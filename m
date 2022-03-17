@@ -2,149 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23724DC1EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACAF4DC1F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbiCQIxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 04:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
+        id S231544AbiCQIyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 04:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiCQIxl (ORCPT
+        with ESMTP id S230363AbiCQIyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 04:53:41 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D605D1CFB;
-        Thu, 17 Mar 2022 01:52:25 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id c15so6290697ljr.9;
-        Thu, 17 Mar 2022 01:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=utKCqy7VusDzWJzGDfUfuV+/FoQNmgt468RWLPQd6V0=;
-        b=NM6sOaIQvQf9NIJbbFjBIfyieIyU0skVM5rgUkl9FvZneQx2HSPloiBsWeAcsEJzIb
-         NP+QzwvBMcuqA2GBaLyzFGxWzrlnzsV8VrzL7WNizIZj9AmgCSOpfy8PHPEhYNC07GNK
-         uAmgZWBx9AvC75LJ+jAqm51M56zcFNQyiW3wpajVfafRVeSUAesvWV+m1NrZ32VEQ+KY
-         ev2CHEKQf6mBiYGgLNdxzKfXjACQoAbLDzyD7hwFj74JBAXw0BfifRaX7j07i4Hvlofx
-         BNBp4OySem/jZbF3Bhd8Ssrowh7qIzGpf0ApNsr8qB4IHbqjlzraGU8nhnfdgS8aUZdn
-         AXuw==
+        Thu, 17 Mar 2022 04:54:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 199D5A76E5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:53:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647507201;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uFfTJdqSsa1NG+Ra/FukB6NKy0iv2m8HqzphlwyuIMY=;
+        b=dRqHieE36AdpyjJ06J2YQrfL2KNP0gjmpudqo/wsH+gUKwh9eh5DmyHmsA9gQRMFo2S85v
+        Ivnu54o+zwLtc7hRifDzhflFF5lwb+c8Gud1A2vxG2ifS/vy4lfj25tNXDexZ7c2WZKkuk
+        osCG+miCztqKwKiaiOKPjLG5c88IyCI=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-73-r7NYHJZ1MfmrvnKC6-jLGg-1; Thu, 17 Mar 2022 04:53:20 -0400
+X-MC-Unique: r7NYHJZ1MfmrvnKC6-jLGg-1
+Received: by mail-lj1-f197.google.com with SMTP id h21-20020a05651c125500b002464536cf4eso1827585ljh.23
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:53:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=utKCqy7VusDzWJzGDfUfuV+/FoQNmgt468RWLPQd6V0=;
-        b=S+ziMxVRiBZLxUaDAO2dHcBBf1ghNTZczgvWkxUXPFF2+Cqrg6wSUDwNSM9iRmyPxs
-         nes51uc62Wfu5F4CRbEZiKUmtKtoT2JJuKI+bJpi2fQlxBIvIq4QHebpb0NTBPuJrCJl
-         LTAb+DFnp+4tfg3JiBpWWgOje3btArkL30Ugbx5KPCkpqdyX4jL9E1RZe2vRtNCmlX7A
-         1Dl1yravnFqAt8sUr+y2KFQ3vrV926v0pGYvuDNKKEsMEAl0uKAnOC28r7CUxyteHIVg
-         tCpE2LRbTGdxiSNIfD20j6XnshBbczhEdhlYFp63QQSFLIDwTq4rVhwGkixOkyJ4CO3d
-         8hOg==
-X-Gm-Message-State: AOAM533B+q/Ys74P9eHQb/qP6nWPpQh/gDFpqRa/TEJaWB934WhuKgTU
-        Sdv1/+vHP/rL7iinQDhSSjI=
-X-Google-Smtp-Source: ABdhPJwoAa1OhOh+IkuyXalL41IHoOBMMg8O2b36bpTO7l5x0ToxGn+f9QvlfvC2lUqe8mYWqoDMiA==
-X-Received: by 2002:a2e:bd13:0:b0:246:1ff8:6da1 with SMTP id n19-20020a2ebd13000000b002461ff86da1mr2173758ljq.219.1647507143460;
-        Thu, 17 Mar 2022 01:52:23 -0700 (PDT)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id u27-20020ac25bdb000000b004485984616bsm388993lfn.296.2022.03.17.01.52.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 01:52:22 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20220316233447.kwyirxckgancdqmh@skbuf>
-References: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
- <20220310142320.611738-4-schultz.hans+netdev@gmail.com>
- <20220310142836.m5onuelv4jej5gvs@skbuf> <86r17495gk.fsf@gmail.com>
- <20220316233447.kwyirxckgancdqmh@skbuf>
-Date:   Thu, 17 Mar 2022 09:52:15 +0100
-Message-ID: <86lex9hsg0.fsf@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uFfTJdqSsa1NG+Ra/FukB6NKy0iv2m8HqzphlwyuIMY=;
+        b=EG3lAbD8pWK8tw2L1jE24z1uJg+9Iffc11QdnElR6se6qFzMuWTOyH6b8NQcGqHNiy
+         cy9DjPmnhkeuDcEsQ2DBTazwQi/2KRO5Dm6Mwq8V5x9BAofdsqxf8qannsQSA5BpNu/u
+         3DfbV7EC7bC+aE3WoYjlIuzn+AiPogpwvbD6N2mQGDD+jcvSIYL2hQlxl3AKkP8Dg9Dp
+         G+2hIiSmploH9T+HK2R+361cJjv0wi8FpYVDavCDeZLcPQp2/kzPQ6CZ9SeMCDwFmqT3
+         Hor2cuX5KTTsAiSMCdChGeZXHqACzTT8yshgt4DazaF3rkGaGEdqajcRs7ssHIctadkn
+         x/mA==
+X-Gm-Message-State: AOAM5311xafiJBztd+QMVjQ2u6pQfrgOA+dtD0YFsYOuW7/JLoSNa0N4
+        81kZg/dM/DZ/IngBUyrklSo2v62Kpjj3WkNTcZOLbunKkwc5o5rfH3Z94XTxkVLv3ea46lMC5SJ
+        KfGT+iwEEr/0LQGQQvfjcQzCWKSa5+VZHoKXyNJYT
+X-Received: by 2002:a2e:9dcf:0:b0:247:f8eb:90d5 with SMTP id x15-20020a2e9dcf000000b00247f8eb90d5mr2171007ljj.23.1647507198401;
+        Thu, 17 Mar 2022 01:53:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzNbwp6tqy+HcMHGRBfqOz/Srxy4fE5I30SgISlwUiwMSrU46WrhElns8Rx+/WjzuJGzZtPGGRI1b5zx3gbtI0=
+X-Received: by 2002:a2e:9dcf:0:b0:247:f8eb:90d5 with SMTP id
+ x15-20020a2e9dcf000000b00247f8eb90d5mr2170987ljj.23.1647507198111; Thu, 17
+ Mar 2022 01:53:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220317075713.10633-1-hpa@redhat.com> <YjLxFuRXKzg3m9HH@paasikivi.fi.intel.com>
+In-Reply-To: <YjLxFuRXKzg3m9HH@paasikivi.fi.intel.com>
+From:   Kate Hsuan <hpa@redhat.com>
+Date:   Thu, 17 Mar 2022 16:53:07 +0800
+Message-ID: <CAEth8oHqSS7EsPofmERRB=pmtS8YPP+MeM6fMG6tJT2z_qChxA@mail.gmail.com>
+Subject: Re: [PATCH v4] staging: media: ipu3: Fix AF x_start position when
+ rightmost stripe is used
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Hans De Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On tor, mar 17, 2022 at 01:34, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Mon, Mar 14, 2022 at 11:46:51AM +0100, Hans Schultz wrote:
->> >> @@ -396,6 +414,13 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
->> >>  				    "ATU miss violation for %pM portvec %x spid %d\n",
->> >>  				    entry.mac, entry.portvec, spid);
->> >>  		chip->ports[spid].atu_miss_violation++;
->> >> +		if (mv88e6xxx_port_is_locked(chip, chip->ports[spid].port))
->> >> +			err = mv88e6xxx_switchdev_handle_atu_miss_violation(chip,
->> >> +									    chip->ports[spid].port,
->> >> +									    &entry,
->> >> +									    fid);
->> >
->> > Do we want to suppress the ATU miss violation warnings if we're going to
->> > notify the bridge, or is it better to keep them for some reason?
->> > My logic is that they're part of normal operation, so suppressing makes
->> > sense.
->> >
->> 
->> I have been seeing many ATU member violations after the miss violation is
->> handled (using ping), and I think it could be considered to suppress the ATU member
->> violations interrupts by setting the IgnoreWrongData bit for the
->> port (sect 4.4.7). This would be something to do whenever a port is set in locked mode?
->
-> So the first packet with a given MAC SA triggers an ATU miss violation
-> interrupt.
->
-> You program that MAC SA into the ATU with a destination port mask of all
-> zeroes. This suppresses further ATU miss interrupts for this MAC SA, but
-> now generates ATU member violations, because the MAC SA _is_ present in
-> the ATU, but not towards the expected port (in fact, towards _no_ port).
->
-> Especially if user space decides it doesn't want to authorize this MAC
-> SA, it really becomes a problem because this is now a vector for denial
-> of service, with every packet triggering an ATU member violation
-> interrupt.
->
-> So your suggestion is to set the IgnoreWrongData bit on locked ports,
-> and this will suppress the actual member violation interrupts for
-> traffic coming from these ports.
->
-> So if the user decides to unplug a previously authorized printer from
-> switch port 1 and move it to port 2, how is this handled? If there isn't
-> a mechanism in place to delete the locked FDB entry when the printer
-> goes away, then by setting IgnoreWrongData you're effectively also
-> suppressing migration notifications.
+Hi Sakari,
 
-I don't think such a scenario is so realistic, as changing port is not
-just something done casually, besides port 2 then must also be a locked
-port to have the same policy.
-
-The other aspect is that the user space daemon that authorizes catches
-the fdb add entry events and checks if it is a locked entry. So it will
-be up to said daemon to decide the policy, like remove the fdb entry
-after a timeout.
-
+On Thu, Mar 17, 2022 at 4:28 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
 >
-> Oh, btw, my question was: could you consider suppressing the _prints_ on
-> an ATU miss violation on a locked port?
+> On Thu, Mar 17, 2022 at 03:57:13PM +0800, Kate Hsuan wrote:
+> > For the AF configuration, if the rightmost stripe is used, the AF scene
+> > will be at the incorrect location of the sensor.
+> >
+> > The AF coordinate may be set to the right part of the sensor. This
+> > configuration would lead to x_start being greater than the
+> > down_scaled_stripes offset and the leftmost stripe would be disabled
+> > and only the rightmost stripe is used to control the AF coordinate. If
+> > the x_start doesn't perform any adjustments, the AF coordinate will be
+> > at the wrong place of the sensor since down_scaled_stripes offset
+> > would be the new zero of the coordinate system.
+> >
+> > In this patch, if only the rightmost stripe is used, x_start should
+> > minus down_scaled_stripes offset to maintain its correctness of AF
+> > scene coordinate.
+> >
+> > Changes in v2:
+> > 1. Remove the setting of the first stripe.
+> >
+> > Changes in v4:
+> > 1. x_start is estimated based on the method for both stripes are enabled.
+> > 2. x_end is estimated based on the width.
+>
+> Please put the changelog before '---' line. I've removed it from the commit
+> message this time.
+>
+> --
+> Sakari Ailus
+>
 
-As there will only be such on the first packet, I think it should be
-logged and those prints serve that purpose, so I think it is best to
-keep the print.
-If in the future some tests or other can argue for suppressing the
-prints, it is an easy thing to do.
+Okay, I got it.
+
+Thank you.
+
+-- 
+BR,
+Kate
+

@@ -2,122 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596D34DC54F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 649184DC557
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbiCQMAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S232262AbiCQMBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbiCQMAo (ORCPT
+        with ESMTP id S233268AbiCQMBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:00:44 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C55173374;
-        Thu, 17 Mar 2022 04:59:10 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id DA0B9580275;
-        Thu, 17 Mar 2022 07:59:09 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 17 Mar 2022 07:59:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; bh=NfFJnkbS3KtilmlXQThAwkw4X4l3eg9znnE/jO
-        g1d5E=; b=N7X5g0pEnkMstgHhqa5+3+0BxTuLz3jVhklrKWMqTOsjegxrvnn1QH
-        Fkdqg24A/ZPO41OAHum1syefQta0Tpi3oVmP5kV8Py12EHR0up9gRD2xvTI7uoa9
-        7D/+0PzOTRErTWQd+XprZVizUqWWf3YjC82AHS8ni1cN4R/C73z1BBPE2rw523xq
-        CkhzuIOPZwqLTjDVqY+Tl5L4gurrdZTgGPc5tTx67ncRL66cXwhB27hSqx4gNDAO
-        RZ7HOop1Tei6M11w1rk7aFAfewV/qSDpIngB2tqbdV695Du2NuMCHf483Fc56lRu
-        XpAZErArtRSnJmaNcUU9QC+MM2mW82AQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=NfFJnkbS3KtilmlXQ
-        ThAwkw4X4l3eg9znnE/jOg1d5E=; b=hD1Gz/uapIf/sWB9JNGq2bqENk7Jvi4hN
-        Y0UvF1yhANVZFON0lDUCzuGbeJQLMNYy8rMbUNaasWYetsyeI8RvU3uVYj4G/XzV
-        hUd5Xt4VKRDcFc61ktuXCtuBjJjZRG7JBly0e/6dGp3yI1SGxLcaOZjwaHxIlDA4
-        MCQZ17wR7waqIx3n6yPT7Nkq4wHiSw7ryxi53joG27ELAZYgNQNHr9WTnxaBm8dx
-        G1hOwLABojoLiGHCZDlz8jcI4sY7YOOflgS19LdWg/S5JeIDA48MBIyHi0W/fcC4
-        HbFAqAW2y+HIOkoX0myj6dIWm3OjHtc5/MmzRn8d7UKlPO/eVgCZg==
-X-ME-Sender: <xms:jSIzYsskDvWb7X-Jb8vYizwxdLJTYB-dmk1uznYkPEODEfYfQnkZYw>
-    <xme:jSIzYpcoLkl4N6S17qTcUmXINKE6tpxzQO6jjGbGBwXHIJC_7FMfbliFXCinLRNuI
-    UT7xcVmTZTeLw>
-X-ME-Received: <xmr:jSIzYnxKs_WExetxBzF948L5tleHabZroB3pjVjlPYRhp66oUEX2ah-YdrjkHhFEwGlSko8hf4yjos0nKpkl559k--gF8oCU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefgedgfeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:jSIzYvOKdSmNOe5q9nzBP4i0bVe4Vifx9yNFfzDzTyDsTENkwnuHNw>
-    <xmx:jSIzYs8_KlCfxHsGGGD8EZd0FyGIPhWGPa85ixPflkJawBatUCzIrw>
-    <xmx:jSIzYnXBC-3TXQI5QCnD61cP629Zi7Co6Gh6K05b4WbMvEziWXPURw>
-    <xmx:jSIzYgS3WKweICGsPYsF1o0_VVIE8DYgbqLe2Dx-KvuzLG6AZPYmCA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 17 Mar 2022 07:59:09 -0400 (EDT)
-Date:   Thu, 17 Mar 2022 12:59:06 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Steffen Eiden <seiden@linux.ibm.com>
-Cc:     agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        david@redhat.com, frankja@linux.ibm.com, gor@linux.ibm.com,
-        hca@linux.ibm.com, imbrenda@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-s390@vger.kernel.org, nrb@linux.ibm.com, shuah@kernel.org
-Subject: Re: [PATCH v3 1/4] drivers/s390/char: Add Ultravisor io device
-Message-ID: <YjMiiom+zRfkhe6F@kroah.com>
-References: <20220304141141.32767-2-seiden@linux.ibm.com>
- <20220317094706.4921-1-seiden@linux.ibm.com>
- <YjMGgSstSCZAmcVa@kroah.com>
- <6175e7fa-070e-8ab2-843a-8019d0dc0c83@linux.ibm.com>
+        Thu, 17 Mar 2022 08:01:35 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BAB170DA8;
+        Thu, 17 Mar 2022 05:00:18 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id o5so9796159ybe.2;
+        Thu, 17 Mar 2022 05:00:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w7umAd0HdQF/0Y/dcMA5O7GL9fe1/Zuc2dVyyldUlgw=;
+        b=gfZ92XehhNSgAL1i916bWJTKe1a1eeZ0rlq0AUvo23EAZz9KwhhgS3njKZeyzpk/Ey
+         vTOdsvqySgrQd5J7nGndrNwNTMBUFcDBdFy95ZNtJtmbvCqyIP3eCgp71S4WMHHHlKla
+         PslTZh1Zwt9t6sxKrVidMy/kfisuV8rOpMCOMDYR2H63sr1PebYkdvyvYEIJpbnQMFJO
+         SPm3dzu23FG1oGpcQbO+1RXRins5MimoZHVlIiGYnapBq2drmDJNN3xojvP/IoYMJYaX
+         rm+ekHq39HFlWjNztSMKB/g0q6VJjEpG6Ay5DLhe/94K4yGtlGTCX/Y7NmM8JP9ui7mj
+         IK1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w7umAd0HdQF/0Y/dcMA5O7GL9fe1/Zuc2dVyyldUlgw=;
+        b=QqM0Vxe7js/qI0kerPxlPNEFJmN67u1pSCN5ZGopQ6BsgA4deYmKLRPzQGWMYlWo3Z
+         BqWWNg3i4nru4v4/V8CAIZwG8Z5rnhIw78s05pCZ4F2N609hplAsbjo9mXtjY7OP9Fus
+         gNRJRJ6jvicMVHwwqjApRsVvNRqHa6YH//o473xLbU94a8vkB3Kj3I8dZPa2UDjASBj1
+         Lom0r42FgAXNzlnpqYHXEnzfU83qNNj381TkWmuZcnRhCpClhkpWeDv1iQLnywPENqAE
+         GBBSMbmv791D3SL4O4bzOrvfz0oQDZveD2Ik5HwprGMRqAxsrhlJWQPWT2o7kxIjvPma
+         I6kw==
+X-Gm-Message-State: AOAM533lxqVcF7MV0XjA+6KUuccwClyAvPmfsEtlvBdtPLfyp0Dd/ZtS
+        WqYiJxzm5YgSHgxHh3ehdwmdyBE6iiqwm9FPVrg=
+X-Google-Smtp-Source: ABdhPJwYmzfiLbLPvbajfh4qpduHNmcl11o8Nfezb4d7zLMfNtasZCOtvIKOiNO97c1p13rWPLnTSu6EhzR8seFgAYs=
+X-Received: by 2002:a25:8812:0:b0:633:7bd8:16ff with SMTP id
+ c18-20020a258812000000b006337bd816ffmr4357088ybl.645.1647518418131; Thu, 17
+ Mar 2022 05:00:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6175e7fa-070e-8ab2-843a-8019d0dc0c83@linux.ibm.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220317012404.8069-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAHp75Vc+uSNF4L0WCfCyadOqJ6szXS3Ct5BmEUbeQ_aKg1zjWg@mail.gmail.com> <87wngtx79f.wl-maz@kernel.org>
+In-Reply-To: <87wngtx79f.wl-maz@kernel.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 17 Mar 2022 11:59:52 +0000
+Message-ID: <CA+V-a8uBrau7-0x95O750nPeckz=vdhK2RJtFZ2rfiQhEtrdwA@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 0/5] Renesas RZ/G2L IRQC support
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 12:07:58PM +0100, Steffen Eiden wrote:
-> Hi greg,
-> 
-> On 3/17/22 10:59, Greg KH wrote:
-> > On Thu, Mar 17, 2022 at 09:47:06AM +0000, Steffen Eiden wrote:
-> > > This patch adds a new miscdevice to expose some Ultravisor functions
-> > > to userspace. Userspace can send IOCTLs to the uvdevice that will then
-> > > emit a corresponding Ultravisor Call and hands the result over to
-> > > userspace. The uvdevice is available if the Ultravisor Call facility is
-> > > present.
-> > > Userspace can call the Retrieve Attestation Measurement
-> > > Ultravisor Call using IOCTLs on the uvdevice.
-> > > 
-> > > The uvdevice will do some sanity checks first.
-> > > Then, copy the request data to kernel space, build the UVCB,
-> > > perform the UV call, and copy the result back to userspace.
-> > > 
-> > > Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
-> > > Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-> > 
-> > Do you have a pointer to the userspace code that interacts with this
-> > kernel driver?  That would be good to have to verify that the api here
-> > is sane.
-> > 
-> There is a userspace tool currently under development, however, not yet
-> ready to be published.
+Hi Marc,
 
-Then really, this driver should not be merged until the user/kernel api
-is determined to work properly, right?  Why submit this now if userspace
-isn't working?
+On Thu, Mar 17, 2022 at 9:23 AM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Thu, 17 Mar 2022 08:46:14 +0000,
+> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> >
+> > On Thu, Mar 17, 2022 at 5:43 AM Lad Prabhakar
+> > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > >
+> > > Hi All,
+> > >
+> > > The RZ/G2L Interrupt Controller is a front-end for the GIC found on
+> > > Renesas RZ/G2L SoC's with below pins:
+> > > - IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI interrupts
+> > > - GPIO pins used as external interrupt input pins out of GPIOINT0-122 a
+> > >   maximum of only 32 can be mapped to 32 GIC SPI interrupts,
+> > > - NMI edge select.
+> > >
+> > What I want to know now is whether it is going to collide with Marc's
+> > series about GPIO IRQ chip constification?
+>
+> Probably, but the current scheme will still be alive for some time
+> (you'll need a couple of cycles to sort out all the drivers).
+>
+Ouch, thanks for letting me know. BTW there are a couple of changes to
+GPIO core which you have to review (this was missed in the previous
+version).
 
-thanks,
+Cheers,
+Prabhakar
 
-greg k-h
+> Worse case, this can be fixed at merge time.
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

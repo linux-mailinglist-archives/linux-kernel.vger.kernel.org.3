@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F73B4DC6B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 938394DC663
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234265AbiCQMzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        id S233960AbiCQMvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234258AbiCQMw7 (ORCPT
+        with ESMTP id S234071AbiCQMvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:52:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA43D1F6877;
-        Thu, 17 Mar 2022 05:50:40 -0700 (PDT)
+        Thu, 17 Mar 2022 08:51:31 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B083E1F6F20;
+        Thu, 17 Mar 2022 05:49:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46A9DB81EA1;
-        Thu, 17 Mar 2022 12:50:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D397C36AF9;
-        Thu, 17 Mar 2022 12:50:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 27ED6CE233F;
+        Thu, 17 Mar 2022 12:49:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142ADC340EF;
+        Thu, 17 Mar 2022 12:49:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521438;
-        bh=lB5hDVitc5GoR8Fyu+Qgh6xvmHGiLNbl7eDd70/dM9I=;
+        s=korg; t=1647521360;
+        bh=LHKATBomQ6ACtfJjG+YFvVAXAGjmKFmdhJSOLfP3MmY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zIBY05CoA/kiw0yFhBzSyF2Tj6OrTSgaLpGT3YIezSJfGRP4NFGtl/tEBD6MOS9s2
-         pBEwlLCmVt1SHAj0bMobvUYdB3JyyXbtN0gsHDz5ALn19iq/dQA897sbKYn4xaTnBH
-         7wilvswT//ADrLHlzzBA+yHf34JN9CNfvI+Jdcqg=
+        b=qscb2wCQ+5gLe6R1RJykJzFVYw4WTfaT1Mx06XK9KclLAkYvE55vBRezwV9QCY61m
+         Zxs9AbgJW+Cdg9Po1+k3av84XeR20H3F+kjV3j++Q3YuhUpfQPFEEscbfT1ukw06l1
+         oOT8xdPDR8l69vDoKcbH8rS0eEhY31J7rcY3EoqU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>,
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 09/23] ARM: dts: rockchip: fix a typo on rk3288 crypto-controller
-Date:   Thu, 17 Mar 2022 13:45:50 +0100
-Message-Id: <20220317124526.223590864@linuxfoundation.org>
+Subject: [PATCH 5.10 10/23] mac80211: refuse aggregations sessions before authorized
+Date:   Thu, 17 Mar 2022 13:45:51 +0100
+Message-Id: <20220317124526.251768816@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220317124525.955110315@linuxfoundation.org>
 References: <20220317124525.955110315@linuxfoundation.org>
@@ -56,35 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 3916c3619599a3970d3e6f98fb430b7c46266ada ]
+[ Upstream commit a6bce78262f5dd4b50510f0aa47f3995f7b185f3 ]
 
-crypto-controller had a typo, fix it.
-In the same time, rename it to just crypto
+If an MFP station isn't authorized, the receiver will (or
+at least should) drop the action frame since it's a robust
+management frame, but if we're not authorized we haven't
+installed keys yet. Refuse attempts to start a session as
+they'd just time out.
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Link: https://lore.kernel.org/r/20220209120355.1985707-1-clabbe@baylibre.com
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Link: https://lore.kernel.org/r/20220203201528.ff4d5679dce9.I34bb1f2bc341e161af2d6faf74f91b332ba11285@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/rk3288.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/mac80211/agg-tx.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
-index 0d89ad274268..9051fb4a267d 100644
---- a/arch/arm/boot/dts/rk3288.dtsi
-+++ b/arch/arm/boot/dts/rk3288.dtsi
-@@ -990,7 +990,7 @@
- 		status = "disabled";
- 	};
+diff --git a/net/mac80211/agg-tx.c b/net/mac80211/agg-tx.c
+index 190f300d8923..4b4ab1961068 100644
+--- a/net/mac80211/agg-tx.c
++++ b/net/mac80211/agg-tx.c
+@@ -9,7 +9,7 @@
+  * Copyright 2007, Michael Wu <flamingice@sourmilk.net>
+  * Copyright 2007-2010, Intel Corporation
+  * Copyright(c) 2015-2017 Intel Deutschland GmbH
+- * Copyright (C) 2018 - 2021 Intel Corporation
++ * Copyright (C) 2018 - 2022 Intel Corporation
+  */
  
--	crypto: cypto-controller@ff8a0000 {
-+	crypto: crypto@ff8a0000 {
- 		compatible = "rockchip,rk3288-crypto";
- 		reg = <0x0 0xff8a0000 0x0 0x4000>;
- 		interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
+ #include <linux/ieee80211.h>
+@@ -626,6 +626,14 @@ int ieee80211_start_tx_ba_session(struct ieee80211_sta *pubsta, u16 tid,
+ 		return -EINVAL;
+ 	}
+ 
++	if (test_sta_flag(sta, WLAN_STA_MFP) &&
++	    !test_sta_flag(sta, WLAN_STA_AUTHORIZED)) {
++		ht_dbg(sdata,
++		       "MFP STA not authorized - deny BA session request %pM tid %d\n",
++		       sta->sta.addr, tid);
++		return -EINVAL;
++	}
++
+ 	/*
+ 	 * 802.11n-2009 11.5.1.1: If the initiating STA is an HT STA, is a
+ 	 * member of an IBSS, and has no other existing Block Ack agreement
 -- 
 2.34.1
 

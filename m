@@ -2,84 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438854DC345
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF064DC347
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbiCQJtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S232215AbiCQJst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbiCQJs5 (ORCPT
+        with ESMTP id S232209AbiCQJsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:48:57 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C2E1D8332
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:47:35 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KK2Ly2Nx7z921l;
-        Thu, 17 Mar 2022 17:45:30 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 17 Mar
- 2022 17:47:31 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
-        <robert.foss@linaro.org>, <Laurent.pinchart@ideasonboard.com>,
-        <jonas@kwiboo.se>, <jernej.skrabec@gmail.com>, <airlied@linux.ie>,
-        <daniel@ffwll.ch>, <hermes.wu@ite.com.tw>, <allen.chen@ite.com.tw>,
-        <angelogioacchino.delregno@collabora.com>
-CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] drm/bridge: it6505: Fix build error
-Date:   Thu, 17 Mar 2022 17:47:24 +0800
-Message-ID: <20220317094724.25972-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        Thu, 17 Mar 2022 05:48:47 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A421D7DB4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:47:31 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 09:47:27 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647510449;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tumt5osRrCKQbL6rmSvAeMUsR7rsUT0BNA75yAoEbpw=;
+        b=2BqY/3HRYoWdgW/TT1EfcRjJhhmjZwUcB7hDY+euHt+f62U4tFj1c8JwU+A3J04NLXuvGV
+        MuWhRx4oFB40oSR2cxl+lLVDGo2NtB51vr1TnA2qRjqDU1pQGB/I7nTSDY+UyNYsXtecuG
+        ILBzgrPeMqcIKsvEweQv6LmyPgLQt/XKeAJYGuiFfZxzxb7t0VxStxNlG4QX7850D9Bf7W
+        ro3yD1Q6J/r/GRHUAKaNyrNdZq+ZlkmTTvs7oIRHWlcYiYMe1vhwVYcg24s/dlTozXsJru
+        kXDX1dznPFEcDYY+KcvN01mkOJQqwssOMKwCp7rLGqPAnbrkOao2PzoelQhByA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647510449;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tumt5osRrCKQbL6rmSvAeMUsR7rsUT0BNA75yAoEbpw=;
+        b=F+t076fuSel2M1UsBromCGJ9US9royaat7iZzJgspVEeGLg6rjWNZNGl2hLg3eUPeotTsy
+        seLpxkUi7yL53hDw==
+From:   "irqchip-bot for Stephen Rothwell" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] pinctrl: npcm: Fix broken typing on 64bit
+ platforms
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220316183227.725bfd37@canb.auug.org.au>
+References: <20220316183227.725bfd37@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <164751044707.389.16417510835118111853.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If DRM_ITE_IT6505 is y but DRM_DP_HELPER is m, building failed:
+The following commit has been merged into the irq/irqchip-next branch of irqc=
+hip:
 
-drivers/gpu/drm/bridge/ite-it6505.o: In function `it6505_i2c_remove':
-ite-it6505.c:(.text+0x35c): undefined reference to `drm_dp_aux_unregister'
-drivers/gpu/drm/bridge/ite-it6505.o: In function `it6505_dpcd_read':
-ite-it6505.c:(.text+0x420): undefined reference to `drm_dp_dpcd_read'
-drivers/gpu/drm/bridge/ite-it6505.o: In function `it6505_get_dpcd':
-ite-it6505.c:(.text+0x4a4): undefined reference to `drm_dp_dpcd_read'
-drivers/gpu/drm/bridge/ite-it6505.o: In function `it6505_dpcd_write':
-ite-it6505.c:(.text+0x52c): undefined reference to `drm_dp_dpcd_write'
+Commit-ID:     1c3b5c62fc856e8ba71f071d1cf37b2d88411e8b
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platfo=
+rms/1c3b5c62fc856e8ba71f071d1cf37b2d88411e8b
+Author:        Stephen Rothwell <sfr@canb.auug.org.au>
+AuthorDate:    Wed, 16 Mar 2022 18:12:14 +11:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Thu, 17 Mar 2022 08:20:39=20
 
-Select DRM_DP_HELPER for DRM_ITE_IT6505 to fix this.
+pinctrl: npcm: Fix broken typing on 64bit platforms
 
-Fixes: b5c84a9edcd4 ("drm/bridge: add it6505 driver")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+The npcm driver confuses u32 and unsigned long, which works on
+32bit platforms, but leads to disasters on 64bit systems (and
+breaks the build if using -Werror=3Darray-bounds).
+
+Use proper typing to address the issue.
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+[maz: commit message, additional changes suggested by Jonathan Neusch=C3=A4fe=
+r]
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220316183227.725bfd37@canb.auug.org.au
 ---
- drivers/gpu/drm/bridge/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
-index c86f5be4dfe0..1b8721a7a6df 100644
---- a/drivers/gpu/drm/bridge/Kconfig
-+++ b/drivers/gpu/drm/bridge/Kconfig
-@@ -78,6 +78,7 @@ config DRM_DISPLAY_CONNECTOR
- config DRM_ITE_IT6505
-         tristate "ITE IT6505 DisplayPort bridge"
-         depends on OF
-+	select DRM_DP_HELPER
-         select DRM_KMS_HELPER
-         select EXTCON
-         help
--- 
-2.17.1
-
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/nuvo=
+ton/pinctrl-npcm7xx.c
+index ba536fd..a9831da 100644
+--- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+@@ -216,7 +216,7 @@ static void npcmgpio_irq_handler(struct irq_desc *desc)
+ 	struct gpio_chip *gc;
+ 	struct irq_chip *chip;
+ 	struct npcm7xx_gpio *bank;
+-	u32 sts, en, bit;
++	unsigned long sts, bit, en;
+=20
+ 	gc =3D irq_desc_get_handler_data(desc);
+ 	bank =3D gpiochip_get_data(gc);
+@@ -225,11 +225,11 @@ static void npcmgpio_irq_handler(struct irq_desc *desc)
+ 	chained_irq_enter(chip, desc);
+ 	sts =3D ioread32(bank->base + NPCM7XX_GP_N_EVST);
+ 	en  =3D ioread32(bank->base + NPCM7XX_GP_N_EVEN);
+-	dev_dbg(bank->gc.parent, "=3D=3D> got irq sts %.8x %.8x\n", sts,
++	dev_dbg(bank->gc.parent, "=3D=3D> got irq sts %.8lx %.8lx\n", sts,
+ 		en);
+=20
+ 	sts &=3D en;
+-	for_each_set_bit(bit, (const void *)&sts, NPCM7XX_GPIO_PER_BANK)
++	for_each_set_bit(bit, &sts, NPCM7XX_GPIO_PER_BANK)
+ 		generic_handle_domain_irq(gc->irq.domain, bit);
+ 	chained_irq_exit(chip, desc);
+ }

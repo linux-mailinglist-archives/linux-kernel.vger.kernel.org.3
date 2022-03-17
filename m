@@ -2,63 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C854DCAFB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA1B4DCAEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236447AbiCQQOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        id S236396AbiCQQNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236400AbiCQQOm (ORCPT
+        with ESMTP id S236401AbiCQQNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:14:42 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E3D19C19;
-        Thu, 17 Mar 2022 09:13:25 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id a1so6659882wrh.10;
-        Thu, 17 Mar 2022 09:13:25 -0700 (PDT)
+        Thu, 17 Mar 2022 12:13:40 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A38A215453
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:12:21 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id r7so3402148wmq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:12:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jF/+b29n2k6QwgY1N7ytCrLXHO8Y7Zm3vkBb+Xdt3qs=;
-        b=Uj7KjY3fF36OqFiimwFYxV7pRXYGE7AoLg7hDmDZIemHwqwiVsCR+j/WWUNbrL2svN
-         VccqsNnUcjCUctBn5gJI90IFOf0axEhmCIRsp8lwM4NkqzRg+lVVir9qDtHi/yuaodTo
-         fj2rECP9DlQ/7zNZjDwipzNOUfJ3fZqc8X1f7GmHZdNM3jpA1KC2dMtcqLj2wWs5FBnD
-         rBjDFroMyz9qtRxBdM6v4DB35E8pdkXr9abM4RSmas/nx+Pv8b/ERsaPJ7mUdnWF5wc4
-         sQVFPx09LZIiOruCkiMwfcUgZVtmHpFzaWOCqWByzXaG91bAOnlOmDi/OsjJsVGWztfi
-         aorA==
+        bh=pXtqp8iuAz8ol8GDqPVE/H1Hyn8eNzNnz8ekbU+Hmwo=;
+        b=CPnUpNsj8Hj1XGqs2SJeL5iW/7Z/awl6wloKV6MiaYjgBco5AT8o8xWb8zFyd3bdP8
+         qTSRy8fDUAuqJ4k060r14ggrCqqOATgAAH3VqLi4Bu7UNzTU5l9Y38bxX1K2tjE/Sww4
+         12cHTUt2qQs3b/sNPTJHfKbKGYqg97duxbmbXph7A8zy1hDFzJRSoiuO7JYFysLydMoc
+         1w09yG1VwVXqpuibHzr1d96+ViEs6sIHQpkDz/yL25/dadR3JWeh/9pRqJr4FH06PfHe
+         y59mqRMXZlEB9ZkG3Npxv401QxGoxC2FYEzh+HI3J5qOUk20N87/2WNDo5tc/iw2rXX7
+         LulQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jF/+b29n2k6QwgY1N7ytCrLXHO8Y7Zm3vkBb+Xdt3qs=;
-        b=CYj9stgUX6Fu7Zhci9VlNOWVkHhHVFXV8ynxe+u1d8bvEzerSbiyazo2pVJ67pm3Yo
-         7Gn9CsdnMK7yFZxjbuNl5yOCiAGHjHgOHTkTmAv+05qMOROUAnmsoxTD0CDV5KaIK6HL
-         YEuRFukgadP9KvkAsJMAmGvvbnra4cGArY/h7z0GlXIQu1zJ/vBr5PIokwmTcu36r4pz
-         DY2nuK6Z3BB7oOQU+RmF/WLIZMO8EfLVRc5nedv2Ga6uhRA6QNzvcUBglrw+uCsrDACp
-         4Q5pyioOYxJhG7zvZujW2LFbqXvVWIYZC2yg3MPegzetxtyeDtl1ys6vwhwbwmb5re8u
-         mQWg==
-X-Gm-Message-State: AOAM532ArcmSVcmciv5nfbAc09bZiq7T1eDTTL92yAA+kmSgs2sXkoE2
-        SVb0dTFlRLnNQEPG+5ElaQLzqvXTjwsyevRy04jk7P5ylDitog==
-X-Google-Smtp-Source: ABdhPJzoKDyBbVV/h3RA8+GrQf9PozlA+frXzSHUXmbwV0v7vgqz+5I9Hmz1OQYOvh9UQdtU2mwZGkNja2h4nbhPbNk=
-X-Received: by 2002:a5d:47a7:0:b0:203:d1b4:8f6 with SMTP id
- 7-20020a5d47a7000000b00203d1b408f6mr4862024wrb.36.1647533604016; Thu, 17 Mar
- 2022 09:13:24 -0700 (PDT)
+        bh=pXtqp8iuAz8ol8GDqPVE/H1Hyn8eNzNnz8ekbU+Hmwo=;
+        b=UyAsETF5+9eeUtA1G02fw5gtVdPcfLptYCKMCenODK9nLzAMkd4RN0LoX0+oCEvOGa
+         0pkc5g/LXq1qUu1uQxnnjpgNUe4a59TPTLUCKa0y2OORKP56ePodoaKpECa9DldIoadH
+         Y9+M2XfxhO3/7xSVL0tvfop6GoBieoP3qAy+UpMbRmjUJUAbhLkbH9iHvrlC7oHHJNUY
+         XVXQ5Xxn0z3dwwuGThsWvlk6rkn41Drk4Vc3JTWZ+KZGmzn0/xrdygWCi3pJ9Qasyvoe
+         iaC0JdHA80g16asrK9HvyQ/dWOWAgtgvvFETvqqJ+jg/Aa3Zt5XB89vwb9yddoRam9ec
+         gKsQ==
+X-Gm-Message-State: AOAM5336N9s3BeZqpvZRvYU8WpZFusdjE4r6klTesRedhNCb4Y+K5SBZ
+        v17+4y4JZs9elch1DTpAYsmwcVt/KzkonZv/N7U=
+X-Google-Smtp-Source: ABdhPJz3P9FkP1bWgVUHNiTWpz4nMrwBTVKAgukRWLso36ZSA+d1U/sb4Pw2jD4jzVsQcJa+SOamChWHDIiq4zEGn2o=
+X-Received: by 2002:a05:600c:35d6:b0:38c:4358:8e30 with SMTP id
+ r22-20020a05600c35d600b0038c43588e30mr4756809wmq.102.1647533539863; Thu, 17
+ Mar 2022 09:12:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220311181014.3448936-1-bjwyman@gmail.com> <fa8b2d9f-e5c9-73f4-3916-84e370748687@roeck-us.net>
- <CAK_vbW2S07+S8+PrQnBLjvXYnLBXU06FHBvfM2zaT6RYx9HO+g@mail.gmail.com> <582086fe-1cc3-d161-a866-f4726d04a254@roeck-us.net>
-In-Reply-To: <582086fe-1cc3-d161-a866-f4726d04a254@roeck-us.net>
-From:   Brandon Wyman <bjwyman@gmail.com>
-Date:   Thu, 17 Mar 2022 11:12:49 -0500
-Message-ID: <CAK_vbW1Lfroo91cMxsLpuf-uuDwcsssG1=fjp3an_O5-FUHjMQ@mail.gmail.com>
-Subject: Re: [PATCH v2] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs entry
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Eddie James <eajames@linux.ibm.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220314224253.236359-1-dmitry.osipenko@collabora.com>
+ <20220314224253.236359-7-dmitry.osipenko@collabora.com> <CAF6AEGsmtM6rTJtOJwTA49cwW7wCjF53Devzodd_PzLO0EOkVw@mail.gmail.com>
+ <be3b09ff-08ea-3e13-7d8c-06af6fffbd8f@collabora.com>
+In-Reply-To: <be3b09ff-08ea-3e13-7d8c-06af6fffbd8f@collabora.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Thu, 17 Mar 2022 09:13:00 -0700
+Message-ID: <CAF6AEGv2Ob7_Zp3+m-16QExDTM9vYfAkeSuBtjWG7ukHnY73UA@mail.gmail.com>
+Subject: Re: [PATCH v2 6/8] drm/shmem-helper: Add generic memory shrinker
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Dmitry Osipenko <digetx@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -70,118 +84,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 3:14 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On Wed, Mar 16, 2022 at 5:13 PM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
 >
-> On 3/16/22 13:03, Brandon Wyman wrote:
-> > On Sun, Mar 13, 2022 at 11:36 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 3/16/22 23:00, Rob Clark wrote:
+> > On Mon, Mar 14, 2022 at 3:44 PM Dmitry Osipenko
+> > <dmitry.osipenko@collabora.com> wrote:
 > >>
-> >> On 3/11/22 10:10, Brandon Wyman wrote:
-> >>> Add a clear_faults write-only debugfs entry for the ibm-cffps device
-> >>> driver.
-> >>>
-> >>> Certain IBM power supplies require clearing some latched faults in order
-> >>> to indicate that the fault has indeed been observed/noticed.
-> >>>
+> >> Introduce a common DRM SHMEM shrinker. It allows to reduce code
+> >> duplication among DRM drivers, it also handles complicated lockings
+> >> for the drivers. This is initial version of the shrinker that covers
+> >> basic needs of GPU drivers.
 > >>
-> >> That is insufficient, sorry. Please provide the affected power supplies as
-> >> well as the affected faults, and confirm that the problem still exists
-> >> in v5.17-rc6 or later kernels - or, more specifically, in any kernel which
-> >> includes commit 35f165f08950 ("hwmon: (pmbus) Clear pmbus fault/warning
-> >> bits after read").
+> >> This patch is based on a couple ideas borrowed from Rob's Clark MSM
+> >> shrinker and Thomas' Zimmermann variant of SHMEM shrinker.
 > >>
-> >> Thanks,
-> >> Guenter
+> >> GPU drivers that want to use generic DRM memory shrinker must support
+> >> generic GEM reservations.
+> >>
+> >> Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
+> >> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> >> ---
+> >>  drivers/gpu/drm/drm_gem_shmem_helper.c | 194 +++++++++++++++++++++++++
+> >>  include/drm/drm_device.h               |   4 +
+> >>  include/drm/drm_gem.h                  |  11 ++
+> >>  include/drm/drm_gem_shmem_helper.h     |  25 ++++
+> >>  4 files changed, 234 insertions(+)
+> >>
+> >> diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
+> >> index 37009418cd28..35be2ee98f11 100644
+> >> --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
+> >> +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+> >> @@ -139,6 +139,9 @@ void drm_gem_shmem_free(struct drm_gem_shmem_object *shmem)
+> >>  {
+> >>         struct drm_gem_object *obj = &shmem->base;
+> >>
+> >> +       /* take out shmem GEM object from the memory shrinker */
+> >> +       drm_gem_shmem_madvise(shmem, 0);
+> >> +
+> >>         WARN_ON(shmem->vmap_use_count);
+> >>
+> >>         if (obj->import_attach) {
+> >> @@ -163,6 +166,42 @@ void drm_gem_shmem_free(struct drm_gem_shmem_object *shmem)
+> >>  }
+> >>  EXPORT_SYMBOL_GPL(drm_gem_shmem_free);
+> >>
+> >> +static void drm_gem_shmem_update_purgeable_status(struct drm_gem_shmem_object *shmem)
+> >> +{
+> >> +       struct drm_gem_object *obj = &shmem->base;
+> >> +       struct drm_gem_shmem_shrinker *gem_shrinker = obj->dev->shmem_shrinker;
+> >> +       size_t page_count = obj->size >> PAGE_SHIFT;
+> >> +
+> >> +       if (!gem_shrinker || obj->import_attach || !obj->funcs->purge)
+> >> +               return;
+> >> +
+> >> +       mutex_lock(&shmem->vmap_lock);
+> >> +       mutex_lock(&shmem->pages_lock);
+> >> +       mutex_lock(&gem_shrinker->lock);
+> >> +
+> >> +       if (shmem->madv < 0) {
+> >> +               list_del_init(&shmem->madv_list);
+> >> +               goto unlock;
+> >> +       } else if (shmem->madv > 0) {
+> >> +               if (!list_empty(&shmem->madv_list))
+> >> +                       goto unlock;
+> >> +
+> >> +               WARN_ON(gem_shrinker->shrinkable_count + page_count < page_count);
+> >> +               gem_shrinker->shrinkable_count += page_count;
+> >> +
+> >> +               list_add_tail(&shmem->madv_list, &gem_shrinker->lru);
+> >> +       } else if (!list_empty(&shmem->madv_list)) {
+> >> +               list_del_init(&shmem->madv_list);
+> >> +
+> >> +               WARN_ON(gem_shrinker->shrinkable_count < page_count);
+> >> +               gem_shrinker->shrinkable_count -= page_count;
+> >> +       }
+> >> +unlock:
+> >> +       mutex_unlock(&gem_shrinker->lock);
+> >> +       mutex_unlock(&shmem->pages_lock);
+> >> +       mutex_unlock(&shmem->vmap_lock);
+> >> +}
+> >> +
+> >>  static int drm_gem_shmem_get_pages_locked(struct drm_gem_shmem_object *shmem)
+> >>  {
+> >>         struct drm_gem_object *obj = &shmem->base;
+> >> @@ -366,6 +405,8 @@ int drm_gem_shmem_vmap(struct drm_gem_shmem_object *shmem,
+> >>         ret = drm_gem_shmem_vmap_locked(shmem, map);
+> >>         mutex_unlock(&shmem->vmap_lock);
+> >>
+> >> +       drm_gem_shmem_update_purgeable_status(shmem);
+> >> +
+> >>         return ret;
+> >>  }
+> >>  EXPORT_SYMBOL(drm_gem_shmem_vmap);
+> >> @@ -409,6 +450,8 @@ void drm_gem_shmem_vunmap(struct drm_gem_shmem_object *shmem,
+> >>         mutex_lock(&shmem->vmap_lock);
+> >>         drm_gem_shmem_vunmap_locked(shmem, map);
+> >>         mutex_unlock(&shmem->vmap_lock);
+> >> +
+> >> +       drm_gem_shmem_update_purgeable_status(shmem);
+> >>  }
+> >>  EXPORT_SYMBOL(drm_gem_shmem_vunmap);
+> >>
+> >> @@ -451,6 +494,8 @@ int drm_gem_shmem_madvise(struct drm_gem_shmem_object *shmem, int madv)
+> >>
+> >>         mutex_unlock(&shmem->pages_lock);
+> >>
+> >> +       drm_gem_shmem_update_purgeable_status(shmem);
+> >> +
+> >>         return (madv >= 0);
+> >>  }
+> >>  EXPORT_SYMBOL(drm_gem_shmem_madvise);
+> >> @@ -763,6 +808,155 @@ drm_gem_shmem_prime_import_sg_table(struct drm_device *dev,
+> >>  }
+> >>  EXPORT_SYMBOL_GPL(drm_gem_shmem_prime_import_sg_table);
+> >>
+> >> +static struct drm_gem_shmem_shrinker *
+> >> +to_drm_shrinker(struct shrinker *shrinker)
+> >> +{
+> >> +       return container_of(shrinker, struct drm_gem_shmem_shrinker, base);
+> >> +}
+> >> +
+> >> +static unsigned long
+> >> +drm_gem_shmem_shrinker_count_objects(struct shrinker *shrinker,
+> >> +                                    struct shrink_control *sc)
+> >> +{
+> >> +       struct drm_gem_shmem_shrinker *gem_shrinker = to_drm_shrinker(shrinker);
+> >> +       u64 count = gem_shrinker->shrinkable_count;
+> >> +
+> >> +       if (count >= SHRINK_EMPTY)
+> >> +               return SHRINK_EMPTY - 1;
+> >> +
+> >> +       return count ?: SHRINK_EMPTY;
+> >> +}
+> >> +
+> >> +static unsigned long
+> >> +drm_gem_shmem_shrinker_scan_objects(struct shrinker *shrinker,
+> >> +                                   struct shrink_control *sc)
+> >> +{
+> >> +       struct drm_gem_shmem_shrinker *gem_shrinker = to_drm_shrinker(shrinker);
+> >> +       struct drm_gem_shmem_object *shmem;
+> >> +       struct list_head still_in_list;
+> >> +       bool lock_contention = true;
+> >> +       struct drm_gem_object *obj;
+> >> +       unsigned long freed = 0;
+> >> +
+> >> +       INIT_LIST_HEAD(&still_in_list);
+> >> +
+> >> +       mutex_lock(&gem_shrinker->lock);
+> >> +
+> >> +       while (freed < sc->nr_to_scan) {
+> >> +               shmem = list_first_entry_or_null(&gem_shrinker->lru,
+> >> +                                                typeof(*shmem), madv_list);
+> >> +               if (!shmem)
+> >> +                       break;
+> >> +
+> >> +               obj = &shmem->base;
+> >> +               list_move_tail(&shmem->madv_list, &still_in_list);
+> >> +
+> >> +               /*
+> >> +                * If it's in the process of being freed, gem_object->free()
+> >> +                * may be blocked on lock waiting to remove it.  So just
+> >> +                * skip it.
+> >> +                */
+> >> +               if (!kref_get_unless_zero(&obj->refcount))
+> >> +                       continue;
+> >> +
+> >> +               mutex_unlock(&gem_shrinker->lock);
+> >> +
+> >> +               /* prevent racing with job submission code paths */
+> >> +               if (!dma_resv_trylock(obj->resv))
+> >> +                       goto shrinker_lock;
 > >
-> > Sorry for the delay in responding. I did some testing with commit
-> > 35f165f08950. I could not get that code to send the CLEAR_FAULTS
-> > command to the power supplies.
-> >
-> > I can update the commit message to be more specific about which power
-> > supplies need this CLEAR_FAULTS sent, and which faults. It is observed
-> > with the 1600W power supplies (2B1E model). The faults that latch are
-> > the VIN_UV and INPUT faults in the STATUS_WORD. The corresponding
-> > STATUS_INPUT fault bits are VIN_UV_FAULT and Unit is Off.
-> >
+> > jfwiw, the trylock here is in the msm code isn't so much for madvise
+> > (it is an error to submit jobs that reference DONTNEED objects), but
+> > instead for the case of evicting WILLNEED but inactive objects to
+> > swap.  Ie. in the case that we need to move bo's back in to memory, we
+> > don't want to unpin/evict a buffer that is later on the list for the
+> > same job.. msm shrinker re-uses the same scan loop for both
+> > inactive_dontneed (purge) and inactive_willneed (evict)
 >
-> The point is that the respective fault bits should be reset when the
-> corresponding alarm attributes are read. This isn't about executing
-> a CLEAR_FAULTS command, but about selectively resetting fault bits
-> while ensuring that faults are reported at least once. Executing
-> CLEAR_FAULTS is a big hammer.
->
-> With the patch I pointed to in place, input (and other) faults should
-> be reset after the corresponding alarm attributes are read, assuming
-> that the condition no longer exists. If that does not happen, we should
-> fix the problem instead of deploying the big hammer.
->
-> Thanks,
-> Guenter
+> I don't see connection between the objects on the shrinker's list and
+> the job's BOs. Jobs indeed must not have any objects marked as DONTNEED,
+> this case should never happen in practice, but we still need to protect
+> from it.
 
-Okay, I see what you are pointing out there. I had been mostly looking
-at the "files" in the debugfs paths. Those do not end up running
-through that pmbus_get_boolean() function, so the individual fault
-clearing was not being attempted. The fault I was interested in
-appears to be associated with in1_lcrti_alarm. Reading that will give
-me a 1 if there is a VIN_UV fault, and then it sends 0x10 to
-STATUS_INPUT. That clears out VIN_UV, but the STATUS_INPUT command was
-returning 0x18. Nothing appears to handle clearing BIT(3), that 0x08
-mask.
+Hmm, let me try to explain with a simple example.. hopefully this makes sense.
 
-Should there be some kind of define for BIT(3) over in pmbus.h?
-Something like PB_VOLTAGE_OFF? Somehow we need something using that in
-sbit of the attributes. I had a quick hack that just OR'ed BIT(3) with
-BIT(4) for that PB_VOLTAGE_UV_FAULT. That resulted in a clear of both
-bits in STATUS_INPUT, and the faults clearing in STATUS_WORD.
-
-It is not clear if there should be a separate alarm for that "Unit Off
-For Insufficient Input Voltage", or if the one for in1_lcrit_alarm
-could just be the two bits OR'ed into one mask. I can send a patch
-with a proposal on how to fix this one bit not getting cleared.
+Say you have a job with two bo's, A and B..  bo A is not backed with
+memory (either hasn't been used before or was evicted.  Allocating
+pages for A triggers shrinker.  But B is still on the
+inactive_willneed list, however it is already locked (because we don't
+want to evict B to obtain backing pages for A).
 
 >
-> >>
-> >>> Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
-> >>> ---
-> >>> V1 -> V2: Explain why this change is needed
-> >>>
-> >>>    drivers/hwmon/pmbus/ibm-cffps.c | 11 +++++++++++
-> >>>    1 file changed, 11 insertions(+)
-> >>>
-> >>> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-> >>> index e3294a1a54bb..3f02dde02a4b 100644
-> >>> --- a/drivers/hwmon/pmbus/ibm-cffps.c
-> >>> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
-> >>> @@ -67,6 +67,7 @@ enum {
-> >>>        CFFPS_DEBUGFS_CCIN,
-> >>>        CFFPS_DEBUGFS_FW,
-> >>>        CFFPS_DEBUGFS_ON_OFF_CONFIG,
-> >>> +     CFFPS_DEBUGFS_CLEAR_FAULTS,
-> >>>        CFFPS_DEBUGFS_NUM_ENTRIES
-> >>>    };
-> >>>
-> >>> @@ -274,6 +275,13 @@ static ssize_t ibm_cffps_debugfs_write(struct file *file,
-> >>>                if (rc)
-> >>>                        return rc;
-> >>>
-> >>> +             rc = 1;
-> >>> +             break;
-> >>> +     case CFFPS_DEBUGFS_CLEAR_FAULTS:
-> >>> +             rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
-> >>> +             if (rc < 0)
-> >>> +                     return rc;
-> >>> +
-> >>>                rc = 1;
-> >>>                break;
-> >>>        default:
-> >>> @@ -607,6 +615,9 @@ static int ibm_cffps_probe(struct i2c_client *client)
-> >>>        debugfs_create_file("on_off_config", 0644, ibm_cffps_dir,
-> >>>                            &psu->debugfs_entries[CFFPS_DEBUGFS_ON_OFF_CONFIG],
-> >>>                            &ibm_cffps_fops);
-> >>> +     debugfs_create_file("clear_faults", 0200, ibm_cffps_dir,
-> >>> +                         &psu->debugfs_entries[CFFPS_DEBUGFS_CLEAR_FAULTS],
-> >>> +                         &ibm_cffps_fops);
-> >>>
-> >>>        return 0;
-> >>>    }
-> >>
+> > I suppose using trylock is not technically wrong, and it would be a
+> > good idea if the shmem helpers supported eviction as well.  But I
+> > think in the madvise/purge case if you lose the trylock then there is
+> > something else bad going on.
 >
+> This trylock is intended for protecting job's submission path from
+> racing with madvise ioctl invocation followed by immediate purging of
+> BOs while job is in a process of submission, i.e. it protects from a
+> use-after-free.
+
+ahh, ok
+
+> If you'll lose this trylock, then shrinker can't use
+> dma_resv_test_signaled() reliably anymore and shrinker may purge BO
+> before job had a chance to add fence to the BO's reservation.
+>
+> > Anyways, from the PoV of minimizing lock contention when under memory
+> > pressure, this all looks good to me.
+>
+> Thank you. I may try to add generic eviction support to the v3.
+
+eviction is a trickier thing to get right, I wouldn't blame you for
+splitting that out into it's own patchset ;-)
+
+You probably also would want to make it a thing that is opt-in for
+drivers using the shmem helpers
+
+BR,
+-R

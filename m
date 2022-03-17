@@ -2,131 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E78C4DCAE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD554DCAE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236379AbiCQQNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S236388AbiCQQNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236368AbiCQQM6 (ORCPT
+        with ESMTP id S232842AbiCQQN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:12:58 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18EA214FA2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:11:40 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so5891772pjl.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:11:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=wywg4x91ht1wDsZE8LDgwKs/937jDdBiI3aoJq8Icig=;
-        b=EcRFu47wdTKbqMSAq17bN6l3fW68je9I7sz6dNGS5tKD2WRbtx22XzizUZtR0qkyAQ
-         QWP1OHwCDN5A0Nw0t3Q7qmd76Q7jNga+edrTyslT2xibkPds1nD37wWbuAnO8SwFuhrO
-         gsVcYZtwJfnoFR7QpeZ53g8ha9BP7vQeAQagIeRfmuB8NZSh871Oy/O22T8GKZQsso7+
-         GAqKZ5LuYXbJaI8VOrspWlTrq9NYT2zp8TS48/UvpIibmW0S8anvsp+TLqAO1q5KW6Bh
-         lxRLQvTEz/3EMFmPsbBbDBLIo1E7GTCaZssTwBenfG227MP1XIuXr1IbCZbQ1ApUnFqh
-         aueg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=wywg4x91ht1wDsZE8LDgwKs/937jDdBiI3aoJq8Icig=;
-        b=n3XCZQ+Pol0fcAlkeUgzvTXWlaUbFM5BCpqqY7snRD8/RManGDpVGqegJ3+nY+mtNg
-         n6lgZMOep9nfs2rGC/NjX/q9I2qB4GGbYmNp+VrTCTh9ruWQfvpmcagDlcV1SLqUu5r3
-         bDCBmTbEv/O6+GZJv/Q1iAa815Y9CyXXPZD/Bc0iOnrvS7YN37FQmAkRzhxYuvcT+V13
-         gHMdWMwY819iMc/LwWPIqoTJwTj4hIFUWdhwv8Gp7fm3k30odTvbeI838PhMIjXGbCAx
-         uVeCRrnFmiSzqSDV2VjWUz8soZUQRePzPqG/cd+ClMfHZ8bADk9Ykh7Iy+tIXnCWd3TQ
-         0uDw==
-X-Gm-Message-State: AOAM532JQAotlJvOod7O3Mgb4nRFAWoUUZQAh2szqLhznxa38hxPV3p/
-        M7WYHXWhLqR3sMBOajy7oat7zw==
-X-Google-Smtp-Source: ABdhPJzujChC6izQDJEHNAPYk2A2y6Fs/ty0Hxcz37xAtsWb7B2FaolAnh/R0gH50blU6B7YVSPE4w==
-X-Received: by 2002:a17:902:7613:b0:151:6e1c:c49c with SMTP id k19-20020a170902761300b001516e1cc49cmr5906213pll.109.1647533499805;
-        Thu, 17 Mar 2022 09:11:39 -0700 (PDT)
-Received: from [127.0.1.1] ([2620:10d:c090:400::5:d2fd])
-        by smtp.gmail.com with ESMTPSA id q10-20020a056a00088a00b004f7ceff389esm7702590pfj.152.2022.03.17.09.11.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 09:11:39 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-scsi@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Florian Westphal <fw@strlen.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Eli Cohen <eli@mellanox.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>, x86@kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Amit Shah <amit@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-block@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        linux-usb@vger.kernel.org, coreteam@netfilter.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        nouveau@lists.freedesktop.org, Jason Wang <jasowang@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        virtualization@lists.linux-foundation.org,
-        Leon Romanovsky <leon@kernel.org>,
-        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
-        linux-rdma@vger.kernel.org,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joachim Fritschi <jfritschi@freenet.de>
-In-Reply-To: <20220316192010.19001-1-rdunlap@infradead.org>
-References: <20220316192010.19001-1-rdunlap@infradead.org>
-Subject: Re: (subset) [PATCH 0/9] treewide: eliminate anonymous module_init & module_exit
-Message-Id: <164753349550.89091.10994175450707575992.b4-ty@kernel.dk>
-Date:   Thu, 17 Mar 2022 10:11:35 -0600
+        Thu, 17 Mar 2022 12:13:29 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B05214F95;
+        Thu, 17 Mar 2022 09:12:13 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22HGA7Mb001466;
+        Thu, 17 Mar 2022 16:11:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=pp1; bh=p25VD7f9NEbYVMjA8oW0QFkZVMeTUhG3CnH7cS//y/k=;
+ b=X9yFhI44zN/g5Djdk7CUVe3XnJ2j55gpP8zMApLg81dXRdugfttKvk7dcCMrAOISaezK
+ Vag3hzezdHuU9lV6FuhPd8E1aaBkjdMqJY6UjedClTXjBOLZvfKFPwKfIt7RfLNIgFPk
+ ou9lOq7QRacw+dpgEh7JaVZ8O6sv5mY75j8VJetIN1+WkPtWw0yz5fsuhZgJh2QB/394
+ +QB/iZu4DGng16LIQzti5X8jM5psouV0fMi05tXl8ARsXeGXA6ZcCY1ZsIw+xqUWWU8+
+ E0oznKOxI8ngGlQF4HR1qUvNIX7twIKPZ6Eq3kI6nE9HJNlu9Z8NSqqSJgmpbZ5C1C8d Sg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev1vq0grp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Mar 2022 16:11:49 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22HGAAco001870;
+        Thu, 17 Mar 2022 16:11:49 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev1vq0gqw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Mar 2022 16:11:49 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22HFx27Q003925;
+        Thu, 17 Mar 2022 16:11:46 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3erk593r4x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Mar 2022 16:11:46 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22HGBhpe29164004
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Mar 2022 16:11:43 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3E0B0A405B;
+        Thu, 17 Mar 2022 16:11:43 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DD193A4054;
+        Thu, 17 Mar 2022 16:11:42 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 17 Mar 2022 16:11:42 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Ritesh Harjani <riteshh@linux.ibm.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-ext4@vger.kernel.org,
+        Jan Kara <jack@suse.cz>, "Theodore Ts'o" <tytso@mit.edu>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@kernel.org, hca@linux.ibm.com
+Subject: Re: [PATCHv3 02/10] ext4: Fix ext4_fc_stats trace point
+References: <cover.1647057583.git.riteshh@linux.ibm.com>
+        <b4b9691414c35c62e570b723e661c80674169f9a.1647057583.git.riteshh@linux.ibm.com>
+        <yt9dr1706b4i.fsf@linux.ibm.com>
+        <20220317145008.73nm7hqtccyjy353@riteshh-domain>
+Date:   Thu, 17 Mar 2022 17:11:42 +0100
+In-Reply-To: <20220317145008.73nm7hqtccyjy353@riteshh-domain> (Ritesh
+        Harjani's message of "Thu, 17 Mar 2022 20:20:08 +0530")
+Message-ID: <yt9d1qz05zk1.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: uOqWNEA3DQxmNIk6-ZvU0e3rRTxJ6Cya
+X-Proofpoint-ORIG-GUID: cEKF-wgx2ytzbbcc3RIkPT8_WeRzuC-x
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-17_06,2022-03-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0 adultscore=0
+ priorityscore=1501 bulkscore=0 malwarescore=0 mlxlogscore=874 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203170092
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 12:20:01 -0700, Randy Dunlap wrote:
-> There are a number of drivers that use "module_init(init)" and
-> "module_exit(exit)", which are anonymous names and can lead to
-> confusion or ambiguity when reading System.map, crashes/oops/bugs,
-> or an initcall_debug log.
-> 
-> Give each of these init and exit functions unique driver-specific
-> names to eliminate the anonymous names.
-> 
-> [...]
+Hi,
 
-Applied, thanks!
+Ritesh Harjani <riteshh@linux.ibm.com> writes:
 
-[1/9] virtio_blk: eliminate anonymous module_init & module_exit
-      commit: bcfe9b6cbb4438b8c1cc4bd475221652c8f9301b
+> On 22/03/17 01:01PM, Sven Schnelle wrote:
+>> Ritesh Harjani <riteshh@linux.ibm.com> writes:
+>>
+>> [    0.958403] Hardware name: IBM 3906 M04 704 (z/VM 7.1.0)
+>> [    0.958407] Workqueue: eval_map_wq eval_map_work_func
+>>
+>> [    0.958446] Krnl PSW : 0704e00180000000 000000000090a9d6 (number+0x25e/0x3c0)
+>> [    0.958456]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
+>> [    0.958461] Krnl GPRS: 0000000000000058 00000000010de0ac 0000000000000001 00000000fffffffc
+>> [    0.958467]            0000038000047b80 0affffff010de0ab 0000000000000000 0000000000000000
+>> [    0.958481]            0000000000000020 0000038000000000 00000000010de0ad 00000000010de0ab
+>> [    0.958484]            0000000080312100 0000000000e68910 0000038000047b50 0000038000047ab8
+>> [    0.958494] Krnl Code: 000000000090a9c6: f0c84112b001        srp     274(13,%r4),1(%r11),8
+>> [    0.958494]            000000000090a9cc: 41202001            la      %r2,1(%r2)
+>> [    0.958494]           #000000000090a9d0: ecab0006c065        clgrj   %r10,%r11,12,000000000090a9dc
+>> [    0.958494]           >000000000090a9d6: d200b0004000        mvc     0(1,%r11),0(%r4)
+>> [    0.958494]            000000000090a9dc: 41b0b001            la      %r11,1(%r11)
+>> [    0.958494]            000000000090a9e0: a74bffff
+>>             aghi    %r4,-1
+>> [    0.958494]            000000000090a9e4: a727fff6            brctg   %r2,000000000090a9d0
+>> [    0.958494]            000000000090a9e8: a73affff            ahi     %r3,-1
+>> [    0.958575] Call Trace:
+>> [    0.958580]  [<000000000090a9d6>] number+0x25e/0x3c0
+>> [    0.958594] ([<0000000000289516>] update_event_printk+0xde/0x200)
+>> [    0.958602]  [<0000000000910020>] vsnprintf+0x4b0/0x7c8
+>> [    0.958606]  [<00000000009103e8>] snprintf+0x40/0x50
+>> [    0.958610]  [<00000000002893d2>] eval_replace+0x62/0xc8
+>> [    0.958614]  [<000000000028e2fe>] trace_event_eval_update+0x206/0x248
+>
+> This looks like you must have this patch from Steven as well [2].
+> Although I did test the patch and didn't see such a crash on my qemu box [3].
+>
+> [2]: https://lore.kernel.org/linux-ext4/20220310233234.4418186a@gandalf.local.home/
+> [3]: https://lore.kernel.org/linux-ext4/20220311051249.ltgqbjjothbrkbno@riteshh-domain/
+>
+> @Steven,
+> Sorry to bother. But does this crash strike anything obvious to you?
 
-Best regards,
--- 
-Jens Axboe
+Looking at the oops output again made me realizes that the snprintf
+tries to write into pages that are mapped RO. Talking to Heiko he
+mentioned that s390 maps rodata/text RO when setting up the initial
+mapping while x86 has a RW mapping in the beginning and changes that
+later to RO. I haven't verified that, but that might be a reason why it
+works on x86.
 
-
+Thanks
+Sven

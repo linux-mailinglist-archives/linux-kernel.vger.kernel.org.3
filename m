@@ -2,84 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0218C4DC456
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5054C4DC45E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbiCQK5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 06:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
+        id S232785AbiCQLAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232675AbiCQK5B (ORCPT
+        with ESMTP id S232774AbiCQLAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 06:57:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C822619E3BE
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647514544;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 17 Mar 2022 07:00:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF572176D29;
+        Thu, 17 Mar 2022 03:59:19 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3453021110;
+        Thu, 17 Mar 2022 10:59:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1647514758; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=oI5WSIRwZsbGZlVeSYcyiheGQZ2AXv4KqUCkckxJqyo=;
-        b=K25yauTZw8HrU9LlvQ2uK/47p5t3Pif4+NtnLSUcqEQXQWvM0VU/UOKfEYX/rJpw8e1SuS
-        WW1MZ0AdkyNkgOUHVE42f8HXuHEtJOM9nOmVG9ufXTv+OkgJ/rZHc0o5oL3HLkT6tdrHj8
-        ARfMAumER2ljJ3rV3Ahj7wIyRxBdbeg=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-rrFZxCQnOeuIJKqC-UkuGA-1; Thu, 17 Mar 2022 06:55:42 -0400
-X-MC-Unique: rrFZxCQnOeuIJKqC-UkuGA-1
-Received: by mail-wr1-f70.google.com with SMTP id t15-20020adfdc0f000000b001ef93643476so1432439wri.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:55:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=oI5WSIRwZsbGZlVeSYcyiheGQZ2AXv4KqUCkckxJqyo=;
-        b=ZmLIc2GEKsmSqaySEHT88n3KomCA+84q4bL3E9QtPeCL+f4t3g9C0Xae4guHWqd2wF
-         t/BwGAQsDbra9Un8dClqX93v3uuYtqCzBPvchhL48oPaCE2oCjnpDSgyeJI5jzhTkJef
-         mIsJpfIuLLjkMTs7x+R6s0c4vKYt9w1pXSwguVDoL+NYO++hN1sjH6PHGpZGi90XHCfm
-         kPi9PTr9fLCxRAiB+w1m4m8svKwruliOc45u3U2fLY+uTA/r0IWVvOF44PeIPnA0VTJL
-         wv9Aa5dMwydYiebotLrWqTta2pvIuSLNtb9ot+7+Iq4TDmIgPSHctvBBf0ZZOLzVxvQ4
-         hLng==
-X-Gm-Message-State: AOAM531zeQ8ewdp85e7cJiyv0tFMuWNBElgYmFjucV41ajyoHgpEKcNM
-        8DlKwVc0ieANCitT+pL31oo+Rszg1CQJxMoiunhM1q5BUtBVY/CId9kLb/zc95juXhHWkciqdSG
-        a0zl+sNA22WLSjfTLCDt+NZ2m
-X-Received: by 2002:a5d:59a4:0:b0:203:914f:52fa with SMTP id p4-20020a5d59a4000000b00203914f52famr3417265wrr.257.1647514541648;
-        Thu, 17 Mar 2022 03:55:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJysbRU6X3N38sZnHt2a+qYqTxqD7zt/WiAYw+BN78ayQKGmZg2WlK4KxV8gsbHuhc5/z0oc2A==
-X-Received: by 2002:a5d:59a4:0:b0:203:914f:52fa with SMTP id p4-20020a5d59a4000000b00203914f52famr3417232wrr.257.1647514541257;
-        Thu, 17 Mar 2022 03:55:41 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
-        by smtp.gmail.com with ESMTPSA id r2-20020a0560001b8200b00203dffb9598sm3290679wru.86.2022.03.17.03.55.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 03:55:40 -0700 (PDT)
-Message-ID: <93480fb1-6992-b992-4c93-0046f3b92d7a@redhat.com>
-Date:   Thu, 17 Mar 2022 11:55:39 +0100
+        bh=FRZFWYXu0lglEsdbgAkHKkmcItgzgemxTYTZc8fsVTc=;
+        b=InraB4+0kSCdc8UDu/okTjNgatj5P6RAXhgCUwmKkl5JBuP6Jc7a82aAVFQCKM5cJV03oP
+        loW9dzgewNjtEz6rsoEZ9jmW3SA7GOPDLYpS9JFRAiS9/7oKRCLfQcaX5T5WrPRqHSmMPf
+        97Oh7UgJ4tESVOfSiJe/aFWx82wNEnE=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 97D36A3B83;
+        Thu, 17 Mar 2022 10:59:16 +0000 (UTC)
+Date:   Thu, 17 Mar 2022 11:59:15 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     mcgrof@kernel.org, rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+        v.narang@samsung.com, swboyd@chromium.org, ojeda@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        avimalin@gmail.com, atomlin@redhat.com, keescook@chromium.org,
+        ndesaulniers@google.com, rdunlap@infradead.org, void@manifault.com
+Subject: Re: [PATCH 1/1 module-next] kallsyms: enhance %pS/s/b printing when
+ KALLSYSMS is disabled
+Message-ID: <YjMUg8xwgRAH3lzA@alley>
+References: <CGME20220316043552epcas5p29b0723b7c55a3bcc9b4d858660e45933@epcas5p2.samsung.com>
+ <20220316043540.677128-1-maninder1.s@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-US
-To:     Dong Aisheng <aisheng.dong@nxp.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dongas86@gmail.com, shawnguo@kernel.org, linux-imx@nxp.com,
-        akpm@linux-foundation.org, m.szyprowski@samsung.com,
-        lecopzer.chen@mediatek.com, vbabka@suse.cz, stable@vger.kernel.org,
-        shijie.qin@nxp.com
-References: <20220315144521.3810298-1-aisheng.dong@nxp.com>
- <20220315144521.3810298-2-aisheng.dong@nxp.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3 1/2] mm: cma: fix allocation may fail sometimes
-In-Reply-To: <20220315144521.3810298-2-aisheng.dong@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316043540.677128-1-maninder1.s@samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,73 +60,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.03.22 15:45, Dong Aisheng wrote:
-> When there're multiple process allocing dma memory in parallel
-
-s/allocing/allocating/
-
-> by calling dma_alloc_coherent(), it may fail sometimes as follows:
+On Wed 2022-03-16 10:05:40, Maninder Singh wrote:
+> print module information when KALLSYMS is disabled.
 > 
-> Error log:
-> cma: cma_alloc: linux,cma: alloc failed, req-size: 148 pages, ret: -16
-> cma: number of available pages:
-> 3@125+20@172+12@236+4@380+32@736+17@2287+23@2473+20@36076+99@40477+108@40852+44@41108+20@41196+108@41364+108@41620+
-> 108@42900+108@43156+483@44061+1763@45341+1440@47712+20@49324+20@49388+5076@49452+2304@55040+35@58141+20@58220+20@58284+
-> 7188@58348+84@66220+7276@66452+227@74525+6371@75549=> 33161 free of 81920 total pages
+> No change for %pB, as it needs to know symbol name to adjust address
+> value which can't be done without KALLSYMS.
 > 
-> When issue happened, we saw there were still 33161 pages (129M) free CMA
-> memory and a lot available free slots for 148 pages in CMA bitmap that we
-> want to allocate.
+> (A) original output with KALLSYMS:
+> [8.842129] ps function_1 [crash]
+> [8.842735] pS function_1+0x4/0x2c [crash]
+> [8.842890] pSb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
+> [8.843175] pB function_1+0x4/0x2c [crash]
+> [8.843362] pBb function_1+0x4/0x2c [crash b367e79021b9f3b0172f9a36d4261c1f528ca1b3]
 > 
-> If dumping memory info, we found that there was also ~342M normal memory,
-> but only 1352K CMA memory left in buddy system while a lot of pageblocks
-> were isolated.
-
-s/If/When/
-
+> (B) original output without KALLSYMS:
+> [12.487424] ps 0xffff800000eb008c
+> [12.487598] pS 0xffff800000eb008c
+> [12.487723] pSb 0xffff800000eb008c
+> [12.487850] pB 0xffff800000eb008c
+> [12.487967] pBb 0xffff800000eb008c
 > 
-> Memory info log:
-> Normal free:351096kB min:30000kB low:37500kB high:45000kB reserved_highatomic:0KB
-> 	    active_anon:98060kB inactive_anon:98948kB active_file:60864kB inactive_file:31776kB
-> 	    unevictable:0kB writepending:0kB present:1048576kB managed:1018328kB mlocked:0kB
-> 	    bounce:0kB free_pcp:220kB local_pcp:192kB free_cma:1352kB lowmem_reserve[]: 0 0 0
-> Normal: 78*4kB (UECI) 1772*8kB (UMECI) 1335*16kB (UMECI) 360*32kB (UMECI) 65*64kB (UMCI)
-> 	36*128kB (UMECI) 16*256kB (UMCI) 6*512kB (EI) 8*1024kB (UEI) 4*2048kB (MI) 8*4096kB (EI)
-> 	8*8192kB (UI) 3*16384kB (EI) 8*32768kB (M) = 489288kB
+> (C) With patched kernel
+> with KALLYSMS:
+> [41.974576] ps function_1 [crash]
+> [41.975173] pS function_1+0x4/0x2c [crash]
+> [41.975386] pSb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> [41.975879] pB function_1+0x4/0x2c [crash]
+> [41.976076] pBb function_1+0x4/0x2c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
 > 
-> The root cause of this issue is that since commit a4efc174b382
-> ("mm/cma.c: remove redundant cma_mutex lock"), CMA supports concurrent
-> memory allocation. It's possible that the memory range process A trying
-> to alloc has already been isolated by the allocation of process B during
-> memory migration.
+> without KALLSYMS:
+> [9.624152] ps 0xffff800001bd008c [crash]	// similar to original, no changes
+> [9.624548] pS 0x(____ptrval____)+0x8c [crash]   // base address hashed and offset is without hash
+> [9.624847] pSb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
+> [9.625388] pB 0x(____ptrval____)+0x8c [crash]
+> [9.625594] pBb 0x(____ptrval____)+0x8c [crash a8b20caaec9635b316cf4812f6b55598fe2b7cee]
 > 
-> The problem here is that the memory range isolated during one allocation
-> by start_isolate_page_range() could be much bigger than the real size we
-> want to alloc due to the range is aligned to MAX_ORDER_NR_PAGES.
+> with disable hashing:
+> [8.563916] ps 0xffff800000f2008c [crash]
+> [8.564574] pS 0xffff800000f20000+0x8c [crash]
+> [8.564749] pSb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
+> [8.565008] pB 0xffff800000f20000+0x8c [crash]
+> [8.565154] pBb 0xffff800000f20000+0x8c [crash 3423a8993a7033fb79e5add14bf9d8d6b56330ca]
 > 
-> Taking an ARMv7 platform with 1G memory as an example, when MAX_ORDER_NR_PAGES
-> is big (e.g. 32M with max_order 14) and CMA memory is relatively small
-> (e.g. 128M), there're only 4 MAX_ORDER slot, then it's very easy that
-> all CMA memory may have already been isolated by other processes when
-> one trying to allocate memory using dma_alloc_coherent().
-> Since current CMA code will only scan one time of whole available CMA
-> memory, then dma_alloc_coherent() may easy fail due to contention with
-> other processes.
-> 
-> This patch introduces a retry mechanism to rescan CMA bitmap for -EBUSY
-> error in case the target memory range may has been temporarily isolated
-> by others and released later.
+> --- a/lib/vsprintf.c
+> +++ b/lib/vsprintf.c
+> @@ -979,33 +979,92 @@ char *bdev_name(char *buf, char *end, struct block_device *bdev,
+>  }
+>  #endif
+>  
+> +#if !defined(CONFIG_KALLSYMS) && defined(CONFIG_MODULES)
+> +static int sprint_module_info(char *buf, unsigned long value,
+> +			     int modbuildid, int backtrace, int symbol)
+> +{
+> +	struct module *mod;
+> +	unsigned long offset;
+> +	void *base;
+> +	char *modname;
+> +	int len;
+> +	const unsigned char *buildid = NULL;
+> +	bool add_offset;
+> +
+> +	if (is_ksym_addr(value))
+> +		return 0;
+> +
+> +	if (backtrace || symbol)
+> +		add_offset = true;
+> +	else
+> +		add_offset = false;
+> +
+> +	preempt_disable();
+> +	mod = __module_address(value);
+> +	if (mod) {
+> +		modname = mod->name;
+> +#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
+> +		if (modbuildid)
+> +			buildid = mod->build_id;
+> +#endif
+> +		if (add_offset) {
+> +			base = mod->core_layout.base;
+> +			offset = value - (unsigned long)base;
+> +		}
+> +	}
+> +	preempt_enable();
+> +	if (!mod)
+> +		return 0;
 
-But you patch doesn't check for -EBUSY and instead might retry forever,
-on any allocation error, no?
+I think that some earlier version of the patch allowed to print
+also the address from vmlinux with the offset. My concern was
+that it would show non-hashed base pointer. IMHO, it is fine
+to show it hashed.
 
-I'd really suggest letting alloc_contig_range() return -EAGAIN in case
-the isolation failed and handling -EAGAIN only in a special way instead.
+> +
+> +	/* address belongs to module */
+> +	if (add_offset)
+> +		len = sprintf(buf, "0x%p+0x%lx", base, offset);
+> +	else
+> +		len = sprintf(buf, "0x%lx", value);
+> +
+> +	return len + fill_name_build_id(buf, modname, modbuildid, buildid, len);
+> +}
 
-In addition, we might want to stop once we looped to often I assume.
+Otherwise, it looks good to me. I did also some basic testing.
+The vmlinux address with offset can be added by a followup patch.
+Feel free to use:
 
--- 
-Thanks,
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Tested-by: Petr Mladek <pmladek@suse.com>
 
-David / dhildenb
-
+Best Regards,
+Petr

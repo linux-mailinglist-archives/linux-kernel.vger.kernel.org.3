@@ -2,58 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928ED4DC300
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9FD4DC301
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232045AbiCQJj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
+        id S232054AbiCQJkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbiCQJjY (ORCPT
+        with ESMTP id S230149AbiCQJkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:39:24 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E58F141D92;
-        Thu, 17 Mar 2022 02:38:06 -0700 (PDT)
-Received: from zn.tnic (p200300ea971561b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:61b0:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D1F581EC03AD;
-        Thu, 17 Mar 2022 10:38:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1647509880;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Y0yRE4GP/95cPt86v2RYG2q4fNKPJLp7ExzsBY7nICc=;
-        b=WdL2QEZ6jXNUe26UHu/Ldn4OsaxPJ58JovqWsilCRZzGVFLMv6ttpJPi4b8bS+uv2bWAE6
-        2Y6WlCmLOp8XtyDZ+lzXm+KABH+L/+NgRc5YApCglzn/t+oce/Nw+i2xWWvVLGgya/yWNz
-        veu9AtkEKyRQK5ag7FO77q8uhCbumkE=
-Date:   Thu, 17 Mar 2022 10:37:56 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Jamie Heilman <jamie@audible.transient.net>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
-Subject: [PATCH -v1.1] kvm/emulate: Fix SETcc emulation function offsets with
- SLS
-Message-ID: <YjMBdMlhVMGLG5ws@zn.tnic>
-References: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
- <YjHYh3XRbHwrlLbR@zn.tnic>
- <YjIwRR5UsTd3W4Bj@audible.transient.net>
- <YjI69aUseN/IuzTj@zn.tnic>
- <YjJFb02Fc0jeoIW4@audible.transient.net>
- <YjJVWYzHQDbI6nZM@zn.tnic>
- <20220316220201.GM8939@worktop.programming.kicks-ass.net>
+        Thu, 17 Mar 2022 05:40:12 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2121.outbound.protection.outlook.com [40.107.117.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EB817ADB1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:38:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hw3t+Fcb5qu5npUuQlZ9/D3BxFbulWHW+i3yE++audWBUtsSmluNjQmm90dchX4E2gCmnHsH1KhZiySSye3bExIRVv91uXDEjTJJxI7UDRgTEPbgiaJOku14QcYY4OaFvWiy1760iEyU7Plxrj9CU8GqnO5qJ7DF6n35ladgODttvfyaYFm65MV77jQnqbUT9YRSI9OBQypjZIlARueZx6Qnc2+jY5HyFZSA9d/q9oxUC0MorguW6pm0aWoOKg70ouqD9Q/rE+MFXxAbMo1ZMhIcI8n3QO9iNB+FfaqcHwRXhPWKN1lEJfmf8FyuNCmoFDWBVk/mfcJqweUAYbE9+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tKm0z0vzl2/UCx25vp1Jr3oEI36MrjD78di1mFmbz6c=;
+ b=jcE7RAgnzCKjnhqFEK0BNyUjaPb/vwfSWIwdD0E3rpnAT3q/aTMJWVl3fhU0GsbIIKlEABa8Shh3poUQz2qMPO/hlvzNm0+bVBGnTJSfci9xqSPyZ/sX4gN3Pw39faPt05DaG6qN7ANl+c/95V6AzBwJRqvaUjWvb/t0W5ienTDbX98bCFvAKH5Ez9WFTSE0PdfQXfTymLFl9RlwMBx0oUb9wo3E1GT2+3thFi5OediHQm76/KjkFwdx45eg/u8e6B7S4F+wl5Hc2KSEwoSj9vtAeKErLyC4ugNO7YKQ5ZsJKRxqAMsmx/7CLi9LbQUmSYEBH0gdGWd0zwKhY4ctAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tKm0z0vzl2/UCx25vp1Jr3oEI36MrjD78di1mFmbz6c=;
+ b=oKuJRNK79jguop01Rm3v1HUkiyhzovmNjsXurY8eJ+DIEyxImbUNYBW/TZtugxAdEVdFWEF6VNQ/i6LuebmV/nsVnfd29ysK3FyoM9kq7GXqOtpYTTFzJ6JFzjq9Q8UcYbDdx+3HMblQ6EaiXUhWWuwDKPWvrCJ/iBt6z6s5jmk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by KL1PR0601MB3939.apcprd06.prod.outlook.com (2603:1096:820:27::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Thu, 17 Mar
+ 2022 09:38:53 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::4005:4e49:1e4e:463c]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::4005:4e49:1e4e:463c%3]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
+ 09:38:53 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] ASoC: SOF: topology: Use kmemdup() to replace kzalloc + memcpy
+Date:   Thu, 17 Mar 2022 02:38:41 -0700
+Message-Id: <20220317093841.3414-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: HK0PR03CA0101.apcprd03.prod.outlook.com
+ (2603:1096:203:b0::17) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220316220201.GM8939@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7c60bba2-a9b3-4f8b-dab9-08da07f9f2db
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB3939:EE_
+X-Microsoft-Antispam-PRVS: <KL1PR0601MB39393AC712D1A33CE1987328A2129@KL1PR0601MB3939.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cpK1i7K0CGydOL2mhfrxvb6T52343NoZbbta/rEIc+jK/Kt7aUiuEWKEjBXJoxQAxXfYMDZSlXBZnGGR4J86nLbgCqqv0x9B/OfbzACND7kgJ2/cGBTnm4LIui79bdzBlkfUttzM1Eh6t8RDmP8/XZqYjkfLmSNc+1cfNkrDzoYgFpte8+eUOeRTtS/QJqXFjtg3RGLIOcVEmAs2pbdwzMUrB0YaErR0HGaPyD0HrHuWqY9SVwbzpimiZNTAMeGJgH/YtNdYTrVmlyD3Rtl+pHYKN0mUwqTBZwMuNaPTRxH/Ig9hPXqXlNBi8aY9IEisBiR3HAUZ46pwt+x/acjSltzwQgJYlRM71+0OyjmYn+8e1Igt4m0DJz9/uheWZml5g2d8tFGopd2oXkyT5mZ/g7tCAOjDt0Ae5Pm56eJDv0Bqh2OltFeIu58KSo9aJ461XnWTBpYDYLSwnoEzVsa9XDyFODXaPdHoahMlOPNLJCD6zbplKDLTiynbqdtxNputMDfDCMQzZ/l/gobtL/J4hO83xjClco3yzuekqJwMuY3nKuWqFlXQN/MC2xI7HCrutlZJ/NtiHR8GI6CzRJVNZi9+Q526GFcnlPgmOjr/pPMaqruu6uJdsXFgDGAdtJemmUzqQvGKzHhCJG7uGSZbMpY34PDqxS034g08nlHKuuj+I5lAEILk03vwR7Cwr4pehFQAX/9UA6EuLOKjUJ0dsJ+Kqx86rNZOQPMlmwlaDz0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(38350700002)(1076003)(38100700002)(83380400001)(6506007)(4326008)(66556008)(8676002)(186003)(6486002)(316002)(66946007)(66476007)(4744005)(86362001)(107886003)(110136005)(2616005)(36756003)(8936002)(2906002)(6512007)(921005)(52116002)(508600001)(7416002)(6666004)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vCtijWd/kI0mKThVIqIugnhRYiGPlKSeTqLouQGLETQkR4qxFFDMkf4+052B?=
+ =?us-ascii?Q?EJgKsU/xxCmeOB2sjqdq33t9iOhHNLd3PszHCmz3b4fbrPJLvDwppXakV/wp?=
+ =?us-ascii?Q?C+YF6x0FMJWsfbE4iDEFe2FxGcKI5QwyVeRavNA3MWAHuZ8UVSKGSXjXGSWi?=
+ =?us-ascii?Q?J7VNEej4qTdT7FhT80Vbd2YtZ8hItY+5uXgk7Nw1VJsvmULuzlVZVC27GTiD?=
+ =?us-ascii?Q?D9LiPiut88gRGJLGD2+5OPLZiQls2uNjIBCWMlX+EpaqbfAr1Oz9ZdRbWjIw?=
+ =?us-ascii?Q?0dOQsjL+wNVJFREw2mOuGqsKONfVPikU4+OdZimcEHuewG3ux/Exb3L8JGMN?=
+ =?us-ascii?Q?eIUuMc6zphyy4BZNpaBYqXQtMBzFeqXb0XwJ3Q22sk+gBSDvlj+fCELgnS49?=
+ =?us-ascii?Q?RXOGHEEunA5zoeZI3Pw4R4k40rD4XZzk2fi5BnwOBl3J2h+kZjr+jN/M7PTM?=
+ =?us-ascii?Q?GNE+hyy2u81t3bt8F2SkweGRwLw5GygbvdDJ1xbkdGkwVvtns7xif5MtYiS6?=
+ =?us-ascii?Q?nQYSjqhFCGhZrA7FU7wA4xhrtlz8/KANd1tpI2Eo8RG/LEhr+tllvMNeybV2?=
+ =?us-ascii?Q?yY+JlNmJzukIYS1gDR+2S5yhzis97LL0TvfDE1A+eiy+JNvMSPVopcuCXKYa?=
+ =?us-ascii?Q?00aQ5pQD9ubHHqIig9QAV833Uh5osB+f0uwkiOXwhBMGvSCiKEW+k2cXoj1i?=
+ =?us-ascii?Q?6DuIkODmLDv5CIwKkOxU8828AspxGrH/h803jjCtQMvJOaiQ0SUJagK/VRhQ?=
+ =?us-ascii?Q?8pWUydsYStp1mkVbqLUnBqBIeQ22f3ldcE2X/1Qnr87SrZJzgxa1SIZVAs6L?=
+ =?us-ascii?Q?KH7Rok7WF25RBgFxOc0rcRxvjXv7VYKysnotSDXQUWXyIgkDkcdQ+JbdaD8x?=
+ =?us-ascii?Q?s8dKAi/A5Yk6nQ+w6fRyj6HB5f3+ZuXC58Z30d0/i6Mz4M1Qga800Hn8RnpM?=
+ =?us-ascii?Q?O4X+KrqI/CpuG3kew9hJPIQw69AdLq0j+ukVMinki1f65WinMSApOG/bdn1V?=
+ =?us-ascii?Q?P2AIl1kdyiMGvZCW8Egwo99aF8S3IjyA7qsmIlY8FnX6LGGw1Kh8AX1qMEwb?=
+ =?us-ascii?Q?Fzv33geRtT/zGPo3S4hKwEedy15Hn6NrRSUOb0dL29LoQD/4mJfUqc83CzQ6?=
+ =?us-ascii?Q?iM+qJImkrGz4e7SXkDawF65WRR5+I0nJfEVwVAGdn7u2Tqj2VFl6YPiiY+0Z?=
+ =?us-ascii?Q?xK6xnJ70/d22ZMpwwDS8fMGs92RE+jl2ZouSKl4cmMMCldFETfEmqnwnGUOZ?=
+ =?us-ascii?Q?9IqiD0Q5tNX0x/Nw8hFYB6oIO5o5LUcoQOfRlfXkvomPZ9LS45t9cVVhRmhx?=
+ =?us-ascii?Q?Ujbzu4y7HMfOLNGaWmQnPO/htQK8LSpWQ9WwNsOb/KslwDTya/Fsw/61xZgz?=
+ =?us-ascii?Q?9L1esUN8pL2Gv1fpWACpES38U8dHpsTQi5cDZ73niLPAdQM8f24INk4xOIOj?=
+ =?us-ascii?Q?BPihwx0LgEEVxRQUQhtsoIJjYyO89TSl?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c60bba2-a9b3-4f8b-dab9-08da07f9f2db
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2022 09:38:53.0654
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6TJsVeoXzPwXQF+8AHDSbNPbJLwRgSyZS7z0RlCQwUZ+w+5GpKa1VKAblyK6jXXrU+oJqfAmZGgMtKq/fbzKsQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB3939
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,109 +117,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 11:02:01PM +0100, Peter Zijlstra wrote:
-> I'd suggest writing that like:
-> 
-> 	#define SETCC_ALIGN	(4 * (1 + IS_ENABLED(CONFIG_SLS)))
-> 
-> That way people can enjoy smaller text when they don't do the whole SLS
-> thing.... Also, it appears to me I added an ENDBR to this in
-> tip/x86/core, well, that needs fixing too. Tomorrow tho.
+fix memdup.cocci warning:
+sound/soc/sof/topology.c:876:19-26: WARNING opportunity for kmemdup
 
-Done.
+Generated by: scripts/coccinelle/api/memdup.cocci
 
-Jamie, I'd appreciate testing this one too, pls, just in case.
-
-Thx.
-
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
 ---
-From: Borislav Petkov <bp@suse.de>
+ sound/soc/sof/topology.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-The commit in Fixes started adding INT3 after RETs as a mitigation
-against straight-line speculation.
-
-The fastop SETcc implementation in kvm's insn emulator uses macro magic
-to generate all possible SETcc functions and to jump to them when
-emulating the respective instruction.
-
-However, it hardcodes the size and alignment of those functions to 4: a
-three-byte SETcc insn and a single-byte RET. BUT, with SLS, there's an
-INT3 that gets slapped after the RET, which brings the whole scheme out
-of alignment:
-
-  15:   0f 90 c0                seto   %al
-  18:   c3                      ret
-  19:   cc                      int3
-  1a:   0f 1f 00                nopl   (%rax)
-  1d:   0f 91 c0                setno  %al
-  20:   c3                      ret
-  21:   cc                      int3
-  22:   0f 1f 00                nopl   (%rax)
-  25:   0f 92 c0                setb   %al
-  28:   c3                      ret
-  29:   cc                      int3
-
-and this explodes like this:
-
-  int3: 0000 [#1] PREEMPT SMP PTI
-  CPU: 0 PID: 2435 Comm: qemu-system-x86 Not tainted 5.17.0-rc8-sls #1
-  Hardware name: Dell Inc. Precision WorkStation T3400  /0TP412, BIOS A14 04/30/2012
-  RIP: 0010:setc+0x5/0x8 [kvm]
-  Code: 00 00 0f 1f 00 0f b6 05 43 24 06 00 c3 cc 0f 1f 80 00 00 00 00 0f 90 c0 c3 cc 0f 1f 00 0f 91 c0 c3 cc 0f 1f 00 0f 92 c0 c3 cc <0f> 1f 00 0f 93 c0 c3 cc 0f 1f 00 0f 94 c0 c3 cc 0f 1f 00 0f 95 c0
-  Call Trace:
-   <TASK>
-   ? x86_emulate_insn [kvm]
-   ? x86_emulate_instruction [kvm]
-   ? vmx_handle_exit [kvm_intel]
-   ? kvm_arch_vcpu_ioctl_run [kvm]
-   ? kvm_vcpu_ioctl [kvm]
-   ? __x64_sys_ioctl
-   ? do_syscall_64+0x40/0xa0
-   ? entry_SYSCALL_64_after_hwframe+0x44/0xae
-   </TASK>
-
-Raise the alignment value when SLS is enabled and use a macro for that
-instead of hard-coding naked numbers.
-
-Fixes: e463a09af2f0 ("x86: Add straight-line-speculation mitigation")
-Reported-by: Jamie Heilman <jamie@audible.transient.net>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/YjGzJwjrvxg5YZ0Z@audible.transient.net
----
- arch/x86/kvm/emulate.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index f667bd8df533..01c0a02f4004 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -430,8 +430,11 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
- 	FOP_END
+diff --git a/sound/soc/sof/topology.c b/sound/soc/sof/topology.c
+index 367fbe2d5b31..369693cc6d10 100644
+--- a/sound/soc/sof/topology.c
++++ b/sound/soc/sof/topology.c
+@@ -873,11 +873,10 @@ static int sof_control_load_bytes(struct snd_soc_component *scomp,
  
- /* Special case for SETcc - 1 instruction per cc */
-+
-+#define SETCC_ALIGN	(4 * (1 + IS_ENABLED(CONFIG_SLS)))
-+
- #define FOP_SETCC(op) \
--	".align 4 \n\t" \
-+	".align " __stringify(SETCC_ALIGN) " \n\t" \
- 	".type " #op ", @function \n\t" \
- 	#op ": \n\t" \
- 	ASM_ENDBR \
-@@ -1049,7 +1052,7 @@ static int em_bsr_c(struct x86_emulate_ctxt *ctxt)
- static __always_inline u8 test_cc(unsigned int condition, unsigned long flags)
- {
- 	u8 rc;
--	void (*fop)(void) = (void *)em_setcc + 4 * (condition & 0xf);
-+	void (*fop)(void) = (void *)em_setcc + SETCC_ALIGN * (condition & 0xf);
+ 	/* copy the private data */
+ 	if (priv_size > 0) {
+-		scontrol->priv = kzalloc(priv_size, GFP_KERNEL);
++		scontrol->priv = kmemdup(control->priv.data, priv_size, GFP_KERNEL);
+ 		if (!scontrol->priv)
+ 			return -ENOMEM;
  
- 	flags = (flags & EFLAGS_MASK) | X86_EFLAGS_IF;
- 	asm("push %[flags]; popf; " CALL_NOSPEC
+-		memcpy(scontrol->priv, control->priv.data, priv_size);
+ 		scontrol->priv_size = priv_size;
+ 	}
+ 
 -- 
-2.29.2
+2.17.1
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

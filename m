@@ -2,205 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C8B4DC002
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 08:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB6B4DC006
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 08:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiCQHM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 03:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
+        id S230166AbiCQHNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 03:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiCQHMv (ORCPT
+        with ESMTP id S230031AbiCQHNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 03:12:51 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB1C16A698
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 00:11:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647501095; x=1679037095;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0nRXy9gODoW5iD619RVbr29Ns5KlgGZx/6Y1CsdPbdo=;
-  b=D1c32EDG4wpS3ok522wzAhF5wKnmsi76z8LpziksCnCoBk+NdTNfFKzp
-   wJ7iUHNLkGLYCqRMdDSFNklKdSbMgsFLHTOxFSF66TcdhtPfjzcTk82Ee
-   xLEwz6JIyIikhjSd1RmJZ8q+duqAKA4ow4QKv9IpBPG34MLcBVu/8fvXr
-   A9orr95vgYI75JNa/qOC2lLWdjkxIPobQvmzSoj72OL7bPvDtlZeGt6j4
-   zXVyJV8oTUUWfVlBvzKzYGqpwMCmTdz47HjFIC/sp6NgbUDavEJPwzbLq
-   wdpLFbeG1S8uV9AMa8pfaPtWcnTD2kATlt2AHUmbvmgV+CsUqMFc4C+6K
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="281589514"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="281589514"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 00:11:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="516657638"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 17 Mar 2022 00:11:33 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUkIG-000DQN-MJ; Thu, 17 Mar 2022 07:11:33 +0000
-Date:   Thu, 17 Mar 2022 15:10:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 558/2335] arch/s390/include/asm/preempt.h:110:42:
- error: implicit declaration of function 'task_thread_info'
-Message-ID: <202203171524.ipsveLi5-lkp@intel.com>
+        Thu, 17 Mar 2022 03:13:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FE716A6A7;
+        Thu, 17 Mar 2022 00:12:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57D73612FC;
+        Thu, 17 Mar 2022 07:12:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37790C340E9;
+        Thu, 17 Mar 2022 07:12:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647501138;
+        bh=KgNHp5UtA+XTjbpsJS9b38tGdPvseTfHTAntYwQVbQ8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QX4Usa9E6tfR7ySnyycPJNu2ur3MT8VOvJeJOx2OwZ+HcPug0zl2wREFI7hHwTu5V
+         AzL9WrmnaMHqmTOhVxRLHngfh/TbYs2Yt/tmolOnGyDfLPChPfzE9BWU3eNmQbOqba
+         pRtLR+CyuZiwLIbU+h1gMy8+C41+kqvLH1SeJrwOCyChtDjAC8dZhTnMtnmJXydNaH
+         XtaCX4q2RCuAGrfDQxAVJ4Jxa0NfWu9iiGqBDDbY7WJIjFOPxK+oh72H6gC+4+H+py
+         odvdpZ5XhXYlfzZEyqwCZGFk+4FJHncfC9QYss70oow/mZJ4Q0iQLJ1tZTPspo9oCl
+         thp18aown5SXQ==
+Date:   Thu, 17 Mar 2022 09:11:28 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Haitao Huang <haitao.huang@linux.intel.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "Zhang, Cathy" <cathy.zhang@intel.com>,
+        "Xing, Cedric" <cedric.xing@intel.com>,
+        "Huang, Haitao" <haitao.huang@intel.com>,
+        "Shanahan, Mark" <mark.shanahan@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        nathaniel@profian.com
+Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
+ permissions
+Message-ID: <YjLfIMz4/Vx8Jm24@iki.fi>
+References: <YimWaAqEnXHbLdjh@iki.fi>
+ <op.1itu5vkewjvjmi@hhuan26-mobl1.mshome.net>
+ <Yis8LV99mORcLYs6@iki.fi>
+ <Yis9rA8uC/0bmWCF@iki.fi>
+ <97565fed-dc67-bab1-28d4-c40201c9f055@intel.com>
+ <Yi6tPLLt9Q+ailQ3@iki.fi>
+ <Yi6tinbF+Y7a66eQ@iki.fi>
+ <Yi6va4dCaljiQ1WQ@iki.fi>
+ <op.1i01q9s0wjvjmi@hhuan26-mobl1.mshome.net>
+ <YjLcr9TwLNWUtwkS@iki.fi>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YjLcr9TwLNWUtwkS@iki.fi>
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   85293bf3fca6d85608cff1447ce3097583f15fab
-commit: fc65f6666073b489472bc5f3625d1f90d3dde51f [558/2335] headers/deps: Move task->thread_info to per_task()
-config: s390-randconfig-r032-20220317 (https://download.01.org/0day-ci/archive/20220317/202203171524.ipsveLi5-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=fc65f6666073b489472bc5f3625d1f90d3dde51f
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout fc65f6666073b489472bc5f3625d1f90d3dde51f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
+On Thu, Mar 17, 2022 at 09:01:07AM +0200, Jarkko Sakkinen wrote:
+> On Mon, Mar 14, 2022 at 10:39:36AM -0500, Haitao Huang wrote:
+> > Hi Jarkko
+> > 
+> > On Sun, 13 Mar 2022 21:58:51 -0500, Jarkko Sakkinen <jarkko@kernel.org>
+> > wrote:
+> > 
+> > > On Mon, Mar 14, 2022 at 04:50:56AM +0200, Jarkko Sakkinen wrote:
+> > > > On Mon, Mar 14, 2022 at 04:49:37AM +0200, Jarkko Sakkinen wrote:
+> > > > > On Fri, Mar 11, 2022 at 09:53:29AM -0800, Reinette Chatre wrote:
+> > > > >
+> > > > > > I saw Haitao's note that EMODPE requires "Read access permitted
+> > > > by enclave".
+> > > > > > This motivates that EMODPR->PROT_NONE should not be allowed
+> > > > since it would
+> > > > > > not be possible to relax permissions (run EMODPE) after that.
+> > > > Even so, I
+> > > > > > also found in the SDM that EACCEPT has the note "Read access
+> > > > permitted
+> > > > > > by enclave". That seems to indicate that EMODPR->PROT_NONE is
+> > > > not practical
+> > > > > > from that perspective either since the enclave will not be able to
+> > > > > > EACCEPT the change. Does that match your understanding?
+> > > > >
+> > > > > Yes, PROT_NONE should not be allowed.
+> > > > >
+> > > > > This is however the real problem.
+> > > > >
+> > > > > The current kernel patch set has inconsistent API and EMODPR ioctl is
+> > > > > simply unacceptable. It  also requires more concurrency management
+> > > > from
+> > > > > user space run-time, which would be heck a lot easier to do in the
+> > > > kernel.
+> > > > >
+> > > > > If you really want EMODPR as ioctl, then for consistencys sake,
+> > > > then EAUG
+> > > > > should be too. Like this when things go opposite directions, this
+> > > > patch set
+> > > > > plain and simply will not work out.
+> > > > >
+> > > > > I would pick EAUG's strategy from these two as it requires half
+> > > > the back
+> > > > > calls to host from an enclave. I.e. please combine mprotect() and
+> > > > EMODPR,
+> > > > > either in the #PF handler or as part of mprotect(), which ever
+> > > > suits you
+> > > > > best.
+> > > > >
+> > > > > I'll try demonstrate this with two examples.
+> > > > >
+> > > > > mmap() could go something like this() (simplified):
+> > > > > 1. Execution #UD's to SYSCALL.
+> > > > > 2. Host calls enclave's mmap() handler with mmap() parameters.
+> > > > > 3. Enclave up-calls host's mmap().
+> > > > > 4. Loops the range with EACCEPTCOPY.
+> > > > >
+> > > > > mprotect() has to be done like this:
+> > > > > 1. Execution #UD's to SYSCALL.
+> > > > > 2. Host calls enclave's mprotect() handler.
+> > > > > 3. Enclave up-calls host's mprotect().
+> > > > > 4. Enclave up-calls host's ioctl() to SGX_IOC_ENCLAVE_PERMISSIONS.
+> > 
+> > I assume up-calls here are ocalls as we call them in our implementation,
+> > which are the calls enclave make to untrusted side via EEXIT.
+> > 
+> > If so, can your implementation combine this two up-calls into one, then host
+> > side just do ioctl() and mprotect to kernel? If so, would that address your
+> > concern about extra up-calls?
+> > 
+> > 
+> > > > > 3. Loops the range with EACCEPT.
+> > > >   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > >   5. Loops the range with EACCEPT + EMODPE.
+> > > > 
+> > > > > This is just terrible IMHO. I hope these examples bring some insight.
+> > > 
+> > > E.g. in Enarx we have to add a special up-call (so called enarxcall in
+> > > intermediate that we call sallyport, which provides shared buffer to
+> > > communicate with the enclave) just for reseting the range with PROT_READ.
+> > > Feel very redundant, adds ugly cruft and is completely opposite strategy
+> > > to
+> > > what you've chosen to do with EAUG, which is I think correct choice as
+> > > far
+> > > as API is concerned.
+> > 
+> > The problem with EMODPR on #PF is that kernel needs to know what permissions
+> > requested from enclave at the time of #PF. So enclave has to make at least
+> > one call to kernel (again via ocall in our case, I assume up-call in your
+> > case) to make the change.
+> 
+> The #PF handler should do unconditionally EMODPR with PROT_READ.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Or mprotect(), as long as secinfo contains PROT_READ. I don't care about
+this detail hugely anymore because it does not affect uapi. 
 
-All error/warnings (new ones prefixed by >>):
+Using EMODPR as a permission control mechanism is a ridiculous idea, and
+I cannot commit to maintain a broken uapi.
 
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:6:
-   In file included from include/linux/smp.h:110:
-   In file included from include/linux/preempt.h:78:
->> arch/s390/include/asm/preempt.h:110:42: error: implicit declaration of function 'task_thread_info' [-Werror,-Wimplicit-function-declaration]
-           return !--S390_lowcore.preempt_count && tif_need_resched();
-                                                   ^
-   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
-   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
-                              ^
-   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
-           test_ti_thread_flag(current_thread_info(), flag)
-                               ^
-   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
-   # define current_thread_info() task_thread_info(current)
-                                  ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:6:
-   In file included from include/linux/smp.h:110:
-   In file included from include/linux/preempt.h:78:
->> arch/s390/include/asm/preempt.h:110:42: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct thread_info *' [-Wint-conversion]
-           return !--S390_lowcore.preempt_count && tif_need_resched();
-                                                   ^~~~~~~~~~~~~~~~~~
-   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
-   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
-           test_ti_thread_flag(current_thread_info(), flag)
-                               ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
-   # define current_thread_info() task_thread_info(current)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sched/thread_info_api_lowlevel.h:39:59: note: passing argument to parameter 'ti' here
-   static inline int test_ti_thread_flag(struct thread_info *ti, int flag)
-                                                             ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:6:
-   In file included from include/linux/smp.h:110:
-   In file included from include/linux/preempt.h:78:
-   arch/s390/include/asm/preempt.h:116:4: error: implicit declaration of function 'task_thread_info' [-Werror,-Wimplicit-function-declaration]
-                           tif_need_resched());
-                           ^
-   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
-   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
-                              ^
-   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
-           test_ti_thread_flag(current_thread_info(), flag)
-                               ^
-   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
-   # define current_thread_info() task_thread_info(current)
-                                  ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:6:
-   In file included from include/linux/smp.h:110:
-   In file included from include/linux/preempt.h:78:
-   arch/s390/include/asm/preempt.h:116:4: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct thread_info *' [-Wint-conversion]
-                           tif_need_resched());
-                           ^~~~~~~~~~~~~~~~~~~
-   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
-   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
-                              ^
-   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
-           test_ti_thread_flag(current_thread_info(), flag)
-                               ^
-   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
-   # define current_thread_info() task_thread_info(current)
-                                  ^
-   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                                               ^
-   include/linux/sched/thread_info_api_lowlevel.h:39:59: note: passing argument to parameter 'ti' here
-   static inline int test_ti_thread_flag(struct thread_info *ti, int flag)
-                                                             ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:9:
-   In file included from include/linux/sched.h:12:
-   include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
-   # include <generated/asm-offsets.h>
-             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings and 3 errors generated.
-   make[2]: *** [scripts/Makefile.build:121: arch/s390/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1191: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/task_thread_info +110 arch/s390/include/asm/preempt.h
-
-c360192bf4a8dc7 Martin Schwidefsky 2016-10-25  107  
-c360192bf4a8dc7 Martin Schwidefsky 2016-10-25  108  static inline bool __preempt_count_dec_and_test(void)
-c360192bf4a8dc7 Martin Schwidefsky 2016-10-25  109  {
-c360192bf4a8dc7 Martin Schwidefsky 2016-10-25 @110  	return !--S390_lowcore.preempt_count && tif_need_resched();
-c360192bf4a8dc7 Martin Schwidefsky 2016-10-25  111  }
-c360192bf4a8dc7 Martin Schwidefsky 2016-10-25  112  
-
-:::::: The code at line 110 was first introduced by commit
-:::::: c360192bf4a8dc72f102dd6a4e1bf8bd0b404cfa s390/preempt: move preempt_count to the lowcore
-
-:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
-:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+BR, Jarkko

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A027A4DC718
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B56EA4DC684
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234339AbiCQM5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
+        id S232991AbiCQMzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234918AbiCQMyD (ORCPT
+        with ESMTP id S234152AbiCQMwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:54:03 -0400
+        Thu, 17 Mar 2022 08:52:37 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A561F1610;
-        Thu, 17 Mar 2022 05:52:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256BB1F1635;
+        Thu, 17 Mar 2022 05:50:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F864B81DA1;
-        Thu, 17 Mar 2022 12:52:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1368C340F2;
-        Thu, 17 Mar 2022 12:52:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAF67B81DA1;
+        Thu, 17 Mar 2022 12:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2823EC340EF;
+        Thu, 17 Mar 2022 12:50:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521560;
-        bh=c/vJSC7ZZC7rjUnp54uJ2Qsy/5gm9rzvDqpR8TxQZkw=;
+        s=korg; t=1647521409;
+        bh=Aam8fO933+rwoFhOIFIjI5gVcPRNyjusS5F4VJONDuI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AXtNRbHqg4aQJmTJ1DXw0UER3CoZBrbQ48wrJJGdGJwsg0RdsEAZeKXrc2lNjXcNW
-         H5xem5NM079ZKhWIcsRwL12fpDGRTM9PRMUpWqJCPbjuD0tWipQCuOGAXYeUavPQDG
-         AaS1wrtEm1zL26Hdst7uKlKZplM4FXbWd7QBKR0s=
+        b=HzmzoWi1m/IHsPMXdj0PoIw8lnO7K6Xc/Fi/vB4tX/u1rzUIw9l0IswigKk6TStMP
+         5ipX7ZQadCreya+kH1KGq0KjCe70xXwq0FmYSdvjFektIWVOq6emkWuRZWRKF30H1t
+         vZ0EFG6EduAQ/r87Pbt63djV07QrvsNo7JtCG+Ds=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 11/28] ARM: dts: rockchip: fix a typo on rk3288 crypto-controller
-Date:   Thu, 17 Mar 2022 13:46:02 +0100
-Message-Id: <20220317124527.090400343@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 5.10 22/23] io_uring: return back safer resurrect
+Date:   Thu, 17 Mar 2022 13:46:03 +0100
+Message-Id: <20220317124526.600389707@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317124526.768423926@linuxfoundation.org>
-References: <20220317124526.768423926@linuxfoundation.org>
+In-Reply-To: <20220317124525.955110315@linuxfoundation.org>
+References: <20220317124525.955110315@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-[ Upstream commit 3916c3619599a3970d3e6f98fb430b7c46266ada ]
+commit f70865db5ff35f5ed0c7e9ef63e7cca3d4947f04 upstream.
 
-crypto-controller had a typo, fix it.
-In the same time, rename it to just crypto
+Revert of revert of "io_uring: wait potential ->release() on resurrect",
+which adds a helper for resurrect not racing completion reinit, as was
+removed because of a strange bug with no clear root or link to the
+patch.
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Link: https://lore.kernel.org/r/20220209120355.1985707-1-clabbe@baylibre.com
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Was improved, instead of rcu_synchronize(), just wait_for_completion()
+because we're at 0 refs and it will happen very shortly. Specifically
+use non-interruptible version to ignore all pending signals that may
+have ended prior interruptible wait.
+
+This reverts commit cb5e1b81304e089ee3ca948db4d29f71902eb575.
+
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Link: https://lore.kernel.org/r/7a080c20f686d026efade810b116b72f88abaff9.1618101759.git.asml.silence@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Cc: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/rk3288.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/io_uring.c |   18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
-index aaaa61875701..45a9d9b908d2 100644
---- a/arch/arm/boot/dts/rk3288.dtsi
-+++ b/arch/arm/boot/dts/rk3288.dtsi
-@@ -971,7 +971,7 @@
- 		status = "disabled";
- 	};
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -1009,6 +1009,18 @@ static inline bool __io_match_files(stru
+ 		req->work.identity->files == files;
+ }
  
--	crypto: cypto-controller@ff8a0000 {
-+	crypto: crypto@ff8a0000 {
- 		compatible = "rockchip,rk3288-crypto";
- 		reg = <0x0 0xff8a0000 0x0 0x4000>;
- 		interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
--- 
-2.34.1
-
++static void io_refs_resurrect(struct percpu_ref *ref, struct completion *compl)
++{
++	bool got = percpu_ref_tryget(ref);
++
++	/* already at zero, wait for ->release() */
++	if (!got)
++		wait_for_completion(compl);
++	percpu_ref_resurrect(ref);
++	if (got)
++		percpu_ref_put(ref);
++}
++
+ static bool io_match_task(struct io_kiocb *head,
+ 			  struct task_struct *task,
+ 			  struct files_struct *files)
+@@ -9757,12 +9769,11 @@ static int __io_uring_register(struct io
+ 			if (ret < 0)
+ 				break;
+ 		} while (1);
+-
+ 		mutex_lock(&ctx->uring_lock);
+ 
+ 		if (ret) {
+-			percpu_ref_resurrect(&ctx->refs);
+-			goto out_quiesce;
++			io_refs_resurrect(&ctx->refs, &ctx->ref_comp);
++			return ret;
+ 		}
+ 	}
+ 
+@@ -9855,7 +9866,6 @@ out:
+ 	if (io_register_op_must_quiesce(opcode)) {
+ 		/* bring the ctx back to life */
+ 		percpu_ref_reinit(&ctx->refs);
+-out_quiesce:
+ 		reinit_completion(&ctx->ref_comp);
+ 	}
+ 	return ret;
 
 

@@ -2,115 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B203F4DC905
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6723E4DC8F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235178AbiCQOk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 10:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
+        id S235215AbiCQOlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 10:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbiCQOk1 (ORCPT
+        with ESMTP id S234486AbiCQOk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 10:40:27 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B715E9F3BB
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:39:10 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647527949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xwa5B4vbC87faqjFjpMX9eHkgYU0LzWzNDEusWEFXMA=;
-        b=aXAczIdCT5b8wJP+mVoY4R7Jp71iJt3bhoK/69/KoIRyiBa/T/4Pj+y2huc4Woeq/Bvy9y
-        K5KYUWYAeQpJ0dOqohhKdBqKo2y2ahxG0URwLLpgVusUw51sFfPLDe9lponrYBoGIbn+lv
-        pMvGyKXnUIUyFM4urZX6sMOpUVdiRWMzAMeDFybIEOqGqQiHNRvOrapDE6/rji/LUgm+ti
-        WugGYbkFVfPhbBWdzRvJg9zjN2zPjM/bkgpZjK6OLelo2K/FkZvRoDUuhudkmJAfdK9kIy
-        9QVGp1leQkjhk4jxa3wHF2NT78+j3Y2CAYuvTubXD+LJfYgS7vonFLcZzvaanw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647527949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xwa5B4vbC87faqjFjpMX9eHkgYU0LzWzNDEusWEFXMA=;
-        b=Z1UtT6VeZQ8ZBxrky5MMlNxZgSh5g7/X0sLp/gp7EYSwLoJpG95TC8LaYJGS2w16xM1/1g
-        a3u60SY+mRSeOUBg==
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv6 05/30] x86/tdx: Exclude shared bit from __PHYSICAL_MASK
-In-Reply-To: <20220317135820.frdppktft4flzhha@black.fi.intel.com>
-References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
- <20220316020856.24435-6-kirill.shutemov@linux.intel.com>
- <87czil303j.ffs@tglx> <20220317135820.frdppktft4flzhha@black.fi.intel.com>
-Date:   Thu, 17 Mar 2022 15:39:08 +0100
-Message-ID: <87r170d4oj.ffs@tglx>
+        Thu, 17 Mar 2022 10:40:57 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B83CDA6F3;
+        Thu, 17 Mar 2022 07:39:36 -0700 (PDT)
+X-UUID: 7c0b814030aa4ab5b3e707a09d2f0dd4-20220317
+X-UUID: 7c0b814030aa4ab5b3e707a09d2f0dd4-20220317
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 851944695; Thu, 17 Mar 2022 22:39:29 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 17 Mar 2022 22:39:28 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 17 Mar
+ 2022 22:39:27 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 17 Mar 2022 22:39:27 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
+        <moudy.ho@mediatek.com>, <jason-jh.lin@mediatek.com>,
+        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
+        <srv_heupstream@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v14 0/6] Add mutex support for MDP
+Date:   Thu, 17 Mar 2022 22:39:20 +0800
+Message-ID: <20220317143926.15835-1-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17 2022 at 16:58, Kirill A. Shutemov wrote:
+Change since V13:
+- Rebase on linux-next tag:next-20220316
+- Adjust the MUTEX MOD table structure and corresponding functions.
+- Adjust the definition style about 8183 MDP MOD.
+- Remove redundant definitions and enumerations.
+- Adjust the CMDQ operation in MUTEX to be backward compatible
 
-> On Thu, Mar 17, 2022 at 01:16:00AM +0100, Thomas Gleixner wrote:
->> On Wed, Mar 16 2022 at 05:08, Kirill A. Shutemov wrote:
->> > @@ -82,6 +82,14 @@ void __init tdx_early_init(void)
->> >  
->> >  	cc_set_vendor(CC_VENDOR_INTEL);
->> >  
->> > +	/*
->> > +	 * All bits above GPA width are reserved and kernel treats shared bit
->> > +	 * as flag, not as part of physical address.
->> > +	 *
->> > +	 * Adjust physical mask to only cover valid GPA bits.
->> > +	 */
->> > +	physical_mask &= GENMASK_ULL(gpa_width - 2, 0);
->> > +
->> 
->> Hrm. I forgot about the second use case for gpa_width, but my comment
->> about ordering still stands. OTOH:
->> 
->>          GENMASK_ULL(gpa_width - 2, 0) == BIT_UL(gpa_width - 1) - 1
->> 
->> right? So you really can consolidate on the fact that cc_mask is a
->> single bit which is above the guests physical address space boundary.
->> 
->> I.e. make the code tell the story instead of adding lengthy comments
->> explaining the obfuscation.
->
-> So it will looks something like this:
->
->
-> 	cc_set_vendor(CC_VENDOR_INTEL);
-> 	cc_mask = get_cc_mask();
-> 	cc_set_mask(cc_mask);
->
-> 	/*
-> 	 * All bits above GPA width are reserved and kernel treats shared bit
-> 	 * as flag, not as part of physical address.
-> 	 *
-> 	 * Adjust physical mask to only cover valid GPA bits.
-> 	 */
-> 	physical_mask &= cc_mask - 1;
->
-> I still think these comments are useful. I hided comment for cc_mask
-> calclulation inside get_cc_mask().
->
-> Does it look fine to you?
+Change since V12:
+- Rebase on linux-next
+- Remove ISP related settings in MMSYS
+- Removed CMDQ operations previously used by MDP in MMSYS
+- Move mediatek MUTEX dt-binding path
+- Add additional property in MUTEX for CMDQ operations
 
-Yes.
+Change since V11:
+- Rebase on v5.17-rc6.
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.17-next/soc&id=5f9b5b757e44de47ebdc116c14b90e3cc8bc7acb
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.17-next/soc&id=831785f0e5b919c29e1bc5f9a74e9ebd38289e24
+[3]: https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.17-next/soc&id=15f1768365aed810826a61fef4a744437aa5b426
+
+Change since v10:
+- For some ISP application scenarios, such as preview and recording
+  at the same time.
+  The routing table needs to be discarded, and the calculation result
+  on the SCP side is used to write a suitable mux setting for
+  1 input and 2 output.
+- Adjust the GCE client register parsing method to avoid redundant warning logs.
+
+Change since v9:
+- Add API for MDP getting mutex mod.
+
+Hi,
+
+This patch splits mmsys and mutex settings from Media Data Path 3 (MDP3),
+and original mailling list list below:
+https://patchwork.kernel.org/project/linux-mediatek/cover/20211201095031.31606-1-moudy.ho@mediatek.com/
+Corresponding settings and interfaces are added for MDP operation in the
+mutex drivers, which increases the independence of the modules
+
+Moudy Ho (6):
+  soc: mediatek: mutex: add common interface to accommodate multiple
+    modules operationg MUTEX
+  soc: mediatek: mutex: add 8183 MUTEX MOD settings for MDP
+  dt-bindings: soc: mediatek: move out common module from display folder
+  dt-bindings: soc: mediatek: add gce-client-reg for MUTEX
+  dts: arm64: mt8183: add GCE client property for Mediatek MUTEX
+  soc: mediatek: mutex: add functions that operate registers by CMDQ
+
+ .../mediatek/mediatek,mutex.yaml              |  10 +-
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   1 +
+ drivers/soc/mediatek/mtk-mutex.c              | 187 +++++++++++++++++-
+ include/linux/soc/mediatek/mtk-mutex.h        |  23 +++
+ 4 files changed, 219 insertions(+), 2 deletions(-)
+ rename Documentation/devicetree/bindings/{display => soc}/mediatek/mediatek,mutex.yaml (83%)
+
+-- 
+2.18.0
+

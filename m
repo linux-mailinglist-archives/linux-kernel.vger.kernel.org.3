@@ -2,58 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EFF4DCAB2
+	by mail.lfdr.de (Postfix) with ESMTP id E282C4DCAB5
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236312AbiCQQFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
+        id S236319AbiCQQFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233599AbiCQQFD (ORCPT
+        with ESMTP id S233690AbiCQQFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:05:03 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4BCDF489
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:03:46 -0700 (PDT)
-Received: from zn.tnic (p200300ea971561b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:61b0:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 86C921EC05ED;
-        Thu, 17 Mar 2022 17:03:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1647533020;
+        Thu, 17 Mar 2022 12:05:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5430EDFD79
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647533035;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=5VUfRHfWHVA+gcxjNm08CCSSttzTC3qvo8Yb9E+0C2k=;
-        b=mBaP5fadVWXFH/Ybi9iJLJBoNCuVskrcwqBX7//yYlYnZzLbLBfeM+IL+WmaVexA9CatWt
-        u+3Ydy6O2jq781W2vh9dDBPd7oWIp+cIq1vjM6WA0YKM1d/t2ps0rjGoC6OjzQl4rKbpz8
-        TqDtO4dzyUYpkEMExNM/ftfGqWim2lQ=
-Date:   Thu, 17 Mar 2022 17:03:37 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCHv6 03/30] x86/tdx: Add __tdx_module_call() and
- __tdx_hypercall() helper functions
-Message-ID: <YjNb2bTrlA4LyZKH@zn.tnic>
-References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
- <20220316020856.24435-4-kirill.shutemov@linux.intel.com>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pjpbf4xeM/d+LM74P4hgb4mVXuo4YOMoiMQxJouuPr4=;
+        b=X0ChvJjlhVjqxMhjFT7LcHOMwfBGTky/v3uA1YaNuMJZtwxRmKAx4jivP/xiAJTPaeO6kk
+        q0kplx0YrRSA1Cpg7TMew1OAh4bKu4P4zVF/gFeOoV7I9mCYLgY6Vt/nMKG0ulAUOgblvU
+        F6AAFImM0qCfN8poK/a8nJuMzIeSFMo=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-451-GZXelJrqNOCJEaD10jez2Q-1; Thu, 17 Mar 2022 12:03:54 -0400
+X-MC-Unique: GZXelJrqNOCJEaD10jez2Q-1
+Received: by mail-io1-f70.google.com with SMTP id i19-20020a5d9353000000b006495ab76af6so466536ioo.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:03:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=pjpbf4xeM/d+LM74P4hgb4mVXuo4YOMoiMQxJouuPr4=;
+        b=DMI/MkcXu/AR4hFAvnrLEefQZXtZiTcNrSL4iuplgiIHLk/dlViYXlVpuElYNcUB1b
+         USGOuOLLkCwRjuq7viT/8xGDSJ8lnRSBaJfyMHyG17AlPljKbGmim7NKSNWmixo+X1Sr
+         IBwk/zOxAhvBgQ3FtUduAd7WQ398TOi5kcMOu+dWHPxB5dL8gXx8yiRh2C5P73F1p52S
+         zCtt0XkruiwB8OyR18xvyCCQS0Tji3FgX+mgt+5+zO7+c+aA7xUEycF2uGp0XIuM2k/u
+         RbEyZxREokDNvGu7HlZMT8eOQ3uJAotyc6VxSJhJwScMDg9O/qN7SLHy+SilVbRn/ub/
+         XUWQ==
+X-Gm-Message-State: AOAM530haUt3eQIwXdfgbLG0WfpiwiK8McM8bJflkJaefTJq7V1rQySE
+        F6J9uWjZCzpxmaNeLeTCU1ZzlTcyXQih1t4XQEz0ZSThmLoRyH/Gs5djltJW1vSsgU+7yvIxUCr
+        G7ftJOBiB3H1TzTMKAMoM+5XE
+X-Received: by 2002:a92:3609:0:b0:2c6:3595:2a25 with SMTP id d9-20020a923609000000b002c635952a25mr2567395ila.233.1647533033531;
+        Thu, 17 Mar 2022 09:03:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz3aHgYME/n6/Qs0XoLrfeBnvVUU0JQGkqMW+0T1bGE3wtNnjJnVWb0pfCfy3PJe1ny3h/xrA==
+X-Received: by 2002:a92:3609:0:b0:2c6:3595:2a25 with SMTP id d9-20020a923609000000b002c635952a25mr2567374ila.233.1647533033326;
+        Thu, 17 Mar 2022 09:03:53 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id k4-20020a5e9304000000b00640dfe71dc8sm2873858iom.46.2022.03.17.09.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 09:03:53 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 10:03:51 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     alex.williamson@redhat.com, kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jgg@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        yishaih@nvidia.com, linux-doc@vger.kernel.org, corbet@lwn.net,
+        hch@infradead.org
+Subject: Re: [PATCH v4] vfio-pci: Provide reviewers and acceptance criteria
+ for variant drivers
+Message-ID: <20220317100351.344e699a.alex.williamson@redhat.com>
+In-Reply-To: <164736509088.181560.2887686123582116702.stgit@omen>
+References: <164736509088.181560.2887686123582116702.stgit@omen>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220316020856.24435-4-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,43 +81,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 05:08:29AM +0300, Kirill A. Shutemov wrote:
-> From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> 
-> Guests communicate with VMMs with hypercalls. Historically, these
-> are implemented using instructions that are known to cause VMEXITs
-> like VMCALL, VMLAUNCH, etc. However, with TDX, VMEXITs no longer
-> expose the guest state to the host. This prevents the old hypercall
-> mechanisms from working. So, to communicate with VMM, TDX
-> specification defines a new instruction called TDCALL.
+On Tue, 15 Mar 2022 11:29:57 -0600
+Alex Williamson <alex.williamson@redhat.com> wrote:
 
-...
-
-> For registers used by the TDCALL instruction, please check TDX GHCI
-> specification, the section titled "TDCALL instruction" and "TDG.VP.VMCALL
-> Interface".
+> Device specific extensions for devices exposed to userspace through
+> the vfio-pci-core library open both new functionality and new risks.
+> Here we attempt to provided formalized requirements and expectations
+> to ensure that future drivers both collaborate in their interaction
+> with existing host drivers, as well as receive additional reviews
+> from community members with experience in this area.
 > 
-> Based on previous patch by Sean Christopherson.
-> 
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Jason Gunthorpe <jgg@nvidia.com>
+> Acked-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+> Reviewed-by: Yishai Hadas <yishaih@nvidia.com>
+> Acked-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
 > ---
->  arch/x86/coco/tdx/Makefile    |   2 +-
->  arch/x86/coco/tdx/tdcall.S    | 191 ++++++++++++++++++++++++++++++++++
->  arch/x86/coco/tdx/tdx.c       |  23 ++++
->  arch/x86/include/asm/tdx.h    |  27 +++++
->  arch/x86/kernel/asm-offsets.c |   8 ++
->  5 files changed, 250 insertions(+), 1 deletion(-)
->  create mode 100644 arch/x86/coco/tdx/tdcall.S
+...> 
+>  Documentation/driver-api/index.rst                 |    1 +
+>  .../vfio-pci-device-specific-driver-acceptance.rst |   35 ++++++++++++++++++++
+>  .../maintainer/maintainer-entry-profile.rst        |    1 +
+>  MAINTAINERS                                        |   10 ++++++
+>  4 files changed, 47 insertions(+)
+>  create mode 100644 Documentation/driver-api/vfio-pci-device-specific-driver-acceptance.rst
 
-With tglx's comment fixed:
+Applied to vfio next branch for v5.18 with Jason and Connie's sign-offs.
+Thanks,
 
-Reviewed-by: Borislav Petkov <bp@suse.de>
+Alex
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,84 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4D14DC7FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 344214DC801
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234735AbiCQN4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 09:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
+        id S234746AbiCQN5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 09:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbiCQN4E (ORCPT
+        with ESMTP id S232467AbiCQN5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:56:04 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9922EEA59
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 06:54:47 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id u23so1293632ejt.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 06:54:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Auj42wKcECcnklt6KoxYruKINeN/YRt0HTEgWQUvSbk=;
-        b=trKaLQcY0Yt+MaFoeQX72QMgkuS5ppCOlNREaVS7jA73fXvLoyc7ULKKjY4nZXSvpb
-         PAWHAjW2yBatHxPF21LM40sYwNnc0oT01X7OtZhPA65Blrr4xDZrt3YVuLS6rl3lkgGG
-         qGdKrKHFuXoeQQ9/dhxBX4+2e5JzFER+NnKiU5FFpm/LZucICodXrX4AZJNcOwQFs4by
-         1HZEjYX5Ev2wrsD8Z6/cy8LNMwZrr5UseaxFnzXb3tEajr3lPLnCMXJwpnSk3XJxpJto
-         02FW+5u8/k7oc1hck+7sNYGTQV+G61KbOnMiUm6QlFH2vykPa7I8ht0+WeQS09VSChWa
-         5omQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Auj42wKcECcnklt6KoxYruKINeN/YRt0HTEgWQUvSbk=;
-        b=212c/sQJ2DVy7z8dNcjr5RkEs067bN6XevhwI51qAb4j+Ue176c4U/UUXpNXqeDGej
-         XKDkrVkbV8dJzjMHwV5Zgdj348THP1rn5/AQMTvdcBmlLPufxXeoVoF36dN0O+NV9a3z
-         cnk++rZ3MMe8TrFdQyMiOtTnesFsEW+bxfzw23nW0T5K7FGOgWlt4nmNzUj4zi+vkg16
-         IZh1bOZiVrj2fOvhhKmNSeDypkbJ3ZrVKeGdicWKh2iqG74gXWSDKPTfzUu0+/p63w98
-         J6wbpri274QGLcdLVW6vS3GIvwomUBI4+YEAPtDTwOP/XQQUZaZB4h13av+cLWUMF8+i
-         WEpQ==
-X-Gm-Message-State: AOAM532tIyOa7j7MMPlYQnVCUnkMeu2r1YhqwZBXLkaYJOw2noI4hr2a
-        vX8aqHRavO6BFjmwl2xV2A9Ibg==
-X-Google-Smtp-Source: ABdhPJy3LJaMR48aHk4Bgx3rzdJbmiM4BhtwzVOo5DCk6QRrRA0jhiASRLbf5YA+rewzYYnz+t/WAQ==
-X-Received: by 2002:a17:907:c05:b0:6db:f118:8834 with SMTP id ga5-20020a1709070c0500b006dbf1188834mr4594601ejc.536.1647525286282;
-        Thu, 17 Mar 2022 06:54:46 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id t19-20020a1709060c5300b006d582121f99sm2376864ejf.36.2022.03.17.06.54.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 06:54:45 -0700 (PDT)
-Message-ID: <24add056-e0d2-bf4b-9d56-04289bedbf15@blackwall.org>
-Date:   Thu, 17 Mar 2022 15:54:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
-Content-Language: en-US
-To:     Ido Schimmel <idosch@idosch.org>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
- <20220317093902.1305816-2-schultz.hans+netdev@gmail.com>
- <YjM7Iwx4MDdGEHFA@shredder>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <YjM7Iwx4MDdGEHFA@shredder>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        Thu, 17 Mar 2022 09:57:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10EBE1042B2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 06:55:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647525344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=3qWgFKPuWbwkNXZxQSeQl0sRheg0mQTqRVZcOh+jo7o=;
+        b=HlkCqTj8Sbwj/AFCZKt8cmnYDT56YI7ue494fWqs/FEq6k9SqlOJD8tmxL7MJIEVTLZ3Qf
+        u1Xix47dYBaRjNg+YayLqV2adSjJV1k+2XirjszUTbwYDAYz5Ui6SvUmJB6Z9HEcAa4AW/
+        w/RklRWibuMTs+rdrN3wdNL1vDdddRs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-482-Y7cZe7tNMCy7UxgEWPzCHQ-1; Thu, 17 Mar 2022 09:55:40 -0400
+X-MC-Unique: Y7cZe7tNMCy7UxgEWPzCHQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50D341044563;
+        Thu, 17 Mar 2022 13:55:40 +0000 (UTC)
+Received: from Diego.redhat.com (unknown [10.39.208.28])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 810822011571;
+        Thu, 17 Mar 2022 13:55:38 +0000 (UTC)
+From:   Michael Petlan <mpetlan@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-perf-users@vger.kernel.org, acme@kernel.org,
+        jolsa@kernel.org, atrajeev@linux.vnet.ibm.com, maddy@linux.ibm.com,
+        kjain@linux.ibm.com
+Subject: [PATCH] perf symbols: Fix symbol size calculation condition
+Date:   Thu, 17 Mar 2022 14:55:36 +0100
+Message-Id: <20220317135536.805-1-mpetlan@redhat.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,25 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2022 15:44, Ido Schimmel wrote:
-> On Thu, Mar 17, 2022 at 10:38:59AM +0100, Hans Schultz wrote:
->> Add an intermediate state for clients behind a locked port to allow for
->> possible opening of the port for said clients. This feature corresponds
->> to the Mac-Auth and MAC Authentication Bypass (MAB) named features. The
->> latter defined by Cisco.
->> Only the kernel can set this FDB entry flag, while userspace can read
->> the flag and remove it by deleting the FDB entry.
-> 
-> Can you explain where this flag is rejected by the kernel?
-> 
-> Nik, it seems the bridge ignores 'NDA_FLAGS_EXT', but I think that for
-> new flags we should do a better job and reject unsupported
-> configurations. WDYT?
-> 
+Before this patch, the symbol end address fixup to be called, needed two
+conditions being met:
 
-Definitely, I agree.
+  if (prev->end == prev->start && prev->end != curr->start)
 
-> The neighbour code will correctly reject the new flag due to
-> 'NTF_EXT_MASK'.
+Where
+  "prev->end == prev->start" means that prev is zero-long
+                             (and thus needs a fixup)
+and
+  "prev->end != curr->start" means that fixup hasn't been applied yet
 
+However, this logic is incorrect in the following situation:
+
+*curr  = {rb_node = {__rb_parent_color = 278218928,
+  rb_right = 0x0, rb_left = 0x0},
+  start = 0xc000000000062354,
+  end = 0xc000000000062354, namelen = 40, type = 2 '\002',
+  binding = 0 '\000', idle = 0 '\000', ignore = 0 '\000',
+  inlined = 0 '\000', arch_sym = 0 '\000', annotate2 = false,
+  name = 0x1159739e "kprobe_optinsn_page\t[__builtin__kprobes]"}
+
+*prev = {rb_node = {__rb_parent_color = 278219041,
+  rb_right = 0x109548b0, rb_left = 0x109547c0},
+  start = 0xc000000000062354,
+  end = 0xc000000000062354, namelen = 12, type = 2 '\002',
+  binding = 1 '\001', idle = 0 '\000', ignore = 0 '\000',
+  inlined = 0 '\000', arch_sym = 0 '\000', annotate2 = false,
+  name = 0x1095486e "optinsn_slot"}
+
+In this case, prev->start == prev->end == curr->start == curr->end,
+thus the condition above thinks that "we need a fixup due to zero
+length of prev symbol, but it has been probably done, since the
+prev->end == curr->start", which is wrong.
+
+After the patch, the execution path proceeds to arch__symbols__fixup_end
+function which fixes up the size of prev symbol by adding page_size to
+its end offset.
+
+Signed-off-by: Michael Petlan <mpetlan@redhat.com>
+---
+ tools/perf/util/symbol.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+index fb075aa8f8f2..dea0fc495185 100644
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -231,7 +231,7 @@ void symbols__fixup_end(struct rb_root_cached *symbols)
+ 		prev = curr;
+ 		curr = rb_entry(nd, struct symbol, rb_node);
+ 
+-		if (prev->end == prev->start && prev->end != curr->start)
++		if (prev->end == prev->start || prev->end != curr->start)
+ 			arch__symbols__fixup_end(prev, curr);
+ 	}
+ 
+-- 
+2.18.4
 

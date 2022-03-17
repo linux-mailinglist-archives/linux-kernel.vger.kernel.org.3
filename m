@@ -2,117 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412AE4DC50A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62ECE4DC50D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233131AbiCQLvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
+        id S233135AbiCQLy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbiCQLvV (ORCPT
+        with ESMTP id S233061AbiCQLyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:51:21 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5342F1D4C0F
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:50:04 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V7RQQb7_1647517801;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V7RQQb7_1647517801)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 17 Mar 2022 19:50:01 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        David Anderson <dvander@google.com>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH v2] erofs: rename ctime to mtime
-Date:   Thu, 17 Mar 2022 19:49:59 +0800
-Message-Id: <20220317114959.106787-1-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
-In-Reply-To: <YjFrSivX%2F%2F3sGdSr@B-P7TQMD6M-0146.local>
-References: <YjFrSivX%2F%2F3sGdSr@B-P7TQMD6M-0146.local>
+        Thu, 17 Mar 2022 07:54:23 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829CE1E5335
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:53:06 -0700 (PDT)
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D0C363F1A1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:53:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647517983;
+        bh=GjViklxymlU9oUxXKXReSCbCv0V/xFiwY5UUrPDATe4=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=vAAd6IWaOt4QUZcApT2vABV+/FwRZHLb8W1dNubntdygx93k1qlKGdEiMGYWP8ZGN
+         +SagSRoEFc5KorD6SS0rcBumPdZcRXmKgjLxL5cF1oB32BHi+fLy8B2mTZroABNXn6
+         zDlgRWJmECFgufwODrqaWjYk9YzQ7RnbUo4tTPQgoHXpP2EPd5Wb9foiLLMn3i1LJg
+         7NrzjtxZ3dbBpELlI1E2EK5KjSyICJCFQuCWQ2xBUzw1AWzNdHDlHyAO/KLeD8AbsG
+         /4UuJSYJCZi5nDm28kcEN3pNKXwqb6MDqayb040liHiYqqk1HUDKhvqYTICCYxnlnR
+         j8a1VnaZMYsKQ==
+Received: by mail-wr1-f70.google.com with SMTP id 8-20020adf8108000000b00203d97ba415so1474901wrm.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:53:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GjViklxymlU9oUxXKXReSCbCv0V/xFiwY5UUrPDATe4=;
+        b=wQFbGK+knO1q/drr9v2rp/fG9raBF/XE7ZLv3gQF3Gg0AKXw7r0d6vxZukLc6sLHiA
+         5fYcn52rJRmh2N2AZj99W/WNoEpjSDHy8uSm62aLvyNT7rvQohN4KMqqVTsO2UP75CD2
+         cSEV8u31qXULUjtOWhPCSbDojG37IkX4bZ8/Nvevo+Nb8L16uB/KXp7QDRltkeKex0Tc
+         rL0OjunUu33lArHWFuplWOsbLZo8xU7R5jNqYxG8mDo1TvHe26m1QP8q4NeGiP85FYVz
+         v1eMY2a14LOu4fXBNfOmcPzUIeHQn7ViSpfPrmLIiiLe0Du7XPom5agfw6QvKB+IBBDZ
+         yasg==
+X-Gm-Message-State: AOAM532hDL5rpLHdOFyt9WGFwGxGkoBMRwIZn6RU4ywKf2w7IN9Ii1Gf
+        /ls9oVoRunOHZgrzDYvEqCT14Y7QYpC7p3mGj8IyG2peANjRGfc768T0/ZwEPCxlLYXpzgNrKZ5
+        MzzEfQqhSmSLzVrL9Uhx2jWnryD0/a0DZghBkhDj2Bg==
+X-Received: by 2002:a05:6000:1a8b:b0:1f1:d8f4:4aa with SMTP id f11-20020a0560001a8b00b001f1d8f404aamr3854712wry.238.1647517983560;
+        Thu, 17 Mar 2022 04:53:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw/DM8yJ+E/5dtwBBWinZJdW8tjig7HKoZ0ZwEWjp3EJbHwbEfzlppwLm7ESNbDHke+EN+0lQ==
+X-Received: by 2002:a05:6000:1a8b:b0:1f1:d8f4:4aa with SMTP id f11-20020a0560001a8b00b001f1d8f404aamr3854693wry.238.1647517983347;
+        Thu, 17 Mar 2022 04:53:03 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id g12-20020a5d698c000000b001f1d8bb4618sm5397351wru.36.2022.03.17.04.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 04:53:02 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH] MIPS: ingenic: correct unit node address
+Date:   Thu, 17 Mar 2022 12:52:59 +0100
+Message-Id: <20220317115259.448868-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Anderson <dvander@google.com>
+Unit node addresses should not have leading 0x:
 
-EROFS images should inherit modification time rather than change time,
-since users and host tooling have no easy way to control change time.
+  Warning (unit_address_format): /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should not have leading "0x"
 
-To reflect the new timestamp meaning, i_ctime and i_ctime_nsec are
-renamed to i_mtime and i_mtime_nsec.
-
-Signed-off-by: David Anderson <dvander@google.com>
-[ Gao Xiang: update document as well. ]
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
-If no other concerns, I will apply it for 5.18.
+ arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Documentation/filesystems/erofs.rst | 2 +-
- fs/erofs/erofs_fs.h                 | 5 +++--
- fs/erofs/inode.c                    | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/filesystems/erofs.rst b/Documentation/filesystems/erofs.rst
-index 7119aa213be7..bef6d3040ce4 100644
---- a/Documentation/filesystems/erofs.rst
-+++ b/Documentation/filesystems/erofs.rst
-@@ -40,7 +40,7 @@ Here is the main features of EROFS:
-    Inode metadata size    32 bytes      64 bytes
-    Max file size          4 GB          16 EB (also limited by max. vol size)
-    Max uids/gids          65536         4294967296
--   File change time       no            yes (64 + 32-bit timestamp)
-+   Per-inode timestamp    no            yes (64 + 32-bit timestamp)
-    Max hardlinks          65536         4294967296
-    Metadata reserved      4 bytes       14 bytes
-    =====================  ============  =====================================
-diff --git a/fs/erofs/erofs_fs.h b/fs/erofs/erofs_fs.h
-index 3ea62c6fb00a..1238ca104f09 100644
---- a/fs/erofs/erofs_fs.h
-+++ b/fs/erofs/erofs_fs.h
-@@ -12,6 +12,7 @@
- #define EROFS_SUPER_OFFSET      1024
+diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+index 3f9ea47a10cd..b998301f179c 100644
+--- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+@@ -510,7 +510,7 @@ efuse: efuse@d0 {
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
  
- #define EROFS_FEATURE_COMPAT_SB_CHKSUM          0x00000001
-+#define EROFS_FEATURE_COMPAT_MTIME              0x00000002
- 
- /*
-  * Any bits that aren't in EROFS_ALL_FEATURE_INCOMPAT should
-@@ -186,8 +187,8 @@ struct erofs_inode_extended {
- 
- 	__le32 i_uid;
- 	__le32 i_gid;
--	__le64 i_ctime;
--	__le32 i_ctime_nsec;
-+	__le64 i_mtime;
-+	__le32 i_mtime_nsec;
- 	__le32 i_nlink;
- 	__u8   i_reserved2[16];
- };
-diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
-index ff62f84f47d3..e8b37ba5e9ad 100644
---- a/fs/erofs/inode.c
-+++ b/fs/erofs/inode.c
-@@ -113,8 +113,8 @@ static void *erofs_read_inode(struct erofs_buf *buf,
- 		set_nlink(inode, le32_to_cpu(die->i_nlink));
- 
- 		/* extended inode has its own timestamp */
--		inode->i_ctime.tv_sec = le64_to_cpu(die->i_ctime);
--		inode->i_ctime.tv_nsec = le32_to_cpu(die->i_ctime_nsec);
-+		inode->i_ctime.tv_sec = le64_to_cpu(die->i_mtime);
-+		inode->i_ctime.tv_nsec = le32_to_cpu(die->i_mtime_nsec);
- 
- 		inode->i_size = le64_to_cpu(die->i_size);
- 
+-			eth0_addr: eth-mac-addr@0x22 {
++			eth0_addr: eth-mac-addr@22 {
+ 				reg = <0x22 0x6>;
+ 			};
+ 		};
 -- 
-2.24.4
+2.32.0
 

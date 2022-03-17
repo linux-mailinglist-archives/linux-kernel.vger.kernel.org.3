@@ -2,80 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09384DC4FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939AF4DC500
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbiCQLow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
+        id S233101AbiCQLpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232562AbiCQLov (ORCPT
+        with ESMTP id S232301AbiCQLpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:44:51 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDFC56773;
-        Thu, 17 Mar 2022 04:43:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647517415; x=1679053415;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=izMyFSd/6/exTcmhx8kxg+WRK3vb/oe1G6XfehxbOcw=;
-  b=bamGKhWgR22flfkrNChcQ9UNGjblXG8A4DjIUq2qRnkAlIzLUVXtT5Wg
-   aqgz/zzyV8Me+aag4xKN4PQb7hmTr/gHcKvQsgLInh+qRXY/xNM1uQfs/
-   qZY+Mib8TRmOx23hs9MCMqivXK9ia7ZvvrX435uXa6nku/92E1D94qTw1
-   Iq6AtF4p3aKwNkZMyxFDDkJAMor8FzFiRZFVYI49n7Nn2g6IQ3C6aGvRg
-   BoYlziYSY5uL+Ld3tHnV2HiQFp9Z/PbUQpfKjbQpAeRc0SFDlC514uQBo
-   xd9DB4UhEHPOXae36sK9w4To4EfH9LxM2FQ9rgf+T45reWrsWEKF16NPY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="254402656"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="254402656"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 04:43:34 -0700
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="513397834"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 04:43:31 -0700
-Received: by lahna (sSMTP sendmail emulation); Thu, 17 Mar 2022 13:43:29 +0200
-Date:   Thu, 17 Mar 2022 13:43:29 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v1 0/2] ACPI: bus: Fix platform-level _OSC handling and
- avoid CPPC is not supported
-Message-ID: <YjMe4Wdh6Y8PkVE5@lahna>
-References: <4734682.31r3eYUQgx@kreacher>
+        Thu, 17 Mar 2022 07:45:49 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B55B11435B;
+        Thu, 17 Mar 2022 04:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1647517466;
+        bh=Yfa3ut3W4uYD/9bxmkIeZvM2xi6/JQhxv3O0dcLAJMQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=cCjsuL2+m1ibXNhseP7H5/dIZyZIa5AbYbSeTSWN/cWA1Bnl7MwTBu47daaGOQDaK
+         lMuNBcECsm9KVI5ttqRGwbaoDDJ6EQCLjCPEILVa3YFCt38o/13D6zyXuQZs5wqwTP
+         4DIbplXrOJZW34uh68SVqpCiDrBbTPGLWs6ZyWfo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MG9kM-1nKv3u2L88-00GX3W; Thu, 17
+ Mar 2022 12:44:26 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-gpio@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        kernel test robot <lkp@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] pinctrl: nuvoton: wpcm450: select GENERIC_PINCTRL_GROUPS
+Date:   Thu, 17 Mar 2022 12:44:12 +0100
+Message-Id: <20220317114413.1418484-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4734682.31r3eYUQgx@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:WdpBpWF/JwLrd0AcAECvf7YahZE34xeKMfffvgDL4CsDOB4F4tm
+ l5fJfDRjm3SdGgl21NqmpMuQn1n/lbDv4FB/EdRPy2wPb2tikoC1lyaqwJ6+6c9C3EGk3pv
+ XNCKiQVuu2fAXB0JofhIYcdo/U3admMZ99eAI7Nj24fRTYFtd+WzTyRZH5QfGgJCWe8iVvk
+ f4S2BkCgzAFOUgZWIY7pA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SUiuo1HjD1w=:xEBAktKb5SkpPyOPbqNI0q
+ MQ2X3vDHwXXXOLZNJ++V4ftz0UgHDq3A1G/++MedP7dL6ej0jnm/gfwKub1Ombi7GRgTqqBbT
+ X7kFamBDnEZiMFwXS2CKNUeJru3TX6Zcs44bjxpJljIab1/CSGw1CXhA4nurzf2aQw1xg/Vcs
+ CyBJcRPivMvGUMDvj+qCHBgHBtgbCu3UI8/ilrrhasjbwdXDu5UaEtV374FkPWS9HQiNILveY
+ mUkPk/Jacu5eegJM0dggqqkfxgKel5hDS8iuVYHkRupAde3liVBQZIG6abY7X6E9xnZho+Fuc
+ FymrhDh8y2Lf79QSjmM2HwRIO86xAm1iVuebjlcdnY/4tj6/IC7NHwkRAMzQCDParZbbrQRHM
+ u13ZTQtkfs3j2aZuC5DyUqH76dV11TixYazzHPDhg4a59v+aP82r5wVzM1yaT4G2QFPh4Krk/
+ SYFHM2GqqYjCagGy2pq1WvWLN+1YWmtewRF3NVZA7fw3N5SlSzavKHy7i3B9EsEnDvrZF0L+7
+ ebWLOrGjx4jEt2hlF8LRRw5HHSaUmUmuHkv4synuG7tcUFMn+zALXw5Ipf6/c10XPbB12cnLY
+ UF1qLROYxkuFUjZFcaiUqZ6hT4Bsq+AbWqZQffIMwZ0hwFhQfiUVWoHeRjGtYAFz0ACje4hTG
+ ty765KgJg0UtCJFz7JzgmqLLgCWJ/SuaQLQx+ZYZ22zqq8ffbAL5RyU2XRC1yr8jgXviFomjQ
+ Pz8ud5cRWUAiL2CCen/X/B3vi3k60iTUjHzw4zOEX6BRk3lIMmMh9GxX58+Uc69yptFRbqhzM
+ iCtLQBkB2YjFSoE4cejpjjZXkMWcoFk0ARDuQXAi3KjE0LHnarAZW6B+SBiccLF4DdumDZg1D
+ BxUPLdFl5jcSEpcV/hlyHt7cFmsXwuUyoaAg1DTqH2plnajRsAzLD7O/0inWM+p16mUbgsftr
+ lFzm7NIS8II84n/nq0zuelS7iG1WQ+LTHG1uz2WnoyhMWpjA2ujd8/e41BlQdpm5gjYmZL2tl
+ E5QCPjsXiDguep4LjSeOYL5xRbdttvIXAqU9zBAZ7jKg3w8wFrLs2hdwWtPj+xV/ieBihZv0l
+ +N1aPHfMJf2erM=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
+CONFIG_GENERIC_PINCTRL_GROUPS must be selected in order for
+struct group_desc to be defined in pinctrl/core.h.
 
-On Wed, Mar 16, 2022 at 01:35:23PM +0100, Rafael J. Wysocki wrote:
-> Hi All,
-> 
-> The following two patches revert a commit that caused the handling of
-> platform-level _OSC to fail in some legitimate cases and address the
-> CPPC handling breakage that was the motivation for the reverted commit.
-> 
-> Please refer to the patch changelogs for details.
+Add the missing select line to CONFIG_PINCTRL_WPCM450.
 
-For both,
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/pinctrl/nuvoton/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+diff --git a/drivers/pinctrl/nuvoton/Kconfig b/drivers/pinctrl/nuvoton/Kco=
+nfig
+index 6a3c6f2a73f2d..b48d32912bef1 100644
+=2D-- a/drivers/pinctrl/nuvoton/Kconfig
++++ b/drivers/pinctrl/nuvoton/Kconfig
+@@ -6,6 +6,7 @@ config PINCTRL_WPCM450
+ 	select PINMUX
+ 	select PINCONF
+ 	select GENERIC_PINCONF
++	select GENERIC_PINCTRL_GROUPS
+ 	select GPIOLIB
+ 	select GPIO_GENERIC
+ 	select GPIOLIB_IRQCHIP
+=2D-
+2.35.1
+

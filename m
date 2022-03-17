@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF944DCD51
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 692104DCD59
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:13:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237297AbiCQSNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58864 "EHLO
+        id S237340AbiCQSOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237296AbiCQSMx (ORCPT
+        with ESMTP id S237376AbiCQSOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:12:53 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E29E21A8A2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:11:34 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id r22so8339079ljd.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GvRtkI+aajtqCy2c1b2F4MUYD+uMLWJPyiKwyzY7fBQ=;
-        b=hne5dkL1r66jaWeZwLdqsQWeaYzLA0jCNqUeaPeX4MK0bcpogrmJFtTsAHSYPHTv37
-         F31NNlIDn9bslKYtcs9T7Ma0331NI3pAKkY7Smg4Njyl7fKErwUzZLR77VAJgDJGt60n
-         8yoAF2gzIx0ez9xH7e1/L5DkEJjrMCAG7htDNgWR4IVaW+tvIGLmwLqztCBKJVgv8JNg
-         9J29bhh2X/xEUKQYCshpyqmTT6OTC0cbzKTXSYQzOMHmhryjwsJyMrPUTkPxAl/m9Ng8
-         HHfV7rzkYosyidu3QWTr29KI54SAqAdUXPgypkWcpypqbuGZSPra+xml3A+fuJpxtgBF
-         iU+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GvRtkI+aajtqCy2c1b2F4MUYD+uMLWJPyiKwyzY7fBQ=;
-        b=7P2lJvBcia2pJ0z13ErEOaU0DFko2ocv0bw74WCHmC+HMo6GJnmGkHn4MUlqZsCBUu
-         5BA4ZlC6Yj/pRpzUheHGnqpoLsHNFqHd3F6zK23yOptxCPscB/GqwbChm/DOkCtuYiX8
-         cfcoJfjL1ayYYXVWSF4jNnmd4tnTcxQ9tS6eExwQyPxnPfRA+Jh6+z6+94sT5Mnb7aiK
-         PG8b4JiSvJgostH68C97OSBXd3l8hr2x9sQjNYc1kjBnwUEHvwwbjQ2lQNugvoalkUbU
-         UoGabzKkDlMI9BW23B1XLKG7G+Xm6iehBiTK+zYtW4j0/x6CeDLqaugvyVZd2wuF9jzM
-         krRA==
-X-Gm-Message-State: AOAM532jtq/CP08pZio9awq0w842p2cinWl0dC0hAbyPkNHZbZI23phI
-        Qr+GZqHytGFNSasT/1jq5WJGZKgLrvrqm0kf/gFiPw==
-X-Google-Smtp-Source: ABdhPJw321RYGnd+eSI0h5Spru1PQ/7vVF+BX9Nro0IcXN12RAcPjoehXMVZPqBvuitiGJFoQTKh96/tVTcy8uPYIkw=
-X-Received: by 2002:a05:651c:1791:b0:243:94bd:d94c with SMTP id
- bn17-20020a05651c179100b0024394bdd94cmr3596248ljb.468.1647540692501; Thu, 17
- Mar 2022 11:11:32 -0700 (PDT)
+        Thu, 17 Mar 2022 14:14:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DB421F774;
+        Thu, 17 Mar 2022 11:12:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCE5561663;
+        Thu, 17 Mar 2022 18:12:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8486C340EC;
+        Thu, 17 Mar 2022 18:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647540741;
+        bh=ptsC5nm9G0+/HpO2r1JMC/u3+Be4YpkP+sY3ZGfaKX8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=taDGPQeN1d7NfJA3qzPxO6Y7dfOE1qEoYvpRJv/gS/c/qiwWVW5ZEsLeIfMcIoOW/
+         laACJSlK3GfYaHQsI5R74RHg+FHV2pI2cH1yETuXuFFx8k4n/fiS+z58gzzO9+vMto
+         Sywx002tz5Cep4ec75DZ7erbXcp6afH2glZc1f88xjNJr9xlLHXINvL7RI+UD3LyTT
+         wPNqUavD77VDBF1kyMWvqaf3xaLhfIY+5Czf+ImbD/v+WELkdI1Kb3TfRzuznfModa
+         gQk63+GRKrxiQjjPux56AB0ZhEIIpEZMBBSOHBlzvCZiJdIxVt+z60dKKamVcXF3sL
+         t9TdlTKKNdy9Q==
+Date:   Thu, 17 Mar 2022 11:12:14 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     trix@redhat.com
+Cc:     konishi.ryusuke@gmail.com, ndesaulniers@google.com,
+        linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] nilfs2: move initialization of nr_dirty to decl
+Message-ID: <YjN5/h+0fR6Ph/5H@dev-arch.thelio-3990X>
+References: <20220317175043.1972081-1-trix@redhat.com>
 MIME-Version: 1.0
-References: <20220316213055.2351342-1-morbo@google.com> <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
-In-Reply-To: <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 17 Mar 2022 11:11:21 -0700
-Message-ID: <CAKwvOdkjb3uR+kqjfdKL5gqA8R+00c5=3E7uGGW+mGZ3QRsjqg@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: acpi: use correct format characters
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bill Wendling <morbo@google.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220317175043.1972081-1-trix@redhat.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 2:07 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Wed, Mar 16, 2022 at 02:30:55PM -0700, Bill Wendling wrote:
-> > When compiling with -Wformat, clang emits the following warning:
-> >
-> > drivers/gpio/gpiolib-acpi.c:393:4: warning: format specifies type
-> > 'unsigned char' but the argument has type 'int' [-Wformat]
-> >                         pin);
-> >                         ^~~
-> >
-> > The types of these arguments are unconditionally defined, so this patch
-> > updates the format character to the correct ones for ints and unsigned
-> > ints.
->
-> hhX specifier refers to unsigned char. It's a bug in the compiler.
->
-> NAK.
+Hi Tom,
 
-Andy,
-Our goal is to enable -Wformat for CC=clang.  Please see also:
-commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
-unnecessary %h[xudi] and %hh[xudi]")
-and the lore link it cites.
-https://lore.kernel.org/lkml/CAHk-=wgoxnmsj8GEVFJSvTwdnWm8wVJthefNk2n6+4TC=20e0Q@mail.gmail.com/
-(I saw your follow up; this patch is one of the less controversial
-ones though since the types are not ones that are promoted).
+On Thu, Mar 17, 2022 at 10:50:43AM -0700, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> On clang build there is this error
+> inode.c:227:13: error: variable 'nr_dirty' is
+>   used uninitialized whenever 'if' condition is false
+>         } else if (ret) {
+>                    ^~~
+> 
+> In nilfs_dirty_folio(), if the call to
+> filemap_dirty_folio() fails and there
+> are no buffers, nr_dirty will be uninitialized.
+> Move the initialization out of the buffer
+> block and to the decl.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Bill,
-I just remembered that we will want to explicitly set
--Wno-format-pedantic when enabling -Wformat. Remember that -Wformat is
-a group flag that turns on other flags, such as -Wformat-security
-(currently disabled) and -Wformat-pedantic.  See also:
-https://reviews.llvm.org/rGcc01d6421f4a896820c02da2ea92b82d973b431e
-commit a8735821d198 ("Kbuild: Disable the -Wformat-security gcc flag")
+This has been fixed in next-20220317:
 
-It may be helpful to cite
-commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
-unnecessary %h[xudi] and %hh[xudi]")
-in future commits that change the format flags for types that are promoted.
--- 
-Thanks,
-~Nick Desaulniers
+https://git.kernel.org/next/linux-next/c/af7afdc7bbbe60cb6ce51a86b022d647e1a72717
+
+Cheers,
+Nathan
+
+> ---
+>  fs/nilfs2/inode.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/fs/nilfs2/inode.c b/fs/nilfs2/inode.c
+> index c1219c0678a57..01e58b65c9384 100644
+> --- a/fs/nilfs2/inode.c
+> +++ b/fs/nilfs2/inode.c
+> @@ -204,7 +204,7 @@ static bool nilfs_dirty_folio(struct address_space *mapping,
+>  {
+>  	struct inode *inode = mapping->host;
+>  	struct buffer_head *head;
+> -	unsigned int nr_dirty;
+> +	unsigned int nr_dirty = 0;
+>  	bool ret = filemap_dirty_folio(mapping, folio);
+>  
+>  	/*
+> @@ -214,8 +214,6 @@ static bool nilfs_dirty_folio(struct address_space *mapping,
+>  	head = folio_buffers(folio);
+>  	if (head) {
+>  		struct buffer_head *bh = head;
+> -
+> -		nr_dirty = 0;
+>  		do {
+>  			/* Do not mark hole blocks dirty */
+>  			if (buffer_dirty(bh) || !buffer_mapped(bh))
+> -- 
+> 2.26.3
+> 

@@ -2,184 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587D64DCA62
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0EF04DCA71
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236112AbiCQPtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 11:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
+        id S233116AbiCQPuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 11:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236089AbiCQPtR (ORCPT
+        with ESMTP id S236111AbiCQPud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 11:49:17 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C831CFFE;
-        Thu, 17 Mar 2022 08:47:59 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 16696210FD;
-        Thu, 17 Mar 2022 15:47:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1647532078; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0KZgEZtmj93bd+mssj6ZZEyp1vXUdnKVaXkz9Wd03iE=;
-        b=fS+c/ababbHT0GIQO2Y8V5/Q820VCknPkk4KYA/U8Xix9iHzJyzj4J1k6epHeVygU8g5mS
-        Wd6UOfp+bjg7YTjOZrwupOBclfzLd4PMYR4iIixn0knB7XgdPo09cqirHiGsMra5OfmfFX
-        UXVOSnt19mBctzY+eRKXzXQxWGzEPz0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1647532078;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0KZgEZtmj93bd+mssj6ZZEyp1vXUdnKVaXkz9Wd03iE=;
-        b=jrx/MvjNZD1YhFlXP8xzURzc2E8ReKCOdoeQD4DtcDMlWAnH3abDf0jq+lOdnXN0BqOEH6
-        4ZCK3lTzBayojmBw==
-Received: from quack3.suse.cz (unknown [10.100.200.198])
+        Thu, 17 Mar 2022 11:50:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9667E16C0BE;
+        Thu, 17 Mar 2022 08:49:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E6706A3B94;
-        Thu, 17 Mar 2022 15:47:57 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 890BAA0615; Thu, 17 Mar 2022 16:47:57 +0100 (CET)
-Date:   Thu, 17 Mar 2022 16:47:57 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, lczerner@redhat.com
-Subject: Re: [PATCH -next v2] jbd2: Fix null-ptr-deref when process reserved
- list in jbd2_journal_commit_transaction
-Message-ID: <20220317154757.4p7oviub7zoifcep@quack3.lan>
-References: <20220317142137.1821590-1-yebin10@huawei.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 205EF60A6E;
+        Thu, 17 Mar 2022 15:49:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 418D1C340E9;
+        Thu, 17 Mar 2022 15:49:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647532155;
+        bh=39WOdItQPncrBfBOVg70lSymz1ZRnCZdrAsfpCgeCSo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CgimuLip+qZZ7z0z9107pVgTWr4QJGehQ6vG71jD1abdpG7RRj9tPxx7M/SJaEiXa
+         7X/XoTA2wetDwNHTmpnClTJ+RQrAagUlbtcTOX0JBrAKBBOssXTSivDLjwrv7tH7UQ
+         vz9EiVmtXKmd8L4a4RMqX0KTfLy4zUjb/+8ODJ5xbC370uOxISjy2TVvGl7ExVjCFt
+         WHbqYEDiiCyi53C02Klqk9MNlzlSY22X51Rz9Wv79lS0NoHtR9u3mAQNGug/N8cMSL
+         2ycqCdWnNANonsqyn5thFH4iSkYl3KY8jD9qMfjJtCC935SneU3iMfFKNVM9w8c5es
+         5tJPc741pY2hQ==
+Message-ID: <be15a412-5abb-7175-57dc-04418885f439@kernel.org>
+Date:   Thu, 17 Mar 2022 09:49:13 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317142137.1821590-1-yebin10@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.2
+Subject: Re: [PATCH net-next v3 3/3] net: icmp: add reasons of the skb drops
+ to icmp protocol
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     "menglong8.dong@gmail.com" <menglong8.dong@gmail.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@redhat.com" <mingo@redhat.com>, "xeb@mail.ru" <xeb@mail.ru>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
+        "imagedong@tencent.com" <imagedong@tencent.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kafai@fb.com" <kafai@fb.com>,
+        "talalahmad@google.com" <talalahmad@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "alobakin@pm.me" <alobakin@pm.me>,
+        "flyingpeng@tencent.com" <flyingpeng@tencent.com>,
+        "mengensun@tencent.com" <mengensun@tencent.com>,
+        "dongli.zhang@oracle.com" <dongli.zhang@oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "benbjiang@tencent.com" <benbjiang@tencent.com>
+References: <20220316063148.700769-1-imagedong@tencent.com>
+ <20220316063148.700769-4-imagedong@tencent.com>
+ <20220316201853.0734280f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <4315b50e-9077-cc4b-010b-b38a2fbb7168@kernel.org>
+ <20220316210534.06b6cfe0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <f787c35b-0984-ecaf-ad97-c7580fcdbbad@kernel.org>
+ <b08e2dc3e0694068a1a9d698475f8992@AcuMS.aculab.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <b08e2dc3e0694068a1a9d698475f8992@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 17-03-22 22:21:37, Ye Bin wrote:
-> we got issue as follows:
-> [   72.796117] EXT4-fs error (device sda): ext4_journal_check_start:83: comm fallocate: Detected aborted journal
-> [   72.826847] EXT4-fs (sda): Remounting filesystem read-only
-> fallocate: fallocate failed: Read-only file system
-> [   74.791830] jbd2_journal_commit_transaction: jh=0xffff9cfefe725d90 bh=0x0000000000000000 end delay
-> [   74.793597] ------------[ cut here ]------------
-> [   74.794203] kernel BUG at fs/jbd2/transaction.c:2063!
-> [   74.794886] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-> [   74.795533] CPU: 4 PID: 2260 Comm: jbd2/sda-8 Not tainted 5.17.0-rc8-next-20220315-dirty #150
-> [   74.798327] RIP: 0010:__jbd2_journal_unfile_buffer+0x3e/0x60
-> [   74.801971] RSP: 0018:ffffa828c24a3cb8 EFLAGS: 00010202
-> [   74.802694] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> [   74.803601] RDX: 0000000000000001 RSI: ffff9cfefe725d90 RDI: ffff9cfefe725d90
-> [   74.804554] RBP: ffff9cfefe725d90 R08: 0000000000000000 R09: ffffa828c24a3b20
-> [   74.805471] R10: 0000000000000001 R11: 0000000000000001 R12: ffff9cfefe725d90
-> [   74.806385] R13: ffff9cfefe725d98 R14: 0000000000000000 R15: ffff9cfe833a4d00
-> [   74.807301] FS:  0000000000000000(0000) GS:ffff9d01afb00000(0000) knlGS:0000000000000000
-> [   74.808338] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   74.809084] CR2: 00007f2b81bf4000 CR3: 0000000100056000 CR4: 00000000000006e0
-> [   74.810047] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [   74.810981] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [   74.811897] Call Trace:
-> [   74.812241]  <TASK>
-> [   74.812566]  __jbd2_journal_refile_buffer+0x12f/0x180
-> [   74.813246]  jbd2_journal_refile_buffer+0x4c/0xa0
-> [   74.813869]  jbd2_journal_commit_transaction.cold+0xa1/0x148
-> [   74.817550]  kjournald2+0xf8/0x3e0
-> [   74.819056]  kthread+0x153/0x1c0
-> [   74.819963]  ret_from_fork+0x22/0x30
+On 3/17/22 8:53 AM, David Laight wrote:
+> From: David Ahern
+>> Sent: 17 March 2022 14:49
+>>
+>> On 3/16/22 10:05 PM, Jakub Kicinski wrote:
+>>> On Wed, 16 Mar 2022 21:35:47 -0600 David Ahern wrote:
+>>>> On 3/16/22 9:18 PM, Jakub Kicinski wrote:
+>>>>>
+>>>>> I guess this set raises the follow up question to Dave if adding
+>>>>> drop reasons to places with MIB exception stats means improving
+>>>>> the granularity or one MIB stat == one reason?
+>>>>
+>>>> There are a few examples where multiple MIB stats are bumped on a drop,
+>>>> but the reason code should always be set based on first failure. Did you
+>>>> mean something else with your question?
+>>>
+>>> I meant whether we want to differentiate between TYPE, and BROADCAST or
+>>> whatever other possible invalid protocol cases we can get here or just
+>>> dump them all into a single protocol error code.
+>>
+>> I think a single one is a good starting point.
 > 
-> Above issue may happen as follows:
->         write                   truncate                   kjournald2
-> generic_perform_write
->  ext4_write_begin
->   ext4_walk_page_buffers
->    do_journal_get_write_access ->add BJ_Reserved list
->  ext4_journalled_write_end
->   ext4_walk_page_buffers
->    write_end_fn
->     ext4_handle_dirty_metadata
->                 ***************JBD2 ABORT**************
->      jbd2_journal_dirty_metadata
->  -> return -EROFS, jh in reserved_list
->                                                    jbd2_journal_commit_transaction
->                                                     while (commit_transaction->t_reserved_list)
->                                                       jh = commit_transaction->t_reserved_list;
->                         truncate_pagecache_range
->                          do_invalidatepage
-> 			  ext4_journalled_invalidatepage
-> 			   jbd2_journal_invalidatepage
-> 			    journal_unmap_buffer
-> 			     __dispose_buffer
-> 			      __jbd2_journal_unfile_buffer
-> 			       jbd2_journal_put_journal_head ->put last ref_count
-> 			        __journal_remove_journal_head
-> 				 bh->b_private = NULL;
-> 				 jh->b_bh = NULL;
-> 				                      jbd2_journal_refile_buffer(journal, jh);
-> 							bh = jh2bh(jh);
-> 							->bh is NULL, later will trigger null-ptr-deref
-> 				 journal_free_journal_head(jh);
+> I remember looking at (I think) the packet drop stats a while back.
+> Two machines on the same LAN were reporting rather different values.
+> Basically 0 v quite a few.
 > 
-> As after 96f1e0974575 commit, handle reserved list will not hold "journal->j_state_lock"
-> when kjournald2 commit transaction. So journal_unmap_buffer maybe free
-> journal_head when handle reserved list. And lead to null-ptr-deref or some
-> strange errors.
-> As reserved list almost time is empty. Use "journal->j_state_lock" to protect
-> handle reserved list can simply solve above issue.
+> It turned out that passing the packets to dhcp was deemed enough
+> to stop them being reported as 'dropped'.
+> And I think that version of dhcp fed every packed into its BPF? filter.
+> (I never did decide whether that caused every skb to be duplicated.)
 > 
-> Fixes: 96f1e0974575("jbd2: avoid long hold times of j_state_lock while committing a transaction")
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-Thanks. Looks good. Feel free to add:
+I believe it depends on the type of socket. Packet sockets - e.g.,
+running lldpd or tcpdump - do cause every packet to be cloned and kills
+performance.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/jbd2/commit.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/jbd2/commit.c b/fs/jbd2/commit.c
-> index 5b9408e3b370..ac7f067b7bdd 100644
-> --- a/fs/jbd2/commit.c
-> +++ b/fs/jbd2/commit.c
-> @@ -488,7 +488,6 @@ void jbd2_journal_commit_transaction(journal_t *journal)
->  	jbd2_journal_wait_updates(journal);
->  
->  	commit_transaction->t_state = T_SWITCH;
-> -	write_unlock(&journal->j_state_lock);
->  
->  	J_ASSERT (atomic_read(&commit_transaction->t_outstanding_credits) <=
->  			journal->j_max_transaction_buffers);
-> @@ -508,6 +507,8 @@ void jbd2_journal_commit_transaction(journal_t *journal)
->  	 * has reserved.  This is consistent with the existing behaviour
->  	 * that multiple jbd2_journal_get_write_access() calls to the same
->  	 * buffer are perfectly permissible.
-> +	 * We use journal->j_state_lock here to serialize processing of
-> +	 * t_reserved_list with eviction of buffers from journal_unmap_buffer().
->  	 */
->  	while (commit_transaction->t_reserved_list) {
->  		jh = commit_transaction->t_reserved_list;
-> @@ -527,6 +528,7 @@ void jbd2_journal_commit_transaction(journal_t *journal)
->  		jbd2_journal_refile_buffer(journal, jh);
->  	}
->  
-> +	write_unlock(&journal->j_state_lock);
->  	/*
->  	 * Now try to drop any written-back buffers from the journal's
->  	 * checkpoint lists.  We do this *before* commit because it potentially
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR

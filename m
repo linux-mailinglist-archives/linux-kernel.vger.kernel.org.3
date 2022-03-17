@@ -2,91 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FE74DC253
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1584DC256
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbiCQJIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        id S231743AbiCQJJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbiCQJIu (ORCPT
+        with ESMTP id S230307AbiCQJJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:08:50 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1111D12E7;
-        Thu, 17 Mar 2022 02:07:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647508054; x=1679044054;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3LOKV8T+J6ndpx4yRF7CsKdRnALN/jjLjomuYjUYYFg=;
-  b=An2dln0AGqQvJ3YQgloLgxipFQ5e7tZ4Tp2tGyTQ6PsZ/k9tnhMArj+y
-   Xu0BDkybHL4fCXL71DAKzoVz2lxSQWtdi2yaBvnvWDduFbKtnotYjteaK
-   vil2mAzJ8r+di4Joy8lc2MrQRZWfy/qN3htsb0tX+R3lJiHPqiXXCJoo2
-   rFQop7bJqTk5WykgZVpW8FzW9rcJqbry0IHfSqu8Ru60z8UAS1KQ1+zPA
-   vWRzTpHzvo28sBX7321gAyuxCO8uxnS0JdyCXJfo3AKSgWDl4IAtNL/xk
-   cLztCpcFGexc3bXbjwcyDHJE+pv1vl2gc2bNGoUlluLVAyXVFxtaCsdLp
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="237428185"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="237428185"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 02:07:34 -0700
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="646981440"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 02:07:31 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nUm5r-001Q0N-NG;
-        Thu, 17 Mar 2022 11:06:51 +0200
-Date:   Thu, 17 Mar 2022 11:06:51 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bill Wendling <morbo@google.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] gpiolib: acpi: use correct format characters
-Message-ID: <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
-References: <20220316213055.2351342-1-morbo@google.com>
+        Thu, 17 Mar 2022 05:09:43 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F076FE6142
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:08:26 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KK1Rl3skvz9sh0;
+        Thu, 17 Mar 2022 17:04:35 +0800 (CST)
+Received: from dggpeml500010.china.huawei.com (7.185.36.155) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 17 Mar 2022 17:08:25 +0800
+Received: from huawei.com (10.67.175.33) by dggpeml500010.china.huawei.com
+ (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 17 Mar
+ 2022 17:08:24 +0800
+From:   Lin Yujun <linyujun809@huawei.com>
+To:     <linux@armlinux.org.uk>, <mhiramat@kernel.org>,
+        <rostedt@goodmis.org>, <ardb@kernel.org>,
+        <ndesaulniers@google.com>, <rmk+kernel@armlinux.org.uk>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] arm/stacktrace, kasan: Silence KASAN warnings in unwind_frame()
+Date:   Thu, 17 Mar 2022 17:07:51 +0800
+Message-ID: <20220317090751.80831-1-linyujun809@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220316213055.2351342-1-morbo@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.33]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500010.china.huawei.com (7.185.36.155)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 02:30:55PM -0700, Bill Wendling wrote:
-> When compiling with -Wformat, clang emits the following warning:
-> 
-> drivers/gpio/gpiolib-acpi.c:393:4: warning: format specifies type
-> 'unsigned char' but the argument has type 'int' [-Wformat]
->                         pin);
->                         ^~~
-> 
-> The types of these arguments are unconditionally defined, so this patch
-> updates the format character to the correct ones for ints and unsigned
-> ints.
+The following KASAN warning is detected by QEMU.
 
-hhX specifier refers to unsigned char. It's a bug in the compiler.
+==================================================================
+BUG: KASAN: stack-out-of-bounds in unwind_frame+0x508/0x870
+Read of size 4 at addr c36bba90 by task cat/163
 
-NAK.
+CPU: 1 PID: 163 Comm: cat Not tainted 5.10.0-rc1 #40
+Hardware name: ARM-Versatile Express
+[<c0113fac>] (unwind_backtrace) from [<c010e71c>] (show_stack+0x10/0x14)
+[<c010e71c>] (show_stack) from [<c0b805b4>] (dump_stack+0x98/0xb0)
+[<c0b805b4>] (dump_stack) from [<c0b7d658>] (print_address_description.constprop.0+0x58/0x4bc)
+[<c0b7d658>] (print_address_description.constprop.0) from [<c031435c>] (kasan_report+0x154/0x170)
+[<c031435c>] (kasan_report) from [<c0113c44>] (unwind_frame+0x508/0x870)
+[<c0113c44>] (unwind_frame) from [<c010e298>] (__save_stack_trace+0x110/0x134)
+[<c010e298>] (__save_stack_trace) from [<c01ce0d8>] (stack_trace_save+0x8c/0xb4)
+[<c01ce0d8>] (stack_trace_save) from [<c0313520>] (kasan_set_track+0x38/0x60)
+[<c0313520>] (kasan_set_track) from [<c0314cb8>] (kasan_set_free_info+0x20/0x2c)
+[<c0314cb8>] (kasan_set_free_info) from [<c0313474>] (__kasan_slab_free+0xec/0x120)
+[<c0313474>] (__kasan_slab_free) from [<c0311e20>] (kmem_cache_free+0x7c/0x334)
+[<c0311e20>] (kmem_cache_free) from [<c01c35dc>] (rcu_core+0x390/0xccc)
+[<c01c35dc>] (rcu_core) from [<c01013a8>] (__do_softirq+0x180/0x518)
+[<c01013a8>] (__do_softirq) from [<c0135214>] (irq_exit+0x9c/0xe0)
+[<c0135214>] (irq_exit) from [<c01a40e4>] (__handle_domain_irq+0xb0/0x110)
+[<c01a40e4>] (__handle_domain_irq) from [<c0691248>] (gic_handle_irq+0xa0/0xb8)
+[<c0691248>] (gic_handle_irq) from [<c0100b0c>] (__irq_svc+0x6c/0x94)
+Exception stack(0xc36bb928 to 0xc36bb970)
+b920:                   c36bb9c0 00000000 c0126919 c0101228 c36bb9c0 b76d7730
+b940: c36b8000 c36bb9a0 c3335b00 c01ce0d8 00000003 c36bba3c c36bb940 c36bb978
+b960: c010e298 c011373c 60000013 ffffffff
+[<c0100b0c>] (__irq_svc) from [<c011373c>] (unwind_frame+0x0/0x870)
+[<c011373c>] (unwind_frame) from [<00000000>] (0x0)
 
+The buggy address belongs to the page:
+page:(ptrval) refcount:0 mapcount:0 mapping:00000000 index:0x0 pfn:0x636bb
+flags: 0x0()
+raw: 00000000 00000000 ef867764 00000000 00000000 00000000 ffffffff 00000000
+page dumped because: kasan: bad access detected
+
+addr c36bba90 is located in stack of task cat/163 at offset 48 in frame:
+ stack_trace_save+0x0/0xb4
+
+this frame has 1 object:
+ [32, 48) 'trace'
+
+Memory state around the buggy address:
+ c36bb980: f1 f1 f1 f1 00 04 f2 f2 00 00 f3 f3 00 00 00 00
+ c36bba00: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
+>c36bba80: 00 00 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
+                 ^
+ c36bbb00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ c36bbb80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
+
+There is a same issue on x86 and has been resolved by the commit f7d27c35ddff
+("x86/mm, kasan: Silence KASAN warnings in get_wchan()").
+The solution could be applied to arm architecture too.
+
+Signed-off-by: Lin Yujun <linyujun809@huawei.com>
+Reported-by: He Ying <heying24@huawei.com>
+---
+ arch/arm/kernel/stacktrace.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/kernel/stacktrace.c b/arch/arm/kernel/stacktrace.c
+index b5efecb3d730..d0fa2037460a 100644
+--- a/arch/arm/kernel/stacktrace.c
++++ b/arch/arm/kernel/stacktrace.c
+@@ -54,17 +54,17 @@ int notrace unwind_frame(struct stackframe *frame)
+ 		return -EINVAL;
+ 
+ 	frame->sp = frame->fp;
+-	frame->fp = *(unsigned long *)(fp);
+-	frame->pc = *(unsigned long *)(fp + 4);
++	frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp));
++	frame->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp + 4));
+ #else
+ 	/* check current frame pointer is within bounds */
+ 	if (fp < low + 12 || fp > high - 4)
+ 		return -EINVAL;
+ 
+ 	/* restore the registers from the stack frame */
+-	frame->fp = *(unsigned long *)(fp - 12);
+-	frame->sp = *(unsigned long *)(fp - 8);
+-	frame->pc = *(unsigned long *)(fp - 4);
++	frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp - 12));
++	frame->sp = READ_ONCE_NOCHECK(*(unsigned long *)(fp - 8));
++	frame->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp - 4));
+ #endif
+ #ifdef CONFIG_KRETPROBES
+ 	if (is_kretprobe_trampoline(frame->pc))
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.17.1
 

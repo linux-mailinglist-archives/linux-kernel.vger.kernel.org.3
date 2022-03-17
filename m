@@ -2,85 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8164DC44F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0218C4DC456
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbiCQKyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 06:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S232773AbiCQK5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 06:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232761AbiCQKyR (ORCPT
+        with ESMTP id S232675AbiCQK5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 06:54:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D91E1402B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:53:01 -0700 (PDT)
+        Thu, 17 Mar 2022 06:57:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C822619E3BE
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:55:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647514380;
+        s=mimecast20190719; t=1647514544;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=I3Y4/CLqhjaWTGSLzXYdOZpML+2A1bgpqt0T/9LDPBM=;
-        b=XURyK2yVL4WDr5cDjKxCp5zzTv8fF+GlMItv4VyMXkzKabQg9+tjApnj3gZIKhFh35Fdcl
-        C5nJmPPtNfD3kgAgXcxY32/HHECdXogGeA6E8IleQTj9Wxw+OIlP16JjeiXN7SQgw/NXwa
-        ZTp9CrVbM1s3gloDlu8blHDvxiixDnA=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=oI5WSIRwZsbGZlVeSYcyiheGQZ2AXv4KqUCkckxJqyo=;
+        b=K25yauTZw8HrU9LlvQ2uK/47p5t3Pif4+NtnLSUcqEQXQWvM0VU/UOKfEYX/rJpw8e1SuS
+        WW1MZ0AdkyNkgOUHVE42f8HXuHEtJOM9nOmVG9ufXTv+OkgJ/rZHc0o5oL3HLkT6tdrHj8
+        ARfMAumER2ljJ3rV3Ahj7wIyRxBdbeg=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-166-rz_G9BalNRy7nRBWv675dA-1; Thu, 17 Mar 2022 06:52:59 -0400
-X-MC-Unique: rz_G9BalNRy7nRBWv675dA-1
-Received: by mail-pj1-f71.google.com with SMTP id o6-20020a17090a9f8600b001c640fa1499so3185052pjp.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:52:59 -0700 (PDT)
+ us-mta-187-rrFZxCQnOeuIJKqC-UkuGA-1; Thu, 17 Mar 2022 06:55:42 -0400
+X-MC-Unique: rrFZxCQnOeuIJKqC-UkuGA-1
+Received: by mail-wr1-f70.google.com with SMTP id t15-20020adfdc0f000000b001ef93643476so1432439wri.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:55:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=I3Y4/CLqhjaWTGSLzXYdOZpML+2A1bgpqt0T/9LDPBM=;
-        b=1Ep7K6CM8znVo9gWi+7fTDw4MWmrUSdAYWJdAq5/1e/CoqbUUYXdV+zNrpQfiP6kgM
-         lfjQKvEjLN6qKmu83TSbgYRbs/BUGnY4V2a+A2e/57aiJM+Yjn9OMK/3SVbhzu/ix6Ai
-         +pzM9JDSpR/yvbT52dh9/QStCOnwgXC/v3QxbFOZVQ/vu24gaVhO8Gs7XvKt0tR1FQ5E
-         f31jDRG4KzMDA+f1IXrSuw9D7M9KCZL5g3AMWrifkcR3UHxRhTvjgY3/EfA4ESCkMhH2
-         A2/0pOafuo/LACfsyz4aU6q3u1utaJwU7zxH268Hht8jaTja+VBGBGpd1ZolfULYuonf
-         xh7w==
-X-Gm-Message-State: AOAM531iTjXoPT7sf/eqpftj8zsG0r+wIF2Qlgouf97b48CFMPd+113l
-        yv4E3C4HjhlWNXYO8qHGTXQjzFEo/ugwB5ntzJoilzsbq3r2S2QuSmNawVbQKopdLPp0mWqSiCi
-        /6iVxHIFjOqqkILSw5Qe6Fni0Z59gSLB4EJEzX+t3UXJtW5mITW0Agy6D7HKGEZ1w196nqy3LUQ
-        ==
-X-Received: by 2002:a17:902:e748:b0:153:b484:bdf4 with SMTP id p8-20020a170902e74800b00153b484bdf4mr4354140plf.66.1647514377862;
-        Thu, 17 Mar 2022 03:52:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyxIHAji0XWgoCyeZFRlJJWn6FJI3OqUsIPbFtAonZujfJV8v0NR2E2ydutT0wtLk1xlHS8GQ==
-X-Received: by 2002:a17:902:e748:b0:153:b484:bdf4 with SMTP id p8-20020a170902e74800b00153b484bdf4mr4354106plf.66.1647514377486;
-        Thu, 17 Mar 2022 03:52:57 -0700 (PDT)
-Received: from [10.72.12.110] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id 134-20020a63008c000000b00380e72483a6sm5219291pga.7.2022.03.17.03.52.52
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=oI5WSIRwZsbGZlVeSYcyiheGQZ2AXv4KqUCkckxJqyo=;
+        b=ZmLIc2GEKsmSqaySEHT88n3KomCA+84q4bL3E9QtPeCL+f4t3g9C0Xae4guHWqd2wF
+         t/BwGAQsDbra9Un8dClqX93v3uuYtqCzBPvchhL48oPaCE2oCjnpDSgyeJI5jzhTkJef
+         mIsJpfIuLLjkMTs7x+R6s0c4vKYt9w1pXSwguVDoL+NYO++hN1sjH6PHGpZGi90XHCfm
+         kPi9PTr9fLCxRAiB+w1m4m8svKwruliOc45u3U2fLY+uTA/r0IWVvOF44PeIPnA0VTJL
+         wv9Aa5dMwydYiebotLrWqTta2pvIuSLNtb9ot+7+Iq4TDmIgPSHctvBBf0ZZOLzVxvQ4
+         hLng==
+X-Gm-Message-State: AOAM531zeQ8ewdp85e7cJiyv0tFMuWNBElgYmFjucV41ajyoHgpEKcNM
+        8DlKwVc0ieANCitT+pL31oo+Rszg1CQJxMoiunhM1q5BUtBVY/CId9kLb/zc95juXhHWkciqdSG
+        a0zl+sNA22WLSjfTLCDt+NZ2m
+X-Received: by 2002:a5d:59a4:0:b0:203:914f:52fa with SMTP id p4-20020a5d59a4000000b00203914f52famr3417265wrr.257.1647514541648;
+        Thu, 17 Mar 2022 03:55:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJysbRU6X3N38sZnHt2a+qYqTxqD7zt/WiAYw+BN78ayQKGmZg2WlK4KxV8gsbHuhc5/z0oc2A==
+X-Received: by 2002:a5d:59a4:0:b0:203:914f:52fa with SMTP id p4-20020a5d59a4000000b00203914f52famr3417232wrr.257.1647514541257;
+        Thu, 17 Mar 2022 03:55:41 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:20af:34be:985b:b6c8? ([2a09:80c0:192:0:20af:34be:985b:b6c8])
+        by smtp.gmail.com with ESMTPSA id r2-20020a0560001b8200b00203dffb9598sm3290679wru.86.2022.03.17.03.55.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 03:52:56 -0700 (PDT)
-Subject: Re: [RFC PATCH v2 0/3] ceph: add support for snapshot names
- encryption
-To:     Jeff Layton <jlayton@kernel.org>,
-        =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
-Cc:     Ilya Dryomov <idryomov@gmail.com>,
-        Ceph Development <ceph-devel@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20220315161959.19453-1-lhenriques@suse.de>
- <5b53e812-d49b-45f0-1219-3dbc96febbc1@redhat.com>
- <329abedd9d9938de95bf4f5600acdcd6a846e6be.camel@kernel.org>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <3c8b78c4-5392-b81c-e76f-64fcce4f3c0f@redhat.com>
-Date:   Thu, 17 Mar 2022 18:52:49 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 17 Mar 2022 03:55:40 -0700 (PDT)
+Message-ID: <93480fb1-6992-b992-4c93-0046f3b92d7a@redhat.com>
+Date:   Thu, 17 Mar 2022 11:55:39 +0100
 MIME-Version: 1.0
-In-Reply-To: <329abedd9d9938de95bf4f5600acdcd6a846e6be.camel@kernel.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
 Content-Language: en-US
+To:     Dong Aisheng <aisheng.dong@nxp.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dongas86@gmail.com, shawnguo@kernel.org, linux-imx@nxp.com,
+        akpm@linux-foundation.org, m.szyprowski@samsung.com,
+        lecopzer.chen@mediatek.com, vbabka@suse.cz, stable@vger.kernel.org,
+        shijie.qin@nxp.com
+References: <20220315144521.3810298-1-aisheng.dong@nxp.com>
+ <20220315144521.3810298-2-aisheng.dong@nxp.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v3 1/2] mm: cma: fix allocation may fail sometimes
+In-Reply-To: <20220315144521.3810298-2-aisheng.dong@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,82 +87,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 15.03.22 15:45, Dong Aisheng wrote:
+> When there're multiple process allocing dma memory in parallel
 
-On 3/17/22 6:01 PM, Jeff Layton wrote:
-> I'm not sure we want to worry about .snap directories here since they
-> aren't "real". IIRC, snaps are inherited from parents too, so you could
-> do something like
->
->      mkdir dir1
->      mkdir dir1/.snap/snap1
->      mkdir dir1/dir2
->      fscrypt encrypt dir1/dir2
->
-> There should be nothing to prevent encrypting dir2, but I'm pretty sure
-> dir2/.snap will not be empty at that point.
+s/allocing/allocating/
 
-If we don't take care of this. Then we don't know which snapshots should 
-do encrypt/dencrypt and which shouldn't when building the path in lookup 
-and when reading the snapdir ?
+> by calling dma_alloc_coherent(), it may fail sometimes as follows:
+> 
+> Error log:
+> cma: cma_alloc: linux,cma: alloc failed, req-size: 148 pages, ret: -16
+> cma: number of available pages:
+> 3@125+20@172+12@236+4@380+32@736+17@2287+23@2473+20@36076+99@40477+108@40852+44@41108+20@41196+108@41364+108@41620+
+> 108@42900+108@43156+483@44061+1763@45341+1440@47712+20@49324+20@49388+5076@49452+2304@55040+35@58141+20@58220+20@58284+
+> 7188@58348+84@66220+7276@66452+227@74525+6371@75549=> 33161 free of 81920 total pages
+> 
+> When issue happened, we saw there were still 33161 pages (129M) free CMA
+> memory and a lot available free slots for 148 pages in CMA bitmap that we
+> want to allocate.
+> 
+> If dumping memory info, we found that there was also ~342M normal memory,
+> but only 1352K CMA memory left in buddy system while a lot of pageblocks
+> were isolated.
 
--- Xiubo
+s/If/When/
 
->
-> -- Jeff
->
-> On Thu, 2022-03-17 at 13:27 +0800, Xiubo Li wrote:
->> Hi Luis,
->>
->> There has another issue you need to handle at the same time.
->>
->> Currently only the empty directory could be enabled the file encryption,
->> such as for the following command:
->>
->> $ fscrypt encrypt mydir/
->>
->> But should we also make sure that the mydir/.snap/ is empty ?
->>
->> Here the 'empty' is not totally empty, which allows it should allow long
->> snap names exist.
->>
->> Make sense ?
->>
->> - Xiubo
->>
->>
->> On 3/16/22 12:19 AM, Luís Henriques wrote:
->>> Hi!
->>>
->>> A couple of changes since v1:
->>>
->>> - Dropped the dentry->d_flags change in ceph_mkdir().  Thanks to Xiubo
->>>     suggestion, patch 0001 now skips calling ceph_fscrypt_prepare_context()
->>>     if we're handling a snapshot.
->>>
->>> - Added error handling to ceph_get_snapdir() in patch 0001 (Jeff had
->>>     already pointed that out but I forgot to include that change in previous
->>>     revision).
->>>
->>> - Rebased patch 0002 to the latest wip-fscrypt branch.
->>>
->>> - Added some documentation regarding snapshots naming restrictions.
->>>
->>> As before, in order to test this code the following PRs are required:
->>>
->>>     mds: add protection from clients without fscrypt support #45073
->>>     mds: use the whole string as the snapshot long name #45192
->>>     mds: support alternate names for snapshots #45224
->>>     mds: limit the snapshot names to 240 characters #45312
->>>
->>> Luís Henriques (3):
->>>     ceph: add support for encrypted snapshot names
->>>     ceph: add support for handling encrypted snapshot names
->>>     ceph: update documentation regarding snapshot naming limitations
->>>
->>>    Documentation/filesystems/ceph.rst |  10 ++
->>>    fs/ceph/crypto.c                   | 158 +++++++++++++++++++++++++----
->>>    fs/ceph/crypto.h                   |  11 +-
->>>    fs/ceph/inode.c                    |  31 +++++-
->>>    4 files changed, 182 insertions(+), 28 deletions(-)
->>>
+> 
+> Memory info log:
+> Normal free:351096kB min:30000kB low:37500kB high:45000kB reserved_highatomic:0KB
+> 	    active_anon:98060kB inactive_anon:98948kB active_file:60864kB inactive_file:31776kB
+> 	    unevictable:0kB writepending:0kB present:1048576kB managed:1018328kB mlocked:0kB
+> 	    bounce:0kB free_pcp:220kB local_pcp:192kB free_cma:1352kB lowmem_reserve[]: 0 0 0
+> Normal: 78*4kB (UECI) 1772*8kB (UMECI) 1335*16kB (UMECI) 360*32kB (UMECI) 65*64kB (UMCI)
+> 	36*128kB (UMECI) 16*256kB (UMCI) 6*512kB (EI) 8*1024kB (UEI) 4*2048kB (MI) 8*4096kB (EI)
+> 	8*8192kB (UI) 3*16384kB (EI) 8*32768kB (M) = 489288kB
+> 
+> The root cause of this issue is that since commit a4efc174b382
+> ("mm/cma.c: remove redundant cma_mutex lock"), CMA supports concurrent
+> memory allocation. It's possible that the memory range process A trying
+> to alloc has already been isolated by the allocation of process B during
+> memory migration.
+> 
+> The problem here is that the memory range isolated during one allocation
+> by start_isolate_page_range() could be much bigger than the real size we
+> want to alloc due to the range is aligned to MAX_ORDER_NR_PAGES.
+> 
+> Taking an ARMv7 platform with 1G memory as an example, when MAX_ORDER_NR_PAGES
+> is big (e.g. 32M with max_order 14) and CMA memory is relatively small
+> (e.g. 128M), there're only 4 MAX_ORDER slot, then it's very easy that
+> all CMA memory may have already been isolated by other processes when
+> one trying to allocate memory using dma_alloc_coherent().
+> Since current CMA code will only scan one time of whole available CMA
+> memory, then dma_alloc_coherent() may easy fail due to contention with
+> other processes.
+> 
+> This patch introduces a retry mechanism to rescan CMA bitmap for -EBUSY
+> error in case the target memory range may has been temporarily isolated
+> by others and released later.
+
+But you patch doesn't check for -EBUSY and instead might retry forever,
+on any allocation error, no?
+
+I'd really suggest letting alloc_contig_range() return -EAGAIN in case
+the isolation failed and handling -EAGAIN only in a special way instead.
+
+In addition, we might want to stop once we looped to often I assume.
+
+-- 
+Thanks,
+
+David / dhildenb
 

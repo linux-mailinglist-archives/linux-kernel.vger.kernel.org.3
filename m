@@ -2,106 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF49E4DC89D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:19:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B034DC776
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbiCQOVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 10:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S234473AbiCQNYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 09:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234774AbiCQOVA (ORCPT
+        with ESMTP id S231321AbiCQNYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 10:21:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A82169B0A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:19:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647526783; x=1679062783;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=U6rXM0bflcprHQwN2TgyP68VKWMmXe8T0RivNVIeLO4=;
-  b=XhK0/ma0fVMn+oC1IzUwE3L/NdYquly8fiLkmLs3cd3Ng1bfzdlxzk6j
-   QsvH6g399I7I1nGmWRS47af6i4Fmi/Moe7enHxzmn3ocqX+7cbYX8tqeI
-   +VXiXat/Z9iUZJVLQz4RO0iuDzN3rHXL5v7ysx3pIl/PBAsGx5rYbDFou
-   K87dQ2c8QGfooFsnoQ1jVW1wlsbxGizFFTN9S0ETsmb/XEVovuvuKmHiE
-   ChJst1gfoO6FPXW2QZDo+rTsAio5laPKb7qQBeQfH75c/m0g26gFhNYf0
-   6GtYXGGUqTDauQL+gPeX+pBPM/KWJIRetIvA6Cvx5x2TWvyOuIRkAkiWa
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="320089294"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="320089294"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 07:19:42 -0700
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="541385197"
-Received: from knavalgu-mobl1.gar.corp.intel.com (HELO [10.251.29.221]) ([10.251.29.221])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 07:19:41 -0700
-Message-ID: <1b955086-94d0-d524-4cd4-b177df56f71c@linux.intel.com>
-Date:   Thu, 17 Mar 2022 08:21:11 -0500
+        Thu, 17 Mar 2022 09:24:12 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A6B1D66FF;
+        Thu, 17 Mar 2022 06:22:50 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 472E358016A;
+        Thu, 17 Mar 2022 09:22:48 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 17 Mar 2022 09:22:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=eIlSa6kmb49A6jcxW
+        6cwLD9pgSEo9IJnzEj0YDWlu10=; b=b+KhIddF8J0sNT4bfCDjgMmQrtgAWfXGl
+        EAGO/qPzgdZ58oetHJnYWEDtgsC8NYFKFZklKUEGKvmjmroPe4lDzixrk/hjDUuY
+        KeT8U4Ja4eMn8+Y2aNW+Pc14r7W5QCbiGe4vt/pVCU8sPkJrWywfWCf+tseiOHaW
+        dezo3n2Aire65l6nI/mDxZzlJCYUNOA6P4WFWB4ULobbkr7H344QzQ7T0zkzC3xA
+        EHX//ljz+jIiZRqJpgpIjTgMCXwLqTQXC4YVagPPh91vAFwa4TLYRfPSU8lNBa31
+        zCBrCESN5LsrQfFZKF0h1YEA5k0bitCpb6ISNatHxAvfB3kIRD3Vw==
+X-ME-Sender: <xms:JzYzYny07R5NXiO5tesyU_Pl_9chN6YYNMiM8nTJkjiCH6_Mg7axvg>
+    <xme:JzYzYvRco-3JekkUPGyfZKYyg-FCmWat3Enc7Jg1iVoS-GLIK9kdyytmO5jPt42Sl
+    1r15FyTPL9XcYs>
+X-ME-Received: <xmr:JzYzYhUkYjTmY3V3JfCqyKXRkwcA3Of5LxoWLmu1zOwf4UKO_DOfvlXUiDigtBTThsY75_zTPfWXc4NoPgRmgr_FRfg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefgedghedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
+    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:JzYzYhinczglwNOn4Eo3EHcmCutmDrAiv7cm-nwzeGpoQdW5dLUptA>
+    <xmx:JzYzYpB5wQdieAYe1J7I7B1FLTplQ278ypxnsGmzRFFkWH05d8lPhg>
+    <xmx:JzYzYqK-PpLSNovypGnRPira-b8nGFrT15f39AXq4L2jvqOW8n3eFw>
+    <xmx:KDYzYqvxTfJn2T9op5AQG23zXoXuC1Vli2PVUP1cjlITl13-stHwLw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 17 Mar 2022 09:22:46 -0400 (EDT)
+Date:   Thu, 17 Mar 2022 15:22:42 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Jianbo Liu <jianbol@nvidia.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org, andrew@lunn.ch,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, rajur@chelsio.com,
+        claudiu.manoil@nxp.com, sgoutham@marvell.com, gakula@marvell.com,
+        sbhatta@marvell.com, hkelam@marvell.com, saeedm@nvidia.com,
+        leon@kernel.org, idosch@nvidia.com, petrm@nvidia.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        simon.horman@corigine.com, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        baowen.zheng@corigine.com, louis.peens@netronome.com,
+        peng.zhang@corigine.com, oss-drivers@corigine.com, roid@nvidia.com
+Subject: Re: [PATCH net-next v3 1/2] net: flow_offload: add tc police action
+ parameters
+Message-ID: <YjM2IhX4k5XHnya0@shredder>
+References: <20220224102908.5255-1-jianbol@nvidia.com>
+ <20220224102908.5255-2-jianbol@nvidia.com>
+ <20220315191358.taujzi2kwxlp6iuf@skbuf>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH] ASoC: SOF: topology: Use kmemdup() to replace kzalloc +
- memcpy
-Content-Language: en-US
-To:     Yihao Han <hanyihao@vivo.com>, Liam Girdwood <lgirdwood@gmail.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com
-References: <20220317093841.3414-1-hanyihao@vivo.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220317093841.3414-1-hanyihao@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315191358.taujzi2kwxlp6iuf@skbuf>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/17/22 04:38, Yihao Han wrote:
-> fix memdup.cocci warning:
-> sound/soc/sof/topology.c:876:19-26: WARNING opportunity for kmemdup
+On Tue, Mar 15, 2022 at 09:13:58PM +0200, Vladimir Oltean wrote:
+> Hello Jianbo,
 > 
-> Generated by: scripts/coccinelle/api/memdup.cocci
+> On Thu, Feb 24, 2022 at 10:29:07AM +0000, Jianbo Liu wrote:
+> > The current police offload action entry is missing exceed/notexceed
+> > actions and parameters that can be configured by tc police action.
+> > Add the missing parameters as a pre-step for offloading police actions
+> > to hardware.
+> > 
+> > Signed-off-by: Jianbo Liu <jianbol@nvidia.com>
+> > Signed-off-by: Roi Dayan <roid@nvidia.com>
+> > Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+> > ---
+> >  include/net/flow_offload.h     |  9 +++++++
+> >  include/net/tc_act/tc_police.h | 30 ++++++++++++++++++++++
+> >  net/sched/act_police.c         | 46 ++++++++++++++++++++++++++++++++++
+> >  3 files changed, 85 insertions(+)
+> > 
+> > diff --git a/include/net/flow_offload.h b/include/net/flow_offload.h
+> > index 5b8c54eb7a6b..74f44d44abe3 100644
+> > --- a/include/net/flow_offload.h
+> > +++ b/include/net/flow_offload.h
+> > @@ -148,6 +148,8 @@ enum flow_action_id {
+> >  	FLOW_ACTION_MPLS_MANGLE,
+> >  	FLOW_ACTION_GATE,
+> >  	FLOW_ACTION_PPPOE_PUSH,
+> > +	FLOW_ACTION_JUMP,
+> > +	FLOW_ACTION_PIPE,
+> >  	NUM_FLOW_ACTIONS,
+> >  };
+> >  
+> > @@ -235,9 +237,16 @@ struct flow_action_entry {
+> >  		struct {				/* FLOW_ACTION_POLICE */
+> >  			u32			burst;
+> >  			u64			rate_bytes_ps;
+> > +			u64			peakrate_bytes_ps;
+> > +			u32			avrate;
+> > +			u16			overhead;
+> >  			u64			burst_pkt;
+> >  			u64			rate_pkt_ps;
+> >  			u32			mtu;
+> > +			struct {
+> > +				enum flow_action_id	act_id;
+> > +				u32			extval;
+> > +			} exceed, notexceed;
+> >  		} police;
+> >  		struct {				/* FLOW_ACTION_CT */
+> >  			int action;
+> > diff --git a/include/net/tc_act/tc_police.h b/include/net/tc_act/tc_police.h
+> > index 72649512dcdd..283bde711a42 100644
+> > --- a/include/net/tc_act/tc_police.h
+> > +++ b/include/net/tc_act/tc_police.h
+> > @@ -159,4 +159,34 @@ static inline u32 tcf_police_tcfp_mtu(const struct tc_action *act)
+> >  	return params->tcfp_mtu;
+> >  }
+> >  
+> > +static inline u64 tcf_police_peakrate_bytes_ps(const struct tc_action *act)
+> > +{
+> > +	struct tcf_police *police = to_police(act);
+> > +	struct tcf_police_params *params;
+> > +
+> > +	params = rcu_dereference_protected(police->params,
+> > +					   lockdep_is_held(&police->tcf_lock));
+> > +	return params->peak.rate_bytes_ps;
+> > +}
+> > +
+> > +static inline u32 tcf_police_tcfp_ewma_rate(const struct tc_action *act)
+> > +{
+> > +	struct tcf_police *police = to_police(act);
+> > +	struct tcf_police_params *params;
+> > +
+> > +	params = rcu_dereference_protected(police->params,
+> > +					   lockdep_is_held(&police->tcf_lock));
+> > +	return params->tcfp_ewma_rate;
+> > +}
+> > +
+> > +static inline u16 tcf_police_rate_overhead(const struct tc_action *act)
+> > +{
+> > +	struct tcf_police *police = to_police(act);
+> > +	struct tcf_police_params *params;
+> > +
+> > +	params = rcu_dereference_protected(police->params,
+> > +					   lockdep_is_held(&police->tcf_lock));
+> > +	return params->rate.overhead;
+> > +}
+> > +
+> >  #endif /* __NET_TC_POLICE_H */
+> > diff --git a/net/sched/act_police.c b/net/sched/act_police.c
+> > index 0923aa2b8f8a..a2275eef6877 100644
+> > --- a/net/sched/act_police.c
+> > +++ b/net/sched/act_police.c
+> > @@ -405,20 +405,66 @@ static int tcf_police_search(struct net *net, struct tc_action **a, u32 index)
+> >  	return tcf_idr_search(tn, a, index);
+> >  }
+> >  
+> > +static int tcf_police_act_to_flow_act(int tc_act, u32 *extval)
+> > +{
+> > +	int act_id = -EOPNOTSUPP;
+> > +
+> > +	if (!TC_ACT_EXT_OPCODE(tc_act)) {
+> > +		if (tc_act == TC_ACT_OK)
+> > +			act_id = FLOW_ACTION_ACCEPT;
+> > +		else if (tc_act ==  TC_ACT_SHOT)
+> > +			act_id = FLOW_ACTION_DROP;
+> > +		else if (tc_act == TC_ACT_PIPE)
+> > +			act_id = FLOW_ACTION_PIPE;
+> > +	} else if (TC_ACT_EXT_CMP(tc_act, TC_ACT_GOTO_CHAIN)) {
+> > +		act_id = FLOW_ACTION_GOTO;
+> > +		*extval = tc_act & TC_ACT_EXT_VAL_MASK;
+> > +	} else if (TC_ACT_EXT_CMP(tc_act, TC_ACT_JUMP)) {
+> > +		act_id = FLOW_ACTION_JUMP;
+> > +		*extval = tc_act & TC_ACT_EXT_VAL_MASK;
+> > +	}
+> > +
+> > +	return act_id;
+> > +}
+> > +
+> >  static int tcf_police_offload_act_setup(struct tc_action *act, void *entry_data,
+> >  					u32 *index_inc, bool bind)
+> >  {
+> >  	if (bind) {
+> >  		struct flow_action_entry *entry = entry_data;
+> > +		struct tcf_police *police = to_police(act);
+> > +		struct tcf_police_params *p;
+> > +		int act_id;
+> > +
+> > +		p = rcu_dereference_protected(police->params,
+> > +					      lockdep_is_held(&police->tcf_lock));
+> >  
+> >  		entry->id = FLOW_ACTION_POLICE;
+> >  		entry->police.burst = tcf_police_burst(act);
+> >  		entry->police.rate_bytes_ps =
+> >  			tcf_police_rate_bytes_ps(act);
+> > +		entry->police.peakrate_bytes_ps = tcf_police_peakrate_bytes_ps(act);
+> > +		entry->police.avrate = tcf_police_tcfp_ewma_rate(act);
+> > +		entry->police.overhead = tcf_police_rate_overhead(act);
+> >  		entry->police.burst_pkt = tcf_police_burst_pkt(act);
+> >  		entry->police.rate_pkt_ps =
+> >  			tcf_police_rate_pkt_ps(act);
+> >  		entry->police.mtu = tcf_police_tcfp_mtu(act);
+> > +
+> > +		act_id = tcf_police_act_to_flow_act(police->tcf_action,
+> > +						    &entry->police.exceed.extval);
 > 
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
-
-Thanks for the patch
-
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-
-> ---
->   sound/soc/sof/topology.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+> I don't know why just now, but I observed an apparent regression here
+> with these commands:
 > 
-> diff --git a/sound/soc/sof/topology.c b/sound/soc/sof/topology.c
-> index 367fbe2d5b31..369693cc6d10 100644
-> --- a/sound/soc/sof/topology.c
-> +++ b/sound/soc/sof/topology.c
-> @@ -873,11 +873,10 @@ static int sof_control_load_bytes(struct snd_soc_component *scomp,
->   
->   	/* copy the private data */
->   	if (priv_size > 0) {
-> -		scontrol->priv = kzalloc(priv_size, GFP_KERNEL);
-> +		scontrol->priv = kmemdup(control->priv.data, priv_size, GFP_KERNEL);
->   		if (!scontrol->priv)
->   			return -ENOMEM;
->   
-> -		memcpy(scontrol->priv, control->priv.data, priv_size);
->   		scontrol->priv_size = priv_size;
->   	}
->   
+> root@debian:~# tc qdisc add dev swp3 clsact
+> root@debian:~# tc filter add dev swp3 ingress protocol ip flower skip_sw ip_proto icmp action police rate 100Mbit burst 10000
+> [   45.767900] tcf_police_act_to_flow_act: 434: tc_act 1
+> [   45.773100] tcf_police_offload_act_setup: 475, act_id -95
+> Error: cls_flower: Failed to setup flow action.
+> We have an error talking to the kernel, -1
+> 
+> The reason why I'm not sure is because I don't know if this should have
+> worked as intended or not. I am remarking just now in "man tc-police"
+> that the default conform-exceed action is "reclassify".
+> 
+> So if I specify "conform-exceed drop", things are as expected, but with
+> the default (implicitly "conform-exceed reclassify") things fail with
+> -EOPNOTSUPP because tcf_police_act_to_flow_act() doesn't handle a
+> police->tcf_action of TC_ACT_RECLASSIFY.
+> 
+> Should it?
+
+Even if tcf_police_act_to_flow_act() handled "reclassify", the
+configuration would have been rejected later on by the relevant device
+driver since they all support "drop" for exceed action and nothing else.
+
+I don't know why iproute2 defaults to "reclassify", but the
+configuration in the example does something different in the SW and HW
+data paths. One ugly suggestion to keep this case working it to have
+tcf_police_act_to_flow_act() default to "drop" and emit a warning via
+extack so that user space is at least aware of this misconfiguration.
+
+> 
+> > +		if (act_id < 0)
+> > +			return act_id;
+> > +
+> > +		entry->police.exceed.act_id = act_id;
+> > +
+> > +		act_id = tcf_police_act_to_flow_act(p->tcfp_result,
+> > +						    &entry->police.notexceed.extval);
+> > +		if (act_id < 0)
+> > +			return act_id;
+> > +
+> > +		entry->police.notexceed.act_id = act_id;
+> > +
+> >  		*index_inc = 1;
+> >  	} else {
+> >  		struct flow_offload_action *fl_action = entry_data;
+> > -- 
+> > 2.26.2
+> > 

@@ -2,237 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277EB4DC630
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 263854DC5FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbiCQMtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
+        id S233670AbiCQMrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233821AbiCQMsw (ORCPT
+        with ESMTP id S233606AbiCQMq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:48:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C221F0CB0;
-        Thu, 17 Mar 2022 05:47:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 17 Mar 2022 08:46:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6DEF111DD8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:45:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647521141;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VBBuRe1MzVMSa5tl85JWrPgpG0AsZAv8LA7ACqhOxW8=;
+        b=B+pNlGsP7v0mhHNFSFf/RREGIVItS2orlAbxgwC/BqLW0Nb12oK3Xi/cM6WR09HFAHx8Ea
+        EijWoEQ95KxhbBb+KDotOlWalAzBM4IxOdp1SxSAqgfpY8Lu2XdPZmzv4eIauBXqJPf/U0
+        x3Eij+6bf0d+VOz1gj6N5/T5R0LL8yI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-563-LSns4lGNMQquxhPprBInwg-1; Thu, 17 Mar 2022 08:45:40 -0400
+X-MC-Unique: LSns4lGNMQquxhPprBInwg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 670C6612ED;
-        Thu, 17 Mar 2022 12:47:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59BB6C340E9;
-        Thu, 17 Mar 2022 12:47:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521247;
-        bh=cVQ0mikGG2uvtBw2oyZsyqRCTbenVT0xZkWKqqJoTsc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=blxtSckKiBDFEi/44DiPsBDStLW4rlTOehiIqD1VnaTspRkTFt09LH32uEfjvdHw7
-         8rZguTCdcYoVwRSN/h9Vv7oSKU7ckl/u7j/bbE3sfs8cvialyu+vHLY/vSb9LBbqnN
-         3o6k2WRJUBi62reYNP/0ehxSUxA+X3xZA1Ftis8g=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 23/43] KVM: arm64: Allow SMCCC_ARCH_WORKAROUND_3 to be discovered and migrated
-Date:   Thu, 17 Mar 2022 13:45:34 +0100
-Message-Id: <20220317124528.320984338@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317124527.672236844@linuxfoundation.org>
-References: <20220317124527.672236844@linuxfoundation.org>
-User-Agent: quilt/0.66
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 11AD81C0150E;
+        Thu, 17 Mar 2022 12:45:40 +0000 (UTC)
+Received: from localhost (ovpn-13-216.pek2.redhat.com [10.72.13.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4AB72C15D57;
+        Thu, 17 Mar 2022 12:45:38 +0000 (UTC)
+Date:   Thu, 17 Mar 2022 20:45:35 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Coiby Xu <coiby.xu@gmail.com>
+Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Coiby Xu <coxu@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [RESEND PATCH v3 1/3] kexec: clean up
+ arch_kexec_kernel_verify_sig
+Message-ID: <YjMtb7u3/sAWG0/7@MiWiFi-R3L-srv>
+References: <20220304020341.85583-1-coiby.xu@gmail.com>
+ <20220304020341.85583-2-coiby.xu@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304020341.85583-2-coiby.xu@gmail.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+On 03/04/22 at 10:03am, Coiby Xu wrote:
+> From: Coiby Xu <coxu@redhat.com>
+> 
+> commit 9ec4ecef0af7790551109283ca039a7c52de343c ("kexec_file,x86,
+> powerpc: factor out kexec_file_ops functions" allows implementing
+> the arch-specific implementation of kernel image verification
+> in kexec_file_ops->verify_sig. Currently, there is no arch-specific
+> implementation of arch_kexec_kernel_verify_sig. So clean it up.
 
-commit a5905d6af492ee6a4a2205f0d550b3f931b03d03 upstream.
+This is a nice cleanup, while the log may need to be improved. You
+should run ./scripts/checkpatch.pl on your patch before sending out.
+When we refer to a commit in log, please refer to
+Documentation/process/submitting-patches.rst.
 
-KVM allows the guest to discover whether the ARCH_WORKAROUND SMCCC are
-implemented, and to preserve that state during migration through its
-firmware register interface.
-
-Add the necessary boiler plate for SMCCC_ARCH_WORKAROUND_3.
-
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-[ kvm code moved to virt/kvm/arm. ]
-Signed-off-by: James Morse <james.morse@arm.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/arm/include/asm/kvm_host.h   |  7 +++++++
- arch/arm/include/uapi/asm/kvm.h   |  6 ++++++
- arch/arm64/include/asm/kvm_host.h |  5 +++++
- arch/arm64/include/uapi/asm/kvm.h |  5 +++++
- virt/kvm/arm/psci.c               | 34 ++++++++++++++++++++++++++++---
- 5 files changed, 54 insertions(+), 3 deletions(-)
-
-diff --git a/arch/arm/include/asm/kvm_host.h b/arch/arm/include/asm/kvm_host.h
-index 32564b017ba0..d8ac89879327 100644
---- a/arch/arm/include/asm/kvm_host.h
-+++ b/arch/arm/include/asm/kvm_host.h
-@@ -15,6 +15,7 @@
- #include <asm/kvm_asm.h>
- #include <asm/kvm_mmio.h>
- #include <asm/fpstate.h>
-+#include <asm/spectre.h>
- #include <kvm/arm_arch_timer.h>
- 
- #define __KVM_HAVE_ARCH_INTC_INITIALIZED
-@@ -424,4 +425,10 @@ static inline bool kvm_arm_vcpu_is_finalized(struct kvm_vcpu *vcpu)
- 
- #define kvm_arm_vcpu_loaded(vcpu)	(false)
- 
-+static inline int kvm_arm_get_spectre_bhb_state(void)
-+{
-+	/* 32bit guests don't need firmware for this */
-+	return SPECTRE_VULNERABLE; /* aka SMCCC_RET_NOT_SUPPORTED */
-+}
-+
- #endif /* __ARM_KVM_HOST_H__ */
-diff --git a/arch/arm/include/uapi/asm/kvm.h b/arch/arm/include/uapi/asm/kvm.h
-index 2769360f195c..89b8e70068a1 100644
---- a/arch/arm/include/uapi/asm/kvm.h
-+++ b/arch/arm/include/uapi/asm/kvm.h
-@@ -227,6 +227,12 @@ struct kvm_vcpu_events {
- #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED	3
- #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_ENABLED	(1U << 4)
- 
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3	KVM_REG_ARM_FW_REG(3)
-+	/* Higher values mean better protection. */
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_AVAIL		0
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_AVAIL		1
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_REQUIRED	2
-+
- /* Device Control API: ARM VGIC */
- #define KVM_DEV_ARM_VGIC_GRP_ADDR	0
- #define KVM_DEV_ARM_VGIC_GRP_DIST_REGS	1
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index 697702a1a1ff..e6efdbe88c0a 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -684,4 +684,9 @@ bool kvm_arm_vcpu_is_finalized(struct kvm_vcpu *vcpu);
- 
- #define kvm_arm_vcpu_loaded(vcpu)	((vcpu)->arch.sysregs_loaded_on_cpu)
- 
-+static inline enum mitigation_state kvm_arm_get_spectre_bhb_state(void)
-+{
-+	return arm64_get_spectre_bhb_state();
-+}
-+
- #endif /* __ARM64_KVM_HOST_H__ */
-diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
-index 67c21f9bdbad..08440ce57a1c 100644
---- a/arch/arm64/include/uapi/asm/kvm.h
-+++ b/arch/arm64/include/uapi/asm/kvm.h
-@@ -240,6 +240,11 @@ struct kvm_vcpu_events {
- #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED	3
- #define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_ENABLED     	(1U << 4)
- 
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3	KVM_REG_ARM_FW_REG(3)
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_AVAIL		0
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_AVAIL		1
-+#define KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_REQUIRED	2
-+
- /* SVE registers */
- #define KVM_REG_ARM64_SVE		(0x15 << KVM_REG_ARM_COPROC_SHIFT)
- 
-diff --git a/virt/kvm/arm/psci.c b/virt/kvm/arm/psci.c
-index 48fde38d64c3..2f5dc7fb437b 100644
---- a/virt/kvm/arm/psci.c
-+++ b/virt/kvm/arm/psci.c
-@@ -426,6 +426,18 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
- 				break;
- 			}
- 			break;
-+		case ARM_SMCCC_ARCH_WORKAROUND_3:
-+			switch (kvm_arm_get_spectre_bhb_state()) {
-+			case SPECTRE_VULNERABLE:
-+				break;
-+			case SPECTRE_MITIGATED:
-+				val = SMCCC_RET_SUCCESS;
-+				break;
-+			case SPECTRE_UNAFFECTED:
-+				val = SMCCC_ARCH_WORKAROUND_RET_UNAFFECTED;
-+				break;
-+			}
-+			break;
- 		}
- 		break;
- 	default:
-@@ -438,7 +450,7 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
- 
- int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
- {
--	return 3;		/* PSCI version and two workaround registers */
-+	return 4;		/* PSCI version and three workaround registers */
- }
- 
- int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices)
-@@ -452,6 +464,9 @@ int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices)
- 	if (put_user(KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2, uindices++))
- 		return -EFAULT;
- 
-+	if (put_user(KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3, uindices++))
-+		return -EFAULT;
-+
- 	return 0;
- }
- 
-@@ -486,9 +501,20 @@ static int get_kernel_wa_level(u64 regid)
- 			return KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED;
- 		case KVM_SSBD_UNKNOWN:
- 		default:
--			return KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_UNKNOWN;
-+			break;
- 		}
--	}
-+		return KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_UNKNOWN;
-+	case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3:
-+		switch (kvm_arm_get_spectre_bhb_state()) {
-+		case SPECTRE_VULNERABLE:
-+			return KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_AVAIL;
-+		case SPECTRE_MITIGATED:
-+			return KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_AVAIL;
-+		case SPECTRE_UNAFFECTED:
-+			return KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_REQUIRED;
-+		}
-+		return KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3_NOT_AVAIL;
-+        }
- 
- 	return -EINVAL;
- }
-@@ -503,6 +529,7 @@ int kvm_arm_get_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
- 		val = kvm_psci_version(vcpu, vcpu->kvm);
- 		break;
- 	case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1:
-+	case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3:
- 		val = get_kernel_wa_level(reg->id) & KVM_REG_FEATURE_LEVEL_MASK;
- 		break;
- 	case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2:
-@@ -555,6 +582,7 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
- 	}
- 
- 	case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1:
-+	case KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3:
- 		if (val & ~KVM_REG_FEATURE_LEVEL_MASK)
- 			return -EINVAL;
- 
--- 
-2.34.1
-
-
+> 
+> Suggested-by: Eric W. Biederman <ebiederm@xmission.com>
+> Signed-off-by: Coiby Xu <coiby.xu@gmail.com>
+> ---
+>  include/linux/kexec.h |  4 ----
+>  kernel/kexec_file.c   | 34 +++++++++++++---------------------
+>  2 files changed, 13 insertions(+), 25 deletions(-)
+> 
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 0c994ae37729..755fed183224 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -196,10 +196,6 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
+>  				 const Elf_Shdr *relsec,
+>  				 const Elf_Shdr *symtab);
+>  int arch_kimage_file_post_load_cleanup(struct kimage *image);
+> -#ifdef CONFIG_KEXEC_SIG
+> -int arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+> -				 unsigned long buf_len);
+> -#endif
+>  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
+>  
+>  extern int kexec_add_buffer(struct kexec_buf *kbuf);
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 8347fc158d2b..3720435807eb 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -89,25 +89,6 @@ int __weak arch_kimage_file_post_load_cleanup(struct kimage *image)
+>  	return kexec_image_post_load_cleanup_default(image);
+>  }
+>  
+> -#ifdef CONFIG_KEXEC_SIG
+> -static int kexec_image_verify_sig_default(struct kimage *image, void *buf,
+> -					  unsigned long buf_len)
+> -{
+> -	if (!image->fops || !image->fops->verify_sig) {
+> -		pr_debug("kernel loader does not support signature verification.\n");
+> -		return -EKEYREJECTED;
+> -	}
+> -
+> -	return image->fops->verify_sig(buf, buf_len);
+> -}
+> -
+> -int __weak arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+> -					unsigned long buf_len)
+> -{
+> -	return kexec_image_verify_sig_default(image, buf, buf_len);
+> -}
+> -#endif
+> -
+>  /*
+>   * arch_kexec_apply_relocations_add - apply relocations of type RELA
+>   * @pi:		Purgatory to be relocated.
+> @@ -184,13 +165,24 @@ void kimage_file_post_load_cleanup(struct kimage *image)
+>  }
+>  
+>  #ifdef CONFIG_KEXEC_SIG
+> +static int kexec_image_verify_sig(struct kimage *image, void *buf,
+> +		unsigned long buf_len)
+> +{
+> +	if (!image->fops || !image->fops->verify_sig) {
+> +		pr_debug("kernel loader does not support signature verification.\n");
+> +		return -EKEYREJECTED;
+> +	}
+> +
+> +	return image->fops->verify_sig(buf, buf_len);
+> +}
+> +
+>  static int
+>  kimage_validate_signature(struct kimage *image)
+>  {
+>  	int ret;
+>  
+> -	ret = arch_kexec_kernel_verify_sig(image, image->kernel_buf,
+> -					   image->kernel_buf_len);
+> +	ret = kexec_image_verify_sig(image, image->kernel_buf,
+> +			image->kernel_buf_len);
+>  	if (ret) {
+>  
+>  		if (IS_ENABLED(CONFIG_KEXEC_SIG_FORCE)) {
+> -- 
+> 2.34.1
+> 
 

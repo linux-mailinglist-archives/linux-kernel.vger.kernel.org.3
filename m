@@ -2,63 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596ED4DC236
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7424DC22F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbiCQJC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
+        id S231658AbiCQJCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbiCQJCk (ORCPT
+        with ESMTP id S231600AbiCQJCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Mar 2022 05:02:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 265761D08C4;
-        Thu, 17 Mar 2022 02:01:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E42551476;
-        Thu, 17 Mar 2022 02:01:24 -0700 (PDT)
-Received: from e123427-lin.arm.com (unknown [10.57.43.22])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 222053F766;
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837451D08D2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:01:24 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id yy13so9280961ejb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:01:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Vhmaa8dvAWAF7hhtVerRMIY5hbJUzuvuMcKyuTSFTwg=;
+        b=78YceMwTeAnCsJX1c/l4aRdsPn2rkY4Ej3QmSbpqhb5TZWTH8ViYLss/o47dggaWBB
+         8Cq3ytvuEIm3eG0HwDRs1eZEPWddjcoQSsiuQ1izCrxzc14/dIVyxYGcBO23FMg961M8
+         5H7Dv2ySLSpgGD0fkCQSc7e9IkkdujC3nrkcFu/UDWdlvDT0QVLM3lhK7NjIyRYqdqmJ
+         b4asp0Vq7xwTU3ge/5S0G/gPuIMxk7pu1sxsNO2eF74epze+2Vrh1MVSX1q0d44mnJ82
+         rPWQMfaUwUu8MHGhxMwvnnCiWq5QfEwA9QFjZ2Vtn+ZhtKxWnlY/r2N3LrGZOjaysGnt
+         BhfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vhmaa8dvAWAF7hhtVerRMIY5hbJUzuvuMcKyuTSFTwg=;
+        b=YgsbuFLWDv1fNEZGCH/flM4VPe6QA5dZpww3Zm69h9c26RtHxHq53p0PiKwa2GBuL3
+         k4xDWmLJh6m5v33eaEOw/S+267Hv1G9wBccsE3X8eIKuL7vQn5habvNDZt67431A1VZ1
+         l+vNWRN+WrvaQROe/9VXVzCL4IHMrq4yHL6hvOHr34rPi34aQGn9lCTZ5xGZIVEUtHDS
+         7u4/47PC6JxpbDcXV3URmWrT1/RuyzYq1kh0hBApq9LctIhDSOd48O69sqtC6xJRbfPw
+         wNFQm7yN9L+watlFrxJ7ySRNQnrK6LHcmwHD4vrRyhShmdTSweA8KXwmqYkMH0S1htj4
+         uOzQ==
+X-Gm-Message-State: AOAM530fkgF3vDcYADRjdLm2JYjCt+A0dy+dEQbqF4fqC69UP7aBbY+P
+        tTiqzVwt4LEOv/x3L7aGlmuBsg==
+X-Google-Smtp-Source: ABdhPJz5wwFFPWZiqC4nPeTrGUb1a5X0B8ku5ObeLhn2reQ2g3kLcviCNUKQ6pdcAOPpsEMmpauk5Q==
+X-Received: by 2002:a17:906:3144:b0:6ce:de5d:5e3b with SMTP id e4-20020a170906314400b006cede5d5e3bmr3366414eje.689.1647507683061;
         Thu, 17 Mar 2022 02:01:23 -0700 (PDT)
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Richard Zhu <hongxing.zhu@nxp.com>, bhelgaas@google.com,
-        l.stach@pengutronix.de
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v2] PCI: imx6: Assert i.MX8MM CLKREQ# even if no device present
-Date:   Thu, 17 Mar 2022 09:01:18 +0000
-Message-Id: <164750763778.14330.2374977117097314236.b4-ty@arm.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <1645672013-8949-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1645672013-8949-1-git-send-email-hongxing.zhu@nxp.com>
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id dn4-20020a17090794c400b006dbec4f4acbsm2061440ejc.6.2022.03.17.02.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 02:01:22 -0700 (PDT)
+Message-ID: <4e09ab7d-95eb-7114-97cd-1e389c948a9e@blackwall.org>
+Date:   Thu, 17 Mar 2022 11:01:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 net-next 08/15] net: bridge: mst: Add helper to check
+ if MST is enabled
+Content-Language: en-US
+To:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
+References: <20220316150857.2442916-1-tobias@waldekranz.com>
+ <20220316150857.2442916-9-tobias@waldekranz.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20220316150857.2442916-9-tobias@waldekranz.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022 11:06:53 +0800, Richard Zhu wrote:
-> The CLKREQ# signal is an open drain, active low signal that is driven
-> low by the remote Endpoint device. But it might not be driven low if no
-> Endpoint device is connected.
+On 16/03/2022 17:08, Tobias Waldekranz wrote:
+> This is useful for switchdev drivers that might want to refuse to join
+> a bridge where MST is enabled, if the hardware can't support it.
 > 
-> On i.MX8MM PCIe, phy_init() may fail and system boot may hang if no
-> Endpoint is connected to assert CLKREQ#.
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
+>  include/linux/if_bridge.h | 6 ++++++
+>  net/bridge/br_mst.c       | 9 +++++++++
+>  2 files changed, 15 insertions(+)
 > 
-> [...]
 
-Applied to pci/imx6, thanks!
+Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
 
-[1/1] PCI: imx6: Assert i.MX8MM CLKREQ# even if no device present
-      https://git.kernel.org/lpieralisi/pci/c/45514f78c6
-
-Thanks,
-Lorenzo

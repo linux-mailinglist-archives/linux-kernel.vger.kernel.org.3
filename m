@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8504DC8A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F52B4DC8A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235032AbiCQOV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 10:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
+        id S235044AbiCQOWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 10:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235034AbiCQOV0 (ORCPT
+        with ESMTP id S231233AbiCQOWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 10:21:26 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0248316CE51;
-        Thu, 17 Mar 2022 07:20:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647526809; x=1679062809;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=27vm0JIz+Qk23Y8+teO3yhtr05xWyYX+RKmIIsewghA=;
-  b=nx3frnG0dDXW2EICpNBnRbUHYfbn1cEpcnkIf80pS2oGFJozwDEQpx9C
-   U5Al3MGbOybFCBrfhjOA97C3EJOk7n6Z8ViLEbJFRQC2azEAHvooTKz37
-   Qqang4dwwo+D11PzHgHpwAYnQSqDeMzSYMQo8DmDIGkHafDMOd8rbwtSk
-   I=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 17 Mar 2022 07:20:08 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 07:20:08 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 17 Mar 2022 07:20:08 -0700
-Received: from [10.216.33.159] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 17 Mar
- 2022 07:20:04 -0700
-Message-ID: <f8fb6ac8-7f97-a3d6-a9b6-1eee4d0ffd86@quicinc.com>
-Date:   Thu, 17 Mar 2022 19:50:00 +0530
+        Thu, 17 Mar 2022 10:22:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAEB169B18;
+        Thu, 17 Mar 2022 07:20:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1179CB81ECB;
+        Thu, 17 Mar 2022 14:20:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2231C340E9;
+        Thu, 17 Mar 2022 14:20:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647526845;
+        bh=1jUnKiTd1ovbIfeqqvU+XJdp2zp/6es7srgZU1ueVYU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=K/Xy2Izpna9w9dzEslqf7bO8KZu+v9fBTe2zkXFrzLYzjVA2zW8PG2G6ccy2UzuCe
+         +megLNyEoALM3Wc8R31tGQJskEsN8hODtURw7ibV+t4q7ilQhqt4qgn/13I7VIINMS
+         Raevqn7AT3PUjJ6u8el4RlvUW+rE0W0awJW/fJDL0F+20UP/OW2m4wQTbde7j1uh0a
+         ZyAoK4E1eJZOwaMp5kSQAIeN7ZeCJvZPHjrz7ckm6u5LxS/+/OIcijzsnNunJhLgdF
+         aLl9ogG6jaQw2DzprxRfjZwrgMk2aombKs6hJyMAz/BWGJTwtc+L++V4JVOLZ+279E
+         EFOsoMUelAbPg==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nUqzb-00FCgJ-4z; Thu, 17 Mar 2022 14:20:43 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v4 2/3] arm64: dts: qcom: sc7280: Add lpass cpu node
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Rohit kumar <rohitkr@codeaurora.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-References: <1644591438-6514-1-git-send-email-quic_srivasam@quicinc.com>
- <1644591438-6514-3-git-send-email-quic_srivasam@quicinc.com>
- <CAD=FV=Xm7UVXX9NQfKs+BymsZpG+aoYqvXXRL5WhJjEZRqi7ug@mail.gmail.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <CAD=FV=Xm7UVXX9NQfKs+BymsZpG+aoYqvXXRL5WhJjEZRqi7ug@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Date:   Thu, 17 Mar 2022 14:20:42 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Pierre Gondois <Pierre.Gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        Lukasz.Luba@arm.com, Morten.Rasmussen@arm.com,
+        Dietmar.Eggemann@arm.com, mka@chromium.org,
+        daniel.lezcano@linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Fuad Tabba <tabba@google.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1 1/3] cpufreq: CPPC: Add cppc_cpufreq_search_cpu_data
+In-Reply-To: <20220317133419.3901736-2-Pierre.Gondois@arm.com>
+References: <20220317133419.3901736-1-Pierre.Gondois@arm.com>
+ <20220317133419.3901736-2-Pierre.Gondois@arm.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <746641141c630dc1d02943d6133a6c8d@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: Pierre.Gondois@arm.com, linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com, Lukasz.Luba@arm.com, Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com, mka@chromium.org, daniel.lezcano@linaro.org, catalin.marinas@arm.com, will@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org, mark.rutland@arm.com, ardb@kernel.org, tabba@google.com, valentin.schneider@arm.com, robh@kernel.org, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,96 +79,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-03-17 13:34, Pierre Gondois wrote:
+> cppc_cpufreq_get_cpu_data() allocates a new struct cppc_cpudata
+> for the input CPU at each call.
+> 
+> To search the struct associated with a cpu without allocating
+> a new one, add cppc_cpufreq_search_cpu_data().
+> Also add an early prototype.
+> 
+> This will be used in a later patch, when generating artificial
+> performance states to register an artificial Energy Model in the
+> cppc_cpufreq driver and enable the Energy Aware Scheduler for ACPI
+> based systems.
+> 
+> Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c 
+> b/drivers/cpufreq/cppc_cpufreq.c
+> index 82d370ae6a4a..8f950fe72765 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -41,6 +41,8 @@
+>   */
+>  static LIST_HEAD(cpu_data_list);
+> 
+> +static struct cppc_cpudata *cppc_cpufreq_search_cpu_data(unsigned int 
+> cpu);
+> +
+>  static bool boost_supported;
+> 
+>  struct cppc_workaround_oem_info {
+> @@ -479,6 +481,19 @@ static void cppc_cpufreq_put_cpu_data(struct
+> cpufreq_policy *policy)
+>  	policy->driver_data = NULL;
+>  }
+> 
+> +static inline struct cppc_cpudata *
 
-On 3/1/2022 6:40 AM, Doug Anderson wrote:
-Thanks for your time Doug!!!
-> Hi,
->
-> On Fri, Feb 11, 2022 at 6:57 AM Srinivasa Rao Mandadapu
-> <quic_srivasam@quicinc.com> wrote:
->> @@ -1750,6 +1751,64 @@
->>                          #clock-cells = <1>;
->>                  };
->>
->> +               lpass_cpu: audio-subsystem@3260000 {
->> +                       compatible = "qcom,sc7280-lpass-cpu";
->> +                       reg = <0 0x3260000 0 0xC000>,
->> +                             <0 0x3280000 0 0x29000>,
->> +                             <0 0x3340000 0 0x29000>,
->> +                             <0 0x336C000 0 0x3000>,
->> +                             <0 0x3987000 0 0x68000>,
->> +                             <0 0x3B00000 0 0x29000>;
-> Lower case hex, please. ...and pad the address to 8 digits here (just
-> don't do it in the unit address in the node name).
-Okay.
->
->
->> +                       reg-names = "lpass-rxtx-cdc-dma-lpm",
->> +                                   "lpass-rxtx-lpaif",
->> +                                   "lpass-va-lpaif",
->> +                                   "lpass-va-cdc-dma-lpm",
->> +                                   "lpass-hdmiif",
->> +                                   "lpass-lpaif";
-> The order of "reg" and "reg-names" needs to match the bindings
-> exactly. It's almost certainly easier to change your device tree since
-> the bindings have already landed.
->
-> That means that "lpass-hdmiif" will be first. ...and it will also
-> change your node name since the first "reg" listed will now be
-> 3987000.
-Okay. will sort it accordingly.
->
->
->> +                       iommus = <&apps_smmu 0x1820 0>,
->> +                                <&apps_smmu 0x1821 0>,
->> +                                <&apps_smmu 0x1832 0>;
->> +                       status = "disabled";
->> +
->> +                       power-domains = <&rpmhpd SC7280_LCX>;
->> +                       power-domain-names = "lcx";
-> power-domain-names is not in the bindings.
-Okay. will update it.
->
->
->> +                       required-opps = <&rpmhpd_opp_nom>;
->> +
->> +                       clocks = <&lpass_aon LPASS_AON_CC_AUDIO_HM_H_CLK>,
->> +                                <&lpasscore LPASS_CORE_CC_SYSNOC_MPORT_CORE_CLK>,
->> +                                <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM_CLK>,
->> +                                <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM0_CLK>,
->> +                                <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM1_CLK>,
->> +                                <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM2_CLK>,
->> +                                <&lpasscore LPASS_CORE_CC_EXT_IF0_IBIT_CLK>,
->> +                                <&lpasscore LPASS_CORE_CC_EXT_IF1_IBIT_CLK>,
->> +                                <&lpass_aon LPASS_AON_CC_VA_MEM0_CLK>;
->> +                       clock-names = "aon_cc_audio_hm_h",
->> +                                     "core_cc_sysnoc_mport_core",
->> +                                     "audio_cc_codec_mem",
->> +                                     "audio_cc_codec_mem0",
->> +                                     "audio_cc_codec_mem1",
->> +                                     "audio_cc_codec_mem2",
->> +                                     "core_cc_ext_if0_ibit",
->> +                                     "core_cc_ext_if1_ibit",
->> +                                     "aon_cc_va_mem0";
-> Clocks do not match bindings.
-Okay. Will change accordingly.
->
->
->> +                       #sound-dai-cells = <1>;
->> +                       #address-cells = <1>;
->> +                       #size-cells = <0>;
->> +
->> +                       interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
->> +                                    <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>,
->> +                                    <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>,
->> +                                    <GIC_SPI 268 IRQ_TYPE_LEVEL_HIGH>;
->> +
->> +                       interrupt-names = "lpass-irq-lpaif",
->> +                                         "lpass-irq-vaif",
->> +                                         "lpass-irq-rxtxif",
->> +                                         "lpass-irq-hdmi";
-> interrupt-names ordering does not match bindings.
-Okay. will sort it.
->
->
-> -Doug
+Why the inline? This is hardly performance critical, and if
+it is, you want something better than iterating over a list.
+
+> +cppc_cpufreq_search_cpu_data(unsigned int cpu)
+> +{
+> +	struct cppc_cpudata *iter, *tmp;
+> +
+> +	list_for_each_entry_safe(iter, tmp, &cpu_data_list, node) {
+> +		if (cpumask_test_cpu(cpu, iter->shared_cpu_map))
+> +			return iter;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+>  static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
+>  {
+>  	unsigned int cpu = policy->cpu;
+
+Thanks,
+
+         M.
+-- 
+Jazz is not dead. It just smells funny...

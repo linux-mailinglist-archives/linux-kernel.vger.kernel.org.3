@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA684DC71B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254DF4DC720
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234232AbiCQM4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
+        id S234640AbiCQM55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234640AbiCQMxX (ORCPT
+        with ESMTP id S234992AbiCQMyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:53:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B862D1F5186;
-        Thu, 17 Mar 2022 05:51:24 -0700 (PDT)
+        Thu, 17 Mar 2022 08:54:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3751EC6D;
+        Thu, 17 Mar 2022 05:53:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5332061021;
-        Thu, 17 Mar 2022 12:51:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D98DC340EF;
-        Thu, 17 Mar 2022 12:51:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E8411CE2336;
+        Thu, 17 Mar 2022 12:53:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF22EC340E9;
+        Thu, 17 Mar 2022 12:52:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521483;
-        bh=Iqwh5RWoW5jbhU7n09L6jNGAntnAJR+hnRZr6bdNjKk=;
+        s=korg; t=1647521579;
+        bh=5nw7cHt/RTx/pOOhvfo54s8PdS6J/svkQh4QT7q+nsg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=00/l4L63nO07HsXlBwQt9aWi322Vm+D4KlRVLsupmPEPpQy/iFZRf59tsoh9rT1wo
-         BgjvNbYxIfN3oTfZKw1jfKrkOSYq7BmATXkhn8JLnawmvDPgMcd2482xyOBKxNgR9N
-         u7iHSTX1ls7/RgphX+LdhJPLaNL4nsnk6GLokk+Y=
+        b=US2BZAN8vnwgRJkm5XzPOF2+nF6G6J5r/JRz2bpWaqEq+4A3No8GkR1LUBNO1qZ1O
+         excL/iDH1LfLMERMAzjbHX8licbd/xMWjqUSQBdUu0Mwd/Tu1Q0peofTcEoXUwmyAH
+         Q7b+bCbqjZVkXbWjIdZuah+y0/jJPlK4hXFYByts=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sreeramya Soratkal <quic_ssramya@quicinc.com>,
-        Johannes Berg <johannes.berg@intel.com>,
+        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ulrich Hecht <uli+renesas@fpond.eu>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 19/25] nl80211: Update bss channel on channel switch for P2P_CLIENT
-Date:   Thu, 17 Mar 2022 13:46:06 +0100
-Message-Id: <20220317124526.857573122@linuxfoundation.org>
+Subject: [PATCH 5.16 16/28] can: rcar_canfd: rcar_canfd_channel_probe(): register the CAN device when fully ready
+Date:   Thu, 17 Mar 2022 13:46:07 +0100
+Message-Id: <20220317124527.228586235@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317124526.308079100@linuxfoundation.org>
-References: <20220317124526.308079100@linuxfoundation.org>
+In-Reply-To: <20220317124526.768423926@linuxfoundation.org>
+References: <20220317124526.768423926@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sreeramya Soratkal <quic_ssramya@quicinc.com>
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-[ Upstream commit e50b88c4f076242358b66ddb67482b96947438f2 ]
+[ Upstream commit c5048a7b2c23ab589f3476a783bd586b663eda5b ]
 
-The wdev channel information is updated post channel switch only for
-the station mode and not for the other modes. Due to this, the P2P client
-still points to the old value though it moved to the new channel
-when the channel change is induced from the P2P GO.
+Register the CAN device only when all the necessary initialization is
+completed. This patch makes sure all the data structures and locks are
+initialized before registering the CAN device.
 
-Update the bss channel after CSA channel switch completion for P2P client
-interface as well.
-
-Signed-off-by: Sreeramya Soratkal <quic_ssramya@quicinc.com>
-Link: https://lore.kernel.org/r/1646114600-31479-1-git-send-email-quic_ssramya@quicinc.com
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Link: https://lore.kernel.org/all/20220221225935.12300-1-prabhakar.mahadev-lad.rj@bp.renesas.com
+Reported-by: Pavel Machek <pavel@denx.de>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Pavel Machek <pavel@denx.de>
+Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/wireless/nl80211.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/can/rcar/rcar_canfd.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-index 99564db14aa1..2f9ead98a9da 100644
---- a/net/wireless/nl80211.c
-+++ b/net/wireless/nl80211.c
-@@ -17525,7 +17525,8 @@ void cfg80211_ch_switch_notify(struct net_device *dev,
- 	wdev->chandef = *chandef;
- 	wdev->preset_chandef = *chandef;
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index 137eea4c7bad..4871428859fd 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -1716,15 +1716,15 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
  
--	if (wdev->iftype == NL80211_IFTYPE_STATION &&
-+	if ((wdev->iftype == NL80211_IFTYPE_STATION ||
-+	     wdev->iftype == NL80211_IFTYPE_P2P_CLIENT) &&
- 	    !WARN_ON(!wdev->current_bss))
- 		cfg80211_update_assoc_bss_entry(wdev, chandef->chan);
+ 	netif_napi_add(ndev, &priv->napi, rcar_canfd_rx_poll,
+ 		       RCANFD_NAPI_WEIGHT);
++	spin_lock_init(&priv->tx_lock);
++	devm_can_led_init(ndev);
++	gpriv->ch[priv->channel] = priv;
+ 	err = register_candev(ndev);
+ 	if (err) {
+ 		dev_err(&pdev->dev,
+ 			"register_candev() failed, error %d\n", err);
+ 		goto fail_candev;
+ 	}
+-	spin_lock_init(&priv->tx_lock);
+-	devm_can_led_init(ndev);
+-	gpriv->ch[priv->channel] = priv;
+ 	dev_info(&pdev->dev, "device registered (channel %u)\n", priv->channel);
+ 	return 0;
  
 -- 
 2.34.1

@@ -2,123 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DEB4DCFDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483D34DCFE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbiCQU7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
+        id S230003AbiCQVEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 17:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbiCQU7Q (ORCPT
+        with ESMTP id S229966AbiCQVET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:59:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878541BB78A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:57:23 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nUxBO-0001hk-Q8; Thu, 17 Mar 2022 21:57:18 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-45d5-ab38-4e18-d873.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:45d5:ab38:4e18:d873])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id CD3AA4D746;
-        Thu, 17 Mar 2022 20:57:17 +0000 (UTC)
-Date:   Thu, 17 Mar 2022 21:57:17 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Max Staudt <max@enpas.org>
-Cc:     Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
-Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <20220317205717.pfgfdxxyucmeuuwr@pengutronix.de>
-References: <20220307214303.1822590-1-max@enpas.org>
- <CAMZ6RqJZObevKPc29jW+m6i0eAgestTbw8KCPXxSGHzSXK7cRg@mail.gmail.com>
- <20220309135414.34f77251.max@enpas.org>
- <CAMZ6RqJJ-PO=WeFeuXk4iC9GHLXz_ZMWtsVCm6sGVGbmeE5U1Q@mail.gmail.com>
- <20220314220408.hn4vdohtjdbfoaqo@pengutronix.de>
- <20220317212359.71252c57.max@enpas.org>
+        Thu, 17 Mar 2022 17:04:19 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F6239141;
+        Thu, 17 Mar 2022 14:03:02 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id bg31-20020a05600c3c9f00b00381590dbb33so3811729wmb.3;
+        Thu, 17 Mar 2022 14:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=sWH98ePusS475I2YzPAj3+F+ANc8EoUJlmN7RbnIJpg=;
+        b=WTUveGQ4vnKmfY2iG6powMUX4vafmrzDKbZzR6eX4C6YRScgRbWi0o3CpXnzIAuejm
+         rLAvTO7oT1s8kPXUE3USxOU7Zvs5jU27f7XmWfYzV92NGbUYxBDQMES3cKdKF3ao9k3H
+         XOzC7gwPLfJEfvj0ERNn1MMab1Ipr3KvJF9V7ZUEZoh9H5UI+C91F3xhbM5YvwB1T8Hj
+         XoEz9gS7SFy2se/i1uqbPsU37ZdjvXtW/grkdADlILHe7GMMt51hux1DD2VTF7ahQXXl
+         ZKB3uy1JRVnvKZt5BINxzbKNqe4gsRKWEuyTQkQHdWtTvDce6xIiiOXUXrc8DLawAwd8
+         XcMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sWH98ePusS475I2YzPAj3+F+ANc8EoUJlmN7RbnIJpg=;
+        b=Bl8Hbg2mTqh+6ePsyw6xIvRovZiiu3IBA+g42My8Q1UJWa6cXrtDXMVAaiKgoaP962
+         DzvGtkGdo5dWi4XNhxavM0NkQa5CYJgDyp1KY3DKQ547QnslcRG4nxFFVWHqwksHMGnB
+         lco0IDopAVC8qwIhbwWaYocKmLkKfaXBzGTq04HJM0R2JwcM2+Ugg/9v4vPRKpcevZlO
+         fxmAqggvtec+KKb3NC1w7iINHyKhjJx0QRzO/X81hlEx+PCBD/if10Xu92LU32OmYGd/
+         KkBxdSRgZKzYRMdzBc3BwiPVNu1+Jia7agFGyWj1LLlvTyvHPAt353Vr0JY4SzDW+VNV
+         2Gwg==
+X-Gm-Message-State: AOAM531ya0/zAnKHVxkYTr9qd5NiLbCNcz+X+kbplyswqosz0sJFbEEW
+        aFi0P8Guse3lh7TVQfbVnes=
+X-Google-Smtp-Source: ABdhPJwjAPc3j2I0qZweqm2xtyZgAsjXy1JlQLeuhzU9G50LDOw14+eNFsX7sH7K8XUSBjfPnpt9Tw==
+X-Received: by 2002:a7b:c341:0:b0:37b:ed90:7dad with SMTP id l1-20020a7bc341000000b0037bed907dadmr5499035wmj.138.1647550980565;
+        Thu, 17 Mar 2022 14:03:00 -0700 (PDT)
+Received: from [192.168.0.160] ([170.253.36.171])
+        by smtp.gmail.com with ESMTPSA id 189-20020a1c02c6000000b0038c57df82aasm5314242wmc.20.2022.03.17.14.02.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 14:03:00 -0700 (PDT)
+Message-ID: <bebd3a92-0828-9e7e-d6b0-51b75e45a124@gmail.com>
+Date:   Thu, 17 Mar 2022 22:02:59 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oacdquk4r2zftcgp"
-Content-Disposition: inline
-In-Reply-To: <20220317212359.71252c57.max@enpas.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] madvise.2: update EINVAL return info
+Content-Language: en-US
+To:     Charan Teja Reddy <quic_charante@quicinc.com>
+Cc:     linux-man@vger.kernel.org, linux-kernel@vger.kernel.org,
+        minchan@kernel.org, nadav.amit@gmail.com, mtk.manpages@gmail.com
+References: <1647442320-7261-1-git-send-email-quic_charante@quicinc.com>
+From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
+In-Reply-To: <1647442320-7261-1-git-send-email-quic_charante@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hellp Charan,
 
---oacdquk4r2zftcgp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 3/16/22 15:52, Charan Teja Reddy wrote:
+> MADV_COLD and MADV_PAGEOUT advises on an address range which includes
+> locked, Huge TLB pages or VM_PFNMAP pages can return EINVAL. Update the
+> man pages accordingly.
+> 
+> Reported-by: Nadav Amit <nadav.amit@gmail.com>
+> Signed-off-by: Charan Teja Reddy <quic_charante@quicinc.com>
 
-On 17.03.2022 21:23:59, Max Staudt wrote:
-> On Mon, 14 Mar 2022 23:04:08 +0100
-> Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->=20
-> > On 09.03.2022 22:49:49, Vincent Mailhol wrote:
-> > > Either we agree that using can_rx_offload without implementing
-> > > the mailbox_read() is OK and in that case, the can_rx_offload
-> > > framework should be modified to allow mailbox_read() to be a NULL
-> > > pointer.
-> > >=20
-> > > Either it is not the case and you use the more classic
-> > > netif_rx().
-> > >=20
-> > > And I do not have the answer. I haven't studied can_rx_offload
-> > > enough to be a judge here. Sorry.
-> > >=20
-> > > @Marc, any thoughts? =20
-> >=20
-> > Use can_rx_offload_add_manual() instead.
->=20
-> m-(
->=20
-> Yes, it's right underneath _add_fifo() and does the right thing. No
-> idea how I missed it, I thought I had looked through all variants.
+Patch applied.
 
-I think that function was not there form the beginning, maybe you looked
-at the rx-offload code when it was not available.
+Thanks,
 
-regards,
-Marc
+Alex
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> ---
+>  man2/madvise.2 | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/man2/madvise.2 b/man2/madvise.2
+> index f1f384c..ab98a87 100644
+> --- a/man2/madvise.2
+> +++ b/man2/madvise.2
+> @@ -505,6 +505,16 @@ is not a valid.
+>  .B EINVAL
+>  .I advice
+>  is
+> +.BR MADV_COLD
+> +or
+> +.BR MADV_PAGEOUT
+> +and the specified address range includes locked, Huge TLB pages, or
+> +.B VM_PFNMAP
+> +pages.
+> +.TP
+> +.B EINVAL
+> +.I advice
+> +is
+>  .B MADV_DONTNEED
+>  or
+>  .BR MADV_REMOVE
 
---oacdquk4r2zftcgp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIzoKsACgkQrX5LkNig
-013IOAf/c9dbbTwcZKyUV+gQU4LIgz1WYgV3/u0NL3CFQNp0T99+ZjV5bw5zWE5k
-Z2Lt6i4NXJnIL0hDBVQI8EY53+gLbuxqdyxGvQUrONANXXmSTLOia+2NaqaCDV/S
-ORJZycjStfmi4HfTbulMELey6h08ueBOmN/NaXCecnrXQcKSMOwOeb0Hng4Flj+Y
-yfXqUT0XRwH02I5zBTEccMWUKRs9B/osjyoZDuqgrBtTFEmQ9/Ag20LFsI9iwjje
-c20Ncr0KJLsm/fvjAQraqgOOL3zLn0TySrlGpSRI/KxD5YQojMzTC0ac+0BCc/EM
-dqUeoPFrQXFvepvy1vOeqnqtLb6zHQ==
-=2qna
------END PGP SIGNATURE-----
-
---oacdquk4r2zftcgp--
+-- 
+Alejandro Colomar
+Linux man-pages comaintainer; https://www.kernel.org/doc/man-pages/
+http://www.alejandro-colomar.es/

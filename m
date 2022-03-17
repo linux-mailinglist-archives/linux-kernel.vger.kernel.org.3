@@ -2,109 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEF34DC78A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCD24DC78C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234557AbiCQN1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 09:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
+        id S234253AbiCQN17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 09:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234560AbiCQN1I (ORCPT
+        with ESMTP id S234596AbiCQN1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:27:08 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1222F16C0BF;
-        Thu, 17 Mar 2022 06:25:48 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id z8so10188013ybh.7;
-        Thu, 17 Mar 2022 06:25:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wPvFn4zW+HYII4PeZtiMT7obVyqt+EFe8DrLP0fyVsc=;
-        b=0ONC3Sqcv0yhwGOYQfs+IWzT/1Yy867R/6KlO6U/15l8yVCbe0I5oRPeHdqKhvMDx8
-         V1R6p9cRNTlu9iLTtOis6RNfHkYfyFohw/OYY16a+QTEdrDpOE5IJ5oOvmOhtVPZ1qEU
-         69X9pIaNTaqBIsbXdVli6EtADvbw+89EE3WKj9gu0q2eqadvXL6YmfDtVYy/2bvrmgDW
-         VGQ0Bhu3vDE0Hjp+Va5arqkIpKZVqB4uD85KZtIgQOfWJA7NpcRw9S9FmLRNO4/af7cW
-         JV/QqWCkktshEzSrIfqKqbLCSAGsQs5+ocKmcPNn4AmvynLJ1u+PNn6iLFb8X4e2FS3I
-         mPlA==
-X-Gm-Message-State: AOAM533T6A/l/PemIByepgZEr5JHk0l4riLxMWmRtMzASRLhag05gs4C
-        iDP/9HMFUJ3uHhVBUlp/IpMZrVbGakP21THWNc3f0LdH
-X-Google-Smtp-Source: ABdhPJwpVcWHCzDs4bdzn3PSpncbPClTGTX/VWTmFLkrF4UgAGPaJFl9wWh5enimlaxnjW8mZzIQjlC/EPpg1q6wCDc=
-X-Received: by 2002:a25:6d05:0:b0:633:b0f5:6c1e with SMTP id
- i5-20020a256d05000000b00633b0f56c1emr1259417ybc.137.1647523547193; Thu, 17
- Mar 2022 06:25:47 -0700 (PDT)
+        Thu, 17 Mar 2022 09:27:51 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8DE16C0A5;
+        Thu, 17 Mar 2022 06:26:34 -0700 (PDT)
+Received: from mail.ispras.ru (unknown [83.149.199.84])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 784C840D4004;
+        Thu, 17 Mar 2022 13:26:28 +0000 (UTC)
 MIME-Version: 1.0
-References: <20220315144122.23144-1-rdunlap@infradead.org>
-In-Reply-To: <20220315144122.23144-1-rdunlap@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 17 Mar 2022 14:25:36 +0100
-Message-ID: <CAJZ5v0gfX2weU++t4szknB16PxufzGZ26NHgqe__B-+VdAmCQw@mail.gmail.com>
-Subject: Re: [PATCH v3] clocksource: acpi_pm: fix return value of __setup handler
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+Date:   Thu, 17 Mar 2022 16:26:28 +0300
+From:   baskov@ispras.ru
+To:     Matthew Garrett <mjg59@srcf.ucam.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Peter Jones <pjones@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bret.barkelew@microsoft.com
+Subject: Re: [PATCH RFC v2 0/2] Handle UEFI NX-restricted page tables
+In-Reply-To: <20220303204759.GA20294@srcf.ucam.org>
+References: <20220224154330.26564-1-baskov@ispras.ru>
+ <CAMj1kXGg=HAv3P_NKqUHCg6bRFsB0qhfa_z-TOdmi-G8EqPrZA@mail.gmail.com>
+ <20220228183044.GA18400@srcf.ucam.org>
+ <9787f1c1948cc640e70a50e4b929f44f@ispras.ru>
+ <20220303204759.GA20294@srcf.ucam.org>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <9b8493626c3c6c0af415e0b277147f9e@ispras.ru>
+X-Sender: baskov@ispras.ru
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 3:41 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> __setup() handlers should return 1 to obsolete_checksetup() in
-> init/main.c to indicate that the boot option has been handled.
-> A return of 0 causes the boot option/value to be listed as an Unknown
-> kernel parameter and added to init's (limited) environment strings.
->
-> The __setup() handler interface isn't meant to handle negative return
-> values -- they are non-zero, so they mean "handled" (like a return
-> value of 1 does), but that's just a quirk. So return 1 from
-> parse_pmtmr(). Also print a warning message if kstrtouint() returns
-> an error.
->
-> Fixes: 6b148507d3d0 ("pmtmr: allow command line override of ioport")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> From: Igor Zhbanov <i.zhbanov@omprussia.ru>
+On 2022-03-03 23:47, Matthew Garrett wrote:
+> 
+> Ok. I think this should really go through the UEFI spec process - I
+> agree that from a strict interpretation of the spec, what this firmware
+> is doing is legitimate, but I don't like having a situation where we
+> have to depend on the DXE spec.
+> 
+> How does Windows handle this? Just update the page tables itself for 
+> any
+> regions it needs during boot?
 
-What does this From tag mean?
+Sorry for delay.
 
-> Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-> Cc: Dan Carpenter <dan.carpenter@oracle.com>
-> Cc: John Stultz <john.stultz@linaro.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: linux-acpi@vger.kernel.org
-> ---
-> v3: also cc: linux-acpi (Rafael)
-> v2: correct the Fixes: tag (Dan Carpenter)
->
->  drivers/clocksource/acpi_pm.c |    6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> --- linux-next-20220315.orig/drivers/clocksource/acpi_pm.c
-> +++ linux-next-20220315/drivers/clocksource/acpi_pm.c
-> @@ -229,8 +229,10 @@ static int __init parse_pmtmr(char *arg)
->         int ret;
->
->         ret = kstrtouint(arg, 16, &base);
-> -       if (ret)
-> -               return ret;
-> +       if (ret) {
-> +               pr_warn("PMTMR: invalid 'pmtmr=' value: '%s'\n", arg);
-> +               return 1;
-> +       }
->
->         pr_info("PMTMR IOPort override: 0x%04x -> 0x%04x\n", pmtmr_ioport,
->                 base);
+Windows is closed source, so we cannot give guarantees on its
+behavior, but this is our belief regarding its behavior.
+Added Bret Barkelew (bret.barkelew@microsoft.com)
+to the CC-list in case he can add something.
+
+Regarding the spec changes, we agree it is reasonable,
+but whether the spec changes or not it will take some time
+to update the edk2.
+
+Our first solution was safer in regards to the use of the services,
+yet as Ard suggested, using DXE services is much cleaner
+as long as it works.
+
+We can post it to edk2-devel, but our opinion
+is that these issues are independent.
+
+Thanks,
+Baskov Evgeniy

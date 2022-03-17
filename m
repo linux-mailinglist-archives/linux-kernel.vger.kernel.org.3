@@ -2,224 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F994DC8C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EEF4DC8C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235113AbiCQOaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 10:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        id S235128AbiCQObP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 10:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbiCQOaG (ORCPT
+        with ESMTP id S233875AbiCQObO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 10:30:06 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488D213E16A;
-        Thu, 17 Mar 2022 07:28:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647527330; x=1679063330;
-  h=to:cc:subject:references:date:mime-version:
-   content-transfer-encoding:from:message-id:in-reply-to;
-  bh=smlVo/6V8oeLQQwTEoeQtGNbNxQ+U934xez9VKbaknE=;
-  b=mO2bvLBlQU5f4s4vHzmt5vcMLdbyiTLQNiR6bh+F9d0yT2rVhUFF8eiR
-   qHm9tb0deJE4NoePPVSVxMVXUcwQlvij/PCpXfua0t/p4LFCdhSCkWLUP
-   Vhs0FlrEkH9hissO4EVpW7p9T3M2wQ+AcsOEPFAvhBt0mO2wrtPmTPmbW
-   rvs/VYsrbIaaxgBCJ2EySxBC9vM+xrAE/svxNQBGzHbj9TXHqN3WOM9TR
-   z/IOqRTkMKMbWwRB0cfYOj1KYco9XmxtOLh+st6iBl7zGrzMWKYDIs0Ir
-   zVUKO6Jg3Atw5CinZf+73cbxoruhYLXKVohJFQKBnBEtUHuDNULbW8w9t
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="236823092"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="236823092"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 07:28:50 -0700
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="557951293"
-Received: from hhuan26-mobl1.amr.corp.intel.com (HELO hhuan26-mobl1.mshome.net) ([10.255.39.199])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-SHA; 17 Mar 2022 07:28:47 -0700
-Content-Type: text/plain; charset=iso-8859-15; format=flowed; delsp=yes
-To:     "Jarkko Sakkinen" <jarkko@kernel.org>
-Cc:     "Reinette Chatre" <reinette.chatre@intel.com>,
-        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        nathaniel@profian.com
-Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
- permissions
-References: <YimWaAqEnXHbLdjh@iki.fi>
- <op.1itu5vkewjvjmi@hhuan26-mobl1.mshome.net> <Yis8LV99mORcLYs6@iki.fi>
- <Yis9rA8uC/0bmWCF@iki.fi> <97565fed-dc67-bab1-28d4-c40201c9f055@intel.com>
- <Yi6tPLLt9Q+ailQ3@iki.fi> <Yi6tinbF+Y7a66eQ@iki.fi> <Yi6va4dCaljiQ1WQ@iki.fi>
- <op.1i01q9s0wjvjmi@hhuan26-mobl1.mshome.net> <YjLcr9TwLNWUtwkS@iki.fi>
- <YjLfIMz4/Vx8Jm24@iki.fi>
-Date:   Thu, 17 Mar 2022 09:28:45 -0500
+        Thu, 17 Mar 2022 10:31:14 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D6B16CE77
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:29:58 -0700 (PDT)
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7A44A3F0EC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:29:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647527396;
+        bh=U5OYvscFPNzOkdF9Q7wjWx6ZtLTk6n/AVRGo7F09r/4=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=sn41GMimINko+Itj8ddvwoAOgYkElKanM+isukWEGlHUUOD3EBz5pU3gM57lA58mW
+         OLgaPveyHvvhkH4EK3mYcbpIBhlBd6MlG+4n+HjSl86jqe8X6xvLUuVLN1jekzHvCn
+         mJTDmalsDgLZt47qBtkv9M/H+s0xEHEQrKr7WL2js5EDgninHzAChZE3BVc6zUAEYR
+         1JBwkonW/uph/VdMujw+4ORATaXYnwEorP5uDrcx5p0C/jZwtO7Xb7YqxgaNVLA9Bx
+         3vxWtRxhK3ZFYuyLuW/puWcs3L7kyJMU5F2MDkclR/ifUtEs70xH+mP8nZkXicd0Wy
+         iD1U8KQCqDEeA==
+Received: by mail-wm1-f71.google.com with SMTP id o21-20020a05600c511500b003818c4b98b5so1717786wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:29:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U5OYvscFPNzOkdF9Q7wjWx6ZtLTk6n/AVRGo7F09r/4=;
+        b=veeRcA+iyeBEiENkVC3A+30kA9/yYUGFekrWDnRMIVLoBd+3UqLU1RFkhckT7cCmJF
+         w2nkkDZIcfWHN8nqy8MRKemd7IbCgRJNPIlTQJSQinYqfMNsito4A6ZdRxgZV6qDHqQa
+         Om0dR2Ol+DBaNvs/Teyav/0KOFSOAKnUekRhXqohwTEYV4lrbubzfxogm7CQl63Klbcy
+         kcMMrF7HGPO5vbnD3PnnBReLtbFQ3sf4xVuz5CxUsALQL2patkq1ePwoY6q78k/6CXIb
+         DvOy3lfKTL4yqGFnBlgdZGscQ6U3EeKDSx5bUHe/Q9hDOL9FXgj25Ir/uccL+0FsoDxD
+         yKxA==
+X-Gm-Message-State: AOAM532aZObQPU2OcKDJyt1kkGGGyKysNV2lq3vkI8fUvzz+qpneNMWi
+        N5OGY8/GKLtkQm5QOy4gAk0yvkDd/7REbHVMeGenlNvpymzrovVdHcQm5UYHPDyJ2douKVTiJeZ
+        nCG0nD16UDVw6dANACuPAOLawglDelnQ5iEwWN5FJQg==
+X-Received: by 2002:a5d:42c2:0:b0:203:e323:4055 with SMTP id t2-20020a5d42c2000000b00203e3234055mr4464489wrr.316.1647527395796;
+        Thu, 17 Mar 2022 07:29:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxVET8zqo0E+0i0//Q5SqWIUZG6brB1YEMvFyAwOxvKaVHDy/MQWCl3C7oSxov2KlwFfux70Q==
+X-Received: by 2002:a5d:42c2:0:b0:203:e323:4055 with SMTP id t2-20020a5d42c2000000b00203e3234055mr4464472wrr.316.1647527395633;
+        Thu, 17 Mar 2022 07:29:55 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id p19-20020a05600c359300b0038c7d1086a7sm1433410wmq.1.2022.03.17.07.29.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 07:29:55 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v2] dt-bindings: irqchip: mrvl,intc: refresh maintainers
+Date:   Thu, 17 Mar 2022 15:29:52 +0100
+Message-Id: <20220317142952.479413-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-From:   "Haitao Huang" <haitao.huang@linux.intel.com>
-Organization: Intel Corp
-Message-ID: <op.1i6iegamwjvjmi@hhuan26-mobl1.mshome.net>
-In-Reply-To: <YjLfIMz4/Vx8Jm24@iki.fi>
-User-Agent: Opera Mail/1.0 (Win32)
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Jason's email bounces and his address was dropped from maintainers in
+commit 509920aee72a ("MAINTAINERS: Move Jason Cooper to CREDITS"), so
+drop him here too.  Switch other maintainers from IRQCHIP subsystem
+maintainers to Marvell Orion platform maintainers because its a bigger
+chance they know the hardware.
 
-On Thu, 17 Mar 2022 02:11:28 -0500, Jarkko Sakkinen <jarkko@kernel.org>  
-wrote:
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-> On Thu, Mar 17, 2022 at 09:01:07AM +0200, Jarkko Sakkinen wrote:
->> On Mon, Mar 14, 2022 at 10:39:36AM -0500, Haitao Huang wrote:
->> > Hi Jarkko
->> >
->> > On Sun, 13 Mar 2022 21:58:51 -0500, Jarkko Sakkinen  
->> <jarkko@kernel.org>
->> > wrote:
->> >
->> > > On Mon, Mar 14, 2022 at 04:50:56AM +0200, Jarkko Sakkinen wrote:
->> > > > On Mon, Mar 14, 2022 at 04:49:37AM +0200, Jarkko Sakkinen wrote:
->> > > > > On Fri, Mar 11, 2022 at 09:53:29AM -0800, Reinette Chatre wrote:
->> > > > >
->> > > > > > I saw Haitao's note that EMODPE requires "Read access  
->> permitted
->> > > > by enclave".
->> > > > > > This motivates that EMODPR->PROT_NONE should not be allowed
->> > > > since it would
->> > > > > > not be possible to relax permissions (run EMODPE) after that.
->> > > > Even so, I
->> > > > > > also found in the SDM that EACCEPT has the note "Read access
->> > > > permitted
->> > > > > > by enclave". That seems to indicate that EMODPR->PROT_NONE is
->> > > > not practical
->> > > > > > from that perspective either since the enclave will not be  
->> able to
->> > > > > > EACCEPT the change. Does that match your understanding?
->> > > > >
->> > > > > Yes, PROT_NONE should not be allowed.
->> > > > >
->> > > > > This is however the real problem.
->> > > > >
->> > > > > The current kernel patch set has inconsistent API and EMODPR  
->> ioctl is
->> > > > > simply unacceptable. It  also requires more concurrency  
->> management
->> > > > from
->> > > > > user space run-time, which would be heck a lot easier to do in  
->> the
->> > > > kernel.
->> > > > >
->> > > > > If you really want EMODPR as ioctl, then for consistencys sake,
->> > > > then EAUG
->> > > > > should be too. Like this when things go opposite directions,  
->> this
->> > > > patch set
->> > > > > plain and simply will not work out.
->> > > > >
->> > > > > I would pick EAUG's strategy from these two as it requires half
->> > > > the back
->> > > > > calls to host from an enclave. I.e. please combine mprotect()  
->> and
->> > > > EMODPR,
->> > > > > either in the #PF handler or as part of mprotect(), which ever
->> > > > suits you
->> > > > > best.
->> > > > >
->> > > > > I'll try demonstrate this with two examples.
->> > > > >
->> > > > > mmap() could go something like this() (simplified):
->> > > > > 1. Execution #UD's to SYSCALL.
->> > > > > 2. Host calls enclave's mmap() handler with mmap() parameters.
->> > > > > 3. Enclave up-calls host's mmap().
->> > > > > 4. Loops the range with EACCEPTCOPY.
->> > > > >
->> > > > > mprotect() has to be done like this:
->> > > > > 1. Execution #UD's to SYSCALL.
->> > > > > 2. Host calls enclave's mprotect() handler.
->> > > > > 3. Enclave up-calls host's mprotect().
->> > > > > 4. Enclave up-calls host's ioctl() to  
->> SGX_IOC_ENCLAVE_PERMISSIONS.
->> >
->> > I assume up-calls here are ocalls as we call them in our  
->> implementation,
->> > which are the calls enclave make to untrusted side via EEXIT.
->> >ar
->> > If so, can your implementation combine this two up-calls into one,  
->> then host
->> > side just do ioctl() and mprotect to kernel? If so, would that  
->> address your
->> > concern about extra up-calls?
->> >
->> >
->> > > > > 3. Loops the range with EACCEPT.
->> > > >   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> > > >   5. Loops the range with EACCEPT + EMODPE.
->> > > >
->> > > > > This is just terrible IMHO. I hope these examples bring some  
->> insight.
->> > >
->> > > E.g. in Enarx we have to add a special up-call (so called enarxcall  
->> in
->> > > intermediate that we call sallyport, which provides shared buffer to
->> > > communicate with the enclave) just for reseting the range with  
->> PROT_READ.
->> > > Feel very redundant, adds ugly cruft and is completely opposite  
->> strategy
->> > > to
->> > > what you've chosen to do with EAUG, which is I think correct choice  
->> as
->> > > far
->> > > as API is concerned.
->> >
->> > The problem with EMODPR on #PF is that kernel needs to know what  
->> permissions
->> > requested from enclave at the time of #PF. So enclave has to make at  
->> least
->> > one call to kernel (again via ocall in our case, I assume up-call in  
->> your
->> > case) to make the change.
->>
->> The #PF handler should do unconditionally EMODPR with PROT_READ.
->
-> Or mprotect(), as long as secinfo contains PROT_READ. I don't care about
-> this detail hugely anymore because it does not affect uapi.
->
-> Using EMODPR as a permission control mechanism is a ridiculous idea, and
-> I cannot commit to maintain a broken uapi.
->
+---
 
-Jarkko, how would automatically forcing PROT_READ on #PF work for this  
-sequence?
+Changes since v1:
+1. Do not add Sebastian.
+---
+ .../devicetree/bindings/interrupt-controller/mrvl,intc.yaml | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-1) EAUG a page (has to be RW)
-2) EACCEPT(RW)
-3) enclave copies some data to page
-4) enclave wants to change permission to R
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/mrvl,intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/mrvl,intc.yaml
+index 75d49c9e956f..6d0c0f44d250 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/mrvl,intc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/mrvl,intc.yaml
+@@ -7,10 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Marvell MMP/Orion Interrupt controller bindings
+ 
+ maintainers:
+-  - Thomas Gleixner <tglx@linutronix.de>
+-  - Jason Cooper <jason@lakedaemon.net>
+-  - Marc Zyngier <maz@kernel.org>
+-  - Rob Herring <robh+dt@kernel.org>
++  - Andrew Lunn <andrew@lunn.ch>
++  - Gregory Clement <gregory.clement@bootlin.com>
+ 
+ allOf:
+   - $ref: /schemas/interrupt-controller.yaml#
+-- 
+2.32.0
 
-If you are proposing mprotect, then as I indicated earlier, please address  
-concerns raised by Reinette:
-https://lore.kernel.org/linux-sgx/e1c04077-0165-c5ec-53be-7fd732965e80@intel.com/
-
-
-
-Thanks
-Haitao

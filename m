@@ -2,170 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 139DB4DC8B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B35E94DC85E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235065AbiCQOY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 10:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
+        id S234945AbiCQOIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 10:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbiCQOY4 (ORCPT
+        with ESMTP id S234977AbiCQOHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 10:24:56 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F71549FA2;
-        Thu, 17 Mar 2022 07:23:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647527020; x=1679063020;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CRwG4aY4JJ4LjAE7lBFW8th+dS3FJs6IUGzKssvwkes=;
-  b=b/5rUZ+jPBKWx28C5Avm2VD+DjWyNwXmm4mwWbaznz1vTpasv5cIpAdj
-   b5QGVf8n+5OchGnEVtvSaYwdhD0NtN+6Q4nvfQ/Gc5dFaK2S0shfOZ5h4
-   3oTFsv5QnUKkNcYw4BIg6MGKao/RDIiJxxWtd06UqxPGWTiHV/43jql4j
-   APDF2QeW+uUnX1KWPi+rV6VEl6GFYLOL01WnShUaZtr0RbMQHon5cj/RV
-   WeYv0lfHh6xmCBLmc0F98sHEniQxNwbuL/VVihusk0JwdRNjxeLHU4nsH
-   d7MYT17P7jlhW07k5AeEnXeNGg8NBjMJyRq18ROFKfkMhdQ3t0ULY9BLK
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="254434487"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="254434487"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 07:23:40 -0700
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="581306413"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 07:23:36 -0700
-Received: by lahna (sSMTP sendmail emulation); Thu, 17 Mar 2022 16:21:22 +0200
-Date:   Thu, 17 Mar 2022 16:21:22 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     "michael.jamet@intel.com" <michael.jamet@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
-        "hch@lst.de" <hch@lst.de>
-Subject: Re: [PATCH] thunderbolt: Stop using iommu_present()
-Message-ID: <YjND4iZaLZbhJhbg@lahna>
-References: <YjIb+XOGZbWKpQDa@lahna>
- <BL1PR12MB515762E68F3A48A97EB2DC89E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
- <YjIgQfmcw6fydkXd@lahna>
- <3bb6a2f8-005b-587a-7d7a-7a9a5391ec05@arm.com>
- <BL1PR12MB5157DA58C3BDAFB5736676F6E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
- <5ef1c30a-1740-00cc-ad16-4b1c1b02fca4@arm.com>
- <BL1PR12MB5157380CD6FD9EB83E76CBB0E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
- <0709e994-1c8b-56fe-7743-8fdbf3ba748b@arm.com>
- <YjLsfhUmhjOiy6G8@lahna>
- <23f232a1-f511-d2fe-b1f8-5fd32b3a1a8f@arm.com>
+        Thu, 17 Mar 2022 10:07:50 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3796139ACC;
+        Thu, 17 Mar 2022 07:06:31 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KK86N6d2YzfZ66;
+        Thu, 17 Mar 2022 22:05:00 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
+ (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 17 Mar
+ 2022 22:06:29 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
+        <lczerner@redhat.com>, Ye Bin <yebin10@huawei.com>
+Subject: [PATCH -next v2] jbd2: Fix null-ptr-deref when process reserved list in jbd2_journal_commit_transaction
+Date:   Thu, 17 Mar 2022 22:21:37 +0800
+Message-ID: <20220317142137.1821590-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <23f232a1-f511-d2fe-b1f8-5fd32b3a1a8f@arm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+we got issue as follows:
+[   72.796117] EXT4-fs error (device sda): ext4_journal_check_start:83: comm fallocate: Detected aborted journal
+[   72.826847] EXT4-fs (sda): Remounting filesystem read-only
+fallocate: fallocate failed: Read-only file system
+[   74.791830] jbd2_journal_commit_transaction: jh=0xffff9cfefe725d90 bh=0x0000000000000000 end delay
+[   74.793597] ------------[ cut here ]------------
+[   74.794203] kernel BUG at fs/jbd2/transaction.c:2063!
+[   74.794886] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+[   74.795533] CPU: 4 PID: 2260 Comm: jbd2/sda-8 Not tainted 5.17.0-rc8-next-20220315-dirty #150
+[   74.798327] RIP: 0010:__jbd2_journal_unfile_buffer+0x3e/0x60
+[   74.801971] RSP: 0018:ffffa828c24a3cb8 EFLAGS: 00010202
+[   74.802694] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+[   74.803601] RDX: 0000000000000001 RSI: ffff9cfefe725d90 RDI: ffff9cfefe725d90
+[   74.804554] RBP: ffff9cfefe725d90 R08: 0000000000000000 R09: ffffa828c24a3b20
+[   74.805471] R10: 0000000000000001 R11: 0000000000000001 R12: ffff9cfefe725d90
+[   74.806385] R13: ffff9cfefe725d98 R14: 0000000000000000 R15: ffff9cfe833a4d00
+[   74.807301] FS:  0000000000000000(0000) GS:ffff9d01afb00000(0000) knlGS:0000000000000000
+[   74.808338] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   74.809084] CR2: 00007f2b81bf4000 CR3: 0000000100056000 CR4: 00000000000006e0
+[   74.810047] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   74.810981] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   74.811897] Call Trace:
+[   74.812241]  <TASK>
+[   74.812566]  __jbd2_journal_refile_buffer+0x12f/0x180
+[   74.813246]  jbd2_journal_refile_buffer+0x4c/0xa0
+[   74.813869]  jbd2_journal_commit_transaction.cold+0xa1/0x148
+[   74.817550]  kjournald2+0xf8/0x3e0
+[   74.819056]  kthread+0x153/0x1c0
+[   74.819963]  ret_from_fork+0x22/0x30
 
-On Thu, Mar 17, 2022 at 01:42:56PM +0000, Robin Murphy wrote:
-> On 2022-03-17 08:08, Mika Westerberg wrote:
-> > Hi Robin,
-> > 
-> > On Wed, Mar 16, 2022 at 07:17:57PM +0000, Robin Murphy wrote:
-> > > The feeling I'm getting from all this is that if we've got as far as
-> > > iommu_dma_protection_show() then it's really too late to meaningfully
-> > > mitigate bad firmware.
-> > 
-> > Note, these are requirements from Microsoft in order for the system to
-> > use the "Kernel DMA protection". Because of this, likelyhood of "bad
-> > firmware" should be quite low since these systems ship with Windows
-> > installed so they should get at least some soft of validation that this
-> > actually works.
-> > 
-> > > We should be able to detect missing
-> > > untrusted/external-facing properties as early as nhi_probe(), and if we
-> > > could go into "continue at your own risk" mode right then *before* anything
-> > > else happens, it all becomes a lot easier to reason about.
-> > 
-> > I think what we want is that the DMAR opt-in bit is set in the ACPI
-> > tables and that we know the full IOMMU translation is happening for the
-> > devices behind "external facing ports". If that's not the case the
-> > iommu_dma_protection_show() should return 0 meaning the userspace can
-> > ask the user whether the connected device is allowed to use DMA (e.g
-> > PCIe is tunneled or not).
-> 
-> Ah, if it's safe to just say "no protection" in the case that we don't know
-> for sure, that's even better. Clearly I hadn't quite grasped that aspect of
-> the usage model, thanks for the nudge!
+Above issue may happen as follows:
+        write                   truncate                   kjournald2
+generic_perform_write
+ ext4_write_begin
+  ext4_walk_page_buffers
+   do_journal_get_write_access ->add BJ_Reserved list
+ ext4_journalled_write_end
+  ext4_walk_page_buffers
+   write_end_fn
+    ext4_handle_dirty_metadata
+                ***************JBD2 ABORT**************
+     jbd2_journal_dirty_metadata
+ -> return -EROFS, jh in reserved_list
+                                                   jbd2_journal_commit_transaction
+                                                    while (commit_transaction->t_reserved_list)
+                                                      jh = commit_transaction->t_reserved_list;
+                        truncate_pagecache_range
+                         do_invalidatepage
+			  ext4_journalled_invalidatepage
+			   jbd2_journal_invalidatepage
+			    journal_unmap_buffer
+			     __dispose_buffer
+			      __jbd2_journal_unfile_buffer
+			       jbd2_journal_put_journal_head ->put last ref_count
+			        __journal_remove_journal_head
+				 bh->b_private = NULL;
+				 jh->b_bh = NULL;
+				                      jbd2_journal_refile_buffer(journal, jh);
+							bh = jh2bh(jh);
+							->bh is NULL, later will trigger null-ptr-deref
+				 journal_free_journal_head(jh);
 
-There is some documentation here too, hope it is helpful:
+As after 96f1e0974575 commit, handle reserved list will not hold "journal->j_state_lock"
+when kjournald2 commit transaction. So journal_unmap_buffer maybe free
+journal_head when handle reserved list. And lead to null-ptr-deref or some
+strange errors.
+As reserved list almost time is empty. Use "journal->j_state_lock" to protect
+handle reserved list can simply solve above issue.
 
-https://docs.kernel.org/admin-guide/thunderbolt.html
+Fixes: 96f1e0974575("jbd2: avoid long hold times of j_state_lock while committing a transaction")
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ fs/jbd2/commit.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> > We do check for the DMAR bit in the Intel IOMMU code and we also do
-> > check that there actually are PCIe ports marked external facing but we
-> > could issue warning there if that's not the case. Similarly if the user
-> > explicitly disabled the IOMMU translation. This can be done inside a new
-> > IOMMU API that does something like the below pseudo-code:
-> > 
-> > #if IOMMU_ENABLED
-> > bool iommu_dma_protected(struct device *dev)
-> > {
-> > 	if (dmar_platform_optin() /* or the AMD equivalent */) {
-> > 		if (!iommu_present(...)) /* whatever is needed to check that the full translation is enabled */
-> > 			dev_warn(dev, "IOMMU protection disabled!");
-> > 		/*
-> > 		 * Look for the external facing ports. Should be at
-> > 		 * least 1 or issue warning.
-> > 		 */
-> > 		 ...
-> > 
-> > 		return true;
-> > 	}
-> > 
-> > 	return false;
-> > }
-> > #else
-> > static inline bool iommu_dma_protected(struct device *dev)
-> > {
-> > 	return false;
-> > }
-> > #endif
-> > 
-> > Then we can make iommu_dma_protection_show() to call this function.
-> 
-> The problem that I've been trying to nail down here is that
-> dmar_platform_optin() really doesn't mean much for us - I don't know how
-> Windows' IOMMU drivers work, but there's every chance it's not the same way
-> as ours. The only material effect that dmar_platform_optin() has for us is
-> to prevent the user from disabling the IOMMU driver altogether, and thus
-> ensure that iommu_present() is true. Whether or not we can actually trust
-> the IOMMU driver to provide reliable protection depends entirely on whether
-> it knows the PCIe ports are external-facing. If not, we can only
-> *definitely* know what the IOMMU driver will do for a given endpoint once
-> that endpoint has appeared behind the port and iommu_probe_device() has
-> decided what its default domain should be, and as far as I now understand,
-> that's not an option for Thunderbolt since it can only happen *after* the
-> tunnel has been authorised and created.
+diff --git a/fs/jbd2/commit.c b/fs/jbd2/commit.c
+index 5b9408e3b370..ac7f067b7bdd 100644
+--- a/fs/jbd2/commit.c
++++ b/fs/jbd2/commit.c
+@@ -488,7 +488,6 @@ void jbd2_journal_commit_transaction(journal_t *journal)
+ 	jbd2_journal_wait_updates(journal);
+ 
+ 	commit_transaction->t_state = T_SWITCH;
+-	write_unlock(&journal->j_state_lock);
+ 
+ 	J_ASSERT (atomic_read(&commit_transaction->t_outstanding_credits) <=
+ 			journal->j_max_transaction_buffers);
+@@ -508,6 +507,8 @@ void jbd2_journal_commit_transaction(journal_t *journal)
+ 	 * has reserved.  This is consistent with the existing behaviour
+ 	 * that multiple jbd2_journal_get_write_access() calls to the same
+ 	 * buffer are perfectly permissible.
++	 * We use journal->j_state_lock here to serialize processing of
++	 * t_reserved_list with eviction of buffers from journal_unmap_buffer().
+ 	 */
+ 	while (commit_transaction->t_reserved_list) {
+ 		jh = commit_transaction->t_reserved_list;
+@@ -527,6 +528,7 @@ void jbd2_journal_commit_transaction(journal_t *journal)
+ 		jbd2_journal_refile_buffer(journal, jh);
+ 	}
+ 
++	write_unlock(&journal->j_state_lock);
+ 	/*
+ 	 * Now try to drop any written-back buffers from the journal's
+ 	 * checkpoint lists.  We do this *before* commit because it potentially
+-- 
+2.31.1
 
-That's correct. We do know the PCIe root/downstream ports (the external
-facing ones) that host the tunneled PCIe topology but rest will appear
-dynamically after the connection manager established the protocol
-tunnel.
-
-> Much as I'm tempted to de-scope back to my IOMMU API cleanup and run away
-> from the rest of the issue, I think I can crib enough from the existing code
-> to attempt a reasonable complete fix, so let me give that a go...
-
-Sure ;-)

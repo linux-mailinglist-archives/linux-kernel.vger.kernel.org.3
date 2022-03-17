@@ -2,84 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA724DC144
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3354DC12F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbiCQIc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 04:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S231270AbiCQIaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 04:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiCQIc1 (ORCPT
+        with ESMTP id S231254AbiCQIan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 04:32:27 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A21196D55;
-        Thu, 17 Mar 2022 01:31:05 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id DEFDD5FD05;
-        Thu, 17 Mar 2022 11:31:02 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1647505862;
-        bh=y4okb8u4vPpWQoxg9kRYRu10eVTvWGN37KpbgRv2jGA=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=oaay5TIgPLWl3+3PcdxWwZ4TOM5uTtEsi2Sj9bazOkGbhfZuYIPP9vb0rlAD0/mSa
-         8S4Gdh4uaF7oy7cV7aTcitjTLn/j7Mv8p3iM0qBFJPGZ68i6ASLvGYQ4T2p1gh0uJK
-         oB87Wt8iYPbCOjBDamSIsiQZXZqUasFPAMGa34P4QMrZaDQhcAZ5eytWCnjvGFnpsg
-         reLmjyXBSy3lAHwTGChIsXAK/r8Gfpd7QPK88sh0f7tU4I5B24SbTArIfQ9jQs3jpD
-         5mjA89q8hX2xLF8qE9qsvV1mXPKIMSwsLhRM34lUtkOjcLZQ7DpZ+4wVMJAoXVxtES
-         FNz0Y6RSxhMBA==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 17 Mar 2022 11:31:02 +0300 (MSK)
-From:   Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Krasnov Arseniy <oxffffaa@gmail.com>,
-        Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
-Subject: [PATCH net-next v4 0/2] af_vsock: add two new tests for
- SOCK_SEQPACKET
-Thread-Topic: [PATCH net-next v4 0/2] af_vsock: add two new tests for
- SOCK_SEQPACKET
-Thread-Index: AQHYOdkn7YTNsId4DUmR+TugFQYSWA==
-Date:   Thu, 17 Mar 2022 08:29:50 +0000
-Message-ID: <97d6d8c6-f7b2-1b03-a3d9-f312c33134ec@sberdevices.ru>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4B08A18727E4C94B97CE9E6C020F9BD3@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Thu, 17 Mar 2022 04:30:43 -0400
+Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc08])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0875BDAFD6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:29:22 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KK0g45ZWXzMpnl0;
+        Thu, 17 Mar 2022 09:29:20 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KK0g342cGzlhSMZ;
+        Thu, 17 Mar 2022 09:29:19 +0100 (CET)
+Message-ID: <57a2e3ef-5baa-16ef-7865-245134a26e25@digikod.net>
+Date:   Thu, 17 Mar 2022 09:30:02 +0100
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/03/17 04:52:00 #18991242
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: 
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
+        Paul Moore <paul@paul-moore.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220311174741.250424-1-mic@digikod.net>
+ <20220311174741.250424-3-mic@digikod.net> <YjLk5p1ej3JwFdaJ@iki.fi>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH v1 2/2] certs: Remove panic() calls from
+ system_trusted_keyring_init()
+In-Reply-To: <YjLk5p1ej3JwFdaJ@iki.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhpcyBhZGRzIHR3byB0ZXN0czogZm9yIHJlY2VpdmUgdGltZW91dCBhbmQgcmVhZGluZyB0byBp
-bnZhbGlkDQpidWZmZXIgcHJvdmlkZWQgYnkgdXNlci4gSSBmb3Jnb3QgdG8gcHV0IGJvdGggcGF0
-Y2hlcyB0byBtYWluDQpwYXRjaHNldC4NCg0KQXJzZW5peSBLcmFzbm92KDIpOg0KDQphZl92c29j
-azogU09DS19TRVFQQUNLRVQgcmVjZWl2ZSB0aW1lb3V0IHRlc3QNCmFmX3Zzb2NrOiBTT0NLX1NF
-UVBBQ0tFVCBicm9rZW4gYnVmZmVyIHRlc3QNCg0KdG9vbHMvdGVzdGluZy92c29jay92c29ja190
-ZXN0LmMgfCAyMTUgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQoxIGZp
-bGUgY2hhbmdlZCwgMjE1IGluc2VydGlvbnMoKykNCg0KdjEgLT4gdjI6DQogc2VlIGV2ZXJ5IHBh
-dGNoIGFmdGVyICctLS0nIGxpbmUuDQoNCnYyIC0+IHYzOg0KIHNlZSBldmVyeSBwYXRjaCBhZnRl
-ciAnLS0tJyBsaW5lLg0KDQp2MyAtPiB2NDoNCiBzZWUgZXZlcnkgcGF0Y2ggYWZ0ZXIgJy0tLScg
-bGluZS4NCg0KLS0gDQoyLjI1LjENCg==
+
+On 17/03/2022 08:36, Jarkko Sakkinen wrote:
+> On Fri, Mar 11, 2022 at 06:47:41PM +0100, Mickaël Salaün wrote:
+>> From: Mickaël Salaün <mic@linux.microsoft.com>
+>>
+>> Replace panic() calls from device_initcall(system_trusted_keyring_init)
+>> with proper error handling using -ENODEV.
+>>
+>> Suggested-by: Jarkko Sakkinen <jarkko@kernel.org> [1]
+>> Link: https://lore.kernel.org/r/Yik0C2t7G272YZ73@iki.fi [1]
+>> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+>> Link: https://lore.kernel.org/r/20220311174741.250424-3-mic@digikod.net
+>> ---
+>>   certs/system_keyring.c | 26 ++++++++++++++++++++------
+>>   1 file changed, 20 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+>> index 05b66ce9d1c9..428046a7aa7f 100644
+>> --- a/certs/system_keyring.c
+>> +++ b/certs/system_keyring.c
+>> @@ -148,8 +148,10 @@ static __init int system_trusted_keyring_init(void)
+>>   			      KEY_USR_VIEW | KEY_USR_READ | KEY_USR_SEARCH),
+>>   			      KEY_ALLOC_NOT_IN_QUOTA,
+>>   			      NULL, NULL);
+>> -	if (IS_ERR(builtin_trusted_keys))
+>> -		panic("Can't allocate builtin trusted keyring\n");
+>> +	if (IS_ERR(builtin_trusted_keys)) {
+>> +		pr_err("Can't allocate builtin trusted keyring\n");
+>> +		return -ENODEV;
+>> +	}
+>>   
+>>   #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
+>>   	secondary_trusted_keys =
+>> @@ -161,14 +163,26 @@ static __init int system_trusted_keyring_init(void)
+>>   			      KEY_ALLOC_NOT_IN_QUOTA,
+>>   			      get_builtin_and_secondary_restriction(),
+>>   			      NULL);
+>> -	if (IS_ERR(secondary_trusted_keys))
+>> -		panic("Can't allocate secondary trusted keyring\n");
+>> +	if (IS_ERR(secondary_trusted_keys)) {
+>> +		pr_err("Can't allocate secondary trusted keyring\n");
+>> +		goto err_secondary;
+>> +	}
+>>   
+>> -	if (key_link(secondary_trusted_keys, builtin_trusted_keys) < 0)
+>> -		panic("Can't link trusted keyrings\n");
+>> +	if (key_link(secondary_trusted_keys, builtin_trusted_keys) < 0) {
+>> +		pr_err("Can't link trusted keyrings\n");
+>> +		goto err_link;
+>> +	}
+>>   #endif
+>>   
+>>   	return 0;
+>> +
+>> +err_link:
+>> +	key_put(secondary_trusted_keys);
+>> +
+>> +err_secondary:
+>> +	key_put(builtin_trusted_keys);
+>> +
+>> +	return -ENODEV;
+>>   }
+>>   
+>>   /*
+>> -- 
+>> 2.35.1
+>>
+> 
+> Changes make sense to me but you should implement all this to the original
+> patch set.
+
+You agreed to add this patch on top of the others a few days ago: 
+https://lore.kernel.org/r/f8b1ea77afe8d6698b4a2122254ff8be310412b1.camel@kernel.org
+
+What do you think about Paul's concerns?

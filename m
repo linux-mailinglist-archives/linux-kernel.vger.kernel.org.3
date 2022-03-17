@@ -2,67 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E89F4DCC4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C164DCC72
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236838AbiCQRWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 13:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43556 "EHLO
+        id S236885AbiCQRaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 13:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbiCQRWa (ORCPT
+        with ESMTP id S236875AbiCQRaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 13:22:30 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A1021045F
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:21:13 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id i11so4317279plr.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:21:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GVH5wVAAit8dSLwq1mNIRCt3Jo09Ih9fX4BoyZZKgPQ=;
-        b=iTFoidxbuOT1lSI7/Ijmymp0fz5i9LCFVj36rYqM9/RnB0fdLmDulWRgpkR3cB/3lE
-         5358Gi6sMXZLRVf9CO6aC4XxLmiTrrRBkJm+OfNr30V6mEBuXo4NuX0XBgxJqNWDNzdK
-         jIBT5ZIec0zweLFylC+8GTTCFvuTmcTsAs4PmgxWAc6FdDeLM9VeztG5YtpfgBGulohF
-         fQ2+aNlr7RlidLrQMM2MsCSpiUrPMfzXkhHrT+zdxwnV8XEt4Ai6ToeQ9g+kcuBVG+7P
-         ARNInrm8U/jSAbwxhsCkeDkVlybyKPBeIE0FCyJkDXbr2LWHutpKbpFDe9Cu+VA8Esmi
-         64QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GVH5wVAAit8dSLwq1mNIRCt3Jo09Ih9fX4BoyZZKgPQ=;
-        b=nR6SX51Mzo33QDQ9XSozcYCFvq4OxGSsnn0ZtRrQqxrqNDeapfKmgBdlgl6X5GqKRc
-         Zdt/ss4Bx1ixETIgu4r4baiNsmFnwM1J5pJ6aK0qk8fsDsCRfQ2y0+EdyFd41XgKBms2
-         qFqJhrqcb49fCoyQJBOD+41uElzz6HzkLdRVJyWeQaL4oHoLldPXxE0RAeAkIF3JpXFS
-         ff2dLl2sALH0vC2hIHMKPcYvhyYIU9A5R2R9jpKSw+y0jjaZaHHnqZMAxOjnhAFcOQ/8
-         MEhTAf5gNCCQIKMgcS1eaz16JgU9bs39cfiSmhG40JbC4x7wU9gMoUwAMXlO63698EZT
-         X7Ug==
-X-Gm-Message-State: AOAM533C+aCEAy2Cz/uy8YBlF15V/2qDeskrvS/mjzJKj8zJylcvUb6b
-        O6FfPHOYU2dy+fw0MuV98I94VR1HFYC1tRFPl2Udww==
-X-Google-Smtp-Source: ABdhPJzqgsPT0hwjxBN45Gy/9OR0t7APqndu9r3X2Xqq7QlDima8SHekoYP4JM8Hssel7QLwL+wIFHPwKWalxj6/VC8=
-X-Received: by 2002:a17:90b:124c:b0:1bc:369b:7db5 with SMTP id
- gx12-20020a17090b124c00b001bc369b7db5mr17253678pjb.179.1647537672934; Thu, 17
- Mar 2022 10:21:12 -0700 (PDT)
+        Thu, 17 Mar 2022 13:30:10 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A99214F9B;
+        Thu, 17 Mar 2022 10:28:52 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id B66601F459AB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647538131;
+        bh=cxxx6hstk7rIVcr0b5g2yR0BAZctX/d+E8ToCgt6AjM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cwENso64YsIjVii0hQAcvg2enNRPzdS/iG2T/cGIBJhBWs8YY68moY/5Jzf/7ZHmR
+         sYRnBikAemwr81rSkHvi3J4smDqhCPJTWBiPdw+vpuM1XxoqIndRD/JH9xRxk7jylg
+         SoMdaXCwDYwGZvFhhNPhEHITeeK/+qjCGTqFZ/s80NJ3TU4t2Maab+baKW9VCFs9jx
+         s4TkkQxs+aOiTdsxRog+DnQBa8phTfNY/4AwW31vuwgiZhJj3/DSDCO/Zt2RJUpua1
+         guR1v0Bs8ZJ4Opp4blOFYyWstNjZzt+Mk4nijUdxoemvzga3Mww9wWCMFg11c26BUf
+         AYfQAnR9jOcHg==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] docs/kselftest: add more guidelines for adding new tests
+Date:   Thu, 17 Mar 2022 22:27:57 +0500
+Message-Id: <20220317172758.582690-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220317094724.25972-1-yuehaibing@huawei.com>
-In-Reply-To: <20220317094724.25972-1-yuehaibing@huawei.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Thu, 17 Mar 2022 18:21:01 +0100
-Message-ID: <CAG3jFythpVSh-CLuBAu8AC403Yq7Sh-oAjjkPtA+JFuN7_OriA@mail.gmail.com>
-Subject: Re: [PATCH -next] drm/bridge: it6505: Fix build error
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        Hermes.Wu@ite.com.tw, allen.chen@ite.com.tw,
-        angelogioacchino.delregno@collabora.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,14 +49,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
+Add the following new guidelines:
+- Add instruction to use lib.mk
+- Add instruction about how to use headers from kernel source
+- Add instruction to add .gitignore file
+- Add instruction about how to add new test in selftests/Makefile
+- Add instruction about different build commands to test
 
-Thanks for submitting this.
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Following patch is fixing build of kselftest when separate output
+direcotry is specified using kernel's top most Makefile. It should be
+accepted first:
+https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/
+---
+ Documentation/dev-tools/kselftest.rst | 46 ++++++++++++++++++++++++++-
+ 1 file changed, 45 insertions(+), 1 deletion(-)
 
-I think this[1] patch should solve the issue you're seeing too. Can
-you confirm that[1] fixes your issues?
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index a833ecf12fbc1..637f83d1450dc 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -208,6 +208,13 @@ In general, the rules for selftests are
+ Contributing new tests (details)
+ ================================
+ 
++ * Use lib.mk instead of writing Makefile from sratch. Specify flags and
++   binaries generation flags on need basis before including lib.mk. ::
++
++    CFLAGS = $(KHDR_INCLUDES)
++    TEST_GEN_PROGS := close_range_test
++    include ../lib.mk
++
+  * Use TEST_GEN_XXX if such binaries or files are generated during
+    compiling.
+ 
+@@ -230,13 +237,50 @@ Contributing new tests (details)
+  * First use the headers inside the kernel source and/or git repo, and then the
+    system headers.  Headers for the kernel release as opposed to headers
+    installed by the distro on the system should be the primary focus to be able
+-   to find regressions.
++   to find regressions. Use KHDR_INCLUDES in Makefile to include headers from
++   the kernel source.
+ 
+  * If a test needs specific kernel config options enabled, add a config file in
+    the test directory to enable them.
+ 
+    e.g: tools/testing/selftests/android/config
+ 
++ * Create a .gitignore file inside test directory and add all generated objects
++   in it.
++
++ * Add new test name in TARGETS in selftests/Makefile::
++
++    TARGETS += android
++
++ * All of the following build commands should be successful
++
++   - Same directory build of kselftests::
++
++      make kselftest-all
++      make kselftest-install
++      make kselftest-clean
++      make kselftest-gen_tar
++
++   - Build with absolute output directory path::
++
++      make kselftest-all O=/abs_build_path
++      make kselftest-install O=/abs_build_path
++      make kselftest-clean O=/abs_build_path
++      make kselftest-gen_tar O=/abs_build_path
++
++   - Build with relative output directory path::
++
++      make kselftest-all O=relative_path
++      make kselftest-install O=relative_path
++      make kselftest-clean O=relative_path
++      make kselftest-gen_tar O=relative_path
++
++   - Build from Makefile of selftests directly::
++
++      make -C tools/testing/selftests
++      make -C tools/testing/selftests O=/abs_build_path
++      make -C tools/testing/selftests O=relative_path
++
+ Test Module
+ ===========
+ 
+-- 
+2.30.2
 
-[1] https://lore.kernel.org/all/YjJXnzJmDGsrZAXj@xps13/
-
-
-Rob.

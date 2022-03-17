@@ -2,88 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350EB4DC7CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 865F74DC7D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234680AbiCQNqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 09:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
+        id S234692AbiCQNqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 09:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbiCQNqj (ORCPT
+        with ESMTP id S234682AbiCQNqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:46:39 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C2EDEB96;
-        Thu, 17 Mar 2022 06:45:23 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id l2so10285628ybe.8;
-        Thu, 17 Mar 2022 06:45:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iPkA9tWXGYSPfTkvzhOngjgt6GqV+PZtcZByWXDH0PM=;
-        b=1/iO2RCInkV3rhF/DbTZqvuFQgmbXPWT+s0fXqBrlbn39rnJ2EckyldzY2ic3yR5i5
-         71gJsdLnoKMDn+MmgqgeTrYIKCxcV9yGj/0b7GizTDS3V49wfh22XDlAwjVUSK0fUDJp
-         KkGcYzn+rHPvsw4FELmAV1A7SjM1NLESzR/NVdI1agrk24Fgiz/Kvc0KXvoJ3N55XQlm
-         U/5NNQ/eoJ00fWQQMmfDjw+8qVcvE7NEG9EgfY+VLMbRIx5HmB9IZ/1KpyM6qga1Qhna
-         FBrJfgTh7D5rto7WZtLh75FU/k6A76x2e/Dk+Qpk7jAP8jzDYoGjh9rFRFWnLCFZUMYN
-         iRnQ==
-X-Gm-Message-State: AOAM530sAF7ao7h0W1ZRJua7k1IpsjgVX7Stz/1q59WvGks0ZU5dp/KS
-        l6H7u5kf1xDDEaHUyVdgu0J3B5iX6gxZF42hiJ4=
-X-Google-Smtp-Source: ABdhPJwOGOZbUy+HA0zjr99J3BqTy7SnKUJf0UQ7rf44mwXAJU0ylPDrV/TF0wNiU6KHSW1fQ9vIXEVRqIbbDcN8beQ=
-X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
- k16-20020a25fe10000000b00625262fe792mr4852801ybe.365.1647524722391; Thu, 17
- Mar 2022 06:45:22 -0700 (PDT)
+        Thu, 17 Mar 2022 09:46:46 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8440F1D4C38;
+        Thu, 17 Mar 2022 06:45:30 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id D24213EF6F2;
+        Thu, 17 Mar 2022 09:45:29 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id eI05lsRnsTj3; Thu, 17 Mar 2022 09:45:29 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 1DCC93EF8F8;
+        Thu, 17 Mar 2022 09:45:29 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 1DCC93EF8F8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1647524729;
+        bh=9OxVWJ4vPMgt6fGn0jQ5iVj+WY+3QXU8NA1cjBO9lIk=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=cUSboxJjB0cAoob2yW7rCVLFTGf6Q6Ns4oFwG6a7Vli6cltVPQcrvXn/gZ7SRZVUT
+         yXGVeOnH8WxE92Maa6yP4K1gdUVHXft9lN+gz8yVStyBG+9kd6rFRkl8mkm4fvWpiC
+         mRl2KZP20DlqwB5pjKDkbIhMqJao4p2Rox0gAJGuO8ng0l2dtgp+F+1EIuDNa6dh1e
+         RsYJYD8cIla4hRa6+uJnRK8n+PGlSMDyE+SKjcN+zcdJ/n81PhnZxoV5pl85pfcubd
+         blo+USifsbOZDoEYobQ+Row+Tmk4rwxvFXt3iHMwcPVe756+vP7W7Ro7nxBe8p8YF3
+         phnRr7zdaeaOw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id J4lQgT7QznH7; Thu, 17 Mar 2022 09:45:29 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id E5A5D3EFD1E;
+        Thu, 17 Mar 2022 09:45:28 -0400 (EDT)
+Date:   Thu, 17 Mar 2022 09:45:28 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        rostedt <rostedt@goodmis.org>,
+        Byungchul Park <byungchul.park@lge.com>,
+        paulmck <paulmck@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Radoslaw Burny <rburny@google.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Message-ID: <365529974.156362.1647524728813.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20220316224548.500123-3-namhyung@kernel.org>
+References: <20220316224548.500123-1-namhyung@kernel.org> <20220316224548.500123-3-namhyung@kernel.org>
+Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow
+ path
 MIME-Version: 1.0
-References: <20220312043624.40732-1-dacohen@pm.me>
-In-Reply-To: <20220312043624.40732-1-dacohen@pm.me>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 17 Mar 2022 14:45:11 +0100
-Message-ID: <CAJZ5v0gqpQTuNN0WpnEd4dAQmnR=BXSoH_w7kkAxOG7xkftW6Q@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: fix dynamic debug within pm_pr_debug()
-To:     David Cohen <dacohen@pm.me>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF98 (Linux)/8.8.15_GA_4232)
+Thread-Topic: locking: Apply contention tracepoints in the slow path
+Thread-Index: gDkcZNYUEH8fJg1vQNRPXNZ0Cqt22w==
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 12, 2022 at 5:37 AM David Cohen <dacohen@pm.me> wrote:
->
-> Currently, pm_pr_debug() and pm_deferred_pr_debug() use __pm_pr_debug()
-> to filter pm debug messages based on pm_debug_messages_on flag.
-> According to __pm_pr_debug() implementation, pm_deferred_pr_debug()
-> indirectly calls printk_deferred() within __pm_pr_debug() which doesn't
-> support dynamic debug, but pm_pr_debug() indirectly calls pr_debug()
+----- On Mar 16, 2022, at 6:45 PM, Namhyung Kim namhyung@kernel.org wrote:
 
-I'm not sure what you mean by pm_pr_debug().  There's no such thing in
-the kernel tree.
+> Adding the lock contention tracepoints in various lock function slow
+> paths.  Note that each arch can define spinlock differently, I only
+> added it only to the generic qspinlock for now.
+> 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+> kernel/locking/mutex.c        |  3 +++
+> kernel/locking/percpu-rwsem.c |  3 +++
+> kernel/locking/qrwlock.c      |  9 +++++++++
+> kernel/locking/qspinlock.c    |  5 +++++
+> kernel/locking/rtmutex.c      | 11 +++++++++++
+> kernel/locking/rwbase_rt.c    |  3 +++
+> kernel/locking/rwsem.c        |  9 +++++++++
+> kernel/locking/semaphore.c    | 14 +++++++++++++-
+> 8 files changed, 56 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+> index ee2fd7614a93..c88deda77cf2 100644
+> --- a/kernel/locking/mutex.c
+> +++ b/kernel/locking/mutex.c
+> @@ -644,6 +644,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state,
+> unsigned int subclas
+> 	}
+> 
+> 	set_current_state(state);
+> +	trace_contention_begin(lock, 0);
 
-Assuming that it means pm_pr_dbg(), it doesn't call pr_debug():
+This should be LCB_F_SPIN rather than the hardcoded 0.
 
-#define pm_pr_dbg(fmt, ...) __pm_pr_dbg(false, fmt, ##__VA_ARGS__)
+> 	for (;;) {
+> 		bool first;
+> 
+> @@ -710,6 +711,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state,
+> unsigned int subclas
+> skip_wait:
+> 	/* got the lock - cleanup and rejoice! */
+> 	lock_acquired(&lock->dep_map, ip);
+> +	trace_contention_end(lock, 0);
+> 
+> 	if (ww_ctx)
+> 		ww_mutex_lock_acquired(ww, ww_ctx);
+> @@ -721,6 +723,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state,
+> unsigned int subclas
+> err:
+> 	__set_current_state(TASK_RUNNING);
+> 	__mutex_remove_waiter(lock, &waiter);
+> +	trace_contention_end(lock, ret);
+> err_early_kill:
+> 	raw_spin_unlock(&lock->wait_lock);
+> 	debug_mutex_free_waiter(&waiter);
+> diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
+> index c9fdae94e098..833043613af6 100644
+> --- a/kernel/locking/percpu-rwsem.c
+> +++ b/kernel/locking/percpu-rwsem.c
+> @@ -9,6 +9,7 @@
+> #include <linux/sched/task.h>
+> #include <linux/sched/debug.h>
+> #include <linux/errno.h>
+> +#include <trace/events/lock.h>
+> 
+> int __percpu_init_rwsem(struct percpu_rw_semaphore *sem,
+> 			const char *name, struct lock_class_key *key)
+> @@ -154,6 +155,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore
+> *sem, bool reader)
+> 	}
+> 	spin_unlock_irq(&sem->waiters.lock);
+> 
+> +	trace_contention_begin(sem, LCB_F_PERCPU | (reader ? LCB_F_READ :
+> LCB_F_WRITE));
+> 	while (wait) {
+> 		set_current_state(TASK_UNINTERRUPTIBLE);
+> 		if (!smp_load_acquire(&wq_entry.private))
+> @@ -161,6 +163,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore
+> *sem, bool reader)
+> 		schedule();
+> 	}
+> 	__set_current_state(TASK_RUNNING);
+> +	trace_contention_end(sem, 0);
 
-and
+So for the reader-write locks, and percpu rwlocks, the "trace contention end" will always
+have ret=0. Likewise for qspinlock, qrwlock, and rtlock. It seems to be a waste of trace
+buffer space to always have space for a return value that is always 0.
 
-void __pm_pr_dbg(bool defer, const char *fmt, ...)
-{
-...
-        if (defer)
-               printk_deferred(KERN_DEBUG "PM: %pV", &vaf);
-        else
-               printk(KERN_DEBUG "PM: %pV", &vaf);
+Sorry if I missed prior dicussions of that topic, but why introduce this single
+"trace contention begin/end" muxer tracepoint with flags rather than per-locking-type
+tracepoint ? The per-locking-type tracepoint could be tuned to only have the fields
+that are needed for each locking type.
 
-And as I said printk(KERN_DEBUG ...) is not equivalent to
-pr_debug(...), because it is not dynamic printk().
+Thanks,
 
-pm_pr_dbg() is not dynamic printk() on purpose, so they both can be
-controlled independently.
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

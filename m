@@ -2,64 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA6DF4DCEEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFBF4DCEF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbiCQTi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 15:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47486 "EHLO
+        id S231726AbiCQTji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 15:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiCQTiz (ORCPT
+        with ESMTP id S231955AbiCQTjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 15:38:55 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8768F22E953;
-        Thu, 17 Mar 2022 12:37:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647545856; x=1679081856;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qo2D3TN6PoZ9wS60fZKZkGUnHxtz5zLGgEpjwbsjoIA=;
-  b=Aat7q+Ua303aWmUlGVX6EFqUr5/znu6J4bwCxsHW2rmyq7ISZFd0v2S3
-   T2MGpeP/qX91UaSBs1sE07VHNm2acml6ua93ymG9+rJUk9qSFJfSm8zi2
-   VbxpWZEDPotTc9EoYt7SrudtY0KU3fg1BqZyyR1HoPp6YJrabO/tOSpFB
-   vlxl6438S4TeFPzGxacDDyeg7qElyI8VgcavgyjOwLauRDL1KRHiWMk0f
-   Efx8LfSZ8t+ya8CyMhCZFcNVtOeN95A02aQXKTTZUDJCaS86lGXYQak4X
-   /fjI++rnajx/0svcvaoE/Jnalrqpq2ov4figRBY1OxNFIoJcyKhtiEjIk
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="236909725"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="236909725"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 12:37:36 -0700
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="635486137"
-Received: from mgsalahu-mobl.amr.corp.intel.com (HELO localhost) ([10.212.119.201])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 12:37:36 -0700
-Date:   Thu, 17 Mar 2022 12:37:35 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-cxl@vger.kernel.org, Linux PCI <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V6 03/10] PCI/DOE: Add Data Object Exchange Aux Driver
-Message-ID: <YjON/33+V1iNXnrk@iweiny-desk3>
-References: <20220201071952.900068-1-ira.weiny@intel.com>
- <20220201071952.900068-4-ira.weiny@intel.com>
- <CAPcyv4hYAgyf-WcArGvbWHAJgc5+p=OO_6ah_dXJhNM5cXcVTw@mail.gmail.com>
- <YjJpzzKAtV4vgM+H@iweiny-desk3>
+        Thu, 17 Mar 2022 15:39:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F21EAC8B;
+        Thu, 17 Mar 2022 12:38:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7870618B3;
+        Thu, 17 Mar 2022 19:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47BC1C340E9;
+        Thu, 17 Mar 2022 19:38:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647545895;
+        bh=YDBqqtsD8hurDcBaCOcL4NXPfM8to2wSvDT1JakwR+U=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=QHOjltqeHi+HQG2Xky3LWk1zqqafGF3WxgeGSm8rT3vPU0OrIVtLl3wS6uocN6bUc
+         Iz9caqzXOHhc9wy/pqpGQWLiUT7tEAYL04H3Off9vCiP7LW2TXslbbnrF9M9FlQCV8
+         attIKQFFR35qHc16JPmEtjl44Q5Ff7maf96V5okDuWAb49J7rdiDeNzTYTncKzvF6Z
+         T1iQSTqsCDlTlep0XNjgklbMVXIHWtcGfmRnX1G3rClnGTe5a/M2H3sdA+adcK70ew
+         XDm0JwOvUwJoPhdpLYxbPEH2ppUF0xVoM3GXRKcaZKCN77N1oT1TWg0Zam3UXU1/mi
+         F6m00k3fi+c+Q==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjJpzzKAtV4vgM+H@iweiny-desk3>
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220228124112.3974242-2-peng.fan@oss.nxp.com>
+References: <20220228124112.3974242-1-peng.fan@oss.nxp.com> <20220228124112.3974242-2-peng.fan@oss.nxp.com>
+Subject: Re: [PATCH V2 2/2] clk: imx8m: check mcore_booted before register clk
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+To:     Peng Fan (OSS) <peng.fan@oss.nxp.com>, abel.vesa@nxp.com,
+        s.hauer@pengutronix.de, shawnguo@kernel.org
+Date:   Thu, 17 Mar 2022 12:38:13 -0700
+User-Agent: alot/0.10
+Message-Id: <20220317193815.47BC1C340E9@smtp.kernel.org>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,78 +57,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 03:50:55PM -0700, Ira Weiny wrote:
-> On Tue, Feb 08, 2022 at 04:59:39PM -0800, Dan Williams wrote:
-> > On Mon, Jan 31, 2022 at 11:20 PM <ira.weiny@intel.com> wrote:
+Quoting Peng Fan (OSS) (2022-02-28 04:41:12)
+> From: Peng Fan <peng.fan@nxp.com>
+>=20
+> If mcore_booted is true, ignore the clk root gate registration and
+> this will simplify AMP clock management and avoid system hang unexpectly
+> especially Linux shutdown clk used by mcore.
+>=20
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>=20
+> V2:
+>  None
+>=20
+>  drivers/clk/imx/clk-composite-8m.c | 21 +++++++++++++--------
+>  1 file changed, 13 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/clk/imx/clk-composite-8m.c b/drivers/clk/imx/clk-com=
+posite-8m.c
+> index 2dfd6149e528..b16c2c0ea9f6 100644
+> --- a/drivers/clk/imx/clk-composite-8m.c
+> +++ b/drivers/clk/imx/clk-composite-8m.c
+> @@ -223,14 +223,19 @@ struct clk_hw *__imx8m_clk_hw_composite(const char =
+*name,
+>         div->lock =3D &imx_ccm_lock;
+>         div->flags =3D CLK_DIVIDER_ROUND_CLOSEST;
+> =20
+> -       gate =3D kzalloc(sizeof(*gate), GFP_KERNEL);
+> -       if (!gate)
+> -               goto fail;
+> -
+> -       gate_hw =3D &gate->hw;
+> -       gate->reg =3D reg;
+> -       gate->bit_idx =3D PCG_CGC_SHIFT;
+> -       gate->lock =3D &imx_ccm_lock;
+> +       /* skip registering the gate ops if M4 is enabled */
+> +       if (mcore_booted) {
+> +               gate_hw =3D NULL;
 
-[snip]
+It could even use the protected-clocks property and then parse it to
+figure out to not register this gate?
 
-> > 
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +static void pci_doe_remove(struct auxiliary_device *aux_dev)
-> > > +{
-> > > +       struct pci_doe *doe = dev_get_drvdata(&aux_dev->dev);
-> > > +
-> > > +       /* First halt the state machine */
-> > > +       cancel_delayed_work_sync(&doe->statemachine);
-> > > +}
-> > > +
-> > > +static const struct auxiliary_device_id pci_doe_auxiliary_id_table[] = {
-> > > +       {},
-> > > +};
-> > > +
-> > > +MODULE_DEVICE_TABLE(auxiliary, pci_doe_auxiliary_id_table);
-> > 
-> > Why is this empty table here?
-> 
-> Filling the id table was done in the next patch.
-> 
-> The split of the patches may have been a bit arbitrary here.  This patch was
-> focused on the state machine and probing of the mailboxes.  The next patch
-> provided the helper function to create all the DOE devices for a given
-> PCI device; pci_doe_create_doe_devices()
-> 
-> > 
-> > > +
-> > > +struct auxiliary_driver pci_doe_auxiliary_drv = {
-> > > +       .name = "pci_doe",
-> > > +       .id_table = pci_doe_auxiliary_id_table,
-> > > +       .probe = pci_doe_probe,
-> > > +       .remove = pci_doe_remove
-> > > +};
-> > 
-> > I expect that these helpers would be provided by the PCI core, but
-> > then a subsystem like CXL would have code to register their auxiliary
-> > devices and drivers that mostly just wrap the PCI core DOE
-> > implementation.
-> 
-> Ah ok, I think I see what you are saying.  That is not quite as straight
-> forward a use of the auxiliary bus but I _think_ it will work.  I'll also
-> attempt to clarify with documentation how the above probe/remove functions are
-> to be used by those defining their own drivers.
-
-Ok looking at this again today I see why I did things the way I did.
-
-The question is:
-
-Is the DOE driver a PCI driver or a driver defined by the subsystems?
-
-The way I have it now the PCI core defines the driver and a couple of very
-small helper functions for the subsystems to use.
-
-What I think you are proposing is the PCI core supplies the helper functions to
-drive the protocol but the actual driver is defined as part of the subsystem?
-Is that correct?
-
-The implications are subtle but one thing about the way I have things is that
-subsystems don't really need to learn about auxiliary bus driver stuff.
-
-OTOH pushing the auxiliary bus code into the subsystem allows for a bit more
-flexibility around the use of the DOE protocol code within the PCI core.
-
-I'll keep looking.
-
-Ira
+> +       } else {
+> +               gate =3D kzalloc(sizeof(*gate), GFP_KERNEL);
+> +               if (!gate)
+> +                       goto fail;
+> +
+> +               gate_hw =3D &gate->hw;
+> +               gate->reg =3D reg;
+> +               gate->bit_idx =3D PCG_CGC_SHIFT;
+> +               gate->lock =3D &imx_ccm_lock;
+> +       }

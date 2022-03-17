@@ -2,196 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A588F4DC75F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2993F4DC768
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234371AbiCQNPy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Mar 2022 09:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S234213AbiCQNUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 09:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbiCQNPw (ORCPT
+        with ESMTP id S231321AbiCQNUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:15:52 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA8A12F174;
-        Thu, 17 Mar 2022 06:14:35 -0700 (PDT)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nUpxZ-00035o-MG; Thu, 17 Mar 2022 14:14:33 +0100
-Message-ID: <254dc1fb-cda7-6249-35e5-a0c584c41206@leemhuis.info>
-Date:   Thu, 17 Mar 2022 14:14:32 +0100
+        Thu, 17 Mar 2022 09:20:14 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449EF171ECC;
+        Thu, 17 Mar 2022 06:18:57 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KK6zR5P09z1GCVs;
+        Thu, 17 Mar 2022 21:13:55 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 17 Mar
+ 2022 21:18:54 +0800
+From:   Zheng Yongjun <zhengyongjun3@huawei.com>
+To:     <dmitry.torokhov@gmail.com>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <linux-input@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] Input: fix reference leak in stmfts_input_open
+Date:   Thu, 17 Mar 2022 13:16:04 +0000
+Message-ID: <20220317131604.53538-1-zhengyongjun3@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: Bug 215605 - [5.14 regression] BUG: unable to handle page fault
- while running badblocks (fsck.ext4 -c) on a raid5 md array
-Content-Language: en-US
-To:     Song Liu <song@kernel.org>,
-        Dominik Mierzejewski <dominik@greysector.net>
-Cc:     linux-raid <linux-raid@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Jens Axboe <axboe@kernel.dk>
-References: <53e7de78-4d27-5089-f159-0d443b354666@leemhuis.info>
- <35bafd68-b340-dfaa-dd5f-d45843104f91@leemhuis.info>
- <CAPhsuW44tX0rBpy5c63HgTtRSF=UAAsgv8ZuYE_QTLhi6syXaA@mail.gmail.com>
- <Yh/nbZYmYD6SpZV9@sakura.greysector.net>
- <CAPhsuW4otwSDcOr8NWFhmecM4AfKim5jQ8aoZO-CY4KkwDFCgg@mail.gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <CAPhsuW4otwSDcOr8NWFhmecM4AfKim5jQ8aoZO-CY4KkwDFCgg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1647522875;13f774a4;
-X-HE-SMSGID: 1nUpxZ-00035o-MG
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker. Top-posting for once,
-to make this easily accessible to everyone.
+pm_runtime_get_sync() will increment pm usage counter even it
+failed. Forgetting to call pm_runtime_put_noidle will result
+in reference leak in stmfts_input_open, so we should fix it.
 
-Song, two weeks ago you said you would try to reproduce this. Any
-success? Or was the discussion moved somewhere else and I just missed it?
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+---
+ drivers/input/touchscreen/stmfts.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+diff --git a/drivers/input/touchscreen/stmfts.c b/drivers/input/touchscreen/stmfts.c
+index bc11203c9cf7..72e0b767e1ba 100644
+--- a/drivers/input/touchscreen/stmfts.c
++++ b/drivers/input/touchscreen/stmfts.c
+@@ -339,11 +339,11 @@ static int stmfts_input_open(struct input_dev *dev)
+ 
+ 	err = pm_runtime_get_sync(&sdata->client->dev);
+ 	if (err < 0)
+-		return err;
++		goto out;
+ 
+ 	err = i2c_smbus_write_byte(sdata->client, STMFTS_MS_MT_SENSE_ON);
+ 	if (err)
+-		return err;
++		goto out;
+ 
+ 	mutex_lock(&sdata->mutex);
+ 	sdata->running = true;
+@@ -366,7 +366,9 @@ static int stmfts_input_open(struct input_dev *dev)
+ 				 "failed to enable touchkey\n");
+ 	}
+ 
+-	return 0;
++out:
++	pm_runtime_put_noidle(&sdata->client->dev);
++	return err;
+ }
+ 
+ static void stmfts_input_close(struct input_dev *dev)
+-- 
+2.17.1
 
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
-
-#regzbot poke
-
-On 04.03.22 07:26, Song Liu wrote:
-> On Wed, Mar 2, 2022 at 1:54 PM Dominik Mierzejewski
-> <dominik@greysector.net> wrote:
->>
->> Hello!
->>
->> On Tuesday, 01 March 2022 at 01:24, Song Liu wrote:
->>> On Mon, Feb 28, 2022 at 1:43 AM Thorsten Leemhuis
->>> <regressions@leemhuis.info> wrote:
->>>>
->>>> [CCing Jens]
->>>>
->>>> Hi, this is your Linux kernel regression tracker. Top-posting for once,
->>>> to make this easily accessible to everyone.
->>>>
->>>> What's up here? Below regression was reported two weeks ago and I
->>>> forwarded it nearly a week ago, nevertheless the reporter afaics didn't
->>>> get a single reply. Is the issue discussed somewhere else and I just
->>>> missed it? Is the report not accurate for some reason or missing
->>>> something important? Or did the report fall throug the cracks?
->>>
->>> Sorry for the late reply. I was on vacation last week.
->>
->> No problem, thanks for responding.
->>
->> [...]
->>>> On 22.02.22 09:59, Thorsten Leemhuis wrote:
->>>>> Hi, this is your Linux kernel regression tracker.
->>>>>
->>>>> I noticed a regression report in bugzilla.kernel.org that afaics nobody
->>>>> acted upon since it was reported about a week ago, that's why I decided
->>>>> to forward it to the lists and add a few relevant people to the CC. To
->>>>> quote from https://bugzilla.kernel.org/show_bug.cgi?id=215605
->>>>>
->>>>>>  Dominik Mierzejewski 2022-02-14 10:36:36 UTC
->>>>>>
->>>>>> Created attachment 300450 [details]
->>>>>> kernel-5.16.8 dmesg with crash
->>>>>>
->>>>>> I'm experiencing kernel crash when running badblocks (fsck.ext4 -c) on a raid5 md array in my Intel Atom-based NAS box (Thecus N5550):
->>>>>> [  720.911993] kernel: BUG: unable to handle page fault for address: ffffdbc681023bc8
->>>>>> [  720.912073] kernel: #PF: supervisor read access in kernel mode
->>>>>> [  720.912120] kernel: #PF: error_code(0x0000) - not-present page
->>>>>> [  720.912166] kernel: PGD 11ffc6067 P4D 11ffc6067 PUD 0
->>>>>> [  720.912213] kernel: Oops: 0000 [#1] PREEMPT SMP NOPTI
->>>>>> [  720.912256] kernel: CPU: 1 PID: 1406 Comm: badblocks Not tainted 5.16.8-200.fc35.x86_64 #1
->>>>>> [  720.912321] kernel: Hardware name: Intel Corporation Milstead Platform/Granite Well, BIOS CDV W Series 05 08/27/2015
->>>>>> [  720.912400] kernel: RIP: 0010:kfree+0x58/0x3e0
->>>>>> [  720.912449] kernel: Code: 80 4c 01 e5 0f 82 84 03 00 00 48 c7 c0 00 00 00 80 48 2b 05 4a 96 3b 01 48 01 c5 48 c1 ed 0c 48 c1 e5 06 48 03 2d 28 96 3b 01 <48> 8b 45 08 48 8d 50 ff a8 01 48 0f 45 ea 4
->>>>>> 8 8b 55 08 48 8d 42 ff
->>>>>> [  720.912598] kernel: RSP: 0018:ffff9db4008efaf8 EFLAGS: 00010286
->>>>>> [  720.912648] kernel: RAX: 00006d7bc0000000 RBX: ffff9284c5214800 RCX: ffff9284c3758ff8
->>>>>> [  720.912708] kernel: RDX: ffff9283c1102740 RSI: ffffffffc07af091 RDI: ffff9db4008efd58
->>>>>> [  720.912767] kernel: RBP: ffffdbc681023bc0 R08: ffff9db4008efb88 R09: ffff9284c3759000
->>>>>> [  720.912826] kernel: R10: 0000000000000028 R11: ffff9284c213db48 R12: ffff9db4008efd58
->>>>>> [  720.912885] kernel: R13: ffff9284c213da00 R14: ffff9284c375f000 R15: ffff9db4008efd58
->>>>>> [  720.912945] kernel: FS:  00007f73e6669740(0000) GS:ffff9284dbc80000(0000) knlGS:0000000000000000
->>>>>> [  720.913012] kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>> [  720.913062] kernel: CR2: ffffdbc681023bc8 CR3: 000000005c2cc000 CR4: 00000000000006e0
->>>>>> [  720.913122] kernel: Call Trace:
->>>>>> [  720.913150] kernel:  <TASK>
->>>>>> [  720.913179] kernel:  raid5_make_request+0xb31/0xb90 [raid456]
->>>>>> [  720.913247] kernel:  ? do_wait_intr_irq+0xa0/0xa0
->>>>>> [  720.913292] kernel:  ? __blk_queue_split+0x30a/0x470
->>>>>> [  720.913339] kernel:  md_handle_request+0x119/0x180
->>>>>> [  720.913386] kernel:  md_submit_bio+0x67/0xa0
->>>>>> [  720.913425] kernel:  __submit_bio_fops+0x91/0x160
->>>>>> [  720.913468] kernel:  submit_bio_noacct+0xd7/0x2c0
->>>>>> [  720.913510] kernel:  __blkdev_direct_IO_simple+0x198/0x290
->>>>>> [  720.913576] kernel:  ? __fpu_restore_sig+0x193/0x570
->>>>>> [  720.913623] kernel:  ? sysvec_apic_timer_interrupt+0xaf/0xd0
->>>>>> [  720.913676] kernel:  ? __blkdev_direct_IO_simple+0x290/0x290
->>>>>> [  720.913728] kernel:  generic_file_read_iter+0x9b/0x160
->>>>>> [  720.913775] kernel:  new_sync_read+0x105/0x180
->>>>>> [  720.913820] kernel:  vfs_read+0xf1/0x190
->>>>>> [  720.913858] kernel:  ksys_read+0x4f/0xc0
->>>>>> [  720.913896] kernel:  do_syscall_64+0x38/0x90
->>>>>> [  720.913936] kernel:  entry_SYSCALL_64_after_hwframe+0x44/0xae
->>>>>> [  720.913985] kernel: RIP: 0033:0x7f73e676d772
->>>>>> [  720.914024] kernel: Code: c0 e9 b2 fe ff ff 50 48 8d 3d da 2e 0c 00 e8 b5 f9 01 00 0f 1f 44 00 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 0f 05 <48> 3d 00 f0 ff ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 48 89 54 24
->>>>>> [  720.914166] kernel: RSP: 002b:00007fff1b8fcbb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
->>>>>> [  720.914231] kernel: RAX: ffffffffffffffda RBX: 0000000000000040 RCX: 00007f73e676d772
->>>>>> [  720.917149] kernel: RDX: 0000000000040000 RSI: 00007f73e65d3000 RDI: 0000000000000004
->>>>>> [  720.920078] kernel: RBP: 0000000000001000 R08: 00000000015105c0 R09: 0000000000000080
->>>>>> [  720.922980] kernel: R10: 00007fff1b8fca00 R11: 0000000000000246 R12: 00000015105c0000
->>>>>> [  720.925875] kernel: R13: 0000000000000004 R14: 00007f73e65d3000 R15: 0000000000040000
->>>>>> [  720.928795] kernel:  </TASK>
->>>>>> [  720.931704] kernel: Modules linked in: sctp ip6_udp_tunnel udp_tunnel rpcrdma rdma_cm iw_cm ib_cm ib_core sit tunnel4 ip_tunnel rfkill ipt_REJECT nf_reject_ipv4 iptable_filter xt_nat iptable_nat nf_nat iptable_mangle nf_conntrack_pptp xt_CT iptable_raw xt_multiport xt_set ip6t_REJECT nf_reject_ipv6 xt_LOG nf_log_syslog xt_limit xt_state xt_conntrack nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip6table_filter ip6_tables ip_set_hash_netport ip_set_hash_net ip_set drivetemp it87 nfnetlink hwmon_vid vfat fat iTCO_wdt intel_pmc_bxt iTCO_vendor_support at24 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx intel_powerclamp raid1 coretemp snd_hda_codec_realtek snd_hda_codec_generic ledtrig_audio snd_hda_codec_hdmi snd_hda_intel snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec snd_hda_core snd_usb_audio i2c_i801 gma500_gfx i2c_smbus snd_usbmidi_lib joydev snd_hwdep snd_rawmidi snd_seq_device mc snd_pcm lpc_ich i2c_algo_bit snd_timer drm_kms_helper snd cec soundcore nfsd auth_rpcgss
->>>>>> [  720.931885] kernel:  nfs_acl lockd grace drm fuse sunrpc zram ip_tables hid_logitech_hidpp serio_raw r8152 sata_sil24 video mii hid_jabra e1000e hid_logitech_dj
->>>>>> [  720.952122] kernel: CR2: ffffdbc681023bc8
->>>>>> [  720.955651] kernel: ---[ end trace de2c3d5b971ae71d ]---
->>>>>> [  720.959186] kernel: RIP: 0010:kfree+0x58/0x3e0
->>>>>> [  720.962723] kernel: Code: 80 4c 01 e5 0f 82 84 03 00 00 48 c7 c0 00 00 00 80 48 2b 05 4a 96 3b 01 48 01 c5 48 c1 ed 0c 48 c1 e5 06 48 03 2d 28 96 3b 01 <48> 8b 45 08 48 8d 50 ff a8 01 48 0f 45 ea 48 8b 55 08 48 8d 42 ff
->>>>>> [  720.966472] kernel: RSP: 0018:ffff9db4008efaf8 EFLAGS: 00010286
->>>>>> [  720.970238] kernel: RAX: 00006d7bc0000000 RBX: ffff9284c5214800 RCX: ffff9284c3758ff8
->>>>>> [  720.973993] kernel: RDX: ffff9283c1102740 RSI: ffffffffc07af091 RDI: ffff9db4008efd58
->>>>>> [  720.977723] kernel: RBP: ffffdbc681023bc0 R08: ffff9db4008efb88 R09: ffff9284c3759000
->>>>>> [  720.981464] kernel: R10: 0000000000000028 R11: ffff9284c213db48 R12: ffff9db4008efd58
->>>>>> [  720.985228] kernel: R13: ffff9284c213da00 R14: ffff9284c375f000 R15: ffff9db4008efd58
->>>>>> [  720.988995] kernel: FS:  00007f73e6669740(0000) GS:ffff9284dbc80000(0000) knlGS:0000000000000000
->>>>>> [  720.992774] kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>> [  720.996535] kernel: CR2: ffffdbc681023bc8 CR3: 000000005c2cc000 CR4: 00000000000006e0
->>>
->>> I tried a few things (injecting badblocks, etc.) but still could not
->>> reproduce this issue.
->>>
->>> Hi Dominik,
->>>
->>> Could you please share more information about the array?
->>
->> Please note that I repaired the array by stopping it and reassembling
->> without badblocks maps:
->> # mdadm --assemble -U force-no-bbl /dev/md126 /dev/sdb1 /dev/sdc1 /dev/sdd1 /dev/sde1 /dev/sdf1
->>
->> I ran fsck on it and repaired multiple-owned blocks. It's been running
->> smoothly since then, even under kernel 5.16.9. I'm not sure the
->> following information will be useful now.
-> 
-> Thanks for these information. I will try to repro with some similar setup.
-> 
-> Song
-> 
-> [..]
-> 
-> 

@@ -2,124 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099104DCDC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC774DCDC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237528AbiCQSkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
+        id S237533AbiCQSlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237527AbiCQSkM (ORCPT
+        with ESMTP id S234696AbiCQSlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:40:12 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84F62128DD
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:38:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647542335; x=1679078335;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=DJR+wvnHR5rivdMFlGEb+X104rJMQMUf5HMSzvneSh0=;
-  b=ldog9jI5RhVhIuDODOxQVfXrX9CRB9LsU8g0f+Zl9oJA8/sWV0zOBjPA
-   NYIh/Uuogi79BYG/wCcjlAvhN9pVjeZGtbZjfJZ+W9qyTzPMS5wK7+jh8
-   JzAZ4P7Y8FDMX4Q63lB+FxbkxcDpwuz1pmEipmoGh3m/S0ogbudmErk1R
-   B8KWTtuonn7Pp7iu1L8eUvAvuLX/1wflnC6jdCSDSFdIGbvNOAZOKwT5M
-   LttcnLTV2fy9cTyVUEokEd7O/itb55319W/m1O5+siBxa6FCei4ZY3ab2
-   AoL/p/hxxBVR7lti8Xjfc0dI8HmX83dXx8BVi6doxNaJHW+qH7+NgL4QI
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="236896176"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="236896176"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 11:38:55 -0700
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="581400848"
-Received: from dstanfie-mobl2.amr.corp.intel.com (HELO [10.212.178.19]) ([10.212.178.19])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 11:38:54 -0700
-Message-ID: <c85ae95a-6603-ca0d-a653-b3f2f7069e20@intel.com>
-Date:   Thu, 17 Mar 2022 11:38:46 -0700
+        Thu, 17 Mar 2022 14:41:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D74204C85;
+        Thu, 17 Mar 2022 11:39:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50E9EB81E97;
+        Thu, 17 Mar 2022 18:39:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19892C340E9;
+        Thu, 17 Mar 2022 18:39:40 +0000 (UTC)
+Date:   Thu, 17 Mar 2022 14:39:38 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Ritesh Harjani <riteshh@linux.ibm.com>, linux-ext4@vger.kernel.org,
+        Jan Kara <jack@suse.cz>, "Theodore Ts'o" <tytso@mit.edu>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@kernel.org
+Subject: Re: [PATCHv3 02/10] ext4: Fix ext4_fc_stats trace point
+Message-ID: <20220317143938.745e1420@gandalf.local.home>
+In-Reply-To: <yt9dr1706b4i.fsf@linux.ibm.com>
+References: <cover.1647057583.git.riteshh@linux.ibm.com>
+        <b4b9691414c35c62e570b723e661c80674169f9a.1647057583.git.riteshh@linux.ibm.com>
+        <yt9dr1706b4i.fsf@linux.ibm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     kernel test robot <oliver.sang@intel.com>,
-        Nadav Amit <namit@vmware.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, ying.huang@intel.com, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
-References: <20220317090415.GE735@xsang-OptiPlex-9020>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [x86/mm/tlb] 6035152d8e: will-it-scale.per_thread_ops -13.2%
- regression
-In-Reply-To: <20220317090415.GE735@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/22 02:04, kernel test robot wrote:
-> FYI, we noticed a -13.2% regression of will-it-scale.per_thread_ops due to commit:
-...
-> commit: 6035152d8eebe16a5bb60398d3e05dc7799067b0 ("x86/mm/tlb: Open-code on_each_cpu_cond_mask() for tlb_is_not_lazy()")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-...
->      24.77 ±  2%      +8.1       32.86 ±  3%  perf-profile.self.cycles-pp.llist_add_batch
+You already replied, but this was what I was working on.
 
+On Thu, 17 Mar 2022 13:01:49 +0100
+Sven Schnelle <svens@linux.ibm.com> wrote:
 
-tl;dr: This commit made the tlb_is_not_lazy() check happen earlier.
-That earlier check can miss threads _going_ lazy because if mmap_lock
-contention.  Fewer lazy threads means more IPIs and lower performance.
+> I'm getting the following oops with that patch:
 
-===
+I think I know the issue.
 
-There's a lot of noise in that profile, but I filtered most of it out.
-The main thing is that, somehow the llist_add() in
-smp_call_function_many_cond() got more expensive.  Either we're doing
-more of them or the cacheline is bouncing around more.
+> 
+> [    0.937455] VFS: Disk quotas dquot_6.6.0
+> [    0.937474] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+> [    0.958347] Unable to handle kernel pointer dereference in virtual kernel address space
+> [    0.958350] Failing address: 00000000010de000 TEID: 00000000010de407
+> [    0.958353] Fault in home space mode while using kernel ASCE.
+> [    0.958357] AS:0000000001ed0007 R3:00000002ffff0007 S:0000000001003701
+> [    0.958388] Oops: 0004 ilc:3 [#1] SMP
+> [    0.958393] Modules linked in:
+> [    0.958398] CPU: 0 PID: 8 Comm: kworker/u128:0 Not tainted 5.17.0-rc8-next-20220317 #396
+> [    0.958403] Hardware name: IBM 3906 M04 704 (z/VM 7.1.0)
 
-Turns out that we're sending *more* IPIs with this patch applied than
-without.  That shouldn't happen since the old code did the same exact
-logical check:
+I'm guessing this is a s390?
 
-	if (cond_func && !cond_func(cpu, info))
-        	continue;
+> [    0.958407] Workqueue: eval_map_wq eval_map_work_func
+> 
+> [    0.958446] Krnl PSW : 0704e00180000000 000000000090a9d6 (number+0x25e/0x3c0)
+> [    0.958456]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
+> [    0.958461] Krnl GPRS: 0000000000000058 00000000010de0ac 0000000000000001 00000000fffffffc
+> [    0.958467]            0000038000047b80 0affffff010de0ab 0000000000000000 0000000000000000
+> [    0.958481]            0000000000000020 0000038000000000 00000000010de0ad 00000000010de0ab
+> [    0.958484]            0000000080312100 0000000000e68910 0000038000047b50 0000038000047ab8
+> [    0.958494] Krnl Code: 000000000090a9c6: f0c84112b001        srp     274(13,%r4),1(%r11),8
+> [    0.958494]            000000000090a9cc: 41202001            la      %r2,1(%r2)
+> [    0.958494]           #000000000090a9d0: ecab0006c065        clgrj   %r10,%r11,12,000000000090a9dc
+> [    0.958494]           >000000000090a9d6: d200b0004000        mvc     0(1,%r11),0(%r4)
+> [    0.958494]            000000000090a9dc: 41b0b001            la      %r11,1(%r11)
+> [    0.958494]            000000000090a9e0: a74bffff
+>             aghi    %r4,-1
+> [    0.958494]            000000000090a9e4: a727fff6            brctg   %r2,000000000090a9d0
+> [    0.958494]            000000000090a9e8: a73affff            ahi     %r3,-1
+> [    0.958575] Call Trace:
+> [    0.958580]  [<000000000090a9d6>] number+0x25e/0x3c0
+> [    0.958594] ([<0000000000289516>] update_event_printk+0xde/0x200)
+> [    0.958602]  [<0000000000910020>] vsnprintf+0x4b0/0x7c8
+> [    0.958606]  [<00000000009103e8>] snprintf+0x40/0x50
+> [    0.958610]  [<00000000002893d2>] eval_replace+0x62/0xc8
+> [    0.958614]  [<000000000028e2fe>] trace_event_eval_update+0x206/0x248
+> [    0.958619]  [<0000000000171bba>] process_one_work+0x1fa/0x460
+> [    0.958625]  [<000000000017234c>] worker_thread+0x64/0x468
+> [    0.958629]  [<000000000017af90>] kthread+0x108/0x110
+> [    0.958634]  [<00000000001032ec>] __ret_from_fork+0x3c/0x58
+> [    0.958640]  [<0000000000cce43a>] ret_from_fork+0xa/0x40
+> [    0.958648] Last Breaking-Event-Address:
+> [    0.958652]  [<000000000090a99c>] number+0x224/0x3c0
+> [    0.958661] Kernel panic - not syncing: Fatal exception: panic_on_oops
+> 
+> I haven't really checked what TRACE_DEFINE_ENUM() does, but removing the
+> last line ("TRACE_DEFINE_ENUM(EXT4_FC_REASON_MAX);") makes the oops go
+> away. Looking at all the other defines looks like the _MAX enum
+> shouldn't be added there?
 
-and the new code does:
+What I believe is happening is that we are modifying different memory to
+fix up the enums by the types. The print_fmt happens to be defined by:
 
-	if (tlb_is_not_lazy(cpu))
-		...
+static char print_fmt_##call[] = print;
 
-where cond_func==tlb_is_not_lazy.
+Which is writable. But the types are defined with:
 
-So, what's the difference?  Timing.  With the old scheme, if a CPU
-enters lazy mode between native_flush_tlb_others() and
-the loop in smp_call_function_many_cond(), it won't get an IPI and won't
-need to do the llist_add().
+.type = #_type"["__stringify(_len)"]", .name = #_item,
 
-I stuck some printk()s in there and can confirm that the
-earlier-calculated mask always seems to have more bits set, at least
-when running will-it-scale tests that induce TLB flush IPIs.
+Which are not. It just so happens that on x86 this is still writable
+during boot up, so it wasn't a problem.
 
-I was kinda surprised that there were so many threads going idle with a
-cpu-eating micro like this.  But, it makes sense since they're
-contending on mmap_lock.  Basically, since TLB-flushing operations like
-mmap() hold mmap_lock for write they tend to *force* other threads into
-idle.  Idle threads are lazy and they tend to _become_ lazy around the
-time that the flushing starts.
+[ here I wanted to add a patch, but I haven't figured out the best way to
+  fix it yet. ]
 
-This new "early lazy check" behavior could theoretically work both ways.
- If threads tended to be waking up from idle when TLB flushes were being
-sent, this would tend to reduce the number of IPIs.  But, since they
-tend to be going to sleep it increases the number of IPIs.
-
-Anybody have a better theory?  I think we should probably revert the commit.
+-- Steve

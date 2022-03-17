@@ -2,170 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 664AF4DC501
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A68CE4DC506
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbiCQLrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
+        id S233118AbiCQLtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiCQLrg (ORCPT
+        with ESMTP id S232301AbiCQLtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:47:36 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFEF1D2050;
-        Thu, 17 Mar 2022 04:46:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uejdWJkIK1y9aZts1LyWLjHYedMA/hP4QQ5pF6Wz8DY=; b=BrsknFpwxai6iGoxbPLkD9nG6u
-        01DQwNWWQKUGHwC3hZuQp7nKlj4tZ6c1NHqjLGoewzDC9PJP5Re5at5zxHNg58a+R667aGLhWsMes
-        tHQlTvw7+DEyS0Gq/RKqQN2354NStG/nM+KsxLbFqC4gvWOnauTCxkwY0JjpzLR83hRxl4OaebdhB
-        yDXV/naAza+mJOLTyZeG82WYegKwjUdIbJxzTh91yK+eAqvLcpMHcuDCHoJqUUEtcH/0znyJTxwXl
-        HHtdot4d0NMlHp7utwnpOEqPRJ4BXYQUnS2JfEgs+mm9Ac9rmpt4FYQh8PkKhHWfuXC5FjwREvRKJ
-        1uYRkG2g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nUoZw-001sOv-6i; Thu, 17 Mar 2022 11:46:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5AC4C3001EA;
-        Thu, 17 Mar 2022 12:46:03 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3FC1F2B3B276F; Thu, 17 Mar 2022 12:46:03 +0100 (CET)
-Date:   Thu, 17 Mar 2022 12:46:03 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
-        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        pbonzini@redhat.com, jmattson@google.com, like.xu.linux@gmail.com,
-        eranian@google.com, ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH 5/7] perf/x86/amd/core: Add PerfMonV2 counter control
-Message-ID: <YjMfe7KyKp+a3Jkp@hirez.programming.kicks-ass.net>
-References: <cover.1647498015.git.sandipan.das@amd.com>
- <7958e729c6be0f682379bec81f115b8cd7cca1ad.1647498015.git.sandipan.das@amd.com>
+        Thu, 17 Mar 2022 07:49:05 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5671D2050;
+        Thu, 17 Mar 2022 04:47:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1647517664;
+        bh=ScbeAyyxitZpz1A58nWOz/GETmODM7KSYw1wdmS7/qo=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=CDWHssWzK47sKOlzoUdIautvZtz6kufj13W9LUBpDDB4eqrI8L255Qp1Vh6iyvVEb
+         5NwGoiq4kr0N8cd9InxsF6mX0iMAhH0rDqDt1fpcDWPPIqlQnDcsLxJM+PrJVtJsiq
+         7UbSMz9XqNhVQAIdi3mvnIR6X9KOTED4A5HaXss0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mv2xO-1oLojQ1lnk-00qzH1; Thu, 17
+ Mar 2022 12:47:44 +0100
+Date:   Thu, 17 Mar 2022 12:47:43 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-gpio@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pinctrl: nuvoton: wpcm450: select GENERIC_PINCTRL_GROUPS
+Message-ID: <YjMf3xraXv5In6vP@latitude>
+References: <20220317114413.1418484-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Gy9dBRxGwPjNPkdU"
 Content-Disposition: inline
-In-Reply-To: <7958e729c6be0f682379bec81f115b8cd7cca1ad.1647498015.git.sandipan.das@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220317114413.1418484-1-j.neuschaefer@gmx.net>
+X-Provags-ID: V03:K1:yFRpWLHn6vGUewvUa9nCbY5STdTIWMyPIiKt0q/hjt4P5r7IrCd
+ B69otjohkzayTidPIg4bXg17JelizEMhWJeodQn5srxhqKWkbhQLpxPKB44UC1lNmVFZFst
+ z/7A2lK1qDHDx98LToBMiJZEq6lDlsZNLoHQL7Mo0Mwh7vBr9cJyyMcYQxrruWOf+SJlqWu
+ 44A7Mks5aFozbBYnipyLw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:jA4yzOIfJc4=:w4teZBIHhvU+cm/kz+TFBw
+ Y1iM3ahLUBsOPbwuq+wJw2aS6pFKWM1Bz3M4xJPyz4Qwjed/4mcQGrCpysG7uSTqluiREWpbn
+ pLfTpbXnOclHzoBpAIXAjvt1Yjh5wtBvAKKA7jRoJxlpBPYXFIh/OwQBe8UAw2yYUw3PZlhk0
+ 60A42+6xSU1MjMpiBStizHeHI7XfU+OnUvgAJ2gWh5AXLNlCDOy79GuC6lncuJ6vnTKTE5fl5
+ p8wUDaGIRYkuDrHg++q/lA438duoscBrh2J3iB5LWjyUwvZe9FmLNp5bn1htlX/SJvSHcApUn
+ Szqd5RYlWZX8/Qd+H21gTqmrCl8ifCarOWXgeZpTOasmZ3MxzsoPxPU6tedjmhX9Gs6yQ7ody
+ V49Ygj7aCZiMWryMmirEgoBXTfmSeaCqYcjzqPvGdGP3tUVgD/0EvMYJROwkZa5Vha/dh5oGn
+ qP59rnG/a36y96pD6a9pMgbQYDxUlYIjH1JMD8L4NC5Ge5gSxl2mpHb7Iu6EjWXRyoI7Wd5qA
+ KAUNtOzZOzqoxYCKS7XlQJr1bihhwp2OexnbFA4cYRUbacF08WI+E6Tep6TPttLtK0VPF1EBe
+ gTa8KXe6f5J5+A/5sOvCTX+qD1R6C1yhaBVTy5ZyWunVjRMoWsd/KTavWgXZ0pl7LbjcpompU
+ TcYl97umDvBKmMP+tX/DKevS84hM9RCTPzvcDrlM8j6amGlIuNbxyRxMqhbX3CKvasWmqYpzG
+ mwN0m/ATxuYI7Lt+8P1Je4Azcxftu2Y5llnWlSg7z9vHpBVuvUJZXgI4IRXZjVLH5IWVgW9gL
+ L/cNQ1yTnfDI967qQi+PaS8/BdrIk6GaFczNlBCly+jJM1JFRcGz+/KPE+UFB2a+rnBjhlhdM
+ 5eEOIiSE7lEF00K5n6MI27t71besNAjW80Kt7SWidPOTEz2OdBkZDGy2gls9V8aOrdgFy1SpQ
+ L3ZUcAhgdCEXzItmzyylQ9zha78dMRmtn8QfrnJCY7liZhAmeMmH+gVStJNKhUjgmZZjctHR/
+ MGmBwmkkUPpz1rSJXhUbA6sM56fDilFsF9aSQQmfSAUS6Tt0aN93cmWYClFKR2l81GrHtmdOd
+ FkrIrWzhxLQtNg=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 11:58:34AM +0530, Sandipan Das wrote:
-> @@ -625,12 +630,32 @@ static void amd_pmu_wait_on_overflow(int idx)
->  	}
->  }
->  
-> +static void amd_pmu_global_enable_all(int added)
-> +{
-> +	amd_pmu_set_global_ctl(amd_pmu_global_cntr_mask);
-> +}
-> +
-> +DEFINE_STATIC_CALL(amd_pmu_enable_all, x86_pmu_enable_all);
-> +
-> +static void amd_pmu_enable_all(int added)
-> +{
-> +	static_call(amd_pmu_enable_all)(added);
-> +}
-> +
-> +static void amd_pmu_global_disable_all(void)
-> +{
-> +	/* Disable all PMCs */
-> +	amd_pmu_set_global_ctl(0);
-> +}
-> +
-> +DEFINE_STATIC_CALL(amd_pmu_disable_all, x86_pmu_disable_all);
-> +
->  static void amd_pmu_disable_all(void)
->  {
->  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
->  	int idx;
->  
-> -	x86_pmu_disable_all();
-> +	static_call(amd_pmu_disable_all)();
->  
->  	/*
->  	 * This shouldn't be called from NMI context, but add a safeguard here
-> @@ -671,6 +696,28 @@ static void amd_pmu_disable_event(struct perf_event *event)
->  	amd_pmu_wait_on_overflow(event->hw.idx);
->  }
->  
-> +static void amd_pmu_global_enable_event(struct perf_event *event)
-> +{
-> +	struct hw_perf_event *hwc = &event->hw;
-> +
-> +	/*
-> +	 * Testing cpu_hw_events.enabled should be skipped in this case unlike
-> +	 * in x86_pmu_enable_event().
-> +	 *
-> +	 * Since cpu_hw_events.enabled is set only after returning from
-> +	 * x86_pmu_start(), the PMCs must be programmed and kept ready.
-> +	 * Counting starts only after x86_pmu_enable_all() is called.
-> +	 */
-> +	__x86_pmu_enable_event(hwc, ARCH_PERFMON_EVENTSEL_ENABLE);
-> +}
-> +
-> +DEFINE_STATIC_CALL(amd_pmu_enable_event, x86_pmu_enable_event);
-> +
-> +static void amd_pmu_enable_event(struct perf_event *event)
-> +{
-> +	static_call(amd_pmu_enable_event)(event);
-> +}
-> +
->  /*
->   * Because of NMI latency, if multiple PMC counters are active or other sources
->   * of NMIs are received, the perf NMI handler can handle one or more overflowed
-> @@ -929,8 +976,8 @@ static __initconst const struct x86_pmu amd_pmu = {
->  	.name			= "AMD",
->  	.handle_irq		= amd_pmu_handle_irq,
->  	.disable_all		= amd_pmu_disable_all,
-> -	.enable_all		= x86_pmu_enable_all,
-> -	.enable			= x86_pmu_enable_event,
-> +	.enable_all		= amd_pmu_enable_all,
-> +	.enable			= amd_pmu_enable_event,
->  	.disable		= amd_pmu_disable_event,
->  	.hw_config		= amd_pmu_hw_config,
->  	.schedule_events	= x86_schedule_events,
-> @@ -989,6 +1036,11 @@ static int __init amd_core_pmu_init(void)
->  		x86_pmu.num_counters = EXT_PERFMON_DEBUG_NUM_CORE_PMC(ebx);
->  
->  		amd_pmu_global_cntr_mask = (1ULL << x86_pmu.num_counters) - 1;
-> +
-> +		/* Update PMC handling functions */
-> +		static_call_update(amd_pmu_enable_all, amd_pmu_global_enable_all);
-> +		static_call_update(amd_pmu_disable_all, amd_pmu_global_disable_all);
-> +		static_call_update(amd_pmu_enable_event, amd_pmu_global_enable_event);
->  	}
+
+--Gy9dBRxGwPjNPkdU
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Mar 17, 2022 at 12:44:12PM +0100, Jonathan Neusch=C3=A4fer wrote:
+> CONFIG_GENERIC_PINCTRL_GROUPS must be selected in order for
+> struct group_desc to be defined in pinctrl/core.h.
+>=20
+> Add the missing select line to CONFIG_PINCTRL_WPCM450.
+>=20
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+
+Ah well, I forgot
+
+	Fixes: a1d1e0e3d80a8 ("pinctrl: nuvoton: Add driver for WPCM450")
+
+which would be appropriate here.
 
 
-This makes no sense to me...
+> ---
+>  drivers/pinctrl/nuvoton/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/pinctrl/nuvoton/Kconfig b/drivers/pinctrl/nuvoton/Kc=
+onfig
+> index 6a3c6f2a73f2d..b48d32912bef1 100644
+> --- a/drivers/pinctrl/nuvoton/Kconfig
+> +++ b/drivers/pinctrl/nuvoton/Kconfig
+> @@ -6,6 +6,7 @@ config PINCTRL_WPCM450
+>  	select PINMUX
+>  	select PINCONF
+>  	select GENERIC_PINCONF
+> +	select GENERIC_PINCTRL_GROUPS
+>  	select GPIOLIB
+>  	select GPIO_GENERIC
+>  	select GPIOLIB_IRQCHIP
+> --
+> 2.35.1
+>=20
 
-First and foremost, *please* tell me your shiny new hardware fixed the
-terrible behaviour that requires the wait_on_overflow hacks in
-amd_pmu_disable_all().
+--Gy9dBRxGwPjNPkdU
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Second, all these x86_pmu methods are already static_calls per
-arch/x86/events/core.c. So what you want to do is something like:
+-----BEGIN PGP SIGNATURE-----
 
-	x86_pmu = amd_pmu;
-	if (amd_v2) {
-		x86_pmu.disable_all = amd_v2_disable_all;
-		x86_pmu.enable_all  = amd_v2_enable_all;
-	}
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmIzH74ACgkQCDBEmo7z
+X9tQZQ/+NikVIHk3lzAqOLO6DkBqMLn0rKX1tw4bokOJ+5f/lCoBEBiGhIGddOgd
+LpFDfvewGj65PkvdYkNN0WG93E1B2oc6uFZeKe8sQF4qGoXGEQHWHWSfDJWZjCp1
+NEIIRDsdnHc1bc/OWkMjfWs9Fc5A66ATqMUaWWqFlp6BMXuuJvlqif4dU/NvUitL
+5OhALWZeqMzqHdwmWdnZ5F0NhrSImjcApMfVdpS6UdT7ZVCqUBQvLUfq3wdxsuBa
+22waseqVHx+d1PZ1g+WVck6++62/C+DNgoZ2BtT2eUTk/ltC8tI7A4Srt7CoQBPC
+CXTFwFrQ9xw3yqBE+Go56vLzSh/NEVyDUIHkXAB0LhAYXbd3iB8cJmvQ8Tjs++Uz
+LHLRLAwCnMc/H3uRegVsB+o4sQrWxjVWLagz8w6WkshJ/4MT6lay0SBHVWruv1jh
+rx6wnjkHcIPSm+t13p+v8kMXYSLaNm/b2WCLtirn/cmOXCJMCDAGz1BwLeGcfM8z
+v7GPTCEgSoZknZjf1d+dgZf/p5psrRURo7bJF2g07lpNi2GGzbCftzhhsY6s0SEU
+26Zz893/mDriDFnEOZcRhz/VX7B2WY05aoc8og/Va407/eJLQNJmA/FPFyozfoV8
+MQDwV2oyknxqcVnPGF58MLzbXQ9oscqQYsbIs1vyCICheEtXGhM=
+=PTgZ
+-----END PGP SIGNATURE-----
 
-And leave it at that.
-
+--Gy9dBRxGwPjNPkdU--

@@ -2,87 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFFE4DCE14
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2984A4DCDDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237695AbiCQSyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S237569AbiCQSqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbiCQSyF (ORCPT
+        with ESMTP id S229482AbiCQSqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:54:05 -0400
-X-Greylist: delayed 502 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Mar 2022 11:52:47 PDT
-Received: from srv1.home.kabele.me (unknown [IPv6:2a02:768:2704:8c1a:3eec:efff:fe00:2ce4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA7CB223202;
-        Thu, 17 Mar 2022 11:52:47 -0700 (PDT)
-Received: from srv1.home.kabele.me (localhost [IPv6:::1])
-        by srv1.home.kabele.me (Postfix) with ESMTP id 7423916927C;
-        Thu, 17 Mar 2022 19:44:24 +0100 (CET)
-Received: from localhost ([2a01:c22:8dfa:1400:beea:2810:7764:7afc])
-        by srv1.home.kabele.me with ESMTPSA
-        id 9D7GGYiBM2LuRjQAnmUwTQ
-        (envelope-from <vit@kabele.me>); Thu, 17 Mar 2022 19:44:24 +0100
-Date:   Thu, 17 Mar 2022 19:44:19 +0100
-From:   Vit Kabele <vit@kabele.me>
-To:     platform-driver-x86@vger.kernel.org
-Cc:     r.marek@assembler.cz, devel@acpica.org, mingo@redhat.com,
-        robert.moore@intel.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: [PATCH 0/3 RESEND] platform/x86, apcica: Sanitize EBDA pointer from
- memory
-Message-ID: <YjOBg4Oys3qV1dbe@czspare1-lap.sysgo.cz>
-Mail-Followup-To: platform-driver-x86@vger.kernel.org, r.marek@assembler.cz,
-        devel@acpica.org, mingo@redhat.com, robert.moore@intel.com,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
+        Thu, 17 Mar 2022 14:46:21 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E355AD5559;
+        Thu, 17 Mar 2022 11:45:03 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id s72so610246pgc.5;
+        Thu, 17 Mar 2022 11:45:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8frA8T51BfSTppCN6qAkZ99su7zckg/tQTH5hUyS8LQ=;
+        b=RyIndbofKYuCI2lbzTuwvX6FW6aLSdrSsTOTwX+0PpMG1tVUS6nBiZpd2wOMB7K7ay
+         4TXEw9HIMq4ArLr+GY+kFHSa3rtOKuWQ87s/u9R2D32lRmCq3j6CFhCFxtPjLOd7b/hs
+         DJMpaqjupWPONWXTRQ/l751ZZyaMTn81HGy5UFIHeDiX+ffcb16r2eiSWfF+XjtYoJZf
+         iy49l9+lkoIEIRCzKoPdQj6f3X7G7il+VGeOHiFvt6MQbKpAGVI/tIWH/GoBh+5/obmw
+         wmcY4pCIn1cM15qgfWs4J/FM/wtfVB0ze3e4oDlIlB2hRiPbQyL9YIGv9n6Gl0rtTJWn
+         V+CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8frA8T51BfSTppCN6qAkZ99su7zckg/tQTH5hUyS8LQ=;
+        b=eSNZt+r0Dy4O+9jJFa/cooGSBvv2Q7WAgJdrqoPGCADfGJL2Om7omHTZB5K/Du2NTq
+         Q9SYbucDJA4pLbOaOccL/vkU9W9fdTjmsaYgsFNwYXPaS1dn1EgXNHF4nXE2RlJ3xZD8
+         Q55JhwYg4FlZr6sRBa7tWxy7dDIOab3874H2g8hFkVOktZs4jQ7RJ84em6RhBPvzKonK
+         qdqXPy2Np3SAec5718Vx9oOZMjHEjV+IMQ7mE0opwhd2MAU0GtssZOeDbr3JWl2J5cFP
+         fi8lXZh2wfKprbfDxFV97q7q5Tdx4FJdb/lDPNYAnPbC1mUfZTcZNC306/C6mMxnHivh
+         qQaQ==
+X-Gm-Message-State: AOAM530s56f28d/VbtJHQTiXWAsvoNn26HyTH1eMd+Jkdr3RfoRncsTU
+        YwZn/Cnv7rnsfpy63NCbu7Q=
+X-Google-Smtp-Source: ABdhPJw2Sgwey2XM0AbmtVD8ylMFuv07FxKNo/PyLtYEDBPs6DlFa+Py7zEbtBRkZ2Tx6uUEyf0HUQ==
+X-Received: by 2002:a63:ab47:0:b0:375:5d05:9f79 with SMTP id k7-20020a63ab47000000b003755d059f79mr4900716pgp.192.1647542703366;
+        Thu, 17 Mar 2022 11:45:03 -0700 (PDT)
+Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
+        by smtp.gmail.com with ESMTPSA id r1-20020a17090a560100b001bf72b5af97sm6285380pjf.13.2022.03.17.11.45.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 11:45:02 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/msm: Add missing put_task_struct() in debugfs path
+Date:   Thu, 17 Mar 2022 11:45:49 -0700
+Message-Id: <20220317184550.227991-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Resend because I messed up the mailing list addresses]
+From: Rob Clark <robdclark@chromium.org>
 
-When testing custom virtualization platform, we noticed that in cases
-where the memory is initialized with random pattern, the Linux guest
-tends to crash on EPT violation.
+Fixes: 25faf2f2e065 ("drm/msm: Show process names in gem_describe")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/msm_gem.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-It turns out that (at least two) codepaths during boot do not check the
-validity of EBDA pointer retrieved from BDA memory at address 0x40e.
-In case that the returned address is over 640K, the kernel happily
-touches the VGA memory (which was not present in our setup, hence the
-EPT violation).
-
-This may be problematic in other virtualized environment too, but it can
-probably also happen on bare metal when booted with legacy free (e.g.
-UEFI without CSM) firmware, because the BDA may not be initialized and
-the VGA range might not be properly decoded.
-
-The third patch of the series adds workaround for the situation where
-EBDA is smaller than 1KiB and the ACPI code scanning for RSDP table
-bumps to the VGA memory.
-
-The two acpcia patches can eventually be squashed together, it's up to you.
-
-I tested these patches on my lenovo laptop (and in QEMU if that counts).
-
-Vit Kabele (3):
-  platform/x86: Check validity of EBDA pointer in mpparse.c
-  acpica: Check that the EBDA pointer is in valid range
-  acpica: Do not touch VGA memory when EBDA < 1KiB
-
- arch/x86/include/asm/bios_ebda.h |  3 +++
- arch/x86/kernel/ebda.c           |  3 ---
- arch/x86/kernel/mpparse.c        | 12 +++++++++++-
- drivers/acpi/acpica/tbxfroot.c   | 25 ++++++++++++++++++-------
- 4 files changed, 32 insertions(+), 11 deletions(-)
-
+diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
+index 02b9ae65a96a..a4f61972667b 100644
+--- a/drivers/gpu/drm/msm/msm_gem.c
++++ b/drivers/gpu/drm/msm/msm_gem.c
+@@ -926,6 +926,7 @@ void msm_gem_describe(struct drm_gem_object *obj, struct seq_file *m,
+ 					get_pid_task(aspace->pid, PIDTYPE_PID);
+ 				if (task) {
+ 					comm = kstrdup(task->comm, GFP_KERNEL);
++					put_task_struct(task);
+ 				} else {
+ 					comm = NULL;
+ 				}
 -- 
-2.30.2
+2.35.1
 

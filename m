@@ -2,89 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539074DCBDF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E754DCBE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236706AbiCQQ7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
+        id S236712AbiCQQ7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236697AbiCQQ7R (ORCPT
+        with ESMTP id S236697AbiCQQ7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:59:17 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E102700;
-        Thu, 17 Mar 2022 09:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647536280; x=1679072280;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Wb78o+XM//VuJF36GZU4ISSlgqvujy19VTeneq6vSSA=;
-  b=Aw3qBi6KeuZewHzQUICz2NGYJkPlO/D1dfeJatDH3/el8rcXwiOH10k5
-   OEjqYBDLndJvrXNl18wIYRBJ05KlZZ9V6d1q70oHuL1LmbWdoKbIB9bVd
-   SBYQ4Zky+SD3HoyoRUOVSzpZX8B52ZohaZR5uzu6IE1dU/LfVVnPstONI
-   Qa5rTPqCayXQCLQO1K+3bWMsBQey74Hw4HEY1mydA40NGzL4lIdQcnNWQ
-   pU6v1OK9SzZaMA4dFvRdT8Zp8SDveapLD0mA106+TibRWBenqg5dt4L9g
-   HsbNhv52p15m5YXl9IOb+VGxxlEWWe+6BroWre5lpF+Lz20pjhw5n126T
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="244369526"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="244369526"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 09:57:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="541442193"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by orsmga007.jf.intel.com with ESMTP; 17 Mar 2022 09:57:55 -0700
-Received: from shsmsx605.ccr.corp.intel.com (10.109.6.215) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 17 Mar 2022 09:57:54 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- SHSMSX605.ccr.corp.intel.com (10.109.6.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 18 Mar 2022 00:57:43 +0800
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.021;
- Thu, 17 Mar 2022 09:57:42 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-CC:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "graeme.gregory@linaro.org" <graeme.gregory@linaro.org>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "myron.stowe@redhat.com" <myron.stowe@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>
-Subject: RE: [BUG] kernel side can NOT trigger memory error with einj
-Thread-Topic: [BUG] kernel side can NOT trigger memory error with einj
-Thread-Index: AQHYMqwUN/kZY3Cbfk+jlxJiPgOL36zCUXmAgAETuICAAHR30A==
-Date:   Thu, 17 Mar 2022 16:57:41 +0000
-Message-ID: <1421c3ac3d3c4438a6ff18f193f8a41c@intel.com>
-References: <8c40a492-9461-2b43-6ec9-06bfc7a0e77f@linux.alibaba.com>
- <YjIeff7ESJB/amYA@agluck-desk3.sc.intel.com>
- <f93a5532-3e07-edf4-38ca-142a0f1d78d7@linux.alibaba.com>
-In-Reply-To: <f93a5532-3e07-edf4-38ca-142a0f1d78d7@linux.alibaba.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 17 Mar 2022 12:59:41 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF214C414;
+        Thu, 17 Mar 2022 09:58:22 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 17B805C017F;
+        Thu, 17 Mar 2022 12:58:22 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 17 Mar 2022 12:58:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; bh=q/O4oWCbOCxInkyu4qYV95RiqyU/wps554Da5a
+        nLtKg=; b=ZxzY3SyVYFxDVKwqKYS+JKuj2Pb0snRyTIEnFh+A5cdJ9c3ndJye5P
+        OREBIgjHI+Jv9HmCh56/UOuhVMTQ3P9jM19p7ocDbGMjb/1QoB2hNnC5TajumV34
+        yGlTCLhLw2CE9ijQAbg6025udnVhbMojznGCM8ZOa6Fa8qUHpEruKcnvJsROSxiO
+        O56L0v6bASvwyMPxxAU6SFTmgs8PnGZ0vwJOM+6KqagOZlYc/3VvqxL4kZOWD/Hb
+        jTmyBHiX+mJ6GUpRcR5DLnMJcgNF4S5JMhqyhfKhDrnDJO1OpO8Lgk6raWSyaDaI
+        umxd4vKgY0l4ZapdsL36aF9kU0dQYKqQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=q/O4oWCbOCxInkyu4
+        qYV95RiqyU/wps554Da5anLtKg=; b=U88Rzc+LaCzMghYa8HODqlkkj5evepbcC
+        +r4XfyaPAGIASFv0UKnpgUR4qpEAHDHMGDnLQXmEsfArhGwYzAcPtfsR837DeNu4
+        Y8OuFKNbKLTDnrFQCTeZdrjViyBCPKo4ynn4EzfFl8Trbp27tO9kTHmVYcDcC4C3
+        cnTmwFqh5ZiqoLpo1OBk/mS80IoSG6nEauDLXYXtT1wrHOSNMin7UgWmDm3CRyM6
+        iYMI11zs/kWag+F3R1D4fLIq35Ccck6hcVfrsSMgz6N3ZsGwWPW3nRx6P4RQAmDt
+        QozpabU0qZr715IR+Lr6e2gIDozo+HKsu5eo5FFx5meAQnnkkp5bw==
+X-ME-Sender: <xms:rWgzYgl8uI1N5aZ3zELULYDhVLYa2jFakvdJc7s0VG-PD0wZjuBuMg>
+    <xme:rWgzYv0BP4WJU8FjBFs7CF5V1tfWSk_-VKsa-WlGEvvQWISnJjBkW5ymntgbrxgT5
+    KrQrKWOp3wsgg>
+X-ME-Received: <xmr:rWgzYup-OYqzHNWV6RLW6oyLoAs6_03V3I9uK_T0n33rLQnsWzrfkjo7b4wpgPm0n1k1aliwoM1BfgHSOBOpWu4nwC-QxVed>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefgedgleefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeeuleeltd
+    ehkeeltefhleduuddvhfffuedvffduveegheekgeeiffevheegfeetgfenucffohhmrghi
+    nhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:rWgzYsmxHLPdqz8BBqoQFCuHMO-93cVWIMDhFtwnCxJGycTX-Q8mKA>
+    <xmx:rWgzYu0MgnonLHvL-UY4kLWe8xwCpDCGxNA2Q-_wTRfjWEZqbZW80A>
+    <xmx:rWgzYjsLX_KbyNEwugWA-MOKCjN_n2IBf0BTlvDcQ1Y0OiCtSJimog>
+    <xmx:rmgzYluaxMoZDZ9sZbHhT5cpHdQHYJ48wyWPdNB2uqEJc2C-3eyyQA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 17 Mar 2022 12:58:21 -0400 (EDT)
+Date:   Thu, 17 Mar 2022 17:58:18 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        mario.limonciello@amd.com
+Subject: Re: [PATCH] thunderbolt: Make iommu_dma_protection more accurate
+Message-ID: <YjNoquzvN7CdFIyl@kroah.com>
+References: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,14 +84,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtICAgICAgIHJjID0gYXBlaV9leGVjX3J1bigmdHJpZ2dlcl9jdHgsIEFDUElfRUlOSl9UUklH
-R0VSX0VSUk9SKTsNCj4gKyAgICAgICBwdHIgPSBrbWFwKHBmbl90b19wYWdlKHBmbikpOw0KPiAr
-ICAgICAgIHRtcCA9ICoocHRyICsgKHBhcmFtMSAmIH4gUEFHRV9NQVNLKSk7DQoNClRoYXQgaGFj
-ayB3b3JrcyB3aGVuIHRoZSB0cmlnZ2VyIGFjdGlvbiBpcyBqdXN0IHRyeWluZyB0byBhY2Nlc3Mg
-dGhlIGluamVjdGVkDQpsb2NhdGlvbi4gQnV0IG9uIEludGVsIHBsYXRmb3JtcyB0aGUgdHJpZ2dl
-ciAia2lja3MiIHRoZSBwYXRyb2wgc2NydWJiZXIgaW4gdGhlDQptZW1vcnkgY29udHJvbGxlciB0
-byBhY2Nlc3MgdGhlIGFkZHJlc3MuIFNvIHRoZSBlcnJvciBpcyB0cmlnZ2VyZWQgbm90IGJ5DQph
-biBhY2Nlc3MgZnJvbSB0aGUgY29yZSwgYnV0IGJ5IGludGVybmFsIG1lbW9yeSBjb250cm9sbGVy
-IGFjY2Vzcy4NCg0KVGhpcyByZXN1bHRzIGluIGEgZGlmZmVyZW50IGVycm9yIHNpZ25hdHVyZSAo
-Zm9yIGFuIHVuY29ycmVjdGVkIGVycm9yIGluamVjdGlvbg0KaXQgd2lsbCBiZSBhIFVDTkEgb3Ig
-U1JBTyBpbiBJbnRlbCBhY3JvbnltLXNwZWFrKS4NCg0KLVRvbnkNCg==
+On Thu, Mar 17, 2022 at 04:17:07PM +0000, Robin Murphy wrote:
+> Between me trying to get rid of iommu_present() and Mario wanting to
+> support the AMD equivalent of DMAR_PLATFORM_OPT_IN, scrutiny has shown
+> that the iommu_dma_protection attribute is being far too optimistic.
+> Even if an IOMMU might be present for some PCI segment in the system,
+> that doesn't necessarily mean it provides translation for the device(s)
+> we care about. Furthermore, all that DMAR_PLATFORM_OPT_IN really does
+> is tell us that memory was protected before the kernel was loaded, and
+> prevent the user from disabling the intel-iommu driver entirely. What
+> actually matters is whether we trust individual devices, based on the
+> "external facing" property that we expect firmware to describe for
+> Thunderbolt ports.
+> 
+> Avoid false positives by looking as close as possible to the same PCI
+> topology that the IOMMU layer will consider once a Thunderbolt endpoint
+> appears. Crucially, we can't assume that IOMMU translation being enabled
+> for any reason is sufficient on its own; full (expensive) DMA protection
+> will still only be imposed on untrusted devices.
+> 
+> CC: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+> 
+> This supersedes my previous attempt just trying to replace
+> iommu_present() at [1], further to the original discussion at [2].
+> 
+> [1] https://lore.kernel.org/linux-iommu/BL1PR12MB515799C0BE396377DBBEF055E2119@BL1PR12MB5157.namprd12.prod.outlook.com/T/
+> [2] https://lore.kernel.org/linux-iommu/202203160844.lKviWR1Q-lkp@intel.com/T/
+> 
+>  drivers/thunderbolt/domain.c | 12 +++---------
+>  drivers/thunderbolt/nhi.c    | 35 +++++++++++++++++++++++++++++++++++
+>  include/linux/thunderbolt.h  |  2 ++
+>  3 files changed, 40 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/domain.c b/drivers/thunderbolt/domain.c
+> index 7018d959f775..d5c825e84ac8 100644
+> --- a/drivers/thunderbolt/domain.c
+> +++ b/drivers/thunderbolt/domain.c
+> @@ -7,9 +7,7 @@
+>   */
+>  
+>  #include <linux/device.h>
+> -#include <linux/dmar.h>
+>  #include <linux/idr.h>
+> -#include <linux/iommu.h>
+>  #include <linux/module.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/slab.h>
+> @@ -257,13 +255,9 @@ static ssize_t iommu_dma_protection_show(struct device *dev,
+>  					 struct device_attribute *attr,
+>  					 char *buf)
+>  {
+> -	/*
+> -	 * Kernel DMA protection is a feature where Thunderbolt security is
+> -	 * handled natively using IOMMU. It is enabled when IOMMU is
+> -	 * enabled and ACPI DMAR table has DMAR_PLATFORM_OPT_IN set.
+> -	 */
+> -	return sprintf(buf, "%d\n",
+> -		       iommu_present(&pci_bus_type) && dmar_platform_optin());
+> +	struct tb *tb = container_of(dev, struct tb, dev);
+> +
+> +	return sprintf(buf, "%d\n", tb->nhi->iommu_dma_protection);
+
+sysfs_emit() please.
+
+thanks,
+
+greg k-h

@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF51E4DC403
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6F34DC407
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbiCQKeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 06:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        id S232614AbiCQKfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 06:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232597AbiCQKes (ORCPT
+        with ESMTP id S232597AbiCQKfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 06:34:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE67811A1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:33:31 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nUnRb-0006Fg-3C; Thu, 17 Mar 2022 11:33:23 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nUnRZ-001EUT-Fz; Thu, 17 Mar 2022 11:33:20 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nUnRX-009kJB-Bg; Thu, 17 Mar 2022 11:33:19 +0100
-Date:   Thu, 17 Mar 2022 11:33:19 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Hammer Hsieh <hammerh0314@gmail.com>
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org, robh+dt@kernel.org,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wells.lu@sunplus.com,
-        hammer.hsieh@sunplus.com
-Subject: Re: [PATCH v3 2/2] pwm: sunplus-pwm: Add Sunplus SoC SP7021 PWM
- Driver
-Message-ID: <20220317103319.7irzmjknsr4hlrq3@pengutronix.de>
-References: <1647237097-29172-1-git-send-email-hammerh0314@gmail.com>
- <1647237097-29172-3-git-send-email-hammerh0314@gmail.com>
+        Thu, 17 Mar 2022 06:35:16 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BA1DE936;
+        Thu, 17 Mar 2022 03:33:59 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 312121F44FD5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647513237;
+        bh=vkOmIpb65jl2/KSIPy8hOvjOKFgiEmDAD06aY4dtfdA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=N5fyGtOugo+DolCSWn541/erLx3k7/OCq/TltPSUuzwLOHD+6qVSl4B8Lrt5tlr41
+         lu6yMRrhoLmK4sxwAmkW6wt0SsR8x9wSd5jebSOPYPUwM21x7zxBAiVbvyOp88gveW
+         9MnjHhwhAveSgmwZ+1T/gUmGkAk9M4o/msWUNJAenk9yA0/c+SXRJkFTFnMD/q8NiK
+         JjbSCJ9RkIYF4Ff3KEjRn1/Jdl9L2XoUDpWUDsJ6CLmm+qXjZ1pVp0nVASiy2qsnLY
+         u+drxGKjdW41Im4sJnHiVBnBJVzRD26abGyqe7ZUAVXzKBukq7LYQuH/pWdM9lPJst
+         1R3E8SpWZVuhQ==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, krisman@collabora.com, david@redhat.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH V5 1/2] selftests: vm: bring common functions to a new file
+Date:   Thu, 17 Mar 2022 15:33:21 +0500
+Message-Id: <20220317103323.94799-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ytfycacticac6xgy"
-Content-Disposition: inline
-In-Reply-To: <1647237097-29172-3-git-send-email-hammerh0314@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,444 +51,365 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Bring common functions to a new file while keeping code as much same as
+possible. These functions can be used in the new tests. This helps in
+avoiding code duplication.
 
---ytfycacticac6xgy
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Changes in V5:
+Keep moved code as same as possible
+- Updated macros names
+- Removed macro used to show bit number of dirty bit, added a comment
+  instead
+- Corrected indentation
+---
+ tools/testing/selftests/vm/Makefile           |   7 +-
+ tools/testing/selftests/vm/madv_populate.c    |  34 +-----
+ .../selftests/vm/split_huge_page_test.c       |  79 +------------
+ tools/testing/selftests/vm/vm_util.c          | 107 ++++++++++++++++++
+ tools/testing/selftests/vm/vm_util.h          |  10 ++
+ 5 files changed, 124 insertions(+), 113 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/vm_util.c
+ create mode 100644 tools/testing/selftests/vm/vm_util.h
 
-On Mon, Mar 14, 2022 at 01:51:37PM +0800, Hammer Hsieh wrote:
-> Add Sunplus SoC SP7021 PWM Driver
->=20
-> Signed-off-by: Hammer Hsieh <hammerh0314@gmail.com>
-> ---
-> Changes in v3:
->  - Addressed all comments from Uwe Kleine-K=F6nig.
->=20
->  MAINTAINERS               |   1 +
->  drivers/pwm/Kconfig       |  11 +++
->  drivers/pwm/Makefile      |   1 +
->  drivers/pwm/pwm-sunplus.c | 232 ++++++++++++++++++++++++++++++++++++++++=
-++++++
->  4 files changed, 245 insertions(+)
->  create mode 100644 drivers/pwm/pwm-sunplus.c
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e1cb7eb..6644bae 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18535,6 +18535,7 @@ SUNPLUS PWM DRIVER
->  M:	Hammer Hsieh <hammerh0314@gmail.com>
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/pwm/sunplus,sp7021-pwm.yaml
-> +F:	drivers/pwm/pwm-sunplus.c
-> =20
->  SUNPLUS RTC DRIVER
->  M:	Vincent Shih <vincent.sunplus@gmail.com>
-> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-> index 21e3b05..54cfb50 100644
-> --- a/drivers/pwm/Kconfig
-> +++ b/drivers/pwm/Kconfig
-> @@ -572,6 +572,17 @@ config PWM_SUN4I
->  	  To compile this driver as a module, choose M here: the module
->  	  will be called pwm-sun4i.
-> =20
-> +config PWM_SUNPLUS
-> +	tristate "Sunplus PWM support"
-> +	depends on ARCH_SUNPLUS || COMPILE_TEST
-> +	depends on HAS_IOMEM && OF
-> +	help
-> +	  Generic PWM framework driver for the PWM controller on
-> +	  Sunplus SoCs.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called pwm-sunplus.
-> +
->  config PWM_TEGRA
->  	tristate "NVIDIA Tegra PWM support"
->  	depends on ARCH_TEGRA || COMPILE_TEST
-> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-> index 708840b..be58616 100644
-> --- a/drivers/pwm/Makefile
-> +++ b/drivers/pwm/Makefile
-> @@ -53,6 +53,7 @@ obj-$(CONFIG_PWM_STM32)		+=3D pwm-stm32.o
->  obj-$(CONFIG_PWM_STM32_LP)	+=3D pwm-stm32-lp.o
->  obj-$(CONFIG_PWM_STMPE)		+=3D pwm-stmpe.o
->  obj-$(CONFIG_PWM_SUN4I)		+=3D pwm-sun4i.o
-> +obj-$(CONFIG_PWM_SUNPLUS)	+=3D pwm-sunplus.o
->  obj-$(CONFIG_PWM_TEGRA)		+=3D pwm-tegra.o
->  obj-$(CONFIG_PWM_TIECAP)	+=3D pwm-tiecap.o
->  obj-$(CONFIG_PWM_TIEHRPWM)	+=3D pwm-tiehrpwm.o
-> diff --git a/drivers/pwm/pwm-sunplus.c b/drivers/pwm/pwm-sunplus.c
-> new file mode 100644
-> index 0000000..b6ab077
-> --- /dev/null
-> +++ b/drivers/pwm/pwm-sunplus.c
-> @@ -0,0 +1,232 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * PWM device driver for SUNPLUS SP7021 SoC
-> + *
-> + * Links:
-> + *   Reference Manual:
-> + *   https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
-> + *
-> + *   Reference Manual(PWM module):
-> + *   https://sunplus.atlassian.net/wiki/spaces/doc/pages/461144198/12.+P=
-ulse+Width+Modulation+PWM
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 5e43f072f5b76..4e68edb26d6b6 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -34,7 +34,7 @@ TEST_GEN_FILES += hugepage-mremap
+ TEST_GEN_FILES += hugepage-shm
+ TEST_GEN_FILES += hugepage-vmemmap
+ TEST_GEN_FILES += khugepaged
+-TEST_GEN_FILES += madv_populate
++TEST_GEN_PROGS = madv_populate
+ TEST_GEN_FILES += map_fixed_noreplace
+ TEST_GEN_FILES += map_hugetlb
+ TEST_GEN_FILES += map_populate
+@@ -47,7 +47,7 @@ TEST_GEN_FILES += on-fault-limit
+ TEST_GEN_FILES += thuge-gen
+ TEST_GEN_FILES += transhuge-stress
+ TEST_GEN_FILES += userfaultfd
+-TEST_GEN_FILES += split_huge_page_test
++TEST_GEN_PROGS += split_huge_page_test
+ TEST_GEN_FILES += ksm_tests
+ 
+ ifeq ($(MACHINE),x86_64)
+@@ -91,6 +91,9 @@ TEST_FILES := test_vmalloc.sh
+ KSFT_KHDR_INSTALL := 1
+ include ../lib.mk
+ 
++$(OUTPUT)/madv_populate: vm_util.c
++$(OUTPUT)/split_huge_page_test: vm_util.c
++
+ ifeq ($(MACHINE),x86_64)
+ BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+ BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
+diff --git a/tools/testing/selftests/vm/madv_populate.c b/tools/testing/selftests/vm/madv_populate.c
+index 3ee0e82756002..715a42e8e2cdb 100644
+--- a/tools/testing/selftests/vm/madv_populate.c
++++ b/tools/testing/selftests/vm/madv_populate.c
+@@ -18,6 +18,7 @@
+ #include <sys/mman.h>
+ 
+ #include "../kselftest.h"
++#include "vm_util.h"
+ 
+ /*
+  * For now, we're using 2 MiB of private anonymous memory for all tests.
+@@ -26,18 +27,6 @@
+ 
+ static size_t pagesize;
+ 
+-static uint64_t pagemap_get_entry(int fd, char *start)
+-{
+-	const unsigned long pfn = (unsigned long)start / pagesize;
+-	uint64_t entry;
+-	int ret;
+-
+-	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
+-	if (ret != sizeof(entry))
+-		ksft_exit_fail_msg("reading pagemap failed\n");
+-	return entry;
+-}
+-
+ static bool pagemap_is_populated(int fd, char *start)
+ {
+ 	uint64_t entry = pagemap_get_entry(fd, start);
+@@ -46,13 +35,6 @@ static bool pagemap_is_populated(int fd, char *start)
+ 	return entry & 0xc000000000000000ull;
+ }
+ 
+-static bool pagemap_is_softdirty(int fd, char *start)
+-{
+-	uint64_t entry = pagemap_get_entry(fd, start);
+-
+-	return entry & 0x0080000000000000ull;
+-}
+-
+ static void sense_support(void)
+ {
+ 	char *addr;
+@@ -258,20 +240,6 @@ static bool range_is_not_softdirty(char *start, ssize_t size)
+ 	return ret;
+ }
+ 
+-static void clear_softdirty(void)
+-{
+-	int fd = open("/proc/self/clear_refs", O_WRONLY);
+-	const char *ctrl = "4";
+-	int ret;
+-
+-	if (fd < 0)
+-		ksft_exit_fail_msg("opening clear_refs failed\n");
+-	ret = write(fd, ctrl, strlen(ctrl));
+-	if (ret != strlen(ctrl))
+-		ksft_exit_fail_msg("writing clear_refs failed\n");
+-	close(fd);
+-}
+-
+ static void test_softdirty(void)
+ {
+ 	char *addr;
+diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/testing/selftests/vm/split_huge_page_test.c
+index 52497b7b9f1db..6aa2b8253aeda 100644
+--- a/tools/testing/selftests/vm/split_huge_page_test.c
++++ b/tools/testing/selftests/vm/split_huge_page_test.c
+@@ -16,14 +16,13 @@
+ #include <sys/mount.h>
+ #include <malloc.h>
+ #include <stdbool.h>
++#include "vm_util.h"
+ 
+ uint64_t pagesize;
+ unsigned int pageshift;
+ uint64_t pmd_pagesize;
+ 
+-#define PMD_SIZE_PATH "/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
+ #define SPLIT_DEBUGFS "/sys/kernel/debug/split_huge_pages"
+-#define SMAP_PATH "/proc/self/smaps"
+ #define INPUT_MAX 80
+ 
+ #define PID_FMT "%d,0x%lx,0x%lx"
+@@ -51,30 +50,6 @@ int is_backed_by_thp(char *vaddr, int pagemap_file, int kpageflags_file)
+ 	return 0;
+ }
+ 
+-
+-static uint64_t read_pmd_pagesize(void)
+-{
+-	int fd;
+-	char buf[20];
+-	ssize_t num_read;
+-
+-	fd = open(PMD_SIZE_PATH, O_RDONLY);
+-	if (fd == -1) {
+-		perror("Open hpage_pmd_size failed");
+-		exit(EXIT_FAILURE);
+-	}
+-	num_read = read(fd, buf, 19);
+-	if (num_read < 1) {
+-		close(fd);
+-		perror("Read hpage_pmd_size failed");
+-		exit(EXIT_FAILURE);
+-	}
+-	buf[num_read] = '\0';
+-	close(fd);
+-
+-	return strtoul(buf, NULL, 10);
+-}
+-
+ static int write_file(const char *path, const char *buf, size_t buflen)
+ {
+ 	int fd;
+@@ -113,58 +88,6 @@ static void write_debugfs(const char *fmt, ...)
+ 	}
+ }
+ 
+-#define MAX_LINE_LENGTH 500
+-
+-static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
+-{
+-	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
+-		if (!strncmp(buf, pattern, strlen(pattern)))
+-			return true;
+-	}
+-	return false;
+-}
+-
+-static uint64_t check_huge(void *addr)
+-{
+-	uint64_t thp = 0;
+-	int ret;
+-	FILE *fp;
+-	char buffer[MAX_LINE_LENGTH];
+-	char addr_pattern[MAX_LINE_LENGTH];
+-
+-	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
+-		       (unsigned long) addr);
+-	if (ret >= MAX_LINE_LENGTH) {
+-		printf("%s: Pattern is too long\n", __func__);
+-		exit(EXIT_FAILURE);
+-	}
+-
+-
+-	fp = fopen(SMAP_PATH, "r");
+-	if (!fp) {
+-		printf("%s: Failed to open file %s\n", __func__, SMAP_PATH);
+-		exit(EXIT_FAILURE);
+-	}
+-	if (!check_for_pattern(fp, addr_pattern, buffer))
+-		goto err_out;
+-
+-	/*
+-	 * Fetch the AnonHugePages: in the same block and check the number of
+-	 * hugepages.
+-	 */
+-	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
+-		goto err_out;
+-
+-	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1) {
+-		printf("Reading smap error\n");
+-		exit(EXIT_FAILURE);
+-	}
+-
+-err_out:
+-	fclose(fp);
+-	return thp;
+-}
+-
+ void split_pmd_thp(void)
+ {
+ 	char *one_page;
+diff --git a/tools/testing/selftests/vm/vm_util.c b/tools/testing/selftests/vm/vm_util.c
+new file mode 100644
+index 0000000000000..5beaebc8a88b4
+--- /dev/null
++++ b/tools/testing/selftests/vm/vm_util.c
+@@ -0,0 +1,107 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <stdbool.h>
++#include <string.h>
++#include "vm_util.h"
++
++#define PMD_SIZE_FILE_PATH "/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
++#define SMAP_FILE_PATH "/proc/self/smaps"
++#define MAX_LINE_LENGTH 500
++
++uint64_t pagemap_get_entry(int fd, char *start)
++{
++	const unsigned long pfn = (unsigned long)start / getpagesize();
++	uint64_t entry;
++	int ret;
++
++	ret = pread(fd, &entry, sizeof(entry), pfn * sizeof(entry));
++	if (ret != sizeof(entry))
++		ksft_exit_fail_msg("reading pagemap failed\n");
++	return entry;
++}
++
++bool pagemap_is_softdirty(int fd, char *start)
++{
++	uint64_t entry = pagemap_get_entry(fd, start);
++
++	// Check if dirty bit (55th bit) is set
++	return entry & 0x0080000000000000ull;
++}
++
++void clear_softdirty(void)
++{
++	int ret;
++	const char *ctrl = "4";
++	int fd = open("/proc/self/clear_refs", O_WRONLY);
++
++	if (fd < 0)
++		ksft_exit_fail_msg("opening clear_refs failed\n");
++	ret = write(fd, ctrl, strlen(ctrl));
++	close(fd);
++	if (ret != strlen(ctrl))
++		ksft_exit_fail_msg("writing clear_refs failed\n");
++}
++
++static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
++{
++	while (fgets(buf, MAX_LINE_LENGTH, fp) != NULL) {
++		if (!strncmp(buf, pattern, strlen(pattern)))
++			return true;
++	}
++	return false;
++}
++
++uint64_t read_pmd_pagesize(void)
++{
++	int fd;
++	char buf[20];
++	ssize_t num_read;
++
++	fd = open(PMD_SIZE_FILE_PATH, O_RDONLY);
++	if (fd == -1)
++		ksft_exit_fail_msg("Open hpage_pmd_size failed\n");
++
++	num_read = read(fd, buf, 19);
++	if (num_read < 1) {
++		close(fd);
++		ksft_exit_fail_msg("Read hpage_pmd_size failed\n");
++	}
++	buf[num_read] = '\0';
++	close(fd);
++
++	return strtoul(buf, NULL, 10);
++}
++
++uint64_t check_huge(void *addr)
++{
++	uint64_t thp = 0;
++	int ret;
++	FILE *fp;
++	char buffer[MAX_LINE_LENGTH];
++	char addr_pattern[MAX_LINE_LENGTH];
++
++	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
++		       (unsigned long) addr);
++	if (ret >= MAX_LINE_LENGTH)
++		ksft_exit_fail_msg("%s: Pattern is too long\n", __func__);
++
++	fp = fopen(SMAP_FILE_PATH, "r");
++	if (!fp)
++		ksft_exit_fail_msg("%s: Failed to open file %s\n", __func__, SMAP_FILE_PATH);
++
++	if (!check_for_pattern(fp, addr_pattern, buffer))
++		goto err_out;
++
++	/*
++	 * Fetch the AnonHugePages: in the same block and check the number of
++	 * hugepages.
++	 */
++	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
++		goto err_out;
++
++	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1)
++		ksft_exit_fail_msg("Reading smap error\n");
++
++err_out:
++	fclose(fp);
++	return thp;
++}
+diff --git a/tools/testing/selftests/vm/vm_util.h b/tools/testing/selftests/vm/vm_util.h
+new file mode 100644
+index 0000000000000..e9f5a0f2be196
+--- /dev/null
++++ b/tools/testing/selftests/vm/vm_util.h
+@@ -0,0 +1,10 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <stdint.h>
++#include <fcntl.h>
++#include "../kselftest.h"
++
++uint64_t pagemap_get_entry(int fd, char *start);
++bool pagemap_is_softdirty(int fd, char *start);
++void clear_softdirty(void);
++uint64_t read_pmd_pagesize(void);
++uint64_t check_huge(void *addr);
+-- 
+2.30.2
 
-On that wiki page someone wants to make s/desable/disable/
-
-> + *
-> + * Limitations:
-> + * - Only supports normal polarity.
-> + * - It output low when PWM channel disabled.
-> + * - When the parameters change, current running period will not be comp=
-leted
-> + *     and run new settings immediately.
-> + * - In .apply() PWM output need to write register FREQ and DUTY. When f=
-irst write FREQ
-> + *     done and not yet write DUTY, it has short timing gap use new FREQ=
- and old DUTY.
-
-good
-
-> + *
-> + * Author: Hammer Hsieh <hammerh0314@gmail.com>
-> + */
-> +#include <linux/clk.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pwm.h>
-> +
-> +#define SP7021_PWM_CONTROL0		0x000
-> +#define SP7021_PWM_CONTROL1		0x004
-
-The link above calls these PWM_MODE0 and PWM_MODE1, also the other
-register names don't match.
-
-> +#define SP7021_PWM_FREQ(ch)		(0x008 + 4 * (ch))
-> +#define SP7021_PWM_DUTY(ch)		(0x018 + 4 * (ch))
-> +#define SP7021_PWM_FREQ_MAX		GENMASK(15, 0)
-> +#define SP7021_PWM_DUTY_MAX		GENMASK(7, 0)
-> +#define SP7021_PWM_CONTROL_EN(ch)	BIT(ch)
-
-I'm a big fan of consistently naming register defines. I'd do something
-like:
-
-	#define SP7021_PWM_MODE0		0x000
-	#define SP7021_PWM_MODE0_PWMEN(ch)		BIT(ch)
-	#define SP7021_PWM_MODE0_BYPASS(ch)		BIT(8 + (ch))
-
-	#define SP7021_PWM_MODE1		0x004
-	#define SP7021_PWM_MODE1_CNTx_EN(ch)		BIT(ch)
-	...
-
-such that register names match the manual and register fields have the
-register as a prefix. That way its easier spotable when there is a
-mismatch. (e.g. someone tries to set SP7021_PWM_MODE1_CNTx_EN(1) in
-SP7021_PWM_MODE0.)
-
-
-> +#define SP7021_PWM_NUM			4
-> +#define SP7021_PWM_BYPASS_BIT_SHIFT	8
-> +#define SP7021_PWM_DD_SEL_BIT_SHIFT	8
-
-When you use the bit masks and FIELD_PREP you never should need a define
-for a shift.
-
-> +#define SP7021_PWM_FREQ_SCALER		256
-> +
-> +struct sunplus_pwm {
-> +	struct pwm_chip chip;
-> +	void __iomem *base;
-> +	struct clk *clk;
-> +};
-> +
-> +static inline struct sunplus_pwm *to_sunplus_pwm(struct pwm_chip *chip)
-> +{
-> +	return container_of(chip, struct sunplus_pwm, chip);
-> +}
-> +
-> +static int sunplus_pwm_apply(struct pwm_chip *chip, struct pwm_device *p=
-wm,
-> +			     const struct pwm_state *state)
-> +{
-> +	struct sunplus_pwm *priv =3D to_sunplus_pwm(chip);
-> +	u32 dd_freq, duty, control0, control1;
-> +	u64 max_period, period_ns, duty_ns, clk_rate;
-> +
-> +	if (state->polarity !=3D pwm->state.polarity)
-> +		return -EINVAL;
-> +
-> +	if (!state->enabled) {
-> +		/* disable pwm channel output */
-> +		control0 =3D readl(priv->base + SP7021_PWM_CONTROL0);
-> +		control0 &=3D ~SP7021_PWM_CONTROL_EN(pwm->hwpwm);
-> +		writel(control0, priv->base + SP7021_PWM_CONTROL0);
-> +		/* disable pwm channel clk source */
-> +		control1 =3D readl(priv->base + SP7021_PWM_CONTROL1);
-> +		control1 &=3D ~SP7021_PWM_CONTROL_EN(pwm->hwpwm);
-> +		writel(control1, priv->base + SP7021_PWM_CONTROL1);
-> +		return 0;
-> +	}
-> +
-> +	clk_rate =3D clk_get_rate(priv->clk);
-> +	/*
-> +	 * SP7021_PWM_FREQ_MAX 16 bits, SP7021_PWM_FREQ_SCALER 8 bits
-> +	 * NSEC_PER_SEC 30 bits, won't overflow.
-> +	 */
-> +	max_period =3D mul_u64_u64_div_u64(SP7021_PWM_FREQ_MAX, (u64)SP7021_PWM=
-_FREQ_SCALER
-> +				* NSEC_PER_SEC, clk_rate);
-> +
-> +	period_ns =3D min(state->period, max_period);
-> +	duty_ns =3D state->duty_cycle;
-
-duty_ns =3D min(state->duty_cycle, period_ns);
-
-> +
-> +	/*
-> +	 * cal pwm freq and check value under range
-> +	 * clk_rate 202.5MHz 28 bits, period_ns max 82849185 27 bits, won't ove=
-rflow.
-> +	 */
-> +	dd_freq =3D mul_u64_u64_div_u64(clk_rate, period_ns, (u64)SP7021_PWM_FR=
-EQ_SCALER
-> +				* NSEC_PER_SEC);
-> +
-> +	if (dd_freq =3D=3D 0)
-> +		return -EINVAL;
-> +
-> +	if (dd_freq > SP7021_PWM_FREQ_MAX)
-> +		dd_freq =3D SP7021_PWM_FREQ_MAX;
-
-This cannot happen after period_ns was limited to max_period, can it?
-I wonder if there is a max_period value that is cheaper to calculate
-(e.g. no division) and still is good enough to ensure that the
-calculation for dd_freq doesn't overflow. The reasoning there includes
-clk_rate =3D 202.5 MHz. So maybe something like:
-
-	clk_rate =3D clk_get_rate(priv->clk);
-=09
-	/*
-	 * The following calculations might overflow if clk is bigger
-	 * than 256 GHz. In practise it's 202.5MHz, so this limitation
-	 * is only theoretic.
-	 */
-	if (clk_rate > (u64)SP7021_PWM_FREQ_SCALER * NSEC_PER_SEC)
-		return -EINVAL;
-
-	/*
-	 * With clk_rate limited above we have dd_freq <=3D state->period,
-	 * so this cannot overflow.
-	 */
-	dd_freq =3D mul_u64_u64_div_u64(clk_rate, state->period,
-				      (u64)SP7021_PWM_FREQ_SCALER * NSEC_PER_SEC);
-
-	if (dd_freq =3D=3D 0)
-		return -EINVAL;
-
-	if (dd_freq > SP7021_PWM_FREQ_MAX)
-		dd_freq =3D SP7021_PWM_FREQ_MAX;
-
-
-> +	writel(dd_freq, priv->base + SP7021_PWM_FREQ(pwm->hwpwm));
-> +
-> +	/* cal and set pwm duty */
-> +	control0 =3D readl(priv->base + SP7021_PWM_CONTROL0);
-> +	control0 |=3D SP7021_PWM_CONTROL_EN(pwm->hwpwm);
-> +	control1 =3D readl(priv->base + SP7021_PWM_CONTROL1);
-> +	control1 |=3D SP7021_PWM_CONTROL_EN(pwm->hwpwm);
-> +	if (duty_ns =3D=3D period_ns) {
-> +		/* PWM channel output =3D high */
-> +		control0 |=3D SP7021_PWM_CONTROL_EN(pwm->hwpwm + SP7021_PWM_BYPASS_BIT=
-_SHIFT);
-> +		duty =3D SP7021_PWM_DUTY_MAX;
-> +	} else {
-> +		control0 &=3D ~SP7021_PWM_CONTROL_EN(pwm->hwpwm + SP7021_PWM_BYPASS_BI=
-T_SHIFT);
-> +		/*
-> +		 * duty_ns <=3D period_ns 27 bits, SP7021_PWM_FREQ_SCALER 8 bits
-> +		 * won't overflow.
-> +		 */
-> +		duty =3D mul_u64_u64_div_u64(duty_ns, (u64)SP7021_PWM_FREQ_SCALER,
-> +					   period_ns);
-
-Note this might configure a duty cycle that is too small.
-Consider:
-
-	clk_rate =3D 202500000
-	period =3D 3333643
-	duty_cycle =3D 3306391
-
-Then we get dd_freq =3D 2636 and duty =3D 253.
-
-With dd_freq =3D 2636 and duty =3D 254 the resulting duty_cycle is
-
-	2636 * 1000000000 * 254 / 202500000 =3D 3306390.12345679
-
-so 254 would be the better value. The problem is that you use period_ns
-in the division which however is a bit of as the real period is a tad
-smaller.
-
-So the right thing to do here is:
-
-	duty =3D duty_ns * clk / (dd_freq * NSEC_PER_SEC)
-
-> +		duty |=3D (pwm->hwpwm << SP7021_PWM_DD_SEL_BIT_SHIFT);
-> +	}
-> +	writel(duty, priv->base + SP7021_PWM_DUTY(pwm->hwpwm));
-
-I don't understand the DDx SEL bitfield in this register. Is it right
-that it is 0 for all 4 PWMs?
-
-> +	writel(control1, priv->base + SP7021_PWM_CONTROL1);
-> +	writel(control0, priv->base + SP7021_PWM_CONTROL0);
-> +
-> +	return 0;
-> +}
-> +
-> +static void sunplus_pwm_get_state(struct pwm_chip *chip, struct pwm_devi=
-ce *pwm,
-> +				  struct pwm_state *state)
-> +{
-> +	struct sunplus_pwm *priv =3D to_sunplus_pwm(chip);
-> +	u32 control0, freq, duty;
-> +	u64 clk_rate;
-> +
-> +	control0 =3D readl(priv->base + SP7021_PWM_CONTROL0);
-> +
-> +	if (control0 & BIT(pwm->hwpwm)) {
-> +		clk_rate =3D clk_get_rate(priv->clk);
-> +		freq =3D readl(priv->base + SP7021_PWM_FREQ(pwm->hwpwm));
-
-I'd call this dd_freq to match the variable name in .apply().
-
-> +		duty =3D readl(priv->base + SP7021_PWM_DUTY(pwm->hwpwm));
-> +		duty &=3D ~GENMASK(9, 8);
-
-That looks wrong, The bit field 9:8 is the divisor source select. Also
-please introduce a define for GENMASK(9,8).
-
-> +		/*
-> +		 * freq 16 bits, SP7021_PWM_FREQ_SCALER 8 bits
-> +		 * NSEC_PER_SEC 30 bits, won't overflow.
-> +		 */
-> +		state->period =3D DIV64_U64_ROUND_UP((u64)freq * (u64)SP7021_PWM_FREQ_=
-SCALER
-> +						* NSEC_PER_SEC, clk_rate);
-> +		/*
-> +		 * freq 16 bits, duty 8 bits, NSEC_PER_SEC 30 bits, won't overflow.
-> +		 */
-> +		state->duty_cycle =3D DIV64_U64_ROUND_UP((u64)freq * (u64)duty * NSEC_=
-PER_SEC,
-> +						       clk_rate);
-> +		state->enabled =3D true;
-> +	} else {
-> +		state->enabled =3D false;
-> +	}
-> +
-> +	state->polarity =3D PWM_POLARITY_NORMAL;
-> +}
-> +
-> +static const struct pwm_ops sunplus_pwm_ops =3D {
-> +	.apply =3D sunplus_pwm_apply,
-> +	.get_state =3D sunplus_pwm_get_state,
-> +	.owner =3D THIS_MODULE,
-> +};
-> +
-> +static void sunplus_pwm_clk_release(void *data)
-> +{
-> +	struct clk *clk =3D data;
-> +
-> +	clk_disable_unprepare(clk);
-> +}
-> +
-> +static int sunplus_pwm_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev =3D &pdev->dev;
-> +	struct sunplus_pwm *priv;
-> +	int ret;
-> +
-> +	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->base =3D devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(priv->base))
-> +		return PTR_ERR(priv->base);
-> +
-> +	priv->clk =3D devm_clk_get(dev, NULL);
-> +	if (IS_ERR(priv->clk))
-> +		return dev_err_probe(dev, PTR_ERR(priv->clk),
-> +				     "get pwm clock failed\n");
-> +
-> +	ret =3D clk_prepare_enable(priv->clk);
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to enable clock: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret =3D devm_add_action_or_reset(dev, sunplus_pwm_clk_release, priv->cl=
-k);
-> +	if (ret < 0) {
-> +		dev_err(dev, "failed to release clock: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	priv->chip.dev =3D dev;
-> +	priv->chip.ops =3D &sunplus_pwm_ops;
-> +	priv->chip.npwm =3D SP7021_PWM_NUM;
-> +
-> +	ret =3D devm_pwmchip_add(dev, &priv->chip);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "Cannot register sunplus PWM\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id sunplus_pwm_of_match[] =3D {
-> +	{ .compatible =3D "sunplus,sp7021-pwm", },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, sunplus_pwm_of_match);
-> +
-> +static struct platform_driver sunplus_pwm_driver =3D {
-> +	.probe		=3D sunplus_pwm_probe,
-> +	.driver		=3D {
-> +		.name	=3D "sunplus-pwm",
-> +		.of_match_table =3D sunplus_pwm_of_match,
-> +	},
-> +};
-> +module_platform_driver(sunplus_pwm_driver);
-> +
-> +MODULE_DESCRIPTION("Sunplus SoC PWM Driver");
-> +MODULE_AUTHOR("Hammer Hsieh <hammerh0314@gmail.com>");
-> +MODULE_LICENSE("GPL");
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ytfycacticac6xgy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIzDmwACgkQwfwUeK3K
-7Am8XAf+PnKi9NZB9HViUSV8v0rloYKUiQ3u0b86c8vkYTJe8ocG4rL+kZg3NC36
-ihuYw9WdYtM402wgoL7TJKpHKbzNckkdqUJvmvUg2iXsHJcWI7YUrd39BQoIO+bJ
-SUJnKUekT6b6VwXx0rYroU2fk7R6K6WMWbUbGYSWmzv5kG14lXP/rwN7LKnyOuW+
-amRyr0IzLR6K16mSL+bKXtcnLe4f/FchsaRoMbB6SGxdY4UlXVzqRTgr+mLvGUFn
-1BL51l9ttVHyjTwdXAxRWrrjX4kGmXENP1K0dhug23wB7obe/vOxINi+PtcMy09g
-n/6RarrSYEC4pVEXCzU+PHwBmR2OyA==
-=/D3w
------END PGP SIGNATURE-----
-
---ytfycacticac6xgy--

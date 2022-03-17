@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7DE4DCA56
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C80D4DCA61
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236084AbiCQPtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 11:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
+        id S230396AbiCQPtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 11:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbiCQPtK (ORCPT
+        with ESMTP id S236092AbiCQPtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 11:49:10 -0400
+        Thu, 17 Mar 2022 11:49:17 -0400
 Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E9713EB7;
-        Thu, 17 Mar 2022 08:47:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CD639BA2;
+        Thu, 17 Mar 2022 08:47:57 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id DD5ACE0139;
-        Thu, 17 Mar 2022 08:47:52 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id A71A4E013C;
+        Thu, 17 Mar 2022 08:47:57 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id T1hfA1Qg9heb; Thu, 17 Mar 2022 08:47:52 -0700 (PDT)
+        with ESMTP id JcpyOJZtPPGy; Thu, 17 Mar 2022 08:47:57 -0700 (PDT)
 From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         linux-usb@vger.kernel.org
@@ -32,13 +32,12 @@ Cc:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         Hector Martin <marcan@marcan.st>,
         "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
         linux-kernel@vger.kernel.org, kernel@puri.sm
-Subject: [PATCH 1/7] usb: typec: tipd: Only update power status on IRQ
-Date:   Thu, 17 Mar 2022 16:45:12 +0100
-Message-Id: <20220317154518.4082046-2-sebastian.krzyszkowiak@puri.sm>
+Subject: [PATCH 2/7] usb: typec: tipd: set the data role on tps IRQ
+Date:   Thu, 17 Mar 2022 16:45:13 +0100
+Message-Id: <20220317154518.4082046-3-sebastian.krzyszkowiak@puri.sm>
 In-Reply-To: <20220317154518.4082046-1-sebastian.krzyszkowiak@puri.sm>
 References: <20220317154518.4082046-1-sebastian.krzyszkowiak@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -49,105 +48,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guido Günther <agx@sigxcpu.org>
+From: Angus Ainslie <angus@akkea.ca>
 
-Instead of refetching power status cache it and only update it when a
-change is signalled via irq. This simplifies tracing and adding more
-supply properties in follow up patches.
+Don't immediately set the data role, only set it in response to the
+negotiated value notification from the tps6589x. Otherwise data role
+switch fails for DRP.
 
-Signed-off-by: Guido Günther <agx@sigxcpu.org>
+We only use values cached from the IRQ instead of poking I2C all
+the time.
+
+The update is moved in a function that will become more useful in later
+commits.
+
+Fixes: 18a6c866bb19 ("usb: typec: tps6598x: Add USB role switching logic")
+Signed-off-by: Angus Ainslie <angus@akkea.ca>
 Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 ---
- drivers/usb/typec/tipd/core.c | 32 ++++++++++++--------------------
- 1 file changed, 12 insertions(+), 20 deletions(-)
+ drivers/usb/typec/tipd/core.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 16b4560216ba..dfbba5ae9487 100644
+index dfbba5ae9487..f387786ff95e 100644
 --- a/drivers/usb/typec/tipd/core.c
 +++ b/drivers/usb/typec/tipd/core.c
-@@ -93,6 +93,8 @@ struct tps6598x {
- 	struct power_supply *psy;
+@@ -94,6 +94,7 @@ struct tps6598x {
  	struct power_supply_desc psy_desc;
  	enum power_supply_usb_type usb_type;
-+
-+	u16 pwr_status;
+ 
++	u32 data_status;
+ 	u16 pwr_status;
  };
  
- static enum power_supply_property tps6598x_psy_props[] = {
-@@ -230,17 +232,12 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
+@@ -271,6 +272,15 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
+ 	return 0;
+ }
+ 
++static int
++tps6598x_update_data_status(struct tps6598x *tps, u32 status)
++{
++	tps6598x_set_data_role(tps, TPS_STATUS_TO_TYPEC_DATAROLE(status),
++			       !!(tps->data_status & TPS_DATA_STATUS_DATA_CONNECTION));
++	trace_tps6598x_data_status(tps->data_status);
++	return 0;
++}
++
+ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
  {
- 	struct typec_partner_desc desc;
- 	enum typec_pwr_opmode mode;
--	u16 pwr_status;
- 	int ret;
+ 	if (!IS_ERR(tps->partner))
+@@ -370,8 +380,6 @@ static int tps6598x_dr_set(struct typec_port *port, enum typec_data_role role)
+ 		goto out_unlock;
+ 	}
  
- 	if (tps->partner)
- 		return 0;
- 
--	ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &pwr_status);
--	if (ret < 0)
--		return ret;
+-	tps6598x_set_data_role(tps, role, true);
 -
--	mode = TPS_POWER_STATUS_PWROPMODE(pwr_status);
-+	mode = TPS_POWER_STATUS_PWROPMODE(tps->pwr_status);
+ out_unlock:
+ 	mutex_unlock(&tps->lock);
  
- 	desc.usb_pd = mode == TYPEC_PWR_MODE_PD;
- 	desc.accessory = TYPEC_ACCESSORY_NONE; /* XXX: handle accessories */
-@@ -455,6 +452,7 @@ static bool tps6598x_read_power_status(struct tps6598x *tps)
- 		dev_err(tps->dev, "failed to read power status: %d\n", ret);
+@@ -437,6 +445,7 @@ static bool tps6598x_read_data_status(struct tps6598x *tps)
+ 		dev_err(tps->dev, "failed to read data status: %d\n", ret);
  		return false;
  	}
-+	tps->pwr_status = pwr_status;
- 	trace_tps6598x_power_status(pwr_status);
++	tps->data_status = data_status;
+ 	trace_tps6598x_data_status(data_status);
  
  	return true;
-@@ -601,15 +599,8 @@ static const struct regmap_config tps6598x_regmap_config = {
- static int tps6598x_psy_get_online(struct tps6598x *tps,
- 				   union power_supply_propval *val)
- {
--	int ret;
--	u16 pwr_status;
--
--	ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &pwr_status);
--	if (ret < 0)
--		return ret;
--
--	if (TPS_POWER_STATUS_CONNECTION(pwr_status) &&
--	    TPS_POWER_STATUS_SOURCESINK(pwr_status)) {
-+	if (TPS_POWER_STATUS_CONNECTION(tps->pwr_status) &&
-+	    TPS_POWER_STATUS_SOURCESINK(tps->pwr_status)) {
- 		val->intval = 1;
- 	} else {
- 		val->intval = 0;
-@@ -622,15 +613,11 @@ static int tps6598x_psy_get_prop(struct power_supply *psy,
- 				 union power_supply_propval *val)
- {
- 	struct tps6598x *tps = power_supply_get_drvdata(psy);
--	u16 pwr_status;
- 	int ret = 0;
+@@ -497,10 +506,13 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
+ 		if (!tps6598x_read_power_status(tps))
+ 			goto err_clear_ints;
  
- 	switch (psp) {
- 	case POWER_SUPPLY_PROP_USB_TYPE:
--		ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &pwr_status);
--		if (ret < 0)
--			return ret;
--		if (TPS_POWER_STATUS_PWROPMODE(pwr_status) == TYPEC_PWR_MODE_PD)
-+		if (TPS_POWER_STATUS_PWROPMODE(tps->pwr_status) == TYPEC_PWR_MODE_PD)
- 			val->intval = POWER_SUPPLY_USB_TYPE_PD;
- 		else
- 			val->intval = POWER_SUPPLY_USB_TYPE_C;
-@@ -837,6 +824,11 @@ static int tps6598x_probe(struct i2c_client *client)
- 	fwnode_handle_put(fwnode);
+-	if (event & APPLE_CD_REG_INT_DATA_STATUS_UPDATE)
++	if (event & APPLE_CD_REG_INT_DATA_STATUS_UPDATE) {
+ 		if (!tps6598x_read_data_status(tps))
+ 			goto err_clear_ints;
  
- 	if (status & TPS_STATUS_PLUG_PRESENT) {
-+		ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &tps->pwr_status);
-+		if (ret < 0) {
-+			dev_err(tps->dev, "failed to read power status: %d\n", ret);
-+			goto err_role_put;
-+		}
- 		ret = tps6598x_connect(tps, status);
- 		if (ret)
- 			dev_err(&client->dev, "failed to register partner\n");
++		tps6598x_update_data_status(tps, status);
++	}
++
+ 	/* Handle plug insert or removal */
+ 	if (event & APPLE_CD_REG_INT_PLUG_EVENT)
+ 		tps6598x_handle_plug_event(tps, status);
+@@ -544,10 +556,13 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
+ 		if (!tps6598x_read_power_status(tps))
+ 			goto err_clear_ints;
+ 
+-	if ((event1 | event2) & TPS_REG_INT_DATA_STATUS_UPDATE)
++	if ((event1 | event2) & TPS_REG_INT_DATA_STATUS_UPDATE) {
+ 		if (!tps6598x_read_data_status(tps))
+ 			goto err_clear_ints;
+ 
++		tps6598x_update_data_status(tps, status);
++	}
++
+ 	/* Handle plug insert or removal */
+ 	if ((event1 | event2) & TPS_REG_INT_PLUG_EVENT)
+ 		tps6598x_handle_plug_event(tps, status);
 -- 
 2.35.1
 

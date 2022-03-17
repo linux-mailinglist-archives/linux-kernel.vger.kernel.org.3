@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEE14DCE11
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2131E4DCE40
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237714AbiCQSyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S237620AbiCQS61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237750AbiCQSyq (ORCPT
+        with ESMTP id S237760AbiCQS56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:54:46 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4241AD80
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:53:21 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id o68-20020a17090a0a4a00b001c686a48263so1500140pjo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:53:21 -0700 (PDT)
+        Thu, 17 Mar 2022 14:57:58 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E88165A8F
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:56:41 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id bt26so10573491lfb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:56:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/NvfzwKXqOSJRruZzUWzCAPVPVy0wwITBus+R6UuGEE=;
-        b=SFD8FzxQIXg9+hlH2Vkb1h3WUfBMuuS4W5CQ8oWADKUTQIWpB4dRFqdc4O5Wp5MjHR
-         L0cc09yCNgySL0Erao+PzqYSsvtPV391iRt+TGZDuBkKHZVu5NTZZV8YnadPlkvDwi0x
-         +pZYJ9KKEL89juosYwlv+5niKRFb2RIpDz9ZI=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KNUNjaBCVasZfpBbOFNsbgHTLCGoLifuHLYmJKwlzBE=;
+        b=HeYHtJ7Lk2fsSlITrtcBvb02gBAgV1u/Sz4/x831laGr7/psVM2Vbs9QGHfqxX8ulj
+         ETvly1hrDFAdBIkS6/pnOGOojuIuqFayBbrVkJA2Yg34jQUErKO5bfvQC8X7c1+Ld0U9
+         QrOOBvFDNRMZ8/V6mj/D7xyEVdr1YXu71Zhpk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/NvfzwKXqOSJRruZzUWzCAPVPVy0wwITBus+R6UuGEE=;
-        b=RGw+dRFku/0IDFGorsa2NJd5A6O1kkw5tDoWB8pYFisJsQ7DPOs9QfDGYglUJejTxh
-         sDBhSgiuWzzMIKkshEjcBFxHH/XjfOqEIya5wFOsrjVPgMAUx7vi9L/3QVZt072EquSX
-         y/+JuskMnEIZpyGvfYfKZg4BCr/9lDHvL9qyZ01kGMSFmA8zVQ57kJz5idJzNTuCLHmE
-         +uoyK7qA90vKOWwh3ZplPXpBqqrJZidXBmVbGKMoaJpwSTgJoU9GBJwurpQioeLq9k6p
-         7lpbtmxDUgV+UkP9pZD9e3QENc02rAhZCPqe6ZI5Kf2evLmET7Hbns8/azfGk4TIIpg+
-         zIYg==
-X-Gm-Message-State: AOAM530Ec8t9GrLF6QfdjtjQOgj28bOASogyF6BYQn7L3TA+ni6htY4Z
-        0Rgtycchky86LMaSuZ4Infk2y8h+QocSBw==
-X-Google-Smtp-Source: ABdhPJxf8zUz4uL69RiHyWHnXrMc949FYbCcqIxC/VkLIVftNL2WTrnWJwvtr47QpDWnhkWwQelguA==
-X-Received: by 2002:a17:902:ce02:b0:153:bd65:5c0e with SMTP id k2-20020a170902ce0200b00153bd655c0emr6088248plg.160.1647543200564;
-        Thu, 17 Mar 2022 11:53:20 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u10-20020a056a00124a00b004f783abfa0esm7530041pfi.28.2022.03.17.11.53.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 11:53:20 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 11:53:19 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     James Jones <linux@theinnocuous.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86: Remove a.out support
-Message-ID: <202203171152.F35EB19767@keescook>
-References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com>
- <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com>
- <202203151150.1CDB1D8DA@keescook>
- <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com>
- <CAK8P3a28dpyEM2+vM+ePZzeFc539b7w_8FDEoRke-j+3AQVZAA@mail.gmail.com>
- <202203161523.857B469@keescook>
- <59fb3d14-423a-d39b-04cb-1e60ee67d3f1@theinnocuous.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KNUNjaBCVasZfpBbOFNsbgHTLCGoLifuHLYmJKwlzBE=;
+        b=dnH9+vkf0kcfFlCHcxv2T+QMRocMcUz0xxKL0Z2zYyhcZAHBWoIXcqvys0RSd5mTS3
+         aJm6uHbVvfn7Yvk4bk0odYaEVis7zfCb2yrzDhnIUmE8l133Ej0Nw0b/TYJwNFT+xtKG
+         JEs9S0HhM4jZ9rVO5WikJ0tC1k2/uPupCqw2ETk66ebHHlTa6IgPxWk0BnZsgwYsZT3/
+         RxJO4MylHgDZKqsugm37uK3atJy1ZDd83SFEEYjQk/9KVKnAc/tLj075p3lHFYKubSjP
+         p8BYaJLxbAGrvsbvsJh/ENMbO672cAmWr2UC4LYf+34H7URiEqlH43MdG84jSqqytzOD
+         fNSg==
+X-Gm-Message-State: AOAM533rcRUxL2s7y8IZ7+f0LbOJUDayRJMxjALxGz0JBASO+eudxGtW
+        +7jgLHDgRNQ3AhNhRJLcMJVHdBn8k8zxJLPS
+X-Google-Smtp-Source: ABdhPJy+5yK3abkslp8A8sJUPSD6ksn1qhQmQ3mQz19njhrR7its/JM0Df9PY5SVbSrJNkx1IVIhew==
+X-Received: by 2002:a05:6512:2614:b0:445:777d:3530 with SMTP id bt20-20020a056512261400b00445777d3530mr3806059lfb.647.1647543399271;
+        Thu, 17 Mar 2022 11:56:39 -0700 (PDT)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
+        by smtp.gmail.com with ESMTPSA id t22-20020a199116000000b004486eef2bdesm507501lfd.272.2022.03.17.11.56.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 11:56:38 -0700 (PDT)
+Received: by mail-lj1-f176.google.com with SMTP id s25so8486482lji.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:56:36 -0700 (PDT)
+X-Received: by 2002:a2e:804b:0:b0:247:e81f:87e9 with SMTP id
+ p11-20020a2e804b000000b00247e81f87e9mr4044603ljg.176.1647543396246; Thu, 17
+ Mar 2022 11:56:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <59fb3d14-423a-d39b-04cb-1e60ee67d3f1@theinnocuous.com>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <00000000000085b1b305da5a66f3@google.com> <CAHk-=wjLNbf7viXP74K59jK=sRkg6mUbj0i3qpQvy9_2S4Lbtg@mail.gmail.com>
+ <s5h5yoc651j.wl-tiwai@suse.de>
+In-Reply-To: <s5h5yoc651j.wl-tiwai@suse.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 17 Mar 2022 11:56:20 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh61USn+ATUDM-_hX+8p6Yhsq3RWHh+XR4BihfqFYJX8w@mail.gmail.com>
+Message-ID: <CAHk-=wh61USn+ATUDM-_hX+8p6Yhsq3RWHh+XR4BihfqFYJX8w@mail.gmail.com>
+Subject: Re: [syzbot] WARNING: kmalloc bug in snd_pcm_plugin_alloc (2)
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     syzbot <syzbot+72732c532ac1454eeee9@syzkaller.appspotmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        alsa-devel@alsa-project.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Willy Tarreau <w@1wt.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 02:04:46AM +0000, James Jones wrote:
-> On 3/16/22 3:30 PM, Kees Cook wrote:
-> > On Wed, Mar 16, 2022 at 01:38:31PM +0100, Arnd Bergmann wrote:
-> >> is in the end, but it's likely easier than a standalone a.out loader
-> >> in user space, or a conversion to ELF format.
-> >
-> > Yeah, the exec format is really simple. The only tricky bit was preparing
-> > the stack and making sure everything landed in the right place for text
-> > and data. James, can you try this? aln and mac run for me, but I'm not
-> > actually exercising them beyond dumping argument lists, etc:
-> >
-> > https://github.com/kees/kernel-tools/tree/trunk/a.out
-> 
-> Yes, works perfectly, thank you. I like the idea of using this much
+On Thu, Mar 17, 2022 at 7:13 AM Takashi Iwai <tiwai@suse.de> wrote:
+>
+> And, we want not only avoiding the overflow but also limiting the
+> actual size, too.  Practically seen, more than 1MB temporary buffer is
+> unrealistic, and better to bail if more than that is requested.
 
-Hurray!
+Looks sane to me, although I obviously can't judge how well that 1M
+limit works since I don't know the uses.
 
-> better than getting emailed every time someone wants to delete the a.out
-> code again. Consider my use case withdrawn. I've already pushed an
-> update to my jaguar-sdk project to use this tool instead.
-
-Nice; I see there are other binaries besides aln and mac that are
-working with this too? *whew* I'm glad it was relatively straight
-forward. :)
-
--- 
-Kees Cook
+Thanks,
+              Linus

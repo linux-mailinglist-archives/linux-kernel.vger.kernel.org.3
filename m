@@ -2,140 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0E34DC34F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20E54DC352
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbiCQJuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
+        id S232255AbiCQJvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbiCQJuI (ORCPT
+        with ESMTP id S230308AbiCQJvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:50:08 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6926E139ADC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:48:51 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso7090626pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:48:51 -0700 (PDT)
+        Thu, 17 Mar 2022 05:51:41 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F99E1BB798
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:50:24 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id bn33so6484823ljb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:50:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3HoYGpM2ujsPl21DU6he6HxjpZNCN9QPtvH57hnndq4=;
-        b=oGX0nSKp5OaDPt2miS1pqf5TYzLVOgG/hdkHmBbYarMoeOH9Znd9b7nSsbnk7eKYNG
-         lPtpRhcoK920snDB5bzYnGagm2wi1YbZT5m/wF3H6ovLhBWycwYMhpUcFP/GqV+bgCic
-         MsjGNUjbg4QT0D2RXnNe6WsC6/I7W8Einehv81RHDNpW7UybcZvg74762NLUKgJUcyil
-         UO3e3n12EmUpNsMFRCCG49iNWZ1aDnR2ddyvHFYSPFjH9Y/1htFIJuv8N35uNbW0a5es
-         2bqb/EkkE3fpLSb3SyvS+Wo7/h0m//SxH9pcGkAlSyl8o2Bm5Xzjpt8UwQu7zthkkZhf
-         65CQ==
+        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=V0LbW5LueiWt1tPi33D71OMFfIFyzm670dcDqQa5c5Q=;
+        b=CxfWZXX0kv32BD1WQ/OJcVIGTDr4mpYvX56gBYB4lFMI4e8M2MOFdiwYSYgpRCe+TV
+         4SPxRzXQEvwIgxda5Ymbh2hfRKRMFdzl/A5DCtNwFYo937O58rin+LBpyg/WiuGQrJoC
+         tk0QW3gTx3wonWCM8CQqjk6TN1YATpkxxJmVlCzut4UvLY0leGV53BFpmuqk3ScMWnjg
+         VlbSkLyQj5YP1VxKhdl7jkFWwd5lGbfeFGCsp2gFFzE835ikvILERttvSuw22ecUqLNJ
+         Slx4HOJgfqyCSbPmg3ychRF8bNbMCYqitgUCV107TpctqoH4jV/QfncMRd3OgzX25RgA
+         OrAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3HoYGpM2ujsPl21DU6he6HxjpZNCN9QPtvH57hnndq4=;
-        b=v6Yt1/4TeT8wtZ0xwLPddEBrhrU0lxjs1K03PMEyM6sJQCKIP+AXlXQvHtJZjtn6la
-         Zcxuz9KSUTy3r4V+LxTU1YZYl4aBeDZ3l4ISOXdb2UqnfOw8sdkD7yszKOlAf86PYerM
-         r3c2CoUFWBVpVyx88fYRpLf/AI0RYpaazMBoWyKOzXVjfYV3D5HoPvOy7nv9R2MqYaKY
-         Eog02+lGv88XTVUAzn/yxd6686yos5sOmIMW+rVYgM7zdMz1OhveMXq2hS4kE0WLgLWq
-         BMbIpL8ZT98Rc365OwItxUBIHA0f5MdZEXLmwBuCZNapGmUKSbAnPthmv0ZlPwhdVepZ
-         ug3w==
-X-Gm-Message-State: AOAM531mzYDgVMC3v4LPacALQlUKO8w/t5+IpH+AC2Peaqkl9lWz2Fpy
-        8XOa94FPFAw3+qS6fgdAc7U=
-X-Google-Smtp-Source: ABdhPJzhAy+PJGg7uN7JFcpjGm7+yqehUGXkqR+kesTQnqL4ourpUYKSy44W511JmTqebj10OiwuoQ==
-X-Received: by 2002:a17:902:8b87:b0:14b:47b3:c0a2 with SMTP id ay7-20020a1709028b8700b0014b47b3c0a2mr3854437plb.51.1647510530847;
-        Thu, 17 Mar 2022 02:48:50 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id j12-20020a056a00234c00b004fa042e822bsm6329509pfj.14.2022.03.17.02.48.50
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=V0LbW5LueiWt1tPi33D71OMFfIFyzm670dcDqQa5c5Q=;
+        b=BJcwmaiCHiFSZogJeXbpffQhrzgq+Ge1szIWsCfiS+dDWH8jYsgiWJseO2PtBbraDk
+         eg7yfaTYwoi0lfeAmEzRGePiGWW6ijPBn41EZOQCxCT/uR2I2S/IpJwqcpy4RyhVhkcr
+         BmDWDKzbMCN6taWrezeBkA0Ixxp+RU6Fpexg11QCtlOkvYCYMxrpatneu3fcsm/a3NEm
+         u+V8pNPzp8X0FKuxaIwNU9LwmY87CRyUcpp48ybhk2tNch1YEQ/Fd8PZh82j3u+b9tpM
+         4v5+3Qskf3mVl4Am7Q1POf2JesJW4PGC4OkHU4kPdgQHxxUj7D9FRUbCKf7U9RNJUXEC
+         thOw==
+X-Gm-Message-State: AOAM531eQ2i/m8JAJcqVv/UOpMsjfYi3auqyZ4EffEEynuRbFzRnAe8S
+        XzrGXsZWrqYyLd4AdUHocroq7w==
+X-Google-Smtp-Source: ABdhPJxvym9jW5qksLpKanP5JwKLvwRKTaFN2HNbX0n+AMIIcCHETjBo6F6B8r/ah3ZFDDGFy44QHQ==
+X-Received: by 2002:a05:651c:1a1f:b0:247:ff8b:e691 with SMTP id by31-20020a05651c1a1f00b00247ff8be691mr2367542ljb.298.1647510623134;
+        Thu, 17 Mar 2022 02:50:23 -0700 (PDT)
+Received: from wkz-x280 (a124.broadband3.quicknet.se. [46.17.184.124])
+        by smtp.gmail.com with ESMTPSA id f11-20020a056512228b00b004487997379esm402462lfu.158.2022.03.17.02.50.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 02:48:50 -0700 (PDT)
-Message-ID: <62330402.1c69fb81.d2ba6.0538@mx.google.com>
-X-Google-Original-Message-ID: <20220317094849.GA2139803@cgel.zte@gmail.com>
-Date:   Thu, 17 Mar 2022 09:48:49 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     bsingharora@gmail.com, akpm@linux-foundation.org,
-        yang.yang29@zte.com.cn, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] delayacct: track delays from ksm cow
-References: <20220316133420.2131707-1-yang.yang29@zte.com.cn>
- <412dc01c-8829-eac2-52c7-3f704dbb5a98@redhat.com>
- <6232970f.1c69fb81.4e365.c9f2@mx.google.com>
- <4e76476b-1da0-09c5-7dc4-0b2db796a549@redhat.com>
+        Thu, 17 Mar 2022 02:50:22 -0700 (PDT)
+From:   Tobias Waldekranz <tobias@waldekranz.com>
+To:     Nikolay Aleksandrov <razor@blackwall.org>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
+Subject: Re: [PATCH v5 net-next 00/15] net: bridge: Multiple Spanning Trees
+In-Reply-To: <610eb6cc-4df4-f0fc-462a-b33145334a12@blackwall.org>
+References: <20220316150857.2442916-1-tobias@waldekranz.com>
+ <610eb6cc-4df4-f0fc-462a-b33145334a12@blackwall.org>
+Date:   Thu, 17 Mar 2022 10:50:21 +0100
+Message-ID: <87tubwkiw2.fsf@waldekranz.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e76476b-1da0-09c5-7dc4-0b2db796a549@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 09:17:13AM +0100, David Hildenbrand wrote:
-> On 17.03.22 03:03, CGEL wrote:
-> > On Wed, Mar 16, 2022 at 03:56:23PM +0100, David Hildenbrand wrote:
-> >> On 16.03.22 14:34, cgel.zte@gmail.com wrote:
-> >>> From: Yang Yang <yang.yang29@zte.com.cn>
-> >>>
-> >>> Delay accounting does not track the delay of ksm cow.  When tasks
-> >>> have many ksm pages, it may spend a amount of time waiting for ksm
-> >>> cow.
-> >>>
-> >>> To get the impact of tasks in ksm cow, measure the delay when ksm
-> >>> cow happens. This could help users to decide whether to user ksm
-> >>> or not.
-> >>>
-> >>> Also update tools/accounting/getdelays.c:
-> >>>
-> >>>     / # ./getdelays -dl -p 231
-> >>>     print delayacct stats ON
-> >>>     listen forever
-> >>>     PID     231
-> >>>
-> >>>     CPU             count     real total  virtual total    delay total  delay average
-> >>>                      6247     1859000000     2154070021     1674255063          0.268ms
-> >>>     IO              count    delay total  delay average
-> >>>                         0              0              0ms
-> >>>     SWAP            count    delay total  delay average
-> >>>                         0              0              0ms
-> >>>     RECLAIM         count    delay total  delay average
-> >>>                         0              0              0ms
-> >>>     THRASHING       count    delay total  delay average
-> >>>                         0              0              0ms
-> >>>     KSM             count    delay total  delay average
-> >>>                      3635      271567604              0ms
-> >>>
-> >>
-> >> TBH I'm not sure how particularly helpful this is and if we want this.
-> >>
-> > Thanks for replying.
-> > 
-> > Users may use ksm by calling madvise(, , MADV_MERGEABLE) when they want
-> > save memory, it's a tradeoff by suffering delay on ksm cow. Users can
-> > get to know how much memory ksm saved by reading
-> > /sys/kernel/mm/ksm/pages_sharing, but they don't know what the costs of
-> > ksm cow delay, and this is important of some delay sensitive tasks. If
-> > users know both saved memory and ksm cow delay, they could better use
-> > madvise(, , MADV_MERGEABLE).
-> 
-> But that happens after the effects, no?
-> 
-> IOW a user already called madvise(, , MADV_MERGEABLE) and then gets the
-> results.
+On Thu, Mar 17, 2022 at 11:00, Nikolay Aleksandrov <razor@blackwall.org> wrote:
+> On 16/03/2022 17:08, Tobias Waldekranz wrote:
+>> The bridge has had per-VLAN STP support for a while now, since:
+>> 
+>> https://lore.kernel.org/netdev/20200124114022.10883-1-nikolay@cumulusnetworks.com/
+>> 
+>> The current implementation has some problems:
+>> 
+>> - The mapping from VLAN to STP state is fixed as 1:1, i.e. each VLAN
+>>   is managed independently. This is awkward from an MSTP (802.1Q-2018,
+>>   Clause 13.5) point of view, where the model is that multiple VLANs
+>>   are grouped into MST instances.
+>> 
+>>   Because of the way that the standard is written, presumably, this is
+>>   also reflected in hardware implementations. It is not uncommon for a
+>>   switch to support the full 4k range of VIDs, but that the pool of
+>>   MST instances is much smaller. Some examples:
+>> 
+>>   Marvell LinkStreet (mv88e6xxx): 4k VLANs, but only 64 MSTIs
+>>   Marvell Prestera: 4k VLANs, but only 128 MSTIs
+>>   Microchip SparX-5i: 4k VLANs, but only 128 MSTIs
+>> 
+>> - By default, the feature is enabled, and there is no way to disable
+>>   it. This makes it hard to add offloading in a backwards compatible
+>>   way, since any underlying switchdevs have no way to refuse the
+>>   function if the hardware does not support it
+>> 
+>> - The port-global STP state has precedence over per-VLAN states. In
+>>   MSTP, as far as I understand it, all VLANs will use the common
+>>   spanning tree (CST) by default - through traffic engineering you can
+>>   then optimize your network to group subsets of VLANs to use
+>>   different trees (MSTI). To my understanding, the way this is
+>>   typically managed in silicon is roughly:
+>> 
+>>   Incoming packet:
+>>   .----.----.--------------.----.-------------
+>>   | DA | SA | 802.1Q VID=X | ET | Payload ...
+>>   '----'----'--------------'----'-------------
+>>                         |
+>>                         '->|\     .----------------------------.
+>>                            | +--> | VID | Members | ... | MSTI |
+>>                    PVID -->|/     |-----|---------|-----|------|
+>>                                   |   1 | 0001001 | ... |    0 |
+>>                                   |   2 | 0001010 | ... |   10 |
+>>                                   |   3 | 0001100 | ... |   10 |
+>>                                   '----------------------------'
+>>                                                              |
+>>                                .-----------------------------'
+>>                                |  .------------------------.
+>>                                '->| MSTI | Fwding | Lrning |
+>>                                   |------|--------|--------|
+>>                                   |    0 | 111110 | 111110 |
+>>                                   |   10 | 110111 | 110111 |
+>>                                   '------------------------'
+>> 
+>>   What this is trying to show is that the STP state (whether MSTP is
+>>   used, or ye olde STP) is always accessed via the VLAN table. If STP
+>>   is running, all MSTI pointers in that table will reference the same
+>>   index in the STP stable - if MSTP is running, some VLANs may point
+>>   to other trees (like in this example).
+>> 
+>>   The fact that in the Linux bridge, the global state (think: index 0
+>>   in most hardware implementations) is supposed to override the
+>>   per-VLAN state, is very awkward to offload. In effect, this means
+>>   that when the global state changes to blocking, drivers will have to
+>>   iterate over all MSTIs in use, and alter them all to match. This
+>>   also means that you have to cache whether the hardware state is
+>>   currently tracking the global state or the per-VLAN state. In the
+>>   first case, you also have to cache the per-VLAN state so that you
+>>   can restore it if the global state transitions back to forwarding.
+>> 
+>> This series adds a new mst_enable bridge setting (as suggested by Nik)
+>> that can only be changed when no VLANs are configured on the
+>> bridge. Enabling this mode has the following effect:
+>> 
+>> - The port-global STP state is used to represent the CST (Common
+>>   Spanning Tree) (1/15)
+>> 
+>> - Ingress STP filtering is deferred until the frame's VLAN has been
+>>   resolved (1/15)
+>> 
+>> - The preexisting per-VLAN states can no longer be controlled directly
+>>   (1/15). They are instead placed under the MST module's control,
+>>   which is managed using a new netlink interface (described in 3/15)
+>> 
+>> - VLANs can br mapped to MSTIs in an arbitrary M:N fashion, using a
+>>   new global VLAN option (2/15)
+>> 
+>> Switchdev notifications are added so that a driver can track:
+>> - MST enabled state
+>> - VID to MSTI mappings
+>> - MST port states
+>> 
+>> An offloading implementation is this provided for mv88e6xxx.
+>> 
+>> A proposal for the corresponding iproute2 interface is available here:
+>> 
+>> https://github.com/wkz/iproute2/tree/mst
+>> 
 >
-Image user are developing or porting their applications on experiment
-machine, they could takes those benchmark as feedback to adjust whether
-to use madvise(, , MADV_MERGEABLE) or it's range.
+> Hi Tobias,
+> One major missing thing is the selftests for this new feature. Do you
+> have a plan to upstream them?
 
-> So how is this interface useful except for somebody writing an
-> application and simply being able to benchmark it with vs. without
-> MADV_MERGEABLE?
->
-> -- 
-> Thanks,
-> 
-> David / dhildenb
+100% agree. I have an internal test that I plan to adapt to run as a
+kselftest. There's a bootstrapping problem here though. I can't send the
+iproute2 series until the kernel support is merged - and until I know
+how the iproute2 support ends up looking I can't add a kselftest.
+
+Ideally, tools/iproute2 would be a thing in the kernel. Then you could
+send the entire implementation as one series. I'm sure that's probably
+been discussed many times already, but my Google-fu fails me.

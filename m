@@ -2,326 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382834DC40B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960794DC409
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbiCQKf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 06:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
+        id S232629AbiCQKfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 06:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232615AbiCQKfT (ORCPT
+        with ESMTP id S232616AbiCQKfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 06:35:19 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1040BE6160;
-        Thu, 17 Mar 2022 03:34:03 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 7D6511F44CCB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647513241;
-        bh=rI9DZ9jsH6eaZI5FatE4QcNepkJ88+Mje76GPlYvw8I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jFH5ZndPzsVi2tZw5UDkJLE1ixNvmShub6JnU23RGhysdZD2I/pLBby5g3s5LtBDh
-         H8x0XFC9jcOeiFSWeNfSCgkqWpj0gdom4elq0xw/0Yn6q2rkPYhtbEa0blIiylvJSE
-         w1HcAAaHnCyua7D2oLxOVrUGyhMjXCZnrOY+XWy8RflvKcTmiFIkVWdU4YbXBSzUp3
-         wUHbZ8pAF6ttmAEkZaIEtEKQjeIlq/tCzVzRrASGCU1as72E9E2Kehj7eRFm6nz/n5
-         9SpiS9s7l15/4lYdwU2wnoInspfRsCfDCrUJtGDnQUq6L73F+YNLpoHenXo8ldva8o
-         GYZm3Fv71dFTw==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Gabriel Krisman Bertazi <krisman@collabora.com>,
-        usama.anjum@collabora.com, kernel@collabora.com, david@redhat.com,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH V5 2/2] selftests: vm: Add test for Soft-Dirty PTE bit
-Date:   Thu, 17 Mar 2022 15:33:22 +0500
-Message-Id: <20220317103323.94799-2-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220317103323.94799-1-usama.anjum@collabora.com>
-References: <20220317103323.94799-1-usama.anjum@collabora.com>
+        Thu, 17 Mar 2022 06:35:18 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A690CD64C2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:34:00 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:f500:58f9:d953:424b])
+        by michel.telenet-ops.be with bizsmtp
+        id 7NZw2700P0M4NNo06NZwKe; Thu, 17 Mar 2022 11:33:58 +0100
+Received: from rox.of.borg ([192.168.97.57] helo=rox)
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nUnS7-004wS8-P1; Thu, 17 Mar 2022 11:33:55 +0100
+Received: from geert by rox with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nUnS7-005Bf1-9H; Thu, 17 Mar 2022 11:33:55 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dung Nguyen <dung.nguyen.zy@renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2] memory: renesas-rpc-if: Fix HF/OSPI data transfer in Manual mode
+Date:   Thu, 17 Mar 2022 11:33:52 +0100
+Message-Id: <b409ea3fae4a6778fd6b44815ad17c9e8e10df87.1647512831.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gabriel Krisman Bertazi <krisman@collabora.com>
+HyperFlash devices fail to probe:
 
-This introduces three tests:
-1) Sanity check soft dirty basic semantics: allocate area, clean, dirty,
-check if the SD bit is flipped.
-2) Check VMA reuse: validate the VM_SOFTDIRTY usage
-3) Check soft-dirty on huge pages
+    rpc-if-hyperflash rpc-if-hyperflash: probing of hyperbus device failed
 
-This was motivated by Will Deacon's fix commit 912efa17e512 ("mm: proc:
-Invalidate TLB after clearing soft-dirty page state"). I was tracking the
-same issue that he fixed, and this test would have caught it.
+In HyperFLASH or Octal-SPI Flash mode, the Transfer Data Enable bits
+(SPIDE) in the Manual Mode Enable Setting Register (SMENR) are derived
+from half of the transfer size, cfr. the rpcif_bits_set() helper
+function.  However, rpcif_reg_{read,write}() does not take the bus size
+into account, and does not double all Manual Mode Data Register access
+sizes when communicating with a HyperFLASH or Octal-SPI Flash device.
 
-Cc: Will Deacon <will@kernel.org>
-Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Fix this, and avoid the back-and-forth conversion between transfer size
+and Transfer Data Enable bits, by explicitly storing the transfer size
+in struct rpcif, and using that value to determine access size in
+rpcif_reg_{read,write}().
+
+Enforce that the "high" Manual Mode Read/Write Data Registers
+(SM[RW]DR1) are only used for 8-byte data accesses.
+While at it, forbid writing to the Manual Mode Read Data Registers,
+as they are read-only.
+
+Fixes: fff53a551db50f5e ("memory: renesas-rpc-if: Correct QSPI data transfer in Manual mode")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
-Andrew has dropped the V3 of this patch.
+Lightly (read-only) tested on:
+  - Salvator-XS with R-Car M3-W ES1.0 with HyperFLASH,
+  - Falcon with R-Car V3U ES1.0 with QSPI.
 
-Changes in V5:
-- Correct indentation of macros
-- Tested by reverting 912efa17e512 and one sub test failed
-- Updated the writing values to the memory and added a comment
+v2:
+  - Use rpc->xfer_size instead of SPIDE register reads and
+    rpc->bus_size.
+      Note: Alternatively, rpcif_manual_xfer() could bypass regmap and
+      use {read,write}[bwl]() directly, cfr. commit 0d37f69cacb33435
+      ("memory: renesas-rpc-if: Correct QSPI data transfer in Manual
+      mode") in the BSP.
+  - HF dirmap reads are confirmed to work on R-Car M3-W,
+  - Drop RFC.
 
-Changes in V4:
-Cosmetic changes
-Removed global variables
-Replaced ksft_print_msg with ksft_exit_fail_msg to exit the program at
-once
-Some other minor changes
-Correct the authorship of the patch
+On Salvator-XS with unlocked HyperFlash, the HyperFlash is now detected
+again, cfr. (with DEBUG_CFI enabled):
 
-Tests of soft dirty bit in this patch and in madv_populate.c are
-non-overlapping. madv_populate.c has only one soft-dirty bit test in the
-context of different advise (MADV_POPULATE_READ and
-MADV_POPULATE_WRITE). This new test adds more tests.
+    Number of erase regions: 1
+    Primary Vendor Command Set: 0002 (AMD/Fujitsu Standard)
+    Primary Algorithm Table at 0040
+    Alternative Vendor Command Set: 0000 (None)
+    No Alternate Algorithm Table
+    Vcc Minimum:  1.7 V
+    Vcc Maximum:  1.9 V
+    No Vpp line
+    Typical byte/word write timeout: 512 \xc2\xb5s
+    Maximum byte/word write timeout: 2048 \xc2\xb5s
+    Typical full buffer write timeout: 512 \xc2\xb5s
+    Maximum full buffer write timeout: 2048 \xc2\xb5s
+    Typical block erase timeout: 1024 ms
+    Maximum block erase timeout: 4096 ms
+    Typical chip erase timeout: 262144 ms
+    Maximum chip erase timeout: 1048576 ms
+    Device size: 0x4000000 bytes (64 MiB)
+    Flash Device Interface description: 0x0000
+      - x8-only asynchronous interface
+    Max. bytes in buffer write: 0x200
+    Number of Erase Block Regions: 1
+      Erase Region #0: BlockSize 0x40000 bytes, 256 blocks
+    rpc-if-hyperflash: Found 1 x16 devices at 0x0 in 16-bit bank. Manufacturer ID 0x000001 Chip ID 0x007000
+    Amd/Fujitsu Extended Query Table at 0x0040
+      Amd/Fujitsu Extended Query version 1.5.
+    rpc-if-hyperflash: CFI contains unrecognised boot bank location (0). Assuming bottom.
+    number of CFI chips: 1
 
-Tab width of 8 has been used to align the macros. This alignment may look
-odd in shell or email. But it looks alright in editors.
-
-Test output:
-TAP version 13
-1..5
-ok 1 Test test_simple
-ok 2 Test test_vma_reuse reused memory location
-ok 3 Test test_vma_reuse dirty bit of previous page
-ok 4 Test test_hugepage huge page allocation
-ok 5 Test test_hugepage huge page dirty bit
- # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Or
-
-TAP version 13
-1..5
-ok 1 Test test_simple
-ok 2 Test test_vma_reuse reused memory location
-ok 3 Test test_vma_reuse dirty bit of previous page
-ok 4 # SKIP Test test_hugepage huge page allocation
-ok 5 # SKIP Test test_hugepage huge page dirty bit
- # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:2 error:0
-
-Changes in V3:
-Move test to selftests/vm
-Use kselftest macros
-Minor updates to make code more maintainable
-Add configurations in config file
-
-V2 of this patch:
-https://lore.kernel.org/lkml/20210603151518.2437813-1-krisman@collabora.com/
+v1: https://lore.kernel.org/r/27107f2d578b198078df841ee2e4d7b71b183898.1647017136.git.geert+renesas@glider.be/
 ---
- tools/testing/selftests/vm/.gitignore   |   1 +
- tools/testing/selftests/vm/Makefile     |   2 +
- tools/testing/selftests/vm/config       |   2 +
- tools/testing/selftests/vm/soft-dirty.c | 146 ++++++++++++++++++++++++
- 4 files changed, 151 insertions(+)
- create mode 100644 tools/testing/selftests/vm/soft-dirty.c
+ drivers/memory/renesas-rpc-if.c | 56 ++++++++++++++++++++++++++-------
+ include/memory/renesas-rpc-if.h |  1 +
+ 2 files changed, 45 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index d7507f3c7c76a..3cb4fa771ec2a 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -29,5 +29,6 @@ write_to_hugetlbfs
- hmm-tests
- memfd_secret
- local_config.*
-+soft-dirty
- split_huge_page_test
- ksm_tests
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 4e68edb26d6b6..f25eb30b5f0cb 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -47,6 +47,7 @@ TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
- TEST_GEN_FILES += userfaultfd
-+TEST_GEN_PROGS += soft-dirty
- TEST_GEN_PROGS += split_huge_page_test
- TEST_GEN_FILES += ksm_tests
+diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+index e4cc64f560196d55..a8c7abe1cf00be65 100644
+--- a/drivers/memory/renesas-rpc-if.c
++++ b/drivers/memory/renesas-rpc-if.c
+@@ -171,18 +171,32 @@ static int rpcif_reg_read(void *context, unsigned int reg, unsigned int *val)
+ {
+ 	struct rpcif *rpc = context;
  
-@@ -92,6 +93,7 @@ KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
- $(OUTPUT)/madv_populate: vm_util.c
-+$(OUTPUT)/soft-dirty: vm_util.c
- $(OUTPUT)/split_huge_page_test: vm_util.c
- 
- ifeq ($(MACHINE),x86_64)
-diff --git a/tools/testing/selftests/vm/config b/tools/testing/selftests/vm/config
-index 60e82da0de850..be087c4bc3961 100644
---- a/tools/testing/selftests/vm/config
-+++ b/tools/testing/selftests/vm/config
-@@ -4,3 +4,5 @@ CONFIG_TEST_VMALLOC=m
- CONFIG_DEVICE_PRIVATE=y
- CONFIG_TEST_HMM=m
- CONFIG_GUP_TEST=y
-+CONFIG_TRANSPARENT_HUGEPAGE=y
-+CONFIG_MEM_SOFT_DIRTY=y
-diff --git a/tools/testing/selftests/vm/soft-dirty.c b/tools/testing/selftests/vm/soft-dirty.c
-new file mode 100644
-index 0000000000000..3153ebac6909b
---- /dev/null
-+++ b/tools/testing/selftests/vm/soft-dirty.c
-@@ -0,0 +1,146 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdio.h>
-+#include <string.h>
-+#include <stdbool.h>
-+#include <fcntl.h>
-+#include <stdint.h>
-+#include <malloc.h>
-+#include <sys/mman.h>
-+#include "../kselftest.h"
-+#include "vm_util.h"
+-	if (reg == RPCIF_SMRDR0 || reg == RPCIF_SMWDR0) {
+-		u32 spide = readl(rpc->base + RPCIF_SMENR) & RPCIF_SMENR_SPIDE(0xF);
+-
+-		if (spide == 0x8) {
++	switch (reg) {
++	case RPCIF_SMRDR0:
++	case RPCIF_SMWDR0:
++		switch (rpc->xfer_size) {
++		case 1:
+ 			*val = readb(rpc->base + reg);
+ 			return 0;
+-		} else if (spide == 0xC) {
 +
-+#define PAGEMAP_FILE_PATH "/proc/self/pagemap"
-+#define TEST_ITERATIONS 10000
++		case 2:
+ 			*val = readw(rpc->base + reg);
+ 			return 0;
+-		} else if (spide != 0xF) {
 +
-+static void test_simple(int pagemap_fd, int pagesize)
-+{
-+	int i;
-+	char *map;
-+
-+	map = aligned_alloc(pagesize, pagesize);
-+	if (!map)
-+		ksft_exit_fail_msg("mmap failed\n");
-+
-+	clear_softdirty();
-+
-+	for (i = 0 ; i < TEST_ITERATIONS; i++) {
-+		if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
-+			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
++		case 4:
++		case 8:
 +			break;
-+		}
 +
-+		clear_softdirty();
-+		// Write something to the page to get the dirty bit enabled on the page
-+		map[0] = i % 255;
++		default:
+ 			return -EILSEQ;
+ 		}
++		break;
 +
-+		if (pagemap_is_softdirty(pagemap_fd, map) == 0) {
-+			ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
++	case RPCIF_SMRDR1:
++	case RPCIF_SMWDR1:
++		if (rpc->xfer_size != 8)
++			return -EILSEQ;
++		break;
+ 	}
+ 
+ 	*val = readl(rpc->base + reg);
+@@ -193,18 +207,34 @@ static int rpcif_reg_write(void *context, unsigned int reg, unsigned int val)
+ {
+ 	struct rpcif *rpc = context;
+ 
+-	if (reg == RPCIF_SMRDR0 || reg == RPCIF_SMWDR0) {
+-		u32 spide = readl(rpc->base + RPCIF_SMENR) & RPCIF_SMENR_SPIDE(0xF);
+-
+-		if (spide == 0x8) {
++	switch (reg) {
++	case RPCIF_SMWDR0:
++		switch (rpc->xfer_size) {
++		case 1:
+ 			writeb(val, rpc->base + reg);
+ 			return 0;
+-		} else if (spide == 0xC) {
++
++		case 2:
+ 			writew(val, rpc->base + reg);
+ 			return 0;
+-		} else if (spide != 0xF) {
++
++		case 4:
++		case 8:
 +			break;
-+		}
 +
-+		clear_softdirty();
-+	}
-+	free(map);
++		default:
+ 			return -EILSEQ;
+ 		}
++		break;
 +
-+	ksft_test_result(i == TEST_ITERATIONS, "Test %s\n", __func__);
-+}
++	case RPCIF_SMWDR1:
++		if (rpc->xfer_size != 8)
++			return -EILSEQ;
++		break;
 +
-+static void test_vma_reuse(int pagemap_fd, int pagesize)
-+{
-+	char *map, *map2;
-+
-+	map = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
-+	if (map == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap failed");
-+
-+	clear_softdirty();
-+
-+	/* Write to the page before unmapping and map the same size region again to check
-+	 * if same memory region is gotten next time and if dirty bit is preserved across
-+	 * this type of allocations.
-+	 */
-+	map[0]++;
-+
-+	munmap(map, pagesize);
-+
-+	map2 = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
-+	if (map2 == MAP_FAILED)
-+		ksft_exit_fail_msg("mmap failed");
-+
-+	ksft_test_result(map == map2, "Test %s reused memory location\n", __func__);
-+
-+	ksft_test_result(pagemap_is_softdirty(pagemap_fd, map) != 0,
-+			 "Test %s dirty bit of previous page\n", __func__);
-+
-+	munmap(map2, pagesize);
-+}
-+
-+static void test_hugepage(int pagemap_fd, int pagesize)
-+{
-+	char *map;
-+	int i, ret;
-+	size_t hpage_len = read_pmd_pagesize();
-+
-+	map = memalign(hpage_len, hpage_len);
-+	if (!map)
-+		ksft_exit_fail_msg("memalign failed\n");
-+
-+	ret = madvise(map, hpage_len, MADV_HUGEPAGE);
-+	if (ret)
-+		ksft_exit_fail_msg("madvise failed %d\n", ret);
-+
-+	for (i = 0; i < hpage_len; i++)
-+		map[i] = (char)i;
-+
-+	if (check_huge(map)) {
-+		ksft_test_result_pass("Test %s huge page allocation\n", __func__);
-+
-+		clear_softdirty();
-+		for (i = 0 ; i < TEST_ITERATIONS ; i++) {
-+			if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
-+				ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
-+				break;
-+			}
-+
-+			clear_softdirty();
-+			// Write something to the page to get the dirty bit enabled on the page
-+			map[0] = i % 255;
-+
-+			if (pagemap_is_softdirty(pagemap_fd, map) == 0) {
-+				ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
-+				break;
-+			}
-+			clear_softdirty();
-+		}
-+
-+		ksft_test_result(i == TEST_ITERATIONS, "Test %s huge page dirty bit\n", __func__);
-+	} else {
-+		// hugepage allocation failed. skip these tests
-+		ksft_test_result_skip("Test %s huge page allocation\n", __func__);
-+		ksft_test_result_skip("Test %s huge page dirty bit\n", __func__);
-+	}
-+	free(map);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int pagemap_fd;
-+	int pagesize;
-+
-+	ksft_print_header();
-+	ksft_set_plan(5);
-+
-+	pagemap_fd = open(PAGEMAP_FILE_PATH, O_RDONLY);
-+	if (pagemap_fd < 0)
-+		ksft_exit_fail_msg("Failed to open %s\n", PAGEMAP_FILE_PATH);
-+
-+	pagesize = getpagesize();
-+
-+	test_simple(pagemap_fd, pagesize);
-+	test_vma_reuse(pagemap_fd, pagesize);
-+	test_hugepage(pagemap_fd, pagesize);
-+
-+	close(pagemap_fd);
-+
-+	return ksft_exit_pass();
-+}
++	case RPCIF_SMRDR0:
++	case RPCIF_SMRDR1:
++		return -EPERM;
+ 	}
+ 
+ 	writel(val, rpc->base + reg);
+@@ -469,6 +499,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
+ 
+ 			smenr |= RPCIF_SMENR_SPIDE(rpcif_bits_set(rpc, nbytes));
+ 			regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
++			rpc->xfer_size = nbytes;
+ 
+ 			memcpy(data, rpc->buffer + pos, nbytes);
+ 			if (nbytes == 8) {
+@@ -533,6 +564,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
+ 			regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
+ 			regmap_write(rpc->regmap, RPCIF_SMCR,
+ 				     rpc->smcr | RPCIF_SMCR_SPIE);
++			rpc->xfer_size = nbytes;
+ 			ret = wait_msg_xfer_end(rpc);
+ 			if (ret)
+ 				goto err_out;
+diff --git a/include/memory/renesas-rpc-if.h b/include/memory/renesas-rpc-if.h
+index 7c93f5177532f187..9c0ad64b8d292d49 100644
+--- a/include/memory/renesas-rpc-if.h
++++ b/include/memory/renesas-rpc-if.h
+@@ -72,6 +72,7 @@ struct rpcif {
+ 	enum rpcif_type type;
+ 	enum rpcif_data_dir dir;
+ 	u8 bus_size;
++	u8 xfer_size;
+ 	void *buffer;
+ 	u32 xferlen;
+ 	u32 smcr;
 -- 
-2.30.2
+2.25.1
 

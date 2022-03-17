@@ -2,227 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989674DCD64
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E51EA4DCD70
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237236AbiCQSRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
+        id S237376AbiCQSTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232048AbiCQSRq (ORCPT
+        with ESMTP id S237337AbiCQSTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:17:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBE71CAF11;
-        Thu, 17 Mar 2022 11:16:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39D4B616EA;
-        Thu, 17 Mar 2022 18:16:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 634B1C340E9;
-        Thu, 17 Mar 2022 18:16:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647540988;
-        bh=nWqId3WbTiLUsX7rCr5adYD6/O7uzN3/Z1DzPVUsjAo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IxmjVXEZtDruYHR0kyX5JDAEYEXNdg4zq6abVG4+XISdhf7m1G3ZNX0rdrRC3FfO+
-         8nkiCK17TgcIFjttpGR2h2UBu5CsKO01JXfBLx85sde+LFexKn1NvEOuj4iwUoLcyr
-         kFGL7L9CN1aRfpax7+vy/fkasgjdT8dI9K3Wq9iRlHQDPtwuLV2qAKIR3CFpiZ8rOy
-         JYOLO9YNGRUVCGo8UyN/B1z/fRl1MGkxSCK4kylCnZcgLwUb15kIt0NMbMWFva/QPZ
-         mMrrQBWIODgTiIVFTCqr7RM0S/OFCUi4306YGmWuvydwoDneVfNyLfi9d/XwPcJ/OR
-         1Bt3FQGFsFUAQ==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Networking for 5.17-final
-Date:   Thu, 17 Mar 2022 11:16:27 -0700
-Message-Id: <20220317181627.487668-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 17 Mar 2022 14:19:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC46F5D181
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:18:18 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647541096;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X1cMRioNx9dyBHJVz2CH0cxjLaOPntib9co0rfHgwgU=;
+        b=Qwnh3wirWfWrTNOaSMoLiRggVDoBJWJqwgsac8TwO2aXHM/Csr4Ev8uzz/p9rXDUctImmG
+        dHBeGfNHLypxIDjPbxuOyaLAwhX4p9u8suz7kHja7f7zJYjSY6pTWCePgU8OSTEHShw36E
+        YJ6OcRxOCEggZawGP+Um3yi4d3pQjGvvvR3DOcfn6G0FbjSePDvwf0QFBuXYlrSG5fFnZM
+        AhjYv6i+uicoy3Uf3Rn3t8gLmHqKa90SYli+pTRW96YuWdy0IHHzF4DoCkD3FQZqhlhHen
+        9JUbAO8wusF9B641iIeSLJQGOfCSPCiVtJXrMQtJb53ZC8zaQSJHJqdN7XHbeA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647541096;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X1cMRioNx9dyBHJVz2CH0cxjLaOPntib9co0rfHgwgU=;
+        b=SabTM6h+J39HEs/HdKKtPDESeI6Qyc5crpV+6SBE2jLSTqW7Ok/JWoGjxwPhlru3PeujNl
+        CuIvw7zWGOq/hwCw==
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCHv6 07/30] x86/traps: Add #VE support for TDX guest
+In-Reply-To: <20220317173354.rqymufl37lcrtmjh@black.fi.intel.com>
+References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
+ <20220316020856.24435-8-kirill.shutemov@linux.intel.com>
+ <877d8t2ykp.ffs@tglx> <20220317173354.rqymufl37lcrtmjh@black.fi.intel.com>
+Date:   Thu, 17 Mar 2022 19:18:15 +0100
+Message-ID: <87czikcujc.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
+On Thu, Mar 17 2022 at 20:33, Kirill A. Shutemov wrote:
+> On Thu, Mar 17, 2022 at 01:48:54AM +0100, Thomas Gleixner wrote:
+>> On Wed, Mar 16 2022 at 05:08, Kirill A. Shutemov wrote:
+>> Hmm?
+>
+> Does the changed version below address your concerns?
+>
+> 	void tdx_get_ve_info(struct ve_info *ve)
+> 	{
+> 		struct tdx_module_output out;
+>
+> 		/*
+> 		 * Called during #VE handling to retrieve the #VE info from the
+> 		 * TDX module.
+> 		 *
+> 		 * This has to be called early in #VE handling.  A "nested" #VE which
+> 		 * occurs before this will raise a #DF and is not recoverable.
+> 		 *
+> 		 * The call retrieves the #VE info from the TDX module, which also
+> 		 * clears the "#VE valid" flag. This must be done before anything else
+> 		 * because any #VE that occurs while the valid flag is set will lead to
+> 		 * #DF.
+> 		 *
+> 		 * Note, the TDX module treats virtual NMIs as inhibited if the #VE
+> 		 * valid flag is set. It means that NMI=>#VE will not result in a #DF.
+> 		 */
+> 		tdx_module_call(TDX_GET_VEINFO, 0, 0, 0, 0, &out);
+>
+> 		/* Transfer the output parameters */
+> 		ve->exit_reason = out.rcx;
+> 		ve->exit_qual   = out.rdx;
+> 		ve->gla         = out.r8;
+> 		ve->gpa         = out.r9;
+> 		ve->instr_len   = lower_32_bits(out.r10);
+> 		ve->instr_info  = upper_32_bits(out.r10);
+> 	}
 
-A few last minute revert / disable and fix patches came down from
-our sub-trees. We're not waiting for any fixes at this point.
+Nice.
 
-The following changes since commit 186d32bbf034417b40e2b4e773eeb8ef106c16c1:
+>> The point is that any #VE in such a code path is fatal and you better
+>> come up with some reasonable explanation why this is not the case in
+>> those code pathes and how a potential violation of that assumption might
+>> be detected especially in rarely used corner cases. If such a violation
+>> is not detectable by audit, CI, static code analysis or whatever then
+>> document the consequences instead of pretending that the problem does
+>> not exist and the kernel is perfect today and forever.
+>
+> It is detectable by audit. The critical windows very limited and located
+> in the highly scrutinized entry code. But, yes, I cannot guarantee that
+> this code will be perfect forever.
 
-  Merge tag 'net-5.17-rc8' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-03-10 16:47:58 -0800)
+Fair enough.
 
-are available in the Git repository at:
+> Consequences of #VE in these critical windows are mentioned in the
+> comment:
+>
+> 	Any exception in this window leads to hard to debug issues and can
+> 	be exploited for privilege escalation. 
+>
+> I have hard time understanding what I has to change here. Do you want
+> details of audit to be documented? Make consequences of #VE at the wrong
+> point to be more prominent in the comment? 
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.17-final
+So having something like this in the comment would be helpful:
 
-for you to fetch changes up to b04683ff8f0823b869c219c78ba0d974bddea0b5:
+        *
+	* The entry code has been audited carefuly for following these
+        * expectations. Changes in the entry code have to be audited for
+        * correctness vs. this aspect.  #VE in these places will cause
+        * [an instant kernel panic | whatever | fill the blanks ]
+        *
 
-  iavf: Fix hang during reboot/shutdown (2022-03-17 09:37:37 -0700)
+Thanks,
 
-----------------------------------------------------------------
-Networking fixes for 5.17-final, including fixes from netfilter, ipsec,
-and wireless.
-
-Current release - regressions:
-
- - Revert "netfilter: nat: force port remap to prevent shadowing
-   well-known ports", restore working conntrack on asymmetric paths
-
- - Revert "ath10k: drop beacon and probe response which leak from
-   other channel", restore working AP and mesh mode on QCA9984
-
- - eth: intel: fix hang during reboot/shutdown
-
-Current release - new code bugs:
-
- - netfilter: nf_tables: disable register tracking, it needs more
-   work to cover all corner cases
-
-Previous releases - regressions:
-
- - ipv6: fix skb_over_panic in __ip6_append_data when (admin-only)
-   extension headers get specified
-
- - esp6: fix ESP over TCP/UDP, interpret ipv6_skip_exthdr's return
-   value more selectively
-
- - bnx2x: fix driver load failure when FW not present in initrd
-
-Previous releases - always broken:
-
- - vsock: stop destroying unrelated sockets in nested virtualization
-
- - packet: fix slab-out-of-bounds access in packet_recvmsg()
-
-Misc:
-
- - add Paolo Abeni to networking maintainers!
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-----------------------------------------------------------------
-Claudiu Beznea (1):
-      net: dsa: microchip: add spi_device_id tables
-
-David S. Miller (1):
-      Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
-
-Doug Berger (1):
-      net: bcmgenet: skip invalid partial checksums
-
-Eric Dumazet (1):
-      net/packet: fix slab-out-of-bounds access in packet_recvmsg()
-
-Florian Westphal (2):
-      Revert "netfilter: nat: force port remap to prevent shadowing well-known ports"
-      Revert "netfilter: conntrack: tag conntracks picked up in local out hook"
-
-Haimin Zhang (1):
-      af_key: add __GFP_ZERO flag for compose_sadb_supported in function pfkey_register
-
-Ivan Vecera (1):
-      iavf: Fix hang during reboot/shutdown
-
-Jakub Kicinski (4):
-      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
-      Add Paolo Abeni to networking maintainers
-      Merge tag 'wireless-2022-03-16' of git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless
-      Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/klassert/ipsec
-
-Jiasheng Jiang (2):
-      atm: eni: Add check for dma_map_single
-      hv_netvsc: Add check for kvmalloc_array
-
-Jiyong Park (1):
-      vsock: each transport cycles only on its own sockets
-
-Juerg Haefliger (1):
-      net: phy: mscc: Add MODULE_FIRMWARE macros
-
-Kalle Valo (1):
-      Revert "ath10k: drop beacon and probe response which leak from other channel"
-
-Kurt Cancemi (1):
-      net: phy: marvell: Fix invalid comparison in the resume and suspend functions
-
-Maciej Fijalkowski (1):
-      ice: fix NULL pointer dereference in ice_update_vsi_tx_ring_stats()
-
-Manish Chopra (1):
-      bnx2x: fix built-in kernel driver load failure
-
-Miaoqian Lin (1):
-      net: dsa: Add missing of_node_put() in dsa_port_parse_of
-
-Michael Walle (1):
-      net: mdio: mscc-miim: fix duplicate debugfs entry
-
-Nicolas Dichtel (1):
-      net: handle ARPHRD_PIMREG in dev_is_mac_header_xmit()
-
-Niels Dossche (1):
-      alx: acquire mutex for alx_reinit in alx_change_mtu
-
-Pablo Neira Ayuso (1):
-      netfilter: nf_tables: disable register tracking
-
-Przemyslaw Patynowski (1):
-      iavf: Fix double free in iavf_reset_task
-
-Sabrina Dubroca (1):
-      esp6: fix check on ipv6_skip_exthdr's return value
-
-Sudheer Mogilappagari (1):
-      ice: destroy flow director filter mutex after releasing VSIs
-
-Tadeusz Struk (1):
-      net: ipv6: fix skb_over_panic in __ip6_append_data
-
-Vladimir Oltean (1):
-      net: mscc: ocelot: fix backwards compatibility with single-chain tc-flower offload
-
- MAINTAINERS                                      |  2 ++
- drivers/atm/eni.c                                |  2 ++
- drivers/net/dsa/microchip/ksz8795_spi.c          | 11 ++++++
- drivers/net/dsa/microchip/ksz9477_spi.c          | 12 +++++++
- drivers/net/ethernet/atheros/alx/main.c          |  5 ++-
- drivers/net/ethernet/broadcom/bnx2x/bnx2x.h      |  2 --
- drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c  | 28 +++++++++------
- drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c | 15 ++-------
- drivers/net/ethernet/broadcom/genet/bcmgenet.c   |  6 ++--
- drivers/net/ethernet/intel/iavf/iavf_main.c      | 15 ++++++++-
- drivers/net/ethernet/intel/ice/ice_main.c        |  7 ++--
- drivers/net/ethernet/mscc/ocelot_flower.c        | 16 ++++++++-
- drivers/net/hyperv/netvsc_drv.c                  |  3 ++
- drivers/net/mdio/mdio-mscc-miim.c                |  9 ++++-
- drivers/net/phy/marvell.c                        |  8 ++---
- drivers/net/phy/mscc/mscc_main.c                 |  3 ++
- drivers/net/wireless/ath/ath10k/wmi.c            | 33 +-----------------
- drivers/vhost/vsock.c                            |  3 +-
- include/linux/if_arp.h                           |  1 +
- include/net/af_vsock.h                           |  3 +-
- include/net/netfilter/nf_conntrack.h             |  1 -
- net/dsa/dsa2.c                                   |  1 +
- net/ipv6/esp6.c                                  |  3 +-
- net/ipv6/ip6_output.c                            |  4 +--
- net/key/af_key.c                                 |  2 +-
- net/netfilter/nf_conntrack_core.c                |  3 --
- net/netfilter/nf_nat_core.c                      | 43 ++----------------------
- net/netfilter/nf_tables_api.c                    |  9 +++--
- net/packet/af_packet.c                           | 11 +++++-
- net/vmw_vsock/af_vsock.c                         |  9 +++--
- net/vmw_vsock/virtio_transport.c                 |  7 ++--
- net/vmw_vsock/vmci_transport.c                   |  5 ++-
- tools/testing/selftests/netfilter/nft_nat.sh     |  5 ++-
- 33 files changed, 154 insertions(+), 133 deletions(-)
+        tglx

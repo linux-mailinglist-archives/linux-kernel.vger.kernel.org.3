@@ -2,78 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003F54DC51F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 239384DC523
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233186AbiCQL5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
+        id S233190AbiCQL6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbiCQL5k (ORCPT
+        with ESMTP id S230122AbiCQL6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:57:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373AA1E5A6E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:56:24 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647518182;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xGDWpn4Nd+uvmJdYTff2wapx3t0iRL9wgWFjTPR3T/o=;
-        b=kcfYjhPhEky1G/4eLzaWqhS2gXIePqiuNm/XHOly+5Ia7ezNUXWqibpOoBx9pI7XFqUS41
-        VpMlla/Sn6DQbCsV7PlgiO+nWAhAOUCsde+nVf6DeNCQI8J0uODk/zmIE3zntV9/hBtU0Q
-        fK6QcKIgq/SjApsDH73UmI1OVgAwAM3Bf2WDpGWdB0DkL6VBVs9jw5gaTXHb/ONOWWoKDf
-        g9TNbcXPPuuP0GImKoStLisL51HAAEMs7i4sgV7HVERGW9s8AIUnItmndKuVH7ZbWbREj7
-        Uf6A9RDQKSTxBzPg9Zc7yDRJ9EgDQ0gk1SM/x6ST9qevmAICI9IYF0lC47Cg2w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647518182;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xGDWpn4Nd+uvmJdYTff2wapx3t0iRL9wgWFjTPR3T/o=;
-        b=4mfzzwiwJ1CkEX+izxxiJkuxfiWn4ECOne/Owep5gpdH1B0cjREr5Xp+DhG/Z761L/Dzgc
-        7hz2d9K+NzrsnhAQ==
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCHv6 13/30] x86: Adjust types used in port I/O helpers
-In-Reply-To: <20220316020856.24435-14-kirill.shutemov@linux.intel.com>
-References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
- <20220316020856.24435-14-kirill.shutemov@linux.intel.com>
-Date:   Thu, 17 Mar 2022 12:56:22 +0100
-Message-ID: <87h77w23o9.ffs@tglx>
+        Thu, 17 Mar 2022 07:58:31 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43A81E5A79
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:15 -0700 (PDT)
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 75B593F499
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:57:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647518234;
+        bh=VChXuM8K4QoDWKbjkubBo2C7YS9EHl+r3kLe9dbaCgo=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=RIvnWzoKVJ+hbtq6+bzObfxgUdPhuE661YJauvJ9sKNPxRtrfDfPgJrvEyUJ7HOC0
+         O1XpUNURmPZNZTOZ2gpFygWujmQU4j9xtmDsI3zRmGm0IIoQWY4TKA01HGd7aKU7Ed
+         wsviopv5DETjEIZBIKjT+R9CejjvLu4+TBHAuLxbH0HHTE4nfq4sNX6zRMUDKdlGbT
+         DXKs+JcZFEnM8sGtRCd2KVn1C2m3PUJJvWUl9Sp7DMi80msAWYyfpaCT2TvHLNlV/3
+         4ZGA55vwQ2UTNtgDwcaVBkPBRVhUFBJBzAcKA1Oi1nHpFYQzpodkkTGsTG/u3JZWXi
+         9qQ5oE2+9HXIg==
+Received: by mail-wr1-f71.google.com with SMTP id j67-20020adf9149000000b00203e6b7d151so774987wrj.13
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=VChXuM8K4QoDWKbjkubBo2C7YS9EHl+r3kLe9dbaCgo=;
+        b=P836qA2s3h89wRHK8XMF0sO6gpMzMb0AqEjL1/YMJszZ9kqe3onSojbephtKlZ/f0J
+         himAjufFRapziGN3VXNTjeQN3RfBHXxQzx3ijSXsqooXAnJ+pM3stH5QzQoVjSi3HHmt
+         mRQDM0aCJ0GBi44wRqeYSdqTnIzNprYfK0uq8uKlaN8ggDZgZfH1jfJbVe3KyP6z4KAH
+         KPZSUVtQOd38lqWmdP6w2qsnRngqZuFaVsOaYvqHfCIHNV1PJxro9gGF2Dr/lJwOA/C/
+         h5OB1MLq9Yg10GjUq/X8TlDnKjWHxpVoBuyhq3lNopP2k+N504P2ISUFdY7L+s4/QHFc
+         qxZg==
+X-Gm-Message-State: AOAM532QrTv8mj9Hacb9KSdMXdC/z/xb8AVljsnKltT3fxsritYQpERc
+        UDW4F/L2Ks2nqMFX7gvWRY/ep3KGHnrS9/6nhPtV0YYmPw5oC3uJctnOLbw8/UsLzZSxhjojhJL
+        AlzbT/qU7+B/u5Eo+ZphxLnFNVy6B6Z+VqKCkGIMQ7w==
+X-Received: by 2002:a1c:7518:0:b0:381:c77:ceec with SMTP id o24-20020a1c7518000000b003810c77ceecmr3609284wmc.57.1647518234160;
+        Thu, 17 Mar 2022 04:57:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxsiX6nbj0kfQADgRjJIDqdkJ617e7CvGmtStpgdMKD/NEmWTzdx19H/0Ce1BkkWrE8nM6zWw==
+X-Received: by 2002:a1c:7518:0:b0:381:c77:ceec with SMTP id o24-20020a1c7518000000b003810c77ceecmr3609267wmc.57.1647518233902;
+        Thu, 17 Mar 2022 04:57:13 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id r65-20020a1c4444000000b0038c48dd23b9sm5824900wma.5.2022.03.17.04.57.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 04:57:12 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Linus Walleij <linusw@kernel.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Michael Walle <michael@walle.cc>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        Daniel Palmer <daniel@thingy.jp>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Bert Vermeulen <bert@biot.com>,
+        John Crispin <john@phrozen.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Suman Anna <s-anna@ti.com>, Lokesh Vutla <lokeshvutla@ti.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, openbmc@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-oxnas@groups.io
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 02/18] ARM: dts: ox820: align interrupt controller node name with dtschema
+Date:   Thu, 17 Mar 2022 12:56:49 +0100
+Message-Id: <20220317115705.450427-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
+References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16 2022 at 05:08, Kirill A. Shutemov wrote:
-> Change port I/O helpers to use u8/u16/u32 instead of unsigned
-> char/short/int for values. Use u16 instead of int for port number.
->
-> It aligns the helpers with implementation in boot stub in preparation
-> for consolidation.
->
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
+Fixes dtbs_check warnings like:
 
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+  gic@1000: $nodename:0: 'gic@1000' does not match '^interrupt-controller(@[0-9a-f,]+)*$'
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ arch/arm/boot/dts/ox820.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/ox820.dtsi b/arch/arm/boot/dts/ox820.dtsi
+index 90846a7655b4..dde4364892bf 100644
+--- a/arch/arm/boot/dts/ox820.dtsi
++++ b/arch/arm/boot/dts/ox820.dtsi
+@@ -287,7 +287,7 @@ local-timer@600 {
+ 				clocks = <&armclk>;
+ 			};
+ 
+-			gic: gic@1000 {
++			gic: interrupt-controller@1000 {
+ 				compatible = "arm,arm11mp-gic";
+ 				interrupt-controller;
+ 				#interrupt-cells = <3>;
+-- 
+2.32.0
+

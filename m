@@ -2,92 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E1A4DBC02
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2A24DBC05
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352540AbiCQBDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 21:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
+        id S1347539AbiCQBEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 21:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344149AbiCQBC7 (ORCPT
+        with ESMTP id S233097AbiCQBEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 21:02:59 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BD41AD80
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:01:44 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id o5so7576909ybe.2
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:01:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2XMh0e8fa1FhO/j0IsGbsAU4HyLhy63wh7ytckFoXEA=;
-        b=ZAPyJAOyiCauXN4zX3OSYnlch2FhpkKGymlETb4hf1qg/yUx11Ck389ZeTeKlimDZ5
-         k32Br1MVI6VyMPgKph8JKJ8h0vmoExNqo0yOVOdtD2RVWXQp0v4ftC3xRZvHBcMw8OSK
-         37WiKTeGr5PV1Agc5D39u57OHv87ImiQYQioYc/Eo0SrN6yxCIlW47Q6J8Y6RqvBZ297
-         4SBghgEzMDwNUb0iCR4iO0u2kRszJp8noDPUtZJbjoH0+3G+ggw4w/WbhjrxSPIxvoUd
-         ZeJWydnICHA9U5SkohDzuPdEmGN3SSq8irKceinZLoXx/86ejfALffxIhtaleEL/DjRL
-         x9Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2XMh0e8fa1FhO/j0IsGbsAU4HyLhy63wh7ytckFoXEA=;
-        b=Xf/u/Mr7Iw8h0VUkffo39JEaKcmWdozyvfHB0Z018DDQpTy8gcvub3WZMwslRh+jIJ
-         mTJm3yqoUUkJRn3cnM6LzTB3SZiDISIJbdtmDn5QrpV97LJip8VJkayNj5F4xeyAI6KA
-         RDFvmWPHxz94Kw4KiynTZk1rDFcGRvsh5CpNYMYDL6oVvhmWHKwp+3fBlGC9o+RZQF8I
-         wrf9v3Yr1t7YYivTEPE/2pMFzOmyuuL7L6FSqx3nfeETSibG6PFiwCsvbDwLkdAKhMsh
-         HguYM08kiaWRIJU/fc8nfrtz8vUKPapNapYtJbCMt++KTgjv8BxzpE5CwDcmph2QmrAB
-         SHQg==
-X-Gm-Message-State: AOAM530rH6FHpEPfkCeXGd58DeXY2nECbKvm3YvqJeSxv2Sn7Tbz9kJ5
-        +nbdNqgT+FojlsNRetkKqUZI4o/lcF+pqM1Nw8AXKQ==
-X-Google-Smtp-Source: ABdhPJwXRv/OtHU5JAnu4idinx3RpVumcJd9VwVN957MrUxV0Dws0TZIyIbctEr87o3xFcpOU4oQFRrLx2WqgWBxz8s=
-X-Received: by 2002:a25:4e82:0:b0:633:68d7:b864 with SMTP id
- c124-20020a254e82000000b0063368d7b864mr2861981ybb.514.1647478904060; Wed, 16
- Mar 2022 18:01:44 -0700 (PDT)
+        Wed, 16 Mar 2022 21:04:51 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA3D1BEBA;
+        Wed, 16 Mar 2022 18:03:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V7OxGLH_1647479011;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V7OxGLH_1647479011)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 17 Mar 2022 09:03:32 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     john.johansen@canonical.com
+Cc:     jmorris@namei.org, serge@hallyn.com, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] apparmor: Fix some kernel-doc comments
+Date:   Thu, 17 Mar 2022 09:03:30 +0800
+Message-Id: <20220317010330.82929-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20220316183227.725bfd37@canb.auug.org.au>
-In-Reply-To: <20220316183227.725bfd37@canb.auug.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 17 Mar 2022 02:01:32 +0100
-Message-ID: <CACRpkdbvm4nnoTWORJV1h0qKFyaCE0q6JXLpXmi3f0nvx5wZ7g@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 8:32 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Remove some warnings found by running scripts/kernel-doc,
+which is caused by using 'make W=1'.
 
-> After merging the kspp tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-(...)
-> I have applied the following hack patch for today.
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Wed, 16 Mar 2022 18:12:14 +1100
-> Subject: [PATCH] fixup for "pinctrl: nuvoton: add NPCM7xx pinctrl and GPIO driver"
+security/apparmor/domain.c:137: warning: Function parameter or member
+'state' not described in 'label_compound_match'
+security/apparmor/domain.c:137: warning: Excess function parameter
+'start' description in 'label_compound_match'
+security/apparmor/domain.c:1294: warning: Excess function parameter
+'onexec' description in 'aa_change_profile'
 
-Patch looks good but didn't apply to he pinctrl tree when I
-tried to simply apply it there.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ security/apparmor/domain.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Since it is touching IRQ handlers, I suspect this could maybe
-apply to Marc Z:s or Bartosz trees? Or can you see which one
-needs this?
+diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
+index a29e69d2c300..d71023f5c9c4 100644
+--- a/security/apparmor/domain.c
++++ b/security/apparmor/domain.c
+@@ -119,7 +119,7 @@ static inline unsigned int match_component(struct aa_profile *profile,
+  * @profile: profile to find perms for
+  * @label: label to check access permissions for
+  * @stack: whether this is a stacking request
+- * @start: state to start match in
++ * @state: state to start match in
+  * @subns: whether to do permission checks on components in a subns
+  * @request: permissions to request
+  * @perms: perms struct to set
+@@ -1279,7 +1279,6 @@ static int change_profile_perms_wrapper(const char *op, const char *name,
+ /**
+  * aa_change_profile - perform a one-way profile transition
+  * @fqname: name of profile may include namespace (NOT NULL)
+- * @onexec: whether this transition is to take place immediately or at exec
+  * @flags: flags affecting change behavior
+  *
+  * Change to new profile @name.  Unlike with hats, there is no way
+-- 
+2.20.1.7.g153144c
 
-Yours,
-Linus Walleij

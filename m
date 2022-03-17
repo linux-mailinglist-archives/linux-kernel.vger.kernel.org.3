@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60DD74DC660
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2164DC724
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234055AbiCQMvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
+        id S234368AbiCQM5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234037AbiCQMvA (ORCPT
+        with ESMTP id S234898AbiCQMyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:51:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A631F2DC5;
-        Thu, 17 Mar 2022 05:49:05 -0700 (PDT)
+        Thu, 17 Mar 2022 08:54:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0B81F0CB0;
+        Thu, 17 Mar 2022 05:52:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C2C2B81E5C;
-        Thu, 17 Mar 2022 12:49:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C1D2C340E9;
-        Thu, 17 Mar 2022 12:49:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 091D361240;
+        Thu, 17 Mar 2022 12:52:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C1BC340EF;
+        Thu, 17 Mar 2022 12:52:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521341;
-        bh=S+C3nMEKcj//SPKl/o/lF689KSCYt2NX+QEWbw/d2CU=;
+        s=korg; t=1647521524;
+        bh=6PZeDCGzWtShOkcat89t0PGQUOlKnHBR17of7pirxH8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W7+R/DRrNsBK41d5ebO2kd5a/vAyZJVpPFMeN3LYjQ1xiN/7p2cQQZqU5KGg42LxN
-         e9uop0pa/4+5zuLz/V36svbZBRB6ptfGT91sz8xpT4na0x3ojZyn0FDky5+K525vYB
-         qRKZ51fmifQxFvHka4oSE5z9QSPYWwlE9EupqEww=
+        b=WwS6fDOnzmcCtu7ifGhnUBhs6S5l1A/AVi4SAZhsCANui8toWxeY4oHQl8aujTsjz
+         I+iDiGFWtuKqkKyonMKZFUvuYkvlLEWVdKur9rv6gKBMq25aplpTlr+HDZ+H4h8HEe
+         sS4N7dnAgVEQXOkg97Ite8hCfTzQTfcygWbYEtK8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 42/43] bnx2: Fix an error message
-Date:   Thu, 17 Mar 2022 13:45:53 +0100
-Message-Id: <20220317124528.836870115@linuxfoundation.org>
+Subject: [PATCH 5.15 07/25] arm64: dts: rockchip: reorder rk3399 hdmi clocks
+Date:   Thu, 17 Mar 2022 13:45:54 +0100
+Message-Id: <20220317124526.519968297@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317124527.672236844@linuxfoundation.org>
-References: <20220317124527.672236844@linuxfoundation.org>
+In-Reply-To: <20220317124526.308079100@linuxfoundation.org>
+References: <20220317124526.308079100@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,32 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Sascha Hauer <s.hauer@pengutronix.de>
 
-[ Upstream commit 8ccffe9ac3239e549beaa0a9d5e1a1eac94e866c ]
+[ Upstream commit 2e8a8b5955a000cc655f7e368670518cbb77fe58 ]
 
-Fix an error message and report the correct failing function.
+The binding specifies the clock order to "cec", "grf", "vpll". Reorder
+the clocks accordingly.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+Link: https://lore.kernel.org/r/20220126145549.617165-19-s.hauer@pengutronix.de
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/broadcom/bnx2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnx2.c b/drivers/net/ethernet/broadcom/bnx2.c
-index c3f67d8e1093..f53292eab9da 100644
---- a/drivers/net/ethernet/broadcom/bnx2.c
-+++ b/drivers/net/ethernet/broadcom/bnx2.c
-@@ -8231,7 +8231,7 @@ bnx2_init_board(struct pci_dev *pdev, struct net_device *dev)
- 		rc = pci_set_consistent_dma_mask(pdev, persist_dma_mask);
- 		if (rc) {
- 			dev_err(&pdev->dev,
--				"pci_set_consistent_dma_mask failed, aborting\n");
-+				"dma_set_coherent_mask failed, aborting\n");
- 			goto err_out_unmap;
- 		}
- 	} else if ((rc = pci_set_dma_mask(pdev, DMA_BIT_MASK(32))) != 0) {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+index 3871c7fd83b0..00f1d036dfe0 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+@@ -1802,10 +1802,10 @@
+ 		interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH 0>;
+ 		clocks = <&cru PCLK_HDMI_CTRL>,
+ 			 <&cru SCLK_HDMI_SFR>,
+-			 <&cru PLL_VPLL>,
++			 <&cru SCLK_HDMI_CEC>,
+ 			 <&cru PCLK_VIO_GRF>,
+-			 <&cru SCLK_HDMI_CEC>;
+-		clock-names = "iahb", "isfr", "vpll", "grf", "cec";
++			 <&cru PLL_VPLL>;
++		clock-names = "iahb", "isfr", "cec", "grf", "vpll";
+ 		power-domains = <&power RK3399_PD_HDCP>;
+ 		reg-io-width = <4>;
+ 		rockchip,grf = <&grf>;
 -- 
 2.34.1
 

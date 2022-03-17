@@ -2,44 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9484DCE6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3A24DCE6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237847AbiCQTEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 15:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        id S237843AbiCQTEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 15:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237814AbiCQTE1 (ORCPT
+        with ESMTP id S237844AbiCQTE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 15:04:27 -0400
-Received: from srv1.home.kabele.me (unknown [IPv6:2a02:768:2704:8c1a:3eec:efff:fe00:2ce4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CBC6BD7CA;
-        Thu, 17 Mar 2022 12:03:05 -0700 (PDT)
-Received: from srv1.home.kabele.me (localhost [IPv6:::1])
-        by srv1.home.kabele.me (Postfix) with ESMTP id C6C421692B3;
-        Thu, 17 Mar 2022 20:03:08 +0100 (CET)
-Received: from localhost ([2a01:c22:8dfa:1400:beea:2810:7764:7afc])
-        by srv1.home.kabele.me with ESMTPSA
-        id CG36LOyFM2ITWTQAnmUwTQ
-        (envelope-from <vit@kabele.me>); Thu, 17 Mar 2022 20:03:08 +0100
-Date:   Thu, 17 Mar 2022 20:03:03 +0100
-From:   Vit Kabele <vit@kabele.me>
-To:     platform-driver-x86@vger.kernel.org
-Cc:     r.marek@assembler.cz, devel@acpica.org, mingo@redhat.com,
-        robert.moore@intel.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: [PATCH 3/3 RESEND] acpica: Do not touch VGA memory when EBDA < 1KiB
-Message-ID: <YjOF5y0Edc0IdSOR@czspare1-lap.sysgo.cz>
-Mail-Followup-To: platform-driver-x86@vger.kernel.org, r.marek@assembler.cz,
-        devel@acpica.org, mingo@redhat.com, robert.moore@intel.com,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-References: <cover.1647526995.git.vit@kabele.me>
+        Thu, 17 Mar 2022 15:04:29 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29070DFDFD
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 12:03:10 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id v25-20020a05683024b900b005b2463a41faso4098287ots.10
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 12:03:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=y9n1grNnQGZ9V3E7Nxt7rAxrPIpeE9mWBbzipD+kNUA=;
+        b=C7OnQb7Ft6JJPMdNGPZU9f+Wh0vGuYeVv/0t90gB4v421kaEXNNNtfDZWN4n8OmVWa
+         b+5oZBrvYR2b1xTYVchDi3Qp3Lwn4xSe7Q5peils3J/LpgCY7X/HD0EPR1zP0KCF5VAH
+         mBJrSfBYHiSM8V5MiL5qFc2EdaNBx3kXf+/AI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=y9n1grNnQGZ9V3E7Nxt7rAxrPIpeE9mWBbzipD+kNUA=;
+        b=N6qsRVegl9WVfRZYVa0SnDi3reAcLDNku7yJV88uMZEqxIVZhnjyK3I92rkNRqm+H5
+         Fe5JKYdR8VcOPv0yZspYyVKhDG1IBJOzDQ0GUpbZl8ZJWCWHsmLCRQ6nz09kppNO+iBU
+         u/CWUCBPHm+aPXInT2zIOFMEIKNhmoYcCuI/zcYR2gShX2782YbGURoVs/+Sv8uoCDDk
+         lbPMaSRDErfvN6McJTnNC9/2fhdM7HMMJtrEEYsL4P1itv6OZyG1e0Ri0IFYtxY+kxlo
+         rhWYx5AIVAxGTwOjt8X45IJ0hkKwHj9dZMqMIYczLZoXAuq83s8E7WRH7PAALIUKcABM
+         wofQ==
+X-Gm-Message-State: AOAM530XqoTg+lrw026SuWNzis96QHoNoQf/zXTJUibpo/1YUMpDuU4S
+        cruWuDbwXnJjS6nHgOe3iJfkEL/QIN0+VpimcTaMmg==
+X-Google-Smtp-Source: ABdhPJytOdff/w0bAttaJWRW5uWOemWMvKHa31a3cxQsk0bZ+BPxIRWDn+fJdy6QN7bH+7iqufTKVKEUYt3bAiwkgok=
+X-Received: by 2002:a9d:b85:0:b0:5cb:3eeb:d188 with SMTP id
+ 5-20020a9d0b85000000b005cb3eebd188mr871324oth.77.1647543790201; Thu, 17 Mar
+ 2022 12:03:10 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 17 Mar 2022 15:03:09 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1647526995.git.vit@kabele.me>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220316172814.v1.3.Iad21bd53f3ac14956b8dbbf3825fc7ab29abdf97@changeid>
+References: <20220316172814.v1.1.I2deda8f2cd6adfbb525a97d8fee008a8477b7b0e@changeid>
+ <20220316172814.v1.3.Iad21bd53f3ac14956b8dbbf3825fc7ab29abdf97@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 17 Mar 2022 15:03:09 -0400
+Message-ID: <CAE-0n50pk=5WNZ7XTo5bCs-_--MxP+JaiNrSMH7oiDjUUVTppA@mail.gmail.com>
+Subject: Re: [PATCH v1 3/4] arm64: dts: qcom: sc7280: herobrine: disable some
+ regulators by default
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,70 +72,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ACPICA code assumes that EBDA region must be at least 1KiB in size.
-Because this is not guaranteed, it might happen that while scanning the
-memory for RSDP pointer, the kernel touches memory above 640KiB.
+Quoting Matthias Kaehlcke (2022-03-16 17:28:19)
+> Not all herobrine boards have a world facing camera or a fingerprint
+> sensor, disable the regulators that feed these devices by default and
+> only enable them for the boards that use them.
+>
+> Similarly the audio configuration can vary between boards, not all
+> boards have the regulator pp3300_codec, disable it by default.
+>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
 
-This is unwanted as the VGA memory range may not be decoded or
-even present when running under virtualization.
+This seems complicated. Maybe we should introduce some sort of mixin dts
+file for fingerprint and world facing camera and audio type so that
+boards can pick and choose what they want. Either way, that can come
+later when we get there.
 
-Signed-off-by: Vit Kabele <vit@kabele.me>
-Reviewed-by: Rudolf Marek <r.marek@assembler.cz>
----
- drivers/acpi/acpica/tbxfroot.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/acpi/acpica/tbxfroot.c b/drivers/acpi/acpica/tbxfroot.c
-index 67b7df1c0520..b1f4a91044d9 100644
---- a/drivers/acpi/acpica/tbxfroot.c
-+++ b/drivers/acpi/acpica/tbxfroot.c
-@@ -114,6 +114,7 @@ acpi_find_root_pointer(acpi_physical_address *table_address)
- 	u8 *table_ptr;
- 	u8 *mem_rover;
- 	u32 physical_address;
-+	u32 ebda_window_size;
- 
- 	ACPI_FUNCTION_TRACE(acpi_find_root_pointer);
- 
-@@ -143,25 +144,32 @@ acpi_find_root_pointer(acpi_physical_address *table_address)
- 	 */
- 	if (physical_address > 0x400 &&
- 	    physical_address < 0xA0000) {
-+		/* Calculate the scan window size
-+		 * The EBDA is not guaranteed to be larger than a KiB
-+		 * and in case that it is smaller the scanning function would
-+		 * leave the low memory and continue to the VGA range.
-+		 */
-+		ebda_window_size = ACPI_MIN(ACPI_EBDA_WINDOW_SIZE,
-+					    0xA0000 - physical_address);
-+
- 		/*
--		 * 1b) Search EBDA paragraphs (EBDA is required to be a
--		 *     minimum of 1K length)
-+		 * 1b) Search EBDA paragraphs
- 		 */
- 		table_ptr = acpi_os_map_memory((acpi_physical_address)
- 					       physical_address,
--					       ACPI_EBDA_WINDOW_SIZE);
-+					       ebda_window_size);
- 		if (!table_ptr) {
- 			ACPI_ERROR((AE_INFO,
- 				    "Could not map memory at 0x%8.8X for length %u",
--				    physical_address, ACPI_EBDA_WINDOW_SIZE));
-+				    physical_address, ebda_window_size));
- 
- 			return_ACPI_STATUS(AE_NO_MEMORY);
- 		}
- 
- 		mem_rover =
- 		    acpi_tb_scan_memory_for_rsdp(table_ptr,
--						 ACPI_EBDA_WINDOW_SIZE);
--		acpi_os_unmap_memory(table_ptr, ACPI_EBDA_WINDOW_SIZE);
-+						 ebda_window_size);
-+		acpi_os_unmap_memory(table_ptr, ebda_window_size);
- 
- 		if (mem_rover) {
- 
--- 
-2.30.2
-
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

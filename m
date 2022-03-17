@@ -2,143 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DF94DD0E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BAD4DD0D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiCQWqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 18:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
+        id S229812AbiCQWlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 18:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiCQWqT (ORCPT
+        with ESMTP id S229608AbiCQWlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 18:46:19 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAD5B29C960;
-        Thu, 17 Mar 2022 15:45:01 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22HMbwbL028517;
-        Thu, 17 Mar 2022 17:37:58 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 22HMbuFG028514;
-        Thu, 17 Mar 2022 17:37:56 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Thu, 17 Mar 2022 17:37:56 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Bill Wendling <morbo@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-Message-ID: <20220317223756.GM614@gate.crashing.org>
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com> <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <CAGG=3QW2ey2w91TxqJ6tzfJOswhTce2e0QTW7kAWyvxeiO+VNg@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGG=3QW2ey2w91TxqJ6tzfJOswhTce2e0QTW7kAWyvxeiO+VNg@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 17 Mar 2022 18:41:35 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F704263676
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:40:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647556818; x=1679092818;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=KB7mH4laCjl6yMQ+iGeEPSM/NqMV2R3n+Vr+9wtjrAo=;
+  b=jOv/b5AzZLZcsYgTMAflxBksXB7JL3l7+sRrWFZJcdGtG9xgOXpy/wm4
+   2YPMkpbhSZ0w+RfiNxzgJDDpmQYmk8xyP8sMj+rvm1I/1a4gnvqJtxeHu
+   RVKf/2ap3a2ksHlIrmy4kxWJCiZg95JJALQKFArW4XOxFa1AFmQOjF/SR
+   hPM2mPPEWTiCfjgKTlsRFuj0deVaCAIzisYaHvq4LZmjJqk9Pr/5gOOnt
+   +abD+GaHAr/T1Ij2+3JMWnURM3bF87X1ZVmXrpSPdEY8Wej4I+p7gI7MI
+   TR2J13l7OMQOf/STaMaTp4Aeo0kc3mhpUDqVgCPaH0bll2/6ywP0AFb61
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="254554083"
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="254554083"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 15:40:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="647223646"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by orsmga004.jf.intel.com with ESMTP; 17 Mar 2022 15:40:17 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 17 Mar 2022 15:40:17 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 17 Mar 2022 15:40:16 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.021;
+ Thu, 17 Mar 2022 15:40:16 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Thomas Gleixner' <tglx@linutronix.de>,
+        Pavel Machek <pavel@denx.de>
+CC:     "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: RE: [PATCH v2 1/2] x86/split_lock: Make life miserable for split
+ lockers
+Thread-Topic: [PATCH v2 1/2] x86/split_lock: Make life miserable for split
+ lockers
+Thread-Index: AQHYNMBHgmgs1nbay0qYe8hPygXs9azD68qAgABzpACAAEb9gP//juYg
+Date:   Thu, 17 Mar 2022 22:40:16 +0000
+Message-ID: <8ceaa1e7624b46feafb15da0935e161c@intel.com>
+References: <20220217012721.9694-1-tony.luck@intel.com>
+ <20220310204854.31752-1-tony.luck@intel.com>
+ <20220310204854.31752-2-tony.luck@intel.com> <20220317111305.GB2237@amd>
+ <87fsngcv25.ffs@tglx> <e2baf93885684512b4c7dc5363620a6f@AcuMS.aculab.com>
+In-Reply-To: <e2baf93885684512b4c7dc5363620a6f@AcuMS.aculab.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-
-On Thu, Mar 17, 2022 at 12:45:30PM -0700, Bill Wendling wrote:
-> On Thu, Mar 17, 2022 at 11:52 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> > It is perhaps telling that the LLVM discussion I found seems to talk
-> > more about the performance impact, not about the fact that THE
-> > GENERATED CODE WAS WRONG.
-> >
-> I think that's a bit unfair. There seemed to be a general consensus
-> that the code was wrong and needed to be fixed. However, the compiler
-> is also expected to generate the most performant code that it can.
-
-I think Linus' point is that correctness is required, and performance
-is just a nice to have.  I don't think you disagree, I sure don't :-)
-
-> > In fact, gcc pretty much documents that "cc" clobbers doesn't do
-> > anything on x86, and isn't needed. It just assumes that the arithmetic
-> > flags always get clobbered, because on x86 that's pretty much the
-> > case. They have sometimes been added for documentation purposes in the
-> > kernel, but that's all they are.
-
-GCC on x86 clobbers the arithmetic flags in every asm.  Long ago the x86
-port still used CC0 (an internal representation of the condition code
-flags), which acted effectively like clobbering the flags on every
-instruction (CC0 will finally be gone in GCC 12 btw).  The x86 port
-stopped using CC0 (and so started using the automatic "cc" clobber, to
-keep old inline asm working) in 1999 :-)
-
-"cc" is a valid clobber on every port, but it doesn't necessarily do
-anything, and if it does, it does not necessarily correspond to any more
-specific register, neither to a GCC register nor to a hardware register.
-It also is not really useful for generic code, since the asm itself is
-by nature pretty much target-specific :-)
-
-> > But the whole "you can't move _other_ things that you don't even
-> > understand around this either" is equally important. A "disable
-> > interrupts" could easily be protecting a "read and modify a CPU MSR
-> > value" too - no real "memory" access necessarily involved, but
-> > "memory" is the only way we can tell you "don't move this".
-> >
-> And yet that's not guaranteed. From
-> https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html:
-> 
-> ```
-> Note that the compiler can move even volatile asm instructions
-> relative to other code, including across jump instructions. For
-> example, on many targets there is a system register that controls the
-> rounding mode of floating-point operations. Setting it with a volatile
-> asm statement, as in the following PowerPC example, does not work
-> reliably.
-> 
->   asm volatile("mtfsf 255, %0" : : "f" (fpenv));
->   sum = x + y;
-> 
-> The solution is to reference the "sum" variable in the asm:
-> 
->   asm volatile ("mtfsf 255,%1" : "=X" (sum) : "f" (fpenv));
-> ```
-> 
-> Note that the solution _isn't_ to add a "memory" clobber, because it's
-> not guaranteed to work, as it's explicitly defined to be a read/write
-> _memory_ barrier, despite what kernel writers wish it would do.
-
-It doesn't work because *other* code can change the fp environment as
-well; adding "memory" clobbers to both asms will keep them in order (if
-they both are not deleted, etc).  This hinders optimisation very
-seriously for code like this btw, another important reason to not do it
-here.
-
-And what is "memory" here anyway?  New memory items can be added very
-late in the pass pipeline, and anything done in an earlier pass will
-not have considered those of course.  The most important case of this
-(but not the only case) is new slots on the stack.
-
-> Your assertion that compilers don't know about control registers isn't
-> exactly true. In the case of "pushf/popf", those instructions know
-> about the eflags registers. All subsequent instructions that read or
-> modify eflags also know about it. In essence, the compiler can
-> determine its own clobber list, which include MSRs.
-
-The compiler only knows about some bits in the flags register.  The
-compiler does not know about most machine resources, including all of
-the model-specific registers.
-
-
-Segher
+PiBUaGV5IGFyZSBhY3R1YWxseSBtb3JlIGxpa2VseSB0byBoYXBwZW4gaW4gdGhlIGtlcm5lbA0K
+PiB3aGVuIGNvZGUgY2FzdHMgaW50W10gdG8gbG9uZ1tdIGFuZCB0aGVuIHVzZXMgdGhlICdCSVQn
+IGZ1bmN0aW9ucyB0bw0KPiBzZXQvY2xlYXIgYml0cyAtIHdoaWNoIGRvIGxvY2tlZCBvcGVyYXRp
+b25zLg0KPiBRdWl0ZSBvZnRlbiB0aGVuIGRvbid0IG5lZWQgdGhlIGxvY2tzIGFueXdheS4NCj4g
+QW5kIHRoYXQgY2FzdCBpcyBzdXJwcmlzaW5nbHkgY29tbW9uIGFuZCBjb21wbGV0ZWx5IGJyb2tl
+biBvbiBCRS4NCg0KRGVmYXVsdCBzcGxpdCBsb2NrIG1vZGUgaXMgImtlcm5lbCBkaWVzIi4gV2Ug
+aGFkIHRvIGZpeCB1cCBhIGRvemVuIG9yDQpzbyBwbGFjZXMgKG1vc3RseSBpbnZvbHZpbmcgc2V0
+X2JpdC9jbHJfYml0IGFzIHlvdSBkZXNjcmliZSkuIEJ1dA0KYWxsIEljZSBMYWtlLiBUaWdlciBM
+YWtlIGFuZCBBbGRlciBMYWtlIHN5c3RlbXMgYXJlIHJ1bm5pbmcgaW4NCnRoYXQgbW9kZSAuLi4g
+YW5kIHdlIGhhdmVuJ3QgaGVhcmQgb2Ygd2lkZXNwcmVhZCBkZWF0aCAob3IgZGlzYWJsaW5nDQp0
+aGUgYm9vdCBvcHRpb24pLg0KDQotVG9ueQ0K

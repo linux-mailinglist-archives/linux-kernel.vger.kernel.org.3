@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0954DCE78
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF714DCE7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237855AbiCQTLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 15:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S237864AbiCQTLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 15:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbiCQTLV (ORCPT
+        with ESMTP id S237857AbiCQTLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 15:11:21 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B76208C23;
-        Thu, 17 Mar 2022 12:10:05 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id w7so7020722ioj.5;
-        Thu, 17 Mar 2022 12:10:04 -0700 (PDT)
+        Thu, 17 Mar 2022 15:11:35 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784B9208C23
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 12:10:18 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id w4so5214674ply.13
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 12:10:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=hDbgA7gV8Bhpf/qXtTqfrmshocN1+RVTTi6fuPy0wKs=;
-        b=KsZOvvOZLobBDug40aTcfdczgcTC/lpgMfOJUf2X+gKksL0p+PYP5WCWbc3dM5/Kek
-         XA2qQkpoS23Dl3iTUU0LIUeFQNYBT3fMMouF0nluCcQagE2l2YoPVXif7lVCOlrtyePP
-         T5QTA8zWK5aOgp4Fbdp+Z3FbvRafehaKlJ1zXwM4CYzf8xxs8v/b4ZObWt2ejkPY2m88
-         VMnQOxKIZ9r4oXLgDrRzirn4HdENgKA/jzz9HP7DFDwAJSpuFsFwkjl3JCeIXTVtXqsr
-         dIflCURkLJ9imj8nhYT4KOjeMM5vXE7MqfsQOPgDF18S52NR9Kec1LPO4IUUlG9V6dzt
-         Rlmw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=q+Yvk4Xw+jpjX5xTLCBpPZo0AleetlGgSVjMzYWsGsY=;
+        b=PtsRNGgXT9KGmeoGD0ZfYSh4rI+8giEJ2KDLATss1DA+b5E2XmtOoQvuZ7lR5RaKJg
+         JNeCtFapCZfcql3cKxFdtTHYu4iLSgQo7W4B3/5Tw6krOSf6xcBxeDdC8M0yIA0vu+Rq
+         yj5wV7ukcYSwWBq5UxpsKMXGM1CWepdL1z5+o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=hDbgA7gV8Bhpf/qXtTqfrmshocN1+RVTTi6fuPy0wKs=;
-        b=W3/JN2O+yv8GP9eHRgTVlG1wsLRRg5LcukPv7io8Ca+YJmoKE5TNTFCh/TiFD0Jscs
-         ly8GkvqI4ff+9IJoQU29jubvjSlf0OaThO7jyGTJU9JQMrjV2ujql4ghadYdMXSut/6X
-         9kw0M0JpvqQM5c7MpNhrjVjljLJVcpT/gryd8mJ3wUrHRyBgYePW8yigPe63UE7fbDW4
-         9s0fv8C9dYg0IEMO7mUnrkem51YfghYuSR/LfGb8CA9dwAHTuWcllfUUv/0+8ZFvzX6L
-         gMfypVEEz49FXfK/6fMPyyiDGXAhnbz1jOkr/OLgH8s0gkgVxhYtdUSvIZIFvroDkOvr
-         RGSg==
-X-Gm-Message-State: AOAM531bMsgMps5qoLaeL6aVDGsebdCKFF/oREAxqg/1C5iVbF0hNs3k
-        2isA/jwL9hgLkyfelaHYrDSC1keXKcD5gdjMPyE=
-X-Google-Smtp-Source: ABdhPJzU1bSJYhH7Evxo/QnvLA58mHOapnJkn2Aaoy+y4BMd26nfiCMVNhhKmDRCm8ofTRSSxaChXA==
-X-Received: by 2002:a02:9402:0:b0:31a:5a8:81a5 with SMTP id a2-20020a029402000000b0031a05a881a5mr2839516jai.83.1647544203738;
-        Thu, 17 Mar 2022 12:10:03 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id m5-20020a927105000000b002c60ed6d3afsm3362851ilc.69.2022.03.17.12.10.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=q+Yvk4Xw+jpjX5xTLCBpPZo0AleetlGgSVjMzYWsGsY=;
+        b=VH+y6HyIrbepTs287GTefKUPOl1/cUfVgGqKgDxP+6l33tFTtoqLbzFKKuoYL9W+ag
+         AFRPWqAI8mEPhztE8Ji1USOes6SisEparDg/v+aIAVrdzpcVUClsaMXICzqMqxBGrf7Z
+         YYontqCT4OM7kt3VXYkUuhU2t9DX8wXksY8shfxrROgbeYyfWOnPxJFAAg39V/Z9HHps
+         6Fc1F/LP94jcgdRWi9Kbif5sYjMKaF5Bchc2OJRuTTwyCAvTo04XeFMN3wItjKB6uUYl
+         vFfvTVRX9/l2aGnCRFW2DF8lUyhXRRHMeMrmFXYsEQ5E7uFt+GUizl/j6CkhksOa15Pi
+         oxMA==
+X-Gm-Message-State: AOAM532ecA4BC8Em+IC9xGA5+3xFcqHIkIVcgBGRahF9CTNcJfvd8x5s
+        TTxApi8GCGQZQOvN4O0PHKS3Sw==
+X-Google-Smtp-Source: ABdhPJzLSAJmtCqtOTC+5DBrXu+wjHpu7EwHOXE/Ox6qNc24/dd5OCcG8i8AC/ClqpXCGpifd8BQGg==
+X-Received: by 2002:a17:90a:f2cd:b0:1c6:5a37:69ab with SMTP id gt13-20020a17090af2cd00b001c65a3769abmr7123263pjb.224.1647544217875;
+        Thu, 17 Mar 2022 12:10:17 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h11-20020a056a00170b00b004f7a83058d5sm8094040pfc.16.2022.03.17.12.10.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 12:10:03 -0700 (PDT)
-Message-ID: <6233878b.1c69fb81.14d9.f5ef@mx.google.com>
-Date:   Thu, 17 Mar 2022 12:10:03 -0700 (PDT)
-X-Google-Original-Date: Thu, 17 Mar 2022 19:10:01 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220317124525.955110315@linuxfoundation.org>
-Subject: RE: [PATCH 5.10 00/23] 5.10.107-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Mar 2022 12:10:17 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 12:10:16 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, linux-api@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 1/2] ptrace: Move setting/clearing ptrace_message into
+ ptrace_stop
+Message-ID: <202203171209.FC87C7B08@keescook>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+ <87bl1kunjj.fsf@email.froward.int.ebiederm.org>
+ <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
+ <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
+ <87tubyx0rg.fsf_-_@email.froward.int.ebiederm.org>
+ <87bky67qfv.fsf_-_@email.froward.int.ebiederm.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87bky67qfv.fsf_-_@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022 13:45:41 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.10.107 release.
-> There are 23 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Mar 15, 2022 at 06:21:08PM -0500, Eric W. Biederman wrote:
 > 
-> Responses should be made by Sat, 19 Mar 2022 12:45:16 +0000.
-> Anything received after that time might be too late.
+> Today ptrace_message is easy to overlook as it not a core part of
+> ptrace_stop.  It has been overlooked so much that there are places
+> that set ptrace_message and don't clear it, and places that never set
+> it.  So if you get an unlucky sequence of events the ptracer may be
+> able to read a ptrace_message that does not apply to the current
+> ptrace stop.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.107-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
+> Move setting of ptrace_message into ptrace_stop so that it always gets
+> set before the stop, and always gets cleared after the stop.  This
+> prevents non-sense from being reported to userspace and makes
+> ptrace_message more visible in the ptrace helper functions so that
+> kernel developers can see it.
 > 
-> thanks,
-> 
-> greg k-h
-> 
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-5.10.107-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+This looks good to me. Did you happen to run the seccomp selftests
+before/after these changes?
 
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook

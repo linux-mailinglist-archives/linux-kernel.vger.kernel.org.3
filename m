@@ -2,79 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450884DCD12
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 829A44DCD16
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237134AbiCQR7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 13:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
+        id S237136AbiCQSAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236473AbiCQR7e (ORCPT
+        with ESMTP id S230443AbiCQSAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 13:59:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743BE13E3D;
-        Thu, 17 Mar 2022 10:58:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28F88B81F3B;
-        Thu, 17 Mar 2022 17:58:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A284C340E9;
-        Thu, 17 Mar 2022 17:58:06 +0000 (UTC)
-Date:   Thu, 17 Mar 2022 17:58:02 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v1 4/7] arm64/pgtable: support
- __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-Message-ID: <YjN2qsXkmlEUTg4u@arm.com>
-References: <20220315141837.137118-1-david@redhat.com>
- <20220315141837.137118-5-david@redhat.com>
- <YjIr9f9qaz4xITVd@arm.com>
- <c3d39666-52ae-42ba-eaa2-7a0ca489f766@redhat.com>
+        Thu, 17 Mar 2022 14:00:21 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AC019BE65
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:59:04 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id r7so3580082wmq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:59:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sh7ajWZOEvGP7QGaACeQjOdADbKbBQm2vBjS6fPkwu8=;
+        b=O2EWkjBkFX0RVZ4CHcgJ2DN31cS4P3BF6pgRry0OacsqxdAemG9tYwNlAFpFtvsJAA
+         ZFoNz0FvTEVXIAi/O6QEUzAcpolAXDAdIklouW6y0IDytbh8NVM0YgRWheUxK/FN6sF2
+         vbqLGakIfH5rBFfoQeXX1VnCp1pZuO+PdwNp0CbF4Ol0mgNTYhZAWKkBMI+5EaoNYg/g
+         SVzNEyNmQxrJuElmBSxQi98UXMMxogM6CHdCj5+2gIj1Z4qpMZmAXYxF6JPUT3Va+X6s
+         kPmnESJQH9nCLjIXyUIS4C/UR1HBGT16vQDjBLkVhZcHDGz661IEXrv57QX/O4JfftXI
+         C/zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sh7ajWZOEvGP7QGaACeQjOdADbKbBQm2vBjS6fPkwu8=;
+        b=FeNerxnXE9K2mraLD3NZR2lwN2Wig0zYERcU6ilxJchhAwZhQty5xp/CeiK+tpm5/R
+         mrlday7NjB4d4Kn6h4Wm86yiW2IUWN4j/vFa2jBmvUid02iWkk7FWzUPawRCcbkewFE4
+         6oRDQDLtvpIicovzK3SMKFTj9llcTLf5tEKAa/B3sdGjJlBbQGQoeajx1KddFiIus7Pd
+         k6L5+byiJZu9uSrELSoeGupEoyA0PtC944V9pKfUTFVuJ41weU67QiyfQrk/tOvpqv/K
+         g57iujgo+Hkf+kVn7c0LsYUt1KFxSvyIpcJ92pQskyPH78GKfa7Ll7WIATvtXkhjKkAn
+         KNjQ==
+X-Gm-Message-State: AOAM531BF4P+cbNPAr5wH65o2QY/uif7UFcFm/Fz898uaf72M2f7frVV
+        XoFYXC8QLGhx9t6DD7ixLYA=
+X-Google-Smtp-Source: ABdhPJyHh9W6kvftdNRFbnkqJ6vyR9K3NBs4FFINPpETIazOXmmQSWJqwd8wLqHxxWwPFMeLyTAIVg==
+X-Received: by 2002:a05:600c:3016:b0:38c:8786:d3b6 with SMTP id j22-20020a05600c301600b0038c8786d3b6mr522228wmh.135.1647539943049;
+        Thu, 17 Mar 2022 10:59:03 -0700 (PDT)
+Received: from localhost.localdomain ([94.73.33.246])
+        by smtp.gmail.com with ESMTPSA id n188-20020a1ca4c5000000b00389c692a3b5sm8035468wme.42.2022.03.17.10.58.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 10:59:02 -0700 (PDT)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     victor.liu@oss.nxp.com
+Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, p.zabel@pengutronix.de,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH v2] drm/bridge: nwl-dsi: switch to devm_drm_of_get_bridge
+Date:   Thu, 17 Mar 2022 18:58:52 +0100
+Message-Id: <20220317175852.799432-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c3d39666-52ae-42ba-eaa2-7a0ca489f766@redhat.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,45 +73,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 11:04:18AM +0100, David Hildenbrand wrote:
-> On 16.03.22 19:27, Catalin Marinas wrote:
-> > On Tue, Mar 15, 2022 at 03:18:34PM +0100, David Hildenbrand wrote:
-> >> @@ -909,12 +925,13 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
-> >>  /*
-> >>   * Encode and decode a swap entry:
-> >>   *	bits 0-1:	present (must be zero)
-> >> - *	bits 2-7:	swap type
-> >> + *	bits 2:		remember PG_anon_exclusive
-> >> + *	bits 3-7:	swap type
-> >>   *	bits 8-57:	swap offset
-> >>   *	bit  58:	PTE_PROT_NONE (must be zero)
-> > 
-> > I don't remember exactly why we reserved bits 0 and 1 when, from the
-> > hardware perspective, it's sufficient for bit 0 to be 0 and the whole
-> > pte becomes invalid. We use bit 1 as the 'table' bit (when 0 at pmd
-> > level, it's a huge page) but we shouldn't check for this on a swap
-> > entry.
-> 
-> You mean
-> 
-> arch/arm64/include/asm/pgtable-hwdef.h:#define PTE_TABLE_BIT            (_AT(pteval_t, 1) << 1)
-> 
-> right?
+The function "drm_of_find_panel_or_bridge" has been deprecated in
+favor of "devm_drm_of_get_bridge".
 
-Yes.
+Switch to the new function and reduce boilerplate.
 
-> I wonder why it even exists, for arm64 I only spot:
-> 
-> arch/arm64/include/asm/pgtable.h:#define pte_mkhuge(pte)                (__pte(pte_val(pte) & ~PTE_TABLE_BIT))
-> 
-> I don't really see code that sets PTE_TABLE_BIT.
-> 
-> Similarly, I don't see code that sets PMD_TABLE_BIT/PUD_TABLE_BIT/P4D_TABLE_BIT.
-> Most probably setting code is not using the defines,  that's why I'm not finding it.
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 
-It gets set as part of P*D_TYPE_TABLE via p*d_populate(). We use the
-P*D_TABLE_BIT mostly for checking whether it's a huge page or not (the
-arm64 hugetlbpage.c code).
+---
 
+v2: (Thanks to Liu Ying)
+
+ - Rebase on top of drm-misc-next
+ - Remove drm_of_panel_bridge_remove
+---
+ drivers/gpu/drm/bridge/nwl-dsi.c | 23 ++++-------------------
+ 1 file changed, 4 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
+index e34fb09b90b9..de62e3fc6a59 100644
+--- a/drivers/gpu/drm/bridge/nwl-dsi.c
++++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+@@ -912,19 +912,11 @@ static int nwl_dsi_bridge_attach(struct drm_bridge *bridge,
+ {
+ 	struct nwl_dsi *dsi = bridge_to_dsi(bridge);
+ 	struct drm_bridge *panel_bridge;
+-	struct drm_panel *panel;
+-	int ret;
+-
+-	ret = drm_of_find_panel_or_bridge(dsi->dev->of_node, 1, 0, &panel,
+-					  &panel_bridge);
+-	if (ret)
+-		return ret;
+ 
+-	if (panel) {
+-		panel_bridge = drm_panel_bridge_add(panel);
+-		if (IS_ERR(panel_bridge))
+-			return PTR_ERR(panel_bridge);
+-	}
++	panel_bridge = devm_drm_of_get_bridge(dsi->dev, dsi->dev->of_node,
++					      1, 0);
++	if (IS_ERR(panel_bridge))
++		return PTR_ERR(panel_bridge);
+ 
+ 	if (!panel_bridge)
+ 		return -EPROBE_DEFER;
+@@ -932,12 +924,6 @@ static int nwl_dsi_bridge_attach(struct drm_bridge *bridge,
+ 	return drm_bridge_attach(bridge->encoder, panel_bridge, bridge, flags);
+ }
+ 
+-static void nwl_dsi_bridge_detach(struct drm_bridge *bridge)
+-{	struct nwl_dsi *dsi = bridge_to_dsi(bridge);
+-
+-	drm_of_panel_bridge_remove(dsi->dev->of_node, 1, 0);
+-}
+-
+ static u32 *nwl_bridge_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
+ 						 struct drm_bridge_state *bridge_state,
+ 						 struct drm_crtc_state *crtc_state,
+@@ -983,7 +969,6 @@ static const struct drm_bridge_funcs nwl_dsi_bridge_funcs = {
+ 	.mode_set		= nwl_dsi_bridge_mode_set,
+ 	.mode_valid		= nwl_dsi_bridge_mode_valid,
+ 	.attach			= nwl_dsi_bridge_attach,
+-	.detach			= nwl_dsi_bridge_detach,
+ };
+ 
+ static int nwl_dsi_parse_dt(struct nwl_dsi *dsi)
 -- 
-Catalin
+2.25.1
+

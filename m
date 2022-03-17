@@ -2,100 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9604DC5F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FC34DC5F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbiCQMqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
+        id S233655AbiCQMqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233454AbiCQMqL (ORCPT
+        with ESMTP id S233657AbiCQMqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:46:11 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E050BF955E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:44:51 -0700 (PDT)
-Received: from [127.0.0.1] (pd95ca587.dip0.t-ipconnect.de [217.92.165.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D827C1EC0445;
-        Thu, 17 Mar 2022 13:44:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1647521086;
+        Thu, 17 Mar 2022 08:46:15 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06859FA217
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:44:55 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647521093;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CQIn16mv6olHxAfmUfYYbbLKbrpFDKYXRnKh5VrfflU=;
-        b=Gc3MqdtcmlEYroeYZcMJNnUiE/iP9H0yQLudg47eLYU63rMNml1lfYLJ31uizChAb9MqK0
-        fjZs5VhjCMDpqkUbP/pJMj1BTerYEwgO3MNMRCTA7jNP9WdGQ+34Yv91inkwpTNx58A4aK
-        8pDfwrKaF/PBoaI5jI2tkaQpyhngZng=
-Date:   Thu, 17 Mar 2022 12:44:42 +0000
-From:   Boris Petkov <bp@alien8.de>
+        bh=vIn0zIhA7b+Fd9t6EFv7mw9uKnRBWuqrQzy1BiPys1I=;
+        b=PCgVvnWL+NhyiDEvSHgOREJVONFb7F7Ji5197BvAg1+KQkTBGRWFy5PGLMl44cMLpe7ZAw
+        atNKsPM5PGRAI6zbgucxOCk3YqDh3RDn9HraN035hfyxdxkBZl3WneIo9oZU3QT7OW7JLv
+        3/TLwh511QcoDbNDMjYK7rr4sOuYC+lXU9fId7nl/gDwHQOY+uEansWFM9gFi1LJQnVxhO
+        TI/DRQs+Lq3Trs6lS0gKG51KbnbuC3EonKcABDAClXAg7NG/NDdixvY+iP7A9H/wn1Ei3N
+        o+qT6+75xw+ZIWX0oJ6BO0ZPxVgzhtiOQHKTgp+AGv40OkjSOBXKS/PYrG66eA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647521093;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vIn0zIhA7b+Fd9t6EFv7mw9uKnRBWuqrQzy1BiPys1I=;
+        b=Ng3RYJkEj2oLQvblni5aeEkfxlKRtcBYn5X9VjKg2DRwuQPxjBmxSTGtPZtoaRkbd/IaVr
+        pDUxiNR37D46FxAQ==
 To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, dave.hansen@intel.com, mingo@redhat.com,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
         luto@kernel.org, peterz@infradead.org
-CC:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        brijesh.singh@amd.com, ak@linux.intel.com, david@redhat.com,
-        dan.j.williams@intel.com, wanpengli@tencent.com, jgross@suse.com,
-        linux-kernel@vger.kernel.org, hpa@zytor.com, jmattson@google.com,
-        pbonzini@redhat.com, seanjc@google.com, jpoimboe@redhat.com,
-        vkuznets@redhat.com, joro@8bytes.org, thomas.lendacky@amd.com,
-        sdeep@vmware.com, x86@kernel.org, knsathya@kernel.org,
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
         Sean Christopherson <sean.j.christopherson@intel.com>,
-        tony.luck@intel.com,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCHv6_20/30=5D_x86/boot=3A_Add_a_tramp?= =?US-ASCII?Q?oline_for_booting_APs_via_firmware_handoff?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220316020856.24435-21-kirill.shutemov@linux.intel.com>
-References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com> <20220316020856.24435-21-kirill.shutemov@linux.intel.com>
-Message-ID: <3D4C3388-DC6A-41A5-A79F-B23FBFFE4E0F@alien8.de>
+Subject: Re: [PATCHv6 21/30] x86/acpi, x86/boot: Add multiprocessor wake-up
+ support
+In-Reply-To: <20220316020856.24435-22-kirill.shutemov@linux.intel.com>
+References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
+ <20220316020856.24435-22-kirill.shutemov@linux.intel.com>
+Date:   Thu, 17 Mar 2022 13:44:53 +0100
+Message-ID: <87zglozr22.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On March 16, 2022 2:08:46 AM UTC, "Kirill A=2E Shutemov" <kirill=2Eshutemov=
-@linux=2Eintel=2Ecom> wrote:
->diff --git a/arch/x86/include/asm/apic=2Eh b/arch/x86/include/asm/apic=2E=
-h
->index 48067af94678=2E=2E35006e151774 100644
->--- a/arch/x86/include/asm/apic=2Eh
->+++ b/arch/x86/include/asm/apic=2Eh
->@@ -328,6 +328,8 @@ struct apic {
->=20
-> 	/* wakeup_secondary_cpu */
-> 	int	(*wakeup_secondary_cpu)(int apicid, unsigned long start_eip);
->+	/* wakeup secondary CPU using 64-bit wakeup point */
->+	int	(*wakeup_secondary_cpu_64)(int apicid, unsigned long start_eip);
->=20
-> 	void	(*inquire_remote_apic)(int apicid);
->=20
->diff --git a/arch/x86/include/asm/realmode=2Eh b/arch/x86/include/asm/rea=
-lmode=2Eh
->index 331474b150f1=2E=2Efd6f6e5b755a 100644
->--- a/arch/x86/include/asm/realmode=2Eh
->+++ b/arch/x86/include/asm/realmode=2Eh
->@@ -25,6 +25,7 @@ struct real_mode_header {
-> 	u32	sev_es_trampoline_start;
-> #endif
-> #ifdef CONFIG_X86_64
->+	u32	trampoline_start64;
+On Wed, Mar 16 2022 at 05:08, Kirill A. Shutemov wrote:
+> +#ifdef CONFIG_X86_64
+> +/* Virtual address of the Multiprocessor Wakeup Structure mailbox */
+> +static int acpi_wakeup_cpu(int apicid, unsigned long start_ip)
+> +{
+> +	static physid_mask_t apic_id_wakemap = PHYSID_MASK_NONE;
+> +	u8 timeout;
+> +
+> +	/* Remap mailbox memory only for the first call to acpi_wakeup_cpu() */
+> +	if (physids_empty(apic_id_wakemap)) {
 
-I had already asked about those here: why do you need to add a new u32 her=
-e and can't use trampoline_start?
+I had to read this condition twice.
 
-Ditto for the new function pointer too=2E
+Why not checking (!acpi_mp_wake_mailbox)? Too obvious, right?
 
-And yes, sev_es_trampoline_start is superfluous too=2E
+> +		acpi_mp_wake_mailbox = memremap(acpi_mp_wake_mailbox_paddr,
+> +						sizeof(*acpi_mp_wake_mailbox),
+> +						MEMREMAP_WB);
+> +	}
+> +
+> +	/*
+> +	 * According to the ACPI specification r6.4, section titled
+> +	 * "Multiprocessor Wakeup Structure" the mailbox-based wakeup
+> +	 * mechanism cannot be used more than once for the same CPU.
+> +	 * Skip wakeups if they are attempted more than once.
+> +	 */
+> +	if (physid_isset(apicid, apic_id_wakemap)) {
+> +		pr_err("CPU already awake (APIC ID %x), skipping wakeup\n",
+> +		       apicid);
+> +		return -EINVAL;
+> +	}
+> +
+> +	spin_lock(&mailbox_lock);
 
---=20
-Sent from a small device: formatting sux and brevity is inevitable=2E 
+What is this lock actually protecting? Wakeup of secondary CPUs is fully
+serialized in the core code already.
+
+Thanks,
+
+        tglx

@@ -2,162 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055144DCE7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FD64DCE92
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237871AbiCQTMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 15:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
+        id S237913AbiCQTQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 15:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234978AbiCQTM3 (ORCPT
+        with ESMTP id S234100AbiCQTQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 15:12:29 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2BFE994B;
-        Thu, 17 Mar 2022 12:11:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1647544270; x=1679080270;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fmhExObKJfb9BUNo4OAayqN1xl6unRSZn3MfjAV8Bug=;
-  b=dIcw9GlpVUZYE2C8r9jV/KJOPAgKt4E7RGx6xS+BWgvs1KVnO7TbkjqP
-   IMTX/htfpMwzdKX9sC0Tb4z1MFTw7lKpo5bnXfAbhxvsgBLqGcTPY/qpU
-   KIYM0RV0oUCHt4LHVy+9N951U942h91qdylf5CKlgcDlnTJqcUYlcX4X+
-   NXzCvZkp/kfVnue7CWfZ/GzHkkv1+nm5lSEmCMWTRnxJgUtNARFnUyIcy
-   98tbC7Y1GwvODEznP5cHDwWkFSJJie/B8u0uLLBXpS30m3lbuXT6D0S9y
-   oqVQzz/XwnA17GFQ/koIBCvWxEECOwTf8rDgpwteHGhSSYReRk9Q5wCdt
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,188,1643698800"; 
-   d="scan'208";a="89307365"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Mar 2022 12:11:09 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 17 Mar 2022 12:11:09 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 17 Mar 2022 12:11:08 -0700
-Date:   Thu, 17 Mar 2022 20:14:06 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-Subject: Re: [PATCH net-next v2 1/3] dt-bindings: net: mscc-miim: add lan966x
- compatible
-Message-ID: <20220317191406.5ivtfkdlwzngmobi@soft-dev3-1.localhost>
-References: <20220313002536.13068-1-michael@walle.cc>
- <20220313002536.13068-2-michael@walle.cc>
- <08b89b3f-d0d3-e96f-d1c3-80e8dfd0798f@kernel.org>
- <d18291ff8d81f03a58900935d92115f2@walle.cc>
- <2d35127c-d4ef-6644-289a-5c10bcbbbf84@kernel.org>
- <145fc079ce8c266b8c2265aacfd3b077@walle.cc>
+        Thu, 17 Mar 2022 15:16:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ABDBF011
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 12:15:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 965A061820
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 19:15:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 941F9C340E9;
+        Thu, 17 Mar 2022 19:15:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647544515;
+        bh=PSKfRijTfYruO+lkLju7czYgdKe0uroqn68x7LRv6WA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=aUWg7VjjplHJWL9OlEE34KgxWttpSCxgtoHxls66YA5v35nRX6BjT/iAxOGGtumEg
+         RL6lKR0ncNFYDQkhixxOvHDz8udy2jM4I/GbyWrgDmwVbzUp2u6edqLM2dcvUHL3Bd
+         kSemi8c77XbbcknINFSHW59VauJhCwddRp4JgXuC3iYbyiVp03iyy7T/+4lTsxD/y4
+         vLQmFZi2/PFSHFcAJw0XGtigVCgEzhWwBAxKXptf880aG2dj6A94/aQD31D8Rzlqfh
+         DrS0KsFtLYKw7NGwVodqukAjcY6cHkx7goWDwkmUv6y07wOt4u4HzfTTEEVHLBX256
+         ogLwRac8w5jKA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>, Yihao Han <hanyihao@vivo.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        sound-open-firmware@alsa-project.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Cc:     kernel@vivo.com
+In-Reply-To: <20220317093841.3414-1-hanyihao@vivo.com>
+References: <20220317093841.3414-1-hanyihao@vivo.com>
+Subject: Re: [PATCH] ASoC: SOF: topology: Use kmemdup() to replace kzalloc + memcpy
+Message-Id: <164754451230.3036648.11453509485052540237.b4-ty@kernel.org>
+Date:   Thu, 17 Mar 2022 19:15:12 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <145fc079ce8c266b8c2265aacfd3b077@walle.cc>
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 03/13/2022 17:30, Michael Walle wrote:
+On Thu, 17 Mar 2022 02:38:41 -0700, Yihao Han wrote:
+> fix memdup.cocci warning:
+> sound/soc/sof/topology.c:876:19-26: WARNING opportunity for kmemdup
+> 
+> Generated by: scripts/coccinelle/api/memdup.cocci
+> 
+> 
 
-Hi Michael,
+Applied to
 
-> 
-> [adding Horatiu and Kavyasree from Microchip]
-> 
-> Am 2022-03-13 17:10, schrieb Krzysztof Kozlowski:
-> > On 13/03/2022 11:47, Michael Walle wrote:
-> > > Am 2022-03-13 10:47, schrieb Krzysztof Kozlowski:
-> > > > On 13/03/2022 01:25, Michael Walle wrote:
-> > > > > The MDIO controller has support to release the internal PHYs from
-> > > > > reset
-> > > > > by specifying a second memory resource. This is different between
-> > > > > the
-> > > > > currently supported SparX-5 and the LAN966x. Add a new compatible to
-> > > > > distiguish between these two.
-> > 
-> > Typo here, BTW.
-> > 
-> > > > > 
-> > > > > Signed-off-by: Michael Walle <michael@walle.cc>
-> > > > > ---
-> > > > >  Documentation/devicetree/bindings/net/mscc-miim.txt | 2 +-
-> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/Documentation/devicetree/bindings/net/mscc-miim.txt
-> > > > > b/Documentation/devicetree/bindings/net/mscc-miim.txt
-> > > > > index 7104679cf59d..a9efff252ca6 100644
-> > > > > --- a/Documentation/devicetree/bindings/net/mscc-miim.txt
-> > > > > +++ b/Documentation/devicetree/bindings/net/mscc-miim.txt
-> > > > > @@ -2,7 +2,7 @@ Microsemi MII Management Controller (MIIM) / MDIO
-> > > > >  =================================================
-> > > > > 
-> > > > >  Properties:
-> > > > > -- compatible: must be "mscc,ocelot-miim"
-> > > > > +- compatible: must be "mscc,ocelot-miim" or "mscc,lan966x-miim"
-> > > > 
-> > > > No wildcards, use one, specific compatible.
-> > > 
-> > > I'm in a kind of dilemma here, have a look yourself:
-> > > grep -r "lan966[28x]-" Documentation
-> > > 
-> > > Should I deviate from the common "name" now? To make things
-> > > worse, there was a similar request by Arnd [1]. But the
-> > > solution feels like cheating ("lan966x" -> "lan966") ;)
-> > 
-> > The previous 966x cases were added by one person from Microchip, so he
-> > actually might know something. But do you know whether lan966x will
-> > cover all current and future designs from Microchip? E.g. lan9669 (if
-> > ever made) will be the same? Avoiding wildcard is the easiest, just
-> > choose one implementation, e.g. "lan9662".
-> 
-> So if Microchip would review/ack this it would be ok? I don't really
-> have a strong opinion, I just want to avoid any inconsistencies. If no
-> one from Microchip will answer, I'll use microchip,lan9668-miim.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-I think it is OK to use microchip,lan966x.
-I am not aware of any plans to create future lan966x designed(lan9664 or
-lan9669). But we can also be on the safe side and use microchip,lan9668.
-I don't have any strong opinion on this.
+Thanks!
 
-Acked-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+[1/1] ASoC: SOF: topology: Use kmemdup() to replace kzalloc + memcpy
+      commit: b26f965f7c83464f60d5af411ef9a03079e41800
 
-> 
-> > Different topic is that all current lan966[28] are from Microchip and
-> > you still add Microsemi, even though it was acquired by Microchip.
-> > That's an inconsistency which should be rather fixed.
-> 
-> Agreed, that was an oversight by me.
-> 
-> > > On a side note, I understand that there should be no wildcards,
-> > > because the compatible should target one specific implementation,
-> > > right? But then the codename "ocelot" represents a whole series of
-> > > chips. Therefore, names for whole families shouldn't be used neither,
-> > > right?
-> > 
-> > You're not adding "ocelot" now, so it is separate topic. However a
-> > compatible like "mscc,ocelot" feels wrong, unless it is used as a
-> > fallback (see: git grep 'apple,').
-> 
-> Sure, it was just a question for my understanding, not to make a
-> point for a discussion.
-> 
-> -michael
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
--- 
-/Horatiu
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

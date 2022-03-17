@@ -2,153 +2,577 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E0F4DCC9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F04464DCCA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236969AbiCQRia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 13:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
+        id S236969AbiCQRlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 13:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234796AbiCQRi2 (ORCPT
+        with ESMTP id S232797AbiCQRlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 13:38:28 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70089.outbound.protection.outlook.com [40.107.7.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A712217943;
-        Thu, 17 Mar 2022 10:37:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DmHeMPYkgNZoY8MGjete8bG5MZ069sU30pJ7Y7oYO2vYivpZ22ODjWG77D8Lh4g8/lpvf6vrbiP9a/KQAs35+3H9CBd2ohuTchxgMLehebiLSArUUP/KK6hSv5a6B2v2fr4G+GD9ukJ9iG44OM6nogOKZpANuF1M89b4zOZI4iBkwQ5I0YybU/OCyiAG5dTr1Jq6eiluOr70a+kltGMjQLjY0NVaqnwNDcZa1UBQkba1uSR/VMkX6jQp+4N3rHZcBpo4lcWneF8PEXGNiS/Kpp/q9fFb7IWh8Rhs5MlriGB8+lp0JtVOegQg+INu86hv3QYkezHI7SlbUq7NxMLqAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1pPvysizrdy8QXCRh/OGt86snDOtCZ4vyCwovREc1go=;
- b=cJRSF42NOMscWaXLleZybupvNK6s6/PDSe4D6Z1h8FIwu25Ub5zZqMcRi4HBn2irF2c26LDE5al+yyPPJVAvUWrGtK7XXRcm6s0sjZCgGf1M9HCzJl1Gd/bI6H1Cms6W7VE0TMaMTrouovQqDkr+uBU8mgp/BVF9BpVHNQfmxzWXGa7abIbjwkf9i9dm/VG0m7LA/5UCHlDMYSYc31pwQt9mMcsIA2meSiBuod5lyba3MTnhWZ/kDHtFbcwJjXUZG3yfMEaxTnsHWwuhF7nkoHJPDyKmbe+qWp0HzWtg2OMxCctvEvoFErmk75JKD1xyChwxadZMUbQvocPAPS2CQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1pPvysizrdy8QXCRh/OGt86snDOtCZ4vyCwovREc1go=;
- b=ArdIRIfcQt0sOgpNw7Zv909LDxPzfmqc2QL5inCUEh33EglPo48dq1bJ7iEE60uC1peSE8DCXhx+tVT0UPybAweJxfA6Zx8HVdtmXkGRV4/7ZspLpiJdPCk84oUEgIadri5sNzeHsBU1bp5mAkcDOiEk+OV2zBUOfQhxp2hvmgo=
-Received: from AM9PR04MB8397.eurprd04.prod.outlook.com (2603:10a6:20b:3b5::5)
- by DB8PR04MB6777.eurprd04.prod.outlook.com (2603:10a6:10:11f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Thu, 17 Mar
- 2022 17:37:09 +0000
-Received: from AM9PR04MB8397.eurprd04.prod.outlook.com
- ([fe80::e52e:aa62:6425:9e9b]) by AM9PR04MB8397.eurprd04.prod.outlook.com
- ([fe80::e52e:aa62:6425:9e9b%8]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
- 17:37:09 +0000
-From:   Claudiu Manoil <claudiu.manoil@nxp.com>
-To:     Bill Wendling <morbo@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: RE: [PATCH] enetc: use correct format characters
-Thread-Topic: [PATCH] enetc: use correct format characters
-Thread-Index: AQHYOX0qnqFJ37bnYU+9UBnfRcMWZazD12GA
-Date:   Thu, 17 Mar 2022 17:37:09 +0000
-Message-ID: <AM9PR04MB8397B7734E38A4E60C6965DB96129@AM9PR04MB8397.eurprd04.prod.outlook.com>
-References: <20220316213109.2352015-1-morbo@google.com>
-In-Reply-To: <20220316213109.2352015-1-morbo@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d9c90f1b-4dc8-42b5-163f-08da083cc335
-x-ms-traffictypediagnostic: DB8PR04MB6777:EE_
-x-microsoft-antispam-prvs: <DB8PR04MB67774DD071651BBDD8BDFE1096129@DB8PR04MB6777.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HouohZ5P/gCvowk+bd/KqfEf4M1PMkNhyBdg21/1n+eqEJDnVbIzy3xclnCkpoagyGdxKOq6pQVv8mZxY9iGTAXFaI6M1FMFoPhkUgjIcNIUD6rTnpJUf7pZmiAYVwQPmoFrZKTcGsIN8dJ3xwJ9+c168XjkiUN/VaZpA+vS6GjlW6vuRI2Qwuu1PMCcplhuYtpLFrrLbUV93dCq9uUAQ+nOe5H1gOSSCKwartM5VZmdhOmpNGmz0A+sbSRTq9WvsXXC8P3Zd76R8QhfqVNNGjjdbykKCuPhu2BHpsepx8+JfFq43lZk1hqJrnRxlpvAM/x9JMb3OwvCXlKOUtbnYXItJbf3nEog9IYn8qj0Wgc250iv/2w8VGqY5CjhV4oqPNk4YeOAns5EeSuz1n8lCzXvqkFz1nXsefpwcIdtsTA4lbMALgn7f26LkPBhSFvsOXT+TqUmhw5GWQ7lqAcwFWycIM52JgyigBsgCtyGCJV891hTnJolYfs3ldrODCT0mfdwUp5LOi09vQlS+f1mPNu16h+L505RefUfTVT9p8qeQUCtColkj3WmLZ+g16Yy422hlU21DH9SK8fqbbv/tJR7OQnc/e81hbUMkCBXNGJaiGDPfEU6+aNS4VGCq4TarKuvYjXPGGGbWy6z+82ywBz+h0NiKUBlAQ+azCg2n3riSf08JkLlwbDcSo58/VNWssT6WheuAg8TB5ZP9TgKow==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8397.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(38070700005)(64756008)(66446008)(86362001)(33656002)(66946007)(66556008)(71200400001)(55016003)(19627235002)(66476007)(76116006)(9686003)(5660300002)(316002)(186003)(44832011)(26005)(122000001)(52536014)(7696005)(8936002)(55236004)(83380400001)(110136005)(38100700002)(508600001)(53546011)(8676002)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dzNzZC9IZlVmWGltWE5DNFdUVFVtL01vd3M3emo0QVVZcVB1cUdTbENvNkJI?=
- =?utf-8?B?VUZQWk5TVHNJSjBtSWtkOVZTbi9iYjZVMytvVyt3VHM0QWc5elB4Y3FjbUpz?=
- =?utf-8?B?Y09DSEVvWUpUY2pZZXdaWDhuN1g1NFRmdjI4emd3VXE2Y2ZqRm54WWtnNnQz?=
- =?utf-8?B?ZDhFTDlOU1ZrS0h0Q2dwMStldS9ncW1uNGpOTGZnK0dYQ3piRklEYzBqQzh5?=
- =?utf-8?B?Unc2OUdvc1RtOUVJVTJ4alhZNWE2Qm1XeEd6dXliNGVKN2RlMGJRcHE1V3VP?=
- =?utf-8?B?TGUxWFZZb1BwN1ZVdUVQZk4vc2xoV21sVzVzWnQ2aWprWEptbW5wM0xMMEF4?=
- =?utf-8?B?Vi9LNy9OWjdPUnJZWndNZlB5T0xmdVdEWFFkY09ZYVB6Z0NqaE1BUGZRN0pn?=
- =?utf-8?B?WjJ6NkNEZFFlbmcrT0dubUcxd24zZHlKVGFLWkFEK0I5SGRMNmUvYzBYeXAy?=
- =?utf-8?B?RW9uR2xCaVJuS1hmWWZ1aWNNS0ViVFdLVWVuMFFNMHVLNWYyWDJlWGh2bFZw?=
- =?utf-8?B?Yzd1dXNydk5nTGhPN0VlaWxTS25zdTVuSGpMay9YNS9FdHJGcE5GRWRFNHRp?=
- =?utf-8?B?eGcvdTNvbXF1eWFqN1B6N1I5RTRuWWVQZ201ZlB4c1E2WEZjYUdPOHlJTHlh?=
- =?utf-8?B?L3ZyZ004TWxhd1NBS3ZuZndOOE5rUkxnRFp4K2tKcE5ta2VuWmE5b0UyZUZI?=
- =?utf-8?B?WnpXVUZGaDZFdm91d3dTNGxNSFJkU2lCZ2tGb1pEaDB1akZVNWkreFZTSWR6?=
- =?utf-8?B?Q1ZldGliRHlqS3JkSnpLRFBtRmlpMUNtek8zYzZycy9HS3llNVdPSUJNNFNn?=
- =?utf-8?B?a2xaQzk4OXV0SXNEQ3d4NUN0WkVLeWRGN1psTGNEL2p6RXBXL0hNYmlmM05B?=
- =?utf-8?B?ZmduSTREUC83eWxIYUxWbTJTS3E2dG9rTGUyeFZwRXJvR0FuOHdIOHVJK0Ur?=
- =?utf-8?B?eFJBTXVaNlhiRUVCS3lRbFk1UkxOcGs4MEhtbE1nU0lrQjJReWdXaGhjbC9R?=
- =?utf-8?B?Q3dOM200bUNLYk9hT0E1VXN2OEhBcWxiVVJwbzdOaEdETVhnQkdsYVRScHlk?=
- =?utf-8?B?c0o1UVBRV0hQNWNyb2ZPZGhTTVZiZmgrWU1pU0p1dVdrZ2VGTDFVdW9KQ2NH?=
- =?utf-8?B?dVBVcXVpdUZVK20yME9IWmRUUEx1MG1Nd3hPdmh5dUFRdUFna0ZyZ1FiVUlJ?=
- =?utf-8?B?TWJlZVRlK1VqeUp3WHNpZE45cHBac0JHUjk4bTZxQTBabUVXL1NiYy91SUN4?=
- =?utf-8?B?UUxzNUxUZS90WlFjNWtxSXRsdVdaaStLbHZXWmgySDMvVG9hUWUzNktQcnNW?=
- =?utf-8?B?TzRMcGRzaklHaFhDWEEvQUIzNVlIQzlSVnFMMXhZUHJudDlWYnJnRVVuUmRl?=
- =?utf-8?B?bjBqUk15N1grSC9DN0ZQcXhsNTVaY2pvTWpzOC9NWDV5eVUycTd1MjFXU3B2?=
- =?utf-8?B?b3pCeUpRd05WOUQxbHQ4eW9YbVFjdDAzdVJVOU01a0dmTGZ0bHFhcnFraXlU?=
- =?utf-8?B?TmN4L0o5UWNWdnY2TjdZcUdYUEZSUVozVm1QTUlPallQb21Xd2hIc2RVZVhW?=
- =?utf-8?B?TmxoQVNpZTRzaW1HUWRFa05EeWpFOEtPaWpLY3o2UndsWmloNFlZVXJKbzMz?=
- =?utf-8?B?aEdod3g5M2hBSEVyM3RrTXliUk5WKzdZZVJzVzFUbE52bVloaFczYVE2SXhC?=
- =?utf-8?B?WTdBVW83MG1TZXZuSUZTU1Fsa3RRVFVuZzNxQy9BWUxLWml0djJ3NXczUmV2?=
- =?utf-8?B?Z2xFcG5RcGcwZ0d5UFhPTTZiQUFHU0dqSjFyR1FST2dIdHZQc0NmSThZMCtN?=
- =?utf-8?B?ait2eWE0UEwvNUFRcDdDbEhPNDMwVUpQZ3hGZS8rOXZESHd6WjJrVlF3Tkds?=
- =?utf-8?B?c3Q1ZmRYVXoyekQ1Q2dlKy9uN0ZpS3Vra0tzaHdyYmxLSnQwNE5aMWtsZitB?=
- =?utf-8?Q?9eE2CMe8mrZEHgvZOrIEISVBu0VsVf+a?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 17 Mar 2022 13:41:14 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB67160145
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:39:56 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id t22so5081977plo.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=fIGGEfqsB9dtGnWRe43Spv5T9AIRrY1dyANAvuc5qkU=;
+        b=UIbHqP2dXru8ZMFFqI4qrmZ5aCF5zRTowOhMxC2DUMmhhMsdVKGuqhkO8w1Cx3IZEK
+         C0lRYIg20hU1i84QTZDTBYO1ZMbKu4ZFuRQjty783537/lbdr1q4DCyKi/FF8XCy0pna
+         H3//msfo+jwvKKDrt61Gv/5wQMgtRiY+yhCn2OEzfbXQjoRn8o8Bzx+nAFZn7XHITkKg
+         N2arOfN6wZQyB4jxn22VM6yI3W6qkzqkkJH9/0WYfQ/6EPm/pH4PsEH1Mg1csSRuL06r
+         rNlzsPz7ZePVVBkcGrtbweEnsoED+q8b6ng44rSUh68RTtkCWgZn2vlSyPfYfxD0JfCe
+         odtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fIGGEfqsB9dtGnWRe43Spv5T9AIRrY1dyANAvuc5qkU=;
+        b=C4bMPIbIklhRouUKGhw3Nv7At7tiLzl48fm+kPBj8pjDOWGgyHZ5qbrRWfQp8E0EbF
+         VV/qN/TBk4ecS8Drzui07RzgKEQjOpumSTsAuKLs+BEUWJGfu7UClR0qTocCdgPLNQdf
+         gXp0RmhiKsjIDhPM/hnajwwNVpdhu1V1hyvlysbkFsfGapiWwQYCFH3poWLE9uhQW4uC
+         beLUMDS+MpLEkzLCENiXo/2k6ZQsYfWOgsnFi3UDBce5htbmAHph2ibgo9V0SXFNzgKk
+         LSTsuik2/j8jJsRhewME9rWzkJ2e3wyvX7zNMO+T1ystUwRvwmhKXqtNMoONXfQ1AkYM
+         KNbg==
+X-Gm-Message-State: AOAM533Obtr4VpFJgdmB1hlHVhCk1NP3ZL5n8vgInY99nsX6DhmycVlH
+        QvZKS9E/D/dy4+9tD+rJbcQ=
+X-Google-Smtp-Source: ABdhPJz3MAPXVBtumXSrhB0fC+eixSjmPlUrA+QbTPe1feYUa2Q3SHqq0ZtDmHfwe/M4CuEMNvcIhQ==
+X-Received: by 2002:a17:902:9a02:b0:14f:2d93:92f4 with SMTP id v2-20020a1709029a0200b0014f2d9392f4mr6259004plp.160.1647538795901;
+        Thu, 17 Mar 2022 10:39:55 -0700 (PDT)
+Received: from [0.0.0.0] ([192.109.233.222])
+        by smtp.gmail.com with ESMTPSA id j14-20020a056a00174e00b004f66ce6367bsm8556434pfc.147.2022.03.17.10.39.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 10:39:55 -0700 (PDT)
+Message-ID: <a1d9fa78-4d27-78c6-d462-d9b1f8cd39e3@gmail.com>
+Date:   Fri, 18 Mar 2022 01:39:48 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8397.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d9c90f1b-4dc8-42b5-163f-08da083cc335
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2022 17:37:09.1192
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hUyln6AUzK+KTFRZvSkki6ynlqQBE2i8XGV0M/oZTGXCRHfjiDirmt07vlv/wmkAcAD4TD8NM/gno89a064LbQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6777
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2][RFC] sched/fair: Change SIS_PROP to search idle CPU
+ based on sum of util_avg
+To:     Chen Yu <yu.c.chen@intel.com>, linux-kernel@vger.kernel.org
+Cc:     Tim Chen <tim.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Len Brown <len.brown@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>
+References: <20220310005228.11737-1-yu.c.chen@intel.com>
+From:   Yicong Yang <yangyccccc@gmail.com>
+In-Reply-To: <20220310005228.11737-1-yu.c.chen@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBCaWxsIFdlbmRsaW5nIDxtb3Ji
-b0Bnb29nbGUuY29tPg0KPiBTZW50OiBXZWRuZXNkYXksIE1hcmNoIDE2LCAyMDIyIDExOjMxIFBN
-DQpbLi4uXQ0KPiBTdWJqZWN0OiBbUEFUQ0hdIGVuZXRjOiB1c2UgY29ycmVjdCBmb3JtYXQgY2hh
-cmFjdGVycw0KPiANCj4gV2hlbiBjb21waWxpbmcgd2l0aCAtV2Zvcm1hdCwgY2xhbmcgZW1pdHMg
-dGhlIGZvbGxvd2luZyB3YXJuaW5nOg0KPiANCj4gZHJpdmVycy9uZXQvZXRoZXJuZXQvZnJlZXNj
-YWxlL2VuZXRjL2VuZXRjX21kaW8uYzoxNTE6MjI6IHdhcm5pbmc6DQo+IGZvcm1hdCBzcGVjaWZp
-ZXMgdHlwZSAndW5zaWduZWQgY2hhcicgYnV0IHRoZSBhcmd1bWVudCBoYXMgdHlwZSAnaW50Jw0K
-PiBbLVdmb3JtYXRdDQo+ICAgICAgICAgICAgICAgICAgICAgICAgIHBoeV9pZCwgZGV2X2FkZHIs
-IHJlZ251bSk7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+
-fn5+fg0KPiAuL2luY2x1ZGUvbGludXgvZGV2X3ByaW50ay5oOjE2Mzo0Nzogbm90ZTogZXhwYW5k
-ZWQgZnJvbSBtYWNybyAnZGV2X2RiZycNCj4gICAgICAgICAgICAgICAgIGRldl9wcmludGsoS0VS
-Tl9ERUJVRywgZGV2LCBkZXZfZm10KGZtdCksICMjX19WQV9BUkdTX18pOyBcDQo+ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB+fn4gICAgIF5+fn5+
-fn5+fn5+DQo+IC4vaW5jbHVkZS9saW51eC9kZXZfcHJpbnRrLmg6MTI5OjM0OiBub3RlOiBleHBh
-bmRlZCBmcm9tIG1hY3JvDQo+ICdkZXZfcHJpbnRrJw0KPiAgICAgICAgICAgICAgICAgX2Rldl9w
-cmludGsobGV2ZWwsIGRldiwgZm10LCAjI19fVkFfQVJHU19fKTsgICAgICAgICAgICBcDQo+ICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB+fn4gICAgXn5+fn5+fn5+fn4N
-Cj4gDQo+IFRoZSB0eXBlcyBvZiB0aGVzZSBhcmd1bWVudHMgYXJlIHVuY29uZGl0aW9uYWxseSBk
-ZWZpbmVkLCBzbyB0aGlzIHBhdGNoDQo+IHVwZGF0ZXMgdGhlIGZvcm1hdCBjaGFyYWN0ZXIgdG8g
-dGhlIGNvcnJlY3Qgb25lcyBmb3IgaW50cyBhbmQgdW5zaWduZWQgaW50cy4NCj4gDQo+IExpbms6
-IENsYW5nQnVpbHRMaW51eC9saW51eCMzNzgNCj4gU2lnbmVkLW9mZi1ieTogQmlsbCBXZW5kbGlu
-ZyA8bW9yYm9AZ29vZ2xlLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IENsYXVkaXUgTWFub2lsIDxjbGF1
-ZGl1Lm1hbm9pbEBueHAuY29tPg0KRml4ZXM6IGViZmNiMjNkNjJhYiAoImVuZXRjOiBBZGQgRU5F
-VEMgUEYgbGV2ZWwgZXh0ZXJuYWwgTURJTyBzdXBwb3J0IikNCg0KQ2FuIGJlIGFsc28gbmV0LW5l
-eHQgbWF0ZXJpYWwuIEl0J3MgdXAgdG8geW91LiBUaHguDQo=
+Hi Chen,
+
+Thanks for the update. I'm still testing on this along with the sched cluster patches.
+I'll show some results when I get enough data. So some questions below.
+
+在 2022/3/10 8:52, Chen Yu 写道:
+> [Problem Statement]
+> Currently select_idle_cpu() uses the percpu average idle time to
+> estimate the total LLC domain idle time, and calculate the number
+> of CPUs to be scanned. This might be inconsistent because idle time
+> of a CPU does not necessarily correlate with idle time of a domain.
+> As a result, the load could be underestimated and causes over searching
+> when the system is very busy.
+>
+> The following histogram is the time spent in select_idle_cpu(),
+> when running 224 instance of netperf on a system with 112 CPUs
+> per LLC domain:
+>
+> @usecs:
+> [0]                  533 |                                                    |
+> [1]                 5495 |                                                    |
+> [2, 4)             12008 |                                                    |
+> [4, 8)            239252 |                                                    |
+> [8, 16)          4041924 |@@@@@@@@@@@@@@                                      |
+> [16, 32)        12357398 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         |
+> [32, 64)        14820255 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+> [64, 128)       13047682 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       |
+> [128, 256)       8235013 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@                        |
+> [256, 512)       4507667 |@@@@@@@@@@@@@@@                                     |
+> [512, 1K)        2600472 |@@@@@@@@@                                           |
+> [1K, 2K)          927912 |@@@                                                 |
+> [2K, 4K)          218720 |                                                    |
+> [4K, 8K)           98161 |                                                    |
+> [8K, 16K)          37722 |                                                    |
+> [16K, 32K)          6715 |                                                    |
+> [32K, 64K)           477 |                                                    |
+> [64K, 128K)            7 |                                                    |
+>
+> netperf latency:
+> =======
+> case            	load    	    Lat_99th	    std%
+> TCP_RR          	thread-224	      257.39	(  0.21)
+> UDP_RR          	thread-224	      242.83	(  6.29)
+>
+> The netperf 99th latency(usec) above is comparable with the time spent in
+> select_idle_cpu(). That is to say, when the system is overloaded, searching
+> for idle CPU could be a bottleneck.
+>
+> [Proposal]
+> The main idea is to replace percpu average idle time with the domain
+> based metric. Choose average CPU utilization(util_avg) as the candidate.
+> In general, the number of CPUs to be scanned should be inversely
+> proportional to the sum of util_avg in this domain. That is, the lower
+> the util_avg is, the more select_idle_cpu() should scan for idle CPU,
+> and vice versa. The benefit of choosing util_avg is that, it is a metric
+> of accumulated historic activity, which seems to be more accurate than
+> instantaneous metrics(such as rq->nr_running).
+>
+> Furthermore, borrow the util_avg from periodic load balance,
+> which could offload the overhead of select_idle_cpu().
+>
+> According to last discussion[1], introduced the linear function
+> for experimental purpose:
+>
+> f(x) = a - bx
+>
+>      llc_size
+> x = \Sum      util_avg[cpu] / llc_cpu_capacity
+>      1
+> f(x) is the number of CPUs to be scanned, x is the sum util_avg.
+> To decide a and b, the following condition should be met:
+>
+> [1] f(0) = llc_size
+> [2] f(x) = 4,  x >= 50%
+>
+> That is to say, when the util_avg is 0, we should search for
+> the whole LLC domain. And if util_avg ratio reaches 50% or higher,
+> it should search at most 4 CPUs.
+
+I might have a question here. In your V1 patch, we won't scan when the LLC
+util >85%. But in this patch we'll always scan 4 cpus no matter how much the
+LLC is overloaded. When the LLC is rather busy the scan is probably redundant
+so is it better if we found a threadhold for stopping the scan? The util_avg
+cannot indicate how much the cpu is overloaded so perhaps just stop scan when
+it is 100% utilized.
+
+>
+> Yes, there would be questions like:
+> Why using this linear function to calculate the number of CPUs to
+> be scanned? Why choosing 50% as the threshold? These questions will
+> be discussed in the [Limitations] section.
+>
+> [Benchmark]
+> netperf, hackbench, schbench, tbench
+> were tested with 25% 50% 75% 100% 125% 150% 175% 200% instance
+> of CPU number (these ratios are not CPU utilization). Each test lasts
+> for 100 seconds, and repeats 3 times. The system would reboot into a
+> fresh environment for each benchmark.
+>
+> The following is the benchmark result comparison between
+> baseline:vanilla and compare:patched kernel. Positive compare%
+> indicates better performance.
+>
+> netperf
+> =======
+> case            	load    	baseline(std%)	compare%( std%)
+> TCP_RR          	28 threads	 1.00 (  0.30)	 -1.26 (  0.32)
+> TCP_RR          	56 threads	 1.00 (  0.35)	 -1.26 (  0.41)
+> TCP_RR          	84 threads	 1.00 (  0.46)	 -0.15 (  0.60)
+> TCP_RR          	112 threads	 1.00 (  0.36)	 +0.44 (  0.41)
+> TCP_RR          	140 threads	 1.00 (  0.23)	 +0.95 (  0.21)
+> TCP_RR          	168 threads	 1.00 (  0.20)	+177.77 (  3.78)
+> TCP_RR          	196 threads	 1.00 (  0.18)	+185.43 ( 10.08)
+> TCP_RR          	224 threads	 1.00 (  0.16)	+187.86 (  7.32)
+> UDP_RR          	28 threads	 1.00 (  0.43)	 -0.93 (  0.27)
+> UDP_RR          	56 threads	 1.00 (  0.17)	 -0.39 ( 10.91)
+> UDP_RR          	84 threads	 1.00 (  6.36)	 +1.03 (  0.92)
+> UDP_RR          	112 threads	 1.00 (  5.55)	 +1.47 ( 17.67)
+> UDP_RR          	140 threads	 1.00 ( 18.17)	 +0.31 ( 15.48)
+> UDP_RR          	168 threads	 1.00 ( 15.00)	+153.87 ( 13.20)
+> UDP_RR          	196 threads	 1.00 ( 16.26)	+169.19 ( 13.78)
+> UDP_RR          	224 threads	 1.00 ( 51.81)	+76.72 ( 10.95)
+>
+> hackbench
+> =========
+> (each group has 1/4 * 112 tasks)
+> case            	load    	baseline(std%)	compare%( std%)
+> process-pipe    	1 group 	 1.00 (  0.47)	 -0.46 (  0.16)
+> process-pipe    	2 groups 	 1.00 (  0.42)	 -0.61 (  0.74)
+> process-pipe    	3 groups 	 1.00 (  0.42)	 +0.38 (  0.20)
+> process-pipe    	4 groups 	 1.00 (  0.15)	 -0.36 (  0.56)
+> process-pipe    	5 groups 	 1.00 (  0.20)	 -5.08 (  0.01)
+> process-pipe    	6 groups 	 1.00 (  0.28)	 -2.98 (  0.29)
+> process-pipe    	7 groups 	 1.00 (  0.08)	 -1.18 (  0.28)
+> process-pipe    	8 groups 	 1.00 (  0.11)	 -0.40 (  0.07)
+> process-sockets 	1 group 	 1.00 (  0.43)	 -1.93 (  0.58)
+> process-sockets 	2 groups 	 1.00 (  0.23)	 -1.10 (  0.49)
+> process-sockets 	3 groups 	 1.00 (  1.10)	 -0.96 (  1.12)
+> process-sockets 	4 groups 	 1.00 (  0.59)	 -0.08 (  0.88)
+> process-sockets 	5 groups 	 1.00 (  0.45)	 +0.31 (  0.34)
+> process-sockets 	6 groups 	 1.00 (  0.23)	 +0.06 (  0.66)
+> process-sockets 	7 groups 	 1.00 (  0.12)	 +1.72 (  0.20)
+> process-sockets 	8 groups 	 1.00 (  0.11)	 +1.98 (  0.02)
+> threads-pipe    	1 group 	 1.00 (  1.07)	 +0.03 (  0.40)
+> threads-pipe    	2 groups 	 1.00 (  1.05)	 +0.19 (  1.27)
+> threads-pipe    	3 groups 	 1.00 (  0.32)	 -0.42 (  0.48)
+> threads-pipe    	4 groups 	 1.00 (  0.42)	 -0.76 (  0.79)
+> threads-pipe    	5 groups 	 1.00 (  0.19)	 -4.97 (  0.07)
+> threads-pipe    	6 groups 	 1.00 (  0.05)	 -4.11 (  0.04)
+> threads-pipe    	7 groups 	 1.00 (  0.10)	 -1.13 (  0.16)
+> threads-pipe    	8 groups 	 1.00 (  0.03)	 -0.08 (  0.05)
+> threads-sockets 	1 group 	 1.00 (  0.33)	 -1.93 (  0.69)
+> threads-sockets 	2 groups 	 1.00 (  0.20)	 -1.55 (  0.30)
+> threads-sockets 	3 groups 	 1.00 (  0.37)	 -1.29 (  0.59)
+> threads-sockets 	4 groups 	 1.00 (  1.83)	 +0.31 (  1.17)
+> threads-sockets 	5 groups 	 1.00 (  0.28)	+15.73 (  0.24)
+> threads-sockets 	6 groups 	 1.00 (  0.15)	 +5.02 (  0.34)
+> threads-sockets 	7 groups 	 1.00 (  0.10)	 +2.29 (  0.14)
+> threads-sockets 	8 groups 	 1.00 (  0.17)	 +2.22 (  0.12)
+>
+> tbench
+> ======
+> case            	load    	baseline(std%)	compare%( std%)
+> loopback        	28 threads	 1.00 (  0.05)	 -1.39 (  0.04)
+> loopback        	56 threads	 1.00 (  0.08)	 -0.37 (  0.04)
+> loopback        	84 threads	 1.00 (  0.03)	 +0.20 (  0.13)
+> loopback        	112 threads	 1.00 (  0.04)	 +0.69 (  0.04)
+> loopback        	140 threads	 1.00 (  0.13)	 +1.15 (  0.21)
+> loopback        	168 threads	 1.00 (  0.03)	 +1.62 (  0.08)
+> loopback        	196 threads	 1.00 (  0.08)	 +1.50 (  0.30)
+> loopback        	224 threads	 1.00 (  0.05)	 +1.62 (  0.05)
+>
+> schbench
+> ========
+> (each mthread group has 1/4 * 112 tasks)
+> case            	load    	baseline(std%)	compare%( std%)
+> normal          	1 mthread group	 1.00 ( 17.92)	+19.23 ( 23.67)
+> normal          	2 mthread groups 1.00 ( 21.10)	 +8.32 ( 16.92)
+> normal          	3 mthread groups 1.00 ( 10.80)	+10.03 (  9.21)
+> normal          	4 mthread groups 1.00 (  2.67)	 +0.11 (  3.00)
+> normal          	5 mthread groups 1.00 (  0.08)	 +0.00 (  0.13)
+> normal          	6 mthread groups 1.00 (  2.99)	 -2.66 (  3.87)
+> normal          	7 mthread groups 1.00 (  2.16)	 -0.83 (  2.24)
+> normal          	8 mthread groups 1.00 (  1.75)	 +0.18 (  3.18)
+>
+> According to the results above, when the workloads is heavy, the throughput
+> of netperf improves a lot. It might be interesting to look into the reason
+> why this patch benefits netperf significantly. Further investigation has
+> shown that, this might be a 'side effect' of this patch. It is found that,
+> the CPU utilization is around 90% on vanilla kernel, while it is nearly
+> 100% on patched kernel. According to the perf profile, with the patch
+> applied, the scheduler would likely to choose previous running CPU for the
+> waking task, thus reduces runqueue lock contention, so the CPU utilization
+> is higher and get better performance.
+>
+> [Limitations]
+> Q:Why using 50% as the util_avg/capacity threshold to search at most 4 CPUs?
+>
+> A: 50% is chosen as that corresponds to almost full CPU utilization, when
+>    the CPU is fixed to run at its base frequency, with turbo enabled.
+>    4 is the minimal number of CPUs to be scanned in current select_idle_cpu().
+>
+>    A synthetic workload was used to simulate different level of
+>    load. This workload takes every 10ms as the sample period, and in
+>    each sample period:
+>
+>    while (!timeout_10ms) {
+>         loop(busy_pct_ms);
+>    	sleep(10ms-busy_pct_ms)
+>    }
+>
+>    to simulate busy_pct% of CPU utilization. When the workload is
+>    running, the percpu runqueue util_avg was monitored. The
+>    following is the result from turbostat's Busy% on CPU2 and
+>    cfs_rq[2].util_avg from /sys/kernel/debug/sched/debug:
+>
+>    Busy%    util_avg   util_avg/cpu_capacity%
+>    10.06    35         3.42
+>    19.97    99         9.67
+>    29.93    154        15.04
+>    39.86    213        20.80
+>    49.79    256        25.00
+>    59.73    325        31.74
+>    69.77    437        42.68
+>    79.69    458        44.73
+>    89.62    519        50.68
+>    99.54    598        58.39
+>
+>    The reason why util_avg ratio is not consistent with Busy% might be due
+>    to CPU frequency invariance. The CPU is running at fixed lower frequency
+>    than the turbo frequency, then the util_avg scales lower than
+>    SCHED_CAPACITY_SCALE. In our test platform, the base frequency is 1.9GHz,
+>    and the max turbo frequency is 3.7GHz, so 1.9/3.7 is around 50%.
+>    In the future maybe we could use arch_scale_freq_capacity()
+>    instead of sds->total_capacity, so as to remove the impact from frequency.
+>    Then the 50% could be adjusted higher. For now, 50% is an aggressive
+>    threshold to restric the idle CPU searching and shows benchmark
+>    improvement.
+>
+> Q: Why using nr_scan = a - b * sum_util_avg to do linear search?
+>
+> A: Ideally the nr_scan could be:
+>
+>    nr_scan = sum_util_avg / pelt_avg_scan_cost
+>
+>    However consider the overhead of calculating pelt on avg_scan_cost
+>    in each wake up, choosing heuristic search for evaluation seems to
+>    be an acceptable trade-off.
+>
+>    The f(sum_util_avg) could be of any form, as long as it is a monotonically
+>    decreasing function. At first f(x) = a - 2^(bx) was chosen. Because when the
+>    sum_util_avg is low, the system should try very hard to find an idle CPU. And
+>    if sum_util_avg goes higher, the system dramatically lose its interest to search
+>    for the idle CPU. But exponential function does have its drawback:
+>
+>    Consider a system with 112 CPUs, let f(x) =  112 when x = 0,
+>    f(x) = 4 when x = 50, x belongs to [0, 100], then we have:
+>
+>    f1(x) = 113 - 2^(x / 7.35)
+>    and
+>    f2(x) = 112 - 2.16 * x
+>
+>    Since kernel does not support floating point, above functions are converted into:
+>    nr_scan1(x) = 113 - 2^(x / 7)
+>    and
+>    nr_scan2(x) = 112 - 2 * x
+>
+>    util_avg%      0     1     2  ...   8     9   ... 47   48   49
+>    nr_scan1     112   112   112      111   111       49   49    4
+>    nr_scan2     112   110   108       96    94       18   16   14
+>
+>    According to above result, the granularity of exponential function
+>    is coarse-grained, while the linear function is fine-grained.
+>
+>    So finally choose linear function. After all, it has shown benchmark
+>    benefit without noticeable regression so far.
+>
+> Q: How to deal with the following corner case:
+>
+>    It is possible that there is unbalanced tasks among CPUs due to CPU affinity.
+>    For example, suppose the LLC domain is composed of 6 CPUs, and 5 tasks are bound
+>    to CPU0~CPU4, while CPU5 is idle:
+>
+> 		CPU0	CPU1	CPU2	CPU3	CPU4	CPU5
+>    util_avg	1024	1024	1024	1024	1024	0
+>
+>    Since the util_avg ratio is 83%( = 5/6 ), which is higher than 50%, select_idle_cpu()
+>    only searches 4 CPUs starting from CPU0, thus leaves idle CPU5 undetected.
+>
+>    A possible workaround to mitigate this problem is that, the nr_scan should
+>    be increased by the number of idle CPUs found during periodic load balance
+>    in update_sd_lb_stats(). In above example, the nr_scan will be adjusted to
+>    4 + 1 = 5. Currently I don't have better solution in mind to deal with it
+>    gracefully.
+
+Without CPU affinity, is it possible that we also meet this case? Considering we always
+scan from the target cpu and the further cpus have less chance to be checked, the scan
+possibility of each CPUs is not equal. When the util_avg ratio >50%, after several wakeups
+from CPU0 the CPU 1~4 will be non-idle andthe following scans may fail without checking CPU5.
+
+>
+> Any comment is appreciated.
+>
+> Link: https://lore.kernel.org/lkml/20220207135253.GF23216@worktop.programming.kicks-ass.net/ # [1]
+> Suggested-by: Tim Chen <tim.c.chen@intel.com>
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> ---
+>  include/linux/sched/topology.h |   1 +
+>  kernel/sched/fair.c            | 107 +++++++++++++++++++--------------
+>  2 files changed, 63 insertions(+), 45 deletions(-)
+>
+> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+> index 8054641c0a7b..aae558459f00 100644
+> --- a/include/linux/sched/topology.h
+> +++ b/include/linux/sched/topology.h
+> @@ -81,6 +81,7 @@ struct sched_domain_shared {
+>  	atomic_t	ref;
+>  	atomic_t	nr_busy_cpus;
+>  	int		has_idle_cores;
+> +	int		nr_idle_scan;
+>  };
+>  
+>  struct sched_domain {
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 5146163bfabb..59f5f8432c21 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6271,43 +6271,14 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>  {
+>  	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
+>  	int i, cpu, idle_cpu = -1, nr = INT_MAX;
+> -	struct rq *this_rq = this_rq();
+> -	int this = smp_processor_id();
+> -	struct sched_domain *this_sd;
+> -	u64 time = 0;
+> -
+> -	this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
+> -	if (!this_sd)
+> -		return -1;
+> +	struct sched_domain_shared *sd_share;
+>  
+>  	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
+>  
+>  	if (sched_feat(SIS_PROP) && !has_idle_core) {
+> -		u64 avg_cost, avg_idle, span_avg;
+> -		unsigned long now = jiffies;
+> -
+> -		/*
+> -		 * If we're busy, the assumption that the last idle period
+> -		 * predicts the future is flawed; age away the remaining
+> -		 * predicted idle time.
+> -		 */
+> -		if (unlikely(this_rq->wake_stamp < now)) {
+> -			while (this_rq->wake_stamp < now && this_rq->wake_avg_idle) {
+> -				this_rq->wake_stamp++;
+> -				this_rq->wake_avg_idle >>= 1;
+> -			}
+> -		}
+> -
+> -		avg_idle = this_rq->wake_avg_idle;
+> -		avg_cost = this_sd->avg_scan_cost + 1;
+> -
+
+With this patch, sd->avg_scan_cost, rq->{wake_stamp, wake_avg_idle} may have no users.
+
+Thanks,
+Yicong
+
+> -		span_avg = sd->span_weight * avg_idle;
+> -		if (span_avg > 4*avg_cost)
+> -			nr = div_u64(span_avg, avg_cost);
+> -		else
+> -			nr = 4;
+> -
+> -		time = cpu_clock(this);
+> +		sd_share = rcu_dereference(per_cpu(sd_llc_shared, target));
+> +		if (sd_share)
+> +			nr = READ_ONCE(sd_share->nr_idle_scan);
+>  	}
+>  
+>  	for_each_cpu_wrap(cpu, cpus, target + 1) {
+> @@ -6328,18 +6299,6 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>  	if (has_idle_core)
+>  		set_idle_cores(target, false);
+>  
+> -	if (sched_feat(SIS_PROP) && !has_idle_core) {
+> -		time = cpu_clock(this) - time;
+> -
+> -		/*
+> -		 * Account for the scan cost of wakeups against the average
+> -		 * idle time.
+> -		 */
+> -		this_rq->wake_avg_idle -= min(this_rq->wake_avg_idle, time);
+> -
+> -		update_avg(&this_sd->avg_scan_cost, time);
+> -	}
+> -
+>  	return idle_cpu;
+>  }
+>  
+> @@ -9199,6 +9158,60 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+>  	return idlest;
+>  }
+>  
+> +static inline void update_nr_idle_scan(struct lb_env *env, struct sd_lb_stats *sds,
+> +				       unsigned long sum_util)
+> +{
+> +	struct sched_domain_shared *sd_share;
+> +	int llc_size = per_cpu(sd_llc_size, env->dst_cpu);
+> +	int nr_scan;
+> +
+> +	/*
+> +	 * Update the number of CPUs to scan in LLC domain, which could
+> +	 * be used as a hint in select_idle_cpu(). The update of this hint
+> +	 * occurs during periodic load balancing, rather than frequent
+> +	 * newidle balance.
+> +	 */
+> +	if (env->idle == CPU_NEWLY_IDLE || env->sd->span_weight != llc_size)
+> +		return;
+> +
+> +	sd_share = rcu_dereference(per_cpu(sd_llc_shared, env->dst_cpu));
+> +	if (!sd_share)
+> +		return;
+> +
+> +	/*
+> +	 * In general, the number of cpus to be scanned should be
+> +	 * inversely proportional to the sum_util. That is, the lower
+> +	 * the sum_util is, the harder select_idle_cpu() should scan
+> +	 * for idle CPU, and vice versa. Let x be the sum_util ratio
+> +	 * [0-100] of the LLC domain, f(x) be the number of CPUs scanned:
+> +	 *
+> +	 * f(x) = a - bx                                              [1]
+> +	 *
+> +	 * Consider that f(x) = nr_llc when x = 0, and f(x) = 4 when
+> +	 * x >= threshold('h' below) then:
+> +	 *
+> +	 * a = llc_size;
+> +	 * b = (nr_llc - 4) / h                                       [2]
+> +	 *
+> +	 * then [2] becomes:
+> +	 *
+> +	 * f(x) = llc_size - (llc_size -4)x/h                         [3]
+> +	 *
+> +	 * Choose 50 (50%) for h as the threshold from experiment result.
+> +	 * And since x = 100 * sum_util / total_cap, [3] becomes:
+> +	 *
+> +	 * f(sum_util)
+> +	 *  = llc_size - (llc_size - 4) * 100 * sum_util / total_cap * 50
+> +	 *  = llc_size - (llc_size - 4) * 2 * sum_util / total_cap
+> +	 *
+> +	 */
+> +	nr_scan = llc_size - (llc_size - 4) * 2 * sum_util / sds->total_capacity;
+> +	if (nr_scan < 4)
+> +		nr_scan = 4;
+> +
+> +	WRITE_ONCE(sd_share->nr_idle_scan, nr_scan);
+> +}
+> +
+>  /**
+>   * update_sd_lb_stats - Update sched_domain's statistics for load balancing.
+>   * @env: The load balancing environment.
+> @@ -9212,6 +9225,7 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+>  	struct sg_lb_stats *local = &sds->local_stat;
+>  	struct sg_lb_stats tmp_sgs;
+>  	int sg_status = 0;
+> +	unsigned long sum_util = 0;
+>  
+>  	do {
+>  		struct sg_lb_stats *sgs = &tmp_sgs;
+> @@ -9242,6 +9256,7 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+>  		/* Now, start updating sd_lb_stats */
+>  		sds->total_load += sgs->group_load;
+>  		sds->total_capacity += sgs->group_capacity;
+> +		sum_util += sgs->group_util;
+>  
+>  		sg = sg->next;
+>  	} while (sg != env->sd->groups);
+> @@ -9268,6 +9283,8 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+>  		WRITE_ONCE(rd->overutilized, SG_OVERUTILIZED);
+>  		trace_sched_overutilized_tp(rd, SG_OVERUTILIZED);
+>  	}
+> +
+> +	update_nr_idle_scan(env, sds, sum_util);
+>  }
+>  
+>  #define NUMA_IMBALANCE_MIN 2

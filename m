@@ -2,103 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BD34DC20C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93AF24DC216
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbiCQI7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 04:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
+        id S231605AbiCQJAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbiCQI7T (ORCPT
+        with ESMTP id S229714AbiCQJAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 04:59:19 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39957665E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:57:58 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id hw13so9163860ejc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ToAuSw9noF4PMelZcjz5Ho1d/K/t8qdLlfiN+Gz3OL8=;
-        b=x0Cy2WjKJUWqxiiIHewCcWsmwWtT91gESaE6raQXk0ObQUNUgGnl0H5BmNYfRCSGEP
-         FlM3MY5srYU1AhhYONSQmQtEFRCb+GS/o0ctE1/4aiYnh6Zb4k0ZdC00KVw2lPquQ2in
-         YEQwenvqU2eCpO2N1+B6wvVxDJ2F12Z5S5G5dS9w8i2pOzH6giS3GVzaiM9cMH/5LwrT
-         AoaPjM00dt/yGzCK01Fmo8QhKRvL9MFL9AvnYTerZvCBZFjh9VqvT4WhAnpOKDXgS29C
-         +v+jSffdrztf19PA6TLAhFnriMdlZU6zMMJ4p5z0vtmRuVh3yvjuewscorTSK1J3zgiC
-         V1mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ToAuSw9noF4PMelZcjz5Ho1d/K/t8qdLlfiN+Gz3OL8=;
-        b=mWEjhk3XsU4Kv9KzF7o5NktQkxDZsFD+ACcQLzfMoAqcXDUFBI/GjHAxscHM0yJv90
-         U5pb6kXsTNZ4nVvs/aNMuKQ8LDPJO71yfhaoD/r8eSfIav8Dh60uDLtEoz0l6Ubg4be6
-         oVlQ+29+5d4i73RVtEWHmEKD96vlGDseDi19kAN60r72h0TcTEQtSRlGVHoECmNly+7W
-         flxqGkEzrRCavHocDWf9RvpZvkHwIJE0N4qnKuNdSVePruzTLN0VL5haB2UCCTQGY4qv
-         q8PodB6n0AKerCS7tfnpofd6aktMRRHInJZq77WahxvoS+E8/WTYlYUvJf5FayitgBg1
-         LUfw==
-X-Gm-Message-State: AOAM530FdpMVEHOamwL6P3h2DUkAoN8bSsPe5MzsixMaFktS3It1Wo/c
-        l8tvnFOQxpRk8DQ5Q94qDI9g+Q==
-X-Google-Smtp-Source: ABdhPJx3JJ470xOltzzfCnSTC8MjjZymtB1Z5FMnjRdR235tvx7INP15PJOVniEvlLBWs9HCYIxijQ==
-X-Received: by 2002:a17:907:3f13:b0:6db:cf49:8871 with SMTP id hq19-20020a1709073f1300b006dbcf498871mr3270614ejc.766.1647507477224;
-        Thu, 17 Mar 2022 01:57:57 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id l2-20020a1709066b8200b006bbea7e566esm2066426ejr.55.2022.03.17.01.57.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 01:57:56 -0700 (PDT)
-Message-ID: <9c821989-cbba-f2ea-c5fc-6fc6bbd34e7e@blackwall.org>
-Date:   Thu, 17 Mar 2022 10:57:54 +0200
+        Thu, 17 Mar 2022 05:00:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D7BD5FEE;
+        Thu, 17 Mar 2022 01:58:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF6521476;
+        Thu, 17 Mar 2022 01:58:43 -0700 (PDT)
+Received: from e123427-lin.arm.com (unknown [10.57.43.22])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C2BE3F766;
+        Thu, 17 Mar 2022 01:58:41 -0700 (PDT)
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     bhelgaas@google.com, l.stach@pengutronix.de,
+        Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] PCI: imx6: Invoke the PHY exit function after PHY power off
+Date:   Thu, 17 Mar 2022 08:58:37 +0000
+Message-Id: <164750743037.11873.2696865290118879978.b4-ty@arm.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <1646289275-17813-1-git-send-email-hongxing.zhu@nxp.com>
+References: <1646289275-17813-1-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 net-next 06/15] net: bridge: mst: Notify switchdev
- drivers of MST state changes
-Content-Language: en-US
-To:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
-References: <20220316150857.2442916-1-tobias@waldekranz.com>
- <20220316150857.2442916-7-tobias@waldekranz.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220316150857.2442916-7-tobias@waldekranz.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2022 17:08, Tobias Waldekranz wrote:
-> Generate a switchdev notification whenever an MST state changes. This
-> notification is keyed by the VLANs MSTI rather than the VID, since
-> multiple VLANs may share the same MST instance.
+On Thu, 3 Mar 2022 14:34:35 +0800, Richard Zhu wrote:
+> To balance phy->init_count, invoke the phy_exit() after phy_power_off().
 > 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> ---
->  include/net/switchdev.h |  7 +++++++
->  net/bridge/br_mst.c     | 18 ++++++++++++++++++
->  2 files changed, 25 insertions(+)
 > 
 
-Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
+Applied to pci/imx6, thanks!
 
+[1/1] PCI: imx6: Invoke the PHY exit function after PHY power off
+      https://git.kernel.org/lpieralisi/pci/c/deaf7a2c2e
+
+Thanks,
+Lorenzo

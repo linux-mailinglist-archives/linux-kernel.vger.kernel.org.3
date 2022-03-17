@@ -2,161 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEA94DC5F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9604DC5F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbiCQMqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
+        id S233647AbiCQMqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233454AbiCQMqC (ORCPT
+        with ESMTP id S233454AbiCQMqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:46:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E027EF7F5E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:44:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647521084;
+        Thu, 17 Mar 2022 08:46:11 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E050BF955E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:44:51 -0700 (PDT)
+Received: from [127.0.0.1] (pd95ca587.dip0.t-ipconnect.de [217.92.165.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D827C1EC0445;
+        Thu, 17 Mar 2022 13:44:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1647521086;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qMMzKWFseA5pvZnvZFNeWATrNWxH9U0hOpDhOpSAHMA=;
-        b=BeV4UdvHsaNXjLfUXTpgT/A3H4YoPsGb08PYrLkVJI9AMjRbbsgUjiiwszZ8TEJtJcuhXA
-        dEXU2gNoj85L4fmih6bWyliWvBvUAV3SfwBDS0EivgWRgyML6PQjBxIzDgp1RCwpcyIK6v
-        EMmrHG4++qS2pDJv5pkkPKRtJQorQOs=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-479-N71vfJhyNWuA85IINCGVwg-1; Thu, 17 Mar 2022 08:44:43 -0400
-X-MC-Unique: N71vfJhyNWuA85IINCGVwg-1
-Received: by mail-pj1-f72.google.com with SMTP id lp2-20020a17090b4a8200b001bc449ecbceso6223531pjb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:44:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=qMMzKWFseA5pvZnvZFNeWATrNWxH9U0hOpDhOpSAHMA=;
-        b=VwAVEO37WokLBu7MtKIhzlhNS/ieS6Ag+F6bnRQHbiKKk/qNn0epn/G7Sjxmh6DrE7
-         BPzY3UbZuSRlyaEiGAm9HbmJWyQ0SLwUT6DE32AXY/1vm4cOk2D1AOd+mrasvuHMaYFL
-         conH6c4akhms2lyWny9zTY4NcYAJyWxgxYC1nosXhMKq94yx4lScqczmRVvIEVCmX2V3
-         +l1oLzt01XFJiwlXyoYuqBldhXq4xrCbqXPtytqZJVuR+mRppaO3k2zgNPiyRq1h7TCs
-         lV0ubHcMkXXb9DMyRoAQX1R72//CkuI9kvyXMMONkR2UR7N/0ZAGoGCBcZXCG7FA6cRb
-         GEcQ==
-X-Gm-Message-State: AOAM531douc5oid6fE0Dfd77WUVv4cTrJMFo/NSDH51pqhUrTR++pcLO
-        1TCI5Qdo2Sjr/ye8YqrdfO/BjIDFH/HK02uhWbGU0FZ4GbTaPMGf4qU6tSZJ6ReiK8xczR786vc
-        JnkqXhw5W77h+GhXzbT53oRXO9EUjUCHfb52bs+ZKFqFqdHVoWsQdqUTHwrVHHlEjjzvRzhR3wg
-        ==
-X-Received: by 2002:a17:903:18b:b0:151:efb5:778 with SMTP id z11-20020a170903018b00b00151efb50778mr4910761plg.45.1647521081654;
-        Thu, 17 Mar 2022 05:44:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzIgTyejXrAySnL1Eq9BOZqMWOd0RvmJOndJCN1VReO/UPbivuId+iGemQGSvzVIZFxqWS8og==
-X-Received: by 2002:a17:903:18b:b0:151:efb5:778 with SMTP id z11-20020a170903018b00b00151efb50778mr4910728plg.45.1647521081288;
-        Thu, 17 Mar 2022 05:44:41 -0700 (PDT)
-Received: from [10.72.12.110] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id o5-20020a655bc5000000b00372f7ecfcecsm5207974pgr.37.2022.03.17.05.44.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 05:44:40 -0700 (PDT)
-Subject: Re: [RFC PATCH v2 0/3] ceph: add support for snapshot names
- encryption
-To:     Jeff Layton <jlayton@kernel.org>,
-        =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
-Cc:     Ilya Dryomov <idryomov@gmail.com>,
-        Ceph Development <ceph-devel@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20220315161959.19453-1-lhenriques@suse.de>
- <5b53e812-d49b-45f0-1219-3dbc96febbc1@redhat.com>
- <329abedd9d9938de95bf4f5600acdcd6a846e6be.camel@kernel.org>
- <3c8b78c4-5392-b81c-e76f-64fcce4f3c0f@redhat.com>
- <87wngshlzb.fsf@brahms.olymp>
- <c2f494b61674e63985e4e2a0fb3b6c503e17334b.camel@kernel.org>
- <a4d26edc-a65f-27e2-2ea9-ef43f364eb9b@redhat.com>
- <93ac97c750456fe77d33f432629bad209dc14e81.camel@kernel.org>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <83db0781-2e9a-55e1-fb0b-ee0923f0b11a@redhat.com>
-Date:   Thu, 17 Mar 2022 20:44:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        bh=CQIn16mv6olHxAfmUfYYbbLKbrpFDKYXRnKh5VrfflU=;
+        b=Gc3MqdtcmlEYroeYZcMJNnUiE/iP9H0yQLudg47eLYU63rMNml1lfYLJ31uizChAb9MqK0
+        fjZs5VhjCMDpqkUbP/pJMj1BTerYEwgO3MNMRCTA7jNP9WdGQ+34Yv91inkwpTNx58A4aK
+        8pDfwrKaF/PBoaI5jI2tkaQpyhngZng=
+Date:   Thu, 17 Mar 2022 12:44:42 +0000
+From:   Boris Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, dave.hansen@intel.com, mingo@redhat.com,
+        luto@kernel.org, peterz@infradead.org
+CC:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        brijesh.singh@amd.com, ak@linux.intel.com, david@redhat.com,
+        dan.j.williams@intel.com, wanpengli@tencent.com, jgross@suse.com,
+        linux-kernel@vger.kernel.org, hpa@zytor.com, jmattson@google.com,
+        pbonzini@redhat.com, seanjc@google.com, jpoimboe@redhat.com,
+        vkuznets@redhat.com, joro@8bytes.org, thomas.lendacky@amd.com,
+        sdeep@vmware.com, x86@kernel.org, knsathya@kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        tony.luck@intel.com,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCHv6_20/30=5D_x86/boot=3A_Add_a_tramp?= =?US-ASCII?Q?oline_for_booting_APs_via_firmware_handoff?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220316020856.24435-21-kirill.shutemov@linux.intel.com>
+References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com> <20220316020856.24435-21-kirill.shutemov@linux.intel.com>
+Message-ID: <3D4C3388-DC6A-41A5-A79F-B23FBFFE4E0F@alien8.de>
 MIME-Version: 1.0
-In-Reply-To: <93ac97c750456fe77d33f432629bad209dc14e81.camel@kernel.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On March 16, 2022 2:08:46 AM UTC, "Kirill A=2E Shutemov" <kirill=2Eshutemov=
+@linux=2Eintel=2Ecom> wrote:
+>diff --git a/arch/x86/include/asm/apic=2Eh b/arch/x86/include/asm/apic=2E=
+h
+>index 48067af94678=2E=2E35006e151774 100644
+>--- a/arch/x86/include/asm/apic=2Eh
+>+++ b/arch/x86/include/asm/apic=2Eh
+>@@ -328,6 +328,8 @@ struct apic {
+>=20
+> 	/* wakeup_secondary_cpu */
+> 	int	(*wakeup_secondary_cpu)(int apicid, unsigned long start_eip);
+>+	/* wakeup secondary CPU using 64-bit wakeup point */
+>+	int	(*wakeup_secondary_cpu_64)(int apicid, unsigned long start_eip);
+>=20
+> 	void	(*inquire_remote_apic)(int apicid);
+>=20
+>diff --git a/arch/x86/include/asm/realmode=2Eh b/arch/x86/include/asm/rea=
+lmode=2Eh
+>index 331474b150f1=2E=2Efd6f6e5b755a 100644
+>--- a/arch/x86/include/asm/realmode=2Eh
+>+++ b/arch/x86/include/asm/realmode=2Eh
+>@@ -25,6 +25,7 @@ struct real_mode_header {
+> 	u32	sev_es_trampoline_start;
+> #endif
+> #ifdef CONFIG_X86_64
+>+	u32	trampoline_start64;
 
-On 3/17/22 8:41 PM, Jeff Layton wrote:
-> On Thu, 2022-03-17 at 20:31 +0800, Xiubo Li wrote:
->> On 3/17/22 8:01 PM, Jeff Layton wrote:
->>> On Thu, 2022-03-17 at 11:11 +0000, Luís Henriques wrote:
->>>> Xiubo Li <xiubli@redhat.com> writes:
->>>>
->>>>> On 3/17/22 6:01 PM, Jeff Layton wrote:
->>>>>> I'm not sure we want to worry about .snap directories here since they
->>>>>> aren't "real". IIRC, snaps are inherited from parents too, so you could
->>>>>> do something like
->>>>>>
->>>>>>        mkdir dir1
->>>>>>        mkdir dir1/.snap/snap1
->>>>>>        mkdir dir1/dir2
->>>>>>        fscrypt encrypt dir1/dir2
->>>>>>
->>>>>> There should be nothing to prevent encrypting dir2, but I'm pretty sure
->>>>>> dir2/.snap will not be empty at that point.
->>>>> If we don't take care of this. Then we don't know which snapshots should do
->>>>> encrypt/dencrypt and which shouldn't when building the path in lookup and when
->>>>> reading the snapdir ?
->>>> In my patchset (which I plan to send a new revision later today, I think I
->>>> still need to rebase it) this is handled by using the *real* snapshot
->>>> parent inode.  If we're decrypting/encrypting a name for a snapshot that
->>>> starts with a '_' character, we first find the parent inode for that
->>>> snapshot and only do the operation if that parent is encrypted.
->>>>
->>>> In the other email I suggested that we could prevent enabling encryption
->>>> in a directory when there are snapshots above in the hierarchy.  But now
->>>> that I think more about it, it won't solve any problem because you could
->>>> create those snapshots later and then you would still need to handle these
->>>> (non-encrypted) "_name_xxxx" snapshots anyway.
->>>>
->>> Yeah, that sounds about right.
->>>
->>> What happens if you don't have the snapshot parent's inode in cache?
->>> That can happen if you (e.g.) are running NFS over ceph, or if you get
->>> crafty with name_to_handle_at() and open_by_handle_at().
->>>
->>> Do we have to do a LOOKUPINO in that case or does the trace contain that
->>> info? If it doesn't then that could really suck in a big hierarchy if
->>> there are a lot of different snapshot parent inodes to hunt down.
->>>
->>> I think this is a case where the client just doesn't have complete
->>> control over the dentry name. It may be better to just not encrypt them
->>> if it's too ugly.
->>>
->>> Another idea might be to just use the same parent inode (maybe the
->>> root?) for all snapshot names. It's not as secure, but it's probably
->>> better than nothing.
->> Does it allow to have different keys for the subdirs in the hierarchy ?
->>   From my test it doesn't.
->>
-> No. Once you set a key on directory you can't set another on a subtree
-> of it.
-If so. Yeah, I think your approach mentioned above is the best.
->> If so we can always use the same oldest ancestor in the hierarchy, who
->> has encryption key, to encyrpt/decrypt all the .snap in the hierarchy,
->> then just need to lookup oldest ancestor inode only once.
->>
-Just like this.
+I had already asked about those here: why do you need to add a new u32 her=
+e and can't use trampoline_start?
 
--- Xiubo
+Ditto for the new function pointer too=2E
 
-> That's a possibility.
+And yes, sev_es_trampoline_start is superfluous too=2E
 
+--=20
+Sent from a small device: formatting sux and brevity is inevitable=2E 

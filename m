@@ -2,140 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0084DC37C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 241374DC376
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbiCQKCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 06:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
+        id S232215AbiCQKBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 06:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbiCQKCF (ORCPT
+        with ESMTP id S232174AbiCQKBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 06:02:05 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629621CAF0B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:00:49 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id z26so6488101lji.8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:00:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QhShUoe84DPn/qSDuJss4yxswaSum21NgfxRVJizeNM=;
-        b=JaGzOhhUBuH/BXOUzMz78R/tXpFW9PtxKjjthc7yAtoRV6cTPvWodM23mwl4m2cLfp
-         H1RGlDUWy2wa6JsIy60+qH5vCdemKBd2v0gUqAOPGoUbBDFr2pSFr3wgSR0o6N7mRYzO
-         wqRnXRK0iyG7WAANNYpOotSjtLLrnpazC+7XUP4/c+n+VArSv8HHCpDqk/CdTCIdtvlc
-         Whhnb9w3pm0GpqFL4VQLkt++CeRY50VzPSRwyn6+NfTW5Q3/YwGhr2VhWXGPecyL+sAY
-         hQ3BkMs88cXhYCv3eLILGmoc5xS9UP96DNEiRvnSgeBYP3ot7ItwtkAcBoYP5gTjlXVE
-         csCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QhShUoe84DPn/qSDuJss4yxswaSum21NgfxRVJizeNM=;
-        b=CZQ9vEDrk6UVb9xLD/mstWgZWTMNM98JqQ0iqg9qecIQuF272dU6ioAZ73S2sQmz0P
-         6DPjdH/DTnvpPUuuLoV8emudeEOjw4MVvJXF7sPp7xzMmILoTNqNCamBX88ZgqNts+6U
-         8Y0yOXqYsvsIMGvGBNlNhlK7jYdhsAYiX5KA3hj7Ymv/TA9t+O90O+CnuwWEg43WLSAE
-         8njOyHLVlIRFBoPmg9kcVT6faTPPj6CAD1uhj8zf3SoU0RF9fIzBp6EYzjDypObNL0nG
-         LuiNPIBc3n5a7AoYHqoUtTJqHsCDT6AcUHNAS78apHMDBulARfC8NxTZZ31TyrwobCzw
-         v80Q==
-X-Gm-Message-State: AOAM53376uG3kq/DWcE68udaCvoZ2NzSBGXf+xdhsoJqNyeI6ECmPQt6
-        3mCvS9y+ce+YWgpb0Ay6xS9CXYVUWPIV5RSjZ18NUw==
-X-Google-Smtp-Source: ABdhPJzGP/6VJ+sfVftD7foeJ61GzofJGTWadnmk9/XhbBJ6gkiCtzjkDLFBkPAu3NbN9QU6HJH517gTjYEZt7di0FI=
-X-Received: by 2002:a2e:5009:0:b0:247:d738:3e90 with SMTP id
- e9-20020a2e5009000000b00247d7383e90mr2393121ljb.229.1647511247546; Thu, 17
- Mar 2022 03:00:47 -0700 (PDT)
+        Thu, 17 Mar 2022 06:01:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EF2186FA1;
+        Thu, 17 Mar 2022 03:00:14 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 77CB41F390;
+        Thu, 17 Mar 2022 10:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1647511213; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Abm9aZWjRWB02cH/iiBq5Tgw+x5jzud0k0C7ziDw03s=;
+        b=vlCVYJPBh0M/MyMvfRsEwu+cDkSf5traFO1dx4P8KF/jzfHC257LnEVgCVdUv1B9+ZgxvD
+        npSQxNmlyBk0bVPntWWUbBKaz1MTkraSdf9gn6leS7M/Cs8AOBvj1yqsmSW5RMglEDxtNH
+        rANFb+MUiW1cdgoUlbE3BTTmylLQoJE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1647511213;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Abm9aZWjRWB02cH/iiBq5Tgw+x5jzud0k0C7ziDw03s=;
+        b=fhBXT5ne5WKxIElVBhepugvk3o08MdErSKw1XcU5a/cEY1ha/sMHd3GIsCliNVcOIjjwQH
+        5BHlJKFVAMUDq4Dw==
+Received: from quack3.suse.cz (unknown [10.100.200.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 572BAA3B94;
+        Thu, 17 Mar 2022 10:00:13 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id D7602A0615; Thu, 17 Mar 2022 11:00:12 +0100 (CET)
+Date:   Thu, 17 Mar 2022 11:00:12 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, lczerner@redhat.com
+Subject: Re: [PATCH -next] jbd2: Fix null-ptr-deref when process reserved
+ list in jbd2_journal_commit_transaction
+Message-ID: <20220317100012.mw7iuvrehlaj5jve@quack3.lan>
+References: <20220317012755.2621687-1-yebin10@huawei.com>
 MIME-Version: 1.0
-References: <20220304135134.47827-1-yann.gautier@foss.st.com>
- <20220304135134.47827-2-yann.gautier@foss.st.com> <CACRpkdYQz+-im3n-r0_8RKL7so2bHS=aZobty4BbzixmPzms-Q@mail.gmail.com>
- <0bc53018-fce4-4104-fa47-6e60d2367d69@foss.st.com>
-In-Reply-To: <0bc53018-fce4-4104-fa47-6e60d2367d69@foss.st.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 17 Mar 2022 11:00:10 +0100
-Message-ID: <CAPDyKFqgQZFH3LT1Z+G9N0MVfhFwoiUr9N2sKFaejTWcH+dNXg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: mmc: mmci: add a property to disable DMA LLI
-To:     Yann Gautier <yann.gautier@foss.st.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Vasut <marex@denx.de>, kernel@dh-electronics.com,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Grzegorz Szymaszek <gszymaszek@short.pl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220317012755.2621687-1-yebin10@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Mar 2022 at 09:26, Yann Gautier <yann.gautier@foss.st.com> wrote:
->
-> On 3/14/22 23:43, Linus Walleij wrote:
-> > "On Fri, Mar 4, 2022 at 2:52 PM Yann Gautier <yann.gautier@foss.st.com> wrote:
-> >
-> >> On STMicroelectronics variant of PL18x, the DMA Linked Lists are supported
-> >> starting from revision v2 of the peripheral. But it has limitations,
-> >> as all the buffers should be aligned on block size (except the last one).
-> >> But this cannot be guaranteed with SDIO. We should then have a property
-> >> to disable the support of LLI.
-> >>
-> >> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
-> >
-> > Actually I think this is present also on the ux500 variants. See:
-> > commit 2253ed4b36dc876d1598c4dab5587e537ec68c34
-> > "mmc: mmci: Support any block sizes for ux500v2 and qcom variant"
-> >
-> > Spot the variant data "dma_power_of_2".
-> >
-> > So whatever property you add
-> > to the variant data (not in the device tree please) should
-> > be added to the ux500 variants as well, it will *VERY* likely
-> > have a problem with LLI elements not being a power of 2
-> > as it is the ancestor of later STMicro variants.
-> >
-> > It might actually be the reason for some annoying WiFi error
-> > messages I have seen :/
-> >
-> > Yours,
-> > Linus Walleij
->
-> Hi Linus,
->
-> The STM32 variant uses an internal DMA, and the DMA functions are in its
-> dedicated file. So I was planning to do the same as what is done in
-> meson-gx-mmc.c: using a bounce buffer to copy from/to in case DMA
-> constraints are not fulfilled. Not sure it can help for Ux500.
+On Thu 17-03-22 09:27:55, Ye Bin wrote:
+> we got issue as follows:
+> [   72.796117] EXT4-fs error (device sda): ext4_journal_check_start:83: comm fallocate: Detected aborted journal
+> [   72.826847] EXT4-fs (sda): Remounting filesystem read-only
+> fallocate: fallocate failed: Read-only file system
+> [   74.791830] jbd2_journal_commit_transaction: jh=0xffff9cfefe725d90 bh=0x0000000000000000 end delay
+> [   74.793597] ------------[ cut here ]------------
+> [   74.794203] kernel BUG at fs/jbd2/transaction.c:2063!
+> [   74.794886] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+> [   74.795533] CPU: 4 PID: 2260 Comm: jbd2/sda-8 Not tainted 5.17.0-rc8-next-20220315-dirty #150
+> [   74.798327] RIP: 0010:__jbd2_journal_unfile_buffer+0x3e/0x60
+> [   74.801971] RSP: 0018:ffffa828c24a3cb8 EFLAGS: 00010202
+> [   74.802694] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> [   74.803601] RDX: 0000000000000001 RSI: ffff9cfefe725d90 RDI: ffff9cfefe725d90
+> [   74.804554] RBP: ffff9cfefe725d90 R08: 0000000000000000 R09: ffffa828c24a3b20
+> [   74.805471] R10: 0000000000000001 R11: 0000000000000001 R12: ffff9cfefe725d90
+> [   74.806385] R13: ffff9cfefe725d98 R14: 0000000000000000 R15: ffff9cfe833a4d00
+> [   74.807301] FS:  0000000000000000(0000) GS:ffff9d01afb00000(0000) knlGS:0000000000000000
+> [   74.808338] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   74.809084] CR2: 00007f2b81bf4000 CR3: 0000000100056000 CR4: 00000000000006e0
+> [   74.810047] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [   74.810981] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [   74.811897] Call Trace:
+> [   74.812241]  <TASK>
+> [   74.812566]  __jbd2_journal_refile_buffer+0x12f/0x180
+> [   74.813246]  jbd2_journal_refile_buffer+0x4c/0xa0
+> [   74.813869]  jbd2_journal_commit_transaction.cold+0xa1/0x148
+> [   74.817550]  kjournald2+0xf8/0x3e0
+> [   74.819056]  kthread+0x153/0x1c0
+> [   74.819963]  ret_from_fork+0x22/0x30
+> 
+> Above issue may happen as follows:
+>         write                   truncate                   kjournald2
+> generic_perform_write
+>  ext4_write_begin
+>   ext4_walk_page_buffers
+>    do_journal_get_write_access ->add BJ_Reserved list
+>  ext4_journalled_write_end
+>   ext4_walk_page_buffers
+>    write_end_fn
+>     ext4_handle_dirty_metadata
+>                 ***************JBD2 ABORT**************
+>      jbd2_journal_dirty_metadata
+>  -> return -EROFS, jh in reserved_list
+>                                                    jbd2_journal_commit_transaction
+>                                                     while (commit_transaction->t_reserved_list)
+>                                                       jh = commit_transaction->t_reserved_list;
+>                         truncate_pagecache_range
+>                          do_invalidatepage
+> 			  ext4_journalled_invalidatepage
+> 			   jbd2_journal_invalidatepage
+> 			    journal_unmap_buffer
+> 			     __dispose_buffer
+> 			      __jbd2_journal_unfile_buffer
+> 			       jbd2_journal_put_journal_head ->put last ref_count
+> 			        __journal_remove_journal_head
+> 				 bh->b_private = NULL;
+> 				 jh->b_bh = NULL;
+> 				                      jbd2_journal_refile_buffer(journal, jh);
+> 							bh = jh2bh(jh);
+> 							->bh is NULL, later will trigger null-ptr-deref
+> 				 journal_free_journal_head(jh);
+> 
+> As after 96f1e0974575 commit, handle reserved list will not hold "journal->j_state_lock"
+> when kjournald2 commit transaction. So journal_unmap_buffer maybe free
+> journal_head when handle reserved list. And lead to null-ptr-deref or some
+> strange errors.
+> As reserved list almost time is empty. Use "journal->j_state_lock" to protect
+> handle reserved list can simply solve above issue.
+> 
+> Fixes: 96f1e0974575("jbd2: avoid long hold times of j_state_lock while committing a transaction")
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-We already have a bounce buffer in mmci_pio_read(), but we need one in
-mmc_pio_write() too, which hasn't been implemented yet.
+Good spotting! Thanks for the analysis and the patch!
 
->
-> Ulf, before I send my new series (although it is not ready yet), would
-> you be OK with the bounce buffer idea?
+> diff --git a/fs/jbd2/commit.c b/fs/jbd2/commit.c
+> index 5b9408e3b370..2b737b928d26 100644
+> --- a/fs/jbd2/commit.c
+> +++ b/fs/jbd2/commit.c
+> @@ -488,7 +488,6 @@ void jbd2_journal_commit_transaction(journal_t *journal)
+>  	jbd2_journal_wait_updates(journal);
+>  
+>  	commit_transaction->t_state = T_SWITCH;
+> -	write_unlock(&journal->j_state_lock);
+>  
+>  	J_ASSERT (atomic_read(&commit_transaction->t_outstanding_credits) <=
+>  			journal->j_max_transaction_buffers);
+> @@ -527,6 +526,7 @@ void jbd2_journal_commit_transaction(journal_t *journal)
+>  		jbd2_journal_refile_buffer(journal, jh);
+>  	}
+>  
+> +	write_unlock(&journal->j_state_lock);
+>  	/*
+>  	 * Now try to drop any written-back buffers from the journal's
+>  	 * checkpoint lists.  We do this *before* commit because it potentially
 
-Yes, that works for me.
+Honestly, using j_state_lock seems like unnecessarily big hammer for this.
+I'd rather use journal->j_list_lock for this which is much more natural for
+list processing. And we grab it anyway from jbd2_journal_refile_buffer() so
+it is not like there will be any additional overhead anyway.
 
-On the other hand, it would be even better if we could specify the
-buffer limitations per mmc host instance, so upper layers (SDIO func
-drivers) could conform to these - and use better buffers, to achieve a
-better performance.
+								Honza
 
->
->
-> Best regards,
-> Yann
-
-Kind regards
-Uffe
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

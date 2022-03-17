@@ -2,92 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D79D4DBCB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDF64DBCCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 03:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350319AbiCQB5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 21:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
+        id S1348001AbiCQCES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 22:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbiCQB5O (ORCPT
+        with ESMTP id S229989AbiCQCEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 21:57:14 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE041CB07;
-        Wed, 16 Mar 2022 18:55:57 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id n15so3298717plh.2;
-        Wed, 16 Mar 2022 18:55:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cCQk19mph1BSQQbRy0W7Dk+XD4eO5zrAeFybxCC9egg=;
-        b=ElzKfEt6I6S0R2iDGmK4BrqQUPMtpKgQv9dW4pWHiC+Z6iVoKSvG9v41s3MdxrIQFH
-         GYKHd4YkDW9vMcn1SchFxvkpt11/2N3Bk2yaGyyiqBcVXmybCKi07EfLdg0EcO4ZwV+L
-         PrWs6w2WsHWs6tMx4VoZjn3lUy0meelIDWgeGeyiZ+zeCgyJgtnkfGi5VKTbasuRe0b2
-         sqF/yKYVHzV4ZiXxDRQRmaczdnhAt2hMREAB2vLqlYnT5Ot4n/0Wq8WhE52QW+BJ17km
-         Agra/qRqVPjsqZNb3eAcQCn8MAU/nVb0qRFEh12sxLainNXYC/5kDyfu4KGZOSNxl7r7
-         OtZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cCQk19mph1BSQQbRy0W7Dk+XD4eO5zrAeFybxCC9egg=;
-        b=79sCXvZASXQ3SXmkIveeFq8BUjSnEzx17/rA9u0ylbf8MdQRZ6TMjgNn8DrNyCjM4b
-         OX1f3hm5jbTNqTzYLzJ7Ha3cgtt7WotKe8akQYB4x8rDpoOsL3ZRLpTCNpMBt3aXXRkh
-         KTS1329sqwCsxieb/vp6Ba5IJZZLLJtS/q4RIWHYw8kzRHzQR7xKQE14Kardff8vLKpz
-         3yEYN9xwnClRR75uBRMY/PdSG1VgWlPloNN/9GE72chirmMuEQwaZo/FDiTJPtQoqhVv
-         uoa6jTGpa3J7zR71dt8/t/B/WXKOmuOnFodYwByDqvxCz1+wNkj6zJAZIoE4h1Or74KQ
-         etQQ==
-X-Gm-Message-State: AOAM532aO7JLKYqMfJM4AT454+LhFna6zivCVAEoPoYPrfPEf0IKI7X0
-        awb78QN3boQcaMS42CqmKj4=
-X-Google-Smtp-Source: ABdhPJwJbxGdMfcN9CTUn6aA06VML0lU1P1+VXDXZNa1jg6n4ZIW3UQ6K8wO/KYK8YyFBGvmaMEHtQ==
-X-Received: by 2002:a17:90b:4c8f:b0:1bc:a64b:805 with SMTP id my15-20020a17090b4c8f00b001bca64b0805mr2711271pjb.156.1647482156931;
-        Wed, 16 Mar 2022 18:55:56 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id me5-20020a17090b17c500b001c63699ff60sm8102769pjb.57.2022.03.16.18.55.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Mar 2022 18:55:56 -0700 (PDT)
-Message-ID: <23d2d5a4-9496-a836-735d-31f1b02ce495@gmail.com>
-Date:   Wed, 16 Mar 2022 18:55:54 -0700
+        Wed, 16 Mar 2022 22:04:15 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA7F642F
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 19:02:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647482579; x=1679018579;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ygj5CHEtZP4OZbDg8L2b07ms+ZfgJHLplt5OQT4RsaY=;
+  b=ZmJzyusO90B2omTWg43kq8St75VVvHgCrseL8Af5uCmVk/6SI4Y5TIn0
+   yeEkIU0moqtgCbio0p7/TW6lNKd8OyItVI+DgSYRrn5V8bkltDvWVmlLD
+   83sbrsu+YohW8J39xC5VwrcupdFz75/kjSvw8YfiPXq/tf9Ro2C6sIMCZ
+   mY21ZmE6zosxg2iOcFuj5kuQmZLMc5xyDCUC9/wU4oMSczp3NsjT257UU
+   anCi6GDw/1K5YdUBU022Dv7ot2Nj/kClv6ojVgQaQO9pDVXetMiltOLrv
+   QpFk1956a2KH6ktAGLTmJ2tzWVuprISLIaw1Rop1c9OYFscrMhwM90Rk8
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="256488734"
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="256488734"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 19:02:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="516582832"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2022 19:02:56 -0700
+Date:   Thu, 17 Mar 2022 09:55:56 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     mcgrof@kernel.org, gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com
+Subject: Re: [PATCH v1 0/8] Extend FW framework for user FW uploads
+Message-ID: <20220317015556.GA133444@yilunxu-OptiPlex-7050>
+References: <20220308214932.24477-1-russell.h.weight@intel.com>
+ <20220316033206.GA123354@yilunxu-OptiPlex-7050>
+ <3840315e-9f78-91a4-cdcd-9bd103c1d144@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net] net: bcmgenet: skip invalid partial checksums
-Content-Language: en-US
-To:     Doug Berger <opendmb@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220317012812.1313196-1-opendmb@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220317012812.1313196-1-opendmb@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3840315e-9f78-91a4-cdcd-9bd103c1d144@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/16/2022 6:28 PM, Doug Berger wrote:
-> The RXCHK block will return a partial checksum of 0 if it encounters
-> a problem while receiving a packet. Since a 1's complement sum can
-> only produce this result if no bits are set in the received data
-> stream it is fair to treat it as an invalid partial checksum and
-> not pass it up the stack.
+On Wed, Mar 16, 2022 at 10:39:39AM -0700, Russ Weight wrote:
 > 
-> Fixes: 810155397890 ("net: bcmgenet: use CHECKSUM_COMPLETE for NETIF_F_RXCSUM")
-> Signed-off-by: Doug Berger <opendmb@gmail.com>
+> 
+> On 3/15/22 20:32, Xu Yilun wrote:
+> > On Tue, Mar 08, 2022 at 01:49:24PM -0800, Russ Weight wrote:
+> >> Extend the firmware loader subsystem to support a persistent sysfs
+> >> interface that userspace may use to initiate a firmware update. For
+> >> example, FPGA based PCIe cards automatically load firmware and FPGA images
+> >> from local FLASH when the card boots. The images in FLASH may be updated
+> >> with new images that are uploaded by the user.
+> >>
+> >> A device driver may call firmware_upload_register() to expose persistent
+> >> "loading" and "data" sysfs files at /sys/class/firmare/<NAME>/*. These
+> >> files are used in the same way as the fallback sysfs "loading" and "data"
+> >> files. However, when 0 is written to "loading" to complete the write of
+> >> firmware data, the data is also transferred to the lower-level driver
+> >> using pre-registered call-back functions. The data transfer is done in
+> >> the context of a kernel worker thread.
+> >>
+> >> Additional sysfs nodes are added in the same location as "loading" and
+> >> "data" to monitor the transfer of the image data to the device using
+> >> callback functions provided by the lower-level device driver and to allow
+> >> the data transfer to be cancelled.
+> >>
+> >> Example usage:
+> >>
+> >> $ pwd
+> >> /sys/class/firmware/n3000bmc-sec-update.8
+> > I'm good with the firmware update API, but have concern about the
+> > example.
+> >
+> > The n3000 bmc secure update engine is the sub device on N3000 PCIe based
+> > FPGA card, it could be a data xfer engine which helps to update the
+> > firmware of the N3000. The N3000 PCI driver knows how the firmware
+> > uploading affects the card.
+> >
+> > So maybe the N3000 PCI driver should register the firmware upload. But
+> > of course it could interact with the n3000bmc-sec-update driver for
+> > specific firmware upload ops.
+> Until now, these interfaces (for the firmware-loader) have been created
+> (i.e. registered) at a granularity of one interface per firmware file (e.g.
+> /sys/class/firmware/my-firmware-file.bin/). For secure updates, the files
+> are self describing, so a single interface is sufficient for various
+> payloads. It sounds like you are suggesting a coarser granularity that
+> would allow other firmware files (separate from the secure update driver)
+> to share a single interface for a PCI card?
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+The granularity is specific to the HW. If we could independently update
+firmware for one sub device and not impact the other component on the card,
+an interface could be registered by the sub device driver. If there is a
+firmware updating that impacts the whole card, an interface could be
+registered by the parent card driver. Alternatively, we could have a single
+interface for parent card which serves all different types of updates
+inside the card, the parent card driver handles each update request
+internally.
+
+My main concern is we should be clear about the scope of the update,
+then find the right device driver to create the interface. To avoid that
+the device is impacted by an update but its driver is unaware of it.
+
+I think registering the firmware update interface in a data transfer engine
+driver is general not a good idea. The update is not to change the data
+transfer engine itself.
+
+Thanks,
+Yilun
+
+> 
+> - Russ
+> >
+> > Thanks,
+> > Yilun
+> >
+> >> $ ls
+> >> cancel  device  loading  remaining_size  subsystem
+> >> data    error   power    status          uevent
+> >> $ echo 1 > loading
+> >> $ cat /tmp/firmware.bin > data
+> >> $ echo 0 > loading
+> >> $ while :; do cat status; cat remaining_size ; sleep 3; done
+> >> preparing
+> >> 44590080
+> >> <--snip-->
+> >> transferring
+> >> 44459008
+> >> transferring
+> >> 44311552
+> >> <--snip-->
+> >> transferring
+> >> 173056
+> >> <--snip-->
+> >> programming
+> >> 0
+> >> <--snip-->
+> >> idle
+> >> 0
+> >> ^C
+> >> $ cat error
+> >>
+> >> The first two patches in this set make minor changes to enable the
+> >> fw_priv data structure and the sysfs interfaces to be used multiple times
+> >> during the existence of the device driver instance. The third patch is
+> >> mostly a reorganization of existing code in preparation for sharing common
+> >> code with the firmware-upload support. The fourth and fifth patches provide
+> >> the code for user-initiated firmware uploads. The final 3 patches extend
+> >> selftest support to test firmware-upload functionality.
+> >>
+> >>
+> >> Changelog RFC -> v1:
+> >>   - Renamed files fw_sysfs.c and fw_sysfs.h to sysfs.c and sysfs.h
+> >>   - Moved "MODULE_IMPORT_NS(FIRMWARE_LOADER_PRIVATE);" from sysfs.c to
+> >>     sysfs.h to address an error identified by the kernel test robot
+> >>     <lkp@intel.com>
+> >>   - renamed fw_upload_register() and fw_upload_unregister() to
+> >>     firmware_upload_register() and fw_upload_unregister().
+> >>   - Moved ifdef'd section of code out of firmware_loading_store() in sysfs.c
+> >>     into a new function, fw_upload_start(), in sysfs_upload.c.
+> >>   - Changed #defines to enums for error codes and progress states
+> >>   - Added additional kernel-doc supported symbols into the documentation.
+> >>     Some rewording in documentation as well.
+> >>   - Added module reference counting for the parent module in the
+> >>     firmware_upload_register() and firmware_upload_unregister() functions
+> >>     to fix problems found when testing with test_firmware module.
+> >>   - Removed unnecessary module reference counting for THIS_MODULE.
+> >>   - Added a new patch to modify the test_firmware module to support
+> >>     testing of the firmware upload mechanism.
+> >>   - Added a new patch to modify the test_firmware module to support
+> >>     error injection for firmware upload.
+> >>   - Added a new patch to extend the existing firmware selftests to cover
+> >>     firmware upload.
+> >>
+> >> Russ Weight (8):
+> >>   firmware_loader: Clear data and size in fw_free_paged_buf
+> >>   firmware_loader: Check fw_state_is_done in loading_store
+> >>   firmware_loader: Split sysfs support from fallback
+> >>   firmware_loader: Add firmware-upload support
+> >>   firmware_loader: Add sysfs nodes to monitor fw_upload
+> >>   test_firmware: Add test support for firmware upload
+> >>   test_firmware: Error injection for firmware upload
+> >>   selftests: firmware: Add firmware upload selftests
+> >>
+> >>  .../ABI/testing/sysfs-class-firmware          |  77 ++++
+> >>  .../driver-api/firmware/fw_upload.rst         | 117 +++++
+> >>  Documentation/driver-api/firmware/index.rst   |   1 +
+> >>  drivers/base/firmware_loader/Kconfig          |  18 +
+> >>  drivers/base/firmware_loader/Makefile         |   2 +
+> >>  drivers/base/firmware_loader/fallback.c       | 430 -----------------
+> >>  drivers/base/firmware_loader/fallback.h       |  46 +-
+> >>  drivers/base/firmware_loader/firmware.h       |  11 +
+> >>  drivers/base/firmware_loader/main.c           |  18 +-
+> >>  drivers/base/firmware_loader/sysfs.c          | 435 ++++++++++++++++++
+> >>  drivers/base/firmware_loader/sysfs.h          | 100 ++++
+> >>  drivers/base/firmware_loader/sysfs_upload.c   | 396 ++++++++++++++++
+> >>  drivers/base/firmware_loader/sysfs_upload.h   |  47 ++
+> >>  include/linux/firmware.h                      |  82 ++++
+> >>  lib/test_firmware.c                           | 378 +++++++++++++++
+> >>  tools/testing/selftests/firmware/Makefile     |   2 +-
+> >>  tools/testing/selftests/firmware/config       |   1 +
+> >>  tools/testing/selftests/firmware/fw_lib.sh    |   7 +
+> >>  .../selftests/firmware/fw_run_tests.sh        |   4 +
+> >>  tools/testing/selftests/firmware/fw_upload.sh | 214 +++++++++
+> >>  20 files changed, 1900 insertions(+), 486 deletions(-)
+> >>  create mode 100644 Documentation/ABI/testing/sysfs-class-firmware
+> >>  create mode 100644 Documentation/driver-api/firmware/fw_upload.rst
+> >>  create mode 100644 drivers/base/firmware_loader/sysfs.c
+> >>  create mode 100644 drivers/base/firmware_loader/sysfs.h
+> >>  create mode 100644 drivers/base/firmware_loader/sysfs_upload.c
+> >>  create mode 100644 drivers/base/firmware_loader/sysfs_upload.h
+> >>  create mode 100755 tools/testing/selftests/firmware/fw_upload.sh
+> >>
+> >> -- 
+> >> 2.25.1

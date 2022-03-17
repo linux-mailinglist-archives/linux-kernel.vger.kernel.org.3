@@ -2,122 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE824DCBCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4875E4DCBB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236669AbiCQQyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S236644AbiCQQwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbiCQQyI (ORCPT
+        with ESMTP id S232196AbiCQQw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:54:08 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A21217956
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:52:51 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2e5a8a8c1cdso56528167b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:52:50 -0700 (PDT)
+        Thu, 17 Mar 2022 12:52:28 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BEC20A959;
+        Thu, 17 Mar 2022 09:51:08 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id kx13-20020a17090b228d00b001c6715c9847so3736292pjb.1;
+        Thu, 17 Mar 2022 09:51:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ls5p6VA534Iw1IExTs/u1d7nC2HX+uKuD3TTQdakQZ8=;
-        b=kxUOCJ/fJRZJGrt9ZKe0pYGGy98fNm2IIaEqQPugg5M4QHB5mp6gI566pfVXEUKcQZ
-         TFowxqYFTpQ3SX9MFnyxvlEbSacpeM7JFyAX2EuQe3DvTYOiSvjT1V8TVYJW4QIrKZPc
-         5MLt2TGnVGftiJLRK/MusjrLz0LvNZp1D+7ULggI5mDZr/AE/MPtiXYuHdcP3i1vF7C0
-         57rmkqKGKGvkbNzUXlZrij2YmqzbiifaFndxFwhVFh1pyIFx+OAXLpcjFg3s2trEYyY6
-         rQABZnd4oocMuXAoyWZ5JT5qVjnZM9wQySVkzCzT6iNzKJ/2Chi5NShHQIJitvdUwm/v
-         7PvQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1fhGdDZ+4+A9O0kCAE2qwkKzIiiq6BxVXVjKbXoOSjc=;
+        b=ac9lDNWQnaCjB8ARNToKqWJDqJP5c28Oek7OnIM8tObf04cglsVkYnXBmiuN9c3Vv5
+         2NYJaoYf5XGUKw3PSYK+DyxInZZKD+1OAcKuFi5M5X8gN4eXpwEBM/lXs/2jp4AB3HtV
+         Op8GJqf+gOusx4Twv2NDLrsanY7dvJieFhLKej2mwDe8ynGiPDWcxYkH8fIoFoeHSzDD
+         S3QJ4T2e0YrbaBaapqQuGQ2R+jZ3nxjWphDWla4JwCtJCimnu3watw7KvWCSxfPq8yw1
+         pN1Efdd8hY6wHe2SlJHqkKgy1i+D5xu9uPDhn10kskC5Oix83cLBVBFyURLBiUmXw8kg
+         OJPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ls5p6VA534Iw1IExTs/u1d7nC2HX+uKuD3TTQdakQZ8=;
-        b=VFjBm9r0rZC/M7nTwDDelg4CfanH2I7hiTBsZTQed+Q+Qp9+5YI8cMuMA9/MfEJdbj
-         RT9k4ch1hMS2+dVh8E85HBBEYOK0wB8ZkUMyZP732d4ilTy/kqgb7ozGts0vHm3MOUHE
-         jDi5t3Mo6g9idJgpVI1c/tTrEQ15pTF8yHZ12q9+2Mus7N3+B0f1FX4reW46DLLx8/cb
-         qTCgM5EJYMqD+9xIyfOcGq3m+qm0zNPsQCfH6xTD9GFKb/2YNxNwLBMkswj3jvFRiQbC
-         aA1XYMqkSpqU6cFU/m3YWbUYzO2jxBO1ErLh3VuqQfjS1Ge7C2x4kXwrhidJbHwWKg8R
-         Z8hQ==
-X-Gm-Message-State: AOAM531fHtO57tp9Z46j7XjTWN/0m4ocuyznNPJa8PxDBoP/M7duMZS5
-        zXstDZMU8RyLDPUWdU11UqVTk+z5BneMGrrhPzMYNQ==
-X-Google-Smtp-Source: ABdhPJyDhLx5hwxyuHdfJnu1PbpQVZuTWpjjxs0CJpSL2oGPPgsLlmH5a4/t1+HNk9SzW7doeSB1ljUM2nZIw5wwE8U=
-X-Received: by 2002:a0d:f685:0:b0:2e2:22e6:52d7 with SMTP id
- g127-20020a0df685000000b002e222e652d7mr7120428ywf.418.1647535970257; Thu, 17
- Mar 2022 09:52:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1fhGdDZ+4+A9O0kCAE2qwkKzIiiq6BxVXVjKbXoOSjc=;
+        b=YPuKVmZm5Af6Gmzn53K5gggdKEK7JA4qWxu1GBI4p40WRCsWWoW+wLAT+NtJZnummY
+         jz2yNQ58jn9ycy01iDjWnfLtY9SSoMU08X7zbiar5CHp4LmqVNNLYRzVJYEm5c4MuFq+
+         a2GC0se8dBU5N6DOCg5El5PnJVqK9cTNqmS7cfWos2HR5TysoRJINF1AUqbT4AG9hXEr
+         xrfGyeLRQYojqzO8H9iCdXDZG6Yt7XWOOZRDVBGuTMgNW0uZ8IvoVJr41/fopiQto4Pq
+         bJuLSlt/d7QVhBY9c6MvUyYtu/QZN6bG8N1dNW9D+Vh2t6T6+fyyB8e8l7/NR79k934L
+         PZzg==
+X-Gm-Message-State: AOAM530HXYH9uR7qmaduymxiMEPIwn9gfV9eRhvMZd629U0hJ0CBAgbT
+        gB43C//P3/5SpS/W9yFMA74=
+X-Google-Smtp-Source: ABdhPJwOV8GUTP9XpL07YdxSy7tQQ35mfNlI37jPr60/Ls8AYizX9BfbQrjuvdQDSL4LF/zStG7h0w==
+X-Received: by 2002:a17:90b:1d8d:b0:1c4:ba77:3e29 with SMTP id pf13-20020a17090b1d8d00b001c4ba773e29mr6509256pjb.206.1647535868296;
+        Thu, 17 Mar 2022 09:51:08 -0700 (PDT)
+Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
+        by smtp.gmail.com with ESMTPSA id d19-20020a056a00199300b004f7b7bb0733sm7071888pfl.60.2022.03.17.09.51.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 09:51:07 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Emma Anholt <emma@anholt.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        linux-kernel@vger.kernel.org (open list),
+        Vladimir Lypak <vladimir.lypak@gmail.com>
+Subject: [PATCH v2 0/3] drm/msm: Add comm/cmdline override
+Date:   Thu, 17 Mar 2022 09:51:37 -0700
+Message-Id: <20220317165144.222101-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220317080504.GC735@xsang-OptiPlex-9020>
-In-Reply-To: <20220317080504.GC735@xsang-OptiPlex-9020>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Fri, 18 Mar 2022 00:50:58 +0800
-Message-ID: <CAMZfGtUg8ApCyyCUNC6MC344aH2nNwWvp1U+F0dRcnf0hAOXxQ@mail.gmail.com>
-Subject: Re: [mm] f886cdb769: kernel_BUG_at_include/linux/swapops.h
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alistair Popple <apopple@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ross Zwisler <zwisler@kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 4:05 PM kernel test robot <oliver.sang@intel.com> wrote:
->
->
->
-> Greeting,
->
-> FYI, we noticed the following commit (built with gcc-9):
->
-> commit: f886cdb76920131b030ffae13e752d8d0ff440f0 ("mm: pvmw: add support for walking devmap pages")
-> url: https://github.com/0day-ci/linux/commits/Petr-Mladek/kthread-Make-it-clear-that-kthread_create_on_node-might-be-terminated-by-any-fatal-signal/20220315-182614
->
-> in testcase: will-it-scale
-> version: will-it-scale-x86_64-a34a85c-1_20220312
-> with following parameters:
->
->         nr_task: 100%
->         mode: process
->         test: lock1
->         cpufreq_governor: performance
->         ucode: 0x2006c0a
->
-> test-description: Will It Scale takes a testcase and runs it from 1 through to n parallel copies to see if the testcase will scale. It builds both a process and threads based test in order to see any differences between the two.
-> test-url: https://github.com/antonblanchard/will-it-scale
->
->
-> on test machine: 104 threads 2 sockets Skylake with 192G memory
->
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
->
->
->
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
->
->
+From: Rob Clark <robdclark@chromium.org>
 
-Thanks for your report. I knew the reason. Because pmd_devmap() is
-only reliable when pmd_present() returns true and  pmd_devmap() could
-returns tue for pmd swap entry.  I should test pmd_present() before
-pmd_devmap().  Will be fixed in the next version.
+Add a way to override comm/cmdline per-drm_file.  This is useful for
+VM scenarios where the host process is just a proxy for the actual
+guest process.
 
-Thanks.
+Rob Clark (3):
+  drm/msm: Add support for pointer params
+  drm/msm: Split out helper to get comm/cmdline
+  drm/msm: Add a way to override processes comm/cmdline
+
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c | 49 ++++++++++++++++++++++++-
+ drivers/gpu/drm/msm/adreno/adreno_gpu.h |  4 +-
+ drivers/gpu/drm/msm/msm_drv.c           |  8 ++--
+ drivers/gpu/drm/msm/msm_gpu.c           | 40 ++++++++++++--------
+ drivers/gpu/drm/msm/msm_gpu.h           | 10 ++++-
+ drivers/gpu/drm/msm/msm_rd.c            |  5 ++-
+ drivers/gpu/drm/msm/msm_submitqueue.c   |  2 +
+ include/uapi/drm/msm_drm.h              |  4 ++
+ 8 files changed, 94 insertions(+), 28 deletions(-)
+
+-- 
+2.35.1
+

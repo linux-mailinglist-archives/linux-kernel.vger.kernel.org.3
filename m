@@ -2,173 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74674DBFE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 08:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A05584DBFE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 08:03:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiCQHDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 03:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
+        id S230106AbiCQHEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 03:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiCQHDO (ORCPT
+        with ESMTP id S229533AbiCQHEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 03:03:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C342213365F;
-        Thu, 17 Mar 2022 00:01:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59E7060EEA;
-        Thu, 17 Mar 2022 07:01:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3232EC340E9;
-        Thu, 17 Mar 2022 07:01:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647500513;
-        bh=KmTCT2wtZIFlvMXZF+u24z+562wYeOezI1J5kEiUej0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=miP8kY+u9I9yUM3Z8nJZV6lGNgUD1sYpDowjD/D74m4E9S0urdzrh6l1wm0XdJvb4
-         WCA3q8gCPhFwOg6BcO7ovj9dZQe0rfB1xw15VMpmiiF42wu7CiG5SP3EacEw7XdJE3
-         MLaTT8mQDIdi5SIHS8hMivaak9aZ82+QD3Pcs00AMuq21P8yWPUDhhPldc3Q+O87pj
-         XV5X2mYbCG5SVZj3r5RP079nfaJP33kK9pv13AuIucBepjSsGVHW+1jjUNozpEJALT
-         msf3410vWriT4SPjKVWNfK+zAsZ4XE9laUOwZ1ZbRA23uxgqS2u8FadfaW4AIN5moM
-         0CLOHsZJFRogw==
-Date:   Thu, 17 Mar 2022 09:01:03 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Haitao Huang <haitao.huang@linux.intel.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        nathaniel@profian.com
-Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
- permissions
-Message-ID: <YjLcr9TwLNWUtwkS@iki.fi>
-References: <DM8PR11MB55917F499CDF4CC7D426B0A7F63C9@DM8PR11MB5591.namprd11.prod.outlook.com>
- <YimWaAqEnXHbLdjh@iki.fi>
- <op.1itu5vkewjvjmi@hhuan26-mobl1.mshome.net>
- <Yis8LV99mORcLYs6@iki.fi>
- <Yis9rA8uC/0bmWCF@iki.fi>
- <97565fed-dc67-bab1-28d4-c40201c9f055@intel.com>
- <Yi6tPLLt9Q+ailQ3@iki.fi>
- <Yi6tinbF+Y7a66eQ@iki.fi>
- <Yi6va4dCaljiQ1WQ@iki.fi>
- <op.1i01q9s0wjvjmi@hhuan26-mobl1.mshome.net>
+        Thu, 17 Mar 2022 03:04:05 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5EF144B64;
+        Thu, 17 Mar 2022 00:02:49 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id o26so1989104pgb.8;
+        Thu, 17 Mar 2022 00:02:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RowpWHpBzdZby6lbDdZdHo0oA7i+6jR2OZYJkKI99A8=;
+        b=a9VwsHkRtiyfeUv56P65QTHs4B+k58upVXJSzFMHI/3WTbUpg/sD04K6s5auP+0yn1
+         se4ao6HYGTORbprmmN2F8Nf6G7cWH67zYJisrmf6RTexNieADdivxFDoDlGwqDqPYiWn
+         Eb9tPtNIporS3YEQF/2Ua1jlLkVTLqhSJwBfTohNl/EjCYsymKNwnAXP+GBu+aCiFbd1
+         sI+2rK9a3XFjvI4nwHWQ5MnNpM1AiCm2FxjMlPJDdVG9T+qLeb3OuzjJtgzqjqsPXunK
+         NZtn5VN06RG9cRxNtsSAJK5yQlILXGQvoX8t3ahgrb4FPC0RTX5FTaZSWmb1tYQ8o0nd
+         sHmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RowpWHpBzdZby6lbDdZdHo0oA7i+6jR2OZYJkKI99A8=;
+        b=Uv6nl6VT7OT3tR/6/XAc3Y7fZCAwHAO9iGoSr7nPTDWxuA3LmAPCbDNbtE3k4bRPq5
+         7VzPu+uOHymmftVQQ0BZC1a9DMmMDD0MatWewJzBJpZ0pi3XPfSXTTIiTRFV/fDQUr/e
+         ffJ1hMLDt4MwijBMu2fBl9pC5Xw0DDw7mY2R19RN0cWK52qPLLmDq4VK99WIFzFOh1DZ
+         KxhxcRMvkzuVtjtQRM5aSiMQesqEgw5hV7Hz/8tCqDvmeSlMHttwcnvZTiOeNxHN1DqI
+         vHPGI3Ansy77omCLCuqOyjpM54YSywkzivMjWGVmk9tR6LIKcNEYjHwlmDUKaS1pm86K
+         /g4A==
+X-Gm-Message-State: AOAM533DaxmXXANLMBpqS/KtonRY17YSMm3nZKf0nwa/tm/OQVNeb1Ah
+        NVSBthbTFF4fPJY8NQx6jUQ=
+X-Google-Smtp-Source: ABdhPJxEk+fScQPzqKGaEohScukM8ZAsCc6cKV7mISxWXhnbnPfJVVi2UowstuagvJ3fexynNm5nrg==
+X-Received: by 2002:a05:6a00:1a89:b0:4f7:b90b:17ee with SMTP id e9-20020a056a001a8900b004f7b90b17eemr3657896pfv.46.1647500568879;
+        Thu, 17 Mar 2022 00:02:48 -0700 (PDT)
+Received: from 9a2d8922b8f1 ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id d14-20020a056a0024ce00b004f7281cda21sm5935779pfv.167.2022.03.17.00.02.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 00:02:48 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 12:32:42 +0530
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Marc Zyngier <marc.zyngier@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: timer: Rearrange compatible entries of
+ arch timer
+Message-ID: <20220317070242.GA9239@9a2d8922b8f1>
+References: <20220316095433.20225-1-singh.kuldeep87k@gmail.com>
+ <20220316095433.20225-2-singh.kuldeep87k@gmail.com>
+ <01ff2432-b8d6-3bfd-efa9-c61b1fdce19d@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <op.1i01q9s0wjvjmi@hhuan26-mobl1.mshome.net>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <01ff2432-b8d6-3bfd-efa9-c61b1fdce19d@canonical.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 10:39:36AM -0500, Haitao Huang wrote:
-> Hi Jarkko
-> 
-> On Sun, 13 Mar 2022 21:58:51 -0500, Jarkko Sakkinen <jarkko@kernel.org>
-> wrote:
-> 
-> > On Mon, Mar 14, 2022 at 04:50:56AM +0200, Jarkko Sakkinen wrote:
-> > > On Mon, Mar 14, 2022 at 04:49:37AM +0200, Jarkko Sakkinen wrote:
-> > > > On Fri, Mar 11, 2022 at 09:53:29AM -0800, Reinette Chatre wrote:
-> > > >
-> > > > > I saw Haitao's note that EMODPE requires "Read access permitted
-> > > by enclave".
-> > > > > This motivates that EMODPR->PROT_NONE should not be allowed
-> > > since it would
-> > > > > not be possible to relax permissions (run EMODPE) after that.
-> > > Even so, I
-> > > > > also found in the SDM that EACCEPT has the note "Read access
-> > > permitted
-> > > > > by enclave". That seems to indicate that EMODPR->PROT_NONE is
-> > > not practical
-> > > > > from that perspective either since the enclave will not be able to
-> > > > > EACCEPT the change. Does that match your understanding?
-> > > >
-> > > > Yes, PROT_NONE should not be allowed.
-> > > >
-> > > > This is however the real problem.
-> > > >
-> > > > The current kernel patch set has inconsistent API and EMODPR ioctl is
-> > > > simply unacceptable. It  also requires more concurrency management
-> > > from
-> > > > user space run-time, which would be heck a lot easier to do in the
-> > > kernel.
-> > > >
-> > > > If you really want EMODPR as ioctl, then for consistencys sake,
-> > > then EAUG
-> > > > should be too. Like this when things go opposite directions, this
-> > > patch set
-> > > > plain and simply will not work out.
-> > > >
-> > > > I would pick EAUG's strategy from these two as it requires half
-> > > the back
-> > > > calls to host from an enclave. I.e. please combine mprotect() and
-> > > EMODPR,
-> > > > either in the #PF handler or as part of mprotect(), which ever
-> > > suits you
-> > > > best.
-> > > >
-> > > > I'll try demonstrate this with two examples.
-> > > >
-> > > > mmap() could go something like this() (simplified):
-> > > > 1. Execution #UD's to SYSCALL.
-> > > > 2. Host calls enclave's mmap() handler with mmap() parameters.
-> > > > 3. Enclave up-calls host's mmap().
-> > > > 4. Loops the range with EACCEPTCOPY.
-> > > >
-> > > > mprotect() has to be done like this:
-> > > > 1. Execution #UD's to SYSCALL.
-> > > > 2. Host calls enclave's mprotect() handler.
-> > > > 3. Enclave up-calls host's mprotect().
-> > > > 4. Enclave up-calls host's ioctl() to SGX_IOC_ENCLAVE_PERMISSIONS.
-> 
-> I assume up-calls here are ocalls as we call them in our implementation,
-> which are the calls enclave make to untrusted side via EEXIT.
-> 
-> If so, can your implementation combine this two up-calls into one, then host
-> side just do ioctl() and mprotect to kernel? If so, would that address your
-> concern about extra up-calls?
-> 
-> 
-> > > > 3. Loops the range with EACCEPT.
-> > >   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >   5. Loops the range with EACCEPT + EMODPE.
-> > > 
-> > > > This is just terrible IMHO. I hope these examples bring some insight.
+On Wed, Mar 16, 2022 at 05:29:07PM +0100, Krzysztof Kozlowski wrote:
+> On 16/03/2022 10:54, Kuldeep Singh wrote:
+> > Compatibles entries of arch timer includes few extra items and enum
+> > pairs which are redundant and can be simplified in a more clear, concise
+> > and readable way. Do it.
 > > 
-> > E.g. in Enarx we have to add a special up-call (so called enarxcall in
-> > intermediate that we call sallyport, which provides shared buffer to
-> > communicate with the enclave) just for reseting the range with PROT_READ.
-> > Feel very redundant, adds ugly cruft and is completely opposite strategy
-> > to
-> > what you've chosen to do with EAUG, which is I think correct choice as
-> > far
-> > as API is concerned.
+> > Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> > ---
+> >  .../devicetree/bindings/timer/arm,arch_timer.yaml    | 12 ++++--------
+> >  1 file changed, 4 insertions(+), 8 deletions(-)
+> > 
 > 
-> The problem with EMODPR on #PF is that kernel needs to know what permissions
-> requested from enclave at the time of #PF. So enclave has to make at least
-> one call to kernel (again via ocall in our case, I assume up-call in your
-> case) to make the change.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> 
 
-The #PF handler should do unconditionally EMODPR with PROT_READ.
+Thanks for your time in reviewing this.
 
-BR, Jarkko
+- Kuldeep

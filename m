@@ -2,164 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539824DC3EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 159684DC3E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbiCQKZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 06:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
+        id S232557AbiCQKYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 06:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbiCQKZx (ORCPT
+        with ESMTP id S231407AbiCQKYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 06:25:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3CEEEA5C;
-        Thu, 17 Mar 2022 03:24:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E8EDB81DB3;
-        Thu, 17 Mar 2022 10:24:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64CB3C340E9;
-        Thu, 17 Mar 2022 10:24:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647512674;
-        bh=68w1tBfa5hfpEaga9MZQXCX1hOMPkNsWM96WRhnVm0c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=milHrrh/RcWjo06/GkwOiu42NyaO4rw8mEPLYsgrvJPx7L0ZcSZ7/uI+eugEqaMps
-         16gqEj8ciZMM54g9BbHdceJdV9gT6RfCMy5W1VIaW9ucaMT1NxlQ6qV5LQYSeSb9ne
-         MQRBRtXKd1IPZb9Oz2urK/gs7i9+TBTlQ8wwJmt8=
-Date:   Thu, 17 Mar 2022 11:24:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Zhang Qiao <zhangqiao22@huawei.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Zhao Gongyi <zhaogongyi@huawei.com>,
-        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>
-Subject: Re: [PATCH 4.19 01/34] cgroup/cpuset: Fix a race between
- cpuset_attach() and cpu hotplug
-Message-ID: <YjMMX7jSU8ynwgON@kroah.com>
-References: <20220228172207.090703467@linuxfoundation.org>
- <20220228172208.566431934@linuxfoundation.org>
- <20220308151232.GA21752@blackbody.suse.cz>
- <Yi73dKB10LBTGb+S@kroah.com>
- <aa25447a-f6ff-2ff2-72e9-3bbab1d430e9@huawei.com>
- <20220314111940.GC1035@blackbody.suse.cz>
- <YjHz2bifJBuCs/UK@kroah.com>
- <1ea13066-aa98-ead2-f50f-f62d030ce3c5@huawei.com>
+        Thu, 17 Mar 2022 06:24:41 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D013E0CB;
+        Thu, 17 Mar 2022 03:23:24 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id s29so8148807lfb.13;
+        Thu, 17 Mar 2022 03:23:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=q997/aim32qAN844XtyF1EgVZGYQu0iTF+26V6EakWA=;
+        b=dCYZRbOJJduJbzFTmXHHEDdLPUTx6ttR6pFI89o//ywj4hPEtjACrI+j95gZRrm/UQ
+         nyZ07FdMf0uNwL05rvb/qgTcwvRK71SEP+LCmH1J1NH7n6n4yw1CkF6JDptYFqg2oXIU
+         gQqfoYUIpeMhm2jO2eWRHnV3PIBUq4cYAyqJuZz6HEok/dPZttjRj62Vuuo4W4XkcKZh
+         bf4s5hNRBwWB5/tPBBozYMxxfhE/zx8Uh8ousphxZ9sTaYsMI2BLZy2Q0RTSjFG3uaxQ
+         7WwwLbJvygjQqaej6K7B/v4QAxvJMWiSNKWi5gl7sTt0dy264mY0QaxOfm2FlPQsEl/r
+         9KfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=q997/aim32qAN844XtyF1EgVZGYQu0iTF+26V6EakWA=;
+        b=VlmuMT6tYhvKOTUxJLaEp3ZUstC4+/yxrjmx5gIa/VAAEYTveTN+nRN1Ji3gGIswnF
+         G6g9dSU5F+re5jFBY38JZXoMqAEeEazb3gVZlwkxW8n5+0dGM0vtQRT2riRhhKgkwFWN
+         Rp1QOl3VXcL1qYXc8umbECirgJXvuGiSsVVDcgKATdsg4lwEJsD7vjauxKKkYNBpHRhw
+         rDBd6o5XsOWU5/je28k0+GKJxMXgIqJ6ppQIsuJtx0J/B4DRi+nCcTF8cZavcZiUD9UP
+         n9TVHRgsx+STdGMVqcWOWeiMWuryepJmHad4IdC0+i02/l+LhvbwKgCMkgBbRQLQt7Oj
+         9DYw==
+X-Gm-Message-State: AOAM530azvhtsbkbsa8i1NPBrJV6ZxpIg64dCXMWTe+07HivNLr4ctZS
+        owVnSoB6uEibyX8obU/5/qQe6w7g8eOA2JNpo40=
+X-Google-Smtp-Source: ABdhPJx6Yw5sqc3oHgOC+M1OOphrf/GwfLoaeL01BvrlD7R30s1AwRtOdfgYh4FrjRTymS/KC7T98VTRHMz7/o96Mo4=
+X-Received: by 2002:a05:6512:2256:b0:449:f79a:e762 with SMTP id
+ i22-20020a056512225600b00449f79ae762mr1357073lfu.261.1647512602353; Thu, 17
+ Mar 2022 03:23:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1ea13066-aa98-ead2-f50f-f62d030ce3c5@huawei.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1647235924-15572-1-git-send-email-vincent.sunplus@gmail.com>
+ <1647235924-15572-3-git-send-email-vincent.sunplus@gmail.com> <7d560277-95e2-070c-e603-30f00dea7f51@canonical.com>
+In-Reply-To: <7d560277-95e2-070c-e603-30f00dea7f51@canonical.com>
+From:   =?UTF-8?B?5pa96YyV6bS7?= <vincent.sunplus@gmail.com>
+Date:   Thu, 17 Mar 2022 18:24:33 +0800
+Message-ID: <CAPvp3RhOs5y2XBYEdY31f5rc9yP5o-x_2KB2=umhL7VdvGXYTw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] dt-bindings: usb: Add bindings doc for Sunplus USB
+ HOST OHCI driver
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, stern@rowland.harvard.edu,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, wells.lu@sunplus.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 10:41:57AM +0800, Zhang Qiao wrote:
-> 
-> 
-> 在 2022/3/16 22:27, Greg Kroah-Hartman 写道:
-> > On Mon, Mar 14, 2022 at 12:19:41PM +0100, Michal Koutný wrote:
-> >> Hello.
-> >>
-> >> In my opinion there are two approaches:
-> >> a) drop this backport (given other races present),
-> > 
-> > I have no problem with that, want to send a revert patch?
-> > 
-> >> b) swap the locks compatible with v4.19 as this patch proposes.
-> >>
-> >> On Mon, Mar 14, 2022 at 05:11:50PM +0800, Zhang Qiao <zhangqiao22@huawei.com> wrote:
-> >>> +       /*
-> >>> +        * It should hold cpus lock because a cpu offline event can
-> >>> +        * cause set_cpus_allowed_ptr() failed.
-> >>> +        */
-> >>> +       cpus_read_lock();
-> >>
-> >> Maybe just a nit, the old kernels before commit c5c63b9a6a2e ("cgroup:
-> >> Replace deprecated CPU-hotplug functions.") v5.15-rc1~159^2~5
-> >> would be more consistent with get_online_cpus() here (but they're
-> >> equivalent functionally so the locking order is correct).
-> > 
-> > A fixed up patch would also be appreciated :)
-> > 
-> 
-> Fixed up patch as follows, replace cpus_read_lock() with get_online_cpus().
-> 
-> thanks.
-> 
-> --------
-> 
-> 
-> [PATCH] cpuset: Fix unsafe lock order between cpuset lock and cpuslock
-> 
-> The backport commit 4eec5fe1c680a ("cgroup/cpuset: Fix a race
-> between cpuset_attach() and cpu hotplug") looks suspicious since
-> it comes before commit d74b27d63a8b ("cgroup/cpuset: Change
-> cpuset_rwsem and hotplug lock order") v5.4-rc1~176^2~30 when
-> the locking order was: cpuset lock, cpus lock.
-> 
-> Fix it with the correct locking order and reduce the cpus locking
-> range because only set_cpus_allowed_ptr() needs the protection of
-> cpus lock.
-> 
-> Fixes: 4eec5fe1c680a ("cgroup/cpuset: Fix a race between cpuset_attach() and cpu hotplug")
-> Reported-by: Michal Koutný <mkoutny@suse.com>
-> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
-> ---
->  kernel/cgroup/cpuset.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index d43d25acc..4e1c4232e 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1528,9 +1528,13 @@ static void cpuset_attach(struct cgroup_taskset *tset)
->         cgroup_taskset_first(tset, &css);
->         cs = css_cs(css);
-> 
-> -       cpus_read_lock();
->         mutex_lock(&cpuset_mutex);
-> 
-> +       /*
-> +        * It should hold cpus lock because a cpu offline event can
-> +        * cause set_cpus_allowed_ptr() failed.
-> +        */
-> +       get_online_cpus();
->         /* prepare for attach */
->         if (cs == &top_cpuset)
->                 cpumask_copy(cpus_attach, cpu_possible_mask);
-> @@ -1549,6 +1553,7 @@ static void cpuset_attach(struct cgroup_taskset *tset)
->                 cpuset_change_task_nodemask(task, &cpuset_attach_nodemask_to);
->                 cpuset_update_task_spread_flag(cs, task);
->         }
-> +       put_online_cpus();
-> 
->         /*
->          * Change mm for all threadgroup leaders. This is expensive and may
-> @@ -1584,7 +1589,6 @@ static void cpuset_attach(struct cgroup_taskset *tset)
->                 wake_up(&cpuset_attach_wq);
-> 
->         mutex_unlock(&cpuset_mutex);
-> -       cpus_read_unlock();
->  }
-> 
->  /* The various types of files and directories in a cpuset file system */
-> --
-> 2.18.0
-> 
-> 
+Hi, Krzysztof
 
-Argh, whitespace was corrupted :(
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=E5=
+=B9=B43=E6=9C=8815=E6=97=A5
+=E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=8812:42=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On 14/03/2022 06:32, Vincent Shih wrote:
+> > Add bindings doc for Sunplus USB HOST OHCI driver
+> >
+> > Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
+> > ---
+> >  .../bindings/usb/sunplus,sp7021-usb-ohci.yaml      | 69 ++++++++++++++=
+++++++++
+> >  MAINTAINERS                                        |  1 +
+> >  2 files changed, 70 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/sunplus,sp702=
+1-usb-ohci.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-o=
+hci.yaml b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.ya=
+ml
+> > new file mode 100644
+> > index 0000000..7583b68
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/sunplus,sp7021-usb-ohci.yam=
+l
+> > @@ -0,0 +1,69 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +# Copyright (C) Sunplus Co., Ltd. 2021
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/sunplus,sp7021-usb-ohci.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+>
+> Looks good. Few minor nitpicks:
+>
+> > +title: Sunplus SP7021 OHCI Controller Device Tree Bindings
+>
+> Remove "Device Tree Bindings" words here. Title is about hardware.
+>
 
-I've fixed this up by hand and queued it up...
+Yes, I will remove it.
 
-greg k-h
+> > +
+> > +allOf:
+> > +  - $ref: usb-hcd.yaml#
+>
+> Put entire "allOf:" just before "properties:".
+
+Yes, I will modify it.
+
+>
+> > +
+> > +maintainers:
+> > +  - Vincent Shih <vincent.sunplus@gmail.com>
+> > +
+> > +description:
+> > +  Sunplus SP7021 USB HOST IP is a USB2.0 Host Controller. It supports =
+both
+> > +  Enhanced Host Controller Interface (EHCI) and Open Host Controller I=
+nterface
+> > +  (OHCI).
+> > +
+> > +  It supports 32-bits address bus and 64bit data bus interface, compli=
+ant
+> > +  to AMBA AXI interface for data transfer.
+> > +
+> > +  It supports 32-bits address and data bus interface, compliant to AMB=
+A
+> > +  AHB interface for register configurations.
+> > +
+> > +  It supports 32-bits address and data bus interface, compliant to AMB=
+A
+> > +  AXI interface for register alternative configurations.
+> > +
+> > +  The UTM Interface block generates PHY control signals, compliant to
+> > +  USB2.0 Transceiver Macrocell Interface Specification Revision 1.0.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: sunplus,sp7021-usb-ohci
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+>
+> You might need here phys. Are you sure you do not need to configure the
+> phy for OHCI? You should not assume it would be configured by other drive=
+r.
+>
+
+Yes, OHCI driver does not need to configure phy according to the
+suggestion of our RD.
+The default status of phy after power-on is good enough for OHCI.
+
+> Best regards,
+> Krzysztof
+
+Thanks for your review.

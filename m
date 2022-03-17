@@ -2,78 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E0A4DCB75
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE044DCB78
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236548AbiCQQcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
+        id S236579AbiCQQdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234836AbiCQQcj (ORCPT
+        with ESMTP id S236598AbiCQQcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:32:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D762B165B96;
-        Thu, 17 Mar 2022 09:31:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A07F71688;
-        Thu, 17 Mar 2022 09:31:22 -0700 (PDT)
-Received: from [10.57.42.204] (unknown [10.57.42.204])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 741193F7B4;
-        Thu, 17 Mar 2022 09:31:19 -0700 (PDT)
-Message-ID: <59aa0151-a51d-0def-6d5d-4788c1fbc21c@arm.com>
-Date:   Thu, 17 Mar 2022 16:31:15 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 1/4 RESEND] ACPI: scan: Export acpi_get_dma_attr()
-Content-Language: en-GB
-To:     Michael Kelley <mikelley@microsoft.com>, sthemmin@microsoft.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, rafael@kernel.org, lenb@kernel.org,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, hch@lst.de, m.szyprowski@samsung.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        iommu@lists.linux-foundation.org
-References: <1647534311-2349-1-git-send-email-mikelley@microsoft.com>
- <1647534311-2349-2-git-send-email-mikelley@microsoft.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <1647534311-2349-2-git-send-email-mikelley@microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Mar 2022 12:32:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100601DEA9E;
+        Thu, 17 Mar 2022 09:31:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F9636134E;
+        Thu, 17 Mar 2022 16:31:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BFBFC340ED;
+        Thu, 17 Mar 2022 16:31:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647534693;
+        bh=0O5d6Rq04+Hr+h8yNHQmWUz6ISqWFrwjXOw3xNpfpwg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VesdbL1bhztzrqSXkwiaWVU6oxT6ntFA9FuVl3Ix7yrUdBiYmpgAkZsmilhXhwAjo
+         JU4Xm9+KsQsb1FnXqhtaPDJfoUMBq6G7oQhJ20pzTaSHisWH2itMf2nGgGXwd5iA2G
+         UBbkraPcmjt0MG+ovONtq8Nay3hYRIkapEH7/3aYA9RAGJgwHK0FGLJ42XPfKBGMmg
+         hvhvi3LF1SyPIqtY64qVHfoK4m3SEzTSy2BCMkirGb7FsMXdbpPdg3ob1bFt4ubQFY
+         p4EOb+YB88y5PI/gm4o5meBIyG2Hk/W/UOYvTEfbV5wynLcqNFiboIBRa19AhtlhoN
+         LVbVStRbdJEgg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nUt2A-00FEoy-Nl; Thu, 17 Mar 2022 16:31:30 +0000
+Date:   Thu, 17 Mar 2022 16:31:30 +0000
+Message-ID: <87o824y1zx.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        Lukasz.Luba@arm.com, Morten.Rasmussen@arm.com,
+        Dietmar.Eggemann@arm.com, mka@chromium.org,
+        daniel.lezcano@linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Fuad Tabba <tabba@google.com>, Rob Herring <robh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] cpufreq: CPPC: Add per_cpu efficiency_class
+In-Reply-To: <d8502879-104e-c1c9-d735-d9de5769da41@arm.com>
+References: <20220317133419.3901736-1-Pierre.Gondois@arm.com>
+        <20220317133419.3901736-3-Pierre.Gondois@arm.com>
+        <f4356101d8c8d209054566261b300a91@kernel.org>
+        <d8502879-104e-c1c9-d735-d9de5769da41@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pierre.gondois@arm.com, linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com, Lukasz.Luba@arm.com, Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com, mka@chromium.org, daniel.lezcano@linaro.org, catalin.marinas@arm.com, will@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org, mark.rutland@arm.com, ardb@kernel.org, tabba@google.com, robh@kernel.org, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-17 16:25, Michael Kelley wrote:
-> Export acpi_get_dma_attr() so that it can be used by the Hyper-V
-> VMbus driver, which may be built as a module. The related function
-> acpi_dma_configure_id() is already exported.
-
-No. Use device_get_dma_attr() like everyone else, please.
-
-Robin.
-
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-> ---
->   drivers/acpi/scan.c | 1 +
->   1 file changed, 1 insertion(+)
+On Thu, 17 Mar 2022 16:07:01 +0000,
+Pierre Gondois <pierre.gondois@arm.com> wrote:
 > 
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index 1331756..9f3c88f 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -1489,6 +1489,7 @@ enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev)
->   	else
->   		return DEV_DMA_NON_COHERENT;
->   }
-> +EXPORT_SYMBOL_GPL(acpi_get_dma_attr);
->   
->   /**
->    * acpi_dma_get_range() - Get device DMA parameters.
+> >> diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+> >> index 27df5c1e6baa..56637cbea5d6 100644
+> >> --- a/arch/arm64/kernel/smp.c
+> >> +++ b/arch/arm64/kernel/smp.c
+> >> @@ -512,6 +512,7 @@ struct acpi_madt_generic_interrupt
+> >> *acpi_cpu_get_madt_gicc(int cpu)
+> >>   {
+> >>   	return &cpu_madt_gicc[cpu];
+> >>   }
+> >> +EXPORT_SYMBOL(acpi_cpu_get_madt_gicc);
+> > 
+> > Why not EXPORT_SYMBOL_GPL()?
+> 
+> From what I understand, this could be made EXPORT_SYMBOL_GPL().
+> The only reason was that the other symbol exportation in the
+> file wasn't restricted to GPL.
+
+I'm personally keen on keeping this for GPL code only, just like the
+current code is. If there is a further need to relax this, we can
+discuss it separately.
+
+> 
+> > 
+> >> 
+> >>   /*
+> >>    * acpi_map_gic_cpu_interface - parse processor MADT entry
+> >> diff --git a/drivers/cpufreq/cppc_cpufreq.c
+> >> b/drivers/cpufreq/cppc_cpufreq.c
+> >> index 8f950fe72765..a6cd95c3b474 100644
+> >> --- a/drivers/cpufreq/cppc_cpufreq.c
+> >> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> >> @@ -422,12 +422,66 @@ static unsigned int
+> >> cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
+> >>   	return cppc_get_transition_latency(cpu) / NSEC_PER_USEC;
+> >>   }
+> >> 
+> >> +static bool efficiency_class_populated;
+> >> +static DEFINE_PER_CPU(unsigned int, efficiency_class);
+> >> +
+> >> +static int populate_efficiency_class(void)
+> >> +{
+> >> +	unsigned int min = UINT_MAX, max = 0, class;
+> >> +	struct acpi_madt_generic_interrupt *gicc;
+> >> +	int cpu;
+> >> +
+> >> +	for_each_possible_cpu(cpu) {
+> >> +		gicc = acpi_cpu_get_madt_gicc(cpu);
+> >> +		if (!gicc)
+> >> +			return -ENODEV;
+> > 
+> > How can that happen if you made it here using ACPI?
+> 
+> This is effectively an extra check. This could be removed.
+
+Please do.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

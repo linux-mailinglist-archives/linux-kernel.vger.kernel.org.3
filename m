@@ -2,126 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E3E4DCAA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 889084DCAAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236264AbiCQQCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
+        id S236008AbiCQQD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236260AbiCQQCN (ORCPT
+        with ESMTP id S236289AbiCQQDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:02:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9473F1B60BF
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:00:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647532855;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RBbDy367kWrGSBoXbYBN/Kvf/xHJKwcAv/IFsfAX7P8=;
-        b=TZEzVtM8/PX3hl7emlanY8d+RwA2ZOgHPxjV9+fuM2+fw5eMOzv6m5CMkFLHXw1dtjQ3oO
-        bBV5sCWfQpQnSYvAOUWxI8oYJSJ6VlyfLYDGHfdjeWosxtF3q0yIPwZ8iGyVgP2EuKgZe+
-        Im9iPNP/ejmO8p9HcsUmcdGCIfduMsk=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-JE4YIapuNd-nwL5Tot9ISA-1; Thu, 17 Mar 2022 12:00:52 -0400
-X-MC-Unique: JE4YIapuNd-nwL5Tot9ISA-1
-Received: by mail-io1-f70.google.com with SMTP id z10-20020a056602080a00b00645b9fdc630so3426626iow.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:00:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=RBbDy367kWrGSBoXbYBN/Kvf/xHJKwcAv/IFsfAX7P8=;
-        b=trBUPZY7iskez5PP1fjC03RBAWtXbEgYHSIR7DwnY0i3s6+19nqNPqK83jfpgw8bjH
-         GFtwuVIrAcJlkylfWrkcfZ5kg3e4N0IfA3og1bRJ4NQQIl+nbZRAfTaInp01/8lEKRaO
-         KBtjwI+x5VZuQc5ji5KaR7hfG+oFVtJfWhTWfy3L2BErfAprfIeKS9ueG72w9JSFLyZo
-         brbxhZyeWBQioM6OZRRqtFOB425XC9WUIoyaGzwKCFCDgpMRRUDPeJYzr6FaeaOV7xXT
-         OjrixIiMVBx+PrFbpposFuGliC/bMDEKeQnmBvJM1n/70tJIsd1DUequmQOvUJAkTqan
-         QvCg==
-X-Gm-Message-State: AOAM532VaOGLfHDDKDJB0nQn6W77gEJUxExaOPLX/VtNUxKdlDBU93/g
-        mEXO5uFy28It3SektRgiVcyGMhzzgqiWWiQBHXiQtu6iG5cMkTHzOjWst9DCj3Qu4U1qurtKKEW
-        4QCfkKysNtHaWE6YbF8EnRNKJ
-X-Received: by 2002:a05:6e02:216f:b0:2c7:7a3f:2a94 with SMTP id s15-20020a056e02216f00b002c77a3f2a94mr2462962ilv.267.1647532851084;
-        Thu, 17 Mar 2022 09:00:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxq6DeC5RvP84Jp8XIKwkiiRG7CXxw/wSac9zA/J5rHz7wKILVwB0AdOAiqXkXniBbu4npQaQ==
-X-Received: by 2002:a05:6e02:216f:b0:2c7:7a3f:2a94 with SMTP id s15-20020a056e02216f00b002c77a3f2a94mr2462938ilv.267.1647532850763;
-        Thu, 17 Mar 2022 09:00:50 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id r15-20020a056e0219cf00b002c77a3f2a85sm3677624ill.6.2022.03.17.09.00.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 09:00:50 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 10:00:49 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: adjust entry for header movement in
- hisilicon qm driver
-Message-ID: <20220317100049.27d7a476.alex.williamson@redhat.com>
-In-Reply-To: <20220316124224.29091-1-lukas.bulwahn@gmail.com>
-References: <20220316124224.29091-1-lukas.bulwahn@gmail.com>
-Organization: Red Hat
+        Thu, 17 Mar 2022 12:03:54 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312E2213512;
+        Thu, 17 Mar 2022 09:02:37 -0700 (PDT)
+Received: from toolbox.toradex.int ([31.10.206.124]) by mrelay.perfora.net
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LcRZg-1nw0Ax2u7a-00jrHl;
+ Thu, 17 Mar 2022 17:01:38 +0100
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Alex Marginean <alexandru.marginean@nxp.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Fabio Estevam <festevam@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Heiko Schocher <hs@denx.de>, Jacky Bai <ping.bai@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kuldeep Singh <kuldeep.singh@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Olof Johansson <olof@lixom.net>, Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Reinhold Mueller <reinhold.mueller@emtrion.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/3] arm64: prepare and add verdin imx8m plus support
+Date:   Thu, 17 Mar 2022 17:01:19 +0100
+Message-Id: <20220317160122.341484-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:ED0sbp66FL+AzkN4iNlevzTuTV0BQ+7P79CubS7HDAtFLugskPG
+ rRdkCZ4wT9vLKJnUwIra+so9iRa6qiuiCSiWWVu9DKtUbZVrFfp1v8gs70Zm+pohlgYyuRB
+ /0LR+8brodVK0k6c12JeOjXRaIK3qVGAYTWdUyYaE8WKvdF6DPPkXAYazBGqtjA/jXKPkNQ
+ aSx6BwG3d1+LWhazmGNZw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:j6Lf8KfJmM4=:gij8r25bka3DF2+u65BHnl
+ QXHwC8hlm/Qq4KefG9oFOKbe6jBMDn95/ZjjrbVnet0PiuxZykGpcxaFb6z0imPGObbPaWXM8
+ MXPQuwhzYusqYEgJABnrVcVc7q5w0EfY5FX5KPD6jL9E9JwSJCJCGmZsjZFt0iZxyewDzMiIz
+ Gs76WBcQGbqEOumkJm2QLQKyEzYj2vgt+UO6L6UED6iBQ8mAhF5zhMKbh8YE2SaA3zEvWUwLA
+ uJeqbbB6xa/sH6ZdeZqYf/D4lmzOATIsvjNupzhDFzGwL2KqIgIsm3q30AGDgwyC65XKxrDA/
+ A91Yd0kvKYxFH4mUFT5K8CBJYchXJNa87Kk9PzMpXDceTVPanZg7LMT5tbolgOJ9L5baWw1LK
+ AUVTFPH1xfkg5CyC/QCa5Ykw8LNGU6YK9/vbC/JcQv/WXWoBW6sE/BGL7OM/91FDqIH4VLNyh
+ RLGlRNPI9Ag1eeKRxr7oYrlMZZl15sXmeZ+hxH+mjCdvvPebZqjZKaeItDoBqSyRTDn00TOyJ
+ 75/zT9ZDcYpUaU4Bgfch9dPbA1Eej0iKDbW6OLNbdN0xvd3pT/RX/BwCxstxq14zWPhdVqg5J
+ HC/2D0BTGSfCIx7XVSJgFuomcVpbApnsjSOExiOj18OxmMY4XdzbynsomssZsURgZRaTrHnb0
+ mYSrXne7CBX4h6AQfHlomN6FMCrEhjueMjsoGAqF/lRI2UW2bQStJGHfoKg7NX/CQVsY=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 13:42:24 +0100
-Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-> Commit ff5812e00d5e ("crypto: hisilicon/qm: Move the QM header to
-> include/linux") moves drivers/crypto/hisilicon/qm.h to
-> include/linux/hisi_acc_qm.h, but misses to adjust MAINTAINERS.
-> 
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-> broken reference.
-> 
-> Adjust the file entry in the HISILICON QM AND ZIP Controller DRIVER
-> following this file movement.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Alex, please pick this minor clean-up on your -next tree on top of the
-> commit above.
-> 
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 845b36c0f0f5..963d7001f2ce 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -8852,9 +8852,9 @@ L:	linux-crypto@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/ABI/testing/debugfs-hisi-zip
->  F:	drivers/crypto/hisilicon/qm.c
-> -F:	drivers/crypto/hisilicon/qm.h
->  F:	drivers/crypto/hisilicon/sgl.c
->  F:	drivers/crypto/hisilicon/zip/
-> +F:	include/linux/hisi_acc_qm.h
->  
->  HISILICON ROCE DRIVER
->  M:	Wenpeng Liang <liangwenpeng@huawei.com>
 
-Applied to vfio next branch for v5.18 with Shameer's R-b.  Thanks,
+Add DMA properties to uart2 node of the base i.MX 8M Plus device tree,
+add toradex,verdin-imx8mp et al. to dt-bindings and finally, add
+initial support for Verdin iMX8M Plus.
 
-Alex
+
+Marcel Ziswiler (3):
+  arm64: dts: imx8mp: add uart2 dma
+  dt-bindings: arm: fsl: add toradex,verdin-imx8mp et al.
+  arm64: dts: freescale: add initial support for verdin imx8m plus
+
+ .../devicetree/bindings/arm/fsl.yaml          |   21 +
+ arch/arm64/boot/dts/freescale/Makefile        |    4 +
+ .../dts/freescale/imx8mp-verdin-dahlia.dtsi   |  125 ++
+ .../boot/dts/freescale/imx8mp-verdin-dev.dtsi |   44 +
+ .../imx8mp-verdin-nonwifi-dahlia.dts          |   18 +
+ .../freescale/imx8mp-verdin-nonwifi-dev.dts   |   18 +
+ .../dts/freescale/imx8mp-verdin-nonwifi.dtsi  |   54 +
+ .../freescale/imx8mp-verdin-wifi-dahlia.dts   |   18 +
+ .../dts/freescale/imx8mp-verdin-wifi-dev.dts  |   18 +
+ .../dts/freescale/imx8mp-verdin-wifi.dtsi     |   82 +
+ .../boot/dts/freescale/imx8mp-verdin.dtsi     | 1373 +++++++++++++++++
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi     |    2 +
+ 12 files changed, 1777 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-dev.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+
+-- 
+2.33.1
 

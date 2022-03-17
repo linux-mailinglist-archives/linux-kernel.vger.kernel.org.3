@@ -2,126 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19714DCE9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5014D4DCEA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237975AbiCQTRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 15:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
+        id S237960AbiCQTSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 15:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237967AbiCQTRP (ORCPT
+        with ESMTP id S238002AbiCQTRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 15:17:15 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F702274CC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 12:15:53 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id mz9-20020a17090b378900b001c657559290so6138624pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 12:15:53 -0700 (PDT)
+        Thu, 17 Mar 2022 15:17:55 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D4E21BC73;
+        Thu, 17 Mar 2022 12:16:38 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2e592e700acso69458117b3.5;
+        Thu, 17 Mar 2022 12:16:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vB5f3WAF1j14ezOj7+5eexYupdGogMxyhohhnTpJG3I=;
-        b=rsLp6M4LC+ha3ufnaOhyywMK6wmY6Hf56U49g+9vNFfpqvMCyNPyBpiXhCkP4xvbFY
-         9E0p8IUr27FGHaoK7iyxQC3LZEG+aoMEI0eUOhXhY5l8IV7wep6uEjjREn4iPEyxIWfa
-         wbW2PSjskg54Dad/119rVJKOnZZ/dKg/Yf0disLS6nfuXqzpBD2K+wgg44U2t++ZNdaj
-         nwwN1p3XtunPwuDDi16+096nin1zKvJ1Iwz0M45yHJl5c4CRlf06irAv0f0VrmFpc5jp
-         GmsJaef8JdJ61XJO/g5QB+dOFOqwY55fZwTUT9FvXAolqNcCT0I12Uu8mpBgBGF9/QUB
-         MMuw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mKapJ9uZA8L9+1rRQInLTdrF5ON+YIytttK2FOHxods=;
+        b=QWXddu++c/+IQNyzISJmK8CHYpxm5aYBFc68JYLbjT8JkfG9k/5GyMEHgXhvUMqzDa
+         glxxliO4fHVMnlzQAkt0yZTKz5TILZElUQPhUBzTC729SUUKEZl/K0HZZo5QZhsw+bXq
+         rrd8NYGTAKSadAI5OdJVaN92GxtwwsZLi42nrkxIWeIK0EBHLBb2SBByh5LYReMYxDdR
+         SQBQaNOUhbKjmspYTzlWMC+S6DWBekmzmFPTZk8DcvX1HVNlNxjPJxOq7I+PyrDYgdLU
+         nuxNubhRfDcv27vkiBEfaBP0EG+xtrIh4ZfP2MEJJ8kJ5A6Vsy2NFWLdhtf7V63ugIV4
+         eZTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=vB5f3WAF1j14ezOj7+5eexYupdGogMxyhohhnTpJG3I=;
-        b=j+dBmc7mIV6sU/u75lwwGBEML4PFiO0/yFKWEcJiE2hgBsmR+MkErfNhOtAz4f68pe
-         ERWzQE0EzqGo+Egr3NPGn1a1IQE+AaUwGmofMHcWuamz6iNDoYyQS4F8EtDyuRTBeCW7
-         d5S6IJ1pkdSaVFAliavr3ksIYBIKQs52x0pT24+vdlghpT2aX0WDxWGrbA1osjUmZ2kC
-         jF5ieK4y8TsbSWht3jLWesjY4YBVgigU5LDMz6GTbMlAOlzGW0lzdw7E/ynNw1/7USyL
-         Xha3ZwovEQjB5iAuY3qKe9PNVCOj/nLqfOsVIFaDn6FrBoO4UTPXik1gSiaZK6/CXMeR
-         6NUA==
-X-Gm-Message-State: AOAM532PMQRDPNpgPygvoJPk3LiSWdfZk/2a8bsSUNiD+7PHPnZBS+sC
-        uP3/jIsnwcnXV+wznHKa+94ygw==
-X-Google-Smtp-Source: ABdhPJwHtQFbcAMtkjIIk7TTag/gBPH400hGz9/wqUBz3Ag9FMPGaHQJZvaF1c312w1xdnvPWdUyvA==
-X-Received: by 2002:a17:90b:4d11:b0:1c2:1939:ca83 with SMTP id mw17-20020a17090b4d1100b001c21939ca83mr17770961pjb.65.1647544552516;
-        Thu, 17 Mar 2022 12:15:52 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id j12-20020a056a00234c00b004fa042e822bsm7558479pfj.14.2022.03.17.12.15.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 12:15:51 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 12:15:51 -0700 (PDT)
-X-Google-Original-Date: Thu, 17 Mar 2022 12:15:46 PDT (-0700)
-Subject:     Re: [PATCH 17/18] dt-bindings: irqchip: sifive: include generic schema
-In-Reply-To: <20220317115705.450427-16-krzysztof.kozlowski@canonical.com>
-CC:     tglx@linutronix.de, Marc Zyngier <maz@kernel.org>,
-        robh+dt@kernel.org, krzk+dt@kernel.org, afaerber@suse.de,
-        mani@kernel.org, linusw@kernel.org, kaloz@openwrt.org,
-        khalasa@piap.pl, michael@walle.cc, mark-pk.tsai@mediatek.com,
-        daniel@thingy.jp, j.neuschaefer@gmx.net,
-        Paul Walmsley <paul.walmsley@sifive.com>, nm@ti.com,
-        kristo@kernel.org, ssantosh@kernel.org, narmstrong@baylibre.com,
-        dinguyen@kernel.org, cristian.ciocaltea@gmail.com,
-        qiangqing.zhang@nxp.com, l.stach@pengutronix.de,
-        paul@crapouillou.net, jiaxun.yang@flygoat.com,
-        claudiu.beznea@microchip.com, jason@lakedaemon.net,
-        paulburton@kernel.org, tsbogend@alpha.franken.de,
-        mail@birger-koblitz.de, bert@biot.com, john@phrozen.org,
-        geert+renesas@glider.be, sagar.kadam@sifive.com, s-anna@ti.com,
-        lokeshvutla@ti.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, openbmc@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-oxnas@groups.io,
-        krzysztof.kozlowski@canonical.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     krzysztof.kozlowski@canonical.com
-Message-ID: <mhng-8f60f19c-40cb-4b5e-b392-9cdf8adc1d13@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mKapJ9uZA8L9+1rRQInLTdrF5ON+YIytttK2FOHxods=;
+        b=Gu6faB+2YevUYJhr3U3dgbSdfqDUcd0bQJdb5sPzUWhSbHgSort191Rzt+3nDTgriX
+         rIuJXkgqZaDTLc8es9LRQkceMR6WJGmNEc13ln8qXcGZ09AHhOwrtGQqIyMkgODH9dLY
+         T1iYVjWQqlDlea5qUBf22tFOVmlO9H1hQcn43rtvjWjUy1f4j74ROsw04UFy00Zq3CyT
+         2k9CvTETDTaA6LXl4Z/XoZXJoaKHfBOkB+fvvl1xXv/gBzi4hY5r2a0vrBq0PuOzhy1+
+         AVYrs+ojoG1SeyDDkcKevNHwRDsqaBtJTCFrvzFtz5Gy/7aUHtJg+q+hcJeMdKg1/zNx
+         5KVw==
+X-Gm-Message-State: AOAM532M4mdKnvwfb4ELb/OjinB+7jBE08pcKjUE54F+xT5PsRldd4h1
+        RudVjSOR934v5QA4Gse8D52b22HU5SrGgwp/4DE=
+X-Google-Smtp-Source: ABdhPJwyQGdV/V+oTZrJb8S7IamfHGCGb/X1pRr2kzGM8sBwIXQlbjp8sH/EXpPUygW9lTgQaOuNVB60ttIIoBwOY+Q=
+X-Received: by 2002:a0d:c645:0:b0:2db:9ed9:e6e5 with SMTP id
+ i66-20020a0dc645000000b002db9ed9e6e5mr7745641ywd.292.1647544598024; Thu, 17
+ Mar 2022 12:16:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1647274406.git.mchehab@kernel.org> <1ebc47e42c2692fe09947d517a5e9a3b12fc58a3.1647274407.git.mchehab@kernel.org>
+In-Reply-To: <1ebc47e42c2692fe09947d517a5e9a3b12fc58a3.1647274407.git.mchehab@kernel.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 17 Mar 2022 19:16:12 +0000
+Message-ID: <CA+V-a8tJL9WssQU3e-5J1NXFanALuF_SDfUQnhbOMJJJ2ZNNmA@mail.gmail.com>
+Subject: Re: [PATCH v2 57/67] media: platform: rename am437x/ to ti/am437x/
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022 04:57:04 PDT (-0700), krzysztof.kozlowski@canonical.com wrote:
-> Include generic interrupt-controller.yaml schema, which enforces node
-> naming and other generic properties.
+On Mon, Mar 14, 2022 at 4:35 PM Mauro Carvalho Chehab
+<mchehab@kernel.org> wrote:
 >
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> As the end goal is to have platform drivers split by vendor,
+> rename am437x/ to ti/am437x/.
+>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 > ---
->  .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml     | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
 >
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> index 27092c6a86c4..e3c08cff89d2 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> @@ -44,6 +44,9 @@ maintainers:
->    - Paul Walmsley  <paul.walmsley@sifive.com>
->    - Palmer Dabbelt <palmer@dabbelt.com>
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v2 00/67] at: https://lore.kernel.org/all/cover.1647274406.git.mchehab@kernel.org/
 >
-> +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
-> +
->  properties:
->    compatible:
->      oneOf:
-> @@ -91,7 +94,7 @@ required:
->    - interrupts-extended
->    - riscv,ndev
+>  MAINTAINERS                                               | 2 +-
+>  drivers/media/platform/Kconfig                            | 2 +-
+>  drivers/media/platform/Makefile                           | 2 +-
+>  drivers/media/platform/{ => ti}/am437x/Kconfig            | 0
+>  drivers/media/platform/{ => ti}/am437x/Makefile           | 0
+>  drivers/media/platform/{ => ti}/am437x/am437x-vpfe.c      | 0
+>  drivers/media/platform/{ => ti}/am437x/am437x-vpfe.h      | 0
+>  drivers/media/platform/{ => ti}/am437x/am437x-vpfe_regs.h | 0
+>  8 files changed, 3 insertions(+), 3 deletions(-)
+>  rename drivers/media/platform/{ => ti}/am437x/Kconfig (100%)
+>  rename drivers/media/platform/{ => ti}/am437x/Makefile (100%)
+>  rename drivers/media/platform/{ => ti}/am437x/am437x-vpfe.c (100%)
+>  rename drivers/media/platform/{ => ti}/am437x/am437x-vpfe.h (100%)
+>  rename drivers/media/platform/{ => ti}/am437x/am437x-vpfe_regs.h (100%)
 >
-> -additionalProperties: false
-> +unevaluatedProperties: false
->
->  examples:
->    - |
+Reviewed-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Cheers,
+Prabhakar
 
-I'm assuming this is going in along with the others.
-
-Thanks!
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 6c1055c27c65..f0b262176a70 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19262,7 +19262,7 @@ S:      Maintained
+>  W:     https://linuxtv.org
+>  Q:     http://patchwork.linuxtv.org/project/linux-media/list/
+>  T:     git git://linuxtv.org/mhadli/v4l-dvb-davinci_devices.git
+> -F:     drivers/media/platform/am437x/
+> +F:     drivers/media/platform/ti/am437x/
+>
+>  TI BANDGAP AND THERMAL DRIVER
+>  M:     Eduardo Valentin <edubezval@gmail.com>
+> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+> index 2ad5fde02543..5d56058fa397 100644
+> --- a/drivers/media/platform/Kconfig
+> +++ b/drivers/media/platform/Kconfig
+> @@ -67,7 +67,6 @@ config VIDEO_MUX
+>
+>  source "drivers/media/platform/allegro-dvt/Kconfig"
+>  source "drivers/media/platform/allwinner/Kconfig"
+> -source "drivers/media/platform/am437x/Kconfig"
+>  source "drivers/media/platform/amlogic/meson-ge2d/Kconfig"
+>  source "drivers/media/platform/amphion/Kconfig"
+>  source "drivers/media/platform/aspeed/Kconfig"
+> @@ -97,6 +96,7 @@ source "drivers/media/platform/samsung/s5p-mfc/Kconfig"
+>  source "drivers/media/platform/stm/sti/Kconfig"
+>  source "drivers/media/platform/stm/stm32/Kconfig"
+>  source "drivers/media/platform/ti-vpe/Kconfig"
+> +source "drivers/media/platform/ti/am437x/Kconfig"
+>  source "drivers/media/platform/via/Kconfig"
+>  source "drivers/media/platform/xilinx/Kconfig"
+>
+> diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+> index f20f1287c665..f8c4617da0ae 100644
+> --- a/drivers/media/platform/Makefile
+> +++ b/drivers/media/platform/Makefile
+> @@ -7,7 +7,6 @@
+>  # (e. g. LC_ALL=C sort Makefile)
+>  obj-y += allegro-dvt/
+>  obj-y += allwinner/
+> -obj-y += am437x/
+>  obj-y += amlogic/meson-ge2d/
+>  obj-y += amphion/
+>  obj-y += aspeed/
+> @@ -42,6 +41,7 @@ obj-y += stm/sti/delta/
+>  obj-y += stm/sti/hva/
+>  obj-y += stm/stm32/
+>  obj-y += ti-vpe/
+> +obj-y += ti/am437x/
+>  obj-y += via/
+>  obj-y += xilinx/
+>
+> diff --git a/drivers/media/platform/am437x/Kconfig b/drivers/media/platform/ti/am437x/Kconfig
+> similarity index 100%
+> rename from drivers/media/platform/am437x/Kconfig
+> rename to drivers/media/platform/ti/am437x/Kconfig
+> diff --git a/drivers/media/platform/am437x/Makefile b/drivers/media/platform/ti/am437x/Makefile
+> similarity index 100%
+> rename from drivers/media/platform/am437x/Makefile
+> rename to drivers/media/platform/ti/am437x/Makefile
+> diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/ti/am437x/am437x-vpfe.c
+> similarity index 100%
+> rename from drivers/media/platform/am437x/am437x-vpfe.c
+> rename to drivers/media/platform/ti/am437x/am437x-vpfe.c
+> diff --git a/drivers/media/platform/am437x/am437x-vpfe.h b/drivers/media/platform/ti/am437x/am437x-vpfe.h
+> similarity index 100%
+> rename from drivers/media/platform/am437x/am437x-vpfe.h
+> rename to drivers/media/platform/ti/am437x/am437x-vpfe.h
+> diff --git a/drivers/media/platform/am437x/am437x-vpfe_regs.h b/drivers/media/platform/ti/am437x/am437x-vpfe_regs.h
+> similarity index 100%
+> rename from drivers/media/platform/am437x/am437x-vpfe_regs.h
+> rename to drivers/media/platform/ti/am437x/am437x-vpfe_regs.h
+> --
+> 2.35.1
+>

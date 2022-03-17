@@ -2,134 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FFB4DCCB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F014DCCB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237004AbiCQRpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 13:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        id S237023AbiCQRqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 13:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236999AbiCQRpU (ORCPT
+        with ESMTP id S237007AbiCQRqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 13:45:20 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E3FBD7E4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:44:03 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id DEB1A1F4552B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647539042;
-        bh=mUMMTYKYpCpUpTWTvn3hhHrvuNHT/8z3r7qyrT17pvA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lJBtpINq0ld1ylJn0JIcyD6BtNED3KoWz7lRZJ7U60pn0clW6BHz5T84ZrDP2ITIO
-         3Uv19QN0g4XSrEKLLM1vgdGA3cHcR/wBh41nUgXhNbEPAkm3ndYCf0g6mKqG4eBcDR
-         LgOxRmhCfbKISLiqP6E4PEhiFHW5m4iCGOr5XYcZOFTI+OWtPATMhQPiLhLuxtvvoq
-         8hU7dLwD5MTqtnJaeqDoktCv9+7KXZ3xzfFWZEhDgQ6SKEEe4ZXHQ/TgaRuqh8Ck8T
-         Ogjin72ZPyE+optlFHhoyqLteqiCZIRYxzj0uhk1cRVWuEno4XCGqeBuxFZlysnPD5
-         yeWmIV9EijnKg==
-Message-ID: <37364303-acdc-ec95-9e99-2edbc84c5040@collabora.com>
-Date:   Thu, 17 Mar 2022 20:43:57 +0300
+        Thu, 17 Mar 2022 13:46:40 -0400
+Received: from audible.transient.net (audible.transient.net [24.143.126.66])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1A84EC12CC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:45:15 -0700 (PDT)
+Received: (qmail 25545 invoked from network); 17 Mar 2022 17:45:11 -0000
+Received: from cucamonga.audible.transient.net (192.168.2.5)
+  by canarsie.audible.transient.net with QMQP; 17 Mar 2022 17:45:11 -0000
+Received: (nullmailer pid 2336 invoked by uid 1000);
+        Thu, 17 Mar 2022 17:45:11 -0000
+Date:   Thu, 17 Mar 2022 17:45:11 +0000
+From:   Jamie Heilman <jamie@audible.transient.net>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH -v1.2] kvm/emulate: Fix SETcc emulation function offsets
+ with SLS
+Message-ID: <YjNzp+bLLAS8aeZg@audible.transient.net>
+Mail-Followup-To: Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
+References: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
+ <YjHYh3XRbHwrlLbR@zn.tnic>
+ <YjIwRR5UsTd3W4Bj@audible.transient.net>
+ <YjI69aUseN/IuzTj@zn.tnic>
+ <YjJFb02Fc0jeoIW4@audible.transient.net>
+ <YjJVWYzHQDbI6nZM@zn.tnic>
+ <20220316220201.GM8939@worktop.programming.kicks-ass.net>
+ <YjMBdMlhVMGLG5ws@zn.tnic>
+ <YjMS8eTOhXBOPFOe@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 6/8] drm/shmem-helper: Add generic memory shrinker
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Dmitry Osipenko <digetx@gmail.com>
-References: <20220314224253.236359-1-dmitry.osipenko@collabora.com>
- <20220314224253.236359-7-dmitry.osipenko@collabora.com>
- <CAF6AEGsmtM6rTJtOJwTA49cwW7wCjF53Devzodd_PzLO0EOkVw@mail.gmail.com>
- <be3b09ff-08ea-3e13-7d8c-06af6fffbd8f@collabora.com>
- <CAF6AEGv2Ob7_Zp3+m-16QExDTM9vYfAkeSuBtjWG7ukHnY73UA@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAF6AEGv2Ob7_Zp3+m-16QExDTM9vYfAkeSuBtjWG7ukHnY73UA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjMS8eTOhXBOPFOe@zn.tnic>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/22 19:13, Rob Clark wrote:
-...
->>>> +               /* prevent racing with job submission code paths */
->>>> +               if (!dma_resv_trylock(obj->resv))
->>>> +                       goto shrinker_lock;
->>>
->>> jfwiw, the trylock here is in the msm code isn't so much for madvise
->>> (it is an error to submit jobs that reference DONTNEED objects), but
->>> instead for the case of evicting WILLNEED but inactive objects to
->>> swap.  Ie. in the case that we need to move bo's back in to memory, we
->>> don't want to unpin/evict a buffer that is later on the list for the
->>> same job.. msm shrinker re-uses the same scan loop for both
->>> inactive_dontneed (purge) and inactive_willneed (evict)
->>
->> I don't see connection between the objects on the shrinker's list and
->> the job's BOs. Jobs indeed must not have any objects marked as DONTNEED,
->> this case should never happen in practice, but we still need to protect
->> from it.
+Borislav Petkov wrote:
+> On Thu, Mar 17, 2022 at 10:37:56AM +0100, Borislav Petkov wrote:
+> > Jamie, I'd appreciate testing this one too, pls, just in case.
 > 
-> Hmm, let me try to explain with a simple example.. hopefully this makes sense.
-> 
-> Say you have a job with two bo's, A and B..  bo A is not backed with
-> memory (either hasn't been used before or was evicted.  Allocating
-> pages for A triggers shrinker.  But B is still on the
-> inactive_willneed list, however it is already locked (because we don't
-> want to evict B to obtain backing pages for A).
+> Here's a version against -rc8 - the previous one was against tip/master
+> and had other contextual changes in it.
 
-I see now what you're talking about, thanks. My intention of locking the
-reservations is different since eviction isn't supported by this v2. But
-we probably will be able to re-use this try_lock for protecting from
-swapping out job's BOs as well.
+You can add my Tested-by: Jamie Heilman <jamie@audible.transient.net>
 
->>> I suppose using trylock is not technically wrong, and it would be a
->>> good idea if the shmem helpers supported eviction as well.  But I
->>> think in the madvise/purge case if you lose the trylock then there is
->>> something else bad going on.
->>
->> This trylock is intended for protecting job's submission path from
->> racing with madvise ioctl invocation followed by immediate purging of
->> BOs while job is in a process of submission, i.e. it protects from a
->> use-after-free.
-> 
-> ahh, ok
-> 
->> If you'll lose this trylock, then shrinker can't use
->> dma_resv_test_signaled() reliably anymore and shrinker may purge BO
->> before job had a chance to add fence to the BO's reservation.
->>
->>> Anyways, from the PoV of minimizing lock contention when under memory
->>> pressure, this all looks good to me.
->>
->> Thank you. I may try to add generic eviction support to the v3.
-> 
-> eviction is a trickier thing to get right, I wouldn't blame you for
-> splitting that out into it's own patchset ;-)
-> 
-> You probably also would want to make it a thing that is opt-in for
-> drivers using the shmem helpers
+This still works great with CONFIG_SLS=Y or CONFIG_SLS=N.
 
-I had the same thoughts, will see.
+> ---
+> From: Borislav Petkov <bp@suse.de>
+> 
+> The commit in Fixes started adding INT3 after RETs as a mitigation
+> against straight-line speculation.
+> 
+> The fastop SETcc implementation in kvm's insn emulator uses macro magic
+> to generate all possible SETcc functions and to jump to them when
+> emulating the respective instruction.
+> 
+> However, it hardcodes the size and alignment of those functions to 4: a
+> three-byte SETcc insn and a single-byte RET. BUT, with SLS, there's an
+> INT3 that gets slapped after the RET, which brings the whole scheme out
+> of alignment:
+> 
+>   15:   0f 90 c0                seto   %al
+>   18:   c3                      ret
+>   19:   cc                      int3
+>   1a:   0f 1f 00                nopl   (%rax)
+>   1d:   0f 91 c0                setno  %al
+>   20:   c3                      ret
+>   21:   cc                      int3
+>   22:   0f 1f 00                nopl   (%rax)
+>   25:   0f 92 c0                setb   %al
+>   28:   c3                      ret
+>   29:   cc                      int3
+> 
+> and this explodes like this:
+> 
+>   int3: 0000 [#1] PREEMPT SMP PTI
+>   CPU: 0 PID: 2435 Comm: qemu-system-x86 Not tainted 5.17.0-rc8-sls #1
+>   Hardware name: Dell Inc. Precision WorkStation T3400  /0TP412, BIOS A14 04/30/2012
+>   RIP: 0010:setc+0x5/0x8 [kvm]
+>   Code: 00 00 0f 1f 00 0f b6 05 43 24 06 00 c3 cc 0f 1f 80 00 00 00 00 0f 90 c0 c3 cc 0f 1f 00 0f 91 c0 c3 cc 0f 1f 00 0f 92 c0 c3 cc <0f> 1f 00 0f 93 c0 c3 cc 0f 1f 00 0f 94 c0 c3 cc 0f 1f 00 0f 95 c0
+>   Call Trace:
+>    <TASK>
+>    ? x86_emulate_insn [kvm]
+>    ? x86_emulate_instruction [kvm]
+>    ? vmx_handle_exit [kvm_intel]
+>    ? kvm_arch_vcpu_ioctl_run [kvm]
+>    ? kvm_vcpu_ioctl [kvm]
+>    ? __x64_sys_ioctl
+>    ? do_syscall_64+0x40/0xa0
+>    ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+>    </TASK>
+> 
+> Raise the alignment value when SLS is enabled and use a macro for that
+> instead of hard-coding naked numbers.
+> 
+> Fixes: e463a09af2f0 ("x86: Add straight-line-speculation mitigation")
+> Reported-by: Jamie Heilman <jamie@audible.transient.net>
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> Link: https://lore.kernel.org/r/YjGzJwjrvxg5YZ0Z@audible.transient.net
+> ---
+>  arch/x86/kvm/emulate.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 5719d8cfdbd9..f321abb9a4a8 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -429,8 +429,11 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+>  	FOP_END
+>  
+>  /* Special case for SETcc - 1 instruction per cc */
+> +
+> +#define SETCC_ALIGN	(4 * (1 + IS_ENABLED(CONFIG_SLS)))
+> +
+>  #define FOP_SETCC(op) \
+> -	".align 4 \n\t" \
+> +	".align " __stringify(SETCC_ALIGN) " \n\t" \
+>  	".type " #op ", @function \n\t" \
+>  	#op ": \n\t" \
+>  	#op " %al \n\t" \
+> @@ -1047,7 +1050,7 @@ static int em_bsr_c(struct x86_emulate_ctxt *ctxt)
+>  static __always_inline u8 test_cc(unsigned int condition, unsigned long flags)
+>  {
+>  	u8 rc;
+> -	void (*fop)(void) = (void *)em_setcc + 4 * (condition & 0xf);
+> +	void (*fop)(void) = (void *)em_setcc + SETCC_ALIGN * (condition & 0xf);
+>  
+>  	flags = (flags & EFLAGS_MASK) | X86_EFLAGS_IF;
+>  	asm("push %[flags]; popf; " CALL_NOSPEC
+> -- 
+> 2.29.2
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
+
+-- 
+Jamie Heilman                     http://audible.transient.net/~jamie/

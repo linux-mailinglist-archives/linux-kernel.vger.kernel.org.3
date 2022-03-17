@@ -2,108 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A064DC4AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 596D54DC4BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbiCQLVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
+        id S232959AbiCQLX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiCQLVf (ORCPT
+        with ESMTP id S231824AbiCQLXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:21:35 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CB01E3E08;
-        Thu, 17 Mar 2022 04:20:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3231FCE21A0;
-        Thu, 17 Mar 2022 11:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 76C11C340EC;
-        Thu, 17 Mar 2022 11:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647516014;
-        bh=UIA6S5+bI123Q5sbQJDY+Ns5uSiqeYzaBozSAYu/4K4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Z3ZZuulDBrgB/ZWQVkelumI0w+sVh3lzG1cKOigLf8YoZK9+k8cvjEJXySuxHQwIU
-         YQHQTtsz4E61+EAylenGzmklJA1rnFMDYx2/5gtc3odgjHEEZrBmP/DMxQgmxVCuGT
-         dZNDIho6Y+6qiPRaAdOKORAabHPpN7fRk/YyJpmrj9PV3NgUzKl8PYyIFlW3hXIz2P
-         Ol/i8iXXw9xLFny2UuI1kc2+080I7bUgnibJJON2ktEBDjUuvPdt+pXhw2+AE4UI98
-         iuvnPoJg0Jlis2IRn2+Q9x6NHMURWfc1XzEcqCH8F8Jj2qVutzTh2HoRixN8o1aTJt
-         IPadvR/zYskIA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 59BE2EAC09C;
-        Thu, 17 Mar 2022 11:20:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 17 Mar 2022 07:23:25 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8C31E31AD;
+        Thu, 17 Mar 2022 04:22:08 -0700 (PDT)
+Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KK4Sk0txBzfYqQ;
+        Thu, 17 Mar 2022 19:20:38 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 17 Mar 2022 19:22:06 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 17 Mar 2022 19:22:05 +0800
+Subject: Re: [PATCH v9] block: cancel all throttled bios in del_gendisk()
+To:     Ming Lei <ming.lei@redhat.com>
+CC:     Christoph Hellwig <hch@infradead.org>, <tj@kernel.org>,
+        <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220210115637.1074927-1-yukuai3@huawei.com>
+ <YhuyBgZSS6m/Mwu6@infradead.org> <Yhxnkg0AEaj36t+a@T590>
+ <YhyYpWHGVhs3J/dk@infradead.org> <Yh31bQu3gbXoDBuK@T590>
+ <836f0686-4ac8-327d-2bab-64a762ea8673@huawei.com> <Yh6/dH2CERzsBPJd@T590>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <f46c8512-400b-144f-e2ba-c57cc895fca8@huawei.com>
+Date:   Thu, 17 Mar 2022 19:22:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <Yh6/dH2CERzsBPJd@T590>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5 1/5] Bluetooth: btmtksdio: Fix kernel oops in
- btmtksdio_interrupt
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <164751601436.15552.12891442472636759067.git-patchwork-notify@kernel.org>
-Date:   Thu, 17 Mar 2022 11:20:14 +0000
-References: <d4be9c9c1ce2757bad4df19885d605e97a1ceec8.1647472087.git.objelf@gmail.com>
-In-Reply-To: <d4be9c9c1ce2757bad4df19885d605e97a1ceec8.1647472087.git.objelf@gmail.com>
-To:     Sean Wang <sean.wang@mediatek.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
-        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
-        Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
-        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
-        frankgor@google.com, abhishekpandit@google.com,
-        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        yake.yang@mediatek.com
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+在 2022/03/02 8:51, Ming Lei 写道:
+> On Tue, Mar 01, 2022 at 09:54:28PM +0800, yukuai (C) wrote:
+>> 在 2022/03/01 18:29, Ming Lei 写道:
+>>> On Mon, Feb 28, 2022 at 01:40:53AM -0800, Christoph Hellwig wrote:
+>>>> On Mon, Feb 28, 2022 at 02:11:30PM +0800, Ming Lei wrote:
+>>>>>> FYI, this crashed left rigt and center when running xfstests with
+>>>>>> traces pointing to throtl_pending_timer_fn.
+>>>>>
+>>>>> Can you share the exact xfstests test(fs, test)? Or panic log?
+>>>>>
+>>>>> I can't reproduce it when running './check -g auto' on XFS, meantime
+>>>>> tracking throtl_pending_timer_fn().
+>>>>
+>>>>   From a quick run using f2fs:
+>>>>
+>>>> generic/081 files ... [  316.487861] run fstests generic/081 at 2022-02-28 09:38:40
+>>>
+>>> Thanks for providing the reproducer.
+>>>
+>>> The reason is that the pending timer is deleted in blkg's release
+>>> handler, so the timer can still be live after request queue is released.
+>>>
+>>> The patch of 'block: cancel all throttled bios in del_gendisk()' should just
+>>> make it easier to trigger.
+>>>
+>>> After patch of "block: move blkcg initialization/destroy into disk allocation/
+>>> release handler" lands, the issue can be fixed easily by:
 
-This series was applied to bluetooth/bluetooth-next.git (master)
-by Marcel Holtmann <marcel@holtmann.org>:
+Hi, Ming
 
-On Thu, 17 Mar 2022 07:15:19 +0800 you wrote:
-> From: Yake Yang <yake.yang@mediatek.com>
-> 
-> Fix the following kernel oops in btmtksdio_interrrupt
-> 
-> [   14.339134]  btmtksdio_interrupt+0x28/0x54
-> [   14.339139]  process_sdio_pending_irqs+0x68/0x1a0
-> [   14.339144]  sdio_irq_work+0x40/0x70
-> [   14.339154]  process_one_work+0x184/0x39c
-> [   14.339160]  worker_thread+0x228/0x3e8
-> [   14.339168]  kthread+0x148/0x3ac
-> [   14.339176]  ret_from_fork+0x10/0x30
-> 
-> [...]
+Now that the above patch is landed in linux-next, do you intend to fix
+the above problem? Or I can take over if you don't mind.
 
-Here is the summary with links:
-  - [v5,1/5] Bluetooth: btmtksdio: Fix kernel oops in btmtksdio_interrupt
-    https://git.kernel.org/bluetooth/bluetooth-next/c/496eab9dde9f
-  - [v5,2/5] Bluetooth: mt7921s: Set HCI_QUIRK_VALID_LE_STATES
-    https://git.kernel.org/bluetooth/bluetooth-next/c/aeeb8ed27062
-  - [v5,3/5] Bluetooth: mt7921s: Add .get_data_path_id
-    https://git.kernel.org/bluetooth/bluetooth-next/c/c844ce71d5be
-  - [v5,4/5] Bluetooth: mt7921s: Add .btmtk_get_codec_config_data
-    https://git.kernel.org/bluetooth/bluetooth-next/c/3cabc5ca2c9d
-  - [v5,5/5] Bluetooth: mt7921s: Add WBS support
-    https://git.kernel.org/bluetooth/bluetooth-next/c/255a55aaccb1
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Kuai

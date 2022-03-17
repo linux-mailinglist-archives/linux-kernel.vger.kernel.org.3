@@ -2,77 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2FC4DBBC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 01:29:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE344DBBCA
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 01:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354206AbiCQAae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 20:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
+        id S1354729AbiCQAbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 20:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354124AbiCQAaa (ORCPT
+        with ESMTP id S237889AbiCQAbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 20:30:30 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EFF1CB15;
-        Wed, 16 Mar 2022 17:29:15 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id z12-20020a17090ad78c00b001bf022b69d6so4050756pju.2;
-        Wed, 16 Mar 2022 17:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZWZ7JEAL1DE1LvgRX3uWuLKQwPRiB58gmhQLlKG1GL0=;
-        b=hQEZ3z2zvW6LDZb1FOtcB/Z5Ml8F/MMBihCYO7JC4NqXWVdgMI4YYRWpGo4MuOcEkT
-         5wBBk9O0n/yPi8OCM5GrZ1YE3w/bSaxI7CJDYVUnOaoSt0+HUa0ftK/pvhJ1TkIJMDGa
-         s5lZ68P5qzgHJ7KsAPP6+BHHKJzIkZu00nu6sYsx9esjYnQ9mOTEz8umK2g6GDgA2Mgx
-         NlLS642gdGy9ih9gf/sG9rwk/HeLSyexsqLUqUycz3mQDjUtKeE6sFJq35cEvsknuj5a
-         QO+BBHVyPUuI4lUS6DsH9rFY+vENdP7uSK6JOFbpTxDXH/8z0ODAl/RF7plJtyQTVFKp
-         b7KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZWZ7JEAL1DE1LvgRX3uWuLKQwPRiB58gmhQLlKG1GL0=;
-        b=gMAlj6CdVCVcGcrGn8EVxmNVONV1Q7gNNw/B4H+GZc47kVqCr94Y4cS+qlx4IIE1D+
-         4mQeE5bBFi6+uduhxGhrp0H5nfRYQITb8zMQ2gkpC+vISwBpwhGz35n/u/BuUeMELZWN
-         nMbxgMOYVJjrd/YD8tfsodttkU/Z0MxVBUE/CxOZbdGL2+lzVVeauW7mwSn+M5VrgWTD
-         fG3X2206FFw27FFgyqoXThS8YlL8DY3pPN4ZRWVhnTLNo7Kd5ZwxKl40X1XuII+DP9of
-         2Kztv2MeWnig/sykRMakUoTkPhXLCIwIiYIZMLRm6Ki3/4f8/6y3pJHmaPOIAL/Du3kr
-         fA0A==
-X-Gm-Message-State: AOAM531YzArqSyc/s2zvs5keu3ZEab/wyJn08D6Yw/Mg0t9SK2LIJy4+
-        q0WiqQrAjqzaVNcdFkYtFjk=
-X-Google-Smtp-Source: ABdhPJyqVMjKPtyWbcZMNiGxIdqe6xlBdoDkqLHl3sBZooawf6OQo1w2RitJWq1Br+5vDBkCvEo2gw==
-X-Received: by 2002:a17:90b:4b8a:b0:1c6:33b2:9d6a with SMTP id lr10-20020a17090b4b8a00b001c633b29d6amr2363205pjb.225.1647476954684;
-        Wed, 16 Mar 2022 17:29:14 -0700 (PDT)
-Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
-        by smtp.gmail.com with ESMTPSA id bh6-20020a056a00308600b004f6aa0367f6sm3744636pfb.118.2022.03.16.17.29.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 17:29:13 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Emma Anholt <emma@anholt.net>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/3] drm/msm: Add a way to override processes comm/cmdline
-Date:   Wed, 16 Mar 2022 17:29:45 -0700
-Message-Id: <20220317002950.193449-4-robdclark@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317002950.193449-1-robdclark@gmail.com>
-References: <20220317002950.193449-1-robdclark@gmail.com>
+        Wed, 16 Mar 2022 20:31:14 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130082.outbound.protection.outlook.com [40.107.13.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F891CB08;
+        Wed, 16 Mar 2022 17:29:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZGK10qNDwHgYq99UoFfg/5B9oOjGS3QAI6M1fuxO418fX9Krbu9ujlAvFWrIydXGUsccc03n6IFE41HKR+TqHqBhNzKqiivhy4AUgoZtxEkYTkBeyNUt3ZqaIfLGQ6pHNfkV96W2RooBIVHZ92ficpLepeAR942XMAOeGIxRLq+bTMInKZoEk5iumjtYATgRvihsWfFTvllP1JtszWGsTDZaIvmcZmwszWGZf1f/vgyLusDQs/aCclpDiBbjIqxEfYKeFPqjz8MubSf0UZkhNqw/f+9A28zXQGcAamYlXv0OVZtIxlpFzU69AJv4L9WD4aW/mtB8TSfTsi4in0W+eQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SBL54WwwKUevTElnw7rruh9QHblyRn+NZ6IJw6H0NB4=;
+ b=l2I/0BsMmSchJXFK5ghN5Jz1xtweBdGpem7RPV43GpKBiWqGCbjfbdIabYVvJfrhx0kQh0jF4rjXxrnkXcBPTOnQaB1VSe1i0DmEG/1sKkMqw8EnloOR4r/CXbeRhf2+ZuPL8/006pUI+lABDSbAxLnfttKQJ78MRXg9pCXUwtOFAG3Tv5+jTwYjg3TPkrHHmuTrq/5K8HVI1xVevoxCeAK4L3WCuzzB4o+Ulg7ZKt90UJRZJ2DJGPHG9sIxF6QICVKinSmt+3A/XgsWmXvH6CZKfGzmtvr8aRVy0CoAU1QxmVAGq+zueaBvH+YJZpR7lPT4epghGWMa9RuFJCN44Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SBL54WwwKUevTElnw7rruh9QHblyRn+NZ6IJw6H0NB4=;
+ b=XRNQBYKSUlu61V7MLNHJhkRSr+1G4v4jxbQo88XkACZf24+Dvsh8gpugOOgPIQNkVWwkBWJ/fXe02miVovz5asWz/mzFbiNzRbtqyEXOYEx6sRl8cM/+r+h941xtoNOmDzesE/le5rNiSlzQmR0WdJoGr48gn0WJfMZ34mgVDQQ=
+Received: from AS8PR04MB8676.eurprd04.prod.outlook.com (2603:10a6:20b:42b::10)
+ by AM9PR04MB8113.eurprd04.prod.outlook.com (2603:10a6:20b:3b5::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Thu, 17 Mar
+ 2022 00:29:55 +0000
+Received: from AS8PR04MB8676.eurprd04.prod.outlook.com
+ ([fe80::f4f1:fe49:d19e:4770]) by AS8PR04MB8676.eurprd04.prod.outlook.com
+ ([fe80::f4f1:fe49:d19e:4770%9]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
+ 00:29:55 +0000
+From:   Hongxing Zhu <hongxing.zhu@nxp.com>
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>
+CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH] PCI: imx6: Invoke the PHY exit function after PHY power
+ off
+Thread-Topic: [PATCH] PCI: imx6: Invoke the PHY exit function after PHY power
+ off
+Thread-Index: AQHYLsn7WwIs+ObiHUuj0vitQkpm3KzB1XKAgAD2A8A=
+Date:   Thu, 17 Mar 2022 00:29:55 +0000
+Message-ID: <AS8PR04MB86761853B899882338FCE8678C129@AS8PR04MB8676.eurprd04.prod.outlook.com>
+References: <1646289275-17813-1-git-send-email-hongxing.zhu@nxp.com>
+ <cf0943a1144e91048fc88fe9b11660bafe1a2d8d.camel@pengutronix.de>
+In-Reply-To: <cf0943a1144e91048fc88fe9b11660bafe1a2d8d.camel@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 90d70ed2-011e-4982-f8f2-08da07ad42b4
+x-ms-traffictypediagnostic: AM9PR04MB8113:EE_
+x-microsoft-antispam-prvs: <AM9PR04MB8113B63230CB28C1DE1D77FF8C129@AM9PR04MB8113.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KXjEw4FEoXrrk2KaJ9GO0qZfaup7WA/JrxYN1/z5np51tU4ksJ5E0lTjzJS+JHyi2RA3wtRxrhVD+srU3s7CIndxMdVXCu8xODnjUkZwnUu0xfLPKQnbq+OqH2ycBDQQElfh26vmc8/uAjbY5OdPU+z9dgd2kADHQ93eE8SvQfxwNNYpwHT/EWJApdGoP9NSYuKbeMel/u0yvhV1aDgl8LUp5RC/b4uPru+A0urgr1TVs78Ig5mavI9+zlHI7itFBWCAnmwULwES5daXk/9lTw4//I7JcM3X1vf3POdG9Q3ZvSJAbXa5v0fjpBHHXDMYVc5I9MB+rjDHmmEgT2mjGf81BpFOiKKk5OIb0/Ddkg19vgaKVLAyOU23slJ+aBGJ+nHbEswYabpnSBcRF+ZhoEDIslNYjyw2yaQrMJoLBdzGGZlA03QdvxSxTpb6MdeKIKnR7ihBGoEQlRO1QFThUMW1S/sQGVvQkAIQQV3rApELgif7rc3wY4lpqmztk1iW2uUFUqvjaybSGmXSqBGpACb78LmUYF77p2ima9CQLa9HIOlEfAF7S7HEcMSl5xv8pKmD7exHQdekrruUkbMFSK+D763gSx8kGnk6Src/AqH8lJVdL84F3HQ+0PI7Qx3gY6HpcRmkxOyLynd2aZdQ9+/twnNM3klhe81I2SesRcc0DlHrAjl8rmeT95r4NdjytOjFrZCGhWFX6ZTW4tqvfw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8676.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(8676002)(5660300002)(4326008)(2906002)(55016003)(38070700005)(508600001)(53546011)(76116006)(8936002)(66946007)(52536014)(66556008)(66476007)(64756008)(6506007)(66446008)(7696005)(44832011)(38100700002)(71200400001)(33656002)(86362001)(26005)(186003)(316002)(9686003)(54906003)(110136005)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TklCblJ3SWRVMlAzdUFOTUtNYlhvUUFiT2VUNklHYVFpYXVCN0hoZ2dTdVc3?=
+ =?utf-8?B?Q2tUVVdtRnYwSVFFcGh5M1ZuTWJZRDdKb2dJVmVjMWt2UVlJZWk2UXJaY1Vk?=
+ =?utf-8?B?bVhQWStKVDhON1N5ZllMMDdHc1Z3T3FFWmE5YmJQaXRyWU85ZklRRTVuQ3pK?=
+ =?utf-8?B?NjNIWmR6L1Vhd2RRcUhMa1JhQWZXbUh1M1RyU05sNVo3K25tZTNpck5RS043?=
+ =?utf-8?B?TzRXb1N1QzNZaFZ0OFpRak40aEYxbHMwYXZUdmQxNm51MHlhOW5NNE5OMlcz?=
+ =?utf-8?B?WUJmYWxSU3o5TjhVc1hCdEVUSmhYdm82WkQyYzhQa3V6RkRjM05wNDdLTjZT?=
+ =?utf-8?B?RklLb3JUamdFVDQzY2h5anhOSlN1UWxBMllnWUpvb1hjemE1c3FsWUE2N0dP?=
+ =?utf-8?B?ZUZobnBoZEp3NE5DdkdhYUNRM2NRV0dlWE9hRVZRQTlobjhaemx3MVZTT2Z0?=
+ =?utf-8?B?TEJ6d2VMZXI5Sk5TeWU2bXRZZHpsL09LYmtpekVlMTJUZjI3UnA5MnFlKy9o?=
+ =?utf-8?B?NnVjMFR4cDA5Uy9WWUV6VVU2azdXZ3psOFVGQVVNUFBQWGdMNFlVcmszNnd1?=
+ =?utf-8?B?VjBHakFsa1huWFQ0MzNocmdyTHBxMkdJbmh0SGtvNWRHU1QzOWl4bFQ1a3ht?=
+ =?utf-8?B?TktuMGNLNzFqUTZJU0lwQ0VwZlVpUkU5WCt2cksyeHNRNS9pV1pKbEg0RmN2?=
+ =?utf-8?B?NVhJSlRCRXN1V3VScFpselhnb1hWQ0E0T3VkallYc096RzNmTHdjNi9KV3Bs?=
+ =?utf-8?B?Q3dVTXJncmRlSktlQW9CUHBzLzNqSGRWb1J2eEFpamNPOG56Q3RGTVQ2TnRr?=
+ =?utf-8?B?U1ZCVTlDMmd5NW5jQkFlSGx4RC9WelJpVDVlbzVtbXBneUVOSi9zMEo1ZS9s?=
+ =?utf-8?B?TkdXZEVzbHJ1K2tRR3RxWnFQV1NLa2RVbFp4dWRnKzdGZjEwOFNzYzRjMVdt?=
+ =?utf-8?B?Qk1qTHgxaXdnQnRITUpHSTE1c054cmY4TDAxdHA0S3MyeEpCakdZSDJnZlIz?=
+ =?utf-8?B?eUJrb2FZN3pvTUlQR01idE42OU9HZGhHLzFJR2E2UUlaa1o5cjZqNTVXaDEz?=
+ =?utf-8?B?MEpFY0p1T3l3TXRXc2tkS3FFT2t4TmdJRFk3THQxZFQ3WnhhNUNpU2t0d1Zj?=
+ =?utf-8?B?bEpXcDBWdVVvV1dlWFY3ZW9MbTYwTDVmZjAzQ2tDNllMbUhvZUJSeldvcFNH?=
+ =?utf-8?B?OUxoUmFtTVlRc3pOeE15TnhoVHRGcXQva1ZvenE3MHdEbVpKZ0orc3FmTjlq?=
+ =?utf-8?B?UE5CTURibzFuMUpvRmFsYVF3UENsRFAySWFUUlNxQmdFMVRURDJzS09YdC9t?=
+ =?utf-8?B?NkdOc29zeldoT3dYNjZCTlFUdU96bk0vUkgrWDFGT1FqVU5DSXpxbkpyc1N4?=
+ =?utf-8?B?Lys0d3AwYzRLZEdtNDd2L2dHU0JlWldnM25zbFpia0VtbDNFcU1ycWtnVlI0?=
+ =?utf-8?B?di84ZDZ2aHB0L2lSSVczV011cWc5NC9mL0loVi9aQXVBTnVpRnkyRVRCZjNx?=
+ =?utf-8?B?VEw0SXZGK2dRN3dUZ0hhWkZWRjNjWnFaeVU2L1pFMlE0SGJKeEZnb2hURkpz?=
+ =?utf-8?B?ZFFrQVV0cE5rZS9kUW5KYW03ZE9tWFdiMkpPN1MrV3hyUTVNbWRsSTE2RmhD?=
+ =?utf-8?B?SzBtUm55N2xlWHM0a0ViZ3hnLzk2cVFNcjNSTG8xd1c3SnBJemJ0RFdreFI0?=
+ =?utf-8?B?L3c0aFAxRHUxb2h5cURiVlBTUWpnTjRydFNmdU5UaVFTVW5HRDU1MUhnR0tx?=
+ =?utf-8?B?MXhYQlpMM2dveXVPZCthTjV6TEZ6OGN3dU1mRXVEQWxpM2t3SjRDeitSb1Rh?=
+ =?utf-8?B?azd6ZHRXdW42MjlSdTNoalVEeGFiSWs2UFZVZnIzWEV2Sm9NNTgzRHR4UTlG?=
+ =?utf-8?B?ZlNlZFpUSnZlWkZnbmdkN0s3alhKR2FQR01YUTA3QVZuUzdBVUwyUmNoeUhX?=
+ =?utf-8?Q?BKKGtW2KkpUgCmJuruwSiWL2C9mzp7wn?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8676.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90d70ed2-011e-4982-f8f2-08da07ad42b4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2022 00:29:55.5302
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LaXsGGd7VF7G0HrosqzuOLaiScEiuvew/0md4Poy2mmV6KciUD8UOwLdfl6G06FN1TDz5PoBvcVbosQEPBoGWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8113
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,146 +131,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
-
-In the cause of using the GPU via virtgpu, the host side process is
-really a sort of proxy, and not terribly interesting from the PoV of
-crash/fault logging.  Add a way to override these per process so that
-we can see the guest process's name.
-
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/adreno/adreno_gpu.c | 40 +++++++++++++++++++++++--
- drivers/gpu/drm/msm/msm_gpu.c           | 11 +++++--
- drivers/gpu/drm/msm/msm_gpu.h           |  6 ++++
- drivers/gpu/drm/msm/msm_submitqueue.c   |  2 ++
- include/uapi/drm/msm_drm.h              |  2 ++
- 5 files changed, 56 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-index 3d307b34854d..c68dc9c722c7 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-@@ -290,11 +290,45 @@ int adreno_get_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
- int adreno_set_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
- 		     uint32_t param, uint64_t value, uint32_t len)
- {
--	/* No pointer params yet */
--	if (len != 0)
--		return -EINVAL;
-+	switch (param) {
-+	case MSM_PARAM_COMM:
-+	case MSM_PARAM_CMDLINE:
-+		/* kstrdup_quotable_cmdline() limits to PAGE_SIZE, so
-+		 * that should be a reasonable upper bound
-+		 */
-+		if (len > PAGE_SIZE)
-+			return -EINVAL;
-+		break;
-+	default:
-+		if (len != 0)
-+			return -EINVAL;
-+	}
- 
- 	switch (param) {
-+	case MSM_PARAM_COMM:
-+	case MSM_PARAM_CMDLINE: {
-+		char *str, **paramp;
-+
-+		str = kmalloc(len + 1, GFP_KERNEL);
-+		if (copy_from_user(str, u64_to_user_ptr(value), len)) {
-+			kfree(str);
-+			return -EFAULT;
-+		}
-+
-+		/* Ensure string is null terminated: */
-+		str[len] = '\0';
-+
-+		if (param == MSM_PARAM_COMM) {
-+			paramp = &ctx->comm;
-+		} else {
-+			paramp = &ctx->cmdline;
-+		}
-+
-+		kfree(*paramp);
-+		*paramp = str;
-+
-+		return 0;
-+	}
- 	case MSM_PARAM_SYSPROF:
- 		if (!capable(CAP_SYS_ADMIN))
- 			return -EPERM;
-diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-index 4ec62b601adc..68f3f8ade76d 100644
---- a/drivers/gpu/drm/msm/msm_gpu.c
-+++ b/drivers/gpu/drm/msm/msm_gpu.c
-@@ -364,14 +364,21 @@ static void retire_submits(struct msm_gpu *gpu);
- 
- static void get_comm_cmdline(struct msm_gem_submit *submit, char **comm, char **cmd)
- {
-+	struct msm_file_private *ctx = submit->queue->ctx;
- 	struct task_struct *task;
- 
-+	*comm = kstrdup(ctx->comm, GFP_KERNEL);
-+	*cmd  = kstrdup(ctx->cmdline, GFP_KERNEL);
-+
- 	task = get_pid_task(submit->pid, PIDTYPE_PID);
- 	if (!task)
- 		return;
- 
--	*comm = kstrdup(task->comm, GFP_KERNEL);
--	*cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
-+	if (!*comm)
-+		*comm = kstrdup(task->comm, GFP_KERNEL);
-+
-+	if (!*cmd)
-+		*cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
- 
- 	put_task_struct(task);
- }
-diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-index c28c2ad9f52e..2c0203fd6ce3 100644
---- a/drivers/gpu/drm/msm/msm_gpu.h
-+++ b/drivers/gpu/drm/msm/msm_gpu.h
-@@ -355,6 +355,12 @@ struct msm_file_private {
- 	 */
- 	int sysprof;
- 
-+	/** comm: Overridden task comm, see MSM_PARAM_COMM */
-+	char *comm;
-+
-+	/** cmdline: Overridden task cmdline, see MSM_PARAM_CMDLINE */
-+	char *cmdline;
-+
- 	/**
- 	 * elapsed:
- 	 *
-diff --git a/drivers/gpu/drm/msm/msm_submitqueue.c b/drivers/gpu/drm/msm/msm_submitqueue.c
-index 79b6ccd6ce64..f486a3cd4e55 100644
---- a/drivers/gpu/drm/msm/msm_submitqueue.c
-+++ b/drivers/gpu/drm/msm/msm_submitqueue.c
-@@ -61,6 +61,8 @@ void __msm_file_private_destroy(struct kref *kref)
- 	}
- 
- 	msm_gem_address_space_put(ctx->aspace);
-+	kfree(ctx->comm);
-+	kfree(ctx->cmdline);
- 	kfree(ctx);
- }
- 
-diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
-index 0aa1a8cb4e0d..794ad1948497 100644
---- a/include/uapi/drm/msm_drm.h
-+++ b/include/uapi/drm/msm_drm.h
-@@ -82,6 +82,8 @@ struct drm_msm_timespec {
- #define MSM_PARAM_FAULTS     0x09  /* RO */
- #define MSM_PARAM_SUSPENDS   0x0a  /* RO */
- #define MSM_PARAM_SYSPROF    0x0b  /* WO: 1 preserves perfcntrs, 2 also disables suspend */
-+#define MSM_PARAM_COMM       0x0c  /* WO: override for task->comm */
-+#define MSM_PARAM_CMDLINE    0x0d  /* WO: override for task cmdline */
- 
- /* For backwards compat.  The original support for preemption was based on
-  * a single ring per priority level so # of priority levels equals the #
--- 
-2.35.1
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBMdWNhcyBTdGFjaCA8bC5zdGFj
+aEBwZW5ndXRyb25peC5kZT4NCj4gU2VudDogMjAyMuW5tDPmnIgxNuaXpSAxNzozOA0KPiBUbzog
+SG9uZ3hpbmcgWmh1IDxob25neGluZy56aHVAbnhwLmNvbT47IGJoZWxnYWFzQGdvb2dsZS5jb207
+DQo+IGxvcmVuem8ucGllcmFsaXNpQGFybS5jb20NCj4gQ2M6IGxpbnV4LXBjaUB2Z2VyLmtlcm5l
+bC5vcmc7IGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsNCj4gbGludXgta2Vy
+bmVsQHZnZXIua2VybmVsLm9yZzsga2VybmVsQHBlbmd1dHJvbml4LmRlOyBkbC1saW51eC1pbXgN
+Cj4gPGxpbnV4LWlteEBueHAuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSBQQ0k6IGlteDY6
+IEludm9rZSB0aGUgUEhZIGV4aXQgZnVuY3Rpb24gYWZ0ZXIgUEhZIHBvd2VyDQo+IG9mZg0KPiAN
+Cj4gQW0gRG9ubmVyc3RhZywgZGVtIDAzLjAzLjIwMjIgdW0gMTQ6MzQgKzA4MDAgc2NocmllYiBS
+aWNoYXJkIFpodToNCj4gPiBUbyBiYWxhbmNlIHBoeS0+aW5pdF9jb3VudCwgaW52b2tlIHRoZSBw
+aHlfZXhpdCgpIGFmdGVyIHBoeV9wb3dlcl9vZmYoKS4NCj4gPg0KPiBUaGlzIGxvb2tzIG9rYXkg
+YXMgYSBmaXgsIGJ1dCBvdmVyYWxsIEkgZG9uJ3QgbGlrZSB0aGF0IHdlIG5lZWQgdG8gaGF2ZSBz
+cGVjaWFsIFBIWQ0KPiBoYW5kbGluZyBpbiB0aGUgc3VzcGVuZCBwYXRoIGFuZCBQSFkgaW5pdCBo
+aWRkZW4gaW4NCj4gaW14Nl9wY2llX2Fzc2VydF9jb3JlX3Jlc2V0KCkgaW4gdGhlIHJlc3VtZSBw
+YXRoLiBNYXliZSB3ZSBjYW4gbWFrZSB0aGlzDQo+IFBIWSBoYW5kbGluZyBhIGJpdCBtb3JlIG9i
+dmlvdXMgYnkgc3BsaXR0aW5nIGl0IG91dCBvZiB0aGUgY29yZSByZXNldCBzZXF1ZW5jZS4gSQ0K
+PiBkb24ndCBzZWUgdGhlIGZ1bGwgaW1wbGljYXRpb25zIG9mIHN1Y2ggYSBjaGFuZ2UgeWV0LCBi
+dXQgSSB0aGluayB3ZSBzaG91bGQgYXQNCj4gbGVhc3QgZ2l2ZSBpdCBhIHRyeS4NCj4gDQo+IEZv
+ciBub3csIHRoaXMgcGF0Y2ggaXM6DQo+IFJldmlld2VkLWJ5OiBMdWNhcyBTdGFjaCA8bC5zdGFj
+aEBwZW5ndXRyb25peC5kZT4NCkhpIEx1Y2FzOg0KVGhhbmtzIGZvciB5b3VyIHJldmlldyBjb21t
+ZW50Lg0KQWdyZWUgd2l0aCB5b3UsIHRoZSBQSFkgaGFuZGxpbmcgc2hvdWxkbid0IGJlIGluY2x1
+ZGUgaW4gdGhlIHJlc2V0IGZ1bmN0aW9uLg0KSSB3b3VsZCBwbGFuIHRvIHJlZmluZSB0aGUgUEhZ
+IGhhbmRsaW5nIGFmdGVyIHRoaXMgZml4Lg0KDQpCZXN0IFJlZ2FyZHMNClJpY2hhcmQgWmh1DQoN
+Cj4gDQo+ID4gRml4ZXM6IDE3OGUyNDRjYjZlMiAoIlBDSTogaW14OiBBZGQgdGhlIGlteDhtbSBw
+Y2llIHN1cHBvcnQiKQ0KPiA+IFNpZ25lZC1vZmYtYnk6IFJpY2hhcmQgWmh1IDxob25neGluZy56
+aHVAbnhwLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy9wY2kvY29udHJvbGxlci9kd2MvcGNp
+LWlteDYuYyB8IDEgKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCj4gPg0K
+PiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BjaS9jb250cm9sbGVyL2R3Yy9wY2ktaW14Ni5jDQo+
+ID4gYi9kcml2ZXJzL3BjaS9jb250cm9sbGVyL2R3Yy9wY2ktaW14Ni5jDQo+ID4gaW5kZXggMzMx
+NDkwNjE0ZDU1Li4zNDNmZTE0MjllM2MgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9wY2kvY29u
+dHJvbGxlci9kd2MvcGNpLWlteDYuYw0KPiA+ICsrKyBiL2RyaXZlcnMvcGNpL2NvbnRyb2xsZXIv
+ZHdjL3BjaS1pbXg2LmMNCj4gPiBAQCAtOTczLDYgKzk3Myw3IEBAIHN0YXRpYyBpbnQgaW14Nl9w
+Y2llX3N1c3BlbmRfbm9pcnEoc3RydWN0IGRldmljZQ0KPiAqZGV2KQ0KPiA+ICAJY2FzZSBJTVg4
+TU06DQo+ID4gIAkJaWYgKHBoeV9wb3dlcl9vZmYoaW14Nl9wY2llLT5waHkpKQ0KPiA+ICAJCQlk
+ZXZfZXJyKGRldiwgInVuYWJsZSB0byBwb3dlciBvZmYgUEhZXG4iKTsNCj4gPiArCQlwaHlfZXhp
+dChpbXg2X3BjaWUtPnBoeSk7DQo+ID4gIAkJYnJlYWs7DQo+ID4gIAlkZWZhdWx0Og0KPiA+ICAJ
+CWJyZWFrOw0KPiANCg0K

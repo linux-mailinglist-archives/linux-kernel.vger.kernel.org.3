@@ -2,80 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0F94DD0B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 010034DD0B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiCQW0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 18:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
+        id S229687AbiCQW0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 18:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiCQW0n (ORCPT
+        with ESMTP id S229750AbiCQW0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 18:26:43 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B12023455A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:25:25 -0700 (PDT)
-Received: from fsav111.sakura.ne.jp (fsav111.sakura.ne.jp [27.133.134.238])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 22HMP86Y092082;
-        Fri, 18 Mar 2022 07:25:08 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav111.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp);
- Fri, 18 Mar 2022 07:25:08 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 22HMP7Bj092075
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 18 Mar 2022 07:25:08 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <d1ed2184-00ee-9756-5ad2-7c8189634748@I-love.SAKURA.ne.jp>
-Date:   Fri, 18 Mar 2022 07:25:04 +0900
+        Thu, 17 Mar 2022 18:26:46 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E4C235741
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:25:27 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id dr20so13297533ejc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=he5SYi2i8fnJsV9XJ7BjYt6CsD8atydpjeDiU4Eqw2I=;
+        b=CXw3IFQ1Fhhf/LJrTcBsPUQ7ryNjlpwia1KfOQuYTYdh/igOYUtvcWxOuRnd07Y2m6
+         zln98DPcLhv3iy/H0+c6zhaEbOQXsuc4k7i5LcZWki1+QokVmpe0NBW+CGqHAFy8IUlF
+         B0V+f/RXCC7M4h4IIsieOnQ3FPOOzUnMW/xjY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=he5SYi2i8fnJsV9XJ7BjYt6CsD8atydpjeDiU4Eqw2I=;
+        b=PI5+McBzM1qIuGmwpNELvzH0Fg/yv4j46ZdvA+XC0q1hsac8+8fAgEp4OOkFDA8x0D
+         BUgq3FW7ICcEbRk18g1w+HAw9DaumjDYfQ5osUJrYmuJaj+cZ5etgyTqa89nPZ09aIXO
+         Jp3Pl/sXHJQydQ6PAdJU80e1WjMmyjxV0zfCXmrbv1Uv71TwglJ986RiyoSUwJ9apYX6
+         wSnYRfjR+hPKNk1MczNlZldnqOtEu+8aQJID9yXIpO4BLeXmhpj3e03h88uQhbsLKXYV
+         yCAanLgMSc7+R6ghZXK5aexfVjSmyttv/zUcxNpcHVbY3szeUsEudp6eaw6ZBgOy8ylX
+         oPqA==
+X-Gm-Message-State: AOAM531HFCihMzgYAR6BpqWZkLnb9C7P9u0reiZmytcR0rpPU+/4V0B+
+        R8KAzgWOe1prZcansurulZGY6A==
+X-Google-Smtp-Source: ABdhPJxgX/wXd+34bhzCk9cw+jFEVE6cMoRGT/ICO7kBqqHpet4BknKxAsc0UhhsSs69Alq7gUbZnw==
+X-Received: by 2002:a17:906:c18c:b0:6d5:8518:e567 with SMTP id g12-20020a170906c18c00b006d58518e567mr6319063ejz.37.1647555926042;
+        Thu, 17 Mar 2022 15:25:26 -0700 (PDT)
+Received: from capella.. (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id m24-20020a170906161800b006d420027b63sm2949654ejd.18.2022.03.17.15.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 15:25:25 -0700 (PDT)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     Abel Vesa <abel.vesa@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: imx: add clock bindings for i.MX8MN GPT
+Date:   Thu, 17 Mar 2022 23:25:20 +0100
+Message-Id: <20220317222521.170762-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3] workqueue: Warn flushing of kernel-global workqueues
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        lkp@lists.01.org, kernel test robot <oliver.sang@intel.com>
-References: <20220221083358.GC835@xsang-OptiPlex-9020>
- <3a20c799-c18e-dd3a-3161-fee6bca1491e@I-love.SAKURA.ne.jp>
- <YhUdjip4VSWe4zDO@slm.duckdns.org>
- <16a33a65-3c67-ef66-ccc8-9c4fffb0ae5a@I-love.SAKURA.ne.jp>
- <YhaoDiJ8MUOhRmp6@slm.duckdns.org>
- <9a883d72-ea7d-1936-93e6-5c2a290509d4@I-love.SAKURA.ne.jp>
- <Yha1LeX4OK3cLCV5@slm.duckdns.org>
- <4165db50-1365-549a-eb77-6122c78d4814@I-love.SAKURA.ne.jp>
- <Yh0XmUtuuyaO9j8j@slm.duckdns.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <Yh0XmUtuuyaO9j8j@slm.duckdns.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/03/01 3:42, Tejun Heo wrote:
-> On Mon, Feb 28, 2022 at 11:03:47PM +0900, Tetsuo Handa wrote:
->> Then, what about this?
->> If this looks OK, I'll test this patch using linux-next via my tree.
-> 
-> Yeah, looks good to me. Can you boot test and fix the obvious ones before
-> the pushing it to linux-next? It probably would be best if this is kept in a
-> separate branch together with all the fix-up patches. Once things settle
-> enough, we should be able to route the patches through the wq tree to Linus.
-> 
-> Thank you so much for doing this.
-> 
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-This patch has been in linux-next.git as commit b9c20da356db1b39 ("workqueue:
-Warn flushing of kernel-global workqueues") since next-20220301, and I got no
-failure reports. I think we can send this patch to linux.git in order to let
-each module's developers to write their patches. (I will drop this patch from
-my tree when you pick up this patch.)
+The i.MX8MN has a General Purpose Timer (GPT) just like the i.MX8MM,
+which already has such bindings. Add the relevant bindings for the Nano
+SoC too.
+
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+---
+ include/dt-bindings/clock/imx8mn-clock.h | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/include/dt-bindings/clock/imx8mn-clock.h b/include/dt-bindings/clock/imx8mn-clock.h
+index 01e8bab1d767..07b8a282c268 100644
+--- a/include/dt-bindings/clock/imx8mn-clock.h
++++ b/include/dt-bindings/clock/imx8mn-clock.h
+@@ -243,6 +243,20 @@
+ 
+ #define IMX8MN_CLK_M7_CORE			221
+ 
+-#define IMX8MN_CLK_END				222
++#define IMX8MN_CLK_GPT_3M			222
++#define IMX8MN_CLK_GPT1				223
++#define IMX8MN_CLK_GPT1_ROOT			224
++#define IMX8MN_CLK_GPT2				225
++#define IMX8MN_CLK_GPT2_ROOT			226
++#define IMX8MN_CLK_GPT3				227
++#define IMX8MN_CLK_GPT3_ROOT			228
++#define IMX8MN_CLK_GPT4				229
++#define IMX8MN_CLK_GPT4_ROOT			230
++#define IMX8MN_CLK_GPT5				231
++#define IMX8MN_CLK_GPT5_ROOT			232
++#define IMX8MN_CLK_GPT6				233
++#define IMX8MN_CLK_GPT6_ROOT			234
++
++#define IMX8MN_CLK_END				235
+ 
+ #endif
+-- 
+2.35.1
+

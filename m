@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CB64DC6A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A454DC71A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234034AbiCQMzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
+        id S230304AbiCQM4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbiCQMwh (ORCPT
+        with ESMTP id S234641AbiCQMxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:52:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C9A1F1D11;
-        Thu, 17 Mar 2022 05:50:14 -0700 (PDT)
+        Thu, 17 Mar 2022 08:53:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84A31F42F9;
+        Thu, 17 Mar 2022 05:51:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99783614AF;
-        Thu, 17 Mar 2022 12:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A41B0C340ED;
-        Thu, 17 Mar 2022 12:50:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9AF7BB81E5C;
+        Thu, 17 Mar 2022 12:51:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D021EC340E9;
+        Thu, 17 Mar 2022 12:51:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521413;
-        bh=Q7TxT+Qahmke/4FB6D+uOUHQd94SguoBT2wBn7Wh2p4=;
+        s=korg; t=1647521480;
+        bh=uupnt2lHilMC53ou54V1UvD3QXZW+C7+LxzkOSFd6Zo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QHO0693l4ZBE8yX4v5vFuV9HWVeePeYhwXHmP+uhiYlJz15RHbBP2jleC+f7RIr4f
-         ym2uFCMqw7ySNRRuCOBnwmSXXeDF0WuUDqohnMLAiuwtvYdLYJRW27X/lk9BsME9U1
-         zgUcHmtTddAh1zR/S6zLSckya+MR2ss8frFqnYEk=
+        b=jFKXzkHw+M7eFYAld6Zc4HuDGj5OS2RJI1E/CtDx5g8u7yV6gZTT0ArQvhQJqMnj3
+         0PmMzHQWETYIZTDJ+a0yu8F73vVZj/t7qkKJFInbJqIbV7Ov8Ya01qKk6LFfNhPlbS
+         wUjs3OATjpvRW01bYtwTfqQWxXFdlZYejZ+a1JFw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@denx.de>, James Morse <james.morse@arm.com>
-Subject: [PATCH 5.10 23/23] arm64: kvm: Fix copy-and-paste error in bhb templates for v5.10 stable
-Date:   Thu, 17 Mar 2022 13:46:04 +0100
-Message-Id: <20220317124526.627536148@linuxfoundation.org>
+        stable@vger.kernel.org, Jani Nikula <jani.nikula@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, dri-devel@lists.freedesktop.org,
+        Manasi Navare <manasi.d.navare@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 18/25] drm/vrr: Set VRR capable prop only if it is attached to connector
+Date:   Thu, 17 Mar 2022 13:46:05 +0100
+Message-Id: <20220317124526.828551088@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317124525.955110315@linuxfoundation.org>
-References: <20220317124525.955110315@linuxfoundation.org>
+In-Reply-To: <20220317124526.308079100@linuxfoundation.org>
+References: <20220317124526.308079100@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,44 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Morse <james.morse@arm.com>
+From: Manasi Navare <manasi.d.navare@intel.com>
 
-KVM's infrastructure for spectre mitigations in the vectors in v5.10 and
-earlier is different, it uses templates which are used to build a set of
-vectors at runtime.
+[ Upstream commit 62929726ef0ec72cbbe9440c5d125d4278b99894 ]
 
-There are two copy-and-paste errors in the templates: __spectre_bhb_loop_k24
-should loop 24 times and __spectre_bhb_loop_k32 32.
+VRR capable property is not attached by default to the connector
+It is attached only if VRR is supported.
+So if the driver tries to call drm core set prop function without
+it being attached that causes NULL dereference.
 
-Fix these.
-
-Reported-by: Pavel Machek <pavel@denx.de>
-Link: https://lore.kernel.org/all/20220310234858.GB16308@amd/
-Signed-off-by: James Morse <james.morse@arm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jani Nikula <jani.nikula@intel.com>
+Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: Manasi Navare <manasi.d.navare@intel.com>
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220225013055.9282-1-manasi.d.navare@intel.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/kvm/hyp/smccc_wa.S |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/drm_connector.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/arch/arm64/kvm/hyp/smccc_wa.S
-+++ b/arch/arm64/kvm/hyp/smccc_wa.S
-@@ -68,7 +68,7 @@ SYM_DATA_START(__spectre_bhb_loop_k24)
- 	esb
- 	sub	sp, sp, #(8 * 2)
- 	stp	x0, x1, [sp, #(8 * 0)]
--	mov	x0, #8
-+	mov	x0, #24
- 2:	b	. + 4
- 	subs	x0, x0, #1
- 	b.ne	2b
-@@ -85,7 +85,7 @@ SYM_DATA_START(__spectre_bhb_loop_k32)
- 	esb
- 	sub	sp, sp, #(8 * 2)
- 	stp	x0, x1, [sp, #(8 * 0)]
--	mov	x0, #8
-+	mov	x0, #32
- 2:	b	. + 4
- 	subs	x0, x0, #1
- 	b.ne	2b
+diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+index 2ba257b1ae20..e9b7926d9b66 100644
+--- a/drivers/gpu/drm/drm_connector.c
++++ b/drivers/gpu/drm/drm_connector.c
+@@ -2233,6 +2233,9 @@ EXPORT_SYMBOL(drm_connector_atomic_hdr_metadata_equal);
+ void drm_connector_set_vrr_capable_property(
+ 		struct drm_connector *connector, bool capable)
+ {
++	if (!connector->vrr_capable_property)
++		return;
++
+ 	drm_object_property_set_value(&connector->base,
+ 				      connector->vrr_capable_property,
+ 				      capable);
+-- 
+2.34.1
+
 
 

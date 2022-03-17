@@ -2,105 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 945A74DBD68
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 04:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE574DBD6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 04:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358527AbiCQDMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 23:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
+        id S230261AbiCQDUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 23:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358520AbiCQDL5 (ORCPT
+        with ESMTP id S229551AbiCQDUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 23:11:57 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DEB21272
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 20:10:41 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id t11so5540381wrm.5
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 20:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U4Cs871ryV3jskArlUJXNj/tgZDn1LSZklEa26kOZ1c=;
-        b=Mm0GSMqaQyv0EPiuAIPo+8UUsDKGk7BSCXjML4fwUhA7o4ncIZ/IfZzhYBRuOYKFFK
-         mfjjR6ySkLHqqr/lO3syWnnka1dSl6KWxCVDTKMXefWiOqKR1GiUx1vYTpw+v6SH5fCS
-         xocd+GVbstnngxmvzfazk+La1ldqjGMH4XNn2+fXSnjj9JbJeGKpjMpFa/Ec3/MfPICl
-         HnjA38IrgBYQAJ19rNjs7a42wqIDYaYZFi4zC+wiVSUSg+TdOpiKrQYih1rk/6k0BAE6
-         k8hrZeleEUsMgXP9gIm9Cd44dV8VN/F5u7R5kqKjZaQvBe2nR3r8i36n3RzOXmsT+g1x
-         4YXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U4Cs871ryV3jskArlUJXNj/tgZDn1LSZklEa26kOZ1c=;
-        b=S/7yBJlmTWTtixVVBTjoxa20cIJ7CHqGaTKVBpO+YZjn5Cq06qxtL6WnoZEGya6YqO
-         0xKMBX43Urtr0VmYl2QJT1AzkiuWR6d51PvVia3xvjKdbndNhIxjY0usQr5GkwbeEpXz
-         KbXWjKolhnuVYx3y6rWbG25drWQVjbCah+VuPRW6M9q0HH2M2uWStVBBf2YFtb9BzUsn
-         MSKI95ZIFa4AyBG1imvjnyXOdDPbasL33NidWmvO8ZGasB/Li5Dc7RuD4H4H8Nfc7+K4
-         HaAUwtRmesb3OOuA8j9EuiLYXF5j1FnWQtYvyyFIbKbUYzoDjFoHJrSycgSrQI1aGaM6
-         tq0w==
-X-Gm-Message-State: AOAM532dKUDvhxBRG8xZbNkV7jGt9B/J0n3B2UXzCBxLVy5IRkybFW31
-        Wu3ce38hMt0GMLxZ1ZUE9eDM67QNnPVMn916GXrhGvkbf/LCNA==
-X-Google-Smtp-Source: ABdhPJxUEpbLmZwl6Sw1kWg+uL3XJMn9zOtRkxxlnIJ8gwPfHabGLQ0spsfin5WGxjTjObtVf2p60c7BcCBRX3yyX5U=
-X-Received: by 2002:a05:6000:11d0:b0:1f1:f6ea:f9a with SMTP id
- i16-20020a05600011d000b001f1f6ea0f9amr2226315wrx.40.1647486640162; Wed, 16
- Mar 2022 20:10:40 -0700 (PDT)
+        Wed, 16 Mar 2022 23:20:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B6321255;
+        Wed, 16 Mar 2022 20:18:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE8C761336;
+        Thu, 17 Mar 2022 03:18:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 315FEC340EC;
+        Thu, 17 Mar 2022 03:18:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647487135;
+        bh=gvE3+/ElSE9yvoZpZIsRKB6D9Lnqy5SmG41P0Reg/AU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZQVy5cIVgYdNDSu0mjNhiXNloQ+KBPGaUD2ENJxZvAA59CDLtPeunLeckpW124o+J
+         wlRSAWRSyFdGkK8n7AKV6Eif59zXOjnma/q+ySUcIqVLalvwDtnKiC8GhT16erK85i
+         ljp3ocnqtPoDNb+JcXWb6T62KDc/59EaETsSQbebrvjLlq8rm1KdA4IzawX8JkhP24
+         3N9rPf3Rowsn/XTbXwaKWnVlolzUqG+0zNQ4wkSoVW0Se8YWq+AJYkWpTpNWn2ZkN4
+         2FyYVyAAol5MyPzajWMtZ9wVWYv+eRtxCDjtgksamYtWvdoc7FXES3sM9i2d19c1Xh
+         QrEqoshZefUFg==
+Date:   Wed, 16 Mar 2022 20:18:53 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     menglong8.dong@gmail.com, dsahern@kernel.org
+Cc:     pabeni@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
+        xeb@mail.ru, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
+        talalahmad@google.com, keescook@chromium.org, alobakin@pm.me,
+        flyingpeng@tencent.com, mengensun@tencent.com,
+        dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, benbjiang@tencent.com
+Subject: Re: [PATCH net-next v3 3/3] net: icmp: add reasons of the skb drops
+ to icmp protocol
+Message-ID: <20220316201853.0734280f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220316063148.700769-4-imagedong@tencent.com>
+References: <20220316063148.700769-1-imagedong@tencent.com>
+        <20220316063148.700769-4-imagedong@tencent.com>
 MIME-Version: 1.0
-References: <20220316232452.53062-1-colin.i.king@gmail.com>
-In-Reply-To: <20220316232452.53062-1-colin.i.king@gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 16 Mar 2022 20:10:28 -0700
-Message-ID: <CAP-5=fWA=OGggwz730ScghTmUqeWGSG3hXv2swCRKGafOOSiDg@mail.gmail.com>
-Subject: Re: [PATCH] perf build-id: Fix spelling mistake "Cant" -> "Can't"
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 4:25 PM Colin Ian King <colin.i.king@gmail.com> wrote:
->
-> There is a spelling mistake in a pr_err message. Fix it.
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+On Wed, 16 Mar 2022 14:31:48 +0800 menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> Replace kfree_skb() used in icmp_rcv() and icmpv6_rcv() with
+> kfree_skb_reason().
+> 
+> In order to get the reasons of the skb drops after icmp message handle,
+> we change the return type of 'handler()' in 'struct icmp_control' from
+> 'bool' to 'enum skb_drop_reason'. This may change its original
+> intention, as 'false' means failure, but 'SKB_NOT_DROPPED_YET' means
+> success now. Therefore, all 'handler' and the call of them need to be
+> handled. Following 'handler' functions are involved:
+> 
+> icmp_unreach()
+> icmp_redirect()
+> icmp_echo()
+> icmp_timestamp()
+> icmp_discard()
+> 
+> And following new drop reasons are added:
+> 
+> SKB_DROP_REASON_ICMP_CSUM
+> SKB_DROP_REASON_ICMP_TYPE
+> SKB_DROP_REASON_ICMP_BROADCAST
+> 
+> Reviewed-by: Hao Peng <flyingpeng@tencent.com>
+> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
 
-Acked-by: Ian Rogers <irogers@google.com>
+I guess this set raises the follow up question to Dave if adding 
+drop reasons to places with MIB exception stats means improving 
+the granularity or one MIB stat == one reason?
 
-Thanks,
-Ian
+> -bool ping_rcv(struct sk_buff *skb)
+> +enum skb_drop_reason ping_rcv(struct sk_buff *skb)
+>  {
+> +	enum skb_drop_reason reason = SKB_DROP_REASON_NO_SOCKET;
+>  	struct sock *sk;
+>  	struct net *net = dev_net(skb->dev);
+>  	struct icmphdr *icmph = icmp_hdr(skb);
+> -	bool rc = false;
+>  
+>  	/* We assume the packet has already been checked by icmp_rcv */
+>  
+> @@ -980,15 +980,17 @@ bool ping_rcv(struct sk_buff *skb)
+>  		struct sk_buff *skb2 = skb_clone(skb, GFP_ATOMIC);
+>  
+>  		pr_debug("rcv on socket %p\n", sk);
+> -		if (skb2 && !ping_queue_rcv_skb(sk, skb2))
+> -			rc = true;
+> +		if (skb2)
+> +			reason = __ping_queue_rcv_skb(sk, skb2);
+> +		else
+> +			reason = SKB_DROP_REASON_NOMEM;
+>  		sock_put(sk);
+>  	}
+>  
+> -	if (!rc)
+> +	if (reason)
+>  		pr_debug("no socket, dropping\n");
 
-> ---
->  tools/perf/util/build-id.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
-> index 7a5821c87f94..82f3d46bea70 100644
-> --- a/tools/perf/util/build-id.c
-> +++ b/tools/perf/util/build-id.c
-> @@ -762,7 +762,7 @@ build_id_cache__add(const char *sbuild_id, const char *name, const char *realnam
->
->                 len = readlink(linkname, path, sizeof(path) - 1);
->                 if (len <= 0) {
-> -                       pr_err("Cant read link: %s\n", linkname);
-> +                       pr_err("Can't read link: %s\n", linkname);
->                         goto out_free;
->                 }
->                 path[len] = '\0';
-> --
-> 2.35.1
->
+This is going to be printed on memory allocation failures now as well.

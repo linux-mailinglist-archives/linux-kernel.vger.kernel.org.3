@@ -2,59 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283C44DCCFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C98DF4DCD07
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237111AbiCQR4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 13:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
+        id S237115AbiCQR6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 13:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbiCQR4T (ORCPT
+        with ESMTP id S232658AbiCQR6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 13:56:19 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006F017ECFC;
-        Thu, 17 Mar 2022 10:55:01 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V7Sm1Zs_1647539695;
-Received: from IT-C02W23QPG8WN.local(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0V7Sm1Zs_1647539695)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 18 Mar 2022 01:54:57 +0800
-Subject: Re: [RESEND PATCH 2/2] perf/x86: improve the event scheduling to
- avoid unnecessary pmu_stop/start
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Wen Yang <simon.wy@alibaba-inc.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        mark rutland <mark.rutland@arm.com>,
-        jiri olsa <jolsa@redhat.com>,
-        namhyung kim <namhyung@kernel.org>,
-        borislav petkov <bp@alien8.de>, x86@kernel.org,
-        "h. peter anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220304110351.47731-1-simon.wy@alibaba-inc.com>
- <20220304110351.47731-2-simon.wy@alibaba-inc.com>
- <YiIyrFn7upPEouVt@hirez.programming.kicks-ass.net>
- <0c119da1-053b-a2d6-1579-8fb09dbe8e63@linux.alibaba.com>
- <YidREXNn2AtI3V1c@hirez.programming.kicks-ass.net>
- <271bc186-7ffb-33c8-4934-cda2beb94816@linux.alibaba.com>
- <Yi8fELo+k9gmkJIa@hirez.programming.kicks-ass.net>
-From:   Wen Yang <wenyang@linux.alibaba.com>
-Message-ID: <05861b8c-2c7c-ae89-613a-41fcace6a174@linux.alibaba.com>
-Date:   Fri, 18 Mar 2022 01:54:55 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <Yi8fELo+k9gmkJIa@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=gbk; format=flowed
+        Thu, 17 Mar 2022 13:58:46 -0400
+Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30041.outbound.protection.outlook.com [40.107.3.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FC621C04D;
+        Thu, 17 Mar 2022 10:57:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dw+DEMKuCzzrMQsSH6Jv+bwDT7QgdEBvg2gMlhS3vHUAJwZ5Hi5likhLjIx+DX8njXIe4ZM+ghjnq8+65nDCk04lG1x5hyjYEiJxD62Tu6eCd5HkjsX1DqTlFrSaju4GgwV7fPL5fZdmIwElssnuF7Fh4vZ63uysnWeKvAtxWzdi6psleDU0tVfU4IYc3BREtjbP6CrnLqrHWarhX0Tn4R05HwHZ8m06u4wY2THEUJB4PnByEbff+IHJ6/MtyyjuUBr5VIdLdAMNJ7ZSTqBUio50OT4CQ+3dFg3NPeKHiZtvRLBxZ8xOxCIjLxSjvd5DVP8o6a9hIrSoILBjsdJKpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3mnJeg77szbF/dXsBZhJmY/ndOf9sj8d1RoHZuLbOVw=;
+ b=CcbqQdK3WH2amqrfzpquGrZ3y3s2KPhGiX3DfSxZGdXf5oS/9Z6chI2EK2TbJDCVG+xrJQmdweLyDGYPMtDRTbkbGN/Zzj2nhbrlBlczVSsf6DL5Sk+hekWSaUqaZgk5sXLMaJpWP1UToAh5t7vadmywjWt32qlTt4X5F2P8lhpjX4kYqgtvZijprNiPYcsT4ux3KDgV7R/hkpldW/Me5hPe3z5VEPvATEe/Ta6aUY/2zCvDc848KMP0RDmhKCxVXf+7SJza3Iius+rmKWEQbHAmdBxe2Q6iuxpKRv1JgngcCoV+CKs58m1rKzu7rwzppfaonnxHe7pJHkAoDCJ6qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=orolia.com; dmarc=pass action=none header.from=orolia.com;
+ dkim=pass header.d=orolia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orolia.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3mnJeg77szbF/dXsBZhJmY/ndOf9sj8d1RoHZuLbOVw=;
+ b=A8pPvM5udFUPcp8pHsDnANkr2OWTgFy+dJ4pRT8wcKXlwZSCQ/nAcW8k3zvzL6eqNpujBVdk6ki0wpT6OPNHCX7sn3cIzX+5iqixwiZ8I+6uLgQf2cN4RcnYhTSSLWRH7+5+h+3BwSC/Y9/1W082mwBlrVd8gvxORhekBmoMZJQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=orolia.com;
+Received: from DB9P251MB0306.EURP251.PROD.OUTLOOK.COM (2603:10a6:10:2c8::20)
+ by DB9P251MB0171.EURP251.PROD.OUTLOOK.COM (2603:10a6:10:2c9::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Thu, 17 Mar
+ 2022 17:57:26 +0000
+Received: from DB9P251MB0306.EURP251.PROD.OUTLOOK.COM
+ ([fe80::8c51:a5d7:5136:9930]) by DB9P251MB0306.EURP251.PROD.OUTLOOK.COM
+ ([fe80::8c51:a5d7:5136:9930%9]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
+ 17:57:26 +0000
+From:   Olivier Dautricourt <olivier.dautricourt@orolia.com>
+To:     Stefan Roese <sr@denx.de>, Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Olivier Dautricourt <olivier.dautricourt@orolia.com>
+Subject: [PATCH 1/2] MAINTAINERS: update my email address
+Date:   Thu, 17 Mar 2022 18:56:55 +0100
+Message-Id: <85c4174fa162bd946ccf3e08dcfc9b83cfe69b5c.1647539776.git.olivier.dautricourt@orolia.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Type: text/plain
+X-ClientProxiedBy: PR0P264CA0096.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:100:18::36) To DB9P251MB0306.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:10:2c8::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d7469381-3d82-4a49-183d-08da083f9881
+X-MS-TrafficTypeDiagnostic: DB9P251MB0171:EE_
+X-Microsoft-Antispam-PRVS: <DB9P251MB0171C77FC961EB2DBEA22CDA8F129@DB9P251MB0171.EURP251.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +XK8qGnZs9bbDgPOuqU+yFa/n4/pwponZYnu1HmZhzfbih+Tghq8JF18pwzI1oqvGXiZCEDH5BYOnhtoFehJxU30+pLZiRUeGozllD9epu4dE66Jux6amzH8km0ObahWQdww/84HzqislhO8WDykE7+cC5WxMWRCrOTdkDwm+Dk53+VtL1s6ZoLnRJ28OcxsORTz4J8G4ak1owgm8ba/ZVXdTpnjfb7kM9sSp19kTcRuYoX/VNvbfl6SkGUOzXXCXNQxgzC0rkWTOTZLv+2ccRtns6JAFcU2bdoLMbMIUdewnKrl1eLwNKuUy24WzFGKUAsndWY66Lcds7PmlE5ZvAmDpycDdKTcQFJY2Lbb5qrGUVfxBjDkevSFRdsYfKRDwfLgEgpN3xaBCuxd+xgaklRDlnIssijpiZ+RP8pqT3BDvbODjRY3vhkxuklpQY52HX7iUllK3yb/K4Ls4rm9Rfr2B7HeCL5HI0HcS4ko6+w7sTo3XuGXuI5DLGg97D+RZQftdqTM5FyKGaWf4HAIJdkfiewntOYEI7NuztqacbY71UJWBZxVHVPnb9KakSeGrVj/pFW4F9Cop6koaXOtlCKU7EJqsFadaeCrMpU/kK5tfIkrTDLprYQPcXsp9Cgt1e1X1UZrcSm8fY1CMOG+0A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9P251MB0306.EURP251.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(52116002)(86362001)(15650500001)(2906002)(508600001)(6666004)(6486002)(316002)(6506007)(110136005)(186003)(107886003)(2616005)(36756003)(83380400001)(4326008)(8676002)(66476007)(66946007)(66556008)(38100700002)(44832011)(5660300002)(4744005)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UQJHgZqXGe6LR5GWKCpfjzlVKVMP//JCJYzfaCigDb4ufWEu1Uc4/cugG2LQ?=
+ =?us-ascii?Q?Jf8xVLeMp7RRdmYMowqzuNDMmWOHqAvkVsROho8NH0GU/MY/kNvzaNDBb69S?=
+ =?us-ascii?Q?7Rs44ILh2fZ+flNVdJO81vXdHw3z0aVYw7w2qrVCilbRPsoYOR0MWd3h4YK0?=
+ =?us-ascii?Q?sQCs6ksLlMvqflLzLABp8cn0EitsDSuNVmbCMpxBBIqWVaHaRi3oBMOgwV/Y?=
+ =?us-ascii?Q?IaVNXns+HnZAgD86sv6eP+yw5H5x0IJUOjuCskxP/STwt+fjfTInO//V3J4F?=
+ =?us-ascii?Q?W4++cNt7wC1W8UrUHufs10EALQTj9T3IvYdC5Jv2U3lcWj1r8xa+2BWXF3nI?=
+ =?us-ascii?Q?T7fmacwjwoNh9tOvz1MLGhYn+aqpbHuw3YwFtqNRqaYiJRbODWe6zJMKBOaW?=
+ =?us-ascii?Q?GWnf8Fe3sEG8rsJUHpIkKK9asifacU9IAOe51sRc27seWJGNP+mjrC45GhS3?=
+ =?us-ascii?Q?BfFoKZAZWvRRxzVLlNELlZ5KmjnXWiI+UuqBxgOZFDbBCW0tzPGjCvNtEzTR?=
+ =?us-ascii?Q?p27bwn4wspoKjFx2SyysjgixmH1WYn+zSNnPXkGyu0CU2nuXN/e1rAqyEGa4?=
+ =?us-ascii?Q?0TNaaMUbpnBDpSaICHNLC4VZscr7eXtN8Lr734Orzck71SM8RL1dZLL1CriV?=
+ =?us-ascii?Q?0st02kFIjkSysBseczYjiUuw3fhPJAJJ0Gu+O2RvRHe1pak0gopPbXdw2dwB?=
+ =?us-ascii?Q?9WAoyJzIJekIaocyo/SSzmMjCEhg5x13BdDA9NisYVY9awPSNtl7IL2G/Wn1?=
+ =?us-ascii?Q?nSSnqgvgjheq4fUMEqIS1+7BZnbRI60gR6d2vt2rRcHSnMhALVsYXW4NhRze?=
+ =?us-ascii?Q?PvuoQ9jHc9BLT4IAGX4evbo6XBXR5YjrVcv4AWylpQ3EUXw/NLo2qqALc2xp?=
+ =?us-ascii?Q?zbzc57vtWJfGsjbakAe22+JYONuPxBj5ChXsFhgp7fP3Ucy8/vQEp8sCSdTK?=
+ =?us-ascii?Q?tIFzA3xfI4BUIOvMowN5+SmNbWDLdHmPUqoSw3/fAdGSC3rlqYmdPjeCTGd8?=
+ =?us-ascii?Q?cBb7nJ410D9dRkJgF6byDFaxd3XNfoeEeSvXRitYBYocLyKKHEBG48m0B5kk?=
+ =?us-ascii?Q?c2X65kSSzJSLmdn5vQvsM/U0vkXZOIEPl0nm5Cgx1hpzL/NFFyCCbJjicL8S?=
+ =?us-ascii?Q?QMQBIO4RNLIf3Lnb/0slmtha4rQUaUcIqQDW370pPd/h949JBP0Y1JNyy3tV?=
+ =?us-ascii?Q?+6Iy56bKLxAsWOI4HbPrGK4A6PtEASHZzkNY0RdSFph2PPTt+OIHFEZ2qBjh?=
+ =?us-ascii?Q?te87V/sh4/F9yqE2QluJpyKOKF12+MekyXclBp1ui86D9GbAftBrsek4bDXF?=
+ =?us-ascii?Q?RJl/hwxs38fZcmN2grT8ccyixYFqIvkeUj90iytLByTZl2+lS2uxVI/ePvLv?=
+ =?us-ascii?Q?F+dkC8Gz/BTth0oIjq83AvOk7HjA+32uFANc8x7wjgWlggEe9fcZjuRumpzM?=
+ =?us-ascii?Q?hKCFPCx8a8mPfyKy39GjbDxg41kTVwMEuiUWsD4slU7r8OKxcKHZiDXFNF61?=
+ =?us-ascii?Q?LueuMjwwt3grPROoFEiD3A5t7wYGQU5tr+7JZ9FqQRhs2tI9JdXL8uioOiNC?=
+ =?us-ascii?Q?8nj8/88yW3TK7Cx0Xcs=3D?=
+X-OriginatorOrg: orolia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7469381-3d82-4a49-183d-08da083f9881
+X-MS-Exchange-CrossTenant-AuthSource: DB9P251MB0306.EURP251.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2022 17:57:26.2468
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a263030c-9c1b-421f-9471-1dec0b29c664
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ktfbEfWzqOH78/z2EWLKymCCzrN9q7Kdm2QIlx83AV3NmMIP7//ccm8o9869oreKzTuAOq+mIbmu/sW4trRm0ZKiGRZUr00JTTiVtYdhZ3Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9P251MB0171
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,166 +115,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This email should now be used to contact me.
 
+Signed-off-by: Olivier Dautricourt <olivier.dautricourt@orolia.com>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-ÔÚ 2022/3/14 ÏÂÎç6:55, Peter Zijlstra Ð´µÀ:
-> On Thu, Mar 10, 2022 at 11:50:33AM +0800, Wen Yang wrote:
-> 
->> As you pointed out, some non-compliant rdpmc can cause problems. But you
->> also know that linux is the foundation of cloud servers, and many
->> third-party programs run on it (we don't have any code for it), and we can
->> only observe that the monitoring data will jitter abnormally (the
->> probability of this issue is not high, about dozens of tens of thousands of
->> machines).
-> 
-> This might be a novel insight, but I *really* don't give a crap about
-> any of that. If they're not using it right, they get to keep the pieces.
-> 
-> I'd almost make it reschedule more to force them to fix their stuff.
-> 
-
-
-Thank you for your guidance.
-
-We also found a case in thousands of servers where the PMU counter is no 
-longer updated due to frequent x86_pmu_stop/x86_pmu_start.
-
-We added logs in the kernel and found that a third-party program would 
-cause the PMU counter to start/stop several times in just a few seconds, 
-as follows:
-
-
-[8993460.537776] XXX x86_pmu_stop line=1388 [cpu1] active_mask=100000001 
-event=ffff880a53411000, state=1, attr.type=0, attr.config=0x0, 
-attr.pinned=1, hw.idx=3, hw.prev_count=0x802a877ef302, 
-hw.period_left=0x7fd578810cfe, event.count=0x14db802a877ecab4, 
-event.prev_count=0x14db802a877ecab4
-[8993460.915873] XXX x86_pmu_start line=1312 [cpu1] 
-active_mask=200000008 event=ffff880a53411000, state=1, attr.type=0, 
-attr.config=0x0, attr.pinned=1, hw.idx=3, 
-hw.prev_count=0xffff802a9cf6a166, hw.period_left=0x7fd563095e9a, 
-event.count=0x14db802a9cf67918, event.prev_count=0x14db802a9cf67918
-[8993461.104643] XXX x86_pmu_stop line=1388 [cpu1] active_mask=100000001 
-event=ffff880a53411000, state=1, attr.type=0, attr.config=0x0, 
-attr.pinned=1, hw.idx=3, hw.prev_count=0xffff802a9cf6a166, 
-hw.period_left=0x7fd563095e9a, event.count=0x14db802a9cf67918, 
-event.prev_count=0x14db802a9cf67918
-[8993461.442508] XXX x86_pmu_start line=1312 [cpu1] 
-active_mask=200000004 event=ffff880a53411000, state=1, attr.type=0, 
-attr.config=0x0, attr.pinned=1, hw.idx=2, 
-hw.prev_count=0xffff802a9cf8492e, hw.period_left=0x7fd56307b6d2, 
-event.count=0x14db802a9cf820e0, event.prev_count=0x14db802a9cf820e0
-[8993461.736927] XXX x86_pmu_stop line=1388 [cpu1] active_mask=100000001 
-event=ffff880a53411000, state=1, attr.type=0, attr.config=0x0, 
-attr.pinned=1, hw.idx=2, hw.prev_count=0xffff802a9cf8492e, 
-hw.period_left=0x7fd56307b6d2, event.count=0x14db802a9cf820e0, 
-event.prev_count=0x14db802a9cf820e0
-[8993461.983135] XXX x86_pmu_start line=1312 [cpu1] 
-active_mask=200000004 event=ffff880a53411000, state=1, attr.type=0, 
-attr.config=0x0, attr.pinned=1, hw.idx=2, 
-hw.prev_count=0xffff802a9cfc29ed, hw.period_left=0x7fd56303d613, 
-event.count=0x14db802a9cfc019f, event.prev_count=0x14db802a9cfc019f
-[8993462.274599] XXX x86_pmu_stop line=1388 [cpu1] active_mask=100000001 
-event=ffff880a53411000, state=1, attr.type=0, attr.config=0x0, 
-attr.pinned=1, hw.idx=2, hw.prev_count=0x802a9d24040e, 
-hw.period_left=0x7fd562dbfbf2, event.count=0x14db802a9d23dbc0, 
-event.prev_count=0x14db802a9d23dbc0
-[8993462.519488] XXX x86_pmu_start line=1312 [cpu1] 
-active_mask=200000004 event=ffff880a53411000, state=1, attr.type=0, 
-attr.config=0x0, attr.pinned=1, hw.idx=2, 
-hw.prev_count=0xffff802ab0bb4719, hw.period_left=0x7fd54f44b8e7, 
-event.count=0x14db802ab0bb1ecb, event.prev_count=0x14db802ab0bb1ecb
-[8993462.726929] XXX x86_pmu_stop line=1388 [cpu1] active_mask=100000003 
-event=ffff880a53411000, state=1, attr.type=0, attr.config=0x0, 
-attr.pinned=1, hw.idx=2, hw.prev_count=0xffff802ab0bb4719, 
-hw.period_left=0x7fd54f44b8e7, event.count=0x14db802ab0bb1ecb, 
-event.prev_count=0x14db802ab0bb1ecb
-[8993463.035674] XXX x86_pmu_start line=1312 [cpu1] 
-active_mask=200000008 event=ffff880a53411000, state=1, attr.type=0, 
-attr.config=0x0, attr.pinned=1, hw.idx=3, 
-hw.prev_count=0xffff802ab0bcd328, hw.period_left=0x7fd54f432cd8, 
-event.count=0x14db802ab0bcaada, event.prev_count=0x14db802ab0bcaada
-
-
-Then, the PMU counter will not be updated£º
-
-[8993463.333622] x86_perf_event_update, event=ffff880a53411000, 
-new_raw_count=802abea31354
-[8993463.359905] x86_perf_event_update [cpu1] active_mask=30000000f 
-event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
-hw.idx=3, hw.prev_count=0x802abea31354, hw.period_left=0x7fd5415cecac, 
-event.count=0x14db802abea2eb06,
-[8993463.504783] x86_perf_event_update, event=ffff880a53411000, 
-new_raw_count=802ad8760160
-[8993463.521138] x86_perf_event_update [cpu1] active_mask=30000000f 
-event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
-hw.idx=3, hw.prev_count=0x802ad8760160, hw.period_left=0x7fd52789fea0, 
-event.count=0x14db802ad875d912,
-[8993463.638337] x86_perf_event_update, event=ffff880a53411000, 
-new_raw_count=802aecb4747b
-[8993463.654441] x86_perf_event_update [cpu1] active_mask=30000000f 
-event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
-hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
-event.count=0x14db802aecb44c2d,
-[8993463.837321] x86_perf_event_update, event=ffff880a53411000, 
-new_raw_count=802aecb4747b
-[8993463.861625] x86_perf_event_update [cpu1] active_mask=30000000f 
-event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
-hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
-event.count=0x14db802aecb44c2d,
-[8993464.012398] x86_perf_event_update, event=ffff880a53411000, 
-new_raw_count=802aecb4747b
-[8993464.012402] x86_perf_event_update [cpu1] active_mask=30000000f 
-event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
-hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
-event.count=0x14db802aecb44c2d,
-[8993464.013676] x86_perf_event_update, event=ffff880a53411000, 
-new_raw_count=802aecb4747b
-[8993464.013678] x86_perf_event_update [cpu1] active_mask=30000000f 
-event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
-hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
-event.count=0x14db802aecb44c2d,
-[8993464.016123] x86_perf_event_update, event=ffff880a53411000, 
-new_raw_count=802aecb4747b
-[8993464.016125] x86_perf_event_update [cpu1] active_mask=30000000f 
-event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
-hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
-event.count=0x14db802aecb44c2d,
-[8993464.016196] x86_perf_event_update, event=ffff880a53411000, 
-new_raw_count=802aecb4747b
-[8993464.016199] x86_perf_event_update [cpu1] active_mask=30000000f 
-event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
-hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
-event.count=0x14db802aecb44c2d,
-
-......
-
-
-Until 6 seconds later, the counter is stopped/started again£º
-
-
-[8993470.243959] XXX x86_pmu_stop line=1388 [cpu1] active_mask=100000001 
-event=ffff880a53411000, state=1, attr.type=0, attr.config=0x0, 
-attr.pinned=1, hw.idx=3, hw.prev_count=0x802aecb4747b, 
-hw.period_left=0x7fd5134b8b85, event.count=0x14db802aecb44c2d, 
-event.prev_count=0x14db802aecb44c2d
-[8993470.243998] XXX x86_pmu_start line=1305 [cpu1] 
-active_mask=200000000 event=ffff880a53411000, state=1, attr.type=0, 
-attr.config=0x0, attr.pinned=1, hw.idx=3, 
-hw.prev_count=0xffff802aecb4747b, hw.period_left=0x7fd5134b8b85, 
-event.count=0x14db802aecb44c2d, event.prev_count=0x14db802aecb44c2d
-
-[8993470.245285] x86_perf_event_update, event=ffff880a53411000, 
-new_raw_count=802aece1e6f6
-
-...
-
-Such problems can be solved by avoiding unnecessary x86_pmu_{stop|start}.
-
-Please have a look again. Thanks.
-
---
-Best wishes,
-Wen
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e127c2fb08a7..4732ca997aca 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -811,7 +811,7 @@ S:	Maintained
+ F:	drivers/mailbox/mailbox-altera.c
+ 
+ ALTERA MSGDMA IP CORE DRIVER
+-M:	Olivier Dautricourt <olivier.dautricourt@orolia.com>
++M:	Olivier Dautricourt <olivierdautricourt@gmail.com>
+ R:	Stefan Roese <sr@denx.de>
+ L:	dmaengine@vger.kernel.org
+ S:	Odd Fixes
+-- 
+2.25.1
 

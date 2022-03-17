@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD3F4DC622
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E49E4DC624
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233923AbiCQMtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38390 "EHLO
+        id S233879AbiCQMtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233860AbiCQMtL (ORCPT
+        with ESMTP id S233819AbiCQMtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:49:11 -0400
+        Thu, 17 Mar 2022 08:49:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D176295A04;
-        Thu, 17 Mar 2022 05:47:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D92125C97;
+        Thu, 17 Mar 2022 05:47:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D10E61225;
-        Thu, 17 Mar 2022 12:47:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60D87C36AE3;
-        Thu, 17 Mar 2022 12:47:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E04486124B;
+        Thu, 17 Mar 2022 12:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE80DC340ED;
+        Thu, 17 Mar 2022 12:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521270;
-        bh=EKl5FZAf+evCGnOXZvSTKeNc1fIeTHR5JL1KpMANC8o=;
+        s=korg; t=1647521277;
+        bh=e6xzV0vMZzVnqvXtBRCAQHXo8mRMN5iWS2lmKY/9nj0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GFLGrweDN+Y0aFShhy/pt4J9TZm+SS6PjWjZtG55UVYUq3tuGKVPWmn/fkMqjwcBB
-         GXf0YmeDg0qNmaRDo0c0yCHYm2BXrr5NXSuorb5Og70e5C7XWeDm1hFcxeBuF+EndL
-         P4gi0Ql+qr2nJ/39oflT6w7WrAHWDA1XWvfLN33o=
+        b=bwPcCw7io7QSj6Fmp5naOMxIWTB5mnO1vxX0FyaW1lz7tHkr0sobfGTelno8MHGWg
+         LUveebqcch5HyPkNRAeWIqCBI/wnPrb+SQNoj1c7vXmSm3w0q6r90BWUMitlqlNF2g
+         ttpgmRwcg3lbzO+tIvl3jlnrm810X3IUuVpfSYOU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        stable@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 29/43] arm64: dts: agilex: use the compatible "intel,socfpga-agilex-hsotg"
-Date:   Thu, 17 Mar 2022 13:45:40 +0100
-Message-Id: <20220317124528.482796800@linuxfoundation.org>
+Subject: [PATCH 5.4 30/43] ARM: dts: rockchip: reorder rk322x hmdi clocks
+Date:   Thu, 17 Mar 2022 13:45:41 +0100
+Message-Id: <20220317124528.509539683@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220317124527.672236844@linuxfoundation.org>
 References: <20220317124527.672236844@linuxfoundation.org>
@@ -54,42 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dinh Nguyen <dinguyen@kernel.org>
+From: Sascha Hauer <s.hauer@pengutronix.de>
 
-[ Upstream commit 268a491aebc25e6dc7c618903b09ac3a2e8af530 ]
+[ Upstream commit be4e65bdffab5f588044325117df77dad7e9c45a ]
 
-The DWC2 USB controller on the Agilex platform does not support clock
-gating, so use the chip specific "intel,socfpga-agilex-hsotg"
-compatible.
+The binding specifies the clock order to "iahb", "isfr", "cec". Reorder
+the clocks accordingly.
 
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+Link: https://lore.kernel.org/r/20220210142353.3420859-1-s.hauer@pengutronix.de
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi | 4 ++--
+ arch/arm/boot/dts/rk322x.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-index d911d38877e5..19f17bb29e4b 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-@@ -369,7 +369,7 @@
- 		};
- 
- 		usb0: usb@ffb00000 {
--			compatible = "snps,dwc2";
-+			compatible = "intel,socfpga-agilex-hsotg", "snps,dwc2";
- 			reg = <0xffb00000 0x40000>;
- 			interrupts = <0 93 4>;
- 			phys = <&usbphy0>;
-@@ -381,7 +381,7 @@
- 		};
- 
- 		usb1: usb@ffb40000 {
--			compatible = "snps,dwc2";
-+			compatible = "intel,socfpga-agilex-hsotg", "snps,dwc2";
- 			reg = <0xffb40000 0x40000>;
- 			interrupts = <0 94 4>;
- 			phys = <&usbphy0>;
+diff --git a/arch/arm/boot/dts/rk322x.dtsi b/arch/arm/boot/dts/rk322x.dtsi
+index 140e22d74dcf..d393bb481e74 100644
+--- a/arch/arm/boot/dts/rk322x.dtsi
++++ b/arch/arm/boot/dts/rk322x.dtsi
+@@ -635,8 +635,8 @@
+ 		interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
+ 		assigned-clocks = <&cru SCLK_HDMI_PHY>;
+ 		assigned-clock-parents = <&hdmi_phy>;
+-		clocks = <&cru SCLK_HDMI_HDCP>, <&cru PCLK_HDMI_CTRL>, <&cru SCLK_HDMI_CEC>;
+-		clock-names = "isfr", "iahb", "cec";
++		clocks = <&cru PCLK_HDMI_CTRL>, <&cru SCLK_HDMI_HDCP>, <&cru SCLK_HDMI_CEC>;
++		clock-names = "iahb", "isfr", "cec";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&hdmii2c_xfer &hdmi_hpd &hdmi_cec>;
+ 		resets = <&cru SRST_HDMI_P>;
 -- 
 2.34.1
 

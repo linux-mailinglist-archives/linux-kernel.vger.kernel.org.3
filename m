@@ -2,73 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550884DC83D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A654DC84F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234893AbiCQODZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 10:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
+        id S234328AbiCQOFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 10:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbiCQOCq (ORCPT
+        with ESMTP id S233413AbiCQOFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 10:02:46 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DA11E5A48
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:01:22 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id x8-20020a17090a788800b001c662c78b4fso2450275pjk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:01:22 -0700 (PDT)
+        Thu, 17 Mar 2022 10:05:50 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BECBCAB;
+        Thu, 17 Mar 2022 07:04:34 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id j21so4449332qta.0;
+        Thu, 17 Mar 2022 07:04:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=AmXJz1T+DxTQ8cL3dWsBE4Euit10u/N4HtWuky6pYRE=;
-        b=V3L1f0OpwlX27SXl8xzlUHsJrCaxgwXpjZ+thrxdmTARlLRSDFFBJ+xnGGLhlQsqqr
-         tbkJyFaGSVmhVw5j9pAG34Rz8abgBSa0naQxCePa/cLUQx3nRMu9coTIGQ4vldyONv2K
-         CMCnM93OSf6m0LNZ8U8XdMEZoOuwaLPvngsPbxN4Uxw/Tb/OW4209S1m0e9ri3orbvU/
-         lAvYKhGN8KXNAv1FpIFUv/VOJSK3nG1Nx19pmWs7x5bECEHXR2C7f822KvYKqD5zP0M3
-         UaNy/efqhy+qXYIxgLxHYB/ZbLn/li1zjGa9muAEbrTmPYtEZKC3/t2JySghT+nFOyXe
-         LU9A==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=FL38fgvsvawpITDbC9x4Hhdt+mogk5h23hg/e1hTAsg=;
+        b=qUgi3dijFX91rXXgftDNfUYEzWuN2MlBVV/5I0nr+NxMuH19Rp30Sta9udsLgUGPYJ
+         wu/RIss1Sl3lgW3eCnGa0ZiEO9BEPRKervXIVp1+DwGuNX3e/wX/u9CpX/yQVUovDY2S
+         FLCpKBgYGBWtg/FTyxaNJsrc+7f7uw2l6q8vTtAGURNYNCG6MXzfMtNl7/FjtEFeeqwq
+         S0YTSXxUIUUXEXZF//wrtvWcEq0BUo/J/OWgx8mgRPvarUw8OGMhr7gFlg/SnjbFfJUn
+         f0z3ePFUjgWyV3xxof2MRdyZLbTUhw0DvPkvPPxJYw6keJvuwVOgQL/RB6ATDvEwweUF
+         FBGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=AmXJz1T+DxTQ8cL3dWsBE4Euit10u/N4HtWuky6pYRE=;
-        b=jdU1FCDLmbiHExhsnzLGhuOvowZC9sijmmmhYV9IV03oXIe1+orEwX/YwoCzERHRIF
-         r/shFD/IaOUJch1+nQfLkI4qnk6v8X/5QjxldZBn9yP/MsIwTrt2a73ZF4Ul2ldB9vwg
-         78Js1LuDymUrhWsQ/rk9A1EMPcFlpr5/LCJ0wLd39u1aXbabE39wiiXs5CPUrAnKm2bH
-         foZvhGZRN/Se3Rt3PUclxR1FQcI/0XOGXmZHuvlSi5LeqwYSLrQkQa+Tt13ywSTnnMM/
-         OvHPn98DyP5Wsg68yxNIRYpBZRb+EmC663madPEREKwAADCRNVK8iKaYZLxMIi5Mvozw
-         80mg==
-X-Gm-Message-State: AOAM531mR4RE9Irnu4cOyyaciB9vyW5ZhTLZJPaF4HHPZxqsjIAUDxvg
-        YfK51zoM+ZwlQ2lnAQzg5IVj5jsTs5D2
-X-Google-Smtp-Source: ABdhPJxvoaqHM4SNfI3emat8G4zJ6gXkRPEt1XpB5btefTfHzZkskzhJq8f5SToxX3rJ2wl3pkTrR0UzOIew
-X-Received: from ezekiel.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:108e])
- (user=shraash job=sendgmr) by 2002:a62:3896:0:b0:4f7:87dc:de5b with SMTP id
- f144-20020a623896000000b004f787dcde5bmr5201915pfa.49.1647525681892; Thu, 17
- Mar 2022 07:01:21 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 19:31:15 +0530
-Message-Id: <20220317140115.541007-1-shraash@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [PATCH] drm/amd/display: Fixed the unused-but-set-variable warning
-From:   Aashish Sharma <shraash@google.com>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>,
-        Jake Wang <haonan.wang2@amd.com>,
-        Anson Jacob <Anson.Jacob@amd.com>,
-        Guenter Roeck <groeck@chromium.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, Anthony Koo <Anthony.Koo@amd.com>,
-        Wayne Lin <wayne.lin@amd.com>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Aashish Sharma <shraash@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=FL38fgvsvawpITDbC9x4Hhdt+mogk5h23hg/e1hTAsg=;
+        b=U3vr77fXodTsmD8pJzvbHiozdd5o1q/4p0OnHIB/HE4NzPDYJzZLNRPhtouV//za2+
+         +anzWRWfzEsEoUjgqYAcHIHpO/wq1RAXCwO5/jMHobzhRtZZwne6YFCAAGEbyR1MwrD0
+         gh7D+XePZNQGNZPgkXbQS08p+oh1DBF46xF6uDc1gZqu5W/7ZXZDYKLEKYaadgik/ivx
+         pMb4y17HJ76mzi7iGFW+3MBUcHOTNBfdFTdIXnmFJ8uhN97M9ESZqtIPuyUKhcuKsuIh
+         8y9VBWN3yVVp85HXZNlaFexHZlhLbviyFTJEyjX/md1PwIvPJGJgksNsUOnhu6O7ZqkT
+         nY6A==
+X-Gm-Message-State: AOAM530Qnc3DzXAvuP9hCRJcVug9LcY0L/9tKdDDteR4+QcVTKwhDn+r
+        HG4L/TAxoC03NRm37UIoHA0=
+X-Google-Smtp-Source: ABdhPJzxoaeAL+NryPJhrxknqODcVoYAVObjeqyZn7qk7WeVe42H5tavc1HD90UMV5DZDZr+HlNl+Q==
+X-Received: by 2002:ac8:5703:0:b0:2e1:edc3:cee1 with SMTP id 3-20020ac85703000000b002e1edc3cee1mr3806343qtw.645.1647525873618;
+        Thu, 17 Mar 2022 07:04:33 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id g5-20020ac87f45000000b002e125ef0ba3sm3595329qtk.82.2022.03.17.07.04.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 07:04:32 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 1187827C005A;
+        Thu, 17 Mar 2022 10:04:32 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 17 Mar 2022 10:04:32 -0400
+X-ME-Sender: <xms:6T8zYu4uu-GNUQDC2S3yRUFqdYa4GvQOHM_3uNFmTtiQsBXJJEkCjQ>
+    <xme:6T8zYn7rOjj_paIRL1uuurIJxOFOyNKglxDMRsMMChLcXQqfOUCWPBQvjwBf5gSVE
+    EEbmERvhoGRvveCqA>
+X-ME-Received: <xmr:6T8zYtfQMTTh482VhShqDIR63v9YB756e4SsVg2IvOlQdsJxHxqQ8wxiy8Bmnw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefgedgheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggugfgjsehtke
+    ertddttdejnecuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghes
+    ghhmrghilhdrtghomheqnecuggftrfgrthhtvghrnhepvddvkefhleetudejueehvedtfe
+    eufeehheefueektdehudefffelteeujedvjeeunecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrh
+    hsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgv
+    nhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:6j8zYrKB7jeA6fmdyQk80dDKggggeS4pFT1zW_WVfjv_aj7LMRqV-w>
+    <xmx:6j8zYiLpbkEYvybjlORHVG6PobvtU5tF_GoHdp9baGj_i6XlSkVFyg>
+    <xmx:6j8zYsxr7Gljzs6BQJmjNh4NgTWC42BwJAmWdwaJ6H0_sIuklNZrzQ>
+    <xmx:8D8zYkBc8wmOsGKQzmRBAaBxy86gwvj7I9kFBC-WI7rjQyGMeFpbMg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 17 Mar 2022 10:04:25 -0400 (EDT)
+Date:   Thu, 17 Mar 2022 22:03:59 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, lorenzo.pieralisi@arm.com,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] PCI: hv: Remove unused function
+ hv_set_msi_entry_from_desc()
+Message-ID: <YjM/z4vlPlVhdfMu@boqun-archlinux>
+References: <20220317085130.36388-1-yuehaibing@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220317085130.36388-1-yuehaibing@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,39 +100,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed this kernel test robot warning:
+On Thu, Mar 17, 2022 at 04:51:30PM +0800, YueHaibing wrote:
+> This patch fix the following build error:
+> 
+> drivers/pci/controller/pci-hyperv.c:769:13: error: ‘hv_set_msi_entry_from_desc’ defined but not used [-Werror=unused-function]
+>   769 | static void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
+> 
+> On arm64 hv_set_msi_entry_from_desc() is not used anymore since
+> commit d06957d7a692 ("PCI: hv: Avoid the retarget interrupt hypercall in irq_unmask() on ARM64").
+> 
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
-drivers/gpu/drm/amd/amdgpu/../display/dmub/inc/dmub_cmd.h:2893:12:
-warning: variable 'temp' set but not used [-Wunused-but-set-variable]
+Good catch!
 
-Replaced the assignment to the unused temp variable with READ_ONCE()
-macro to flush the writes.
+Acked-by: Boqun Feng <boqun.feng@gmail.com>
 
-Signed-off-by: Aashish Sharma <shraash@google.com>
----
- drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Regards,
+Boqun
 
-diff --git a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h b/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-index 873ecd04e01d..b7981a781701 100644
---- a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-+++ b/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-@@ -2913,13 +2913,12 @@ static inline void dmub_rb_flush_pending(const struct dmub_rb *rb)
- 	uint32_t wptr = rb->wrpt;
- 
- 	while (rptr != wptr) {
--		uint64_t volatile *data = (uint64_t volatile *)((uint8_t *)(rb->base_address) + rptr);
-+		uint64_t *data = (uint64_t volatile *)((uint8_t *)(rb->base_address) + rptr);
- 		//uint64_t volatile *p = (uint64_t volatile *)data;
--		uint64_t temp;
- 		uint8_t i;
- 
- 		for (i = 0; i < DMUB_RB_CMD_SIZE / sizeof(uint64_t); i++)
--			temp = *data++;
-+			(void)READ_ONCE(*data++);
- 
- 		rptr += DMUB_RB_CMD_SIZE;
- 		if (rptr >= rb->capacity)
--- 
-2.35.1.723.g4982287a31-goog
-
+> ---
+>  drivers/pci/controller/pci-hyperv.c | 8 --------
+>  1 file changed, 8 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index df84d221e3de..558b35aba610 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -766,14 +766,6 @@ static unsigned int hv_msi_get_int_vector(struct irq_data *irqd)
+>  	return irqd->parent_data->hwirq;
+>  }
+>  
+> -static void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
+> -				       struct msi_desc *msi_desc)
+> -{
+> -	msi_entry->address = ((u64)msi_desc->msg.address_hi << 32) |
+> -			      msi_desc->msg.address_lo;
+> -	msi_entry->data = msi_desc->msg.data;
+> -}
+> -
+>  /*
+>   * @nr_bm_irqs:		Indicates the number of IRQs that were allocated from
+>   *			the bitmap.
+> -- 
+> 2.17.1
+> 

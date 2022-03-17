@@ -2,69 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699374DBD2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 03:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 677424DBD30
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 03:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350978AbiCQCny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 22:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
+        id S1355447AbiCQCo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 22:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237943AbiCQCnw (ORCPT
+        with ESMTP id S236570AbiCQCo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 22:43:52 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5241201AC
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 19:42:36 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 17 Mar
- 2022 10:42:38 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 17 Mar
- 2022 10:42:34 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <benh@kernel.crashing.org>, <masahiroy@kernel.org>,
-        <adobriyan@gmail.com>
-CC:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        "Haowen Bai" <baihaowen@meizu.com>
-Subject: [PATCH] macintosh: windfarm_pm91: Fix warning comparing pointer to 0
-Date:   Thu, 17 Mar 2022 10:42:33 +0800
-Message-ID: <1647484953-15249-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 16 Mar 2022 22:44:27 -0400
+Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [203.148.12.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2D3DF96;
+        Wed, 16 Mar 2022 19:43:10 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
+ (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 17 Mar
+ 2022 10:43:07 +0800
+Received: from [10.29.8.49] (10.29.8.49) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 17 Mar
+ 2022 10:43:05 +0800
+Message-ID: <edfa2f91-80e9-fa05-3a91-9c22ce223f29@zhaoxin.com>
+Date:   Thu, 17 Mar 2022 10:43:04 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
+Content-Language: en-US
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
+        <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+References: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
+ <261420fb-28b4-0def-a9e1-9c011bab7912@linux.intel.com>
+ <1882dfc1-0f46-a594-d75b-b73d30f6d6db@zhaoxin.com>
+ <6c11dc4f-4984-e7aa-9fc5-7026100b38e1@linux.intel.com>
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+In-Reply-To: <6c11dc4f-4984-e7aa-9fc5-7026100b38e1@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.29.8.49]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid pointer type value compared with 0 to make code clear.
+On 2022/3/16 21:20, Mathias Nyman wrote:
+> On 15.3.2022 14.44, WeitaoWang-oc@zhaoxin.com wrote:
+>> On 2022/3/15 下午4:08, Mathias Nyman wrote:
+>>> On 14.3.2022 9.25, WeitaoWang-oc@zhaoxin.com wrote:
+>>>> On some situations, software handles TRB events slower than adding TRBs,
+>>>> xhci_irq will not exit until all events are handled. If xhci_irq just
+>>>> handles 256 TRBs and exit, the temp variable(event_ring_deq) driver records in xhci irq is equal to driver current dequeue pointer. It will cause driver not update ERDP and software dequeue pointer lost sync with ERDP. On the next xhci_irq, the event ring is full but driver will not update ERDP as software dequeue pointer is equal to ERDP.
+>>>>
+>>>> [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
+>>>> [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7 inflight: CMD OUT
+>>>> [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 00 00 08 00
+>>>> [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host not responding to stop endpoint command.
+>>>> [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
+>>>> [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not responding, assume dead
+>>>> [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6 inflight: CMD
+>>>> [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 00 00 08 00
+>>>> [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD
+>>>>
+>>>> Fixed this issue by update software record temp variable when handles 128 TRB events.>
+>>>> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+>>>
+>>> Thanks
+>>>
+>>> Solution itself looks good but patch has some minor format issue:
+>>>
+>>>
+>>> It would also be interesting to know if the full event ring was triggered in a real
+>>> life usecase?
+>>> If that is the case I might need to look more into it.
+>>>
+>>> Bigger event ring, more rings, faster handler, avoid irqoff time...
+>>>
+>>> Thanks
+>>> Mathias
+>>> .
+>> Some performance test tools such as fio or iometer can be used to reproduce
+>>   this case, If tested with 4KB read or write. xHCI will generate a lost TRB
+>>   events fast than software consume on a certain period of time. Once the interrupt is entered, software may handle more than 128 TRBs at a time.
+>> While the software is processing, xHCI is still generating events. This may
+>> has problems caused by the ERDP update mechanism. If update software
+>>   record temp variable when handles 128 TRB events, event ring full will not
+>>   happen any more even though fio test with 4KB read or write.
+>>
+>> Thanks
+>> Weitao Wang
+>>>
+> 
+> Thanks for the clarification.
+> 
+> Could you resubmit this after fixing the minor patch format issue?
+> Also make sure patch passes checkpatch test
+> 
+> Thanks
+> -Mathias
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/macintosh/windfarm_pm91.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+All right, I'll resubmit this patch.Thanks for your help.
 
-diff --git a/drivers/macintosh/windfarm_pm91.c b/drivers/macintosh/windfarm_pm91.c
-index 3f346af..568f8a2 100644
---- a/drivers/macintosh/windfarm_pm91.c
-+++ b/drivers/macintosh/windfarm_pm91.c
-@@ -149,7 +149,7 @@ static void wf_smu_create_cpu_fans(void)
- 
- 	/* First, locate the PID params in SMU SBD */
- 	hdr = smu_get_sdb_partition(SMU_SDB_CPUPIDDATA_ID, NULL);
--	if (hdr == 0) {
-+	if (!hdr) {
- 		printk(KERN_WARNING "windfarm: CPU PID fan config not found "
- 		       "max fan speed\n");
- 		goto fail;
--- 
-2.7.4
-
+Weitao Wang
+> .

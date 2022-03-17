@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0D04DCF5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E2D4DCF60
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiCQUdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
+        id S229713AbiCQUdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 16:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiCQUcv (ORCPT
+        with ESMTP id S229705AbiCQUde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:32:51 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F4518A3CF;
-        Thu, 17 Mar 2022 13:31:34 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 12so6803008oix.12;
-        Thu, 17 Mar 2022 13:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V4LhBNYnhdygc0CZZHH2ej2UF+qrm4ulwWEIxzmxAaw=;
-        b=dar6Vs3kjGkCthhBYvhfxSifJx9V/Ldg9ALQfn/DAwU7An1VoKquqdZhbmS/6Yzub9
-         QbqN6HXQaSgE3UTOC0oN+gejpLxQxIFQkHjs8hplnYWwKhvOvUAvtID/1WYMBW9s+t5h
-         dTBX6BdaXctfugE6/4qMa0PCgBsKKIMaBFLkf334qEAK3CI2SunnI+cHHTIiE366YE7U
-         taG1Hr1vOdFfqhube0rpis+ncHTP3XYWtFQIVMEcqqd4vGE0gXF8mOngvwLnnTHCxDFj
-         mjihcCmduqABv7XB10XJxA/Sp8ahuxiqPMTgjGm81S3JHjZhWiNjjWLPcxXiV6NpukQY
-         h3hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V4LhBNYnhdygc0CZZHH2ej2UF+qrm4ulwWEIxzmxAaw=;
-        b=zvHQhz7ZHwVeHYyANoai3bkzYeRapJ3CR8xi8Q5fLEd/8NXZxeJ+OIs06VLfdkP/XY
-         QC5Scwhw92KnX4pcX8InOW6uDNj0oUQlMxVZ+4QPiciUuq+IAU1DXL7mOkbnLIUoLCtX
-         JwO+bF9fkxLN0jxn+y1xAYiVWPrDk4qY3tgBovWOp+g7l/7d8ZwYgOijwtd2hrxJMUuO
-         x2BwUf0CrC2SSbB47Z3e66sKg0TOgK0Tb8BJ4jabYW9giDlxCGBPQn+tOYY27CN8nY+y
-         ueISN4TIeGTKB5bHLceljr645FgRKmzlL/3zWXkxr3Xah/39Zp5QN3JNGJ91PiijpPXL
-         eUjg==
-X-Gm-Message-State: AOAM5301ZbFPeeEV++lnBSVSqGrNsUtBARMMBz6Xw15vjUz1c9eWkXU2
-        lQtZVY+haY1oUYagZlvCpJstQr6GTc6GMMDCx78a15H6
-X-Google-Smtp-Source: ABdhPJzfXLl6CjRpcz/xsIrozszoM9Zxzo1ZghzalC9LjaTSEVZBWPtjOkaOWTRLElQXRVjGKWPWZU4nF/4n3UlgxUM=
-X-Received: by 2002:aca:d07:0:b0:2ec:eaaf:a036 with SMTP id
- 7-20020aca0d07000000b002eceaafa036mr2865348oin.253.1647549094217; Thu, 17 Mar
- 2022 13:31:34 -0700 (PDT)
+        Thu, 17 Mar 2022 16:33:34 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619ED18C0D6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:32:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647549138; x=1679085138;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=AEXJne/EhKcc7HM5kihV88ieb+qIyyW31oeTAwzgR+U=;
+  b=XnKUaNbk8wUPzTxiyjmEs9YhH9RNuAS0hJQKeNHyjjOWdd3Rtc2zjb7Z
+   2YgoP7j+OYyEA9AS/4Yewv0XZzpGAsU3pz9hAkgiXzvTCdPxGOzY4uaXE
+   UXAKeHrgLK0t+9gn5W0AkTrf/vINKzIOjgiG1REAPIQtNEVE8w5a6dk6l
+   rlVV+aszmeadwbt1tlxdQVxlI8rCii0hMsAN24O5GJNj+zZ972LP4mYTm
+   6O9cLYuNY+HgiQ59vGD1kja7PBUiMx5O4Tl2dLcexYf8pDOhRs4s4mKGZ
+   GOLxQnc2/lLQ8gRTT9o0bQupuR/BQHR29nbOfFA4lDBw1VFEMx9bc+WdW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="254532509"
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="254532509"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 13:32:18 -0700
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="516914989"
+Received: from dstanfie-mobl2.amr.corp.intel.com (HELO [10.212.178.19]) ([10.212.178.19])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 13:32:15 -0700
+Message-ID: <5b3bece3-5956-3116-a07c-a0b6f380fac8@intel.com>
+Date:   Thu, 17 Mar 2022 13:32:07 -0700
 MIME-Version: 1.0
-References: <20220315201959.2952327-1-colin.i.king@gmail.com>
-In-Reply-To: <20220315201959.2952327-1-colin.i.king@gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 17 Mar 2022 16:31:23 -0400
-Message-ID: <CADnq5_PE-zWB9Cjw05Pby44G-uNG4t8i09Z92-f9O_QiPo+HfQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: Fix spelling mistake "regiser" -> "register"
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
+        bp@alien8.de, luto@kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
+ <20220316020856.24435-8-kirill.shutemov@linux.intel.com>
+ <877d8t2ykp.ffs@tglx> <20220317173354.rqymufl37lcrtmjh@black.fi.intel.com>
+ <20220317202141.GO8939@worktop.programming.kicks-ass.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv6 07/30] x86/traps: Add #VE support for TDX guest
+In-Reply-To: <20220317202141.GO8939@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,32 +76,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On 3/17/22 13:21, Peter Zijlstra wrote:
+> From vague memories #VE can be raised on any memop, loading the stack
+> address in the syscall-gap is a memop. What makes that special? Can we
+> get a comment _there_ to explain how this is safe such that we can keep
+> it so?
 
-Alex
+#GP and #PF can be raised from any memop too.  But, we know that if we
+only touch normal, valid kernel mappings, we don't have to worry about them.
 
-On Tue, Mar 15, 2022 at 4:20 PM Colin Ian King <colin.i.king@gmail.com> wrote:
->
-> There is a spelling mistake in a dev_error error message. Fix it.
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
-> index a025f080aa6a..9aa355a5ac3c 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c
-> @@ -919,7 +919,7 @@ static u32 amdgpu_virt_rlcg_reg_rw(struct amdgpu_device *adev, u32 offset, u32 v
->                                                 "wrong operation type, rlcg failed to program reg: 0x%05x\n", offset);
->                                 } else if (tmp & AMDGPU_RLCG_REG_NOT_IN_RANGE) {
->                                         dev_err(adev->dev,
-> -                                               "regiser is not in range, rlcg failed to program reg: 0x%05x\n", offset);
-> +                                               "register is not in range, rlcg failed to program reg: 0x%05x\n", offset);
->                                 } else {
->                                         dev_err(adev->dev,
->                                                 "unknown error type, rlcg failed to program reg: 0x%05x\n", offset);
-> --
-> 2.35.1
->
+The memop rules to avoid #VE are basically the same, except they also
+include "TD-shared" memory.  But, "normal" kernel memory isn't ever
+shared because it's under the control of the untrusted hypervisor.  The
+kernel trusts shared memory like it trusts userspace-mapped memory.
+
+The kernel would be insane to, for instance, put its stack in
+userspace-writable memory.  The same goes for TD-shared memory.
+
+In the end, I'm asserting that we don't really have to be any more
+careful to avoid a #VE on a memory access than we are to avoid #GP and #PF.
+
+The TDX rules are *much* nicer than SEV.  They're also a lot nicer on
+TDX _now_ than they used to be.  There are a few stubborn people at
+Intel who managed to add some drops of sanity to the architecture.

@@ -2,133 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD074DC771
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF49E4DC89D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234457AbiCQNW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 09:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S230443AbiCQOVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 10:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiCQNW1 (ORCPT
+        with ESMTP id S234774AbiCQOVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:22:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DD41760E9;
-        Thu, 17 Mar 2022 06:21:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AAFF421108;
-        Thu, 17 Mar 2022 13:21:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1647523269; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OQSNVY5ry6JPZidVzTQekm/g7RGFWM3qtv5Uggb/ziA=;
-        b=bwSOJ2vnD+dtYYUcUSM425vvrfLnK63Y6Of6LE2Lch+TeaVLiBQWfEJnxVMEPuWzAPJWS2
-        T1RC/nJ8Pgk+wvrv6HRfB0RFeTlwJbK6J+KgmhX197lzYM6jcfCu55rvQgNDKDgBJUgKbJ
-        KzHZzk+1K3EzFF4fdxr2Ki9XMyX/CVE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1647523269;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OQSNVY5ry6JPZidVzTQekm/g7RGFWM3qtv5Uggb/ziA=;
-        b=iL4+jc8bcuBD9X4xuAYrd/i6+tbXXhs3vl91B0j4W5tP/aHmqf5q/VCABCDNEkFooR2qdp
-        5vDIeftzHCzeTEDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 631EB13BA9;
-        Thu, 17 Mar 2022 13:21:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id EpZKFsU1M2L4DQAAMHmgww
-        (envelope-from <jroedel@suse.de>); Thu, 17 Mar 2022 13:21:09 +0000
-Date:   Thu, 17 Mar 2022 14:21:08 +0100
-From:   Joerg Roedel <jroedel@suse.de>
-To:     Vasant Karasulli <vkarasulli@suse.de>
-Cc:     linux-kernel@vger.kernel.org, bp@alien8.de, kvm@vger.kernel.org,
-        x86@kernel.org, thomas.lendacky@amd.com,
-        Varad Gautam <varad.gautam@suse.com>
-Subject: Re: [PATCH v5 1/1] x86/test: Add a test for AMD SEV-ES #VC handling
-Message-ID: <YjM1xOzRVRjtnNvP@suse.de>
-References: <20220208162623.18368-1-vkarasulli@suse.de>
- <20220208162623.18368-2-vkarasulli@suse.de>
+        Thu, 17 Mar 2022 10:21:00 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A82169B0A
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:19:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647526783; x=1679062783;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=U6rXM0bflcprHQwN2TgyP68VKWMmXe8T0RivNVIeLO4=;
+  b=XhK0/ma0fVMn+oC1IzUwE3L/NdYquly8fiLkmLs3cd3Ng1bfzdlxzk6j
+   QsvH6g399I7I1nGmWRS47af6i4Fmi/Moe7enHxzmn3ocqX+7cbYX8tqeI
+   +VXiXat/Z9iUZJVLQz4RO0iuDzN3rHXL5v7ysx3pIl/PBAsGx5rYbDFou
+   K87dQ2c8QGfooFsnoQ1jVW1wlsbxGizFFTN9S0ETsmb/XEVovuvuKmHiE
+   ChJst1gfoO6FPXW2QZDo+rTsAio5laPKb7qQBeQfH75c/m0g26gFhNYf0
+   6GtYXGGUqTDauQL+gPeX+pBPM/KWJIRetIvA6Cvx5x2TWvyOuIRkAkiWa
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="320089294"
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="320089294"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 07:19:42 -0700
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="541385197"
+Received: from knavalgu-mobl1.gar.corp.intel.com (HELO [10.251.29.221]) ([10.251.29.221])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 07:19:41 -0700
+Message-ID: <1b955086-94d0-d524-4cd4-b177df56f71c@linux.intel.com>
+Date:   Thu, 17 Mar 2022 08:21:11 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220208162623.18368-2-vkarasulli@suse.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH] ASoC: SOF: topology: Use kmemdup() to replace kzalloc +
+ memcpy
+Content-Language: en-US
+To:     Yihao Han <hanyihao@vivo.com>, Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com
+References: <20220317093841.3414-1-hanyihao@vivo.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220317093841.3414-1-hanyihao@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vasant,
 
-thanks for submitting this.
 
-On Tue, Feb 08, 2022 at 05:26:23PM +0100, Vasant Karasulli wrote:
-> From: Varad Gautam <varad.gautam@suse.com>
+On 3/17/22 04:38, Yihao Han wrote:
+> fix memdup.cocci warning:
+> sound/soc/sof/topology.c:876:19-26: WARNING opportunity for kmemdup
 > 
-> Add a KUnit based test to validate Linux's VC handling, and introduce
-> a new CONFIG_X86_TESTS to cover such tests. The test:
-> 1. installs a kretprobe on the #VC handler (sev_es_ghcb_hv_call, to
->    access GHCB before/after the resulting VMGEXIT).
-> 2. triggers an NAE.
-> 3. checks that the kretprobe was hit with the right exit_code available
->    in GHCB.
+> Generated by: scripts/coccinelle/api/memdup.cocci
 > 
-> Since relying on kprobes, the test does not cover NMI contexts.
-> 
-> Signed-off-by: Varad Gautam <varad.gautam@suse.com>
-> Signed-off-by: Vasant Karasulli <vkarasulli@suse.de>
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+
+Thanks for the patch
+
+Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
 > ---
->  arch/x86/Kbuild              |   2 +
->  arch/x86/Kconfig.debug       |  16 ++++
->  arch/x86/kernel/Makefile     |   7 ++
->  arch/x86/tests/Makefile      |   3 +
->  arch/x86/tests/sev-test-vc.c | 154 +++++++++++++++++++++++++++++++++++
->  5 files changed, 182 insertions(+)
->  create mode 100644 arch/x86/tests/Makefile
->  create mode 100644 arch/x86/tests/sev-test-vc.c
-
-Can we split this up a bit? Say into an initial patch which adds
-arch/x86/tests/ and the Kconfig option and then three patches adding the
-tests:
-
-	1. Infrastructure and instruction-based tests (cpuid, wbinvd)
-	2. Register access tests (MSR, DR7)
-	3. IO tests (mmio, ioio)
-
-> +static void sev_es_nae_mmio(struct kunit *test)
-> +{
-> +	unsigned long lapic_ver_pa = 0xfee00030; /* APIC_DEFAULT_PHYS_BASE + APIC_LVR */
-
-Instead of the comment, please use the values directly to assign the
-variable.
-
-Regards,
-
--- 
-Jörg Rödel
-jroedel@suse.de
-
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5
-90409 Nürnberg
-Germany
- 
-(HRB 36809, AG Nürnberg)
-Geschäftsführer: Ivo Totev
-
+>   sound/soc/sof/topology.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/sound/soc/sof/topology.c b/sound/soc/sof/topology.c
+> index 367fbe2d5b31..369693cc6d10 100644
+> --- a/sound/soc/sof/topology.c
+> +++ b/sound/soc/sof/topology.c
+> @@ -873,11 +873,10 @@ static int sof_control_load_bytes(struct snd_soc_component *scomp,
+>   
+>   	/* copy the private data */
+>   	if (priv_size > 0) {
+> -		scontrol->priv = kzalloc(priv_size, GFP_KERNEL);
+> +		scontrol->priv = kmemdup(control->priv.data, priv_size, GFP_KERNEL);
+>   		if (!scontrol->priv)
+>   			return -ENOMEM;
+>   
+> -		memcpy(scontrol->priv, control->priv.data, priv_size);
+>   		scontrol->priv_size = priv_size;
+>   	}
+>   

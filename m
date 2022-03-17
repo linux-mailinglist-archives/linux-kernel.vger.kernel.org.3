@@ -2,216 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1E44DC716
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9234DC604
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235545AbiCQM7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
+        id S233676AbiCQMrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234210AbiCQMzV (ORCPT
+        with ESMTP id S231530AbiCQMrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:55:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A73BA27E9;
-        Thu, 17 Mar 2022 05:53:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1C51B81EA1;
-        Thu, 17 Mar 2022 12:53:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D67E2C36AE2;
-        Thu, 17 Mar 2022 12:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521630;
-        bh=ttqHx00Pz/KQ4MnXgN1hjdqSE3T+gxajqzQTE81Z/74=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ym+yOjqntpe+Yxyme7l/EJK1rh1T18cy0yX1BjCDdJgXgkYODQyUp/Sc9Ol9KkYOQ
-         VPCV7WuChRK6DBKQvk6v3Dd/+Gc3+20kraukInrZ3SI6SAltBnX3gaftQFiO2TPv67
-         +EBDsclOsZM2nysqcGYINnAxDFMsR+7HDLOMO/E0=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ivan Vecera <ivecera@redhat.com>,
-        Petr Oros <poros@redhat.com>,
-        Dave Ertman <david.m.ertman@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.16 28/28] ice: Fix race condition during interface enslave
-Date:   Thu, 17 Mar 2022 13:46:19 +0100
-Message-Id: <20220317124527.562546441@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317124526.768423926@linuxfoundation.org>
-References: <20220317124526.768423926@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Thu, 17 Mar 2022 08:47:47 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89CF105074
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:46:30 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647521189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6UWSnFJfyk89o7rv8EPIFwEm6EdPuHp5eJF4BxTz6A8=;
+        b=mjxI6T6gLnySTe1LlKvUeulr1uJ4VHy0kpoQCCrtNohrfOd6vplkmnchXxeYzaJbtodgZN
+        gIP61eEs4VbeI3SDPMFEVhUSeysggJjrmZDzxABjL+bnlEqHUMCwdG7blMtNg+oMtU9IoQ
+        cgV+SqrCHUBwBDcen/Z6CpDV6iSjkOaIpmlO6fsw0iPmpMY/qFBZt1ZZQsiomlVWaKtwCA
+        HGlRrB35F/iL+0AS9VLSt6zDaasJTQNe9JoiTooLXDkMZfICc3xIA43CRyaD4fEgwL6+iH
+        /aZNOywuZX7wUm79urqpekgHgNVotd1o+SgphkCgXEUBt9g41BiHgzpdC0wbag==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647521189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6UWSnFJfyk89o7rv8EPIFwEm6EdPuHp5eJF4BxTz6A8=;
+        b=4BgG7RPsmYMViCMUP1fWipHpMA9zfS8Rc4HcliVU1B6LyhfbBa5IWLMv6o2KFb03/dQtni
+        CDXY1s+CnmVyHsDA==
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCHv6 22/30] x86/boot: Set CR0.NE early and keep it set
+ during the boot
+In-Reply-To: <20220316020856.24435-23-kirill.shutemov@linux.intel.com>
+References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
+ <20220316020856.24435-23-kirill.shutemov@linux.intel.com>
+Date:   Thu, 17 Mar 2022 13:46:29 +0100
+Message-ID: <87wngszqze.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ivan Vecera <ivecera@redhat.com>
+On Wed, Mar 16 2022 at 05:08, Kirill A. Shutemov wrote:
+> Make CR0 initialization consistent, deriving the initial value of CR0
+> from CR0_STATE. Since CR0_STATE always has CR0.NE=1, this ensures that
+> CR0.NE is never 0 and avoids the #GP.
+>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
 
-commit 5cb1ebdbc4342b1c2ce89516e19808d64417bdbc upstream.
-
-Commit 5dbbbd01cbba83 ("ice: Avoid RTNL lock when re-creating
-auxiliary device") changes a process of re-creation of aux device
-so ice_plug_aux_dev() is called from ice_service_task() context.
-This unfortunately opens a race window that can result in dead-lock
-when interface has left LAG and immediately enters LAG again.
-
-Reproducer:
-```
-#!/bin/sh
-
-ip link add lag0 type bond mode 1 miimon 100
-ip link set lag0
-
-for n in {1..10}; do
-        echo Cycle: $n
-        ip link set ens7f0 master lag0
-        sleep 1
-        ip link set ens7f0 nomaster
-done
-```
-
-This results in:
-[20976.208697] Workqueue: ice ice_service_task [ice]
-[20976.213422] Call Trace:
-[20976.215871]  __schedule+0x2d1/0x830
-[20976.219364]  schedule+0x35/0xa0
-[20976.222510]  schedule_preempt_disabled+0xa/0x10
-[20976.227043]  __mutex_lock.isra.7+0x310/0x420
-[20976.235071]  enum_all_gids_of_dev_cb+0x1c/0x100 [ib_core]
-[20976.251215]  ib_enum_roce_netdev+0xa4/0xe0 [ib_core]
-[20976.256192]  ib_cache_setup_one+0x33/0xa0 [ib_core]
-[20976.261079]  ib_register_device+0x40d/0x580 [ib_core]
-[20976.266139]  irdma_ib_register_device+0x129/0x250 [irdma]
-[20976.281409]  irdma_probe+0x2c1/0x360 [irdma]
-[20976.285691]  auxiliary_bus_probe+0x45/0x70
-[20976.289790]  really_probe+0x1f2/0x480
-[20976.298509]  driver_probe_device+0x49/0xc0
-[20976.302609]  bus_for_each_drv+0x79/0xc0
-[20976.306448]  __device_attach+0xdc/0x160
-[20976.310286]  bus_probe_device+0x9d/0xb0
-[20976.314128]  device_add+0x43c/0x890
-[20976.321287]  __auxiliary_device_add+0x43/0x60
-[20976.325644]  ice_plug_aux_dev+0xb2/0x100 [ice]
-[20976.330109]  ice_service_task+0xd0c/0xed0 [ice]
-[20976.342591]  process_one_work+0x1a7/0x360
-[20976.350536]  worker_thread+0x30/0x390
-[20976.358128]  kthread+0x10a/0x120
-[20976.365547]  ret_from_fork+0x1f/0x40
-...
-[20976.438030] task:ip              state:D stack:    0 pid:213658 ppid:213627 flags:0x00004084
-[20976.446469] Call Trace:
-[20976.448921]  __schedule+0x2d1/0x830
-[20976.452414]  schedule+0x35/0xa0
-[20976.455559]  schedule_preempt_disabled+0xa/0x10
-[20976.460090]  __mutex_lock.isra.7+0x310/0x420
-[20976.464364]  device_del+0x36/0x3c0
-[20976.467772]  ice_unplug_aux_dev+0x1a/0x40 [ice]
-[20976.472313]  ice_lag_event_handler+0x2a2/0x520 [ice]
-[20976.477288]  notifier_call_chain+0x47/0x70
-[20976.481386]  __netdev_upper_dev_link+0x18b/0x280
-[20976.489845]  bond_enslave+0xe05/0x1790 [bonding]
-[20976.494475]  do_setlink+0x336/0xf50
-[20976.502517]  __rtnl_newlink+0x529/0x8b0
-[20976.543441]  rtnl_newlink+0x43/0x60
-[20976.546934]  rtnetlink_rcv_msg+0x2b1/0x360
-[20976.559238]  netlink_rcv_skb+0x4c/0x120
-[20976.563079]  netlink_unicast+0x196/0x230
-[20976.567005]  netlink_sendmsg+0x204/0x3d0
-[20976.570930]  sock_sendmsg+0x4c/0x50
-[20976.574423]  ____sys_sendmsg+0x1eb/0x250
-[20976.586807]  ___sys_sendmsg+0x7c/0xc0
-[20976.606353]  __sys_sendmsg+0x57/0xa0
-[20976.609930]  do_syscall_64+0x5b/0x1a0
-[20976.613598]  entry_SYSCALL_64_after_hwframe+0x65/0xca
-
-1. Command 'ip link ... set nomaster' causes that ice_plug_aux_dev()
-   is called from ice_service_task() context, aux device is created
-   and associated device->lock is taken.
-2. Command 'ip link ... set master...' calls ice's notifier under
-   RTNL lock and that notifier calls ice_unplug_aux_dev(). That
-   function tries to take aux device->lock but this is already taken
-   by ice_plug_aux_dev() in step 1
-3. Later ice_plug_aux_dev() tries to take RTNL lock but this is already
-   taken in step 2
-4. Dead-lock
-
-The patch fixes this issue by following changes:
-- Bit ICE_FLAG_PLUG_AUX_DEV is kept to be set during ice_plug_aux_dev()
-  call in ice_service_task()
-- The bit is checked in ice_clear_rdma_cap() and only if it is not set
-  then ice_unplug_aux_dev() is called. If it is set (in other words
-  plugging of aux device was requested and ice_plug_aux_dev() is
-  potentially running) then the function only clears the bit
-- Once ice_plug_aux_dev() call (in ice_service_task) is finished
-  the bit ICE_FLAG_PLUG_AUX_DEV is cleared but it is also checked
-  whether it was already cleared by ice_clear_rdma_cap(). If so then
-  aux device is unplugged.
-
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-Co-developed-by: Petr Oros <poros@redhat.com>
-Signed-off-by: Petr Oros <poros@redhat.com>
-Reviewed-by: Dave Ertman <david.m.ertman@intel.com>
-Link: https://lore.kernel.org/r/20220310171641.3863659-1-ivecera@redhat.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/net/ethernet/intel/ice/ice.h      |   11 ++++++++++-
- drivers/net/ethernet/intel/ice/ice_main.c |   12 +++++++++++-
- 2 files changed, 21 insertions(+), 2 deletions(-)
-
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -891,7 +891,16 @@ static inline void ice_set_rdma_cap(stru
-  */
- static inline void ice_clear_rdma_cap(struct ice_pf *pf)
- {
--	ice_unplug_aux_dev(pf);
-+	/* We can directly unplug aux device here only if the flag bit
-+	 * ICE_FLAG_PLUG_AUX_DEV is not set because ice_unplug_aux_dev()
-+	 * could race with ice_plug_aux_dev() called from
-+	 * ice_service_task(). In this case we only clear that bit now and
-+	 * aux device will be unplugged later once ice_plug_aux_device()
-+	 * called from ice_service_task() finishes (see ice_service_task()).
-+	 */
-+	if (!test_and_clear_bit(ICE_FLAG_PLUG_AUX_DEV, pf->flags))
-+		ice_unplug_aux_dev(pf);
-+
- 	clear_bit(ICE_FLAG_RDMA_ENA, pf->flags);
- 	clear_bit(ICE_FLAG_AUX_ENA, pf->flags);
- }
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -2237,9 +2237,19 @@ static void ice_service_task(struct work
- 		return;
- 	}
- 
--	if (test_and_clear_bit(ICE_FLAG_PLUG_AUX_DEV, pf->flags))
-+	if (test_bit(ICE_FLAG_PLUG_AUX_DEV, pf->flags)) {
-+		/* Plug aux device per request */
- 		ice_plug_aux_dev(pf);
- 
-+		/* Mark plugging as done but check whether unplug was
-+		 * requested during ice_plug_aux_dev() call
-+		 * (e.g. from ice_clear_rdma_cap()) and if so then
-+		 * plug aux device.
-+		 */
-+		if (!test_and_clear_bit(ICE_FLAG_PLUG_AUX_DEV, pf->flags))
-+			ice_unplug_aux_dev(pf);
-+	}
-+
- 	if (test_and_clear_bit(ICE_FLAG_MTU_CHANGED, pf->flags)) {
- 		struct iidc_event *event;
- 
-
-
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>

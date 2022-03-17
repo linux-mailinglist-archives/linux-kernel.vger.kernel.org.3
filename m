@@ -2,233 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFF54DC7F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:54:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A944DC876
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234722AbiCQNzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 09:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S234601AbiCQOOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 10:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234755AbiCQNzI (ORCPT
+        with ESMTP id S233290AbiCQOOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:55:08 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E94EFFA3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 06:53:40 -0700 (PDT)
-Received: from kwepemi500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KK7qX6zRKzfZ61;
-        Thu, 17 Mar 2022 21:52:08 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500023.china.huawei.com (7.221.188.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 17 Mar 2022 21:53:37 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 17 Mar 2022 21:53:36 +0800
-From:   Tong Tiangen <tongtiangen@huawei.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Thu, 17 Mar 2022 10:14:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDAB9F3BC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:13:13 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id A2EE0210FD;
+        Thu, 17 Mar 2022 14:13:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647526392; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6edWcSlDuE7GBRxOnbjiZrVj1Ut4eAAnls2UvqT8a+Q=;
+        b=FAMppHJSN0V7e808pZpLTejB737rs6wrDw4F+QAUAjQvE39Iq3dR9B7E+X5Xyy7bnED19g
+        y830BefgyDDYNcT8A46hHRCu9EcAUF2XZkWqSQYkFn2nmYiFanE+x5vLUF5A8IqUihbk9g
+        aVd2D/QtfdZ/WGM7DTAlonNis9L5cs4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647526392;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6edWcSlDuE7GBRxOnbjiZrVj1Ut4eAAnls2UvqT8a+Q=;
+        b=RlrA0+u4HufMDNPznh8PItdhiWY8jeQoUb1gmKrbv7iScUP6D36pXKGac8cc1iwPmEHv3a
+        +/nY1pssqG3sBFBQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 6A704A3BE5;
+        Thu, 17 Mar 2022 14:13:12 +0000 (UTC)
+Date:   Thu, 17 Mar 2022 15:13:12 +0100
+Message-ID: <s5h5yoc651j.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     syzbot <syzbot+72732c532ac1454eeee9@syzkaller.appspotmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        Tong Tiangen <tongtiangen@huawei.com>
-Subject: [PATCH -next 4/4] riscv: mm: add support for page table check
-Date:   Thu, 17 Mar 2022 14:12:03 +0000
-Message-ID: <20220317141203.3646253-5-tongtiangen@huawei.com>
-X-Mailer: git-send-email 2.18.0.huawei.25
-In-Reply-To: <20220317141203.3646253-1-tongtiangen@huawei.com>
-References: <20220317141203.3646253-1-tongtiangen@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        alsa-devel@alsa-project.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Willy Tarreau <w@1wt.eu>
+Subject: Re: [syzbot] WARNING: kmalloc bug in snd_pcm_plugin_alloc (2)
+In-Reply-To: <CAHk-=wjLNbf7viXP74K59jK=sRkg6mUbj0i3qpQvy9_2S4Lbtg@mail.gmail.com>
+References: <00000000000085b1b305da5a66f3@google.com>
+        <CAHk-=wjLNbf7viXP74K59jK=sRkg6mUbj0i3qpQvy9_2S4Lbtg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As commit d283d422c6c4 ("x86: mm: add x86_64 support for page table
-check"), add some necessary page table check hooks into routines that
-modify user page tables.
+On Wed, 16 Mar 2022 20:28:46 +0100,
+Linus Torvalds wrote:
+> 
+> On Wed, Mar 16, 2022 at 11:51 AM syzbot
+> <syzbot+72732c532ac1454eeee9@syzkaller.appspotmail.com> wrote:
+> >
+> > WARNING: CPU: 1 PID: 3761 at mm/util.c:591 kvmalloc_node+0x121/0x130 mm/util.c:591
+> >  snd_pcm_plugin_alloc+0x570/0x770 sound/core/oss/pcm_plugin.c:71
+> >  snd_pcm_plug_alloc+0x20d/0x310 sound/core/oss/pcm_plugin.c:118
+> >  snd_pcm_oss_change_params_locked+0x19db/0x3bf0 sound/core/oss/pcm_oss.c:1041
+> >  snd_pcm_oss_change_params sound/core/oss/pcm_oss.c:1104 [inline]
+> >  snd_pcm_oss_get_active_substream+0x164/0x1c0 sound/core/oss/pcm_oss.c:1121
+> >  snd_pcm_oss_get_rate sound/core/oss/pcm_oss.c:1778 [inline]
+> >  snd_pcm_oss_set_rate sound/core/oss/pcm_oss.c:1770 [inline]
+> >  snd_pcm_oss_ioctl+0x144f/0x3430 sound/core/oss/pcm_oss.c:2632
+> 
+> Well, that looks like a real bug in the sound subsystem, and the
+> warning is appropriate.
+> 
+> It looks like
+> 
+>         size = frames * format->channels * width;
+> 
+> can overflow 32 bits, and this is presumably user-triggerable with
+> snd_pcm_oss_ioctl().
+> 
+> Maybe there's some range check at an upper layer that is supposed to
+> catch this, but I'm not seeing it.
+> 
+> I think the simple fix is to do
+> 
+>         size = array3_size(frames, format->channels, width);
+> 
+> instead, which clamps the values at the maximum size_t.
+> 
+> Then you can trivially check for that overflow value (SIZE_MAX), but
+> you can - and probably should - just check for some sane value.
+> INT_MAX comes to mind, since that's what the allocation routine will
+> warn about.
+> 
+> But you can also say "Ok, I have now used the 'array_size()' function
+> to make sure any overflow will clamp to a very high value, so I know
+> I'll get an allocation failure, and I'd rather just make the allocator
+> do the size checking, so I'll add __GFP_NOWARN at allocation time and
+> just return -ENOMEM when that fails".
+> 
+> But that __GFP_NOWARN is *ONLY* acceptable if you have actually made
+> sure that "yes, all my size calculations have checked for overflow
+> and/or done that SIZE_MAX clamping".
+> 
+> Alternatively, you can just do each multiplication carefully, and use
+> "check_mul_overflow()" by hand, but it's a lot more inconvenient and
+> the end result tends to look horrible. There's a reason we have those
+> "array_size()" and "array3_size()" helpers.
+> 
+> There is also some very odd and suspicious-looking code in
+> snd_pcm_oss_change_params_locked():
+> 
+>         oss_period_size *= oss_frame_size;
+> 
+>         oss_buffer_size = oss_period_size * runtime->oss.periods;
+>         if (oss_buffer_size < 0) {
+>                 err = -EINVAL;
+>                 goto failure;
+>         }
+> 
+> which seems to think that checking the end result for being negative
+> is how you check for overflow. But that's actually after the
+> snd_pcm_plug_alloc() call.
+> 
+> It looks like all of this should use "check_mul_overflow()", but it
+> presumably also wants fixing (and also would like to use the
+> 'array_size()' helpers, but note that those take a 'size_t', so you do
+> want to check for negative values *before* if you allow zeroes
+> anywhere else)
+> 
+> If you don't mind "multiplying by zero will hide a negative
+> intermediate value", you can pass in 'ssize_t' arguments, do the
+> multiplication as unsigned, put the result in a 'ssize_t' value, and
+> just check for a negative result.
+> 
+> That would seem to be acceptable here, and that
+> snd_pcm_oss_change_params_locked() code could also just be
+> 
+>         oss_period_size = array_size(oss_period_size, oss_frame_size);
+>         oss_buffer_size = array_size(oss_period_size, runtime->oss.periods);
+>         if (oss_buffer_size < 0) {
+>                 ...
+> 
+> but I would suggest checking for a zero result too, because that can
+> hide the sub-parts having been some invalid crazy values that can also
+> cause problems later.
 
-Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+Indeed there seem missing value limit checks.  Currently we rely on
+the fact that the parameters of the underlying PCM device have been
+already configured properly, and it assures that the original values
+are fine.  OTOH, this PCM OSS layer does also conversions and it
+allocates temporary buffers for that.  The problem happens with those
+converted parameters; depending on the sample rate, channels, and
+format, it may increases significantly, and this was the reason of the
+31bit overflow.
+
+And, we want not only avoiding the overflow but also limiting the
+actual size, too.  Practically seen, more than 1MB temporary buffer is
+unrealistic, and better to bail if more than that is requested.
+
+Blow is the fix patch.  It works fine for local testing.
+
+
+thanks,
+
+Takashi
+
+-- 8< --
+From: Takashi Iwai <tiwai@suse.de>
+Date: Thu, 17 Mar 2022 11:29:39 +0100
+Subject: [PATCH] ALSA: oss: Fix PCM OSS buffer allocation overflow
+
+We've got syzbot reports hitting INT_MAX overflow at vmalloc()
+allocation that is called from snd_pcm_plug_alloc().  Although we
+apply the restrictions to input parameters, it's based only on the
+hw_params of the underlying PCM device.  Since the PCM OSS layer
+allocates a temporary buffer for the data conversion, the size may
+become unexpectedly large when more channels or higher rates is given;
+in the reported case, it went over INT_MAX, hence it hits WARN_ON().
+
+This patch is an attempt to avoid such an overflow and an allocation
+for too large buffers.  First off, it adds the limit of 1MB as the
+upper bound for period bytes.  This must be large enough for all use
+cases, and we really don't want to handle a larger temporary buffer
+than this size.  The size check is performed at two places, where the
+original period bytes is calculated and where the plugin buffer size
+is calculated.
+
+In addition, the driver uses array_size() and array3_size() for
+multiplications to catch overflows for the converted period size and
+buffer bytes.
+
+Reported-by: syzbot+72732c532ac1454eeee9@syzkaller.appspotmail.com
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/00000000000085b1b305da5a66f3@google.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- arch/riscv/Kconfig               |  1 +
- arch/riscv/include/asm/pgtable.h | 64 +++++++++++++++++++++++++++++---
- 2 files changed, 59 insertions(+), 6 deletions(-)
+ sound/core/oss/pcm_oss.c    | 12 ++++++++----
+ sound/core/oss/pcm_plugin.c |  5 ++++-
+ 2 files changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index d140e066f758..710d591fb272 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -37,6 +37,7 @@ config RISCV
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
- 	select ARCH_SUPPORTS_HUGETLBFS if MMU
-+	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
- 	select ARCH_USE_MEMTEST
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- 	select ARCH_WANT_FRAME_POINTERS
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 046b44225623..312430192ac7 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -114,6 +114,8 @@
- #include <asm/pgtable-32.h>
- #endif /* CONFIG_64BIT */
+diff --git a/sound/core/oss/pcm_oss.c b/sound/core/oss/pcm_oss.c
+index 3ee9edf85815..f158f0abd25d 100644
+--- a/sound/core/oss/pcm_oss.c
++++ b/sound/core/oss/pcm_oss.c
+@@ -774,6 +774,11 @@ static int snd_pcm_oss_period_size(struct snd_pcm_substream *substream,
  
-+#include <linux/page_table_check.h>
+ 	if (oss_period_size < 16)
+ 		return -EINVAL;
 +
- #ifdef CONFIG_XIP_KERNEL
- #define XIP_FIXUP(addr) ({							\
- 	uintptr_t __a = (uintptr_t)(addr);					\
-@@ -381,6 +383,25 @@ static inline pte_t pte_mkhuge(pte_t pte)
- 	return pte;
- }
- 
-+#ifdef CONFIG_PAGE_TABLE_CHECK
-+static inline bool pte_user_accessible_page(pte_t pte)
-+{
-+	return (pte_val(pte) & _PAGE_PRESENT) && (pte_val(pte) & _PAGE_USER);
-+}
++	/* don't allocate too large period; 1MB period must be enough */
++	if (oss_period_size > 1024 * 1024)
++		return -ENOMEM;
 +
-+static inline bool pmd_user_accessible_page(pmd_t pmd)
-+{
-+	return pmd_leaf(pmd) && (pmd_val(pmd) & _PAGE_PRESENT) &&
-+		(pmd_val(pmd) & _PAGE_USER);
-+}
-+
-+static inline bool pud_user_accessible_page(pud_t pud)
-+{
-+	return pud_leaf(pud) && (pud_val(pud) & _PAGE_PRESENT) &&
-+		(pud_val(pud) & _PAGE_USER);
-+}
-+#endif
-+
- #ifdef CONFIG_NUMA_BALANCING
- /*
-  * See the comment in include/asm-generic/pgtable.h
-@@ -446,7 +467,7 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
- 
- void flush_icache_pte(pte_t pte);
- 
--static inline void set_pte_at(struct mm_struct *mm,
-+static inline void __set_pte_at(struct mm_struct *mm,
- 	unsigned long addr, pte_t *ptep, pte_t pteval)
- {
- 	if (pte_present(pteval) && pte_exec(pteval))
-@@ -455,10 +476,17 @@ static inline void set_pte_at(struct mm_struct *mm,
- 	set_pte(ptep, pteval);
- }
- 
-+static inline void set_pte_at(struct mm_struct *mm,
-+	unsigned long addr, pte_t *ptep, pte_t pteval)
-+{
-+	page_table_check_pte_set(mm, addr, ptep, pteval);
-+	__set_pte_at(mm, addr, ptep, pteval);
-+}
-+
- static inline void pte_clear(struct mm_struct *mm,
- 	unsigned long addr, pte_t *ptep)
- {
--	set_pte_at(mm, addr, ptep, __pte(0));
-+	__set_pte_at(mm, addr, ptep, __pte(0));
- }
- 
- #define __HAVE_ARCH_PTEP_SET_ACCESS_FLAGS
-@@ -475,11 +503,21 @@ static inline int ptep_set_access_flags(struct vm_area_struct *vma,
- 	return true;
- }
- 
-+static inline pte_t __ptep_get_and_clear(struct mm_struct *mm,
-+				       unsigned long address, pte_t *ptep)
-+{
-+	return __pte(atomic_long_xchg((atomic_long_t *)ptep, 0));
-+}
-+
- #define __HAVE_ARCH_PTEP_GET_AND_CLEAR
- static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
- 				       unsigned long address, pte_t *ptep)
- {
--	return __pte(atomic_long_xchg((atomic_long_t *)ptep, 0));
-+	pte_t pte = __ptep_get_and_clear(mm, address, ptep);
-+
-+	page_table_check_pte_clear(mm, address, pte);
-+
-+	return pte;
- }
- 
- #define __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
-@@ -546,6 +584,13 @@ static inline unsigned long pmd_pfn(pmd_t pmd)
- 	return ((__pmd_to_phys(pmd) & PMD_MASK) >> PAGE_SHIFT);
- }
- 
-+#define __pud_to_phys(pud)  (pud_val(pud) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
-+
-+static inline unsigned long pud_pfn(pud_t pud)
-+{
-+	return ((__pud_to_phys(pud) & PUD_MASK) >> PAGE_SHIFT);
-+}
-+
- static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- {
- 	return pte_pmd(pte_modify(pmd_pte(pmd), newprot));
-@@ -600,13 +645,15 @@ static inline pmd_t pmd_mkdirty(pmd_t pmd)
- static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 				pmd_t *pmdp, pmd_t pmd)
- {
--	return set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd));
-+	page_table_check_pmd_set(mm, addr, pmdp, pmd);
-+	return __set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd));
- }
- 
- static inline void set_pud_at(struct mm_struct *mm, unsigned long addr,
- 				pud_t *pudp, pud_t pud)
- {
--	return set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud));
-+	page_table_check_pud_set(mm, addr, pudp, pud);
-+	return __set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud));
- }
- 
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-@@ -634,7 +681,11 @@ static inline int pmdp_test_and_clear_young(struct vm_area_struct *vma,
- static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
- 					unsigned long address, pmd_t *pmdp)
- {
--	return pte_pmd(ptep_get_and_clear(mm, address, (pte_t *)pmdp));
-+	pmd_t pmd = pte_pmd(__ptep_get_and_clear(mm, address, (pte_t *)pmdp));
-+
-+	page_table_check_pmd_clear(mm, address, pmd);
-+
-+	return pmd;
- }
- 
- #define __HAVE_ARCH_PMDP_SET_WRPROTECT
-@@ -648,6 +699,7 @@ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
- static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
- 				unsigned long address, pmd_t *pmdp, pmd_t pmd)
- {
-+	page_table_check_pmd_set(vma->vm_mm, address, pmdp, pmd);
- 	return __pmd(atomic_long_xchg((atomic_long_t *)pmdp, pmd_val(pmd)));
- }
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+ 	runtime->oss.period_bytes = oss_period_size;
+ 	runtime->oss.period_frames = 1;
+ 	runtime->oss.periods = oss_periods;
+@@ -1043,10 +1048,9 @@ static int snd_pcm_oss_change_params_locked(struct snd_pcm_substream *substream)
+ 			goto failure;
+ 	}
+ #endif
+-	oss_period_size *= oss_frame_size;
+-
+-	oss_buffer_size = oss_period_size * runtime->oss.periods;
+-	if (oss_buffer_size < 0) {
++	oss_period_size = array_size(oss_period_size, oss_frame_size);
++	oss_buffer_size = array_size(oss_period_size, runtime->oss.periods);
++	if (oss_buffer_size <= 0) {
+ 		err = -EINVAL;
+ 		goto failure;
+ 	}
+diff --git a/sound/core/oss/pcm_plugin.c b/sound/core/oss/pcm_plugin.c
+index 061ba06bc926..82e180c776ae 100644
+--- a/sound/core/oss/pcm_plugin.c
++++ b/sound/core/oss/pcm_plugin.c
+@@ -62,7 +62,10 @@ static int snd_pcm_plugin_alloc(struct snd_pcm_plugin *plugin, snd_pcm_uframes_t
+ 	width = snd_pcm_format_physical_width(format->format);
+ 	if (width < 0)
+ 		return width;
+-	size = frames * format->channels * width;
++	size = array3_size(frames, format->channels, width);
++	/* check for too large period size once again */
++	if (size > 1024 * 1024)
++		return -ENOMEM;
+ 	if (snd_BUG_ON(size % 8))
+ 		return -ENXIO;
+ 	size /= 8;
 -- 
-2.18.0.huawei.25
+2.34.1
 

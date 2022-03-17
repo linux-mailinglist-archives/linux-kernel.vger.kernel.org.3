@@ -2,290 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9370E4DD077
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0944DD07B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiCQWCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 18:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
+        id S229529AbiCQWFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 18:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiCQWC2 (ORCPT
+        with ESMTP id S229451AbiCQWFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 18:02:28 -0400
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A2F1834F0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:01:10 -0700 (PDT)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id CF48737FFA8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:01:09 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id UyBBny0rxdx86UyBBnpoiK; Thu, 17 Mar 2022 17:01:09 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=G8PPz3EEXerG6wcqjyGRnyJnAFhn2RgK8hinJVsi3pM=; b=uaiaHXcGBrTw3r48iBpIHB3z8Y
-        jUiNXzO8DCvvwLRyqjh4Gj636gajTuYecScIHnIqGiXzzhF8XHitjyGwn0YxjbKzeU/6SrIusEom7
-        0E0r675MJEnCzRyUNHm9A4/c5Mt8ROAdhIm0qyM619fGozd6yRbXiAGwUnpwbl8MLYFxq2OyWJKm7
-        9mF5L3/t7Y7WUr492ZY/8xLV2ljg3zvMku3aSWMuZf7SbVE6Y2vtjy1NoOD06WSw3tikjrehEyiYM
-        pV7UEp61jllsqXo05CBfAYemP0MeeyJ+bOgjKoJGlGOfNzEAoBbIjuVMPnYJCoQ+6oWdCZtAgJPmQ
-        w+ARFqCw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54316)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nUyBB-000tNv-9X; Thu, 17 Mar 2022 22:01:09 +0000
-Message-ID: <cbc028bd-8b4f-5cc1-3bcf-a195ae7cebd9@roeck-us.net>
-Date:   Thu, 17 Mar 2022 15:01:07 -0700
+        Thu, 17 Mar 2022 18:05:04 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A168E116B52
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:03:45 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id e22so7464803ioe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qTabM7n0BoyDX6ZD2j1IXdmhWUV9Un2uw2keLgRSpCA=;
+        b=B7vyF3M3g03Oull46QpewO+Evk7OZKsDT2Dl3123BE9ScGlhRxPaFPHX0Wn4ji5F9x
+         d5xzwzdbyqNY2CNoeTejfMdV3kD+BtTkOKDV3O8TuB4CjeBdW4cmpWk4HhvuthtcWDf5
+         eRs2E3lfbxX4vRXOh62LnkRhV/PlgPnau5DWBi0MPiIZZj03sOs0iW6vyLoJnkkVu5ZY
+         F1Da53joklwPYW9449PxQi1h80vhkf0o60ZjXtW9zgeH+xHLPXtF/X5hacYn4RKRb/+L
+         kKA6kT/KIWkajcvYJiCdK6FvCFYd9hXrLOCaFrY4WrK8mMjgbh1CviY0KGqb2HFdBDF8
+         AVtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qTabM7n0BoyDX6ZD2j1IXdmhWUV9Un2uw2keLgRSpCA=;
+        b=54MteByLfzM0X+fXLzE5SIvFxX1fGwT1O6BlBqu2zEOxBXItVdXNepBfUaamkImVAb
+         A/jqR9ylOPL4Q4PWOJj/pK/PR1kCAx5Lxr6CWzdlbCoHkRy7ynjGTwY3msNRtJSLZjTa
+         GLQB0pGAdLseEwzVsgJfUkjUOtbtyglkRq6xHu5zMexE89oCOnxOz8iBPZYDbAtzh7Ar
+         W9VPawIsBtGWtfRpP/2R0PnzzDK7PX2qo8m0DZ0GckreDD8G7RHU3SqiJZuszQaljZz4
+         ccYKJ4IWu/QIEHPSTXw0DI1HOwT6KtG0qBP0fMEnFmZ/Xz1EwGXbPnmHqx8ov720gT8Y
+         QR+w==
+X-Gm-Message-State: AOAM5313MWMXA9LXi5694qF46WWSQheHZLBJB/OxHAwj9htOXNIb6DL5
+        gOdvu8mPYQ9EwFG+qQgcMgOEjaBAnPV1/s9KQOE=
+X-Google-Smtp-Source: ABdhPJzmpC3FaPzymZm0MUm+gkG7m5Ndgj5W+M3ddfE+XAu+jt4cb9fOCxWgzYR99WehbuHz/6/roL2lsfaqPRu78vg=
+X-Received: by 2002:a05:6638:33a8:b0:319:cb5c:f6d9 with SMTP id
+ h40-20020a05663833a800b00319cb5cf6d9mr3189302jav.93.1647554625049; Thu, 17
+ Mar 2022 15:03:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] hwmon: (adt7475) Add support for pin configuration
-Content-Language: en-US
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
- <20220316234134.290492-3-chris.packham@alliedtelesis.co.nz>
- <6aabb517-c46e-bcf8-c93d-b6fa1fe8eb3a@roeck-us.net>
- <52a6f788-cba7-9823-76db-523e2e8c1f2e@alliedtelesis.co.nz>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <52a6f788-cba7-9823-76db-523e2e8c1f2e@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nUyBB-000tNv-9X
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54316
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 1
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220317152458.213689956@goodmis.org> <20220317152522.284233550@goodmis.org>
+In-Reply-To: <20220317152522.284233550@goodmis.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 17 Mar 2022 15:03:33 -0700
+Message-ID: <CAEf4BzaN_HnyAkVYeUmYoxvW01cFKR2FW0MwZJBL3gvkRw0TYg@mail.gmail.com>
+Subject: Re: [for-next][PATCH 03/13] fprobe: Add ftrace based probe APIs
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/22 14:35, Chris Packham wrote:
-> 
-> On 18/03/22 02:28, Guenter Roeck wrote:
->> On 3/16/22 16:41, Chris Packham wrote:
->>> The adt7473, adt7475, adt7476 and adt7490 have pins that can be used for
->>> different functions. On the adt7473 and  adt7475 this is pins 5 and 9.
->>> On the adt7476 and adt7490 this is pins 10 and 14.
->>>
->>> The first pin can either be PWM2(default) or SMBALERT#. The second pin
->>> can be TACH4(default), THERM#, SMBALERT# or GPIO.
->>>
->>> The adt7475 driver has always been able to detect the configuration if
->>> it had been done by an earlier boot stage. Add support for configuring
->>> the pins based on the hardware description in the device tree.
->>>
->>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
->>> ---
->>>    drivers/hwmon/adt7475.c | 95 +++++++++++++++++++++++++++++++++++++++++
->>>    1 file changed, 95 insertions(+)
->>>
->>> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
->>> index 9d5b019651f2..ad5e5a7a844b 100644
->>> --- a/drivers/hwmon/adt7475.c
->>> +++ b/drivers/hwmon/adt7475.c
->>> @@ -112,6 +112,8 @@
->>>    #define CONFIG3_THERM        0x02
->>>      #define CONFIG4_PINFUNC        0x03
->>> +#define CONFIG4_THERM        0x01
->>> +#define CONFIG4_SMBALERT    0x02
->>>    #define CONFIG4_MAXDUTY        0x08
->>>    #define CONFIG4_ATTN_IN10    0x30
->>>    #define CONFIG4_ATTN_IN43    0xC0
->>> @@ -1460,6 +1462,95 @@ static int adt7475_update_limits(struct
->>> i2c_client *client)
->>>        return 0;
->>>    }
->>>    +static int load_pin10_config(const struct i2c_client *client,
->>> const char *propname)
->>> +{
->>
->> A better function name would probably be load_config3() or similar.
-> 
-> Yep that'd be a better name.
-> 
->>
->>> +    const char *function;
->>> +    u8 config3;
->>> +    int err;
->>> +
->>> +    err = of_property_read_string(client->dev.of_node, propname,
->>> &function);
->>> +    if (!err) {
->>> +        config3 = adt7475_read(REG_CONFIG3);
->>
->> error check missing (I see the driver is notorious for that, but that
->> is not
->> a reason to keep doing it).
-> 
-> Ikegami-san and Dan did to some good work to address some of that. The
-> probe function is still quite careless.
-> 
-> I'll see what I can do to make sure my additions don't make it worse.
->>
->>> +
->>> +        if (!strcmp("pwm2", function))
->>> +            config3 &= ~CONFIG3_SMBALERT;
->>> +        else if (!strcmp("smbalert#", function))
->>> +            config3 |= CONFIG3_SMBALERT;
->>> +        else
->>> +            return -EINVAL;
->>> +
->>> +        return i2c_smbus_write_byte_data(client, REG_CONFIG3, config3);
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int load_pin14_config(const struct i2c_client *client, const
->>> char *propname)
->>> +{
->>
->> load_config4() ?
->>
->>> +    const char *function;
->>> +    u8 config4;
->>> +    int err;
->>> +
->>> +    err = of_property_read_string(client->dev.of_node, propname,
->>> &function);
->>> +    if (!err) {
->>> +        config4 = adt7475_read(REG_CONFIG4);
->>
->> error check
->>
->>> +        config4 &= ~CONFIG4_PINFUNC;
->>> +
->>> +        if (!strcmp("tach4", function))
->>> +            ;
->>> +        else if (!strcmp("therm#", function))
->>> +            config4 |= CONFIG4_THERM;
->>> +        else if (!strcmp("smbalert#", function))
->>> +            config4 |= CONFIG4_SMBALERT;
->>> +        else if (!strcmp("gpio", function))
->>> +            config4 |= CONFIG4_PINFUNC;
->>> +        else
->>> +            return -EINVAL;
->>> +
->>> +        return i2c_smbus_write_byte_data(client, REG_CONFIG4, config4);
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int load_config(const struct i2c_client *client, int chip)
->>> +{
->>> +    int err;
->>> +    const char *conf_prop1, *conf_prop2;
->>
->> conf_ prefix is unnecessary.
->>
->>> +
->>> +    switch (chip) {
->>> +    case adt7473:
->>> +    case adt7475:
->>> +        conf_prop1 = "adi,pin5-function";
->>> +        conf_prop2 = "adi,pin9-function";
->>> +        break;
->>> +    case adt7476:
->>> +    case adt7490:
->>> +        conf_prop1 = "adi,pin10-function";
->>> +        conf_prop2 = "adi,pin14-function";
->>> +        break;
->>> +    default:
->>> +        return -EINVAL;
->>
->> It doesn't seem right to return -EINVAL here.
->>
-> Have you got a better suggestion? I was trying to avoid someone
-> specifying compatible = "adi,adt7476" with "adi,pin5-function". Is your
-> concern that I should use -ENODEV or that I should just pick more
-> generic names for the configurable pins (naming things is hard).
-> 
-> Or perhaps just dev_warn() and return 0?
-> 
+On Thu, Mar 17, 2022 at 8:25 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> From: Masami Hiramatsu <mhiramat@kernel.org>
+>
+> The fprobe is a wrapper API for ftrace function tracer.
+> Unlike kprobes, this probes only supports the function entry, but this
+> can probe multiple functions by one fprobe. The usage is similar, user
+> will set their callback to fprobe::entry_handler and call
+> register_fprobe*() with probed functions.
+> There are 3 registration interfaces,
+>
+>  - register_fprobe() takes filtering patterns of the functin names.
+>  - register_fprobe_ips() takes an array of ftrace-location addresses.
+>  - register_fprobe_syms() takes an array of function names.
+>
+> The registered fprobes can be unregistered with unregister_fprobe().
+> e.g.
+>
+> struct fprobe fp = { .entry_handler = user_handler };
+> const char *targets[] = { "func1", "func2", "func3"};
+> ...
+>
+> ret = register_fprobe_syms(&fp, targets, ARRAY_SIZE(targets));
+>
+> ...
+>
+> unregister_fprobe(&fp);
+>
+> Link: https://lkml.kernel.org/r/164735283857.1084943.1154436951479395551.stgit@devnote2
+>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Martin KaFai Lau <kafai@fb.com>
+> Cc: Song Liu <songliubraving@fb.com>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: KP Singh <kpsingh@chromium.org>
+> Cc: "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>
+> Cc: Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
+> Cc: "David S . Miller" <davem@davemloft.net>
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
 
-If you use "enum chips" as function parameter you should not need
-a default: case. Otherwise -EINVAL is fine _if_ the code below is
-removed. I didn't understand what you wanted to accomplish by
-returning 0 for known (but unsupported) devices but -EINVAL for
-non-existing ones.
+Hey Steven!
 
-Guenter
+Do I understand correctly that this patch set was applied in your
+tree? I was under the impression that we agreed to route this through
+the bpf-next tree earlier (see [0]), but I might have misunderstood
+something, sorry.
 
->>> +    }
->>> +
->>> +    if (chip != adt7476 && chip != adt7490)
->>> +        return 0;
->>> +
->>
->> Why not check this first, and what is the point of assigning values to
->> conf_prop1 and conf_prop2 for the other chips in the case statement above
->> only to return 0 here ? It would be much simpler to drop the other chips
->> from the case statement and have default: return 0.
->>
-> Sorry that is old. I initially was under the impression that only these
-> 2 had configurable pins but then I read the other datasheets more closely.
->>> +    err = load_pin10_config(client, conf_prop1);
->>> +    if (err) {
->>> +        dev_err(&client->dev, "failed to configure PIN10\n");
->>
->> The messages are misleading. This isn't always pin 10/14.
->>
-> Now I've got the prop names I can use that instead.
->>> +        return err;
->>> +    }
->>> +
->>> +    err = load_pin14_config(client, conf_prop2);
->>> +    if (err) {
->>> +        dev_err(&client->dev, "failed to configure PIN14\n");
->>> +        return err;
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>>    static int set_property_bit(const struct i2c_client *client, char
->>> *property,
->>>                    u8 *config, u8 bit_index)
->>>    {
->>> @@ -1585,6 +1676,10 @@ static int adt7475_probe(struct i2c_client
->>> *client)
->>>            revision = adt7475_read(REG_DEVID2) & 0x07;
->>>        }
->>>    +    ret = load_config(client, chip);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>>        config3 = adt7475_read(REG_CONFIG3);
->>>        /* Pin PWM2 may alternatively be used for ALERT output */
->>>        if (!(config3 & CONFIG3_SMBALERT))
->>
+Either way, the reason it matters is because Jiri's multi-attach
+kprobe patch set ([1]) is depending on Masami's patches and having
+fprobe patches in bpf-next tree would simplify logistics
+significantly.
 
+So I wonder if it's still possible to route it through bpf-next?
+
+If not, we'd need a way to get these changes into the bpf-next tree
+somehow. Having it in a separate branch that we can merge would be a
+way to go about this, I presume? But it's certainly a more complicated
+way, so it would be preferable to back it out and land through
+bpf-next.
+
+Please let me know how we should proceed. Thanks!
+
+  [0] https://lore.kernel.org/bpf/CAEf4BzaugZWf6f_0JzA-mqaGfp52tCwEp5dWdhpeVt6GjDLQ3Q@mail.gmail.com/
+  [1] https://lore.kernel.org/bpf/20220316122419.933957-1-jolsa@kernel.org/
+
+>  include/linux/fprobe.h |  87 +++++++++++++++++
+>  kernel/trace/Kconfig   |  12 +++
+>  kernel/trace/Makefile  |   1 +
+>  kernel/trace/fprobe.c  | 211 +++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 311 insertions(+)
+>  create mode 100644 include/linux/fprobe.h
+>  create mode 100644 kernel/trace/fprobe.c
+>
+
+[...]

@@ -2,140 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622374DD028
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 849B44DD029
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiCQV1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 17:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S230319AbiCQV2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 17:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbiCQV1o (ORCPT
+        with ESMTP id S230292AbiCQV1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 17:27:44 -0400
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B30E127E;
-        Thu, 17 Mar 2022 14:26:26 -0700 (PDT)
-Received: by mail-pj1-f43.google.com with SMTP id o6-20020a17090a9f8600b001c6562049d9so6640850pjp.3;
-        Thu, 17 Mar 2022 14:26:26 -0700 (PDT)
+        Thu, 17 Mar 2022 17:27:52 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84523E127E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:26:35 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 6so3628575pgg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:26:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=O28KFB9Z1FTz+AymH1IN8bgHj7fL/zlAB/PUyRZgUJs=;
-        b=p46uwofeLg5Vu8lhhImWBLOdalf9R9c51tbeP4ZqSXmJbVrnjwLKBmGO9x6y741/9C
-         F1z3FT9GcfO3w8Uy5wgXkvY6Zwo2xF4zgYMtDHHrA2e3Tsx6H8wPajgjqunwWno7+obU
-         O6jsg/z1Bm5Zqn45iBnmqEX6OA1XWo7u0lsPGuH6iRhhTvHzeE2ZhCcy8SVHLf76esom
-         jC4E5SjBuceJocPckCw5BIzd3ZvDCUpxHgkpX8+G+QJVoz3BlD1LcuU1moF9RfTaOcXO
-         EkObbZW7qdIyoS1dWuTav1xwouqRxh6yOZ1vBaCw4wPeTtMpIuOCslctpNdt1fGceRqP
-         Q0kw==
+        bh=t3AEOAq14i3EG/rquowlVe/zjdaZDH/WIKQHfOErJko=;
+        b=UVHNXXnOEefY1Vy3hj/0OCtNe0JL8d0KcntvVuMCDGi5ySZpLRjcvDWZjscPkaXYUL
+         4aW3QgrkeWASmfJWSKiiG6kZc/H1pzq6pbGJ7GCQLgWp4SmesyDfNh2hd9esKtvnyxsv
+         b+B/TF1CHJ4H+QRBYkPUhwm86M8au6P02KeLM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=O28KFB9Z1FTz+AymH1IN8bgHj7fL/zlAB/PUyRZgUJs=;
-        b=1Zbw8PbbMsfRlZbFZJYq30NNsPA1/xsrHRAijo3POLNEeakSr29lEu+lTQyEquU72d
-         l6aAwgnBjDdHWcVS/zOyUk2BK7Fu8+IORtKCHLISRZM04rNjN0MOylKFr7Cv+8HDpPXp
-         Z3CsDCz9yyr5iENVabZjjdfUY00/BwC4C7o5XBymhs1asQPAjgXG4qzqKSi4usc3QGgf
-         eqatnONAdxukug2UCL21408S8tFQMSS//vk9o2WzivxeFINi9ApulD+kAGLS+r71mJOh
-         dqkicxyiOA4Tx8B96ykzgk3McYNuvLd2D7kEFAowiUWrPccxkjEDRbGNW3FqBJneIg3p
-         ykYA==
-X-Gm-Message-State: AOAM532r1jwS82VZxbd6Rnx8zt5XQMehQcEQokR2AxgUCxLdI66pZcK3
-        ikIl1Xa5inExEDdx6jJkykw=
-X-Google-Smtp-Source: ABdhPJwiI+1DF6j6F1CN5z+IyxD3suUX3qc9ceGaxuETSEpJcT/76Ll3c9nj5XiMyX7kuDZiR4jblg==
-X-Received: by 2002:a17:90b:3e8c:b0:1bf:4043:daa with SMTP id rj12-20020a17090b3e8c00b001bf40430daamr7630460pjb.233.1647552315163;
-        Thu, 17 Mar 2022 14:25:15 -0700 (PDT)
-Received: from 9a2d8922b8f1 ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id k185-20020a6384c2000000b003821dcd9020sm1284016pgd.27.2022.03.17.14.25.11
+        bh=t3AEOAq14i3EG/rquowlVe/zjdaZDH/WIKQHfOErJko=;
+        b=1GJCdO1T4oJP80zJsgPuNmmo+Ti77oZht9853frzQtHFL+n7WyajPBUG4/ny2zpwHY
+         yKx4t8t7WqWCGEH0jS+CuzzAC/3H+RqtxgYGtXtdvyJAEebnE6jXfGYRZ2cY94BPuraL
+         MbU3VQ1MphUCusNpPmZaPgg/2fzUweOPZ3gXSJ17pl+OIyjosnN8imgQcYqPVg+2uYd0
+         ZpLhCKJveKRn8sHmtRTlxSMccf6JrUeEek12omzbsZTxdStM0nR4M395n57Sr4/Yxktr
+         lluIhFbXe8AFPHeOatfM4eel67QQmVkiaJfN6wNWqCEZez0ihOWKe2CoIBmqPXilGx2d
+         AfTw==
+X-Gm-Message-State: AOAM533jQo3RGLr5+YpYoCyHmZXXzBIvytRO/p4ItLDFkskCmr13JBZW
+        QjkjcZz8JHF+p7txFRWY9XJ5SQ==
+X-Google-Smtp-Source: ABdhPJxv39a1M1FCYdm1DZMI4PMp646IDuGYZTbImyl9pmm2fzbnwYdGE1sQXO2UUSvX2ZZp4e9tfA==
+X-Received: by 2002:a05:6a00:2d0:b0:4f4:1f34:e39d with SMTP id b16-20020a056a0002d000b004f41f34e39dmr7042633pft.14.1647552395033;
+        Thu, 17 Mar 2022 14:26:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h2-20020a056a00218200b004f6519ce666sm7735505pfi.170.2022.03.17.14.26.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 14:25:14 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 02:55:08 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/3] dt-bindings: timer: Document arm, cortex-a7-timer
- in arch timer
-Message-ID: <20220317212508.GB99538@9a2d8922b8f1>
-References: <20220317191527.96237-1-singh.kuldeep87k@gmail.com>
- <20220317191527.96237-3-singh.kuldeep87k@gmail.com>
- <558f0c92-c499-daca-e1ad-2b16137f8c06@arm.com>
+        Thu, 17 Mar 2022 14:26:34 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 14:26:33 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     dave.hansen@intel.com, len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, viro@zeniv.linux.org.uk,
+        ebiederm@xmission.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 3/3] elf: Don't write past end of notes for regset gap
+Message-ID: <202203171425.565EB773FD@keescook>
+References: <20220317192013.13655-1-rick.p.edgecombe@intel.com>
+ <20220317192013.13655-4-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <558f0c92-c499-daca-e1ad-2b16137f8c06@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220317192013.13655-4-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 08:25:12PM +0000, Robin Murphy wrote:
-> On 2022-03-17 19:15, Kuldeep Singh wrote:
-> > Renesas RZ/N1D platform uses compatible "arm,cortex-a7-timer" in
-> > conjugation with "arm,armv7-timer". Since, initial entry is not
-> > documented, it start raising dtbs_check warnings.
-> > 
-> > ['arm,cortex-a7-timer', 'arm,armv7-timer'] is too long
-> > 'arm,cortex-a7-timer' is not one of ['arm,armv7-timer', 'arm,armv8-timer']
-> > 'arm,cortex-a7-timer' is not one of ['arm,cortex-a15-timer']
-> > 
-> > Document this compatible to address it. The motivation to add this
-> > change is taken from an already existing entry "arm,cortex-a15-timer".
-> > Please note, this will not hurt any arch timer users.
+On Thu, Mar 17, 2022 at 12:20:13PM -0700, Rick Edgecombe wrote:
+> In fill_thread_core_info() the ptrace accessible registers are collected
+> to be written out as notes in a core file. The note array is allocated
+> from a size calculated by iterating the user regset view, and counting the
+> regsets that have a non-zero core_note_type. However, this only allows for
+> there to be non-zero core_note_type at the end of the regset view. If
+> there are any gaps in the middle, fill_thread_core_info() will overflow the
+> note allocation, as it iterates over the size of the view and the
+> allocation would be smaller than that.
 > 
-> Eh, if it's never been documented or supported, I say just get rid of it.
-> The arch timer interface is by definition part of a CPU, and we can tell
-> what the CPU is by reading its ID registers. Indeed that's how the driver
-> handles the non-zero number of CPU-specific errata that already exist - we
-> don't need compatibles for that.
+> There doesn't appear to be any arch that has gaps such that they exceed
+> the notes allocation, but the code is brittle and tries to support
+> something it doesn't. It could be fixed by increasing the allocation size,
+> but instead just have the note collecting code utilize the array better.
+> This way the allocation can stay smaller.
 > 
-> In some ways it might have been nice to have *SoC-specific* compatibles
-> given the difficulty some integrators seem to have had in wiring up a stable
-> count *to* the interface, but it's not like they could be magically added to
-> already-deployed DTs after a bug is discovered, and nor could we have
-> mandated them from day 1 just in case and subsequently maintained a binding
-> that is just an ever-growing list of every SoC. Oh well.
-
-Robin, A similar discussion was already done on v1 thread. Please see
-below for details:
-https://lore.kernel.org/linux-devicetree/20220317065925.GA9158@9a2d8922b8f1/
-https://lore.kernel.org/linux-devicetree/726bde76-d792-febf-d364-6eedeb748c3b@canonical.com/
-
-And final outcome of discussion turns out to add this compatible string.
-
-I see people with different set of perspective in regard to whether keep
-compatible string or not. We should have some sort of evidences to
-support claims so that next time when similar situation arises, we'll be
-aware beforehand how to proceed.
-
-- Kuldeep
+> Even in the case of no arch's that have gaps in their regset views, this
+> introduces a change in the resulting indicies of t->notes. It does not
+> introduce any changes to the core file itself, because any blank notes are
+> skipped in write_note_info().
 > 
-> Robin.
+> In case, the allocation logic between fill_note_info() and
+> fill_thread_core_info() ever diverges from the usage logic, warn and skip
+> writing any notes that would overflow the array.
 > 
-> > Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-> > ---
-> >   Documentation/devicetree/bindings/timer/arm,arch_timer.yaml | 1 +
-> >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml b/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
-> > index ba2910f0a7b2..ea390e5df71d 100644
-> > --- a/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
-> > +++ b/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
-> > @@ -26,6 +26,7 @@ properties:
-> >             - arm,armv8-timer
-> >         - items:
-> >             - enum:
-> > +              - arm,cortex-a7-timer
-> >                 - arm,cortex-a15-timer
-> >             - const: arm,armv7-timer
+> This fix is derrived from an earlier one[0] by Yu-cheng Yu.
+> 
+> [0] https://lore.kernel.org/lkml/20180717162502.32274-1-yu-cheng.yu@intel.com/
+> 
+> Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> 
+> ---
+> 
+> v2:
+>  - Warn and break out of the note collecting loop if the allocation would
+>    overflow. Note: I tweaked it slightly to do break instead of continue
+>    and to do it before SET_PR_FPVALID(). (Kees)
+
+This looks great; thank you for the tweak. :)
+
+Acked-by: Kees Cook <keescook@chromium.org>
+
+Shall I take this separately into the for-next/execve tree, or would you
+rather is stay in this series?
+
+-Kees
+
+-- 
+Kees Cook

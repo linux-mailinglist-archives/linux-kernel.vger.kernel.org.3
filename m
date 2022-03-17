@@ -2,126 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F0C4DC2FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 928ED4DC300
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbiCQJiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
+        id S232045AbiCQJj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiCQJiP (ORCPT
+        with ESMTP id S231624AbiCQJjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:38:15 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5F516BCF7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:36:58 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id x15so6447268wru.13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=O1i7cT2ko1hGy64hM+B681n9QzyGnrB/xnsaByZUNh8=;
-        b=bT3V2iREkpKRmBDY+g7eALtr2ZrQzwNd3hRJ8VsYaZQdh4QtwfMbuvSO2LYeQck2+m
-         blb5DQOnSiZn9qqTx7mM3L6osuzQv91f7qSuuELZYtAgFdShTDmlAlhAO+/4/qeqIahJ
-         w2bbZqr2KyIMqNh+SX3GTt0IaCKm1NIHnbjNs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=O1i7cT2ko1hGy64hM+B681n9QzyGnrB/xnsaByZUNh8=;
-        b=tmqGWH7YkAeyROJxpgw25KDGSI5xzWvNvt0wZ9ec8btkllX8ZVMijkgAAYVdFQvYcm
-         vNkJyeoEplxz0HJ1HX9DK9XyDZIAdSoCmm7t36RhC/mQDAnk7/PSNwJcg0gnyw3x6mFC
-         qUQy4QN1IFnvnEvegwg65HtQefJKRraA13neTtq3ifMvPuwnz4V1c2PROnlW93NtWu6u
-         jlYdUHpDCMHlhTezTVj2Fn5GRFJngeQq/lhqT/2cguRK/H6v0f22dNoxUID995tNNIWr
-         dM2I4x6fg/y3OZ6h8mJd/qhiE3Oy5B7VFgmlMCGqYo+R0hnC0GwnI5oxDkBdbr/qRhxM
-         vbGg==
-X-Gm-Message-State: AOAM530LPOuU7KZmwOz57HtOHlzmA6MFL+q33G9rXrOIYH2trFBygnpL
-        KfR/EjdgJ63Jx4gYmmLFroystw==
-X-Google-Smtp-Source: ABdhPJyBrD7lqlP9xmnBLxk8QITal87n7bvpbobiyjAncbEh+KRG7YowAhGzRkaFfT/qWpV6bR+A+w==
-X-Received: by 2002:a5d:47c8:0:b0:1ef:8e97:2b8c with SMTP id o8-20020a5d47c8000000b001ef8e972b8cmr3264671wrc.545.1647509817467;
-        Thu, 17 Mar 2022 02:36:57 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id k9-20020adfd849000000b00203d18bf389sm3442926wrl.17.2022.03.17.02.36.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 02:36:56 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 10:36:55 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        corbet@lwn.net, pekka.paalanen@collabora.com,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH] drm/doc: Clarify what ioctls can be used on
- render nodes
-Message-ID: <YjMBN8XcQLmQJuWc@phenom.ffwll.local>
-Mail-Followup-To: Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, corbet@lwn.net,
-        pekka.paalanen@collabora.com, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1646667156-16366-1-git-send-email-quic_jhugo@quicinc.com>
+        Thu, 17 Mar 2022 05:39:24 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E58F141D92;
+        Thu, 17 Mar 2022 02:38:06 -0700 (PDT)
+Received: from zn.tnic (p200300ea971561b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:61b0:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D1F581EC03AD;
+        Thu, 17 Mar 2022 10:38:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1647509880;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Y0yRE4GP/95cPt86v2RYG2q4fNKPJLp7ExzsBY7nICc=;
+        b=WdL2QEZ6jXNUe26UHu/Ldn4OsaxPJ58JovqWsilCRZzGVFLMv6ttpJPi4b8bS+uv2bWAE6
+        2Y6WlCmLOp8XtyDZ+lzXm+KABH+L/+NgRc5YApCglzn/t+oce/Nw+i2xWWvVLGgya/yWNz
+        veu9AtkEKyRQK5ag7FO77q8uhCbumkE=
+Date:   Thu, 17 Mar 2022 10:37:56 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Jamie Heilman <jamie@audible.transient.net>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
+Subject: [PATCH -v1.1] kvm/emulate: Fix SETcc emulation function offsets with
+ SLS
+Message-ID: <YjMBdMlhVMGLG5ws@zn.tnic>
+References: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
+ <YjHYh3XRbHwrlLbR@zn.tnic>
+ <YjIwRR5UsTd3W4Bj@audible.transient.net>
+ <YjI69aUseN/IuzTj@zn.tnic>
+ <YjJFb02Fc0jeoIW4@audible.transient.net>
+ <YjJVWYzHQDbI6nZM@zn.tnic>
+ <20220316220201.GM8939@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1646667156-16366-1-git-send-email-quic_jhugo@quicinc.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+In-Reply-To: <20220316220201.GM8939@worktop.programming.kicks-ass.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 08:32:36AM -0700, Jeffrey Hugo wrote:
-> The documentation for render nodes indicates that only "PRIME-related"
-> ioctls are valid on render nodes, but the documentation does not clarify
-> what that means.  If the reader is not familiar with PRIME, they may
-> beleive this to be only the ioctls with "PRIME" in the name and not other
-> ioctls such as set of syncobj ioctls.  Clarify the situation for the
-> reader by referencing where the reader will find a current list of valid
-> ioctls.
+On Wed, Mar 16, 2022 at 11:02:01PM +0100, Peter Zijlstra wrote:
+> I'd suggest writing that like:
 > 
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
+> 	#define SETCC_ALIGN	(4 * (1 + IS_ENABLED(CONFIG_SLS)))
+> 
+> That way people can enjoy smaller text when they don't do the whole SLS
+> thing.... Also, it appears to me I added an ENDBR to this in
+> tip/x86/core, well, that needs fixing too. Tomorrow tho.
 
-Applied to drm-misc-next, thanks for the patch.
--Daniel
+Done.
 
-> ---
-> 
-> I was confused by this when reading the documentation.  Now that I have
-> figured out what the documentation means, I would like to add a clarification
-> for the next reader which would have helped me.
-> 
->  Documentation/gpu/drm-uapi.rst | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.rst
-> index 199afb5..ce47b42 100644
-> --- a/Documentation/gpu/drm-uapi.rst
-> +++ b/Documentation/gpu/drm-uapi.rst
-> @@ -148,7 +148,9 @@ clients together with the legacy drmAuth authentication procedure.
->  If a driver advertises render node support, DRM core will create a
->  separate render node called renderD<num>. There will be one render node
->  per device. No ioctls except PRIME-related ioctls will be allowed on
-> -this node. Especially GEM_OPEN will be explicitly prohibited. Render
-> +this node. Especially GEM_OPEN will be explicitly prohibited. For a
-> +complete list of driver-independent ioctls that can be used on render
-> +nodes, see the ioctls marked DRM_RENDER_ALLOW in drm_ioctl.c  Render
->  nodes are designed to avoid the buffer-leaks, which occur if clients
->  guess the flink names or mmap offsets on the legacy interface.
->  Additionally to this basic interface, drivers must mark their
-> -- 
-> 2.7.4
-> 
+Jamie, I'd appreciate testing this one too, pls, just in case.
+
+Thx.
+
+---
+From: Borislav Petkov <bp@suse.de>
+
+The commit in Fixes started adding INT3 after RETs as a mitigation
+against straight-line speculation.
+
+The fastop SETcc implementation in kvm's insn emulator uses macro magic
+to generate all possible SETcc functions and to jump to them when
+emulating the respective instruction.
+
+However, it hardcodes the size and alignment of those functions to 4: a
+three-byte SETcc insn and a single-byte RET. BUT, with SLS, there's an
+INT3 that gets slapped after the RET, which brings the whole scheme out
+of alignment:
+
+  15:   0f 90 c0                seto   %al
+  18:   c3                      ret
+  19:   cc                      int3
+  1a:   0f 1f 00                nopl   (%rax)
+  1d:   0f 91 c0                setno  %al
+  20:   c3                      ret
+  21:   cc                      int3
+  22:   0f 1f 00                nopl   (%rax)
+  25:   0f 92 c0                setb   %al
+  28:   c3                      ret
+  29:   cc                      int3
+
+and this explodes like this:
+
+  int3: 0000 [#1] PREEMPT SMP PTI
+  CPU: 0 PID: 2435 Comm: qemu-system-x86 Not tainted 5.17.0-rc8-sls #1
+  Hardware name: Dell Inc. Precision WorkStation T3400  /0TP412, BIOS A14 04/30/2012
+  RIP: 0010:setc+0x5/0x8 [kvm]
+  Code: 00 00 0f 1f 00 0f b6 05 43 24 06 00 c3 cc 0f 1f 80 00 00 00 00 0f 90 c0 c3 cc 0f 1f 00 0f 91 c0 c3 cc 0f 1f 00 0f 92 c0 c3 cc <0f> 1f 00 0f 93 c0 c3 cc 0f 1f 00 0f 94 c0 c3 cc 0f 1f 00 0f 95 c0
+  Call Trace:
+   <TASK>
+   ? x86_emulate_insn [kvm]
+   ? x86_emulate_instruction [kvm]
+   ? vmx_handle_exit [kvm_intel]
+   ? kvm_arch_vcpu_ioctl_run [kvm]
+   ? kvm_vcpu_ioctl [kvm]
+   ? __x64_sys_ioctl
+   ? do_syscall_64+0x40/0xa0
+   ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+   </TASK>
+
+Raise the alignment value when SLS is enabled and use a macro for that
+instead of hard-coding naked numbers.
+
+Fixes: e463a09af2f0 ("x86: Add straight-line-speculation mitigation")
+Reported-by: Jamie Heilman <jamie@audible.transient.net>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/YjGzJwjrvxg5YZ0Z@audible.transient.net
+---
+ arch/x86/kvm/emulate.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index f667bd8df533..01c0a02f4004 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -430,8 +430,11 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+ 	FOP_END
+ 
+ /* Special case for SETcc - 1 instruction per cc */
++
++#define SETCC_ALIGN	(4 * (1 + IS_ENABLED(CONFIG_SLS)))
++
+ #define FOP_SETCC(op) \
+-	".align 4 \n\t" \
++	".align " __stringify(SETCC_ALIGN) " \n\t" \
+ 	".type " #op ", @function \n\t" \
+ 	#op ": \n\t" \
+ 	ASM_ENDBR \
+@@ -1049,7 +1052,7 @@ static int em_bsr_c(struct x86_emulate_ctxt *ctxt)
+ static __always_inline u8 test_cc(unsigned int condition, unsigned long flags)
+ {
+ 	u8 rc;
+-	void (*fop)(void) = (void *)em_setcc + 4 * (condition & 0xf);
++	void (*fop)(void) = (void *)em_setcc + SETCC_ALIGN * (condition & 0xf);
+ 
+ 	flags = (flags & EFLAGS_MASK) | X86_EFLAGS_IF;
+ 	asm("push %[flags]; popf; " CALL_NOSPEC
+-- 
+2.29.2
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

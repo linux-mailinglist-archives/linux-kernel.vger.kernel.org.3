@@ -2,101 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CC84DBC87
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6E34DBC8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245678AbiCQBiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 21:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
+        id S1349253AbiCQBjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 21:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358355AbiCQBiC (ORCPT
+        with ESMTP id S242818AbiCQBjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 21:38:02 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B246D219F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:36:46 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id mr5-20020a17090b238500b001c67366ae93so1746573pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hLOIx+3Pmnl73GTjEYvWShoiqMdFw5kmET+4unFTHJ4=;
-        b=Wu0nsARKIICs+jW7F3oFJzGJqelliQJG3GF0j3U0ZvNRO0AE1q/qzHQX9QkTC+J+ts
-         k1t3Wyz9yne0IfIGAaizMCF3pjzp0+MEJ6pzGlLgIvV9ueTFJCQdEIk0ev5XLb4NAm7U
-         nL79DmZ2iL1/B6Nr7VtXE+myrcqBy+xyuWFeAAjPusteIKcAhlFNSHiOLc2v8w31nnRI
-         SqzWPCMgxhxpz/2hatPqF2sWkgX1NU52CRfVT2ZqFgIafuDNE3YEO0h1926a/EJS0dau
-         wEVje5ho5xkuxfwnNsmM5niuP2wv2OvL+nBD9S4XAu3lTBcGNiT5Y5rdpEPSlNggNftZ
-         MxAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hLOIx+3Pmnl73GTjEYvWShoiqMdFw5kmET+4unFTHJ4=;
-        b=ZXVi2GiHM6z4bPIQxB4oe2rfWzrIC0hVwYtqGu18WfRzu09t3/RBEp+SBQx/VAu9RL
-         4TUacdiAGE4Ocw4LD5fgkxiU7if768dqhkrK2wFBG+HnbrvOGVjp9btwNn9CYMfLgbco
-         +5Pc9cI9IereoycuUlz62nGCJwq64b+G9OewlZPr+YJyLpvuxeEHGuhkXAtbHKwCphaI
-         dgy1vgaYxu1YMjVk3igO0QbxbMiggIKtMC/lCk57eq9aOT9DJkm+ml5Z6folFwEk2pkO
-         gmSLj8jnOIG4XQrHXHkis5r/3EZZQjWbbypbquFTvZw1i8g0DxPkdV3WAs1UANNaWgjP
-         orMQ==
-X-Gm-Message-State: AOAM531bStzFudz/ExuhQWEkNBuIwAKEYTxOzf/ZFvSh7EbJw0/0QKHS
-        Zx3samEXBc3PF7oxFLI8VWM=
-X-Google-Smtp-Source: ABdhPJx3HpfjQ/SBKMITNoJ7cIjTDAlFbLmyoyo48cbvUkkjoivULVly5bln19Od9Eedj5f8PjoHng==
-X-Received: by 2002:a17:902:edd5:b0:153:abee:1093 with SMTP id q21-20020a170902edd500b00153abee1093mr2677801plk.77.1647481006288;
-        Wed, 16 Mar 2022 18:36:46 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id p25-20020a637419000000b0037fa57520adsm3759644pgc.27.2022.03.16.18.36.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 18:36:45 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     mingo@redhat.com
-Cc:     juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] sched: sched: remove duplicate include in 'core.c'
-Date:   Thu, 17 Mar 2022 01:36:32 +0000
-Message-Id: <20220317013632.2135160-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 16 Mar 2022 21:39:05 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC095B8D;
+        Wed, 16 Mar 2022 18:37:49 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R641e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V7PI2DK_1647481060;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V7PI2DK_1647481060)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 17 Mar 2022 09:37:47 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     patrice.chotard@foss.st.com
+Cc:     mchehab@kernel.org, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] media: platform: Remove unused including <linux/version.h>
+Date:   Thu, 17 Mar 2022 09:37:38 +0800
+Message-Id: <20220317013738.122877-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+Eliminate the follow versioncheck warning:
 
-'stats.h' and 'autogroup.h' included in 'core.c' is duplicated.
+./drivers/media/platform/stm/sti/c8sectpfe/c8sectpfe-common.h: 16
+linux/version.h not needed.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- kernel/sched/core.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/platform/stm/sti/c8sectpfe/c8sectpfe-common.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ef31751c5799..0b87a26f231c 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -82,10 +82,8 @@
- #include "stats.h"
- #include "autogroup.h"
+diff --git a/drivers/media/platform/stm/sti/c8sectpfe/c8sectpfe-common.h b/drivers/media/platform/stm/sti/c8sectpfe/c8sectpfe-common.h
+index 5ab7ca448cf9..f8d97841f366 100644
+--- a/drivers/media/platform/stm/sti/c8sectpfe/c8sectpfe-common.h
++++ b/drivers/media/platform/stm/sti/c8sectpfe/c8sectpfe-common.h
+@@ -13,7 +13,6 @@
+ #include <linux/dvb/dmx.h>
+ #include <linux/dvb/frontend.h>
+ #include <linux/gpio.h>
+-#include <linux/version.h>
  
--#include "autogroup.h"
- #include "pelt.h"
- #include "smp.h"
--#include "stats.h"
- 
- #include "../workqueue_internal.h"
- #include "../../fs/io-wq.h"
+ #include <media/dmxdev.h>
+ #include <media/dvb_demux.h>
 -- 
-2.25.1
+2.20.1.7.g153144c
 

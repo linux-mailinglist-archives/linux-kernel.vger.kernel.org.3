@@ -2,97 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA714DBECD
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 06:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D724DBF50
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 07:19:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbiCQF4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 01:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55262 "EHLO
+        id S229630AbiCQGU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 02:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiCQF4P (ORCPT
+        with ESMTP id S229668AbiCQGUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 01:56:15 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DEB2DCBFF
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 22:30:44 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id o26so1845025pgb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 22:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=Gfg0sfM1yOZcobziVscETOqEbK+m4KH2STWY/RhzvKM=;
-        b=p/DaaFIBXMKLYKdMeigqMEbkNzz2UmwkZ1EFHnR+vGLGHiUzJ+oKoWCc75yRbblKlU
-         XY6wS1b4XYolAjRWWIbz2PyAx1bgYIMsc/BNIwUvTkGVTrriASyMjIxrZlTWbEkWFKc+
-         UXp4FsH2NtXkPBUVp8Hjm6oD+oW2I+mh6qhDStIhDHojgZEvqp48XO9zh0KiOf1HRfoK
-         3rmwCExGHErobvapU73Qay5djJ77vuKl037+x+eIuxYIb6IQBBkHSZEuQQzhEnbiHm4s
-         zHWtECJsTTjb2A09PYM3BfQlKkWw1gwtBiNSPD8mj3xWLFyCUcVjn8ySAgg4nMNupmoQ
-         uTcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Gfg0sfM1yOZcobziVscETOqEbK+m4KH2STWY/RhzvKM=;
-        b=i87FYNvJ0Fo9PE15NMKKryG9IjUzpzRq5lZTMpqGRKXpxLUIGP2vBAQrIlSZMvi3LV
-         SHAh8379f91eFjqeD+6tWE5DtfTef4EFL1kbha14BZh/5UVFUdmEwNnxe6wZH7rBFF1L
-         O+HMWyWdafPo1VZ10Q5cbXgljSN6ObSWSH4Lao3teQASSejbKTGt7OIgXVmdVmnzW7Pj
-         5+vkgyqs82tqo2aHIosnlq/ytK7Jn+TfVWENKOYHNlfDAy++TqOM0B0xCcRzEBeDioJZ
-         ElRF1Atuc5iLYD1X+mU1yWhU6u8xbpldwkBSCLAbO307Pp8ZWoBNzfJWGGrlWzhIKYpw
-         vIAA==
-X-Gm-Message-State: AOAM533YAlXh3awEsJohj84F/c+L1hIstBGp5WW1dJ/gBIBaWFb0rzZG
-        GW0gFXFLI087kwabyTCx78DAQ7RVCQg=
-X-Google-Smtp-Source: ABdhPJzkf6aRGNT4PCjsIj3xSQL7MwoZQSgaVrVC2ZHHBuegkwTvvtn8/goU3JG9vEQ+mi8RqnmORg==
-X-Received: by 2002:a63:1743:0:b0:381:42cf:187 with SMTP id 3-20020a631743000000b0038142cf0187mr2089420pgx.397.1647490701303;
-        Wed, 16 Mar 2022 21:18:21 -0700 (PDT)
-Received: from Asurada-Nvidia.nvidia.com ([12.154.207.45])
-        by smtp.gmail.com with ESMTPSA id h13-20020a056a00170d00b004f757a795fesm5047654pfc.219.2022.03.16.21.18.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 21:18:20 -0700 (PDT)
-From:   Nicolin Chen <nicoleotsuka@gmail.com>
-To:     broonie@kernel.org, shengjiu.wang@nxp.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Xiubo.Lee@gmail.com, festevam@gmail.com, lgirdwood@gmail.com,
-        shengjiu.wang@gmail.com
-Subject: [PATCH] MAINTAINERS: Add Shengjiu to maintainer list of sound/soc/fsl
-Date:   Wed, 16 Mar 2022 21:18:06 -0700
-Message-Id: <20220317041806.28230-1-nicoleotsuka@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Mar 2022 02:20:11 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D998C120D8E;
+        Wed, 16 Mar 2022 23:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=VyFqe0+9Q5DJGBQKh8EVe9afKqvNdtEGhYtwaUik3yk=; b=VBLeR91KB/5LrCFBGInhWgpub6
+        B5MSRoF5KBeEmupeGG8n0Zjls45v8J+WqoZkJ8vbta2GyU12Rrl1j01iiqusuvKgOwKGB7+o4QtJn
+        FHnLO31jpAVc3obGn6a5a7JaPjXHuFTDNkWAKSo17G/SrU9rSOBaI8Mvx/WptWlBf60+H2rhU6rny
+        RiCMzNGC2HiDrIbi1O0L9HZTgbfQbHOXeW+kYwp+cOgn/PnRj7vhuSAuJp6KEZgsLog6PEVd4VmvU
+        bw4DyRg/h4SnnVOexz2WL2uMoPlemVVTaFzusrdAUZ/JnOSgo2YrDfHjEjwXJ2oSpjIfIeXzYDQtH
+        QAiQ6YxQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nUhdb-001mAe-NM; Thu, 17 Mar 2022 04:21:24 +0000
+Message-ID: <0f622499-36e1-ea43-ddc3-a8b3bb08d34b@infradead.org>
+Date:   Wed, 16 Mar 2022 21:21:16 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: mmotm 2022-03-16-17-42 uploaded (uml sub-x86_64, sched/fair, RCU)
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
+        linux-um <linux-um@lists.infradead.org>, paulmck@kernel.org,
+        Richard Weinberger <richard@nod.at>,
+        Johannes Berg <johannes@sipsolutions.net>
+References: <20220317004304.95F89C340E9@smtp.kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220317004304.95F89C340E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shengjiu has been actively working on latest FSL platforms and
-keeping upstream effort as well, while I have been working on
-other subsystem lately and cannot guarantee audio patch review
-in the near term. So replacing with him in the maintainer list.
 
-Cc: Shengjiu Wang <shengjiu.wang@gmail.com>
-Signed-off-by: Nicolin Chen <nicoleotsuka@gmail.com>
----
- MAINTAINERS | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 46ffe05eaeb7..bf7a0ae10d06 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7779,10 +7779,10 @@ F:	drivers/net/ethernet/freescale/fs_enet/
- F:	include/linux/fs_enet_pd.h
- 
- FREESCALE SOC SOUND DRIVERS
--M:	Nicolin Chen <nicoleotsuka@gmail.com>
-+M:	Shengjiu Wang <shengjiu.wang@gmail.com>
- M:	Xiubo Li <Xiubo.Lee@gmail.com>
- R:	Fabio Estevam <festevam@gmail.com>
--R:	Shengjiu Wang <shengjiu.wang@gmail.com>
-+R:	Nicolin Chen <nicoleotsuka@gmail.com>
- L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
- L:	linuxppc-dev@lists.ozlabs.org
- S:	Maintained
+On 3/16/22 17:43, Andrew Morton wrote:
+> The mm-of-the-moment snapshot 2022-03-16-17-42 has been uploaded to
+> 
+>    https://www.ozlabs.org/~akpm/mmotm/
+> 
+> mmotm-readme.txt says
+> 
+> README for mm-of-the-moment:
+> 
+> https://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> https://ozlabs.org/~akpm/mmotm/series
+
+
+UML for x86_64, defconfig:
+
+In file included from ./arch/x86/include/generated/asm/rwonce.h:1:0,
+                 from ../include/linux/compiler.h:248,
+                 from ../include/linux/kernel.h:20,
+                 from ../include/linux/cpumask.h:10,
+                 from ../include/linux/energy_model.h:4,
+                 from ../kernel/sched/fair.c:23:
+../include/linux/psi.h: In function ‘cgroup_move_task’:
+../include/linux/rcupdate.h:414:36: error: dereferencing pointer to incomplete type ‘struct css_set’
+ #define RCU_INITIALIZER(v) (typeof(*(v)) __force __rcu *)(v)
+                                    ^~~~
+../include/asm-generic/rwonce.h:55:33: note: in definition of macro ‘__WRITE_ONCE’
+  *(volatile typeof(x) *)&(x) = (val);    \
+                                 ^~~
+../include/asm-generic/barrier.h:190:2: note: in expansion of macro ‘WRITE_ONCE’
+  WRITE_ONCE(*p, v);      \
+  ^~~~~~~~~~
+../include/linux/rcupdate.h:455:3: note: in expansion of macro ‘smp_store_release’
+   smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+   ^~~~~~~~~~~~~~~~~
+../include/linux/rcupdate.h:455:25: note: in expansion of macro ‘RCU_INITIALIZER’
+   smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
+                         ^~~~~~~~~~~~~~~
+../include/linux/psi.h:58:2: note: in expansion of macro ‘rcu_assign_pointer’
+  rcu_assign_pointer(p->cgroups, to);
+  ^~~~~~~~~~~~~~~~~~
+
+
+
 -- 
-2.17.1
-
+~Randy

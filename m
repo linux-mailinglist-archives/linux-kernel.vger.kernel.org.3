@@ -2,119 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E4C4DC2A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 449404DC2C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbiCQJ3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S231897AbiCQJdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiCQJ3d (ORCPT
+        with ESMTP id S231872AbiCQJdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:29:33 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F815147ADC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:28:16 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KK1td0MzNz9smV;
-        Thu, 17 Mar 2022 17:24:25 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 17 Mar 2022 17:28:14 +0800
-Subject: Re: [PATCH v4] mm/hwpoison: fix race between hugetlb free/demotion
- and memory_failure_hugetlb()
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-References: <20220316120701.394061-1-naoya.horiguchi@linux.dev>
- <7362f9ee-81fa-702a-7a03-1a91ecf0b58e@oracle.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <3fe5a7e9-785d-db79-543a-c7723fc6f505@huawei.com>
-Date:   Thu, 17 Mar 2022 17:28:13 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 17 Mar 2022 05:33:06 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A0D1D4C29;
+        Thu, 17 Mar 2022 02:31:50 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22H5Kw4t025823;
+        Thu, 17 Mar 2022 04:31:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=+1Spm++uXSWjxqTxhnFXit10wfkaW+dD/q6ScBEsMgI=;
+ b=Zt0Tys2Yx4cotdJNlZ/r3kRO00Ni9H59EKpYQHdn/1Zb9/M4X2AuIPHlSlbgzxc40rf4
+ KVYDAKPy9/UNB0GXZx51gCI5udcV5X+nVJpeozh9XT0flFde+S09Nw1wutaJlxOnoV+b
+ 9DVZF/slXHKnRdnuOef2qaLHhykpV3S2FMopI0JX/R4QhfgWc4QQUHJWhvbdPvSqmOvz
+ w7G2IMHEBO5oApexBcGIFnEgfDeE25znbFG2DcbHbRCWeOAc0GzjdZplsrUZynmDmyE5
+ Yu3cGZfX77TFHDab+IDD+seaFR8pZVs09BnBZrOZZVYAN0YF8mN2GbNkSFfhK3ZC1dy1 wg== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3et5yp475e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 17 Mar 2022 04:31:31 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 17 Mar
+ 2022 09:31:29 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Thu, 17 Mar 2022 09:31:29 +0000
+Received: from aryzen.ad.cirrus.com (unknown [198.61.64.95])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8DD957C;
+        Thu, 17 Mar 2022 09:31:29 +0000 (UTC)
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: [PATCH v4 00/16] Support external boost at CS35l41 ASoC driver
+Date:   Thu, 17 Mar 2022 09:31:04 +0000
+Message-ID: <20220317093120.168534-1-tanureal@opensource.cirrus.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <7362f9ee-81fa-702a-7a03-1a91ecf0b58e@oracle.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 2c5yPmNcZ4Zid1lPjl9jqO_edeLTrjGT
+X-Proofpoint-GUID: 2c5yPmNcZ4Zid1lPjl9jqO_edeLTrjGT
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/17 6:51, Mike Kravetz wrote:
-> On 3/16/22 05:07, Naoya Horiguchi wrote:
->> From: Miaohe Lin <linmiaohe@huawei.com>
->>
->> There is a race condition between memory_failure_hugetlb() and hugetlb
->> free/demotion, which causes setting PageHWPoison flag on the wrong page.
->> The one simple result is that wrong processes can be killed, but another
->> (more serious) one is that the actual error is left unhandled, so no one
->> prevents later access to it, and that might lead to more serious results
->> like consuming corrupted data.
->>
->> Think about the below race window:
->>
->>   CPU 1                                   CPU 2
->>   memory_failure_hugetlb
->>   struct page *head = compound_head(p);
->>                                           hugetlb page might be freed to
->>                                           buddy, or even changed to another
->>                                           compound page.
->>
->>   get_hwpoison_page -- page is not what we want now...
->>
->> The compound_head is called outside hugetlb_lock, so the head is not
->> reliable.
->>
->> So set PageHWPoison flag after passing prechecks. And to detect
->> potential violation, this patch also introduces a new action type
->> MF_MSG_DIFFERENT_PAGE_SIZE.
-> 
-> Thanks for squashing these patches.
-> 
-> In my testing, there is a change in behavior that may not be intended.
-> 
-> My test strategy is:
-> - allocate two hugetlb pages
-> - create a mapping which reserves those two pages, but does not fault them in
->   - as a result, the pages are on the free list but can not be freed
-> - inject error on a subpage of one of the huge pages
->   - echo 0xYYY > /sys/kernel/debug/hwpoison/corrupt-pfn
-> - memory error code will call dissolve_free_huge_page
->   - dissolve_free_huge_page returns -EBUSY because
->     h->free_huge_pages - h->resv_huge_pages == 0
-> - We never end up setting Poison on the page with error or head page
-> - Huge page sitting on free list with error in subpage and not marked
-> - huge page with error could be given to an application or returned to buddy
-> 
-> Prior to this change, Poison would be set on the head page
-> 
+Move the support for CS35L41 external boost to its shared library
+for ASoC use.
+This move resulted in cs35l41_hda_reg_sequence being removed,
+and its steps were broken down into regmap writes or functions
+from the library. And hardware configuration struct was unified
+for its use in the shared lib.
+While at it, some minor bugs were found and fixed it.
 
-Many thanks for pointing this out. IIUC, this change in behavior should be a bit
-unintended. We're trying to avoid setting PageHWPoison flag on the wrong page so
-we have to set the PageHWPoison flag after passing prechecks as commit log said.
-But there is room for improvement, e.g. when page changed to single page or another
-compound-size page after we grab the page refcnt, we could also set PageHWPoison
-before bailing out ? There might be something more we can do?
+v4 changelog:
+ - Separated GPIO 1 and 2 function enums
 
-> I do not think this was an intended change in behavior.  But, perhaps it is
-> all we can do in this case?  Sorry for not being able to look more closely
-> at the code right now.   
-> 
+v3 changelog:
+ - Remove patches already accepted
+ - Improved logic in documentation patch
+ - Documentation patch goes before its code
+ - Fixed missing Signed-off-by
+ - Fixed subject for HDA patches
 
-Thanks.
+v2 changelog:
+ - Instead of removing the log, playback actions will log the last regmap access.
+ - Documentation patch with the correct subject line and fixed bug reported by Rob Herring on the
+ provided example.
+
+Previous versions:
+ v1: https://lkml.org/lkml/2022/3/3/759
+ v2: https://lkml.org/lkml/2022/3/4/743
+ v3: https://lkml.org/lkml/2022/3/8/975
+
+David Rhodes (1):
+  ASoC: dt-bindings: cs35l41: Document CS35l41 External Boost
+
+Lucas Tanure (15):
+  sound: cs35l41: Unify hardware configuration
+  sound: cs35l41: Check hw_config before using it
+  sound: cs35l41: Move cs35l41_gpio_config to shared lib
+  ALSA: hda: cs35l41: Fix I2S params comments
+  ALSA: hda: cs35l41: Always configure the DAI
+  ALSA: hda: cs35l41: Add Boost type flag
+  hda: cs35l41: Put the device into safe mode for external boost
+  hda: cs35l41: Mute the device before shutdown
+  sound: cs35l41: Enable Internal Boost in shared lib
+  ALSA: hda: cs35l41: Move boost config to initialization code
+  ALSA: hda: cs35l41: Remove cs35l41_hda_reg_sequence struct
+  ALSA: hda: cs35l41: Reorganize log for playback actions
+  ALSA: hda: cs35l41: Handle all external boost setups the same way
+  ALSA: hda: cs35l41: Move external boost handling to lib for ASoC use
+  ASoC: cs35l41: Support external boost
+
+ .../bindings/sound/cirrus,cs35l41.yaml        |  44 ++-
+ include/sound/cs35l41.h                       |  59 +++-
+ sound/pci/hda/cs35l41_hda.c                   | 295 ++++++------------
+ sound/pci/hda/cs35l41_hda.h                   |  27 +-
+ sound/soc/codecs/cs35l41-i2c.c                |   4 +-
+ sound/soc/codecs/cs35l41-lib.c                | 190 ++++++++++-
+ sound/soc/codecs/cs35l41-spi.c                |   4 +-
+ sound/soc/codecs/cs35l41.c                    | 166 +++++-----
+ sound/soc/codecs/cs35l41.h                    |   5 +-
+ 9 files changed, 443 insertions(+), 351 deletions(-)
+
+-- 
+2.35.1
+

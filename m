@@ -2,124 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F325F4DCA2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7715D4DCA35
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236000AbiCQPjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 11:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
+        id S236014AbiCQPlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 11:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235963AbiCQPjH (ORCPT
+        with ESMTP id S236015AbiCQPk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 11:39:07 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3F920C194
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 08:37:51 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 624F55C052D;
-        Thu, 17 Mar 2022 11:37:50 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 17 Mar 2022 11:37:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to
-        :reply-to:sender:subject:subject:to:to; s=fm3; bh=j1NPISH+l624H2
-        cG6MYTSkySP6eLhrxXfSj11vAvYwo=; b=OEg4pekKGsqANjnlRxk6Ne+AKRv5J0
-        gC7chvs4deAZLS0IGG5xg4Of1D65Fzamd9mUuCvUoLnYn4xlIxU9oAdXjwtjx0Ks
-        KC91J9kj4ZNhKl0fIA/YPwzLZsMzBWpDvUcjb7oTEGAof2YmbxeT3FVdSJK7sxal
-        Tpr1F0M/iwE4LeOgUl+wnkdzp/tco7LVCuNDOjZbWIMyVr8SFB/kC5FOIvnZx/uv
-        ciEb56hSR6EOpwJNPBnhlDFXfxF181IKRYFviVJHiX99j1Lb5awrIHtlkhq5XwOL
-        ckwWPvXlltzxHnBRF6thhp/0WWwIOgJ2FcGglXqhzkxL4Ynn3mtsD6CQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=j1NPISH+l624H2cG6MYTSkySP6eLhrxXfSj11vAvYwo=; b=fsPD+QP4
-        oVKblv83NDRSSHsq8ic1HamtNf556nGnG96rIRcy6U/kkmmrE+vgioPHL+eZ62Kn
-        bkau6+QzC2KZ7teDzNah5mv88yVVPNfr6C7KS3v7ZapCBkIJwD58Pc6OnvUYeBkz
-        FLtkRFb0DBWWFQKqdIZnxxgbxWqzn1vh8GmmPnly5Dxf4mwugmehI+sS3teVK+s+
-        aT6Twa4cwnVdahGFFZQ6TqSsy3cfeaiKb0X4hC3WanxU/LYsK/+6UKWwC1CZZEsK
-        qlsK9etDMocxMbQlOGzK9cGvj9a776nbLMw6AefiaBin5CF6KeoWCBBXRKloHMNR
-        NeW0X4AQWZ30Ig==
-X-ME-Sender: <xms:zVUzYm9mayJt5TpNk0vu9qE5KQUzuTZ9vJJE6qPurGsnTzV-SYBzTA>
-    <xme:zVUzYmtzDB40YZGMo9KJIlCKSu4U_tvp1Chx0VD6Snv2fWjeJEXubhifRxJ-OKrhn
-    S5A6ZnCxhRgT1x_-g>
-X-ME-Received: <xmr:zVUzYsCeAyOxdTVA1UoIcgufxJ68CAft14qRUSabpkFcywONCyC7HlLvPdtVDTB9D3rbiG9sCKRCJjSQvA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefgedgjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfrhgggfestdhqredtredttdenucfhrhhomhepkghiucgj
-    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepieejue
-    dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepiihirdihrghnsehsvg
-    hnthdrtghomh
-X-ME-Proxy: <xmx:zVUzYueDDkdQvVcTsY8rJPVgFbfokYc_HWqCuQ9i1zcLxSWuM_fQAQ>
-    <xmx:zVUzYrN353Ikh7oS8nFdYl5Cj16xDOc9EGNppahPFkLxDXG384pAyA>
-    <xmx:zVUzYollA_b2Eb__yMI4PWwBetcNKYBXJKEv5XXeW-snDoJ-XgM8aw>
-    <xmx:zlUzYmpseKnei9xDovW9v5iwid23SPpZudGziSqwNwTO96Kk8xiCaQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 17 Mar 2022 11:37:49 -0400 (EDT)
-From:   Zi Yan <zi.yan@sent.com>
-To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v8 5/5] drivers: virtio_mem: use pageblock size as the minimum virtio_mem size.
-Date:   Thu, 17 Mar 2022 11:37:33 -0400
-Message-Id: <20220317153733.2171277-6-zi.yan@sent.com>
+        Thu, 17 Mar 2022 11:40:57 -0400
+Received: from unicorn.mansr.com (unicorn.mansr.com [IPv6:2001:8b0:ca0d:8d8e::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D508220C2E0;
+        Thu, 17 Mar 2022 08:39:38 -0700 (PDT)
+Received: from raven.mansr.com (raven.mansr.com [81.2.72.235])
+        by unicorn.mansr.com (Postfix) with ESMTPS id EF05B15360;
+        Thu, 17 Mar 2022 15:39:35 +0000 (GMT)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+        id 86495210BC8; Thu, 17 Mar 2022 15:39:35 +0000 (GMT)
+From:   Mans Rullgard <mans@mansr.com>
+To:     Pantelis Antoniou <pantelis.antoniou@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vitaly Bordug <vbordug@ru.mvista.com>,
+        Dan Malek <dan@embeddededge.com>,
+        Joakim Tjernlund <joakim.tjernlund@lumentis.se>,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC][PATCH] net: fs_enet: fix tx error handling
+Date:   Thu, 17 Mar 2022 15:38:58 +0000
+Message-Id: <20220317153858.20719-1-mans@mansr.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317153733.2171277-1-zi.yan@sent.com>
-References: <20220317153733.2171277-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+In some cases, the TXE flag is apparently set without any error
+indication in the buffer descriptor status. When this happens, tx
+stalls until the tx_restart() function is called via the device
+watchdog which can take a long time.
 
-alloc_contig_range() now only needs to be aligned to pageblock_order,
-drop virtio_mem size requirement that it needs to be the max of
-pageblock_order and MAX_ORDER.
+To fix this, check for TXE in the napi poll function and trigger a
+tx_restart() call as for errors reported in the buffer descriptor.
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
+This change makes the FCC based Ethernet controller on MPC82xx devices
+usable. It probably breaks the other modes (FEC, SCC) which I have no
+way of testing.
+
+Signed-off-by: Mans Rullgard <mans@mansr.com>
 ---
- drivers/virtio/virtio_mem.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../ethernet/freescale/fs_enet/fs_enet-main.c | 47 +++++++------------
+ .../net/ethernet/freescale/fs_enet/mac-fcc.c  |  2 +-
+ 2 files changed, 19 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-index e7d6b679596d..e07486f01999 100644
---- a/drivers/virtio/virtio_mem.c
-+++ b/drivers/virtio/virtio_mem.c
-@@ -2476,10 +2476,10 @@ static int virtio_mem_init_hotplug(struct virtio_me=
-m *vm)
- 				      VIRTIO_MEM_DEFAULT_OFFLINE_THRESHOLD);
-=20
- 	/*
--	 * TODO: once alloc_contig_range() works reliably with pageblock
--	 * granularity on ZONE_NORMAL, use pageblock_nr_pages instead.
-+	 * alloc_contig_range() works reliably with pageblock
-+	 * granularity on ZONE_NORMAL, use pageblock_nr_pages.
- 	 */
--	sb_size =3D PAGE_SIZE * MAX_ORDER_NR_PAGES;
-+	sb_size =3D PAGE_SIZE * pageblock_nr_pages;
- 	sb_size =3D max_t(uint64_t, vm->device_block_size, sb_size);
-=20
- 	if (sb_size < memory_block_size_bytes() && !force_bbm) {
---=20
+diff --git a/drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c b/drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c
+index 78e008b81374..4276becd07cf 100644
+--- a/drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c
++++ b/drivers/net/ethernet/freescale/fs_enet/fs_enet-main.c
+@@ -94,14 +94,22 @@ static int fs_enet_napi(struct napi_struct *napi, int budget)
+ 	int curidx;
+ 	int dirtyidx, do_wake, do_restart;
+ 	int tx_left = TX_RING_SIZE;
++	u32 int_events;
+ 
+ 	spin_lock(&fep->tx_lock);
+ 	bdp = fep->dirty_tx;
++	do_wake = do_restart = 0;
++
++	int_events = (*fep->ops->get_int_events)(dev);
++
++	if (int_events & fep->ev_err) {
++		(*fep->ops->ev_error)(dev, int_events);
++		do_restart = 1;
++	}
+ 
+ 	/* clear status bits for napi*/
+ 	(*fep->ops->napi_clear_event)(dev);
+ 
+-	do_wake = do_restart = 0;
+ 	while (((sc = CBDR_SC(bdp)) & BD_ENET_TX_READY) == 0 && tx_left) {
+ 		dirtyidx = bdp - fep->tx_bd_base;
+ 
+@@ -318,43 +326,24 @@ fs_enet_interrupt(int irq, void *dev_id)
+ {
+ 	struct net_device *dev = dev_id;
+ 	struct fs_enet_private *fep;
+-	const struct fs_platform_info *fpi;
+ 	u32 int_events;
+-	u32 int_clr_events;
+-	int nr, napi_ok;
+-	int handled;
+ 
+ 	fep = netdev_priv(dev);
+-	fpi = fep->fpi;
+ 
+-	nr = 0;
+-	while ((int_events = (*fep->ops->get_int_events)(dev)) != 0) {
+-		nr++;
++	int_events = (*fep->ops->get_int_events)(dev);
++	if (!int_events)
++		return IRQ_NONE;
+ 
+-		int_clr_events = int_events;
+-		int_clr_events &= ~fep->ev_napi;
++	int_events &= ~fep->ev_napi;
+ 
+-		(*fep->ops->clear_int_events)(dev, int_clr_events);
+-
+-		if (int_events & fep->ev_err)
+-			(*fep->ops->ev_error)(dev, int_events);
+-
+-		if (int_events & fep->ev) {
+-			napi_ok = napi_schedule_prep(&fep->napi);
+-
+-			(*fep->ops->napi_disable)(dev);
+-			(*fep->ops->clear_int_events)(dev, fep->ev_napi);
+-
+-			/* NOTE: it is possible for FCCs in NAPI mode    */
+-			/* to submit a spurious interrupt while in poll  */
+-			if (napi_ok)
+-				__napi_schedule(&fep->napi);
+-		}
++	(*fep->ops->clear_int_events)(dev, int_events);
+ 
++	if (napi_schedule_prep(&fep->napi)) {
++		(*fep->ops->napi_disable)(dev);
++		__napi_schedule(&fep->napi);
+ 	}
+ 
+-	handled = nr > 0;
+-	return IRQ_RETVAL(handled);
++	return IRQ_HANDLED;
+ }
+ 
+ void fs_init_bds(struct net_device *dev)
+diff --git a/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c b/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c
+index b47490be872c..66c8f82a8333 100644
+--- a/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c
++++ b/drivers/net/ethernet/freescale/fs_enet/mac-fcc.c
+@@ -124,7 +124,7 @@ static int do_pd_setup(struct fs_enet_private *fep)
+ 	return ret;
+ }
+ 
+-#define FCC_NAPI_EVENT_MSK	(FCC_ENET_RXF | FCC_ENET_RXB | FCC_ENET_TXB)
++#define FCC_NAPI_EVENT_MSK	(FCC_ENET_RXF | FCC_ENET_RXB | FCC_ENET_TXB | FCC_ENET_TXE)
+ #define FCC_EVENT		(FCC_ENET_RXF | FCC_ENET_TXB)
+ #define FCC_ERR_EVENT_MSK	(FCC_ENET_TXE)
+ 
+-- 
 2.35.1
 

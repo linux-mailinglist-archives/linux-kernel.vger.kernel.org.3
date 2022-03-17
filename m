@@ -2,231 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45624DC1D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 451B44DC1E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbiCQIum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 04:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
+        id S231143AbiCQIvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 04:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiCQIuj (ORCPT
+        with ESMTP id S230071AbiCQIvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 04:50:39 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97E71C16E2;
-        Thu, 17 Mar 2022 01:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647506961; x=1679042961;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=THSmDaUYhUXwpzD/LRroNFtu5MvAMJPSWNSOH7fBQr0=;
-  b=h7Whcc/cMztS7wLd3UfMV8fGITpj5v0Wk9iZDjV90uIh2A90R4MXoxk2
-   zICWC6e3h/twe2m2hgx8ifp0ZFAf+IlT5Szo9ybRDL9BNtPLMHai6s38i
-   wvWuxdwOmcfj0txVVUPPKOgmqZytUmRc6A78lTUjklx4tphg4mjFtF89W
-   mBAnsao0T4hjgKhbrTRFAURBL4Rzy+Mxmli+v7DMxya2MXzxlLKgPraEL
-   8ntQIeyb4FCKyeI0xWD4rlStt+qrA4uHvtTIPfvtKgCenTmxYtN6LL9sb
-   Q01ghYulRvdEGQ5fLeeSXVpV0h5dvFinCO0KYlHa8hoUR3sNoueH9WU96
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="256769424"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="256769424"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 01:49:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="516684732"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by orsmga006.jf.intel.com with ESMTP; 17 Mar 2022 01:49:20 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 17 Mar 2022 01:49:20 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Thu, 17 Mar 2022 01:49:20 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.46) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Thu, 17 Mar 2022 01:49:20 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HlDEdta4qanKN7C37rLHW93Zy9TZ8CmnunTyfMmcR7QSsc2HLuG+0x2MRJ0Cq6u9684qUhlQEjYHx7h9BA2hE8pILyfBQZTo62Q3mpkXE/k/zkPEAllmfM7LIZCUdPCxlJYjtTzAAjl24ur9usSfCklN5ANLzBQ2+VPSvT7IP3bS+4P8GwqzvGR9B8sTA3xf4XcXTsO507RzQqP9V2ZYVaeEoARpKbMoaceb/vEgSNzBdxuyoSdiiniKrJEJ7CrGC60qNx6TjHZuQJSYBd9+9xnraVVozJAGo8g/+ZY1idd/rsmEmUi2DGj0RfddHt3o+ce6PWW8669aSbcRHNGjyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Zz9Ff0wWklWAW8McMZ8nqpxWR3u3wDQgh0RFTkMjQFE=;
- b=bUvAiHGv3uduqXHsWGl7cY6lJ7Cq/nXDrKOyuaiI3KcUedmGQrrZrXbK2HutWXurPdXcCWrrDsb9C7xV7mSE24c1WzfCvJ5Y6r/8nGGX4kOCC0BiPurzICd2Eu4F4pHpweuGO4yZ/AOMYLeYu78aDByQ1+Zyemp2z19yxpkEBaA4BDoMqlvO/cihKu3WTW8kMc33CkwMojclZFK6K3RAHb1sNa9Q6UMJzHzNeADUDmMdGkWvMDSXGHxl5ysRAjkpepdDxOrydkc9hHYRw8bgQJtKB8uk+fV7kyHTSEhWa3mRTkNRBUl3NaI9ggQjbSc47WH6fNQtmOX2Thqq+yyl4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
- by BN6PR11MB4115.namprd11.prod.outlook.com (2603:10b6:405:80::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Thu, 17 Mar
- 2022 08:49:16 +0000
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::d9ee:5bb8:1828:222d]) by DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::d9ee:5bb8:1828:222d%7]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
- 08:49:16 +0000
-From:   "Wu, Hao" <hao.wu@intel.com>
-To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: RE: [PATCH v6 3/6] fpga: dfl: check released_port_num and num_vfs for
- legacy model
-Thread-Topic: [PATCH v6 3/6] fpga: dfl: check released_port_num and num_vfs
- for legacy model
-Thread-Index: AQHYOQUgSs9N1UoLREyNbEPguLG93azDQyug
-Date:   Thu, 17 Mar 2022 08:49:16 +0000
-Message-ID: <DM6PR11MB381950AC46C7913128AE212D85129@DM6PR11MB3819.namprd11.prod.outlook.com>
-References: <20220316070814.1916017-1-tianfei.zhang@intel.com>
- <20220316070814.1916017-4-tianfei.zhang@intel.com>
-In-Reply-To: <20220316070814.1916017-4-tianfei.zhang@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f68bd180-f588-4d53-016f-08da07f304aa
-x-ms-traffictypediagnostic: BN6PR11MB4115:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BN6PR11MB41150215B2749E8A6655CF7F85129@BN6PR11MB4115.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BfyFEyYpiZvg1uSLELHMwBhkL4/VpA2k5nAxdW+RYdTbTlSGV9Hm0jYKDd8x3q5MdcCcGFXRBIOq8I5XO70esOSwCGS5vqtLy1lpTni5tsDsKtW5zxqB7a0IZW76trrMqyzEI4FGgYXSGwLfX172xwNdRDc3m/ZPX+c6/WezgvofHjLoLo706r7wlf/0g3dQhUxi0plIOpBNazD8EzkSVrzaZuCFvUfpzEr3cnF2pdc91h27nZQa/N5mzhsNEF+h63o64tgt2gIZczvd5LrJW4J5HPmUPVOv4pc6AP16K/m/V9JbV/FKJ2/i7fB0iUR5YUtQaRJRrL2mpR/dXukyfLSjml8JpWEahApD39OQd4tm04zu4B+nAyWv9JdEmkE+9NeYGTPcW9iPZShnjkZ5/aglRFS30RQBzCeOceB1nwje79W/RGaECppGEeFgnIkKqejlDd96ZjOyMeNBI4534nS7ELmKtBJNs1n4eDu+XjrKw8ukA1j32xSfqUR8UGqTsMJrjm+/R6Jy2eJLKJ24RPHiqc50Lxh6zbAT/hHDKvk1CWwCM4eu7zgApdOS3ksSZhhVgRwC2/Sjd9Dsj07+xa9JFB5vxxB834+NSwe20uGvwnVxVfiYXxRk1Ee0ke3Xfm3k0fIPDOegP/fcv5ZEKRxSgiP+4PLUCsfpb6qKQCMSt+WD9pvuLAI7LTnJYfL+L/ERDndXu2HHqIPPWgKq2nIxfaW6IxVGJbpoOHOIxts=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(38070700005)(55016003)(8936002)(2906002)(83380400001)(5660300002)(33656002)(8676002)(122000001)(66556008)(66476007)(66446008)(64756008)(110136005)(186003)(26005)(4326008)(66946007)(54906003)(316002)(76116006)(52536014)(9686003)(71200400001)(38100700002)(6506007)(921005)(82960400001)(7696005)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?GDV7iqLB6yk2xA2fisPAIcViu5lAMujl0zl5i6N48XsJDEjTkLkbTkJ//+Qa?=
- =?us-ascii?Q?S+yYrSOUE6D42Ey13cwjpeJ07ApdPoho7tVnHmbUH4cVld5k1Tm/HUtc/BD+?=
- =?us-ascii?Q?PqurO8SI3S9F21l/9NGyAin8M9+XWiwz/aDd7dE0xW2lKQngx4CfQ926DsD9?=
- =?us-ascii?Q?SP1GiCKqWduK7OxojYaJYibRWF27Imw9Bpn8vIM8SDlPe9L4Hwlnn2M9G5ii?=
- =?us-ascii?Q?RP1paO3QcjIvUxQKl4fD3LNzy+z+PeDjz4LJ0yPpMtSNaJvcefy+LLE36pGb?=
- =?us-ascii?Q?KWRprOwynhO5AvSjf2UtdZR5HaefjkWPkFE66kXmIvsM68inc+FFnIv7VTc0?=
- =?us-ascii?Q?G2mtZkRxxppbQkax+LY7JjRoYlP/CAZ2SekFC0r9yAj44ANVZX5JIlZse/fz?=
- =?us-ascii?Q?K6raqza9j74rmkkYF0Vxt7/j3d1yNa1CEnUILhYbQovlVSO1GHOoLcYqfKRo?=
- =?us-ascii?Q?y/S5gKpJGv1oqr/YgGZH9mdudL43gmrxRR5+h1Ijjm7SxPUJHJ6DEbdlEdhb?=
- =?us-ascii?Q?s9SJoJsAXe0WHieEkVWGxRdBcWMEvlmHrm8V/LYqevqudc7o05ihf78mGgfu?=
- =?us-ascii?Q?mwSELna7/k05oquj5HDrAaE1ndl3D+wn8MRo5fGs2gCUj7MB4BkGExfZMGR6?=
- =?us-ascii?Q?dEQnEhKgR4ysXpo7m7fTEzzOkNokZp2lXtZMvw9h7dBVCx9O4FBmlCDjolex?=
- =?us-ascii?Q?HWRXM5MvwRXSVlrFPnufDF6bks+l2HUQC/wu2WMCEMdJx4c2Ik0hKJ++7y4T?=
- =?us-ascii?Q?RU2Nqfna+4cEYnu196Jd5PMZn2Ezwh/7Ei4UOY/zZV/uNUJEm8lRSU9/3oX+?=
- =?us-ascii?Q?76x0o6adUN8aUv7Bag8SuA8oAHh4IDgFNeEdrZao384ADl72TjfJJSVwvRfL?=
- =?us-ascii?Q?MnyuZSl6cjyATmyVqxLS8SEmojKBWDvVymyRvBGEYuYnEcQxdozn98E4aA6y?=
- =?us-ascii?Q?LmV2vUo9WuUj/Z1gdyly+G8c4R9BayrGloR4vCwBQJ8rq8CQtnrsK6Mwg/oD?=
- =?us-ascii?Q?aXbda6Uj4w+8eMepVnO1Th19DxsAgTCVk1kMUpze+0Ch44N6tuMAmtadwEkc?=
- =?us-ascii?Q?grJ80rDg5QcoN6JA5u/UscOFcwmj3bZN8vOZp/jlYPE9Qa7kr1UhaiwA4Ude?=
- =?us-ascii?Q?2WqmfA9IkmPr8fD112oW3xrHFgG04P8tTIJU/pBjCUL2NkB6Gfty2CETDRw1?=
- =?us-ascii?Q?J7fHNx0LagQB2mT6KM4eSL6L1MCFIMCudzepbpi5VqFoerC5Bsgpwf6foqtf?=
- =?us-ascii?Q?r/9h6tYKTRCuCyZ7948ZMpnbKFCvRtBxl6w5L4G6TyGNCyl+pz08ZPCo8SnY?=
- =?us-ascii?Q?KIBNjJSa6vfbXLA3NTqTvxM4MuCie8Z6lbybxaMIW4DfKIJY4OlnpX7Uudea?=
- =?us-ascii?Q?H+D00D0ww+mmksCcPaMvaGybmKYwzUkZpYiEpRChNEzw52oa27McYzQysIQT?=
- =?us-ascii?Q?J77jv0+BgUg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 17 Mar 2022 04:51:46 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1129F6E7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:50:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=/psyaRdsVlBoPSQar3nutqmlxiw
+        1nqEeNHN3sJwG3XQ=; b=IlJ3sFfjgXrCV/iFL1WPeYu3Qgy+L75APYhe7y+lKfl
+        QP0UNXhvDEyRQADam9sEYoZDOqrqtITCKE2jJqHeyWuwT9L8oaDxdraMtBG8R8cU
+        ZVAdrkDKy/yFyFtH64I0wiq7p+CD54XaixmF0K9tTB0xDuaoaenYJpiegHDpqk60
+        =
+Received: (qmail 3379127 invoked from network); 17 Mar 2022 09:50:25 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Mar 2022 09:50:25 +0100
+X-UD-Smtp-Session: l3s3148p1@1XTUHmbaIM0gAQnoAEd5ADwsgXkBgqk7
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-gpio@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH v7 0/1] gpio: add simple logic analyzer using polling
+Date:   Thu, 17 Mar 2022 09:50:18 +0100
+Message-Id: <20220317085019.3987-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f68bd180-f588-4d53-016f-08da07f304aa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2022 08:49:16.2106
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PODQamkjdjvhmlhgnqC1qKltvlRvUZFyxOsyJGQQB/vtXNyxa0iWY/IthgA6XVpado+Kq4XzhFF21G2tyrgQNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB4115
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: [PATCH v6 3/6] fpga: dfl: check released_port_num and num_vfs fo=
-r
-> legacy model
->=20
-> From: Tianfei zhang <tianfei.zhang@intel.com>
->=20
-> In OFS legacy model, there is 1:1 mapping for Port device and VF,
-> so it need to check the number of released port match the number of
-> VFs or not. But in "Multiple VFs per PR slot" model, there is 1:N
-> mapping for the Port device and VFs.
+Here is the next version of the sloppy GPIO logic analyzer. Changes
+since last version:
 
-The title and commit message seems not matching the code..
-From code it sounds like we are trying to skip the PORT=20
-(PF access-> VF access) function, as new SRIOV usage model is introduced.
-Probably we can skip it early in this function or even skip this function
-directly. It doesn't matter it's 1:N or 1:1, we always want to keep PF
-access to port, right?
+* improved the script to handle already mounted (legacy) cpusets or
+  cgroups. Works also with cgroups2 as long as the cpuset controller
+  is not used.
 
->=20
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> ---
->  drivers/fpga/dfl.c | 10 ++++++----
->  drivers/fpga/dfl.h |  2 ++
->  2 files changed, 8 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 712c53363fda..b95b29c5c81d 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -1707,11 +1707,13 @@ int dfl_fpga_cdev_config_ports_vf(struct
-> dfl_fpga_cdev *cdev, int num_vfs)
->=20
->  	mutex_lock(&cdev->lock);
->  	/*
-> -	 * can't turn multiple ports into 1 VF device, only 1 port for 1 VF
-> -	 * device, so if released port number doesn't match VF device number,
-> -	 * then reject the request with -EINVAL error code.
-> +	 * In the OFS legacy model, it can't turn multiple ports into 1 VF
-> +	 * device, because only 1 port conneced to 1 VF device, so if released
-> +	 * port number doesn't match VF device number, then reject the request
-> +	 * with -EINVAL error code.
->  	 */
-> -	if (cdev->released_port_num !=3D num_vfs) {
-> +	if ((dfl_has_port_connected_afu(cdev) &&
+* needed Kconfig options and cpuset hints added to docs
 
-Could we really use this as indication for which SRIOV model of hardware?
+* driver depends now on DEBUG_FS and CPUSETS
 
-> +	     cdev->released_port_num !=3D num_vfs)) {
->  		ret =3D -EINVAL;
->  		goto done;
->  	}
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index bc56b7e8c01b..83c2c50975e5 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -471,6 +471,8 @@ void dfl_fpga_enum_info_free(struct
-> dfl_fpga_enum_info *info);
->  #define DFL_PORT_CONNECT_BITS  MAX_DFL_FPGA_PORT_NUM
->  #define DFL_FEAT_PORT_CONNECT_MASK ((1UL <<
-> (DFL_PORT_CONNECT_BITS)) - 1)
->=20
-> +#define dfl_has_port_connected_afu(cdev) ((cdev)->flags &
-> DFL_FEAT_PORT_CONNECT_MASK)
-> +
->  /**
->   * struct dfl_fpga_cdev - container device of DFL based FPGA
->   *
-> --
-> 2.26.2
+The changes are rather small. To ease reviewing, I'll add the diff to
+the previous version to the end of this cover-letter. Note that I tried
+to convert the analyzer to cgroups2 but I wasn't able to create a new
+process on the isolated CPU. Maybe we fix this incrementally or we just
+leave it as is, it works well enough and cgroups are still around.
+
+For those new to this sloppy GPIO logic analyzer, here is a small
+excerpt from a previous cover-letter with the links updated:
+
+===
+
+Here is the next update of the in-kernel logic analyzer based on GPIO
+polling with local irqs disabled. It has been tested locally and
+remotely. It provided satisfactory results. Besides the driver, there is
+also a script which isolates a CPU to achieve the best possible result.
+I am aware of the latency limitations. However, the intention is for
+debugging only, not mass production. Especially for remote debugging and
+to get a first impression, this has already been useful. Documentation
+is within the patch, to get a better idea what this is all about.
+
+A branch is here:
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/gpio-logic-analyzer-v7
+
+And an eLinux-wiki page with a picture of a result is here:
+https://elinux.org/Kernel_GPIO_Logic_analyzer
+
+I've used the analyzer in a few more scenarios and on multiple SoCs
+(Renesas R-Car H3 and M3-W) and was happy with the outcome. Looking
+forward to other tests and comments. From my side this is good to go.
+
+===
+
+Here is the diff:
+
+--- 8< ---
+
+ .../dev-tools/gpio-sloppy-logic-analyzer.rst  |  5 ++++
+ drivers/gpio/Kconfig                          |  2 +-
+ tools/gpio/gpio-sloppy-logic-analyzer         | 27 ++++++++++++-------
+ 3 files changed, 24 insertions(+), 10 deletions(-)
+
+diff --git a/Documentation/dev-tools/gpio-sloppy-logic-analyzer.rst b/Documentation/dev-tools/gpio-sloppy-logic-analyzer.rst
+index 330d45046f0f..a9b1cd6c2fea 100644
+--- a/Documentation/dev-tools/gpio-sloppy-logic-analyzer.rst
++++ b/Documentation/dev-tools/gpio-sloppy-logic-analyzer.rst
+@@ -33,6 +33,11 @@ first view and aid further debugging.
+ Setup
+ =====
+ 
++Your kernel must have CONFIG_DEBUG_FS and CONFIG_CPUSETS enabled. Ideally, your
++runtime environment does not utilize cpusets otherwise, then isolation of a CPU
++core is easiest. If you do need cpusets, check that helper script for the
++sloppy logic analyzer does not interfere with your other settings.
++
+ Tell the kernel which GPIOs are used as probes. For a Device Tree based system,
+ you need to use the following bindings. Because these bindings are only for
+ debugging, there is no official schema::
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 299205f7628c..2a75a3ffb0ef 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -1695,7 +1695,7 @@ menu "GPIO hardware hacking tools"
+ 
+ config GPIO_SLOPPY_LOGIC_ANALYZER
+ 	tristate "Sloppy GPIO logic analyzer"
+-	depends on (GPIOLIB || COMPILE_TEST) && EXPERT
++	depends on (GPIOLIB || COMPILE_TEST) && CPUSETS && DEBUG_FS && EXPERT
+ 	help
+ 	  This option enables support for a sloppy logic analyzer using polled
+ 	  GPIOs. Use the 'tools/gpio/gpio-sloppy-logic-analyzer' script with
+diff --git a/tools/gpio/gpio-sloppy-logic-analyzer b/tools/gpio/gpio-sloppy-logic-analyzer
+index eb2065fe6733..09065535e874 100755
+--- a/tools/gpio/gpio-sloppy-logic-analyzer
++++ b/tools/gpio/gpio-sloppy-logic-analyzer
+@@ -8,7 +8,8 @@
+ 
+ samplefreq=1000000
+ numsamples=250000
+-cpusetdir='/dev/cpuset'
++cpusetdefaultdir='/sys/fs/cgroup'
++cpusetprefix='cpuset.'
+ debugdir='/sys/kernel/debug'
+ ladirname='gpio-sloppy-logic-analyzer'
+ outputdir="$PWD"
+@@ -76,17 +77,16 @@ set_newmask()
+ init_cpu()
+ {
+ 	isol_cpu="$1"
+-	[ -d $cpusetdir ] || mkdir $cpusetdir
+-	mount | grep -q $cpusetdir || mount -t cpuset cpuset $cpusetdir
++
+ 	[ -d "$lacpusetdir" ] || mkdir "$lacpusetdir"
+ 
+-	cur_cpu="$(cat "$lacpusetdir"/cpus)"
++	cur_cpu=$(cat "${lacpusetfile}cpus")
+ 	[ "$cur_cpu" = "$isol_cpu" ] && return
+ 	[ -z "$cur_cpu" ] || fail "CPU$isol_cpu requested but CPU$cur_cpu already isolated"
+ 
+-	echo "$isol_cpu" > "$lacpusetdir"/cpus || fail "Could not isolate CPU$isol_cpu. Does it exist?"
+-	echo 1 > "$lacpusetdir"/cpu_exclusive
+-	echo 0 > "$lacpusetdir"/mems
++	echo "$isol_cpu" > "${lacpusetfile}cpus" || fail "Could not isolate CPU$isol_cpu. Does it exist?"
++	echo 1 > "${lacpusetfile}cpu_exclusive"
++	echo 0 > "${lacpusetfile}mems"
+ 
+ 	oldmask=$(cat /proc/irq/default_smp_affinity)
+ 	newmask=$(printf "%x" $((0x$oldmask & ~(1 << isol_cpu))))
+@@ -183,7 +183,16 @@ for f in $neededcmds; do
+ 	command -v "$f" >/dev/null || fail "Command '$f' not found"
+ done
+ 
++# print cpuset mountpoint if any, errorcode > 0 if noprefix option was found
++cpusetdir=$(awk '$3 == "cgroup" && $4 ~ /cpuset/ { print $2; exit (match($4, /noprefix/) > 0) }' /proc/self/mounts) || cpusetprefix=''
++if [ -z "$cpusetdir" ]; then
++	cpusetdir="$cpusetdefaultdir"
++	[ -d $cpusetdir ] || mkdir $cpusetdir
++	mount -t cgroup -o cpuset none $cpusetdir || fail "Couldn't mount cpusets. Not in kernel or already in use?"
++fi
++
+ lacpusetdir="$cpusetdir/$ladirname"
++lacpusetfile="$lacpusetdir/$cpusetprefix"
+ sysfsdir="$debugdir/$ladirname"
+ 
+ [ "$samplefreq" -ne 0 ] || fail "Invalid sample frequency"
+@@ -194,7 +203,7 @@ sysfsdir="$debugdir/$ladirname"
+ if [ -n "$lainstance" ]; then
+ 	lasysfsdir="$sysfsdir/$lainstance"
+ else
+-	lasysfsdir="$(find "$sysfsdir" -mindepth 1 -type d -print -quit)"
++	lasysfsdir=$(find "$sysfsdir" -mindepth 1 -type d -print -quit)
+ fi
+ [ -d "$lasysfsdir" ] || fail "Logic analyzer directory '$lasysfsdir' not found!"
+ [ -d "$outputdir" ] || fail "Output directory '$outputdir' not found!"
+@@ -213,7 +222,7 @@ if [ -n "$triggerdat" ]; then
+ 	printf "$trigger_bindat" > "$lasysfsdir"/trigger 2>/dev/null || fail "Trigger data '$triggerdat' rejected"
+ fi
+ 
+-workcpu=$(cat "$lacpusetdir"/effective_cpus)
++workcpu=$(cat "${lacpusetfile}effective_cpus")
+ [ -n "$workcpu" ] || fail "No isolated CPU found"
+ cpumask=$(printf '%x' $((1 << workcpu)))
+ instance=${lasysfsdir##*/}
+
+--- 8< ---
+
+
+Happy hacking,
+
+   Wolfram
+
+Wolfram Sang (1):
+  gpio: add sloppy logic analyzer using polling
+
+ .../dev-tools/gpio-sloppy-logic-analyzer.rst  |  91 +++++
+ Documentation/dev-tools/index.rst             |   1 +
+ drivers/gpio/Kconfig                          |  17 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-sloppy-logic-analyzer.c     | 340 ++++++++++++++++++
+ tools/gpio/gpio-sloppy-logic-analyzer         | 230 ++++++++++++
+ 6 files changed, 680 insertions(+)
+ create mode 100644 Documentation/dev-tools/gpio-sloppy-logic-analyzer.rst
+ create mode 100644 drivers/gpio/gpio-sloppy-logic-analyzer.c
+ create mode 100755 tools/gpio/gpio-sloppy-logic-analyzer
+
+-- 
+2.30.2
 

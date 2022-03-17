@@ -2,80 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDD44DCFAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C154DCFB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:55:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiCQU4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        id S229958AbiCQU5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 16:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiCQU4f (ORCPT
+        with ESMTP id S229934AbiCQU5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:56:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F2DAFCC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:55:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3905CB81FCB
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 20:55:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6260C340EC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 20:55:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647550515;
-        bh=pze1z1BdbXGkFdCxOha8uoXDciJVurg0YhEMJq3runk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CkePYpcghyT7B9A7yzhLZc+hWJC38j3LHw7aOwkWXJgdylnJfppDK0g+HSzYOaQI/
-         /ZbaDCpREmCCoaN3PjaZoI5TurB22skINuBF0QwYOLwu7OrM2LDC4OQ9zJ1zXYEp0G
-         ohpFmGkgqQ1zQbNIE/Q/r+bE3AIMlAu+mhFVXRFFr0+PJLD9UhDOvlxKx5UFAdng2F
-         QDUvD3vnZZdSbm7bhX7NdWdOjFx0ZU/BlW5ErRJvS+/3D6zj71m+zelZE8MYAjq6LG
-         1yyFnSCyk0b/KON8A7FJ3eWbuO4GYQ5z9H6WP6ZD8lITF8J3Dk0yYBf9gKp+XZKGEV
-         Xs6DsALpmMVsQ==
-Received: by mail-wm1-f53.google.com with SMTP id r190-20020a1c2bc7000000b0038a1013241dso3819764wmr.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:55:15 -0700 (PDT)
-X-Gm-Message-State: AOAM530wN8MYMpVk27PL6vPCfCK9M0BUEawBULiwzF4y0swrKN71xZGB
-        8UJBGn9kf1aTdgrg7uST9C3WxFVPn0GzwQkbNI0=
-X-Google-Smtp-Source: ABdhPJyZSHw1ltlznEHKpdgeeoKyl8jbWM+Dk2G5VG9wHw91b7cvT5lTxqYcy7l9pCd4B5lxaWL6odka8LdVjGdJIyo=
-X-Received: by 2002:a7b:cd13:0:b0:38b:f39c:1181 with SMTP id
- f19-20020a7bcd13000000b0038bf39c1181mr5645518wmj.20.1647550514226; Thu, 17
- Mar 2022 13:55:14 -0700 (PDT)
+        Thu, 17 Mar 2022 16:57:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47B513DB43
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:55:51 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nUx9s-0001M1-HO; Thu, 17 Mar 2022 21:55:44 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-45d5-ab38-4e18-d873.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:45d5:ab38:4e18:d873])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 55CE14D743;
+        Thu, 17 Mar 2022 20:55:43 +0000 (UTC)
+Date:   Thu, 17 Mar 2022 21:55:42 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Max Staudt <max@enpas.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+Message-ID: <20220317205542.2re5x73gqys5fl2n@pengutronix.de>
+References: <20220307214303.1822590-1-max@enpas.org>
+ <20220314215843.xxf6rdxxfwb255s4@pengutronix.de>
+ <20220317211822.7d74b49c.max@enpas.org>
 MIME-Version: 1.0
-References: <20220316183708.1505846-1-arnd@kernel.org> <aaf204b2-e876-d271-3d4e-51cbcc70d690@suse.de>
- <1f6c4559-ee48-ca67-8ff1-f7f9d330bc12@suse.de> <CAK8P3a3ogV8sJshQJrzHe7hc2k1Opq-2hvXf6DU+HfhREk-DhQ@mail.gmail.com>
- <7082c67a-a336-54fc-dd32-81b9b8c0a64b@suse.de>
-In-Reply-To: <7082c67a-a336-54fc-dd32-81b9b8c0a64b@suse.de>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 17 Mar 2022 21:54:58 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0Tfnza=OSR=-A_2u5QYNx8ZPm+FrFUtncVZMQYVNsATQ@mail.gmail.com>
-Message-ID: <CAK8P3a0Tfnza=OSR=-A_2u5QYNx8ZPm+FrFUtncVZMQYVNsATQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel: add CONFIG_DRM_KMS_HELPER dependencies
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Deepak Rawat <drawat.floss@gmail.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ggvj54df27ylfkyv"
+Content-Disposition: inline
+In-Reply-To: <20220317211822.7d74b49c.max@enpas.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,67 +58,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 8:15 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Am 16.03.22 um 21:59 schrieb Arnd Bergmann:
-> > On Wed, Mar 16, 2022 at 8:31 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >
-> > I was going for 'depends on' in the panel drivers because I saw the same being
-> > done for other panel drivers, and mixing the two methods causes dependency
-> > loops. I looked again now, and find that 'select DRM_KMS_HELPER' is more
-> > common for other drivers, and makes sense here because it is generally
-> > not user-selectable.
-> >
-> > The easiest replacement for my patch would then be to just use 'select
-> > DRM_KMS_HELPER' from CONFIG_DRM_MIPI_DBI, which makes it
-> > safer and more consistent with your change. If you like, I'll send an updated
-> > version.
+
+--ggvj54df27ylfkyv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 17.03.2022 21:18:22, Max Staudt wrote:
+> > > +/* Bits in elm->cmds_todo */
+> > > +enum ELM_TODO { =20
+> >         ^^^^^^^^
+> > small caps please, and Vincent alreadt commented on the name.
+>=20
+> Small caps? Sorry, that's not possible in plain ASCII.
+> You probably mean something else, but I'm not sure what?
+
+I meant to say lowercase, sorry for the confusion.
+
+[...]
+
+> > > +	/* Regular parsing */
+> > > +	switch (elm->state) {
+> > > +	case ELM_RECEIVING:
+> > > +		if (elm327_parse_frame(elm, len)) {
+> > > +			/* Parse an error line. */
+> > > +			elm327_parse_error(elm, len);
+> > > +
+> > > +			/* Start afresh. */
+> > > +			elm327_kick_into_cmd_mode(elm);
+> > > +		}
+> > > +		break;
+> > > +	default:
+> > > +		break;
+> > > +	}
+> > > +}
+> > > +
+> > > +/* Assumes elm->lock taken. */
+> > > +static void elm327_handle_prompt(struct elmcan *elm)
+> > > +{
+> > > +	struct can_frame *frame =3D &elm->can_frame;
+> > > +	char local_txbuf[20]; =20
+> >=20
+> > How can you be sure, that the local_txbuf is large enough?
+>=20
+> It's filled in this very same function, with sprintf() or a strcpy()
+> from one of the short strings in elm327_init_script (see next quote
+> below). I've calculated the maximum length that can occur out of all
+> these possibilities in the current code, and set that as the length of
+> local_txbuf.
+
+You can use something like "local_txbuf[sizeof("ATZ;ATDT0815;ATH")]"
+with the longest ATZ command you can produce here.
+
+> > > +	/* Reconfigure ELM327 step by step as indicated by
+> > > elm->cmds_todo */
+> > > +	if (test_bit(TODO_INIT, &elm->cmds_todo)) {
+> > > +		strcpy(local_txbuf, *elm->next_init_cmd); =20
+> >=20
+> > strncpy()
+>=20
+> For this, there would have to be an entry in elm327_init_script that is
+> longer than sizeof(local_txbuf) - 1. I highly doubt there ever will be,
+> and even if someone does come up with one (maybe a huge new command in a
+> future ELM327 revision), then strncpy would silently cut off the end and
+> induce unexpected failure. Most importantly, this failure would be
+> silent - the driver doesn't check the ELM's responses by design!
+>=20
+> I suggest an assert here. How about something like this?
+>=20
+> 	if (strlen(*elm->next_init_cmd) < sizeof(local_txbuf))
+> 		strcpy(local_txbuf, *elm->next_init_cmd);
+> 	else
+> 		WARN_ONCE(...)
 >
-> MIPI DBI is another helper and select is not transitive IIRC. So drivers
-> would still have to select KMS helpers as well. (?)
+> If elm327_init_script contains an item longer than this buffer, then
+> the buffer size needs to be increased. Simple programming error IMHO.
+> I'd also add a comment to state this, next to elm327_init_script.
+>=20
+> What do you think?
 
-Not sure what you mean here: if a driver selects DRM_MIPI_DBI,
-and DRM_MIPI_DBI selects DRM_KMS_HELPER, the leaf driver
-does not need to select DRM_KMS_HELPER because it is already
-selected. This is one of the major problems of overusing 'select' because
-you end up unable to turn things off.
+You can use BUILD_BUG_ON() (see linux/build_bug.h) inside your C
+function to make a compile time check, or static_assert() outside of C
+functions.
 
-Maybe you are thinking of the case where DRM_MIPI_DBI depends
-on DRM_KMS_HELPER, and something selects DRM_MIPI_DBI.
-In this case, the dependency does /not/ get inherited by the leaf
-driver, it needs a copy of the dependency or it triggers a warning,
-which is what my patch intended.
+> > > +	} else if (test_and_clear_bit(TODO_SILENT_MONITOR,
+> > > &elm->cmds_todo)) {
+> > > +		sprintf(local_txbuf, "ATCSM%i\r",
+> > > +			!(!(elm->can.ctrlmode &
+> > > CAN_CTRLMODE_LISTENONLY))); =20
+> >=20
+> > snprintf()
+>=20
+> See above. This size is predictable, and used to size local_txbuf.
+>=20
+> Thinking about it, since this size is easily predictable, the compiler
+> could also do it, and that would turn snprintf() into a compile time
+> check.
+>=20
+> Unfortunately I couldn't make GCC shout at me for giving snprintf() too
+> small a buffer to fit all possible expansions of this format string. Is
+> this even possible?
 
-> More generally, I think you're right about making DRM helper libraries
-> using 'depends on' to link to other libraries. Drivers would at least
-> know which config symbols to select. A number of config rules would have
-> to be adapted to make that happen, I guess.
+In user space, I've seen warnings like that, not sure about the kernel.
 
-Generally speaking, a problem with DRM is that it uses way too
-much 'select' to enforce other subsystems to be enabled, this is
-what causes DRM to have more problems with incorrect or circular
-dependencies, and the only way to avoid that is to be consistent
-about the dependencies: each symbol should only be referenced
-with either 'select' or 'depends on' but not both, and 'select' should
-ideally only be used on hidden symbols.
+> > > +static int elmcan_netdev_open(struct net_device *dev)
+> > > +{
+> > > +	struct elmcan *elm =3D netdev_priv(dev);
+> > > +	int err;
+> > > +
+> > > +	spin_lock_bh(&elm->lock);
+> > > +	if (elm->hw_failure) {
+> > > +		netdev_err(elm->dev, "Refusing to open interface
+> > > after a hardware fault has been detected.\n");
+> > > +		spin_unlock_bh(&elm->lock);
+> > > +		return -EIO;
+> > > +	} =20
+> >=20
+> > How to recover from this error?
+>=20
+> The user can detach and reattach the ldisc as often as desired.
+>=20
+> There is currently no intention to recover automatically. Once
+> elm->hw_failure is set, something really weird must have happened such
+> as unexpected characters on the UART. Since these devices are usually a
+> PIC right next to a UART-USB bridge chip, which is why I deem this
+> indicative of hardware too faulty to be trusted in any way.
+>=20
+> Regular "expected" errors are parsed and dealt with by sending error
+> frames in elm327_parse_error(). These do not trigger hw_failure.
 
-> > One thing I'm not sure about is whether there is still use for ever having
-> > CONFIG_DRM without CONFIG_DRM_KMS_HELPER if it gets selected
-> > by almost every driver anyway. Is this actually a configuration that
-> > users rely on, or should we just remove the symbol completely and
-> > build the KMS helpers unconditionally?
->
-> Best leave it as it is. i915 doesn't use it. And since it's a helper, it
-> should not be lumped together with core DRM code simply for reasons of
-> design.
+Ok, in other drivers I usually do a full reset during an ifdown/ifup
+cycle....at least for non hot plug-able devices.
 
-Ok
+> > > +	elm->txbuf =3D kmalloc(ELM327_SIZE_TXBUF, GFP_KERNEL); =20
+> >=20
+> > Why do you allocate an extra buffer?
+>=20
+> If I remember correctly, I was told that this is preferred because
+> drivers can DMA out of the aligned buffer. I didn't question that. I
+> can simply allocate a buffer as part of struct elmcan if you prefer.
 
-> For DRM_KMS_HELPER itself, the mid-term plan is to move some of the code
-> into other modules. KMS helpers used to contain all kind of helpers, but
-> recently there's interest in reducing the minimum size of a built-in DRM
-> with minimal driver support. So the non-essential stuff needs to go into
-> modules for the more-sophisticated DRM drivers.
+You can force proper alignment with marking the memory as
+____cacheline_aligned. Extra bonus for checking (and optimizing)
+structure packing with the "pahole" tool.
 
-Right, that makes sense.
+regards,
+Marc
 
-       Arnd
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ggvj54df27ylfkyv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIzoEsACgkQrX5LkNig
+012lqAf/Q72TeHYSVq1zAC8Fm7vG5aDOCz8WTJ9RVHMhNIuamFIriPLpRnc6h4OO
+yEBb+ysLUmjh2EaUlaQlW+p/7JsKy59tyiCDmberN4pcx5PlGBywSxD+UEZn5JxT
+bmCeCWcOKHAsiQ9AhSVlclfPZgX0q0yOEDXu63Nvsdirlpe5JPmEadKOypN3tX85
+QmSt1N4LMUN37KV315DSI0QAtuo9476XdtkosOhNMz1KenGQcqCMi1/46c5+Q6Dn
+ZHEAOUOgTov+gJ7PmZeA1R4qyq6onDnaAF/bIGJjhs4/0mA8u2NaTZ4bwvcDE5V/
+eoCdLwrt/hmhrFmpKwRv9pfaqxRp1Q==
+=oHJR
+-----END PGP SIGNATURE-----
+
+--ggvj54df27ylfkyv--

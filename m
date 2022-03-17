@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488184DD13C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098C54DD140
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiCQXld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 19:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56548 "EHLO
+        id S230174AbiCQXsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 19:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiCQXlc (ORCPT
+        with ESMTP id S229776AbiCQXsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 19:41:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC022C74B5;
-        Thu, 17 Mar 2022 16:40:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78465B8204A;
-        Thu, 17 Mar 2022 23:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA497C340E9;
-        Thu, 17 Mar 2022 23:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1647560412;
-        bh=w797oqO942yv+U+WAjx8vxn2UXSyujCK+6XAulOhpmM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Mta7xvARtzsI9Z8MUCe/BOrdIaoo8KclzMP0367SKo/tFMoE8dJqa3WRcs6um6BLG
-         amIDUoecdLPF0KKITo285fkxgActdutDIMpmwg7Kz751NPeOQXypsTqf+lN8LHlypn
-         qSIarGlFtWMRQvLcivq5epIfLbAAw1Th8aXwAvW4=
-Date:   Thu, 17 Mar 2022 16:40:11 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Jianxing Wang <wangjianxing@loongson.cn>
-Cc:     peterz@infradead.org, will@kernel.org, aneesh.kumar@linux.ibm.com,
-        npiggin@gmail.com, linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] mm/mmu_gather: limit free batch count and add
- schedule point in tlb_batch_pages_flush
-Message-Id: <20220317164011.27d7341715de12d890ca244a@linux-foundation.org>
-In-Reply-To: <20220317072857.2635262-1-wangjianxing@loongson.cn>
-References: <20220317072857.2635262-1-wangjianxing@loongson.cn>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Mar 2022 19:48:07 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA2226133B;
+        Thu, 17 Mar 2022 16:46:49 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id r10so9607132wrp.3;
+        Thu, 17 Mar 2022 16:46:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=44jSVu9ViGX65V2KV4sJoKN91g8S2sbZ550L2N5DUJ4=;
+        b=l/0VWzdsq+0tapKmp9GM2+I2R4GUGVKdkGWYWuAwvHzKLPI3p5TshglsScGVDa6NFW
+         DaUSL0XENlAwNhjU9nCyUGZAAKbuLTE5fPZkTuqREBsP1ImFELxbCE3lmp3Tj4nI/jZy
+         9MwmBjSZpXSmwI4DVJZDYjtVulXynQRqIUs3I7K0QsW9YAidOZSK0Tv9Ac8x3k42NYBa
+         rI6tO6VGSjlkuhdZoQ0C6BU3ba7i/97qKi1VIMAusTrJVubzZfr5sUa8Dru53eP9ebuz
+         wQGxh7PiQr4lqSAjy9LGqm91YM5rAGN3LoMMnC2WtFXix6zXjBdx0Wr+n4qempHJNmVk
+         hZKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=44jSVu9ViGX65V2KV4sJoKN91g8S2sbZ550L2N5DUJ4=;
+        b=sPUOJTii9xSjQLTLtiE9pAUEoyRZQ97p9muRYglQ8XeP08eSzXK+xguUdunXn0d7WS
+         wVpb8MrYYI+0t75LPg1n+CtVhWjapuI9RQSkFske7aIIRvBsUNPwviB8wVBSD8ppXr+1
+         rOMoFfV9wCA7CuEHjwAtVOClA4K5EGYlkgb+qpWWqSH7NY3Do9olkGBqI5DgyNBrpn94
+         L8ASrm77fkUD7j4pyCEg8BCe27j+7/pA8vzYasdRCeBwuEndc5JvLqztBoD2u/OfvXtz
+         JIw+rGwLfXl6d4BXPC7gYH920dFy5UMh8dFAeBJ/1ZR/tQoOtYRP37mohKxm2SoTOzXA
+         R/kg==
+X-Gm-Message-State: AOAM533QnNUUji0luwbIBmqt0dLmZ8/kWiHDtEizzgV7z3a8Lr0MKx2m
+        cUDK0wkJNEdEa8kRwzXm+oY=
+X-Google-Smtp-Source: ABdhPJxdH/WN2xf224PSCmdD+V5oRw0iLxFKpaeNeTNgCZ9Kx3jYO0+gAPl3kcA/9A7EbQbNAzpyng==
+X-Received: by 2002:adf:efd2:0:b0:203:db42:c56c with SMTP id i18-20020adfefd2000000b00203db42c56cmr5842974wrp.698.1647560808002;
+        Thu, 17 Mar 2022 16:46:48 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id v5-20020adfe4c5000000b001edc1e5053esm4860565wrm.82.2022.03.17.16.46.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 16:46:47 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+        Jens Axboe <axboe@kernel.dk>, xen-devel@lists.xenproject.org,
+        linux-block@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] xen-blkback: remove redundant assignment to variable i
+Date:   Thu, 17 Mar 2022 23:46:46 +0000
+Message-Id: <20220317234646.78158-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022 03:28:57 -0400 Jianxing Wang <wangjianxing@loongson.cn> wrote:
+Variable i is being assigned a value that is never read, it is being
+re-assigned later in a for-loop. The assignment is redundant and can
+be removed.
 
-> free a large list of pages maybe cause rcu_sched starved on
-> non-preemptible kernels. howerver free_unref_page_list maybe can't
-> cond_resched as it maybe called in interrupt or atomic context,
-> especially can't detect atomic context in CONFIG_PREEMPTION=n.
-> 
-> tlb flush batch count depends on PAGE_SIZE, it's too large if
-> PAGE_SIZE > 4K, here limit free batch count with 512.
-> And add schedule point in tlb_batch_pages_flush.
-> 
-> rcu: rcu_sched kthread starved for 5359 jiffies! g454793 f0x0
-> RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=19
-> [...]
-> Call Trace:
->    free_unref_page_list+0x19c/0x270
->    release_pages+0x3cc/0x498
->    tlb_flush_mmu_free+0x44/0x70
->    zap_pte_range+0x450/0x738
->    unmap_page_range+0x108/0x240
->    unmap_vmas+0x74/0xf0
->    unmap_region+0xb0/0x120
->    do_munmap+0x264/0x438
->    vm_munmap+0x58/0xa0
->    sys_munmap+0x10/0x20
->    syscall_common+0x24/0x38
+Cleans up clang scan build warning:
+drivers/block/xen-blkback/blkback.c:934:14: warning: Although the value
+stored to 'i' is used in the enclosing expression, the value is never
+actually read from 'i' [deadcode.DeadStores]
 
-tlb_batch_pages_flush() doesn't appear in this trace.  I assume the call
-sequence is
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/block/xen-blkback/blkback.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-zap_pte_range
-->tlb_flush_mmu
-  ->tlb_flush_mmu_free
+diff --git a/drivers/block/xen-blkback/blkback.c b/drivers/block/xen-blkback/blkback.c
+index d1e26461a64e..de42458195bc 100644
+--- a/drivers/block/xen-blkback/blkback.c
++++ b/drivers/block/xen-blkback/blkback.c
+@@ -931,7 +931,7 @@ static int xen_blkbk_parse_indirect(struct blkif_request *req,
+ 	if (rc)
+ 		goto unmap;
+ 
+-	for (n = 0, i = 0; n < nseg; n++) {
++	for (n = 0; n < nseg; n++) {
+ 		uint8_t first_sect, last_sect;
+ 
+ 		if ((n % SEGS_PER_INDIRECT_FRAME) == 0) {
+-- 
+2.35.1
 
-correct?
-
-> --- a/mm/mmu_gather.c
-> +++ b/mm/mmu_gather.c
-> @@ -47,8 +47,20 @@ static void tlb_batch_pages_flush(struct mmu_gather *tlb)
->  	struct mmu_gather_batch *batch;
->  
->  	for (batch = &tlb->local; batch && batch->nr; batch = batch->next) {
-> -		free_pages_and_swap_cache(batch->pages, batch->nr);
-> -		batch->nr = 0;
-> +		struct page **pages = batch->pages;
-> +
-> +		do {
-> +			/*
-> +			 * limit free batch count when PAGE_SIZE > 4K
-> +			 */
-> +			unsigned int nr = min(512U, batch->nr);
-> +
-> +			free_pages_and_swap_cache(pages, nr);
-> +			pages += nr;
-> +			batch->nr -= nr;
-> +
-> +			cond_resched();
-> +		} while (batch->nr);
->  	}
-
-The patch looks safe enough.  But again, it's unlikely to work if the
-calling task has realtime policy.  The same can be said of the
-cond_resched() in zap_pte_range(), and presumably many others.
-
-I'll save this away for now and will revisit after 5.18-rc1.
-
-How serious is this problem?  Under precisely what circumstances were
-you able to trigger this?  In other words, do you believe that a
-backport into -stable kernels is needed and if so, why?
-
-Thanks.

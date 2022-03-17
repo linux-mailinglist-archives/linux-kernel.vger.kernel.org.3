@@ -2,99 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE1E4DC4DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 686274DC4DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbiCQLeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S233053AbiCQLeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiCQLeG (ORCPT
+        with ESMTP id S233049AbiCQLeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:34:06 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94D81E3E23;
-        Thu, 17 Mar 2022 04:32:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ey+fTvo2WaAXz/8S4ThmUaqCZBbCMIOrkL3sCa+NTTg=; b=DZZZ/qaiMvFxJJskTW+RRyyWsq
-        TRlnPiyk/dtCK42Dv6mDxRNz4owhHryjydGyhYmrBORhvKeWfVLAuEzvIc1w3/zDq6KuPErCy7PhT
-        idgCXcKlyPExYrnKXaNRGvazDEtawVsq/AAPsz7LmISSvuXHFrQ6buAEy4Ep/p7pmwrPQEbOh3aqV
-        LDg7LD4oR8wbPWNsBLSFO7MwbQItFeMoON98KSSBiuM+TQXKmKVDkeq6HI/25kR88jrRngRc12d/g
-        N0CnxxYjnJMkOVoF430KilTDGDRGpjpmQGzu0QqamoOi+pv/wf4E1d176253ikUAhexvyjmCDtfoa
-        /rsijmBw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nUoMv-006uxP-Kc; Thu, 17 Mar 2022 11:32:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3967C3001EA;
-        Thu, 17 Mar 2022 12:32:37 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1B7AD2B3B2762; Thu, 17 Mar 2022 12:32:37 +0100 (CET)
-Date:   Thu, 17 Mar 2022 12:32:37 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
-        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        pbonzini@redhat.com, jmattson@google.com, like.xu.linux@gmail.com,
-        eranian@google.com, ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH 4/7] perf/x86/amd/core: Detect available counters
-Message-ID: <YjMcVVkG+kOZgtYB@hirez.programming.kicks-ass.net>
-References: <cover.1647498015.git.sandipan.das@amd.com>
- <7393a62ef0489c4b86034c68ff8e11bc97456385.1647498015.git.sandipan.das@amd.com>
+        Thu, 17 Mar 2022 07:34:15 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA046B43;
+        Thu, 17 Mar 2022 04:32:58 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so1426535pjm.0;
+        Thu, 17 Mar 2022 04:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=D1r2+ujwtgn46Z8IW9rsnE8ina0uSN8BH1oaJ82ex2s=;
+        b=C090cHSsTT/XY1HvyyGEEbnYVln+2jSkSncoauLw4cuTHsmDy8LhH3sb3db0JoG/TO
+         7B9zFaWm7eB6tFQ7nNsGKtC0rwM0MkAtSMh7jJOjvtIUgocKM73fqvXTT+m2GQZVDjGR
+         kKbhNW20spLTZrW+1pGk/nRHZVmpuRUfIRlU4Bik5YU8yiINh4h4b4mv5Mq4okPhAwYM
+         EgZ+y20MndMxzw655ovZpE+3Vu/1nT4KGhUzPEtt0pUgBW3LWa2UpyTH/QoEUG4+hg31
+         MgFarz5drfd8lEXoRUJV0rytmJYQ6N4vm5KLdVdVnLqcWUEYv8JwMjp1BdHB4UbghOy8
+         kP5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=D1r2+ujwtgn46Z8IW9rsnE8ina0uSN8BH1oaJ82ex2s=;
+        b=t2M8UHEDxYxuW7C80g1jBCgAsAJ1TCNfjhdO+LZAkQzPFH0LnGD0sQIs40H99s3g2Y
+         xo+JOzroElw8XkQWSofsNagTsmtKzLaBrIlsUhK1chW/lBgntLgSK6Rzkr4lR4hATiT0
+         zQZE0MOWti4fTaYvarT7N6u4LhlO3AWezR0RoXTjST66D7Ds4tepoKcnqapr1jUgc8TX
+         MAFi6yGxK44YeSYbCi4jtdfXFJErGJcrD6SRjwBrZ4umxZgPwcaXlry7DMWA7WtyagmI
+         VJ8QUdbNY344EoQ9lBlU0WivJzHCfRxVt3iUgrkvwARFkAcH4oHezHZZ8M/POZO0ZNJ3
+         ytKQ==
+X-Gm-Message-State: AOAM5325vJpCZU67g9HrhMLsocZwuDJxZFsiQXlkz8XIymXEg52leBP3
+        xdxMym807N9giEpvd3K/0SOTyxRVrzCazw==
+X-Google-Smtp-Source: ABdhPJxgb0qWeAujzMIl9E8TyRyXqgQbnoynbbARMY0OiKTJJ/cfUeu5waSoEQ8hAiDsuZL2r2I0pw==
+X-Received: by 2002:a17:903:41c1:b0:151:f026:8048 with SMTP id u1-20020a17090341c100b00151f0268048mr4086675ple.41.1647516777848;
+        Thu, 17 Mar 2022 04:32:57 -0700 (PDT)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id oo17-20020a17090b1c9100b001bf0ccc59c2sm10097718pjb.16.2022.03.17.04.32.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 04:32:57 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 11:32:53 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     rcu@vger.kernel.org
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: RCU: undefined reference to irq_work_queue
+Message-ID: <YjMcZexG/kJepYDi@ip-172-31-19-208.ap-northeast-1.compute.internal>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7393a62ef0489c4b86034c68ff8e11bc97456385.1647498015.git.sandipan.das@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 11:58:33AM +0530, Sandipan Das wrote:
-> If AMD Performance Monitoring Version 2 (PerfMonV2) is
-> supported, use CPUID Fn80000022[EBX] to detect the number
-> of Core PMCs. This offers more flexibility if the counts
-> change across processor families.
-> 
-> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-> ---
->  arch/x86/events/amd/core.c        | 5 +++++
->  arch/x86/include/asm/perf_event.h | 8 ++++++++
->  2 files changed, 13 insertions(+)
-> 
-> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-> index a074af97faa9..05d79afe5173 100644
-> --- a/arch/x86/events/amd/core.c
-> +++ b/arch/x86/events/amd/core.c
-> @@ -980,9 +980,14 @@ static int __init amd_core_pmu_init(void)
->  
->  	/* Check for Performance Monitoring v2 support */
->  	if (boot_cpu_has(X86_FEATURE_PERFMON_V2)) {
-> +		int ebx = cpuid_ebx(EXT_PERFMON_DEBUG_FEATURES);
-> +
->  		/* Update PMU version for later usage */
->  		x86_pmu.version = 2;
->  
-> +		/* Find the number of available Core PMCs */
-> +		x86_pmu.num_counters = EXT_PERFMON_DEBUG_NUM_CORE_PMC(ebx);
-> +
->  		amd_pmu_global_cntr_mask = (1ULL << x86_pmu.num_counters) - 1;
->  	}
+Hello RCU folks,
 
-I prefer using unions like cpuid10_ebx. Such much easier to read than
-all this shouting.
+I like to use minimal configuration for kernel development.
+when building with tinyconfig + CONFIG_PREEMPT=y on arm64:
+
+ld: kernel/rcu/update.o: in function `call_rcu_tasks':
+update.c:(.text+0xb2c): undefined reference to `irq_work_queue'
+update.c:(.text+0xb2c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `irq_work_queue'
+make: *** [Makefile:1155: vmlinux] Error 1
+
+It seems RCU calls irq_work_queue() without checking if CONFIG_IRQ_WORK is enabled.
+
+-- 
+Thank you, You are awesome!
+Hyeonggon :-)

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34FB4DC542
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D549A4DC539
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbiCQL65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
+        id S233249AbiCQL7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233193AbiCQL6w (ORCPT
+        with ESMTP id S233238AbiCQL65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:58:52 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275BC1E6E97
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:36 -0700 (PDT)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        Thu, 17 Mar 2022 07:58:57 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9119F1E6EA5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:39 -0700 (PDT)
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 042DA3F798
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:57:35 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 73B133F7E7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:57:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647518255;
-        bh=rkZlJ0igM03Y8VkMiNizWzNDbnqGn+aUyjhq4DWqgik=;
+        s=20210705; t=1647518258;
+        bh=nSwS54FLcijToE2aK+yEI4OGn17JP6PMWHAMiQXMIj8=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=Xjvdv+OkUwW7yZJeLNnCKGE5WEwOL7LyvwphAhGFP13EzvIgbkiWZ4LuPozL/XbSm
-         hW3Svg4KotzhuoRm1WOGeH6/gG5fr+QSDloCh5N4bzrzAUTqJHEuxNpgI5L+trQOKd
-         Ug99Ipse3lNuAnXjJtPpBIsxCROnvwXQN1ZkEBgWwWQrpR88Zth/pTrTRiFxqoWjEh
-         H1Tj9qDn4neRqMdknlOT7mfrs1NpDqN88u3tPIyAZkkv7oW6T8EAfIDmxqJE85xDuJ
-         RonMQowSEQWFA9M4wC52vld9Zb8OI1tA1HLxTaF3nzN2uUe90YIK3y6gg97VfKQd7F
-         fFNYM6dbtNcEA==
-Received: by mail-ed1-f70.google.com with SMTP id o20-20020aa7dd54000000b00413bc19ad08so2989796edw.7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:35 -0700 (PDT)
+        b=PT2jj0e+JyQ2s0l5t7kVIdSaiAvGp0yT9zEI2ItJ0s+/6oy8Z+LjHLztjWreNegxy
+         HpzZwHXbIpbOJR/le+lYsdGo196viUTcnpx+TSshZ6iN09M6WQ8uGc0r9Wxxdm0tie
+         4UBZ9GQypYBuy2amB6EGSzu5yuQGqlNXpflSygfPozh76ReS9LBjpi+2kob9tzj7/L
+         acnZLsh0EVxGFs+d/6j9f/lkraT+kK6cw74+vB3kcSdDoAMLq2kbqK5e5KftdclJdL
+         NH8WAQ5r2UR60zERyn2LTkYMWp43V4dKCIbq+5Pc/faaX+SDJq9p52GRKi6XKSysRx
+         AySgPxse8EeAw==
+Received: by mail-lf1-f72.google.com with SMTP id b7-20020a056512218700b0044869874779so1743321lft.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rkZlJ0igM03Y8VkMiNizWzNDbnqGn+aUyjhq4DWqgik=;
-        b=0HSNjCHnfx2D0KxH2VObIytaF6J5QO0dY6O0HpxYeZxroCYWDeWGEIzSmEgh02EOjK
-         aIWShIEm2oClHsDiOKcuFORpZx6746BbqVYDXZwyLJex6y8oVXpO6nl1cqw/gg/xfXfP
-         9Aq7ot358VGwtAj74UxLPmZl0T5CxkFGdtwzxa0CE5bhQ4Wj21wbtTTHoyM97nDEj3uD
-         1wu70fkH+q5FRbsqF2e1OzcLtEnbC3bMBFh4NzKXD4WK96QttGcxjL0+i3QYt+tL3jZm
-         9kRUIzxEy0rxLNbhWIXOTOv3Kw+zGMgn7M6ZpqxMbaucDSRR5c7774P1gme3rDPZMsm6
-         wn9g==
-X-Gm-Message-State: AOAM5339uYwGz+z1tzKJNTDbRWEvs/E9cE/vd9VvPBL747z/BwC70C+D
-        fzeEKZ/FN79qNSwH6ESAoOQ2lwOsO7AZsR50z2hM3aDBdyc2nJUk4j/TiRmmpgGM9kzFoqH4Lkr
-        zMir4McvLpSqCu3Xde0p7vKa9nw1mJ8CaAnK6a0RpJw==
-X-Received: by 2002:a5d:608e:0:b0:203:e8a3:36f3 with SMTP id w14-20020a5d608e000000b00203e8a336f3mr2822206wrt.176.1647518244237;
-        Thu, 17 Mar 2022 04:57:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwPfOj+UeHfKmqSbS2Hx8bnxirl/NYvL3z9HsIpNergGiYK9EsV7ImtjHZaqXnE8okb/mRUOw==
-X-Received: by 2002:a5d:608e:0:b0:203:e8a3:36f3 with SMTP id w14-20020a5d608e000000b00203e8a336f3mr2822186wrt.176.1647518244048;
-        Thu, 17 Mar 2022 04:57:24 -0700 (PDT)
+        bh=nSwS54FLcijToE2aK+yEI4OGn17JP6PMWHAMiQXMIj8=;
+        b=fWo0c9EJdbvQsqzCTWz7daLUWyT8iRdQx/OV7q9uk5QN/d/K9FaY4J91u/ZLkG9nal
+         el9dnAnnMQ4IZJlJCd9LhWvVJbr9ZHhtH5O5O42kePu/RbVBcOye8xxj5H38KXgBKuos
+         HcbrtfZbusyJxAX5SDLHOIrfSDXomTm4MZnM8HXCqYHtxWh8N8/0+rDdPu/1VAvxwE5C
+         6G1QIXWUrw01+hcRWhQ5k6wVEXzkwSHRw2m8jmuwlyYIyfbi3F2ccthUHPc7EHnJ2Jm6
+         EqDnHY3IzhnDJ7HkzZ6uUEGyr8zmGK+2ncNBP5F2YVS0pe6lN1gRKnFugSG6FTJdJu7i
+         itRw==
+X-Gm-Message-State: AOAM530Wpe9QkpsXq+sq8HrC4f+OvSjLgDpJgk1LNnXtgsxelDUGctrR
+        3hvxd+vrwNzjGEpKSQV8dNQuHy7bQ3UBMphStYID6RRC1V/Htjqva0f1VAMxh5bMSjlkyGJoZJp
+        LMGrWH4gHDkDPm3wEVED10Rl0vlf0QwFZzQkJbPLRgw==
+X-Received: by 2002:a05:6000:15c1:b0:1f0:73d6:b716 with SMTP id y1-20020a05600015c100b001f073d6b716mr3661594wry.293.1647518247282;
+        Thu, 17 Mar 2022 04:57:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzG3c2rG8wtLfvYQbJABDH6zuNp51t36w+nKsTHklu2oA2xBjTj2AvcWZKYkNP1t4hn/llH6w==
+X-Received: by 2002:a05:6000:15c1:b0:1f0:73d6:b716 with SMTP id y1-20020a05600015c100b001f073d6b716mr3661557wry.293.1647518247090;
+        Thu, 17 Mar 2022 04:57:27 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id r65-20020a1c4444000000b0038c48dd23b9sm5824900wma.5.2022.03.17.04.57.21
+        by smtp.gmail.com with ESMTPSA id r65-20020a1c4444000000b0038c48dd23b9sm5824900wma.5.2022.03.17.04.57.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 04:57:23 -0700 (PDT)
+        Thu, 17 Mar 2022 04:57:25 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
@@ -97,9 +97,9 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         linux-actions@lists.infradead.org, openbmc@lists.ozlabs.org,
         linux-riscv@lists.infradead.org, linux-oxnas@groups.io
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH 06/18] dt-bindings: irqchip: ingenic: include generic schema
-Date:   Thu, 17 Mar 2022 12:56:53 +0100
-Message-Id: <20220317115705.450427-5-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 07/18] dt-bindings: irqchip: intel,ixp4xx: include generic schema
+Date:   Thu, 17 Mar 2022 12:56:54 +0100
+Message-Id: <20220317115705.450427-6-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
 References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
@@ -120,26 +120,26 @@ naming and other generic properties.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- .../bindings/interrupt-controller/ingenic,intc.yaml          | 5 ++++-
+ .../interrupt-controller/intel,ixp4xx-interrupt.yaml         | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/ingenic,intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/ingenic,intc.yaml
-index 0358a7739c8e..74597a98f86c 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/ingenic,intc.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/ingenic,intc.yaml
-@@ -9,6 +9,9 @@ title: Ingenic SoCs interrupt controller devicetree bindings
- maintainers:
-   - Paul Cercueil <paul@crapouillou.net>
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/intel,ixp4xx-interrupt.yaml b/Documentation/devicetree/bindings/interrupt-controller/intel,ixp4xx-interrupt.yaml
+index 14dced11877b..38290b38e13e 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/intel,ixp4xx-interrupt.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/intel,ixp4xx-interrupt.yaml
+@@ -21,6 +21,9 @@ description: |
+   families were the only ones to reach the developer and consumer
+   market.
  
 +allOf:
 +  - $ref: /schemas/interrupt-controller.yaml#
 +
  properties:
-   $nodename:
-     pattern: "^interrupt-controller@[0-9a-f]+$"
-@@ -50,7 +53,7 @@ required:
-   - "#interrupt-cells"
+   compatible:
+     items:
+@@ -44,7 +47,7 @@ required:
    - interrupt-controller
+   - '#interrupt-cells'
  
 -additionalProperties: false
 +unevaluatedProperties: false

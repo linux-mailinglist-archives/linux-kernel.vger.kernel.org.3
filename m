@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5944DCD58
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0CD4DCD5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235622AbiCQSOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
+        id S237424AbiCQSPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237336AbiCQSOG (ORCPT
+        with ESMTP id S237365AbiCQSPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:14:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085BD221BAF;
-        Thu, 17 Mar 2022 11:12:28 -0700 (PDT)
+        Thu, 17 Mar 2022 14:15:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6FC223857;
+        Thu, 17 Mar 2022 11:12:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A70261671;
-        Thu, 17 Mar 2022 18:12:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3FD7C340E9;
-        Thu, 17 Mar 2022 18:12:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47B1AB81F6A;
+        Thu, 17 Mar 2022 18:12:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A4D2C340EC;
+        Thu, 17 Mar 2022 18:12:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647540746;
-        bh=SitlRaV0KtXhyXe6RFz7Aw0RDpiWGyj8dk2YClR8zz0=;
+        s=k20201202; t=1647540760;
+        bh=ZnWJuhPZ+RixOwnNK+nIf0xEqbmN2UYpbHRta7ubnak=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iLY8T7maVzTyELIBg9UlU9aZDJ7Ww5vTWgfSoq4zy7QqH6WsM823DFjq+wDaH+SxM
-         YtcPdjoMnVs5lGg0KZg5dWYJfuJR2V+bAEHDoT1JgCrMIpyQ8GVDySoxA0PmxGcNmj
-         sF3xJarI8lqCYx3lr/ziS5jfxVORmt6jfSQZrndtxJv2blAsTFs5nSowOGzzNUi0pw
-         faigSLCZTkAVdZolUlw1AsJ37KA7BILQV8BAWtVLQQOVAgUCKrpKt2PIguhd7h4A2P
-         kSEzom4NRQeq8XtlOsRlJzuh5sB1z7Nqkq9DzPZ9G+GEtI6v26OzNIN2gB93lvK9AO
-         GWXBNA+9lCMvw==
+        b=b75k2ShzfLr7htgR3DOpjEafAh2Alrx69P0HvipOPvzkLucHPg4/RjUniebDpqJO5
+         s8ml8w6/O0672KIZWAimQ2ImMtJB0nSb0vlqUfSUkoBUadjPoIYGzz5py3Xd6TJCiA
+         30hslYzso6e3sFStdHWQSNv16Sn1/EstYnvMyygywNtjErgjQ3sWDJl9KDRxlc9o68
+         QG4G5w8LAd7AXF8aMYxEbkIs0/yE9nAl4/kPhNKFmLZ6N1G+QWL2lm0cPBt9zUPg1i
+         0+k0v2k5Th/nkcESmeh8i06yw/kXQvqmPEUbQKHq33AHTd6iVXG72auJ1vR7KrT6eq
+         B/iq5I7ROM5zg==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -43,22 +43,37 @@ Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         Wedson Almeida Filho <wedsonaf@google.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sven Van Asbroeck <thesven73@gmail.com>,
-        Wu XiangCheng <bobwxc@email.cn>, Gary Guo <gary@garyguo.net>,
+        Gary Guo <gary@garyguo.net>,
         Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Yuki Okushi <jtitor@2k36.org>, Wei Liu <wei.liu@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>, Julian Merkle <me@jvmerkle.de>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Douglas Su <d0u9.su@outlook.com>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Daniel Xu <dxu@dxuuu.xyz>, Miguel Cano <macanroj@gmail.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: [PATCH v5 15/20] docs: add Rust documentation
-Date:   Thu, 17 Mar 2022 19:10:03 +0100
-Message-Id: <20220317181032.15436-16-ojeda@kernel.org>
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kbuild@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v5 16/20] Kbuild: add Rust support
+Date:   Thu, 17 Mar 2022 19:10:04 +0100
+Message-Id: <20220317181032.15436-17-ojeda@kernel.org>
 In-Reply-To: <20220317181032.15436-1-ojeda@kernel.org>
 References: <20220317181032.15436-1-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,16 +84,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the documentation for Rust is written within the source code
-itself, as it is idiomatic for Rust projects. This applies to both
-the shared infrastructure at `rust/` as well as any other Rust module
-(e.g. drivers) written across the kernel.
-
-However, these documents contain general information that does not
-fit particularly well in the source code, like the Quick Start guide.
-
-It also contains an asset (SVG logo) used for the `rustdoc` target
-and a few other small changes elsewhere in the documentation folder.
+Having all the new files in place, we now enable Rust support
+in the build system, including `Kconfig` entries related to Rust,
+the Rust configuration printer, the target specification
+generation script, the version detection script and a few
+other bits.
 
 Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
 Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
@@ -92,2174 +102,2155 @@ Co-developed-by: Michael Ellerman <mpe@ellerman.id.au>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
 Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
 Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
-Co-developed-by: Wu XiangCheng <bobwxc@email.cn>
-Signed-off-by: Wu XiangCheng <bobwxc@email.cn>
 Co-developed-by: Gary Guo <gary@garyguo.net>
 Signed-off-by: Gary Guo <gary@garyguo.net>
 Co-developed-by: Boris-Chengbiao Zhou <bobo1239@web.de>
 Signed-off-by: Boris-Chengbiao Zhou <bobo1239@web.de>
-Co-developed-by: Yuki Okushi <jtitor@2k36.org>
-Signed-off-by: Yuki Okushi <jtitor@2k36.org>
-Co-developed-by: Wei Liu <wei.liu@kernel.org>
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Co-developed-by: Douglas Su <d0u9.su@outlook.com>
+Signed-off-by: Douglas Su <d0u9.su@outlook.com>
+Co-developed-by: Dariusz Sosnowski <dsosnowski@dsosnowski.pl>
+Signed-off-by: Dariusz Sosnowski <dsosnowski@dsosnowski.pl>
+Co-developed-by: Antonio Terceiro <antonio.terceiro@linaro.org>
+Signed-off-by: Antonio Terceiro <antonio.terceiro@linaro.org>
 Co-developed-by: Daniel Xu <dxu@dxuuu.xyz>
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-Co-developed-by: Julian Merkle <me@jvmerkle.de>
-Signed-off-by: Julian Merkle <me@jvmerkle.de>
+Co-developed-by: Miguel Cano <macanroj@gmail.com>
+Signed-off-by: Miguel Cano <macanroj@gmail.com>
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- Documentation/doc-guide/kernel-doc.rst     |   3 +
- Documentation/index.rst                    |   1 +
- Documentation/kbuild/kbuild.rst            |  17 +
- Documentation/kbuild/makefiles.rst         |  50 ++-
- Documentation/process/changes.rst          |  41 +++
- Documentation/rust/arch-support.rst        |  34 ++
- Documentation/rust/coding-guidelines.rst   | 214 ++++++++++++
- Documentation/rust/general-information.rst |  77 +++++
- Documentation/rust/index.rst               |  20 ++
- Documentation/rust/logo.svg                | 357 +++++++++++++++++++++
- Documentation/rust/quick-start.rst         | 230 +++++++++++++
- 11 files changed, 1040 insertions(+), 4 deletions(-)
- create mode 100644 Documentation/rust/arch-support.rst
- create mode 100644 Documentation/rust/coding-guidelines.rst
- create mode 100644 Documentation/rust/general-information.rst
- create mode 100644 Documentation/rust/index.rst
- create mode 100644 Documentation/rust/logo.svg
- create mode 100644 Documentation/rust/quick-start.rst
+ .gitignore                                   |   5 +
+ .rustfmt.toml                                |  12 +
+ Makefile                                     | 173 ++++++++-
+ arch/Kconfig                                 |   6 +
+ arch/arm/Kconfig                             |   1 +
+ arch/arm64/Kconfig                           |   1 +
+ arch/powerpc/Kconfig                         |   1 +
+ arch/riscv/Kconfig                           |   1 +
+ arch/riscv/Makefile                          |   5 +
+ arch/x86/Kconfig                             |   1 +
+ arch/x86/Makefile                            |  14 +
+ init/Kconfig                                 |  44 ++-
+ lib/Kconfig.debug                            | 143 +++++++
+ rust/.gitignore                              |   8 +
+ rust/Makefile                                | 376 +++++++++++++++++++
+ rust/bindgen_parameters                      |  13 +
+ scripts/.gitignore                           |   1 +
+ scripts/Kconfig.include                      |   6 +-
+ scripts/Makefile                             |   3 +
+ scripts/Makefile.build                       |  60 +++
+ scripts/Makefile.debug                       |  10 +
+ scripts/Makefile.host                        |  34 +-
+ scripts/Makefile.lib                         |  12 +
+ scripts/Makefile.modfinal                    |   8 +-
+ scripts/cc-version.sh                        |  12 +-
+ scripts/generate_rust_target.rs              | 227 +++++++++++
+ scripts/is_rust_module.sh                    |  13 +
+ scripts/kconfig/confdata.c                   |  75 ++++
+ scripts/min-tool-version.sh                  |   6 +
+ scripts/rust-is-available-bindgen-libclang.h |   2 +
+ scripts/rust-is-available.sh                 | 158 ++++++++
+ 31 files changed, 1408 insertions(+), 23 deletions(-)
+ create mode 100644 .rustfmt.toml
+ create mode 100644 rust/.gitignore
+ create mode 100644 rust/Makefile
+ create mode 100644 rust/bindgen_parameters
+ create mode 100644 scripts/generate_rust_target.rs
+ create mode 100755 scripts/is_rust_module.sh
+ create mode 100644 scripts/rust-is-available-bindgen-libclang.h
+ create mode 100755 scripts/rust-is-available.sh
 
-diff --git a/Documentation/doc-guide/kernel-doc.rst b/Documentation/doc-gui=
-de/kernel-doc.rst
-index 79aaa55d6bcf..724e2ffddff1 100644
---- a/Documentation/doc-guide/kernel-doc.rst
-+++ b/Documentation/doc-guide/kernel-doc.rst
-@@ -11,6 +11,9 @@ when it is embedded in source files.
-    reasons. The kernel source contains tens of thousands of kernel-doc
-    comments. Please stick to the style described here.
-=20
-+.. note:: kernel-doc does not cover Rust code: please see
-+   Documentation/rust/docs.rst instead.
+diff --git a/.gitignore b/.gitignore
+index 7afd412dadd2..48c68948f476 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -37,6 +37,7 @@
+ *.o
+ *.o.*
+ *.patch
++*.rmeta
+ *.s
+ *.so
+ *.so.dbg
+@@ -96,6 +97,7 @@ modules.order
+ !.gitattributes
+ !.gitignore
+ !.mailmap
++!.rustfmt.toml
+ 
+ #
+ # Generated include files
+@@ -161,3 +163,6 @@ x509.genkey
+ 
+ # Documentation toolchain
+ sphinx_*/
 +
- The kernel-doc structure is extracted from the comments, and proper
- `Sphinx C Domain`_ function and type descriptions with anchors are
- generated from them. The descriptions are filtered for special kernel-doc
-diff --git a/Documentation/index.rst b/Documentation/index.rst
-index b58692d687f6..ca9ff1adbe0b 100644
---- a/Documentation/index.rst
-+++ b/Documentation/index.rst
-@@ -82,6 +82,7 @@ merged much easier.
-    maintainer/index
-    fault-injection/index
-    livepatch/index
-+   rust/index
-=20
-=20
- Kernel API documentation
-diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.=
-rst
-index 2d1fc03d346e..11c8a55c91ff 100644
---- a/Documentation/kbuild/kbuild.rst
-+++ b/Documentation/kbuild/kbuild.rst
-@@ -48,6 +48,10 @@ KCFLAGS
- -------
- Additional options to the C compiler (for built-in and modules).
-=20
-+KRUSTFLAGS
-+----------
-+Additional options to the Rust compiler (for built-in and modules).
-+
- CFLAGS_KERNEL
- -------------
- Additional options for $(CC) when used to compile
-@@ -57,6 +61,15 @@ CFLAGS_MODULE
- -------------
- Additional module specific options to use for $(CC).
-=20
-+RUSTFLAGS_KERNEL
-+----------------
-+Additional options for $(RUSTC) when used to compile
-+code that is compiled as built-in.
-+
-+RUSTFLAGS_MODULE
-+----------------
-+Additional module specific options to use for $(RUSTC).
-+
- LDFLAGS_MODULE
- --------------
- Additional options used for $(LD) when linking modules.
-@@ -69,6 +82,10 @@ HOSTCXXFLAGS
- ------------
- Additional flags to be passed to $(HOSTCXX) when building host programs.
-=20
-+HOSTRUSTFLAGS
-+-------------
-+Additional flags to be passed to $(HOSTRUSTC) when building host programs.
-+
- HOSTLDFLAGS
- -----------
- Additional flags to be passed when linking host programs.
-diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/make=
-files.rst
-index b008b90b92c9..1cd9b8ac90ee 100644
---- a/Documentation/kbuild/makefiles.rst
-+++ b/Documentation/kbuild/makefiles.rst
-@@ -29,8 +29,9 @@ This document describes the Linux kernel Makefiles.
- 	   --- 4.1 Simple Host Program
- 	   --- 4.2 Composite Host Programs
- 	   --- 4.3 Using C++ for host programs
--	   --- 4.4 Controlling compiler options for host programs
--	   --- 4.5 When host programs are actually built
-+	   --- 4.4 Using Rust for host programs
-+	   --- 4.5 Controlling compiler options for host programs
-+	   --- 4.6 When host programs are actually built
-=20
- 	=3D=3D=3D 5 Userspace Program support
- 	   --- 5.1 Simple Userspace Program
-@@ -835,7 +836,24 @@ Both possibilities are described in the following.
- 		qconf-cxxobjs :=3D qconf.o
- 		qconf-objs    :=3D check.o
-=20
--4.4 Controlling compiler options for host programs
-+4.4 Using Rust for host programs
-+--------------------------------
-+
-+	Kbuild offers support for host programs written in Rust. However,
-+	since a Rust toolchain is not mandatory for kernel compilation,
-+	it may only be used in scenarios where Rust is required to be
-+	available (e.g. when  ``CONFIG_RUST`` is enabled).
-+
-+	Example::
-+
-+		hostprogs     :=3D target
-+		target-rust   :=3D y
-+
-+	Kbuild will compile ``target`` using ``target.rs`` as the crate root,
-+	located in the same directory as the ``Makefile``. The crate may
-+	consist of several source files (see ``samples/rust/hostprogs``).
-+
-+4.5 Controlling compiler options for host programs
- --------------------------------------------------
-=20
- 	When compiling host programs, it is possible to set specific flags.
-@@ -867,7 +885,7 @@ Both possibilities are described in the following.
- 	When linking qconf, it will be passed the extra option
- 	"-L$(QTDIR)/lib".
-=20
--4.5 When host programs are actually built
-+4.6 When host programs are actually built
- -----------------------------------------
-=20
- 	Kbuild will only build host-programs when they are referenced
-@@ -1179,6 +1197,17 @@ When kbuild executes, the following steps are follow=
-ed (roughly):
- 	The first example utilises the trick that a config option expands
- 	to 'y' when selected.
-=20
-+    KBUILD_RUSTFLAGS
-+	$(RUSTC) compiler flags
-+
-+	Default value - see top level Makefile
-+	Append or modify as required per architecture.
-+
-+	Often, the KBUILD_RUSTFLAGS variable depends on the configuration.
-+
-+	Note that target specification file generation (for ``--target``)
-+	is handled in ``scripts/generate_rust_target.rs``.
-+
-     KBUILD_AFLAGS_KERNEL
- 	Assembler options specific for built-in
-=20
-@@ -1206,6 +1235,19 @@ When kbuild executes, the following steps are follow=
-ed (roughly):
- 	are used for $(CC).
- 	From commandline CFLAGS_MODULE shall be used (see kbuild.rst).
-=20
-+    KBUILD_RUSTFLAGS_KERNEL
-+	$(RUSTC) options specific for built-in
-+
-+	$(KBUILD_RUSTFLAGS_KERNEL) contains extra Rust compiler flags used to
-+	compile resident kernel code.
-+
-+    KBUILD_RUSTFLAGS_MODULE
-+	Options for $(RUSTC) when building modules
-+
-+	$(KBUILD_RUSTFLAGS_MODULE) is used to add arch-specific options that
-+	are used for $(RUSTC).
-+	From commandline RUSTFLAGS_MODULE shall be used (see kbuild.rst).
-+
-     KBUILD_LDFLAGS_MODULE
- 	Options for $(LD) when linking modules
-=20
-diff --git a/Documentation/process/changes.rst b/Documentation/process/chan=
-ges.rst
-index a337e8eabfe1..ee22bd1da334 100644
---- a/Documentation/process/changes.rst
-+++ b/Documentation/process/changes.rst
-@@ -31,6 +31,8 @@ you probably needn't concern yourself with pcmciautils.
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
- GNU C                  5.1              gcc --version
- Clang/LLVM (optional)  11.0.0           clang --version
-+Rust (optional)        1.59.0           rustc --version
-+bindgen (optional)     0.56.0           bindgen --version
- GNU make               3.81             make --version
- binutils               2.23             ld -v
- flex                   2.5.35           flex --version
-@@ -78,6 +80,29 @@ kernels. Older releases aren't guaranteed to work, and w=
-e may drop workarounds
- from the kernel that were used to support older versions. Please see addit=
-ional
- docs on :ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
-=20
-+Rust (optional)
-+---------------
-+
-+A particular version of the Rust toolchain is required. Newer versions may=
- or
-+may not work because the kernel depends on some unstable Rust features, for
-+the moment.
-+
-+Each Rust toolchain comes with several "components", some of which are req=
-uired
-+(like ``rustc``) and some that are optional. The ``rust-src`` component (w=
-hich
-+is optional) needs to be installed to build the kernel. Other components a=
-re
-+useful for developing.
-+
-+Please see Documentation/rust/quick-start.rst for instructions on how to
-+satisfy the build requirements of Rust support. In particular, the ``Makef=
-ile``
-+target ``rustavailable`` is useful to check why the Rust toolchain may not
-+be detected.
-+
-+bindgen (optional)
-+------------------
-+
-+``bindgen`` is used to generate the Rust bindings to the C side of the ker=
-nel.
-+It depends on ``libclang``.
-+
- Make
- ----
-=20
-@@ -340,6 +365,12 @@ Sphinx
- Please see :ref:`sphinx_install` in :ref:`Documentation/doc-guide/sphinx.r=
-st <sphinxdoc>`
- for details about Sphinx requirements.
-=20
-+rustdoc
-+-------
-+
-+``rustdoc`` is used to generate the documentation for Rust code. Please see
-+Documentation/rust/general-information.rst for more information.
-+
- Getting updated software
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
-@@ -356,6 +387,16 @@ Clang/LLVM
-=20
- - :ref:`Getting LLVM <getting_llvm>`.
-=20
-+Rust
-+----
-+
-+- Documentation/rust/quick-start.rst.
-+
-+bindgen
-+-------
-+
-+- Documentation/rust/quick-start.rst.
-+
- Make
- ----
-=20
-diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-=
-support.rst
++# Rust analyzer configuration
++/rust-project.json
+diff --git a/.rustfmt.toml b/.rustfmt.toml
 new file mode 100644
-index 000000000000..482757a1f3d0
+index 000000000000..3de5cc497465
 --- /dev/null
-+++ b/Documentation/rust/arch-support.rst
-@@ -0,0 +1,34 @@
-+Arch Support
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++++ b/.rustfmt.toml
+@@ -0,0 +1,12 @@
++edition = "2021"
++newline_style = "Unix"
 +
-+Currently, the Rust compiler (``rustc``) uses LLVM for code generation,
-+which limits the supported architectures that can be targeted. In addition,
-+support for building the kernel with LLVM/Clang varies (please see
-+Documentation/kbuild/llvm.rst). This support is needed for ``bindgen``
-+which uses ``libclang``.
++# Unstable options that help catching some mistakes in formatting and that we may want to enable
++# when they become stable.
++#
++# They are kept here since they are useful to run from time to time.
++#format_code_in_doc_comments = true
++#reorder_impl_items = true
++#comment_width = 100
++#wrap_comments = true
++#normalize_comments = true
+diff --git a/Makefile b/Makefile
+index 55a30ca69350..67008a2d964c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -120,6 +120,13 @@ endif
+ 
+ export KBUILD_CHECKSRC
+ 
++# Enable "clippy" (a linter) as part of the Rust compilation.
++#
++# Use 'make CLIPPY=1' to enable it.
++ifeq ("$(origin CLIPPY)", "command line")
++  KBUILD_CLIPPY := $(CLIPPY)
++endif
 +
-+Below is a general summary of architectures that currently work. Level of
-+support corresponds to ``S`` values in the ``MAINTAINERS`` file.
+ # Use make M=dir or set the environment variable KBUILD_EXTMOD to specify the
+ # directory of external module to build. Setting M= takes precedence.
+ ifeq ("$(origin M)", "command line")
+@@ -267,7 +274,7 @@ no-dot-config-targets := $(clean-targets) \
+ 			 cscope gtags TAGS tags help% %docs check% coccicheck \
+ 			 $(version_h) headers headers_% archheaders archscripts \
+ 			 %asm-generic kernelversion %src-pkg dt_binding_check \
+-			 outputmakefile
++			 outputmakefile rustavailable rustfmt rustfmtcheck
+ # Installation targets should not require compiler. Unfortunately, vdso_install
+ # is an exception where build artifacts may be updated. This must be fixed.
+ no-compiler-targets := $(no-dot-config-targets) install dtbs_install \
+@@ -430,13 +437,32 @@ else
+ HOSTCC	= gcc
+ HOSTCXX	= g++
+ endif
++HOSTRUSTC = rustc
+ 
+ export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+ 			      -O2 -fomit-frame-pointer -std=gnu89
+ export KBUILD_USERLDFLAGS :=
+ 
++# These flags apply to all Rust code in the tree, including the kernel and
++# host programs.
++export rust_common_flags := --edition=2021 \
++			    -Zbinary_dep_depinfo=y \
++			    -Dunsafe_op_in_unsafe_fn -Drust_2018_idioms \
++			    -Dunreachable_pub -Dnon_ascii_idents \
++			    -Wmissing_docs \
++			    -Drustdoc::missing_crate_level_docs \
++			    -Dclippy::correctness -Dclippy::style \
++			    -Dclippy::suspicious -Dclippy::complexity \
++			    -Dclippy::perf \
++			    -Dclippy::let_unit_value -Dclippy::mut_mut \
++			    -Dclippy::needless_bitwise_bool \
++			    -Dclippy::needless_continue \
++			    -Wclippy::dbg_macro
 +
-+.. list-table::
-+   :widths: 10 10 10
-+   :header-rows: 1
+ KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
+ KBUILD_HOSTCXXFLAGS := -Wall -O2 $(HOST_LFS_CFLAGS) $(HOSTCXXFLAGS)
++KBUILD_HOSTRUSTFLAGS := $(rust_common_flags) -O -Cstrip=debuginfo \
++			-Zallow-features= $(HOSTRUSTFLAGS)
+ KBUILD_HOSTLDFLAGS  := $(HOST_LFS_LDFLAGS) $(HOSTLDFLAGS)
+ KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
+ 
+@@ -461,6 +487,12 @@ OBJDUMP		= $(CROSS_COMPILE)objdump
+ READELF		= $(CROSS_COMPILE)readelf
+ STRIP		= $(CROSS_COMPILE)strip
+ endif
++RUSTC		= rustc
++RUSTDOC		= rustdoc
++RUSTFMT		= rustfmt
++CLIPPY_DRIVER	= clippy-driver
++BINDGEN		= bindgen
++CARGO		= cargo
+ PAHOLE		= pahole
+ RESOLVE_BTFIDS	= $(objtree)/tools/bpf/resolve_btfids/resolve_btfids
+ LEX		= flex
+@@ -486,9 +518,11 @@ CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
+ 		  -Wbitwise -Wno-return-void -Wno-unknown-attribute $(CF)
+ NOSTDINC_FLAGS :=
+ CFLAGS_MODULE   =
++RUSTFLAGS_MODULE =
+ AFLAGS_MODULE   =
+ LDFLAGS_MODULE  =
+ CFLAGS_KERNEL	=
++RUSTFLAGS_KERNEL =
+ AFLAGS_KERNEL	=
+ LDFLAGS_vmlinux =
+ 
+@@ -517,15 +551,42 @@ KBUILD_CFLAGS   := -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs \
+ 		   -Werror=return-type -Wno-format-security \
+ 		   -std=gnu89
+ KBUILD_CPPFLAGS := -D__KERNEL__
++KBUILD_RUSTFLAGS := $(rust_common_flags) \
++		    --target=$(objtree)/rust/target.json \
++		    -Cpanic=abort -Cembed-bitcode=n -Clto=n \
++		    -Cforce-unwind-tables=n -Ccodegen-units=1 \
++		    -Csymbol-mangling-version=v0 \
++		    -Crelocation-model=static \
++		    -Zfunction-sections=n \
++		    -Dclippy::float_arithmetic
 +
-+   * - Architecture
-+     - Level of support
-+     - Constraints
-+   * - ``arm``
-+     - Maintained
-+     - ``armv6`` and compatible only, ``RUST_OPT_LEVEL >=3D 2``
-+   * - ``arm64``
-+     - Maintained
-+     - None
-+   * - ``powerpc``
-+     - Maintained
-+     - ``ppc64le`` only, ``RUST_OPT_LEVEL < 2`` requires ``CONFIG_THREAD_S=
-HIFT=3D15``
-+   * - ``riscv``
-+     - Maintained
-+     - ``riscv64`` only
-+   * - ``x86``
-+     - Maintained
-+     - ``x86_64`` only
-diff --git a/Documentation/rust/coding-guidelines.rst b/Documentation/rust/=
-coding-guidelines.rst
+ KBUILD_AFLAGS_KERNEL :=
+ KBUILD_CFLAGS_KERNEL :=
++KBUILD_RUSTFLAGS_KERNEL :=
+ KBUILD_AFLAGS_MODULE  := -DMODULE
+ KBUILD_CFLAGS_MODULE  := -DMODULE
++KBUILD_RUSTFLAGS_MODULE := --cfg MODULE
+ KBUILD_LDFLAGS_MODULE :=
+ KBUILD_LDFLAGS :=
+ CLANG_FLAGS :=
+ 
++ifeq ($(KBUILD_CLIPPY),1)
++	RUSTC_OR_CLIPPY_QUIET := CLIPPY
++	RUSTC_OR_CLIPPY = $(CLIPPY_DRIVER)
++else
++	RUSTC_OR_CLIPPY_QUIET := RUSTC
++	RUSTC_OR_CLIPPY = $(RUSTC)
++endif
++
++ifdef RUST_LIB_SRC
++	export RUST_LIB_SRC
++endif
++
++export RUSTC_BOOTSTRAP := 1
++
+ export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC
++export RUSTC RUSTDOC RUSTFMT RUSTC_OR_CLIPPY_QUIET RUSTC_OR_CLIPPY BINDGEN CARGO
++export HOSTRUSTC KBUILD_HOSTRUSTFLAGS
+ export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AWK INSTALLKERNEL
+ export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
+ export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
+@@ -533,9 +594,10 @@ export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS LDFLAGS_MODULE
+ 
+ export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS KBUILD_LDFLAGS
+ export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
++export KBUILD_RUSTFLAGS RUSTFLAGS_KERNEL RUSTFLAGS_MODULE
+ export KBUILD_AFLAGS AFLAGS_KERNEL AFLAGS_MODULE
+-export KBUILD_AFLAGS_MODULE KBUILD_CFLAGS_MODULE KBUILD_LDFLAGS_MODULE
+-export KBUILD_AFLAGS_KERNEL KBUILD_CFLAGS_KERNEL
++export KBUILD_AFLAGS_MODULE KBUILD_CFLAGS_MODULE KBUILD_RUSTFLAGS_MODULE KBUILD_LDFLAGS_MODULE
++export KBUILD_AFLAGS_KERNEL KBUILD_CFLAGS_KERNEL KBUILD_RUSTFLAGS_KERNEL
+ export PAHOLE_FLAGS
+ 
+ # Files to ignore in find ... statements
+@@ -716,7 +778,7 @@ $(KCONFIG_CONFIG):
+ #
+ # Do not use $(call cmd,...) here. That would suppress prompts from syncconfig,
+ # so you cannot notice that Kconfig is waiting for the user input.
+-%/config/auto.conf %/config/auto.conf.cmd %/generated/autoconf.h: $(KCONFIG_CONFIG)
++%/config/auto.conf %/config/auto.conf.cmd %/generated/autoconf.h %/generated/rustc_cfg: $(KCONFIG_CONFIG)
+ 	$(Q)$(kecho) "  SYNC    $@"
+ 	$(Q)$(MAKE) -f $(srctree)/Makefile syncconfig
+ else # !may-sync-config
+@@ -745,12 +807,28 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
+ 
+ ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
+ KBUILD_CFLAGS += -O2
++KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := 2
+ else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
+ KBUILD_CFLAGS += -O3
++KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := 3
+ else ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
+ KBUILD_CFLAGS += -Os
++KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := s
+ endif
+ 
++# Always set `debug-assertions` and `overflow-checks` because their default
++# depends on `opt-level` and `debug-assertions`, respectively.
++KBUILD_RUSTFLAGS += -Cdebug-assertions=$(if $(CONFIG_RUST_DEBUG_ASSERTIONS),y,n)
++KBUILD_RUSTFLAGS += -Coverflow-checks=$(if $(CONFIG_RUST_OVERFLOW_CHECKS),y,n)
++KBUILD_RUSTFLAGS += -Copt-level=$\
++	$(if $(CONFIG_RUST_OPT_LEVEL_SIMILAR_AS_CHOSEN_FOR_C),$(KBUILD_RUSTFLAGS_OPT_LEVEL_MAP))$\
++	$(if $(CONFIG_RUST_OPT_LEVEL_0),0)$\
++	$(if $(CONFIG_RUST_OPT_LEVEL_1),1)$\
++	$(if $(CONFIG_RUST_OPT_LEVEL_2),2)$\
++	$(if $(CONFIG_RUST_OPT_LEVEL_3),3)$\
++	$(if $(CONFIG_RUST_OPT_LEVEL_S),s)$\
++	$(if $(CONFIG_RUST_OPT_LEVEL_Z),z)
++
+ # Tell gcc to never replace conditional load with a non-conditional one
+ ifdef CONFIG_CC_IS_GCC
+ # gcc-10 renamed --param=allow-store-data-races=0 to
+@@ -780,6 +858,9 @@ KBUILD_CFLAGS += $(stackp-flags-y)
+ KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
+ KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+ 
++KBUILD_RUSTFLAGS-$(CONFIG_WERROR) += -Dwarnings
++KBUILD_RUSTFLAGS += $(KBUILD_RUSTFLAGS-y)
++
+ ifdef CONFIG_CC_IS_CLANG
+ KBUILD_CPPFLAGS += -Qunused-arguments
+ # The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
+@@ -801,12 +882,15 @@ KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
+ 
+ ifdef CONFIG_FRAME_POINTER
+ KBUILD_CFLAGS	+= -fno-omit-frame-pointer -fno-optimize-sibling-calls
++KBUILD_RUSTFLAGS += -Cforce-frame-pointers=y
+ else
+ # Some targets (ARM with Thumb2, for example), can't be built with frame
+ # pointers.  For those, we don't have FUNCTION_TRACER automatically
+ # select FRAME_POINTER.  However, FUNCTION_TRACER adds -pg, and this is
+ # incompatible with -fomit-frame-pointer with current GCC, so we don't use
+ # -fomit-frame-pointer with FUNCTION_TRACER.
++# In the Rust target specification, "frame-pointer" is set explicitly
++# to "may-omit".
+ ifndef CONFIG_FUNCTION_TRACER
+ KBUILD_CFLAGS	+= -fomit-frame-pointer
+ endif
+@@ -871,8 +955,10 @@ ifdef CONFIG_DEBUG_SECTION_MISMATCH
+ KBUILD_CFLAGS += -fno-inline-functions-called-once
+ endif
+ 
++# `rustc`'s `-Zfunction-sections` applies to data too (as of 1.59.0).
+ ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+ KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
++KBUILD_RUSTFLAGS_KERNEL += -Zfunction-sections=y
+ LDFLAGS_vmlinux += --gc-sections
+ endif
+ 
+@@ -1016,10 +1102,11 @@ include $(addprefix $(srctree)/, $(include-y))
+ # Do not add $(call cc-option,...) below this line. When you build the kernel
+ # from the clean source tree, the GCC plugins do not exist at this point.
+ 
+-# Add user supplied CPPFLAGS, AFLAGS and CFLAGS as the last assignments
++# Add user supplied CPPFLAGS, AFLAGS, CFLAGS and RUSTFLAGS as the last assignments
+ KBUILD_CPPFLAGS += $(KCPPFLAGS)
+ KBUILD_AFLAGS   += $(KAFLAGS)
+ KBUILD_CFLAGS   += $(KCFLAGS)
++KBUILD_RUSTFLAGS += $(KRUSTFLAGS)
+ 
+ KBUILD_LDFLAGS_MODULE += --build-id=sha1
+ LDFLAGS_vmlinux += --build-id=sha1
+@@ -1088,6 +1175,7 @@ export MODULES_NSDEPS := $(extmod_prefix)modules.nsdeps
+ ifeq ($(KBUILD_EXTMOD),)
+ core-y			+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
+ core-$(CONFIG_BLOCK)	+= block/
++core-$(CONFIG_RUST)	+= rust/
+ 
+ vmlinux-dirs	:= $(patsubst %/,%,$(filter %/, \
+ 		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
+@@ -1192,6 +1280,10 @@ prepare0: archprepare
+ 
+ # All the preparing..
+ prepare: prepare0
++ifdef CONFIG_RUST
++	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/rust-is-available.sh -v
++	$(Q)$(MAKE) $(build)=rust
++endif
+ 
+ PHONY += remove-stale-files
+ remove-stale-files:
+@@ -1480,7 +1572,7 @@ endif # CONFIG_MODULES
+ # Directories & files removed with 'make clean'
+ CLEAN_FILES += include/ksym vmlinux.symvers modules-only.symvers \
+ 	       modules.builtin modules.builtin.modinfo modules.nsdeps \
+-	       compile_commands.json .thinlto-cache
++	       compile_commands.json .thinlto-cache rust/test rust/doc
+ 
+ # Directories & files removed with 'make mrproper'
+ MRPROPER_FILES += include/config include/generated          \
+@@ -1491,7 +1583,8 @@ MRPROPER_FILES += include/config include/generated          \
+ 		  certs/signing_key.pem \
+ 		  certs/x509.genkey \
+ 		  vmlinux-gdb.py \
+-		  *.spec
++		  *.spec \
++		  rust/target.json rust/libmacros.so
+ 
+ # clean - Delete most, but leave enough to build external modules
+ #
+@@ -1516,6 +1609,9 @@ $(mrproper-dirs):
+ 
+ mrproper: clean $(mrproper-dirs)
+ 	$(call cmd,rmfiles)
++	@find . $(RCS_FIND_IGNORE) \
++		\( -name '*.rmeta' \) \
++		-type f -print | xargs rm -f
+ 
+ # distclean
+ #
+@@ -1603,6 +1699,23 @@ help:
+ 	@echo  '  kselftest-merge   - Merge all the config dependencies of'
+ 	@echo  '		      kselftest to existing .config.'
+ 	@echo  ''
++	@echo  'Rust targets:'
++	@echo  '  rustavailable   - Checks whether the Rust toolchain is'
++	@echo  '		    available and, if not, explains why.'
++	@echo  '  rustfmt	  - Reformat all the Rust code in the kernel'
++	@echo  '  rustfmtcheck	  - Checks if all the Rust code in the kernel'
++	@echo  '		    is formatted, printing a diff otherwise.'
++	@echo  '  rustdoc	  - Generate Rust documentation'
++	@echo  '		    (requires kernel .config)'
++	@echo  '  rusttest        - Runs the Rust tests'
++	@echo  '                    (requires kernel .config; downloads external repos)'
++	@echo  '  rust-analyzer	  - Generate rust-project.json rust-analyzer support file'
++	@echo  '		    (requires kernel .config)'
++	@echo  '  dir/file.[os]   - Build specified target only'
++	@echo  '  dir/file.i      - Build macro expanded source, similar to C preprocessing'
++	@echo  '                    (run with RUSTFMT=n to skip reformatting if needed)'
++	@echo  '  dir/file.ll     - Build the LLVM assembly file'
++	@echo  ''
+ 	@$(if $(dtstree), \
+ 		echo 'Devicetree:'; \
+ 		echo '* dtbs             - Build device tree blobs for enabled boards'; \
+@@ -1674,6 +1787,52 @@ PHONY += $(DOC_TARGETS)
+ $(DOC_TARGETS):
+ 	$(Q)$(MAKE) $(build)=Documentation $@
+ 
++
++# Rust targets
++# ---------------------------------------------------------------------------
++
++# "Is Rust available?" target
++PHONY += rustavailable
++rustavailable:
++	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/rust-is-available.sh -v && echo >&2 "Rust is available!"
++
++# Documentation target
++#
++# Using the singular to avoid running afoul of `no-dot-config-targets`.
++PHONY += rustdoc
++rustdoc: prepare
++	$(Q)$(MAKE) $(build)=rust $@
++
++# Testing target
++PHONY += rusttest
++rusttest: prepare
++	$(Q)$(MAKE) $(build)=rust $@
++
++# Formatting targets
++PHONY += rustfmt rustfmtcheck
++
++# We skip `rust/alloc` since we want to minimize the diff w.r.t. upstream.
++#
++# We match using absolute paths since `find` does not resolve them
++# when matching, which is a problem when e.g. `srctree` is `..`.
++# We `grep` afterwards in order to remove the directory entry itself.
++rustfmt:
++	$(Q)find $(abs_srctree) -type f -name '*.rs' \
++		-o -path $(abs_srctree)/rust/alloc -prune \
++		-o -path $(abs_objtree)/rust/test -prune \
++		| grep -Fv $(abs_srctree)/rust/alloc \
++		| grep -Fv $(abs_objtree)/rust/test \
++		| grep -Fv generated \
++		| xargs $(RUSTFMT) $(rustfmt_flags)
++
++rustfmtcheck: rustfmt_flags = --check
++rustfmtcheck: rustfmt
++
++# IDE support targets
++PHONY += rust-analyzer
++rust-analyzer:
++	$(Q)$(MAKE) $(build)=rust $@
++
+ # Misc
+ # ---------------------------------------------------------------------------
+ 
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 678a80713b21..3b3844bbfc39 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -339,6 +339,12 @@ config HAVE_RSEQ
+ 	  This symbol should be selected by an architecture if it
+ 	  supports an implementation of restartable sequences.
+ 
++config HAVE_RUST
++	bool
++	help
++	  This symbol should be selected by an architecture if it
++	  supports Rust.
++
+ config HAVE_FUNCTION_ARG_ACCESS_API
+ 	bool
+ 	help
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 4c97cb40eebb..879ee8e961c9 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -113,6 +113,7 @@ config ARM
+ 	select MMU_GATHER_RCU_TABLE_FREE if SMP && ARM_LPAE
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
+ 	select HAVE_RSEQ
++	select HAVE_RUST if CPU_32v6 || CPU_32v6K
+ 	select HAVE_STACKPROTECTOR
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select HAVE_UID16
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index c842878f8133..5fd1a90fcad7 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -197,6 +197,7 @@ config ARM64
+ 	select HAVE_FUNCTION_ARG_ACCESS_API
+ 	select MMU_GATHER_RCU_TABLE_FREE
+ 	select HAVE_RSEQ
++	select HAVE_RUST
+ 	select HAVE_STACKPROTECTOR
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select HAVE_KPROBES
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index b779603978e1..4ff4c6876b58 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -232,6 +232,7 @@ config PPC
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
+ 	select HAVE_RELIABLE_STACKTRACE
+ 	select HAVE_RSEQ
++	select HAVE_RUST			if PPC64 && CPU_LITTLE_ENDIAN
+ 	select HAVE_SETUP_PER_CPU_AREA		if PPC64
+ 	select HAVE_SOFTIRQ_ON_OWN_STACK
+ 	select HAVE_STACKPROTECTOR		if PPC32 && $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=r2)
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 5adcbd9b5e88..56b6384f5d3f 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -98,6 +98,7 @@ config RISCV
+ 	select HAVE_PERF_REGS
+ 	select HAVE_PERF_USER_STACK_DUMP
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
++	select HAVE_RUST if 64BIT
+ 	select HAVE_FUNCTION_ARG_ACCESS_API
+ 	select HAVE_STACKPROTECTOR
+ 	select HAVE_SYSCALL_TRACEPOINTS
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 7d81102cffd4..663ae53b5597 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -26,6 +26,8 @@ ifeq ($(CONFIG_ARCH_RV64I),y)
+ 	KBUILD_CFLAGS += -mabi=lp64
+ 	KBUILD_AFLAGS += -mabi=lp64
+ 
++	KBUILD_RUSTFLAGS += -Ctarget-cpu=generic-rv64
++
+ 	KBUILD_LDFLAGS += -melf64lriscv
+ else
+ 	BITS := 32
+@@ -33,6 +35,9 @@ else
+ 
+ 	KBUILD_CFLAGS += -mabi=ilp32
+ 	KBUILD_AFLAGS += -mabi=ilp32
++
++	KBUILD_RUSTFLAGS += -Ctarget-cpu=generic-rv32
++
+ 	KBUILD_LDFLAGS += -melf32lriscv
+ endif
+ 
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 9f5bd41bf660..69784063af11 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -248,6 +248,7 @@ config X86
+ 	select HAVE_STATIC_CALL_INLINE		if HAVE_STACK_VALIDATION
+ 	select HAVE_PREEMPT_DYNAMIC
+ 	select HAVE_RSEQ
++	select HAVE_RUST			if X86_64
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select HAVE_UNSTABLE_SCHED_CLOCK
+ 	select HAVE_USER_RETURN_NOTIFIER
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index e84cdd409b64..5bfd4c833732 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -21,6 +21,8 @@ ifdef CONFIG_CC_IS_CLANG
+ RETPOLINE_CFLAGS	:= -mretpoline-external-thunk
+ RETPOLINE_VDSO_CFLAGS	:= -mretpoline
+ endif
++RETPOLINE_RUSTFLAGS	:= -Ctarget-feature=+retpoline-external-thunk
++
+ export RETPOLINE_CFLAGS
+ export RETPOLINE_VDSO_CFLAGS
+ 
+@@ -61,6 +63,8 @@ export BITS
+ #    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53383
+ #
+ KBUILD_CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx
++KBUILD_RUSTFLAGS += -Ctarget-feature=-mmx,-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2
++KBUILD_RUSTFLAGS += -Ctarget-feature=-3dnow,-3dnowa,-avx,-avx2,+soft-float
+ 
+ # Intel CET isn't enabled in the kernel
+ KBUILD_CFLAGS += $(call cc-option,-fcf-protection=none)
+@@ -136,8 +140,17 @@ else
+         cflags-$(CONFIG_GENERIC_CPU)	+= -mtune=generic
+         KBUILD_CFLAGS += $(cflags-y)
+ 
++        rustflags-$(CONFIG_MK8)		+= -Ctarget-cpu=k8
++        rustflags-$(CONFIG_MPSC)	+= -Ctarget-cpu=nocona
++        rustflags-$(CONFIG_MCORE2)	+= -Ctarget-cpu=core2
++        rustflags-$(CONFIG_MATOM)	+= -Ctarget-cpu=atom
++        rustflags-$(CONFIG_GENERIC_CPU)	+= -Ztune-cpu=generic
++        KBUILD_RUSTFLAGS += $(rustflags-y)
++
+         KBUILD_CFLAGS += -mno-red-zone
+         KBUILD_CFLAGS += -mcmodel=kernel
++        KBUILD_RUSTFLAGS += -Cno-redzone=y
++        KBUILD_RUSTFLAGS += -Ccode-model=kernel
+ endif
+ 
+ ifdef CONFIG_X86_X32
+@@ -189,6 +202,7 @@ ifdef CONFIG_RETPOLINE
+   ifndef CONFIG_CC_IS_CLANG
+     KBUILD_CFLAGS += -fno-jump-tables
+   endif
++  KBUILD_RUSTFLAGS += $(RETPOLINE_RUSTFLAGS)
+ endif
+ 
+ ifdef CONFIG_SLS
+diff --git a/init/Kconfig b/init/Kconfig
+index e9119bf54b1f..e62638856518 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -60,6 +60,17 @@ config LLD_VERSION
+ 	default $(ld-version) if LD_IS_LLD
+ 	default 0
+ 
++config RUST_IS_AVAILABLE
++	def_bool $(success,$(srctree)/scripts/rust-is-available.sh)
++	help
++	  This shows whether a suitable Rust toolchain is available (found).
++
++	  Please see Documentation/rust/quick-start.rst for instructions on how
++	  to satify the build requirements of Rust support.
++
++	  In particular, the Makefile target 'rustavailable' is useful to check
++	  why the Rust toolchain is not being detected.
++
+ config CC_CAN_LINK
+ 	bool
+ 	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag)) if 64BIT
+@@ -142,7 +153,8 @@ config WERROR
+ 	default COMPILE_TEST
+ 	help
+ 	  A kernel build should not cause any compiler warnings, and this
+-	  enables the '-Werror' flag to enforce that rule by default.
++	  enables the '-Werror' (for C) and '-Dwarnings' (for Rust) flags
++	  to enforce that rule by default.
+ 
+ 	  However, if you have a new (or very old) compiler with odd and
+ 	  unusual warnings, or you have some architecture with problems,
+@@ -2041,6 +2053,36 @@ config PROFILING
+ 	  Say Y here to enable the extended profiling support mechanisms used
+ 	  by profilers.
+ 
++config RUST
++	bool "Rust support"
++	depends on HAVE_RUST
++	depends on RUST_IS_AVAILABLE
++	depends on !MODVERSIONS
++	depends on !GCC_PLUGIN_RANDSTRUCT
++	select CONSTRUCTORS
++	help
++	  Enables Rust support in the kernel.
++
++	  This allows other Rust-related options, like drivers written in Rust,
++	  to be selected.
++
++	  It is also required to be able to load external kernel modules
++	  written in Rust.
++
++	  See Documentation/rust/ for more information.
++
++	  If unsure, say N.
++
++config RUSTC_VERSION_TEXT
++	string
++	depends on RUST
++	default $(shell,command -v $(RUSTC) >/dev/null 2>&1 && $(RUSTC) --version || echo n)
++
++config BINDGEN_VERSION_TEXT
++	string
++	depends on RUST
++	default $(shell,command -v $(BINDGEN) >/dev/null 2>&1 && $(BINDGEN) --version || echo n)
++
+ #
+ # Place an empty function call at each tracepoint site. Can be
+ # dynamically changed for a probe function.
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 14b89aa37c5c..4985417575ca 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2687,6 +2687,149 @@ config HYPERV_TESTING
+ 
+ endmenu # "Kernel Testing and Coverage"
+ 
++menu "Rust hacking"
++
++config RUST_DEBUG_ASSERTIONS
++	bool "Debug assertions"
++	depends on RUST
++	help
++	  Enables rustc's `-Cdebug-assertions` codegen option.
++
++	  This flag lets you turn `cfg(debug_assertions)` conditional
++	  compilation on or off. This can be used to enable extra debugging
++	  code in development but not in production. For example, it controls
++	  the behavior of the standard library's `debug_assert!` macro.
++
++	  Note that this will apply to all Rust code, including `core`.
++
++	  If unsure, say N.
++
++config RUST_OVERFLOW_CHECKS
++	bool "Overflow checks"
++	default y
++	depends on RUST
++	help
++	  Enables rustc's `-Coverflow-checks` codegen option.
++
++	  This flag allows you to control the behavior of runtime integer
++	  overflow. When overflow-checks are enabled, a Rust panic will occur
++	  on overflow.
++
++	  Note that this will apply to all Rust code, including `core`.
++
++	  If unsure, say Y.
++
++choice
++	prompt "Optimization level"
++	default RUST_OPT_LEVEL_SIMILAR_AS_CHOSEN_FOR_C
++	depends on RUST
++	help
++	  Controls rustc's `-Copt-level` codegen option.
++
++	  This flag controls the optimization level.
++
++	  If unsure, say "Similar as chosen for C".
++
++config RUST_OPT_LEVEL_SIMILAR_AS_CHOSEN_FOR_C
++	bool "Similar as chosen for C"
++	help
++	  This choice will pick a similar optimization level as chosen in
++	  the "Compiler optimization level" for C:
++
++	      -O2 is currently mapped to -Copt-level=2
++	      -O3 is currently mapped to -Copt-level=3
++	      -Os is currently mapped to -Copt-level=s
++
++	  The mapping may change over time to follow the intended semantics
++	  of the choice for C as sensibly as possible.
++
++	  This is the default.
++
++config RUST_OPT_LEVEL_0
++	bool "No optimizations (-Copt-level=0)"
++	help
++	  Not recommended for most purposes. It may come in handy for debugging
++	  suspected optimizer bugs, unexpected undefined behavior, etc.
++
++	  Note that this level will *not* enable debug assertions nor overflow
++	  checks on its own (like it happens when interacting with rustc
++	  directly). Use the corresponding configuration options to control
++	  that instead, orthogonally.
++
++	  Note this level may cause excessive stack usage, which can lead to stack
++	  overflow and subsequent crashes.
++
++config RUST_OPT_LEVEL_1
++	bool "Basic optimizations (-Copt-level=1)"
++	help
++	  Useful for debugging without getting too lost, but without
++	  the overhead and boilerplate of no optimizations at all.
++
++	  Note this level may cause excessive stack usage, which can lead to stack
++	  overflow and subsequent crashes.
++
++config RUST_OPT_LEVEL_2
++	bool "Some optimizations (-Copt-level=2)"
++	help
++	  The sensible choice in most cases.
++
++config RUST_OPT_LEVEL_3
++	bool "All optimizations (-Copt-level=3)"
++	help
++	  Yet more performance (hopefully).
++
++config RUST_OPT_LEVEL_S
++	bool "Optimize for size (-Copt-level=s)"
++	help
++	  Smaller kernel, ideally without too much performance loss.
++
++config RUST_OPT_LEVEL_Z
++	bool "Optimize for size, no loop vectorization (-Copt-level=z)"
++	help
++	  Like the previous level, but also turn off loop vectorization.
++
++endchoice
++
++choice
++	prompt "Build-time assertions"
++	default RUST_BUILD_ASSERT_ALLOW if RUST_OPT_LEVEL_0
++	default RUST_BUILD_ASSERT_DENY if !RUST_OPT_LEVEL_0
++	depends on RUST
++	help
++	  Controls how are `build_error!` and `build_assert!` handled during build.
++
++	  If calls to them exist in the binary, it may indicate a violated invariant
++	  or that the optimizer failed to verify the invariant during compilation.
++	  You can choose to abort compilation or ignore them during build and let the
++	  check be carried to runtime.
++
++	  If optimizations are turned off, you cannot select "Deny".
++
++	  If unsure, say "Deny".
++
++config RUST_BUILD_ASSERT_ALLOW
++	bool "Allow"
++	help
++	  Unoptimized calls to `build_error!` will be converted to `panic!`
++	  and checked at runtime.
++
++config RUST_BUILD_ASSERT_WARN
++	bool "Warn"
++	help
++	  Unoptimized calls to `build_error!` will be converted to `panic!`
++	  and checked at runtime, but warnings will be generated when building.
++
++config RUST_BUILD_ASSERT_DENY
++	bool "Deny"
++	depends on !RUST_OPT_LEVEL_0
++	help
++	  Unoptimized calls to `build_error!` will abort compilation.
++
++endchoice
++
++
++endmenu # "Rust"
++
+ source "Documentation/Kconfig"
+ 
+ endmenu # Kernel hacking
+diff --git a/rust/.gitignore b/rust/.gitignore
 new file mode 100644
-index 000000000000..2a71fd68a06d
+index 000000000000..9bd1af8e05a1
 --- /dev/null
-+++ b/Documentation/rust/coding-guidelines.rst
-@@ -0,0 +1,214 @@
-+Coding Guidelines
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++++ b/rust/.gitignore
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0
 +
-+This document describes how to write Rust code in the kernel.
++target.json
++bindings_generated.rs
++bindings_helpers_generated.rs
++exports_*_generated.h
++doc/
++test/
+diff --git a/rust/Makefile b/rust/Makefile
+new file mode 100644
+index 000000000000..fd0f04a504b9
+--- /dev/null
++++ b/rust/Makefile
+@@ -0,0 +1,376 @@
++# SPDX-License-Identifier: GPL-2.0
 +
++always-$(CONFIG_RUST) += target.json
++no-clean-files += target.json
 +
-+Style & formatting
-+------------------
++obj-$(CONFIG_RUST) += core.o compiler_builtins.o
++always-$(CONFIG_RUST) += exports_core_generated.h
 +
-+The code should be formatted using ``rustfmt``. In this way, a person
-+contributing from time to time to the kernel does not need to learn and
-+remember one more style guide. More importantly, reviewers and maintainers
-+do not need to spend time pointing out style issues anymore, and thus
-+less patch roundtrips may be needed to land a change.
++# Missing prototypes are expected in the helpers since these are exported
++# for Rust only, thus there is no header nor prototypes.
++obj-$(CONFIG_RUST) += helpers.o
++CFLAGS_REMOVE_helpers.o = -Wmissing-prototypes -Wmissing-declarations
 +
-+.. note:: Conventions on comments and documentation are not checked by
-+  ``rustfmt``. Thus those are still needed to be taken care of.
++always-$(CONFIG_RUST) += libmacros.so
++no-clean-files += libmacros.so
 +
-+The default settings of ``rustfmt`` are used. This means the idiomatic Rust
-+style is followed. For instance, 4 spaces are used for indentation rather
-+than tabs.
++always-$(CONFIG_RUST) += bindings_generated.rs bindings_helpers_generated.rs
++obj-$(CONFIG_RUST) += alloc.o kernel.o
++always-$(CONFIG_RUST) += exports_alloc_generated.h exports_kernel_generated.h
 +
-+It is convenient to instruct editors/IDEs to format while typing,
-+when saving or at commit time. However, if for some reason reformatting
-+the entire kernel Rust sources is needed at some point, the following can =
-be
-+run::
++ifdef CONFIG_RUST_BUILD_ASSERT_DENY
++always-$(CONFIG_RUST) += build_error.o
++else
++obj-$(CONFIG_RUST) += build_error.o
++endif
 +
-+	make LLVM=3D1 rustfmt
++obj-$(CONFIG_RUST) += exports.o
 +
-+It is also possible to check if everything is formatted (printing a diff
-+otherwise), for instance for a CI, with::
++# Avoids running `$(RUSTC)` for the sysroot when it may not be available.
++ifdef CONFIG_RUST
 +
-+	make LLVM=3D1 rustfmtcheck
++# `$(rust_flags)` is passed in case the user added `--sysroot`.
++rustc_sysroot := $(shell $(RUSTC) $(rust_flags) --print sysroot)
++rustc_host_target := $(shell $(RUSTC) --version --verbose | grep -F 'host: ' | cut -d' ' -f2)
++RUST_LIB_SRC ?= $(rustc_sysroot)/lib/rustlib/src/rust/library
 +
-+Like ``clang-format`` for the rest of the kernel, ``rustfmt`` works on
-+individual files, and does not require a kernel configuration. Sometimes i=
-t may
-+even work with broken code.
++ifeq ($(quiet),silent_)
++cargo_quiet=-q
++rust_test_quiet=-q
++rustdoc_test_quiet=--test-args -q
++else ifeq ($(quiet),quiet_)
++rust_test_quiet=-q
++rustdoc_test_quiet=--test-args -q
++else
++cargo_quiet=--verbose
++endif
 +
++core-cfgs = \
++    --cfg no_fp_fmt_parse
 +
-+Comments
-+--------
++alloc-cfgs = \
++    --cfg no_global_oom_handling \
++    --cfg no_rc \
++    --cfg no_sync
 +
-+"Normal" comments (i.e. ``//``, rather than code documentation which starts
-+with ``///`` or ``//!``) are written in Markdown the same way as documenta=
-tion
-+comments are, even though they will not be rendered. This improves consist=
-ency,
-+simplifies the rules and allows to move content between the two kinds of
-+comments more easily. For instance:
++quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
++      cmd_rustdoc = \
++	OBJTREE=$(abspath $(objtree)) \
++	$(RUSTDOC) $(if $(rustdoc_host),$(rust_common_flags),$(rust_flags)) \
++		$(rustc_target_flags) -L$(objtree)/$(obj) \
++		--output $(objtree)/$(obj)/doc \
++		--crate-name $(subst rustdoc-,,$@) \
++		@$(objtree)/include/generated/rustc_cfg $<
 +
-+.. code-block:: rust
++# The `html_logo_url` and `html_favicon_url` forms of the `doc` attribute
++# can be used to specify a custom logo. However:
++#   - The given value is used as-is, thus it cannot be relative or a local file
++#     (unlike the non-custom case) since the generated docs have subfolders.
++#   - It requires adding it to every crate.
++#   - It requires changing `core` which comes from the sysroot.
++#
++# Using `-Zcrate-attr` would solve the last two points, but not the first.
++# The https://github.com/rust-lang/rfcs/pull/3226 RFC suggests two new
++# command-like flags to solve the issue. Meanwhile, we use the non-custom case
++# and then retouch the generated files.
++rustdoc: rustdoc-core rustdoc-macros rustdoc-compiler_builtins \
++    rustdoc-alloc rustdoc-kernel
++	$(Q)cp $(srctree)/Documentation/rust/logo.svg $(objtree)/$(obj)/doc
++	$(Q)find $(objtree)/$(obj)/doc -name '*.html' -type f -print0 | xargs -0 sed -Ei \
++		-e 's:rust-logo\.png:logo.svg:g' \
++		-e 's:favicon\.svg:logo.svg:g' \
++		-e 's:<link rel="alternate icon" type="image/png" href="[./]*favicon-(16x16|32x32)\.png">::g'
 +
-+	// `object` is ready to be handled now.
-+	f(object);
++rustdoc-macros: private rustdoc_host = yes
++rustdoc-macros: private rustc_target_flags = --crate-type proc-macro \
++    --extern proc_macro
++rustdoc-macros: $(src)/macros/lib.rs FORCE
++	$(call if_changed,rustdoc)
 +
-+Furthermore, just like documentation, comments are capitalized at the begi=
-nning
-+of a sentence and ended with a period (even if it is a single sentence). T=
-his
-+includes ``// SAFETY:``, ``// TODO:`` and other "tagged" comments, e.g.:
++rustdoc-core: private rustc_target_flags = $(core-cfgs)
++rustdoc-core: $(RUST_LIB_SRC)/core/src/lib.rs FORCE
++	$(call if_changed,rustdoc)
 +
-+.. code-block:: rust
++rustdoc-compiler_builtins: $(src)/compiler_builtins.rs rustdoc-core FORCE
++	$(call if_changed,rustdoc)
 +
-+	// FIXME: The error should be handled properly.
++# We need to allow `rustdoc::broken_intra_doc_links` because some
++# `no_global_oom_handling` functions refer to non-`no_global_oom_handling`
++# functions. Ideally `rustdoc` would have a way to distinguish broken links
++# due to things that are "configured out" vs. entirely non-existing ones.
++rustdoc-alloc: private rustc_target_flags = $(alloc-cfgs) \
++    -Arustdoc::broken_intra_doc_links
++rustdoc-alloc: $(src)/alloc/lib.rs rustdoc-core rustdoc-compiler_builtins FORCE
++	$(call if_changed,rustdoc)
 +
-+Comments should not be used for documentation purposes: comments are inten=
-ded
-+for implementation details, not users. This distinction is useful even if =
-the
-+reader of the source file is both an implementor and a user of an API. In =
-fact,
-+sometimes it is useful to use both comments and documentation at the same =
-time.
-+For instance, for a ``TODO`` list or to comment on the documentation itsel=
-f.
-+For the latter case, comments can be inserted in the middle; that is, clos=
-er to
-+the line of documentation to be commented. For any other case, comments are
-+written after the documentation, e.g.:
++rustdoc-kernel: private rustc_target_flags = --extern alloc \
++    --extern build_error --extern macros=$(objtree)/$(obj)/libmacros.so
++rustdoc-kernel: $(src)/kernel/lib.rs rustdoc-core rustdoc-macros \
++    rustdoc-compiler_builtins rustdoc-alloc $(obj)/libmacros.so \
++    $(obj)/bindings_generated.rs $(obj)/bindings_helpers_generated.rs FORCE
++	$(call if_changed,rustdoc)
 +
-+.. code-block:: rust
++quiet_cmd_rustc_test_library = RUSTC TL $<
++      cmd_rustc_test_library = \
++	OBJTREE=$(abspath $(objtree)) \
++	$(RUSTC) $(rust_common_flags) \
++		@$(objtree)/include/generated/rustc_cfg $(rustc_target_flags) \
++		--crate-type $(if $(rustc_test_library_proc),proc-macro,rlib) \
++		--out-dir $(objtree)/$(obj)/test --cfg testlib \
++		--sysroot $(objtree)/$(obj)/test/sysroot \
++		-L$(objtree)/$(obj)/test \
++		--crate-name $(subst rusttest-,,$(subst rusttestlib-,,$@)) $<
 +
-+	/// Returns a new [`Foo`].
-+	///
-+	/// # Examples
-+	///
-+	// TODO: Find a better example.
-+	/// ```
-+	/// let foo =3D f(42);
-+	/// ```
-+	// FIXME: Use fallible approach.
-+	pub fn f(x: i32) -> Foo {
-+	    // ...
++rusttestlib-build_error: $(src)/build_error.rs rusttest-prepare FORCE
++	$(call if_changed,rustc_test_library)
++
++rusttestlib-macros: private rustc_target_flags = --extern proc_macro
++rusttestlib-macros: private rustc_test_library_proc = yes
++rusttestlib-macros: $(src)/macros/lib.rs rusttest-prepare FORCE
++	$(call if_changed,rustc_test_library)
++
++quiet_cmd_rustdoc_test = RUSTDOC T $<
++      cmd_rustdoc_test = \
++	OBJTREE=$(abspath $(objtree)) \
++	$(RUSTDOC) --test $(rust_common_flags) \
++		@$(objtree)/include/generated/rustc_cfg \
++		$(rustc_target_flags) $(rustdoc_test_target_flags) \
++		--sysroot $(objtree)/$(obj)/test/sysroot $(rustdoc_test_quiet) \
++		-L$(objtree)/$(obj)/test --output $(objtree)/$(obj)/doc \
++		--crate-name $(subst rusttest-,,$@) $<
++
++# We cannot use `-Zpanic-abort-tests` because some tests are dynamic,
++# so for the moment we skip `-Cpanic=abort`.
++quiet_cmd_rustc_test = RUSTC T  $<
++      cmd_rustc_test = \
++	OBJTREE=$(abspath $(objtree)) \
++	$(RUSTC) --test $(rust_common_flags) \
++		@$(objtree)/include/generated/rustc_cfg \
++		$(rustc_target_flags) --out-dir $(objtree)/$(obj)/test \
++		--sysroot $(objtree)/$(obj)/test/sysroot \
++		-L$(objtree)/$(obj)/test \
++		--crate-name $(subst rusttest-,,$@) $<; \
++	$(objtree)/$(obj)/test/$(subst rusttest-,,$@) $(rust_test_quiet) \
++		$(rustc_test_run_flags)
++
++rusttest: rusttest-macros rusttest-kernel
++
++# This prepares a custom sysroot with our custom `alloc` instead of
++# the standard one.
++#
++# This requires several hacks:
++#   - Unlike `core` and `alloc`, `std` depends on more than a dozen crates,
++#     including third-party crates that need to be downloaded, plus custom
++#     `build.rs` steps. Thus hardcoding things here is not maintainable.
++#   - `cargo` knows how to build the standard library, but it is an unstable
++#     feature so far (`-Zbuild-std`).
++#   - `cargo` only considers the use case of building the standard library
++#     to use it in a given package. Thus we need to create a dummy package
++#     and pick the generated libraries from there.
++#   - Since we only keep a subset of upstream `alloc` in-tree, we need
++#     to recreate it on the fly by putting our sources on top.
++#   - The usual ways of modifying the dependency graph in `cargo` do not seem
++#     to apply for the `-Zbuild-std` steps, thus we have to mislead it
++#     by modifying the sources in the sysroot.
++#   - To avoid messing with the user's Rust installation, we create a clone
++#     of the sysroot. However, `cargo` ignores `RUSTFLAGS` in the `-Zbuild-std`
++#     steps, thus we use a wrapper binary passed via `RUSTC` to pass the flag.
++#
++# In the future, we hope to avoid the whole ordeal by either:
++#   - Making the `test` crate not depend on `std` (either improving upstream
++#     or having our own custom crate).
++#   - Making the tests run in kernel space (requires the previous point).
++#   - Making `std` and friends be more like a "normal" crate, so that
++#     `-Zbuild-std` and related hacks are not needed.
++quiet_cmd_rustsysroot = RUSTSYSROOT
++      cmd_rustsysroot = \
++	rm -rf $(objtree)/$(obj)/test; \
++	mkdir -p $(objtree)/$(obj)/test; \
++	cp -a $(rustc_sysroot) $(objtree)/$(obj)/test/sysroot; \
++	cp -r $(srctree)/$(src)/alloc/* \
++		$(objtree)/$(obj)/test/sysroot/lib/rustlib/src/rust/library/alloc/src; \
++	echo '\#!/bin/sh' > $(objtree)/$(obj)/test/rustc_sysroot; \
++	echo "$(RUSTC) --sysroot=$(abspath $(objtree)/$(obj)/test/sysroot) \"\$$@\"" \
++		>> $(objtree)/$(obj)/test/rustc_sysroot; \
++	chmod u+x $(objtree)/$(obj)/test/rustc_sysroot; \
++	$(CARGO) -q new $(objtree)/$(obj)/test/dummy; \
++	RUSTC=$(objtree)/$(obj)/test/rustc_sysroot $(CARGO) $(cargo_quiet) \
++		test -Zbuild-std --target $(rustc_host_target) \
++		--manifest-path $(objtree)/$(obj)/test/dummy/Cargo.toml; \
++	rm $(objtree)/$(obj)/test/sysroot/lib/rustlib/$(rustc_host_target)/lib/*; \
++	cp $(objtree)/$(obj)/test/dummy/target/$(rustc_host_target)/debug/deps/* \
++		$(objtree)/$(obj)/test/sysroot/lib/rustlib/$(rustc_host_target)/lib
++
++rusttest-prepare: FORCE
++	$(call if_changed,rustsysroot)
++
++rusttest-macros: private rustc_target_flags = --extern proc_macro
++rusttest-macros: private rustdoc_test_target_flags = --crate-type proc-macro
++rusttest-macros: $(src)/macros/lib.rs rusttest-prepare FORCE
++	$(call if_changed,rustc_test)
++	$(call if_changed,rustdoc_test)
++
++rusttest-kernel: private rustc_target_flags = --extern alloc \
++    --extern build_error --extern macros
++rusttest-kernel: private rustc_test_run_flags = --skip bindgen_test_layout_
++rusttest-kernel: $(src)/kernel/lib.rs rusttest-prepare \
++    rusttestlib-build_error rusttestlib-macros FORCE
++	$(call if_changed,rustc_test)
++	$(call if_changed,rustc_test_library)
++	$(call if_changed,rustdoc_test)
++
++filechk_rust_target = $(objtree)/scripts/generate_rust_target < $<
++
++$(obj)/target.json: $(objtree)/include/config/auto.conf FORCE
++	$(call filechk,rust_target)
++
++ifdef CONFIG_CC_IS_CLANG
++bindgen_c_flags = $(c_flags)
++else
++# bindgen relies on libclang to parse C. Ideally, bindgen would support a GCC
++# plugin backend and/or the Clang driver would be perfectly compatible with GCC.
++#
++# For the moment, here we are tweaking the flags on the fly. This is a hack,
++# and some kernel configurations may not work (e.g. `GCC_PLUGIN_RANDSTRUCT`
++# if we end up using one of those structs).
++bindgen_skip_c_flags := -mno-fp-ret-in-387 -mpreferred-stack-boundary=% \
++	-mskip-rax-setup -mgeneral-regs-only -msign-return-address=% \
++	-mindirect-branch=thunk-extern -mindirect-branch-register \
++	-mrecord-mcount -mabi=lp64 -mstack-protector-guard% -mtraceback=no \
++	-mno-pointers-to-nested-functions -mno-string -mno-strict-align \
++	-mstrict-align \
++	-fconserve-stack -falign-jumps=% -falign-loops=% \
++	-femit-struct-debug-baseonly -fno-ipa-cp-clone -fno-ipa-sra \
++	-fno-partial-inlining -fplugin-arg-arm_ssp_per_task_plugin-% \
++	-fno-reorder-blocks -fno-allow-store-data-races -fasan-shadow-offset=% \
++	-fzero-call-used-regs=% -fno-stack-clash-protection \
++	-fno-inline-functions-called-once \
++	--param=% --param asan-%
++
++# Derived from `scripts/Makefile.clang`.
++BINDGEN_TARGET_arm	:= arm-linux-gnueabi
++BINDGEN_TARGET_arm64	:= aarch64-linux-gnu
++BINDGEN_TARGET_powerpc	:= powerpc64le-linux-gnu
++BINDGEN_TARGET_riscv	:= riscv64-linux-gnu
++BINDGEN_TARGET_x86	:= x86_64-linux-gnu
++BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
++
++# All warnings are inhibited since GCC builds are very experimental,
++# many GCC warnings are not supported by Clang, they may only appear in
++# some configurations, with new GCC versions, etc.
++bindgen_extra_c_flags = -w --target=$(BINDGEN_TARGET)
++
++bindgen_c_flags = $(filter-out $(bindgen_skip_c_flags), $(c_flags)) \
++	$(bindgen_extra_c_flags)
++endif
++
++ifdef CONFIG_LTO
++bindgen_c_flags_lto = $(filter-out $(CC_FLAGS_LTO), $(bindgen_c_flags))
++else
++bindgen_c_flags_lto = $(bindgen_c_flags)
++endif
++
++bindgen_c_flags_final = $(bindgen_c_flags_lto)
++
++quiet_cmd_bindgen = BINDGEN $@
++      cmd_bindgen = \
++	$(BINDGEN) $< $(bindgen_target_flags) \
++		--use-core --with-derive-default --ctypes-prefix c_types \
++		--no-debug '.*' \
++		--size_t-is-usize -o $@ -- $(bindgen_c_flags_final) -DMODULE \
++		$(bindgen_target_cflags) $(bindgen_target_extra)
++
++$(obj)/bindings_generated.rs: private bindgen_target_flags = \
++    $(shell grep -v '^\#\|^$$' $(srctree)/$(src)/bindgen_parameters)
++$(obj)/bindings_generated.rs: $(src)/kernel/bindings_helper.h \
++    $(src)/bindgen_parameters FORCE
++	$(call if_changed_dep,bindgen)
++
++# See `CFLAGS_REMOVE_helpers.o` above. In addition, Clang on C does not warn
++# with `-Wmissing-declarations` (unlike GCC), so it is not strictly needed here
++# given it is `libclang`; but for consistency, future Clang changes and/or
++# a potential future GCC backend for `bindgen`, we disable it too.
++$(obj)/bindings_helpers_generated.rs: private bindgen_target_flags = \
++    --blacklist-type '.*' --whitelist-var '' \
++    --whitelist-function 'rust_helper_.*'
++$(obj)/bindings_helpers_generated.rs: private bindgen_target_cflags = \
++    -I$(objtree)/$(obj) -Wno-missing-prototypes -Wno-missing-declarations
++$(obj)/bindings_helpers_generated.rs: private bindgen_target_extra = ; \
++    sed -Ei 's/pub fn rust_helper_([a-zA-Z0-9_]*)/#[link_name="rust_helper_\1"]\n    pub fn \1/g' $@
++$(obj)/bindings_helpers_generated.rs: $(src)/helpers.c FORCE
++	$(call if_changed_dep,bindgen)
++
++quiet_cmd_exports = EXPORTS $@
++      cmd_exports = \
++	$(NM) -p --defined-only $< \
++		| grep -E ' (T|R|D) ' | cut -d ' ' -f 3 \
++		| xargs -Isymbol \
++		echo 'EXPORT_SYMBOL_RUST_GPL(symbol);' > $@
++
++$(obj)/exports_core_generated.h: $(obj)/core.o FORCE
++	$(call if_changed,exports)
++
++$(obj)/exports_alloc_generated.h: $(obj)/alloc.o FORCE
++	$(call if_changed,exports)
++
++$(obj)/exports_kernel_generated.h: $(obj)/kernel.o FORCE
++	$(call if_changed,exports)
++
++quiet_cmd_rustc_procmacro = $(RUSTC_OR_CLIPPY_QUIET) P $@
++      cmd_rustc_procmacro = \
++	$(RUSTC_OR_CLIPPY) $(rust_common_flags) \
++		--emit=dep-info,link --extern proc_macro \
++		--crate-type proc-macro --out-dir $(objtree)/$(obj) \
++		--crate-name $(patsubst lib%.so,%,$(notdir $@)) $<; \
++	mv $(objtree)/$(obj)/$(patsubst lib%.so,%,$(notdir $@)).d $(depfile); \
++	sed -i '/^\#/d' $(depfile)
++
++# Procedural macros can only be used with the `rustc` that compiled it.
++# Therefore, to get `libmacros.so` automatically recompiled when the compiler
++# version changes, we add `core.o` as a dependency (even if it is not needed).
++$(obj)/libmacros.so: $(src)/macros/lib.rs $(obj)/core.o FORCE
++	$(call if_changed_dep,rustc_procmacro)
++
++quiet_cmd_rustc_library = $(if $(skip_clippy),RUSTC,$(RUSTC_OR_CLIPPY_QUIET)) L $@
++      cmd_rustc_library = \
++	OBJTREE=$(abspath $(objtree)) \
++	$(if $(skip_clippy),$(RUSTC),$(RUSTC_OR_CLIPPY)) \
++		$(filter-out $(skip_flags),$(rust_flags) $(rustc_target_flags)) \
++		--emit=dep-info,obj,metadata --crate-type rlib \
++		--out-dir $(objtree)/$(obj) -L$(objtree)/$(obj) \
++		--crate-name $(patsubst %.o,%,$(notdir $@)) $<; \
++	mv $(objtree)/$(obj)/$(patsubst %.o,%,$(notdir $@)).d $(depfile); \
++	sed -i '/^\#/d' $(depfile) \
++	$(if $(rustc_objcopy),;$(OBJCOPY) $(rustc_objcopy) $@)
++
++rust-analyzer:
++	$(Q)$(srctree)/scripts/generate_rust_analyzer.py $(srctree) $(objtree) \
++		$(RUST_LIB_SRC) > $(objtree)/rust-project.json
++
++$(obj)/core.o: private skip_clippy = 1
++$(obj)/core.o: private skip_flags = -Dunreachable_pub --edition=2021
++$(obj)/core.o: private rustc_target_flags = $(core-cfgs) --edition=2018
++$(obj)/core.o: $(RUST_LIB_SRC)/core/src/lib.rs $(obj)/target.json FORCE
++	$(call if_changed_dep,rustc_library)
++
++$(obj)/compiler_builtins.o: private rustc_objcopy = -w -W '__*'
++$(obj)/compiler_builtins.o: $(src)/compiler_builtins.rs $(obj)/core.o FORCE
++	$(call if_changed_dep,rustc_library)
++
++$(obj)/alloc.o: private skip_clippy = 1
++$(obj)/alloc.o: private skip_flags = -Dunreachable_pub
++$(obj)/alloc.o: private rustc_target_flags = $(alloc-cfgs)
++$(obj)/alloc.o: $(src)/alloc/lib.rs $(obj)/compiler_builtins.o FORCE
++	$(call if_changed_dep,rustc_library)
++
++$(obj)/build_error.o: $(src)/build_error.rs $(obj)/compiler_builtins.o FORCE
++	$(call if_changed_dep,rustc_library)
++
++$(obj)/kernel.o: private rustc_target_flags = --extern alloc \
++    --extern build_error --extern macros
++$(obj)/kernel.o: $(src)/kernel/lib.rs $(obj)/alloc.o $(obj)/build_error.o \
++    $(obj)/libmacros.so $(obj)/bindings_generated.rs \
++    $(obj)/bindings_helpers_generated.rs FORCE
++	$(call if_changed_dep,rustc_library)
++
++endif # CONFIG_RUST
+diff --git a/rust/bindgen_parameters b/rust/bindgen_parameters
+new file mode 100644
+index 000000000000..c2cc4a88234e
+--- /dev/null
++++ b/rust/bindgen_parameters
+@@ -0,0 +1,13 @@
++# SPDX-License-Identifier: GPL-2.0
++
++--opaque-type xregs_state
++--opaque-type desc_struct
++--opaque-type arch_lbr_state
++--opaque-type local_apic
++
++# If SMP is disabled, `arch_spinlock_t` is defined as a ZST which triggers a Rust
++# warning. We don't need to peek into it anyway.
++--opaque-type spinlock
++
++# `seccomp`'s comment gets understood as a doctest
++--no-doc-comments
+diff --git a/scripts/.gitignore b/scripts/.gitignore
+index eed308bef604..b7aec8eb1bd4 100644
+--- a/scripts/.gitignore
++++ b/scripts/.gitignore
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ /asn1_compiler
+ /bin2c
++/generate_rust_target
+ /insert-sys-cert
+ /kallsyms
+ /module.lds
+diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
+index 0496efd6e117..83e850321eb6 100644
+--- a/scripts/Kconfig.include
++++ b/scripts/Kconfig.include
+@@ -36,12 +36,12 @@ ld-option = $(success,$(LD) -v $(1))
+ as-instr = $(success,printf "%b\n" "$(1)" | $(CC) $(CLANG_FLAGS) -c -x assembler -o /dev/null -)
+ 
+ # check if $(CC) and $(LD) exist
+-$(error-if,$(failure,command -v $(CC)),compiler '$(CC)' not found)
++$(error-if,$(failure,command -v $(CC)),C compiler '$(CC)' not found)
+ $(error-if,$(failure,command -v $(LD)),linker '$(LD)' not found)
+ 
+-# Get the compiler name, version, and error out if it is not supported.
++# Get the C compiler name, version, and error out if it is not supported.
+ cc-info := $(shell,$(srctree)/scripts/cc-version.sh $(CC))
+-$(error-if,$(success,test -z "$(cc-info)"),Sorry$(comma) this compiler is not supported.)
++$(error-if,$(success,test -z "$(cc-info)"),Sorry$(comma) this C compiler is not supported.)
+ cc-name := $(shell,set -- $(cc-info) && echo $1)
+ cc-version := $(shell,set -- $(cc-info) && echo $2)
+ 
+diff --git a/scripts/Makefile b/scripts/Makefile
+index ce5aa9030b74..a278345e7820 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -10,6 +10,9 @@ hostprogs-always-$(CONFIG_BUILDTIME_TABLE_SORT)		+= sorttable
+ hostprogs-always-$(CONFIG_ASN1)				+= asn1_compiler
+ hostprogs-always-$(CONFIG_MODULE_SIG_FORMAT)		+= sign-file
+ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
++hostprogs-always-$(CONFIG_RUST)				+= generate_rust_target
++
++generate_rust_target-rust := y
+ 
+ HOSTCFLAGS_sorttable.o = -I$(srctree)/tools/include
+ HOSTLDLIBS_sorttable = -lpthread
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index a4b89b757287..699b58483e04 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -26,6 +26,7 @@ EXTRA_CPPFLAGS :=
+ EXTRA_LDFLAGS  :=
+ asflags-y  :=
+ ccflags-y  :=
++rustflags-y :=
+ cppflags-y :=
+ ldflags-y  :=
+ 
+@@ -324,6 +325,65 @@ quiet_cmd_cc_lst_c = MKLST   $@
+ $(obj)/%.lst: $(src)/%.c FORCE
+ 	$(call if_changed_dep,cc_lst_c)
+ 
++# Compile Rust sources (.rs)
++# ---------------------------------------------------------------------------
++
++rust_allowed_features := allocator_api,bench_black_box,concat_idents,generic_associated_types
++
++rust_common_cmd = \
++	RUST_MODFILE=$(modfile) $(RUSTC_OR_CLIPPY) $(rust_flags) \
++	-Zallow-features=$(rust_allowed_features) \
++	-Zcrate-attr=no_std \
++	-Zcrate-attr='feature($(rust_allowed_features))' \
++	--extern alloc --extern kernel \
++	--crate-type rlib --out-dir $(obj) -L $(objtree)/rust/ \
++	--crate-name $(basename $(notdir $@))
++
++rust_handle_depfile = \
++	mv $(obj)/$(basename $(notdir $@)).d $(depfile); \
++	sed -i '/^\#/d' $(depfile)
++
++# `--emit=obj`, `--emit=asm` and `--emit=llvm-ir` imply a single codegen unit
++# will be used. We explicitly request `-Ccodegen-units=1` in any case, and
++# the compiler shows a warning if it is not 1. However, if we ever stop
++# requesting it explicitly and we start using some other `--emit` that does not
++# imply it (and for which codegen is performed), then we would be out of sync,
++# i.e. the outputs we would get for the different single targets (e.g. `.ll`)
++# would not match each other.
++
++quiet_cmd_rustc_o_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
++      cmd_rustc_o_rs = \
++	$(rust_common_cmd) --emit=dep-info,obj $<; \
++	$(rust_handle_depfile)
++
++$(obj)/%.o: $(src)/%.rs FORCE
++	$(call if_changed_dep,rustc_o_rs)
++
++quiet_cmd_rustc_i_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
++      cmd_rustc_i_rs = \
++	$(rust_common_cmd) --emit=dep-info -Zunpretty=expanded $< >$@; \
++	command -v $(RUSTFMT) >/dev/null && $(RUSTFMT) $@; \
++	$(rust_handle_depfile)
++
++$(obj)/%.i: $(src)/%.rs FORCE
++	$(call if_changed_dep,rustc_i_rs)
++
++quiet_cmd_rustc_s_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
++      cmd_rustc_s_rs = \
++	$(rust_common_cmd) --emit=dep-info,asm $<; \
++	$(rust_handle_depfile)
++
++$(obj)/%.s: $(src)/%.rs FORCE
++	$(call if_changed_dep,rustc_s_rs)
++
++quiet_cmd_rustc_ll_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
++      cmd_rustc_ll_rs = \
++	$(rust_common_cmd) --emit=dep-info,llvm-ir $<; \
++	$(rust_handle_depfile)
++
++$(obj)/%.ll: $(src)/%.rs FORCE
++	$(call if_changed_dep,rustc_ll_rs)
++
+ # Compile assembler sources (.S)
+ # ---------------------------------------------------------------------------
+ 
+diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
+index 9f39b0130551..fe87389d52c0 100644
+--- a/scripts/Makefile.debug
++++ b/scripts/Makefile.debug
+@@ -1,4 +1,5 @@
+ DEBUG_CFLAGS	:=
++DEBUG_RUSTFLAGS	:=
+ 
+ ifdef CONFIG_DEBUG_INFO_SPLIT
+ DEBUG_CFLAGS	+= -gsplit-dwarf
+@@ -10,6 +11,12 @@ ifndef CONFIG_AS_IS_LLVM
+ KBUILD_AFLAGS	+= -Wa,-gdwarf-2
+ endif
+ 
++ifdef CONFIG_DEBUG_INFO_REDUCED
++DEBUG_RUSTFLAGS += -Cdebuginfo=1
++else
++DEBUG_RUSTFLAGS += -Cdebuginfo=2
++endif
++
+ ifndef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+ dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
+ dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
+@@ -31,3 +38,6 @@ endif
+ 
+ KBUILD_CFLAGS += $(DEBUG_CFLAGS)
+ export DEBUG_CFLAGS
++
++KBUILD_RUSTFLAGS += $(DEBUG_RUSTFLAGS)
++export DEBUG_RUSTFLAGS
+diff --git a/scripts/Makefile.host b/scripts/Makefile.host
+index 278b4d6ac945..da133780b751 100644
+--- a/scripts/Makefile.host
++++ b/scripts/Makefile.host
+@@ -22,6 +22,8 @@ $(obj)/%.tab.c $(obj)/%.tab.h: $(src)/%.y FORCE
+ # to preprocess a data file.
+ #
+ # Both C and C++ are supported, but preferred language is C for such utilities.
++# Rust is also supported, but it may only be used in scenarios where a Rust
++# toolchain is required to be available (e.g. when  `CONFIG_RUST` is enabled).
+ #
+ # Sample syntax (see Documentation/kbuild/makefiles.rst for reference)
+ # hostprogs := bin2hex
+@@ -37,15 +39,20 @@ $(obj)/%.tab.c $(obj)/%.tab.h: $(src)/%.y FORCE
+ # qconf-objs      := menu.o
+ # Will compile qconf as a C++ program, and menu as a C program.
+ # They are linked as C++ code to the executable qconf
++#
++# hostprogs   := target
++# target-rust := y
++# Will compile `target` as a Rust program, using `target.rs` as the crate root.
++# The crate may consist of several source files.
+ 
+ # C code
+ # Executables compiled from a single .c file
+ host-csingle	:= $(foreach m,$(hostprogs), \
+-			$(if $($(m)-objs)$($(m)-cxxobjs),,$(m)))
++			$(if $($(m)-objs)$($(m)-cxxobjs)$($(m)-rust),,$(m)))
+ 
+ # C executables linked based on several .o files
+ host-cmulti	:= $(foreach m,$(hostprogs),\
+-		   $(if $($(m)-cxxobjs),,$(if $($(m)-objs),$(m))))
++		   $(if $($(m)-cxxobjs)$($(m)-rust),,$(if $($(m)-objs),$(m))))
+ 
+ # Object (.o) files compiled from .c files
+ host-cobjs	:= $(sort $(foreach m,$(hostprogs),$($(m)-objs)))
+@@ -58,11 +65,17 @@ host-cxxmulti	:= $(foreach m,$(hostprogs),$(if $($(m)-cxxobjs),$(m)))
+ # C++ Object (.o) files compiled from .cc files
+ host-cxxobjs	:= $(sort $(foreach m,$(host-cxxmulti),$($(m)-cxxobjs)))
+ 
++# Rust code
++# Executables compiled from a single Rust crate (which may consist of
++# one or more .rs files)
++host-rust	:= $(foreach m,$(hostprogs),$(if $($(m)-rust),$(m)))
++
+ host-csingle	:= $(addprefix $(obj)/,$(host-csingle))
+ host-cmulti	:= $(addprefix $(obj)/,$(host-cmulti))
+ host-cobjs	:= $(addprefix $(obj)/,$(host-cobjs))
+ host-cxxmulti	:= $(addprefix $(obj)/,$(host-cxxmulti))
+ host-cxxobjs	:= $(addprefix $(obj)/,$(host-cxxobjs))
++host-rust	:= $(addprefix $(obj)/,$(host-rust))
+ 
+ #####
+ # Handle options to gcc. Support building with separate output directory
+@@ -71,6 +84,8 @@ _hostc_flags   = $(KBUILD_HOSTCFLAGS)   $(HOST_EXTRACFLAGS)   \
+                  $(HOSTCFLAGS_$(target-stem).o)
+ _hostcxx_flags = $(KBUILD_HOSTCXXFLAGS) $(HOST_EXTRACXXFLAGS) \
+                  $(HOSTCXXFLAGS_$(target-stem).o)
++_hostrust_flags = $(KBUILD_HOSTRUSTFLAGS) $(HOST_EXTRARUSTFLAGS) \
++                  $(HOSTRUSTFLAGS_$(target-stem))
+ 
+ # $(objtree)/$(obj) for including generated headers from checkin source files
+ ifeq ($(KBUILD_EXTMOD),)
+@@ -82,6 +97,7 @@ endif
+ 
+ hostc_flags    = -Wp,-MMD,$(depfile) $(_hostc_flags)
+ hostcxx_flags  = -Wp,-MMD,$(depfile) $(_hostcxx_flags)
++hostrust_flags = $(_hostrust_flags)
+ 
+ #####
+ # Compile programs on the host
+@@ -128,5 +144,17 @@ quiet_cmd_host-cxxobjs	= HOSTCXX $@
+ $(host-cxxobjs): $(obj)/%.o: $(src)/%.cc FORCE
+ 	$(call if_changed_dep,host-cxxobjs)
+ 
++# Create executable from a single Rust crate (which may consist of
++# one or more `.rs` files)
++# host-rust -> Executable
++quiet_cmd_host-rust	= HOSTRUSTC $@
++      cmd_host-rust	= \
++	$(HOSTRUSTC) $(hostrust_flags) --emit=dep-info,link \
++		--out-dir=$(obj)/ $<; \
++	mv $(obj)/$(target-stem).d $(depfile); \
++	sed -i '/^\#/d' $(depfile)
++$(host-rust): $(obj)/%: $(src)/%.rs FORCE
++	$(call if_changed_dep,host-rust)
++
+ targets += $(host-csingle) $(host-cmulti) $(host-cobjs) \
+-	   $(host-cxxmulti) $(host-cxxobjs)
++	   $(host-cxxmulti) $(host-cxxobjs) $(host-rust)
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 79be57fdd32a..6ac8ae2fc3b6 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -8,6 +8,7 @@ ldflags-y  += $(EXTRA_LDFLAGS)
+ # flags that take effect in current and sub directories
+ KBUILD_AFLAGS += $(subdir-asflags-y)
+ KBUILD_CFLAGS += $(subdir-ccflags-y)
++KBUILD_RUSTFLAGS += $(subdir-rustflags-y)
+ 
+ # Figure out what we need to build from the various variables
+ # ===========================================================================
+@@ -133,6 +134,10 @@ _c_flags       = $(filter-out $(CFLAGS_REMOVE_$(target-stem).o), \
+                      $(filter-out $(ccflags-remove-y), \
+                          $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) $(ccflags-y)) \
+                      $(CFLAGS_$(target-stem).o))
++_rust_flags    = $(filter-out $(RUSTFLAGS_REMOVE_$(target-stem).o), \
++                     $(filter-out $(rustflags-remove-y), \
++                         $(KBUILD_RUSTFLAGS) $(rustflags-y)) \
++                     $(RUSTFLAGS_$(target-stem).o))
+ _a_flags       = $(filter-out $(AFLAGS_REMOVE_$(target-stem).o), \
+                      $(filter-out $(asflags-remove-y), \
+                          $(KBUILD_CPPFLAGS) $(KBUILD_AFLAGS) $(asflags-y)) \
+@@ -207,6 +212,11 @@ modkern_cflags =                                          \
+ 		$(KBUILD_CFLAGS_MODULE) $(CFLAGS_MODULE), \
+ 		$(KBUILD_CFLAGS_KERNEL) $(CFLAGS_KERNEL) $(modfile_flags))
+ 
++modkern_rustflags =                                              \
++	$(if $(part-of-module),                                   \
++		$(KBUILD_RUSTFLAGS_MODULE) $(RUSTFLAGS_MODULE), \
++		$(KBUILD_RUSTFLAGS_KERNEL) $(RUSTFLAGS_KERNEL))
++
+ modkern_aflags = $(if $(part-of-module),				\
+ 			$(KBUILD_AFLAGS_MODULE) $(AFLAGS_MODULE),	\
+ 			$(KBUILD_AFLAGS_KERNEL) $(AFLAGS_KERNEL))
+@@ -216,6 +226,8 @@ c_flags        = -Wp,-MMD,$(depfile) $(NOSTDINC_FLAGS) $(LINUXINCLUDE)     \
+ 		 $(_c_flags) $(modkern_cflags)                           \
+ 		 $(basename_flags) $(modname_flags)
+ 
++rust_flags     = $(_rust_flags) $(modkern_rustflags) @$(objtree)/include/generated/rustc_cfg
++
+ a_flags        = -Wp,-MMD,$(depfile) $(NOSTDINC_FLAGS) $(LINUXINCLUDE)     \
+ 		 $(_a_flags) $(modkern_aflags)
+ 
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index 7f39599e9fae..670d7997a38b 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -39,11 +39,13 @@ quiet_cmd_ld_ko_o = LD [M]  $@
+ 
+ quiet_cmd_btf_ko = BTF [M] $@
+       cmd_btf_ko = 							\
+-	if [ -f vmlinux ]; then						\
++	if [ ! -f vmlinux ]; then					\
++		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
++	elif [ -n "$(CONFIG_RUST)" ] && $(srctree)/scripts/is_rust_module.sh $@; then 		\
++		printf "Skipping BTF generation for %s because it's a Rust module\n" $@ 1>&2; \
++	else								\
+ 		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
+ 		$(RESOLVE_BTFIDS) -b vmlinux $@; 			\
+-	else								\
+-		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
+ 	fi;
+ 
+ # Same as newer-prereqs, but allows to exclude specified extra dependencies
+diff --git a/scripts/cc-version.sh b/scripts/cc-version.sh
+index f1952c522466..2401c86fcf53 100755
+--- a/scripts/cc-version.sh
++++ b/scripts/cc-version.sh
+@@ -1,13 +1,13 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ #
+-# Print the compiler name and its version in a 5 or 6-digit form.
++# Print the C compiler name and its version in a 5 or 6-digit form.
+ # Also, perform the minimum version check.
+ 
+ set -e
+ 
+-# Print the compiler name and some version components.
+-get_compiler_info()
++# Print the C compiler name and some version components.
++get_c_compiler_info()
+ {
+ 	cat <<- EOF | "$@" -E -P -x c - 2>/dev/null
+ 	#if defined(__clang__)
+@@ -32,7 +32,7 @@ get_canonical_version()
+ 
+ # $@ instead of $1 because multiple words might be given, e.g. CC="ccache gcc".
+ orig_args="$@"
+-set -- $(get_compiler_info "$@")
++set -- $(get_c_compiler_info "$@")
+ 
+ name=$1
+ 
+@@ -52,7 +52,7 @@ ICC)
+ 	min_version=$($min_tool_version icc)
+ 	;;
+ *)
+-	echo "$orig_args: unknown compiler" >&2
++	echo "$orig_args: unknown C compiler" >&2
+ 	exit 1
+ 	;;
+ esac
+@@ -62,7 +62,7 @@ min_cversion=$(get_canonical_version $min_version)
+ 
+ if [ "$cversion" -lt "$min_cversion" ]; then
+ 	echo >&2 "***"
+-	echo >&2 "*** Compiler is too old."
++	echo >&2 "*** C compiler is too old."
+ 	echo >&2 "***   Your $name version:    $version"
+ 	echo >&2 "***   Minimum $name version: $min_version"
+ 	echo >&2 "***"
+diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
+new file mode 100644
+index 000000000000..e38842ad37a9
+--- /dev/null
++++ b/scripts/generate_rust_target.rs
+@@ -0,0 +1,227 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! The custom target specification file generator for `rustc`.
++//!
++//! To configure a target from scratch, a JSON-encoded file has to be passed
++//! to `rustc` (introduced in [RFC 131]). These options and the file itself are
++//! unstable. Eventually, `rustc` should provide a way to do this in a stable
++//! manner. For instance, via command-line arguments. Therefore, this file
++//! should avoid using keys which can be set via `-C` or `-Z` options.
++//!
++//! [RFC 131]: https://rust-lang.github.io/rfcs/0131-target-specification.html
++
++use std::{
++    collections::HashMap,
++    fmt::{Display, Formatter, Result},
++    io::BufRead,
++};
++
++enum Value {
++    Boolean(bool),
++    Number(i32),
++    String(String),
++    Object(Object),
++}
++
++type Object = Vec<(String, Value)>;
++
++/// Minimal "almost JSON" generator (e.g. no `null`s, no arrays, no escaping),
++/// enough for this purpose.
++impl Display for Value {
++    fn fmt(&self, formatter: &mut Formatter<'_>) -> Result {
++        match self {
++            Value::Boolean(boolean) => write!(formatter, "{}", boolean),
++            Value::Number(number) => write!(formatter, "{}", number),
++            Value::String(string) => write!(formatter, "\"{}\"", string),
++            Value::Object(object) => {
++                formatter.write_str("{")?;
++                if let [ref rest @ .., ref last] = object[..] {
++                    for (key, value) in rest {
++                        write!(formatter, "\"{}\": {},", key, value)?;
++                    }
++                    write!(formatter, "\"{}\": {}", last.0, last.1)?;
++                }
++                formatter.write_str("}")
++            }
++        }
++    }
++}
++
++struct TargetSpec(Object);
++
++impl TargetSpec {
++    fn new() -> TargetSpec {
++        TargetSpec(Vec::new())
++    }
++}
++
++trait Push<T> {
++    fn push(&mut self, key: &str, value: T);
++}
++
++impl Push<bool> for TargetSpec {
++    fn push(&mut self, key: &str, value: bool) {
++        self.0.push((key.to_string(), Value::Boolean(value)));
++    }
++}
++
++impl Push<i32> for TargetSpec {
++    fn push(&mut self, key: &str, value: i32) {
++        self.0.push((key.to_string(), Value::Number(value)));
++    }
++}
++
++impl Push<String> for TargetSpec {
++    fn push(&mut self, key: &str, value: String) {
++        self.0.push((key.to_string(), Value::String(value)));
++    }
++}
++
++impl Push<&str> for TargetSpec {
++    fn push(&mut self, key: &str, value: &str) {
++        self.push(key, value.to_string());
++    }
++}
++
++impl Push<Object> for TargetSpec {
++    fn push(&mut self, key: &str, value: Object) {
++        self.0.push((key.to_string(), Value::Object(value)));
++    }
++}
++
++impl Display for TargetSpec {
++    fn fmt(&self, formatter: &mut Formatter<'_>) -> Result {
++        // We add some newlines for clarity.
++        formatter.write_str("{\n")?;
++        if let [ref rest @ .., ref last] = self.0[..] {
++            for (key, value) in rest {
++                write!(formatter, "    \"{}\": {},\n", key, value)?;
++            }
++            write!(formatter, "    \"{}\": {}\n", last.0, last.1)?;
++        }
++        formatter.write_str("}")
++    }
++}
++
++struct KernelConfig(HashMap<String, String>);
++
++impl KernelConfig {
++    /// Parses `include/config/auto.conf` from `stdin`.
++    fn from_stdin() -> KernelConfig {
++        let mut result = HashMap::new();
++
++        let stdin = std::io::stdin();
++        let mut handle = stdin.lock();
++        let mut line = String::new();
++
++        loop {
++            line.clear();
++
++            if handle.read_line(&mut line).unwrap() == 0 {
++                break;
++            }
++
++            if line.starts_with('#') {
++                continue;
++            }
++
++            let (key, value) = line.split_once('=').expect("Missing `=` in line.");
++            result.insert(key.to_string(), value.trim_end_matches('\n').to_string());
++        }
++
++        KernelConfig(result)
++    }
++
++    /// Does the option exist in the configuration (any value)?
++    ///
++    /// The argument must be passed without the `CONFIG_` prefix.
++    /// This avoids repetition and it also avoids `fixdep` making us
++    /// depend on it.
++    fn has(&self, option: &str) -> bool {
++        let option = "CONFIG_".to_owned() + option;
++        self.0.contains_key(&option)
++    }
++}
++
++fn main() {
++    let cfg = KernelConfig::from_stdin();
++    let mut ts = TargetSpec::new();
++
++    // `llvm-target`s are taken from `scripts/Makefile.clang`.
++    if cfg.has("ARM") {
++        ts.push("arch", "arm");
++        ts.push(
++            "data-layout",
++            "e-m:e-p:32:32-Fi8-i64:64-v128:64:128-a:0:32-n32-S64",
++        );
++        ts.push("features", "+strict-align,+v6");
++        ts.push("llvm-target", "arm-linux-gnueabi");
++        ts.push("max-atomic-width", 64);
++        ts.push("target-mcount", "\\u0001__gnu_mcount_nc");
++        ts.push("target-pointer-width", "32");
++    } else if cfg.has("ARM64") {
++        ts.push("arch", "aarch64");
++        ts.push(
++            "data-layout",
++            "e-m:e-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128",
++        );
++        ts.push("disable-redzone", true);
++        ts.push("features", "+strict-align,-neon,-fp-armv8");
++        ts.push("llvm-target", "aarch64-linux-gnu");
++        ts.push("max-atomic-width", 128);
++        ts.push("target-pointer-width", "64");
++    } else if cfg.has("PPC") {
++        ts.push("arch", "powerpc64");
++        ts.push("code-model", "large");
++        ts.push("data-layout", "e-m:e-i64:64-n32:64");
++        ts.push("features", "-altivec,-vsx,-hard-float");
++        ts.push("llvm-target", "powerpc64le-linux-gnu");
++        ts.push("max-atomic-width", 64);
++        ts.push("target-mcount", "_mcount");
++        ts.push("target-pointer-width", "64");
++    } else if cfg.has("RISCV") {
++        if cfg.has("64BIT") {
++            ts.push("arch", "riscv64");
++            ts.push("data-layout", "e-m:e-p:64:64-i64:64-i128:128-n64-S128");
++            ts.push("llvm-target", "riscv64-linux-gnu");
++            ts.push("target-pointer-width", "64");
++        } else {
++            ts.push("arch", "riscv32");
++            ts.push("data-layout", "e-m:e-p:32:32-i64:64-n32-S128");
++            ts.push("llvm-target", "riscv32-linux-gnu");
++            ts.push("target-pointer-width", "32");
++        }
++        ts.push("code-model", "medium");
++        ts.push("disable-redzone", true);
++        let mut features = "+m,+a".to_string();
++        if cfg.has("RISCV_ISA_C") {
++            features += ",+c";
++        }
++        ts.push("features", features);
++    } else if cfg.has("X86") {
++        ts.push("arch", "x86_64");
++        ts.push(
++            "data-layout",
++            "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128",
++        );
++        ts.push("llvm-target", "x86_64-linux-gnu");
++        ts.push("target-pointer-width", "64");
++    } else {
++        panic!("Unsupported architecture");
++    }
++
++    ts.push("emit-debug-gdb-scripts", false);
++    ts.push("frame-pointer", "may-omit");
++    ts.push(
++        "stack-probes",
++        vec![("kind".to_string(), Value::String("none".to_string()))],
++    );
++
++    // Everything else is LE, whether `CPU_LITTLE_ENDIAN` is declared or not
++    // (e.g. x86). It is also `rustc`'s default.
++    if cfg.has("CPU_BIG_ENDIAN") {
++        ts.push("target-endian", "big");
++    }
++
++    println!("{}", ts);
++}
+diff --git a/scripts/is_rust_module.sh b/scripts/is_rust_module.sh
+new file mode 100755
+index 000000000000..277a64d07f22
+--- /dev/null
++++ b/scripts/is_rust_module.sh
+@@ -0,0 +1,13 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++#
++# is_rust_module.sh module.ko
++#
++# Returns `0` if `module.ko` is a Rust module, `1` otherwise.
++
++set -e
++
++# Using the `16_` prefix ensures other symbols with the same substring
++# are not picked up (even if it would be unlikely). The last part is
++# used just in case LLVM decides to use the `.` suffix.
++${NM} "$*" | grep -qE '^[0-9a-fA-F]+ r _R[^[:space:]]+16___IS_RUST_MODULE[^[:space:]]*$'
+diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
+index d3c3a61308ad..b94a533eacf0 100644
+--- a/scripts/kconfig/confdata.c
++++ b/scripts/kconfig/confdata.c
+@@ -216,6 +216,13 @@ static const char *conf_get_autoheader_name(void)
+ 	return name ? name : "include/generated/autoconf.h";
+ }
+ 
++static const char *conf_get_rustccfg_name(void)
++{
++	char *name = getenv("KCONFIG_RUSTCCFG");
++
++	return name ? name : "include/generated/rustc_cfg";
++}
++
+ static int conf_set_sym_val(struct symbol *sym, int def, int def_flags, char *p)
+ {
+ 	char *p2;
+@@ -605,6 +612,9 @@ static const struct comment_style comment_style_c = {
+ 
+ static void conf_write_heading(FILE *fp, const struct comment_style *cs)
+ {
++	if (!cs)
++		return;
++
+ 	fprintf(fp, "%s\n", cs->prefix);
+ 
+ 	fprintf(fp, "%s Automatically generated file; DO NOT EDIT.\n",
+@@ -752,6 +762,65 @@ static void print_symbol_for_c(FILE *fp, struct symbol *sym)
+ 	free(escaped);
+ }
+ 
++static void print_symbol_for_rustccfg(FILE *fp, struct symbol *sym)
++{
++	const char *val;
++	const char *val_prefix = "";
++	char *val_prefixed = NULL;
++	size_t val_prefixed_len;
++	char *escaped = NULL;
++
++	if (sym->type == S_UNKNOWN)
++		return;
++
++	val = sym_get_string_value(sym);
++
++	switch (sym->type) {
++	case S_BOOLEAN:
++	case S_TRISTATE:
++		/*
++		 * We do not care about disabled ones, i.e. no need for
++		 * what otherwise are "comments" in other printers.
++		 */
++		if (*val == 'n')
++			return;
++
++		/*
++		 * To have similar functionality to the C macro `IS_ENABLED()`
++		 * we provide an empty `--cfg CONFIG_X` here in both `y`
++		 * and `m` cases.
++		 *
++		 * Then, the common `fprintf()` below will also give us
++		 * a `--cfg CONFIG_X="y"` or `--cfg CONFIG_X="m"`, which can
++		 * be used as the equivalent of `IS_BUILTIN()`/`IS_MODULE()`.
++		 */
++		fprintf(fp, "--cfg=%s%s\n", CONFIG_, sym->name);
++		break;
++	case S_HEX:
++		if (val[0] != '0' || (val[1] != 'x' && val[1] != 'X'))
++			val_prefix = "0x";
++		break;
++	default:
++		break;
 +	}
 +
-+One special kind of comments are the ``// SAFETY:`` comments. These must a=
-ppear
-+before every ``unsafe`` block, and they explain why the code inside the bl=
-ock is
-+correct/sound, i.e. why it cannot trigger undefined behavior in any case, =
-e.g.:
-+
-+.. code-block:: rust
-+
-+	// SAFETY: `p` is valid by the safety requirements.
-+	unsafe { *p =3D 0; }
-+
-+``// SAFETY:`` comments are not to be confused with the ``# Safety`` secti=
-ons
-+in code documentation. ``# Safety`` sections specify the contract that cal=
-lers
-+(for functions) or implementors (for traits) need to abide by. ``// SAFETY=
-:``
-+comments show why a call (for functions) or implementation (for traits) ac=
-tually
-+respects the preconditions stated in a ``# Safety`` section or the language
-+reference.
-+
-+
-+Code documentation
-+------------------
-+
-+Rust kernel code is not documented like C kernel code (i.e. via kernel-doc=
-).
-+Instead, the usual system for documenting Rust code is used: the ``rustdoc=
-``
-+tool, which uses Markdown (a lightweight markup language).
-+
-+To learn Markdown, there are many guides available out there. For instance,
-+the one at:
-+
-+	https://commonmark.org/help/
-+
-+This is how a well-documented Rust function may look like:
-+
-+.. code-block:: rust
-+
-+	/// Returns the contained [`Some`] value, consuming the `self` value,
-+	/// without checking that the value is not [`None`].
-+	///
-+	/// # Safety
-+	///
-+	/// Calling this method on [`None`] is *[undefined behavior]*.
-+	///
-+	/// [undefined behavior]: https://doc.rust-lang.org/reference/behavior-co=
-nsidered-undefined.html
-+	///
-+	/// # Examples
-+	///
-+	/// ```
-+	/// let x =3D Some("air");
-+	/// assert_eq!(unsafe { x.unwrap_unchecked() }, "air");
-+	/// ```
-+	pub unsafe fn unwrap_unchecked(self) -> T {
-+	    match self {
-+	        Some(val) =3D> val,
-+
-+	        // SAFETY: The safety contract must be upheld by the caller.
-+	        None =3D> unsafe { hint::unreachable_unchecked() },
-+	    }
++	if (strlen(val_prefix) > 0) {
++		val_prefixed_len = strlen(val) + strlen(val_prefix) + 1;
++		val_prefixed = xmalloc(val_prefixed_len);
++		snprintf(val_prefixed, val_prefixed_len, "%s%s", val_prefix, val);
++		val = val_prefixed;
 +	}
 +
-+This example showcases a few ``rustdoc`` features and some conventions fol=
-lowed
-+in the kernel:
++	/* All values get escaped: the `--cfg` option only takes strings */
++	escaped = escape_string_value(val);
++	val = escaped;
 +
-+  - The first paragraph must be a single sentence briefly describing what
-+    the documented item does. Further explanations must go in extra paragr=
-aphs.
++	fprintf(fp, "--cfg=%s%s=%s\n", CONFIG_, sym->name, val);
 +
-+  - Unsafe functions must document their safety preconditions under
-+    a ``# Safety`` section.
++	free(escaped);
++	free(val_prefixed);
++}
 +
-+  - While not shown here, if a function may panic, the conditions under wh=
-ich
-+    that happens must be described under a ``# Panics`` section.
+ /*
+  * Write out a minimal config.
+  * All values that has default values are skipped as this is redundant.
+@@ -1136,6 +1205,12 @@ int conf_write_autoconf(int overwrite)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = __conf_write_autoconf(conf_get_rustccfg_name(),
++				    print_symbol_for_rustccfg,
++				    NULL);
++	if (ret)
++		return ret;
 +
-+    Please note that panicking should be very rare and used only with a go=
-od
-+    reason. In almost all cases, a fallible approach should be used, typic=
-ally
-+    returning a ``Result``.
-+
-+  - If providing examples of usage would help readers, they must be writte=
-n in
-+    a section called ``# Examples``.
-+
-+  - Rust items (functions, types, constants...) must be linked appropriate=
-ly
-+    (``rustdoc`` will create a link automatically).
-+
-+  - Any ``unsafe`` block must be preceded by a ``// SAFETY:`` comment
-+    describing why the code inside is sound.
-+
-+    While sometimes the reason might look trivial and therefore unneeded,
-+    writing these comments is not just a good way of documenting what has =
-been
-+    taken into account, but most importantly, it provides a way to know th=
-at
-+    there are no *extra* implicit constraints.
-+
-+To learn more about how to write documentation for Rust and extra features,
-+please take a look at the ``rustdoc`` book at:
-+
-+	https://doc.rust-lang.org/rustdoc/how-to-write-documentation.html
-+
-+
-+Naming
-+------
-+
-+Rust kernel code follows the usual Rust naming conventions:
-+
-+	https://rust-lang.github.io/api-guidelines/naming.html
-+
-+When existing C concepts (e.g. macros, functions, objects...) are wrapped =
-into
-+a Rust abstraction, a name as close as reasonably possible to the C side s=
-hould
-+be used in order to avoid confusion and to improve readability when switch=
-ing
-+back and forth between the C and Rust sides. For instance, macros such as
-+``pr_info`` from C are named the same in the Rust side.
-+
-+Having said that, casing should be adjusted to follow the Rust naming
-+conventions, and namespacing introduced by modules and types should not be
-+repeated in the item names. For instance, when wrapping constants like:
-+
-+.. code-block:: c
-+
-+	#define GPIO_LINE_DIRECTION_IN	0
-+	#define GPIO_LINE_DIRECTION_OUT	1
-+
-+The equivalent in Rust may look like (ignoring documentation):
-+
-+.. code-block:: rust
-+
-+	pub mod gpio {
-+	    pub enum LineDirection {
-+	        In =3D bindings::GPIO_LINE_DIRECTION_IN as _,
-+	        Out =3D bindings::GPIO_LINE_DIRECTION_OUT as _,
-+	    }
-+	}
-+
-+That is, the equivalent of ``GPIO_LINE_DIRECTION_IN`` would be referred to=
- as
-+``gpio::LineDirection::In``. In particular, it should not be named
-+``gpio::gpio_line_direction::GPIO_LINE_DIRECTION_IN``.
-diff --git a/Documentation/rust/general-information.rst b/Documentation/rus=
-t/general-information.rst
+ 	/*
+ 	 * Create include/config/auto.conf. This must be the last step because
+ 	 * Kbuild has a dependency on auto.conf and this marks the successful
+diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+index 7c20252a90c6..2fc305342fa1 100755
+--- a/scripts/min-tool-version.sh
++++ b/scripts/min-tool-version.sh
+@@ -31,6 +31,12 @@ llvm)
+ 		echo 11.0.0
+ 	fi
+ 	;;
++rustc)
++	echo 1.59.0
++	;;
++bindgen)
++	echo 0.56.0
++	;;
+ *)
+ 	echo "$1: unknown tool" >&2
+ 	exit 1
+diff --git a/scripts/rust-is-available-bindgen-libclang.h b/scripts/rust-is-available-bindgen-libclang.h
 new file mode 100644
-index 000000000000..e2713f145a17
+index 000000000000..0ef6db10d674
 --- /dev/null
-+++ b/Documentation/rust/general-information.rst
-@@ -0,0 +1,77 @@
-+General Information
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+This document contains useful information to know when working with
-+the Rust support in the kernel.
-+
-+
-+Code documentation
-+------------------
-+
-+Rust kernel code is documented using ``rustdoc``, its built-in documentati=
-on
-+generator.
-+
-+The generated HTML docs include integrated search, linked items (e.g. type=
-s,
-+functions, constants), source code, etc. They may be read at (TODO: link w=
-hen
-+in mainline and generated alongside the rest of the documentation):
-+
-+	http://kernel.org/
-+
-+The docs can also be easily generated and read locally. This is quite fast
-+(same order as compiling the code itself) and no special tools or environm=
-ent
-+are needed. This has the added advantage that they will be tailored to
-+the particular kernel configuration used. To generate them, use the ``rust=
-doc``
-+target with the same invocation used for compilation, e.g.::
-+
-+	make LLVM=3D1 rustdoc
-+
-+To read the docs locally in your web browser, run e.g.::
-+
-+	xdg-open rust/doc/kernel/index.html
-+
-+To learn about how to write the documentation, please see coding-guideline=
-s.rst.
-+
-+
-+Extra lints
-+-----------
-+
-+While ``rustc`` is a very helpful compiler, some extra lints and analyses =
-are
-+available via ``clippy``, a Rust linter. To enable it, pass ``CLIPPY=3D1``=
- to
-+the same invocation used for compilation, e.g.::
-+
-+	make LLVM=3D1 CLIPPY=3D1
-+
-+Please note that Clippy may change code generation, thus it should not be
-+enabled while building a production kernel.
-+
-+
-+Abstractions vs. bindings
-+-------------------------
-+
-+Abstractions are Rust code wrapping kernel functionality from the C side.
-+
-+In order to use functions and types from the C side, bindings are created.
-+Bindings are the declarations for Rust of those functions and types from
-+the C side.
-+
-+For instance, one may write a ``Mutex`` abstraction in Rust which wraps
-+a ``struct mutex`` from the C side and calls its functions through the bin=
-dings.
-+
-+Abstractions are not available for all the kernel internal APIs and concep=
-ts,
-+but it is intended that coverage is expanded as time goes on. "Leaf" modul=
-es
-+(e.g. drivers) should not use the C bindings directly. Instead, subsystems
-+should provide as-safe-as-possible abstractions as needed.
-+
-+
-+Conditional compilation
-+-----------------------
-+
-+Rust code has access to conditional compilation based on the kernel
-+configuration:
-+
-+.. code-block:: rust
-+
-+	#[cfg(CONFIG_X)]       // Enabled               (`y` or `m`)
-+	#[cfg(CONFIG_X=3D"y")]   // Enabled as a built-in (`y`)
-+	#[cfg(CONFIG_X=3D"m")]   // Enabled as a module   (`m`)
-+	#[cfg(not(CONFIG_X))]  // Disabled
-diff --git a/Documentation/rust/index.rst b/Documentation/rust/index.rst
-new file mode 100644
-index 000000000000..d28e816513aa
++++ b/scripts/rust-is-available-bindgen-libclang.h
+@@ -0,0 +1,2 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#pragma message("clang version " __clang_version__)
+diff --git a/scripts/rust-is-available.sh b/scripts/rust-is-available.sh
+new file mode 100755
+index 000000000000..6bd395167d0f
 --- /dev/null
-+++ b/Documentation/rust/index.rst
-@@ -0,0 +1,20 @@
-+Rust
-+=3D=3D=3D=3D
-+
-+Documentation related to Rust within the kernel. To start using Rust
-+in the kernel, please read the quick-start.rst guide.
-+
-+.. toctree::
-+    :maxdepth: 1
-+
-+    quick-start
-+    general-information
-+    coding-guidelines
-+    arch-support
-+
-+.. only::  subproject and html
-+
-+   Indices
-+   =3D=3D=3D=3D=3D=3D=3D
-+
-+   * :ref:`genindex`
-diff --git a/Documentation/rust/logo.svg b/Documentation/rust/logo.svg
-new file mode 100644
-index 000000000000..65be792a5abe
---- /dev/null
-+++ b/Documentation/rust/logo.svg
-@@ -0,0 +1,357 @@
-+<?xml version=3D"1.0" encoding=3D"UTF-8"?>
-+<svg width=3D"104.5" height=3D"104.5" version=3D"1.1" xmlns=3D"http://www.=
-w3.org/2000/svg" xmlns:xlink=3D"http://www.w3.org/1999/xlink">
-+ <defs>
-+  <linearGradient id=3D"a">
-+   <stop stop-color=3D"#fefefc" offset=3D"0"/>
-+   <stop stop-color=3D"#fefefc" offset=3D".75734"/>
-+   <stop stop-color=3D"#d4d4d4" offset=3D"1"/>
-+  </linearGradient>
-+  <linearGradient id=3D"j">
-+   <stop stop-color=3D"#b98309" offset=3D"0"/>
-+   <stop stop-color=3D"#382605" offset=3D"1"/>
-+  </linearGradient>
-+  <filter id=3D"bw" x=3D"-.10751" y=3D"-.1085" width=3D"1.215" height=3D"1=
-.217" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"3.9237191"/>
-+  </filter>
-+  <filter id=3D"bx" x=3D"-.075366" y=3D"-.069725" width=3D"1.1507" height=
-=3D"1.1394" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"2.4365744"/>
-+  </filter>
-+  <filter id=3D"bv" x=3D"-.033766" y=3D"-.018616" width=3D"1.0675" height=
-=3D"1.0372" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.3702557"/>
-+  </filter>
-+  <filter id=3D"bl" x=3D"-.10104" y=3D"-.04267" width=3D"1.2021" height=3D=
-"1.0853" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"1.1322032"/>
-+  </filter>
-+  <linearGradient id=3D"h">
-+   <stop stop-color=3D"#7c7c7c" offset=3D"0"/>
-+   <stop stop-color=3D"#7c7c7c" stop-opacity=3D".32941" offset=3D"1"/>
-+  </linearGradient>
-+  <filter id=3D"bp" x=3D"-.070456" y=3D"-.1506" width=3D"1.1409" height=3D=
-"1.3012" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"1.0252435"/>
-+  </filter>
-+  <filter id=3D"bq" x=3D"-.070456" y=3D"-.1506" width=3D"1.1409" height=3D=
-"1.3012" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"1.0252435"/>
-+  </filter>
-+  <linearGradient id=3D"i">
-+   <stop stop-color=3D"#110800" offset=3D"0"/>
-+   <stop stop-color=3D"#a65a00" stop-opacity=3D".8" offset=3D".59067"/>
-+   <stop stop-color=3D"#ff921e" stop-opacity=3D"0" offset=3D"1"/>
-+  </linearGradient>
-+  <filter id=3D"bo" x=3D"-.20051" y=3D"-.23409" width=3D"1.401" height=3D"=
-1.4682" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"2.8444356"/>
-+  </filter>
-+  <filter id=3D"bn" x=3D"-.091411" y=3D"-.10672" width=3D"1.1828" height=
-=3D"1.2134" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"1.2967831"/>
-+  </filter>
-+  <filter id=3D"be" x=3D"-.43231" y=3D"-.28957" width=3D"1.8646" height=3D=
-"1.5791" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.85991809"/>
-+  </filter>
-+  <filter id=3D"br" x=3D"-.5806" y=3D"-.48605" width=3D"2.1612" height=3D"=
-1.9721" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"2.6400036"/>
-+  </filter>
-+  <filter id=3D"bk" x=3D"-.076234" y=3D"-.068211" width=3D"1.1525" height=
-=3D"1.1364" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"2.2091576"/>
-+  </filter>
-+  <linearGradient id=3D"b">
-+   <stop stop-color=3D"#3e2a06" offset=3D"0"/>
-+   <stop stop-color=3D"#ad780a" offset=3D"1"/>
-+  </linearGradient>
-+  <filter id=3D"bu" x=3D"-.14502" y=3D"-.143" width=3D"1.29" height=3D"1.2=
-86" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"4.7787162"/>
-+  </filter>
-+  <filter id=3D"bt" x=3D"-.11529" y=3D"-.12495" width=3D"1.2306" height=3D=
-"1.2499" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"3.1725155"/>
-+  </filter>
-+  <filter id=3D"bd" x=3D"-.020912" y=3D"-.12927" width=3D"1.0418" height=
-=3D"1.2585" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.47946431"/>
-+  </filter>
-+  <filter id=3D"bf" x=3D"-.17755" y=3D"-.15943" width=3D"1.3551" height=3D=
-"1.3189" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.90083196"/>
-+  </filter>
-+  <filter id=3D"aq" x=3D"-.8166" y=3D"-.057824" width=3D"2.6332" height=3D=
-"1.1156" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"1.4463082"/>
-+  </filter>
-+  <linearGradient id=3D"c">
-+   <stop offset=3D"0"/>
-+   <stop stop-opacity=3D".24887" offset=3D"1"/>
-+  </linearGradient>
-+  <filter id=3D"ar" x=3D"-.086908" y=3D"-.08128" width=3D"1.1738" height=
-=3D"1.1626" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.7854602"/>
-+  </filter>
-+  <filter id=3D"at" x=3D"-.050797" y=3D"-.073276" width=3D"1.1016" height=
-=3D"1.1466" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"1.1383167"/>
-+  </filter>
-+  <filter id=3D"as" x=3D"-.049921" y=3D"-.046222" width=3D"1.0998" height=
-=3D"1.0924" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.6434074"/>
-+  </filter>
-+  <filter id=3D"bs" x=3D"-.11753" y=3D"-.040046" width=3D"1.2351" height=
-=3D"1.0801" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"1.352085"/>
-+  </filter>
-+  <linearGradient id=3D"g">
-+   <stop stop-color=3D"#d2940a" offset=3D"0"/>
-+   <stop stop-color=3D"#d89c08" offset=3D".75144"/>
-+   <stop stop-color=3D"#b67e07" offset=3D".86579"/>
-+   <stop stop-color=3D"#946106" offset=3D"1"/>
-+  </linearGradient>
-+  <filter id=3D"bc" x=3D"-.15524" y=3D"-.22072" width=3D"1.3105" height=3D=
-"1.4414" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.89858666"/>
-+  </filter>
-+  <filter id=3D"bi" x=3D"-.0344" y=3D"-.079385" width=3D"1.0688" height=3D=
-"1.1588" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.75821369"/>
-+  </filter>
-+  <filter id=3D"bm" x=3D"-.16096" y=3D"-.13028" width=3D"1.3219" height=3D=
-"1.2606" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.84878819"/>
-+  </filter>
-+  <linearGradient id=3D"e">
-+   <stop stop-color=3D"#3a2903" offset=3D"0"/>
-+   <stop stop-color=3D"#735208" offset=3D".55473"/>
-+   <stop stop-color=3D"#ac8c04" offset=3D"1"/>
-+  </linearGradient>
-+  <filter id=3D"bg" x=3D"-.046765" y=3D"-.089099" width=3D"1.0935" height=
-=3D"1.1782" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.11039302"/>
-+  </filter>
-+  <filter id=3D"bh" x=3D"-.11645" y=3D"-.10573" width=3D"1.2329" height=3D=
-"1.2115" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.11039302"/>
-+  </filter>
-+  <filter id=3D"bb" x=3D"-.1215" y=3D"-.13611" width=3D"1.243" height=3D"1=
-.2722" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.2640625"/>
-+  </filter>
-+  <filter id=3D"aw" x=3D"-.23447" y=3D"-.14607" width=3D"1.4689" height=3D=
-"1.2921" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.51262416"/>
-+  </filter>
-+  <linearGradient id=3D"f">
-+   <stop stop-color=3D"#646464" stop-opacity=3D"0" offset=3D"0"/>
-+   <stop stop-color=3D"#646464" stop-opacity=3D".58252" offset=3D".30628"/>
-+   <stop stop-color=3D"#646464" offset=3D".47"/>
-+   <stop stop-color=3D"#646464" stop-opacity=3D".25728" offset=3D".72834"/>
-+   <stop stop-color=3D"#646464" stop-opacity=3D"0" offset=3D"1"/>
-+  </linearGradient>
-+  <filter id=3D"ax" x=3D"-.023088" y=3D"-.025667" width=3D"1.0462" height=
-=3D"1.0513" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.13475369"/>
-+  </filter>
-+  <filter id=3D"ay" x=3D"-.023071" y=3D"-.025007" width=3D"1.0461" height=
-=3D"1.05" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.1475"/>
-+  </filter>
-+  <filter id=3D"ba" x=3D"-.15795" y=3D"-.2092" width=3D"1.3159" height=3D"=
-1.4184" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.24891089"/>
-+  </filter>
-+  <filter id=3D"az" x=3D"-.17868" y=3D"-.18134" width=3D"1.3574" height=3D=
-"1.3627" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.51947927"/>
-+  </filter>
-+  <filter id=3D"bj" x=3D"-.29218" y=3D"-.30825" width=3D"1.5844" height=3D=
-"1.6165" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"1.7403319"/>
-+  </filter>
-+  <filter id=3D"av" x=3D"-.036517" y=3D"-.074028" width=3D"1.073" height=
-=3D"1.1481" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"0.93152507"/>
-+  </filter>
-+  <filter id=3D"au" x=3D"-.076378" y=3D"-.12919" width=3D"1.1528" height=
-=3D"1.2584" color-interpolation-filters=3D"sRGB">
-+   <feGaussianBlur stdDeviation=3D"2.0355046"/>
-+  </filter>
-+  <radialGradient id=3D"z" cx=3D"223.2" cy=3D"137.66" r=3D"14.572" gradien=
-tTransform=3D"matrix(.81524 -.034312 .029611 1.248 -208.44 -35.543)" gradie=
-ntUnits=3D"userSpaceOnUse" xlink:href=3D"#a"/>
-+  <radialGradient id=3D"y" cx=3D"223.2" cy=3D"137.66" r=3D"14.572" gradien=
-tTransform=3D"matrix(1.0858 -.034312 .039438 1.248 -233.54 -35.543)" gradie=
-ntUnits=3D"userSpaceOnUse" xlink:href=3D"#a"/>
-+  <radialGradient id=3D"x" cx=3D"275.54" cy=3D"150.65" r=3D"15.382" gradie=
-ntTransform=3D"matrix(.69785 -.50717 .46034 .63341 -271.1 183.03)" gradient=
-Units=3D"userSpaceOnUse">
-+   <stop stop-color=3D"#020204" offset=3D"0"/>
-+   <stop stop-color=3D"#020204" offset=3D".73448"/>
-+   <stop stop-color=3D"#5c5c5c" offset=3D"1"/>
-+  </radialGradient>
-+  <linearGradient id=3D"ap" x1=3D"213.02" x2=3D"219.73" y1=3D"132.77" y2=
-=3D"140.72" gradientTransform=3D"translate(-60 -58.362)" gradientUnits=3D"u=
-serSpaceOnUse">
-+   <stop stop-color=3D"#949494" stop-opacity=3D".39216" offset=3D"0"/>
-+   <stop stop-color=3D"#949494" offset=3D".5"/>
-+   <stop stop-color=3D"#949494" stop-opacity=3D".39216" offset=3D"1"/>
-+  </linearGradient>
-+  <linearGradient id=3D"ao" x1=3D"337.25" x2=3D"358.62" y1=3D"119.99" y2=
-=3D"132.49" gradientTransform=3D"translate(-250)" gradientUnits=3D"userSpac=
-eOnUse">
-+   <stop stop-color=3D"#747474" offset=3D"0"/>
-+   <stop stop-color=3D"#8c8c8c" offset=3D".125"/>
-+   <stop stop-color=3D"#a4a4a4" offset=3D".25"/>
-+   <stop stop-color=3D"#d4d4d4" offset=3D".5"/>
-+   <stop stop-color=3D"#d4d4d4" offset=3D".61919"/>
-+   <stop stop-color=3D"#7c7c7c" offset=3D"1"/>
-+  </linearGradient>
-+  <linearGradient id=3D"an" x1=3D"294.51" x2=3D"308.74" y1=3D"114.56" y2=
-=3D"128" gradientTransform=3D"translate(-300 -1)" gradientUnits=3D"userSpac=
-eOnUse" xlink:href=3D"#f"/>
-+  <linearGradient id=3D"am" x1=3D"253.23" x2=3D"266.63" y1=3D"115.67" y2=
-=3D"128.57" gradientTransform=3D"translate(-300 -1)" gradientUnits=3D"userS=
-paceOnUse" xlink:href=3D"#f"/>
-+  <linearGradient id=3D"al" x1=3D"164.05" x2=3D"169.88" y1=3D"132.06" y2=
-=3D"142.49" gradientTransform=3D"translate(-50 -58.362)" gradientUnits=3D"u=
-serSpaceOnUse">
-+   <stop stop-color=3D"#757574" stop-opacity=3D"0" offset=3D"0"/>
-+   <stop stop-color=3D"#757574" offset=3D".26291"/>
-+   <stop stop-color=3D"#757574" offset=3D".5"/>
-+   <stop stop-color=3D"#757574" stop-opacity=3D"0" offset=3D"1"/>
-+  </linearGradient>
-+  <radialGradient id=3D"w" cx=3D"294.48" cy=3D"193.1" r=3D"31.111" gradien=
-tTransform=3D"matrix(.93619 -.3864 .27133 .65739 -244.48 146.72)" gradientU=
-nits=3D"userSpaceOnUse" xlink:href=3D"#g"/>
-+  <linearGradient id=3D"ak" x1=3D"256.86" x2=3D"313.34" y1=3D"158.31" y2=
-=3D"157.87" gradientTransform=3D"translate(-210)" gradientUnits=3D"userSpac=
-eOnUse">
-+   <stop stop-color=3D"#ad780a" offset=3D"0"/>
-+   <stop stop-color=3D"#d89e08" offset=3D".11973"/>
-+   <stop stop-color=3D"#edb80b" offset=3D".25514"/>
-+   <stop stop-color=3D"#ebc80d" offset=3D".39194"/>
-+   <stop stop-color=3D"#f5d838" offset=3D".52741"/>
-+   <stop stop-color=3D"#f6d811" offset=3D".76907"/>
-+   <stop stop-color=3D"#f5cd31" offset=3D"1"/>
-+  </linearGradient>
-+  <radialGradient id=3D"v" cx=3D"77.672" cy=3D"147.09" r=3D"3.2301" gradie=
-ntTransform=3D"matrix(1 0 0 .58333 60 3.054)" gradientUnits=3D"userSpaceOnU=
-se" xlink:href=3D"#e"/>
-+  <radialGradient id=3D"u" cx=3D"63.125" cy=3D"147.44" r=3D"1.535" gradien=
-tTransform=3D"matrix(1 0 0 1.0751 60 -69.456)" gradientUnits=3D"userSpaceOn=
-Use" xlink:href=3D"#e"/>
-+  <linearGradient id=3D"aj" x1=3D"243.03" x2=3D"243.47" y1=3D"157.02" y2=
-=3D"159.77" gradientUnits=3D"userSpaceOnUse">
-+   <stop stop-color=3D"#f5ce2d" offset=3D"0"/>
-+   <stop stop-color=3D"#d79b08" offset=3D"1"/>
-+  </linearGradient>
-+  <radialGradient id=3D"t" cx=3D"268.07" cy=3D"126.53" r=3D"35.511" gradie=
-ntTransform=3D"matrix(.20141 -.033161 .03065 .18616 -3.1264 114.04)" gradie=
-ntUnits=3D"userSpaceOnUse">
-+   <stop stop-color=3D"#c8c8c8" offset=3D"0"/>
-+   <stop stop-color=3D"#797978" offset=3D"1"/>
-+  </radialGradient>
-+  <radialGradient id=3D"s" cx=3D"336.22" cy=3D"220.54" r=3D"27.391" gradie=
-ntTransform=3D"matrix(-.69844 0 0 .76336 166.31 50.22)" gradientUnits=3D"us=
-erSpaceOnUse" xlink:href=3D"#c"/>
-+  <radialGradient id=3D"r" cx=3D"312.15" cy=3D"236.37" r=3D"27.391" gradie=
-ntTransform=3D"matrix(1 0 0 .76336 -150 -8.1422)" gradientUnits=3D"userSpac=
-eOnUse" xlink:href=3D"#c"/>
-+  <radialGradient id=3D"q" cx=3D"275.55" cy=3D"225.13" r=3D"10.845" gradie=
-ntTransform=3D"matrix(1 0 0 1.0692 -150 -73.222)" gradientUnits=3D"userSpac=
-eOnUse" xlink:href=3D"#c"/>
-+  <linearGradient id=3D"ai" x1=3D"338.29" x2=3D"341.98" y1=3D"323.9" y2=3D=
-"351.49" gradientTransform=3D"translate(-310)" gradientUnits=3D"userSpaceOn=
-Use">
-+   <stop offset=3D"0"/>
-+   <stop stop-opacity=3D"0" offset=3D"1"/>
-+  </linearGradient>
-+  <linearGradient id=3D"ah" x1=3D"442.04" x2=3D"490.12" y1=3D"371.54" y2=
-=3D"293.59" gradientTransform=3D"translate(-250 -58.362)" gradientUnits=3D"=
-userSpaceOnUse" xlink:href=3D"#b"/>
-+  <linearGradient id=3D"ag" x1=3D"355.16" x2=3D"353.75" y1=3D"289.59" y2=
-=3D"302.32" gradientTransform=3D"translate(-150 -60.362)" gradientUnits=3D"=
-userSpaceOnUse">
-+   <stop stop-color=3D"#f3cd0c" offset=3D"0"/>
-+   <stop stop-color=3D"#f3cd0c" stop-opacity=3D"0" offset=3D"1"/>
-+  </linearGradient>
-+  <radialGradient id=3D"p" cx=3D"363.34" cy=3D"303.42" r=3D"16.846" gradie=
-ntTransform=3D"matrix(1.3082 .35053 -.36795 1.3732 -150.51 -298.71)" gradie=
-ntUnits=3D"userSpaceOnUse" xlink:href=3D"#i"/>
-+  <radialGradient id=3D"o" cx=3D"363.34" cy=3D"303.42" r=3D"16.846" gradie=
-ntTransform=3D"matrix(1.3082 .35053 -.36795 1.3732 -310.51 -240.35)" gradie=
-ntUnits=3D"userSpaceOnUse" xlink:href=3D"#i"/>
-+  <radialGradient id=3D"n" cx=3D"382.23" cy=3D"246.86" r=3D"20.538" gradie=
-ntTransform=3D"matrix(.36025 .1568 -.072468 .16649 260.62 181.94)" gradient=
-Units=3D"userSpaceOnUse" xlink:href=3D"#h"/>
-+  <linearGradient id=3D"af" x1=3D"358.5" x2=3D"361.5" y1=3D"279.36" y2=3D"=
-279.24" gradientUnits=3D"userSpaceOnUse" xlink:href=3D"#h"/>
-+  <linearGradient id=3D"ae" x1=3D"123.13" x2=3D"170.86" y1=3D"301.54" y2=
-=3D"381.62" gradientTransform=3D"translate(-80 -58.362)" gradientUnits=3D"u=
-serSpaceOnUse" xlink:href=3D"#j"/>
-+  <linearGradient id=3D"ad" x1=3D"171.57" x2=3D"186.6" y1=3D"323.99" y2=3D=
-"352.28" gradientTransform=3D"translate(-80.53 -60.13)" gradientUnits=3D"us=
-erSpaceOnUse">
-+   <stop stop-color=3D"#ebc40c" offset=3D"0"/>
-+   <stop stop-color=3D"#ebc40c" stop-opacity=3D"0" offset=3D"1"/>
-+  </linearGradient>
-+  <clipPath id=3D"cl">
-+   <path transform=3D"matrix(1 0 0 1.0183 0 -4.0313)" d=3D"m137.58 281.02c=
-1.5993-0.66295 3.3982-0.78361 5.1007-0.46963 1.7025 0.31398 3.3114 1.0495 4=
-.7434 2.0224 2.864 1.9458 4.9882 4.7777 7.0226 7.5795 4.6719 6.4341 9.1687 =
-13.002 13.245 19.829 3.3064 5.5377 6.3435 11.257 10.164 16.453 2.494 3.3919=
- 5.3066 6.5395 7.813 9.9222 2.5064 3.3827 4.7279 7.0559 5.8393 11.117 1.444=
-1 5.2765 0.88463 11.093-1.6267 15.953-1.7666 3.419-4.4765 6.3523-7.7724 8.3=
-39-3.296 1.9867-7.1706 3.0144-11.016 2.8702-6.1141-0.2293-11.699-3.2852-17.=
-384-5.5491-11.581-4.6125-24.16-6.0594-36.097-9.6517-3.6686-1.104-7.2758-2.4=
-107-10.97-3.4263-1.6412-0.45122-3.3087-0.8482-4.8588-1.5514-1.5501-0.70325-=
-2.9995-1.7491-3.8617-3.2168-0.66639-1.1344-0.94839-2.47-0.93019-3.7855 0.01=
-82-1.3155 0.32589-2.6145 0.77382-3.8516 0.89585-2.4741 2.3433-4.7137 3.3202=
--7.157 1.5951-3.9894 1.8817-8.3884 1.6666-12.679-0.21511-4.291-0.91078-8.54=
-48-1.2045-12.831-0.13118-1.9141-0.18066-3.8526 0.18479-5.736 0.36545-1.8834=
- 1.1758-3.7246 2.5577-5.0554 1.2741-1.2269 2.9649-1.9553 4.6964-2.3165s3.51=
-53-0.37747 5.2837-0.33762c1.7683 0.0399 3.5407 0.13425 5.3035-0.0106 1.7628=
--0.14488 3.5335-0.54055 5.0691-1.4183 1.46-0.83447 2.6543-2.0745 3.6437-3.4=
-342 0.9894-1.3597 1.7891-2.8457 2.6089-4.314 0.81983-1.4682 1.6683-2.9315 2=
-.7416-4.2261 1.0732-1.2946 2.3892-2.423 3.9427-3.067" fill=3D"url(#d)"/>
-+  </clipPath>
-+  <linearGradient id=3D"d" x1=3D"123.13" x2=3D"170.86" y1=3D"301.54" y2=3D=
-"381.62" gradientUnits=3D"userSpaceOnUse" xlink:href=3D"#j"/>
-+  <clipPath id=3D"ck">
-+   <path transform=3D"translate(-240 -1)" d=3D"m137.58 281.02c1.5993-0.662=
-95 3.3982-0.78361 5.1007-0.46963 1.7025 0.31398 3.3114 1.0495 4.7434 2.0224=
- 2.864 1.9458 4.9882 4.7777 7.0226 7.5795 4.6719 6.4341 9.1687 13.002 13.24=
-5 19.829 3.3064 5.5377 6.3435 11.257 10.164 16.453 2.494 3.3919 5.3066 6.53=
-95 7.813 9.9222 2.5064 3.3827 4.7279 7.0559 5.8393 11.117 1.4441 5.2765 0.8=
-8463 11.093-1.6267 15.953-1.7666 3.419-4.4765 6.3523-7.7724 8.339-3.296 1.9=
-867-7.1706 3.0144-11.016 2.8702-6.1141-0.2293-11.699-3.2852-17.384-5.5491-1=
-1.581-4.6125-24.16-6.0594-36.097-9.6517-3.6686-1.104-7.2758-2.4107-10.97-3.=
-4263-1.6412-0.45122-3.3087-0.8482-4.8588-1.5514-1.5501-0.70325-2.9995-1.749=
-1-3.8617-3.2168-0.66639-1.1344-0.94839-2.47-0.93019-3.7855 0.0182-1.3155 0.=
-32589-2.6145 0.77382-3.8516 0.89585-2.4741 2.3433-4.7137 3.3202-7.157 1.595=
-1-3.9894 1.8817-8.3884 1.6666-12.679-0.21511-4.291-0.91078-8.5448-1.2045-12=
-.831-0.13118-1.9141-0.18066-3.8526 0.18479-5.736 0.36545-1.8834 1.1758-3.72=
-46 2.5577-5.0554 1.2741-1.2269 2.9649-1.9553 4.6964-2.3165s3.5153-0.37747 5=
-.2837-0.33762c1.7683 0.0399 3.5407 0.13425 5.3035-0.0106 1.7628-0.14488 3.5=
-335-0.54055 5.0691-1.4183 1.46-0.83447 2.6543-2.0745 3.6437-3.4342 0.9894-1=
-.3597 1.7891-2.8457 2.6089-4.314 0.81983-1.4682 1.6683-2.9315 2.7416-4.2261=
- 1.0732-1.2946 2.3892-2.423 3.9427-3.067" fill=3D"url(#d)"/>
-+  </clipPath>
-+  <clipPath id=3D"cj">
-+   <path d=3D"m513.19 336.61c-2.6238 3.1148-6.268 5.1704-9.8965 7.0198-6.1=
-886 3.1544-12.602 5.9218-18.42 9.7165-3.898 2.5425-7.4959 5.5267-10.86 8.74=
-24-2.8772 2.7501-5.6058 5.6874-8.8325 8.0177-3.2557 2.3512-7.0192 4.0543-10=
-.991 4.6502-4.8303 0.72481-9.8213-0.21289-14.299-2.1642-3.1375-1.3673-6.155=
-7-3.3229-7.963-6.2293-1.8142-2.9175-2.2281-6.4881-2.2327-9.9238-8e-3 -6.076=
-7 1.1182-12.09 2.1785-18.073 0.88097-4.9718 1.7195-9.9548 2.2601-14.975 0.9=
-8337-9.1312 0.9763-18.353 0.3199-27.513-0.10993-1.5342-0.23754-3.0832-8e-3 =
--4.6041 0.22922-1.5209 0.85475-3.0367 2.0207-4.0399 1.077-0.9266 2.5209-1.3=
-36 3.9395-1.4145 1.4185-0.0785 2.834 0.14655 4.2398 0.35197 3.3125 0.48405 =
-6.6516 0.8649 9.8892 1.7166 2.0428 0.53738 4.0332 1.2592 6.0722 1.8108 3.40=
-26 0.92039 6.9664 1.3614 10.467 0.95192 3.7692-0.44089 7.4299-1.8568 11.224=
--1.7647 1.5566 0.0378 3.1015 0.33171 4.5865 0.79985 1.5154 0.47772 3.0091 1=
-.1618 4.1228 2.2951 0.84639 0.8613 1.4358 1.9454 1.8787 3.0688 0.65982 1.67=
-35 1.0149 3.457 1.167 5.2494 0.13475 1.5879 0.11343 3.1944 0.41433 4.7593 0=
-.49503 2.5746 1.8475 4.923 3.5285 6.9349s3.6898 3.7205 5.6964 5.4078c1.9991=
- 1.681 4.0106 3.3547 6.1671 4.8284 1.0121 0.69165 2.0564 1.3395 3.0174 2.10=
-06s1.8447 1.6468 2.4454 2.7154c0.81492 1.4494 1.0638 3.2077 0.53758 4.8766-=
-0.5262 1.6688-1.4816 3.2766-2.6706 4.6881z" fill=3D"url(#ac)"/>
-+  </clipPath>
-+  <linearGradient id=3D"ac" x1=3D"442.04" x2=3D"490.12" y1=3D"371.54" y2=
-=3D"293.59" gradientTransform=3D"translate(-250 -58.362)" gradientUnits=3D"=
-userSpaceOnUse" xlink:href=3D"#b"/>
-+  <clipPath id=3D"ci">
-+   <path d=3D"m509.36 335.74c-2.2956 2.5276-5.4839 4.1957-8.6585 5.6965-5.=
-4145 2.5597-11.025 4.8054-16.116 7.8848-3.4104 2.0632-6.5582 4.4849-9.5017 =
-7.0943-2.5173 2.2317-4.9046 4.6153-7.7276 6.5063-2.8484 1.908-6.1411 3.29-9=
-.6158 3.7736-4.2261 0.58818-8.5928-0.17275-12.51-1.7562-2.7451-1.1095-5.385=
-7-2.6965-6.9669-5.055-1.5873-2.3676-1.9494-5.265-1.9534-8.053-7e-3 -4.9311 =
-0.97837-9.8109 1.906-14.666 0.77077-4.0345 1.5044-8.0782 1.9774-12.152 0.86=
-036-7.4098 0.85417-14.893 0.27988-22.327-0.0962-1.245-0.20783-2.502-7e-3 -3=
-.7362 0.20055-1.2342 0.74783-2.4642 1.7679-3.2783 0.94224-0.75193 2.2056-1.=
-0841 3.4467-1.1478 1.2411-0.0637 2.4795 0.11892 3.7095 0.28562 2.8982 0.392=
-8 5.8196 0.70185 8.6522 1.393 1.7873 0.43608 3.5286 1.0219 5.3126 1.4694 2.=
-977 0.74689 6.095 1.1048 9.158 0.77247 3.2977-0.35777 6.5005-1.5068 9.8197-=
-1.4321 1.3619 0.0307 2.7135 0.26918 4.0128 0.64907 1.3258 0.38766 2.6327 0.=
-9428 3.6071 1.8625 0.74051 0.69893 1.2562 1.5787 1.6437 2.4903 0.57728 1.35=
-8 0.88797 2.8053 1.021 4.2599 0.11789 1.2885 0.0992 2.5922 0.3625 3.8621 0.=
-43311 2.0892 1.6164 3.995 3.0871 5.6276 1.4707 1.6326 3.2283 3.0191 4.9839 =
-4.3884 1.749 1.3641 3.5089 2.7223 5.3956 3.9182 0.8855 0.56126 1.7992 1.087=
- 2.6399 1.7046 0.84074 0.61765 1.6139 1.3364 2.1395 2.2035 0.71298 1.1762 0=
-.93071 2.603 0.47034 3.9573-0.46038 1.3542-1.2963 2.6589-2.3365 3.8043z" fi=
-ll=3D"url(#ab)"/>
-+  </clipPath>
-+  <linearGradient id=3D"ab" x1=3D"442.04" x2=3D"490.12" y1=3D"371.54" y2=
-=3D"293.59" gradientTransform=3D"matrix(.87491 0 0 .81149 -158.36 15.227)" =
-gradientUnits=3D"userSpaceOnUse" xlink:href=3D"#b"/>
-+  <clipPath id=3D"ch">
-+   <path d=3D"m263.19 278.25c-2.6238 3.1148-6.268 5.1704-9.8965 7.0198-6.1=
-886 3.1544-12.602 5.9218-18.42 9.7165-3.898 2.5425-7.4959 5.5267-10.86 8.74=
-24-2.8772 2.7501-5.6058 5.6874-8.8325 8.0177-3.2557 2.3512-7.0192 4.0543-10=
-.991 4.6502-4.8303 0.72481-9.8213-0.21289-14.299-2.1642-3.1375-1.3673-6.155=
-7-3.3229-7.963-6.2293-1.8142-2.9175-2.2281-6.4881-2.2327-9.9238-8e-3 -6.076=
-7 1.1182-12.09 2.1785-18.073 0.88097-4.9718 1.7195-9.9548 2.2601-14.975 0.9=
-8337-9.1312 0.9763-18.353 0.3199-27.513-0.10993-1.5342-0.23754-3.0832-8e-3 =
--4.6041 0.22922-1.5209 0.85475-3.0367 2.0207-4.0399 1.077-0.9266 2.5209-1.3=
-36 3.9395-1.4145 1.4185-0.0785 2.834 0.14655 4.2398 0.35197 3.3125 0.48405 =
-6.6516 0.8649 9.8892 1.7166 2.0428 0.53738 4.0332 1.2592 6.0722 1.8108 3.40=
-26 0.92039 6.9664 1.3614 10.467 0.95192 3.7692-0.44089 7.4299-1.8568 11.224=
--1.7647 1.5566 0.0378 3.1015 0.33171 4.5865 0.79985 1.5154 0.47772 3.0091 1=
-.1618 4.1228 2.2951 0.84639 0.8613 1.4358 1.9454 1.8787 3.0688 0.65982 1.67=
-35 1.0149 3.457 1.167 5.2494 0.13475 1.5879 0.11343 3.1944 0.41433 4.7593 0=
-.49503 2.5746 1.8475 4.923 3.5285 6.9349s3.6898 3.7205 5.6964 5.4078c1.9991=
- 1.681 4.0106 3.3547 6.1671 4.8284 1.0121 0.69165 2.0564 1.3395 3.0174 2.10=
-06s1.8447 1.6468 2.4454 2.7154c0.81492 1.4494 1.0638 3.2077 0.53758 4.8766-=
-0.5262 1.6688-1.4816 3.2766-2.6706 4.6881z" fill=3D"url(#aa)"/>
-+  </clipPath>
-+  <linearGradient id=3D"aa" x1=3D"442.04" x2=3D"490.12" y1=3D"371.54" y2=
-=3D"293.59" gradientTransform=3D"translate(-500 -116.72)" gradientUnits=3D"=
-userSpaceOnUse" xlink:href=3D"#b"/>
-+  <clipPath id=3D"cg">
-+   <path d=3D"m304.85 225.45c5.9768 4.8946 9.769 12.286 10.943 20.003 0.91=
-574 6.0186 0.32054 12.195-1.0124 18.132-1.3329 5.9373-3.3909 11.676-5.4335 =
-17.401-0.81452 2.2827-1.6327 4.5871-1.9563 6.9933-0.32365 2.4062-0.1187 4.9=
-543 1.0211 7.0878 1.3066 2.4458 3.7453 4.1302 6.3668 4.9229 2.5882 0.78263 =
-5.3837 0.76618 8.0035 0.10153 2.6198-0.66466 5.0658-1.9634 7.1983-3.6493 5.=
-4176-4.2831 8.6866-10.949 9.952-17.812 1.2654-6.8634 0.68401-13.95-0.49258-=
-20.83-1.6044-9.3814-4.3039-18.551-7.74-27.408-2.5275-6.5147-5.7653-12.742-9=
-.6175-18.52-3.7793-5.6684-9.1416-10.093-13.103-15.635-1.3764-1.9255-3.0319-=
-3.9316-4.3842-5.8784-2.9158-4.1977-2.2554-3.4145-4.0642-6.1316-1.3124-1.971=
-3-3.3845-2.6487-5.5649-3.511-2.1804-0.86226-4.629-1.1162-6.8806-0.47108-2.9=
-678 0.85034-5.3923 3.2311-6.6822 6.0821s-1.5154 6.1231-1.0136 9.2201c0.6473=
-9 3.9954 2.4422 7.7026 4.4657 11.189 2.2854 3.9372 4.9328 7.7271 8.3844 10.=
-654 3.602 3.0546 7.9577 5.0688 11.611 8.0602" fill=3D"#020204"/>
-+  </clipPath>
-+  <clipPath id=3D"cf">
-+   <path d=3D"m240.47 195.04c-7.0731 8.0369-14.352 15.816-18.346 24.505-1.=
-9762 4.4133-2.9108 9.2072-4.265 13.849-1.5379 5.2718-3.6261 10.37-5.9707 15=
-.336-2.165 4.5853-4.5498 9.0629-6.9389 13.536-1.7382 3.2541-3.5051 6.581-4.=
-1078 10.221-0.47628 2.8763-0.1985 5.8442 0.53375 8.6663 0.73225 2.822 1.909=
-6 5.5106 3.2378 8.106 5.6672 11.075 14.17 20.622 24.242 27.925 4.5706 3.314=
-2 9.4667 6.1811 14.602 8.526 2.7825 1.2704 5.7136 2.4044 8.7719 2.4574 1.52=
-92 0.0265 3.0741-0.22544 4.4743-0.84055 1.4002-0.6151 2.6507-1.6037 3.4825-=
-2.8871 1.0228-1.5779 1.3699-3.5383 1.1646-5.4074-0.2053-1.8691-0.93484-3.65=
-29-1.9132-5.2587-2.39-3.9225-6.1652-6.7606-9.7964-9.5734-7.8406-6.0736-15.4=
-25-12.48-22.682-19.24-2.0491-1.9085-4.0984-3.8776-5.5302-6.2841-1.3943-2.34=
-35-2.1476-5.0138-2.6578-7.6925-1.3997-7.3487-1.0409-15.083 1.4596-22.133 0.=
-97822-2.7583 2.2712-5.392 3.5182-8.0396 2.1613-4.5891 4.2072-9.2656 7.0493-=
-13.467 3.538-5.2304 8.2675-9.6605 11.151-15.278 2.4342-4.7415 3.4199-10.072=
- 4.3618-15.318 0.73693-4.1043 2.1504-8.1244 2.8692-12.232-1.4061 2.6657-5.9=
-38 7.0428-8.7107 10.525z" fill=3D"#020204"/>
-+  </clipPath>
-+  <clipPath id=3D"ce">
-+   <path d=3D"m386.19 285.33c-0.40516-1.1037-1.1184-2.0816-1.9907-2.8699-0=
-.87226-0.78832-1.9005-1.3923-2.9828-1.8516-2.1646-0.91852-4.5205-1.2615-6.8=
-315-1.6956-2.1792-0.40931-4.3418-0.90631-6.5278-1.2773-2.2714-0.38551-4.617=
-9-0.63213-6.8653-0.1253-1.9658 0.44333-3.7845 1.4588-5.2717 2.8186-1.4872 1=
-.3598-2.6491 3.0564-3.485 4.8901-1.4722 3.2295-1.9345 6.865-1.6539 10.403 0=
-.20881 2.6332 0.87532 5.3459 2.6088 7.3391 1.4006 1.6105 3.3873 2.6153 5.43=
-4 3.2209 3.525 1.0432 7.3666 0.98822 10.86-0.1553 5.7669-1.9311 10.876-5.77=
-39 14.33-10.779 1.1386-1.6496 2.1122-3.4481 2.5532-5.4034 0.33597-1.4896 0.=
-34831-3.0811-0.1779-4.5146" fill=3D"#020204"/>
-+  </clipPath>
-+  <clipPath id=3D"cd">
-+   <path d=3D"m386.19 285.33c-0.40516-1.1037-1.1184-2.0816-1.9907-2.8699-0=
-.87226-0.78832-1.9005-1.3923-2.9828-1.8516-2.1646-0.91852-4.5205-1.2615-6.8=
-315-1.6956-2.1792-0.40931-4.3418-0.90631-6.5278-1.2773-2.2714-0.38551-4.617=
-9-0.63213-6.8653-0.1253-1.9658 0.44333-3.7845 1.4588-5.2717 2.8186-1.4872 1=
-.3598-2.6491 3.0564-3.485 4.8901-1.4722 3.2295-1.9345 6.865-1.6539 10.403 0=
-.20881 2.6332 0.87532 5.3459 2.6088 7.3391 1.4006 1.6105 3.3873 2.6153 5.43=
-4 3.2209 3.525 1.0432 7.3666 0.98822 10.86-0.1553 5.7669-1.9311 10.876-5.77=
-39 14.33-10.779 1.1386-1.6496 2.1122-3.4481 2.5532-5.4034 0.33597-1.4896 0.=
-34831-3.0811-0.1779-4.5146" fill=3D"#020204"/>
-+  </clipPath>
-+  <clipPath id=3D"cc">
-+   <path d=3D"m85.75 122.36c-2.7804 1.9102-5.1106 4.5749-6.25 7.75-1.436 4=
-.0016-0.88584 8.4807 0.5 12.5 1.4195 4.1169 3.7938 8.041 7.3793 10.512 1.79=
-28 1.2357 3.8681 2.083 6.0304 2.3386s4.4093-0.0949 6.3403-1.1009c2.3531-1.2=
-26 4.1478-3.3728 5.2622-5.7808 1.1144-2.408 1.5888-5.0701 1.7378-7.7192 0.1=
-8989-3.3755-0.14047-6.8065-1.25-10-1.2053-3.4691-3.39-6.6706-6.4728-8.6666-=
-1.5414-0.99803-3.292-1.6836-5.1109-1.9352-1.8189-0.25158-3.7048-0.0633-5.41=
-64 0.60175-0.97547 0.37901-1.8874 0.9074-2.75 1.5" fill=3D"url(#m)"/>
-+  </clipPath>
-+  <radialGradient id=3D"m" cx=3D"223.2" cy=3D"137.66" r=3D"14.572" gradien=
-tTransform=3D"matrix(1.0858 -.034312 .039438 1.248 -15.542 -75.905)" gradie=
-ntUnits=3D"userSpaceOnUse" xlink:href=3D"#a"/>
-+  <clipPath id=3D"cb">
-+   <path d=3D"m54.232 122.36c-1.781 0.097-3.4846 0.91899-4.7878 2.1367-1.3=
-032 1.2177-2.2214 2.8118-2.7862 4.5036-1.1296 3.3836-0.87548 7.0518-0.6187 =
-10.61 0.23251 3.2216 0.47041 6.5053 1.6768 9.5016 0.60319 1.4981 1.4502 2.9=
-102 2.5803 4.064 1.1301 1.1537 2.5517 2.0419 4.1183 2.4345 1.4688 0.36809 3=
-.0382 0.29183 4.4828-0.16209 1.4446-0.45392 2.7639-1.2789 3.8462-2.3379 1.5=
-79-1.5451 2.6433-3.5662 3.2534-5.6895 0.61019-2.1233 0.78416-4.3516 0.7524-=
-6.5605-0.0397-2.7644-0.40091-5.5385-1.2658-8.1644-0.86485-2.6259-2.2458-5.1=
-033-4.1728-7.0856-0.93331-0.96009-1.9978-1.8051-3.1986-2.3975-1.2008-0.5923=
-3-2.5434-0.92535-3.8804-0.85253" fill=3D"url(#l)"/>
-+  </clipPath>
-+  <radialGradient id=3D"l" cx=3D"223.2" cy=3D"137.66" r=3D"14.572" gradien=
-tTransform=3D"matrix(.81524 -.034312 .029611 1.248 9.5624 -75.905)" gradien=
-tUnits=3D"userSpaceOnUse" xlink:href=3D"#a"/>
-+  <clipPath id=3D"ca">
-+   <path d=3D"m214.64 148.04c-2.5103-0.0409-4.9914 0.28921-7.2715 0.88384-=
-4.0525 1.0569-7.5737 2.9393-10.085 5.3932-1.6281 0.85539-3.05 1.8992-4.2072=
- 3.0864-0.66186 0.67901-1.2439 1.4169-1.5013 2.2476-0.20244 0.65333-0.19857=
- 1.3447-0.28524 2.0199-0.0324 0.25293-0.0778 0.5073-0.0362 0.76548 0.0208 0=
-.12909 0.0631 0.25809 0.13756 0.38081 0.0221 0.0364 0.0528 0.0707 0.0806 0.=
-1055 0.0825 0.15031 0.18297 0.29681 0.31473 0.43099 0.28806 0.29334 0.68023=
- 0.53107 1.0942 0.73203 0.41394 0.20097 0.85255 0.36757 1.2815 0.54936 2.28=
-01 0.96628 4.2277 2.3246 5.9925 3.7592 2.3677 1.9248 4.5294 4.061 7.5099 5.=
-46 2.1046 0.98794 4.5277 1.552 6.926 1.724 2.8164 0.20193 5.5852-0.12293 8.=
-1817-0.69344 2.4063-0.52873 4.6967-1.2713 6.752-2.254 3.907-1.868 6.987-4.6=
-063 11.424-5.8344 0.96876-0.2681 1.9904-0.45921 2.9132-0.78993s1.763-0.8265=
- 2.1195-1.5271c0.34261-0.67347 0.2049-1.4503 0.23569-2.1897 0.0329-0.791 0.=
-26357-1.5559 0.33312-2.3428 0.0695-0.78687-0.0382-1.6289-0.62199-2.3518-0.1=
-2955-0.16043-0.28324-0.31001-0.45163-0.45157-0.0509-0.29235-0.22134-0.58029=
--0.46622-0.83239-0.50487-0.51975-1.2933-0.87172-2.0952-1.1167-1.0982-0.3355=
-5-2.256-0.50211-3.3989-0.69601-3.5109-0.59565-6.9696-1.4754-10.295-2.6039-1=
-.653-0.56104-3.2707-1.1833-4.9042-1.7793-1.6793-0.61273-3.3867-1.201-5.1652=
--1.5773-1.4911-0.31546-3.0064-0.47332-4.5126-0.49788z" fill=3D"url(#k)"/>
-+  </clipPath>
-+  <radialGradient id=3D"k" cx=3D"294.48" cy=3D"193.1" r=3D"31.111" gradien=
-tTransform=3D"matrix(.81495 -.25453 .31491 .43302 -75.371 150.74)" gradient=
-Units=3D"userSpaceOnUse" xlink:href=3D"#g"/>
-+  <clipPath id=3D"bz">
-+   <path d=3D"m-26.296 154.81c-1.0464 1.3114-1.7277 2.8873-2.1393 4.5137-0=
-.41153 1.6264-0.56228 3.308-0.62653 4.9845-0.12849 3.3529 0.0765 6.7702-0.8=
-1096 10.006-0.94874 3.4595-3.076 6.4565-5.1576 9.378-3.6048 5.0592-7.2485 1=
-0.25-9.0271 16.202-1.0771 3.6047-1.4356 7.4226-1.0484 11.165-4.0353 5.9262-=
-7.5289 12.221-10.423 18.781-4.3862 9.9416-7.3961 20.526-8.4546 31.341-1.296=
-1 13.242 0.39758 26.862 5.6275 39.097 3.7813 8.8459 9.4177 16.944 16.686 23=
-.247 3.6954 3.2047 7.7997 5.9394 12.189 8.0971 15.213 7.4771 34.013 7.491 4=
-8.973-0.48031 7.8184-4.1661 14.418-10.258 20.781-16.422 3.8318-3.7121 7.643=
-5-7.5125 10.567-11.976 5.6275-8.5924 7.5875-19.036 8.8054-29.234 2.1297-17.=
-833 2.1984-36.67-5.6214-52.838-2.6922-5.5664-6.279-10.699-10.581-15.141-1.1=
-455-7.7809-3.4064-15.397-6.6921-22.542-2.3704-5.155-5.2683-10.062-7.4708-15=
-.291-0.90422-2.1467-1.69-4.3449-2.6935-6.447-1.0035-2.1021-2.2414-4.125-3.9=
-245-5.7354-1.7234-1.6491-3.871-2.8182-6.1359-3.5663-2.265-0.74806-4.6492-1.=
-087-7.0315-1.2068-4.7646-0.23966-9.5387 0.38348-14.306 0.19423-3.7948-0.150=
-66-7.5778-0.81566-11.369-0.59186-1.8956 0.1119-3.7909 0.45058-5.5503 1.1649=
--1.7594 0.71432-3.3817 1.8171-4.5661 3.3014" fill=3D"#fdfdfb"/>
-+  </clipPath>
-+  <clipPath id=3D"by">
-+   <path d=3D"m-47.296 161.44c-1.0464 1.4237-1.7277 3.1346-2.1393 4.9003-0=
-.41153 1.7657-0.56228 3.5913-0.62653 5.4114-0.12849 3.6401 0.0765 7.35-0.81=
-096 10.863-0.94874 3.7558-3.076 7.0095-5.1576 10.181-3.6048 5.4925-7.2485 1=
-1.128-9.0271 17.59-1.0771 3.9134-1.4356 8.0583-1.0484 12.121-4.0353 6.4338-=
-7.5289 13.268-10.423 20.389-4.3862 10.793-7.3961 22.285-8.4546 34.025-1.296=
-1 14.377 0.39758 29.163 5.6275 42.445 3.7813 9.6036 9.4177 18.395 16.686 25=
-.238 3.6954 3.4792 7.7997 6.4482 12.189 8.7906 15.213 8.1176 34.013 8.1326 =
-48.973-0.52145 7.8184-4.5229 14.418-11.137 20.781-17.829 3.8318-4.03 7.6435=
--8.156 10.567-13.001 5.6275-9.3283 7.5875-20.666 8.8054-31.738 2.1297-19.36=
-1 2.1984-39.811-5.6214-57.364-2.6922-6.0431-6.279-11.615-10.581-16.437-1.14=
-55-8.4473-3.4064-16.715-6.6921-24.473-2.3704-5.5966-5.2683-10.924-7.4708-16=
-.601-0.90422-2.3306-1.69-4.717-2.6935-6.9992-1.0035-2.2822-2.2414-4.4783-3.=
-9245-6.2266-1.7234-1.7904-3.871-3.0596-6.1359-3.8718-2.265-0.81213-4.6492-1=
-.1801-7.0315-1.3102-4.7646-0.26019-9.5387 0.41632-14.306 0.21086-3.7948-0.1=
-6356-7.5778-0.88552-11.369-0.64255-1.8956 0.12148-3.7909 0.48917-5.5503 1.2=
-647-1.7594 0.77551-3.3817 1.9728-4.5661 3.5842" fill=3D"#fdfdfb"/>
-+  </clipPath>
-+ </defs>
-+ <g transform=3D"translate(-18.8 -18.7)">
-+  <path d=3D"m71.05 23.68c-26.06 0-47.27 21.22-47.27 47.27s21.22 47.27 47.=
-27 47.27 47.27-21.22 47.27-47.27-21.22-47.27-47.27-47.27zm-0.07 4.2a3.1 3.1=
-1 0 0 1 3.02 3.11 3.11 3.11 0 0 1-6.22 0 3.11 3.11 0 0 1 3.2-3.11zm7.12 5.1=
-2a38.27 38.27 0 0 1 26.2 18.66l-3.67 8.28c-0.63 1.43 0.02 3.11 1.44 3.75l7.=
-06 3.13a38.27 38.27 0 0 1 0.08 6.64h-3.93c-0.39 0-0.55 0.26-0.55 0.64v1.8c0=
- 4.24-2.39 5.17-4.49 5.4-2 0.23-4.21-0.84-4.49-2.06-1.18-6.63-3.14-8.04-6.2=
-4-10.49 3.85-2.44 7.85-6.05 7.85-10.87 0-5.21-3.57-8.49-6-10.1-3.42-2.25-7.=
-2-2.7-8.22-2.7h-40.6a38.27 38.27 0 0 1 21.41-12.08l4.79 5.02c1.08 1.13 2.87=
- 1.18 4 0.09zm-44.2 23.02a3.11 3.11 0 0 1 3.02 3.11 3.11 3.11 0 0 1-6.22 0 =
-3.11 3.11 0 0 1 3.2-3.11zm74.15 0.14a3.11 3.11 0 0 1 3.02 3.11 3.11 3.11 0 =
-0 1-6.22 0 3.11 3.11 0 0 1 3.2-3.11zm-68.29 0.5h5.42v24.44h-10.94a38.27 38.=
-27 0 0 1-1.24-14.61l6.7-2.98c1.43-0.64 2.08-2.31 1.44-3.74zm22.62 0.26h12.9=
-1c0.67 0 4.71 0.77 4.71 3.8 0 2.51-3.1 3.41-5.65 3.41h-11.98zm0 17.56h9.89c=
-0.9 0 4.83 0.26 6.08 5.28 0.39 1.54 1.26 6.56 1.85 8.17 0.59 1.8 2.98 5.4 5=
-.53 5.4h16.14a38.27 38.27 0 0 1-3.54 4.1l-6.57-1.41c-1.53-0.33-3.04 0.65-3.=
-37 2.18l-1.56 7.28a38.27 38.27 0 0 1-31.91-0.15l-1.56-7.28c-0.33-1.53-1.83-=
-2.51-3.36-2.18l-6.43 1.38a38.27 38.27 0 0 1-3.32-3.92h31.27c0.35 0 0.59-0.0=
-6 0.59-0.39v-11.06c0-0.32-0.24-0.39-0.59-0.39h-9.15zm-14.43 25.33a3.11 3.11=
- 0 0 1 3.02 3.11 3.11 3.11 0 0 1-6.22 0 3.11 3.11 0 0 1 3.2-3.11zm46.05 0.1=
-4a3.11 3.11 0 0 1 3.02 3.11 3.11 3.11 0 0 1-6.22 0 3.11 3.11 0 0 1 3.2-3.11=
-z"/>
-+  <path d=3D"m115.68 70.95a44.63 44.63 0 0 1-44.63 44.63 44.63 44.63 0 0 1=
--44.63-44.63 44.63 44.63 0 0 1 44.63-44.63 44.63 44.63 0 0 1 44.63 44.63zm-=
-0.84-4.31 6.96 4.31-6.96 4.31 5.98 5.59-7.66 2.87 4.78 6.65-8.09 1.32 3.4 7=
-.46-8.19-0.29 1.88 7.98-7.98-1.88 0.29 8.19-7.46-3.4-1.32 8.09-6.65-4.78-2.=
-87 7.66-5.59-5.98-4.31 6.96-4.31-6.96-5.59 5.98-2.87-7.66-6.65 4.78-1.32-8.=
-09-7.46 3.4 0.29-8.19-7.98 1.88 1.88-7.98-8.19 0.29 3.4-7.46-8.09-1.32 4.78=
--6.65-7.66-2.87 5.98-5.59-6.96-4.31 6.96-4.31-5.98-5.59 7.66-2.87-4.78-6.65=
- 8.09-1.32-3.4-7.46 8.19 0.29-1.88-7.98 7.98 1.88-0.29-8.19 7.46 3.4 1.32-8=
-.09 6.65 4.78 2.87-7.66 5.59 5.98 4.31-6.96 4.31 6.96 5.59-5.98 2.87 7.66 6=
-.65-4.78 1.32 8.09 7.46-3.4-0.29 8.19 7.98-1.88-1.88 7.98 8.19-0.29-3.4 7.4=
-6 8.09 1.32-4.78 6.65 7.66 2.87z" fill-rule=3D"evenodd" stroke=3D"#000" str=
-oke-linecap=3D"round" stroke-linejoin=3D"round" stroke-width=3D"3"/>
-+ </g>
-+ <g transform=3D"matrix(1.0769 0 0 1.0769 85.998 -19.139)">
-+  <g transform=3D"matrix(.29571 0 0 .29571 -73.202 15.895)">
-+   <g>
-+    <path d=3D"m140.81 19.578c-7.168-0.07795-14.424 1.3746-20.734 4.7754-6=
-.7066 3.6143-12.201 9.3955-15.586 16.221-3.3835 6.822-4.7129 14.108-4.9141 =
-22.133-0.38216 15.247 0.34393 31.239 1.4941 45.73 0.3054 4.4126 0.85369 6.9=
-95 0.29297 11.523-1.8865 9.6299-10.313 16.112-14.805 24.57-4.9547 9.3309-7.=
-0434 19.881-10.783 29.762-3.4225 9.0424-8.2276 17.521-11.471 26.629-4.5349 =
-12.736-5.8905 26.731-2.8945 39.914 2.2839 10.05 7.0546 19.473 13.484 27.533=
--0.9305 1.6769-1.8322 3.3716-2.793 5.0312-2.9795 5.1469-6.6196 10.027-8.316=
-4 15.727-0.84842 2.85-1.1824 5.8898-0.63476 8.8125 0.54765 2.9227 2.0265 5.=
-7186 4.3516 7.5723 1.522 1.2135 3.3574 1.9948 5.2539 2.4336 1.8965 0.43879 =
-3.8566 0.54531 5.8027 0.50391 7.3946-0.15718 14.559-2.4052 21.713-4.2832 4.=
-2395-1.1129 8.5104-2.101 12.803-2.9883 15.241-3.1221 32.25-1.8759 46.398 0.=
-17579 4.792 0.72368 9.5498 1.671 14.26 2.8125 7.3771 1.7879 14.729 4.067 22=
-.316 4.2832 1.9973 0.0569 4.0106-0.0306 5.9609-0.46484 1.9503-0.43429 3.842=
-1-1.2269 5.4043-2.4727 2.3292-1.8575 3.8083-4.6574 4.3555-7.5859 0.54713-2.=
-9285 0.20917-5.977-0.64843-8.8301-1.7152-5.7061-5.3887-10.575-8.4356-15.695=
--1.2022-2.0203-2.3202-4.0926-3.5137-6.1172 9.1687-10.296 16.548-22.203 20.8=
-16-35.281 4.6587-14.275 5.5143-29.646 3.5527-44.533-1.9615-14.888-6.6821-29=
-.321-12.898-42.99-7.7977-17.138-14.353-23.331-19.104-38.381-5.1347-16.266-0=
-.8948-35.514-4.7109-50.268-1.3618-5.0173-3.5328-9.8068-6.3262-14.191-3.2731=
--5.1375-7.4246-9.7424-12.357-13.316-7.8707-5.7025-17.615-8.6385-27.334-8.74=
-41z" fill=3D"#020204"/>
-+    <path d=3D"m112.7 105.45c-1.0464 1.3114-1.7277 2.8873-2.1393 4.5137-0.=
-41153 1.6264-0.56228 3.308-0.62653 4.9845-0.12849 3.3529 0.0765 6.7702-0.81=
-096 10.006-0.94874 3.4595-3.076 6.4565-5.1576 9.378-3.6048 5.0592-7.2485 10=
-.25-9.0271 16.202-1.0771 3.6047-1.4356 7.4226-1.0484 11.165-4.0353 5.9262-7=
-.5289 12.221-10.423 18.781-4.3862 9.9416-7.3961 20.526-8.4546 31.341-1.2961=
- 13.242 0.39758 26.862 5.6275 39.097 3.7813 8.8459 9.4177 16.944 16.686 23.=
-247 3.6954 3.2047 7.7997 5.9394 12.189 8.0971 15.213 7.4771 34.013 7.491 48=
-.973-0.48031 7.8184-4.1661 14.418-10.258 20.781-16.422 3.8318-3.7121 7.6435=
--7.5125 10.567-11.976 5.6275-8.5924 7.5875-19.036 8.8054-29.234 2.1297-17.8=
-33 2.1984-36.67-5.6214-52.838-2.6922-5.5664-6.279-10.699-10.581-15.141-1.14=
-55-7.7809-3.4064-15.397-6.6921-22.542-2.3704-5.155-5.2683-10.062-7.4708-15.=
-291-0.90422-2.1467-1.69-4.3449-2.6935-6.447-1.0035-2.1021-2.2414-4.125-3.92=
-45-5.7354-1.7234-1.6491-3.871-2.8182-6.1359-3.5663-2.265-0.74806-4.6492-1.0=
-87-7.0315-1.2068-4.7646-0.23966-9.5387 0.38348-14.306 0.19423-3.7948-0.1506=
-6-7.5778-0.81566-11.369-0.59186-1.8956 0.1119-3.7909 0.45058-5.5503 1.1649-=
-1.7594 0.71432-3.3817 1.8171-4.5661 3.3014" fill=3D"#fdfdfb"/>
-+   </g>
-+   <g>
-+    <g>
-+     <path transform=3D"matrix(1.1543 0 0 1 166.33 -58.362)" d=3D"m-61.003=
- 211.59c0.88005 1.5239-0.54737 6.7783 19.964 3.4153 0 0-3.602 0.4573-7.1528=
- 1.4042-5.5213 2.1334-10.33 4.5171-14.04 7.6752-3.6755 3.1217-6.3671 7.1969=
--9.7397 10.697 0 0 5.4617-11.519 6.8233-14.987 1.3616-3.4687-0.22795-3.31 0=
-.84893-8.4136 1.0769-5.1036 3.7135-10.007 3.7135-10.007s-2.1524 7.2109-0.41=
-678 10.216z" fill=3D"url(#s)" filter=3D"url(#as)" opacity=3D".25"/>
-+     <path d=3D"m172.05 151.86c-4.8251 3.3614-7.6524 2.9634-13.507 3.6209s=
--21.698 0.41943-21.698 0.41943 2.2937-0.0427 7.3776 0.90419c5.0839 0.94693 =
-15.453 1.8523 21.292 4.0747s7.9685 2.8566 11.517 5.1006c5.0511 3.1939 8.758=
-2 8.1969 13.587 11.697 0 0 0.23377-4.6437-1.7157-8.1124s-7.1904-8.935-8.732=
-2-14.039c-1.5418-5.1036-2.2743-15.132-2.2743-15.132s-1.0211 8.1048-5.8462 1=
-1.466z" fill=3D"url(#r)" filter=3D"url(#at)" opacity=3D".42"/>
-+     <path d=3D"m126.67 144.68c-0.17937 1.4559-0.41189 2.9053-0.69695 4.34=
-43-0.14052 0.70936-0.2949 1.4199-0.55905 2.0931-0.26414 0.67317-0.64419 1.3=
-121-1.1812 1.7964-0.47071 0.42443-1.0444 0.71595-1.6207 0.97975-2.2483 1.02=
-92-4.6544 1.7126-7.108 2.019 0.97993 0.0719 1.9586 0.16127 2.9353 0.2682 0.=
-61534 0.0674 1.2321 0.14208 1.8317 0.29586 0.59961 0.15377 1.1847 0.38955 1=
-.6842 0.75518 0.54781 0.40099 0.97799 0.94833 1.2993 1.5464 0.64023 1.1916 =
-0.85435 2.5628 0.97272 3.9103 0.15139 1.7234 0.16244 3.459 0.033 5.1842 0.1=
-1585-1.1543 0.35775-2.2959 0.72-3.398 0.65284-1.9861 1.7042-3.8479 3.1197-5=
-.3864 0.56171-0.6105 1.1804-1.1704 1.8588-1.6479 2.0782-1.4629 4.718-2.1055=
- 7.2361-1.7613-2.559 0.11302-5.149-0.69089-7.1942-2.233-1.0416-0.78539-1.94=
-88-1.7629-2.5798-2.9046-0.97579-1.7656-1.2501-3.9068-0.75097-5.8613" fill=
-=3D"url(#q)" filter=3D"url(#ar)" opacity=3D".2"/>
-+     <path d=3D"m120.5 178.72c-1.2295 4.6793-2.0752 9.4595-2.5257 14.277-0=
-.63702 6.8122-0.48368 13.672-0.84934 20.505-0.31029 5.7975-0.99107 11.656 0=
-.0159 17.374 0.48017 2.7266 1.3427 5.3855 2.5546 7.8747 0.19249-0.95006 0.3=
-3356-1.9105 0.42239-2.8758 0.42661-4.636-0.3541-9.2869-0.61781-13.935-0.462=
-25-8.1474 0.66569-16.29 1.125-24.438 0.3526-6.2548 0.31082-12.532-0.125-18.=
-781h-4e-5" color=3D"#000000" filter=3D"url(#aq)" opacity=3D".11"/>
-+    </g>
-+    <g fill=3D"#7c7c7c">
-+     <path transform=3D"matrix(-.069919 .95701 -.56451 -.11853 236.57 -180=
-.38)" d=3D"m351.96 200.86c-1.4516 0.38883-1.2301 3.9942-0.29604 5.4979 0.78=
-886 1.27 3.0724 2.2711 3.7585 1.005 1.1141-2.0556-1.4719-7.0361-3.4625-6.50=
-29z" filter=3D"url(#be)" opacity=3D".25"/>
-+     <path transform=3D"matrix(-.095961 -.95701 -.77476 .11853 398.9 493.2=
-4)" d=3D"m361.75 209.34c2e-3 -1.5331-7.5647-10.056-9.7896-8.4864-2.2249 1.5=
-7-0.49172 3.7842-0.29604 5.4979 0.19568 1.7137-0.94537 6.6093 0.23849 7.259=
-3s3.3661-2.5198 5.3011-4.277c1.5582-1.4149 4.544 1.5393 4.546 6e-3z" filter=
-=3D"url(#br)" opacity=3D".75"/>
-+     <path transform=3D"matrix(1.1522 0 0 1.1522 -163.03 -72.2)" d=3D"m277=
-.96 90.857c-2.2249 1.57-1.2529 3.5305-0.29604 5.4979s-2.1043 7.6397-2.1365 =
-7.8843c-0.0322 0.24465 6.0253-2.8754 7.6761-4.902 1.9496-2.3934 6.877 3.237=
-9 6.6085 2.3812 2e-3 -1.5331-9.6272-12.431-11.852-10.861z" filter=3D"url(#b=
-j)"/>
-+    </g>
-+    <path transform=3D"translate(160 -57.362)" d=3D"m16.687 165.86c-2.1622=
- 1.9694 1.0136 4.9277 2.5197 8.4043 0.93626 2.1613 3.5268 5.2051 6.0324 4.7=
-175 1.8848-0.36677 3.0543-3.0794 2.8759-4.9912-0.34416-3.6885-3.4567-4.5526=
--5.7172-5.8195-1.7914-1.004-4.1926-3.6939-5.7108-2.3111z" fill=3D"#838384" =
-filter=3D"url(#bf)"/>
-+    <path transform=3D"translate(139 -49.362)" d=3D"m-28.632 172.6c1.7029 =
-4.9378 5.1304 9.152 9.1858 12.444 1.3487 1.0946 2.7822 2.1044 4.3662 2.817 =
-1.5841 0.71257 3.3316 1.1194 5.0624 0.97245 1.695-0.14396 3.3075-0.80936 4.=
-7887-1.6458 1.4813-0.8364 2.856-1.8469 4.293-2.7572 2.4626-1.5602 5.0998-2.=
-8214 7.6572-4.2209 3.0825-1.6869 6.0696-3.5901 8.6647-5.9593 1.1879-1.0845 =
-2.2957-2.268 3.6075-3.1989 1.3118-0.93094 2.883-1.6057 4.4878-1.4965 1.2039=
- 0.0819 2.3329 0.59386 3.5125 0.84794 0.58979 0.12704 1.2008 0.18932 1.7972=
- 0.0984 0.59643-0.0909 1.1797-0.34439 1.5979-0.77928 0.51237-0.53286 0.7364=
-1-1.2998 0.70961-2.0386-0.0268-0.73874-0.28445-1.453-0.62885-2.1071-0.68881=
--1.3082-1.7345-2.4351-2.2002-3.8383-0.4144-1.2487-0.33045-2.5989-0.29393-3.=
-914 0.03652-1.3151 0.0075-2.689-0.5986-3.8567-0.46159-0.88922-1.2361-1.5952=
--2.1216-2.0639-0.88551-0.46867-1.8786-0.71001-2.8761-0.80365-1.995-0.18727-=
-3.9939 0.19997-5.9945 0.31349-2.6558 0.1507-5.322-0.18176-7.9772-0.0221-3.3=
-113 0.1991-6.557 1.1605-9.8743 1.1664-3.786 7e-3 -7.5681-1.2319-11.308-0.63=
-996-1.6046 0.25401-3.1348 0.8376-4.6757 1.3522-1.5409 0.5146-3.1327 0.96724=
--4.7571 0.94371-1.8442-0.0267-3.6293-0.66537-5.469-0.79666-0.91986-0.0656-1=
-.8625-1.8e-4 -2.7261 0.32326-0.86362 0.32344-1.6445 0.92357-2.0683 1.7426-0=
-.24287 0.46932-0.36319 0.99683-0.38586 1.5248-0.02266 0.52795 0.05026 1.057=
- 0.17783 1.5698 0.25513 1.0256 0.72423 1.9828 1.1098 2.9669 1.3925 3.5537 1=
-.6924 7.4481 2.9368 11.056" clip-path=3D"url(#bz)" fill-opacity=3D".25882" =
-filter=3D"url(#au)"/>
-+    <g>
-+     <path transform=3D"matrix(1 0 0 .92111 160 -43.255)" d=3D"m-54.381 16=
-5.47c3.3085 2.2189 6.2767 4.9441 8.7695 8.0515 2.3132 2.8836 4.2811 6.1543 =
-7.2993 8.2889 2.1326 1.5082 4.6949 2.3578 7.2941 2.6161 3.0515 0.3032 6.139=
-8-0.18685 9.0817-1.052 2.7266-0.80188 5.3632-1.9293 7.7822-3.4214 4.5982-2.=
-8364 8.4392-6.9928 13.51-8.8571 1.107-0.407 2.2592-0.69817 3.3265-1.2002 1.=
-0673-0.50208 2.0714-1.254 2.5811-2.3177 0.48998-1.0224 0.47096-2.2025 0.630=
-53-3.325 0.17071-1.2008 0.55376-2.3618 0.76387-3.5564s0.23517-2.4723-0.2814=
--3.5698c-0.42777-0.90876-1.2054-1.6278-2.0999-2.0847-0.89449-0.45686-1.9011=
--0.6644-2.9043-0.71362-2.0064-0.0985-3.9875 0.41519-5.9881 0.59766-2.6496 0=
-.24167-5.3179-0.0991-7.9772-0.019-3.3083 0.0996-6.5682 0.84884-9.8743 1.005=
--3.7717 0.17818-7.5341-0.41751-11.308-0.55139-1.6323-0.0579-3.2754-0.0286-4=
-.8843 0.25254-1.6089 0.28112-3.1882 0.82168-4.5485 1.7256-1.32 0.87714-2.39=
-67 2.0673-3.6066 3.091-0.60492 0.51187-1.2478 0.98508-1.9537 1.345s-1.4788 =
-0.60451-2.2703 0.64257c-0.40728 0.0196-0.81834-0.0152-1.2213 0.0472-0.67617=
- 0.10463-1.3037 0.49355-1.6983 1.0525-0.39458 0.55899-0.5509 1.2805-0.42305=
- 1.9527v1e-5" clip-path=3D"url(#by)" filter=3D"url(#av)" opacity=3D".3"/>
-+     <path transform=3D"translate(160 -57.362)" d=3D"m45.101 224.45c6.0848=
- 4.8946 9.9456 12.286 11.141 20.003 0.93229 6.0186 0.32634 12.195-1.0307 18=
-.132-1.357 5.9373-3.4522 11.676-5.5317 17.401-0.82924 2.2827-1.6622 4.5871-=
-1.9917 6.9933-0.3295 2.4062-0.12085 4.9543 1.0395 7.0878 1.3302 2.4458 3.81=
-3 4.1302 6.4818 4.9229 2.6349 0.78263 5.481 0.76618 8.1482 0.10153 2.6671-0=
-.66466 7.1574-1.5259 9.3284-3.2118 5.5156-4.2831 6.8247-11.719 8.1319-18.25=
- 1.3632-6.8103 0.69637-13.95-0.50149-20.83-1.6334-9.3814-4.3817-18.551-7.87=
-99-27.408-2.5731-6.5147-5.8695-12.742-9.7914-18.52-3.8476-5.6684-9.3069-10.=
-093-13.34-15.635-1.4013-1.9255-3.0867-3.9316-4.4634-5.8784-2.9685-4.1977-2.=
-2962-3.4145-4.1377-6.1316-1.3361-1.9713-3.4457-2.6487-5.6655-3.511s-4.7127-=
-1.1162-7.005-0.47108c-3.0214 0.85034-5.4898 3.2311-6.8029 6.0821-1.3131 2.8=
-51-1.5428 6.1231-1.0319 9.2201 0.6591 3.9954 2.4863 7.7026 4.5464 11.189 2.=
-3267 3.9372 5.022 7.7271 8.536 10.654 3.6671 3.0546 8.1015 5.0688 11.82 8.0=
-602" fill=3D"#020204"/>
-+     <path transform=3D"translate(160 -57.362)" d=3D"m-69.527 194.04c-7.07=
-31 8.0369-14.352 15.816-18.346 24.505-1.9762 4.4133-2.9108 9.2072-4.265 13.=
-849-1.5379 5.2718-3.6261 10.37-5.9707 15.336-2.165 4.5853-4.5498 9.0629-6.9=
-389 13.536-1.7382 3.2541-3.5051 6.581-4.1078 10.221-0.47628 2.8763-0.1985 5=
-.8442 0.53375 8.6663 0.73225 2.822 1.9096 5.5106 3.2378 8.106 5.6672 11.075=
- 14.17 20.622 24.242 27.925 4.5706 3.3142 9.4667 6.1811 14.602 8.526 2.7825=
- 1.2704 5.7136 2.4044 8.7719 2.4574 1.5292 0.0265 3.0741-0.22544 4.4743-0.8=
-4055 1.4002-0.6151 2.6507-1.6037 3.4825-2.8871 1.0228-1.5779 1.3699-3.5383 =
-1.1646-5.4074s-0.93484-3.6529-1.9132-5.2587c-2.39-3.9225-6.1652-6.7606-9.79=
-64-9.5734-7.8405-6.0736-15.425-12.48-22.682-19.24-2.0491-1.9085-4.0984-3.87=
-76-5.5302-6.2841-1.3943-2.3435-2.1476-5.0138-2.6578-7.6925-1.3997-7.3487-1.=
-0409-15.083 1.4596-22.133 0.97822-2.7583 2.2712-5.392 3.5182-8.0396 2.1613-=
-4.5891 4.2072-9.2656 7.0493-13.467 3.538-5.2304 8.2675-9.6605 11.151-15.278=
- 2.4342-4.7415 3.4199-10.072 4.3618-15.318 0.73693-4.1043 2.1504-8.1244 2.8=
-692-12.232-1.4061 2.6657-5.938 7.0428-8.7107 10.525z" fill=3D"#020204"/>
-+     <path transform=3D"matrix(1.0181 0 0 1 -105.26 -58.362)" d=3D"m290.78=
- 216.02c0.48482 0.46774 0.98091 0.94261 1.5 1.375 3.6672 3.0546 5.6188 6.48=
-53 9.3376 9.4767 6.0848 4.8946 12.259 13.344 13.454 21.061 0.93229 6.0186-0=
-.30093 9.2895-1.8047 16.388-1.5037 7.0983-5.7694 17.148-8.0738 23.992-0.918=
-9 2.7291 1.8612 1.6031 1.4961 4.4798-0.17944 1.4138-0.19766 2.8424-0.0346 4=
-.2592 0.0227-0.27104 0.0388-0.5525 0.0693-0.82194 0.44281-3.9227 1.6233-7.6=
-948 2.9088-11.395 2.4742-7.1221 5.3143-14.101 7.272-21.408 1.9576-7.3068 1.=
-7403-12.564 0.71875-18.844-1.2846-7.8964-5.797-15.187-12.188-20-4.5185-3.40=
-31-9.8469-5.5846-14.656-8.5625z" clip-path=3D"url(#cg)" fill=3D"#838384" fi=
-lter=3D"url(#bs)"/>
-+     <path transform=3D"translate(-150 -58.362)" d=3D"m232.33 224.27c-2.32=
-13 2.1375-4.3331 4.6105-5.9534 7.3182-2.668 4.4585-4.239 9.4684-6.1781 14.2=
-89-1.4436 3.5889-3.1252 7.1931-3.3266 11.056-0.10346 1.9842 0.19056 3.9659 =
-0.25671 5.9516 0.0662 1.9858-0.11756 4.0511-1.0897 5.7839-0.81338 1.4499-2.=
-1659 2.589-3.733 3.144 2.1155 0.70686 4.0045 2.0755 5.3353 3.8654 1.1145 1.=
-499 1.8276 3.2537 2.7961 4.8509 0.78716 1.2982 1.7534 2.5012 2.9428 3.4446s=
-2.6114 1.6197 4.1173 1.8129c2.0662 0.26508 4.2357-0.42815 5.7654-1.8422-1.9=
-254-18.036-0.16195-36.457 5.1501-53.8 0.33544-1.0952 0.68725-2.1983 0.77034=
--3.3406 0.0831-1.1424-0.12896-2.3479-0.82414-3.2582-0.37014-0.48467-0.86838=
--0.87059-1.4302-1.1078-0.56182-0.2372-1.1859-0.32512-1.7914-0.25236-0.60549=
- 0.0727-1.191 0.306-1.6806 0.66954-0.48964 0.36355-0.88227 0.85651-1.1271 1=
-.4151h-2e-5" clip-path=3D"url(#cf)" fill=3D"#7c7c7c" filter=3D"url(#bl)" op=
-acity=3D".95"/>
-+    </g>
-+    <g>
-+     <path transform=3D"matrix(1.0269 0 0 1 157.69 -58.362)" d=3D"m86.056 =
-328.13c-0.45671 1.5492-1.1522 3.0458-2.0496 4.4109-1.9805 3.0124-4.8545 5.2=
-794-7.7268 7.3702-4.8989 3.5659-10.003 6.8378-14.563 10.89-3.0555 2.7151-5.=
-8411 5.7594-8.4228 8.9649-2.2079 2.7415-4.2839 5.6193-6.8009 8.0573-2.5396 =
-2.4599-5.5305 4.4468-8.7519 5.5293-3.918 1.3167-8.058 1.2533-11.832 0.25938=
--2.6448-0.69647-5.2236-1.907-6.8622-4.0969-1.6448-2.1983-2.1777-5.1522-2.36=
-8-8.0519-0.33651-5.1288 0.25967-10.37 0.8034-15.575 0.45167-4.3257 0.86825-=
-8.6548 1.0386-12.972 0.30984-7.852-0.19668-15.636-1.2319-23.273-0.17336-1.2=
-791-0.36202-2.5682-0.25656-3.8856 0.10519-1.3174 0.5354-2.6883 1.4362-3.705=
-3 0.83202-0.93937 1.9928-1.4957 3.1507-1.7689 1.1579-0.27325 2.3298-0.2898 =
-3.4927-0.3215 2.7402-0.0747 5.4965-0.24039 8.1952 6e-3 1.7028 0.15559 3.372=
-6 0.47459 5.0731 0.6427 2.8376 0.28052 5.7813 0.13286 8.6274-0.72369 3.064-=
-0.92215 5.9863-2.6516 9.0994-3.1274 1.2773-0.19521 2.559-0.17251 3.801 6e-3=
- 1.2675 0.18218 2.5284 0.54175 3.5024 1.336 0.74019 0.60362 1.2819 1.4328 1=
-.7058 2.3166 0.63144 1.3165 1.0192 2.7703 1.2412 4.2613 0.19663 1.3208 0.26=
-639 2.6802 0.59789 3.9574 0.54536 2.1012 1.7809 3.8865 3.2674 5.3396 1.4865=
- 1.4532 3.225 2.6024 4.9606 3.7341 1.7291 1.1274 3.4679 2.2468 5.3147 3.176=
-3 0.86675 0.43621 1.7575 0.83074 2.5861 1.3331 0.8286 0.50234 1.6007 1.1211=
- 2.1509 1.9355 0.74634 1.1047 1.0457 2.5527 0.82168 3.9747l2e-5 -1e-5" fill=
-=3D"url(#ai)" filter=3D"url(#bk)" opacity=3D".2"/>
-+     <path d=3D"m263.19 278.25c-2.6238 3.1148-6.268 5.1704-9.8965 7.0198-6=
-.1886 3.1544-12.602 5.9218-18.42 9.7165-3.898 2.5425-7.4959 5.5267-10.86 8.=
-7424-2.8772 2.7501-5.6058 5.6874-8.8325 8.0177-3.2557 2.3512-7.0192 4.0543-=
-10.991 4.6502-4.8303 0.72481-9.8213-0.21289-14.299-2.1642-3.1375-1.3673-6.1=
-557-3.3229-7.963-6.2293-1.8142-2.9175-2.2281-6.4881-2.2327-9.9238-8e-3 -6.0=
-767 1.1182-12.09 2.1785-18.073 0.88097-4.9718 1.7195-9.9548 2.2601-14.975 0=
-.98337-9.1312 0.9763-18.353 0.3199-27.513-0.10993-1.5342-0.23754-3.0832-8e-=
-3 -4.6041 0.22922-1.5209 0.85475-3.0367 2.0207-4.0399 1.077-0.9266 2.5209-1=
-.336 3.9395-1.4145 1.4185-0.0785 2.834 0.14655 4.2398 0.35197 3.3125 0.4840=
-5 6.6516 0.8649 9.8892 1.7166 2.0428 0.53738 4.0332 1.2592 6.0722 1.8108 3.=
-4026 0.92039 6.9664 1.3614 10.467 0.95192 3.7692-0.44089 7.4299-1.8568 11.2=
-24-1.7647 1.5566 0.0378 3.1015 0.33171 4.5865 0.79985 1.5154 0.47772 3.0091=
- 1.1618 4.1228 2.2951 0.84639 0.8613 1.4358 1.9454 1.8787 3.0688 0.65982 1.=
-6735 1.0149 3.457 1.167 5.2494 0.13475 1.5879 0.11343 3.1944 0.41433 4.7593=
- 0.49503 2.5746 1.8475 4.923 3.5285 6.9349s3.6898 3.7205 5.6964 5.4078c1.99=
-91 1.681 4.0106 3.3547 6.1671 4.8284 1.0121 0.69165 2.0564 1.3395 3.0174 2.=
-1006s1.8447 1.6468 2.4454 2.7154c0.81492 1.4494 1.0638 3.2077 0.53758 4.876=
-6-0.5262 1.6688-1.4816 3.2766-2.6706 4.6881z" fill=3D"url(#ah)"/>
-+     <path transform=3D"translate(-250 -58.362)" d=3D"m512.89 328.72c-0.61=
-724 1.5474-1.4897 2.9928-2.5715 4.2598-2.4025 2.814-5.7292 4.6544-9.0377 6.=
-311-5.653 2.8304-11.503 5.3176-16.821 8.7354-3.5536 2.2836-6.8408 4.9656-9.=
-9178 7.8596-2.6292 2.4727-5.125 5.116-8.0661 7.2081-2.9809 2.1204-6.4179 3.=
-6468-10.037 4.1806-4.4093 0.65041-8.9602-0.19314-13.058-1.9456-2.8572-1.221=
-8-5.6173-2.97-7.272-5.6003-1.6463-2.6169-2.0313-5.83-2.0389-8.9217-0.0135-5=
-.4647 1.0183-10.871 1.9894-16.248 0.80703-4.4688 1.5753-8.9482 2.064-13.463=
- 0.88853-8.2082 0.8481-16.498 0.29214-24.735-0.0931-1.3802-0.20023-2.7738 0=
-.0118-4.1408 0.21204-1.367 0.77803-2.7274 1.826-3.6304 0.9828-0.84687 2.303=
--1.218 3.5986-1.2859 1.2956-0.068 2.5874 0.14181 3.871 0.3307 3.0232 0.4449=
- 6.0724 0.77918 9.0311 1.5432 1.8654 0.48173 3.6837 1.1316 5.5453 1.628 3.1=
-095 0.82898 6.3623 1.2249 9.5591 0.8558 3.4413-0.39728 6.7866-1.6715 10.25-=
-1.5865 1.4206 0.0348 2.8305 0.30037 4.1885 0.71908 1.3818 0.42605 2.7491 1.=
-0345 3.7651 2.0634 0.76566 0.7754 1.2954 1.7535 1.7157 2.7589 0.62574 1.496=
-7 1.0326 3.0974 1.0658 4.7194 0.0347 1.6937-0.33552 3.3949-0.10594 5.0734 0=
-.18638 1.3626 0.7635 2.648 1.5006 3.8091 0.73713 1.1611 1.634 2.2109 2.5225=
- 3.2607 1.7173 2.029 3.4393 4.0967 5.5931 5.6546 2.4522 1.7736 5.3619 2.811=
-4 7.8951 4.4673 0.75511 0.49359 1.486 1.0522 2.0181 1.7806 0.8972 1.2281 1.=
-1387 2.9079 0.62379 4.339h2e-5" clip-path=3D"url(#cj)" fill=3D"#cd8907" fil=
-ter=3D"url(#bu)"/>
-+     <path transform=3D"matrix(1.143 0 0 1.2323 -319 -135.49)" d=3D"m508.7=
-9 327.93c-0.60151 1.2646-1.3822 2.4437-2.3113 3.4913-2.1534 2.4278-5.061 4.=
-0992-8.1235 5.1725-5.0417 1.767-10.546 2.0044-15.495 4.0162-3.0162 1.2261-5=
-.7306 3.0734-8.4791 4.8187-2.2217 1.4108-4.4925 2.7689-6.9321 3.7562-2.7555=
- 1.1152-5.6857 1.7405-8.6258 2.1786-1.8708 0.27876-3.7626 0.48423-5.6516 0.=
-38704-1.889-0.0972-3.7842-0.50735-5.4513-1.4009-1.264-0.6775-2.4013-1.6529-=
-3.076-2.9184-0.74956-1.4059-0.87959-3.056-0.86243-4.6492 0.0457-4.2459 1.02=
-56-8.4458 0.99617-12.692-0.0256-3.6961-0.81525-7.345-1.0423-11.034-0.43665-=
-7.0946 1.2047-14.313-0.23989-21.273-0.23125-1.1141-0.54212-2.2269-0.52701-3=
-.3646 8e-3 -0.56889 0.0988-1.141 0.31541-1.6671 0.21661-0.52609 0.56289-1.0=
-051 1.0246-1.3375 0.38878-0.27992 0.85044-0.45024 1.3234-0.52677 0.47292-0.=
-0765 0.95748-0.0616 1.4317 7e-3 0.94836 0.13656 1.8519 0.48215 2.7755 0.737=
-18 2.6419 0.72952 5.4325 0.71432 8.1175 1.2648 1.6853 0.34555 3.3168 0.9114=
-9 4.9844 1.3343 2.8003 0.70996 5.7201 1.0133 8.5921 0.70142 3.0885-0.33539 =
-6.1071-1.3753 9.2129-1.3003 1.273 0.0307 2.5374 0.25005 3.7648 0.58936 1.22=
-77 0.3394 2.4554 0.81951 3.3842 1.6911 0.6693 0.62809 1.1514 1.4307 1.5421 =
-2.2612 0.5703 1.212 0.96726 2.5285 0.95796 3.868-5e-3 0.6968-0.11899 1.3876=
--0.18672 2.0811-0.0677 0.69352-0.0878 1.4037 0.0914 2.077 0.18009 0.67656 0=
-.55415 1.2867 0.98269 1.8403 0.42854 0.55364 0.91471 1.06 1.3582 1.6018 1.2=
-42 1.5171 2.1296 3.2854 3.0972 4.9907 0.96764 1.7052 2.0523 3.3927 3.5804 4=
-.6212 2.0797 1.672 4.778 2.3402 7.0964 3.6614 0.67877 0.38682 1.3368 0.8408=
-2 1.814 1.4594 0.38231 0.49552 0.63762 1.0882 0.73509 1.7064 0.0975 0.61822=
- 0.0369 1.2607-0.1744 1.8498h9e-5" clip-path=3D"url(#ci)" fill=3D"#f5c021" =
-filter=3D"url(#bt)"/>
-+     <path d=3D"m187.31 230.29c3.2761-0.88704 6.0662 1.5972 8.4423 3.4723 =
-1.5353 1.3093 3.7535 0.97992 5.6366 1.0421 3.1207-0.11321 6.2254 0.52281 9.=
-3471 0.13577 6.1446-0.51932 12.168-2.0297 18.342-2.2898 2.9495-0.18579 6.25=
-99-0.35725 8.8081 1.3652 1.033 0.7155 2.547 3.7414 3.5665 2.6049-0.42031-3.=
-1782-2.7775-6.2559-5.9391-7.1022-2.4749-0.38942-4.9898 0.29134-7.4895 0.071=
-1-7.4229-0.17706-14.793-1.5554-22.234-1.1602-5.1764 0.0448-10.347-0.19501-1=
-5.515-0.39662-2.0306-0.41489-2.7467 1.389-3.8489 2.0808" clip-path=3D"url(#=
-ch)" fill=3D"url(#ag)" filter=3D"url(#bd)"/>
-+    </g>
-+    <g>
-+     <path d=3D"m57.577 222.66c1.5993-0.66295 3.3982-0.78361 5.1007-0.4696=
-3 1.7025 0.31398 3.3114 1.0495 4.7434 2.0224 2.864 1.9458 4.9882 4.7777 7.0=
-226 7.5795 4.6719 6.4341 9.1687 13.002 13.245 19.829 3.3064 5.5377 6.3435 1=
-1.257 10.164 16.453 2.494 3.3919 5.3066 6.5395 7.813 9.9222 2.5064 3.3827 4=
-.7279 7.0559 5.8393 11.117 1.4441 5.2765 0.88463 11.093-1.6267 15.953-1.766=
-6 3.419-4.4765 6.3523-7.7724 8.339-3.296 1.9867-7.1706 3.0144-11.016 2.8702=
--6.1141-0.2293-11.699-3.2852-17.384-5.5491-11.581-4.6125-24.16-6.0594-36.09=
-7-9.6517-3.6686-1.104-7.2758-2.4107-10.97-3.4263-1.6412-0.45122-3.3087-0.84=
-82-4.8588-1.5514-1.5501-0.70325-2.9995-1.7491-3.8617-3.2168-0.66639-1.1344-=
-0.94839-2.47-0.93019-3.7855 0.0182-1.3155 0.32589-2.6145 0.77382-3.8516 0.8=
-9585-2.4741 2.3433-4.7137 3.3202-7.157 1.5951-3.9894 1.8817-8.3884 1.6666-1=
-2.679-0.21511-4.291-0.91078-8.5448-1.2045-12.831-0.13118-1.9141-0.18066-3.8=
-526 0.18479-5.736 0.36545-1.8834 1.1758-3.7246 2.5577-5.0554 1.2741-1.2269 =
-2.9649-1.9553 4.6964-2.3165s3.5153-0.37747 5.2837-0.33762c1.7683 0.0399 3.5=
-407 0.13425 5.3035-0.0106 1.7628-0.14488 3.5335-0.54055 5.0691-1.4183 1.46-=
-0.83447 2.6543-2.0745 3.6437-3.4342 0.9894-1.3597 1.7891-2.8457 2.6089-4.31=
-4 0.81983-1.4682 1.6683-2.9315 2.7416-4.2261 1.0732-1.2946 2.3892-2.423 3.9=
-427-3.067" fill=3D"url(#ae)"/>
-+     <path transform=3D"translate(160 -57.362)" d=3D"m-99.89 282.78c1.4552=
--0.58619 3.0942-0.65064 4.6227-0.30406 1.5285 0.34657 2.9496 1.0902 4.1884 =
-2.047 2.4776 1.9137 4.1998 4.6138 5.8542 7.2686 3.9701 6.4331 7.8514 12.934=
- 11.516 19.567 2.7769 4.9932 5.4247 10.093 8.8375 14.679 2.2638 3.0415 4.84=
-74 5.8314 7.1579 8.8368 2.3105 3.0054 4.3713 6.2821 5.3928 9.9335 1.3163 4.=
-7058 0.78265 9.91-1.4954 14.233-1.6376 3.1058-4.152 5.7464-7.1861 7.5126-3.=
-0341 1.7662-6.5792 2.6492-10.087 2.4879-5.5983-0.25772-10.711-3.0535-15.981=
--4.9507-10.103-3.6657-21.053-4.1575-31.416-7.02-3.7148-1.0083-7.3366-2.3528=
--11.07-3.294-1.6516-0.41658-3.333-0.75712-4.9022-1.4193-1.5691-0.66219-3.04=
-68-1.6887-3.8975-3.1647-0.63282-1.0972-0.88561-2.3884-0.84651-3.6542 0.0391=
--1.2658 0.35915-2.5104 0.80992-3.6939 0.90155-2.367 2.3202-4.5103 3.2291-6.=
-8746 1.3787-3.5742 1.5499-7.5041 1.294-11.326s-0.9211-7.6095-1.1533-11.434c=
--0.10374-1.709-0.11933-3.439 0.22634-5.1158 0.34564-1.6768 1.0761-3.3097 2.=
-2949-4.512 1.3209-1.309 3.1412-2.0241 4.9773-2.3043 1.8361-0.28013 3.706-0.=
-15808 5.5548 7e-3 1.8488 0.16495 3.705 0.37271 5.5611 0.26163 1.8561-0.1110=
-9 3.7357-0.56331 5.2689-1.6069 1.3974-0.94461 2.4458-2.3241 3.2444-3.7984 0=
-.79856-1.4744 1.3676-3.0554 1.9764-4.6166 0.60885-1.5611 1.2667-3.1219 2.22=
-18-4.5097 0.95509-1.3878 2.2361-2.6047 3.8057-3.2347" clip-path=3D"url(#ck)=
-" fill=3D"#d99a03" filter=3D"url(#bw)"/>
-+     <path transform=3D"matrix(1 0 0 .98205 -80 -54.403)" d=3D"m138.75 281=
-.24c1.4091-0.7122 3.0706-0.85812 4.6164-0.53681 1.5458 0.3213 2.9782 1.0906=
- 4.1957 2.0958 2.435 2.0104 3.9803 4.8747 5.4194 7.6854 3.3049 6.4547 6.383=
-4 13.05 10.338 19.128 2.8688 4.4095 6.1796 8.517 9.0816 12.905 3.9356 5.950=
-7 7.1358 12.496 8.4564 19.507 0.88822 4.7157 0.85899 9.8096-1.3724 14.058-1=
-.4687 2.7961-3.85 5.0899-6.6634 6.5252-2.8134 1.4353-6.0432 2.017-9.1889 1.=
-7344-4.9542-0.44507-9.4537-2.9251-14.117-4.6548-8.2747-3.0688-17.218-3.8032=
--25.734-6.1187-3.592-0.9766-7.11-2.2352-10.751-3.0096-1.6062-0.34163-3.2436=
--0.59125-4.7768-1.1794-1.5331-0.58818-2.9862-1.5658-3.7696-3.0089-0.55139-1=
-.0157-0.73656-2.2046-0.65433-3.3574 0.0822-1.1528 0.42084-2.2749 0.86462-3.=
-342 0.88755-2.1343 2.2009-4.0894 2.8904-6.2956 1.0132-3.2421 0.59672-6.7572=
--0.1636-10.068-0.76031-3.3106-1.8567-6.5613-2.1945-9.9412-0.15046-1.5054-0.=
-14681-3.0399 0.19136-4.5146 0.33818-1.4746 1.0269-2.8918 2.1086-3.9496 1.39=
-32-1.3624 3.3437-2.04 5.2832-2.2292 1.9394-0.18927 3.8922 0.0689 5.8203 0.3=
-512 1.9281 0.28227 3.8682 0.59003 5.8148 0.49986 1.9466-0.0902 3.9285-0.610=
-81 5.4532-1.8243 1.5078-1.2001 2.4558-2.9871 2.9994-4.836 0.54362-1.8488 0.=
-71997-3.7819 0.94267-5.6961s0.50044-3.8462 1.2297-5.63c0.72928-1.7838 1.960=
-9-3.4281 3.6808-4.2974" clip-path=3D"url(#cl)" fill=3D"#f5bd0c" filter=3D"u=
-rl(#bx)"/>
-+     <path d=3D"m76.407 237.61c2.6062 4.7134 4.1958 10.122 6.7812 14.875 2=
-.3781 4.3722 5.0845 8.8738 7.5 12.906 1.0754 1.7953 3.5833 4.5546 6.119 8.8=
-373 2.2977 3.8808 4.6183 9.2972 5.9166 11.116-0.74552-2.1288-2.2793-7.8466-=
-4.1088-11.923-1.7096-3.8088-3.6998-5.9822-4.9268-8.0306-2.4155-4.0325-5.016=
-9-7.6565-7.5-11.5-3.4252-5.3018-6.0356-11.235-9.7812-16.281z" fill=3D"url(#=
-ad)" filter=3D"url(#bv)"/>
-+    </g>
-+    <g>
-+     <path d=3D"m231.48 237.28c-0.56258-1.102-1.5869-1.9258-2.7287-2.4025-=
-1.1418-0.47667-2.3969-0.6289-3.6342-0.61936-2.4745 0.0191-4.9346 0.66357-7.=
-4 0.45028-2.0826-0.18018-4.0588-0.96301-6.0898-1.4574-2.0973-0.51049-4.3219=
--0.70969-6.4046-0.14297-2.226 0.60568-4.1894 2.0936-5.4192 4.0454-1.0843 1.=
-7209-1.5991 3.7527-1.7611 5.7803s0.013 4.0658 0.21815 6.0894c0.1484 1.4636 =
-0.31354 2.9308 0.66764 4.3587 0.35411 1.4279 0.90422 2.8228 1.7661 4.0151 1=
-.2407 1.7163 3.0834 2.9395 5.0694 3.675 3.2418 1.2005 6.9338 1.136 10.132-0=
-.17718 5.6588-2.457 10.449-6.8639 13.369-12.299 1.0454-1.946 1.8574-4.0193 =
-2.3819-6.1651 0.20845-0.85283 0.37215-1.7224 0.37977-2.6003 8e-3 -0.8779-0.=
-14655-1.7688-0.54573-2.5507" fill=3D"url(#p)" filter=3D"url(#bo)" opacity=
-=3D".35"/>
-+     <path transform=3D"matrix(1 0 0 .72293 160 20.396)" d=3D"m71.484 295.=
-64c-0.56258-1.102-1.5869-1.9258-2.7287-2.4025-1.1418-0.47667-2.3969-0.6289-=
-3.6342-0.61936-2.4745 0.0191-4.9346 0.66357-7.4 0.45028-2.0826-0.18018-4.05=
-87-0.96301-6.0898-1.4574-2.0973-0.51049-4.3219-0.70969-6.4046-0.14297-2.226=
- 0.60568-4.1894 2.0936-5.4192 4.0454-1.0843 1.7209-1.5991 3.7527-1.7611 5.7=
-803-0.16202 2.0275 0.01297 4.0658 0.21815 6.0894 0.1484 1.4636 0.31354 2.93=
-08 0.66764 4.3587 0.3541 1.4279 0.90422 2.8228 1.7661 4.0151 1.2407 1.7163 =
-3.0834 2.9395 5.0694 3.675 3.2418 1.2005 6.9338 1.136 10.132-0.17718 5.6589=
--2.457 10.449-6.8639 13.369-12.299 1.0454-1.946 1.8574-4.0193 2.3819-6.1651=
- 0.20845-0.85283 0.37215-1.7224 0.37978-2.6003 0.0076-0.8779-0.14656-1.7688=
--0.54574-2.5507" fill=3D"url(#o)" filter=3D"url(#bn)" opacity=3D".35"/>
-+     <path transform=3D"translate(160 -58.362)" d=3D"m76.188 285.33c-0.405=
-16-1.1037-1.1184-2.0816-1.9907-2.8699-0.87226-0.78832-1.9005-1.3923-2.9828-=
-1.8516-2.1646-0.91852-4.5205-1.2615-6.8315-1.6956-2.1792-0.40931-4.3418-0.9=
-0631-6.5278-1.2773-2.2714-0.38551-4.6179-0.63213-6.8653-0.1253-1.9658 0.443=
-33-3.7845 1.4588-5.2717 2.8186-1.4872 1.3598-2.6491 3.0564-3.485 4.8901-1.4=
-722 3.2295-1.9345 6.865-1.6539 10.403 0.20882 2.6332 0.87532 5.3459 2.6088 =
-7.3391 1.4007 1.6105 3.3873 2.6153 5.434 3.2209 3.525 1.0432 7.3666 0.98822=
- 10.86-0.1553 5.7669-1.9311 10.876-5.7739 14.33-10.779 1.1386-1.6496 2.1122=
--3.4481 2.5532-5.4034 0.33597-1.4896 0.34831-3.0811-0.1779-4.5146" fill=3D"=
-#020204"/>
-+     <path transform=3D"translate(-150 -58.362)" d=3D"m362.22 276.46c-0.54=
-933 0.0306-1.0814 0.0909-1.625 0.1875-3.4695 0.61686-6.647 2.8086-8.4375 5.=
-8438-1.264 2.1427-1.8398 4.6763-1.6562 7.1562 0.0732-1.7416 0.52946-3.4468 =
-1.375-4.9688 1.4344-2.5818 4.0324-4.5298 6.9375-5.0625 1.7898-0.32819 3.631=
-8-0.13095 5.4375 0.0937 1.7326 0.2156 3.4812 0.44287 5.1875 0.8125 2.641 0.=
-57209 5.2543 1.4514 7.4688 3 0.51646 0.36118 0.99955 0.76857 1.4062 1.25 0.=
-40669 0.48143 0.72188 1.0379 0.84375 1.6562 0.17824 0.90428-0.0794 1.853-0.=
-53125 2.6562-0.45189 0.8033-1.0649 1.5066-1.7188 2.1562-0.52923 0.5258-1.09=
-48 1.0342-1.6562 1.5312 2.559-0.49571 5.152-1.1977 7.2812-2.6875 0.89975-0.=
-62955 1.7152-1.3846 2.25-2.3438 0.53477-0.95912 0.76245-2.1212 0.5-3.1875-0=
-.17714-0.71971-0.57137-1.3824-1.0625-1.9375-0.49114-0.55511-1.0805-1.0122-1=
-.6875-1.4375-2.6788-1.877-5.8149-3.0785-9.0625-3.4688-2.0815-0.38286-4.1812=
--0.70597-6.2812-0.96875-1.6434-0.20564-3.3208-0.37313-4.9688-0.28125z" clip=
--path=3D"url(#ce)" fill=3D"url(#n)" filter=3D"url(#bp)"/>
-+     <path transform=3D"translate(-150 -58.362)" d=3D"m362.22 276.46c-0.54=
-933 0.0306-1.0814 0.0909-1.625 0.1875-3.4695 0.61686-6.647 2.8086-8.4375 5.=
-8438-1.264 2.1427-1.8398 4.6763-1.6562 7.1562 0.0732-1.7416 0.52946-3.4468 =
-1.375-4.9688 1.4344-2.5818 4.0324-4.5298 6.9375-5.0625 1.7898-0.32819 3.631=
-8-0.13095 5.4375 0.0937 1.7326 0.2156 3.4812 0.44287 5.1875 0.8125 2.641 0.=
-57209 5.2543 1.4514 7.4688 3 0.51646 0.36118 0.99955 0.76857 1.4062 1.25 0.=
-40669 0.48143 0.72188 1.0379 0.84375 1.6562 0.17824 0.90428-0.0794 1.853-0.=
-53125 2.6562-0.45189 0.8033-1.0649 1.5066-1.7188 2.1562-0.52923 0.5258-1.09=
-48 1.0342-1.6562 1.5312 2.559-0.49571 5.152-1.1977 7.2812-2.6875 0.89975-0.=
-62955 1.7152-1.3846 2.25-2.3438 0.53477-0.95912 0.76245-2.1212 0.5-3.1875-0=
-.17714-0.71971-0.57137-1.3824-1.0625-1.9375-0.49114-0.55511-1.0805-1.0122-1=
-.6875-1.4375-2.6788-1.877-5.8149-3.0785-9.0625-3.4688-2.0815-0.38286-4.1812=
--0.70597-6.2812-0.96875-1.6434-0.20564-3.3208-0.37313-4.9688-0.28125z" clip=
--path=3D"url(#cd)" fill=3D"url(#af)" filter=3D"url(#bq)"/>
-+    </g>
-+    <g>
-+     <g>
-+      <path transform=3D"translate(139 -49.362)" d=3D"m-24.768 113.36c-1.7=
-81 0.097-3.4846 0.91899-4.7879 2.1367-1.3032 1.2177-2.2214 2.8118-2.7862 4.=
-5036-1.1296 3.3836-0.87548 7.0518-0.6187 10.61 0.23251 3.2216 0.4704 6.5053=
- 1.6768 9.5016 0.60319 1.4981 1.4502 2.9102 2.5803 4.064s2.5517 2.0419 4.11=
-83 2.4345c1.4688 0.36809 3.0382 0.29183 4.4828-0.16209 1.4446-0.45392 2.763=
-9-1.2789 3.8462-2.3379 1.579-1.5451 2.6433-3.5662 3.2534-5.6895 0.61019-2.1=
-233 0.78416-4.3516 0.7524-6.5605-0.03974-2.7644-0.40091-5.5385-1.2658-8.164=
-4s-2.2457-5.1033-4.1728-7.0856c-0.93331-0.96009-1.9978-1.8051-3.1986-2.3975=
--1.2008-0.59233-2.5434-0.92535-3.8804-0.85253" fill=3D"url(#z)"/>
-+      <g>
-+       <path transform=3D"translate(-50 -58.362)" d=3D"m159.94 137.11c-0.3=
-7211 2.2457-0.38563 4.602 0.3864 6.7434 0.50979 1.414 1.3504 2.6969 2.3722 =
-3.7994 0.66903 0.72184 1.4282 1.3778 2.3158 1.8032s1.9158 0.60638 2.8704 0.=
-36671c0.88113-0.22123 1.6516-0.78859 2.2201-1.4972 0.56856-0.70857 0.9476-1=
-.553 1.2177-2.4203 0.7974-2.5608 0.66926-5.3616-0.12241-7.9242-0.5768-1.867=
--1.5321-3.6679-3.0266-4.9268-0.71307-0.60061-1.5477-1.0712-2.4548-1.2866-0.=
-90707-0.2155-1.8887-0.16505-2.7375 0.22063-0.9423 0.42817-1.6716 1.243-2.14=
-91 2.1613-0.47749 0.91829-0.72288 1.9394-0.89207 2.9605" fill=3D"#020204"/>
-+       <path d=3D"m114.69 77.125c0.24185 0.6337 1.0542 0.86381 1.5 1.375 0=
-.43302 0.49651 0.88735 1.0106 1.125 1.625 0.4549 1.1762-0.4488 2.9193 0.5 3=
-.75 0.29782 0.26075 0.89472 0.26639 1.1875 0 1.1454-1.0422 0.89094-3.1443 0=
-.4375-4.625-0.4115-1.3437-1.4275-2.6164-2.6792-3.2551-0.57882-0.29536-1.450=
-8-0.54089-1.9458-0.11988-0.31898 0.2713-0.27431 0.85878-0.125 1.25z" fill=
-=3D"url(#al)" filter=3D"url(#aw)"/>
-+      </g>
-+      <path transform=3D"translate(60 -58.362)" d=3D"m50.392 129.53c2.6854=
--1.5993 5.9551-1.9703 9.0667-1.6756 3.1116 0.29468 6.1254 1.2085 9.1413 2.0=
-292 2.2116 0.60188 4.4516 1.1615 6.5253 2.1378 2.0737 0.97627 3.9999 2.4157=
- 5.1419 4.403 0.18319 0.31877 0.34526 0.6497 0.53925 0.96201 0.194 0.31232 =
-0.42311 0.60867 0.71646 0.83031s0.65699 0.3643 1.0241 0.34424c0.18356-0.01 =
-0.36561-0.0609 0.52418-0.15388 0.15856-0.093 0.29294-0.22871 0.37799-0.3916=
-9 0.09778-0.18739 0.12808-0.40446 0.11714-0.61554s-0.06122-0.41805-0.11714-=
-0.62189c-0.7552-2.753-2.535-5.0883-3.8891-7.6014-0.8126-1.5081-1.477-3.0927=
--2.2981-4.5962-2.8183-5.1602-7.4436-9.2156-12.701-11.847-5.2578-2.6317-11.1=
-27-3.8961-16.997-4.2393-6.8012-0.39768-13.62 0.40945-20.329 1.591-2.9086 0.=
-5122-5.8608 1.1151-8.4357 2.5616-1.2874 0.72322-2.4675 1.6566-3.3885 2.8109=
-s-1.5765 2.5352-1.7876 3.9967c-0.20352 1.4086 0.0088 2.8606 0.5013 4.1958 0=
-.49248 1.3352 1.2582 2.5585 2.1565 3.6624 1.7966 2.2077 4.1007 3.9336 6.222=
-4 5.8309 2.1213 1.8969 4.09 3.992 6.4629 5.5628 1.1865 0.78539 2.4727 1.435=
- 3.8434 1.8167 1.3707 0.38166 2.8299 0.48917 4.2238 0.20358 1.445-0.29606 2=
-.7827-1.005 3.9536-1.902 1.1709-0.89697 2.1861-1.9801 3.1484-3.0979 1.9246-=
-2.2358 3.7225-4.6865 6.2571-6.196" clip-path=3D"url(#cb)" fill=3D"url(#t)"/>
-+      <path transform=3D"translate(160 -57.362)" d=3D"m-38.438 119.38c2.50=
-37 2.3453 4.365 5.2397 5.625 8.3094-0.55066-3.3847-1.4234-6.1037-3.625-8.30=
-94-1.3513-1.2658-2.8864-2.3778-4.625-3.1587-1.5213-0.68334-3.2136-1.1079-4.=
-1808-1.1255-0.96723-0.0176-1.2022 4e-3 -1.4009 0.0134-0.19874 9e-3 -0.35739=
- 0.0162 0.27185 0.0877s2.0337 0.45118 3.5411 1.1283c1.5074 0.6771 3.0425 1.=
-789 4.3938 3.0548z" fill=3D"url(#am)" filter=3D"url(#ax)"/>
-+     </g>
-+     <path transform=3D"translate(139 -49.362)" d=3D"m6.75 113.36c-2.7804 =
-1.9102-5.1106 4.5749-6.25 7.75-1.436 4.0016-0.88584 8.4807 0.5 12.5 1.4195 =
-4.1169 3.7938 8.041 7.3793 10.512 1.7928 1.2357 3.8681 2.083 6.0304 2.3386s=
-4.4093-0.0949 6.3403-1.1009c2.3531-1.226 4.1478-3.3728 5.2622-5.7808s1.5888=
--5.0701 1.7378-7.7192c0.18989-3.3755-0.14047-6.8065-1.25-10-1.2053-3.4691-3=
-.3901-6.6706-6.4728-8.6666-1.5414-0.99803-3.2919-1.6836-5.1109-1.9352-1.818=
-9-0.25158-3.7048-0.0633-5.4164 0.60175-0.97547 0.37901-1.8874 0.9074-2.75 1=
-.5" fill=3D"url(#y)"/>
-+     <g>
-+      <path transform=3D"translate(-150 -58.362)" d=3D"m302.16 130.76c-1.0=
-455 0.0749-2.0644 0.4318-2.9514 0.99028-0.88699 0.55848-1.6433 1.3152-2.237=
- 2.179-1.1875 1.7276-1.7089 3.8468-1.793 5.9414-0.0631 1.5723 0.11098 3.165=
-1 0.63245 4.6498s1.4009 2.8588 2.6128 3.8625c1.2401 1.0271 2.8165 1.6436 4.=
-4248 1.7209s3.2395-0.38665 4.561-1.3066c1.0529-0.73292 1.9021-1.7417 2.5067=
--2.8732 0.60455-1.1315 0.96879-2.3835 1.1353-3.6555 0.29411-2.2468-0.0385-4=
-.593-1.0769-6.607-1.0384-2.014-2.8005-3.6727-4.9267-4.4561-0.92093-0.3393-1=
-.9091-0.51576-2.888-0.44563" fill=3D"#020204"/>
-+      <path d=3D"m154.66 79.25c-0.86591 0.34162-2.2366 0.12677-2.6162 0.97=
-67-0.22493 0.50357 0.0927 1.3325 0.60343 1.5406 1.0324 0.42063 2.6319-0.341=
-11 3.0488-1.3751 0.18104-0.4491-0.0934-1.161-0.53974-1.3486-0.16515-0.0694-=
-0.32958 0.14069-0.49623 0.20644z" fill=3D"#141413" filter=3D"url(#ba)"/>
-+      <path d=3D"m158.62 81.5c1.1611-1.1611-0.82613-4.2395-2.375-5.5-1.121=
-8-0.91296-4.3906-1.8685-4.25-0.875s1.6099 2.2665 2.5947 3.2374c1.2124 1.195=
-3 3.4789 3.689 4.0303 3.1376z" fill=3D"url(#ap)" filter=3D"url(#az)"/>
-+     </g>
-+     <path transform=3D"translate(60 -58.362)" d=3D"m75.25 132.49c2.3837-1=
-.9801 5.1609-3.4847 8.1215-4.4001 6.0856-1.8815 13-1.1371 18.378 2.2751 1.8=
-571 1.1781 3.5124 2.6419 5.2394 4.0037 1.7269 1.3618 3.5612 2.6412 5.6356 3=
-.3713 1.1209 0.39448 2.3182 0.62345 3.5 0.5 1.0677-0.11153 2.0993-0.5118 2.=
-9844-1.1192 0.88515-0.60736 1.6248-1.4185 2.1806-2.3369 1.1118-1.8367 1.47-=
-4.0646 1.2784-6.203-0.38324-4.2768-2.7956-8.0534-4.8185-11.841-0.63342-1.18=
-6-1.2364-2.3933-2-3.5-2.3433-3.3962-6.0731-5.6356-9.985-6.9479-3.9118-1.312=
-3-8.0463-1.7864-12.14-2.3021-1.8257-0.22998-3.673-0.46998-5.5-0.25-2.0998 0=
-.25283-4.076 1.101-6.125 1.625-0.97265 0.24874-1.9637 0.42478-2.928 0.70391=
--0.96437 0.27912-1.913 0.669-2.697 1.2961-1.1448 0.91567-1.8651 2.2909-2.17=
-65 3.7234-0.31145 1.4325-0.24052 2.9244-0.01161 4.3724 0.45781 2.896 1.5409=
- 5.7241 1.4381 8.6542-0.07058 2.0123-0.70229 3.988-0.625 6 0.02266 0.58987 =
-0.10659 1.1774 0.25 1.75" clip-path=3D"url(#cc)" fill=3D"url(#ao)"/>
-+     <path transform=3D"translate(160 -57.362)" d=3D"m-4.5939 113.12c-0.47=
-695 0.59985-0.90798 1.2523-1.25 1.9688 2.1464 0.46247 4.1991 1.3458 6.0312 =
-2.5625 3.5451 2.3543 6.237 5.7965 8.125 9.625 0.44076-0.48807 0.84202-1.011=
-8 1.1875-1.5938-1.8975-3.9878-4.6438-7.5949-8.3125-10.031-1.7623-1.1704-3.7=
-246-2.0537-5.7812-2.5312z" fill=3D"url(#an)" filter=3D"url(#ay)"/>
-+    </g>
-+    <g>
-+     <path transform=3D"translate(139 -49.362)" d=3D"m-16.399 136.86c1.767=
-4-1.9866 2.9762-4.4105 4.6741-6.4568 0.84898-1.0231 1.8284-1.9553 2.9817-2.=
-6168 1.1533-0.66147 2.492-1.0411 3.8165-0.9264 1.4745 0.12769 2.8545 0.8622=
-8 3.9341 1.8747 1.0795 1.0124 1.8798 2.2903 2.5186 3.6253 0.61174 1.2783 1.=
-0978 2.6403 1.9791 3.75 0.94033 1.184 2.2595 1.9922 3.4511 2.9229 0.59578 0=
-.46535 1.1675 0.96911 1.6384 1.5605 0.47092 0.59139 0.83961 1.276 0.99099 2=
-.0166 0.15372 0.75214 0.077153 1.5451-0.18518 2.2665-0.26233 0.72148-0.7067=
- 1.3717-1.2596 1.9043-1.1059 1.0651-2.6136 1.6396-4.1338 1.8547-3.0405 0.43=
-016-6.1147-0.47583-9.1842-0.39142-3.1069 0.0854-6.1416 1.1837-9.2475 1.0701=
--1.553-0.0568-3.1281-0.43624-4.4043-1.323-0.63809-0.44339-1.194-1.0106-1.59=
-58-1.6756-0.40182-0.66505-0.64669-1.4289-0.67286-2.2055-0.02497-0.74092 0.1=
-4804-1.4809 0.44408-2.1606 0.29603-0.67967 0.71268-1.3018 1.1821-1.8755 0.9=
-3888-1.1475 2.087-2.1062 3.0725-3.2139" fill=3D"url(#x)"/>
-+     <g>
-+      <path transform=3D"translate(60 -58.362)" d=3D"m45.752 165.03c0.0614=
-6 0.29539 0.17251 0.58039 0.32709 0.8395 0.26568 0.44533 0.65394 0.80631 1.=
-0733 1.1114s0.8728 0.55947 1.3118 0.83545c2.3336 1.467 4.2354 3.529 5.9247 =
-5.7071 2.2665 2.9222 4.2719 6.1649 7.2993 8.2889 2.1378 1.4998 4.6957 2.355=
- 7.2941 2.6161 3.0513 0.30656 6.1399-0.18595 9.0817-1.052 2.7264-0.80267 5.=
-3631-1.9296 7.7822-3.4214 4.5985-2.8359 8.4392-6.9927 13.51-8.8571 1.107-0.=
-40702 2.2592-0.69819 3.3265-1.2003 1.0673-0.50207 2.0714-1.254 2.5811-2.317=
-7 0.48998-1.0224 0.47097-2.2025 0.63053-3.325 0.1707-1.2008 0.55374-2.3618 =
-0.76385-3.5564 0.2101-1.1946 0.23517-2.4723-0.28138-3.5698-0.42775-0.90878-=
-1.2054-1.6279-2.0998-2.0848-0.89448-0.4569-1.9011-0.66447-2.9043-0.71372-2.=
-0064-0.0985-3.9876 0.41519-5.9881 0.59785-2.6495 0.24193-5.3179-0.0982-7.97=
-72-0.019-3.3083 0.0986-6.5684 0.84468-9.8743 1.005-3.7715 0.18294-7.5347-0.=
-39851-11.308-0.55139-1.6341-0.0662-3.28-0.0512-4.8918 0.22531-1.6119 0.2765=
-4-3.1952 0.82363-4.541 1.7529-1.3114 0.90553-2.3559 2.1402-3.5602 3.184-0.6=
-0214 0.52192-1.2495 0.99929-1.9663 1.3474-0.71678 0.34812-1.5075 0.564-2.30=
-42 0.54708-0.4096-9e-3 -0.83086-0.0769-1.2213 0.0472-0.24392 0.0775-0.46048=
- 0.22705-0.64353 0.40593s-0.33479 0.38705-0.4778 0.59931c-0.33254 0.49356-0=
-.62307 1.0154-0.86742 1.5581" fill=3D"url(#w)"/>
-+      <path transform=3D"translate(60 -58.362)" d=3D"m60.557 169.1c-0.3864=
-6 1.596-0.15199 3.3341 0.64359 4.7707s2.1444 2.5575 3.7023 3.0768c1.9778 0.=
-65919 4.2066 0.33635 6.0548-0.62813 1.0714-0.55909 2.0512-1.3459 2.6694-2.3=
-842 0.3091-0.51918 0.52398-1.0971 0.60452-1.6959 0.08054-0.59884 0.02471-1.=
-2185-0.18489-1.7852-0.22972-0.62112-0.64026-1.1685-1.1461-1.596-0.50579-0.4=
-2748-1.1047-0.7378-1.7334-0.94568-1.2575-0.41575-2.6109-0.42405-3.9339-0.36=
-051-2.0052 0.0963-4.0029 0.34837-5.9692 0.75318" fill=3D"#d9b30d" filter=3D=
-"url(#bc)"/>
-+      <path transform=3D"translate(60 -58.362)" d=3D"m54.066 156.68c-1.339=
- 0.79147-2.6286 1.6637-3.8975 2.5632-0.6567 0.46551-1.3342 0.96895-1.6806 1=
-.6956-0.2455 0.51498-0.30177 1.099-0.30959 1.6695-0.0078 0.57045 0.02884 1.=
-144-0.04618 1.7095-0.05124 0.38625-0.15433 0.76619-0.17154 1.1554-0.0086 0.=
-19463 0.0047 0.39145 0.05602 0.57938 0.05134 0.18793 0.1419 0.36704 0.27548=
- 0.50885 0.17256 0.18318 0.40793 0.29591 0.64865 0.36931s0.49064 0.1112 0.7=
-3562 0.16878c1.1747 0.27611 2.1969 0.99676 3.0941 1.8037s1.7029 1.7149 2.63=
-89 2.4764c2.5373 2.0645 5.8905 2.9187 9.1611 2.9725 3.2706 0.0538 6.5042-0.=
-63066 9.6953-1.3495 2.5063-0.56456 5.015-1.1547 7.4254-2.0436 3.7028-1.3654=
- 7.1407-3.4317 10.118-6.0219 1.35-1.1744 2.6172-2.4636 4.1325-3.4152 1.3409=
--0.84211 2.8426-1.398 4.2063-2.2026 0.12193-0.072 0.24321-0.14621 0.35213-0=
-.23665 0.10893-0.0905 0.20574-0.1981 0.26892-0.3248 0.10917-0.21894 0.10937=
--0.48123 0.0389-0.71552-0.0704-0.23429-0.20633-0.44389-0.36-0.63425-0.16999=
--0.21058-0.36336-0.40158-0.56895-0.57756-1.4244-1.2192-3.3568-1.6624-5.2258=
--1.8107-1.8691-0.14822-3.7607-0.0434-5.61-0.35238-1.7386-0.29048-3.3933-0.9=
-3881-5.0718-1.4773-1.7619-0.56527-3.5628-1.0125-5.389-1.3104-4.2948-0.70063=
--8.7173-0.56641-12.977 0.32063-4.0577 0.84488-7.9713 2.3706-11.539 4.4796" =
-fill=3D"#604405" filter=3D"url(#bi)"/>
-+      <path transform=3D"translate(60 -58.362)" d=3D"m53.639 152.15c-1.929=
-4 1.2986-3.6661 2.8829-5.136 4.6852-0.8407 1.0308-1.6037 2.1508-2.0271 3.41=
-18-0.333 0.99185-0.44648 2.0415-0.65633 3.0665-0.07861 0.38398-0.17139 0.76=
-923-0.16974 1.1612 8.22e-4 0.19597 0.02568 0.39281 0.08646 0.57912 0.06079 =
-0.18631 0.15831 0.36204 0.29407 0.50337 0.22468 0.23391 0.54041 0.36101 0.8=
-581 0.42632 0.31769 0.0653 0.6438 0.0751 0.96606 0.11177 1.4546 0.16535 2.7=
-945 0.87199 4.0003 1.7022 1.2059 0.83017 2.3171 1.7954 3.5544 2.578 2.7339 =
-1.729 5.9946 2.4983 9.2269 2.6228 3.2323 0.12456 6.4574-0.36641 9.6295-0.99=
-977 2.5209-0.50334 5.0339-1.1007 7.4254-2.0436 3.6624-1.4439 6.9635-3.6669 =
-10.118-6.0219 1.433-1.0698 2.846-2.1732 4.1325-3.4152 0.43668-0.42159 0.859=
-16-0.85947 1.3276-1.2455 0.4684-0.38603 0.98816-0.72177 1.566-0.90766 0.880=
-77-0.28336 1.8356-0.20203 2.7482-0.0495 0.68732 0.11488 1.376 0.26902 2.072=
-3 0.24128 0.34815-0.0139 0.69661-0.0742 1.0201-0.2037 0.32345-0.12954 0.621=
-55-0.33028 0.8433-0.59903 0.29139-0.35317 0.43996-0.81445 0.4416-1.2723 2e-=
-3 -0.45786-0.1387-0.91095-0.37105-1.3055-0.4647-0.78905-1.2682-1.3231-2.105=
--1.695-1.1461-0.50941-2.3863-0.76136-3.6055-1.0557-3.7453-0.90427-7.3848-2.=
-2406-10.836-3.9538-1.7156-0.85173-3.3836-1.7956-5.0718-2.7004-1.7356-0.9302=
-1-3.5046-1.8242-5.389-2.3954-4.2133-1.2771-8.8185-0.85829-12.977 0.58609-4.=
-6199 1.6045-8.7974 4.4631-11.966 8.1883v2e-5" fill=3D"url(#ak)"/>
-+      <path transform=3D"translate(60 -58.362)" d=3D"m83.239 153.08c-0.226=
-5-0.28623-0.55114-0.48799-0.90129-0.59103s-0.72467-0.1104-1.0844-0.0488c-0.=
-71953 0.12322-1.3645 0.51049-1.9657 0.9245-1.7086 1.1765-3.2189 2.6282-4.53=
-73 4.2298-1.7452 2.12-3.185 4.5717-3.6676 7.2749-0.08131 0.45547-0.13511 0.=
-92132-0.07821 1.3805 0.0569 0.45916 0.23279 0.91479 0.55871 1.2432 0.28617 =
-0.28835 0.67573 0.46425 1.0778 0.52203 0.40212 0.0578 0.8159 2e-3 1.2008-0.=
-12836 0.76971-0.26019 1.409-0.79942 2.0144-1.3413 3.336-2.9855 6.3525-6.567=
-8 7.5596-10.879 0.12113-0.43261 0.22401-0.87566 0.22123-1.3249-0.0028-0.449=
-24-0.11924-0.90947-0.39801-1.2618" fill=3D"#f6da4a" filter=3D"url(#bm)"/>
-+      <g>
-+       <path d=3D"m135.25 88.528c0.23129 0.7424 1.4278 0.61935 2.1191 0.97=
-542 0.60659 0.31244 1.0945 0.99723 1.7765 1.0169 0.65093 0.0188 1.664-0.225=
-42 1.7487-0.87109 0.11187-0.85303-1.1338-1.3951-1.9354-1.7076-1.0315-0.4021=
-6-2.353-0.6062-3.3206-0.0682-0.22173 0.12328-0.46373 0.41238-0.38827 0.6545=
-8z" fill=3D"url(#v)" filter=3D"url(#bg)" opacity=3D".8"/>
-+       <path d=3D"m123.83 88.108c-0.88816-0.28854-2.3575 1.2775-1.8781 2.0=
-789 0.13167 0.22009 0.53491 0.49916 0.80641 0.34992 0.40925-0.22497 0.74404=
--1.0296 1.1875-1.345 0.29608-0.21058 0.22974-0.97156-0.11581-1.0838z" fill=
-=3D"url(#u)" filter=3D"url(#bh)" opacity=3D".8"/>
-+      </g>
-+      <path transform=3D"matrix(1.0956 0 -.17018 1.5181 -76.244 -140.48)" =
-d=3D"m245.9 158.28a2.6081 2.3281 0 0 1-2.6081 2.3281 2.6081 2.3281 0 0 1-2.=
-6081-2.3281 2.6081 2.3281 0 0 1 2.6081-2.3281 2.6081 2.3281 0 0 1 2.6081 2.=
-3281z" clip-path=3D"url(#ca)" color=3D"#000000" fill=3D"url(#aj)" filter=3D=
-"url(#bb)"/>
-+     </g>
-+    </g>
-+   </g>
-+  </g>
-+ </g>
-+</svg>
-diff --git a/Documentation/rust/quick-start.rst b/Documentation/rust/quick-=
-start.rst
-new file mode 100644
-index 000000000000..d23ee31d4716
---- /dev/null
-+++ b/Documentation/rust/quick-start.rst
-@@ -0,0 +1,230 @@
-+Quick Start
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+This document describes how to get started with kernel development in Rust.
-+
-+
-+Requirements: Building
-+----------------------
-+
-+This section explains how to fetch the tools needed for building.
-+
-+Some of these requirements might be available from Linux distributions
-+under names like ``rustc``, ``rust-src``, ``rust-bindgen``, etc. However,
-+at the time of writing, they are likely not to be recent enough unless
-+the distribution tracks the latest releases.
-+
-+To easily check whether the requirements are met, the following target
-+can be used::
-+
-+	make LLVM=3D1 rustavailable
-+
-+This triggers the same logic used by Kconfig to determine whether
-+``RUST_IS_AVAILABLE`` should be enabled; but it also explains why not
-+if that is the case.
-+
-+
-+rustc
-+*****
-+
-+A particular version of the Rust compiler is required. Newer versions may =
-or
-+may not work because, for the moment, the kernel depends on some unstable
-+Rust features.
-+
-+If ``rustup`` is being used, enter the checked out source code directory
-+and run::
-+
-+	rustup override set $(scripts/min-tool-version.sh rustc)
-+
-+Otherwise, fetch a standalone installer or install ``rustup`` from:
-+
-+	https://www.rust-lang.org
-+
-+
-+Rust standard library source
-+****************************
-+
-+The Rust standard library source is required because the build system will
-+cross-compile ``core`` and ``alloc``.
-+
-+If ``rustup`` is being used, run::
-+
-+	rustup component add rust-src
-+
-+The components are installed per toolchain, thus upgrading the Rust compil=
-er
-+version later on requires re-adding the component.
-+
-+Otherwise, if a standalone installer is used, the Rust repository may be c=
-loned
-+into the installation folder of the toolchain::
-+
-+	git clone --recurse-submodules \
-+		--branch $(scripts/min-tool-version.sh rustc) \
-+		https://github.com/rust-lang/rust \
-+		$(rustc --print sysroot)/lib/rustlib/src/rust
-+
-+In this case, upgrading the Rust compiler version later on requires manual=
-ly
-+updating this clone.
-+
-+
-+libclang
-+********
-+
-+``libclang`` (part of LLVM) is used by ``bindgen`` to understand the C code
-+in the kernel, which means LLVM needs to be installed; like when the kernel
-+is compiled with ``CC=3Dclang`` or ``LLVM=3D1``.
-+
-+Linux distributions are likely to have a suitable one available, so it is
-+best to check that first.
-+
-+There are also some binaries for several systems and architectures uploade=
-d at:
-+
-+	https://releases.llvm.org/download.html
-+
-+Otherwise, building LLVM takes quite a while, but it is not a complex proc=
-ess:
-+
-+	https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-bui=
-lding-llvm
-+
-+Please see Documentation/kbuild/llvm.rst for more information and further =
-ways
-+to fetch pre-built releases and distribution packages.
-+
-+
-+bindgen
-+*******
-+
-+The bindings to the C side of the kernel are generated at build time using
-+the ``bindgen`` tool. A particular version is required.
-+
-+Install it via (note that this will download and build the tool from sourc=
-e)::
-+
-+	cargo install --locked --version $(scripts/min-tool-version.sh bindgen) b=
-indgen
-+
-+
-+Requirements: Developing
-+------------------------
-+
-+This section explains how to fetch the tools needed for developing. That i=
-s,
-+they are not needed when just building the kernel.
-+
-+
-+rustfmt
-+*******
-+
-+The ``rustfmt`` tool is used to automatically format all the Rust kernel c=
-ode,
-+including the generated C bindings (for details, please see
-+coding-guidelines.rst).
-+
-+If ``rustup`` is being used, its ``default`` profile already installs the =
-tool,
-+thus nothing needs to be done. If another profile is being used, the compo=
-nent
-+can be installed manually::
-+
-+	rustup component add rustfmt
-+
-+The standalone installers also come with ``rustfmt``.
-+
-+
-+clippy
-+******
-+
-+``clippy`` is a Rust linter. Running it provides extra warnings for Rust c=
-ode.
-+It can be run by passing ``CLIPPY=3D1`` to ``make`` (for details, please s=
-ee
-+general-information.rst).
-+
-+If ``rustup`` is being used, its ``default`` profile already installs the =
-tool,
-+thus nothing needs to be done. If another profile is being used, the compo=
-nent
-+can be installed manually::
-+
-+	rustup component add clippy
-+
-+The standalone installers also come with ``clippy``.
-+
-+
-+cargo
-+*****
-+
-+``cargo`` is the Rust native build system. It is currently required to run
-+the tests since it is used to build a custom standard library that contains
-+the facilities provided by the custom ``alloc`` in the kernel. The tests c=
-an
-+be run using the ``rusttest`` Make target.
-+
-+If ``rustup`` is being used, all the profiles already install the tool,
-+thus nothing needs to be done.
-+
-+The standalone installers also come with ``cargo``.
-+
-+
-+rustdoc
-+*******
-+
-+``rustdoc`` is the documentation tool for Rust. It generates pretty HTML
-+documentation for Rust code (for details, please see
-+general-information.rst).
-+
-+``rustdoc`` is also used to test the examples provided in documented Rust =
-code
-+(called doctests or documentation tests). The ``rusttest`` Make target uses
-+this feature.
-+
-+If ``rustup`` is being used, all the profiles already install the tool,
-+thus nothing needs to be done.
-+
-+The standalone installers also come with ``rustdoc``.
-+
-+
-+rust-analyzer
-+*************
-+
-+The `rust-analyzer <https://rust-analyzer.github.io/>`_ language server can
-+be used with many editors to enable syntax highlighting, completion, go to
-+definition, and other features.
-+
-+``rust-analyzer`` needs a configuration file, ``rust-project.json``, which
-+can be generated by the ``rust-analyzer`` Make target.
-+
-+
-+Configuration
-+-------------
-+
-+``Rust support`` (``CONFIG_RUST``) needs to be enabled in the ``General se=
-tup``
-+menu. The option is only shown if a suitable Rust toolchain is found (see
-+above), as long as the other requirements are met. In turn, this will make
-+visible the rest of options that depend on Rust.
-+
-+Afterwards, go to::
-+
-+	Kernel hacking
-+	    -> Sample kernel code
-+	        -> Rust samples
-+
-+And enable some sample modules either as built-in or as loadable.
-+
-+
-+Building
-+--------
-+
-+Building a kernel with a complete LLVM toolchain is the best supported set=
-up
-+at the moment. That is::
-+
-+	make LLVM=3D1
-+
-+For architectures that do not support a full LLVM toolchain, use::
-+
-+	make CC=3Dclang
-+
-+Using GCC also works for some configurations, but it is very experimental =
-at
-+the moment.
-+
-+
-+Hacking
-+-------
-+
-+To dive deeper, take a look at the source code of the samples
-+at ``samples/rust/``, the Rust support code under ``rust/`` and
-+the ``Rust hacking`` menu under ``Kernel hacking``.
-+
-+If GDB/Binutils is used and Rust symbols are not getting demangled, the re=
-ason
-+is the toolchain does not support Rust's new v0 mangling scheme yet.
-+There are a few ways out:
-+
-+  - Install a newer release (GDB >=3D 10.2, Binutils >=3D 2.36).
-+
-+  - Some versions of GDB (e.g. vanilla GDB 10.1) are able to use
-+    the pre-demangled names embedded in the debug info (``CONFIG_DEBUG_INF=
-O``).
---=20
++++ b/scripts/rust-is-available.sh
+@@ -0,0 +1,158 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++#
++# Tests whether a suitable Rust toolchain is available.
++#
++# Pass `-v` for human output and more checks (as warnings).
++
++set -e
++
++min_tool_version=$(dirname $0)/min-tool-version.sh
++
++# Convert the version string x.y.z to a canonical up-to-7-digits form.
++#
++# Note that this function uses one more digit (compared to other
++# instances in other version scripts) to give a bit more space to
++# `rustc` since it will reach 1.100.0 in late 2026.
++get_canonical_version()
++{
++	IFS=.
++	set -- $1
++	echo $((100000 * $1 + 100 * $2 + $3))
++}
++
++# Check that the Rust compiler exists.
++if ! command -v "$RUSTC" >/dev/null; then
++	if [ "$1" = -v ]; then
++		echo >&2 "***"
++		echo >&2 "*** Rust compiler '$RUSTC' could not be found."
++		echo >&2 "***"
++	fi
++	exit 1
++fi
++
++# Check that the Rust bindings generator exists.
++if ! command -v "$BINDGEN" >/dev/null; then
++	if [ "$1" = -v ]; then
++		echo >&2 "***"
++		echo >&2 "*** Rust bindings generator '$BINDGEN' could not be found."
++		echo >&2 "***"
++	fi
++	exit 1
++fi
++
++# Check that the Rust compiler version is suitable.
++#
++# Non-stable and distributions' versions may have a version suffix, e.g. `-dev`.
++rust_compiler_version=$( \
++	LC_ALL=C "$RUSTC" --version 2>/dev/null \
++		| head -n 1 \
++		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
++)
++rust_compiler_min_version=$($min_tool_version rustc)
++rust_compiler_cversion=$(get_canonical_version $rust_compiler_version)
++rust_compiler_min_cversion=$(get_canonical_version $rust_compiler_min_version)
++if [ "$rust_compiler_cversion" -lt "$rust_compiler_min_cversion" ]; then
++	if [ "$1" = -v ]; then
++		echo >&2 "***"
++		echo >&2 "*** Rust compiler '$RUSTC' is too old."
++		echo >&2 "***   Your version:    $rust_compiler_version"
++		echo >&2 "***   Minimum version: $rust_compiler_min_version"
++		echo >&2 "***"
++	fi
++	exit 1
++fi
++if [ "$1" = -v ] && [ "$rust_compiler_cversion" -gt "$rust_compiler_min_cversion" ]; then
++	echo >&2 "***"
++	echo >&2 "*** Rust compiler '$RUSTC' is too new. This may or may not work."
++	echo >&2 "***   Your version:     $rust_compiler_version"
++	echo >&2 "***   Expected version: $rust_compiler_min_version"
++	echo >&2 "***"
++fi
++
++# Check that the Rust bindings generator is suitable.
++#
++# Non-stable and distributions' versions may have a version suffix, e.g. `-dev`.
++rust_bindings_generator_version=$( \
++	LC_ALL=C "$BINDGEN" --version 2>/dev/null \
++		| head -n 1 \
++		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
++)
++rust_bindings_generator_min_version=$($min_tool_version bindgen)
++rust_bindings_generator_cversion=$(get_canonical_version $rust_bindings_generator_version)
++rust_bindings_generator_min_cversion=$(get_canonical_version $rust_bindings_generator_min_version)
++if [ "$rust_bindings_generator_cversion" -lt "$rust_bindings_generator_min_cversion" ]; then
++	if [ "$1" = -v ]; then
++		echo >&2 "***"
++		echo >&2 "*** Rust bindings generator '$BINDGEN' is too old."
++		echo >&2 "***   Your version:    $rust_bindings_generator_version"
++		echo >&2 "***   Minimum version: $rust_bindings_generator_min_version"
++		echo >&2 "***"
++	fi
++	exit 1
++fi
++if [ "$1" = -v ] && [ "$rust_bindings_generator_cversion" -gt "$rust_bindings_generator_min_cversion" ]; then
++	echo >&2 "***"
++	echo >&2 "*** Rust bindings generator '$BINDGEN' is too new. This may or may not work."
++	echo >&2 "***   Your version:     $rust_bindings_generator_version"
++	echo >&2 "***   Expected version: $rust_bindings_generator_min_version"
++	echo >&2 "***"
++fi
++
++# Check that the `libclang` used by the Rust bindings generator is suitable.
++bindgen_libclang_version=$( \
++	LC_ALL=C "$BINDGEN" $(dirname $0)/rust-is-available-bindgen-libclang.h 2>&1 >/dev/null \
++		| grep -F 'clang version ' \
++		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
++)
++bindgen_libclang_min_version=$($min_tool_version llvm)
++bindgen_libclang_cversion=$(get_canonical_version $bindgen_libclang_version)
++bindgen_libclang_min_cversion=$(get_canonical_version $bindgen_libclang_min_version)
++if [ "$bindgen_libclang_cversion" -lt "$bindgen_libclang_min_cversion" ]; then
++	if [ "$1" = -v ]; then
++		echo >&2 "***"
++		echo >&2 "*** libclang (used by the Rust bindings generator '$BINDGEN') is too old."
++		echo >&2 "***   Your version:    $bindgen_libclang_version"
++		echo >&2 "***   Minimum version: $bindgen_libclang_min_version"
++		echo >&2 "***"
++	fi
++	exit 1
++fi
++
++# If the C compiler is Clang, then we can also check whether its version
++# matches the `libclang` version used by the Rust bindings generator.
++#
++# In the future, we might be able to perform a full version check, see
++# https://github.com/rust-lang/rust-bindgen/issues/2138.
++if [ "$1" = -v ]; then
++	cc_name=$($(dirname $0)/cc-version.sh "$CC" | cut -f1 -d' ')
++	if [ "$cc_name" = Clang ]; then
++		clang_version=$( \
++			LC_ALL=C "$CC" --version 2>/dev/null \
++				| sed -nE '1s:.*version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
++		)
++		if [ "$clang_version" != "$bindgen_libclang_version" ]; then
++			echo >&2 "***"
++			echo >&2 "*** libclang (used by the Rust bindings generator '$BINDGEN') version does not match Clang's. This may be a problem."
++			echo >&2 "***   libclang version: $bindgen_libclang_version"
++			echo >&2 "***   Clang version:    $clang_version"
++			echo >&2 "***"
++		fi
++	fi
++fi
++
++# Check that the source code for the `core` standard library exists.
++#
++# `$KRUSTFLAGS` is passed in case the user added `--sysroot`.
++rustc_sysroot=$("$RUSTC" $KRUSTFLAGS --print sysroot)
++rustc_src=${RUST_LIB_SRC:-"$rustc_sysroot/lib/rustlib/src/rust/library"}
++rustc_src_core="$rustc_src/core/src/lib.rs"
++if [ ! -e "$rustc_src_core" ]; then
++	if [ "$1" = -v ]; then
++		echo >&2 "***"
++		echo >&2 "*** Source code for the 'core' standard library could not be found"
++		echo >&2 "*** at '$rustc_src_core'."
++		echo >&2 "***"
++	fi
++	exit 1
++fi
+-- 
 2.35.1
 

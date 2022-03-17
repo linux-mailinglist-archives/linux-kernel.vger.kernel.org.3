@@ -2,287 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE624DBFC9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 07:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4724DBFCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 07:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiCQHAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 03:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
+        id S230089AbiCQHAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 03:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiCQHAO (ORCPT
+        with ESMTP id S229605AbiCQHAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 03:00:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1717D7654
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 23:58:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647500337;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KnRSdO66HNXmMRFDGV7E0Y6pab5MMr0xJk4rgppyXM8=;
-        b=Qa2cMaOOkFBHI3Tokft1Ke9r8I2nVIruXNrTn/yPhKEVkg6C4jRmsNHTF8X5J/lEdP3VWo
-        3KIwif4FmyR2xdk52sfP1h69CX2dHF4xt7xf0euQHuPHhFYGxgcebfvpV+SgfsKgU+bseu
-        GXetLW94tHKM0yoqNxmI+QSlxd1vtOE=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-449-cYVxceu4MUKc8LQCDbl5HA-1; Thu, 17 Mar 2022 02:58:55 -0400
-X-MC-Unique: cYVxceu4MUKc8LQCDbl5HA-1
-Received: by mail-lf1-f72.google.com with SMTP id w13-20020ac25d4d000000b004488cf80eb1so1470432lfd.23
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 23:58:55 -0700 (PDT)
+        Thu, 17 Mar 2022 03:00:48 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B87B859;
+        Wed, 16 Mar 2022 23:59:32 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id a5so6114854pfv.2;
+        Wed, 16 Mar 2022 23:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bTvA02fwUpyoJi/TzzKPy+j0AsQcZbGmLjHeosuRf4Q=;
+        b=pTGUQD+ckQk39GSvZd5kI1ahBZ0yEYZAb7yDmSWUWOXhgYqtbS5sQyXRgTgBnogrth
+         R9qNKKLCg8KXg20mdV9Q/q1Lh+xnuqMCSW1OW/xZ836JF2btzp7Uuui2fOowHfOmhJyr
+         nZ+hmUcokobxlSaJ2ZQ7qiA5q7q5omaLaiOW6v0ciAv289ZHGrA1+bngMu9kF1P/xFys
+         DAmVZsU3+/R9v6gwvQLlIY6v/rB/Ha4Ry2Zxr87FPcKjBBbi1N5Q4ljyIWEaKyYozYIf
+         sQmkco0WX8O+9/uXXa6mIteeW/9T8exZy4UZrMg4TGESFaqyoemtJAVuf8bGjK1mlKZV
+         B6QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=KnRSdO66HNXmMRFDGV7E0Y6pab5MMr0xJk4rgppyXM8=;
-        b=M7WI8RQn2tS7PzqIhKXIBj47yz49Q1bQr4+tBNApUs85zigRVqIvsS5UmGb9ZSia3h
-         mjcmVSz/3fNsJK38LNOEdXIYHJz0E8BSaSRO8BGXeHyk7PnXWCF0iBIcKf7AatAEcNMm
-         BlMqBEaJ0n2L+JycgzwZZXJQM8B/wKfBjsbLvums8tmXNJ7TrCjbg6seW9uYlj8VWXfs
-         mZrXG1/gq4X6//fW7skocGGZFcHMupuOgsm7XCc0k2DDs/UOSWhX9A542q7J+PLn3n2n
-         zGUYW15rLez6/KVYOpBqVgMqiIlRTklEYtw0NRnlq5UmzgL0wFPhEoEWszc0fsfHmFdl
-         e/yA==
-X-Gm-Message-State: AOAM533MQwnSMy2rkaNgQUA/HCRF2RTFBitovawPUzd8sHhTLUAImrbT
-        nDbEcRR+MI40viPqtB/8NGjBzcgxPeQ+k5fh8sBWhSkFOdTF42Dl6yBPrkzGF9tU7h39mrExsBP
-        6/y8hiOI7vEMBy7gcCHNo1/k=
-X-Received: by 2002:a2e:8882:0:b0:244:8a8a:212 with SMTP id k2-20020a2e8882000000b002448a8a0212mr2040042lji.220.1647500333996;
-        Wed, 16 Mar 2022 23:58:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJylH+VggbD2HXSlPGduupiGrABceaM4x7qKSwqLCwC6jd4uf2rfcxnvHC/yzc59RSDz8FSrow==
-X-Received: by 2002:a2e:8882:0:b0:244:8a8a:212 with SMTP id k2-20020a2e8882000000b002448a8a0212mr2040032lji.220.1647500333715;
-        Wed, 16 Mar 2022 23:58:53 -0700 (PDT)
-Received: from [192.168.1.121] (91-145-109-188.bb.dnainternet.fi. [91.145.109.188])
-        by smtp.gmail.com with ESMTPSA id u13-20020a19600d000000b00448ba707284sm310144lfb.163.2022.03.16.23.58.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Mar 2022 23:58:53 -0700 (PDT)
-Message-ID: <0f53c5ff-1711-861d-9a12-0634d4ab9fca@redhat.com>
-Date:   Thu, 17 Mar 2022 08:58:52 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bTvA02fwUpyoJi/TzzKPy+j0AsQcZbGmLjHeosuRf4Q=;
+        b=154oGisoVMD/UH6Vr4SnpMPvPRnLDQrGs2wAJNIFqnm34/EjeRDPP3bPbvjqwOOMNR
+         1a3zmbMawfe+SMIXhinbbUjoMcc4xkYF6rWjqhwqV3KUWkfztqElQ6PWfn7y7pFGp/Kj
+         62iuMqU50cUMx5cNb1YgzP73WQMx0frcAQGWShTbLomYQpr9Sl8rH4u9IAMpO/E6GfCw
+         PApRExIAIKRMVAkx7iscOESkmbne8TU33tcMB69epGQraPxe0I6/PU+h8UITa5ZtUoua
+         MpBd9ElUlalc31lm8RonCpCFO8oFCMu2c5mNIvaIyGgVSE5icl/A+M3Cro/fEQx9f0zW
+         dBYw==
+X-Gm-Message-State: AOAM532/Uz0OZ7aWhQc5XeLq8z5g59Mf71veG7cijMPfzQaT9jRgFovG
+        BknVyV0UGRcfNvbv0n0JLt0=
+X-Google-Smtp-Source: ABdhPJzIXGxkuvnkQM2cnNQzBYQ2FKsgiG91ui1C5izJ0oeQe+1doQKw4YWF0CThFj3ChdYUqe8p5g==
+X-Received: by 2002:a05:6a00:b52:b0:4f7:ae2d:64a with SMTP id p18-20020a056a000b5200b004f7ae2d064amr3672127pfo.0.1647500371837;
+        Wed, 16 Mar 2022 23:59:31 -0700 (PDT)
+Received: from 9a2d8922b8f1 ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id p10-20020a637f4a000000b00373a2760775sm4275259pgn.2.2022.03.16.23.59.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 23:59:31 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 12:29:25 +0530
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Marc Zyngier <maz@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/3] clocksource: arch_timer: Add arm,cortex-a7/15-timer
+ in of_match list
+Message-ID: <20220317065925.GA9158@9a2d8922b8f1>
+References: <20220316095433.20225-1-singh.kuldeep87k@gmail.com>
+ <20220316095433.20225-4-singh.kuldeep87k@gmail.com>
+ <f54b0647-12ad-5861-8b8b-5d4233bb9bd2@canonical.com>
+ <20220316174108.GB21737@9a2d8922b8f1>
+ <87zglpybzw.wl-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] mm/hmm/test: simplify hmm test code: use miscdevice
- instead of char dev
-Content-Language: en-US
-From:   =?UTF-8?Q?Mika_Penttil=c3=a4?= <mpenttil@redhat.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        apopple@nvidia.com, jhubbard@nvidia.com, rcampbell@nvidia.com,
-        vbabka@suse.cz
-References: <20220311033050.22724-1-mpenttil@redhat.com>
- <20220314182439.GB64706@ziepe.ca>
- <d9b9c82e-4012-cf0a-d966-d9669a684a27@redhat.com>
- <20220315183922.GC64706@ziepe.ca>
- <8e836d75-97b0-d301-4d6a-92025e91cad5@redhat.com>
-In-Reply-To: <8e836d75-97b0-d301-4d6a-92025e91cad5@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87zglpybzw.wl-maz@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 16, 2022 at 06:43:15PM +0000, Marc Zyngier wrote:
+> On Wed, 16 Mar 2022 17:41:08 +0000,
+> Kuldeep Singh <singh.kuldeep87k@gmail.com> wrote:
+> > 
+> > On Wed, Mar 16, 2022 at 05:30:26PM +0100, Krzysztof Kozlowski wrote:
+> > > On 16/03/2022 10:54, Kuldeep Singh wrote:
+> > > > Few platforms such as Renesas RZ/N1D, Calxeda, Alpine etc. are using
+> > > > arm,cortex-a15-timer and arm,cortex-a7-timer entries in conjugation with
+> > > > arm,armv7-timer which are not currently defined in driver file. Add
+> > > > these entries in arch_timer_of_match list to bring them in use.
+> > > > 
+> > > 
+> > > This looks wrong (also Marc pointed this out) and rationale is not
+> > > sufficient. Why do you need these compatibles in the driver?
+> > 
+> > Hi Krzysztof and Marc,
+> > 
+> > I find myself in trouble whenever dealing with compatible entries and
+> > had 2 options when I stumble this issue.
+> > 	1. Remove unused compatible
+> 
+> That'd be silly.
+> 
+> > 	2. Add required compatible to binding and driver
+> 
+> To the binding, yes. But to the driver?
+> 
+> > My past experience and advise from other developer says not to remove an
+> > existing compatible. And also I found "arm,cortex-a15-timer" in binding
+> > which was again not documented and was present in DT. This prompted me
+> > to go for second option and make necessary additions in binding and
+> > driver following current entries.
+> 
+> The "arm,cortex-a15-timer" compatible is documentation, and only
+> that. If, one day, we find a bug in this implementation, we could work
+> around it in the driver thanks to the separate compatible (although in
+> this case, we'd have much better way of doing that).
+> 
+> > As per your perspective, current configuration isn't apt which means
+> > "arm,cortex-a15-timer" is a stub and is wrongly present in binding.
+> 
+> That's not what I said. This compatible string is perfectly fine, and
+> accurately describe the HW. The driver doesn't need to know about the
+> fine details of the implementation, and is perfectly happy with the
+> current state of things.
+> 
+> Think of it as an instance of a class. The driver doesn't need to know
+> the instance, only that it is a certain class.
+> 
 
+Thanks Marc for sharing knowledge. This was indeed helpful.
+To sum up from what I understood, bindings and DTs should always be in
+sync and driver file may not need to define all compatible entries as
+long as purpose is served.
 
-On 17.3.2022 7.47, Mika Penttilä wrote:
+This means no driver change will be required to address
+"arm,cortex-a7-timer". To which I have a question to Krzysztof.
+
+Hi Krzysztof,
+
+As per your comments on 2/3 patch, that it's DT which is not aligned
+with binding w.r.t arm,cortex-a7-timer.
+
+What makes "arm,cortex-a7-timer" an invalid entry from binding
+perspective when we have a similar entry "arm,cortex-a15-timer" already
+present?
+
+I think we should share some common grounds here and keep both of them
+in bindings or remove them altogether. I prefer first option, What's
+your say?
+Or please let me know in case there's better way to address this.
+
+- Kuldeep
+
+> > I also observed many other DTs have compatibles which are not present in
+> > driver. What is an ideal idealogy behind such cases?
 > 
-> 
-> On 15.3.2022 20.39, Jason Gunthorpe wrote:
->> On Tue, Mar 15, 2022 at 05:22:15AM +0200, Mika Penttilä wrote:
->>> Hi Jason and thanks for your comments..
->>>
->>> On 14.3.2022 20.24, Jason Gunthorpe wrote:
->>>> On Fri, Mar 11, 2022 at 05:30:50AM +0200, mpenttil@redhat.com wrote:
->>>>> From: Mika Penttilä <mpenttil@redhat.com>
->>>>>
->>>>> HMM selftests use an in-kernel pseudo device to emulate device private
->>>>> memory. The pseudo device registers a major device range for two 
->>>>> pseudo
->>>>> device instances. User space has a script that reads /proc/devices in
->>>>> order to find the assigned major number, and sends that to mknod(1),
->>>>> once for each node.
->>>>>
->>>>> This duplicates a fair amount of boilerplate that misc device can do
->>>>> instead.
->>>>>
->>>>> Change this to use misc device, which makes the device node names 
->>>>> appear
->>>>> for us. This also enables udev-like processing if desired.
->>>>
->>>> This is borderline the wrong way to use misc devices, they should
->>>> never be embedded into other structs like this. It works out here
->>>> because they are eventually only placed in a static array, but still
->>>> it is a generally bad pattern to see.
->>>
->>> Could you elaborate on this one? We have many in-tree usages of the same
->>> pattern, like:
->>
->> The kernel is full of bugs
->>
->>> drivers/video/fbdev/pxa3xx-gcu.c
->>
->> ie this is broken because it allocates like this:
->>
->>          priv = devm_kzalloc(dev, sizeof(struct pxa3xx_gcu_priv), 
->> GFP_KERNEL);
->>          if (!priv)
->>                  return -ENOMEM;
->>
->> And free's via devm:
->>
->>
->> static int pxa3xx_gcu_remove(struct platform_device *pdev)
->> {
->>          struct pxa3xx_gcu_priv *priv = platform_get_drvdata(pdev);
->>
->>          misc_deregister(&priv->misc_dev);
->>          return 0;
->> }
->>
->> But this will UAF if it races fops open with misc_desregister.
-> 
-> 
-> Yes this driver is broken because platform_device and miscdevice have 
-> unrelated lifetimes.
-> 
->>
->> Proper use of cdevs with proper struct devices prevent this bug.
->>
->>> You mention "placed in a static array", are you seeing a potential 
->>> lifetime
->>> issue or what? Many of the examples above embed miscdevice in a 
->>> dynamically
->>> allocated object also.
->>>
->>> The file object's private_data holds a pointer to the miscdevice, and
->>> fops_get() pins the module. So freeing the objects miscdevice is 
->>> embedded in
->>> at module_exit time should be fine. But, as you said, in this case the
->>> miscdevices are statically allocated, so that shouldn't be an issue
->>> either.
->>
->> Correct, it is OK here because the module refcounts prevent the
->> miscdevice memory from being freed, the above cases with dynamic
->> allocations do not have that protection and are wrong.
->>
->> This is why I don't care for the pattern of putting misc devices
->> inside other structs, it suggests this is perhaps generally safe but
->> it is not.
->>
->>> I think using cdev_add ends up in the same results in device_* api
->>> sense.
->>
->> Nope, everything works right once you use cdev_device_add on a
->> properly registered struct device.
->>
->>> miscdevice acting like a mux at a higher abstraction level simplifies 
->>> the
->>> code.
->>
->> It does avoid the extra struct device, but at the cost of broken
->> memory lifetime
-> 
-> No, misc_register() ends up calling device_create_with_groups() so there 
-> is struct device involved. cdev_device_add() would make the explicit 
-> struct_device as a parent of the cdev kobj ensuring that struct_device 
-> (and maybe structure containing it) is not free before the cdev. But the 
-> lifetime of the objects here are controlled by the module lifetime. 
-> Note, there is also cdev involved with miscdevice protecting misc.ko and 
-> our fops protecting our module unload.
-> 
-> I don't mind using the cdev APIs per se, just would like to do for the 
-> right reasons. Using cdev apis might be just overkill for many usages, 
-> and that's where miscdevice is useful. It miscdevice is broken in some 
-> subtle ways I think it should be better documented, or better yet, fixed.
-> 
-> 
->>
->> Jason
->>
-> 
+> I think I've made myself clear above.
 > 
 > Thanks,
-> Mika
-
-With the cdev approach, the patch (kernel parts) is not too bad either :
-
-Thanks,
-Mika
-
----
-
-diff --git a/lib/test_hmm.c b/lib/test_hmm.c
-index 767538089a62..566e7142f33f 100644
---- a/lib/test_hmm.c
-+++ b/lib/test_hmm.c
-@@ -29,11 +29,17 @@
-
-  #include "test_hmm_uapi.h"
-
--#define DMIRROR_NDEVICES               2
-  #define DMIRROR_RANGE_FAULT_TIMEOUT    1000
-  #define DEVMEM_CHUNK_SIZE              (256 * 1024 * 1024U)
-  #define DEVMEM_CHUNKS_RESERVE          16
-
-+static const char *dmirror_device_names[] = {
-+       "hmm_dmirror0",
-+       "hmm_dmirror1"
-+};
-+
-+#define DMIRROR_NDEVICES ARRAY_SIZE(dmirror_device_names)
-+
-  static const struct dev_pagemap_ops dmirror_devmem_ops;
-  static const struct mmu_interval_notifier_ops dmirror_min_ops;
-  static dev_t dmirror_dev;
-@@ -74,7 +80,7 @@ struct dmirror {
-   * ZONE_DEVICE pages for migration and simulating device memory.
-   */
-  struct dmirror_chunk {
--       struct dev_pagemap      pagemap;
-+       struct dev_pagemap      pagemap;
-         struct dmirror_device   *mdevice;
-  };
-
-@@ -82,8 +88,9 @@ struct dmirror_chunk {
-   * Per device data.
-   */
-  struct dmirror_device {
--       struct cdev             cdevice;
--       struct hmm_devmem       *devmem;
-+       struct cdev             cdevice;
-+       struct device           device;
-+       struct hmm_devmem       *devmem;
-
-         unsigned int            devmem_capacity;
-         unsigned int            devmem_count;
-@@ -132,7 +139,7 @@ static int dmirror_fops_open(struct inode *inode, 
-struct file *filp)
-         xa_init(&dmirror->pt);
-
-         ret = mmu_interval_notifier_insert(&dmirror->notifier, current->mm,
--                               0, ULONG_MAX & PAGE_MASK, &dmirror_min_ops);
-+                                       0, ULONG_MAX & PAGE_MASK, 
-&dmirror_min_ops);
-         if (ret) {
-                 kfree(dmirror);
-                 return ret;
-@@ -1225,7 +1232,11 @@ static int dmirror_device_init(struct 
-dmirror_device *mdevice, int id)
-
-         cdev_init(&mdevice->cdevice, &dmirror_fops);
-         mdevice->cdevice.owner = THIS_MODULE;
--       ret = cdev_add(&mdevice->cdevice, dev, 1);
-+       device_initialize(&mdevice->device);
-+       dev_set_name(&mdevice->device, "%s", dmirror_device_names[id]);
-+       mdevice->device.devt = dev;
-+
-+       ret = cdev_device_add(&mdevice->cdevice, &mdevice->device);
-         if (ret)
-                 return ret;
-
+> 
+> 	M.
+> 
+> -- 
+> Without deviation from the norm, progress is not possible.

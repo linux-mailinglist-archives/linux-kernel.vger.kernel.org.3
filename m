@@ -2,156 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A754DC89C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 903894DC8A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234673AbiCQOU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 10:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
+        id S235020AbiCQOVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 10:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbiCQOUz (ORCPT
+        with ESMTP id S235002AbiCQOVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 10:20:55 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EAB168093
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:19:38 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id h16so2637284wmd.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=vOnzxJlH628gKK791oOxGy9dmx+tXiUp5rK1D8p/Qyc=;
-        b=kDa19YjHt8tRsYBiCBRfz6pxQ6UQoy4iCEQZlW16D9UkkNnJ5lJWdzG5326YcKXBbe
-         wXqwKuhekffzEpU/DSQxmw8BngtaGdfZqJb+dcnZFsBEvsulNkyI+Ewh6bkGRNbnsNL3
-         iTsuRvUa5JouyV37vWooKUnnwgTmoilWrVXbPZqGYIkHky8DmZ7n4SzCUBsggTqvfvRK
-         5JwbkPO2e5PRQCviaoDuQaaHS8QpAIMPmrOTTm6DFGb55TOkSyDDwA6xan0PlhGk4R26
-         FPZPX7kc3a+Taa39eA1Ls/isLKM7mMxkqlekhijkOVXc2WWIowYHwAPx9xa+rzaDIC3u
-         7YSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=vOnzxJlH628gKK791oOxGy9dmx+tXiUp5rK1D8p/Qyc=;
-        b=U0aar+zJMLfsARqQNv2Q37fluxI7rgdm5LQi4Z5Lpg2HurW+3EWatOk+GbFS00OoGE
-         V6ufruKSs8d2GUU0Eqxdm0SctvEBspcbIWcFYsOfqF/fV3PDhK9/7pTMbWP3BQvNCSmv
-         7EEqvhm5Xg7HQNZK6ULeLBl0wP7r3ghr7aGnuRGZLeysrVUGY3wI0ZIJJhXqqWQJc12Y
-         n2R7MN2ESKAIWUgr3dpvh/5wRWGPDOApoIi5nKgWCBZCxSywigea88qgVzZJzzbSY00c
-         REFjjr86lQxYcdeMNZb1E8uPBZxTkKDP4W0k7khcmL6ZV8MN1TtaZT38ZOVwpWK7DZYY
-         ca9g==
-X-Gm-Message-State: AOAM533DKw7z/2i2gNuUucuWCoz6Mkxilq4+ihry2XjKPHWAFvMMAAPd
-        9FJlpjR0MMhi2Xhem5u2N9BUdIGEzdR+FQ==
-X-Google-Smtp-Source: ABdhPJxHZZo33eVHgCXtOwWiAcwRItKQpqcB0Hn2WCbkLjhRmwjh4xDZTHa0HI9wyEJ/oy2JZF1G3w==
-X-Received: by 2002:a05:600c:3c9f:b0:38c:6dc6:6de2 with SMTP id bg31-20020a05600c3c9f00b0038c6dc66de2mr6739347wmb.132.1647526776607;
-        Thu, 17 Mar 2022 07:19:36 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id v20-20020a7bcb54000000b0037fa63db8aasm7975546wmj.5.2022.03.17.07.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 07:19:35 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 14:19:33 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     linux-kernel@vger.kernel.org,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 1/1] drm/amdkfd: Protect the Client whilst it is being
- operated on
-Message-ID: <YjNDdXXOMYNuHJcV@google.com>
-References: <20220317131610.554347-1-lee.jones@linaro.org>
+        Thu, 17 Mar 2022 10:21:19 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940E1169B0E;
+        Thu, 17 Mar 2022 07:20:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=jWX0ErRmdHl2MMr3l9xYOPX3cELcq3q9BO5puqjFVX8=; b=rwgF0iK79Q1WES0TwTF6Ir0PLT
+        ZAX1ts7rE4L6FXuSKGFW/iMq3a/kmMpKhRBLRIO8lbMI16pgg+qwNyy5P3rWfM8+zFDH3HL1hE1uB
+        BqidmqRKl250oRAnoskdS4eeJbusyXueReOuCmq1m48tLaxWG1KIxLCpg+0Ve1PuwCyw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nUqyg-00BQGd-35; Thu, 17 Mar 2022 15:19:46 +0100
+Date:   Thu, 17 Mar 2022 15:19:46 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+Message-ID: <YjNDgnrYaYfviNTi@lunn.ch>
+References: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
+ <20220310142320.611738-4-schultz.hans+netdev@gmail.com>
+ <20220310142836.m5onuelv4jej5gvs@skbuf>
+ <86r17495gk.fsf@gmail.com>
+ <20220316233447.kwyirxckgancdqmh@skbuf>
+ <86lex9hsg0.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220317131610.554347-1-lee.jones@linaro.org>
+In-Reply-To: <86lex9hsg0.fsf@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022, Lee Jones wrote:
-
-> Presently the Client can be freed whilst still in use.
+On Thu, Mar 17, 2022 at 09:52:15AM +0100, Hans Schultz wrote:
+> On tor, mar 17, 2022 at 01:34, Vladimir Oltean <olteanv@gmail.com> wrote:
+> > On Mon, Mar 14, 2022 at 11:46:51AM +0100, Hans Schultz wrote:
+> >> >> @@ -396,6 +414,13 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+> >> >>  				    "ATU miss violation for %pM portvec %x spid %d\n",
+> >> >>  				    entry.mac, entry.portvec, spid);
+> >> >>  		chip->ports[spid].atu_miss_violation++;
+> >> >> +		if (mv88e6xxx_port_is_locked(chip, chip->ports[spid].port))
+> >> >> +			err = mv88e6xxx_switchdev_handle_atu_miss_violation(chip,
+> >> >> +									    chip->ports[spid].port,
+> >> >> +									    &entry,
+> >> >> +									    fid);
+> >> >
+> >> > Do we want to suppress the ATU miss violation warnings if we're going to
+> >> > notify the bridge, or is it better to keep them for some reason?
+> >> > My logic is that they're part of normal operation, so suppressing makes
+> >> > sense.
+> >> >
+> >> 
+> >> I have been seeing many ATU member violations after the miss violation is
+> >> handled (using ping), and I think it could be considered to suppress the ATU member
+> >> violations interrupts by setting the IgnoreWrongData bit for the
+> >> port (sect 4.4.7). This would be something to do whenever a port is set in locked mode?
+> >
+> > So the first packet with a given MAC SA triggers an ATU miss violation
+> > interrupt.
+> >
+> > You program that MAC SA into the ATU with a destination port mask of all
+> > zeroes. This suppresses further ATU miss interrupts for this MAC SA, but
+> > now generates ATU member violations, because the MAC SA _is_ present in
+> > the ATU, but not towards the expected port (in fact, towards _no_ port).
+> >
+> > Especially if user space decides it doesn't want to authorize this MAC
+> > SA, it really becomes a problem because this is now a vector for denial
+> > of service, with every packet triggering an ATU member violation
+> > interrupt.
+> >
+> > So your suggestion is to set the IgnoreWrongData bit on locked ports,
+> > and this will suppress the actual member violation interrupts for
+> > traffic coming from these ports.
+> >
+> > So if the user decides to unplug a previously authorized printer from
+> > switch port 1 and move it to port 2, how is this handled? If there isn't
+> > a mechanism in place to delete the locked FDB entry when the printer
+> > goes away, then by setting IgnoreWrongData you're effectively also
+> > suppressing migration notifications.
 > 
-> Use the already provided lock to prevent this.
+> I don't think such a scenario is so realistic, as changing port is not
+> just something done casually, besides port 2 then must also be a locked
+> port to have the same policy.
+
+I think it is very realistic. It is also something which does not work
+is going to cause a lot of confusion. People will blame the printer,
+when in fact they should be blaming the switch. They will be rebooting
+the printer, when in fact, they need to reboot the switch etc.
+
+I expect there is a way to cleanly support this, you just need to
+figure it out.
+
+> The other aspect is that the user space daemon that authorizes catches
+> the fdb add entry events and checks if it is a locked entry. So it will
+> be up to said daemon to decide the policy, like remove the fdb entry
+> after a timeout.
 > 
-> Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
-
-I should have clarified here, that:
-
-This patch has only been *build* tested.
-
-Since I have no way to run this on real H/W.
-
-Please ensure this is tested on real H/W before it gets applied, since
-it *may* have some undesired side-effects.  For instance, I have no
-idea if client->lock plays nicely with dev->smi_lock or whether this
-may well end up in deadlock.
-
-TIA.
-
->  drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+> >
+> > Oh, btw, my question was: could you consider suppressing the _prints_ on
+> > an ATU miss violation on a locked port?
 > 
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-> index e4beebb1c80a2..3b9ac1e87231f 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-> @@ -145,8 +145,11 @@ static int kfd_smi_ev_release(struct inode *inode, struct file *filep)
->  	spin_unlock(&dev->smi_lock);
->  
->  	synchronize_rcu();
-> +
-> +	spin_lock(&client->lock);
->  	kfifo_free(&client->fifo);
->  	kfree(client);
-> +	spin_unlock(&client->lock);
->  
->  	return 0;
->  }
-> @@ -247,11 +250,13 @@ int kfd_smi_event_open(struct kfd_dev *dev, uint32_t *fd)
->  		return ret;
->  	}
->  
-> +	spin_lock(&client->lock);
->  	ret = anon_inode_getfd(kfd_smi_name, &kfd_smi_ev_fops, (void *)client,
->  			       O_RDWR);
->  	if (ret < 0) {
->  		kfifo_free(&client->fifo);
->  		kfree(client);
-> +		spin_unlock(&client->lock);
->  		return ret;
->  	}
->  	*fd = ret;
-> @@ -264,6 +269,7 @@ int kfd_smi_event_open(struct kfd_dev *dev, uint32_t *fd)
->  	spin_lock(&dev->smi_lock);
->  	list_add_rcu(&client->list, &dev->smi_clients);
->  	spin_unlock(&dev->smi_lock);
-> +	spin_unlock(&client->lock);
->  
->  	return 0;
->  }
+> As there will only be such on the first packet, I think it should be
+> logged and those prints serve that purpose, so I think it is best to
+> keep the print.
+> If in the future some tests or other can argue for suppressing the
+> prints, it is an easy thing to do.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Please use a traffic generator and try to DOS one of your own
+switches. Can you?
+
+	  Andrew

@@ -2,141 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 932104DD108
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6535A4DD107
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbiCQXFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 19:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
+        id S230135AbiCQXFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 19:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiCQXFk (ORCPT
+        with ESMTP id S229730AbiCQXFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 19:05:40 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD582C77BB
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 16:04:23 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id u103so12927967ybi.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 16:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VGYk8110mxEIfZb97hjNSOmSSAM9U3Ysh5enZGGhhu8=;
-        b=UiJxJlc4/xpUFMOyYI60SdngqCq0itChQDoI227vzhkyaBmHb9JeQGsE/YMnQrHGag
-         DkHB7CFzQLIr0i38uhyRbunBatMWQR/RB5qV7YfA2Cfb7wDBHu8GuIKJIN4ObfYuMtGm
-         wHrcS6QEL6E62FcC69vnga/S0aE/b/qKfDP+R2WPFUyfZYYiMxWwVS9ijl63S/ArikBk
-         Q1S5eoR7Lqjx5pbNHzb69iokOtUB/NVhZIpLboRq84aN3oz5i11pNEyhLOZG3TfHsv9X
-         +PKfBzwwU70sDh45fCJGG3jw29X/LoPxKDK97gFfRTuFHa4UcMKgsZX2PDN8u7NogtWQ
-         xN7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VGYk8110mxEIfZb97hjNSOmSSAM9U3Ysh5enZGGhhu8=;
-        b=JhJlhoyd1DY49Gxt9nVNLosZkEsRmJeuABJyjW5om6Zk+XOGjbnWFv3ABogJp++zzx
-         cZuaX9TAYnRIzwvfqRH+CNEx/XGe84veFTELTaFcPSkq+xGTcnzE5/dd9FNYNv6deFx5
-         RWl9SjtfTjtS6SVCJ8NdPriisj7j+1S2ZUK6xHoSwlRoDKMrg69PwIgm/rAVt4xSEeOO
-         PQxIVcqQt+sJsGBV7bq3WF8+tT9w6FKUJzqZCITvlydGT67Uf/Ft2LucebC76YoxI3gd
-         zjndsQ9AGm9JfnDnjc2GwHZEZL7GecaY0kmp5J34bIS+nc2fnlDIQK068H+/KESKtPEC
-         oq9g==
-X-Gm-Message-State: AOAM530oRu8jGhqlVpAPAOt4T2hz4Drng8Q+xmOEQU/GeKHDT9XZa7XB
-        DGGBwXtIO45aqx0b7bBEiqcxkFUg0KUIEgL8tTOPZw==
-X-Google-Smtp-Source: ABdhPJwPczS+6WCYnnhcITlCGDk3THAAaV4Jc7NXiOhLRFH1Y2B7Em3vO9MiZ6aLM2JmJGpm22pOvfhVqCZ16YWK0xQ=
-X-Received: by 2002:a25:e749:0:b0:633:93d4:4b66 with SMTP id
- e70-20020a25e749000000b0063393d44b66mr7378064ybh.553.1647558262082; Thu, 17
- Mar 2022 16:04:22 -0700 (PDT)
+        Thu, 17 Mar 2022 19:05:32 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D8F2C2752
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 16:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647558255; x=1679094255;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jcx2pvuYRJlbZfM/GWFl8nSn4/vkEAjnqC1ZiKdWoyY=;
+  b=VMdMJaudbp00A9afpmeLn7oLhwvLnxKKig+FF23ut+/lqqZzkZopEoFu
+   rdv/plc6DMQC5iow8JQE3BPFYbw7Nk747cRCQI7GTwbC1y1rjKxrXrk7W
+   i6/lYJ/AaxI38YfV1SJhHQopSxSjcRr0I012BjcKHwW0KUT+qfIEjKXV7
+   7b2BH8cEcUfXvAuzCiKNX8IN/tOA79XMG0zEhJHkBiWhAxdszoloqqX0k
+   EIhkTvHfuwodjvbbmJPyRb6X7K9rVLUQq8kOjeWrD7+JC+mezsJ1nwePN
+   7P+1TJNpzUpRhGnFZsFffCt1NtsKyip+vGoxgI1cBrOn9y5GjV2AW01jp
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="254558110"
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="254558110"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 16:04:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="558146973"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 17 Mar 2022 16:04:08 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 62605107; Fri, 18 Mar 2022 01:04:28 +0200 (EET)
+Date:   Fri, 18 Mar 2022 02:04:28 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv6 29/30] ACPICA: Avoid cache flush inside virtual machines
+Message-ID: <20220317230428.uqfbm6y7v2qbgknn@black.fi.intel.com>
+References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
+ <20220316020856.24435-30-kirill.shutemov@linux.intel.com>
+ <f60f4310-8a03-2fdb-d495-be2658f08abe@intel.com>
 MIME-Version: 1.0
-References: <20220225012819.1807147-1-surenb@google.com> <YiY7K4ftAI3t6km8@dhcp22.suse.cz>
- <CAJuCfpEt6V+v_FcLsYWpGLA1vwCK01vv0PqNernfKM2GTzNqKg@mail.gmail.com>
-In-Reply-To: <CAJuCfpEt6V+v_FcLsYWpGLA1vwCK01vv0PqNernfKM2GTzNqKg@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 17 Mar 2022 16:04:11 -0700
-Message-ID: <CAJuCfpHgTb5Uvd7yfwSHnPx7gf2wXDfRa0U+XOwr=qHm+JJTNA@mail.gmail.com>
-Subject: Re: [RFC 1/1] mm: page_alloc: replace mm_percpu_wq with kthreads in drain_all_pages
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Tim Murray <timmurray@google.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f60f4310-8a03-2fdb-d495-be2658f08abe@intel.com>
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 9:24 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Mon, Mar 7, 2022 at 9:04 AM 'Michal Hocko' via kernel-team
-> <kernel-team@android.com> wrote:
-> >
-> > On Thu 24-02-22 17:28:19, Suren Baghdasaryan wrote:
-> > > Sending as an RFC to confirm if this is the right direction and to
-> > > clarify if other tasks currently executed on mm_percpu_wq should be
-> > > also moved to kthreads. The patch seems stable in testing but I want
-> > > to collect more performance data before submitting a non-RFC version.
-> > >
-> > >
-> > > Currently drain_all_pages uses mm_percpu_wq to drain pages from pcp
-> > > list during direct reclaim. The tasks on a workqueue can be delayed
-> > > by other tasks in the workqueues using the same per-cpu worker pool.
-> > > This results in sizable delays in drain_all_pages when cpus are highly
-> > > contended.
-> >
-> > This is not about cpus being highly contended. It is about too much work
-> > on the WQ context.
->
-> Ack.
->
-> >
-> > > Memory management operations designed to relieve memory pressure should
-> > > not be allowed to block by other tasks, especially if the task in direct
-> > > reclaim has higher priority than the blocking tasks.
-> >
-> > Agreed here.
-> >
-> > > Replace the usage of mm_percpu_wq with per-cpu low priority FIFO
-> > > kthreads to execute draining tasks.
-> >
-> > This looks like a natural thing to do when WQ context is not suitable
-> > but I am not sure the additional resources is really justified. Large
-> > machines with a lot of cpus would create a lot of kernel threads. Can we
-> > do better than that?
-> >
-> > Would it be possible to have fewer workers (e.g. 1 or one per numa node)
-> > and it would perform the work on a dedicated cpu by changing its
-> > affinity? Or would that introduce an unacceptable overhead?
->
-> Not sure but I can try implementing per-node kthreads and measure the
-> performance of the reclaim path, comparing with the current and with
-> per-cpu approach.
+On Wed, Mar 16, 2022 at 03:13:18PM -0700, Dave Hansen wrote:
+> On 3/15/22 19:08, Kirill A. Shutemov wrote:
+> > While running inside virtual machine, the kernel can bypass cache
+> > flushing. Changing sleep state in a virtual machine doesn't affect the
+> > host system sleep state and cannot lead to data loss.
+> > 
+> > Before entering sleep states, the ACPI code flushes caches to prevent
+> > data loss using the WBINVD instruction.  This mechanism is required on
+> > bare metal.
+> > 
+> > But, any use WBINVD inside of a guest is worthless.  Changing sleep
+> > state in a virtual machine doesn't affect the host system sleep state
+> > and cannot lead to data loss, so most hypervisors simply ignore it.
+> > Despite this, the ACPI code calls WBINVD unconditionally anyway.
+> > It's useless, but also normally harmless.
+> > 
+> > In TDX guests, though, WBINVD stops being harmless; it triggers a
+> > virtualization exception (#VE).  If the ACPI cache-flushing WBINVD
+> > were left in place, TDX guests would need handling to recover from
+> > the exception.
+> > 
+> > Avoid using WBINVD whenever running under a hypervisor.  This both
+> > removes the useless WBINVDs and saves TDX from implementing WBINVD
+> > handling.
+> 
+> Looks good.  Did you have more acks on this earlier that got removed?  I
+> thought I remembered more acks on earlier versions.
 
-Just to update on this RFC. In my testing I don't see a meaningful
-improvement from using the kthreads yet. This might be due to my test
-setup, so I'll keep exploring. Will post the next version only if I
-get demonstrable improvements.
-Thanks!
+I missed Dan's Reviewed-by, but it was the only one that got to my inbox.
 
->
-> >
-> > Or would it be possible to update the existing WQ code to use rescuer
-> > well before the WQ is completely clogged?
-> > --
-> > Michal Hocko
-> > SUSE Labs
-> >
-> > --
-> > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
-> >
+We had few (actually few too many) different approaches to address WBINVD
+and some of them got acks. Dan was the only one who acked this version,
+before current submission.
+
+-- 
+ Kirill A. Shutemov

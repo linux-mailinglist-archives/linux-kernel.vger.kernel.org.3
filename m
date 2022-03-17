@@ -2,132 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC924DD125
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E214DD11B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiCQX1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 19:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
+        id S229637AbiCQXW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 19:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiCQX1u (ORCPT
+        with ESMTP id S229555AbiCQXWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 19:27:50 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DA8728AC7B;
-        Thu, 17 Mar 2022 16:26:32 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22HNK0JT030658;
-        Thu, 17 Mar 2022 18:20:00 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 22HNJxhb030657;
-        Thu, 17 Mar 2022 18:19:59 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Thu, 17 Mar 2022 18:19:59 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Bill Wendling <morbo@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-Message-ID: <20220317231959.GN614@gate.crashing.org>
-References: <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <CAGG=3QW2ey2w91TxqJ6tzfJOswhTce2e0QTW7kAWyvxeiO+VNg@mail.gmail.com> <CAHk-=whn3iYE7gZM4vHx1kFhWBD2P9Wvmcyj8OOqv=y_7nemGQ@mail.gmail.com> <CAGG=3QWC9VS9RdGFTwY8VGqujDnFYnRTT1dQ6kkVr+0SRk6COg@mail.gmail.com> <CAHk-=wh=x7oCk05JD1=6XNsvvgpsidRWupoqySw1zODmvNy9Ug@mail.gmail.com> <CAGG=3QWcKof_NXrC0kznM2ikwTA00AgUJrcWhKBTitmjCuOxqw@mail.gmail.com> <CAHk-=wj=aK2T+h=rRJL4jDDTgV2U533E_duroCoVSUfkvYd0OQ@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj=aK2T+h=rRJL4jDDTgV2U533E_duroCoVSUfkvYd0OQ@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 17 Mar 2022 19:22:51 -0400
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904551FD2D8;
+        Thu, 17 Mar 2022 16:21:33 -0700 (PDT)
+Received: by mail-oo1-xc29.google.com with SMTP id w3-20020a4ac183000000b0031d806bbd7eso8301764oop.13;
+        Thu, 17 Mar 2022 16:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cV2G53aQ8gy5xgFrzeVM67TOnDJP6UFgv7JOAg+ZKWQ=;
+        b=M7g23SMXsoBSpy5meppRZhZ9iJd6A1uiBr9hvVMVpqk+LXXZx6qHDtr5tv8/j5pqXl
+         18GJFWFYcUiH8MfsMi05vmvsjihNU6mF10W/KnfcwystkmUCBfcHc3Dzelei1Dv2kyI3
+         9LhhVYktOShrLdOw4kqCJ/cOlOAkM1C1+kzA/Uw93daCZYZaHrpxIQq4LB4w1eLL2rSe
+         vu/DLza6h8iMKOUrFA+LYcKYBfb8X/5zXDwDYP7ZRCUKjry2F8oeEzUxHHdBeW0Chje1
+         GTEVVwGXVwXMuFP0sDOqDOaGErYFIDJ7ejZYdgkkwtUyBhwf94QX16auJz1djyhta7P4
+         SsEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cV2G53aQ8gy5xgFrzeVM67TOnDJP6UFgv7JOAg+ZKWQ=;
+        b=qrrFrxh+EFYIMfStyOxYALZzeV65H7TaujNOcJX9wZoQmLQUs1jXUxImTH3BWHokUy
+         CUAuWJ1JofSGG8x3FFomx5u8JQ8fv9efqqMk77ak7FrwDALBjyoRRLI4dBg++0vLMuVZ
+         /5LVDKAfYOUqeXeaAsgXofIjnx9pHnx67PhYklWWfdrEyzEYOJOW5ZnmYI46Lw3EKzoH
+         L+aNtD00Y9Zg+zbl1WlxLLhLPqTJY2rodQ8fKEneB1/9GgEKXwb174VjZYuG5SncQBny
+         etJu2fx9D+sIFd1Gbojhje9kHCzQG8ypTTvsP7feIfWLF9pAqkaFp3n1Toj9lcTKx9Ha
+         OXPw==
+X-Gm-Message-State: AOAM533Hl0znHYDb8RncHgEuLYsXz3FYlc2t1/21FhTUy+TDoamZ3b4O
+        S4cXLv/dWuEa+NyXZ0FNpeg6TYfbjJe+mA==
+X-Google-Smtp-Source: ABdhPJxJ+l9rTlCJYd2wVYy2pwNS7uAh2Sp5Ne51ph7mT/7XNCauNvYRHmWpLePy55iAhu00t0gKlw==
+X-Received: by 2002:a05:6870:c10b:b0:da:40b:9d92 with SMTP id f11-20020a056870c10b00b000da040b9d92mr2800341oad.31.1647559292787;
+        Thu, 17 Mar 2022 16:21:32 -0700 (PDT)
+Received: from fstone04p1.aus.stglabs.ibm.com ([129.41.86.15])
+        by smtp.gmail.com with ESMTPSA id 2-20020a056870124200b000dd9ac0d61esm2869159oao.24.2022.03.17.16.21.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 16:21:32 -0700 (PDT)
+From:   Brandon Wyman <bjwyman@gmail.com>
+To:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
+        Eddie James <eajames@linux.ibm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Brandon Wyman <bjwyman@gmail.com>
+Subject: [PATCH] hwmon: (pmbus) Add Vin unit off handling
+Date:   Thu, 17 Mar 2022 23:21:23 +0000
+Message-Id: <20220317232123.2103592-1-bjwyman@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 03:51:28PM -0700, Linus Torvalds wrote:
-> On Thu, Mar 17, 2022 at 2:45 PM Bill Wendling <morbo@google.com> wrote:
-> > I'm NOT saying that it WILL change or that it SHOULD change. I'm also
-> > not saying that your concern isn't justified. What I am saying is that
-> > unless you're using a compiler feature that's DEFINED as having a
-> > certain effect, then you are not using that feature correctly,
-> > regardless of how it's acted in the past. And it has the potential to
-> > bite you in the ass sooner or later. We've all seen such things happen
-> > before.
-> 
-> So I think most of inline asm constraints are fairly well defined.
-> Certainly "memory" clobbers are.
-> 
-> The unfortunate exception to this is, I think, "volatile".  It has
-> always had somewhat undefined semantics (iirc originally gcc talked
-> about it not being "moved significantly" etc), and it ends up getting
-> mixed reasons for existing.
+If there is an input undervoltage fault, reported in STATUS_INPUT
+command response, there is quite likely a "Unit Off For Insufficient
+Input Voltage" condition as well.
 
-"asm volatile" has always meant "has some unspecified side effect", in
-parallel with what a volatile object is in C (there, all *accesses* to
-such objects have the side effects).  All such side effects have to
-happen on the real machine in the same order (and exactly as often) as
-on the abstract C machine.  This is all it means, nothing more, nothing
-less.
+Add a constant for bit 3 of STATUS_INPUT. Update the Vin limit
+attributes to include both bits in the mask for clearing faults.
 
-This is a little hard to understand, certainly for most users, who do
-not often have heard of the abstract machine before (which is a shame,
-because *all* of C semantics are defined wrt that).
+If an input undervoltage fault occurs, causing a unit off for
+insufficient input voltage, but the unit is off bit is not cleared, the
+STATUS_WORD will not be updated to clear the input fault condition.
+Including the unit is off bit (bit 3) allows for the input fault
+condition to completely clear.
 
-> The *natural* semantics would be to literally make it have the same
-> rules as volatile data accesses: something like "'volatile' marks the
-> asm as having visible side effects in the virtual machine".
+Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+---
+ drivers/hwmon/pmbus/pmbus.h      | 1 +
+ drivers/hwmon/pmbus/pmbus_core.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Not necessarily visible, that is the point even, but yes :-)
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index e0aa8aa46d8c..ef3a8ecde4df 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -319,6 +319,7 @@ enum pmbus_fan_mode { percent = 0, rpm };
+ /*
+  * STATUS_VOUT, STATUS_INPUT
+  */
++#define PB_VOLTAGE_VIN_OFF		BIT(3)
+ #define PB_VOLTAGE_UV_FAULT		BIT(4)
+ #define PB_VOLTAGE_UV_WARNING		BIT(5)
+ #define PB_VOLTAGE_OV_WARNING		BIT(6)
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index ac2fbee1ba9c..a0d899dc81f0 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1373,7 +1373,7 @@ static const struct pmbus_limit_attr vin_limit_attrs[] = {
+ 		.reg = PMBUS_VIN_UV_FAULT_LIMIT,
+ 		.attr = "lcrit",
+ 		.alarm = "lcrit_alarm",
+-		.sbit = PB_VOLTAGE_UV_FAULT,
++		.sbit = (PB_VOLTAGE_UV_FAULT | PB_VOLTAGE_VIN_OFF),
+ 	}, {
+ 		.reg = PMBUS_VIN_OV_WARN_LIMIT,
+ 		.attr = "max",
+-- 
+2.25.1
 
-> So I think natural semantics for "asm volatile" - and the ones that
-> would be simple to document - would literally be to compare it to
-> those volatile memory accesses, and say that it can't be optimized
-> away, and it's ordered wrt other volatile operations (whether volatile
-> data accesses or other volatile asm instructions).
-
-"Cannot be optimised away" means something else to everyone, and almost
-all of those meanings do not correspond to the truth very well.
-
-> And then we in the kernel have then also co-opted 'asm volatile' to
-> just fix some compiler bugs, so we end up using "asm volatile goto"
-> because of
-> 
->       http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58670
-> 
-> although *that* particular issue is probably historical now that we
-> require more modern compiler versions.
-
-Thankfully.  The barrier_before_unreachable() thing in compiler-gcc.h
-needs some newer GCC 7 (.3 or .4 I think?), so that is still needed for
-a while more.  The barrier() one in compiler.h is probably not a bug
-anymore since decades, it is from before the kernel started documenting
-what versions of required tools have what known bugs, apparently ;-)
-
-> I still think that from a sanity standpoint, it would be good to
-> actually strengthen the semantics of "asm volatile" to literally act
-> as - and be ordered with - volatile memory accesses.
-> 
-> But I guess that's water under the bridge.
-
-That is what it has actually done since forever.  See C 5.1.2.3.  For
-GCC, "asm volatile" has a side effect like in /2 there as well, as does
-unspec_volatile (an internal GCC thing used to implement certain
-builtins, among other things).
-
-"asm volatile" does not mean, and has never meant, anything like "can
-not be deleted" or "can not be cloned".  "Cannot be moved significantly"
-is vague enough that it isn't untrue (but isn't very helpful either).
-
-
-Segher

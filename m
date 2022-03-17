@@ -2,178 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171174DCF94
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 520DD4DCF98
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiCQUnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
+        id S229863AbiCQUnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 16:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiCQUmz (ORCPT
+        with ESMTP id S229830AbiCQUn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:42:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C8CF3FA1;
-        Thu, 17 Mar 2022 13:41:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8AF37B8200C;
-        Thu, 17 Mar 2022 20:41:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB6BFC340E9;
-        Thu, 17 Mar 2022 20:41:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647549688;
-        bh=dppT/88vVyC0bQdMfnQJBCBFZtwfaRmALNXImiosTTQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Zf3Yq1ElOsy81XsXb+1Pjuzc3hlu26tRvg5iiktVjH6+qydmUYRs5qb0acCs54nUY
-         aCFErppAgWbXrD7u/b5WI5REnzTWc911OFTwlc6PhcLyfySjvivqODkXrXWsiBU3nz
-         iRHllCGl60zMBNo6kUGJ44BQ4d55JoyIEg1g3RjPElrglvW/6Nbl3CxdDMjrYO8H3R
-         KyUr2nSyOFK+l/SGhn+tMfk4DJcY1Dpe3/B0bWg+9PQcr11i/+fsSBs2MXoMKNr5JF
-         xv2v3QxbjmApnZtcU45YSmKyHFfT7pu9U20B4xIQ0L+yJBUddhv0i/dekBUCvtv2be
-         TLbCCZrAPoNJQ==
-Date:   Thu, 17 Mar 2022 15:41:26 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, micklorain@protonmail.com,
-        Alex Williamson <alex.williamson@redhat.com>
-Subject: Re: [PATCH v1 1/1] PCI: Enable INTx quirk for ATI PCIe-USB adapter
-Message-ID: <20220317204126.GA723808@bhelgaas>
+        Thu, 17 Mar 2022 16:43:29 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C65F10CF18;
+        Thu, 17 Mar 2022 13:42:12 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id r13so13190062ejd.5;
+        Thu, 17 Mar 2022 13:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BgQnw+BqusxL9RJ+sc/8dhfcjQxpoNkAjiP0V+wfr98=;
+        b=SYegcS9YNSU0vv5yR5gINCKQHpg+/XqF9+gzIf7ZIUFM9walUETQONunOSMMgl4HB2
+         zCqnFH2a7rhCGrTh1Vd3AzmjQIpEb90wh4ODtWjOGsvbblvHJAiEHynhL8EQTAcvsZbi
+         V1zGzmg+B7NfQqJCIKFJZ9VA5NMyIQz2egBuKmwqdgV9kznKaBGpH1LqiYfu61QAVQZB
+         sKNgB3Ci7KrFbhlulNrmxa7BptLiLsjn8Slde6S3yr6CKcwpfKMtlGM8zemRHjCh85wN
+         GRAFLHNno3yHeVpsMMUXGvm3TslovFj+wa2UvbXpkOOIxN9L1LJuJxCSpJMtl/OV2CuY
+         cV6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BgQnw+BqusxL9RJ+sc/8dhfcjQxpoNkAjiP0V+wfr98=;
+        b=D+3hPt/cB0OKlekMYuHZmg9GqRUnc1NbaMVy11y5LDuK3dsjzuAB8MKDmmAzi2QxKn
+         pOjYaqah2yw1aXmzyD0ohHFATLc/S9pojXQOkMX3uw3RQ5sKapML+6/5W1dfM+peQQy3
+         EFdGrrBl6DyK+N31/3mdIS7GWqGXX/p1W+tdANbg96EUF93I1G6KqOYQkgZPq07Sx6uu
+         sRnDcI0ZhgD0+BqM/rxqCcOGCV64AfndCv/jNRPp0UDTVRycj6G60TRYE5yM1zb2Dgyn
+         /7nxA8hlQ8Bo4Nmld4BAHzK71HjUtJJnTVLuh5C7O6y+xI2OM/oYnRaU8RdNtAFCkR/m
+         bmuA==
+X-Gm-Message-State: AOAM5312gwCGikzi5DsIxsXxX3gjkeAI0MfRcL9zVQGiPDDvGP++mW9G
+        Pa0ZsBsvAazvZaVT8alZDrue8UrziCfFhGjqhos=
+X-Google-Smtp-Source: ABdhPJzEbN9DOOisz1Ugx2LgbjMjBSsuDgEYw04K57+AdtuDehT5TPDBxAAYS6R6GfzSWB1BSvvcYbx0RXnbm8oBG3Y=
+X-Received: by 2002:a17:906:7746:b0:6ce:a12e:489f with SMTP id
+ o6-20020a170906774600b006cea12e489fmr5990415ejn.551.1647549731023; Thu, 17
+ Mar 2022 13:42:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjL4cEBXCQ1eSy48@smile.fi.intel.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YjMcZexG/kJepYDi@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <20220317140000.GO4285@paulmck-ThinkPad-P17-Gen-1> <YjNSuprCqjAgGgqB@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <20220317162033.GP4285@paulmck-ThinkPad-P17-Gen-1> <YjNll+Iv++LORS0n@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <20220317173621.GQ4285@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220317173621.GQ4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Fri, 18 Mar 2022 04:41:59 +0800
+Message-ID: <CAABZP2zu3Qiqtnw=DRnFUig8xO3WtvKuVkf=gqQ6kRihOmDTLQ@mail.gmail.com>
+Subject: Re: RCU: undefined reference to irq_work_queue
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, rcu <rcu@vger.kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 10:59:28AM +0200, Andy Shevchenko wrote:
-> On Wed, Mar 16, 2022 at 04:15:48PM -0500, Bjorn Helgaas wrote:
-> > On Wed, Mar 16, 2022 at 06:12:19PM +0200, Andy Shevchenko wrote:
-> > > On Wed, Mar 16, 2022 at 06:52:09AM -0500, Bjorn Helgaas wrote:
-> > > > On Wed, Mar 16, 2022 at 12:27:57PM +0200, Andy Shevchenko wrote:
-> > > > > On Tue, Mar 15, 2022 at 03:22:31PM -0500, Bjorn Helgaas wrote:
-> > > > > > On Tue, Mar 15, 2022 at 12:09:08PM +0200, Andy Shevchenko wrote:
-> > > > > > > On Mon, Mar 14, 2022 at 02:42:53PM -0500, Bjorn Helgaas wrote:
-> > > > > > > > On Mon, Mar 14, 2022 at 12:14:48PM +0200, Andy Shevchenko wrote:
-> > > > > > > > > ATI PCIe-USB adapter advertises MSI, but it doesn't work
-> > > > > > > > > if INTx is disabled.  Enable the respective quirk as
-> > > > > > > > > it's done for other ATI devices on this chipset,
-> > > > > > > > > 
-> > > > > > > > > Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on
-> > > > > > > > > PCI devices")
-> > 
-> > > > > > Anyway, I applied this to pci/msi for v5.18 with the following
-> > > > > > commit log:
-> > > > > > 
-> > > > > >     PCI: Disable broken MSI on ATI SB600 USB adapters
-> > > > > > 
-> > > > > >     Some ATI SB600 USB adapters advertise MSI, but MSI doesn't
-> > > > > >     work if INTx is disabled.  Disable MSI on these adapters.
-> > > > > 
-> > > > > But IIUC MSI is _not_ disabled. That's why I have issued this
-> > > > > version of the patch with different commit message. Did I
-> > > > > misunderstand something?
-> > > > 
-> > > > Oh, right, of course.  Sorry, I was asleep at the wheel.
-> > > 
-> > > Are you going to fix that?
-> > 
-> > Yes, of course, I'll do something with the commit message after we
-> > figure out how to handle PCI_COMMAND_INTX_DISABLE.
-> > 
-> > > > I guess it's just that for these devices, we don't disable INTx
-> > > > when enabling MSI.  I can't remember why we disable INTx when
-> > > > enabling MSI, but it raises the question of whether it's better to
-> > > > leave INTx enabled or to just disable use of MSI completely.
-> > > 
-> > > It's required by specification to disable INTx if I read 6.1.4.3
-> > > Enabling Operation correctly.
-> > 
-> > Thanks for the reference; I was looking for something like that.  But
-> > I don't think this section requires us to set
-> > PCI_COMMAND_INTX_DISABLE.  For the benefit of folks without the spec,
-> > PCIe r6.0, sec 6.1.4.3 says:
-> > 
-> >   To maintain backward compatibility, the MSI Enable bit in the
-> >   Message Control Register for MSI and the MSI-X Enable bit in the
-> >   Message Control Register for MSI-X are each Clear by default (MSI
-> >   and MSI-X are both disabled). System configuration software Sets one
-> >   of these bits to enable either MSI or MSI-X, but never both
-> >   simultaneously. Behavior is undefined if both MSI and MSI-X are
-> >   enabled simultaneously. Software disabling either mechanism during
-> >   active operation may result in the Function dropping pending
-> >   interrupt conditions or failing to recognize new interrupt
-> >   conditions. While enabled for MSI or MSI-X operation, a Function is
-> >   prohibited from using INTx interrupts (if implemented) to request
-> >   service (MSI, MSI-X, and INTx are mutually exclusive).
-> > 
-> > The only *software* constraints I see are (1) software must never
-> > enable both MSI and MSI-X simultaneously, and (2) if software disables
-> > MSI or MSI-X during active operation, the Function may fail to
-> > generate an interrupt when it should.
-> > 
-> > I read the last sentence as a constraint on the *hardware*: if either
-> > MSI or MSI-X is enabled, the Function is not allowed to use INTx,
-> > regardless of the state of PCI_COMMAND_INTX_DISABLE.
-> > 
-> > I searched the spec for "Interrupt Disable", looking for situations
-> > where software might be *required* to set it, but I didn't see
-> > anything.
-> > 
-> > I suspect "Interrupt Disable" was intended to help the OS stop all
-> > activity from a device during hot-plug or reconfiguration, as hinted
-> > at in sec 6.4, "Device Synchronization":
-> > 
-> >   The ability of the driver and/or system software to block new
-> >   Requests from the device is supported by the Bus Master Enable,
-> >   SERR# Enable, and Interrupt Disable bits in the Command register
-> >   (Section 7.5.1.1.3) of each device Function, and other such control
-> >   bits.
-> > 
-> > So I'm trying to figure out why when enabling MSI we need to set
-> > PCI_COMMAND_INTX_DISABLE for most devices, but it's safe to skip that
-> > for these quirked devices.
-> 
-> I guess it's wrong wording in the last paragraph. It's not safe, but it's
-> _required_ since HW doesn't follow PCI specification that clearly says:
-> "MSI, MSI-X, and INTx are mutually exclusive".
+hi
 
-I agree there's a defect in these SB600 devices.  My guess is that
-PCI_COMMAND_INTX_DISABLE actually disables both INTx and MSI, when
-it's only supposed to disable INTx.
+On Fri, Mar 18, 2022 at 4:20 AM Paul E. McKenney <paulmck@kernel.org> wrote=
+:
+>
+> On Thu, Mar 17, 2022 at 04:45:11PM +0000, Hyeonggon Yoo wrote:
+> > On Thu, Mar 17, 2022 at 09:20:33AM -0700, Paul E. McKenney wrote:
+> > > On Thu, Mar 17, 2022 at 03:24:42PM +0000, Hyeonggon Yoo wrote:
+> > > > On Thu, Mar 17, 2022 at 07:00:00AM -0700, Paul E. McKenney wrote:
+> > > > > On Thu, Mar 17, 2022 at 11:32:53AM +0000, Hyeonggon Yoo wrote:
+> > > > > > Hello RCU folks,
+> > > > > >
+> > > > > > I like to use minimal configuration for kernel development.
+> > > > > > when building with tinyconfig + CONFIG_PREEMPT=3Dy on arm64:
+> > > > > >
+> > > > > > ld: kernel/rcu/update.o: in function `call_rcu_tasks':
+> > > > > > update.c:(.text+0xb2c): undefined reference to `irq_work_queue'
+> > > > > > update.c:(.text+0xb2c): relocation truncated to fit: R_AARCH64_=
+CALL26 against undefined symbol `irq_work_queue'
+> > > > > > make: *** [Makefile:1155: vmlinux] Error 1
+> > > > > >
+> > > > > > It seems RCU calls irq_work_queue() without checking if CONFIG_=
+IRQ_WORK is enabled.
+> > > > >
+> > > > > Indeed it does!
+> > > > >
+> > > > > And kernel/rcu/Kconfig shows why:
+> > > > >
+> > > > > config TASKS_TRACE_RCU
+> > > > >         def_bool 0
+> > > > >         select IRQ_WORK
+> > > > >         help
+> > > > >           This option enables a task-based RCU implementation tha=
+t uses
+> > > > >           explicit rcu_read_lock_trace() read-side markers, and a=
+llows
+> > > > >           these readers to appear in the idle loop as well as on =
+the CPU
+> > > > >           hotplug code paths.  It can force IPIs on online CPUs, =
+including
+> > > > >           idle ones, so use with caution.
+> > > > >
+> > > > > So the solution is to further minimize your configuration so as t=
+o
+> > > > > deselect TASKS_TRACE_RCU.
+> > > >
+> > > > They are already not selected.
+> > >
+> > > Good, thank you.
+> > >
+> > > How about TASKS_RUDE_RCU, TASKS_TRACE_RCU, and TASKS_RCU_GENERIC?
+> >
+> > TASKS_RUDE_RCU=3Dn
+> > TASKS_TRACE_RCU=3Dn
+> > TASKS_RCU_GENERIC=3Dy
+> > TASKS_RCU=3Dy
+> >
+> > > > > This means making sure that both BPF and
+> > > > > the various RCU torture tests are all deselected.
+> > > >
+> > > > I wanted to say call_rcu_tasks() can be referenced even when IRQ_WO=
+RK is not
+> > > > selected, making it fail to build.
+> > >
+> > > I am guessing because TASKS_RCU_GENERIC is selected?
+> > >
+> >
+> > Right.
+> >
+> > > If so, does the patch at the end of this email help?
+> > >
+> >
+> > No. did not help.
+> >
+> > I think I found reason...
+> > with PREEMPTION=3Dy,
+> >
+> > in kernel/rcu/Kconfig:
+> > config TASKS_RCU
+> >         def_bool PREEMPTION
+> >         help
+> >           This option enables a task-based RCU implementation that uses
+> >           only voluntary context switch (not preemption!), idle, and
+> >           user-mode execution as quiescent states.  Not for manual sele=
+ction.
+> >
+> > in kernel/rcu/Kconfig:
+> > config TASKS_RCU_GENERIC
+> >         def_bool TASKS_RCU || TASKS_RUDE_RCU || TASKS_TRACE_RCU
+> >         select SRCU
+> >         help
+> >           This option enables generic infrastructure code supporting
+> >           task-based RCU implementations.  Not for manual selection.
+>
+> Ah, this is because some of the tracing code uses TASKS_RCU only
+> when PREEMPTION=3Dy.  That would be KPROBES and TRACING.  Maybe also
+> TRACE_CLOCK and TRACEPOINTS, but I would hope that TRACING would
+> cover those.  Adding the tracing guys for their thoughts.
+>
+> > > > > > ld: kernel/rcu/update.o: in function `call_rcu_tasks':
+> > > > > > update.c:(.text+0xb2c): undefined reference to `irq_work_queue'
+> > > > > > update.c:(.text+0xb2c): relocation truncated to fit: R_AARCH64_=
+CALL26 against undefined symbol `irq_work_queue'
+> > > > > > make: *** [Makefile:1155: vmlinux] Error 1
+> > > >
+> > > > Isn't it better to fix this build failure?
+> > >
+> > > But of course!  However, first I need to know exactly what is causing=
+ your
+> > > build failure.  I cannot see your .config file, so I am having to gue=
+ss.
+> > >
+> > > Don't get me wrong, I do have a lot of practice guessing, but it is s=
+till
+> > > just guessing.  ;-)
+> >
+> > Sorry to make you guess. Maybe too late, but added config as attachment=
+ ;)
+>
+> Perhaps I needed the practice.  ;-)
+>
+> > > > It fails to build when both TASKS_TRACE_RCU and IRQ_WORK are not se=
+lected
+> > > > and PREEMPT is selected.
+> > > >
+> > > >   =E2=94=82 Symbol: TASKS_TRACE_RCU [=3Dn]                         =
+                   =E2=94=82
+> > > >   =E2=94=82 Type  : bool                                           =
+                 =E2=94=82
+> > > >   =E2=94=82 Defined at kernel/rcu/Kconfig:96                       =
+                 =E2=94=82
+> > > >   =E2=94=82 Selects: IRQ_WORK [=3Dn]                               =
+                   =E2=94=82
+> > > >   =E2=94=82 Selected by [n]:                                       =
+                 =E2=94=82
+> > > >   =E2=94=82   - BPF_SYSCALL [=3Dn]                                 =
+                   =E2=94=82
+> > > >   =E2=94=82   - RCU_SCALE_TEST [=3Dn] && DEBUG_KERNEL [=3Dy]       =
+                     =E2=94=82
+> > > >   =E2=94=82   - RCU_TORTURE_TEST [=3Dn] && DEBUG_KERNEL [=3Dy]     =
+                     =E2=94=82
+> > > >   =E2=94=82   - RCU_REF_SCALE_TEST [=3Dn] && DEBUG_KERNEL [=3Dy]
+> > > >
+> > > > Thanks!
+> > > >
+> > > > >
+> > > > > Or turn on IRQ_WORK, for example, if you need to use BPF.
+> > >
+> > > Or do you already have TASKS_RCU_GENERIC deselected?
+> > >
+> >
+> > No, this is selected. TASKS_RCU_GENERIC=3Dy. because of PREEMPTION=3Dy.
+>
+> OK, the patch shown below allows me to get TASKS_RCU_GENERIC=3Dn even
+> with PREEMPTION=3Dy.  This might somehow subtly break tracing, but in
+> that case further adjustments can be made.  Untested other than
+> generating a few .config combinations.
+>
+> Thoughts?
+>
+>                                                         Thanx, Paul
+>
+> ------------------------------------------------------------------------
+>
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 678a80713b21..66c5b5543511 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -38,6 +38,7 @@ config KPROBES
+>         depends on MODULES
+>         depends on HAVE_KPROBES
+>         select KALLSYMS
+> +       select TASKS_RCU if PREEMPTION
+>         help
+>           Kprobes allows you to trap at almost any kernel address and
+>           execute a callback function.  register_kprobe() establishes
+> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> index f559870fbf8b..4f665ae0cf55 100644
+> --- a/kernel/rcu/Kconfig
+> +++ b/kernel/rcu/Kconfig
+> @@ -78,7 +78,8 @@ config TASKS_RCU_GENERIC
+>           task-based RCU implementations.  Not for manual selection.
+>
+>  config TASKS_RCU
+> -       def_bool PREEMPTION
+> +       def_bool 0
+> +       select IRQ_WORK
+>         help
+>           This option enables a task-based RCU implementation that uses
+>           only voluntary context switch (not preemption!), idle, and
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index 752ed89a293b..a7aaf150b704 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -127,6 +127,7 @@ config TRACING
+>         select BINARY_PRINTF
+>         select EVENT_TRACING
+>         select TRACE_CLOCK
+> +       select TASKS_RCU if PREEMPTION
+>
+>  config GENERIC_TRACER
+>         bool
+I apply above patch, and invoke
+$make  ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu-
+CC=3Daarch64-linux-gnu-gcc-10 tinyconfig
+$make ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu-
+CC=3Daarch64-linux-gnu-gcc-10 -j 16
+kernel build successful this time (without above patch, kernel build
+will quit with undefined reference to `irq_work_queue'
+Tested-by: Zhouyi Zhou<zhouzhouyi@gmail.com>
 
-I'm pretty sure the spec doesn't actually require software to set
-Interrupt Disable when enabling MSI, since MSI was added in PCI r2.2,
-which included this text in sec 6.8.2:
-
-  System configuration software sets [the MSI Enable] bit to enable
-  MSI. ...  Once enabled, a function is prohibited from using its
-  INTx# pin (if implemented) to request service (MSI and INTx# are
-  mutually exclusive).
-
-and Interrupt Disable was added later, in PCI r2.3, with no mention of
-a connection with MSI.  All the specs from PCI r2.2 to PCIe r6.0
-include the text above about not using INTx# if MSI or MSI-X is
-enabled, but that's not the same as requiring software to set
-Interrupt Disable.  Linux has set Interrupt Disable when enabling MSI
-ever since MSI support was added [1], so I would hesitate to change
-that even though I don't think it's required.
-
-What I don't like about PCI_DEV_FLAGS_MSI_INTX_DISABLE_BUG is that it
-changes the generic code path in a sort of random way, i.e., this
-device becomes yet another special case in how we handle Interrupt
-Disable.
-
-What would you think about just setting pdev->no_msi instead, so we
-don't try to use MSI at all on these devices?  I think that's what we
-did before 306c54d0edb6.
-
-[1] https://lore.kernel.org/all/200310032215.h93MFnjT005788@snoqualmie.dp.intel.com/ (search for PCI_COMMAND_INTX_DISABLE)
+Thanks
+Zhouyi

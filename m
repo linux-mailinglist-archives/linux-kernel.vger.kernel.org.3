@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DD64DCE16
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFEE14DCE11
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237729AbiCQSyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S237714AbiCQSyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237730AbiCQSyo (ORCPT
+        with ESMTP id S237750AbiCQSyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:54:44 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A060412D0A5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:53:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3EE5C1F38E;
-        Thu, 17 Mar 2022 18:53:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1647543194; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sg6FmafrPdR1KtYNg/JwS0y/weg8uwWLi0b4wB9DaB8=;
-        b=CW+6aHqwJGO16ayz+hSnPGa0OPbIHWsUKut3I4UlP3B9++g8YafKAZteQjBFUdF6bEJfoH
-        hpy6Ebcd2p94U4iCH9Lc1apwE77b13nAy1ZvtBdnmBxqwOdyTaVCwhE1JXtYPQ4Uq7QOy7
-        s1DPlV+jNFXxC91mvrPiXyLcTnNioUY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1647543194;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sg6FmafrPdR1KtYNg/JwS0y/weg8uwWLi0b4wB9DaB8=;
-        b=o8CjYA0ITGwkIvMJKFrEfzWkeowZgmhKOTbhiqLw0rKG8pL+AQyrQ9lPQ17fvlbiiikol3
-        lPAUcMEz8wfNLADQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0DB7A13BB5;
-        Thu, 17 Mar 2022 18:53:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id G5OlApqDM2IkKwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 17 Mar 2022 18:53:14 +0000
-Message-ID: <34856139-e2db-4d34-07b5-c0af2bdf44f4@suse.cz>
-Date:   Thu, 17 Mar 2022 19:53:13 +0100
+        Thu, 17 Mar 2022 14:54:46 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4241AD80
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:53:21 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id o68-20020a17090a0a4a00b001c686a48263so1500140pjo.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:53:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/NvfzwKXqOSJRruZzUWzCAPVPVy0wwITBus+R6UuGEE=;
+        b=SFD8FzxQIXg9+hlH2Vkb1h3WUfBMuuS4W5CQ8oWADKUTQIWpB4dRFqdc4O5Wp5MjHR
+         L0cc09yCNgySL0Erao+PzqYSsvtPV391iRt+TGZDuBkKHZVu5NTZZV8YnadPlkvDwi0x
+         +pZYJ9KKEL89juosYwlv+5niKRFb2RIpDz9ZI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/NvfzwKXqOSJRruZzUWzCAPVPVy0wwITBus+R6UuGEE=;
+        b=RGw+dRFku/0IDFGorsa2NJd5A6O1kkw5tDoWB8pYFisJsQ7DPOs9QfDGYglUJejTxh
+         sDBhSgiuWzzMIKkshEjcBFxHH/XjfOqEIya5wFOsrjVPgMAUx7vi9L/3QVZt072EquSX
+         y/+JuskMnEIZpyGvfYfKZg4BCr/9lDHvL9qyZ01kGMSFmA8zVQ57kJz5idJzNTuCLHmE
+         +uoyK7qA90vKOWwh3ZplPXpBqqrJZidXBmVbGKMoaJpwSTgJoU9GBJwurpQioeLq9k6p
+         7lpbtmxDUgV+UkP9pZD9e3QENc02rAhZCPqe6ZI5Kf2evLmET7Hbns8/azfGk4TIIpg+
+         zIYg==
+X-Gm-Message-State: AOAM530Ec8t9GrLF6QfdjtjQOgj28bOASogyF6BYQn7L3TA+ni6htY4Z
+        0Rgtycchky86LMaSuZ4Infk2y8h+QocSBw==
+X-Google-Smtp-Source: ABdhPJxf8zUz4uL69RiHyWHnXrMc949FYbCcqIxC/VkLIVftNL2WTrnWJwvtr47QpDWnhkWwQelguA==
+X-Received: by 2002:a17:902:ce02:b0:153:bd65:5c0e with SMTP id k2-20020a170902ce0200b00153bd655c0emr6088248plg.160.1647543200564;
+        Thu, 17 Mar 2022 11:53:20 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u10-20020a056a00124a00b004f783abfa0esm7530041pfi.28.2022.03.17.11.53.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 11:53:20 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 11:53:19 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     James Jones <linux@theinnocuous.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] x86: Remove a.out support
+Message-ID: <202203171152.F35EB19767@keescook>
+References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com>
+ <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com>
+ <202203151150.1CDB1D8DA@keescook>
+ <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com>
+ <CAK8P3a28dpyEM2+vM+ePZzeFc539b7w_8FDEoRke-j+3AQVZAA@mail.gmail.com>
+ <202203161523.857B469@keescook>
+ <59fb3d14-423a-d39b-04cb-1e60ee67d3f1@theinnocuous.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v2 1/4] [PATCH 1/4] mm: refactor of vma_merge()
-Content-Language: en-US
-To:     =?UTF-8?Q?Jakub_Mat=c4=9bna?= <matenajakub@gmail.com>,
-        linux-mm@kvack.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        mhocko@kernel.org, mgorman@techsingularity.net,
-        willy@infradead.org, liam.howlett@oracle.com, hughd@google.com,
-        kirill@shutemov.name, riel@surriel.com, rostedt@goodmis.org,
-        peterz@infradead.org
-References: <20220311174602.288010-1-matenajakub@gmail.com>
- <20220311174602.288010-2-matenajakub@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220311174602.288010-2-matenajakub@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <59fb3d14-423a-d39b-04cb-1e60ee67d3f1@theinnocuous.com>
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,17 +74,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/11/22 18:45, Jakub Matěna wrote:
-> Refactor vma_merge() to make it shorter, more understandable and
-> suitable for tracing of successful merges that are made possible by
-> following patches in the series. Main change is the elimination of code
-> duplicity in the case of merge next check. This is done by first doing
-> checks and caching the results before executing the merge itself. Exit
-> paths are also unified.
+On Thu, Mar 17, 2022 at 02:04:46AM +0000, James Jones wrote:
+> On 3/16/22 3:30 PM, Kees Cook wrote:
+> > On Wed, Mar 16, 2022 at 01:38:31PM +0100, Arnd Bergmann wrote:
+> >> is in the end, but it's likely easier than a standalone a.out loader
+> >> in user space, or a conversion to ELF format.
+> >
+> > Yeah, the exec format is really simple. The only tricky bit was preparing
+> > the stack and making sure everything landed in the right place for text
+> > and data. James, can you try this? aln and mac run for me, but I'm not
+> > actually exercising them beyond dumping argument lists, etc:
+> >
+> > https://github.com/kees/kernel-tools/tree/trunk/a.out
 > 
-> Signed-off-by: Jakub Matěna <matenajakub@gmail.com>
+> Yes, works perfectly, thank you. I like the idea of using this much
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Hurray!
 
-It's a nice cleanup on its own. Removed duplication and reduced indentation
-levels helps.
+> better than getting emailed every time someone wants to delete the a.out
+> code again. Consider my use case withdrawn. I've already pushed an
+> update to my jaguar-sdk project to use this tool instead.
+
+Nice; I see there are other binaries besides aln and mac that are
+working with this too? *whew* I'm glad it was relatively straight
+forward. :)
+
+-- 
+Kees Cook

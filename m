@@ -2,75 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015004DBF53
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 07:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 900BE4DBF55
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 07:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiCQGVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 02:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
+        id S229963AbiCQGWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 02:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiCQGVf (ORCPT
+        with ESMTP id S229952AbiCQGWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 02:21:35 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B86131942;
-        Wed, 16 Mar 2022 23:10:33 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id z8so8388175ybh.7;
-        Wed, 16 Mar 2022 23:10:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VR1NhHDBNWvTmsBrOFP6HJbH1ggjLumhtoOfnuEXWKI=;
-        b=fu4hQROzacXnjEwEickLat//Rsxu9Mg2FA2L9aNavavKzn0dy5RrL8/eZ8e2nZF3bv
-         fVW2xyaDnnwnoC0HgYzzqDf09WFCtCDRjgFQPFkVSLXbiDLAJVHOjSXybUgX449Pw7eT
-         Q2hxqjQvk5Ms4SAMC/5SebEIT7IGnNuzkKTZkdxBvHReCBY5is2qRUoczKFGn7vFMt7Z
-         xWnHJ8ehuz1yo5/EBZY95KOoGP0rjCQWHC5goHSZNz0f+2JZEbtWneqri0DerNcbrjxG
-         2N5hVUQwtat2x1LfXr9o4w4e017Jzf03v8joZg+SU0MHa/Zl03jK6+N/OuWOI0SwIRu4
-         s5yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VR1NhHDBNWvTmsBrOFP6HJbH1ggjLumhtoOfnuEXWKI=;
-        b=oxi4u5knUQTV9ogG9CfMlIS1xBJH0yeGBfxGypQR7F4/VWux0WN1EHzYzTw12uSbW5
-         QW30Ye+0tuvWMcJjjkWMNsFDE5gC2akIEaW4T8iR3dcAgl2199SrY1HlPYymZvKUvgy6
-         jBYMnxiXP4qTR6Ff56Ha6xrnPFp6McU5yr19OLvkxhmpBdbjXd2/uHoeOVGV1Pd0izh6
-         QfM+NSU7R+kq21wiZdd8cPOH/k5Jb7mjjU5aUcamNnrnMIiF1C/3HR8mGyqmPheEB1B+
-         A20HjAjQqmiRU8wWl3o3rrBrpo9QB+OtRciZMZHqhU24LjIWH7cr7z1uGIHITBjLJhPH
-         PS1A==
-X-Gm-Message-State: AOAM530wFEl3YTWrahrkAgOkPogwHrP1RD8RH6NfNrBpadZXaIDFpAXy
-        rueVfEpZSNbRDy9JqpW2NQE0xdLjtcJlqIWca4k=
-X-Google-Smtp-Source: ABdhPJzQqgUkL5oq0fuMuFq3UxEvtkIDlfD5E6dHXD5tJDQpxFdTJEw7TX0b6u6guiTEMMBwB50+ZyiQdXb65QCDXvs=
-X-Received: by 2002:a05:6902:13c1:b0:61d:969c:109c with SMTP id
- y1-20020a05690213c100b0061d969c109cmr3275233ybu.133.1647497432674; Wed, 16
- Mar 2022 23:10:32 -0700 (PDT)
+        Thu, 17 Mar 2022 02:22:01 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60062.outbound.protection.outlook.com [40.107.6.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DAF6EB2B;
+        Wed, 16 Mar 2022 23:11:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iesUl6zwsZe5HxRBni6HdgYp8Ys5Mx88umHQEV9uTfFclGTLKA3K9SF3MJ2+nFgVjicCrcNVb0Oq6XdBHveEIGmMc9Yr3At26/66wjWt4jQonc6yiV1OISUsqxx48UQ9mpacjCXW1RoQgxO9iSRP8y06hg/oFuRFN2+kYTg1SEnqgpub6Swky9DMeI3Q40mPh00m1vn2yJHVpj1HYdeIdiSJFUG/WjF0is4xmUFjOLHeOIcp1UB7AhWE8Udg7SsGHYmODkwuD0oWfevxlfPfbgbBnEBFM28wdDJ++ban0l/2iyuUl7G4I/NPjUpg2ZXoBV10CMz4GoU5oQZlqgJwYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qIxXwC3sM4wJ8/Qo+yjE8iUNe6GZq+O8YocjNWBQUJo=;
+ b=FFueF8ZsIFYJS601XMUYx/E/BGN6gHc/zAxXg/TLZF1DytXaEppn4DwZONWpJiyGr+fHo//w9YfP3t/3/qbGGbIb62SqdqsRMpqqFl9imOSBzO2Sgek4QwtugObOAxBU2uE1UvdDejTfIK/njudD+mge80xNp+I8b4IoPbAs2rTcNKiPsDa97lQjGj3jdGKCrofDO9iEoQhlk41i/bU+WF8UmHHKLZOBfdam4K/NBEEenLB0h7f9hunEgsg9FABYtZIRUHKBf4AwRN7crEZ/jEA5bCrcfi8kJm+Fx6cXDYp/ripYqmT677pAGB1xIgCsju4IK9quAzStcIk4f0bpcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qIxXwC3sM4wJ8/Qo+yjE8iUNe6GZq+O8YocjNWBQUJo=;
+ b=bMfXWpTZyYZ7m5GMstjDDE7zPcXn0jhZhcTs2YBBe6IeaqC+PdBhIftIYzfS8/rFP6ANbtwWI4epgtiert3Y2PFrFuul+DsbW3b+xZpY5pca7u+yZnAhOJ2mzakhkCd3oTmsXMQVBj2M16f6nknIzBj0jnaG7RYLD6C+WKgC4XU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
+ by AM0PR04MB4611.eurprd04.prod.outlook.com (2603:10a6:208:71::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Thu, 17 Mar
+ 2022 06:11:57 +0000
+Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::c39:69cf:c4ea:967]) by AM6PR04MB6341.eurprd04.prod.outlook.com
+ ([fe80::c39:69cf:c4ea:967%5]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
+ 06:11:57 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     mchehab@kernel.org, shawnguo@kernel.org
+Cc:     hverkuil-cisco@xs4all.nl, robh+dt@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, aisheng.dong@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v19] arm64: dts: freescale: imx8q: add imx vpu codec entries
+Date:   Thu, 17 Mar 2022 14:11:30 +0800
+Message-Id: <20220317061130.20857-1-ming.qian@nxp.com>
+X-Mailer: git-send-email 2.33.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0054.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::22) To AM6PR04MB6341.eurprd04.prod.outlook.com
+ (2603:10a6:20b:d8::14)
 MIME-Version: 1.0
-References: <f1deaeabfd31fdf512ff6502f38186ef842c2b1f.1646413117.git.darren@os.amperecomputing.com>
-In-Reply-To: <f1deaeabfd31fdf512ff6502f38186ef842c2b1f.1646413117.git.darren@os.amperecomputing.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Thu, 17 Mar 2022 19:10:19 +1300
-Message-ID: <CAGsJ_4x-ZmAfAGBmAY6HoWNGuCVc945Er4v337eGHR_zLcCHFQ@mail.gmail.com>
-Subject: Re: [PATCH v3] topology: make core_mask include at least cluster_siblings
-To:     Darren Hart <darren@os.amperecomputing.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Arm <linux-arm-kernel@lists.infradead.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        "D . Scott Phillips" <scott@os.amperecomputing.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: abdf7754-28e9-485e-831e-08da07dd0a41
+X-MS-TrafficTypeDiagnostic: AM0PR04MB4611:EE_
+X-Microsoft-Antispam-PRVS: <AM0PR04MB46118C52B10BD87FFA7A08BAE7129@AM0PR04MB4611.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iUOCqB+w8jSUbzIIJcE+vY5ZdysS5atlxryBy26m0aPzX1puAR+f775ytQGJVS6/2iY8xttEcBzbC2FQjkl+j90Uzxjy0KtW1ByUr4kCSXZs8SxtK8wtgeaM7+BHVVEGqWzqtC5vmD2NDgMN7ggSJHrT8DgbixWx7lsTEehSfzgCHIrfbH3eu7btfTomspoUExP0xuiSSLBNrhJlKHspxPQvvOrqicHpbhqVkWI0mzOZ3OXJ3hBn5+C3Sjn1dnOqH+uCLclrhzydqQfQkNGN5RG2NsmFQml80mv7RqL0deuy4PQvQr48G3R+PQjJg6+5zVLx5EhKMmksLsspbU08lF+SCG7ywuc8NoEuiGX6GM4S9F0QAyab6TpkqxiElHh9S6UZYOk346fj0gaTITXJQe52GZuqSyAd77k3x0G1/9/3UMuIXBqJV3KoyHnsnMYqp9VHObTtgubqhYMRVwDxoml4UfJv4E76lmBygc5bcBkgudLVcFzu/fZKgZR7qqQ6a7eN6zrCEj7llb0P0/wHSBhJS8nQXALTSZq0qUNieuhSJVUM7YfV2VFa4qE9Ug3OuvqKKXO52ny6Az4gRP+FfOhjsEJLFsqnZc5e+O3ibBtPxlgegoCBuCx0+3sm/R8n5h9EEhxGRf59pXEvB38qQPN940dtLYo4ErMWr+zNQbwbe+Um8VczFUBNtXpMqgNgWhmLond/5m2nSR3POevDQ6dHCFsTmo/9FBFv4b29vCzYa9v6UhSuTDnMayW5LSO9I3EbMRffSWST3fcMaf5MUw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(2616005)(86362001)(6666004)(316002)(7416002)(6512007)(8676002)(36756003)(44832011)(52116002)(6506007)(2906002)(508600001)(6486002)(26005)(66556008)(66476007)(8936002)(83380400001)(186003)(38350700002)(38100700002)(66946007)(1076003)(5660300002)(32563001)(414714003)(473944003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dr0jHLwz0cKNMjludiCeejQYStu4Ybcg2k1HJzy/FVok5ZENBQGattufVGIV?=
+ =?us-ascii?Q?qjaDBSEbI6GZliPnjrY9SBFfdGHRUrObHXKMUzUiAvGdtD7tVVo80Imoo7KP?=
+ =?us-ascii?Q?ngrRqj+IzefLcmYJaROOBQ93gpGo9vKlPyIgu4xZ7sdgLFNKr4DGBx6Shc3D?=
+ =?us-ascii?Q?jVlGOLHWBAsgI1Xh1dbMX//D3kN/PjNRadNgYBtqU3s+wcoIRnarFGL74n+/?=
+ =?us-ascii?Q?s2zzL7YpVSFOYzX4qlD8UlEML4+EqTzqYMYol1gvDhxQ+cFBNldREP+1vmzL?=
+ =?us-ascii?Q?Wvhv31g65LG+aABpcyTYleGAPPhH4QJoEAzuRfLd6xHeFrqu89+KcmKjnf3u?=
+ =?us-ascii?Q?M9bd0l0EeQb+/GpI/BZd0d6UhgOa+J7ZAtwK/02PIcYa2d7zOu/x/cTNvbRk?=
+ =?us-ascii?Q?o/ypV1iONw/EFMzz/7TqdkGDJmYoGK643+v3UxlNIM/jM5xeogIVlAV2jQnX?=
+ =?us-ascii?Q?HyxKCYNazAnpxVW4iY4cNhvNV7WJjXL5F9Y8oKIVQiXiaAXhw/8VIv8jZd/B?=
+ =?us-ascii?Q?Ieu/KXtN/oW6p8nytjpo0sQ2rMClsgEdO8PlxjQCqrR4mA8WGtD0qQMsLAG/?=
+ =?us-ascii?Q?1w7g9kNUo4js3ST6wwFlJYPzpSCcb94mJeleRdKqiyGKGcnOS4eGmufhlFaJ?=
+ =?us-ascii?Q?GOhaFtDiUbj3OJZ7EBihZTG37gEbYw4VKbYVZi5rVoSamSZGL9mh6qHfPpq/?=
+ =?us-ascii?Q?ovqoEnT16SbVfGTHfPaf0VmHZV9ZGu12XNpw9VqsDTkO0/4zE4uIVwBsy0Rd?=
+ =?us-ascii?Q?6LZLrxNsnPDfe4IIAyb8wTEO5YO7Js5hRrt1tq32eK/98tBa3QSa5Qp8G78w?=
+ =?us-ascii?Q?uLLMfR2LK4zeiSFlZFxpvoFUhOQ3Mw62C9miVxq0OexIElYgHUZUHK6R9WQM?=
+ =?us-ascii?Q?V7RfBUGrVD3X98Ez4cAF9KIJ6Beye6YEYrshEhz0C0UwJQPAry9C2YJGd6cX?=
+ =?us-ascii?Q?CRikGRXcAU9UaOf8aZAuN4KqtOHuStHcTH5M+XjCtUXdzoiKnwtcVS94Av1F?=
+ =?us-ascii?Q?cQrVjG61fvJdZr3l/SAmRTGDALqzNEPpZqDaYQF1plGwQf2JBlAh0gTLbDjU?=
+ =?us-ascii?Q?Lpckbkk9kLZt6OPu9wttPC/vkRSSDus7yeqShqhmZs6bke5X9HHxeyb9Suj/?=
+ =?us-ascii?Q?KhO0gxu0AUMrqaJmiH6FfVULZgU3cx5aWlHEbpZ8YpeE363A+OrTTHlMmoWu?=
+ =?us-ascii?Q?jkmEeq5Bo9/T+aGbaFaXXFKTM+TDT98a07nThafn8+0N7SdxyKB2z0CdX5sk?=
+ =?us-ascii?Q?na+SaomfZwMcgAKUIhOpG3TYV4msAgGf1RusyA4UkXojfYOTJpNHMyz3d3u1?=
+ =?us-ascii?Q?WrwuXfSuzaeoT1+N7PCWWMaoUnr8MaGqShCs0Vu/aBnd/otvAtQZZsPL5rAK?=
+ =?us-ascii?Q?10SNZmPdCIoPTXqdxNjTzsByEWitZKRjyIyX9aET5L5oUm8yOYxoV4MvPXBi?=
+ =?us-ascii?Q?rTGKwmB6fsV531vxK+qF5ZwEW6hQBBpt?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: abdf7754-28e9-485e-831e-08da07dd0a41
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2022 06:11:56.9922
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: q5LhSrS7MBF4RbTz2fHgPLCpjva75KV6YpYIm/HBROGuiqkM/oH4bN/vFJfrXKlecHWLJjqrZq5BwEdUqLoaCQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4611
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,99 +113,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 5, 2022 at 8:54 AM Darren Hart
-<darren@os.amperecomputing.com> wrote:
->
-> Ampere Altra defines CPU clusters in the ACPI PPTT. They share a Snoop
-> Control Unit, but have no shared CPU-side last level cache.
->
-> cpu_coregroup_mask() will return a cpumask with weight 1, while
-> cpu_clustergroup_mask() will return a cpumask with weight 2.
->
-> As a result, build_sched_domain() will BUG() once per CPU with:
->
-> BUG: arch topology borken
-> the CLS domain not a subset of the MC domain
->
-> The MC level cpumask is then extended to that of the CLS child, and is
-> later removed entirely as redundant. This sched domain topology is an
-> improvement over previous topologies, or those built without
-> SCHED_CLUSTER, particularly for certain latency sensitive workloads.
-> With the current scheduler model and heuristics, this is a desirable
-> default topology for Ampere Altra and Altra Max system.
->
-> Rather than create a custom sched domains topology structure and
-> introduce new logic in arch/arm64 to detect these systems, update the
-> core_mask so coregroup is never a subset of clustergroup, extending it
-> to cluster_siblings if necessary.
->
-> This has the added benefit over a custom topology of working for both
-> symmetric and asymmetric topologies. It does not address systems where
-> the cluster topology is above a populated mc topology, but these are not
-> considered today and can be addressed separately if and when they
-> appear.
->
-> The final sched domain topology for a 2 socket Ampere Altra system is
-> unchanged with or without CONFIG_SCHED_CLUSTER, and the BUG is avoided:
->
-> For CPU0:
->
-> CONFIG_SCHED_CLUSTER=y
-> CLS  [0-1]
-> DIE  [0-79]
-> NUMA [0-159]
->
-> CONFIG_SCHED_CLUSTER is not set
-> DIE  [0-79]
-> NUMA [0-159]
->
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> Cc: Barry Song <song.bao.hua@hisilicon.com>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: D. Scott Phillips <scott@os.amperecomputing.com>
-> Cc: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-> Cc: <stable@vger.kernel.org> # 5.16.x
-> Suggested-by: Barry Song <song.bao.hua@hisilicon.com>
-> Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+Add the Video Processing Unit node for IMX8Q SoC.
 
-Reviewed-by: Barry Song <baohua@kernel.org>
+Signed-off-by: Ming Qian <ming.qian@nxp.com>
+Signed-off-by: Shijie Qin <shijie.qin@nxp.com>
+Signed-off-by: Zhou Peng <eagle.zhou@nxp.com>
+---
+ .../arm64/boot/dts/freescale/imx8-ss-vpu.dtsi | 74 +++++++++++++++++++
+ arch/arm64/boot/dts/freescale/imx8qxp-mek.dts | 25 +++++++
+ arch/arm64/boot/dts/freescale/imx8qxp.dtsi    | 24 ++++++
+ 3 files changed, 123 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-ss-vpu.dtsi
 
-> ---
-> v1: Drop MC level if coregroup weight == 1
-> v2: New sd topo in arch/arm64/kernel/smp.c
-> v3: No new topo, extend core_mask to cluster_siblings
->
->  drivers/base/arch_topology.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 976154140f0b..a96f45db928b 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -628,6 +628,14 @@ const struct cpumask *cpu_coregroup_mask(int cpu)
->                         core_mask = &cpu_topology[cpu].llc_sibling;
->         }
->
-> +       /*
-> +        * For systems with no shared cpu-side LLC but with clusters defined,
-> +        * extend core_mask to cluster_siblings. The sched domain builder will
-> +        * then remove MC as redundant with CLS if SCHED_CLUSTER is enabled.
-> +        */
-> +       if (cpumask_subset(core_mask, &cpu_topology[cpu].cluster_sibling))
-> +               core_mask = &cpu_topology[cpu].cluster_sibling;
-> +
->         return core_mask;
->  }
->
-> --
-> 2.31.1
->
+diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-vpu.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-vpu.dtsi
+new file mode 100644
+index 000000000000..989f2bf07b5e
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8-ss-vpu.dtsi
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright 2021 NXP
++ *	Dong Aisheng <aisheng.dong@nxp.com>
++ */
++
++vpu: vpu@2c000000 {
++	#address-cells = <1>;
++	#size-cells = <1>;
++	ranges = <0x2c000000 0x0 0x2c000000 0x2000000>;
++	reg = <0 0x2c000000 0 0x1000000>;
++	power-domains = <&pd IMX_SC_R_VPU>;
++	status = "disabled";
++
++	mu_m0: mailbox@2d000000 {
++		compatible = "fsl,imx6sx-mu";
++		reg = <0x2d000000 0x20000>;
++		interrupts = <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>;
++		#mbox-cells = <2>;
++		power-domains = <&pd IMX_SC_R_VPU_MU_0>;
++		status = "disabled";
++	};
++
++	mu1_m0: mailbox@2d020000 {
++		compatible = "fsl,imx6sx-mu";
++		reg = <0x2d020000 0x20000>;
++		interrupts = <GIC_SPI 470 IRQ_TYPE_LEVEL_HIGH>;
++		#mbox-cells = <2>;
++		power-domains = <&pd IMX_SC_R_VPU_MU_1>;
++		status = "disabled";
++	};
++
++	mu2_m0: mailbox@2d040000 {
++		compatible = "fsl,imx6sx-mu";
++		reg = <0x2d040000 0x20000>;
++		interrupts = <GIC_SPI 474 IRQ_TYPE_LEVEL_HIGH>;
++		#mbox-cells = <2>;
++		power-domains = <&pd IMX_SC_R_VPU_MU_2>;
++		status = "disabled";
++	};
++
++	vpu_core0: vpu_core@2d080000 {
++		reg = <0x2d080000 0x10000>;
++		compatible = "nxp,imx8q-vpu-decoder";
++		power-domains = <&pd IMX_SC_R_VPU_DEC_0>;
++		mbox-names = "tx0", "tx1", "rx";
++		mboxes = <&mu_m0 0 0>,
++			<&mu_m0 0 1>,
++			<&mu_m0 1 0>;
++		status = "disabled";
++	};
++
++	vpu_core1: vpu_core@2d090000 {
++		reg = <0x2d090000 0x10000>;
++		compatible = "nxp,imx8q-vpu-encoder";
++		power-domains = <&pd IMX_SC_R_VPU_ENC_0>;
++		mbox-names = "tx0", "tx1", "rx";
++		mboxes = <&mu1_m0 0 0>,
++			<&mu1_m0 0 1>,
++			<&mu1_m0 1 0>;
++		status = "disabled";
++	};
++
++	vpu_core2: vpu_core@2d0a0000 {
++		reg = <0x2d0a0000 0x10000>;
++		compatible = "nxp,imx8q-vpu-encoder";
++		power-domains = <&pd IMX_SC_R_VPU_ENC_1>;
++		mbox-names = "tx0", "tx1", "rx";
++		mboxes = <&mu2_m0 0 0>,
++			<&mu2_m0 0 1>,
++			<&mu2_m0 1 0>;
++		status = "disabled";
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
+index 863232a47004..44347a076722 100644
+--- a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
++++ b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
+@@ -196,6 +196,31 @@ &usdhc2 {
+ 	status = "okay";
+ };
+ 
++&vpu {
++	compatible = "nxp,imx8qxp-vpu";
++	status = "okay";
++};
++
++&mu_m0 {
++	status = "okay";
++};
++
++&mu1_m0 {
++	status = "okay";
++};
++
++&vpu_core0 {
++	reg = <0x2d040000 0x10000>;
++	memory-region = <&decoder_boot>, <&decoder_rpc>;
++	status = "okay";
++};
++
++&vpu_core1 {
++	reg = <0x2d050000 0x10000>;
++	memory-region = <&encoder_boot>, <&encoder_rpc>;
++	status = "okay";
++};
++
+ &iomuxc {
+ 	pinctrl_fec1: fec1grp {
+ 		fsl,pins = <
+diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+index dbec7c106e0b..a79ae33cbad2 100644
+--- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+@@ -46,6 +46,9 @@ aliases {
+ 		serial1 = &lpuart1;
+ 		serial2 = &lpuart2;
+ 		serial3 = &lpuart3;
++		vpu_core0 = &vpu_core0;
++		vpu_core1 = &vpu_core1;
++		vpu_core2 = &vpu_core2;
+ 	};
+ 
+ 	cpus {
+@@ -162,10 +165,30 @@ reserved-memory {
+ 		#size-cells = <2>;
+ 		ranges;
+ 
++		decoder_boot: decoder-boot@84000000 {
++			reg = <0 0x84000000 0 0x2000000>;
++			no-map;
++		};
++
++		encoder_boot: encoder-boot@86000000 {
++			reg = <0 0x86000000 0 0x200000>;
++			no-map;
++		};
++
++		decoder_rpc: decoder-rpc@92000000 {
++			reg = <0 0x92000000 0 0x100000>;
++			no-map;
++		};
++
+ 		dsp_reserved: dsp@92400000 {
+ 			reg = <0 0x92400000 0 0x2000000>;
+ 			no-map;
+ 		};
++
++		encoder_rpc: encoder-rpc@94400000 {
++			reg = <0 0x94400000 0 0x700000>;
++			no-map;
++		};
+ 	};
+ 
+ 	pmu {
+@@ -287,6 +310,7 @@ map0 {
+ 
+ 	/* sorted in register address */
+ 	#include "imx8-ss-img.dtsi"
++	#include "imx8-ss-vpu.dtsi"
+ 	#include "imx8-ss-adma.dtsi"
+ 	#include "imx8-ss-conn.dtsi"
+ 	#include "imx8-ss-ddr.dtsi"
+-- 
+2.33.0
 
-Thanks
-Barry

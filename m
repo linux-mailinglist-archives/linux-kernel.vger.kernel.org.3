@@ -2,52 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BD04DC57C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8817C4DC584
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233407AbiCQMGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
+        id S233423AbiCQMIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbiCQMGi (ORCPT
+        with ESMTP id S233416AbiCQMIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:06:38 -0400
-Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D421A6E6A;
-        Thu, 17 Mar 2022 05:05:20 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KK5SH2RZ2zMqNN2;
-        Thu, 17 Mar 2022 13:05:19 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KK5SG3DNhzlhSMF;
-        Thu, 17 Mar 2022 13:05:18 +0100 (CET)
-Message-ID: <ebf1f65c-c0eb-c818-e3e4-46ad9292bdec@digikod.net>
-Date:   Thu, 17 Mar 2022 13:06:02 +0100
+        Thu, 17 Mar 2022 08:08:23 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCA81D59C1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:07:06 -0700 (PDT)
+X-UUID: 0ac663a97f25400ba5128c5806cf542d-20220317
+X-UUID: 0ac663a97f25400ba5128c5806cf542d-20220317
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 962720090; Thu, 17 Mar 2022 20:06:50 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 17 Mar 2022 20:06:48 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 17 Mar
+ 2022 20:06:44 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 17 Mar 2022 20:06:44 +0800
+Message-ID: <8b331befede093265cd9fc0773000c1bf715a2c8.camel@mediatek.com>
+Subject: Re: [PATCH v3,3/4] drm/mediatek: keep dsi as LP00 before dcs cmds
+ transfer
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <matthias.bgg@gmail.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <jitao.shi@mediatek.com>
+Date:   Thu, 17 Mar 2022 20:06:44 +0800
+In-Reply-To: <1647503611-13144-4-git-send-email-xinlei.lee@mediatek.com>
+References: <1647503611-13144-1-git-send-email-xinlei.lee@mediatek.com>
+         <1647503611-13144-4-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20220221212522.320243-1-mic@digikod.net>
- <20220221212522.320243-10-mic@digikod.net>
- <CAHC9VhSmz1ga5NTu=vG3+Z+gxD8C+-W+k5UweUROe2p4BfjSTg@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v1 09/11] landlock: Document LANDLOCK_ACCESS_FS_REFER and
- ABI versioning
-In-Reply-To: <CAHC9VhSmz1ga5NTu=vG3+Z+gxD8C+-W+k5UweUROe2p4BfjSTg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,76 +61,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Xinlei,
 
-On 17/03/2022 02:27, Paul Moore wrote:
-> On Mon, Feb 21, 2022 at 4:15 PM Mickaël Salaün <mic@digikod.net> wrote:
->>
->> From: Mickaël Salaün <mic@linux.microsoft.com>
->>
->> Add LANDLOCK_ACCESS_FS_REFER in the example and properly check to only
->> use it if the current kernel support it thanks to the Landlock ABI
->> version.
->>
->> Move the file renaming and linking limitation to a new "Previous
->> limitations" section.
->>
->> Improve documentation about the backward and forward compatibility,
->> including the rational for ruleset's handled_access_fs.
->>
->> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
->> Link: https://lore.kernel.org/r/20220221212522.320243-10-mic@digikod.net
->> ---
->>   Documentation/userspace-api/landlock.rst | 124 +++++++++++++++++++----
->>   1 file changed, 104 insertions(+), 20 deletions(-)
+On Thu, 2022-03-17 at 15:53 +0800, xinlei.lee@mediatek.com wrote:
+> From: Jitao Shi <jitao.shi@mediatek.com>
 > 
-> Thanks for remembering to update the docs :)  I made a few phrasing
-> suggestions below, but otherwise it looks good to me.
+> To comply with the panel sequence, hold the mipi signal to LP00 
 
-Thanks Paul! I'll take them.
+Could you provide a example panel power sequence to let me understand
+that?
+Maybe you can put them in commit message.
 
+> before the dcs cmds transmission,
+> and pull the mipi signal high from LP00 to LP11 until the start of
+> the dcs cmds transmission.
 
+Maybe you can try to write as:
+To comply with...
+- Hold the mipi signal...
+- Pul the miip signal high....
+
+> If dsi is not in cmd mode, then dsi will pull the mipi signal high in
+> the mtk_output_dsi_enable function.
 > 
-> Reviewed-by: Paul Moore <paul@paul-moore.com>
+> Fixes: 2dd8075d2185 ("drm/mediatek: mtk_dsi: Use the drm_panel_bridge
+> API")
 > 
->> diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
->> index f35552ff19ba..97db09d36a5c 100644
->> --- a/Documentation/userspace-api/landlock.rst
->> +++ b/Documentation/userspace-api/landlock.rst
->> @@ -281,6 +347,24 @@ Memory usage
->>   Kernel memory allocated to create rulesets is accounted and can be restricted
->>   by the Documentation/admin-guide/cgroup-v1/memory.rst.
->>
->> +Previous limitations
->> +====================
->> +
->> +File renaming and linking (ABI 1)
->> +---------------------------------
->> +
->> +Because Landlock targets unprivileged access controls, it is needed to properly
->                                                            ^^^^^
->                                             "... controls, it needs to ..."
-> 
->> +handle composition of rules.  Such property also implies rules nesting.
->> +Properly handling multiple layers of ruleset, each one of them able to restrict
->                                          ^^^^^^^
->                                        "rulesets,"
-> 
->> +access to files, also implies to inherit the ruleset restrictions from a parent
->                                   ^^^^^^^^^^
->                      "... implies inheritance of the ..."
-> 
->> +to its hierarchy.  Because files are identified and restricted by their
->> +hierarchy, moving or linking a file from one directory to another implies to
->> +propagate the hierarchy constraints.
-> 
-> "... one directory to another implies propagation of the hierarchy constraints."
-> 
->> +                                     To protect against privilege escalations
-> 
->> +through renaming or linking, and for the sake of simplicity, Landlock previously
->> +limited linking and renaming to the same directory.  Starting with the Landlock
->> +ABI version 2, it is now possible to securely control renaming and linking
->> +thanks to the new `LANDLOCK_ACCESS_FS_REFER` access right.
-> 
+
+Can you remove this blank line?
+
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dsi.c | 31 +++++++++++++++++++++++-----
 > --
-> paul-moore.com
+>  1 file changed, 24 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index e33caaca11a7..b509d59235e2 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -203,6 +203,7 @@ struct mtk_dsi {
+>  	struct mtk_phy_timing phy_timing;
+>  	int refcount;
+>  	bool enabled;
+> +	bool lanes_ready;
+>  	u32 irq_data;
+>  	wait_queue_head_t irq_wait_queue;
+>  	const struct mtk_dsi_driver_data *driver_data;
+> @@ -654,13 +655,6 @@ static int mtk_dsi_poweron(struct mtk_dsi *dsi)
+>  	mtk_dsi_config_vdo_timing(dsi);
+>  	mtk_dsi_set_interrupt_enable(dsi);
+>  
+> -	mtk_dsi_rxtx_control(dsi);
+> -	usleep_range(30, 100);
+> -	mtk_dsi_reset_dphy(dsi);
+> -	mtk_dsi_clk_ulp_mode_leave(dsi);
+> -	mtk_dsi_lane0_ulp_mode_leave(dsi);
+> -	mtk_dsi_clk_hs_mode(dsi, 0);
+> -
+>  	return 0;
+>  err_disable_engine_clk:
+>  	clk_disable_unprepare(dsi->engine_clk);
+> @@ -689,6 +683,8 @@ static void mtk_dsi_poweroff(struct mtk_dsi *dsi)
+>  	clk_disable_unprepare(dsi->digital_clk);
+>  
+>  	phy_power_off(dsi->phy);
+> +
+> +	dsi->lanes_ready = false;
+>  }
+>  
+>  static void mtk_output_dsi_enable(struct mtk_dsi *dsi)
+> @@ -696,6 +692,16 @@ static void mtk_output_dsi_enable(struct mtk_dsi
+> *dsi)
+>  	if (dsi->enabled)
+>  		return;
+>  
+> +	if (!dsi->lanes_ready) {
+> +		dsi->lanes_ready = true;
+> +		mtk_dsi_rxtx_control(dsi);
+> +		usleep_range(30, 100);
+> +		mtk_dsi_reset_dphy(dsi);
+> +		mtk_dsi_clk_ulp_mode_leave(dsi);
+> +		mtk_dsi_lane0_ulp_mode_leave(dsi);
+> +		mtk_dsi_clk_hs_mode(dsi, 0);
+> +	}
+> +
+>  	mtk_dsi_set_mode(dsi);
+>  	mtk_dsi_clk_hs_mode(dsi, 1);
+>  
+> @@ -995,6 +1001,17 @@ static ssize_t mtk_dsi_host_transfer(struct
+> mipi_dsi_host *host,
+>  	if (MTK_DSI_HOST_IS_READ(msg->type))
+>  		irq_flag |= LPRX_RD_RDY_INT_FLAG;
+>  
+> +	if (!dsi->lanes_ready) {
+> +		dsi->lanes_ready = true;
+> +		mtk_dsi_rxtx_control(dsi);
+> +		usleep_range(30, 100);
+> +		mtk_dsi_reset_dphy(dsi);
+> +		mtk_dsi_clk_ulp_mode_leave(dsi);
+> +		mtk_dsi_lane0_ulp_mode_leave(dsi);
+> +		mtk_dsi_clk_hs_mode(dsi, 0);
+
+The drivers are the same with previous modification.
+I think you can use a funtion for them?
+
+> +		msleep(20);
+
+Why delay 20ms but not in mtk_output_dsi_enable?
+
+BRs,
+Rex
+> +	}
+> +
+>  	ret = mtk_dsi_host_send_cmd(dsi, msg, irq_flag);
+>  	if (ret)
+>  		goto restore_dsi_mode;
+

@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504E34DCAA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A7A4DCAAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236280AbiCQQDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S236285AbiCQQDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234213AbiCQQDi (ORCPT
+        with ESMTP id S236287AbiCQQDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:03:38 -0400
+        Thu, 17 Mar 2022 12:03:46 -0400
 Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5EE1C16C4;
-        Thu, 17 Mar 2022 09:02:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3336B2013FA;
+        Thu, 17 Mar 2022 09:02:27 -0700 (PDT)
 Received: from toolbox.toradex.int ([31.10.206.124]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LmaZx-1o3O2b0Acd-00aGMe;
- Thu, 17 Mar 2022 17:01:46 +0100
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MgM1Q-1niXo80J8Q-00Nhkn;
+ Thu, 17 Mar 2022 17:01:51 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Alex Marginean <alexandru.marginean@nxp.com>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Fabio Estevam <festevam@gmail.com>,
         Frank Rowand <frowand.list@gmail.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Olof Johansson <olof@lixom.net>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Reinhold Mueller <reinhold.mueller@emtrion.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/3] dt-bindings: arm: fsl: add toradex,verdin-imx8mp et al.
-Date:   Thu, 17 Mar 2022 17:01:21 +0100
-Message-Id: <20220317160122.341484-3-marcel@ziswiler.com>
+        Tim Harvey <tharvey@gateworks.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 3/3] arm64: dts: freescale: add initial support for verdin imx8m plus
+Date:   Thu, 17 Mar 2022 17:01:22 +0100
+Message-Id: <20220317160122.341484-4-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220317160122.341484-1-marcel@ziswiler.com>
 References: <20220317160122.341484-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:ams2CG3ed2gw3hclzRgKMrYSeCfSVx52f7cyauVVMqPLm2fYMJz
- isT5IQ1fK9yMVEHPdYL55wFIZhpUNGxxbwnmUWxqv4uYqn3TjdWxNCiJSunuC+qnFhzVaBS
- hFWQTpvM6aYd4Kodw0Zy1Cp4EcqJAG1ZuiT5gFZAos9bXU00Utob6avoQ16pfupm3RrElf4
- Rka9MHV4C9D7eLzooewpQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tklSanhWjWM=:ThAQc2zUC2AmlWSJnkFxyT
- CYhrdSa2FzUZ1N/ZIhO1tOlxUqqLtAcEyniCVWyCT7Zv93oO11Mla9CnQooNc2iTyNRT7ht/Q
- RKsZQP4mUW4ZT5aOfGW59XVy9PK25bbxCYsn3J6NMT+2hBhRNkf4fsHS42BpC+CCzE6edhLl9
- nya5hmTLB8HGcLvEUIzek1MdlO4O/OYlZb/Un483BEqm3P4prMX74EcClE0Iyy2VyiCJphH9O
- 8x98h1JOOTqJT8+aDmuIgHkwgf7YA540AEQIUpkpe7gIG3dIkKO35t4+qla5ADlycPdqKlvnS
- rsYFnEXRUH1Jyfo6xAmPY8/g0jcxbx++hxPpRIX+KG8FxgPB6edKwe98rxkC7NrVEEqGXzygs
- mhaOo6asTTdGlPzeqfULFcJ3VTjHA1ax4AjRo3Mr6NO3rHym3WDcRaDAtl/LGudlarwpxumhl
- Qt+TRK5BGOu2EdLsjrFT125oCepGcJ1+9h06As+qH6wJWGnWr+CxE4fgOEuB3vjZZyAx5Wxy8
- dI0iNcwEYQqGD4Z6dw1lMo06SQZLsFLzwqdGsaZLKGPKgROgzwhmA4wDp817NlwgRyITfrvkh
- 59r6ESkhfJrpqFSjwQHx4dx1fy0zd2qgwi58ftwHaOVxj9vRCwU7ra8y2bDPAxYDnGxulr5kL
- 7wNgtg147GCV91GOLJ+mJ8cudtkk0t64PD3XZ+68NmnzPCtGqRRPQ5lurtBPzimBwb5I=
+X-Provags-ID: V03:K1:SU2iykIgCsSSK3+hq3ZnKKc38tkr9hezMNHN59yabAT/IByL9xM
+ 2P9YG6bctCfYjfta4zCFjGSY1qreE5wkh61/EeGYBnAQml0TQlRqKSjK6ZNK0oOU7r3rASk
+ LVsog1ONTfHAOyeSm3AyYkBd54kMIfYVzRTOLrv0J3ZDbD3dC+cC4cvRoRcWQgqsgneARTl
+ uGnFAzY6YcqS+jp9mq4YA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LnhB5RE3Ns8=:GKlGt6gHBjZfDwwc3UY5DM
+ tWIUODgfiAxO3OolD4g7L7/bnpqqYBPTqHZLT4q9LcCPG8wfTaXh6/YMohFsy+0cbPzBsa/+y
+ LIwTDyw2bUhto3v5mKCTG4yMeTHguTqCgYd5bjDVqE4NyKSxw1CpSJvNdSDB0S08cWGwcKPIF
+ uh48xrRjAywGfMJ9fqkAZ2uIpRFw+twew6+2N3Xe8SEXA3wp14zFjMC+QRGyYVrR9qrjsOLe9
+ bILgl8VsHho3JlQNvPLOClEMupZRSWo0fyY4KfCVmKOcVr1Pnp9Y9Z9D+t0eR+wCEWMP8pzOG
+ qwTNMuNMO47MFYFf3a6xxioDa2CgBMh5TQItX2UPwo0CQrHa658mt4PfLX/Lga6Q8YTSm5ulo
+ y/jkfVK4pqKf702XRQG3XarNmH1WFttcEVX8dXGaV1rtOj0W637KcsAI1Tuu6LGZ9dyDMrwQu
+ 9Nl6dGP5vHVLYYBQPRcLoLHX9TFC2hLkSIx5jYOD4I2hUI/Xie6RTNy6BV459WJIgfgjp97vt
+ kKVA0V62fZ7LsMQAbgKJ+e7sTEuReTqRKph4ae/gezmPosnv/x4nw+jjjQVyZAAtmcMpWa6ku
+ 7+mlqjkadSloyvz6IHoIN823QKEsF5VtX+hhB974ak7wtZ5xFzk+INMo5GgfzmINo3IFpPSh1
+ RHyREVlOLM4nSpXSUf4yiy0NnhOtWqsFlQMAfeBf4jTkClCExVQzYJ44okhc4l+riM2uJpZLS
+ q3dt9jZXVIhtv/cY
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -69,55 +72,1874 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Add toradex,verdin-imx8mp for the Verdin iMX8M Plus modules, its nonwifi
-and wifi variants and the carrier boards (both Dahlia and the Verdin
-Development Board) they may be mated in.
+This patch adds the device tree to support Toradex Verdin iMX8M Plus [1]
+a computer on module which can be used on different carrier boards.
+
+The module consists of an NXP i.MX 8M Plus family SoC (either i.MX 8M
+Plus Quad or 8M Plus QuadLite), a PCA9450C PMIC, a Gigabit Ethernet PHY,
+1, 2, 4 or 8 GB of LPDDR4 RAM, an eMMC, a TLA2024 ADC, an I2C EEPROM, an
+RX8130 RTC, an optional I2C temperature sensor plus an optional
+Bluetooth/Wi-Fi module.
+
+Anything that is not self-contained on the module is disabled by
+default.
+
+The device tree for the Dahlia includes the module's device tree and
+enables the supported peripherals of the carrier board.
+
+The device tree for the Verdin Development Board includes the module's
+device tree as well as the Dahlia one as it is a superset and supports
+almost all peripherals available.
+
+So far there is no display functionality supported at all but basic
+console UART, USB host, eMMC and Ethernet functionality work fine.
+
+[1] https://www.toradex.com/computer-on-modules/verdin-arm-family/nxp-imx-8m-plus
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+
 ---
 
- .../devicetree/bindings/arm/fsl.yaml          | 21 +++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ arch/arm64/boot/dts/freescale/Makefile        |    4 +
+ .../dts/freescale/imx8mp-verdin-dahlia.dtsi   |  125 ++
+ .../boot/dts/freescale/imx8mp-verdin-dev.dtsi |   44 +
+ .../imx8mp-verdin-nonwifi-dahlia.dts          |   18 +
+ .../freescale/imx8mp-verdin-nonwifi-dev.dts   |   18 +
+ .../dts/freescale/imx8mp-verdin-nonwifi.dtsi  |   54 +
+ .../freescale/imx8mp-verdin-wifi-dahlia.dts   |   18 +
+ .../dts/freescale/imx8mp-verdin-wifi-dev.dts  |   18 +
+ .../dts/freescale/imx8mp-verdin-wifi.dtsi     |   82 +
+ .../boot/dts/freescale/imx8mp-verdin.dtsi     | 1373 +++++++++++++++++
+ 10 files changed, 1754 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-dev.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
 
-diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-index 08bdd30e511c..8e42ae52a77a 100644
---- a/Documentation/devicetree/bindings/arm/fsl.yaml
-+++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-@@ -860,6 +860,9 @@ properties:
-         items:
-           - enum:
-               - fsl,imx8mp-evk            # i.MX8MP EVK Board
-+              - toradex,verdin-imx8mp     # Verdin iMX8M Plus Modules
-+              - toradex,verdin-imx8mp-nonwifi  # Verdin iMX8M Plus Modules without Wi-Fi / BT
-+              - toradex,verdin-imx8mp-wifi  # Verdin iMX8M Plus Wi-Fi / BT Modules
-           - const: fsl,imx8mp
- 
-       - description: PHYTEC phyCORE-i.MX8MP SoM based boards
-@@ -868,6 +871,24 @@ properties:
-           - const: phytec,imx8mp-phycore-som         # phyCORE-i.MX8MP SoM
-           - const: fsl,imx8mp
- 
-+      - description: Toradex Boards with Verdin iMX8M Plus Modules
-+        items:
-+          - enum:
-+              - toradex,verdin-imx8mp-nonwifi-dahlia # Verdin iMX8M Plus Module on Dahlia
-+              - toradex,verdin-imx8mp-nonwifi-dev    # Verdin iMX8M Plus Module on Verdin Development Board
-+          - const: toradex,verdin-imx8mp-nonwifi     # Verdin iMX8M Plus Module without Wi-Fi / BT
-+          - const: toradex,verdin-imx8mp             # Verdin iMX8M Plus Module
-+          - const: fsl,imx8mp
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 7f51b537df40..f1d7607888e2 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -78,6 +78,10 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-venice-gw7902.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-nonwifi-dahlia.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-nonwifi-dev.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-wifi-dahlia.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-wifi-dev.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mq-evk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mq-hummingboard-pulse.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mq-kontron-pitx-imx8m.dtb
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
+new file mode 100644
+index 000000000000..103d97a3b029
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
+@@ -0,0 +1,125 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
 +
-+      - description: Toradex Boards with Verdin iMX8M Plus Wi-Fi / BT Modules
-+        items:
-+          - enum:
-+              - toradex,verdin-imx8mp-wifi-dahlia # Verdin iMX8M Plus Wi-Fi / BT Module on Dahlia
-+              - toradex,verdin-imx8mp-wifi-dev    # Verdin iMX8M Plus Wi-Fi / BT M. on Verdin Development B.
-+          - const: toradex,verdin-imx8mp-wifi     # Verdin iMX8M Plus Wi-Fi / BT Module
-+          - const: toradex,verdin-imx8mp          # Verdin iMX8M Plus Module
-+          - const: fsl,imx8mp
++&backlight {
++	power-supply = <&reg_3p3v>;
++};
 +
-       - description: i.MX8MQ based Boards
-         items:
-           - enum:
++/* Verdin SPI_1 */
++&ecspi1 {
++	status = "okay";
++};
++
++/* EEPROM on display adapter boards */
++&eeprom_display_adapter {
++	status = "okay";
++};
++
++/* EEPROM on Verdin Development board */
++&eeprom_carrier_board {
++	status = "okay";
++};
++
++&eqos {
++	status = "okay";
++};
++
++&flexcan1 {
++	status = "okay";
++};
++
++&flexcan2 {
++	status = "okay";
++};
++
++/* Verdin QSPI_1 */
++&flexspi {
++	status = "okay";
++};
++
++/* Current measurement into module VCC */
++&hwmon {
++	status = "okay";
++};
++
++&hwmon_temp {
++	vs-supply = <&reg_1p8v>;
++	status = "okay";
++};
++
++/* Verdin I2C_2_DSI */
++&i2c2 {
++	status = "okay";
++};
++
++&i2c3 {
++	status = "okay";
++};
++
++/* Verdin I2C_1 */
++&i2c4 {
++	status = "okay";
++};
++
++/* Verdin PCIE_1 */
++
++/* Verdin PWM_1 */
++&pwm1 {
++	status = "okay";
++};
++
++/* Verdin PWM_2 */
++&pwm2 {
++	status = "okay";
++};
++
++/* Verdin PWM_3_DSI */
++&pwm3 {
++	status = "okay";
++};
++
++&reg_usdhc2_vmmc {
++	vin-supply = <&reg_3p3v>;
++};
++
++/* VERDIN I2S_1 */
++
++/* Verdin UART_1 */
++&uart1 {
++	status = "okay";
++};
++
++/* Verdin UART_2 */
++&uart2 {
++	status = "okay";
++};
++
++/* Verdin UART_3, used as the Linux Console */
++&uart3 {
++	status = "okay";
++};
++
++/* Verdin USB_1 */
++&usb3_0 {
++	status = "okay";
++};
++
++&usb3_phy0 {
++	status = "okay";
++};
++
++/* Verdin USB_2 */
++&usb3_1 {
++	status = "okay";
++};
++
++&usb3_phy1 {
++	status = "okay";
++};
++
++/* Verdin SD_1 */
++&usdhc2 {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-dev.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dev.dtsi
+new file mode 100644
+index 000000000000..1dfa9012e70d
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dev.dtsi
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++#include "imx8mp-verdin-dahlia.dtsi"
++
++/ {
++	reg_eth2phy: regulator-eth2phy {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio_expander_21 4 GPIO_ACTIVE_HIGH>; /* ETH_PWR_EN */
++		off-on-delay = <500000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-min-microvolt = <3300000>;
++		regulator-name = "+V3.3_ETH";
++		startup-delay-us = <200000>;
++		vin-supply = <&reg_3p3v>;
++	};
++};
++
++&fec {
++	phy-supply = <&reg_eth2phy>;
++	status = "okay";
++};
++
++&gpio_expander_21 {
++	status = "okay";
++	vcc-supply = <&reg_1p8v>;
++};
++
++/* Verdin I2C_1 */
++
++/* Verdin UART_1, connector X50 through RS485 transceiver */
++&uart1 {
++	linux,rs485-enabled-at-boot-time;
++	rs485-rts-active-low;
++	rs485-rx-during-tx;
++};
++
++/* Limit frequency on dev board due to long traces and bad signal integrity */
++&usdhc2 {
++	max-frequency = <100000000>;
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dts b/arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dts
+new file mode 100644
+index 000000000000..68147b0c1b35
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dts
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++
++#include "imx8mp-verdin.dtsi"
++#include "imx8mp-verdin-nonwifi.dtsi"
++#include "imx8mp-verdin-dahlia.dtsi"
++
++/ {
++	model = "Toradex Verdin iMX8M Plus on Dahlia Board";
++	compatible = "toradex,verdin-imx8mp-nonwifi-dahlia",
++		     "toradex,verdin-imx8mp-nonwifi",
++		     "toradex,verdin-imx8mp",
++		     "fsl,imx8mp";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dts b/arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dts
+new file mode 100644
+index 000000000000..879ff687cf2b
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dts
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++
++#include "imx8mp-verdin.dtsi"
++#include "imx8mp-verdin-nonwifi.dtsi"
++#include "imx8mp-verdin-dev.dtsi"
++
++/ {
++	model = "Toradex Verdin iMX8M Plus on Verdin Development Board";
++	compatible = "toradex,verdin-imx8mp-nonwifi-dev",
++		     "toradex,verdin-imx8mp-nonwifi",
++		     "toradex,verdin-imx8mp",
++		     "fsl,imx8mp";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi.dtsi
+new file mode 100644
+index 000000000000..91d597391b7c
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi.dtsi
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++&gpio5 {
++	gpio-line-names = "SODIMM_42",
++			  "SODIMM_46",
++			  "SODIMM_187",
++			  "SODIMM_20",
++			  "SODIMM_22",
++			  "SODIMM_15",
++			  "SODIMM_196",
++			  "SODIMM_200",
++			  "SODIMM_198",
++			  "SODIMM_202",
++			  "SODIMM_164",
++			  "SODIMM_152",
++			  "SODIMM_116",
++			  "SODIMM_128",
++			  "",
++			  "",
++			  "SODIMM_55",
++			  "SODIMM_53",
++			  "SODIMM_95",
++			  "SODIMM_93",
++			  "SODIMM_14",
++			  "SODIMM_12",
++			  "SODIMM_129",
++			  "SODIMM_131",
++			  "SODIMM_137",
++			  "SODIMM_139",
++			  "SODIMM_147",
++			  "SODIMM_149",
++			  "SODIMM_151",
++			  "SODIMM_153";
++};
++
++&iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_gpio1>, <&pinctrl_gpio2>,
++		    <&pinctrl_gpio3>, <&pinctrl_gpio4>,
++		    <&pinctrl_gpio7>, <&pinctrl_gpio8>,
++		    <&pinctrl_gpio_hog1>, <&pinctrl_gpio_hog2>, <&pinctrl_gpio_hog3>,
++		    <&pinctrl_hdmi_hog>;
++};
++
++/*
++ * Verdin UART_4
++ * Often used by the M7 and then should not be enabled here.
++ */
++&uart4 {
++	status = "disabled";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dts b/arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dts
+new file mode 100644
+index 000000000000..804567f6ccee
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dts
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++
++#include "imx8mp-verdin.dtsi"
++#include "imx8mp-verdin-wifi.dtsi"
++#include "imx8mp-verdin-dahlia.dtsi"
++
++/ {
++	model = "Toradex Verdin iMX8M Plus WB on Dahlia Board";
++	compatible = "toradex,verdin-imx8mp-wifi-dahlia",
++		     "toradex,verdin-imx8mp-wifi",
++		     "toradex,verdin-imx8mp",
++		     "fsl,imx8mp";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dts b/arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dts
+new file mode 100644
+index 000000000000..c1713c28cdce
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dts
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++
++#include "imx8mp-verdin.dtsi"
++#include "imx8mp-verdin-wifi.dtsi"
++#include "imx8mp-verdin-dev.dtsi"
++
++/ {
++	model = "Toradex Verdin iMX8M Plus WB on Verdin Development Board";
++	compatible = "toradex,verdin-imx8mp-wifi-dev",
++		     "toradex,verdin-imx8mp-wifi",
++		     "toradex,verdin-imx8mp",
++		     "fsl,imx8mp";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi.dtsi
+new file mode 100644
+index 000000000000..34d9bc48c899
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi.dtsi
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/ {
++	reg_wifi_en: regulator-wifi-en {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio2 11 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_wifi_pwr_en>;
++		regulator-max-microvolt = <3300000>;
++		regulator-min-microvolt = <3300000>;
++		regulator-name = "PDn_AW-CM276NF";
++		startup-delay-us = <2000>;
++	};
++};
++
++&gpio5 {
++	gpio-line-names = "SODIMM_42",
++			  "SODIMM_46",
++			  "SODIMM_187",
++			  "SODIMM_20",
++			  "SODIMM_22",
++			  "SODIMM_15",
++			  "SODIMM_196",
++			  "SODIMM_200",
++			  "SODIMM_198",
++			  "SODIMM_202",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "SODIMM_55",
++			  "SODIMM_53",
++			  "SODIMM_95",
++			  "SODIMM_93",
++			  "SODIMM_14",
++			  "SODIMM_12",
++			  "SODIMM_129",
++			  "SODIMM_131",
++			  "SODIMM_137",
++			  "SODIMM_139",
++			  "SODIMM_147",
++			  "SODIMM_149",
++			  "SODIMM_151",
++			  "SODIMM_153";
++};
++
++&iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_gpio1>, <&pinctrl_gpio2>,
++		    <&pinctrl_gpio3>, <&pinctrl_gpio4>,
++		    <&pinctrl_gpio7>, <&pinctrl_gpio8>,
++		    <&pinctrl_gpio_hog2>, <&pinctrl_gpio_hog3>, <&pinctrl_gpio_hog4>,
++		    <&pinctrl_hdmi_hog>;
++};
++
++/* On-module Bluetooth */
++&uart4 {
++	fsl,uart-has-rtscts;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_bt_uart>;
++	status = "okay";
++};
++
++/* On-module Wi-Fi */
++&usdhc1 {
++	bus-width = <4>;
++	keep-power-in-suspend;
++	max-frequency = <100000000>;
++	non-removable;
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_wifi_ctrl>;
++	pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_wifi_ctrl>;
++	pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_wifi_ctrl>;
++	vmmc-supply = <&reg_wifi_en>;
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+new file mode 100644
+index 000000000000..26d6c2819ee8
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+@@ -0,0 +1,1373 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++#include "dt-bindings/pwm/pwm.h"
++#include "imx8mp.dtsi"
++
++/ {
++	chosen {
++		stdout-path = &uart3;
++	};
++
++	aliases {
++		/* Ethernet aliases to ensure correct MAC addresses */
++		ethernet0 = &eqos;
++		ethernet1 = &fec;
++		rtc0 = &rtc_i2c;
++		rtc1 = &snvs_rtc;
++	};
++
++	backlight: backlight {
++		compatible = "pwm-backlight";
++		brightness-levels = <0 45 63 88 119 158 203 255>;
++		default-brightness-level = <4>;
++		/* Verdin I2S_2_D_OUT (DSI_1_BKL_EN/DSI_1_BKL_EN_LVDS, SODIMM 46) */
++		enable-gpios = <&gpio5 1 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_i2s_2_d_out_dsi_1_bkl_en>;
++		power-supply = <&reg_3p3v>;
++		/* Verdin PWM_3_DSI/PWM_3_DSI_LVDS (SODIMM 19) */
++		pwms = <&pwm3 0 6666667 PWM_POLARITY_INVERTED>;
++		status = "disabled";
++	};
++
++	backlight_mezzanine: backlight-mezzanine {
++		compatible = "pwm-backlight";
++		brightness-levels = <0 45 63 88 119 158 203 255>;
++		default-brightness-level = <4>;
++		/* Verdin GPIO 4 (SODIMM 212) */
++		enable-gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
++		/* Verdin PWM_2 (SODIMM 16) */
++		pwms = <&pwm2 0 6666667 PWM_POLARITY_INVERTED>;
++		status = "disabled";
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio_keys>;
++
++		wakeup {
++			debounce-interval = <10>;
++			/* Verdin CTRL_WAKE1_MICO# (SODIMM 252) */
++			gpios = <&gpio4 0 GPIO_ACTIVE_LOW>;
++			label = "Wake-Up";
++			linux,code = <KEY_WAKEUP>;
++			wakeup-source;
++		};
++	};
++
++	/* Carrier Board Supplies */
++	reg_1p8v: regulator-1p8v {
++		compatible = "regulator-fixed";
++		regulator-max-microvolt = <1800000>;
++		regulator-min-microvolt = <1800000>;
++		regulator-name = "+V1.8_SW";
++	};
++
++	reg_3p3v: regulator-3p3v {
++		compatible = "regulator-fixed";
++		regulator-max-microvolt = <3300000>;
++		regulator-min-microvolt = <3300000>;
++		regulator-name = "+V3.3_SW";
++	};
++
++	reg_5p0v: regulator-5p0v {
++		compatible = "regulator-fixed";
++		regulator-max-microvolt = <5000000>;
++		regulator-min-microvolt = <5000000>;
++		regulator-name = "+V5_SW";
++	};
++
++	/* Non PMIC On-module Supplies */
++	reg_module_eth1phy: regulator-module-eth1phy {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio2 20 GPIO_ACTIVE_HIGH>; /* PMIC_EN_ETH */
++		off-on-delay = <500000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_reg_eth>;
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-max-microvolt = <3300000>;
++		regulator-min-microvolt = <3300000>;
++		regulator-name = "On-module +V3.3_ETH";
++		startup-delay-us = <200000>;
++		vin-supply = <&reg_vdd_3v3>;
++	};
++
++	reg_usb1_vbus: regulator-usb1-vbus {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		/* Verdin USB_1_EN (SODIMM 155) */
++		gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_usb1_vbus>;
++		regulator-max-microvolt = <5000000>;
++		regulator-min-microvolt = <5000000>;
++		regulator-name = "USB_1_EN";
++	};
++
++	reg_usb2_vbus: regulator-usb2-vbus {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		/* Verdin USB_2_EN (SODIMM 185) */
++		gpio = <&gpio1 14 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_usb2_vbus>;
++		regulator-max-microvolt = <5000000>;
++		regulator-min-microvolt = <5000000>;
++		regulator-name = "USB_2_EN";
++	};
++
++	reg_usdhc2_vmmc: regulator-usdhc2 {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		/* Verdin SD_1_PWR_EN (SODIMM 76) */
++		gpio = <&gpio4 22 GPIO_ACTIVE_HIGH>;
++		off-on-delay = <100000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_usdhc2_pwr_en>;
++		regulator-max-microvolt = <3300000>;
++		regulator-min-microvolt = <3300000>;
++		regulator-name = "+V3.3_SD";
++		startup-delay-us = <2000>;
++	};
++
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		/* Use the kernel configuration settings instead */
++		/delete-node/ linux,cma;
++	};
++};
++
++/* Verdin SPI_1 */
++&ecspi1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	cs-gpios = <&gpio5 9 GPIO_ACTIVE_LOW>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_ecspi1>;
++};
++
++/* Verdin ETH_1 (On-module PHY) */
++&eqos {
++	phy-handle = <&ethphy0>;
++	phy-mode = "rgmii-id";
++	phy-supply = <&reg_module_eth1phy>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_eqos>;
++	snps,force_thresh_dma_mode;
++	snps,mtl-rx-config = <&mtl_rx_setup>;
++	snps,mtl-tx-config = <&mtl_tx_setup>;
++
++	mdio {
++		compatible = "snps,dwmac-mdio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		ethphy0: ethernet-phy@7 {
++			compatible = "ethernet-phy-ieee802.3-c22";
++			eee-broken-100tx;
++			eee-broken-1000t;
++			interrupt-parent = <&gpio1>;
++			interrupts = <10 IRQ_TYPE_LEVEL_LOW>;
++			micrel,led-mode = <0>;
++			reg = <7>;
++		};
++	};
++
++	mtl_rx_setup: rx-queues-config {
++		snps,rx-queues-to-use = <5>;
++		snps,rx-sched-sp;
++
++		queue0 {
++			snps,dcb-algorithm;
++			snps,priority = <0x1>;
++			snps,map-to-dma-channel = <0>;
++		};
++
++		queue1 {
++			snps,dcb-algorithm;
++			snps,priority = <0x2>;
++			snps,map-to-dma-channel = <1>;
++		};
++
++		queue2 {
++			snps,dcb-algorithm;
++			snps,priority = <0x4>;
++			snps,map-to-dma-channel = <2>;
++		};
++
++		queue3 {
++			snps,dcb-algorithm;
++			snps,priority = <0x8>;
++			snps,map-to-dma-channel = <3>;
++		};
++
++		queue4 {
++			snps,dcb-algorithm;
++			snps,priority = <0xf0>;
++			snps,map-to-dma-channel = <4>;
++		};
++	};
++
++	mtl_tx_setup: tx-queues-config {
++		snps,tx-queues-to-use = <5>;
++		snps,tx-sched-sp;
++
++		queue0 {
++			snps,dcb-algorithm;
++			snps,priority = <0x1>;
++		};
++
++		queue1 {
++			snps,dcb-algorithm;
++			snps,priority = <0x2>;
++		};
++
++		queue2 {
++			snps,dcb-algorithm;
++			snps,priority = <0x4>;
++		};
++
++		queue3 {
++			snps,dcb-algorithm;
++			snps,priority = <0x8>;
++		};
++
++		queue4 {
++			snps,dcb-algorithm;
++			snps,priority = <0xf0>;
++		};
++	};
++};
++
++/* Verdin ETH_2_RGMII */
++&fec {
++	fsl,magic-packet;
++	phy-handle = <&ethphy1>;
++	phy-mode = "rgmii-id";
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_fec>;
++	pinctrl-1 = <&pinctrl_fec_sleep>;
++
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		ethphy1: ethernet-phy@7 {
++			compatible = "ethernet-phy-ieee802.3-c22";
++			interrupt-parent = <&gpio4>;
++			interrupts = <18 IRQ_TYPE_LEVEL_LOW>;
++			micrel,led-mode = <0>;
++			reg = <7>;
++		};
++	};
++};
++
++/* Verdin CAN_1 */
++&flexcan1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_flexcan1>;
++	status = "disabled";
++};
++
++
++/* Verdin CAN_2 */
++&flexcan2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_flexcan2>;
++	status = "disabled";
++};
++
++/* Verdin QSPI_1 */
++&flexspi {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_flexspi0>;
++};
++
++&gpio1 {
++	gpio-line-names = "SODIMM_206",
++			  "SODIMM_208",
++			  "",
++			  "",
++			  "",
++			  "SODIMM_210",
++			  "SODIMM_212",
++			  "SODIMM_216",
++			  "SODIMM_218",
++			  "",
++			  "",
++			  "SODIMM_16",
++			  "SODIMM_155",
++			  "SODIMM_157",
++			  "SODIMM_185",
++			  "SODIMM_91";
++};
++
++&gpio2 {
++	gpio-line-names = "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "SODIMM_143",
++			  "SODIMM_141",
++			  "",
++			  "",
++			  "SODIMM_161",
++			  "",
++			  "SODIMM_84",
++			  "SODIMM_78",
++			  "SODIMM_74",
++			  "SODIMM_80",
++			  "SODIMM_82",
++			  "SODIMM_70",
++			  "SODIMM_72";
++
++	ctrl-sleep-moci-hog {
++		gpio-hog;
++		/* Verdin CTRL_SLEEP_MOCI# (SODIMM 256) */
++		gpios = <29 GPIO_ACTIVE_HIGH>;
++		line-name = "CTRL_SLEEP_MOCI#";
++		output-high;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_ctrl_sleep_moci>;
++	};
++};
++
++&gpio3 {
++	gpio-line-names = "SODIMM_52",
++			  "SODIMM_54",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "SODIMM_56",
++			  "SODIMM_58",
++			  "SODIMM_60",
++			  "SODIMM_62",
++			  "",
++			  "",
++			  "",
++			  "",
++			  "SODIMM_66",
++			  "",
++			  "SODIMM_64",
++			  "",
++			  "",
++			  "SODIMM_34",
++			  "SODIMM_19",
++			  "",
++			  "SODIMM_32",
++			  "",
++			  "",
++			  "SODIMM_30",
++			  "SODIMM_59",
++			  "SODIMM_57",
++			  "SODIMM_63",
++			  "SODIMM_61";
++};
++
++&gpio4 {
++	gpio-line-names = "SODIMM_252",
++			  "SODIMM_222",
++			  "SODIMM_36",
++			  "SODIMM_220",
++			  "SODIMM_193",
++			  "SODIMM_191",
++			  "SODIMM_201",
++			  "SODIMM_203",
++			  "SODIMM_205",
++			  "SODIMM_207",
++			  "SODIMM_199",
++			  "SODIMM_197",
++			  "SODIMM_221",
++			  "SODIMM_219",
++			  "SODIMM_217",
++			  "SODIMM_215",
++			  "SODIMM_211",
++			  "SODIMM_213",
++			  "SODIMM_189",
++			  "SODIMM_244",
++			  "SODIMM_38",
++			  "",
++			  "SODIMM_76",
++			  "SODIMM_135",
++			  "SODIMM_133",
++			  "SODIMM_17",
++			  "SODIMM_24",
++			  "SODIMM_26",
++			  "SODIMM_21",
++			  "SODIMM_256",
++			  "SODIMM_48",
++			  "SODIMM_44";
++};
++
++/* On-module I2C */
++&i2c1 {
++	clock-frequency = <400000>;
++	pinctrl-names = "default", "gpio";
++	pinctrl-0 = <&pinctrl_i2c1>;
++	pinctrl-1 = <&pinctrl_i2c1_gpio>;
++	scl-gpios = <&gpio5 14 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
++	sda-gpios = <&gpio5 15 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
++	status = "okay";
++
++	pca9450: pmic@25 {
++		compatible = "nxp,pca9450c";
++		interrupt-parent = <&gpio1>;
++		/* PMIC PCA9450 PMIC_nINT GPIO1_IO3 */
++		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pmic>;
++		reg = <0x25>;
++		sd-vsel-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
++
++		/* The bootloader is expected to switch on LDO4 and the I2C level shifter. */
++
++		regulators {
++			BUCK1 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <1000000>;
++				regulator-min-microvolt = <720000>;
++				regulator-name = "On-module +VDD_SOC (BUCK1)";
++				regulator-ramp-delay = <3125>;
++			};
++
++			BUCK2 {
++				nxp,dvs-run-voltage = <950000>;
++				nxp,dvs-standby-voltage = <850000>;
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <1025000>;
++				regulator-min-microvolt = <720000>;
++				regulator-name = "On-module +VDD_ARM (BUCK2)";
++				regulator-ramp-delay = <3125>;
++			};
++
++			reg_vdd_3v3: BUCK4 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <3300000>;
++				regulator-min-microvolt = <3300000>;
++				regulator-name = "On-module +V3.3 (BUCK4)";
++			};
++
++			reg_vdd_1v8: BUCK5 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <1800000>;
++				regulator-min-microvolt = <1800000>;
++				regulator-name = "PWR_1V8_MOCI (BUCK5)";
++			};
++
++			BUCK6 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <1155000>;
++				regulator-min-microvolt = <1045000>;
++				regulator-name = "On-module +VDD_DDR (BUCK6)";
++			};
++
++			LDO1 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <1950000>;
++				regulator-min-microvolt = <1650000>;
++				regulator-name = "On-module +V1.8_SNVS (LDO1)";
++			};
++
++			LDO2 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <1150000>;
++				regulator-min-microvolt = <800000>;
++				regulator-name = "On-module +V0.8_SNVS (LDO2)";
++			};
++
++			LDO3 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <1800000>;
++				regulator-min-microvolt = <1800000>;
++				regulator-name = "On-module +V1.8A (LDO3)";
++			};
++
++			LDO4 {
++				regulator-always-on;
++				regulator-boot-on;
++				regulator-max-microvolt = <3300000>;
++				regulator-min-microvolt = <3300000>;
++				regulator-name = "On-module +V3.3_ADC (LDO4)";
++			};
++
++			LDO5 {
++				regulator-max-microvolt = <3300000>;
++				regulator-min-microvolt = <1800000>;
++				regulator-name = "On-module +V3.3_1.8_SD (LDO5)";
++			};
++		};
++	};
++
++	rtc_i2c: rtc@32 {
++		compatible = "epson,rx8130";
++		reg = <0x32>;
++	};
++
++	/* On-module temperature sensor */
++	hwmon_temp_module: sensor@48 {
++		compatible = "ti,tmp1075";
++		reg = <0x48>;
++		vs-supply = <&reg_vdd_1v8>;
++	};
++
++	adc@49 {
++		compatible = "ti,ads1015";
++		reg = <0x49>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		/* Verdin I2C_1 (ADC_4 - ADC_3) */
++		channel@0 {
++			reg = <0>;
++			ti,datarate = <4>;
++			ti,gain = <2>;
++		};
++
++		/* Verdin I2C_1 (ADC_4 - ADC_1) */
++		channel@1 {
++			reg = <1>;
++			ti,datarate = <4>;
++			ti,gain = <2>;
++		};
++
++		/* Verdin I2C_1 (ADC_3 - ADC_1) */
++		channel@2 {
++			reg = <2>;
++			ti,datarate = <4>;
++			ti,gain = <2>;
++		};
++
++		/* Verdin I2C_1 (ADC_2 - ADC_1) */
++		channel@3 {
++			reg = <3>;
++			ti,datarate = <4>;
++			ti,gain = <2>;
++		};
++
++		/* Verdin I2C_1 ADC_4 */
++		channel@4 {
++			reg = <4>;
++			ti,datarate = <4>;
++			ti,gain = <2>;
++		};
++
++		/* Verdin I2C_1 ADC_3 */
++		channel@5 {
++			reg = <5>;
++			ti,datarate = <4>;
++			ti,gain = <2>;
++		};
++
++		/* Verdin I2C_1 ADC_2 */
++		channel@6 {
++			reg = <6>;
++			ti,datarate = <4>;
++			ti,gain = <2>;
++		};
++
++		/* Verdin I2C_1 ADC_1 */
++		channel@7 {
++			reg = <7>;
++			ti,datarate = <4>;
++			ti,gain = <2>;
++		};
++	};
++
++	eeprom@50 {
++		compatible = "st,24c02";
++		pagesize = <16>;
++		reg = <0x50>;
++	};
++};
++
++/* Verdin I2C_2_DSI */
++&i2c2 {
++	clock-frequency = <10000>;
++	pinctrl-names = "default", "gpio";
++	pinctrl-0 = <&pinctrl_i2c2>;
++	pinctrl-1 = <&pinctrl_i2c2_gpio>;
++
++	atmel_mxt_ts_mezzanine: touch-mezzanine@4a {
++		compatible = "atmel,maxtouch";
++		/* Verdin GPIO_3 (SODIMM 210) */
++		interrupt-parent = <&gpio1>;
++		interrupts = <5 IRQ_TYPE_EDGE_FALLING>;
++		reg = <0x4a>;
++		/* Verdin GPIO_2 (SODIMM 208) */
++		reset-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
++		status = "disabled";
++	};
++};
++
++/* Verdin I2C_3_HDMI */
++
++/* Verdin I2C_4_CSI */
++&i2c3 {
++	clock-frequency = <400000>;
++	pinctrl-names = "default", "gpio";
++	pinctrl-0 = <&pinctrl_i2c3>;
++	pinctrl-1 = <&pinctrl_i2c3_gpio>;
++	scl-gpios = <&gpio5 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
++	sda-gpios = <&gpio5 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
++};
++
++/* Verdin I2C_1 */
++&i2c4 {
++	clock-frequency = <400000>;
++	pinctrl-names = "default", "gpio";
++	pinctrl-0 = <&pinctrl_i2c4>;
++	pinctrl-1 = <&pinctrl_i2c4_gpio>;
++	scl-gpios = <&gpio5 20 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
++	sda-gpios = <&gpio5 21 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
++
++	gpio_expander_21: gpio-expander@21 {
++		compatible = "nxp,pcal6416";
++		#gpio-cells = <2>;
++		gpio-controller;
++		reg = <0x21>;
++		vcc-supply = <&reg_3p3v>;
++		status = "disabled";
++	};
++
++	lvds_ti_sn65dsi83: bridge@2c {
++		compatible = "ti,sn65dsi83";
++		/* Verdin GPIO_9_DSI (SN65DSI84 IRQ, SODIMM 17, unused) */
++		/* Verdin GPIO_10_DSI (SODIMM 21) */
++		enable-gpios = <&gpio4 28 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio_10_dsi>;
++		reg = <0x2c>;
++		status = "disabled";
++	};
++
++	/* Current measurement into module VCC */
++	hwmon: hwmon@40 {
++		compatible = "ti,ina219";
++		reg = <0x40>;
++		shunt-resistor = <10000>;
++		status = "disabled";
++	};
++
++	hdmi_lontium_lt8912: hdmi@48 {
++		compatible = "lontium,lt8912b";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio_10_dsi>, <&pinctrl_pwm_3_dsi_hpd_gpio>;
++		reg = <0x48>;
++		/* Verdin GPIO_9_DSI (LT8912 INT, SODIMM 17, unused) */
++		/* Verdin GPIO_10_DSI (SODIMM 21) */
++		reset-gpios = <&gpio4 28 GPIO_ACTIVE_LOW>;
++		status = "disabled";
++	};
++
++	atmel_mxt_ts: touch@4a {
++		compatible = "atmel,maxtouch";
++		/*
++		 * Verdin GPIO_9_DSI
++		 * (TOUCH_INT#, SODIMM 17, also routed to SN65DSI83 IRQ albeit currently unused)
++		 */
++		interrupt-parent = <&gpio4>;
++		interrupts = <25 IRQ_TYPE_EDGE_FALLING>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio_9_dsi>, <&pinctrl_i2s_2_bclk_touch_reset>;
++		reg = <0x4a>;
++		/* Verdin I2S_2_BCLK (TOUCH_RESET#, SODIMM 42) */
++		reset-gpios = <&gpio5 0 GPIO_ACTIVE_HIGH>;
++		status = "disabled";
++	};
++
++	/* Temperature sensor on carrier board */
++	hwmon_temp: sensor@4f {
++		compatible = "ti,tmp75c";
++		reg = <0x4f>;
++		status = "disabled";
++	};
++
++	/* EEPROM on display adapter (MIPI DSI Display Adapter) */
++	eeprom_display_adapter: eeprom@50 {
++		compatible = "st,24c02";
++		pagesize = <16>;
++		reg = <0x50>;
++		status = "disabled";
++	};
++
++	/* EEPROM on carrier board */
++	eeprom_carrier_board: eeprom@57 {
++		compatible = "st,24c02";
++		pagesize = <16>;
++		reg = <0x57>;
++		status = "disabled";
++	};
++};
++
++/* Verdin PCIE_1 */
++
++/* Verdin PWM_1 */
++&pwm1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm_1>;
++	#pwm-cells = <3>;
++};
++
++/* Verdin PWM_2 */
++&pwm2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm_2>;
++	#pwm-cells = <3>;
++};
++
++/* Verdin PWM_3_DSI */
++&pwm3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pwm_3>;
++	#pwm-cells = <3>;
++};
++
++/* VERDIN I2S_1 */
++
++/* VERDIN I2S_2 */
++
++&snvs_pwrkey {
++	status = "okay";
++};
++
++/* Verdin UART_1 */
++&uart1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart1>;
++	fsl,uart-has-rtscts;
++};
++
++/* Verdin UART_2 */
++&uart2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2>;
++	fsl,uart-has-rtscts;
++};
++
++/* Verdin UART_3, used as the Linux Console */
++&uart3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart3>;
++};
++
++/* Verdin UART_4, used for Bluetooth on Wi-Fi/Bluetooth SKUs */
++&uart4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart4>;
++};
++
++/* Verdin USB_1 */
++&usb3_phy0 {
++	vbus-supply = <&reg_usb1_vbus>;
++};
++
++&usb_dwc3_0 {
++	adp-disable;
++	dr_mode = "otg";
++	hnp-disable;
++	maximum-speed = "high-speed";
++	over-current-active-low;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usb_1_id>;
++	srp-disable;
++};
++
++/* Verdin USB_2 */
++&usb3_phy1 {
++	vbus-supply = <&reg_usb2_vbus>;
++};
++
++&usb_dwc3_1 {
++	disable-over-current;
++	dr_mode = "host";
++};
++
++/* Verdin SD_1 */
++&usdhc2 {
++	assigned-clocks = <&clk IMX8MP_CLK_USDHC2>;
++	assigned-clock-rates = <400000000>;
++	bus-width = <4>;
++	cd-gpios = <&gpio2 12 GPIO_ACTIVE_LOW>;
++	disable-wp;
++	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
++	pinctrl-0 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_cd>;
++	pinctrl-1 = <&pinctrl_usdhc2_100mhz>, <&pinctrl_usdhc2_cd>;
++	pinctrl-2 = <&pinctrl_usdhc2_200mhz>, <&pinctrl_usdhc2_cd>;
++	pinctrl-3 = <&pinctrl_usdhc2_sleep>, <&pinctrl_usdhc2_cd_sleep>;
++	vmmc-supply = <&reg_usdhc2_vmmc>;
++};
++
++/* On-module eMMC */
++&usdhc3 {
++	assigned-clocks = <&clk IMX8MP_CLK_USDHC3_ROOT>;
++	assigned-clock-rates = <400000000>;
++	bus-width = <8>;
++	non-removable;
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc3>;
++	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
++	status = "okay";
++};
++
++&wdog1 {
++	fsl,ext-reset-output;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wdog>;
++	status = "okay";
++};
++
++&iomuxc {
++	pinctrl_bt_uart: btuartgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_ECSPI2_MISO__UART4_DCE_CTS	0x1c4>,
++			<MX8MP_IOMUXC_ECSPI2_MOSI__UART4_DCE_TX		0x1c4>,
++			<MX8MP_IOMUXC_ECSPI2_SCLK__UART4_DCE_RX		0x1c4>,
++			<MX8MP_IOMUXC_ECSPI2_SS0__UART4_DCE_RTS		0x1c4>;
++	};
++
++	pinctrl_ctrl_sleep_moci: ctrlsleepmocigrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29		0x1c4>;	/* SODIMM 256 */
++	};
++
++	pinctrl_ecspi1: ecspi1grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_ECSPI1_MISO__ECSPI1_MISO		0x1c4>,	/* SODIMM 198 */
++			<MX8MP_IOMUXC_ECSPI1_MOSI__ECSPI1_MOSI		0x4>,	/* SODIMM 200 */
++			<MX8MP_IOMUXC_ECSPI1_SCLK__ECSPI1_SCLK		0x4>,	/* SODIMM 196 */
++			<MX8MP_IOMUXC_ECSPI1_SS0__GPIO5_IO09		0x1c4>;	/* SODIMM 202 */
++	};
++
++	/* Connection On Board PHY */
++	pinctrl_eqos: eqosgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_ENET_MDC__ENET_QOS_MDC				0x3>,
++			<MX8MP_IOMUXC_ENET_MDIO__ENET_QOS_MDIO				0x3>,
++			<MX8MP_IOMUXC_ENET_RD0__ENET_QOS_RGMII_RD0			0x91>,
++			<MX8MP_IOMUXC_ENET_RD1__ENET_QOS_RGMII_RD1			0x91>,
++			<MX8MP_IOMUXC_ENET_RD2__ENET_QOS_RGMII_RD2			0x91>,
++			<MX8MP_IOMUXC_ENET_RD3__ENET_QOS_RGMII_RD3			0x91>,
++			<MX8MP_IOMUXC_ENET_RXC__CCM_ENET_QOS_CLOCK_GENERATE_RX_CLK	0x91>,
++			<MX8MP_IOMUXC_ENET_RX_CTL__ENET_QOS_RGMII_RX_CTL		0x91>,
++			<MX8MP_IOMUXC_ENET_TD0__ENET_QOS_RGMII_TD0			0x1f>,
++			<MX8MP_IOMUXC_ENET_TD1__ENET_QOS_RGMII_TD1			0x1f>,
++			<MX8MP_IOMUXC_ENET_TD2__ENET_QOS_RGMII_TD2			0x1f>,
++			<MX8MP_IOMUXC_ENET_TD3__ENET_QOS_RGMII_TD3			0x1f>,
++			<MX8MP_IOMUXC_ENET_TX_CTL__ENET_QOS_RGMII_TX_CTL		0x1f>,
++			<MX8MP_IOMUXC_ENET_TXC__CCM_ENET_QOS_CLOCK_GENERATE_TX_CLK	0x1f>;
++	};
++
++	/* ETH_INT# shared with TPM_INT# (usually N/A) */
++	pinctrl_eth_tpm_int: ethtpmintgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO10__GPIO1_IO10		0x1c4>;
++	};
++
++	/* Connection Carrier Board PHY ETH_2 */
++	pinctrl_fec: fecgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI1_RXD2__ENET1_MDC		0x3>,	/* SODIMM 193 */
++			<MX8MP_IOMUXC_SAI1_RXD3__ENET1_MDIO		0x3>,	/* SODIMM 191 */
++			<MX8MP_IOMUXC_SAI1_RXD4__ENET1_RGMII_RD0	0x91>,	/* SODIMM 201 */
++			<MX8MP_IOMUXC_SAI1_RXD5__ENET1_RGMII_RD1	0x91>,	/* SODIMM 203 */
++			<MX8MP_IOMUXC_SAI1_RXD6__ENET1_RGMII_RD2	0x91>,	/* SODIMM 205 */
++			<MX8MP_IOMUXC_SAI1_RXD7__ENET1_RGMII_RD3	0x91>,	/* SODIMM 207 */
++			<MX8MP_IOMUXC_SAI1_TXC__ENET1_RGMII_RXC		0x91>,	/* SODIMM 197 */
++			<MX8MP_IOMUXC_SAI1_TXFS__ENET1_RGMII_RX_CTL	0x91>,	/* SODIMM 199 */
++			<MX8MP_IOMUXC_SAI1_TXD0__ENET1_RGMII_TD0	0x1f>,	/* SODIMM 221 */
++			<MX8MP_IOMUXC_SAI1_TXD1__ENET1_RGMII_TD1	0x1f>,	/* SODIMM 219 */
++			<MX8MP_IOMUXC_SAI1_TXD2__ENET1_RGMII_TD2	0x1f>,	/* SODIMM 217 */
++			<MX8MP_IOMUXC_SAI1_TXD3__ENET1_RGMII_TD3	0x1f>,	/* SODIMM 215 */
++			<MX8MP_IOMUXC_SAI1_TXD4__ENET1_RGMII_TX_CTL	0x1f>,	/* SODIMM 211 */
++			<MX8MP_IOMUXC_SAI1_TXD5__ENET1_RGMII_TXC	0x1f>,	/* SODIMM 213 */
++			<MX8MP_IOMUXC_SAI1_TXD6__GPIO4_IO18		0x1c4>;	/* SODIMM 189 */
++	};
++
++	pinctrl_fec_sleep: fecsleepgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI1_RXD2__ENET1_MDC		0x3>,	/* SODIMM 193 */
++			<MX8MP_IOMUXC_SAI1_RXD3__ENET1_MDIO		0x3>,	/* SODIMM 191 */
++			<MX8MP_IOMUXC_SAI1_RXD4__ENET1_RGMII_RD0	0x91>,	/* SODIMM 201 */
++			<MX8MP_IOMUXC_SAI1_RXD5__ENET1_RGMII_RD1	0x91>,	/* SODIMM 203 */
++			<MX8MP_IOMUXC_SAI1_RXD6__ENET1_RGMII_RD2	0x91>,	/* SODIMM 205 */
++			<MX8MP_IOMUXC_SAI1_RXD7__ENET1_RGMII_RD3	0x91>,	/* SODIMM 207 */
++			<MX8MP_IOMUXC_SAI1_TXC__ENET1_RGMII_RXC		0x91>,	/* SODIMM 197 */
++			<MX8MP_IOMUXC_SAI1_TXFS__ENET1_RGMII_RX_CTL	0x91>,	/* SODIMM 199 */
++			<MX8MP_IOMUXC_SAI1_TXD0__GPIO4_IO12		0x1f>,	/* SODIMM 221 */
++			<MX8MP_IOMUXC_SAI1_TXD1__GPIO4_IO13		0x1f>,	/* SODIMM 219 */
++			<MX8MP_IOMUXC_SAI1_TXD2__GPIO4_IO14		0x1f>,	/* SODIMM 217 */
++			<MX8MP_IOMUXC_SAI1_TXD3__GPIO4_IO15		0x1f>,	/* SODIMM 215 */
++			<MX8MP_IOMUXC_SAI1_TXD4__GPIO4_IO16		0x1f>,	/* SODIMM 211 */
++			<MX8MP_IOMUXC_SAI1_TXD5__GPIO4_IO17		0x1f>,	/* SODIMM 213 */
++			<MX8MP_IOMUXC_SAI1_TXD6__GPIO4_IO18		0x184>;	/* SODIMM 189 */
++	};
++
++	pinctrl_flexcan1: flexcan1grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SPDIF_RX__CAN1_RX			0x154>,	/* SODIMM 22 */
++			<MX8MP_IOMUXC_SPDIF_TX__CAN1_TX			0x154>;	/* SODIMM 20 */
++	};
++
++	pinctrl_flexcan2: flexcan2grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI2_MCLK__CAN2_RX		0x154>,	/* SODIMM 26 */
++			<MX8MP_IOMUXC_SAI2_TXD0__CAN2_TX		0x154>;	/* SODIMM 24 */
++	};
++
++	pinctrl_flexspi0: flexspi0grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_NAND_ALE__FLEXSPI_A_SCLK		0x1c2>,	/* SODIMM 52 */
++			<MX8MP_IOMUXC_NAND_CE0_B__FLEXSPI_A_SS0_B	0x82>,	/* SODIMM 54 */
++			<MX8MP_IOMUXC_NAND_DQS__FLEXSPI_A_DQS		0x82>,	/* SODIMM 66 */
++			<MX8MP_IOMUXC_NAND_DATA00__FLEXSPI_A_DATA00	0x82>,	/* SODIMM 56 */
++			<MX8MP_IOMUXC_NAND_DATA01__FLEXSPI_A_DATA01	0x82>,	/* SODIMM 58 */
++			<MX8MP_IOMUXC_NAND_DATA02__FLEXSPI_A_DATA02	0x82>,	/* SODIMM 60 */
++			<MX8MP_IOMUXC_NAND_DATA03__FLEXSPI_A_DATA03	0x82>,	/* SODIMM 62 */
++			<MX8MP_IOMUXC_NAND_READY_B__GPIO3_IO16		0x82>;	/* SODIMM 64 */
++	};
++
++	pinctrl_gpio1: gpio1grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO00__GPIO1_IO00		0x184>;	/* SODIMM 206 */
++	};
++
++	pinctrl_gpio2: gpio2grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO01__GPIO1_IO01		0x1c4>;	/* SODIMM 208 */
++	};
++
++	pinctrl_gpio3: gpio3grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO05__GPIO1_IO05		0x184>;	/* SODIMM 210 */
++	};
++
++	pinctrl_gpio4: gpio4grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06		0x184>;	/* SODIMM 212 */
++	};
++
++	pinctrl_gpio5: gpio5grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07		0x184>;	/* SODIMM 216 */
++	};
++
++	pinctrl_gpio6: gpio6grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO08__GPIO1_IO08		0x184>;	/* SODIMM 218 */
++	};
++
++	pinctrl_gpio7: gpio7grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI1_RXD1__GPIO4_IO03		0x184>;	/* SODIMM 220 */
++	};
++
++	pinctrl_gpio8: gpio8grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI1_RXC__GPIO4_IO01		0x184>;	/* SODIMM 222 */
++	};
++
++	/* Verdin GPIO_9_DSI (pulled-up as active-low) */
++	pinctrl_gpio_9_dsi: gpio9dsigrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25		0x1c4>;	/* SODIMM 17 */
++	};
++
++	/* Verdin GPIO_10_DSI */
++	pinctrl_gpio_10_dsi: gpio10dsigrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28		0x1c4>;	/* SODIMM 21 */
++	};
++
++	/* Non-wifi MSP usage only */
++	pinctrl_gpio_hog1: gpiohog1grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_ECSPI2_MISO__GPIO5_IO12		0x1c4>,	/* SODIMM 116 */
++			<MX8MP_IOMUXC_ECSPI2_MOSI__GPIO5_IO11		0x1c4>,	/* SODIMM 152 */
++			<MX8MP_IOMUXC_ECSPI2_SCLK__GPIO5_IO10		0x1c4>,	/* SODIMM 164 */
++			<MX8MP_IOMUXC_ECSPI2_SS0__GPIO5_IO13		0x1c4>;	/* SODIMM 128 */
++	};
++
++	/* USB_2_OC# */
++	pinctrl_gpio_hog2: gpiohog2grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI3_MCLK__GPIO5_IO02		0x1c4>;	/* SODIMM 187 */
++	};
++
++	pinctrl_gpio_hog3: gpiohog3grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO13__GPIO1_IO13		0x1c4>,	/* SODIMM 157 */
++			/* CSI_1_MCLK */
++			<MX8MP_IOMUXC_GPIO1_IO15__GPIO1_IO15		0x1c4>;	/* SODIMM 91 */
++	};
++
++	/* Wifi usage only */
++	pinctrl_gpio_hog4: gpiohog4grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_UART4_RXD__GPIO5_IO28		0x1c4>,	/* SODIMM 151 */
++			<MX8MP_IOMUXC_UART4_TXD__GPIO5_IO29		0x1c4>;	/* SODIMM 153 */
++	};
++
++	pinctrl_gpio_keys: gpiokeysgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI1_RXFS__GPIO4_IO00		0x1c4>;	/* SODIMM 252 */
++	};
++
++	pinctrl_hdmi_hog: hdmihoggrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_HDMI_CEC__HDMIMIX_HDMI_CEC	0x40000019>,	/* SODIMM 63 */
++			<MX8MP_IOMUXC_HDMI_DDC_SCL__HDMIMIX_HDMI_SCL	0x400001c3>,	/* SODIMM 59 */
++			<MX8MP_IOMUXC_HDMI_DDC_SDA__HDMIMIX_HDMI_SDA	0x400001c3>,	/* SODIMM 57 */
++			<MX8MP_IOMUXC_HDMI_HPD__HDMIMIX_HDMI_HPD	0x40000019>;	/* SODIMM 61 */
++	};
++
++	/* On-module I2C */
++	pinctrl_i2c1: i2c1grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_I2C1_SCL__I2C1_SCL		0x400001c6>,	/* PMIC_I2C_SCL */
++			<MX8MP_IOMUXC_I2C1_SDA__I2C1_SDA		0x400001c6>;	/* PMIC_I2C_SDA */
++	};
++
++	pinctrl_i2c1_gpio: i2c1gpiogrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_I2C1_SCL__GPIO5_IO14		0x400001c6>,	/* PMIC_I2C_SCL */
++			<MX8MP_IOMUXC_I2C1_SDA__GPIO5_IO15		0x400001c6>;	/* PMIC_I2C_SDA */
++	};
++
++	/* Verdin I2C_2_DSI */
++	pinctrl_i2c2: i2c2grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_I2C2_SCL__I2C2_SCL		0x400001c6>,	/* SODIMM 55 */
++			<MX8MP_IOMUXC_I2C2_SDA__I2C2_SDA		0x400001c6>;	/* SODIMM 53 */
++	};
++
++	pinctrl_i2c2_gpio: i2c2gpiogrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_I2C2_SCL__GPIO5_IO16		0x400001c6>,	/* SODIMM 55 */
++			<MX8MP_IOMUXC_I2C2_SDA__GPIO5_IO17		0x400001c6>;	/* SODIMM 53 */
++	};
++
++	/* Verdin I2C_4_CSI */
++	pinctrl_i2c3: i2c3grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_I2C3_SCL__I2C3_SCL		0x400001c6>,	/* SODIMM 95 */
++			<MX8MP_IOMUXC_I2C3_SDA__I2C3_SDA		0x400001c6>;	/* SODIMM 93 */
++	};
++
++	pinctrl_i2c3_gpio: i2c3gpiogrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_I2C3_SCL__GPIO5_IO18		0x400001c6>,	/* SODIMM 95 */
++			<MX8MP_IOMUXC_I2C3_SDA__GPIO5_IO19		0x400001c6>;	/* SODIMM 93 */
++	};
++
++	/* Verdin I2C_1 */
++	pinctrl_i2c4: i2c4grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_I2C4_SCL__I2C4_SCL		0x400001c6>,	/* SODIMM 14 */
++			<MX8MP_IOMUXC_I2C4_SDA__I2C4_SDA		0x400001c6>;	/* SODIMM 12 */
++	};
++
++	pinctrl_i2c4_gpio: i2c4gpiogrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_I2C4_SCL__GPIO5_IO20		0x400001c6>,	/* SODIMM 14 */
++			<MX8MP_IOMUXC_I2C4_SDA__GPIO5_IO21		0x400001c6>;	/* SODIMM 12 */
++	};
++
++	/* Verdin I2S_2_BCLK (TOUCH_RESET#) */
++	pinctrl_i2s_2_bclk_touch_reset: i2s2bclktouchresetgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI3_TXC__GPIO5_IO00		0x184>;	/* SODIMM 42 */
++	};
++
++	/* Verdin I2S_2_D_OUT shared with SAI3 */
++	pinctrl_i2s_2_d_out_dsi_1_bkl_en: i2s2doutdsi1bklengrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI3_TXD__GPIO5_IO01		0x184>;	/* SODIMM 46 */
++	};
++
++	pinctrl_pcie: pciegrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI1_TXD7__GPIO4_IO19		0x4>,	/* SODIMM 244 */
++			<MX8MP_IOMUXC_SD2_RESET_B__GPIO2_IO19		0x1c4>;	/* PMIC_EN_PCIe_CLK, unused */
++	};
++
++	pinctrl_pmic: pmicirqgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO03__GPIO1_IO03		0x1c4>;	/* PMIC_INT# */
++	};
++
++	pinctrl_pwm_1: pwm1grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SPDIF_EXT_CLK__PWM1_OUT		0x6>;	/* SODIMM 15 */
++	};
++
++	pinctrl_pwm_2: pwm2grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO11__PWM2_OUT		0x6>;	/* SODIMM 16 */
++	};
++
++	/* Verdin PWM_3_DSI shared with GPIO3_IO20 */
++	pinctrl_pwm_3: pwm3grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI5_RXC__PWM3_OUT		0x6>;	/* SODIMM 19 */
++	};
++
++	/* Verdin PWM_3_DSI (pulled-down as active-high) shared with PWM3_OUT */
++	pinctrl_pwm_3_dsi_hpd_gpio: pwm3dsi1hpdgpiogrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI5_RXC__GPIO3_IO20		0x184>;	/* SODIMM 19 */
++	};
++
++	pinctrl_reg_eth: regethgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SD2_WP__GPIO2_IO20		0x184>;	/* PMIC_EN_ETH */
++	};
++
++	pinctrl_sai1: sai1grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI1_MCLK__AUDIOMIX_SAI1_MCLK		0x96>,	/* SODIMM 38 */
++			<MX8MP_IOMUXC_SAI1_RXD0__AUDIOMIX_SAI1_RX_DATA00	0x1d6>,	/* SODIMM 36 */
++			<MX8MP_IOMUXC_SAI5_MCLK__AUDIOMIX_SAI1_TX_BCLK		0x1d6>,	/* SODIMM 30 */
++			<MX8MP_IOMUXC_SAI5_RXD1__AUDIOMIX_SAI1_TX_SYNC		0x1d6>,	/* SODIMM 32 */
++			<MX8MP_IOMUXC_SAI5_RXFS__AUDIOMIX_SAI1_TX_DATA00	0x96>;	/* SODIMM 34 */
++	};
++
++	pinctrl_sai3: sai3grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI3_RXD__AUDIOMIX_SAI3_RX_DATA00	0x1d6>,	/* SODIMM 48 */
++			<MX8MP_IOMUXC_SAI3_TXC__AUDIOMIX_SAI3_TX_BCLK	0x1d6>,	/* SODIMM 42 */
++			<MX8MP_IOMUXC_SAI3_TXD__AUDIOMIX_SAI3_TX_DATA00	0x96>,	/* SODIMM 46 */
++			<MX8MP_IOMUXC_SAI3_TXFS__AUDIOMIX_SAI3_TX_SYNC	0x1d6>;	/* SODIMM 44 */
++	};
++
++	pinctrl_uart1: uart1grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI2_RXD0__UART1_DCE_RTS		0x1c4>,	/* SODIMM 135 */
++			<MX8MP_IOMUXC_SAI2_TXFS__UART1_DCE_CTS		0x1c4>,	/* SODIMM 133 */
++			<MX8MP_IOMUXC_UART1_RXD__UART1_DCE_RX		0x1c4>,	/* SODIMM 129 */
++			<MX8MP_IOMUXC_UART1_TXD__UART1_DCE_TX		0x1c4>;	/* SODIMM 131 */
++	};
++
++	pinctrl_uart2: uart2grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SD1_DATA4__UART2_DCE_RTS		0x1c4>,	/* SODIMM 143 */
++			<MX8MP_IOMUXC_SD1_DATA5__UART2_DCE_CTS		0x1c4>,	/* SODIMM 141 */
++			<MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX		0x1c4>,	/* SODIMM 137 */
++			<MX8MP_IOMUXC_UART2_TXD__UART2_DCE_TX		0x1c4>; /* SODIMM 139 */
++	};
++
++	pinctrl_uart3: uart3grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_UART3_RXD__UART3_DCE_RX		0x1c4>,	/* SODIMM 147 */
++			<MX8MP_IOMUXC_UART3_TXD__UART3_DCE_TX		0x1c4>;	/* SODIMM 149 */
++	};
++
++	/* Non-wifi usage only */
++	pinctrl_uart4: uart4grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_UART4_RXD__UART4_DCE_RX		0x1c4>,	/* SODIMM 151 */
++			<MX8MP_IOMUXC_UART4_TXD__UART4_DCE_TX		0x1c4>;	/* SODIMM 153 */
++	};
++
++	pinctrl_usb1_vbus: usb1vbusgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO12__USB1_OTG_PWR		0x19>;	/* SODIMM 155 */
++	};
++
++	/* USB_1_ID */
++	pinctrl_usb_1_id: usb1idgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SD1_RESET_B__GPIO2_IO10		0x1c4>;	/* SODIMM 161 */
++	};
++
++	pinctrl_usb2_vbus: usb2vbusgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO14__USB2_OTG_PWR		0x19>;	/* SODIMM 185 */
++	};
++
++	/* On-module Wi-Fi */
++	pinctrl_usdhc1: usdhc1grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK		0x190>,
++			<MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD		0x1d0>,
++			<MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0		0x1d0>,
++			<MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1		0x1d0>,
++			<MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2		0x1d0>,
++			<MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3		0x1d0>;
++	};
++
++	pinctrl_usdhc1_100mhz: usdhc1-100mhzgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK		0x194>,
++			<MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD		0x1d4>,
++			<MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0		0x1d4>,
++			<MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1		0x1d4>,
++			<MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2		0x1d4>,
++			<MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3		0x1d4>;
++	};
++
++	pinctrl_usdhc1_200mhz: usdhc1-200mhzgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK		0x196>,
++			<MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD		0x1d6>,
++			<MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0		0x1d6>,
++			<MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1		0x1d6>,
++			<MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2		0x1d6>,
++			<MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3		0x1d6>;
++	};
++
++	pinctrl_usdhc2_cd: usdhc2cdgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SD2_CD_B__GPIO2_IO12		0x1c4>;	/* SODIMM 84 */
++	};
++
++	pinctrl_usdhc2_cd_sleep: usdhc2cdslpgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SD2_CD_B__GPIO2_IO12		0x0>;	/* SODIMM 84 */
++	};
++
++	pinctrl_usdhc2_pwr_en: usdhc2pwrengrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI2_RXC__GPIO4_IO22		0x4>;	/* SODIMM 76 */
++	};
++
++	pinctrl_usdhc2: usdhc2grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0x4>,	/* PMIC_USDHC_VSELECT */
++			<MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK		0x190>,	/* SODIMM 78 */
++			<MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD		0x1d0>,	/* SODIMM 74 */
++			<MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0		0x1d0>,	/* SODIMM 80 */
++			<MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1		0x1d0>,	/* SODIMM 82 */
++			<MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2		0x1d0>,	/* SODIMM 70 */
++			<MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3		0x1d0>;	/* SODIMM 72 */
++	};
++
++	pinctrl_usdhc2_100mhz: usdhc2-100mhzgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0x4>,
++			<MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK		0x194>,
++			<MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD		0x1d4>,
++			<MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0		0x1d4>,
++			<MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1		0x1d4>,
++			<MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2		0x1d4>,
++			<MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3		0x1d4>;
++	};
++
++	pinctrl_usdhc2_200mhz: usdhc2-200mhzgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0x4>,
++			<MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK		0x196>,
++			<MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD		0x1d6>,
++			<MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0		0x1d6>,
++			<MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1		0x1d6>,
++			<MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2		0x1d6>,
++			<MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3		0x1d6>;
++	};
++
++	pinctrl_usdhc2_sleep: usdhc2-slpgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0x100>,
++			<MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK		0x100>,
++			<MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD		0x100>,
++			<MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0		0x100>,
++			<MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1		0x100>,
++			<MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2		0x100>,
++			<MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3		0x100>;
++	};
++
++	pinctrl_usdhc3: usdhc3grp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO09__USDHC3_RESET_B	0x1d1>,
++			<MX8MP_IOMUXC_NAND_CE1_B__USDHC3_STROBE		0x190>,
++			<MX8MP_IOMUXC_NAND_CE2_B__USDHC3_DATA5		0x1d0>,
++			<MX8MP_IOMUXC_NAND_CE3_B__USDHC3_DATA6		0x1d0>,
++			<MX8MP_IOMUXC_NAND_CLE__USDHC3_DATA7		0x1d0>,
++			<MX8MP_IOMUXC_NAND_DATA04__USDHC3_DATA0		0x1d0>,
++			<MX8MP_IOMUXC_NAND_DATA05__USDHC3_DATA1		0x1d0>,
++			<MX8MP_IOMUXC_NAND_DATA06__USDHC3_DATA2		0x1d0>,
++			<MX8MP_IOMUXC_NAND_DATA07__USDHC3_DATA3		0x1d0>,
++			<MX8MP_IOMUXC_NAND_RE_B__USDHC3_DATA4		0x1d0>,
++			<MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK		0x190>,
++			<MX8MP_IOMUXC_NAND_WP_B__USDHC3_CMD		0x1d0>;
++	};
++
++	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO09__USDHC3_RESET_B	0x1d1>,
++			<MX8MP_IOMUXC_NAND_CE1_B__USDHC3_STROBE		0x194>,
++			<MX8MP_IOMUXC_NAND_CE2_B__USDHC3_DATA5		0x1d4>,
++			<MX8MP_IOMUXC_NAND_CE3_B__USDHC3_DATA6		0x1d4>,
++			<MX8MP_IOMUXC_NAND_CLE__USDHC3_DATA7		0x1d4>,
++			<MX8MP_IOMUXC_NAND_DATA04__USDHC3_DATA0		0x1d4>,
++			<MX8MP_IOMUXC_NAND_DATA05__USDHC3_DATA1		0x1d4>,
++			<MX8MP_IOMUXC_NAND_DATA06__USDHC3_DATA2		0x1d4>,
++			<MX8MP_IOMUXC_NAND_DATA07__USDHC3_DATA3		0x1d4>,
++			<MX8MP_IOMUXC_NAND_RE_B__USDHC3_DATA4		0x1d4>,
++			<MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK		0x194>,
++			<MX8MP_IOMUXC_NAND_WP_B__USDHC3_CMD		0x1d4>;
++	};
++
++	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO09__USDHC3_RESET_B	0x1d1>,
++			<MX8MP_IOMUXC_NAND_CE1_B__USDHC3_STROBE		0x196>,
++			<MX8MP_IOMUXC_NAND_CE2_B__USDHC3_DATA5		0x1d2>,
++			<MX8MP_IOMUXC_NAND_CE3_B__USDHC3_DATA6		0x1d2>,
++			<MX8MP_IOMUXC_NAND_CLE__USDHC3_DATA7		0x1d2>,
++			<MX8MP_IOMUXC_NAND_DATA04__USDHC3_DATA0		0x1d2>,
++			<MX8MP_IOMUXC_NAND_DATA05__USDHC3_DATA1		0x1d2>,
++			<MX8MP_IOMUXC_NAND_DATA06__USDHC3_DATA2		0x1d2>,
++			<MX8MP_IOMUXC_NAND_DATA07__USDHC3_DATA3		0x1d2>,
++			<MX8MP_IOMUXC_NAND_RE_B__USDHC3_DATA4		0x1d2>,
++			<MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK		0x196>,
++			<MX8MP_IOMUXC_NAND_WP_B__USDHC3_CMD		0x1d6>;
++	};
++
++	pinctrl_wdog: wdoggrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO02__WDOG1_WDOG_B		0xc6>;	/* PMIC_WDI */
++	};
++
++	pinctrl_bluetooth_ctrl: bluetoothctrlgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SD1_DATA6__GPIO2_IO08		0x1c4>;	/* WIFI_WKUP_BT */
++	};
++
++	pinctrl_wifi_ctrl: wifictrlgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SD1_DATA7__GPIO2_IO09		0x1c4>;	/* WIFI_WKUP_WLAN */
++	};
++
++	pinctrl_wifi_i2s: wifii2sgrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SAI2_RXFS__GPIO4_IO21		0x1d6>,	/* WIFI_TX_SYNC */
++			<MX8MP_IOMUXC_SAI5_RXD0__GPIO3_IO21		0x96>,	/* WIFI_RX_DATA0 */
++			<MX8MP_IOMUXC_SAI5_RXD2__GPIO3_IO23		0x1d6>,	/* WIFI_TX_BCLK */
++			<MX8MP_IOMUXC_SAI5_RXD3__GPIO3_IO24		0x1d6>;	/* WIFI_TX_DATA0 */
++	};
++
++	pinctrl_wifi_pwr_en: wifipwrengrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_SD1_STROBE__GPIO2_IO11		0x184>;	/* PMIC_EN_WIFI */
++	};
++};
 -- 
 2.33.1
 

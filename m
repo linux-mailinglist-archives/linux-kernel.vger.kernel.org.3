@@ -2,47 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938394DC663
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4E14DC6F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233960AbiCQMvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
+        id S234468AbiCQNAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 09:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbiCQMvb (ORCPT
+        with ESMTP id S234387AbiCQM4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:51:31 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B083E1F6F20;
-        Thu, 17 Mar 2022 05:49:23 -0700 (PDT)
+        Thu, 17 Mar 2022 08:56:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085BEE9948;
+        Thu, 17 Mar 2022 05:54:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 27ED6CE233F;
-        Thu, 17 Mar 2022 12:49:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142ADC340EF;
-        Thu, 17 Mar 2022 12:49:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D5FF60F1B;
+        Thu, 17 Mar 2022 12:54:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A5FCC340E9;
+        Thu, 17 Mar 2022 12:54:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521360;
-        bh=LHKATBomQ6ACtfJjG+YFvVAXAGjmKFmdhJSOLfP3MmY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qscb2wCQ+5gLe6R1RJykJzFVYw4WTfaT1Mx06XK9KclLAkYvE55vBRezwV9QCY61m
-         Zxs9AbgJW+Cdg9Po1+k3av84XeR20H3F+kjV3j++Q3YuhUpfQPFEEscbfT1ukw06l1
-         oOT8xdPDR8l69vDoKcbH8rS0eEhY31J7rcY3EoqU=
+        s=korg; t=1647521660;
+        bh=Oiwz1Z86UsbOiF/D/+uZsqFlOG7gt+YtJPBjmB8q8KM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NBYwLnP8k7chZmwJ7Xz9+Z5MIr9RC1IvS7xIaqHnaouepDvgGMBAt5pC5pt1qpn04
+         VgG0/naTzcE4J4aBuJVLHyXqb/bttC8uBx1uVLzyS/WgRkfquj+/tI4p+1MLTxZ+6M
+         6MahGgb5mbd41EWHWvuBY+QraFf1ErpK4y40+aMs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 10/23] mac80211: refuse aggregations sessions before authorized
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.16 00/28] 5.16.16-rc1 review
 Date:   Thu, 17 Mar 2022 13:45:51 +0100
-Message-Id: <20220317124526.251768816@linuxfoundation.org>
+Message-Id: <20220317124526.768423926@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317124525.955110315@linuxfoundation.org>
-References: <20220317124525.955110315@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.16-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.16.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.16.16-rc1
+X-KernelTest-Deadline: 2022-03-19T12:45+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -54,54 +62,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+This is the start of the stable review cycle for the 5.16.16 release.
+There are 28 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-[ Upstream commit a6bce78262f5dd4b50510f0aa47f3995f7b185f3 ]
+Responses should be made by Sat, 19 Mar 2022 12:45:16 +0000.
+Anything received after that time might be too late.
 
-If an MFP station isn't authorized, the receiver will (or
-at least should) drop the action frame since it's a robust
-management frame, but if we're not authorized we haven't
-installed keys yet. Refuse attempts to start a session as
-they'd just time out.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.16-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+and the diffstat can be found below.
 
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Link: https://lore.kernel.org/r/20220203201528.ff4d5679dce9.I34bb1f2bc341e161af2d6faf74f91b332ba11285@changeid
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/mac80211/agg-tx.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+thanks,
 
-diff --git a/net/mac80211/agg-tx.c b/net/mac80211/agg-tx.c
-index 190f300d8923..4b4ab1961068 100644
---- a/net/mac80211/agg-tx.c
-+++ b/net/mac80211/agg-tx.c
-@@ -9,7 +9,7 @@
-  * Copyright 2007, Michael Wu <flamingice@sourmilk.net>
-  * Copyright 2007-2010, Intel Corporation
-  * Copyright(c) 2015-2017 Intel Deutschland GmbH
-- * Copyright (C) 2018 - 2021 Intel Corporation
-+ * Copyright (C) 2018 - 2022 Intel Corporation
-  */
- 
- #include <linux/ieee80211.h>
-@@ -626,6 +626,14 @@ int ieee80211_start_tx_ba_session(struct ieee80211_sta *pubsta, u16 tid,
- 		return -EINVAL;
- 	}
- 
-+	if (test_sta_flag(sta, WLAN_STA_MFP) &&
-+	    !test_sta_flag(sta, WLAN_STA_AUTHORIZED)) {
-+		ht_dbg(sdata,
-+		       "MFP STA not authorized - deny BA session request %pM tid %d\n",
-+		       sta->sta.addr, tid);
-+		return -EINVAL;
-+	}
-+
- 	/*
- 	 * 802.11n-2009 11.5.1.1: If the initiating STA is an HT STA, is a
- 	 * member of an IBSS, and has no other existing Block Ack agreement
--- 
-2.34.1
+greg k-h
 
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.16.16-rc1
+
+Ivan Vecera <ivecera@redhat.com>
+    ice: Fix race condition during interface enslave
+
+Chengming Zhou <zhouchengming@bytedance.com>
+    kselftest/vm: fix tests build with old libc
+
+Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+    bnx2: Fix an error message
+
+Niels Dossche <dossche.niels@gmail.com>
+    sfc: extend the locking on mcdi->seqno
+
+Eric Dumazet <edumazet@google.com>
+    tcp: make tcp_read_sock() more robust
+
+Sreeramya Soratkal <quic_ssramya@quicinc.com>
+    nl80211: Update bss channel on channel switch for P2P_CLIENT
+
+Manasi Navare <manasi.d.navare@intel.com>
+    drm/vrr: Set VRR capable prop only if it is attached to connector
+
+Golan Ben Ami <golan.ben.ami@intel.com>
+    iwlwifi: don't advertise TWT support
+
+Hans de Goede <hdegoede@redhat.com>
+    Input: goodix - workaround Cherry Trail devices with a bogus ACPI Interrupt() resource
+
+Hans de Goede <hdegoede@redhat.com>
+    Input: goodix - use the new soc_intel_is_byt() helper
+
+Florian Westphal <fw@strlen.de>
+    netfilter: egress: silence egress hook lockdep splats
+
+Jia-Ju Bai <baijiaju1990@gmail.com>
+    atm: firestream: check the return value of ioremap() in fs_init()
+
+Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+    can: rcar_canfd: rcar_canfd_channel_probe(): register the CAN device when fully ready
+
+Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+    Bluetooth: hci_core: Fix leaking sent_cmd skb
+
+Julian Braha <julianbraha@gmail.com>
+    ARM: 9178/1: fix unmet dependency on BITREVERSE for HAVE_ARCH_BITREVERSE
+
+Alexander Lobakin <alobakin@pm.me>
+    MIPS: smp: fill in sibling and core maps earlier
+
+Johannes Berg <johannes.berg@intel.com>
+    mac80211: refuse aggregations sessions before authorized
+
+Corentin Labbe <clabbe@baylibre.com>
+    ARM: dts: rockchip: fix a typo on rk3288 crypto-controller
+
+Sascha Hauer <s.hauer@pengutronix.de>
+    ARM: dts: rockchip: reorder rk322x hmdi clocks
+
+Dinh Nguyen <dinguyen@kernel.org>
+    arm64: dts: agilex: use the compatible "intel,socfpga-agilex-hsotg"
+
+Sascha Hauer <s.hauer@pengutronix.de>
+    arm64: dts: rockchip: reorder rk3399 hdmi clocks
+
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+    arm64: dts: rockchip: align pl330 node name with dtschema
+
+Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
+    arm64: dts: rockchip: fix rk3399-puma eMMC HS400 signal integrity
+
+Yan Yan <evitayan@google.com>
+    xfrm: Fix xfrm migrate issues when address family changes
+
+Yan Yan <evitayan@google.com>
+    xfrm: Check if_id in xfrm_migrate
+
+Quentin Schulz <quentin.schulz@theobroma-systems.com>
+    arm64: dts: rockchip: fix rk3399-puma-haikou USB OTG mode
+
+Frank Wunderlich <frank-w@public-files.de>
+    arm64: dts: rockchip: fix dma-controller node names on rk356x
+
+Kai Lueke <kailueke@linux.microsoft.com>
+    Revert "xfrm: state and policy should fail if XFRMA_IF_ID 0"
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                           |  4 +--
+ arch/arm/boot/dts/rk322x.dtsi                      |  4 +--
+ arch/arm/boot/dts/rk3288.dtsi                      |  2 +-
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi      |  4 +--
+ arch/arm64/boot/dts/rockchip/px30.dtsi             |  2 +-
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi           |  2 +-
+ .../arm64/boot/dts/rockchip/rk3399-puma-haikou.dts |  1 +
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi      | 20 +++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi           |  6 ++--
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi           |  4 +--
+ arch/mips/kernel/smp.c                             |  6 ++--
+ drivers/atm/firestream.c                           |  2 ++
+ drivers/gpu/drm/drm_connector.c                    |  3 ++
+ drivers/input/touchscreen/goodix.c                 | 34 +++++++++++-----------
+ drivers/net/can/rcar/rcar_canfd.c                  |  6 ++--
+ drivers/net/ethernet/broadcom/bnx2.c               |  2 +-
+ drivers/net/ethernet/intel/ice/ice.h               | 11 ++++++-
+ drivers/net/ethernet/intel/ice/ice_main.c          | 12 +++++++-
+ drivers/net/ethernet/sfc/mcdi.c                    |  2 +-
+ drivers/net/wireless/intel/iwlwifi/iwl-nvm-parse.c |  3 +-
+ drivers/net/wireless/intel/iwlwifi/mvm/mac80211.c  |  1 -
+ include/linux/netfilter_netdev.h                   |  4 +++
+ include/net/xfrm.h                                 |  5 ++--
+ lib/Kconfig                                        |  1 -
+ net/bluetooth/hci_core.c                           |  1 +
+ net/ipv4/tcp.c                                     | 10 ++++---
+ net/key/af_key.c                                   |  2 +-
+ net/mac80211/agg-tx.c                              | 10 ++++++-
+ net/wireless/nl80211.c                             |  3 +-
+ net/xfrm/xfrm_policy.c                             | 14 +++++----
+ net/xfrm/xfrm_state.c                              | 15 +++++++---
+ net/xfrm/xfrm_user.c                               | 27 +++++------------
+ tools/testing/selftests/vm/userfaultfd.c           |  1 +
+ 33 files changed, 141 insertions(+), 83 deletions(-)
 
 

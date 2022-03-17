@@ -2,83 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2A24DBC05
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6AD4DBC09
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347539AbiCQBEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 21:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
+        id S1354099AbiCQBIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 21:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233097AbiCQBEv (ORCPT
+        with ESMTP id S239297AbiCQBH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 21:04:51 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA3D1BEBA;
-        Wed, 16 Mar 2022 18:03:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V7OxGLH_1647479011;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V7OxGLH_1647479011)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 17 Mar 2022 09:03:32 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     john.johansen@canonical.com
-Cc:     jmorris@namei.org, serge@hallyn.com, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] apparmor: Fix some kernel-doc comments
-Date:   Thu, 17 Mar 2022 09:03:30 +0800
-Message-Id: <20220317010330.82929-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 16 Mar 2022 21:07:57 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C871BEBD
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:06:42 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id mz9-20020a17090b378900b001c657559290so3846456pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:06:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uokqAmG9CvnWBx18M8Uu5r7m44QG1XAXLxISh4niXH4=;
+        b=G/qUIQX7rNnf/j7R+SGiByuT42bQJGtLY3l77liJPfTnJO1jfwDEJWcaBW9AosRv7l
+         L2u4vTKEVrsKGNL75pxwFzOsTelg8luWhtOUPfCCM4YITRL+P2AZ/0lkXGc54R35atGU
+         AA45RAqrMYLhBTTvGiVhItGidvRxI1yJrGAjs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uokqAmG9CvnWBx18M8Uu5r7m44QG1XAXLxISh4niXH4=;
+        b=F5dPlPsGRxOvkLRBc7Q9t7BWL9GA8jfXhOyAZxXbhPgI90D8hqoVrbcAFAfcVk+NYq
+         6zVM/2l5WPNF0Kd6xOXU1cAeEE/U5fyXsj85ReVFNDsQeuV/3MnsCbBFgPl2kdYo6uDj
+         oZ50Bdl6Gxm5IxGojdZF/E0TK949PY7RntccuMbsTwjV3+nFBmwPssXA3Bj8iZ2gkXDy
+         PMXxzNMCttri+kpuhP6pL9UX1Pj+N4oFeYLXJq11EgQeaq/qKRN/G1tsIL7yvCpt/OTU
+         7ZEYj4RiDotE2gTrkwlW9j2mFdqLE8twaVaNPR3baPR5TRGfBPPh6XaXSTrz/II9bGK2
+         xlqg==
+X-Gm-Message-State: AOAM531lQKienz9T0rQBWji0HSBt8hAC5JkKT3Gil84xgyyFaN79zCkJ
+        anUYyOtIMqAxwHYBuB/5RwBS9w==
+X-Google-Smtp-Source: ABdhPJzAvRRtkqAYVjZZCxSdPvpMJTgeOGtla4pRkmCAu8bkr5QCbNHzposHvSFqPjWEvBZVuL5s0g==
+X-Received: by 2002:a17:902:f545:b0:151:fa7a:7d57 with SMTP id h5-20020a170902f54500b00151fa7a7d57mr2162928plf.62.1647479202139;
+        Wed, 16 Mar 2022 18:06:42 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:dec5:e3f8:cbd7:f5a7])
+        by smtp.gmail.com with ESMTPSA id s14-20020a056a0008ce00b004f66dcd4f1csm5093923pfu.32.2022.03.16.18.06.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 18:06:41 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>
+Subject: [PATCH 0/2] Fix and update fingerprint flashing on herobrine
+Date:   Wed, 16 Mar 2022 18:06:38 -0700
+Message-Id: <20220317010640.2498502-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove some warnings found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
+This series fixes fingerprint pins on herobrine so that the flashing
+code is more reliable. Right now it fails depending on timings. The
+second patch updates the node to be compliant with the new binding
+being proposed.
 
-security/apparmor/domain.c:137: warning: Function parameter or member
-'state' not described in 'label_compound_match'
-security/apparmor/domain.c:137: warning: Excess function parameter
-'start' description in 'label_compound_match'
-security/apparmor/domain.c:1294: warning: Excess function parameter
-'onexec' description in 'aa_change_profile'
+This technically depends on the binding series[1] but only the second
+patch. The first patch is a fix and should be merged at the earliest
+convenience. Even the second patch could be merged and it would probably
+be OK.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- security/apparmor/domain.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Stephen Boyd (2):
+  arm64: dts: qcom: sc7280-herobrine: Drop outputs on fpmcu pins
+  arm64: dts: qcom: Fully describe fingerprint node on Herobrine
 
-diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
-index a29e69d2c300..d71023f5c9c4 100644
---- a/security/apparmor/domain.c
-+++ b/security/apparmor/domain.c
-@@ -119,7 +119,7 @@ static inline unsigned int match_component(struct aa_profile *profile,
-  * @profile: profile to find perms for
-  * @label: label to check access permissions for
-  * @stack: whether this is a stacking request
-- * @start: state to start match in
-+ * @state: state to start match in
-  * @subns: whether to do permission checks on components in a subns
-  * @request: permissions to request
-  * @perms: perms struct to set
-@@ -1279,7 +1279,6 @@ static int change_profile_perms_wrapper(const char *op, const char *name,
- /**
-  * aa_change_profile - perform a one-way profile transition
-  * @fqname: name of profile may include namespace (NOT NULL)
-- * @onexec: whether this transition is to take place immediately or at exec
-  * @flags: flags affecting change behavior
-  *
-  * Change to new profile @name.  Unlike with hats, there is no way
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Matthias Kaehlcke <mka@chromium.org>
+Cc: Alexandru M Stan <amstan@chromium.org>
+
+[1] https://lore.kernel.org/r/20220317005814.2496302-1-swboyd@chromium.org
+
+base-commit: 1e49defb863638cde53e48805747271f80f9abec
 -- 
-2.20.1.7.g153144c
+https://chromeos.dev
 

@@ -2,239 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65784DBDB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 04:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 023A94DBDEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 05:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbiCQDfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 23:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S229603AbiCQE7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 00:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiCQDf0 (ORCPT
+        with ESMTP id S229608AbiCQE5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 23:35:26 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D815EBCF;
-        Wed, 16 Mar 2022 20:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647488041; x=1679024041;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=fvSysYrUKMfGk8/VVxHhcMOBMFAuiZiHLOX32nrDtbU=;
-  b=ijtUhERXG3Cy/OyvJ+RNLnnZ5+yQSuWExjPEYB6Uya4KUqOLlGBlfy4n
-   VokXRrEApHQCN8C9fgZVoqSGqMVIDMlzdK1vJpDj4d60B5c8GD7YINXuQ
-   /ap/w+IUoRT0L8EUC2eRakgNkOtMwpgefpIGaHH8IzbYT5p1++4a1q/+q
-   uMZbG7GFB7Jh7y7Mgds5Cjj6g2JZ0DqL7RdfVsVhPCTfHWM8FAXdXtjZ9
-   qk+aw/9gi3GGCXlsWJeSu8EcHsvVsDLnbEeVqJj8gPQ8i+iVOdgT26ZUE
-   wOmnRv5brtQ/iJ88qhIomSeXO8CfnfHLexCjAAOWxuHyBuTlS3KopbNyx
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="238935622"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="238935622"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 20:32:55 -0700
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="613867506"
-Received: from mbhanuva-mobl.amr.corp.intel.com (HELO localhost) ([10.212.30.158])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 20:32:54 -0700
-Date:   Wed, 16 Mar 2022 20:32:54 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eli Cohen <eli@mellanox.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>,
-        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
-        Joachim Fritschi <jfritschi@freenet.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, netdev@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org, x86@kernel.org
-Subject: Re: [PATCH 0/9] treewide: eliminate anonymous module_init &
- module_exit
-Message-ID: <YjKr5vU6Vu8iW8VL@iweiny-desk3>
-References: <20220316192010.19001-1-rdunlap@infradead.org>
+        Thu, 17 Mar 2022 00:57:49 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772EA1B3F7B;
+        Wed, 16 Mar 2022 21:40:16 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 22H3dJIO030820
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Mar 2022 23:39:20 -0400
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 4EF0915C3EA9; Wed, 16 Mar 2022 23:39:19 -0400 (EDT)
+Date:   Wed, 16 Mar 2022 23:39:19 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Byungchul Park <byungchul.park@lge.com>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, willy@infradead.org,
+        david@fromorbit.com, amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
+        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: [PATCH RFC v5 00/21] DEPT(Dependency Tracker)
+Message-ID: <YjKtZxjIKDJqsSrP@mit.edu>
+References: <1647397593-16747-1-git-send-email-byungchul.park@lge.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220316192010.19001-1-rdunlap@infradead.org>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1647397593-16747-1-git-send-email-byungchul.park@lge.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 12:20:01PM -0700, Randy Dunlap wrote:
-> There are a number of drivers that use "module_init(init)" and
-> "module_exit(exit)", which are anonymous names and can lead to
-> confusion or ambiguity when reading System.map, crashes/oops/bugs,
-> or an initcall_debug log.
-> 
-> Give each of these init and exit functions unique driver-specific
-> names to eliminate the anonymous names.
+On Wed, Mar 16, 2022 at 11:26:12AM +0900, Byungchul Park wrote:
+> I'm gonna re-add RFC for a while at Ted's request. But hard testing is
+> needed to find false alarms for now that there's no false alarm with my
+> system. I'm gonna look for other systems that might produce false
+> alarms. And it'd be appreciated if you share it when you see any alarms
+> with yours.
 
-I'm not fully sure about the Fixes tags but I don't see that it hurts anything.
+Is dept1.18_on_v5.17-rc7 roughly equivalent to the v5 version sent to
+the list.  The commit date is March 16th, so I assume it was.  I tried
+merging it with the ext4 dev branch, and tried enabling CONFIG_DEPT
+and running xfstests.  The result was nearly test failing, because a 
+DEPT warning.
 
-For the series:
+I assume that this is due to some misconfiguration of DEPT on my part?
+And I'm curious why DEPT_WARN_ONCE is apparently getting many, many
+times?
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+[  760.990409] DEPT_WARN_ONCE: Pool(ecxt) is empty.
+[  770.319656] DEPT_WARN_ONCE: Pool(ecxt) is empty.
+[  772.460360] DEPT_WARN_ONCE: Pool(ecxt) is empty.
+[  784.039676] DEPT_WARN_ONCE: Pool(ecxt) is empty.
 
-> 
-> Example 1: (System.map)
->  ffffffff832fc78c t init
->  ffffffff832fc79e t init
->  ffffffff832fc8f8 t init
->  ffffffff832fca05 t init
->  ffffffff832fcbd2 t init
->  ffffffff83328f0e t init
->  ffffffff8332c5b1 t init
->  ffffffff8332d9eb t init
->  ffffffff8332f0aa t init
->  ffffffff83330e25 t init
->  ffffffff833317a5 t init
->  ffffffff8333dd6b t init
-> 
-> Example 2: (initcall_debug log)
->  calling  init+0x0/0x12 @ 1
->  initcall init+0x0/0x12 returned 0 after 15 usecs
->  calling  init+0x0/0x60 @ 1
->  initcall init+0x0/0x60 returned 0 after 2 usecs
->  calling  init+0x0/0x9a @ 1
->  initcall init+0x0/0x9a returned 0 after 74 usecs
->  calling  init+0x0/0x73 @ 1
->  initcall init+0x0/0x73 returned 0 after 6 usecs
->  calling  init+0x0/0x73 @ 1
->  initcall init+0x0/0x73 returned 0 after 4 usecs
->  calling  init+0x0/0xf5 @ 1
->  initcall init+0x0/0xf5 returned 0 after 27 usecs
->  calling  init+0x0/0x7d @ 1
->  initcall init+0x0/0x7d returned 0 after 11 usecs
->  calling  init+0x0/0xc9 @ 1
->  initcall init+0x0/0xc9 returned 0 after 19 usecs
->  calling  init+0x0/0x9d @ 1
->  initcall init+0x0/0x9d returned 0 after 37 usecs
->  calling  init+0x0/0x63f @ 1
->  initcall init+0x0/0x63f returned 0 after 411 usecs
->  calling  init+0x0/0x171 @ 1
->  initcall init+0x0/0x171 returned 0 after 61 usecs
->  calling  init+0x0/0xef @ 1
->  initcall init+0x0/0xef returned 0 after 3 usecs
-> 
-> Cc: "Michael S. Tsirkin" <mst@redhat.com>
-> Cc: Jason Wang <jasowang@redhat.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Stefan Hajnoczi <stefanha@redhat.com>
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Amit Shah <amit@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Eli Cohen <eli@mellanox.com>
-> Cc: Saeed Mahameed <saeedm@nvidia.com>
-> Cc: Leon Romanovsky <leon@kernel.org>
-> Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-> Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
-> Cc: Florian Westphal <fw@strlen.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
-> Cc: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Krzysztof Opasiak <k.opasiak@samsung.com>
-> Cc: Igor Kotrasinski <i.kotrasinsk@samsung.com>
-> Cc: Valentina Manea <valentina.manea.m@gmail.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Shuah Khan <skhan@linuxfoundation.org>
-> Cc: Jussi Kivilinna <jussi.kivilinna@mbnet.fi>
-> Cc: Joachim Fritschi <jfritschi@freenet.de>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Karol Herbst <karolherbst@gmail.com>
-> Cc: Pekka Paalanen <ppaalanen@gmail.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: netfilter-devel@vger.kernel.org
-> Cc: coreteam@netfilter.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-block@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-rdma@vger.kernel.org
-> Cc: linux-scsi@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: nouveau@lists.freedesktop.org
-> Cc: virtualization@lists.linux-foundation.org
-> Cc: x86@kernel.org
-> 
-> patches:
->  [PATCH 1/9] virtio_blk: eliminate anonymous module_init & module_exit
->  [PATCH 2/9] virtio_console: eliminate anonymous module_init & module_exit
->  [PATCH 3/9] net: mlx5: eliminate anonymous module_init & module_exit
->  [PATCH 4/9] netfilter: h323: eliminate anonymous module_init & module_exit
->  [PATCH 5/9] virtio-scsi: eliminate anonymous module_init & module_exit
->  [PATCH 6/9] usb: gadget: eliminate anonymous module_init & module_exit
->  [PATCH 7/9] usb: usbip: eliminate anonymous module_init & module_exit
->  [PATCH 8/9] x86/crypto: eliminate anonymous module_init & module_exit
->  [PATCH 9/9] testmmiotrace: eliminate anonymous module_init & module_exit
-> 
-> diffstat:
->  arch/x86/crypto/blowfish_glue.c                |    8 ++++----
->  arch/x86/crypto/camellia_glue.c                |    8 ++++----
->  arch/x86/crypto/serpent_avx2_glue.c            |    8 ++++----
->  arch/x86/crypto/twofish_glue.c                 |    8 ++++----
->  arch/x86/crypto/twofish_glue_3way.c            |    8 ++++----
->  arch/x86/mm/testmmiotrace.c                    |    8 ++++----
->  drivers/block/virtio_blk.c                     |    8 ++++----
->  drivers/char/virtio_console.c                  |    8 ++++----
->  drivers/net/ethernet/mellanox/mlx5/core/main.c |    8 ++++----
->  drivers/scsi/virtio_scsi.c                     |    8 ++++----
->  drivers/usb/gadget/legacy/inode.c              |    8 ++++----
->  drivers/usb/gadget/legacy/serial.c             |   10 +++++-----
->  drivers/usb/gadget/udc/dummy_hcd.c             |    8 ++++----
->  drivers/usb/usbip/vudc_main.c                  |    8 ++++----
->  net/ipv4/netfilter/nf_nat_h323.c               |    8 ++++----
->  15 files changed, 61 insertions(+), 61 deletions(-)
+(and this goes on over and over...)
+
+Here's the full output of the DEPT warning from trying to run
+generic/001.  There is a similar warning for generic/002, generic/003,
+etc., for a total of 468 failures out of 495 tests run.
+
+[  760.945068] run fstests generic/001 at 2022-03-16 08:16:53
+[  760.985440] ------------[ cut here ]------------
+[  760.990409] DEPT_WARN_ONCE: Pool(ecxt) is empty.
+[  760.995166] WARNING: CPU: 1 PID: 73369 at kernel/dependency/dept.c:297 from_pool+0xc2/0x110
+[  761.003915] CPU: 1 PID: 73369 Comm: bash Tainted: G        W         5.17.0-rc7-xfstests-00649-g5456f2312272 #520
+[  761.014389] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+[  761.024363] RIP: 0010:from_pool+0xc2/0x110
+[  761.028598] Code: 3d 32 62 96 01 00 75 c2 48 6b db 38 48 c7 c7 00 94 f1 ad 48 89 04 24 c6 05 1a 62 96 01 01 48 8b b3 20 9a 2f ae e8 2f dd bf 00 <0f> 0b 48 8b 04 24 eb 98 48 63 c2 48 0f af 86 28 9a 2f ae 48 03 86
+[  761.048189] RSP: 0018:ffffa7ce4425fd48 EFLAGS: 00010086
+[  761.053617] RAX: 0000000000000000 RBX: 00000000000000a8 RCX: 0000000000000000
+[  761.060965] RDX: 0000000000000001 RSI: ffffffffadfb95e0 RDI: 00000000ffffffff
+[  761.068322] RBP: 00000000001dc598 R08: 0000000000000000 R09: ffffa7ce4425fb90
+[  761.075789] R10: fffffffffffe0aa0 R11: fffffffffffe0ae8 R12: ffff9768e07f0600
+[  761.083063] R13: 0000000000000000 R14: 0000000000000246 R15: 0000000000000000
+[  761.090312] FS:  00007fd4ecc4c740(0000) GS:ffff976999400000(0000) knlGS:0000000000000000
+[  761.098623] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  761.104580] CR2: 0000563c61657eb0 CR3: 00000001328fa001 CR4: 00000000003706e0
+[  761.111921] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  761.119171] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  761.126617] Call Trace:
+[  761.129175]  <TASK>
+[  761.131385]  add_ecxt+0x54/0x1c0
+[  761.134736]  ? simple_attr_write+0x87/0x100
+[  761.139063]  dept_event+0xaa/0x1d0
+[  761.142687]  ? simple_attr_write+0x87/0x100
+[  761.147089]  __mutex_unlock_slowpath+0x60/0x2d0
+[  761.151866]  simple_attr_write+0x87/0x100
+[  761.155997]  debugfs_attr_write+0x40/0x60
+[  761.160124]  vfs_write+0xec/0x390
+[  761.163557]  ksys_write+0x68/0xe0
+[  761.167004]  do_syscall_64+0x43/0x90
+[  761.170782]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  761.176204] RIP: 0033:0x7fd4ecd3df33
+[  761.180010] Code: 8b 15 61 ef 0c 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 28 48 89 54 24 18
+[  761.199551] RSP: 002b:00007ffe772d4808 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+[  761.207240] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fd4ecd3df33
+[  761.214583] RDX: 0000000000000002 RSI: 0000563c61657eb0 RDI: 0000000000000001
+[  761.221835] RBP: 0000563c61657eb0 R08: 000000000000000a R09: 0000000000000001
+[  761.229537] R10: 0000563c61902240 R11: 0000000000000246 R12: 0000000000000002
+[  761.237239] R13: 00007fd4ece0e6a0 R14: 0000000000000002 R15: 00007fd4ece0e8a0
+[  761.245283]  </TASK>
+[  761.247586] ---[ end trace 0000000000000000 ]---
+[  761.761829] EXT4-fs (dm-0): mounted filesystem with ordered data mode. Quota mode: none.
+[  769.903489] EXT4-fs (dm-0): mounted filesystem with ordered data mode. Quota mode: none.
+
+Let me know what I should do in order to fix this DEPT_WARN_ONCE?
+
+Thanks,
+
+						- Ted

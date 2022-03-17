@@ -2,77 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 749D44DD07A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9370E4DD077
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiCQWCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 18:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        id S229492AbiCQWCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 18:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiCQWC3 (ORCPT
+        with ESMTP id S229449AbiCQWC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 18:02:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0961959C3;
-        Thu, 17 Mar 2022 15:01:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8ED4CB81E91;
-        Thu, 17 Mar 2022 22:01:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6FB4C340E9;
-        Thu, 17 Mar 2022 22:01:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647554468;
-        bh=EvbJwNZK/WSFgkuBFOh/+QIchcc/X2Y9rQl+FqCdeR0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hYvJQIwciKreLhuUUF3SHtPfz7pAmeeogDIOjLlM99+68AS/mu/I/o1iUxXT7eXC+
-         mNcS15U3Y7jOwK3Z9xcR3dnDpnqYJPfjNvDdN5Pedz2kn/vtWZXER26HkpzOzplfK8
-         khYqKS/Rw7K4Z0lY44EBFzeGEiTw7BpQlcMlqaFeIlyGenvTWMi6smMJ91W5CRhWzR
-         b8VwGsm7nIn6h6LsF8MjIOcYJwTwnfnSlOQzldX+GgwRdzfFKRWEiP/z+pQt6U44XL
-         TOFurNagPqQ7NqNPfXP+g8mLaZwEQi7yi7VocTcczEEOQS3Awg/6cbx4VuRcz2aUK0
-         LQM6zCflnqh7Q==
-Date:   Fri, 18 Mar 2022 00:00:17 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Haitao Huang <haitao.huang@linux.intel.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        nathaniel@profian.com
-Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
- permissions
-Message-ID: <YjOvcbdM+YmYw37c@iki.fi>
-References: <Yis9rA8uC/0bmWCF@iki.fi>
- <97565fed-dc67-bab1-28d4-c40201c9f055@intel.com>
- <Yi6tPLLt9Q+ailQ3@iki.fi>
- <Yi6tinbF+Y7a66eQ@iki.fi>
- <Yi6va4dCaljiQ1WQ@iki.fi>
- <op.1i01q9s0wjvjmi@hhuan26-mobl1.mshome.net>
- <YjLcr9TwLNWUtwkS@iki.fi>
- <YjLfIMz4/Vx8Jm24@iki.fi>
- <op.1i6iegamwjvjmi@hhuan26-mobl1.mshome.net>
- <YjOtLp4f4nu18Fzx@iki.fi>
+        Thu, 17 Mar 2022 18:02:28 -0400
+Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.148.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A2F1834F0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:01:10 -0700 (PDT)
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id CF48737FFA8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:01:09 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id UyBBny0rxdx86UyBBnpoiK; Thu, 17 Mar 2022 17:01:09 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=G8PPz3EEXerG6wcqjyGRnyJnAFhn2RgK8hinJVsi3pM=; b=uaiaHXcGBrTw3r48iBpIHB3z8Y
+        jUiNXzO8DCvvwLRyqjh4Gj636gajTuYecScIHnIqGiXzzhF8XHitjyGwn0YxjbKzeU/6SrIusEom7
+        0E0r675MJEnCzRyUNHm9A4/c5Mt8ROAdhIm0qyM619fGozd6yRbXiAGwUnpwbl8MLYFxq2OyWJKm7
+        9mF5L3/t7Y7WUr492ZY/8xLV2ljg3zvMku3aSWMuZf7SbVE6Y2vtjy1NoOD06WSw3tikjrehEyiYM
+        pV7UEp61jllsqXo05CBfAYemP0MeeyJ+bOgjKoJGlGOfNzEAoBbIjuVMPnYJCoQ+6oWdCZtAgJPmQ
+        w+ARFqCw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54316)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nUyBB-000tNv-9X; Thu, 17 Mar 2022 22:01:09 +0000
+Message-ID: <cbc028bd-8b4f-5cc1-3bcf-a195ae7cebd9@roeck-us.net>
+Date:   Thu, 17 Mar 2022 15:01:07 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjOtLp4f4nu18Fzx@iki.fi>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] hwmon: (adt7475) Add support for pin configuration
+Content-Language: en-US
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
+ <20220316234134.290492-3-chris.packham@alliedtelesis.co.nz>
+ <6aabb517-c46e-bcf8-c93d-b6fa1fe8eb3a@roeck-us.net>
+ <52a6f788-cba7-9823-76db-523e2e8c1f2e@alliedtelesis.co.nz>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <52a6f788-cba7-9823-76db-523e2e8c1f2e@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nUyBB-000tNv-9X
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54316
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 1
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,163 +87,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 11:50:41PM +0200, Jarkko Sakkinen wrote:
-> On Thu, Mar 17, 2022 at 09:28:45AM -0500, Haitao Huang wrote:
-> > Hi
-> > 
-> > On Thu, 17 Mar 2022 02:11:28 -0500, Jarkko Sakkinen <jarkko@kernel.org>
-> > wrote:
-> > 
-> > > On Thu, Mar 17, 2022 at 09:01:07AM +0200, Jarkko Sakkinen wrote:
-> > > > On Mon, Mar 14, 2022 at 10:39:36AM -0500, Haitao Huang wrote:
-> > > > > Hi Jarkko
-> > > > >
-> > > > > On Sun, 13 Mar 2022 21:58:51 -0500, Jarkko Sakkinen
-> > > > <jarkko@kernel.org>
-> > > > > wrote:
-> > > > >
-> > > > > > On Mon, Mar 14, 2022 at 04:50:56AM +0200, Jarkko Sakkinen wrote:
-> > > > > > > On Mon, Mar 14, 2022 at 04:49:37AM +0200, Jarkko Sakkinen wrote:
-> > > > > > > > On Fri, Mar 11, 2022 at 09:53:29AM -0800, Reinette Chatre wrote:
-> > > > > > > >
-> > > > > > > > > I saw Haitao's note that EMODPE requires "Read access
-> > > > permitted
-> > > > > > > by enclave".
-> > > > > > > > > This motivates that EMODPR->PROT_NONE should not be allowed
-> > > > > > > since it would
-> > > > > > > > > not be possible to relax permissions (run EMODPE) after that.
-> > > > > > > Even so, I
-> > > > > > > > > also found in the SDM that EACCEPT has the note "Read access
-> > > > > > > permitted
-> > > > > > > > > by enclave". That seems to indicate that EMODPR->PROT_NONE is
-> > > > > > > not practical
-> > > > > > > > > from that perspective either since the enclave will not be
-> > > > able to
-> > > > > > > > > EACCEPT the change. Does that match your understanding?
-> > > > > > > >
-> > > > > > > > Yes, PROT_NONE should not be allowed.
-> > > > > > > >
-> > > > > > > > This is however the real problem.
-> > > > > > > >
-> > > > > > > > The current kernel patch set has inconsistent API and EMODPR
-> > > > ioctl is
-> > > > > > > > simply unacceptable. It  also requires more concurrency
-> > > > management
-> > > > > > > from
-> > > > > > > > user space run-time, which would be heck a lot easier to do
-> > > > in the
-> > > > > > > kernel.
-> > > > > > > >
-> > > > > > > > If you really want EMODPR as ioctl, then for consistencys sake,
-> > > > > > > then EAUG
-> > > > > > > > should be too. Like this when things go opposite directions,
-> > > > this
-> > > > > > > patch set
-> > > > > > > > plain and simply will not work out.
-> > > > > > > >
-> > > > > > > > I would pick EAUG's strategy from these two as it requires half
-> > > > > > > the back
-> > > > > > > > calls to host from an enclave. I.e. please combine
-> > > > mprotect() and
-> > > > > > > EMODPR,
-> > > > > > > > either in the #PF handler or as part of mprotect(), which ever
-> > > > > > > suits you
-> > > > > > > > best.
-> > > > > > > >
-> > > > > > > > I'll try demonstrate this with two examples.
-> > > > > > > >
-> > > > > > > > mmap() could go something like this() (simplified):
-> > > > > > > > 1. Execution #UD's to SYSCALL.
-> > > > > > > > 2. Host calls enclave's mmap() handler with mmap() parameters.
-> > > > > > > > 3. Enclave up-calls host's mmap().
-> > > > > > > > 4. Loops the range with EACCEPTCOPY.
-> > > > > > > >
-> > > > > > > > mprotect() has to be done like this:
-> > > > > > > > 1. Execution #UD's to SYSCALL.
-> > > > > > > > 2. Host calls enclave's mprotect() handler.
-> > > > > > > > 3. Enclave up-calls host's mprotect().
-> > > > > > > > 4. Enclave up-calls host's ioctl() to
-> > > > SGX_IOC_ENCLAVE_PERMISSIONS.
-> > > > >
-> > > > > I assume up-calls here are ocalls as we call them in our
-> > > > implementation,
-> > > > > which are the calls enclave make to untrusted side via EEXIT.
-> > > > >ar
-> > > > > If so, can your implementation combine this two up-calls into one,
-> > > > then host
-> > > > > side just do ioctl() and mprotect to kernel? If so, would that
-> > > > address your
-> > > > > concern about extra up-calls?
-> > > > >
-> > > > >
-> > > > > > > > 3. Loops the range with EACCEPT.
-> > > > > > >   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > > >   5. Loops the range with EACCEPT + EMODPE.
-> > > > > > >
-> > > > > > > > This is just terrible IMHO. I hope these examples bring some
-> > > > insight.
-> > > > > >
-> > > > > > E.g. in Enarx we have to add a special up-call (so called
-> > > > enarxcall in
-> > > > > > intermediate that we call sallyport, which provides shared buffer to
-> > > > > > communicate with the enclave) just for reseting the range with
-> > > > PROT_READ.
-> > > > > > Feel very redundant, adds ugly cruft and is completely opposite
-> > > > strategy
-> > > > > > to
-> > > > > > what you've chosen to do with EAUG, which is I think correct
-> > > > choice as
-> > > > > > far
-> > > > > > as API is concerned.
-> > > > >
-> > > > > The problem with EMODPR on #PF is that kernel needs to know what
-> > > > permissions
-> > > > > requested from enclave at the time of #PF. So enclave has to make
-> > > > at least
-> > > > > one call to kernel (again via ocall in our case, I assume up-call
-> > > > in your
-> > > > > case) to make the change.
-> > > > 
-> > > > The #PF handler should do unconditionally EMODPR with PROT_READ.
-> > > 
-> > > Or mprotect(), as long as secinfo contains PROT_READ. I don't care about
-> > > this detail hugely anymore because it does not affect uapi.
-> > > 
-> > > Using EMODPR as a permission control mechanism is a ridiculous idea, and
-> > > I cannot commit to maintain a broken uapi.
-> > > 
-> > 
-> > Jarkko, how would automatically forcing PROT_READ on #PF work for this
-> > sequence?
-> > 
-> > 1) EAUG a page (has to be RW)
-> > 2) EACCEPT(RW)
-> > 3) enclave copies some data to page
-> > 4) enclave wants to change permission to R
-> > 
-> > If you are proposing mprotect, then as I indicated earlier, please address
-> > concerns raised by Reinette:
-> > https://lore.kernel.org/linux-sgx/e1c04077-0165-c5ec-53be-7fd732965e80@intel.com/
+On 3/17/22 14:35, Chris Packham wrote:
 > 
-> For EAUG you can choose between #PF handler and having it as part of
-> mmap() with the same uapi.
+> On 18/03/22 02:28, Guenter Roeck wrote:
+>> On 3/16/22 16:41, Chris Packham wrote:
+>>> The adt7473, adt7475, adt7476 and adt7490 have pins that can be used for
+>>> different functions. On the adt7473 and  adt7475 this is pins 5 and 9.
+>>> On the adt7476 and adt7490 this is pins 10 and 14.
+>>>
+>>> The first pin can either be PWM2(default) or SMBALERT#. The second pin
+>>> can be TACH4(default), THERM#, SMBALERT# or GPIO.
+>>>
+>>> The adt7475 driver has always been able to detect the configuration if
+>>> it had been done by an earlier boot stage. Add support for configuring
+>>> the pins based on the hardware description in the device tree.
+>>>
+>>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+>>> ---
+>>>    drivers/hwmon/adt7475.c | 95 +++++++++++++++++++++++++++++++++++++++++
+>>>    1 file changed, 95 insertions(+)
+>>>
+>>> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+>>> index 9d5b019651f2..ad5e5a7a844b 100644
+>>> --- a/drivers/hwmon/adt7475.c
+>>> +++ b/drivers/hwmon/adt7475.c
+>>> @@ -112,6 +112,8 @@
+>>>    #define CONFIG3_THERM        0x02
+>>>      #define CONFIG4_PINFUNC        0x03
+>>> +#define CONFIG4_THERM        0x01
+>>> +#define CONFIG4_SMBALERT    0x02
+>>>    #define CONFIG4_MAXDUTY        0x08
+>>>    #define CONFIG4_ATTN_IN10    0x30
+>>>    #define CONFIG4_ATTN_IN43    0xC0
+>>> @@ -1460,6 +1462,95 @@ static int adt7475_update_limits(struct
+>>> i2c_client *client)
+>>>        return 0;
+>>>    }
+>>>    +static int load_pin10_config(const struct i2c_client *client,
+>>> const char *propname)
+>>> +{
+>>
+>> A better function name would probably be load_config3() or similar.
 > 
-> For EMODPR clearly #PF handler would be tricky but nothing prevents
-> resetting the permissions as part of mprotect() flow, which is trivial.
+> Yep that'd be a better name.
 > 
-> One good reason to have a fixed EMODPR is that e.g. emulating properly
-> mprotect() is almost undoable if you don't do it otherwise. Specifically
+>>
+>>> +    const char *function;
+>>> +    u8 config3;
+>>> +    int err;
+>>> +
+>>> +    err = of_property_read_string(client->dev.of_node, propname,
+>>> &function);
+>>> +    if (!err) {
+>>> +        config3 = adt7475_read(REG_CONFIG3);
+>>
+>> error check missing (I see the driver is notorious for that, but that
+>> is not
+>> a reason to keep doing it).
+> 
+> Ikegami-san and Dan did to some good work to address some of that. The
+> probe function is still quite careless.
+> 
+> I'll see what I can do to make sure my additions don't make it worse.
+>>
+>>> +
+>>> +        if (!strcmp("pwm2", function))
+>>> +            config3 &= ~CONFIG3_SMBALERT;
+>>> +        else if (!strcmp("smbalert#", function))
+>>> +            config3 |= CONFIG3_SMBALERT;
+>>> +        else
+>>> +            return -EINVAL;
+>>> +
+>>> +        return i2c_smbus_write_byte_data(client, REG_CONFIG3, config3);
+>>> +    }
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static int load_pin14_config(const struct i2c_client *client, const
+>>> char *propname)
+>>> +{
+>>
+>> load_config4() ?
+>>
+>>> +    const char *function;
+>>> +    u8 config4;
+>>> +    int err;
+>>> +
+>>> +    err = of_property_read_string(client->dev.of_node, propname,
+>>> &function);
+>>> +    if (!err) {
+>>> +        config4 = adt7475_read(REG_CONFIG4);
+>>
+>> error check
+>>
+>>> +        config4 &= ~CONFIG4_PINFUNC;
+>>> +
+>>> +        if (!strcmp("tach4", function))
+>>> +            ;
+>>> +        else if (!strcmp("therm#", function))
+>>> +            config4 |= CONFIG4_THERM;
+>>> +        else if (!strcmp("smbalert#", function))
+>>> +            config4 |= CONFIG4_SMBALERT;
+>>> +        else if (!strcmp("gpio", function))
+>>> +            config4 |= CONFIG4_PINFUNC;
+>>> +        else
+>>> +            return -EINVAL;
+>>> +
+>>> +        return i2c_smbus_write_byte_data(client, REG_CONFIG4, config4);
+>>> +    }
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static int load_config(const struct i2c_client *client, int chip)
+>>> +{
+>>> +    int err;
+>>> +    const char *conf_prop1, *conf_prop2;
+>>
+>> conf_ prefix is unnecessary.
+>>
+>>> +
+>>> +    switch (chip) {
+>>> +    case adt7473:
+>>> +    case adt7475:
+>>> +        conf_prop1 = "adi,pin5-function";
+>>> +        conf_prop2 = "adi,pin9-function";
+>>> +        break;
+>>> +    case adt7476:
+>>> +    case adt7490:
+>>> +        conf_prop1 = "adi,pin10-function";
+>>> +        conf_prop2 = "adi,pin14-function";
+>>> +        break;
+>>> +    default:
+>>> +        return -EINVAL;
+>>
+>> It doesn't seem right to return -EINVAL here.
+>>
+> Have you got a better suggestion? I was trying to avoid someone
+> specifying compatible = "adi,adt7476" with "adi,pin5-function". Is your
+> concern that I should use -ENODEV or that I should just pick more
+> generic names for the configurable pins (naming things is hard).
+> 
+> Or perhaps just dev_warn() and return 0?
+> 
 
-s/don't//g
+If you use "enum chips" as function parameter you should not need
+a default: case. Otherwise -EINVAL is fine _if_ the code below is
+removed. I didn't understand what you wanted to accomplish by
+returning 0 for known (but unsupported) devices but -EINVAL for
+non-existing ones.
 
-> the scenario where your address range spans through multiple adjacent
-> VMAs. It's even without EMODPR complex enough scenario that you really
-> don't want to ask yourself for more trouble than use EMODPR in a super
-> conservative manner.
-> 
-> Having EMODPR fully exposed will only make more difficult API to do with
-> extra round-trips. If you want to use ring-0 instructions fully exposed,
-> please don't use a kernel. There's a bunch of hardware features in Intel
-> CPUs for which Linux does not provide 1:1 all wide open interfaces.
-> 
-> BR, Jarkko
+Guenter
+
+>>> +    }
+>>> +
+>>> +    if (chip != adt7476 && chip != adt7490)
+>>> +        return 0;
+>>> +
+>>
+>> Why not check this first, and what is the point of assigning values to
+>> conf_prop1 and conf_prop2 for the other chips in the case statement above
+>> only to return 0 here ? It would be much simpler to drop the other chips
+>> from the case statement and have default: return 0.
+>>
+> Sorry that is old. I initially was under the impression that only these
+> 2 had configurable pins but then I read the other datasheets more closely.
+>>> +    err = load_pin10_config(client, conf_prop1);
+>>> +    if (err) {
+>>> +        dev_err(&client->dev, "failed to configure PIN10\n");
+>>
+>> The messages are misleading. This isn't always pin 10/14.
+>>
+> Now I've got the prop names I can use that instead.
+>>> +        return err;
+>>> +    }
+>>> +
+>>> +    err = load_pin14_config(client, conf_prop2);
+>>> +    if (err) {
+>>> +        dev_err(&client->dev, "failed to configure PIN14\n");
+>>> +        return err;
+>>> +    }
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>>    static int set_property_bit(const struct i2c_client *client, char
+>>> *property,
+>>>                    u8 *config, u8 bit_index)
+>>>    {
+>>> @@ -1585,6 +1676,10 @@ static int adt7475_probe(struct i2c_client
+>>> *client)
+>>>            revision = adt7475_read(REG_DEVID2) & 0x07;
+>>>        }
+>>>    +    ret = load_config(client, chip);
+>>> +    if (ret)
+>>> +        return ret;
+>>> +
+>>>        config3 = adt7475_read(REG_CONFIG3);
+>>>        /* Pin PWM2 may alternatively be used for ALERT output */
+>>>        if (!(config3 & CONFIG3_SMBALERT))
+>>
+

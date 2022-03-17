@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4044DBC2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77FD74DBC2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356248AbiCQBUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 21:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S1356644AbiCQBVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 21:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240599AbiCQBUa (ORCPT
+        with ESMTP id S240599AbiCQBVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 21:20:30 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B391D337
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:19:15 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id v62so4076680vsv.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:19:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=A+Wf6nipilc62C5+2uvqd/Mtv9A0A5YLc2vYs6Wsj5I=;
-        b=Q71DUZDk7wnQyc8I2qTmyrUitsPPbwzcmK/9B3h+reFop1O6ehsoZATMGsZg3C80+b
-         +mD3ePTRNq13qXn2y0ZbDx78rWSKe5vXWcpbMS+1GGS7Hyl0aIObyC38Suc/cHr6ZOeK
-         YEKKNGliO6dHzhUPCV2tMVxszotQnLeylYlo8UwqdH6bQy04hzwJJH6SYICaaaPgdGL9
-         PD2dJIfgsQKh088rCzfIPu35WU2Ene7GXHykCPdUbEJHcOsnZajKaW1Q5uHVXnOTHay3
-         tJS1TUsJ97I/DeqHnAL35fRQqb4tZoR+oYMpY4T5ZYiFDSLU+h13fKPDxE29bJu8ubUr
-         RSoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=A+Wf6nipilc62C5+2uvqd/Mtv9A0A5YLc2vYs6Wsj5I=;
-        b=iVJpp0B76s0utkxhvkCaxYFSCrdrjyy+A87ubdAyek4MKT2E8XS8RRuZVLH9uzaP7w
-         MW0VyBhlCSh8TSRmIpVzZLbc7cClmvRiPsVFJsDjn3//NVumwlrE5Hoy0IJ0unsCcd4C
-         uuxFao9nZfN6VxEoC3y/ymPefzfBD/drtGC3O1aMgfMGl4b1HMjFMXc4Yfyqf6bCbyye
-         i/GRT64Tadh7wZb3gEr4r9g2WYzDR96avTI0DP+8iPF/ChDXtP3idSUD4v2GI1/h1nE+
-         qIkdOeP+MwBY0qfy+8cjLJESfJuFMgfKR2OF7T/KHuytD1xuXDxzIm9Gji7V2dI95aJN
-         5Ptw==
-X-Gm-Message-State: AOAM5323QYDqv2O4eoVfN8w3U2KkwmcR5DigMUw/oufRNjjp/RR9RCx/
-        qvCj+68gfqDwjwfnEKQDq1/vhf5w0t1WmkZPaYnkbhNo27vz5w==
-X-Google-Smtp-Source: ABdhPJxBSvGKCpVl/6XrSos5P0R8nYjn7Z5y3/TpLMh2PYXWIqZjSALpvr3y9MEUgR++mT+Abgwn/ylDbNjLWeQ8WZc=
-X-Received: by 2002:a05:6102:c02:b0:320:9e52:4856 with SMTP id
- x2-20020a0561020c0200b003209e524856mr801645vss.20.1647479954585; Wed, 16 Mar
- 2022 18:19:14 -0700 (PDT)
+        Wed, 16 Mar 2022 21:21:04 -0400
+Received: from out199-9.us.a.mail.aliyun.com (out199-9.us.a.mail.aliyun.com [47.90.199.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD2C1D33F;
+        Wed, 16 Mar 2022 18:19:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R411e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V7Okujx_1647479982;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V7Okujx_1647479982)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 17 Mar 2022 09:19:43 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     peterhuewe@gmx.de
+Cc:     jarkko@kernel.org, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] char: tpm: cr50: Fix tpm_cr50_i2c_probe() kernel-doc comment
+Date:   Thu, 17 Mar 2022 09:19:41 +0800
+Message-Id: <20220317011941.102301-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-From:   jim.cromie@gmail.com
-Date:   Wed, 16 Mar 2022 19:18:48 -0600
-Message-ID: <CAJfuBxx4=QY5Ah3ZNdPYNWPyBc_NnH5Swx7rvu7-qYRuK6d6XA@mail.gmail.com>
-Subject: does kernel have any FOLD_LEFT macro equivalent ?
-To:     LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-does the kernel have anything like
-BOOST_PP_SEQ_FOLD_LEFT(op, state, seq)  ?
+Remove the description of @id in tpm_cr50_i2c_probe()
+kernel-doc comment to remove warning found by running
+scripts/kernel-doc, which is caused by using 'make W=1'.
 
-or any hand-coded implementation of the pattern in-kernel
-that I can look at ?
+drivers/char/tpm/tpm_tis_i2c_cr50.c:681: warning: Excess function
+parameter 'id' description in 'tpm_cr50_i2c_probe'
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/char/tpm/tpm_tis_i2c_cr50.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+index f6c0affbb456..d9bd58c3518e 100644
+--- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
++++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+@@ -671,7 +671,6 @@ MODULE_DEVICE_TABLE(of, of_cr50_i2c_match);
+ /**
+  * tpm_cr50_i2c_probe() - Driver probe function.
+  * @client:	I2C client information.
+- * @id:		I2C device id.
+  *
+  * Return:
+  * - 0:		Success.
+-- 
+2.20.1.7.g153144c
+

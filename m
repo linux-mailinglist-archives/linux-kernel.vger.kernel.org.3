@@ -2,271 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C915A4DC7B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D84E44DC7A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234661AbiCQNhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 09:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
+        id S234612AbiCQNfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 09:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234665AbiCQNhR (ORCPT
+        with ESMTP id S234604AbiCQNfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:37:17 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 769071DEC22;
-        Thu, 17 Mar 2022 06:35:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 31BFE1570;
-        Thu, 17 Mar 2022 06:35:58 -0700 (PDT)
-Received: from e126645.arm.com (unknown [10.57.41.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C1D583F766;
-        Thu, 17 Mar 2022 06:35:53 -0700 (PDT)
-From:   Pierre Gondois <Pierre.Gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ionela.Voinescu@arm.com, Lukasz.Luba@arm.com,
-        Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com,
-        mka@chromium.org, daniel.lezcano@linaro.org,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Fuad Tabba <tabba@google.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Hector Martin <marcan@marcan.st>,
-        Rob Herring <robh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH v1 3/3] cpufreq: CPPC: Register EM based on efficiency class information
-Date:   Thu, 17 Mar 2022 14:34:17 +0100
-Message-Id: <20220317133419.3901736-4-Pierre.Gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220317133419.3901736-1-Pierre.Gondois@arm.com>
-References: <20220317133419.3901736-1-Pierre.Gondois@arm.com>
+        Thu, 17 Mar 2022 09:35:48 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4637E1D8327;
+        Thu, 17 Mar 2022 06:34:32 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id m67so10263636ybm.4;
+        Thu, 17 Mar 2022 06:34:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bVTYHCw+sIjTpGlaPwKVewFptDurXIS2uuawHeJHLLA=;
+        b=BAtPILSFs0nOVFUgxIJXGVA8Vn2gs6IHJTl3UVn2oIYb07qBdvEcM+TxzOBQ0GUKyl
+         PYwl10DDAgfPGI3peyrO21r47edXNngbEqLCpOS6lD7zBR9viMXpi4SxSMI5FYYLbybj
+         yXfCxOj3QhZFyJFmIxsB3aLRjKHkHx0vSyBMohfyYNXR9lUwfxrisNCittoZAJpcmXsq
+         MWy7dl5KV1R4TgfXyCrrF9hgHrOoh1jnLWxYBX+DPgySFJ7oWOnVmpBx4shF/ShP74n5
+         iSkyc9MjSoT6ojrItTnPxRvzlIITWLjjIKfZTMBiCFtbw3kd7Nm1KYiEGaV8LfJQ3MuF
+         JCsg==
+X-Gm-Message-State: AOAM532mF7MR/mLo83auoMzkIy8EMx5E+Bj5cL9f5rP0GXZkHCBTav1J
+        XKAwrpHxr3/crNABaPsFduh1W6/lvSllth6czm4=
+X-Google-Smtp-Source: ABdhPJy6DKisf5GePZUAUsw10mXzY76VFI0VY63YMwwR6uG1gCWv7s4+Qd2m05v8v17o1iGhmVwXH1okd/5VI0MkbZc=
+X-Received: by 2002:a25:3a41:0:b0:628:86a2:dbc with SMTP id
+ h62-20020a253a41000000b0062886a20dbcmr4619617yba.633.1647524071539; Thu, 17
+ Mar 2022 06:34:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <2630560.mvXUDI8C0e@kreacher> <5558236.DvuYhMxLoT@kreacher>
+In-Reply-To: <5558236.DvuYhMxLoT@kreacher>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 17 Mar 2022 14:34:20 +0100
+Message-ID: <CAJZ5v0jEFdDdw3TLAFwwSjHrruk9ak4KNXjzZjcXz-7jyVFrxg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] cpuidle: intel_idle: Update intel_idle() kerneldoc comment
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Performance states and energy consumption values are not advertised
-in ACPI. In the GicC structure of the MADT table, the "Processor
-Power Efficiency Class field" (called efficiency class from now)
-allows to describe the relative energy efficiency of CPUs.
+On Tue, Mar 15, 2022 at 8:37 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Commit bf9282dc26e7 ("cpuidle: Make CPUIDLE_FLAG_TLB_FLUSHED generic")
+> moved the leave_mm() call away from intel_idle(), but it didn't update
+> its kerneldoc comment accordingly, so do that now.
+>
+> Fixes: bf9282dc26e7 ("cpuidle: Make CPUIDLE_FLAG_TLB_FLUSHED generic")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/idle/intel_idle.c |    3 ---
+>  1 file changed, 3 deletions(-)
+>
+> Index: linux-pm/drivers/idle/intel_idle.c
+> ===================================================================
+> --- linux-pm.orig/drivers/idle/intel_idle.c
+> +++ linux-pm/drivers/idle/intel_idle.c
+> @@ -122,9 +122,6 @@ static unsigned int mwait_substates __in
+>   * If the local APIC timer is not known to be reliable in the target idle state,
+>   * enable one-shot tick broadcasting for the target CPU before executing MWAIT.
+>   *
+> - * Optionally call leave_mm() for the target CPU upfront to avoid wakeups due to
+> - * flushing user TLBs.
+> - *
+>   * Must be called under local_irq_disable().
+>   */
+>  static __cpuidle int intel_idle(struct cpuidle_device *dev,
+>
 
-To leverage the EM and EAS, the CPPC driver creates a set of
-artificial performance states and registers them in the Energy Model
-(EM), such as:
-- Every 20 capacity unit, a performance state is created.
-- The energy cost of each performance state gradually increases.
-No power value is generated as only the cost is used in the EM.
-
-During task placement, a task can raise the frequency of its whole
-pd. This can make EAS place a task on a pd with CPUs that are
-individually less energy efficient.
-As cost values are artificial, and to place tasks on CPUs with the
-lower efficiency class, a gap in cost values is generated for adjacent
-efficiency classes.
-E.g.:
-- efficiency class = 0, capacity is in [0-1024], so cost values
-  are in [0: 51] (one performance state every 20 capacity unit)
-- efficiency class = 1, capacity is in [0-1024], cost values
-  are in [1*gap+0: 1*gap+51].
-
-The value of the cost gap is chosen to absorb a the energy of 4 CPUs
-at their maximum capacity. This means that between:
-1- a pd of 4 CPUs, each of them being used at almost their full
-   capacity. Their efficiency class is N.
-2- a CPU using almost none of its capacity. Its efficiency class is
-   N+1
-EAS will choose the first option.
-
-Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 142 +++++++++++++++++++++++++++++++++
- 1 file changed, 142 insertions(+)
-
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index a6cd95c3b474..b65586511bc3 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -425,6 +425,129 @@ static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
- static bool efficiency_class_populated;
- static DEFINE_PER_CPU(unsigned int, efficiency_class);
- 
-+/* Create an artificial performance state every CPPC_EM_CAP_STEP capacity unit. */
-+#define CPPC_EM_CAP_STEP	(20)
-+/* Increase the cost value by CPPC_EM_COST_STEP every performance state. */
-+#define CPPC_EM_COST_STEP	(1)
-+/* Add a cost gap correspnding to the energy of 4 CPUs. */
-+#define CPPC_EM_COST_GAP	(4 * SCHED_CAPACITY_SCALE * CPPC_EM_COST_STEP \
-+				/ CPPC_EM_CAP_STEP)
-+
-+static unsigned int get_perf_level_count(struct cpufreq_policy *policy)
-+{
-+	struct cppc_perf_caps *perf_caps;
-+	unsigned int min_cap, max_cap;
-+	struct cppc_cpudata *cpu_data;
-+	int cpu = policy->cpu;
-+
-+	cpu_data = cppc_cpufreq_search_cpu_data(cpu);
-+	perf_caps = &cpu_data->perf_caps;
-+	max_cap = arch_scale_cpu_capacity(cpu);
-+	min_cap = div_u64(max_cap * perf_caps->lowest_perf, perf_caps->highest_perf);
-+	if ((min_cap == 0) || (max_cap < min_cap))
-+		return 0;
-+	return 1 + max_cap / CPPC_EM_CAP_STEP - min_cap / CPPC_EM_CAP_STEP;
-+}
-+
-+/*
-+ * The cost is defined as:
-+ *   cost = power * max_frequency / frequency
-+ */
-+static inline unsigned long compute_cost(int cpu, int step)
-+{
-+	return CPPC_EM_COST_GAP * per_cpu(efficiency_class, cpu) +
-+			step * CPPC_EM_COST_STEP;
-+}
-+
-+static int cppc_get_cpu_power(struct device *cpu_dev,
-+		unsigned long *power, unsigned long *KHz)
-+{
-+	unsigned long perf_step, perf_prev, perf, perf_check;
-+	unsigned int min_step, max_step, step, step_check;
-+	unsigned long prev_freq = *KHz;
-+	unsigned int min_cap, max_cap;
-+
-+	struct cppc_perf_caps *perf_caps;
-+	struct cppc_cpudata *cpu_data;
-+
-+	cpu_data = cppc_cpufreq_search_cpu_data(cpu_dev->id);
-+	perf_caps = &cpu_data->perf_caps;
-+	max_cap = arch_scale_cpu_capacity(cpu_dev->id);
-+	min_cap = div_u64(max_cap * perf_caps->lowest_perf,
-+			perf_caps->highest_perf);
-+
-+	perf_step = CPPC_EM_CAP_STEP * perf_caps->highest_perf / max_cap;
-+	min_step = min_cap / CPPC_EM_CAP_STEP;
-+	max_step = max_cap / CPPC_EM_CAP_STEP;
-+
-+	perf_prev = cppc_cpufreq_khz_to_perf(cpu_data, *KHz);
-+	step = perf_prev / perf_step;
-+
-+	if (step > max_step)
-+		return -EINVAL;
-+
-+	if (min_step == max_step) {
-+		step = max_step;
-+		perf = perf_caps->highest_perf;
-+	} else if (step < min_step) {
-+		step = min_step;
-+		perf = perf_caps->lowest_perf;
-+	} else {
-+		step++;
-+		if (step == max_step)
-+			perf = perf_caps->highest_perf;
-+		else
-+			perf = step * perf_step;
-+	}
-+
-+	*KHz = cppc_cpufreq_perf_to_khz(cpu_data, perf);
-+	perf_check = cppc_cpufreq_khz_to_perf(cpu_data, *KHz);
-+	step_check = perf_check / perf_step;
-+
-+	/*
-+	 * To avoid bad integer approximation, check that new frequency value
-+	 * increased and that the new frequency will be converted to the
-+	 * desired step value.
-+	 */
-+	while ((*KHz == prev_freq) || (step_check != step)) {
-+		perf++;
-+		*KHz = cppc_cpufreq_perf_to_khz(cpu_data, perf);
-+		perf_check = cppc_cpufreq_khz_to_perf(cpu_data, *KHz);
-+		step_check = perf_check / perf_step;
-+	}
-+
-+	/*
-+	 * With an artificial EM, only the cost value is used. Still the power
-+	 * is populated such as 0 < power < EM_MAX_POWER. This allows to add
-+	 * more sense to the artificial performance states.
-+	 */
-+	*power = compute_cost(cpu_dev->id, step);
-+
-+	return 0;
-+}
-+
-+static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
-+		unsigned long *cost)
-+{
-+	unsigned long perf_step, perf_prev;
-+	struct cppc_perf_caps *perf_caps;
-+	struct cppc_cpudata *cpu_data;
-+	unsigned int max_cap;
-+	int step;
-+
-+	cpu_data = cppc_cpufreq_search_cpu_data(cpu_dev->id);
-+	perf_caps = &cpu_data->perf_caps;
-+	max_cap = arch_scale_cpu_capacity(cpu_dev->id);
-+
-+	perf_prev = cppc_cpufreq_khz_to_perf(cpu_data, KHz);
-+	perf_step = CPPC_EM_CAP_STEP * perf_caps->highest_perf / max_cap;
-+	step = perf_prev / perf_step;
-+
-+	*cost = compute_cost(cpu_dev->id, step);
-+
-+	return 0;
-+}
-+
- static int populate_efficiency_class(void)
- {
- 	unsigned int min = UINT_MAX, max = 0, class;
-@@ -472,6 +595,21 @@ static int populate_efficiency_class(void)
- 	return 0;
- }
- 
-+static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
-+{
-+	struct cppc_cpudata *cpu_data;
-+	struct em_data_callback em_cb =
-+		EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
-+
-+	if (!efficiency_class_populated)
-+		return;
-+
-+	cpu_data = cppc_cpufreq_search_cpu_data(policy->cpu);
-+	em_dev_register_perf_domain(get_cpu_device(policy->cpu),
-+			get_perf_level_count(policy), &em_cb,
-+			cpu_data->shared_cpu_map, 0);
-+}
-+
- #else
- 
- static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
-@@ -482,6 +620,9 @@ static int populate_efficiency_class(void)
- {
- 	return 0;
- }
-+static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
-+{
-+}
- #endif
- 
- 
-@@ -753,6 +894,7 @@ static struct cpufreq_driver cppc_cpufreq_driver = {
- 	.init = cppc_cpufreq_cpu_init,
- 	.exit = cppc_cpufreq_cpu_exit,
- 	.set_boost = cppc_cpufreq_set_boost,
-+	.register_em = cppc_cpufreq_register_em,
- 	.attr = cppc_cpufreq_attr,
- 	.name = "cppc_cpufreq",
- };
--- 
-2.25.1
-
+Assuming no objections, so applied.

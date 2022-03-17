@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0A24DCEE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7FD4DCEE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiCQTiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 15:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        id S231217AbiCQTig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 15:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiCQTiK (ORCPT
+        with ESMTP id S230122AbiCQTie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 15:38:10 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C89622B6D4;
-        Thu, 17 Mar 2022 12:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Zya69H4T73q6+dj6a2oty/2yQG0Z1p5MEjn65dgAoAo=; b=nR5h0znrFXAEivgsTPEPKLrACx
-        +lDItqrslGaapsjlNjLsfewEkLWlBp+nl+C7ItjmaTzKhbEqzodg+aFrv3qf1JpNSTwm9cydLfLX8
-        VVvIT1WJXtI4TS3LeuM06LZ90y6l+nl+K4BgoEHuu9ntVBwPuMYsKCYcYqqekMvjn7pMokzgdeILY
-        g2ZkwCvm5R8W66pcJemJrhylC1nEPwregLgnNxUxL6ecIWMmQoX71dpJXnDIPsuOeE76XLMxiH/3y
-        S8OxR2rxvyZW9Jpe968bvh5rQxLNoZlPVhRtSebaI+wkzT2szqM0rDwsxw60wTNPTQjDt58CErB5Y
-        nfEucpbw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nUvv4-007GDz-7R; Thu, 17 Mar 2022 19:36:22 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1B9163001EA;
-        Thu, 17 Mar 2022 20:36:19 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E4E4E30C650C4; Thu, 17 Mar 2022 20:36:18 +0100 (CET)
-Date:   Thu, 17 Mar 2022 20:36:18 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        X86 ML <x86@kernel.org>, joao@overdrivepizza.com,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Mark Rutland <mark.rutland@arm.com>, alyssa.milburn@intel.com,
-        Miroslav Benes <mbenes@suse.cz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <YjONspga4Ahoqxx4@hirez.programming.kicks-ass.net>
-References: <YinGZObp37b27LjK@hirez.programming.kicks-ass.net>
- <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
- <YionV0+v/cUBiOh0@hirez.programming.kicks-ass.net>
- <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
- <CAADnVQJfffD9tH_cWThktCCwXeoRV1XLZq69rKK5vKy_y6BN8A@mail.gmail.com>
- <20220312154407.GF28057@worktop.programming.kicks-ass.net>
- <CAADnVQL7xrafAviUJg47LfvFSJpgZLwyP18Bm3S_KQwRyOpheQ@mail.gmail.com>
- <20220313085214.GK28057@worktop.programming.kicks-ass.net>
- <Yi9YOdn5Nbq9BBwd@hirez.programming.kicks-ass.net>
- <CAK7LNASOjsSRixifxxUBKiFdR_Q_pSoBu98zYU_u_z1rtUD=zA@mail.gmail.com>
+        Thu, 17 Mar 2022 15:38:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C15122C6D4;
+        Thu, 17 Mar 2022 12:37:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3276618A9;
+        Thu, 17 Mar 2022 19:37:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33264C340E9;
+        Thu, 17 Mar 2022 19:37:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647545837;
+        bh=wZADvi8AH8u7rrJ6fm+rJHZo13IxweiVHExl3Kx7B8w=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=hxtB08nDB74+ElGeDdXkWH2FwFo4gBAPQhiuOUh6fiSJfkzsO9ah0hwNQZenA/2th
+         knoPfLRHIgJRHROWhmzJTG6F9Fq+0/Zh5mk1NQJiWYukgxxHc/hvBkXrluk/dPk2NU
+         qkFORdIDaAGS2ottyyHKj5SJQnYlXq2XJN69JdWRSEW7N8ytZOLmZnmP/z610zzvCu
+         Nk1pkksgr4jUvI6cnWW1Sdz3ngU4P0226G1+zvejoiISo33DYMD/URR3oOf/dErLxX
+         8+8mguAIhlrHNj5hau8+szip14RmlbPiL01ExsNKXhGXXwobUN/RBIIIrcIsst1Lnd
+         QbY9JPVh18gxA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNASOjsSRixifxxUBKiFdR_Q_pSoBu98zYU_u_z1rtUD=zA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220228124112.3974242-1-peng.fan@oss.nxp.com>
+References: <20220228124112.3974242-1-peng.fan@oss.nxp.com>
+Subject: Re: [PATCH V2 1/2] clk: imx: add mcore_booted module paratemter
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+To:     Peng Fan (OSS) <peng.fan@oss.nxp.com>, abel.vesa@nxp.com,
+        s.hauer@pengutronix.de, shawnguo@kernel.org
+Date:   Thu, 17 Mar 2022 12:37:15 -0700
+User-Agent: alot/0.10
+Message-Id: <20220317193717.33264C340E9@smtp.kernel.org>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 01:26:25AM +0900, Masahiro Yamada wrote:
-> Help?
-> 
-> I had never noticed this thread before because
-> you did not CC me or kbuild ML.
+Quoting Peng Fan (OSS) (2022-02-28 04:41:11)
+> From: Peng Fan <peng.fan@nxp.com>
+>=20
+> Add mcore_booted boot parameter which could simplify AMP clock
+> management. To i.MX8M, there is CCM(clock control Module) to generate
+> clock root clock, anatop(analog PLL module) to generate PLL, and CCGR
+> (clock gating) to gate clocks to peripherals. As below:
+>   anatop->ccm->ccgr->peripheral
+>=20
+> Linux handles the clock management and the auxiliary core is under
+> control of Linux. Although there is per hardware domain control for CCGR
+> and CCM, auxiliary core normally only use CCGR hardware domain control
+> to avoid linux gate off the clk to peripherals and leave CCM ana anatop
+> to Linux.
+>=20
+> Per NXP hardware design, because CCGR already support gate to
+> peripherals, and clk root gate power leakage is negligible. So
+> when in AMP case, we could not register the clk root gate.
+>=20
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>=20
+> V2:
+>  Switch to use module parameter, tested on i.MX8MP-EVK
 
-I thought I did.. the copy in my sent folder has you on Cc. Sorry if it
-went MIA. I'll go look at the patch.
+Why is a module parameter being used? I'd expect this informatioon that
+mcore is booted to come from devicetree/firmware somehow.

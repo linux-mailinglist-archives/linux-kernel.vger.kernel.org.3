@@ -2,128 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A294DCAB4
+	by mail.lfdr.de (Postfix) with ESMTP id 01EFF4DCAB2
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236303AbiCQQEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        id S236312AbiCQQFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236300AbiCQQEi (ORCPT
+        with ESMTP id S233599AbiCQQFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:04:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C217DAB5;
-        Thu, 17 Mar 2022 09:03:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 17 Mar 2022 12:05:03 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4BCDF489
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:03:46 -0700 (PDT)
+Received: from zn.tnic (p200300ea971561b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:61b0:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C66BCB80122;
-        Thu, 17 Mar 2022 16:03:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89C3AC340F7;
-        Thu, 17 Mar 2022 16:03:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647532998;
-        bh=NGiQFPVnfDqZ1ROyWh9ETbUs7TxBnFHdgwPh/4n9jkA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rh3zXpgLbT6SxqOATKmV9Yg1s5i3qEYz1c57woGTPEB9HVQOvoNJg27Eh+Vpr5bnB
-         9l5P2ZTbDZaUyjAkAuW69dtO6pyULM2UcfPOa/ltFPnPz77RHcuBH0PVA5FQJ12/RC
-         Vk505u32UA7dKFDT0dy2VxMqKGqWACf/31xxW4OqezMnTHpxYCMn1KQiwkY/kCWZjl
-         tez2KzHX0g5xYLn7LOcGj9kCZD3N5v3/Q8DWhareckpREHZplQyMPK0Lacqa+cRkYa
-         +F+S5yDxaEib1+Rm48oukLIWleLtwPzHRjq6T+UmUWe4bisqNoOKNa4rHPwNTuLNGA
-         61hyjnnLNxwhA==
-Received: by mail-ua1-f49.google.com with SMTP id i26so2231972uap.6;
-        Thu, 17 Mar 2022 09:03:18 -0700 (PDT)
-X-Gm-Message-State: AOAM531bLQ9j5G+gp/Lo/PFiis0JHUWfBPW46CD/bKg5JwkV1cVcXPng
-        SjWhnrtPMTOZbCm2i6hJ3lON1f5MEG/g1xzQyf8=
-X-Google-Smtp-Source: ABdhPJx56mP1yBItNhpbrH5BO1aKkva0leBOvED1GBx+mkRa6thFGwJA/RpUKcskkXEWf9nO8JBbTl9WVNeKe2iBtLA=
-X-Received: by 2002:ab0:3785:0:b0:350:c22e:9908 with SMTP id
- d5-20020ab03785000000b00350c22e9908mr1907268uav.114.1647532997252; Thu, 17
- Mar 2022 09:03:17 -0700 (PDT)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 86C921EC05ED;
+        Thu, 17 Mar 2022 17:03:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1647533020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=5VUfRHfWHVA+gcxjNm08CCSSttzTC3qvo8Yb9E+0C2k=;
+        b=mBaP5fadVWXFH/Ybi9iJLJBoNCuVskrcwqBX7//yYlYnZzLbLBfeM+IL+WmaVexA9CatWt
+        u+3Ydy6O2jq781W2vh9dDBPd7oWIp+cIq1vjM6WA0YKM1d/t2ps0rjGoC6OjzQl4rKbpz8
+        TqDtO4dzyUYpkEMExNM/ftfGqWim2lQ=
+Date:   Thu, 17 Mar 2022 17:03:37 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCHv6 03/30] x86/tdx: Add __tdx_module_call() and
+ __tdx_hypercall() helper functions
+Message-ID: <YjNb2bTrlA4LyZKH@zn.tnic>
+References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
+ <20220316020856.24435-4-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-References: <20220313012221.1755483-1-guoren@kernel.org> <YjH2e4bfTl+0/+yc@arm.com>
-In-Reply-To: <YjH2e4bfTl+0/+yc@arm.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 18 Mar 2022 00:03:06 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQmix3hc5-EntHZ_cTpp6XeCmDfOD4vHCd8Y+svUjPgGA@mail.gmail.com>
-Message-ID: <CAJF2gTQmix3hc5-EntHZ_cTpp6XeCmDfOD4vHCd8Y+svUjPgGA@mail.gmail.com>
-Subject: Re: [PATCH V2] arch: patch_text: Fixup last cpu should be master
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220316020856.24435-4-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 10:38 PM Catalin Marinas
-<catalin.marinas@arm.com> wrote:
->
-> On Sun, Mar 13, 2022 at 09:22:21AM +0800, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > These patch_text implementations are using stop_machine_cpuslocked
-> > infrastructure with atomic cpu_count. The original idea: When the
-> > master CPU patch_text, the others should wait for it.
->
-> I couldn't find the original intent in the commit logs (at least not in
-> the arm64 logs). Maybe the intention was for the CPUs to wait for the
-> text patching to complete rather than the master CPU to wait for the
-> others to enter the cpu_relax() loop before patching.
->
-> I think your patch makes sense anyway, the master CPU would wait for all
-> the others to enter the cpu_relax() loop before patching and releasing
-> them with another increment. You probably wouldn't see any issues in
-> practice unless you insert probes in the multi_stop_cpu() function (or
-> we could mark this function as __kprobes and get rid of the extra loops
-> entirely).
-That could depend on micro-arch, trigger other harts' IPI is not
-guaranteed by hw.
+On Wed, Mar 16, 2022 at 05:08:29AM +0300, Kirill A. Shutemov wrote:
+> From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> 
+> Guests communicate with VMMs with hypercalls. Historically, these
+> are implemented using instructions that are known to cause VMEXITs
+> like VMCALL, VMLAUNCH, etc. However, with TDX, VMEXITs no longer
+> expose the guest state to the host. This prevents the old hypercall
+> mechanisms from working. So, to communicate with VMM, TDX
+> specification defines a new instruction called TDCALL.
 
->
-> > --- a/arch/arm64/kernel/patching.c
-> > +++ b/arch/arm64/kernel/patching.c
-> > @@ -117,8 +117,8 @@ static int __kprobes aarch64_insn_patch_text_cb(void *arg)
-> >       int i, ret = 0;
-> >       struct aarch64_insn_patch *pp = arg;
-> >
-> > -     /* The first CPU becomes master */
-> > -     if (atomic_inc_return(&pp->cpu_count) == 1) {
-> > +     /* The last CPU becomes master */
-> > +     if (atomic_inc_return(&pp->cpu_count) == num_online_cpus()) {
-> >               for (i = 0; ret == 0 && i < pp->insn_cnt; i++)
-> >                       ret = aarch64_insn_patch_text_nosync(pp->text_addrs[i],
-> >                                                            pp->new_insns[i]);
->
-> For arm64:
->
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Thx
+...
 
->
-> --
-> Catalin
+> For registers used by the TDCALL instruction, please check TDX GHCI
+> specification, the section titled "TDCALL instruction" and "TDG.VP.VMCALL
+> Interface".
+> 
+> Based on previous patch by Sean Christopherson.
+> 
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
+> ---
+>  arch/x86/coco/tdx/Makefile    |   2 +-
+>  arch/x86/coco/tdx/tdcall.S    | 191 ++++++++++++++++++++++++++++++++++
+>  arch/x86/coco/tdx/tdx.c       |  23 ++++
+>  arch/x86/include/asm/tdx.h    |  27 +++++
+>  arch/x86/kernel/asm-offsets.c |   8 ++
+>  5 files changed, 250 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/x86/coco/tdx/tdcall.S
 
+With tglx's comment fixed:
 
+Reviewed-by: Borislav Petkov <bp@suse.de>
 
 -- 
-Best Regards
- Guo Ren
+Regards/Gruss,
+    Boris.
 
-ML: https://lore.kernel.org/linux-csky/
+https://people.kernel.org/tglx/notes-about-netiquette

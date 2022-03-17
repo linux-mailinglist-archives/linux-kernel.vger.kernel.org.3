@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E214DD11B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816C64DD124
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiCQXW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 19:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
+        id S229741AbiCQX03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 19:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiCQXWv (ORCPT
+        with ESMTP id S229588AbiCQX01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 19:22:51 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904551FD2D8;
-        Thu, 17 Mar 2022 16:21:33 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id w3-20020a4ac183000000b0031d806bbd7eso8301764oop.13;
-        Thu, 17 Mar 2022 16:21:33 -0700 (PDT)
+        Thu, 17 Mar 2022 19:26:27 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA2828AC61
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 16:25:09 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso2779946pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 16:25:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cV2G53aQ8gy5xgFrzeVM67TOnDJP6UFgv7JOAg+ZKWQ=;
-        b=M7g23SMXsoBSpy5meppRZhZ9iJd6A1uiBr9hvVMVpqk+LXXZx6qHDtr5tv8/j5pqXl
-         18GJFWFYcUiH8MfsMi05vmvsjihNU6mF10W/KnfcwystkmUCBfcHc3Dzelei1Dv2kyI3
-         9LhhVYktOShrLdOw4kqCJ/cOlOAkM1C1+kzA/Uw93daCZYZaHrpxIQq4LB4w1eLL2rSe
-         vu/DLza6h8iMKOUrFA+LYcKYBfb8X/5zXDwDYP7ZRCUKjry2F8oeEzUxHHdBeW0Chje1
-         GTEVVwGXVwXMuFP0sDOqDOaGErYFIDJ7ejZYdgkkwtUyBhwf94QX16auJz1djyhta7P4
-         SsEw==
+        d=google.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JmUCQVk4p0cql4Zp5v3fHTvJoVt4VmVRaNw9Ggc3AOk=;
+        b=W6h6qL8S3g8afytfz20rv6rSCgPNASLmfu6fexAtiaRSoo2VJ2M3/5p4O9kcHWCIm8
+         CBNWQVBFx8ahfSa/z0fnD8ZqgEOFe2IJr1e1EjXADZScIvbFE4pa5nokY2SaT/8/wrtx
+         U3XHWem/Kvx/Q7JZmQJBQPajx/d91ZcIpg/w6rGXBDed+EUbZL0E/NsAOJvejZswCxvf
+         YZweh0g39yeF66nNV6y1AXCLeID3Yhm3lFQB8KMPZhK4yvsZRlQZNwlJuY9G5lySbEOb
+         nZzF1rbE5iRtTCk8pqFrl5hXfNidoJsgW3gjHW2GcSan71hc5KFTNi/2+hHUau8VWZWM
+         +5gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=cV2G53aQ8gy5xgFrzeVM67TOnDJP6UFgv7JOAg+ZKWQ=;
-        b=qrrFrxh+EFYIMfStyOxYALZzeV65H7TaujNOcJX9wZoQmLQUs1jXUxImTH3BWHokUy
-         CUAuWJ1JofSGG8x3FFomx5u8JQ8fv9efqqMk77ak7FrwDALBjyoRRLI4dBg++0vLMuVZ
-         /5LVDKAfYOUqeXeaAsgXofIjnx9pHnx67PhYklWWfdrEyzEYOJOW5ZnmYI46Lw3EKzoH
-         L+aNtD00Y9Zg+zbl1WlxLLhLPqTJY2rodQ8fKEneB1/9GgEKXwb174VjZYuG5SncQBny
-         etJu2fx9D+sIFd1Gbojhje9kHCzQG8ypTTvsP7feIfWLF9pAqkaFp3n1Toj9lcTKx9Ha
-         OXPw==
-X-Gm-Message-State: AOAM533Hl0znHYDb8RncHgEuLYsXz3FYlc2t1/21FhTUy+TDoamZ3b4O
-        S4cXLv/dWuEa+NyXZ0FNpeg6TYfbjJe+mA==
-X-Google-Smtp-Source: ABdhPJxJ+l9rTlCJYd2wVYy2pwNS7uAh2Sp5Ne51ph7mT/7XNCauNvYRHmWpLePy55iAhu00t0gKlw==
-X-Received: by 2002:a05:6870:c10b:b0:da:40b:9d92 with SMTP id f11-20020a056870c10b00b000da040b9d92mr2800341oad.31.1647559292787;
-        Thu, 17 Mar 2022 16:21:32 -0700 (PDT)
-Received: from fstone04p1.aus.stglabs.ibm.com ([129.41.86.15])
-        by smtp.gmail.com with ESMTPSA id 2-20020a056870124200b000dd9ac0d61esm2869159oao.24.2022.03.17.16.21.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 16:21:32 -0700 (PDT)
-From:   Brandon Wyman <bjwyman@gmail.com>
-To:     Joel Stanley <joel@jms.id.au>, openbmc@lists.ozlabs.org,
-        Eddie James <eajames@linux.ibm.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Brandon Wyman <bjwyman@gmail.com>
-Subject: [PATCH] hwmon: (pmbus) Add Vin unit off handling
-Date:   Thu, 17 Mar 2022 23:21:23 +0000
-Message-Id: <20220317232123.2103592-1-bjwyman@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=JmUCQVk4p0cql4Zp5v3fHTvJoVt4VmVRaNw9Ggc3AOk=;
+        b=DAq7ZNzZaoTM++SqgO9J7CF8P1H2fdvbLM5fNE+IHldCnYt0qKibeUFtQBMp6YA5/3
+         GkZeVMAIUwm9/ISf/ZOF6b4ScKhFotxaudl5C3FbaCSk5sv8SXZoH7rwi0Z8zTUGmFC+
+         uhxeJm5fK5qnobBLQqJwOkedsrutiKWI5/bKAsTstQnJkcFkhunv1b95HKTGBijG8uTE
+         6RuP2zoqkDvsBf/A9avdO0HZKVafjohxORNbwx/PzSUWNhEmF2Na89qdaR1n2iieCTZm
+         jpwbDw5B8D7WyjBrYa6p1BG+LiqkyBonjC8PR1BORJlcPPIc46hn7dH5+itHuVPfupxV
+         TcBw==
+X-Gm-Message-State: AOAM530UfY74ndkL/LD6NUtiYbVbDh0gb33sozuehouki3WKavH7mv5Y
+        xiS1LvdIIfd9QB1RXh0+wakfMQ==
+X-Google-Smtp-Source: ABdhPJzlMtDWWeTtXNzB4CxVuuhC16aWEKWXdrV4zLSspA09ZzbRfR7c0y+Xi6FADWZaGPxctgiSAg==
+X-Received: by 2002:a17:90a:dd45:b0:1bc:9466:9b64 with SMTP id u5-20020a17090add4500b001bc94669b64mr18673989pjv.23.1647559508482;
+        Thu, 17 Mar 2022 16:25:08 -0700 (PDT)
+Received: from ?IPV6:2600:1700:38d4:55df:8747:480:f0df:4c1a? ([2600:1700:38d4:55df:8747:480:f0df:4c1a])
+        by smtp.gmail.com with ESMTPSA id p15-20020a056a000b4f00b004f7b71f8bd6sm7892507pfo.47.2022.03.17.16.25.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 16:25:07 -0700 (PDT)
+Message-ID: <a37bb4b7-3772-4579-a4e6-d27fb29411a6@google.com>
+Date:   Thu, 17 Mar 2022 16:25:05 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [RFC PATCH 00/47] Address Space Isolation for KVM
+Content-Language: en-US
+To:     Alexandre Chartre <alexandre.chartre@oracle.com>,
+        linux-kernel@vger.kernel.org
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, jmattson@google.com,
+        pjt@google.com, oweisse@google.com, rppt@linux.ibm.com,
+        dave.hansen@linux.intel.com, peterz@infradead.org,
+        tglx@linutronix.de, luto@kernel.org, linux-mm@kvack.org
+References: <20220223052223.1202152-1-junaids@google.com>
+ <91dd5f0a-61da-074d-42ed-bf0886f617d9@oracle.com>
+From:   Junaid Shahid <junaids@google.com>
+In-Reply-To: <91dd5f0a-61da-074d-42ed-bf0886f617d9@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,50 +79,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there is an input undervoltage fault, reported in STATUS_INPUT
-command response, there is quite likely a "Unit Off For Insufficient
-Input Voltage" condition as well.
+Hi Alex,
 
-Add a constant for bit 3 of STATUS_INPUT. Update the Vin limit
-attributes to include both bits in the mask for clearing faults.
+On 3/16/22 14:34, Alexandre Chartre wrote:
+> 
+> Hi Junaid,
+> 
+> On 2/23/22 06:21, Junaid Shahid wrote:
+>> This patch series is a proof-of-concept RFC for an end-to-end implementation of
+>> Address Space Isolation for KVM. It has similar goals and a somewhat similar
+>> high-level design as the original ASI patches from Alexandre Chartre
+>> ([1],[2],[3],[4]), but with a different underlying implementation. This also
+>> includes several memory management changes to help with differentiating between
+>> sensitive and non-sensitive memory and mapping of non-sensitive memory into the
+>> ASI restricted address spaces.
+>>
+>> This RFC is intended as a demonstration of what a full ASI implementation for
+>> KVM could look like, not necessarily as a direct proposal for what might
+>> eventually be merged. In particular, these patches do not yet implement KPTI on
+>> top of ASI, although the framework is generic enough to be able to support it.
+>> Similarly, these patches do not include non-sensitive annotations for data
+>> structures that did not get frequently accessed during execution of our test
+>> workloads, but the framework is designed such that new non-sensitive memory
+>> annotations can be added trivially.
+>>
+>> The patches apply on top of Linux v5.16. These patches are also available via
+>> gerrit at https://linux-review.googlesource.com/q/topic:asi-rfc.
+>>
+> Sorry for the late answer, and thanks for investigating possible ASI
+> implementations. I have to admit I put ASI on the back-burner for
+> a while because I am more and more wondering if the complexity of
+> ASI is worth the benefit, especially given challenges to effectively
+> exploit flaws that ASI is expected to mitigate, in particular when VMs
+> are running on dedicated cpu cores, or when core scheduling is used.
+> So I have been looking at a more simplistic approach (see below, A
+> Possible Alternative to ASI).
+> 
+> But first, your implementation confirms that KVM-ASI can be broken up
+> into different parts: pagetable management, ASI core and sibling cpus
+> synchronization.
+> 
+> Pagetable Management
+> ====================
+> For ASI, we need to build a pagetable with a subset of the kernel
+> pagetable mappings. Your solution is interesting as it is provides
+> a broad solution and also works well with dynamic allocations (while
+> my approach to copy mappings had several limitations). The drawback
+> is the extend of your changes which spread over all the mm code
+> (while the simple solution to copy mappings can be done with a few
+> self-contained independent functions).
+> 
+> ASI Core
+> ========
+> 
+> KPTI
+> ----
+> Implementing KPTI with ASI is possible but this is not straight forward.
+> This requires some special handling in particular in the assembly kernel
+> entry/exit code for syscall, interrupt and exception (see ASI RFC v4 [4]
+> as an example) because we are also switching privilege level in addition
+> of switching the pagetable. So this might be something to consider early
+> in your implementation to ensure it is effectively compatible with KPTI.
 
-If an input undervoltage fault occurs, causing a unit off for
-insufficient input voltage, but the unit is off bit is not cleared, the
-STATUS_WORD will not be updated to clear the input fault condition.
-Including the unit is off bit (bit 3) allows for the input fault
-condition to completely clear.
+Yes, I will look in more detail into how to implement KPTI on top of this ASI implementation, but at least at a high level, it seems that it should work. Of course, the devil is always in the details :)
 
-Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
----
- drivers/hwmon/pmbus/pmbus.h      | 1 +
- drivers/hwmon/pmbus/pmbus_core.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> Going beyond KPTI (with a KPTI-next) and trying to execute most
+> syscalls/interrupts without switching to the full kernel address space
+> is more challenging, because it would require much more kernel mapping
+> in the user pagetable, and this would basically defeat the purpose of
+> KPTI. You can refer to discussions about the RFC to defer CR3 switch
+> to C code [7] which was an attempt to just reach the kernel entry C
+> code with a KPTI pagetable.
 
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index e0aa8aa46d8c..ef3a8ecde4df 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -319,6 +319,7 @@ enum pmbus_fan_mode { percent = 0, rpm };
- /*
-  * STATUS_VOUT, STATUS_INPUT
-  */
-+#define PB_VOLTAGE_VIN_OFF		BIT(3)
- #define PB_VOLTAGE_UV_FAULT		BIT(4)
- #define PB_VOLTAGE_UV_WARNING		BIT(5)
- #define PB_VOLTAGE_OV_WARNING		BIT(6)
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index ac2fbee1ba9c..a0d899dc81f0 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -1373,7 +1373,7 @@ static const struct pmbus_limit_attr vin_limit_attrs[] = {
- 		.reg = PMBUS_VIN_UV_FAULT_LIMIT,
- 		.attr = "lcrit",
- 		.alarm = "lcrit_alarm",
--		.sbit = PB_VOLTAGE_UV_FAULT,
-+		.sbit = (PB_VOLTAGE_UV_FAULT | PB_VOLTAGE_VIN_OFF),
- 	}, {
- 		.reg = PMBUS_VIN_OV_WARN_LIMIT,
- 		.attr = "max",
--- 
-2.25.1
+In principle, the ASI restricted address space would not contain any sensitive data, so having more mappings should be ok as long as they really are non-sensitive. Of course, it is possible that we may mistakenly think that some data is not sensitive and mark it as such, but in reality it really was sensitive in some way. In that sense, a strict KPTI is certainly a little more secure than the KPTI-Next that I mentioned, but KPTI-Next would also have lower performance overhead compared to the strict KPTI.
 
+> 
+> Interrupts/Exceptions
+> ---------------------
+> As long as interrupts/exceptions are not expected to be processed with
+> ASI, it is probably better to explicitly exit ASI before processing an
+> interrupt/exception, otherwise you will have an extra overhead on each
+> interrupt/exception to take a page fault and then exit ASI.
+
+I agree that for those interrupts/exceptions that will need to access sensitive data, it is better to do an explicit ASI Exit at the start. But it is probably possible for many interrupts to be handled without needing to access sensitive data, in which case, it would be better to avoid the ASI Exit.
+
+> 
+> This is particularily true if you have want to have KPTI use ASI, and
+> in that case the ASI exit will need to be done early in the interrupt
+> and exception assembly entry code.
+> 
+> ASI Hooks
+> ---------
+> ASI hooks are certainly a good idea to perform specific actions on ASI
+> enter or exit. However, I am not sure they are appropriate places for cpus
+> stunning with KVM-ASI. That's because cpus stunning doesn't need to be
+> done precisely when entering and exiting ASI, and it probably shouldn't be
+> done there: it should be done right before VMEnter and right after VMExit
+> (see below).
+> 
+
+I believe that performing sibling CPU stunning right after VM Exit will negate most of the performance advantage of ASI. I think that it is feasible to do the stunning on ASI Exit. Please see below for how we handle the problem that you have mentioned.
+
+
+> Sibling CPUs Synchronization
+> ============================
+> KVM-ASI requires the synchronization of sibling CPUs from the same CPU
+> core so that when a VM is running then sibling CPUs are running with the
+> ASI associated with this VM (or an ASI compatible with the VM, depending
+> on how ASI is defined). That way the VM can only spy on data from ASI
+> and won't be able to access any sensitive data.
+> 
+> So, right before entering a VM, KVM should ensures that sibling CPUs are
+> using ASI. If a sibling CPU is not using ASI then KVM can either wait for
+> that sibling to run ASI, or force it to use ASI (or to become idle).
+> This behavior should be enforced as long as any sibling is running the
+> VM. When all siblings are not running the VM then other siblings can run
+> any code (using ASI or not).
+> 
+> I would be interesting to see the code you use to achieve this, because
+> I don't get how this is achieved from the description of your sibling
+> hyperthread stun and unstun mechanism.
+> 
+> Note that this synchronization is critical for ASI to work, in particular
+> when entering the VM, we need to be absolutely sure that sibling CPUs are
+> effectively using ASI. The core scheduling sibling stunning code you
+> referenced [6] uses a mechanism which is fine for userspace synchronization
+> (the delivery of the IPI forces the sibling to immediately enter the kernel)
+> but this won't work for ASI as the delivery of the IPI won't guarantee that
+> the sibling as enter ASI yet. I did some experiments that show that data
+> will leak if siblings are not perfectly synchronized.
+
+I agree that it is not secure to run one sibling in the unrestricted kernel address space while the other sibling is running in an ASI restricted address space, without doing a cache flush before re-entering the VM. However, I think that avoiding this situation does not require doing a sibling stun operation immediately after VM Exit. The way we avoid it is as follows.
+
+First, we always use ASI in conjunction with core scheduling. This means that if HT0 is running a VCPU thread, then HT1 will be running either a VCPU thread of the same VM or the Idle thread. If it is running a VCPU thread, then if/when that thread takes a VM Exit, it will also be running in the same ASI restricted address space. For the idle thread, we have created another ASI Class, called Idle-ASI, which maps only globally non-sensitive kernel memory. The idle loop enters this ASI address space.
+
+This means that when HT0 does a VM Exit, HT1 will either be running the guest code of a VCPU of the same VM, or it will be running kernel code in either a KVM-ASI or the Idle-ASI address space. (If HT1 is already running in the full kernel address space, that would imply that it had previously done an ASI Exit, which would have triggered a stun_sibling, which would have already caused HT0 to exit the VM and wait in the kernel).
+
+If HT1 now does an ASI Exit, that will trigger the stun_sibling() operation in its pre_asi_exit() handler, which will set the state of the core/HT0 to Stunned (and possibly send an IPI too, though that will be ignored if HT0 was already in kernel mode). Now when HT0 tries to re-enter the VM, since its state is set to Stunned, it will just wait in a loop until HT1 does an unstun_sibling() operation, which it will do in its post_asi_enter handler the next time it does an ASI Enter (which would be either just before VM Enter if it was KVM-ASI, or in the next iteration of the idle loop if it was Idle-ASI). In either case, HT1's post_asi_enter() handler would also do a flush_sensitive_cpu_state operation before the unstun_sibling(), so when HT0 gets out of its wait-loop and does a VM Enter, there will not be any sensitive state left.
+
+One thing that probably was not clear from the patch, is that the stun state check and wait-loop is still always executed before VM Enter, even if no ASI Exit happened in that execution.
+
+> 
+> A Possible Alternative to ASI?
+> =============================
+> ASI prevents access to sensitive data by unmapping them. On the other
+> hand, the KVM code somewhat already identifies access to sensitive data
+> as part of the L1TF/MDS mitigation, and when KVM is about to access
+> sensitive data then it sets l1tf_flush_l1d to true (so that L1D gets
+> flushed before VMEnter).
+> 
+> With KVM knowing when it accesses sensitive data, I think we can provide
+> the same mitigation as ASI by simply allowing KVM code which doesn't
+> access sensitive data to be run concurrently with a VM. This can be done
+> by tagging the kernel thread when it enters KVM code which doesn't
+> access sensitive data, and untagging the thread right before it accesses
+> sensitive data. And when KVM is about to do a VMEnter then we synchronize
+> siblings CPUs so that they run threads with the same tag. Sounds familar?
+> Yes, because that's similar to core scheduling but inside the kernel
+> (let's call it "kernel core scheduling").
+> 
+> I think the benefit of this approach would be that it should be much
+> simpler to implement and less invasive than ASI, and it doesn't preclude
+> to later do ASI: ASI can be done in addition and provide an extra level
+> of mitigation in case some sensitive is still accessed by KVM. Also it
+> would provide the critical sibling CPU synchronization mechanism that
+> we also need with ASI.
+> 
+> I did some prototyping to implement this kernel core scheduling a while
+> ago (and then get diverted on other stuff) but so far performances have
+> been abyssal especially when doing a strict synchronization between
+> sibling CPUs. I am planning go back and do more investigations when I
+> have cycles but probably not that soon.
+> 
+
+This also seems like an interesting approach. It does have some different trade-offs compared to ASI. First, there is the trade-off between a blacklist vs. whitelist approach. Secondly, ASI has a more structured approach based on the sensitivity of the data itself, instead of having to audit every new code path to verify whether or not it can potentially access any sensitive data. On the other hand, as you point out, this approach is much simpler than ASI, which is certainly a plus.
+
+Thanks,
+Junaid

@@ -2,73 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBF24DC9C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEFD4DC9C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235706AbiCQPTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 11:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S235708AbiCQPUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 11:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234275AbiCQPTP (ORCPT
+        with ESMTP id S231173AbiCQPUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 11:19:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84739D0D8;
-        Thu, 17 Mar 2022 08:17:58 -0700 (PDT)
+        Thu, 17 Mar 2022 11:20:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631D2157589;
+        Thu, 17 Mar 2022 08:19:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45F2D61944;
-        Thu, 17 Mar 2022 15:17:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E413C340E9;
-        Thu, 17 Mar 2022 15:17:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8402B81E90;
+        Thu, 17 Mar 2022 15:19:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB9FC340E9;
+        Thu, 17 Mar 2022 15:19:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647530277;
-        bh=iit+kNVt5zpWWwXPYJiPwGesFnvkto/Yc7KjVR9Mkhg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tyQEo38PMkJ8Fcz5uNbmai5vvlIw0XgS6kAg5D05GCt+d7X5BfyCc+PpYF1iU2QWD
-         OG97uXfq79ulLpRfKSBqM9viv1Dtp1gnsCQ4EnF+szPEQk1gK3hRluac8oo+LHDbYC
-         VLnhpVj39kBL44dlWty5V6NN72lU7wAnLCwWyNBgNoo1t7JXW8yc/Phd/rbz4MQrlg
-         wovOnFYsiyMRt+gRO+mhvRpuQ38cUoKcts9ess7FLhv77w85VE5yh5rNOT7ta0hxgg
-         dvph5vdCelHBSF6z6z89fCsjaYyItggAblKWuaoBBMn6+Lv9mHHiEnwXLP3v8mOAUM
-         v0zkOPpG62xcQ==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nUrsx-00FDcZ-2F; Thu, 17 Mar 2022 15:17:55 +0000
+        s=k20201202; t=1647530369;
+        bh=BpENNq9c5j2eyXFaAKoDXCluzS14HqF6oKhXkk1xNV8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P7chehQi6B2mXVHEu6AUIO7CjWwaazsnQdQg5nI6FxXjwkkhQjZofbJbLKHkvskt0
+         122kv5DNsp0BuIYU48Ej8wFLQHRq/PwPwIOiWUSyaK/5p9OwB96CqL/mLOVuIoE1Mw
+         mm8WhcgQ+DnAgVzRE8AlSoor7tBS5WKeDZpeDNu9vuznoygMfS8xLWxRctJYo2BO0i
+         36WVhenXsi+gWNxi6IBHsGSflBEnZ3fbQmSfK9zySmZtmJtPWLfnrrnuQCFs+HLY4b
+         i3MfiQQCPrzg6VE1Q//tjl3SrOnmSjeiya6b5lw9mIJ8kShLdKfONDCVLk0eckiNF7
+         enG6KrZ+yEmOw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id D674740407; Thu, 17 Mar 2022 12:19:25 -0300 (-03)
+Date:   Thu, 17 Mar 2022 12:19:25 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     kkourt@kkourt.io, dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kornilios Kourtis <kornilios@isovalent.com>
+Subject: Re: [PATCH 2/2] dwarves: cus__load_files: set errno if load fails
+Message-ID: <YjNRfXt8ZAAgHxSJ@kernel.org>
+References: <YjHjLkYBk/XfXSK0@tinh>
+ <20220316132354.3226908-1-kkourt@kkourt.io>
+ <6232c089bbaf2_487f208db@john.notmuch>
 MIME-Version: 1.0
-Date:   Thu, 17 Mar 2022 15:17:54 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
-        Lukasz.Luba@arm.com, Morten.Rasmussen@arm.com,
-        Dietmar.Eggemann@arm.com, mka@chromium.org,
-        daniel.lezcano@linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Fuad Tabba <tabba@google.com>, Rob Herring <robh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] cpufreq: CPPC: Add cppc_cpufreq_search_cpu_data
-In-Reply-To: <76a15179-560f-d412-1512-7ec28ea62cd9@arm.com>
-References: <20220317133419.3901736-1-Pierre.Gondois@arm.com>
- <20220317133419.3901736-2-Pierre.Gondois@arm.com>
- <746641141c630dc1d02943d6133a6c8d@kernel.org>
- <76a15179-560f-d412-1512-7ec28ea62cd9@arm.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <2741f16d17d646fb84ec96334265ef01@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: pierre.gondois@arm.com, linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com, Lukasz.Luba@arm.com, Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com, mka@chromium.org, daniel.lezcano@linaro.org, catalin.marinas@arm.com, will@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org, mark.rutland@arm.com, ardb@kernel.org, tabba@google.com, robh@kernel.org, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6232c089bbaf2_487f208db@john.notmuch>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -79,65 +60,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-17 14:44, Pierre Gondois wrote:
-> On 3/17/22 15:20, Marc Zyngier wrote:
->> On 2022-03-17 13:34, Pierre Gondois wrote:
->>> cppc_cpufreq_get_cpu_data() allocates a new struct cppc_cpudata
->>> for the input CPU at each call.
->>> 
->>> To search the struct associated with a cpu without allocating
->>> a new one, add cppc_cpufreq_search_cpu_data().
->>> Also add an early prototype.
->>> 
->>> This will be used in a later patch, when generating artificial
->>> performance states to register an artificial Energy Model in the
->>> cppc_cpufreq driver and enable the Energy Aware Scheduler for ACPI
->>> based systems.
->>> 
->>> Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
->>> ---
->>>   drivers/cpufreq/cppc_cpufreq.c | 15 +++++++++++++++
->>>   1 file changed, 15 insertions(+)
->>> 
->>> diff --git a/drivers/cpufreq/cppc_cpufreq.c
->>> b/drivers/cpufreq/cppc_cpufreq.c
->>> index 82d370ae6a4a..8f950fe72765 100644
->>> --- a/drivers/cpufreq/cppc_cpufreq.c
->>> +++ b/drivers/cpufreq/cppc_cpufreq.c
->>> @@ -41,6 +41,8 @@
->>>    */
->>>   static LIST_HEAD(cpu_data_list);
->>> 
->>> +static struct cppc_cpudata *cppc_cpufreq_search_cpu_data(unsigned 
->>> int
->>> cpu);
->>> +
->>>   static bool boost_supported;
->>> 
->>>   struct cppc_workaround_oem_info {
->>> @@ -479,6 +481,19 @@ static void cppc_cpufreq_put_cpu_data(struct
->>> cpufreq_policy *policy)
->>>   	policy->driver_data = NULL;
->>>   }
->>> 
->>> +static inline struct cppc_cpudata *
->> 
->> Why the inline? This is hardly performance critical, and if
->> it is, you want something better than iterating over a list.
+Em Wed, Mar 16, 2022 at 10:00:57PM -0700, John Fastabend escreveu:
+> kkourt@ wrote:
+> > From: Kornilios Kourtis <kornilios@isovalent.com>
+> > 
+> > This patch improves the error seen by the user by setting errno in
+> > cus__load_files(). Otherwise, we get a "No such file or directory" error
+> > which might be confusing.
+> > 
+> > Before the patch, using a bogus file:
+> > $ ./pahole -J ./vmlinux-5.3.18-24.102-default.debug
+> > pahole: ./vmlinux-5.3.18-24.102-default.debug: No such file or directory
+> > $ ls ./vmlinux-5.3.18-24.102-default.debug
+> > /home/kkourt/src/hubble-fgs/vmlinux-5.3.18-24.102-default.debug
+> > 
+> > After the patch:
+> > $ ./pahole -J ./vmlinux-5.3.18-24.102-default.debug
+> > pahole: ./vmlinux-5.3.18-24.102-default.debug: Unknown error -22
+> > 
+> > Which is not very helpful, but less confusing.
+> > 
+> > Signed-off-by: Kornilios Kourtis <kornilios@isovalent.com>
+> > ---
 > 
-> This was made inline mainly because the function was small. The 
-> function
-> is called only at boot, so it should not be performance critical. The
-> 'inline' can be removed if necessary.
-> Would letting it inlined have a negative impact ?
+> With the err to -err fix Arnaldo proposed.
+> 
+> Acked-by: John Fastabend <john.fastabend@gmail.com>
 
-This is why we have a compiler. It is perfectly able to decide
-on its own whether to inline or not, depending on how it can
-optimise it. With modern compilers, 'inline' means nothing anyway,
-and is ignored most of the time.
+Thanks, did the ammendment and collected your Acked-by,
 
-So dropping it will at least save 7 bytes of source code! ;-)
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+- Arnaldo

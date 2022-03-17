@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849B44DD029
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B183A4DD02F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbiCQV2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 17:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36810 "EHLO
+        id S230266AbiCQV3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 17:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiCQV1w (ORCPT
+        with ESMTP id S230252AbiCQV3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 17:27:52 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84523E127E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:26:35 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 6so3628575pgg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:26:35 -0700 (PDT)
+        Thu, 17 Mar 2022 17:29:45 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F403B65ED
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:28:26 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id e4so3937045oif.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:28:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=t3AEOAq14i3EG/rquowlVe/zjdaZDH/WIKQHfOErJko=;
-        b=UVHNXXnOEefY1Vy3hj/0OCtNe0JL8d0KcntvVuMCDGi5ySZpLRjcvDWZjscPkaXYUL
-         4aW3QgrkeWASmfJWSKiiG6kZc/H1pzq6pbGJ7GCQLgWp4SmesyDfNh2hd9esKtvnyxsv
-         b+B/TF1CHJ4H+QRBYkPUhwm86M8au6P02KeLM=
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=UNSHY9stDEkYj4x5uGDPU+/xpghSYFwE9UEK93GK/gM=;
+        b=UJ6ChFrD90E+fyCqG323ewJ4CboNt0noYEGXnfAPEfX84YTjFpiHIqWLGryy+REnEl
+         m+BeB7MRpK2nOqB4s2Vd8hj6AzSxqmyqCSgGwWoDz4bynPsW6Kd44b2jxUBbqTKRdx5M
+         rGSwbd+IxqOivaCpFLd6L9XgHkiW067VR7wP4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=t3AEOAq14i3EG/rquowlVe/zjdaZDH/WIKQHfOErJko=;
-        b=1GJCdO1T4oJP80zJsgPuNmmo+Ti77oZht9853frzQtHFL+n7WyajPBUG4/ny2zpwHY
-         yKx4t8t7WqWCGEH0jS+CuzzAC/3H+RqtxgYGtXtdvyJAEebnE6jXfGYRZ2cY94BPuraL
-         MbU3VQ1MphUCusNpPmZaPgg/2fzUweOPZ3gXSJ17pl+OIyjosnN8imgQcYqPVg+2uYd0
-         ZpLhCKJveKRn8sHmtRTlxSMccf6JrUeEek12omzbsZTxdStM0nR4M395n57Sr4/Yxktr
-         lluIhFbXe8AFPHeOatfM4eel67QQmVkiaJfN6wNWqCEZez0ihOWKe2CoIBmqPXilGx2d
-         AfTw==
-X-Gm-Message-State: AOAM533jQo3RGLr5+YpYoCyHmZXXzBIvytRO/p4ItLDFkskCmr13JBZW
-        QjkjcZz8JHF+p7txFRWY9XJ5SQ==
-X-Google-Smtp-Source: ABdhPJxv39a1M1FCYdm1DZMI4PMp646IDuGYZTbImyl9pmm2fzbnwYdGE1sQXO2UUSvX2ZZp4e9tfA==
-X-Received: by 2002:a05:6a00:2d0:b0:4f4:1f34:e39d with SMTP id b16-20020a056a0002d000b004f41f34e39dmr7042633pft.14.1647552395033;
-        Thu, 17 Mar 2022 14:26:35 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h2-20020a056a00218200b004f6519ce666sm7735505pfi.170.2022.03.17.14.26.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 14:26:34 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 14:26:33 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     dave.hansen@intel.com, len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, viro@zeniv.linux.org.uk,
-        ebiederm@xmission.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 3/3] elf: Don't write past end of notes for regset gap
-Message-ID: <202203171425.565EB773FD@keescook>
-References: <20220317192013.13655-1-rick.p.edgecombe@intel.com>
- <20220317192013.13655-4-rick.p.edgecombe@intel.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=UNSHY9stDEkYj4x5uGDPU+/xpghSYFwE9UEK93GK/gM=;
+        b=6R58PpfXWtdxuurPUDljbDwvBESGsLE7pGF79ueGW1fDf2XHUbPtH1HzqMKMtjAnxt
+         VIYTCH6+vcK6YkVkWGCW1bGnRUPyYwXiIz2NaBXjO4IxlK8uUpzH2AsZOKnR0XRQLA2u
+         +nXyy4mD1pTh21kYvghXMNrl0Ntf5vh+nG7VOTIMCCcggO+RQSMTU6kTx0sh6bGD/8jn
+         DKLVyD2ffBEyJEr4WciFGMyXDyVtoOgSQZdKSX6cJZy341bwtpexDhJ/WUDhoxIz9ZJE
+         knyn9SoA8YHIBVFgD6QOroe9HghDayzCK1psiWzIi2QjtkxAdFs2hlufpiY+lIOobbCs
+         ng0w==
+X-Gm-Message-State: AOAM533PRC9Tqvf6cM5yOjV4Et+gBn0OB3wto0FctKiDw64ap9dDw+UZ
+        cP6y6GB3RdZJyksqfraNkv+pxrn0ikEcMlW1luxwTg==
+X-Google-Smtp-Source: ABdhPJyv2KBnd9epOKRH7UvrY9oWjNtBrVHvuV99b+9vkNMSlZzoiR1rQ+l7ignHhDoNDiXp1SY6ndIb2XVw3NaYJjs=
+X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
+ n62-20020acabd41000000b002ecff42814fmr3029465oif.63.1647552506394; Thu, 17
+ Mar 2022 14:28:26 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 17 Mar 2022 17:28:25 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317192013.13655-4-rick.p.edgecombe@intel.com>
+In-Reply-To: <1647452154-16361-4-git-send-email-quic_sbillaka@quicinc.com>
+References: <1647452154-16361-1-git-send-email-quic_sbillaka@quicinc.com> <1647452154-16361-4-git-send-email-quic_sbillaka@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 17 Mar 2022 17:28:25 -0400
+Message-ID: <CAE-0n51SCm2HJ4O-DPJy3zKLrbgn9EFQbYPkzJDyqNncnC=4mA@mail.gmail.com>
+Subject: Re: [PATCH v5 3/9] arm64: dts: qcom: sc7280: Enable backlight for eDP panel
+To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     robdclark@gmail.com, seanpaul@chromium.org,
+        quic_kalyant@quicinc.com, quic_abhinavk@quicinc.com,
+        dianders@chromium.org, quic_khsieh@quicinc.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        thierry.reding@gmail.com, sam@ravnborg.org,
+        dmitry.baryshkov@linaro.org, quic_vproddut@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,54 +74,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 12:20:13PM -0700, Rick Edgecombe wrote:
-> In fill_thread_core_info() the ptrace accessible registers are collected
-> to be written out as notes in a core file. The note array is allocated
-> from a size calculated by iterating the user regset view, and counting the
-> regsets that have a non-zero core_note_type. However, this only allows for
-> there to be non-zero core_note_type at the end of the regset view. If
-> there are any gaps in the middle, fill_thread_core_info() will overflow the
-> note allocation, as it iterates over the size of the view and the
-> allocation would be smaller than that.
-> 
-> There doesn't appear to be any arch that has gaps such that they exceed
-> the notes allocation, but the code is brittle and tries to support
-> something it doesn't. It could be fixed by increasing the allocation size,
-> but instead just have the note collecting code utilize the array better.
-> This way the allocation can stay smaller.
-> 
-> Even in the case of no arch's that have gaps in their regset views, this
-> introduces a change in the resulting indicies of t->notes. It does not
-> introduce any changes to the core file itself, because any blank notes are
-> skipped in write_note_info().
-> 
-> In case, the allocation logic between fill_note_info() and
-> fill_thread_core_info() ever diverges from the usage logic, warn and skip
-> writing any notes that would overflow the array.
-> 
-> This fix is derrived from an earlier one[0] by Yu-cheng Yu.
-> 
-> [0] https://lore.kernel.org/lkml/20180717162502.32274-1-yu-cheng.yu@intel.com/
-> 
-> Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> 
+Quoting Sankeerth Billakanti (2022-03-16 10:35:48)
+> Enable backlight support for eDP panel on CRD platform for sc7280.
+>
+> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
 > ---
-> 
-> v2:
->  - Warn and break out of the note collecting loop if the allocation would
->    overflow. Note: I tweaked it slightly to do break instead of continue
->    and to do it before SET_PR_FPVALID(). (Kees)
+>
+> Changes in v5:
+>   - Separate out backlight nodes
+>
+>  arch/arm64/boot/dts/qcom/sc7280-crd.dts | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> index 2df654e..16d1a5b 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+> @@ -37,6 +37,15 @@
+>                 pinctrl-0 = <&edp_panel_power>;
+>         };
+>
+> +       edp_backlight: edp-backlight {
 
-This looks great; thank you for the tweak. :)
+Does this also move to qcard.dtsi? Why can't this be combined with the
+previous patch?
 
-Acked-by: Kees Cook <keescook@chromium.org>
+> +               compatible = "pwm-backlight";
+> +
+> +               power-supply = <&vreg_edp_bp>;
+> +               pwms = <&pm8350c_pwm 3 65535>;
+> +
+> +               enable-gpios = <&pm8350c_gpios 7 GPIO_ACTIVE_HIGH>;
+> +       };
+> +
+>         vreg_edp_bp: vreg-edp-bp-regulator {
+>                 compatible = "regulator-fixed";
+>                 regulator-name = "vreg_edp_bp";
+> @@ -123,7 +132,9 @@ ap_ts_pen_1v8: &i2c13 {
+>                 edp_panel: edp-panel {
+>                         compatible = "edp-panel";
+>
+> +                       backlight = <&edp_backlight>;
+>                         power-supply = <&edp_3v3_regulator>;
+> +
 
-Shall I take this separately into the for-next/execve tree, or would you
-rather is stay in this series?
+Nitpick: Remove this newline from this hunk and put it in when
+power-supply is introduced.
 
--Kees
+>                         ports {
+>                                 #address-cells = <1>;
+>                                 #size-cells = <0>;
+> @@ -172,6 +183,13 @@ ap_ts_pen_1v8: &i2c13 {
+>         };
+>  };
+>
+> +&pm8350c_pwm {
+> +       status = "okay";
+> +
+> +       pinctrl-names = "default";
+> +       pinctrl-0 = <&edp_bl_pwm>;
 
--- 
-Kees Cook
+I see the pinctrl is used now but it would be easier to review this
+patch if the pinctrl was in this patch.

@@ -2,85 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A1C4DC290
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B37574DC291
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbiCQJZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
+        id S231835AbiCQJ0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiCQJZQ (ORCPT
+        with ESMTP id S229480AbiCQJ0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:25:16 -0400
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC8F13EFAE;
-        Thu, 17 Mar 2022 02:24:00 -0700 (PDT)
-Received: by mail-wm1-f43.google.com with SMTP id v130-20020a1cac88000000b00389d0a5c511so4564781wme.5;
-        Thu, 17 Mar 2022 02:24:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RKYv39Dz6kpsbqvNDiuEP28ERy33QsF4e6gcs7JiHOM=;
-        b=6YrfeHC3Nc0krZmm5yqRh27TVwtIh7vUXVZJ2ZExaSplOk8fgKVN5h77UwSmVzx4Xd
-         NuyJoLeEH8SGrBz2gsVlpx7KgZ1vnyGpx1VNMC0t2kq8goceBOyzIUnflyaWgu7dy9LP
-         wNR7cii5/aFxiNg9c5ZiviMYyOOKQifd0jh4gCNk1TpUtk0bLJlWpJ6s/m+GafMeEaYJ
-         E9Zroziltxl+vXN96aqqAhWv6T1kfYz4lQ0RTQu4llvjvihLfpYdywLf/kcCRQfcSc9k
-         2mV5BGj2zA9Pv/ZhG/5vtmmutb02nc5y/ed5w4Ie0vVP3zrH4l09UD1xKuNXjyukuE68
-         L0WQ==
-X-Gm-Message-State: AOAM532gsh1HriTuiIIonvIJso8otTZZrrHOF3mc3vr19DOgaCIT4aO6
-        M2rgZdNiBT7z1i78lxKiKBs=
-X-Google-Smtp-Source: ABdhPJzhyiiwvo2SSiFiEF0/qXF7GuGh2tYwpapsxhJcGaoaDIimLViYPpX1jf/eOTjJYQf6rwtraw==
-X-Received: by 2002:a05:600c:21d1:b0:381:4fed:159a with SMTP id x17-20020a05600c21d100b003814fed159amr3057114wmj.143.1647509038800;
-        Thu, 17 Mar 2022 02:23:58 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id f4-20020a5d4dc4000000b001d8e67e5214sm3609644wru.48.2022.03.17.02.23.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 02:23:56 -0700 (PDT)
-Message-ID: <e95a3743-3285-1d36-9f27-3504beaf176a@kernel.org>
-Date:   Thu, 17 Mar 2022 10:23:45 +0100
+        Thu, 17 Mar 2022 05:26:10 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C35143C5B
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:24:52 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 17 Mar
+ 2022 17:24:51 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 17 Mar
+ 2022 17:24:50 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     <benh@kernel.crashing.org>, <masahiroy@kernel.org>,
+        <adobriyan@gmail.com>
+CC:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        "Haowen Bai" <baihaowen@meizu.com>
+Subject: [PATCH] macintosh: macio-adb: Fix warning comparing pointer to 0
+Date:   Thu, 17 Mar 2022 17:24:49 +0800
+Message-ID: <1647509089-4280-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Document adt7475 pin-function
- properties
-Content-Language: en-US
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220316234134.290492-1-chris.packham@alliedtelesis.co.nz>
- <20220316234134.290492-2-chris.packham@alliedtelesis.co.nz>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220316234134.290492-2-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2022 00:41, Chris Packham wrote:
-> The adt7473, adt7475, adt7476 and adt7490 have pins that can be used for
-> different functions. Add bindings so that it is possible to describe
-> what pin functions are intended by the hardware design.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->  .../devicetree/bindings/hwmon/adt7475.yaml    | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
+Avoid pointer type value compared with 0 to make code clear.
 
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ drivers/macintosh/macio-adb.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+diff --git a/drivers/macintosh/macio-adb.c b/drivers/macintosh/macio-adb.c
+index dc634c2..b7d287a 100644
+--- a/drivers/macintosh/macio-adb.c
++++ b/drivers/macintosh/macio-adb.c
+@@ -97,7 +97,7 @@ int macio_init(void)
+ 	unsigned int irq;
+ 
+ 	adbs = of_find_compatible_node(NULL, "adb", "chrp,adb0");
+-	if (adbs == 0)
++	if (!adbs)
+ 		return -ENXIO;
+ 
+ 	if (of_address_to_resource(adbs, 0, &r)) {
+@@ -180,7 +180,7 @@ static int macio_send_request(struct adb_request *req, int sync)
+ 	req->reply_len = 0;
+ 
+ 	spin_lock_irqsave(&macio_lock, flags);
+-	if (current_req != 0) {
++	if (current_req) {
+ 		last_req->next = req;
+ 		last_req = req;
+ 	} else {
+@@ -210,7 +210,8 @@ static irqreturn_t macio_adb_interrupt(int irq, void *arg)
+ 	spin_lock(&macio_lock);
+ 	if (in_8(&adb->intr.r) & TAG) {
+ 		handled = 1;
+-		if ((req = current_req) != 0) {
++		req = current_req;
++		if (req) {
+ 			/* put the current request in */
+ 			for (i = 0; i < req->nbytes; ++i)
+ 				out_8(&adb->data[i].r, req->data[i]);
+-- 
+2.7.4
 
-
-Best regards,
-Krzysztof

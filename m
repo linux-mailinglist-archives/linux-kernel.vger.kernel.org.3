@@ -2,164 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815FB4DC9FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69EE4DCA06
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235858AbiCQPaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 11:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
+        id S235832AbiCQPeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 11:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235772AbiCQPaR (ORCPT
+        with ESMTP id S234996AbiCQPeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 11:30:17 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9010316F6CE
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 08:29:00 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id t25so9605379lfg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 08:29:00 -0700 (PDT)
+        Thu, 17 Mar 2022 11:34:06 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3894C208C2D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 08:32:50 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id n15so4763158plh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 08:32:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=73OoSacSDvFhxxRgzZaXeE59BqLPs6obhzhzNPkozSw=;
-        b=QUREg4kHWnnp6zurzo6oI5HEMeBnr61/oZMWQty1m0hGnaSy6HHU+Pfz50LUnG6gNd
-         Jlu+274qPi6Az/jM03t9VrxgM7tpCFw83n6A31VPmmfesDnbJaQvy9j0DuaaQFPv7/fW
-         J4pbig/s1jI787oVJzsc3ZG992IfU2uLezW9/Bm3sTdMqIu7n/SsAq1ZBSTlPCcbwQp0
-         467sz6nDtQeedGX0wdjypIN4iy8ZKHc0QJOnV1voStHTwJEAUXaPBrh1XVvTi31wv6Z/
-         W8nRkm7wEamzAiiPu3qqVmHiEhTq1PcRspyNw+r+JJ0UM85EfKr+NBgKqwMek6EntNKl
-         7URg==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hnPiewiTmn5iKj7tv6YyXKcFYclFsk36ptIecBJ8qYw=;
+        b=s/z6/SWEMrGSkgPqxHXiGu4Z5wuN0408LIBkkxWyr/DtH9662uvtRvJ+NeWlGvaUCw
+         2Q1NzrDo3uEu3fUgvbSWVxghMV3dALlHH/0ZvvXrthrmkLFAoJokILmuoaHTFRbAZeta
+         mj6WETnZnUYPlH10aqh0c7fRRboLZCJMglgtMgYH4YAmK1NTRS5QbdG1spBF69gfodtl
+         w3YyT6MssVTsBV+0Ip48QjWAOvzn/25nVJ5yifmWjfFwvz/wMjGhUxxVvzGYWs84ar2Q
+         eOBHrYNZ1qTv5HI5OqPwsgeeNqRKtQLEKhrK1uhOzzEMNW3QTUEkqJY029P41mRcuTUn
+         Rr0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=73OoSacSDvFhxxRgzZaXeE59BqLPs6obhzhzNPkozSw=;
-        b=qyyZ3h2YsEaZe6h6j2uH/ltW15Z6EdIBwsdqe+nyMmwZXDAQ6UWLdeqSadHCQSkh3K
-         12DOMh7V8kqSFVB2R6XHBqvzR/038FHTJe25BM5DtM4ku8OTR8VpI3iJpW24j6BxnXwA
-         CdG6yY/Wlm66bpDvRI/qiqCVx0t8kAj9q3YZLIhdAFbhP2P3NZAuh4sDcJKQZiZM7ge2
-         bDhlBw3eDxmHyF2C4VePIOm7eSUZRiDbKY2nS1cLrrWAayCRL4xPnQxKD2LN++MeJEPc
-         CyGcYn/V009BtNeOgaLzS64BRF2Z50ErgN72nmLO5HDhW/uulNm1iR4r0W8Js5+gHrAQ
-         Bw5w==
-X-Gm-Message-State: AOAM5320E+Jc/3emPbGoYb9yyQ0qV0Yo7Eyoz3/iHrtQKL2QHKz/1aJH
-        mVVuUkmawyzRYxxDz55ApYFhlQ==
-X-Google-Smtp-Source: ABdhPJzLmU0zY5O6Hkp9EoPU07swOYLlw9GI/BmLO8proJ4mupQjGZDCZFz2uFy/Qopw0Y92YU405A==
-X-Received: by 2002:a05:6512:2037:b0:448:92de:21de with SMTP id s23-20020a056512203700b0044892de21demr3216056lfs.52.1647530938721;
-        Thu, 17 Mar 2022 08:28:58 -0700 (PDT)
-Received: from localhost.localdomain (h-155-4-129-34.NA.cust.bahnhof.se. [155.4.129.34])
-        by smtp.gmail.com with ESMTPSA id m15-20020a2eb6cf000000b00247e82c1c32sm466565ljo.89.2022.03.17.08.28.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 08:28:57 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org
-Cc:     Yann Gautier <yann.gautier@foss.st.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        brcm80211-dev-list.pdl@broadcom.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] brcmfmac: Avoid keeping power to SDIO card unless WOWL is used
-Date:   Thu, 17 Mar 2022 16:28:46 +0100
-Message-Id: <20220317152846.246281-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hnPiewiTmn5iKj7tv6YyXKcFYclFsk36ptIecBJ8qYw=;
+        b=XfNrePSbhOLGBACLZxhAcfMMeaPdRC4lHTugnKcroHkGH0ewNapM5MA3v2YqNkEPJ5
+         JL10EH7GcCGB7CykBtgJ14FT/K1RPVpZtyz+HiGycR4Ag/WdjR8D4Gcz+pE3JhOoolzx
+         I1qtoHMUK0aScjJnJwOCMapGBEKTZopxpFQRXYueyJv/PbFBdOo4OXHwXs9+awGTUK4I
+         97gVfitkEXmEG2iMsnA12VFuFUGLujaKbA7smYzCyf0sfFmNDIpVF0kePu+hZOhQQu59
+         EnSHMecQLisyk93Uf5TGW2CxOHcqIv6uf6KjeMtbV43zq7PgTC2KdylefRpSu97Sg6O8
+         xFzg==
+X-Gm-Message-State: AOAM532LVe2xG5ODPdPUgZcAOdRlCM/XsknU+VTniX4BEnMOq35ZhZoC
+        8cs8veLbnnQfj/eIlvM1GezWu+G1p99XaBmolP5IEA==
+X-Google-Smtp-Source: ABdhPJz0vY/sonzlwd8zKFAyz+RKh4/TJBEXP4Xs9IlBbNdO7Hih1mT1AbluhuJRxwhy4Dr3EwKWwrVmlQsltRMCiL0=
+X-Received: by 2002:a17:902:d504:b0:154:172:3677 with SMTP id
+ b4-20020a170902d50400b0015401723677mr1307643plg.147.1647531169689; Thu, 17
+ Mar 2022 08:32:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
+ <20220316020856.24435-30-kirill.shutemov@linux.intel.com> <f60f4310-8a03-2fdb-d495-be2658f08abe@intel.com>
+In-Reply-To: <f60f4310-8a03-2fdb-d495-be2658f08abe@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Thu, 17 Mar 2022 08:32:39 -0700
+Message-ID: <CAPcyv4gfVfCNZKhc3aUU1+TyaSpxSMeuiqVxK1V2i3O6HVspcg@mail.gmail.com>
+Subject: Re: [PATCHv6 29/30] ACPICA: Avoid cache flush inside virtual machines
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Juergen Gross <jgross@suse.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, sdeep@vmware.com,
+        Sean Christopherson <seanjc@google.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>, X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Keeping the power to the SDIO card during system wide suspend, consumes
-energy. Especially on battery driven embedded systems, this can be a
-problem. Therefore, let's change the behaviour into allowing the SDIO card
-to be powered off, unless WOWL is supported and enabled.
+On Wed, Mar 16, 2022 at 3:13 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 3/15/22 19:08, Kirill A. Shutemov wrote:
+> > While running inside virtual machine, the kernel can bypass cache
+> > flushing. Changing sleep state in a virtual machine doesn't affect the
+> > host system sleep state and cannot lead to data loss.
+> >
+> > Before entering sleep states, the ACPI code flushes caches to prevent
+> > data loss using the WBINVD instruction.  This mechanism is required on
+> > bare metal.
+> >
+> > But, any use WBINVD inside of a guest is worthless.  Changing sleep
+> > state in a virtual machine doesn't affect the host system sleep state
+> > and cannot lead to data loss, so most hypervisors simply ignore it.
+> > Despite this, the ACPI code calls WBINVD unconditionally anyway.
+> > It's useless, but also normally harmless.
+> >
+> > In TDX guests, though, WBINVD stops being harmless; it triggers a
+> > virtualization exception (#VE).  If the ACPI cache-flushing WBINVD
+> > were left in place, TDX guests would need handling to recover from
+> > the exception.
+> >
+> > Avoid using WBINVD whenever running under a hypervisor.  This both
+> > removes the useless WBINVDs and saves TDX from implementing WBINVD
+> > handling.
+>
+> Looks good.  Did you have more acks on this earlier that got removed?  I
+> thought I remembered more acks on earlier versions.
+>
+> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
 
-Note that, the downside from this change, is that at system resume the SDIO
-card needs to be re-initialized and the FW must re-programmed. Even it that
-may take some time to complete, it should we worth it, rather than draining
-a battery.
+Yeah, my previous reviewed-by still stands:
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
-
-Please note that, I have only compile-tested this patch, so I am relying on help
-from Yann and others to run tests on real HW.
-
-Kind regards
-Ulf Hansson
-
----
- .../broadcom/brcm80211/brcmfmac/bcmsdh.c      | 33 +++++++++++--------
- 1 file changed, 20 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-index ac02244a6fdf..351886c9d68e 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-@@ -1119,9 +1119,21 @@ void brcmf_sdio_wowl_config(struct device *dev, bool enabled)
- {
- 	struct brcmf_bus *bus_if = dev_get_drvdata(dev);
- 	struct brcmf_sdio_dev *sdiodev = bus_if->bus_priv.sdio;
-+	mmc_pm_flag_t pm_caps = sdio_get_host_pm_caps(sdiodev->func1);
- 
--	brcmf_dbg(SDIO, "Configuring WOWL, enabled=%d\n", enabled);
--	sdiodev->wowl_enabled = enabled;
-+	/* Power must be preserved to be able to support WOWL. */
-+	if (!(pm_caps & MMC_PM_KEEP_POWER))
-+		goto notsup;
-+
-+	if (sdiodev->settings->bus.sdio.oob_irq_supported ||
-+	    pm_caps & MMC_PM_WAKE_SDIO_IRQ) {
-+		sdiodev->wowl_enabled = enabled;
-+		brcmf_dbg(SDIO, "Configuring WOWL, enabled=%d\n", enabled);
-+		return;
-+	}
-+
-+notsup:
-+	brcmf_dbg(SDIO, "WOWL not supported\n");
- }
- 
- #ifdef CONFIG_PM_SLEEP
-@@ -1130,7 +1142,7 @@ static int brcmf_ops_sdio_suspend(struct device *dev)
- 	struct sdio_func *func;
- 	struct brcmf_bus *bus_if;
- 	struct brcmf_sdio_dev *sdiodev;
--	mmc_pm_flag_t pm_caps, sdio_flags;
-+	mmc_pm_flag_t sdio_flags;
- 	int ret = 0;
- 
- 	func = container_of(dev, struct sdio_func, dev);
-@@ -1142,20 +1154,15 @@ static int brcmf_ops_sdio_suspend(struct device *dev)
- 	bus_if = dev_get_drvdata(dev);
- 	sdiodev = bus_if->bus_priv.sdio;
- 
--	pm_caps = sdio_get_host_pm_caps(func);
--
--	if (pm_caps & MMC_PM_KEEP_POWER) {
--		/* preserve card power during suspend */
-+	if (sdiodev->wowl_enabled) {
- 		brcmf_sdiod_freezer_on(sdiodev);
- 		brcmf_sdio_wd_timer(sdiodev->bus, 0);
- 
- 		sdio_flags = MMC_PM_KEEP_POWER;
--		if (sdiodev->wowl_enabled) {
--			if (sdiodev->settings->bus.sdio.oob_irq_supported)
--				enable_irq_wake(sdiodev->settings->bus.sdio.oob_irq_nr);
--			else
--				sdio_flags |= MMC_PM_WAKE_SDIO_IRQ;
--		}
-+		if (sdiodev->settings->bus.sdio.oob_irq_supported)
-+			enable_irq_wake(sdiodev->settings->bus.sdio.oob_irq_nr);
-+		else
-+			sdio_flags |= MMC_PM_WAKE_SDIO_IRQ;
- 
- 		if (sdio_set_host_pm_flags(sdiodev->func1, sdio_flags))
- 			brcmf_err("Failed to set pm_flags %x\n", sdio_flags);
--- 
-2.25.1
-
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5414DC706
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9469B4DC70A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234480AbiCQM5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S234355AbiCQM73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234908AbiCQMyC (ORCPT
+        with ESMTP id S234335AbiCQMz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:54:02 -0400
+        Thu, 17 Mar 2022 08:55:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046CB1EE8E5;
-        Thu, 17 Mar 2022 05:52:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C72BB920;
+        Thu, 17 Mar 2022 05:54:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93993614F0;
-        Thu, 17 Mar 2022 12:52:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D18E5C340E9;
-        Thu, 17 Mar 2022 12:52:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FE56614F0;
+        Thu, 17 Mar 2022 12:54:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02807C340EF;
+        Thu, 17 Mar 2022 12:54:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521538;
-        bh=R/C8STymm8ReCkBQLt18z2XcBrbpXSFwqEfZsjQ2/iE=;
+        s=korg; t=1647521644;
+        bh=DPdfF6q9H15BXcu0xyHzF22kFQv23DsT8xa/YMq2E1I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JUZj78snFCjDuFVcGosogCXj3XRkG8vjKswoSK5JPJ2FrSK+uGU0k9rDLiOwIl94+
-         nVb/BpBfjd7SaTHusMffU3DW1iOKTYtJ9nul9XviSVKSxHJzJ1ao5VVNm0oMDo/CzO
-         vDTWdbjHAohB3N1p5KXHbCVuOQZmZ1mNAPkyoY4Q=
+        b=S05oLSeXKc3hOfghWJtg+hbBpaQ6c9Nb4bB23q5baJfHdGMuQZZ7vy8+qW5KVM3La
+         oz/BBKqnOXmiVdSqJJ+pEle0PzgfZ+/EXMzka654i6oxCWFH2Y/h9FVMWyAAAsJGal
+         N89kd8zJljBvM25F2fnFKyxCTS2qnLRWKja4U24k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        stable@vger.kernel.org, Quentin Schulz <foss+kernel@0leil.net>,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
         Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 09/25] ARM: dts: rockchip: reorder rk322x hmdi clocks
-Date:   Thu, 17 Mar 2022 13:45:56 +0100
-Message-Id: <20220317124526.575679406@linuxfoundation.org>
+Subject: [PATCH 5.16 06/28] arm64: dts: rockchip: fix rk3399-puma eMMC HS400 signal integrity
+Date:   Thu, 17 Mar 2022 13:45:57 +0100
+Message-Id: <20220317124526.953096814@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317124526.308079100@linuxfoundation.org>
-References: <20220317124526.308079100@linuxfoundation.org>
+In-Reply-To: <20220317124526.768423926@linuxfoundation.org>
+References: <20220317124526.768423926@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sascha Hauer <s.hauer@pengutronix.de>
+From: Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
 
-[ Upstream commit be4e65bdffab5f588044325117df77dad7e9c45a ]
+[ Upstream commit 62966cbdda8a92f82d966a45aa671e788b2006f7 ]
 
-The binding specifies the clock order to "iahb", "isfr", "cec". Reorder
-the clocks accordingly.
+There are signal integrity issues running the eMMC at 200MHz on Puma
+RK3399-Q7.
 
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-Link: https://lore.kernel.org/r/20220210142353.3420859-1-s.hauer@pengutronix.de
+Similar to the work-around found for RK3399 Gru boards, lowering the
+frequency to 100MHz made the eMMC much more stable, so let's lower the
+frequency to 100MHz.
+
+It might be possible to run at 150MHz as on RK3399 Gru boards but only
+100MHz was extensively tested.
+
+Cc: Quentin Schulz <foss+kernel@0leil.net>
+Signed-off-by: Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Link: https://lore.kernel.org/r/20220119134948.1444965-1-quentin.schulz@theobroma-systems.com
 Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/rk322x.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm/boot/dts/rk322x.dtsi b/arch/arm/boot/dts/rk322x.dtsi
-index 75af99c76d7e..f31cf1df892b 100644
---- a/arch/arm/boot/dts/rk322x.dtsi
-+++ b/arch/arm/boot/dts/rk322x.dtsi
-@@ -718,8 +718,8 @@
- 		interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
- 		assigned-clocks = <&cru SCLK_HDMI_PHY>;
- 		assigned-clock-parents = <&hdmi_phy>;
--		clocks = <&cru SCLK_HDMI_HDCP>, <&cru PCLK_HDMI_CTRL>, <&cru SCLK_HDMI_CEC>;
--		clock-names = "isfr", "iahb", "cec";
-+		clocks = <&cru PCLK_HDMI_CTRL>, <&cru SCLK_HDMI_HDCP>, <&cru SCLK_HDMI_CEC>;
-+		clock-names = "iahb", "isfr", "cec";
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&hdmii2c_xfer &hdmi_hpd &hdmi_cec>;
- 		resets = <&cru SRST_HDMI_P>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+index 002ece51c3ba..08fa00364b42 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+@@ -439,6 +439,12 @@
+ };
+ 
+ &sdhci {
++	/*
++	 * Signal integrity isn't great at 200MHz but 100MHz has proven stable
++	 * enough.
++	 */
++	max-frequency = <100000000>;
++
+ 	bus-width = <8>;
+ 	mmc-hs400-1_8v;
+ 	mmc-hs400-enhanced-strobe;
 -- 
 2.34.1
 

@@ -2,118 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9AD4DCF96
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD9B4DCFA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiCQUnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S229908AbiCQUrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 16:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiCQUnf (ORCPT
+        with ESMTP id S229887AbiCQUrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:43:35 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6ECE11BE43
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647549734; x=1679085734;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ZPJPlyM9zhjOGH64p0/EhU5dIkf9pGM8NWxT3n0sIXg=;
-  b=iMJ7nwsHbScFB0oadF1EILOmr4ye6YyzpNQaXI83u4NhIejmi149FVkb
-   GVwmWHDKafcJv22MlcQNI7EG6+gyZNSnXogwkwQOmS9WTUtDl5gzDhorD
-   OVM5gyFZI5+6qTM6COleQj3qa0vDLV2FHb58r06fI6+eBH2qVgSde+nOX
-   MajvTmr2j9tWm253HaLyhtpoui+eutNlnvbNWWiYu7MMzHQwohruCDafY
-   N05xUVQetyf7/aN4u73P8tZmYRRrCsnc6DYA788LAGG/NdcuJJWifdTJ9
-   7Yl+d9owJhg6nQeN9KJMvt3J3Dpb3+UhdjwjcVmYRZXpjdzSr4MWUj6cD
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="254534171"
-X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
-   d="scan'208";a="254534171"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 13:42:14 -0700
-X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
-   d="scan'208";a="599237997"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 13:42:14 -0700
-Date:   Thu, 17 Mar 2022 13:45:30 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Jason Gunthorpe" <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>, jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v2 4/8] iommu/vt-d: Use device_pasid attach op for
- RID2PASID
-Message-ID: <20220317134530.36321009@jacob-builder>
-In-Reply-To: <BN9PR11MB52766909013F9CC71A61369C8C119@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
-        <20220315050713.2000518-5-jacob.jun.pan@linux.intel.com>
-        <BN9PR11MB52766909013F9CC71A61369C8C119@BN9PR11MB5276.namprd11.prod.outlook.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Thu, 17 Mar 2022 16:47:02 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACCA19D61A;
+        Thu, 17 Mar 2022 13:45:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647549944; x=1679085944;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hl8P+qRLRH8B9uYa1kVh8yuL9rMFyQViq9H9Yb65PJM=;
+  b=vE5TOZz1Gk0i3j52GTzgvr0DXUksiyaTynqh4zMNIn2x7iUQqk8rjOvu
+   dlcbNnSjNg5duqEApe10Ny1h5BosQa4ipCbxAFsxfcyTHBTcgT6YR9XES
+   EwqDy6BZoNgc3plVpljsxsvkD2XZkFhbe8WP6fTJxifkP2YIc26LeaBBX
+   k=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 17 Mar 2022 13:45:44 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 13:45:42 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 17 Mar 2022 13:45:42 -0700
+Received: from [10.216.15.137] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 17 Mar
+ 2022 13:45:37 -0700
+Message-ID: <3b066b63-c180-09c6-e39f-b408464b5bc1@quicinc.com>
+Date:   Fri, 18 Mar 2022 02:15:34 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [Freedreno] [PATCH 3/3] drm/msm/gpu: Remove mutex from wait_event
+ condition
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, <dri-devel@lists.freedesktop.org>
+CC:     Rob Clark <robdclark@chromium.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>,
+        <linux-arm-msm@vger.kernel.org>,
+        "Vladimir Lypak" <vladimir.lypak@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sean Paul <sean@poorly.run>, Daniel Vetter <daniel@ffwll.ch>,
+        <freedreno@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+References: <20220310234611.424743-1-robdclark@gmail.com>
+ <20220310234611.424743-4-robdclark@gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <20220310234611.424743-4-robdclark@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
+On 3/11/2022 5:16 AM, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+>
+> The mutex wasn't really protecting anything before.  Before the previous
+> patch we could still be racing with the scheduler's kthread, as that is
+> not necessarily frozen yet.  Now that we've parked the sched threads,
+> the only race is with jobs retiring, and that is harmless, ie.
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>   drivers/gpu/drm/msm/adreno/adreno_device.c | 11 +----------
+>   1 file changed, 1 insertion(+), 10 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> index 0440a98988fc..661dfa7681fb 100644
+> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
+> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> @@ -607,15 +607,6 @@ static int adreno_runtime_resume(struct device *dev)
+>   	return gpu->funcs->pm_resume(gpu);
+>   }
+>   
+> -static int active_submits(struct msm_gpu *gpu)
+> -{
+> -	int active_submits;
+> -	mutex_lock(&gpu->active_lock);
+> -	active_submits = gpu->active_submits;
+> -	mutex_unlock(&gpu->active_lock);
+I assumed that this lock here was to ensure proper barriers while 
+reading active_submits. Is that not required?
 
-On Wed, 16 Mar 2022 07:54:19 +0000, "Tian, Kevin" <kevin.tian@intel.com>
-wrote:
+-Akhil.
+> -	return active_submits;
+> -}
+> -
+>   static int adreno_runtime_suspend(struct device *dev)
+>   {
+>   	struct msm_gpu *gpu = dev_to_gpu(dev);
+> @@ -669,7 +660,7 @@ static int adreno_system_suspend(struct device *dev)
+>   	suspend_scheduler(gpu);
+>   
+>   	remaining = wait_event_timeout(gpu->retire_event,
+> -				       active_submits(gpu) == 0,
+> +				       gpu->active_submits == 0,
+>   				       msecs_to_jiffies(1000));
+>   	if (remaining == 0) {
+>   		dev_err(dev, "Timeout waiting for GPU to suspend\n");
 
-> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > Sent: Tuesday, March 15, 2022 1:07 PM
-> > 
-> > With the availability of a generic device-PASID-domain attachment API,
-> > there's no need to special case RID2PASID.  Use the API to replace
-> > duplicated code.
-> > 
-> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > ---
-> >  drivers/iommu/intel/iommu.c | 18 ++----------------
-> >  1 file changed, 2 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> > index 9267194eaed3..f832b7599d21 100644
-> > --- a/drivers/iommu/intel/iommu.c
-> > +++ b/drivers/iommu/intel/iommu.c
-> > @@ -1683,9 +1683,6 @@ static void domain_flush_piotlb(struct
-> > intel_iommu *iommu,
-> >  		qi_flush_piotlb(iommu, did, domain->default_pasid,
-> >  				addr, npages, ih);
-> > 
-> > -	if (!list_empty(&domain->devices))
-> > -		qi_flush_piotlb(iommu, did, PASID_RID2PASID, addr,
-> > npages, ih);
-> > -  
-> 
-> this should be rebased on top of Baolu's "iommu cleanup and refactoring"
-> series which has removed the entire domain_flush_piotlb().
-> 
-Yes, I have been working with Baolu. Some of the refactoring patches were
-withdrawn, so there are lots of moving targets. 
-
-Thanks,
-
-Jacob

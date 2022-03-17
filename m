@@ -2,132 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CE04DC97B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3426F4DC984
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235599AbiCQPD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 11:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
+        id S235609AbiCQPFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 11:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbiCQPD0 (ORCPT
+        with ESMTP id S231290AbiCQPFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 11:03:26 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0F4203A58;
-        Thu, 17 Mar 2022 08:02:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647529330; x=1679065330;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=igAx1K+VLoM7S36/is1LCPa675eznCJ8RDhWohRr6r4=;
-  b=PJC37VU3CDdCIgwbEsP6JOBzyrW5AWAuawqJeRZFEP5SfJHwqKJegEhI
-   fKJGY4Z7DzBgTtu3z5w6IruKk6w8PIGPRTioS+36PTTI/T8VWdrqUFYxF
-   E5gQZTVzyprgyUpPJJ5qqMlNw1c/k7R17lnu7VEqSRoe4Vxae9Ghx+u/S
-   l6RfC2Gr2tgUT7zxOxQbTukULkRu5sxB5SQ5TWOhgNml5VXUVyHqJujtk
-   bMChMt6zlRXklBz7Vri1WBjhKoiKW6degK+ns7XFjEAHLmU0MsfIzfEtj
-   Rnt8hqqQy+Is9WQfkqLbuUTTArZWq1HDjV7rNOI8DpsqWi2zB4/m2/szd
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="257070424"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="257070424"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 08:01:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="635386809"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Mar 2022 08:01:25 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUrcz-000DmU-8s; Thu, 17 Mar 2022 15:01:25 +0000
-Date:   Thu, 17 Mar 2022 23:00:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, broonie@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        ashishsingha@nvidia.com
-Cc:     kbuild-all@lists.01.org, skomatineni@nvidia.com,
-        ldewangan@nvidia.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: Re: [PATCH 1/3] spi: tegra210-quad: Multi-cs support
-Message-ID: <202203172241.iGAq0qeH-lkp@intel.com>
-References: <20220317012006.15080-2-kyarlagadda@nvidia.com>
+        Thu, 17 Mar 2022 11:05:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 701F3F1AF8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 08:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647529424;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aa1jAvfCIcTnLm2lUoV2mmz4eiiaEOLiyUm5zpRdIXk=;
+        b=RRSYGFXysvlLOQrsC8WcdVp7xVWcncxpKH1Lbn2KfpOgiuLxKA2iGbOZOMNhu6ekZk+aF9
+        GW+8BjFLNwVXnN7N8AfCX14MYd/0ckhzSqJtLADX1xBdRUjKcBL0hk6fHtgiZXCRKuLorI
+        dQT110SIDGIltWbG4YPvMymSndwc/NI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-144-1uKE53VaO8eu6i448SukJw-1; Thu, 17 Mar 2022 11:03:43 -0400
+X-MC-Unique: 1uKE53VaO8eu6i448SukJw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0AF02805A30;
+        Thu, 17 Mar 2022 15:03:42 +0000 (UTC)
+Received: from [10.22.33.180] (unknown [10.22.33.180])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 98BEC401E6F;
+        Thu, 17 Mar 2022 15:03:40 +0000 (UTC)
+Message-ID: <364c72a9-64ca-592a-510b-d48a963121aa@redhat.com>
+Date:   Thu, 17 Mar 2022 11:03:40 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317012006.15080-2-kyarlagadda@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/5] asm-generic: ticket-lock: New generic ticket-based
+ spinlock
+Content-Language: en-US
+To:     Boqun Feng <boqun.feng@gmail.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     linux-riscv@lists.infradead.org, peterz@infradead.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, mingo@redhat.com, Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        Arnd Bergmann <arnd@arndb.de>, jszhang@kernel.org,
+        wangkefeng.wang@huawei.com, openrisc@lists.librecores.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20220316232600.20419-1-palmer@rivosinc.com>
+ <20220316232600.20419-3-palmer@rivosinc.com>
+ <YjM+P32I4fENIqGV@boqun-archlinux>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YjM+P32I4fENIqGV@boqun-archlinux>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krishna,
+On 3/17/22 09:57, Boqun Feng wrote:
+> On Wed, Mar 16, 2022 at 04:25:57PM -0700, Palmer Dabbelt wrote:
+>> From: Peter Zijlstra <peterz@infradead.org>
+>>
+>> This is a simple, fair spinlock.  Specifically it doesn't have all the
+>> subtle memory model dependencies that qspinlock has, which makes it more
+>> suitable for simple systems as it is more likely to be correct.
+>>
+>> [Palmer: commit text]
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> --
+>>
+>> I have specifically not included Peter's SOB on this, as he sent his
+>> original patch
+>> <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>
+>> without one.
+>> ---
+>>   include/asm-generic/ticket-lock-types.h | 11 ++++
+>>   include/asm-generic/ticket-lock.h       | 86 +++++++++++++++++++++++++
+>>   2 files changed, 97 insertions(+)
+>>   create mode 100644 include/asm-generic/ticket-lock-types.h
+>>   create mode 100644 include/asm-generic/ticket-lock.h
+>>
+>> diff --git a/include/asm-generic/ticket-lock-types.h b/include/asm-generic/ticket-lock-types.h
+>> new file mode 100644
+>> index 000000000000..829759aedda8
+>> --- /dev/null
+>> +++ b/include/asm-generic/ticket-lock-types.h
+>> @@ -0,0 +1,11 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +
+>> +#ifndef __ASM_GENERIC_TICKET_LOCK_TYPES_H
+>> +#define __ASM_GENERIC_TICKET_LOCK_TYPES_H
+>> +
+>> +#include <linux/types.h>
+>> +typedef atomic_t arch_spinlock_t;
+>> +
+>> +#define __ARCH_SPIN_LOCK_UNLOCKED	ATOMIC_INIT(0)
+>> +
+>> +#endif /* __ASM_GENERIC_TICKET_LOCK_TYPES_H */
+>> diff --git a/include/asm-generic/ticket-lock.h b/include/asm-generic/ticket-lock.h
+>> new file mode 100644
+>> index 000000000000..3f0d53e21a37
+>> --- /dev/null
+>> +++ b/include/asm-generic/ticket-lock.h
+>> @@ -0,0 +1,86 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +
+>> +/*
+>> + * 'Generic' ticket-lock implementation.
+>> + *
+>> + * It relies on atomic_fetch_add() having well defined forward progress
+>> + * guarantees under contention. If your architecture cannot provide this, stick
+>> + * to a test-and-set lock.
+>> + *
+>> + * It also relies on atomic_fetch_add() being safe vs smp_store_release() on a
+>> + * sub-word of the value. This is generally true for anything LL/SC although
+>> + * you'd be hard pressed to find anything useful in architecture specifications
+>> + * about this. If your architecture cannot do this you might be better off with
+>> + * a test-and-set.
+>> + *
+>> + * It further assumes atomic_*_release() + atomic_*_acquire() is RCpc and hence
+>> + * uses atomic_fetch_add() which is SC to create an RCsc lock.
+>> + *
+> Probably it's better to use "fully-ordered" instead of "SC", because our
+> atomic documents never use "SC" or "Sequential Consisteny" to describe
+> the semantics, further I'm not sure our "fully-ordered" is equivalent to
+> SC, better not cause misunderstanding in the future here.
 
-Thank you for the patch! Yet something to improve:
+The terms RCpc, RCsc comes from academia. I believe we can keep this but 
+add more comment to elaborate what they are and what do they mean for 
+the average kernel engineer.
 
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on next-20220316]
-[cannot apply to v5.17-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Cheers,
+Longman
 
-url:    https://github.com/0day-ci/linux/commits/Krishna-Yarlagadda/spi-tegra-quad-Add-Tegra-Grace-features/20220317-092247
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20220317/202203172241.iGAq0qeH-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/38ff812651f89adc738066112000ec32eb73d106
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Krishna-Yarlagadda/spi-tegra-quad-Add-Tegra-Grace-features/20220317-092247
-        git checkout 38ff812651f89adc738066112000ec32eb73d106
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/spi/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/spi/spi-tegra210-quad.c:1497:49: error: 'th500_qspi_soc_data' undeclared here (not in a function); did you mean 'tegra_qspi_soc_data'?
-    1497 |                 .driver_data = (kernel_ulong_t)&th500_qspi_soc_data,
-         |                                                 ^~~~~~~~~~~~~~~~~~~
-         |                                                 tegra_qspi_soc_data
-
-
-vim +1497 drivers/spi/spi-tegra210-quad.c
-
-  1483	
-  1484	#ifdef CONFIG_ACPI
-  1485	static const struct acpi_device_id tegra_qspi_acpi_match[] = {
-  1486		{
-  1487			.id = "NVDA1213",
-  1488			.driver_data = (kernel_ulong_t)&tegra210_qspi_soc_data,
-  1489		}, {
-  1490			.id = "NVDA1313",
-  1491			.driver_data = (kernel_ulong_t)&tegra186_qspi_soc_data,
-  1492		}, {
-  1493			.id = "NVDA1413",
-  1494			.driver_data = (kernel_ulong_t)&tegra234_qspi_soc_data,
-  1495		}, {
-  1496			.id = "NVDA1513",
-> 1497			.driver_data = (kernel_ulong_t)&th500_qspi_soc_data,
-  1498		},
-  1499		{}
-  1500	};
-  1501	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

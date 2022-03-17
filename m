@@ -2,106 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4004E4DC582
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BD04DC57C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233380AbiCQMIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
+        id S233407AbiCQMGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiCQMIQ (ORCPT
+        with ESMTP id S231928AbiCQMGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:08:16 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06ED1D4C13;
-        Thu, 17 Mar 2022 05:06:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1647518763;
-        bh=FvAOnwGgm6mSzo4GWwbSbtaPsT3+hToFjrf6jLKI3b8=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Mrd5vzWfzAzg7upBL2NOum5ESRYqII4I7LB5+xCbu7zbeJY72xXm/4wnCf2Vdv7yp
-         8RnGN798Lzhv2zIEvf8XnzN1IQAaTbHHnYWyH/BP90OEBQqNNN4lFVowp+PC5VaZVN
-         qVmFcKpo7juvb+9R9dWAkzyIQoH7TPf/QiFA1uUs=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfHEP-1o19yD3EMd-00gssK; Thu, 17
- Mar 2022 13:06:02 +0100
-Date:   Thu, 17 Mar 2022 13:05:54 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Michael Walle <michael@walle.cc>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Bert Vermeulen <bert@biot.com>,
-        John Crispin <john@phrozen.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Suman Anna <s-anna@ti.com>, Lokesh Vutla <lokeshvutla@ti.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, openbmc@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-oxnas@groups.io
-Subject: Re: [PATCH 14/18] dt-bindings: irqchip: nuvoton,wpcm450-aic: include
- generic schema
-Message-ID: <YjMkIkaMD4aXW4p3@latitude>
-References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
- <20220317115705.450427-13-krzysztof.kozlowski@canonical.com>
+        Thu, 17 Mar 2022 08:06:38 -0400
+Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D421A6E6A;
+        Thu, 17 Mar 2022 05:05:20 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KK5SH2RZ2zMqNN2;
+        Thu, 17 Mar 2022 13:05:19 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KK5SG3DNhzlhSMF;
+        Thu, 17 Mar 2022 13:05:18 +0100 (CET)
+Message-ID: <ebf1f65c-c0eb-c818-e3e4-46ad9292bdec@digikod.net>
+Date:   Thu, 17 Mar 2022 13:06:02 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6We2K2LccY5TYmIH"
-Content-Disposition: inline
-In-Reply-To: <20220317115705.450427-13-krzysztof.kozlowski@canonical.com>
-X-Provags-ID: V03:K1:HgL/c7y20/2o06wU7DUbHTGm2dtdKvONyD2DCEUDcT19aKB9dp/
- 4YFswLqVeUacbJfuaUDINBhpX8w3EAd6v+d4BzRlu0XisSUP17PNuWg/7WN/pvmXHwcLhw9
- f4fq2mw5u+m5ub1UFpJm0YNLy237jEHwhPjQxCZUJ3KWdkHY3PtDNxdr4n9t/F25/ik6h9M
- JcWSfb1x/nlLhWFmAaahQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Q+LaKt2UmKs=:OOCnDGzegq7M4POFDUWR4b
- M7csAE3emHW6sJoi+gtTJIMwzgN+Ow+9Nt4CL/4QdsUnbrvl6FfU09hizYzSvEbtmPklO99ap
- SjjPAHFGB6621T7B55di6QPcgLDFQUXK3tw+a2zeB00U9ijpUWWAlrd+KvzKhu9QnpACnatEn
- e0InZ2dITD8ae/tJ3bxreUEbEysNjf/WeUnmbz3Q7olzEIaiKh8qN0uJxjfBUXDjXqiCWTspP
- KxK8nEUG9hXMbI3oQ7wNwalMarGKFDlCwAFodPp0eAGNlNAU8J/Ee4d9wYAVFxTjwNKOgSpsn
- 3FUpyE7Uh2bRsibCBetlUjV20Ps/9Fq25jBodwt+QiEgDCq68M0T/HBprD/j08dCu7tgj5OOW
- +iBcP8m9X8CP2UYG7gXOKTCqVf5HFI99GAJ6DrvnVOlVaI5udZfWY485qmUZhZ5iBYipb1vAh
- 2Vj+8UdkO8A+w3TzocjW9InzwT0NdkCQpVZDjjwDbmpU53zIpct7/TZAwWr7/2D9sIp/SraMM
- rqAUQbPBEQFKsFNxDwRDifg4x4V+S/e7d0vaqIJGHY0FmEN8kQSpSU62mXfjapbft3OfaK3B9
- k6wxO0MXZYzYKONEPWvVU/IBPPIKxDoWMEyaMvb4V2zWoQlQbzOUZqQBLCBdKLLEmxu2xhYuj
- lcedH/Z8K/h8ctpENTCkzJmPmRNFWgNHvLE9fjwYF/w3ANCm76XdAEjQPPYZaLceFg2exs/Kc
- VMU7W4zqdO9hbpQkyFVecUgjvQJfvQghIk32+Hi1xlwgrK+37ne91k1/tnHfrMLZGQkg1650Q
- SmoN4Y7j9Uz/mbTROEqvASzxjOayimJMBQDKCHhkaM0/rW/PJwsabtmYH5YOyeXnHCnHyn18t
- ARwSlMVdGg6djVHg8TnK85kyvqjGSQ7xSfLTkQJ5gdqRbUlASCJt9p49BAAF3bWgTj/4eHMZJ
- p4qnimyKYT1jcZmZtmc32m/MmClphx33oBtSPt1Ux/MI6PSyiLbK8oC061wAUbgfLXpqWbhI/
- 1IHaDPvocdBDAUmVTrMgzWsGRJvhvaWU2GzwTcWKppO5gQb81i56C0EZKylcDKUuGCXQzVCkV
- qWMwg/tfQIUG8I=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: 
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
+References: <20220221212522.320243-1-mic@digikod.net>
+ <20220221212522.320243-10-mic@digikod.net>
+ <CAHC9VhSmz1ga5NTu=vG3+Z+gxD8C+-W+k5UweUROe2p4BfjSTg@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH v1 09/11] landlock: Document LANDLOCK_ACCESS_FS_REFER and
+ ABI versioning
+In-Reply-To: <CAHC9VhSmz1ga5NTu=vG3+Z+gxD8C+-W+k5UweUROe2p4BfjSTg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -109,81 +56,75 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---6We2K2LccY5TYmIH
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 17/03/2022 02:27, Paul Moore wrote:
+> On Mon, Feb 21, 2022 at 4:15 PM Mickaël Salaün <mic@digikod.net> wrote:
+>>
+>> From: Mickaël Salaün <mic@linux.microsoft.com>
+>>
+>> Add LANDLOCK_ACCESS_FS_REFER in the example and properly check to only
+>> use it if the current kernel support it thanks to the Landlock ABI
+>> version.
+>>
+>> Move the file renaming and linking limitation to a new "Previous
+>> limitations" section.
+>>
+>> Improve documentation about the backward and forward compatibility,
+>> including the rational for ruleset's handled_access_fs.
+>>
+>> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+>> Link: https://lore.kernel.org/r/20220221212522.320243-10-mic@digikod.net
+>> ---
+>>   Documentation/userspace-api/landlock.rst | 124 +++++++++++++++++++----
+>>   1 file changed, 104 insertions(+), 20 deletions(-)
+> 
+> Thanks for remembering to update the docs :)  I made a few phrasing
+> suggestions below, but otherwise it looks good to me.
 
-On Thu, Mar 17, 2022 at 12:57:01PM +0100, Krzysztof Kozlowski wrote:
-> Include generic interrupt-controller.yaml schema, which enforces node
-> naming and other generic properties.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
+Thanks Paul! I'll take them.
 
-Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
 
->  .../bindings/interrupt-controller/nuvoton,wpcm450-aic.yaml | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/nuvot=
-on,wpcm450-aic.yaml b/Documentation/devicetree/bindings/interrupt-controlle=
-r/nuvoton,wpcm450-aic.yaml
-> index 9ce6804bdb99..285c20de0962 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/nuvoton,wpcm=
-450-aic.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/nuvoton,wpcm=
-450-aic.yaml
-> @@ -9,6 +9,9 @@ title: Nuvoton WPCM450 Advanced Interrupt Controller bind=
-ings
->  maintainers:
->    - Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> =20
-> +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
-> +
->  properties:
->    '#interrupt-cells':
->      const: 2
-> @@ -21,14 +24,14 @@ properties:
->    reg:
->      maxItems: 1
-> =20
-> -additionalProperties: false
-> -
->  required:
->    - '#interrupt-cells'
->    - compatible
->    - reg
->    - interrupt-controller
-> =20
-> +unevaluatedProperties: false
-> +
->  examples:
->    - |
->      aic: interrupt-controller@b8002000 {
-> --=20
-> 2.32.0
->=20
-
---6We2K2LccY5TYmIH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmIzJAAACgkQCDBEmo7z
-X9uWABAAyCJBDe/oJqNtFTHpiAaREvkhvc/p2FA+LYL7rx1AakR0loGpsK2LPJKZ
-zyaXqwnn/eM43JdcpN8IiOu4hcrpBZ3IYwvdbBbCyvhTruAxgCYyeVCzYTiaDvl1
-viiR1Nrne+v9WIV5+6wQzU3SCXIIZFHR8NTDoYjIwQm+Kk/0iIgp31Fir5/1Gxne
-qkFkHNxsTyuV+lhXPPxR4Ckws+DBAhSAoD7Z93Fz3Wxe8dvwSqCm9bdrRwBI3FoN
-PMsK68P8HY8UjfJaShm1YCmiHAVVXCuVtPhv8t5qYk9QRRnwR9PMmsWBZUWJ5/X3
-PVc+U61swOpCcjekpEqCaANNOIj5gGegG7TyOfFKMvjQg007dOXkrVneZY6LWct7
-bBz9YqPvobcqXgQ65kY3hZN31F7NbK1NqEN1Y6uuEPzWBh63rSQusXuOMXYqIg2W
-gX43E6GEAfZODJErtwXdF2GQOnaK0VcnHHVzn2xO7n2ygXXtgh5Ty7t/wAAV34Li
-cUeL3a5B0drHBT4SHGGGyDGtgar4gfoUQuMWipQo3in/puaUPwK0ZdpEHxRuy5lJ
-B1OlCMRiBAm4TeGr3uAo5xEnCagPAYOQnX5YuGF4LXgWKtBNvrbMekA8MtNg2jTz
-nsyloA9vu5b6xYWcBOych0jIGJqubGCUmTLG5/AYXoAZfWTm8Js=
-=eXJh
------END PGP SIGNATURE-----
-
---6We2K2LccY5TYmIH--
+> 
+> Reviewed-by: Paul Moore <paul@paul-moore.com>
+> 
+>> diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
+>> index f35552ff19ba..97db09d36a5c 100644
+>> --- a/Documentation/userspace-api/landlock.rst
+>> +++ b/Documentation/userspace-api/landlock.rst
+>> @@ -281,6 +347,24 @@ Memory usage
+>>   Kernel memory allocated to create rulesets is accounted and can be restricted
+>>   by the Documentation/admin-guide/cgroup-v1/memory.rst.
+>>
+>> +Previous limitations
+>> +====================
+>> +
+>> +File renaming and linking (ABI 1)
+>> +---------------------------------
+>> +
+>> +Because Landlock targets unprivileged access controls, it is needed to properly
+>                                                            ^^^^^
+>                                             "... controls, it needs to ..."
+> 
+>> +handle composition of rules.  Such property also implies rules nesting.
+>> +Properly handling multiple layers of ruleset, each one of them able to restrict
+>                                          ^^^^^^^
+>                                        "rulesets,"
+> 
+>> +access to files, also implies to inherit the ruleset restrictions from a parent
+>                                   ^^^^^^^^^^
+>                      "... implies inheritance of the ..."
+> 
+>> +to its hierarchy.  Because files are identified and restricted by their
+>> +hierarchy, moving or linking a file from one directory to another implies to
+>> +propagate the hierarchy constraints.
+> 
+> "... one directory to another implies propagation of the hierarchy constraints."
+> 
+>> +                                     To protect against privilege escalations
+> 
+>> +through renaming or linking, and for the sake of simplicity, Landlock previously
+>> +limited linking and renaming to the same directory.  Starting with the Landlock
+>> +ABI version 2, it is now possible to securely control renaming and linking
+>> +thanks to the new `LANDLOCK_ACCESS_FS_REFER` access right.
+> 
+> --
+> paul-moore.com

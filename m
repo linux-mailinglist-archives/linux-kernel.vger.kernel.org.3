@@ -2,148 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759544DC1AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 255094DC1BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbiCQIp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 04:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
+        id S231146AbiCQIrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 04:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbiCQIpy (ORCPT
+        with ESMTP id S230447AbiCQIrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 04:45:54 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90088.outbound.protection.outlook.com [40.107.9.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBAE1C9478
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:44:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZMqyzN23mXefcz/jWV3toJXHgJ/prCu/MDcMDUpgROwz/jmt6D9RJZXYN/AUIqUBd1V3MhDL2Fo4Zc8hbcgjQuNkt8+ZlP7J7cME1/9F+YfelRW6lzj+zwSIE0AYtJ+X49n1xvokqrK0QJWSYUQfUPitfma4Sy/bsYvpzfWwXj6eRzjeoGSw5IDsSe1n3Iwe/ors2r/xEAcLPQLCksFg3Xmc1oFuZ3kbi1U4Vs9CG1Wm6/UbZUvRhqtXLU/93uvLY8fVAJIDwO9IeLPDLv1Meb6T95SA3oyHUG8wgdnKl35iYCeG+IZoxlMEFIPK0CgH7XTc0qmE53jRaLHsfTwvRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=00MoNrRCPLZJKGw86ANVTCZg1RGgi/7fCXHIhCl+pD0=;
- b=g8Ydv3v8Dr6qdMS68ycTGJ6D9cJaxA7olsPny2aW9Tm5FUfYAvOlx7ZQCjDzl+qKB7EThx3OimdZdZVQvdWHqxfTmMZ1bHmvbhU835z99Xo2Aj5Up4UqMjTpSPW2gFDjUeiIQZ3H4AB2iskW1rpZCJquo14Lueg3u3dBM/DMtd1a5j1j1bIEBqOb6Nq2xHaHjbz+czK+1L3s2xjYHAAy1SMTj9wOWPjetbV+PO+9tRG050F05HrWJSQQsJWMijLydHTnbwmqPmfltA480ckzC8w/V319npz95xBFRv1iKMjyMYCXkcQNItRX+Ji2QTkvXC2DLCzWPTw4zVhfyn06fg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB1898.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:16f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Thu, 17 Mar
- 2022 08:44:34 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d%6]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
- 08:44:34 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Haowen Bai <baihaowen@meizu.com>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "adobriyan@gmail.com" <adobriyan@gmail.com>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] macintosh: via-cuda: Fix warning comparing pointer to 0
-Thread-Topic: [PATCH] macintosh: via-cuda: Fix warning comparing pointer to 0
-Thread-Index: AQHYOantEDPE51ge90O2ls+FnF/Gx6zDQx0A
-Date:   Thu, 17 Mar 2022 08:44:34 +0000
-Message-ID: <e2cec39d-fce4-9181-63fb-fde90f1f9a86@csgroup.eu>
-References: <1647484837-14352-1-git-send-email-baihaowen@meizu.com>
-In-Reply-To: <1647484837-14352-1-git-send-email-baihaowen@meizu.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 22032bd9-512f-4aca-a795-08da07f25cb1
-x-ms-traffictypediagnostic: PR0P264MB1898:EE_
-x-microsoft-antispam-prvs: <PR0P264MB18987414E38965FC69687C81ED129@PR0P264MB1898.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NLgwE9rWVhdg0D4/Li9BOTpN2ArZWnCe9Jb46E9USkGtAZ6RKIlkVIUnkgIpn2Cz+aStdvwjNqr7rDPc1bxqBu8GdeD7SBUTHst66hm2K1goRq5stKqYee3ltehYxoyl68LZmwKoEBsir8opIElBXMDCbciUOJYyuOY689H1QGdNE19AGYwKxuaD/k/e5MZhRgu2d/TjYV8BcAXEsriPVpBvZv22vJOSsVzNYubTH1sF03vfuDEUdohf2N/UADS/te7ZBiNJ2xoMmomCHkPUXsXRDh8TL8/tVvUzfSDNziqlNsDYfT67ONqkvgdaH3EfCpTRztFBNLZ7n8ZMeOkdplQVlAXnQe5Me7zVnLyD/cqVd+EJazoTT85vstYfXlwWzI987BTwR9jwlX6SpeNkgrgik0eNqGi2SZuTxBajepqsYlsGZHTHgcolgDZNmbVaFS0ynSxKnEpM+PV/V1LzQ8Dph7R1foSo+KjJAHaFxWH9r4Fw+xVEb09lpbwwKmkMT05Puin5O9MCjfcDjzwllqSGHQklcsIWz0rv0eFiYQLYgtOZyMzmKHenvlpbS7KQeW6HhyOhtLvcwbik05vzPVQ++MOYVU3j8WA01mrW3gJuPK2pgR9JRf92+4dvLPK/I9C+fLv8/Pb9X1OBtUaW93dfbfeC8fhJCkmDDdpYvgnc4oECM8udSisM2JU8D2qo0FCmJ+5BPYf/JbqBKawWihS02GFIqn1v8G1YUT6QkbXzFBuD1+rh8xE2J1NKit4Z8vQ7yYdHR+J5mZf0fKNo8J4abnCOyQh0fPCMLxW4tVrC5j5zYAJbArBWLtA2obkfB7cbtfDy6mPH/zCDVDce+xFMrR6BQ2HmpZH6OQANw0k=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(8676002)(64756008)(4326008)(38100700002)(6512007)(2616005)(6506007)(76116006)(66446008)(66476007)(66946007)(2906002)(71200400001)(66556008)(38070700005)(8936002)(508600001)(66574015)(44832011)(6486002)(966005)(31696002)(86362001)(5660300002)(316002)(186003)(83380400001)(26005)(110136005)(36756003)(54906003)(31686004)(91956017)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bDVKSjAyQVVlYkd2empIb2doNVBSamxPOUIzRWhFUldNYTI1ckwvOE92RWRM?=
- =?utf-8?B?RmV5eVBsMjZQRHBIcnpKVWplSmF2TU5GbDZJSmtMSEcyODlCL1ZXZ0ZFeW5u?=
- =?utf-8?B?aDh1cXhxUytua1FNdy9FOXF3K1FmSFAxWmxxZXo3U1VEQXA5V3RYZS9MQnk1?=
- =?utf-8?B?UFNhcHo0alZyVHVNZnVaQ0g4cnhaYnFjOGRZUTJLNFhIeUZtNlNpOWhxUWZr?=
- =?utf-8?B?NENvZjA1ZFhFSDZDUzVZVUNzSlp3MnVTTXVhcnhMbTRnVkcyV3dCcWpCV2NZ?=
- =?utf-8?B?SjhtbGtWbFFlUElCT2tydk1JaUsrN01SOEo1Mm9xcHZVcEF2WWpTUjIrN3o5?=
- =?utf-8?B?ZENHNmRxSElPbSt1eGh3em1GL1pFdVNlVGFzUytjWnMwSnY1VjZVRTUvQ2l5?=
- =?utf-8?B?Qmd1WDNwVVY0ZHNUbDBQaEFFNDZXakUxczFXMWwzUmtDa28zUXBZeStEaUZQ?=
- =?utf-8?B?cHNFQW96K1ZYRk1wYWRZL1YrWUF5RmpxQXlTM3A4N3dOdWdKRGJwQXV6Qklt?=
- =?utf-8?B?cmdWQVZqdllZQ1A2d01BMDk4VVppK0E3bjN5VGt6bTVVcVFOMXkxUXU4TjJh?=
- =?utf-8?B?dTRma04vS0dvYnJZQ0xQaW84dkhnZjE1czE1eGxuaDZlTG54VzcrQy85U1JD?=
- =?utf-8?B?V3NCKzEva1NleFdLU3BrTVp2SmlMMko1SlJ5aUhESU9PUWxMeXpSYks4ellP?=
- =?utf-8?B?dGhubHZCZC9hL1o0c1JqK2gvM0xFakpPSFVLMlprUWFpYklaVnl1ZHZzUFQ1?=
- =?utf-8?B?U2o0bnIvTkdnUmNPTWF2YkJJUlU0dzBLRWs1NG0xT3YrYlVnaHZSRFI5QU16?=
- =?utf-8?B?WWxxT0drNGNmODY0dW9NYkg2Q0dUN0gyNjlnUzdyNEdLLzFaSXlqMGIwZGhk?=
- =?utf-8?B?MUQzb0g3ZHFBOWUzVFZUVjRsd216Q3BuOUxDMlJFNjRveVpqMFdBZ1lOR3Fq?=
- =?utf-8?B?enYrTkE1N0d3dEpaV2xjOVFnWWFjREtVUVpibVU4N1R2bThiSkR6aytnT2VS?=
- =?utf-8?B?WUNqOHZhcWxUa3MwY0dYOHEySnRPQnQ1VUN3RXNxOXczUUZsakxibGhtYWth?=
- =?utf-8?B?RnpIZmJhWi83bjVTM3VwdzlGRlFBdnE4Z3pJSDJlQ2FkQW9FNFFnMmR6NU9L?=
- =?utf-8?B?VnpiOUxKMjlheldvMmJzMUF5dVpSZzluUFhzVGF2OWJ3K29RK1hBbHhxSUc3?=
- =?utf-8?B?NmVkOFlGZUNJRWowOFUrYTMxMjV6Tlo2ZWJ5RHE5NWpTYjFhSWYycm9qZ1J4?=
- =?utf-8?B?WmZ3QTlIcWdCMjgxZXpKc0J1dVJEYlp4Zy9LUENkWEk5dG9IeUZWUGt3U005?=
- =?utf-8?B?YU9uNVBGZjdQdk5qUFBiS1ZLYXEwUzNsV0dUK3d2NUFFZlRlV3BHeVdERDcr?=
- =?utf-8?B?Z3JnK2dOMUN3NkpnWGdVdzF2NE4ybUlYbFVPTU1RTE92RHdQTzd3NnJIVnNl?=
- =?utf-8?B?eEV1ZW5sYlprb0xORUR3R3JWMDVYNFU3WjFpWHB1bGFrUXYreE96WGpuTUlY?=
- =?utf-8?B?VjRKV3JWNVJqd2ltbVpRb0ZwcXZRUnRFcys0TFVYeVJra1Q3VS9yM3hOWmxK?=
- =?utf-8?B?Vjl2MXl4RzJnZGY3TTE5RlE5aGFKNkoxM3ptOG9KTnFSSVB5UzkzSW5uSUZC?=
- =?utf-8?B?b200L2RNeUkvYWdJaExTZGptYWoyNWNhQy9aY0dIQ3FtWXdySjhQSGZNVXcy?=
- =?utf-8?B?ZmNjTDVuemV4UU8xS2hzS1RHek5Da1NyZ0tJQkd5QzhYZUt6Q1Y2UmZwUUNp?=
- =?utf-8?B?Sm90NFFsalA1c1dGZ2MzMGZseGw2aXp6bzBGRnl5Nmt2VlJua0t4RGs0dHJJ?=
- =?utf-8?B?bUJOZENKTVlvckJNUmxBQnZ4dFBSdEsrSEZjemFVTGhNZlNZaURiZlZIT2Ux?=
- =?utf-8?B?WmRNQktLdnFHdVRaRnJWVTgvRW5XcEV0RWx4V1phQnJkVFVybjdtUDN2alhE?=
- =?utf-8?B?NUQwbi9Bem5LTjNmczlMR1NPcWlzNDU5dU03NTc4OXJxZnRhRzZzTVVrT2Fz?=
- =?utf-8?Q?lPwQY0zUkD3rT0VWQ4xcESqWjW9lH0=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <31C6EE7F3C766740BFC81D5F50CC8D2F@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Thu, 17 Mar 2022 04:47:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B5EB1C9B69
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:46:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647506763;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OJl0OqzFyx1IFYWW/jK4Qb7pxtgaM7g83EsrlNNbdCA=;
+        b=fGd3TdXYQ43+fB8qHF4tr0icvBQx1vpt7P/livOfxDSSfz82pVhnY/ZQIN1Xi7PpehAqrf
+        RHA0ZwUZPLmgDI3Bj02NeT7mc95XFqrhAJXs191OwvGBLCyLjyH29Mwe8P6TSSZpWmwrJt
+        CBs+Y97K8L1fVdvWC4vKIzBweHEHSOw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-150-ziQYNZgFMDqlhEuLtt5kZg-1; Thu, 17 Mar 2022 04:46:00 -0400
+X-MC-Unique: ziQYNZgFMDqlhEuLtt5kZg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D69261C03389;
+        Thu, 17 Mar 2022 08:45:57 +0000 (UTC)
+Received: from localhost (unknown [10.39.194.252])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 643CC43E8FA;
+        Thu, 17 Mar 2022 08:45:56 +0000 (UTC)
+Date:   Thu, 17 Mar 2022 08:45:55 +0000
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eli Cohen <eli@mellanox.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
+        Joachim Fritschi <jfritschi@freenet.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org
+Subject: Re: [PATCH 1/9] virtio_blk: eliminate anonymous module_init &
+ module_exit
+Message-ID: <YjL1Qz58ET7gS0bs@stefanha-x1.localdomain>
+References: <20220316192010.19001-1-rdunlap@infradead.org>
+ <20220316192010.19001-2-rdunlap@infradead.org>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 22032bd9-512f-4aca-a795-08da07f25cb1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2022 08:44:34.4192
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MPyLClmn9MewGXeBUZxvJTo13k9EkvUuqXAFPnHTzRj5Yojp892Nj4ypz6YbaEDDVR1ZRGf80Nwx1Be/Lrtos6yZaztfS6qnLKyNyMh7HKI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB1898
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="fc5ZE+6HWCBqJ9uq"
+Content-Disposition: inline
+In-Reply-To: <20220316192010.19001-2-rdunlap@infradead.org>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksDQoNCkxlIDE3LzAzLzIwMjIgw6AgMDM6NDAsIEhhb3dlbiBCYWkgYSDDqWNyaXTCoDoNCj4g
-QXZvaWQgcG9pbnRlciB0eXBlIHZhbHVlIGNvbXBhcmVkIHdpdGggMCB0byBtYWtlIGNvZGUgY2xl
-YXIuDQoNCldlIGFscmVhZHkgaGF2ZSB0aGlzIGNoYW5nZSB3YWl0aW5nIGluIHRoZSBxdWV1ZSwg
-c2VlIA0KaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2xpbnV4cHBjLWRldi9w
-YXRjaC8yMDIyMDIxNDAxMDU1OC4xMzAyMDEtMS15YW5nLmxlZUBsaW51eC5hbGliYWJhLmNvbS8N
-Cg0KVGhhbmtzDQpDaHJpc3RvcGhlDQoNCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEhhb3dlbiBCYWkg
-PGJhaWhhb3dlbkBtZWl6dS5jb20+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvbWFjaW50b3NoL3ZpYS1j
-dWRhLmMgfCA2ICsrKy0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMg
-ZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9tYWNpbnRvc2gvdmlhLWN1
-ZGEuYyBiL2RyaXZlcnMvbWFjaW50b3NoL3ZpYS1jdWRhLmMNCj4gaW5kZXggY2QyNjczOTIuLjA1
-YTNjZDkgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbWFjaW50b3NoL3ZpYS1jdWRhLmMNCj4gKysr
-IGIvZHJpdmVycy9tYWNpbnRvc2gvdmlhLWN1ZGEuYw0KPiBAQCAtMjM2LDEwICsyMzYsMTAgQEAg
-aW50IF9faW5pdCBmaW5kX3ZpYV9jdWRhKHZvaWQpDQo+ICAgICAgIGNvbnN0IHUzMiAqcmVnOw0K
-PiAgICAgICBpbnQgZXJyOw0KPiAgIA0KPiAtICAgIGlmICh2aWFzICE9IDApDQo+ICsgICAgaWYg
-KHZpYXMpDQo+ICAgCXJldHVybiAxOw0KPiAgICAgICB2aWFzID0gb2ZfZmluZF9ub2RlX2J5X25h
-bWUoTlVMTCwgInZpYS1jdWRhIik7DQo+IC0gICAgaWYgKHZpYXMgPT0gMCkNCj4gKyAgICBpZiAo
-IXZpYXMpDQo+ICAgCXJldHVybiAwOw0KPiAgIA0KPiAgICAgICByZWcgPSBvZl9nZXRfcHJvcGVy
-dHkodmlhcywgInJlZyIsIE5VTEwpOw0KPiBAQCAtNTE3LDcgKzUxNyw3IEBAIGN1ZGFfd3JpdGUo
-c3RydWN0IGFkYl9yZXF1ZXN0ICpyZXEpDQo+ICAgICAgIHJlcS0+cmVwbHlfbGVuID0gMDsNCj4g
-ICANCj4gICAgICAgc3Bpbl9sb2NrX2lycXNhdmUoJmN1ZGFfbG9jaywgZmxhZ3MpOw0KPiAtICAg
-IGlmIChjdXJyZW50X3JlcSAhPSAwKSB7DQo+ICsgICAgaWYgKGN1cnJlbnRfcmVxKSB7DQo+ICAg
-CWxhc3RfcmVxLT5uZXh0ID0gcmVxOw0KPiAgIAlsYXN0X3JlcSA9IHJlcTsNCj4gICAgICAgfSBl
-bHNlIHs=
+
+--fc5ZE+6HWCBqJ9uq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Mar 16, 2022 at 12:20:02PM -0700, Randy Dunlap wrote:
+> Eliminate anonymous module_init() and module_exit(), which can lead to
+> confusion or ambiguity when reading System.map, crashes/oops/bugs,
+> or an initcall_debug log.
+>=20
+> Give each of these init and exit functions unique driver-specific
+> names to eliminate the anonymous names.
+>=20
+> Example 1: (System.map)
+>  ffffffff832fc78c t init
+>  ffffffff832fc79e t init
+>  ffffffff832fc8f8 t init
+>=20
+> Example 2: (initcall_debug log)
+>  calling  init+0x0/0x12 @ 1
+>  initcall init+0x0/0x12 returned 0 after 15 usecs
+>  calling  init+0x0/0x60 @ 1
+>  initcall init+0x0/0x60 returned 0 after 2 usecs
+>  calling  init+0x0/0x9a @ 1
+>  initcall init+0x0/0x9a returned 0 after 74 usecs
+>=20
+> Fixes: e467cde23818 ("Block driver using virtio.")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: "Michael S. Tsirkin" <mst@redhat.com>
+> Cc: Jason Wang <jasowang@redhat.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Stefan Hajnoczi <stefanha@redhat.com>
+> Cc: virtualization@lists.linux-foundation.org
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: linux-block@vger.kernel.org
+> ---
+>  drivers/block/virtio_blk.c |    8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> --- lnx-517-rc8.orig/drivers/block/virtio_blk.c
+> +++ lnx-517-rc8/drivers/block/virtio_blk.c
+> @@ -1058,7 +1058,7 @@ static struct virtio_driver virtio_blk =3D
+>  #endif
+>  };
+> =20
+> -static int __init init(void)
+> +static int __init virtio_blk_init(void)
+>  {
+>  	int error;
+> =20
+> @@ -1084,14 +1084,14 @@ out_destroy_workqueue:
+>  	return error;
+>  }
+> =20
+> -static void __exit fini(void)
+> +static void __exit virtio_blk_fini(void)
+>  {
+>  	unregister_virtio_driver(&virtio_blk);
+>  	unregister_blkdev(major, "virtblk");
+>  	destroy_workqueue(virtblk_wq);
+>  }
+> -module_init(init);
+> -module_exit(fini);
+> +module_init(virtio_blk_init);
+> +module_exit(virtio_blk_fini);
+> =20
+>  MODULE_DEVICE_TABLE(virtio, id_table);
+>  MODULE_DESCRIPTION("Virtio block driver");
+>=20
+
+Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
+
+--fc5ZE+6HWCBqJ9uq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmIy9UIACgkQnKSrs4Gr
+c8iZgwgAu+noR+ltVAJ7OwDFJ+cU1+Jt+y9ekxCE7nVf1ewvSPnRQk4uHedTFnbj
+Gj0heR6sfjVttvETL+7czSeKRHX9EXeoVppr4CUa8V5WFqvF9x1znxWKUdhLvBTQ
+EkP9LIuTQcDIAhhBnDkey+nm+HGSCskhzdL2dv+tCrmQpNL+A452YdhLdRDE9rc0
+hZhcHBGwWMaLCwkBgoOjtbV8XhAben6e8pSm/y4fhYox3Vdp+uhpyNq0VgecqQxo
+oAIHze/jJOOtt40S/VkCBFk59HmIIVfiP1HZYLTZ1rSxlozav/tpfevVO+SE1J4I
+AOGS9d5FzkEqt+zUnNrH4FIwokLOJQ==
+=xh+M
+-----END PGP SIGNATURE-----
+
+--fc5ZE+6HWCBqJ9uq--
+

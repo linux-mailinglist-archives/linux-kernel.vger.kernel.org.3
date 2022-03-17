@@ -2,185 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6AE4DCF71
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:36:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A224DCF7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiCQUiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S229785AbiCQUkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 16:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiCQUh6 (ORCPT
+        with ESMTP id S229775AbiCQUkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:37:58 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E054319611F
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:36:39 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id bt26so10981021lfb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:36:39 -0700 (PDT)
+        Thu, 17 Mar 2022 16:40:12 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4BCBB917;
+        Thu, 17 Mar 2022 13:38:55 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id t14so3550527pgr.3;
+        Thu, 17 Mar 2022 13:38:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yvCBQhvuhOwtfCqiEm+hthJDaVDRziXPjtYnTX7Px84=;
-        b=Pb7vw1v8KqV7vMdCXksuJhYR/Z0TATOJk8MxAWV0eo+m1M/QQOaITAqAhXgsEaNHAn
-         OVdl7RDl9aHsjXGHFD1lfodi4HhuuO7ryga88W9mXDwu5HKSYy+CK2HiGm/nVFQxpDaZ
-         tIovYJ38do4gLiUn0qYtQGldgNe/vrnYRv+dc=
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=XXPxc8xF2CJlGObdw/eC6baiwA/XpPKEd/Jy1SJ3ol8=;
+        b=N4ZQLI8tGuL3HO7LWthMx63lUi8bBwKx4ejXuWr+Hzv7vwlGzlxOUjoKPnvOZtq6LC
+         31S3SSnT23US3dSeCl6I85ttzhDYlywg0PL1/sUs2kkuMe2MyUurbXzOrpAxeVqZ8lQc
+         cnLaBIH8VKhUDUqZhHwYk1sh0Nrx1leIl+rjGh1uYlbRS0RVXSiQf88LVt1YKLteXs1t
+         kIVkVDOgTu/Zn6yPssRCO23eCMwYwz0NSeZYOxu5OoUPZWgtmVKovnId9+FtBfkCe0Fs
+         FjQxP05od8Q1gogWspX2xQ1vEgZ8DXY9+9/oMckgpGGK8kBLYpi0NDX9/yle3+1Ci1p9
+         XmNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yvCBQhvuhOwtfCqiEm+hthJDaVDRziXPjtYnTX7Px84=;
-        b=X+YaYK7Dn6rkVLsgR60XVPVxFAZN1qxK+u7nVdzZ+g8vpFA0cj5g47QBjKNeKVri6w
-         JXONMjx0V6CNAJlOYLBQRmcFmG9+vEnwZ40jQ9R71m9pZpmkkMTftbTDHd2aD0pBWKrJ
-         78PqkeIDF0snW/x/5M49e8rmOV7sBjooUygWn9aZzdYG/oo8gQviq29T5sG6+aWXuC9W
-         6aOWn8ZsqHl56gOv7TrxW3FZibbQ+kzl2m9Mlav/AcVrFABbO2BPpIjONG9USuQyi//o
-         ze+z06IhKl/TGOcj430kH1iZk9cKti50qkhjUo5kJ0YT9kCIT3HspKhnXq+T5oLfy5f6
-         hhwQ==
-X-Gm-Message-State: AOAM5302myxOMTV3/tvU+PQ5L7LQcfxivHNXlQ+l1NyBY3jy+nJn5w/L
-        Ho/cYVE6QFpr8+/fEcXwHrByUV1pI8UuJFv/dKg=
-X-Google-Smtp-Source: ABdhPJzANa3MPVUuSvRplTpX2ymg4iN439MwLn4ogA9aQwb4r2DBjjBZk3aJ9s5Fr0M+VO1X7NwTaw==
-X-Received: by 2002:a05:6512:2256:b0:449:f79a:e762 with SMTP id i22-20020a056512225600b00449f79ae762mr2885016lfu.261.1647549397852;
-        Thu, 17 Mar 2022 13:36:37 -0700 (PDT)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
-        by smtp.gmail.com with ESMTPSA id v2-20020ac258e2000000b004483faeb6f6sm525494lfo.280.2022.03.17.13.36.36
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 13:36:36 -0700 (PDT)
-Received: by mail-lj1-f169.google.com with SMTP id r22so8823114ljd.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:36:36 -0700 (PDT)
-X-Received: by 2002:a2e:a78f:0:b0:249:21ce:6d53 with SMTP id
- c15-20020a2ea78f000000b0024921ce6d53mr4013908ljf.164.1647549396155; Thu, 17
- Mar 2022 13:36:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com>
- <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
- <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
- <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
- <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <878rt8gwxa.fsf@oldenburg.str.redhat.com>
-In-Reply-To: <878rt8gwxa.fsf@oldenburg.str.redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 17 Mar 2022 13:36:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiZtg-E5s1CEZgaSE=e38vFoP3y2aV-4R82jqmcUoD0Aw@mail.gmail.com>
-Message-ID: <CAHk-=wiZtg-E5s1CEZgaSE=e38vFoP3y2aV-4R82jqmcUoD0Aw@mail.gmail.com>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=XXPxc8xF2CJlGObdw/eC6baiwA/XpPKEd/Jy1SJ3ol8=;
+        b=wckDgOy+TXQ3cNd/MG7qiqW/YvYLp8XEnwOCsoLJ2g57FukOzzUy3leqF93AOTuV1A
+         8sRjpCNf4zwBQRPCjyq1qSYEzBKz+C3uqmrw1y3UPXddcQ1Hmt/hDXpvgh5zzfM8N8Hk
+         +CE0/FBHNJH+dNlKr3QVCN46LhFk/UOwpLPUdsClNM7o3ZtlyMS/A30rvoIosM7dL4DP
+         q9buC1csOEsFDAlHlMU6/in3c8ntAopFnW4YjpIaOs1+TuTDh/yWK/JillL+sKq3K2Kn
+         cfUqLq3x8ialiW4f2Y9ifGnkgmv9Ai87VcK9bCZLtKqlUc2gY0cDQBTUzZUpUCzGY/gI
+         +seA==
+X-Gm-Message-State: AOAM531/XQT4NbZjapcQvmE7LZTPKzyrvlf1zivayiImS8CqKYhpDG0y
+        twVmQOki8Fy6vhbzBi6D/a8=
+X-Google-Smtp-Source: ABdhPJyK0tJFmlDmVUuHFtogfArqh+PaJZQTl6s/30PTRARFfwstTpt/Vf5VhxkHqx+dRGRiPhVYhg==
+X-Received: by 2002:aa7:92cf:0:b0:4fa:3b47:7408 with SMTP id k15-20020aa792cf000000b004fa3b477408mr5232524pfa.72.1647549535202;
+        Thu, 17 Mar 2022 13:38:55 -0700 (PDT)
+Received: from smtpclient.apple ([66.170.99.2])
+        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004f70d5e92basm7673990pfx.34.2022.03.17.13.38.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Mar 2022 13:38:54 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH V2,2/2] mm: madvise: skip unmapped vma holes passed to
+ process_madvise
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <CAJuCfpGBJev_h92S0xLEQXghGQzNPCsqWTunpVPJQX4WWPjGzw@mail.gmail.com>
+Date:   Thu, 17 Mar 2022 13:38:52 -0700
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Charan Teja Kalla <quic_charante@quicinc.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        =?utf-8?Q?Edgar_Arriaga_Garc=C3=ADa?= <edgararriaga@google.com>,
+        Michal Hocko <mhocko@suse.com>, linux-mm <linux-mm@kvack.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        "# 5 . 10+" <stable@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <B49F17E4-8D3D-45FB-97E9-E0F906C88564@gmail.com>
+References: <cover.1647008754.git.quic_charante@quicinc.com>
+ <4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com>
+ <YjEaFBWterxc3Nzf@google.com>
+ <20220315164807.7a9cf1694ee2db8709a8597c@linux-foundation.org>
+ <YjFAzuLKWw5eadtf@google.com>
+ <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
+ <20220316142906.e41e39d2315e35ef43f4aad6@linux-foundation.org>
+ <YjNhvhb7l2i9WTfF@google.com>
+ <CAJuCfpGBJev_h92S0xLEQXghGQzNPCsqWTunpVPJQX4WWPjGzw@mail.gmail.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 1:13 PM Florian Weimer <fweimer@redhat.com> wrote:
->
-> * Linus Torvalds:
->
-> > You can actually operate on EFLAGS at multiple granularities.
-> >
-> >  - normal pushf/popf. Don't do it unless you are doing system software.
->
-> There's one exception: PUSHF/twiddle/POPF/PUSHF/compare is the
-> recommended sequence to detect CPUID support on i386 (in userspace and
-> elsewhere).
 
-Yeah.
 
-I do think that hand-crafted sequences using pushf/popf work. But I
-think they should be in one single inline asm statement.
+> On Mar 17, 2022, at 9:53 AM, Suren Baghdasaryan <surenb@google.com> =
+wrote:
+>=20
+> On Thu, Mar 17, 2022 at 9:28 AM Minchan Kim <minchan@kernel.org> =
+wrote:
+>>=20
+>> On Wed, Mar 16, 2022 at 02:29:06PM -0700, Andrew Morton wrote:
+>>> On Wed, 16 Mar 2022 19:49:38 +0530 Charan Teja Kalla =
+<quic_charante@quicinc.com> wrote:
+>>>=20
+>>>>> IMO, it's worth to note in man page.
+>>>>>=20
+>>>>=20
+>>>> Or the current patch for just ENOMEM is sufficient here and we just =
+have
+>>>> to update the man page?
+>>>=20
+>>> I think the "On success, process_madvise() returns the number of =
+bytes
+>>> advised" behaviour sounds useful.  But madvise() doesn't do that.
+>>>=20
+>>> RETURN VALUE
+>>>       On  success, madvise() returns zero.  On error, it returns -1 =
+and errno
+>>>       is set to indicate the error.
+>>>=20
+>>> So why is it desirable in the case of process_madvise()?
+>>=20
+>> Since process_madvise deal with multiple ranges and could fail at one =
+of
+>> them in the middle or pocessing, people could decide where the call
+>> failed and then make a strategy whether they will abort at the point =
+or
+>> continue to hint next addresses. Here, problem of the strategy is API
+>> doesn't return any error vaule if it has processed any bytes so they
+>> would have limitation to decide a policy. That's the limitation for
+>> every vector IO syscalls, unfortunately.
+>>=20
+>>>=20
+>>>=20
+>>>=20
+>>> And why was process_madvise() designed this way?   Or was it
+>>> always simply an error in the manpage?
+>=20
+> Taking a closer look, indeed manpage seems to be wrong.
+> https://elixir.bootlin.com/linux/v5.17-rc8/source/mm/madvise.c#L1154
+> indicates that in the presence of unmapped holes madvise will skip
+> them but will return ENOMEM and that's what process_madvise is
+> ultimately returning in this case. So, the manpage claim of "This
+> return value may be less than the total number of requested bytes, if
+> an error occurred after some iovec elements were already processed."
+> does not reflect the reality in our case because the return value will
+> be -ENOMEM. After the desired behavior is finalized I'll modify the
+> manpage accordingly.
 
-Obviously the kernel use of
+Since process_madvise() might be used in sort of non-cooperative mode,
+I think that the caller cannot guarantee that it knows exactly the
+memory layout of the process whose memory it madvise=E2=80=99s. I know =
+that
+MADV_DONTNEED for instance is not supported (at least today) by
+process_madvise(), but if it were, the caller may want which exact
+memory was madvise'd even if the target process ran some other
+memory layout changing syscalls (e.g., munmap()).
 
-        asm volatile("# __raw_save_flags\n\t"
-                     "pushf ; pop %0"
-                     : "=rm" (flags)
-                     : /* no input */
-                     : "memory");
+IOW, skipping holes and just returning the total number of madvise=E2=80=99=
+d
+bytes might not be enough.
 
-is exactly that (and yes, I can well believe that we should make "=rm"
-be "=r"), or at least show that the "m" case is much more expensive
-some way).
-
-Is it optimal that we put the push/pop right next to each other? No.
-But it avoids a *lot* of problems.
-
-And is that "memory" clobber because it modifies the memory location
-just below the current stack pointer?
-
-No, not really - outside the kernel that might be an issue, but we
-already have to build the kernel with -mno-red-zone, so if the
-compiler uses that memory location, that would be a *HUGE* compiler
-bug already.
-
-So the "memory" clobber has absolutely nothing to do with the fact
-that 'pushf' updates the stack pointer, writes to that location, and
-the popf then undoes it.
-
-It's literally because we don't want the compiler to move non-spill
-memory accesses around it (or other asm statements wiht memory
-clobbers), regardless of the fact that the sequence doesn't really
-read or write memory in any way that is relevant to the compiler.
-
-> >  - you can use lahf/sahc to load/store only the arithmetic flags
-> > into/from AH. Deprecated, and going away, but historically supported.
->
-> And these instructions were missing from the original long mode, but
-> they were added back.
-
-They're also actively being deprecated, so the "adding back" ends up
-being (maybe) temporary.
-
-> GCC doesn't have barriers in the built-ins (if we are talking about
-> __builtin_ia32_readeflags_u64 and __builtin_ia32_writeeflags_u64).  I
-> expect they are actually pretty useless, and were merely added for
-> completeness of the intrinsics headers.
-
-Yeah, without any kinds of ordering guarantees, I think those builtins
-are basically only so in name. They might as well return a random
-value - they're not *useful*, because they don't have any defined
-behavior.
-
-I mean, we *could* certainly use "read eflags" in the kernel, and yes,
-in theory it would be lovely if we didn't have to encode it as a
-"pushf/pop" sequence, and the compiler tracked the stack pointer for
-us, and perhaps combined it with other stack pointer changes to the
-point where the "popf" would never happen, it would just undo the %rsp
-change at function exit time.
-
-So yes, a builtin can improve code generation.
-
-But if there is no documented barrier guarantees, how do we know that
-the read of the eflags the compiler does doesn't migrate around the
-code that sets IF or whatever?
-
-So then we'd need compiler intrinsics for 'sti' and 'cli' too. And
-then we'd need to have a way to describe the ordering requirements for
-*those* wrt all the other things we do (ie locks or whatever other
-code that need to be protected from interrupts).
-
-None of which exists.
-
-And even if it ends up existing in newer compiler versions, we'd have
-to wait for the better part of a decade (or more) for that to have
-percolated everywhere.
-
-And even _then_, the builtin syntax is often easily clumsier and less
-flexible than what we get with inline asm (I'm thinking of the
-fundamentally mis-designed memory ordering intrinsics).
-
-                    Linus

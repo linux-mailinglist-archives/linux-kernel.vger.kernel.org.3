@@ -2,47 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0644DBC53
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DD54DBC5A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358300AbiCQBZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 21:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
+        id S1350294AbiCQB1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 21:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358285AbiCQBZp (ORCPT
+        with ESMTP id S231935AbiCQB1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 21:25:45 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B1AF1E3DC;
-        Wed, 16 Mar 2022 18:24:28 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.90,187,1643641200"; 
-   d="scan'208";a="113753459"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 17 Mar 2022 10:24:27 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 9440141A45D9;
-        Thu, 17 Mar 2022 10:24:24 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [RFC PATCH v4 5/5] pinctrl: renesas: pinctrl-rzg2l: Add IRQ domain to handle GPIO interrupt
-Date:   Thu, 17 Mar 2022 01:24:04 +0000
-Message-Id: <20220317012404.8069-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220317012404.8069-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220317012404.8069-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Wed, 16 Mar 2022 21:27:37 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58E41DA79
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:26:20 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id qa43so7654016ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 18:26:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LgV0fd+BwTbg7RPyItVYlkUF0L+G2JNvxHK98uutjq8=;
+        b=JO1KCJzGLyWUg+CcEOyBJkeMyoi+vIaQI14wNzjfXi1lAp2PKNTGC/c7IqNotADydK
+         JX9qKj0RuPxPp5mKMrDIXRbRIzi8KLu5s23Z4IG8O/6CFH9ilcrq+goVjn0+QBOEfcFX
+         6u0so/mdr8g/iCsIMqkikbXLqC70pRU7Njs8OrviG9h6dKamlLqEc/lBSzmeB+X28yD8
+         SS0LWuxioyIXGElOMrMf1XfZs84rwRYEBEo8PAcz5EEj6MbpDCyrfFJiT18pCyKso31s
+         j66xTtcav3dWJtPBm+U9Yn/l1dEOIhXXPbLBhB4t2CgOBipaZOwE2wxGbjL9IW+v7jGB
+         liJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LgV0fd+BwTbg7RPyItVYlkUF0L+G2JNvxHK98uutjq8=;
+        b=dxEMqu9tZcvQQmKZK8eQ0/Axs5g9nSWsCn8cGAoh/COVN7eB/9gSwnbFSxIleb9rsj
+         G7337RSf62rlQ9s7NHjpyLkCjLqlUppWMOinlvie9oqBWAalKxb3NCQbVVAT+YDaMTpF
+         mSKm84hFwjkPcs2JmCx/k8033j/wkQ5jWOGYku+B1F2GhpVrKA0krPhhRhhppSO+2ZN9
+         SI0Iijj+W8QEQSBbBkHnuyJySll+We8c13JCp5qenVqWDiZqRY+X7x80fDAXyBLnHeFA
+         WSizoNAgMhX0z2MfPr4TQqG+JoCVTjJY0oSn5YPDI5Xood2aojpTDq6oOhctBQ5D9dES
+         DnoA==
+X-Gm-Message-State: AOAM533lK3D9KEdVBwgZMMUhgg/GHPJ2ZRyUzMah/X44L2/Eu5R80s2L
+        tBBA59GbTc6oUr21VTlEB925VsXo/U0emyMjWpH9
+X-Google-Smtp-Source: ABdhPJz6fiEEFi+Q35JiW3eZl06su1XRmZErVn79mSPE8R2VXQXUbM6SSUcQ/vlKwDD/wXijrtbrvgqXR12FWRfxars=
+X-Received: by 2002:a17:907:3f86:b0:6db:b745:f761 with SMTP id
+ hr6-20020a1709073f8600b006dbb745f761mr2168517ejc.610.1647480379164; Wed, 16
+ Mar 2022 18:26:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220221212522.320243-1-mic@digikod.net> <20220221212522.320243-2-mic@digikod.net>
+In-Reply-To: <20220221212522.320243-2-mic@digikod.net>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 16 Mar 2022 21:26:08 -0400
+Message-ID: <CAHC9VhQEEKGgCn7fYgUt-_WhXc-vrKq9TVm=cfwJUyWaUgY2Vw@mail.gmail.com>
+Subject: Re: [PATCH v1 01/11] landlock: Define access_mask_t to enforce a
+ consistent access mask size
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,300 +76,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add IRQ domian to RZ/G2L pinctrl driver to handle GPIO interrupt.
+On Mon, Feb 21, 2022 at 4:15 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+>
+> From: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+>
+> Create and use the access_mask_t typedef to enforce a consistent access
+> mask size and uniformly use a 16-bits type.  This will helps transition
+> to a 32-bits value one day.
+>
+> Add a build check to make sure all (filesystem) access rights fit in.
+> This will be extended with a following commit.
+>
+> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+> Link: https://lore.kernel.org/r/20220221212522.320243-2-mic@digikod.net
+> ---
+>  security/landlock/fs.c      | 19 ++++++++++---------
+>  security/landlock/fs.h      |  2 +-
+>  security/landlock/limits.h  |  2 ++
+>  security/landlock/ruleset.c |  6 ++++--
+>  security/landlock/ruleset.h | 17 +++++++++++++----
+>  5 files changed, 30 insertions(+), 16 deletions(-)
+>
+> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+> index 97b8e421f617..9de2a460a762 100644
+> --- a/security/landlock/fs.c
+> +++ b/security/landlock/fs.c
+> @@ -150,7 +150,7 @@ static struct landlock_object *get_inode_object(struc=
+t inode *const inode)
+>   * @path: Should have been checked by get_path_from_fd().
+>   */
+>  int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
+> -               const struct path *const path, u32 access_rights)
+> +               const struct path *const path, access_mask_t access_right=
+s)
+>  {
+>         int err;
+>         struct landlock_object *object;
+> @@ -182,8 +182,8 @@ int landlock_append_fs_rule(struct landlock_ruleset *=
+const ruleset,
+>
+>  static inline u64 unmask_layers(
+>                 const struct landlock_ruleset *const domain,
+> -               const struct path *const path, const u32 access_request,
+> -               u64 layer_mask)
+> +               const struct path *const path,
+> +               const access_mask_t access_request, u64 layer_mask)
+>  {
+>         const struct landlock_rule *rule;
+>         const struct inode *inode;
+> @@ -223,7 +223,8 @@ static inline u64 unmask_layers(
+>  }
+>
+>  static int check_access_path(const struct landlock_ruleset *const domain=
+,
+> -               const struct path *const path, u32 access_request)
+> +               const struct path *const path,
+> +               const access_mask_t access_request)
+>  {
+>         bool allowed =3D false;
+>         struct path walker_path;
+> @@ -308,7 +309,7 @@ static int check_access_path(const struct landlock_ru=
+leset *const domain,
+>  }
+>
+>  static inline int current_check_access_path(const struct path *const pat=
+h,
+> -               const u32 access_request)
+> +               const access_mask_t access_request)
+>  {
+>         const struct landlock_ruleset *const dom =3D
+>                 landlock_get_current_domain();
+> @@ -511,7 +512,7 @@ static int hook_sb_pivotroot(const struct path *const=
+ old_path,
+>
+>  /* Path hooks */
+>
+> -static inline u32 get_mode_access(const umode_t mode)
+> +static inline access_mask_t get_mode_access(const umode_t mode)
+>  {
+>         switch (mode & S_IFMT) {
+>         case S_IFLNK:
+> @@ -563,7 +564,7 @@ static int hook_path_link(struct dentry *const old_de=
+ntry,
+>                         get_mode_access(d_backing_inode(old_dentry)->i_mo=
+de));
+>  }
+>
+> -static inline u32 maybe_remove(const struct dentry *const dentry)
+> +static inline access_mask_t maybe_remove(const struct dentry *const dent=
+ry)
+>  {
+>         if (d_is_negative(dentry))
+>                 return 0;
+> @@ -631,9 +632,9 @@ static int hook_path_rmdir(const struct path *const d=
+ir,
+>
+>  /* File hooks */
+>
+> -static inline u32 get_file_access(const struct file *const file)
+> +static inline access_mask_t get_file_access(const struct file *const fil=
+e)
+>  {
+> -       u32 access =3D 0;
+> +       access_mask_t access =3D 0;
+>
+>         if (file->f_mode & FMODE_READ) {
+>                 /* A directory can only be opened in read mode. */
+> diff --git a/security/landlock/fs.h b/security/landlock/fs.h
+> index 187284b421c9..74be312aad96 100644
+> --- a/security/landlock/fs.h
+> +++ b/security/landlock/fs.h
+> @@ -65,6 +65,6 @@ static inline struct landlock_superblock_security *land=
+lock_superblock(
+>  __init void landlock_add_fs_hooks(void);
+>
+>  int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
+> -               const struct path *const path, u32 access_hierarchy);
+> +               const struct path *const path, access_mask_t access_hiera=
+rchy);
+>
+>  #endif /* _SECURITY_LANDLOCK_FS_H */
+> diff --git a/security/landlock/limits.h b/security/landlock/limits.h
+> index 2a0a1095ee27..458d1de32ed5 100644
+> --- a/security/landlock/limits.h
+> +++ b/security/landlock/limits.h
+> @@ -9,6 +9,7 @@
+>  #ifndef _SECURITY_LANDLOCK_LIMITS_H
+>  #define _SECURITY_LANDLOCK_LIMITS_H
+>
+> +#include <linux/bitops.h>
+>  #include <linux/limits.h>
+>  #include <uapi/linux/landlock.h>
+>
+> @@ -17,5 +18,6 @@
+>
+>  #define LANDLOCK_LAST_ACCESS_FS                LANDLOCK_ACCESS_FS_MAKE_S=
+YM
+>  #define LANDLOCK_MASK_ACCESS_FS                ((LANDLOCK_LAST_ACCESS_FS=
+ << 1) - 1)
+> +#define LANDLOCK_NUM_ACCESS_FS         __const_hweight64(LANDLOCK_MASK_A=
+CCESS_FS)
 
-GPIO0-GPIO122 pins can be used as IRQ lines but only 32 pins can be
-used as IRQ lines at given time. Selection of pins as IRQ lines
-is handled by IA55 (which is the IRQC block) which sits in between the
-GPIO and GIC.
+The line above, and the static_assert() in ruleset.h are clever.  I'll
+admit I didn't even know the hweightX() macros existed until looking
+at this code :)
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/pinctrl/renesas/pinctrl-rzg2l.c | 205 ++++++++++++++++++++++++
- 1 file changed, 205 insertions(+)
+However, the LANDLOCK_NUM_ACCESS_FS is never really going to be used
+outside the static_assert() in ruleset.h is it?  I wonder if it would
+be better to skip the extra macro and rewrite the static_assert like
+this:
 
-diff --git a/drivers/pinctrl/renesas/pinctrl-rzg2l.c b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-index ccee9c9e2e22..d5bc8b73e514 100644
---- a/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-+++ b/drivers/pinctrl/renesas/pinctrl-rzg2l.c
-@@ -9,8 +9,10 @@
- #include <linux/clk.h>
- #include <linux/gpio/driver.h>
- #include <linux/io.h>
-+#include <linux/interrupt.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-+#include <linux/of_irq.h>
- #include <linux/pinctrl/pinconf-generic.h>
- #include <linux/pinctrl/pinconf.h>
- #include <linux/pinctrl/pinctrl.h>
-@@ -89,6 +91,7 @@
- #define PIN(n)			(0x0800 + 0x10 + (n))
- #define IOLH(n)			(0x1000 + (n) * 8)
- #define IEN(n)			(0x1800 + (n) * 8)
-+#define ISEL(n)			(0x2C80 + (n) * 8)
- #define PWPR			(0x3014)
- #define SD_CH(n)		(0x3000 + (n) * 4)
- #define QSPI			(0x3008)
-@@ -112,6 +115,10 @@
- #define RZG2L_PIN_ID_TO_PORT_OFFSET(id)	(RZG2L_PIN_ID_TO_PORT(id) + 0x10)
- #define RZG2L_PIN_ID_TO_PIN(id)		((id) % RZG2L_PINS_PER_PORT)
- 
-+#define RZG2L_TINT_MAX_INTERRUPT	32
-+#define RZG2L_TINT_IRQ_START_INDEX	9
-+#define RZG2L_PACK_HWIRQ(t, i)		(((t) << 16) | (i))
-+
- struct rzg2l_dedicated_configs {
- 	const char *name;
- 	u32 config;
-@@ -137,6 +144,9 @@ struct rzg2l_pinctrl {
- 
- 	struct gpio_chip		gpio_chip;
- 	struct pinctrl_gpio_range	gpio_range;
-+	DECLARE_BITMAP(tint_slot, RZG2L_TINT_MAX_INTERRUPT);
-+	spinlock_t			bitmap_lock;
-+	unsigned int			hwirq[RZG2L_TINT_MAX_INTERRUPT];
- 
- 	spinlock_t			lock;
- };
-@@ -883,6 +893,8 @@ static int rzg2l_gpio_get(struct gpio_chip *chip, unsigned int offset)
- 
- static void rzg2l_gpio_free(struct gpio_chip *chip, unsigned int offset)
- {
-+	unsigned int virq;
-+
- 	pinctrl_gpio_free(chip->base + offset);
- 
- 	/*
-@@ -890,6 +902,10 @@ static void rzg2l_gpio_free(struct gpio_chip *chip, unsigned int offset)
- 	 * drive the GPIO pin as an output.
- 	 */
- 	rzg2l_gpio_direction_input(chip, offset);
-+
-+	virq = irq_find_mapping(chip->irq.domain, offset);
-+	if (virq)
-+		irq_dispose_mapping(virq);
- }
- 
- static const char * const rzg2l_gpio_names[] = {
-@@ -1075,14 +1091,193 @@ static  struct rzg2l_dedicated_configs rzg2l_dedicated_pins[] = {
- 	{ "RIIC1_SCL", RZG2L_SINGLE_PIN_PACK(0xe, 3, PIN_CFG_IEN) },
- };
- 
-+static int rzg2l_gpio_get_gpioint(unsigned int virq)
-+{
-+	unsigned int gpioint = 0;
-+	unsigned int i = 0;
-+	u32 port, bit;
-+
-+	port = virq / 8;
-+	bit = virq % 8;
-+
-+	if (port >= ARRAY_SIZE(rzg2l_gpio_configs))
-+		return -EINVAL;
-+
-+	for (i = 0; i < port; i++)
-+		gpioint += RZG2L_GPIO_PORT_GET_PINCNT(rzg2l_gpio_configs[i]);
-+
-+	if (bit >= RZG2L_GPIO_PORT_GET_PINCNT(rzg2l_gpio_configs[i]))
-+		return -EINVAL;
-+
-+	gpioint += bit;
-+
-+	return gpioint;
-+}
-+
-+static void rzg2l_gpio_irq_domain_free(struct irq_domain *domain, unsigned int virq,
-+				       unsigned int nr_irqs)
-+{
-+	struct irq_data *d;
-+
-+	d = irq_domain_get_irq_data(domain, virq);
-+	if (d) {
-+		struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+		struct rzg2l_pinctrl *pctrl = container_of(gc, struct rzg2l_pinctrl, gpio_chip);
-+		irq_hw_number_t hwirq = irqd_to_hwirq(d);
-+		unsigned long flags;
-+		unsigned int i;
-+
-+		for (i = 0; i < RZG2L_TINT_MAX_INTERRUPT; i++) {
-+			if (pctrl->hwirq[i] == hwirq) {
-+				spin_lock_irqsave(&pctrl->bitmap_lock, flags);
-+				bitmap_release_region(pctrl->tint_slot, i, get_order(1));
-+				spin_unlock_irqrestore(&pctrl->bitmap_lock, flags);
-+				pctrl->hwirq[i] = 0;
-+				break;
-+			}
-+		}
-+	}
-+	irq_domain_free_irqs_common(domain, virq, nr_irqs);
-+}
-+
-+static void rzg2l_gpio_irq_disable(struct irq_data *d)
-+{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	struct rzg2l_pinctrl *pctrl = container_of(gc, struct rzg2l_pinctrl, gpio_chip);
-+	unsigned int hwirq = irqd_to_hwirq(d);
-+	unsigned long flags;
-+	void __iomem *addr;
-+	u32 port;
-+	u8 bit;
-+
-+	port = RZG2L_PIN_ID_TO_PORT(hwirq);
-+	bit = RZG2L_PIN_ID_TO_PIN(hwirq);
-+
-+	addr = pctrl->base + ISEL(port);
-+	if (bit >= 4) {
-+		bit -= 4;
-+		addr += 4;
-+	}
-+
-+	spin_lock_irqsave(&pctrl->lock, flags);
-+	writel(readl(addr) & ~BIT(bit * 8), addr);
-+	spin_unlock_irqrestore(&pctrl->lock, flags);
-+
-+	irq_chip_disable_parent(d);
-+}
-+
-+static void rzg2l_gpio_irq_enable(struct irq_data *d)
-+{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-+	struct rzg2l_pinctrl *pctrl = container_of(gc, struct rzg2l_pinctrl, gpio_chip);
-+	unsigned int hwirq = irqd_to_hwirq(d);
-+	unsigned long flags;
-+	void __iomem *addr;
-+	u32 port;
-+	u8 bit;
-+
-+	port = RZG2L_PIN_ID_TO_PORT(hwirq);
-+	bit = RZG2L_PIN_ID_TO_PIN(hwirq);
-+
-+	addr = pctrl->base + ISEL(port);
-+	if (bit >= 4) {
-+		bit -= 4;
-+		addr += 4;
-+	}
-+
-+	spin_lock_irqsave(&pctrl->lock, flags);
-+	writel(readl(addr) | BIT(bit * 8), addr);
-+	spin_unlock_irqrestore(&pctrl->lock, flags);
-+
-+	irq_chip_enable_parent(d);
-+}
-+
-+static int rzg2l_gpio_irq_set_type(struct irq_data *d, unsigned int type)
-+{
-+	return irq_chip_set_type_parent(d, type);
-+}
-+
-+static void rzg2l_gpio_irqc_eoi(struct irq_data *d)
-+{
-+	irq_chip_eoi_parent(d);
-+}
-+
-+static struct irq_chip rzg2l_gpio_irqchip = {
-+	.name = "rzg2l-gpio",
-+	.irq_disable = rzg2l_gpio_irq_disable,
-+	.irq_enable = rzg2l_gpio_irq_enable,
-+	.irq_mask = irq_chip_mask_parent,
-+	.irq_unmask = irq_chip_unmask_parent,
-+	.irq_set_type = rzg2l_gpio_irq_set_type,
-+	.irq_eoi = rzg2l_gpio_irqc_eoi,
-+};
-+
-+static int rzg2l_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
-+					    unsigned int child,
-+					    unsigned int child_type,
-+					    unsigned int *parent,
-+					    unsigned int *parent_type)
-+{
-+	struct rzg2l_pinctrl *pctrl = gpiochip_get_data(gc);
-+	unsigned long flags;
-+	int gpioint, irq;
-+
-+	gpioint = rzg2l_gpio_get_gpioint(child);
-+	if (gpioint < 0)
-+		return gpioint;
-+
-+	spin_lock_irqsave(&pctrl->bitmap_lock, flags);
-+	irq = bitmap_find_free_region(pctrl->tint_slot, RZG2L_TINT_MAX_INTERRUPT, get_order(1));
-+	spin_unlock_irqrestore(&pctrl->bitmap_lock, flags);
-+	if (irq < 0)
-+		return -ENOSPC;
-+	pctrl->hwirq[irq] = child;
-+	irq += RZG2L_TINT_IRQ_START_INDEX;
-+
-+	/* All these interrupts are level high in the CPU */
-+	*parent_type = IRQ_TYPE_LEVEL_HIGH;
-+	*parent = RZG2L_PACK_HWIRQ(gpioint, irq);
-+	return 0;
-+}
-+
-+static void *rzg2l_gpio_populate_parent_fwspec(struct gpio_chip *chip,
-+					       unsigned int parent_hwirq,
-+					       unsigned int parent_type)
-+{
-+	struct irq_fwspec *fwspec;
-+
-+	fwspec = kzalloc(sizeof(*fwspec), GFP_KERNEL);
-+	if (!fwspec)
-+		return NULL;
-+
-+	fwspec->fwnode = chip->irq.parent_domain->fwnode;
-+	fwspec->param_count = 2;
-+	fwspec->param[0] = parent_hwirq;
-+	fwspec->param[1] = parent_type;
-+
-+	return fwspec;
-+}
-+
- static int rzg2l_gpio_register(struct rzg2l_pinctrl *pctrl)
- {
- 	struct device_node *np = pctrl->dev->of_node;
- 	struct gpio_chip *chip = &pctrl->gpio_chip;
- 	const char *name = dev_name(pctrl->dev);
-+	struct irq_domain *parent_domain;
- 	struct of_phandle_args of_args;
-+	struct device_node *parent_np;
-+	struct gpio_irq_chip *girq;
- 	int ret;
- 
-+	parent_np = of_irq_find_parent(np);
-+	if (!parent_np)
-+		return -ENXIO;
-+
-+	parent_domain = irq_find_host(parent_np);
-+	of_node_put(parent_np);
-+	if (!parent_domain)
-+		return -EPROBE_DEFER;
-+
- 	ret = of_parse_phandle_with_fixed_args(np, "gpio-ranges", 3, 0, &of_args);
- 	if (ret) {
- 		dev_err(pctrl->dev, "Unable to parse gpio-ranges\n");
-@@ -1109,6 +1304,15 @@ static int rzg2l_gpio_register(struct rzg2l_pinctrl *pctrl)
- 	chip->base = -1;
- 	chip->ngpio = of_args.args[2];
- 
-+	girq = &chip->irq;
-+	girq->chip = &rzg2l_gpio_irqchip;
-+	girq->fwnode = of_node_to_fwnode(np);
-+	girq->parent_domain = parent_domain;
-+	girq->child_to_parent_hwirq = rzg2l_gpio_child_to_parent_hwirq;
-+	girq->populate_parent_alloc_arg = rzg2l_gpio_populate_parent_fwspec;
-+	girq->child_irq_domain_ops.free = rzg2l_gpio_irq_domain_free;
-+	girq->ngirq = RZG2L_TINT_MAX_INTERRUPT;
-+
- 	pctrl->gpio_range.id = 0;
- 	pctrl->gpio_range.pin_base = 0;
- 	pctrl->gpio_range.base = 0;
-@@ -1224,6 +1428,7 @@ static int rzg2l_pinctrl_probe(struct platform_device *pdev)
- 	}
- 
- 	spin_lock_init(&pctrl->lock);
-+	spin_lock_init(&pctrl->bitmap_lock);
- 
- 	platform_set_drvdata(pdev, pctrl);
- 
--- 
-2.17.1
+static_assert(BITS_PER_TYPE(access_mask_t) >=3D
+__const_hweight64(LANDLOCK_MASK_ACCESS_FS));
 
+If not, I might suggest changing LANDLOCK_NUM_ACCESS_FS to
+LANDLOCK_BITS_ACCESS_FS or something similar.
+
+
+> diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
+> index 2d3ed7ec5a0a..7e7cac68e443 100644
+> --- a/security/landlock/ruleset.h
+> +++ b/security/landlock/ruleset.h
+> @@ -9,13 +9,20 @@
+>  #ifndef _SECURITY_LANDLOCK_RULESET_H
+>  #define _SECURITY_LANDLOCK_RULESET_H
+>
+> +#include <linux/bitops.h>
+> +#include <linux/build_bug.h>
+>  #include <linux/mutex.h>
+>  #include <linux/rbtree.h>
+>  #include <linux/refcount.h>
+>  #include <linux/workqueue.h>
+>
+> +#include "limits.h"
+>  #include "object.h"
+>
+> +typedef u16 access_mask_t;
+> +/* Makes sure all filesystem access rights can be stored. */
+> +static_assert(BITS_PER_TYPE(access_mask_t) >=3D LANDLOCK_NUM_ACCESS_FS);
+
+--
+paul-moore.com

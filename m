@@ -2,89 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8D94DD0BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70E54DD0BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiCQWaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 18:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S229803AbiCQWbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 18:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiCQWav (ORCPT
+        with ESMTP id S229490AbiCQWbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 18:30:51 -0400
-Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC67C7491
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:29:34 -0700 (PDT)
-Received: from gproxy1-pub.mail.unifiedlayer.com (unknown [69.89.25.95])
-        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 461278033B46
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 22:29:33 +0000 (UTC)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id B3E5C10048A0F
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 22:29:32 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id UycenppeEwm8iUycenrQe4; Thu, 17 Mar 2022 22:29:32 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=DpSTREz+ c=1 sm=1 tr=0 ts=6233b64c
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=o8Y5sQTvuykA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=2GCAtCuT3wgT4q42L9EA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=okwJesg+n+xS19dxycO0FL5oTNm06thYVuK9ZYqFucU=; b=AWKZHTuq7ELRTfmoGj/gp4hZWe
-        UsWlpbvHN5Dbgd2VIJw2K5AJpGttNqUEVoMCmu1yVMAjY6x8Dor/cyijF0MtZ7qG8xV+DhA843umA
-        2AHmBSuupUXpkTKZ809mptNS0;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33244 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nUycd-003p3r-BI; Thu, 17 Mar 2022 16:29:31 -0600
-Subject: Re: [PATCH 5.15 00/25] 5.15.30-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220317124526.308079100@linuxfoundation.org>
-In-Reply-To: <20220317124526.308079100@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <bdbf5040-0f79-e1f9-4d8b-742d864b1ecc@w6rz.net>
-Date:   Thu, 17 Mar 2022 15:29:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 17 Mar 2022 18:31:48 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009971697B3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647556231; x=1679092231;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RLq+jbYOHZ3v2hFGMjLPhr/TJ4Byl5PWB49G9X3oN0o=;
+  b=HHIpuDvnavHx7IWokrAMFrLQFOjzhl2nJoBpEFwHNn2XsG/ngMaonwDC
+   FBAcBgIoTXGc2kkAaWhMC7w4D9iIpsltmA/KSNFNmAsYKO2ALcbwz2rxB
+   l8JV/rBrnQIh6DMZbxB0NlbvOyVSX5zN3ScC/XY/rcpsBuMqCMOcz4sA4
+   fm2hRg2nNZaU9yKwm00gzinaEwjQogK8PrUgnlJJ3GCjiz/PxJ8vrQDoe
+   6wNaI5bxjNRfwi7XTZJFoADqiPie7oF8B2UQ9iWx3OpghcnXJCts+/wkM
+   K0utSQvTDrcYGLMy1Rn2d8mOfM72kRWFSu/3fQg1NiTTul7kTFAqzv+za
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="239159038"
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="239159038"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 15:30:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="647221128"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 17 Mar 2022 15:30:17 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUydN-000EAC-5h; Thu, 17 Mar 2022 22:30:17 +0000
+Date:   Fri, 18 Mar 2022 06:30:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: /tmp/cch5VBly.s: Warning: Can not find match relax hint.  Line: 1841
+Message-ID: <202203180600.lgiajPmN-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nUycd-003p3r-BI
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:33244
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,26 +61,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/22 5:45 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.30 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 19 Mar 2022 12:45:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.30-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Alexei,
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+FYI, the error/warning still remains.
 
-Tested-by: Ron Economos <re@w6rz.net>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   56e337f2cf1326323844927a04e9dbce9a244835
+commit: 29db4bea1d10b73749d7992c1fc9ac13499e8871 bpf: Prepare relo_core.c for kernel duty.
+date:   4 months ago
+config: nds32-buildonly-randconfig-r001-20220317 (https://download.01.org/0day-ci/archive/20220318/202203180600.lgiajPmN-lkp@intel.com/config)
+compiler: nds32le-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=29db4bea1d10b73749d7992c1fc9ac13499e8871
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 29db4bea1d10b73749d7992c1fc9ac13499e8871
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   tools/lib/bpf/relo_core.c: In function 'bpf_core_apply_relo_insn':
+   tools/lib/bpf/relo_core.c:1346:1: warning: the frame size of 1160 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+    1346 | }
+         | ^
+   /tmp/cch5VBly.s: Assembler messages:
+>> /tmp/cch5VBly.s: Warning: Can not find match relax hint.  Line: 1841
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

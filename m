@@ -2,230 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1BF4DC48E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C19924DC485
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbiCQLNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S232875AbiCQLMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbiCQLM6 (ORCPT
+        with ESMTP id S230330AbiCQLMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:12:58 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6141DBA8D
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:11:41 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id q6-20020a056e0215c600b002c2c4091914so2800866ilu.14
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:11:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:cc;
-        bh=FSb3bECaa+QZmvUye7BqR5VJOw9yW+TrzGw9Xi56Luo=;
-        b=hnaoHOx0OGQaQuHU424LzW5yokLrlUAAIE7Y5cu9ZJVPZu2wdvhY808/rNLO9+/8pM
-         fm+8lwIHopB6fBthivmqiZZocKmREVwebb1AsQqVlTU5o0Jg8qNLzOc4WAM9FzjVZIjz
-         vds0kNevt68An3JT+nNcyb+mTbTaoLEmjQolEnuCdPn1CxToOfuHXDVHO/KTV63geh29
-         ZzzIxSlqrQth9iTJK4byRbq7AD+HtVj6Ok57b1Kfx2tdgXf848lB0kUwn62LLfPeMkGe
-         MntmFYaIJ+5NmmdaUbpPmPvzbHiYnhzq4Um367QdE+oZGTt0m/orMJkxEdLLwtmynRCK
-         QBSg==
-X-Gm-Message-State: AOAM530iWwePIoGnJRK9VOkqIF+tZnpd/jIRTDL0E5nv7+DzqQLe02po
-        xk9XCoWZ9S+K66K8ND6z0UvDEOdguq2bGms/8BGVgYMGFF55
-X-Google-Smtp-Source: ABdhPJx+r318zTBhalqDbzgPbd5g/MFRfuCipk6BT/fbRmyDgUovZsWSKrpChl142bdM7c8rcY6cbY5XuvdAejQQ16ENTX/Uhf+F
+        Thu, 17 Mar 2022 07:12:51 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5358D1CAF0F;
+        Thu, 17 Mar 2022 04:11:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C968B1F37F;
+        Thu, 17 Mar 2022 11:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647515493; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iRWwxLu6tSwi4l2M+4CwPACdz/Ep8oZjcYHhi+zSnZo=;
+        b=wJrdaEiRrIq/v/zHa0n/T9So7Z/OgV9e6X9nB71bgOzvHXx5CrbIROlDYJ2L9po1akdsM/
+        u/ehH1s4g2BHMyYM3RDp8KgrC6mLNP9egXKFxkh5n2RJfWnWzkXV7U4NV33tiOgExerr2V
+        osPLNhQWfkCv8Yay1us2m2/TFAvKWg4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647515493;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iRWwxLu6tSwi4l2M+4CwPACdz/Ep8oZjcYHhi+zSnZo=;
+        b=kQJdk8Lb8wmauRJGsEpbnB3nlPP7su+Wfz+O8UauXC7T86RuGZjzQ+ZJh4iwXBkdmcQVkI
+        kTFPNzjKJMcVMCBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 64BA613B64;
+        Thu, 17 Mar 2022 11:11:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 57LBFWUXM2KFUAAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Thu, 17 Mar 2022 11:11:33 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id ae5107b0;
+        Thu, 17 Mar 2022 11:11:52 +0000 (UTC)
+From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Ceph Development <ceph-devel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 0/3] ceph: add support for snapshot names encryption
+References: <20220315161959.19453-1-lhenriques@suse.de>
+        <5b53e812-d49b-45f0-1219-3dbc96febbc1@redhat.com>
+        <329abedd9d9938de95bf4f5600acdcd6a846e6be.camel@kernel.org>
+        <3c8b78c4-5392-b81c-e76f-64fcce4f3c0f@redhat.com>
+Date:   Thu, 17 Mar 2022 11:11:52 +0000
+In-Reply-To: <3c8b78c4-5392-b81c-e76f-64fcce4f3c0f@redhat.com> (Xiubo Li's
+        message of "Thu, 17 Mar 2022 18:52:49 +0800")
+Message-ID: <87wngshlzb.fsf@brahms.olymp>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3713:b0:317:ca48:4b7 with SMTP id
- k19-20020a056638371300b00317ca4804b7mr1817720jav.27.1647515500554; Thu, 17
- Mar 2022 04:11:40 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 04:11:39 -0700
-In-Reply-To: <20220317111127.2117-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002c2eab05da68180d@google.com>
-Subject: Re: [syzbot] KASAN: out-of-bounds Read in ath9k_hif_usb_rx_cb (3)
-From:   syzbot <syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Sun, 06 Jun 2021 14:16:15 -0700
->> syzbot has found a reproducer for the following issue on:
->> 
->> HEAD commit:    f5b6eb1e Merge branch 'i2c/for-current' of git://git.kerne..
->> git tree:       upstream
->> console output: https://syzkaller.appspot.com/x/log.txt?x=12fa1797d00000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=8a9e9956ca52a5f6
->> dashboard link: https://syzkaller.appspot.com/bug?extid=3f1ca6a6fec34d601788
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=158914ebd00000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17720670300000
->> 
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com
->> 
->> ==================================================================
->> BUG: KASAN: out-of-bounds in ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:636 [inline]
->> BUG: KASAN: out-of-bounds in ath9k_hif_usb_rx_cb+0xdd8/0x1050 drivers/net/wireless/ath/ath9k/hif_usb.c:680
->> Read of size 4 at addr ffff888036db4178 by task swapper/1/0
->> 
->> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.13.0-rc4-syzkaller #0
->> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
->> Call Trace:
->>  <IRQ>
->>  __dump_stack lib/dump_stack.c:79 [inline]
->>  dump_stack+0x141/0x1d7 lib/dump_stack.c:120
->>  print_address_description.constprop.0.cold+0x5b/0x2f8 mm/kasan/report.c:233
->>  __kasan_report mm/kasan/report.c:419 [inline]
->>  kasan_report.cold+0x7c/0xd8 mm/kasan/report.c:436
->>  ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:636 [inline]
->>  ath9k_hif_usb_rx_cb+0xdd8/0x1050 drivers/net/wireless/ath/ath9k/hif_usb.c:680
->>  __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1656
->>  usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1726
->>  dummy_timer+0x11f4/0x32a0 drivers/usb/gadget/udc/dummy_hcd.c:1978
->>  call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1431
->>  expire_timers kernel/time/timer.c:1476 [inline]
->>  __run_timers.part.0+0x67c/0xa50 kernel/time/timer.c:1745
->>  __run_timers kernel/time/timer.c:1726 [inline]
->>  run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1758
->>  __do_softirq+0x29b/0x9f6 kernel/softirq.c:559
->>  invoke_softirq kernel/softirq.c:433 [inline]
->>  __irq_exit_rcu+0x136/0x200 kernel/softirq.c:637
->>  irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
->>  sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1100
->>  </IRQ>
->>  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:647
->> RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:29 [inline]
->> RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
->> RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:132 [inline]
->> RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:109 [inline]
->> RIP: 0010:acpi_idle_do_entry+0x1c9/0x250 drivers/acpi/processor_idle.c:513
->> Code: ed b0 5b f8 84 db 75 ac e8 34 aa 5b f8 e8 ef b9 61 f8 e9 0c 00 00 00 e8 25 aa 5b f8 0f 00 2d 5e 48 b5 00 e8 19 aa 5b f8 fb f4 <9c> 5b 81 e3 00 02 00 00 fa 31 ff 48 89 de e8 24 b2 5b f8 48 85 db
->> RSP: 0018:ffffc90000d57d18 EFLAGS: 00000293
->> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
->> RDX: ffff8880123dd4c0 RSI: ffffffff89193267 RDI: 0000000000000000
->> RBP: ffff8881427b7864 R08: 0000000000000001 R09: 0000000000000001
->> R10: ffffffff817aec78 R11: 0000000000000000 R12: 0000000000000001
->> R13: ffff8881427b7800 R14: ffff8881427b7864 R15: ffff88801c850804
->>  acpi_idle_enter+0x361/0x500 drivers/acpi/processor_idle.c:648
->>  cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
->>  cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
->>  call_cpuidle kernel/sched/idle.c:158 [inline]
->>  cpuidle_idle_call kernel/sched/idle.c:239 [inline]
->>  do_idle+0x3e8/0x590 kernel/sched/idle.c:306
->>  cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:403
->>  start_secondary+0x274/0x350 arch/x86/kernel/smpboot.c:272
->>  secondary_startup_64_no_verify+0xb0/0xbb
->> 
->> Allocated by task 11245:
->>  kasan_save_stack+0x1b/0x40 mm/kasan/common.c:38
->>  kasan_set_track mm/kasan/common.c:46 [inline]
->>  set_alloc_info mm/kasan/common.c:428 [inline]
->>  ____kasan_kmalloc mm/kasan/common.c:507 [inline]
->>  ____kasan_kmalloc mm/kasan/common.c:466 [inline]
->>  __kasan_kmalloc+0x9b/0xd0 mm/kasan/common.c:516
->>  kmalloc include/linux/slab.h:561 [inline]
->>  raw_alloc_io_data drivers/usb/gadget/legacy/raw_gadget.c:593 [inline]
->>  raw_alloc_io_data+0x157/0x1c0 drivers/usb/gadget/legacy/raw_gadget.c:577
->>  raw_ioctl_ep0_read drivers/usb/gadget/legacy/raw_gadget.c:694 [inline]
->>  raw_ioctl+0x110b/0x2720 drivers/usb/gadget/legacy/raw_gadget.c:1223
->>  vfs_ioctl fs/ioctl.c:51 [inline]
->>  __do_sys_ioctl fs/ioctl.c:1069 [inline]
->>  __se_sys_ioctl fs/ioctl.c:1055 [inline]
->>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:1055
->>  do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
->>  entry_SYSCALL_64_after_hwframe+0x44/0xae
->> 
->> The buggy address belongs to the object at ffff888036db4000
->>  which belongs to the cache kmalloc-4k of size 4096
->> The buggy address is located 376 bytes inside of
->>  4096-byte region [ffff888036db4000, ffff888036db5000)
->> The buggy address belongs to the page:
->> page:ffffea0000db6c00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x36db0
->> head:ffffea0000db6c00 order:3 compound_mapcount:0 compound_pincount:0
->> flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
->> raw: 00fff00000010200 dead000000000100 dead000000000122 ffff888011042140
->> raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
->> page dumped because: kasan: bad access detected
->> page_owner tracks the page as allocated
->> page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd2040(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4855, ts 492416671090, free_ts 492416389440
->>  prep_new_page mm/page_alloc.c:2358 [inline]
->>  get_page_from_freelist+0x1033/0x2b60 mm/page_alloc.c:3994
->>  __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5200
->>  alloc_pages+0x18c/0x2a0 mm/mempolicy.c:2272
->>  alloc_slab_page mm/slub.c:1645 [inline]
->>  allocate_slab+0x2c5/0x4c0 mm/slub.c:1785
->>  new_slab mm/slub.c:1848 [inline]
->>  new_slab_objects mm/slub.c:2594 [inline]
->>  ___slab_alloc+0x4a1/0x810 mm/slub.c:2757
->>  __slab_alloc.constprop.0+0xa7/0xf0 mm/slub.c:2797
->>  slab_alloc_node mm/slub.c:2879 [inline]
->>  slab_alloc mm/slub.c:2921 [inline]
->>  __kmalloc+0x315/0x330 mm/slub.c:4055
->>  kmalloc include/linux/slab.h:561 [inline]
->>  tomoyo_realpath_from_path+0xc3/0x620 security/tomoyo/realpath.c:254
->>  tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
->>  tomoyo_path_perm+0x21b/0x400 security/tomoyo/file.c:822
->>  security_inode_getattr+0xcf/0x140 security/security.c:1332
->>  vfs_getattr fs/stat.c:139 [inline]
->>  vfs_fstat+0x43/0xb0 fs/stat.c:164
->>  __do_sys_newfstat+0x81/0x100 fs/stat.c:404
->>  do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
->>  entry_SYSCALL_64_after_hwframe+0x44/0xae
->> page last free stack trace:
->>  reset_page_owner include/linux/page_owner.h:24 [inline]
->>  free_pages_prepare mm/page_alloc.c:1298 [inline]
->>  __free_pages_ok+0x476/0xce0 mm/page_alloc.c:1572
->>  device_release+0x9f/0x240 drivers/base/core.c:2190
->>  kobject_cleanup lib/kobject.c:705 [inline]
->>  kobject_release lib/kobject.c:736 [inline]
->>  kref_put include/linux/kref.h:65 [inline]
->>  kobject_put+0x1c8/0x540 lib/kobject.c:753
->>  put_device+0x1b/0x30 drivers/base/core.c:3432
->>  ath9k_htc_probe_device+0x1c7/0x1e50 drivers/net/wireless/ath/ath9k/htc_drv_init.c:976
->>  ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:503
->>  ath9k_hif_usb_firmware_cb+0x274/0x530 drivers/net/wireless/ath/ath9k/hif_usb.c:1239
->>  request_firmware_work_func+0x12c/0x230 drivers/base/firmware_loader/main.c:1081
->>  process_one_work+0x98d/0x1600 kernel/workqueue.c:2276
->>  worker_thread+0x64c/0x1120 kernel/workqueue.c:2422
->>  kthread+0x3b1/0x4a0 kernel/kthread.c:313
->>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
->> 
->> Memory state around the buggy address:
->>  ffff888036db4000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->>  ffff888036db4080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->> >ffff888036db4100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->>                                                                 ^
->>  ffff888036db4180: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->>  ffff888036db4200: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->> ==================================================================
->
-> Fix oob by adding boundary check.
->
-> Hillf
->
-> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+Xiubo Li <xiubli@redhat.com> writes:
 
-This bug is already marked as fixed. No point in testing.
+> On 3/17/22 6:01 PM, Jeff Layton wrote:
+>> I'm not sure we want to worry about .snap directories here since they
+>> aren't "real". IIRC, snaps are inherited from parents too, so you could
+>> do something like
+>>
+>>      mkdir dir1
+>>      mkdir dir1/.snap/snap1
+>>      mkdir dir1/dir2
+>>      fscrypt encrypt dir1/dir2
+>>
+>> There should be nothing to prevent encrypting dir2, but I'm pretty sure
+>> dir2/.snap will not be empty at that point.
+>
+> If we don't take care of this. Then we don't know which snapshots should =
+do
+> encrypt/dencrypt and which shouldn't when building the path in lookup and=
+ when
+> reading the snapdir ?
+
+In my patchset (which I plan to send a new revision later today, I think I
+still need to rebase it) this is handled by using the *real* snapshot
+parent inode.  If we're decrypting/encrypting a name for a snapshot that
+starts with a '_' character, we first find the parent inode for that
+snapshot and only do the operation if that parent is encrypted.
+
+In the other email I suggested that we could prevent enabling encryption
+in a directory when there are snapshots above in the hierarchy.  But now
+that I think more about it, it won't solve any problem because you could
+create those snapshots later and then you would still need to handle these
+(non-encrypted) "_name_xxxx" snapshots anyway.
+
+Cheers,
+--=20
+Lu=C3=ADs
 
 >
-> --- x/drivers/net/wireless/ath/ath9k/hif_usb.c
-> +++ y/drivers/net/wireless/ath/ath9k/hif_usb.c
-> @@ -633,6 +633,10 @@ static void ath9k_hif_usb_rx_stream(stru
->  					"ath9k_htc: over RX MAX_PKT_NUM\n");
->  				goto err;
->  			}
-> +			if (pkt_len >= len || len - pkt_len < chk_idx + 4) {
-> +				dev_err(&hif_dev->udev->dev, "ath9k_htc: RX OOB\n");
-> +				goto err;
-> +			}
->  			nskb = __dev_alloc_skb(pkt_len + 32, GFP_ATOMIC);
->  			if (!nskb) {
->  				dev_err(&hif_dev->udev->dev,
-> --
+> -- Xiubo
+>
+>>
+>> -- Jeff
+>>
+>> On Thu, 2022-03-17 at 13:27 +0800, Xiubo Li wrote:
+>>> Hi Luis,
+>>>
+>>> There has another issue you need to handle at the same time.
+>>>
+>>> Currently only the empty directory could be enabled the file encryption,
+>>> such as for the following command:
+>>>
+>>> $ fscrypt encrypt mydir/
+>>>
+>>> But should we also make sure that the mydir/.snap/ is empty ?
+>>>
+>>> Here the 'empty' is not totally empty, which allows it should allow long
+>>> snap names exist.
+>>>
+>>> Make sense ?
+>>>
+>>> - Xiubo
+>>>
+>>>
+>>> On 3/16/22 12:19 AM, Lu=C3=ADs Henriques wrote:
+>>>> Hi!
+>>>>
+>>>> A couple of changes since v1:
+>>>>
+>>>> - Dropped the dentry->d_flags change in ceph_mkdir().  Thanks to Xiubo
+>>>>     suggestion, patch 0001 now skips calling ceph_fscrypt_prepare_cont=
+ext()
+>>>>     if we're handling a snapshot.
+>>>>
+>>>> - Added error handling to ceph_get_snapdir() in patch 0001 (Jeff had
+>>>>     already pointed that out but I forgot to include that change in pr=
+evious
+>>>>     revision).
+>>>>
+>>>> - Rebased patch 0002 to the latest wip-fscrypt branch.
+>>>>
+>>>> - Added some documentation regarding snapshots naming restrictions.
+>>>>
+>>>> As before, in order to test this code the following PRs are required:
+>>>>
+>>>>     mds: add protection from clients without fscrypt support #45073
+>>>>     mds: use the whole string as the snapshot long name #45192
+>>>>     mds: support alternate names for snapshots #45224
+>>>>     mds: limit the snapshot names to 240 characters #45312
+>>>>
+>>>> Lu=C3=ADs Henriques (3):
+>>>>     ceph: add support for encrypted snapshot names
+>>>>     ceph: add support for handling encrypted snapshot names
+>>>>     ceph: update documentation regarding snapshot naming limitations
+>>>>
+>>>>    Documentation/filesystems/ceph.rst |  10 ++
+>>>>    fs/ceph/crypto.c                   | 158 +++++++++++++++++++++++++-=
+---
+>>>>    fs/ceph/crypto.h                   |  11 +-
+>>>>    fs/ceph/inode.c                    |  31 +++++-
+>>>>    4 files changed, 182 insertions(+), 28 deletions(-)
+>>>>
+>
+

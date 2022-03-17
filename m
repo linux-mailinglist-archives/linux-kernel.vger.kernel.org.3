@@ -2,221 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DED4DCB44
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD024DCB5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236519AbiCQQ0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
+        id S236556AbiCQQ1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233658AbiCQQ0a (ORCPT
+        with ESMTP id S236540AbiCQQ1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:26:30 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF60BD7E8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:25:13 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id w4so4844959ply.13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6sSNVFojWkEa+kB1rxVwpwdlRixm4OOVySYgWgA6hHU=;
-        b=MIjoGDMSbCb+8RaIRBW4suJHxfXpTo855FIRj8RMraN9uYrseVjLtsfrJaw8R1WJRC
-         w7a/cIO3C4JIYz+QMRRQycoo5YTjncyXCvOMJEJrWvAuq9oZjUyAGlG32MpJ7JLZ4KVQ
-         UuIs7rZVwuFSzXVdmtTDGuiHE4yihgkRMDzdEBLzr4WJGgGovWg8w9oRagk3iJksXpiP
-         j+6kzguWQ39dcsXRZSE0xnhH+Z4dzJ9j1NO5YApUmQYCVNaeFvltVT0gEu64ITs0BluW
-         4VoClCJ/rnS+Pdl4OyVHHYU/2ftCeULXTeKY23yLhfY0f5m4g4ssHj+30FXiuBSncF1c
-         Ycjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6sSNVFojWkEa+kB1rxVwpwdlRixm4OOVySYgWgA6hHU=;
-        b=W48IDRRQ3yiJSeWkPLirw+L8hOW0cqcMV1XI4RPebGsq/TjJxDyNyn409As89E4o4z
-         ivvsihu6GhlnO+60Y0exXU0nwsPkOVdp5xDoNf7jrv5pyIvzZoGqnOmZayAk/qKhx9eM
-         dAT1h5+tKOLvQK0q3KCcfcEzGRxTY2y4a4Y+NQa1hMYhF1cnY9t9nyTlrlC0ts+mq1gs
-         zkx5LJf+jIuDUvQtwXVIgYQ9Xr+Rdkpm+fQa7OHVCzU9di3eZ4B8I7RAskio6Eu5V8mC
-         gV9ENLvxmnx/ysVQjx0an5jBAOYpHDpShBBPONUVlo4/4eaqf88OhAcgvuSE733NrEGa
-         SBxw==
-X-Gm-Message-State: AOAM531F8x5pMBzhvh0ITLt8v3yqQHshqh0xtOA1xyULuzACsN+nG1As
-        Z+dxLLV0TNFEp7kKvwlTxbFHLA==
-X-Google-Smtp-Source: ABdhPJwFtbsxAvxS4DCDF9la8zCNKh+F6SHycDDweS3/B6oT2kQgW7jmQaauv6istzAcTM5eZtk0rQ==
-X-Received: by 2002:a17:90a:6441:b0:1c6:8de6:9fc0 with SMTP id y1-20020a17090a644100b001c68de69fc0mr3243379pjm.163.1647534312833;
-        Thu, 17 Mar 2022 09:25:12 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id mq6-20020a17090b380600b001c6357f146csm10359793pjb.12.2022.03.17.09.25.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 09:25:11 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 10:25:09 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v4] remoteproc: mediatek: Fix side effect of mt8195 sram
- power on
-Message-ID: <20220317162509.GA2630429@p14s>
-References: <20220316031117.7311-1-tinghan.shen@mediatek.com>
- <20220316163451.GA2546942@p14s>
- <8a7be596-531a-52f4-c1b0-ed1d23cfa1bb@collabora.com>
+        Thu, 17 Mar 2022 12:27:01 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11021024.outbound.protection.outlook.com [52.101.62.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD43DAFC5;
+        Thu, 17 Mar 2022 09:25:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e0NhkDClOkLvQt/RRQb+jzedPz2jjhzXkr48E84UBIPZqzVHCCVKjpreHFEIYRa2aJh/hpekJtstZlZLriPb1pyZYxIW0W5/C4tbOkt5qAc0rRQV8y5k+9I88uRZfhlN2CczgZ2btm+QUWfheqcTg/mAms9g1xHyX7mitP+aQrPinrfj9go84olK//WJ/Q4DNc/r+JHid001vS2i8+XzmcO2tgOD7c9q9ibi/UuDrGquwCUEgR9cvw8lxucINj+So6dqljxRv43NtBUM6wbNNziulFpJCfemgBqIrxirwLNrFfjvlbUMBjt442OELZO3Hw+e8x0zJ3zvWn6gkxAP6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WxZuje2ccNfL+dilqXvqiAwKeYbCnnj+H5tv91jgZzc=;
+ b=B1/g7SHhil4StypBijAPjYmj3YWTd8WBYPrWp8DnKdp1pHiu/awyiOvvdYu5N+NvXZzYeQulLdWXWBgJFqcWMSXijw0HLnIvkUU/5PAwlm8vzVozV9YSXF8DQoQ5PA/aNWj0YjWs312OsSac8FaQsIr1uCR3tt4VdmX5sHFPUbdsTPWqUEaay1egwwTRIylfmt2gimnm6oZr512GlhC+Ng+12ecmp6YUouzBmjGYYk7hm8P1GmiA1rMNRNnnVgguS3rgjM1peBioL6blZ1FaL3wD84cIJzJQO450hWy58oiPZN67Uvehx1U7QiRyMdAUUdMNXrVBW/c6LlL0Tw1PLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WxZuje2ccNfL+dilqXvqiAwKeYbCnnj+H5tv91jgZzc=;
+ b=Zgo7Fev8foZOmdvTUYUwxDLxYI6/ACexVvwgR71amsLRBHaueyo8qhfWajiS1Gu73XQ8wboXoefUtEWzmCJ4U+xcQNdW8ckWmzaq3rA96b8A1ILRiDTt6tzawMdqYwVVZOltoSgyRmqP3uDDt9yc/xUqNBpPs8oYaXb8XDfr/D8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from DM6PR21MB1514.namprd21.prod.outlook.com (2603:10b6:5:22d::11)
+ by BL0PR2101MB1796.namprd21.prod.outlook.com (2603:10b6:207:19::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.7; Thu, 17 Mar
+ 2022 16:25:43 +0000
+Received: from DM6PR21MB1514.namprd21.prod.outlook.com
+ ([fe80::8c81:f644:fc1c:1357]) by DM6PR21MB1514.namprd21.prod.outlook.com
+ ([fe80::8c81:f644:fc1c:1357%4]) with mapi id 15.20.5102.007; Thu, 17 Mar 2022
+ 16:25:43 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     sthemmin@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, rafael@kernel.org,
+        lenb@kernel.org, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com, hch@lst.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Cc:     mikelley@microsoft.com
+Subject: [PATCH 2/4 RESEND] dma-mapping: Add wrapper function to set dma_coherent
+Date:   Thu, 17 Mar 2022 09:25:09 -0700
+Message-Id: <1647534311-2349-3-git-send-email-mikelley@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1647534311-2349-1-git-send-email-mikelley@microsoft.com>
+References: <1647534311-2349-1-git-send-email-mikelley@microsoft.com>
+Content-Type: text/plain
+X-ClientProxiedBy: MW4P222CA0001.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:303:114::6) To DM6PR21MB1514.namprd21.prod.outlook.com
+ (2603:10b6:5:22d::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8a7be596-531a-52f4-c1b0-ed1d23cfa1bb@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c0939e0c-e960-4f57-0e22-08da0832c882
+X-MS-TrafficTypeDiagnostic: BL0PR2101MB1796:EE_
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-Microsoft-Antispam-PRVS: <BL0PR2101MB1796727DD7E54A7C3BB965CDD7129@BL0PR2101MB1796.namprd21.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a2PJvTQmy+qBdJMrhcQvH5odCF+txcZ7z7z0DEmBOhS5PN3DdVvpjJ6Qs6yA0cyWTPBSq1kpvFHDgrGrxnBw68CM6vvMt3cy0ZCrtzjJF5yCp5B+LbS9C7UQbEhhljg0QXqTBcYYLdjeeztifaA6sIaD5Nmywp1E9slwjqNL7xqv/IolJAXUo9/LS61m82vZs5UQWPJcBjzS8KR8+ber4NA7beK8dVT4/ZjqVARGYIaJeOIdYaYuhl9i7pD/P6xU3J97Cx75WaB80JKM3qqy1tl63oflbUB5jpwXyQHrzqs/O9foUrEDeY6D6aLI9CO9E9lmGeGGx4rbDcbuKVSxmOacfgucViFAi8snWDrHc0D9KmdCR4Svc2K5qO9ehDCb7cn5WjOYHs/CaCjKPBx7cO6BsXYxY3YIU/Y8Sde+ln7kLxIfw26daeFdf/bUuafBT06NUFHZQMuNQgeqJnDmFP0ISwQUDVHhnNzCM8Sug0a0DRhNIpTF9jUzL9a0RjdU9cV4GhuNmkyexTbSQpVIdt4R9yIDJi4h2lgqlWaUi5Z+N6AHHSrLofAhoo7/hocC8CIqBRCgD2ajEnsB6v2RY+8FMruzqBiusXRo2UMcxG0CQgWDtDgU5qWUSJl4bgXtilhHfPqsz87jJMATxmSVo64rG1cAfWGWXC9Km9hqqG40HiTynhI8Y5NK1Cl2i2Pl+2DCcNUJ/Yki75J6hvOlRd6DjcZm6b4En1X1zZD5/Vme54v1QmFE4WGTlu18wDk/WNFbv4HaUNfQzynOOS0lgg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1514.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(6666004)(4326008)(8676002)(7416002)(66476007)(66556008)(66946007)(6506007)(921005)(508600001)(82950400001)(10290500003)(82960400001)(52116002)(38350700002)(6486002)(38100700002)(8936002)(2906002)(107886003)(5660300002)(6512007)(86362001)(4744005)(26005)(186003)(36756003)(316002)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0av/8x5/s5DDYsN4H1M8Oo0+Cr42RfQO9oxfqFYM2cuxq79z+1qabJm5uvsb?=
+ =?us-ascii?Q?7x6BapWsDLIKaiGr4MSPow02pV+KhLeMLo0hsJbg2cnZGLFC2ltA08hhPkiw?=
+ =?us-ascii?Q?ax0Y01H+c6pm3FVw47ejuGYgl5JpHQuCHw2K0ZYHn47QMQj7PXczB1o2hw5j?=
+ =?us-ascii?Q?Yz26jyFvkoYI2sdtjv+qEHP4Q06vnzYjPHJ8InQStQHdOPyVIGOIChq5XBvg?=
+ =?us-ascii?Q?KB6oGx4lWbqGcTuyHAYK19UKdIR03Aya2SW0cXuofDsDOS3498xq7025UjEA?=
+ =?us-ascii?Q?1Ga+8Jw8eBf1M/Jc1etlgvcjVbuFV5olF0eIcuhm3IKCVgE03wqOpgKgSqWF?=
+ =?us-ascii?Q?wVKKc1Mh34em9qGY1ZCFwDmSXge5al8b/tAUuhtWqF2lnA5ZeK5r2vVJalv7?=
+ =?us-ascii?Q?ufhWB3c3JbimjSnQZ2Un65ezCu3J4r42SsKh7nyQZ3GGWIzzxynIZ4UFAhfh?=
+ =?us-ascii?Q?AxLqvF89MaM7nzeZZAaeE2Ofq/NmxvoBj8DmL1jXnboXL2nngtmGVL8Z268D?=
+ =?us-ascii?Q?K9twsgNi2tDBHe80JqLAgX28xHy5eKlqRo6EOEXn5YZdKkYmf4TZVK2rhoxK?=
+ =?us-ascii?Q?I1mGcyY7c/NkJIORBhGLc0ZMmF2KqbT4dZb14RFbiudY+jmRn41TkIasmKGF?=
+ =?us-ascii?Q?1/J+OU8T3KERu/tBBVlUIj1/reucSocTpqgWKQjoLnN/aBkXuz5UveoJwW1F?=
+ =?us-ascii?Q?HhTWGAAZQwIVw5moG9X/17GaK8gwi9gXIMTd+C35+TbXa/94XAogucl9+YNj?=
+ =?us-ascii?Q?Bnw0RzuowuoWw8Sg0CaA8sM2CkE8NW+BUZONnJVkCEAsaBsGAIiLs/I5oIRj?=
+ =?us-ascii?Q?7EMvO5RsjW91IXl59BLrVf9pSmAMDPlFW/9iU9IpFj4k/QD5yte1QOV73jMO?=
+ =?us-ascii?Q?EazUUygzSOqcBc29EycuBW2NM2GO6K6NBLXkLMk5ZcwsfWq4FRyOu8+Vm9CM?=
+ =?us-ascii?Q?CWorNkbpsRwBs+mJFX45ns9OGPa3JmbFoVBqT3SLriMGvwzRcIFaRanmX2+W?=
+ =?us-ascii?Q?v2J2MB07Y8U4VFDoWrC5PCoKd/urAiNLcd2UDp7hGCiVPFtRRx+HILZse5gC?=
+ =?us-ascii?Q?CjWBGL7wbIQHFt+h/c59/AWnM0BF3rsLLiK2J8xpOfYHgHUzG0UWf3SmRs7l?=
+ =?us-ascii?Q?Bv6JCaPUv0N7w27D1xs0wRMldO5oS5g5Kt8rcmjMYuP+PEGJoF+lYSarqmXN?=
+ =?us-ascii?Q?AdJ05M4gPbZJdTwYiJVZbARvncV7TGPJxahPQvsYgsreFO6EhSOjw1FnXRUU?=
+ =?us-ascii?Q?mStx4I8Qpa0fCAJPMWuiu29sKEFar+Nh6cMBSlmwWbL48JWiHgI6fFxoOVdv?=
+ =?us-ascii?Q?dLIb6Mrx1PRa89jiRboZ5osKwZI60W07OpV3kOvSGvvijl1UHzS1B0pdBBj5?=
+ =?us-ascii?Q?5ML2pFGqsblJlETrdrdGGBQqKK/FsU4gvNhZPJjIV4mEglvpxX2EaInm2anh?=
+ =?us-ascii?Q?rIs5MVFf9tTf4xIzWUtmSuMadQZk5F+L0ca/MJPPtTpxoPXAxaj6mw=3D=3D?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c0939e0c-e960-4f57-0e22-08da0832c882
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1514.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2022 16:25:43.2999
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: thINH8NTaWtd2dm7lqe57swda2R2EZ03Z0TV3Yf9IMYieOtm6GKvzTCYE6wlofCTlhcm1IWPUL38W25Mu64EXg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR2101MB1796
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 05:44:04PM +0100, AngeloGioacchino Del Regno wrote:
-> Il 16/03/22 17:34, Mathieu Poirier ha scritto:
-> > Good morning,
-> > 
-> > On Wed, Mar 16, 2022 at 11:11:17AM +0800, Tinghan Shen wrote:
-> > > The definition of L1TCM_SRAM_PDN bits on mt8195 is different to mt8192.
-> > > 
-> > > L1TCM_SRAM_PDN bits[3:0] control the power of mt8195 L1TCM SRAM.
-> > > 
-> > > L1TCM_SRAM_PDN bits[7:4] control the access path to EMI for SCP.
-> > > These bits have to be powered on to allow EMI access for SCP.
-> > > 
-> > > Bits[7:4] also affect audio DSP because audio DSP and SCP are
-> > > placed on the same hardware bus. If SCP cannot access EMI, audio DSP is
-> > > blocked too.
-> > > 
-> > > L1TCM_SRAM_PDN bits[31:8] are not used.
-> > > 
-> > > This fix removes modification of bits[7:4] when power on/off mt8195 SCP
-> > > L1TCM. It's because the modification introduces a short period of time
-> > > blocking audio DSP to access EMI. This was not a problem until we have
-> > > to load both SCP module and audio DSP module. audio DSP needs to access
-> > > EMI because it has source/data on DRAM. Audio DSP will have unexpected
-> > > behavior when it accesses EMI and the SCP driver blocks the EMI path at
-> > > the same time.
-> > > 
-> > > Fixes: 79111df414fc ("remoteproc: mediatek: Support mt8195 scp")
-> > > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > > Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> > > ---
-> > > v4: add Fixes and Reviewed-by tags
-> > > v3: fix build error
-> > > v2: apply comments about macro definition and function calls
-> > > ---
-> > >   drivers/remoteproc/mtk_common.h |  2 ++
-> > >   drivers/remoteproc/mtk_scp.c    | 67 +++++++++++++++++++++++++++++++----------
-> > >   2 files changed, 53 insertions(+), 16 deletions(-)
-> > > 
-> > > diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-> > > index 5ff3867c72f3..ff954a06637c 100644
-> > > --- a/drivers/remoteproc/mtk_common.h
-> > > +++ b/drivers/remoteproc/mtk_common.h
-> > > @@ -51,6 +51,8 @@
-> > >   #define MT8192_CORE0_WDT_IRQ		0x10030
-> > >   #define MT8192_CORE0_WDT_CFG		0x10034
-> > > +#define MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS		GENMASK(7, 4)
-> > > +
-> > >   #define SCP_FW_VER_LEN			32
-> > >   #define SCP_SHARE_BUFFER_SIZE		288
-> > > diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-> > > index 36e48cf58ed6..5f686fe09203 100644
-> > > --- a/drivers/remoteproc/mtk_scp.c
-> > > +++ b/drivers/remoteproc/mtk_scp.c
-> > > @@ -365,22 +365,22 @@ static int mt8183_scp_before_load(struct mtk_scp *scp)
-> > >   	return 0;
-> > >   }
-> > > -static void mt8192_power_on_sram(void __iomem *addr)
-> > > +static void scp_sram_power_on(void __iomem *addr, u32 reserved_mask)
-> > 
-> > Why is @reserved_mask needed?  It is not described in the changelong and as far
-> > as I can see in this patchset the parameter is always set to '0', which has no
-> > effect on the mask that gets generated.
-> > 
-> 
-> Hello Mathieu,
-> the @reserved_mask is explained in perhaps not very very clear terms, meaning
-> that he's not explicitly saying the name of the new param, but that's it:
-> 
-> "This fix removes modification of bits[7:4] when power on/off mt8195 SCP
-> L1TCM."
-> 
-> ....and it's actually being used, check below....
-> 
-> > Thanks,
-> > Mathieu
-> > 
-> > >   {
-> > >   	int i;
-> > >   	for (i = 31; i >= 0; i--)
-> > > -		writel(GENMASK(i, 0), addr);
-> > > +		writel(GENMASK(i, 0) & ~reserved_mask, addr);
-> > >   	writel(0, addr);
-> > >   }
-> > > -static void mt8192_power_off_sram(void __iomem *addr)
-> > > +static void scp_sram_power_off(void __iomem *addr, u32 reserved_mask)
-> 
-> ...snip...
-> 
-> > > +static int mt8195_scp_before_load(struct mtk_scp *scp)
-> > > +{
-> > > +	/* clear SPM interrupt, SCP2SPM_IPC_CLR */
-> > > +	writel(0xff, scp->reg_base + MT8192_SCP2SPM_IPC_CLR);
-> > > +
-> > > +	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
-> > > +
-> > > +	/* enable SRAM clock */
-> > > +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-> > > +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-> > > +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-> 
-> 
-> > > +	scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
-> > > +			  MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS);
-> 
-> here	
+Add a wrapper function to set dma_coherent, avoiding the need for
+complex #ifdef's when setting it in architecture independent code.
 
-Yes - it's obvious now that you point it out.  
+Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+---
+ include/linux/dma-map-ops.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-This patch conflicts with the newly added support for mt8186[1].  I tried to fix
-it but did not know if mt8185 needed the same kind of bit masking as mt8195.
-Please have a look and rebase to rproc-next.
+diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
+index 0d5b06b..3350e7a 100644
+--- a/include/linux/dma-map-ops.h
++++ b/include/linux/dma-map-ops.h
+@@ -254,11 +254,20 @@ static inline bool dev_is_dma_coherent(struct device *dev)
+ {
+ 	return dev->dma_coherent;
+ }
++static inline void dev_set_dma_coherent(struct device *dev,
++		bool coherent)
++{
++	dev->dma_coherent = coherent;
++}
+ #else
+ static inline bool dev_is_dma_coherent(struct device *dev)
+ {
+ 	return true;
+ }
++static inline void dev_set_dma_coherent(struct device *dev,
++		bool coherent)
++{
++}
+ #endif /* CONFIG_ARCH_HAS_DMA_COHERENCE_H */
+ 
+ void *arch_dma_alloc(struct device *dev, size_t size, dma_addr_t *dma_handle,
+-- 
+1.8.3.1
 
-Thanks,
-Mathieu
-
-[1]. 80d691854ffb remoteproc: mediatek: Support mt8186 scp
-
-> 
-> > > +	scp_sram_power_on(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
-> > >   	/* enable MPU for all memory regions */
-> > >   	writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
-> 
-> ...snip...
-> 
-> > > +
-> > > +static void mt8195_scp_stop(struct mtk_scp *scp)
-> > > +{
-> > > +	/* Disable SRAM clock */
-> > > +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-> > > +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-> > > +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-> > > +	scp_sram_power_off(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
-> > > +			   MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS);
-> 
-> and here 			^^^^^^^^
-> 
-> > > +	scp_sram_power_off(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
-> 
-> Cheers,
-> Angelo

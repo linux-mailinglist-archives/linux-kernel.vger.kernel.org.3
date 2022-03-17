@@ -2,115 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F194DC363
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C67894DC36A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbiCQJzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        id S232049AbiCQJ54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiCQJzm (ORCPT
+        with ESMTP id S231959AbiCQJ5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:55:42 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED381DB3FA
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:54:25 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id ja24so4117523ejc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:54:25 -0700 (PDT)
+        Thu, 17 Mar 2022 05:57:47 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A759D1DB8B3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:56:31 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id gb39so9532512ejc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:56:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=gW7kOKK7V7pspvar7Z3AV8JkKJaIW60c95pvf/QvtJU=;
-        b=DpYDn7zwd3HjXoXmYbpayeyC4NYCPpPnll9KWttDoEirj+zncLhWZ5Hky8I8q3/4h3
-         D8K0z8QEu/KAO7K7vkyIww01hRH72xKVDavzSTShF0t8OJoiXf25i6iipMXr637xdJhD
-         Y5a4REyjjGpEUZ8Hrds8DGaQ96fEp3R+AQbIr3SYlNcUdJ4v52i7qm0cGFwKGVHB9MDU
-         PIWNLehQbYptux6UYkrpig+SeBzRGtQRkPjmriZu48gcreMWbJ6D8urnqg45BVXAjVLt
-         4OlwkmS+PrQkWMOf5PFGdeY6mHfOGIO3n/EJ0ZvsApThdaFapEAB4YjPmsxl4yveBjld
-         cs6g==
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LKI5osEQPlJQ9O41BUKV52XR7DzjpxsT1kue581cMEE=;
+        b=wtF2cm1chUMImmLChI8MkXLIoXzRJv/4c2ZfBPQXNLIW3gztpjO9Vus4qB80F9/9Ac
+         UfctFxEEUiedV5c74UYBUcZbTl7TAnqIDK/81wFUViIAyzwtnGBDk/nEfWIu4dOZq3UY
+         dU772LEIPywn+CzvVwK16LoMS8QaDRouGG8Ra7DddwEVLt3oRdY1hvMUB8H9AIXtgvwj
+         v+laEHqfmmio6d79AWCPC9XC9JU2ad1QjY1he8lLN/UplsOA70S56ox/4B+pz62Dgp3L
+         3UKH4xjoixBzd2DeF+Z3lSqd6kkiE+ouS+Y1reWWY2fTs+L5B4x9E6PUniJymHyX+99H
+         2pIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=gW7kOKK7V7pspvar7Z3AV8JkKJaIW60c95pvf/QvtJU=;
-        b=KQ3ZXpANIuNVVkxNd/n1SYNQedcTevPsVHe/mKuA1tlPBeCd6+wPJQ6BSknlLzQOCB
-         kmA6o7zRtX8x+w8xly9ks6hc8b9L8+RrQWYCIbyvLipUI2p4ezkZYWWuk8UgsjZoHYlP
-         BmVLhYovy3/lWuED63Yg5LS35YNBTPIAopKhl1giQtsQJR0VrQlxhhn3vkLLsrNpVoDi
-         GKfUo7HKRSP2F4yvrZnGUwmPNMDAB7u02QEoDT6uxaMfTGlEtE3JAslcdSxDApOMBn7+
-         fefQpVaMGPPAK8YLw0hsea2hunQ70t8jZldO0lb6cEYi+NbMtjMf1wBaQI9fs9faXZY3
-         hrAw==
-X-Gm-Message-State: AOAM531JoNzEBpgBKXV+DlD4AYxHKEY2d+4ugBoJP0rimQbNt05BwKbY
-        nu+o6vGutAcAaqGk5cokCw==
-X-Google-Smtp-Source: ABdhPJzAThsGiLrgJiQEuu6BRsWPAxD23J0epCgvB7yBKal7P7Zea9OmtH1mDStEfDXlehxUtOq3hA==
-X-Received: by 2002:a17:907:2d0a:b0:6df:8bc8:236f with SMTP id gs10-20020a1709072d0a00b006df8bc8236fmr3053287ejc.527.1647510863598;
-        Thu, 17 Mar 2022 02:54:23 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.248.53])
-        by smtp.gmail.com with ESMTPSA id a1-20020a1709063e8100b006ce06ed8aa7sm2142980ejj.142.2022.03.17.02.54.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 02:54:23 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 12:54:21 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     hui li <juanfengpy@gmail.com>
-Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org
-Subject: Re: discussing about proc_misc_d_delete
-Message-ID: <YjMFTSKZp9eX/c4k@localhost.localdomain>
-References: <CAPmgiUJVaACDyWkEhpC5Tfk233t-Tw6_f-Y99KLUDqv6dEq0tw@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LKI5osEQPlJQ9O41BUKV52XR7DzjpxsT1kue581cMEE=;
+        b=RGMko1LEGahYCu+LtHsIP2LsJRHwchs4r2PVM0Q4c/2LNFFkRuaJySZ8TrJKpc3c+9
+         0htvdKM+M1+nQjiqudmpnGY30obtbIwj8NQzr3epw/YVKQKRp9rwe21R6GLQVUF+tyf/
+         gtRzst/1G4RO7Fa0odHrpbrpEgm3N90SKSY4IgDj23RsHkXgyOQbw8MXNe3057tDgIB3
+         1PpxMEIeQDt15i5AA7efCb2PObdqNKgBJ7lCOF8+HPpsUICMUEknl6nF418PH0R4MsGX
+         MZCXxiidslfewjIjfJicBZmIkya+R1c3nMumNyvA8uv1EEYQktWnXuXVns174BbpP5lh
+         bzrQ==
+X-Gm-Message-State: AOAM532cIE7GfdKfP3eqZnuQK9G6fr8iyNK09hzIHiTsJADuQTXlrjg8
+        GmwJfnsSvmqoarKdXA/bkk7/9g==
+X-Google-Smtp-Source: ABdhPJzruCPaoIxNIBvpP+LfzFl7/FwTivyoElXEcL44kAFVVQxza9J2S8xYas7tVKVC8JIZgQmL6w==
+X-Received: by 2002:a17:907:9910:b0:6d5:acd6:8d02 with SMTP id ka16-20020a170907991000b006d5acd68d02mr3560951ejc.173.1647510989856;
+        Thu, 17 Mar 2022 02:56:29 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id n6-20020aa7c786000000b00410d2403ccfsm2382081eds.21.2022.03.17.02.56.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 02:56:29 -0700 (PDT)
+Message-ID: <65f72950-8cfa-132d-f455-06213dae4327@blackwall.org>
+Date:   Thu, 17 Mar 2022 11:56:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPmgiUJVaACDyWkEhpC5Tfk233t-Tw6_f-Y99KLUDqv6dEq0tw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 net-next 00/15] net: bridge: Multiple Spanning Trees
+Content-Language: en-US
+To:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Cooper Lees <me@cooperlees.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bridge@lists.linux-foundation.org
+References: <20220316150857.2442916-1-tobias@waldekranz.com>
+ <610eb6cc-4df4-f0fc-462a-b33145334a12@blackwall.org>
+ <87tubwkiw2.fsf@waldekranz.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <87tubwkiw2.fsf@waldekranz.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	[cc linux-kernel ]
-
-On Mon, Mar 14, 2022 at 11:54:37AM +0800, hui li wrote:
-> We noticed that, commit 1da4d377f94 (“proc: revalidate misc dentries”)
-> introduced proc_misc_dentry_ops as default ops for /proc dentry,
-> dentry ops for /proc/pid/net/stat/ is set as proc_net_dentry_ops,
-> which will revalidate dentry each time when this path is resolved and
-> dentry for the stat file is removed from dcache. This time, if files
-> under /proc/pid/net/stat/ are in use, then dentries of these files
-> will be put in lru when closed, which is meanlingless,  as parrent
-> dentry (stat) of these files are remove from dcache.
+On 17/03/2022 11:50, Tobias Waldekranz wrote:
+> On Thu, Mar 17, 2022 at 11:00, Nikolay Aleksandrov <razor@blackwall.org> wrote:
+>> On 16/03/2022 17:08, Tobias Waldekranz wrote:
+>>> The bridge has had per-VLAN STP support for a while now, since:
+>>>
+>>> https://lore.kernel.org/netdev/20200124114022.10883-1-nikolay@cumulusnetworks.com/
+>>>
+>>> The current implementation has some problems:
+>>>
+>>> - The mapping from VLAN to STP state is fixed as 1:1, i.e. each VLAN
+>>>   is managed independently. This is awkward from an MSTP (802.1Q-2018,
+>>>   Clause 13.5) point of view, where the model is that multiple VLANs
+>>>   are grouped into MST instances.
+>>>
+>>>   Because of the way that the standard is written, presumably, this is
+>>>   also reflected in hardware implementations. It is not uncommon for a
+>>>   switch to support the full 4k range of VIDs, but that the pool of
+>>>   MST instances is much smaller. Some examples:
+>>>
+>>>   Marvell LinkStreet (mv88e6xxx): 4k VLANs, but only 64 MSTIs
+>>>   Marvell Prestera: 4k VLANs, but only 128 MSTIs
+>>>   Microchip SparX-5i: 4k VLANs, but only 128 MSTIs
+>>>
+>>> - By default, the feature is enabled, and there is no way to disable
+>>>   it. This makes it hard to add offloading in a backwards compatible
+>>>   way, since any underlying switchdevs have no way to refuse the
+>>>   function if the hardware does not support it
+>>>
+>>> - The port-global STP state has precedence over per-VLAN states. In
+>>>   MSTP, as far as I understand it, all VLANs will use the common
+>>>   spanning tree (CST) by default - through traffic engineering you can
+>>>   then optimize your network to group subsets of VLANs to use
+>>>   different trees (MSTI). To my understanding, the way this is
+>>>   typically managed in silicon is roughly:
+>>>
+>>>   Incoming packet:
+>>>   .----.----.--------------.----.-------------
+>>>   | DA | SA | 802.1Q VID=X | ET | Payload ...
+>>>   '----'----'--------------'----'-------------
+>>>                         |
+>>>                         '->|\     .----------------------------.
+>>>                            | +--> | VID | Members | ... | MSTI |
+>>>                    PVID -->|/     |-----|---------|-----|------|
+>>>                                   |   1 | 0001001 | ... |    0 |
+>>>                                   |   2 | 0001010 | ... |   10 |
+>>>                                   |   3 | 0001100 | ... |   10 |
+>>>                                   '----------------------------'
+>>>                                                              |
+>>>                                .-----------------------------'
+>>>                                |  .------------------------.
+>>>                                '->| MSTI | Fwding | Lrning |
+>>>                                   |------|--------|--------|
+>>>                                   |    0 | 111110 | 111110 |
+>>>                                   |   10 | 110111 | 110111 |
+>>>                                   '------------------------'
+>>>
+>>>   What this is trying to show is that the STP state (whether MSTP is
+>>>   used, or ye olde STP) is always accessed via the VLAN table. If STP
+>>>   is running, all MSTI pointers in that table will reference the same
+>>>   index in the STP stable - if MSTP is running, some VLANs may point
+>>>   to other trees (like in this example).
+>>>
+>>>   The fact that in the Linux bridge, the global state (think: index 0
+>>>   in most hardware implementations) is supposed to override the
+>>>   per-VLAN state, is very awkward to offload. In effect, this means
+>>>   that when the global state changes to blocking, drivers will have to
+>>>   iterate over all MSTIs in use, and alter them all to match. This
+>>>   also means that you have to cache whether the hardware state is
+>>>   currently tracking the global state or the per-VLAN state. In the
+>>>   first case, you also have to cache the per-VLAN state so that you
+>>>   can restore it if the global state transitions back to forwarding.
+>>>
+>>> This series adds a new mst_enable bridge setting (as suggested by Nik)
+>>> that can only be changed when no VLANs are configured on the
+>>> bridge. Enabling this mode has the following effect:
+>>>
+>>> - The port-global STP state is used to represent the CST (Common
+>>>   Spanning Tree) (1/15)
+>>>
+>>> - Ingress STP filtering is deferred until the frame's VLAN has been
+>>>   resolved (1/15)
+>>>
+>>> - The preexisting per-VLAN states can no longer be controlled directly
+>>>   (1/15). They are instead placed under the MST module's control,
+>>>   which is managed using a new netlink interface (described in 3/15)
+>>>
+>>> - VLANs can br mapped to MSTIs in an arbitrary M:N fashion, using a
+>>>   new global VLAN option (2/15)
+>>>
+>>> Switchdev notifications are added so that a driver can track:
+>>> - MST enabled state
+>>> - VID to MSTI mappings
+>>> - MST port states
+>>>
+>>> An offloading implementation is this provided for mv88e6xxx.
+>>>
+>>> A proposal for the corresponding iproute2 interface is available here:
+>>>
+>>> https://github.com/wkz/iproute2/tree/mst
+>>>
+>>
+>> Hi Tobias,
+>> One major missing thing is the selftests for this new feature. Do you
+>> have a plan to upstream them?
 > 
-> This can be reproduced when use linux command "while :;do du
-> /proc/;done”, then refcount of each dentry of /proc/pid/net/stat/ will
-> increase rapidly which should be deleted at once.
-
-Are you worried that reference count can overflow? Those dentries will be
-flushed eventually and reference count goes back to normal values.
-This is easy to see with "echo 3 >/proc/sys/vm/drop_caches".
-
-> I think this problem may by solved by checking whether parrent
-> dentries are in d_cache inside proc_misc_d_delete, or set
-> proc_misc_dentry_ops->d_delete = always_delete_dentry, just as what is
-> used in kernel version 4.x and 3.x.
-> --- a/fs/proc/generic.c
-> +++ b/fs/proc/generic.c
-> @@ -236,6 +236,16 @@ static int proc_misc_d_revalidate(struct dentry
-> *dentry, unsigned int flags)
+> 100% agree. I have an internal test that I plan to adapt to run as a
+> kselftest. There's a bootstrapping problem here though. I can't send the
+> iproute2 series until the kernel support is merged - and until I know
+> how the iproute2 support ends up looking I can't add a kselftest.
 > 
->  static int proc_misc_d_delete(const struct dentry *dentry)
->  {
-> +       struct dentry *p;
-> +       for (p = dentry->d_parent; !IS_ROOT(p); p = p->d_parent) {
-> +               if (!spin_trylock(&p->d_lock))
-> +                       break;
-> +               if (unlikely(d_unhashed(p))){
-> +                       spin_unlock(&p->d_lock);
-> +                       return 1;
-> +               }
-> +               spin_unlock(&p->d_lock);
-> +       }
->         return atomic_read(&PDE(d_inode(dentry))->in_use) < 0;
->  }
+
+That's ok, some people choose to send the iproute2 with the set, others
+send the iproute2 patches separately and add selftests after those are
+accepted (that's my personal preference for the same reasons above).
+Personally I don't mind either way as long as the tests end up materializing. :)
+
+Just in case you've missed it - most of the bridge tests reside in
+tools/testing/selftests/net/forwarding.
+
+> Ideally, tools/iproute2 would be a thing in the kernel. Then you could
+> send the entire implementation as one series. I'm sure that's probably
+> been discussed many times already, but my Google-fu fails me.
+
+Cheers,
+ Nik

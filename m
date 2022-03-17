@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E313C4DC534
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 561004DC544
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbiCQL76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
+        id S233331AbiCQMAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233313AbiCQL7a (ORCPT
+        with ESMTP id S233326AbiCQL7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:59:30 -0400
+        Thu, 17 Mar 2022 07:59:31 -0400
 Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69561700A1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:58:10 -0700 (PDT)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF64B1728A0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:58:12 -0700 (PDT)
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BAFBD3FFD8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:58:06 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 316963F94B
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:58:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647518286;
-        bh=KFmifwXJp5W4UT7dzRYgwV6FTL9sctX1thCEx5C+nkM=;
+        s=20210705; t=1647518289;
+        bh=Se1x08TIKnomHmbPOsCcljQ9abxNVpGR1lbzQcpKc/g=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=dy1BtMr9FpqWvrJ0af4Qg0knda8iYlCDRQs5YR+RK0uU/6Gl3ETXxa+EMRlguytC3
-         coW4tQaBIjMcmjPofSz2rM9FQtqSSkv1h4ov77iFfUmaQ5BfMo+X7fFTOyT/XELcIL
-         6Z3yXFbUIOnDe0B4X3FNL4sbjbp58SXP4ao5S+JW2F8XaDQ7OHz9F2+tEid8j6lAyD
-         rHYqniMjDtJNvVcPEViIPgRlkcIE6Psr+/9+8H8TxzO2LoeCwOJLGC4344EuMmMNMi
-         ODAdEhEfjoHG60SiNTOXHq6SjJtHPakhKttfrGuey+aK80S33pF867kWUyvPF3DpVX
-         75pEMEtdMbuXg==
-Received: by mail-ej1-f72.google.com with SMTP id hy26-20020a1709068a7a00b006dfa034862cso550883ejc.23
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:58:06 -0700 (PDT)
+        b=BKlAww1Ak/xk0I5iXWUh8YZcrfI/iNP6m5rC6fBoW+yYkP+rdWNWDFEk89uO3lGlN
+         mDCKVHPGNZlAzXfvGZaBn06/Jxyxgs4IiAm7cVjyoq9LNWJEn1aWQlJnQrHXsb+1h+
+         702oAGN7V3fHEG6YZFDwHzoJWQpteQ6BFqxJLCgsKVuMiFSxQn7hLBrvvmRsXZcLFe
+         Xj35YuRB2pyJi9mrDAT4XjC/gtTo41UArR2rCNSIaWGoG4pHQ5EppouqnZ9GDQFNl+
+         sQTYrKU7tT7xbiVrOP9wIIcWk25Y1VDaK3tnd/Gwj2OhfrzCzsIAhU+aAyJ2f2Xq3c
+         oJlZb13S+L8Sw==
+Received: by mail-wm1-f71.google.com with SMTP id v184-20020a1cacc1000000b0038a12dbc23bso4182013wme.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:58:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KFmifwXJp5W4UT7dzRYgwV6FTL9sctX1thCEx5C+nkM=;
-        b=2cwu9pBekbUzqXiSxgelGXcxLGcjWfhJDvB1+AQmhqCVLZsRCyWkAf93T/UbzU8G+M
-         LkXmhkJaLqkcMt1v6n3CesrGo9k4ZbfW1WNldp08PLLsLFsS1o4Y34Q/1N3ZeUaDaHoQ
-         bKu4NVqybGa0TX8DRI5mJJMYY9NJ/SxfcqMNIoOHh8vGSfFSb+VPt/HyIt8yrd5qXPwe
-         8MfChyiAof4ZtybXedazGRKsO+GJneCB3ju77wZgTxISEdznp3ckoBO6XSzZ0XqFZ4Fk
-         8MUmR4rSNIlxUC03m4ZVKJdHcLDX4FnmukXkCfgqpOIbXu3dn6qishdP3ff356fFcNHe
-         rDlQ==
-X-Gm-Message-State: AOAM530ETPQ3Ggh3yL65V8vKsZahFGpHnIN4sWSKHKuOD6dil9xOcGRw
-        GMsghJrQXffRQcw+2FY4whdkKQSbRWiRJrTTQKXH2Tf7ySyijKuf05bGfbuw58Z54lDJvVqZ/HQ
-        ZZGce/Xv9G8i/uAQmPgKNOSchfpexqlDPG1sKYHv+bA==
-X-Received: by 2002:a05:6000:15c1:b0:1f0:73d6:b716 with SMTP id y1-20020a05600015c100b001f073d6b716mr3663317wry.293.1647518274495;
-        Thu, 17 Mar 2022 04:57:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwQvKKHcnhZqthCpzLO2USNLVXIsLYfJdNKGccVKarN3fEhfI5+MqhVsRHbxfF78ndbEuW0XA==
-X-Received: by 2002:a05:6000:15c1:b0:1f0:73d6:b716 with SMTP id y1-20020a05600015c100b001f073d6b716mr3663274wry.293.1647518274258;
-        Thu, 17 Mar 2022 04:57:54 -0700 (PDT)
+        bh=Se1x08TIKnomHmbPOsCcljQ9abxNVpGR1lbzQcpKc/g=;
+        b=RrnqkQxRYAno46WtagHJ99jbrYjwJlUumDbO5g9I9ocKJrr4QC2zzqVnwiulLZgdeS
+         P7PhiLvtvDVpHXB9/D7zB+MXNO4oLBhGxnDt6aPdY/he7bkTmMCIOJsfjDaaHV99zt+R
+         Wnt+oq96YS1qjoFXjiwPgLH/79rxXSBfug4oBPqHGYvMNkSqlR2/ZguYvRjr9ehipjk5
+         sb0gmcoH117vbG30X3mmhjO+o2NTsVP34J2qnCuUT+5OwYbNPq94ovcoi716+u/6MuwR
+         Y6LTGxtkxXnHujKlJxha/o/eVhrLckuEss9eH13DlPDCadQl4tG1UuiBT760Q7TNCi2I
+         p8EQ==
+X-Gm-Message-State: AOAM532+dOvcsfKQSj4+xa3tgkQ6dk4ezeGDoeUb76ZMqcqjGVyGmwxE
+        TWMyK2nVnCnPZcd7xKypm0SHmN31vt2HZNhnsJ0lFBMzqNGULMfCuQfQy8z220LRy81X+nxgYna
+        T9e2GUqJ9aDnF7YK/4T9jqz/8dmNZ/adb6GbVDYADvQ==
+X-Received: by 2002:a1c:7312:0:b0:38c:6f75:ab28 with SMTP id d18-20020a1c7312000000b0038c6f75ab28mr5970876wmb.19.1647518276637;
+        Thu, 17 Mar 2022 04:57:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxzGz1twNJ92VnBy+RepCLy4U1K/Q67OukVWGeTcahnkhBl7wcOvPZo8IwHXQJMuUSC1th66Q==
+X-Received: by 2002:a1c:7312:0:b0:38c:6f75:ab28 with SMTP id d18-20020a1c7312000000b0038c6f75ab28mr5970841wmb.19.1647518276425;
+        Thu, 17 Mar 2022 04:57:56 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id r65-20020a1c4444000000b0038c48dd23b9sm5824900wma.5.2022.03.17.04.57.52
+        by smtp.gmail.com with ESMTPSA id r65-20020a1c4444000000b0038c48dd23b9sm5824900wma.5.2022.03.17.04.57.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 04:57:53 -0700 (PDT)
+        Thu, 17 Mar 2022 04:57:56 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
@@ -97,9 +97,9 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         linux-actions@lists.infradead.org, openbmc@lists.ozlabs.org,
         linux-riscv@lists.infradead.org, linux-oxnas@groups.io
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH 17/18] dt-bindings: irqchip: sifive: include generic schema
-Date:   Thu, 17 Mar 2022 12:57:04 +0100
-Message-Id: <20220317115705.450427-16-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 18/18] dt-bindings: irqchip: ti: include generic schema
+Date:   Thu, 17 Mar 2022 12:57:05 +0100
+Message-Id: <20220317115705.450427-17-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
 References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
@@ -115,37 +115,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include generic interrupt-controller.yaml schema, which enforces node
-naming and other generic properties.
+Include generic interrupt-controller.yaml and msi-controller.yaml
+schema, which enforces node naming and other generic properties.
+The schema requires now proper naming of node.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml     | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../bindings/interrupt-controller/ti,pruss-intc.yaml         | 5 ++++-
+ .../bindings/interrupt-controller/ti,sci-inta.yaml           | 1 +
+ .../bindings/interrupt-controller/ti,sci-intr.yaml           | 3 ++-
+ 3 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-index 27092c6a86c4..e3c08cff89d2 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-@@ -44,6 +44,9 @@ maintainers:
-   - Paul Walmsley  <paul.walmsley@sifive.com>
-   - Palmer Dabbelt <palmer@dabbelt.com>
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+index 65523d9459d8..983d10da4463 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+@@ -32,6 +32,9 @@ description: |
+   This interrupt-controller node should be defined as a child node of the
+   corresponding PRUSS node. The node should be named "interrupt-controller".
  
 +allOf:
 +  - $ref: /schemas/interrupt-controller.yaml#
 +
  properties:
-   compatible:
-     oneOf:
-@@ -91,7 +94,7 @@ required:
-   - interrupts-extended
-   - riscv,ndev
+   $nodename:
+     pattern: "^interrupt-controller@[0-9a-f]+$"
+@@ -106,7 +109,7 @@ required:
+   - interrupt-controller
+   - "#interrupt-cells"
  
 -additionalProperties: false
 +unevaluatedProperties: false
  
  examples:
    - |
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml b/Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml
+index 88c46e61732e..935a61504aa0 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml
+@@ -11,6 +11,7 @@ maintainers:
+ 
+ allOf:
+   - $ref: /schemas/arm/keystone/ti,k3-sci-common.yaml#
++  - $ref: msi-controller.yaml#
+ 
+ description: |
+   The Interrupt Aggregator (INTA) provides a centralized machine
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/ti,sci-intr.yaml b/Documentation/devicetree/bindings/interrupt-controller/ti,sci-intr.yaml
+index e12aee42b126..0d35a5e21a64 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/ti,sci-intr.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/ti,sci-intr.yaml
+@@ -11,6 +11,7 @@ maintainers:
+ 
+ allOf:
+   - $ref: /schemas/arm/keystone/ti,k3-sci-common.yaml#
++  - $ref: /schemas/interrupt-controller.yaml#
+ 
+ description: |
+   The Interrupt Router (INTR) module provides a mechanism to mux M
+@@ -92,7 +93,7 @@ unevaluatedProperties: false
+ 
+ examples:
+   - |
+-    main_gpio_intr: interrupt-controller0 {
++    main_gpio_intr: interrupt-controller {
+         compatible = "ti,sci-intr";
+         ti,intr-trigger-type = <1>;
+         interrupt-controller;
 -- 
 2.32.0
 

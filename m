@@ -2,205 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A554DC937
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 678DB4DC940
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbiCQOvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 10:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
+        id S233866AbiCQOv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 10:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbiCQOva (ORCPT
+        with ESMTP id S235424AbiCQOv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 10:51:30 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2046.outbound.protection.outlook.com [40.107.236.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30B4C6EDF
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:50:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lBxykHons+QNbiIRkL4Sn6hlNcPEG/LVYkQQCWdEalpuIDicAf6LcUMqDQmubnLBDTYkP9vgjDD77bp9qT3+8eoVtnHBQXFrgkkKrSwUb4kP/4QhC3sWK//JpM857Zc91iaUwUx0FWcOjRjZZRWqHlX0aNyhE7gH/ME/U4pembf3Bp1UmxSwWbanAuAIBzqGfdz1TwtW3NJNUR7RiQ7LvNo0AHW6i/QmVR20jIZdKDY2RBBmBcEi0BsyIckf72lggWb0kmH3u0eG8ucJRXCV4P2x1GAScElbWWCCmyRuIvs/zmGRQa4c6898PM7UrxbQcEk+IQudymT/bhZxHrQdjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=omhxDS/0RIGbNYKp+5JPK6Hol/Gw2D+tHO1cVIX+FYE=;
- b=BEBqbWMbyLEYng+KYYPVRHdvyG4doOMSSj5Znt01nSJDNvq2fLLauvQpjMPxhBlSbUEPhotEzviijm/N/hdM3oNXAiUrPJsyzb6/Y62s77hMRHgnbchDd8G7g6oCR7Ly5BzdqC3ugKGX2QXXDiCtW5ln/qxQ2+USBb2La0SqddmsIfK8oSFDMCRvI/JPyh5S0xiaX5ewJjAm73U2HX2y/I+gAj3EEIFkWAYSdEGlkZ8FBB6pJbSoVdPBH0IvQdtJcdws6+QLpZSvtEhD+X1HoMyaI7l54NEgBRfIwQJUBHIL3h7HltIXkM4jAyaQQkHGrXPuQ3XX2oxzB+JP3nXaLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=omhxDS/0RIGbNYKp+5JPK6Hol/Gw2D+tHO1cVIX+FYE=;
- b=LagAAvEHB8SXGJzRhcB1NkERICnpfKA5B1hO0QLSnImdl0Dix+xCj+Shg+Ub1y6Qgg7YGRuulklvPPbZxVurSdRVY2lUMp8fwY/oLCeQmHqkxMQzsFzTiBXkDhRZmKIKuAMnB8DWDyrvdE1yE39F6BTXVxbNvxAojwUXkEoWdmw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by MN2PR12MB2942.namprd12.prod.outlook.com (2603:10b6:208:108::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Thu, 17 Mar
- 2022 14:50:09 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::4839:9431:1040:5cd5]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::4839:9431:1040:5cd5%4]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
- 14:50:09 +0000
-Message-ID: <8702f8a5-62a1-c07e-c7b7-e9378be069b6@amd.com>
-Date:   Thu, 17 Mar 2022 10:50:07 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/1] drm/amdkfd: Protect the Client whilst it is being
- operated on
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20220317131610.554347-1-lee.jones@linaro.org>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-In-Reply-To: <20220317131610.554347-1-lee.jones@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT3PR01CA0103.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:85::18) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        Thu, 17 Mar 2022 10:51:56 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76CC202169;
+        Thu, 17 Mar 2022 07:50:39 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22HCn6vK028654;
+        Thu, 17 Mar 2022 14:50:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=KCoCcfcIPlnA0Ety0vCsMbqzvNkdERq6HjsHasLk1iM=;
+ b=SWilQJ0xxGak4F2nLfOB/pmYbYBQdNzWh+Krl17rCsO6W6445uPCHOH7mJ15ysIeK8r6
+ 2dmbZ3A7KUzqHNJfmQoA4m/gkIQJdvdHHGrXGrrfWng0zQ9O/NYQ/uUJtQ1h8GkLtEAm
+ dGMtm/B46cIBvRCT7wwELgZcGEw4ECrDOgrJBQKNyuWUBvFXfSdsheAM+Q6gEW6vOe98
+ VC3HAvSUXCdTE5WKrxR52riFQtr4kK0nJOMOX55sGD8mTdeCQ8FFoeSkQsXngwjYBpXJ
+ Fx66zxMbJ8aOnPwFbJdTk48k2k6r6UHggVrIm00chti1gFyQmIWWeg8PrpVCCe++g6YK AQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev2b2p7s8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Mar 2022 14:50:15 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22HEXQsk014928;
+        Thu, 17 Mar 2022 14:50:15 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev2b2p7re-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Mar 2022 14:50:15 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22HEh2mV022720;
+        Thu, 17 Mar 2022 14:50:12 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 3et95wxw82-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Mar 2022 14:50:12 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22HEoARs54788470
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Mar 2022 14:50:10 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 00FAAAE05A;
+        Thu, 17 Mar 2022 14:50:10 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8AFAEAE04D;
+        Thu, 17 Mar 2022 14:50:09 +0000 (GMT)
+Received: from localhost (unknown [9.43.18.248])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 17 Mar 2022 14:50:09 +0000 (GMT)
+Date:   Thu, 17 Mar 2022 20:20:08 +0530
+From:   Ritesh Harjani <riteshh@linux.ibm.com>
+To:     Sven Schnelle <svens@linux.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-ext4@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@kernel.org
+Subject: Re: [PATCHv3 02/10] ext4: Fix ext4_fc_stats trace point
+Message-ID: <20220317145008.73nm7hqtccyjy353@riteshh-domain>
+References: <cover.1647057583.git.riteshh@linux.ibm.com>
+ <b4b9691414c35c62e570b723e661c80674169f9a.1647057583.git.riteshh@linux.ibm.com>
+ <yt9dr1706b4i.fsf@linux.ibm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yt9dr1706b4i.fsf@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 7EPq7XGn84IGNwb3CZSAR8DnPse3-_C4
+X-Proofpoint-GUID: Pjtnr7CWwsfgLBDBp_eK0FG8cgO5eBOy
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 18281f27-5cf3-47c5-cea2-08da08256eb1
-X-MS-TrafficTypeDiagnostic: MN2PR12MB2942:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB2942FB7401002BE404746A7492129@MN2PR12MB2942.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8n1bySeWbZMkeuF1Cs/ONN1KjS7J6fkNm+Cp08kgO5clyygx7MVR642tGThdCnYDYC0uXiPvrWRBODJtxZgahIbOmTaz77amVkwXSX9/8Ipgvaai7PuekWPBCrE1Iv7RXvBzFX8e0f0wBtsPlQx2pBy79arpdVASq/uqZnk30IoYGaaVPlQnXgmv4hC8daatpaHbpUPiKf2QUKxBlc1ZmqZZDzHf2adOdIH+NXMXgSYDYz5Tq4VYfSoRgcUrup1gUdopE48KzshoRfODxwJPi7D25WgvsB8vycYKOrDSTZwJHfZkv4KHLVPR7pnw/FIsIfbnggxJyeIlBVpHsbjFRXT1fA/DK08KvvlYZStKE877JzBRIR7U37eLLHsVEBZoVK6+HLBoRXnTUDFWVN7vK3JJNLtZvUr33X3P7JCtm6svmRyWNRSUsjXHSRzUKgEdADgdt+9u2Xma4LeBPt58Xkvvm3ptxoc2J1KaC4ine8XPzcadcEFs1dcSXPOhrWo5VK3tAdXNQPZNRLTFp2gjR/w/4SM6A9N4N13j3G/OPGKWdFXlstkL0hsIbYMiqTV4sD348ri0vdKwohw5gP/vE7B0ok0hii01YuR3WQZQnSSQAtyOaDLNlAJmZX1vnQz73NLHEkJDvpZxxdjeqADuZtzK2KeuVF1M6f4Nc92f9c3aoJdks0GuFYlCf3Wd/PwIR6cIqYAdPBeoLXwtBaEex2lG91lcoULThzv3f7pRPMRNJo5g1CvdFoPj+4CZNjGO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(83380400001)(6916009)(31686004)(54906003)(66574015)(316002)(44832011)(36756003)(8936002)(2906002)(6486002)(8676002)(66946007)(31696002)(86362001)(26005)(186003)(66476007)(66556008)(6506007)(2616005)(4326008)(38100700002)(508600001)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U1dJSW9hOHVqSDNHWWhMUCtMUUUrVlBTTjF0UzE4WVYwYStrbnFWRVBJK2ZF?=
- =?utf-8?B?THFvQUdhK2RwVUNaeGVkenV3b0pXbFlqejJ6YkZYb3U2VHFWb0MvWTJoUFRT?=
- =?utf-8?B?SmpjZjVnNGdGSlBBb1FoZExQQkVaTS9mdXFteUUzaTZJbDBUeWthSHlIOC90?=
- =?utf-8?B?eG1jVHp6Rm1iTVo0ZXJVUyt0VmhFdGc1amdLV3UzU0hESFBNWXl0UHJCT2dZ?=
- =?utf-8?B?cERSWDJlWkZLVHY3MllVQmJIT2x3UTkrVC9XdkgwNVpQQWZNOHpMQnRxekpy?=
- =?utf-8?B?WCttNmZ0MXR5Z0p2T2RHemVVcjZnc1dlNVArMDluOUZSWGN4OHpubWJuU2VC?=
- =?utf-8?B?azZDWExxLzdzdWFRcFl6WXdsVElENWRiZzliYXJNTDZtRTVZWDlkVXFyWEps?=
- =?utf-8?B?WktBcEJMVXRzeCtldElhalNvVjJ1VGJsUUJnMUhsVTE0eEVPdVZlcDh6MmhP?=
- =?utf-8?B?TTRhbWVoWk5QODhtTkp4ZUs0OS9TMkdMWlh3QlExcEZnTnRTZDUvVzNzeThI?=
- =?utf-8?B?eHMyb1VXeFlmYlR3QkZFQ0Qzdk42MzBSWDJpdXpVL0tqUExUVEpVQXRjKzlV?=
- =?utf-8?B?em1RdVZPbXRHU1loUXNhck5UemxqTjVCMWlDUkt0NURzNEoxdlhxbXdGbGtB?=
- =?utf-8?B?VTVNSkRjbWpiUlVaMTBTdlIvb05SMkMwdXd4aTI4SjdiaC9qSXMyckJCd1Zp?=
- =?utf-8?B?YUJNTDNvb1BTbnZmUVJrRHVjMmRtRnZReERTaGZBQmR6WU5uRG5XQ2p4bjRV?=
- =?utf-8?B?eDd1Nk03d1h5aVJvZHR6STJocUU0dHF2eUVuOUg5V1N0MEtWLy9EZldLUUpj?=
- =?utf-8?B?MTdSMVBsQlJWMjlsU0J0ODMrN2N2S3BQTXdWZ1NrSTROZU9RdWE4czRvV0dZ?=
- =?utf-8?B?Q0xnVW5BNU52dnpMWmxDNnhhYlhYQ1V1aDVrYTYrWWZJUzRyQ0U4V0dRNWJS?=
- =?utf-8?B?RlZxK3RkUlo2V29sQlBzQlYxT09nMWw3WWFKVERIL21kQjRuQkxRTGJsQU9r?=
- =?utf-8?B?dmlOZW50Y1FKWTRiV3hNK0VZazd2NzVKaGZWMUpMTmtWaGxsbUlIL202RmpR?=
- =?utf-8?B?aVZCMk8zOS90VElxKzBrQnkxOEg2OWZWcTRxbGM5TFpLNFRaQWp1UXUyemxk?=
- =?utf-8?B?UjhZVzhTRlBGVFNnRHRDVW5pTHhtVHpuaitrZWNXdVFZUnMyc3ZZTlJqYXhu?=
- =?utf-8?B?YkpYRXFtcjZYM05EOUU2aGNNc0xIMXowRGR3dW1jaEx0MEVsQU9ENDFjdkhI?=
- =?utf-8?B?c2dPeUZtdEViQUN2MmxNT1dzY0Y3U2FuSnN6UHVMSUpGV3M4d1JpVVhwZXd6?=
- =?utf-8?B?SHB5K2RUVUZPVmppVDB4dCtjblVDcWw1a3VIbDMrZFFGMjRyZG42bk5xbkpD?=
- =?utf-8?B?LzdjQy9qUE9DUGFxSFdaTFpvdEZBRDRBVlQwRWROS1NQR2dxQm9DUFY2eEFQ?=
- =?utf-8?B?QldYNzJkK1FPaytEcTI3ZXV1K25IRG5qMkpZQ1lmOEptUkhNM2V5Tmc1VU51?=
- =?utf-8?B?Wm1CbnlwYXgwL1Y4K1BZUzNZSFB3cXJLL3hoYTlOV2xMWmV1MGFwSVdUcUFV?=
- =?utf-8?B?OVo3NTM4ejRDU0lSQUttVWFLeXdyb3gyU1dzZEk3M3dOYlpZWFhTM3FwR09w?=
- =?utf-8?B?bGg4b1J3bURMa0ZTZjlSeUtVdTZ5Sjh6dnlzREJjM1dwOVVkVlhIZjhWRDVu?=
- =?utf-8?B?alFNNUJyRlBoemx6c3B3VVV3dFVFTmpiMDlyQmJxTEJTR0t2RUU2bUFIc2hM?=
- =?utf-8?B?YktncU5XNUJpbTNGMHpqVzBmN1Q4Nk8wV3NpbFMySXU4cEhUWWRjU0dkeVIr?=
- =?utf-8?B?K0VDMzZZZzJiOTExMnBaZ0lNSSsxb0Zsc2Y2VUN5bURCRlRydGdpZWx0ckhI?=
- =?utf-8?B?VW5iRlpLaWZMNTlsRDRySWJzK25NNTZlWktFUytVWXFYMldFMW5FdjZWYkhp?=
- =?utf-8?Q?wRm9gl9T+sLdAdaQC6Pqtx9pXIcBewnE?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18281f27-5cf3-47c5-cea2-08da08256eb1
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2022 14:50:09.1554
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TxxsvWu3dPwhKDPl0je0doMhuHSc6CsltZlMzl1GOlqwGStJGo8aZLZNlg5aRgwkzK7Z9tls3XPg7n+wrBRB3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB2942
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-17_05,2022-03-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 phishscore=0 spamscore=0 mlxlogscore=975 clxscore=1015
+ suspectscore=0 malwarescore=0 mlxscore=0 impostorscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203170085
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-03-17 um 09:16 schrieb Lee Jones:
-> Presently the Client can be freed whilst still in use.
+On 22/03/17 01:01PM, Sven Schnelle wrote:
+> Ritesh Harjani <riteshh@linux.ibm.com> writes:
 >
-> Use the already provided lock to prevent this.
+> > ftrace's __print_symbolic() requires that any enum values used in the
+> > symbol to string translation table be wrapped in a TRACE_DEFINE_ENUM
+> > so that the enum value can be decoded from the ftrace ring buffer by
+> > user space tooling.
+> >
+> > This patch also fixes few other problems found in this trace point.
+> > e.g. dereferencing structures in TP_printk which should not be done
+> > at any cost.
+> >
+> > Also to avoid checkpatch warnings, this patch removes those
+> > whitespaces/tab stops issues.
+> >
+> > Cc: stable@kernel.org
+> > Fixes: commit aa75f4d3daae ("ext4: main fast-commit commit path")
+> > Reported-by: Steven Rostedt <rostedt@goodmis.org>
+> > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+> > Reviewed-by: Jan Kara <jack@suse.cz>
+> > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> > Reviewed-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+> > ---
+> >  include/trace/events/ext4.h | 78 +++++++++++++++++++++++--------------
+> >  1 file changed, 49 insertions(+), 29 deletions(-)
+> >
+> > diff --git a/include/trace/events/ext4.h b/include/trace/events/ext4.h
+> > index 19e957b7f941..1a0b7030f72a 100644
+> > --- a/include/trace/events/ext4.h
+> > +++ b/include/trace/events/ext4.h
+> > @@ -95,6 +95,17 @@ TRACE_DEFINE_ENUM(ES_REFERENCED_B);
+> >  	{ FALLOC_FL_COLLAPSE_RANGE,	"COLLAPSE_RANGE"},	\
+> >  	{ FALLOC_FL_ZERO_RANGE,		"ZERO_RANGE"})
+> >
+> > +TRACE_DEFINE_ENUM(EXT4_FC_REASON_XATTR);
+> > +TRACE_DEFINE_ENUM(EXT4_FC_REASON_CROSS_RENAME);
+> > +TRACE_DEFINE_ENUM(EXT4_FC_REASON_JOURNAL_FLAG_CHANGE);
+> > +TRACE_DEFINE_ENUM(EXT4_FC_REASON_NOMEM);
+> > +TRACE_DEFINE_ENUM(EXT4_FC_REASON_SWAP_BOOT);
+> > +TRACE_DEFINE_ENUM(EXT4_FC_REASON_RESIZE);
+> > +TRACE_DEFINE_ENUM(EXT4_FC_REASON_RENAME_DIR);
+> > +TRACE_DEFINE_ENUM(EXT4_FC_REASON_FALLOC_RANGE);
+> > +TRACE_DEFINE_ENUM(EXT4_FC_REASON_INODE_JOURNAL_DATA);
+> > +TRACE_DEFINE_ENUM(EXT4_FC_REASON_MAX);
 >
-> Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->   drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c | 6 ++++++
->   1 file changed, 6 insertions(+)
+> I'm getting the following oops with that patch:
 >
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-> index e4beebb1c80a2..3b9ac1e87231f 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-> @@ -145,8 +145,11 @@ static int kfd_smi_ev_release(struct inode *inode, struct file *filep)
->   	spin_unlock(&dev->smi_lock);
->   
->   	synchronize_rcu();
-> +
-> +	spin_lock(&client->lock);
->   	kfifo_free(&client->fifo);
->   	kfree(client);
-> +	spin_unlock(&client->lock);
+> [    0.937455] VFS: Disk quotas dquot_6.6.0
+> [    0.937474] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+> [    0.958347] Unable to handle kernel pointer dereference in virtual kernel address space
+> [    0.958350] Failing address: 00000000010de000 TEID: 00000000010de407
+> [    0.958353] Fault in home space mode while using kernel ASCE.
+> [    0.958357] AS:0000000001ed0007 R3:00000002ffff0007 S:0000000001003701
+> [    0.958388] Oops: 0004 ilc:3 [#1] SMP
+> [    0.958393] Modules linked in:
+> [    0.958398] CPU: 0 PID: 8 Comm: kworker/u128:0 Not tainted 5.17.0-rc8-next-20220317 #396
 
-The spin_unlock is after the spinlock data structure has been freed. 
-There should be no concurrent users here, since we are freeing the data 
-structure. If there still are concurrent users at this point, they will 
-crash anyway. So the locking is unnecessary.
+I tried running this master branch of linux-next from here [1].
+But I started facing build failures with it.
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+> [    0.958403] Hardware name: IBM 3906 M04 704 (z/VM 7.1.0)
+> [    0.958407] Workqueue: eval_map_wq eval_map_work_func
+>
+> [    0.958446] Krnl PSW : 0704e00180000000 000000000090a9d6 (number+0x25e/0x3c0)
+> [    0.958456]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
+> [    0.958461] Krnl GPRS: 0000000000000058 00000000010de0ac 0000000000000001 00000000fffffffc
+> [    0.958467]            0000038000047b80 0affffff010de0ab 0000000000000000 0000000000000000
+> [    0.958481]            0000000000000020 0000038000000000 00000000010de0ad 00000000010de0ab
+> [    0.958484]            0000000080312100 0000000000e68910 0000038000047b50 0000038000047ab8
+> [    0.958494] Krnl Code: 000000000090a9c6: f0c84112b001        srp     274(13,%r4),1(%r11),8
+> [    0.958494]            000000000090a9cc: 41202001            la      %r2,1(%r2)
+> [    0.958494]           #000000000090a9d0: ecab0006c065        clgrj   %r10,%r11,12,000000000090a9dc
+> [    0.958494]           >000000000090a9d6: d200b0004000        mvc     0(1,%r11),0(%r4)
+> [    0.958494]            000000000090a9dc: 41b0b001            la      %r11,1(%r11)
+> [    0.958494]            000000000090a9e0: a74bffff
+>             aghi    %r4,-1
+> [    0.958494]            000000000090a9e4: a727fff6            brctg   %r2,000000000090a9d0
+> [    0.958494]            000000000090a9e8: a73affff            ahi     %r3,-1
+> [    0.958575] Call Trace:
+> [    0.958580]  [<000000000090a9d6>] number+0x25e/0x3c0
+> [    0.958594] ([<0000000000289516>] update_event_printk+0xde/0x200)
+> [    0.958602]  [<0000000000910020>] vsnprintf+0x4b0/0x7c8
+> [    0.958606]  [<00000000009103e8>] snprintf+0x40/0x50
+> [    0.958610]  [<00000000002893d2>] eval_replace+0x62/0xc8
+> [    0.958614]  [<000000000028e2fe>] trace_event_eval_update+0x206/0x248
+
+This looks like you must have this patch from Steven as well [2].
+Although I did test the patch and didn't see such a crash on my qemu box [3].
+
+[2]: https://lore.kernel.org/linux-ext4/20220310233234.4418186a@gandalf.local.home/
+[3]: https://lore.kernel.org/linux-ext4/20220311051249.ltgqbjjothbrkbno@riteshh-domain/
+
+@Steven,
+Sorry to bother. But does this crash strike anything obvious to you?
+
+-ritesh
 
 
->   
->   	return 0;
->   }
-> @@ -247,11 +250,13 @@ int kfd_smi_event_open(struct kfd_dev *dev, uint32_t *fd)
->   		return ret;
->   	}
->   
-> +	spin_lock(&client->lock);
-
-The client was just allocated, and it wasn't added to the client list or 
-given to user mode yet. So there can be no concurrent users at this 
-point. The locking is unnecessary.
-
-There could be potential issues if someone uses the file descriptor by 
-dumb luck before this function returns. So maybe we need to move the 
-anon_inode_getfd to the end of the function (just before list_add_rcu) 
-so that we only create the file descriptor after the client structure is 
-fully initialized.
-
-Regards,
-   Felix
-
-
->   	ret = anon_inode_getfd(kfd_smi_name, &kfd_smi_ev_fops, (void *)client,
->   			       O_RDWR);
->   	if (ret < 0) {
->   		kfifo_free(&client->fifo);
->   		kfree(client);
-> +		spin_unlock(&client->lock);
->   		return ret;
->   	}
->   	*fd = ret;
-> @@ -264,6 +269,7 @@ int kfd_smi_event_open(struct kfd_dev *dev, uint32_t *fd)
->   	spin_lock(&dev->smi_lock);
->   	list_add_rcu(&client->list, &dev->smi_clients);
->   	spin_unlock(&dev->smi_lock);
-> +	spin_unlock(&client->lock);
->   
->   	return 0;
->   }
+> [    0.958619]  [<0000000000171bba>] process_one_work+0x1fa/0x460
+> [    0.958625]  [<000000000017234c>] worker_thread+0x64/0x468
+> [    0.958629]  [<000000000017af90>] kthread+0x108/0x110
+> [    0.958634]  [<00000000001032ec>] __ret_from_fork+0x3c/0x58
+> [    0.958640]  [<0000000000cce43a>] ret_from_fork+0xa/0x40
+> [    0.958648] Last Breaking-Event-Address:
+> [    0.958652]  [<000000000090a99c>] number+0x224/0x3c0
+> [    0.958661] Kernel panic - not syncing: Fatal exception: panic_on_oops
+>
+> I haven't really checked what TRACE_DEFINE_ENUM() does, but removing the
+> last line ("TRACE_DEFINE_ENUM(EXT4_FC_REASON_MAX);") makes the oops go
+> away. Looking at all the other defines looks like the _MAX enum
+> shouldn't be added there?
+>
+> Thanks
+> Sven

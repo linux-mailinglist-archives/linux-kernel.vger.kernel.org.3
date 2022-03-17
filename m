@@ -2,85 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384454DC734
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646944DC738
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbiCQNFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 09:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
+        id S232569AbiCQNGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 09:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235337AbiCQNDr (ORCPT
+        with ESMTP id S229841AbiCQNGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:03:47 -0400
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C91D148674;
-        Thu, 17 Mar 2022 06:02:27 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id v130so10007569ybe.13;
-        Thu, 17 Mar 2022 06:02:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=B7qYsNUbGJYHdxCIQHkf/OD/PW64BsHLYhrDQx+Tw6A=;
-        b=l/T/ddD3wQRP2CLVQA8G66Mj6xL8Ss119WlpsqKk2PhPEDBLfTPxUhG+B1yy4RLy9N
-         5xXPorTviJDEjjGBRPDkXKJ+Tv/fHFRB4yoy/Oz5Gjg6wi6Rg2NLqjtq6N2klXq8hR6c
-         Hq6C+uaI/K/BbJGvhnnyZaWHons1hb/iix62jobVnYS3a6ypyiOY5RSRu07Gvl9LeWEx
-         nM5/W6V6hM+24ZdaKDnYeFeg4Cb7gfyMS8ks8HV99HBHLwFc31yMvoE9Z0Y54epG4bMR
-         iCeMSZxo1uB5y9LNrI82/xtHeO6/SVX0UtGDLPd4N67ix4lLH50hmhrQePEnRV1oqvOg
-         QwdA==
-X-Gm-Message-State: AOAM530DSjSd9+GJ2z9wd7EgoJ0anarUUJmpS21KjFAeMgb9WssSHk6L
-        T3H2r/cFl/tXWGYzOJqJEHJQhOcyBSwbX8ho9D3tSJ6ldCc=
-X-Google-Smtp-Source: ABdhPJyOqVbWlCAFoVtJfjG/++NcPW/hSsSa5o6Ghrd0pjN2FM5kxovkHkVhqvNZMaTH468GRkVguvNg9V55mgYPkjA=
-X-Received: by 2002:a25:9d8a:0:b0:633:9668:c48a with SMTP id
- v10-20020a259d8a000000b006339668c48amr4653467ybp.153.1647522146210; Thu, 17
- Mar 2022 06:02:26 -0700 (PDT)
+        Thu, 17 Mar 2022 09:06:50 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428A31557CA;
+        Thu, 17 Mar 2022 06:05:33 -0700 (PDT)
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KK6hy4lDNz9smw;
+        Thu, 17 Mar 2022 21:01:22 +0800 (CST)
+Received: from [10.174.176.103] (10.174.176.103) by
+ dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Thu, 17 Mar 2022 21:05:11 +0800
+Message-ID: <8139ea99-09fa-eb84-e9ef-f1fb470b5b88@huawei.com>
+Date:   Thu, 17 Mar 2022 21:05:11 +0800
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 17 Mar 2022 14:02:15 +0100
-Message-ID: <CAJZ5v0gcZb9mq4WfHuGC-3zMx215u_cYMzwTkx1jxgZmu_EUbw@mail.gmail.com>
-Subject: [GIT PULL] ACPI fix for final v5.17
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH -next] nbd: fix possible overflow on 'first_minor' in
+ nbd_dev_add()
+From:   "zhangwensheng (E)" <zhangwensheng5@huawei.com>
+To:     <josef@toxicpanda.com>, <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <nbd@other.debian.org>, <yukuai3@huawei.com>
+References: <20220310093224.4002895-1-zhangwensheng5@huawei.com>
+ <0e5faf35-5adb-3ea1-9f7f-7c4f61a623b2@huawei.com>
+In-Reply-To: <0e5faf35-5adb-3ea1-9f7f-7c4f61a623b2@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.103]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggeme756-chm.china.huawei.com (10.3.19.102)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+friendly ping...
 
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-5.17-rc9
-
-with top-most commit 462ccc35a750f335c8456cde9120b8b593fff60f
-
- Revert "ACPI: scan: Do not add device IDs from _CID if _HID is not valid"
-
-on top of commit 09688c0166e76ce2fb85e86b9d99be8b0084cdf9
-
- Linux 5.17-rc8
-
-to receive an ACPI fix for final 5.17.
-
-This reverts recent commit that caused multiple systems to misbehave
-due to firmware issues.
-
-Thanks!
-
-
----------------
-
-Rafael J. Wysocki (1):
-      Revert "ACPI: scan: Do not add device IDs from _CID if _HID is not valid"
-
----------------
-
- drivers/acpi/scan.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+在 2022/3/11 10:43, zhangwensheng (E) 写道:
+> friendly ping...
+>
+> 在 2022/3/10 17:32, Zhang Wensheng 写道:
+>> When 'index' is a big numbers, it may become negative which forced
+>> to 'int'. then 'index << part_shift' might overflow to a positive
+>> value that is not greater than '0xfffff', then sysfs might complains
+>> about duplicate creation. Because of this, move the 'index' judgment
+>> to the front will fix it and be better.
+>>
+>> Fixes: b0d9111a2d53 ("nbd: use an idr to keep track of nbd devices")
+>> Fixes: 940c264984fd ("nbd: fix possible overflow for 'first_minor' in 
+>> nbd_dev_add()")
+>> Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
+>> ---
+>>   drivers/block/nbd.c | 24 ++++++++++++------------
+>>   1 file changed, 12 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+>> index 5a1f98494ddd..b3cdfc0ffb98 100644
+>> --- a/drivers/block/nbd.c
+>> +++ b/drivers/block/nbd.c
+>> @@ -1800,17 +1800,6 @@ static struct nbd_device *nbd_dev_add(int 
+>> index, unsigned int refs)
+>>       refcount_set(&nbd->refs, 0);
+>>       INIT_LIST_HEAD(&nbd->list);
+>>       disk->major = NBD_MAJOR;
+>> -
+>> -    /* Too big first_minor can cause duplicate creation of
+>> -     * sysfs files/links, since index << part_shift might overflow, or
+>> -     * MKDEV() expect that the max bits of first_minor is 20.
+>> -     */
+>> -    disk->first_minor = index << part_shift;
+>> -    if (disk->first_minor < index || disk->first_minor > MINORMASK) {
+>> -        err = -EINVAL;
+>> -        goto out_free_work;
+>> -    }
+>> -
+>>       disk->minors = 1 << part_shift;
+>>       disk->fops = &nbd_fops;
+>>       disk->private_data = nbd;
+>> @@ -1915,8 +1904,19 @@ static int nbd_genl_connect(struct sk_buff 
+>> *skb, struct genl_info *info)
+>>       if (!netlink_capable(skb, CAP_SYS_ADMIN))
+>>           return -EPERM;
+>>   -    if (info->attrs[NBD_ATTR_INDEX])
+>> +    if (info->attrs[NBD_ATTR_INDEX]) {
+>>           index = nla_get_u32(info->attrs[NBD_ATTR_INDEX]);
+>> +
+>> +        /*
+>> +         * Too big first_minor can cause duplicate creation of
+>> +         * sysfs files/links, since index << part_shift might 
+>> overflow, or
+>> +         * MKDEV() expect that the max bits of first_minor is 20.
+>> +         */
+>> +        if (index < 0 || index > MINORMASK >> part_shift) {
+>> +            printk(KERN_ERR "nbd: illegal input index %d\n", index);
+>> +            return -EINVAL;
+>> +        }
+>> +    }
+>>       if (!info->attrs[NBD_ATTR_SOCKETS]) {
+>>           printk(KERN_ERR "nbd: must specify at least one socket\n");
+>>           return -EINVAL;
+> .

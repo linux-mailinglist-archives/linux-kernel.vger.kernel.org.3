@@ -2,155 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D014DCF26
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6934DCF29
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiCQULu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
+        id S229561AbiCQUML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 16:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiCQULt (ORCPT
+        with ESMTP id S229463AbiCQUMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:11:49 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA8A29EE3E;
-        Thu, 17 Mar 2022 13:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1647547824; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TBhB5mnj+yU5UQCD6yhog64770XneXJJnfqfginvPmo=;
-        b=eIHZgUYBBumSPI4xw5meu79N9cSbfki0qgEzFAf/RVYUvpkeFP4EkLreDOAlI+5YSidDqX
-        c6BqiOViZLrayAJTMhSeN9IYJXETgI0f5ZqnktWoBauBv7mzqNwgrAi3uS8UFmwXzi/aWc
-        TMl+T5IsLybiEqIOSn6YeyoWf2HzXAo=
-Date:   Thu, 17 Mar 2022 20:10:14 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 4/4] dt-bindings: display/panel: Add Leadtek
- ltk035c5444t
-To:     Christophe Branchereau <cbranchereau@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Message-Id: <21OW8R.3JWZ0IT11MIP2@crapouillou.net>
-In-Reply-To: <20220311170240.173846-5-cbranchereau@gmail.com>
-References: <20220311170240.173846-1-cbranchereau@gmail.com>
-        <20220311170240.173846-5-cbranchereau@gmail.com>
+        Thu, 17 Mar 2022 16:12:07 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB2D2EE94D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:10:45 -0700 (PDT)
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 021163F07E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 20:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647547835;
+        bh=oGka89Ju4SH1eJbMmEz67bGmXAxdjFKHnHgVhuc4y5I=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=sw/5GufZAgBNmERL1Y9HmuS3umWXoV2LJzjY+01EAlEwJymaQ6Py5UKQg5jQ17e/j
+         FJwQFOObsuqqLRyUJuzEC4uBPqopCxzvb+VjLCi2QIr6MEgdodY0JfBWuB2Lli07uZ
+         X3PYAjkOeeOqA1lZQl1usTtxfj31YEVn4zzOlX5xeIU9YZcsESK3YewSlqAPQfJ0Jn
+         NMxJhP+pwoAPVgQMcfZPQfPc2hvfwnnmpbkb5J+OXoEvI3zhE3uY5VyZIojQX+AAee
+         vkJ5hOlqTEtLw7TOTeJZJkWxYxeqqkIKj6biABYlIPbRN3z9AZ3gzf/yRPsG2TESOa
+         Mwk7oAUqWWZeQ==
+Received: by mail-pj1-f69.google.com with SMTP id om8-20020a17090b3a8800b001c68e7ccd5fso1390303pjb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:10:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
+         :comments:mime-version:content-id:date:message-id;
+        bh=oGka89Ju4SH1eJbMmEz67bGmXAxdjFKHnHgVhuc4y5I=;
+        b=7se+F3FeDPTMMO7f6cp1A+Oo7J52dIDoMAbH6L2ryFeM4n8tF9sDUdEzEUqIko3lcd
+         cwQE25ZRGeZpQAAsFyylpzY374/DaCpb2n2f3baCoXfkT5ffRdu9Bzx++laRxXOlgSCR
+         HD98hufzjNtVl9djQO5xZT0VlkmjKLDbLnIyScaL9m7Dn5eiwuwy5xa+v0I6Ur2CT4R6
+         oCoinGk68H/WcdstWWKmvpETVBXvOCIkErHjNtUUHflTPU9GP6mLlyGHtXeVKXMZJf6r
+         tQASY0pWSnPGhtQ9m28fgk2G4+XKo9mnnKzpMeVt/WIK2TTupuEeSzY6nPGVQ7SZtW3M
+         3jjQ==
+X-Gm-Message-State: AOAM533tTVKO20ZP3U1mlF1VMzaOIti2O/eiU1vr3xQ5lLNoy0hPxJ1K
+        Y12ORSHBZDJCarNpQJ+gX2SoVgeoJ87QISbfRQlPC2w3Le7POmh8ib3Yb4bsowfDfCoE0APkAGd
+        atwFqfAPAspWIn9jZj1VEgbwWYl4g50njR9b3UAslmA==
+X-Received: by 2002:a17:90b:1e05:b0:1bf:4673:7e7d with SMTP id pg5-20020a17090b1e0500b001bf46737e7dmr18136860pjb.10.1647547832989;
+        Thu, 17 Mar 2022 13:10:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyIWov4910PEae3SHu9J2fytnHDI9r4/fCyzFHyStsFyiNnPRcM6KxaBT6Do9lWoJyhJ8XkTA==
+X-Received: by 2002:a17:90b:1e05:b0:1bf:4673:7e7d with SMTP id pg5-20020a17090b1e0500b001bf46737e7dmr18136848pjb.10.1647547832729;
+        Thu, 17 Mar 2022 13:10:32 -0700 (PDT)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id q10-20020a056a00088a00b004f7ceff389esm8019135pfj.152.2022.03.17.13.10.32
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Mar 2022 13:10:32 -0700 (PDT)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id D9ACA5FDEE; Thu, 17 Mar 2022 13:10:31 -0700 (PDT)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id D2725A0B18;
+        Thu, 17 Mar 2022 13:10:31 -0700 (PDT)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     David Ahern <dsahern@kernel.org>
+cc:     Sun Shouxin <sunshouxin@chinatelecom.cn>, vfalico@gmail.com,
+        andy@greyhouse.net, davem@davemloft.net, kuba@kernel.org,
+        yoshfuji@linux-ipv6.org, oliver@neukum.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
+Subject: Re: [PATCH v4] net:bonding:Add support for IPV6 RLB to balance-alb mode
+In-reply-to: <eff0021c-5a9b-5c44-3fb7-24387cf13e16@kernel.org>
+References: <20220317061521.23985-1-sunshouxin@chinatelecom.cn> <eff0021c-5a9b-5c44-3fb7-24387cf13e16@kernel.org>
+Comments: In-reply-to David Ahern <dsahern@kernel.org>
+   message dated "Thu, 17 Mar 2022 12:49:54 -0600."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <24596.1647547831.1@famine>
+Date:   Thu, 17 Mar 2022 13:10:31 -0700
+Message-ID: <24597.1647547831@famine>
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+David Ahern <dsahern@kernel.org> wrote:
 
-Le ven., mars 11 2022 at 18:02:40 +0100, Christophe Branchereau=20
-<cbranchereau@gmail.com> a =E9crit :
-> Add binding for the leadtek ltk035c5444t, which is a 640x480
-> mipi-dbi over spi / 24-bit RGB panel based on the newvision
-> NV03052C chipset.
->=20
-> It is found in the Anbernic RG350M mips handheld.
->=20
-> Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
+>On 3/17/22 12:15 AM, Sun Shouxin wrote:
+>> This patch is implementing IPV6 RLB for balance-alb mode.
+>> 
+>> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+>> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+>> ---
+>> changelog:
+>> v1-->v2:
+>> -Remove ndisc_bond_send_na and refactor ndisc_send_na.
+>> -In rlb_nd_xmit, if the lladdr is not local, return curr_active_slave.
+>> -Don't send neighbor advertisement message when receiving
+>>  neighbor advertisement message in rlb6_update_entry_from_na.
+>> 
+>> v2-->v3:
+>> -Don't export ndisc_send_na.
+>> -Use ipv6_stub->ndisc_send_na to replace ndisc_send_na
+>>  in rlb6_update_client.
+>> 
+>> v3-->v4:
+>> -Submit all code at a whole patch.
+>
+>you misunderstood Jakub's comment. The code should evolve with small,
+>focused patches and each patch needs to compile and function correctly
+>(ie., no breakage).
 
-Applied to drm-misc-next.
+	Agreed; the split of the patches was not at issue, it was that
+each patch in a series must compile and the built kernel must function
+rationally.
 
-Thanks,
--Paul
+>You need to respond to Jiri's question about why this feature is needed.
 
-> ---
->  .../display/panel/leadtek,ltk035c5444t.yaml   | 59=20
-> +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644=20
-> Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
->=20
-> diff --git=20
-> a/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.ya=
-ml=20
-> b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.ya=
-ml
-> new file mode 100644
-> index 000000000000..817a9bed7d5a
-> --- /dev/null
-> +++=20
-> b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.ya=
-ml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id:=20
-> http://devicetree.org/schemas/display/panel/leadtek,ltk035c5444t.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Leadtek ltk035c5444t 3.5" (640x480 pixels) 24-bit IPS LCD=20
-> panel
-> +
-> +maintainers:
-> +  - Paul Cercueil <paul@crapouillou.net>
-> +  - Christophe Branchereau <cbranchereau@gmail.com>
-> +
-> +allOf:
-> +  - $ref: panel-common.yaml#
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: leadtek,ltk035c5444t
-> +
-> +  backlight: true
-> +  port: true
-> +  power-supply: true
-> +  reg: true
-> +  reset-gpios: true
-> +
-> +required:
-> +  - compatible
-> +  - power-supply
-> +  - reset-gpios
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    spi {
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +        panel@0 {
-> +            compatible =3D "leadtek,ltk035c5444t";
-> +            reg =3D <0>;
-> +
-> +            spi-3wire;
-> +            spi-max-frequency =3D <3125000>;
-> +
-> +            reset-gpios =3D <&gpe 2 GPIO_ACTIVE_LOW>;
-> +
-> +            backlight =3D <&backlight>;
-> +            power-supply =3D <&vcc>;
-> +
-> +            port {
-> +                panel_input: endpoint {
-> +                    remote-endpoint =3D <&panel_output>;
-> +                };
-> +            };
-> +        };
-> +    };
-> --
-> 2.35.1
->=20
+	I'm not entirely sold on adding IPv6 RLB for balance-alb, but
+the IPv4 version of it does see moderate levels of use, even now.  It's
+less common than LACP by far, though.  I'd like to know why someone
+would choose IPv6 RLB over LACP.  I wonder if this is a checklist item
+somewhere that something must have "complete support for IPv6" or words
+to that effect, versus an actual functional need.
 
+>After that:
+>
+>1. patch 1 adds void *data to ndisc_send_na stub function and
+>ndisc_send_na direct function. Update all places that use both
+>ndisc_send_na to pass NULL as the data parameter.
+>
+>2. patch 2 refactors ndisc_send_na to handle the new data argument
+>
+>3. patch 3 exports any IPv6 functions. explain why each needs to be
+>exported.
+>
+>4. patch 4 .... bonding changes. (bonding folks can respond on how to
+>introduce that change).
 
+	Looking at the previous patch for bonding, my two initial
+requests are:
+
+	1) A more detailed commit message.  The only way to understand
+how any of this actually works is reading the code, there is no higher
+level description.
+
+	2) How does this interact with the IPv4 RLB logic?  Is it
+possible for a given bond interface MAC to be "assigned" to two
+different peers (one IPv4, one IPv6), and if so, does that behave in an
+expected manner?  I.e., two peers on the network could receive
+contradictory information via ARP and ND for the MAC address of a given
+peer.  This is already possible with the IPv4 RLB, but with an
+additional IPv6 RLB, a single peer could see two different MACs for a
+given host (one via IPv4, one via IPv6), and another peer could see the
+opposite, or even disjoint information across several peers.
+
+	-J
+
+---
+	-Jay Vosburgh, jay.vosburgh@canonical.com

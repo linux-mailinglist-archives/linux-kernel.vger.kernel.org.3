@@ -2,83 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB354DBD29
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 03:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1FA4DBD2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 03:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351780AbiCQClf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 22:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
+        id S1358515AbiCQCmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 22:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354977AbiCQCl2 (ORCPT
+        with ESMTP id S1358517AbiCQCmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 22:41:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A5F20185;
-        Wed, 16 Mar 2022 19:40:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 814FFB81DEA;
-        Thu, 17 Mar 2022 02:40:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 294E7C340EF;
-        Thu, 17 Mar 2022 02:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647484811;
-        bh=d6PHNPVPmTysZRBit4MXXt2WuAvPHuq0x2xiVX6+buQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Bd03dVaQKeLa5kOBEyhtT8eCYCLD/LUX/77MAU8WEW/Gr/wbI9ZqqKXFS7jtixiZW
-         rfJtkwdDOBlb9sx5sAIW6FCgXkbjhtX8OxzwhBFghAKl3zfDguPK1HFcAZ9cs50ixn
-         R6xuGNdYYtfG8VzV/bzaKtPAc3B4ePpNZQcZmbEOarpoHzSkU9rbWpTzpPYNeivBx/
-         t81cumUNi+67xotsGyRyc/UJ31hEI2xX0pvVqhAH+1VCH5q/uK9oNFqJod8dWMzZB5
-         aQfl1vQS5gB8DRrxp8FwQscKBOMPPiiN3FQIfoPwuReXFMK/ddUO/VFZw3+3MsMVC2
-         K1uaMWuAy1IMA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E8A2BF03848;
-        Thu, 17 Mar 2022 02:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 16 Mar 2022 22:42:04 -0400
+Received: from mail.meizu.com (unknown [14.29.68.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F318320F5A
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 19:40:40 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
+ (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 17 Mar
+ 2022 10:40:40 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 17 Mar
+ 2022 10:40:38 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     <benh@kernel.crashing.org>, <masahiroy@kernel.org>,
+        <adobriyan@gmail.com>
+CC:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        "Haowen Bai" <baihaowen@meizu.com>
+Subject: [PATCH] macintosh: via-cuda: Fix warning comparing pointer to 0
+Date:   Thu, 17 Mar 2022 10:40:37 +0800
+Message-ID: <1647484837-14352-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: hns3: Fix spelling mistake "does't" -> "doesn't"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164748481094.31245.11981080354188425621.git-patchwork-notify@kernel.org>
-Date:   Thu, 17 Mar 2022 02:40:10 +0000
-References: <20220315222914.2960786-1-colin.i.king@gmail.com>
-In-Reply-To: <20220315222914.2960786-1-colin.i.king@gmail.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     yisen.zhuang@huawei.com, salil.mehta@huawei.com,
-        davem@davemloft.net, kuba@kernel.org, huangguangbin2@huawei.com,
-        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Avoid pointer type value compared with 0 to make code clear.
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ drivers/macintosh/via-cuda.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On Tue, 15 Mar 2022 22:29:14 +0000 you wrote:
-> There is a spelling mistake in a dev_warn message. Fix it.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_tm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Here is the summary with links:
-  - net: hns3: Fix spelling mistake "does't" -> "doesn't"
-    https://git.kernel.org/netdev/net-next/c/f403443015c6
-
-You are awesome, thank you!
+diff --git a/drivers/macintosh/via-cuda.c b/drivers/macintosh/via-cuda.c
+index cd267392..05a3cd9 100644
+--- a/drivers/macintosh/via-cuda.c
++++ b/drivers/macintosh/via-cuda.c
+@@ -236,10 +236,10 @@ int __init find_via_cuda(void)
+     const u32 *reg;
+     int err;
+ 
+-    if (vias != 0)
++    if (vias)
+ 	return 1;
+     vias = of_find_node_by_name(NULL, "via-cuda");
+-    if (vias == 0)
++    if (!vias)
+ 	return 0;
+ 
+     reg = of_get_property(vias, "reg", NULL);
+@@ -517,7 +517,7 @@ cuda_write(struct adb_request *req)
+     req->reply_len = 0;
+ 
+     spin_lock_irqsave(&cuda_lock, flags);
+-    if (current_req != 0) {
++    if (current_req) {
+ 	last_req->next = req;
+ 	last_req = req;
+     } else {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.7.4
 

@@ -2,161 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685014DCB20
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E11414DCB22
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236473AbiCQQV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53246 "EHLO
+        id S236476AbiCQQWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236443AbiCQQVx (ORCPT
+        with ESMTP id S233264AbiCQQWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:21:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAFC20DB16;
-        Thu, 17 Mar 2022 09:20:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97818B81F25;
-        Thu, 17 Mar 2022 16:20:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 396BBC340EF;
-        Thu, 17 Mar 2022 16:20:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647534034;
-        bh=/+CHBTGFlXDKJZW/jGmX5qQz2Po3iveVuzuR9CMSbek=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=JJoaAiuewj4hihUicGFfgIeEGWmgHBMKmb7ZX4njN9MGBZBJTioXnQua7fSnVIxUx
-         g6FsIaOwoTtrR6BPOGkUctg77v3LcxEHTMZRSR2cYvhJYXKk5o1F9ynfXmZn+ZXk6C
-         na0ggp+zkr0utwZjq8umbm04+oc0TKzJYBEKIObEftZ7RoqCOZ7qaI17GlCGDdiOdJ
-         rqGYsbVW+dF7fkKgwYUUv9Igx+AQ6FoAAVwxu71xKeepppgmFZMUu7fYy/F85gUYRr
-         xKse3T8Nsp4r69wOKn03/sA3Vfv1vcPgV+46qSZCsuKYwOcCTJixROORygHB07q3jf
-         M/+tMKZ9Cqbbw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D37B65C051B; Thu, 17 Mar 2022 09:20:33 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 09:20:33 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     rcu@vger.kernel.org, Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: RCU: undefined reference to irq_work_queue
-Message-ID: <20220317162033.GP4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YjMcZexG/kJepYDi@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <20220317140000.GO4285@paulmck-ThinkPad-P17-Gen-1>
- <YjNSuprCqjAgGgqB@ip-172-31-19-208.ap-northeast-1.compute.internal>
+        Thu, 17 Mar 2022 12:22:30 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B6D215900;
+        Thu, 17 Mar 2022 09:21:12 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 01AC0E000E;
+        Thu, 17 Mar 2022 16:21:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1647534070;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=p+cYBkfFFvELqWc9QhQrIx+yztmy6I4JHGArTu/5pHI=;
+        b=DTjpkPO+Rd8PPKRBmDgIFf8CocPlPj+9wu7TQwKkH/W0cTGtcxwD+qkLdZ4vVrrK5894tJ
+        qjWmm6zNPvtp7WuOoZYPoAABdrfPmfdjfZP5alH9VGaORL5zNcW1tO/qyUMSX6N9AfWvHb
+        9FtpA38vZpWNVGuIAL8VAY/jdqsLRy9GRiOiezU+eavHdCHz2CqFaHFQfKAU0Qa3D5f8Xl
+        ef2mEmAUL09Sfh6bPrDXj7UogiwjaJWP1CmTH1wXKu32D4wRi1/kLzHE7rWzx9Dm32lTYK
+        W0DPmtj0k73bDzoXYiEafY2Qh/JG7P24sh+DGhwDqUxrQlAK6mlG4BGScugF8A==
+Date:   Thu, 17 Mar 2022 17:21:07 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 7/9] dt-bindings: media: Add Allwinner A83T MIPI CSI-2
+ bindings documentation
+Message-ID: <YjNf827KuySLowK1@aptenodytes>
+References: <20220302220739.144303-1-paul.kocialkowski@bootlin.com>
+ <20220302220739.144303-8-paul.kocialkowski@bootlin.com>
+ <YjHlisNfdobeAta7@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="iiX+RlDO9qayM+ej"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YjNSuprCqjAgGgqB@ip-172-31-19-208.ap-northeast-1.compute.internal>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YjHlisNfdobeAta7@paasikivi.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 03:24:42PM +0000, Hyeonggon Yoo wrote:
-> On Thu, Mar 17, 2022 at 07:00:00AM -0700, Paul E. McKenney wrote:
-> > On Thu, Mar 17, 2022 at 11:32:53AM +0000, Hyeonggon Yoo wrote:
-> > > Hello RCU folks,
-> > > 
-> > > I like to use minimal configuration for kernel development.
-> > > when building with tinyconfig + CONFIG_PREEMPT=y on arm64:
-> > > 
-> > > ld: kernel/rcu/update.o: in function `call_rcu_tasks':
-> > > update.c:(.text+0xb2c): undefined reference to `irq_work_queue'
-> > > update.c:(.text+0xb2c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `irq_work_queue'
-> > > make: *** [Makefile:1155: vmlinux] Error 1
-> > > 
-> > > It seems RCU calls irq_work_queue() without checking if CONFIG_IRQ_WORK is enabled.
-> > 
-> > Indeed it does!
-> > 
-> > And kernel/rcu/Kconfig shows why:
-> > 
-> > config TASKS_TRACE_RCU
-> > 	def_bool 0
-> > 	select IRQ_WORK
-> > 	help
-> > 	  This option enables a task-based RCU implementation that uses
-> > 	  explicit rcu_read_lock_trace() read-side markers, and allows
-> > 	  these readers to appear in the idle loop as well as on the CPU
-> > 	  hotplug code paths.  It can force IPIs on online CPUs, including
-> > 	  idle ones, so use with caution.
-> > 
-> > So the solution is to further minimize your configuration so as to
-> > deselect TASKS_TRACE_RCU.
-> 
-> They are already not selected.
 
-Good, thank you.
+--iiX+RlDO9qayM+ej
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-How about TASKS_RUDE_RCU, TASKS_TRACE_RCU, and TASKS_RCU_GENERIC?
+Hi Sakari,
 
-> > This means making sure that both BPF and
-> > the various RCU torture tests are all deselected.
-> 
-> I wanted to say call_rcu_tasks() can be referenced even when IRQ_WORK is not
-> selected, making it fail to build.
+On Wed 16 Mar 22, 15:26, Sakari Ailus wrote:
+> Hi Paul,
+>=20
+> Thanks for the patch.
 
-I am guessing because TASKS_RCU_GENERIC is selected?
+And thanks for the review!
 
-If so, does the patch at the end of this email help?
+> On Wed, Mar 02, 2022 at 11:07:37PM +0100, Paul Kocialkowski wrote:
+> > This introduces YAML bindings documentation for the Allwinner A83T
+> > MIPI CSI-2 controller.
+> >=20
+> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  .../media/allwinner,sun8i-a83t-mipi-csi2.yaml | 138 ++++++++++++++++++
+> >  1 file changed, 138 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/media/allwinner,s=
+un8i-a83t-mipi-csi2.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun8i-a8=
+3t-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun8i=
+-a83t-mipi-csi2.yaml
+> > new file mode 100644
+> > index 000000000000..75121b402435
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi=
+-csi2.yaml
+> > @@ -0,0 +1,138 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/allwinner,sun8i-a83t-mipi-csi=
+2.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Allwinner A83T MIPI CSI-2 Device Tree Bindings
+> > +
+> > +maintainers:
+> > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: allwinner,sun8i-a83t-mipi-csi2
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: Bus Clock
+> > +      - description: Module Clock
+> > +      - description: MIPI-specific Clock
+> > +      - description: Misc CSI Clock
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: bus
+> > +      - const: mod
+> > +      - const: mipi
+> > +      - const: misc
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > +        description: Input port, connect to a MIPI CSI-2 sensor
+> > +
+> > +        properties:
+> > +          reg:
+> > +            const: 0
+> > +
+> > +          endpoint:
+> > +            $ref: video-interfaces.yaml#
+> > +            unevaluatedProperties: false
+> > +
+> > +            properties:
+> > +              clock-lanes:
+> > +                maxItems: 1
+>=20
+> Does the hardware support lane reordering? If not, the property should be
+> omitted here.
 
-> > > ld: kernel/rcu/update.o: in function `call_rcu_tasks':
-> > > update.c:(.text+0xb2c): undefined reference to `irq_work_queue'
-> > > update.c:(.text+0xb2c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `irq_work_queue'
-> > > make: *** [Makefile:1155: vmlinux] Error 1
-> 
-> Isn't it better to fix this build failure?
+I'm not sure what this relates to. Is it about inverting the clock lane with
+a data lane? I'm a bit confused about logical vs physical lane in the conte=
+xt
+of MIPI CSI-2.
 
-But of course!  However, first I need to know exactly what is causing your
-build failure.  I cannot see your .config file, so I am having to guess.
+The controller has dedicated pins for the clock and data lanes and supports
+filtering packets based on virtual channel or data type.
 
-Don't get me wrong, I do have a lot of practice guessing, but it is still
-just guessing.  ;-)
+Are the clock-lanes and data-lanes only relevant for reordering?
+IIRC they are also necessary to get the lanes count in the driver.
 
-> It fails to build when both TASKS_TRACE_RCU and IRQ_WORK are not selected
-> and PREEMPT is selected.
-> 
->   │ Symbol: TASKS_TRACE_RCU [=n]                                            │
->   │ Type  : bool                                                            │
->   │ Defined at kernel/rcu/Kconfig:96                                        │
->   │ Selects: IRQ_WORK [=n]                                                  │
->   │ Selected by [n]:                                                        │
->   │   - BPF_SYSCALL [=n]                                                    │
->   │   - RCU_SCALE_TEST [=n] && DEBUG_KERNEL [=y]                            │
->   │   - RCU_TORTURE_TEST [=n] && DEBUG_KERNEL [=y]                          │
->   │   - RCU_REF_SCALE_TEST [=n] && DEBUG_KERNEL [=y]
-> 
-> Thanks!
-> 
-> > 
-> > Or turn on IRQ_WORK, for example, if you need to use BPF.
+> I can also remove the three lines here while applying the patches.
 
-Or do you already have TASKS_RCU_GENERIC deselected?
+I think this series will need another iteration anyway, so let's wait.
 
-							Thanx, Paul
+Paul
 
-------------------------------------------------------------------------
+> > +
+> > +              data-lanes:
+> > +                minItems: 1
+> > +                maxItems: 4
+> > +
+> > +            required:
+> > +              - data-lanes
+> > +
+> > +        additionalProperties: false
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > +        description: Output port, connect to a CSI controller
+> > +
+> > +        properties:
+> > +          reg:
+> > +            const: 1
+> > +
+> > +          endpoint:
+> > +            $ref: video-interfaces.yaml#
+> > +            unevaluatedProperties: false
+> > +
+> > +        additionalProperties: false
+> > +
+> > +    required:
+> > +      - port@0
+> > +      - port@1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - clock-names
+> > +  - resets
+> > +  - ports
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    #include <dt-bindings/clock/sun8i-a83t-ccu.h>
+> > +    #include <dt-bindings/reset/sun8i-a83t-ccu.h>
+> > +
+> > +    mipi_csi2: csi@1cb1000 {
+> > +        compatible =3D "allwinner,sun8i-a83t-mipi-csi2";
+> > +        reg =3D <0x01cb1000 0x1000>;
+> > +        interrupts =3D <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> > +        clocks =3D <&ccu CLK_BUS_CSI>,
+> > +                 <&ccu CLK_CSI_SCLK>,
+> > +                 <&ccu CLK_MIPI_CSI>,
+> > +                 <&ccu CLK_CSI_MISC>;
+> > +        clock-names =3D "bus", "mod", "mipi", "misc";
+> > +        resets =3D <&ccu RST_BUS_CSI>;
+> > +
+> > +        ports {
+> > +            #address-cells =3D <1>;
+> > +            #size-cells =3D <0>;
+> > +
+> > +            mipi_csi2_in: port@0 {
+> > +                reg =3D <0>;
+> > +
+> > +                mipi_csi2_in_ov8865: endpoint {
+> > +                    data-lanes =3D <1 2 3 4>;
+> > +
+> > +                    remote-endpoint =3D <&ov8865_out_mipi_csi2>;
+> > +                };
+> > +            };
+> > +
+> > +            mipi_csi2_out: port@1 {
+> > +                reg =3D <1>;
+> > +
+> > +                mipi_csi2_out_csi: endpoint {
+> > +                    remote-endpoint =3D <&csi_in_mipi_csi2>;
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > +
+> > +...
+>=20
+> --=20
+> Kind regards,
+>=20
+> Sakari Ailus
 
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index bf8e341e75b4..f559870fbf8b 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -86,6 +86,7 @@ config TASKS_RCU
- 
- config TASKS_RUDE_RCU
- 	def_bool 0
-+	select IRQ_WORK
- 	help
- 	  This option enables a task-based RCU implementation that uses
- 	  only context switch (including preemption) and user-mode
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--iiX+RlDO9qayM+ej
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIzX/MACgkQ3cLmz3+f
+v9E+pQf+IeGzh1lXPZrMZDTECUlOPK5l/zgJtpRtE5Gd7qzKbZm59v2L4YYnaBzC
+uT+MIgMHxJtyX90UobiXOilMW/yxilQFh/i00T4HMXEZ+VFxY6wVVUZt0/yZM33n
+U3EqJqMWT/cb14jgNFBi9jEX7Y08cRih1u8JZxnDBDnq/1KZL/csvquJ2Ljwczw0
+cMOQ+1L8liSsQiq7AlorcZLuFSLttMlbIZg+E2u9FNSBKcoF1iUpsDhSggXEVvs9
+rVxpT+YhxM6hNls7XR3LyeE7KdAfdcub5JFhUiq7oTJxQK+K6/0IWv8qBrq35k3u
+qcCt2yH9UO9dmAyhBky+qbS06yaJjA==
+=IJLv
+-----END PGP SIGNATURE-----
+
+--iiX+RlDO9qayM+ej--

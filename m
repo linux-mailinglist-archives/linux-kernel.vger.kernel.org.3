@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E56F4DBE69
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 06:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A24DF4DBE8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 06:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbiCQFe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 01:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
+        id S229474AbiCQFjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 01:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiCQFez (ORCPT
+        with ESMTP id S229379AbiCQFjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 01:34:55 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9182335F8
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 22:02:36 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id kd12so3495348qvb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 22:02:36 -0700 (PDT)
+        Thu, 17 Mar 2022 01:39:14 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6808C26A978
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 22:08:28 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id q19so1811659pgm.6
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 22:08:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VvVRu/eQ4rluWWC4xLbR2tgbkWAUCRDnVAYNhV1Z6xc=;
-        b=M8svGS/iYe/6Axq12vi5bRDCEMlzc6Ij8qRz9Jv2zShz/ObYi/K8LvxnXddnqwdlZ5
-         Hy8n9AmCKbusB4osSPTnHAVp8vUxmh7SSg9lwbwwufhybms+bvk63V8UIvo3q7mbeWUr
-         ms0f7znXjC7cHbVmrOohql/i6f8ctFGbu8I9sNEgFyiZeOLtmREtacl8Yw4snmOA8pXM
-         kQilYsz8Wh8v2crCMneeQf+7yJnPEZ2x4vdo/qdi/D/NOFRsSbZ+5MsxXFKvgaMYLpf+
-         WUk8rZ4g3h3S5QvnL30UOp/JJuMmWm3L6uvPr4rQBgKs/g6hiojbCciTRUP/h0N9SzjX
-         D/YA==
+        bh=WjOHj/8BATPBP0IusStgCkjkvXpEOFe7FfCA17j19dU=;
+        b=o1u3cr7gjNAmLIFszokjYtRlBW9YgENKNSlekv8UL8chTfVfPdo6wVkoY6bwpm60l6
+         l3jwfncEOHo063kGAFw3R6s40XnNCmp8ZGTK9gz8JM69rP4B5e7w2FewsQG+0kY8xkBE
+         VY11XP+IZ7GEHIlyOyh7s8/Rbkdl9MqIsfNeSmI6fiksjsG4xzEalnCm8D4AwuPqOO6S
+         uXEKkzZkHrHl3dLpgT9W2dx3xNS3+P6sjXgIYRYKxv6lZ5nlA4sVTQMiGVM2+dLHvn+x
+         s9Akgp3UHRCkylI1xF2HXF6cpEaW//VHHRTxW+JxEouHH72oSD9c91epcZkwmiepKuMF
+         1+qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VvVRu/eQ4rluWWC4xLbR2tgbkWAUCRDnVAYNhV1Z6xc=;
-        b=AC1TZFB+NXjyApUwfjEqJG8AnFd/vH2QU5AKNbpXNYrAExtcGNlSTcCag1tS2Smuly
-         zF7KoOxgCchy4RjquJQs74qtuVfrpHyJDMC7fS0xsAgrs3FuWKddp0A4fDQAg9DT05J4
-         hxuHjkDIyegAcXd14C5QLP7OBsdQlDvJfSqS1ySn33h7JTvbyWbxcYtMe2Zluv6TCTf9
-         yUCTMNzWVQshhIfuEcjdpnnFequB0h6QgjVI9hCR3S8qTYkcg4bWZ1E/oQMwtvNY+Tjg
-         A1hK2v810M9grJuTknG0Gj5BUotgBx99IxYPo295sgHsLAxGalROff3Ljb3d8fmd8SPO
-         eR4A==
-X-Gm-Message-State: AOAM533dvB6pb0wILK6ICz5KeFwWilIsokqi1hGXXOErbITuoriA38CH
-        ddhWTKlzYqMSrsEm5NWPNo/f7/4p8+Xznw==
-X-Google-Smtp-Source: ABdhPJyi19/Qz8TowVm2OmKd/W9qF6RFe2vVau6sqR7JL6Hr7iGFozZcp/GI1PSjE0Jf1/f0WMuLow==
-X-Received: by 2002:a17:903:234d:b0:153:b63f:8abf with SMTP id c13-20020a170903234d00b00153b63f8abfmr3060697plh.51.1647489342392;
-        Wed, 16 Mar 2022 20:55:42 -0700 (PDT)
+        bh=WjOHj/8BATPBP0IusStgCkjkvXpEOFe7FfCA17j19dU=;
+        b=Ha7kOiO0PpPGNJ3imrtxUsmM9QFqOuMqcJRbjLDHzbL9rzNGp1/h6NBz6uCprnHVOO
+         7bfdFz7tZD9YIvmYmh2IZBMf96zeW3Ywq1/RWpA9TeQ3xH9pcpBX91O+wGKC1+jb/dmG
+         WnOCRg0Ys1NW7//rnj2asXVFjp7gc6mIphHvqkvgldWW31GiFDKJ0WY7r8NSXwQ0L7gg
+         qd7RiXT7acq0SeJd0BA3ZhFKcX6On8P30u6dq1SBi1pA3G21R5SWWgk9OF8ukk43HcJM
+         r29lWY6iWG1abRU+BTj47mdDnTQfxw8WkwKzXDYyUNFq6cUO7MWjTCPSwzz11vwH1qdn
+         qWXA==
+X-Gm-Message-State: AOAM532/90WWDxsy/9R5KgptkPJSIHZ44oHcdmJq5tdePuZlzAdPRNaa
+        hez3trMV5mgKSAqTW1/bETOOk19DJJZA/g==
+X-Google-Smtp-Source: ABdhPJzI9v1AsK1frl/OfapPyfUjcQq9CI1+CjtXBFdgE2i0TOisHVwLb4aM0S1NFFwVdeouAbr7lQ==
+X-Received: by 2002:a63:1743:0:b0:381:42cf:187 with SMTP id 3-20020a631743000000b0038142cf0187mr2035408pgx.397.1647489361831;
+        Wed, 16 Mar 2022 20:56:01 -0700 (PDT)
 Received: from localhost.localdomain ([122.171.160.59])
-        by smtp.gmail.com with ESMTPSA id 132-20020a62168a000000b004f40e8b3133sm5074436pfw.188.2022.03.16.20.55.37
+        by smtp.gmail.com with ESMTPSA id g9-20020a056a0023c900b004f736d081d9sm5184749pfc.64.2022.03.16.20.55.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 20:55:41 -0700 (PDT)
+        Wed, 16 Mar 2022 20:56:01 -0700 (PDT)
 From:   Anup Patel <apatel@ventanamicro.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     Atish Patra <atishp@atishpatra.org>,
         Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] RISC-V: KVM: Don't clear hgatp CSR in kvm_arch_vcpu_put()
-Date:   Thu, 17 Mar 2022 09:25:21 +0530
-Message-Id: <20220317035521.272486-1-apatel@ventanamicro.com>
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH] RISC-V: Increase range and default value of NR_CPUS
+Date:   Thu, 17 Mar 2022 09:25:42 +0530
+Message-Id: <20220317035542.272547-1-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +72,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We might have RISC-V systems (such as QEMU) where VMID is not part
-of the TLB entry tag so these systems will have to flush all TLB
-enteries upon any change in hgatp.VMID.
+Currently, the range and default value of NR_CPUS is too restrictive
+for high-end RISC-V systems with large number of HARTs. The latest
+QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
+restrictive for QEMU as well. Other major architectures (such as
+ARM64, x86_64, MIPS, etc) have a much higher range and default
+value of NR_CPUS.
 
-Currently, we zero-out hgatp CSR in kvm_arch_vcpu_put() and we
-re-program hgatp CSR in kvm_arch_vcpu_load(). For above described
-systems, this will flush all TLB enteries whenever VCPU exits to
-user-space hence reducing performance.
+This patch increases NR_CPUS range to 2-256 and default value to
+XLEN (i.e. 32 for RV32 and 64 for RV64).
 
-This patch fixes above described performance issue by not clearing
-hgatp CSR in kvm_arch_vcpu_put().
-
-Fixes: 34bde9d8b9e6 ("RISC-V: KVM: Implement VCPU world-switch")
-Cc: stable@vger.kernel.org
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 ---
- arch/riscv/kvm/vcpu.c | 2 --
- 1 file changed, 2 deletions(-)
+ arch/riscv/Kconfig | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-index 624166004e36..6785aef4cbd4 100644
---- a/arch/riscv/kvm/vcpu.c
-+++ b/arch/riscv/kvm/vcpu.c
-@@ -653,8 +653,6 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
- 				     vcpu->arch.isa);
- 	kvm_riscv_vcpu_host_fp_restore(&vcpu->arch.host_context);
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 5adcbd9b5e88..54f125eb10f6 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -274,10 +274,11 @@ config SMP
+ 	  If you don't know what to do here, say N.
  
--	csr_write(CSR_HGATP, 0);
--
- 	csr->vsstatus = csr_read(CSR_VSSTATUS);
- 	csr->vsie = csr_read(CSR_VSIE);
- 	csr->vstvec = csr_read(CSR_VSTVEC);
+ config NR_CPUS
+-	int "Maximum number of CPUs (2-32)"
+-	range 2 32
++	int "Maximum number of CPUs (2-256)"
++	range 2 256
+ 	depends on SMP
+-	default "8"
++	default "32" if 32BIT
++	default "64" if 64BIT
+ 
+ config HOTPLUG_CPU
+ 	bool "Support for hot-pluggable CPUs"
 -- 
 2.25.1
 

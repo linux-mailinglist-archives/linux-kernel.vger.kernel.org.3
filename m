@@ -2,118 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B784DCA9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C71F4DCA9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236237AbiCQP74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 11:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
+        id S236252AbiCQQAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbiCQP7v (ORCPT
+        with ESMTP id S236259AbiCQQAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 11:59:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF495BF03B;
-        Thu, 17 Mar 2022 08:58:34 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22HFsWPN027305;
-        Thu, 17 Mar 2022 15:58:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=3m4fCIq28ovG+snMQBx7uMwRJ3aY27nz3p2vh0x8Kzc=;
- b=SogeypK+ZDDWdv/8J1qiFhvoC1L0o5dwSA1XmgSbu/tH/zB0pwtu1xxrDj4+XYvuNyLx
- ofprfBAZWD3Pvb+XIBOPtRF+ZdU+Al89ls5llYT69yjG4+aJtNM06O/gRxhNM+jgDCB7
- 8tLlJ/oKJ3jGyc2Sh2UVdC7c3cyfeMxaNeku1ZHaS9K707fmFtEvUSOhKQ5jjFsjRJOB
- ky1UbVj8DMVq5Iuq33QcJAdjYoF2+zp9DOLk4hFxzUs5l9qXuUJiXWAFyvdFUH7yTXzu
- jea7VpmKCNaJV7qlNlRM4HfBtnZ7xEGc+L0AQwhT+JpZ3dC6XAyTUzFxld4mQNKY3ecG jA== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev2sbq6a8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Mar 2022 15:58:30 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22HFZ27p003140;
-        Thu, 17 Mar 2022 15:58:28 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma02fra.de.ibm.com with ESMTP id 3erk58t000-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Mar 2022 15:58:28 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22HFwPO942336696
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Mar 2022 15:58:26 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D975F11C052;
-        Thu, 17 Mar 2022 15:58:25 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0B2E811C04A;
-        Thu, 17 Mar 2022 15:58:25 +0000 (GMT)
-Received: from sig-9-65-73-185.ibm.com (unknown [9.65.73.185])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 17 Mar 2022 15:58:24 +0000 (GMT)
-Message-ID: <692a64e10646154ee7310b62ffd74025f29cdccf.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 5/8] ima: permit fsverity's file digests in the IMA
- measurement list
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 17 Mar 2022 11:58:24 -0400
-In-Reply-To: <YhbUBJbQ+nCN515p@sol.localdomain>
-References: <20220211214310.119257-1-zohar@linux.ibm.com>
-         <20220211214310.119257-6-zohar@linux.ibm.com>
-         <YhbUBJbQ+nCN515p@sol.localdomain>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: QGW2ZGs_To9y4LZRuo_-huVmNLOD99c6
-X-Proofpoint-GUID: QGW2ZGs_To9y4LZRuo_-huVmNLOD99c6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-17_06,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- priorityscore=1501 adultscore=0 mlxlogscore=816 lowpriorityscore=0
- suspectscore=0 bulkscore=0 phishscore=0 clxscore=1011 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203170091
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Mar 2022 12:00:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9801C6EEB;
+        Thu, 17 Mar 2022 08:58:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A18931F38D;
+        Thu, 17 Mar 2022 15:58:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647532724; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KnvKkMkKV+AkQh16DqNsG50faWxcS2O+JpiJc4G40BM=;
+        b=Rk7UBFafzjCj4QFrQz8aKxdQtZfJjeU0TbP9DSdZU6ngd6/ROIQoKSaYBFmLs3T0xGG7ql
+        9BkJcwCxCWLIx+JOXgDZqh1IupzkOXNoMP0yEV8MQyVbQNzc+XkiLK+XOVUmIdy7yUH3Yw
+        yG6Fj/0t9f17KWxK8kDLozDVdP3yRdU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647532724;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KnvKkMkKV+AkQh16DqNsG50faWxcS2O+JpiJc4G40BM=;
+        b=HQqXeJ+XU0kwpRtchanpWMsyLCZ4sR8+Q8JhLnACx/OXvdjbU4r5K4+Lu88BIXYPXoLwz5
+        QIR9gafjitP1i6Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3CDA1132BE;
+        Thu, 17 Mar 2022 15:58:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id V3L4C7RaM2L3YgAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Thu, 17 Mar 2022 15:58:44 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id f232acc7;
+        Thu, 17 Mar 2022 15:59:02 +0000 (UTC)
+From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
+        Ceph Development <ceph-devel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 0/3] ceph: add support for snapshot names encryption
+References: <20220315161959.19453-1-lhenriques@suse.de>
+        <5b53e812-d49b-45f0-1219-3dbc96febbc1@redhat.com>
+        <329abedd9d9938de95bf4f5600acdcd6a846e6be.camel@kernel.org>
+        <3c8b78c4-5392-b81c-e76f-64fcce4f3c0f@redhat.com>
+        <87wngshlzb.fsf@brahms.olymp>
+        <c2f494b61674e63985e4e2a0fb3b6c503e17334b.camel@kernel.org>
+Date:   Thu, 17 Mar 2022 15:59:02 +0000
+In-Reply-To: <c2f494b61674e63985e4e2a0fb3b6c503e17334b.camel@kernel.org> (Jeff
+        Layton's message of "Thu, 17 Mar 2022 08:01:17 -0400")
+Message-ID: <87czikh8op.fsf@brahms.olymp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> diff --git a/security/integrity/integrity.h
-b/security/integrity/integrity.h
-> > index daf49894fd7d..39a999877013 100644
-> > --- a/security/integrity/integrity.h
-> > +++ b/security/integrity/integrity.h
-> > @@ -32,7 +32,7 @@
-> >  #define IMA_HASHED		0x00000200
-> >  
-> >  /* iint policy rule cache flags */
-> > -#define IMA_NONACTION_FLAGS	0xff000000
-> > +#define IMA_NONACTION_FLAGS	0xff800000
-> >  #define IMA_DIGSIG_REQUIRED	0x01000000
-> >  #define IMA_PERMIT_DIRECTIO	0x02000000
-> >  #define IMA_NEW_FILE		0x04000000
-> > @@ -40,6 +40,8 @@
-> >  #define IMA_FAIL_UNVERIFIABLE_SIGS	0x10000000
-> >  #define IMA_MODSIG_ALLOWED	0x20000000
-> >  #define IMA_CHECK_BLACKLIST	0x40000000
-> > +#define IMA_VERITY_REQUIRED	0x80000000
-> > +#define IMA_VERITY_DIGEST	0x00800000
-> 
-> How about defining these flags in numerical order?
+Jeff Layton <jlayton@kernel.org> writes:
 
-Originally I increased the flags size, but I'd like to avoid as much
-patch churn as possible for the namespacing patch set.
+> On Thu, 2022-03-17 at 11:11 +0000, Lu=C3=ADs Henriques wrote:
+>> Xiubo Li <xiubli@redhat.com> writes:
+>>=20
+>> > On 3/17/22 6:01 PM, Jeff Layton wrote:
+>> > > I'm not sure we want to worry about .snap directories here since they
+>> > > aren't "real". IIRC, snaps are inherited from parents too, so you co=
+uld
+>> > > do something like
+>> > >=20
+>> > >      mkdir dir1
+>> > >      mkdir dir1/.snap/snap1
+>> > >      mkdir dir1/dir2
+>> > >      fscrypt encrypt dir1/dir2
+>> > >=20
+>> > > There should be nothing to prevent encrypting dir2, but I'm pretty s=
+ure
+>> > > dir2/.snap will not be empty at that point.
+>> >=20
+>> > If we don't take care of this. Then we don't know which snapshots shou=
+ld do
+>> > encrypt/dencrypt and which shouldn't when building the path in lookup =
+and when
+>> > reading the snapdir ?
+>>=20
+>> In my patchset (which I plan to send a new revision later today, I think=
+ I
+>> still need to rebase it) this is handled by using the *real* snapshot
+>> parent inode.  If we're decrypting/encrypting a name for a snapshot that
+>> starts with a '_' character, we first find the parent inode for that
+>> snapshot and only do the operation if that parent is encrypted.
+>>=20
+>> In the other email I suggested that we could prevent enabling encryption
+>> in a directory when there are snapshots above in the hierarchy.  But now
+>> that I think more about it, it won't solve any problem because you could
+>> create those snapshots later and then you would still need to handle the=
+se
+>> (non-encrypted) "_name_xxxx" snapshots anyway.
+>>=20
+>
+> Yeah, that sounds about right.
+>
+> What happens if you don't have the snapshot parent's inode in cache?
+> That can happen if you (e.g.) are running NFS over ceph, or if you get
+> crafty with name_to_handle_at() and open_by_handle_at().
+>
+> Do we have to do a LOOKUPINO in that case or does the trace contain that
+> info? If it doesn't then that could really suck in a big hierarchy if
+> there are a lot of different snapshot parent inodes to hunt down.
+>
+> I think this is a case where the client just doesn't have complete
+> control over the dentry name. It may be better to just not encrypt them
+> if it's too ugly.
 
-Mimi
+I *think* this is covered by my last revision.  I didn't really tested
+NFS, but this was why the patches are using ceph_get_inode() and falling
+back to ceph_find_inode().  I tested this by directly mounting an
+encrypted directory that had snapshots from a realm that wasn't in the
+mount root.
 
+(Obviously, these snapshot names are *not* encrypted because they belong
+to snapshots that are not encrypted either.)
+
+Cheers,
+--=20
+Lu=C3=ADs
+
+> Another idea might be to just use the same parent inode (maybe the
+> root?) for all snapshot names. It's not as secure, but it's probably
+> better than nothing.
+> --=20
+> Jeff Layton <jlayton@kernel.org>

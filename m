@@ -2,89 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD984DD13A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 488184DD13C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiCQXiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 19:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
+        id S230140AbiCQXld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 19:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiCQXip (ORCPT
+        with ESMTP id S229713AbiCQXlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 19:38:45 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9D22986F6;
-        Thu, 17 Mar 2022 16:37:27 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V7TGI0g_1647560243;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V7TGI0g_1647560243)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 18 Mar 2022 07:37:24 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     dinguyen@kernel.org
-Cc:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] EDAC/altera: Remove unnecessary print function dev_err()
-Date:   Fri, 18 Mar 2022 07:37:22 +0800
-Message-Id: <20220317233722.109036-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 17 Mar 2022 19:41:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC022C74B5;
+        Thu, 17 Mar 2022 16:40:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78465B8204A;
+        Thu, 17 Mar 2022 23:40:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA497C340E9;
+        Thu, 17 Mar 2022 23:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1647560412;
+        bh=w797oqO942yv+U+WAjx8vxn2UXSyujCK+6XAulOhpmM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Mta7xvARtzsI9Z8MUCe/BOrdIaoo8KclzMP0367SKo/tFMoE8dJqa3WRcs6um6BLG
+         amIDUoecdLPF0KKITo285fkxgActdutDIMpmwg7Kz751NPeOQXypsTqf+lN8LHlypn
+         qSIarGlFtWMRQvLcivq5epIfLbAAw1Th8aXwAvW4=
+Date:   Thu, 17 Mar 2022 16:40:11 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Jianxing Wang <wangjianxing@loongson.cn>
+Cc:     peterz@infradead.org, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        npiggin@gmail.com, linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] mm/mmu_gather: limit free batch count and add
+ schedule point in tlb_batch_pages_flush
+Message-Id: <20220317164011.27d7341715de12d890ca244a@linux-foundation.org>
+In-Reply-To: <20220317072857.2635262-1-wangjianxing@loongson.cn>
+References: <20220317072857.2635262-1-wangjianxing@loongson.cn>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The print function dev_err() is redundant because platform_get_irq()
-already prints an error.
+On Thu, 17 Mar 2022 03:28:57 -0400 Jianxing Wang <wangjianxing@loongson.cn> wrote:
 
-Eliminate the follow coccicheck warnings:
-./drivers/edac/altera_edac.c:2153:2-9: line 2153 is redundant because
-platform_get_irq() already prints an error
-./drivers/edac/altera_edac.c:2188:2-9: line 2188 is redundant because
-platform_get_irq() already prints an error
+> free a large list of pages maybe cause rcu_sched starved on
+> non-preemptible kernels. howerver free_unref_page_list maybe can't
+> cond_resched as it maybe called in interrupt or atomic context,
+> especially can't detect atomic context in CONFIG_PREEMPTION=n.
+> 
+> tlb flush batch count depends on PAGE_SIZE, it's too large if
+> PAGE_SIZE > 4K, here limit free batch count with 512.
+> And add schedule point in tlb_batch_pages_flush.
+> 
+> rcu: rcu_sched kthread starved for 5359 jiffies! g454793 f0x0
+> RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=19
+> [...]
+> Call Trace:
+>    free_unref_page_list+0x19c/0x270
+>    release_pages+0x3cc/0x498
+>    tlb_flush_mmu_free+0x44/0x70
+>    zap_pte_range+0x450/0x738
+>    unmap_page_range+0x108/0x240
+>    unmap_vmas+0x74/0xf0
+>    unmap_region+0xb0/0x120
+>    do_munmap+0x264/0x438
+>    vm_munmap+0x58/0xa0
+>    sys_munmap+0x10/0x20
+>    syscall_common+0x24/0x38
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/edac/altera_edac.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+tlb_batch_pages_flush() doesn't appear in this trace.  I assume the call
+sequence is
 
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index e7e8e624a436..47dc35938fa8 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -2149,10 +2149,8 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- 	}
- 
- 	edac->sb_irq = platform_get_irq(pdev, 0);
--	if (edac->sb_irq < 0) {
--		dev_err(&pdev->dev, "No SBERR IRQ resource\n");
-+	if (edac->sb_irq < 0)
- 		return edac->sb_irq;
--	}
- 
- 	irq_set_chained_handler_and_data(edac->sb_irq,
- 					 altr_edac_a10_irq_handler,
-@@ -2184,10 +2182,8 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
- 	}
- #else
- 	edac->db_irq = platform_get_irq(pdev, 1);
--	if (edac->db_irq < 0) {
--		dev_err(&pdev->dev, "No DBERR IRQ resource\n");
-+	if (edac->db_irq < 0)
- 		return edac->db_irq;
--	}
- 	irq_set_chained_handler_and_data(edac->db_irq,
- 					 altr_edac_a10_irq_handler, edac);
- #endif
--- 
-2.20.1.7.g153144c
+zap_pte_range
+->tlb_flush_mmu
+  ->tlb_flush_mmu_free
 
+correct?
+
+> --- a/mm/mmu_gather.c
+> +++ b/mm/mmu_gather.c
+> @@ -47,8 +47,20 @@ static void tlb_batch_pages_flush(struct mmu_gather *tlb)
+>  	struct mmu_gather_batch *batch;
+>  
+>  	for (batch = &tlb->local; batch && batch->nr; batch = batch->next) {
+> -		free_pages_and_swap_cache(batch->pages, batch->nr);
+> -		batch->nr = 0;
+> +		struct page **pages = batch->pages;
+> +
+> +		do {
+> +			/*
+> +			 * limit free batch count when PAGE_SIZE > 4K
+> +			 */
+> +			unsigned int nr = min(512U, batch->nr);
+> +
+> +			free_pages_and_swap_cache(pages, nr);
+> +			pages += nr;
+> +			batch->nr -= nr;
+> +
+> +			cond_resched();
+> +		} while (batch->nr);
+>  	}
+
+The patch looks safe enough.  But again, it's unlikely to work if the
+calling task has realtime policy.  The same can be said of the
+cond_resched() in zap_pte_range(), and presumably many others.
+
+I'll save this away for now and will revisit after 5.18-rc1.
+
+How serious is this problem?  Under precisely what circumstances were
+you able to trigger this?  In other words, do you believe that a
+backport into -stable kernels is needed and if so, why?
+
+Thanks.

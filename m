@@ -2,115 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE224DC194
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 150494DC199
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbiCQIor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 04:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S229745AbiCQIoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 04:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbiCQIom (ORCPT
+        with ESMTP id S231373AbiCQIoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 04:44:42 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EBD96813;
-        Thu, 17 Mar 2022 01:43:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647506601; x=1679042601;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=fk6weti58MZKAxtUajcq3xIVBK6Sp4rBWIwlnsIXVuc=;
-  b=dPyzvwcEjSWW3LaJ/HgybVPbph+eiGvqtNrJgdtQamnDA/pZz3YZK/81
-   ZVwnKKEmK8M8eY3o7QpLva7aee3FeqrCjn92tuPHr6byDUSguO5vlCWqE
-   I4ZwkK/PzGTc5lCTCPQpJ8mowtEeM8v5zpcfXDQrfAq9qKdf/CNca2QIt
-   jZmN/afZGQ5D24oyjvIKoco90ns61/j1wNsXKzovN/nzj2x97ROyb9bwr
-   W2HI6GsrPwd5jO+RBU+Ks3WHNF0UezxPL7Zj83jHvv8uo2g0ldKYdVFLv
-   bf93L2+6VVKz/sZV4fq19lF80N1z6yibEM/IEOcfJBaUx0Mvx2Iy+GhQu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="317535538"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="317535538"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 01:43:20 -0700
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="557840005"
-Received: from msivosuo-mobl1.ger.corp.intel.com ([10.252.54.208])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 01:43:14 -0700
-Date:   Thu, 17 Mar 2022 10:43:11 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Wander Lairson Costa <wander@redhat.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        =?ISO-8859-15?Q?Pali_Roh=E1r?= <pali@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, rostedt@goodmis.org,
-        senozhatsky@chromium.org, andre.goddard@gmail.com,
-        sudipm.mukherjee@gmail.com, andy.shevchenko@gmail.com,
-        David.Laight@aculab.com, jonathanh@nvidia.com, phil@raspberrypi.com
-Subject: Re: [PATCH v4 5/5] serial/8250: Only use fifo after the port is
- initialized in console_write
-In-Reply-To: <20220316143646.13301-6-wander@redhat.com>
-Message-ID: <2f3d386-b82a-9ae1-eaba-f2123b1346f8@linux.intel.com>
-References: <20220316143646.13301-1-wander@redhat.com> <20220316143646.13301-6-wander@redhat.com>
+        Thu, 17 Mar 2022 04:44:44 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61918A88B0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:43:23 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id gm1so3720110qvb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:43:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=38ARv7oGn2IQRHU++RvejNj3WhGkCt+ty8OR/2c8eX8=;
+        b=gOD42dwq5fEnB5jY1Ci54Oo7KCFmfOH96uf0xg2sr7RMlWtyu/6CUCf4HqjW9Ei+Ut
+         0joef1qqCb3J0FWvDP/6bgVYuytsxx4G0chyU1XkJpSwx3KX8iZstr8TaN99uc1rXDeK
+         k/i/6z/n5AfzzJd3qwenPgCxVB+QTaq2LjdK3grruEl3eEYlqE0SGGJZR8oV7xv2ra4L
+         v/1UPi+V/Fl73V8dLttwiV7nMIFRuEEJNo4oczbRrPnjmG3HA3JhF9Z1Q7zO9u20OT5U
+         BBJJLSRbkY2dwttjfDt2RTlsj70byy04zzSJGgH4K4DupcjWFLY39OKXGau4Ounn6wlo
+         //fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=38ARv7oGn2IQRHU++RvejNj3WhGkCt+ty8OR/2c8eX8=;
+        b=YslA9Q0+yAM+zS9VnCUhd6/wWQPkQ636XFxIvmqbbhWSeKz/Mf68RKV2dU41ip0T6O
+         bRh7CB0MfHOoJmAa6GF330s32RBGErdB2gYKakPpMHMClrywLLUpqqAPb/1epn7JxxeJ
+         Qe5gIRPvgE0sHgxriYPkaLod4vp7SyHDchu9gou0JIMBemuJJf7q7KhSYFuEm4onS/Nj
+         g9GeQTwkO9dFjg8/AdkzgUzZdkc7qn2yCde5qEPV/21YGjImDRRetaf0LPgjrCNJXItZ
+         BJnmrwxlRqDg9sycVjfNov7FV7y7jhoKOzBBIhbxalDkQfn6YdqOpNBKZOAGMdPABDv/
+         5DfA==
+X-Gm-Message-State: AOAM531Pkq3Exhjrf37I3ioaWamT+UPgijlN3H0nb8zxfS/oLJpf+ark
+        cb/nes52X/mUT32V5fh98DwnPeUH0k4d0sBAXycXiA==
+X-Google-Smtp-Source: ABdhPJz7tSnICHGgjrk4Ox9GC631xG2x+y8FWGdsZnc+6TSzW+4IoahugpOtAepQXnrPNsE/9r6cSmjXM5UzfNv7HTQ=
+X-Received: by 2002:a05:6214:d8b:b0:440:d680:c744 with SMTP id
+ e11-20020a0562140d8b00b00440d680c744mr2691992qve.29.1647506602915; Thu, 17
+ Mar 2022 01:43:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220316202622.324866-1-frowand.list@gmail.com> <20220316202622.324866-3-frowand.list@gmail.com>
+In-Reply-To: <20220316202622.324866-3-frowand.list@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 17 Mar 2022 16:43:11 +0800
+Message-ID: <CABVgOSngfB41BVoEvQ1JX+2oFvS7Mik58VfPm9pydmiC_GSD6Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] Documentation: dev-tools: use literal block
+ instead of code-block
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Rae Moar <rmr167@gmail.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Daniel Latypov <dlatypov@google.com>, kernelci@groups.io,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000d9c19405da6605be"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022, Wander Lairson Costa wrote:
+--000000000000d9c19405da6605be
+Content-Type: text/plain; charset="UTF-8"
 
-> The serial driver set the value of uart_8250_port.fcr in the function
-> serial8250_config_port, but only writes the value to the controller
-> register later in the initalization code.
-> 
-> That opens a small window in which is not safe to use the fifo for
-> console write.
-> 
-> Make sure the port is initialized correctly before reading the FCR
-> cached value.
-> 
-> Unfortunately, I lost track of who originally reported the issue. If
-> s/he is reading this, please speak up so I can give you the due credit.
-> 
-> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+On Thu, Mar 17, 2022 at 4:26 AM <frowand.list@gmail.com> wrote:
+>
+> From: Frank Rowand <frank.rowand@sony.com>
+>
+> KTAP Specification: Change code-block directives to straightforward
+> literal blocks since the blocks do not contain code.
+>
+> Suggested-by: Jonathan Corbet <corbet@lwn.net>
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
 > ---
->  drivers/tty/serial/8250/8250_port.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> index 4acf620be241..7e2227161555 100644
-> --- a/drivers/tty/serial/8250/8250_port.c
-> +++ b/drivers/tty/serial/8250/8250_port.c
-> @@ -3416,6 +3416,7 @@ void serial8250_console_write(struct uart_8250_port *up, const char *s,
->  		!(up->capabilities & UART_CAP_MINI) &&
->  		up->tx_loadsz > 1 &&
->  		(up->fcr & UART_FCR_ENABLE_FIFO) &&
-> +		test_bit(TTY_PORT_INITIALIZED, &port->state->port.iflags) &&
->  		/*
->  		 * After we put a data in the fifo, the controller will send
->  		 * it regardless of the CTS state. Therefore, only use fifo
 
-So it looks like 2-5 just contain your development history and should all 
-be merged to 1/5 (perhaps with Co-developed-by: tags where appropriate).
+This looks good to me.
 
-And please don't just merge them "silently" there w/o describing in the 
-message _why_ you ended up doing the things the way you did in the end.
-The messages you've written for patches 2-5 will serve you as great source 
-material (with small mods, obviously).
+I'd personally rather push this through independently of the KTAP 2.0
+spec updates, as it's really just a minor formatting change to the
+spec, and it has no impact on the actual KTAP format.
+
+So, if we can accept this independently, that'd be swell.
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
 
 
--- 
- i.
+>  Documentation/dev-tools/ktap.rst | 18 ++++++++----------
+>  1 file changed, 8 insertions(+), 10 deletions(-)
+>
+> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+> index 37b5dc61bfb8..b9a57ceddd4f 100644
+> --- a/Documentation/dev-tools/ktap.rst
+> +++ b/Documentation/dev-tools/ktap.rst
+> @@ -115,34 +115,32 @@ The diagnostic data field is optional, and results which have neither a
+>  directive nor any diagnostic data do not need to include the "#" field
+>  separator.
+>
+> -Example result lines include:
+> -
+> -.. code-block:: none
+> +Example result lines include::
+>
+>         ok 1 test_case_name
+>
+>  The test "test_case_name" passed.
+>
+> -.. code-block:: none
+> +::
+>
+>         not ok 1 test_case_name
+>
+>  The test "test_case_name" failed.
+>
+> -.. code-block:: none
+> +::
+>
+>         ok 1 test # SKIP necessary dependency unavailable
+>
+>  The test "test" was SKIPPED with the diagnostic message "necessary dependency
+>  unavailable".
+>
+> -.. code-block:: none
+> +::
+>
+>         not ok 1 test # TIMEOUT 30 seconds
+>
+>  The test "test" timed out, with diagnostic data "30 seconds".
+>
+> -.. code-block:: none
+> +::
+>
+>         ok 5 check return code # rcode=0
+>
+> @@ -202,7 +200,7 @@ allowed to be either indented or not indented.
+>
+>  An example of a test with two nested subtests:
+>
+> -.. code-block:: none
+> +::
+>
+>         KTAP version 1
+>         1..1
+> @@ -215,7 +213,7 @@ An example of a test with two nested subtests:
+>
+>  An example format with multiple levels of nested testing:
+>
+> -.. code-block:: none
+> +::
+>
+>         KTAP version 1
+>         1..2
+> @@ -250,7 +248,7 @@ nested version line, uses a line of the form
+>
+>  Example KTAP output
+>  --------------------
+> -.. code-block:: none
+> +::
+>
+>         KTAP version 1
+>         1..1
+> --
+> Frank Rowand <frank.rowand@sony.com>
+>
 
+--000000000000d9c19405da6605be
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
+2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
+dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
+jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
+ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
+QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD/
+veQhoB/7AHajBmLtRzTMPDV3mVNkoti1RQbI/Q2JuzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAzMTcwODQzMjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAYYVU/uOUwk2ECXLz2vo8
+sPQsJpV3JDiHHFsYbNfpBx+eZ4FkOO34HKNWQfOY0f7bF9zM86+82TeNTQF1aPaySptG2ZZkSeB6
+5v+uRQNV673O9abHKHNl3z+lZqQuRdpJLzr0QjlXQtm4F+3erqPtvOvS5b38ckmcfxDOD31/v2/H
+5tfTzF7xrUmXsBQo5bgjNFQnDvqxvJwwKCPOD86lNTEfq9AhiQs5SYicl9KYQv2RQaCHDJ4+jXY7
+NKm3czYyz3K4w11fx7ZAXvhdL4TkGmkRUqhLS7w0i0BhiPH+9rxomV8s8cUEzvwfP13NiR9nQvya
+wpY8z3aTsy+HPJ8I0A==
+--000000000000d9c19405da6605be--

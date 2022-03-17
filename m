@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CEB4DC66E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBC14DC710
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233998AbiCQMwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
+        id S234716AbiCQM7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234023AbiCQMvt (ORCPT
+        with ESMTP id S234291AbiCQMzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:51:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7951F83D0;
-        Thu, 17 Mar 2022 05:49:37 -0700 (PDT)
+        Thu, 17 Mar 2022 08:55:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E690F89CD4;
+        Thu, 17 Mar 2022 05:54:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 033D161228;
-        Thu, 17 Mar 2022 12:49:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F1CBC340E9;
-        Thu, 17 Mar 2022 12:49:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 845536157E;
+        Thu, 17 Mar 2022 12:54:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F616C340E9;
+        Thu, 17 Mar 2022 12:54:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521376;
-        bh=k8jhjV4CJs7IhI95iarqfAAHzfd8JtOKmNL1gm3q48s=;
+        s=korg; t=1647521641;
+        bh=UqwiPp2qBmb+7tKFdE0+ShqjTMU9taITEwrPGtd63H8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dqJaZKXYE/IB7R2aqwqaBdhpc4+3Wgcs0fB0mNyiGzyNauMqLDigoh9cWbRD0TpEJ
-         8PmnFpqaU1EStAIicW5q3nEEG/03iSyFZGmzUPhTViEiReMGL+6KidMDwPep/vhM1k
-         E4TgkZSdbUECvrIZvuabrKQOGtII99ed96Sfn+94=
+        b=afY+Dh0VsuyHlfu8zLpRaa6buSPry/Vcw2cOpRe/wlx24HicJOv7+L+JjjZz8k16C
+         WQ3hYlrf21CCuCzdrRqPp8NGkTyOdr8E1BLfrFYRv2Od9dpil0aT25RoV8gLjhEc45
+         dRH9VULtzdxcFLKeAyo1aJBw2sNe+jgBvwpNRCFI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Yan Yan <evitayan@google.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 14/23] atm: firestream: check the return value of ioremap() in fs_init()
-Date:   Thu, 17 Mar 2022 13:45:55 +0100
-Message-Id: <20220317124526.374629426@linuxfoundation.org>
+Subject: [PATCH 5.16 05/28] xfrm: Fix xfrm migrate issues when address family changes
+Date:   Thu, 17 Mar 2022 13:45:56 +0100
+Message-Id: <20220317124526.925337900@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317124525.955110315@linuxfoundation.org>
-References: <20220317124525.955110315@linuxfoundation.org>
+In-Reply-To: <20220317124526.768423926@linuxfoundation.org>
+References: <20220317124526.768423926@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Yan Yan <evitayan@google.com>
 
-[ Upstream commit d4e26aaea7f82ba884dcb4acfe689406bc092dc3 ]
+[ Upstream commit e03c3bba351f99ad932e8f06baa9da1afc418e02 ]
 
-The function ioremap() in fs_init() can fail, so its return value should
-be checked.
+xfrm_migrate cannot handle address family change of an xfrm_state.
+The symptons are the xfrm_state will be migrated to a wrong address,
+and sending as well as receiving packets wil be broken.
 
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+This commit fixes it by breaking the original xfrm_state_clone
+method into two steps so as to update the props.family before
+running xfrm_init_state. As the result, xfrm_state's inner mode,
+outer mode, type and IP header length in xfrm_state_migrate can
+be updated with the new address family.
+
+Tested with additions to Android's kernel unit test suite:
+https://android-review.googlesource.com/c/kernel/tests/+/1885354
+
+Signed-off-by: Yan Yan <evitayan@google.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/atm/firestream.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/xfrm/xfrm_state.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/atm/firestream.c b/drivers/atm/firestream.c
-index 0ddd611b4277..43a34aee33b8 100644
---- a/drivers/atm/firestream.c
-+++ b/drivers/atm/firestream.c
-@@ -1675,6 +1675,8 @@ static int fs_init(struct fs_dev *dev)
- 	dev->hw_base = pci_resource_start(pci_dev, 0);
+diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
+index 291236d7676f..f7bfa1916968 100644
+--- a/net/xfrm/xfrm_state.c
++++ b/net/xfrm/xfrm_state.c
+@@ -1578,9 +1578,6 @@ static struct xfrm_state *xfrm_state_clone(struct xfrm_state *orig,
+ 	memcpy(&x->mark, &orig->mark, sizeof(x->mark));
+ 	memcpy(&x->props.smark, &orig->props.smark, sizeof(x->props.smark));
  
- 	dev->base = ioremap(dev->hw_base, 0x1000);
-+	if (!dev->base)
-+		return 1;
+-	if (xfrm_init_state(x) < 0)
+-		goto error;
+-
+ 	x->props.flags = orig->props.flags;
+ 	x->props.extra_flags = orig->props.extra_flags;
  
- 	reset_chip (dev);
-   
+@@ -1667,6 +1664,11 @@ struct xfrm_state *xfrm_state_migrate(struct xfrm_state *x,
+ 	if (!xc)
+ 		return NULL;
+ 
++	xc->props.family = m->new_family;
++
++	if (xfrm_init_state(xc) < 0)
++		goto error;
++
+ 	memcpy(&xc->id.daddr, &m->new_daddr, sizeof(xc->id.daddr));
+ 	memcpy(&xc->props.saddr, &m->new_saddr, sizeof(xc->props.saddr));
+ 
 -- 
 2.34.1
 

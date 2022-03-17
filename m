@@ -2,212 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BE24DC10D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1B54DC110
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiCQI0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 04:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        id S231246AbiCQI05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 04:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiCQI0q (ORCPT
+        with ESMTP id S230447AbiCQI0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 04:26:46 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2510DB4A0
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:25:29 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22H8GQdZ001936;
-        Thu, 17 Mar 2022 08:25:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
- bh=AOU691oDqFSFpc/0oa3XeGOLlgfzqlJ+wnFA6NJBOvA=;
- b=mv9mFYGzKB1gnWFE5PqNTtruIpch8Szed6oXcFStSslb8uq/+O2PILyYPJXfKqf4Q48T
- W7SbPRKMiedevZFnXG3ZcXhYpc2gyKwRetFicQaF5qDCxY9URleUpqWRXVBAshThZEp/
- w8zYajg6t2Q9GR4i89dQVGzWtQ7jO6HwiJ4uMtvTCBZvHavT5GKMTWPvYjbsfJh7K0IE
- KAaiTGR6hZ8Xjy8RCiut8RIdQtBvu3LKxVU9FOowcrCVZu7M1pIeIDBh5saqg1b/0MEx
- CfZQLN/inMq4yOgHwTa0/0CfwPLMLaKYACs1ZjPfQg7u4DT6tmgt0dc2XHpijm/vszjF SA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3et5xwr8u2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Mar 2022 08:25:26 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22H8Gjjs121162;
-        Thu, 17 Mar 2022 08:25:25 GMT
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2047.outbound.protection.outlook.com [104.47.56.47])
-        by aserp3020.oracle.com with ESMTP id 3et64m5s4f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Mar 2022 08:25:24 +0000
+        Thu, 17 Mar 2022 04:26:55 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE4E16BCC6;
+        Thu, 17 Mar 2022 01:25:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647505538; x=1679041538;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=lRKtJ2ZsGyy+5HabjF6x3fqMAQy+ck6B2gxbJGYudu0=;
+  b=lzG/JulovKKxWslGSSTXpbTqbHlhUBpPWYqEfe8NwM1A4FYF3jBS3ocA
+   SAUSL4TsvCxZFTkMjDIY/sRCdft4P2Ofjo/V1R5Hvs/ncPYFYKfmokzqz
+   PiGUV6f/Nhf90+nxsgsJpmTZUWBS6RUvsA8PXSetS4bsSN8zRG6OSZetP
+   ULCrfNc4pyKznp+HM/LA9nQES2Sg9pEv+eemDuGj+g/QuM3a7UKUV+D1C
+   /ExuUGRJlCSj3AO7jGz9RyUdQZcjaPf5nnohanUgjOW2Y/v2QrAGUplLO
+   l2QtO+1etQvqXIlJ9lIcOX/9pUuBOJHUqskQdMGKtCZkITtzQ9WV6zWsw
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="257002567"
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="257002567"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 01:25:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="646971167"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by orsmga004.jf.intel.com with ESMTP; 17 Mar 2022 01:25:38 -0700
+Received: from fmsmsx606.amr.corp.intel.com (10.18.126.86) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 17 Mar 2022 01:25:37 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21 via Frontend Transport; Thu, 17 Mar 2022 01:25:37 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.21; Thu, 17 Mar 2022 01:25:36 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wp7nzyGDbiZVpuGZ83m3WXb7Oy2inQHMf2MEKOl7jagfpK/TZA0sXiuMqepa4lxPI1qzw/wPR7HQkbnJCb6Zi9dKNgAneF2mObKDjbDh5Mk4Ms9CYqRX/EjGKU+hZF4n9FyJW469tHJciBJugHVnOwDBbSLo7lGmYqLzVDanYuMsGDh4Kkhya/eGwqf6omsDSn+O9w4QOB/LGy9ssDpXeb6LFOvN9Al3GDf/n7Bz/ywY6AO/xdIhFllmkmlRjYpKrBHHLpKI6t6C4c9QdZCBVrGwHxCInEIG9Ca1KvfTolwxqqn3Oo1tR36bTtHasRRfLkMAUo8DsQc2W74+To2URA==
+ b=nURWgH0HaeOWuzQwYWV2llJLESKpnvP4FoWIwYXHIITcz4uxgg6ajfC9hzVXGy9iDs0SqCqhDWgC2Etiqe1H8iNHTCkRQfnT4Ii3GSSIbovSvhA3E+41AckGY0qgaGmmYDO9vpXU0of9uHP9ziwr05ifgFWqf52rfWm4X2hoiHujbTFdzM7O4kYQXKSrMdhusfKQukmh1T/aygFOo05jsXXlPJ6caQ8R2RRKODA1Rzg6Vef719eNzIFnYt/1uHZrEZXLgcdcEcFjA/5GiVwxuNK3P1ILSVQzRDh/9kB+pA6OcdDHq+Lr+q1UO/GR8/I9EGKDRLCWt1kDYXV4bUrDAA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AOU691oDqFSFpc/0oa3XeGOLlgfzqlJ+wnFA6NJBOvA=;
- b=INLZjbbxvBndUlXghp6M6xShoIOsAHU+Pa8IuZJbBVY8JqEtP4sH7CvqoJ702oI11/ETprugn+GHyw1hOXkdbxBmHPG8KjBeXNamwty8//6yEzRtSBfciCPdVC+fodwdEf/zO3yDImqrjC/kexSBnC1YDR43swxE6gC1VOkxWhdQ9oK6QIWGrCvgRjKZ3ocNVoaXjjpcvF8138KXiYZoE2vAsPmhWI2YmsA//4OeD8l2CSaqPW4MPFBl4Wstw7z+ZEbV5TEvVbBwtiCpeW9DxNOHJSB/xu8179p5lpl95CB83msM48dNX1kenUT4cXolsN4ksrPy8l1UVjawE5GTrg==
+ bh=c9AM9eKxTZq1BEqZlVncFVg04WKeG2JksF69C64dDpA=;
+ b=lC8ioVzbY/IlUSWnyU0dEQYTTzoGlby9jGjKzFcUEXEczCQ18+il9WpXyyZvadU5rW+87grHPYNUG4udHwVsOABgYCkGkvRBhH9n90wOYXymD48M1V323CwR3rc7GjN2O6bsDZZA9CqkYZSVhlL/iKVSExcCu1EoYBp21Nv9b5ckmEupQ3H9J4GbILfEe5PxNEB1RqikqfFU+oK+k4OfSkdRtAj5vgm8WFGgKptQwnYTdivW7hf1BUaq05gYkZ3QHTmK7GEY9S53apfC/eEBEy72UtL8ZEjF+9fUBzYTBDDksSWncwWUTqOa1NK9YvmAgcJclsRPT9A/l1grwcCNLA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AOU691oDqFSFpc/0oa3XeGOLlgfzqlJ+wnFA6NJBOvA=;
- b=J2GJmLgq5GwEHSIVcM/YFs53d1KG6DWEJMOkB06/oBKAHTZzX7mUVe4TfdeUZIWuSBPDR233vFY4XEpi7GVjhCZCPayprKgaJJL3rCB9Jasiuscvxjaoddod2I2ugTJ0Gj49ndXHnu8ko0SEeWtWyLU8A3ilezdrPVp/W33056w=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by SN4PR10MB5654.namprd10.prod.outlook.com
- (2603:10b6:806:20d::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.24; Thu, 17 Mar
- 2022 08:25:23 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5%4]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
- 08:25:22 +0000
-Date:   Thu, 17 Mar 2022 11:24:56 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kbuild@lists.01.org, Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     lkp@intel.com, kbuild-all@lists.01.org, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: [kbuild] [gfs2:for-next 9/11] fs/gfs2/file.c:796:24: sparse:
- unsigned int *
-Message-ID: <202203170954.vFlMcTje-lkp@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Message-ID-Hash: W42IIGHFD2LWJARLL25XFIR4TNBTMIEI
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNXP275CA0036.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:18::24)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
+ by DM6PR11MB4153.namprd11.prod.outlook.com (2603:10b6:5:19f::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Thu, 17 Mar
+ 2022 08:25:33 +0000
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::d9ee:5bb8:1828:222d]) by DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::d9ee:5bb8:1828:222d%7]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
+ 08:25:33 +0000
+From:   "Wu, Hao" <hao.wu@intel.com>
+To:     "Zhang, Tianfei" <tianfei.zhang@intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: RE: [PATCH v6 2/6] fpga: dfl: tracking port conntected with AFU
+Thread-Topic: [PATCH v6 2/6] fpga: dfl: tracking port conntected with AFU
+Thread-Index: AQHYOQUdByxZzeJi+E+POSFjFU02WqzDPQvw
+Date:   Thu, 17 Mar 2022 08:25:33 +0000
+Message-ID: <DM6PR11MB3819F26BDA4AA2826AFD5CA285129@DM6PR11MB3819.namprd11.prod.outlook.com>
+References: <20220316070814.1916017-1-tianfei.zhang@intel.com>
+ <20220316070814.1916017-3-tianfei.zhang@intel.com>
+In-Reply-To: <20220316070814.1916017-3-tianfei.zhang@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 21ab222e-672d-4d57-fe86-08da07efb4c1
+x-ms-traffictypediagnostic: DM6PR11MB4153:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <DM6PR11MB4153FD6567BF39A1B385EA3E85129@DM6PR11MB4153.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RqG524alAtGJZXlPbgAMwNVpHXGHMps/7SMvLAZgN2dRLddzNtaaUMkd09e35v50/4VIqbkkf99wl1HIh4kBkSNIWXRey536S7V+HfG+sq11SnxFJhEPARahc0osMxK7Kj+Gh34AbLu9wTQxbdQsX+6ov0zwm/LT/p1jlqvnqBgo2zWMjAWhAUCOmtj+trRR6kgNLpxgnni4gNUaupvnQE6vW90JDpqER9V2kyvijPpo8tkWQRDSJpiC4Kj7gaPX9f34bURwB9X0mchqCKn7/A+qlR9sucderVmIMKoNKbOZ89WCCR0Kn+88+K/xi9pBhukhLMmN1S6vhE+NSoc524+l9qpUzOqWc9etWr3zc+42NlKcml5HhetRWSqA70A3rXcwHK25dCCRIb3K2mdrjYPLW6KYM7VAQO/f0NaPhJFgOZ6VK+XevOtcQYh9GS7j2xhf+iIHGmbMFuKURSm6BD25HJws1rpk+gHL9SVJG1hBtEk9YWI0iX2W1LRgJdoLPyUc6UOMHmELSkJOxpvdO/hidv7Inx4LHYR2MUM8Xo2Pnaejq5Oha6h3yI5feU4L9FVxPvv2kBTIjcKB5g5btZG9nPVGmtwICwP3TNlplc6hx5zZDfq08UfWVW7ofY4f3oM3aaChppCa62yxT5WJWu/64h4uFGjkVJpWo+7hS8sP9VKMzf1RWvOAMwW0fDoz8BlT2Yi2te6pgctDtcqZ1DWuje1ZO4NDEtGIh9gtk7A=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(8936002)(2906002)(83380400001)(122000001)(38070700005)(921005)(5660300002)(86362001)(82960400001)(26005)(186003)(52536014)(110136005)(54906003)(7696005)(6506007)(53546011)(508600001)(55016003)(9686003)(71200400001)(8676002)(66946007)(66476007)(4326008)(66556008)(66446008)(76116006)(64756008)(33656002)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?CafAabVSggk7WJRTgscuKrSGsUJ8WOQmCqin6LRo70Z4Fle+5SJjb9piYsiH?=
+ =?us-ascii?Q?cpyTkohsR3JlXYQ+k83XqrsrSF3C70EdzZLLcbrYWHPqjxg4LEw5gEaogH3U?=
+ =?us-ascii?Q?HlgFVBbXkR+3hCx2Z9LEVHd2IdQNJfpXMgkPts9qeEKNhxdMGRwR+E9JNnIh?=
+ =?us-ascii?Q?qnCvkrO7+eTHzudaYnqGGkVo7N6em9/DmN2XCiiUfhKqMNgxwlFyLw+OIIgl?=
+ =?us-ascii?Q?i6QXkPVwm0OEVqGsQiby5P4gb15/dax3U+w/TmPpgai/UxzOsYL61Aysr20o?=
+ =?us-ascii?Q?JuLSoEto3GDxTT/UKY3UyOAxTYGPINpJ0/RffrEddVBRbiztl+J5HltGiBZt?=
+ =?us-ascii?Q?05nTQdrfQUWfdnBsVIibKDElnE/oq7KNyLnxLzO9vyj6v0XwJP2YFdlmEmZy?=
+ =?us-ascii?Q?igW5LUldvuANTj1ego2KPFKovgk0qc+/hi/MQp3o4+jwlkfjo0JU7k1+Us7b?=
+ =?us-ascii?Q?AloWTEB4k+CsejM2u5oe7IIDY7gBphG1jl8FCMSdc70kTMoogGMSgxRSNwoX?=
+ =?us-ascii?Q?YITXjrE+kmiXPyyH4pHSdL8bcSA6Xhl5gXkJ69YWrmNbtpKDsTb1fMeMzGxf?=
+ =?us-ascii?Q?eph2EAY+yqQ0pY1aSKgv5aHkobDZFCCyqjqHZnEOBTPYb2E9g5HH++g/w+OV?=
+ =?us-ascii?Q?jQW7FhWRjh+BP/SqyqvFrM74ZQ2JrX0rvNU6wQXvrWukXb6eg/MHFopvzdcF?=
+ =?us-ascii?Q?Fmo6VITu6g3jgkoMeehEJ6Bp2EWZnncrxFzUJSIhBmTj6vGa/npB7ZW7D2C4?=
+ =?us-ascii?Q?dIRMC3JjrBcCXbSAdonPDg1W9/pMuoqWyS7SOM04TglsVCi6tjUlvKH6nQ1b?=
+ =?us-ascii?Q?0+3KKUTTG+BYhCP9VeDJ16g1UQ2yYDwTIfPbUK0a/ef/t5otftv8UqkzQUOW?=
+ =?us-ascii?Q?YIny6pfT3cGQy9Syo0RNTEPHxJXF1U/hegLMceZEc5NXui5eSQGLWzXL6Rt+?=
+ =?us-ascii?Q?MtofpysVsnB4UhJfCShyXwngy1f4GxcV+oi/DA4XxcLlmlVp8Nzny2UqMu96?=
+ =?us-ascii?Q?O6qPKu/Qp64CWzp+IwCDo7B2RSHTEYFUly4ebiz85y9aM3Vx93JJWyYTiN8o?=
+ =?us-ascii?Q?ld7iqDrzTDhewdEpVmYf0L8SaudsXfEXQinZ5iu+pMfLVZExV32Z5r8Tm2v7?=
+ =?us-ascii?Q?0FMAww7uZ3+Odg2PLQga3Xgho1Kr1AksYpfLJNpQwqkEDxjhmg7yb611qxgh?=
+ =?us-ascii?Q?l8ppJtrEbO1HzCwLXUuxx2/KBsFLolIau0XO3Q9c3bxL4LooUhlIPZmlsHe3?=
+ =?us-ascii?Q?pgBweSn3jOhIKq7fn3XJEZclLc5KoDYswybE9rjq7uKfF9AHnwfzuZL/S5Gu?=
+ =?us-ascii?Q?Pqhy1ZfKBrVRYCYc8dcRtHjTrAqlyJ41bKnNE0oXFWDt6li0lG7gqdrYB7TK?=
+ =?us-ascii?Q?cZJVTt0lN9DxGQhlqAv7hbnNCg88xbM3HLgvstpP5+CGR6f1vbhxsnIHFiVy?=
+ =?us-ascii?Q?1TrJE/5SQis=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8d2f1aae-7f95-4b9d-072d-08da07efadfa
-X-MS-TrafficTypeDiagnostic: SN4PR10MB5654:EE_
-X-Microsoft-Antispam-PRVS: <SN4PR10MB5654ECB42B416B106FB99BBA8E129@SN4PR10MB5654.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HuHVsMkd37yHH9uX6dA/mw8IfLaHa0Ed7UlypK7pYU9AI8/dokJ0xRfWztq4GEq7M5xphO1UEcz/vg+Zs2dBG9rcRVZ8WYkxiMSlxoYv9Nwn/2pLZJe7kl5c6NCUSU4+RnmZopPGycISvCAPHyp3+BJGrEWrPKHn3n3fsJFuCHR8+5ktWNbUJDky5VsIuBaI+AuH1mnRhcDmL6ctDpnvFsdja9snzJmYmezW5f/P7y3YUP6KiuuSvxzMq0gJ8FxfvP/sDON7GCRiHrWHDvixkSA5P6PLCj2/hQigIuDSpYs/CX0jfjoJ0KD2mVTRE4dRHhhxrg8BpQEUGUk+q+QG90nc5Mp7w+PIkSOHlDjZXQYjs/vQnQFblYD4dBdqxgon9FE5Cjhuc/QNbYESF3PKPT/eFCAopNWbUvzMaExkGNgDWVIhBSeiM/kux90sIzcgl+cAm/xPsSGKKhGwvhssxXrPuM1SUhSBNzC0GNc4Zgq2nvdeSepjgQMXagWXv+M9rO4f19bIGMtbXFqVpNZwk9Caxf1GZTAvG4OYULzDUfWLEmhIc9gS3y2rQ7TNO0Qn+UAPHaJ+ebuGradmHTU4F178l3Xv4ECa/3W1SnIdTH4dV8P32wXzTri+AOLtL8SS/U6VytD2ZNyPdNlkjV4BXRcvmJsSstAU+5PFt/moxvARxJCaXsnxNOfYzgna2a7VbfcMMbAW6rsJVlEqXTKmR3QS+G66T08TvtvnPrKqfdB3ho3AZ6bYYWrBh2fDmTJGeNK9iVEzjeR69egC5jMWoF2uElAAjja9rvtbMQ027kWovCbr7pV0a3UhuTjpm8ErpQzFczSevT8mfS8Rw689Mg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(186003)(316002)(6486002)(966005)(66476007)(6666004)(6512007)(6506007)(4001150100001)(26005)(8936002)(1076003)(83380400001)(6916009)(36756003)(52116002)(66556008)(9686003)(5660300002)(8676002)(38350700002)(4326008)(44832011)(38100700002)(2906002)(86362001)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SZPb7TpxxWALzM51vpgTpWzSiUqS3TVEBTmT2vZUN/0byc1kcN2wHka+ozd/?=
- =?us-ascii?Q?du44AZxFU3mZ3nJgqqjU9zsegYz6+3n1ewpDUXLjCs+CrXqbb12WLuP474Oa?=
- =?us-ascii?Q?o+p1Qw9qGihRMgbwHlDNAHF2lc3/D0vQeRySgKLdterePj4yGGHWiq7d1Nmx?=
- =?us-ascii?Q?vM3SPK00YMHsFaOS/k/7soX/ylbYXkXsVK4sJIunPL2vd3at08ckUEVVGhLh?=
- =?us-ascii?Q?kBid07y+iHc9z8GIyWALLucHEzEfDoZ7/zP9vrThWHEyNhrfkZ2Ir21323dA?=
- =?us-ascii?Q?dG6swp+Ual5dsgpXG0GwUe/TG1ySVU1bzZZ7ZiR6NTrLS70xp+hsmpdPyMAq?=
- =?us-ascii?Q?PprCR3Iagity5k2+rBuynhnmslR46FAF1zuIUgkBlthXUKSJgLEnVC6ybijm?=
- =?us-ascii?Q?FCE0S0yg5xvt/1bg70c278FIuk/Pm0HE++wdTduWTYhyjCj6VgOwOuYe6AjS?=
- =?us-ascii?Q?QQOtj1gveOkRYPvBK1xZF8hdzJHyOeg2CYGeRsKW1bqmeq71RmUIVJki2pjU?=
- =?us-ascii?Q?BIOgYRZRDv5Lrqw3qDhhrnHzicqEarBLP6YOdKAICuGqw1pgia9Pv+tNQsha?=
- =?us-ascii?Q?Otq2rzNiPrHCd97dv4bQ6xXvAXYdT+aq0l5NabujhhhsbIgaRoJAu2MIv8qH?=
- =?us-ascii?Q?Ku7oEYum1XqiJk8QoL87TfH8W/OQAxjBwZoJMZ3WE4A827CSvNhPFxY5DHEk?=
- =?us-ascii?Q?KC0q8z2Xm0f3NQXL49juX1MgfHRCAZPvV+yRgBoNg5broCYIqEk9UQcKZL+a?=
- =?us-ascii?Q?v/RX8Ncki8ESVGs+DfqxXmkDjDpmmWHDKJA+hV7jg1CMdjybwb5SGTN90RQV?=
- =?us-ascii?Q?U0QvcIoi/DnS6mottYmOgyN7d/2XN8X8Y8Si9FvvWE5OJtmsaFRE8uv8eC/k?=
- =?us-ascii?Q?6edZQynJDnxMqU6zgtySFGAvBJbrMcTUfkWM4Hf3AQi6FKqC4o505RpV0n7k?=
- =?us-ascii?Q?jTFZdScZqRkD2DBRCRSfsQVW0kb/ViutmA2T0KBp+48QwhmUtwIqefbzl9aL?=
- =?us-ascii?Q?MazzPvH2xTe6Yu4JWkZ8mmI//ocAvSTH/xh4TTt+bW4EoF21+C/YmbAD9tAu?=
- =?us-ascii?Q?6PyMAhIgu+z5aiZsGQZmI5XtvBeavcLGf4Z/5QqtbNQ3+rQz+ZzhsPtTHfmr?=
- =?us-ascii?Q?LyOUIYw3tWAmNhUgp4SCPovUeD4br5cKPVmhTW1QZoV+DcgqQaP9JNy1idZk?=
- =?us-ascii?Q?Ree7aylAa6iPIvELiLuXvXg4ErPA3jmdVdjYIMwiBR1OHUv4WsDXc9v66+Lb?=
- =?us-ascii?Q?IXezw4wAhHW5WAYyeORDiI+sx+a+POI2gSLzCbqcGIKvsXstOmwcgduPKhwL?=
- =?us-ascii?Q?7UiNxHjI74QbKJnSecMdXp+L+8Xsyk5BZVzH9YOFhkleFDwvs6w9Uo/D4BMQ?=
- =?us-ascii?Q?J0ll3MwtDSe+PfEMizw7/DdBEPzhO8FUAS+tvQDVa7l5n1XMepF9eW70omEY?=
- =?us-ascii?Q?2eofMBeCuqj2q5uZknestH4LRTCZMX0/D9tqZe9lY02mu2+uY5yp4g=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d2f1aae-7f95-4b9d-072d-08da07efadfa
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2022 08:25:22.4706
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21ab222e-672d-4d57-fe86-08da07efb4c1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2022 08:25:33.5349
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p5Xiw7m7gNjizzY4Vd/d7uxALh27PallqutldaOPZfoK2OY4UzR1Ca9aSf47NaVSDS4YGZ3Ka0b18niiIYnsXaq37XvkPjeM/aJyIC8S6S4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR10MB5654
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10288 signatures=693715
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 spamscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203170048
-X-Proofpoint-GUID: 9T-fC7HEFdsLGeX5OARXPmNk9RpT45xN
-X-Proofpoint-ORIG-GUID: 9T-fC7HEFdsLGeX5OARXPmNk9RpT45xN
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gRT2Vqm1GqSlR7bZ0s/QvReFl/5ZX+zQXOkiZeaQMH5CHzM7h9FoxWnOhE2x9uMKCs/YZhYyDzd1og0bgnNCvw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4153
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git  for-next
-head:   a20050c14edf19add5a9588cb196bb00aa410650
-commit: 165d142ffacdef3e620819a1031df3d896aa29ab [9/11] gfs2: Fix should_fault_in_pages() logic
-config: sh-randconfig-s032-20220313 (https://download.01.org/0day-ci/archive/20220317/202203170954.vFlMcTje-lkp@intel.com/config )
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross  -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git/commit/?id=165d142ffacdef3e620819a1031df3d896aa29ab 
-        git remote add gfs2 https://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git 
-        git fetch --no-tags gfs2 for-next
-        git checkout 165d142ffacdef3e620819a1031df3d896aa29ab
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash fs/gfs2/
+> -----Original Message-----
+> From: Zhang, Tianfei <tianfei.zhang@intel.com>
+> Sent: Wednesday, March 16, 2022 3:08 PM
+> To: Wu, Hao <hao.wu@intel.com>; trix@redhat.com; mdf@kernel.org; Xu, Yilu=
+n
+> <yilun.xu@intel.com>; linux-fpga@vger.kernel.org; linux-doc@vger.kernel.o=
+rg;
+> linux-kernel@vger.kernel.org; rdunlap@infradead.org
+> Cc: corbet@lwn.net; Zhang, Tianfei <tianfei.zhang@intel.com>; Matthew
+> Gerlach <matthew.gerlach@linux.intel.com>
+> Subject: [PATCH v6 2/6] fpga: dfl: tracking port conntected with AFU
+>=20
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+"conntected" -> "connected"
 
-sparse warnings: (new ones prefixed by >>)
-   fs/gfs2/file.c:796:24: sparse: sparse: incompatible types in comparison expression (different signedness):
->> fs/gfs2/file.c:796:24: sparse:    unsigned int *
-   fs/gfs2/file.c:796:24: sparse:    int *
->> fs/gfs2/file.c:796:24: sparse: sparse: cannot size expression
+> From: Tianfei zhang <tianfei.zhang@intel.com>
+>=20
+> Introducing flags in dfl_fpga_cdev to track extensions
+> or new features discovered during DFL enumeration. It uses
+> some lowest bits of flags to track the port status which
+> the AFU was connected to port device or not. In legacy
+> model, the AFU was connected to Port device, but in "multiple
+> VFs per PR slot" model, the AFU or PR slot without connected
+> to Port device directly.
 
-vim +796 fs/gfs2/file.c
+It's "Port with AFU vs "Port without AFU", so why we have this flag
+in container device not for each port device?=20
+and probably you need to describe why we need this flag. What I am
+thinking is that port driver can use this flag to decide if afu related
+interface will be visible or not...does it make more sense to have
+this flag for port device itself?
 
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  773  static inline bool should_fault_in_pages(ssize_t ret, struct iov_iter *i,
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  774  					 size_t *prev_count,
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  775  					 size_t *window_size)
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  776  {
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  777  	size_t count = iov_iter_count(i);
-165d142ffacdef fs/gfs2/file.c     Andreas Gruenbacher 2022-03-07  778  	size_t size, offs;
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  779  
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  780  	if (likely(!count))
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  781  		return false;
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  782  	if (ret <= 0 && ret != -EFAULT)
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  783  		return false;
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  784  	if (!iter_is_iovec(i))
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  785  		return false;
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  786  
-165d142ffacdef fs/gfs2/file.c     Andreas Gruenbacher 2022-03-07  787  	size = PAGE_SIZE;
-165d142ffacdef fs/gfs2/file.c     Andreas Gruenbacher 2022-03-07  788  	offs = offset_in_page(i->iov[0].iov_base + i->iov_offset);
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  789  	if (*prev_count != count || !*window_size) {
-165d142ffacdef fs/gfs2/file.c     Andreas Gruenbacher 2022-03-07  790  		int nr_dirtied;
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  791  
-165d142ffacdef fs/gfs2/file.c     Andreas Gruenbacher 2022-03-07  792  		size = ALIGN(offs + count, PAGE_SIZE);
-165d142ffacdef fs/gfs2/file.c     Andreas Gruenbacher 2022-03-07  793  		size = min_t(size_t, size, SZ_1M);
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  794  		nr_dirtied = max(current->nr_dirtied_pause -
-165d142ffacdef fs/gfs2/file.c     Andreas Gruenbacher 2022-03-07  795  				 current->nr_dirtied, 8);
-165d142ffacdef fs/gfs2/file.c     Andreas Gruenbacher 2022-03-07 @796  		size = min(size, nr_dirtied << PAGE_SHIFT);
 
-size is size_t so nr_dirtied needs to be size_t as well.  I'm surprised
-this compiles.  The min()/max() macros are supposed to trigger a compile
-error for type mismatches.
-
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  797  	}
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  798  
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  799  	*prev_count = count;
-165d142ffacdef fs/gfs2/file.c     Andreas Gruenbacher 2022-03-07  800  	*window_size = size - offs;
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  801  	return true;
-00bfe02f479688 fs/gfs2/file.c     Andreas Gruenbacher 2021-10-18  802  }
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org 
-_______________________________________________
-kbuild mailing list -- kbuild@lists.01.org
-To unsubscribe send an email to kbuild-leave@lists.01.org
+>=20
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> ---
+>  drivers/fpga/dfl.c | 11 ++++++++++-
+>  drivers/fpga/dfl.h | 12 ++++++++++++
+>  2 files changed, 22 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> index 599bb21d86af..712c53363fda 100644
+> --- a/drivers/fpga/dfl.c
+> +++ b/drivers/fpga/dfl.c
+> @@ -1124,8 +1124,10 @@ static void build_info_complete(struct
+> build_feature_devs_info *binfo)
+>  static int parse_feature_fiu(struct build_feature_devs_info *binfo,
+>  			     resource_size_t ofst)
+>  {
+> +	struct dfl_fpga_cdev *cdev =3D binfo->cdev;
+>  	int ret =3D 0;
+>  	u32 offset;
+> +	u32 port;
+>  	u16 id;
+>  	u64 v;
+>=20
+> @@ -1160,8 +1162,15 @@ static int parse_feature_fiu(struct
+> build_feature_devs_info *binfo,
+>  	v =3D readq(binfo->ioaddr + NEXT_AFU);
+>=20
+>  	offset =3D FIELD_GET(NEXT_AFU_NEXT_DFH_OFST, v);
+> -	if (offset)
+> +	if (offset) {
+> +		if (dfh_id_to_type(id) =3D=3D PORT_ID) {
+> +			port =3D FIELD_GET(PORT_CAP_PORT_NUM,
+> +					 readq(binfo->ioaddr +
+> PORT_HDR_CAP));
+> +			cdev->flags |=3D dfl_feat_port_connect_afu(port);
+> +		}
+> +
+>  		return parse_feature_afu(binfo, offset);
+> +	}
+>=20
+>  	dev_dbg(binfo->dev, "No AFUs detected on FIU %d\n", id);
+>=20
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 1fd493e82dd8..bc56b7e8c01b 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -461,6 +461,16 @@ int dfl_fpga_enum_info_add_irq(struct
+> dfl_fpga_enum_info *info,
+>  			       unsigned int nr_irqs, int *irq_table);
+>  void dfl_fpga_enum_info_free(struct dfl_fpga_enum_info *info);
+>=20
+> +/*
+> + * Bitfields in flags of dfl_fpga_cdev.
+> + *
+> + * 0 - (DFL_PORT_CONNECT_BITS -1): AFU was connected with Port device.
+> + * DFL_PORT_CONNECT_BITS - 63: reserved.
+> + */
+> +#define dfl_feat_port_connect_afu(port) (BIT_ULL(port))
+> +#define DFL_PORT_CONNECT_BITS  MAX_DFL_FPGA_PORT_NUM
+> +#define DFL_FEAT_PORT_CONNECT_MASK ((1UL <<
+> (DFL_PORT_CONNECT_BITS)) - 1)
+> +
+>  /**
+>   * struct dfl_fpga_cdev - container device of DFL based FPGA
+>   *
+> @@ -470,6 +480,7 @@ void dfl_fpga_enum_info_free(struct
+> dfl_fpga_enum_info *info);
+>   * @lock: mutex lock to protect the port device list.
+>   * @port_dev_list: list of all port feature devices under this container=
+ device.
+>   * @released_port_num: released port number under this container device.
+> + * @flags: extensions discovered during DFL enumeration.
+>   */
+>  struct dfl_fpga_cdev {
+>  	struct device *parent;
+> @@ -478,6 +489,7 @@ struct dfl_fpga_cdev {
+>  	struct mutex lock;
+>  	struct list_head port_dev_list;
+>  	int released_port_num;
+> +	u64 flags;
+>  };
+>=20
+>  struct dfl_fpga_cdev *
+> --
+> 2.26.2
 

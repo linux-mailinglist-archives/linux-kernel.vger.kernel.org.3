@@ -2,125 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF944DBCB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA7B4DBCB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 02:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352830AbiCQB63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 21:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
+        id S1358332AbiCQB7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 21:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbiCQB62 (ORCPT
+        with ESMTP id S232966AbiCQB7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 21:58:28 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891B11CB1B;
-        Wed, 16 Mar 2022 18:57:13 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id q5so5420913ljb.11;
-        Wed, 16 Mar 2022 18:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D2eRtDhUiRlh6LC4tNmroWlfl0w9KefZzF7QC113Ymw=;
-        b=HWHhI+tJQb7NceqGVdfZf3qv6HHsoD0DK8KH+CJhB6W4ZWMx0h+SDyEEwnL25LMVQg
-         zKpt0ilsFTJWMEn+YotbBv+CHmhm5wz9RJm+gBH3YhHI/sHYQXOCtql1zNHK16BwRv2P
-         sGc0l127JfS/+cMODtL4iRAzr56VdQX3AYGKDR/BmEsAQPDNuYKFh+B1i0a2Px4TICyD
-         OWROAcrc5KqNBGAXvwAhOqXYkRgxfVHMf+b+Z1cYZBFcpkRErF0rm1jhR9xPhKPFUnbW
-         0XJsyPajRCCHhkCPbcMA0M0GcAvaVRxYsfyiDLT9zqaKO3jUS9WTDeci37Hs2h244u1Z
-         /FdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D2eRtDhUiRlh6LC4tNmroWlfl0w9KefZzF7QC113Ymw=;
-        b=PWlxqGLaegudeSlUyEronYsKHl3U0xDk79vXeZFovlK8kiB4MWeABDOT0C8DrB5za5
-         fQk9eODxH6cQyPeiOS2plK3kvWAe9c8m99O1wolgLRG/TLq8pzDuR1pMvh5O4ZPQ+vtl
-         z4H3xTlMcudd3nhfJY9jTPvrKvfozLoNf7E53/D+V76sAT9/DkwZgRzVD1WxN2snq+mB
-         fzszcb9RLugd0QFzmh0B1D5ZhPRbWCjg1BA/4JKZ4XjEU7x7sjRDhbPB9Ed1t2ip6rQo
-         GNqtebi79d8AeLeizIOEdNf0gcT0RHU5zvVziQ88qoHUaybyhYWI3xbICUlhqbnx4B9r
-         Fiog==
-X-Gm-Message-State: AOAM532f7KKR8TnCb7txfbfIDKaFwBuNZzwhEWHT+PUo+ftlOKarolbS
-        qYwWNpaMYb1YEf3cDvb77BBkVSU5TLCopR+84L0=
-X-Google-Smtp-Source: ABdhPJyFlkiIFXp5hQL4DLC4LGWzR86G2RzWAwiNyNiA38WnKp4DUP+0KDCKDRtO1/T4VA2hZDiQIlMOygIkkzfVeKY=
-X-Received: by 2002:a2e:9d86:0:b0:247:da0e:7c59 with SMTP id
- c6-20020a2e9d86000000b00247da0e7c59mr1443340ljj.127.1647482231736; Wed, 16
- Mar 2022 18:57:11 -0700 (PDT)
+        Wed, 16 Mar 2022 21:59:13 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFC86428;
+        Wed, 16 Mar 2022 18:57:57 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KJqsh64wnzcb5l;
+        Thu, 17 Mar 2022 09:52:56 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 17 Mar 2022 09:57:55 +0800
+Subject: Re: [PATCH] hugetlb: do not demote poisoned hugetlb pages
+To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     HORIGUCHI NAOYA <naoya.horiguchi@nec.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <stable@vger.kernel.org>
+References: <20220307215707.50916-1-mike.kravetz@oracle.com>
+ <6ba788b3-901e-d740-2575-bc652461187b@huawei.com>
+ <8b40c33f-1bdf-2cda-5948-cf433302514e@oracle.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <e4f9c14f-c013-79c6-352d-99f2e0b6d187@huawei.com>
+Date:   Thu, 17 Mar 2022 09:57:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
-In-Reply-To: <3c576edf-89c3-ccf3-a43f-4ce2c1ced18d@zhaoxin.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Thu, 17 Mar 2022 09:56:57 +0800
-Message-ID: <CAL411-pthKbSuUEjFPDJtRK=nWApRnJkPVH0C+qaqNRyf0u5yg@mail.gmail.com>
-Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
-To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-Cc:     mathias.nyman@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        USB list <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, CobeChen@zhaoxin.com,
-        TimGuo@zhaoxin.com, tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <8b40c33f-1bdf-2cda-5948-cf433302514e@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 1:30 AM WeitaoWang-oc@zhaoxin.com
-<WeitaoWang-oc@zhaoxin.com> wrote:
->
-> On some situations, software handles TRB events slower than adding TRBs,
-> xhci_irq will not exit until all events are handled. If xhci_irq just
-> handles 256 TRBs and exit, the temp variable(event_ring_deq) driver
-> records in xhci irq is equal to driver current dequeue pointer. It will
-> cause driver not update ERDP and software dequeue pointer lost sync with
-> ERDP. On the next xhci_irq, the event ring is full but driver will not
-> update ERDP as software dequeue pointer is equal to ERDP.
->
-> [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
-> [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7
-> inflight: CMD OUT
-> [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78
-> 00 00 08 00
-> [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host
-> not responding to stop endpoint command.
-> [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
-> [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not
-> responding, assume dead
-> [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6
-> inflight: CMD
-> [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8
-> 00 00 08 00
-> [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5
-> inflight: CMD
->
-> Fixed this issue by update software record temp variable when handles
-> 128 TRB events.
->
-> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+On 2022/3/17 6:31, Mike Kravetz wrote:
+> On 3/8/22 05:43, Miaohe Lin wrote:
+>> On 2022/3/8 5:57, Mike Kravetz wrote:
+>>> It is possible for poisoned hugetlb pages to reside on the free lists.
+>>> The huge page allocation routines which dequeue entries from the free
+>>> lists make a point of avoiding poisoned pages.  There is no such check
+>>> and avoidance in the demote code path.
+>>>
+>>> If a hugetlb page on the is on a free list, poison will only be set in
+>>> the head page rather then the page with the actual error.  If such a
+>>> page is demoted, then the poison flag may follow the wrong page.  A page
+>>> without error could have poison set, and a page with poison could not
+>>> have the flag set.
+>>>
+>>> Check for poison before attempting to demote a hugetlb page.  Also,
+>>> return -EBUSY to the caller if only poisoned pages are on the free list.
+>>>
+>>> Fixes: 8531fc6f52f5 ("hugetlb: add hugetlb demote page support")
+>>> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+>>> Cc: <stable@vger.kernel.org>
+>>> ---
+>>>  mm/hugetlb.c | 17 ++++++++++-------
+>>>  1 file changed, 10 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>>> index b34f50156f7e..f8ca7cca3c1a 100644
+>>> --- a/mm/hugetlb.c
+>>> +++ b/mm/hugetlb.c
+>>> @@ -3475,7 +3475,6 @@ static int demote_pool_huge_page(struct hstate *h, nodemask_t *nodes_allowed)
+>>>  {
+>>>  	int nr_nodes, node;
+>>>  	struct page *page;
+>>> -	int rc = 0;
+>>>  
+>>>  	lockdep_assert_held(&hugetlb_lock);
+>>>  
+>>> @@ -3486,15 +3485,19 @@ static int demote_pool_huge_page(struct hstate *h, nodemask_t *nodes_allowed)
+>>>  	}
+>>>  
+>>>  	for_each_node_mask_to_free(h, nr_nodes, node, nodes_allowed) {
+>>> -		if (!list_empty(&h->hugepage_freelists[node])) {
+>>> -			page = list_entry(h->hugepage_freelists[node].next,
+>>> -					struct page, lru);
+>>> -			rc = demote_free_huge_page(h, page);
+>>> -			break;
+>>> +		list_for_each_entry(page, &h->hugepage_freelists[node], lru) {
+>>> +			if (PageHWPoison(page))
+>>> +				continue;
+>>> +
+>>> +			return demote_free_huge_page(h, page);
+>>
+>> It seems this patch is not ideal. Memory failure can hit the hugetlb page anytime without
+>> holding the hugetlb_lock. So the page might become HWPoison just after the check. But this
+>> patch should have handled the common case. Many thanks for your work. :)
+>>
+> 
+> Correct, this patch handles the common case of not demoting a hugetlb
+> page if HWPoison is set.  This is similar to code in the dequeue path
+> used when allocating a huge page for allocation use.
+> 
+> As you point out, work still needs to be done to better coordinate
+> memory failure with demote as well as huge page freeing.  As you know
+> Naoya is working on this now.  It is unclear if that work will be limited
+> to memory error handling code, or if greater coordination with hugetlb
+> code will be required.
+> 
+> Unless you have objections, I believe this patch should move forward and
+> be backported to stable trees.  If we determine that more coordination
+> between memory error and hugetlb code is needed, that can be added later. 
 
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
+I think this patch is good enough to move forward and be backported to stable trees.
+Many thanks. :)
 
-> ---
->   drivers/usb/host/xhci-ring.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index d0b6806..f970799 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -3141,6 +3141,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
->                  if (event_loop++ < TRBS_PER_SEGMENT / 2)
->                          continue;
->                  xhci_update_erst_dequeue(xhci, event_ring_deq);
-> +               event_ring_deq = xhci->event_ring->dequeue;
->
->                  /* ring is half-full, force isoc trbs to interrupt more
-> often */
->                  if (xhci->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
-> --
-> 2.7.4
+> 

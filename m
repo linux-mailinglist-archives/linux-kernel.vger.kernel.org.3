@@ -2,108 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99F44DC482
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1BF4DC48E
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232874AbiCQLLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
+        id S232889AbiCQLNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiCQLLn (ORCPT
+        with ESMTP id S232906AbiCQLM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:11:43 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B24BE1DB8B7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:10:25 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-255-MiCiRbVUN16QRgYdqh5Xig-1; Thu, 17 Mar 2022 11:10:22 +0000
-X-MC-Unique: MiCiRbVUN16QRgYdqh5Xig-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Thu, 17 Mar 2022 11:10:21 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Thu, 17 Mar 2022 11:10:21 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Vignesh Raghavendra' <vigneshr@ti.com>,
-        'Michael Walle' <michael@walle.cc>
-CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>
-Subject: RE: [PATCH v2 0/6] spi-mem: Allow specifying the byte order in DTR
- mode
-Thread-Topic: [PATCH v2 0/6] spi-mem: Allow specifying the byte order in DTR
- mode
-Thread-Index: AQHYOQSPIX1seC7nAUuKrYcK6uPoWazCAVMggAFSn4CAAATp8IAABzYAgAAFzgA=
-Date:   Thu, 17 Mar 2022 11:10:21 +0000
-Message-ID: <fcae2d955b3f43af8d64f1aa50fbc685@AcuMS.aculab.com>
-References: <20220311080147.453483-1-tudor.ambarus@microchip.com>
- <76eb13b6-9263-975f-3196-312259634301@ti.com>
- <b60064231d33581c20279172cf8f765e@walle.cc>
- <0f271365-354b-82e2-02a2-9d69a6ac85b1@ti.com>
- <9bc530d1fdaf4490a00fee150f963ac7@AcuMS.aculab.com>
- <bc2083a8903fdabc65083f7e5232ca2d@walle.cc>
- <8b765d24cb9a422bb383aad07251b65f@AcuMS.aculab.com>
- <c17fe9c6-0757-dbb6-6efb-69d05d7ff589@ti.com>
-In-Reply-To: <c17fe9c6-0757-dbb6-6efb-69d05d7ff589@ti.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 17 Mar 2022 07:12:58 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6141DBA8D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:11:41 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id q6-20020a056e0215c600b002c2c4091914so2800866ilu.14
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:11:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to:cc;
+        bh=FSb3bECaa+QZmvUye7BqR5VJOw9yW+TrzGw9Xi56Luo=;
+        b=hnaoHOx0OGQaQuHU424LzW5yokLrlUAAIE7Y5cu9ZJVPZu2wdvhY808/rNLO9+/8pM
+         fm+8lwIHopB6fBthivmqiZZocKmREVwebb1AsQqVlTU5o0Jg8qNLzOc4WAM9FzjVZIjz
+         vds0kNevt68An3JT+nNcyb+mTbTaoLEmjQolEnuCdPn1CxToOfuHXDVHO/KTV63geh29
+         ZzzIxSlqrQth9iTJK4byRbq7AD+HtVj6Ok57b1Kfx2tdgXf848lB0kUwn62LLfPeMkGe
+         MntmFYaIJ+5NmmdaUbpPmPvzbHiYnhzq4Um367QdE+oZGTt0m/orMJkxEdLLwtmynRCK
+         QBSg==
+X-Gm-Message-State: AOAM530iWwePIoGnJRK9VOkqIF+tZnpd/jIRTDL0E5nv7+DzqQLe02po
+        xk9XCoWZ9S+K66K8ND6z0UvDEOdguq2bGms/8BGVgYMGFF55
+X-Google-Smtp-Source: ABdhPJx+r318zTBhalqDbzgPbd5g/MFRfuCipk6BT/fbRmyDgUovZsWSKrpChl142bdM7c8rcY6cbY5XuvdAejQQ16ENTX/Uhf+F
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3713:b0:317:ca48:4b7 with SMTP id
+ k19-20020a056638371300b00317ca4804b7mr1817720jav.27.1647515500554; Thu, 17
+ Mar 2022 04:11:40 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 04:11:39 -0700
+In-Reply-To: <20220317111127.2117-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002c2eab05da68180d@google.com>
+Subject: Re: [syzbot] KASAN: out-of-bounds Read in ath9k_hif_usb_rx_cb (3)
+From:   syzbot <syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogVmlnbmVzaCBSYWdoYXZlbmRyYQ0KPiBTZW50OiAxNyBNYXJjaCAyMDIyIDEwOjI0DQou
-Li4NCj4gTW9kZXJuIE9TUEkvUVNQSSBmbGFzaCBjb250cm9sbGVycyBwcm92aWRlIE1NSU8gaW50
-ZXJmYWNlIHRvIHJlYWQgZnJvbQ0KPiBmbGFzaCB3aGVyZSBETUEgY2FuIHB1bGwgZGF0YSBhcyBp
-ZiB0aG91Z2ggeW91IGFyZSByZWFkaW5nIGZyb20gT24gY2hpcCBSQU0NCg0KU28gdGhlIGNwdSBk
-b2VzIGFuIE1NSU8gcmVhZCBjeWNsZSB0byB0aGUgY29udHJvbGxlciB3aGljaCBkb2Vzbid0DQpj
-b21wbGV0ZSB1bnRpbCAoZm9yIHRoZSBuaWJibGUtbW9kZSBzcGkgZGV2aWNlIEkgaGF2ZSk6DQox
-KSBDaGlwc2VsZWN0IGlzIGFzc2VydGVkLg0KMikgVGhlIDgtYml0IGNvbW1hbmQgaGFzIGJlZW4g
-Y2xvY2tlZCBvdXQuDQozKSBUaGUgMzJiaXQgYWRkcmVzcyBoYXZlIGJlZW4gY2xvY2tlZCBvdXQg
-KDggY2xvY2tzIGluIG5pYmJsZXMpLg0KNCkgQSBmZXcgKHByb2JhYmx5IDQpIGV4dHJhIGRlbGF5
-IGNsb2NrcyBhcmUgYWRkZWQuDQo1KSBUaGUgZGF0YSBpcyByZWFkIC0gOCBjbG9ja3MgZm9yIDMy
-Yml0cyBpbiBuaWJibGUgbW9kZS4NCjYpIENoaXBzZWxlY3QgaXMgcmVtb3ZlZC4NCg0KTm93IHlv
-dSBjYW4gZG8gbG9uZyBzZXF1ZW50aWFsIHJlYWRzIHdpdGhvdXQgYWxsIHRoZSByZWQgdGFwZS4N
-CkJ1dCBhIHJhbmRvbSByZWFkIGluIG5pYmJsZSBtb2RlIGlzIGFib3V0IDMwIGNsb2Nrcy4NCjE2
-IGJpdCBtb2RlIHNhdmVzIDYgY2xvY2tzIGZvciB0aGUgZGF0YSBhbmQgbWF5YmUgNiBmb3IgdGhl
-IGFkZHJlc3M/DQoNClRoZSBjb250cm9sbGVyIGNvdWxkIGRvICdjbGV2ZXIgc3R1ZmYnIGZvciBz
-ZXF1ZW50aWFsIHJlYWRzLg0KQXQgYSBjb3N0IG9mIHNsb3dpbmcgZG93biByYW5kb20gcmVhZHMu
-DQoNClNvIGV2ZW4gYXQgNDAwTUh6IGl0IGlzbid0IHRoYXQgZmFzdC4NCg0KSWYgdGhlIE1NSU8g
-aW50ZXJmYWNlIHRvIHRoZSBmbGFzaCBjb250cm9sbGVyIGlzIFBDSWUgeW91IGNhbg0KYWRkIGlu
-IGEgbG9hZCBvZiBleHRyYSBsYXRlbmN5IGZvciB0aGUgY3B1IHJlYWQgaXRzZWxmLg0KDQpXaGls
-ZSBQQ0llIGFsbG93cyBtdWx0aXBsZSByZWFkIHJlcXVlc3RzIHRvIGJlIG91dHN0YW5kaW5nLA0K
-dGhlIEludGVsIGNwdSBJJ3ZlIGxvb2tlZCBhdCBzZXJpYWxpc2UgdGhlIHJlYWRzIGZyb20gZWFj
-aA0KY3B1IGNvcmUgKGVhY2ggY3B1IGFsd2F5cyB1c2VzIHRoZSBzYW1lIFRMUCB0YWcpLg0KDQpO
-b3cgbG9uZ2VyIHJlYWQgVExQIGhlbHAgYSBsb3QgKElJUkMgbWF4IGlzIDI1NiBieXRlcykuDQpC
-dXQgdGhlIHg4NiBjcHUgd2lsbCBvbmx5IGdlbmVyYXRlIHJlYWQgVExQIGZvciByZWdpc3RlciBy
-ZWFkcy4NCllvdSBuZWVkIHRvIHVzZSBBVlg1MTIgcmVnaXN0ZXJzIChvciBjYWNoZSBsaW5lIGZl
-dGNoZXMpIHRvDQpnZXQgYmV0dGVyIHRocm91Z2hwdXQhDQoNClRoZSBhbHRlcm5hdGl2ZSBpcyBn
-ZXR0aW5nIHRoZSBmbGFzaCBjb250cm9sbGVyIHRvIGlzc3VlDQp0aGUgcmVhZC93cml0ZSBUTFAg
-Zm9yIG1lbW9yeSB0cmFuc2ZlcnMuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3Mg
-TGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQ
-VCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+> On Sun, 06 Jun 2021 14:16:15 -0700
+>> syzbot has found a reproducer for the following issue on:
+>> 
+>> HEAD commit:    f5b6eb1e Merge branch 'i2c/for-current' of git://git.kerne..
+>> git tree:       upstream
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=12fa1797d00000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=8a9e9956ca52a5f6
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=3f1ca6a6fec34d601788
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=158914ebd00000
+>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17720670300000
+>> 
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+3f1ca6a6fec34d601788@syzkaller.appspotmail.com
+>> 
+>> ==================================================================
+>> BUG: KASAN: out-of-bounds in ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:636 [inline]
+>> BUG: KASAN: out-of-bounds in ath9k_hif_usb_rx_cb+0xdd8/0x1050 drivers/net/wireless/ath/ath9k/hif_usb.c:680
+>> Read of size 4 at addr ffff888036db4178 by task swapper/1/0
+>> 
+>> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.13.0-rc4-syzkaller #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+>> Call Trace:
+>>  <IRQ>
+>>  __dump_stack lib/dump_stack.c:79 [inline]
+>>  dump_stack+0x141/0x1d7 lib/dump_stack.c:120
+>>  print_address_description.constprop.0.cold+0x5b/0x2f8 mm/kasan/report.c:233
+>>  __kasan_report mm/kasan/report.c:419 [inline]
+>>  kasan_report.cold+0x7c/0xd8 mm/kasan/report.c:436
+>>  ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:636 [inline]
+>>  ath9k_hif_usb_rx_cb+0xdd8/0x1050 drivers/net/wireless/ath/ath9k/hif_usb.c:680
+>>  __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1656
+>>  usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1726
+>>  dummy_timer+0x11f4/0x32a0 drivers/usb/gadget/udc/dummy_hcd.c:1978
+>>  call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1431
+>>  expire_timers kernel/time/timer.c:1476 [inline]
+>>  __run_timers.part.0+0x67c/0xa50 kernel/time/timer.c:1745
+>>  __run_timers kernel/time/timer.c:1726 [inline]
+>>  run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1758
+>>  __do_softirq+0x29b/0x9f6 kernel/softirq.c:559
+>>  invoke_softirq kernel/softirq.c:433 [inline]
+>>  __irq_exit_rcu+0x136/0x200 kernel/softirq.c:637
+>>  irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
+>>  sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1100
+>>  </IRQ>
+>>  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:647
+>> RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:29 [inline]
+>> RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
+>> RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:132 [inline]
+>> RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:109 [inline]
+>> RIP: 0010:acpi_idle_do_entry+0x1c9/0x250 drivers/acpi/processor_idle.c:513
+>> Code: ed b0 5b f8 84 db 75 ac e8 34 aa 5b f8 e8 ef b9 61 f8 e9 0c 00 00 00 e8 25 aa 5b f8 0f 00 2d 5e 48 b5 00 e8 19 aa 5b f8 fb f4 <9c> 5b 81 e3 00 02 00 00 fa 31 ff 48 89 de e8 24 b2 5b f8 48 85 db
+>> RSP: 0018:ffffc90000d57d18 EFLAGS: 00000293
+>> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+>> RDX: ffff8880123dd4c0 RSI: ffffffff89193267 RDI: 0000000000000000
+>> RBP: ffff8881427b7864 R08: 0000000000000001 R09: 0000000000000001
+>> R10: ffffffff817aec78 R11: 0000000000000000 R12: 0000000000000001
+>> R13: ffff8881427b7800 R14: ffff8881427b7864 R15: ffff88801c850804
+>>  acpi_idle_enter+0x361/0x500 drivers/acpi/processor_idle.c:648
+>>  cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
+>>  cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
+>>  call_cpuidle kernel/sched/idle.c:158 [inline]
+>>  cpuidle_idle_call kernel/sched/idle.c:239 [inline]
+>>  do_idle+0x3e8/0x590 kernel/sched/idle.c:306
+>>  cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:403
+>>  start_secondary+0x274/0x350 arch/x86/kernel/smpboot.c:272
+>>  secondary_startup_64_no_verify+0xb0/0xbb
+>> 
+>> Allocated by task 11245:
+>>  kasan_save_stack+0x1b/0x40 mm/kasan/common.c:38
+>>  kasan_set_track mm/kasan/common.c:46 [inline]
+>>  set_alloc_info mm/kasan/common.c:428 [inline]
+>>  ____kasan_kmalloc mm/kasan/common.c:507 [inline]
+>>  ____kasan_kmalloc mm/kasan/common.c:466 [inline]
+>>  __kasan_kmalloc+0x9b/0xd0 mm/kasan/common.c:516
+>>  kmalloc include/linux/slab.h:561 [inline]
+>>  raw_alloc_io_data drivers/usb/gadget/legacy/raw_gadget.c:593 [inline]
+>>  raw_alloc_io_data+0x157/0x1c0 drivers/usb/gadget/legacy/raw_gadget.c:577
+>>  raw_ioctl_ep0_read drivers/usb/gadget/legacy/raw_gadget.c:694 [inline]
+>>  raw_ioctl+0x110b/0x2720 drivers/usb/gadget/legacy/raw_gadget.c:1223
+>>  vfs_ioctl fs/ioctl.c:51 [inline]
+>>  __do_sys_ioctl fs/ioctl.c:1069 [inline]
+>>  __se_sys_ioctl fs/ioctl.c:1055 [inline]
+>>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:1055
+>>  do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
+>>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>> 
+>> The buggy address belongs to the object at ffff888036db4000
+>>  which belongs to the cache kmalloc-4k of size 4096
+>> The buggy address is located 376 bytes inside of
+>>  4096-byte region [ffff888036db4000, ffff888036db5000)
+>> The buggy address belongs to the page:
+>> page:ffffea0000db6c00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x36db0
+>> head:ffffea0000db6c00 order:3 compound_mapcount:0 compound_pincount:0
+>> flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+>> raw: 00fff00000010200 dead000000000100 dead000000000122 ffff888011042140
+>> raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
+>> page dumped because: kasan: bad access detected
+>> page_owner tracks the page as allocated
+>> page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd2040(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4855, ts 492416671090, free_ts 492416389440
+>>  prep_new_page mm/page_alloc.c:2358 [inline]
+>>  get_page_from_freelist+0x1033/0x2b60 mm/page_alloc.c:3994
+>>  __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5200
+>>  alloc_pages+0x18c/0x2a0 mm/mempolicy.c:2272
+>>  alloc_slab_page mm/slub.c:1645 [inline]
+>>  allocate_slab+0x2c5/0x4c0 mm/slub.c:1785
+>>  new_slab mm/slub.c:1848 [inline]
+>>  new_slab_objects mm/slub.c:2594 [inline]
+>>  ___slab_alloc+0x4a1/0x810 mm/slub.c:2757
+>>  __slab_alloc.constprop.0+0xa7/0xf0 mm/slub.c:2797
+>>  slab_alloc_node mm/slub.c:2879 [inline]
+>>  slab_alloc mm/slub.c:2921 [inline]
+>>  __kmalloc+0x315/0x330 mm/slub.c:4055
+>>  kmalloc include/linux/slab.h:561 [inline]
+>>  tomoyo_realpath_from_path+0xc3/0x620 security/tomoyo/realpath.c:254
+>>  tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+>>  tomoyo_path_perm+0x21b/0x400 security/tomoyo/file.c:822
+>>  security_inode_getattr+0xcf/0x140 security/security.c:1332
+>>  vfs_getattr fs/stat.c:139 [inline]
+>>  vfs_fstat+0x43/0xb0 fs/stat.c:164
+>>  __do_sys_newfstat+0x81/0x100 fs/stat.c:404
+>>  do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
+>>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>> page last free stack trace:
+>>  reset_page_owner include/linux/page_owner.h:24 [inline]
+>>  free_pages_prepare mm/page_alloc.c:1298 [inline]
+>>  __free_pages_ok+0x476/0xce0 mm/page_alloc.c:1572
+>>  device_release+0x9f/0x240 drivers/base/core.c:2190
+>>  kobject_cleanup lib/kobject.c:705 [inline]
+>>  kobject_release lib/kobject.c:736 [inline]
+>>  kref_put include/linux/kref.h:65 [inline]
+>>  kobject_put+0x1c8/0x540 lib/kobject.c:753
+>>  put_device+0x1b/0x30 drivers/base/core.c:3432
+>>  ath9k_htc_probe_device+0x1c7/0x1e50 drivers/net/wireless/ath/ath9k/htc_drv_init.c:976
+>>  ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:503
+>>  ath9k_hif_usb_firmware_cb+0x274/0x530 drivers/net/wireless/ath/ath9k/hif_usb.c:1239
+>>  request_firmware_work_func+0x12c/0x230 drivers/base/firmware_loader/main.c:1081
+>>  process_one_work+0x98d/0x1600 kernel/workqueue.c:2276
+>>  worker_thread+0x64c/0x1120 kernel/workqueue.c:2422
+>>  kthread+0x3b1/0x4a0 kernel/kthread.c:313
+>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+>> 
+>> Memory state around the buggy address:
+>>  ffff888036db4000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>>  ffff888036db4080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>> >ffff888036db4100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>>                                                                 ^
+>>  ffff888036db4180: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>>  ffff888036db4200: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>> ==================================================================
+>
+> Fix oob by adding boundary check.
+>
+> Hillf
+>
+> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 
+This bug is already marked as fixed. No point in testing.
+
+>
+> --- x/drivers/net/wireless/ath/ath9k/hif_usb.c
+> +++ y/drivers/net/wireless/ath/ath9k/hif_usb.c
+> @@ -633,6 +633,10 @@ static void ath9k_hif_usb_rx_stream(stru
+>  					"ath9k_htc: over RX MAX_PKT_NUM\n");
+>  				goto err;
+>  			}
+> +			if (pkt_len >= len || len - pkt_len < chk_idx + 4) {
+> +				dev_err(&hif_dev->udev->dev, "ath9k_htc: RX OOB\n");
+> +				goto err;
+> +			}
+>  			nskb = __dev_alloc_skb(pkt_len + 32, GFP_ATOMIC);
+>  			if (!nskb) {
+>  				dev_err(&hif_dev->udev->dev,
+> --

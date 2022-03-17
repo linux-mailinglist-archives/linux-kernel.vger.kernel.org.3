@@ -2,143 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB53B4DCD3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF944DCD51
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237236AbiCQSLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
+        id S237297AbiCQSNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236915AbiCQSLw (ORCPT
+        with ESMTP id S237296AbiCQSMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:11:52 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2049.outbound.protection.outlook.com [40.107.92.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07762217C70;
-        Thu, 17 Mar 2022 11:10:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kYVvvKCfcUA9UJgLBo6IUWjwY5Fif3E/Q+d4bqB6TxsvRnIwEiWXZqEtfo3xiMHMfB4oYoKrWA1yiP5vDbPuwgT6gKw6fLwOo0UAItWt0uJkDrNeufblJeARVS93wqmONsv/e9VEnXLy5WKw/E9z+TZVDcwCjZSltL4OJud7jyu/S6iL0XxRJkTFADCaNyuSc4WcDj/NKtF8GZDpS6/UYlUhH7sRH69hzBlfKjmo60eSnOFctrGKECav9t5Dh2TDkqyChrTL75ji5JFTwfj4tLkIR8/6PmrK034qLzRhdL9cN+9s3Q9Ie45mbBfFkpV1UhcDc3hVEavuRL18NlbP/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yUZnYOsoAYlFR6kl+DIrmDSDloBHCLicnBDqLC4k5Jg=;
- b=QE1xFjpWmatC1Hwat9rDQMAV87CQkdL1JSM2A6TKv5Dhev26+DWstfRw4RFCFZK7upIqUeoienKvZHbUtYSyt0HULjyMCm6gQGCaN3enU2CeCUniZFyeUjIA40TMSrL93BBDiCeH+7O31NPYGMsn+fu3YaI5E5zEp/iG2sUZD2LAk8/DvjvTdyDbp1Z68sdAodLvvPPGN9qf0dkSoJFj1C3HiOzAKIejFso6wmSB5tGyHCpvtju6nJdAHH/lrYTCjlFvUkn0cgud49ScYfn2h2jdEXAyk56uiuWjacMK1RctAkwSCDiMa89O5ztAU1ntak39oVJBHedPGM+JO7e6MQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yUZnYOsoAYlFR6kl+DIrmDSDloBHCLicnBDqLC4k5Jg=;
- b=mmZ0S+b7UI2IZ37VbWYEB2L8JI9mqDTV5JOkEqqC6OTRVllbT5DaQQPeH8szF/zANCxZ+iT1CtUHaYJtt3e1Ukgdji0KGAZETXxNWupULwniMR90/0oZ1ixAV9Zzn6VBxKP0hUxxzfCK4/Vf5ATKZEmeA5Yi95K/SJYr7QWNF20=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB1947.namprd12.prod.outlook.com (2603:10b6:3:111::23)
- by CO6PR12MB5475.namprd12.prod.outlook.com (2603:10b6:5:354::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Thu, 17 Mar
- 2022 18:10:33 +0000
-Received: from DM5PR12MB1947.namprd12.prod.outlook.com
- ([fe80::90bd:5b12:918d:5703]) by DM5PR12MB1947.namprd12.prod.outlook.com
- ([fe80::90bd:5b12:918d:5703%6]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
- 18:10:32 +0000
-Message-ID: <3a475e5a-1090-e2f4-779c-6915fc8524b1@amd.com>
-Date:   Thu, 17 Mar 2022 14:10:28 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/3] drm/msm/gpu: Park scheduler threads for system
- suspend
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220310234611.424743-1-robdclark@gmail.com>
- <20220310234611.424743-3-robdclark@gmail.com>
- <YjMGac4Hnjmg1wE8@phenom.ffwll.local>
- <3945551d-47d2-1974-f637-1dbc61e14702@amd.com>
- <CAF6AEGv36V8bLoDn5O1SW3iTUtzd3O1XeuT5gJxyLMxd1E-o3Q@mail.gmail.com>
- <865abcff-9f52-dca4-df38-b11189c739ff@amd.com>
- <CAF6AEGuoBeYoMTR6-KM9xGZ05XSSnSJWMDciawczi7qtiLN9Vw@mail.gmail.com>
- <915537e2-ac5b-ab0e-3697-2b16a9ec8f91@amd.com>
- <CAF6AEGsyFAOPmHqT7YX1wsukP4-gYAstCukr89r9w28V0YSCUw@mail.gmail.com>
-From:   Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-In-Reply-To: <CAF6AEGsyFAOPmHqT7YX1wsukP4-gYAstCukr89r9w28V0YSCUw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT1PR01CA0095.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2d::34) To DM5PR12MB1947.namprd12.prod.outlook.com
- (2603:10b6:3:111::23)
+        Thu, 17 Mar 2022 14:12:53 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E29E21A8A2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:11:34 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id r22so8339079ljd.4
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:11:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GvRtkI+aajtqCy2c1b2F4MUYD+uMLWJPyiKwyzY7fBQ=;
+        b=hne5dkL1r66jaWeZwLdqsQWeaYzLA0jCNqUeaPeX4MK0bcpogrmJFtTsAHSYPHTv37
+         F31NNlIDn9bslKYtcs9T7Ma0331NI3pAKkY7Smg4Njyl7fKErwUzZLR77VAJgDJGt60n
+         8yoAF2gzIx0ez9xH7e1/L5DkEJjrMCAG7htDNgWR4IVaW+tvIGLmwLqztCBKJVgv8JNg
+         9J29bhh2X/xEUKQYCshpyqmTT6OTC0cbzKTXSYQzOMHmhryjwsJyMrPUTkPxAl/m9Ng8
+         HHfV7rzkYosyidu3QWTr29KI54SAqAdUXPgypkWcpypqbuGZSPra+xml3A+fuJpxtgBF
+         iU+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GvRtkI+aajtqCy2c1b2F4MUYD+uMLWJPyiKwyzY7fBQ=;
+        b=7P2lJvBcia2pJ0z13ErEOaU0DFko2ocv0bw74WCHmC+HMo6GJnmGkHn4MUlqZsCBUu
+         5BA4ZlC6Yj/pRpzUheHGnqpoLsHNFqHd3F6zK23yOptxCPscB/GqwbChm/DOkCtuYiX8
+         cfcoJfjL1ayYYXVWSF4jNnmd4tnTcxQ9tS6eExwQyPxnPfRA+Jh6+z6+94sT5Mnb7aiK
+         PG8b4JiSvJgostH68C97OSBXd3l8hr2x9sQjNYc1kjBnwUEHvwwbjQ2lQNugvoalkUbU
+         UoGabzKkDlMI9BW23B1XLKG7G+Xm6iehBiTK+zYtW4j0/x6CeDLqaugvyVZd2wuF9jzM
+         krRA==
+X-Gm-Message-State: AOAM532jtq/CP08pZio9awq0w842p2cinWl0dC0hAbyPkNHZbZI23phI
+        Qr+GZqHytGFNSasT/1jq5WJGZKgLrvrqm0kf/gFiPw==
+X-Google-Smtp-Source: ABdhPJw321RYGnd+eSI0h5Spru1PQ/7vVF+BX9Nro0IcXN12RAcPjoehXMVZPqBvuitiGJFoQTKh96/tVTcy8uPYIkw=
+X-Received: by 2002:a05:651c:1791:b0:243:94bd:d94c with SMTP id
+ bn17-20020a05651c179100b0024394bdd94cmr3596248ljb.468.1647540692501; Thu, 17
+ Mar 2022 11:11:32 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7716cd27-8ab4-42ad-eaf6-08da08416ceb
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5475:EE_
-X-Microsoft-Antispam-PRVS: <CO6PR12MB547518F84B27C208D742BD0CEA129@CO6PR12MB5475.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DcZWPkCFFQAdOI4i2ERHpey6pKXWv25uUUi5pZbHRfvedfrwTZCu47rOPktbCeLxgyCPhp4ZwLhJtq8RviYe+OzXfuJUy5vE+vbKC/Mxkla5tKOjpcclGYYlxplGnR6Au9HtuttQIxPl/JPMLb0ZqSoyN3X7oMK300RyFxBgeTM8agbT2UdDc6Kn/VT3mpG7nW4ezT8xYATTmun5Y7cOmcCAoBKPryOJz0eTitP1a2jfvwewykGPsIR/O3AQpje/OviZW1LhMRPWZv7LwHu7c9b3gkFZhuOjpsqfE35ZFNDu2yEtnwG/kd1JinaqX8gjlPlZKZCG58Hu99SEceLirF0PY7rlZqOHluGNjRHOV9hg/Vbin+MgEeVfYtTNkYQcnNADN15U5Jxdrl7XHj4USi73WixTacRWwjQH6u4sTBxv5LhGD//oVFfosyKsPC+05a5oDpxPzyFvkwpWHzcQj0WwqW96NfaH6B132u9vlg9il7bpSctIV2Ep792WD3vDenmehEIFl55gJbw4Iho8haVnxqFIZ8ItjDVSZb2NPIhFDEFKxoXjXslt7Yf4Dvkw4PCsR7d66mEbWtcqPN4CZb1eVknhcg9iXhuzVt10YakfFgcoJJBi0ysVClO6AJpZIofb8/FW4KCbAFjo9/LcGuwtreQZOTcZfISZuyHTEz0kNdT0jTndTB61YulY6Xt26ixXLTIIM9nA08VELo84eDTjIXANjVpc/oWmqETk30zoNmOG3ADMWCx7PBQxSS9F
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1947.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(15650500001)(2616005)(54906003)(110136005)(6666004)(31686004)(6636002)(316002)(6506007)(31696002)(2906002)(53546011)(6512007)(38100700002)(6486002)(83380400001)(4326008)(186003)(44832011)(5660300002)(66946007)(66574015)(66476007)(66556008)(86362001)(508600001)(7416002)(8676002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UlNQK3E5SzQ2VTc3a1pYdVZxYVpBODkvQ2M1amVkSXM2ajE5eWZ1T3dCSDZR?=
- =?utf-8?B?b0RHS3ZGa3ozVWsyTStsS1pzN0J4a1ppVWlneFhlNU1DdU9XL3l2OWpEc3NO?=
- =?utf-8?B?a09MTDdJYzZ1d0IxV0dkZHZST1VCdllmVm42anBRTmdpd3RxaWZRYVlMcHhK?=
- =?utf-8?B?VERmQzBBUThVZXV4SmJNM01CQ2UvMENlUjdkTS9HdCtwV1cvUGRvMFVkUVZY?=
- =?utf-8?B?VTZSTmcyMVZoTENRUDVlWDlpTVR5VmVndExUVDBvMnhaOVVublg4MXdaS0V1?=
- =?utf-8?B?NGN4VC9YQnFpRGFkVUpRNGdYcThkNHpqZ0RuLzZDRzlzNUlFTjd2R21taFFD?=
- =?utf-8?B?UFJXK3FVcTcwMlZsSnAzSVk1V0Fqcmg4TUx5ekxSbXVYaUFjcDJ1Mjkwdmpl?=
- =?utf-8?B?Z3MrWHd2TnJ5SlJFQTNpN3NQMEZqOHBFeDluN1FFb0RDVytrNktFbFJMYjJ3?=
- =?utf-8?B?MnNaTVltS2M1eFpPcGdBL05zbnByeEJDNm8yQzArTHp6Q0IycTkwYjkyUGVm?=
- =?utf-8?B?c1JZZS9qQTQyWG5SQ05FSXQ2ZWEvMDdzOUZEby9mT3NxV3Y4MVZYbEtGclB3?=
- =?utf-8?B?RnloVk9sUzhaMDVxcE9OVnlzeXFzb0JSOHZQTWhlbDFIcVR1N0g2bmMyQllT?=
- =?utf-8?B?RzI0cU16eXRnZ0RJdDRIWHo1dDd1eFhpNk1JU3dqSU01V2NqK1kwdEJuQU1W?=
- =?utf-8?B?U2gyTm9oVHUzbWw4ZmNTVDJtS1pxTDRCeWtFTzhoNkhUdUluSU1iMzMwcjZ4?=
- =?utf-8?B?ekpyN3ZVTmxCSDRGRW5ZamFLZEgrMk9VemxlakIrWStpdWcra3V0ZG1DTVpP?=
- =?utf-8?B?Yjd4TCt5ZjlsRXk1STJTSTZyUkZ5a1RSN0M4cmJmRjZlTmpvdy9zOHg0OENa?=
- =?utf-8?B?bkdjRVhaTlpBSUJ1ZHpsUVgySUpMdUVjbkFFT3ZEd3FyK1YwTlN5VW04RENn?=
- =?utf-8?B?ZmVvMU8xbkFnbjlOSHRMTmZHcHBjaHJ2MjNZL091Z2taT3U1d3dYWitPVHhP?=
- =?utf-8?B?ZmZCTXBiT3RLa240Mkp6emJKcjRxM0g0b2ZqWEZOYlM0NElseEswYWJFWXln?=
- =?utf-8?B?QUxrTWhsYURNTFVXTkFaVTVQNTFQam5WcXpBTnh2Mmw1ckV5UzRycUhUelJm?=
- =?utf-8?B?NmtpMis5eFUrYU9jRXlVdURwWTZrUUtxTVJVdGliWjdxTU9abVgvS2dTSnUy?=
- =?utf-8?B?SEVQd1dPekplNVhMMFo2TEQ5cDIzU2RYNU1CUWsxTXY5ZkM3RXJ4Vm10K0ln?=
- =?utf-8?B?OFJ1VW0xTTgxdGwraDBjMFNBRThOYVM5N0p3Tlp3Vjk0MTh1NHpmcXlUMUZL?=
- =?utf-8?B?VGcwT2cra3VPMUhVYUpKZ29NYWVIM0w1TE1ZNlRFN0Q3c1FUZis2K1ZvMmJ0?=
- =?utf-8?B?eERFTU4yV3lPYkd4QmhFTzVqUnMwNU1JYW1SVGVFNitXSlBqbko5Nk1ObU9X?=
- =?utf-8?B?UW9pTFJtMVNRRCt3S3BDR0tUemUxTHUxR09zeHBJS3lwTkdrak9pcFMxRVRu?=
- =?utf-8?B?YzdwYkk3QURHei9PN2FuQ25obUNoVnhGaHRXUEliaEp4Z0pkZGhqK2dneHVK?=
- =?utf-8?B?WXA3WUJBU3Ayb3pXbzdWNVdyR09DYmttejlSTzdxY1RnQmM2VEhkUW51L3hB?=
- =?utf-8?B?R0craDNOV1JVa0xtTzhqbXNGQUtUL2J6NitFRXlpaG5pKyt1ZTU5SUtXNVpl?=
- =?utf-8?B?dGFMSG5rcDBvQ0d0a3RkdW5rNXVad3hVSHVseldJWVZpdndLNGwzMVo1YjRE?=
- =?utf-8?B?amwzTzc3N24zd0ZkQlVOZjhCNkxtb0FJMXZlOEpobGZ1V2tYbFUyWlJDNTdh?=
- =?utf-8?B?VWZNTE1ka3pCdlhkRkg1RkZ3SnlJTVYzSDFIbjNSdnF3bTBqSThxNjRud0tR?=
- =?utf-8?B?dzJaYkxweHNDN0tucDRTZXpadm8zY3gxdXNBUm1zb3FWMjhHMTRhSmFFMTJS?=
- =?utf-8?B?SDgyblhwbzdDTDIwaHVPbXJiOFgybDJ5ZG0xOXJwUy80d3B0ZFZxQW83aVVN?=
- =?utf-8?B?d3A3UHdtK2dsNmhyWDJJNld5NUEyZDVPb0kvOTRkNW9xZUgzSys3WHlhSVEz?=
- =?utf-8?Q?LjVyyA?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7716cd27-8ab4-42ad-eaf6-08da08416ceb
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1947.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2022 18:10:32.1518
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Z1AKCK7v0U7XAwsEuHy8HF0IolW7emRGGdAbLbNX1ShIFED/6OWFPK6qFzQUBkAnMpQEp6LjOgCf0gLD5uKINw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5475
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220316213055.2351342-1-morbo@google.com> <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
+In-Reply-To: <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 17 Mar 2022 11:11:21 -0700
+Message-ID: <CAKwvOdkjb3uR+kqjfdKL5gqA8R+00c5=3E7uGGW+mGZ3QRsjqg@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: acpi: use correct format characters
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bill Wendling <morbo@google.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -146,76 +72,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022-03-17 13:35, Rob Clark wrote:
-> On Thu, Mar 17, 2022 at 9:45 AM Christian König
-> <christian.koenig@amd.com> wrote:
->> Am 17.03.22 um 17:18 schrieb Rob Clark:
->>> On Thu, Mar 17, 2022 at 9:04 AM Christian König
->>> <christian.koenig@amd.com> wrote:
->>>> Am 17.03.22 um 16:10 schrieb Rob Clark:
->>>>> [SNIP]
->>>>> userspace frozen != kthread frozen .. that is what this patch is
->>>>> trying to address, so we aren't racing between shutting down the hw
->>>>> and the scheduler shoveling more jobs at us.
->>>> Well exactly that's the problem. The scheduler is supposed to shoveling
->>>> more jobs at us until it is empty.
->>>>
->>>> Thinking more about it we will then keep some dma_fence instance
->>>> unsignaled and that is and extremely bad idea since it can lead to
->>>> deadlocks during suspend.
->>> Hmm, perhaps that is true if you need to migrate things out of vram?
->>> It is at least not a problem when vram is not involved.
->> No, it's much wider than that.
->>
->> See what can happen is that the memory management shrinkers want to wait
->> for a dma_fence during suspend.
-> we don't wait on fences in shrinker, only purging or evicting things
-> that are already ready.  Actually, waiting on fences in shrinker path
-> sounds like a pretty bad idea.
+On Thu, Mar 17, 2022 at 2:07 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
->> And if you stop the scheduler they will just wait forever.
->>
->> What you need to do instead is to drain the scheduler, e.g. call
->> drm_sched_entity_flush() with a proper timeout for each entity you have
->> created.
-> yeah, it would work to drain the scheduler.. I guess that might be the
-> more portable approach as far as generic solution for suspend.
+> On Wed, Mar 16, 2022 at 02:30:55PM -0700, Bill Wendling wrote:
+> > When compiling with -Wformat, clang emits the following warning:
+> >
+> > drivers/gpio/gpiolib-acpi.c:393:4: warning: format specifies type
+> > 'unsigned char' but the argument has type 'int' [-Wformat]
+> >                         pin);
+> >                         ^~~
+> >
+> > The types of these arguments are unconditionally defined, so this patch
+> > updates the format character to the correct ones for ints and unsigned
+> > ints.
 >
-> BR,
-> -R
-
-
-I am not sure how this drains the scheduler ? Suppose we done the 
-waiting in drm_sched_entity_flush,
-what prevents someone to push right away another job into the same 
-entity's queue  right after that ?
-Shouldn't we first disable further pushing of jobs into entity before we 
-wait for  sched->job_scheduled ?
-
-Andrey
-
-
+> hhX specifier refers to unsigned char. It's a bug in the compiler.
 >
->> Regards,
->> Christian.
->>
->>>> So this patch here is an absolute clear NAK from my side. If amdgpu is
->>>> doing something similar that is a severe bug and needs to be addressed
->>>> somehow.
->>> I think amdgpu's use of kthread_park is not related to suspend, but
->>> didn't look too closely.
->>>
->>> And perhaps the solution for this problem is more complex in the case
->>> of amdgpu, I'm not super familiar with the constraints there.  But I
->>> think it is a fine solution for integrated GPUs.
->>>
->>> BR,
->>> -R
->>>
->>>> Regards,
->>>> Christian.
->>>>
->>>>> BR,
->>>>> -R
->>>>>
+> NAK.
+
+Andy,
+Our goal is to enable -Wformat for CC=clang.  Please see also:
+commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
+unnecessary %h[xudi] and %hh[xudi]")
+and the lore link it cites.
+https://lore.kernel.org/lkml/CAHk-=wgoxnmsj8GEVFJSvTwdnWm8wVJthefNk2n6+4TC=20e0Q@mail.gmail.com/
+(I saw your follow up; this patch is one of the less controversial
+ones though since the types are not ones that are promoted).
+
+Bill,
+I just remembered that we will want to explicitly set
+-Wno-format-pedantic when enabling -Wformat. Remember that -Wformat is
+a group flag that turns on other flags, such as -Wformat-security
+(currently disabled) and -Wformat-pedantic.  See also:
+https://reviews.llvm.org/rGcc01d6421f4a896820c02da2ea92b82d973b431e
+commit a8735821d198 ("Kbuild: Disable the -Wformat-security gcc flag")
+
+It may be helpful to cite
+commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
+unnecessary %h[xudi] and %hh[xudi]")
+in future commits that change the format flags for types that are promoted.
+-- 
+Thanks,
+~Nick Desaulniers

@@ -2,631 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76CE4DC098
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B16074DC09C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiCQIFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 04:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
+        id S230440AbiCQIFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 04:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiCQIFK (ORCPT
+        with ESMTP id S230412AbiCQIFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 04:05:10 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2026955A8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647504234; x=1679040234;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IKndJ0o2gBcCWv1GodCMWM4hw6LUBWMLE3aRRQQfsTU=;
-  b=O4xkLN1Z22CeC1AeAIFz1zAEnyvNmf8KTNsYGu5zXwN6ZOqDPDy3+CMr
-   OOh5hmJM13BLUFm5BzSaH8rDcuzffkThYtfAIf5uWuIvCZu8wF/4vbGTn
-   YYwFF9KYtDsdi7AS07P+mxBzV6p3dQK5QBokoQdF3RQxtDUAdVS4ouWOG
-   CDTUeANm08gzb3WktGxFWfB+ov3wHQ8T8MHk76lKwmZ8Gcj4P6KEZBMOu
-   kGhtrDr86CrDNmskLx8f8XiVauTJcCXQunx5hTJvETSuZYimKspcHzHdr
-   foAEWGTfKzR3liVsi5Xfd8u3xlQn4wsh44egVvugCS7Y8FTf3A+cy0Ls6
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="317529223"
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="317529223"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 01:03:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
-   d="scan'208";a="714944650"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 17 Mar 2022 01:03:01 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUl64-000DTj-QI; Thu, 17 Mar 2022 08:03:00 +0000
-Date:   Thu, 17 Mar 2022 16:02:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Patrick Bellasi <patrick.bellasi@arm.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Quentin Perret <quentin.perret@arm.com>,
-        Chris Redpath <chris.redpath@arm.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-q-release
- 43/7636] kernel/sched/tune.c:290:33: warning: 'struct cgroup_taskset'
- declared inside parameter list will not be visible outside of this
- definition or declaration
-Message-ID: <202203171642.uVKJqHxx-lkp@intel.com>
+        Thu, 17 Mar 2022 04:05:18 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCAD13D5D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:04:00 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id r190-20020a1c2bc7000000b0038a1013241dso2707171wmr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:04:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GvbEbVOrbgC9mZcPo5wcFNLU0wZbdVO402DEFXY4cBA=;
+        b=o15ibHO+hKlf1xrluP8yCfzGY+avvUkCab+/8mKGUk/qXvZuzCMPs8aLQbA0QdNWH3
+         Rcqx6z2yLf1jV91yVEMNvONY3tZ7h8+SE6UMAPeFTEbpy7bZK65/HAECeLA1vJbujhUf
+         myYHz7CiOJ9Q6YG3nPORIRR9Wlv17MyB1FgeKwPh2PHp3XfGLDHIxRmN0bRtu92NyARX
+         YMA8ijWE4MmZ/BdHqdtC9x+SY+b+uFB2r9P4YyT1cyg34h10WZXy4ACHGMTt+VjdmXSx
+         fiMTCuUTUfghdvA31cgK4W++LWRx534jtjbLWKYQAYaoq4KLY09l7H0e02/EveuZEIXC
+         10Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GvbEbVOrbgC9mZcPo5wcFNLU0wZbdVO402DEFXY4cBA=;
+        b=6Sxmohmp/+Fz3B1LCVZFd1minen6cAyNRvV9A6SJxin3gQcbLjY4wJj/F5WgF42XVA
+         KXlSej7xPiqeb+NV/CVxPCdNhdu5eU7IF45EJzQBr/DyJJVzL1KScsto24o9Gg2rp8wJ
+         lusnYvgHghSCAjmZFjdjT0ZInlw9a31sRqzNJEAlVvcFrloJso2D+YQ5RkOZZAhQAGyX
+         xKvl0TBJSH7jGwq19DbQohwFn5VI0dE46rK3Xtfq5cDakVjEJbDOI5LEohZTBBbq5xw/
+         KJ9ESB2kLeRIskXdo+WzghwOaZ84YBEI2JE/uJTgmMqzQvPjgSjIqO3tUpIaMZv5Kk9r
+         izmA==
+X-Gm-Message-State: AOAM532PATTejLiC7yXQywDpp7frUuapQMF/XlHKGplGTZlrgEw/yWrL
+        NYYNGOoSOBKRGQDGcjuvHPhz77bpXpypBh1vgtEt4A==
+X-Google-Smtp-Source: ABdhPJxg/Cc+37sSpei8q4ub6J3Q8Uu8mxQOC71PTvdaU7UUPfbDfiDfS1QBuk/mixYd+IW74/Mtk5/M0WhumMbSXLQ=
+X-Received: by 2002:a05:600c:1c8e:b0:38b:5608:9f00 with SMTP id
+ k14-20020a05600c1c8e00b0038b56089f00mr2763321wms.163.1647504238550; Thu, 17
+ Mar 2022 01:03:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220316024432.1454366-1-dlatypov@google.com> <CABVgOSkvmuiHfG11VRsQhigOLw_-5HYWjJrQrA4Vy18MvUpW9w@mail.gmail.com>
+ <CAGS_qxpCoyr0_xpRVpjMwAALn49iShGAs-MuBrYHwrEJhKcZUA@mail.gmail.com>
+In-Reply-To: <CAGS_qxpCoyr0_xpRVpjMwAALn49iShGAs-MuBrYHwrEJhKcZUA@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 17 Mar 2022 16:03:47 +0800
+Message-ID: <CABVgOSk4W85e4j=COrx=KDAoRkMuKEWjdvVp5BxhQWrOqtM37w@mail.gmail.com>
+Subject: Re: [PATCH] kunit: split resource API from test.h into new resource.h
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000ee1d0805da657860"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-q-release
-head:   1a3500dc59324a85c20f025cfa6485a1a0debbdf
-commit: 68dbff9ce92ae2f923321d150fb72a6d8b05e640 [43/7636] ANDROID: sched: fair/tune: Add schedtune with cgroups interface
-config: s390-randconfig-r035-20220317 (https://download.01.org/0day-ci/archive/20220317/202203171642.uVKJqHxx-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/68dbff9ce92ae2f923321d150fb72a6d8b05e640
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-q-release
-        git checkout 68dbff9ce92ae2f923321d150fb72a6d8b05e640
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash kernel/sched/
+--000000000000ee1d0805da657860
+Content-Type: text/plain; charset="UTF-8"
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Thu, Mar 17, 2022 at 12:19 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Wed, Mar 16, 2022 at 12:41 AM David Gow <davidgow@google.com> wrote:
+> >
+> > On Wed, Mar 16, 2022 at 10:44 AM Daniel Latypov <dlatypov@google.com> wrote:
+> > >
+> > > Background:
+> > > Currently, a reader looking at kunit/test.h will find the file is quite
+> > > long, and the first meaty comment is a doc comment about struct
+> > > kunit_resource.
+> > >
+> > > Most users will not ever use the KUnit resource API directly.
+> > > They'll use kunit_kmalloc() and friends, or decide it's simpler to do
+> > > cleanups via labels (it often can be) instead of figuring out how to use
+> > > the API.
+> > >
+> >
+> > A depressing (but probably not untrue) thought. I think that, even if
+>
+> I'm not sure it's that depressing.
+> Without some compiler support (e.g. GCC's `cleanup`), I can see there
+> being a number of one-off things that don't warrant formalizing into a
+> resource.
 
-All warnings (new ones prefixed by >>):
-
-   kernel/sched/tune.c:81:36: error: field 'css' has incomplete type
-      81 |         struct cgroup_subsys_state css;
-         |                                    ^~~
-   kernel/sched/tune.c: In function 'task_schedtune':
-   kernel/sched/tune.c:101:23: error: implicit declaration of function 'task_css'; did you mean 'task_cpu'? [-Werror=implicit-function-declaration]
-     101 |         return css_st(task_css(tsk, schedtune_cgrp_id));
-         |                       ^~~~~~~~
-         |                       task_cpu
-   kernel/sched/tune.c:101:37: error: 'schedtune_cgrp_id' undeclared (first use in this function); did you mean 'schedtune_spc_rdiv'?
-     101 |         return css_st(task_css(tsk, schedtune_cgrp_id));
-         |                                     ^~~~~~~~~~~~~~~~~
-         |                                     schedtune_spc_rdiv
-   kernel/sched/tune.c:101:37: note: each undeclared identifier is reported only once for each function it appears in
-   kernel/sched/tune.c: At top level:
->> kernel/sched/tune.c:290:33: warning: 'struct cgroup_taskset' declared inside parameter list will not be visible outside of this definition or declaration
-     290 | int schedtune_can_attach(struct cgroup_taskset *tset)
-         |                                 ^~~~~~~~~~~~~~
-   kernel/sched/tune.c:290:5: warning: no previous prototype for 'schedtune_can_attach' [-Wmissing-prototypes]
-     290 | int schedtune_can_attach(struct cgroup_taskset *tset)
-         |     ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/tune.c: In function 'schedtune_can_attach':
-   kernel/sched/tune.c:306:9: error: implicit declaration of function 'cgroup_taskset_for_each' [-Werror=implicit-function-declaration]
-     306 |         cgroup_taskset_for_each(task, css, tset) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/tune.c:306:49: error: expected ';' before '{' token
-     306 |         cgroup_taskset_for_each(task, css, tset) {
-         |                                                 ^~
-         |                                                 ;
-   kernel/sched/tune.c:300:13: warning: unused variable 'tasks' [-Wunused-variable]
-     300 |         int tasks;
-         |             ^~~~~
-   kernel/sched/tune.c:299:13: warning: unused variable 'dst_bg' [-Wunused-variable]
-     299 |         int dst_bg; /* Destination boost group index */
-         |             ^~~~~~
-   kernel/sched/tune.c:298:13: warning: unused variable 'src_bg' [-Wunused-variable]
-     298 |         int src_bg; /* Source boost group index */
-         |             ^~~~~~
-   kernel/sched/tune.c:297:20: warning: unused variable 'rq' [-Wunused-variable]
-     297 |         struct rq *rq;
-         |                    ^~
-   kernel/sched/tune.c:296:22: warning: unused variable 'cpu' [-Wunused-variable]
-     296 |         unsigned int cpu;
-         |                      ^~~
-   kernel/sched/tune.c:295:25: warning: unused variable 'rq_flags' [-Wunused-variable]
-     295 |         struct rq_flags rq_flags;
-         |                         ^~~~~~~~
-   kernel/sched/tune.c:294:30: warning: unused variable 'bg' [-Wunused-variable]
-     294 |         struct boost_groups *bg;
-         |                              ^~
-   kernel/sched/tune.c: At top level:
-   kernel/sched/tune.c:363:37: warning: 'struct cgroup_taskset' declared inside parameter list will not be visible outside of this definition or declaration
-     363 | void schedtune_cancel_attach(struct cgroup_taskset *tset)
-         |                                     ^~~~~~~~~~~~~~
-   kernel/sched/tune.c:363:6: warning: no previous prototype for 'schedtune_cancel_attach' [-Wmissing-prototypes]
-     363 | void schedtune_cancel_attach(struct cgroup_taskset *tset)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~
->> kernel/sched/tune.c:444:58: warning: 'struct cftype' declared inside parameter list will not be visible outside of this definition or declaration
-     444 | prefer_idle_read(struct cgroup_subsys_state *css, struct cftype *cft)
-         |                                                          ^~~~~~
-   kernel/sched/tune.c:452:59: warning: 'struct cftype' declared inside parameter list will not be visible outside of this definition or declaration
-     452 | prefer_idle_write(struct cgroup_subsys_state *css, struct cftype *cft,
-         |                                                           ^~~~~~
-   kernel/sched/tune.c:462:52: warning: 'struct cftype' declared inside parameter list will not be visible outside of this definition or declaration
-     462 | boost_read(struct cgroup_subsys_state *css, struct cftype *cft)
-         |                                                    ^~~~~~
-   kernel/sched/tune.c:470:53: warning: 'struct cftype' declared inside parameter list will not be visible outside of this definition or declaration
-     470 | boost_write(struct cgroup_subsys_state *css, struct cftype *cft,
-         |                                                     ^~~~~~
-   kernel/sched/tune.c:486:22: error: array type has incomplete element type 'struct cftype'
-     486 | static struct cftype files[] = {
-         |                      ^~~~~
-   kernel/sched/tune.c:583:8: error: variable 'schedtune_cgrp_subsys' has initializer but incomplete type
-     583 | struct cgroup_subsys schedtune_cgrp_subsys = {
-         |        ^~~~~~~~~~~~~
-   kernel/sched/tune.c:584:10: error: 'struct cgroup_subsys' has no member named 'css_alloc'
-     584 |         .css_alloc      = schedtune_css_alloc,
-         |          ^~~~~~~~~
->> kernel/sched/tune.c:584:27: warning: excess elements in struct initializer
-     584 |         .css_alloc      = schedtune_css_alloc,
-         |                           ^~~~~~~~~~~~~~~~~~~
-   kernel/sched/tune.c:584:27: note: (near initialization for 'schedtune_cgrp_subsys')
-   kernel/sched/tune.c:585:10: error: 'struct cgroup_subsys' has no member named 'css_free'
-     585 |         .css_free       = schedtune_css_free,
-         |          ^~~~~~~~
-   kernel/sched/tune.c:585:27: warning: excess elements in struct initializer
-     585 |         .css_free       = schedtune_css_free,
-         |                           ^~~~~~~~~~~~~~~~~~
-   kernel/sched/tune.c:585:27: note: (near initialization for 'schedtune_cgrp_subsys')
-   kernel/sched/tune.c:586:10: error: 'struct cgroup_subsys' has no member named 'can_attach'
-     586 |         .can_attach     = schedtune_can_attach,
-         |          ^~~~~~~~~~
-   kernel/sched/tune.c:586:27: warning: excess elements in struct initializer
-     586 |         .can_attach     = schedtune_can_attach,
-         |                           ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/tune.c:586:27: note: (near initialization for 'schedtune_cgrp_subsys')
-   kernel/sched/tune.c:587:10: error: 'struct cgroup_subsys' has no member named 'cancel_attach'
-     587 |         .cancel_attach  = schedtune_cancel_attach,
-         |          ^~~~~~~~~~~~~
-   kernel/sched/tune.c:587:27: warning: excess elements in struct initializer
-     587 |         .cancel_attach  = schedtune_cancel_attach,
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/tune.c:587:27: note: (near initialization for 'schedtune_cgrp_subsys')
-   kernel/sched/tune.c:588:10: error: 'struct cgroup_subsys' has no member named 'legacy_cftypes'
-     588 |         .legacy_cftypes = files,
-         |          ^~~~~~~~~~~~~~
-   kernel/sched/tune.c:588:27: warning: excess elements in struct initializer
-     588 |         .legacy_cftypes = files,
-         |                           ^~~~~
-   kernel/sched/tune.c:588:27: note: (near initialization for 'schedtune_cgrp_subsys')
-   kernel/sched/tune.c:589:10: error: 'struct cgroup_subsys' has no member named 'early_init'
-     589 |         .early_init     = 1,
-         |          ^~~~~~~~~~
-   kernel/sched/tune.c:589:27: warning: excess elements in struct initializer
-     589 |         .early_init     = 1,
-         |                           ^
-   kernel/sched/tune.c:589:27: note: (near initialization for 'schedtune_cgrp_subsys')
-   kernel/sched/tune.c:583:22: error: storage size of 'schedtune_cgrp_subsys' isn't known
-     583 | struct cgroup_subsys schedtune_cgrp_subsys = {
-         |                      ^~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/tune.c: In function 'task_schedtune':
-   kernel/sched/tune.c:102:1: warning: control reaches end of non-void function [-Wreturn-type]
-     102 | }
-         | ^
-   kernel/sched/tune.c: In function 'schedtune_can_attach':
-   kernel/sched/tune.c:361:1: warning: control reaches end of non-void function [-Wreturn-type]
-     361 | }
-         | ^
-   At top level:
-   kernel/sched/tune.c:486:22: warning: 'files' defined but not used [-Wunused-variable]
-     486 | static struct cftype files[] = {
-         |                      ^~~~~
-   cc1: some warnings being treated as errors
+True, though I do think that the resources API could use a bit of
+polish to reduce the friction involved in figuring out how to use the
+API.
+(And this patch is a good start!)
 
 
-vim +290 kernel/sched/tune.c
+> More detail:
+> It works OK when there's one pointer parameter, e.g. [1], but I feel
+> like you'd normally need to capture at least one more local variable.
+> So then you need to define a new struct to hold all the values, which
+> is where I'd draw the line personally.
+>
+> [1] https://elixir.bootlin.com/linux/v5.17-rc8/source/lib/kunit/executor_test.c#L182
+>
+> > most people were to use the resource API, having it in test.h makes it
+> > harder, as having the resource functions separate makes it easier to
+> > understand as well.
+> >
+> > > It's also logically separate from everything else in test.h.
+> > > Removing it from the file doesn't cause any compilation errors (since
+> > > struct kunit has `struct list_head resources` to store them).
+> > >
+> > > This commit:
+> > > Let's move it into a kunit/resource.h file and give it a separate page
+> > > in the docs, kunit/api/resource.rst.
+> >
+> > Yay! This makes a lot of sense to me, as I've wasted a lot of time
+> > scrolling through test.h.
+> >
+> > >
+> > > We include resource.h at the bottom of test.h since
+> > > * don't want to force existing users to add a new include if they use the API
+> > > * it accesses `lock` inside `struct kunit` in a inline func
+> > >   * so we can't just forward declare, and the alternatives require
+> > >     uninlining the func, adding hepers to lock/unlock, or other more
+> > >     invasive changes.
+> >
+> > I don't like this, but still think it's an improvement on what we have
+> > now. Ultimately, I think adding helpers to lock/unlock or similar and
+>
+> Yes, I can see us maybe needing this in the future.
+> Right now, outside of test.c, there's only one callsite for each (in
+> resource.h).
+>
+> > making users include this separately is probably the right thing to
+> > do, as nesting the headers like this is a bit ugly, but I won't lose
+> > sleep over leaving it till later.
+>
+> Ack, I can add a TODO to indicate we want to clean this up?
+> It's a bit annoying right now, but it'll only get more annoying in the future.
 
-    98	
-    99	static inline struct schedtune *task_schedtune(struct task_struct *tsk)
-   100	{
- > 101		return css_st(task_css(tsk, schedtune_cgrp_id));
-   102	}
-   103	
-   104	static inline struct schedtune *parent_st(struct schedtune *st)
-   105	{
-   106		return css_st(st->css.parent);
-   107	}
-   108	
-   109	/*
-   110	 * SchedTune root control group
-   111	 * The root control group is used to defined a system-wide boosting tuning,
-   112	 * which is applied to all tasks in the system.
-   113	 * Task specific boost tuning could be specified by creating and
-   114	 * configuring a child control group under the root one.
-   115	 * By default, system-wide boosting is disabled, i.e. no boosting is applied
-   116	 * to tasks which are not into a child control group.
-   117	 */
-   118	static struct schedtune
-   119	root_schedtune = {
-   120		.boost	= 0,
-   121		.prefer_idle = 0,
-   122	};
-   123	
-   124	/*
-   125	 * Maximum number of boost groups to support
-   126	 * When per-task boosting is used we still allow only limited number of
-   127	 * boost groups for two main reasons:
-   128	 * 1. on a real system we usually have only few classes of workloads which
-   129	 *    make sense to boost with different values (e.g. background vs foreground
-   130	 *    tasks, interactive vs low-priority tasks)
-   131	 * 2. a limited number allows for a simpler and more memory/time efficient
-   132	 *    implementation especially for the computation of the per-CPU boost
-   133	 *    value
-   134	 */
-   135	#define BOOSTGROUPS_COUNT 5
-   136	
-   137	/* Array of configured boostgroups */
-   138	static struct schedtune *allocated_group[BOOSTGROUPS_COUNT] = {
-   139		&root_schedtune,
-   140		NULL,
-   141	};
-   142	
-   143	/* SchedTune boost groups
-   144	 * Keep track of all the boost groups which impact on CPU, for example when a
-   145	 * CPU has two RUNNABLE tasks belonging to two different boost groups and thus
-   146	 * likely with different boost values.
-   147	 * Since on each system we expect only a limited number of boost groups, here
-   148	 * we use a simple array to keep track of the metrics required to compute the
-   149	 * maximum per-CPU boosting value.
-   150	 */
-   151	struct boost_groups {
-   152		/* Maximum boost value for all RUNNABLE tasks on a CPU */
-   153		int boost_max;
-   154		struct {
-   155			/* True when this boost group maps an actual cgroup */
-   156			bool valid;
-   157			/* The boost for tasks on that boost group */
-   158			int boost;
-   159			/* Count of RUNNABLE tasks on that boost group */
-   160			unsigned tasks;
-   161		} group[BOOSTGROUPS_COUNT];
-   162		/* CPU's boost group locking */
-   163		raw_spinlock_t lock;
-   164	};
-   165	
-   166	/* Boost groups affecting each CPU in the system */
-   167	DEFINE_PER_CPU(struct boost_groups, cpu_boost_groups);
-   168	
-   169	static void
-   170	schedtune_cpu_update(int cpu)
-   171	{
-   172		struct boost_groups *bg = &per_cpu(cpu_boost_groups, cpu);
-   173		int boost_max;
-   174		int idx;
-   175	
-   176		/* The root boost group is always active */
-   177		boost_max = bg->group[0].boost;
-   178		for (idx = 1; idx < BOOSTGROUPS_COUNT; ++idx) {
-   179	
-   180			/* Ignore non boostgroups not mapping a cgroup */
-   181			if (!bg->group[idx].valid)
-   182				continue;
-   183	
-   184			/*
-   185			 * A boost group affects a CPU only if it has
-   186			 * RUNNABLE tasks on that CPU
-   187			 */
-   188			if (bg->group[idx].tasks == 0)
-   189				continue;
-   190	
-   191			boost_max = max(boost_max, bg->group[idx].boost);
-   192		}
-   193	
-   194		/* Ensures boost_max is non-negative when all cgroup boost values
-   195		 * are neagtive. Avoids under-accounting of cpu capacity which may cause
-   196		 * task stacking and frequency spikes.*/
-   197		boost_max = max(boost_max, 0);
-   198		bg->boost_max = boost_max;
-   199	}
-   200	
-   201	static int
-   202	schedtune_boostgroup_update(int idx, int boost)
-   203	{
-   204		struct boost_groups *bg;
-   205		int cur_boost_max;
-   206		int old_boost;
-   207		int cpu;
-   208	
-   209		/* Update per CPU boost groups */
-   210		for_each_possible_cpu(cpu) {
-   211			bg = &per_cpu(cpu_boost_groups, cpu);
-   212	
-   213			/* CGroups are never associated to non active cgroups */
-   214			BUG_ON(!bg->group[idx].valid);
-   215	
-   216			/*
-   217			 * Keep track of current boost values to compute the per CPU
-   218			 * maximum only when it has been affected by the new value of
-   219			 * the updated boost group
-   220			 */
-   221			cur_boost_max = bg->boost_max;
-   222			old_boost = bg->group[idx].boost;
-   223	
-   224			/* Update the boost value of this boost group */
-   225			bg->group[idx].boost = boost;
-   226	
-   227			/* Check if this update increase current max */
-   228			if (boost > cur_boost_max && bg->group[idx].tasks) {
-   229				bg->boost_max = boost;
-   230				continue;
-   231			}
-   232	
-   233			/* Check if this update has decreased current max */
-   234			if (cur_boost_max == old_boost && old_boost > boost) {
-   235				schedtune_cpu_update(cpu);
-   236				continue;
-   237			}
-   238		}
-   239	
-   240		return 0;
-   241	}
-   242	
-   243	#define ENQUEUE_TASK  1
-   244	#define DEQUEUE_TASK -1
-   245	
-   246	static inline void
-   247	schedtune_tasks_update(struct task_struct *p, int cpu, int idx, int task_count)
-   248	{
-   249		struct boost_groups *bg = &per_cpu(cpu_boost_groups, cpu);
-   250		int tasks = bg->group[idx].tasks + task_count;
-   251	
-   252		/* Update boosted tasks count while avoiding to make it negative */
-   253		bg->group[idx].tasks = max(0, tasks);
-   254	
-   255		/* Boost group activation or deactivation on that RQ */
-   256		if (tasks == 1 || tasks == 0)
-   257			schedtune_cpu_update(cpu);
-   258	}
-   259	
-   260	/*
-   261	 * NOTE: This function must be called while holding the lock on the CPU RQ
-   262	 */
-   263	void schedtune_enqueue_task(struct task_struct *p, int cpu)
-   264	{
-   265		struct boost_groups *bg = &per_cpu(cpu_boost_groups, cpu);
-   266		unsigned long irq_flags;
-   267		struct schedtune *st;
-   268		int idx;
-   269	
-   270		if (unlikely(!schedtune_initialized))
-   271			return;
-   272	
-   273		/*
-   274		 * Boost group accouting is protected by a per-cpu lock and requires
-   275		 * interrupt to be disabled to avoid race conditions for example on
-   276		 * do_exit()::cgroup_exit() and task migration.
-   277		 */
-   278		raw_spin_lock_irqsave(&bg->lock, irq_flags);
-   279		rcu_read_lock();
-   280	
-   281		st = task_schedtune(p);
-   282		idx = st->idx;
-   283	
-   284		schedtune_tasks_update(p, cpu, idx, ENQUEUE_TASK);
-   285	
-   286		rcu_read_unlock();
-   287		raw_spin_unlock_irqrestore(&bg->lock, irq_flags);
-   288	}
-   289	
- > 290	int schedtune_can_attach(struct cgroup_taskset *tset)
-   291	{
-   292		struct task_struct *task;
-   293		struct cgroup_subsys_state *css;
-   294		struct boost_groups *bg;
-   295		struct rq_flags rq_flags;
-   296		unsigned int cpu;
-   297		struct rq *rq;
-   298		int src_bg; /* Source boost group index */
-   299		int dst_bg; /* Destination boost group index */
-   300		int tasks;
-   301	
-   302		if (unlikely(!schedtune_initialized))
-   303			return 0;
-   304	
-   305	
-   306		cgroup_taskset_for_each(task, css, tset) {
-   307	
-   308			/*
-   309			 * Lock the CPU's RQ the task is enqueued to avoid race
-   310			 * conditions with migration code while the task is being
-   311			 * accounted
-   312			 */
-   313			rq = task_rq_lock(task, &rq_flags);
-   314	
-   315			if (!task->on_rq) {
-   316				task_rq_unlock(rq, task, &rq_flags);
-   317				continue;
-   318			}
-   319	
-   320			/*
-   321			 * Boost group accouting is protected by a per-cpu lock and requires
-   322			 * interrupt to be disabled to avoid race conditions on...
-   323			 */
-   324			cpu = cpu_of(rq);
-   325			bg = &per_cpu(cpu_boost_groups, cpu);
-   326			raw_spin_lock(&bg->lock);
-   327	
-   328			dst_bg = css_st(css)->idx;
-   329			src_bg = task_schedtune(task)->idx;
-   330	
-   331			/*
-   332			 * Current task is not changing boostgroup, which can
-   333			 * happen when the new hierarchy is in use.
-   334			 */
-   335			if (unlikely(dst_bg == src_bg)) {
-   336				raw_spin_unlock(&bg->lock);
-   337				task_rq_unlock(rq, task, &rq_flags);
-   338				continue;
-   339			}
-   340	
-   341			/*
-   342			 * This is the case of a RUNNABLE task which is switching its
-   343			 * current boost group.
-   344			 */
-   345	
-   346			/* Move task from src to dst boost group */
-   347			tasks = bg->group[src_bg].tasks - 1;
-   348			bg->group[src_bg].tasks = max(0, tasks);
-   349			bg->group[dst_bg].tasks += 1;
-   350	
-   351			raw_spin_unlock(&bg->lock);
-   352			task_rq_unlock(rq, task, &rq_flags);
-   353	
-   354			/* Update CPU boost group */
-   355			if (bg->group[src_bg].tasks == 0 || bg->group[dst_bg].tasks == 1)
-   356				schedtune_cpu_update(task_cpu(task));
-   357	
-   358		}
-   359	
-   360		return 0;
-   361	}
-   362	
- > 363	void schedtune_cancel_attach(struct cgroup_taskset *tset)
-   364	{
-   365		/* This can happen only if SchedTune controller is mounted with
-   366		 * other hierarchies ane one of them fails. Since usually SchedTune is
-   367		 * mouted on its own hierarcy, for the time being we do not implement
-   368		 * a proper rollback mechanism */
-   369		WARN(1, "SchedTune cancel attach not implemented");
-   370	}
-   371	
-   372	/*
-   373	 * NOTE: This function must be called while holding the lock on the CPU RQ
-   374	 */
-   375	void schedtune_dequeue_task(struct task_struct *p, int cpu)
-   376	{
-   377		struct boost_groups *bg = &per_cpu(cpu_boost_groups, cpu);
-   378		unsigned long irq_flags;
-   379		struct schedtune *st;
-   380		int idx;
-   381	
-   382		if (unlikely(!schedtune_initialized))
-   383			return;
-   384	
-   385		/*
-   386		 * Boost group accouting is protected by a per-cpu lock and requires
-   387		 * interrupt to be disabled to avoid race conditions on...
-   388		 */
-   389		raw_spin_lock_irqsave(&bg->lock, irq_flags);
-   390		rcu_read_lock();
-   391	
-   392		st = task_schedtune(p);
-   393		idx = st->idx;
-   394	
-   395		schedtune_tasks_update(p, cpu, idx, DEQUEUE_TASK);
-   396	
-   397		rcu_read_unlock();
-   398		raw_spin_unlock_irqrestore(&bg->lock, irq_flags);
-   399	}
-   400	
-   401	int schedtune_cpu_boost(int cpu)
-   402	{
-   403		struct boost_groups *bg;
-   404	
-   405		bg = &per_cpu(cpu_boost_groups, cpu);
-   406		return bg->boost_max;
-   407	}
-   408	
-   409	int schedtune_task_boost(struct task_struct *p)
-   410	{
-   411		struct schedtune *st;
-   412		int task_boost;
-   413	
-   414		if (unlikely(!schedtune_initialized))
-   415			return 0;
-   416	
-   417		/* Get task boost value */
-   418		rcu_read_lock();
-   419		st = task_schedtune(p);
-   420		task_boost = st->boost;
-   421		rcu_read_unlock();
-   422	
-   423		return task_boost;
-   424	}
-   425	
-   426	int schedtune_prefer_idle(struct task_struct *p)
-   427	{
-   428		struct schedtune *st;
-   429		int prefer_idle;
-   430	
-   431		if (unlikely(!schedtune_initialized))
-   432			return 0;
-   433	
-   434		/* Get prefer_idle value */
-   435		rcu_read_lock();
-   436		st = task_schedtune(p);
-   437		prefer_idle = st->prefer_idle;
-   438		rcu_read_unlock();
-   439	
-   440		return prefer_idle;
-   441	}
-   442	
-   443	static u64
- > 444	prefer_idle_read(struct cgroup_subsys_state *css, struct cftype *cft)
-   445	{
-   446		struct schedtune *st = css_st(css);
-   447	
-   448		return st->prefer_idle;
-   449	}
-   450	
-   451	static int
-   452	prefer_idle_write(struct cgroup_subsys_state *css, struct cftype *cft,
-   453		    u64 prefer_idle)
-   454	{
-   455		struct schedtune *st = css_st(css);
-   456		st->prefer_idle = !!prefer_idle;
-   457	
-   458		return 0;
-   459	}
-   460	
-   461	static s64
-   462	boost_read(struct cgroup_subsys_state *css, struct cftype *cft)
-   463	{
-   464		struct schedtune *st = css_st(css);
-   465	
-   466		return st->boost;
-   467	}
-   468	
-   469	static int
-   470	boost_write(struct cgroup_subsys_state *css, struct cftype *cft,
-   471		    s64 boost)
-   472	{
-   473		struct schedtune *st = css_st(css);
-   474	
-   475		if (boost < 0 || boost > 100)
-   476			return -EINVAL;
-   477	
-   478		st->boost = boost;
-   479	
-   480		/* Update CPU boost */
-   481		schedtune_boostgroup_update(st->idx, st->boost);
-   482	
-   483		return 0;
-   484	}
-   485	
- > 486	static struct cftype files[] = {
-   487		{
-   488			.name = "boost",
-   489			.read_s64 = boost_read,
-   490			.write_s64 = boost_write,
-   491		},
-   492		{
-   493			.name = "prefer_idle",
-   494			.read_u64 = prefer_idle_read,
-   495			.write_u64 = prefer_idle_write,
-   496		},
-   497		{ }	/* terminate */
-   498	};
-   499	
+Yeah, let's get this in largely as-is first, then we can start adding
+direct includes of "resource.h" where necessary before making it
+required.
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> >
+> > >
+> > > Now the first big comment in test.h is about kunit_case, which is a lot
+> > > more relevant to what a new user wants to know.
+> > >
+> > > A side effect of this is git blame won't properly track history by
+> > > default, users need to run
+> > > $ git blame -L ,1 -C17 include/kunit/resource.h
+> >
+> > This is a pain, but is probably worth it. Thanks for including the
+> > command in the commit message, which should mitigate it slightly.
+> >
+> > >
+> > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > > ---
+> >
+> > This was starting to annoy me, too, as it was a pain to read through
+> > everything in test.h. It'll be a bit of short-term pain,
+> > merge-conflict wise if we have other changes to the resource system
+> > (which I fear is likely), but is worth it.
+> >
+> > Reviewed-by: David Gow <davidgow@google.com>
+> >
+> > -- David
+> >
+> > >
+> > > NOTE: this file doesn't split out code from test.c to a new resource.c
+> > > file.
+> > > I'm primarily concerned with users trying to read the headers, so I
+> > > didn't think messing up git blame (w/ default settings) was worth it.
+> > > But I can make that change if it feels appropriate (it might also be
+> > > messier).
+> >
+> > Personally, I think it's probably worth splitting this out as well.
+> > And the sooner we do it, the less history we'll obscure. :-)
+>
+> Yeah, that was my thought.
+> But if you think this would help users, then I think we have a case to
+> make this change.
+>
+> Should I send a v2 with resource.c split out?
+> Brendan (and any others who have an opinion), what's your preference?
+
+I think it's a separate enough thing that this patch could go in
+as-is, and resource.c could be split in a separate one if you
+preferred. But doing it in a v2 is fine as well.
+
+> >
+> > But I agree, it's less of an issue as it only directly affects people
+> > working on KUnit itself. Though making it easier for users to find and
+> > read the implementation of these functions could help them understand
+> > API "gotchas", so I think it's worthwhile.
+> >
+> > >
+> > > ---
+> > >  Documentation/dev-tools/kunit/api/index.rst   |   5 +
+> > >  .../dev-tools/kunit/api/resource.rst          |  13 +
+> > >  include/kunit/resource.h                      | 319 ++++++++++++++++++
+> > >  include/kunit/test.h                          | 301 +----------------
+> > >  4 files changed, 339 insertions(+), 299 deletions(-)
+> > >  create mode 100644 Documentation/dev-tools/kunit/api/resource.rst
+> > >  create mode 100644 include/kunit/resource.h
+> > >
+> > <...snip...>
+
+--000000000000ee1d0805da657860
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
+2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
+dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
+jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
+ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
+QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAQ
+1v3IWkyPfUd+pctSqIZtY+7iKn9fNw7uMebL8/pOQTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAzMTcwODAzNThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAejRQOfUmyPk1J4DYfgqT
+OyIIeCbfEp7JN+wR2AlpvMOmtMkgfz0iml9tsPdE+mxSD/TF5+NgDasSduI+7EZ25ovnqUDF6uW/
+lqBIkaX1B3PgRK4eQwqG0CaBqZyQT1FG8WLuIVA8c5XqKA9s2DGtUxKKAu33/PggIIh3CtycKrCR
+kKvs/y+mRIivxnWK0t6yFMjacM592+Kg+uAKPFzmDOJKGRR1hqmXclOr+TVaFBGHVxBT+wMJCUNm
+6j7o0TgayLV+a1KY8lom6cQPBMuiWYgiyp5252dYpSAk48bULIZjBgB2/A4xFIwa1LrGJqIW5d8Q
+6b3O0grPAevDr2EDAw==
+--000000000000ee1d0805da657860--

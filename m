@@ -2,62 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C554DC4D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0964DC4D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233011AbiCQL24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
+        id S233024AbiCQLaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiCQL2z (ORCPT
+        with ESMTP id S233014AbiCQLaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:28:55 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98561E3E16;
-        Thu, 17 Mar 2022 04:27:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6pSjtFwZExqOXA+yysNgtvdz+muXo5bfQL+YBtE9pIU=; b=iG6ZHYm09e+pzmWv7SrbFgUFNu
-        QW7P4qPMvTf9Iv9kqoiSPrZY5PB2irtdQEjRan1bsLaTfYRlfte+n7e67FBphG0RPMWMd7a+7IcRM
-        uMgJt6Z0NE3rz5VsbVhew8lJDu173grOW8GwaBUfq1dyekucOjm8d6cN28ATM3S7C7d5JsmNQgvHe
-        eFkZv2nHnVoGB2/EbKOHIQdqv5Kyi0vzjTIL0wXDjVMPfInGlwXCymNyLvjZKLQYd5ijzqUp2Pqw8
-        Wl1Cr1veut6D0bFKTPS+3nk/D7LPqAWG/f2B3quw0yyy4IQtRwHFZxOSp2YzsVySkLXC6AF7jSGzj
-        WSSEnTiQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nUoHs-001s9t-U1; Thu, 17 Mar 2022 11:27:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8FF333001EA;
-        Thu, 17 Mar 2022 12:27:24 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7DD7422B9050A; Thu, 17 Mar 2022 12:27:24 +0100 (CET)
-Date:   Thu, 17 Mar 2022 12:27:24 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
-        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        pbonzini@redhat.com, jmattson@google.com, like.xu.linux@gmail.com,
-        eranian@google.com, ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH 3/7] perf/x86/amd/core: Detect PerfMonV2 support
-Message-ID: <YjMbHKwtOKJTfVIh@hirez.programming.kicks-ass.net>
-References: <cover.1647498015.git.sandipan.das@amd.com>
- <1ddd003765ac0d057b2137eab869be4ffee69473.1647498015.git.sandipan.das@amd.com>
+        Thu, 17 Mar 2022 07:30:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15C8DE7295
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:28:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647516536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cPlGxTVc5l/iXzGYZHS8T7PaUjXYnLI4OTLYSgTvVj4=;
+        b=BlT5FEWXNx3TPT4oD6XGziA6140naL+WDZWXfjuXo/y3ecjl9yD3LbHVoF7ks6zu4RDR7i
+        wOEn0NdSIGddqGZxKrcsM/xjhxETt1gQx41Gwi9RwpBvhWIIi94RrTtLpsANSUpbOrGucm
+        5AnC8NaJUxvitIsCTuaf769CRGz0C8U=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-636-Wp_7g9gDOhyGA42FVWzXGg-1; Thu, 17 Mar 2022 07:28:55 -0400
+X-MC-Unique: Wp_7g9gDOhyGA42FVWzXGg-1
+Received: by mail-pj1-f71.google.com with SMTP id g19-20020a17090a579300b001b9d80f3714so3207465pji.7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:28:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=cPlGxTVc5l/iXzGYZHS8T7PaUjXYnLI4OTLYSgTvVj4=;
+        b=pdhJ6K1UCdFdAXF/2sXFE9zw3cS997R1cXf6jeWhVUh4YoKT83OTINq56z4xFREapN
+         ogLxn5h+kcglqh2VDcJ+Uv/auLMVH6zN4lKqmfPfHyDnexg9z/uS1cWgfZCEnePDVO2V
+         iPZ4oEFvRqqZvRXFmpPxnMU9HgSPvk5sVjbdp93tgaTDq9jPLH6T5S6b3eQsYA8a20zj
+         G1y9s40afqjG3x2WnW8B/7n3hvbSTsBcqm+GcuYwDw9p6IGBWGZzD6vrNxxcS+9DqZr5
+         7aM+zoY1MmPFtOgJ33/eweddRIUgJOGZ2kup3Y7eYSMBYrQmclVhLEMPDBLvRLfVb/mO
+         48vg==
+X-Gm-Message-State: AOAM53117vUovLNuyyncE0cSOfziNa8ToYKGjZqJtc+//5s1BXPfpFyC
+        Sy0Iw/ng2CocKbTAi3Ws6Wk68sJCKrcApH4xrjvzmvCGIgA8lsnJwZRUgYkTQgZK/Qj34FGagPT
+        o+hjq5HHeAns9yF4Oou5xGyTYJPqf5Bcqw252o3mZ2BjVe3mR5f+zIB/tXAWu1MD0h1DfR1GIHg
+        ==
+X-Received: by 2002:a17:903:40c7:b0:153:b0d:f8a0 with SMTP id t7-20020a17090340c700b001530b0df8a0mr4572628pld.156.1647516533288;
+        Thu, 17 Mar 2022 04:28:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzwiTpMxihvo30z7tGf/OsomJLRyOiNBGyqOMEI8ev+G3klDSKKuINhyVnXWRjTEPzQQO4+AQ==
+X-Received: by 2002:a17:903:40c7:b0:153:b0d:f8a0 with SMTP id t7-20020a17090340c700b001530b0df8a0mr4572573pld.156.1647516532561;
+        Thu, 17 Mar 2022 04:28:52 -0700 (PDT)
+Received: from [10.72.12.110] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id oo17-20020a17090b1c9100b001bf0ccc59c2sm10086923pjb.16.2022.03.17.04.28.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 04:28:51 -0700 (PDT)
+Subject: Re: [RFC PATCH v2 0/3] ceph: add support for snapshot names
+ encryption
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Ceph Development <ceph-devel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20220315161959.19453-1-lhenriques@suse.de>
+ <5b53e812-d49b-45f0-1219-3dbc96febbc1@redhat.com>
+ <329abedd9d9938de95bf4f5600acdcd6a846e6be.camel@kernel.org>
+ <3c8b78c4-5392-b81c-e76f-64fcce4f3c0f@redhat.com>
+ <87wngshlzb.fsf@brahms.olymp>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <40c9ebed-2c49-3a91-7893-5d0c7f124ead@redhat.com>
+Date:   Thu, 17 Mar 2022 19:28:45 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1ddd003765ac0d057b2137eab869be4ffee69473.1647498015.git.sandipan.das@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <87wngshlzb.fsf@brahms.olymp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,35 +90,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 11:58:32AM +0530, Sandipan Das wrote:
-> AMD Performance Monitoring Version 2 (PerfMonV2) introduces
-> some new Core PMU features such as detection of the number
-> of available PMCs and managing PMCs using global registers
-> namely, PerfCntrGlobalCtl and PerfCntrGlobalStatus.
-> 
-> Clearing PerfCntrGlobalCtl and PerfCntrGlobalStatus ensures
-> that all PMCs are inactive and have no pending overflows
-> when CPUs are onlined or offlined.
-> 
-> The PMU version (x86_pmu.version) now indicates PerfMonV2
-> support and will be used to bypass the new features on
-> unsupported processors.
-> 
-> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-> ---
 
-> +static void amd_pmu_cpu_reset(int cpu)
-> +{
-> +	if (x86_pmu.version < 2)
-> +		return;
-> +
-> +	/* Clear enable bits i.e. PerfCntrGlobalCtl.PerfCntrEn */
-> +	wrmsrl_on_cpu(cpu, MSR_AMD64_PERF_CNTR_GLOBAL_CTL, 0);
-> +
-> +	/* Clear overflow bits i.e. PerfCntrGLobalStatus.PerfCntrOvfl */
-> +	wrmsrl_on_cpu(cpu, MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR,
-> +		      amd_pmu_global_cntr_mask);
-> +}
+On 3/17/22 7:11 PM, Luís Henriques wrote:
+> Xiubo Li <xiubli@redhat.com> writes:
+>
+>> On 3/17/22 6:01 PM, Jeff Layton wrote:
+>>> I'm not sure we want to worry about .snap directories here since they
+>>> aren't "real". IIRC, snaps are inherited from parents too, so you could
+>>> do something like
+>>>
+>>>       mkdir dir1
+>>>       mkdir dir1/.snap/snap1
+>>>       mkdir dir1/dir2
+>>>       fscrypt encrypt dir1/dir2
+>>>
+>>> There should be nothing to prevent encrypting dir2, but I'm pretty sure
+>>> dir2/.snap will not be empty at that point.
+>> If we don't take care of this. Then we don't know which snapshots should do
+>> encrypt/dencrypt and which shouldn't when building the path in lookup and when
+>> reading the snapdir ?
+> In my patchset (which I plan to send a new revision later today, I think I
+> still need to rebase it) this is handled by using the *real* snapshot
+> parent inode.  If we're decrypting/encrypting a name for a snapshot that
+> starts with a '_' character, we first find the parent inode for that
+> snapshot and only do the operation if that parent is encrypted.
 
-I think these can be wrmsrl() both starting and dead run on the target
-cpu.
+Yeah, this is correct. And in my previous patches it worked well.
+
+
+>
+> In the other email I suggested that we could prevent enabling encryption
+> in a directory when there are snapshots above in the hierarchy.
+
+I think this is incorrect. Or once there has a snapshot in the root 
+directory, then you couldn't enable encryption any more in any subdirs ...
+
+
+>   But now
+> that I think more about it, it won't solve any problem because you could
+> create those snapshots later and then you would still need to handle these
+> (non-encrypted) "_name_xxxx" snapshots anyway.
+
+You only need to take care of the *real* or local snapshots.
+
+-- Xiubo
+
+>
+> Cheers,
+

@@ -2,46 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C164DCC72
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E91D94DCC76
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236885AbiCQRaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 13:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S236899AbiCQRax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 13:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236875AbiCQRaK (ORCPT
+        with ESMTP id S236766AbiCQRav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 13:30:10 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A99214F9B;
-        Thu, 17 Mar 2022 10:28:52 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id B66601F459AB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647538131;
-        bh=cxxx6hstk7rIVcr0b5g2yR0BAZctX/d+E8ToCgt6AjM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cwENso64YsIjVii0hQAcvg2enNRPzdS/iG2T/cGIBJhBWs8YY68moY/5Jzf/7ZHmR
-         sYRnBikAemwr81rSkHvi3J4smDqhCPJTWBiPdw+vpuM1XxoqIndRD/JH9xRxk7jylg
-         SoMdaXCwDYwGZvFhhNPhEHITeeK/+qjCGTqFZ/s80NJ3TU4t2Maab+baKW9VCFs9jx
-         s4TkkQxs+aOiTdsxRog+DnQBa8phTfNY/4AwW31vuwgiZhJj3/DSDCO/Zt2RJUpua1
-         guR1v0Bs8ZJ4Opp4blOFYyWstNjZzt+Mk4nijUdxoemvzga3Mww9wWCMFg11c26BUf
-         AYfQAnR9jOcHg==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] docs/kselftest: add more guidelines for adding new tests
-Date:   Thu, 17 Mar 2022 22:27:57 +0500
-Message-Id: <20220317172758.582690-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 17 Mar 2022 13:30:51 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892A5214FA3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:29:33 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id j17so8419593wrc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:29:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=8bKHLTXLh3Prk0x7Kjt1KuDZoyhkHjZ+7FeBGH5Uapo=;
+        b=KGxafnM3qSYdU4CWYMi0SB6NNYPDBifAXbe2jqJL/qXULaaQ+MT9nrXnwx6FBn4e7X
+         ESQY1KvTvkAnL8cj9hWkHb5PKlmdM5BFnaP4dgIUu6pD7+G1hEyRdZZZs8US0zhnKmEi
+         fSiqWxuJQV5wCsL6OUaXZbDvIXAVamf91ff6U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=8bKHLTXLh3Prk0x7Kjt1KuDZoyhkHjZ+7FeBGH5Uapo=;
+        b=osvBNS5W/4/j0r+7xvYKrtutGXcvcI7ajz89q+dg2Bcd6aCxnf+5T5jP/NqjMbLaWG
+         EU6dc6Nqf3gW+QSaN0xGLIjwH78dSutUaCAIDiHPRpkHED1hpAFawAOqat35jZkafSBk
+         8xAbcw1Klq0VL1drjkOfOCy7iIXZVgt2WjqPJSrftIduNFvnkSiqQzFi4UEyPr1R3NHd
+         NBu7y2wVazS5baMM7vGuEoy8Ru353gZwNebuz4UfOYleI+niFUPXOEm5exSr9bXd8kUd
+         MNJXF9ua4cxioG4Xgz5OFDrLez1ind57MH62ZtXqmW2uQhyyAlVqx2D7XbBhIUq/Zjan
+         rFDQ==
+X-Gm-Message-State: AOAM533EWRfjhtRcgkmKliHehigIoAg9s03eyvlOBHRGDwaIeZW1Z7gi
+        uX8ibf2KqiYCissy8G1c37SRyw==
+X-Google-Smtp-Source: ABdhPJzoRAo3np0fazhW9XxJ7KsRXfdgnZ3L0q1YWfSdtT6Ap0qveKDccvepjyTYUjg/8j2AHQh5Hg==
+X-Received: by 2002:a5d:528b:0:b0:203:d928:834c with SMTP id c11-20020a5d528b000000b00203d928834cmr5178984wrv.500.1647538172004;
+        Thu, 17 Mar 2022 10:29:32 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b0037c91e085ddsm9709824wmq.40.2022.03.17.10.29.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 10:29:31 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 18:29:29 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        open list <linux-kernel@vger.kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH 2/3] drm/msm/gpu: Park scheduler threads for system
+ suspend
+Message-ID: <YjNv+csmFyjNYc5b@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Rob Clark <robdclark@gmail.com>, Rob Clark <robdclark@chromium.org>,
+        Jonathan Marek <jonathan@marek.ca>, David Airlie <airlied@linux.ie>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        open list <linux-kernel@vger.kernel.org>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+References: <20220310234611.424743-1-robdclark@gmail.com>
+ <20220310234611.424743-3-robdclark@gmail.com>
+ <YjMGac4Hnjmg1wE8@phenom.ffwll.local>
+ <3945551d-47d2-1974-f637-1dbc61e14702@amd.com>
+ <CAF6AEGv36V8bLoDn5O1SW3iTUtzd3O1XeuT5gJxyLMxd1E-o3Q@mail.gmail.com>
+ <865abcff-9f52-dca4-df38-b11189c739ff@amd.com>
+ <CAF6AEGuoBeYoMTR6-KM9xGZ05XSSnSJWMDciawczi7qtiLN9Vw@mail.gmail.com>
+ <915537e2-ac5b-ab0e-3697-2b16a9ec8f91@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <915537e2-ac5b-ab0e-3697-2b16a9ec8f91@amd.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,93 +105,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the following new guidelines:
-- Add instruction to use lib.mk
-- Add instruction about how to use headers from kernel source
-- Add instruction to add .gitignore file
-- Add instruction about how to add new test in selftests/Makefile
-- Add instruction about different build commands to test
+On Thu, Mar 17, 2022 at 05:44:57PM +0100, Christian König wrote:
+> Am 17.03.22 um 17:18 schrieb Rob Clark:
+> > On Thu, Mar 17, 2022 at 9:04 AM Christian König
+> > <christian.koenig@amd.com> wrote:
+> > > Am 17.03.22 um 16:10 schrieb Rob Clark:
+> > > > [SNIP]
+> > > > userspace frozen != kthread frozen .. that is what this patch is
+> > > > trying to address, so we aren't racing between shutting down the hw
+> > > > and the scheduler shoveling more jobs at us.
+> > > Well exactly that's the problem. The scheduler is supposed to shoveling
+> > > more jobs at us until it is empty.
+> > > 
+> > > Thinking more about it we will then keep some dma_fence instance
+> > > unsignaled and that is and extremely bad idea since it can lead to
+> > > deadlocks during suspend.
+> > Hmm, perhaps that is true if you need to migrate things out of vram?
+> > It is at least not a problem when vram is not involved.
+> 
+> No, it's much wider than that.
+> 
+> See what can happen is that the memory management shrinkers want to wait for
+> a dma_fence during suspend.
+> 
+> And if you stop the scheduler they will just wait forever.
+> 
+> What you need to do instead is to drain the scheduler, e.g. call
+> drm_sched_entity_flush() with a proper timeout for each entity you have
+> created.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-Following patch is fixing build of kselftest when separate output
-direcotry is specified using kernel's top most Makefile. It should be
-accepted first:
-https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/
----
- Documentation/dev-tools/kselftest.rst | 46 ++++++++++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
+Yeah I think properly flushing the scheduler and stopping it and cutting
+all drivers over to that sounds like the right approach. Generally suspend
+shouldn't be such a critical path that this will hurt us, all the other io
+queues get flushed too afaik.
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index a833ecf12fbc1..637f83d1450dc 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -208,6 +208,13 @@ In general, the rules for selftests are
- Contributing new tests (details)
- ================================
- 
-+ * Use lib.mk instead of writing Makefile from sratch. Specify flags and
-+   binaries generation flags on need basis before including lib.mk. ::
-+
-+    CFLAGS = $(KHDR_INCLUDES)
-+    TEST_GEN_PROGS := close_range_test
-+    include ../lib.mk
-+
-  * Use TEST_GEN_XXX if such binaries or files are generated during
-    compiling.
- 
-@@ -230,13 +237,50 @@ Contributing new tests (details)
-  * First use the headers inside the kernel source and/or git repo, and then the
-    system headers.  Headers for the kernel release as opposed to headers
-    installed by the distro on the system should be the primary focus to be able
--   to find regressions.
-+   to find regressions. Use KHDR_INCLUDES in Makefile to include headers from
-+   the kernel source.
- 
-  * If a test needs specific kernel config options enabled, add a config file in
-    the test directory to enable them.
- 
-    e.g: tools/testing/selftests/android/config
- 
-+ * Create a .gitignore file inside test directory and add all generated objects
-+   in it.
-+
-+ * Add new test name in TARGETS in selftests/Makefile::
-+
-+    TARGETS += android
-+
-+ * All of the following build commands should be successful
-+
-+   - Same directory build of kselftests::
-+
-+      make kselftest-all
-+      make kselftest-install
-+      make kselftest-clean
-+      make kselftest-gen_tar
-+
-+   - Build with absolute output directory path::
-+
-+      make kselftest-all O=/abs_build_path
-+      make kselftest-install O=/abs_build_path
-+      make kselftest-clean O=/abs_build_path
-+      make kselftest-gen_tar O=/abs_build_path
-+
-+   - Build with relative output directory path::
-+
-+      make kselftest-all O=relative_path
-+      make kselftest-install O=relative_path
-+      make kselftest-clean O=relative_path
-+      make kselftest-gen_tar O=relative_path
-+
-+   - Build from Makefile of selftests directly::
-+
-+      make -C tools/testing/selftests
-+      make -C tools/testing/selftests O=/abs_build_path
-+      make -C tools/testing/selftests O=relative_path
-+
- Test Module
- ===========
- 
+Resume is the thing that needs to go real fast.
+
+So a patch set to move all drivers that open code the kthread_park to the
+right scheduler function sounds like the right idea here to me.
+-Daniel
+
+> 
+> Regards,
+> Christian.
+> 
+> > 
+> > > So this patch here is an absolute clear NAK from my side. If amdgpu is
+> > > doing something similar that is a severe bug and needs to be addressed
+> > > somehow.
+> > I think amdgpu's use of kthread_park is not related to suspend, but
+> > didn't look too closely.
+> > 
+> > And perhaps the solution for this problem is more complex in the case
+> > of amdgpu, I'm not super familiar with the constraints there.  But I
+> > think it is a fine solution for integrated GPUs.
+> > 
+> > BR,
+> > -R
+> > 
+> > > Regards,
+> > > Christian.
+> > > 
+> > > > BR,
+> > > > -R
+> > > > 
+> 
+
 -- 
-2.30.2
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

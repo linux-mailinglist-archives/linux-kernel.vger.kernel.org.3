@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E374DC535
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB284DC522
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbiCQL6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
+        id S233195AbiCQL6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233213AbiCQL6r (ORCPT
+        with ESMTP id S233197AbiCQL6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:58:47 -0400
+        Thu, 17 Mar 2022 07:58:38 -0400
 Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15041E6EB9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:29 -0700 (PDT)
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3308B1E6E9A
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:21 -0700 (PDT)
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 54C133F7DF
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:57:27 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3F2863F366
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:57:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647518247;
-        bh=9zBbrIVySme8IHRcwhL+hzcd9fjni90AU02iDVUn98k=;
+        s=20210705; t=1647518239;
+        bh=aSGezm1yIxV4XCs71xtI5EKoFHjXL820ywE13DRNOT4=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=RUAJlnExixOKv6xQJz+N5sNFJU8dQzq+R+gFQIVdczugTvYrDW8dC/1De1q5E5MCM
-         tX5Qcnf2TdgsWx7rFHLZ9Gl0J5qKUYYQfTmubI7KGLrG7w7EnZsw0JxOTR5cGmQ0H7
-         H3rbj0QPA63U2zDgPixlQe+meFlIPgXs1EYqSbvu83gXrWi9Zd7qjxm1l1DJlsxnR+
-         3JlpACEppq9XKV/Z8pI3uV7T/2kTYRYThqx0J0BvAS14GTRyXFYPdoQuSdHEh5HEiN
-         LH0s9atDegDlWvNJJ5UMfAGENn8P014thv6GT73wCF7YxwRj0G2+z7iMhDdyfx+eMq
-         7hii9uXips2eA==
-Received: by mail-lj1-f197.google.com with SMTP id d16-20020a2e8910000000b00247ff33e987so1972139lji.14
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:27 -0700 (PDT)
+        b=kP40/AcRzh78psvl69t+INXZAatYaeYLa92P2c4coCB0MaLQgxtCbYBDxRHgmsOea
+         fiiMC4i5Tdk+fpNuXStJq5a03J9kQRP6c/fySZ4pFHE9B/6ZLeSAdqpUI/jnjvKTdw
+         E3k9T+RbtkWWsRiwmhKvsVID7EzQZM6h3tber2yZwUs7pMjx6zgJ5OP19hZjzh27dy
+         uVqL5gSyNcCCy5LsuqSjz8YBM80C8JExhGhtk2uCVxwfJSdwyzM+qETH0011J9wkKS
+         VN0N23HfDCvhGUj39PEPOZ/5LjM/wtCQUNf2P+W426aOStiMggTXl/QrFok5Ladgy+
+         wi8g55bblvcIw==
+Received: by mail-wm1-f70.google.com with SMTP id 26-20020a05600c22da00b00388307f3503so2031520wmg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9zBbrIVySme8IHRcwhL+hzcd9fjni90AU02iDVUn98k=;
-        b=y5sctTSNiB8Zn9vFRVs5XD+gEC+LQ8lk3J8+oFqnN9muM10xdcxEnE3fdOXW7ignpe
-         42z1RB/U0x+Xn7R5uzxP4AFqe+qiSF9nWrY54bpailAwievZbDwz/13C3j++kWNHusNF
-         rGu7LpGX/BuHAdZRYnpMcFfEizgRCp6l9loxOXksSe/GVmILIM7wohZh9dvt93HHo/eu
-         ZUBmUTWlIvr499sitTPQzTHbMMmpi3J+5ru/17fc4WGVgsYE6k50tt1i8Baqm7+1Rrpu
-         e4Mbhsx1Hw8foAXIbG3sipor7s0ynh7zrI2HUpsstvlrM9bCt2pUeuUi+YWBpyYF1rE1
-         GeYQ==
-X-Gm-Message-State: AOAM532BeAIXMGNbWDr1AMWVGc0uRgyews9FqofMLXN6hcn7cZrNxK77
-        9NJX4O8Zpd5E6xfH8uSV/dk9sbumjG7Ywb4z9UvrUHwc/hunFp479K/1n4pEdC7Fa6FvkZibeDY
-        ueONPjrM1095AXlIkABxZEgFxTbA0vPYXDf3jAa9Tmg==
-X-Received: by 2002:a05:6000:1ac7:b0:1f1:f9ee:7c57 with SMTP id i7-20020a0560001ac700b001f1f9ee7c57mr3633454wry.52.1647518236426;
-        Thu, 17 Mar 2022 04:57:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwRVHHUrn4Gc7Ji2R1ZLqLDKn0bipCiLCnFH300rCQjMQzGcy481HRPG22f9lNVTtX9qFN6oQ==
-X-Received: by 2002:a05:6000:1ac7:b0:1f1:f9ee:7c57 with SMTP id i7-20020a0560001ac700b001f1f9ee7c57mr3633417wry.52.1647518236248;
-        Thu, 17 Mar 2022 04:57:16 -0700 (PDT)
+        bh=aSGezm1yIxV4XCs71xtI5EKoFHjXL820ywE13DRNOT4=;
+        b=yIXPCEMZuWLIwwOiKf3fmYhPDSrcuXpbcOwkWdUr8QYM9TShwsrrRJ33kBE+FEGg5X
+         Qvg2cQoDfT7zaVMfUS9eiweDB6kDgnnIoFXNNnREA04VsPUj0cYV+PQyvyQGY925CCAb
+         aTdMnAt7e+P/0H4eut8zMjZig1Q93zDjidfcaH06CSiD6FrCACulhW6niQnHjEWlYOfn
+         ZgakRYQY/oVqeei/eQ8bRVQbrMrGe4WNm8mLPSSkfRNjQ/RAhL95hxQyyNApdmP3p22c
+         vFQIuSUJLlxKK5dR9XwUB+/Q6I13238FJDyAWCfBqFmu6+YqAPfIJmVPDb902OkHhEax
+         v12g==
+X-Gm-Message-State: AOAM533bzYe3qm7sWvjpNRLRDN+TrUPrv/LsktQLOgKyiTT66kEHmwx2
+        QXh/4t4WgGY7jt/7po3nePKG7Cb+sOeI+v+R6iIO/3X0yIQDEC03yJK3rW5FG6BqY4BU5C0RCcw
+        hEGF2fagfhhYUCVfpSwxLLKn8cVyu4mmUazyWIEzTYw==
+X-Received: by 2002:adf:a302:0:b0:1ed:bf30:40e3 with SMTP id c2-20020adfa302000000b001edbf3040e3mr3777928wrb.270.1647518238530;
+        Thu, 17 Mar 2022 04:57:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz2T8BZ9r1cayLerGnUvxU9+ZIYyhi9vmiexAY/nI3LK3OqgvQvruoxbLO/RKMhjARnY2yv2A==
+X-Received: by 2002:adf:a302:0:b0:1ed:bf30:40e3 with SMTP id c2-20020adfa302000000b001edbf3040e3mr3777906wrb.270.1647518238317;
+        Thu, 17 Mar 2022 04:57:18 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id r65-20020a1c4444000000b0038c48dd23b9sm5824900wma.5.2022.03.17.04.57.14
+        by smtp.gmail.com with ESMTPSA id r65-20020a1c4444000000b0038c48dd23b9sm5824900wma.5.2022.03.17.04.57.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 04:57:15 -0700 (PDT)
+        Thu, 17 Mar 2022 04:57:17 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
@@ -97,9 +97,9 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         linux-actions@lists.infradead.org, openbmc@lists.ozlabs.org,
         linux-riscv@lists.infradead.org, linux-oxnas@groups.io
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH 03/18] ARM: dts: socfpga: align interrupt controller node name with dtschema
-Date:   Thu, 17 Mar 2022 12:56:50 +0100
-Message-Id: <20220317115705.450427-2-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 04/18] dt-bindings: irqchip: actions,owl-sirq: include generic schema
+Date:   Thu, 17 Mar 2022 12:56:51 +0100
+Message-Id: <20220317115705.450427-3-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
 References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
@@ -115,42 +115,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes dtbs_check warnings like:
-
-  $nodename:0: 'intc@fffed000' does not match '^interrupt-controller(@[0-9a-f,]+)*$'
+Include generic interrupt-controller.yaml schema, which enforces node
+naming and other generic properties.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- arch/arm/boot/dts/socfpga.dtsi         | 2 +-
- arch/arm/boot/dts/socfpga_arria10.dtsi | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../bindings/interrupt-controller/actions,owl-sirq.yaml      | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/socfpga.dtsi b/arch/arm/boot/dts/socfpga.dtsi
-index 7c1d6423d7f8..b8c5dd7860cb 100644
---- a/arch/arm/boot/dts/socfpga.dtsi
-+++ b/arch/arm/boot/dts/socfpga.dtsi
-@@ -46,7 +46,7 @@ pmu: pmu@ff111000 {
- 		      <0xff113000 0x1000>;
- 	};
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/actions,owl-sirq.yaml b/Documentation/devicetree/bindings/interrupt-controller/actions,owl-sirq.yaml
+index 5da333c644c9..c058810cf475 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/actions,owl-sirq.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/actions,owl-sirq.yaml
+@@ -14,6 +14,9 @@ description: |
+   This interrupt controller is found in the Actions Semi Owl SoCs (S500, S700
+   and S900) and provides support for handling up to 3 external interrupt lines.
  
--	intc: intc@fffed000 {
-+	intc: interrupt-controller@fffed000 {
- 		compatible = "arm,cortex-a9-gic";
- 		#interrupt-cells = <3>;
- 		interrupt-controller;
-diff --git a/arch/arm/boot/dts/socfpga_arria10.dtsi b/arch/arm/boot/dts/socfpga_arria10.dtsi
-index 3ba431dfa8c9..f1e50d2e623a 100644
---- a/arch/arm/boot/dts/socfpga_arria10.dtsi
-+++ b/arch/arm/boot/dts/socfpga_arria10.dtsi
-@@ -38,7 +38,7 @@ pmu: pmu@ff111000 {
- 		      <0xff113000 0x1000>;
- 	};
++allOf:
++  - $ref: /schemas/interrupt-controller.yaml#
++
+ properties:
+   compatible:
+     enum:
+@@ -46,7 +49,7 @@ required:
+   - '#interrupt-cells'
+   - 'interrupts'
  
--	intc: intc@ffffd000 {
-+	intc: interrupt-controller@ffffd000 {
- 		compatible = "arm,cortex-a9-gic";
- 		#interrupt-cells = <3>;
- 		interrupt-controller;
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
 -- 
 2.32.0
 

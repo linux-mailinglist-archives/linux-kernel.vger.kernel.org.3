@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AAD4DCD28
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C154DCD29
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237145AbiCQSFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
+        id S237164AbiCQSFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236257AbiCQSFf (ORCPT
+        with ESMTP id S237100AbiCQSFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:05:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95A8CEEA59
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:04:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647540257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EOSDI0h0ANr9PEykDMY3nNB9yGsUhPfVjoXSQ0kUYPs=;
-        b=EH9I8B9c7+lIDWKpMojhCMwnmqV7F5sEkNXQMYvM9B7bUK4e8jWVXhS/Y9/UuVCDT2IGRx
-        D0w7G0RjBpr4gUvh+ee/e+bheFpuriOUfHsV9iggHjLlwnVUo3Wn1c9x9QWJiJ1p6t+fwV
-        q1lHNzJ9IVDw1IoseSFse3NvBJQ03FY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-78-xxlvuOx6OoCAqTVlvk_owg-1; Thu, 17 Mar 2022 14:04:11 -0400
-X-MC-Unique: xxlvuOx6OoCAqTVlvk_owg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0064E85A5BE;
-        Thu, 17 Mar 2022 18:04:11 +0000 (UTC)
-Received: from [10.22.8.95] (unknown [10.22.8.95])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3DC9FC08092;
-        Thu, 17 Mar 2022 18:04:10 +0000 (UTC)
-Message-ID: <7d076c5b-a17c-72c0-766f-3ae834264683@redhat.com>
-Date:   Thu, 17 Mar 2022 14:04:09 -0400
+        Thu, 17 Mar 2022 14:05:38 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D09918FAE7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:04:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647540262; x=1679076262;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uUf5LFIzzQ0tXKBi4/9/PI02R9U0axKS3svPmT3Lxvc=;
+  b=ctvb4Bu7oamwrPRru/Ompp9KIS7lRF+05bpVGi0kicVinjLdNOuUfTqn
+   n2wxp3oYPN6Vv9mTnsp8Zc+cAWxwY5iKFm3p1rJbx4FZHDjQlIi8QB3Nx
+   Ljljlc8AzH+AL6bHD4FS24pms3wFt6DewNc0i/p6AqOtuyjp4gfcn0mq1
+   eLIaAZz7bx/JmoZNhKN6eHTCFkeddVZNQleQpwu+ZTMBbR5qkVMR1/svm
+   7hHB3pZjVyjXy0x4GP8AqEAVz5FhEHsFCvbW0zXaJBdxoAjpuwjHqyZak
+   1ZPN0yU//uQQK8qI8dwM7onRr+Lb/85iFWQ7QVBd2eonRzDumORMDSCR3
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="236885561"
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="236885561"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 11:04:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="715136857"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 17 Mar 2022 11:04:14 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 868D9107; Thu, 17 Mar 2022 20:04:34 +0200 (EET)
+Date:   Thu, 17 Mar 2022 21:04:34 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCHv6 12/30] x86/tdx: Detect TDX at early kernel
+ decompression time
+Message-ID: <20220317180434.5snbc2sni4r63nbg@black.fi.intel.com>
+References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
+ <20220316020856.24435-13-kirill.shutemov@linux.intel.com>
+ <87k0cs23oy.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/5] asm-generic: ticket-lock: New generic ticket-based
- spinlock
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        linux-riscv@lists.infradead.org, peterz@infradead.org
-Cc:     jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, mingo@redhat.com, Will Deacon <will@kernel.org>,
-        boqun.feng@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        Arnd Bergmann <arnd@arndb.de>, jszhang@kernel.org,
-        wangkefeng.wang@huawei.com, openrisc@lists.librecores.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20220316232600.20419-1-palmer@rivosinc.com>
- <20220316232600.20419-3-palmer@rivosinc.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220316232600.20419-3-palmer@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87k0cs23oy.ffs@tglx>
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,137 +74,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/22 19:25, Palmer Dabbelt wrote:
-> From: Peter Zijlstra <peterz@infradead.org>
->
-> This is a simple, fair spinlock.  Specifically it doesn't have all the
-> subtle memory model dependencies that qspinlock has, which makes it more
-> suitable for simple systems as it is more likely to be correct.
->
-> [Palmer: commit text]
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->
-> --
->
-> I have specifically not included Peter's SOB on this, as he sent his
-> original patch
-> <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>
-> without one.
-> ---
->   include/asm-generic/ticket-lock-types.h | 11 ++++
->   include/asm-generic/ticket-lock.h       | 86 +++++++++++++++++++++++++
->   2 files changed, 97 insertions(+)
->   create mode 100644 include/asm-generic/ticket-lock-types.h
->   create mode 100644 include/asm-generic/ticket-lock.h
->
-> diff --git a/include/asm-generic/ticket-lock-types.h b/include/asm-generic/ticket-lock-types.h
-> new file mode 100644
-> index 000000000000..829759aedda8
-> --- /dev/null
-> +++ b/include/asm-generic/ticket-lock-types.h
-> @@ -0,0 +1,11 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef __ASM_GENERIC_TICKET_LOCK_TYPES_H
-> +#define __ASM_GENERIC_TICKET_LOCK_TYPES_H
-> +
-> +#include <linux/types.h>
-> +typedef atomic_t arch_spinlock_t;
-> +
-> +#define __ARCH_SPIN_LOCK_UNLOCKED	ATOMIC_INIT(0)
-> +
-> +#endif /* __ASM_GENERIC_TICKET_LOCK_TYPES_H */
-> diff --git a/include/asm-generic/ticket-lock.h b/include/asm-generic/ticket-lock.h
-> new file mode 100644
-> index 000000000000..3f0d53e21a37
-> --- /dev/null
-> +++ b/include/asm-generic/ticket-lock.h
-> @@ -0,0 +1,86 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +/*
-> + * 'Generic' ticket-lock implementation.
-> + *
-> + * It relies on atomic_fetch_add() having well defined forward progress
-> + * guarantees under contention. If your architecture cannot provide this, stick
-> + * to a test-and-set lock.
-> + *
-> + * It also relies on atomic_fetch_add() being safe vs smp_store_release() on a
-> + * sub-word of the value. This is generally true for anything LL/SC although
-> + * you'd be hard pressed to find anything useful in architecture specifications
-> + * about this. If your architecture cannot do this you might be better off with
-> + * a test-and-set.
-> + *
-> + * It further assumes atomic_*_release() + atomic_*_acquire() is RCpc and hence
-> + * uses atomic_fetch_add() which is SC to create an RCsc lock.
-> + *
-> + * The implementation uses smp_cond_load_acquire() to spin, so if the
-> + * architecture has WFE like instructions to sleep instead of poll for word
-> + * modifications be sure to implement that (see ARM64 for example).
-> + *
-> + */
-> +
-> +#ifndef __ASM_GENERIC_TICKET_LOCK_H
-> +#define __ASM_GENERIC_TICKET_LOCK_H
-> +
-> +#include <linux/atomic.h>
-> +#include <asm/ticket-lock-types.h>
-> +
-> +static __always_inline void ticket_lock(arch_spinlock_t *lock)
-> +{
-> +	u32 val = atomic_fetch_add(1<<16, lock); /* SC, gives us RCsc */
-> +	u16 ticket = val >> 16;
-> +
-> +	if (ticket == (u16)val)
-> +		return;
-> +
-> +	atomic_cond_read_acquire(lock, ticket == (u16)VAL);
-> +}
-> +
-> +static __always_inline bool ticket_trylock(arch_spinlock_t *lock)
-> +{
-> +	u32 old = atomic_read(lock);
-> +
-> +	if ((old >> 16) != (old & 0xffff))
-> +		return false;
-> +
-> +	return atomic_try_cmpxchg(lock, &old, old + (1<<16)); /* SC, for RCsc */
-> +}
-> +
-> +static __always_inline void ticket_unlock(arch_spinlock_t *lock)
-> +{
-> +	u16 *ptr = (u16 *)lock + __is_defined(__BIG_ENDIAN);
-> +	u32 val = atomic_read(lock);
-> +
-> +	smp_store_release(ptr, (u16)val + 1);
-> +}
-> +
-> +static __always_inline int ticket_is_locked(arch_spinlock_t *lock)
-> +{
-> +	u32 val = atomic_read(lock);
-> +
-> +	return ((val >> 16) != (val & 0xffff));
-> +}
-> +
-> +static __always_inline int ticket_is_contended(arch_spinlock_t *lock)
-> +{
-> +	u32 val = atomic_read(lock);
-> +
-> +	return (s16)((val >> 16) - (val & 0xffff)) > 1;
-> +}
-> +
-> +static __always_inline int ticket_value_unlocked(arch_spinlock_t lock)
-> +{
-> +	return !ticket_is_locked(&lock);
-> +}
-> +
-> +#define arch_spin_lock(l)		ticket_lock(l)
-> +#define arch_spin_trylock(l)		ticket_trylock(l)
-> +#define arch_spin_unlock(l)		ticket_unlock(l)
-> +#define arch_spin_is_locked(l)		ticket_is_locked(l)
-> +#define arch_spin_is_contended(l)	ticket_is_contended(l)
-> +#define arch_spin_value_unlocked(l)	ticket_value_unlocked(l)
-> +
-> +#endif /* __ASM_GENERIC_TICKET_LOCK_H */
-Acked-by: Waiman Long <longman@redhat.com>
+On Thu, Mar 17, 2022 at 12:55:57PM +0100, Thomas Gleixner wrote:
+> On Wed, Mar 16 2022 at 05:08, Kirill A. Shutemov wrote:
+> > +
+> > +#include <asm/shared/tdx.h>
+> > +
+> > +static bool tdx_guest_detected;
+> > +
+> > +bool early_is_tdx_guest(void)
+> > +{
+> > +	return tdx_guest_detected;
+> > +}
+> 
+> Neither tdx_guest_detected nor early_is_tdx_guest() is used anywhere.
 
+Oh. Leftovers. Will drop.
+
+-- 
+ Kirill A. Shutemov

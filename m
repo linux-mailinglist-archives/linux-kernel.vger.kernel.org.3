@@ -2,94 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EDC4DC480
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B99F44DC482
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232860AbiCQLLf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Mar 2022 07:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
+        id S232874AbiCQLLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiCQLLe (ORCPT
+        with ESMTP id S230330AbiCQLLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:11:34 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3C41CABFE;
-        Thu, 17 Mar 2022 04:10:14 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nUo0i-0007fY-TN; Thu, 17 Mar 2022 12:09:40 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     linux-riscv@lists.infradead.org, peterz@infradead.org
-Cc:     jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, mingo@redhat.com, Will Deacon <will@kernel.org>,
-        longman@redhat.com, boqun.feng@gmail.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        Arnd Bergmann <arnd@arndb.de>, jszhang@kernel.org,
-        wangkefeng.wang@huawei.com, openrisc@lists.librecores.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arch@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH 0/5] Generic Ticket Spinlocks
-Date:   Thu, 17 Mar 2022 12:09:39 +0100
-Message-ID: <11364105.8ZH9dyz9j6@diego>
-In-Reply-To: <20220316232600.20419-1-palmer@rivosinc.com>
-References: <20220316232600.20419-1-palmer@rivosinc.com>
+        Thu, 17 Mar 2022 07:11:43 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B24BE1DB8B7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:10:25 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-255-MiCiRbVUN16QRgYdqh5Xig-1; Thu, 17 Mar 2022 11:10:22 +0000
+X-MC-Unique: MiCiRbVUN16QRgYdqh5Xig-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Thu, 17 Mar 2022 11:10:21 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Thu, 17 Mar 2022 11:10:21 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Vignesh Raghavendra' <vigneshr@ti.com>,
+        'Michael Walle' <michael@walle.cc>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>
+Subject: RE: [PATCH v2 0/6] spi-mem: Allow specifying the byte order in DTR
+ mode
+Thread-Topic: [PATCH v2 0/6] spi-mem: Allow specifying the byte order in DTR
+ mode
+Thread-Index: AQHYOQSPIX1seC7nAUuKrYcK6uPoWazCAVMggAFSn4CAAATp8IAABzYAgAAFzgA=
+Date:   Thu, 17 Mar 2022 11:10:21 +0000
+Message-ID: <fcae2d955b3f43af8d64f1aa50fbc685@AcuMS.aculab.com>
+References: <20220311080147.453483-1-tudor.ambarus@microchip.com>
+ <76eb13b6-9263-975f-3196-312259634301@ti.com>
+ <b60064231d33581c20279172cf8f765e@walle.cc>
+ <0f271365-354b-82e2-02a2-9d69a6ac85b1@ti.com>
+ <9bc530d1fdaf4490a00fee150f963ac7@AcuMS.aculab.com>
+ <bc2083a8903fdabc65083f7e5232ca2d@walle.cc>
+ <8b765d24cb9a422bb383aad07251b65f@AcuMS.aculab.com>
+ <c17fe9c6-0757-dbb6-6efb-69d05d7ff589@ti.com>
+In-Reply-To: <c17fe9c6-0757-dbb6-6efb-69d05d7ff589@ti.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Am Donnerstag, 17. März 2022, 00:25:55 CET schrieb Palmer Dabbelt:
-> Peter sent an RFC out about a year ago
-> <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>,
-> but after a spirited discussion it looks like we lost track of things.
-> IIRC there was broad consensus on this being the way to go, but there
-> was a lot of discussion so I wasn't sure.  Given that it's been a year,
-> I figured it'd be best to just send this out again formatted a bit more
-> explicitly as a patch.
-> 
-> This has had almost no testing (just a build test on RISC-V defconfig),
-> but I wanted to send it out largely as-is because I didn't have a SOB
-> from Peter on the code.  I had sent around something sort of similar in
-> spirit, but this looks completely re-written.  Just to play it safe I
-> wanted to send out almost exactly as it was posted.  I'd probably rename
-> this tspinlock and tspinlock_types, as the mis-match kind of makes my
-> eyes go funny, but I don't really care that much.  I'll also go through
-> the other ports and see if there's any more candidates, I seem to
-> remember there having been more than just OpenRISC but it's been a
-> while.
-> 
-> I'm in no big rush for this and given the complex HW dependencies I
-> think it's best to target it for 5.19, that'd give us a full merge
-> window for folks to test/benchmark it on their systems to make sure it's
-> OK.  RISC-V has a forward progress guarantee so we should be safe, but
-> these can always trip things up.
-
-I've tested this on both the Qemu-Virt machine as well as the
-Allwinner Nezha board (with a D1 SoC).
-
-Both of those are of course not necessarily the best platforms
-for benchmarks I guess, as from what I gathered before I'd need
-need multiple cores to actually get interesting measurements when
-comparing different implementations. But at least everything that
-worked before still works with this series ;-)
-
-
-So, Series
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-
-
-Heiko
-
+RnJvbTogVmlnbmVzaCBSYWdoYXZlbmRyYQ0KPiBTZW50OiAxNyBNYXJjaCAyMDIyIDEwOjI0DQou
+Li4NCj4gTW9kZXJuIE9TUEkvUVNQSSBmbGFzaCBjb250cm9sbGVycyBwcm92aWRlIE1NSU8gaW50
+ZXJmYWNlIHRvIHJlYWQgZnJvbQ0KPiBmbGFzaCB3aGVyZSBETUEgY2FuIHB1bGwgZGF0YSBhcyBp
+ZiB0aG91Z2ggeW91IGFyZSByZWFkaW5nIGZyb20gT24gY2hpcCBSQU0NCg0KU28gdGhlIGNwdSBk
+b2VzIGFuIE1NSU8gcmVhZCBjeWNsZSB0byB0aGUgY29udHJvbGxlciB3aGljaCBkb2Vzbid0DQpj
+b21wbGV0ZSB1bnRpbCAoZm9yIHRoZSBuaWJibGUtbW9kZSBzcGkgZGV2aWNlIEkgaGF2ZSk6DQox
+KSBDaGlwc2VsZWN0IGlzIGFzc2VydGVkLg0KMikgVGhlIDgtYml0IGNvbW1hbmQgaGFzIGJlZW4g
+Y2xvY2tlZCBvdXQuDQozKSBUaGUgMzJiaXQgYWRkcmVzcyBoYXZlIGJlZW4gY2xvY2tlZCBvdXQg
+KDggY2xvY2tzIGluIG5pYmJsZXMpLg0KNCkgQSBmZXcgKHByb2JhYmx5IDQpIGV4dHJhIGRlbGF5
+IGNsb2NrcyBhcmUgYWRkZWQuDQo1KSBUaGUgZGF0YSBpcyByZWFkIC0gOCBjbG9ja3MgZm9yIDMy
+Yml0cyBpbiBuaWJibGUgbW9kZS4NCjYpIENoaXBzZWxlY3QgaXMgcmVtb3ZlZC4NCg0KTm93IHlv
+dSBjYW4gZG8gbG9uZyBzZXF1ZW50aWFsIHJlYWRzIHdpdGhvdXQgYWxsIHRoZSByZWQgdGFwZS4N
+CkJ1dCBhIHJhbmRvbSByZWFkIGluIG5pYmJsZSBtb2RlIGlzIGFib3V0IDMwIGNsb2Nrcy4NCjE2
+IGJpdCBtb2RlIHNhdmVzIDYgY2xvY2tzIGZvciB0aGUgZGF0YSBhbmQgbWF5YmUgNiBmb3IgdGhl
+IGFkZHJlc3M/DQoNClRoZSBjb250cm9sbGVyIGNvdWxkIGRvICdjbGV2ZXIgc3R1ZmYnIGZvciBz
+ZXF1ZW50aWFsIHJlYWRzLg0KQXQgYSBjb3N0IG9mIHNsb3dpbmcgZG93biByYW5kb20gcmVhZHMu
+DQoNClNvIGV2ZW4gYXQgNDAwTUh6IGl0IGlzbid0IHRoYXQgZmFzdC4NCg0KSWYgdGhlIE1NSU8g
+aW50ZXJmYWNlIHRvIHRoZSBmbGFzaCBjb250cm9sbGVyIGlzIFBDSWUgeW91IGNhbg0KYWRkIGlu
+IGEgbG9hZCBvZiBleHRyYSBsYXRlbmN5IGZvciB0aGUgY3B1IHJlYWQgaXRzZWxmLg0KDQpXaGls
+ZSBQQ0llIGFsbG93cyBtdWx0aXBsZSByZWFkIHJlcXVlc3RzIHRvIGJlIG91dHN0YW5kaW5nLA0K
+dGhlIEludGVsIGNwdSBJJ3ZlIGxvb2tlZCBhdCBzZXJpYWxpc2UgdGhlIHJlYWRzIGZyb20gZWFj
+aA0KY3B1IGNvcmUgKGVhY2ggY3B1IGFsd2F5cyB1c2VzIHRoZSBzYW1lIFRMUCB0YWcpLg0KDQpO
+b3cgbG9uZ2VyIHJlYWQgVExQIGhlbHAgYSBsb3QgKElJUkMgbWF4IGlzIDI1NiBieXRlcykuDQpC
+dXQgdGhlIHg4NiBjcHUgd2lsbCBvbmx5IGdlbmVyYXRlIHJlYWQgVExQIGZvciByZWdpc3RlciBy
+ZWFkcy4NCllvdSBuZWVkIHRvIHVzZSBBVlg1MTIgcmVnaXN0ZXJzIChvciBjYWNoZSBsaW5lIGZl
+dGNoZXMpIHRvDQpnZXQgYmV0dGVyIHRocm91Z2hwdXQhDQoNClRoZSBhbHRlcm5hdGl2ZSBpcyBn
+ZXR0aW5nIHRoZSBmbGFzaCBjb250cm9sbGVyIHRvIGlzc3VlDQp0aGUgcmVhZC93cml0ZSBUTFAg
+Zm9yIG1lbW9yeSB0cmFuc2ZlcnMuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3Mg
+TGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQ
+VCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 

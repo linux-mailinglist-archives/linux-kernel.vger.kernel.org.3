@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9469B4DC70A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C919D4DC723
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234355AbiCQM73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S235188AbiCQM6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234335AbiCQMz7 (ORCPT
+        with ESMTP id S234318AbiCQMxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:55:59 -0400
+        Thu, 17 Mar 2022 08:53:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C72BB920;
-        Thu, 17 Mar 2022 05:54:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC8E1F6F36;
+        Thu, 17 Mar 2022 05:50:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FE56614F0;
-        Thu, 17 Mar 2022 12:54:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02807C340EF;
-        Thu, 17 Mar 2022 12:54:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE2646124B;
+        Thu, 17 Mar 2022 12:50:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CB1EC340E9;
+        Thu, 17 Mar 2022 12:50:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521644;
-        bh=DPdfF6q9H15BXcu0xyHzF22kFQv23DsT8xa/YMq2E1I=;
+        s=korg; t=1647521451;
+        bh=h5dWFH7rvdGWUVv5SR/PyniHXkWqs3usscoC++mnayc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S05oLSeXKc3hOfghWJtg+hbBpaQ6c9Nb4bB23q5baJfHdGMuQZZ7vy8+qW5KVM3La
-         oz/BBKqnOXmiVdSqJJ+pEle0PzgfZ+/EXMzka654i6oxCWFH2Y/h9FVMWyAAAsJGal
-         N89kd8zJljBvM25F2fnFKyxCTS2qnLRWKja4U24k=
+        b=nwA+NldyMmanhJDtHjOa0d1xgrRwTw/kbdISsM0qfn95Qp3wtYlhueCOWfT9fl5UV
+         Ywt2v4DHhXC9e7Kxm3i+/2tK/W2qCZ5Uo4JrBFBReflX1WY70KNI0yzDnHeK3g1T/t
+         SEjYtsrRh+ZtH31RztmLXLyebrkPvLSLpsttA9ko=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Quentin Schulz <foss+kernel@0leil.net>,
-        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 06/28] arm64: dts: rockchip: fix rk3399-puma eMMC HS400 signal integrity
+Subject: [PATCH 5.15 10/25] ARM: dts: rockchip: fix a typo on rk3288 crypto-controller
 Date:   Thu, 17 Mar 2022 13:45:57 +0100
-Message-Id: <20220317124526.953096814@linuxfoundation.org>
+Message-Id: <20220317124526.604280474@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317124526.768423926@linuxfoundation.org>
-References: <20220317124526.768423926@linuxfoundation.org>
+In-Reply-To: <20220317124526.308079100@linuxfoundation.org>
+References: <20220317124526.308079100@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,47 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit 62966cbdda8a92f82d966a45aa671e788b2006f7 ]
+[ Upstream commit 3916c3619599a3970d3e6f98fb430b7c46266ada ]
 
-There are signal integrity issues running the eMMC at 200MHz on Puma
-RK3399-Q7.
+crypto-controller had a typo, fix it.
+In the same time, rename it to just crypto
 
-Similar to the work-around found for RK3399 Gru boards, lowering the
-frequency to 100MHz made the eMMC much more stable, so let's lower the
-frequency to 100MHz.
-
-It might be possible to run at 150MHz as on RK3399 Gru boards but only
-100MHz was extensively tested.
-
-Cc: Quentin Schulz <foss+kernel@0leil.net>
-Signed-off-by: Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Link: https://lore.kernel.org/r/20220119134948.1444965-1-quentin.schulz@theobroma-systems.com
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Link: https://lore.kernel.org/r/20220209120355.1985707-1-clabbe@baylibre.com
 Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/arm/boot/dts/rk3288.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-index 002ece51c3ba..08fa00364b42 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
-@@ -439,6 +439,12 @@
- };
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 4dcdcf17c977..66ff5db53c5a 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -971,7 +971,7 @@
+ 		status = "disabled";
+ 	};
  
- &sdhci {
-+	/*
-+	 * Signal integrity isn't great at 200MHz but 100MHz has proven stable
-+	 * enough.
-+	 */
-+	max-frequency = <100000000>;
-+
- 	bus-width = <8>;
- 	mmc-hs400-1_8v;
- 	mmc-hs400-enhanced-strobe;
+-	crypto: cypto-controller@ff8a0000 {
++	crypto: crypto@ff8a0000 {
+ 		compatible = "rockchip,rk3288-crypto";
+ 		reg = <0x0 0xff8a0000 0x0 0x4000>;
+ 		interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.34.1
 

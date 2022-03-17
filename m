@@ -2,116 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BADFD4DBFF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 08:06:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B894DBFFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 08:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiCQHID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 03:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
+        id S230132AbiCQHLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 03:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiCQHIA (ORCPT
+        with ESMTP id S229673AbiCQHLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 03:08:00 -0400
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94A67679;
-        Thu, 17 Mar 2022 00:06:43 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id b15so5408306edn.4;
-        Thu, 17 Mar 2022 00:06:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pnGDpE7h6Qwm7jpuPXAkv5jYm5jyweWlH4y/NG7xMVw=;
-        b=BUWy/CwDRxfls+gUsD0Yn/UHsj7Fim6XyXsxpehQhjGJuT0aMOVh6CSuaQeUxB4j9f
-         mBQXwIgbmPHU9/8ELQCj/HufOyoSQv9TWifco+x7iHHnRv8L4/vrXJjtXJArvw0W7gTd
-         se+181ruK+NTjM/9wI8YbEx/pNf40gTUWASZHWT2UpSdXKxxRBexptecMpq7pWb0dxV/
-         WJtn7TJIKpbhcEjs8aWG+GrKhzPfoPhH7mp3YxQRL54cPUll8JZ2/Fw6aVc9Bt62aSav
-         O5QZ/VKrcw4g+gdPVlg0+1eenYM0eDLFBBfE4SJ+vc/C6nTMQeVcocEwDD/vlTt2NFzU
-         aazA==
-X-Gm-Message-State: AOAM531GlAAbI4pJ6rRGFoVUTWCRjLEb6wBe34bgkuifazyMgxFUGyqP
-        3fqmV/1dWkdR+xZfyqPkhhw=
-X-Google-Smtp-Source: ABdhPJy/hq37aySKEIjBncTRHCWYqedom3Y0ELtxjz/Ydy07dGZaqVSVDaevsO82u5DyjouvWYWk5g==
-X-Received: by 2002:a05:6402:1d4d:b0:416:c489:b784 with SMTP id dz13-20020a0564021d4d00b00416c489b784mr2878883edb.304.1647500801689;
-        Thu, 17 Mar 2022 00:06:41 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id ga5-20020a1709070c0500b006de43e9605asm1897233ejc.181.2022.03.17.00.06.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 00:06:41 -0700 (PDT)
-Message-ID: <4914513f-cdb8-7698-be7f-968d343c5693@kernel.org>
-Date:   Thu, 17 Mar 2022 08:06:39 +0100
-MIME-Version: 1.0
+        Thu, 17 Mar 2022 03:11:22 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A4316A693
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 00:10:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GGdr4JA8PlX0RIPdyiwRruAG0u/x/+HaE7alXICz52EaW5v0g9/o30gBjXxnQGFWfkDa4E50fVEerHQyeflvbmKbw54SBKvgbeyzdRx3MVvTZCPZUxK/bAodxMQQwOOqjJjgczz/eHw6MHzZTZ3iVGcouDFLsQQFGaObpWxcM90nYw2bCjW9XxglOlpm51vfAVV3QGHw/ROabEXSIawZz+NC8mNEE4wvdbq3G3tSb/Z8jv545+Kd4DAK/rwm0LEf91TgdHkXoif0fcZaTbgBJp9FojAE17J2XM4+7JE3u109unk4I/3Ig+ytFy/7XMUjk9es3IHQhdfTb7+JhBfyNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xpFAN/U676LTkcKVjw5IDgneZZaGkyOwe7yLMas6OiU=;
+ b=Ms9Z3a6AQp4MEWoWFlNUXlVlUWJl6xo5ZZ5jvQrTnxf+rgIiHAKGNO0ZBXbgxMyHZXkCNY4Kac3wbbmgxeE0FUeD84yNmhlqLb6YI3Da/e7ewvThJOwP6raMAjDGvpPIhPsinElL877lTB0byGTZNPYS5TiAXxLjRG/+8eO3cTOfiiQtPFnoWnpwr4jVuKshLstrwXVEGuixYJy8X0D/LwoaV2CdQ42Li/h4p+j3yjzJXguwcliraAD1FlL9Xg1sOcE8WSggZcthIOyruIDnKoudls2T+NgMXix1NYkd697Z29ULpNbEfukJ1FpXHBL/4QlUsH5Q4fxQO2fmCL4Nug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xpFAN/U676LTkcKVjw5IDgneZZaGkyOwe7yLMas6OiU=;
+ b=X5E2lJGjiIBMb+9uEEnAdltx95uRjKV/InglAetHI22lkfkQrr4I9jIP926MYTuZJj7e6RIRXnMoDktuiru0l1WkA1mbrsD0bnhsU3uTrIMSJ1L8ZZrmi63LO/INfsTVNuCN3q/Pak2Hh4xz1b/jfuc5gRdDmJWOjXTXL8uvCgs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by CY4PR12MB1352.namprd12.prod.outlook.com (2603:10b6:903:3a::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.26; Thu, 17 Mar
+ 2022 07:10:03 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185%6]) with mapi id 15.20.5081.015; Thu, 17 Mar 2022
+ 07:10:03 +0000
+Message-ID: <140d1f43-d603-c24e-f72e-878ad10e751c@amd.com>
+Date:   Thu, 17 Mar 2022 08:09:58 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v4 5/5] serial/8250: Only use fifo after the port is
- initialized in console_write
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/ttm: fix uninit ptr deref in range manager alloc
+ error path
 Content-Language: en-US
-To:     Wander Lairson Costa <wander@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     rostedt@goodmis.org, senozhatsky@chromium.org,
-        andre.goddard@gmail.com, sudipm.mukherjee@gmail.com,
-        andy.shevchenko@gmail.com, David.Laight@aculab.com,
-        jonathanh@nvidia.com, phil@raspberrypi.com
-References: <20220316143646.13301-1-wander@redhat.com>
- <20220316143646.13301-6-wander@redhat.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220316143646.13301-6-wander@redhat.com>
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        dri-devel@lists.freedesktop.org, Huang Rui <ray.huang@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-kernel@vger.kernel.org
+References: <20220316195034.3821108-1-bob.beckett@collabora.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220316195034.3821108-1-bob.beckett@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS9PR05CA0057.eurprd05.prod.outlook.com
+ (2603:10a6:20b:489::35) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f856f3fa-a378-43c1-f69f-08da07e52825
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1352:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB1352DA669F20737DDA0C6A7483129@CY4PR12MB1352.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xsM46ka6eIcpReJHRbKsTm4UgYVDGdK8Q1z1j4p39r14aJarjrGjOiBw+PbgU+G8JY8gqwJPPoaI94lbwE7Ljj/J/EAZ6r4VEjxCEpPOl0kTXCdy/T8JgEMQ4zD9tq/eFYy3BCA9tG5ArKKsKcRj+b0ZRd2xdIOJlUk9mU1zJ/Wa+O6whCn7EQWLb9FEtTyuYY5R8AgQjf0oaKXxcJeE8wcCSe7XqxC3zTIwng4p/vdFZpyLB37GDXj44K813FSOo6kPr5LG1KDL5TD1WmNezO6Xx/XvfpuzrWnfkepSgADO/HiGiBSJ+SmZU0dlmozBBH9HfGRP+VhlAgSo+ml9ISSDb/TgCTuUZBF9++Zy/L/QROC2jTy+8QHmI/SQwP2PaM7gin42t8umBS5xFF18F8RagvcHQdclWYBmc+MJsVUWcW466l+7E5dwLVrSlT55CYhayk2xXyPQ4B4e8QF/ZUWiUnmUYlW7fFk/jQHVFzEEjmKn0G6uOBKRrgIJMwJVUqpOqm+tKqYSgmGIb/pOtM2phPP/wAIXS0S9ZJ5/Ur+AANPKlZnfkoQsM3TUbv9JBKtGVjWeUTKVxADyxVTZ+PwrQ1GKhJ+lYxPykzH9poDNSuX2igmNDq+8idA2Ing4Q9arG7PGNestSMIQ0CwzvVzg8lgFPbJSnmDlRwxadtUq8r0dDQDhGeZPLwniOkQUOWQRlUotnoujcgEKHYcr2IMl7t09xBqeUmL2KkiIi3mQzac9WXRPhuw3Y8vKEsmo
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(36756003)(66946007)(83380400001)(38100700002)(31686004)(31696002)(66556008)(66574015)(2616005)(66476007)(86362001)(26005)(186003)(2906002)(8676002)(6512007)(4744005)(110136005)(316002)(5660300002)(4326008)(6666004)(8936002)(6506007)(508600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUh4OFNYYWRKUTdydmpIclpYMk00V2c4d3RaTnNNL1BENGF2TGhzNnJYMSsx?=
+ =?utf-8?B?WVlXV3hUdVdHQ2lVcGRJYVZyMDdSNWtSODdURnF6UU0xRW9LOXJwT3JsbkJj?=
+ =?utf-8?B?YnNjSFJvOFNXWUZwMFhOUFdhU25vRVRCMk1mSW5pckNKd3VmdE9xckx6L2ZV?=
+ =?utf-8?B?MURXblp5b2VGTUdYNFNTdjJwbEU4OWhGWlE1WFY0eUFYUWJNTTJpMjdUYm5F?=
+ =?utf-8?B?ZGVpSzltOFNvN294K3VrWnhpSjFXbFZwMTZyOEYrT25QbXc4VmNjN0M1cGJk?=
+ =?utf-8?B?Um5PcFdpMzdGNTdEdG5sU2o3K2VEK0phN2ZjNGkvSW1TZE9oTG5BdXlTdlhG?=
+ =?utf-8?B?ZVB0QWhDYTV4dnJ0OUNlYkZydmN2LzZtNWU3c2R6OVhXZGlNaVZjcllIMGlB?=
+ =?utf-8?B?amJDb3h1VEk2ZVNrRnNlbExNZXFQYlIwTFVuN09ldmtvYmQ5VnVCTW93dVZZ?=
+ =?utf-8?B?RkZrVWRGUzM1S2x4SzE4N3QwLytaeGp4NHBvM3FyRFN5K3pwYTlOMlA0Z2ZQ?=
+ =?utf-8?B?Q2FRRHg3eGxhUjdpTmZGc1NBaWZuWG5xOVhSSXUyck92bExlcjJpRzgyQ2VY?=
+ =?utf-8?B?TWgvUW5sN0VORXBlajIyY2QydG8rYnl3dS8wVmpPK1hMa05hZ3N0eEZ6dWtp?=
+ =?utf-8?B?cnI4N0xpSGZSUDhjWk9aYUdiT05JK2Z5VlRyS05URXJnNkc3UWRtTERYZjEy?=
+ =?utf-8?B?RFJoOWdCM2N5MlpYa1NiODBlaGluWDVueU4yQWRaRmU4a1dDNEpJcDhxaVdw?=
+ =?utf-8?B?TGpLUkl6dUZrOTREM1J0SU80NHkwY2orTzQrbnZTY3YyUnZkUjRvTHRYU3RD?=
+ =?utf-8?B?dW15empzWklSYjlpZllqOFJrMEQwZ3dIaTlQd2s1RlEvSkthS0pFbHhOKzV1?=
+ =?utf-8?B?SXgxaGFONzBOVEwxRUdyOXZJVlc1c243R1NkTUszbGZwdnZkK2RRVjJyNFhC?=
+ =?utf-8?B?d2wyMDFBSlo1QjVSbnZLZGpQQXZ3QVVRZFRuQ2sxNFdlTXFZYWZoYk4xc2RR?=
+ =?utf-8?B?S1RTN0ZzWTlldUNYVG5yc3lLMDhleTR2OGlvbHhNNUR2bkYwaGF6L2crUFd0?=
+ =?utf-8?B?SW4rM20vZVJ3VS9aaDVwTjUvbGhVTFNKN2MwemFrd3VPOGsyaStnMDNJYThP?=
+ =?utf-8?B?TUlmRTRVaEhiK2xOZzJvZHVUckc1S3BoakVvdCt2VEN2M0pFSHZrTTh1bnFy?=
+ =?utf-8?B?RzEwZEYyY3lFdnlIb0plVDBiR3VDc2pwclNkelgvbkpsZ0pabXFyWnVpbHlN?=
+ =?utf-8?B?TDJFRnlGMHg2cjNQMVFyZEtmWi8zaFpZWDBMVUxDRTVpUFpxendoVFdsUkkx?=
+ =?utf-8?B?NGl3RHBNSUVETVBrQTFCQXBqNFFpYlo1ejVnWnU5OUtQOENrVHRGd0djQjkw?=
+ =?utf-8?B?b05wNzNtNW40eTd0L2FCc2VwOS9GZVNURTd5U2xoeVgzQXhiUCs0OERTcnJO?=
+ =?utf-8?B?MzY1em96c0NKN2tXZVoxck5kNDArYVhyYmNjVlhZSmc3ZHk5elZaNmtNcnhz?=
+ =?utf-8?B?K2l4MUdPdm8xcko3U0pWTndJZkdMMWtVVzU2ckdrTmVoOHBIaTJYWmRKWkhx?=
+ =?utf-8?B?ZlR3ckpZYUFFdDZiRlBqTVpCRUNONzI2OFhIV1RGRWhVY2ZzVUQ2ZUlZV1NQ?=
+ =?utf-8?B?Qm9yQ1F4TkswQm5uMDRmY2FBMkFybDJLQVFPRDBUeWRDYkNEVzNVQW8yQ3kr?=
+ =?utf-8?B?YXRHTm1ycFdlN1NMMEtZbVdqM296NXBuMkxwTW41S1hnZG9aUGRNV2daS0M2?=
+ =?utf-8?B?SnQvRDhFamYybzJyNGltWUlycmxYbk5JeExPOUtKd3NuVUdQNHBGRDhJVmRh?=
+ =?utf-8?B?dGNFSy9VNEJRZGJyQ3hqTTYrTEZNTTZNdjNVVERzeHA3V21EUUdvL1NUdk1z?=
+ =?utf-8?B?akFmSEhTVVhYeXlZUVpac2U4N2w3Y3RxU1hEeXJoNDJ2cVlhd29YcFVzc1Bm?=
+ =?utf-8?Q?jGdP2Jo8F0BmQulwxYHXkK1hlhEsjxXq?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f856f3fa-a378-43c1-f69f-08da07e52825
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2022 07:10:03.0859
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TP42/H2CANJHqADLk2+UIh6t6wN89IbUGUPaYTe+MruAuftxmxDWRzFSZKRCQidZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1352
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16. 03. 22, 15:36, Wander Lairson Costa wrote:
-> The serial driver set the value of uart_8250_port.fcr in the function
-> serial8250_config_port, but only writes the value to the controller
-> register later in the initalization code.
-> 
-> That opens a small window in which is not safe to use the fifo for
-> console write.
-> 
-> Make sure the port is initialized correctly before reading the FCR
-> cached value.
-> 
-> Unfortunately, I lost track of who originally reported the issue. If
-> s/he is reading this, please speak up so I can give you the due credit.
-> 
-> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+Am 16.03.22 um 20:50 schrieb Robert Beckett:
+> ttm_range_man_alloc would try to ttm_resource_fini the res pointer
+> before it is allocated.
+>
+> Fixes: de3688e469b0 (drm/ttm: add ttm_resource_fini v2)
+>
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+
+Reviewed-by: Christian König <christian.koenig@amd.com>
+
+Good catch, going to push that to drm-misc-fixes.
+
 > ---
->   drivers/tty/serial/8250/8250_port.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> index 4acf620be241..7e2227161555 100644
-> --- a/drivers/tty/serial/8250/8250_port.c
-> +++ b/drivers/tty/serial/8250/8250_port.c
-> @@ -3416,6 +3416,7 @@ void serial8250_console_write(struct uart_8250_port *up, const char *s,
->   		!(up->capabilities & UART_CAP_MINI) &&
->   		up->tx_loadsz > 1 &&
->   		(up->fcr & UART_FCR_ENABLE_FIFO) &&
-> +		test_bit(TTY_PORT_INITIALIZED, &port->state->port.iflags) &&
+>   drivers/gpu/drm/ttm/ttm_range_manager.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/ttm/ttm_range_manager.c b/drivers/gpu/drm/ttm/ttm_range_manager.c
+> index 5662627bb933..1b4d8ca52f68 100644
+> --- a/drivers/gpu/drm/ttm/ttm_range_manager.c
+> +++ b/drivers/gpu/drm/ttm/ttm_range_manager.c
+> @@ -89,7 +89,7 @@ static int ttm_range_man_alloc(struct ttm_resource_manager *man,
+>   	spin_unlock(&rman->lock);
+>   
+>   	if (unlikely(ret)) {
+> -		ttm_resource_fini(man, *res);
+> +		ttm_resource_fini(man, &node->base);
+>   		kfree(node);
+>   		return ret;
+>   	}
 
-Cannot be port->state be NULL sometimes here?
-
->   		/*
->   		 * After we put a data in the fifo, the controller will send
->   		 * it regardless of the CTS state. Therefore, only use fifo
-
-
--- 
-js
-suse labs

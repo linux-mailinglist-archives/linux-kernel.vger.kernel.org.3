@@ -2,71 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18604DBD09
+	by mail.lfdr.de (Postfix) with ESMTP id A60F64DBD08
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 03:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358426AbiCQCdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 22:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
+        id S1358443AbiCQCdx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 16 Mar 2022 22:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345141AbiCQCdr (ORCPT
+        with ESMTP id S232675AbiCQCdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 22:33:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D9E1FA55;
-        Wed, 16 Mar 2022 19:32:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74C54B81DD5;
-        Thu, 17 Mar 2022 02:32:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9699C340E9;
-        Thu, 17 Mar 2022 02:32:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647484350;
-        bh=y9kA9fR+nB2fSNtZoY6laFEBg+/BJtd2Tcb6EeiZPW0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PZXKCiFS23ahgZk4PCEs30fuMEJ9Z9V61W7ZJbUwLyenN3Xr8p45YdS7Aet5w9qpw
-         GBOQdQPfVvuOMS+5yxd1Nz1xcmJ/986oRyCOeZ2JhZqnkFWS+t8AEE9lZ/SDty2BUW
-         z738Y1fOfKq5KqXVegVGX+jDqN3h8E2mJFww5CEUPBr5CtHs7iSpVK3ymaffNEzs6b
-         HcisQ2oBCwJKO6qQSlAoTEMBzl+7zgXDlbISLhZzN7j3ASZwYfc2EIeT3LjSvzoPpp
-         tN8y/HvpXrGPqE+1LB+KEnkw9xqXxvgS+FtE9kuGSRahIQnJqlaAAOb5dlK3gkZhZ5
-         66aJBILjF4lKA==
-Date:   Wed, 16 Mar 2022 19:32:28 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     sebastian.hesselbarth@gmail.com, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH V2] net: mv643xx_eth: undo some opreations in
- mv643xx_eth_probe
-Message-ID: <20220316193228.4966348c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220316012444.2126070-1-chi.minghao@zte.com.cn>
-References: <20220316012444.2126070-1-chi.minghao@zte.com.cn>
+        Wed, 16 Mar 2022 22:33:49 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31DF11FA4E
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 19:32:34 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-28-TfXkqhZKOkGnjBRqD1P3bg-1; Thu, 17 Mar 2022 02:32:31 +0000
+X-MC-Unique: TfXkqhZKOkGnjBRqD1P3bg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Thu, 17 Mar 2022 02:32:30 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Thu, 17 Mar 2022 02:32:29 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Kees Cook' <keescook@chromium.org>,
+        James Jones <linux@theinnocuous.com>,
+        Arnd Bergmann <arnd@arndb.de>
+CC:     Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] x86: Remove a.out support
+Thread-Topic: [PATCH] x86: Remove a.out support
+Thread-Index: AQHYOYVhiI2rWSVwnUW0pCDz/QTpF6zC2QRw
+Date:   Thu, 17 Mar 2022 02:32:29 +0000
+Message-ID: <5161ace381a74a63b58b0a2a2a2cb57d@AcuMS.aculab.com>
+References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com>
+ <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com>
+ <202203151150.1CDB1D8DA@keescook>
+ <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com>
+ <CAK8P3a28dpyEM2+vM+ePZzeFc539b7w_8FDEoRke-j+3AQVZAA@mail.gmail.com>
+ <202203161523.857B469@keescook>
+In-Reply-To: <202203161523.857B469@keescook>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 01:24:44 +0000 cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+From: Kees Cook
+> Sent: 16 March 2022 22:30
 > 
-> Cannot directly return platform_get_irq return irq, there
-> are operations that need to be undone.
+> On Wed, Mar 16, 2022 at 01:38:31PM +0100, Arnd Bergmann wrote:
+> > is in the end, but it's likely easier than a standalone a.out loader
+> > in user space, or a conversion to ELF format.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Yeah, the exec format is really simple. The only tricky bit was preparing
+> the stack and making sure everything landed in the right place for text
+> and data. James, can you try this? aln and mac run for me, but I'm not
+> actually exercising them beyond dumping argument lists, etc:
 
-Pretty sure I reported this :/ Fixes tag would be nice as well.
-Let me fix those two issues and apply. 
-Inhale, exhale.
+Doesn't that restrict the a.out program to the address space below
+the normal base address for elf programs?
+So you'll only be able to load small programs - which might be ok here.
 
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+OTOH it might be possible to link the 'loader program' to a high
+address - the elf loader will probably just load it.
+Best to link it static to avoid shared lib mmaps
+and probably try to avoid libc calls.
+
+I was wondering what happens when malloc() starts using
+sbrk() - but I guess it sees the top of the bss for the
+loaded and it all works fine.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D30B4DCA0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 213204DCA11
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbiCQPfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 11:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
+        id S235906AbiCQPfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 11:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234996AbiCQPfP (ORCPT
+        with ESMTP id S234996AbiCQPfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 11:35:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4AF1788EA
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 08:33:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59818B81F01
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:33:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8F3DC340E9;
-        Thu, 17 Mar 2022 15:33:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647531236;
-        bh=TMJ/fQxoE5x1D/yJMBmQ7AuOWquE2zVSEVfwHsu3aeA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QtLfK/S82sWqLgPnYxHtlxLH2F4vNU7EaWuxvOQqZmH39k60ZfGjkrdyzskvQsyXQ
-         rTWraBRX808/yxa9867NNMxT50jSplQF3Yz0ueb8hqrpMyDkoW+V9TA+8siiGCOOit
-         bW2t/VQ6pGGMiFY+kAfnUhS9iF0lyalbZTyl7rtu9tUg5q3UkCxFvOBVP2/Qm0WGIn
-         z7YS675sygqiTL/Zpo5uge5QLIw3zD0rU6oTugU99MVkpZcYO8xKsWPQ6DGNKkosi/
-         lz3yTCpJn7smeibQvojf8/Oleeb9iSPA67BEJDuzcMSxHLcup/luo1hUfq8TSI0to7
-         UbgmyK/J6vg4w==
-Date:   Thu, 17 Mar 2022 16:33:53 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 4/4] rcu: Name internal polling flag
-Message-ID: <20220317153353.GA463481@lothringen>
-References: <20220316144255.336021-1-frederic@kernel.org>
- <20220316144255.336021-5-frederic@kernel.org>
- <c0845c3d-fe96-857a-df72-c5d1e35f8e7f@quicinc.com>
+        Thu, 17 Mar 2022 11:35:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03B91788F2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 08:34:00 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 15:33:58 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1647531239;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GmfvRc9g5bLRQcU5mUbsyU2skozRH90l+W7VUJrSNkY=;
+        b=3KDAXI9s6uOMQ6ymG0XbP6WqrAVXuBfzEiFQ8WfJA/aSa90JJkcRifFrErBEkPEfOjprKJ
+        SlE9xgzOLLkixm8CVimEqOdoRJUm27y1RdjBNHQBpNfA6X505aFgiCi8yM57Z63BFHVsRk
+        rnyNbLCgts1EJTLsgnlw2RG3RJF6jajoZzBT/TmEajct1dlVzL44jS35f2XmhLuqT12/Uk
+        FFKgInTIm9sS4JtIJGIeozufm8LxbQx0g+35Yn8fQWt1aJ51pgg5+Yt/1eInJnAkQZ2sjO
+        TB13+z+DQXAZDYUR3pqjbNDRmCMW79QAYKizVenZiS2cvGcr+uYm6mDzcB5IKA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1647531239;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GmfvRc9g5bLRQcU5mUbsyU2skozRH90l+W7VUJrSNkY=;
+        b=lbYtxVNniht6eJQCMRQpXwotBUYvhGLi/MBcXGmn9mQjEQk2aySGIk8F2rZloqj4N7da7K
+        wrHqypG7ETG6N8DQ==
+From:   "irqchip-bot for Yang Yingliang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] irqchip/irq-qcom-mpm: fix return value
+ check in qcom_mpm_init()
+Cc:     Hulk Robot <hulkci@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220316025100.1758413-1-yangyingliang@huawei.com>
+References: <20220316025100.1758413-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0845c3d-fe96-857a-df72-c5d1e35f8e7f@quicinc.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <164753123809.389.16541550679620677780.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 03:12:17PM +0530, Neeraj Upadhyay wrote:
-> 
-> 
-> On 3/16/2022 8:12 PM, Frederic Weisbecker wrote:
-> > Give a proper self-explanatory name to the expedited grace period
-> > internal polling flag.
-> > 
-> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> > Cc: Boqun Feng <boqun.feng@gmail.com>
-> > Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-> > Cc: Joel Fernandes <joel@joelfernandes.org>
-> > ---
-> >   kernel/rcu/rcu.h      | 5 +++++
-> >   kernel/rcu/tree.c     | 2 +-
-> >   kernel/rcu/tree_exp.h | 9 +++++----
-> >   3 files changed, 11 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-> > index eccbdbdaa02e..8a62bb416ba4 100644
-> > --- a/kernel/rcu/rcu.h
-> > +++ b/kernel/rcu/rcu.h
-> > @@ -30,6 +30,11 @@
-> >   #define RCU_GET_STATE_USE_NORMAL	0x2
-> >   #define RCU_GET_STATE_BAD_FOR_NORMAL	(RCU_GET_STATE_FROM_EXPEDITED | RCU_GET_STATE_USE_NORMAL)
-> > +/*
-> > + * Low-order bit definitions for polled grace-period internals.
-> > + */
-> > +#define RCU_EXP_SEQ_POLL_DONE 0x1
-> 
-> From what I understood, this flag is intended for lifecycle management
-> of the ->exp_seq_poll_rq; with the flag set meaning that we need to re-poll,
-> which could be used for cases, where there is long gap between 2 polls, such
-> that the sequence wraps around. So, maybe we can name it as
-> RCU_EXP_SEQ_POLL_EXPIRED? However, my understanding could be wrong here.
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-It may be confusing also because this patchset slightly extends the role of this
-bit.
+Commit-ID:     294aee8ab6cb5d44cde4defcda43324a25c64118
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/294aee8ab6cb5d44cde4defcda43324a25c64118
+Author:        Yang Yingliang <yangyingliang@huawei.com>
+AuthorDate:    Wed, 16 Mar 2022 10:51:00 +08:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Thu, 17 Mar 2022 15:30:35 
 
-Before the patchset, the role is indeed to deal with wrapping.
-After the patchset it deals with wrapping and the polling cycle.
+irqchip/irq-qcom-mpm: fix return value check in qcom_mpm_init()
 
-I would say that before the patchset, the name could be RCU_EXP_SEQ_POLLABLE,
-and after the patchset it can indeed be RCU_EXP_SEQ_POLL_EXPIRED.
+If devm_platform_ioremap_resource() fails, it never returns
+NULL, replace NULL check with IS_ERR().
+
+Fixes: a6199bb514d8 ("irqchip: Add Qualcomm MPM controller driver")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Acked-by: Shawn Guo <shawn.guo@linaro.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220316025100.1758413-1-yangyingliang@huawei.com
+---
+ drivers/irqchip/irq-qcom-mpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/irqchip/irq-qcom-mpm.c b/drivers/irqchip/irq-qcom-mpm.c
+index eea5a75..d306146 100644
+--- a/drivers/irqchip/irq-qcom-mpm.c
++++ b/drivers/irqchip/irq-qcom-mpm.c
+@@ -375,7 +375,7 @@ static int qcom_mpm_init(struct device_node *np, struct device_node *parent)
+ 	raw_spin_lock_init(&priv->lock);
+ 
+ 	priv->base = devm_platform_ioremap_resource(pdev, 0);
+-	if (!priv->base)
++	if (IS_ERR(priv->base))
+ 		return PTR_ERR(priv->base);
+ 
+ 	for (i = 0; i < priv->reg_stride; i++) {

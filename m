@@ -2,164 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105354DC3DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F684DC3DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbiCQKUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 06:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S232538AbiCQKUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 06:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiCQKUH (ORCPT
+        with ESMTP id S231810AbiCQKUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 06:20:07 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E5CCA0F5;
-        Thu, 17 Mar 2022 03:18:47 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22H8AOCs004861;
-        Thu, 17 Mar 2022 11:18:01 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=s0T2J+BUPfq3wtxoi9ptnx4PkAnuCrcogO563PL6A7E=;
- b=tqrYTAk4hJkdazLPqvrldMktXaVm9S42CGuzyXUR+l5dwYSKzFJXJcmWvCl3n/6Zd4oj
- nB68lSvlWf68oH7XFck5WhuVEOTLdPTjFNuJouxs2duli8lL5txwogER8/4avRbIF9gw
- dLJladdVvNk4eePFSSjp7XfbapW34ADQgrnjIwmEW8lYSQtXdYl26zgh10fJGGgPtien
- J3iHVDGmmZC6QAIer+Q+JtV2HW8DPlmS+6IqtxyQlSGOtmm7Kgwwzd7K8QymiRdJgZTb
- 1U5eEf3EgbJEdQ9r6aWG0bJGyOcRT18cgI169NWPyrzeVCSjSDQQBM04laO0yP+kECcW oA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3et63jbvmh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Mar 2022 11:18:00 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id AFA8910002A;
-        Thu, 17 Mar 2022 11:17:58 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9B821215132;
-        Thu, 17 Mar 2022 11:17:58 +0100 (CET)
-Received: from [10.211.8.11] (10.75.127.47) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 17 Mar
- 2022 11:17:57 +0100
-Message-ID: <6bfade04-36b4-98c3-2796-ebeaa230f52e@foss.st.com>
-Date:   Thu, 17 Mar 2022 11:17:57 +0100
+        Thu, 17 Mar 2022 06:20:34 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA62CA0F5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:19:17 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id e22so5282834ioe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n6iauwsK21Ks+eaRsgF1KeKTsBm/xpjROn2Egsfn7rk=;
+        b=BtkGQvlL8IiX7Af3L9wZ73uGGfUoeWkZqZLD/lucGZokmkXOOy8OjDYxOLE4psUs9O
+         T1MtVaDxvBGzA3zrwBhgIGXnwvyftGG3IvQB/r6blP7uCGzhKoM7CinSpkVyi18E7lx6
+         PJO+fu8JJnL7VLKIO7ZzZdD9ZHmK0lcIAwfhmE2EoFbGLYfVAVMOHyJEjAoS4/OnCgSO
+         quL1+ycGUxzCrr9M3ZBiPsx3glvBTJDaL39xvFsTjZZxFJlrTL0L9BFLIwH3vblEbx2L
+         yHsqkAE+PAyUj24GdsV2gkmgOpnVwGUfpQGgrBPKxpMuQgp4KazHDnNupD5OAf1C4IdH
+         kumA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n6iauwsK21Ks+eaRsgF1KeKTsBm/xpjROn2Egsfn7rk=;
+        b=g2VLaGeibv4IKYWX7Awj2WRpLBTvU0Ga0sKrzA/fJ7ZxrAtrhxJWqN/7ZBQZXuVOut
+         MKxm8FmpL4Dp1qA8UKkY/nKObWQfyicQ0k357KauSWSeY+TJfoUaViQre8PQBCK6fl73
+         w/oaoi7K9aHs9F5nL7edyhxAAKxsBwCgUr6c+YIhwLL68ZhcF23gPAxnAxqeo9ymRlXj
+         pfmS+yxf/hrHYlK+hBOE3NTAwYuFSn/wtHQKi2Zx8/24oTc9QztkT46QLP6tssRtE0Kp
+         SgmtIG66RXQo/m3qRJnD8h8q+LSnu8HobWz36sP57CKZ4OYpya47S9DGiJz45crD3DhK
+         XWoA==
+X-Gm-Message-State: AOAM531toggZOYbYhMN+X2cry/6L33yzKKDXLV6lWriFsDFlosKhnQjb
+        jYSaSMfcsAwUFhzovxewcYazdNO0Qfu0THYkFSkj7g==
+X-Google-Smtp-Source: ABdhPJwQ2P9JinBva619F3p7zagggJVYhqCv0EesuF+pPCUxY163Xe5b0no+EBuFuKNrGdTuZaE7Z702loWBZ6Jd3bc=
+X-Received: by 2002:a02:6383:0:b0:314:d9da:13b2 with SMTP id
+ j125-20020a026383000000b00314d9da13b2mr1598984jac.99.1647512357201; Thu, 17
+ Mar 2022 03:19:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/3] dt-bindings: mmc: mmci: add a property to disable DMA
- LLI
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+References: <20220131133049.77780-1-robert.marko@sartura.hr>
+ <20220131133049.77780-6-robert.marko@sartura.hr> <Yh8vJNc4D6rA68au@google.com>
+ <Yh/kFzNuvbwA2qeE@robh.at.kernel.org> <CA+HBbNHComN9kgFp1Xr4mdedwYjDMbSUkw+6_KAe8+O4hrtvKQ@mail.gmail.com>
+ <YiKI5LDWaxvlc9m5@robh.at.kernel.org>
+In-Reply-To: <YiKI5LDWaxvlc9m5@robh.at.kernel.org>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Thu, 17 Mar 2022 11:19:06 +0100
+Message-ID: <CA+HBbNG4KfoO8wyQghubjqVvL5ocyxqa+CKjqkn0iXfA9duY_w@mail.gmail.com>
+Subject: Re: [PATCH v10 5/6] dt-bindings: mfd: Add Delta TN48M CPLD drivers bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>, brgl@bgdev.pl,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Vasut <marex@denx.de>, <kernel@dh-electronics.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Grzegorz Szymaszek <gszymaszek@short.pl>
-References: <20220304135134.47827-1-yann.gautier@foss.st.com>
- <20220304135134.47827-2-yann.gautier@foss.st.com>
- <CACRpkdYQz+-im3n-r0_8RKL7so2bHS=aZobty4BbzixmPzms-Q@mail.gmail.com>
- <0bc53018-fce4-4104-fa47-6e60d2367d69@foss.st.com>
- <CAPDyKFqgQZFH3LT1Z+G9N0MVfhFwoiUr9N2sKFaejTWcH+dNXg@mail.gmail.com>
-From:   Yann Gautier <yann.gautier@foss.st.com>
-In-Reply-To: <CAPDyKFqgQZFH3LT1Z+G9N0MVfhFwoiUr9N2sKFaejTWcH+dNXg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-17_03,2022-03-15_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        skhan@linuxfoundation.org, Luka Perkov <luka.perkov@sartura.hr>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/22 11:00, Ulf Hansson wrote:
-> On Tue, 15 Mar 2022 at 09:26, Yann Gautier <yann.gautier@foss.st.com> wrote:
->>
->> On 3/14/22 23:43, Linus Walleij wrote:
->>> "On Fri, Mar 4, 2022 at 2:52 PM Yann Gautier <yann.gautier@foss.st.com> wrote:
->>>
->>>> On STMicroelectronics variant of PL18x, the DMA Linked Lists are supported
->>>> starting from revision v2 of the peripheral. But it has limitations,
->>>> as all the buffers should be aligned on block size (except the last one).
->>>> But this cannot be guaranteed with SDIO. We should then have a property
->>>> to disable the support of LLI.
->>>>
->>>> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
->>>
->>> Actually I think this is present also on the ux500 variants. See:
->>> commit 2253ed4b36dc876d1598c4dab5587e537ec68c34
->>> "mmc: mmci: Support any block sizes for ux500v2 and qcom variant"
->>>
->>> Spot the variant data "dma_power_of_2".
->>>
->>> So whatever property you add
->>> to the variant data (not in the device tree please) should
->>> be added to the ux500 variants as well, it will *VERY* likely
->>> have a problem with LLI elements not being a power of 2
->>> as it is the ancestor of later STMicro variants.
->>>
->>> It might actually be the reason for some annoying WiFi error
->>> messages I have seen :/
->>>
->>> Yours,
->>> Linus Walleij
->>
->> Hi Linus,
->>
->> The STM32 variant uses an internal DMA, and the DMA functions are in its
->> dedicated file. So I was planning to do the same as what is done in
->> meson-gx-mmc.c: using a bounce buffer to copy from/to in case DMA
->> constraints are not fulfilled. Not sure it can help for Ux500.
-> 
+On Fri, Mar 4, 2022 at 10:47 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Mar 03, 2022 at 01:41:13PM +0100, Robert Marko wrote:
+> > On Wed, Mar 2, 2022 at 10:39 PM Rob Herring <robh@kernel.org> wrote:
+> > >
+> > > On Wed, Mar 02, 2022 at 08:47:32AM +0000, Lee Jones wrote:
+> > > > On Mon, 31 Jan 2022, Robert Marko wrote:
+> > > >
+> > > > > Add binding documents for the Delta TN48M CPLD drivers.
+> > > > >
+> > > > > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > > >
+> > > > This is missing a DT review.
+> > >
+> > > How about this one[1]?
+> > >
+> > > Rob
+> > >
+> > > [1] https://lore.kernel.org/all/20210719225906.GA2769608@robh.at.kernel.org/
+> >
+> > Hi Rob,
+> > Thanks for reaching out.
+> >
+> > As you can see the bindings have evolved since v6,
+> > GPIO driver now only uses 2 distinct compatibles.
+>
+> Fundamentally, it hasn't really changed.
+>
+> There's 2 main issues. First, I don't see the need for any child nodes.
+> This would be sufficient:
+>
+> cpld@41 {
+>     compatible = "delta,tn48m-cpld";
+>     reg = <0x41>;
+>     #reset-cells = <1>;
+>     #gpio-cells = <2>;
+>     gpio-controller;
+> };
+>
+> You only need child nodes if the sub-blocks have their own resources or
+> are widely reused in different configurations.
+>
+> The 2nd issue is whether GPIOs are even GPIOs at all. I don't recall
+> that Linus ever agreed.
+>
+> Both issues kind of boil down to is there even more that 1 variation of
+> this h/w where you have differing connections? AFAICT, Delta tn48m is a
+> pretty specific device and I would guess something implemented in a CPLD
+> is likely to change on every board design. At least that's my experience
+> with 'board level logic'.
 
-Hi Ulf,
+Hi Rob, sorry for the late reply.
 
-> We already have a bounce buffer in mmci_pio_read(), but we need one in
-> mmc_pio_write() too, which hasn't been implemented yet.
+Having one node was the route I went in v1, but that was rejected as
+it would mean
+having an MFD driver that just registers the sub-drivers.
+That is what the simple-mfd-i2c driver was designed to get rid of and
+inherit the regmap
+from the parent.
+For this to work, subnodes are required as we need to match on compatibles.
 
-The idea is to keep using our internal DMA, and not switch to pio mode.
+Using subnodes for GPIO-s also gets rid of hardcoding the register
+layout in the driver per board,
+as Delta chose to use a weird register layout in which the GPIO
+registers have completely random offsets.
+The layout is even weirder in the TN4810M which uses the same CPLD but
+expanded and is easily
+supportable in the same driver in the current form.
+My goal and the requirement from the community was to make the GPIO
+driver as simple as possible
+and extendable so that boards like TN4810M can be easily added.
 
-> 
->>
->> Ulf, before I send my new series (although it is not ready yet), would
->> you be OK with the bounce buffer idea?
-> 
-> Yes, that works for me.
-I have patches almost ready, I'll send that soon.
+Also, the Kontron SL28CPLD does pretty much the same in regards to DT
+as well as other things.
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml?h=v5.16.15
 
-> 
-> On the other hand, it would be even better if we could specify the
-> buffer limitations per mmc host instance, so upper layers (SDIO func
-> drivers) could conform to these - and use better buffers, to achieve a
-> better performance.
+It uses the same logic with different compatibles for GPIO to be able
+to inform the kernel of the certain
+bank capabilities.
+I mean, using one compatible would be possible by using a boolean
+property for example that tells you
+that its output capable as well.
 
-We've seen things that could be improved in the wifi driver. I'll check 
-what could be done.
+Regards,
+Robert
 
-Best regards,
-Yann
-> 
->>
->>
->> Best regards,
->> Yann
-> 
-> Kind regards
-> Uffe
+>
+> Rob
 
+
+
+-- 
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr

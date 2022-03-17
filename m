@@ -2,171 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137D24DD0D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67DF94DD0E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiCQWh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 18:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
+        id S229934AbiCQWqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 18:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiCQWhY (ORCPT
+        with ESMTP id S229623AbiCQWqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 18:37:24 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C73126243C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:36:06 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id h1so8262559edj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:36:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HUL7G4oOlZT6ZcSm0IypZD6C9fq3wHaBrHnjH9uPtcY=;
-        b=bOpNBvfhoMLPtp0GDUuHsUff1/qKx7bzkXyoF5Zx6VrrBO7q8B/4cX0+mN+37dIlox
-         YDHDC3DUdzKD6KtoOLORcZI+L02IV30xfDP2fyJVAOFAvwEAfRdeBB0SLBTxlgcLr9SP
-         8GPEgGFswgaPIY1nVGh1/EI3Z6p8SGhW3wnGU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HUL7G4oOlZT6ZcSm0IypZD6C9fq3wHaBrHnjH9uPtcY=;
-        b=A1r6YL38hfW4NNFUOn9mSZJX7/9kt2wv3dRKgQ4YSeAmeJQ8oedQm4P8l9xEZoPcvO
-         2lWVobJ6B6vDRJpkS910QdkWnbhu6xR3YzSxpaG49YSeynm/J5ssN5TdE0vcT07sLyqv
-         bF0gQ1LIkot4oFM518TitQES6RHQPS63BaMoEb8Ag+TUZzkNoRJAg5vMtllR0WktsbAV
-         1JfwOeH+GJ4bMjSg3WGllc31dkVrtp52BqMxTzAhwQAbS2lQ2DcFbV4j24oX22e/+agn
-         5uq8bBcOuP8lUXZ692tNqGH2LGM4BZwlwo8soW8jqMmgAA5wjfzXdN08uLAeMATbER6A
-         LXZA==
-X-Gm-Message-State: AOAM533HZAfcySqn2iiCM3yYjoeW83w7eJ6fV5XMnWzN+YnC0o7sJiWn
-        U+qykCW1VZwJ6ewIiumzCSXQHA==
-X-Google-Smtp-Source: ABdhPJydOD9qsL8/+g218ELmo+ZGkUSYcQYHwl3QeH92QppgAMEA4so62K4IOG1KKTFJ4W9Zx4CqFw==
-X-Received: by 2002:aa7:cb0f:0:b0:416:201f:c64d with SMTP id s15-20020aa7cb0f000000b00416201fc64dmr6798503edt.48.1647556565058;
-        Thu, 17 Mar 2022 15:36:05 -0700 (PDT)
-Received: from capella.. (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id ec21-20020a170906b6d500b006d170a3444csm2893669ejb.164.2022.03.17.15.36.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 15:36:04 -0700 (PDT)
-From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
-To:     Abel Vesa <abel.vesa@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v2 2/2] clk: imx8mn: add GPT support
-Date:   Thu, 17 Mar 2022 23:35:59 +0100
-Message-Id: <20220317223600.175894-2-alvin@pqrs.dk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317223600.175894-1-alvin@pqrs.dk>
-References: <20220317223600.175894-1-alvin@pqrs.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 17 Mar 2022 18:46:19 -0400
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAD5B29C960;
+        Thu, 17 Mar 2022 15:45:01 -0700 (PDT)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22HMbwbL028517;
+        Thu, 17 Mar 2022 17:37:58 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 22HMbuFG028514;
+        Thu, 17 Mar 2022 17:37:56 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Thu, 17 Mar 2022 17:37:56 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Bill Wendling <morbo@google.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Subject: Re: [PATCH v5] x86: use builtins to read eflags
+Message-ID: <20220317223756.GM614@gate.crashing.org>
+References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com> <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <CAGG=3QW2ey2w91TxqJ6tzfJOswhTce2e0QTW7kAWyvxeiO+VNg@mail.gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGG=3QW2ey2w91TxqJ6tzfJOswhTce2e0QTW7kAWyvxeiO+VNg@mail.gmail.com>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+Hi!
 
-Add support for the General Purpose Timer (GPT) clocks on the i.MX8MN.
-The i.MX8MN GPT IP block is the same as on the i.MX8MM, on which this
-patch is based.
+On Thu, Mar 17, 2022 at 12:45:30PM -0700, Bill Wendling wrote:
+> On Thu, Mar 17, 2022 at 11:52 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> > It is perhaps telling that the LLVM discussion I found seems to talk
+> > more about the performance impact, not about the fact that THE
+> > GENERATED CODE WAS WRONG.
+> >
+> I think that's a bit unfair. There seemed to be a general consensus
+> that the code was wrong and needed to be fixed. However, the compiler
+> is also expected to generate the most performant code that it can.
 
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
----
-v1->v2: for reasons of consistency, change lines of the form:
+I think Linus' point is that correctness is required, and performance
+is just a nice to have.  I don't think you disagree, I sure don't :-)
 
-    static const char *const imx8mn_gpt...
+> > In fact, gcc pretty much documents that "cc" clobbers doesn't do
+> > anything on x86, and isn't needed. It just assumes that the arithmetic
+> > flags always get clobbered, because on x86 that's pretty much the
+> > case. They have sometimes been added for documentation purposes in the
+> > kernel, but that's all they are.
 
-to
+GCC on x86 clobbers the arithmetic flags in every asm.  Long ago the x86
+port still used CC0 (an internal representation of the condition code
+flags), which acted effectively like clobbering the flags on every
+instruction (CC0 will finally be gone in GCC 12 btw).  The x86 port
+stopped using CC0 (and so started using the automatic "cc" clobber, to
+keep old inline asm working) in 1999 :-)
 
-    static const char * const imx8mn_gpt...
+"cc" is a valid clobber on every port, but it doesn't necessarily do
+anything, and if it does, it does not necessarily correspond to any more
+specific register, neither to a GCC register nor to a hardware register.
+It also is not really useful for generic code, since the asm itself is
+by nature pretty much target-specific :-)
 
-and adjust the indentation accordingly.
----
- drivers/clk/imx/clk-imx8mn.c | 38 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+> > But the whole "you can't move _other_ things that you don't even
+> > understand around this either" is equally important. A "disable
+> > interrupts" could easily be protecting a "read and modify a CPU MSR
+> > value" too - no real "memory" access necessarily involved, but
+> > "memory" is the only way we can tell you "don't move this".
+> >
+> And yet that's not guaranteed. From
+> https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html:
+> 
+> ```
+> Note that the compiler can move even volatile asm instructions
+> relative to other code, including across jump instructions. For
+> example, on many targets there is a system register that controls the
+> rounding mode of floating-point operations. Setting it with a volatile
+> asm statement, as in the following PowerPC example, does not work
+> reliably.
+> 
+>   asm volatile("mtfsf 255, %0" : : "f" (fpenv));
+>   sum = x + y;
+> 
+> The solution is to reference the "sum" variable in the asm:
+> 
+>   asm volatile ("mtfsf 255,%1" : "=X" (sum) : "f" (fpenv));
+> ```
+> 
+> Note that the solution _isn't_ to add a "memory" clobber, because it's
+> not guaranteed to work, as it's explicitly defined to be a read/write
+> _memory_ barrier, despite what kernel writers wish it would do.
 
-diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
-index 92fcbab4f5be..fb058cb38c27 100644
---- a/drivers/clk/imx/clk-imx8mn.c
-+++ b/drivers/clk/imx/clk-imx8mn.c
-@@ -227,6 +227,30 @@ static const char * const imx8mn_pwm4_sels[] = {"osc_24m", "sys_pll2_100m", "sys
- 						"sys_pll1_40m", "sys_pll3_out", "clk_ext2",
- 						"sys_pll1_80m", "video_pll1_out", };
- 
-+static const char * const imx8mn_gpt1_sels[] = {"osc_24m", "sys_pll2_100m", "sys_pll1_400m",
-+						"sys_pll1_40m", "video_pll1_out", "sys_pll1_80m",
-+						"audio_pll1_out", "clk_ext1", };
-+
-+static const char * const imx8mn_gpt2_sels[] = {"osc_24m", "sys_pll2_100m", "sys_pll1_400m",
-+						"sys_pll1_40m", "video_pll1_out", "sys_pll1_80m",
-+						"audio_pll1_out", "clk_ext1", };
-+
-+static const char * const imx8mn_gpt3_sels[] = {"osc_24m", "sys_pll2_100m", "sys_pll1_400m",
-+						"sys_pll1_40m", "video_pll1_out", "sys_pll1_80m",
-+						"audio_pll1_out", "clk_ext1", };
-+
-+static const char * const imx8mn_gpt4_sels[] = {"osc_24m", "sys_pll2_100m", "sys_pll1_400m",
-+						"sys_pll1_40m", "video_pll1_out", "sys_pll1_80m",
-+						"audio_pll1_out", "clk_ext1", };
-+
-+static const char * const imx8mn_gpt5_sels[] = {"osc_24m", "sys_pll2_100m", "sys_pll1_400m",
-+						"sys_pll1_40m", "video_pll1_out", "sys_pll1_80m",
-+						"audio_pll1_out", "clk_ext1", };
-+
-+static const char * const imx8mn_gpt6_sels[] = {"osc_24m", "sys_pll2_100m", "sys_pll1_400m",
-+						"sys_pll1_40m", "video_pll1_out", "sys_pll1_80m",
-+						"audio_pll1_out", "clk_ext1", };
-+
- static const char * const imx8mn_wdog_sels[] = {"osc_24m", "sys_pll1_133m", "sys_pll1_160m",
- 						"vpu_pll_out", "sys_pll2_125m", "sys_pll3_out",
- 						"sys_pll1_80m", "sys_pll2_166m", };
-@@ -476,6 +500,12 @@ static int imx8mn_clocks_probe(struct platform_device *pdev)
- 	hws[IMX8MN_CLK_PWM2] = imx8m_clk_hw_composite("pwm2", imx8mn_pwm2_sels, base + 0xb400);
- 	hws[IMX8MN_CLK_PWM3] = imx8m_clk_hw_composite("pwm3", imx8mn_pwm3_sels, base + 0xb480);
- 	hws[IMX8MN_CLK_PWM4] = imx8m_clk_hw_composite("pwm4", imx8mn_pwm4_sels, base + 0xb500);
-+	hws[IMX8MN_CLK_GPT1] = imx8m_clk_hw_composite("gpt1", imx8mn_gpt1_sels, base + 0xb580);
-+	hws[IMX8MN_CLK_GPT2] = imx8m_clk_hw_composite("gpt2", imx8mn_gpt2_sels, base + 0xb600);
-+	hws[IMX8MN_CLK_GPT3] = imx8m_clk_hw_composite("gpt3", imx8mn_gpt3_sels, base + 0xb680);
-+	hws[IMX8MN_CLK_GPT4] = imx8m_clk_hw_composite("gpt4", imx8mn_gpt4_sels, base + 0xb700);
-+	hws[IMX8MN_CLK_GPT5] = imx8m_clk_hw_composite("gpt5", imx8mn_gpt5_sels, base + 0xb780);
-+	hws[IMX8MN_CLK_GPT6] = imx8m_clk_hw_composite("gpt6", imx8mn_gpt6_sels, base + 0xb800);
- 	hws[IMX8MN_CLK_WDOG] = imx8m_clk_hw_composite("wdog", imx8mn_wdog_sels, base + 0xb900);
- 	hws[IMX8MN_CLK_WRCLK] = imx8m_clk_hw_composite("wrclk", imx8mn_wrclk_sels, base + 0xb980);
- 	hws[IMX8MN_CLK_CLKO1] = imx8m_clk_hw_composite("clko1", imx8mn_clko1_sels, base + 0xba00);
-@@ -501,6 +531,12 @@ static int imx8mn_clocks_probe(struct platform_device *pdev)
- 	hws[IMX8MN_CLK_GPIO3_ROOT] = imx_clk_hw_gate4("gpio3_root_clk", "ipg_root", base + 0x40d0, 0);
- 	hws[IMX8MN_CLK_GPIO4_ROOT] = imx_clk_hw_gate4("gpio4_root_clk", "ipg_root", base + 0x40e0, 0);
- 	hws[IMX8MN_CLK_GPIO5_ROOT] = imx_clk_hw_gate4("gpio5_root_clk", "ipg_root", base + 0x40f0, 0);
-+	hws[IMX8MN_CLK_GPT1_ROOT] = imx_clk_hw_gate4("gpt1_root_clk", "gpt1", base + 0x4100, 0);
-+	hws[IMX8MN_CLK_GPT2_ROOT] = imx_clk_hw_gate4("gpt2_root_clk", "gpt2", base + 0x4110, 0);
-+	hws[IMX8MN_CLK_GPT3_ROOT] = imx_clk_hw_gate4("gpt3_root_clk", "gpt3", base + 0x4120, 0);
-+	hws[IMX8MN_CLK_GPT4_ROOT] = imx_clk_hw_gate4("gpt4_root_clk", "gpt4", base + 0x4130, 0);
-+	hws[IMX8MN_CLK_GPT5_ROOT] = imx_clk_hw_gate4("gpt5_root_clk", "gpt5", base + 0x4140, 0);
-+	hws[IMX8MN_CLK_GPT6_ROOT] = imx_clk_hw_gate4("gpt6_root_clk", "gpt6", base + 0x4150, 0);
- 	hws[IMX8MN_CLK_I2C1_ROOT] = imx_clk_hw_gate4("i2c1_root_clk", "i2c1", base + 0x4170, 0);
- 	hws[IMX8MN_CLK_I2C2_ROOT] = imx_clk_hw_gate4("i2c2_root_clk", "i2c2", base + 0x4180, 0);
- 	hws[IMX8MN_CLK_I2C3_ROOT] = imx_clk_hw_gate4("i2c3_root_clk", "i2c3", base + 0x4190, 0);
-@@ -549,6 +585,8 @@ static int imx8mn_clocks_probe(struct platform_device *pdev)
- 	hws[IMX8MN_CLK_SDMA3_ROOT] = imx_clk_hw_gate4("sdma3_clk", "ipg_audio_root", base + 0x45f0, 0);
- 	hws[IMX8MN_CLK_SAI7_ROOT] = imx_clk_hw_gate2_shared2("sai7_root_clk", "sai7", base + 0x4650, 0, &share_count_sai7);
- 
-+	hws[IMX8MN_CLK_GPT_3M] = imx_clk_hw_fixed_factor("gpt_3m", "osc_24m", 1, 8);
-+
- 	hws[IMX8MN_CLK_DRAM_ALT_ROOT] = imx_clk_hw_fixed_factor("dram_alt_root", "dram_alt", 1, 4);
- 
- 	hws[IMX8MN_CLK_ARM] = imx_clk_hw_cpu("arm", "arm_a53_core",
--- 
-2.35.1
+It doesn't work because *other* code can change the fp environment as
+well; adding "memory" clobbers to both asms will keep them in order (if
+they both are not deleted, etc).  This hinders optimisation very
+seriously for code like this btw, another important reason to not do it
+here.
 
+And what is "memory" here anyway?  New memory items can be added very
+late in the pass pipeline, and anything done in an earlier pass will
+not have considered those of course.  The most important case of this
+(but not the only case) is new slots on the stack.
+
+> Your assertion that compilers don't know about control registers isn't
+> exactly true. In the case of "pushf/popf", those instructions know
+> about the eflags registers. All subsequent instructions that read or
+> modify eflags also know about it. In essence, the compiler can
+> determine its own clobber list, which include MSRs.
+
+The compiler only knows about some bits in the flags register.  The
+compiler does not know about most machine resources, including all of
+the model-specific registers.
+
+
+Segher

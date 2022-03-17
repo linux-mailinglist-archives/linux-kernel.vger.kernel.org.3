@@ -2,47 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111CD4DC26F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BD84DC278
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbiCQJRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
+        id S230515AbiCQJS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231683AbiCQJRH (ORCPT
+        with ESMTP id S229621AbiCQJSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:17:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7C9E11D7AF;
-        Thu, 17 Mar 2022 02:15:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A277A1476;
-        Thu, 17 Mar 2022 02:15:50 -0700 (PDT)
-Received: from lpieralisi (unknown [10.57.43.22])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 137E33F766;
-        Thu, 17 Mar 2022 02:15:47 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 09:15:43 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Marc Zyngier <maz@kernel.org>,
-        dann frazier <dann.frazier@canonical.com>, robh@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, Toan Le <toan@os.amperecomputing.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
-        dann frazier <dann.frazier@canonical.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [PATCH] PCI: xgene: Revert "PCI: xgene: Use inbound resources
- for setup"
-Message-ID: <YjL8P0zkle2foxbk@lpieralisi>
-References: <20220314144429.1947610-1-maz@kernel.org>
+        Thu, 17 Mar 2022 05:18:25 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29215124C32;
+        Thu, 17 Mar 2022 02:17:08 -0700 (PDT)
+Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MtfRp-1oONmW22Jz-00v6tb; Thu, 17 Mar 2022 10:17:07 +0100
+Received: by mail-wr1-f42.google.com with SMTP id r10so6444443wrp.3;
+        Thu, 17 Mar 2022 02:17:07 -0700 (PDT)
+X-Gm-Message-State: AOAM533aOR4+cyrobtkfyRj1oDMGMwF63p3OjAuP3F0IbfwWZTM5ZtbY
+        mhZKKjjY94Gsh9lcxdYiegB9PoN8ACf5kJmgXh4=
+X-Google-Smtp-Source: ABdhPJzHxRGEWXDlBot3JUsd9DgwDJ6ivxcLghivZobZjz3wwreUXbJML8BPLrLgeRbd4dSRRrBLY4hc87aaQUXL1EU=
+X-Received: by 2002:a05:6000:1e0d:b0:203:e950:7b74 with SMTP id
+ bj13-20020a0560001e0d00b00203e9507b74mr1946333wrb.219.1647508627012; Thu, 17
+ Mar 2022 02:17:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220314144429.1947610-1-maz@kernel.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220316232600.20419-1-palmer@rivosinc.com>
+In-Reply-To: <20220316232600.20419-1-palmer@rivosinc.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 17 Mar 2022 10:16:50 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0J3ViDWserQew2wt95Hnu6AHT5gmSxtUz0x5W2fWdxBA@mail.gmail.com>
+Message-ID: <CAK8P3a0J3ViDWserQew2wt95Hnu6AHT5gmSxtUz0x5W2fWdxBA@mail.gmail.com>
+Subject: Re: [PATCH 0/5] Generic Ticket Spinlocks
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:A8t+JNQ6hnfKWa5ZvcXXjImC9GHMIrJRw1UUen1iqsyraxUR3B2
+ IoPgjisorvwAoB+Zyb1Vr6LscrQ0ft+lf6/vlyMhxuoK7BmeSDmEfycB7T36OFb1hGh9Qjh
+ cDYXU1F9M9OvcpV6EIrlccH1mqZmjOQiC7DCeLZI7NV+dzj0Buh6H6DhTJ4aBxWvmkWVd5R
+ cHSLUKq3tcy7AUApZ2BUA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0maHK8ZCjz8=:RcAArPyC15KFEFlLUXqXie
+ +YrGxC300capN6HgP2eEXhvAFuBurqss1Eff1jBdCv0spP460aIftn0ii1An5MWa9l7w0Mp7g
+ mdFQIWlsHiWqAo6Bm4gifactIrEo7L9vkUHNCZJL4kPfpJ2aue+zPQ2/d2e+nnbJASbRNYctP
+ 20INB5uJaIZfSVai1jzWAZs8fpq6NrM1ZC+EY+Fgb8Gh3iMc15lT7UJ5gmblObQgE/g5TMP8t
+ PqHQspg9xo6EizCocgwjAQ6KQ2yEe6BCVWIHdIe8HiTgfidi4a5bcuhrkQ2kQF+z0c301GGjp
+ MYYBse3vxbsWCds2Rt0Pp3gN48ionkcU124WFMRkbvjx64S3CmKkcfQRDr0P69vWeapUzLZPh
+ U/QSE93IHG8Z4ji92VouT8ReNq8GJjuGpwXNFqFBjmaW54JtwZzyJ4HIXxeqfsWXVGxBvQ3ij
+ h34AGJalj9gLMDYiE0K2eV9L8gCjVMds9aD0LrLMeY3zYsO3jU0a16T3LeMh/MrFYbQPYOOEL
+ GIIjxbY/cXk3JorOmN4lYslu7rPDMcylHOR7nj9HPHIHAEJpbt+s8ivcwQpl1887oV7OLx2J+
+ fZpr+EkAjQGdctMA2QHCaxI+ywzVguFc9S9oTqc8otEJclm5kbn5V69QEQvQj7cinoesPwhkV
+ z3FvNv2nQnijBabHLw7YZ9BI1XfAArtDu2crLLA+g1fsWv/+CRSqvl38JViBBcGO+wSfEjG+4
+ DsPJxC3kD9Vbad+TgjE0xaJiAeHLXnVJuPPzDu7XppI6+EVkOzvievc9AFyanPYPesKmJK6B/
+ KXfve/WAFlTd1v/rWUVdhAq4AaM2OIWslIssKe6YgBXEOCjSJM=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,114 +79,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[removed CC stable]
+On Thu, Mar 17, 2022 at 12:25 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>
+> Peter sent an RFC out about a year ago
+> <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>,
+> but after a spirited discussion it looks like we lost track of things.
+> IIRC there was broad consensus on this being the way to go, but there
+> was a lot of discussion so I wasn't sure.  Given that it's been a year,
+> I figured it'd be best to just send this out again formatted a bit more
+> explicitly as a patch.
+>
+> This has had almost no testing (just a build test on RISC-V defconfig),
+> but I wanted to send it out largely as-is because I didn't have a SOB
+> from Peter on the code.  I had sent around something sort of similar in
+> spirit, but this looks completely re-written.  Just to play it safe I
+> wanted to send out almost exactly as it was posted.  I'd probably rename
+> this tspinlock and tspinlock_types, as the mis-match kind of makes my
+> eyes go funny, but I don't really care that much.  I'll also go through
+> the other ports and see if there's any more candidates, I seem to
+> remember there having been more than just OpenRISC but it's been a
+> while.
+>
+> I'm in no big rush for this and given the complex HW dependencies I
+> think it's best to target it for 5.19, that'd give us a full merge
+> window for folks to test/benchmark it on their systems to make sure it's
+> OK.  RISC-V has a forward progress guarantee so we should be safe, but
+> these can always trip things up.
 
-On Mon, Mar 14, 2022 at 02:44:29PM +0000, Marc Zyngier wrote:
-> Commit 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup")
-> killed PCIe on my XGene-1 box (a Mustang board). The machine itself
-> is still alive, but half of its storage (over NVMe) is gone, and the
-> NVMe driver just times out.
-> 
-> Note that this machine boots with a device tree provided by the
-> UEFI firmware (2016 vintage), which could well be non conformant
-> with the spec, hence the breakage.
-> 
-> With the patch reverted, the box boots 5.17-rc8 with flying colors.
-> 
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Toan Le <toan@os.amperecomputing.com>
-> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Cc: Krzysztof Wilczyński <kw@linux.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Stéphane Graber <stgraber@ubuntu.com>
-> Cc: dann frazier <dann.frazier@canonical.com>
-> Cc: Thorsten Leemhuis <regressions@leemhuis.info>
-> Cc: stable@vger.kernel.org>
-> ---
->  drivers/pci/controller/pci-xgene.c | 33 ++++++++++++++++++++----------
->  1 file changed, 22 insertions(+), 11 deletions(-)
+This all looks good to me, feel free to merge the asm-generic
+bits through the riscv tree.
 
-Dann, Rob,
+Regarding the naming, my preference would be to just use
+this version in place of the (currently useless) asm-generic/spinlock.h,
+and just naming it arch_spin_lock() etc.
 
-does this fix the regression debated here:
+This way, converting an architecture to the generic ticket lock can
+be done simply by removing its custom asm/spinlock.h. Or it
+could stay with the current name, but then have a new
+asm-generic/spinlock.h that just includes both asm/ticket_lock.h
+and asm/qrwlock.h.
 
-https://lore.kernel.org/all/Yf2wTLjmcRj+AbDv@xps13.dannf
-
-It is unclear in that thread what the conclusion reached was.
-
-Thanks,
-Lorenzo
-
-> diff --git a/drivers/pci/controller/pci-xgene.c b/drivers/pci/controller/pci-xgene.c
-> index 0d5acbfc7143..aa41ceaf031f 100644
-> --- a/drivers/pci/controller/pci-xgene.c
-> +++ b/drivers/pci/controller/pci-xgene.c
-> @@ -479,28 +479,27 @@ static int xgene_pcie_select_ib_reg(u8 *ib_reg_mask, u64 size)
->  }
->  
->  static void xgene_pcie_setup_ib_reg(struct xgene_pcie *port,
-> -				    struct resource_entry *entry,
-> -				    u8 *ib_reg_mask)
-> +				    struct of_pci_range *range, u8 *ib_reg_mask)
->  {
->  	void __iomem *cfg_base = port->cfg_base;
->  	struct device *dev = port->dev;
->  	void __iomem *bar_addr;
->  	u32 pim_reg;
-> -	u64 cpu_addr = entry->res->start;
-> -	u64 pci_addr = cpu_addr - entry->offset;
-> -	u64 size = resource_size(entry->res);
-> +	u64 cpu_addr = range->cpu_addr;
-> +	u64 pci_addr = range->pci_addr;
-> +	u64 size = range->size;
->  	u64 mask = ~(size - 1) | EN_REG;
->  	u32 flags = PCI_BASE_ADDRESS_MEM_TYPE_64;
->  	u32 bar_low;
->  	int region;
->  
-> -	region = xgene_pcie_select_ib_reg(ib_reg_mask, size);
-> +	region = xgene_pcie_select_ib_reg(ib_reg_mask, range->size);
->  	if (region < 0) {
->  		dev_warn(dev, "invalid pcie dma-range config\n");
->  		return;
->  	}
->  
-> -	if (entry->res->flags & IORESOURCE_PREFETCH)
-> +	if (range->flags & IORESOURCE_PREFETCH)
->  		flags |= PCI_BASE_ADDRESS_MEM_PREFETCH;
->  
->  	bar_low = pcie_bar_low_val((u32)cpu_addr, flags);
-> @@ -531,13 +530,25 @@ static void xgene_pcie_setup_ib_reg(struct xgene_pcie *port,
->  
->  static int xgene_pcie_parse_map_dma_ranges(struct xgene_pcie *port)
->  {
-> -	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(port);
-> -	struct resource_entry *entry;
-> +	struct device_node *np = port->node;
-> +	struct of_pci_range range;
-> +	struct of_pci_range_parser parser;
-> +	struct device *dev = port->dev;
->  	u8 ib_reg_mask = 0;
->  
-> -	resource_list_for_each_entry(entry, &bridge->dma_ranges)
-> -		xgene_pcie_setup_ib_reg(port, entry, &ib_reg_mask);
-> +	if (of_pci_dma_range_parser_init(&parser, np)) {
-> +		dev_err(dev, "missing dma-ranges property\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Get the dma-ranges from DT */
-> +	for_each_of_pci_range(&parser, &range) {
-> +		u64 end = range.cpu_addr + range.size - 1;
->  
-> +		dev_dbg(dev, "0x%08x 0x%016llx..0x%016llx -> 0x%016llx\n",
-> +			range.flags, range.cpu_addr, end, range.pci_addr);
-> +		xgene_pcie_setup_ib_reg(port, &range, &ib_reg_mask);
-> +	}
->  	return 0;
->  }
->  
-> -- 
-> 2.34.1
-> 
+      Arnd

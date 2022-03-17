@@ -2,102 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF714DCE7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5094A4DCE80
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 20:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237864AbiCQTLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 15:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S237883AbiCQTMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 15:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237857AbiCQTLf (ORCPT
+        with ESMTP id S237878AbiCQTMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 15:11:35 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784B9208C23
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 12:10:18 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id w4so5214674ply.13
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 12:10:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=q+Yvk4Xw+jpjX5xTLCBpPZo0AleetlGgSVjMzYWsGsY=;
-        b=PtsRNGgXT9KGmeoGD0ZfYSh4rI+8giEJ2KDLATss1DA+b5E2XmtOoQvuZ7lR5RaKJg
-         JNeCtFapCZfcql3cKxFdtTHYu4iLSgQo7W4B3/5Tw6krOSf6xcBxeDdC8M0yIA0vu+Rq
-         yj5wV7ukcYSwWBq5UxpsKMXGM1CWepdL1z5+o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=q+Yvk4Xw+jpjX5xTLCBpPZo0AleetlGgSVjMzYWsGsY=;
-        b=VH+y6HyIrbepTs287GTefKUPOl1/cUfVgGqKgDxP+6l33tFTtoqLbzFKKuoYL9W+ag
-         AFRPWqAI8mEPhztE8Ji1USOes6SisEparDg/v+aIAVrdzpcVUClsaMXICzqMqxBGrf7Z
-         YYontqCT4OM7kt3VXYkUuhU2t9DX8wXksY8shfxrROgbeYyfWOnPxJFAAg39V/Z9HHps
-         6Fc1F/LP94jcgdRWi9Kbif5sYjMKaF5Bchc2OJRuTTwyCAvTo04XeFMN3wItjKB6uUYl
-         vFfvTVRX9/l2aGnCRFW2DF8lUyhXRRHMeMrmFXYsEQ5E7uFt+GUizl/j6CkhksOa15Pi
-         oxMA==
-X-Gm-Message-State: AOAM532ecA4BC8Em+IC9xGA5+3xFcqHIkIVcgBGRahF9CTNcJfvd8x5s
-        TTxApi8GCGQZQOvN4O0PHKS3Sw==
-X-Google-Smtp-Source: ABdhPJzLSAJmtCqtOTC+5DBrXu+wjHpu7EwHOXE/Ox6qNc24/dd5OCcG8i8AC/ClqpXCGpifd8BQGg==
-X-Received: by 2002:a17:90a:f2cd:b0:1c6:5a37:69ab with SMTP id gt13-20020a17090af2cd00b001c65a3769abmr7123263pjb.224.1647544217875;
-        Thu, 17 Mar 2022 12:10:17 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h11-20020a056a00170b00b004f7a83058d5sm8094040pfc.16.2022.03.17.12.10.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 12:10:17 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 12:10:16 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, linux-api@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH 1/2] ptrace: Move setting/clearing ptrace_message into
- ptrace_stop
-Message-ID: <202203171209.FC87C7B08@keescook>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <87bl1kunjj.fsf@email.froward.int.ebiederm.org>
- <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
- <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
- <87tubyx0rg.fsf_-_@email.froward.int.ebiederm.org>
- <87bky67qfv.fsf_-_@email.froward.int.ebiederm.org>
+        Thu, 17 Mar 2022 15:12:34 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401AF208C23
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 12:11:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647544277; x=1679080277;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=QtbZsZYj0hr0+LT60TV+H4KtAWp3GNm9B4MX5TPGWQk=;
+  b=GUmy1ma1DosoGBcQ2Hy4tPidmyGAzHsqv8FsAP0CJPjwWUDOjfs3xHJk
+   IlJVcZOA4igLz9A6eNPG8BLcq5TTSAmQrJaxCgXcvxmdkklBwpf91CHhs
+   NYJxQOy/1+JbslfKE86ufTTgNwAosSe5ZEBiYTsCjH1bqWjO4rTQ2u14n
+   w9dUZUSSNf7G7hjdSJvIlMLf9CzBhkCckPzpmWB0dw1coj18+IYrF53N7
+   v5cr31n15CUtl++bNhSMBT89rdFCAHEeaPnmWEKAii/RRBlBPwmZDU0l3
+   /EJ7ETOxJVXvfOy3Z1WcQCD34qawwUpsNxc6vp3qmd21RT5Fec0wfU3fe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="237574612"
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="237574612"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 12:11:16 -0700
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="581411403"
+Received: from dstanfie-mobl2.amr.corp.intel.com (HELO [10.212.178.19]) ([10.212.178.19])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 12:11:16 -0700
+Message-ID: <96f9b880-876f-bf4d-8eb0-9ae8bbc8df6d@intel.com>
+Date:   Thu, 17 Mar 2022 12:11:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bky67qfv.fsf_-_@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Nadav Amit <namit@vmware.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "lkp@lists.01.org" <lkp@lists.01.org>,
+        "lkp@intel.com" <lkp@intel.com>,
+        "ying.huang@intel.com" <ying.huang@intel.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>,
+        "fengwei.yin@intel.com" <fengwei.yin@intel.com>
+References: <20220317090415.GE735@xsang-OptiPlex-9020>
+ <c85ae95a-6603-ca0d-a653-b3f2f7069e20@intel.com>
+ <3B958B13-75F0-4B81-B8CF-99CD140436EB@vmware.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [x86/mm/tlb] 6035152d8e: will-it-scale.per_thread_ops -13.2%
+ regression
+In-Reply-To: <3B958B13-75F0-4B81-B8CF-99CD140436EB@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 06:21:08PM -0500, Eric W. Biederman wrote:
+On 3/17/22 12:02, Nadav Amit wrote:
+>> This new "early lazy check" behavior could theoretically work both ways.
+>> If threads tended to be waking up from idle when TLB flushes were being
+>> sent, this would tend to reduce the number of IPIs.  But, since they
+>> tend to be going to sleep it increases the number of IPIs.
+>>
+>> Anybody have a better theory?  I think we should probably revert the commit.
 > 
-> Today ptrace_message is easy to overlook as it not a core part of
-> ptrace_stop.  It has been overlooked so much that there are places
-> that set ptrace_message and don't clear it, and places that never set
-> it.  So if you get an unlucky sequence of events the ptracer may be
-> able to read a ptrace_message that does not apply to the current
-> ptrace stop.
+> Let’s get back to the motivation behind this patch.
 > 
-> Move setting of ptrace_message into ptrace_stop so that it always gets
-> set before the stop, and always gets cleared after the stop.  This
-> prevents non-sense from being reported to userspace and makes
-> ptrace_message more visible in the ptrace helper functions so that
-> kernel developers can see it.
+> Originally we had an indirect branch that on system which are
+> vulnerable to Spectre v2 translates into a retpoline.
 > 
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> So I would not paraphrase this patch purpose as “early lazy check”
+> but instead “more efficient lazy check”. There is very little code
+> that was executed between the call to on_each_cpu_cond_mask() and
+> the actual check of tlb_is_not_lazy(). So what it seems to happen
+> in this test-case - according to what you say - is that *slower*
+> checks of is-lazy allows to send fewer IPIs since some cores go
+> into idle-state.
+> 
+> Was this test run with retpolines? If there is a difference in
+> performance without retpoline - I am probably wrong.
 
-This looks good to me. Did you happen to run the seccomp selftests
-before/after these changes?
+Nope, no retpolines:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+> /sys/devices/system/cpu/vulnerabilities/spectre_v2:Mitigation: Enhanced IBRS, IBPB: conditional, RSB filling
 
--- 
-Kees Cook
+which is the same situation as the "Xeon Platinum 8358" which found this
+in 0day.
+
+Maybe the increased IPIs with this approach end up being a wash with the
+reduced retpoline overhead.
+
+Did you have any specific performance numbers that show the benefit on
+retpoline systems?

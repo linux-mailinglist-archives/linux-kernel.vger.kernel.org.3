@@ -2,209 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0461B4DCDF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC5F4DCE17
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237672AbiCQSvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        id S237689AbiCQSyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237650AbiCQSvH (ORCPT
+        with ESMTP id S231468AbiCQSyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:51:07 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175251557EF;
-        Thu, 17 Mar 2022 11:49:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1647542984; x=1679078984;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RIdhHdpM5nL7HMZXAvGb9SlP3iancAtq9XoW3asZ+fA=;
-  b=Pu3O+0bCfB/IKGjZYx6GfB0vBGF8KVblmJHZccAHDx2rEVuqT8pvX+b+
-   eShCNihi+xCwupmgA7JAwtVhXZLTkp3evRevZoAkFEBaq6CKB+1FmP938
-   mMxxUVnb7kEhFdJ4fN/ihjAfolVMCu6hzp+UsSb5lRGlYWCBIUOsEXydu
-   AuvTmKMDloBlqZ2Ll+i8QCh+q3/9d3CL540ctehq9Ofk1/1CdehPxvu2D
-   JOdeKYfPzHrpEURUVpjlj+DRu/mvbXgFy782wkGgm6Z0BQEHv+ma6s3CG
-   JpKDLwDfF9DyzK/6QUv6j/Tz0uLKGZL0OcbVl8wpSuQ2eZJ+wNn2R2nWn
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,188,1643698800"; 
-   d="scan'208";a="152385628"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Mar 2022 11:49:39 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 17 Mar 2022 11:49:34 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 17 Mar 2022 11:49:32 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
-        <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next 5/5] net: lan96x: Update FDMA to change MTU.
-Date:   Thu, 17 Mar 2022 19:51:59 +0100
-Message-ID: <20220317185159.1661469-6-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220317185159.1661469-1-horatiu.vultur@microchip.com>
-References: <20220317185159.1661469-1-horatiu.vultur@microchip.com>
+        Thu, 17 Mar 2022 14:54:05 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD4E2220F9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:52:47 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id y17so8418151ljd.12
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:52:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SWE7ZJ9hpebJWcE2cZFbACGv2btEDEVbeAE9VoY9EiI=;
+        b=CZfJIPwgLVlnZ/hWoJNx1l13U+oWobomaEsiXFNSc3E9eB53oh+jwCoQRkojtujA1b
+         ktLaaOnQ8y1nP8beK9ieQ2wFmdLtKQa0yIPe/u6fYJgi6W2gs7AI0IbdWZpJKUE4/Fry
+         hlRz2iZhPfT3IxS9LxKkes0PVNWKqbbL9G08w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SWE7ZJ9hpebJWcE2cZFbACGv2btEDEVbeAE9VoY9EiI=;
+        b=zQ3d6lQCJt017IbLw302bhAf4u0rBKzPkIPDT6/Vv8ENpRBBTdD4KgKLz7gd/iaXUS
+         crqaOtipIf1Rrjc0WuedkiRInF/h1VfjmCNo/UAc5FLLO7LGCdpxw5C8UsvNY7j9JXp3
+         N5L/wAEJ/NT3fOgXTzMOdgBdwsquscl2CbDuscjjdFdcQHbr1b+lz1GvBrTppQRK6xot
+         V7hyEhVWqTnyNB+gJX5L32FFTN442ogcM+kUaIYaOUqcgh/Et3uJFiAW1craYoHkHh2f
+         6b5MOHgN1JkwLv+DUUpXfos8m8Zg3KRAgxYuumSIGlt7WCWSiHeN46amP2npkCytNWQy
+         lVCw==
+X-Gm-Message-State: AOAM533Aj1xM4rmP9aEW6ST8vB/zZbpKKXEsInrnHtTXtG8L8ukv2pAG
+        UV88ui/fIioGz8E6KsmOUpMWmGCoYck5QiUd
+X-Google-Smtp-Source: ABdhPJwmIo+QAZ1dqXKkBWS8Tjyyb6ZXhnWQ9wzA5V7a5mYOg4TQviWtc4DQNsEnPRGZuNx/kl823g==
+X-Received: by 2002:a2e:5009:0:b0:247:d738:3e90 with SMTP id e9-20020a2e5009000000b00247d7383e90mr3887692ljb.229.1647543165275;
+        Thu, 17 Mar 2022 11:52:45 -0700 (PDT)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
+        by smtp.gmail.com with ESMTPSA id bu9-20020a056512168900b004489c47d241sm508033lfb.32.2022.03.17.11.52.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 11:52:43 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id w12so10522253lfr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:52:43 -0700 (PDT)
+X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
+ y3-20020ac24203000000b004488053d402mr3728431lfh.687.1647543162903; Thu, 17
+ Mar 2022 11:52:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com>
+ <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
+ <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
+ <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
+In-Reply-To: <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 17 Mar 2022 11:52:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
+Message-ID: <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
+Subject: Re: [PATCH v5] x86: use builtins to read eflags
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When changing the MTU, it is required to change also the size of the
-DBs. In case those frames will arrive to CPU.
+[ I got cc'd in the middle of the discussion, so I might be missing
+some context or pointing something out that was already discussed ]
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- .../ethernet/microchip/lan966x/lan966x_fdma.c | 95 +++++++++++++++++++
- .../ethernet/microchip/lan966x/lan966x_main.c |  2 +-
- .../ethernet/microchip/lan966x/lan966x_main.h |  1 +
- 3 files changed, 97 insertions(+), 1 deletion(-)
+On Thu, Mar 17, 2022 at 11:00 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> > >One change you may see due to this patch is the compiler moving the
+> > >"pop %..." instruction away from the "pushf" instruction. This could
+> > >happen if the compiler determines that it could produce better code by
+> > >doing so---e.g. to reduce register pressure. The "gcc -O2" example
+> > >below shows this code movement.
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index c23e521a1f8b..a33329cc4834 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -633,6 +633,101 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
- 	return err;
- }
- 
-+static int lan966x_fdma_get_max_mtu(struct lan966x *lan966x)
-+{
-+	int max_mtu = 0;
-+	int i;
-+
-+	for (i = 0; i < lan966x->num_phys_ports; ++i) {
-+		int mtu;
-+
-+		if (!lan966x->ports[i])
-+			continue;
-+
-+		mtu = lan966x->ports[i]->dev->mtu;
-+		if (mtu > max_mtu)
-+			max_mtu = mtu;
-+	}
-+
-+	return max_mtu;
-+}
-+
-+static int lan966x_qsys_sw_status(struct lan966x *lan966x)
-+{
-+	return lan_rd(lan966x, QSYS_SW_STATUS(CPU_PORT));
-+}
-+
-+static void lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
-+{
-+	void *rx_dcb, *tx_dcb, *tx_dcb_buf;
-+	dma_addr_t rx_dma, tx_dma;
-+	unsigned long flags;
-+	u32 size;
-+
-+	/* Store these for later to free them */
-+	rx_dma = lan966x->rx.dma;
-+	tx_dma = lan966x->tx.dma;
-+	rx_dcb = lan966x->rx.dcbs;
-+	tx_dcb = lan966x->tx.dcbs;
-+	tx_dcb_buf = lan966x->tx.dcbs_buf;
-+
-+	lan966x_fdma_rx_disable(&lan966x->rx);
-+	lan966x_fdma_rx_free_skbs(&lan966x->rx);
-+	lan966x->rx.page_order = round_up(new_mtu, PAGE_SIZE) / PAGE_SIZE - 1;
-+	lan966x_fdma_rx_alloc(&lan966x->rx);
-+	lan966x_fdma_rx_start(&lan966x->rx);
-+
-+	spin_lock_irqsave(&lan966x->tx_lock, flags);
-+	lan966x_fdma_tx_disable(&lan966x->tx);
-+	lan966x_fdma_tx_alloc(&lan966x->tx);
-+	spin_unlock_irqrestore(&lan966x->tx_lock, flags);
-+
-+	/* Now it is possible to clean */
-+	size = sizeof(struct lan966x_tx_dcb) * FDMA_DCB_MAX;
-+	size = ALIGN(size, PAGE_SIZE);
-+	dma_free_coherent(lan966x->dev, size, tx_dcb, tx_dma);
-+
-+	kfree(tx_dcb_buf);
-+
-+	size = sizeof(struct lan966x_rx_dcb) * FDMA_DCB_MAX;
-+	size = ALIGN(size, PAGE_SIZE);
-+	dma_free_coherent(lan966x->dev, size, rx_dcb, rx_dma);
-+}
-+
-+int lan966x_fdma_change_mtu(struct lan966x *lan966x)
-+{
-+	int max_mtu;
-+	u32 val;
-+
-+	max_mtu = lan966x_fdma_get_max_mtu(lan966x);
-+	if (round_up(max_mtu, PAGE_SIZE) / PAGE_SIZE - 1 ==
-+	    lan966x->rx.page_order)
-+		return 0;
-+
-+	/* Disable the CPU port */
-+	lan_rmw(QSYS_SW_PORT_MODE_PORT_ENA_SET(0),
-+		QSYS_SW_PORT_MODE_PORT_ENA,
-+		lan966x, QSYS_SW_PORT_MODE(CPU_PORT));
-+
-+	/* Flush the CPU queues */
-+	readx_poll_timeout(lan966x_qsys_sw_status, lan966x,
-+			   val, !(QSYS_SW_STATUS_EQ_AVAIL_GET(val)),
-+			   READL_SLEEP_US, READL_TIMEOUT_US);
-+
-+	/* Add a sleep in case there are frames between the queues and the CPU
-+	 * port
-+	 */
-+	usleep_range(1000, 2000);
-+
-+	lan966x_fdma_reload(lan966x, max_mtu);
-+
-+	/* Enable back the CPU port */
-+	lan_rmw(QSYS_SW_PORT_MODE_PORT_ENA_SET(1),
-+		QSYS_SW_PORT_MODE_PORT_ENA,
-+		lan966x,  QSYS_SW_PORT_MODE(CPU_PORT));
-+	return 0;
-+}
-+
- void lan966x_fdma_netdev_init(struct lan966x *lan966x, struct net_device *dev)
- {
- 	if (lan966x->fdma_ndev)
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 6cb9fffc3058..a78fee5471e7 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -359,7 +359,7 @@ static int lan966x_port_change_mtu(struct net_device *dev, int new_mtu)
- 	       lan966x, DEV_MAC_MAXLEN_CFG(port->chip_port));
- 	dev->mtu = new_mtu;
- 
--	return 0;
-+	return !lan966x->fdma ? 0 : lan966x_fdma_change_mtu(lan966x);
- }
- 
- static int lan966x_mc_unsync(struct net_device *dev, const unsigned char *addr)
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index bfa7feea2b56..fa4016f2b5d4 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -397,6 +397,7 @@ void lan966x_ptp_txtstamp_release(struct lan966x_port *port,
- irqreturn_t lan966x_ptp_irq_handler(int irq, void *args);
- 
- int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev);
-+int lan966x_fdma_change_mtu(struct lan966x *lan966x);
- void lan966x_fdma_netdev_init(struct lan966x *lan966x, struct net_device *dev);
- void lan966x_fdma_netdev_deinit(struct lan966x *lan966x, struct net_device *dev);
- void lan966x_fdma_init(struct lan966x *lan966x);
--- 
-2.33.0
+Honestly, that part worries me a _lot_.
 
+Why?
+
+Because clang in particular has already messed up eflags handling
+once, by spilling condition codes (in the form of eflags) onto the
+stack, and then loading them later with a "popf".
+
+And it did so across a function call THAT MODIFIED 'IF'. This was a
+major bug in clang back in 2015 or so, and made it unusable for the
+kernel.
+
+See for example
+
+    https://lore.kernel.org/all/CA+icZUU7y5ATSLV_0TGzi5m5deWADLmAMBkAT32FKGyUWNSJSA@mail.gmail.com/
+
+for some kernel discussion, and separately
+
+    https://lists.llvm.org/pipermail/llvm-dev/2015-July/088774.html
+
+for just llvm discussions.
+
+It is perhaps telling that the LLVM discussion I found seems to talk
+more about the performance impact, not about the fact that THE
+GENERATED CODE WAS WRONG.
+
+That compiler bug would basically enable or disable interrupts in
+random places - because clang developers thought that 'eflags' is only
+about the condition codes.
+
+> EFLAGS is defined as the lower 16 bits of FLAGS register, yeah?
+
+No. EFLAGS is a 32-bit register.
+
+A lot of the high bits end up being reserved, but not all of them. AC,
+VIF/VIP are all in the upper 16 bits.
+
+Also:
+
+> So I don't understand your point; the finest grain resolution
+> the compiler has to work with is the whole EFLAGS register, not
+> individual bits like IF, DF, or AC.  (I triple checked this with the
+> maintainer of LLVM's x86 backend)
+
+You can actually operate on EFLAGS at multiple granularities.
+
+ - normal pushf/popf. Don't do it unless you are doing system software.
+
+ - You *can* (but you really *really* should not) operate on only the
+lower 16 bits, with "popfw". Don't do it - it doesn't help, requires
+an operand size override, and is just bad.
+
+ - you can use lahf/sahc to load/store only the arithmetic flags
+into/from AH. Deprecated, and going away, but historically supported.
+
+ - you can obviously use arithmetic and setcc to modify/read the
+arithmetic flags properly.
+
+A compiler should NEVER think that it can access eflags natively with
+pushf/popf. Clang thought it could do so, and clang was WRONG.
+
+The absolutely only case that a compiler should ever worry about and
+do is that last case above: arithmetic instructions that set the
+flags, and 'jcc', 'setcc', 'cmov', 'adc' etc that test it./
+
+Yes, yes, that complete mental breakdown with pushf/popf did get
+fixed, but it really makes me very wary of thinking that we should
+ever use a built-in that compiler writers really fundamentally got so
+wrong before.
+
+What would make me think that you'd get it right now? In user space,
+you'll basically never actually see the whole system flags issues, so
+your test-cases would never work or be very contrieved. You'd have to
+really work at it to see the problems.
+
+> > The memory barrier is needed for IF changes, for example.
+>
+> Shouldn't native_irq_disable/native_irq_enable be declaring that they
+> clobber "cc" then?
+> https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Clobbers-and-Scratch-Registers
+
+No. Once again: compilers don't understand system flags in eflags.
+
+In fact, gcc pretty much documents that "cc" clobbers doesn't do
+anything on x86, and isn't needed. It just assumes that the arithmetic
+flags always get clobbered, because on x86 that's pretty much the
+case. They have sometimes been added for documentation purposes in the
+kernel, but that's all they are.
+
+So you can find that "cc" clobber in a few places in the kernel, but
+it's pointless.
+
+The reason pushf/popf need to have a memory clobber is so that the
+compiler will not move it around other things that have memory
+clobbers.
+
+Because memory clobbers are things that compilers *UNDERSTAND*.
+
+Put another way: when you see that "memory" clobber in an inline asm,
+don't think that it means "this modifies or uses memory".
+
+That may be the documentation, and that may be how compiler people
+think about them, but that's just wrong.
+
+What *kernel* people think is "this makes the compiler not do stupid things".
+
+Because compilers really don't understand things like system registers
+and system flags, and the subtle issues they have, and the ordering
+requirements they have. Never have, and never will.
+
+And compilers really don't understand - or care about - things like
+"cc", because compiler people think it's about arithmetic flags, and
+would do things like "oh, I'll just save and restore the flags over
+this since the asm modifies it".
+
+Note that "eflags" is just the tip of the iceberg here. This is true
+for a lot of other cases.
+
+Yes, when you have something like a "disable interrupts", the compiler
+really must not move memory accesses around it, because the interrupt
+flag may in fact be protecting that memory access from becoming a
+deadlock.
+
+But the whole "you can't move _other_ things that you don't even
+understand around this either" is equally important. A "disable
+interrupts" could easily be protecting a "read and modify a CPU MSR
+value" too - no real "memory" access necessarily involved, but
+"memory" is the only way we can tell you "don't move this".
+
+Particularly since both the clang people and gcc people have actively
+been trying to weaken the "volatile" semantics (which would have
+generally been the logically consistent model - thinking if inline asm
+to be visible in the machine model, and not being able to move them
+around for those reasons).
+
+> > This feels like "let's fix LLVM by hacking the kernel in dangerous ways" once again!
+>
+> Even if the behavior of llvm was changed, you'd _still_ get better
+> codegen for _both_ compilers by using the intrinsics.
+
+No.
+
+"moving instructions around a bit" is not better code generation when
+the end result DOES NOT WORK.
+
+And honestly, we have absolutely zero reason to believe that it would work.
+
+If it turns out that "pop to memory" is a big deal for performance,
+let's just change the "=rm" to "=r" and be done with it. Problem
+solved. We already used to do that on the "pushf" side, but these days
+we avoid "popfl" entirely and do a conditional jump over a "sti"
+instead.
+
+Because maybe moving that "pop" by a few inbstructions helps a bit,
+but if you move the "pushf" noticeably, you've just created a big big
+problem.
+
+A bug you've had once already.
+
+                 Linus

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A92E4DC9E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:27:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADD74DC9E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235844AbiCQP1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 11:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
+        id S235832AbiCQP1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 11:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235761AbiCQP0m (ORCPT
+        with ESMTP id S235762AbiCQP0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Mar 2022 11:26:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6035C205BDF
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF6D205BDC
         for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 08:25:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AB7B61973
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 507A961977
         for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:25:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8886C3410C;
-        Thu, 17 Mar 2022 15:25:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B072C36AE2;
+        Thu, 17 Mar 2022 15:25:25 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1nUs0C-004ziV-0E;
+        id 1nUs0C-004zj4-6N;
         Thu, 17 Mar 2022 11:25:24 -0400
-Message-ID: <20220317152523.833350491@goodmis.org>
+Message-ID: <20220317152524.027268941@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Thu, 17 Mar 2022 11:25:09 -0400
+Date:   Thu, 17 Mar 2022 11:25:10 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
@@ -46,7 +46,7 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
         "David S . Miller" <davem@davemloft.net>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [for-next][PATCH 11/13] fprobe: Introduce FPROBE_FL_KPROBE_SHARED flag for fprobe
+Subject: [for-next][PATCH 12/13] docs: fprobe: Add fprobe description to ftrace-use.rst
 References: <20220317152458.213689956@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,36 +61,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Masami Hiramatsu <mhiramat@kernel.org>
 
-Introduce FPROBE_FL_KPROBE_SHARED flag for sharing fprobe callback with
-kprobes safely from the viewpoint of recursion.
+Add a documentation of fprobe for the user who needs
+this interface.
 
-Since the recursion safety of the fprobe (and ftrace) is a bit different
-from the kprobes, this may cause an issue if user wants to run the same
-code from the fprobe and the kprobes.
-
-The kprobes has per-cpu 'current_kprobe' variable which protects the
-kprobe handler from recursion in any case. On the other hand, the fprobe
-uses only ftrace_test_recursion_trylock(), which will allow interrupt
-context calls another (or same) fprobe during the fprobe user handler is
-running.
-
-This is not a matter in cases if the common callback shared among the
-kprobes and the fprobe has its own recursion detection, or it can handle
-the recursion in the different contexts (normal/interrupt/NMI.)
-But if it relies on the 'current_kprobe' recursion lock, it has to check
-kprobe_running() and use kprobe_busy_*() APIs.
-
-Fprobe has FPROBE_FL_KPROBE_SHARED flag to do this. If your common callback
-code will be shared with kprobes, please set FPROBE_FL_KPROBE_SHARED
-*before* registering the fprobe, like;
-
- fprobe.flags = FPROBE_FL_KPROBE_SHARED;
-
- register_fprobe(&fprobe, "func*", NULL);
-
-This will protect your common callback from the nested call.
-
-Link: https://lkml.kernel.org/r/164735293127.1084943.15687374237275817599.stgit@devnote2
+Link: https://lkml.kernel.org/r/164735294272.1084943.12372175959382037397.stgit@devnote2
 
 Cc: Jiri Olsa <jolsa@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
@@ -106,93 +80,204 @@ Cc: "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>
 Cc: Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
 Cc: "David S . Miller" <davem@davemloft.net>
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+[ Removed extra line at end of fprobe.rst ]
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- include/linux/fprobe.h  | 12 ++++++++++++
- include/linux/kprobes.h |  3 +++
- kernel/trace/fprobe.c   | 19 ++++++++++++++++++-
- 3 files changed, 33 insertions(+), 1 deletion(-)
+ Documentation/trace/fprobe.rst | 173 +++++++++++++++++++++++++++++++++
+ Documentation/trace/index.rst  |   1 +
+ 2 files changed, 174 insertions(+)
+ create mode 100644 Documentation/trace/fprobe.rst
 
-diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
-index 8eefec2b485e..1c2bde0ead73 100644
---- a/include/linux/fprobe.h
-+++ b/include/linux/fprobe.h
-@@ -34,13 +34,25 @@ struct fprobe {
- 	void (*exit_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
- };
- 
-+/* This fprobe is soft-disabled. */
- #define FPROBE_FL_DISABLED	1
- 
-+/*
-+ * This fprobe handler will be shared with kprobes.
-+ * This flag must be set before registering.
-+ */
-+#define FPROBE_FL_KPROBE_SHARED	2
+diff --git a/Documentation/trace/fprobe.rst b/Documentation/trace/fprobe.rst
+new file mode 100644
+index 000000000000..5d0454cd3196
+--- /dev/null
++++ b/Documentation/trace/fprobe.rst
+@@ -0,0 +1,173 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
- static inline bool fprobe_disabled(struct fprobe *fp)
- {
- 	return (fp) ? fp->flags & FPROBE_FL_DISABLED : false;
- }
- 
-+static inline bool fprobe_shared_with_kprobes(struct fprobe *fp)
-+{
-+	return (fp) ? fp->flags & FPROBE_FL_KPROBE_SHARED : false;
-+}
++==================================
++Fprobe - Function entry/exit probe
++==================================
 +
- #ifdef CONFIG_FPROBE
- int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter);
- int register_fprobe_ips(struct fprobe *fp, unsigned long *addrs, int num);
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index 19b884353b15..5f1859836deb 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -427,6 +427,9 @@ static inline struct kprobe *kprobe_running(void)
- {
- 	return NULL;
- }
-+#define kprobe_busy_begin()	do {} while (0)
-+#define kprobe_busy_end()	do {} while (0)
++.. Author: Masami Hiramatsu <mhiramat@kernel.org>
 +
- static inline int register_kprobe(struct kprobe *p)
- {
- 	return -EOPNOTSUPP;
-diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-index 38073632bfe4..8b2dd5b9dcd1 100644
---- a/kernel/trace/fprobe.c
-+++ b/kernel/trace/fprobe.c
-@@ -56,6 +56,20 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
- }
- NOKPROBE_SYMBOL(fprobe_handler);
- 
-+static void fprobe_kprobe_handler(unsigned long ip, unsigned long parent_ip,
-+				  struct ftrace_ops *ops, struct ftrace_regs *fregs)
-+{
-+	struct fprobe *fp = container_of(ops, struct fprobe, ops);
++Introduction
++============
 +
-+	if (unlikely(kprobe_running())) {
-+		fp->nmissed++;
-+		return;
-+	}
-+	kprobe_busy_begin();
-+	fprobe_handler(ip, parent_ip, ops, fregs);
-+	kprobe_busy_end();
-+}
++Fprobe is a function entry/exit probe mechanism based on ftrace.
++Instead of using ftrace full feature, if you only want to attach callbacks
++on function entry and exit, similar to the kprobes and kretprobes, you can
++use fprobe. Compared with kprobes and kretprobes, fprobe gives faster
++instrumentation for multiple functions with single handler. This document
++describes how to use fprobe.
 +
- static void fprobe_exit_handler(struct rethook_node *rh, void *data,
- 				struct pt_regs *regs)
- {
-@@ -110,7 +124,10 @@ static unsigned long *get_ftrace_locations(const char **syms, int num)
- static void fprobe_init(struct fprobe *fp)
- {
- 	fp->nmissed = 0;
--	fp->ops.func = fprobe_handler;
-+	if (fprobe_shared_with_kprobes(fp))
-+		fp->ops.func = fprobe_kprobe_handler;
-+	else
-+		fp->ops.func = fprobe_handler;
- 	fp->ops.flags |= FTRACE_OPS_FL_SAVE_REGS;
- }
- 
++The usage of fprobe
++===================
++
++The fprobe is a wrapper of ftrace (+ kretprobe-like return callback) to
++attach callbacks to multiple function entry and exit. User needs to set up
++the `struct fprobe` and pass it to `register_fprobe()`.
++
++Typically, `fprobe` data structure is initialized with the `entry_handler`
++and/or `exit_handler` as below.
++
++.. code-block:: c
++
++ struct fprobe fp = {
++        .entry_handler  = my_entry_callback,
++        .exit_handler   = my_exit_callback,
++ };
++
++To enable the fprobe, call one of register_fprobe(), register_fprobe_ips(), and
++register_fprobe_syms(). These functions register the fprobe with different types
++of parameters.
++
++The register_fprobe() enables a fprobe by function-name filters.
++E.g. this enables @fp on "func*()" function except "func2()".::
++
++  register_fprobe(&fp, "func*", "func2");
++
++The register_fprobe_ips() enables a fprobe by ftrace-location addresses.
++E.g.
++
++.. code-block:: c
++
++  unsigned long ips[] = { 0x.... };
++
++  register_fprobe_ips(&fp, ips, ARRAY_SIZE(ips));
++
++And the register_fprobe_syms() enables a fprobe by symbol names.
++E.g.
++
++.. code-block:: c
++
++  char syms[] = {"func1", "func2", "func3"};
++
++  register_fprobe_syms(&fp, syms, ARRAY_SIZE(syms));
++
++To disable (remove from functions) this fprobe, call::
++
++  unregister_fprobe(&fp);
++
++You can temporally (soft) disable the fprobe by::
++
++  disable_fprobe(&fp);
++
++and resume by::
++
++  enable_fprobe(&fp);
++
++The above is defined by including the header::
++
++  #include <linux/fprobe.h>
++
++Same as ftrace, the registered callbacks will start being called some time
++after the register_fprobe() is called and before it returns. See
++:file:`Documentation/trace/ftrace.rst`.
++
++Also, the unregister_fprobe() will guarantee that the both enter and exit
++handlers are no longer being called by functions after unregister_fprobe()
++returns as same as unregister_ftrace_function().
++
++The fprobe entry/exit handler
++=============================
++
++The prototype of the entry/exit callback function is as follows:
++
++.. code-block:: c
++
++ void callback_func(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
++
++Note that both entry and exit callbacks have same ptototype. The @entry_ip is
++saved at function entry and passed to exit handler.
++
++@fp
++        This is the address of `fprobe` data structure related to this handler.
++        You can embed the `fprobe` to your data structure and get it by
++        container_of() macro from @fp. The @fp must not be NULL.
++
++@entry_ip
++        This is the ftrace address of the traced function (both entry and exit).
++        Note that this may not be the actual entry address of the function but
++        the address where the ftrace is instrumented.
++
++@regs
++        This is the `pt_regs` data structure at the entry and exit. Note that
++        the instruction pointer of @regs may be different from the @entry_ip
++        in the entry_handler. If you need traced instruction pointer, you need
++        to use @entry_ip. On the other hand, in the exit_handler, the instruction
++        pointer of @regs is set to the currect return address.
++
++Share the callbacks with kprobes
++================================
++
++Since the recursion safeness of the fprobe (and ftrace) is a bit different
++from the kprobes, this may cause an issue if user wants to run the same
++code from the fprobe and the kprobes.
++
++Kprobes has per-cpu 'current_kprobe' variable which protects the kprobe
++handler from recursion in all cases. On the other hand, fprobe uses
++only ftrace_test_recursion_trylock(). This allows interrupt context to
++call another (or same) fprobe while the fprobe user handler is running.
++
++This is not a matter if the common callback code has its own recursion
++detection, or it can handle the recursion in the different contexts
++(normal/interrupt/NMI.)
++But if it relies on the 'current_kprobe' recursion lock, it has to check
++kprobe_running() and use kprobe_busy_*() APIs.
++
++Fprobe has FPROBE_FL_KPROBE_SHARED flag to do this. If your common callback
++code will be shared with kprobes, please set FPROBE_FL_KPROBE_SHARED
++*before* registering the fprobe, like:
++
++.. code-block:: c
++
++ fprobe.flags = FPROBE_FL_KPROBE_SHARED;
++
++ register_fprobe(&fprobe, "func*", NULL);
++
++This will protect your common callback from the nested call.
++
++The missed counter
++==================
++
++The `fprobe` data structure has `fprobe::nmissed` counter field as same as
++kprobes.
++This counter counts up when;
++
++ - fprobe fails to take ftrace_recursion lock. This usually means that a function
++   which is traced by other ftrace users is called from the entry_handler.
++
++ - fprobe fails to setup the function exit because of the shortage of rethook
++   (the shadow stack for hooking the function return.)
++
++The `fprobe::nmissed` field counts up in both cases. Therefore, the former
++skips both of entry and exit callback and the latter skips the exit
++callback, but in both case the counter will increase by 1.
++
++Note that if you set the FTRACE_OPS_FL_RECURSION and/or FTRACE_OPS_FL_RCU to
++`fprobe::ops::flags` (ftrace_ops::flags) when registering the fprobe, this
++counter may not work correctly, because ftrace skips the fprobe function which
++increase the counter.
++
++
++Functions and structures
++========================
++
++.. kernel-doc:: include/linux/fprobe.h
++.. kernel-doc:: kernel/trace/fprobe.c
+diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
+index 3a47aa8341c6..f9b7bcb5a630 100644
+--- a/Documentation/trace/index.rst
++++ b/Documentation/trace/index.rst
+@@ -9,6 +9,7 @@ Linux Tracing Technologies
+    tracepoint-analysis
+    ftrace
+    ftrace-uses
++   fprobe
+    kprobes
+    kprobetrace
+    uprobetracer
 -- 
 2.35.1

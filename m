@@ -2,100 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 317BC4DCF49
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 554374DCF54
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiCQU0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
+        id S229696AbiCQU2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 16:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiCQU0g (ORCPT
+        with ESMTP id S229692AbiCQU2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:26:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6DA114CD08;
-        Thu, 17 Mar 2022 13:25:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 941081FB;
-        Thu, 17 Mar 2022 13:25:19 -0700 (PDT)
-Received: from [10.57.43.230] (unknown [10.57.43.230])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7FC503F766;
-        Thu, 17 Mar 2022 13:25:17 -0700 (PDT)
-Message-ID: <558f0c92-c499-daca-e1ad-2b16137f8c06@arm.com>
-Date:   Thu, 17 Mar 2022 20:25:12 +0000
+        Thu, 17 Mar 2022 16:28:16 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF6346642;
+        Thu, 17 Mar 2022 13:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=QWXUe21q1gHls2uczwr3JpXzhHSqbD4o/avgcFBuero=; b=f7hzC9sXay5fUDnXj7tiN55V8M
+        1m6lUnI7zujcL8yQgsuLgsQ/OnzWVul2XBJiN3Z0I94CwtcNmYUBBHyqW8w5eHY6bQ64Hqf4FW/KP
+        XV33m62D9eWlFuUMIeaB2IeoI2uk2wAUXtQqbqdj2TgfNBYzdM6ojmuw+0a2ovvcOnPKdlO17vLmz
+        9kaK5AzNA/nvNvLXX+SaFa8pFQ1AY0CQY7qPYbCxZWV41X2YeaQ0IbYk6DDiWiHe9AvspRjFviMj5
+        CcpKNFbA076sOrUCVEAGwHQ/Xhj6h4mQ0V9fCUEtAvOcSdI933YDHNNKjw+TwSn3o1Rc2L+e6tBpF
+        9Zz4te4g==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nUwhu-001zWV-Er; Thu, 17 Mar 2022 20:26:51 +0000
+Message-ID: <48d30a49-541f-ac67-aa2a-bef8b182dcd9@infradead.org>
+Date:   Thu, 17 Mar 2022 13:26:45 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: timer: Document arm, cortex-a7-timer
- in arch timer
-Content-Language: en-GB
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220317191527.96237-1-singh.kuldeep87k@gmail.com>
- <20220317191527.96237-3-singh.kuldeep87k@gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220317191527.96237-3-singh.kuldeep87k@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: RCU: undefined reference to irq_work_queue
+Content-Language: en-US
+To:     paulmck@kernel.org, Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     rcu@vger.kernel.org, Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org
+References: <YjMcZexG/kJepYDi@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <20220317140000.GO4285@paulmck-ThinkPad-P17-Gen-1>
+ <YjNSuprCqjAgGgqB@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <20220317162033.GP4285@paulmck-ThinkPad-P17-Gen-1>
+ <YjNll+Iv++LORS0n@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <20220317173621.GQ4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220317173621.GQ4285@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-17 19:15, Kuldeep Singh wrote:
-> Renesas RZ/N1D platform uses compatible "arm,cortex-a7-timer" in
-> conjugation with "arm,armv7-timer". Since, initial entry is not
-> documented, it start raising dtbs_check warnings.
+
+
+On 3/17/22 10:36, Paul E. McKenney wrote:
+> On Thu, Mar 17, 2022 at 04:45:11PM +0000, Hyeonggon Yoo wrote:
+>> On Thu, Mar 17, 2022 at 09:20:33AM -0700, Paul E. McKenney wrote:
+>>> On Thu, Mar 17, 2022 at 03:24:42PM +0000, Hyeonggon Yoo wrote:
+>>>> On Thu, Mar 17, 2022 at 07:00:00AM -0700, Paul E. McKenney wrote:
+>>>>> On Thu, Mar 17, 2022 at 11:32:53AM +0000, Hyeonggon Yoo wrote:
+>>>>>> Hello RCU folks,
+>>>>>>
+
+> ------------------------------------------------------------------------
 > 
-> ['arm,cortex-a7-timer', 'arm,armv7-timer'] is too long
-> 'arm,cortex-a7-timer' is not one of ['arm,armv7-timer', 'arm,armv8-timer']
-> 'arm,cortex-a7-timer' is not one of ['arm,cortex-a15-timer']
-> 
-> Document this compatible to address it. The motivation to add this
-> change is taken from an already existing entry "arm,cortex-a15-timer".
-> Please note, this will not hurt any arch timer users.
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 678a80713b21..66c5b5543511 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -38,6 +38,7 @@ config KPROBES
+>  	depends on MODULES
+>  	depends on HAVE_KPROBES
+>  	select KALLSYMS
+> +	select TASKS_RCU if PREEMPTION
+>  	help
+>  	  Kprobes allows you to trap at almost any kernel address and
+>  	  execute a callback function.  register_kprobe() establishes
+> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> index f559870fbf8b..4f665ae0cf55 100644
+> --- a/kernel/rcu/Kconfig
+> +++ b/kernel/rcu/Kconfig
+> @@ -78,7 +78,8 @@ config TASKS_RCU_GENERIC
+>  	  task-based RCU implementations.  Not for manual selection.
+>  
+>  config TASKS_RCU
+> -	def_bool PREEMPTION
+> +	def_bool 0
 
-Eh, if it's never been documented or supported, I say just get rid of 
-it. The arch timer interface is by definition part of a CPU, and we can 
-tell what the CPU is by reading its ID registers. Indeed that's how the 
-driver handles the non-zero number of CPU-specific errata that already 
-exist - we don't need compatibles for that.
+preferably
+	def_bool n
 
-In some ways it might have been nice to have *SoC-specific* compatibles 
-given the difficulty some integrators seem to have had in wiring up a 
-stable count *to* the interface, but it's not like they could be 
-magically added to already-deployed DTs after a bug is discovered, and 
-nor could we have mandated them from day 1 just in case and subsequently 
-maintained a binding that is just an ever-growing list of every SoC. Oh 
-well.
+but the 0 probably works...  :)
 
-Robin.
+> +	select IRQ_WORK
+>  	help
+>  	  This option enables a task-based RCU implementation that uses
+>  	  only voluntary context switch (not preemption!), idle, and
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index 752ed89a293b..a7aaf150b704 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -127,6 +127,7 @@ config TRACING
+>  	select BINARY_PRINTF
+>  	select EVENT_TRACING
+>  	select TRACE_CLOCK
+> +	select TASKS_RCU if PREEMPTION
+>  
+>  config GENERIC_TRACER
+>  	bool
 
-> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-> ---
->   Documentation/devicetree/bindings/timer/arm,arch_timer.yaml | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml b/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
-> index ba2910f0a7b2..ea390e5df71d 100644
-> --- a/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
-> +++ b/Documentation/devicetree/bindings/timer/arm,arch_timer.yaml
-> @@ -26,6 +26,7 @@ properties:
->             - arm,armv8-timer
->         - items:
->             - enum:
-> +              - arm,cortex-a7-timer
->                 - arm,cortex-a15-timer
->             - const: arm,armv7-timer
->   
+-- 
+~Randy

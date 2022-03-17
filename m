@@ -2,218 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 143FB4DCC20
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 912134DCC22
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236747AbiCQRNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 13:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
+        id S236811AbiCQRNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 13:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233524AbiCQRNI (ORCPT
+        with ESMTP id S230168AbiCQRNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 13:13:08 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90B4210459
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:11:51 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id a20so2295056uaq.11
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:11:51 -0700 (PDT)
+        Thu, 17 Mar 2022 13:13:45 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF21210467;
+        Thu, 17 Mar 2022 10:12:28 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d18so4986058plr.6;
+        Thu, 17 Mar 2022 10:12:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IjdO2gAXjrlONlc4x17XqznmOuozTYDeD6qXOclL8Xg=;
-        b=CwdCUg0Y2CycSS2sODVaVFEPGPmVu3qugMo+QRAXAtV7pYVntF5x+BkSUtFdCGHQaW
-         pGvAlmu+V70UQyUpnjbCZJwV8T+f3eW7TaVUe+N2BdyGb2qT80nvi+GxvHd88g3WCxyE
-         ZSHAwFy0U6tpxPJMqg4NVgX9nBtf8l9yyKONrFk3LtAFV1+BXSeqsqpnmQnsytJq2th4
-         6O++hWC7s+Gp2Nblh5heQVw52IN1rE//OnNwZ8TZ+Vygx+Dk6q+R1PXkx+iuJcYvd6cp
-         ViZYYzV7bc4zP2ci0i4nKUPg92+QCSt0htd3jVsdjALfcam9mIv9SMNxDd3BdB9LvTK4
-         fF2Q==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BfRIcgPs/Pl8i4tK6oyOpSNCam9epu+QKnu3NmXGnOw=;
+        b=Y/qWpr0fc1TTd4Aa60J6ylfkVoYFNHkVPZjYU240B4q0SgKsb2ru9Wnz3pDxw3YZHY
+         5u3MzV1yJNJOUS3nbjtb9ic7M52OWkav4aN5o0vVBBbSp7Qcyw8yIjAMtSn+yR4jiSAi
+         qnY/NKvEA3QCTDf4eboP774TCAifrhAUbVY6G82Q9aDK5gY41E/ZQDgD3R5UyUgNhBNJ
+         HpY0xfUlWGM3VMIdz+htbabY5dEsfXWWKhlREbgkkxiWfek5cKb12AKOoBzwgUI2yJzY
+         7kX3p0WwmPPW2A5bA9ydMhEbLDkO0gvyUSfTAi/FFXX4SHKb0w8EGfZ68fBrZ7mfBVyQ
+         wR+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IjdO2gAXjrlONlc4x17XqznmOuozTYDeD6qXOclL8Xg=;
-        b=FBL/LIFTbJOxRNU3WOro09nl+PU8pmH1x3dbwLVnF/97DaA8uGCINlx/Pgxy5TUjKj
-         /wjTy9FdoFtE5Otw/FTAoNtENFXxAhyhlxOHPFilwVuJFlLyeD6xLmFVdnGH/xTC0mE9
-         g9oXqWGsGsraDg60cNEKUdNFnyXdv56FKJRqcZp3UG7SPuOpKxT8uKOBg2RHEyxrAwYv
-         4wXZ9S4mdbaegds4q1FM0KOFT2VW3LyIQVo148JqCzu2aoxc/VVpiPKRjuusoDM/1xh5
-         KGIrnGXFyBP8SHvzDgrrnTp0AO4pFhO8wfjaJsamjLE85Vndwv8AFIiYdJgLMoZ5oUg1
-         fTjg==
-X-Gm-Message-State: AOAM532qrELKUwI2JWcWylPvXb+KjcyXzltf+h3EtdR6vYZvZa6ZSvzX
-        VmVP4NxNdrtkIf+Ja9CTMBWC4twBymoIDtpoeQoPtQ==
-X-Google-Smtp-Source: ABdhPJyb7WPnqx1FZmSlxqsQUzcgxVrP6ntKUE7PeoirkBJ1qI0T/XyfGVje0YBHOSWMY/Mpj0xinpmcn8gPGkeO9Kw=
-X-Received: by 2002:ab0:1667:0:b0:34b:d5b4:3ccb with SMTP id
- l36-20020ab01667000000b0034bd5b43ccbmr2020917uae.79.1647537110711; Thu, 17
- Mar 2022 10:11:50 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=BfRIcgPs/Pl8i4tK6oyOpSNCam9epu+QKnu3NmXGnOw=;
+        b=jLcshWaFhXXvPYEY/Dt/5t4kQp1q9jS2rTf471sQ2+1eOEqCWrTRB1iXT1cHRDei6D
+         2VgbQWDnL9Vyt9b5pHVpDiEYAXwF/xcU/aIRyMwI8TM5/3HsiSY8LjwcWzo6u9PI5uEx
+         WGpiSze6jcA8pnKRYqUTuMvz6YRnQjKUcn40YPg7t5ZVVfJkvYmRKlCYvXW+kti642YY
+         eKlRfYnWeOGdpMh5E3F7UCmst1g0XMFv+TjY1G6yGCDDx6WZgI4MGSGiReLs/EHaRk3I
+         UpbtRVpbubsQ94TFZe7KA/W+fdL8C2MM+Jv5kwL+Qqymd/3op3QqM8YFfU6xmZxjMp11
+         ijTA==
+X-Gm-Message-State: AOAM530Abvm1uICkFQZHH0uUVO0L7jqDK6X6Y4ULmYKdehHzSkARaMQ4
+        h+gcwnQqL0U2oBwNrvthnXDpoR1UNGA=
+X-Google-Smtp-Source: ABdhPJyZJ8MWbA7R6ifyOln1R/qHgf+Vlu9BKsuGzHz74o+zI72HIyfYzfH/6s1DtYJD2u6bUN/fHw==
+X-Received: by 2002:a17:90b:3503:b0:1bc:5d68:e7a2 with SMTP id ls3-20020a17090b350300b001bc5d68e7a2mr6557098pjb.29.1647537147694;
+        Thu, 17 Mar 2022 10:12:27 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:b625:fd41:4746:7bf5])
+        by smtp.gmail.com with ESMTPSA id d4-20020a17090ad3c400b001c65ba76911sm5761892pjw.3.2022.03.17.10.12.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 10:12:27 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 17 Mar 2022 10:12:25 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Dong Aisheng <dongas86@gmail.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        shawnguo@kernel.org, linux-imx@nxp.com, akpm@linux-foundation.org,
+        m.szyprowski@samsung.com, lecopzer.chen@mediatek.com,
+        vbabka@suse.cz, stable@vger.kernel.org, shijie.qin@nxp.com
+Subject: Re: [PATCH v3 1/2] mm: cma: fix allocation may fail sometimes
+Message-ID: <YjNr+d2Un7F8c2DZ@google.com>
+References: <20220315144521.3810298-1-aisheng.dong@nxp.com>
+ <20220315144521.3810298-2-aisheng.dong@nxp.com>
+ <93480fb1-6992-b992-4c93-0046f3b92d7a@redhat.com>
+ <CAA+hA=QzDJhFnntKK4nk-SMErk9J_mFPv0b7ZWuC8Ubz0BC+sg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220208211637.2221872-1-eranian@google.com> <20220208211637.2221872-7-eranian@google.com>
- <YgPedIWUiPIzF8OW@hirez.programming.kicks-ass.net> <YiI0DKEzc41bF15C@hirez.programming.kicks-ass.net>
- <CABPqkBRQwYnxcXigKwF83BPhQmombqa6nuF5-krqN=00Loy_gg@mail.gmail.com> <20220315120853.GG8939@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220315120853.GG8939@worktop.programming.kicks-ass.net>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Thu, 17 Mar 2022 10:11:39 -0700
-Message-ID: <CABPqkBT=6NX+jZeT97_EwMrAyQMrcTp5RAwAC85fM2cB0ihoQQ@mail.gmail.com>
-Subject: Re: [PATCH v6 06/12] perf/x86/amd: add AMD branch sampling period adjustment
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kim.phillips@amd.com,
-        acme@redhat.com, jolsa@redhat.com, songliubraving@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA+hA=QzDJhFnntKK4nk-SMErk9J_mFPv0b7ZWuC8Ubz0BC+sg@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 5:09 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Mar 09, 2022 at 03:03:39PM -0800, Stephane Eranian wrote:
-> > On Fri, Mar 4, 2022 at 7:45 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Thu, Mar 17, 2022 at 10:26:42PM +0800, Dong Aisheng wrote:
+> On Thu, Mar 17, 2022 at 6:55 PM David Hildenbrand <david@redhat.com> wrote:
+> >
+> > On 15.03.22 15:45, Dong Aisheng wrote:
+> > > When there're multiple process allocing dma memory in parallel
+> >
+> > s/allocing/allocating/
+> >
+> > > by calling dma_alloc_coherent(), it may fail sometimes as follows:
 > > >
-> > > On Wed, Feb 09, 2022 at 04:32:04PM +0100, Peter Zijlstra wrote:
-> > > > On Tue, Feb 08, 2022 at 01:16:31PM -0800, Stephane Eranian wrote:
-> > > > > Add code to adjust the sampling event period when used with the Branch
-> > > > > Sampling feature (BRS). Given the depth of the BRS (16), the period is
-> > > > > reduced by that depth such that in the best case scenario, BRS saturates at
-> > > > > the desired sampling period. In practice, though, the processor may execute
-> > > > > more branches. Given a desired period P and a depth D, the kernel programs
-> > > > > the actual period at P - D. After P occurrences of the sampling event, the
-> > > > > counter overflows. It then may take X branches (skid) before the NMI is
-> > > > > caught and held by the hardware and BRS activates. Then, after D branches,
-> > > > > BRS saturates and the NMI is delivered.  With no skid, the effective period
-> > > > > would be (P - D) + D = P. In practice, however, it will likely be (P - D) +
-> > > > > X + D. There is no way to eliminate X or predict X.
-> > > > >
-> > > > > Signed-off-by: Stephane Eranian <eranian@google.com>
-> > > > > ---
-> > > > >  arch/x86/events/core.c       |  7 +++++++
-> > > > >  arch/x86/events/perf_event.h | 12 ++++++++++++
-> > > > >  2 files changed, 19 insertions(+)
-> > > > >
-> > > > > diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-> > > > > index c2a890caeb0a..ed285f640efe 100644
-> > > > > --- a/arch/x86/events/core.c
-> > > > > +++ b/arch/x86/events/core.c
-> > > > > @@ -1374,6 +1374,13 @@ int x86_perf_event_set_period(struct perf_event *event)
-> > > > >         x86_pmu.set_topdown_event_period)
-> > > > >             return x86_pmu.set_topdown_event_period(event);
-> > > > >
-> > > > > +   /*
-> > > > > +    * decrease period by the depth of the BRS feature to get
-> > > > > +    * the last N taken branches and approximate the desired period
-> > > > > +    */
-> > > > > +   if (has_branch_stack(event))
-> > > > > +           period = amd_brs_adjust_period(period);
-> > > > > +
-> > > > >     /*
-> > > > >      * If we are way outside a reasonable range then just skip forward:
-> > > > >      */
-> > > > > diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-> > > > > index 3485a4cf0241..25b037b571e4 100644
-> > > > > --- a/arch/x86/events/perf_event.h
-> > > > > +++ b/arch/x86/events/perf_event.h
-> > > > > @@ -1263,6 +1263,14 @@ static inline bool amd_brs_active(void)
-> > > > >     return cpuc->brs_active;
-> > > > >  }
-> > > > >
-> > > > > +static inline s64 amd_brs_adjust_period(s64 period)
-> > > > > +{
-> > > > > +   if (period > x86_pmu.lbr_nr)
-> > > > > +           return period - x86_pmu.lbr_nr;
-> > > > > +
-> > > > > +   return period;
-> > > > > +}
-> > > >
-> > > > This makes no sense to me without also enforcing that the event is in
-> > > > fact that branch retired thing.
+> > > Error log:
+> > > cma: cma_alloc: linux,cma: alloc failed, req-size: 148 pages, ret: -16
+> > > cma: number of available pages:
+> > > 3@125+20@172+12@236+4@380+32@736+17@2287+23@2473+20@36076+99@40477+108@40852+44@41108+20@41196+108@41364+108@41620+
+> > > 108@42900+108@43156+483@44061+1763@45341+1440@47712+20@49324+20@49388+5076@49452+2304@55040+35@58141+20@58220+20@58284+
+> > > 7188@58348+84@66220+7276@66452+227@74525+6371@75549=> 33161 free of 81920 total pages
 > > >
-> > > So what are we going to do with all these patches? Note that I did pick
-> > > them up for testing and I've fixed at least 2 build problems with them.
+> > > When issue happened, we saw there were still 33161 pages (129M) free CMA
+> > > memory and a lot available free slots for 148 pages in CMA bitmap that we
+> > > want to allocate.
+
+Yes, I also have met the problem especially when the multiple threads
+compete cma allocation. Thanks for bringing up the issue.
+
 > > >
-> > > But I still don't think they're actually completely sane. So there's the
-> > > above issue, subtracting lbr_nr from a random event just makes no sense.
+> > > If dumping memory info, we found that there was also ~342M normal memory,
+> > > but only 1352K CMA memory left in buddy system while a lot of pageblocks
+> > > were isolated.
 > >
+> > s/If/When/
 > >
-> > You are right. Initially, I had it such that only retired_branch_taken was
-> > the only event possible. In that case, subtracting lbr_nr made sense.
-> > Since, I have relaxed the event but it exposes this problem. I think
-> > given how BRS works, I am okay restricting to retired_br_taken
-> > because no matter what the hw is going to activate at P (period)
-> > and wait for 16  taken branches before delivering the NMI. So if I
-> > am sampling on cycles with P=1000000, then the NMI is delivered
-> > at P + X + Z, where X = number of cycles elapsed for the 16 taken
-> > branches (unpredictable) and Z the interrupt skid for NMI (which is
-> > extremely big on AMD). With retired_branch_taken, that formula
-> > becomes: P + 16 + Z, where Z is the number of taken branches
-> > during the skid. But given BRS saturates when full, you do lose
-> > the content because of the Z skid. My opinion is we keep the
-> > lbr_nr subtraction and force event to be only retired_branch_taken.
->
-> OK, can you do me a delta patch and tell me which commit to merge it in?
->
-You want a delta patch covering the restriction allowing only
-retired_taken_branch
-as the sampling event. Is that right? I can also post a V7 that has
-all the changes
-including fixes in the perf tool strerror code. Whatever you prefer?
-
-> > > But there's also the whole exclusion thing, IIRC you're making it
-> > > exclusive against other LBR users, but AFAICT having one LBR user active
-> > > will completely screw over any other sampling event due to introducing
-> > > these massive skids.
+> 
+> Will fix them all, thanks.
+> 
+> > >
+> > > Memory info log:
+> > > Normal free:351096kB min:30000kB low:37500kB high:45000kB reserved_highatomic:0KB
+> > >           active_anon:98060kB inactive_anon:98948kB active_file:60864kB inactive_file:31776kB
+> > >           unevictable:0kB writepending:0kB present:1048576kB managed:1018328kB mlocked:0kB
+> > >           bounce:0kB free_pcp:220kB local_pcp:192kB free_cma:1352kB lowmem_reserve[]: 0 0 0
+> > > Normal: 78*4kB (UECI) 1772*8kB (UMECI) 1335*16kB (UMECI) 360*32kB (UMECI) 65*64kB (UMCI)
+> > >       36*128kB (UMECI) 16*256kB (UMCI) 6*512kB (EI) 8*1024kB (UEI) 4*2048kB (MI) 8*4096kB (EI)
+> > >       8*8192kB (UI) 3*16384kB (EI) 8*32768kB (M) = 489288kB
+> > >
+> > > The root cause of this issue is that since commit a4efc174b382
+> > > ("mm/cma.c: remove redundant cma_mutex lock"), CMA supports concurrent
+> > > memory allocation. It's possible that the memory range process A trying
+> > > to alloc has already been isolated by the allocation of process B during
+> > > memory migration.
+> > >
+> > > The problem here is that the memory range isolated during one allocation
+> > > by start_isolate_page_range() could be much bigger than the real size we
+> > > want to alloc due to the range is aligned to MAX_ORDER_NR_PAGES.
+> > >
+> > > Taking an ARMv7 platform with 1G memory as an example, when MAX_ORDER_NR_PAGES
+> > > is big (e.g. 32M with max_order 14) and CMA memory is relatively small
+> > > (e.g. 128M), there're only 4 MAX_ORDER slot, then it's very easy that
+> > > all CMA memory may have already been isolated by other processes when
+> > > one trying to allocate memory using dma_alloc_coherent().
+> > > Since current CMA code will only scan one time of whole available CMA
+> > > memory, then dma_alloc_coherent() may easy fail due to contention with
+> > > other processes.
+> > >
+> > > This patch introduces a retry mechanism to rescan CMA bitmap for -EBUSY
+> > > error in case the target memory range may has been temporarily isolated
+> > > by others and released later.
 > >
+> > But you patch doesn't check for -EBUSY and instead might retry forever,
+> > on any allocation error, no?
 > >
-> > The skid is not massive compared to the actual skid of regular interrupt-based
-> > sampling. You are looking at the time it takes to execute 16 taken branches
-> > vs. 2000+ cycles for the NMI skid.  And this would happen only if the other
-> > events overflow during that 16 taken branch window.
->
-> Wait, you're telling me that regs->ip is 2000 cycles/CPI further along
-> than the instruction that caused the PMI on AMD? That seems beyond
-> useless.
->
-Yes, depending on the conditions, the skid can be large. Remember that AMD added
-a loop to poll on amd_pmu_disable_all(). See commit:
-914123fa3904 x86/perf/amd: Resolve race condition when disabling PMC
+> 
+> My patch seems not need check it because there's no chance to retry the loop
+> in case an non -EBUS error happened earlier.
+> 
+> for (;;) {
+>         if (bitmap_no >= bitmap_maxno) {
+>                 retry_the_whole_loop;
+>         }
+> 
+>         pfn = cma->base_pfn + (bitmap_no << cma->order_per_bit);
+>         ret = alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
+>                              GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0));
+> 
+>         if (ret != -EBUSY)
+>                 break;
+> }
+> 
+> > I'd really suggest letting alloc_contig_range() return -EAGAIN in case
+> > the isolation failed and handling -EAGAIN only in a special way instead.
+> >
+> 
+> Yes, i guess that's another improvement and is applicable.
+> 
+> > In addition, we might want to stop once we looped to often I assume.
+> >
+> 
+> I wonder if really retried un-reasonably too often, we probably may
+> need figure out
+> what's going on inside alloc_contig_range() and fix it rather than
+> return EBUSY error to
+> users in case there're still a lot of avaiable memories.
+> So currently i didn't add a maximum retry loop outside.
+> 
+> Additionaly, for a small CMA system (128M with 32M max_order pages),
+> the retry would
+> be frequently when multiple process allocating memory, it also depends
+> on system running
+> state, so it's hard to define a reasonable and stable maxinum retry count.
 
-> That's also not what I seem to remember from the last time I used perf
-> on AMD (admittedly a while ago). Normally the reported IP is a few
-> instructions beyond the eventing IP. Yielding the normal perf-annotate
-> output that's shifted but mostly trivially readable.
->
-It all depends on what event you are sampling on. If you are sampling on
-cycles and you are stalled, then you cannot make forward progress and
-therefore the skid appears small and the profile still points you in the right
-direction.
-
-> However, if you delay that NMI for however many instructions it takes to
-> do 16 branches, the reported IP (regs->ip) will be completely unrelated
-> to the eventing IP (the one that actually triggered PMI).
->
-No, because  once the BRS is full and saturates, the CPU delivers the NMI, still
-subject to the skid. The regs->ip will be at the closest possible from
-the last taken
-branch recorded, just like with regular (non BRS sampling).
-
-In the code we usually have, there are a lot of taken branches. In the case
-of autoFDO, the regs->ip is not used, only the content of the branch buffer
-is used.
-
-> In that case the perf-annotate output becomes really hard to interpret.
-> Esp. if you don't know which IPs were basically garbage.
->
-That is true. But usually LBR data is not used for visualization by perf report.
-It is post-processed for pure LBR data analysis, such as FDO.
-
-> One possible work-around might be to discard the sample for any
-> !retired_branch_taken overflow and reprogram those counters with a very
-> small (1?) value to 'insta' take a new sample without interference. But
-> that's yuck too.
->
-Yes, that is ugly.
-
-Thanks.
+IMO, when the CMA see the -EAGAIN, it should put the task into
+cma->wait_queue and then be woken up by other thread which finish
+work of the cma. So it's similar with cma_mutex but we don't need to
+synchronize for !EAGAIN cases and make the cma allocatoin fair.

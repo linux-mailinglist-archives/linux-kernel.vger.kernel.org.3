@@ -2,113 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A912B4DC422
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD8B4DC425
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232661AbiCQKnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 06:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
+        id S232667AbiCQKoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 06:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232654AbiCQKnM (ORCPT
+        with ESMTP id S229724AbiCQKog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 06:43:12 -0400
-Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [IPv6:2001:1600:3:17::190d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12881DEABE
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:41:54 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KK3c05KT3zMppQ4;
-        Thu, 17 Mar 2022 11:41:52 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KK3bz6r1pzlhRV1;
-        Thu, 17 Mar 2022 11:41:51 +0100 (CET)
-Message-ID: <33d4a0fc-1b77-39df-31e9-ba974b851a97@digikod.net>
-Date:   Thu, 17 Mar 2022 11:42:35 +0100
+        Thu, 17 Mar 2022 06:44:36 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572267C7B6;
+        Thu, 17 Mar 2022 03:43:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1647513798; x=1679049798;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=m5EnwoRRHmooy0FryyIjRhlX/cBcuiEAB12WBtxGbFM=;
+  b=L41+Aw0/EaLlGP916SPVFa903zwitfBWVKmMhVmjvCbxHdLoSTRgDeJF
+   sOq3UdL3Kk1sT/PGNKu2miFMhlnxAGb4z+UE+cYjuvEMYrdO6jxLJF4VH
+   daRpjqktN5hDvXAKwO6N3FUR0b/xrT/tX8KG/DXnKo0Bx7RicUVNXHVc4
+   ZrUGA5WwHug/WskF2fQlAtsNfezBzSYqf59hyS7M8ekohLGXX5JzofN2R
+   boIRG0zj6K+TW67wrMip8jqozQ0zBGvhQzWYHwdEdHn+UJt9VpxuCMqSR
+   DMF1jtsRRIVoDNsQ66+pm3iKUGJ1jpCK67RE5iEVynwrTNfeg/wr+kWiS
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,188,1643698800"; 
+   d="scan'208";a="156782070"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Mar 2022 03:43:17 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 17 Mar 2022 03:43:15 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 17 Mar 2022 03:43:13 -0700
+From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+To:     <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <richardcochran@gmail.com>, <UNGLinuxDriver@microchip.com>,
+        <Ian.Saturley@microchip.com>
+Subject: [PATCH net-next V1 0/5]net: lan743x: PCI11010 / PCI11414 devices
+Date:   Thu, 17 Mar 2022 16:13:05 +0530
+Message-ID: <20220317104310.61091-1-Raju.Lakkaraju@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v1 05/11] landlock: Move filesystem helpers and add a new
- one
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20220221212522.320243-1-mic@digikod.net>
- <20220221212522.320243-6-mic@digikod.net>
- <CAHC9VhQM33jnJYMz+z1YoNt9=nNceW=TutuGO=x+SSpHW7PMyg@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <CAHC9VhQM33jnJYMz+z1YoNt9=nNceW=TutuGO=x+SSpHW7PMyg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series continues with the addition of supported features             
+for the Ethernet function of the PCI11010 / PCI11414 devices to                 
+the LAN743x driver.
 
-On 17/03/2022 02:26, Paul Moore wrote:
-> On Mon, Feb 21, 2022 at 4:15 PM Mickaël Salaün <mic@digikod.net> wrote:
->>
->> From: Mickaël Salaün <mic@linux.microsoft.com>
->>
->> Move the SB_NOUSER and IS_PRIVATE dentry check to a standalone
->> is_nouser_or_private() helper.  This will be useful for a following
->> commit.
->>
->> Move get_mode_access() and maybe_remove() to make them usable by new
->> code provided by a following commit.
->>
->> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
->> Link: https://lore.kernel.org/r/20220221212522.320243-6-mic@digikod.net
->> ---
->>   security/landlock/fs.c | 87 ++++++++++++++++++++++--------------------
->>   1 file changed, 46 insertions(+), 41 deletions(-)
-> 
-> One nit-picky comment below, otherwise it looks fine to me.
-> 
-> Reviewed-by: Paul Moore <paul@paul-moore.com>
-> 
->> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
->> index 9662f9fb3cd0..3886f9ad1a60 100644
->> --- a/security/landlock/fs.c
->> +++ b/security/landlock/fs.c
->> @@ -257,6 +257,18 @@ static inline bool unmask_layers(const struct landlock_rule *const rule,
->>          return false;
->>   }
->>
->> +static inline bool is_nouser_or_private(const struct dentry *dentry)
->> +{
->> +       /*
->> +        * Allows access to pseudo filesystems that will never be mountable
->> +        * (e.g. sockfs, pipefs), but can still be reachable through
->> +        * /proc/<pid>/fd/<file-descriptor> .
->> +        */
-> 
-> I might suggest moving this explanation up to a function header comment block.
+Raju Lakkaraju (5):
+  net: lan743x: Add support to display Tx Queue statistics
+  net: lan743x: Add support for EEPROM
+  net: lan743x: Add support for OTP
+  net: lan743x: Add support for PTP-IO Event Input External Timestamp
+    (extts)
+  net: lan743x: Add support for PTP-IO Event Output (Periodic Output)
 
-Sounds good.
+ .../net/ethernet/microchip/lan743x_ethtool.c  | 378 +++++++++++-
+ drivers/net/ethernet/microchip/lan743x_main.c |   2 +
+ drivers/net/ethernet/microchip/lan743x_main.h | 159 +++++
+ drivers/net/ethernet/microchip/lan743x_ptp.c  | 558 ++++++++++++++++--
+ drivers/net/ethernet/microchip/lan743x_ptp.h  |  10 +
+ 5 files changed, 1061 insertions(+), 46 deletions(-)
 
+-- 
+2.25.1
 
-> 
-> 
->> +       return (dentry->d_sb->s_flags & SB_NOUSER) ||
->> +                       (d_is_positive(dentry) &&
->> +                        unlikely(IS_PRIVATE(d_backing_inode(dentry))));
->> +}
->> +
->>   static int check_access_path(const struct landlock_ruleset *const domain,
->>                  const struct path *const path,
->>                  const access_mask_t access_request)
-> 
-> --
-> paul-moore.com

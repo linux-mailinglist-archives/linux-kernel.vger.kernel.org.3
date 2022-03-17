@@ -2,284 +2,411 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCEE4DC2B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CB34DC2C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbiCQJcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
+        id S231991AbiCQJdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiCQJce (ORCPT
+        with ESMTP id S231872AbiCQJdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:32:34 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2050.outbound.protection.outlook.com [40.107.243.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920F31D4C17;
-        Thu, 17 Mar 2022 02:31:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=huML0IRdm0milXTfKOewdfTRm9xkNu7j/joJBDZpW27sRfm1nImKzkWxlLi8kK8l6fleN6okLhSJtGkc2GvGH4AVS9Y7va0jFHeB2Nxkmqgscy5SJ1Uy+6KfvHaWcu5WnoASa42AxaKD0roZGmUkeczmP8BM0230dH+3iEkRwDKctwi/Ghj4t5RuZotuqAJa+JgFHozz46SkoXv8gcg+Bnp8r6hcjvTx9F1Cg6aE29PKXFWqWgh2/DBAoiAeVISC28ZcwtpObQzVgRnSedvNyDiopVtfCqd//beCZdGdqPupLj46T62J9X+GVCp0Nh0oFPhI+bI8zlJBZHvnjIi92w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=woA/u1JS5C0cRW9D81lh46h03/H8Ufgz1K+L+GXNSeU=;
- b=nrcQPDtx6cmSPZjz4qWTul4hiQWRHLJmNc46sbwDpKeo50cSnu2TlagAO1hRG4Oyri0HSaRHkt40Rm7wou4+uhv1bCnum4/dFuiBa45I0MBz3YZv7B2jcUcmN1f0pgTLGlMrCFww2IQc1+acgFuOS+oCUFleoVEFtvvhIaK7snuRkYvRUbJk3WMjQAKfv84XN5O7XbdaNXhcuUywJyT3BF0pfG5BRmkpoAMU0N/impA4aajpix87lLXsQewCqHnGKOQbvIwf3ydr2iHZ3hyAlz75MUcBj8szeDW2EmU7I3zjaRhWkpYBkEBy5XfhBGrbjYpJMoJdeEZxU0A3ZSuGoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=woA/u1JS5C0cRW9D81lh46h03/H8Ufgz1K+L+GXNSeU=;
- b=IxZCxW+6mwfpqNZyFgBuWjkG1zze37uW8p3tsIASA3fZOCoI+r3f4Tk5RiGrMY4S7OM96/OBef4o7DOq7E8JtGZaoamFXLKoN+4+rWc9N/BfPd0c5nY+TqYvxU8IsqB95ZwNmicM1AUxKuAIokeQ2GVqDIKqXXLrYfauEjQZHxcbMTKnDFvOSCwb9By9U6Ru2kpSBL1O1zuATV4EjUW4Ibi0wKs/ury4nQmo8QX7Fb218ySjxwUWfi02I2mKMIaUsGwh+IZ6nMczhA5rk47C/rI3COtKPBXrCwrUxm1RS0X9OU+uzZGIzrQFiImmixIrZIdFpmg3JoRbQ6gJpz2WWg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- MW3PR12MB4458.namprd12.prod.outlook.com (2603:10b6:303:5d::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5081.17; Thu, 17 Mar 2022 09:31:15 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::88c:baca:7f34:fba7]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::88c:baca:7f34:fba7%5]) with mapi id 15.20.5061.032; Thu, 17 Mar 2022
- 09:31:15 +0000
-Message-ID: <11af24f0-41ad-3972-9ddb-5468283302e8@nvidia.com>
+        Thu, 17 Mar 2022 05:33:11 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D721D4C2E;
+        Thu, 17 Mar 2022 02:31:53 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22H5Kw4u025823;
+        Thu, 17 Mar 2022 04:31:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=hYWJtZQGfPacQLp8QDCAqSZPipffLbhKEWbotjqieuc=;
+ b=Kh6y1VzndJZ0ftSB5D1OHSNyCQrBdA35UjB4VLezYQLrzpxGPJDU5/mMNUCDntpgdrzV
+ AysRNMZaXWOfkhKeEsBhl08eXMbmJOA73kX+t6cyDuo0neReffx0wcg66GLN+eMbbS8l
+ uxLxFdhf59rPWsQGXhrb3fVyXfryLzoQ3AxnNtcQMb6+ESQGc7eSO2LWXkAuMYPMAdej
+ SjPcqHDkkndjmKnRsQScsK5CZPigp5fzHmACQwojg5U3HCJsNoishgicwTnwlDg362o9
+ NFSp7VOTiRioDc1B1UXE+yPq0V87MoUsTz/DZV+bntsIBlgNNeQZkYOtN4Ddy/Li9nBX cw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3et5yp475e-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 17 Mar 2022 04:31:32 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 17 Mar
+ 2022 09:31:30 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Thu, 17 Mar 2022 09:31:30 +0000
+Received: from aryzen.ad.cirrus.com (unknown [198.61.64.95])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 425DA7C;
+        Thu, 17 Mar 2022 09:31:30 +0000 (UTC)
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Subject: [PATCH v4 02/16] sound: cs35l41: Check hw_config before using it
 Date:   Thu, 17 Mar 2022 09:31:06 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/3] spi: tegra210-quad: Add wait polling support
-Content-Language: en-US
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>, broonie@kernel.org,
-        thierry.reding@gmail.com, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org, ashishsingha@nvidia.com
-Cc:     skomatineni@nvidia.com, ldewangan@nvidia.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220317012006.15080-1-kyarlagadda@nvidia.com>
- <20220317012006.15080-3-kyarlagadda@nvidia.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20220317012006.15080-3-kyarlagadda@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS9PR06CA0241.eurprd06.prod.outlook.com
- (2603:10a6:20b:45f::20) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+Message-ID: <20220317093120.168534-3-tanureal@opensource.cirrus.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220317093120.168534-1-tanureal@opensource.cirrus.com>
+References: <20220317093120.168534-1-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3c732ea9-7214-48ab-8dd4-08da07f8e1ac
-X-MS-TrafficTypeDiagnostic: MW3PR12MB4458:EE_
-X-Microsoft-Antispam-PRVS: <MW3PR12MB4458521C366F0A0CA1AF8130D9129@MW3PR12MB4458.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HIpJWbNPMK7LnRmXH2WtkKKCSee7B1aSjbIng9cCdUpoXrbs8uOMNv6CJGDPNu6QOLiIOEbsV2bkllHO+kYiillwx/d3yizH48+jdelVJR9WV+UwQmjY4GVfdhM8N70UpiMCncV/aZ4IKYHgxSmn8DwJDDpZwMfGuU1KTnZDDUo6xns5y4BmNHvUlKTgyhxiv3VyTilzTa9Vv8pnTplB3F8/n0GfgxYeEFsRhrEofTv9xbnq+dhITq6XCrF6oD4JIH3Bnl8uS6y0R4X4kb/DLFla5czi3RYg5DarEzHlQtbU75LqbYXKofWySOJpBQJkxqaLHyI8xv7l6pqrLo0GyKgJ77UDoN2+ociL+db7z1NOdhicMIWkLen7fEUlIH2keBx9gpFzuK1DatZIWM5an5twbu+z02GuSgVjPetE+YSFvCPcwBMtE3cmYJKRVH4GggqbVY7bSvgdyFtelr4+vmAq9tTHqzlIg1sNCbtxIUZ/f4WG9NuzjdKjjwKVKQYer3rgTpMxW/U7r3j4orXoUP7m7qCyenNE3oXoy8rTgc1I6BLuTuCHg0PexWoNJetV9/M4Sqb8JBXIkD5LYD+ssNIkfl/zWj9XXvGSZqROq+AXHQPOs0MiQzares+7HXFMKaE/hgRS3VlNZ8i/nRrNm27Xx5Y5fzUt7kxKCmzUKxmYAsXzYFQXj19m/dDiksuKfbjv8pCUL/wWxyVNQ9RL2gpooOv4y1pT6Y2tIPEFCnjLTsMphnESXsQ5PIGu+vlD
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(508600001)(6486002)(86362001)(6512007)(31696002)(26005)(2616005)(186003)(6666004)(5660300002)(55236004)(53546011)(6506007)(2906002)(36756003)(6636002)(4326008)(8676002)(66476007)(66556008)(66946007)(38100700002)(31686004)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Rk01cFNFdHVCVHM2SEFvWHRyUlhieWREdnQ5bk9yNGpvL0I1SEg0a3ZTRU92?=
- =?utf-8?B?bGR6TncyWU0zQzlsbGVZYThRM29tNFR2eFArakE5aXFMbm9rODlqaENFMXJK?=
- =?utf-8?B?STJpUjd6WUNvNEduU3EzOTN1VVVtWjB5czBPZ1piOU9mdUtoWE91NEpJeE1y?=
- =?utf-8?B?RXNia2o4UWJmYVg0K21aZGJtTm03RWdUQkZoOUNBQ0hzWmdUT3BYS082TC93?=
- =?utf-8?B?aWhzLzlSbWduMHlvWkFaMHUyaXlVaUg0cVNjdmU0dkUzVktvWXNhTGJxemlh?=
- =?utf-8?B?cUFRYVNCY3ZqRGg1dHM5RnpGZGs0eGV2S0dGVWhWK04xVlhDVlA0RnJGaFZs?=
- =?utf-8?B?QTFGV3JOQy9KL1l0V004OWFySXRScDhsU0lOdUdsMi90Zm10VGZrWDY1dXFj?=
- =?utf-8?B?c2UwcEdwT3BWNHAxeU1VQ1JBNWU4bWw5ZGR1aDRZVWF4cVJtTWprTGdVZ05L?=
- =?utf-8?B?QlExd3BlMTlCYzlVcnhCR29pNSsrT3Y4d1VwYXlicXYrZ0tkM0VXNDJhVHdo?=
- =?utf-8?B?UThlb3pCbm9kdWRwSU5zaGlMbUxjN1g0S1RLTWIzUkZZNDI4d1RWaGltSko0?=
- =?utf-8?B?dUlhbUJuVW5yUkI0QkYrbUZ5VGFrU1MyeFF0UWxpMURVbWlLamlNT1hFVnA1?=
- =?utf-8?B?M013Mk5ka1d5eFUrYklTbFd1amtMZjRndy9KTmNBQisvTUFrS1lpQkZNTG54?=
- =?utf-8?B?U0p3VmJzZUx3b3VWeDVHb0JhMXdUZXhBeHhUbXRzZ1BrVWpGZG5hM1kvcVlh?=
- =?utf-8?B?Lzd5MG5Mbk9BeGR3ODlHOGtOWEU2ZzhQSW42d2RRZE5TMkFqWml5NjZJTUZX?=
- =?utf-8?B?bWxRa2Nmc29aVzlrMFVkVzgzbC9qMFkyME9OeDVTZ2ZDVzl0RGs5ZXZXcEds?=
- =?utf-8?B?NVRhZG5WTUlNY2E1dGpJUnZSZ3ZTakdnZUFEUy9jWmhUSEY0Y0lzSnlBUlM5?=
- =?utf-8?B?NjFLTXZIUVJRSU5OTE9yZ3M0NzB6YTBrYjRHVlBsbHdxQ0o2cFpQcWY3Q0Fi?=
- =?utf-8?B?T0pyL3JzVkQwWFloUDZEcSs4RHQwT0FTeEl1KzdPNktJdytORkVRblJRN1l5?=
- =?utf-8?B?MHJBMk5Wb05nRm5uWFJiRUdRMUFjTWJnQzNXUGVyMzAyNkhVZWtFZHhQeHZS?=
- =?utf-8?B?NE9RMzRyOGtDQXFvR0phbmxrQ2c4WllTM0J0dERRTTZSUHZPL2NLOFNrVXpE?=
- =?utf-8?B?dE1vOXNaNGluK0E4Vk5nVXI0amd0dDAzYjJQbjBsVXh6bkhoV2hGa0licVVJ?=
- =?utf-8?B?SzFRZU5iQ0swaFphWHZUbi9ac3BCUElqNUZ0RE1RWTRGelp5UlpYZmZORXpE?=
- =?utf-8?B?eWdxYmQwdUNKV3JUMkZ2TU0zWER3SmFFdlNIZjFTZWxxMVZTRFNCU0VhaEMx?=
- =?utf-8?B?TFBjRWdSdW5LOGtIalBPZGtmYThIbXJ0Z3NHbGdjcG5HR0VScEhkdDFpdHJD?=
- =?utf-8?B?KzYxWit3MFhMaWtvRFBqUm42OTBKNXJBVklQdXk3OTNVMm5yNWVhRlh4bk9O?=
- =?utf-8?B?clRLd0NGQ2laY1V6Vnp0Y2x3YWIyZG05TVVJamEzVWd4cFBLTyt0VXRHUGpQ?=
- =?utf-8?B?MFpBVjR6VDFLelNveVZOOEtDeXQ5Ti85TStPelh2SEZDUnBIeEVGb0d4WmJK?=
- =?utf-8?B?TGhpZEJCbmJQbFZvbk5ndVBIVVp1bG1raVlsbVI4bTFtZlZaVUxUQUNpS2wv?=
- =?utf-8?B?aHliNTBmdjQ4OXhaaFRyMllTYUVxQUQwbHI5MUJTQTdOYjVIMk9IWGhLMVY3?=
- =?utf-8?B?MjlvRFB0VzBCcjV6WXg3NUdiSTNqREtPVGFSSldEclhKMnZINUdYYmMya29E?=
- =?utf-8?B?TTJNM0JDSU5SemlDT2R1cFgzc2hCMmhXV3dwSlhBa1NUWHEwTUxPNXE2K2Zy?=
- =?utf-8?B?bWR5ejByN21UOVRFakc2MHZpemNZMDRRTjNLUTQ2NzF2MjlrekM3bmZTL3Fn?=
- =?utf-8?B?SkVuWGc2M1ZMd0xPd0t3RFpIeCs3MTI2V0tZcUY3cFhCSHRJS01lL0ZrQ2J4?=
- =?utf-8?B?Tmhia2IrRCtnPT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c732ea9-7214-48ab-8dd4-08da07f8e1ac
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2022 09:31:14.8311
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wKNntX7UYl0Xdx66RLKknRHjF0mx0TytsURoFR9yX+8j6iB4PBxhZu9MKyfLNZo1AygqcVwss/XFwAklLDEVuQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4458
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 0CABzqSdKvpNSydi7BguvbFqzy-e33yN
+X-Proofpoint-GUID: 0CABzqSdKvpNSydi7BguvbFqzy-e33yN
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The driver can receive an empty hw_config, so mark as valid if
+successfully read from device tree/ACPI or set by the driver itself.
+Platforms not marked with a valid hw config will not be supported.
 
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
+ include/sound/cs35l41.h        |  3 +-
+ sound/pci/hda/cs35l41_hda.c    | 70 +++++++++++++++++++------------
+ sound/soc/codecs/cs35l41-lib.c | 16 ++++---
+ sound/soc/codecs/cs35l41.c     | 76 +++++++++++++++++++++-------------
+ 4 files changed, 104 insertions(+), 61 deletions(-)
 
-On 17/03/2022 01:20, Krishna Yarlagadda wrote:
-> Controller can poll for wait state inserted by TPM device and
-> handle it.
-> 
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> ---
->   drivers/spi/spi-tegra210-quad.c | 31 +++++++++++++++++++++++++++++++
->   1 file changed, 31 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-> index a2e225e8f7f0..ecf171bfcdce 100644
-> --- a/drivers/spi/spi-tegra210-quad.c
-> +++ b/drivers/spi/spi-tegra210-quad.c
-> @@ -142,6 +142,7 @@
->   
->   #define QSPI_GLOBAL_CONFIG			0X1a4
->   #define QSPI_CMB_SEQ_EN				BIT(0)
-> +#define QSPI_TPM_WAIT_POLL_EN			BIT(1)
->   
->   #define QSPI_CMB_SEQ_ADDR			0x1a8
->   #define QSPI_ADDRESS_VALUE_SET(X)		(((x) & 0xFFFF) << 0)
-> @@ -165,11 +166,13 @@ struct tegra_qspi_soc_data {
->   	bool has_dma;
->   	bool cmb_xfer_capable;
->   	bool cs_count;
-> +	bool has_wait_polling;
->   };
->   
->   struct tegra_qspi_client_data {
->   	int tx_clk_tap_delay;
->   	int rx_clk_tap_delay;
-> +	bool wait_polling;
->   };
->   
->   struct tegra_qspi {
-> @@ -833,6 +836,11 @@ static u32 tegra_qspi_setup_transfer_one(struct spi_device *spi, struct spi_tran
->   		else
->   			command1 |= QSPI_CONTROL_MODE_0;
->   
-> +		if (tqspi->soc_data->cmb_xfer_capable)
-> +			command1 &= ~QSPI_CS_SW_HW;
-> +		else
-> +			command1 |= QSPI_CS_SW_HW;
-> +
->   		if (spi->mode & SPI_CS_HIGH)
->   			command1 |= QSPI_CS_SW_VAL;
->   		else
-> @@ -917,6 +925,7 @@ static int tegra_qspi_start_transfer_one(struct spi_device *spi,
->   
->   static struct tegra_qspi_client_data *tegra_qspi_parse_cdata_dt(struct spi_device *spi)
->   {
-> +	struct tegra_qspi *tqspi = spi_master_get_devdata(spi->master);
->   	struct tegra_qspi_client_data *cdata;
->   
->   	cdata = devm_kzalloc(&spi->dev, sizeof(*cdata), GFP_KERNEL);
-> @@ -927,6 +936,11 @@ static struct tegra_qspi_client_data *tegra_qspi_parse_cdata_dt(struct spi_devic
->   				 &cdata->tx_clk_tap_delay);
->   	device_property_read_u32(&spi->dev, "nvidia,rx-clk-tap-delay",
->   				 &cdata->rx_clk_tap_delay);
-> +	if (tqspi->soc_data->has_wait_polling)
-> +		cdata->wait_polling = device_property_read_bool
-> +					(&spi->dev,
-> +					 "nvidia,wait-polling");
-> +
->   
->   	return cdata;
->   }
-> @@ -1049,6 +1063,7 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
->   	bool is_first_msg = true;
->   	struct spi_transfer *xfer;
->   	struct spi_device *spi = msg->spi;
-> +	struct tegra_qspi_client_data *cdata = spi->controller_data;
->   	u8 transfer_phase = 0;
->   	u32 cmd1 = 0, dma_ctl = 0;
->   	int ret = 0;
-> @@ -1059,6 +1074,10 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
->   	/* Enable Combined sequence mode */
->   	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
->   	val |= QSPI_CMB_SEQ_EN;
-> +	if (cdata->wait_polling)
-> +		val |= QSPI_TPM_WAIT_POLL_EN;
-> +	else
-> +		val &= ~QSPI_TPM_WAIT_POLL_EN;
->   	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
->   	/* Process individual transfer list */
->   	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
-> @@ -1158,6 +1177,8 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
->   		transfer_phase++;
->   	}
->   
-> +	ret = 0;
-> +
->   exit:
->   	msg->status = ret;
->   
-> @@ -1180,6 +1201,7 @@ static int tegra_qspi_non_combined_seq_xfer(struct tegra_qspi *tqspi,
->   	/* Disable Combined sequence mode */
->   	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
->   	val &= ~QSPI_CMB_SEQ_EN;
-> +	val &= ~QSPI_TPM_WAIT_POLL_EN;
->   	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
->   	list_for_each_entry(transfer, &msg->transfers, transfer_list) {
->   		struct spi_transfer *xfer = transfer;
-> @@ -1439,24 +1461,28 @@ static struct tegra_qspi_soc_data tegra210_qspi_soc_data = {
->   	.has_dma = true,
->   	.cmb_xfer_capable = false,
->   	.cs_count = 1,
-> +	.has_wait_polling = false,
->   };
->   
->   static struct tegra_qspi_soc_data tegra186_qspi_soc_data = {
->   	.has_dma = true,
->   	.cmb_xfer_capable = true,
->   	.cs_count = 1,
-> +	.has_wait_polling = false,
->   };
->   
->   static struct tegra_qspi_soc_data tegra234_qspi_soc_data = {
->   	.has_dma = false,
->   	.cmb_xfer_capable = true,
->   	.cs_count = 1,
-> +	.has_wait_polling = true,
->   };
->   
->   static struct tegra_qspi_soc_data tegra_grace_qspi_soc_data = {
->   	.has_dma = false,
->   	.cmb_xfer_capable = true,
->   	.cs_count = 4,
-> +	.has_wait_polling = true,
->   };
->   
->   static const struct of_device_id tegra_qspi_of_match[] = {
-> @@ -1509,6 +1535,7 @@ static int tegra_qspi_probe(struct platform_device *pdev)
->   	struct resource		*r;
->   	int ret, qspi_irq;
->   	int bus_num;
-> +	u8 val = 0;
->   
->   	master = devm_spi_alloc_master(&pdev->dev, sizeof(*tqspi));
->   	if (!master)
-> @@ -1585,6 +1612,10 @@ static int tegra_qspi_probe(struct platform_device *pdev)
->   	tqspi->spi_cs_timing1 = tegra_qspi_readl(tqspi, QSPI_CS_TIMING1);
->   	tqspi->spi_cs_timing2 = tegra_qspi_readl(tqspi, QSPI_CS_TIMING2);
->   	tqspi->def_command2_reg = tegra_qspi_readl(tqspi, QSPI_COMMAND2);
-> +	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
-> +	val &= ~QSPI_CMB_SEQ_EN;
-> +	val &= ~QSPI_TPM_WAIT_POLL_EN;
-
-Don't we need to check here is the device support this TPM_WAIT_POLL?
-
-Jon
-
+diff --git a/include/sound/cs35l41.h b/include/sound/cs35l41.h
+index abcf850f7110..4200379e0c26 100644
+--- a/include/sound/cs35l41.h
++++ b/include/sound/cs35l41.h
+@@ -538,7 +538,6 @@
+ #define CS35L41_OTP_SIZE_WORDS		32
+ #define CS35L41_NUM_OTP_ELEM		100
+ 
+-#define CS35L41_VALID_PDATA		0x80000000
+ #define CS35L41_NUM_SUPPLIES            2
+ 
+ #define CS35L41_SCLK_MSTR_MASK		0x10
+@@ -753,12 +752,14 @@ enum cs35l41_gpio2_func {
+ };
+ 
+ struct cs35l41_gpio_cfg {
++	bool valid;
+ 	bool pol_inv;
+ 	bool out_en;
+ 	unsigned int func;
+ };
+ 
+ struct cs35l41_hw_cfg {
++	bool valid;
+ 	int bst_ind;
+ 	int bst_ipk;
+ 	int bst_cap;
+diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
+index b79d6ad4b4f5..a14ad3b0d516 100644
+--- a/sound/pci/hda/cs35l41_hda.c
++++ b/sound/pci/hda/cs35l41_hda.c
+@@ -219,46 +219,52 @@ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41)
+ 	bool internal_boost = false;
+ 	int ret;
+ 
++	if (!cs35l41->hw_cfg.valid)
++		return -EINVAL;
++
+ 	if (hw_cfg->vspk_always_on) {
+ 		cs35l41->reg_seq = &cs35l41_hda_reg_seq_no_bst;
+ 		return 0;
+ 	}
+ 
+-	if (hw_cfg->bst_ind || hw_cfg->bst_cap || hw_cfg->bst_ipk)
++	if (hw_cfg->bst_ind > 0 || hw_cfg->bst_cap > 0 || hw_cfg->bst_ipk > 0)
+ 		internal_boost = true;
+ 
+-	switch (hw_cfg->gpio1.func) {
+-	case CS35L41_NOT_USED:
+-		break;
+-	case CS35l41_VSPK_SWITCH:
+-		regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
+-				   CS35L41_GPIO1_CTRL_MASK, 1 << CS35L41_GPIO1_CTRL_SHIFT);
+-		break;
+-	case CS35l41_SYNC:
+-		regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
+-				   CS35L41_GPIO1_CTRL_MASK, 2 << CS35L41_GPIO1_CTRL_SHIFT);
+-		break;
+-	default:
+-		dev_err(cs35l41->dev, "Invalid function %d for GPIO1\n", hw_cfg->gpio1.func);
+-		return -EINVAL;
++	if (hw_cfg->gpio1.valid) {
++		switch (hw_cfg->gpio1.func) {
++		case CS35L41_NOT_USED:
++			break;
++		case CS35l41_VSPK_SWITCH:
++			regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
++					   CS35L41_GPIO1_CTRL_MASK, 1 << CS35L41_GPIO1_CTRL_SHIFT);
++			break;
++		case CS35l41_SYNC:
++			regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
++					   CS35L41_GPIO1_CTRL_MASK, 2 << CS35L41_GPIO1_CTRL_SHIFT);
++			break;
++		default:
++			dev_err(cs35l41->dev, "Invalid function %d for GPIO1\n",
++				hw_cfg->gpio1.func);
++			return -EINVAL;
++		}
+ 	}
+ 
+-	switch (hw_cfg->gpio2.func) {
+-	case CS35L41_NOT_USED:
+-		break;
+-	case CS35L41_INTERRUPT:
+-		regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
+-				   CS35L41_GPIO2_CTRL_MASK, 2 << CS35L41_GPIO2_CTRL_SHIFT);
+-		break;
+-	default:
+-		dev_err(cs35l41->dev, "Invalid function %d for GPIO2\n", hw_cfg->gpio2.func);
+-		return -EINVAL;
++	if (hw_cfg->gpio2.valid) {
++		switch (hw_cfg->gpio2.func) {
++		case CS35L41_NOT_USED:
++			break;
++		case CS35L41_INTERRUPT:
++			regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
++					   CS35L41_GPIO2_CTRL_MASK, 2 << CS35L41_GPIO2_CTRL_SHIFT);
++			break;
++		default:
++			dev_err(cs35l41->dev, "Invalid GPIO2 function %d\n", hw_cfg->gpio2.func);
++			return -EINVAL;
++		}
+ 	}
+ 
+ 	if (internal_boost) {
+ 		cs35l41->reg_seq = &cs35l41_hda_reg_seq_int_bst;
+-		if (!(hw_cfg->bst_ind && hw_cfg->bst_cap && hw_cfg->bst_ipk))
+-			return -EINVAL;
+ 		ret = cs35l41_boost_config(cs35l41->dev, cs35l41->regmap,
+ 					   hw_cfg->bst_ind, hw_cfg->bst_cap, hw_cfg->bst_ipk);
+ 		if (ret)
+@@ -334,28 +340,37 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
+ 	if (ret)
+ 		goto err;
+ 	hw_cfg->gpio1.func = values[cs35l41->index];
++	hw_cfg->gpio1.valid = true;
+ 
+ 	property = "cirrus,gpio2-func";
+ 	ret = device_property_read_u32_array(physdev, property, values, nval);
+ 	if (ret)
+ 		goto err;
+ 	hw_cfg->gpio2.func = values[cs35l41->index];
++	hw_cfg->gpio2.valid = true;
+ 
+ 	property = "cirrus,boost-peak-milliamp";
+ 	ret = device_property_read_u32_array(physdev, property, values, nval);
+ 	if (ret == 0)
+ 		hw_cfg->bst_ipk = values[cs35l41->index];
++	else
++		hw_cfg->bst_ipk = -1;
+ 
+ 	property = "cirrus,boost-ind-nanohenry";
+ 	ret = device_property_read_u32_array(physdev, property, values, nval);
+ 	if (ret == 0)
+ 		hw_cfg->bst_ind = values[cs35l41->index];
++	else
++		hw_cfg->bst_ind = -1;
+ 
+ 	property = "cirrus,boost-cap-microfarad";
+ 	ret = device_property_read_u32_array(physdev, property, values, nval);
+ 	if (ret == 0)
+ 		hw_cfg->bst_cap = values[cs35l41->index];
++	else
++		hw_cfg->bst_cap = -1;
+ 
++	hw_cfg->valid = true;
+ 	put_device(physdev);
+ 
+ 	return 0;
+@@ -381,6 +396,7 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
+ 	cs35l41->index = id == 0x40 ? 0 : 1;
+ 	cs35l41->reset_gpio = gpiod_get_index(physdev, NULL, 0, GPIOD_OUT_HIGH);
+ 	cs35l41->hw_cfg.vspk_always_on = true;
++	cs35l41->hw_cfg.valid = true;
+ 	put_device(physdev);
+ 
+ 	return 0;
+diff --git a/sound/soc/codecs/cs35l41-lib.c b/sound/soc/codecs/cs35l41-lib.c
+index e5a56bcbb223..905c648a8f49 100644
+--- a/sound/soc/codecs/cs35l41-lib.c
++++ b/sound/soc/codecs/cs35l41-lib.c
+@@ -992,10 +992,20 @@ int cs35l41_boost_config(struct device *dev, struct regmap *regmap, int boost_in
+ 	case 101 ... 200:
+ 		bst_cbst_range = 3;
+ 		break;
+-	default:	/* 201 uF and greater */
++	default:
++		if (boost_cap < 0) {
++			dev_err(dev, "Invalid boost capacitor value: %d nH\n", boost_cap);
++			return -EINVAL;
++		}
++		/* 201 uF and greater */
+ 		bst_cbst_range = 4;
+ 	}
+ 
++	if (boost_ipk < 1600 || boost_ipk > 4500) {
++		dev_err(dev, "Invalid boost inductor peak current: %d mA\n", boost_ipk);
++		return -EINVAL;
++	}
++
+ 	ret = regmap_update_bits(regmap, CS35L41_BSTCVRT_COEFF,
+ 				 CS35L41_BST_K1_MASK | CS35L41_BST_K2_MASK,
+ 				 cs35l41_bst_k1_table[bst_lbst_val][bst_cbst_range]
+@@ -1017,10 +1027,6 @@ int cs35l41_boost_config(struct device *dev, struct regmap *regmap, int boost_in
+ 		return ret;
+ 	}
+ 
+-	if (boost_ipk < 1600 || boost_ipk > 4500) {
+-		dev_err(dev, "Invalid boost inductor peak current: %d mA\n", boost_ipk);
+-		return -EINVAL;
+-	}
+ 	bst_ipk_scaled = ((boost_ipk - 1600) / 50) + 0x10;
+ 
+ 	ret = regmap_update_bits(regmap, CS35L41_BSTCVRT_PEAK_CUR, CS35L41_BST_IPK_MASK,
+diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
+index e76b93c15106..90dec80707ea 100644
+--- a/sound/soc/codecs/cs35l41.c
++++ b/sound/soc/codecs/cs35l41.c
+@@ -995,28 +995,24 @@ static int cs35l41_dai_set_sysclk(struct snd_soc_dai *dai,
+ 
+ static int cs35l41_set_pdata(struct cs35l41_private *cs35l41)
+ {
++	struct cs35l41_hw_cfg *hw_cfg = &cs35l41->hw_cfg;
+ 	int ret;
+ 
+-	/* Set Platform Data */
+-	/* Required */
+-	if (cs35l41->hw_cfg.bst_ipk &&
+-	    cs35l41->hw_cfg.bst_ind && cs35l41->hw_cfg.bst_cap) {
+-		ret = cs35l41_boost_config(cs35l41->dev, cs35l41->regmap, cs35l41->hw_cfg.bst_ind,
+-					   cs35l41->hw_cfg.bst_cap, cs35l41->hw_cfg.bst_ipk);
+-		if (ret) {
+-			dev_err(cs35l41->dev, "Error in Boost DT config: %d\n", ret);
+-			return ret;
+-		}
+-	} else {
+-		dev_err(cs35l41->dev, "Incomplete Boost component DT config\n");
++	if (!hw_cfg->valid)
+ 		return -EINVAL;
++
++	/* Required */
++	ret = cs35l41_boost_config(cs35l41->dev, cs35l41->regmap,
++				   hw_cfg->bst_ind, hw_cfg->bst_cap, hw_cfg->bst_ipk);
++	if (ret) {
++		dev_err(cs35l41->dev, "Error in Boost DT config: %d\n", ret);
++		return ret;
+ 	}
+ 
+ 	/* Optional */
+-	if (cs35l41->hw_cfg.dout_hiz <= CS35L41_ASP_DOUT_HIZ_MASK &&
+-	    cs35l41->hw_cfg.dout_hiz >= 0)
++	if (hw_cfg->dout_hiz <= CS35L41_ASP_DOUT_HIZ_MASK && hw_cfg->dout_hiz >= 0)
+ 		regmap_update_bits(cs35l41->regmap, CS35L41_SP_HIZ_CTRL, CS35L41_ASP_DOUT_HIZ_MASK,
+-				   cs35l41->hw_cfg.dout_hiz);
++				   hw_cfg->dout_hiz);
+ 
+ 	return 0;
+ }
+@@ -1037,16 +1033,28 @@ static int cs35l41_gpio_config(struct cs35l41_private *cs35l41)
+ 			   gpio2->pol_inv << CS35L41_GPIO_POL_SHIFT |
+ 			   !gpio2->out_en << CS35L41_GPIO_DIR_SHIFT);
+ 
+-	regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
+-			   CS35L41_GPIO1_CTRL_MASK | CS35L41_GPIO2_CTRL_MASK,
+-			   gpio1->func << CS35L41_GPIO1_CTRL_SHIFT |
+-			   gpio2->func << CS35L41_GPIO2_CTRL_SHIFT);
++	if (gpio1->valid)
++		regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
++				   CS35L41_GPIO1_CTRL_MASK,
++				   gpio1->func << CS35L41_GPIO1_CTRL_SHIFT);
+ 
+-	if ((gpio2->func == (CS35L41_GPIO2_INT_PUSH_PULL_LOW | CS35L41_VALID_PDATA)) ||
+-		(gpio2->func == (CS35L41_GPIO2_INT_OPEN_DRAIN | CS35L41_VALID_PDATA)))
+-		irq_pol = IRQF_TRIGGER_LOW;
+-	else if (gpio2->func == (CS35L41_GPIO2_INT_PUSH_PULL_HIGH | CS35L41_VALID_PDATA))
+-		irq_pol = IRQF_TRIGGER_HIGH;
++	if (gpio2->valid) {
++		regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
++				   CS35L41_GPIO2_CTRL_MASK,
++				   gpio2->func << CS35L41_GPIO2_CTRL_SHIFT);
++
++		switch (gpio2->func) {
++		case CS35L41_GPIO2_INT_PUSH_PULL_LOW:
++		case CS35L41_GPIO2_INT_OPEN_DRAIN:
++			irq_pol = IRQF_TRIGGER_LOW;
++			break;
++		case CS35L41_GPIO2_INT_PUSH_PULL_HIGH:
++			irq_pol = IRQF_TRIGGER_HIGH;
++			break;
++		default:
++			break;
++		}
++	}
+ 
+ 	return irq_pol;
+ }
+@@ -1121,14 +1129,20 @@ static int cs35l41_handle_pdata(struct device *dev, struct cs35l41_hw_cfg *hw_cf
+ 	ret = device_property_read_u32(dev, "cirrus,boost-peak-milliamp", &val);
+ 	if (ret >= 0)
+ 		hw_cfg->bst_ipk = val;
++	else
++		hw_cfg->bst_ipk = -1;
+ 
+ 	ret = device_property_read_u32(dev, "cirrus,boost-ind-nanohenry", &val);
+ 	if (ret >= 0)
+ 		hw_cfg->bst_ind = val;
++	else
++		hw_cfg->bst_ind = -1;
+ 
+ 	ret = device_property_read_u32(dev, "cirrus,boost-cap-microfarad", &val);
+ 	if (ret >= 0)
+ 		hw_cfg->bst_cap = val;
++	else
++		hw_cfg->bst_cap = -1;
+ 
+ 	ret = device_property_read_u32(dev, "cirrus,asp-sdout-hiz", &val);
+ 	if (ret >= 0)
+@@ -1140,15 +1154,21 @@ static int cs35l41_handle_pdata(struct device *dev, struct cs35l41_hw_cfg *hw_cf
+ 	gpio1->pol_inv = device_property_read_bool(dev, "cirrus,gpio1-polarity-invert");
+ 	gpio1->out_en = device_property_read_bool(dev, "cirrus,gpio1-output-enable");
+ 	ret = device_property_read_u32(dev, "cirrus,gpio1-src-select", &val);
+-	if (ret >= 0)
+-		gpio1->func = val | CS35L41_VALID_PDATA;
++	if (ret >= 0) {
++		gpio1->func = val;
++		gpio1->valid = true;
++	}
+ 
+ 	/* GPIO2 Pin Config */
+ 	gpio2->pol_inv = device_property_read_bool(dev, "cirrus,gpio2-polarity-invert");
+ 	gpio2->out_en = device_property_read_bool(dev, "cirrus,gpio2-output-enable");
+ 	ret = device_property_read_u32(dev, "cirrus,gpio2-src-select", &val);
+-	if (ret >= 0)
+-		gpio2->func = val | CS35L41_VALID_PDATA;
++	if (ret >= 0) {
++		gpio2->func = val;
++		gpio2->valid = true;
++	}
++
++	hw_cfg->valid = true;
+ 
+ 	return 0;
+ }
 -- 
-nvpublic
+2.35.1
+

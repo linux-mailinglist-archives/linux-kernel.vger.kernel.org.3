@@ -2,50 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7D94DD129
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 728584DD12B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiCQX3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 19:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S229967AbiCQXcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 19:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiCQX3s (ORCPT
+        with ESMTP id S229839AbiCQXcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 19:29:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFA4D3738
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 16:28:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFF0CB8204A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 23:28:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA96C340E9;
-        Thu, 17 Mar 2022 23:28:25 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ka04jWG8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1647559704;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=E+PvMxWcS3ApAYnp0Ppxv3cA5ntFGWMLNNnCr55gGEM=;
-        b=ka04jWG8tHwiwpxCLH3hj1y8aKPbUW8Ohp8qh4kcJPa1R8BnTbhpxMDfeLa/uBYiDxhlea
-        jFnTS+qAwOvKshFsuz2emu1oZN3awC2uqJn021c+zfJ8IOhgvoeOjR1V5WZHHm7tGOYsw0
-        QE6BtfC5qMo/ySZ0rw/fx9Ub1UjDv2M=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 57e948a2 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 17 Mar 2022 23:28:23 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] random number generator updates for 5.18-rc1
-Date:   Thu, 17 Mar 2022 17:28:04 -0600
-Message-Id: <20220317232804.931702-1-Jason@zx2c4.com>
+        Thu, 17 Mar 2022 19:32:04 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC748185943;
+        Thu, 17 Mar 2022 16:30:46 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id a1so8172668wrh.10;
+        Thu, 17 Mar 2022 16:30:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Kf+pDBs2nbvt7GpmUkQZXtJLUtopEEIfY3t5/TWUWOc=;
+        b=VVucs9qDmdDKge+F191+fRNzExdWb3Lo0N2rleaCXYe5S0r3FlfewC8VZQaIkE1og2
+         4dYejnaeMwMLg//7nWTWkMEyzx69MgJoFupSrhvFuJLx+zV8G/7lOqdAjI9f+sv/gtBr
+         vd2yPqB75GUyX0wzkJLJdZjfMrlP3dNJOKxhjcU1TJtcGAqp7iry2ppem4lPYVyd9XAQ
+         nawvWAF5kNDi9cWN+Lonvq0Sq3snbL9ka/pSeuACez2tdq3d/Vo0KTa6eIjsVFiqMlm5
+         NbIavEJ6xnrkQoKSrDkO/0cv4mk0wi0kfDgeXR0Q+5iRXAiGqxv884In4ldMkCEQVdd6
+         p8og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Kf+pDBs2nbvt7GpmUkQZXtJLUtopEEIfY3t5/TWUWOc=;
+        b=4a91MPaXYme+JDNwnQ2bB/5BigyTitGGPgcZnTqWxcUy3WaTH7A+kGrxNOTv1br1A/
+         TAGtnTmg/GgyiXkCx5HjQzQtDXBR1V4RZpwXnBubC5p85TCkr8QDGhwXfT7xh/LeEtyg
+         TzSG5Tct0KRaTx6uUmJHuasqrpDZRqKlchupFHL7ptbFFHsB0wsBumdsg7IjL7QlKW+T
+         ttf75maryYMqdV8zQhn33yK68FOaZ0HstUdMQT4NhsjT3VuLmKb7Via18z7IxkR3HZ8f
+         7162yiNC5eUEt/Bn2rSohbdl/ySQTytHGlb7MPaoFGoAMmL5VFDgIP2MKti7/9ZXPe52
+         i3/w==
+X-Gm-Message-State: AOAM530hlQFaEmOTsMcA5LEnNh5Mc+0ON8pZZv3Mrl5jzyl7NCSbuO04
+        ZxcyjGCd4BhvC4WP3ggmNiRVCHXELOLxKU75J2I=
+X-Google-Smtp-Source: ABdhPJxmSMSY2cEFdzhlD4Ik29HDsWr2Tb3B+hhEsTAKkWNrSEDmy8KicWxkB2svfRU2gNRkUX3PymoBsz1AmB02/v0=
+X-Received: by 2002:adf:c54c:0:b0:203:ed16:2570 with SMTP id
+ s12-20020adfc54c000000b00203ed162570mr3845609wrf.646.1647559845276; Thu, 17
+ Mar 2022 16:30:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220311181014.3448936-1-bjwyman@gmail.com> <fa8b2d9f-e5c9-73f4-3916-84e370748687@roeck-us.net>
+ <CAK_vbW2S07+S8+PrQnBLjvXYnLBXU06FHBvfM2zaT6RYx9HO+g@mail.gmail.com>
+ <582086fe-1cc3-d161-a866-f4726d04a254@roeck-us.net> <CAK_vbW1Lfroo91cMxsLpuf-uuDwcsssG1=fjp3an_O5-FUHjMQ@mail.gmail.com>
+ <b284838a-6987-273c-ce00-592aa9ab51b2@roeck-us.net>
+In-Reply-To: <b284838a-6987-273c-ce00-592aa9ab51b2@roeck-us.net>
+From:   Brandon Wyman <bjwyman@gmail.com>
+Date:   Thu, 17 Mar 2022 18:30:10 -0500
+Message-ID: <CAK_vbW2QFk8wJrK6X+Xyvefx1XDPLHOFoh0VpKnSCNN43knwMw@mail.gmail.com>
+Subject: Re: [PATCH v2] hwmon: (pmbus/ibm-cffps) Add clear_faults debugfs entry
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Joel Stanley <joel@jms.id.au>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,189 +72,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Mar 17, 2022 at 1:50 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 3/17/22 09:12, Brandon Wyman wrote:
+> > On Wed, Mar 16, 2022 at 3:14 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >>
+> >> On 3/16/22 13:03, Brandon Wyman wrote:
+> >>> On Sun, Mar 13, 2022 at 11:36 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >>>>
+> >>>> On 3/11/22 10:10, Brandon Wyman wrote:
+> >>>>> Add a clear_faults write-only debugfs entry for the ibm-cffps device
+> >>>>> driver.
+> >>>>>
+> >>>>> Certain IBM power supplies require clearing some latched faults in order
+> >>>>> to indicate that the fault has indeed been observed/noticed.
+> >>>>>
+> >>>>
+> >>>> That is insufficient, sorry. Please provide the affected power supplies as
+> >>>> well as the affected faults, and confirm that the problem still exists
+> >>>> in v5.17-rc6 or later kernels - or, more specifically, in any kernel which
+> >>>> includes commit 35f165f08950 ("hwmon: (pmbus) Clear pmbus fault/warning
+> >>>> bits after read").
+> >>>>
+> >>>> Thanks,
+> >>>> Guenter
+> >>>
+> >>> Sorry for the delay in responding. I did some testing with commit
+> >>> 35f165f08950. I could not get that code to send the CLEAR_FAULTS
+> >>> command to the power supplies.
+> >>>
+> >>> I can update the commit message to be more specific about which power
+> >>> supplies need this CLEAR_FAULTS sent, and which faults. It is observed
+> >>> with the 1600W power supplies (2B1E model). The faults that latch are
+> >>> the VIN_UV and INPUT faults in the STATUS_WORD. The corresponding
+> >>> STATUS_INPUT fault bits are VIN_UV_FAULT and Unit is Off.
+> >>>
+> >>
+> >> The point is that the respective fault bits should be reset when the
+> >> corresponding alarm attributes are read. This isn't about executing
+> >> a CLEAR_FAULTS command, but about selectively resetting fault bits
+> >> while ensuring that faults are reported at least once. Executing
+> >> CLEAR_FAULTS is a big hammer.
+> >>
+> >> With the patch I pointed to in place, input (and other) faults should
+> >> be reset after the corresponding alarm attributes are read, assuming
+> >> that the condition no longer exists. If that does not happen, we should
+> >> fix the problem instead of deploying the big hammer.
+> >>
+> >> Thanks,
+> >> Guenter
+> >
+> > Okay, I see what you are pointing out there. I had been mostly looking
+> > at the "files" in the debugfs paths. Those do not end up running
+> > through that pmbus_get_boolean() function, so the individual fault
+> > clearing was not being attempted. The fault I was interested in
+> > appears to be associated with in1_lcrti_alarm. Reading that will give
+> > me a 1 if there is a VIN_UV fault, and then it sends 0x10 to
+> > STATUS_INPUT. That clears out VIN_UV, but the STATUS_INPUT command was
+> > returning 0x18. Nothing appears to handle clearing BIT(3), that 0x08
+> > mask.
+> >
+> > Should there be some kind of define for BIT(3) over in pmbus.h?
+> > Something like PB_VOLTAGE_OFF? Somehow we need something using that in
+> > sbit of the attributes. I had a quick hack that just OR'ed BIT(3) with
+> > BIT(4) for that PB_VOLTAGE_UV_FAULT. That resulted in a clear of both
+> > bits in STATUS_INPUT, and the faults clearing in STATUS_WORD.
+> >
+> > It is not clear if there should be a separate alarm for that "Unit Off
+> > For Insufficient Input Voltage", or if the one for in1_lcrit_alarm
+> > could just be the two bits OR'ed into one mask. I can send a patch
+> > with a proposal on how to fix this one bit not getting cleared.
+> >
+>
+> We don't have a separate standard attribute. I think the best approach
+> would be to add a mask for bit 3 and or that mask for lcrit in
+> vin_limit_attrs with PB_VOLTAGE_UV_FAULT. I'd suggest to name the
+> define something like PB_VOLTAGE_VIN_OFF or PB_VOLTAGE_VIN_FAULT
+> to clarify that the bit applies to the input.
 
-Please pull the following updates for 5.18-rc1. Since 5.17, there have been a
-few important changes to the RNG's crypto, but the intent for 5.18 has been to
-shore up the existing design as much as possible with modern cryptographic
-functions and proven constructions, rather than actually changing up anything
-fundamental to the RNG's design. So it's still the same old RNG at its core as
-before: it still counts entropy bits, and collects from the various sources
-with the same heuristics as before, and so forth. However, the cryptographic
-algorithms that transform that entropic data into safe random numbers have
-been modernized.
+Done. See: https://lore.kernel.org/linux-hwmon/20220317232123.2103592-1-bjwyman@gmail.com/T/#u
 
-Just as important, if not more, is that the code has been cleaned up and
-re-documented. As one of the first drivers in Linux, going back to 1.3.30, its
-general style and organization was showing its age and becoming both a
-maintenance burden and an auditability impediment. Hopefully this provides a
-more solid foundation to build on for the future. I encourage you to open up
-the file in full, and maybe you'll remark, "oh, that's what it's doing," and
-enjoy reading it. That, at least, is the eventual goal, which this pull
-begins working toward.
-
-Here's a summary of the various patches in this pull:
-
-  1) /dev/urandom and /dev/random now do the same thing, per the patch we
-     discussed on the list. I think this is worth trying out. If it does
-     appear problematic, I've made sure to keep it standalone and revertible
-     without any conflicts.
-
-  2) Fixes and cleanups for numerous integer type problems, locking issues,
-     and general code quality concerns.
-
-  3) The input pool's LFSR has been replaced with a cryptographically secure
-     hash function, which has security and performance benefits alike, and
-     consequently allows us to count entropy bits linearly.
-
-  4) The pre-init injection now uses a real hash function too, instead of an
-     LFSR or vanilla xor.
-
-  5) The interrupt handler's fast_mix() function now uses one round of SipHash,
-     rather than the fake crypto that was there before.
-
-  6) All additions of RDRAND and RDSEED now go through the input pool's hash
-     function, in part to mitigate ridiculous hypothetical CPU backdoors, but
-     more so to have a consistent interface for ingesting entropy that's easy
-     to analyze, making everything happen one way, instead of a potpourri of
-     different ways.
-
-  7) The crng now works on per-cpu data, while also being in accordance with
-     the actual "fast key erasure RNG" design. This allows us to fix several
-     boot-time race complications associated with the prior dynamically
-     allocated model, eliminates much locking, and makes our backtrack
-     protection more robust.
-
-  8) Batched entropy now erases doled out values so that it's backtrack
-     resistant.
-
-  9) Working closely with Sebastian, the interrupt handler no longer needs to
-     take any locks at all, as we punt the synchronized/expensive operations
-     to a workqueue. This is especially nice for PREEMPT_RT, where taking
-     spinlocks in irq context is problematic. It also makes the handler faster
-     for the rest of us.
-
-  10) Also working with Sebastian, we now do the right thing on CPU hotplug,
-      so that we don't use stale entropy or fail to accumulate new entropy
-      when CPUs come back online.
-
-  11) We handle virtual machines that fork / clone / snapshot, using the
-      "vmgenid" ACPI specification for retrieving a unique new RNG seed, which
-      we can use to also make WireGuard (and in the future, other things) safe
-      across VM forks.
-
-  12) Around boot time, we now try to reseed more often if enough entropy is
-      available, before settling on the usual 5 minute schedule.
-
-  13) Last, but certainly not least, the documentation in the file has been
-      updated considerably.
-
-Please pull!
-
-Thanks,
-Jason
-
-----------------------------------------------------------------
-
-The following changes since commit cfb92440ee71adcc2105b0890bb01ac3cddb8507:
-
-  Linux 5.17-rc5 (2022-02-20 13:07:20 -0800)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/crng/random.git tags/random-5.18-rc1-for-linus
-
-for you to fetch changes up to 3e504d2026eb6c8762cd6040ae57db166516824a:
-
-  random: check for signal and try earlier when generating entropy (2022-03-12 20:51:39 -0700)
-
-----------------------------------------------------------------
-
-Alexander Graf (1):
-      ACPI: allow longer device IDs
-
-Dominik Brodowski (2):
-      random: fix locking in crng_fast_load()
-      random: fix locking for crng_init in crng_reseed()
-
-Eric Biggers (1):
-      random: remove use_input_pool parameter from crng_reseed()
-
-Jason A. Donenfeld (56):
-      random: use computational hash for entropy extraction
-      random: simplify entropy debiting
-      random: use linear min-entropy accumulation crediting
-      random: always wake up entropy writers after extraction
-      random: make credit_entropy_bits() always safe
-      random: remove batched entropy locking
-      random: use RDSEED instead of RDRAND in entropy extraction
-      random: get rid of secondary crngs
-      random: inline leaves of rand_initialize()
-      random: ensure early RDSEED goes through mixer on init
-      random: do not xor RDRAND when writing into /dev/random
-      random: absorb fast pool into input pool after fast load
-      random: use simpler fast key erasure flow on per-cpu keys
-      random: use hash function for crng_slow_load()
-      random: make more consistent use of integer types
-      random: remove outdated INT_MAX >> 6 check in urandom_read()
-      random: zero buffer after reading entropy from userspace
-      random: tie batched entropy generation to base_crng generation
-      random: remove ifdef'd out interrupt bench
-      random: remove unused tracepoints
-      random: add proper SPDX header
-      random: deobfuscate irq u32/u64 contributions
-      random: introduce drain_entropy() helper to declutter crng_reseed()
-      random: remove useless header comment
-      random: remove whitespace and reorder includes
-      random: group initialization wait functions
-      random: group crng functions
-      random: group entropy extraction functions
-      random: group entropy collection functions
-      random: group userspace read/write functions
-      random: group sysctl functions
-      random: rewrite header introductory comment
-      random: defer fast pool mixing to worker
-      random: do not take pool spinlock at boot
-      random: unify early init crng load accounting
-      random: check for crng_init == 0 in add_device_randomness()
-      random: pull add_hwgenerator_randomness() declaration into random.h
-      random: clear fast pool, crng, and batches in cpuhp bring up
-      random: round-robin registers as ulong, not u32
-      random: only wake up writers after zap if threshold was passed
-      random: cleanup UUID handling
-      random: unify cycles_t and jiffies usage and types
-      random: do crng pre-init loading in worker rather than irq
-      random: block in /dev/urandom
-      random: give sysctl_random_min_urandom_seed a more sensible value
-      random: don't let 644 read-only sysctls be written to
-      random: add mechanism for VM forks to reinitialize crng
-      virt: vmgenid: notify RNG of VM fork and supply generation ID
-      random: do not export add_vmfork_randomness() unless needed
-      random: replace custom notifier chain with standard one
-      random: provide notifier for VM fork
-      wireguard: device: clear keys on VM fork
-      random: use SipHash as interrupt entropy accumulator
-      random: make consistent usage of crng_ready()
-      random: reseed more often immediately after booting
-      random: check for signal and try earlier when generating entropy
-
- Documentation/admin-guide/sysctl/kernel.rst |   16 +-
- MAINTAINERS                                 |    1 +
- drivers/char/hw_random/core.c               |    1 +
- drivers/char/mem.c                          |    2 +-
- drivers/char/random.c                       | 2939 +++++++++++----------------
- drivers/net/wireguard/device.c              |   38 +-
- drivers/virt/Kconfig                        |   11 +
- drivers/virt/Makefile                       |    1 +
- drivers/virt/vmgenid.c                      |  100 +
- include/linux/cpuhotplug.h                  |    2 +
- include/linux/hw_random.h                   |    2 -
- include/linux/mod_devicetable.h             |    2 +-
- include/linux/random.h                      |   43 +-
- include/trace/events/random.h               |  233 ---
- kernel/cpu.c                                |   11 +
- lib/random32.c                              |   14 +-
- lib/vsprintf.c                              |   10 +-
- 17 files changed, 1419 insertions(+), 2007 deletions(-)
- create mode 100644 drivers/virt/vmgenid.c
- delete mode 100644 include/trace/events/random.h
+>
+> Thanks,
+> Guenter

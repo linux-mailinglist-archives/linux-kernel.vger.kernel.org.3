@@ -2,88 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84E44DC7A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED7C4DC7AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234612AbiCQNfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 09:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
+        id S234625AbiCQNf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 09:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234604AbiCQNfs (ORCPT
+        with ESMTP id S234616AbiCQNf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:35:48 -0400
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4637E1D8327;
-        Thu, 17 Mar 2022 06:34:32 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id m67so10263636ybm.4;
-        Thu, 17 Mar 2022 06:34:32 -0700 (PDT)
+        Thu, 17 Mar 2022 09:35:56 -0400
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5511D8327;
+        Thu, 17 Mar 2022 06:34:39 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id u16so6396582wru.4;
+        Thu, 17 Mar 2022 06:34:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bVTYHCw+sIjTpGlaPwKVewFptDurXIS2uuawHeJHLLA=;
-        b=BAtPILSFs0nOVFUgxIJXGVA8Vn2gs6IHJTl3UVn2oIYb07qBdvEcM+TxzOBQ0GUKyl
-         PYwl10DDAgfPGI3peyrO21r47edXNngbEqLCpOS6lD7zBR9viMXpi4SxSMI5FYYLbybj
-         yXfCxOj3QhZFyJFmIxsB3aLRjKHkHx0vSyBMohfyYNXR9lUwfxrisNCittoZAJpcmXsq
-         MWy7dl5KV1R4TgfXyCrrF9hgHrOoh1jnLWxYBX+DPgySFJ7oWOnVmpBx4shF/ShP74n5
-         iSkyc9MjSoT6ojrItTnPxRvzlIITWLjjIKfZTMBiCFtbw3kd7Nm1KYiEGaV8LfJQ3MuF
-         JCsg==
-X-Gm-Message-State: AOAM532mF7MR/mLo83auoMzkIy8EMx5E+Bj5cL9f5rP0GXZkHCBTav1J
-        XKAwrpHxr3/crNABaPsFduh1W6/lvSllth6czm4=
-X-Google-Smtp-Source: ABdhPJy6DKisf5GePZUAUsw10mXzY76VFI0VY63YMwwR6uG1gCWv7s4+Qd2m05v8v17o1iGhmVwXH1okd/5VI0MkbZc=
-X-Received: by 2002:a25:3a41:0:b0:628:86a2:dbc with SMTP id
- h62-20020a253a41000000b0062886a20dbcmr4619617yba.633.1647524071539; Thu, 17
- Mar 2022 06:34:31 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:content-language:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=tiddZtdatCAOBeWoKQ39T3OINXD+ANIwjKxCq8gFVyg=;
+        b=r5Xue6WFoXurEsZZDzrwuYYHerUIraIHaA8RcD1K2dwTdrJR/ys9oxo8JnZUeiowya
+         /JKKn+N2g9pdGaVg+WXJFfuGBd9hqyxWORyB+eIw+TkEMv58C2IK+43ibfqKc5ZNdOdQ
+         rslf09TaabA/6ht9ox4jWORmdh71/MDAsvzzxx5SUsW7srpNBvBlvoHlW8x+yoUGy20k
+         DdIhJH17iUKZvgiz9q0Imu+GT5JuMLZjIOGTnAb6bUaKQxwqnXgImUEC5tHpyhjdpDu8
+         QwbC9TkJFV+i3bsCSwB8b/El6XBcQ3tr5AavmNxLVAeoamTzNLkBj58mMDw+CiaATA26
+         dacQ==
+X-Gm-Message-State: AOAM530YHZkbfpsp45xK7mSYZoZvp3oXxlegV0dkvQb5cq51ZK/iZ/Ub
+        gAC7oJwDfj/oMudRHyNv5js=
+X-Google-Smtp-Source: ABdhPJwAnfd4irGcCYcMc4ioXDUc5jApZtA3VHsE3K+y3gDHzFM/81yNXsSr4TkmhdNbWlYAtnsHIg==
+X-Received: by 2002:adf:9123:0:b0:1ef:9b6d:60c1 with SMTP id j32-20020adf9123000000b001ef9b6d60c1mr4030511wrj.169.1647524078009;
+        Thu, 17 Mar 2022 06:34:38 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm4314005wmh.31.2022.03.17.06.34.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 06:34:35 -0700 (PDT)
+Message-ID: <e26ab4e4-6774-e292-8fcb-c86b33af048a@kernel.org>
+Date:   Thu, 17 Mar 2022 14:34:33 +0100
 MIME-Version: 1.0
-References: <2630560.mvXUDI8C0e@kreacher> <5558236.DvuYhMxLoT@kreacher>
-In-Reply-To: <5558236.DvuYhMxLoT@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 17 Mar 2022 14:34:20 +0100
-Message-ID: <CAJZ5v0jEFdDdw3TLAFwwSjHrruk9ak4KNXjzZjcXz-7jyVFrxg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] cpuidle: intel_idle: Update intel_idle() kerneldoc comment
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [RFC PATCH v4 1/5] dt-bindings: interrupt-controller: Add Renesas
+ RZ/G2L Interrupt Controller
+Content-Language: en-US
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220317012404.8069-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220317012404.8069-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <971850ad-96af-2abb-f4bf-ba6188e2d732@kernel.org>
+ <CA+V-a8t+=dVsofAT=Qk-v3hvJ7_zGNNLoj_EQK8hUGptnQROhQ@mail.gmail.com>
+In-Reply-To: <CA+V-a8t+=dVsofAT=Qk-v3hvJ7_zGNNLoj_EQK8hUGptnQROhQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 8:37 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Commit bf9282dc26e7 ("cpuidle: Make CPUIDLE_FLAG_TLB_FLUSHED generic")
-> moved the leave_mm() call away from intel_idle(), but it didn't update
-> its kerneldoc comment accordingly, so do that now.
->
-> Fixes: bf9282dc26e7 ("cpuidle: Make CPUIDLE_FLAG_TLB_FLUSHED generic")
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/idle/intel_idle.c |    3 ---
->  1 file changed, 3 deletions(-)
->
-> Index: linux-pm/drivers/idle/intel_idle.c
-> ===================================================================
-> --- linux-pm.orig/drivers/idle/intel_idle.c
-> +++ linux-pm/drivers/idle/intel_idle.c
-> @@ -122,9 +122,6 @@ static unsigned int mwait_substates __in
->   * If the local APIC timer is not known to be reliable in the target idle state,
->   * enable one-shot tick broadcasting for the target CPU before executing MWAIT.
->   *
-> - * Optionally call leave_mm() for the target CPU upfront to avoid wakeups due to
-> - * flushing user TLBs.
-> - *
->   * Must be called under local_irq_disable().
->   */
->  static __cpuidle int intel_idle(struct cpuidle_device *dev,
->
+On 17/03/2022 12:55, Lad, Prabhakar wrote:
+> Hi Krzysztof,
+> 
+> Thank you for the review.
+> 
+> On Thu, Mar 17, 2022 at 9:44 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>
+>> On 17/03/2022 02:24, Lad Prabhakar wrote:
+>>> Add DT bindings for the Renesas RZ/G2L Interrupt Controller.
+>>>
+>>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>>> ---
+>>>  .../renesas,rzg2l-irqc.yaml                   | 131 ++++++++++++++++++
+>>>  1 file changed, 131 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+>>> new file mode 100644
+>>> index 000000000000..a14492ec9235
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+>>> @@ -0,0 +1,131 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/interrupt-controller/renesas,rzg2l-irqc.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Renesas RZ/G2L (and alike SoC's) Interrupt Controller (IA55)
+>>> +
+>>> +maintainers:
+>>> +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>>> +  - Geert Uytterhoeven <geert+renesas@glider.be>
+>>> +
+>>> +description: |
+>>> +  IA55 performs various interrupt controls including synchronization for the external
+>>> +  interrupts of NMI, IRQ, and GPIOINT and the interrupts of the built-in peripheral
+>>> +  interrupts output by each IP. And it notifies the interrupt to the GIC
+>>> +    - IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI interrupts
+>>> +    - GPIO pins used as external interrupt input pins, mapped to 32 GIC SPI interrupts
+>>> +    - NMI edge select (NMI is not treated as NMI exception and supports fall edge and
+>>> +      stand-up edge detection interrupts)
+>>> +
+>>> +allOf:
+>>> +  - $ref: /schemas/interrupt-controller.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - renesas,r9a07g044-irqc    # RZ/G2L
+>>> +      - const: renesas,rzg2l-irqc
+>>> +
+>>> +  '#interrupt-cells':
+>>> +    const: 2
+>>> +
+>>> +  '#address-cells':
+>>> +    const: 0
+>>> +
+>>> +  interrupt-controller: true
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1> +
+>>> +  interrupts:
+>>> +    maxItems: 41
+>>> +
+>>> +  clocks:
+>>> +    maxItems: 2
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: clk
+>>> +      - const: pclk
+>>> +
+>>> +  power-domains:
+>>> +    maxItems: 1
+>>> +
+>>> +  resets:
+>>> +    maxItems: 1
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - '#interrupt-cells'
+>>> +  - '#address-cells'
+>>> +  - interrupt-controller
+>>> +  - reg
+>>> +  - interrupts
+>>> +  - clocks
+>>> +  - clock-names
+>>> +  - power-domains
+>>> +  - resets
+>>> +
+>>> +additionalProperties: false
+>>
+>> This should be rather unevaluatedProperties and remove
+>> interrupt-controller:true from properties.
+>>
+> Ok will do.
 
-Assuming no objections, so applied.
+After some tests it seems interrupt-controller:true is required in
+properties, so only change unevaluatedProperties.
+
+
+Best regards,
+Krzysztof

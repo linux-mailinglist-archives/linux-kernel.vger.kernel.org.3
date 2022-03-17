@@ -2,225 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C47B4DC371
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6924DC399
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbiCQKA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 06:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
+        id S232354AbiCQKHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 06:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiCQKA0 (ORCPT
+        with ESMTP id S232317AbiCQKHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 06:00:26 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFCBD3714
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:59:09 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id r6so6581946wrr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zUt2tWkZnzZmR22TBfzVAfjbYftNAG6kYb5PLZxCQe0=;
-        b=jgPd4/lzC2G8C7BxbIVBbZg/T/CeFLTTtdnT7GDQIMkDTo3olfLtrfpc2XKCmFMmLN
-         1Ova22BUpr4EodnpmV4Us7t7xKvV6+Esqjh2hNtkN1dB9CtVfUXFClvd9PfYf7z22COq
-         HvGTOMyMWbS0rIEfjLDuu2TOeyboi4LUHLuIY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=zUt2tWkZnzZmR22TBfzVAfjbYftNAG6kYb5PLZxCQe0=;
-        b=rF0NuI4pByROVxCAocK9g2n3PvO4VGxeda6hxJRU8TLuDVzdJwuTMHDUpMDtbKQHBu
-         fhkAh35XeXEVy3I7UhunpzAL8JfC9wyn7eb0h3DzU/F/Rg8qAf/asOBfBeH1/TnmQ4Yr
-         opIuihxfpG6yktTxEPg7fmfhwBDx0zeNcIb4wvQQrgipC7yVTLp3jc1gMyxsucDc5QYb
-         M/WsLhUQb9q5+lc7cYpmucL/or2g0jjOtFEjHyF7GojbJWIkUbLkCeV6RaiPGIhtiGH3
-         1wRdUU55AzhHcpWT0+SapnlrSFG7MODyfKKbc9t1Bfb81xWBZhluYxKNuW9wHsU5r/pJ
-         yohA==
-X-Gm-Message-State: AOAM533zwsSaDK/umS44tVA9KYq+Hi+ogSMV6NT5woW3NCwa2nDJb3ON
-        tcP5COBJEWJ0hNlT60A/d8trLQ==
-X-Google-Smtp-Source: ABdhPJyVRbvMqP3RkZC3MlKGRoYqlAqtY6uzXCzQNDy205UCPIRTLqvSpNmTlOSJ5ttBBEhl2Snd4A==
-X-Received: by 2002:a05:6000:1688:b0:203:8efe:e0b0 with SMTP id y8-20020a056000168800b002038efee0b0mr3108580wrd.289.1647511148160;
-        Thu, 17 Mar 2022 02:59:08 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id u7-20020a5d6da7000000b00203d9d1875bsm4016772wrs.73.2022.03.17.02.59.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 02:59:07 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 10:59:05 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Rob Clark <robdclark@gmail.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] drm/msm/gpu: Park scheduler threads for system
- suspend
-Message-ID: <YjMGac4Hnjmg1wE8@phenom.ffwll.local>
-Mail-Followup-To: Rob Clark <robdclark@gmail.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220310234611.424743-1-robdclark@gmail.com>
- <20220310234611.424743-3-robdclark@gmail.com>
+        Thu, 17 Mar 2022 06:07:03 -0400
+X-Greylist: delayed 371 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Mar 2022 03:05:47 PDT
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520B9C12CE;
+        Thu, 17 Mar 2022 03:05:47 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id DD634580245;
+        Thu, 17 Mar 2022 05:59:32 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 17 Mar 2022 05:59:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; bh=0MGy6HvebexiCC2YhyoJoldMNm9d/DgjaE5btR
+        Ao9JA=; b=EOLrAJUUzyotS3KHHDV+ihh1yuFc9PbARfH+aTTFPicj1CjJnnxoVl
+        A94s0L2WRtoSveTeJf7cD+0BzjZOMOGa9Jy9F3BgLx/XMJsCvn3yB00ZDoKlDG84
+        0N+wGEysgM54AfFc1gJR+jYt4Ek5UZfQ5qMLRneiUsgXOfVzt2eOtFKTrvp9e/ho
+        XkKoQfycI5UOe82vIEbGaQFwJUsw1Tn3nsBw/uKVHS/t6fb8cmscMVQO24GOfMu1
+        W6LYWO466c+xPcFWp1uSPOesLS0HaVTCzVd3U5eWRdyfd/3xv92zRPh+J+Xhhu8X
+        UrVRrF/OB+ps+Daw3BNVo+cFG+mXzfYA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=0MGy6HvebexiCC2Yh
+        yoJoldMNm9d/DgjaE5btRAo9JA=; b=IdmHbXsFPCgorP+QgDyJ+U4JRWjTFeBv0
+        fcM/UxJuD1njO4W+uqXq7Ho8ccx9FdEwVMJXzhpg8lBKKy803iDeoaMTrvgOwVFs
+        MyX/cjMtGKRLhndlrBJWcY/2GQztVOZD05l0ltf41xLg4mkUrt9unMFtAAY0w6T+
+        cmeVT6RhX/kevcwduh9wQKQMzdw8ln9AnPpS7GbFmFw9duOD0p2BQN+OQOOB/DvO
+        e/dqDvOr7ovJ61SD0ZGqfVYXrmb1rUIuIAFULFsSXPwFX0QE8BAa3HAXhJjG+xT3
+        eZY2nJQ7Pt0ALAH0gWpuBENa1uYym+8Ls4ouMMDOJmv3mKJtiT/Qw==
+X-ME-Sender: <xms:hAYzYtCwoCMGDOxC7QdIq37YR-Hm09c1MA5hEvckZqoiwHOmWhcauw>
+    <xme:hAYzYrhE_DF9BNPvAHO1FwPjQ5ekHDBd6lhTb4J57yYwGaIyMupT99Cp45LEZtmjS
+    10IumvYyipdkg>
+X-ME-Received: <xmr:hAYzYonqJs8kFPretBhZv3kXOvR8BaR1dukXjcVq2M9i4qsXVvARWHO7yCps679SDAXDJn2OIrS_PsTUW2of-g5do0fHBs_g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefgedgtdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdortddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevhefgje
+    eitdfffefhvdegleeigeejgeeiffekieffjeeflefhieegtefhudejueenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:hAYzYnxeeHNmCg8ezmN-l5lIY8xPlVjSbmwi7NjZ56vQHp4BsGjPww>
+    <xmx:hAYzYiRnty3dyHuvRkK_lCgje6qaEYUKZE401jUBLPjemCOhrEzhpA>
+    <xmx:hAYzYqbe1wudRx339mg046LRHONIquLBrz7UKaDY5w89yZwPGhf_XA>
+    <xmx:hAYzYtksPdP_VEtxd0PizzKDWR_tDCcTQRlz0UjtjUEOjycC9jLJuw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 17 Mar 2022 05:59:31 -0400 (EDT)
+Date:   Thu, 17 Mar 2022 10:59:29 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Steffen Eiden <seiden@linux.ibm.com>
+Cc:     agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        david@redhat.com, frankja@linux.ibm.com, gor@linux.ibm.com,
+        hca@linux.ibm.com, imbrenda@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-s390@vger.kernel.org, nrb@linux.ibm.com, shuah@kernel.org
+Subject: Re: [PATCH v3 1/4] drivers/s390/char: Add Ultravisor io device'
+Message-ID: <YjMGgSstSCZAmcVa@kroah.com>
+References: <20220304141141.32767-2-seiden@linux.ibm.com>
+ <20220317094706.4921-1-seiden@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220310234611.424743-3-robdclark@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220317094706.4921-1-seiden@linux.ibm.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 03:46:05PM -0800, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
+On Thu, Mar 17, 2022 at 09:47:06AM +0000, Steffen Eiden wrote:
+> This patch adds a new miscdevice to expose some Ultravisor functions
+> to userspace. Userspace can send IOCTLs to the uvdevice that will then
+> emit a corresponding Ultravisor Call and hands the result over to
+> userspace. The uvdevice is available if the Ultravisor Call facility is
+> present.
+> Userspace can call the Retrieve Attestation Measurement
+> Ultravisor Call using IOCTLs on the uvdevice.
 > 
-> In the system suspend path, we don't want to be racing with the
-> scheduler kthreads pushing additional queued up jobs to the hw
-> queue (ringbuffer).  So park them first.  While we are at it,
-> move the wait for active jobs to complete into the new system-
-> suspend path.
+> The uvdevice will do some sanity checks first.
+> Then, copy the request data to kernel space, build the UVCB,
+> perform the UV call, and copy the result back to userspace.
 > 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/gpu/drm/msm/adreno/adreno_device.c | 68 ++++++++++++++++++++--
->  1 file changed, 64 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> index 8859834b51b8..0440a98988fc 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> @@ -619,22 +619,82 @@ static int active_submits(struct msm_gpu *gpu)
->  static int adreno_runtime_suspend(struct device *dev)
->  {
->  	struct msm_gpu *gpu = dev_to_gpu(dev);
-> -	int remaining;
-> +
-> +	/*
-> +	 * We should be holding a runpm ref, which will prevent
-> +	 * runtime suspend.  In the system suspend path, we've
-> +	 * already waited for active jobs to complete.
-> +	 */
-> +	WARN_ON_ONCE(gpu->active_submits);
-> +
-> +	return gpu->funcs->pm_suspend(gpu);
-> +}
-> +
-> +static void suspend_scheduler(struct msm_gpu *gpu)
-> +{
-> +	int i;
-> +
-> +	/*
-> +	 * Shut down the scheduler before we force suspend, so that
-> +	 * suspend isn't racing with scheduler kthread feeding us
-> +	 * more work.
-> +	 *
-> +	 * Note, we just want to park the thread, and let any jobs
-> +	 * that are already on the hw queue complete normally, as
-> +	 * opposed to the drm_sched_stop() path used for handling
-> +	 * faulting/timed-out jobs.  We can't really cancel any jobs
-> +	 * already on the hw queue without racing with the GPU.
-> +	 */
-> +	for (i = 0; i < gpu->nr_rings; i++) {
-> +		struct drm_gpu_scheduler *sched = &gpu->rb[i]->sched;
-> +		kthread_park(sched->thread);
+> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-Shouldn't we have some proper interfaces for this? Also I'm kinda
-wondering how other drivers do this, feels like we should have a standard
-way.
+Do you have a pointer to the userspace code that interacts with this
+kernel driver?  That would be good to have to verify that the api here
+is sane.
 
-Finally not flushing out all in-flight requests sounds a bit like a bad
-idea for system suspend/resume since that's also the hibernation path, and
-that would mean your shrinker/page reclaim stops working. At least in full
-generality. Which ain't good for hibernation.
+thanks,
 
-Adding Christian and Andrey.
--Daniel
-
-> +	}
-> +}
-> +
-> +static void resume_scheduler(struct msm_gpu *gpu)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < gpu->nr_rings; i++) {
-> +		struct drm_gpu_scheduler *sched = &gpu->rb[i]->sched;
-> +		kthread_unpark(sched->thread);
-> +	}
-> +}
-> +
-> +static int adreno_system_suspend(struct device *dev)
-> +{
-> +	struct msm_gpu *gpu = dev_to_gpu(dev);
-> +	int remaining, ret;
-> +
-> +	suspend_scheduler(gpu);
->  
->  	remaining = wait_event_timeout(gpu->retire_event,
->  				       active_submits(gpu) == 0,
->  				       msecs_to_jiffies(1000));
->  	if (remaining == 0) {
->  		dev_err(dev, "Timeout waiting for GPU to suspend\n");
-> -		return -EBUSY;
-> +		ret = -EBUSY;
-> +		goto out;
->  	}
->  
-> -	return gpu->funcs->pm_suspend(gpu);
-> +	ret = pm_runtime_force_suspend(dev);
-> +out:
-> +	if (ret)
-> +		resume_scheduler(gpu);
-> +
-> +	return ret;
->  }
-> +
-> +static int adreno_system_resume(struct device *dev)
-> +{
-> +	resume_scheduler(dev_to_gpu(dev));
-> +	return pm_runtime_force_resume(dev);
-> +}
-> +
->  #endif
->  
->  static const struct dev_pm_ops adreno_pm_ops = {
-> -	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
-> +	SET_SYSTEM_SLEEP_PM_OPS(adreno_system_suspend, adreno_system_resume)
->  	SET_RUNTIME_PM_OPS(adreno_runtime_suspend, adreno_runtime_resume, NULL)
->  };
->  
-> -- 
-> 2.35.1
-> 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+greg k-h

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70974DCBC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0DE4DCBC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236662AbiCQQwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        id S236671AbiCQQwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236652AbiCQQwc (ORCPT
+        with ESMTP id S236652AbiCQQwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:52:32 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0064820C18E;
-        Thu, 17 Mar 2022 09:51:15 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id s8so7233583pfk.12;
-        Thu, 17 Mar 2022 09:51:15 -0700 (PDT)
+        Thu, 17 Mar 2022 12:52:37 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E7520C2C9;
+        Thu, 17 Mar 2022 09:51:19 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id m22so5417987pja.0;
+        Thu, 17 Mar 2022 09:51:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CKSIvXkqxKLFm6MnEgEDHDzqzUeFog6pmD8CweFsghI=;
-        b=bUGk2Wp+U7vNMRDQf8jdXaKMmj/UyBkl6QWCzCJeio9r9gAN+TQGqAVsWKT/hb0awj
-         rPgPl1CbtTcSQJUk1xm2/RaUqJhFJj1TgduuN+wp4/PpmRWYouaJZSvyZGUxvivjVecf
-         hZcjtHDt8QRRLK7gs/9tgMz41L9vCTOHw75Bo2ptMcdzUD0WiSJWVFWcKQtveTG3o9QT
-         hM46O9AT68fo/Y5AlvlaKYNP5+q4xk/uqZBMDtMJ/fbbEXHFmHx/IMKq4WHUbumvMurm
-         jxbO/lVPfDT7DKtSBeYENQAghy5PT5d8ygaVSo3/Mq7xQul2lHKdZAPOwGDjUhXNNqBT
-         hkyw==
+        bh=morR5sm8z9pnyy1KkY8kjo/wAR7FEyx0daIfh3/D6sA=;
+        b=EWtjmT7pTP3SeoDp8sW+ozfYHAhBX3Xl/GnFDItw2NZ3ePFqDrotlayFQQ450LMKB6
+         18A33bR4cvBUfbh1V+k+feW8v4sEYGNeiLMzB3YBoMMYAD1Z4cYnZ2chowE79Hfq7BLz
+         9aCaWCELis141P5ObHZXraaizkT7m7zHbIYf7bcltai0wbpwm3QfIbYlfMZ4yM0HzTo+
+         vF3HcN7No3PIX5WxPiEufmiFVbcnx5oiJn+qLZGF0pllxHdKbZzxcV37fOP+DOqhynY4
+         NqSfa5tlM2/EOw4vi2KHp25KR902/YDT7yuHwpeoZDDcSAAmLI3JdwhJ6is561aDRHUm
+         SWBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CKSIvXkqxKLFm6MnEgEDHDzqzUeFog6pmD8CweFsghI=;
-        b=B/r+6cyGdJdrIMvazSj4wx4WgB/6YJZ1Z4rq2ERbxOzgUH0yn4/eiCIqEX2doxmBVo
-         gZtKuiUh1UQ3JErwFKopB89GGWLlZ3skM9SA28YLGul/Cg/zdQp6tswduRrt/6xhW7nC
-         EI7SrX3SKM1BrlkDSix+9zwgdLga7Ynh7rW3Se9UGdMur+We9Z1PWAP2/s9z2td+jt/0
-         OYEC4yTuABoSWFT6bqAJoo92NJztK1k1Fb2oEQmZPfwUEF8GCJ5o5AKH3IO5vJim9xFh
-         IhKfgCJj8pDrkGvswNjHa+Fy/zlH3z7YRIlrsnFd3UEnBmNUAYJE1Pi+zfRVgk+c7tbp
-         6RDQ==
-X-Gm-Message-State: AOAM531ORuHqIBrE0kitxu48kSmVHGcWfwGVQ7thyFv3gqs5peNtPFxW
-        eThzdM6Zf9ZPsRFO7HaD0oMLaXRC9ks=
-X-Google-Smtp-Source: ABdhPJxSo7vijSrAXyA9Xt6LaQJ3VguWil2NyOTQvpUudA2xCjPQHwFiQKBx4wdZad9KFOfWTZnJLA==
-X-Received: by 2002:a63:f00e:0:b0:373:9fdb:ce03 with SMTP id k14-20020a63f00e000000b003739fdbce03mr4476237pgh.518.1647535875515;
-        Thu, 17 Mar 2022 09:51:15 -0700 (PDT)
+        bh=morR5sm8z9pnyy1KkY8kjo/wAR7FEyx0daIfh3/D6sA=;
+        b=IkbR0603LryHtSFvGluweHGo2/0rDJp5K4uHovvS3PVlSt713QvrgBDJmyDIBstl3p
+         raTidxaemuDzgRfVkJMLww/IOD3psaBumS4gOZqoFh5uGwkyuiPQwJG9q7ew3CvwKxAp
+         tRdkZANbywxSCdrandmtJtoSGjekUAfgJ48uqdPtSqwCpulxI/P0eUQaNOgP+fH6AOeb
+         odGCXyjt7caLd9YpQ7IKhEAdipd1kyicwFk/NyJz/PbjiZxaHtNYZQCfxGEpLbQM0ps2
+         2phNZdV2fZ+R1DtYaK1n/1N4Xg+bjs5gJFmsD+0epYunoYn4SY/PGZAaYkAnD067EQw2
+         kccA==
+X-Gm-Message-State: AOAM531BnHeM/MUPgXBWwN4g16HxMg7isKU1jqElkkR7qQqtaNERQmp3
+        l1lGiet0ghKnId/58sRxE34=
+X-Google-Smtp-Source: ABdhPJzXmOILB5Wbq0oNnzGhvgVCeJQ6JjR+4t8h3dPCLhxhvTcVLX/EpMuPNGjCYSH3cADf6U/anQ==
+X-Received: by 2002:a17:902:c94e:b0:151:a988:f3dd with SMTP id i14-20020a170902c94e00b00151a988f3ddmr6143070pla.142.1647535879288;
+        Thu, 17 Mar 2022 09:51:19 -0700 (PDT)
 Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
-        by smtp.gmail.com with ESMTPSA id t71-20020a63784a000000b00380a9f7367asm6048611pgc.77.2022.03.17.09.51.14
+        by smtp.gmail.com with ESMTPSA id o12-20020a056a001bcc00b004fa2830a03esm3134711pfw.200.2022.03.17.09.51.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 09:51:14 -0700 (PDT)
+        Thu, 17 Mar 2022 09:51:18 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
@@ -57,10 +57,14 @@ Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Emma Anholt <emma@anholt.net>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 2/3] drm/msm: Split out helper to get comm/cmdline
-Date:   Thu, 17 Mar 2022 09:51:39 -0700
-Message-Id: <20220317165144.222101-3-robdclark@gmail.com>
+Subject: [PATCH v2 3/3] drm/msm: Add a way to override processes comm/cmdline
+Date:   Thu, 17 Mar 2022 09:51:40 -0700
+Message-Id: <20220317165144.222101-4-robdclark@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220317165144.222101-1-robdclark@gmail.com>
 References: <20220317165144.222101-1-robdclark@gmail.com>
@@ -78,74 +82,151 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Deduplicate this from fault_worker and recover_worker.
+In the cause of using the GPU via virtgpu, the host side process is
+really a sort of proxy, and not terribly interesting from the PoV of
+crash/fault logging.  Add a way to override these per process so that
+we can see the guest process's name.
+
+v2: Handle kmalloc failure, add comment to explain kstrdup returns
+    NULL if passed NULL [Dan Carpenter]
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/gpu/drm/msm/msm_gpu.c | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c | 43 +++++++++++++++++++++++--
+ drivers/gpu/drm/msm/msm_gpu.c           | 12 +++++--
+ drivers/gpu/drm/msm/msm_gpu.h           |  6 ++++
+ drivers/gpu/drm/msm/msm_submitqueue.c   |  2 ++
+ include/uapi/drm/msm_drm.h              |  2 ++
+ 5 files changed, 60 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+index 3d307b34854d..45f2c6084aa7 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+@@ -290,11 +290,48 @@ int adreno_get_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
+ int adreno_set_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
+ 		     uint32_t param, uint64_t value, uint32_t len)
+ {
+-	/* No pointer params yet */
+-	if (len != 0)
+-		return -EINVAL;
++	switch (param) {
++	case MSM_PARAM_COMM:
++	case MSM_PARAM_CMDLINE:
++		/* kstrdup_quotable_cmdline() limits to PAGE_SIZE, so
++		 * that should be a reasonable upper bound
++		 */
++		if (len > PAGE_SIZE)
++			return -EINVAL;
++		break;
++	default:
++		if (len != 0)
++			return -EINVAL;
++	}
+ 
+ 	switch (param) {
++	case MSM_PARAM_COMM:
++	case MSM_PARAM_CMDLINE: {
++		char *str, **paramp;
++
++		str = kmalloc(len + 1, GFP_KERNEL);
++		if (!str)
++			return -ENOMEM;
++
++		if (copy_from_user(str, u64_to_user_ptr(value), len)) {
++			kfree(str);
++			return -EFAULT;
++		}
++
++		/* Ensure string is null terminated: */
++		str[len] = '\0';
++
++		if (param == MSM_PARAM_COMM) {
++			paramp = &ctx->comm;
++		} else {
++			paramp = &ctx->cmdline;
++		}
++
++		kfree(*paramp);
++		*paramp = str;
++
++		return 0;
++	}
+ 	case MSM_PARAM_SYSPROF:
+ 		if (!capable(CAP_SYS_ADMIN))
+ 			return -EPERM;
 diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-index 8fe4aee96aa9..4ec62b601adc 100644
+index 4ec62b601adc..747b89aa9d13 100644
 --- a/drivers/gpu/drm/msm/msm_gpu.c
 +++ b/drivers/gpu/drm/msm/msm_gpu.c
-@@ -362,6 +362,20 @@ find_submit(struct msm_ringbuffer *ring, uint32_t fence)
+@@ -364,14 +364,22 @@ static void retire_submits(struct msm_gpu *gpu);
  
- static void retire_submits(struct msm_gpu *gpu);
- 
-+static void get_comm_cmdline(struct msm_gem_submit *submit, char **comm, char **cmd)
-+{
-+	struct task_struct *task;
-+
-+	task = get_pid_task(submit->pid, PIDTYPE_PID);
-+	if (!task)
-+		return;
-+
-+	*comm = kstrdup(task->comm, GFP_KERNEL);
-+	*cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
-+
-+	put_task_struct(task);
-+}
-+
- static void recover_worker(struct kthread_work *work)
+ static void get_comm_cmdline(struct msm_gem_submit *submit, char **comm, char **cmd)
  {
- 	struct msm_gpu *gpu = container_of(work, struct msm_gpu, recover_work);
-@@ -378,18 +392,11 @@ static void recover_worker(struct kthread_work *work)
++	struct msm_file_private *ctx = submit->queue->ctx;
+ 	struct task_struct *task;
  
- 	submit = find_submit(cur_ring, cur_ring->memptrs->fence + 1);
- 	if (submit) {
--		struct task_struct *task;
--
- 		/* Increment the fault counts */
- 		submit->queue->faults++;
- 		submit->aspace->faults++;
++	/* Note that kstrdup will return NULL if argument is NULL: */
++	*comm = kstrdup(ctx->comm, GFP_KERNEL);
++	*cmd  = kstrdup(ctx->cmdline, GFP_KERNEL);
++
+ 	task = get_pid_task(submit->pid, PIDTYPE_PID);
+ 	if (!task)
+ 		return;
  
--		task = get_pid_task(submit->pid, PIDTYPE_PID);
--		if (task) {
--			comm = kstrdup(task->comm, GFP_KERNEL);
--			cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
--			put_task_struct(task);
--		}
-+		get_comm_cmdline(submit, &comm, &cmd);
+-	*comm = kstrdup(task->comm, GFP_KERNEL);
+-	*cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
++	if (!*comm)
++		*comm = kstrdup(task->comm, GFP_KERNEL);
++
++	if (!*cmd)
++		*cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
  
- 		if (comm && cmd) {
- 			DRM_DEV_ERROR(dev->dev, "%s: offending task: %s (%s)\n",
-@@ -478,14 +485,7 @@ static void fault_worker(struct kthread_work *work)
- 		goto resume_smmu;
+ 	put_task_struct(task);
+ }
+diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
+index c28c2ad9f52e..2c0203fd6ce3 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.h
++++ b/drivers/gpu/drm/msm/msm_gpu.h
+@@ -355,6 +355,12 @@ struct msm_file_private {
+ 	 */
+ 	int sysprof;
  
- 	if (submit) {
--		struct task_struct *task;
--
--		task = get_pid_task(submit->pid, PIDTYPE_PID);
--		if (task) {
--			comm = kstrdup(task->comm, GFP_KERNEL);
--			cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
--			put_task_struct(task);
--		}
-+		get_comm_cmdline(submit, &comm, &cmd);
++	/** comm: Overridden task comm, see MSM_PARAM_COMM */
++	char *comm;
++
++	/** cmdline: Overridden task cmdline, see MSM_PARAM_CMDLINE */
++	char *cmdline;
++
+ 	/**
+ 	 * elapsed:
+ 	 *
+diff --git a/drivers/gpu/drm/msm/msm_submitqueue.c b/drivers/gpu/drm/msm/msm_submitqueue.c
+index 79b6ccd6ce64..f486a3cd4e55 100644
+--- a/drivers/gpu/drm/msm/msm_submitqueue.c
++++ b/drivers/gpu/drm/msm/msm_submitqueue.c
+@@ -61,6 +61,8 @@ void __msm_file_private_destroy(struct kref *kref)
+ 	}
  
- 		/*
- 		 * When we get GPU iova faults, we can get 1000s of them,
+ 	msm_gem_address_space_put(ctx->aspace);
++	kfree(ctx->comm);
++	kfree(ctx->cmdline);
+ 	kfree(ctx);
+ }
+ 
+diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
+index 0aa1a8cb4e0d..794ad1948497 100644
+--- a/include/uapi/drm/msm_drm.h
++++ b/include/uapi/drm/msm_drm.h
+@@ -82,6 +82,8 @@ struct drm_msm_timespec {
+ #define MSM_PARAM_FAULTS     0x09  /* RO */
+ #define MSM_PARAM_SUSPENDS   0x0a  /* RO */
+ #define MSM_PARAM_SYSPROF    0x0b  /* WO: 1 preserves perfcntrs, 2 also disables suspend */
++#define MSM_PARAM_COMM       0x0c  /* WO: override for task->comm */
++#define MSM_PARAM_CMDLINE    0x0d  /* WO: override for task cmdline */
+ 
+ /* For backwards compat.  The original support for preemption was based on
+  * a single ring per priority level so # of priority levels equals the #
 -- 
 2.35.1
 

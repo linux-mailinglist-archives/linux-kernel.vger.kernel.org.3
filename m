@@ -2,117 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649184DC557
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2F84DC567
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbiCQMBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
+        id S233339AbiCQMCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233268AbiCQMBf (ORCPT
+        with ESMTP id S231549AbiCQMCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:01:35 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BAB170DA8;
-        Thu, 17 Mar 2022 05:00:18 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id o5so9796159ybe.2;
-        Thu, 17 Mar 2022 05:00:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w7umAd0HdQF/0Y/dcMA5O7GL9fe1/Zuc2dVyyldUlgw=;
-        b=gfZ92XehhNSgAL1i916bWJTKe1a1eeZ0rlq0AUvo23EAZz9KwhhgS3njKZeyzpk/Ey
-         vTOdsvqySgrQd5J7nGndrNwNTMBUFcDBdFy95ZNtJtmbvCqyIP3eCgp71S4WMHHHlKla
-         PslTZh1Zwt9t6sxKrVidMy/kfisuV8rOpMCOMDYR2H63sr1PebYkdvyvYEIJpbnQMFJO
-         SPm3dzu23FG1oGpcQbO+1RXRins5MimoZHVlIiGYnapBq2drmDJNN3xojvP/IoYMJYaX
-         rm+ekHq39HFlWjNztSMKB/g0q6VJjEpG6Ay5DLhe/94K4yGtlGTCX/Y7NmM8JP9ui7mj
-         IK1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w7umAd0HdQF/0Y/dcMA5O7GL9fe1/Zuc2dVyyldUlgw=;
-        b=QqM0Vxe7js/qI0kerPxlPNEFJmN67u1pSCN5ZGopQ6BsgA4deYmKLRPzQGWMYlWo3Z
-         BqWWNg3i4nru4v4/V8CAIZwG8Z5rnhIw78s05pCZ4F2N609hplAsbjo9mXtjY7OP9Fus
-         gNRJRJ6jvicMVHwwqjApRsVvNRqHa6YH//o473xLbU94a8vkB3Kj3I8dZPa2UDjASBj1
-         Lom0r42FgAXNzlnpqYHXEnzfU83qNNj381TkWmuZcnRhCpClhkpWeDv1iQLnywPENqAE
-         GBBSMbmv791D3SL4O4bzOrvfz0oQDZveD2Ik5HwprGMRqAxsrhlJWQPWT2o7kxIjvPma
-         I6kw==
-X-Gm-Message-State: AOAM533lxqVcF7MV0XjA+6KUuccwClyAvPmfsEtlvBdtPLfyp0Dd/ZtS
-        WqYiJxzm5YgSHgxHh3ehdwmdyBE6iiqwm9FPVrg=
-X-Google-Smtp-Source: ABdhPJwYmzfiLbLPvbajfh4qpduHNmcl11o8Nfezb4d7zLMfNtasZCOtvIKOiNO97c1p13rWPLnTSu6EhzR8seFgAYs=
-X-Received: by 2002:a25:8812:0:b0:633:7bd8:16ff with SMTP id
- c18-20020a258812000000b006337bd816ffmr4357088ybl.645.1647518418131; Thu, 17
- Mar 2022 05:00:18 -0700 (PDT)
+        Thu, 17 Mar 2022 08:02:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBC318FADD;
+        Thu, 17 Mar 2022 05:01:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F418AB80E8A;
+        Thu, 17 Mar 2022 12:01:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED6FAC340E9;
+        Thu, 17 Mar 2022 12:01:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647518479;
+        bh=Qf8CBbHvzkdofb9fpNdW6CQM9HNMKy+UOcace2VJYCw=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=tdxDnyrbQ3jnvwbKN7ctQjVnoMcyTI0dYBfVhBAXFaZFNcyJ0WjMLi9BGyKlALHvL
+         hXtKP+3jnMTbE8SrVCsfrl3pKxqoRzBF9m5txFRmwJRUNnX9NMUnm5cmCl33whIMBJ
+         X3vW8nyoNp4NTB04PYRzNffMdIqhXEMDSmm9ET/RaWs8LMOjM610DISEgyi14rRcvu
+         cjkdPrXDnNjOlyU4F/CoNwbbobxnXWHY3hCvNnQ9aDfjHH89kXxoI88gtALsWldwEz
+         SbiFEjJeZrp2/anICt9K8uprD41kdKphA8UKIes+FtDK3UeHoYpvb+a5s8A7SXCWPn
+         3naZaDM9tNqbg==
+Message-ID: <c2f494b61674e63985e4e2a0fb3b6c503e17334b.camel@kernel.org>
+Subject: Re: [RFC PATCH v2 0/3] ceph: add support for snapshot names
+ encryption
+From:   Jeff Layton <jlayton@kernel.org>
+To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Xiubo Li <xiubli@redhat.com>
+Cc:     Ilya Dryomov <idryomov@gmail.com>,
+        Ceph Development <ceph-devel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 17 Mar 2022 08:01:17 -0400
+In-Reply-To: <87wngshlzb.fsf@brahms.olymp>
+References: <20220315161959.19453-1-lhenriques@suse.de>
+         <5b53e812-d49b-45f0-1219-3dbc96febbc1@redhat.com>
+         <329abedd9d9938de95bf4f5600acdcd6a846e6be.camel@kernel.org>
+         <3c8b78c4-5392-b81c-e76f-64fcce4f3c0f@redhat.com>
+         <87wngshlzb.fsf@brahms.olymp>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-References: <20220317012404.8069-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAHp75Vc+uSNF4L0WCfCyadOqJ6szXS3Ct5BmEUbeQ_aKg1zjWg@mail.gmail.com> <87wngtx79f.wl-maz@kernel.org>
-In-Reply-To: <87wngtx79f.wl-maz@kernel.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 17 Mar 2022 11:59:52 +0000
-Message-ID: <CA+V-a8uBrau7-0x95O750nPeckz=vdhK2RJtFZ2rfiQhEtrdwA@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 0/5] Renesas RZ/G2L IRQC support
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+On Thu, 2022-03-17 at 11:11 +0000, Luís Henriques wrote:
+> Xiubo Li <xiubli@redhat.com> writes:
+> 
+> > On 3/17/22 6:01 PM, Jeff Layton wrote:
+> > > I'm not sure we want to worry about .snap directories here since they
+> > > aren't "real". IIRC, snaps are inherited from parents too, so you could
+> > > do something like
+> > > 
+> > >      mkdir dir1
+> > >      mkdir dir1/.snap/snap1
+> > >      mkdir dir1/dir2
+> > >      fscrypt encrypt dir1/dir2
+> > > 
+> > > There should be nothing to prevent encrypting dir2, but I'm pretty sure
+> > > dir2/.snap will not be empty at that point.
+> > 
+> > If we don't take care of this. Then we don't know which snapshots should do
+> > encrypt/dencrypt and which shouldn't when building the path in lookup and when
+> > reading the snapdir ?
+> 
+> In my patchset (which I plan to send a new revision later today, I think I
+> still need to rebase it) this is handled by using the *real* snapshot
+> parent inode.  If we're decrypting/encrypting a name for a snapshot that
+> starts with a '_' character, we first find the parent inode for that
+> snapshot and only do the operation if that parent is encrypted.
+> 
+> In the other email I suggested that we could prevent enabling encryption
+> in a directory when there are snapshots above in the hierarchy.  But now
+> that I think more about it, it won't solve any problem because you could
+> create those snapshots later and then you would still need to handle these
+> (non-encrypted) "_name_xxxx" snapshots anyway.
+> 
 
-On Thu, Mar 17, 2022 at 9:23 AM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Thu, 17 Mar 2022 08:46:14 +0000,
-> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> >
-> > On Thu, Mar 17, 2022 at 5:43 AM Lad Prabhakar
-> > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > >
-> > > Hi All,
-> > >
-> > > The RZ/G2L Interrupt Controller is a front-end for the GIC found on
-> > > Renesas RZ/G2L SoC's with below pins:
-> > > - IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI interrupts
-> > > - GPIO pins used as external interrupt input pins out of GPIOINT0-122 a
-> > >   maximum of only 32 can be mapped to 32 GIC SPI interrupts,
-> > > - NMI edge select.
-> > >
-> > What I want to know now is whether it is going to collide with Marc's
-> > series about GPIO IRQ chip constification?
->
-> Probably, but the current scheme will still be alive for some time
-> (you'll need a couple of cycles to sort out all the drivers).
->
-Ouch, thanks for letting me know. BTW there are a couple of changes to
-GPIO core which you have to review (this was missed in the previous
-version).
+Yeah, that sounds about right.
 
-Cheers,
-Prabhakar
+What happens if you don't have the snapshot parent's inode in cache?
+That can happen if you (e.g.) are running NFS over ceph, or if you get
+crafty with name_to_handle_at() and open_by_handle_at().
 
-> Worse case, this can be fixed at merge time.
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+Do we have to do a LOOKUPINO in that case or does the trace contain that
+info? If it doesn't then that could really suck in a big hierarchy if
+there are a lot of different snapshot parent inodes to hunt down.
+
+I think this is a case where the client just doesn't have complete
+control over the dentry name. It may be better to just not encrypt them
+if it's too ugly.
+
+Another idea might be to just use the same parent inode (maybe the
+root?) for all snapshot names. It's not as secure, but it's probably
+better than nothing.
+-- 
+Jeff Layton <jlayton@kernel.org>

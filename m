@@ -2,62 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE554DCFAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDD44DCFAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiCQUzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
+        id S229940AbiCQU4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 16:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiCQUzA (ORCPT
+        with ESMTP id S229886AbiCQU4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:55:00 -0400
+        Thu, 17 Mar 2022 16:56:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AB89D4CB;
-        Thu, 17 Mar 2022 13:53:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F2DAFCC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:55:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14070B8200A;
-        Thu, 17 Mar 2022 20:53:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA1E9C340E9;
-        Thu, 17 Mar 2022 20:53:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3905CB81FCB
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 20:55:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6260C340EC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 20:55:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647550419;
-        bh=JB9wr/FTZrc36V/c3kVbrMhJok3z/274Y1tIaq5E3O8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ZiZThT7Q8zU0I9zmLBXk2gg+LKSkdW9IZAPB2dt6hokjl7lI60cPsYixq9AtyeOrD
-         9RzOveuxxC0rsMzIsxwEglJ7R3HVfi4zzFHxHFmvl1XUL9XkqcQHuiOf1oJkNEbTAh
-         l+2iX2F/uQ1dI6BlMezXkbgqjfkv/ebfeGuh6dNUWYVXUIjx0bgtnNDa+KcJqk2vrN
-         LgGi2o4T2uzD1OiZTXa3gwqKOnOehonSCOnhSSY5IjhxVKvJhYiPz4vDenjc0htV8K
-         UmUCYQjc8nU/DHEpt9uk2C+6sCo9eAbhmQZPamJSHry52GF2Lo3+5nqptamVzf181O
-         lS7iUmS3GnQgg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 41B285C4C4E; Thu, 17 Mar 2022 13:53:39 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 13:53:39 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, rcu <rcu@vger.kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: RCU: undefined reference to irq_work_queue
-Message-ID: <20220317205339.GT4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YjMcZexG/kJepYDi@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <20220317140000.GO4285@paulmck-ThinkPad-P17-Gen-1>
- <YjNSuprCqjAgGgqB@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <20220317162033.GP4285@paulmck-ThinkPad-P17-Gen-1>
- <YjNll+Iv++LORS0n@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <20220317173621.GQ4285@paulmck-ThinkPad-P17-Gen-1>
- <CAABZP2zu3Qiqtnw=DRnFUig8xO3WtvKuVkf=gqQ6kRihOmDTLQ@mail.gmail.com>
+        s=k20201202; t=1647550515;
+        bh=pze1z1BdbXGkFdCxOha8uoXDciJVurg0YhEMJq3runk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CkePYpcghyT7B9A7yzhLZc+hWJC38j3LHw7aOwkWXJgdylnJfppDK0g+HSzYOaQI/
+         /ZbaDCpREmCCoaN3PjaZoI5TurB22skINuBF0QwYOLwu7OrM2LDC4OQ9zJ1zXYEp0G
+         ohpFmGkgqQ1zQbNIE/Q/r+bE3AIMlAu+mhFVXRFFr0+PJLD9UhDOvlxKx5UFAdng2F
+         QDUvD3vnZZdSbm7bhX7NdWdOjFx0ZU/BlW5ErRJvS+/3D6zj71m+zelZE8MYAjq6LG
+         1yyFnSCyk0b/KON8A7FJ3eWbuO4GYQ5z9H6WP6ZD8lITF8J3Dk0yYBf9gKp+XZKGEV
+         Xs6DsALpmMVsQ==
+Received: by mail-wm1-f53.google.com with SMTP id r190-20020a1c2bc7000000b0038a1013241dso3819764wmr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:55:15 -0700 (PDT)
+X-Gm-Message-State: AOAM530wN8MYMpVk27PL6vPCfCK9M0BUEawBULiwzF4y0swrKN71xZGB
+        8UJBGn9kf1aTdgrg7uST9C3WxFVPn0GzwQkbNI0=
+X-Google-Smtp-Source: ABdhPJyZSHw1ltlznEHKpdgeeoKyl8jbWM+Dk2G5VG9wHw91b7cvT5lTxqYcy7l9pCd4B5lxaWL6odka8LdVjGdJIyo=
+X-Received: by 2002:a7b:cd13:0:b0:38b:f39c:1181 with SMTP id
+ f19-20020a7bcd13000000b0038bf39c1181mr5645518wmj.20.1647550514226; Thu, 17
+ Mar 2022 13:55:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAABZP2zu3Qiqtnw=DRnFUig8xO3WtvKuVkf=gqQ6kRihOmDTLQ@mail.gmail.com>
+References: <20220316183708.1505846-1-arnd@kernel.org> <aaf204b2-e876-d271-3d4e-51cbcc70d690@suse.de>
+ <1f6c4559-ee48-ca67-8ff1-f7f9d330bc12@suse.de> <CAK8P3a3ogV8sJshQJrzHe7hc2k1Opq-2hvXf6DU+HfhREk-DhQ@mail.gmail.com>
+ <7082c67a-a336-54fc-dd32-81b9b8c0a64b@suse.de>
+In-Reply-To: <7082c67a-a336-54fc-dd32-81b9b8c0a64b@suse.de>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 17 Mar 2022 21:54:58 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0Tfnza=OSR=-A_2u5QYNx8ZPm+FrFUtncVZMQYVNsATQ@mail.gmail.com>
+Message-ID: <CAK8P3a0Tfnza=OSR=-A_2u5QYNx8ZPm+FrFUtncVZMQYVNsATQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/panel: add CONFIG_DRM_KMS_HELPER dependencies
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,194 +83,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 04:41:59AM +0800, Zhouyi Zhou wrote:
-> hi
-> 
-> On Fri, Mar 18, 2022 at 4:20 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+On Thu, Mar 17, 2022 at 8:15 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> Am 16.03.22 um 21:59 schrieb Arnd Bergmann:
+> > On Wed, Mar 16, 2022 at 8:31 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
 > >
-> > On Thu, Mar 17, 2022 at 04:45:11PM +0000, Hyeonggon Yoo wrote:
-> > > On Thu, Mar 17, 2022 at 09:20:33AM -0700, Paul E. McKenney wrote:
-> > > > On Thu, Mar 17, 2022 at 03:24:42PM +0000, Hyeonggon Yoo wrote:
-> > > > > On Thu, Mar 17, 2022 at 07:00:00AM -0700, Paul E. McKenney wrote:
-> > > > > > On Thu, Mar 17, 2022 at 11:32:53AM +0000, Hyeonggon Yoo wrote:
-> > > > > > > Hello RCU folks,
-> > > > > > >
-> > > > > > > I like to use minimal configuration for kernel development.
-> > > > > > > when building with tinyconfig + CONFIG_PREEMPT=y on arm64:
-> > > > > > >
-> > > > > > > ld: kernel/rcu/update.o: in function `call_rcu_tasks':
-> > > > > > > update.c:(.text+0xb2c): undefined reference to `irq_work_queue'
-> > > > > > > update.c:(.text+0xb2c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `irq_work_queue'
-> > > > > > > make: *** [Makefile:1155: vmlinux] Error 1
-> > > > > > >
-> > > > > > > It seems RCU calls irq_work_queue() without checking if CONFIG_IRQ_WORK is enabled.
-> > > > > >
-> > > > > > Indeed it does!
-> > > > > >
-> > > > > > And kernel/rcu/Kconfig shows why:
-> > > > > >
-> > > > > > config TASKS_TRACE_RCU
-> > > > > >         def_bool 0
-> > > > > >         select IRQ_WORK
-> > > > > >         help
-> > > > > >           This option enables a task-based RCU implementation that uses
-> > > > > >           explicit rcu_read_lock_trace() read-side markers, and allows
-> > > > > >           these readers to appear in the idle loop as well as on the CPU
-> > > > > >           hotplug code paths.  It can force IPIs on online CPUs, including
-> > > > > >           idle ones, so use with caution.
-> > > > > >
-> > > > > > So the solution is to further minimize your configuration so as to
-> > > > > > deselect TASKS_TRACE_RCU.
-> > > > >
-> > > > > They are already not selected.
-> > > >
-> > > > Good, thank you.
-> > > >
-> > > > How about TASKS_RUDE_RCU, TASKS_TRACE_RCU, and TASKS_RCU_GENERIC?
-> > >
-> > > TASKS_RUDE_RCU=n
-> > > TASKS_TRACE_RCU=n
-> > > TASKS_RCU_GENERIC=y
-> > > TASKS_RCU=y
-> > >
-> > > > > > This means making sure that both BPF and
-> > > > > > the various RCU torture tests are all deselected.
-> > > > >
-> > > > > I wanted to say call_rcu_tasks() can be referenced even when IRQ_WORK is not
-> > > > > selected, making it fail to build.
-> > > >
-> > > > I am guessing because TASKS_RCU_GENERIC is selected?
-> > > >
-> > >
-> > > Right.
-> > >
-> > > > If so, does the patch at the end of this email help?
-> > > >
-> > >
-> > > No. did not help.
-> > >
-> > > I think I found reason...
-> > > with PREEMPTION=y,
-> > >
-> > > in kernel/rcu/Kconfig:
-> > > config TASKS_RCU
-> > >         def_bool PREEMPTION
-> > >         help
-> > >           This option enables a task-based RCU implementation that uses
-> > >           only voluntary context switch (not preemption!), idle, and
-> > >           user-mode execution as quiescent states.  Not for manual selection.
-> > >
-> > > in kernel/rcu/Kconfig:
-> > > config TASKS_RCU_GENERIC
-> > >         def_bool TASKS_RCU || TASKS_RUDE_RCU || TASKS_TRACE_RCU
-> > >         select SRCU
-> > >         help
-> > >           This option enables generic infrastructure code supporting
-> > >           task-based RCU implementations.  Not for manual selection.
+> > I was going for 'depends on' in the panel drivers because I saw the same being
+> > done for other panel drivers, and mixing the two methods causes dependency
+> > loops. I looked again now, and find that 'select DRM_KMS_HELPER' is more
+> > common for other drivers, and makes sense here because it is generally
+> > not user-selectable.
 > >
-> > Ah, this is because some of the tracing code uses TASKS_RCU only
-> > when PREEMPTION=y.  That would be KPROBES and TRACING.  Maybe also
-> > TRACE_CLOCK and TRACEPOINTS, but I would hope that TRACING would
-> > cover those.  Adding the tracing guys for their thoughts.
-> >
-> > > > > > > ld: kernel/rcu/update.o: in function `call_rcu_tasks':
-> > > > > > > update.c:(.text+0xb2c): undefined reference to `irq_work_queue'
-> > > > > > > update.c:(.text+0xb2c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `irq_work_queue'
-> > > > > > > make: *** [Makefile:1155: vmlinux] Error 1
-> > > > >
-> > > > > Isn't it better to fix this build failure?
-> > > >
-> > > > But of course!  However, first I need to know exactly what is causing your
-> > > > build failure.  I cannot see your .config file, so I am having to guess.
-> > > >
-> > > > Don't get me wrong, I do have a lot of practice guessing, but it is still
-> > > > just guessing.  ;-)
-> > >
-> > > Sorry to make you guess. Maybe too late, but added config as attachment ;)
-> >
-> > Perhaps I needed the practice.  ;-)
-> >
-> > > > > It fails to build when both TASKS_TRACE_RCU and IRQ_WORK are not selected
-> > > > > and PREEMPT is selected.
-> > > > >
-> > > > >   │ Symbol: TASKS_TRACE_RCU [=n]                                            │
-> > > > >   │ Type  : bool                                                            │
-> > > > >   │ Defined at kernel/rcu/Kconfig:96                                        │
-> > > > >   │ Selects: IRQ_WORK [=n]                                                  │
-> > > > >   │ Selected by [n]:                                                        │
-> > > > >   │   - BPF_SYSCALL [=n]                                                    │
-> > > > >   │   - RCU_SCALE_TEST [=n] && DEBUG_KERNEL [=y]                            │
-> > > > >   │   - RCU_TORTURE_TEST [=n] && DEBUG_KERNEL [=y]                          │
-> > > > >   │   - RCU_REF_SCALE_TEST [=n] && DEBUG_KERNEL [=y]
-> > > > >
-> > > > > Thanks!
-> > > > >
-> > > > > >
-> > > > > > Or turn on IRQ_WORK, for example, if you need to use BPF.
-> > > >
-> > > > Or do you already have TASKS_RCU_GENERIC deselected?
-> > > >
-> > >
-> > > No, this is selected. TASKS_RCU_GENERIC=y. because of PREEMPTION=y.
-> >
-> > OK, the patch shown below allows me to get TASKS_RCU_GENERIC=n even
-> > with PREEMPTION=y.  This might somehow subtly break tracing, but in
-> > that case further adjustments can be made.  Untested other than
-> > generating a few .config combinations.
-> >
-> > Thoughts?
-> >
-> >                                                         Thanx, Paul
-> >
-> > ------------------------------------------------------------------------
-> >
-> > diff --git a/arch/Kconfig b/arch/Kconfig
-> > index 678a80713b21..66c5b5543511 100644
-> > --- a/arch/Kconfig
-> > +++ b/arch/Kconfig
-> > @@ -38,6 +38,7 @@ config KPROBES
-> >         depends on MODULES
-> >         depends on HAVE_KPROBES
-> >         select KALLSYMS
-> > +       select TASKS_RCU if PREEMPTION
-> >         help
-> >           Kprobes allows you to trap at almost any kernel address and
-> >           execute a callback function.  register_kprobe() establishes
-> > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> > index f559870fbf8b..4f665ae0cf55 100644
-> > --- a/kernel/rcu/Kconfig
-> > +++ b/kernel/rcu/Kconfig
-> > @@ -78,7 +78,8 @@ config TASKS_RCU_GENERIC
-> >           task-based RCU implementations.  Not for manual selection.
-> >
-> >  config TASKS_RCU
-> > -       def_bool PREEMPTION
-> > +       def_bool 0
-> > +       select IRQ_WORK
-> >         help
-> >           This option enables a task-based RCU implementation that uses
-> >           only voluntary context switch (not preemption!), idle, and
-> > diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-> > index 752ed89a293b..a7aaf150b704 100644
-> > --- a/kernel/trace/Kconfig
-> > +++ b/kernel/trace/Kconfig
-> > @@ -127,6 +127,7 @@ config TRACING
-> >         select BINARY_PRINTF
-> >         select EVENT_TRACING
-> >         select TRACE_CLOCK
-> > +       select TASKS_RCU if PREEMPTION
-> >
-> >  config GENERIC_TRACER
-> >         bool
-> I apply above patch, and invoke
-> $make  ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
-> CC=aarch64-linux-gnu-gcc-10 tinyconfig
-> $make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
-> CC=aarch64-linux-gnu-gcc-10 -j 16
-> kernel build successful this time (without above patch, kernel build
-> will quit with undefined reference to `irq_work_queue'
-> Tested-by: Zhouyi Zhou<zhouzhouyi@gmail.com>
+> > The easiest replacement for my patch would then be to just use 'select
+> > DRM_KMS_HELPER' from CONFIG_DRM_MIPI_DBI, which makes it
+> > safer and more consistent with your change. If you like, I'll send an updated
+> > version.
+>
+> MIPI DBI is another helper and select is not transitive IIRC. So drivers
+> would still have to select KMS helpers as well. (?)
 
-I will apply on my next rebase, thank you!
+Not sure what you mean here: if a driver selects DRM_MIPI_DBI,
+and DRM_MIPI_DBI selects DRM_KMS_HELPER, the leaf driver
+does not need to select DRM_KMS_HELPER because it is already
+selected. This is one of the major problems of overusing 'select' because
+you end up unable to turn things off.
 
-							Thanx, Paul
+Maybe you are thinking of the case where DRM_MIPI_DBI depends
+on DRM_KMS_HELPER, and something selects DRM_MIPI_DBI.
+In this case, the dependency does /not/ get inherited by the leaf
+driver, it needs a copy of the dependency or it triggers a warning,
+which is what my patch intended.
+
+> More generally, I think you're right about making DRM helper libraries
+> using 'depends on' to link to other libraries. Drivers would at least
+> know which config symbols to select. A number of config rules would have
+> to be adapted to make that happen, I guess.
+
+Generally speaking, a problem with DRM is that it uses way too
+much 'select' to enforce other subsystems to be enabled, this is
+what causes DRM to have more problems with incorrect or circular
+dependencies, and the only way to avoid that is to be consistent
+about the dependencies: each symbol should only be referenced
+with either 'select' or 'depends on' but not both, and 'select' should
+ideally only be used on hidden symbols.
+
+> > One thing I'm not sure about is whether there is still use for ever having
+> > CONFIG_DRM without CONFIG_DRM_KMS_HELPER if it gets selected
+> > by almost every driver anyway. Is this actually a configuration that
+> > users rely on, or should we just remove the symbol completely and
+> > build the KMS helpers unconditionally?
+>
+> Best leave it as it is. i915 doesn't use it. And since it's a helper, it
+> should not be lumped together with core DRM code simply for reasons of
+> design.
+
+Ok
+
+> For DRM_KMS_HELPER itself, the mid-term plan is to move some of the code
+> into other modules. KMS helpers used to contain all kind of helpers, but
+> recently there's interest in reducing the minimum size of a built-in DRM
+> with minimal driver support. So the non-essential stuff needs to go into
+> modules for the more-sophisticated DRM drivers.
+
+Right, that makes sense.
+
+       Arnd

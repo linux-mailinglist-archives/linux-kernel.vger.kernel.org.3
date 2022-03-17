@@ -2,119 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8164DCB8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B574DCB8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236482AbiCQQis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
+        id S236599AbiCQQjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbiCQQiq (ORCPT
+        with ESMTP id S236595AbiCQQjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:38:46 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAAF1FE54C
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:37:29 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id d19-20020a0566022bf300b00645eba5c992so3500986ioy.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 09:37:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=3qe8aLcAOkT7n6QAlmd+508Z97v0g9bTF25s2pX78nc=;
-        b=Muf1h5uZybdSsMNcQPZ0RLPnfWVh8/C6HG5Cf5PSgZOYpMvlfqzfuTXbtIfVrIP+q1
-         0QsyFLysOr2OKKxF9UrIsvJg4iJ8OdUCAxG1JEJ7YkfaBTidH/OMKMsgrNoJw/gBgEb/
-         uQNyJnF6nfrfhIpJKesrw2se+qQ2BqW07r1ZfwvSce8D+96KUj7czQJcUtNtgqT07u1h
-         UZnwHSM3h1VM22zC5zQRrX6spaCtmY1X1FqJiACF/edqaBXiswDCTw4YDlhLFyVkSqWh
-         KJxhQweMFZmCkWooOtDgEi++qB04cNUxug3tRj9VekfgZ3p9vpYbPLO1uiWqh1H2VSz1
-         OQyg==
-X-Gm-Message-State: AOAM530wddsOFCVyq1ZSjHCJrVVl5Ngxr9CypF1Mqr3KUhH8czA9Iw8r
-        Hpbm2LUuzYM/omugywWAjlCSp5woR3BsRnG0VYnv+RVlYMPm
-X-Google-Smtp-Source: ABdhPJw4V0lIONtc6Jx/sU6+owHZ6SSY+YoSdTtghDVwwXZ35TcS992KmkJCWgHdHGIZltO0CP9IH3G0/nqvsm/ALMe/FYQErXTq
+        Thu, 17 Mar 2022 12:39:00 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD901FE55B;
+        Thu, 17 Mar 2022 09:37:43 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 784873F1806;
+        Thu, 17 Mar 2022 12:37:42 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 5IU4r6yf7cn0; Thu, 17 Mar 2022 12:37:42 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id E79CB3F11F0;
+        Thu, 17 Mar 2022 12:37:41 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com E79CB3F11F0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1647535061;
+        bh=PAPHnbmF2wR3OMxiL7OnGQkD2yhd8ljr7LSo+m6MLCo=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=T/3OA0T0S3X2mfR5fnvDp2mIRLLxB9dPjr7c3ZY3NJQnwwCzYqM66+/x06cBREYdd
+         A2RqZsXjZwEARFzpYhg4OlsXAXiIWX6OuR3ZEjgiBZbQQ2T3gI2stE250D6nW2HxaY
+         54NJN5kSPdpRXXrP8X/271uzqlEXJvErwi4TXjdZGIgdqvYawN9PLO4BfWt4imFb57
+         8i/HKxf3SfHzlO2Uu2hnoOMRAGTHcr32Qb6PZ12HtZdhHR54r+2wlgecwlNTk/x8a+
+         mFm8gW2FfMAALqsVcbR0FmOtehwweqmpUl+uPrIufJymdMbKzVomdLbiooyL5V34e6
+         W7gpyliS6FRfA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id j8KehMFo--jP; Thu, 17 Mar 2022 12:37:41 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id D49F63F16A6;
+        Thu, 17 Mar 2022 12:37:41 -0400 (EDT)
+Date:   Thu, 17 Mar 2022 12:37:41 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     rostedt <rostedt@goodmis.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Byungchul Park <byungchul.park@lge.com>,
+        paulmck <paulmck@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Radoslaw Burny <rburny@google.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Message-ID: <1649265824.157580.1647535061743.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20220317120753.4cd73f9e@gandalf.local.home>
+References: <20220316224548.500123-1-namhyung@kernel.org> <20220316224548.500123-2-namhyung@kernel.org> <636955156.156341.1647523975127.JavaMail.zimbra@efficios.com> <20220317120753.4cd73f9e@gandalf.local.home>
+Subject: Re: [PATCH 1/2] locking: Add lock contention tracepoints
 MIME-Version: 1.0
-X-Received: by 2002:a02:294a:0:b0:317:3541:3b9a with SMTP id
- p71-20020a02294a000000b0031735413b9amr2474587jap.101.1647535049146; Thu, 17
- Mar 2022 09:37:29 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 09:37:29 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005c067605da6ca58e@google.com>
-Subject: [syzbot] WARNING in inc_nlink (3)
-From:   syzbot <syzbot+2b3af42c0644df1e4da9@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF98 (Linux)/8.8.15_GA_4232)
+Thread-Topic: locking: Add lock contention tracepoints
+Thread-Index: +VNQJvpuNZvv5prjCmd52ze/0Xeh4g==
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+----- On Mar 17, 2022, at 12:07 PM, rostedt rostedt@goodmis.org wrote:
 
-syzbot found the following issue on:
+> On Thu, 17 Mar 2022 09:32:55 -0400 (EDT)
+> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> 
+>> Unless there is a particular reason for using preprocessor defines here, the
+>> following form is typically better because it does not pollute the preprocessor
+>> defines, e.g.:
+>> 
+>> enum lock_contention_flags {
+>>         LCB_F_SPIN =   1U << 0;
+>>         LCB_F_READ =   1U << 1;
+>>         LCB_F_WRITE =  1U << 2;
+>>         LCB_F_RT =     1U << 3;
+>>         LCB_F_PERCPU = 1U << 4;
+>> };
+> 
+> If you do this, then to use the __print_flags(), You'll also need to add:
+> 
+> TRACE_DEFINE_ENUM(LCB_F_SPIN);
+> TRACE_DEFINE_ENUM(LCB_F_READ);
+> TRACE_DEFINE_ENUM(LCB_F_WRITE);
+> TRACE_DEFINE_ENUM(LCB_F_RT);
+> TRACE_DEFINE_ENUM(LCB_F_PERCPU);
+> 
+> Which does slow down boot up slightly.
 
-HEAD commit:    aad611a868d1 Merge tag 'perf-tools-fixes-for-v5.17-2022-03..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11ae4ede700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aba0ab2928a512c2
-dashboard link: https://syzkaller.appspot.com/bug?extid=2b3af42c0644df1e4da9
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b9eb31700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1429c4c5700000
+So it looks like there is (currently) a good reason for going with the #define.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2b3af42c0644df1e4da9@syzkaller.appspotmail.com
+As a side-discussion, I keep finding it odd that this adds overhead on boot. I suspect
+this is also implemented as a linked list which needs to be iterated over at boot-time.
 
-------------[ cut here ]------------
-WARNING: CPU: 3 PID: 3671 at fs/inode.c:388 inc_nlink+0x144/0x160 fs/inode.c:388
-Modules linked in:
-CPU: 3 PID: 3671 Comm: syz-executor254 Not tainted 5.17.0-rc7-syzkaller-00235-gaad611a868d1 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:inc_nlink+0x144/0x160 fs/inode.c:388
-Code: ff 4c 89 e7 e8 0d 97 ec ff e9 42 ff ff ff 4c 89 e7 e8 90 96 ec ff e9 fc fe ff ff 4c 89 e7 e8 83 96 ec ff eb d4 e8 9c b0 a5 ff <0f> 0b e9 6e ff ff ff e8 80 96 ec ff e9 44 ff ff ff e8 76 96 ec ff
-RSP: 0018:ffffc900027cfcc0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff8880266e06c0 RCX: 0000000000000000
-RDX: ffff888022f24100 RSI: ffffffff81d244f4 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffff8880266e0183
-R10: ffffffff81d24460 R11: 000000000000001d R12: ffff8880266e0708
-R13: ffff888026531d78 R14: ffff8880266e00f8 R15: ffff88801d309c00
-FS:  00005555565363c0(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000564785040878 CR3: 000000001626c000 CR4: 0000000000150ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- v9fs_vfs_mkdir_dotl+0x478/0x770 fs/9p/vfs_inode_dotl.c:454
- vfs_mkdir+0x1c3/0x3b0 fs/namei.c:3933
- do_mkdirat+0x285/0x300 fs/namei.c:3959
- __do_sys_mkdir fs/namei.c:3979 [inline]
- __se_sys_mkdir fs/namei.c:3977 [inline]
- __x64_sys_mkdir+0xf2/0x140 fs/namei.c:3977
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f5da8ba5829
-Code: 28 c3 e8 5a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd6deb21e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000053
-RAX: ffffffffffffffda RBX: 00007ffd6deb21f8 RCX: 00007f5da8ba5829
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00000000200002c0
-RBP: 00007ffd6deb21f0 R08: 00007f5da8b63af0 R09: 00007f5da8b63af0
-R10: 0000000020000340 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+With a few changes to these macros, these linked lists could be turned into arrays,
+and thus remove the boot-time overhead.
 
+Thanks,
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Mathieu
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> 
+> -- Steve
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

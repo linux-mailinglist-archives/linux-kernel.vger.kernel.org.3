@@ -2,154 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCDA4DD05D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2E24DD060
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbiCQVq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 17:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
+        id S230387AbiCQVrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 17:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiCQVqy (ORCPT
+        with ESMTP id S230349AbiCQVrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 17:46:54 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1E411A9B2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:45:37 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d19so7897151pfv.7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:45:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IPOIkmx/1ZEzac6tX87LtTmxD7qv0ZDR17y94CVjDjM=;
-        b=PPA8dRi4KI3FwJ1U/1S2LJsZEyxCAqZHA8pGlFu0lhXkTkpwruUj6vS3P/MD4h7Z9Q
-         irjoPWQIUZtr1wg3ZfXIk7I4s8Vw/LtWDH9EultQ9EYJwNjUPdXj7Ya9P+2LlSsCko3Y
-         XZKsqFy3IRVk3HZx7XNt59NGkxb1MlAj+3XhXng6bAtmwnDFWhDVO/sDNnnYWl+4R1g+
-         j0qXbx3o//DiCZcjkQZEHSBxwYc/lMHnUgTL6PweZCYjBImpNvtPFOVr+YBwNAwpEqBW
-         0RBNL0R6oO+CdphmVSZLHuhzGjygGU1X2DMvFj516Nd+sgD1Y7xyniu/9KhIM2zz1nnB
-         YVog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IPOIkmx/1ZEzac6tX87LtTmxD7qv0ZDR17y94CVjDjM=;
-        b=LgCxUDJukZReZwjcF2yUy6+iqTdkr+7uMEyAf4WA4ZtFO6iRtohbt3nDpo41IvX4sh
-         1UWPA6De1XKCtkchhNnTd/rAhngJ98DbPal9gI5HTLXVIP9vuQmoYZcZUAPCaZCr3gG/
-         YKgESsbdxnRiYs78GVZw9ytClmSZ5UCvtpneKBleE70FfOvNc6Itjg5DUOGqbvsoRBKC
-         Mlc9ZVLcQPQ9LCZ/7SDwWa9K/ND3BqdQA82XzTTOhcO9yO2JnIeljD7VM1DRzHuIcqGB
-         etHubLD2BVJ/oILqRneP0AYgG61fa9795cQpVAKSK1Z5xNRA4H+s8FFc2aOrHNHYzc3Q
-         rk0g==
-X-Gm-Message-State: AOAM530aaSdDNaVfTaKcXhOv+iDjw15gg2fRQB6D0ped+P9z2F/7pAc0
-        iMRuTylAhGgEjjjqi3ctDon+p1XEN7L4uH3yOi8H
-X-Google-Smtp-Source: ABdhPJxAhlXJfmDyDkQQ+h1lUvIFbNNj5OWZGK6sdNBsVl37VkPAC01npTUgWrIz/K99HNPx06c8cshuGVJoe8+lkwE=
-X-Received: by 2002:a05:6a00:1596:b0:4f9:f992:9f69 with SMTP id
- u22-20020a056a00159600b004f9f9929f69mr6437304pfk.7.1647553536437; Thu, 17 Mar
- 2022 14:45:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com>
- <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
- <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
- <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
- <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
- <CAGG=3QW2ey2w91TxqJ6tzfJOswhTce2e0QTW7kAWyvxeiO+VNg@mail.gmail.com>
- <CAHk-=whn3iYE7gZM4vHx1kFhWBD2P9Wvmcyj8OOqv=y_7nemGQ@mail.gmail.com>
- <CAGG=3QWC9VS9RdGFTwY8VGqujDnFYnRTT1dQ6kkVr+0SRk6COg@mail.gmail.com> <CAHk-=wh=x7oCk05JD1=6XNsvvgpsidRWupoqySw1zODmvNy9Ug@mail.gmail.com>
-In-Reply-To: <CAHk-=wh=x7oCk05JD1=6XNsvvgpsidRWupoqySw1zODmvNy9Ug@mail.gmail.com>
-From:   Bill Wendling <morbo@google.com>
-Date:   Thu, 17 Mar 2022 14:45:25 -0700
-Message-ID: <CAGG=3QWcKof_NXrC0kznM2ikwTA00AgUJrcWhKBTitmjCuOxqw@mail.gmail.com>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Mar 2022 17:47:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F00190B6D;
+        Thu, 17 Mar 2022 14:46:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 725A1B8200C;
+        Thu, 17 Mar 2022 21:46:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8200C340E9;
+        Thu, 17 Mar 2022 21:46:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647553575;
+        bh=qdQVSRg2hXKIggnMTH/zj9zs5OSmnRHv038Yej8jfPY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gW+CwaDyNFxQzel4/T6w13sOlU975El2hm1WPnyo8V2TSrMHOa0B8HtT7WNCDwSwD
+         G9ec4nWaKayphDIfYeop4ENYvAK8TfXaHYaXqXa8iGQA/ybABtJ5l+iTxHEVW84VZV
+         kPq5/RnxamUmBWt6aYH4z9x97Upbm6tr5iFCS2+O8l/ZgpZ2TsgSQhiN5KugkCIHUH
+         64811tXrVj4hQa2ulhyqDWjAgYJ5yOoAR/LiSG/DpCvVZEpSu+VBzcKW5uxmNNtIwY
+         P2D/U+LLOD4RbtCbGykS3oajptHbWkgDCYvZyW3vVvKiZvCaRXhTBLZKdbkpQa8H2h
+         jR4fgLbOAOb4A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nUxwi-00FIZx-Nl; Thu, 17 Mar 2022 21:46:12 +0000
+Date:   Thu, 17 Mar 2022 21:46:12 +0000
+Message-ID: <87fsngxnff.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org
+Subject: Re: [PATCH v2 3/3] ARM: dts: aspeed: Remove arch timer clocks property
+In-Reply-To: <20220317211024.GA99538@9a2d8922b8f1>
+References: <20220317191527.96237-1-singh.kuldeep87k@gmail.com>
+        <20220317191527.96237-4-singh.kuldeep87k@gmail.com>
+        <87h77wxslh.wl-maz@kernel.org>
+        <20220317211024.GA99538@9a2d8922b8f1>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: singh.kuldeep87k@gmail.com, robh+dt@kernel.org, joel@jms.id.au, andrew@aj.id.au, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 2:21 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Thu, 17 Mar 2022 21:10:24 +0000,
+Kuldeep Singh <singh.kuldeep87k@gmail.com> wrote:
+> 
+> On Thu, Mar 17, 2022 at 07:54:34PM +0000, Marc Zyngier wrote:
+> > On Thu, 17 Mar 2022 19:15:26 +0000,
+> > Kuldeep Singh <singh.kuldeep87k@gmail.com> wrote:
+> > > 
+> > > Arch timer either require clock-frequency property or doesn't need to
+> > > specify clock at all in DT. In general, frequency can be determined
+> > > internally and in case of brokern firmwares, need to extend
+> > > clock-frequency to pass info to driver.
+> > 
+> > A clock frequency and a clock are not the same thing.
+> 
+> Yes Marc, That's what I have mentioned in commit description.
 >
-> On Thu, Mar 17, 2022 at 2:10 PM Bill Wendling <morbo@google.com> wrote:
-> > >
-> > > As a result, we mark pretty much all system instructions as being
-> > > memory clobbers, because that actually works.
-> >
-> > For now.
->
-> No. Forever.
->
-> If you change the compiler to ignore memory clobbers in inline asms,
-> we'll stop using clang again.
->
-> This is not some kind of "threat". This is literally just a plain fact.
->
-> If you turn your compiler into garbage, we can't use it.
->
-> End of discussion.
->
-> > > Whether they actually clobber memory or not is immaterial, and is not
-> > > why we do it.
-> >
-> > I understand that. My point is that it's not a guarantee that the
-> > compiler won't change in the future.
->
-> YES IT DAMN WELL IS.
->
-> If I have an inline asm thing, and I tell the compiler "this inline
-> asm reads or writes memory in ways you don't understand", and you then
-> move externally visible memory operations around it - or move other
-> inline asms that do the same thing around it - then your compiler is
-> simply not a compiler any more.
->
-> IT IS BROKEN  SHIT.
->
-> See?
->
-> That memory clobber is not a "please mister compiler, can you pretty
-> please take this into account".
->
-> That memory clobber is a "if you don't take this into account, you are
-> now no longer a working compiler, and thank Gods we have
-> alternatives".
->
-> This is not a "in ten years things can change" kind of issue. This is
-> a very fundamental and simple thing.
->
-> I don't understand why you can't just admit that.
->
-> This is as simple as 2+2 being 4. That's black and white.
->
-> There is no "the compiler might optimize it to be 3 at some future date".
->
-I'm NOT saying that it WILL change or that it SHOULD change. I'm also
-not saying that your concern isn't justified. What I am saying is that
-unless you're using a compiler feature that's DEFINED as having a
-certain effect, then you are not using that feature correctly,
-regardless of how it's acted in the past. And it has the potential to
-bite you in the ass sooner or later. We've all seen such things happen
-before.
+> Driver uses "clock-frequency" property only and doesn't take inputs from
+> "clocks" property. So, any platform should refrain from defining such
+> entity at first place in DT. Binding also says the same i.e pass info
+> via "clock-frequency" property and no mention of "clocks".
 
-I'm not thick and you don't have to yell about this. We're on the same
-page! :-) It would be much much better if there was a feature that was
-defined to act in the way you want it to. But I'm not offering one at
-the moment or even with the change that started this thread.
+And what do you think provides this clock frequency? Do you believe it
+comes out of thin air? No, the driver doesn't use a clock, because it
+*assumes* the clock feeding the counter is enabled at all times.
 
--bw
+Does it mean such clock doesn't exist?
+
+> 
+> > 
+> > > 
+> > > Aspeed BMC is the platform which defines clocks property, an invalid
+> > > entry which can be safely removed.
+> > 
+> > Safely removed? Says who? Have you tested this change?
+> 
+> Since "clocks" is never read by driver and driver incorporates
+> "clock-frequency" which was certainly not defined here, I believe this
+> reasoning is sufficient for my clause. As it's safe to remove an entry
+> which was never used.
+
+Really? And you have of course audited all possible firmware
+implementations (the bootloader, for example, which would *enable*
+this clock) and other operating systems than Linux that use the same
+DT and run on the same HW?
+
+The kernel tree unfortunately serves as a repository for all the DTs,
+including for payloads other than Linux.
+
+> Please note, it's just Aspeed BMC which had "clocks" defined, other
+> platforms which require input from DT have extended "clock-frequency"
+> property like I mentioned before.
+
+Again: clock frequency and clock are not the same thing.
+
+> I don't possess this platform physically,and did successfull compile
+> time testing. I have initally copied few Aspeed folks, they can help in
+> reviewing and confirming this.
+> 
+> > 
+> > > 
+> > > Moreover, clocks also matches incorrectly with the regex pattern.
+> > > Remove this entry altogether to fix it.
+> > > 'clocks' does not match any of the regexes: 'pinctrl-[0-9]+'
+> > 
+> > NAK. That's not a reason to randomly butcher things.
+> 
+> I hope I explained my reasons above.
+
+My position on this sort of change remains. Blindly changing existing
+DTs based on a warning provided by a tool that totally ignores the
+reality of what is out there is not acceptable.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

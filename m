@@ -2,180 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB6B4DC006
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 08:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC224DC005
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 08:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiCQHNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 03:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
+        id S230147AbiCQHNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 03:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbiCQHNf (ORCPT
+        with ESMTP id S230170AbiCQHM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 03:13:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FE716A6A7;
-        Thu, 17 Mar 2022 00:12:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57D73612FC;
-        Thu, 17 Mar 2022 07:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37790C340E9;
-        Thu, 17 Mar 2022 07:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647501138;
-        bh=KgNHp5UtA+XTjbpsJS9b38tGdPvseTfHTAntYwQVbQ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QX4Usa9E6tfR7ySnyycPJNu2ur3MT8VOvJeJOx2OwZ+HcPug0zl2wREFI7hHwTu5V
-         AzL9WrmnaMHqmTOhVxRLHngfh/TbYs2Yt/tmolOnGyDfLPChPfzE9BWU3eNmQbOqba
-         pRtLR+CyuZiwLIbU+h1gMy8+C41+kqvLH1SeJrwOCyChtDjAC8dZhTnMtnmJXydNaH
-         XtaCX4q2RCuAGrfDQxAVJ4Jxa0NfWu9iiGqBDDbY7WJIjFOPxK+oh72H6gC+4+H+py
-         odvdpZ5XhXYlfzZEyqwCZGFk+4FJHncfC9QYss70oow/mZJ4Q0iQLJ1tZTPspo9oCl
-         thp18aown5SXQ==
-Date:   Thu, 17 Mar 2022 09:11:28 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Haitao Huang <haitao.huang@linux.intel.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "Zhang, Cathy" <cathy.zhang@intel.com>,
-        "Xing, Cedric" <cedric.xing@intel.com>,
-        "Huang, Haitao" <haitao.huang@intel.com>,
-        "Shanahan, Mark" <mark.shanahan@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        nathaniel@profian.com
-Subject: Re: [PATCH V2 16/32] x86/sgx: Support restricting of enclave page
- permissions
-Message-ID: <YjLfIMz4/Vx8Jm24@iki.fi>
-References: <YimWaAqEnXHbLdjh@iki.fi>
- <op.1itu5vkewjvjmi@hhuan26-mobl1.mshome.net>
- <Yis8LV99mORcLYs6@iki.fi>
- <Yis9rA8uC/0bmWCF@iki.fi>
- <97565fed-dc67-bab1-28d4-c40201c9f055@intel.com>
- <Yi6tPLLt9Q+ailQ3@iki.fi>
- <Yi6tinbF+Y7a66eQ@iki.fi>
- <Yi6va4dCaljiQ1WQ@iki.fi>
- <op.1i01q9s0wjvjmi@hhuan26-mobl1.mshome.net>
- <YjLcr9TwLNWUtwkS@iki.fi>
+        Thu, 17 Mar 2022 03:12:57 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D5316A698;
+        Thu, 17 Mar 2022 00:11:41 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id j29so3137412ila.4;
+        Thu, 17 Mar 2022 00:11:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lsH1jTwGh70nbMJVP8wAJmLqUSHhmR9shuFU76M+9Dc=;
+        b=EBzB740TKu1d1Imn3mpaSB1EfZ2FjXarBVL0Npr4JVxuTydJxK6GaorJm5cvoHan50
+         vid57wYTSwXyO/dPQEoc3X4KoEUoPrrxfj+fIagyseVtSHFazHuJcsVS4DC0u8l/7CZ7
+         QpUcDmZaqTc0eu0rXYtIrRTDKW44Nsl+7U6kTOHKQlI0d3A2is47q9H5Lm6YKIwokwif
+         bu5m2qhNTXEzDk07DaC1a0TwpqdPkxzIEfeffk19Si+088MSC3fURJLeLeA4KvopIpj4
+         ldGfVVm7o0WDdtHqG0wYQtxjEPI/yExWJky43z4PltQEh9PsZNwU4h6GrjWNCbxOrvyA
+         Tr/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lsH1jTwGh70nbMJVP8wAJmLqUSHhmR9shuFU76M+9Dc=;
+        b=23wqmmZBHZS3Xr6HJtueq+9C7Eunj8Bk3XKhNCvTIb6B4tWojy+KWMXa0+GkqPfEVb
+         S4HESCiHBC/ZC/L3EweouG7SxkG7iVck9yxd9g5AymhcJKs+ktzmLPDXDFKc8yBn1P18
+         ikR7MSkSUs0+1FpqRMEKib3d2CIOxVF7Zd6t0B0osPWVciJ61cdUeYmYTas7v/WmcGcz
+         QWwVy8wDD8bWpMq/1bOVNln8rseuPszFAR1D2zvwgTvmk0uTB0FYfR6dM+HtKvB8IRta
+         8EaIBFjKBHzW8CAOOdSl2LOKe7Jjs/C7R3FdPd5z3mVolUuwoDHlM1LAtLWBhDMkfB0E
+         0xPw==
+X-Gm-Message-State: AOAM5304TBP6wF/qwQVS0k2gsOlAjrvxuIOtXO0Q+pGIo2GmjX9cxCI1
+        /xEsfT2XBPHEExa1L/Wc8hHaCpiw3C2isClH1ZI=
+X-Google-Smtp-Source: ABdhPJylbMRWa83N8Qi1rEHyJaDatdhRujBdMy27TMS6aUMu0aXeRV6F+XT1QD0fGBvkRtFEXxUAEinfYkWcWu6zA1g=
+X-Received: by 2002:a05:6e02:1846:b0:2c7:b032:5d92 with SMTP id
+ b6-20020a056e02184600b002c7b0325d92mr1331857ilv.237.1647501100639; Thu, 17
+ Mar 2022 00:11:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjLcr9TwLNWUtwkS@iki.fi>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220317170254.0f6e3bac@canb.auug.org.au>
+In-Reply-To: <20220317170254.0f6e3bac@canb.auug.org.au>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 17 Mar 2022 08:11:29 +0100
+Message-ID: <CANiq72=Ww3Qb4RfAHfognp8F2PbCRyA-3asqB-6f2R76uBLiXg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the kbuild tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Douglas Su <d0u9.su@outlook.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Finn Behrens <me@kloenk.de>, Gary Guo <gary@garyguo.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Cano <macanroj@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 09:01:07AM +0200, Jarkko Sakkinen wrote:
-> On Mon, Mar 14, 2022 at 10:39:36AM -0500, Haitao Huang wrote:
-> > Hi Jarkko
-> > 
-> > On Sun, 13 Mar 2022 21:58:51 -0500, Jarkko Sakkinen <jarkko@kernel.org>
-> > wrote:
-> > 
-> > > On Mon, Mar 14, 2022 at 04:50:56AM +0200, Jarkko Sakkinen wrote:
-> > > > On Mon, Mar 14, 2022 at 04:49:37AM +0200, Jarkko Sakkinen wrote:
-> > > > > On Fri, Mar 11, 2022 at 09:53:29AM -0800, Reinette Chatre wrote:
-> > > > >
-> > > > > > I saw Haitao's note that EMODPE requires "Read access permitted
-> > > > by enclave".
-> > > > > > This motivates that EMODPR->PROT_NONE should not be allowed
-> > > > since it would
-> > > > > > not be possible to relax permissions (run EMODPE) after that.
-> > > > Even so, I
-> > > > > > also found in the SDM that EACCEPT has the note "Read access
-> > > > permitted
-> > > > > > by enclave". That seems to indicate that EMODPR->PROT_NONE is
-> > > > not practical
-> > > > > > from that perspective either since the enclave will not be able to
-> > > > > > EACCEPT the change. Does that match your understanding?
-> > > > >
-> > > > > Yes, PROT_NONE should not be allowed.
-> > > > >
-> > > > > This is however the real problem.
-> > > > >
-> > > > > The current kernel patch set has inconsistent API and EMODPR ioctl is
-> > > > > simply unacceptable. It  also requires more concurrency management
-> > > > from
-> > > > > user space run-time, which would be heck a lot easier to do in the
-> > > > kernel.
-> > > > >
-> > > > > If you really want EMODPR as ioctl, then for consistencys sake,
-> > > > then EAUG
-> > > > > should be too. Like this when things go opposite directions, this
-> > > > patch set
-> > > > > plain and simply will not work out.
-> > > > >
-> > > > > I would pick EAUG's strategy from these two as it requires half
-> > > > the back
-> > > > > calls to host from an enclave. I.e. please combine mprotect() and
-> > > > EMODPR,
-> > > > > either in the #PF handler or as part of mprotect(), which ever
-> > > > suits you
-> > > > > best.
-> > > > >
-> > > > > I'll try demonstrate this with two examples.
-> > > > >
-> > > > > mmap() could go something like this() (simplified):
-> > > > > 1. Execution #UD's to SYSCALL.
-> > > > > 2. Host calls enclave's mmap() handler with mmap() parameters.
-> > > > > 3. Enclave up-calls host's mmap().
-> > > > > 4. Loops the range with EACCEPTCOPY.
-> > > > >
-> > > > > mprotect() has to be done like this:
-> > > > > 1. Execution #UD's to SYSCALL.
-> > > > > 2. Host calls enclave's mprotect() handler.
-> > > > > 3. Enclave up-calls host's mprotect().
-> > > > > 4. Enclave up-calls host's ioctl() to SGX_IOC_ENCLAVE_PERMISSIONS.
-> > 
-> > I assume up-calls here are ocalls as we call them in our implementation,
-> > which are the calls enclave make to untrusted side via EEXIT.
-> > 
-> > If so, can your implementation combine this two up-calls into one, then host
-> > side just do ioctl() and mprotect to kernel? If so, would that address your
-> > concern about extra up-calls?
-> > 
-> > 
-> > > > > 3. Loops the range with EACCEPT.
-> > > >   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > >   5. Loops the range with EACCEPT + EMODPE.
-> > > > 
-> > > > > This is just terrible IMHO. I hope these examples bring some insight.
-> > > 
-> > > E.g. in Enarx we have to add a special up-call (so called enarxcall in
-> > > intermediate that we call sallyport, which provides shared buffer to
-> > > communicate with the enclave) just for reseting the range with PROT_READ.
-> > > Feel very redundant, adds ugly cruft and is completely opposite strategy
-> > > to
-> > > what you've chosen to do with EAUG, which is I think correct choice as
-> > > far
-> > > as API is concerned.
-> > 
-> > The problem with EMODPR on #PF is that kernel needs to know what permissions
-> > requested from enclave at the time of #PF. So enclave has to make at least
-> > one call to kernel (again via ocall in our case, I assume up-call in your
-> > case) to make the change.
-> 
-> The #PF handler should do unconditionally EMODPR with PROT_READ.
+Hi Stephen,
 
-Or mprotect(), as long as secinfo contains PROT_READ. I don't care about
-this detail hugely anymore because it does not affect uapi. 
+On Thu, Mar 17, 2022 at 7:03 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
 
-Using EMODPR as a permission control mechanism is a ridiculous idea, and
-I cannot commit to maintain a broken uapi.
+Looks good to me -- thanks!
 
-BR, Jarkko
+Cheers,
+Miguel

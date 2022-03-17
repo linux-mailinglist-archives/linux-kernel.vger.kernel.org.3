@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B644DD010
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:20:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593144DD014
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbiCQVUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 17:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S230283AbiCQVUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 17:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiCQVUe (ORCPT
+        with ESMTP id S230281AbiCQVUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 17:20:34 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADBEB2455
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:19:16 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id b18-20020a63d812000000b0037e1aa59c0bso2312030pgh.12
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 14:19:16 -0700 (PDT)
+        Thu, 17 Mar 2022 17:20:49 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF14BC43;
+        Thu, 17 Mar 2022 14:19:29 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id t2so7831162pfj.10;
+        Thu, 17 Mar 2022 14:19:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=6mHysSGkjSaV0ili798Q1zLL9ynUJ9JmihmTcdCLIZY=;
-        b=kgTRMhvOjKo0YDi1oWQ8YuJ3ZeMPo74qt+/vjGdCcuqs8dkrP0TRKHe74cxBTHRisY
-         pXpC7Ow+2tv6+LH3Y4J+kRigvMhRBwP34m3TIOywj5vMh3PHyuS2pozWWwFAF+JxmyQI
-         ijSEtzxiCCln73+qzuFQho1qJyA+9K7PlXH2aic3sOO5/pXWtBiwYCpg7UtF2Nc/mZ0y
-         leTXS0J1RZwoak/k4U9aNUICFCK2CU74Zziu/oRs7R4IMrbpMQExf1frRcDqN5tTsem9
-         7Y9xQ2+RG8tgUfvE4x3Xa2sLU0ccGllxOI/YzO8blwRuY/8ZXvt3XFGf8gf/N8V/mUXi
-         VhHg==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=E0FghEjS/Rw5fgY3QFgY5tO8sn18k23p8upmZjRX6VQ=;
+        b=YKg1Cy6p/GmNp3eJGkiFcNW3+VsuSs1HOoCHGW2tmG3+7L6cZALRLH5RG3Nuy9mDxO
+         XkX/eOKowUqrtX1ifkThqh9IXD08cC9GzVZJQYF8/w8gpsROPA6mUp4GYLdJXcGZGNLq
+         TXBfIKevQWgyXX8t3lxw/dusfVsNXAb1HtGXMNdrxEfECWjrQuoV2lSgdMwxzfs81zbD
+         LlyJttNivr1Vx7v+mXae5ipct1aRegQIit5fJsA5FzQarkDTipqKpnEzeng+48K5Gbn8
+         1vU8vf8oqu6unXFqILFt2wmWUl0GN1x5u2oJtf9yTnVX+grtbiDmgUuuPa1F0D5AkNDh
+         UCXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=6mHysSGkjSaV0ili798Q1zLL9ynUJ9JmihmTcdCLIZY=;
-        b=jYknUa3FcELtmKVMWrBpchRhk3ef5gQPddJ2h23jkwmOZ1QlOY8cKttrrPnHiLDM+t
-         8MOFIfq3caoz17MV3oFFmXzWNfH2O+J9uj1kALURlD/HmFakwbOpAhFcTaD/j4Qjrfl7
-         uBMFUT4XLYJGFiS2JaA+fOO8evulV49230ydwKHDh93ALYMgfLDdpZzRypHEulZqTJz0
-         HHdcJiANO8Ad6CBC1rtNWKDgTXOFI3Dkw7qaMUmpghj5uW6eV8K4PI7sNXslX2Q9qRIQ
-         c9Z9QK+y77bMllGyCER0FoaluvZPEr9vu6s79WfKVTT7+byj4NAnoXvCDscYWkN/IbjI
-         7MbA==
-X-Gm-Message-State: AOAM532vxw346IBpTH7AfpRALLRotHNiB4MRMgzYmVtrHaCtPHHsSp4e
-        Zcrg5QEiK7orfn63YjzW7WnEE0mSUHk=
-X-Google-Smtp-Source: ABdhPJzRlMtFf9+BfW4ekzaU3Vlw86V5D1cZQ96eDB6kmJFiiAOOAjp/f1ObJsH6I7e0TQxtVo1VhFUhRlE=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:ef70:31aa:2364:9dda])
- (user=pgonda job=sendgmr) by 2002:a17:902:e74f:b0:151:c20b:5f39 with SMTP id
- p15-20020a170902e74f00b00151c20b5f39mr6866669plf.43.1647551956388; Thu, 17
- Mar 2022 14:19:16 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 14:19:13 -0700
-Message-Id: <20220317211913.1397427-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH] x86/sev-es: Replace open-coded hlt-loop with sev_es_terminate()
-From:   Peter Gonda <pgonda@google.com>
-To:     x86@kernel.org
-Cc:     Peter Gonda <pgonda@google.com>, Borislav Petkov <bp@alien8.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Joerg Roedel <jroedel@suse.de>, kvm@vger.kernel.org,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=E0FghEjS/Rw5fgY3QFgY5tO8sn18k23p8upmZjRX6VQ=;
+        b=oLdG05mg6k9nCFi7nbCGcNEn9ypndNdXZPzKOpLDUSa9yFNCz6BfqohlAF7FIYo2pC
+         9Rb/OE/FayBhflqKjVh/FgSrMWcAK3LL12A6Z3Mp5qZdGfE0HWLbFdCdrfSStNUwwe01
+         cNTA84Wubt+dVIdjUTgrNvJ7nkg6xYEr2oDf0Js9A3zE0mTafW24HK7YGIltYODC5hdv
+         c3mCZoc94vhkLNV3OTGoPCykgG7hJ/pPLL9fz4XbX3jKhREFPamTmSnplvpP1skuOW/Y
+         wQpKzWNgVnHAfDKgAfx//ioEiW0x1lhwOBKHBN4F+MxP11VdFIpXHY7cXUtKUTz76C3I
+         p5Yg==
+X-Gm-Message-State: AOAM530Hn4qeSKN7jBul7MWuaFnbInGJ4pvopwOPur0zgIu5OzNLJo13
+        bsCa/yG8mAY3eTaelQHQLA9FcURuY/o=
+X-Google-Smtp-Source: ABdhPJxS6AsPEzJcAbDKaR6kjQG9O2clYK2m18uZSi9kl8/+pxS1sI7lKq9kHdBRrTkMDVHktVXGKQ==
+X-Received: by 2002:a63:dc53:0:b0:381:7f41:3a2d with SMTP id f19-20020a63dc53000000b003817f413a2dmr5333223pgj.126.1647551969420;
+        Thu, 17 Mar 2022 14:19:29 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id om17-20020a17090b3a9100b001bf0fffee9bsm11285688pjb.52.2022.03.17.14.19.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 14:19:28 -0700 (PDT)
+Subject: Re: [PATCH 5.10 00/23] 5.10.107-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220317124525.955110315@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <84699378-88db-f3fe-25fa-cea7c9af2ba4@gmail.com>
+Date:   Thu, 17 Mar 2022 14:19:19 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20220317124525.955110315@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,36 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the hlt loop in handle_vc_boot_ghcb() with an
-sev_es_terminate(). The hlt gives the system no indication the guest is
-unhappy. The termination request will signal there was an error during
-VC handling during boot.
+On 3/17/22 5:45 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.107 release.
+> There are 23 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 19 Mar 2022 12:45:16 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.107-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Brijesh Singh <brijesh.singh@amd.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: x86@kernel.org
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Peter Gonda <pgonda@google.com>
----
- arch/x86/kernel/sev.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index e6d316a01fdd..ae87fbf27724 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -1425,6 +1425,5 @@ bool __init handle_vc_boot_ghcb(struct pt_regs *regs)
- fail:
- 	show_regs(regs);
- 
--	while (true)
--		halt();
-+	sev_es_terminate(GHCB_SEV_ES_GEN_REQ);
- }
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.35.1.894.gb6a874cedc-goog
-
+Florian

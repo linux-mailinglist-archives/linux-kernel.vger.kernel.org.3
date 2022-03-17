@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D549A4DC539
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EA04DC531
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbiCQL7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
+        id S233228AbiCQL6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbiCQL65 (ORCPT
+        with ESMTP id S233222AbiCQL6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:58:57 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9119F1E6EA5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:39 -0700 (PDT)
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        Thu, 17 Mar 2022 07:58:49 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC611E6E9E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:33 -0700 (PDT)
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 73B133F7E7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:57:38 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C83693F20A
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:57:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647518258;
-        bh=nSwS54FLcijToE2aK+yEI4OGn17JP6PMWHAMiQXMIj8=;
+        s=20210705; t=1647518251;
+        bh=q6L0pTvWqCbYxp4ud2xHQC7gNboKzwtZb8Qa+W91MLY=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=PT2jj0e+JyQ2s0l5t7kVIdSaiAvGp0yT9zEI2ItJ0s+/6oy8Z+LjHLztjWreNegxy
-         HpzZwHXbIpbOJR/le+lYsdGo196viUTcnpx+TSshZ6iN09M6WQ8uGc0r9Wxxdm0tie
-         4UBZ9GQypYBuy2amB6EGSzu5yuQGqlNXpflSygfPozh76ReS9LBjpi+2kob9tzj7/L
-         acnZLsh0EVxGFs+d/6j9f/lkraT+kK6cw74+vB3kcSdDoAMLq2kbqK5e5KftdclJdL
-         NH8WAQ5r2UR60zERyn2LTkYMWp43V4dKCIbq+5Pc/faaX+SDJq9p52GRKi6XKSysRx
-         AySgPxse8EeAw==
-Received: by mail-lf1-f72.google.com with SMTP id b7-20020a056512218700b0044869874779so1743321lft.3
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:38 -0700 (PDT)
+        b=i+yAbbFvds6D9dLYCY0vZ+oaR4SfURtQfKPYQdMWWljzNzEKnxVHSTLFbmgggPVmi
+         WBuwAgTpDx594lKi2mnrqhOcz/NNxrd+MCHcOPnRIiy7+AYP0vVar3BK82IpfCOR/9
+         E+syl7B15a/XTmtqLseoE/oq+aOLEfSU/N3imps5gnfRxi8VT+I++TVEci77WgvKPB
+         hE87NyBxJMduk6TUy9DxpPPHJpoQm/Le0XNlVzkV4Bp7HFsGPlqJC/SgDvP/6qFLV4
+         /iDY4a6vD2SD3g+ThzZqHJhxo4OTncylYijVmiZEmEX9p4t/0NlCPTZGshuo7ViaSR
+         8SI5C9YYRu0Zw==
+Received: by mail-wm1-f72.google.com with SMTP id i6-20020a05600c354600b0038be262d9d9so3026227wmq.8
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 04:57:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nSwS54FLcijToE2aK+yEI4OGn17JP6PMWHAMiQXMIj8=;
-        b=fWo0c9EJdbvQsqzCTWz7daLUWyT8iRdQx/OV7q9uk5QN/d/K9FaY4J91u/ZLkG9nal
-         el9dnAnnMQ4IZJlJCd9LhWvVJbr9ZHhtH5O5O42kePu/RbVBcOye8xxj5H38KXgBKuos
-         HcbrtfZbusyJxAX5SDLHOIrfSDXomTm4MZnM8HXCqYHtxWh8N8/0+rDdPu/1VAvxwE5C
-         6G1QIXWUrw01+hcRWhQ5k6wVEXzkwSHRw2m8jmuwlyYIyfbi3F2ccthUHPc7EHnJ2Jm6
-         EqDnHY3IzhnDJ7HkzZ6uUEGyr8zmGK+2ncNBP5F2YVS0pe6lN1gRKnFugSG6FTJdJu7i
-         itRw==
-X-Gm-Message-State: AOAM530Wpe9QkpsXq+sq8HrC4f+OvSjLgDpJgk1LNnXtgsxelDUGctrR
-        3hvxd+vrwNzjGEpKSQV8dNQuHy7bQ3UBMphStYID6RRC1V/Htjqva0f1VAMxh5bMSjlkyGJoZJp
-        LMGrWH4gHDkDPm3wEVED10Rl0vlf0QwFZzQkJbPLRgw==
-X-Received: by 2002:a05:6000:15c1:b0:1f0:73d6:b716 with SMTP id y1-20020a05600015c100b001f073d6b716mr3661594wry.293.1647518247282;
-        Thu, 17 Mar 2022 04:57:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzG3c2rG8wtLfvYQbJABDH6zuNp51t36w+nKsTHklu2oA2xBjTj2AvcWZKYkNP1t4hn/llH6w==
-X-Received: by 2002:a05:6000:15c1:b0:1f0:73d6:b716 with SMTP id y1-20020a05600015c100b001f073d6b716mr3661557wry.293.1647518247090;
-        Thu, 17 Mar 2022 04:57:27 -0700 (PDT)
+        bh=q6L0pTvWqCbYxp4ud2xHQC7gNboKzwtZb8Qa+W91MLY=;
+        b=xTvHkjvUxp7bW9uPk8XZEKDsUV91i23vDr/DfuJVf9/UOzCZYUEtJyvjP2mYYLd0pr
+         j0RmrNzeuzn5LSDS2cFfr4vptiLTGWvRfqd8uLqqqE/JfTjtcp/rrC4CrNFuHPiLyPbE
+         IGOAHlRptcudsi+SMKV+ioG+vyvgn4WrzaQSiNxB1HxFOKn7GOb3kmv8NP4ysjgcVPI8
+         PeRWxgk4b1Ejnia4oKJC0t/lZhrHG0sMwuFNWpygTchxUz3o0qcXqh2MxA2QQoLsxjnL
+         w68nFt7g09Vbb9dVGJZyu7CW2Om8ImpHey3z0q/1tX+HWzySguS8839+txtpxQJ9gH8z
+         WMuQ==
+X-Gm-Message-State: AOAM532/MdopRrjb0flJlmTgMbtvLaq4keDgwcHcunwrmAQACnLCyk7P
+        goh6Du/iQfhRR7pbMHa2oDf1h9+2ErzvHt0Y6TcQRbP9kxKeXDFqBegUq6834s5qrCYZNVANkd9
+        ITqZ5v6GhtS6tyQwlRj0A+MmbhVw+qP6cIQpEC9G+/w==
+X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id s25-20020a1cf219000000b0038c782c03bbmr2376117wmc.94.1647518249488;
+        Thu, 17 Mar 2022 04:57:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxX1jxnKZiD0NuCgy5RBXKK6my/n/GYxN3iuUU96hXmDCoERczZgFOzB2MQI7Nkvxk6j0Zexw==
+X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id s25-20020a1cf219000000b0038c782c03bbmr2376082wmc.94.1647518249282;
+        Thu, 17 Mar 2022 04:57:29 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id r65-20020a1c4444000000b0038c48dd23b9sm5824900wma.5.2022.03.17.04.57.24
+        by smtp.gmail.com with ESMTPSA id r65-20020a1c4444000000b0038c48dd23b9sm5824900wma.5.2022.03.17.04.57.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 04:57:25 -0700 (PDT)
+        Thu, 17 Mar 2022 04:57:28 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
@@ -97,9 +97,9 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         linux-actions@lists.infradead.org, openbmc@lists.ozlabs.org,
         linux-riscv@lists.infradead.org, linux-oxnas@groups.io
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH 07/18] dt-bindings: irqchip: intel,ixp4xx: include generic schema
-Date:   Thu, 17 Mar 2022 12:56:54 +0100
-Message-Id: <20220317115705.450427-6-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 08/18] dt-bindings: irqchip: kontron,sl28cpld: include generic schema
+Date:   Thu, 17 Mar 2022 12:56:55 +0100
+Message-Id: <20220317115705.450427-7-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
 References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
@@ -107,7 +107,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,32 +120,29 @@ naming and other generic properties.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- .../interrupt-controller/intel,ixp4xx-interrupt.yaml         | 5 ++++-
+ .../bindings/interrupt-controller/kontron,sl28cpld-intc.yaml | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/intel,ixp4xx-interrupt.yaml b/Documentation/devicetree/bindings/interrupt-controller/intel,ixp4xx-interrupt.yaml
-index 14dced11877b..38290b38e13e 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/intel,ixp4xx-interrupt.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/intel,ixp4xx-interrupt.yaml
-@@ -21,6 +21,9 @@ description: |
-   families were the only ones to reach the developer and consumer
-   market.
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
+index e8dfa6507f64..1d0939390631 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
+@@ -29,6 +29,9 @@ description: |
+     7  n/a           not used
+   ==== ============= ==================================
  
 +allOf:
 +  - $ref: /schemas/interrupt-controller.yaml#
 +
  properties:
    compatible:
-     items:
-@@ -44,7 +47,7 @@ required:
+     enum:
+@@ -51,4 +54,4 @@ required:
+   - "#interrupt-cells"
    - interrupt-controller
-   - '#interrupt-cells'
  
 -additionalProperties: false
 +unevaluatedProperties: false
- 
- examples:
-   - |
 -- 
 2.32.0
 

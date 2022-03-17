@@ -2,266 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF24E4DCCBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BE84DCCBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237032AbiCQRrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 13:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
+        id S235157AbiCQRrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 13:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235157AbiCQRrB (ORCPT
+        with ESMTP id S237036AbiCQRrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 13:47:01 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D082713508D
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:45:42 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id b190so6304577vsc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CJC749JOe7I90/lVVKBYlNIBirJ/7ws7bUfBK1kajWI=;
-        b=hGbq++vNY0ATZznXCcjcwbOkcmjRxxpZhmOMfpPm/yRx5FqZI111fTotlpSyn/CdcO
-         7l3ElPlXHH6BwDZo+8mU81mlv2jbKGK7CIxI5lwZdD7AcxOm8p/GkmYSVeDGBvihYGeb
-         Kb0XvywsC/ZchoHy2d++5wnmfNs3wCzH44+n+WFkMo5kDd7mMVBxKckPCEMaozDsGlfM
-         JbDQQNjP5aWWYYzfz1/qTr3SuIQE4tDcJazloYZ2bP/2nPRzquTnR8Q1lU/5EpS0LL+H
-         OVZcmmsOpFy+mU7DFTGEUuPwuA5qnZS2KA+uvQHb0YvCsAaGDS7pC4bwsQh2/U2hUtp3
-         0GSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CJC749JOe7I90/lVVKBYlNIBirJ/7ws7bUfBK1kajWI=;
-        b=JWuf7Vc6F8tyLqstfmlOxaa/cEBez1cHEXbdti0vWuYXIX86OxuYuXOGmGCqcckGML
-         Ta9oWzNfjzbmeX84vdsyeEyvcUEADtORzwDb8a3omd2Xt5VQjL0ezHlvzoksDZalKlX1
-         bMpeBfpUBN1IHm8berKpL27Q7m2MI3XJDp07eTVCnPWavBwZMOWUNE4Fgbw5oU/DL3zQ
-         stbNACnn5ymBDNGWpw1gGALjfTBgcHm5x6DnmIzehy0JGQXLV6Y4yeOBfPUufO8aN5RF
-         /LQnG1cCPfSB5gm7rciIMpTMgXb5F5CEIbgq7+mRY5Q4d+CIrm8RwFMutt5FcI4R+6nB
-         lD/g==
-X-Gm-Message-State: AOAM533CvLqefMfD1af7L46IXOml6N8J0wAA0IapKAIGtyv8pXrFLqyZ
-        eo/XpPyYwpcs9LEMq7fXDhDBlkdOHMUQjieRTfYqRs9DtIc=
-X-Google-Smtp-Source: ABdhPJy4Y4fW3GgejnniiHiQi1beP4dgdMsSUpFZ8WdwH+pwRYjgt6pxjlWkk8Ul9/U9XaWNC/0bmB8JQ3ERCaA3OyA=
-X-Received: by 2002:a67:c09b:0:b0:322:9ac9:4b2e with SMTP id
- x27-20020a67c09b000000b003229ac94b2emr2643795vsi.11.1647539141809; Thu, 17
- Mar 2022 10:45:41 -0700 (PDT)
+        Thu, 17 Mar 2022 13:47:03 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29E012D0A5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:45:46 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 3B5F21F45995
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647539145;
+        bh=aAOXLIlLLxolaEW1Wc2fkceSynAuP4sIIbhdmw65sMg=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=Rct+s6YPEXeYia4L+VIYOA8OlStP0I6CfIHOYzU0IwzopO/JcaFha27iCICtSAvf5
+         w21NXM28Olc0W6Sk21ZMc3VWO1Aj9qGXdzKKSKullKb7cBdKi4i3Qy0FPbFQ4BCpAw
+         yg7L2iNCVbDUNDBRsDQCZWq5WDnlr8XyRBcTw9ssWEhlDn6JN/00XWnd+T293dy91/
+         BPurcDVq2KDT6ZnfZ5Bhb37VoBGxc7+9vlffRh9CdcJ8eTHK0s6oOgeqPCK1QOA+OL
+         D3GrmCJjbsDJXz/sifzOOTLC+DFohcP8zrsuW3PzxRmlGm5fWx62q3nb+z5ZR+MbFS
+         u3tzFS23iTtiA==
+Message-ID: <aa3545cd-03c6-d45c-8b2c-9779e8327a55@collabora.com>
+Date:   Thu, 17 Mar 2022 20:45:33 +0300
 MIME-Version: 1.0
-References: <cover.1647498015.git.sandipan.das@amd.com> <7d43b4ba8a7c3c0833495f3fabfcfc6df8db3732.1647498015.git.sandipan.das@amd.com>
- <YjMjNvrGa7ZK/x3H@hirez.programming.kicks-ass.net>
-In-Reply-To: <YjMjNvrGa7ZK/x3H@hirez.programming.kicks-ass.net>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Thu, 17 Mar 2022 10:45:30 -0700
-Message-ID: <CABPqkBTPkUtkAyh7+_51L83UA=AUjoU_KQqRVKyd7hLhapqHZg@mail.gmail.com>
-Subject: Re: [PATCH 6/7] perf/x86/amd/core: Add PerfMonV2 overflow handling
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Sandipan Das <Sandipan.Das@amd.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, x86@kernel.org, bp@alien8.de,
-        dave.hansen@linux.intel.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
-        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        pbonzini@redhat.com, jmattson@google.com, like.xu.linux@gmail.com,
-        ananth.narayan@amd.com, ravi.bangoria@amd.com,
-        santosh.shukla@amd.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 6/8] drm/shmem-helper: Add generic memory shrinker
+Content-Language: en-US
+To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        virtualization@lists.linux-foundation.org,
+        Dmitry Osipenko <digetx@gmail.com>
+References: <20220314224253.236359-1-dmitry.osipenko@collabora.com>
+ <20220314224253.236359-7-dmitry.osipenko@collabora.com>
+ <YjNwnOMvboOkGm4w@phenom.ffwll.local>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <YjNwnOMvboOkGm4w@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 5:02 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Mar 17, 2022 at 11:58:35AM +0530, Sandipan Das wrote:
->
-> > +static inline u64 amd_pmu_get_global_overflow(void)
-> > +{
-> > +     u64 status;
-> > +
-> > +     /* PerfCntrGlobalStatus is read-only */
-> > +     rdmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_STATUS, status);
-> > +
-> > +     return status & amd_pmu_global_cntr_mask;
-> > +}
-> > +
-> > +static inline void amd_pmu_ack_global_overflow(u64 status)
-> > +{
-> > +     /*
-> > +      * PerfCntrGlobalStatus is read-only but an overflow acknowledgment
-> > +      * mechanism exists; writing 1 to a bit in PerfCntrGlobalStatusClr
-> > +      * clears the same bit in PerfCntrGlobalStatus
-> > +      */
-> > +
-> > +     /* Only allow modifications to PerfCntrGlobalStatus.PerfCntrOvfl */
-> > +     status &= amd_pmu_global_cntr_mask;
-> > +     wrmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR, status);
-> > +}
-> > +
-> > +static bool amd_pmu_legacy_has_overflow(int idx)
-> > +{
-> > +     u64 counter;
-> > +
-> > +     rdmsrl(x86_pmu_event_addr(idx), counter);
-> > +
-> > +     return !(counter & BIT_ULL(x86_pmu.cntval_bits - 1));
-> > +}
-> > +
-> > +static bool amd_pmu_global_has_overflow(int idx)
-> > +{
-> > +     return amd_pmu_get_global_overflow() & BIT_ULL(idx);
-> > +}
-> > +
-> > +DEFINE_STATIC_CALL(amd_pmu_has_overflow, amd_pmu_legacy_has_overflow);
-> > +
-> >  /*
-> >   * When a PMC counter overflows, an NMI is used to process the event and
-> >   * reset the counter. NMI latency can result in the counter being updated
-> > @@ -613,7 +653,6 @@ static inline void amd_pmu_set_global_ctl(u64 ctl)
-> >  static void amd_pmu_wait_on_overflow(int idx)
-> >  {
-> >       unsigned int i;
-> > -     u64 counter;
-> >
-> >       /*
-> >        * Wait for the counter to be reset if it has overflowed. This loop
-> > @@ -621,8 +660,7 @@ static void amd_pmu_wait_on_overflow(int idx)
-> >        * forever...
-> >        */
-> >       for (i = 0; i < OVERFLOW_WAIT_COUNT; i++) {
-> > -             rdmsrl(x86_pmu_event_addr(idx), counter);
-> > -             if (counter & (1ULL << (x86_pmu.cntval_bits - 1)))
-> > +             if (!static_call(amd_pmu_has_overflow)(idx))
-> >                       break;
-> >
-> >               /* Might be in IRQ context, so can't sleep */
->
-> This scares me... please tell me you fixed that mess.
->
-> > @@ -718,6 +756,83 @@ static void amd_pmu_enable_event(struct perf_event *event)
-> >       static_call(amd_pmu_enable_event)(event);
-> >  }
-> >
-> > +static int amd_pmu_global_handle_irq(struct pt_regs *regs)
-> > +{
-> > +     struct perf_sample_data data;
-> > +     struct cpu_hw_events *cpuc;
-> > +     struct hw_perf_event *hwc;
-> > +     struct perf_event *event;
-> > +     u64 val, status, mask;
-> > +     int handled = 0, idx;
-> > +
-> > +     status = amd_pmu_get_global_overflow();
-> > +
-> > +     /* Check if any overflows are pending */
-> > +     if (!status)
-> > +             return 0;
-> > +
-> > +     /* Stop counting */
-> > +     amd_pmu_global_disable_all();
->
->
-> This seems weird to me, I'd first disable it, then read status. MSR
-> access is expensive, you want to shut down the PMU asap.
->
-> Also, this is written like PMI would not be the primary NMI source,
-> which seems somewhat unlikely.
->
-> > +
-> > +     cpuc = this_cpu_ptr(&cpu_hw_events);
-> > +
-> > +     /*
-> > +      * Some chipsets need to unmask the LVTPC in a particular spot
-> > +      * inside the nmi handler.  As a result, the unmasking was
-> > +      * pushed into all the nmi handlers.
-> > +      *
-> > +      * This generic handler doesn't seem to have any issues where
-> > +      * the unmasking occurs so it was left at the top.
-> > +      *
-> > +      * N.B. Taken from x86_pmu_handle_irq()
-> > +      */
->
-> Please write an AMD specific comment here. Note how 'recent' Intel chips
-> ended up pushing this to the end of the handler. Verify with your
-> hardware team where they want this and write as much of the rationale as
-> you're allowed to share in the comment.
->
-> > +     apic_write(APIC_LVTPC, APIC_DM_NMI);
-> > +
-> > +     for (idx = 0; idx < x86_pmu.num_counters; idx++) {
-> > +             if (!test_bit(idx, cpuc->active_mask))
-> > +                     continue;
-> > +
-> > +             event = cpuc->events[idx];
-> > +             hwc = &event->hw;
-> > +             val = x86_perf_event_update(event);
-> > +             mask = BIT_ULL(idx);
-> > +
-> > +             if (!(status & mask))
-> > +                     continue;
-> > +
-> > +             /* Event overflow */
-> > +             handled++;
-> > +             perf_sample_data_init(&data, 0, hwc->last_period);
-> > +
-> > +             if (!x86_perf_event_set_period(event))
-> > +                     continue;
-> > +
-> > +             if (perf_event_overflow(event, &data, regs))
-> > +                     x86_pmu_stop(event, 0);
-> > +
-> > +             status &= ~mask;
-> > +     }
-> > +
-> > +     /*
-> > +      * It should never be the case that some overflows are not handled as
-> > +      * the corresponding PMCs are expected to be inactive according to the
-> > +      * active_mask
-> > +      */
-> > +     WARN_ON(status > 0);
-> > +
-> > +     /* Clear overflow bits */
-> > +     amd_pmu_ack_global_overflow(~status);
-> > +
-> > +     inc_irq_stat(apic_perf_irqs);
-> > +
-> > +     /* Resume counting */
-> > +     amd_pmu_global_enable_all(0);
->
-> I think this is broken vs perf_pmu_{dis,en}able(), note how
-> intel_pmu_handle_irq() saves/restores the enable state.
->
-> > +
-> > +     return handled;
-> > +}
-> > +
-> > +DEFINE_STATIC_CALL(amd_pmu_handle_irq, x86_pmu_handle_irq);
-> > +
-> >  /*
-> >   * Because of NMI latency, if multiple PMC counters are active or other sources
-> >   * of NMIs are received, the perf NMI handler can handle one or more overflowed
-> > @@ -741,7 +856,7 @@ static int amd_pmu_handle_irq(struct pt_regs *regs)
-> >       int handled;
-> >
-> >       /* Process any counter overflows */
-> > -     handled = x86_pmu_handle_irq(regs);
-> > +     handled = static_call(amd_pmu_handle_irq)(regs);
-> >
-> >       /*
-> >        * If a counter was handled, record a timestamp such that un-handled
-> > @@ -1041,6 +1156,8 @@ static int __init amd_core_pmu_init(void)
-> >               static_call_update(amd_pmu_enable_all, amd_pmu_global_enable_all);
-> >               static_call_update(amd_pmu_disable_all, amd_pmu_global_disable_all);
-> >               static_call_update(amd_pmu_enable_event, amd_pmu_global_enable_event);
-> > +             static_call_update(amd_pmu_has_overflow, amd_pmu_global_has_overflow);
-> > +             static_call_update(amd_pmu_handle_irq, amd_pmu_global_handle_irq);
-> >       }
->
-> Same, all this static_call() stuff is misguided.
->
-> Also, if you feel like it, you can create amd_pmu_v2.
+On 3/17/22 20:32, Daniel Vetter wrote:
+>> +static void drm_gem_shmem_update_purgeable_status(struct drm_gem_shmem_object *shmem)
+>> +{
+>> +	struct drm_gem_object *obj = &shmem->base;
+>> +	struct drm_gem_shmem_shrinker *gem_shrinker = obj->dev->shmem_shrinker;
+>> +	size_t page_count = obj->size >> PAGE_SHIFT;
+>> +
+>> +	if (!gem_shrinker || obj->import_attach || !obj->funcs->purge)
+>> +		return;
+>> +
+>> +	mutex_lock(&shmem->vmap_lock);
+>> +	mutex_lock(&shmem->pages_lock);
+>> +	mutex_lock(&gem_shrinker->lock);
+> Uh this is just terrible I think.
+> 
+> Can't we move shmem helpers over to reasonable locking, i.e. per-object
+> dma_resv_lock for everything? I know it's a pile of work, but I think
+> we're way past the point with things like this popping up where we should
+> just bite that bullet.
+> 
+> I discussed the full thing with Daniel Stone, but maybe a joint refresher
+> on irc would be a good thing.
 
-Given the number of overrides, that would also make more sense to me.
+Aha! Perhaps I saw bits of that discussion, but it wasn't entirely clear
+to me what was discussed in fact. Sounds like a good idea to try to use
+the reservation lock everywhere, thank you for the suggestion.

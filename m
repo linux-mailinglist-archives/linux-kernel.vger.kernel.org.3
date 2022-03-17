@@ -2,230 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61444DC16B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 302114DC171
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 09:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbiCQIhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 04:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60918 "EHLO
+        id S230413AbiCQIig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 04:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbiCQIhN (ORCPT
+        with ESMTP id S231477AbiCQIiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 04:37:13 -0400
-Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599761AD39D
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:35:56 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KK0pf5LWCzMq31C;
-        Thu, 17 Mar 2022 09:35:54 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KK0pd1DtQzlhRV1;
-        Thu, 17 Mar 2022 09:35:53 +0100 (CET)
-Message-ID: <ed8467f2-dcd0-bc2f-8e98-1d9129fb2c30@digikod.net>
-Date:   Thu, 17 Mar 2022 09:36:36 +0100
+        Thu, 17 Mar 2022 04:38:12 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED8A1B98AE
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:36:55 -0700 (PDT)
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 413DF3F1AF
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 08:36:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647506214;
+        bh=Aenf1r+odjtoHPxCzbMLtD9uL99h+8AF2uxAxyuOS54=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=SOY7+yqoqVGrgXOon26npkfqcKGduMBbqY5MBh1VxDRqacF5RDiapODK5PC1ZWIZz
+         Pd8VDNun6pquwfWkmVPAbEpW1OgLy4hTOEXixCmOumKolMfFTseHehzL5sjL2zbGi8
+         FdS1fNoEMBfwD8KeOZnJkAQXr1UPswvBePD1Rk0RBi7bP6J/pjONDuNrVlanT2vJbO
+         823HkSWOsv0rCQiYCyOVdPewqzcQOHdgr4Zm8zUY4QThHM6RxUOeh9zVeCdozyXE21
+         +QvsTTQPQIIdH+xyOnShtsb/FDDe64VkaoEW0En9KjdfPHeKJINV+CW1qTQptpiVCs
+         SqOph4rF45iZg==
+Received: by mail-wr1-f70.google.com with SMTP id x15-20020a5d6b4f000000b001ee6c0aa287so1307333wrw.9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 01:36:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Aenf1r+odjtoHPxCzbMLtD9uL99h+8AF2uxAxyuOS54=;
+        b=Gj+xt42wwsmhswRZto8CBBgpLff9jNvOI88REZnVJ7r1o0hPKzRMB+8dXHBWo1joxw
+         V7eeqB/ROl6Orrc7Qb86XYN7eO8cCLhd0BnwquAc8L7DYhdqY1EBqffKbMzDOTLHdMss
+         Zpm73F4uS+6Kpjulnj0rLln1Qxlh5jFO4rXPr+apVwzQhmSP6tpRUjiDAjGAOm5LSNND
+         HRgHRz90OGT1R/oqpyB3sUcXQnOTkU0uKgwO1LaPot4ymYF81u3VdqRSDaPaTi3Lvuul
+         GJLvtmbsGz2uImDoTRFvj2mwMjsfaGD59/UclctOLHC1/DPAzTz7XYYUqxNFx+rI/J6A
+         ln9A==
+X-Gm-Message-State: AOAM532gxY4i20Ae5nx8Dg5CJr04eO0kr/SGR/2ylX9/gymNYcA9if/g
+        lpNLICd5UK+c7t1yAdD5FKq1xz7idH5kLy66oBMzo9wHxVuy0f9FvQgNdzNJ/0dQKVuFHIWKeUL
+        2J8HmyXat7E2rUTVnnJTtpremYOoHxMQUai9dC+aulQ==
+X-Received: by 2002:a5d:6185:0:b0:203:eaa6:7fee with SMTP id j5-20020a5d6185000000b00203eaa67feemr1444639wru.523.1647506213471;
+        Thu, 17 Mar 2022 01:36:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwJZektFnlITP8f7Plb326+U02zgGEzii73mdienA+JhznN3cxPwQr2vDwz4ClXnOR2D7Jyvg==
+X-Received: by 2002:a5d:6185:0:b0:203:eaa6:7fee with SMTP id j5-20020a5d6185000000b00203eaa67feemr1444623wru.523.1647506213260;
+        Thu, 17 Mar 2022 01:36:53 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id o41-20020a05600c512900b00389d8c3e2b9sm3787994wms.15.2022.03.17.01.36.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 01:36:52 -0700 (PDT)
+Message-ID: <fb4def96-4b20-604f-d15d-fef87eb2232d@canonical.com>
+Date:   Thu, 17 Mar 2022 09:36:51 +0100
 MIME-Version: 1.0
-User-Agent: 
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 09/10] arch: arm: boot: dts: Introduce HPE GXP Device
+ tree
 Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20220221212522.320243-1-mic@digikod.net>
- <20220221212522.320243-2-mic@digikod.net>
- <CAHC9VhQEEKGgCn7fYgUt-_WhXc-vrKq9TVm=cfwJUyWaUgY2Vw@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH v1 01/11] landlock: Define access_mask_t to enforce a
- consistent access mask size
-In-Reply-To: <CAHC9VhQEEKGgCn7fYgUt-_WhXc-vrKq9TVm=cfwJUyWaUgY2Vw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        "soc@kernel.org" <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220310195229.109477-1-nick.hawkins@hpe.com>
+ <20220310195229.109477-9-nick.hawkins@hpe.com>
+ <eb66cc83-2da9-8e19-db69-633e34fef946@canonical.com>
+ <PH0PR84MB1718C31DB71AA2A67FEC5F6E88119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <b1cc2566-cd78-7cb4-f8a5-d6fc8065fe6e@canonical.com>
+ <PH0PR84MB1718292B1C11F4FE83326A5388119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <PH0PR84MB1718292B1C11F4FE83326A5388119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 16/03/2022 21:10, Hawkins, Nick wrote:
 
-On 17/03/2022 02:26, Paul Moore wrote:
-> On Mon, Feb 21, 2022 at 4:15 PM Mickaël Salaün <mic@digikod.net> wrote:
->>
->> From: Mickaël Salaün <mic@linux.microsoft.com>
->>
->> Create and use the access_mask_t typedef to enforce a consistent access
->> mask size and uniformly use a 16-bits type.  This will helps transition
->> to a 32-bits value one day.
->>
->> Add a build check to make sure all (filesystem) access rights fit in.
->> This will be extended with a following commit.
->>
->> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
->> Link: https://lore.kernel.org/r/20220221212522.320243-2-mic@digikod.net
->> ---
->>   security/landlock/fs.c      | 19 ++++++++++---------
->>   security/landlock/fs.h      |  2 +-
->>   security/landlock/limits.h  |  2 ++
->>   security/landlock/ruleset.c |  6 ++++--
->>   security/landlock/ruleset.h | 17 +++++++++++++----
->>   5 files changed, 30 insertions(+), 16 deletions(-)
->>
->> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
->> index 97b8e421f617..9de2a460a762 100644
->> --- a/security/landlock/fs.c
->> +++ b/security/landlock/fs.c
->> @@ -150,7 +150,7 @@ static struct landlock_object *get_inode_object(struct inode *const inode)
->>    * @path: Should have been checked by get_path_from_fd().
->>    */
->>   int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
->> -               const struct path *const path, u32 access_rights)
->> +               const struct path *const path, access_mask_t access_rights)
->>   {
->>          int err;
->>          struct landlock_object *object;
->> @@ -182,8 +182,8 @@ int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
->>
->>   static inline u64 unmask_layers(
->>                  const struct landlock_ruleset *const domain,
->> -               const struct path *const path, const u32 access_request,
->> -               u64 layer_mask)
->> +               const struct path *const path,
->> +               const access_mask_t access_request, u64 layer_mask)
->>   {
->>          const struct landlock_rule *rule;
->>          const struct inode *inode;
->> @@ -223,7 +223,8 @@ static inline u64 unmask_layers(
->>   }
->>
->>   static int check_access_path(const struct landlock_ruleset *const domain,
->> -               const struct path *const path, u32 access_request)
->> +               const struct path *const path,
->> +               const access_mask_t access_request)
->>   {
->>          bool allowed = false;
->>          struct path walker_path;
->> @@ -308,7 +309,7 @@ static int check_access_path(const struct landlock_ruleset *const domain,
->>   }
->>
->>   static inline int current_check_access_path(const struct path *const path,
->> -               const u32 access_request)
->> +               const access_mask_t access_request)
->>   {
->>          const struct landlock_ruleset *const dom =
->>                  landlock_get_current_domain();
->> @@ -511,7 +512,7 @@ static int hook_sb_pivotroot(const struct path *const old_path,
->>
->>   /* Path hooks */
->>
->> -static inline u32 get_mode_access(const umode_t mode)
->> +static inline access_mask_t get_mode_access(const umode_t mode)
->>   {
->>          switch (mode & S_IFMT) {
->>          case S_IFLNK:
->> @@ -563,7 +564,7 @@ static int hook_path_link(struct dentry *const old_dentry,
->>                          get_mode_access(d_backing_inode(old_dentry)->i_mode));
->>   }
->>
->> -static inline u32 maybe_remove(const struct dentry *const dentry)
->> +static inline access_mask_t maybe_remove(const struct dentry *const dentry)
->>   {
->>          if (d_is_negative(dentry))
->>                  return 0;
->> @@ -631,9 +632,9 @@ static int hook_path_rmdir(const struct path *const dir,
->>
->>   /* File hooks */
->>
->> -static inline u32 get_file_access(const struct file *const file)
->> +static inline access_mask_t get_file_access(const struct file *const file)
->>   {
->> -       u32 access = 0;
->> +       access_mask_t access = 0;
->>
->>          if (file->f_mode & FMODE_READ) {
->>                  /* A directory can only be opened in read mode. */
->> diff --git a/security/landlock/fs.h b/security/landlock/fs.h
->> index 187284b421c9..74be312aad96 100644
->> --- a/security/landlock/fs.h
->> +++ b/security/landlock/fs.h
->> @@ -65,6 +65,6 @@ static inline struct landlock_superblock_security *landlock_superblock(
->>   __init void landlock_add_fs_hooks(void);
->>
->>   int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
->> -               const struct path *const path, u32 access_hierarchy);
->> +               const struct path *const path, access_mask_t access_hierarchy);
->>
->>   #endif /* _SECURITY_LANDLOCK_FS_H */
->> diff --git a/security/landlock/limits.h b/security/landlock/limits.h
->> index 2a0a1095ee27..458d1de32ed5 100644
->> --- a/security/landlock/limits.h
->> +++ b/security/landlock/limits.h
->> @@ -9,6 +9,7 @@
->>   #ifndef _SECURITY_LANDLOCK_LIMITS_H
->>   #define _SECURITY_LANDLOCK_LIMITS_H
->>
->> +#include <linux/bitops.h>
->>   #include <linux/limits.h>
->>   #include <uapi/linux/landlock.h>
->>
->> @@ -17,5 +18,6 @@
->>
->>   #define LANDLOCK_LAST_ACCESS_FS                LANDLOCK_ACCESS_FS_MAKE_SYM
->>   #define LANDLOCK_MASK_ACCESS_FS                ((LANDLOCK_LAST_ACCESS_FS << 1) - 1)
->> +#define LANDLOCK_NUM_ACCESS_FS         __const_hweight64(LANDLOCK_MASK_ACCESS_FS)
-> 
-> The line above, and the static_assert() in ruleset.h are clever.  I'll
-> admit I didn't even know the hweightX() macros existed until looking
-> at this code :)
-> 
-> However, the LANDLOCK_NUM_ACCESS_FS is never really going to be used
-> outside the static_assert() in ruleset.h is it?  I wonder if it would
-> be better to skip the extra macro and rewrite the static_assert like
-> this:
-> 
-> static_assert(BITS_PER_TYPE(access_mask_t) >=
-> __const_hweight64(LANDLOCK_MASK_ACCESS_FS));
-> 
-> If not, I might suggest changing LANDLOCK_NUM_ACCESS_FS to
-> LANDLOCK_BITS_ACCESS_FS or something similar.
+(...)
 
-I declared LANDLOCK_NUM_ACCESS_FS in this patch to be able to have the 
-static_assert() here and ease the review, but LANDLOCK_NUM_ACCESS_FS is 
-really used in patch 6/11 to define an array size: 
-get_handled_acceses(), init_layer_masks(), is_superset(), 
-check_access_path_dual()…
+>>>>> I think one of previous comments was that you cannot have "generic-ehci"
+>>>>> only, right?
+>>>
+>>> Yes there was, I removed the usb0: ehci@cefe0000. I see now that this is in reference to the compatible. This is our ehci controller. What would be a more appropriate compatible? Do we need hpe,gxp-ehci perhaps?
+> 
+>> Yes,, see other cases in generic-ehci.yaml bindings. Your current choice would be pointed out by dtbs_check, that it's invalid according to current bindings.
+> 
+> For some reason when I compile I am not seeing a warning for that file. I have been using "make dtbs_check" and "make dtbs W=1". Perhaps I am missing an important flag?
+
+My bad, I misread the generic-ehci binding, so your compatible is
+actually correct from bindings point of view. Still common practice is
+to add own compatible which allows later customization.
+
+> In the case of creating a hpe,gxp-ehci binding would I need to add that to the generic-ehci.yaml?
+
+Yes, add your compatible to that big enum with list of many implementations.
+
+(...)
+
+>>>>>>> +
+>>>>>>> +		memclk: memclk {
+>>>>>>> +			compatible = "fixed-clock";
+>>>>>>> +			#clock-cells = <0>>>>;
+>>>>>>> +			clock-output-names = "memclk";
+>>>>>>> +			clock-frequency = <800000000>>>>;
+>>>>>>> +		};
+>>>
+>>>>> What are these clocks? If external to the SoC, then where are they? On the board?
+>>>
+>>> This was the internal iopclk and memclk they were both internal to the chip.
+>>> For now I am removing osc and memclk and will just have an iopclk that Gxp-timer will refer to.
+> 
+>> You should rather have a clock controller driver which defines this (and many others). They can stay as a temporary work-around, if you really need them for some other nodes.
+> 
+> I am trying to picture what you are saying but I am unsure, I know that on a separate review you mentioned that the gxp-timer needed to have clocks, and clock-names inside the node. Would it be improper for the gxp-timer to reference iopclk?
+
+It all depends on the architecture of your SoC. I could imagine such one:
+1. Few external (from SoC point of view) oscillators, usually provided
+on the board. It could be 24 MHz, could be 32767 Hz for Bluetooth etc.
+
+2. One or several clock controllers inside the SoC which take as input
+these external clocks. The clock controller provides clocks for several
+other components/blocks. Allows also gating clocks, reparenting and
+changing dividers (rate).
+
+3. Other blocks within your SoC, e.g. gxp-timer, use these clocks.
+
+The true question is where is that memclk or iopclk generated? Is it
+controllable (gate/mux/rate)? Even some fixed-frequency clocks, coming
+out of that clock controller (point 2.), are defined in the clock
+controller because that's the logical place for them.
 
 
-> 
-> 
->> diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
->> index 2d3ed7ec5a0a..7e7cac68e443 100644
->> --- a/security/landlock/ruleset.h
->> +++ b/security/landlock/ruleset.h
->> @@ -9,13 +9,20 @@
->>   #ifndef _SECURITY_LANDLOCK_RULESET_H
->>   #define _SECURITY_LANDLOCK_RULESET_H
->>
->> +#include <linux/bitops.h>
->> +#include <linux/build_bug.h>
->>   #include <linux/mutex.h>
->>   #include <linux/rbtree.h>
->>   #include <linux/refcount.h>
->>   #include <linux/workqueue.h>
->>
->> +#include "limits.h"
->>   #include "object.h"
->>
->> +typedef u16 access_mask_t;
->> +/* Makes sure all filesystem access rights can be stored. */
->> +static_assert(BITS_PER_TYPE(access_mask_t) >= LANDLOCK_NUM_ACCESS_FS);
-> 
-> --
-> paul-moore.com
+Best regards,
+Krzysztof

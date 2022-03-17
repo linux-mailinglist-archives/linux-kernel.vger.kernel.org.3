@@ -2,93 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687704DD137
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD984DD13A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 00:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiCQXfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 19:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
+        id S230117AbiCQXiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 19:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiCQXft (ORCPT
+        with ESMTP id S229713AbiCQXip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 19:35:49 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACFB221B88
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 16:34:31 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2e5827a76f4so75448697b3.6
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 16:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=L8g8ZPHpuOw5hNHCIMko1gs83so+DUcEbnuxIALJZU0=;
-        b=ZHZptDmZTPut1QUZhu52fuo7JAlpCxItPmTZ0p59DvhnbVdxsGh/2VYaKvjiNluyhW
-         qbr/UH/bOsBcRteO6KCU9kMfPtygGP5prb9tRlNCcSuStucDY+UmKaxjdrvrkwp3J5j4
-         reyVTMVzxGfOGlfZr0XejUnGmWvV1aqLaoS08rwag35iaDPOAKL+Fzo45ydo4moofFec
-         YqMH5RTFhTtalz2kzLDLMb4Y94FeNl/a7FMwUSS2RlxMEF8JLi/JAHtHnbn+hKXqmPoM
-         /7vwRMxBe2PmstjXS/fCWvkZCY7wbdXaI6VBqKLsLDOlh7hk9EY/DNmGTXSx/OA5OdTq
-         YUag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=L8g8ZPHpuOw5hNHCIMko1gs83so+DUcEbnuxIALJZU0=;
-        b=Q0ah2z6c/nILQDilgLIy9SCeKndUVkOa1HmP/F90+UGBxUOnHV7nApApUFzSx4clsP
-         I93c0VDiN7psCE1KER/09/I3hMMUifkzN2JnrHSGZcL3EQkA1BYFQ25Ve+6cAp4WRE92
-         21y7E/2Q5fZmbrDYaKD7IAngE5+b4/KpiywqYSfLpN6qLp0NTOs40gqpyf355NE052CY
-         vFm5dCzPl138aTH9gQrWUDIfVEgIHT/vO+jX5iILAVuZbJ3UGCRV18r4WfeP0kTw/UPB
-         TcmC1FljHlQxnVWVUYWDE/G/tpnNNyd7jSg/KDjGb6AbXugm8ZuPYgXMSWaaqz2Si2YO
-         O/EQ==
-X-Gm-Message-State: AOAM531wHj7ILj+Yay9en9vtVnwOj1e14jJwqG1epglFlR58HU4IFvrS
-        pAjadoQgHAAo02JMTf/kN0FNrYG9UD1gpJ0RZuA=
-X-Google-Smtp-Source: ABdhPJzzzjveZSm9E8aK4hY4Nh3a96o1keqTQMbYEVnPGqrHoxGdfD5+98FqXx88YJciDS62ZzhdDq8jYxyoi5JNDPM=
-X-Received: by 2002:a81:980c:0:b0:2d1:e9f:69e4 with SMTP id
- p12-20020a81980c000000b002d10e9f69e4mr8235344ywg.363.1647560070446; Thu, 17
- Mar 2022 16:34:30 -0700 (PDT)
+        Thu, 17 Mar 2022 19:38:45 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9D22986F6;
+        Thu, 17 Mar 2022 16:37:27 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V7TGI0g_1647560243;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V7TGI0g_1647560243)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 18 Mar 2022 07:37:24 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     dinguyen@kernel.org
+Cc:     bp@alien8.de, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, rric@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] EDAC/altera: Remove unnecessary print function dev_err()
+Date:   Fri, 18 Mar 2022 07:37:22 +0800
+Message-Id: <20220317233722.109036-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Sender: aishagadafi815@gmail.com
-Received: by 2002:a05:7010:4294:b0:239:29a:f60e with HTTP; Thu, 17 Mar 2022
- 16:34:30 -0700 (PDT)
-From:   "MRS. Maya Olivia" <madamisha00@gmail.com>
-Date:   Fri, 18 Mar 2022 00:34:30 +0100
-X-Google-Sender-Auth: otTwoGiQBWxdzUqrvCS9H81dPew
-Message-ID: <CABxt3qcGuXSpWBDyU3YYsZQgc82hFZ10xUqzBB5-pGUHMpkaFw@mail.gmail.com>
-Subject: I want to invest in your country
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,MILLION_HUNDRED,MILLION_USD,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
- Please i need your help
-I am sending my greetings to you from the Sultanate of Oman, In the
-capital city of Muscat.
-May i use this medium to open a mutual communication with you, and
-seeking your acceptance towards investing in your country under your
-management as my partner, My name is Aisha Gaddafi and presently
-living in Oman, i am a Widow and single Mother with three Children,
-the only biological Daughter of late Libyan President (Late Colonel
-Muammar Gaddafi) and presently i am under political asylum protection
-by the Omani Government.
-I have funds worth =E2=80=9CTwenty Seven Million Five Hundred Thousand Unit=
-ed
-State Dollars=E2=80=9D -$27.500.000.00 US Dollars which i want to entrust o=
-n
-you for investment project in your country.If you are willing to
-handle this project on my behalf, kindly reply urgent to enable me
-provide you more details to start the transfer process.
-I shall appreciate your urgent response through my email address
-below: madamgadafiaisha@gmail.com
-Thanks
-Yours Truly Aisha
+The print function dev_err() is redundant because platform_get_irq()
+already prints an error.
+
+Eliminate the follow coccicheck warnings:
+./drivers/edac/altera_edac.c:2153:2-9: line 2153 is redundant because
+platform_get_irq() already prints an error
+./drivers/edac/altera_edac.c:2188:2-9: line 2188 is redundant because
+platform_get_irq() already prints an error
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/edac/altera_edac.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index e7e8e624a436..47dc35938fa8 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -2149,10 +2149,8 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	edac->sb_irq = platform_get_irq(pdev, 0);
+-	if (edac->sb_irq < 0) {
+-		dev_err(&pdev->dev, "No SBERR IRQ resource\n");
++	if (edac->sb_irq < 0)
+ 		return edac->sb_irq;
+-	}
+ 
+ 	irq_set_chained_handler_and_data(edac->sb_irq,
+ 					 altr_edac_a10_irq_handler,
+@@ -2184,10 +2182,8 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
+ 	}
+ #else
+ 	edac->db_irq = platform_get_irq(pdev, 1);
+-	if (edac->db_irq < 0) {
+-		dev_err(&pdev->dev, "No DBERR IRQ resource\n");
++	if (edac->db_irq < 0)
+ 		return edac->db_irq;
+-	}
+ 	irq_set_chained_handler_and_data(edac->db_irq,
+ 					 altr_edac_a10_irq_handler, edac);
+ #endif
+-- 
+2.20.1.7.g153144c
+

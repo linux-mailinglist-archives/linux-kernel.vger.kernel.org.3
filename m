@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCBE4DCFA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4528E4DCFAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiCQUuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
+        id S229914AbiCQUvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 16:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiCQUuQ (ORCPT
+        with ESMTP id S229886AbiCQUvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:50:16 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83671C392B;
-        Thu, 17 Mar 2022 13:48:59 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id t14so3566295pgr.3;
-        Thu, 17 Mar 2022 13:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8yBDL7EAakc//ezwXk8ah3NmVfo+0zdt06qvmpelSDg=;
-        b=iilkIs/Y7o04ZzCcRkJVRH/+ZswTHqd30N2tbeX2C+Fol9ygACjINvzrqVrtKvthQl
-         sPRCQHpqaxFPkeYYX0U/XZcWgMEw6W7ysWdRV6cyLQRxiS/qJ89jmbvmbP+Q4WfhTCG+
-         4zWDRwUGG0ZNP0ZvdlYIHg1HuL9lykpvsAcDw1CzOgh0trFTAVX7NFZck2d4UwKVMhlh
-         gzyuqlkdM+CJzzJiq6FJcMRRna8JIaifsHksFkR9oHj6NMG7pdrU81PRqNt+Xw34Y9JD
-         8Ko221dU74kymQyK9USFEHNYNncGlII/1t6Ea6QXPtGNuZyqUmvS9/L2OpbrycMhF+hx
-         9r+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8yBDL7EAakc//ezwXk8ah3NmVfo+0zdt06qvmpelSDg=;
-        b=yFjk9zPj+C8M8oaRYzQHJosYJStup3O0t2HNzWriXUsdhRaUVEhVw+xmNEhkKExAU/
-         kp2gVC/+cfEjNom1ftcp74CaRqnaR+xFZuVO1V6OF1EDrAobDcfKfw9gZV7syeDI8Epd
-         Rryw/hOCMfbw2fpUAFpp6Gll/c3oRZNZMkUBp9VBxTLrlG08z3Dt1EDtIphlzAiptexx
-         vmxK/DqzbGCn/ZA1aGrp3JpgmkUUnHFFizjNuYflPO1zgn4KKumZbbjCBIAtSgbGUW2z
-         KQkHmY5SssIQDCnD9xwdhkRyG24ZRjLyibtA/EBE+blVNIh8L9hJpYO5zlThBBNNtUJp
-         mcsg==
-X-Gm-Message-State: AOAM532jp+Z9ZDpbwCyhrmJK6ho/3YLfHpbUoXZpxo7TZpmZbZbr+fRQ
-        Yaazkgaoj937RtdzI6x8DW0=
-X-Google-Smtp-Source: ABdhPJzo5YSyqe9WF2d0eKkDmU8zffhV7MydaDoz+/2U1IEwfZ7HaNuC8AnAiiiWW7cKRv5S4CgO0g==
-X-Received: by 2002:a63:f1d:0:b0:381:8478:e9e4 with SMTP id e29-20020a630f1d000000b003818478e9e4mr5239646pgl.240.1647550139178;
-        Thu, 17 Mar 2022 13:48:59 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id g7-20020a656cc7000000b00375948e63d6sm5749235pgw.91.2022.03.17.13.48.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 13:48:58 -0700 (PDT)
-Subject: Re: [PATCH 5.4 00/43] 5.4.186-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220317124527.672236844@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <9cc0730a-5a29-6e3c-1087-ec9c94fedd02@gmail.com>
-Date:   Thu, 17 Mar 2022 13:48:55 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 17 Mar 2022 16:51:14 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A16F1F1D19
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:49:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647550197; x=1679086197;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=OCmJYCFxkrfZnqc0HrsOziL96o+DxlHmBR8ARsJy1Tc=;
+  b=QArZN4kstG1Tk9+DsfqeWeiMECEw8n7qrAwbz98ZywXAyLosaqi8pqJ4
+   lP1SzyxTolR82m0YAu5ZPnS0jwsq2pMAVO/II1dPchxmoMMIysw3rgVfR
+   YLdQCo6IhYP8fdWzc9y4im7xvffE0YRcBnKQKKbStV3S4emryik9ayEIN
+   ZHfxKgRsaHQx1UOWcleFaMjYydRHw/n/Khbw8Dyaq+AJPf/wZE9FnYVCY
+   ZE6HM3RYy9sAiuWqnOhNnA145wnQaGZTsFWcGpytbq/ishLMk1Dg4NyrT
+   52QzT7xR1puMGW2Rb40yDtXn8T81Qxe/OsiAOB28W2FLCnAVdhrZ8FdMn
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="236924706"
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="236924706"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 13:49:56 -0700
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="516919382"
+Received: from dstanfie-mobl2.amr.corp.intel.com (HELO [10.212.178.19]) ([10.212.178.19])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 13:49:56 -0700
+Message-ID: <285cf565-ebf7-8cf5-4e57-2245608e79fb@intel.com>
+Date:   Thu, 17 Mar 2022 13:49:48 -0700
 MIME-Version: 1.0
-In-Reply-To: <20220317124527.672236844@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
 Content-Language: en-US
+To:     Nadav Amit <namit@vmware.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "lkp@lists.01.org" <lkp@lists.01.org>,
+        "lkp@intel.com" <lkp@intel.com>,
+        "ying.huang@intel.com" <ying.huang@intel.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>,
+        "fengwei.yin@intel.com" <fengwei.yin@intel.com>
+References: <20220317090415.GE735@xsang-OptiPlex-9020>
+ <c85ae95a-6603-ca0d-a653-b3f2f7069e20@intel.com>
+ <3B958B13-75F0-4B81-B8CF-99CD140436EB@vmware.com>
+ <96f9b880-876f-bf4d-8eb0-9ae8bbc8df6d@intel.com>
+ <DC37F01B-A80F-4839-B4FB-C21F64943E64@vmware.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [x86/mm/tlb] 6035152d8e: will-it-scale.per_thread_ops -13.2%
+ regression
+In-Reply-To: <DC37F01B-A80F-4839-B4FB-C21F64943E64@vmware.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,33 +75,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/22 5:45 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.186 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 19 Mar 2022 12:45:16 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.186-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On 3/17/22 13:32, Nadav Amit wrote:
+> Can you please clarify how the bot works - did it notice a performance
+> regression and then started bisecting, or did it just check one patch
+> at a time?
 
-There is a build failure with SDEI enable that was reported to the patch
-author in response to patch #18 in this series:
+Oliver can tell us for sure, but it usually finds things by bisecting.
+It will pick an upstream commit and compare it to the latest baseline.
+If it sees a delta it starts bisecting for the triggering commit.
 
-/local/users/fainelli/buildroot/output/arm64/host/bin/aarch64-linux-ld:
-arch/arm64/kernel/entry.o: in function `__sdei_asm_exit_trampoline':
-/local/users/fainelli/buildroot/output/arm64/build/linux-custom/arch/arm64/kernel/entry.S:1352:
-undefined reference to `__sdei_asm_trampoline_next_handler'
-make[2]: *** [Makefile:1100: vmlinux] Error 1
+It isn't a literal 'git bisect', but it's logically similar.
 
--- 
-Florian
+I did ask the 0day folks privately if they had any more performance data
+on that commit: good, bad or neutral.
+
+That commit didn't actually look to me like it was fundamental to
+anything built after it.  It might not revert cleanly, but it doesn't
+look like it would be hard to logically remove.  What other side-effects
+are you worried about?
+
+BTW, there's also a dirt simple hack to do the on_each_cpu_cond_mask()
+without a retpoline:
+
+	if ((cond_func == tlb_is_not_lazy) &&
+            !tlb_is_not_lazy(...))
+		continue;
+
+You can't do that literally in arch-independent code, but you get the point.
+
+I know folks have discussed ways of doing this kind of stuff for other
+high-value indirect calls.  I need to see if there's anything around
+that we could use.

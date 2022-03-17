@@ -2,97 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E204DCFFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C4E4DD00B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 22:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiCQVQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 17:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
+        id S230212AbiCQVTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 17:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiCQVQK (ORCPT
+        with ESMTP id S230135AbiCQVTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 17:16:10 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5A3247C26;
-        Thu, 17 Mar 2022 14:14:52 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKKfK64NNz4xw7;
-        Fri, 18 Mar 2022 08:14:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647551691;
-        bh=MZK+qMZWlkhk6Pszi8zLGu3p8NpkMEGMJLuYRUBSOjU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PEJY4CXHG93LvI4P9n1PN3z5LX5uf9zb548RypM2C7IEwXrjMCSd788YSD/W0sEbH
-         O9gPMAINYA/68YCT7eMReI84ftvpgSky4g5LLtXZG3122ZDZfrkr7Fzq3yZiwPsyTb
-         I77NvCQP8TBopYWpNIvrz3fmj03OC49Xju40vhiPTBnTiTS55JAKxww4853Z98142R
-         fNfkO5j9E7TT1mg8yBOQSkGFOnAtmdMNlGYcnAvM4N2OUFEbaqRMPxSSaePReWcdLO
-         V2aBd6J+OD7FjGj5Q5ZwS5B1uWrY5Frcpoy2WLDpVbvyIeaQNgRzb34sGdS7G2c63c
-         CsQgaUiuH8nXw==
-Date:   Fri, 18 Mar 2022 08:14:48 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Kaixi Fan <fankaixi.li@bytedance.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the bpf-next tree
-Message-ID: <20220318081448.586adc42@canb.auug.org.au>
+        Thu, 17 Mar 2022 17:19:10 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C04B188B;
+        Thu, 17 Mar 2022 14:17:51 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id A46ED1C0B7F; Thu, 17 Mar 2022 22:17:49 +0100 (CET)
+Date:   Thu, 17 Mar 2022 22:17:49 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/23] 5.10.107-rc1 review
+Message-ID: <20220317211749.GA5328@duo.ucw.cz>
+References: <20220317124525.955110315@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SM1ktpCV0NyCJ=79+77cuM7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="45Z9DzgjV8m4Oswq"
+Content-Disposition: inline
+In-Reply-To: <20220317124525.955110315@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/SM1ktpCV0NyCJ=79+77cuM7
-Content-Type: text/plain; charset=US-ASCII
+
+--45Z9DzgjV8m4Oswq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi!
 
-In commit
+> This is the start of the stable review cycle for the 5.10.107 release.
+> There are 23 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-  a50cbac6d81a ("selftests/bpf: Fix tunnel remote IP comments")
+CIP testing did not find any problems here:
 
-Fixes tag
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+5.10.y
 
-  Fixes: 933a741e ("selftests/bpf: bpf tunnel test.")
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
 
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
-
+Best regards,
+                                                                Pavel
 --=20
-Cheers,
-Stephen Rothwell
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
---Sig_/SM1ktpCV0NyCJ=79+77cuM7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--45Z9DzgjV8m4Oswq
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIzpMgACgkQAVBC80lX
-0Gz/4wf+On4vnxj/D2y0yuq4X2GXj7qJSK1hYLct1XPJV8RZnbMuUuN3e98EqcOv
-tGZmE1Ndc3NncRQ/zC6iRVyLZZXibcRdLl5iwyP6xPKtkurts8iaMAVcPdz8AASW
-Vgk+OVMwcPxparEl1DDckmf1OE8HdYFVotYuXVirvFsF6R370IuqZN1DwmG5nNQM
-x8ZgsjAUcvI30gPVy+vTlBWShP2HURFbS3yV56PR3lavYvd4Q7LADO9y2s7JCl4S
-t8FNLrKHN96JuTnrG4orprlgSPONGS+QbFGw55+8txI/A6kWlPgb1hyF1e2f9P4Q
-xF+FVgKcluJb8GhiVaLkRKBcwST8Rw==
-=1Q2P
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYjOlfQAKCRAw5/Bqldv6
+8gIyAJwIAswW9NBOOXTc2QEBU1IFEP6W0gCguWnRHWmE6m645+NerDEH7NulvIw=
+=W0dZ
 -----END PGP SIGNATURE-----
 
---Sig_/SM1ktpCV0NyCJ=79+77cuM7--
+--45Z9DzgjV8m4Oswq--

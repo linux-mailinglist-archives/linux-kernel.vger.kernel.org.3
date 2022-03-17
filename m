@@ -2,135 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4408A4DC2EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A464DC2F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbiCQJf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S231965AbiCQJhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbiCQJfu (ORCPT
+        with ESMTP id S229918AbiCQJhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:35:50 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F32C49690
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:34:34 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KK21v0TQRz9sgy;
-        Thu, 17 Mar 2022 17:30:43 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 17 Mar 2022 17:34:32 +0800
-Subject: Re: [PATCH] mm/mempolicy: fix potential mpol_new leak in
- shared_policy_replace
-To:     Michal Hocko <mhocko@suse.com>
-CC:     <akpm@linux-foundation.org>, <kosaki.motohiro@jp.fujitsu.com>,
-        <mgorman@suse.de>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220311093624.39546-1-linmiaohe@huawei.com>
- <Yi9w7TCYbj+OLGXJ@dhcp22.suse.cz>
- <26577566-ae1e-801c-8c64-89c2c89a487d@huawei.com>
- <YjCwYpTbGzAj9kmg@dhcp22.suse.cz>
- <24b2a9ef-eea0-09bd-6842-121d8436e56a@huawei.com>
- <YjG0PsF25wpAEOY3@dhcp22.suse.cz>
- <6ebebfd6-6356-e956-4fbc-0abaa58308ff@huawei.com>
- <YjL5Y6ZrZ2eLnnTv@dhcp22.suse.cz>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <207bbd69-6678-5120-3760-e2bcd9803a14@huawei.com>
-Date:   Thu, 17 Mar 2022 17:34:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 17 Mar 2022 05:37:05 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA10616BCF7
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:35:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=M1kfGq35Txrk2/WrFn9836CKxulS
+        Oplyo3itJGzIWE4=; b=uXofC98gbVT4ydrsrX5gFPPoKnGP/6ko4aJu+gGeEemb
+        qbvsr3V6SDd1BJ8TfF3i1GnVBm7NbVKI1Ba4uCwoLmaFFUuIWOySo4FvwqyJtJlz
+        Ec0faaMo0ZUwaCmAoGiZUD+sMQLoDRop5iBkWmldGcytdxDM9mhvJD+nM+XZZfg=
+Received: (qmail 3395135 invoked from network); 17 Mar 2022 10:35:45 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Mar 2022 10:35:45 +0100
+X-UD-Smtp-Session: l3s3148p1@OP0ewWbaYs0gAQnoAEd5ADwsgXkBgqk7
+Date:   Thu, 17 Mar 2022 10:35:45 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>, Lad@rox.of.borg,
+        Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        linux-renesas-soc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] memory: renesas-rpc-if: Fix HF/OSPI data transfer in
+ Manual mode
+Message-ID: <YjMA8TuXWj3HvQkD@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>, Lad@rox.of.borg,
+        Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        linux-renesas-soc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <27107f2d578b198078df841ee2e4d7b71b183898.1647017136.git.geert+renesas@glider.be>
+ <31a776ed-3371-55d6-747b-8e70e72619d7@canonical.com>
 MIME-Version: 1.0
-In-Reply-To: <YjL5Y6ZrZ2eLnnTv@dhcp22.suse.cz>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ncIMMMuhdN5FBkyZ"
+Content-Disposition: inline
+In-Reply-To: <31a776ed-3371-55d6-747b-8e70e72619d7@canonical.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/17 17:03, Michal Hocko wrote:
-> On Thu 17-03-22 10:05:08, Miaohe Lin wrote:
->> On 2022/3/16 17:56, Michal Hocko wrote:
->>> On Wed 16-03-22 14:39:37, Miaohe Lin wrote:
->>>> On 2022/3/15 23:27, Michal Hocko wrote:
->>>>> On Tue 15-03-22 21:42:29, Miaohe Lin wrote:
->>>>>> On 2022/3/15 0:44, Michal Hocko wrote:
->>>>>>> On Fri 11-03-22 17:36:24, Miaohe Lin wrote:
->>>>>>>> If mpol_new is allocated but not used in restart loop, mpol_new will be
->>>>>>>> freed via mpol_put before returning to the caller. But refcnt is not
->>>>>>>> initialized yet, so mpol_put could not do the right things and might
->>>>>>>> leak the unused mpol_new.
->>>>>>>
->>>>>>> The code is really hideous but is there really any bug there? AFAICS the
->>>>>>> new policy is only allocated in if (n->end > end) branch and that one
->>>>>>> will set the reference count on the retry. Or am I missing something?
->>>>>>>
->>>>>>
->>>>>> Many thanks for your comment.
->>>>>> IIUC, new policy is allocated via the below code:
->>>>>>
->>>>>> shared_policy_replace:
->>>>>> 	alloc_new:
->>>>>> 		write_unlock(&sp->lock);
->>>>>> 		ret = -ENOMEM;
->>>>>> 		n_new = kmem_cache_alloc(sn_cache, GFP_KERNEL);
->>>>>> 		if (!n_new)
->>>>>> 			goto err_out;
->>>>>> 		mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
->>>>>> 		if (!mpol_new)
->>>>>> 			goto err_out;
->>>>>> 		goto restart;
->>>>>>
->>>>>> And mpol_new' reference count will be set before used in n->end > end case. But
->>>>>> if that is "not" the case, i.e. mpol_new is not inserted into the rb_tree, mpol_new
->>>>>> will be freed via mpol_put before return:
->>>>>
->>>>> One thing I have missed previously is that the lock is dropped during
->>>>> the allocation so I guess the memory policy could have been changed
->>>>> during that time. Is this possible? Have you explored this possibility?
->>>>> Is this a theoretical problem or it can be triggered intentionally.
->>>>>
->>>>
->>>> This is found via code investigation. I think this could be triggered if there
->>>> are many concurrent mpol_set_shared_policy in place. But the user-visible effect
->>>> might be obscure as only sizeof(struct mempolicy) bytes leaks possiblely every time.
->>>>
->>>>> These details would be really interesting for the changelog so that we
->>>>> can judge how important this would be.
->>>>
->>>> This might not be that important as this issue should have been well-concealed for
->>>> almost ten years (since commit 42288fe366c4 ("mm: mempolicy: Convert shared_policy mutex to spinlock")).
->>>
->>> I think it is really worth to drill down to the bottom of the issue.
->>> While theoretically possible can be a good enough to justify the change
->>> it is usually preferred to describe the underlying problem for future
->>> maintainability. 
->>
->> This issue mainly causes mpol_new memory leaks and this is pointed out in the commit log.
->> Am I supposed to do something more to move forward this patch ? Could you point that out
->> for me?
-> 
-> Sorry if I was not really clear. My main request is to have a clear
-> insight whether this is a theretical issue or the leak could be really
-> triggered. If the later we need to mark it properly and backport to
-> older kernels because memory leaks can lead to DoS when they are
-> reasonably easy to trigger.
-> 
-> Is this more clear now?
 
-I see. Many thanks. I would have a try to trigger this. :)
+--ncIMMMuhdN5FBkyZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
 
+> Some reviews and tests will be useful. Anyway it's too late upcoming
+> cycle, so I will pick it up after merge window.
+
+We just discussed on IRC a better solution. So expect a new patch for
+this issue. Thanks!
+
+
+--ncIMMMuhdN5FBkyZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIzAO0ACgkQFA3kzBSg
+KbZeSQ/+MMP9kyqwgaotyBIzZLr6O0gU5dbxHE74xNpiw7rr5PZ9YUswaMGLygJV
+BVmc3GfYxm7acBfKA7voUvAVPsLx0p06kTutWWZ8xiFoRsm/3a/v+r81jl9n2atY
+B91VTUco3ZXhYRyiNWoy7ChIHf+/XUzeookt/+CTnMvirTeUprLcESyJ3+X+KwfC
+/L3kBy1MrrBVLImocz8xhHo6YmiNupujT5kmFqskkPdAnbYkQKXXuGKFQ2Ff6hc/
+4DxCCinV1dc8RjvYhLNHFyhdXPZ+wz6FX+mhhoXgddyzx2y2QnSyeQtfTjK0e41b
+23yritvWTnHgmvjjf8lZs5sExsOx8zUS9QRyUvLQciL+7MzqPAyzZ9LuzT8rLG3M
+L5Zt/aLUIuSBU7AiVs/JS4+83n4PqOBCObb1xalSFI4kq7Bk7yDOXMGBUMQhPLF5
+3iVKR/+4mlrAlRb967YwN6bn/SNFGMLfQ1QH456X6QLpORxfXY3Lu7b1hDANTbrV
+D66nO/3PPwn/u6fGEnLeA2o4c06vsaVegYZzUe/5kd74OHxBA6XNLV7j7JqFe1ZS
+3O7usINcPdSM+Fe5GIBN61CCLfnUwvP+kSjTJHdpwHoY9HEi2IImKIGdeEHGNlg2
+3xRFm/dTmKsm2IckwBInpvo9ldoTUKR8RxoHJ+xGoMemBVKjLE8=
+=nfHW
+-----END PGP SIGNATURE-----
+
+--ncIMMMuhdN5FBkyZ--

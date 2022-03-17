@@ -2,68 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68ECE4DC3A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71C34DC3B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbiCQKJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 06:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
+        id S232394AbiCQKL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 06:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbiCQKJv (ORCPT
+        with ESMTP id S232358AbiCQKL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 06:09:51 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144F6B91A6;
-        Thu, 17 Mar 2022 03:08:34 -0700 (PDT)
-X-UUID: fbd5deff4e8f4ca2b59f2fd6a870e4b1-20220317
-X-UUID: fbd5deff4e8f4ca2b59f2fd6a870e4b1-20220317
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 354121972; Thu, 17 Mar 2022 18:08:28 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 17 Mar 2022 18:08:27 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 17 Mar
- 2022 18:08:27 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 17 Mar 2022 18:08:25 +0800
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Axe Yang <axe.yang@mediatek.com>, Lucas Stach <dev@lynxeye.de>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Yong Mao <yong.mao@mediatek.com>
-Subject: [PATCH 3/3] mmc: mediatek: add support for SDIO eint wakup IRQ
-Date:   Thu, 17 Mar 2022 18:08:18 +0800
-Message-ID: <20220317100818.24908-4-axe.yang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220317100818.24908-1-axe.yang@mediatek.com>
-References: <20220317100818.24908-1-axe.yang@mediatek.com>
+        Thu, 17 Mar 2022 06:11:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C64BF530;
+        Thu, 17 Mar 2022 03:10:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA722617BF;
+        Thu, 17 Mar 2022 10:10:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 518D7C340EC;
+        Thu, 17 Mar 2022 10:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647511810;
+        bh=BoXZ3Qb0hXldnHMBdCH4nRaa+Krj4pfwocF1BjxbIfI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=E0hMCPrujEK9JWBqxeAno4lCOTIq2bZfpjjrHzcewk5VmpQjZJisjRSih5Z0E3xks
+         TIM73rtATl9aoF26ppap9ILNcMGteJWFr+4rdKWBGkkwO4LTv4uu08zVDu9RmxG2qw
+         BuK6ZVFddooKfG3Rr53bpADz57J89oMnX2qL2EyzTivegS6nUCCvpDbahdf9Q4Zzls
+         ++3JagNxxqbmBDt2fSfLKbm4KLT+GtMj9RJspxQQhEcyGijTljSq/JcCdanKMs1BsX
+         mimyKGhlD1X8eI/A0FKOQGmjwes5XVycQsKNukYhvbGK2OVO7QOTxZcyKk88tTiQqT
+         eRks4aTEqvUoA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 34905F03841;
+        Thu, 17 Mar 2022 10:10:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v4 0/2] net: mvneta: Armada 98DX2530 SoC
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164751181021.10384.6185526581828131470.git-patchwork-notify@kernel.org>
+Date:   Thu, 17 Mar 2022 10:10:10 +0000
+References: <20220315215207.2746793-1-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20220315215207.2746793-1-chris.packham@alliedtelesis.co.nz>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        thomas.petazzoni@bootlin.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,240 +58,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for eint IRQ when MSDC is used as an SDIO host. This
-feature requires SDIO device support async IRQ function. With this
-feature, SDIO host can be awakened by SDIO card in suspend state,
-without additional pin.
+Hello:
 
-MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
-turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
-resume, switch GPIO function back to DAT1 mode then turn on clock.
+This series was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Some device tree property should be added or modified in MSDC node
-to support SDIO eint IRQ. Pinctrls named "state_dat1" and "state_eint"
-are mandatory. Since this feature depends on asynchronous interrupts,
-"wakeup-source", "keep-power-in-suspend" and "cap-sdio-irq" flags are
-necessary, and the interrupts list should be extended:
-        &mmcX {
-		...
-		interrupts-extended = <...>,
-                              	      <&pio xxx IRQ_TYPE_LEVEL_LOW>;
-                ...
-                pinctrl-names = "default", "state_uhs", "state_eint",
-                                "state_dat1";
-                ...
-                pinctrl-2 = <&mmc2_pins_eint>;
-                pinctrl-3 = <&mmc2_pins_dat1>;
-                ...
-                cap-sdio-irq;
-		keep-power-in-suspend;
-		wakeup-source;
-                ...
-        };
+On Wed, 16 Mar 2022 10:52:05 +1300 you wrote:
+> This is split off from [1] to let it go in via net-next rather than waiting for
+> the rest of the series to land.
+> 
+> [1] - https://lore.kernel.org/lkml/20220314213143.2404162-1-chris.packham@alliedtelesis.co.nz/
+> 
+> Chris Packham (2):
+>   dt-bindings: net: mvneta: Add marvell,armada-ac5-neta
+>   net: mvneta: Add support for 98DX2530 Ethernet port
+> 
+> [...]
 
-Co-developed-by: Yong Mao <yong.mao@mediatek.com>
-Signed-off-by: Yong Mao <yong.mao@mediatek.com>
-Signed-off-by: Axe Yang <axe.yang@mediatek.com>
-Change-Id: I191cd046b500beecb0eb09763648bdebd3365a4a
----
- drivers/mmc/host/mtk-sd.c | 100 +++++++++++++++++++++++++++++++++++---
- 1 file changed, 92 insertions(+), 8 deletions(-)
+Here is the summary with links:
+  - [net-next,v4,1/2] dt-bindings: net: mvneta: Add marvell,armada-ac5-neta
+    https://git.kernel.org/netdev/net-next/c/270a95966881
+  - [net-next,v4,2/2] net: mvneta: Add support for 98DX2530 Ethernet port
+    https://git.kernel.org/netdev/net-next/c/2d2a514c1d61
 
-diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 65037e1d7723..8560d040bacb 100644
---- a/drivers/mmc/host/mtk-sd.c
-+++ b/drivers/mmc/host/mtk-sd.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2014-2015 MediaTek Inc.
-+ * Copyright (c) 2014-2015, 2022 MediaTek Inc.
-  * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
-  */
- 
-@@ -20,6 +20,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
-+#include <linux/pm_wakeirq.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
-@@ -440,8 +441,12 @@ struct msdc_host {
- 	struct pinctrl *pinctrl;
- 	struct pinctrl_state *pins_default;
- 	struct pinctrl_state *pins_uhs;
-+	struct pinctrl_state *pins_eint;
-+	struct pinctrl_state *pins_dat1;
- 	struct delayed_work req_timeout;
- 	int irq;		/* host interrupt */
-+	int eint_irq;		/* interrupt from sdio device for waking up system */
-+	int sdio_wake_irq_depth;
- 	struct reset_control *reset;
- 
- 	struct clk *src_clk;	/* msdc source clock */
-@@ -465,6 +470,7 @@ struct msdc_host {
- 	bool hs400_tuning;	/* hs400 mode online tuning */
- 	bool internal_cd;	/* Use internal card-detect logic */
- 	bool cqhci;		/* support eMMC hw cmdq */
-+	bool sdio_eint_ready;	/* Ready to support SDIO eint interrupt */
- 	struct msdc_save_para save_para; /* used when gate HCLK */
- 	struct msdc_tune_para def_tune_para; /* default tune setting */
- 	struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
-@@ -1527,10 +1533,12 @@ static void msdc_enable_sdio_irq(struct mmc_host *mmc, int enb)
- 	__msdc_enable_sdio_irq(host, enb);
- 	spin_unlock_irqrestore(&host->lock, flags);
- 
--	if (enb)
--		pm_runtime_get_noresume(host->dev);
--	else
--		pm_runtime_put_noidle(host->dev);
-+	if (mmc->card && !mmc_card_enable_async_irq(mmc->card)) {
-+		if (enb)
-+			pm_runtime_get_noresume(host->dev);
-+		else
-+			pm_runtime_put_noidle(host->dev);
-+	}
- }
- 
- static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32 intsts)
-@@ -2631,6 +2639,23 @@ static int msdc_drv_probe(struct platform_device *pdev)
- 		goto host_free;
- 	}
- 
-+	/* Support for SDIO eint irq ? */
-+	if (mmc->pm_caps & MMC_PM_WAKE_SDIO_IRQ) {
-+		host->pins_eint = pinctrl_lookup_state(host->pinctrl, "state_eint");
-+		if (IS_ERR(host->pins_eint)) {
-+			dev_dbg(&pdev->dev, "Cannot find pinctrl eint!\n");
-+		} else {
-+			host->pins_dat1 = pinctrl_lookup_state(host->pinctrl, "state_dat1");
-+			if (IS_ERR(host->pins_dat1)) {
-+				ret = dev_err_probe(&pdev->dev, PTR_ERR(host->pins_dat1),
-+						    "Cannot find pinctrl dat1!\n");
-+				goto host_free;
-+			}
-+
-+			host->sdio_eint_ready = true;
-+		}
-+	}
-+
- 	msdc_of_property_parse(pdev, host);
- 
- 	host->dev = &pdev->dev;
-@@ -2722,6 +2747,21 @@ static int msdc_drv_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto release;
- 
-+	if (host->sdio_eint_ready) {
-+		host->eint_irq = irq_of_parse_and_map(host->dev->of_node, 1);
-+		ret = host->eint_irq ? dev_pm_set_dedicated_wake_irq(host->dev, host->eint_irq) :
-+		      -ENODEV;
-+
-+		if (ret) {
-+			dev_err(host->dev, "Failed to register data1 eint irq!\n");
-+			goto release;
-+		}
-+
-+		dev_pm_disable_wake_irq(host->dev);
-+		pinctrl_select_state(host->pinctrl, host->pins_dat1);
-+	}
-+
-+	device_init_wakeup(host->dev, true);
- 	pm_runtime_set_active(host->dev);
- 	pm_runtime_set_autosuspend_delay(host->dev, MTK_MMC_AUTOSUSPEND_DELAY);
- 	pm_runtime_use_autosuspend(host->dev);
-@@ -2734,6 +2774,7 @@ static int msdc_drv_probe(struct platform_device *pdev)
- 	return 0;
- end:
- 	pm_runtime_disable(host->dev);
-+	dev_pm_clear_wake_irq(host->dev);
- release:
- 	platform_set_drvdata(pdev, NULL);
- 	msdc_deinit_hw(host);
-@@ -2845,6 +2886,16 @@ static int __maybe_unused msdc_runtime_suspend(struct device *dev)
- 	struct msdc_host *host = mmc_priv(mmc);
- 
- 	msdc_save_reg(host);
-+
-+	if (host->sdio_eint_ready) {
-+		disable_irq(host->irq);
-+		pinctrl_select_state(host->pinctrl, host->pins_eint);
-+		if (host->sdio_wake_irq_depth == 0) {
-+			dev_pm_enable_wake_irq(dev);
-+			host->sdio_wake_irq_depth++;
-+		}
-+		sdr_clr_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
-+	}
- 	msdc_gate_clock(host);
- 	return 0;
- }
-@@ -2860,12 +2911,25 @@ static int __maybe_unused msdc_runtime_resume(struct device *dev)
- 		return ret;
- 
- 	msdc_restore_reg(host);
-+
-+	if (host->sdio_eint_ready) {
-+		if (host->sdio_wake_irq_depth > 0) {
-+			dev_pm_disable_wake_irq(dev);
-+			host->sdio_wake_irq_depth--;
-+			sdr_set_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
-+		} else {
-+			sdr_clr_bits(host->base + MSDC_INTEN, MSDC_INTEN_SDIOIRQ);
-+		}
-+		pinctrl_select_state(host->pinctrl, host->pins_dat1);
-+		enable_irq(host->irq);
-+	}
- 	return 0;
- }
- 
--static int __maybe_unused msdc_suspend(struct device *dev)
-+static int __maybe_unused msdc_suspend_noirq(struct device *dev)
- {
- 	struct mmc_host *mmc = dev_get_drvdata(dev);
-+	struct msdc_host *host = mmc_priv(mmc);
- 	int ret;
- 
- 	if (mmc->caps2 & MMC_CAP2_CQE) {
-@@ -2874,16 +2938,36 @@ static int __maybe_unused msdc_suspend(struct device *dev)
- 			return ret;
- 	}
- 
-+	if (host->sdio_eint_ready)
-+		enable_irq_wake(host->eint_irq);
-+
- 	return pm_runtime_force_suspend(dev);
- }
- 
--static int __maybe_unused msdc_resume(struct device *dev)
-+static int __maybe_unused msdc_resume_noirq(struct device *dev)
- {
-+	struct mmc_host *mmc = dev_get_drvdata(dev);
-+	struct msdc_host *host = mmc_priv(mmc);
-+
-+	if (host->sdio_eint_ready) {
-+		disable_irq_wake(host->eint_irq);
-+
-+		/*
-+		 * In noirq resume stage, msdc_runtime_resume()
-+		 * won't be called, so disalbe wake irq here
-+		 * to block dedicated wake irq handler callback.
-+		 */
-+		if (likely(host->sdio_wake_irq_depth > 0)) {
-+			dev_pm_disable_wake_irq(dev);
-+			host->sdio_wake_irq_depth--;
-+		}
-+	}
-+
- 	return pm_runtime_force_resume(dev);
- }
- 
- static const struct dev_pm_ops msdc_dev_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(msdc_suspend, msdc_resume)
-+	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(msdc_suspend_noirq, msdc_resume_noirq)
- 	SET_RUNTIME_PM_OPS(msdc_runtime_suspend, msdc_runtime_resume, NULL)
- };
- 
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

@@ -2,61 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86284DCF3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A4B4DCF39
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiCQUXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S229605AbiCQUXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 16:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiCQUXl (ORCPT
+        with ESMTP id S229585AbiCQUXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:23:41 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5E61427F9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:22:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5ynJ63fuZlq/Q/DDYvx8FSGQPk2RfeTabFUx6AZiQ6A=; b=mouiyjq2GiFti606CpaZKdD/0+
-        amvlNWrtul5jE5roZSSspQgi8ps/wFB7OWZH1ZGFnIpe1l9LHIZ9dccSoCU9d15wrN+0OQY85PQQd
-        nfZTpXjSAZhlIdI/LNINaj6EJ5594cMP5K3xWtN7mTCv4HnEGsolNOxeXanSi5xYdPeQCj70SzPXr
-        TJJsMmSXvJ0xR4pGuh7stiwxiYKvSyjLasTPNGfz3KW47KLVlu4dTsiNeoO142dIlpWMzxSG4XxQH
-        QIHhB3cG64FBCt4qkIv7Du2kLwkYdXi0AaAXqahgxASeuqNoWNrWS9/grH4h3+wD8xkqtQCMoRrBo
-        bT0gBf0A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nUwcw-001zQw-1N; Thu, 17 Mar 2022 20:21:42 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6E04D9882B3; Thu, 17 Mar 2022 21:21:41 +0100 (CET)
-Date:   Thu, 17 Mar 2022 21:21:41 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@intel.com, luto@kernel.org,
+        Thu, 17 Mar 2022 16:23:01 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF58E13BAE3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:21:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647548504; x=1679084504;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5r+UM7uGE8iSy2g3vezLNOSUEun6kfdmzTbiW3xpeuo=;
+  b=A/zpUHFnh3yDslfgo63fvecYvvgDTQFDtApURKOI1WEZxpxvHpRSZent
+   6A9RX8xNrdLklKeAY07Gl5LxPtHM9BHZVpkExjufqrv6YmxZSEez+CKKt
+   SNQdivLCD4isjEI7ErKv29iKdzRsGW55L04kly2jqiEjOib3xfOkXINWZ
+   O6uL5RI24L7flqXRlYLQqw0IhicgJjFu32kAEV2ZyLwAWgCvW7bo3iHNe
+   4D+Mv7Lhxmi8pypHfvDLS8BnvFNtLH1dhlVsWJgFcMW2SgwGE6gkfGlhG
+   S5x9FMKEtRFg1YSPujNOZ/X7uMvv3ojrnBusZGgz4PFWrOkoSLx3siH1/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="236919352"
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="236919352"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 13:21:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="498972946"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 17 Mar 2022 13:21:36 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 30489107; Thu, 17 Mar 2022 22:21:55 +0200 (EET)
+Date:   Thu, 17 Mar 2022 23:21:55 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Boris Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, dave.hansen@intel.com, mingo@redhat.com,
+        luto@kernel.org, peterz@infradead.org,
         sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
+        brijesh.singh@amd.com, ak@linux.intel.com, david@redhat.com,
+        dan.j.williams@intel.com, wanpengli@tencent.com, jgross@suse.com,
+        linux-kernel@vger.kernel.org, hpa@zytor.com, jmattson@google.com,
+        pbonzini@redhat.com, seanjc@google.com, jpoimboe@redhat.com,
+        vkuznets@redhat.com, joro@8bytes.org, thomas.lendacky@amd.com,
+        sdeep@vmware.com, x86@kernel.org, knsathya@kernel.org,
         Sean Christopherson <sean.j.christopherson@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCHv6 07/30] x86/traps: Add #VE support for TDX guest
-Message-ID: <20220317202141.GO8939@worktop.programming.kicks-ass.net>
+        tony.luck@intel.com
+Subject: Re: [PATCHv6 20/30] x86/boot: Add a trampoline for booting APs via
+ firmware handoff
+Message-ID: <20220317202155.aurobskmy3v57nse@black.fi.intel.com>
 References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
- <20220316020856.24435-8-kirill.shutemov@linux.intel.com>
- <877d8t2ykp.ffs@tglx>
- <20220317173354.rqymufl37lcrtmjh@black.fi.intel.com>
+ <20220316020856.24435-21-kirill.shutemov@linux.intel.com>
+ <3D4C3388-DC6A-41A5-A79F-B23FBFFE4E0F@alien8.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220317173354.rqymufl37lcrtmjh@black.fi.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <3D4C3388-DC6A-41A5-A79F-B23FBFFE4E0F@alien8.de>
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,33 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 08:33:54PM +0300, Kirill A. Shutemov wrote:
+On Thu, Mar 17, 2022 at 12:44:42PM +0000, Boris Petkov wrote:
+> On March 16, 2022 2:08:46 AM UTC, "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com> wrote:
+> >diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
+> >index 48067af94678..35006e151774 100644
+> >--- a/arch/x86/include/asm/apic.h
+> >+++ b/arch/x86/include/asm/apic.h
+> >@@ -328,6 +328,8 @@ struct apic {
+> > 
+> > 	/* wakeup_secondary_cpu */
+> > 	int	(*wakeup_secondary_cpu)(int apicid, unsigned long start_eip);
+> >+	/* wakeup secondary CPU using 64-bit wakeup point */
+> >+	int	(*wakeup_secondary_cpu_64)(int apicid, unsigned long start_eip);
+> > 
+> > 	void	(*inquire_remote_apic)(int apicid);
+> > 
+> >diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
+> >index 331474b150f1..fd6f6e5b755a 100644
+> >--- a/arch/x86/include/asm/realmode.h
+> >+++ b/arch/x86/include/asm/realmode.h
+> >@@ -25,6 +25,7 @@ struct real_mode_header {
+> > 	u32	sev_es_trampoline_start;
+> > #endif
+> > #ifdef CONFIG_X86_64
+> >+	u32	trampoline_start64;
+> 
+> I had already asked about those here: why do you need to add a new u32 here and can't use trampoline_start?
+> 
+> Ditto for the new function pointer too.
+> 
+> And yes, sev_es_trampoline_start is superfluous too.
 
-> [ Disclaimer: I have limited understanding of the entry code complexity
->   and may miss some crucial details. But I try my best. ]
-> 
-> Yes, it is the same comment, but it is based on code audit, not only on
-> testing.
-> 
-> I claim that kernel does not do anything that can possibly trigger #VE
-> where kernel cannot deal with it:
-> 
->  - on syscall entry code before kernel stack is set up (few instructions
->    in the beginning of entry_SYSCALL_64())
-> 
->  - in NMI entry code (asm_exc_nmi()) before NMI nesting is safe:
->    + for NMI from user mode, before switched to thread stack
->    + for NMI from kernel, up to end_repead_nmi
-> 
-> After that points #VE is safe.
+As I said[1], I'm confused by the request. These field initialized at
+build time. I don't see how a single field would work.
 
-In what way is it guaranteed that #VE isn't raised in those places? What
-does an auditor / future coder looking to changes things, need to
-consider to keep this so.
+[1] https://lore.kernel.org/all/20220216141009.ymmjduf5doqnhnqy@black.fi.intel.com/
 
-From vague memories #VE can be raised on any memop, loading the stack
-address in the syscall-gap is a memop. What makes that special? Can we
-get a comment _there_ to explain how this is safe such that we can keep
-it so?
-
-Same for the NMI path I suppose.
+-- 
+ Kirill A. Shutemov

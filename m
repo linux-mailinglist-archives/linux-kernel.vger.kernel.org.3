@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93EF4DD0A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 909D64DD0A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 23:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiCQWW2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 17 Mar 2022 18:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
+        id S229713AbiCQWYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 18:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiCQWW0 (ORCPT
+        with ESMTP id S229469AbiCQWYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 18:22:26 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDC8B18DA83
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:21:07 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-44-hg7KCkJuOi-vtTRWngsi6g-1; Thu, 17 Mar 2022 22:21:04 +0000
-X-MC-Unique: hg7KCkJuOi-vtTRWngsi6g-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Thu, 17 Mar 2022 22:21:03 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Thu, 17 Mar 2022 22:21:03 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Thomas Gleixner' <tglx@linutronix.de>,
-        Pavel Machek <pavel@denx.de>, "Tony Luck" <tony.luck@intel.com>
-CC:     Fenghua Yu <fenghua.yu@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: RE: [PATCH v2 1/2] x86/split_lock: Make life miserable for split
- lockers
-Thread-Topic: [PATCH v2 1/2] x86/split_lock: Make life miserable for split
- lockers
-Thread-Index: AQHYOinRp0NJ20rcrEGwBVQASAIHFKzEJTxA
-Date:   Thu, 17 Mar 2022 22:21:03 +0000
-Message-ID: <e2baf93885684512b4c7dc5363620a6f@AcuMS.aculab.com>
-References: <20220217012721.9694-1-tony.luck@intel.com>
- <20220310204854.31752-1-tony.luck@intel.com>
- <20220310204854.31752-2-tony.luck@intel.com> <20220317111305.GB2237@amd>
- <87fsngcv25.ffs@tglx>
-In-Reply-To: <87fsngcv25.ffs@tglx>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 17 Mar 2022 18:24:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E43F3252
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647555779;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sv3UUAVB2KPZ5L0mxg1wFQw0ov6G6R3jsnNctmpYwvw=;
+        b=U+9b2E5Hz2Uvl2zqJc+TZl2EzQIrOszHXDCUIXj55B9j3qQIl6J1RKOUOShjQfSFYOV7jK
+        MDT6Lxl6j/iCgcP06uoTSNzmTpOsygMg7B1RdMse9OlVzGg3GwLBR7+L+/MUaaMx1p8srm
+        YcKQ++C17dfMnuCa1WfS5b7KQcGU7Vs=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-461-bLuSU7yUO3iQoBArJLjhsg-1; Thu, 17 Mar 2022 18:22:58 -0400
+X-MC-Unique: bLuSU7yUO3iQoBArJLjhsg-1
+Received: by mail-qt1-f198.google.com with SMTP id t19-20020ac86a13000000b002e1fd2c4ce5so1381404qtr.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 15:22:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Sv3UUAVB2KPZ5L0mxg1wFQw0ov6G6R3jsnNctmpYwvw=;
+        b=2XWL2vfHvjzhJs1NAzJ/ixajZ/bHgErsOSo6euotH4weY5ajmIFwJHC07X0PD1UsKr
+         oH/tNGkZqAfd0wKT0Jd9AvfgVpzbemRAONnbgz/Y/MZrBf6mTI4+jWWpnmgS+x9dggk3
+         TjVoGcPj7Ga+yLqbIRbVYkfv28Aoe7TMW3RRsWDRGMVqAlhlrV88VX29/JIvqDXV5XkR
+         JSdd9bhaxwZMAsYz9RnyH1n9k9sRa0N6R6B1AvjppYiTUL9iwvH2yYOTFSnUSaXoFV8j
+         D5N75Teu82T91xBMrDAoO4mwVxJka/FdeU6i6Q/76Vop8BLNmhXJwcfqJY9syTMAmEtD
+         BQwA==
+X-Gm-Message-State: AOAM532zZT92xPkIKns4TA9mzsayvBbkDfUkURdV63Z6XpXgYt/H7Cj2
+        t0u9htxww4ERdVw7+prGv5JL4+OQD7FOJL/hOD93JzXN2Utac6YwSbDTzRQerH/tOi8QX3SJ0ig
+        qJKNDlKCGzq8KYloLClEYBgCP
+X-Received: by 2002:a05:620a:2481:b0:67b:39ef:b3eb with SMTP id i1-20020a05620a248100b0067b39efb3ebmr4245601qkn.188.1647555778245;
+        Thu, 17 Mar 2022 15:22:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzB5EHpzybgcaF3fhLBPNrQL4vv70Dh880xKSomJoQSZ34rgt+KARoQMjBGMUhTqVX0eNgzUA==
+X-Received: by 2002:a05:620a:2481:b0:67b:39ef:b3eb with SMTP id i1-20020a05620a248100b0067b39efb3ebmr4245596qkn.188.1647555778037;
+        Thu, 17 Mar 2022 15:22:58 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id h2-20020ac85842000000b002e1ec550506sm3755079qth.87.2022.03.17.15.22.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 15:22:57 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 15:22:54 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tip-commits@vger.kernel.org" 
+        <linux-tip-commits@vger.kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [tip: x86/core] objtool: Find unused ENDBR instructions
+Message-ID: <20220317222254.lm2f2337jejcf3uu@treble>
+References: <20220308154319.763643193@infradead.org>
+ <164734101940.16921.11639161864874862247.tip-bot2@tip-bot2>
+ <a5fa50d9f00542de8a6ad7a3fe0c49b3@AcuMS.aculab.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a5fa50d9f00542de8a6ad7a3fe0c49b3@AcuMS.aculab.com>
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,65 +81,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner
-> Sent: 17 March 2022 18:07
+On Tue, Mar 15, 2022 at 03:39:52PM +0000, David Laight wrote:
+> From: Peter Zijlstra
+> > 
+> > objtool: Find unused ENDBR instructions
+> > 
+> > Find all ENDBR instructions which are never referenced and stick them
+> > in a section such that the kernel can poison them, sealing the
+> > functions from ever being an indirect call target.
 > 
-> On Thu, Mar 17 2022 at 12:13, Pavel Machek wrote:
-> >> In https://lore.kernel.org/all/87y22uujkm.ffs@tglx/ Thomas
-> >> said:
-> >>
-> >>   Its's simply wishful thinking that stuff gets fixed because of a
-> >>   WARN_ONCE(). This has never worked. The only thing which works is to
-> >>   make stuff fail hard or slow it down in a way which makes it annoying
-> >>   enough to users to complain.
-> >>
-> >> He was talking about WBINVD. But it made me think about how we
-> >> use the split lock detection feature in Linux.
-> >>
-> >> Existing code has three options for applications:
-> >> 1) Don't enable split lock detection (allow arbitrary split locks)
-> >> 2) Warn once when a process uses split lock, but let the process
-> >>    keep running with split lock detection disabled
-> >> 3) Kill process that use split locks
-> >
-> > I'm not sure what split locks are, and if you want applications to
-> > stop doing that maybe documentation would help.
-> 
-> Split locks are lock prefixed operations which cross a cache line
-> boundary. The way how they are implemented is taking the bus lock, which
-> is the largest serialization hammer.
-> 
-> Bus locks are also triggered by lock prefixed operations on uncached
-> memory and on MMIO.
-> 
-> > Anyway, you can't really introduce regressions to userspace to "get
-> > stuff fixed" in applications.
-> 
-> Split locks can be triggered by unpriviledged user space and can be used
-> to run a local DoS attack. A very effective DoS to be clear.
-> 
-> We have no indication whether a process is malicious or just doing
-> stupid things. The only reason to not kill the offending process
-> instantly is that there can be legacy binary only executables which
-> trigger that due to stupidity.
-> 
-> But that opens up DoS at the same time. So the only way to "protect"
-> against that is to slow down the freqeuncy of buslocks unconditionally.
-> If you don't like that after analysing the situation you can turn split
-> lock detection off.
-> 
-> The only binary I've seen so far triggering this, is some stoneage "value
-> add" blob from HP which is also doing totally nuts other things.
+> Thought, what happens if the only indirect call is from
+> code in a module?
 
-They are actually more likely to happen in the kernel
-when code casts int[] to long[] and then uses the 'BIT' functions to
-set/clear bits - which do locked operations.
-Quite often then don't need the locks anyway.
-And that cast is surprisingly common and completely broken on BE.
+Then <boom>, I guess.  Is it safe to assume in-tree modules don't need
+to do indirect calls to exported functions?  I guess we'll find out :-)
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+-- 
+Josh
 

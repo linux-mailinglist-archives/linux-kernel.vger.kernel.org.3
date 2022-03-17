@@ -2,116 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274734DCF6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 489784DCF67
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiCQUgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38132 "EHLO
+        id S229731AbiCQUgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 16:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiCQUgP (ORCPT
+        with ESMTP id S229691AbiCQUgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:36:15 -0400
-Received: from p3plwbeout23-06.prod.phx3.secureserver.net (p3plsmtp23-06-2.prod.phx3.secureserver.net [68.178.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9BC1959EC
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:34:57 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.145])
-        by :WBEOUT: with ESMTP
-        id UwpknH3Fjx8HrUwplnnUjh; Thu, 17 Mar 2022 13:34:57 -0700
-X-CMAE-Analysis: v=2.4 cv=Mo6XV0We c=1 sm=1 tr=0 ts=62339b71
- a=7e6w4QD8YWtpVJ/7+iiidw==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=o8Y5sQTvuykA:10 a=FP58Ms26AAAA:8 a=NEAV23lmAAAA:8
- a=ryZrMDmbnnAo0_BphGwA:9
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  UwpknH3Fjx8Hr
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=linux.fritz.box)
-        by smtp12.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1nUwpj-0005dN-QB; Thu, 17 Mar 2022 20:34:56 +0000
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        squashfs-devel@lists.sourceforge.net
-Cc:     phillip.lougher@gmail.com
-Subject: [ANN] Squashfs-tools 4.5.1 released
-Date:   Thu, 17 Mar 2022 20:34:46 +0000
-Message-Id: <20220317203446.22444-1-phillip@squashfs.org.uk>
-X-Mailer: git-send-email 2.34.1
+        Thu, 17 Mar 2022 16:36:01 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D67195331;
+        Thu, 17 Mar 2022 13:34:44 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id h15so8954928wrc.6;
+        Thu, 17 Mar 2022 13:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=oAJskbyEigMdhBrsDXA46H1CUC1pPQdTRwKfHPvXIas=;
+        b=oEuQwf0ZJEDJhu8J1bZy27VFNh9RTbpoxCpXlLqPKAKn3B15kctg+ZElkzMvVNBO/G
+         jmk1g9sEzQzLPFBeeHRtC+MLHsCsONYHw8KxMsxbw/qY9mwHI7Q/5RVrf2OeST4xfhag
+         wrlEDUVW0IEWEnx/QLYdTzBzlCzzM9nOOKgnSVZuI32zuH1S88VOgiqgAfCB1gWIWbXV
+         Dd2t5WHRu0OVM98lu12IpylTrtWrm23fZctxUrZ/MlRNg+8X96UkK8R3FgTaNGg6iHzd
+         0XdTRSNq2ltJoZ+Rqh+TDQLhbfu2W4l9A3nFnQ1LprPdLMABczJYh4f5wcdegRfsYCxj
+         NwaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=oAJskbyEigMdhBrsDXA46H1CUC1pPQdTRwKfHPvXIas=;
+        b=MsdbMf8f++Z839bIYfVEMtiLxE7Ulzw9Giu9LBTfU4wtruzvRvtUMHCYQLTut0qIqv
+         tu/z3ciDCe5a5HXm5k2Yj5YcC0Rg5h3yDgme09HdhNaV3Ctrs9IVSDZA8i69gyhlJNyx
+         OpE7hiX0Iluv7+YQHt9h6M7cMLklTOPWrR4WYQDw2E9nl8/U2GbeQ3jAVHM+0x9CRGmR
+         znOGEsYj7krMIWCA1SgJ5aS2mLgADdhwuw6fyDYdEB3kLwA9TnvqeYHHvwmPKYs1izuZ
+         U5yPURz3IOTBRiWtYpVnXeONlIVGp+MISHL3HUTuNpJ4tcKfK774N7CNVZiGbM1gWZRt
+         5Yeg==
+X-Gm-Message-State: AOAM531Dp9ehMeY8ZJHws9tEZZqGQ9TR33Lt9Zys7/yWPL9NT1kPQXSE
+        wUj3izCHAqTh22LceRRfy5ZNVsw39fT3XgRNR1E=
+X-Google-Smtp-Source: ABdhPJwz5D+6OUjG940PblL2Vpl7ISgIXGVQbVtLxJ7YGpXTqYORj6Uj/qjxIpnX1B77gaN0lujSYyp7JNozZoY/KaY=
+X-Received: by 2002:a05:6000:170c:b0:203:df21:742c with SMTP id
+ n12-20020a056000170c00b00203df21742cmr5544567wrc.574.1647549282639; Thu, 17
+ Mar 2022 13:34:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfAQABWY7q5ZTXBs++O6iHQlLRByHuBk0QyCqXxGP8lNZr9//PemnJTk0UQT+XFhj2lMNOWSYzA5RMmjLEFYH5RftUDoRhbMEGKWCS++WEl6jg/VsZFI4
- AgIlBbdRqAogkLaLaCAga0BPcIB0CjW8QJLRr8fBFXWGKrGTzT1oXE8jD7eCilI0Dn7Zt/NZgFklOHgqSwSEN06k5NgvTeafJ6JK13gIN4udqyt08XcbdLR2
- tw7a27aXv3TRJdpU2gBvQw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220310234611.424743-1-robdclark@gmail.com> <20220310234611.424743-3-robdclark@gmail.com>
+ <YjMGac4Hnjmg1wE8@phenom.ffwll.local> <3945551d-47d2-1974-f637-1dbc61e14702@amd.com>
+ <CAF6AEGv36V8bLoDn5O1SW3iTUtzd3O1XeuT5gJxyLMxd1E-o3Q@mail.gmail.com>
+ <865abcff-9f52-dca4-df38-b11189c739ff@amd.com> <CAF6AEGuoBeYoMTR6-KM9xGZ05XSSnSJWMDciawczi7qtiLN9Vw@mail.gmail.com>
+ <915537e2-ac5b-ab0e-3697-2b16a9ec8f91@amd.com> <CAF6AEGsyFAOPmHqT7YX1wsukP4-gYAstCukr89r9w28V0YSCUw@mail.gmail.com>
+ <3a475e5a-1090-e2f4-779c-6915fc8524b1@amd.com> <CAF6AEGtPrSdj=7AP1_puR+OgmL-qro0mWZDNngtaVPxpaCM76A@mail.gmail.com>
+ <1c847474-8ee1-cc7e-3d4d-261a4e92fb2d@amd.com>
+In-Reply-To: <1c847474-8ee1-cc7e-3d4d-261a4e92fb2d@amd.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Thu, 17 Mar 2022 13:35:24 -0700
+Message-ID: <CAF6AEGuw45gi4f+mVs7cVyjCHY9O4N1O8OfuGHv-wAkzP3UpMA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] drm/msm/gpu: Park scheduler threads for system suspend
+To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Mar 17, 2022 at 12:50 PM Andrey Grodzovsky
+<andrey.grodzovsky@amd.com> wrote:
+>
+>
+> On 2022-03-17 14:25, Rob Clark wrote:
+> > On Thu, Mar 17, 2022 at 11:10 AM Andrey Grodzovsky
+> > <andrey.grodzovsky@amd.com> wrote:
+> >>
+> >> On 2022-03-17 13:35, Rob Clark wrote:
+> >>> On Thu, Mar 17, 2022 at 9:45 AM Christian K=C3=B6nig
+> >>> <christian.koenig@amd.com> wrote:
+> >>>> Am 17.03.22 um 17:18 schrieb Rob Clark:
+> >>>>> On Thu, Mar 17, 2022 at 9:04 AM Christian K=C3=B6nig
+> >>>>> <christian.koenig@amd.com> wrote:
+> >>>>>> Am 17.03.22 um 16:10 schrieb Rob Clark:
+> >>>>>>> [SNIP]
+> >>>>>>> userspace frozen !=3D kthread frozen .. that is what this patch i=
+s
+> >>>>>>> trying to address, so we aren't racing between shutting down the =
+hw
+> >>>>>>> and the scheduler shoveling more jobs at us.
+> >>>>>> Well exactly that's the problem. The scheduler is supposed to shov=
+eling
+> >>>>>> more jobs at us until it is empty.
+> >>>>>>
+> >>>>>> Thinking more about it we will then keep some dma_fence instance
+> >>>>>> unsignaled and that is and extremely bad idea since it can lead to
+> >>>>>> deadlocks during suspend.
+> >>>>> Hmm, perhaps that is true if you need to migrate things out of vram=
+?
+> >>>>> It is at least not a problem when vram is not involved.
+> >>>> No, it's much wider than that.
+> >>>>
+> >>>> See what can happen is that the memory management shrinkers want to =
+wait
+> >>>> for a dma_fence during suspend.
+> >>> we don't wait on fences in shrinker, only purging or evicting things
+> >>> that are already ready.  Actually, waiting on fences in shrinker path
+> >>> sounds like a pretty bad idea.
+> >>>
+> >>>> And if you stop the scheduler they will just wait forever.
+> >>>>
+> >>>> What you need to do instead is to drain the scheduler, e.g. call
+> >>>> drm_sched_entity_flush() with a proper timeout for each entity you h=
+ave
+> >>>> created.
+> >>> yeah, it would work to drain the scheduler.. I guess that might be th=
+e
+> >>> more portable approach as far as generic solution for suspend.
+> >>>
+> >>> BR,
+> >>> -R
+> >>
+> >> I am not sure how this drains the scheduler ? Suppose we done the
+> >> waiting in drm_sched_entity_flush,
+> >> what prevents someone to push right away another job into the same
+> >> entity's queue  right after that ?
+> >> Shouldn't we first disable further pushing of jobs into entity before =
+we
+> >> wait for  sched->job_scheduled ?
+> >>
+> > In the system suspend path, userspace processes will have already been
+> > frozen, so there should be no way to push more jobs to the scheduler,
+> > unless they are pushed from the kernel itself.
+>
+>
+> It was my suspicion but I wasn't sure about it.
+>
+>
+> > We don't do that in
+> > drm/msm, but maybe you need to to move things btwn vram and system
+> > memory?
+>
+>
+> Exactly, that was my main concern - if we use this method we have to use
+> it in a point in
+> suspend sequence when all the in kernel job submissions activity already
+> suspended
+>
+> > But even in that case, if the # of jobs you push is bounded I
+> > guess that is ok?
+>
+> Submissions to scheduler entities are using unbounded queue, the bounded
+> part is when
+> you extract next job from entity to submit to HW ring and it rejects if
+> submission limit reached (drm_sched_ready)
+>
+> In general - It looks to me at least that what we what we want her is
+> more of a drain operation then flush (i.e.
+> we first want to disable any further job submission to entity's queue
+> and then flush all in flight ones). As example
+> for this i was looking at  flush_workqueue vs. drain_workqueue
 
-I'm pleased to announce the release of Squashfs tools 4.5.1.
-This is a point release which adds Manpages, a fix for
-CVE-2021-41072, and the usual minor improvements and bug fixes.
+Would it be possible for amdgpu to, in the system suspend task,
 
-The release can be downloaded either from Sourceforge, or GitHub.
+1) first queue up all the jobs needed to migrate bos out of vram, and
+whatever other housekeeping jobs are needed
+2) then drain gpu scheduler's queues
+3) and then finally wait for jobs executing on GPU to complete
 
-https://sourceforge.net/projects/squashfs/files/latest/download
+BR,
+-R
 
-https://github.com/plougher/squashfs-tools/archive/refs/tags/4.5.1.tar.gz
-
-A summary of the changes is below.
-
-Phillip
-
-	1. Major improvements
-
-		1.1 This release adds Manpages for Mksquashfs(1), Unsquashfs(1),
-		    Sqfstar(1) and Sqfscat(1).
-		1.2 The -help text output from the utilities has been improved
-		    and extended as well (but the Manpages are now more
-		    comprehensive).
-		1.3 CVE-2021-41072 which is a writing outside of destination
-		    exploit, has been fixed.
-
-	2. Minor improvements
-
-		2.1 The number of hard-links in the filesystem is now also
-		    displayed by Mksquashfs in the output summary.
-		2.2 The number of hard-links written by Unsquashfs is now
-		    also displayed in the output summary.
-		2.3 Unsquashfs will now write to a pre-existing destination
-		    directory, rather than aborting.
-		2.4 Unsquashfs now allows "." to used as the destination, to
-		    extract to the current directory.
-		2.5 The Unsquashfs progress bar now tracks empty files and
-		    hardlinks, in addition to data blocks.
-		2.6 -no-hardlinks option has been implemented for Sqfstar.
-		2.7 More sanity checking for "corrupted" filesystems, including
-		    checks for multiply linked directories and directory loops.
-		2.8 Options that may cause filesystems to be unmountable have
-		    been moved into a new "experts" category in the Mksquashfs
-		    help text (and Manpage).
-
-	3. Bug fixes
-
-		3.1 Maximum cpiostyle filename limited to PATH_MAX.  This
-		    prevents attempts to overflow the stack, or cause system
-		    calls to fail with a too long pathname.
-		3.2 Don't always use "max open file limit" when calculating
-		    length of queues, as a very large file limit can cause
-		    Unsquashfs to abort.  Instead use the smaller of max open
-		    file limit and cache size.
-		3.3 Fix Mksquashfs silently ignoring Pseudo file definitions
-		    when appending.
-		3.4 Don't abort if no XATTR support has been built in, and
-		    there's XATTRs in the filesystem.  This is a regression
-		    introduced in 2019 in Version 4.4.
-		3.5 Fix duplicate check when the last file block is sparse.
-
+> Andrey
+>
+>
+> >
+> > BR,
+> > -R

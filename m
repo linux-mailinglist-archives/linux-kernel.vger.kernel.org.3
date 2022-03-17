@@ -2,86 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB654DC2A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CEF4DC2A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbiCQJ2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
+        id S231851AbiCQJ2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbiCQJ2p (ORCPT
+        with ESMTP id S229457AbiCQJ2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:28:45 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BA41D4C0A;
-        Thu, 17 Mar 2022 02:27:28 -0700 (PDT)
-Received: from zn.tnic (p200300ea971561b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:61b0:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 80B0D1EC0576;
-        Thu, 17 Mar 2022 10:27:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1647509243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=/RQrguJ3cKjr+bWjA/6e8aVvTohMSMRaWDTYbIX/dH8=;
-        b=i+kn3NRUeKo+NkVaSmoJYziJGSO3+q5T+7oduZrys964Cz0hU7XIqxwWCoHt9Jkf/RXZyk
-        +7AjyVtRs2t7A9mGrqqvDIptjzpi4qcGy84NAUnSO0hdXL/ELlUhmnvPksB3QzV0iNsvnk
-        Akuqq5MI5rP5rq8i37CQx8WsWc9MAoM=
-Date:   Thu, 17 Mar 2022 10:27:18 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        David.Laight@aculab.com, Dave Hansen <dave.hansen@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>, x86@kernel.org
-Subject: Re: [PATCH v5 0/2] Two x86 fixes
-Message-ID: <YjL+9sUPLvE57GE0@zn.tnic>
-References: <20220310015306.445359-1-ammarfaizi2@gnuweeb.org>
- <CAFBCWQLJ6vCWePF0W4U7mont=Jn4QfDUq-8UpOcm37yqtbkQ8Q@mail.gmail.com>
+        Thu, 17 Mar 2022 05:28:44 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438451D4C0B;
+        Thu, 17 Mar 2022 02:27:25 -0700 (PDT)
+X-UUID: d1ba9e9be6124dc793fbad94c5fc3cae-20220317
+X-UUID: d1ba9e9be6124dc793fbad94c5fc3cae-20220317
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <leilk.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1914048782; Thu, 17 Mar 2022 17:27:23 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 17 Mar 2022 17:27:21 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 17 Mar
+ 2022 17:27:21 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 17 Mar 2022 17:27:20 +0800
+Message-ID: <602f93f020967789eff49e2fd821d1b03f5b009f.camel@mediatek.com>
+Subject: Re: [PATCH V4 4/6] spi: mediatek: add spi memory support for ipm
+ design
+From:   Leilk Liu <leilk.liu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Mark Brown" <broonie@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Date:   Thu, 17 Mar 2022 17:27:20 +0800
+In-Reply-To: <b237c1fe-9ddd-0a2e-ecf2-05bfb984c5dd@collabora.com>
+References: <20220315032411.2826-1-leilk.liu@mediatek.com>
+         <20220315032411.2826-5-leilk.liu@mediatek.com>
+         <b237c1fe-9ddd-0a2e-ecf2-05bfb984c5dd@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAFBCWQLJ6vCWePF0W4U7mont=Jn4QfDUq-8UpOcm37yqtbkQ8Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 03:19:07PM +0700, Ammar Faizi wrote:
-> On Thu, Mar 10, 2022 at 8:53 AM Ammar Faizi wrote:
-> > Two x86 fixes in this series.
-> >
-> > 1) x86/delay: Fix the wrong Assembly constraint in delay_loop() function.
-> > 2) x86/MCE/AMD: Fix memory leak when `threshold_create_bank()` fails.
+On Tue, 2022-03-15 at 10:31 +0100, AngeloGioacchino Del Regno wrote:
+> Il 15/03/22 04:24, Leilk Liu ha scritto:
+> > this patch add the support of spi-mem for ipm design.
+> > 
+> > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> > ---
+> >   drivers/spi/spi-mt65xx.c | 349
+> > ++++++++++++++++++++++++++++++++++++++-
+> >   1 file changed, 348 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+> > index 1a0b3208dfca..8958c3fa4fea 100644
+> > --- a/drivers/spi/spi-mt65xx.c
+> > +++ b/drivers/spi/spi-mt65xx.c
 > 
-> Ping (1)!
-> Borislav? Thomas?
+> ...snip...
+> 
+> > +
+> > +static void of_mtk_spi_parse_dt(struct spi_master *master, struct
+> > device_node *nc)
+> > +{
+> > +	struct mtk_spi *mdata = spi_master_get_devdata(master);
+> > +	u32 value;
+> > +
+> > +	if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) {
+> 
+> Hello Leilk,
+> 
+> thanks for considering my advice about "spi-{tx,rx}-bus-width", but
+> there's
+> something that you have misunderstood about it.
+> 
+> Simply, you don't need this function at all. Whatever you are doing
+> here is
+> already being performed in the Linux SPI framework: at the end of the
+> probe
+> function, this driver is calling the (legacy)
+> devm_spi_register_master(),
+> which calls devm_spi_register_controller().
+> 
+> In drivers/spi/spi.c, function spi_register_controller(), will in
+> turn call
+> of_register_spi_devices(ctlr) -> of_register_spi_device(ctlr, nc)...
+> that
+> will end up finally calling function of_spi_parse_dt(ctlr, spi, nc).
+> 
+> The last mentioned function already contains the logic and setup to
+> check
+> devicetree properties "spi-tx-bus-width" and "spi-rx-bus-width" (and
+> some
+> others, as well).
+> 
+> This means that spi-mt65xx.c already probed these even before your
+> IPM
+> implementation, hence ***function of_mtk_spi_parse_dt() is not
+> needed***.
+> 
+> Simply drop it and don't check for these properties: that's already
+> done.
+> 
+> 
+> Regards,
+> Angelo
+> 
+Hi Angelo,
 
-Yes, what's up?
+Thanks for your advice.
 
-Are those urgent fixes which break some use case or can you simply sit
-patiently and wait?
+There are two spi controllor on MT7986. One supports single/dual mode,
+the other supports quad mode. Both of them can support spi memory
+framework(one's tx/rx bus width is 1/2, the other one's tx/rx bus width
+is 1/2/4). 
 
-Because we have an upcoming merge window and we need to prepare for
-that. And there are real bugs that need fixing too.
+Can I use of_mtk_spi_parse_dt() to parse the information? What's your
+suggestion?
 
-So what's the rush here?
+Thanks!
 
--- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> > +		switch (value) {
+> > +		case 1:
+> > +			break;
+> > +		case 2:
+> > +			master->mode_bits |= SPI_TX_DUAL;
+> > +			break;
+> > +		case 4:
+> > +			master->mode_bits |= SPI_TX_QUAD;
+> > +			break;
+> > +		default:
+> > +			dev_warn(mdata->dev,
+> > +				 "spi-tx-bus-width %d not supported\n",
+> > +				value);
+> > +			break;
+> > +		}
+> > +	}
+> > +
+> > +	if (!of_property_read_u32(nc, "spi-rx-bus-width", &value)) {
+> > +		switch (value) {
+> > +		case 1:
+> > +			break;
+> > +		case 2:
+> > +			master->mode_bits |= SPI_RX_DUAL;
+> > +			break;
+> > +		case 4:
+> > +			master->mode_bits |= SPI_RX_QUAD;
+> > +			break;
+> > +		case 8:
+> > +			master->mode_bits |= SPI_RX_OCTAL;
+> > +			break;
+> > +		default:
+> > +			dev_warn(mdata->dev,
+> > +				 "spi-rx-bus-width %d not supported\n",
+> > +				value);
+> > +			break;
+> > +		}
+> > +	}
+> > +}
+> > +
+> >   static int mtk_spi_probe(struct platform_device *pdev)
+> >   {
+> >   	struct spi_master *master;
+> > @@ -830,6 +1170,13 @@ static int mtk_spi_probe(struct
+> > platform_device *pdev)
+> >   	if (mdata->dev_comp->ipm_design)
+> >   		master->mode_bits |= SPI_LOOP;
+> >   
+> > +	if (mdata->dev_comp->ipm_design) {
+> > +		mdata->dev = &pdev->dev;
+> > +		master->mem_ops = &mtk_spi_mem_ops;
+> > +		of_mtk_spi_parse_dt(master, pdev->dev.of_node);
+> > +		init_completion(&mdata->spimem_done);
+> > +	}
+> > +
+> >   	if (mdata->dev_comp->need_pad_sel) {
+> >   		mdata->pad_num = of_property_count_u32_elems(
+> >   			pdev->dev.of_node,
+

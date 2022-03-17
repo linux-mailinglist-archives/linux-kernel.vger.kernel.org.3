@@ -2,240 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCD24DCC98
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4645F4DCC9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236951AbiCQRhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 13:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
+        id S236960AbiCQRiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 13:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233856AbiCQRhk (ORCPT
+        with ESMTP id S237030AbiCQRh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 13:37:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144B2216FB4;
-        Thu, 17 Mar 2022 10:36:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9887DB81F0A;
-        Thu, 17 Mar 2022 17:36:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F4BC340ED;
-        Thu, 17 Mar 2022 17:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647538581;
-        bh=0q3xdlM1IF9MZ2qtXS4D/vLwcZrz+KWgrBVdvvNb6fE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Ta9swPt+QEh9vIxtEO5oa9oySb+iqpf25TZK6UaqAU7eQtOMAjGAzyUE2I4g2BXKZ
-         d1QxvLZnR+8idhAkm8FNe43z7oTPoe9cKpkdbCV8tET2a+wDQzq4yAZVGwBguxVuv6
-         m6D+a1WGGcD1ovYsROJNU7hzITS6WHzibHuhWILQjmBmTFZpPHx4VQ6MkXEJrGf5+O
-         dgRS0UcWx5yf1TX7YHE30ka/Gom1XXAez/g7cfY/UmAE5xWus/SQd5WgqkuvrNm/7d
-         JL7rCCpJ4jwHerPMT8TPJkOUDkmA/+D2h1KbmHZP8fV5acppe+wHJXp/TFifZoTy0C
-         7wIde06AHFocQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 144135C08A0; Thu, 17 Mar 2022 10:36:21 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 10:36:21 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     rcu@vger.kernel.org, Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: RCU: undefined reference to irq_work_queue
-Message-ID: <20220317173621.GQ4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YjMcZexG/kJepYDi@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <20220317140000.GO4285@paulmck-ThinkPad-P17-Gen-1>
- <YjNSuprCqjAgGgqB@ip-172-31-19-208.ap-northeast-1.compute.internal>
- <20220317162033.GP4285@paulmck-ThinkPad-P17-Gen-1>
- <YjNll+Iv++LORS0n@ip-172-31-19-208.ap-northeast-1.compute.internal>
+        Thu, 17 Mar 2022 13:37:59 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CF7216FB9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:36:42 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id g17so10250079lfh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Km1+WLs5rrLSDyROV/f9OUca+QCvw6zcJNZtYw4V1uE=;
+        b=VYxZYRTbkjvH6YCOY9RqDDSGEsrPYFLbOgwVeDHpf7nSmhoS7JUVZwUUnNprmnOAuv
+         sZuJu0xUMTRAGyKf4uqMfacJQOhRwOXZ3pdrKISoZ/OaiY7yIJNEsZKihCeU9Uxrr0tD
+         t5U0mSBDzmncCSY3A2KneHDwYbsUtyEQy74MIOos4bPoRHG4wyB2O83/xuyDn0DYHpqd
+         CXCQHx5Tax8GOutoZ3cSZOZUYTK6HtgCXQ6IUzPteKBXOm6Adz2P0zx19gyXka+KkxxX
+         53cTJIqjmtHVlDsFrA/TDi9t4ilJmbeEfHzs7HDS6S9fzA/vForzgTEE8KumPpaiEXQb
+         EtVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Km1+WLs5rrLSDyROV/f9OUca+QCvw6zcJNZtYw4V1uE=;
+        b=zrvaQsiBFXGDxKnIGXBuOow8XgKjEhRD9gIuYeGn041me0FOEp0RXq2uhDmy1F4F9M
+         4NE51FO6lZsOtH2VkSvVpZezlX3WHQWLRSF0Od7dXjMHAdGdKqbt48GNz9eLkDvCThWw
+         IwLIE5I1uvC7X4se9hslfJek/1bJLx0YdFi6VmeG/GxngGUabaCDRkbNBAOKzSHvsYGf
+         XtF4DhqDg04jIPPtXtF9TOD/9U5HyCeVePlcnnR1iUFZgVpJIijlmsZGPg5eQfYZV+vK
+         zV3QXjj4QiPhxFQ9d+mDKuzFJrcneoRg+tONf8vkRzs7wthAjnAnZHk4JniuKY1eK2dh
+         2ULQ==
+X-Gm-Message-State: AOAM530JZUiILochroh2wMbFk1d9WeSxan61QutRTwyHk+1kkxMvfbjM
+        Ad68gJ0rdHmhe7Qa27AKt3Wp9iCXGr1iSr7SGrs0LA==
+X-Google-Smtp-Source: ABdhPJz083NOCfMPET/Tb2OX48rOXyJYY1kGgZeel9vCZPowq3a6lvhKBkmkJAP25bEbEdNtoQalCDQ0XJyRNZBPXIU=
+X-Received: by 2002:a05:6512:3043:b0:447:b909:b868 with SMTP id
+ b3-20020a056512304300b00447b909b868mr3677484lfb.286.1647538599092; Thu, 17
+ Mar 2022 10:36:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YjNll+Iv++LORS0n@ip-172-31-19-208.ap-northeast-1.compute.internal>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220216031528.92558-1-chao.gao@intel.com> <20220216031528.92558-5-chao.gao@intel.com>
+In-Reply-To: <20220216031528.92558-5-chao.gao@intel.com>
+From:   Oliver Upton <oupton@google.com>
+Date:   Thu, 17 Mar 2022 10:36:27 -0700
+Message-ID: <CAOQ_QsgfnUMJD9XVCBbbA-dZryA2a2yBksmM6mGLZE-8ux_Wsg@mail.gmail.com>
+Subject: Re: [PATCH v4 4/6] KVM: arm64: Simplify the CPUHP logic
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     seanjc@google.com, maz@kernel.org, kvm@vger.kernel.org,
+        pbonzini@redhat.com, kevin.tian@intel.com, tglx@linutronix.de,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <Alexandru.Elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>, Jia He <justin.he@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 04:45:11PM +0000, Hyeonggon Yoo wrote:
-> On Thu, Mar 17, 2022 at 09:20:33AM -0700, Paul E. McKenney wrote:
-> > On Thu, Mar 17, 2022 at 03:24:42PM +0000, Hyeonggon Yoo wrote:
-> > > On Thu, Mar 17, 2022 at 07:00:00AM -0700, Paul E. McKenney wrote:
-> > > > On Thu, Mar 17, 2022 at 11:32:53AM +0000, Hyeonggon Yoo wrote:
-> > > > > Hello RCU folks,
-> > > > > 
-> > > > > I like to use minimal configuration for kernel development.
-> > > > > when building with tinyconfig + CONFIG_PREEMPT=y on arm64:
-> > > > > 
-> > > > > ld: kernel/rcu/update.o: in function `call_rcu_tasks':
-> > > > > update.c:(.text+0xb2c): undefined reference to `irq_work_queue'
-> > > > > update.c:(.text+0xb2c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `irq_work_queue'
-> > > > > make: *** [Makefile:1155: vmlinux] Error 1
-> > > > > 
-> > > > > It seems RCU calls irq_work_queue() without checking if CONFIG_IRQ_WORK is enabled.
-> > > > 
-> > > > Indeed it does!
-> > > > 
-> > > > And kernel/rcu/Kconfig shows why:
-> > > > 
-> > > > config TASKS_TRACE_RCU
-> > > > 	def_bool 0
-> > > > 	select IRQ_WORK
-> > > > 	help
-> > > > 	  This option enables a task-based RCU implementation that uses
-> > > > 	  explicit rcu_read_lock_trace() read-side markers, and allows
-> > > > 	  these readers to appear in the idle loop as well as on the CPU
-> > > > 	  hotplug code paths.  It can force IPIs on online CPUs, including
-> > > > 	  idle ones, so use with caution.
-> > > > 
-> > > > So the solution is to further minimize your configuration so as to
-> > > > deselect TASKS_TRACE_RCU.
-> > > 
-> > > They are already not selected.
-> > 
-> > Good, thank you.
-> > 
-> > How about TASKS_RUDE_RCU, TASKS_TRACE_RCU, and TASKS_RCU_GENERIC?
-> 
-> TASKS_RUDE_RCU=n
-> TASKS_TRACE_RCU=n
-> TASKS_RCU_GENERIC=y
-> TASKS_RCU=y
-> 
-> > > > This means making sure that both BPF and
-> > > > the various RCU torture tests are all deselected.
-> > > 
-> > > I wanted to say call_rcu_tasks() can be referenced even when IRQ_WORK is not
-> > > selected, making it fail to build.
-> > 
-> > I am guessing because TASKS_RCU_GENERIC is selected?
-> >
-> 
-> Right.
-> 
-> > If so, does the patch at the end of this email help?
-> >
-> 
-> No. did not help.
-> 
-> I think I found reason...
-> with PREEMPTION=y,
-> 
-> in kernel/rcu/Kconfig:
-> config TASKS_RCU
->         def_bool PREEMPTION
->         help
->           This option enables a task-based RCU implementation that uses
->           only voluntary context switch (not preemption!), idle, and 
->           user-mode execution as quiescent states.  Not for manual selection.
-> 
-> in kernel/rcu/Kconfig:
-> config TASKS_RCU_GENERIC
->         def_bool TASKS_RCU || TASKS_RUDE_RCU || TASKS_TRACE_RCU
->         select SRCU
->         help
->           This option enables generic infrastructure code supporting
->           task-based RCU implementations.  Not for manual selection.
+On Tue, Feb 15, 2022 at 7:16 PM Chao Gao <chao.gao@intel.com> wrote:
+>
+> From: Marc Zyngier <maz@kernel.org>
+>
+> For a number of historical reasons, the KVM/arm64 hotplug setup is pretty
+> complicated, and we have two extra CPUHP notifiers for vGIC and timers.
+>
+> It looks pretty pointless, and gets in the way of further changes.
+> So let's just expose some helpers that can be called from the core
+> CPUHP callback, and get rid of everything else.
+>
+> This gives us the opportunity to drop a useless notifier entry,
+> as well as tidy-up the timer enable/disable, which was a bit odd.
+>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Chao Gao <chao.gao@intel.com>
 
-Ah, this is because some of the tracing code uses TASKS_RCU only
-when PREEMPTION=y.  That would be KPROBES and TRACING.  Maybe also
-TRACE_CLOCK and TRACEPOINTS, but I would hope that TRACING would
-cover those.  Adding the tracing guys for their thoughts.
+Reviewed-by: Oliver Upton <oupton@google.com>
 
-> > > > > ld: kernel/rcu/update.o: in function `call_rcu_tasks':
-> > > > > update.c:(.text+0xb2c): undefined reference to `irq_work_queue'
-> > > > > update.c:(.text+0xb2c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `irq_work_queue'
-> > > > > make: *** [Makefile:1155: vmlinux] Error 1
-> > > 
-> > > Isn't it better to fix this build failure?
-> > 
-> > But of course!  However, first I need to know exactly what is causing your
-> > build failure.  I cannot see your .config file, so I am having to guess.
-> >
-> > Don't get me wrong, I do have a lot of practice guessing, but it is still
-> > just guessing.  ;-)
-> 
-> Sorry to make you guess. Maybe too late, but added config as attachment ;)
-
-Perhaps I needed the practice.  ;-)
-
-> > > It fails to build when both TASKS_TRACE_RCU and IRQ_WORK are not selected
-> > > and PREEMPT is selected.
-> > > 
-> > >   │ Symbol: TASKS_TRACE_RCU [=n]                                            │
-> > >   │ Type  : bool                                                            │
-> > >   │ Defined at kernel/rcu/Kconfig:96                                        │
-> > >   │ Selects: IRQ_WORK [=n]                                                  │
-> > >   │ Selected by [n]:                                                        │
-> > >   │   - BPF_SYSCALL [=n]                                                    │
-> > >   │   - RCU_SCALE_TEST [=n] && DEBUG_KERNEL [=y]                            │
-> > >   │   - RCU_TORTURE_TEST [=n] && DEBUG_KERNEL [=y]                          │
-> > >   │   - RCU_REF_SCALE_TEST [=n] && DEBUG_KERNEL [=y]
-> > > 
-> > > Thanks!
-> > > 
-> > > > 
-> > > > Or turn on IRQ_WORK, for example, if you need to use BPF.
-> > 
-> > Or do you already have TASKS_RCU_GENERIC deselected?
-> >
-> 
-> No, this is selected. TASKS_RCU_GENERIC=y. because of PREEMPTION=y.
-
-OK, the patch shown below allows me to get TASKS_RCU_GENERIC=n even
-with PREEMPTION=y.  This might somehow subtly break tracing, but in
-that case further adjustments can be made.  Untested other than
-generating a few .config combinations.
-
-Thoughts?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 678a80713b21..66c5b5543511 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -38,6 +38,7 @@ config KPROBES
- 	depends on MODULES
- 	depends on HAVE_KPROBES
- 	select KALLSYMS
-+	select TASKS_RCU if PREEMPTION
- 	help
- 	  Kprobes allows you to trap at almost any kernel address and
- 	  execute a callback function.  register_kprobe() establishes
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index f559870fbf8b..4f665ae0cf55 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -78,7 +78,8 @@ config TASKS_RCU_GENERIC
- 	  task-based RCU implementations.  Not for manual selection.
- 
- config TASKS_RCU
--	def_bool PREEMPTION
-+	def_bool 0
-+	select IRQ_WORK
- 	help
- 	  This option enables a task-based RCU implementation that uses
- 	  only voluntary context switch (not preemption!), idle, and
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index 752ed89a293b..a7aaf150b704 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -127,6 +127,7 @@ config TRACING
- 	select BINARY_PRINTF
- 	select EVENT_TRACING
- 	select TRACE_CLOCK
-+	select TASKS_RCU if PREEMPTION
- 
- config GENERIC_TRACER
- 	bool
+> ---
+>  arch/arm64/kvm/arch_timer.c     | 27 ++++++++++-----------------
+>  arch/arm64/kvm/arm.c            |  4 ++++
+>  arch/arm64/kvm/vgic/vgic-init.c | 19 ++-----------------
+>  include/kvm/arm_arch_timer.h    |  4 ++++
+>  include/kvm/arm_vgic.h          |  4 ++++
+>  include/linux/cpuhotplug.h      |  3 ---
+>  6 files changed, 24 insertions(+), 37 deletions(-)
+>
+> diff --git a/arch/arm64/kvm/arch_timer.c b/arch/arm64/kvm/arch_timer.c
+> index 6e542e2eae32..f9d14c6dc0b4 100644
+> --- a/arch/arm64/kvm/arch_timer.c
+> +++ b/arch/arm64/kvm/arch_timer.c
+> @@ -796,10 +796,18 @@ void kvm_timer_vcpu_init(struct kvm_vcpu *vcpu)
+>         ptimer->host_timer_irq_flags = host_ptimer_irq_flags;
+>  }
+>
+> -static void kvm_timer_init_interrupt(void *info)
+> +void kvm_timer_cpu_up(void)
+>  {
+>         enable_percpu_irq(host_vtimer_irq, host_vtimer_irq_flags);
+> -       enable_percpu_irq(host_ptimer_irq, host_ptimer_irq_flags);
+> +       if (host_ptimer_irq)
+> +               enable_percpu_irq(host_ptimer_irq, host_ptimer_irq_flags);
+> +}
+> +
+> +void kvm_timer_cpu_down(void)
+> +{
+> +       disable_percpu_irq(host_vtimer_irq);
+> +       if (host_ptimer_irq)
+> +               disable_percpu_irq(host_ptimer_irq);
+>  }
+>
+>  int kvm_arm_timer_set_reg(struct kvm_vcpu *vcpu, u64 regid, u64 value)
+> @@ -961,18 +969,6 @@ void kvm_arm_timer_write_sysreg(struct kvm_vcpu *vcpu,
+>         preempt_enable();
+>  }
+>
+> -static int kvm_timer_starting_cpu(unsigned int cpu)
+> -{
+> -       kvm_timer_init_interrupt(NULL);
+> -       return 0;
+> -}
+> -
+> -static int kvm_timer_dying_cpu(unsigned int cpu)
+> -{
+> -       disable_percpu_irq(host_vtimer_irq);
+> -       return 0;
+> -}
+> -
+>  static int timer_irq_set_vcpu_affinity(struct irq_data *d, void *vcpu)
+>  {
+>         if (vcpu)
+> @@ -1170,9 +1166,6 @@ int kvm_timer_hyp_init(bool has_gic)
+>                 goto out_free_irq;
+>         }
+>
+> -       cpuhp_setup_state(CPUHP_AP_KVM_ARM_TIMER_STARTING,
+> -                         "kvm/arm/timer:starting", kvm_timer_starting_cpu,
+> -                         kvm_timer_dying_cpu);
+>         return 0;
+>  out_free_irq:
+>         free_percpu_irq(host_vtimer_irq, kvm_get_running_vcpus());
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 0165cf3aac3a..31b049e48b19 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -1658,6 +1658,8 @@ static void _kvm_arch_hardware_enable(void *discard)
+>  {
+>         if (!__this_cpu_read(kvm_arm_hardware_enabled)) {
+>                 cpu_hyp_reinit();
+> +               kvm_vgic_cpu_up();
+> +               kvm_timer_cpu_up();
+>                 __this_cpu_write(kvm_arm_hardware_enabled, 1);
+>         }
+>  }
+> @@ -1671,6 +1673,8 @@ int kvm_arch_hardware_enable(void)
+>  static void _kvm_arch_hardware_disable(void *discard)
+>  {
+>         if (__this_cpu_read(kvm_arm_hardware_enabled)) {
+> +               kvm_timer_cpu_down();
+> +               kvm_vgic_cpu_down();
+>                 cpu_hyp_reset();
+>                 __this_cpu_write(kvm_arm_hardware_enabled, 0);
+>         }
+> diff --git a/arch/arm64/kvm/vgic/vgic-init.c b/arch/arm64/kvm/vgic/vgic-init.c
+> index fc00304fe7d8..60038a8516de 100644
+> --- a/arch/arm64/kvm/vgic/vgic-init.c
+> +++ b/arch/arm64/kvm/vgic/vgic-init.c
+> @@ -460,17 +460,15 @@ int kvm_vgic_map_resources(struct kvm *kvm)
+>
+>  /* GENERIC PROBE */
+>
+> -static int vgic_init_cpu_starting(unsigned int cpu)
+> +void kvm_vgic_cpu_up(void)
+>  {
+>         enable_percpu_irq(kvm_vgic_global_state.maint_irq, 0);
+> -       return 0;
+>  }
+>
+>
+> -static int vgic_init_cpu_dying(unsigned int cpu)
+> +void kvm_vgic_cpu_down(void)
+>  {
+>         disable_percpu_irq(kvm_vgic_global_state.maint_irq);
+> -       return 0;
+>  }
+>
+>  static irqreturn_t vgic_maintenance_handler(int irq, void *data)
+> @@ -579,19 +577,6 @@ int kvm_vgic_hyp_init(void)
+>                 return ret;
+>         }
+>
+> -       ret = cpuhp_setup_state(CPUHP_AP_KVM_ARM_VGIC_INIT_STARTING,
+> -                               "kvm/arm/vgic:starting",
+> -                               vgic_init_cpu_starting, vgic_init_cpu_dying);
+> -       if (ret) {
+> -               kvm_err("Cannot register vgic CPU notifier\n");
+> -               goto out_free_irq;
+> -       }
+> -
+>         kvm_info("vgic interrupt IRQ%d\n", kvm_vgic_global_state.maint_irq);
+>         return 0;
+> -
+> -out_free_irq:
+> -       free_percpu_irq(kvm_vgic_global_state.maint_irq,
+> -                       kvm_get_running_vcpus());
+> -       return ret;
+>  }
+> diff --git a/include/kvm/arm_arch_timer.h b/include/kvm/arm_arch_timer.h
+> index 51c19381108c..16a2f65fcfb4 100644
+> --- a/include/kvm/arm_arch_timer.h
+> +++ b/include/kvm/arm_arch_timer.h
+> @@ -106,4 +106,8 @@ void kvm_arm_timer_write_sysreg(struct kvm_vcpu *vcpu,
+>  u32 timer_get_ctl(struct arch_timer_context *ctxt);
+>  u64 timer_get_cval(struct arch_timer_context *ctxt);
+>
+> +/* CPU HP callbacks */
+> +void kvm_timer_cpu_up(void);
+> +void kvm_timer_cpu_down(void);
+> +
+>  #endif
+> diff --git a/include/kvm/arm_vgic.h b/include/kvm/arm_vgic.h
+> index bb30a6803d9f..a2a0cca05a73 100644
+> --- a/include/kvm/arm_vgic.h
+> +++ b/include/kvm/arm_vgic.h
+> @@ -427,4 +427,8 @@ int vgic_v4_load(struct kvm_vcpu *vcpu);
+>  void vgic_v4_commit(struct kvm_vcpu *vcpu);
+>  int vgic_v4_put(struct kvm_vcpu *vcpu, bool need_db);
+>
+> +/* CPU HP callbacks */
+> +void kvm_vgic_cpu_up(void);
+> +void kvm_vgic_cpu_down(void);
+> +
+>  #endif /* __KVM_ARM_VGIC_H */
+> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+> index 411a428ace4d..4345b8eafc03 100644
+> --- a/include/linux/cpuhotplug.h
+> +++ b/include/linux/cpuhotplug.h
+> @@ -183,9 +183,6 @@ enum cpuhp_state {
+>         CPUHP_AP_TI_GP_TIMER_STARTING,
+>         CPUHP_AP_HYPERV_TIMER_STARTING,
+>         CPUHP_AP_KVM_STARTING,
+> -       CPUHP_AP_KVM_ARM_VGIC_INIT_STARTING,
+> -       CPUHP_AP_KVM_ARM_VGIC_STARTING,
+> -       CPUHP_AP_KVM_ARM_TIMER_STARTING,
+>         /* Must be the last timer callback */
+>         CPUHP_AP_DUMMY_TIMER_STARTING,
+>         CPUHP_AP_ARM_XEN_STARTING,
+> --
+> 2.25.1
+>

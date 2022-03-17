@@ -2,220 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759424DC46F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B094DC472
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 12:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbiCQLHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 07:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
+        id S232850AbiCQLIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 07:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiCQLHi (ORCPT
+        with ESMTP id S230330AbiCQLIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 07:07:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECD61C9B55;
-        Thu, 17 Mar 2022 04:06:21 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22HATJiE002876;
-        Thu, 17 Mar 2022 11:06:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=bjDod+kHZDl/ajqdBnOYCpzviwrKudbSbq33TCzIQro=;
- b=lOdaNlsHJZzIoZfo45dONRUBe0j4pMRNBpKCBfOgvJt5hHHmhkuxdL3SmAVue9t1n0Jr
- a1SXwcOeG4G66GJd31v2VlJNgwuePPR1/Txfb1WdPZaThobvuKdS79xvBw95RxowGkdX
- g6GPYkWotay6oH3g0Itu63yfD9Ejf41YFvndImRCDcDhUOdKp+UOoDPipTZezAgRGKkM
- IcjNAEnNubwiWvo+ZkpqjwUg4U0ZdFhbRE1w6/gdkvvLYE+Gi8G5JaKA99oDGYzdJUYG
- MwvC76ZYJSiQksPMPG+M0i8URKKZZkXdla9rC9qqkysLzkp5iFvHujf8jLfOgS3jKfCX tQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev04pvbt4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Mar 2022 11:06:13 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22HAfT0S004112;
-        Thu, 17 Mar 2022 11:06:13 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev04pvbsg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Mar 2022 11:06:13 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22HB2a2x027999;
-        Thu, 17 Mar 2022 11:06:10 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3erk58sg52-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Mar 2022 11:06:10 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22HB6AEc40829328
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Mar 2022 11:06:10 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 230204C050;
-        Thu, 17 Mar 2022 11:06:08 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CEAB94C04E;
-        Thu, 17 Mar 2022 11:06:07 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.145.66.50])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 17 Mar 2022 11:06:07 +0000 (GMT)
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-To:     mpe@ellerman.id.au
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>
-Subject: [PATCH] powerpc/rtas: Keep MSR RI set when calling RTAS
-Date:   Thu, 17 Mar 2022 12:06:01 +0100
-Message-Id: <20220317110601.86917-1-ldufour@linux.ibm.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 17 Mar 2022 07:08:17 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C291D7D9E;
+        Thu, 17 Mar 2022 04:07:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647515221; x=1679051221;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=1MLk0nGN5yRG+EPQEQB+T1pUQpNRL4odves+GjpHiv4=;
+  b=aO38hJXKhaG9mLI7MXFnW5o8RMqovZL8zRJ3dADBAWzsEezNMrvCtS1f
+   /yfHxX36E3vv790axFKScgEqn0oFZZXWbikUNbtqD8GWvJARcNXKwJBjN
+   l0RzAQOnNT8d7O1se8lX4/+JWWWq3zNVIUg61mxFLyXU/koZrGsvgNufH
+   n990WAEWSvYiJSH20tusK/8SXpxtxpXGi+HJruSr8Rud3xW6FEj1fGSwk
+   aIStTxMbNXO9K7CkI2K4tkHC0v44YDXUCUmZgjKJbnpn9DhcxdaS7TiCf
+   AHoiYUjQwoKTV9NLZwYHeESDoyLUVMbUpd1HvNH7kpH0F39V8yl/NJlxJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="256790109"
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="256790109"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 04:07:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="613964486"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Mar 2022 04:07:00 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 17 Mar 2022 04:07:00 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21 via Frontend Transport; Thu, 17 Mar 2022 04:07:00 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.42) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.21; Thu, 17 Mar 2022 04:07:00 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WESA2iuDc2NxeGJrFbFONJ2k9224fCoKJKpuI6OOShIj08/EVJcE1NwyaS3myl1uxVUsPc5DS+oU8SkOkyOOj2UAIJjBKlNzFKLPLWprXmMx0Ks2KBKqXqwasedlHa51q0yoLubm6uPkpcy9P2Dqa4KvwQrSRO2ArDN9WIgFLtRL+rhrzevpvbs6D9zLs0Uh/duFceUF/uLbvm1275ij1wRMeBswqdPhxdTkXE3MfOtXU9LSzZeHC4VPR2Q5E9oGjOw3Rnr8iKVlij+Gh99LssutcIuqnSankYB3Al9DPT3aYLkxP1BS3IN5B36rLaEpTsMcdjdlTlk+8TzKIV0w3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1MLk0nGN5yRG+EPQEQB+T1pUQpNRL4odves+GjpHiv4=;
+ b=dsY2Fsr0qtK7NhQF4U6lOx0UuGCWbn59Ifgr8/fohhyVhu0w3qfONT0WJtqxVinxvYdzO652LgU6T2jAn7FCJ8HCF9tKPp2JW2y8ZxgbDlv3SH4yJpA/am61gSrr3ocFjooldiABosah518pbueL7VMWSAS67lUfAuTe88YAt19rtQwOQGtuWzaCWVGol/wvGX9WeIHqjH9ldNvk7ygDcbGIaFgeqG9Wb0Mv1SkGegGKWFtILSP+xpXkeUmHUzW+Xakl7i6XhwQXSg1SfTcqJ+1Btg0ZGp6awy5lBoJWBSb5SX8K5ZkoOlE4YGchjITOgkvkZFkAhH5T03UMFirJhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BYAPR11MB3207.namprd11.prod.outlook.com (2603:10b6:a03:7c::14)
+ by PH0PR11MB5189.namprd11.prod.outlook.com (2603:10b6:510:3d::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Thu, 17 Mar
+ 2022 11:06:58 +0000
+Received: from BYAPR11MB3207.namprd11.prod.outlook.com
+ ([fe80::a428:75b3:6530:4167]) by BYAPR11MB3207.namprd11.prod.outlook.com
+ ([fe80::a428:75b3:6530:4167%7]) with mapi id 15.20.5081.015; Thu, 17 Mar 2022
+ 11:06:58 +0000
+From:   "Coelho, Luciano" <luciano.coelho@intel.com>
+To:     "kvalo@kernel.org" <kvalo@kernel.org>,
+        "Grumbach, Emmanuel" <emmanuel.grumbach@intel.com>,
+        "arnd@kernel.org" <arnd@kernel.org>
+CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "Beker, Ayala" <ayala.beker@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH] iwlwifi: mei: fix building iwlmei
+Thread-Topic: [PATCH] iwlwifi: mei: fix building iwlmei
+Thread-Index: AQHYOWTHPLmml5yFXU6hM90mCcYWnqzCXBOAgAEPX4A=
+Date:   Thu, 17 Mar 2022 11:06:58 +0000
+Message-ID: <3554c5cb403df472eca607e036a1f48a7699d490.camel@intel.com>
+References: <20220316183617.1470631-1-arnd@kernel.org>
+         <SA1PR11MB5825D9DDC4F622A9B8FA77B9F2119@SA1PR11MB5825.namprd11.prod.outlook.com>
+In-Reply-To: <SA1PR11MB5825D9DDC4F622A9B8FA77B9F2119@SA1PR11MB5825.namprd11.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.43.3-1+b1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 10808e6d-066d-4c17-4aeb-08da0806417e
+x-ms-traffictypediagnostic: PH0PR11MB5189:EE_
+x-microsoft-antispam-prvs: <PH0PR11MB5189B3D30BEAAEA2630E7C8C90129@PH0PR11MB5189.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GIxulMXdKCzgY+KbB6OuPiHxIyHk2dKLycPzT7In6tiIRExdZZxmyTqYKsDhARuWHTGXrIxlZblsMGlzj5Vx+CgaTD2h9QKtE4ZCUy2ZHthWgJbPwOw4KGohw+4bdynCzr+/cisdb2jl9Cbc/uJHkYueBrklnUAR7h2x/D2hVTlewf8vecT1x9RBHFuZI8xjHPv/Tnq63tueYj3BcoxVvVCNzC8DjFea9TdkJEMkUUEdqdJHpmZpIKew83RLPnqjnhurFlFln3y2hIr/a5S8BNHp2NjV//YXiT4MbAebXKiBQjpApc53IU+WStRpwlJmH1K3O/gJYclHQ1zZaCY/I6giUDm+a6ZqxZGSMKGFJZVOBnWOPRxz+Zp1uNmNjxujPWFkXWONsSBD7MlyH/GOxHdL5ous9GLcgRx5JrAQiQwN/DW173sT5KFF6fsmN+yhxcKKYr7SWQ7Fh1g/rPVZk+2/W1McL36Bmk5kx1N8+SMgMLAjDTLLx0ZJ/RC9sPsNW3z8Q3ZeFikHjHRPA9wZdFUhvDjuumnFgwBJHb6JpWTe0BxDgzPJre/kOmGt/UjgHMS1JCRkQ4Vlt/dHDcDFYt/inrOfTCsA/42ZF0zpjmPGLEBXDIommi4HU/OBgg4zj2XDG0hWj/jP+V842z7ycHGzNnf4uFHsx70I1MGzgNzY/2j2Ps6EvcnNjTVn6ND2m52wbS7bpJibwrK2Bjjnvg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3207.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38070700005)(83380400001)(186003)(26005)(38100700002)(82960400001)(122000001)(8936002)(5660300002)(66946007)(66556008)(66476007)(8676002)(64756008)(66446008)(4326008)(2906002)(76116006)(508600001)(6506007)(2616005)(6512007)(316002)(91956017)(54906003)(71200400001)(6486002)(110136005)(36756003)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WFdneFMwaXFyT3pOdXFUTEN4Q01CbzZqcXRBV1ZGQU1nZXVpNitndFZKc2tj?=
+ =?utf-8?B?RUlmZ2ZKWEtIR0VhTGp1RjIrSEtBWCtrRmVsUk94N2dJVlV0STU4cFEwK2lB?=
+ =?utf-8?B?RjZwb1pRakUyejlhM1hTSExoRUJvOElUMEVvejl6RTc4SmVxbE5LQXhIVFdv?=
+ =?utf-8?B?V3hPK1lVeTFYZXRTZmZPZUFoNTVmWUdYdkk3NjZUZi92R0gxeFNaQTllMyt4?=
+ =?utf-8?B?MFgwZGVxTVZmdkQzcmp1b2xieEZBaXVZNHZPZ2JWWWczNitMTythdWtrRHJC?=
+ =?utf-8?B?TG13eEVrYjQ0TmlJMFZreU9HQkhhMlJVbGx6Y2lDVjNTb2FIbEdidmdRQllz?=
+ =?utf-8?B?VnAwLzFqSG9CRFJSL3pJSmFPNk9CaTcrSmtvUUFHeDhoeXc1eXJVZWgyd25B?=
+ =?utf-8?B?cFlrcHFpWUZKMkxodEQ0Nm9od2J3NU51MEM5OTMxSjJkQzRJRXBDNWZFbEFJ?=
+ =?utf-8?B?aEx0Z3JIbE5kZWNzVUtjQzh6VldSdTNHTXZIOGVRR3pZQXREQk9ZRUxiM1dV?=
+ =?utf-8?B?NHl4OWl2VGRML0x0SDdhc0grbmpOd1h5VjBBNDBjcE0vZElwaHhoNWRhcGhp?=
+ =?utf-8?B?WE1WbnVtNjUwRkFDazRVRnRBWDFHUlNHR1lOYVBSUTJyYTNzdnNzVGxLWStC?=
+ =?utf-8?B?ZE9vZjdFMnhoU3NwaDhGOHU2VC9nSjQxektUYzNJSXNsRDgrS2lvcG1RR2sx?=
+ =?utf-8?B?cjdpVm80WHo1bUlOd3BJVjJsSDlJajJ2UGljaXhaM3E5eVM1MVU4UTVEUFJT?=
+ =?utf-8?B?dXMvcG9GaERRMm9ERHJ1OXNSMkZMZmMvSnYxMXEzVmllNGVDTTRQN0xvRjRi?=
+ =?utf-8?B?ak5jOXJycWVmZWRLaHVnbUkwdkR2Q0w0elF4K1ZMVjJpM25PejFZcXdrV1VO?=
+ =?utf-8?B?ZVV5Zmc0cmVzbHB2OFVQOVUvcGNsMEVaM1JHYXVLenNsNTArSkt5R3FGRStD?=
+ =?utf-8?B?NzZEK1BTcHVUWWxBUk1odEtaNmIxLzBEd1kwaE5JejMxczF3WTh3R2U3RGhi?=
+ =?utf-8?B?dldLQjZXdEtNYytaZGc1akcwVjJTeU9oeVhjZ1BUamxhZUcydlUxOEhzNmpX?=
+ =?utf-8?B?czl4OUhGTHIwOGlLK2sza3UraHRMOFdSTTllNXhjZnBSRk1RdnRKT3FmWDgv?=
+ =?utf-8?B?QXNmY2JjYi82SkRoS0x0R0ZnRnZub0dFMjNQWXZZNEJhbUxTNDBNWE5WRDlV?=
+ =?utf-8?B?TXZ0QWdtMUlqSHNQajl0bFZZTG1RTUtFYXdmVkJSdUIwUFZWQ2F4ZFN1VXFh?=
+ =?utf-8?B?eWgzYUNISTdUWHU4YkRmZWN2RVRQRENEUkVyNTZRa3p3WmM5akZLS3BSeUF5?=
+ =?utf-8?B?bkZrS3BzNW1SSUFRZUJ4dGNLdHYwM1J5ZHJGSkFnQ3NPQjNUY3c5aDdyUjJx?=
+ =?utf-8?B?QzhOZERxUFVvaUtreTJkUVE4UVhEUmwxdkZoY2xxSFhhbHRJdENYNWxkOGNm?=
+ =?utf-8?B?K29lM2VJUFI2c0w4Mzc2Vms4bWYrMmRRRVZDSWZYTzBJdXR0OGdObzR1bDZ6?=
+ =?utf-8?B?UTRVUCt5bWhkQldiT25ISithWDRBQUtrdVEyTHBhSXpjRitjZ0ladm1ZWlVB?=
+ =?utf-8?B?NnlFZ3VoN0FBRTAvVXQ4R0NFVC9jcW8vZzhGSDR3MVpGc2ZST2hqMERRVnVs?=
+ =?utf-8?B?RWRuU3hrSERsOXZDMXMrLzBLWWlmWEZ4YzBoZUdLSkNNUWxiYUlWT0JJTmxU?=
+ =?utf-8?B?NXYxQTE5YnNCTXdaUjFXRUk5ZEtNNmlzc3ZyNXN6YmZUZzRSMTJnancwZ2g0?=
+ =?utf-8?B?MTNPb3FBeHRaYmhnK1J4TnZJb1NFOE4zSWx1YzFIam5HTkpaa2w1WGI3N0xw?=
+ =?utf-8?B?OW5aSFlGdzl6Y2xOdDNFUnRXSnhmb0VZNXUzOGE0SGd1Smp1dkwwTXRHU3lJ?=
+ =?utf-8?B?cWRobEFoSWxPTTZLbXFFSERpMnRVYzJXejZvMmNrcE54bnNXZXZKY3pPQkx3?=
+ =?utf-8?B?UURzUFNyVEd1aldzNWVieHlkUzE5Qlk4ejY5R2ZueUxmdFEweCtxclZIN3Jv?=
+ =?utf-8?B?WXZJYXRWMllBPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <EB5933034B3CD541BA9F97511A09EAD7@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: K82nTEZM-YLRZJkm-rjmME3Qfuu2DH64
-X-Proofpoint-ORIG-GUID: -6CyisBvOoFMTo9gRhk5wSrgLM7mgWlW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-17_04,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- phishscore=0 bulkscore=0 mlxscore=0 malwarescore=0 suspectscore=0
- priorityscore=1501 lowpriorityscore=0 clxscore=1011 mlxlogscore=999
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203170066
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3207.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10808e6d-066d-4c17-4aeb-08da0806417e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2022 11:06:58.7030
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NbZTHcW0bo4vMls2iyrHngRC45k+C+wdS4iYVaM8LVMuynk4X0R5iB1hK/UjBi6k7vFq950VOvrrylpuJL4VkCDMjEGVG6ljEKZmDZP5Des=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5189
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RTAS runs in real mode (MSR[DR] and MSR[IR] unset) and in 32bits
-mode (MSR[SF] unset).
-
-The change in MSR is done in enter_rtas() in a relatively complex way,
-since the MSR value could be hardcoded.
-
-Furthermore, a panic has been reported when hitting the watchdog interrupt
-while running in RTAS, this leads to the following stack trace:
-
-[69244.027433][   C24] watchdog: CPU 24 Hard LOCKUP
-[69244.027442][   C24] watchdog: CPU 24 TB:997512652051031, last heartbeat TB:997504470175378 (15980ms ago)
-[69244.027451][   C24] Modules linked in: chacha_generic(E) libchacha(E) xxhash_generic(E) wp512(E) sha3_generic(E) rmd160(E) poly1305_generic(E) libpoly1305(E) michael_mic(E) md4(E) crc32_generic(E) cmac(E) ccm(E) algif_rng(E) twofish_generic(E) twofish_common(E) serpent_generic(E) fcrypt(E) des_generic(E) libdes(E) cast6_generic(E) cast5_generic(E) cast_common(E) camellia_generic(E) blowfish_generic(E) blowfish_common(E) algif_skcipher(E) algif_hash(E) gcm(E) algif_aead(E) af_alg(E) tun(E) rpcsec_gss_krb5(E) auth_rpcgss(E)
-nfsv4(E) dns_resolver(E) rpadlpar_io(EX) rpaphp(EX) xsk_diag(E) tcp_diag(E) udp_diag(E) raw_diag(E) inet_diag(E) unix_diag(E) af_packet_diag(E) netlink_diag(E) nfsv3(E) nfs_acl(E) nfs(E) lockd(E) grace(E) sunrpc(E) fscache(E) netfs(E) af_packet(E) rfkill(E) bonding(E) tls(E) ibmveth(EX) crct10dif_vpmsum(E) rtc_generic(E) drm(E) drm_panel_orientation_quirks(E) fuse(E) configfs(E) backlight(E) ip_tables(E) x_tables(E) dm_service_time(E) sd_mod(E) t10_pi(E)
-[69244.027555][   C24]  ibmvfc(EX) scsi_transport_fc(E) vmx_crypto(E) gf128mul(E) btrfs(E) blake2b_generic(E) libcrc32c(E) crc32c_vpmsum(E) xor(E) raid6_pq(E) dm_mirror(E) dm_region_hash(E) dm_log(E) sg(E) dm_multipath(E) dm_mod(E) scsi_dh_rdac(E) scsi_dh_emc(E) scsi_dh_alua(E) scsi_mod(E)
-[69244.027587][   C24] Supported: No, Unreleased kernel
-[69244.027600][   C24] CPU: 24 PID: 87504 Comm: drmgr Kdump: loaded Tainted: G            E  X    5.14.21-150400.71.1.bz196362_2-default #1 SLE15-SP4 (unreleased) 0d821077ef4faa8dfaf370efb5fdca1fa35f4e2c
-[69244.027609][   C24] NIP:  000000001fb41050 LR: 000000001fb4104c CTR: 0000000000000000
-[69244.027612][   C24] REGS: c00000000fc33d60 TRAP: 0100   Tainted: G            E  X     (5.14.21-150400.71.1.bz196362_2-default)
-[69244.027615][   C24] MSR:  8000000002981000 <SF,VEC,VSX,ME>  CR: 48800002  XER: 20040020
-[69244.027625][   C24] CFAR: 000000000000011c IRQMASK: 1
-[69244.027625][   C24] GPR00: 0000000000000003 ffffffffffffffff 0000000000000001 00000000000050dc
-[69244.027625][   C24] GPR04: 000000001ffb6100 0000000000000020 0000000000000001 000000001fb09010
-[69244.027625][   C24] GPR08: 0000000020000000 0000000000000000 0000000000000000 0000000000000000
-[69244.027625][   C24] GPR12: 80040000072a40a8 c00000000ff8b680 0000000000000007 0000000000000034
-[69244.027625][   C24] GPR16: 000000001fbf6e94 000000001fbf6d84 000000001fbd1db0 000000001fb3f008
-[69244.027625][   C24] GPR20: 000000001fb41018 ffffffffffffffff 000000000000017f fffffffffffff68f
-[69244.027625][   C24] GPR24: 000000001fb18fe8 000000001fb3e000 000000001fb1adc0 000000001fb1cf40
-[69244.027625][   C24] GPR28: 000000001fb26000 000000001fb460f0 000000001fb17f18 000000001fb17000
-[69244.027663][   C24] NIP [000000001fb41050] 0x1fb41050
-[69244.027696][   C24] LR [000000001fb4104c] 0x1fb4104c
-[69244.027699][   C24] Call Trace:
-[69244.027701][   C24] Instruction dump:
-[69244.027723][   C24] XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
-[69244.027728][   C24] XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
-[69244.027762][T87504] Oops: Unrecoverable System Reset, sig: 6 [#1]
-[69244.028044][T87504] LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
-[69244.028089][T87504] Modules linked in: chacha_generic(E) libchacha(E) xxhash_generic(E) wp512(E) sha3_generic(E) rmd160(E) poly1305_generic(E) libpoly1305(E) michael_mic(E) md4(E) crc32_generic(E) cmac(E) ccm(E) algif_rng(E) twofish_generic(E) twofish_common(E) serpent_generic(E) fcrypt(E) des_generic(E) libdes(E) cast6_generic(E) cast5_generic(E) cast_common(E) camellia_generic(E) blowfish_generic(E) blowfish_common(E) algif_skcipher(E) algif_hash(E) gcm(E) algif_aead(E) af_alg(E) tun(E) rpcsec_gss_krb5(E) auth_rpcgss(E)
-nfsv4(E) dns_resolver(E) rpadlpar_io(EX) rpaphp(EX) xsk_diag(E) tcp_diag(E) udp_diag(E) raw_diag(E) inet_diag(E) unix_diag(E) af_packet_diag(E) netlink_diag(E) nfsv3(E) nfs_acl(E) nfs(E) lockd(E) grace(E) sunrpc(E) fscache(E) netfs(E) af_packet(E) rfkill(E) bonding(E) tls(E) ibmveth(EX) crct10dif_vpmsum(E) rtc_generic(E) drm(E) drm_panel_orientation_quirks(E) fuse(E) configfs(E) backlight(E) ip_tables(E) x_tables(E) dm_service_time(E) sd_mod(E) t10_pi(E)
-[69244.028171][T87504]  ibmvfc(EX) scsi_transport_fc(E) vmx_crypto(E) gf128mul(E) btrfs(E) blake2b_generic(E) libcrc32c(E) crc32c_vpmsum(E) xor(E) raid6_pq(E) dm_mirror(E) dm_region_hash(E) dm_log(E) sg(E) dm_multipath(E) dm_mod(E) scsi_dh_rdac(E) scsi_dh_emc(E) scsi_dh_alua(E) scsi_mod(E)
-[69244.028307][T87504] Supported: No, Unreleased kernel
-[69244.028385][T87504] CPU: 24 PID: 87504 Comm: drmgr Kdump: loaded Tainted: G            E  X    5.14.21-150400.71.1.bz196362_2-default #1 SLE15-SP4 (unreleased) 0d821077ef4faa8dfaf370efb5fdca1fa35f4e2c
-[69244.028408][T87504] NIP:  000000001fb41050 LR: 000000001fb4104c CTR: 0000000000000000
-[69244.028418][T87504] REGS: c00000000fc33d60 TRAP: 0100   Tainted: G            E  X     (5.14.21-150400.71.1.bz196362_2-default)
-[69244.028429][T87504] MSR:  8000000002981000 <SF,VEC,VSX,ME>  CR: 48800002  XER: 20040020
-[69244.028444][T87504] CFAR: 000000000000011c IRQMASK: 1
-[69244.028444][T87504] GPR00: 0000000000000003 ffffffffffffffff 0000000000000001 00000000000050dc
-[69244.028444][T87504] GPR04: 000000001ffb6100 0000000000000020 0000000000000001 000000001fb09010
-[69244.028444][T87504] GPR08: 0000000020000000 0000000000000000 0000000000000000 0000000000000000
-[69244.028444][T87504] GPR12: 80040000072a40a8 c00000000ff8b680 0000000000000007 0000000000000034
-[69244.028444][T87504] GPR16: 000000001fbf6e94 000000001fbf6d84 000000001fbd1db0 000000001fb3f008
-[69244.028444][T87504] GPR20: 000000001fb41018 ffffffffffffffff 000000000000017f fffffffffffff68f
-[69244.028444][T87504] GPR24: 000000001fb18fe8 000000001fb3e000 000000001fb1adc0 000000001fb1cf40
-[69244.028444][T87504] GPR28: 000000001fb26000 000000001fb460f0 000000001fb17f18 000000001fb17000
-[69244.028534][T87504] NIP [000000001fb41050] 0x1fb41050
-[69244.028543][T87504] LR [000000001fb4104c] 0x1fb4104c
-[69244.028549][T87504] Call Trace:
-[69244.028554][T87504] Instruction dump:
-[69244.028561][T87504] XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
-[69244.028575][T87504] XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
-[69244.028607][T87504] ---[ end trace 3ddec07f638c34a2 ]---
-
-This happens because MSR[RI] is unset when entering RTAS but there is no
-valid reason to not set it here.
-
-Fixing this by reviewing the way MSR is compute before calling RTAS. Now a
-hardcoded value meaning real mode, 32 bits and Recoverable Interrupt is
-loaded.
-
-In addition a check is added in do_enter_rtas() to detect calls made with
-MSR[RI] unset, as we are forcing it on later.
-
-Cc: stable@vger.kernel.org
-Suggested-by: Nicholas Piggin <npiggin@gmail.com>
-Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
----
- arch/powerpc/kernel/entry_64.S | 18 ++++++------------
- arch/powerpc/kernel/rtas.c     |  5 +++++
- 2 files changed, 11 insertions(+), 12 deletions(-)
-
-diff --git a/arch/powerpc/kernel/entry_64.S b/arch/powerpc/kernel/entry_64.S
-index 9581906b5ee9..fbc8dfe7da9f 100644
---- a/arch/powerpc/kernel/entry_64.S
-+++ b/arch/powerpc/kernel/entry_64.S
-@@ -330,22 +330,16 @@ _GLOBAL(enter_rtas)
- 	clrldi	r4,r4,2			/* convert to realmode address */
-        	mtlr	r4
- 
--	li	r0,0
--	ori	r0,r0,MSR_EE|MSR_SE|MSR_BE|MSR_RI
--	andc	r0,r6,r0
--	
--        li      r9,1
--        rldicr  r9,r9,MSR_SF_LG,(63-MSR_SF_LG)
--	ori	r9,r9,MSR_IR|MSR_DR|MSR_FE0|MSR_FE1|MSR_FP|MSR_RI|MSR_LE
--	andc	r6,r0,r9
--
- __enter_rtas:
--	sync				/* disable interrupts so SRR0/1 */
--	mtmsrd	r0			/* don't get trashed */
--
- 	LOAD_REG_ADDR(r4, rtas)
- 	ld	r5,RTASENTRY(r4)	/* get the rtas->entry value */
- 	ld	r4,RTASBASE(r4)		/* get the rtas->base value */
-+
-+	/* RTAS runs in 32bits real mode but we may hit watchdog irq */
-+	LOAD_REG_IMMEDIATE(r6, MSR_ME|MSR_RI)
-+
-+	li      r0,0
-+	mtmsrd  r0,1                    /* disable RI before using SRR0/1 */
- 	
- 	mtspr	SPRN_SRR0,r5
- 	mtspr	SPRN_SRR1,r6
-diff --git a/arch/powerpc/kernel/rtas.c b/arch/powerpc/kernel/rtas.c
-index 1f42aabbbab3..d7775b8c8853 100644
---- a/arch/powerpc/kernel/rtas.c
-+++ b/arch/powerpc/kernel/rtas.c
-@@ -49,6 +49,11 @@ void enter_rtas(unsigned long);
- 
- static inline void do_enter_rtas(unsigned long args)
- {
-+	unsigned long msr;
-+
-+	msr = mfmsr();
-+	BUG_ON(!(msr & MSR_RI));
-+
- 	enter_rtas(args);
- 
- 	srr_regs_clobbered(); /* rtas uses SRRs, invalidate */
--- 
-2.35.1
-
+T24gV2VkLCAyMDIyLTAzLTE2IGF0IDE4OjU1ICswMDAwLCBHcnVtYmFjaCwgRW1tYW51ZWwgd3Jv
+dGU6DQo+ID4gDQo+ID4gRnJvbTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4NCj4gPiAN
+Cj4gPiBCdWlsZGluZyBpd2xtZWkgd2l0aG91dCBDT05GSUdfQ0ZHODAyMTEgY2F1c2VzIGEgbGlu
+ay10aW1lIHdhcm5pbmc6DQo+ID4gDQo+ID4gbGQubGxkOiBlcnJvcjogdW5kZWZpbmVkIHN5bWJv
+bDogaWVlZTgwMjExX2hkcmxlbg0KPiA+ID4gPiA+IHJlZmVyZW5jZWQgYnkgbmV0LmMNCj4gPiA+
+ID4gPiANCj4gPiA+ID4gPiBuZXQvd2lyZWxlc3MvaW50ZWwvaXdsd2lmaS9tZWkvbmV0Lm86KGl3
+bF9tZWlfdHhfY29weV90b19jc21lDQo+ID4gPiA+ID4gKSBpbg0KPiA+ID4gPiA+IGFyY2hpdmUg
+ZHJpdmVycy9idWlsdC1pbi5hDQo+ID4gDQo+ID4gQWRkIGFuIGV4cGxpY2l0IGRlcGVuZGVuY3kg
+dG8gYXZvaWQgdGhpcy4gSW4gdGhlb3J5IGl0IHNob3VsZCBub3QNCj4gPiBiZSBuZWVkZWQNCj4g
+PiBoZXJlLCBidXQgaXQgYWxzbyBzZWVtcyBwb2ludGxlc3MgdG8gYWxsb3cgSVdMTUVJIGZvcg0K
+PiA+IGNvbmZpZ3VyYXRpb25zIHdpdGhvdXQNCj4gPiBDRkc4MDIxMS4NCj4gPiANCj4gPiBTaWdu
+ZWQtb2ZmLWJ5OiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPg0KPiA+IC0tLQ0KPiA+IMKg
+ZHJpdmVycy9uZXQvd2lyZWxlc3MvaW50ZWwvaXdsd2lmaS9LY29uZmlnIHwgMSArDQo+ID4gwqAx
+IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCj4gPiANCj4gPiBJIHNlZSB0aGlzIHdhcm5p
+bmcgb24gNS4xNy1yYzgsIGJ1dCBkaWQgbm90IHRlc3QgaXQgb24gbGludXgtbmV4dCwNCj4gPiB3
+aGljaCBtYXkNCj4gPiBhbHJlYWR5IGhhdmUgYSBmaXguDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvbmV0L3dpcmVsZXNzL2ludGVsL2l3bHdpZmkvS2NvbmZpZw0KPiA+IGIvZHJpdmVy
+cy9uZXQvd2lyZWxlc3MvaW50ZWwvaXdsd2lmaS9LY29uZmlnDQo+ID4gaW5kZXggODVlNzA0Mjgz
+NzU1Li5hNjQ3YTQwNmI4N2IgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3Mv
+aW50ZWwvaXdsd2lmaS9LY29uZmlnDQo+ID4gKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvaW50
+ZWwvaXdsd2lmaS9LY29uZmlnDQo+ID4gQEAgLTEzOSw2ICsxMzksNyBAQCBjb25maWcgSVdMTUVJ
+DQo+ID4gwqAJdHJpc3RhdGUgIkludGVsIE1hbmFnZW1lbnQgRW5naW5lIGNvbW11bmljYXRpb24g
+b3ZlciBXTEFOIg0KPiA+IMKgCWRlcGVuZHMgb24gSU5URUxfTUVJDQo+ID4gwqAJZGVwZW5kcyBv
+biBQTQ0KPiA+ICsJZGVwZW5kcyBvbiBDRkc4MDIxMQ0KPiA+IMKgCWhlbHANCj4gPiDCoAkgIEVu
+YWJsZXMgdGhlIGl3bG1laSBrZXJuZWwgbW9kdWxlLg0KPiA+IA0KPiANCj4gRldJVzogTHVjYSBq
+dXN0IG1lcmdlZCB0aGUgZXhhY3Qgc2FtZSBwYXRjaCBpbnRlcm5hbGx5LiBTbw0KPiBBY2tlZC1i
+eTogRW1tYW51ZWwgR3J1bWJhY2ggPEVtbWFudWVsLmdydW1iYWNoQGludGVsLmNvbT4NCg0KWWVh
+aCwgcGxlYXNlIHRha2UgdGhpcy4NCg0KQWNrZWQtYnk6IEx1Y2EgQ29lbGhvIDxsdWNpYW5vLmNv
+ZWxob0BpbnRlbC5jb20+DQoNCi0tDQpDaGVlcnMsDQpMdWNhLg0K

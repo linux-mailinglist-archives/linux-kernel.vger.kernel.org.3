@@ -2,113 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9B04DBD41
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 03:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 330984DBD49
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 03:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348007AbiCQCyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 22:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S1348911AbiCQC6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 22:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237023AbiCQCya (ORCPT
+        with ESMTP id S1347012AbiCQC5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 22:54:30 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9174FD37
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 19:53:14 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id i4so3411082qti.7
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 19:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=northvilleschools.net; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=hOTvV/BSKqVkGgoGdzHd4gweYpV9pcJ3dB6vvIoE2gU=;
-        b=BVTlqSXDh/6F0/7cr+KPmDGtn27xHshwmogWqP00WdmxLteEOSwZlNSaJOBLvd+qb8
-         qDa/rgK6dn+meP1EArL1V2duBZi3GoiYWlb3tRa7rbmwb3AVfAY0EjJiPH4g58yZwV+j
-         hXQ6fFN9lyxmI35PDNl0E7mn2MH1ILNXdkVdC8FVSw+vvZPTwQlgpKZXPpOq7eQnaUp9
-         A1YNDqvQ1teAgSYR/v6hGxb/FJTFaSYmMjuxnUReFY/sUGPw16VtSK7XCc1CCT5OPs5r
-         +5IrEj060hA7qwHGOCxcOm+3D2dSqsAPi98UwulgRarYityfafdUH25Swou844UKQNCa
-         bUFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=hOTvV/BSKqVkGgoGdzHd4gweYpV9pcJ3dB6vvIoE2gU=;
-        b=PvTj7753zXOWoSel31uBvd5cTAOF2wB7/czCfQmkBFzxMJH1KPpGgY2ArF9Du1hPMI
-         sEfb0lQh3JYmtOk+uk4U7JlMRwT3JjaYBtgbl86OR16cM/uT6RTc6UfMuQ7jFY5ThCRa
-         cIeF4SndXRha4MUwQR9nmLM+HbBcNT1JAYzHGar3fPiDhVlh5aLrbh8Z5hFT39PNMEAj
-         rIJ3iO16pKORpmQxMUC3PlwTHuVF+dd6tw7fbT034anVrVZBWZzdYD10SNxekGNIUeua
-         ivuVl3xo/cRVTCN8ZnR6Px5BQ5guFSMzJOTgxPt832W9jvvnDx1Zoh9OrolFcO6Th4v2
-         UilQ==
-X-Gm-Message-State: AOAM531jCZdvU76QAhpgR7sEQy2ehieDE7L7PR/Urv2PY0A3V8WBGj1r
-        T1bRtd/TzSPnwp6gFOjcHl25hzbYwLYM/O5PGdY=
-X-Google-Smtp-Source: ABdhPJxcSCr7rDUc/YBUZSvGfZQOTDxzd+GR7tv+xBZ0n9tA0G7tmJVSHCMEVmU70JPw4w7J13sEYA==
-X-Received: by 2002:ac8:4b61:0:b0:2d1:cfc7:2989 with SMTP id g1-20020ac84b61000000b002d1cfc72989mr2184228qts.416.1647485593603;
-        Wed, 16 Mar 2022 19:53:13 -0700 (PDT)
-Received: from sckzor-linux (d4-50-247-168.col.wideopenwest.com. [50.4.168.247])
-        by smtp.gmail.com with ESMTPSA id j4-20020a37c244000000b0067d79a3fd0esm1817540qkm.106.2022.03.16.19.53.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 19:53:13 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 22:53:12 -0400
-From:   Charlie Sands <sandsch@northvilleschools.net>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH V2] staging: rts5208: Resolve checkpatch.pl issues.
-Message-ID: <YjKimAdiRfRVfGl8@sckzor-linux.localdomain>
+        Wed, 16 Mar 2022 22:57:48 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018EF12AD8;
+        Wed, 16 Mar 2022 19:56:32 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R711e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V7PgVAo_1647485788;
+Received: from 30.240.113.214(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V7PgVAo_1647485788)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 17 Mar 2022 10:56:29 +0800
+Message-ID: <f93a5532-3e07-edf4-38ca-142a0f1d78d7@linux.alibaba.com>
+Date:   Thu, 17 Mar 2022 10:56:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [BUG] kernel side can NOT trigger memory error with einj
+Content-Language: en-US
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        graeme.gregory@linaro.org, will.deacon@arm.com,
+        myron.stowe@redhat.com, len.brown@intel.com, ying.huang@intel.com
+References: <8c40a492-9461-2b43-6ec9-06bfc7a0e77f@linux.alibaba.com>
+ <YjIeff7ESJB/amYA@agluck-desk3.sc.intel.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <YjIeff7ESJB/amYA@agluck-desk3.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch removes unwanted use of dev_info for ftrace-like functionality
-as suggested by checkpatch.pl.
+Hi, Tony,
 
-Signed-off-by: Charlie Sands <sandsch@northvilleschools.net>
----
-V2: fixed bad commit message and compiler warning
+Thank you for your quick reply.
 
- drivers/staging/rts5208/rtsx.c | 8 --------
- 1 file changed, 8 deletions(-)
+在 2022/3/17 AM1:29, Luck, Tony 写道:
+> On Tue, Mar 08, 2022 at 01:19:12PM +0800, Shuai Xue wrote:
+>> Hi folks,
+>>
+>> If we inject an memory error at physical memory address, e.g. 0x92f033038,
+>> used by a user space process:
+>>
+>> 	echo 0x92f033038 > /sys/kernel/debug/apei/einj/param1
+>> 	echo 0xfffffffffffff000 > /sys/kernel/debug/apei/einj/param2
+>> 	echo 0x1 > /sys/kernel/debug/apei/einj/flags
+>> 	echo 0x8 > /sys/kernel/debug/apei/einj/error_type
+>> 	echo 1 > /sys/kernel/debug/apei/einj/error_inject
+>>
+>> Then the following error will be reported in dmesg:
+>>
+>>     ACPI: [Firmware Bug]: requested region covers kernel memory @ 0x000000092f033038
+>>
+>> After digging into einj trigger interface, I think it's a kernel bug.
+> 
+> I think you are right. This isn't the first bug where Linux tries
+> to validate addresses supplied by EINJ for Linux to read/write.
+> 
+> I hadn't come across it because I almost always set:
+> 
+> # echo 1 > notrigger
+> 
+> so that I can have some application, or function in the kernel
+> trigger the error. Instead of running the EINJ trigger action
+> to make it happen right away.
 
-diff --git a/drivers/staging/rts5208/rtsx.c b/drivers/staging/rts5208/rtsx.c
-index 5a58dac76c88..2284a96abcff 100644
---- a/drivers/staging/rts5208/rtsx.c
-+++ b/drivers/staging/rts5208/rtsx.c
-@@ -159,8 +159,6 @@ static int command_abort(struct scsi_cmnd *srb)
- 	struct rtsx_dev *dev = host_to_rtsx(host);
- 	struct rtsx_chip *chip = dev->chip;
- 
--	dev_info(&dev->pci->dev, "%s called\n", __func__);
--
- 	scsi_lock(host);
- 
- 	/* Is this command still active? */
-@@ -186,10 +184,6 @@ static int command_abort(struct scsi_cmnd *srb)
-  */
- static int device_reset(struct scsi_cmnd *srb)
- {
--	struct rtsx_dev *dev = host_to_rtsx(srb->device->host);
--
--	dev_info(&dev->pci->dev, "%s called\n", __func__);
--
- 	return SUCCESS;
- }
- 
-@@ -968,8 +962,6 @@ static void rtsx_remove(struct pci_dev *pci)
- {
- 	struct rtsx_dev *dev = pci_get_drvdata(pci);
- 
--	dev_info(&pci->dev, "%s called\n", __func__);
--
- 	quiesce_and_remove_host(dev);
- 	release_everything(dev);
- 	pci_release_regions(pci);
--- 
-2.35.1
+Haha, I know your great test suit, ras-tools. All cases are not triggered
+by EINJ tigger action. I have learned a lot from it.
 
+>> I am wondering that should we use kmap to map RAM in acpi_map or add a
+>> another path to address this issue? Any comment is welcomed.
+> 
+> Perhaps just drop the sanity checks? Just trusting the BIOS? Sounds
+> radical, but this is validation code where the user is deliberately
+> injecting errors. If there are BIOS bugs, then people doing validation
+> may be well positioned to find the BIOS people to make them fix
+> things.
+> 
+> Problem with this approach is that EINJ calls into the APEI code
+> that is used for other things besides error injection for validation.
+> So a blanket removal of sanity checks wouldn't be a good idea.
+
+Agree. A blanket removal of APEI sanity checks is not a good idea. How about
+requesting memory with kmap instead APEI API only in __einj_error_trigger()?
+Then we would not break the validation of APEI code and could trigger the
+injected error.
+
+I have provided a rough code in last mail.
+
+> A hacking way to address this issue is that map RAM memory with kmap
+> instead of apei_exec_pre_map_gars, and read it directly instead of
+> apei_exec_run.
+> -       rc = apei_exec_pre_map_gars(&trigger_ctx);
+> -       if (rc)
+> -               goto out_release;
+> +       volatile long *ptr;
+> +       long tmp;
+> +       unsigned long pfn;
+> +       pfn = param1 >> PAGE_SHIFT;
+>
+> -       rc = apei_exec_run(&trigger_ctx, ACPI_EINJ_TRIGGER_ERROR);
+> +       ptr = kmap(pfn_to_page(pfn));
+> +       tmp = *(ptr + (param1 & ~ PAGE_MASK));
+>
+> -       apei_exec_post_unmap_gars(&trigger_ctx);
+
+
+Best Regards.
+Shuai

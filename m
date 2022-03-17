@@ -2,189 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79794DC77E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEF34DC78A
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234544AbiCQN0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 09:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
+        id S234557AbiCQN1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 09:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234549AbiCQN0M (ORCPT
+        with ESMTP id S234560AbiCQN1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:26:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12425197AED
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 06:24:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AF9F821108;
-        Thu, 17 Mar 2022 13:24:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1647523493; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=MDeAE84DRLdT9jTy1nr6IG8m6m2XkLXKMCgf9rNtHAE=;
-        b=p6ZXeSgny6Tu58YnVcA0wv/EvTIaFQdn+VqHGWds/5zwIRG/22ulGIfKP1dTLUIAjbhiMb
-        lQ48yGOMljRn9o0yb5mBRlYaLn7pN/jvBNY04rUreV9oAZLPHplVy+FC+/W2QS4M3EAX0M
-        ZDKN0NbllGBtCNdE1oB0HPebCUsUbzs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1647523493;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=MDeAE84DRLdT9jTy1nr6IG8m6m2XkLXKMCgf9rNtHAE=;
-        b=nheOVJ5H9rGvN+YbNv/kMHTF3T3D1p8eWb0ejrQDQj4HYk27fukhHOv5nUuGXpPcozo3BZ
-        MUzuMa1jerXV7qDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3585013BA9;
-        Thu, 17 Mar 2022 13:24:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sRQWCqU2M2IgEAAAMHmgww
-        (envelope-from <osalvador@suse.de>); Thu, 17 Mar 2022 13:24:53 +0000
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Oscar Salvador <osalvador@suse.de>
-Subject: [PATCH] mm: Untangle config dependencies for demote-on-reclaim
-Date:   Thu, 17 Mar 2022 14:24:50 +0100
-Message-Id: <20220317132450.5116-1-osalvador@suse.de>
-X-Mailer: git-send-email 2.35.1
+        Thu, 17 Mar 2022 09:27:08 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1222F16C0BF;
+        Thu, 17 Mar 2022 06:25:48 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id z8so10188013ybh.7;
+        Thu, 17 Mar 2022 06:25:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wPvFn4zW+HYII4PeZtiMT7obVyqt+EFe8DrLP0fyVsc=;
+        b=0ONC3Sqcv0yhwGOYQfs+IWzT/1Yy867R/6KlO6U/15l8yVCbe0I5oRPeHdqKhvMDx8
+         V1R6p9cRNTlu9iLTtOis6RNfHkYfyFohw/OYY16a+QTEdrDpOE5IJ5oOvmOhtVPZ1qEU
+         69X9pIaNTaqBIsbXdVli6EtADvbw+89EE3WKj9gu0q2eqadvXL6YmfDtVYy/2bvrmgDW
+         VGQ0Bhu3vDE0Hjp+Va5arqkIpKZVqB4uD85KZtIgQOfWJA7NpcRw9S9FmLRNO4/af7cW
+         JV/QqWCkktshEzSrIfqKqbLCSAGsQs5+ocKmcPNn4AmvynLJ1u+PNn6iLFb8X4e2FS3I
+         mPlA==
+X-Gm-Message-State: AOAM533T6A/l/PemIByepgZEr5JHk0l4riLxMWmRtMzASRLhag05gs4C
+        iDP/9HMFUJ3uHhVBUlp/IpMZrVbGakP21THWNc3f0LdH
+X-Google-Smtp-Source: ABdhPJwpVcWHCzDs4bdzn3PSpncbPClTGTX/VWTmFLkrF4UgAGPaJFl9wWh5enimlaxnjW8mZzIQjlC/EPpg1q6wCDc=
+X-Received: by 2002:a25:6d05:0:b0:633:b0f5:6c1e with SMTP id
+ i5-20020a256d05000000b00633b0f56c1emr1259417ybc.137.1647523547193; Thu, 17
+ Mar 2022 06:25:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220315144122.23144-1-rdunlap@infradead.org>
+In-Reply-To: <20220315144122.23144-1-rdunlap@infradead.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 17 Mar 2022 14:25:36 +0100
+Message-ID: <CAJZ5v0gfX2weU++t4szknB16PxufzGZ26NHgqe__B-+VdAmCQw@mail.gmail.com>
+Subject: Re: [PATCH v3] clocksource: acpi_pm: fix return value of __setup handler
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the time demote-on-reclaim was introduced, it was tied to
-CONFIG_HOTPLUG_CPU + CONFIG_MIGRATE, but that is not really
-accurate.
+On Tue, Mar 15, 2022 at 3:41 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> __setup() handlers should return 1 to obsolete_checksetup() in
+> init/main.c to indicate that the boot option has been handled.
+> A return of 0 causes the boot option/value to be listed as an Unknown
+> kernel parameter and added to init's (limited) environment strings.
+>
+> The __setup() handler interface isn't meant to handle negative return
+> values -- they are non-zero, so they mean "handled" (like a return
+> value of 1 does), but that's just a quirk. So return 1 from
+> parse_pmtmr(). Also print a warning message if kstrtouint() returns
+> an error.
+>
+> Fixes: 6b148507d3d0 ("pmtmr: allow command line override of ioport")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> From: Igor Zhbanov <i.zhbanov@omprussia.ru>
 
-The only two things we need to depen on is CONFIG_NUMA +
-CONFIG_MIGRATE, so clean this up.
-Furthermore, we only register the hotplug memory notifier
-when the system has CONFIG_MEMORY_HOTPLUG.
+What does this From tag mean?
 
-Signed-off-by: Oscar Salvador <osalvador@suse.de>
-Suggested-by: "Huang, Ying" <ying.huang@intel.com>
----
- include/linux/migrate.h |  5 ++++-
- mm/migrate.c            | 11 ++++++-----
- mm/vmstat.c             |  2 --
- 3 files changed, 10 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/migrate.h b/include/linux/migrate.h
-index a4a336fd81fc..1efabe7bb5fc 100644
---- a/include/linux/migrate.h
-+++ b/include/linux/migrate.h
-@@ -49,14 +49,17 @@ int folio_migrate_mapping(struct address_space *mapping,
- 
- extern bool numa_demotion_enabled;
- extern void migrate_on_reclaim_init(void);
--#ifdef CONFIG_HOTPLUG_CPU
-+#ifdef CONFIG_NUMA
- extern void set_migration_target_nodes(void);
-+extern void migrate_on_reclaim_init(void);
- #else
- static inline void set_migration_target_nodes(void) {}
-+static inline void migrate_on_reclaim_init(void) {}
- #endif
- #else
- 
- static inline void set_migration_target_nodes(void) {}
-+static inline void migrate_on_reclaim_init(void) {}
- 
- static inline void putback_movable_pages(struct list_head *l) {}
- static inline int migrate_pages(struct list_head *l, new_page_t new,
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 3364bfaddeef..118f71425241 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -2144,7 +2144,6 @@ int migrate_misplaced_page(struct page *page, struct vm_area_struct *vma,
- 	return 0;
- }
- #endif /* CONFIG_NUMA_BALANCING */
--#endif /* CONFIG_NUMA */
- 
- /*
-  * node_demotion[] example:
-@@ -2278,7 +2277,6 @@ int next_demotion_node(int node)
- 	return target;
- }
- 
--#if defined(CONFIG_HOTPLUG_CPU)
- /* Disable reclaim-based migration. */
- static void __disable_all_migrate_targets(void)
- {
-@@ -2471,6 +2469,7 @@ void set_migration_target_nodes(void)
-  * __set_migration_target_nodes() can be used as opposed to
-  * set_migration_target_nodes().
-  */
-+#ifdef CONFIG_MEMORY_HOTPLUG
- static int __meminit migrate_on_reclaim_callback(struct notifier_block *self,
- 						 unsigned long action, void *_arg)
- {
-@@ -2516,6 +2515,7 @@ static int __meminit migrate_on_reclaim_callback(struct notifier_block *self,
- 
- 	return notifier_from_errno(0);
- }
-+#endif
- 
- void __init migrate_on_reclaim_init(void)
- {
-@@ -2523,8 +2523,9 @@ void __init migrate_on_reclaim_init(void)
- 				      sizeof(struct demotion_nodes),
- 				      GFP_KERNEL);
- 	WARN_ON(!node_demotion);
--
-+#ifdef CONFIG_MEMORY_HOTPLUG
- 	hotplug_memory_notifier(migrate_on_reclaim_callback, 100);
-+#endif
- 	/*
- 	 * At this point, all numa nodes with memory/CPus have their state
- 	 * properly set, so we can build the demotion order now.
-@@ -2535,7 +2536,6 @@ void __init migrate_on_reclaim_init(void)
- 	set_migration_target_nodes();
- 	cpus_read_unlock();
- }
--#endif /* CONFIG_HOTPLUG_CPU */
- 
- bool numa_demotion_enabled = false;
- 
-@@ -2596,4 +2596,5 @@ static int __init numa_init_sysfs(void)
- 	return err;
- }
- subsys_initcall(numa_init_sysfs);
--#endif
-+#endif /* CONFIG_SYSFS */
-+#endif /* CONFIG_NUMA */
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index b75b1a64b54c..f2d0dec1062d 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -2111,9 +2111,7 @@ void __init init_mm_internals(void)
- 
- 	start_shepherd_timer();
- #endif
--#if defined(CONFIG_MIGRATION) && defined(CONFIG_HOTPLUG_CPU)
- 	migrate_on_reclaim_init();
--#endif
- #ifdef CONFIG_PROC_FS
- 	proc_create_seq("buddyinfo", 0444, NULL, &fragmentation_op);
- 	proc_create_seq("pagetypeinfo", 0400, NULL, &pagetypeinfo_op);
--- 
-2.34.1
-
+> Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+> Cc: Dan Carpenter <dan.carpenter@oracle.com>
+> Cc: John Stultz <john.stultz@linaro.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: linux-acpi@vger.kernel.org
+> ---
+> v3: also cc: linux-acpi (Rafael)
+> v2: correct the Fixes: tag (Dan Carpenter)
+>
+>  drivers/clocksource/acpi_pm.c |    6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> --- linux-next-20220315.orig/drivers/clocksource/acpi_pm.c
+> +++ linux-next-20220315/drivers/clocksource/acpi_pm.c
+> @@ -229,8 +229,10 @@ static int __init parse_pmtmr(char *arg)
+>         int ret;
+>
+>         ret = kstrtouint(arg, 16, &base);
+> -       if (ret)
+> -               return ret;
+> +       if (ret) {
+> +               pr_warn("PMTMR: invalid 'pmtmr=' value: '%s'\n", arg);
+> +               return 1;
+> +       }
+>
+>         pr_info("PMTMR IOPort override: 0x%04x -> 0x%04x\n", pmtmr_ioport,
+>                 base);

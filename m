@@ -2,143 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51EA4DCD70
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 579884DCD79
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237376AbiCQSTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56892 "EHLO
+        id S237407AbiCQSVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237337AbiCQSTg (ORCPT
+        with ESMTP id S237357AbiCQSVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:19:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC46F5D181
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:18:18 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647541096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X1cMRioNx9dyBHJVz2CH0cxjLaOPntib9co0rfHgwgU=;
-        b=Qwnh3wirWfWrTNOaSMoLiRggVDoBJWJqwgsac8TwO2aXHM/Csr4Ev8uzz/p9rXDUctImmG
-        dHBeGfNHLypxIDjPbxuOyaLAwhX4p9u8suz7kHja7f7zJYjSY6pTWCePgU8OSTEHShw36E
-        YJ6OcRxOCEggZawGP+Um3yi4d3pQjGvvvR3DOcfn6G0FbjSePDvwf0QFBuXYlrSG5fFnZM
-        AhjYv6i+uicoy3Uf3Rn3t8gLmHqKa90SYli+pTRW96YuWdy0IHHzF4DoCkD3FQZqhlhHen
-        9JUbAO8wusF9B641iIeSLJQGOfCSPCiVtJXrMQtJb53ZC8zaQSJHJqdN7XHbeA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647541096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X1cMRioNx9dyBHJVz2CH0cxjLaOPntib9co0rfHgwgU=;
-        b=SabTM6h+J39HEs/HdKKtPDESeI6Qyc5crpV+6SBE2jLSTqW7Ok/JWoGjxwPhlru3PeujNl
-        CuIvw7zWGOq/hwCw==
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCHv6 07/30] x86/traps: Add #VE support for TDX guest
-In-Reply-To: <20220317173354.rqymufl37lcrtmjh@black.fi.intel.com>
-References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
- <20220316020856.24435-8-kirill.shutemov@linux.intel.com>
- <877d8t2ykp.ffs@tglx> <20220317173354.rqymufl37lcrtmjh@black.fi.intel.com>
-Date:   Thu, 17 Mar 2022 19:18:15 +0100
-Message-ID: <87czikcujc.ffs@tglx>
+        Thu, 17 Mar 2022 14:21:07 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27895220B0D;
+        Thu, 17 Mar 2022 11:19:51 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id v4so5584387pjh.2;
+        Thu, 17 Mar 2022 11:19:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+g2oRiO3uzZ+DA2WGg9ZB5KEZZCxlDqRy1Fc/qJpJHM=;
+        b=lkJD3Zm5NwTqW+OB6itNq0cJY20QN8LbaRZAYvK7alxragMTGwPhdS9iO7nmWkBOy2
+         MjsatpMGaQXFhOHpx1v6LjY+q+TCChmWqMxvOudQbXhc1UyIVR03eV7mjJeqwzF2sEta
+         b6PN3jGtXXncNejO64PCuaKIB28Ez7ZJe17gspBe8ubYbt9Yjnze0dFFMJGav/Hb0FBv
+         hbw8rEj0CzXMzDmNfqWiaCco1SwwYnt9GCLdKXMnlSErPfDrNnE07wRkVkLo+S2/Mwfj
+         Kg15gvo5MnjUcBcIQH3AWYfpO0pC/vfQFMzT3IY4p0/MX+i7I2DrkpThbDrq7unfDgWV
+         qQHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+g2oRiO3uzZ+DA2WGg9ZB5KEZZCxlDqRy1Fc/qJpJHM=;
+        b=jfiY9uIXQ6lbRkFnRtm6INNJ4KLCAObcuC91n4qlvPhae/gb1gQAf18jWqVmfIZRBc
+         /r0YYho8Mp5tOKUcawoBFYXbTOWHKq0r3eGFuHnUlWgRdGs4vPy1/wi6YXhuesfU9X3h
+         /zBmP8K5KhEm3oW36nCAV4d1USV5iCl4LZt7RgtKdwTEwBR7uPoMsGgKiOzMvqZSegM6
+         hxeKPrUa5b/z6qsacWRNDyD+zC1+8C4L7wT3MjZyTJziCp+11tk8xg/S85synIH2bE9Q
+         JyIr4KpBBFKeWMJP0IkL0aTODG6xOKnagtj1GzIpol/pcmYH+T024aVvfH7go+6Hnilj
+         niPQ==
+X-Gm-Message-State: AOAM531pA79YZqqK3JTYPaTynEiJtow8l1Q5wMZH0lcl0/BA6u0VacCe
+        5kzymHW5lWQl0GyWHfzIrIw=
+X-Google-Smtp-Source: ABdhPJwsbPBANPJBlFrJblkjlzz7zEPKAqYuZHhFZ20KssMtVJM6PS+PLrLUUJut6hAlL7oOBwoTKA==
+X-Received: by 2002:a17:90a:8581:b0:1b2:7541:af6c with SMTP id m1-20020a17090a858100b001b27541af6cmr7004158pjn.48.1647541190705;
+        Thu, 17 Mar 2022 11:19:50 -0700 (PDT)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id p10-20020a056a0026ca00b004fa06fa407asm7647668pfw.91.2022.03.17.11.19.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 11:19:50 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 18:19:44 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Byungchul Park <byungchul.park@lge.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Radoslaw Burny <rburny@google.com>, linux-arch@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow
+ path
+Message-ID: <YjN7wPMEBVIuOiGN@ip-172-31-19-208.ap-northeast-1.compute.internal>
+References: <20220316224548.500123-1-namhyung@kernel.org>
+ <20220316224548.500123-3-namhyung@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316224548.500123-3-namhyung@kernel.org>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17 2022 at 20:33, Kirill A. Shutemov wrote:
-> On Thu, Mar 17, 2022 at 01:48:54AM +0100, Thomas Gleixner wrote:
->> On Wed, Mar 16 2022 at 05:08, Kirill A. Shutemov wrote:
->> Hmm?
+On Wed, Mar 16, 2022 at 03:45:48PM -0700, Namhyung Kim wrote:
+> Adding the lock contention tracepoints in various lock function slow
+> paths.  Note that each arch can define spinlock differently, I only
+> added it only to the generic qspinlock for now.
+> 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  kernel/locking/mutex.c        |  3 +++
+>  kernel/locking/percpu-rwsem.c |  3 +++
+>  kernel/locking/qrwlock.c      |  9 +++++++++
+>  kernel/locking/qspinlock.c    |  5 +++++
+>  kernel/locking/rtmutex.c      | 11 +++++++++++
+>  kernel/locking/rwbase_rt.c    |  3 +++
+>  kernel/locking/rwsem.c        |  9 +++++++++
+>  kernel/locking/semaphore.c    | 14 +++++++++++++-
+>  8 files changed, 56 insertions(+), 1 deletion(-)
 >
-> Does the changed version below address your concerns?
->
-> 	void tdx_get_ve_info(struct ve_info *ve)
-> 	{
-> 		struct tdx_module_output out;
->
-> 		/*
-> 		 * Called during #VE handling to retrieve the #VE info from the
-> 		 * TDX module.
-> 		 *
-> 		 * This has to be called early in #VE handling.  A "nested" #VE which
-> 		 * occurs before this will raise a #DF and is not recoverable.
-> 		 *
-> 		 * The call retrieves the #VE info from the TDX module, which also
-> 		 * clears the "#VE valid" flag. This must be done before anything else
-> 		 * because any #VE that occurs while the valid flag is set will lead to
-> 		 * #DF.
-> 		 *
-> 		 * Note, the TDX module treats virtual NMIs as inhibited if the #VE
-> 		 * valid flag is set. It means that NMI=>#VE will not result in a #DF.
-> 		 */
-> 		tdx_module_call(TDX_GET_VEINFO, 0, 0, 0, 0, &out);
->
-> 		/* Transfer the output parameters */
-> 		ve->exit_reason = out.rcx;
-> 		ve->exit_qual   = out.rdx;
-> 		ve->gla         = out.r8;
-> 		ve->gpa         = out.r9;
-> 		ve->instr_len   = lower_32_bits(out.r10);
-> 		ve->instr_info  = upper_32_bits(out.r10);
-> 	}
 
-Nice.
+[...]
 
->> The point is that any #VE in such a code path is fatal and you better
->> come up with some reasonable explanation why this is not the case in
->> those code pathes and how a potential violation of that assumption might
->> be detected especially in rarely used corner cases. If such a violation
->> is not detectable by audit, CI, static code analysis or whatever then
->> document the consequences instead of pretending that the problem does
->> not exist and the kernel is perfect today and forever.
->
-> It is detectable by audit. The critical windows very limited and located
-> in the highly scrutinized entry code. But, yes, I cannot guarantee that
-> this code will be perfect forever.
+> diff --git a/kernel/locking/semaphore.c b/kernel/locking/semaphore.c
+> index 9ee381e4d2a4..e3c19668dfee 100644
+> --- a/kernel/locking/semaphore.c
+> +++ b/kernel/locking/semaphore.c
+> @@ -32,6 +32,7 @@
+>  #include <linux/semaphore.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/ftrace.h>
+> +#include <trace/events/lock.h>
+>  
+>  static noinline void __down(struct semaphore *sem);
+>  static noinline int __down_interruptible(struct semaphore *sem);
+> @@ -209,6 +210,7 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
+>  								long timeout)
+>  {
+>  	struct semaphore_waiter waiter;
+> +	bool tracing = false;
+>  
+>  	list_add_tail(&waiter.list, &sem->wait_list);
+>  	waiter.task = current;
+> @@ -220,18 +222,28 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
+>  		if (unlikely(timeout <= 0))
+>  			goto timed_out;
+>  		__set_current_state(state);
+> +		if (!tracing) {
+> +			trace_contention_begin(sem, 0);
+> +			tracing = true;
+> +		}
+>  		raw_spin_unlock_irq(&sem->lock);
+>  		timeout = schedule_timeout(timeout);
+>  		raw_spin_lock_irq(&sem->lock);
+> -		if (waiter.up)
+> +		if (waiter.up) {
+> +			trace_contention_end(sem, 0);
+>  			return 0;
+> +		}
+>  	}
+>  
+>   timed_out:
+> +	if (tracing)
+> +		trace_contention_end(sem, -ETIME);
+>  	list_del(&waiter.list);
+>  	return -ETIME;
+>  
+>   interrupted:
+> +	if (tracing)
+> +		trace_contention_end(sem, -EINTR);
+>  	list_del(&waiter.list);
+>  	return -EINTR;
+>  }
 
-Fair enough.
+why not simply remove tracing variable and call trace_contention_begin()
+earlier like in rwsem? we can ignore it if ret != 0.
 
-> Consequences of #VE in these critical windows are mentioned in the
-> comment:
->
-> 	Any exception in this window leads to hard to debug issues and can
-> 	be exploited for privilege escalation. 
->
-> I have hard time understanding what I has to change here. Do you want
-> details of audit to be documented? Make consequences of #VE at the wrong
-> point to be more prominent in the comment? 
-
-So having something like this in the comment would be helpful:
-
-        *
-	* The entry code has been audited carefuly for following these
-        * expectations. Changes in the entry code have to be audited for
-        * correctness vs. this aspect.  #VE in these places will cause
-        * [an instant kernel panic | whatever | fill the blanks ]
-        *
-
-Thanks,
-
-        tglx
+-- 
+Thank you, You are awesome!
+Hyeonggon :-)

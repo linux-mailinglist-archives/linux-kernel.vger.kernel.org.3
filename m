@@ -2,184 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB8A4DCB2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B694DCB54
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:25:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236494AbiCQQZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60940 "EHLO
+        id S236542AbiCQQ1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbiCQQZW (ORCPT
+        with ESMTP id S234815AbiCQQ1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:25:22 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8103ABB92A;
-        Thu, 17 Mar 2022 09:24:05 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id t14so3028247pgr.3;
-        Thu, 17 Mar 2022 09:24:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CxHgpSNZZuEtV5slXCliwgtbxDqjHZAN89PA6Kha9DQ=;
-        b=iPAspoN1cg41/RL92HB4FhRGyagjBvagM5CpfCMVgHIe/NOZVcb+ykblGBqEVqTLtz
-         xF8Skv9VuPLU37EdRRSifh8gynYM+K5ULxGEmG3ByTmueZrXPQIj6+ouCaCTlWRFLlNF
-         otsnBI08np3EV3drQhJ0xTW/L483Q5q85CxzujVmQ0LH7ytdX/neCpf/MYBCnR3RrKDu
-         10Wxy4Kr6ABKpryrufH/P8PxG6GplEO/7NTNESKE5F2SHT3bVkrKcobomZ84iUTfIYim
-         KRl3H4JGmn10rTxV4JZI/N1J7jWwvpt7DWmPPgNB/x3LSmoZPmAmkDyFeNBrPKXGpLju
-         VkpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=CxHgpSNZZuEtV5slXCliwgtbxDqjHZAN89PA6Kha9DQ=;
-        b=rnYnkAxudSxOCXZbojhRtiTVTIV2n2vFApaO8Ge6stD9ACvpkTn+9J26+nacjhL8ai
-         V9PZ9SNjqS8Yi+R59OiIzH4eqGjRF2SXc+QB9h6rM36Ry86fRGNFNfSqzOaOmge4pyzn
-         Pob5XVmFPFi19kVXUrj1MNpZklkPMlPhV4QcTBleshnH4KYwDn7mg3SCc5RjeFGYyNDX
-         Hoj0g67+ruSD9sYR/c8XkGSayNQRyuqmOKGhtESAQZDgVwsNAgZ72U/y2Wo9uyPQy+Hy
-         kYPHzWGll7NYH+RWuDUm2hJNfWdOa2+WyKCIcs6k61QhO92rE9+8MCU7HSxgQuyD5E5s
-         RYhg==
-X-Gm-Message-State: AOAM5338gSGrqK2WH4CF+8Gg3JLGG1Nep1vLwppUE8vhD6Sel74XLE2g
-        07dVP0tlB9A2QVFdBK/h7yCvBmq9oP4=
-X-Google-Smtp-Source: ABdhPJxzBcB7aeTPqJrx6jD8KKAt6PoUG1RqtUoPQyS+6jB+C9zd1Ix29rCWyHkQ1xVZp+b2p2Sjew==
-X-Received: by 2002:a63:cd:0:b0:382:1204:84f6 with SMTP id 196-20020a6300cd000000b00382120484f6mr2059100pga.109.1647534244814;
-        Thu, 17 Mar 2022 09:24:04 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:b625:fd41:4746:7bf5])
-        by smtp.gmail.com with ESMTPSA id b5-20020a056a0002c500b004f6dbd217c9sm6726611pft.108.2022.03.17.09.24.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 09:24:04 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 17 Mar 2022 09:24:01 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, surenb@google.com,
-        vbabka@suse.cz, rientjes@google.com, sfr@canb.auug.org.au,
-        edgararriaga@google.com, nadav.amit@gmail.com, mhocko@suse.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "# 5 . 10+" <stable@vger.kernel.org>
-Subject: Re: [PATCH V2,2/2] mm: madvise: skip unmapped vma holes passed to
- process_madvise
-Message-ID: <YjNgoeg1yOocsjWC@google.com>
-References: <cover.1647008754.git.quic_charante@quicinc.com>
- <4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com>
- <YjEaFBWterxc3Nzf@google.com>
- <20220315164807.7a9cf1694ee2db8709a8597c@linux-foundation.org>
- <YjFAzuLKWw5eadtf@google.com>
- <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
+        Thu, 17 Mar 2022 12:27:00 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11021024.outbound.protection.outlook.com [52.101.62.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F4DDAFC5;
+        Thu, 17 Mar 2022 09:25:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PvwjxdPSyI8K2Vk8GdIaw1xMlKQELS28qczrI96v8O+4WfJqoFbK0bpsVUasC4BzxZgF0pF+PaVfK3PmHzbK5TGG7J674KWzLrlqR9LyALhGAdAc3i+Bon2ljgsL8Wx7lp8LnvrLN2DLTfs5neqqiGMM5UsZVrwuDRNiOH0+WzkbxEFL2hg+c6BEZZeOkG+N77Ty4Xkdmc7IJ1QYfwkoNg+WGZljWPlg0AAQtgt/XG4rpQsmhwJTRvOdtRv/Eet0qpfIxLEHB8tx9Csw8SKWtl3yUoLlBGsTrxfsZsWdhd9Aj8dNpzFR0nSNjDx/sxWUtkxooJKlLAUFRp5LTbAMjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hBRksVOYCYGxK+oWseMqGlkZjqhO/t2MgDq47iOK61k=;
+ b=F7MDu9Fcsv0rAwWBJETqYlTrEaDRbA2Z94OKh/TIlnaqNCZ9hz/8FZX3nGhZv+K0cDus9jS9heAMRoQndKM9brXk+Qbh+7qZEghS/WFE8bkyJcp/C10XbjvlVaU7IGQOATlPzmIrm/AnOjWJz4C/anMKy5Wd7T265B2QqMpD2looBlZ36AnyBTGuJJxTETbPVTwtGpwlsrpXpkIu3l8MAQRf3mE2cjfPLqvK5KLh6xtxUZ5rp4kNlVhqae/22ifAWuPECVPrdFdfWKlT47R97cPfRR5i5bFjtC1kHNSauZmodRKbkUIgD/L2N+vwK8wqa+EkyTuA6uWe0ZPAYbxKnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hBRksVOYCYGxK+oWseMqGlkZjqhO/t2MgDq47iOK61k=;
+ b=GrQI81VkvuxPjKE4VfPTMC513A/mgoIQfiB3Q+LbDeiVtGC+LCGn+osoxsZ4gWWNokWTRQuE5kbFAQfO1sDjGrOKfteD/KWiDxI5T0IGxSV3fTUPA2Cs6TG/dXwRLOr1M3SHVnGTz9wKZ/LbZIeQwlbIMnrHY8RMuJsg0z+opOQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from DM6PR21MB1514.namprd21.prod.outlook.com (2603:10b6:5:22d::11)
+ by BL0PR2101MB1796.namprd21.prod.outlook.com (2603:10b6:207:19::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.7; Thu, 17 Mar
+ 2022 16:25:41 +0000
+Received: from DM6PR21MB1514.namprd21.prod.outlook.com
+ ([fe80::8c81:f644:fc1c:1357]) by DM6PR21MB1514.namprd21.prod.outlook.com
+ ([fe80::8c81:f644:fc1c:1357%4]) with mapi id 15.20.5102.007; Thu, 17 Mar 2022
+ 16:25:41 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     sthemmin@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, rafael@kernel.org,
+        lenb@kernel.org, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com, hch@lst.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Cc:     mikelley@microsoft.com
+Subject: [PATCH 0/4 RESEND] Fix coherence for VMbus and PCI pass-thru devices in Hyper-V VM
+Date:   Thu, 17 Mar 2022 09:25:07 -0700
+Message-Id: <1647534311-2349-1-git-send-email-mikelley@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: MW4P222CA0001.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:303:114::6) To DM6PR21MB1514.namprd21.prod.outlook.com
+ (2603:10b6:5:22d::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ee828dbb-1cb5-4818-f67c-08da0832c719
+X-MS-TrafficTypeDiagnostic: BL0PR2101MB1796:EE_
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-Microsoft-Antispam-PRVS: <BL0PR2101MB1796868C777EA0E0CC2F46EED7129@BL0PR2101MB1796.namprd21.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AlZrtcwbRB4/B+gF7YOq9hlYAIfKrDrpSDo2YkAQB8WXfTwltkNjYxkhCFFGl9osDCkqjTF8SI9z8M1WVN04/CqZ6wd59DiWRLEoIklAnSLE9tO6kvxv6I3L0LJrL5CiWR+FFJsiswQSRiSIssb2FoIIuhvICFI7fV03k3u6eLT7ZNrlPCZh663UPbQZ2lv7O/Ax0JqotzWk5lRKkERQCA2UvmuCHlxm4iipNgfBmLjYzXZev85LZSFX4D8vaQOzfqsk9HI7MmmGN1wA3bQiGHc9/ewUmAiup16MvEAF3JUzWLJ+vM8UpJ2RCoNXmVhJq5nF5vxK3WQuBobWPlSm7AIWwb4O6RAUlpRSVW7T4IUuVtJl637KVAmutVOn8SOehcsAEWIoLEDysC2azlRJA7D7IXuBDV3sKLawKgy8Zvgxh4QfAHiMa957x8TvA2grO/vkFVLd0AqzAWq48u9/5GxHx+kD+iNZDK9nVkwvlD5lvKgFZpRoV5ppuOnK0P/mOhwwQB0QVmRkx5I2kQlHnICwqHDUChO2KTERp5tJeQGq6uwl6Dm1wJK6BJVTVbAerZdC86VNXV5UZGS+SVAWLjtqiDGBVdsNb3TiBFQuf8kv0CeCEtV2cmuIOcBNPe905FJa0TOwoZXASgySYVjXJyTxlR5YLRISloYpyhQ1+cmn80U0UM4T5AQIZycwKTDPtqJ8/GsDC/qbfXLlgb9jPkmUoide8RFNXisdZUfjI4MKi6p6h/tz+Kl+IlthDrlByvav6AQQGJcKGdWYp6Kzfw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1514.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(6666004)(4326008)(8676002)(7416002)(66476007)(66556008)(66946007)(6506007)(921005)(508600001)(82950400001)(10290500003)(82960400001)(52116002)(38350700002)(6486002)(38100700002)(8936002)(2906002)(83380400001)(107886003)(5660300002)(6512007)(86362001)(26005)(186003)(36756003)(316002)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?W6I+YXr+9U7/IlnaoVpefZYXo3WBSZ8ql3FnIf1E+xJHDKmy3pfThppAJVE2?=
+ =?us-ascii?Q?/N7tKqMvz9Oeky1AyuJ4lT7tGgki9vdknOpfRIh29TMxETXxvx2BJqw325is?=
+ =?us-ascii?Q?6xgoSgtxvg17aTwwM1FWRGZBT3egjB1wLAS1H2fR0Ifef0N7wKNCZrPDiArr?=
+ =?us-ascii?Q?zPdweiWlE6koGAmrdsGwRsbR6DQJi5p/Pyw1pWc1KPQUz+2ilUwwml72qtRc?=
+ =?us-ascii?Q?q8dpHMSkd60xyazYn/RBU89ndtH4RLLQsL4BIfXRN+Hy47a635rdwEBVruWo?=
+ =?us-ascii?Q?ougWTJMVSUtjfFiw6X1UPCxoOMCNDBlZ1IdFzWySvCAw1LN8nE/rglc8zLWG?=
+ =?us-ascii?Q?QioIYHQk+dlKS4naN1Uk6CupqveSHnlTGxSzgEu6Gx8PYgikrcudKQMJRAfb?=
+ =?us-ascii?Q?EGN60yUhLcPFsd0eTd3NGfF7otB1L2MLHV4nvq1dSNcKvYRYQv1BWOYTzXD5?=
+ =?us-ascii?Q?O86ligJq7FRss7lcuPW7KxwADLE3bStdKxlxXPt8FGYMoW4cYS+z9bVgRhHQ?=
+ =?us-ascii?Q?XPR3h0nNUAmNu27Ztobx+kaI7qnbV0Dy6urrx1MxvxyjBrBNcGRQSYJUxIf6?=
+ =?us-ascii?Q?qcfiMwKSnzP8epV55UQgMhlxZClEbv5yQcrU9TjIn6Mgt0HQmfHEDmWAFkBy?=
+ =?us-ascii?Q?3kyVwasrmciWdbwPUPVk1LTzXA/UmTTsRes6bA5Kdt7qtkS2ffZ9P2DyIcIN?=
+ =?us-ascii?Q?xiggS7vfc6c0opHFY3FflLAuuPWHzf7sBjzrq6sTIrOflcIQHxsMkVe6oQtk?=
+ =?us-ascii?Q?krDIbqWtxrkMjMuIueEYOzfQk6lWktVXX6Rwjj2DPGUIYcpbsQIznR4edkeR?=
+ =?us-ascii?Q?Sfy4M4cwy9NB0zny344b5V7gTpwmD9W5ghBpXgwPS1DuFD+0YAjkhJaT+chW?=
+ =?us-ascii?Q?AkUDdZ5+gY70MeSTnifqN0ev0qRQpa6onwCIBmTdq6QF7sFqYErmlr9B49o5?=
+ =?us-ascii?Q?U7QH/HxZyQM1CcQG/U/5cdoeA91jSP5tMscU/Jq2/p/SdiRg+BScmXz961x9?=
+ =?us-ascii?Q?n2u4+hrlfvUI4cUXrMnV7YAbYc+Bbr9XCPrJy+Vrdnc5B+PUS/dygrDcq5qb?=
+ =?us-ascii?Q?Em0qOQzBe+nnEoAOwVA6REp5sNaztpwOICoUr8fEhIGFb6mT9kspBeeClxgt?=
+ =?us-ascii?Q?CD7EX/KhgYcfJkJ1bUcuJXAoWar1NYVc5NkZ92KFLsOz82gkG3TD6aAf6/h6?=
+ =?us-ascii?Q?tK0+DAIbtJQ65UjzpTTOSh06yQkgxHuBeqCLjmwnK8DD8Jou5rGxg2sBQ/Sm?=
+ =?us-ascii?Q?cLA2MeMlWnvHKkQG6PajzLEEEMxDvyenKBR5HucoPVWcRxUzSNYvHlUfoLXk?=
+ =?us-ascii?Q?K+jAATcfbjpiuKXfYknJ/BJDMZ6v0N4KdN0sUvez226wPbI7rWanVCTVtOv9?=
+ =?us-ascii?Q?P6qphPSw8jooaccxBfQHl/uyE+uDtST2u/l0flZhGef+QpFB7Tji4zCxQqSc?=
+ =?us-ascii?Q?2MZeE8Kk1nEGzvaWdwu0H/4i0iLezGUTz/IkvLaVmPjZPuBN0y3H0A=3D=3D?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee828dbb-1cb5-4818-f67c-08da0832c719
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1514.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2022 16:25:40.9450
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: X85/sLRftqiQ5GsCLE4Il6KxF/XduqsxUs6X6aK1qxEEvkV0HZ4oGGzvyFz5xd24jka4rnAscKiCufuVTDcotg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR2101MB1796
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 07:49:38PM +0530, Charan Teja Kalla wrote:
-> Thanks Andrew and Minchan.
-> 
-> On 3/16/2022 7:13 AM, Minchan Kim wrote:
-> > On Tue, Mar 15, 2022 at 04:48:07PM -0700, Andrew Morton wrote:
-> >> On Tue, 15 Mar 2022 15:58:28 -0700 Minchan Kim <minchan@kernel.org> wrote:
-> >>
-> >>> On Fri, Mar 11, 2022 at 08:59:06PM +0530, Charan Teja Kalla wrote:
-> >>>> The process_madvise() system call is expected to skip holes in vma
-> >>>> passed through 'struct iovec' vector list. But do_madvise, which
-> >>>> process_madvise() calls for each vma, returns ENOMEM in case of unmapped
-> >>>> holes, despite the VMA is processed.
-> >>>> Thus process_madvise() should treat ENOMEM as expected and consider the
-> >>>> VMA passed to as processed and continue processing other vma's in the
-> >>>> vector list. Returning -ENOMEM to user, despite the VMA is processed,
-> >>>> will be unable to figure out where to start the next madvise.
-> >>>> Fixes: ecb8ac8b1f14("mm/madvise: introduce process_madvise() syscall: an external memory hinting API")
-> >>>> Cc: <stable@vger.kernel.org> # 5.10+
-> >>>
-> >>> Hmm, not sure whether it's stable material since it changes semantic of
-> >>> API. It would be better to change the semantic from 5.19 with man page
-> >>> update to specify the change.
-> >>
-> >> It's a very desirable change and it makes the code match the manpage
-> >> and it's cc:stable.  I think we should just absorb any transitory
-> >> damage which this causes people.  I doubt if there will be much - if
-> >> anyone was affected by this they would have already told us that it's
-> >> broken?
-> > 
-> > 
-> > process_madvise fails to return exact processed bytes at several cases
-> > if it encounters the error, such as, -EINVAL, -EINTR, -ENOMEM in the
-> > middle of processing vmas. And now we are trying to make exception for
-> > change for only hole?
-> I think EINTR will never return in the middle of processing VMA's for
-> the behaviours supported by process_madvise().
-> 
-> It can return EINTR when:
-> -------------------------
-> 1) PTRACE_MODE_READ is being checked in mm_access() where it is waiting
-> on task->signal->exec_update_lock. EINTR returned from here guarantees
-> that process_madvise() didn't event start processing.
-> https://elixir.bootlin.com/linux/v5.16.14/source/mm/madvise.c#L1264 -->
-> https://elixir.bootlin.com/linux/v5.16.14/source/kernel/fork.c#L1318
-> 
-> 2) The process_madvise() started processing VMA's but the required
-> behavior on a VMA needs mmap_write_lock_killable(), from where EINTR is
-> returned. The current behaviours supported by process_madvise(),
-> MADV_COLD, PAGEOUT, WILLNEED, just need read lock here.
-> https://elixir.bootlin.com/linux/v5.16.14/source/mm/madvise.c#L1164
->  **Thus I think no way for EINTR can be returned by process_madvise() in
-> the middle of processing.** . No?
-> 
-> for EINVAL:
-> -----------
-> The only case, I can think of,  where EINVAL can be returned in the
-> middle of processing is in examples like, given range contains VMA's
-> with a hole in between and one of the VMA contains the pages that fails
-> can_madv_lru_vma() condition.
-> So, it's a limitation that this returns -EINVAL though some bytes are
-> processed.
-> 	OR
-> Since there exists still some invalid bytes processed it is valid to
-> return -EINVAL here and user has to check the address range sent?
-> 
-> for ENOMEM:
-> ----------
-> Though complete range is processed still returns ENOMEM. IMO, This
-> shouldn't be treated as error which the patch is targeted for. Then
-> there is limitation case that you mentioned below where it returns
-> positive processes bytes even though it didn't process anything if it
-> couldn't find any vma for the first iteration in madvise_walk_vmas
-> 
-> I think the above limitations with EINVAL and ENOMEM are arising because
-> we are relying on do_madvise() functionality which madvise() call uses
-> to process a single VMA. When 'struct iovec' vector processing interface
-> is given in a system call, it is the expectation by the caller that this
-> system call should return the correct bytes processed to help the user
-> to take the correct decisions. Please correct me If i am wrong here.
-> 
-> So, should we add the new function say do_process_madvise(), which take
-> cares of above limitations? or any alternative suggestions here please?
+[Resend to fix an email address typo for Bjorn Helgaas]
 
-What I am thinking now is that the process_madvise needs own iterator(i.e.,
-do_process_madvise) and it should represent exact bytes it addressed with
-exacts ranges like process_vm_readv/writev. Poviding valid ranges is
-responsiblity from the user.
+Hyper-V VMs have VMbus synthetic devices and PCI pass-thru devices that are added
+dynamically via the VMbus protocol and are not represented in the ACPI DSDT. Only
+the top level VMbus node exists in the DSDT. As such, on ARM64 these devices don't
+pick up coherence information and default to not hardware coherent.  This results
+in extra software coherence management overhead since the synthetic devices are
+always hardware coherent. PCI pass-thru devices are also hardware coherent in all
+current usage scenarios.
 
-> 
-> > IMO, it's worth to note in man page.
-> > 
-> 
-> Or the current patch for just ENOMEM is sufficient here and we just have
-> to update the man page?
-> 
-> > In addition, this change returns positive processes bytes even though
-> > it didn't process anything if it couldn't find any vma for the first
-> > iteration in madvise_walk_vmas.
-> 
-> Thanks,
-> Charan
-> 
+Fix this by propagating coherence information from the top level VMbus node in
+the DSDT to all VMbus synthetic devices and PCI pass-thru devices. While smaller
+granularity of control would be better, basing on the VMbus node in the DSDT
+gives as escape path if a future scenario arises with devices that are not
+hardware coherent.
+
+The first two patches are prep to allow manipulating device coherence from a
+module (since the VMbus driver can be built as a module) and from architecture
+independent code without having a bunch of #ifdef's.
+
+The third patch propagates the VMbus node coherence to VMbus synthetic devices.
+
+The fourth patch propagates the coherence to PCI pass-thru devices.
+
+Michael Kelley (4):
+  ACPI: scan: Export acpi_get_dma_attr()
+  dma-mapping: Add wrapper function to set dma_coherent
+  Drivers: hv: vmbus: Propagate VMbus coherence to each VMbus device
+  PCI: hv: Propagate coherence from VMbus device to PCI device
+
+ drivers/acpi/scan.c                 |  1 +
+ drivers/hv/vmbus_drv.c              | 15 +++++++++++++++
+ drivers/pci/controller/pci-hyperv.c | 17 +++++++++++++----
+ include/linux/dma-map-ops.h         |  9 +++++++++
+ 4 files changed, 38 insertions(+), 4 deletions(-)
+
+-- 
+1.8.3.1
+

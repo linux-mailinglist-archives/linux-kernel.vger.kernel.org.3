@@ -2,220 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024334DBBA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 01:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D5F4DBBAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 01:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349302AbiCQA0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 20:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
+        id S1350257AbiCQA3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 20:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiCQA0u (ORCPT
+        with ESMTP id S245080AbiCQA3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 20:26:50 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB684F50;
-        Wed, 16 Mar 2022 17:25:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1647476733; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hjvU2QGpLUfPUtCM8m4TQ07BgX4mPI0C2UUUAlz37Vw=;
-        b=ssSLsW7bE6EaS3KkT1zyYnGKSKnsVqcqj4B4+LynPLP7cy2+kIyyR5zRoJVPJHm/gFECYs
-        k6NvPOFKpGPySOkR1jsDWYyApExgqJlaQvDuRyxBJympL73+iEWHICdNUD6hlDVJlCV9nZ
-        o2upXpHbcUpJ06PjnSiyWjlCGwnN5YE=
-Date:   Thu, 17 Mar 2022 00:25:24 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4] pinctrl: ingenic: Fix regmap on X series SoCs
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     linus.walleij@linaro.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <C65V8R.D82E1A2ACHCW@crapouillou.net>
-In-Reply-To: <20220317000740.1045204-1-aidanmacdonald.0x0@gmail.com>
-References: <20220317000740.1045204-1-aidanmacdonald.0x0@gmail.com>
+        Wed, 16 Mar 2022 20:29:42 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67ACA14083
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 17:28:27 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id q11so3125944pln.11
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 17:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s7sITGOccSSxXbU5IqO/h2LY98v91UmNuWsJwF4ndG0=;
+        b=WDLX8RusToDhguFb9R+rCWHeuiQ9xj1U0FmX3/jNDcQHvip5vREM6uhQ0SlzUIIT2j
+         Ph2NU9QMfsX+77WZ2mKP8w46ikhcXVC7eVnPTkNSJ+82v4hh+/sAEertJqaOCgn6qI4U
+         oIuPVUAvZacjdffC/1xVdem7LqSICRDZe+ltE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s7sITGOccSSxXbU5IqO/h2LY98v91UmNuWsJwF4ndG0=;
+        b=jlz6gZqG1Y4dxWa3QrvxegSz20jFZGZn17qS34TuzS478L5HprZcmdaeOMNHjOwvmm
+         UrVvs5PgEBWs6EcT0Hl6XWuxqL/+NYUufF53kM/HYXWQx6Nz2YX/7va6i8fAtjr2YjNU
+         CReIKaoa4R2ySjTOfP+wl8hlQopeUIvfsflICu+H+wWyFSyUuy552uv30G7fTo4A1elz
+         HO9i9reBhc4jYpGQfoO9gMHpn5YwOO5FRjaINXFwEpBkMxyaKxTftN2NRki2T+KEI7/o
+         aNNTUlI5nA53AqNC35ggY9iiXQfYGs4CCyVyQiGhlJPqe0mV+wPz5u+TSg9qLLfohaud
+         nf0A==
+X-Gm-Message-State: AOAM532kH2t3Sh0A6hQt8u1TP70pBdo3olfeCOinTlxolEkoHrFotzTL
+        Hfjk7apvx3Z+gdKXtNpWAmmhew==
+X-Google-Smtp-Source: ABdhPJxoDEonzZLvxbRJfDVLNOwBp6GF5KVNLA9ru3wOYbA5CpXQ2CMarPevTUmhXDQpypumPPymGA==
+X-Received: by 2002:a17:903:32c3:b0:152:c1b:e840 with SMTP id i3-20020a17090332c300b001520c1be840mr2494389plr.40.1647476906946;
+        Wed, 16 Mar 2022 17:28:26 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:3314:2f99:65d0:5a73])
+        by smtp.gmail.com with UTF8SMTPSA id x16-20020a637c10000000b00380b351aaacsm3396764pgc.16.2022.03.16.17.28.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 17:28:26 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>, devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH v1 1/4] arm64: dts: qcom: sc7280: Rename crd to crd-r3
+Date:   Wed, 16 Mar 2022 17:28:17 -0700
+Message-Id: <20220316172814.v1.1.I2deda8f2cd6adfbb525a97d8fee008a8477b7b0e@changeid>
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+There are multiple revisions of CRD boards. The current sc7280-crd.dts
+describes revision 3 and 4 (aka CRD 1.0 and 2.0). Support for a newer
+version will be added by another patch. Add the revision number to
+distinguish it from the versionn. Also add the revision numbers to
+the compatible string.
 
-Le jeu., mars 17 2022 at 00:07:40 +0000, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> The X series Ingenic SoCs have a shadow GPIO group which is at a=20
-> higher
-> offset than the other groups, and is used for all GPIO configuration.
-> The regmap did not take this offset into account and set max_register
-> too low, so the regmap API blocked writes to the shadow group, which
-> made the pinctrl driver unable to configure any pins.
->=20
-> Fix this by adding regmap access tables to the chip info. The way that
-> max_register was computed was also off by one, since max_register is=20
-> an
-> inclusive bound, not an exclusive bound; this has been fixed.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+---
 
-Fixes: 6626a76ef857 ("pinctrl: ingenic: Add .max_register in=20
-regmap_config")
-Cc: stable@vger.kernel.org
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+ arch/arm64/boot/dts/qcom/Makefile                             | 2 +-
+ .../arm64/boot/dts/qcom/{sc7280-crd.dts => sc7280-crd-r3.dts} | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename arch/arm64/boot/dts/qcom/{sc7280-crd.dts => sc7280-crd-r3.dts} (91%)
 
-Cheers,
--Paul
-
-> ---
-> v1 -> v2: use regmap_access_table
-> v2 -> v3: compute max_register instead of putting it in chip_info
-> v3 -> v4: explain the fix to the max_register calculation
->=20
->  drivers/pinctrl/pinctrl-ingenic.c | 46=20
-> ++++++++++++++++++++++++++++++-
->  1 file changed, 45 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/pinctrl/pinctrl-ingenic.c=20
-> b/drivers/pinctrl/pinctrl-ingenic.c
-> index 2712f51eb238..fa6becca1788 100644
-> --- a/drivers/pinctrl/pinctrl-ingenic.c
-> +++ b/drivers/pinctrl/pinctrl-ingenic.c
-> @@ -119,6 +119,8 @@ struct ingenic_chip_info {
->  	unsigned int num_functions;
->=20
->  	const u32 *pull_ups, *pull_downs;
-> +
-> +	const struct regmap_access_table *access_table;
->  };
->=20
->  struct ingenic_pinctrl {
-> @@ -2179,6 +2181,17 @@ static const struct function_desc=20
-> x1000_functions[] =3D {
->  	{ "mac", x1000_mac_groups, ARRAY_SIZE(x1000_mac_groups), },
->  };
->=20
-> +static const struct regmap_range x1000_access_ranges[] =3D {
-> +	regmap_reg_range(0x000, 0x400 - 4),
-> +	regmap_reg_range(0x700, 0x800 - 4),
-> +};
-> +
-> +/* shared with X1500 */
-> +static const struct regmap_access_table x1000_access_table =3D {
-> +	.yes_ranges =3D x1000_access_ranges,
-> +	.n_yes_ranges =3D ARRAY_SIZE(x1000_access_ranges),
-> +};
-> +
->  static const struct ingenic_chip_info x1000_chip_info =3D {
->  	.num_chips =3D 4,
->  	.reg_offset =3D 0x100,
-> @@ -2189,6 +2202,7 @@ static const struct ingenic_chip_info=20
-> x1000_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(x1000_functions),
->  	.pull_ups =3D x1000_pull_ups,
->  	.pull_downs =3D x1000_pull_downs,
-> +	.access_table =3D &x1000_access_table,
->  };
->=20
->  static int x1500_uart0_data_pins[] =3D { 0x4a, 0x4b, };
-> @@ -2300,6 +2314,7 @@ static const struct ingenic_chip_info=20
-> x1500_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(x1500_functions),
->  	.pull_ups =3D x1000_pull_ups,
->  	.pull_downs =3D x1000_pull_downs,
-> +	.access_table =3D &x1000_access_table,
->  };
->=20
->  static const u32 x1830_pull_ups[4] =3D {
-> @@ -2506,6 +2521,16 @@ static const struct function_desc=20
-> x1830_functions[] =3D {
->  	{ "mac", x1830_mac_groups, ARRAY_SIZE(x1830_mac_groups), },
->  };
->=20
-> +static const struct regmap_range x1830_access_ranges[] =3D {
-> +	regmap_reg_range(0x0000, 0x4000 - 4),
-> +	regmap_reg_range(0x7000, 0x8000 - 4),
-> +};
-> +
-> +static const struct regmap_access_table x1830_access_table =3D {
-> +	.yes_ranges =3D x1830_access_ranges,
-> +	.n_yes_ranges =3D ARRAY_SIZE(x1830_access_ranges),
-> +};
-> +
->  static const struct ingenic_chip_info x1830_chip_info =3D {
->  	.num_chips =3D 4,
->  	.reg_offset =3D 0x1000,
-> @@ -2516,6 +2541,7 @@ static const struct ingenic_chip_info=20
-> x1830_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(x1830_functions),
->  	.pull_ups =3D x1830_pull_ups,
->  	.pull_downs =3D x1830_pull_downs,
-> +	.access_table =3D &x1830_access_table,
->  };
->=20
->  static const u32 x2000_pull_ups[5] =3D {
-> @@ -2969,6 +2995,17 @@ static const struct function_desc=20
-> x2000_functions[] =3D {
->  	{ "otg", x2000_otg_groups, ARRAY_SIZE(x2000_otg_groups), },
->  };
->=20
-> +static const struct regmap_range x2000_access_ranges[] =3D {
-> +	regmap_reg_range(0x000, 0x500 - 4),
-> +	regmap_reg_range(0x700, 0x800 - 4),
-> +};
-> +
-> +/* shared with X2100 */
-> +static const struct regmap_access_table x2000_access_table =3D {
-> +	.yes_ranges =3D x2000_access_ranges,
-> +	.n_yes_ranges =3D ARRAY_SIZE(x2000_access_ranges),
-> +};
-> +
->  static const struct ingenic_chip_info x2000_chip_info =3D {
->  	.num_chips =3D 5,
->  	.reg_offset =3D 0x100,
-> @@ -2979,6 +3016,7 @@ static const struct ingenic_chip_info=20
-> x2000_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(x2000_functions),
->  	.pull_ups =3D x2000_pull_ups,
->  	.pull_downs =3D x2000_pull_downs,
-> +	.access_table =3D &x2000_access_table,
->  };
->=20
->  static const u32 x2100_pull_ups[5] =3D {
-> @@ -3189,6 +3227,7 @@ static const struct ingenic_chip_info=20
-> x2100_chip_info =3D {
->  	.num_functions =3D ARRAY_SIZE(x2100_functions),
->  	.pull_ups =3D x2100_pull_ups,
->  	.pull_downs =3D x2100_pull_downs,
-> +	.access_table =3D &x2000_access_table,
->  };
->=20
->  static u32 ingenic_gpio_read_reg(struct ingenic_gpio_chip *jzgc, u8=20
-> reg)
-> @@ -4168,7 +4207,12 @@ static int __init ingenic_pinctrl_probe(struct=20
-> platform_device *pdev)
->  		return PTR_ERR(base);
->=20
->  	regmap_config =3D ingenic_pinctrl_regmap_config;
-> -	regmap_config.max_register =3D chip_info->num_chips *=20
-> chip_info->reg_offset;
-> +	if (chip_info->access_table) {
-> +		regmap_config.rd_table =3D chip_info->access_table;
-> +		regmap_config.wr_table =3D chip_info->access_table;
-> +	} else {
-> +		regmap_config.max_register =3D chip_info->num_chips *=20
-> chip_info->reg_offset - 4;
-> +	}
->=20
->  	jzpc->map =3D devm_regmap_init_mmio(dev, base, &regmap_config);
->  	if (IS_ERR(jzpc->map)) {
-> --
-> 2.34.1
->=20
-
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index f9e6343acd03..38d41b1d70ad 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -87,7 +87,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r0.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
+-dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-ganges-kirin.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-discovery.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-pioneer.dtb
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+similarity index 91%
+rename from arch/arm64/boot/dts/qcom/sc7280-crd.dts
+rename to arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+index e2efbdde53a3..7a028b9248c3 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+@@ -11,8 +11,8 @@
+ #include "sc7280-idp-ec-h1.dtsi"
+ 
+ / {
+-	model = "Qualcomm Technologies, Inc. sc7280 CRD platform";
+-	compatible = "qcom,sc7280-crd", "google,hoglin", "qcom,sc7280";
++	model = "Qualcomm Technologies, Inc. sc7280 CRD platform (rev3 - 4)";
++	compatible = "qcom,sc7280-crd", "google,hoglin-rev3", "google,hoglin-rev4", "qcom,sc7280";
+ 
+ 	aliases {
+ 		serial0 = &uart5;
+-- 
+2.35.1.723.g4982287a31-goog
 

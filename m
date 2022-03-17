@@ -2,103 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA14D4DC5C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 408984DC5C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233536AbiCQM0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S233546AbiCQM04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiCQM0c (ORCPT
+        with ESMTP id S231142AbiCQM0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:26:32 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2140C1A94A5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:25:15 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647519913;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gb79sWi4m4dbNXtJsnSEmI57RBmlXzY8WCvcSqnzS1E=;
-        b=gIaYZfMbTeIiC91pw08dBS1Rb4TzR6MC3rRrBlTBcBjfDfUoAk8GPPrCDmpWVDq6fE9lms
-        i/rMd38P8hIIjkoiVbu/GX8SsnVTA0SoxqiBiCvCScFO9i0f+pmU0co4Ar8WqXPRJ1iCRc
-        3SiZNYfBu/kBhOrYzkdLRa12i8sUmBpysUfKqvlDU1WVoB8jgn7rLfvrxMob5qwUeWWEti
-        q0e720Nmq0INFNrhKtopIQRwcGgt4vjRaMU2CWEv2y2yo0D+EK8XhgWGbAZw56Edn4/ESf
-        /z46TMnY8IOjcyTX+4dsAREhx0CPnNvOHtWDASrNxELc1cCsna5PGSg1NgGCPQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647519913;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gb79sWi4m4dbNXtJsnSEmI57RBmlXzY8WCvcSqnzS1E=;
-        b=9ohosx+HfP+VpvFJFXUtIlU5IMJop5iV5lidOJR3mMZBjrNMXydwC3hSDf2SAfgtotUvTy
-        X7UeQtKVIYXKdyCg==
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCHv6 17/30] x86/tdx: Port I/O: add runtime hypercalls
-In-Reply-To: <20220316020856.24435-18-kirill.shutemov@linux.intel.com>
-References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
- <20220316020856.24435-18-kirill.shutemov@linux.intel.com>
-Date:   Thu, 17 Mar 2022 13:25:13 +0100
-Message-ID: <877d8s22c6.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 17 Mar 2022 08:26:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5431CABF0;
+        Thu, 17 Mar 2022 05:25:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEE9660FA0;
+        Thu, 17 Mar 2022 12:25:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F0D0C340E9;
+        Thu, 17 Mar 2022 12:25:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647519938;
+        bh=djIfn2o+hfPfTL+TBFE+wa1DHVPc7L9QaL2b4KZ+Go4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SVyv/45fN9euf1qljHRkVZdQnC7QHDarrkC5FM7JJevRVaDbtl3wJ5seadk51dUMW
+         mJCEnhixKm+ghlzRE+TetlEiAKVZTvSX15+W7EJAgBeflXvbICENrLNsipkbRXq+Nk
+         9xBwZVJhi6WxEt7tJvT22yLWrrLa+1SAZHRkkSq+K3V/qDwRHVWWzPcAX68elVVNYZ
+         IUV+1wH89uBPQ+j6yqJgMS9UrwzQLZnNJNDjvTROJUgHg2MyE+E4enDApGj69TvvAP
+         TUOVu7d2J9xoiTX+iQnaG/gxGKjGbPz/C+dDnSzzqaS9Ekdf4Wyjvjoc7LaC+l9Ht1
+         jhS5XJy/NV5YQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nUpCB-00FAni-JM; Thu, 17 Mar 2022 12:25:35 +0000
+Date:   Thu, 17 Mar 2022 12:25:35 +0000
+Message-ID: <87r170ydds.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [RFC PATCH] of/platform: Drop static setup of IRQ resource from DT core
+In-Reply-To: <20220316200633.28974-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220316200633.28974-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.mahadev-lad.rj@bp.renesas.com, robh+dt@kernel.org, frowand.list@gmail.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, prabhakar.csengg@gmail.com, linux-renesas-soc@vger.kernel.org, biju.das.jz@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16 2022 at 05:08, Kirill A. Shutemov wrote:
-> +static bool handle_in(struct pt_regs *regs, int size, int port)
-> +{
-> +	struct tdx_hypercall_args args = {
-> +		.r10 = TDX_HYPERCALL_STANDARD,
-> +		.r11 = hcall_func(EXIT_REASON_IO_INSTRUCTION),
-> +		.r12 = size,
-> +		.r13 = PORT_READ,
-> +		.r14 = port,
-> +	};
-> +	bool success;
-> +	u64 mask = GENMASK(BITS_PER_BYTE * size, 0);
+On Wed, 16 Mar 2022 20:06:33 +0000,
+Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> 
+> Now that all the DT drivers have switched to platform_get_irq() we can now
+> safely drop the static setup of IRQ resource from DT core code.
+> 
+> With the above change hierarchical setup of irq domains is no longer
+> bypassed and thus allowing hierarchical interrupt domains to describe
+> interrupts using "interrupts" DT property.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> Hi All,
+> 
+> Sending this as RFC as couple of more drivers need to hit -rc yet with
+> the platform_get_irq() change while that is in progress I wanted to get
+> some feedback on this patch.
+> 
+> Cheers,
+> Prabhakar
+> ---
+>  drivers/of/platform.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> index 793350028906..6890f7fe556f 100644
+> --- a/drivers/of/platform.c
+> +++ b/drivers/of/platform.c
+> @@ -114,35 +114,31 @@ struct platform_device *of_device_alloc(struct device_node *np,
+>  				  struct device *parent)
+>  {
+>  	struct platform_device *dev;
+> -	int rc, i, num_reg = 0, num_irq;
+> +	int rc, i, num_reg = 0;
+>  	struct resource *res, temp_res;
+>  
+>  	dev = platform_device_alloc("", PLATFORM_DEVID_NONE);
+>  	if (!dev)
+>  		return NULL;
+>  
+> -	/* count the io and irq resources */
+> +	/* count the io resources */
+>  	while (of_address_to_resource(np, num_reg, &temp_res) == 0)
+>  		num_reg++;
+> -	num_irq = of_irq_count(np);
+>  
+>  	/* Populate the resource table */
+> -	if (num_irq || num_reg) {
+> -		res = kcalloc(num_irq + num_reg, sizeof(*res), GFP_KERNEL);
+> +	if (num_reg) {
+> +		res = kcalloc(num_reg, sizeof(*res), GFP_KERNEL);
+>  		if (!res) {
+>  			platform_device_put(dev);
+>  			return NULL;
+>  		}
+>  
+> -		dev->num_resources = num_reg + num_irq;
+> +		dev->num_resources = num_reg;
+>  		dev->resource = res;
+>  		for (i = 0; i < num_reg; i++, res++) {
+>  			rc = of_address_to_resource(np, i, res);
+>  			WARN_ON(rc);
+>  		}
+> -		if (of_irq_to_resource_table(np, res, num_irq) != num_irq)
+> -			pr_debug("not all legacy IRQ resources mapped for %pOFn\n",
+> -				 np);
+>  	}
+>  
+>  	dev->dev.of_node = of_node_get(np);
 
-Reverse fir tree ordering please:
+I think this definitely goes in the right direction by not eagerly
+populating resources without a driver actually needing it. If anything
+breaks, that should be seen as an opportunity to fix the users of this
+misfeature. I booted a couple of boxes with this patch, and nothing
+caught fire, so:
 
-	u64 mask = GENMASK(BITS_PER_BYTE * size, 0);
-	bool success;
+Acked-by: Marc Zyngier <maz@kernel.org>
+Tested-by: Marc Zyngier <maz@kernel.org>
 
-> +/*
-> + * Emulate I/O using hypercall.
-> + *
-> + * Assumes the IO instruction was using ax, which is enforced
-> + * by the standard io.h macros.
-> + *
-> + * Return True on success or False on failure.
-> + */
-> +static bool handle_io(struct pt_regs *regs, u32 exit_qual)
-> +{
-> +	bool in;
-> +	int size, port;
+	M.
 
-Ditto.
-
-Other than that:
-
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+-- 
+Without deviation from the norm, progress is not possible.

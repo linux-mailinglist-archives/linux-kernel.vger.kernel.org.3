@@ -2,164 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263854DC5FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 543944DC62C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbiCQMrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S233862AbiCQMtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233606AbiCQMq7 (ORCPT
+        with ESMTP id S233831AbiCQMsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:46:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6DEF111DD8
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647521141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VBBuRe1MzVMSa5tl85JWrPgpG0AsZAv8LA7ACqhOxW8=;
-        b=B+pNlGsP7v0mhHNFSFf/RREGIVItS2orlAbxgwC/BqLW0Nb12oK3Xi/cM6WR09HFAHx8Ea
-        EijWoEQ95KxhbBb+KDotOlWalAzBM4IxOdp1SxSAqgfpY8Lu2XdPZmzv4eIauBXqJPf/U0
-        x3Eij+6bf0d+VOz1gj6N5/T5R0LL8yI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-LSns4lGNMQquxhPprBInwg-1; Thu, 17 Mar 2022 08:45:40 -0400
-X-MC-Unique: LSns4lGNMQquxhPprBInwg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 17 Mar 2022 08:48:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609AB1F160C;
+        Thu, 17 Mar 2022 05:47:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 11AD81C0150E;
-        Thu, 17 Mar 2022 12:45:40 +0000 (UTC)
-Received: from localhost (ovpn-13-216.pek2.redhat.com [10.72.13.216])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4AB72C15D57;
-        Thu, 17 Mar 2022 12:45:38 +0000 (UTC)
-Date:   Thu, 17 Mar 2022 20:45:35 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Coiby Xu <coiby.xu@gmail.com>
-Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Coiby Xu <coxu@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH v3 1/3] kexec: clean up
- arch_kexec_kernel_verify_sig
-Message-ID: <YjMtb7u3/sAWG0/7@MiWiFi-R3L-srv>
-References: <20220304020341.85583-1-coiby.xu@gmail.com>
- <20220304020341.85583-2-coiby.xu@gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97423B81E8F;
+        Thu, 17 Mar 2022 12:47:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3E23C340E9;
+        Thu, 17 Mar 2022 12:47:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647521251;
+        bh=xQ/QPoHuSTOEaT/zwWGL/Im2bTgaHT33q9j06Qr2CWQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eBSNfFZ7R/CIFacunqyw8SKgvJjybhfE7K/N66fV3cThClvSRaeuPfDHhoeiduIaY
+         eMHIzpnxO3KjOQQoRXTAhfcw3WJPxrdTM8LzKTy3/U9JMgPkJwcgbfDbGIrq35ZrUa
+         Jqnf6FjBTiUgYXa/7NWkrnZUpYfXb8rwiWevs45M=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 24/43] arm64: Use the clearbhb instruction in mitigations
+Date:   Thu, 17 Mar 2022 13:45:35 +0100
+Message-Id: <20220317124528.347435363@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220317124527.672236844@linuxfoundation.org>
+References: <20220317124527.672236844@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304020341.85583-2-coiby.xu@gmail.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/22 at 10:03am, Coiby Xu wrote:
-> From: Coiby Xu <coxu@redhat.com>
-> 
-> commit 9ec4ecef0af7790551109283ca039a7c52de343c ("kexec_file,x86,
-> powerpc: factor out kexec_file_ops functions" allows implementing
-> the arch-specific implementation of kernel image verification
-> in kexec_file_ops->verify_sig. Currently, there is no arch-specific
-> implementation of arch_kexec_kernel_verify_sig. So clean it up.
+From: James Morse <james.morse@arm.com>
 
-This is a nice cleanup, while the log may need to be improved. You
-should run ./scripts/checkpatch.pl on your patch before sending out.
-When we refer to a commit in log, please refer to
-Documentation/process/submitting-patches.rst.
+commit 228a26b912287934789023b4132ba76065d9491c upstream.
 
-> 
-> Suggested-by: Eric W. Biederman <ebiederm@xmission.com>
-> Signed-off-by: Coiby Xu <coiby.xu@gmail.com>
-> ---
->  include/linux/kexec.h |  4 ----
->  kernel/kexec_file.c   | 34 +++++++++++++---------------------
->  2 files changed, 13 insertions(+), 25 deletions(-)
-> 
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index 0c994ae37729..755fed183224 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -196,10 +196,6 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
->  				 const Elf_Shdr *relsec,
->  				 const Elf_Shdr *symtab);
->  int arch_kimage_file_post_load_cleanup(struct kimage *image);
-> -#ifdef CONFIG_KEXEC_SIG
-> -int arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
-> -				 unsigned long buf_len);
-> -#endif
->  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
->  
->  extern int kexec_add_buffer(struct kexec_buf *kbuf);
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 8347fc158d2b..3720435807eb 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -89,25 +89,6 @@ int __weak arch_kimage_file_post_load_cleanup(struct kimage *image)
->  	return kexec_image_post_load_cleanup_default(image);
->  }
->  
-> -#ifdef CONFIG_KEXEC_SIG
-> -static int kexec_image_verify_sig_default(struct kimage *image, void *buf,
-> -					  unsigned long buf_len)
-> -{
-> -	if (!image->fops || !image->fops->verify_sig) {
-> -		pr_debug("kernel loader does not support signature verification.\n");
-> -		return -EKEYREJECTED;
-> -	}
-> -
-> -	return image->fops->verify_sig(buf, buf_len);
-> -}
-> -
-> -int __weak arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
-> -					unsigned long buf_len)
-> -{
-> -	return kexec_image_verify_sig_default(image, buf, buf_len);
-> -}
-> -#endif
-> -
->  /*
->   * arch_kexec_apply_relocations_add - apply relocations of type RELA
->   * @pi:		Purgatory to be relocated.
-> @@ -184,13 +165,24 @@ void kimage_file_post_load_cleanup(struct kimage *image)
->  }
->  
->  #ifdef CONFIG_KEXEC_SIG
-> +static int kexec_image_verify_sig(struct kimage *image, void *buf,
-> +		unsigned long buf_len)
-> +{
-> +	if (!image->fops || !image->fops->verify_sig) {
-> +		pr_debug("kernel loader does not support signature verification.\n");
-> +		return -EKEYREJECTED;
-> +	}
-> +
-> +	return image->fops->verify_sig(buf, buf_len);
-> +}
-> +
->  static int
->  kimage_validate_signature(struct kimage *image)
->  {
->  	int ret;
->  
-> -	ret = arch_kexec_kernel_verify_sig(image, image->kernel_buf,
-> -					   image->kernel_buf_len);
-> +	ret = kexec_image_verify_sig(image, image->kernel_buf,
-> +			image->kernel_buf_len);
->  	if (ret) {
->  
->  		if (IS_ENABLED(CONFIG_KEXEC_SIG_FORCE)) {
-> -- 
-> 2.34.1
-> 
+Future CPUs may implement a clearbhb instruction that is sufficient
+to mitigate SpectreBHB. CPUs that implement this instruction, but
+not CSV2.3 must be affected by Spectre-BHB.
+
+Add support to use this instruction as the BHB mitigation on CPUs
+that support it. The instruction is in the hint space, so it will
+be treated by a NOP as older CPUs.
+
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+[ modified for stable: Use a KVM vector template instead of alternatives,
+  removed bitmap of mitigations ]
+Signed-off-by: James Morse <james.morse@arm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/arm64/include/asm/assembler.h  |  7 +++++++
+ arch/arm64/include/asm/cpufeature.h | 13 +++++++++++++
+ arch/arm64/include/asm/sysreg.h     |  1 +
+ arch/arm64/include/asm/vectors.h    |  7 +++++++
+ arch/arm64/kernel/cpu_errata.c      | 14 ++++++++++++++
+ arch/arm64/kernel/cpufeature.c      |  1 +
+ arch/arm64/kernel/entry.S           |  8 ++++++++
+ arch/arm64/kvm/hyp/hyp-entry.S      |  6 ++++++
+ 8 files changed, 57 insertions(+)
+
+diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+index 4b13739ca518..01112f9767bc 100644
+--- a/arch/arm64/include/asm/assembler.h
++++ b/arch/arm64/include/asm/assembler.h
+@@ -110,6 +110,13 @@
+ 	hint	#20
+ 	.endm
+ 
++/*
++ * Clear Branch History instruction
++ */
++	.macro clearbhb
++	hint	#22
++	.endm
++
+ /*
+  * Speculation barrier
+  */
+diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+index 40a5e48881af..f63438474dd5 100644
+--- a/arch/arm64/include/asm/cpufeature.h
++++ b/arch/arm64/include/asm/cpufeature.h
+@@ -523,6 +523,19 @@ static inline bool supports_csv2p3(int scope)
+ 	return csv2_val == 3;
+ }
+ 
++static inline bool supports_clearbhb(int scope)
++{
++	u64 isar2;
++
++	if (scope == SCOPE_LOCAL_CPU)
++		isar2 = read_sysreg_s(SYS_ID_AA64ISAR2_EL1);
++	else
++		isar2 = read_sanitised_ftr_reg(SYS_ID_AA64ISAR2_EL1);
++
++	return cpuid_feature_extract_unsigned_field(isar2,
++						    ID_AA64ISAR2_CLEARBHB_SHIFT);
++}
++
+ static inline bool system_supports_32bit_el0(void)
+ {
+ 	return cpus_have_const_cap(ARM64_HAS_32BIT_EL0);
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index b35579352856..5b3bdad66b27 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -577,6 +577,7 @@
+ #define ID_AA64ISAR1_GPI_IMP_DEF	0x1
+ 
+ /* id_aa64isar2 */
++#define ID_AA64ISAR2_CLEARBHB_SHIFT	28
+ #define ID_AA64ISAR2_RPRES_SHIFT	4
+ #define ID_AA64ISAR2_WFXT_SHIFT		0
+ 
+diff --git a/arch/arm64/include/asm/vectors.h b/arch/arm64/include/asm/vectors.h
+index 1f65c37dc653..f64613a96d53 100644
+--- a/arch/arm64/include/asm/vectors.h
++++ b/arch/arm64/include/asm/vectors.h
+@@ -32,6 +32,12 @@ enum arm64_bp_harden_el1_vectors {
+ 	 * canonical vectors.
+ 	 */
+ 	EL1_VECTOR_BHB_FW,
++
++	/*
++	 * Use the ClearBHB instruction, before branching to the canonical
++	 * vectors.
++	 */
++	EL1_VECTOR_BHB_CLEAR_INSN,
+ #endif /* CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY */
+ 
+ 	/*
+@@ -43,6 +49,7 @@ enum arm64_bp_harden_el1_vectors {
+ #ifndef CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY
+ #define EL1_VECTOR_BHB_LOOP		-1
+ #define EL1_VECTOR_BHB_FW		-1
++#define EL1_VECTOR_BHB_CLEAR_INSN	-1
+ #endif /* !CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY */
+ 
+ /* The vectors to use on return from EL0. e.g. to remap the kernel */
+diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+index 0f74dc2b13c0..33b33416fea4 100644
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -125,6 +125,8 @@ extern char __spectre_bhb_loop_k24_start[];
+ extern char __spectre_bhb_loop_k24_end[];
+ extern char __spectre_bhb_loop_k32_start[];
+ extern char __spectre_bhb_loop_k32_end[];
++extern char __spectre_bhb_clearbhb_start[];
++extern char __spectre_bhb_clearbhb_end[];
+ 
+ static void __copy_hyp_vect_bpi(int slot, const char *hyp_vecs_start,
+ 				const char *hyp_vecs_end)
+@@ -1086,6 +1088,7 @@ static void update_mitigation_state(enum mitigation_state *oldp,
+  * - Mitigated by a branchy loop a CPU specific number of times, and listed
+  *   in our "loop mitigated list".
+  * - Mitigated in software by the firmware Spectre v2 call.
++ * - Has the ClearBHB instruction to perform the mitigation.
+  * - Has the 'Exception Clears Branch History Buffer' (ECBHB) feature, so no
+  *   software mitigation in the vectors is needed.
+  * - Has CSV2.3, so is unaffected.
+@@ -1226,6 +1229,9 @@ bool is_spectre_bhb_affected(const struct arm64_cpu_capabilities *entry,
+ 	if (supports_csv2p3(scope))
+ 		return false;
+ 
++	if (supports_clearbhb(scope))
++		return true;
++
+ 	if (spectre_bhb_loop_affected(scope))
+ 		return true;
+ 
+@@ -1266,6 +1272,8 @@ static const char *kvm_bhb_get_vecs_end(const char *start)
+ 		return __spectre_bhb_loop_k24_end;
+ 	else if (start == __spectre_bhb_loop_k32_start)
+ 		return __spectre_bhb_loop_k32_end;
++	else if (start == __spectre_bhb_clearbhb_start)
++		return __spectre_bhb_clearbhb_end;
+ 
+ 	return NULL;
+ }
+@@ -1305,6 +1313,7 @@ static void kvm_setup_bhb_slot(const char *hyp_vecs_start)
+ #define __spectre_bhb_loop_k8_start NULL
+ #define __spectre_bhb_loop_k24_start NULL
+ #define __spectre_bhb_loop_k32_start NULL
++#define __spectre_bhb_clearbhb_start NULL
+ 
+ static void kvm_setup_bhb_slot(const char *hyp_vecs_start) { }
+ #endif
+@@ -1323,6 +1332,11 @@ void spectre_bhb_enable_mitigation(const struct arm64_cpu_capabilities *entry)
+ 	} else if (cpu_mitigations_off()) {
+ 		pr_info_once("spectre-bhb mitigation disabled by command line option\n");
+ 	} else if (supports_ecbhb(SCOPE_LOCAL_CPU)) {
++		state = SPECTRE_MITIGATED;
++	} else if (supports_clearbhb(SCOPE_LOCAL_CPU)) {
++		kvm_setup_bhb_slot(__spectre_bhb_clearbhb_start);
++		this_cpu_set_vectors(EL1_VECTOR_BHB_CLEAR_INSN);
++
+ 		state = SPECTRE_MITIGATED;
+ 	} else if (spectre_bhb_loop_affected(SCOPE_LOCAL_CPU)) {
+ 		switch (spectre_bhb_loop_affected(SCOPE_SYSTEM)) {
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 0d89d535720f..d07dadd6b8ff 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -156,6 +156,7 @@ static const struct arm64_ftr_bits ftr_id_aa64isar1[] = {
+ };
+ 
+ static const struct arm64_ftr_bits ftr_id_aa64isar2[] = {
++	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_HIGHER_SAFE, ID_AA64ISAR2_CLEARBHB_SHIFT, 4, 0),
+ 	ARM64_FTR_END,
+ };
+ 
+diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+index fcfbb2b009e2..296422119488 100644
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -1074,6 +1074,7 @@ alternative_else_nop_endif
+ #define BHB_MITIGATION_NONE	0
+ #define BHB_MITIGATION_LOOP	1
+ #define BHB_MITIGATION_FW	2
++#define BHB_MITIGATION_INSN	3
+ 
+ 	.macro tramp_ventry, vector_start, regsize, kpti, bhb
+ 	.align	7
+@@ -1090,6 +1091,11 @@ alternative_else_nop_endif
+ 	__mitigate_spectre_bhb_loop	x30
+ 	.endif // \bhb == BHB_MITIGATION_LOOP
+ 
++	.if	\bhb == BHB_MITIGATION_INSN
++	clearbhb
++	isb
++	.endif // \bhb == BHB_MITIGATION_INSN
++
+ 	.if	\kpti == 1
+ 	/*
+ 	 * Defend against branch aliasing attacks by pushing a dummy
+@@ -1170,6 +1176,7 @@ ENTRY(tramp_vectors)
+ #ifdef CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY
+ 	generate_tramp_vector	kpti=1, bhb=BHB_MITIGATION_LOOP
+ 	generate_tramp_vector	kpti=1, bhb=BHB_MITIGATION_FW
++	generate_tramp_vector	kpti=1, bhb=BHB_MITIGATION_INSN
+ #endif /* CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY */
+ 	generate_tramp_vector	kpti=1, bhb=BHB_MITIGATION_NONE
+ END(tramp_vectors)
+@@ -1232,6 +1239,7 @@ SYM_CODE_START(__bp_harden_el1_vectors)
+ #ifdef CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY
+ 	generate_el1_vector	bhb=BHB_MITIGATION_LOOP
+ 	generate_el1_vector	bhb=BHB_MITIGATION_FW
++	generate_el1_vector	bhb=BHB_MITIGATION_INSN
+ #endif /* CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY */
+ SYM_CODE_END(__bp_harden_el1_vectors)
+ 	.popsection
+diff --git a/arch/arm64/kvm/hyp/hyp-entry.S b/arch/arm64/kvm/hyp/hyp-entry.S
+index b59b66f1f905..99b8ecaae810 100644
+--- a/arch/arm64/kvm/hyp/hyp-entry.S
++++ b/arch/arm64/kvm/hyp/hyp-entry.S
+@@ -405,4 +405,10 @@ ENTRY(__spectre_bhb_loop_k32_start)
+ 	ldp	x0, x1, [sp, #(8 * 0)]
+ 	add	sp, sp, #(8 * 2)
+ ENTRY(__spectre_bhb_loop_k32_end)
++
++ENTRY(__spectre_bhb_clearbhb_start)
++	esb
++	clearbhb
++	isb
++ENTRY(__spectre_bhb_clearbhb_end)
+ #endif
+-- 
+2.34.1
+
+
 

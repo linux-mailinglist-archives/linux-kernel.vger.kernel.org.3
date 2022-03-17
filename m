@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26104DCA33
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E2D4DCA36
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 16:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235991AbiCQPkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 11:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
+        id S236008AbiCQPkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 11:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235285AbiCQPki (ORCPT
+        with ESMTP id S235285AbiCQPkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 11:40:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D5320C2E0;
-        Thu, 17 Mar 2022 08:39:22 -0700 (PDT)
+        Thu, 17 Mar 2022 11:40:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8087720C2EA;
+        Thu, 17 Mar 2022 08:39:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E18706199B;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 981A1CE23BC;
+        Thu, 17 Mar 2022 15:39:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6707C340F2;
         Thu, 17 Mar 2022 15:39:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B72AC340EF;
-        Thu, 17 Mar 2022 15:39:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647531561;
-        bh=No/nArYdGiPaiSflbYi9n3JC3ItYkbFrFm5VnVe0g94=;
+        s=k20201202; t=1647531562;
+        bh=muK9ioYGxlpIqdRAEOJJqqju0/Qdv+BbLGk8bujE/IM=;
         h=From:To:Subject:Date:In-Reply-To:References:In-Reply-To:
          References:From;
-        b=JsELj5TFdiNOmnNPOTxgdEbPy9oaD0+AIBoev2UJsob2PK2KYI8F1WZsWUMB8di6h
-         FQJPMDikz+1nERbi/4wXfwarVcVikb0IiWwvzYC98oniIJkoNTyy6lMi7JCf1/iyDh
-         EbXFx7DlbwsT2/rZ8ybgFXrTGtV3PgML5cbmpifynsOhvgkuO+wnCpMwgvVQCu3lbQ
-         6I0xUYIHVnZ/Vm5K0+WhThCM2O6wP9Oi2DXsO2q5w2B87yYvi+zv6TXJj1wwVjiTCa
-         JzURqYctGygrSDjAj+aNy9FLEn1oWsLxR9eIDAWN9qyqF3xNHqVTNDJ8n/2GgA6msF
-         GMxjEC2MEL//Q==
+        b=N9LRRRKonLVFo0yNQOViTj46/OnGVjZGcgmy2rO/C91mDnGMlVaNbIsjItv9gyc7K
+         MGHO3/T1FTtrZ8avJFySYpnKoa7aF1lU3F6v9jW9V7abcNTNh4YlEjcwxKA2nODeoW
+         0cf+dvhLohff6gG1XlnRUny47SMRTXg1qu4cAWLNU6N6dfILx8T0cmqFqIHE/dAD2E
+         //Mc3cR2REHnCa4s9KdDgOXUZP6q9bQ4JGuWO4j1YbV8JPu7yf4mKBV8C7sUayRFkM
+         v9WjmsJa7/p7jqw/m49E90DP7lRqvJhEL8M1y08iadIkfhx6DpGsrc2h347CMxol63
+         mHPvPR2WhNmLw==
 From:   zanussi@kernel.org
 To:     LKML <linux-kernel@vger.kernel.org>,
         linux-rt-users <linux-rt-users@vger.kernel.org>,
@@ -45,9 +45,9 @@ To:     LKML <linux-kernel@vger.kernel.org>,
         Clark Williams <williams@redhat.com>,
         "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
         Tom Zanussi <zanussi@kernel.org>
-Subject: [PATCH RT 1/2] eventfd: Fix stable-rt v5.4.182-rt71 conflict fixup issue
-Date:   Thu, 17 Mar 2022 10:39:16 -0500
-Message-Id: <7ecbf796f7026cf007e9d03d251a9f04e89cd3e9.1647531549.git.zanussi@kernel.org>
+Subject: [PATCH RT 2/2] Linux 5.4.182-rt72-rc1
+Date:   Thu, 17 Mar 2022 10:39:17 -0500
+Message-Id: <a018941c62b30e26140ec9369fc7e14d0a7e49a3.1647531550.git.zanussi@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1647531549.git.zanussi@kernel.org>
 References: <cover.1647531549.git.zanussi@kernel.org>
@@ -71,35 +71,18 @@ If anyone has any objections, please let me know.
 -----------
 
 
-This fixes an issue in stable-rt release v5.4.182-rt71 where a hunk
-from the context diff was inadvertently included in a conflict fixup
-where it shouldn't have been.  Remove those lines that don't belong.
-
-Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Tom Zanussi <zanussi@kernel.org>
 ---
- include/linux/sched.h | 8 --------
- 1 file changed, 8 deletions(-)
+ localversion-rt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index e1dfb01f4623..91f1aac3c86a 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -802,14 +802,6 @@ struct task_struct {
- 	/* to be used once the psi infrastructure lands upstream. */
- 	unsigned			use_memdelay:1;
- #endif
--#ifdef CONFIG_PSI
--	/* Stalled due to lack of memory */
--	unsigned			in_memstall:1;
--#endif
--#ifdef CONFIG_PAGE_OWNER
--	/* Used by page_owner=on to detect recursion in page tracking. */
--	unsigned			in_page_owner:1;
--#endif
- #ifdef CONFIG_EVENTFD
- 	/* Recursion prevention for eventfd_signal() */
- 	unsigned			in_eventfd_signal:1;
+diff --git a/localversion-rt b/localversion-rt
+index f38a3cc7f310..70396d6f53b7 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt71
++-rt72-rc1
 -- 
 2.17.1
 

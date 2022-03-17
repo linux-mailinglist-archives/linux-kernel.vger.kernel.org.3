@@ -2,405 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EF44DC01F
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 08:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A804DC01C
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 08:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiCQH2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 03:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S230258AbiCQH2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 03:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiCQH2E (ORCPT
+        with ESMTP id S230215AbiCQH16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 03:28:04 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D9F1C16DB
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 00:26:48 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22H3O7oU030081;
-        Thu, 17 Mar 2022 07:26:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=ixBrXFQUSYstJbK8GgPPTtLT1s0p6RbjKcjoVmYZqvA=;
- b=WR6cERwF5L4CX3Ea7yR/fSxhkvh1jV6zj4uEjvu/iFmkXROrMxjaVTcySe4Hkccmqc1r
- Ilnf0RpWBILaJHIUmBgfXCuleqP1a6VPzW8bL29Nq8QfMeMfIGgWCj/pakZdBnsvHqvV
- 2ffbjEeSJWBHeI2pUBCgycTr032k4jVGnzNc7e9f9OqAH+FP+jq1hvBy+xMEuHL9WNNh
- SufukkVS8OzMbtfSgN1wWViO7xMYgF/e0mkWfahexbwclYgqjhbE9YaR0b9NmeQyg1O4
- QDZ58L94U652JXzqgh/dKDi2HBU8grK76C/9ZnsIumfBBM19S6kvqSgzi93IOIpmRS8D Zg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3et5fu8hcs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Mar 2022 07:26:42 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22H7C9q2012696;
-        Thu, 17 Mar 2022 07:26:41 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2104.outbound.protection.outlook.com [104.47.58.104])
-        by aserp3020.oracle.com with ESMTP id 3et64m4wyd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Mar 2022 07:26:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TmCxRn080IcnqJsVD2Ll8zNpdjbydP9g8M1f8s09GrNsa51YKDbVhGR2x9sBw0/RKSFtoMewBNNSFEjut9BrYgT6M563qNsvnMC+A0WHW533YGCyIg4j8yG1NNKBOKpedg1UH8BbfLPUbDV6gCyNxQoKSMunIzqzWBrOxxnQ/QI7Ex0PCc+4KLfm0G5cKwBaryGiNUFdxgVbna4TCKYtKQWUyzQhxAhI+hPIXlhyK6hZ1Zq20TxnBmVQ8rhRfSvBTwIiQKbCkCz+2CGmBWfXTbgM2D5k5l9RZsOCH421bwtjTNziFKSB6Lb/76eyIYb2vokn13uKORHlArZ9bKeMaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ixBrXFQUSYstJbK8GgPPTtLT1s0p6RbjKcjoVmYZqvA=;
- b=ByBDCy2yOP/f8Lt63ZQK6qDj+kiZBRSr3YpwQ5F98k3F+1X2sj9GDbFfjf1/nqxPL2NCM+miayKyzd9sQwkQr6eoNoiZKrJ4SRTN9nj3ZxDA2Td+mIVITEXM0okObbuO4/UJ5Fw6fnP48YnduwqBHeOLq9y7BJqX3hgfWUdoBxtz8X7LRRkNBmiQ2vZoVktPjDgwhZ34e7I5d5ay0ruFadF5Cd2YZ4AJ7RF0Lzhgku4uJpdA/oG1GEsHMKaBoPBhbDSgOeFTBzQBY9QR0+ZmdsD2OgroMAEjfS0lHEao954LsGwwiLLMjPLDg5qGK9iPdsg61D5W+OQhUNQbGI1YOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ixBrXFQUSYstJbK8GgPPTtLT1s0p6RbjKcjoVmYZqvA=;
- b=CJsh3hMmmm5xG8p2mYrxrFTQHsrGcbJonWDiwUel0YZBcN7loSCsFmrycjAOpJyfi5HDYdYzsof+i2v3MsZGkwC3G4HHCdDRK7HcWsobXO7+UOXRjzknGX9r9kj8AVBQ6BD3jYdKGQdwRJaUxx431EqnuWObYs7k4xFZxPUcL6U=
-Received: from CO1PR10MB4468.namprd10.prod.outlook.com (2603:10b6:303:6c::24)
- by DM6PR10MB4332.namprd10.prod.outlook.com (2603:10b6:5:220::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Thu, 17 Mar
- 2022 07:26:40 +0000
-Received: from CO1PR10MB4468.namprd10.prod.outlook.com
- ([fe80::b5ab:1c3e:6540:d2fa]) by CO1PR10MB4468.namprd10.prod.outlook.com
- ([fe80::b5ab:1c3e:6540:d2fa%9]) with mapi id 15.20.5081.017; Thu, 17 Mar 2022
- 07:26:40 +0000
-From:   Imran Khan <imran.f.khan@oracle.com>
-To:     tj@kernel.org, viro@zeniv.linux.org.uk
-Cc:     gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v7 8/8] kernfs: Add a document to describe hashed locks used in kernfs.
-Date:   Thu, 17 Mar 2022 18:26:12 +1100
-Message-Id: <20220317072612.163143-9-imran.f.khan@oracle.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220317072612.163143-1-imran.f.khan@oracle.com>
-References: <20220317072612.163143-1-imran.f.khan@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SY6PR01CA0035.ausprd01.prod.outlook.com
- (2603:10c6:10:eb::22) To CO1PR10MB4468.namprd10.prod.outlook.com
- (2603:10b6:303:6c::24)
+        Thu, 17 Mar 2022 03:27:58 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8EBC1C16DC
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 00:26:40 -0700 (PDT)
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E3D8A3F366
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:26:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647501997;
+        bh=ghNz7R4BGfeSRpf4QcIYnWTSvV5jI5ENR9wPPc5DGEw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=D6hMMPtho+Q1KIKx7adXE4EIZassueyz+XFtkeV6tc6Qnw0rJKR9iRWjGJdl8iWHg
+         N766DWkJYEFMbvAvnwokTW7pIH4dC5ffv3/YIqzOvgIDHMvXHRZSeUBL3Xdzgj0VKX
+         jzi/0elzfyVESukJOn0QQTA3mn6/d9mqHQL5rqSfYNNkNXBAfMBA52kqUCjDGkzgOv
+         GPU5qwQH47BATIai5PFJ3yL85POOWiavxeTQEQ/d6/MIxYtbvrJmxhdtHG4hzqPkaK
+         MiO3Kxp5hdn9o5TSJ7gHYQFGq9fq6k95EPC/0cDKFJCZhERu4zdVgSxuvnK2fkL2xr
+         jGMLE9jZgUwNg==
+Received: by mail-wm1-f70.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so1803563wmj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 00:26:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ghNz7R4BGfeSRpf4QcIYnWTSvV5jI5ENR9wPPc5DGEw=;
+        b=VL5eMhHsoFWxF2u1FqWKpxJhqyGkNGfwPyKNYeZanQDnObANPWvWLTh4ONjlS+bvcR
+         GHkGDo5mE+NQh9MAU2PnCe+UuBZn+4gb196wPQotSFKThQMi1iDPOd5yR1xWaXU7afFG
+         khrYGBbxdFNVmO2AWhXmvSknb9evkvsmvQwCgMO1CmRyHouoejjYRZis+zgR4KdTNBvL
+         S+wT8MmJfHamL1Fe302ewRpruyUMB0DZLJkM8wZLzInFghIzI274gOl61JpUCHbztMds
+         SBQ1vVSuG7G8xJB5Tgw5d9VBeCZaY1SwILffFlnXtGna7sJJGrXz6r/H8Kx5kMrTF24P
+         8w1A==
+X-Gm-Message-State: AOAM532vgeD1Bg7wOZrW2Z9aQPZ4M5Sl0yQZVdpoTLwHmevI5u5LXU4M
+        kkb9Ui3+j+HBnq8h4qnAZ3JMFNAG95R8rQGfyX0lMOzKlPjbh8QJQKoMDhmfUy5ezZVkA5HAi1e
+        teh4ihbEUxoq7NeX2KN5OKgUqhC9sGoCYQ1anZgHorg==
+X-Received: by 2002:a5d:6182:0:b0:203:ecfb:6d5e with SMTP id j2-20020a5d6182000000b00203ecfb6d5emr826498wru.555.1647501997313;
+        Thu, 17 Mar 2022 00:26:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyXUvFXzXTNB1+s0MST5P6b3GxTO5cqxsPLl8NjBFb0wBvzAZuUPRWZ20My4isFC+iYaqWujw==
+X-Received: by 2002:a5d:6182:0:b0:203:ecfb:6d5e with SMTP id j2-20020a5d6182000000b00203ecfb6d5emr826481wru.555.1647501997039;
+        Thu, 17 Mar 2022 00:26:37 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id k17-20020a05600c1c9100b00386bb6e9c50sm10966353wms.45.2022.03.17.00.26.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 00:26:36 -0700 (PDT)
+Message-ID: <4b1f4772-35f9-3e21-6429-b64c7427144a@canonical.com>
+Date:   Thu, 17 Mar 2022 08:26:35 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4ba2a070-a5a2-42b1-e018-08da07e77a76
-X-MS-TrafficTypeDiagnostic: DM6PR10MB4332:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR10MB4332E4E35EE1C1D4FE4C0AD2B0129@DM6PR10MB4332.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yY6XrgF4Er5dSOj0VSUO5ftjBByX5Y9oYqRqddXwup3W+vgyGV+80puyfHB1QSa8I0NkdgP5XIrW9CjVeC0UUfP9LV1hTFH2wQgKUjhsnqbfbqKTfua6fG1XhONjuZCEwHPKFhId0ec2tG2wPzWY0p94NlOV+LeHXaNdiVXRZ9ZfIdXoB1Q8I8NLBM73U+JpK7afUPWW1LnF68Yi7hHutm6IDqFNVtUKi7/5WZSZ1Z6pivsYldXe+7MPTF/2inbc6IJYOsOzqjHgoAGZ9vjfK1OxzdMgttlCBtjIrAPy/3MsdOeHInaEyThLxZoSxGxJSXpJ8LmTdYTX1f9yDKK4fI2o7R6ZRy1ufYBFTiGiEY4DSPXQbcgErjCcl8QxJSazI7fXXeeOix0sxEW4Iq7G6pGkPMlzBWyw9aHYwRzGPhphptWGSftnp903vQ/p48cDZy16gm66VUYyjW4oy7P8SGz4J56kqMqGH+P4a4xWfW+fYNCJk4Vz06MJBEvUU62Sbjm2M0+cywORv9oalWzR5WB20h58b/HIprEbkh4abIgzyoo1qhAzd7QM57LF0olkzPLECO/fF1ifP200igBDME6L6Rqty4oYCZrE5HrLecnyeueZ6WVPs68bFVQsihNrmS9JHQNQKl06SEpQZEKnK6w+EMjnxdb6jflCe48KG7rBMQdr7g8B/nMRu5b/U3zp2hDUna0qCaqUJH1ICvaR7Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4468.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(2906002)(8936002)(26005)(52116002)(36756003)(38100700002)(316002)(186003)(38350700002)(103116003)(6506007)(86362001)(6666004)(83380400001)(1076003)(5660300002)(30864003)(4326008)(66946007)(6486002)(8676002)(66556008)(66476007)(508600001)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1cZKvCg48jUM38TBfZpvpIIR3YotNwU2QyiHz7uk/mjT6IF/cG8u15cUd8fK?=
- =?us-ascii?Q?FTDuyb8ymVpxOD9c4SBuR+hNdOacLpfFah2xsyVz6drt41PXzo2lEr4FKaFV?=
- =?us-ascii?Q?S/vp/dAMBEwppx8tFRTLWj0ZstZXvsaMGPt+QhpUb4KZCRLZ/mnim1uE84sa?=
- =?us-ascii?Q?7c919nGhz95zSL0gplvzn5xzhbJyR3cO6UFItcoMdIXdYnN9qno6j0U/zbWX?=
- =?us-ascii?Q?DKBTivvR3q+T+yYYU+p3QPh41aZJgbEKWuUOhSuNZJIh7LJl/QVXs7A/6k+Y?=
- =?us-ascii?Q?P0xVdtyH92yJoltGcD3a/Rzr0r/ALBFr1MZ10OOiPfNAG4zBMO6tlAREIQgs?=
- =?us-ascii?Q?zR7sWw0UDh2B0ZzaqiWCS3YUJC7cGE+VLSoKkdYtUltiWwGQe5nKRsUupVin?=
- =?us-ascii?Q?rJlWwZAVtOxpMKCST9+M9G8iOyiPgvmxxVbRAdz4C7cL6rtOm8frT7IqwRPl?=
- =?us-ascii?Q?D3fNORtKwVPvb/RNf/pvIejuutnSyFglqCvaY3qUKoC8VYBwnqDGfegFa/I4?=
- =?us-ascii?Q?4BsrziJpmGNx4jdodv6KaTncxlqPCrzE6VjPwZmTY8TutFnAsbKwTvlLN6Kf?=
- =?us-ascii?Q?2uM9MZ9m9PJ7v9sx0NJbMs3FlkgwGUkBCeYHruynsF+oHemLcIkydz2xIqty?=
- =?us-ascii?Q?WC3CqlJKd8D8fRJz/FMiSO83FvfnwWfi0iHwj1FkANSksg9OL6yGe+Ke+ruE?=
- =?us-ascii?Q?MseplgeDQuagynYnMdcpxNEwY36WQgrhh7A1XXAcQhxrZRj3w8H/7jtsGypK?=
- =?us-ascii?Q?fSJOazrBtyTrgndco8HD7qtAbB0L5btaaRm6NGev14oKzZpa8TqPx7bQR6HZ?=
- =?us-ascii?Q?sr4xulfyuHNVJgjKjl7YeziLeD0RCH9vYWOdhrdKxJHC/0wcCOznL5VKec/d?=
- =?us-ascii?Q?H6hIgye8CwZ+vEcONBbaIvQqfFC17njTb+4RNF7YTet03m6WJn2NfCu4jnmy?=
- =?us-ascii?Q?s176uPhhleSagZgYUi7lVEmA6BFdnc/k9DDHhHrV8yjQ85iG2KPWTGzwINjz?=
- =?us-ascii?Q?Do9oqGlPcsSW8Ez2hezAv3s0KXd+OGnyzauZfGhgJxMlfemu7FpEeYpDAgcl?=
- =?us-ascii?Q?9pbonJpAa9QlK/zCFq97BMfRVKG89R7eEKSfao0U5M4zRVHSlT2qCKTtQzy5?=
- =?us-ascii?Q?VZpT7Ogsdv0/kQAIAw3bBjJFqcKPDYGnCpwx/vqOSPCmLBcZ4PzJDiKmWnrT?=
- =?us-ascii?Q?BDIZcn1TZd04h3UPfLRe6gtr2yNHzHqYWvZPbhxFVO75sBPOMnwUjYWHMd1x?=
- =?us-ascii?Q?eQ9zfRLVtLrZ1e9M6G1ZKrJln+k13+n79vEfXxjbx5GiXU2xOo2/zf4lAcu1?=
- =?us-ascii?Q?YEMFfWLoTHq2XSX71CPTuaSAMT6bcr3ZMkshXqpja0FnLyOnzwg7Ehe+ibBC?=
- =?us-ascii?Q?6O3fQ2/Q7a2Hrh+wxP0A4l92XHcbR3gmjwcaQMT3YaKoz3MukjiC8Pr4Cxda?=
- =?us-ascii?Q?JHeS4DdneBTy9kWORZNJ/WpewJYhJDR4GL2fquip7sMsP7UVep082A=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ba2a070-a5a2-42b1-e018-08da07e77a76
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4468.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2022 07:26:40.1059
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DwCtIPG50pahGt1lB+NVfELQr4gRUMFQtK31cMqS2U1MDD2N+ZQRXx0Zci2fgwNC/2gNtv5j2oMMRaOX91LJJA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4332
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10288 signatures=693715
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 spamscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203170042
-X-Proofpoint-GUID: DIwFc6GdqjP8W27Z5HKIGRfYy7q51qgu
-X-Proofpoint-ORIG-GUID: DIwFc6GdqjP8W27Z5HKIGRfYy7q51qgu
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/8] dt-bindings: pinctrl: mvebu: Document bindings for
+ AC5
+Content-Language: en-US
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220314213143.2404162-1-chris.packham@alliedtelesis.co.nz>
+ <20220314213143.2404162-2-chris.packham@alliedtelesis.co.nz>
+ <4e6df448-5562-8f50-6f46-91acb279bc1a@canonical.com>
+ <7e73bba0-8b54-772c-2e94-8fca4e4e3294@alliedtelesis.co.nz>
+ <cb0af80e-3e5a-fbd9-cd8b-7b252ebe33fe@canonical.com>
+ <6d902e7d-b71f-9dcd-9175-cc706e3d60cc@alliedtelesis.co.nz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <6d902e7d-b71f-9dcd-9175-cc706e3d60cc@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This document describes usage and proof of various hashed locks
-introduced in this patch set
+On 16/03/2022 21:21, Chris Packham wrote:
+> 
+> On 16/03/22 21:16, Krzysztof Kozlowski wrote:
+>> On 15/03/2022 22:12, Chris Packham wrote:
+>>> (trimmed cc list to the arm, pinctrl and dt people)
+>>>
+>>> On 15/03/22 23:46, Krzysztof Kozlowski wrote:
+>>>> On 14/03/2022 22:31, Chris Packham wrote:
+>>>>> Add JSON schema for marvell,ac5-pinctrl present on the Marvell 98DX2530
+>>>>> SoC.
+>>>>>
+>>>>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+>>>>> ---
+>>>>>
+>>>>> Notes:
+>>>>>       Changes in v2:
+>>>>>       - Remove syscon and simple-mfd compatibles
+>>>>>
+>>>>>    .../bindings/pinctrl/marvell,ac5-pinctrl.yaml | 70 +++++++++++++++++++
+>>>>>    1 file changed, 70 insertions(+)
+>>>>>    create mode 100644 Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..65af1d5f5fe0
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/pinctrl/marvell,ac5-pinctrl.yaml
+>>>>> @@ -0,0 +1,70 @@
+>>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: http://scanmail.trustwave.com/?c=20988&d=1pyx4kv4KTrTfE5fXNs54mLZmOgk87Uim6CXu-YC1w&u=http%3a%2f%2fdevicetree%2eorg%2fschemas%2fpinctrl%2fmarvell%2cac5-pinctrl%2eyaml%23
+>>>>> +$schema: http://scanmail.trustwave.com/?c=20988&d=1pyx4kv4KTrTfE5fXNs54mLZmOgk87Uim6TAvbEE2Q&u=http%3a%2f%2fdevicetree%2eorg%2fmeta-schemas%2fcore%2eyaml%23
+>>>>> +
+>>>>> +title: Marvell AC5 pin controller
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
+>>>>> +
+>>>>> +description:
+>>>>> +  Bindings for Marvell's AC5 memory-mapped pin controller.
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    const: marvell,ac5-pinctrl
+>>>>> +
+>>>>> +patternProperties:
+>>>>> +  '-pins$':
+>>>>> +    type: object
+>>>>> +    $ref: pinmux-node.yaml#
+>>>>> +
+>>>>> +    properties:
+>>>>> +      marvell,function:
+>>>>> +        $ref: "/schemas/types.yaml#/definitions/string"
+>>>>> +        description:
+>>>>> +          Indicates the function to select.
+>>>>> +        enum: [ gpio, i2c0, i2c1, nand, sdio, spi0, spi1, uart0, uart1, uart2, uart3 ]
+>>>>> +
+>>>>> +      marvell,pins:
+>>>>> +        $ref: /schemas/types.yaml#/definitions/string-array
+>>>>> +        description:
+>>>>> +          Array of MPP pins to be used for the given function.
+>>>>> +        minItems: 1
+>>>>> +        items:
+>>>>> +          enum: [ mpp0, mpp1, mpp2, mpp3, mpp4, mpp5, mpp6, mpp7, mpp8, mpp9,
+>>>>> +                  mpp10, mpp11, mpp12, mpp13, mpp14, mpp15, mpp16, mpp17, mpp18, mpp19,
+>>>>> +                  mpp20, mpp21, mpp22, mpp23, mpp24, mpp25, mpp26, mpp27, mpp28, mpp29,
+>>>>> +                  mpp30, mpp31, mpp32, mpp33, mpp34, mpp35, mpp36, mpp37, mpp38, mpp39,
+>>>>> +                  mpp40, mpp41, mpp42, mpp43, mpp44, mpp45 ]
+>>>>> +
+>>>>> +allOf:
+>>>>> +  - $ref: "pinctrl.yaml#"
+>>>>> +
+>>>>> +required:
+>>>>> +  - compatible
+>>>>> +
+>>>>> +additionalProperties: false
+>>>>> +
+>>>>> +examples:
+>>>>> +  - |
+>>>>> +    system-controller@80020100 {
+>>>>> +      compatible = "syscon", "simple-mfd";
+>>>>> +      reg = <0x80020000 0x20>;
+>>>> This is unusual. Usually the pinctrl should be a device @80020100, not
+>>>> child of syscon node. Why do you need it? In v1 you mentioned that
+>>>> vendor sources do like this, but it's not correct to copy wrong DTS. :)
+>>> The vendor dts has this
+>>>
+>>>           pinctrl0: pinctrl@80020100 {
+>>>               compatible = "marvell,ac5-pinctrl",
+>>>                        "syscon", "simple-mfd";
+>>>               reg = <0 0x80020100 0 0x20>;
+>>>               i2c_mpps: i2c-mpps {
+>>>                   marvell,pins = "mpp26", "mpp27";
+>>>                   marvell,function = "i2c0-opt";
+>>>               };
+>>>        };
+>>>
+>>> Rob pointed out that "syscon", "simple-mfd" don't belong. I went looking
+>>> and found marvell,armada-7k-pinctrl which has the pinctrl as a child of
+>>> a syscon node and what you see in v2 is the result.
+>>>
+>>> I probably went a bit too far off the deep end and should have just
+>>> dropped the "syscon", "simple-mfd" compatibles. I even wrote that
+>>> version but decided to add some gold plating before I submitted it.
+>> More or less it is explained in
+>> Documentation/devicetree/bindings/arm/marvell/cp110-system-controller.txt why
+>> armada-7k uses it that way. The pinctrl is part of system registers
+>> which apparently has to be shared with others (on shared SFR range).
+>>
+>> It depends on your case, your SFR ranges for pinctrl and other blocks.
+>>
+> I can tell you that without a syscon node in the mix somewhere the 
+> driver will fail to load. And when I switch to 
+> mvebu_pinctrl_simple_mmio_probe() the driver loads but then kernel 
+> panics when something tries to use one of the pin functions.
+> 
+> So I think the syscon is needed. I just need to come up with a better 
+> justification than "because it's needed".
 
-Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
----
- .../filesystems/kernfs-hashed-locks.rst       | 245 ++++++++++++++++++
- 1 file changed, 245 insertions(+)
- create mode 100644 Documentation/filesystems/kernfs-hashed-locks.rst
+What do you mean "driver fails to load"? You control the driver, don't
+you? You wrote it? If you write a driver which is not compatible with
+bindings, it won't work obviously, so after changing bindings you need
+to revisit the driver.
 
-diff --git a/Documentation/filesystems/kernfs-hashed-locks.rst b/Documentation/filesystems/kernfs-hashed-locks.rst
-new file mode 100644
-index 000000000000..2ffa579ee1e3
---- /dev/null
-+++ b/Documentation/filesystems/kernfs-hashed-locks.rst
-@@ -0,0 +1,245 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+===================
-+kernfs hashed locks
-+===================
-+
-+kernfs uses following hashed locks
-+
-+1. Hashed mutexes
-+2. Hashed spinlock
-+3. Hashed rwsem
-+
-+In certain cases hashed rwsem needs to work in conjunction with a per-fs mutex
-+(Described further below).So this document describes this mutex as well.
-+
-+A kernfs_global_locks object (defined below) provides hashed mutexes,
-+hashed spinlocks and hashed rwsems.
-+
-+	struct kernfs_global_locks {
-+		struct kernfs_open_file_mutex open_file_mutex[NR_KERNFS_LOCKS];
-+		struct kernfs_open_node_lock open_node_locks[NR_KERNFS_LOCKS];
-+		struct rw_semaphore kernfs_rwsem[NR_KERNFS_LOCKS];
-+	};
-+
-+The hashed mutexes and spinlocks are encapsulated in kernfs_open_file_mutex and
-+kernfs_open_node_lock respectively as shown below:
-+
-+struct kernfs_open_file_mutex {
-+	struct mutex lock;
-+} ____cacheline_aligned_in_smp;
-+
-+struct kernfs_open_node_lock {
-+	spinlock_t lock;
-+} ____cacheline_aligned_in_smp;
-+
-+
-+For all hashed locks address of a kernfs_node object acts as hashing key.
-+
-+For the remainder of this document a node means a kernfs_node object. The
-+node can refer to a file, directory or symlink of a kernfs based file system.
-+Also a node's mutex, spinlock or rwsem refers to hashed mutex, hashed spinlock
-+or hashed rwsem corresponding to the node.
-+It does not mean any locking construct embedded in the kernfs_node itself.
-+
-+What is protected by hashed locks
-+=================================
-+
-+(1) There's one kernfs_open_file for each open file and all kernfs_open_file
-+    instances corresponding to a kernfs_node are maintained in a list.
-+    hashed mutexes or kernfs_global_locks.open_file_mutex[index].lock protects
-+    this list.
-+
-+(2) For each kernfs file that has been opened there is one instance of
-+    kernfs_open_node and kernfs_node->attr.open points to it.
-+    hashed spinlocks or kernfs_global_locks.open_node_locks[index].lock protects
-+    ->attr.open.
-+
-+(3) Hashed rwsems or kernfs_global_locks.kernfs_rwsem[index] protects node's
-+    state and synchronizes operations that change state of a node or depend on
-+    the state of a node.
-+
-+(4) per-fs mutex (mentioned earlier) provides synchronization between lookup
-+    and remove operations.
-+    While looking for a node we will not have address of corresponding node
-+    so we can't acquire node's rwsem right from the beginning.
-+    On the other hand a parallel remove operation for the same node can acquire
-+    corresponding rwsem and go ahead with node removal. So it may happen that
-+    search operation for the node finds and returns it but before it can be
-+    pinned or used, the remove operation, that was going on in parallel, removes
-+    the node and hence makes its any future use wrong.
-+    per-fs mutex ensures that for competing search and remove operations only
-+    one proceeds at a time and since object returned by search is pinned before
-+    releasing the per-fs mutex, it will be available for subsequent usage.
-+
-+
-+Lock usage and proof
-+=======================
-+
-+(1) Hashed mutexes
-+
-+    Since hashed mutexes protect the list of kernfs_open_file instances
-+    corresponding to a kernfs_node, ->open and ->release backends of
-+    file_operations need to acquire hashed mutex corresponding to kernfs_node.
-+    Also when a kernfs_node is removed, all of its kernfs_open_file instances
-+    are drained after deactivating the node. This drain operation acquires
-+    hashed mutex to traverse list of kernfs_open_file instances.
-+    So addition (via ->open), deletion (via ->release) and traversal
-+    (during kernfs_drain) of kernfs_open_file list occurs in a synchronous
-+    manner.
-+
-+(2) Hashed spinlocks
-+
-+    As hashed spinlocks protect ->attr.open, ->open and ->release backends of
-+    file operations need to acquire spinlock corresponding the kernfs_node so
-+    that kernfs_open_node instances can be properly refcounted and freed when
-+    this refcount reaches 0.
-+
-+    file events notifier uses ->poll backend of kernfs_open_node instance, so
-+    it also needs node's spinlock before accessing ->attr.open.
-+
-+(3) Hashed rwsems
-+
-+	3.1. A node's rwsem protects its state and needs to be acquired to:
-+		3.1.a. Remove the node
-+		3.1.b. Move the node
-+		3.1.c. Travers or modify a node's children RB tree (for
-+		       directories), i.e to add/remove files/subdirectories
-+		       within/from a directory.
-+		3.1.d. Modify or access node's inode attributes
-+
-+	3.2. Hashed rwsems are used in following operations:
-+
-+		3.2.a. Addition of a new node
-+
-+		While adding a new kernfs_node under a kernfs directory
-+		kernfs_add_one acquires directory node's rwsem for
-+		writing. Clause 3.1.a ensures that directory exists
-+		throughout the operation. Clause 3.1.c ensures proper
-+		updation of children rb tree (i.e ->dir.children).
-+		Clause 3.1.d ensures correct modification of inode
-+		attribute to reflect timestamp of this operation.
-+		If the directory gets removed while waiting for semaphore,
-+		the subsequent checks in kernfs_add_one will fail resulting
-+		in early bail out from kernfs_add_one.
-+
-+		3.2.b. Removal of a node
-+
-+		Removal of a node involves recursive removal of all of its
-+		descendants as well. per-fs mutex (i.e kernfs_rm_mutex) avoids
-+		concurrent node removals even if the nodes are different.
-+
-+		At first node's rwsem is acquired. Clause 3.1.c avoids parallel
-+		modification of descendant tree and while holding this rwsem
-+		each of the descendants are deactivated.
-+
-+		Once a descendant has been deactivated and drained, its parent's
-+		rwsem is taken. Clause 3.1.c ensures proper unlinking of this
-+		descendant from its siblings. Clause 3.1.d ensures that parent's
-+		inode attributes are correctly updated to record time stamp of
-+		removal.
-+
-+		3.2.c. Movement of a node
-+
-+		Moving or renaming a node (kernfs_rename_ns) acquires rwsem for
-+		node and its old and new parents. Clauses 3.1.b and 3.1.c avoid
-+		concurrent move operations for the same node.
-+		Also if old parent of a node changes while waiting for rwsem,
-+		the acquisition of rwsem for 3 involved nodes is attempted
-+		again. It is always ensured that as far as old parent is
-+		concerned, rwsem corresponding to current parent is acquired.
-+
-+		3.2.d. Reading a directory
-+
-+		For diectory reading kernfs_fop_readdir acquires directory
-+		node's rwsem for reading. Clause 3.1.c ensures a consistent view
-+		of children RB tree.
-+		As far as directroy being read is concerned, if it gets removed
-+		while waiting for semaphore, the for loop that iterates through
-+		children will be ineffective. So for this operation acquiring
-+		directory node's rwsem for reading is enough.
-+
-+		3.2.e. Dentry revalidation
-+
-+		A dentry revalidation (kernfs_dop_revalidate) can happen for a
-+		negative or for a normal dentry.
-+		For negative dentries we just need to check parent change, so in
-+		this case acquiring parent kernfs_node's rwsem for reading is
-+		enough.
-+		For a normal dentry acquiring node's rwsem for reading is enough
-+		(Clause 3.1.a and 3.1.b).
-+		If node gets removed while waiting for the lock subsequent checks
-+		in kernfs_dop_revalidate will fail and kernfs_dop_revalidate will
-+		exit early.
-+
-+		3.2.f. kernfs_node lookup
-+
-+		While searching for a node under a given parent
-+		(kernfs_find_and_get_ns, kernfs_walk_and_get_ns) rwsem of parent
-+		node is acquired for reading. Clause 3.1.c ensures a consistent
-+		view of parent's children RB tree. To avoid parallel removal of
-+		found node before it gets pinned, these operation make use of
-+		per-fs mutex (kernfs_rm_mutex) as explained earlier.
-+		This per-fs mutex is also taken during kernfs_node removal
-+		(__kernfs_remove).
-+
-+		If the node being searched gets removed while waiting for the
-+		mutex or rwsem, the subsequent kernfs_find_ns or kernfs_walk_ns
-+		will fail.
-+
-+		3.2.g. kenfs_node's inode lookup
-+
-+		Looking up for inode instances via kernfs_iop_lookup involves
-+		node lookup. So locks acquired are same as ones required in 3.2.f.
-+		Also once node lookup is complete parent's rwsem is released and
-+		rwsem of found node is acquired to get corresponding inode.
-+		Since we are operating under per-fs kernfs_rm_mutex the found node
-+		will not disappear in the middle.
-+
-+		3.2.h. Updating or reading inode attribute
-+
-+		Interfaces that change inode attributes(i.e kernfs_setattr and
-+		kernfs_iop_setattr) acquire node's rwsem for writing.
-+		If the kernfs_node gets removed while waiting for the semaphore
-+		the subsequent __kernfs_setattr will fail.
-+		From 3.2.a and 3.2.b we know that updates due to addition or
-+		removal of nodes will not happen in parallel.
-+		So just locking the kernfs_node in these cases is enough to
-+		guarantee correct modification of inode attributes.
-+		Similarly the interfaces that read inode attributes
-+		(i.e kernfs_iop_getattr, kernfs_iop_permission) just need to
-+		acquire involved node's rwsem for reading.
-+
-+		3.2.i. kernfs file event generation
-+
-+		kernfs_notify pins involved node before scheduling
-+		kernfs_notify_work and kernfs_notify_workfn acquires node's
-+		rwsem. Clauses in 3.1 ensure a consistent view of node state
-+		throughout execution of work handler.
-+
-+		3.2.j. mount
-+
-+		kernfs_fill_super, invoked during mount operation, acquires root
-+		node's rwsem. During mount process there can't be other execution
-+		contexts trying to move or delete the node so just locking the
-+		involved node(i.e the root node) is enough.
-+
-+		3.2.k. getting symlink for a kernfs file
-+
-+		kernfs_getlink locks both parent and target nodes. Clauses
-+		3.1.a and 3.1.b avoid movement/removal of parent and target
-+		nodes. If parent or target gets moved or removed while
-+		kernfs_getlink was waiting for rwsem, the subsequent
-+		kernfs_get_target_path will return error.
-+
-+		3.2.l. while activating a node
-+
-+		For a node that started as deactivated, kernfs_activate
-+		activates the node. In this case acquiring node's rwsem is
-+		enough. Since the node is not active yet any parallel removal
-+		that wins the race for rwsem will skip this node and its
-+		descendents. Also user space can't see a deactivated node so we
-+		don't have any parallel access emanating from their as well.
-+
-+	3.3  For operations that involve locking multiple nodes at the same time
-+	     locks are acquired in order of their addresses.
--- 
-2.30.2
+There is no need for syscon because driver "fails to load". You need to
+fix your driver. Currently the driver code is definitely not a proper
+platform driver.
 
+Different question is whether something else requires here syscon
+because it accesses these registers but this requires knowledge of
+architecture and other components.
+
+
+Best regards,
+Krzysztof

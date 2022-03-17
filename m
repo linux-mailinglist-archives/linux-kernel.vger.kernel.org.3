@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C874DBEC9
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 06:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3556B4DBED5
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 06:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiCQFz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 01:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
+        id S229521AbiCQF6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 01:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiCQFz0 (ORCPT
+        with ESMTP id S229514AbiCQF6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 01:55:26 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A282220EE;
-        Wed, 16 Mar 2022 22:27:58 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id B01A25FD05;
-        Thu, 17 Mar 2022 08:27:55 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1647494875;
-        bh=Ompi4xbRQbnpUpOJ16sHOJ+JWKY7vg+02Db2wCk8mCA=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=irhKgrfoFShVO8afiyTqqzR5u3hxZudUmTx7dEcPsaHh8ohvQUKsEito67HvQt9aT
-         zwxg1odSk5K6yC3jnDCFqUQYfQ1Z7MDjuVvYA458ebXxPEq8dzf4x9KQ7NLo8W7vVq
-         C3jnMT93zUWMDs3rAqkfT3ngfMsDeZ8oyqMxRx1o8UasHrr9Spjb9XEB2UEdeHGUZA
-         nvdauIlUwxPYZwStQtGo/pV2Iea1vToRKitC51AZMNyiLKKPPjfc7B4u9BHEf3V2oE
-         jQT1HsKAeALd9td8mJT4P7+5mieCmsw+kddX2GDC0ha2YgcQdRstDK3NniSWSfyGIf
-         l3W5yzny+Rd4w==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 17 Mar 2022 08:27:55 +0300 (MSK)
-From:   Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Krasnov Arseniy <oxffffaa@gmail.com>,
-        Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>,
-        Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH net-next v3 1/2] af_vsock: SOCK_SEQPACKET receive timeout test
-Thread-Topic: [PATCH net-next v3 1/2] af_vsock: SOCK_SEQPACKET receive timeout
- test
-Thread-Index: AQHYOb+Ukv8XF38YE06ap5RsA4YM1g==
-Date:   Thu, 17 Mar 2022 05:26:45 +0000
-Message-ID: <a3f95812-d5bb-86a0-46a0-78935651e39e@sberdevices.ru>
-In-Reply-To: <4ecfa306-a374-93f6-4e66-be62895ae4f7@sberdevices.ru>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <92CA1A604E01A842AC5098FE117172E4@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Thu, 17 Mar 2022 01:58:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E96D91D7893
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 22:27:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647494830;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tv87CG7LG3XKpxDNEZ+GwPodON4sdnWxi1QyglUUWzI=;
+        b=SGBqu+Foh3O8/2PUh5QoWuDzCPM8RuJqVswr2pOfg96xH8Y30oCUpeLqS5uw9t7SRTTgmk
+        4v63uF5q+SMajRy10ir7E7618bP1V5fkXSkkbzhDWdUdQozzHKkAdFQVV5Dg6FwNV3tBvI
+        YmkONhUWkPFDkZ/Sz8aeKhCbyueOAlc=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-281-lekH8-HcOACT0NkxLg5cwA-1; Thu, 17 Mar 2022 01:27:09 -0400
+X-MC-Unique: lekH8-HcOACT0NkxLg5cwA-1
+Received: by mail-pj1-f70.google.com with SMTP id c7-20020a17090a674700b001beef0afd32so2786947pjm.2
+        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 22:27:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=tv87CG7LG3XKpxDNEZ+GwPodON4sdnWxi1QyglUUWzI=;
+        b=Xa/hYc75YvxLlU+S/MHYOvGkOw65nVSOxWVo0sC9D3ggY7frDqMCyN4n3IUPCormZX
+         iKqgLzHQbM9wiB5fzCPKrT4IbZJIm4ZfagsSvTp+/Xwl1GcsEA1N7NYLGFlgBGBL6oe9
+         PCvojjrZh9KHRQcn1zwI5nceW9HDu92IwMW52eKKRMk/gRLvS7exCsFeYDRVtFP5titu
+         6W21Xjq+SBp9lG9Hxgb9EEwN6dp1Qsd4/Myuut7Rg78gTbbSGYjQ4t6lLcKbI46C8Bg8
+         4auC+NOvMhNTIDU1jf6kr0PKWBnmX9L7J6bjH5GrTHdzBc3IE5EaFffjuCxLNWdfn8fw
+         p9TA==
+X-Gm-Message-State: AOAM531sGNi+g8JGWTinIqn//kudSl/WUUDw/Rv8pu+Z1kLqlE40pW3h
+        mfrJ+bXmwifG2fWzDP09fCPeH4O17sB6DbkSlVhoGnOnA/a+xVr7x2q5yKWa4fDuQ+kmwcarJmj
+        QhqGQ4T8P963R7PXtCtnIznzyTUb2b2hb+ZkpVOhXS6Jb32R+6520zvDj9rAOT4pEuYAu16m0gQ
+        ==
+X-Received: by 2002:a17:902:ce8a:b0:153:191:b24e with SMTP id f10-20020a170902ce8a00b001530191b24emr3011988plg.135.1647494828070;
+        Wed, 16 Mar 2022 22:27:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJznSB+E+HfjEDlJ6+UMu/rrJfeYA0TD89epzRt55YVmSkSlYTG5o0vA572uSkle0tFT0sPMlw==
+X-Received: by 2002:a17:902:ce8a:b0:153:191:b24e with SMTP id f10-20020a170902ce8a00b001530191b24emr3011963plg.135.1647494827705;
+        Wed, 16 Mar 2022 22:27:07 -0700 (PDT)
+Received: from [10.72.12.110] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id r4-20020a638f44000000b0038105776895sm4160156pgn.76.2022.03.16.22.27.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 22:27:07 -0700 (PDT)
+Subject: Re: [RFC PATCH v2 0/3] ceph: add support for snapshot names
+ encryption
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
+References: <20220315161959.19453-1-lhenriques@suse.de>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Ceph Development <ceph-devel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <5b53e812-d49b-45f0-1219-3dbc96febbc1@redhat.com>
+Date:   Thu, 17 Mar 2022 13:27:01 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/03/17 01:49:00 #18989990
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+In-Reply-To: <20220315161959.19453-1-lhenriques@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,59 +86,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGVzdCBmb3IgcmVjZWl2ZSB0aW1lb3V0IGNoZWNrOiBjb25uZWN0aW9uIGlzIGVzdGFibGlzaGVk
-LA0KcmVjZWl2ZXIgc2V0cyB0aW1lb3V0LCBidXQgc2VuZGVyIGRvZXMgbm90aGluZy4gUmVjZWl2
-ZXIncw0KJ3JlYWQoKScgY2FsbCBtdXN0IHJldHVybiBFQUdBSU4uDQoNClNpZ25lZC1vZmYtYnk6
-IEtyYXNub3YgQXJzZW5peSBWbGFkaW1pcm92aWNoIDxBVktyYXNub3ZAc2JlcmRldmljZXMucnU+
-DQotLS0NCiB2MiAtPiB2MzoNCiAxKSBVc2UgJ2ZwcmludGYoKScgaW5zdGVhZCBvZiAncGVycm9y
-KCknIHdoZXJlICdlcnJubycgdmFyaWFibGUNCiAgICBpcyBub3QgYWZmZWN0ZWQuDQogMikgUHJp
-bnQgJ3JlYWQoKScgb3ZlcmhlYWQuDQoNCiB0b29scy90ZXN0aW5nL3Zzb2NrL3Zzb2NrX3Rlc3Qu
-YyB8IDg0ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQogMSBmaWxlIGNoYW5nZWQs
-IDg0IGluc2VydGlvbnMoKykNCg0KZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3RpbmcvdnNvY2svdnNv
-Y2tfdGVzdC5jIGIvdG9vbHMvdGVzdGluZy92c29jay92c29ja190ZXN0LmMNCmluZGV4IDJhMzYz
-OGMwYTAwOC4uZjU0OThkZTY3NTFkIDEwMDY0NA0KLS0tIGEvdG9vbHMvdGVzdGluZy92c29jay92
-c29ja190ZXN0LmMNCisrKyBiL3Rvb2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfdGVzdC5jDQpAQCAt
-MTYsNiArMTYsNyBAQA0KICNpbmNsdWRlIDxsaW51eC9rZXJuZWwuaD4NCiAjaW5jbHVkZSA8c3lz
-L3R5cGVzLmg+DQogI2luY2x1ZGUgPHN5cy9zb2NrZXQuaD4NCisjaW5jbHVkZSA8dGltZS5oPg0K
-IA0KICNpbmNsdWRlICJ0aW1lb3V0LmgiDQogI2luY2x1ZGUgImNvbnRyb2wuaCINCkBAIC0zOTEs
-NiArMzkyLDg0IEBAIHN0YXRpYyB2b2lkIHRlc3Rfc2VxcGFja2V0X21zZ190cnVuY19zZXJ2ZXIo
-Y29uc3Qgc3RydWN0IHRlc3Rfb3B0cyAqb3B0cykNCiAJY2xvc2UoZmQpOw0KIH0NCiANCitzdGF0
-aWMgdGltZV90IGN1cnJlbnRfbnNlYyh2b2lkKQ0KK3sNCisJc3RydWN0IHRpbWVzcGVjIHRzOw0K
-Kw0KKwlpZiAoY2xvY2tfZ2V0dGltZShDTE9DS19SRUFMVElNRSwgJnRzKSkgew0KKwkJcGVycm9y
-KCJjbG9ja19nZXR0aW1lKDMpIGZhaWxlZCIpOw0KKwkJZXhpdChFWElUX0ZBSUxVUkUpOw0KKwl9
-DQorDQorCXJldHVybiAodHMudHZfc2VjICogMTAwMDAwMDAwMFVMTCkgKyB0cy50dl9uc2VjOw0K
-K30NCisNCisjZGVmaW5lIFJDVlRJTUVPX1RJTUVPVVRfU0VDIDENCisjZGVmaW5lIFJFQURfT1ZF
-UkhFQURfTlNFQyAyNTAwMDAwMDAgLyogMC4yNSBzZWMgKi8NCisNCitzdGF0aWMgdm9pZCB0ZXN0
-X3NlcXBhY2tldF90aW1lb3V0X2NsaWVudChjb25zdCBzdHJ1Y3QgdGVzdF9vcHRzICpvcHRzKQ0K
-K3sNCisJaW50IGZkOw0KKwlzdHJ1Y3QgdGltZXZhbCB0djsNCisJY2hhciBkdW1teTsNCisJdGlt
-ZV90IHJlYWRfZW50ZXJfbnM7DQorCXRpbWVfdCByZWFkX292ZXJoZWFkX25zOw0KKw0KKwlmZCA9
-IHZzb2NrX3NlcXBhY2tldF9jb25uZWN0KG9wdHMtPnBlZXJfY2lkLCAxMjM0KTsNCisJaWYgKGZk
-IDwgMCkgew0KKwkJcGVycm9yKCJjb25uZWN0Iik7DQorCQlleGl0KEVYSVRfRkFJTFVSRSk7DQor
-CX0NCisNCisJdHYudHZfc2VjID0gUkNWVElNRU9fVElNRU9VVF9TRUM7DQorCXR2LnR2X3VzZWMg
-PSAwOw0KKw0KKwlpZiAoc2V0c29ja29wdChmZCwgU09MX1NPQ0tFVCwgU09fUkNWVElNRU8sICh2
-b2lkICopJnR2LCBzaXplb2YodHYpKSA9PSAtMSkgew0KKwkJcGVycm9yKCJzZXRzb2Nrb3B0ICdT
-T19SQ1ZUSU1FTyciKTsNCisJCWV4aXQoRVhJVF9GQUlMVVJFKTsNCisJfQ0KKw0KKwlyZWFkX2Vu
-dGVyX25zID0gY3VycmVudF9uc2VjKCk7DQorDQorCWlmIChlcnJubyAhPSBFQUdBSU4pIHsNCisJ
-CXBlcnJvcigiRUFHQUlOIGV4cGVjdGVkIik7DQorCQlleGl0KEVYSVRfRkFJTFVSRSk7DQorCX0N
-CisNCisJaWYgKHJlYWQoZmQsICZkdW1teSwgc2l6ZW9mKGR1bW15KSkgIT0gLTEpIHsNCisJCWZw
-cmludGYoc3RkZXJyLA0KKwkJCSJleHBlY3RlZCAnZHVtbXknIHJlYWQoMikgZmFpbHVyZVxuIik7
-DQorCQlleGl0KEVYSVRfRkFJTFVSRSk7DQorCX0NCisNCisJcmVhZF9vdmVyaGVhZF9ucyA9IGN1
-cnJlbnRfbnNlYygpIC0gcmVhZF9lbnRlcl9ucyAtDQorCQkJMTAwMDAwMDAwMFVMTCAqIFJDVlRJ
-TUVPX1RJTUVPVVRfU0VDOw0KKw0KKwlpZiAocmVhZF9vdmVyaGVhZF9ucyA+IFJFQURfT1ZFUkhF
-QURfTlNFQykgew0KKwkJZnByaW50ZihzdGRlcnIsDQorCQkJInRvbyBtdWNoIHRpbWUgaW4gcmVh
-ZCgyKSwgJWx1ID4gJWkgbnNcbiIsDQorCQkJcmVhZF9vdmVyaGVhZF9ucywgUkVBRF9PVkVSSEVB
-RF9OU0VDKTsNCisJCWV4aXQoRVhJVF9GQUlMVVJFKTsNCisJfQ0KKw0KKwljb250cm9sX3dyaXRl
-bG4oIldBSVRET05FIik7DQorCWNsb3NlKGZkKTsNCit9DQorDQorc3RhdGljIHZvaWQgdGVzdF9z
-ZXFwYWNrZXRfdGltZW91dF9zZXJ2ZXIoY29uc3Qgc3RydWN0IHRlc3Rfb3B0cyAqb3B0cykNCit7
-DQorCWludCBmZDsNCisNCisJZmQgPSB2c29ja19zZXFwYWNrZXRfYWNjZXB0KFZNQUREUl9DSURf
-QU5ZLCAxMjM0LCBOVUxMKTsNCisJaWYgKGZkIDwgMCkgew0KKwkJcGVycm9yKCJhY2NlcHQiKTsN
-CisJCWV4aXQoRVhJVF9GQUlMVVJFKTsNCisJfQ0KKw0KKwljb250cm9sX2V4cGVjdGxuKCJXQUlU
-RE9ORSIpOw0KKwljbG9zZShmZCk7DQorfQ0KKw0KIHN0YXRpYyBzdHJ1Y3QgdGVzdF9jYXNlIHRl
-c3RfY2FzZXNbXSA9IHsNCiAJew0KIAkJLm5hbWUgPSAiU09DS19TVFJFQU0gY29ubmVjdGlvbiBy
-ZXNldCIsDQpAQCAtNDMxLDYgKzUxMCwxMSBAQCBzdGF0aWMgc3RydWN0IHRlc3RfY2FzZSB0ZXN0
-X2Nhc2VzW10gPSB7DQogCQkucnVuX2NsaWVudCA9IHRlc3Rfc2VxcGFja2V0X21zZ190cnVuY19j
-bGllbnQsDQogCQkucnVuX3NlcnZlciA9IHRlc3Rfc2VxcGFja2V0X21zZ190cnVuY19zZXJ2ZXIs
-DQogCX0sDQorCXsNCisJCS5uYW1lID0gIlNPQ0tfU0VRUEFDS0VUIHRpbWVvdXQiLA0KKwkJLnJ1
-bl9jbGllbnQgPSB0ZXN0X3NlcXBhY2tldF90aW1lb3V0X2NsaWVudCwNCisJCS5ydW5fc2VydmVy
-ID0gdGVzdF9zZXFwYWNrZXRfdGltZW91dF9zZXJ2ZXIsDQorCX0sDQogCXt9LA0KIH07DQogDQot
-LSANCjIuMjUuMQ0K
+Hi Luis,
+
+There has another issue you need to handle at the same time.
+
+Currently only the empty directory could be enabled the file encryption, 
+such as for the following command:
+
+$ fscrypt encrypt mydir/
+
+But should we also make sure that the mydir/.snap/ is empty ?
+
+Here the 'empty' is not totally empty, which allows it should allow long 
+snap names exist.
+
+Make sense ?
+
+- Xiubo
+
+
+On 3/16/22 12:19 AM, Luís Henriques wrote:
+> Hi!
+>
+> A couple of changes since v1:
+>
+> - Dropped the dentry->d_flags change in ceph_mkdir().  Thanks to Xiubo
+>    suggestion, patch 0001 now skips calling ceph_fscrypt_prepare_context()
+>    if we're handling a snapshot.
+>
+> - Added error handling to ceph_get_snapdir() in patch 0001 (Jeff had
+>    already pointed that out but I forgot to include that change in previous
+>    revision).
+>
+> - Rebased patch 0002 to the latest wip-fscrypt branch.
+>
+> - Added some documentation regarding snapshots naming restrictions.
+>
+> As before, in order to test this code the following PRs are required:
+>
+>    mds: add protection from clients without fscrypt support #45073
+>    mds: use the whole string as the snapshot long name #45192
+>    mds: support alternate names for snapshots #45224
+>    mds: limit the snapshot names to 240 characters #45312
+>
+> Luís Henriques (3):
+>    ceph: add support for encrypted snapshot names
+>    ceph: add support for handling encrypted snapshot names
+>    ceph: update documentation regarding snapshot naming limitations
+>
+>   Documentation/filesystems/ceph.rst |  10 ++
+>   fs/ceph/crypto.c                   | 158 +++++++++++++++++++++++++----
+>   fs/ceph/crypto.h                   |  11 +-
+>   fs/ceph/inode.c                    |  31 +++++-
+>   4 files changed, 182 insertions(+), 28 deletions(-)
+>
+

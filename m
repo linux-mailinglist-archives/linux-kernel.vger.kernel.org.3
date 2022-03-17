@@ -2,113 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77194DC859
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1489A4DC85B
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234932AbiCQOH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 10:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
+        id S234952AbiCQOHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 10:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233413AbiCQOHY (ORCPT
+        with ESMTP id S234948AbiCQOHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 10:07:24 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B525122232;
-        Thu, 17 Mar 2022 07:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1647525961; x=1679061961;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WyIgvspQhf/CWwmJmV9DuJtBRSa+lu1xsA1u/xKmtYk=;
-  b=pXvtN12X59gfFlhaAj2KO2b8Sd2XA+Apjjg+eX9aqYU8ELKTjToHnnr5
-   pBCk0vhZQFJTI+Ol0xzRZBY9QqYtIVVydqCdbgRWmfCcTi7+OAezTepPo
-   +Yc5XX3jdCvStvCBSbPrCBMqKFjpX2EsKP38mAh+tnVmweR8c2tC2QJGX
-   FannnVKZpKvcDu3nfAneEk2KJz9fZqBF7av2FngrZMiwZPPJZciJp9hh/
-   8Y3HB+QGasq+L957YF0M4weh9kQctOZ6VXT6pvAv8UR+0UmvyTIFDeYUC
-   uzeCTRSKDDYQeKoVbfWUa3fTQvwIxbkj6xmq/LIC5Sv/zTK6CBg9J4EyJ
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,188,1643698800"; 
-   d="scan'208";a="157263183"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Mar 2022 07:06:00 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 17 Mar 2022 07:06:00 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 17 Mar 2022 07:06:00 -0700
-Date:   Thu, 17 Mar 2022 15:05:59 +0100
-From:   "Allan W. Nielsen" <allan.nielsen@microchip.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     <patchwork-bot+netdevbpf@kernel.org>,
-        <Divya.Koppera@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <davem@davemloft.net>,
-        <devicetree@vger.kernel.org>, <hkallweit1@gmail.com>,
-        <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux@armlinux.org.uk>, <madhuri.sripada@microchip.com>,
-        <manohar.puri@microchip.com>, <netdev@vger.kernel.org>,
-        <richardcochran@gmail.com>, <robh+dt@kernel.org>
-Subject: Re: [PATCH net-next 0/3] Add support for 1588 in LAN8814
-Message-ID: <20220317140559.f52cuvw6gswyrfn6@den-dk-m31684h>
-References: <164639821168.27302.1826304809342359025.git-patchwork-notify@kernel.org>
- <20220317121650.934899-1-michael@walle.cc>
+        Thu, 17 Mar 2022 10:07:34 -0400
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61245136660;
+        Thu, 17 Mar 2022 07:06:18 -0700 (PDT)
+Received: by mail-pj1-f49.google.com with SMTP id mz9-20020a17090b378900b001c657559290so5285575pjb.2;
+        Thu, 17 Mar 2022 07:06:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=l5TJbPNzDqPASdkDHCLk62DytQZBW+wKClOw+PHQQjc=;
+        b=Nx9GdB+OwF0Pai9M39tso/lBKaWwCYr/T/8yjX2C2nMSEDAV5zs6+8gbBqwNRTX61l
+         4bG9EVIxs8ysO2B46J8jb1lQ+moEoCGW6r25FZWuGUzpi5q7FYGeDSbNqZShf+6qu/X5
+         faRuUJlBC9bL3t9l/vzJn77gRuxToRaOL+Y5l99gFVx7hrCLbOI9AMpPwF6oQ2qO79Pv
+         8bhfXXp648tsz+l2vm0k7OVRWrG3fMOlvHEYOuwh7b1ifoD4E/5+bCoHIdTQhusMaNI7
+         AVTRFTax2x/n5zZwCEkMdnVNFV07l+OU7Dm/tA7qCjcSStOIwxE/e/AmEj1xYhhnoHPw
+         pUug==
+X-Gm-Message-State: AOAM533rK3AN72GmFi8H/jxVPF2+ZnvKG4Upg11f6pq1iLG2DrKymtgj
+        yFitzGswO7FWH5CxivlBxUs=
+X-Google-Smtp-Source: ABdhPJw+trXwAO+jp5KEgP7+0YMzXFmtnQ7Oi+H6HoOCE18jVvu7LSrsSPwBrEX4TkUVY2eHcaADhA==
+X-Received: by 2002:a17:902:e94f:b0:14f:1636:c8a8 with SMTP id b15-20020a170902e94f00b0014f1636c8a8mr4952381pll.130.1647525977380;
+        Thu, 17 Mar 2022 07:06:17 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id na8-20020a17090b4c0800b001bf191ee347sm10381694pjb.27.2022.03.17.07.06.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 07:06:17 -0700 (PDT)
+Message-ID: <22cd48e9-fe36-414c-942e-382b8139ab4b@acm.org>
+Date:   Thu, 17 Mar 2022 07:06:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220317121650.934899-1-michael@walle.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 1/3] block: don't show disk stats if io accounting is
+ disabled
+Content-Language: en-US
+To:     Yu Kuai <yukuai3@huawei.com>, axboe@kernel.dk, mpatocka@redhat.com,
+        snitzer@redhat.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+References: <20220317112653.1019490-1-yukuai3@huawei.com>
+ <20220317112653.1019490-2-yukuai3@huawei.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220317112653.1019490-2-yukuai3@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Mar 17, 2022 at 01:16:50PM +0100, Michael Walle wrote:
-> From: patchwork-bot+netdevbpf@kernel.org
-> > Here is the summary with links:
-> >   - [net-next,1/3] net: phy: micrel: Fix concurrent register access
-> >     https://git.kernel.org/netdev/net-next/c/4488f6b61480
-> >   - [net-next,2/3] dt-bindings: net: micrel: Configure latency values and timestamping check for LAN8814 phy
-> >     https://git.kernel.org/netdev/net-next/c/2358dd3fd325
-> >   - [net-next,3/3] net: phy: micrel: 1588 support for LAN8814 phy
-> >     https://git.kernel.org/netdev/net-next/c/ece19502834d
+On 3/17/22 04:26, Yu Kuai wrote:
+> If io accounting is disabled, there is no point to handle such device
+> in diskstats_show(), and it can be confused for users because all fields
+> in iostat are zero while the disk is handling io.
 > 
-> I'm almost afraid to ask.. but will this series be reverted (or
-> the device tree bindings patch)? There were quite a few remarks, even
-> about the naming of the properties. So, will it be part of the next
-> kernel release or will it be reverted?
-Thanks for bringing this up - was about to ask myself.
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   block/genhd.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/block/genhd.c b/block/genhd.c
+> index c3b32c665aec..e5307f512185 100644
+> --- a/block/genhd.c
+> +++ b/block/genhd.c
+> @@ -937,6 +937,9 @@ ssize_t part_stat_show(struct device *dev,
+>   	struct disk_stats stat;
+>   	unsigned int inflight;
+>   
+> +	if (!blk_queue_io_stat(q))
+> +		return sprintf(buf, "io accounting is disabled\n");
+> +
 
-Not sure what is the normal procedure here.
+Hmm ... the above looks sub-optimal to me. Has it been considered to 
+return an error code instead or even better to hide the stat attribute 
+if I/O accounting is disabled? The latter can be achieved by modifying 
+disk_visible().
 
-If not reverted, we can do a patch to remove the dt-bindings (and also
-the code in the driver using them). Also, a few other minor comments was
-given and we can fix those.
+Thanks,
 
-The elefant in the room is the 'lan8814_latencies' structure containing
-the default latency values in the driver, which Richard is unhappy with.
-
-Russell indicated that he prefere having these numbers in the driver
-rather than hiding them in firmware (lan8814 does not have firmware, so
-not an option).
-
-Andrew sugegsted adding additional APIs to let ptp4l control if
-time-stamps should be calibrated in HW/Kernel or in userspace. Likely
-something like that can be done - but I did not get the impression that
-this is what Richard would like to see either.
-
-Also, I would like drivers to come with default latency numbers which
-are good enough for most (and the rest will need to calibrate and
-compensate further using the hooks and handles in userspace).
-
-What would you like to see - believe you will also be a user of this?
-
--- 
-/Allan
+Bart.

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716AD4DC673
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8B64DC6FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbiCQMwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 08:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
+        id S234298AbiCQM7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234112AbiCQMwA (ORCPT
+        with ESMTP id S234272AbiCQM4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:52:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA911F1260;
-        Thu, 17 Mar 2022 05:49:44 -0700 (PDT)
+        Thu, 17 Mar 2022 08:56:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5465DDAFD0;
+        Thu, 17 Mar 2022 05:54:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E0F4614F9;
-        Thu, 17 Mar 2022 12:49:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F535C36AE3;
-        Thu, 17 Mar 2022 12:49:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D822BB81E8F;
+        Thu, 17 Mar 2022 12:54:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0115AC340E9;
+        Thu, 17 Mar 2022 12:54:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647521383;
-        bh=74fUNjecR8fdqL28kcqYW3B5dHuRd/wXLz1YjF6Q8wE=;
+        s=korg; t=1647521649;
+        bh=uhdsoUxxt7mQ3PMpzNkAu4PksDbXgWyjX6865DxB0aM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rVF4CJMcPcoNiIGN1S/gYfvgZL+GdUaWSH3m6HPPQIr2fbwInFOPV1jP9aln+PsJR
-         qSGOpmc5EOiRvwpcMarRS5M6wFXQTIKEF9DRbZlTkRGeqjcI4Lw7WEVHdqhKx/WxVt
-         uaioBMVw0UoFCYD+VV5V8pDfEHoiOP7x0An0Swkg=
+        b=wpnZT4lPkjhHpa9X7lHp96GIPA6Bx4kAOj6Zi32MkEaoudp3StG/UCzywZxTjkvYC
+         Q37K0ypN81cp1VmcRiAbXLTic/YshKLGowjr8PoK1HyMpAfAzz6C/QF63VDOKcsFe5
+         ZnBgrHhDzFIZP4hm36t/729gmn2N0x3codFcbFkQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jani Nikula <jani.nikula@intel.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>, dri-devel@lists.freedesktop.org,
-        Manasi Navare <manasi.d.navare@intel.com>,
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 16/23] drm/vrr: Set VRR capable prop only if it is attached to connector
-Date:   Thu, 17 Mar 2022 13:45:57 +0100
-Message-Id: <20220317124526.431057119@linuxfoundation.org>
+Subject: [PATCH 5.16 07/28] arm64: dts: rockchip: align pl330 node name with dtschema
+Date:   Thu, 17 Mar 2022 13:45:58 +0100
+Message-Id: <20220317124526.980463534@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220317124525.955110315@linuxfoundation.org>
-References: <20220317124525.955110315@linuxfoundation.org>
+In-Reply-To: <20220317124526.768423926@linuxfoundation.org>
+References: <20220317124526.768423926@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,40 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manasi Navare <manasi.d.navare@intel.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-[ Upstream commit 62929726ef0ec72cbbe9440c5d125d4278b99894 ]
+[ Upstream commit 8fd9415042826c7609c588e5ef45f3e84237785f ]
 
-VRR capable property is not attached by default to the connector
-It is attached only if VRR is supported.
-So if the driver tries to call drm core set prop function without
-it being attached that causes NULL dereference.
+Fixes dtbs_check warnings like:
 
-Cc: Jani Nikula <jani.nikula@intel.com>
-Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Cc: dri-devel@lists.freedesktop.org
-Signed-off-by: Manasi Navare <manasi.d.navare@intel.com>
-Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220225013055.9282-1-manasi.d.navare@intel.com
+  dmac@ff240000: $nodename:0: 'dmac@ff240000' does not match '^dma-controller(@.*)?$'
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Link: https://lore.kernel.org/r/20220129175429.298836-1-krzysztof.kozlowski@canonical.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_connector.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm64/boot/dts/rockchip/px30.dtsi   | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-index 717c4e7271b0..5163433ac561 100644
---- a/drivers/gpu/drm/drm_connector.c
-+++ b/drivers/gpu/drm/drm_connector.c
-@@ -2155,6 +2155,9 @@ EXPORT_SYMBOL(drm_connector_attach_max_bpc_property);
- void drm_connector_set_vrr_capable_property(
- 		struct drm_connector *connector, bool capable)
- {
-+	if (!connector->vrr_capable_property)
-+		return;
-+
- 	drm_object_property_set_value(&connector->base,
- 				      connector->vrr_capable_property,
- 				      capable);
+diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
+index 00f50b05d55a..b72874c16a71 100644
+--- a/arch/arm64/boot/dts/rockchip/px30.dtsi
++++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
+@@ -711,7 +711,7 @@
+ 		clock-names = "pclk", "timer";
+ 	};
+ 
+-	dmac: dmac@ff240000 {
++	dmac: dma-controller@ff240000 {
+ 		compatible = "arm,pl330", "arm,primecell";
+ 		reg = <0x0 0xff240000 0x0 0x4000>;
+ 		interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+index 39db0b85b4da..b822533dc7f1 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+@@ -489,7 +489,7 @@
+ 		status = "disabled";
+ 	};
+ 
+-	dmac: dmac@ff1f0000 {
++	dmac: dma-controller@ff1f0000 {
+ 		compatible = "arm,pl330", "arm,primecell";
+ 		reg = <0x0 0xff1f0000 0x0 0x4000>;
+ 		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
 -- 
 2.34.1
 

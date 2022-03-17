@@ -2,115 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D5D4DC047
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 08:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7044DC043
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 08:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiCQHkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 03:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
+        id S230359AbiCQHkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 03:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbiCQHkR (ORCPT
+        with ESMTP id S229727AbiCQHkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 03:40:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8DDBD2FD;
-        Thu, 17 Mar 2022 00:39:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70591B81DD2;
-        Thu, 17 Mar 2022 07:39:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACCF3C340EE;
-        Thu, 17 Mar 2022 07:38:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647502739;
-        bh=O79CEsoyIM7lxDVdJAO6U5R65lNwXiJdQsB6hFftUwY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FFuNrIGNOAYmosTutCqrDM2kXVQiSItuO1IPhKEQHAgH4HwLiAVMVFOUjKN1DjwpD
-         4osvtn0lcnS5F3eaG/pVFKSfTBWqvFh4j3uOfHDvJqSb5w7sdTzuiMs7XGd8P6O7bi
-         nyTHoIxWh2wpLcbgW+auOg2nRYmMp/h2OS8E/tHxx/fqzhXDcGN2X8rrWFT4x9wjya
-         lXreP54kXkeKsCdeEub9CRYsu+1htrC11ZTTR8/u+1xq2QpR+q9qaW8/uKQxf7pfPg
-         dmmgPCqjUgq2TsKZ2sBgff7IHAw4/Z8RkkDwFr9sPZaIyYrVVFnyCuqLtZzBHIcGLz
-         nNz2EoXYfsZFw==
-Date:   Thu, 17 Mar 2022 09:38:09 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Nayna <nayna@linux.vnet.ibm.com>
-Cc:     Nageswara Sastry <rnsastry@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        dhowells@redhat.com, zohar@linux.ibm.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
-        seth@forshee.me, Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v11 0/4] integrity: support including firmware
- ".platform" keys at build time
-Message-ID: <YjLlYTs+2ep80zoK@iki.fi>
-References: <20220310214450.676505-1-nayna@linux.ibm.com>
- <4afae87c-2986-6b0e-07be-954dd4937afd@linux.ibm.com>
- <f78d11fefd13bd17748e36621acee9c2f27a77f6.camel@kernel.org>
- <f92ec4d8-47c0-ece5-3c52-caeb8265881c@linux.vnet.ibm.com>
+        Thu, 17 Mar 2022 03:40:11 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9389AA27C3;
+        Thu, 17 Mar 2022 00:38:55 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id v14so3756041qta.2;
+        Thu, 17 Mar 2022 00:38:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m1V3fNiTEOwXPOKxaeq5HgKINKdqwd4xqVIZu/TZBMc=;
+        b=uIFmswG3Om3948F1UaJHnoGYqDcxzgP3CzuxauyPTY8RDmmJKC+csotYKddbdzNGhG
+         evAZ3oPuQhTHZcy1qBqGHdhznCR9mPr9mwJ2a6/qBC/F9ecUR8krnpz71OFd/Pd2Hwok
+         5E+CsqHqOIR4Bj3vIG2uLTQ3821qBnZZXrxhLHk88RInsIlodu9/1YqOJ+LuAAVUJxbm
+         e+jq+ieXkglgG+9nJQ6DGTcGdLt91v6MLowLjeFFTPICUVVzaCwCviIU8hkBfH8/jInl
+         HJE1vMEaxrCTJA35tpZolE6qpWVxgK80GFLb7XrcVUdWh0cs/jS0Kpr+f0+w6z+cNIEv
+         4zrg==
+X-Gm-Message-State: AOAM531JmhkYainbud/rKXVlU34ofaJKLD34YtIriy9uAupmKgg5VEva
+        Tp8LyXIuYiNscIyPcmyhzwTjdPY2zT+lUg==
+X-Google-Smtp-Source: ABdhPJwNqtxhIyGXOe3B+dXkP8Iu9eXOvnfCIT9oVzRSP/lbAKRGwY7HlgDXq7YYUHjuD+LK/Elj0g==
+X-Received: by 2002:ac8:5d86:0:b0:2e1:b9fd:ec24 with SMTP id d6-20020ac85d86000000b002e1b9fdec24mr2661289qtx.290.1647502733948;
+        Thu, 17 Mar 2022 00:38:53 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id s81-20020a374554000000b0067e46c09859sm140639qka.21.2022.03.17.00.38.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 00:38:52 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2dbd97f9bfcso48428637b3.9;
+        Thu, 17 Mar 2022 00:38:52 -0700 (PDT)
+X-Received: by 2002:a81:6dd1:0:b0:2dc:56d1:1dae with SMTP id
+ i200-20020a816dd1000000b002dc56d11daemr4224334ywc.479.1647502731804; Thu, 17
+ Mar 2022 00:38:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f92ec4d8-47c0-ece5-3c52-caeb8265881c@linux.vnet.ibm.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220316211315.2819835-1-arnd@kernel.org>
+In-Reply-To: <20220316211315.2819835-1-arnd@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 17 Mar 2022 08:38:40 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX-Spi=M_0MiCunNE0boEeXH7sYr7pe1VBJkmg466vKrA@mail.gmail.com>
+Message-ID: <CAMuHMdX-Spi=M_0MiCunNE0boEeXH7sYr7pe1VBJkmg466vKrA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] ARM: remove support for NOMMU ARMv4/v5
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        John Crispin <john@phrozen.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Marc Zyngier <maz@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 04:03:12PM -0500, Nayna wrote:
-> 
-> On 3/11/22 11:42, Jarkko Sakkinen wrote:
-> > On Fri, 2022-03-11 at 10:11 +0530, Nageswara Sastry wrote:
-> > > 
-> > > On 11/03/22 3:14 am, Nayna Jain wrote:
-> > > > Some firmware support secure boot by embedding static keys to verify the
-> > > > Linux kernel during boot. However, these firmware do not expose an
-> > > > interface for the kernel to load firmware keys onto the ".platform"
-> > > > keyring, preventing the kernel from verifying the kexec kernel image
-> > > > signature.
-> > > > 
-> > > > This patchset exports load_certificate_list() and defines a new function
-> > > > load_builtin_platform_cert() to load compiled in certificates onto the
-> > > > ".platform" keyring.
-> > > > 
-> > > > Changelog:
-> > > > v11:
-> > > > * Added a new patch to conditionally build extract-cert if
-> > > > PLATFORM_KEYRING is enabled.
-> > > > 
-> > > Tested the following four patches with and with out setting
-> > > CONFIG_INTEGRITY_PLATFORM_KEYS
-> > > 
-> > > Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
-> > OK, I added it:
-> > 
-> > git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-> 
-> Thanks Jarkko. Masahiro Yamada would prefer to revert the original commit
-> 340a02535ee785c64c62a9c45706597a0139e972 i.e. move extract-cert back to the
-> scripts/ directory.
-> 
-> I am just posting v12 which includes Masahiro feedback. Nageswara has
-> already tested v12 version as well.
-> 
-> I am fine either way 1.) Adding v11 and then separately handling of
-> reverting of the commit or 2.) Adding v12 version which includes the revert.
-> I leave the decision on you as to which one to upstream.
-> 
-> Thanks & Regards,
-> 
->     - Nayna
-> 
+Hi Arnd,
 
-I already sent PR for v5.18. Too many late changes to include this, which
-means that v12 is the way to go.
+On Wed, Mar 16, 2022 at 10:13 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> It is possible to build MMU-less kernels for Cortex-M base
+> microcrontrollers as well as a couple of older platforms that
+> have not been converted to CONFIG_ARCH_MULTIPLATFORM,
+> specifically ep93xx, footbridge, dove, sa1100 and s3c24xx.
+>
+> It seems unlikely that anybody has tested those configurations
+> in recent years, as even building them is frequently broken.
+> A patch I submitted caused another build time regression
+> in this configuration. I sent a patch for that, but it seems
+> better to also remove the option entirely, leaving ARMv7-M
+> as the only supported Arm NOMMU target for simplicity.
+>
+> A couple of platforms have dependencies on CONFIG_MMU, those
+> can all be removed now. Notably, mach-integrator tries to
+> support MMU-less CPU cores, but those have not actually been
+> selectable for a long time.
+>
+> This addresses several build failures in randconfig builds that
+> have accumulated over the years.
+>
+> Cc: Vladimir Murzin <vladimir.murzin@arm.com>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-BR, Jarkko
+Thanks for your patch!
 
+Always feeling sad when seeing a feature is removed...
+
+>  arch/arm/mach-shmobile/Kconfig                |  2 +-
+
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,102 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7933A4DC7CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 350EB4DC7CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 14:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234676AbiCQNp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 09:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        id S234680AbiCQNqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 09:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbiCQNp0 (ORCPT
+        with ESMTP id S231247AbiCQNqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:45:26 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B3EDD95E;
-        Thu, 17 Mar 2022 06:44:09 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 41A805C00C2;
-        Thu, 17 Mar 2022 09:44:09 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 17 Mar 2022 09:44:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=cgLvCoZ+reMOUxcSz
-        Tb0NcXr/MQseBQTzNT+xFvmncU=; b=hPKPfuHBJBEX+L4UQ2y043DZBPIh293rI
-        doLU9LsgikXoL8Ib3ZEYa7L0VbDSUWgoXRHnUtNA0Qy4F27Yc3omfSGkvDItb/QN
-        yK4/gBMjP9D0EFTMxsb0m1u/rowaRgVmRl1scbqYycJpn5AgYVIELxKQshjr6DHt
-        BwXij39HpbqmZU4lxQBz4XWgDaQ3/lafgfFemTYAngvEIIJe6iS5NqnNPfehi+Xt
-        JB/xy6oFqwEwd+zKcFSl9oM6W6pcCShLAmMcd9Wz1UabX155iPLgWP6AYJKGYQP5
-        JU5d4z1vnokvLa/590Krvh8xlCYqP925JjCRXxNxkumgKWdihpecA==
-X-ME-Sender: <xms:KDszYnvdAvEu4cVwdNHwn1ASuT1qwlU2-gVpiPrc2-hpdh6p0qVN6g>
-    <xme:KDszYofrjlCHSv_gaboa9HwZWAvmu6Ss_yC3rTv26SgN-k7uB1oaeDw-VOMzIHxxg
-    49I3EBoByvxUFQ>
-X-ME-Received: <xmr:KDszYqzqSd5g1UUOe8q5anZ6MAHqEYDn6XVmnaBDXQzG177n5DWWaeN8YkThEMUQfTqY2nfAO7nIrjF2_rVBbGzZzzs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefgedgheehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
-    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
-    hoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:KDszYmPfwtFcAL-L4CUmMSLMAvAlLM3frY0sM4vhnKWF6ODaTf7yMQ>
-    <xmx:KDszYn_TM2qjdwpdr2XbT4iAqXl07aV1vvTD9ZqxibXr82zMzlBRYA>
-    <xmx:KDszYmXDD2R33H3dsZ8iD_Mf5hwAPog2YY2QH9H-BprZ9sWGQEFeKQ>
-    <xmx:KTszYkixf2kmsYBqmOQPODCE6ffMKZnIeRtjvKGGtqiF8Cp9yGXfSg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 17 Mar 2022 09:44:08 -0400 (EDT)
-Date:   Thu, 17 Mar 2022 15:44:03 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Hans Schultz <schultz.hans@gmail.com>, razor@blackwall.org
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
-Message-ID: <YjM7Iwx4MDdGEHFA@shredder>
-References: <20220317093902.1305816-1-schultz.hans+netdev@gmail.com>
- <20220317093902.1305816-2-schultz.hans+netdev@gmail.com>
+        Thu, 17 Mar 2022 09:46:39 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C2EDEB96;
+        Thu, 17 Mar 2022 06:45:23 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id l2so10285628ybe.8;
+        Thu, 17 Mar 2022 06:45:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iPkA9tWXGYSPfTkvzhOngjgt6GqV+PZtcZByWXDH0PM=;
+        b=1/iO2RCInkV3rhF/DbTZqvuFQgmbXPWT+s0fXqBrlbn39rnJ2EckyldzY2ic3yR5i5
+         71gJsdLnoKMDn+MmgqgeTrYIKCxcV9yGj/0b7GizTDS3V49wfh22XDlAwjVUSK0fUDJp
+         KkGcYzn+rHPvsw4FELmAV1A7SjM1NLESzR/NVdI1agrk24Fgiz/Kvc0KXvoJ3N55XQlm
+         U/5NNQ/eoJ00fWQQMmfDjw+8qVcvE7NEG9EgfY+VLMbRIx5HmB9IZ/1KpyM6qga1Qhna
+         FBrJfgTh7D5rto7WZtLh75FU/k6A76x2e/Dk+Qpk7jAP8jzDYoGjh9rFRFWnLCFZUMYN
+         iRnQ==
+X-Gm-Message-State: AOAM530sAF7ao7h0W1ZRJua7k1IpsjgVX7Stz/1q59WvGks0ZU5dp/KS
+        l6H7u5kf1xDDEaHUyVdgu0J3B5iX6gxZF42hiJ4=
+X-Google-Smtp-Source: ABdhPJwOGOZbUy+HA0zjr99J3BqTy7SnKUJf0UQ7rf44mwXAJU0ylPDrV/TF0wNiU6KHSW1fQ9vIXEVRqIbbDcN8beQ=
+X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
+ k16-20020a25fe10000000b00625262fe792mr4852801ybe.365.1647524722391; Thu, 17
+ Mar 2022 06:45:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317093902.1305816-2-schultz.hans+netdev@gmail.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220312043624.40732-1-dacohen@pm.me>
+In-Reply-To: <20220312043624.40732-1-dacohen@pm.me>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 17 Mar 2022 14:45:11 +0100
+Message-ID: <CAJZ5v0gqpQTuNN0WpnEd4dAQmnR=BXSoH_w7kkAxOG7xkftW6Q@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: fix dynamic debug within pm_pr_debug()
+To:     David Cohen <dacohen@pm.me>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 10:38:59AM +0100, Hans Schultz wrote:
-> Add an intermediate state for clients behind a locked port to allow for
-> possible opening of the port for said clients. This feature corresponds
-> to the Mac-Auth and MAC Authentication Bypass (MAB) named features. The
-> latter defined by Cisco.
-> Only the kernel can set this FDB entry flag, while userspace can read
-> the flag and remove it by deleting the FDB entry.
+On Sat, Mar 12, 2022 at 5:37 AM David Cohen <dacohen@pm.me> wrote:
+>
+> Currently, pm_pr_debug() and pm_deferred_pr_debug() use __pm_pr_debug()
+> to filter pm debug messages based on pm_debug_messages_on flag.
+> According to __pm_pr_debug() implementation, pm_deferred_pr_debug()
+> indirectly calls printk_deferred() within __pm_pr_debug() which doesn't
+> support dynamic debug, but pm_pr_debug() indirectly calls pr_debug()
 
-Can you explain where this flag is rejected by the kernel?
+I'm not sure what you mean by pm_pr_debug().  There's no such thing in
+the kernel tree.
 
-Nik, it seems the bridge ignores 'NDA_FLAGS_EXT', but I think that for
-new flags we should do a better job and reject unsupported
-configurations. WDYT?
+Assuming that it means pm_pr_dbg(), it doesn't call pr_debug():
 
-The neighbour code will correctly reject the new flag due to
-'NTF_EXT_MASK'.
+#define pm_pr_dbg(fmt, ...) __pm_pr_dbg(false, fmt, ##__VA_ARGS__)
+
+and
+
+void __pm_pr_dbg(bool defer, const char *fmt, ...)
+{
+...
+        if (defer)
+               printk_deferred(KERN_DEBUG "PM: %pV", &vaf);
+        else
+               printk(KERN_DEBUG "PM: %pV", &vaf);
+
+And as I said printk(KERN_DEBUG ...) is not equivalent to
+pr_debug(...), because it is not dynamic printk().
+
+pm_pr_dbg() is not dynamic printk() on purpose, so they both can be
+controlled independently.

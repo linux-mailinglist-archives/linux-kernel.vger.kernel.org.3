@@ -2,123 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457734DCDD2
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFFE4DCE14
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237566AbiCQSo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S237695AbiCQSyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237557AbiCQSoY (ORCPT
+        with ESMTP id S234250AbiCQSyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:44:24 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8519CD5563
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:43:06 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id p17so5172876plo.9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fQEW/lPQ6xfHE8z4NalMYFGcFuJD2YWjzJ3BRVmyjX4=;
-        b=LtDtw1Mu1QaThn5L7q9eGcDr/OkqkP4Yz2bLSdJllDcnWEeDAPFBsGkEX4JcRo+vFw
-         xPnTLroTxnNJphORWThfAlhHDDi+CJ2y93lKWGEyIkyCjDNSFc+cp10LeVOV2nHPlQWI
-         xlRT3LQepq3Re0yj766Rn7ODZTJi0wje6Aps8cqrUwqUaPF3RlpjiLKlAPvLvy/mSfHz
-         ZqY0bHuyzw7BRysyG5lnvfO/WSITOZ2arLJ9WlP/KfsD6SRYLQ/Rvo0I/ZbDHLnD0BnW
-         CpU7442ppE198PC7Lez+vyF1aOWeuXa1FmLAG1qBQocaS/VI2spsWsJGOg+RfpEV6/58
-         igHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fQEW/lPQ6xfHE8z4NalMYFGcFuJD2YWjzJ3BRVmyjX4=;
-        b=WndjNm19xvAeZqnAU5QYAz5Kgru0YV59YkVwliQYDljQrm5HeLAmnkDTcXTNhCmY8f
-         ncDJrgbzW5Z6Md7LFMlUALhvXinGrMkn3TvU4zolouyS5bL3nnscxaHXTrlH3eYxz53L
-         UJFXeV7MES89rkYjma7rSIMZAwPCXSyvWoktTkpzM9ux34lw1OMBi3qL82sp6rJbmmIr
-         CBgh0nJz+UO+FP3rQCg0oAVPmleIAyeZolvXNqXDzMi1eNGoOUvM2rvdTdahO7a9mmF/
-         xXpiuDx+8O8KyYJDFVheVdewKJSHGjJRXVc5ZWxfDay/P22byzOuM0XXpds8P0v5EivI
-         WPnA==
-X-Gm-Message-State: AOAM531CSo7AS8JEnwnNrcW9eiFTEYLEikREly/eXNk0wZ0U8NW7B02L
-        JpF2gw5XzLm5/caCyg0dWsp31cYKjgjlKkEx73LSFwP2yg==
-X-Google-Smtp-Source: ABdhPJyj88oCapvSqhQbCjXfNFcN+y+jnlhdujAJTp+yixW38jgW1DX5+1i7Bzl0OCZ+w5lDgMBX9OBbEIYHZMvMI8o=
-X-Received: by 2002:a17:902:ec89:b0:153:f480:5089 with SMTP id
- x9-20020a170902ec8900b00153f4805089mr3627171plg.166.1647542585558; Thu, 17
- Mar 2022 11:43:05 -0700 (PDT)
+        Thu, 17 Mar 2022 14:54:05 -0400
+X-Greylist: delayed 502 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Mar 2022 11:52:47 PDT
+Received: from srv1.home.kabele.me (unknown [IPv6:2a02:768:2704:8c1a:3eec:efff:fe00:2ce4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA7CB223202;
+        Thu, 17 Mar 2022 11:52:47 -0700 (PDT)
+Received: from srv1.home.kabele.me (localhost [IPv6:::1])
+        by srv1.home.kabele.me (Postfix) with ESMTP id 7423916927C;
+        Thu, 17 Mar 2022 19:44:24 +0100 (CET)
+Received: from localhost ([2a01:c22:8dfa:1400:beea:2810:7764:7afc])
+        by srv1.home.kabele.me with ESMTPSA
+        id 9D7GGYiBM2LuRjQAnmUwTQ
+        (envelope-from <vit@kabele.me>); Thu, 17 Mar 2022 19:44:24 +0100
+Date:   Thu, 17 Mar 2022 19:44:19 +0100
+From:   Vit Kabele <vit@kabele.me>
+To:     platform-driver-x86@vger.kernel.org
+Cc:     r.marek@assembler.cz, devel@acpica.org, mingo@redhat.com,
+        robert.moore@intel.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: [PATCH 0/3 RESEND] platform/x86, apcica: Sanitize EBDA pointer from
+ memory
+Message-ID: <YjOBg4Oys3qV1dbe@czspare1-lap.sysgo.cz>
+Mail-Followup-To: platform-driver-x86@vger.kernel.org, r.marek@assembler.cz,
+        devel@acpica.org, mingo@redhat.com, robert.moore@intel.com,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
 MIME-Version: 1.0
-References: <20220316213122.2352992-1-morbo@google.com> <9053a28a-0cc5-a35e-b613-c63689b9f8f7@infradead.org>
-In-Reply-To: <9053a28a-0cc5-a35e-b613-c63689b9f8f7@infradead.org>
-From:   Bill Wendling <morbo@google.com>
-Date:   Thu, 17 Mar 2022 11:42:54 -0700
-Message-ID: <CAGG=3QUmOg8KY9tkD744USFJ5Gd3He_Nzh6rz7=cUApeRvonQA@mail.gmail.com>
-Subject: Re: [PATCH] nfsd: use correct format characters
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-nfs@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 11:09 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Hi--
->
-> On 3/16/22 14:31, Bill Wendling wrote:
-> > When compiling with -Wformat, clang emits the following warnings:
-> >
-> > fs/nfsd/flexfilelayout.c:120:27: warning: format specifies type 'unsigned
-> > char' but the argument has type 'int' [-Wformat]
-> >                          "%s.%hhu.%hhu", addr, port >> 8, port & 0xff);
-> >                              ~~~~              ^~~~~~~~~
-> >                              %d
-> > fs/nfsd/flexfilelayout.c:120:38: warning: format specifies type 'unsigned
-> > char' but the argument has type 'int' [-Wformat]
-> >                          "%s.%hhu.%hhu", addr, port >> 8, port & 0xff);
-> >                                   ~~~~                    ^~~~~~~~~~~
-> >                                   %d
-> >
-> > The types of these arguments are unconditionally defined, so this patch
-> > updates the format character to the correct ones for ints and unsigned
-> > ints.
-> >
-> > Link: ClangBuiltLinux/linux#378
->
-> Please make the Link: more complete, such as a URL/URI.
->
-Done. I sent out v2 of the patch. Sorry about this oversight!
+[Resend because I messed up the mailing list addresses]
 
--bw
+When testing custom virtualization platform, we noticed that in cases
+where the memory is initialized with random pattern, the Linux guest
+tends to crash on EPT violation.
 
-> > Signed-off-by: Bill Wendling <morbo@google.com>
-> > ---
-> >  fs/nfsd/flexfilelayout.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/fs/nfsd/flexfilelayout.c b/fs/nfsd/flexfilelayout.c
-> > index 2e2f1d5e9f62..070f90ed09b6 100644
-> > --- a/fs/nfsd/flexfilelayout.c
-> > +++ b/fs/nfsd/flexfilelayout.c
-> > @@ -117,7 +117,7 @@ nfsd4_ff_proc_getdeviceinfo(struct super_block *sb, struct svc_rqst *rqstp,
-> >
-> >       da->netaddr.addr_len =
-> >               snprintf(da->netaddr.addr, FF_ADDR_LEN + 1,
-> > -                      "%s.%hhu.%hhu", addr, port >> 8, port & 0xff);
-> > +                      "%s.%d.%d", addr, port >> 8, port & 0xff);
-> >
-> >       da->tightly_coupled = false;
-> >
->
-> thanks.
-> --
-> ~Randy
+It turns out that (at least two) codepaths during boot do not check the
+validity of EBDA pointer retrieved from BDA memory at address 0x40e.
+In case that the returned address is over 640K, the kernel happily
+touches the VGA memory (which was not present in our setup, hence the
+EPT violation).
+
+This may be problematic in other virtualized environment too, but it can
+probably also happen on bare metal when booted with legacy free (e.g.
+UEFI without CSM) firmware, because the BDA may not be initialized and
+the VGA range might not be properly decoded.
+
+The third patch of the series adds workaround for the situation where
+EBDA is smaller than 1KiB and the ACPI code scanning for RSDP table
+bumps to the VGA memory.
+
+The two acpcia patches can eventually be squashed together, it's up to you.
+
+I tested these patches on my lenovo laptop (and in QEMU if that counts).
+
+Vit Kabele (3):
+  platform/x86: Check validity of EBDA pointer in mpparse.c
+  acpica: Check that the EBDA pointer is in valid range
+  acpica: Do not touch VGA memory when EBDA < 1KiB
+
+ arch/x86/include/asm/bios_ebda.h |  3 +++
+ arch/x86/kernel/ebda.c           |  3 ---
+ arch/x86/kernel/mpparse.c        | 12 +++++++++++-
+ drivers/acpi/acpica/tbxfroot.c   | 25 ++++++++++++++++++-------
+ 4 files changed, 32 insertions(+), 11 deletions(-)
+
+-- 
+2.30.2
+

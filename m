@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF5B4DCD92
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 423AC4DCD94
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 19:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237493AbiCQSbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 14:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S237500AbiCQSb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 14:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237456AbiCQSbB (ORCPT
+        with ESMTP id S237451AbiCQSbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 14:31:01 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88366E9CBD
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:29:41 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id e4-20020a056902034400b00633691534d5so5076286ybs.7
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:29:41 -0700 (PDT)
+        Thu, 17 Mar 2022 14:31:02 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC83EF086
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:29:44 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d07ae11467so51970767b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 11:29:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=gnkVNXRwpItYkOrqz46oL2chMQsJgSaGJoWho/NmMis=;
-        b=YI3AvzQTkogxPDdiIj/+RzCOTUyCJ88hQl4NXWYLjZjemg83w5R17ujjNEM8V9JAxU
-         hX4ZgYQR0v4tFmfJ8iAJH004yDgrkRSN3J6hTAbjATM4u519i9/dnU/whB3VhTT8MziD
-         F9dMBVqJa2yKmwn43IZsUg2y3EKB7csr8aTxm1Z4fB+6MvQgGNOAv3fwHPDLgd7R+F0B
-         Gx3DhZEBOr3niPggW8C8KvkyvgQp4N4wJiWzM2N6s/4wRD76YrfXZ4DGxIdJe5LuG/yU
-         kWfZVUy7kCRD/3cL8qj/tm6vRnadhwteKHxGPe2hWSnhPBWiG5a9VyHc0FXOZhbr1nng
-         G7EQ==
+        bh=16R8cuvlrytUTd48mQ9QH65EhG2EnQWcUN8IuJ/qkS0=;
+        b=YkMKBUs/08jQ8aMFJCwXs7KV7zxnkANJBEApz0nbFTla9/OIuO1F8iOWZ3RbeuqpLK
+         /7rZ5DUlsuV3zgmLDauE40dGturuyASqlt5+oRK3wP72piUDbkzXgypTK3J3osip64Kq
+         DazD65tgSwPrJgxXWug071ElzL/LFovDC/hNBvFAFpysnRidv3dAiDzGUSlIZyAa5bop
+         xdK4mSkCTglTBbAV8LtJ83cGN/vAUMueNgeJ6a/eS9aSZqxrTTYGxMmd/vJQ+dVcJ6ty
+         lh5dFGa0UAp8jUMUsgvnZOkW32YZJWvftSPRNX6QGTVcvRDEHB9dv6St5vcEb0fBQ2UO
+         JW4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=gnkVNXRwpItYkOrqz46oL2chMQsJgSaGJoWho/NmMis=;
-        b=QqwqCrf1Hy3klA945sRjQDfctEhP2PGnLbfXgz7DNLeygD84sPn/ZgIVUHTSHvGSys
-         MYnbhyiYLUcg+Z2nXnsxy41iRnPf4OB4DnUHS+wHiJPqXoZkwZSoivdj7OvhuixjR8LQ
-         dkRSRyERpwhZ/s7GbnRuLBOrPGHipla6OCvBhaeKHRbFLDggUB87HQ/n029Xks0tpAqK
-         qgijxE1oFiKZuDixMFddmfgWA5lKR/yzUSQ2Ehb5zZEo6uJEcwDrdKzfqtw6uvucYQu3
-         fb5xCnCldEN3v1biFVp/F89rt1rNIjKhh+khFLaLRmT47b2PNE8qRLMpg1xCUuNEnBa3
-         yh5A==
-X-Gm-Message-State: AOAM531vxD/L9rSt4v/JwIQstkdAj5jhbvnR+LhPVVBJSHnn5UbWxgfI
-        hliQyQKbjtK6K5pqdYQNTdL6uIGnQ9ZG
-X-Google-Smtp-Source: ABdhPJwG7KilWiR4b5N372CVJhO6garmO3lmZYo657yxgBeL5DrAS6dg72sSQCD/RV0p7p8ebFanQV4ss7H3
+        bh=16R8cuvlrytUTd48mQ9QH65EhG2EnQWcUN8IuJ/qkS0=;
+        b=1WdYPO8YeVRw1/HHNo6hkK6i4C5GaLNtlWTd0zC03qJs4oNrHgurxUvM5i6eiantDW
+         quwmvOeIcLx/lAUXn+LHzsDFqD2pcoyYdf9ynd5G0CfTwf8TpFtFAw5thKAa62v+jrOm
+         7WtotEIDSmrxDlczRu8STSahN66rTiaNfgiDrtTeIfhkFe9/Feg83hg619QCoHDO5s0F
+         6rdHVJgInewhVISB8HmJksTBMj4uujkqsArEyGUVV1hf2JKHzjFPdrnz8BApSkFsw9Z4
+         rqnL3cmff+Miq1Rsgj+Q1IgtOnU2Cp4nTfxUn745wvEZTi/o2ujBoqWprWkoWqoaRisr
+         BZEA==
+X-Gm-Message-State: AOAM530Jm2bqeB0UCzgpUy0PDXHZYW8WTrmUuBCD0Cctx1BffaRBKL6Z
+        EuYdYWW7g0/hcpg3+ZW+xZGViT8BvuUA
+X-Google-Smtp-Source: ABdhPJy26VZJsBJ3Wu/Pjx0aWHyrafHeAkxP4Ucljuz60xLQtfCIEK4A2XoBy9YEwOl5vykEQ2RDaESKn5qa
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:6811:1685:e3b9:7904])
- (user=irogers job=sendgmr) by 2002:a25:5090:0:b0:628:b76b:b9d3 with SMTP id
- e138-20020a255090000000b00628b76bb9d3mr6321465ybb.128.1647541780744; Thu, 17
- Mar 2022 11:29:40 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 11:28:55 -0700
+ (user=irogers job=sendgmr) by 2002:a81:1cc5:0:b0:2d6:17ad:11ea with SMTP id
+ c188-20020a811cc5000000b002d617ad11eamr6936770ywc.43.1647541783631; Thu, 17
+ Mar 2022 11:29:43 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 11:28:56 -0700
 In-Reply-To: <20220317182858.484474-1-irogers@google.com>
-Message-Id: <20220317182858.484474-5-irogers@google.com>
+Message-Id: <20220317182858.484474-6-irogers@google.com>
 Mime-Version: 1.0
 References: <20220317182858.484474-1-irogers@google.com>
 X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH 5/8] perf vendor events: Update events for Skylake
+Subject: [PATCH 6/8] perf vendor events: Update events for SkylakeX
 From:   Ian Rogers <irogers@google.com>
 To:     Kan Liang <kan.liang@linux.intel.com>,
         Zhengjun Xing <zhengjun.xing@linux.intel.com>,
@@ -89,15 +89,15 @@ perf json files for this change.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../pmu-events/arch/x86/skylake/cache.json    | 36 +++++++++++++++++++
- .../pmu-events/arch/x86/skylake/other.json    | 36 -------------------
+ .../pmu-events/arch/x86/skylakex/cache.json   | 36 +++++++++++++++++++
+ .../pmu-events/arch/x86/skylakex/other.json   | 36 -------------------
  2 files changed, 36 insertions(+), 36 deletions(-)
 
-diff --git a/tools/perf/pmu-events/arch/x86/skylake/cache.json b/tools/perf/pmu-events/arch/x86/skylake/cache.json
-index 529c5e6e117f..c5d9a4ed10d7 100644
---- a/tools/perf/pmu-events/arch/x86/skylake/cache.json
-+++ b/tools/perf/pmu-events/arch/x86/skylake/cache.json
-@@ -2937,5 +2937,41 @@
+diff --git a/tools/perf/pmu-events/arch/x86/skylakex/cache.json b/tools/perf/pmu-events/arch/x86/skylakex/cache.json
+index 821d2f2a8f25..6639e18a7068 100644
+--- a/tools/perf/pmu-events/arch/x86/skylakex/cache.json
++++ b/tools/perf/pmu-events/arch/x86/skylakex/cache.json
+@@ -1686,5 +1686,41 @@
          "PublicDescription": "Counts the number of cache line split locks sent to the uncore.",
          "SampleAfterValue": "100003",
          "UMask": "0x10"
@@ -140,11 +140,11 @@ index 529c5e6e117f..c5d9a4ed10d7 100644
      }
  ]
 \ No newline at end of file
-diff --git a/tools/perf/pmu-events/arch/x86/skylake/other.json b/tools/perf/pmu-events/arch/x86/skylake/other.json
-index 5c0e81f76a5b..4f4839024915 100644
---- a/tools/perf/pmu-events/arch/x86/skylake/other.json
-+++ b/tools/perf/pmu-events/arch/x86/skylake/other.json
-@@ -16,41 +16,5 @@
+diff --git a/tools/perf/pmu-events/arch/x86/skylakex/other.json b/tools/perf/pmu-events/arch/x86/skylakex/other.json
+index 8b344259176f..779654e62d97 100644
+--- a/tools/perf/pmu-events/arch/x86/skylakex/other.json
++++ b/tools/perf/pmu-events/arch/x86/skylakex/other.json
+@@ -76,41 +76,5 @@
          "EventName": "MEMORY_DISAMBIGUATION.HISTORY_RESET",
          "SampleAfterValue": "2000003",
          "UMask": "0x1"

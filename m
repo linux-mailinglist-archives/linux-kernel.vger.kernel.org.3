@@ -2,150 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD554DCAE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F4D4DCAF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236388AbiCQQNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
+        id S236405AbiCQQOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbiCQQN3 (ORCPT
+        with ESMTP id S232842AbiCQQOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:13:29 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B05214F95;
-        Thu, 17 Mar 2022 09:12:13 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22HGA7Mb001466;
-        Thu, 17 Mar 2022 16:11:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : content-type :
- mime-version; s=pp1; bh=p25VD7f9NEbYVMjA8oW0QFkZVMeTUhG3CnH7cS//y/k=;
- b=X9yFhI44zN/g5Djdk7CUVe3XnJ2j55gpP8zMApLg81dXRdugfttKvk7dcCMrAOISaezK
- Vag3hzezdHuU9lV6FuhPd8E1aaBkjdMqJY6UjedClTXjBOLZvfKFPwKfIt7RfLNIgFPk
- ou9lOq7QRacw+dpgEh7JaVZ8O6sv5mY75j8VJetIN1+WkPtWw0yz5fsuhZgJh2QB/394
- +QB/iZu4DGng16LIQzti5X8jM5psouV0fMi05tXl8ARsXeGXA6ZcCY1ZsIw+xqUWWU8+
- E0oznKOxI8ngGlQF4HR1qUvNIX7twIKPZ6Eq3kI6nE9HJNlu9Z8NSqqSJgmpbZ5C1C8d Sg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev1vq0grp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Mar 2022 16:11:49 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22HGAAco001870;
-        Thu, 17 Mar 2022 16:11:49 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev1vq0gqw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Mar 2022 16:11:49 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22HFx27Q003925;
-        Thu, 17 Mar 2022 16:11:46 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3erk593r4x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Mar 2022 16:11:46 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22HGBhpe29164004
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Mar 2022 16:11:43 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3E0B0A405B;
-        Thu, 17 Mar 2022 16:11:43 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DD193A4054;
-        Thu, 17 Mar 2022 16:11:42 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 17 Mar 2022 16:11:42 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-ext4@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, "Theodore Ts'o" <tytso@mit.edu>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@kernel.org, hca@linux.ibm.com
-Subject: Re: [PATCHv3 02/10] ext4: Fix ext4_fc_stats trace point
-References: <cover.1647057583.git.riteshh@linux.ibm.com>
-        <b4b9691414c35c62e570b723e661c80674169f9a.1647057583.git.riteshh@linux.ibm.com>
-        <yt9dr1706b4i.fsf@linux.ibm.com>
-        <20220317145008.73nm7hqtccyjy353@riteshh-domain>
-Date:   Thu, 17 Mar 2022 17:11:42 +0100
-In-Reply-To: <20220317145008.73nm7hqtccyjy353@riteshh-domain> (Ritesh
-        Harjani's message of "Thu, 17 Mar 2022 20:20:08 +0530")
-Message-ID: <yt9d1qz05zk1.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Thu, 17 Mar 2022 12:14:39 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-eus2azon11020021.outbound.protection.outlook.com [52.101.56.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B1813F17;
+        Thu, 17 Mar 2022 09:13:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jLzN/OhbanPe3vVYMW+8WhCIZxsWgXd97JJvu7Qmu3bNRtUcTEiBkTVlmYtx85rIuKoqYla7glWF9Z3XDor13mpUIMA/guXE52iiOKI+LjgpRDy98Zg8DEQ8YbXFD39vImneY8mFs7bEIrucb4qv44JTuKKUuJSGRpN8qcJLxyl0esgm0hlW6q/MhoAlZwWSd9bSwuKIKznRe5zoid1fswuDINJdhkvaXig1uE98Lz2sK+9pBxwy96GtxNKKNAB4Rt1fy0zRgr9OFe1H5DwgJV53+s+vYm5NMGJZ0qRmCP/hWxiBZkZH9tUp0TCLo7ghXXegVWGceRnYLltKRS4hWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LO1YdWsiEnaF9VQyrEJVPHKwnv+MhPiQSoaZvJ3DwgI=;
+ b=KagHVo8lhKlVmhfHauJRHMqTKYY5/2u++phJHsNYhEUsrcWcZd2JriIzhdOV5OmWSp2wfeAXPax1YghSCa2H5yj+vWNPDNgg3sYI1yEVeeU9uEpD3BspoiG64w/pRGwP/XysEp+sbcZketzkNiumbkfL9zmAUtZTqT12xW+D9PhmFm8wyeyNY9Nt/Da1riKE0IanRrueO4gfu0OZq9E8FVUcda7Obm1sOHfcgv/zW/yX2yW6UVGP0drqVghwE8Pvp6Y9BJZp+Vj3dRiVJwDzrT3QCffqgXXHEwHOi6Y/5Zw4XJ7p5iQ1zSXYIIgylCV6qBvDqfuKkJklABZnsQUOog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LO1YdWsiEnaF9VQyrEJVPHKwnv+MhPiQSoaZvJ3DwgI=;
+ b=ZqhDBm4l1xIbRE9Wv2qAgM7me4xuB7l9tsTx5Tay6cAFyrOypFOFrzbTE6XqQHXavLDYZHXJKj83wQSW8XfXKLE4lhijXSNoimX+yD9Zwb3ztxg+lyk2jnIkoyedWzDjy69dexdweItitovYEKHhwNJYrcSexP6mMeLv+SjT9cc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from DM6PR21MB1514.namprd21.prod.outlook.com (2603:10b6:5:22d::11)
+ by BL0PR2101MB0995.namprd21.prod.outlook.com (2603:10b6:207:36::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Thu, 17 Mar
+ 2022 16:13:19 +0000
+Received: from DM6PR21MB1514.namprd21.prod.outlook.com
+ ([fe80::8c81:f644:fc1c:1357]) by DM6PR21MB1514.namprd21.prod.outlook.com
+ ([fe80::8c81:f644:fc1c:1357%4]) with mapi id 15.20.5102.007; Thu, 17 Mar 2022
+ 16:13:19 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     sthemmin@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, rafael@kernel.org,
+        lenb@kernel.org, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        kw@linux.com, bhelgass@google.com, hch@lst.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Cc:     mikelley@microsoft.com
+Subject: [PATCH 0/4] Fix coherence for VMbus and PCI pass-thru devices in Hyper-V VM
+Date:   Thu, 17 Mar 2022 09:12:39 -0700
+Message-Id: <1647533563-2170-1-git-send-email-mikelley@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uOqWNEA3DQxmNIk6-ZvU0e3rRTxJ6Cya
-X-Proofpoint-ORIG-GUID: cEKF-wgx2ytzbbcc3RIkPT8_WeRzuC-x
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+X-ClientProxiedBy: MW3PR06CA0007.namprd06.prod.outlook.com
+ (2603:10b6:303:2a::12) To DM6PR21MB1514.namprd21.prod.outlook.com
+ (2603:10b6:5:22d::11)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-17_06,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0 adultscore=0
- priorityscore=1501 bulkscore=0 malwarescore=0 mlxlogscore=874 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203170092
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 73609d37-2d96-4d66-c85c-08da08310cf1
+X-MS-TrafficTypeDiagnostic: BL0PR2101MB0995:EE_
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-Microsoft-Antispam-PRVS: <BL0PR2101MB0995005F7E4BE8BA03737FC4D7129@BL0PR2101MB0995.namprd21.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nPxtzWIhT4uj8csDWBf/oPbwaFLBrNKhhyNPkMd6y149rVFqSWTR/OdlVchReScvPk7zh+Vgtw8hg/SO90sViHaF/+XnfJY8pwLp+9QQVs7VyHvR2nIeiwP/Qhjtq3nwB6kA7K1nmsFwIUoEB6xDW4Mn6qImBIX0KGN2wpHszdw3BZEalNvnlAe2D5TKM3wXhc5b7v6AT8Iqvaw6yKCmEGVO86qUisBJaLd5zwgvHioJL/SWW3jCaFAFaFvYPjBdmzYNJRelyKnS+PNa531IjglhkdCZUxyMlatHnLCWg8Zq5dZVG17IKo1AilkG0dqy9dtNutcjBO4rR+/yowjlJkpvPYYz1aF1crDB2OnQl+uZJwdghQfWnrvJqmqM3Y0pNiLqnt/T+SnzgguTZvfhEy3mMu8Qm+WX/wfyzJ2QeyWLJHu15/DToTX6OCwFTCJ1TB0SVfpW5AsflaGTgCClKE5WCjs0aw/aL3Eql7iB+m0gDFg8jlCMvDdNymEr1l/4zmQ5CDogDo9lgisYku20PPp0bqLnJdQFyVcVongUQYq1bazRcC6GaaK8b3hVWs4FovuGFUmXYHlsScTIn0Ly65x74JGxmHh0U902qo0bmlUxvNzmnz7JtSFvBo9hRceV4qlUJQTlnb7iE4RpA9qW949g2ljYC/mKa66GHZhAk4m0XMwY40jkDEOHyaAdSegF3kXV4zy5L7k8pDZXp5mxLfBBHG0tDW7k3E7JKcZB5gRastENzsuaHGptIHuu2mEeByunqRDUffwmv30wBMGGbw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1514.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(83380400001)(186003)(26005)(4326008)(8676002)(2616005)(8936002)(66946007)(66476007)(66556008)(107886003)(38100700002)(38350700002)(316002)(36756003)(10290500003)(6486002)(86362001)(5660300002)(921005)(6512007)(82960400001)(7416002)(82950400001)(6506007)(2906002)(508600001)(6666004)(52116002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tZ6Lpu8LrHgb1aJq3omqdCAXMAps5ZKWhCPLtY1Ko2t1fsPWniSEVg73m5Fa?=
+ =?us-ascii?Q?dt7j1x5OE4aHYns8PagRQR17htU9KBns8L0gZn/jHp66dy43fl25UYYwIOss?=
+ =?us-ascii?Q?uUOQqwY/oWVyh2sIQvDr9rAWpw8YNGjk5Euk7a7/K+/G5A0qCf0Xmh255OMa?=
+ =?us-ascii?Q?lV3bachgGKJkicYdcQZPMe9/E7eHQXvcpmYS5L3Cczq3Ix/UQ8JqTLN/ZmM4?=
+ =?us-ascii?Q?Wr6x6HkoU8Z43xbDZfhf/3EQIVbG+7+qzs0CxD7kZtEl7UvfU4uQ5NFm89s6?=
+ =?us-ascii?Q?5SVPO3I5McJMCBct6wlsXUdHmGixNF6DW33GPY+eVMWcaHgaH7YPPDFoEcWr?=
+ =?us-ascii?Q?NZhCBhyJsBNnRZzX6dFuc0+s+ZANcbZ2trsa/y+fp99YgAZYmA4+7yaQgvMP?=
+ =?us-ascii?Q?TDVr5ViherFy2ZO6+2b+NN2SyyP3WEsll2o43M0iswZSokZPpObUSdp25Vtm?=
+ =?us-ascii?Q?yR1nPfOG8JprGN7HDkB6pef/2bx9sQbSjWznZNNXH5auLYXy/kiJW8CRnA4Z?=
+ =?us-ascii?Q?gOXdWYc1pK6NDmkzMx9VnxhOcRHFB8AX15Z2vFjpIlIisGSK8zrEY0vHUTZc?=
+ =?us-ascii?Q?gXJKTKoq1tmaDhEWBMPkQbVxRNIZP1M7XfNChTK26cErHFP76D49wXCL6yv2?=
+ =?us-ascii?Q?LrvOhMsPabyADcRhJCB5YKF0A26OwzEEtLDycNkfKVQKNpQF6Z22G2HkBtLO?=
+ =?us-ascii?Q?KA7QajJl/ocP+tBRXDrDHLYrr051TXYGfVQo2GyVMFQVHcMJqnWU/GUdwfmr?=
+ =?us-ascii?Q?DfsNHloP5HD50sEMno8Wo/lV/A7yL37m86ODDcd2aXj91LP/ajVQtM0p5VLp?=
+ =?us-ascii?Q?HZOT/hM4ybtTIfc9rRALNY/KqzxskO6xuKrK81Ah0u+GAEuhMvsIyjXZbgN9?=
+ =?us-ascii?Q?QKepvWqhApC1P4/cBvNxrhQ5Rimi6WEaSyZGO9L1j+pqc5b0hyQ1b8DajJ1j?=
+ =?us-ascii?Q?FaJ0DFPLjLRqPEUWfmtUKK6E1Pe9R4bUtkwgIr8Ynt1otmPfbnIcEnVgdQtJ?=
+ =?us-ascii?Q?cKmIzdkHiOx6GE5zm2OgX9g7GEos/GX1srd7ri8UOakUj2UGtaFdNnPNggKT?=
+ =?us-ascii?Q?uIjGo5MlL1HXWyZBmh+owCGvZ4HvmKfycAwIS3d3OGfNBGH5rEkQyqHSlutg?=
+ =?us-ascii?Q?d7nLaAjaVg0kU/YFbaaKnD52arT1eJTXtcdhh0BO53Ko/C9f1Rf4nAdx6I46?=
+ =?us-ascii?Q?rFAFgqqhGcxx50U9YARYtZK9kt7u7CezRJw0cUFG11o5bUaD8rwHFKres+9H?=
+ =?us-ascii?Q?c6/M1+hBDudaKB06WkCGMpz1xlH/hZbjCjhQjDnfR2OTmkZ7+zPGdIr2veKF?=
+ =?us-ascii?Q?Air6iwr6kjWHpAO8JwuXO4+IXv4PG0mMBMZWkjFKLe/nV7WC3RfrYvTbFty3?=
+ =?us-ascii?Q?GTHVj2b7FlChfzSTSHGdrzsNpyCiVdp88lDiJXAGkcJfTrarTPe83NwdVM8m?=
+ =?us-ascii?Q?3vyFH10M5S9pl1COoz5HDDbHLnfhuW5MRUdMvFy0TdqHxT5sE7kYCg=3D=3D?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73609d37-2d96-4d66-c85c-08da08310cf1
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1514.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2022 16:13:19.1337
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: snRMojjKXjofr4oHeNQb1QzwyF8HWDkMxFGF6POyVlxjLxaV+A215yEYWNz/A/rDfbgDwAytrDrqIrjyO5dEiw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR2101MB0995
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hyper-V VMs have VMbus synthetic devices and PCI pass-thru devices that are added
+dynamically via the VMbus protocol and are not represented in the ACPI DSDT. Only
+the top level VMbus node exists in the DSDT. As such, on ARM64 these devices don't
+pick up coherence information and default to not hardware coherent.  This results
+in extra software coherence management overhead since the synthetic devices are
+always hardware coherent. PCI pass-thru devices are also hardware coherent in all
+current usage scenarios.
 
-Ritesh Harjani <riteshh@linux.ibm.com> writes:
+Fix this by propagating coherence information from the top level VMbus node in
+the DSDT to all VMbus synthetic devices and PCI pass-thru devices. While smaller
+granularity of control would be better, basing on the VMbus node in the DSDT
+gives as escape path if a future scenario arises with devices that are not
+hardware coherent.
 
-> On 22/03/17 01:01PM, Sven Schnelle wrote:
->> Ritesh Harjani <riteshh@linux.ibm.com> writes:
->>
->> [    0.958403] Hardware name: IBM 3906 M04 704 (z/VM 7.1.0)
->> [    0.958407] Workqueue: eval_map_wq eval_map_work_func
->>
->> [    0.958446] Krnl PSW : 0704e00180000000 000000000090a9d6 (number+0x25e/0x3c0)
->> [    0.958456]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
->> [    0.958461] Krnl GPRS: 0000000000000058 00000000010de0ac 0000000000000001 00000000fffffffc
->> [    0.958467]            0000038000047b80 0affffff010de0ab 0000000000000000 0000000000000000
->> [    0.958481]            0000000000000020 0000038000000000 00000000010de0ad 00000000010de0ab
->> [    0.958484]            0000000080312100 0000000000e68910 0000038000047b50 0000038000047ab8
->> [    0.958494] Krnl Code: 000000000090a9c6: f0c84112b001        srp     274(13,%r4),1(%r11),8
->> [    0.958494]            000000000090a9cc: 41202001            la      %r2,1(%r2)
->> [    0.958494]           #000000000090a9d0: ecab0006c065        clgrj   %r10,%r11,12,000000000090a9dc
->> [    0.958494]           >000000000090a9d6: d200b0004000        mvc     0(1,%r11),0(%r4)
->> [    0.958494]            000000000090a9dc: 41b0b001            la      %r11,1(%r11)
->> [    0.958494]            000000000090a9e0: a74bffff
->>             aghi    %r4,-1
->> [    0.958494]            000000000090a9e4: a727fff6            brctg   %r2,000000000090a9d0
->> [    0.958494]            000000000090a9e8: a73affff            ahi     %r3,-1
->> [    0.958575] Call Trace:
->> [    0.958580]  [<000000000090a9d6>] number+0x25e/0x3c0
->> [    0.958594] ([<0000000000289516>] update_event_printk+0xde/0x200)
->> [    0.958602]  [<0000000000910020>] vsnprintf+0x4b0/0x7c8
->> [    0.958606]  [<00000000009103e8>] snprintf+0x40/0x50
->> [    0.958610]  [<00000000002893d2>] eval_replace+0x62/0xc8
->> [    0.958614]  [<000000000028e2fe>] trace_event_eval_update+0x206/0x248
->
-> This looks like you must have this patch from Steven as well [2].
-> Although I did test the patch and didn't see such a crash on my qemu box [3].
->
-> [2]: https://lore.kernel.org/linux-ext4/20220310233234.4418186a@gandalf.local.home/
-> [3]: https://lore.kernel.org/linux-ext4/20220311051249.ltgqbjjothbrkbno@riteshh-domain/
->
-> @Steven,
-> Sorry to bother. But does this crash strike anything obvious to you?
+The first two patches are prep to allow manipulating device coherence from a
+module (since the VMbus driver can be built as a module) and from architecture
+independent code without having a bunch of #ifdef's.
 
-Looking at the oops output again made me realizes that the snprintf
-tries to write into pages that are mapped RO. Talking to Heiko he
-mentioned that s390 maps rodata/text RO when setting up the initial
-mapping while x86 has a RW mapping in the beginning and changes that
-later to RO. I haven't verified that, but that might be a reason why it
-works on x86.
+The third patch propagates the VMbus node coherence to VMbus synthetic devices.
 
-Thanks
-Sven
+The fourth patch propagates the coherence to PCI pass-thru devices.
+
+Michael Kelley (4):
+  ACPI: scan: Export acpi_get_dma_attr()
+  dma-mapping: Add wrapper function to set dma_coherent
+  Drivers: hv: vmbus: Propagate VMbus coherence to each VMbus device
+  PCI: hv: Propagate coherence from VMbus device to PCI device
+
+ drivers/acpi/scan.c                 |  1 +
+ drivers/hv/vmbus_drv.c              | 15 +++++++++++++++
+ drivers/pci/controller/pci-hyperv.c | 17 +++++++++++++----
+ include/linux/dma-map-ops.h         |  9 +++++++++
+ 4 files changed, 38 insertions(+), 4 deletions(-)
+
+-- 
+1.8.3.1
+

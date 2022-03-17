@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2A84DBD4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 03:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220764DBD4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 03:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358476AbiCQC6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 16 Mar 2022 22:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58272 "EHLO
+        id S1351688AbiCQDAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 16 Mar 2022 23:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234652AbiCQC6V (ORCPT
+        with ESMTP id S234652AbiCQDAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 16 Mar 2022 22:58:21 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A0D20F4F
-        for <linux-kernel@vger.kernel.org>; Wed, 16 Mar 2022 19:57:05 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 17 Mar
- 2022 10:57:06 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 17 Mar
- 2022 10:57:03 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <benh@kernel.crashing.org>, <masahiroy@kernel.org>,
-        <adobriyan@gmail.com>
-CC:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        "Haowen Bai" <baihaowen@meizu.com>
-Subject: [PATCH] macintosh: windfarm_pm121: Fix warning comparing pointer to 0
-Date:   Thu, 17 Mar 2022 10:57:02 +0800
-Message-ID: <1647485822-16717-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 16 Mar 2022 23:00:06 -0400
+Received: from ha.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 276FF201BC;
+        Wed, 16 Mar 2022 19:58:51 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by ha.nfschina.com (Postfix) with ESMTP id 98BF11E80D24;
+        Thu, 17 Mar 2022 10:57:50 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from ha.nfschina.com ([127.0.0.1])
+        by localhost (ha.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZotB6GPQhZ7h; Thu, 17 Mar 2022 10:57:47 +0800 (CST)
+Received: from localhost.localdomain (unknown [101.228.249.16])
+        (Authenticated sender: yuzhe@nfschina.com)
+        by ha.nfschina.com (Postfix) with ESMTPA id 548181E80CD2;
+        Thu, 17 Mar 2022 10:57:47 +0800 (CST)
+From:   yuzhe <yuzhe@nfschina.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        yuzhe <yuzhe@nfschina.com>
+Subject: [PATCH] sched: Fix spelling mistake "then" -> "than"
+Date:   Wed, 16 Mar 2022 19:58:41 -0700
+Message-Id: <20220317025841.5738-1-yuzhe@nfschina.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid pointer type value compared with 0 to make code clear.
+There is a spelling mistake in comment.Fix it.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Signed-off-by: yuzhe <yuzhe@nfschina.com>
 ---
- drivers/macintosh/windfarm_pm121.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/sched/fair.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/macintosh/windfarm_pm121.c b/drivers/macintosh/windfarm_pm121.c
-index ba1ec6f..f0aa263 100644
---- a/drivers/macintosh/windfarm_pm121.c
-+++ b/drivers/macintosh/windfarm_pm121.c
-@@ -650,7 +650,7 @@ static void pm121_create_cpu_fans(void)
- 
- 	/* First, locate the PID params in SMU SBD */
- 	hdr = smu_get_sdb_partition(SMU_SDB_CPUPIDDATA_ID, NULL);
--	if (hdr == 0) {
-+	if (!hdr) {
- 		printk(KERN_WARNING "pm121: CPU PID fan config not found.\n");
- 		goto fail;
- 	}
-@@ -969,7 +969,7 @@ static int pm121_init_pm(void)
- 	const struct smu_sdbp_header *hdr;
- 
- 	hdr = smu_get_sdb_partition(SMU_SDB_SENSORTREE_ID, NULL);
--	if (hdr != 0) {
-+	if (hdr) {
- 		struct smu_sdbp_sensortree *st =
- 			(struct smu_sdbp_sensortree *)&hdr[1];
- 		pm121_mach_model = st->model_id;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 8bcc1dbc544c..e6b3d62389c9 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5944,7 +5944,7 @@ static unsigned long capacity_of(int cpu)
+ static void record_wakee(struct task_struct *p)
+ {
+ 	/*
+-	 * Only decay a single time; tasks that have less then 1 wakeup per
++	 * Only decay a single time; tasks that have less than 1 wakeup per
+ 	 * jiffy will not have built up many flips.
+ 	 */
+ 	if (time_after(jiffies, current->wakee_flip_decay_ts + HZ)) {
 -- 
-2.7.4
+2.25.1
 

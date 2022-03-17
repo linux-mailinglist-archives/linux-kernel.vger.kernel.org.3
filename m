@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535034DCB1E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 685014DCB20
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 17:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236421AbiCQQVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 12:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
+        id S236473AbiCQQV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 12:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236351AbiCQQVa (ORCPT
+        with ESMTP id S236443AbiCQQVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 12:21:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B0721417F;
-        Thu, 17 Mar 2022 09:20:13 -0700 (PDT)
+        Thu, 17 Mar 2022 12:21:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAFC20DB16;
+        Thu, 17 Mar 2022 09:20:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBC4BB81F26;
-        Thu, 17 Mar 2022 16:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6BA6EC340EF;
-        Thu, 17 Mar 2022 16:20:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97818B81F25;
+        Thu, 17 Mar 2022 16:20:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 396BBC340EF;
+        Thu, 17 Mar 2022 16:20:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647534010;
-        bh=HgDSJ7s434vEqvyKuZwzC5GRxOLi5zUyTlJCtSasKXQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VIVlWWr3XVQ91PlWEsqU5ZA93XV6bWAAmLFTSycJGmO4LG62ai61uowBr6Y9s9Vfg
-         n8kHARfH79FhRwtRG+ReS1qGYGmuwJyH44h23/Y8DXqj8dSntK2dmmWQTBYObgt6i7
-         IvzmWZvAgp2ZLeAHYtqdGyoJbA+X2dumjFgZqmem5MAgyop3UdBsqz/P2LA33gWl2h
-         czA9G3pvFUeVjpweqTpy1mSKEuUnBvZZ60G4fc+WXytpdwG8ZP9kY4CIw3GESXGzk3
-         w+qs7wv/nZ8ks42s9cACX6QO3IgY+z63+U6/6r4TKH8NFHswQ/g1ObPEmq9fFKFPTp
-         Fl8OX7UFw89cA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 48562E6D3DD;
-        Thu, 17 Mar 2022 16:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1647534034;
+        bh=/+CHBTGFlXDKJZW/jGmX5qQz2Po3iveVuzuR9CMSbek=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=JJoaAiuewj4hihUicGFfgIeEGWmgHBMKmb7ZX4njN9MGBZBJTioXnQua7fSnVIxUx
+         g6FsIaOwoTtrR6BPOGkUctg77v3LcxEHTMZRSR2cYvhJYXKk5o1F9ynfXmZn+ZXk6C
+         na0ggp+zkr0utwZjq8umbm04+oc0TKzJYBEKIObEftZ7RoqCOZ7qaI17GlCGDdiOdJ
+         rqGYsbVW+dF7fkKgwYUUv9Igx+AQ6FoAAVwxu71xKeepppgmFZMUu7fYy/F85gUYRr
+         xKse3T8Nsp4r69wOKn03/sA3Vfv1vcPgV+46qSZCsuKYwOcCTJixROORygHB07q3jf
+         M/+tMKZ9Cqbbw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D37B65C051B; Thu, 17 Mar 2022 09:20:33 -0700 (PDT)
+Date:   Thu, 17 Mar 2022 09:20:33 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     rcu@vger.kernel.org, Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: RCU: undefined reference to irq_work_queue
+Message-ID: <20220317162033.GP4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <YjMcZexG/kJepYDi@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <20220317140000.GO4285@paulmck-ThinkPad-P17-Gen-1>
+ <YjNSuprCqjAgGgqB@ip-172-31-19-208.ap-northeast-1.compute.internal>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: phy: mscc: Add MODULE_FIRMWARE macros
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164753401029.12859.6997997137028972129.git-patchwork-notify@kernel.org>
-Date:   Thu, 17 Mar 2022 16:20:10 +0000
-References: <20220316151835.88765-1-juergh@canonical.com>
-In-Reply-To: <20220316151835.88765-1-juergh@canonical.com>
-To:     Juerg Haefliger <juerg.haefliger@canonical.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, netdev@vger.kernel.org,
-        linux@armlinux.org.uk, linux-kernel@vger.kernel.org,
-        juergh@canonical.com
+In-Reply-To: <YjNSuprCqjAgGgqB@ip-172-31-19-208.ap-northeast-1.compute.internal>
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,27 +63,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 16 Mar 2022 16:18:35 +0100 you wrote:
-> The driver requires firmware so define MODULE_FIRMWARE so that modinfo
-> provides the details.
+On Thu, Mar 17, 2022 at 03:24:42PM +0000, Hyeonggon Yoo wrote:
+> On Thu, Mar 17, 2022 at 07:00:00AM -0700, Paul E. McKenney wrote:
+> > On Thu, Mar 17, 2022 at 11:32:53AM +0000, Hyeonggon Yoo wrote:
+> > > Hello RCU folks,
+> > > 
+> > > I like to use minimal configuration for kernel development.
+> > > when building with tinyconfig + CONFIG_PREEMPT=y on arm64:
+> > > 
+> > > ld: kernel/rcu/update.o: in function `call_rcu_tasks':
+> > > update.c:(.text+0xb2c): undefined reference to `irq_work_queue'
+> > > update.c:(.text+0xb2c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `irq_work_queue'
+> > > make: *** [Makefile:1155: vmlinux] Error 1
+> > > 
+> > > It seems RCU calls irq_work_queue() without checking if CONFIG_IRQ_WORK is enabled.
+> > 
+> > Indeed it does!
+> > 
+> > And kernel/rcu/Kconfig shows why:
+> > 
+> > config TASKS_TRACE_RCU
+> > 	def_bool 0
+> > 	select IRQ_WORK
+> > 	help
+> > 	  This option enables a task-based RCU implementation that uses
+> > 	  explicit rcu_read_lock_trace() read-side markers, and allows
+> > 	  these readers to appear in the idle loop as well as on the CPU
+> > 	  hotplug code paths.  It can force IPIs on online CPUs, including
+> > 	  idle ones, so use with caution.
+> > 
+> > So the solution is to further minimize your configuration so as to
+> > deselect TASKS_TRACE_RCU.
 > 
-> Signed-off-by: Juerg Haefliger <juergh@canonical.com>
-> ---
->  drivers/net/phy/mscc/mscc_main.c | 3 +++
->  1 file changed, 3 insertions(+)
+> They are already not selected.
 
-Here is the summary with links:
-  - net: phy: mscc: Add MODULE_FIRMWARE macros
-    https://git.kernel.org/netdev/net/c/f1858c277ba4
+Good, thank you.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+How about TASKS_RUDE_RCU, TASKS_TRACE_RCU, and TASKS_RCU_GENERIC?
 
+> > This means making sure that both BPF and
+> > the various RCU torture tests are all deselected.
+> 
+> I wanted to say call_rcu_tasks() can be referenced even when IRQ_WORK is not
+> selected, making it fail to build.
 
+I am guessing because TASKS_RCU_GENERIC is selected?
+
+If so, does the patch at the end of this email help?
+
+> > > ld: kernel/rcu/update.o: in function `call_rcu_tasks':
+> > > update.c:(.text+0xb2c): undefined reference to `irq_work_queue'
+> > > update.c:(.text+0xb2c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `irq_work_queue'
+> > > make: *** [Makefile:1155: vmlinux] Error 1
+> 
+> Isn't it better to fix this build failure?
+
+But of course!  However, first I need to know exactly what is causing your
+build failure.  I cannot see your .config file, so I am having to guess.
+
+Don't get me wrong, I do have a lot of practice guessing, but it is still
+just guessing.  ;-)
+
+> It fails to build when both TASKS_TRACE_RCU and IRQ_WORK are not selected
+> and PREEMPT is selected.
+> 
+>   │ Symbol: TASKS_TRACE_RCU [=n]                                            │
+>   │ Type  : bool                                                            │
+>   │ Defined at kernel/rcu/Kconfig:96                                        │
+>   │ Selects: IRQ_WORK [=n]                                                  │
+>   │ Selected by [n]:                                                        │
+>   │   - BPF_SYSCALL [=n]                                                    │
+>   │   - RCU_SCALE_TEST [=n] && DEBUG_KERNEL [=y]                            │
+>   │   - RCU_TORTURE_TEST [=n] && DEBUG_KERNEL [=y]                          │
+>   │   - RCU_REF_SCALE_TEST [=n] && DEBUG_KERNEL [=y]
+> 
+> Thanks!
+> 
+> > 
+> > Or turn on IRQ_WORK, for example, if you need to use BPF.
+
+Or do you already have TASKS_RCU_GENERIC deselected?
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+index bf8e341e75b4..f559870fbf8b 100644
+--- a/kernel/rcu/Kconfig
++++ b/kernel/rcu/Kconfig
+@@ -86,6 +86,7 @@ config TASKS_RCU
+ 
+ config TASKS_RUDE_RCU
+ 	def_bool 0
++	select IRQ_WORK
+ 	help
+ 	  This option enables a task-based RCU implementation that uses
+ 	  only context switch (including preemption) and user-mode

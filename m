@@ -2,89 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6934DC952
+	by mail.lfdr.de (Postfix) with ESMTP id 5960C4DC953
 	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 15:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235503AbiCQOzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 10:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
+        id S235487AbiCQOzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 10:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235469AbiCQOzM (ORCPT
+        with ESMTP id S235476AbiCQOzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 17 Mar 2022 10:55:12 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04061DF4B2;
-        Thu, 17 Mar 2022 07:53:55 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id AD5E02223A;
-        Thu, 17 Mar 2022 15:53:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647528833;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hyh5t4TKfoidnQYqHVP2vqC50I83Xx9jmc0tLpP0DG0=;
-        b=Dlf3eoBU3JxuwJp0t9qUNEYrcPpx2XIxKnh5YLHVURl12SCaTP6ci7wAu3gdGlTVWlKHl+
-        tSQXuOteLrEmULdicZc70uyIH0OnWAh8NhuwC5eaXEmJCfrFO5p4k5J2pDDPkKbpJwFXr5
-        IRSWVfIURbWPWg3VZlrIL35zsEGQJzo=
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE64DDF49C
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 07:53:53 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-321-P6g7D78BM56_TDs4X2OSiw-1; Thu, 17 Mar 2022 14:53:50 +0000
+X-MC-Unique: P6g7D78BM56_TDs4X2OSiw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Thu, 17 Mar 2022 14:53:50 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Thu, 17 Mar 2022 14:53:50 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'David Ahern' <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+CC:     "menglong8.dong@gmail.com" <menglong8.dong@gmail.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@redhat.com" <mingo@redhat.com>, "xeb@mail.ru" <xeb@mail.ru>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
+        "imagedong@tencent.com" <imagedong@tencent.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kafai@fb.com" <kafai@fb.com>,
+        "talalahmad@google.com" <talalahmad@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "alobakin@pm.me" <alobakin@pm.me>,
+        "flyingpeng@tencent.com" <flyingpeng@tencent.com>,
+        "mengensun@tencent.com" <mengensun@tencent.com>,
+        "dongli.zhang@oracle.com" <dongli.zhang@oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "benbjiang@tencent.com" <benbjiang@tencent.com>
+Subject: RE: [PATCH net-next v3 3/3] net: icmp: add reasons of the skb drops
+ to icmp protocol
+Thread-Topic: [PATCH net-next v3 3/3] net: icmp: add reasons of the skb drops
+ to icmp protocol
+Thread-Index: AQHYOg4fPu4cJYiuNkyikVGsIDB36azDqG8w
+Date:   Thu, 17 Mar 2022 14:53:49 +0000
+Message-ID: <b08e2dc3e0694068a1a9d698475f8992@AcuMS.aculab.com>
+References: <20220316063148.700769-1-imagedong@tencent.com>
+ <20220316063148.700769-4-imagedong@tencent.com>
+ <20220316201853.0734280f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <4315b50e-9077-cc4b-010b-b38a2fbb7168@kernel.org>
+ <20220316210534.06b6cfe0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <f787c35b-0984-ecaf-ad97-c7580fcdbbad@kernel.org>
+In-Reply-To: <f787c35b-0984-ecaf-ad97-c7580fcdbbad@kernel.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 17 Mar 2022 15:53:48 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        Daniel Palmer <daniel@thingy.jp>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Bert Vermeulen <bert@biot.com>,
-        John Crispin <john@phrozen.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Suman Anna <s-anna@ti.com>, Lokesh Vutla <lokeshvutla@ti.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, openbmc@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-oxnas@groups.io
-Subject: Re: [PATCH 08/18] dt-bindings: irqchip: kontron,sl28cpld: include
- generic schema
-In-Reply-To: <20220317115705.450427-7-krzysztof.kozlowski@canonical.com>
-References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
- <20220317115705.450427-7-krzysztof.kozlowski@canonical.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <9bbda22b8ad713bd901e209cda85d65d@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,42 +84,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-03-17 12:56, schrieb Krzysztof Kozlowski:
-> Include generic interrupt-controller.yaml schema, which enforces node
-> naming and other generic properties.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+RnJvbTogRGF2aWQgQWhlcm4NCj4gU2VudDogMTcgTWFyY2ggMjAyMiAxNDo0OQ0KPiANCj4gT24g
+My8xNi8yMiAxMDowNSBQTSwgSmFrdWIgS2ljaW5za2kgd3JvdGU6DQo+ID4gT24gV2VkLCAxNiBN
+YXIgMjAyMiAyMTozNTo0NyAtMDYwMCBEYXZpZCBBaGVybiB3cm90ZToNCj4gPj4gT24gMy8xNi8y
+MiA5OjE4IFBNLCBKYWt1YiBLaWNpbnNraSB3cm90ZToNCj4gPj4+DQo+ID4+PiBJIGd1ZXNzIHRo
+aXMgc2V0IHJhaXNlcyB0aGUgZm9sbG93IHVwIHF1ZXN0aW9uIHRvIERhdmUgaWYgYWRkaW5nDQo+
+ID4+PiBkcm9wIHJlYXNvbnMgdG8gcGxhY2VzIHdpdGggTUlCIGV4Y2VwdGlvbiBzdGF0cyBtZWFu
+cyBpbXByb3ZpbmcNCj4gPj4+IHRoZSBncmFudWxhcml0eSBvciBvbmUgTUlCIHN0YXQgPT0gb25l
+IHJlYXNvbj8NCj4gPj4NCj4gPj4gVGhlcmUgYXJlIGEgZmV3IGV4YW1wbGVzIHdoZXJlIG11bHRp
+cGxlIE1JQiBzdGF0cyBhcmUgYnVtcGVkIG9uIGEgZHJvcCwNCj4gPj4gYnV0IHRoZSByZWFzb24g
+Y29kZSBzaG91bGQgYWx3YXlzIGJlIHNldCBiYXNlZCBvbiBmaXJzdCBmYWlsdXJlLiBEaWQgeW91
+DQo+ID4+IG1lYW4gc29tZXRoaW5nIGVsc2Ugd2l0aCB5b3VyIHF1ZXN0aW9uPw0KPiA+DQo+ID4g
+SSBtZWFudCB3aGV0aGVyIHdlIHdhbnQgdG8gZGlmZmVyZW50aWF0ZSBiZXR3ZWVuIFRZUEUsIGFu
+ZCBCUk9BRENBU1Qgb3INCj4gPiB3aGF0ZXZlciBvdGhlciBwb3NzaWJsZSBpbnZhbGlkIHByb3Rv
+Y29sIGNhc2VzIHdlIGNhbiBnZXQgaGVyZSBvciBqdXN0DQo+ID4gZHVtcCB0aGVtIGFsbCBpbnRv
+IGEgc2luZ2xlIHByb3RvY29sIGVycm9yIGNvZGUuDQo+IA0KPiBJIHRoaW5rIGEgc2luZ2xlIG9u
+ZSBpcyBhIGdvb2Qgc3RhcnRpbmcgcG9pbnQuDQoNCkkgcmVtZW1iZXIgbG9va2luZyBhdCAoSSB0
+aGluaykgdGhlIHBhY2tldCBkcm9wIHN0YXRzIGEgd2hpbGUgYmFjay4NClR3byBtYWNoaW5lcyBv
+biB0aGUgc2FtZSBMQU4gd2VyZSByZXBvcnRpbmcgcmF0aGVyIGRpZmZlcmVudCB2YWx1ZXMuDQpC
+YXNpY2FsbHkgMCB2IHF1aXRlIGEgZmV3Lg0KDQpJdCB0dXJuZWQgb3V0IHRoYXQgcGFzc2luZyB0
+aGUgcGFja2V0cyB0byBkaGNwIHdhcyBkZWVtZWQgZW5vdWdoDQp0byBzdG9wIHRoZW0gYmVpbmcg
+cmVwb3J0ZWQgYXMgJ2Ryb3BwZWQnLg0KQW5kIEkgdGhpbmsgdGhhdCB2ZXJzaW9uIG9mIGRoY3Ag
+ZmVkIGV2ZXJ5IHBhY2tlZCBpbnRvIGl0cyBCUEY/IGZpbHRlci4NCihJIG5ldmVyIGRpZCBkZWNp
+ZGUgd2hldGhlciB0aGF0IGNhdXNlZCBldmVyeSBza2IgdG8gYmUgZHVwbGljYXRlZC4pDQoNCglE
+YXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91
+bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5
+NzM4NiAoV2FsZXMpDQo=
 
-Acked-by: Michael Walle <michael@walle.cc>
-
-> ---
->  .../bindings/interrupt-controller/kontron,sl28cpld-intc.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git
-> a/Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
-> b/Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
-> index e8dfa6507f64..1d0939390631 100644
-> ---
-> a/Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
-> +++
-> b/Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
-> @@ -29,6 +29,9 @@ description: |
->      7  n/a           not used
->    ==== ============= ==================================
-> 
-> +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
-> +
->  properties:
->    compatible:
->      enum:
-> @@ -51,4 +54,4 @@ required:
->    - "#interrupt-cells"
->    - interrupt-controller
-> 
-> -additionalProperties: false
-> +unevaluatedProperties: false
-
--- 
--michael

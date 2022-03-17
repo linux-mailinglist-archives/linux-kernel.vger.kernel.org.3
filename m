@@ -2,304 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0D04DC359
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEAF4DC362
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 10:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbiCQJwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 05:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
+        id S231830AbiCQJzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 05:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbiCQJwJ (ORCPT
+        with ESMTP id S230527AbiCQJzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 05:52:09 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E001BB7B4;
-        Thu, 17 Mar 2022 02:50:52 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 671DB1F37F;
-        Thu, 17 Mar 2022 09:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1647510651; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QfbYTpwmomx16ctt1RjXA9fxEmr00PmojuKeOAWkHPs=;
-        b=D6Ym7y9RWAEf284MrZZX9Fk3uwqgZGerCsk7LpxHXlMWYJHQw2OlvCuR+7jWKiQCsNF/O7
-        Cnpc9e/Kn+9y63HSHzsO7i7JxmOyThIblCKjjn99KWPAEFqkzXysf3b8Vv2eGnYsFYHO3L
-        lJWWqt+ObqQ+0AQoOCpJ44GMP9IVAIw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1647510651;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QfbYTpwmomx16ctt1RjXA9fxEmr00PmojuKeOAWkHPs=;
-        b=iBqa1+FEb+wO2qrMbvLIN/4Zs/fwI88v/njYSL11quBxp8Maae5hT6JeGhQO3Rb22oh2JT
-        GEXC+5lFgPgVACAw==
-Received: from vasant-suse.fritz.box (unknown [10.163.24.178])
-        by relay2.suse.de (Postfix) with ESMTP id 2C229A3B81;
-        Thu, 17 Mar 2022 09:50:51 +0000 (UTC)
-From:   Vasant Karasulli <vkarasulli@suse.de>
-To:     David Disseldorp <ddiss@suse.de>, linux-fsdevel@vger.kernel.org
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Vasant Karasulli <vkarasulli@suse.de>
-Subject: [PATCH v5 1/1] exfat: allow access to paths with trailing dots
-Date:   Thu, 17 Mar 2022 10:50:47 +0100
-Message-Id: <20220317095047.11992-2-vkarasulli@suse.de>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220317095047.11992-1-vkarasulli@suse.de>
-References: <20220317095047.11992-1-vkarasulli@suse.de>
+        Thu, 17 Mar 2022 05:55:33 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31711DA8CA
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:54:16 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id p6so881206lfh.1
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 02:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zCXxdzzj3V/3A0xK6d4iA6VZnIpM+mGxT4b3DUddSIM=;
+        b=gQMhSOZGINgOThSGbrVP1SXG4DlfVxlpXhEtrHKkicc+XcaOvHh3RZzASQrfZt6GoK
+         StqG3fLdr1owf98ZdDrodllY4N8hAsoXkCPr/8iaGp2GMiKNXh6U53Ia7DNetICyKjD1
+         EzigLAg9gzwCwvPUDkBtfBbMqeLo4EGw8FsvNQtOB0gufOHUdDWz4q7wxLReXAEIS4dM
+         tApHLTywRCcrsFq65dKcDaqVRgRacdmcIgmEg1WZtpYKzOAs2DVJ1vzRju1o0ME4rtPt
+         2pI9sOXbqUcMUrPOa7qH615qWpImjYQUSyW707wBBl7T3gpYKiL8JS1dlWC+DdT8x5dq
+         MgNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zCXxdzzj3V/3A0xK6d4iA6VZnIpM+mGxT4b3DUddSIM=;
+        b=0DIJf0qym5iJQuzzyOdoCvuSdVFan01ze+slg/7/aPmMlP+tYFlCKjcbZsBIvlRyg0
+         vGusXyxywaB1f4neB6q4h1KF84UG1zoOarT2LQuCAat4jLJt0W0xB0eaoWPnXBNG/IDQ
+         72cCJlGDudkOwxAxaFxWYgBZope481aGSc/noPuH7mjAed9ud4S5T/3AbcBjzi98e7kV
+         AmEzsvUZVv7aTQQex3NRZqNjZDiVuwS5ZI83YAOmHAZuDMnVkuuvOCjeiu+SJwt2AR5Z
+         HB0xnmEnvpfJ5AjdpWkJiiQ05IR3vIFZGo7a5EYDt05fpm3ZOzVS9dvkJwlvHAIWBCk+
+         +Ivw==
+X-Gm-Message-State: AOAM531zsx6+SE41+nzxC0a3jIotUkj6xp1S9UgxLbUGrbQbROZ+cZey
+        AAdEEVI494Px3SWczJLr2Nf4wywdNeNYiKhWX1rPdQ==
+X-Google-Smtp-Source: ABdhPJzmzAKjKa58G6f1RWjMSzVqbGXrJJ78vbXzRMt2UZAF5ITJfl8DNQ+zIhJIvQACrQNepr2VJCCGmuzjJ2MrqgM=
+X-Received: by 2002:a05:6512:12c4:b0:448:6d12:4434 with SMTP id
+ p4-20020a05651212c400b004486d124434mr2254387lfg.71.1647510854848; Thu, 17 Mar
+ 2022 02:54:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220310125636.1.I484f4ee35609f78b932bd50feed639c29e64997e@changeid>
+ <50d4b87c-003f-818a-c8ba-a3bac9c0f171@intel.com> <CA+ASDXO8-wmEDPxUrO6j9wBvCMzTZMpTyH7adSga8dYLNq5ehg@mail.gmail.com>
+ <CAPDyKFoQfr3W45vWY4SnTeBG7=z3J749=WBGNtEgujvXAqAn0Q@mail.gmail.com> <3ef33014-be77-3a97-d49e-84b62d09ba00@gmail.com>
+In-Reply-To: <3ef33014-be77-3a97-d49e-84b62d09ba00@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 17 Mar 2022 10:53:38 +0100
+Message-ID: <CAPDyKFq+81v4N5-R_Fka871uuZQEeQ3D1haG4b4to7Tg5H2oeg@mail.gmail.com>
+Subject: Re: [PATCH] mmc: core: Set HS clock speed before sending HS CMD13
+To:     Brian Norris <briannorris@chromium.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Shawn Lin <shawn.lin@rock-chips.com>, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- The Linux kernel exfat driver currently unconditionally strips
- trailing periods '.' from path components. This isdone intentionally,
- loosely following Windows behaviour and specifications
- which state:
+On Wed, 16 Mar 2022 at 22:57, Heiner Kallweit <hkallweit1@gmail.com> wrote:
+>
+> On 15.03.2022 13:27, Ulf Hansson wrote:
+> > + Heiner
+> >
+> > On Tue, 15 Mar 2022 at 00:11, Brian Norris <briannorris@chromium.org> wrote:
+> >>
+> >> On Mon, Mar 14, 2022 at 6:13 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >>>
+> >>> On 10.3.2022 22.56, Brian Norris wrote:
+> >>>> Way back in commit 4f25580fb84d ("mmc: core: changes frequency to
+> >>>> hs_max_dtr when selecting hs400es"), Rockchip engineers noticed that
+> >>>> some eMMC don't respond to SEND_STATUS commands very reliably if they're
+> >>>> still running at a low initial frequency. As mentioned in that commit,
+> >>>> JESD84-B51 P49 suggests a sequence in which the host:
+> >>>> 1. sets HS_TIMING
+> >>>> 2. bumps the clock ("<= 52 MHz")
+> >>>> 3. sends further commands
+> >>>>
+> >>>> It doesn't exactly require that we don't use a lower-than-52MHz
+> >>>> frequency, but in practice, these eMMC don't like it.
+> >>>>
+> >>>> Anyway, the aforementioned commit got that right for HS400ES, but the
+> >>>> refactoring in 53e60650f74e ("mmc: core: Allow CMD13 polling when
+> >>>> switching to HS mode for mmc") messed that back up again, by reordering
+> >>>> step 2 after step 3.
+> >>>
+> >>> That description might not be accurate.
+> >>
+> >> I've been struggling to track where things were working, where things
+> >> were broken, and what/why Shawn's original fix was, precisely. So you
+> >> may be correct in many ways :) Thanks for looking.
+> >>
+> >>> It looks like 4f25580fb84d did not have the intended effect because
+> >>> CMD13 was already being sent by mmc_select_hs(), still before increasing
+> >>> the frequency.  53e60650f74e just kept that behaviour.
+> >>
+> >> You may be partially right, or fully right. But anyway, I think I have
+> >> some additional explanation, now that you've pointed that out: that
+> >> behavior changed a bit in this commit:
+> >>
+> >> 08573eaf1a70 mmc: mmc: do not use CMD13 to get status after speed mode switch
+> >>
+> >> While that patch was merged in July 2016 and Shawn submitted his v1
+> >> fix in September, there's a very good chance that a lot of his work
+> >> was actually done via backports, and even if not, he may not have been
+> >> testing precisely the latest -next kernel when submitting. So his fix
+> >> may have worked out for _some_ near-upstream kernel he was testing in
+> >> 2016, you may be correct that it didn't really work in the state it
+> >> was committed to git history.
+> >>
+> >> This may also further explain why my attempts at bisection were rather
+> >> fruitless (notwithstanding the difficulties in getting RK3399 running
+> >> on that old of a kernel).
+> >>
+> >> Anyway, I'll see if I can improve the messaging if/when a v2 comes around.
+> >>
+> >>>> --- a/drivers/mmc/core/mmc.c
+> >>>> +++ b/drivers/mmc/core/mmc.c
+> >> ...
+> >>>> @@ -1487,6 +1492,12 @@ static int mmc_select_hs200(struct mmc_card *card)
+> >>>>               old_timing = host->ios.timing;
+> >>>>               mmc_set_timing(host, MMC_TIMING_MMC_HS200);
+> >>>>
+> >>>> +             /*
+> >>>> +              * Bump to HS frequency. Some cards don't handle SEND_STATUS
+> >>>> +              * reliably at the initial frequency.
+> >>>> +              */
+> >>>> +             mmc_set_clock(host, card->ext_csd.hs_max_dtr);
+> >>>
+> >>> Is card->ext_csd.hs_max_dtr better than card->ext_csd.hs200_max_dtr here?
+> >>
+> >> I believe either worked in practice. I ended up choosing hs_max_dtr
+> >> because it's lower and presumably safer. But frankly, I don't know
+> >> what the Right thing to do is here, since the spec just talks about
+> >> "<=", and yet f_init (which is also "<=") does not work. I think it
+> >> might be like Ulf was guessing way back in the first place [1], and
+> >> the key is that there is *some* increase (i.e., not using f_init).
+> >>
+> >> So assuming either works, would you prefer hs200_max_dtr here, since
+> >> that does seem like the appropriate final rate?
+> >
+> > I think that makes most sense, as we are switching to that rate anyway
+> > just a few cycles later in mmc_select_timing(), when it calls
+> > mmc_set_bus_speed().
+> >
+> > That said, I have recently queued a patch that improves the
+> > speed-mode-selection-fallback, when switching to HS200 mode fails [2].
+> > We need to make sure this part still works as expected. I have looped
+> > in Heiner who has been in the loop around this change, hopefully he
+> > can help with further testing or so. Maybe $subject patch (or a new
+> > version of it) can even make HS200 to work on Heiner's platform!?
+> >
+> >>
+> >> Brian
+> >>
+> >> [1] https://lore.kernel.org/all/CAPDyKFrNp=Y3BhVE_kxtggv7Qc6m=2kef2U8Dn2Bb3ANHPYV-Q@mail.gmail.com/
+> >> Re: [PATCH 3/5] mmc: core: changes frequency to hs_max_dtr when
+> >> selecting hs400es
+> >
+> > Kind regards
+> > Uffe
+> >
+> > [2]
+> > https://patchwork.kernel.org/project/linux-mmc/patch/20220303164522.129583-1-ulf.hansson@linaro.org/
+>
+> In my specific case this patch makes no difference. My test system is a
+> dirt-cheap Amlogic SoC based Android TV box. My best guess is that maybe due
+> to chip shortage the vendor omitted some regulator, making the eMMC card
+> refuse the switch to HS200.
+> Therefore my test result doesn't speak against the proposed patch.
 
-  #exFAT
-  The concatenated file name has the same set of illegal characters as
-  other FAT-based file systems (see Table 31).
+Thanks Heiner for confirming!
 
-  #FAT
-  ...
-  Leading and trailing spaces in a long name are ignored.
-  Leading and embedded periods are allowed in a name and are stored in
-  the long name. Trailing periods are ignored.
+Brian, I expect you to send an updated/rebased patch that we can test
+and review.
 
-Note: Leading and trailing space ' ' characters are currently retained
-by Linux kernel exfat, in conflict with the above specification.
-On Windows 10, trailing and leading space ' ' characters are stripped
-from the filenames.
-Some implementations, such as fuse-exfat, don't perform path trailer
-removal. When mounting images which contain trailing-dot paths, these
-paths are unreachable, e.g.:
-
-  + mount.exfat-fuse /dev/zram0 /mnt/test/
-  FUSE exfat 1.3.0
-  + cd /mnt/test/
-  + touch fuse_created_dots... '  fuse_created_spaces  '
-  + ls -l
-  total 0
-  -rwxrwxrwx 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
-  -rwxrwxrwx 1 root 0 0 Aug 18 09:45  fuse_created_dots...
-  + cd /
-  + umount /mnt/test/
-  + mount -t exfat /dev/zram0 /mnt/test
-  + cd /mnt/test
-  + ls -l
-  ls: cannot access 'fuse_created_dots...': No such file or directory
-  total 0
-  -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
-  -????????? ? ?    ? ?            ?  fuse_created_dots...
-  + touch kexfat_created_dots... '  kexfat_created_spaces  '
-  + ls -l
-  ls: cannot access 'fuse_created_dots...': No such file or directory
-  total 0
-  -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  fuse_created_spaces  '
-  -rwxr-xr-x 1 root 0 0 Aug 18 09:45 '  kexfat_created_spaces  '
-  -????????? ? ?    ? ?            ?  fuse_created_dots...
-  -rwxr-xr-x 1 root 0 0 Aug 18 09:45  kexfat_created_dots
-  + cd /
-  + umount /mnt/test/
-
-This commit adds "keep_last_dots" mount option that controls whether or
-not trailing periods '.' are stripped
-from path components during file lookup or file creation.
-This mount option can be used to access
-paths with trailing periods and disallow creating files with names with
-trailing periods. E.g. continuing from the previous example:
-
-  + mount -t exfat -o keep_last_dots /dev/zram0 /mnt/test
-  + cd /mnt/test
-  + ls -l
-  total 0
-  -rwxr-xr-x 1 root 0 0 Aug 18 10:32 '  fuse_created_spaces  '
-  -rwxr-xr-x 1 root 0 0 Aug 18 10:32 '  kexfat_created_spaces  '
-  -rwxr-xr-x 1 root 0 0 Aug 18 10:32  fuse_created_dots...
-  -rwxr-xr-x 1 root 0 0 Aug 18 10:32  kexfat_created_dots
-
-  + echo > kexfat_created_dots_again...
-  sh: kexfat_created_dots_again...: Invalid argument
-
-Link: https://bugzilla.suse.com/show_bug.cgi?id=1188964
-Link: https://lore.kernel.org/linux-fsdevel/003b01d755e4$31fb0d80$95f12880$
-@samsung.com/
-Link: https://docs.microsoft.com/en-us/windows/win32/fileio/exfat-specification
-Suggested-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Vasant Karasulli <vkarasulli@suse.de>
-Co-developed-by: David Disseldorp <ddiss@suse.de>
-Signed-off-by: David Disseldorp <ddiss@suse.de>
----
- fs/exfat/exfat_fs.h |  3 ++-
- fs/exfat/namei.c    | 50 ++++++++++++++++++++++++++++++++-------------
- fs/exfat/super.c    |  7 +++++++
- 3 files changed, 45 insertions(+), 15 deletions(-)
-
-diff --git a/fs/exfat/exfat_fs.h b/fs/exfat/exfat_fs.h
-index 619e5b4bed10..c6800b880920 100644
---- a/fs/exfat/exfat_fs.h
-+++ b/fs/exfat/exfat_fs.h
-@@ -203,7 +203,8 @@ struct exfat_mount_options {
- 	/* on error: continue, panic, remount-ro */
- 	enum exfat_error_mode errors;
- 	unsigned utf8:1, /* Use of UTF-8 character set */
--		 discard:1; /* Issue discard requests on deletions */
-+		 discard:1, /* Issue discard requests on deletions */
-+		 keep_last_dots:1; /* Keep trailing periods in paths */
- 	int time_offset; /* Offset of timestamps from UTC (in minutes) */
- };
-
-diff --git a/fs/exfat/namei.c b/fs/exfat/namei.c
-index af4eb39cc0c3..a4f8010fbd38 100644
---- a/fs/exfat/namei.c
-+++ b/fs/exfat/namei.c
-@@ -65,11 +65,14 @@ static int exfat_d_revalidate(struct dentry *dentry, unsigned int flags)
- 	return ret;
- }
-
--/* returns the length of a struct qstr, ignoring trailing dots */
--static unsigned int exfat_striptail_len(unsigned int len, const char *name)
-+/* returns the length of a struct qstr, ignoring trailing dots if necessary */
-+static unsigned int exfat_striptail_len(unsigned int len, const char *name,
-+					bool keep_last_dots)
- {
--	while (len && name[len - 1] == '.')
--		len--;
-+	if (!keep_last_dots) {
-+		while (len && name[len - 1] == '.')
-+			len--;
-+	}
- 	return len;
- }
-
-@@ -83,7 +86,8 @@ static int exfat_d_hash(const struct dentry *dentry, struct qstr *qstr)
- 	struct super_block *sb = dentry->d_sb;
- 	struct nls_table *t = EXFAT_SB(sb)->nls_io;
- 	const unsigned char *name = qstr->name;
--	unsigned int len = exfat_striptail_len(qstr->len, qstr->name);
-+	unsigned int len = exfat_striptail_len(qstr->len, qstr->name,
-+			   EXFAT_SB(sb)->options.keep_last_dots);
- 	unsigned long hash = init_name_hash(dentry);
- 	int i, charlen;
- 	wchar_t c;
-@@ -104,8 +108,10 @@ static int exfat_d_cmp(const struct dentry *dentry, unsigned int len,
- {
- 	struct super_block *sb = dentry->d_sb;
- 	struct nls_table *t = EXFAT_SB(sb)->nls_io;
--	unsigned int alen = exfat_striptail_len(name->len, name->name);
--	unsigned int blen = exfat_striptail_len(len, str);
-+	unsigned int alen = exfat_striptail_len(name->len, name->name,
-+				EXFAT_SB(sb)->options.keep_last_dots);
-+	unsigned int blen = exfat_striptail_len(len, str,
-+				EXFAT_SB(sb)->options.keep_last_dots);
- 	wchar_t c1, c2;
- 	int charlen, i;
-
-@@ -136,7 +142,8 @@ static int exfat_utf8_d_hash(const struct dentry *dentry, struct qstr *qstr)
- {
- 	struct super_block *sb = dentry->d_sb;
- 	const unsigned char *name = qstr->name;
--	unsigned int len = exfat_striptail_len(qstr->len, qstr->name);
-+	unsigned int len = exfat_striptail_len(qstr->len, qstr->name,
-+			       EXFAT_SB(sb)->options.keep_last_dots);
- 	unsigned long hash = init_name_hash(dentry);
- 	int i, charlen;
- 	unicode_t u;
-@@ -161,8 +168,11 @@ static int exfat_utf8_d_cmp(const struct dentry *dentry, unsigned int len,
- 		const char *str, const struct qstr *name)
- {
- 	struct super_block *sb = dentry->d_sb;
--	unsigned int alen = exfat_striptail_len(name->len, name->name);
--	unsigned int blen = exfat_striptail_len(len, str);
-+	unsigned int alen = exfat_striptail_len(name->len, name->name,
-+				EXFAT_SB(sb)->options.keep_last_dots);
-+	unsigned int blen = exfat_striptail_len(len, str,
-+				EXFAT_SB(sb)->options.keep_last_dots);
-+
- 	unicode_t u_a, u_b;
- 	int charlen, i;
-
-@@ -416,13 +426,25 @@ static int __exfat_resolve_path(struct inode *inode, const unsigned char *path,
- 	struct super_block *sb = inode->i_sb;
- 	struct exfat_sb_info *sbi = EXFAT_SB(sb);
- 	struct exfat_inode_info *ei = EXFAT_I(inode);
-+	int pathlen = strlen(path);
-
--	/* strip all trailing periods */
--	namelen = exfat_striptail_len(strlen(path), path);
-+	/*
-+	 * get the length of the pathname excluding
-+	 * trailing periods, if any.
-+	 */
-+	namelen = exfat_striptail_len(pathlen, path, false);
-+	if (EXFAT_SB(sb)->options.keep_last_dots) {
-+		/*
-+		 * Do not allow the creation of files with names
-+		 * ending with period(s).
-+		 */
-+		if (!lookup && (namelen < pathlen))
-+			return -EINVAL;
-+		namelen = pathlen;
-+	}
- 	if (!namelen)
- 		return -ENOENT;
--
--	if (strlen(path) > (MAX_NAME_LENGTH * MAX_CHARSET_SIZE))
-+	if (pathlen > (MAX_NAME_LENGTH * MAX_CHARSET_SIZE))
- 		return -ENAMETOOLONG;
-
- 	/*
-diff --git a/fs/exfat/super.c b/fs/exfat/super.c
-index 8c9fb7dcec16..4c3f80ed17b1 100644
---- a/fs/exfat/super.c
-+++ b/fs/exfat/super.c
-@@ -174,6 +174,8 @@ static int exfat_show_options(struct seq_file *m, struct dentry *root)
- 		seq_puts(m, ",errors=remount-ro");
- 	if (opts->discard)
- 		seq_puts(m, ",discard");
-+	if (opts->keep_last_dots)
-+		seq_puts(m, ",keep_last_dots");
- 	if (opts->time_offset)
- 		seq_printf(m, ",time_offset=%d", opts->time_offset);
- 	return 0;
-@@ -217,6 +219,7 @@ enum {
- 	Opt_charset,
- 	Opt_errors,
- 	Opt_discard,
-+	Opt_keep_last_dots,
- 	Opt_time_offset,
-
- 	/* Deprecated options */
-@@ -243,6 +246,7 @@ static const struct fs_parameter_spec exfat_parameters[] = {
- 	fsparam_string("iocharset",		Opt_charset),
- 	fsparam_enum("errors",			Opt_errors, exfat_param_enums),
- 	fsparam_flag("discard",			Opt_discard),
-+	fsparam_flag("keep_last_dots",		Opt_keep_last_dots),
- 	fsparam_s32("time_offset",		Opt_time_offset),
- 	__fsparam(NULL, "utf8",			Opt_utf8, fs_param_deprecated,
- 		  NULL),
-@@ -297,6 +301,9 @@ static int exfat_parse_param(struct fs_context *fc, struct fs_parameter *param)
- 	case Opt_discard:
- 		opts->discard = 1;
- 		break;
-+	case Opt_keep_last_dots:
-+		opts->keep_last_dots = 1;
-+		break;
- 	case Opt_time_offset:
- 		/*
- 		 * Make the limit 24 just in case someone invents something
---
-2.32.0
-
+Kind regards
+Uffe

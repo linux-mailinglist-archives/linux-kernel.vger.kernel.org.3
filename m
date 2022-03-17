@@ -2,183 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907304DCF9C
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9AD4DCF96
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 21:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiCQUob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 16:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
+        id S229896AbiCQUnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 16:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiCQUo2 (ORCPT
+        with ESMTP id S229895AbiCQUnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 16:44:28 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4073163E17
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:43:11 -0700 (PDT)
+        Thu, 17 Mar 2022 16:43:35 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6ECE11BE43
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 13:42:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647549791; x=1679085791;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HvPciZAkV4hSYDrRdNDz9KtkNzvTDaaFCpDcxV7tsFY=;
-  b=FdTrKbv1FISBVkRYWeQHT4EsjXJuiY8m1TbkZ9bmn4cVM4Vc5lOUPHrR
-   0xDTy0v/+vtH9XkjdySSPAramtECT3oo+YnTnpDr99jd7glsD0cs1A1WG
-   9ZFd+Pg6W+F5pYVO3S2+jKgyDR+wciG1kSD6tlryI47Y5VoLpXr3JGxWU
-   QtsHAk19l3t29sYFlU3KYWdMtc30qWXWdBZXheqyQr3jrq79PUSfjyMzA
-   NNlyK2dmMc/1z00qcWBpPZlbKTXyC5hCN7pBibYRSm4JStc1ryVox1qy+
-   Tv7ICW0m9sr5C6pOv6JIp1UYL7edVESS5sVSH/MICNTOXxHW1zqwiK2AU
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="237593128"
+  t=1647549734; x=1679085734;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ZPJPlyM9zhjOGH64p0/EhU5dIkf9pGM8NWxT3n0sIXg=;
+  b=iMJ7nwsHbScFB0oadF1EILOmr4ye6YyzpNQaXI83u4NhIejmi149FVkb
+   GVwmWHDKafcJv22MlcQNI7EG6+gyZNSnXogwkwQOmS9WTUtDl5gzDhorD
+   OVM5gyFZI5+6qTM6COleQj3qa0vDLV2FHb58r06fI6+eBH2qVgSde+nOX
+   MajvTmr2j9tWm253HaLyhtpoui+eutNlnvbNWWiYu7MMzHQwohruCDafY
+   N05xUVQetyf7/aN4u73P8tZmYRRrCsnc6DYA788LAGG/NdcuJJWifdTJ9
+   7Yl+d9owJhg6nQeN9KJMvt3J3Dpb3+UhdjwjcVmYRZXpjdzSr4MWUj6cD
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="254534171"
 X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
-   d="scan'208";a="237593128"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 13:43:11 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="254534171"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 13:42:14 -0700
 X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
-   d="scan'208";a="715188885"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 17 Mar 2022 13:43:10 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUwxh-000E3z-LM; Thu, 17 Mar 2022 20:43:09 +0000
-Date:   Fri, 18 Mar 2022 04:42:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:merge.2022.03.15a] BUILD SUCCESS
- 2747a744e72828bcbcb65a206ced6fe9c34c5d7f
-Message-ID: <62339d3d.d6iqbtFYVDIpfx9E%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="599237997"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 13:42:14 -0700
+Date:   Thu, 17 Mar 2022 13:45:30 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Jason Gunthorpe" <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>, jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v2 4/8] iommu/vt-d: Use device_pasid attach op for
+ RID2PASID
+Message-ID: <20220317134530.36321009@jacob-builder>
+In-Reply-To: <BN9PR11MB52766909013F9CC71A61369C8C119@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
+        <20220315050713.2000518-5-jacob.jun.pan@linux.intel.com>
+        <BN9PR11MB52766909013F9CC71A61369C8C119@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git merge.2022.03.15a
-branch HEAD: 2747a744e72828bcbcb65a206ced6fe9c34c5d7f  Merge commit '04d4e665a6090' into HEAD
+Hi Kevin,
 
-elapsed time: 749m
+On Wed, 16 Mar 2022 07:54:19 +0000, "Tian, Kevin" <kevin.tian@intel.com>
+wrote:
 
-configs tested: 102
-configs skipped: 3
+> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > Sent: Tuesday, March 15, 2022 1:07 PM
+> > 
+> > With the availability of a generic device-PASID-domain attachment API,
+> > there's no need to special case RID2PASID.  Use the API to replace
+> > duplicated code.
+> > 
+> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > ---
+> >  drivers/iommu/intel/iommu.c | 18 ++----------------
+> >  1 file changed, 2 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> > index 9267194eaed3..f832b7599d21 100644
+> > --- a/drivers/iommu/intel/iommu.c
+> > +++ b/drivers/iommu/intel/iommu.c
+> > @@ -1683,9 +1683,6 @@ static void domain_flush_piotlb(struct
+> > intel_iommu *iommu,
+> >  		qi_flush_piotlb(iommu, did, domain->default_pasid,
+> >  				addr, npages, ih);
+> > 
+> > -	if (!list_empty(&domain->devices))
+> > -		qi_flush_piotlb(iommu, did, PASID_RID2PASID, addr,
+> > npages, ih);
+> > -  
+> 
+> this should be rebased on top of Baolu's "iommu cleanup and refactoring"
+> series which has removed the entire domain_flush_piotlb().
+> 
+Yes, I have been working with Baolu. Some of the refactoring patches were
+withdrawn, so there are lots of moving targets. 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-arm64                               defconfig
-arm64                            allyesconfig
-i386                          randconfig-c001
-powerpc                     tqm8548_defconfig
-sh                          kfr2r09_defconfig
-xtensa                              defconfig
-parisc                generic-64bit_defconfig
-sh                               alldefconfig
-powerpc                     tqm8541_defconfig
-powerpc                     tqm8555_defconfig
-h8300                               defconfig
-sh                        edosk7705_defconfig
-mips                           ip32_defconfig
-arm                            xcep_defconfig
-arm                  randconfig-c002-20220317
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nds32                               defconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                                defconfig
-parisc64                            defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-sparc                            allyesconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                   debian-10.3-kselftests
-i386                                defconfig
-sparc                               defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220317
-riscv                randconfig-r042-20220317
-s390                 randconfig-r044-20220317
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                           allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-
-clang tested configs:
-arm                            mmp2_defconfig
-mips                           ip22_defconfig
-powerpc                     powernv_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                         tb0287_defconfig
-arm                       versatile_defconfig
-arm                         orion5x_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220317
-hexagon              randconfig-r041-20220317
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Jacob

@@ -2,160 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A20E4DC44D
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8164DC44F
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 11:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbiCQKyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 06:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
+        id S232760AbiCQKyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 06:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231938AbiCQKx7 (ORCPT
+        with ESMTP id S232761AbiCQKyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 06:53:59 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71761DFDC3;
-        Thu, 17 Mar 2022 03:52:42 -0700 (PDT)
-Received: from zn.tnic (p200300ea971561b0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:61b0:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 646241EC03AD;
-        Thu, 17 Mar 2022 11:52:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1647514357;
+        Thu, 17 Mar 2022 06:54:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D91E1402B
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:53:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647514380;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=P3ZmMn1KaGWxf/LfBe/ecGMG/c1wdUNLz9y2FVgpg20=;
-        b=laW1CWNVAha8zrGJGDRuywipSgVXY7W9p3AhKT0dB4y+Ehhok6AAXd05fygY4HXIAPCTBG
-        vwRx+51hBBCzsdaXRhrLI2wRqPMoyW2V2B3NFrTOs4XOKC/S7H5KS5p9RSnnAr9Pndyp3T
-        S8SyOWE0hTXe6UOcsuHvVFfrBLcgyDw=
-Date:   Thu, 17 Mar 2022 11:52:33 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Jamie Heilman <jamie@audible.transient.net>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
-Subject: [PATCH -v1.2] kvm/emulate: Fix SETcc emulation function offsets with
- SLS
-Message-ID: <YjMS8eTOhXBOPFOe@zn.tnic>
-References: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
- <YjHYh3XRbHwrlLbR@zn.tnic>
- <YjIwRR5UsTd3W4Bj@audible.transient.net>
- <YjI69aUseN/IuzTj@zn.tnic>
- <YjJFb02Fc0jeoIW4@audible.transient.net>
- <YjJVWYzHQDbI6nZM@zn.tnic>
- <20220316220201.GM8939@worktop.programming.kicks-ass.net>
- <YjMBdMlhVMGLG5ws@zn.tnic>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I3Y4/CLqhjaWTGSLzXYdOZpML+2A1bgpqt0T/9LDPBM=;
+        b=XURyK2yVL4WDr5cDjKxCp5zzTv8fF+GlMItv4VyMXkzKabQg9+tjApnj3gZIKhFh35Fdcl
+        C5nJmPPtNfD3kgAgXcxY32/HHECdXogGeA6E8IleQTj9Wxw+OIlP16JjeiXN7SQgw/NXwa
+        ZTp9CrVbM1s3gloDlu8blHDvxiixDnA=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-166-rz_G9BalNRy7nRBWv675dA-1; Thu, 17 Mar 2022 06:52:59 -0400
+X-MC-Unique: rz_G9BalNRy7nRBWv675dA-1
+Received: by mail-pj1-f71.google.com with SMTP id o6-20020a17090a9f8600b001c640fa1499so3185052pjp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 03:52:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=I3Y4/CLqhjaWTGSLzXYdOZpML+2A1bgpqt0T/9LDPBM=;
+        b=1Ep7K6CM8znVo9gWi+7fTDw4MWmrUSdAYWJdAq5/1e/CoqbUUYXdV+zNrpQfiP6kgM
+         lfjQKvEjLN6qKmu83TSbgYRbs/BUGnY4V2a+A2e/57aiJM+Yjn9OMK/3SVbhzu/ix6Ai
+         +pzM9JDSpR/yvbT52dh9/QStCOnwgXC/v3QxbFOZVQ/vu24gaVhO8Gs7XvKt0tR1FQ5E
+         f31jDRG4KzMDA+f1IXrSuw9D7M9KCZL5g3AMWrifkcR3UHxRhTvjgY3/EfA4ESCkMhH2
+         A2/0pOafuo/LACfsyz4aU6q3u1utaJwU7zxH268Hht8jaTja+VBGBGpd1ZolfULYuonf
+         xh7w==
+X-Gm-Message-State: AOAM531iTjXoPT7sf/eqpftj8zsG0r+wIF2Qlgouf97b48CFMPd+113l
+        yv4E3C4HjhlWNXYO8qHGTXQjzFEo/ugwB5ntzJoilzsbq3r2S2QuSmNawVbQKopdLPp0mWqSiCi
+        /6iVxHIFjOqqkILSw5Qe6Fni0Z59gSLB4EJEzX+t3UXJtW5mITW0Agy6D7HKGEZ1w196nqy3LUQ
+        ==
+X-Received: by 2002:a17:902:e748:b0:153:b484:bdf4 with SMTP id p8-20020a170902e74800b00153b484bdf4mr4354140plf.66.1647514377862;
+        Thu, 17 Mar 2022 03:52:57 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyxIHAji0XWgoCyeZFRlJJWn6FJI3OqUsIPbFtAonZujfJV8v0NR2E2ydutT0wtLk1xlHS8GQ==
+X-Received: by 2002:a17:902:e748:b0:153:b484:bdf4 with SMTP id p8-20020a170902e74800b00153b484bdf4mr4354106plf.66.1647514377486;
+        Thu, 17 Mar 2022 03:52:57 -0700 (PDT)
+Received: from [10.72.12.110] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id 134-20020a63008c000000b00380e72483a6sm5219291pga.7.2022.03.17.03.52.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 03:52:56 -0700 (PDT)
+Subject: Re: [RFC PATCH v2 0/3] ceph: add support for snapshot names
+ encryption
+To:     Jeff Layton <jlayton@kernel.org>,
+        =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
+Cc:     Ilya Dryomov <idryomov@gmail.com>,
+        Ceph Development <ceph-devel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20220315161959.19453-1-lhenriques@suse.de>
+ <5b53e812-d49b-45f0-1219-3dbc96febbc1@redhat.com>
+ <329abedd9d9938de95bf4f5600acdcd6a846e6be.camel@kernel.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <3c8b78c4-5392-b81c-e76f-64fcce4f3c0f@redhat.com>
+Date:   Thu, 17 Mar 2022 18:52:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YjMBdMlhVMGLG5ws@zn.tnic>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <329abedd9d9938de95bf4f5600acdcd6a846e6be.camel@kernel.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 10:37:56AM +0100, Borislav Petkov wrote:
-> Jamie, I'd appreciate testing this one too, pls, just in case.
 
-Here's a version against -rc8 - the previous one was against tip/master
-and had other contextual changes in it.
+On 3/17/22 6:01 PM, Jeff Layton wrote:
+> I'm not sure we want to worry about .snap directories here since they
+> aren't "real". IIRC, snaps are inherited from parents too, so you could
+> do something like
+>
+>      mkdir dir1
+>      mkdir dir1/.snap/snap1
+>      mkdir dir1/dir2
+>      fscrypt encrypt dir1/dir2
+>
+> There should be nothing to prevent encrypting dir2, but I'm pretty sure
+> dir2/.snap will not be empty at that point.
 
----
-From: Borislav Petkov <bp@suse.de>
+If we don't take care of this. Then we don't know which snapshots should 
+do encrypt/dencrypt and which shouldn't when building the path in lookup 
+and when reading the snapdir ?
 
-The commit in Fixes started adding INT3 after RETs as a mitigation
-against straight-line speculation.
+-- Xiubo
 
-The fastop SETcc implementation in kvm's insn emulator uses macro magic
-to generate all possible SETcc functions and to jump to them when
-emulating the respective instruction.
+>
+> -- Jeff
+>
+> On Thu, 2022-03-17 at 13:27 +0800, Xiubo Li wrote:
+>> Hi Luis,
+>>
+>> There has another issue you need to handle at the same time.
+>>
+>> Currently only the empty directory could be enabled the file encryption,
+>> such as for the following command:
+>>
+>> $ fscrypt encrypt mydir/
+>>
+>> But should we also make sure that the mydir/.snap/ is empty ?
+>>
+>> Here the 'empty' is not totally empty, which allows it should allow long
+>> snap names exist.
+>>
+>> Make sense ?
+>>
+>> - Xiubo
+>>
+>>
+>> On 3/16/22 12:19 AM, Luís Henriques wrote:
+>>> Hi!
+>>>
+>>> A couple of changes since v1:
+>>>
+>>> - Dropped the dentry->d_flags change in ceph_mkdir().  Thanks to Xiubo
+>>>     suggestion, patch 0001 now skips calling ceph_fscrypt_prepare_context()
+>>>     if we're handling a snapshot.
+>>>
+>>> - Added error handling to ceph_get_snapdir() in patch 0001 (Jeff had
+>>>     already pointed that out but I forgot to include that change in previous
+>>>     revision).
+>>>
+>>> - Rebased patch 0002 to the latest wip-fscrypt branch.
+>>>
+>>> - Added some documentation regarding snapshots naming restrictions.
+>>>
+>>> As before, in order to test this code the following PRs are required:
+>>>
+>>>     mds: add protection from clients without fscrypt support #45073
+>>>     mds: use the whole string as the snapshot long name #45192
+>>>     mds: support alternate names for snapshots #45224
+>>>     mds: limit the snapshot names to 240 characters #45312
+>>>
+>>> Luís Henriques (3):
+>>>     ceph: add support for encrypted snapshot names
+>>>     ceph: add support for handling encrypted snapshot names
+>>>     ceph: update documentation regarding snapshot naming limitations
+>>>
+>>>    Documentation/filesystems/ceph.rst |  10 ++
+>>>    fs/ceph/crypto.c                   | 158 +++++++++++++++++++++++++----
+>>>    fs/ceph/crypto.h                   |  11 +-
+>>>    fs/ceph/inode.c                    |  31 +++++-
+>>>    4 files changed, 182 insertions(+), 28 deletions(-)
+>>>
 
-However, it hardcodes the size and alignment of those functions to 4: a
-three-byte SETcc insn and a single-byte RET. BUT, with SLS, there's an
-INT3 that gets slapped after the RET, which brings the whole scheme out
-of alignment:
-
-  15:   0f 90 c0                seto   %al
-  18:   c3                      ret
-  19:   cc                      int3
-  1a:   0f 1f 00                nopl   (%rax)
-  1d:   0f 91 c0                setno  %al
-  20:   c3                      ret
-  21:   cc                      int3
-  22:   0f 1f 00                nopl   (%rax)
-  25:   0f 92 c0                setb   %al
-  28:   c3                      ret
-  29:   cc                      int3
-
-and this explodes like this:
-
-  int3: 0000 [#1] PREEMPT SMP PTI
-  CPU: 0 PID: 2435 Comm: qemu-system-x86 Not tainted 5.17.0-rc8-sls #1
-  Hardware name: Dell Inc. Precision WorkStation T3400  /0TP412, BIOS A14 04/30/2012
-  RIP: 0010:setc+0x5/0x8 [kvm]
-  Code: 00 00 0f 1f 00 0f b6 05 43 24 06 00 c3 cc 0f 1f 80 00 00 00 00 0f 90 c0 c3 cc 0f 1f 00 0f 91 c0 c3 cc 0f 1f 00 0f 92 c0 c3 cc <0f> 1f 00 0f 93 c0 c3 cc 0f 1f 00 0f 94 c0 c3 cc 0f 1f 00 0f 95 c0
-  Call Trace:
-   <TASK>
-   ? x86_emulate_insn [kvm]
-   ? x86_emulate_instruction [kvm]
-   ? vmx_handle_exit [kvm_intel]
-   ? kvm_arch_vcpu_ioctl_run [kvm]
-   ? kvm_vcpu_ioctl [kvm]
-   ? __x64_sys_ioctl
-   ? do_syscall_64+0x40/0xa0
-   ? entry_SYSCALL_64_after_hwframe+0x44/0xae
-   </TASK>
-
-Raise the alignment value when SLS is enabled and use a macro for that
-instead of hard-coding naked numbers.
-
-Fixes: e463a09af2f0 ("x86: Add straight-line-speculation mitigation")
-Reported-by: Jamie Heilman <jamie@audible.transient.net>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/YjGzJwjrvxg5YZ0Z@audible.transient.net
----
- arch/x86/kvm/emulate.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 5719d8cfdbd9..f321abb9a4a8 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -429,8 +429,11 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
- 	FOP_END
- 
- /* Special case for SETcc - 1 instruction per cc */
-+
-+#define SETCC_ALIGN	(4 * (1 + IS_ENABLED(CONFIG_SLS)))
-+
- #define FOP_SETCC(op) \
--	".align 4 \n\t" \
-+	".align " __stringify(SETCC_ALIGN) " \n\t" \
- 	".type " #op ", @function \n\t" \
- 	#op ": \n\t" \
- 	#op " %al \n\t" \
-@@ -1047,7 +1050,7 @@ static int em_bsr_c(struct x86_emulate_ctxt *ctxt)
- static __always_inline u8 test_cc(unsigned int condition, unsigned long flags)
- {
- 	u8 rc;
--	void (*fop)(void) = (void *)em_setcc + 4 * (condition & 0xf);
-+	void (*fop)(void) = (void *)em_setcc + SETCC_ALIGN * (condition & 0xf);
- 
- 	flags = (flags & EFLAGS_MASK) | X86_EFLAGS_IF;
- 	asm("push %[flags]; popf; " CALL_NOSPEC
--- 
-2.29.2
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

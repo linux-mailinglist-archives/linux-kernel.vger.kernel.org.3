@@ -2,146 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C564DCCDF
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD7D4DCCE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 18:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237089AbiCQRsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 13:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
+        id S237105AbiCQRs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 13:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237073AbiCQRsK (ORCPT
+        with ESMTP id S237095AbiCQRsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 13:48:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C086B1F6356
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:46:53 -0700 (PDT)
+        Thu, 17 Mar 2022 13:48:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35F4E1F6F1E
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 10:46:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647539212;
+        s=mimecast20190719; t=1647539215;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=llqjR9J1FmybTT0pHxsozwhPdyLYqoq+OgcFl5fMvI4=;
-        b=X7v+a+3GIfbjGtyGOEoKEN6aLHlBimYXLjPd7cuVU7NrGNI5h6uit4z0oMlC767cpnW7OF
-        uSiYek03N2suncz5ZFR6hcGeKix1l+VDmhZ5mb6rdC+/lHIfJFLY+c2K/mLqHDxS+Ey5uX
-        j6IYyEOLeK5iKviPhbzgMzaVuTQ2ITc=
+        bh=TSju7HUI+LaKZ4xnPb9CmLb83y1fN66XS6ap4ycu7PM=;
+        b=YoCreiM/SvWC0zZGivWcLzn0qXX7or5cn9N6DIJgSo3dd650XawCLLGajYEcuuf9zt0Iyg
+        XOBLDPupoZBMAqZxjR0CMRjwX8QABqECK+R+VvkZRsUDhGKctso39/h++ldOhVcp+CbmvJ
+        pDslwsGSfIQx109tvPEU/OQ+xq3mxWg=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-201-D_1JD0DkM1yNyRBj3b6jGg-1; Thu, 17 Mar 2022 13:46:49 -0400
-X-MC-Unique: D_1JD0DkM1yNyRBj3b6jGg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+ us-mta-416-2CRTTnGSPaKpBp8b3QXeBA-1; Thu, 17 Mar 2022 13:46:53 -0400
+X-MC-Unique: 2CRTTnGSPaKpBp8b3QXeBA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8A59218A6584;
-        Thu, 17 Mar 2022 17:46:48 +0000 (UTC)
-Received: from [10.22.8.95] (unknown [10.22.8.95])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4EC33401E87;
-        Thu, 17 Mar 2022 17:46:47 +0000 (UTC)
-Message-ID: <67ba2190-dd72-4ad0-32c2-de43418b73a2@redhat.com>
-Date:   Thu, 17 Mar 2022 13:46:46 -0400
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2AFE1066694;
+        Thu, 17 Mar 2022 17:46:52 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.69])
+        by smtp.corp.redhat.com (Postfix) with SMTP id B7A3E2D479;
+        Thu, 17 Mar 2022 17:46:50 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 17 Mar 2022 18:46:52 +0100 (CET)
+Date:   Thu, 17 Mar 2022 18:46:49 +0100
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@ZenIV.linux.org.uk>, linux-api@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 1/2] ptrace: Move setting/clearing ptrace_message into
+ ptrace_stop
+Message-ID: <20220317174648.GA13318@redhat.com>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+ <87bl1kunjj.fsf@email.froward.int.ebiederm.org>
+ <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
+ <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
+ <87tubyx0rg.fsf_-_@email.froward.int.ebiederm.org>
+ <87bky67qfv.fsf_-_@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/5] asm-generic: qspinlock: Indicate the use of
- mixed-size atomics
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        linux-riscv@lists.infradead.org, peterz@infradead.org
-Cc:     jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, mingo@redhat.com, Will Deacon <will@kernel.org>,
-        boqun.feng@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        Arnd Bergmann <arnd@arndb.de>, jszhang@kernel.org,
-        wangkefeng.wang@huawei.com, openrisc@lists.librecores.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20220316232600.20419-1-palmer@rivosinc.com>
- <20220316232600.20419-2-palmer@rivosinc.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220316232600.20419-2-palmer@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87bky67qfv.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/22 19:25, Palmer Dabbelt wrote:
-> From: Peter Zijlstra <peterz@infradead.org>
+On 03/15, Eric W. Biederman wrote:
 >
-> The qspinlock implementation depends on having well behaved mixed-size
-> atomics.  This is true on the more widely-used platforms, but these
-> requirements are somewhat subtle and may not be satisfied by all the
-> platforms that qspinlock is used on.
->
-> Document these requirements, so ports that use qspinlock can more easily
-> determine if they meet these requirements.
->
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->
-> ---
->
-> I have specifically not included Peter's SOB on this, as he sent his
-> original patch
-> <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>
-> without one.
-> ---
->   include/asm-generic/qspinlock.h | 30 ++++++++++++++++++++++++++++++
->   1 file changed, 30 insertions(+)
->
-> diff --git a/include/asm-generic/qspinlock.h b/include/asm-generic/qspinlock.h
-> index d74b13825501..a7a1296b0b4d 100644
-> --- a/include/asm-generic/qspinlock.h
-> +++ b/include/asm-generic/qspinlock.h
-> @@ -2,6 +2,36 @@
->   /*
->    * Queued spinlock
->    *
-> + * A 'generic' spinlock implementation that is based on MCS locks. An
-> + * architecture that's looking for a 'generic' spinlock, please first consider
-> + * ticket-lock.h and only come looking here when you've considered all the
-> + * constraints below and can show your hardware does actually perform better
-> + * with qspinlock.
-> + *
-> + *
-> + * It relies on atomic_*_release()/atomic_*_acquire() to be RCsc (or no weaker
-> + * than RCtso if you're power), where regular code only expects atomic_t to be
-> + * RCpc.
-> + *
-> + * It relies on a far greater (compared to ticket-lock.h) set of atomic
-> + * operations to behave well together, please audit them carefully to ensure
-> + * they all have forward progress. Many atomic operations may default to
-> + * cmpxchg() loops which will not have good forward progress properties on
-> + * LL/SC architectures.
-> + *
-> + * One notable example is atomic_fetch_or_acquire(), which x86 cannot (cheaply)
-> + * do. Carefully read the patches that introduced queued_fetch_set_pending_acquire().
-> + *
-> + * It also heavily relies on mixed size atomic operations, in specific it
-> + * requires architectures to have xchg16; something which many LL/SC
-> + * architectures need to implement as a 32bit and+or in order to satisfy the
-> + * forward progress guarantees mentioned above.
-> + *
-> + * Further reading on mixed size atomics that might be relevant:
-> + *
-> + *   http://www.cl.cam.ac.uk/~pes20/popl17/mixed-size.pdf
-> + *
-> + *
->    * (C) Copyright 2013-2015 Hewlett-Packard Development Company, L.P.
->    * (C) Copyright 2015 Hewlett-Packard Enterprise Development LP
->    *
-Acked-by: Waiman Long <longman@redhat.com>
+> there are places
+> that set ptrace_message and don't clear it, and places that never set
+> it.
 
-Note that it references ticket-lock.h. Perhaps we should reverse the 
-order of patches 1 & 2.
+Yes, I too never understood this.
 
-Cheers,
-Longman
+So I obviously like this change. The only problem (as usual) is that we
+can never know if something depends on this old (and strange) behaviour.
+
+Acked-by: Oleg Nesterov <oleg@redhat.com>
 

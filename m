@@ -2,107 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6424DD5E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1144DD5EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbiCRISL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 04:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
+        id S233651AbiCRITA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233645AbiCRIR4 (ORCPT
+        with ESMTP id S233631AbiCRIS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:17:56 -0400
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2D72DD9BD;
-        Fri, 18 Mar 2022 01:16:36 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id 25so10325286ljv.10;
-        Fri, 18 Mar 2022 01:16:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gdJy8KDJJqmZ9B5JDH3Ed9jqDYHGnMTV1QhHIxa70VU=;
-        b=GVM42SLm2lGCheCmSygx2ufuVdNvkgpp7NOnZxDwrfAZ0IMawN8wuuTFTeLufayWrt
-         OTG3ri8PSqJqEO59RmC9Rksu4cdinWSPqEovriMnuun9btG+POeEDBUbc+I0gORWPMcw
-         KWbZkfqzTxYK2H4pXJnjpgVarEStfgOHHWIYyqXuGHpEOvXtSqO5ueABE4J7v5A2RqUB
-         2OxD9UBcY3pqyTsI5gX0J74ki8bLm2SIs5GktoR7Pgzb4PcHpM4e04Qoy8MdJq4rST/Y
-         djuHNI+91ZPW19t2kPOXb4/qzMLqcJzswLkZT+tDFVO0mt95hoGn22iTnvpu7fUofAKy
-         tLRw==
-X-Gm-Message-State: AOAM532agG29LLzg6LeP5BTMfoqXFERPRrpWLfjPkx0HOWVqXz/cMmHa
-        vGXo6w/4R0klIoVQr4aftH4=
-X-Google-Smtp-Source: ABdhPJz7A6Ubxp/taJytZpn2KcwTH1dwwAdR5Al82fKyO+424DvYHLnCmfgjQ9zxdQvi7bmGxxt0Qg==
-X-Received: by 2002:a2e:9bd7:0:b0:248:ca3:ecf1 with SMTP id w23-20020a2e9bd7000000b002480ca3ecf1mr5678862ljj.66.1647591394254;
-        Fri, 18 Mar 2022 01:16:34 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id d12-20020ac241cc000000b004437eab8187sm743539lfi.73.2022.03.18.01.16.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 01:16:33 -0700 (PDT)
-Message-ID: <97d88728-4e73-0820-07e7-199377ebff2a@kernel.org>
-Date:   Fri, 18 Mar 2022 09:16:30 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/4] power: supply: max17042_battery: Add unit conversion
- macros
-Content-Language: en-US
-To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
- <20220318001048.20922-2-sebastian.krzyszkowiak@puri.sm>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220318001048.20922-2-sebastian.krzyszkowiak@puri.sm>
-Content-Type: text/plain; charset=UTF-8
+        Fri, 18 Mar 2022 04:18:57 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60087.outbound.protection.outlook.com [40.107.6.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B932D9198;
+        Fri, 18 Mar 2022 01:17:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MM1pRZBlX/2PPRARAIpWnRtoDWXIll+nbu/MrWecfXGqvHVVo+W8QibV3IcxJ9w1fMU0EywnRhzJ8kBH82yU9kCJqLkFE5+ClEAXBnMCj8xqUS7mnaq1DqsD0xnN2/ox/ADJIMlHEXzwJvr+2Zh8SLxbnsF4NxgD2wUoAcTraXoMFerQiM4HFaHCP03+8Uwr1b7mU3mjSNGIYWeVBkHdIm+Tc2fH3ZxUgeTsKkwFRKackajQJm4jly6Et1o+OuH+iwy0u8SVP5Dtk+hx7pnTLyLo4G/ZnqjeOzLYvd6vTYuXBvA6zDIxv3j8HKmqahLJDbTQqgJc7sjIDi4DyP/WOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bmiwjKiLpp1ieB5rDWXFsz70aBHOHo4IFQMpx2g3/CM=;
+ b=QM4USn8iCkD7u1lzA14gH5iiZGkRC0uYUj7hrjuczIcPHtG/89xXwiElp3vXvLGeOU+uyv5ItBN/AngmJbgOHH+QXsLiOHtrkQRStOzZfW/sTEc+fLvu3nBdaSXB5JpsmGvXtvoW5/fdqQ6VasZ6kQxGOQhcJ50mY+YC1Y6dtc/8oSmpCsARRRgJof0PnJQa5Vhzb1IvL8lRqyQJ2JjvRjzC7l838Y+V+DGk25IWrn2k8nXl6a59U+ypkFthlC9BKtY6IFCziLlIYkolYmVW7dovmUs3ILWmi+YSaSmsW5YPvOvqPYLtFDZW9vvnCc2O88i9y9eiVhGbd6tumw/QhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bmiwjKiLpp1ieB5rDWXFsz70aBHOHo4IFQMpx2g3/CM=;
+ b=gsA6Cu/U7rJkOviQ2GwFqSQnf7Q9gvmqsRjru9uOBrYj+ATCPZzz5nXMLErlR94QONWKufePbSfIatRpBh0SCeivL6UR8Rw0hnPpIjn0mLza7gYjHC3/tiN7Im/Ge8V1slyEh/QnQBYKKEJyQ5ab3oEBbl9SGucXQU+QIATXPuQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB8PR04MB6346.eurprd04.prod.outlook.com (2603:10a6:10:10c::14)
+ by AM0PR04MB3954.eurprd04.prod.outlook.com (2603:10a6:208:63::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Fri, 18 Mar
+ 2022 08:17:35 +0000
+Received: from DB8PR04MB6346.eurprd04.prod.outlook.com
+ ([fe80::a8a5:945f:4d08:69c2]) by DB8PR04MB6346.eurprd04.prod.outlook.com
+ ([fe80::a8a5:945f:4d08:69c2%4]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
+ 08:17:35 +0000
+From:   Ming Qian <ming.qian@nxp.com>
+To:     mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        mirela.rabulea@oss.nxp.com
+Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 0/5] imx-jpeg: Support dynamic resolution change
+Date:   Fri, 18 Mar 2022 16:16:50 +0800
+Message-Id: <cover.1647590462.git.ming.qian@nxp.com>
+X-Mailer: git-send-email 2.33.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR06CA0015.apcprd06.prod.outlook.com
+ (2603:1096:4:186::7) To DB8PR04MB6346.eurprd04.prod.outlook.com
+ (2603:10a6:10:10c::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0120675c-54db-4c34-21da-08da08b7c1f5
+X-MS-TrafficTypeDiagnostic: AM0PR04MB3954:EE_
+X-Microsoft-Antispam-PRVS: <AM0PR04MB3954FCB3F60B2F478235B820E7139@AM0PR04MB3954.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DZm+N9/xdJHSXVRhnPitNp4bR2UbOsdELsl/eZZ/I3LbhSvkLUPP2YNdZDJsqMP0kFZ+sHveut0DckQadRufJVOTVte8ozyCzMUp82j7Oy5P9od+/gO0xbrWrdF794W3NGvovKY8HuvzwjuPl1mT9rDcvpDP7oJIsF4aJQaaX1U7N1JpHfqQXZfhYOQ6BNzp58e7mmhJ0cTXBVxsb3tv8l6Qc+B3o4wahforhVKPED69gsKdjXY15i3YOOjjb+khB9F/IGOFgafYssLr7jy4qismuiT8Zkd/nRV/Bj5WZwgLOZtQkKqPHZW8fWJGMu9Es7UiH/2YSH+i7jrt7YcN8lyMbRUOOmbHatqjoVZsmG/Ep7t86sAMU08EQwgKZae848+9WXoaFs0I08llhDDDUTlp0iJ5/ABKh/IDJ7Uo18YxnSK+NhMTUAy/h7TZEB3WHlGzkL+EN7rUi5FUsTjnsoofLioxr1En8Y5JvOkF4meeG553qUs2pzc69nz5fNqyknpeXfZEo1Ct6YIYQGbGjjgtvEb0qST6yGEAR13qOzK61TG71RjyI8WZVmSQe0aL9nX8Ed0R91YslBNfU6DvaNJEfsqAJSdBL/RmlSyWIBJvJK4HmJNVhVA3bWBSmUqn3urir5DjV9qY8GzxYQndJ/5rLzdytpvD3lsNcX8kjA1DGs3TXuP7M1IaQSYNwtf2K7L90jnDg5hbW1KKNtvfKA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6346.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(6506007)(6666004)(8676002)(4326008)(66946007)(86362001)(66556008)(66476007)(38100700002)(38350700002)(6486002)(508600001)(316002)(2616005)(186003)(26005)(36756003)(83380400001)(5660300002)(44832011)(7416002)(8936002)(4744005)(2906002)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zaxBGKpXQbpCnyBbE2KCN415bV5Op9tcD4NZ/RbYQF/GL9RzhgJ5DjifKxOs?=
+ =?us-ascii?Q?+e4IwpIEW1E2fNTynGZljpXhYyD+viuYcD6/fijMAJRRqJhLnY/eN3wkckel?=
+ =?us-ascii?Q?WP+6W2xtmgeiIA7L+uNuwDtNQmoR+LJzY1sUpjlhiCRo0KOmTfgWUqQzS7Zj?=
+ =?us-ascii?Q?TZSAuccQlrCy3TkM7iXimGT9yFq8NbuSwATp+Owp5axRTY8IW5ajoiWBwU0l?=
+ =?us-ascii?Q?+lcNqbSDG6EV2yflp+PgwMxcanysg5NubB9CPz0Hw2FV4MxfeQfN3yQaLgcr?=
+ =?us-ascii?Q?KRb/KH5oiN9QapXxVZUh2IalIGda+aENN9eslRhg9uBb4OUzOtZHJHrsJpSR?=
+ =?us-ascii?Q?g2Rgom2Rcrcmyjoh5+9gen7xnjgGWv9xdNwDYPhi3CQ+nJTDtQvt9d9E4azf?=
+ =?us-ascii?Q?3I22rd0FzdQo/z+EMsewGD72EgOf0/rbbhpy5tPAIW8gI0lfc9Zd9BQNhQDT?=
+ =?us-ascii?Q?rD0XOtMT97NhMpnNmIaQh5spNH5I9UQquYc2sx94WiFHI87xkqbs0ur2/uyi?=
+ =?us-ascii?Q?UtlSCm4hcXwqjfExy5W297Cdzu1ebpxz+c86AGoFCHZKOHZDBIU6DxiCQNxm?=
+ =?us-ascii?Q?Vu+n6mrjN6eanOixxloJ8B4uh/ZW2FyupQEBXS5sg187xP/rX+jWRS6fHHVN?=
+ =?us-ascii?Q?FOtOlz918Wg4RsYZWRzJHA4IFfyi1HsVNg+zu1VhwgDzbdceTkG9wFOvd7yD?=
+ =?us-ascii?Q?Fv/WDAtHG1rNaMr3yv+m2Qm13w0bgmGOALBsiKns3AmBfEy7rAkY1isVZgKX?=
+ =?us-ascii?Q?JkytxYTeFGNERdWP+SnUJs54uSGF2i/0iClvrOdD28BRFem3TqOu2QTpfe3j?=
+ =?us-ascii?Q?UyryCxKuVNvq7f/NBil+cQjf7OPQx1cmj4/QSKxpaxCLBcVj+yaTCcGqSZZm?=
+ =?us-ascii?Q?bugy7HWqgED+Lk9VOi0nm0nvmLeJ2pf2aeIOTFZc6rLWBv2B1p873Npx5ijS?=
+ =?us-ascii?Q?MXwxtiZOBU/NfxaPzTrpng12txuf+jTzNItkIV69b93rHX3RXlqoy7QFifpR?=
+ =?us-ascii?Q?UbUSS7dChPSxCJKpiDlkIF6MhdwrA4+yZe1ZGTI27Ag+6iAyVMVSjMUFniZl?=
+ =?us-ascii?Q?aEGNzWwwg/mZCRls4mxXRO3z3ixsnIMvVms8yzIj4hhWsDaeeMkErfnhKRRu?=
+ =?us-ascii?Q?VduCO0b+SOv63je7yXtNj6haDWorqc+jLYcV19nVYMLmMRbPT6Eji3B+7J2G?=
+ =?us-ascii?Q?x2zNZ6t/wXk/OZa+kz+jNLjnDNfPOzLA0o2FkS4w3mcrYOZFXs507J2dLz1i?=
+ =?us-ascii?Q?wiOkacTcm2pGTR36M9wRrBwA/Fagky7Ag5FkB7soC2nztCvxyNgXRtl63s88?=
+ =?us-ascii?Q?KqQhKFxQk/hUJ9aC+fBvk/OnxuY+fcmTiPoEg5VoptfPKdBfuzpbkoUZwnbo?=
+ =?us-ascii?Q?VVnLtx0aQ53kQCIJsvh8xXmpK/hO4Odkm/vcI81BRMllYABbyVJaofc5MrrW?=
+ =?us-ascii?Q?YITqlaWxQGv2bdrJjI+3Sjyh6iWV52+J?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0120675c-54db-4c34-21da-08da08b7c1f5
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6346.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 08:17:35.5888
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TCDABCUtXQU955n8MHtWA0t0wW/6+IyQDfVye2mM/vhSavIw4Vc/6coEmJE6gBbzR6Ym2e0hzAxpySxqq9KFZQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB3954
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
-> Instead of sprinkling the code with magic numbers, put the unit
-> definitions used by the gauge into a set of macros. Macros are
-> used instead of simple defines in order to not require floating
-> point operations for divisions.
-> 
-> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-> ---
->  drivers/power/supply/max17042_battery.c | 40 +++++++++++++++----------
->  1 file changed, 24 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-> index ab031bbfbe78..c019d6c52363 100644
-> --- a/drivers/power/supply/max17042_battery.c
-> +++ b/drivers/power/supply/max17042_battery.c
-> @@ -51,6 +51,15 @@
->  
->  #define MAX17042_VMAX_TOLERANCE		50 /* 50 mV */
->  
-> +#define MAX17042_CURRENT_LSB		1562500ll /* µV */
+These patchset are to support dynamic resolution change.
+Avoid decoding error or even kernel panic.
+Otherwise, the Gstreamer v4l2videodec will fail to decode jpeg
+who is not decoded to yuyv.
 
-Is this really long long? The usage in max17042_get_status() is with int
-operand and result.
+Ming Qian (5):
+  media: imx-jpeg: Refactor function mxc_jpeg_parse
+  media: imx-jpeg: Identify and handle precision correctly
+  media: imx-jpeg: Propagate the output frame size to the capture side
+  media: imx-jpeg: Handle source change in a function
+  media: imx-jpeg: Support dynamic resolution change
 
-> +#define MAX17042_CURRENT_RSENSE(x)	(x * MAX17042_CURRENT_LSB) /* µV */
-> +#define MAX17042_CAPACITY_LSB		5000000ll /* µVh */
-> +#define MAX17042_CAPACITY_RSENSE(x)	(x * MAX17042_CAPACITY_LSB) /* µVh */
-> +#define MAX17042_TIME(x)		(x * 5625 / 1000) /* s */
-> +#define MAX17042_VOLTAGE(x)		(x * 625 / 8) /* µV */
-> +#define MAX17042_RESISTANCE(x)		(x / 4096) /* Ω */
-> +#define MAX17042_TEMPERATURE(x)		(x / 256) /* °C */
-
-Please enclose the "x" in (), in each macro
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 244 ++++++++++++------
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg.h    |   3 +
+ 2 files changed, 169 insertions(+), 78 deletions(-)
 
 
-Best regards,
-Krzysztof
+base-commit: 71e6d0608e4d1b79069990c7dacb3600ced28a3b
+-- 
+2.33.0
+

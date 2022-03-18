@@ -2,80 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2744DDF01
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6243F4DDEF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239198AbiCRQbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
+        id S236368AbiCRQbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239226AbiCRQa6 (ORCPT
+        with ESMTP id S239214AbiCRQax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:30:58 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771D119455D;
-        Fri, 18 Mar 2022 09:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647620970; x=1679156970;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=xBTcRJLtKt62fcWPwLWQXbKps2DSAsxac8MlWJab0nU=;
-  b=Url5dC5A1prXyEu4rKVHgUd+PhobBZ2KavK0KqB4z9WjcPGEUIj2YOEb
-   VxLfrIzfPGOiRwBL+KHhBOe/yfKmCI3KhRq+Fc9sh/nmmXXFauX3BSaky
-   WWiwrYA10Llt4db7LRGEcZhf/Ya4VecE/Y5xVRH5Mbb+YP3xrN9fe2Cqu
-   hlMG5WMCCOTvxDdlT/81Yn/nlJ5eU6k6oECAW6yuasfZW+eh2O7DcUYsR
-   P8etR8AUEPvYWkpS0jyruM8K3VGNZQYU/hTebyvgk0W3nTiVcKqXrEty+
-   eG36hVV1cYsX72YVDA+nGKonicrQ9NYV8NwKd1btgPrw5oal5XaHIEhdX
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="257356961"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="257356961"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 09:29:30 -0700
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="550798759"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 09:29:25 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nVFT3-002KEd-Qt;
-        Fri, 18 Mar 2022 18:28:45 +0200
-Date:   Fri, 18 Mar 2022 18:28:45 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "'Rafael J . Wysocki '" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 4/6] i2c: mux: pinctrl: remove CONFIG_OF dependency and
- use fwnode API
-Message-ID: <YjSzPeWpcR/SSX1a@smile.fi.intel.com>
-References: <20220318160059.328208-1-clement.leger@bootlin.com>
- <20220318160059.328208-5-clement.leger@bootlin.com>
+        Fri, 18 Mar 2022 12:30:53 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9F6DCB;
+        Fri, 18 Mar 2022 09:28:50 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id v130-20020a1cac88000000b00389d0a5c511so6913361wme.5;
+        Fri, 18 Mar 2022 09:28:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Vk4JE0LHLflJo+B6RFRUohdRJcZLP+PjloWAv/7DfzE=;
+        b=fp+VS3ktbFn2/EaMOn3vWa9uLodDChe5QhvdZguP49J5796v/ZHJ0fRW0dnJ/W1lyb
+         T8ZD0VpHzpN5fE7VFfxApu6TDmrK08gk+lmLmakv025T6ZOeq1946xAHBTFkzUFDN9ZZ
+         9kbUxLTVszAeUcE9885PNFXW629KbPZIdl5os9kaUz0+LyJFuDQsQ5bE+nJlKO5wpwCW
+         rmvS+7Px7SwwjUX4HV2/nlVZx7rspBEF2sOkhAGvxjc0zHuC6IHNLpb/d2GC8u0Zx8V9
+         0ZIWD2MnWX2Dc9qfKiVtBH2JedmKllWTvEU4NAuD80o039ljvrMxtxPkrVLo1ph4XlE1
+         OSzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Vk4JE0LHLflJo+B6RFRUohdRJcZLP+PjloWAv/7DfzE=;
+        b=AU209Nt5ejr4Nz32A1FGldrPBD1jEHzZ4KPT2XnZfcyOuqSYqgfQ4ZQzz2VlvRsNAt
+         8t9Kpvq/RSDfQqhEpsXcmrOtD+pqr5avHjWOw5YnNikhfbKPFT+sl01IqcyyPGvs5NAr
+         ftgh8jubhkRX1lle79VMxbIAR54L54k/kNlx/oFZWWWjqTJICPdqV3HStbXUxN+SCnUU
+         GfE0uwNN1NHp798H0DcdmCEEpMHaIwiTQoC1Qwqw0BknKUvDvncEb/3pD/w2yW3CNfu8
+         521Q7EtIK1zolJCJkWgFdBAbGLq082W8wQ4pDU46OozZUTeMBrBkrKSVUO2SGf4jAHH+
+         WnMw==
+X-Gm-Message-State: AOAM530ruYWKQumPITZW30JGLXs9ihsbxjLZbRXA0VsuagGanvN2ZYX7
+        mRBLyMcmj+Nfg/KMvHRv5Z4=
+X-Google-Smtp-Source: ABdhPJz6/c8+gK/JPhjz0xrZwtI0JkqOWgYadx5Lf8Sg2rsMqgXZ7U+ZLCBdvRr5wpGIrKfalpiVWw==
+X-Received: by 2002:a7b:ca54:0:b0:388:a579:d0ea with SMTP id m20-20020a7bca54000000b00388a579d0eamr16228072wml.192.1647620929449;
+        Fri, 18 Mar 2022 09:28:49 -0700 (PDT)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id k17-20020a05600c1c9100b00386bb6e9c50sm16196212wms.45.2022.03.18.09.28.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 09:28:49 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 16:28:47 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/23] 5.10.107-rc1 review
+Message-ID: <YjSzPx04zPDKmUhu@debian>
+References: <20220317124525.955110315@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220318160059.328208-5-clement.leger@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220317124525.955110315@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,18 +73,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 05:00:50PM +0100, Clément Léger wrote:
-> In order to use i2c muxes with software_node when added with a struct
-> mfd_cell, switch to fwnode API. The fwnode layer will allow to use this
-> with both device_node and software_node.
+Hi Greg,
 
-> -	struct device_node *np = dev->of_node;
-> +	struct fwnode_handle *np = dev_fwnode(dev);
+On Thu, Mar 17, 2022 at 01:45:41PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.107 release.
+> There are 23 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 19 Mar 2022 12:45:16 +0000.
+> Anything received after that time might be too late.
 
-np is now a misleading name. Use fwnode.
+Build test:
+mips (gcc version 11.2.1 20220301): 63 configs -> no new failure
+arm (gcc version 11.2.1 20220301): 105 configs -> no new failure
+arm64 (gcc version 11.2.1 20220301): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220301): 4 configs -> no failure
 
--- 
-With Best Regards,
-Andy Shevchenko
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
+[1]. https://openqa.qa.codethink.co.uk/tests/907
+[2]. https://openqa.qa.codethink.co.uk/tests/908
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
 

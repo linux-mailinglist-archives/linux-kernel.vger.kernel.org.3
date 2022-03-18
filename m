@@ -2,88 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79E84DD1F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106954DD1FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbiCRAbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 20:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S231235AbiCRAku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 20:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiCRAba (ORCPT
+        with ESMTP id S229482AbiCRAks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 20:31:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7F41AA058;
-        Thu, 17 Mar 2022 17:30:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F8F0B820FD;
-        Fri, 18 Mar 2022 00:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 43F4AC340EE;
-        Fri, 18 Mar 2022 00:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647563410;
-        bh=E2Vr9Rj9cTD0c26P/K+p388YiJfYXuN1UcSWwBEQLTY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=AKRNIPZoVmzw1F18R1UfzZJEF0gzxTGZtdbppC1GYZP7cZLqpPu/NggNeT0GyNppT
-         eRlKc6q+i4yyat82Y1rvkrbHhtJd7wsDgnMQcH/cj5V7YJYzJF1MOpVMxaMLx7Zki/
-         apsJcWj8FXFDg+3nLvDZVfPAC+OudxeLGdIquBxtcQ6lB/rxbsgA9kK05SHe9Z2If3
-         DAHqMQqJC4B5EmIUQFXw3RPNf36AH12SbgMfxkWGUd6tsEepBuZeOaa3ET95mW6xx/
-         +5yu3UI5oDUxJ0iOtm/bsiZJ2zo/jDO7UmdNpPWZy6ZAg7EMkvJSd0W4JJYglzNx9N
-         FQZYHFBDM0yRA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1A513E6D3DD;
-        Fri, 18 Mar 2022 00:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 17 Mar 2022 20:40:48 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71913E994F;
+        Thu, 17 Mar 2022 17:39:30 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id j26so9728968wrb.1;
+        Thu, 17 Mar 2022 17:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7gsTkrihCJqnEHPeTUREyY+grPIvlwOYy2RYZrHaUHI=;
+        b=FLPx3v9O3yp794Fc9m8+3Fms180PmpDjbtrLO0Xu1i8qXrAd/9enHHAeShbg4oSb7t
+         md9G09lQyD5JyMP0ZOdKfNy4zxT1/xQDszXVsxP0F/x1wl9DLVVpLchZbrsin0Bk66P1
+         6vop8DECEbBHRj1ikoWDW3T6qUgGUzdvVDfOLlDTvrq+71zXZi95SfBq+N42khglWfuX
+         awl0h72ycsBAS7Vc2MvCwZJOkRdTx/T8lBcQ45hjGnfQ3EcTD2ycbkgFp385z3MYIC6P
+         APBPni1nM3HPfu7A1b4AouHvNpwkbgHS7k3Dshz85Qn2R5p6/e7AC7alVu8nhg2wvHKX
+         yjMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7gsTkrihCJqnEHPeTUREyY+grPIvlwOYy2RYZrHaUHI=;
+        b=h9r3Z7u5YrIMSxiZdaOgTqp+vaTPBcz7edOmEw36FGZa1qStVbF8CnI80P8VDdqOyx
+         z/HGxa9oeAqmBS52HR8cd0cJvFGv9LnJAu5upXRuNfFBV4WoCGg4ze1YWlV6aup2HGCe
+         HQAdA5Ol9llMwGVYu4AjlFdcPt7bDGUZelWmeBASUI6nOc+16RnM6C1k9f14+hZ6f4YW
+         A0/T3t5BGZT5slpgXWiRwSwmRJNIi39mJey54aRwPjotYBY8TAae64rhVHqsNbqiUcmD
+         05Lc5Cz59JCMXgirCsORy9bRuynPvF9Mz4W2Zb2wLuIf0A6bi2ZxybG/D616RJvuUagv
+         NXcA==
+X-Gm-Message-State: AOAM530f17/pLSJ0gxFjPeneVQgbVqe6OslyjcYZjVFBymUzy6dDmpIp
+        62OAli+eD4YJ4XwDXQrclYw=
+X-Google-Smtp-Source: ABdhPJwoQZOjUskNt5TU0ZyJE8Ju4uZEdL59fCI7gDoWZSkg2jY3/M90ILkKoeR3EvRnfG/qXKEatQ==
+X-Received: by 2002:a05:6000:18ac:b0:203:ecad:a203 with SMTP id b12-20020a05600018ac00b00203ecada203mr4249744wri.177.1647563969021;
+        Thu, 17 Mar 2022 17:39:29 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id 2-20020a1c1902000000b00380d3873d6asm5533293wmz.43.2022.03.17.17.39.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 17:39:28 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] scsi: message: fusion: mptbase: remove redundant variable dmp
+Date:   Fri, 18 Mar 2022 00:39:27 +0000
+Message-Id: <20220318003927.81471-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v1 1/1] net: dsa: microchip: ksz8795: handle eee
- specif erratum
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164756341010.32270.6496971748158497644.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Mar 2022 00:30:10 +0000
-References: <20220316125529.1489045-1-o.rempel@pengutronix.de>
-In-Reply-To: <20220316125529.1489045-1-o.rempel@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, f.fainelli@gmail.com, vivien.didelot@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        kernel@pengutronix.de, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Variable dmp is being assigned a value that is never read, the
+variable is redundant and can be removed.
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Cleans up clang scan build warning:
+drivers/message/fusion/mptbase.c:6667:39: warning: Although
+the value stored to 'dmp' is used in the enclosing expression,
+the value is never actually read from 'dmp' [deadcode.DeadStores]
 
-On Wed, 16 Mar 2022 13:55:29 +0100 you wrote:
-> According to erratum described in DS80000687C[1]: "Module 2: Link drops with
-> some EEE link partners.", we need to "Disable the EEE next page
-> exchange in EEE Global Register 2"
-> 
-> 1 - https://ww1.microchip.com/downloads/en/DeviceDoc/KSZ87xx-Errata-DS80000687C.pdf
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> 
-> [...]
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/message/fusion/mptbase.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Here is the summary with links:
-  - [net-next,v1,1/1] net: dsa: microchip: ksz8795: handle eee specif erratum
-    https://git.kernel.org/netdev/net-next/c/7b6e6235b664
-
-You are awesome, thank you!
+diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
+index e90adfa57950..9b3ba2df71c7 100644
+--- a/drivers/message/fusion/mptbase.c
++++ b/drivers/message/fusion/mptbase.c
+@@ -6658,13 +6658,13 @@ static int mpt_summary_proc_show(struct seq_file *m, void *v)
+ static int mpt_version_proc_show(struct seq_file *m, void *v)
+ {
+ 	u8	 cb_idx;
+-	int	 scsi, fc, sas, lan, ctl, targ, dmp;
++	int	 scsi, fc, sas, lan, ctl, targ;
+ 	char	*drvname;
+ 
+ 	seq_printf(m, "%s-%s\n", "mptlinux", MPT_LINUX_VERSION_COMMON);
+ 	seq_printf(m, "  Fusion MPT base driver\n");
+ 
+-	scsi = fc = sas = lan = ctl = targ = dmp = 0;
++	scsi = fc = sas = lan = ctl = targ = 0;
+ 	for (cb_idx = MPT_MAX_PROTOCOL_DRIVERS-1; cb_idx; cb_idx--) {
+ 		drvname = NULL;
+ 		if (MptCallbacks[cb_idx]) {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.35.1
 

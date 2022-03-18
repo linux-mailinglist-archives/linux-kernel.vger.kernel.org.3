@@ -2,113 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C6F4DDADA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:48:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F02734DDADC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236834AbiCRNtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 09:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S236846AbiCRNt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236109AbiCRNtu (ORCPT
+        with ESMTP id S236831AbiCRNtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:49:50 -0400
-Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A129E163E05
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:48:30 -0700 (PDT)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 61EA210048445
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 13:48:30 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id VCxynvtdZwm8iVCxynxTSt; Fri, 18 Mar 2022 13:48:30 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=DpSTREz+ c=1 sm=1 tr=0 ts=62348dae
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=o8Y5sQTvuykA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=2GCAtCuT3wgT4q42L9EA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=1QYp7nWSJ3VYtGgxX5TKlOfQVqw+7WaVqX47zjJXg7A=; b=GPtW2r3sGhkZWVZWfCwPapDQU3
-        iGXALFfeiyOyyEv153wGjcvPyLhQnHtvxLAsR/uUg3hxtV84hWOLAeh6KogTg6EZ1VRtSIATsh4Rh
-        IX5uz2EMK/SObQynPSfci6ZVf;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33286 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nVCxx-000O6R-3d; Fri, 18 Mar 2022 07:48:29 -0600
-Subject: Re: [PATCH 5.16 00/28] 5.16.16-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220317124526.768423926@linuxfoundation.org>
-In-Reply-To: <20220317124526.768423926@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <a074ff6f-a339-bfbc-c408-3d1617fb4f57@w6rz.net>
-Date:   Fri, 18 Mar 2022 06:48:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 18 Mar 2022 09:49:51 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2086.outbound.protection.outlook.com [40.107.100.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF4CBC1F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:48:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ivt9HxYhDj6SjBGbrgWUuu5HMqME7Jt2rf079WVqGC040YxUd3Ktpmkq2QvDJcYdaoph5dZVD499hXqTt7nvu1/iQ1TEfviLZMylg8IjPM9XGecE5HAF1Z0oDFfuqre8ACUto+m+MdQsyE5koXpRXQFPIPolqscE7qcagtjuIbu0JDYwJMQB3fPZgdtIUAc7/TfsM/Mjrqpb68qzPnHzQ/qSvqK+zb4g3C3XaTQuSpdi4nR+ocbyfYhrJfshujzDRCh8LbV6ROkp/LYeMCHx+jUpIIgVqvB5oukM+XV278oCsWBQTlgMBHN5fQTgLQu0jb/LLWt+B3rxRBAAgWsz0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BTD7bbgHy6yug/JW7rJs5GcfDTGb3eof6YuKLCSiIT0=;
+ b=U7wkn1/hNhi8cOk82suLjt46yrTjKy/lWw7Xkc62dcxwlMmegqaK+kPlysGADlg6F4Gcl7Jkol6TwGO1DQQOIa8iKZGgoDAUoiXw6JoTdHiW1Rnee3+LQLxiq3n4pSJtlWxWnRJVOlmE/mPhMfrQc27GRbfOUn1+4GxAoQet1RCL48R7IIlC/+TQiq1JSfhxNm7JVJYrMXmBgg91Me6BE/JZ99E0LJ6HA4Ya4oHTDOscDO26sK8hzt/GRGCdMEB1RTipQuew7loMIs9HoSHizvOCokJzaDUl/nh8doFmaGOsgNohFKcVNYJ4NQWTABnEkKyQ9a7D0k0ynyp6zIcXYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BTD7bbgHy6yug/JW7rJs5GcfDTGb3eof6YuKLCSiIT0=;
+ b=nVA/qM2AomKs0bERh7j+kLtR1UKGn27pYwx0IgK4/hO6nkimtgU4F9HPeEKH6nzaP4gOOMDKlx8+9U0km4DFkc8ulF96Urb0AIDGlmaWsHwZUpCDAqXuKAXNCbp2Hod4uOMS9CJoSUpzuFcTcV8r7XAUbiRc2UfOaJ5da6OHm+F681vCpy6UNPSe65dLHPV17ygGZIGi7dRlztPZctCS5UGS/jZmxdkcFUYQ2wEuiHxb/xmGNGLQ0aZRqCtoxA8l73MLUYae4ATPaOGIaypKkjB3I3HA6nx4sJlrEvhchBlEEQcQNcBTK17LJzLfAnLlOL/A/CHb5AkaFZ0NckX3Ng==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by CY4PR12MB1783.namprd12.prod.outlook.com (2603:10b6:903:121::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Fri, 18 Mar
+ 2022 13:48:30 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::11a0:970a:4c24:c70c]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::11a0:970a:4c24:c70c%5]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
+ 13:48:30 +0000
+Date:   Fri, 18 Mar 2022 10:48:28 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Jacob Pan <jacob.jun.pan@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
+Subject: Re: [PATCH v2 2/8] iommu: Add attach/detach_dev_pasid domain ops
+Message-ID: <20220318134828.GL11336@nvidia.com>
+References: <20220315050713.2000518-1-jacob.jun.pan@linux.intel.com>
+ <20220315050713.2000518-3-jacob.jun.pan@linux.intel.com>
+ <51f6a64a-194b-0aca-bd2b-64737bd2140e@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <51f6a64a-194b-0aca-bd2b-64737bd2140e@linux.intel.com>
+X-ClientProxiedBy: MN2PR05CA0030.namprd05.prod.outlook.com
+ (2603:10b6:208:c0::43) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nVCxx-000O6R-3d
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:33286
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 310b9e9b-61b3-4fd6-0511-08da08e5fc69
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1783:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB17839957838DD5C9A4A0C7C8C2139@CY4PR12MB1783.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: T/OumOgISYl4O0vIDZo3l3PoX4M3KQl3VS1RypPQdReuy5P6UgOFj2PYLnXoC4pcubgg/LqH6cMa0+4I7pk5iGxek3TzFXmi6v/zmbJom7YmPpyvV6QkLxzX9+BM+u3Z6ThtQVzpklox03THQAQXJuha1pNFul9P2YU0RXkvxLzsPCLePZVuIgxYUbwie+JXkbvVYRyVHA1Un3jqCxzeaSIbUXclmmN+IJi11SPWlg/Ku8ddIAkHZ18BwM97rzfJ5klJ5ayOvmgJyqTHteQxrBuMskR00wOb39jLHK4OyUw9M9mly/w3/WlIbiGXLxO33JhNwGYQ9Z2e9jUzqGFcDXaA1B37l8OO+GvQwkAFuFkl9r1y/dNwxNhfyfW7TkgBVNSW1Yjg4dUnv66Mi3WjoiIoFisgQRTQkxfIA3UEH3S2OtDrSUkUpIagHWbsHGoHKAp0WIxTv9ioiE9r23gk7J1rzY6DFlLbuUafRJob+zU9t2XbAqnoq18aOLOQr7S4kONLYp5vVyNN3FsceZGl4e6zq6bD7DQoHwOaKR3FH5YKEuevyMiFfkqrz7RlLKis3UnXPaRPXLDdpLYw2ML/qhGcqd80jliV1W6zF+i1tOpAl7wX8PfWxTGjEDb3IL6L7YhXg47TtCJBY8wIsM5E/A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(316002)(54906003)(2616005)(1076003)(186003)(26005)(2906002)(38100700002)(4326008)(6506007)(66476007)(66556008)(53546011)(6916009)(66946007)(5660300002)(8676002)(7416002)(86362001)(83380400001)(508600001)(33656002)(8936002)(36756003)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zigp0v9sEoX99MgWKdwOy58+bMaOrLKKubXpjJjL1/9J3tkTAhP6l4doBzQR?=
+ =?us-ascii?Q?GXAzBwbLNRpZARd4P/dj1KOXUylnz6k+Y2ATKpzEcvd90K/evmRYYh7KV7XF?=
+ =?us-ascii?Q?RkZIAdlU72Zb0KBdngZMeVqzcBSk/6KNADjxAtwm8fQtUwCZzqHuF7EJ9PxT?=
+ =?us-ascii?Q?tGNgonM6eyiO9YF3boF3jcyUb1Irr1i0DT8NjaWlAF0EugKJfV2C6ogEPvDu?=
+ =?us-ascii?Q?CElfZvxS0fv+/BrUs27jjIYdebFOK0DqYKSPSJO/te6bLKN5xe1jNb6wq9OC?=
+ =?us-ascii?Q?4AR5o/VjM2tGv12Xsy5+4KQJRAq7vJh0Ty49FPxyGCRVZlQch1+bnfTPdEl/?=
+ =?us-ascii?Q?67PbzFkB4K/YDJYAEjMUWwtUG/7q62nwTt50z5vFx94xinjo/hIJ2sTUdKIA?=
+ =?us-ascii?Q?m+vvp4uR2cn7m9mryPuXGRgct6P4khSnc3ZQBfn9CHJmmN82NxYwL1KJP5AC?=
+ =?us-ascii?Q?bekW3dH5gShX/p9KS4DOBa9g4QWTGbmsNmbk9TAtPatEScAXOMSrTQ6c5amb?=
+ =?us-ascii?Q?9iKPK485QrRGuYRWMYtWXnM0zt3zW8umcTPSqswN+DbLcJ6ol47q0OQUkhZf?=
+ =?us-ascii?Q?RV0MyYD2roRPC+JGTw8G5CvryswEo0oxfXK+Jg6T/j9gjomxNP3AVubnUEpw?=
+ =?us-ascii?Q?UK0FKBkJ+60mZk6jpomEsSZ+OA/DouOpuM6m/rCs/fnMNfg1d5XRqI20kJCq?=
+ =?us-ascii?Q?URhgNufGE0NdJEByWVWZE8hm9AFRo0vEXuIIHGuKE+Dt73DhVTgDRfQv/g/h?=
+ =?us-ascii?Q?afbd9DH1Cpwh2/QbaJGFCSIs7ujYUWmSb8qRQQQFc31KR9RT4r5iRdz5fSQF?=
+ =?us-ascii?Q?QRiGI/nya90RVKm0gRybYh1eVGd7ZVguiPvdGGIbGtujuxvdhqBi/tX6LEAt?=
+ =?us-ascii?Q?vDL9vJB/PvqzK5uK+0ICXAHqdmZ3/eZ7TF4Ln2XiIaGSclI+zxGMzpCiJas7?=
+ =?us-ascii?Q?BzvgIcn4Rn+SiXvv+w6UiJvDHyeIuTo0LkT+g5air87wglrUq/mbBme0lF1n?=
+ =?us-ascii?Q?KQl2Q45kGpMKZ2pCr6uI5PTVQ5f0P4czXITvH+ZuOiHnCoHuXFb5UKhYnnJy?=
+ =?us-ascii?Q?UDEdOKylJ5yy4iMM4/To1swMagDm02lh1Du0fVAxcZzOfoNKHb5guR7WcEv2?=
+ =?us-ascii?Q?Kk2Th23XTsNQtevlbOo23lzvoF7WvgVQNvChUgj5HFvoqHpsYCo/Pufy73Ep?=
+ =?us-ascii?Q?SF1Bv/1D7bNbwNCsKQ4yCB5bhEZ8tYoUV74nv31thOe12RU/z3HIXdhLzrfN?=
+ =?us-ascii?Q?wi+6exLvGsEhWSH/ylMKzMT0qLrBDOmp13O9npu9qKeAYUdQQz+9p+wTAfXD?=
+ =?us-ascii?Q?Ql2laBCJcUMYPqQ3i6ElAj8IiavzHs2oMFOEIoUNxm3E+J4dqHrsiIOxC8KP?=
+ =?us-ascii?Q?D9JFLt4mgW4a8LtmX+WZtVrKVf7UfoUg6eu/rmlTIbJTMohIWfefUOn48Enp?=
+ =?us-ascii?Q?Gi4Rp3/8Q62y5UA+huAD9/sSXufMJ3lg?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 310b9e9b-61b3-4fd6-0511-08da08e5fc69
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 13:48:30.2401
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bPqZdBnplDFHjOw8mRRClAkoNwXVpO2k67vOSD1JsvQnwlvwPvhMg/mFfWclmeIY
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1783
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/22 5:45 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.16 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 19 Mar 2022 12:45:16 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.16-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri, Mar 18, 2022 at 07:52:33PM +0800, Lu Baolu wrote:
+> On 2022/3/15 13:07, Jacob Pan wrote:
+> > From: Lu Baolu <baolu.lu@linux.intel.com>
+> > 
+> > An IOMMU domain represents an address space which can be attached by
+> > devices that perform DMA within a domain. However, for platforms with
+> > PASID capability the domain attachment needs be handled at device+PASID
+> > level. There can be multiple PASIDs within a device and multiple devices
+> > attached to a given domain.
+> > This patch introduces a new IOMMU op which support device, PASID, and
+> > IOMMU domain attachment. The immediate use case is for PASID capable
+> > devices to perform DMA under DMA APIs.
+> > 
+> > Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> >   include/linux/iommu.h | 6 ++++++
+> >   1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> > index 369f05c2a4e2..fde5b933dbe3 100644
+> > +++ b/include/linux/iommu.h
+> > @@ -227,6 +227,8 @@ struct iommu_iotlb_gather {
+> >    * @aux_get_pasid: get the pasid given an aux-domain
+> >    * @sva_bind: Bind process address space to device
+> >    * @sva_unbind: Unbind process address space from device
+> > + * @attach_dev_pasid: attach an iommu domain to a pasid of device
+> > + * @detach_dev_pasid: detach an iommu domain from a pasid of device
+> >    * @sva_get_pasid: Get PASID associated to a SVA handle
+> >    * @page_response: handle page request response
+> >    * @cache_invalidate: invalidate translation caches
+> > @@ -296,6 +298,10 @@ struct iommu_ops {
+> >   	struct iommu_sva *(*sva_bind)(struct device *dev, struct mm_struct *mm,
+> >   				      void *drvdata);
+> >   	void (*sva_unbind)(struct iommu_sva *handle);
+> > +	int (*attach_dev_pasid)(struct iommu_domain *domain,
+> > +				struct device *dev, ioasid_t id);
+> > +	void (*detach_dev_pasid)(struct iommu_domain *domain,
+> > +				 struct device *dev, ioasid_t id);
+> 
+> As we have introduced iommu_domain_ops, these callbacks should be part
+> of the domain ops.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
++1
 
-Tested-by: Ron Economos <re@w6rz.net>
-
+Jason

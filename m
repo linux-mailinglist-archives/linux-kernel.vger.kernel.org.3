@@ -2,73 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD0C4DD97D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7FA4DD97E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236091AbiCRMQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
+        id S236105AbiCRMRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236059AbiCRMQ4 (ORCPT
+        with ESMTP id S236102AbiCRMRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:16:56 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D55DF1EBA
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:15:37 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id i2so4612729ila.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:15:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=vfOVKzjXEJgbasTjmTrxtQ69SXV3NL2wUbcICFdrT0Q=;
-        b=Mp8xNUnf83O5UYm8HTwhZw+W8dX1ciFYSag/WGoXxhkPD7uDumvEh2gYMaggbJsjlE
-         SS4056+GwHrKQyAY9SS15Iwwe65HKU/VmwlJIBuDswLhvXwh/sm6WDe1XjKJxTzKn5nk
-         74HQnq0MWfj4i2kLZnNHPsleSR9V7o2XKStbKUD2qLe4Mou8VqiK+yZHwcztCS2ocldZ
-         hn9xhi5G0YfgaNNuydrzT+gAs3+90qnF6jyppovYY4VlNP1y/o/Yr39zSwDQFNbl73RW
-         TQxweW8oXAeaaiGUxcgNmRYYaXfWwPdjNt+B8Sf6gg7ADxDbO5dr4kDG0GJVobuGP5ej
-         uYag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vfOVKzjXEJgbasTjmTrxtQ69SXV3NL2wUbcICFdrT0Q=;
-        b=sKRn4XG0AD5asaXQ9G9cwaJ342hwhyulGDV3X6CxbLMoasy3nvU+J4mrv4XkBJ9NkC
-         6JqLfXj86VmdO98O9xb8aZ5zaSI/6CqL6aPdCcLg7O2iAIBkYke/zN8ef+vOLECIXdql
-         eV1vnSKdyZcYikgmW4FWMemaiiY/9M4+Ob9sbu5cIoJp5YeeQeKApNXnuIZkoxcZxpQP
-         UO1W0evNwl6vGFD19GuONhKkIT3UQCVSYw7Ir7h3cWKcmzwp+4t4XGIYapb6yuIX9RcQ
-         /9qD5tjOaaTDeOVFRxFQinA9r8DpHJymqZYxSKOqJlbhs12s0ScEnbsr6otSKBFh0YN9
-         04Xw==
-X-Gm-Message-State: AOAM531d3Voi9mIKEYAZyizczpihTYYVBSHzixDmfdTA0C29GEwUrYnX
-        DBfQZGhw26r55X8hgeqYydJ+0kdtduwFzknb
-X-Google-Smtp-Source: ABdhPJy4jNJGr92YWGl0Z7hprUxfmBOjlbNFBAjBrGpbebIFPWycBIChT+nePxjFSYCqEThHJqi7hw==
-X-Received: by 2002:a05:6e02:1581:b0:2c2:5aef:db32 with SMTP id m1-20020a056e02158100b002c25aefdb32mr4607238ilu.158.1647605736347;
-        Fri, 18 Mar 2022 05:15:36 -0700 (PDT)
-Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id k2-20020a056e02156200b002c7881bf27asm4984760ilu.27.2022.03.18.05.15.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 05:15:35 -0700 (PDT)
-Message-ID: <a4b3ad02-f1c7-c13b-7740-d5b9982bd7c7@linaro.org>
-Date:   Fri, 18 Mar 2022 07:15:34 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6] staging: greybus: introduce pwm_ops::apply
-Content-Language: en-US
-To:     Song Chen <chensong_2000@189.cn>, johan@kernel.org,
-        elder@kernel.org, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, elder@ieee.org
-References: <1647597432-27586-1-git-send-email-chensong_2000@189.cn>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <1647597432-27586-1-git-send-email-chensong_2000@189.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Fri, 18 Mar 2022 08:17:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0BDF1EBE
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:15:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD6416185C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:15:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99A57C340E8;
+        Fri, 18 Mar 2022 12:15:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647605747;
+        bh=apeeG6WHRgatQTif+1EPcuy7+7eZkIEix8HhadU5MZc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=bGScCB0Xn69LYU84wjG6fNIR0WKtN3pDC/uAs8BxGSt85dKp+W/t+Nkuq6vZYY426
+         OE8DzopDzg5ogmjolQrR4JAXnHOHe3DsBwLhoJteKuFmE5LdcHD74W6+O04vfvtiA8
+         teeWJJyD1q1s3a7esrs/Q4XPvtCivFsqj4Gda6RNqriKtkrd86/0q6B1P77E2waQFb
+         5x3c42ObpRFegAKi8UKolYmT/wvskMpv69bVBe1dZc3zhID3sf5QV3M72q0cwVmkdm
+         wD0NC/FHfk9FztZ4q4PvDR8KJJQduo8KertujFzAOzNijAGiGT9ehtw/6rVjNhw2I8
+         i3LXuf6VVzknw==
+From:   sj@kernel.org
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     sj@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/damon: Make the sampling more accurate
+Date:   Fri, 18 Mar 2022 12:15:43 +0000
+Message-Id: <20220318121543.26861-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <6cb97421-ab4a-2520-2503-10fec548edd0@linux.alibaba.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,134 +51,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/18/22 4:57 AM, Song Chen wrote:
-> Introduce newer .apply function in pwm_ops to replace legacy operations
-> including enable, disable, config and set_polarity.
-> 
-> This guarantees atomic changes of the pwm controller configuration.
-> 
-> Signed-off-by: Song Chen <chensong_2000@189.cn>
-
-I had another comment suggestion but you've been through enough.
-Thanks for working this to completion.
-
-Reviewed-by: Alex Elder <elder@linaro.org>
+On Fri, 18 Mar 2022 19:58:07 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
 
 > 
-> ---
-> v2:
-> 1, define duty_cycle and period as u64 in gb_pwm_config_operation.
-> 2, define duty and period as u64 in gb_pwm_config_request.
-> 3, disable before configuring duty and period if the eventual goal
->     is a disabled state.
 > 
-> v3:
-> Regarding duty_cycle and period, I read more discussion in this thread,
-> min, warn or -EINVAL, seems no perfect way acceptable for everyone.
-> How about we limit their value to INT_MAX and throw a warning at the
-> same time when they are wrong?
+> On 3/18/2022 6:49 PM, sj@kernel.org wrote:
+> > On Fri, 18 Mar 2022 18:01:19 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+> > 
+> >>
+> >> On 3/18/2022 5:40 PM, sj@kernel.org wrote:
+> >>> Hi Baolin,
+> >>>
+> >>> On Fri, 18 Mar 2022 17:23:13 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+> >>>
+> >>>> When I try to sample the physical address with DAMON to migrate pages
+> >>>> on tiered memory system, I found it will demote some cold regions mistakenly.
+> >>>> Now we will choose an physical address in the region randomly, but if
+> >>>> its corresponding page is not an online LRU page, we will ignore the
+> >>>> accessing status in this cycle of sampling, and actually will be treated
+> >>>> as a non-accessed region. Suppose a region including some non-LRU pages,
+> >>>> it will be treated as a cold region with a high probability, and may be
+> >>>> merged with adjacent cold regions, but there are some pages may be
+> >>>> accessed we missed.
+> >>>>
+> >>>> So instead of ignoring the access status of this region if we did not find
+> >>>> a valid page according to current sampling address, we can use last valid
+> >>>> sampling address to help to make the sampling more accurate, then we can do
+> >>>> a better decision.
+> >>>
+> >>> Well...  Offlined pages are also a valid part of the memory region, so treating
+> >>> those as not accessed and making the memory region containing the offlined
+> >>> pages looks colder seems legal to me.  IOW, this approach could make memory
+> >>> regions containing many non-online-LRU pages as hot.
+> >>
+> >> IMO I don't think this is a problem, since if this region containing
+> >> many non-online-LRU pages is treated as hot, which means threre are aome
+> >> pages are hot, right? We can find them and promote them to fast memory
+> >> (or do other schemes). Meanwhile, for non-online-LRU pages, we can
+> >> filter them and do nothing for them, since we can not get a valid page
+> >> struct for them.
+> > 
+> > For some of DAMOS actions that you mentioned, that could make sense.  However,
+> > that wouldn't make much sense for some other cases, especially for manual
+> > DAMON-based access pattern profiling.
 > 
-> v4:
-> 1, explain why legacy operations are replaced.
-> 2, cap the value of period and duty to U32_MAX.
-> 
-> v5:
-> 1, revise commit message.
-> 
-> v6:
-> 1, revise commit message.
-> 2, explain why capping the value of period and duty to U32_MAX in
->     comment.
-> ---
->   drivers/staging/greybus/pwm.c | 64 ++++++++++++++++++++++-------------
->   1 file changed, 40 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
-> index 891a6a672378..ad20ec24031e 100644
-> --- a/drivers/staging/greybus/pwm.c
-> +++ b/drivers/staging/greybus/pwm.c
-> @@ -204,43 +204,59 @@ static void gb_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
->   	gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
->   }
->   
-> -static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
-> -			 int duty_ns, int period_ns)
-> +static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-> +			const struct pwm_state *state)
->   {
-> +	int err;
-> +	bool enabled = pwm->state.enabled;
-> +	u64 period = state->period;
-> +	u64 duty_cycle = state->duty_cycle;
->   	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
->   
-> -	return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, period_ns);
-> -};
-> +	/* Set polarity */
-> +	if (state->polarity != pwm->state.polarity) {
-> +		if (enabled) {
-> +			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
-> +			enabled = false;
-> +		}
-> +		err = gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, state->polarity);
-> +		if (err)
-> +			return err;
-> +	}
->   
-> -static int gb_pwm_set_polarity(struct pwm_chip *chip, struct pwm_device *pwm,
-> -			       enum pwm_polarity polarity)
-> -{
-> -	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
-> +	if (!state->enabled) {
-> +		if (enabled)
-> +			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
-> +		return 0;
-> +	}
->   
-> -	return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
-> -};
-> +	/*
-> +	 * Set period and duty cycle
-> +	 *
-> +	 * PWM privodes 64-bit period and duty_cycle, but greybus only accepts
-> +	 * 32-bit, so their values have to be limited to U32_MAX.
-> +	 */
-> +	if (period > U32_MAX)
-> +		period = U32_MAX;
->   
-> -static int gb_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
-> -{
-> -	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
-> +	if (duty_cycle > period)
-> +		duty_cycle = period;
->   
-> -	return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
-> -};
-> +	err = gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_cycle, period);
-> +	if (err)
-> +		return err;
->   
-> -static void gb_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
-> -{
-> -	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
-> +	/* enable/disable */
-> +	if (!enabled)
-> +		return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
->   
-> -	gb_pwm_disable_operation(pwmc, pwm->hwpwm);
-> -};
-> +	return 0;
-> +}
->   
->   static const struct pwm_ops gb_pwm_ops = {
->   	.request = gb_pwm_request,
->   	.free = gb_pwm_free,
-> -	.config = gb_pwm_config,
-> -	.set_polarity = gb_pwm_set_polarity,
-> -	.enable = gb_pwm_enable,
-> -	.disable = gb_pwm_disable,
-> +	.apply = gb_pwm_apply,
->   	.owner = THIS_MODULE,
->   };
->   
+> I am not sure about this case, could you elaborate on how this can worse 
+> the case you mentioned?
 
+For an example, let's suppose a user using DAMON to know the working set size
+of the system.  And further suppose there is a region that containing many
+offlined pages and one online hot page.  With this patch, once DAMON sampled
+the one hot page, the entire region will be reported as hot, though the other
+offlined pages has not accessed.  As a result, the user will think the working
+set size is bigger than real.
+
+> 
+> Like you said as below, we can split the regions to separate the hot 
+> pages out of the hot regions containing some offline or non-lru pages, 
+> that is also a benefit to improve the regions adjustment.
+> 
+> > After all, we already have a mechanism for this case: adaptive regions
+> > adjustment (or, regions split/merge).  That mechanism will eventually separate
+> > out hot oneline-LRU pages in the memory regions.  Before the region is
+> > adjusted, reporting the whole region as hot looks like a right result to me.
+> > Of course, I admit that it could take too much time to converge to the optimal
+> > regions, and there are many rooms for improvement of the regions adjustment
+> > mechanism.  I think we should pursue the direction (improving the regions
+> > adjustment mechanism).
+> 
+> Yes, agree.
+> 
+> > FYI, I have some rough ideas for improving the mechanism including partitioning
+> > regions into more than 2 sub-regions if we belive it is not making a good
+> > progress.  Nevertheless, I'd like to first make a methodology for evaluating
+> > current accuracy.  For that, I am planning to implement a page-granularity
+> > access monitoring.
+> 
+> Great, I think the page-granularity monitoring will be more suitable for 
+> tiered memory system, which can reduce redundant demotion and promotion. 
+> However, I still concern the overhead if the monitoring is a 
+> page-granularity, especially for a large memory size.
+
+Sure.  It's main purpose for now is only to be compared with DAMON for
+evaluating DAMON's accuracy.  Someone who has small-enough memory size of
+huge-enough CPU resource could use that for their product, of course.
+
+> Anyway, I'd like to help to test or review the new page-granularity
+> monitoring when you're ready to send out. Thanks.
+
+So glad to hear that and appreciate always for your help!
+
+
+Thanks,
+SJ

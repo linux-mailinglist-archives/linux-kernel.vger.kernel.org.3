@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBC94DDCFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05164DDCF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238176AbiCRPdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 11:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
+        id S238152AbiCRPdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 11:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238060AbiCRPcS (ORCPT
+        with ESMTP id S238072AbiCRPcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 11:32:18 -0400
+        Fri, 18 Mar 2022 11:32:19 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D66219058B
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 08:30:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A550192590
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 08:31:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647617459; x=1679153459;
+  t=1647617460; x=1679153460;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=MSvS+9NbYSrsQgy6kndTGjPkboouyc+qZrLBTCDZhBM=;
-  b=JM8hnDy6Nl3bnZZ/uUBZ7vEw8C71Ximy5NK/dz3cTzpychyTomu3ZITY
-   9T9vEGn/7fuvj2OFyoSVVZTBn4XwDKQGAumc/bEHG7No7x3/ie5r4fxUv
-   wW99jAUO91jquuSTPGjF9Lbnq1Dr3Bh5UEdRQAPrVCB8X52rvrpQyufF6
-   UOC/YmXesGyd4ntdoCA9IV38vfBw49I9uiSmgUwyF/m2/FTe9c4bjCtsn
-   cQlLPEOE5E8U7gsB+/UwXYAjL5pw8FiVDnYDgWeitkAJtBmjDmpzf8K3d
-   hEHY5rAwe6hR6/hDzmzu110kd9IuFjAnjOUbHnII99t80bKuHeHs8NcfC
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="255982618"
+  bh=5jDVsKlXLEWs7hNvGtEGjQQDLrI7Lv8BWQrcDFTtyks=;
+  b=Zi8Vf0eTd7f2jMeDiUannCoOCnZjPSUE3QbH86MFmuTDP5S6rAn4MKwV
+   MvdlSqd3asbQh8h18R+vMhTlaEbdIgc9037vhA84I1Y9Vh9ggJiGFNLE3
+   Xz02LD+FAbpTdyZb+sLHxkanYUj9wTaRL0IvjfvY03puUF0Oibvo4/Ql/
+   m4BMmTJvtG5HICBYNahT56Q02wgnMbeSC6YK6QVRawsS97+mkGXxvPSr+
+   kwS9nS052/1IZ8DhUbYlNhwgBE+9VziXcopcrcSNBIuez39M3DlggKCpH
+   yV+Pr3Q0Tl9pnkqM3VEd+ukWWDHmjEGhoFx96hiuBHYWcFoAaKswWdlEY
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="255982621"
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="255982618"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
+   d="scan'208";a="255982621"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 08:30:52 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="581751864"
+   d="scan'208";a="513919409"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 18 Mar 2022 08:30:45 -0700
+  by orsmga002.jf.intel.com with ESMTP; 18 Mar 2022 08:30:45 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id D6A8AA2E; Fri, 18 Mar 2022 17:30:50 +0200 (EET)
+        id E1776A7A; Fri, 18 Mar 2022 17:30:50 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
@@ -52,9 +52,9 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
         linux-kernel@vger.kernel.org,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv7 23/30] x86/boot: Avoid #VE during boot for TDX platforms
-Date:   Fri, 18 Mar 2022 18:30:41 +0300
-Message-Id: <20220318153048.51177-24-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv7 24/30] x86/topology: Disable CPU online/offline control for TDX guests
+Date:   Fri, 18 Mar 2022 18:30:42 +0300
+Message-Id: <20220318153048.51177-25-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220318153048.51177-1-kirill.shutemov@linux.intel.com>
 References: <20220318153048.51177-1-kirill.shutemov@linux.intel.com>
@@ -70,186 +70,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-There are a few MSRs and control register bits that the kernel
-normally needs to modify during boot. But, TDX disallows
-modification of these registers to help provide consistent security
-guarantees. Fortunately, TDX ensures that these are all in the correct
-state before the kernel loads, which means the kernel does not need to
-modify them.
+Unlike regular VMs, TDX guests use the firmware hand-off wakeup method
+to wake up the APs during the boot process. This wakeup model uses a
+mailbox to communicate with firmware to bring up the APs. As per the
+design, this mailbox can only be used once for the given AP, which means
+after the APs are booted, the same mailbox cannot be used to
+offline/online the given AP. More details about this requirement can be
+found in Intel TDX Virtual Firmware Design Guide, sec titled "AP
+initialization in OS" and in sec titled "Hotplug Device".
 
-The conditions to avoid are:
+Since the architecture does not support any method of offlining the
+CPUs, disable CPU hotplug support in the kernel.
 
- * Any writes to the EFER MSR
- * Clearing CR4.MCE
+Since this hotplug disable feature can be re-used by other VM guests,
+add a new CC attribute CC_ATTR_HOTPLUG_DISABLED and use it to disable
+the hotplug support.
 
-This theoretically makes the guest boot more fragile. If, for instance,
-EFER was set up incorrectly and a WRMSR was performed, it will trigger
-early exception panic or a triple fault, if it's before early
-exceptions are set up. However, this is likely to trip up the guest
-BIOS long before control reaches the kernel. In any case, these kinds
-of problems are unlikely to occur in production environments, and
-developers have good debug tools to fix them quickly.
+Attempt to offline CPU will fail with -EOPNOTSUPP.
 
-Change the common boot code to work on TDX and non-TDX systems.
-This should have no functional effect on non-TDX systems.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/Kconfig                     |  1 +
- arch/x86/boot/compressed/head_64.S   | 20 ++++++++++++++++++--
- arch/x86/boot/compressed/pgtable.h   |  2 +-
- arch/x86/kernel/head_64.S            | 28 ++++++++++++++++++++++++++--
- arch/x86/realmode/rm/trampoline_64.S | 13 ++++++++++++-
- 5 files changed, 58 insertions(+), 6 deletions(-)
+ arch/x86/coco/core.c        |  1 +
+ include/linux/cc_platform.h | 10 ++++++++++
+ kernel/cpu.c                |  7 +++++++
+ 3 files changed, 18 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index d2f45e58e846..98efb35ed7b1 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -886,6 +886,7 @@ config INTEL_TDX_GUEST
- 	depends on X86_X2APIC
- 	select ARCH_HAS_CC_PLATFORM
- 	select DYNAMIC_PHYSICAL_MASK
-+	select X86_MCE
- 	help
- 	  Support running as a guest under Intel TDX.  Without this support,
- 	  the guest kernel can not boot or run under TDX.
-diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-index d0c3d33f3542..6d903b2fc544 100644
---- a/arch/x86/boot/compressed/head_64.S
-+++ b/arch/x86/boot/compressed/head_64.S
-@@ -643,12 +643,28 @@ SYM_CODE_START(trampoline_32bit_src)
- 	movl	$MSR_EFER, %ecx
- 	rdmsr
- 	btsl	$_EFER_LME, %eax
-+	/* Avoid writing EFER if no change was made (for TDX guest) */
-+	jc	1f
- 	wrmsr
--	popl	%edx
-+1:	popl	%edx
- 	popl	%ecx
- 
-+#ifdef CONFIG_X86_MCE
-+	/*
-+	 * Preserve CR4.MCE if the kernel will enable #MC support.
-+	 * Clearing MCE may fault in some environments (that also force #MC
-+	 * support). Any machine check that occurs before #MC support is fully
-+	 * configured will crash the system regardless of the CR4.MCE value set
-+	 * here.
-+	 */
-+	movl	%cr4, %eax
-+	andl	$X86_CR4_MCE, %eax
-+#else
-+	movl	$0, %eax
-+#endif
+diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
+index df08edc94f9b..70956f9d7c7e 100644
+--- a/arch/x86/coco/core.c
++++ b/arch/x86/coco/core.c
+@@ -20,6 +20,7 @@ static bool intel_cc_platform_has(enum cc_attr attr)
+ {
+ 	switch (attr) {
+ 	case CC_ATTR_GUEST_UNROLL_STRING_IO:
++	case CC_ATTR_HOTPLUG_DISABLED:
+ 		return true;
+ 	default:
+ 		return false;
+diff --git a/include/linux/cc_platform.h b/include/linux/cc_platform.h
+index efd8205282da..691494bbaf5a 100644
+--- a/include/linux/cc_platform.h
++++ b/include/linux/cc_platform.h
+@@ -72,6 +72,16 @@ enum cc_attr {
+ 	 * Examples include TDX guest & SEV.
+ 	 */
+ 	CC_ATTR_GUEST_UNROLL_STRING_IO,
 +
- 	/* Enable PAE and LA57 (if required) paging modes */
--	movl	$X86_CR4_PAE, %eax
-+	orl	$X86_CR4_PAE, %eax
- 	testl	%edx, %edx
- 	jz	1f
- 	orl	$X86_CR4_LA57, %eax
-diff --git a/arch/x86/boot/compressed/pgtable.h b/arch/x86/boot/compressed/pgtable.h
-index 6ff7e81b5628..cc9b2529a086 100644
---- a/arch/x86/boot/compressed/pgtable.h
-+++ b/arch/x86/boot/compressed/pgtable.h
-@@ -6,7 +6,7 @@
- #define TRAMPOLINE_32BIT_PGTABLE_OFFSET	0
- 
- #define TRAMPOLINE_32BIT_CODE_OFFSET	PAGE_SIZE
--#define TRAMPOLINE_32BIT_CODE_SIZE	0x70
-+#define TRAMPOLINE_32BIT_CODE_SIZE	0x80
- 
- #define TRAMPOLINE_32BIT_STACK_END	TRAMPOLINE_32BIT_SIZE
- 
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 9c63fc5988cd..184b7468ea76 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -140,8 +140,22 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	addq	$(init_top_pgt - __START_KERNEL_map), %rax
- 1:
- 
-+#ifdef CONFIG_X86_MCE
-+	/*
-+	 * Preserve CR4.MCE if the kernel will enable #MC support.
-+	 * Clearing MCE may fault in some environments (that also force #MC
-+	 * support). Any machine check that occurs before #MC support is fully
-+	 * configured will crash the system regardless of the CR4.MCE value set
-+	 * here.
++	/**
++	 * @CC_ATTR_HOTPLUG_DISABLED: Hotplug is not supported or disabled.
++	 *
++	 * The platform/OS is running as a guest/virtual machine does not
++	 * support CPU hotplug feature.
++	 *
++	 * Examples include TDX Guest.
 +	 */
-+	movq	%cr4, %rcx
-+	andl	$X86_CR4_MCE, %ecx
-+#else
-+	movl	$0, %ecx
-+#endif
-+
- 	/* Enable PAE mode, PGE and LA57 */
--	movl	$(X86_CR4_PAE | X86_CR4_PGE), %ecx
-+	orl	$(X86_CR4_PAE | X86_CR4_PGE), %ecx
- #ifdef CONFIG_X86_5LEVEL
- 	testl	$1, __pgtable_l5_enabled(%rip)
- 	jz	1f
-@@ -246,13 +260,23 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	/* Setup EFER (Extended Feature Enable Register) */
- 	movl	$MSR_EFER, %ecx
- 	rdmsr
++	CC_ATTR_HOTPLUG_DISABLED,
+ };
+ 
+ #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index f39eb0b52dfe..c94f00fa34d3 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -34,6 +34,7 @@
+ #include <linux/scs.h>
+ #include <linux/percpu-rwsem.h>
+ #include <linux/cpuset.h>
++#include <linux/cc_platform.h>
+ 
+ #include <trace/events/power.h>
+ #define CREATE_TRACE_POINTS
+@@ -1185,6 +1186,12 @@ static int __ref _cpu_down(unsigned int cpu, int tasks_frozen,
+ 
+ static int cpu_down_maps_locked(unsigned int cpu, enum cpuhp_state target)
+ {
 +	/*
-+	 * Preserve current value of EFER for comparison and to skip
-+	 * EFER writes if no change was made (for TDX guest)
++	 * If the platform does not support hotplug, report it explicitly to
++	 * differentiate it from a transient offlining failure.
 +	 */
-+	movl    %eax, %edx
- 	btsl	$_EFER_SCE, %eax	/* Enable System Call */
- 	btl	$20,%edi		/* No Execute supported? */
- 	jnc     1f
- 	btsl	$_EFER_NX, %eax
- 	btsq	$_PAGE_BIT_NX,early_pmd_flags(%rip)
--1:	wrmsr				/* Make changes effective */
- 
-+	/* Avoid writing EFER if no change was made (for TDX guest) */
-+1:	cmpl	%edx, %eax
-+	je	1f
-+	xor	%edx, %edx
-+	wrmsr				/* Make changes effective */
-+1:
- 	/* Setup cr0 */
- 	movl	$CR0_STATE, %eax
- 	/* Make changes effective */
-diff --git a/arch/x86/realmode/rm/trampoline_64.S b/arch/x86/realmode/rm/trampoline_64.S
-index d380f2d1fd23..e38d61d6562e 100644
---- a/arch/x86/realmode/rm/trampoline_64.S
-+++ b/arch/x86/realmode/rm/trampoline_64.S
-@@ -143,11 +143,22 @@ SYM_CODE_START(startup_32)
- 	movl	%eax, %cr3
- 
- 	# Set up EFER
-+	movl	$MSR_EFER, %ecx
-+	rdmsr
-+	/*
-+	 * Skip writing to EFER if the register already has desired
-+	 * value (to avoid #VE for the TDX guest).
-+	 */
-+	cmp	pa_tr_efer, %eax
-+	jne	.Lwrite_efer
-+	cmp	pa_tr_efer + 4, %edx
-+	je	.Ldone_efer
-+.Lwrite_efer:
- 	movl	pa_tr_efer, %eax
- 	movl	pa_tr_efer + 4, %edx
--	movl	$MSR_EFER, %ecx
- 	wrmsr
- 
-+.Ldone_efer:
- 	# Enable paging and in turn activate Long Mode.
- 	movl	$CR0_STATE, %eax
- 	movl	%eax, %cr0
++	if (cc_platform_has(CC_ATTR_HOTPLUG_DISABLED))
++		return -EOPNOTSUPP;
+ 	if (cpu_hotplug_disabled)
+ 		return -EBUSY;
+ 	return _cpu_down(cpu, 0, target);
 -- 
 2.34.1
 

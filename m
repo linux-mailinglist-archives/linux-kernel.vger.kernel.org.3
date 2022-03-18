@@ -2,131 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4364DE3F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 23:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A8A4DE3E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 23:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241278AbiCRWRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 18:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
+        id S241259AbiCRWLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 18:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233444AbiCRWRH (ORCPT
+        with ESMTP id S233782AbiCRWLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 18:17:07 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DDEA42DF3FB;
-        Fri, 18 Mar 2022 15:15:46 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22IM93Hc011038;
-        Fri, 18 Mar 2022 17:09:03 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 22IM91UT011037;
-        Fri, 18 Mar 2022 17:09:01 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Fri, 18 Mar 2022 17:09:01 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-Message-ID: <20220318220901.GS614@gate.crashing.org>
-References: <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com> <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org> <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com>
-Mime-Version: 1.0
+        Fri, 18 Mar 2022 18:11:11 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4AE30A897
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 15:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647641392; x=1679177392;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Cu9nNdxtPDawACx7InDTN4UY7aKMYya8+mRpAsuasGU=;
+  b=WnWAW9MUW0ATpRIMQD4cFlgNOiFggdzHrxFZN1M5XnxWH1/geYGLghEM
+   5S8r2vmL8c5PuSJ+efUHoSxowX1oJnfWgh+VNHuUibRwbpKi9hVUmhSBv
+   dTfTUcr9gDrGpMA2ImD+TpAJK36ZDM96d82Q4kXCjaxAszqTyEXRv67wD
+   lUzxnDWM/a5EbOZPrNnhGbiRxeuHXXYTtUGqQQFRkTVchrm6XETkphGIq
+   YwcZQvcd6K5P2E6NMz3hIWGGOx+tEg1KFvMj4edrVBZhwSd/LwS8b5sCt
+   uJX3kmS85FzX3vPg2lonzSeWgcYaigbocWg4pxBI6a+JBxtIDh6Pg7lrp
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="343674031"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="343674031"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 15:09:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="542061844"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 18 Mar 2022 15:09:50 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nVKn7-000FCf-NL; Fri, 18 Mar 2022 22:09:49 +0000
+Date:   Sat, 19 Mar 2022 06:09:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ cfb8c6f9e2c97f5844918598976087d6b7af2632
+Message-ID: <62350320.e8E9ud/CuxBwbq9C%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 11:19:28AM -0700, Linus Torvalds wrote:
-> Or rather, it's not the redzoning itself, but the fact that the
-> compiler might use the word under the stack for random other things,
-> and the pushf will then corrupt some local variable storage.
-> 
-> I think it would be lovely to solve that in inline asm itself some way
-> - by marking the stack pointer clobbered or something.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: cfb8c6f9e2c97f5844918598976087d6b7af2632  Merge branch 'linus'
 
-Inline assembler does not allow you to change the stack pointer, in
-principle.  You have to return everything to its original state before
-you return control from the asm code, and you have to deal with what
-happens if am interrupt comes in halfway through the asm, and all other
-ABI things that may happen on your platform.
+elapsed time: 721m
 
-> Because you have the same issue if an inline asm might need to do a
-> function call - think magic calling conventions etc, but also possibly
-> slow-path cases.
+configs tested: 106
+configs skipped: 3
 
-Yes.  The compiler itself can deal with all the red zone restrictions --
-precisely *because* it is in full control of the stack frame -- but
-those restrictions are very real.  It generally is a very good idea to
-have a redzone though, without it you pay much more than necessary for
-frame setup and teardown in leaf functions (similar to some of what the
-misnamed "shrink-wrapping" optimisation does, but the two are mostly
-independent, the benefits add up).
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> As mentioned, it's not an issue for the kernel proper due to
-> -mno-red-zone which we need for entirely unrelated reasons.
+gcc tested configs:
+arm                                 defconfig
+arm                              allmodconfig
+arm                              allyesconfig
+arm64                               defconfig
+arm64                            allyesconfig
+i386                          randconfig-c001
+powerpc                      tqm8xx_defconfig
+sh                         microdev_defconfig
+mips                            ar7_defconfig
+sh                          polaris_defconfig
+mips                         rt305x_defconfig
+ia64                        generic_defconfig
+xtensa                           alldefconfig
+mips                  decstation_64_defconfig
+mips                      maltasmvp_defconfig
+mips                      loongson3_defconfig
+powerpc                   motionpro_defconfig
+arc                 nsimosci_hs_smp_defconfig
+sh                           sh2007_defconfig
+powerpc                        cell_defconfig
+ia64                             alldefconfig
+sh                ecovec24-romimage_defconfig
+sh                          r7780mp_defconfig
+sh                              ul2_defconfig
+arm                        keystone_defconfig
+arm                  randconfig-c002-20220318
+arm                  randconfig-c002-20220317
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+parisc64                            defconfig
+s390                             allmodconfig
+s390                                defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a015
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+riscv                    nommu_virt_defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
 
-It might help to have some special clobber syntax that says "this asm
-clobbers the red zone", so the compiler can arrange for the red zone to
-contain nothing during the asm (it already does the same for function
-calls, for example).
+clang tested configs:
+arm                   milbeaut_m10v_defconfig
+arm                          pcm027_defconfig
+arm                     am200epdkit_defconfig
+mips                     loongson1c_defconfig
+mips                           rs90_defconfig
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220318
+hexagon              randconfig-r045-20220317
+hexagon              randconfig-r041-20220318
+riscv                randconfig-r042-20220318
+hexagon              randconfig-r041-20220317
 
-How bad is it to do the fail-safe general solution here though?  I.e.,
-write actual assembler code:
-
-# u16 getflags(void);
-getflags:
-	pushf
-	pop %ax
-	ret
-
-(or whatever the syntax is, my x86 is rusty).
-
-> Side note and kind of related: we do have this in the kernel:
-> 
->   register unsigned long current_stack_pointer asm(_ASM_SP);
->   #define ASM_CALL_CONSTRAINT "+r" (current_stack_pointer)
-> 
-> which *might* also solve the redzoning issue.
-
-The GCC documentation of inline asm says
-  Another restriction is that the clobber list should not contain the
-  stack pointer register.  This is because the compiler requires the
-  value of the stack pointer to be the same after an 'asm' statement as
-  it was on entry to the statement.  However, previous versions of GCC
-  did not enforce this rule and allowed the stack pointer to appear in
-  the list, with unclear semantics.  This behavior is deprecated and
-  listing the stack pointer may become an error in future versions of
-  GCC.
-
-> In the kernel we need it not because of redzoned stack use, but
-> because we need the stack frame to be set up properly or objtool
-> complains.
-
-If the kernel has special rules for the stack, it had better teach the
-compiler about this special ABI, or there will be tears eventually.  If
-the kernel requires only what the standard ABIs provide, it can trust
-the compiler to do that correctly, this is one of the core jobs of a
-compiler!
-
-
-Segher
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

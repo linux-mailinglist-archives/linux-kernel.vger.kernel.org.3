@@ -2,130 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8CA4DD3FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 05:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1174DD401
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 05:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbiCREmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 00:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
+        id S232419AbiCREwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 00:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbiCREmW (ORCPT
+        with ESMTP id S231846AbiCREwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 00:42:22 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8166D2AA852
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 21:41:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E5BB0CE247E
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 04:41:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C3E2C340E8;
-        Fri, 18 Mar 2022 04:40:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647578460;
-        bh=Pzb4wO6iDHHWxXmW2gHDzPoirgP7sfeBSmWcMBaW6kk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=t1i1oYJroEpeLwzRvslpeCf6axg+L1lqBqJkduu19PXVfEviT1CU90ngjXVHoSmfD
-         s/5YuH1P3uJ4em89vdfaI+J57q1WIjCrqyX3snPGQVjjsu028ZKommmEoAWCQVQylb
-         C7/I7xsG2qdxfj0yoN7J9l/kqaiUAYlNFLV+uY7OXoMYVWjyqm+RF2bK03DsxJaKaT
-         ft9w7Rb7Yw9zoJW53Ark7fGA77VWQrf7Xg20mopr9ZqcQiKrvGNrcyhItFEEdgTCVU
-         5FF9kZnPi94cgOtWtD//E+sTyC9D04BIYzQLRxrVPZBXNJVqfrKWfj846GZjTnBdYa
-         2vopThRqbhOvw==
-Date:   Fri, 18 Mar 2022 13:40:54 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [for-next][PATCH 03/13] fprobe: Add ftrace based probe APIs
-Message-Id: <20220318134054.0fbbbdcd677c1e39a283cf43@kernel.org>
-In-Reply-To: <CAADnVQJSZhJo5XK-h6t8oHuNtiPxYx9Zjav=wvm92m-cpTpghw@mail.gmail.com>
-References: <20220317152458.213689956@goodmis.org>
-        <20220317152522.284233550@goodmis.org>
-        <CAEf4BzaN_HnyAkVYeUmYoxvW01cFKR2FW0MwZJBL3gvkRw0TYg@mail.gmail.com>
-        <20220317194937.08584828@gandalf.local.home>
-        <CAADnVQJSZhJo5XK-h6t8oHuNtiPxYx9Zjav=wvm92m-cpTpghw@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 18 Mar 2022 00:52:00 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05E831934;
+        Thu, 17 Mar 2022 21:50:40 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id q19so4272396pgm.6;
+        Thu, 17 Mar 2022 21:50:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=aPJHHquyjBnSufkdQ/CHMVfaCdWkcaHC/wocvUvtM2g=;
+        b=L5+IUfXTkDjiK+ANw+KnlygW7x1M6zI1nZKYKG8jW93yJ0tEAcGlUx48T0NZ2sFz6L
+         jDxT0gbkygNOOKK8Tc1gVyd6ymspz90eonQ6TBa9V4zx3wN+Dthk53JLZ74y06zljXlz
+         VQaly16G1x2Hl2uxOXsUJUU7hVD2hrCLJkQ5fODbmlMU/PInY7mTYAZ8MO0ETg1B9dDH
+         WSiG2J1HZzIXHJdqmFhD32TclV02lEfivp3bBcbXzPgM/zhTItKhadan3OnKhc2aVkzv
+         lLkvJkBnbik5ttZL0XPEhbpaEruniAVu5asVUQ9WaWcY0DS/6zFjiyJDajkoueovd9i6
+         hM6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=aPJHHquyjBnSufkdQ/CHMVfaCdWkcaHC/wocvUvtM2g=;
+        b=4/fuLvu89KkL6d0wmYMQguq5HiFDNP3GlyDH54qP4WiQWFPiH7yP88pLRRKDDkbsZT
+         gAJJW6rAiVP1tPvVf5YWGJtV0ynMBQ1g7V/3PNAO6wshj7xfSgKTy7kfT1J2s/rmmjo7
+         5bYqkRUkvshOnqNVpxSsTXrotI/qBnwpWMyiI7g5/MGqlBpdTKxNZpE0gcwi+rmSseAx
+         0GSrsMOyPPujCXbudWdFG4qVeom67aqGX+9jFfZLaUL2yuV5S0gjHOOPlxRNhAUjfWic
+         VsCnV8RyDirKxmyyuFMcrgXTx+trp7nkqfRS/26hl2bTSH6yn0ezwBxBqZZaO94o6HXl
+         cTEw==
+X-Gm-Message-State: AOAM531bss81YfZ18v7m6Mu0eU4TaxKcYUZ6HhnKcjEgtyNjBTiQrXdM
+        HMQShiuEx24hMvU8sWr6sMufA+zkWZAMGQ==
+X-Google-Smtp-Source: ABdhPJzhxM+hugE7owmzEeU+bzQPYLXLvCW/ZmgFw14Vv0YIH0K1U6rFcf3IiYlZhsK58SGQHcP1rw==
+X-Received: by 2002:a65:538f:0:b0:382:b4d:bdd8 with SMTP id x15-20020a65538f000000b003820b4dbdd8mr4457255pgq.262.1647579040371;
+        Thu, 17 Mar 2022 21:50:40 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-92.three.co.id. [180.214.233.92])
+        by smtp.gmail.com with ESMTPSA id u4-20020a056a00158400b004fa0263cf5dsm8788368pfk.130.2022.03.17.21.50.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 21:50:39 -0700 (PDT)
+Message-ID: <07033c8a-fe1a-f97e-49b3-48d1da1e0413@gmail.com>
+Date:   Fri, 18 Mar 2022 11:50:34 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] docs/kselftest: add more guidelines for adding new tests
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220317172758.582690-1-usama.anjum@collabora.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220317172758.582690-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022 17:26:23 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-
-> On Thu, Mar 17, 2022 at 4:49 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > On Thu, 17 Mar 2022 15:03:33 -0700
-> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> > > Do I understand correctly that this patch set was applied in your
-> > > tree? I was under the impression that we agreed to route this through
-> > > the bpf-next tree earlier (see [0]), but I might have misunderstood
-> > > something, sorry.
-> > >
-> > > Either way, the reason it matters is because Jiri's multi-attach
-> > > kprobe patch set ([1]) is depending on Masami's patches and having
-> > > fprobe patches in bpf-next tree would simplify logistics
-> > > significantly.
-> >
-> > I knew Jiri's patches were to go through the bpf tree, but I missed that
-> > those were dependent on this and you wanted these to go through as well.
-> >
-> > I had just finished my automated tests that ran these patches. I haven't
-> > pushed them to my next branch yet so I can hold them off. I don't have
-> > anything dependent on them.
+On 18/03/22 00.27, Muhammad Usama Anjum wrote:
+> Add the following new guidelines:
+> - Add instruction to use lib.mk
+> - Add instruction about how to use headers from kernel source
+> - Add instruction to add .gitignore file
+> - Add instruction about how to add new test in selftests/Makefile
+> - Add instruction about different build commands to test
 > 
-> Excellent. Thanks for testing.
-> 
-> > Would you be able to take these for-next patches directly (as they all have
-> > been tested) and you can switch my signed-off-by to Reviewed-by.
-> >
-> > The first of the series is unrelated and will go through my tree. That's
-> > the user_events patch.
-> 
-> Right.
-> We're talking about this set:
-> https://patchwork.kernel.org/project/netdevbpf/cover/164735281449.1084943.12438881786173547153.stgit@devnote2/
-> 
-> I believe it has a small doc difference vs what you've tested.
-> Looks like our CI is green on it too.
-> We'll do additional testing and add your SOB and Tested-by
-> before pushing.
 
-Thanks Alexei and Steve, I think this fprobe series is good to go through
-bpf-next tree because it is currently used only from bpf with Jiri's patch.
-Sorry Steve for confusion. I think I might better move you to CC when I
-tagged it 'bpf-next'.
+Too verbose, because people can figure out what were added in the diff
+without explicitly mention them.
+  
+> + * Use lib.mk instead of writing Makefile from sratch. Specify flags and
+> +   binaries generation flags on need basis before including lib.mk. ::
+> +
+> +    CFLAGS = $(KHDR_INCLUDES)
+> +    TEST_GEN_PROGS := close_range_test
+> +    include ../lib.mk
+> +
 
-Thank you,
+I think what you mean is "In your Makefile, use facilities from lib.mk by
+including it instead of reinventing the wheel.", right?
 
-> 
-> Thanks!
+> + * Add new test name in TARGETS in selftests/Makefile::
+> +
+> +    TARGETS += android
+> +
+> + * All of the following build commands should be successful
+> +
+> +   - Same directory build of kselftests::
+> +
+> +      make kselftest-all
+> +      make kselftest-install
+> +      make kselftest-clean
+> +      make kselftest-gen_tar
+> +
+> +   - Build with absolute output directory path::
+> +
+> +      make kselftest-all O=/abs_build_path
+> +      make kselftest-install O=/abs_build_path
+> +      make kselftest-clean O=/abs_build_path
+> +      make kselftest-gen_tar O=/abs_build_path
+> +
+> +   - Build with relative output directory path::
+> +
+> +      make kselftest-all O=relative_path
+> +      make kselftest-install O=relative_path
+> +      make kselftest-clean O=relative_path
+> +      make kselftest-gen_tar O=relative_path
+> +
+> +   - Build from Makefile of selftests directly::
+> +
+> +      make -C tools/testing/selftests
+> +      make -C tools/testing/selftests O=/abs_build_path
+> +      make -C tools/testing/selftests O=relative_path
+> +
 
+For simplicity, we can say "All changes should pass
+kselftest-{all,install,clean,gen_tar} builds."
+
+You don't need to spell out full command-line in the guideline unless
+absolutely necessary, in general.
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+An old man doll... just what I always wanted! - Clara

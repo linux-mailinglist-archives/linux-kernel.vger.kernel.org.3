@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B864DDBD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:41:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 900044DDBD5
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237375AbiCROnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237374AbiCROmp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S237372AbiCROmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 18 Mar 2022 10:42:45 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278D772E1B;
-        Fri, 18 Mar 2022 07:41:27 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:50150)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nVDnB-00CHeb-JB; Fri, 18 Mar 2022 08:41:25 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:38502 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nVDnA-006EQS-3D; Fri, 18 Mar 2022 08:41:24 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>, linux-api@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
-        <87bl1kunjj.fsf@email.froward.int.ebiederm.org>
-        <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
-        <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
-        <87tubyx0rg.fsf_-_@email.froward.int.ebiederm.org>
-        <875yoe7qdp.fsf_-_@email.froward.int.ebiederm.org>
-        <20220317180856.GB13318@redhat.com>
-Date:   Fri, 18 Mar 2022 09:40:48 -0500
-In-Reply-To: <20220317180856.GB13318@redhat.com> (Oleg Nesterov's message of
-        "Thu, 17 Mar 2022 19:08:57 +0100")
-Message-ID: <87r16z2uj3.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233187AbiCROmn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 18 Mar 2022 10:42:43 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454CC72E1B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:41:24 -0700 (PDT)
+Received: from [IPV6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1] (unknown [IPv6:2a00:5f00:102:0:10b3:10ff:fe5d:4ec1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 457FD1F45FDD;
+        Fri, 18 Mar 2022 14:41:21 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647614482;
+        bh=aOAvZJ3YpqdRhOb0wcVTFtzo0hw/DL1k4YKv61CzQWg=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=nL2C0nfha3tkRVC9UrK2Io1Es+wUL38zxUmvE2qCswyWIVMp9aDcfqryJB7E+R6BP
+         W2O6mv33ofUBPjpwz1la8ntw1Ll11p3AgQuuaQNtQPqd8I/tW29t7HQAPO9uDv5vHV
+         Ws5kmo/FdVCIMxAtD+mBfJxDUZ3eO/7KN1CGFWKzGQWg5mnMPNQP6l60CzBv5HdRLG
+         4M7isGiW/ALBPEGIz9tESa0dE6N35XF762XrsN1xWVFnKvLeeM8Aei0RQuBAwWHwt2
+         nJTL3h27VK3tTNzuZ4eKjSyrMi+f3mJr2eZidsLJ9r/O0OBwKkhjFVg05iuy9z5V2H
+         n40aiKPsUHX/A==
+Message-ID: <b8d74d79-7d49-658f-5e0b-4a5da4fa2afc@collabora.com>
+Date:   Fri, 18 Mar 2022 17:41:18 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nVDnA-006EQS-3D;;;mid=<87r16z2uj3.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18ZjnnYjbyuB5jXx+RBFTyIAWv+eFlbsBQ=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 8/8] drm/panfrost: Switch to generic memory shrinker
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Steven Price <steven.price@arm.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        virtualization@lists.linux-foundation.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+References: <20220314224253.236359-1-dmitry.osipenko@collabora.com>
+ <20220314224253.236359-9-dmitry.osipenko@collabora.com>
+ <4e6256d0-a3c6-ba01-c31f-a5757b79a9ce@arm.com>
+ <3dda45b8-1f49-eefd-0167-1f3c13b2c73f@collabora.com>
+In-Reply-To: <3dda45b8-1f49-eefd-0167-1f3c13b2c73f@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 538 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 9 (1.7%), b_tie_ro: 8 (1.4%), parse: 1.37 (0.3%),
-        extract_message_metadata: 4.2 (0.8%), get_uri_detail_list: 1.25 (0.2%),
-         tests_pri_-1000: 4.7 (0.9%), tests_pri_-950: 1.83 (0.3%),
-        tests_pri_-900: 1.13 (0.2%), tests_pri_-90: 209 (38.8%), check_bayes:
-        207 (38.4%), b_tokenize: 5.0 (0.9%), b_tok_get_all: 6 (1.0%),
-        b_comp_prob: 2.7 (0.5%), b_tok_touch_all: 189 (35.2%), b_finish: 1.11
-        (0.2%), tests_pri_0: 280 (52.0%), check_dkim_signature: 0.76 (0.1%),
-        check_dkim_adsp: 3.7 (0.7%), poll_dns_idle: 1.07 (0.2%), tests_pri_10:
-        3.5 (0.7%), tests_pri_500: 12 (2.1%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 2/2] ptrace: Return the signal to continue with from
- ptrace_stop
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
 
-> Not sure I understand this patch, I can't apply it. I guess I need to
-> clone your tree first, will do later.
+On 3/17/22 02:04, Dmitry Osipenko wrote:
+> 
+> On 3/16/22 18:04, Steven Price wrote:
+>> On 14/03/2022 22:42, Dmitry Osipenko wrote:
+>>> Replace Panfrost's memory shrinker with a generic DRM memory shrinker.
+>>>
+>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>> ---
+>> I gave this a spin on my Firefly-RK3288 board and everything seems to
+>> work. So feel free to add a:
+>>
+>> Tested-by: Steven Price <steven.price@arm.com>
+>>
+>> As Alyssa has already pointed out you need to remove the
+>> panfrost_gem_shrinker.c file. But otherwise everything looks fine, and
+>> I'm very happy to see the shrinker code gone ;)
+> 
+> Awesome, thank you.
 
-Yes this series is on top of:
-  https://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git kill-tracehook-for-v5.18
+Steven, could you please tell me how exactly you tested the shrinker?
 
-Nothing particularly interesting happens in my kill tracehook series
-but I do get rid of tracehook.h and so everything gets moved and
-renamed.
+I realized that today's IGT doesn't have any tests for the Panfrost's
+madvise ioctl.
 
-Eric
+You may invoke "echo 2 > /proc/sys/vm/drop_caches" manually in order to
+trigger shrinker while 3d app is running actively (like a game or
+benchmark). Nothing crashing will be a good enough indicator that it
+works okay.
+
+I may get an RK board next week and then will be able to test it by
+myself, so please don't hurry.

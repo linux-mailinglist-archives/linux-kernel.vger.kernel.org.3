@@ -2,57 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D174DD24F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 02:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5393C4DD255
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 02:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231402AbiCRBQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 21:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        id S231434AbiCRBR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 21:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiCRBQH (ORCPT
+        with ESMTP id S231423AbiCRBRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 21:16:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BC6272F24;
-        Thu, 17 Mar 2022 18:14:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61788615F8;
-        Fri, 18 Mar 2022 01:14:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFF22C340E9;
-        Fri, 18 Mar 2022 01:14:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647566088;
-        bh=PjCYq684cE8WpxvhQSO64ZVBTF5dnWDDGIPDDhW8hN8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=b67MYZColaU56bN2ydXx8eExS69Ta6+sbNFTInMV0ZmP+cyeS5+dQDjW6o+lrFGwk
-         WcicEBCmooiNEkZYVarbo9e8B7ZW2a3fZFQ7ZT8AH3SdmlAa4CfW9JZSRfCL6YtTgu
-         d1bE/SKDrvz2VWgvKzIfPZf0zN/pLdlAaEa0atiEPPSQosm3Wdt61XTgbesXU82xW/
-         Mwbr9U/rCmJwYjqLaOuBGhJ1oI1obKlX+uxZlb94/mraVcO2uTtuCKEvmhX4qbIVpP
-         /VsE34PAV6NtAg37/kJnZnFFJED93FnSIX/GsHoT8C9MwtmIICEz4W173ulDPMCLsj
-         B2z6AkRvSyLoA==
-Date:   Fri, 18 Mar 2022 10:14:45 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Thu, 17 Mar 2022 21:17:24 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AE52A046C;
+        Thu, 17 Mar 2022 18:16:05 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id h126so13428831ybc.1;
+        Thu, 17 Mar 2022 18:16:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=VRsb5Zmb/JCOeENoTDRg7wIKUPQgA0/d6iKWZvPMkaw=;
+        b=gxFBnfWRS6wjleZvzFQNXoTfaiX0E6pjWIupBHBHr0SfVAYDgZiI+XgDsV7PpB4U67
+         4y8iSEE+2ly4nmLzGztFYRJBtHjgJQvoyuGvqtUvwyC9gh3qycNrJ4lA7A/pvnX4ZacD
+         DxXxxLvuchL/+vp/rItPOgGmEEn+NuAc5WJx4lBt9E9CyTd5hlBSrEyMLFUrb6ECAy43
+         mVQH5bYzRijK+Q6tdNGM6qLrKzZCDs5Cjv4QM39KllWc+dOFyZcNDKPGlSIGgynuhjZJ
+         hjUAOJbtI3oOSpzwT6+makiViBL4VWYpaFa37QI2iDg6ENewo7KGQjLNjMo9fIupbIk4
+         RBLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VRsb5Zmb/JCOeENoTDRg7wIKUPQgA0/d6iKWZvPMkaw=;
+        b=a15qf1g5C/W7/vJzLh+iLxvvbsmMd0c4UbL8vAGlnEf1zaHQcs6wHU5l4SlRNFhCzo
+         0gwe2NQs37WcCyVXxGQqFm4BmJ90DMsHiUJsigeIxvu3WPzgBblNJavvHPKFByZIBTGD
+         DvcvujJ3XXpbDJEKeP8yxgFHB3MmCPDQJdTGRnean+QqC1LZGg1dxp+H5d3S9L4tCR1h
+         zu4aVKgp5tyk+sO1PNYLYl8ktUExeKnB/hlYR73wP34h8+ARqonqw7sG34efGXNr1t+y
+         mCnOuZUx/pcKywVpTLO+O7ia3j8w1utJQHifsrnQ94WATWC4j7m5fKs8zFDlJrycWD6+
+         E64A==
+X-Gm-Message-State: AOAM531mrlnIKybbh1lrMmNALu4/KSvb/DDWAwM1pMWhGxrwu9uRJDzD
+        RShzIjwIp5edsveJYXxTPA3QcstSFDnqjU5JsCY=
+X-Google-Smtp-Source: ABdhPJwg2ySuj+xOjHdgdurPQW4/xpvbPONWKSpFY/ZbtyRbsY+xD+fgXfSSRGGveSsQWmt4JiYb/ZKNVUN9rC1yMhw=
+X-Received: by 2002:a25:a223:0:b0:621:1238:68b1 with SMTP id
+ b32-20020a25a223000000b00621123868b1mr8097719ybi.370.1647566164753; Thu, 17
+ Mar 2022 18:16:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220309021230.721028-1-yuzhao@google.com> <20220309021230.721028-4-yuzhao@google.com>
+In-Reply-To: <20220309021230.721028-4-yuzhao@google.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Fri, 18 Mar 2022 14:15:48 +1300
+Message-ID: <CAGsJ_4zr_toOjd976AA5uBctVokVn+xZdvGo1TTZAg2XH0zmKQ@mail.gmail.com>
+Subject: Re: [PATCH v9 03/14] mm/vmscan.c: refactor shrink_node()
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v2 2/3] bootconfig: Support embedding a bootconfig file
- in kernel
-Message-Id: <20220318101445.fdb151efe58c6c3a1c572500@kernel.org>
-In-Reply-To: <20220316191649.GA11547@pswork>
-References: <164724890153.731226.1478494969800777757.stgit@devnote2>
-        <164724892075.731226.14103557516176115189.stgit@devnote2>
-        <20220316191649.GA11547@pswork>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Linux-MM <linux-mm@kvack.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        x86 <x86@kernel.org>, Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,220 +101,283 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 20:16:49 +0100
-Padmanabha Srinivasaiah <treasure4paddy@gmail.com> wrote:
+On Wed, Mar 9, 2022 at 3:47 PM Yu Zhao <yuzhao@google.com> wrote:
+>
+> This patch refactors shrink_node() to improve readability for the
+> upcoming changes to mm/vmscan.c.
+>
+> Signed-off-by: Yu Zhao <yuzhao@google.com>
+> Acked-by: Brian Geffon <bgeffon@google.com>
+> Acked-by: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
+> Acked-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> Acked-by: Steven Barrett <steven@liquorix.net>
+> Acked-by: Suleiman Souhlal <suleiman@google.com>
+> Tested-by: Daniel Byrne <djbyrne@mtu.edu>
+> Tested-by: Donald Carr <d@chaos-reins.com>
+> Tested-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
+> Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
+> Tested-by: Shuang Zhai <szhai2@cs.rochester.edu>
+> Tested-by: Sofia Trinh <sofia.trinh@edi.works>
+> Tested-by: Vaibhav Jain <vaibhav@linux.ibm.com>
 
-> Hello Masami Hiramatsu,
-> 
-> On Mon, Mar 14, 2022 at 06:08:41PM +0900, Masami Hiramatsu wrote:
-> > This allows kernel developer to embed a default bootconfig file in
-> > the kernel instead of embedding it in the initrd. This will be good
-> > for who are using the kernel without initrd, or who needs a default
-> > bootconfigs.
-> > This needs to set two kconfigs: CONFIG_EMBED_BOOT_CONFIG=y and set
-> > the file path to CONFIG_EMBED_BOOT_CONFIG_FILE.
-> > 
-> > Note that you still need 'bootconfig' command line option to load the
-> > embedded bootconfig. Also if you boot using an initrd with a different
-> > bootconfig, the kernel will use the bootconfig in the initrd, instead
-> > of the default bootconfig.
-> > 
-> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > ---
-> >  include/linux/bootconfig.h |   10 ++++++++++
-> >  init/Kconfig               |   21 +++++++++++++++++++++
-> >  init/main.c                |   13 ++++++++-----
-> >  lib/.gitignore             |    1 +
-> >  lib/Makefile               |   12 ++++++++++++
-> >  lib/bootconfig.c           |   23 +++++++++++++++++++++++
-> >  6 files changed, 75 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
-> > index a4665c7ab07c..5dbda5e3e9bb 100644
-> > --- a/include/linux/bootconfig.h
-> > +++ b/include/linux/bootconfig.h
-> > @@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
-> >  /* XBC cleanup data structures */
-> >  void __init xbc_exit(void);
-> >  
-> > +/* XBC embedded bootconfig data in kernel */
-> > +#ifdef CONFIG_EMBED_BOOT_CONFIG
-> > +char * __init xbc_get_embedded_bootconfig(size_t *size);
-> > +#else
-> > +static inline char *xbc_get_embedded_bootconfig(size_t *size)
-> > +{
-> > +	return NULL;
-> > +}
-> > +#endif
-> > +
-> >  #endif
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index e9119bf54b1f..70440804874d 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -1357,6 +1357,27 @@ config BOOT_CONFIG
-> >  
-> >  	  If unsure, say Y.
-> >  
-> > +config EMBED_BOOT_CONFIG
-> > +	bool "Embed bootconfig file in the kernel"
-> > +	depends on BOOT_CONFIG
-> > +	default n
-> > +	help
-> > +	  Embed a bootconfig file given by EMBED_BOOT_CONFIG_FILE in the
-> > +	  kernel. Usually, the bootconfig file is loaded with the initrd
-> > +	  image. But if the system doesn't support initrd, this option will
-> > +	  help you by embedding a bootconfig file while building the kernel.
-> > +
-> > +	  If unsure, say N.
-> > +
-> > +config EMBED_BOOT_CONFIG_FILE
-> > +	string "Embedded bootconfig file path"
-> > +	default ""
-> > +	depends on EMBED_BOOT_CONFIG
-> > +	help
-> > +	  Specify a bootconfig file which will be embedded to the kernel.
-> > +	  This bootconfig will be used if there is no initrd or no other
-> > +	  bootconfig in the initrd.
-> > +
-> >  choice
-> >  	prompt "Compiler optimization level"
-> >  	default CC_OPTIMIZE_FOR_PERFORMANCE
-> > diff --git a/init/main.c b/init/main.c
-> > index 421050be5039..3803bf2e22ea 100644
-> > --- a/init/main.c
-> > +++ b/init/main.c
-> > @@ -265,7 +265,7 @@ static int __init loglevel(char *str)
-> >  early_param("loglevel", loglevel);
-> >  
-> >  #ifdef CONFIG_BLK_DEV_INITRD
-> > -static void * __init get_boot_config_from_initrd(u32 *_size)
-> > +static void * __init get_boot_config_from_initrd(size_t *_size)
-> >  {
-> >  	u32 size, csum;
-> >  	char *data;
-> > @@ -411,12 +411,15 @@ static void __init setup_boot_config(void)
-> >  	static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
-> >  	const char *msg;
-> >  	int pos;
-> > -	u32 size;
-> > +	size_t size;
-> >  	char *data, *err;
-> >  	int ret;
-> >  
-> >  	/* Cut out the bootconfig data even if we have no bootconfig option */
-> >  	data = get_boot_config_from_initrd(&size);
-> > +	/* If there is no bootconfig in initrd, try embedded one. */
-> > +	if (!data)
-> > +		data = xbc_get_embedded_bootconfig(&size);
-> >  
-> >  	strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
-> >  	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
-> > @@ -435,8 +438,8 @@ static void __init setup_boot_config(void)
-> >  	}
-> >  
-> >  	if (size >= XBC_DATA_MAX) {
-> > -		pr_err("bootconfig size %d greater than max size %d\n",
-> > -			size, XBC_DATA_MAX);
-> > +		pr_err("bootconfig size %ld greater than max size %d\n",
-> > +			(long)size, XBC_DATA_MAX);
-> >  		return;
-> >  	}
-> >  
-> > @@ -449,7 +452,7 @@ static void __init setup_boot_config(void)
-> >  				msg, pos);
-> >  	} else {
-> >  		xbc_get_info(&ret, NULL);
-> > -		pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
-> > +		pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
-> >  		/* keys starting with "kernel." are passed via cmdline */
-> >  		extra_command_line = xbc_make_cmdline("kernel");
-> >  		/* Also, "init." keys are init arguments */
-> > diff --git a/lib/.gitignore b/lib/.gitignore
-> > index e5e217b8307b..30a2a5db7033 100644
-> > --- a/lib/.gitignore
-> > +++ b/lib/.gitignore
-> > @@ -6,3 +6,4 @@
-> >  /oid_registry_data.c
-> >  /test_fortify.log
-> >  /test_fortify/*.log
-> > +/default.bconf
-> > diff --git a/lib/Makefile b/lib/Makefile
-> > index 300f569c626b..8183785ee99d 100644
-> > --- a/lib/Makefile
-> > +++ b/lib/Makefile
-> > @@ -279,6 +279,18 @@ $(foreach file, $(libfdt_files), \
-> >  	$(eval CFLAGS_$(file) = -I $(srctree)/scripts/dtc/libfdt))
-> >  lib-$(CONFIG_LIBFDT) += $(libfdt_files)
-> >  
-> > +ifeq ($(CONFIG_EMBED_BOOT_CONFIG),y)
-> > +# Since the specified bootconfig file can be switched, we forcibly update the
-> > +# default.bconf file always.
-> > +$(obj)/default.bconf: FORCE
-> > +	$(call cmd,defbconf)
-> > +
-> > +quiet_cmd_defbconf = GEN     $@
-> > +      cmd_defbconf = cat < /dev/null $(CONFIG_EMBED_BOOT_CONFIG_FILE) > $@
-> > +clean-files	+= default.bconf
-> > +$(obj)/bootconfig.o: $(obj)/default.bconf
-> > +endif
-> > +
-> >  lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
-> >  
-> >  obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
-> > diff --git a/lib/bootconfig.c b/lib/bootconfig.c
-> > index 74f3201ab8e5..3a3bf3a208e3 100644
-> > --- a/lib/bootconfig.c
-> > +++ b/lib/bootconfig.c
-> > @@ -12,6 +12,29 @@
-> >  #include <linux/kernel.h>
-> >  #include <linux/memblock.h>
-> >  #include <linux/string.h>
-> > +
-> > +#ifdef CONFIG_EMBED_BOOT_CONFIG
-> > +asm (
-> > +"	.pushsection .init.data, \"aw\"			\n"
-> > +"	.global embedded_bootconfig_data		\n"
-> > +"embedded_bootconfig_data:				\n"
-> > +"	.incbin \"lib/default.bconf\"			\n"
-> > +"	.global embedded_bootconfig_data_end		\n"
-> > +"embedded_bootconfig_data_end:				\n"
-> > +"	.popsection					\n"
-> > +);
-> > +
-> > +extern __visible char embedded_bootconfig_data[];
-> > +extern __visible char embedded_bootconfig_data_end[];
-> > +
-> > +char * __init xbc_get_embedded_bootconfig(size_t *size)
-> > +{
-> > +	*size = embedded_bootconfig_data_end - embedded_bootconfig_data;
-> > +	return (*size) ? embedded_bootconfig_data : NULL;
-> > +}
-> > +
-> > +#endif
-> > +
-> >  #else /* !__KERNEL__ */
-> >  /*
-> >   * NOTE: This is only for tools/bootconfig, because tools/bootconfig will
-> >
-> 
-> Thanks tested the implemation, it works as expected.
+Reviewed-by: Barry Song <baohua@kernel.org>
 
-Great!
+seems nice refactoring since we are going to skip the whole
+function for lru_gen later:
+static void prepare_scan_count(pg_data_t *pgdat, struct scan_control *sc)
+{
+        unsigned long file;
+        struct lruvec *target_lruvec;
 
-> 
-> Also noted that a change in default.bconf requries a clean build, is it
-> expected behaviour?
+        if (lru_gen_enabled())
+                return;
+       ...
+}
 
-default.bconf will be always updated if CONFIG_EMBED_BOOT_CONFIG=y. So you can
-do incremental build. (I tested it with the incremental build environment)
+> ---
+>  mm/vmscan.c | 198 +++++++++++++++++++++++++++-------------------------
+>  1 file changed, 104 insertions(+), 94 deletions(-)
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 59b14e0d696c..8e744cdf802f 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2718,6 +2718,109 @@ enum scan_balance {
+>         SCAN_FILE,
+>  };
+>
+> +static void prepare_scan_count(pg_data_t *pgdat, struct scan_control *sc=
+)
+> +{
+> +       unsigned long file;
+> +       struct lruvec *target_lruvec;
+> +
+> +       target_lruvec =3D mem_cgroup_lruvec(sc->target_mem_cgroup, pgdat)=
+;
+> +
+> +       /*
+> +        * Flush the memory cgroup stats, so that we read accurate per-me=
+mcg
+> +        * lruvec stats for heuristics.
+> +        */
+> +       mem_cgroup_flush_stats();
+> +
+> +       /*
+> +        * Determine the scan balance between anon and file LRUs.
+> +        */
+> +       spin_lock_irq(&target_lruvec->lru_lock);
+> +       sc->anon_cost =3D target_lruvec->anon_cost;
+> +       sc->file_cost =3D target_lruvec->file_cost;
+> +       spin_unlock_irq(&target_lruvec->lru_lock);
+> +
+> +       /*
+> +        * Target desirable inactive:active list ratios for the anon
+> +        * and file LRU lists.
+> +        */
+> +       if (!sc->force_deactivate) {
+> +               unsigned long refaults;
+> +
+> +               refaults =3D lruvec_page_state(target_lruvec,
+> +                               WORKINGSET_ACTIVATE_ANON);
+> +               if (refaults !=3D target_lruvec->refaults[0] ||
+> +                       inactive_is_low(target_lruvec, LRU_INACTIVE_ANON)=
+)
+> +                       sc->may_deactivate |=3D DEACTIVATE_ANON;
+> +               else
+> +                       sc->may_deactivate &=3D ~DEACTIVATE_ANON;
+> +
+> +               /*
+> +                * When refaults are being observed, it means a new
+> +                * workingset is being established. Deactivate to get
+> +                * rid of any stale active pages quickly.
+> +                */
+> +               refaults =3D lruvec_page_state(target_lruvec,
+> +                               WORKINGSET_ACTIVATE_FILE);
+> +               if (refaults !=3D target_lruvec->refaults[1] ||
+> +                   inactive_is_low(target_lruvec, LRU_INACTIVE_FILE))
+> +                       sc->may_deactivate |=3D DEACTIVATE_FILE;
+> +               else
+> +                       sc->may_deactivate &=3D ~DEACTIVATE_FILE;
+> +       } else
+> +               sc->may_deactivate =3D DEACTIVATE_ANON | DEACTIVATE_FILE;
+> +
+> +       /*
+> +        * If we have plenty of inactive file pages that aren't
+> +        * thrashing, try to reclaim those first before touching
+> +        * anonymous pages.
+> +        */
+> +       file =3D lruvec_page_state(target_lruvec, NR_INACTIVE_FILE);
+> +       if (file >> sc->priority && !(sc->may_deactivate & DEACTIVATE_FIL=
+E))
+> +               sc->cache_trim_mode =3D 1;
+> +       else
+> +               sc->cache_trim_mode =3D 0;
+> +
+> +       /*
+> +        * Prevent the reclaimer from falling into the cache trap: as
+> +        * cache pages start out inactive, every cache fault will tip
+> +        * the scan balance towards the file LRU.  And as the file LRU
+> +        * shrinks, so does the window for rotation from references.
+> +        * This means we have a runaway feedback loop where a tiny
+> +        * thrashing file LRU becomes infinitely more attractive than
+> +        * anon pages.  Try to detect this based on file LRU size.
+> +        */
+> +       if (!cgroup_reclaim(sc)) {
+> +               unsigned long total_high_wmark =3D 0;
+> +               unsigned long free, anon;
+> +               int z;
+> +
+> +               free =3D sum_zone_node_page_state(pgdat->node_id, NR_FREE=
+_PAGES);
+> +               file =3D node_page_state(pgdat, NR_ACTIVE_FILE) +
+> +                          node_page_state(pgdat, NR_INACTIVE_FILE);
+> +
+> +               for (z =3D 0; z < MAX_NR_ZONES; z++) {
+> +                       struct zone *zone =3D &pgdat->node_zones[z];
+> +
+> +                       if (!managed_zone(zone))
+> +                               continue;
+> +
+> +                       total_high_wmark +=3D high_wmark_pages(zone);
+> +               }
+> +
+> +               /*
+> +                * Consider anon: if that's low too, this isn't a
+> +                * runaway file reclaim problem, but rather just
+> +                * extreme pressure. Reclaim as per usual then.
+> +                */
+> +               anon =3D node_page_state(pgdat, NR_INACTIVE_ANON);
+> +
+> +               sc->file_is_tiny =3D
+> +                       file + free <=3D total_high_wmark &&
+> +                       !(sc->may_deactivate & DEACTIVATE_ANON) &&
+> +                       anon >> sc->priority;
+> +       }
+> +}
+> +
+>  /*
+>   * Determine how aggressively the anon and file LRU lists should be
+>   * scanned.  The relative value of each set of LRU lists is determined
+> @@ -3188,109 +3291,16 @@ static void shrink_node(pg_data_t *pgdat, struct=
+ scan_control *sc)
+>         unsigned long nr_reclaimed, nr_scanned;
+>         struct lruvec *target_lruvec;
+>         bool reclaimable =3D false;
+> -       unsigned long file;
+>
+>         target_lruvec =3D mem_cgroup_lruvec(sc->target_mem_cgroup, pgdat)=
+;
+>
+>  again:
+> -       /*
+> -        * Flush the memory cgroup stats, so that we read accurate per-me=
+mcg
+> -        * lruvec stats for heuristics.
+> -        */
+> -       mem_cgroup_flush_stats();
+> -
+>         memset(&sc->nr, 0, sizeof(sc->nr));
+>
+>         nr_reclaimed =3D sc->nr_reclaimed;
+>         nr_scanned =3D sc->nr_scanned;
+>
+> -       /*
+> -        * Determine the scan balance between anon and file LRUs.
+> -        */
+> -       spin_lock_irq(&target_lruvec->lru_lock);
+> -       sc->anon_cost =3D target_lruvec->anon_cost;
+> -       sc->file_cost =3D target_lruvec->file_cost;
+> -       spin_unlock_irq(&target_lruvec->lru_lock);
+> -
+> -       /*
+> -        * Target desirable inactive:active list ratios for the anon
+> -        * and file LRU lists.
+> -        */
+> -       if (!sc->force_deactivate) {
+> -               unsigned long refaults;
+> -
+> -               refaults =3D lruvec_page_state(target_lruvec,
+> -                               WORKINGSET_ACTIVATE_ANON);
+> -               if (refaults !=3D target_lruvec->refaults[0] ||
+> -                       inactive_is_low(target_lruvec, LRU_INACTIVE_ANON)=
+)
+> -                       sc->may_deactivate |=3D DEACTIVATE_ANON;
+> -               else
+> -                       sc->may_deactivate &=3D ~DEACTIVATE_ANON;
+> -
+> -               /*
+> -                * When refaults are being observed, it means a new
+> -                * workingset is being established. Deactivate to get
+> -                * rid of any stale active pages quickly.
+> -                */
+> -               refaults =3D lruvec_page_state(target_lruvec,
+> -                               WORKINGSET_ACTIVATE_FILE);
+> -               if (refaults !=3D target_lruvec->refaults[1] ||
+> -                   inactive_is_low(target_lruvec, LRU_INACTIVE_FILE))
+> -                       sc->may_deactivate |=3D DEACTIVATE_FILE;
+> -               else
+> -                       sc->may_deactivate &=3D ~DEACTIVATE_FILE;
+> -       } else
+> -               sc->may_deactivate =3D DEACTIVATE_ANON | DEACTIVATE_FILE;
+> -
+> -       /*
+> -        * If we have plenty of inactive file pages that aren't
+> -        * thrashing, try to reclaim those first before touching
+> -        * anonymous pages.
+> -        */
+> -       file =3D lruvec_page_state(target_lruvec, NR_INACTIVE_FILE);
+> -       if (file >> sc->priority && !(sc->may_deactivate & DEACTIVATE_FIL=
+E))
+> -               sc->cache_trim_mode =3D 1;
+> -       else
+> -               sc->cache_trim_mode =3D 0;
+> -
+> -       /*
+> -        * Prevent the reclaimer from falling into the cache trap: as
+> -        * cache pages start out inactive, every cache fault will tip
+> -        * the scan balance towards the file LRU.  And as the file LRU
+> -        * shrinks, so does the window for rotation from references.
+> -        * This means we have a runaway feedback loop where a tiny
+> -        * thrashing file LRU becomes infinitely more attractive than
+> -        * anon pages.  Try to detect this based on file LRU size.
+> -        */
+> -       if (!cgroup_reclaim(sc)) {
+> -               unsigned long total_high_wmark =3D 0;
+> -               unsigned long free, anon;
+> -               int z;
+> -
+> -               free =3D sum_zone_node_page_state(pgdat->node_id, NR_FREE=
+_PAGES);
+> -               file =3D node_page_state(pgdat, NR_ACTIVE_FILE) +
+> -                          node_page_state(pgdat, NR_INACTIVE_FILE);
+> -
+> -               for (z =3D 0; z < MAX_NR_ZONES; z++) {
+> -                       struct zone *zone =3D &pgdat->node_zones[z];
+> -                       if (!managed_zone(zone))
+> -                               continue;
+> -
+> -                       total_high_wmark +=3D high_wmark_pages(zone);
+> -               }
+> -
+> -               /*
+> -                * Consider anon: if that's low too, this isn't a
+> -                * runaway file reclaim problem, but rather just
+> -                * extreme pressure. Reclaim as per usual then.
+> -                */
+> -               anon =3D node_page_state(pgdat, NR_INACTIVE_ANON);
+> -
+> -               sc->file_is_tiny =3D
+> -                       file + free <=3D total_high_wmark &&
+> -                       !(sc->may_deactivate & DEACTIVATE_ANON) &&
+> -                       anon >> sc->priority;
+> -       }
+> +       prepare_scan_count(pgdat, sc);
+>
+>         shrink_node_memcgs(pgdat, sc);
+>
+> --
+> 2.35.1.616.g0bdcbb4464-goog
+>
 
-Thank you,
-
-> 
-> Thanks and Regards,
-> Padmanabha.S
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Thanks
+Barry

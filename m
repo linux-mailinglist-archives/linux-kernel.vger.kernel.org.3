@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA7B4DD204
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:46:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3B14DD208
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiCRArI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 20:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
+        id S231252AbiCRAvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 20:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiCRArH (ORCPT
+        with ESMTP id S229482AbiCRAvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 20:47:07 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C06247C2F
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:45:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647564349; x=1679100349;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=ioIK2vITaATAP80hVGQmV1FVy0+JSS1KHG27psb3DZw=;
-  b=fULJiA+Q3zI6eQTJPS9IkXX5SDNrxw4TaEk89fBT+mKGbXpuMryNuZQ3
-   jHDCBRVVcYojcqRgcqt5lLKEX/KC/pIMURJLkVg5SDdhxpWOu0I/3+XbQ
-   C7MNgnMaQXB3ezITuagCIa0tarxwxa70ZAuRXIakgpqC0QDZrd5Z4Qni5
-   fwai13RYIDQXTDOD02RxLRB8LkJpRi/JuSLjB0pdWiMA8+5nF9oHQG9Ub
-   9G+gpTBSCD4u0o36u+G5JAQIw3ivftLkGdrjO9JvKXhW06eqOaAoJYIJR
-   DhminPxYxh1W+0afgvj0HZJ9h0cGTP0DXF6f80j+kdDke5ShbTVWBJuq0
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="256964364"
-X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
-   d="scan'208";a="256964364"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 17:45:49 -0700
-X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
-   d="scan'208";a="516984044"
-Received: from dstanfie-mobl2.amr.corp.intel.com (HELO [10.212.178.19]) ([10.212.178.19])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 17:45:48 -0700
-Message-ID: <d4f62008-faa7-2931-5690-f29f9544b81b@intel.com>
-Date:   Thu, 17 Mar 2022 17:45:41 -0700
+        Thu, 17 Mar 2022 20:51:45 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCED13DB61;
+        Thu, 17 Mar 2022 17:50:27 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id v130-20020a1cac88000000b00389d0a5c511so5898455wme.5;
+        Thu, 17 Mar 2022 17:50:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3pMEbKBsMpapDd8TCjE4RHFawECGaW/7eNS3lLK39RM=;
+        b=nurmfdO1iMIrBTlsO7SIBEuIZr5DueNEiSytzbs9NuL2KOS/DHR/ihWYxPNIKIvIos
+         qE2q38W5m0BtJEBxcRlYheiXOLooMSQf3rokqWtNO0i6qVOpzfADGXKZBGPZySVHe3xP
+         Os+26lqEw08MMVC4YINaAGUl0uGzucz7Wv1/MCy7vztqDnrqsPSVcHjEeVNpZoXZosEE
+         JO4gQ2RBB9Y+gIvpzQkIhFQ9T1ar5IgFM1rwDrPwR7PUE2cmGK91R6rK/Z3DNR4i0eLn
+         mmlgroZmqLPbYTueAZnwLINL5LYxYwTYE94eBxiT7Vz1fP6DMhAwsxFirkXj8IrsEHaR
+         zLpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3pMEbKBsMpapDd8TCjE4RHFawECGaW/7eNS3lLK39RM=;
+        b=35mzEG0vRlI1VCFqPJu6Y1Qfn4fWmyUV1bUOWXVuQ9hzON9UctFBAeHpo2cZTStc8X
+         FI0OoFGhodLf2bOaz6MieEHvVaNU9eKAG6DUsI3wDg5mtO2r160uOUgTy3B69UKL+zGf
+         JSJD+Wpdmxf8l/FDU0n1vR7bh3DStrV/zeeWJWLaVzlI1llAQp7QtvWwutIqVJ61piLw
+         B4XqgkD2cKpqPyEOdaD7kqZ9GTj9XJnK7tkxX16aJmIe2oHfjINdaHjSdDugJgJEgq88
+         6zP1KRK73wiGmFZt7XYF7xzEV5/mxL146irTn0c49bg19jNS/i3wO/x+jgH+5/JE9wt8
+         Gktg==
+X-Gm-Message-State: AOAM533j8J2h2RA3i9iGHwgN8eWJ+A3GuqOj/KcD8w1aRZAmYfcI9ko2
+        IscVGG7DYxgdHxNlveiUbJY=
+X-Google-Smtp-Source: ABdhPJxlOL4MExEm3h26Y4McVA9a+lQbSOcpch5+/PntdcTOqCOFkKirk/UG1u3K3uaNw444o89q6g==
+X-Received: by 2002:a05:600c:a4b:b0:37b:ea2b:5583 with SMTP id c11-20020a05600c0a4b00b0037bea2b5583mr14211291wmq.139.1647564625886;
+        Thu, 17 Mar 2022 17:50:25 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id n65-20020a1c2744000000b003862bfb509bsm9483720wmn.46.2022.03.17.17.50.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 17:50:25 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Chris Snook <chris.snook@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Gatis Peisenieks <gatis@mikrotik.com>, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] atl1c: remove redundant assignment to variable size
+Date:   Fri, 18 Mar 2022 00:50:21 +0000
+Message-Id: <20220318005021.82073-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Nadav Amit <namit@vmware.com>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "lkp@lists.01.org" <lkp@lists.01.org>,
-        "lkp@intel.com" <lkp@intel.com>,
-        "ying.huang@intel.com" <ying.huang@intel.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>,
-        "fengwei.yin@intel.com" <fengwei.yin@intel.com>,
-        Andy Lutomirski <luto@kernel.org>
-References: <20220317090415.GE735@xsang-OptiPlex-9020>
- <c85ae95a-6603-ca0d-a653-b3f2f7069e20@intel.com>
- <3B958B13-75F0-4B81-B8CF-99CD140436EB@vmware.com>
- <96f9b880-876f-bf4d-8eb0-9ae8bbc8df6d@intel.com>
- <DC37F01B-A80F-4839-B4FB-C21F64943E64@vmware.com>
- <dd8be93c-ded6-b962-50d4-96b1c3afb2b7@intel.com>
- <A185DAD5-3AA7-445B-B57D-AFAF6B55D144@vmware.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [x86/mm/tlb] 6035152d8e: will-it-scale.per_thread_ops -13.2%
- regression
-In-Reply-To: <A185DAD5-3AA7-445B-B57D-AFAF6B55D144@vmware.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/22 17:20, Nadav Amit wrote:
-> I don’t have other data right now. Let me run some measurements later
-> tonight. I understand your explanation, but I still do not see how
-> much “later” can the lazy check be that it really matters. Just
-> strange.
+Variable sie is being assigned a value that is never read. The
+The assignment is redundant and can be removed.
 
-These will-it-scale tests are really brutal.  They're usually sitting in
-really tight kernel entry/exit loops.  Everything is pounding on kernel
-locks and bouncing cachelines around like crazy.  It might only be a few
-thousand cycles between two successive kernel entries.
+Cleans up clang scan build warning:
+drivers/net/ethernet/atheros/atl1c/atl1c_main.c:1054:22: warning:
+Although the value stored to 'size' is used in the enclosing
+expression, the value is never actually read from 'size'
+[deadcode.DeadStores]
 
-Things like the call_single_queue cacheline have to be dragged from
-other CPUs *and* there are locks that you can spin on.  While a thread
-is doing all this spinning, it is forcing more and more threads into the
-lazy TLB state.  The longer you spin, the more threads have entered the
-kernel, contended on the mmap_lock and gone idle.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/net/ethernet/atheros/atl1c/atl1c_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Is it really surprising that a loop that can take hundreds of locks can
-take a long time?
+diff --git a/drivers/net/ethernet/atheros/atl1c/atl1c_main.c b/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
+index f50604f3e541..49459397993e 100644
+--- a/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
++++ b/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
+@@ -1051,7 +1051,7 @@ static int atl1c_setup_ring_resources(struct atl1c_adapter *adapter)
+ 	 * each ring/block may need up to 8 bytes for alignment, hence the
+ 	 * additional bytes tacked onto the end.
+ 	 */
+-	ring_header->size = size =
++	ring_header->size =
+ 		sizeof(struct atl1c_tpd_desc) * tpd_ring->count * tqc +
+ 		sizeof(struct atl1c_rx_free_desc) * rfd_ring->count * rqc +
+ 		sizeof(struct atl1c_recv_ret_status) * rfd_ring->count * rqc +
+-- 
+2.35.1
 
-                for_each_cpu(cpu, cfd->cpumask) {
-                        csd_lock(csd);
-			...
-		}

@@ -2,102 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7323B4DE37F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 22:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1B04DE382
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 22:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241128AbiCRV0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 17:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S241149AbiCRV2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 17:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbiCRV0g (ORCPT
+        with ESMTP id S241202AbiCRV2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 17:26:36 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C3712E741;
-        Fri, 18 Mar 2022 14:25:17 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22IIW7vq033023;
-        Fri, 18 Mar 2022 21:25:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=zRbPg1Tx2tDNI7lXo72lciqg1DdD0NPW0gBMTsN9jhw=;
- b=bfPcVWePpfnwjNO9QMEBkrSMAzJByYnFl7Tyl78XLYiOjAtfnDQvTGgTHeGTMhpWsApy
- uF9Lw8TQiYwMdWbFy0eKynaRIL7JhL8RWbgcv4QUVpRMXnC1ctMKgo+kEwP2saRgBTl+
- yD0FDPsLNaOYlcbBwQdm/jSn3J6t6eoSEqARDLp1ff1u941/tVQQhO1Yv0Wm7eGvFelH
- 61NbpTSjTdz6KiZdMJi9oEcEyIYk0Gip5YsIpZ+AcyBmYrep+yUdOwqGQCTQ8rbtIBWm
- gBemUGQZfTtpvShA9xiQtBmAx5MUpfROcZjnfvgAP2lEqb3hkQFhhhzCJuzOGoapdEVQ Sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev074ynf3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 21:25:12 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22ILJQQ5008202;
-        Fri, 18 Mar 2022 21:25:11 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev074ynet-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 21:25:11 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22ILDqMt011724;
-        Fri, 18 Mar 2022 21:25:10 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma01dal.us.ibm.com with ESMTP id 3erk5afu89-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 21:25:10 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22ILP8m326935714
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Mar 2022 21:25:08 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8267C13605D;
-        Fri, 18 Mar 2022 21:25:08 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D3A2F136059;
-        Fri, 18 Mar 2022 21:25:07 +0000 (GMT)
-Received: from [9.211.157.42] (unknown [9.211.157.42])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 18 Mar 2022 21:25:07 +0000 (GMT)
-Message-ID: <57d7034a-fb5c-444e-a709-4f993459688e@linux.vnet.ibm.com>
-Date:   Fri, 18 Mar 2022 17:25:07 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v11 0/4] integrity: support including firmware ".platform"
- keys at build time
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Nageswara Sastry <rnsastry@linux.ibm.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        dhowells@redhat.com, zohar@linux.ibm.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dimitri.ledkov@canonical.com,
-        seth@forshee.me, Masahiro Yamada <masahiroy@kernel.org>
-References: <20220310214450.676505-1-nayna@linux.ibm.com>
- <4afae87c-2986-6b0e-07be-954dd4937afd@linux.ibm.com>
- <f78d11fefd13bd17748e36621acee9c2f27a77f6.camel@kernel.org>
- <f92ec4d8-47c0-ece5-3c52-caeb8265881c@linux.vnet.ibm.com>
- <YjLlYTs+2ep80zoK@iki.fi>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-In-Reply-To: <YjLlYTs+2ep80zoK@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: IkzPowucMttYl2FgGLxv67O761TYy2Gu
-X-Proofpoint-ORIG-GUID: Lgq4WlscjYm1-zu86nVD2JR3DE1M-mai
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 18 Mar 2022 17:28:05 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B20012E741;
+        Fri, 18 Mar 2022 14:26:46 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id b8so8375241pjb.4;
+        Fri, 18 Mar 2022 14:26:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ngACJmeVV9pPVZzYzpTofY7PpGPGJ4tyVyA//CfbKMw=;
+        b=I5DKGYi5JVESFPGE8929b6D4feB7CmGqV1QTUVY144tOMh4r8VrXHqZYItH1JtzF6+
+         xWiu7ZgTBvNe0py4k0xnQPYWVt08Ps//7Uk7cGi5dmxN4vlrRAfaAZpeHGx+9HPDG2bf
+         ZX+dZS8JGMK4CpcUosDYfgb8UdEC9ZBcT00t90sGBjfG+5fw4yOjmP8lZKXjhOBjoTE4
+         zjsMNE3l5CkEIZDOJ+JM/NyhH5T7T+YgeSdP1JGi+7uL11u3YtdaUq/LP9gwgOs/pNMN
+         gXx497yV8ujjTMkJI7iHQYkTtIBnPzR00RZUmH4DbxVvsQ1cek1HqBVJ/mfgv52w1FlP
+         1hPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ngACJmeVV9pPVZzYzpTofY7PpGPGJ4tyVyA//CfbKMw=;
+        b=UAWiIZpvtcbHHhGvvU5gy+Yca7Jmc9q2oWc0xlPSQvQKC8uY1AVjuVSMM88FJO35C0
+         VZ3ZjNz6IaypNDjfWKipAlu3vsgO7lRe9lBJJksHDjHZ6SXC2amxgvrfS309gmHsh02L
+         uGoRXD4CmnKTksawLqa2sc64PTEJYUezAR9gFUXLK/n7AvhME8Fiey0E39uchEuEs0Uu
+         l0TZabcpjWPj/ainb+WddWD0kpqUeQYfh9z7k5e7FiurcEQXUjOC+rhn/SI6jW6V3CjA
+         ADe+icdOHpTY378LAN883HxR5YaYFcMU8lOzc5fMmWfrmjXzno9HaGiTpRpMsP9vGoVr
+         x2uw==
+X-Gm-Message-State: AOAM533cNq6fUINvPoxScFzlZ9+TKiCCr79quwfb5MdJCtqw6aWwBbz5
+        uNNnaxeSbNA3HnZhbcGiyKsElire0qg=
+X-Google-Smtp-Source: ABdhPJy+etAMlosAPHBEubVULFhPikXO3lrAyit0p0AdzhMJ1owsnFVy8PWq4CVWA2INxOFRIJ43pA==
+X-Received: by 2002:a17:90b:4b8a:b0:1c6:35d1:4418 with SMTP id lr10-20020a17090b4b8a00b001c635d14418mr23227227pjb.176.1647638805484;
+        Fri, 18 Mar 2022 14:26:45 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id o3-20020a639203000000b003810e49ff4fsm8884375pgd.1.2022.03.18.14.26.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 14:26:44 -0700 (PDT)
+Subject: Re: [PATCH] net: bcmgenet: Use stronger register read/writes to
+ assure ordering
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Peter Robinson <pbrobinson@gmail.com>,
+        Jeremy Linton <jeremy.linton@arm.com>, netdev@vger.kernel.org,
+        opendmb@gmail.com, davem@davemloft.net,
+        bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
+References: <20220310045358.224350-1-jeremy.linton@arm.com>
+ <f831a4c6-58c9-20bd-94e8-e221369609e8@gmail.com>
+ <de28c0ec-56a7-bfff-0c41-72aeef097ee3@arm.com>
+ <2167202d-327c-f87d-bded-702b39ae49e1@gmail.com>
+ <CALeDE9MerhZWwJrkg+2OEaQ=_9C6PHYv7kQ_XEQ6Kp7aV2R31A@mail.gmail.com>
+ <472540d2-3a61-beca-70df-d5f152e1cfd1@gmail.com>
+ <20220318122017.24341eb1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <082a7743-2eb8-c067-e41d-2a3acca5c056@gmail.com>
+Date:   Fri, 18 Mar 2022 14:26:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-18_14,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 suspectscore=0 malwarescore=0 mlxscore=0 adultscore=0
- bulkscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=999
- clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203180113
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220318122017.24341eb1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,44 +84,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 3/17/22 03:38, Jarkko Sakkinen wrote:
-> On Fri, Mar 11, 2022 at 04:03:12PM -0500, Nayna wrote:
->> On 3/11/22 11:42, Jarkko Sakkinen wrote:
->>> ".platform" keyring.
->>>>> Changelog:
->>>>> v11:
->>>>> * Added a new patch to conditionally build extract-cert if
->>>>> PLATFORM_KEYRING is enabled.
->>>>>
->>>> Tested the following four patches with and with out setting
->>>> CONFIG_INTEGRITY_PLATFORM_KEYS
->>>>
->>>> Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
->>> OK, I added it:
->>>
->>> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
->> Thanks Jarkko. Masahiro Yamada would prefer to revert the original commit
->> 340a02535ee785c64c62a9c45706597a0139e972 i.e. move extract-cert back to the
->> scripts/ directory.
+On 3/18/22 12:20 PM, Jakub Kicinski wrote:
+> On Fri, 18 Mar 2022 12:01:20 -0700 Florian Fainelli wrote:
+>> Given the time crunch we should go with Jeremy's patch that uses
+>> stronger I/O access method and then we will work with Jeremy offline to
+>> make sure that our version of GCC12 is exactly the same as his, as well
+>> as the compiler options (like -mtune/-march) to reproduce this.
 >>
->> I am just posting v12 which includes Masahiro feedback. Nageswara has
->> already tested v12 version as well.
->>
->> I am fine either way 1.) Adding v11 and then separately handling of
->> reverting of the commit or 2.) Adding v12 version which includes the revert.
->> I leave the decision on you as to which one to upstream.
->>
->> Thanks & Regards,
->>
->>      - Nayna
->>
-> I already sent PR for v5.18. Too many late changes to include this, which
-> means that v12 is the way to go.
+>> If we believe this is only a problem with GCC12 and 5.17 in Fedora, then
+>> I would be inclined to remove the Fixes tag such that when we come up
+>> with a more localized solution we do not have to revert "net: bcmgenet:
+>> Use stronger register read/writes to assure ordering" from stable
+>> branches. This would be mostly a courtesy to our future selves, but an
+>> argument could be made that this probably has always existed, and that
+>> different compilers could behave more or less like GCC12.
+> 
+> Are you expecting this patch to make 5.17? If Linus cuts final this
+> weekend, as he most likely will, unless we do something special the
+> patch in question will end up getting merged during the merge window.
+> Without the Fixes tag you'll need to manually instruct Greg to pull 
+> it in. Is that the plan?
 
-Assuming v12 looks good, could you please queue it now ?
+Maybe I should have refrained from making that comment after all :)
+Having the Fixes: tag dramatically helps with getting this patch applied
+all the way to the relevant stable trees and surely correctness over
+speed should prevail. If we want to restore the performance loss (with
+the onus on Doug and I to prove that there is a performance drop), then
+we could send a fix with the appropriate localized barrier followed by a
+revert of Jeremy's patch. And if we cared about getting those two
+patches applied to stable, we would tag them with the appropriate Fixes tag.
 
-Thanks & Regards,
-
-     - Nayna
-
+It looks like there are a few 'net' changes that showed up, are you
+going to send a pull request to Linus before 5.17 final is cut?
+-- 
+Florian

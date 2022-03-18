@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B7B4DD7F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E60C4DD7F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235015AbiCRKgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
+        id S235031AbiCRKgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234992AbiCRKfy (ORCPT
+        with ESMTP id S235004AbiCRKf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 06:35:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D82EB255A0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:34:35 -0700 (PDT)
+        Fri, 18 Mar 2022 06:35:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D5CDF3281
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:34:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647599675;
+        s=mimecast20190719; t=1647599679;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PODFzb3mjImlWQPxxoECM7lRSKqdrL/May27LmTIUmk=;
-        b=TnppTak9YM95yoJsPt9n0JEIKOasxvJ7jqw00wNvZIm7qs4iXLE9oobtGnUQZH0SHxo2tG
-        iQr7CYfHVOceekEbshaO4S6izRZKycCn/A6z10+6T3ZCTPjkVUW2rmyuzCYJVCgZg96+bX
-        cHDe1NP+E+H/PCl1QbLiwxIhW8Zn8UM=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=EDf+Cue22NIq+++ettcFUZpGsy+wdzQQBWaXtBz9VhU=;
+        b=gPcgEv8OHxrim7lrL/8J+Mug5yaSL35teVplXwedYFj/RpaOXlq3MHi/clJU+s/pxm745Q
+        Q8atBqxgfbl4lhZeaF/mGHd59RrMSrD+UtrJ9F/HpP8TjdI/ZyWNAfIgx72YlpHbiI4ro4
+        +o02VeaD043a+kWS2BmkeSk0kK47JaM=
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
+ [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-227-Aq4d69K9MqirLeG7oJgbhw-1; Fri, 18 Mar 2022 06:34:33 -0400
-X-MC-Unique: Aq4d69K9MqirLeG7oJgbhw-1
-Received: by mail-pf1-f197.google.com with SMTP id s3-20020aa78bc3000000b004fa59ef2a34so2143351pfd.19
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:34:33 -0700 (PDT)
+ us-mta-240-0mtlhistOFCYu4-Lvs7XCQ-1; Fri, 18 Mar 2022 06:34:38 -0400
+X-MC-Unique: 0mtlhistOFCYu4-Lvs7XCQ-1
+Received: by mail-pf1-f198.google.com with SMTP id w68-20020a62dd47000000b004f6aa5e4824so5094477pff.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:34:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PODFzb3mjImlWQPxxoECM7lRSKqdrL/May27LmTIUmk=;
-        b=hp3PWRXK58OLg1GifACZJKCCc3AC9IB8WMMVHfUaLtnJgmvhw/yElFoqdzclmzIKL3
-         wrhVNomCpbs0AalVp3RfMjM47zpdT3L4c9NvSu4Ii7OBSmuvtaSowZTdKSszaVxI+/l7
-         wmCdXixz4hw9bOx4uc0XKdac+34aPoOFSdewgLvfJbYrrFLAWqDFu6IqqUJd25acP0cU
-         M3NyZmbySoq8caTJbGKd9AJE/W+yyKqu3ia3nkK2UO8qtxFIqKBpVkGx6lzQLq8rfmWA
-         qFmZvp2plTKOzAxRKvSxuRLHU5CwiPc71Da/xf6+PyZVnEu6A6cfWPIDKXEsDpnUHcYN
-         UljQ==
-X-Gm-Message-State: AOAM5311ghNTzbQVan8eUX7j5G12SAOoUFnpYHmx1ZBpfQpKN6KEy1Z+
-        Ie9Lz8y3ZICoz0YRqoy2IgDYd8NtDS+qcluHo5ApnpkQPgf/6m8Wx2ZisCLMbAOEvdBNxYC/22F
-        yCpVGlZUuw7xXD3FBovXHfR4w
-X-Received: by 2002:a05:6a00:1152:b0:4be:ab79:fcfa with SMTP id b18-20020a056a00115200b004beab79fcfamr9598492pfm.3.1647599671395;
-        Fri, 18 Mar 2022 03:34:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwVqCTYHmMvd/+g0VOR29gw2GmqZvnV0UPmluByeNafGkhNa+o3V1s2U3kyohRsqW5FHTDTeA==
-X-Received: by 2002:a05:6a00:1152:b0:4be:ab79:fcfa with SMTP id b18-20020a056a00115200b004beab79fcfamr9598457pfm.3.1647599671120;
-        Fri, 18 Mar 2022 03:34:31 -0700 (PDT)
+        bh=EDf+Cue22NIq+++ettcFUZpGsy+wdzQQBWaXtBz9VhU=;
+        b=sQEphs3T9Dw+3lk6qMeSjvl0ghWBK5Sfmj3VUrT2ABqITkFd67wVglq9U6kpr2BZD1
+         OEiKG0pS/cCGYwYCwilEKj9kfhPQ8oeMogbbY/w2JZtJCZi/xMxtVnklZa4PM9WMY/4d
+         TRabFoL35HDA/VZZHtxU6ykhQtFdIdjC6kjjGiu6sJzH0KqR+TXs2aBV6qtd+x/LugqK
+         7BSzTbV0n1FFVIy6XIXrpWthf9+e/IEP9tIq5CgHxasg07eStjkaRyBTLoncZ9wCglCE
+         KzhIvyVG+f7oo9rH5N6eaTaU8O8tWdGgJEhl+F5vHC4aA9BQiNDBv1mPjnXxdFiP71PD
+         hieQ==
+X-Gm-Message-State: AOAM532k6vYtFXPcdEhQjTLRdTECuqP6DVibyE3L0CwUPho3AT3ty4Y3
+        WdrzbJOaK91+/eUYPibkhAUU7W6WTk4rzuojuDeA+DTSZP4EmPyUEedVR8c4XGwsSbP1+aUIVwa
+        IPER7h4eskiPsquq/ZbWV8sXO
+X-Received: by 2002:a17:902:db10:b0:151:ef9a:7e27 with SMTP id m16-20020a170902db1000b00151ef9a7e27mr9211897plx.39.1647599677355;
+        Fri, 18 Mar 2022 03:34:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw4eHzy4IQF50hT/ddKSZ0UY2J9cU8InbYVKChGw7aJVMkZmTYKHNSbfCTQcgf4H6bZpxJhpw==
+X-Received: by 2002:a17:902:db10:b0:151:ef9a:7e27 with SMTP id m16-20020a170902db1000b00151ef9a7e27mr9211781plx.39.1647599675619;
+        Fri, 18 Mar 2022 03:34:35 -0700 (PDT)
 Received: from localhost ([240e:3a1:2e5:800:f995:6136:f760:a3d0])
-        by smtp.gmail.com with ESMTPSA id s20-20020a056a00179400b004f709998d13sm9657970pfg.10.2022.03.18.03.34.30
+        by smtp.gmail.com with ESMTPSA id pi10-20020a17090b1e4a00b001bf9749b95bsm12445631pjb.50.2022.03.18.03.34.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 03:34:30 -0700 (PDT)
+        Fri, 18 Mar 2022 03:34:34 -0700 (PDT)
 From:   Coiby Xu <coxu@redhat.com>
 To:     kexec@lists.infradead.org
 Cc:     Milan Broz <gmazyland@gmail.com>,
@@ -62,11 +62,15 @@ Cc:     Milan Broz <gmazyland@gmail.com>,
         Kairui Song <ryncsn@gmail.com>, dm-devel@redhat.com,
         Mike Snitzer <snitzer@redhat.com>, Baoquan He <bhe@redhat.com>,
         Dave Young <dyoung@redhat.com>, linux-kernel@vger.kernel.org,
-        Alasdair Kergon <agk@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
         Eric Biederman <ebiederm@xmission.com>
-Subject: [RFC 1/4] kexec, dm-crypt: receive LUKS master key from dm-crypt and pass it to kdump
-Date:   Fri, 18 Mar 2022 18:34:20 +0800
-Message-Id: <20220318103423.286410-2-coxu@redhat.com>
+Subject: [RFC 2/4] kdump, x86: pass the LUKS master key to kdump kernel using a kernel command line parameter luksmasterkey
+Date:   Fri, 18 Mar 2022 18:34:21 +0800
+Message-Id: <20220318103423.286410-3-coxu@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220318103423.286410-1-coxu@redhat.com>
 References: <20220318103423.286410-1-coxu@redhat.com>
@@ -74,7 +78,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,143 +86,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After receiving the LUKS master key from driver/md/dm-crypt, kdump has 1
-hour at maximum to ask kexec to pass the key before the key gets wiped by
-kexec. And after kdump retrieves the key, the key will be wiped
-immediately.
+kdump will build up the kernel command parameter luksmasterkey as
+similar to elfcorehdr to pass the memory address of the stored info of LUKS
+master key to kdump kernel.
 
 Signed-off-by: Coiby Xu <coxu@redhat.com>
 ---
- drivers/md/dm-crypt.c |  5 +++-
- include/linux/kexec.h |  3 ++
- kernel/kexec_core.c   | 66 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 73 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/crash.h      |  1 +
+ arch/x86/kernel/crash.c           | 42 ++++++++++++++++++++++++++++++-
+ arch/x86/kernel/kexec-bzimage64.c |  7 ++++++
+ include/linux/kexec.h             |  4 +++
+ 4 files changed, 53 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-index d4ae31558826..41f9ca377312 100644
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -41,6 +41,7 @@
- #include <keys/trusted-type.h>
+diff --git a/arch/x86/include/asm/crash.h b/arch/x86/include/asm/crash.h
+index 8b6bd63530dc..757374389296 100644
+--- a/arch/x86/include/asm/crash.h
++++ b/arch/x86/include/asm/crash.h
+@@ -4,6 +4,7 @@
  
- #include <linux/device-mapper.h>
-+#include <linux/kexec.h>
+ struct kimage;
  
- #include "dm-audit.h"
++int crash_load_luks_key(struct kimage *image);
+ int crash_load_segments(struct kimage *image);
+ int crash_setup_memmap_entries(struct kimage *image,
+ 		struct boot_params *params);
+diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+index e8326a8d1c5d..6d117da62da4 100644
+--- a/arch/x86/kernel/crash.c
++++ b/arch/x86/kernel/crash.c
+@@ -304,6 +304,7 @@ static int memmap_exclude_ranges(struct kimage *image, struct crash_mem *cmem,
+ 				 unsigned long long mend)
+ {
+ 	unsigned long start, end;
++	int r;
  
-@@ -2388,6 +2389,8 @@ static int crypt_setkey(struct crypt_config *cc)
- 	unsigned subkey_size;
- 	int err = 0, i, r;
- 
-+	/* save master key to kexec */
-+	kexec_save_luks_master_key(cc->key, cc->key_size);
- 	/* Ignore extra keys (which are used for IV etc) */
- 	subkey_size = crypt_subkey_size(cc);
- 
-@@ -3580,6 +3583,7 @@ static int crypt_message(struct dm_target *ti, unsigned argc, char **argv,
- 			DMWARN("not suspended during key manipulation.");
- 			return -EINVAL;
- 		}
+ 	cmem->ranges[0].start = mstart;
+ 	cmem->ranges[0].end = mend;
+@@ -312,7 +313,19 @@ static int memmap_exclude_ranges(struct kimage *image, struct crash_mem *cmem,
+ 	/* Exclude elf header region */
+ 	start = image->elf_load_addr;
+ 	end = start + image->elf_headers_sz - 1;
+-	return crash_exclude_mem_range(cmem, start, end);
++	r = crash_exclude_mem_range(cmem, start, end);
 +
- 		if (argc == 3 && !strcasecmp(argv[1], "set")) {
- 			/* The key size may not be changed. */
- 			key_size = get_key_size(&argv[2]);
-@@ -3587,7 +3591,6 @@ static int crypt_message(struct dm_target *ti, unsigned argc, char **argv,
- 				memset(argv[2], '0', strlen(argv[2]));
- 				return -EINVAL;
- 			}
--
- 			ret = crypt_set_key(cc, argv[2]);
- 			if (ret)
- 				return ret;
++	if (r)
++		return r;
++
++	/* Exclude LUKS master key region */
++	if (image->luks_master_key_addr) {
++		start = image->luks_master_key_addr;
++		end = start + image->luks_master_key_sz - 1;
++		return crash_exclude_mem_range(cmem, start, end);
++	}
++
++	return r;
+ }
+ 
+ /* Prepare memory map for crash dump kernel */
+@@ -383,6 +396,33 @@ int crash_setup_memmap_entries(struct kimage *image, struct boot_params *params)
+ 	return ret;
+ }
+ 
++int crash_load_luks_key(struct kimage *image)
++{
++	int ret;
++	struct kexec_buf kbuf = { .image = image, .buf_min = 0,
++				  .buf_max = ULONG_MAX, .top_down = false };
++
++	image->luks_master_key_addr = 0;
++	ret = kexec_pass_luks_master_key(&kbuf.buffer, &kbuf.bufsz);
++	if (ret)
++		return ret;
++
++	kbuf.memsz = kbuf.bufsz;
++	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
++	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
++	ret = kexec_add_buffer(&kbuf);
++	if (ret) {
++		vfree((void *)kbuf.buffer);
++		return ret;
++	}
++	image->luks_master_key_addr = kbuf.mem;
++	image->luks_master_key_sz = kbuf.bufsz;
++	pr_debug("Loaded LUKS master key at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
++		 image->luks_master_key_addr, kbuf.bufsz, kbuf.bufsz);
++
++	return ret;
++}
++
+ int crash_load_segments(struct kimage *image)
+ {
+ 	int ret;
+diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
+index 170d0fd68b1f..64ea3b6a5768 100644
+--- a/arch/x86/kernel/kexec-bzimage64.c
++++ b/arch/x86/kernel/kexec-bzimage64.c
+@@ -76,6 +76,10 @@ static int setup_cmdline(struct kimage *image, struct boot_params *params,
+ 	if (image->type == KEXEC_TYPE_CRASH) {
+ 		len = sprintf(cmdline_ptr,
+ 			"elfcorehdr=0x%lx ", image->elf_load_addr);
++
++		if (image->luks_master_key_addr != 0)
++			len += sprintf(cmdline_ptr + len,
++					"luksmasterkey=0x%lx ", image->luks_master_key_addr);
+ 	}
+ 	memcpy(cmdline_ptr + len, cmdline, cmdline_len);
+ 	cmdline_len += len;
+@@ -372,6 +376,9 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
+ 		ret = crash_load_segments(image);
+ 		if (ret)
+ 			return ERR_PTR(ret);
++		ret = crash_load_luks_key(image);
++		if (ret)
++			pr_debug("Either no LUKS master key or error to retrieve the LUKS master key\n");
+ 	}
+ 
+ 	/*
 diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-index 0c994ae37729..91507bc684e2 100644
+index 91507bc684e2..456a5bc28518 100644
 --- a/include/linux/kexec.h
 +++ b/include/linux/kexec.h
-@@ -205,6 +205,9 @@ int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
- extern int kexec_add_buffer(struct kexec_buf *kbuf);
- int kexec_locate_mem_hole(struct kexec_buf *kbuf);
+@@ -316,6 +316,10 @@ struct kimage {
+ 	void *elf_headers;
+ 	unsigned long elf_headers_sz;
+ 	unsigned long elf_load_addr;
++
++	/* LUKS master key buffer */
++	unsigned long luks_master_key_addr;
++	unsigned long luks_master_key_sz;
+ };
  
-+extern int kexec_pass_luks_master_key(void **addr, unsigned long *sz);
-+extern int kexec_save_luks_master_key(u8 *key, unsigned int key_size);
-+
- /* Alignment required for elf header segment */
- #define ELF_CORE_HEADER_ALIGN   4096
- 
-diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-index 68480f731192..86df36b71443 100644
---- a/kernel/kexec_core.c
-+++ b/kernel/kexec_core.c
-@@ -1218,3 +1218,69 @@ void __weak arch_kexec_protect_crashkres(void)
- 
- void __weak arch_kexec_unprotect_crashkres(void)
- {}
-+
-+
-+static u8 *luks_master_key;
-+static unsigned int luks_master_key_size;
-+
-+void wipe_luks_master_key(void)
-+{
-+	if (luks_master_key) {
-+		memset(luks_master_key, 0, luks_master_key_size * sizeof(u8));
-+		kfree(luks_master_key);
-+		luks_master_key = NULL;
-+	}
-+}
-+
-+static void _wipe_luks_master_key(struct work_struct *dummy)
-+{
-+	wipe_luks_master_key();
-+}
-+
-+static DECLARE_DELAYED_WORK(wipe_luks_master_key_work, _wipe_luks_master_key);
-+
-+static unsigned __read_mostly wipe_key_delay = 3600; /* 1 hour */
-+
-+int kexec_save_luks_master_key(u8 *key, unsigned int key_size)
-+{
-+	if (luks_master_key) {
-+		memset(luks_master_key, 0, luks_master_key_size * sizeof(u8));
-+		kfree(luks_master_key);
-+	}
-+
-+	luks_master_key = kmalloc(key_size * sizeof(u8), GFP_KERNEL);
-+
-+	if (!luks_master_key)
-+		return -ENOMEM;
-+	memcpy(luks_master_key, key, key_size * sizeof(u8));
-+	luks_master_key_size = key_size;
-+	pr_debug("LUKS master key (size=%u): %64ph\n", key_size, luks_master_key);
-+	schedule_delayed_work(&wipe_luks_master_key_work,
-+			      round_jiffies_relative(wipe_key_delay * HZ));
-+	return 0;
-+}
-+EXPORT_SYMBOL(kexec_save_luks_master_key);
-+
-+int kexec_pass_luks_master_key(void **addr, unsigned long *sz)
-+{
-+	unsigned long luks_key_sz;
-+	unsigned char *buf;
-+	unsigned int *size_ptr;
-+
-+	if (!luks_master_key)
-+		return -EINVAL;
-+
-+	luks_key_sz = sizeof(unsigned int) + luks_master_key_size * sizeof(u8);
-+
-+	buf = vzalloc(luks_key_sz);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	size_ptr = (unsigned int *)buf;
-+	memcpy(size_ptr, &luks_master_key_size, sizeof(unsigned int));
-+	memcpy(size_ptr + 1, luks_master_key, luks_master_key_size * sizeof(u8));
-+	*addr = buf;
-+	*sz = luks_key_sz;
-+	wipe_luks_master_key();
-+	return 0;
-+}
+ /* kexec interface functions */
 -- 
 2.34.1
 

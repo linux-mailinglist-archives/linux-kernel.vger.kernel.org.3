@@ -2,81 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C364DE0D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3068B4DE0C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240056AbiCRSOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 14:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
+        id S240024AbiCRSLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 14:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233194AbiCRSOt (ORCPT
+        with ESMTP id S233194AbiCRSLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 14:14:49 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB014939DC;
-        Fri, 18 Mar 2022 11:13:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647627210; x=1679163210;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ZcLZFns2cmqmUDYsf79yEaH3pnYex27zE67UUmjrAQU=;
-  b=PrPujoHJH+SZDrMGogNvPpMufkdHurjQmdh0x5c7p3hAGzTYo4vxwJmR
-   Gi6DUuujeBg3g2ZqI3gAfNSbBbOgAPoMeIeUfrYe927nYbnIfMBjg8t8M
-   04oqWCVHCuKPLY8qeSbXWBe8zh+sxdoKrGDqw64wbF5gQ5AzWDSxnkRp8
-   lya8WF9j0LBhfMp1Bplr+2Y4NzlFROgjmPSgBBtZxuPY4/Fr4bNBeRHJu
-   9OuKQvvecB3u0hBKsv/fpjAK0g6vQWPOebT5ucNFetRxIw67flhFYI7mV
-   xMavr6svoQILCavL3sDUpRsARds2iIko7otmdQ343WSNOTJ3LkVhtKcoM
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="256920621"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="256920621"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:10:27 -0700
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="558577638"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:10:17 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nVH2f-002Npa-DH;
-        Fri, 18 Mar 2022 20:09:37 +0200
-Date:   Fri, 18 Mar 2022 20:09:37 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "'Rafael J . Wysocki '" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/6] property: add fwnode_property_read_string_index()
-Message-ID: <YjTK4UW7DwZ0S3QY@smile.fi.intel.com>
-References: <20220318160059.328208-1-clement.leger@bootlin.com>
- <20220318160059.328208-2-clement.leger@bootlin.com>
- <YjSymEpNH8vnkQ+L@smile.fi.intel.com>
- <20220318174912.5759095f@fixe.home>
+        Fri, 18 Mar 2022 14:11:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA002E842A
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:10:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1C79B81747
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D4CC340E8;
+        Fri, 18 Mar 2022 18:10:20 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@kernel.org>
+Cc:     Rich Wiley <rwiley@nvidia.com>, James Morse <james.morse@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Subject: Re: [PATCH] arm64: errata: avoid duplicate field initializer
+Date:   Fri, 18 Mar 2022 18:10:18 +0000
+Message-Id: <164762664708.829336.6118267245056806692.b4-ty@arm.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220316183800.1546731-1-arnd@kernel.org>
+References: <20220316183800.1546731-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220318174912.5759095f@fixe.home>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,41 +49,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 05:49:12PM +0100, Clément Léger wrote:
-> Le Fri, 18 Mar 2022 18:26:00 +0200,
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> a écrit :
-> > On Fri, Mar 18, 2022 at 05:00:47PM +0100, Clément Léger wrote:
-> > > Add fwnode_property_read_string_index() function which allows to
-> > > retrieve a string from an array by its index. This function is the
-> > > equivalent of of_property_read_string_index() but for fwnode support.  
-
-...
-
-> > > +	values = kcalloc(nval, sizeof(*values), GFP_KERNEL);
-> > > +	if (!values)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	ret = fwnode_property_read_string_array(fwnode, propname, values, nval);
-> > > +	if (ret < 0)
-> > > +		goto out;
-> > > +
-> > > +	*string = values[index];
-> > > +out:
-> > > +	kfree(values);  
-> > 
-> > Here is UAF (use after free). How is it supposed to work?
+On Wed, 16 Mar 2022 19:37:45 +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> values is an array of pointers. I'm only retrieving a pointer out of
-> it.
+> The '.type' field is initialized both in place and in the macro
+> as reported by this W=1 warning:
+> 
+> arch/arm64/include/asm/cpufeature.h:281:9: error: initialized field overwritten [-Werror=override-init]
+>   281 |         (ARM64_CPUCAP_SCOPE_LOCAL_CPU | ARM64_CPUCAP_OPTIONAL_FOR_LATE_CPU)
+>       |         ^
+> arch/arm64/kernel/cpu_errata.c:136:17: note: in expansion of macro 'ARM64_CPUCAP_LOCAL_CPU_ERRATUM'
+>   136 |         .type = ARM64_CPUCAP_LOCAL_CPU_ERRATUM,                         \
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> arch/arm64/kernel/cpu_errata.c:145:9: note: in expansion of macro 'ERRATA_MIDR_RANGE'
+>   145 |         ERRATA_MIDR_RANGE(m, var, r_min, var, r_max)
+>       |         ^~~~~~~~~~~~~~~~~
+> arch/arm64/kernel/cpu_errata.c:613:17: note: in expansion of macro 'ERRATA_MIDR_REV_RANGE'
+>   613 |                 ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2),
+>       |                 ^~~~~~~~~~~~~~~~~~~~~
+> arch/arm64/include/asm/cpufeature.h:281:9: note: (near initialization for 'arm64_errata[18].type')
+>   281 |         (ARM64_CPUCAP_SCOPE_LOCAL_CPU | ARM64_CPUCAP_OPTIONAL_FOR_LATE_CPU)
+>       |         ^
+> 
+> [...]
 
-I see, thanks for pointing out.
+Applied to arm64 (for-next/fixes), thanks!
 
-Nevertheless, I don't like the idea of allocating memory in this case.
-Can we rather add a new callback that will provide us the necessary
-property directly?
+[1/1] arm64: errata: avoid duplicate field initializer
+      https://git.kernel.org/arm64/c/316e46f65a54
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Catalin
 

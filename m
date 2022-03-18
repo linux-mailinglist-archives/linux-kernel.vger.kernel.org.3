@@ -2,98 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5393C4DD255
+	by mail.lfdr.de (Postfix) with ESMTP id A465D4DD256
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 02:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbiCRBR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 21:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49968 "EHLO
+        id S231420AbiCRBRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 21:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231423AbiCRBRY (ORCPT
+        with ESMTP id S229921AbiCRBRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 21:17:24 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AE52A046C;
-        Thu, 17 Mar 2022 18:16:05 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id h126so13428831ybc.1;
-        Thu, 17 Mar 2022 18:16:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VRsb5Zmb/JCOeENoTDRg7wIKUPQgA0/d6iKWZvPMkaw=;
-        b=gxFBnfWRS6wjleZvzFQNXoTfaiX0E6pjWIupBHBHr0SfVAYDgZiI+XgDsV7PpB4U67
-         4y8iSEE+2ly4nmLzGztFYRJBtHjgJQvoyuGvqtUvwyC9gh3qycNrJ4lA7A/pvnX4ZacD
-         DxXxxLvuchL/+vp/rItPOgGmEEn+NuAc5WJx4lBt9E9CyTd5hlBSrEyMLFUrb6ECAy43
-         mVQH5bYzRijK+Q6tdNGM6qLrKzZCDs5Cjv4QM39KllWc+dOFyZcNDKPGlSIGgynuhjZJ
-         hjUAOJbtI3oOSpzwT6+makiViBL4VWYpaFa37QI2iDg6ENewo7KGQjLNjMo9fIupbIk4
-         RBLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VRsb5Zmb/JCOeENoTDRg7wIKUPQgA0/d6iKWZvPMkaw=;
-        b=a15qf1g5C/W7/vJzLh+iLxvvbsmMd0c4UbL8vAGlnEf1zaHQcs6wHU5l4SlRNFhCzo
-         0gwe2NQs37WcCyVXxGQqFm4BmJ90DMsHiUJsigeIxvu3WPzgBblNJavvHPKFByZIBTGD
-         DvcvujJ3XXpbDJEKeP8yxgFHB3MmCPDQJdTGRnean+QqC1LZGg1dxp+H5d3S9L4tCR1h
-         zu4aVKgp5tyk+sO1PNYLYl8ktUExeKnB/hlYR73wP34h8+ARqonqw7sG34efGXNr1t+y
-         mCnOuZUx/pcKywVpTLO+O7ia3j8w1utJQHifsrnQ94WATWC4j7m5fKs8zFDlJrycWD6+
-         E64A==
-X-Gm-Message-State: AOAM531mrlnIKybbh1lrMmNALu4/KSvb/DDWAwM1pMWhGxrwu9uRJDzD
-        RShzIjwIp5edsveJYXxTPA3QcstSFDnqjU5JsCY=
-X-Google-Smtp-Source: ABdhPJwg2ySuj+xOjHdgdurPQW4/xpvbPONWKSpFY/ZbtyRbsY+xD+fgXfSSRGGveSsQWmt4JiYb/ZKNVUN9rC1yMhw=
-X-Received: by 2002:a25:a223:0:b0:621:1238:68b1 with SMTP id
- b32-20020a25a223000000b00621123868b1mr8097719ybi.370.1647566164753; Thu, 17
- Mar 2022 18:16:04 -0700 (PDT)
+        Thu, 17 Mar 2022 21:17:12 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60082.outbound.protection.outlook.com [40.107.6.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A234929EE0F;
+        Thu, 17 Mar 2022 18:15:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ejx2XVe3tEgPAJ6yPHCmFnTIbHlsWIhAWBJcpZpKjd6Wdob1FnEJX4HSfSWLzH+CZ3QQdoKsZi4DXyOPjH+wNAEVr0YwY/rJWfNrLc+PLEuiu8dNJ62v50+Xm5D31IWx9MPRw0BQPCFETT/NpExn9p9JgqO/iW2MVzwxQpz8KbUHrht7Gm0Uaa5+aByO5vNnjPtDV7LunR+EMwTL4vV22teBBTWk/Qrqp6TGn3rwSmjO9ACogqBD0b4N5TRwfEYkeLuBvgYX1yAa8aZpozghFuvQ9RYRwY/3M0bYkNLcRPUMwTs+vT0pbUAVOVzdIAFZvnEyVS438tw0bv2VnqJFOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+rCz9//TySGWAEViMmT7CXoor9W9DWBPlO1RtbTn3rQ=;
+ b=TDuDJX0zGLUuSTNr6wE4lnVQtVlaKpZpZ/NlYLuYQfLHuRKu4cyqHfAquStBzUfJMac2boUwLR6OJsupoY42Ttrd85c7saJaYL1oOr/z1hJdN9bq9P+meBudWxDHF0yFYeWpaYTKguzq16WWUJ1fWnZNi2zEXkhSVsp+XmPoROPVSDn4iH9VqGLWXMYto30fNrYSyCro/+0pfDzQ/rqnSjQlfPaEsq2JVpkfjOs7nraT53C0CaOz/Aazz2ugV+1Yh+IhftDcHtRE8qevG5PSraARqdJvr255TKj2nRoE3VJ5WtnDE/ye6bnUYwQMfhsg431ujDOPnA6sVJVBFeZCjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+rCz9//TySGWAEViMmT7CXoor9W9DWBPlO1RtbTn3rQ=;
+ b=CQL6xmnccxG3stan99W1m7myypTvwIt/4nI/9AVC2dy9CspXwus04/dmTTgqEdYMZSmRpPib9RmHX7ungowcx+K3TdT09qXGE/JYfvc78p85MwBvmbZhHI+6CSspYHPMC3YLKm71YmBYtCad6CKZkBlC+r5E1LxoyldSIvFEwoE=
+Received: from PA4PR04MB9416.eurprd04.prod.outlook.com (2603:10a6:102:2ab::21)
+ by HE1PR0402MB2921.eurprd04.prod.outlook.com (2603:10a6:3:d5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Fri, 18 Mar
+ 2022 01:15:51 +0000
+Received: from PA4PR04MB9416.eurprd04.prod.outlook.com
+ ([fe80::9470:2e85:68c0:83bc]) by PA4PR04MB9416.eurprd04.prod.outlook.com
+ ([fe80::9470:2e85:68c0:83bc%7]) with mapi id 15.20.5081.014; Fri, 18 Mar 2022
+ 01:15:51 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH V2 2/2] clk: imx8m: check mcore_booted before register clk
+Thread-Topic: [PATCH V2 2/2] clk: imx8m: check mcore_booted before register
+ clk
+Thread-Index: AQHYLKA2MA7+7RMqd0yRWyJn90Rz2azEE9SAgABd4aA=
+Date:   Fri, 18 Mar 2022 01:15:51 +0000
+Message-ID: <PA4PR04MB9416FE8A48930C7F932CA09888139@PA4PR04MB9416.eurprd04.prod.outlook.com>
+References: <20220228124112.3974242-1-peng.fan@oss.nxp.com>
+ <20220228124112.3974242-2-peng.fan@oss.nxp.com>
+ <20220317193815.47BC1C340E9@smtp.kernel.org>
+In-Reply-To: <20220317193815.47BC1C340E9@smtp.kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 534673fc-e867-4ab6-d7ab-08da087cd800
+x-ms-traffictypediagnostic: HE1PR0402MB2921:EE_
+x-microsoft-antispam-prvs: <HE1PR0402MB2921516A9358F9DEE913F1FD88139@HE1PR0402MB2921.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LD8bKHxlPBFSvQvNz6Bsn8Mjon5KvG/SDzy6+xSDh+rCDGLrx1vUs2dUFABCMTb26evXnshmv8r0PpOkMbcycnX+OHRl8Axjiq0sw3nh48a7UHqKN3F3Et5XwvEiZHfnLeeV5PYhXH3JFjoUIesKrYuFDy9J+7jGpSpHUTy242cyXOsQc76I2oGeqWifRa2j/R6mfL5MlnziB7XflSz+/eUxua+c46V0Hhz6vvsc5t+0n/IyXWh+4xDhhylJsm40xNygKrge7OM4WRpkn+weDpXYdnVAEY2+YPz/C2/iz6I131ltPRyUx7TY7UhFIEnah/1minr/zBwG4W8S+7CfOno3TZaqKFYrX1gHLn8zZ0o83kV4QmQquAleaGhxWI+YPuKin1Mml/Gqoic/tKLgVIJbcYPGD0kRNmFgfn8sRIZi/B/QBHBLHfBUlEIaeo6YZLXMNCPv+3luMvWr3lZzhwLBFKqtB4T+XXS3cS4F/Y9D4N9wENqe8tS3pg+TDTGBi7bUsPHvBvpOw7i7UTFxrQcjAKM0A6TG7h/NCpHes21aonsuNzFeTIFJRzCcXLohfK/57XQGkpwc9rwl52DeK7wIQeLfZTunn0VU0IaWJtK5mwROBJGEdQem0tl/cF5dfwWQAjBiZGZVYwiuIg7Bd9sYFVjrC4BBQFQuRPdSgkvmx/HhU97W6V3TcYMAzAIpeFyYslXB3nUuUtDa1+Ey5p3Su5ZF+2/mENH9KNPwMzk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9416.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(122000001)(76116006)(55016003)(186003)(71200400001)(8936002)(64756008)(38070700005)(66476007)(66446008)(5660300002)(26005)(4326008)(38100700002)(66556008)(33656002)(66946007)(44832011)(8676002)(86362001)(316002)(83380400001)(508600001)(110136005)(52536014)(9686003)(7696005)(6506007)(54906003)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dktURTRBS2puNFNzVWRGVThVTHBsSVdSaHFZeSs2OXVDdzNtcjBjbXpUQ1hp?=
+ =?utf-8?B?UHdmYXRPRDljWW9tZitGR3RxR0VzNVdjVGMyUVRETElwbWFPSDA1ZEdrMnZK?=
+ =?utf-8?B?dWY1VlFJNDI3bTJmS0tkSDF6WUl3ZXJ1WmQxczRqaHRkY3JuSk5aN244M29Z?=
+ =?utf-8?B?V2Vyd0tpbVh4UkVGTHNiamt4WnVGaVJDN0Z2cGlGTnFLdEFkNWNWSzJlNGY5?=
+ =?utf-8?B?K0JScHZWaUV0dGt3bkJiOExFcUZ0cytKL2FITHFsM0FSWHZzcVZ3SGZvZy9n?=
+ =?utf-8?B?Yk1KbHFjUXREQUlEb2luLytFdUNkcXh6Sm1XczJLRGJMbW0yb1JTZFcwVFZr?=
+ =?utf-8?B?azFEa3E1RkU4ZGVNZ2ZjWUk0cmczY20zM0NpU3JuU0Jud25CTjJlRVF5NDIy?=
+ =?utf-8?B?dzhTZWZCcTN2bFhzOFl2bWhpL3lLc082algrY2s5VXY2S29NakNDMjdBSWha?=
+ =?utf-8?B?cmZnam9mN1pwMnJRRmFBc2dlUTY5Q2EzTWhaRE9WNzA0QVdwenhGOFVQc1U4?=
+ =?utf-8?B?ejVhV0xpbkxQWUVtcmZlRDBoSk94aWQ2c2paaXhFSnBPUGhqaXpIS0tLOU5Q?=
+ =?utf-8?B?WTQxS1YzamxPTE9wYXRzYWdnK2Z0SUUyMFBkemdnTEk0eHloSk1pZDRwam9L?=
+ =?utf-8?B?cDZWTTl1aElUV0xZc3ZpR2RZbTBCOUFUbUZHMjVETGFOY2l1bTJpYktSYUlG?=
+ =?utf-8?B?eFhhMEd2akJWT29PSUdEWnM1ZnFEVXBNTW1icVBNNXFNMmlTTWNVWGlUbWtQ?=
+ =?utf-8?B?cHJqckV0L3VwdGFkNjdReTNaa1gveEVHbURtMDl6d3pKakNobi9sUVl1eElZ?=
+ =?utf-8?B?WE9RWDZTVFFkYlBZdXhHWmUxSmpBajZwbW9RVFlaNHMzTXhpbi8vSitsUWZE?=
+ =?utf-8?B?aWdrL3V1Nko2T1gvQTlKcTRCZkNOTkJvejMrQUFKbHhWVWJob0RNTDBLdXNK?=
+ =?utf-8?B?L01NRVlySGxwMnJ1K2tNaTZRd0ErMXpidTB2TkxTdWxzNjdNMC9pbDRVWkVJ?=
+ =?utf-8?B?ZVk4d09uZXVIUmMwNFNhOUhWQW91UTVZeXA5bzRTU2EranUyM29pbHBHT0h1?=
+ =?utf-8?B?ZFptdkI3U3l1YTJLZXV5anhVSFpGNDU1bVdkL3hpUXNXWUZEcGRKUi84RnVw?=
+ =?utf-8?B?cmgzbDBqKzlObzlaeGlOSE5rc1FCVUp0Q0k1RG16aXprdjlIdVp2UmRLRWFl?=
+ =?utf-8?B?VHh4Rmh4REVKL2kzTVIyNjZ6M2lsNFpIU09IZXUxVzZucHRrcmVXNlFqdGVY?=
+ =?utf-8?B?a2x6QUxZZTFxUFNHWmZtdGlSb2R6TWQweXNCV1grbml5NDlzWGVYUC9xamdz?=
+ =?utf-8?B?cEVLbzZmZ1lQSG5USkNuZml2aWpJWlZBLytmVFZsTGVsQmhBWkczUkJUMk5Z?=
+ =?utf-8?B?bHVxVzIrZEl6aWJ0VWJxQ0pTeE9NbUk5WWprbmNYYW5zeTNtNk9MSk80SzRh?=
+ =?utf-8?B?VS92bEFxN2dOR2ZLQUg1OW9UMVRaRjMrNmdjWlYxK0VITGRBUGg1ZytkYVNk?=
+ =?utf-8?B?NnppVm1WM2ZBTDJ4aGZCK0YzL3djUXZHMzBnSitnRGtUc0wxaXJkL1VmeTJm?=
+ =?utf-8?B?TVB2bGhJQk55dXQ4WFRlR1R2ZW1nM1h0eHlIc08vT0puMHU4UVBPTExsTlFQ?=
+ =?utf-8?B?bzVCRTNEWXFoY2Zjd3pWZUVDWTErcGZKRjltTTllN0s3Q1laL05rMzFJVTJ0?=
+ =?utf-8?B?MkRsSXF0bU5xTXlnZEtCQTFZYVdPb2d0bGxlWHgvdVphWmRXOHdPdUM2cG9S?=
+ =?utf-8?B?b2tsTTV0RFVUWG1PV1pFZWxVaDNWK2FUYVAwTVJCRjUreS9ESjd6bzNTaHFm?=
+ =?utf-8?B?ZElyZkpJNVFXdHQ0MXlFWUpuOG5idGVPMVRwM3cxc09TOVNtK2pEMVBnVUl0?=
+ =?utf-8?B?NUFwUEZRTk10Sk84WVV1SHd0QzdsYzJYMkZVVi8xelFpaTY2dmNkSStaRFBB?=
+ =?utf-8?Q?5dBRsRQ0cKA=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220309021230.721028-1-yuzhao@google.com> <20220309021230.721028-4-yuzhao@google.com>
-In-Reply-To: <20220309021230.721028-4-yuzhao@google.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Fri, 18 Mar 2022 14:15:48 +1300
-Message-ID: <CAGsJ_4zr_toOjd976AA5uBctVokVn+xZdvGo1TTZAg2XH0zmKQ@mail.gmail.com>
-Subject: Re: [PATCH v9 03/14] mm/vmscan.c: refactor shrink_node()
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        x86 <x86@kernel.org>, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9416.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 534673fc-e867-4ab6-d7ab-08da087cd800
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Mar 2022 01:15:51.8622
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1LGU52nlqXGyVFwECUzp3ny40ftNT61ERYEtrKvPu5CQkQCYxOTV11zNkL6bkW8/IWIIn3U86/WinWujvL+7Lw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0402MB2921
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,283 +134,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 3:47 PM Yu Zhao <yuzhao@google.com> wrote:
->
-> This patch refactors shrink_node() to improve readability for the
-> upcoming changes to mm/vmscan.c.
->
-> Signed-off-by: Yu Zhao <yuzhao@google.com>
-> Acked-by: Brian Geffon <bgeffon@google.com>
-> Acked-by: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-> Acked-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> Acked-by: Steven Barrett <steven@liquorix.net>
-> Acked-by: Suleiman Souhlal <suleiman@google.com>
-> Tested-by: Daniel Byrne <djbyrne@mtu.edu>
-> Tested-by: Donald Carr <d@chaos-reins.com>
-> Tested-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
-> Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
-> Tested-by: Shuang Zhai <szhai2@cs.rochester.edu>
-> Tested-by: Sofia Trinh <sofia.trinh@edi.works>
-> Tested-by: Vaibhav Jain <vaibhav@linux.ibm.com>
-
-Reviewed-by: Barry Song <baohua@kernel.org>
-
-seems nice refactoring since we are going to skip the whole
-function for lru_gen later:
-static void prepare_scan_count(pg_data_t *pgdat, struct scan_control *sc)
-{
-        unsigned long file;
-        struct lruvec *target_lruvec;
-
-        if (lru_gen_enabled())
-                return;
-       ...
-}
-
-> ---
->  mm/vmscan.c | 198 +++++++++++++++++++++++++++-------------------------
->  1 file changed, 104 insertions(+), 94 deletions(-)
->
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 59b14e0d696c..8e744cdf802f 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -2718,6 +2718,109 @@ enum scan_balance {
->         SCAN_FILE,
->  };
->
-> +static void prepare_scan_count(pg_data_t *pgdat, struct scan_control *sc=
-)
-> +{
-> +       unsigned long file;
-> +       struct lruvec *target_lruvec;
-> +
-> +       target_lruvec =3D mem_cgroup_lruvec(sc->target_mem_cgroup, pgdat)=
-;
-> +
-> +       /*
-> +        * Flush the memory cgroup stats, so that we read accurate per-me=
-mcg
-> +        * lruvec stats for heuristics.
-> +        */
-> +       mem_cgroup_flush_stats();
-> +
-> +       /*
-> +        * Determine the scan balance between anon and file LRUs.
-> +        */
-> +       spin_lock_irq(&target_lruvec->lru_lock);
-> +       sc->anon_cost =3D target_lruvec->anon_cost;
-> +       sc->file_cost =3D target_lruvec->file_cost;
-> +       spin_unlock_irq(&target_lruvec->lru_lock);
-> +
-> +       /*
-> +        * Target desirable inactive:active list ratios for the anon
-> +        * and file LRU lists.
-> +        */
-> +       if (!sc->force_deactivate) {
-> +               unsigned long refaults;
-> +
-> +               refaults =3D lruvec_page_state(target_lruvec,
-> +                               WORKINGSET_ACTIVATE_ANON);
-> +               if (refaults !=3D target_lruvec->refaults[0] ||
-> +                       inactive_is_low(target_lruvec, LRU_INACTIVE_ANON)=
-)
-> +                       sc->may_deactivate |=3D DEACTIVATE_ANON;
-> +               else
-> +                       sc->may_deactivate &=3D ~DEACTIVATE_ANON;
-> +
-> +               /*
-> +                * When refaults are being observed, it means a new
-> +                * workingset is being established. Deactivate to get
-> +                * rid of any stale active pages quickly.
-> +                */
-> +               refaults =3D lruvec_page_state(target_lruvec,
-> +                               WORKINGSET_ACTIVATE_FILE);
-> +               if (refaults !=3D target_lruvec->refaults[1] ||
-> +                   inactive_is_low(target_lruvec, LRU_INACTIVE_FILE))
-> +                       sc->may_deactivate |=3D DEACTIVATE_FILE;
-> +               else
-> +                       sc->may_deactivate &=3D ~DEACTIVATE_FILE;
-> +       } else
-> +               sc->may_deactivate =3D DEACTIVATE_ANON | DEACTIVATE_FILE;
-> +
-> +       /*
-> +        * If we have plenty of inactive file pages that aren't
-> +        * thrashing, try to reclaim those first before touching
-> +        * anonymous pages.
-> +        */
-> +       file =3D lruvec_page_state(target_lruvec, NR_INACTIVE_FILE);
-> +       if (file >> sc->priority && !(sc->may_deactivate & DEACTIVATE_FIL=
-E))
-> +               sc->cache_trim_mode =3D 1;
-> +       else
-> +               sc->cache_trim_mode =3D 0;
-> +
-> +       /*
-> +        * Prevent the reclaimer from falling into the cache trap: as
-> +        * cache pages start out inactive, every cache fault will tip
-> +        * the scan balance towards the file LRU.  And as the file LRU
-> +        * shrinks, so does the window for rotation from references.
-> +        * This means we have a runaway feedback loop where a tiny
-> +        * thrashing file LRU becomes infinitely more attractive than
-> +        * anon pages.  Try to detect this based on file LRU size.
-> +        */
-> +       if (!cgroup_reclaim(sc)) {
-> +               unsigned long total_high_wmark =3D 0;
-> +               unsigned long free, anon;
-> +               int z;
-> +
-> +               free =3D sum_zone_node_page_state(pgdat->node_id, NR_FREE=
-_PAGES);
-> +               file =3D node_page_state(pgdat, NR_ACTIVE_FILE) +
-> +                          node_page_state(pgdat, NR_INACTIVE_FILE);
-> +
-> +               for (z =3D 0; z < MAX_NR_ZONES; z++) {
-> +                       struct zone *zone =3D &pgdat->node_zones[z];
-> +
-> +                       if (!managed_zone(zone))
-> +                               continue;
-> +
-> +                       total_high_wmark +=3D high_wmark_pages(zone);
-> +               }
-> +
-> +               /*
-> +                * Consider anon: if that's low too, this isn't a
-> +                * runaway file reclaim problem, but rather just
-> +                * extreme pressure. Reclaim as per usual then.
-> +                */
-> +               anon =3D node_page_state(pgdat, NR_INACTIVE_ANON);
-> +
-> +               sc->file_is_tiny =3D
-> +                       file + free <=3D total_high_wmark &&
-> +                       !(sc->may_deactivate & DEACTIVATE_ANON) &&
-> +                       anon >> sc->priority;
-> +       }
-> +}
-> +
->  /*
->   * Determine how aggressively the anon and file LRU lists should be
->   * scanned.  The relative value of each set of LRU lists is determined
-> @@ -3188,109 +3291,16 @@ static void shrink_node(pg_data_t *pgdat, struct=
- scan_control *sc)
->         unsigned long nr_reclaimed, nr_scanned;
->         struct lruvec *target_lruvec;
->         bool reclaimable =3D false;
-> -       unsigned long file;
->
->         target_lruvec =3D mem_cgroup_lruvec(sc->target_mem_cgroup, pgdat)=
-;
->
->  again:
-> -       /*
-> -        * Flush the memory cgroup stats, so that we read accurate per-me=
-mcg
-> -        * lruvec stats for heuristics.
-> -        */
-> -       mem_cgroup_flush_stats();
-> -
->         memset(&sc->nr, 0, sizeof(sc->nr));
->
->         nr_reclaimed =3D sc->nr_reclaimed;
->         nr_scanned =3D sc->nr_scanned;
->
-> -       /*
-> -        * Determine the scan balance between anon and file LRUs.
-> -        */
-> -       spin_lock_irq(&target_lruvec->lru_lock);
-> -       sc->anon_cost =3D target_lruvec->anon_cost;
-> -       sc->file_cost =3D target_lruvec->file_cost;
-> -       spin_unlock_irq(&target_lruvec->lru_lock);
-> -
-> -       /*
-> -        * Target desirable inactive:active list ratios for the anon
-> -        * and file LRU lists.
-> -        */
-> -       if (!sc->force_deactivate) {
-> -               unsigned long refaults;
-> -
-> -               refaults =3D lruvec_page_state(target_lruvec,
-> -                               WORKINGSET_ACTIVATE_ANON);
-> -               if (refaults !=3D target_lruvec->refaults[0] ||
-> -                       inactive_is_low(target_lruvec, LRU_INACTIVE_ANON)=
-)
-> -                       sc->may_deactivate |=3D DEACTIVATE_ANON;
-> -               else
-> -                       sc->may_deactivate &=3D ~DEACTIVATE_ANON;
-> -
-> -               /*
-> -                * When refaults are being observed, it means a new
-> -                * workingset is being established. Deactivate to get
-> -                * rid of any stale active pages quickly.
-> -                */
-> -               refaults =3D lruvec_page_state(target_lruvec,
-> -                               WORKINGSET_ACTIVATE_FILE);
-> -               if (refaults !=3D target_lruvec->refaults[1] ||
-> -                   inactive_is_low(target_lruvec, LRU_INACTIVE_FILE))
-> -                       sc->may_deactivate |=3D DEACTIVATE_FILE;
-> -               else
-> -                       sc->may_deactivate &=3D ~DEACTIVATE_FILE;
-> -       } else
-> -               sc->may_deactivate =3D DEACTIVATE_ANON | DEACTIVATE_FILE;
-> -
-> -       /*
-> -        * If we have plenty of inactive file pages that aren't
-> -        * thrashing, try to reclaim those first before touching
-> -        * anonymous pages.
-> -        */
-> -       file =3D lruvec_page_state(target_lruvec, NR_INACTIVE_FILE);
-> -       if (file >> sc->priority && !(sc->may_deactivate & DEACTIVATE_FIL=
-E))
-> -               sc->cache_trim_mode =3D 1;
-> -       else
-> -               sc->cache_trim_mode =3D 0;
-> -
-> -       /*
-> -        * Prevent the reclaimer from falling into the cache trap: as
-> -        * cache pages start out inactive, every cache fault will tip
-> -        * the scan balance towards the file LRU.  And as the file LRU
-> -        * shrinks, so does the window for rotation from references.
-> -        * This means we have a runaway feedback loop where a tiny
-> -        * thrashing file LRU becomes infinitely more attractive than
-> -        * anon pages.  Try to detect this based on file LRU size.
-> -        */
-> -       if (!cgroup_reclaim(sc)) {
-> -               unsigned long total_high_wmark =3D 0;
-> -               unsigned long free, anon;
-> -               int z;
-> -
-> -               free =3D sum_zone_node_page_state(pgdat->node_id, NR_FREE=
-_PAGES);
-> -               file =3D node_page_state(pgdat, NR_ACTIVE_FILE) +
-> -                          node_page_state(pgdat, NR_INACTIVE_FILE);
-> -
-> -               for (z =3D 0; z < MAX_NR_ZONES; z++) {
-> -                       struct zone *zone =3D &pgdat->node_zones[z];
-> -                       if (!managed_zone(zone))
-> -                               continue;
-> -
-> -                       total_high_wmark +=3D high_wmark_pages(zone);
-> -               }
-> -
-> -               /*
-> -                * Consider anon: if that's low too, this isn't a
-> -                * runaway file reclaim problem, but rather just
-> -                * extreme pressure. Reclaim as per usual then.
-> -                */
-> -               anon =3D node_page_state(pgdat, NR_INACTIVE_ANON);
-> -
-> -               sc->file_is_tiny =3D
-> -                       file + free <=3D total_high_wmark &&
-> -                       !(sc->may_deactivate & DEACTIVATE_ANON) &&
-> -                       anon >> sc->priority;
-> -       }
-> +       prepare_scan_count(pgdat, sc);
->
->         shrink_node_memcgs(pgdat, sc);
->
-> --
-> 2.35.1.616.g0bdcbb4464-goog
->
-
-Thanks
-Barry
+PiBTdWJqZWN0OiBSZTogW1BBVENIIFYyIDIvMl0gY2xrOiBpbXg4bTogY2hlY2sgbWNvcmVfYm9v
+dGVkIGJlZm9yZSByZWdpc3Rlcg0KPiBjbGsNCj4gDQo+IFF1b3RpbmcgUGVuZyBGYW4gKE9TUykg
+KDIwMjItMDItMjggMDQ6NDE6MTIpDQo+ID4gRnJvbTogUGVuZyBGYW4gPHBlbmcuZmFuQG54cC5j
+b20+DQo+ID4NCj4gPiBJZiBtY29yZV9ib290ZWQgaXMgdHJ1ZSwgaWdub3JlIHRoZSBjbGsgcm9v
+dCBnYXRlIHJlZ2lzdHJhdGlvbiBhbmQNCj4gPiB0aGlzIHdpbGwgc2ltcGxpZnkgQU1QIGNsb2Nr
+IG1hbmFnZW1lbnQgYW5kIGF2b2lkIHN5c3RlbSBoYW5nDQo+ID4gdW5leHBlY3RseSBlc3BlY2lh
+bGx5IExpbnV4IHNodXRkb3duIGNsayB1c2VkIGJ5IG1jb3JlLg0KPiA+DQo+ID4gU2lnbmVkLW9m
+Zi1ieTogUGVuZyBGYW4gPHBlbmcuZmFuQG54cC5jb20+DQo+ID4gLS0tDQo+ID4NCj4gPiBWMjoN
+Cj4gPiAgTm9uZQ0KPiA+DQo+ID4gIGRyaXZlcnMvY2xrL2lteC9jbGstY29tcG9zaXRlLThtLmMg
+fCAyMSArKysrKysrKysrKysrLS0tLS0tLS0NCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDEzIGluc2Vy
+dGlvbnMoKyksIDggZGVsZXRpb25zKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9j
+bGsvaW14L2Nsay1jb21wb3NpdGUtOG0uYw0KPiA+IGIvZHJpdmVycy9jbGsvaW14L2Nsay1jb21w
+b3NpdGUtOG0uYw0KPiA+IGluZGV4IDJkZmQ2MTQ5ZTUyOC4uYjE2YzJjMGVhOWY2IDEwMDY0NA0K
+PiA+IC0tLSBhL2RyaXZlcnMvY2xrL2lteC9jbGstY29tcG9zaXRlLThtLmMNCj4gPiArKysgYi9k
+cml2ZXJzL2Nsay9pbXgvY2xrLWNvbXBvc2l0ZS04bS5jDQo+ID4gQEAgLTIyMywxNCArMjIzLDE5
+IEBAIHN0cnVjdCBjbGtfaHcNCj4gKl9faW14OG1fY2xrX2h3X2NvbXBvc2l0ZShjb25zdCBjaGFy
+ICpuYW1lLA0KPiA+ICAgICAgICAgZGl2LT5sb2NrID0gJmlteF9jY21fbG9jazsNCj4gPiAgICAg
+ICAgIGRpdi0+ZmxhZ3MgPSBDTEtfRElWSURFUl9ST1VORF9DTE9TRVNUOw0KPiA+DQo+ID4gLSAg
+ICAgICBnYXRlID0ga3phbGxvYyhzaXplb2YoKmdhdGUpLCBHRlBfS0VSTkVMKTsNCj4gPiAtICAg
+ICAgIGlmICghZ2F0ZSkNCj4gPiAtICAgICAgICAgICAgICAgZ290byBmYWlsOw0KPiA+IC0NCj4g
+PiAtICAgICAgIGdhdGVfaHcgPSAmZ2F0ZS0+aHc7DQo+ID4gLSAgICAgICBnYXRlLT5yZWcgPSBy
+ZWc7DQo+ID4gLSAgICAgICBnYXRlLT5iaXRfaWR4ID0gUENHX0NHQ19TSElGVDsNCj4gPiAtICAg
+ICAgIGdhdGUtPmxvY2sgPSAmaW14X2NjbV9sb2NrOw0KPiA+ICsgICAgICAgLyogc2tpcCByZWdp
+c3RlcmluZyB0aGUgZ2F0ZSBvcHMgaWYgTTQgaXMgZW5hYmxlZCAqLw0KPiA+ICsgICAgICAgaWYg
+KG1jb3JlX2Jvb3RlZCkgew0KPiA+ICsgICAgICAgICAgICAgICBnYXRlX2h3ID0gTlVMTDsNCj4g
+DQo+IEl0IGNvdWxkIGV2ZW4gdXNlIHRoZSBwcm90ZWN0ZWQtY2xvY2tzIHByb3BlcnR5IGFuZCB0
+aGVuIHBhcnNlIGl0IHRvIGZpZ3VyZSBvdXQNCj4gdG8gbm90IHJlZ2lzdGVyIHRoaXMgZ2F0ZT8N
+Cg0KQmVjYXVzZSBvZiBoYXJkd2FyZSBkZXNpZ24gYXMgSSByZXBsaWVkIGluIHBhdGNoIDEvMiwg
+dGhhdCBtZWFucyB3ZSB3aWxsIGFkZA0KaHVuZHJlZHMgb2YgY2xrIGVudHJ5IGluIGRldmljZSB0
+cmVlLiBJIHdvdWxkIG5vdCBkbyB0aGF0Lg0KDQpUaGFua3MsDQpQZW5nLg0KDQo+IA0KPiA+ICsg
+ICAgICAgfSBlbHNlIHsNCj4gPiArICAgICAgICAgICAgICAgZ2F0ZSA9IGt6YWxsb2Moc2l6ZW9m
+KCpnYXRlKSwgR0ZQX0tFUk5FTCk7DQo+ID4gKyAgICAgICAgICAgICAgIGlmICghZ2F0ZSkNCj4g
+PiArICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGZhaWw7DQo+ID4gKw0KPiA+ICsgICAgICAg
+ICAgICAgICBnYXRlX2h3ID0gJmdhdGUtPmh3Ow0KPiA+ICsgICAgICAgICAgICAgICBnYXRlLT5y
+ZWcgPSByZWc7DQo+ID4gKyAgICAgICAgICAgICAgIGdhdGUtPmJpdF9pZHggPSBQQ0dfQ0dDX1NI
+SUZUOw0KPiA+ICsgICAgICAgICAgICAgICBnYXRlLT5sb2NrID0gJmlteF9jY21fbG9jazsNCj4g
+PiArICAgICAgIH0NCg==

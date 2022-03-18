@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4B04DD81E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADC64DD804
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbiCRKjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
+        id S235153AbiCRKjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235059AbiCRKi6 (ORCPT
+        with ESMTP id S235060AbiCRKi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Mar 2022 06:38:58 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2230F2D8125;
-        Fri, 18 Mar 2022 03:37:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BC82D8126;
+        Fri, 18 Mar 2022 03:37:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=CWcBMmMi6fNaNE57LOh1pQYBwkefYJf4b2w4bAjHl0A=;
-  b=J5B0sRvZX3OkZCoa3QNL+Fy0yQ4CaUaZAvDTsclK6lS3Blw0coE8fg+I
-   cXFSvtVjP6l5//yF6XnVsdCDPOJqTnVQgDgGX9jxz+A1pziKfQxP5M2t1
-   juRMqEexEk6Wss6NhgBwNoSJZkg9GcN37UbCOyIxJwLhIuN8RGtmE2Ume
-   8=;
+  bh=70GBOoGlM1s/D/vZ/gDz7tsiLlk7NWNVX7tgLUieEPg=;
+  b=mxQ0CtrWw8OtDoXXQVFm8pi+3gB5tEHcj4Lmd3G5XYPe1Iy5s6kuu5if
+   DYGNOgfSlNU1e44x/RMVmVmLsVSi/on3OMd2Uhy+CsVhVPtWG3boA1hzn
+   iy+MY0b8q02hPUMSn2G5mC2JeMUJXxr3RJ1G0fn3kgAZij9ot+E8Td4Wq
+   g=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.90,192,1643670000"; 
-   d="scan'208";a="8935633"
+   d="scan'208";a="8935634"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:37:35 +0100
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Lubomir Rintel <lkundrak@v3.sk>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     kernel-janitors@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
         Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: mmp: fix typos in comments
-Date:   Fri, 18 Mar 2022 11:36:59 +0100
-Message-Id: <20220318103729.157574-4-Julia.Lawall@inria.fr>
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: s3c: s3c24xx: fix typos in comments
+Date:   Fri, 18 Mar 2022 11:37:00 +0100
+Message-Id: <20220318103729.157574-5-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,34 +58,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- arch/arm/mach-mmp/gplugd.c |    2 +-
- arch/arm/mach-mmp/pxa168.c |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/mach-s3c/s3c24xx.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-mmp/gplugd.c b/arch/arm/mach-mmp/gplugd.c
-index 5888b71944b8..ead674015b55 100644
---- a/arch/arm/mach-mmp/gplugd.c
-+++ b/arch/arm/mach-mmp/gplugd.c
-@@ -154,7 +154,7 @@ static int gplugd_eth_init(void)
- struct pxa168_eth_platform_data gplugd_eth_platform_data = {
- 	.port_number = 0,
- 	.phy_addr    = 0,
--	.speed       = 0, /* Autonagotiation */
-+	.speed       = 0, /* Autonegotiation */
- 	.intf        = PHY_INTERFACE_MODE_RMII,
- 	.init        = gplugd_eth_init,
- };
-diff --git a/arch/arm/mach-mmp/pxa168.c b/arch/arm/mach-mmp/pxa168.c
-index 1e9389245d0e..97e6c3b2bd31 100644
---- a/arch/arm/mach-mmp/pxa168.c
-+++ b/arch/arm/mach-mmp/pxa168.c
-@@ -129,7 +129,7 @@ struct platform_device pxa168_device_gpio = {
+diff --git a/arch/arm/mach-s3c/s3c24xx.c b/arch/arm/mach-s3c/s3c24xx.c
+index ccfed48c98aa..37eaf9480da7 100644
+--- a/arch/arm/mach-s3c/s3c24xx.c
++++ b/arch/arm/mach-s3c/s3c24xx.c
+@@ -146,7 +146,7 @@ static struct map_desc s3c_iodesc[] __initdata __maybe_unused = {
+ 	IODESC_ENT(UART)
  };
  
- struct resource pxa168_usb_host_resources[] = {
--	/* USB Host conroller register base */
-+	/* USB Host controller register base */
- 	[0] = {
- 		.start	= PXA168_U2H_REGBASE + U2x_CAPREGS_OFFSET,
- 		.end	= PXA168_U2H_REGBASE + USB_REG_RANGE,
+-/* read cpu identificaiton code */
++/* read cpu identification code */
+ 
+ static unsigned long s3c24xx_read_idcode_v5(void)
+ {
 

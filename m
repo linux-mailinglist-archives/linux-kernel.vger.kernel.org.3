@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E14B4DD88D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1472C4DD896
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235520AbiCRK7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S235557AbiCRK7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235031AbiCRK7P (ORCPT
+        with ESMTP id S235538AbiCRK71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 06:59:15 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F2B2A9;
-        Fri, 18 Mar 2022 03:57:54 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 4DE9B1F45E72
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647601073;
-        bh=QFMATzqfLU4fdYkBOKl2poTrZxOt3e3lamYNlbklolU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Y+HKyBYlb6kRxRzZf19aWqC84CXIBmX1Ds5iOqLt/HVYn9kn9/xQf3oY1dGmL1ppV
-         b5AAhQF/LbCmY8eU8sBNW0MY9XMZHUKjYJCRXB9aMsOAwIwXNL7H3//sR3BCiQSzsc
-         O28Loczx6AGJOnFI/qXH3lkFRDQwTxPf2W9LsHLHp/DGKLjMH+Ab4kEPKtNnpuy9Dm
-         xg4FM8ygImFhrjI/qUVm8r4a05O0AfduZLa2GkKNm3jW3I1Hqh2699H/qxlT2F0Ta/
-         T9/s6qTPnLt0DRuzCjEvOVlxLgBSJVmsM/8sa+vOQeOu+wQ3vYBTOy5cNGMPN5IFB1
-         yicf9tMJESXAA==
-Message-ID: <a3ccba54-9076-0966-f282-1943f10a0346@collabora.com>
-Date:   Fri, 18 Mar 2022 11:57:49 +0100
+        Fri, 18 Mar 2022 06:59:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFFF6DFD2;
+        Fri, 18 Mar 2022 03:58:08 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7182A16F3;
+        Fri, 18 Mar 2022 03:58:08 -0700 (PDT)
+Received: from [10.57.43.230] (unknown [10.57.43.230])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 519D23F7F5;
+        Fri, 18 Mar 2022 03:58:04 -0700 (PDT)
+Message-ID: <44dd4f16-3f0b-5289-c9a2-fe42341b0231@arm.com>
+Date:   Fri, 18 Mar 2022 10:57:59 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 2/2] phy: mediatek: Add PCIe PHY driver
-Content-Language: en-US
-To:     Jianjun Wang <jianjun.wang@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
-        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
-        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
-References: <20220318095417.2016-1-jianjun.wang@mediatek.com>
- <20220318095417.2016-3-jianjun.wang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220318095417.2016-3-jianjun.wang@mediatek.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 4/4 RESEND] PCI: hv: Propagate coherence from VMbus device
+ to PCI device
+Content-Language: en-GB
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
+References: <1647534311-2349-1-git-send-email-mikelley@microsoft.com>
+ <1647534311-2349-5-git-send-email-mikelley@microsoft.com>
+ <9c52c5a0-163d-e2dd-d95b-9f382e665215@arm.com>
+ <PH0PR21MB302533BCD6707DAACC13E64DD7139@PH0PR21MB3025.namprd21.prod.outlook.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <PH0PR21MB302533BCD6707DAACC13E64DD7139@PH0PR21MB3025.namprd21.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,267 +64,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 18/03/22 10:54, Jianjun Wang ha scritto:
-> Add PCIe GEN3 PHY driver support on MediaTek chipsets.
+On 2022-03-18 05:12, Michael Kelley (LINUX) wrote:
+> From: Robin Murphy <robin.murphy@arm.com> Sent: Thursday, March 17, 2022 10:15 AM
+>>
+>> On 2022-03-17 16:25, Michael Kelley via iommu wrote:
+>>> PCI pass-thru devices in a Hyper-V VM are represented as a VMBus
+>>> device and as a PCI device.  The coherence of the VMbus device is
+>>> set based on the VMbus node in ACPI, but the PCI device has no
+>>> ACPI node and defaults to not hardware coherent.  This results
+>>> in extra software coherence management overhead on ARM64 when
+>>> devices are hardware coherent.
+>>>
+>>> Fix this by propagating the coherence of the VMbus device to the
+>>> PCI device.  There's no effect on x86/x64 where devices are
+>>> always hardware coherent.
+>>>
+>>> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+>>> ---
+>>>    drivers/pci/controller/pci-hyperv.c | 17 +++++++++++++----
+>>>    1 file changed, 13 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+>>> index ae0bc2f..14276f5 100644
+>>> --- a/drivers/pci/controller/pci-hyperv.c
+>>> +++ b/drivers/pci/controller/pci-hyperv.c
+>>> @@ -49,6 +49,7 @@
+>>>    #include <linux/refcount.h>
+>>>    #include <linux/irqdomain.h>
+>>>    #include <linux/acpi.h>
+>>> +#include <linux/dma-map-ops.h>
+>>>    #include <asm/mshyperv.h>
+>>>
+>>>    /*
+>>> @@ -2142,9 +2143,9 @@ static void hv_pci_remove_slots(struct hv_pcibus_device
+>> *hbus)
+>>>    }
+>>>
+>>>    /*
+>>> - * Set NUMA node for the devices on the bus
+>>> + * Set NUMA node and DMA coherence for the devices on the bus
+>>>     */
+>>> -static void hv_pci_assign_numa_node(struct hv_pcibus_device *hbus)
+>>> +static void hv_pci_assign_properties(struct hv_pcibus_device *hbus)
+>>>    {
+>>>    	struct pci_dev *dev;
+>>>    	struct pci_bus *bus = hbus->bridge->bus;
+>>> @@ -2167,6 +2168,14 @@ static void hv_pci_assign_numa_node(struct
+>> hv_pcibus_device *hbus)
+>>>    				     numa_map_to_online_node(
+>>>    					     hv_dev->desc.virtual_numa_node));
+>>>
+>>> +		/*
+>>> +		 * On ARM64, propagate the DMA coherence from the VMbus device
+>>> +		 * to the corresponding PCI device. On x86/x64, these calls
+>>> +		 * have no effect because DMA is always hardware coherent.
+>>> +		 */
+>>> +		dev_set_dma_coherent(&dev->dev,
+>>> +			dev_is_dma_coherent(&hbus->hdev->device));
+>>
+>> Eww... if you really have to do this, I'd prefer to see a proper
+>> hv_dma_configure() helper implemented and wired up to
+>> pci_dma_configure(). Although since it's a generic property I guess at
+>> worst pci_dma_configure could perhaps propagate coherency from the host
+>> bridge to its children by itself in the absence of any other firmware
+>> info. And it's built-in so could use arch_setup_dma_ops() like everyone
+>> else.
+>>
 > 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> ---
->   drivers/phy/mediatek/Kconfig        |  11 ++
->   drivers/phy/mediatek/Makefile       |   1 +
->   drivers/phy/mediatek/phy-mtk-pcie.c | 246 ++++++++++++++++++++++++++++
->   3 files changed, 258 insertions(+)
->   create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
-> 
-> diff --git a/drivers/phy/mediatek/Kconfig b/drivers/phy/mediatek/Kconfig
-> index 55f8e6c048ab..387ed1b3f2cc 100644
-> --- a/drivers/phy/mediatek/Kconfig
-> +++ b/drivers/phy/mediatek/Kconfig
-> @@ -55,3 +55,14 @@ config PHY_MTK_MIPI_DSI
->   	select GENERIC_PHY
->   	help
->   	  Support MIPI DSI for Mediatek SoCs.
-> +
-> +config PHY_MTK_PCIE
-> +	tristate "MediaTek PCIe-PHY Driver"
-> +	depends on ARCH_MEDIATEK || COMPILE_TEST
-> +	depends on OF
-> +	select GENERIC_PHY
-> +	help
-> +	  Say 'Y' here to add support for MediaTek PCIe PHY driver.
-> +	  This driver create the basic PHY instance and provides initialize
-> +	  callback for PCIe GEN3 port, it supports software efuse
-> +	  initialization.
-> diff --git a/drivers/phy/mediatek/Makefile b/drivers/phy/mediatek/Makefile
-> index ace660fbed3a..788c13147f63 100644
-> --- a/drivers/phy/mediatek/Makefile
-> +++ b/drivers/phy/mediatek/Makefile
-> @@ -6,6 +6,7 @@
->   obj-$(CONFIG_PHY_MTK_TPHY)		+= phy-mtk-tphy.o
->   obj-$(CONFIG_PHY_MTK_UFS)		+= phy-mtk-ufs.o
->   obj-$(CONFIG_PHY_MTK_XSPHY)		+= phy-mtk-xsphy.o
-> +obj-$(CONFIG_PHY_MTK_PCIE)		+= phy-mtk-pcie.o
->   
->   phy-mtk-hdmi-drv-y			:= phy-mtk-hdmi.o
->   phy-mtk-hdmi-drv-y			+= phy-mtk-hdmi-mt2701.o
-> diff --git a/drivers/phy/mediatek/phy-mtk-pcie.c b/drivers/phy/mediatek/phy-mtk-pcie.c
-> new file mode 100644
-> index 000000000000..0f5d7c7e2b7e
-> --- /dev/null
-> +++ b/drivers/phy/mediatek/phy-mtk-pcie.c
-> @@ -0,0 +1,246 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 MediaTek Inc.
-> + * Author: Jianjun Wang <jianjun.wang@mediatek.com>
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/compiler_types.h>
-> +#include <linux/module.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/phy/phy.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +
-> +#include "phy-mtk-io.h"
-> +
-> +#define PEXTP_ANA_GLB_00_REG		0x9000
-> +#define PEXTP_ANA_LN0_TRX_REG		0xa000
-> +#define PEXTP_ANA_TX_OFFSET		0x04
-> +#define PEXTP_ANA_RX_OFFSET		0x3c
-> +#define PEXTP_ANA_LANE_OFFSET		0x100
-> +
-> +/* PEXTP_GLB_00_REG[28:24] Internal Resistor Selection of TX Bias Current */
-> +#define EFUSE_GLB_INTR_SEL		GENMASK(28, 24)
-> +#define EFUSE_GLB_INTR_VAL(x)		((0x1f & (x)) << 24)
-> +
-> +/* PEXTP_ANA_LN_RX_REG[3:0] RX impedance selection */
-> +#define EFUSE_LN_RX_SEL			GENMASK(3, 0)
-> +#define EFUSE_LN_RX_VAL(x)		(0xf & (x))
-> +
-> +/* PEXTP_ANA_LN_TX_REG[5:2] TX PMOS impedance selection */
-> +#define EFUSE_LN_TX_PMOS_SEL		GENMASK(5, 2)
-> +#define EFUSE_LN_TX_PMOS_VAL(x)		((0xf & (x)) << 2)
-> +
-> +/* PEXTP_ANA_LN_TX_REG[11:8] TX NMOS impedance selection */
-> +#define EFUSE_LN_TX_NMOS_SEL		GENMASK(11, 8)
-> +#define EFUSE_LN_TX_NMOS_VAL(x)		((0xf & (x)) << 8)
-> +
-> +/* Efuse data for each lane */
+> I'm not seeing an existing mechanism to provide a "helper" or override
+> of pci_dma_configure().   Could you elaborate?  Or is this something
+> that needs to be created?
 
-What about some kerneldoc?
+I mean something like the diff below (other #includes omitted for 
+clarity). Essentially if VMBus has its own way of describing parts of 
+the system, then for those parts it's nice if it could fit into the same 
+abstractions we use for firmware-based system description.
 
-/**
-  * struct mtk_pcie_lane_efuse - eFuse data for each lane
-  * @tx_pmos:
-  ......etc :))
+Cheers,
+Robin.
 
-> +struct mtk_pcie_lane_efuse {
-> +	u32 tx_pmos;
-> +	u32 tx_nmos;
-> +	u32 rx_data;
-> +	bool lane_efuse_supported;
-> +};
-> +
+----->8-----
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index 588588cfda48..7d92ccad1569 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -20,6 +20,7 @@
+  #include <linux/of_device.h>
+  #include <linux/acpi.h>
+  #include <linux/dma-map-ops.h>
++#include <linux/hyperv.h>
+  #include "pci.h"
+  #include "pcie/portdrv.h"
 
-Same here
+@@ -1602,6 +1603,8 @@ static int pci_dma_configure(struct device *dev)
+  		struct acpi_device *adev = to_acpi_device_node(bridge->fwnode);
 
-/**
-  * struct mtk_pcie_phy - PCIe phy driver main structure
-  * @dev: ......
+  		ret = acpi_dma_configure(dev, acpi_get_dma_attr(adev));
++	} else if (is_vmbus_dev(bridge)) {
++		ret = hv_dma_configure(dev, device_get_dma_attr(bridge));
+  	}
 
-> +struct mtk_pcie_phy {
-> +	struct device *dev;
-> +	struct phy *phy;
-> +	void __iomem *sif_base;
-> +
-> +	/*
-> +	 * Support software efuse initialization,
-> +	 * currently we only support 2 lane in maximum.
-> +	 */
+  	pci_put_host_bridge_device(bridge);
+diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+index f565a8938836..d1d4dd3d5a3a 100644
+--- a/include/linux/hyperv.h
++++ b/include/linux/hyperv.h
+@@ -1764,4 +1764,19 @@ static inline unsigned long virt_to_hvpfn(void *addr)
+  #define HVPFN_DOWN(x)	((x) >> HV_HYP_PAGE_SHIFT)
+  #define page_to_hvpfn(page)	(page_to_pfn(page) * NR_HV_HYP_PAGES_IN_PAGE)
 
-Obviously, if you add kerneldoc, this comment would get moved to that kerneldoc.
-
-> +	bool sw_efuse_supported;
-> +	u32 efuse_glb_intr;
-
-
-> +	struct mtk_pcie_lane_efuse efuse[2];
-
-If you dynamically allocate this one, you will be able to support any number
-of lanes, futureproofing this driver and giving it more flexibility.
-
-> +};
-> +
-
-..snip..
-
-> +
-> +static int mtk_pcie_efuse_read_for_lane(struct mtk_pcie_phy *pcie_phy,
-> +					unsigned int lane)
-> +{
-> +	struct device *dev = pcie_phy->dev;
-> +	struct mtk_pcie_lane_efuse *data;
-> +	char efuse_id[15];
-> +	int ret;
-> +
-> +	if (lane >= ARRAY_SIZE(pcie_phy->efuse))
-> +		return dev_err_probe(pcie_phy->dev, -EINVAL,
-> +				     "Requested lane number %d exceeds maximum %ld\n",
-> +				     lane, ARRAY_SIZE(pcie_phy->efuse) - 1);
-
-I don't like seeing dev_err_probe() outside of a probe function, but I acknowledge
-that the Linux documentation doesn't seem to give any direction about that, so
-this is a personal preference, at this point.
-
-> +
-> +	data = &pcie_phy->efuse[lane];
-> +
-> +	snprintf(efuse_id, sizeof(efuse_id), "tx_ln%d_pmos", lane);
-> +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &data->tx_pmos);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to read %s\n", efuse_id);
-> +
-> +	snprintf(efuse_id, sizeof(efuse_id), "tx_ln%d_nmos", lane);
-> +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &data->tx_nmos);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to read %s\n", efuse_id);
-> +
-> +	snprintf(efuse_id, sizeof(efuse_id), "rx_ln%d", lane);
-> +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &data->rx_data);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to read %s\n", efuse_id);
-> +
-> +	if (!(data->tx_pmos || data->tx_nmos || data->rx_data))
-> +		return dev_err_probe(dev, -EINVAL,
-> +				     "No efuse data found for lane%d, but dts enable it\n",
-> +				     lane);
-> +
-> +	data->lane_efuse_supported = true;
-> +
-> +	return 0;
-> +}
-> +
-> +static int mtk_pcie_read_efuse(struct mtk_pcie_phy *pcie_phy)
-> +{
-> +	struct device *dev = pcie_phy->dev;
-> +	bool nvmem_enabled;
-> +	int ret;
-> +
-> +	nvmem_enabled = device_property_read_bool(dev, "nvmem-cells");
-> +	if (!nvmem_enabled)
-> +		return -ENODEV;
-> +
-> +	ret = nvmem_cell_read_variable_le_u32(dev, "glb_intr",
-> +					      &pcie_phy->efuse_glb_intr);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to read glb_intr\n");
-> +
-> +	pcie_phy->sw_efuse_supported = true;
-> +
-> +	ret = mtk_pcie_efuse_read_for_lane(pcie_phy, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = mtk_pcie_efuse_read_for_lane(pcie_phy, 1);
-> +	if (ret)
-> +		return ret;
-
-To give some more future-proofing to this driver, I would instead either add a
-u32 devicetree property "num-lanes" or, if the same SoC may not have a different
-number of lanes across controller instances, I would add a number of lanes
-parameter as data for each of_match.
-
-You'd be at that point using a for loop here like:
-
-for (i = 0; i < pcie_phy->num_lanes, i++) {
-	ret = mtk_pcie_efuse_read_for_lane(pcie_phy, i);
-	if (ret)
-		return ret;
-}
-
-Of course, the same logic would apply to mtk_pcie_phy_init(), where you are
-instead calling mtk_pcie_efuse_set_lane().
-
-> +
-> +	return 0;
-> +}
-> +
-> +static int mtk_pcie_phy_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct phy_provider *provider;
-> +	struct mtk_pcie_phy *pcie_phy;
-> +
-> +	pcie_phy = devm_kzalloc(dev, sizeof(*pcie_phy), GFP_KERNEL);
-> +	if (!pcie_phy)
-> +		return -ENOMEM;
-> +
-> +	pcie_phy->dev = dev;
-> +
-> +	pcie_phy->sif_base = devm_platform_ioremap_resource_byname(pdev, "sif");
-> +	if (IS_ERR(pcie_phy->sif_base))
-> +		return dev_err_probe(dev, PTR_ERR(pcie_phy->sif_base),
-> +				     "Failed to map phy-sif base\n");
-> +
-> +	pcie_phy->phy = devm_phy_create(dev, dev->of_node, &mtk_pcie_phy_ops);
-> +	if (IS_ERR(pcie_phy->phy))
-> +		return dev_err_probe(dev, PTR_ERR(pcie_phy->phy),
-> +				     "Failed to create PCIe phy\n");
-> +
-> +	/*
-> +	 * Failed to read the efuse data is not a fatal problem,
-> +	 * ignore the failure and keep going.
-> +	 */
-> +	mtk_pcie_read_efuse(pcie_phy);
-
-If you get an -EPROBE_DEFER here, you surely want to defer probing this driver,
-so, yes you're free to ignore the other failures, but you should fix that corner
-case.
-
-Everything else looks good, so, please make sure to add me to the Cc's for the
-next version of this series for me to give you a faster review.
-
-Regards,
-Angelo
-
++static inline bool is_vmbus_dev(struct device *dev)
++{
++	/*
++	 * dev->bus == &hv_bus would break when the caller is built-in
++	 * and CONFIG_HYPERV=m, so look for it by name instead.
++	 */
++	return !strcmp(dev->bus->name, "vmbus");
++}
++
++static inline int hv_dma_configure(struct device *dev, enum 
+dev_dma_attr attr)
++{
++	arch_setup_dma_ops(dev, 0, 0, NULL, attr == DEV_DMA_COHERENT);
++	return 0;
++}
++
+  #endif /* _HYPERV_H */

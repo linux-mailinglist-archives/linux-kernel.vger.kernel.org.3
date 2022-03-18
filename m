@@ -2,139 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0DE4DD880
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:54:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D07E4DD88A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235469AbiCRKzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
+        id S235515AbiCRK5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235441AbiCRKzM (ORCPT
+        with ESMTP id S235359AbiCRK5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 06:55:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB9617157C;
-        Fri, 18 Mar 2022 03:53:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F5AD614F0;
-        Fri, 18 Mar 2022 10:53:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 680A2C340E8;
-        Fri, 18 Mar 2022 10:53:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647600833;
-        bh=Ka134EcpD/pAKg03HVpWxkVbFlnaUkIgiy7ozVY+d7I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lWxwwL4fmDQkBireSEgwI6RPLJMy2t50xMGZ/rs1uKQwU8kSkzEkpLMA/0ZeoIwcD
-         ccwqFbCXPntjLziwvplJKY/E+0TY1ZS8qlSf0AZevWvqulKZs0Nl9Fhc14pRzqan9f
-         Q1qGt4BWm3LzbM+U03L5j3+HD+fYhGlFhrIQmEcI/XBXd6kurQ0UnkbVbsM1oI01g0
-         BzPFGKyesh9phZFmsOYwIW1VvFbO8NB1i2/8XyLtB5AT/BOpozVaKxfaCjYY00sJtw
-         uo5Q8jrZzNn05EEn4xARAnyj5DTxDEuc0iUpOj4mdcLdFKOPxbXmjN18Is8/zKyRkH
-         9c7svTiMwfcPw==
-Date:   Fri, 18 Mar 2022 11:53:48 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Graeme Gregory <quic_ggregory@quicinc.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: add tracepoints for I2C slave events
-Message-ID: <YjRkvPc9uahbozbQ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Jamie Iles <quic_jiles@quicinc.com>,
-        Graeme Gregory <quic_ggregory@quicinc.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20220308163333.3985974-1-quic_jaehyoo@quicinc.com>
+        Fri, 18 Mar 2022 06:57:10 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89782D6390
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:55:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kaBZ8KjDbC/rb3g+TLUWGoLdFNQvbA6hXQr+dWf5eMM=; b=OLfKYG5sHQOWuRtWuM0VgFWO6B
+        hV7PmU5dD0ZWMjo6/6M9xqsccm4EQjyL8m8sJluR0/8AsNT5p4wHvqxLw7GAoy2xQyJrRtpgSzUyu
+        lKW/8+L4FjPC/dRmfdbMbBM/sObByZadpMkIJerv4wQUARC3RORaK96q+hgpTVZOi+PGcKNIciRKn
+        sIfQHNcQvH2p9plCDItSx5OOsXTy99f9OCsaOW7K4s8QXz7wivorWqE6ffa6qhVxk8Yyqx5F5MIrS
+        oQIKEp36hVETOlpDZ4QhoIIuSAIpt0I1hrMJjTmmHn1/E943gt5QazEt59DMefPK8eT2SyyQOpahi
+        ai5ZshJA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nVAGH-007sEu-Uw; Fri, 18 Mar 2022 10:55:14 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7C90C3001C7;
+        Fri, 18 Mar 2022 11:55:11 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 447362D35E979; Fri, 18 Mar 2022 11:55:11 +0100 (CET)
+Date:   Fri, 18 Mar 2022 11:55:11 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
+        bp@alien8.de, luto@kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCHv6 07/30] x86/traps: Add #VE support for TDX guest
+Message-ID: <YjRlDytYjENcurpT@hirez.programming.kicks-ass.net>
+References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
+ <20220316020856.24435-8-kirill.shutemov@linux.intel.com>
+ <877d8t2ykp.ffs@tglx>
+ <20220317173354.rqymufl37lcrtmjh@black.fi.intel.com>
+ <20220317202141.GO8939@worktop.programming.kicks-ass.net>
+ <5b3bece3-5956-3116-a07c-a0b6f380fac8@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rqHRRJko+wIyNI/C"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220308163333.3985974-1-quic_jaehyoo@quicinc.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5b3bece3-5956-3116-a07c-a0b6f380fac8@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 17, 2022 at 01:32:07PM -0700, Dave Hansen wrote:
 
---rqHRRJko+wIyNI/C
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> The TDX rules are *much* nicer than SEV.  They're also a lot nicer on
+> TDX _now_ than they used to be.  There are a few stubborn people at
+> Intel who managed to add some drops of sanity to the architecture.
 
-Hi,
-
-On Tue, Mar 08, 2022 at 08:33:33AM -0800, Jae Hyun Yoo wrote:
-> I2C slave events tracepoints can be enabled by:
->=20
-> 	echo 1 > /sys/kernel/tracing/events/i2c_slave/enable
->=20
-> and logs in /sys/kernel/tracing/trace will look like:
->=20
-> 	... i2c_slave: i2c-0 a=3D010 WR_REQ []
-> 	... i2c_slave: i2c-0 a=3D010 WR_RCV [02]
-> 	... i2c_slave: i2c-0 a=3D010 WR_RCV [0c]
-> 	... i2c_slave: i2c-0 a=3D010   STOP []
-> 	... i2c_slave: i2c-0 a=3D010 RD_REQ [04]
-> 	... i2c_slave: i2c-0 a=3D010 RD_PRO [b4]
-> 	... i2c_slave: i2c-0 a=3D010   STOP []
->=20
-> formatted as:
->=20
-> 	i2c-<adapter-nr>
-> 	a=3D<addr>
-> 	<event>
-> 	[<data>]
->=20
-> trace printings can be selected by adding a filter like:
->=20
-> 	echo adapter_nr=3D=3D1 >/sys/kernel/tracing/events/i2c_slave/filter
->=20
-> Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-
-Steven, are you happy with the tracepoint parts of this patch?
-
-
-> +	if (trace_i2c_slave_enabled() && !ret)
-> +		trace_i2c_slave(client, event, val);
-
-Why '!ret'? I think we should always print 'ret' in the trace as well.
-Backends are allowed to send errnos on WRITE_RECEIVED to NACK the
-reception of a byte. This is useful information, too, or?
-
-Rest looks good to me.
-
-Thanks,
-
-   Wolfram
-
-
---rqHRRJko+wIyNI/C
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmI0ZLwACgkQFA3kzBSg
-KbaU0xAAiJLhpuUxibhFyVl14QQR4Qh1XvhM6rcLT6jWqrp0cGOWeIg0aTXm+NPV
-FY20MyoM8Upmgg1gr1R4wh0M2ShDau2IOHhMEQtAvXwvUtkmAUxdtvIOI6difKse
-m8JbV4AfiWHQTvkcwr0zlbJg58tqGUmPiBzvXsTARthrCida24i9uLFQWFHoqBGX
-E9463fdGmdzbuJojfRlQ601LPNTqwNpFNiZpg97J/CY+L8iVKQqvMfYWQ78d3Cze
-g57NqWIMZAyCQSxhgdjBBsW87bbD/Qo5eQAmD/M6E96sClo+ZcYEtFqPiE0cPkMm
-C+x3e4jW9nxS9YHcYbfGb0bXOjJ6VhQMNDd64f3uEvghI12P9NAqjXnQ5VgoXw8Z
-99GD2NlJkoHPK4qvbj+aaf4QEwYctldE9NGtpMFWzgowgUu3vIZyWfcWDUIAXyk7
-4+F9xmjcOqpUAR46o2w8POd5AfhI3WU5DsR/7nSRKqrkapYD2oCYq8k0Lvj1ZskT
-1CwJSNZ1jvS2ipsFLVsvRDFJUrPSN/iu2Xs903v+bOSnCLj3HBMqbkNWY3cXPXpq
-WrnKdVBXFb7/uWb3pysgYutrAIRUpdZgAmzE3SyzbnBudpNzj8QnZkJuh/ozDGhM
-Vq5s+ELhxFx/G1HWeDwkRnucRJJIHuXP7T5XCKVkAggywYbXORk=
-=PJ2T
------END PGP SIGNATURE-----
-
---rqHRRJko+wIyNI/C--
+Right; that is saner than it used to be. I have definite memories that
+pages could be taken back by the TDX thing and would need
+re-authentication. A pool of 'fixed' pages was talked about. I'm glad to
+hear all that is gone.

@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363864DE279
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC994DE278
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234493AbiCRU10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 16:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57326 "EHLO
+        id S240658AbiCRU1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 16:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240575AbiCRU1P (ORCPT
+        with ESMTP id S240586AbiCRU1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Mar 2022 16:27:15 -0400
 Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5917528AC79;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFFA28CA96;
         Fri, 18 Mar 2022 13:25:55 -0700 (PDT)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 6FC79223F0;
+        by ssl.serverraum.org (Postfix) with ESMTPSA id EEAE5223F7;
         Fri, 18 Mar 2022 21:25:53 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647635153;
+        t=1647635154;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=j4eEfzdaSHRgbRaTl+z3o6r6NpwnLWsJFO/To4JJxyc=;
-        b=vnsdyriuCyC2kem++eZO+pNApLgk2+lXoo/ahLUw0DZBtL2Hv9Ekzb9ENZJFmeWfo1XwWS
-        0TqU0AD5P3g+yAQLY4wxmN5ED2psOM5MpYyxBwyjAaz7ldWKYxpjUG6kbkb/DDV2XcACix
-        fWZLJ259t+9DDjS5BiGYNmJ5jpkHZlI=
+        bh=tYqLzTM+PgVgCGYTteyksCDNUwqgACT77UqZ07efI+o=;
+        b=JOOx3rS5sUK0fw87yD6OzHwGUR10Iuz7LZCtf9rK4uwhQfCd9Gr8fUU52M7dM5RFyCkbDW
+        t9nymO/iRxSGiXfFed1Dt4vRCzpE/x9zfDLn5VVHXjhFEYj3xWBnccKHbR/OWVN4Mzg2y9
+        VTDZ4KaYtjDtDgoibjdb/mB1El+s3bk=
 From:   Michael Walle <michael@walle.cc>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     "David S . Miller" <davem@davemloft.net>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v2 2/8] MIPS: mscc: ocelot: fix MIIM1 pinctrl node name
-Date:   Fri, 18 Mar 2022 21:25:41 +0100
-Message-Id: <20220318202547.1650687-3-michael@walle.cc>
+Subject: [PATCH v2 3/8] MIPS: mscc: ocelot: fix PHY interrupt pinctrl node name
+Date:   Fri, 18 Mar 2022 21:25:42 +0100
+Message-Id: <20220318202547.1650687-4-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220318202547.1650687-1-michael@walle.cc>
 References: <20220318202547.1650687-1-michael@walle.cc>
@@ -70,48 +70,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The pinctrl device tree binding will be converted to YAML format. All
 the pin nodes should end with "-pins". Fix them.
 
-Fixes: a0553e01f85b ("MIPS: mscc: ocelot: add MIIM1 bus")
+Fixes: 116edf6e5239 ("MIPS: mscc: add DT for Ocelot PCB120")
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- arch/mips/boot/dts/mscc/ocelot.dtsi       | 4 ++--
  arch/mips/boot/dts/mscc/ocelot_pcb120.dts | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/boot/dts/mscc/ocelot.dtsi b/arch/mips/boot/dts/mscc/ocelot.dtsi
-index e51db651af13..cfc219a72bdd 100644
---- a/arch/mips/boot/dts/mscc/ocelot.dtsi
-+++ b/arch/mips/boot/dts/mscc/ocelot.dtsi
-@@ -225,7 +225,7 @@ uart2_pins: uart2-pins {
- 				function = "uart2";
- 			};
- 
--			miim1: miim1 {
-+			miim1_pins: miim1-pins {
- 				pins = "GPIO_14", "GPIO_15";
- 				function = "miim";
- 			};
-@@ -261,7 +261,7 @@ mdio1: mdio@10700c0 {
- 			reg = <0x10700c0 0x24>;
- 			interrupts = <15>;
- 			pinctrl-names = "default";
--			pinctrl-0 = <&miim1>;
-+			pinctrl-0 = <&miim1_pins>;
- 			status = "disabled";
- 		};
- 
 diff --git a/arch/mips/boot/dts/mscc/ocelot_pcb120.dts b/arch/mips/boot/dts/mscc/ocelot_pcb120.dts
-index bd240690cb37..9d6b5717befb 100644
+index 9d6b5717befb..cda6c5ff58ad 100644
 --- a/arch/mips/boot/dts/mscc/ocelot_pcb120.dts
 +++ b/arch/mips/boot/dts/mscc/ocelot_pcb120.dts
-@@ -40,7 +40,7 @@ &mdio0 {
- &mdio1 {
- 	status = "okay";
- 	pinctrl-names = "default";
--	pinctrl-0 = <&miim1>, <&phy_int_pins>, <&phy_load_save_pins>;
-+	pinctrl-0 = <&miim1_pins>, <&phy_int_pins>, <&phy_load_save_pins>;
+@@ -22,7 +22,7 @@ memory@0 {
+ };
  
- 	phy7: ethernet-phy@0 {
- 		reg = <0>;
+ &gpio {
+-	phy_int_pins: phy_int_pins {
++	phy_int_pins: phy-int-pins {
+ 		pins = "GPIO_4";
+ 		function = "gpio";
+ 	};
 -- 
 2.30.2
 

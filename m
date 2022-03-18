@@ -2,103 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8D64DD8EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 316124DD8F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235802AbiCRLaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 07:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
+        id S235808AbiCRLbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 07:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235789AbiCRLaw (ORCPT
+        with ESMTP id S235789AbiCRLbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 07:30:52 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC661ED055;
-        Fri, 18 Mar 2022 04:29:32 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B26241EC0662;
-        Fri, 18 Mar 2022 12:29:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1647602966;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=7cHjZTrO3pszQOYs78HUK2TVdaR3zSuUmPa3P4965TQ=;
-        b=VeMn+FV7lsd7524c97/dvErpkObi38LUan9DkmodjZQSeYnUrvs7EaaJuXn0hK/BI/NLtz
-        62womwRZey5rcx+VkO/8LsSXpmzNml/SwXDz2Iadftaplf3xGftTClz54F7KSC9VsZD5lo
-        KwtZsPVedAcImMNQwD6wjo7iSXsPItg=
-Date:   Fri, 18 Mar 2022 12:29:23 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
-        Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] x86/sev: Unroll string mmio with
- CC_ATTR_GUEST_UNROLL_STRING_IO
-Message-ID: <YjRtE30Usxy8PurP@zn.tnic>
-References: <20220310112615.31133-1-joro@8bytes.org>
+        Fri, 18 Mar 2022 07:31:12 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D7E1ED043;
+        Fri, 18 Mar 2022 04:29:54 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id C12C91F45BE5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647602993;
+        bh=hEq5CQBIYDpOSE8rYqrF9Pr2CGQ6yjPai9TP2Z1F2Ww=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ix2SDlHuXaTogi0wYj6ufFFJZqPuqpM1n79MzBo8NDi4SOUeYE4KyPND+KBtoxNmE
+         voxSeyzl2PdqfO6XlRk6356TZ+I1h2JCsTCb/QdIhj7JkUfcecDnrAwU5TkLMwVpzE
+         GvAG4jN6U8A1zYZTaYmJkbgKyMOjNprrMBh9MnL/t/E583gZWGzzBms0Zu1ekJRBpS
+         ieuH0seSPBh48BSLPxrU4d6o/7iXw3UL11WEedd7wEGoTvk9X04i3Ru3C1E0iEKENf
+         0GCOFp+98JmOiFyIhYSe1iXg0GVQQhE1TGwOOmA+4FtAAokELo89Cp071lVVAp1Yz4
+         EigmWM14xVyXg==
+Message-ID: <fc5f0554-dc37-d514-039c-cfacbe407813@collabora.com>
+Date:   Fri, 18 Mar 2022 12:29:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220310112615.31133-1-joro@8bytes.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH V5 2/3] dt-bindings: spi: support hclk
+Content-Language: en-US
+To:     Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220318025027.31281-1-leilk.liu@mediatek.com>
+ <20220318025027.31281-3-leilk.liu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220318025027.31281-3-leilk.liu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 12:26:15PM +0100, Joerg Roedel wrote:
-> From: Joerg Roedel <jroedel@suse.de>
+Il 18/03/22 03:50, Leilk Liu ha scritto:
+> this patch support hclk for AHB bus.
 > 
-> The io specific memcpy/memset functions use string mmio accesses to do
-> their work. Under SEV the hypervisor can't emulate these instructions,
-> because they read/write directly from/to encrypted memory.
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+> ---
+>   .../devicetree/bindings/spi/mediatek,spi-mt65xx.yaml          | 4 ++++
+>   1 file changed, 4 insertions(+)
 > 
-> KVM will inject a page fault exception into the guest when it is asked
-> to emulate string mmio instructions for an SEV guest:
-> 
-> 	BUG: unable to handle page fault for address: ffffc90000065068
-> 	#PF: supervisor read access in kernel mode
-> 	#PF: error_code(0x0000) - not-present page
-> 	PGD 8000100000067 P4D 8000100000067 PUD 80001000fb067 PMD 80001000fc067 PTE 80000000fed40173
-> 	Oops: 0000 [#1] PREEMPT SMP NOPTI
-> 	CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc7 #3
-> 
-> As string mmio for an SEV guest can not be supported by the
-> hypervisor, unroll the instructions for CC_ATTR_GUEST_UNROLL_STRING_IO
-> enabled kernels.
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> index 7247a177466b..ecb4a5002cc1 100644
+> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> @@ -53,16 +53,20 @@ properties:
+>       maxItems: 1
+>   
+>     clocks:
+> +    minItems: 3
+>       items:
+>         - description: clock used for the parent clock
+>         - description: clock used for the muxes clock
+>         - description: clock used for the clock gate
+> +      - description: clock used for the AHB bus, this clock is optional
+>   
+>     clock-names:
+> +    minItems: 3
+>       items:
+>         - const: parent-clk
+>         - const: sel-clk
+>         - const: spi-clk
+> +      - const: hclk
+>   
+>     mediatek,pad-select:
+>       $ref: /schemas/types.yaml#/definitions/uint32-array
 
-What I'm missing in this description is why wasn't it a problem until now?
 
-You mentioned something about libvirt adding TPMs and that causing this
-but I'm still unclear as to why exactly this is causing the issue. I'm
-guessing SEV guests didn't do string IO but libvirt adding a TPM is
-somehow causing them to use them now...
 
-> @@ -56,9 +55,8 @@ void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
->  	}
->  	rep_movs((void *)to, (const void *) from, n);
->  }
-> -EXPORT_SYMBOL(memcpy_toio);
->  
-> -void memset_io(volatile void __iomem *a, int b, size_t c)
-> +static void string_memset_io(volatile void __iomem *a, int b, size_t c)
-
-You can simply remove that wrapper and use memset() at the callsite.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

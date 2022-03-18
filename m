@@ -2,143 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829D74DDB1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7914DDB24
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:02:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236966AbiCROBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
+        id S236957AbiCRODR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 10:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236953AbiCROA4 (ORCPT
+        with ESMTP id S234767AbiCRODN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:00:56 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120050.outbound.protection.outlook.com [40.107.12.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76332D1CE3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:59:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nlsF+Rsz7cxs6R3qAI2BtB5RwlHE8m9JxLuY2TCy1IOCTXKAIpNqqSdykIHwrAf/91axoyu6/z/cdXmzor+LHuce5WAmRlGXI7vR+2lhgfKeox9uzhmpa6CmG9qvDRkiy5MkGalQWJvC968uk5K1IE9MFh1QUOxyCbU09DF2/r1S4LjMDoGEX0fPLASX33Glk2bYUvnw2ha87sDfr0JAhbgyK6IfeektaJrDRWCFT+UHVtfCJ8CSRifn3Hphy+WvZUL4a+f2jewQp04QClBxTTBBnGHhvtJDOgQHspu3VjFKBIO5Q8EKTDtDXjxLVyf2aEpAhDOJBWteaKRRnEXnpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zmQmGIr3FPmodm34yix+JbpW7dzVXitlW8FQlevz2ds=;
- b=UbzNKIhWP8Fx3zb+ITPKh6Ny9z5PmVbZqAY7TlSdV0eGLAq+VIHGc5ktfLZyfE8e2zdVwK4xu0FurjFgGSl3pqnGXKh22vEvd+RnMV0sp1ubxE+rf8D0aYCe74XdTZ2DrcOuSLWn/KNCdlmJfKFSTDBwe5S8Fp0iAI+vGo2sctpQ8gY28dqRXR0D3r0w2YIanl89InxR/QIGwXlwDnI1iW6ZYto18BCBKUcNzRO0xw2+LzFkOF2vhr4dTuRp5wC3O95dfuKCGtUvUMzXHsQIZjD4V3mcgkTp6niX/6x/Sasc/BNM/2RJD9DJ6BX1ijXYqfLK9BRPtIdFlLiHdFLcbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB1627.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:16e::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Fri, 18 Mar
- 2022 13:59:34 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d%6]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
- 13:59:34 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Sathvika Vasireddy <sv@linux.ibm.com>
-CC:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
-Thread-Topic: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
-Thread-Index: AQHYOsOkMhd+XrYXYE6fzWpV8XELvKzFK0EA
-Date:   Fri, 18 Mar 2022 13:59:34 +0000
-Message-ID: <33447256-81d1-8844-d82f-e8ac94f65fbe@csgroup.eu>
-References: <20220318105140.43914-1-sv@linux.ibm.com>
- <20220318105140.43914-4-sv@linux.ibm.com>
- <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
-In-Reply-To: <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bae95cc6-4c61-4d0c-7eb5-08da08e78829
-x-ms-traffictypediagnostic: PR0P264MB1627:EE_
-x-microsoft-antispam-prvs: <PR0P264MB1627F7FC89BEFB9BE0747024ED139@PR0P264MB1627.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wEimvwXGCQNim1Z7CJqDns1113+eDgifnEQ7IZx0LD6vfA17Lht2vBArJKsKaCZf9HOBun+rrGSs/z63oV/xiHPDK5JtdQoQ/Rm03K9G6vsE0cumnfMfoQI83I/0BR8/VtXBBksv7W6NCQZMCPCjXWbQr9iBHloJokTFsTEIWdVoTqjEuJx+6ghlPtFtA9JZR1m1Lj0w9+BCAVJWKNvxw6/B0e63xp29WECbVg1h+lpyYw/a4lHapmUno+03mXD0HaA7Q3QINMIoWtL8K9SUYWZvR4oXXyjTy0/7d6/cY+Rw7yQOfmpWBGQ4gFmDa0VyWffuDJGnpxyUyk3eQKujG0BzRG0yKAOPm70lE79FG3xMTvoFJm4YbdH8WQQ27PUmTgeIUmV+axmtV2drHQ9Wx/PXQuEjLSLBlVaJ0kLpu/Ygj3OBmn1KyaYuDCRhqoWOcKim/+/ar258cx0A7/q7kTxuvrURDHUnffj3XaNKmC2MErLMzJTtgqVSZiuyg1kDRmNFOAUpLd28OFuPZUBg5sKKph7k++YBx59mUUHzPEKAmpj+dCz6ndLJFZ7B3NkoDgSt1/TOdcQDAF5pdONCYnhhLO3R9onjbv2v4DPqV+zsWYnqxDgJSV8vOKqM322biQKo3G+tOvuA/K1ET+Czkg5Ik34kDlonDsvebAn2jqV2tTmH4qdMA2X7uKLuJXbH0/S1Nt8susgio/Z+bsoCX88LlAb861O6MstJ+f/PpgxvbN/VXNypdkgegn9iL6FIYa3sgCd8tZCiGX85kM0xSlwr6NOpDsJ9YVLX6vrF2PH1ooJ0Nj9NnrFrRZBkMUPB3H/B2aa7xhuujslktbAFiiTti7r8Mi3cCtF8ysizobY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(91956017)(66946007)(122000001)(6916009)(76116006)(66556008)(66476007)(66446008)(8676002)(54906003)(4326008)(38100700002)(64756008)(508600001)(6486002)(26005)(186003)(966005)(316002)(6512007)(71200400001)(6506007)(31696002)(2906002)(8936002)(86362001)(31686004)(2616005)(44832011)(5660300002)(38070700005)(36756003)(4744005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cGxXRXl6ZGdtZzMzRjN0TUtudnE1bFFITmM2cXFnN2VoQ2VmNU9KMmV1amlY?=
- =?utf-8?B?MGNWaXZ4cWcyUjRBN1lMUjhsQ0xMVUR4VVhNYWc1RXJZOUNUS3pFdjlyRjk1?=
- =?utf-8?B?Z0dHSzB2c0t4bDBGTnBUOHVzL3lpdEZFWVVPSWNTN2IzVDJhZmtTMWZRSENk?=
- =?utf-8?B?anRqL3NNTXJCdnVRdzloSHVQQTc3OVJYUW1mMzgxTlRwUER4Qk5xdWg5Nk9p?=
- =?utf-8?B?b2VoZXhZNm9EQTlFaktqamJ2eUF0ZVRtMWRiSHBPRy9ocC9ZVVMwK0JzUlVh?=
- =?utf-8?B?aFF5N2p5TFNqRFQyQ1hTTStzRmJMTnRDM2NkTnZPL3JpR3VBQXlEeExZVFdy?=
- =?utf-8?B?WlFWdTh2VXZpZkFWVi9YWXFFRkNHT3ZNbW1pZXhYeElMTWF4bUNVWFMzYnAw?=
- =?utf-8?B?dGlBNTl4L1E1V1EzQytjMDViMXY5c3l3QTd2VEVOanVHS2x3R2ZkUEhHekl0?=
- =?utf-8?B?NWtvVGZyUm9GZlgzbmJKV3pUeHp4L0NOcEw5aGFLR2U1cXFXbnM0czc5UW9J?=
- =?utf-8?B?aVYySzMrQktOaVhKaUtOd2JxbzkyOEQrYlI3VU5aVndGMitZVUlwYVJUSzZQ?=
- =?utf-8?B?SVlJSXQyVSt2MDFEU2ZER3FQbS9icVY0b1FDakQ0SDFMR0Zma2UrZzZ5ZFRs?=
- =?utf-8?B?MXN6U3lqUDNEUlo3bC9HWER5VnRVQk9hbm9nalVPVGlGNWwzTEl4VEY4VFBK?=
- =?utf-8?B?bTJnYmNnenEzR3F2cDJWcjdGeVpoTDVkU01ENENWL3B4QXBkS2h1WlBXTXE0?=
- =?utf-8?B?c0d6WkFjWDAveUQwZ3I2NStwRFlMSVRxNVpnRWwzbVFmdEZFcW4vWVNaTFpq?=
- =?utf-8?B?Z2RHcHpHaGpHN0o2WDY1OVFaUnRjbWdzVXVoL3FicmMzTUZNOGplSmluMUNU?=
- =?utf-8?B?ZEtWQkhIeDhTYjhZWHVnem9SQWorYU80NFhsRkpBVXZQSHdXbTlrMVE2VzJG?=
- =?utf-8?B?VjhTZ1JRYTYxUW05cVFLNGJRR05tbFNrNEhQekc0RlN1UnZXaHF4MFI0a0p3?=
- =?utf-8?B?WTVhTDUzWVFFWmNXTlhEZWw4ejdLbnpScHJKTVFGamozM3d4UkdvUlQ5MTBO?=
- =?utf-8?B?ZDAxRkY3aStyb2lKbDNJVHFWQjI0VWkxaXU4TStNaEpaZDl3U0VreFRKS1Rk?=
- =?utf-8?B?eXVqSjJ5SmlIYTZ2aS82cDhlR2VtMmhiQldyRy9oZTUrSms4WEQyUnc0RmVa?=
- =?utf-8?B?OGdhZEdVMGp0NGJnaVFQeTArYXhySldUdlhLKzZHVmRDMUk2NTE5YXdSdjhm?=
- =?utf-8?B?WmJTNnFBbUZjaktzVjJnTDJmQnFyZFl6RjZCcVlXclhERHA5K0xGR1dsRFBK?=
- =?utf-8?B?bll3d3p6Um9IZjE0ZytFNzN1RU1YOEhnK1FRMEdsSmZKZTA0NTlFdkcvMmlS?=
- =?utf-8?B?OE9CQXREV0hvWHV4bzFOb3E2S1QxUytzc29uN3VRZER5Q3FSNmJZRlhpNExE?=
- =?utf-8?B?OExHUHp0WTcrajVyZkl3RTlMVG5rODZSK05CTDAwSTdTZWt2TnljeUxWU1da?=
- =?utf-8?B?S3hlMWxQemhSNkJzRTVBYlRjeFBMdUxiWVgxbVNvSXVzcVBjbFRWZ1pHazBm?=
- =?utf-8?B?WEpoMzZWaUs1SjhYM0g4b2NVNnlsTUpiVkFmdVY1STVTUWlFeVJHZEJuTGVr?=
- =?utf-8?B?ZzZxU0xjWGFjSjJoOSt6bkw0MjZ4cmFoaXVaa0pTOEl6NXR3Rk1ZZXhlb1V0?=
- =?utf-8?B?ZFdiU1BwMnhZUkhuTC90cWR2N1VwNFZpVklpbzI3dGN0TE9FcHhlYkNleHhW?=
- =?utf-8?B?dWcvWjBxUDhrZFJzekpqTnh5Z2tEYlhKYXJmb2VGcVpLM0FSaURvUnBERGFo?=
- =?utf-8?B?YjFmdXp3UW5kZS9oTEJXLzlHZSsrL09KLzhBZCtsOFM5WXZtcEJDZ3M4d3Bt?=
- =?utf-8?B?UFZ3c2pybzl6SzhmTzRXcVhKLzFiKzM2L0xQWVZzWGF6eWEwa05oRlJ4MlFn?=
- =?utf-8?B?c1o3VFZ1aWxxeUU1SUpGZnJ0QjZ0Wm81SkZuSE1nZ0dNTUNLTXY2amVyckxo?=
- =?utf-8?Q?5q1sHkVpLhVActGge/TNHt07VYkZ34=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <34434F866BB88047B379CE48EA2B2C48@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Fri, 18 Mar 2022 10:03:13 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2A921F74D;
+        Fri, 18 Mar 2022 07:01:53 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2e5e176e1b6so14460057b3.13;
+        Fri, 18 Mar 2022 07:01:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5VArFVcUzcHgwGcBdrmCG7NoSNoulRRst2M2L56rKO0=;
+        b=3irpL0IJrA5Bs1v1tKtLyXNcM4V2DzmBYk5cg8XzFiZhljZ+7v+qjsb4r8Wnh1RuX+
+         x53LEqjuR64VUOXUbvHmxLGHMny9RZBCIarVy5tfT1sJDGjdYgBs4tvssAlcoWrMfmgk
+         D47xH0lj3z302XDLLe2sUenmunIYMQM2FQi+ya1sqs4QSg4udpeHeyD/WlUWJJwnwlup
+         lyDI04vn8Smqfe+G9sWgnw0vNvAg8Zlzha8V7fx5GbvqyuEXFoUjPYqQt2rOrEb65DYc
+         9t/9SXNl9/FuZ4J3lWjvjWpoRVbHm3qU4SISKZ8EA5n3Jy9HcBI9m+Ke2TQlPKQSN0uo
+         bpqQ==
+X-Gm-Message-State: AOAM533aFB6bueoHoMgoDyl8L4NFlBp6fT6kJPMgF4DgSzxE32vB4xQx
+        oUVv7cFA4nhUU/RgIJMYtahjcQsH+nCXWARu9FE=
+X-Google-Smtp-Source: ABdhPJzwQecTT2Agccf/LxIghc1zMAMSnNZ2nyhoX5sX6HqhZGbPV01RH30w0pao+y+fr0MowFnI4C+xlatme6Nf4eo=
+X-Received: by 2002:a81:36cf:0:b0:2e5:2597:a026 with SMTP id
+ d198-20020a8136cf000000b002e52597a026mr11225028ywa.301.1647612112897; Fri, 18
+ Mar 2022 07:01:52 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: bae95cc6-4c61-4d0c-7eb5-08da08e78829
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Mar 2022 13:59:34.0453
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BBMr0wOzdjUntQtxV2KS6pynrYx3UvXIw31sIDj8/wpoyusTnAl0Y39nPagMS2eDX7zAHLvldh9x9qlQ6B+KbUjkl1qMHOXjdRIlafQjpv4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB1627
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220317153939.31542-1-rdunlap@infradead.org>
+In-Reply-To: <20220317153939.31542-1-rdunlap@infradead.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 18 Mar 2022 15:01:42 +0100
+Message-ID: <CAJZ5v0i_70DuJdHZLcv_eDdXKE=txCSrYR0kMetyk5D22_p7Eg@mail.gmail.com>
+Subject: Re: [PATCH v4] clocksource: acpi_pm: fix return value of __setup handler
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksDQoNCkxlIDE4LzAzLzIwMjIgw6AgMTM6MjYsIFBldGVyIFppamxzdHJhIGEgw6ljcml0wqA6
-DQo+IE9uIEZyaSwgTWFyIDE4LCAyMDIyIGF0IDA0OjIxOjQwUE0gKzA1MzAsIFNhdGh2aWthIFZh
-c2lyZWRkeSB3cm90ZToNCj4+IFRoaXMgcGF0Y2ggYWRkcyBwb3dlcnBjIHNwZWNpZmljIGZ1bmN0
-aW9ucyByZXF1aXJlZCBmb3INCj4+ICdvYmp0b29sIG1jb3VudCcgdG8gd29yaywgYW5kIGVuYWJs
-ZXMgbWNvdW50IGZvciBwcGMuDQo+IA0KPiBJIHdvdWxkIGxvdmUgdG8gc2VlIG1vcmUgb2JqdG9v
-bCBlbmFibGVtZW50IGZvciBQb3dlciA6LSkNCg0KSSBoYXZlIG5vdCByZWNlaXZlZCB0aGlzIHNl
-cmllcyBhbmQgSSBjYW4ndCBzZWUgaXQgb24gcG93ZXJwYyBwYXRjaHdvcmsgDQplaXRoZXIgKGh0
-dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9saW51eHBwYy1kZXYvbGlzdC8pDQoN
-CkRpZCB5b3Ugc2VuZCBpdCB0byBsaW51eHBwYy1kZXYgbGlzdCA/IElmIG5vdCBjYW4geW91IHJl
-c2VuZCBpdCB0aGVyZSA/DQoNCg0KSXMgeW91ciBzZXJpZXMgYSByZXBsYWNlbWVudCBvZiBzY3Jp
-cHRzL3JlY29yZG1jb3VudC5jID8NCg0KSWYgc28sIGlzIHRoZXJlIGFueXRoaW5nIGNvbW1vbiB3
-aXRoIHRoZSBmb2xsb3dpbmcgUkZDOg0KDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sL2Nv
-dmVyLjE1OTExMjUxMjcuZ2l0Lm1oZWxzbGV5QHZtd2FyZS5jb20vDQoNClRoYW5rcw0KQ2hyaXN0
-b3BoZQ0K
+On Thu, Mar 17, 2022 at 4:39 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> __setup() handlers should return 1 to obsolete_checksetup() in
+> init/main.c to indicate that the boot option has been handled.
+> A return of 0 causes the boot option/value to be listed as an Unknown
+> kernel parameter and added to init's (limited) environment strings.
+>
+> The __setup() handler interface isn't meant to handle negative return
+> values -- they are non-zero, so they mean "handled" (like a return
+> value of 1 does), but that's just a quirk. So return 1 from
+> parse_pmtmr(). Also print a warning message if kstrtouint() returns
+> an error.
+>
+> Fixes: 6b148507d3d0 ("pmtmr: allow command line override of ioport")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+> Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+> Cc: Dan Carpenter <dan.carpenter@oracle.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: linux-acpi@vger.kernel.org
+> ---
+> v4: correct Igor's email address to be Reported-by: (Rafael)
+> v3: also cc: linux-acpi (Rafael)
+> v2: correct the Fixes: tag (Dan Carpenter);
+>     remove Cc: John Stultz <john.stultz@linaro.org> (bouncing)
+>
+>  drivers/clocksource/acpi_pm.c |    6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> --- linux-next-20220315.orig/drivers/clocksource/acpi_pm.c
+> +++ linux-next-20220315/drivers/clocksource/acpi_pm.c
+> @@ -229,8 +229,10 @@ static int __init parse_pmtmr(char *arg)
+>         int ret;
+>
+>         ret = kstrtouint(arg, 16, &base);
+> -       if (ret)
+> -               return ret;
+> +       if (ret) {
+> +               pr_warn("PMTMR: invalid 'pmtmr=' value: '%s'\n", arg);
+> +               return 1;
+> +       }
+>
+>         pr_info("PMTMR IOPort override: 0x%04x -> 0x%04x\n", pmtmr_ioport,
+>                 base);
+
+Applied as 5.18 material, thanks!

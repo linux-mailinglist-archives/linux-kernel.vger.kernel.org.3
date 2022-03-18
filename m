@@ -2,188 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7954DD95E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFC74DD961
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236031AbiCRMDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
+        id S236034AbiCRMFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236020AbiCRMDG (ORCPT
+        with ESMTP id S232569AbiCRMFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:03:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76AC72D4D52;
-        Fri, 18 Mar 2022 05:01:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3269A1424;
-        Fri, 18 Mar 2022 05:01:48 -0700 (PDT)
-Received: from [10.57.43.230] (unknown [10.57.43.230])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7177A3F7F5;
-        Fri, 18 Mar 2022 05:01:46 -0700 (PDT)
-Message-ID: <65207fdf-c4ab-5165-dbda-8ab55b51adb7@arm.com>
-Date:   Fri, 18 Mar 2022 12:01:42 +0000
+        Fri, 18 Mar 2022 08:05:22 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD52F204AB8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:04:02 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2e5e31c34bfso9408457b3.10
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:04:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DBvV4G6vOU2kREwkM4zbHp8OUt3CMWwQq1dJoUZwDd4=;
+        b=QK41pf21otxSJ7KIemOIbH4kWR5S01A46Yz0lBCrgNMX6PnAW41AqoAhOl7fFhigkw
+         faZomf4Z+f755BDK0AsAlBH1D493CEDQIom0dhx4o3uBAjxBWJf2ObNr+5EDtN3ptdzJ
+         jRE52rXKwcm380pWpW/geHXEDDi0hrjbuBtDy/VAuzdUWfHdsLdGxKHb5lPlh2Ucw5lo
+         zEWA/kCoeNGcijLMsfRj8mMBM/YivkOCN4+eVX98xhxaOuUkYEA3qp+NeudUWxQErB3x
+         GGM3//v4XxlZNmd86M7XJrwDlhI6XfywQBioLC0gk4kZ9cc9APDJI5QxevquC4KyOigj
+         pSbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DBvV4G6vOU2kREwkM4zbHp8OUt3CMWwQq1dJoUZwDd4=;
+        b=bv9BPIezjY15ETckq2q5igp7/hhHBfviwfVsU6fYLaWrHJjErYpRd9Ef/95BJI1Lxr
+         y9snYVwwdgcXMq1nuCqWjNCMbuQ8jTFy/bOZurl60zy7yKByuppDWXlZwDEISX0CGKtG
+         s5txLNHv42F5HKC9HyyuVxqjMupRiYxoquggQfqTav+Jd4UTYr/xcGfljwGooBvvufdR
+         URCV74NiFNVjNiLWOrhMvYOFIoW0JV8J9oJBPRgk6z/gVgaZnNOdBgio+O+cEZpecrJ3
+         J4oJCzMCNwdRvxw98kw5zKxm/lKAwRetcZn35XojhSa1Ho8+cadn4j3l9IX+//qIZHA+
+         8t3g==
+X-Gm-Message-State: AOAM532VNrK1a6d9hnZ4yKtHqmf9+ln3LqQcJt4Ucmu385Ie0paYxzLw
+        WhpJUUM/x6q3pRYa2wmVm8yg6FUv6IlPcpgOmg5M5w==
+X-Google-Smtp-Source: ABdhPJzwRtRyLqTheT8yJL/ej55d6PdmwoyGt8xO0LaNXvPUKZb4vJ5Ydf5uk4Aus+GxE3qWx2fwVVWMxFIZM661TKM=
+X-Received: by 2002:a81:7812:0:b0:2d0:8c2c:5159 with SMTP id
+ t18-20020a817812000000b002d08c2c5159mr10557677ywc.120.1647605041628; Fri, 18
+ Mar 2022 05:04:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] thunderbolt: Make iommu_dma_protection more accurate
-Content-Language: en-GB
-To:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
-        "michael.jamet@intel.com" <michael.jamet@intel.com>,
-        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-References: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
- <BL1PR12MB515783C0F998169D49D92A55E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
- <BL1PR12MB51573F55B3C2B3922BAAA7F1E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
- <YjRvMk1kcbMwJvx+@lahna>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YjRvMk1kcbMwJvx+@lahna>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220317124527.672236844@linuxfoundation.org>
+In-Reply-To: <20220317124527.672236844@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 18 Mar 2022 17:33:49 +0530
+Message-ID: <CA+G9fYvLHr=ihMou7hvAWeJCxhfE7mnxUNkUhXRMApNrNFZ-ng@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/43] 5.4.186-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-18 11:38, mika.westerberg@linux.intel.com wrote:
-> Hi Mario,
-> 
-> On Thu, Mar 17, 2022 at 08:36:13PM +0000, Limonciello, Mario wrote:
->> Here is a proposal on top of what you did for this.
->> The idea being check the ports right when the links are made if they exist
->> (all the new USB4 stuff) and then check all siblings on TBT3 stuff.
->>
->> diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
->> index 79b5abf9d042..89432456dbea 100644
->> --- a/drivers/thunderbolt/acpi.c
->> +++ b/drivers/thunderbolt/acpi.c
->> @@ -14,6 +14,7 @@
->>   static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
->>                                      void **return_value)
->>   {
->> +       enum nhi_iommu_status iommu_status = IOMMU_UNKNOWN;
->>          struct fwnode_reference_args args;
->>          struct fwnode_handle *fwnode;
->>          struct tb_nhi *nhi = data;
->> @@ -91,6 +92,8 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
->>                  if (link) {
->>                          dev_dbg(&nhi->pdev->dev, "created link from %s\n",
->>                                  dev_name(&pdev->dev));
->> +                       if (iommu_status != IOMMU_DISABLED)
->> +                               iommu_status = nhi_check_iommu_for_port(pdev);
->>                  } else {
->>                          dev_warn(&nhi->pdev->dev, "device link creation from %s failed\n",
->>                                   dev_name(&pdev->dev));
->> @@ -101,6 +104,7 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
->>
->>   out_put:
->>          fwnode_handle_put(args.fwnode);
->> +       nhi->iommu_dma_protection = (iommu_status == IOMMU_ENABLED);
->>          return AE_OK;
->>   }
->>
->> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
->> index e12c2e266741..b5eb0cab392f 100644
->> --- a/drivers/thunderbolt/nhi.c
->> +++ b/drivers/thunderbolt/nhi.c
->> @@ -1103,10 +1103,30 @@ static void nhi_check_quirks(struct tb_nhi *nhi)
->>                  nhi->quirks |= QUIRK_AUTO_CLEAR_INT;
->>   }
->>
->> +enum nhi_iommu_status nhi_check_iommu_for_port(struct pci_dev *pdev)
->> +{
->> +       if (!pci_is_pcie(pdev) ||
->> +           !(pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT ||
->> +            pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM)) {
->> +               return IOMMU_UNKNOWN;
->> +       }
->> +
->> +       if (!device_iommu_mapped(&pdev->dev)) {
->> +               return IOMMU_DISABLED;
->> +       }
->> +
->> +       if (!pdev->untrusted) {
->> +               dev_info(&pdev->dev,
->> +                       "Assuming unreliable Kernel DMA protection\n");
->> +               return IOMMU_DISABLED;
->> +       }
->> +       return IOMMU_ENABLED;
->> +}
->> +
->>   static void nhi_check_iommu(struct tb_nhi *nhi)
->>   {
->> -       struct pci_dev *pdev;
->> -       bool port_ok = false;
->> +       enum nhi_iommu_status iommu_status = nhi->iommu_dma_protection ?
->> +                                       IOMMU_ENABLED : IOMMU_UNKNOWN;
->>
->>          /*
->>           * Check for sibling devices that look like they should be our
->> @@ -1117,23 +1137,13 @@ static void nhi_check_iommu(struct tb_nhi *nhi)
->>           * otherwise even if translation is enabled for existing devices it
->>           * may potentially be overridden for a future tunnelled endpoint.
->>           */
->> -       for_each_pci_bridge(pdev, nhi->pdev->bus) {
->> -               if (!pci_is_pcie(pdev) ||
->> -                   !(pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT ||
->> -                     pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM))
->> -                       continue;
->> -
->> -               if (!device_iommu_mapped(&pdev->dev))
->> -                       return;
->> -
->> -               if (!pdev->untrusted) {
->> -                       dev_info(&nhi->pdev->dev,
->> -                                "Assuming unreliable Kernel DMA protection\n");
->> -                       return;
->> -               }
->> -               port_ok = true;
->> +       if (iommu_status == IOMMU_UNKNOWN) {
->> +               struct pci_dev *pdev;
->> +               for_each_pci_bridge(pdev, nhi->pdev->bus)
->> +                       if (iommu_status != IOMMU_DISABLED)
->> +                               iommu_status = nhi_check_iommu_for_port(pdev);
->>          }
->> -       nhi->iommu_dma_protection = port_ok;
->> +       nhi->iommu_dma_protection = (iommu_status == IOMMU_ENABLED);
->>   }
->>
->>   static int nhi_init_msi(struct tb_nhi *nhi)
->>
->> diff --git a/drivers/thunderbolt/nhi.h b/drivers/thunderbolt/nhi.h
->> index 69083aab2736..1622d49b1763 100644
->> --- a/drivers/thunderbolt/nhi.h
->> +++ b/drivers/thunderbolt/nhi.h
->> @@ -11,6 +11,13 @@
->>
->>   #include <linux/thunderbolt.h>
->>
->> +enum nhi_iommu_status {
->> +       IOMMU_UNKNOWN,
->> +       IOMMU_DISABLED,
->> +       IOMMU_ENABLED,
->> +};
->> +enum nhi_iommu_status nhi_check_iommu_for_port(struct pci_dev *pdev);
->> +
-> 
-> This adds quite a lot code and complexity, and honestly I would like to
-> keep it as simple as possible (and this is not enough because we need to
-> make sure the DMAR bit is there so that none of the possible connected
-> devices were able to overwrite our memory already).
+On Thu, 17 Mar 2022 at 18:19, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.186 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 19 Mar 2022 12:45:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.186-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Shall we forget the standalone sibling check and just make the 
-pdev->untrusted check directly in tb_acpi_add_link() then? On reflection 
-I guess the DMAR bit makes iommu_dma_protection functionally dependent 
-on ACPI already, so we don't actually lose anything (and anyone can come 
-back and revisit firmware-agnostic methods later if a need appears).
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Robin.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.4.186-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.4.y
+* git commit: 4eb765392859512cee9488eb5831d73f5b47b4ac
+* git describe: v5.4.185-44-g4eb765392859
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
+85-44-g4eb765392859
+
+## Test Regressions (compared to v5.4.185)
+No test regressions found.
+
+## Metric Regressions (compared to v5.4.185)
+No metric regressions found.
+
+## Test Fixes (compared to v5.4.185)
+No test fixes found.
+
+## Metric Fixes (compared to v5.4.185)
+No metric fixes found.
+
+## Test result summary
+total: 92947, pass: 76842, fail: 1135, skip: 13484, xfail: 1486
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 290 total, 290 passed, 0 failed
+* arm64: 40 total, 34 passed, 6 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 20 total, 20 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 49 passed, 11 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 40 total, 40 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

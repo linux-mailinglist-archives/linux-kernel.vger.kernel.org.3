@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8744B4DD9FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D654DD9FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236427AbiCRMyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
+        id S236444AbiCRMzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236439AbiCRMym (ORCPT
+        with ESMTP id S236439AbiCRMzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:54:42 -0400
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E862F3281;
-        Fri, 18 Mar 2022 05:53:23 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id o6so11193988ljp.3;
-        Fri, 18 Mar 2022 05:53:23 -0700 (PDT)
+        Fri, 18 Mar 2022 08:55:01 -0400
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A79131DF8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:53:42 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id u3so11260574ljd.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:53:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=azzcjd1OIWakEOc8UERpptRP6fFvybBF/IXdEJwOYok=;
-        b=eoLQiLfu1TPsEdwzkBZInXc+LkvonGx+mECDutWQrmYDixW+5RkFKB9pQNcgxnL+kn
-         VQUtBjhlrwlGnwTkNeVPKQOEFSNWlZ2QvRHv8p+y/tffa7k86+7ogykKSvsKl/4+QEWB
-         6YDQ8vq8u0FAxPucG9v2d4oLmFF2tvSOMTtGN4Ci/6A9xlkyIRv1ofYn622BQt+1VAYP
-         JEcfnjCka2APuvAXEnhxV0NcoFDCRBo0lLydPa4dq/ZWrLMydQQ1q86L0nbx6767N6vM
-         hIgTuMWwvPmKErimryRDIzZ++P/BE+82J16igvg6zBxbeSzyyhcDfXx4aaMot9++Mhk+
-         wOcA==
-X-Gm-Message-State: AOAM5326n2kXNePtmqRlkDoIAjJaJ2yQIAOL3ct/T+r4bf6wp+U4XDjD
-        2vCSx2T20Pfa+Yilk8IzTXzRYbEX9Lk=
-X-Google-Smtp-Source: ABdhPJz3hHh22dAgdUP2vOsOvXNZF84TeD+dtedtzAccxko5hO5CfDbqZPj7PZRVU02lw9zujdnxYA==
-X-Received: by 2002:a2e:b536:0:b0:247:f015:ad57 with SMTP id z22-20020a2eb536000000b00247f015ad57mr6063675ljm.257.1647608001421;
-        Fri, 18 Mar 2022 05:53:21 -0700 (PDT)
+        bh=4mu2OuGaPzAlSckILaZwyPu3lEiEzcu9CZya493fP8E=;
+        b=saaQzXzI8UZ8u3oHra1CyTZxJexrxjlIHuyPiJtMquAD2IkiBiDVh0KPi+dAwg4AHl
+         khBC1TmwAkGNDajrpUC4kuCLTvbcrROVQqMyrBfjPT5YqDxqXDZGKLejmeZ/EHaReuNx
+         SyubnqRsp4fB4tWdml/3kP9T3xzG2yHK9msCynJo2xopijVga8h1lDGFgW78pxOGvkHf
+         3tiCEcJ+3swyJjoP3huJz7oZWtbG4IlkzbzyzFRH0X1mtYzykUn9Y+wa/AoU/aWk/D0m
+         wvaefjbRhlOxrjT7SvSRBeDy9TABNesmU9otDxW0mV/BtHB69KkahbuziaGZbQaJSLKU
+         ozWw==
+X-Gm-Message-State: AOAM533bcbjOGEqwbUNmUTf6UDA+NH65spKqf07yHd7r43CwNQ5Htxe/
+        nk2pl/C5+IGCE5vxxGCYKq4=
+X-Google-Smtp-Source: ABdhPJxQ9uko5et6u+LegwREFDr5bEBIZhwzLZ4c47FNelbGTzZYJD439JkB+S5faUXXtgm0Yi7G1A==
+X-Received: by 2002:a05:651c:1209:b0:244:b99d:8902 with SMTP id i9-20020a05651c120900b00244b99d8902mr5872302lja.185.1647608020684;
+        Fri, 18 Mar 2022 05:53:40 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id m21-20020a197115000000b0044895f0608asm840021lfc.37.2022.03.18.05.53.19
+        by smtp.googlemail.com with ESMTPSA id c7-20020a2e9d87000000b00247ebe11990sm954625ljj.10.2022.03.18.05.53.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 05:53:20 -0700 (PDT)
-Message-ID: <d0d0c0e1-47c7-0177-1b97-61befe3f1327@kernel.org>
-Date:   Fri, 18 Mar 2022 13:53:18 +0100
+        Fri, 18 Mar 2022 05:53:40 -0700 (PDT)
+Message-ID: <5bc9ebe3-5c0b-2d72-4574-1630056c883e@kernel.org>
+Date:   Fri, 18 Mar 2022 13:53:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] memory: renesas-rpc-if: fix platform-device leak in error
- path
+Subject: Re: [PATCH] memory: atmel-ebi: Fix missing of_node_put in
+ atmel_ebi_probe
 Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-References: <20220303180632.3194-1-johan@kernel.org>
+To:     Miaoqian Lin <linmq006@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220309110144.22412-1-linmq006@gmail.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220303180632.3194-1-johan@kernel.org>
+In-Reply-To: <20220309110144.22412-1-linmq006@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -65,17 +68,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/2022 19:06, Johan Hovold wrote:
-> Make sure to free the flash platform device in the event that
-> registration fails during probe.
+On 09/03/2022 12:01, Miaoqian Lin wrote:
+> The device_node pointer is returned by of_parse_phandle() with refcount
+> incremented. We should use of_node_put() on it when done.
 > 
-> Fixes: ca7d8b980b67 ("memory: add Renesas RPC-IF driver")
-> Cc: stable@vger.kernel.org      # 5.8
-> Cc: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+> Fixes: 87108dc78eb8 ("memory: atmel-ebi: Enable the SMC clock if specified")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 > ---
->  drivers/memory/renesas-rpc-if.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+>  drivers/memory/atmel-ebi.c | 23 +++++++++++++++++------
+>  1 file changed, 17 insertions(+), 6 deletions(-)
 > 
 
 It's too late for upcoming cycle, so I will pick it up after the merge

@@ -2,145 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1668F4DE1F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 20:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C48D4DE201
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 20:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240428AbiCRTxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 15:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        id S240442AbiCRT6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 15:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240380AbiCRTxv (ORCPT
+        with ESMTP id S240380AbiCRT6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 15:53:51 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B4A2EA0C7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:52:31 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id w12so15673301lfr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AQ3E8sCDZrEL2wZ8doD+CiI98BAdcflnpsvxxLxIuMs=;
-        b=ENTvmxmfC4BBPkAvhD10+g2ipgazNCa4PAo9eVHZtO0K7t4pwlwqgomak+5pu8YwRJ
-         05IbDBoO0ky49EF0YZ16JJCVFeR7Z9tKixBgevg/2393ptzAGOCK+UyXWJAsR8TlWx9R
-         ZEjN0bsBQp4zVFejhCCUNvPjaId2PNhRRnnsQbJDR1bxrWukR/2LCBs8ftpwE68iS1ch
-         vRxY210N95DMzLNpJH2jRAEQW25g4EtYLjiYQy532pwdPCzQnkGUZ/Hz2KLzgQo+MgQA
-         djHW421qAfRshCbzSw2FzrnMQE3fucFLq7CGZfxVWOCAGxNIUiD/04HWve0DpOEztz0o
-         4zIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AQ3E8sCDZrEL2wZ8doD+CiI98BAdcflnpsvxxLxIuMs=;
-        b=54c3Jme3vJYZE8+eOQXwAHu/AojPM0FjmBUTFFwf99Ks6OlZpfxqfDkvy4TQ2enMEZ
-         fTGtrc5pdp/Q8l2qkJVUhYw8EoyzLEIqnkYHu6MCICpPFhrmAUSen49zFD4oIDbSWzDC
-         EBvcHoBjq3KVTXJgx5PXZfgItWYAJp7knhRYX8PQJ4GAz3gkqe+jXjpEI/XFl/VWEUgc
-         ZoKKZ4BEf85FZSMWezCPDyc9plvMBSLmf3H7x6Jd5PQlaKAghCg5YAc/M5ZiGvgBZJJ/
-         bdUPdx7cnymogpew1ilHktWlQpbtkXFAYbvc+k5XA1VyeauBPjOJcachk/kVqr1Y2Dxd
-         xQBg==
-X-Gm-Message-State: AOAM530PruaiJKh7HKv48uLqURLjyJk1bCLj6cv1dQTuT3lZZ/GEzCaR
-        Fcq0MCmMzQcpr1XXi6jLCz9pBRdpYMn6HndPmX6jOA==
-X-Google-Smtp-Source: ABdhPJyRQNH0WtelZOLCxhPX/+XCdJCX7NUeT+ryQRKooQ4D3nMrEUPMm3JbVI2fIOqCYAy82TIIaA+3n9az4eMg7Ys=
-X-Received: by 2002:a05:6512:308e:b0:448:3826:6d68 with SMTP id
- z14-20020a056512308e00b0044838266d68mr6639558lfd.184.1647633149856; Fri, 18
- Mar 2022 12:52:29 -0700 (PDT)
+        Fri, 18 Mar 2022 15:58:13 -0400
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 507E014003
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:56:53 -0700 (PDT)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id C1C2415F939;
+        Sat, 19 Mar 2022 04:56:52 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 22IJup2T021603
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 19 Mar 2022 04:56:52 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-2) with ESMTPS id 22IJupYL069791
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 19 Mar 2022 04:56:51 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 22IJupoG069790;
+        Sat, 19 Mar 2022 04:56:51 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Jonathan Lassoff <jof@thejof.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Add FAT messages to printk index
+References: <c11c5c259d5e53afe5b20fa761002e7edd48277f.1647624190.git.jof@thejof.com>
+Date:   Sat, 19 Mar 2022 04:56:51 +0900
+In-Reply-To: <c11c5c259d5e53afe5b20fa761002e7edd48277f.1647624190.git.jof@thejof.com>
+        (Jonathan Lassoff's message of "Fri, 18 Mar 2022 10:23:51 -0700")
+Message-ID: <87v8wbvxto.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
 MIME-Version: 1.0
-References: <20220316183833.1563139-1-arnd@kernel.org> <3b9cedd6-a084-5d87-2fdd-0da10146827b@arm.com>
-In-Reply-To: <3b9cedd6-a084-5d87-2fdd-0da10146827b@arm.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 18 Mar 2022 12:52:18 -0700
-Message-ID: <CAKwvOdnut8db1Z1FdZkkSXCvmggrzfKv9Y9GO3uz4ND=K5sB3g@mail.gmail.com>
-Subject: Re: [PATCH] arm64: fix clang warning about TRAMP_VALIAS
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 12:11 PM Robin Murphy <robin.murphy@arm.com> wrote:
+Jonathan Lassoff <jof@thejof.com> writes:
+
+> In order for end users to quickly react to new issues that come up in
+> production, it is proving useful to leverage the printk indexing system. This
+> printk index enables kernel developers to use calls to printk() with changable
+> ad-hoc format strings, while still enabling end users to detect changes and
+> develop a semi-stable interface for detecting and parsing these messages.
 >
-> On 2022-03-16 18:38, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > The newly introduced TRAMP_VALIAS definition causes a build warning
-> > with clang-14:
-> >
-> > arch/arm64/include/asm/vectors.h:66:31: error: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Werror,-Wnull-pointer-arithmetic]
+> So that detailed FAT messages are captured by this printk index, this patch
+> wraps fat_msg with a macro.
 >
-> Tangentially, all the other GNU extensions we depend on throughout Linux
-> are also GNU extensions. Do we know what's special about this one?
-
-My first thought is that -Wnull-pointer-arithmetic should be in the
--Wgnu flag group, such that -Wno-gnu (as set by Kbuild) implies
--Wno-null-pointer-arithmetic.
-
-One issue seems to be that -Wnull-pointer-arithmetic seems to control
-at least 2 different checks in clang.
-
-https://godbolt.org/z/hdYYejj3d
-
-So it's likely these two checks should have 2 distinct flags, such
-that the warning we're observing can be grouped under -Wgnu.
-
-Filed: https://github.com/llvm/llvm-project/issues/54444
-
+> PATCH v1 -- Fix indentation with tabs in fat_msg macro
+> PATCH v2 -- Define FAT_PRINTK_PREFIX
 >
-> Robin.
+> Signed-off-by: Jonathan Lassoff <jof@thejof.com>
+
+Acked-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+
+> ---
+>  fs/fat/fat.h  | 9 ++++++++-
+>  fs/fat/misc.c | 4 ++--
+>  2 files changed, 10 insertions(+), 3 deletions(-)
 >
-> >                  return (char *)TRAMP_VALIAS + SZ_2K * slot;
-> >
-> > Change the addition to something clang does not complain about.
-> >
-> > Fixes: bd09128d16fa ("arm64: Add percpu vectors for EL1")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >   arch/arm64/include/asm/vectors.h | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > I see this warning on 5.17-rc8, but did not test it on linux-next,
-> > which may already have a fix.
-> >
-> > diff --git a/arch/arm64/include/asm/vectors.h b/arch/arm64/include/asm/vectors.h
-> > index f64613a96d53..bc9a2145f419 100644
-> > --- a/arch/arm64/include/asm/vectors.h
-> > +++ b/arch/arm64/include/asm/vectors.h
-> > @@ -56,14 +56,14 @@ enum arm64_bp_harden_el1_vectors {
-> >   DECLARE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector);
-> >
-> >   #ifndef CONFIG_UNMAP_KERNEL_AT_EL0
-> > -#define TRAMP_VALIAS 0
-> > +#define TRAMP_VALIAS 0ul
-> >   #endif
-> >
-> >   static inline const char *
-> >   arm64_get_bp_hardening_vector(enum arm64_bp_harden_el1_vectors slot)
-> >   {
-> >       if (arm64_kernel_unmapped_at_el0())
-> > -             return (char *)TRAMP_VALIAS + SZ_2K * slot;
-> > +             return (char *)(TRAMP_VALIAS + SZ_2K * slot);
-> >
-> >       WARN_ON_ONCE(slot == EL1_VECTOR_KPTI);
-> >
-
-
+> diff --git a/fs/fat/fat.h b/fs/fat/fat.h
+> index 02d4d4234956..2a20a21f2fb9 100644
+> --- a/fs/fat/fat.h
+> +++ b/fs/fat/fat.h
+> @@ -433,8 +433,15 @@ void __fat_fs_error(struct super_block *sb, int report, const char *fmt, ...);
+>  	__fat_fs_error(sb, 1, fmt , ## args)
+>  #define fat_fs_error_ratelimit(sb, fmt, args...) \
+>  	__fat_fs_error(sb, __ratelimit(&MSDOS_SB(sb)->ratelimit), fmt , ## args)
+> +
+> +#define FAT_PRINTK_PREFIX "%sFAT-fs (%s): "
+> +#define fat_msg(sb, level, fmt, args...)				\
+> +do {									\
+> +	printk_index_subsys_emit(FAT_PRINTK_PREFIX, level, fmt, ##args);\
+> +	_fat_msg(sb, level, fmt, ##args);				\
+> +} while(0)
+>  __printf(3, 4) __cold
+> -void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...);
+> +void _fat_msg(struct super_block *sb, const char *level, const char *fmt, ...);
+>  #define fat_msg_ratelimit(sb, level, fmt, args...)	\
+>  	do {	\
+>  			if (__ratelimit(&MSDOS_SB(sb)->ratelimit))	\
+> diff --git a/fs/fat/misc.c b/fs/fat/misc.c
+> index 91ca3c304211..a3f1e4f8bed3 100644
+> --- a/fs/fat/misc.c
+> +++ b/fs/fat/misc.c
+> @@ -45,7 +45,7 @@ EXPORT_SYMBOL_GPL(__fat_fs_error);
+>   * fat_msg() - print preformated FAT specific messages. Every thing what is
+>   * not fat_fs_error() should be fat_msg().
+>   */
+> -void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
+> +void _fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
+>  {
+>  	struct va_format vaf;
+>  	va_list args;
+> @@ -53,7 +53,7 @@ void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
+>  	va_start(args, fmt);
+>  	vaf.fmt = fmt;
+>  	vaf.va = &args;
+> -	printk("%sFAT-fs (%s): %pV\n", level, sb->s_id, &vaf);
+> +	_printk(FAT_PRINTK_PREFIX "%pV\n", level, sb->s_id, &vaf);
+>  	va_end(args);
+>  }
 
 -- 
-Thanks,
-~Nick Desaulniers
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>

@@ -2,110 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E194DDA17
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2389B4DDA19
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:03:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236491AbiCRNED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 09:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
+        id S236495AbiCRNE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236481AbiCRNEB (ORCPT
+        with ESMTP id S236494AbiCRNEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:04:01 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5652D63BC
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:02:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647608562; x=1679144562;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=vsczFr3MgbsN8jGklVyt7JkNJ3ifHP1+yQDJ5SClufU=;
-  b=giIBHlvnQ0aQtkl4SUAn9Q5g35R7ar6dVTCMcS7fZHn3vD+LJ/1ESp/P
-   WK6Ixy0askZ+8S6vyGzYQ1Sm1L49AuH2OqD7e2pokGqTy+WGUhGmf/VL5
-   FBcU2Te0S4PD20VwcwrPJhYo8qUrewnaNDJmeElNp77b6iNtQFhGNp9Eu
-   o=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 Mar 2022 06:02:41 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:02:41 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 18 Mar 2022 06:02:40 -0700
-Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 18 Mar 2022 06:02:38 -0700
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-To:     <akpm@linux-foundation.org>, <nigupta@nvidia.com>, <vbabka@suse.cz>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Charan Teja Kalla <quic_charante@quicinc.com>
-Subject: [PATCH] mm: compaction: fix compiler warning when CONFIG_COMPACTION=n
-Date:   Fri, 18 Mar 2022 18:31:58 +0530
-Message-ID: <1647608518-20924-1-git-send-email-quic_charante@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 18 Mar 2022 09:04:20 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D4EE26
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:03:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647608581; x=1679144581;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=y13Cjuw2H7tEE+1BWa6OiwOSaXllXsUoc+JlxP8YghY=;
+  b=cNnaZvPmV9NHfT7kcqBlufn3tdQtjL4cUj+veDTTi8yW8+MLm1XqgFr7
+   FnhOClRyC7QX1xljrdtrtAxXkJG3ELJz9rofiX46+YW3Va2MByz/AZ8b7
+   ipz6xcb6NFg+YwO3OOnNDSaNzwB0fNje2y9nmbAAMv1c7MtGZdXFM1q7K
+   nOSUqQSIKA92JWD24qw7yER4fXCosNP9WO5sFoxBZNLuw2xhQaKbZuPjR
+   uEeiB8VTQArX2rAYsXVWSFgk9GqkUHaLMjqmpP9mMQZu81cZEn6pqG6DK
+   wQJx5aM1FnHTbo9I981ZgIg8uMM5iH09sFN0IQQkTtztK9bl7QbC+V/yB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="244586024"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="244586024"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:03:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="822276642"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Mar 2022 06:02:54 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id C806810E; Fri, 18 Mar 2022 15:03:13 +0200 (EET)
+Date:   Fri, 18 Mar 2022 16:03:13 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
+        bp@alien8.de, luto@kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCHv6 07/30] x86/traps: Add #VE support for TDX guest
+Message-ID: <20220318130313.tv7vecdahoakbetf@black.fi.intel.com>
+References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
+ <20220316020856.24435-8-kirill.shutemov@linux.intel.com>
+ <877d8t2ykp.ffs@tglx>
+ <20220317173354.rqymufl37lcrtmjh@black.fi.intel.com>
+ <20220317202141.GO8939@worktop.programming.kicks-ass.net>
+ <5b3bece3-5956-3116-a07c-a0b6f380fac8@intel.com>
+ <YjRlDytYjENcurpT@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjRlDytYjENcurpT@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The below warning is reported when CONFIG_COMPACTION=n:
+On Fri, Mar 18, 2022 at 11:55:11AM +0100, Peter Zijlstra wrote:
+> On Thu, Mar 17, 2022 at 01:32:07PM -0700, Dave Hansen wrote:
+> 
+> > The TDX rules are *much* nicer than SEV.  They're also a lot nicer on
+> > TDX _now_ than they used to be.  There are a few stubborn people at
+> > Intel who managed to add some drops of sanity to the architecture.
+> 
+> Right; that is saner than it used to be. I have definite memories that
+> pages could be taken back by the TDX thing and would need
+> re-authentication. A pool of 'fixed' pages was talked about. I'm glad to
+> hear all that is gone.
 
-   mm/compaction.c:56:27: warning: 'HPAGE_FRAG_CHECK_INTERVAL_MSEC'
-defined but not used [-Wunused-const-variable=]
-      56 | static const unsigned int HPAGE_FRAG_CHECK_INTERVAL_MSEC =
-500;
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Right, VMM can still pull memory form the guest at any point, but
+reference of such memory from the guest would lead not to #VE as before,
+but to TD termination.
 
-Fix it by moving 'HPAGE_FRAG_CHECK_INTERVAL_MSEC' under
-CONFIG_COMPACTION defconfig. Also since this is just a 'static const
-int' type, use #define for it.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
----
- mm/compaction.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/mm/compaction.c b/mm/compaction.c
-index b4e94cd..4d86d04 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -26,6 +26,11 @@
- #include "internal.h"
- 
- #ifdef CONFIG_COMPACTION
-+/*
-+ * Fragmentation score check interval for proactive compaction purposes.
-+ */
-+#define HPAGE_FRAG_CHECK_INTERVAL_MSEC	(500)
-+
- static inline void count_compact_event(enum vm_event_item item)
- {
- 	count_vm_event(item);
-@@ -51,11 +56,6 @@ static inline void count_compact_events(enum vm_event_item item, long delta)
- #define pageblock_end_pfn(pfn)		block_end_pfn(pfn, pageblock_order)
- 
- /*
-- * Fragmentation score check interval for proactive compaction purposes.
-- */
--static const unsigned int HPAGE_FRAG_CHECK_INTERVAL_MSEC = 500;
--
--/*
-  * Page order with-respect-to which proactive compaction
-  * calculates external fragmentation, which is used as
-  * the "fragmentation score" of a node/zone.
 -- 
-2.7.4
-
+ Kirill A. Shutemov

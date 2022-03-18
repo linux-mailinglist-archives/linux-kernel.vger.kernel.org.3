@@ -2,70 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713D24DD2D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 03:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 089CE4DD2F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 03:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbiCRCMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 22:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
+        id S231733AbiCRCOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 22:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiCRCMW (ORCPT
+        with ESMTP id S230527AbiCRCOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 22:12:22 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13532B5AFD
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 19:11:03 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 18 Mar
- 2022 10:11:04 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 18 Mar
- 2022 10:11:01 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <giovanni.cabiddu@intel.com>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <marco.chiappero@intel.com>,
-        <fiona.trahe@intel.com>, <wojciech.ziemba@intel.com>
-CC:     <qat-linux@intel.com>, <linux-crypto@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Haowen Bai <baihaowen@meizu.com>
-Subject: [PATCH] crypto: qat: Fix unsigned comparison with less than zero
-Date:   Fri, 18 Mar 2022 10:10:59 +0800
-Message-ID: <1647569459-18376-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 17 Mar 2022 22:14:51 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C43F2138
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 19:13:33 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id x127-20020a25e085000000b0063372775c9aso5808450ybg.17
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 19:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=lJQh/Exyrm7jkuouuP+OFVuB8hBfkh2Al21bjlOl0AQ=;
+        b=bU5cNjnSbfuOBeInriKiwJ43wTavdmlH3NKiDX7FoCYGJjoGx81eqzj7U/cGMRVN+S
+         DMAklEp0sQd5oNelJoM25F6J37gJQbf0lKfBertZq3LzbXhzrW6tYNWdm6G/1KHXCJ+V
+         otWWGManMbwWjWugM9Jsmq/7mlLH08ZnG4XePmjQ/kBySP/moZ2ySLLga770efdOZH06
+         tVfT6yyWqxj8CGnUX4LQvsZZ6ABJn15pYZgm3xG5aDxm4ejOZMOqAa+058F5aEM+7uml
+         djP9jWDcgSeJp/UhFl8jXTatDsG2tsmri+wPhNrF9xF84EQRYVV1kcJpwiZAYEcJ0DUL
+         mkNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=lJQh/Exyrm7jkuouuP+OFVuB8hBfkh2Al21bjlOl0AQ=;
+        b=ZbSBCBIhuhyBgRmC21frPUJzImNnUpFgiki5kpaXJU0FUqfGcjJsvZjh11giDq+ccS
+         9DWsFv0EqBfHk2DPPa7zLxmShT6UTSd2uwP6PEfwrKXgVdhEhP1n5RkbX08otq8lqSL7
+         ilJGejdXGdxZFWgJm5Pcax/tCE2p1ukrZQWYGycNwoKqJeyLu9OH6W1xHlGCc10/6mCs
+         eqa4oBvmZO2AOoNsuY4BIjwGJDcXBi/OP6Rj+1G9NKY82oIk2P0DwBjZ5Ve2D+UwLoom
+         Vr16Kl76PGgqluO/pbkstratkMZ0v9GeO+554liIWGvfNlCIUfMt2x3dyxEFezm+W9PT
+         Rp4g==
+X-Gm-Message-State: AOAM533bJ6dEAG9I70CO6/aKNunIH+RFeHnVnYoq/Hjpc2/QkCd/NE30
+        ik8wkKetmasRk2aTPdyKDW7+xujn0z57+A==
+X-Google-Smtp-Source: ABdhPJwfzO6Vfvq0NFoAyajCpwKamuadpZgMSHI9lgsqF5mO2tNkiNrQDm5hddG34QkZKXXe+1YreV64q/yv9A==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a0d:d756:0:b0:2e5:9b8a:78f6 with SMTP id
+ z83-20020a0dd756000000b002e59b8a78f6mr9179301ywd.216.1647569613119; Thu, 17
+ Mar 2022 19:13:33 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 10:13:12 +0800
+Message-Id: <20220318021314.3225240-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+Subject: [RFC PATCH 0/2] kunit: Support redirecting function calls
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c:67:5-8: WARNING: Unsigned expression compared with zero: ret < 0
+When writing tests, it'd often be very useful to be able to intercept
+calls to a function in the code being tested and replace it with a
+test-specific stub. This has always been an obviously missing piece of
+KUnit, and the solutions always involve some tradeoffs with cleanliness,
+performance, or impact on non-test code. See the folowing document for
+some of the challenges:
+https://kunit.dev/mocking.html
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series consists of two prototype patches which add support for this
+sort of redirection to KUnit tests:
 
-diff --git a/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c b/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c
-index 6d10edc..0143835 100644
---- a/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c
-+++ b/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c
-@@ -52,7 +52,7 @@ static const char *const dev_cfg_services[] = {
- static int get_service_enabled(struct adf_accel_dev *accel_dev)
- {
- 	char services[ADF_CFG_MAX_VAL_LEN_IN_BYTES] = {0};
--	u32 ret;
-+	s32 ret;
- 
- 	ret = adf_cfg_get_param_value(accel_dev, ADF_GENERAL_SEC,
- 				      ADF_SERVICES_ENABLED, services);
+1: static_stub: Any function which might want to be intercepted adds a
+call to a macro which checks if a test has redirected calls to it, and
+calls the corresponding replacement.
+
+2: ftrace_stub: Functions are intercepted using ftrace and livepatch.
+This doesn't require adding a new prologue to each function being
+replaced, but does have more dependencies (which restricts it to a small
+number of architectures, not including UML), and doesn't work well with
+inline functions.
+
+The API for both implementations is very similar, so it should be easy
+to migrate from one to the other if necessary.  Both of these
+implementations restrict the redirection to the test context: it is
+automatically undone after the KUnit test completes, and does not affect
+calls in other threads. If CONFIG_KUNIT is not enabled, there should be
+no overhead in either implementation.
+
+Does either (or both) of these features sound useful, and is this
+sort-of API the right model? (Personally, I think there's a reasonable
+scope for both.) Is anything obviously missing or wrong? Do the names,
+descriptions etc. make any sense?
+
+Note that these patches are definitely still at the "prototype" level,
+and things like error-handling, documentation, and testing are still
+pretty sparse. There is also quite a bit of room for optimisation.
+These'll all be improved for v1 if the concept seems good.
+
+Cheers,
+-- David
+
+Daniel Latypov (1):
+  kunit: expose ftrace-based API for stubbing out functions during tests
+
+David Gow (1):
+  kunit: Expose 'static stub' API to redirect functions
+
+ include/kunit/ftrace_stub.h         |  84 +++++++++++++++++
+ include/kunit/static_stub.h         | 106 +++++++++++++++++++++
+ lib/kunit/Kconfig                   |  11 +++
+ lib/kunit/Makefile                  |   5 +
+ lib/kunit/ftrace_stub.c             | 138 ++++++++++++++++++++++++++++
+ lib/kunit/kunit-example-test.c      |  64 +++++++++++++
+ lib/kunit/static_stub.c             | 125 +++++++++++++++++++++++++
+ lib/kunit/stubs_example.kunitconfig |  11 +++
+ 8 files changed, 544 insertions(+)
+ create mode 100644 include/kunit/ftrace_stub.h
+ create mode 100644 include/kunit/static_stub.h
+ create mode 100644 lib/kunit/ftrace_stub.c
+ create mode 100644 lib/kunit/static_stub.c
+ create mode 100644 lib/kunit/stubs_example.kunitconfig
+
 -- 
-2.7.4
+2.35.1.894.gb6a874cedc-goog
 

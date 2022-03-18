@@ -2,81 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F724DD534
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCC84DD539
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233043AbiCRH2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
+        id S233069AbiCRH2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232969AbiCRH2N (ORCPT
+        with ESMTP id S233055AbiCRH2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:28:13 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838C470047;
-        Fri, 18 Mar 2022 00:26:55 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id j15so1216958eje.9;
-        Fri, 18 Mar 2022 00:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=itc+KLZwa6VwF+6eEaFGhtCck5gzdg+KvVatJJSA2NE=;
-        b=pRr6K+cLN8i9DbwlGKWlNdwKkasDt5xJz94SYgHN1tf4ECvVu39Rgj1EZ5aXLV0v31
-         GcqV+nOqDcuK/5MN5bpDsfo0QgK4hJdCpFGKGgvrfJ/7a3r1G+/s6p1Na6qCi8M5SPCK
-         ARhHsOEDp9R2jZ2jEWXt/W8abMrzZZi2KdeniD3OZ9gwQEWB1612BxDr+TOrQsI0y2GY
-         i9f3Z3CN3vUFJ653LORtyeuM6MlUpuYrK2n3cIQhvjGi7ujmzWMnfCNxnaw7G3CsGNCm
-         GDBOxaBO5aqi1we3s7rtZhTJCW99fQmKhhtjH8jWnuKfp3owZw02NJY7K/GUU0MFG3CY
-         EKfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=itc+KLZwa6VwF+6eEaFGhtCck5gzdg+KvVatJJSA2NE=;
-        b=bG5UysrtziHt+tZ+jSUcqx+moJfoIZDdcig4PTviVZ1zOn4Lrreb1pmkoEjvnfkPmm
-         HWJHVBCBHlXCCeUIaJaqexvA5gb50m4+vxZ0X48rtP/VzFrJykVMrNYWabe6Oh2xjCVI
-         iPy6ekuYauy3wf6/kFNa+uWyQ8EXptrkcg/VsETdfyywAnqKNhHTG0Gdrfz2xWyRyzgm
-         THdmEsiHy3+bYP2Qa+8MWGjXlpUpfoIUiEkowAkmHps4KZlCA7jvier/C6CxPk4qCL1K
-         jEJT7/+94yj/3V0uVTKHYZX2nhShAqsTJDMGKvbAlcd844cJk4vBrz10ic+xVROASQnn
-         i2wA==
-X-Gm-Message-State: AOAM5337NkeC4axlETfPuTD08DiKWkjLBtIG7GfvCIl3qHIJAR4PBfv8
-        F4rJLMIg/aWBfDNmhcc6xv2MU6rBgrDz6Ta8uPrp7gx0Ms0=
-X-Google-Smtp-Source: ABdhPJxs5dqG2EJqVRPNNQKwxXPQlimEhSvGucWSC8STBvnUhjWMQvC9aGGN/4gOyUdMgtQlCL7NDMOpqfZ1fPOfY4g=
-X-Received: by 2002:a17:906:8555:b0:6df:8b7b:49a3 with SMTP id
- h21-20020a170906855500b006df8b7b49a3mr7420841ejy.704.1647588414013; Fri, 18
- Mar 2022 00:26:54 -0700 (PDT)
+        Fri, 18 Mar 2022 03:28:31 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F212EBF90;
+        Fri, 18 Mar 2022 00:27:12 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKbDp3chXz4xvn;
+        Fri, 18 Mar 2022 18:27:06 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647588428;
+        bh=4P6oBHZbWcIxwT6MsapuBObcRne1x7bQPyYjSFdT/sU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=t06yomXIIhLoRCIv5pwUZf3K3QHga4Hmcri1Yz0celrwLXpTXIM7uyCv2pcZZ7BLW
+         ejEpLV+HkQwhFqmc2rZTlEVcW4L8hGKdnK+4F0vGZrA/5iOUr4PgP8WFhIN1FZS3Ox
+         4Lmyw5QrL8v76wv5Nii626a53JfsM5NwzVOei9Wkb1g7B5jO+g7E232o27bH/POJP3
+         uORhO1YspCFPk8oVgfgI9nsFbBG3525vC1CSfjVRO+ajGN6PFPlcLl1XWL49e6IEqX
+         qLsSzflkreiwfNZCwwPxiuhVk+nIJH4X5hPNhyh4dCcbLzIqB4/8m1wXQy5NdRhZOZ
+         Rz1uoPS5D1wrA==
+Date:   Fri, 18 Mar 2022 18:27:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Gross <agross@kernel.org>
+Cc:     broonie@kernel.org, Colin Cross <ccross@android.com>,
+        Olof Johansson <olof@lixom.net>,
+        Thierry Reding <treding@nvidia.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: linux-next: manual merge of the tegra tree with the qcom tree
+Message-ID: <20220318182704.22cfa5d5@canb.auug.org.au>
+In-Reply-To: <20211216080100.3496490-1-broonie@kernel.org>
+References: <20211216080100.3496490-1-broonie@kernel.org>
 MIME-Version: 1.0
-References: <20220316063148.700769-1-imagedong@tencent.com>
- <20220316063148.700769-4-imagedong@tencent.com> <20220316201853.0734280f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <4315b50e-9077-cc4b-010b-b38a2fbb7168@kernel.org> <20220316210534.06b6cfe0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <f787c35b-0984-ecaf-ad97-c7580fcdbbad@kernel.org> <CADxym3YM9FMFrTirxWQF7aDOpoEGq5bC4-xm2p0mF8shP+Q0Hw@mail.gmail.com>
- <a4032cff-0d48-2690-3c1f-a2ec6c54ffb4@kernel.org>
-In-Reply-To: <a4032cff-0d48-2690-3c1f-a2ec6c54ffb4@kernel.org>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Fri, 18 Mar 2022 15:26:42 +0800
-Message-ID: <CADxym3bGVebdCTCXxg3xEcPwdfSQADLyPbLTJnPnwn+phqGp3A@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 3/3] net: icmp: add reasons of the skb drops
- to icmp protocol
-To:     David Ahern <dsahern@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, xeb@mail.ru,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        Eric Dumazet <edumazet@google.com>, Martin Lau <kafai@fb.com>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Hao Peng <flyingpeng@tencent.com>,
-        Mengen Sun <mengensun@tencent.com>, dongli.zhang@oracle.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Biao Jiang <benbjiang@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/fL01buxU.9hxKK+6Xp_J/Px";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,55 +59,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 12:10 PM David Ahern <dsahern@kernel.org> wrote:
->
-> On 3/17/22 7:37 PM, Menglong Dong wrote:
-> > On Thu, Mar 17, 2022 at 10:48 PM David Ahern <dsahern@kernel.org> wrote:
-> >>
-> >> On 3/16/22 10:05 PM, Jakub Kicinski wrote:
-> >>> On Wed, 16 Mar 2022 21:35:47 -0600 David Ahern wrote:
-> >>>> On 3/16/22 9:18 PM, Jakub Kicinski wrote:
-> >>>>>
-> >>>>> I guess this set raises the follow up question to Dave if adding
-> >>>>> drop reasons to places with MIB exception stats means improving
-> >>>>> the granularity or one MIB stat == one reason?
-> >>>>
-> >>>> There are a few examples where multiple MIB stats are bumped on a drop,
-> >>>> but the reason code should always be set based on first failure. Did you
-> >>>> mean something else with your question?
-> >>>
-> >>> I meant whether we want to differentiate between TYPE, and BROADCAST or
-> >>> whatever other possible invalid protocol cases we can get here or just
-> >>> dump them all into a single protocol error code.
-> >>
-> >> I think a single one is a good starting point.
-> >
-> > Ok, I'll try my best to make a V4 base this way...Is there any inspiration?
-> >
-> > Such as we make SKB_DROP_REASON_PTYPE_ABSENT to
-> > SKB_DROP_REASON_L2_PROTO, which means the L2 protocol is not
-> > supported or invalied.
->
-> not following. PTYPE is a Linux name. That means nothing to a user.
->
-> I am not sure where you want to use L2_PROTO.
+--Sig_/fL01buxU.9hxKK+6Xp_J/Px
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, PTYPE seems not suitable. I mean that replace SKB_DROP_REASON_PTYPE_ABSENT
-that is used in __netif_receive_skb_core() with L3_PROTO, which means no L3
-protocol handler (or other device handler) is not found for the
-packet. This seems more
-friendly and not code based.
+Hi all,
 
+On Thu, 16 Dec 2021 08:01:00 +0000 broonie@kernel.org wrote:
 >
-> >
-> > And use SKB_DROP_REASON_L4_PROTO for the L4 protocol problem,
-> > such as GRE version not supported, ICMP type not supported, etc.
+> Today's linux-next merge of the tegra tree got a conflict in:
+>=20
+>   arch/arm/configs/multi_v7_defconfig
+>=20
+> between commit:
+>=20
+>   7495af9308354 ("ARM: multi_v7_defconfig: Enable drivers for DragonBoard=
+ 410c")
+>=20
+> from the qcom tree and commit:
+>=20
+>   ca1f7d245f530 ("ARM: config: multi v7: Enable display drivers used by T=
+egra devices")
+>=20
+> from the tegra tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc arch/arm/configs/multi_v7_defconfig
+> index ae227d309dc1b,3d509bc134440..0000000000000
+> --- a/arch/arm/configs/multi_v7_defconfig
+> +++ b/arch/arm/configs/multi_v7_defconfig
+> @@@ -705,7 -690,7 +708,8 @@@ CONFIG_DRM_PANEL_ORISETECH_OTM8009A=3D
+>   CONFIG_DRM_PANEL_RAYDIUM_RM68200=3Dm
+>   CONFIG_DRM_PANEL_SAMSUNG_S6E63J0X03=3Dm
+>   CONFIG_DRM_PANEL_SAMSUNG_S6E8AA0=3Dm
+>  +CONFIG_DRM_DISPLAY_CONNECTOR=3Dm
+> + CONFIG_DRM_LVDS_CODEC=3Dm
+>   CONFIG_DRM_NXP_PTN3460=3Dm
+>   CONFIG_DRM_PARADE_PS8622=3Dm
+>   CONFIG_DRM_SII902X=3Dm
 
-Is this L4_PROTO followed by anyone?
+This is now a conflict between the qcom tree and Linus' tree.
 
-Thanks!
-Menglong Dong
+--=20
+Cheers,
+Stephen Rothwell
 
-> >
-> > Sounds nice, isn't it?
->
+--Sig_/fL01buxU.9hxKK+6Xp_J/Px
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI0NEgACgkQAVBC80lX
+0Gy4/Qf+Ku4iswK0aK0VYdx3zBb7ksEo0rFwdhzbqS0BWfsZkpwoplEhZIzYZbR/
+8gzLLGaoe+6hCLlwP2zNzOeSXNFdmjOazGMEJ/2QRTws1pqkV6TiOhcwPYOE00xB
+aNedh2g8UMd3K8Fb2fXxcZH7i6PwD7OKlZJ3Nf/keCkeeMUdsmFW//B/o8coe25T
+DUQwmQtE1C8rZoXWNzeV4RjPwuNT6TqYNLoGUt4Jz779cdvchIX51jz5waG4Afyn
+3jFcR5x7mwnSadnrB2mAbncaC3BqRm8sH9W4iU3+6MMw9KGUuwNA9No/9oGX94p+
+HyMjg+QAfGp7r276k63sPJDE/XC1tw==
+=D+xB
+-----END PGP SIGNATURE-----
+
+--Sig_/fL01buxU.9hxKK+6Xp_J/Px--

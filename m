@@ -2,137 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221084DDC3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCDF4DDC35
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237615AbiCROyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
+        id S236579AbiCROyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 10:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237231AbiCROyo (ORCPT
+        with ESMTP id S230223AbiCROyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:54:44 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2118.outbound.protection.outlook.com [40.107.255.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417ABF8472;
-        Fri, 18 Mar 2022 07:53:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PSx2cPKGL5cPwM++SHMOB+xp7f/xmEzwMQZtat9ew9xU8wVOfcdos15y8w5H9q2JmApNOLirtfck22wrrLK2Gd6PccfUzsUWJGUhgJIbSqp8nkFheAWUHz4Bb7FBvNthCh3SeAlWaNDIHA5Tp9n3sUoJu0nejpdtu5IkwDDgJMyu01t4gBJbKDMcZ3kvd33DtuGzjJbSL8DBCXme4XxPb3TgYvShIugU4BT+AktZKIgwZOW+vBTUDAr/6jmHA0det/5ww4dtdgU+poYXLTju+kXIoallp6XS81dCbMHucG4vn3jsaWW0wfAJMg/mA1KKzAJGgk+4C6aE3LZTwejZ5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kIEyoua8qyU/lxq2P0udYtP2K8pGJqUyWzlOAmWWvkY=;
- b=JtSWIgArqp2zv9rujeiRfJYOlQ9spgj6Zbdz6E2O17cjXnqbruShmRCkb0Iyz2l0OzH36+OXagjIRCN//u5XqfFMrpZ0jcqqmfIs+V7yLdtZPLfyP2pIf63fz61gAMFa5u1OPqdlDJl57p7CUYtAYVLLNbR4yS6QrR3rQSF6SSdRzHGrHJyhSMUb2svHBt1JBfWvNS0cHY005AMgfJxRH0VwN7ixn0QuDX1mnuQ4G5Kist5UlBX5fgbFuUccLc0Mqt3EUrqN3RvWseXNoZIa8UiIF0mPRnFzOZJvFumvTKnf51sptJB4OMbQe0Nk7gOhGc+e1zLzvKjtsKzdiceNOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kIEyoua8qyU/lxq2P0udYtP2K8pGJqUyWzlOAmWWvkY=;
- b=oZthGSdSdO8edagatrH0vb4PrTgqbv4wa+XPAZ51BGxH0eAp0pftYezylvXqmShQGSx0FiTUhW/B39z54fBS82GiUB2u/gHrZehSiImGwihQI+VyJUsk4UumgNPZL1+pQSezJhJbv6qxoG6NqYNyNGufg5dtIozE7PBbOxStxaM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- SI2PR06MB4473.apcprd06.prod.outlook.com (2603:1096:4:156::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5081.15; Fri, 18 Mar 2022 14:53:20 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::9d3f:ff3b:1948:d732]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::9d3f:ff3b:1948:d732%4]) with mapi id 15.20.5081.017; Fri, 18 Mar 2022
- 14:53:20 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     James Smart <james.smart@broadcom.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Daniel Wagner <dwagner@suse.de>, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: elx: efct: remove unnecessary memset in efct_io
-Date:   Fri, 18 Mar 2022 22:52:20 +0800
-Message-Id: <20220318145230.1031-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0154.apcprd02.prod.outlook.com
- (2603:1096:201:1f::14) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Fri, 18 Mar 2022 10:54:15 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97912D0835;
+        Fri, 18 Mar 2022 07:52:56 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:45878)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nVDyJ-00CJx6-HL; Fri, 18 Mar 2022 08:52:55 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:38510 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nVDyI-006KVX-DP; Fri, 18 Mar 2022 08:52:55 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, linux-api@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        <87bl1kunjj.fsf@email.froward.int.ebiederm.org>
+        <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
+        <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
+        <87tubyx0rg.fsf_-_@email.froward.int.ebiederm.org>
+        <875yoe7qdp.fsf_-_@email.froward.int.ebiederm.org>
+        <202203171210.1239C9CDA@keescook>
+Date:   Fri, 18 Mar 2022 09:52:46 -0500
+In-Reply-To: <202203171210.1239C9CDA@keescook> (Kees Cook's message of "Thu,
+        17 Mar 2022 12:13:09 -0700")
+Message-ID: <871qyz2tz5.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5adab59b-bb97-4a1a-5b18-08da08ef0a14
-X-MS-TrafficTypeDiagnostic: SI2PR06MB4473:EE_
-X-Microsoft-Antispam-PRVS: <SI2PR06MB447301CD3C79969F6BF9D6D7AB139@SI2PR06MB4473.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LlNUv7bzlFD81ar83x8ETsqVqJXzR0qJGfjKs7cnY32E42e1pGyszaPo1EYw0GSwiWzCbZzPPzZ4JFivYQwz1xpAPTOY2y6fnWtxhKpyG60ijK4rRmGy5SClyNRBCMD+En2e47bCijYRF1+0JfhDW+NbQnTChEcJwLmohDWDaGbCLCiiASVS+YGzguhLM3IHfVcCjxvyfXvapjDteuAc0wy1olEyq+W0XElwlqFfUhokA8SY4bWvInQMXcLXQRyOhbTSPGzQPBVN2dT6vXNLCtSG6UXd/fxVz+d6IadbpafG+LKcLncrVR8x6t9R4wFI+iYQjkpoDsH+nqPmtjWfNJaWBODY1doesRQlRrMH8EN8h1kixMMiLRzBdIUoZnQe4GE/daG7qNqskjmrfOpykLzWV0bJo7yv1TZlCvPpQbIl9sXSIOnKi1OY/0gSHkVf7iP01O8TLWslLhu3wNGQ1Jszo34cnMuRguR62FV/weRmECIDzhUQ/IGEknZWLi2UienKqbGtj5Mzh6XstfSb+TZhow7VYvVrpQ1sjhCXa8oV1YuCEAJuLpW5HsIzD1W0gSEkCp5PnLyTLXPMa0ibKHBmQimMrC9ROI+2a7XrIiWDazhHK3y32mJHJ724ontN+Ovt1mM6lUCsKQsvylEXyMNfOwzOA0/udmXxCB+jui57NQns/H2+R4dbfZH6UkLDBPi3pOwZAh1eB3uT1kE/Dw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(4744005)(38350700002)(38100700002)(2906002)(8676002)(66476007)(66946007)(66556008)(2616005)(6506007)(316002)(83380400001)(6512007)(508600001)(52116002)(86362001)(36756003)(5660300002)(1076003)(186003)(26005)(110136005)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7H10e6MrFkWqUAi4NusPGAClIAUnXrd/TNcjgevLkqf24RzTlQKZ6De2etcy?=
- =?us-ascii?Q?p5vFFal9hRgzXct3KZRpk2jCqnDPIXi8LhPLdYwrSNrEKbLaalD2pc9vcgg5?=
- =?us-ascii?Q?zj984jHLsqG9IpftcmdnJPtSjOusQeqpb+gN9160wI1EiWTSs9RWOuJL7bhk?=
- =?us-ascii?Q?gYho0hLNNEVQAYA1elQrHA0iOmXCLGZ0gN+E85l3INM6zNAW+XXzaciX/5V4?=
- =?us-ascii?Q?EbpSAnhRLMIuPgkXmjJVTa2evphnLdmp0f7UWuItqffPpQEq7gbGH+txHoJd?=
- =?us-ascii?Q?R0cu7F9XQjeBqGT6Pc1iX6tePfZxCdupkpeOGVpBG7+1+zAX2QflErS4pBg0?=
- =?us-ascii?Q?jHd1mrvURbj5mmF826whr6vCtmQjsXu1AVmEHqLG1HLVVKfeJt3X0XaAuJ2g?=
- =?us-ascii?Q?ySNhnlRXtDIdM5PBSNcnZPYrK6WJmHTtfN5F7yMU8UecAyo+rJ+IksF3eSjX?=
- =?us-ascii?Q?ks3xUHxvD6+v/bdKwnSX6Pf0IWV6J96A8fRf9OpwWrbMq1cnPH9fvni1hyXx?=
- =?us-ascii?Q?NMwsGh/4BSC9f49QS1HTfXSui4RFKThBgcFHgEwvwWzIeq8ZM9njuFM1c7ic?=
- =?us-ascii?Q?uLKG1hE7U8Wkyx3O0XrCW1LyXZCy/VmAGecTDU+gvUd+bluw9M9gujbYJalh?=
- =?us-ascii?Q?9Vls6SqQN6yOhq7zD8o0gpD61e43SnMbiorxbi55DIumbVonH5JHNGSLg0/A?=
- =?us-ascii?Q?sM/RJ9d+UOzAO+RCq6+D0o/UChsg5btRkygB1c8RifsuL8xFxC4eYIudDqYg?=
- =?us-ascii?Q?mlrhbVIRjf4h+++Hsj83dbwWUIk6TM/Wiw3h8QXWoF6jl93oQtnlSwEKpDYs?=
- =?us-ascii?Q?eEV6S7sInXUvUdArbYHmEycHXhbzsNtHhnwCMCijipVrSUEtxrdPINww/Hxl?=
- =?us-ascii?Q?EPCyICM9VarftFNuW4J8IUWY5pwMgxEVGbcgTdAMhRGYwi8ogdpLe4745uYD?=
- =?us-ascii?Q?VEmSgorHCZpsMvOPeE1dhqkEb4HxTK03bryx2aJMdLVWBNj6b0ZqRNhg0TCE?=
- =?us-ascii?Q?vhYevHJt+tt+zas9dhVnGLZdHxMrb3WBFOwbMEZy/vf0m1y3CrNed5dHMnUt?=
- =?us-ascii?Q?H0rPpmafR7j6l6vnLoSteqVlRsJwMWeMrS6lFzRajI73OVJXZRKKZOG6UQPg?=
- =?us-ascii?Q?NeAAnAmRXqSfrwEYRQmcVbHy9FUfpA3Uj69JXq2ZU5xHlY+6PYSXXfj67S6Y?=
- =?us-ascii?Q?HyqE0VMllTxeDd4BmOs73sLFaUvKM/3WYQxdVRdemoqXLJTYDprq0hd7aahF?=
- =?us-ascii?Q?0y3V8h6QtxhXU4x63WxfHldRQ2+LTW1JylAPDgxWfRXxqkjdUFpbfU7dK/Zt?=
- =?us-ascii?Q?zU7Fy+67gNeg5ZFWVu8gRSBFGoNd21etTpaPrj9MyxV8ofxue8tNZPj61hal?=
- =?us-ascii?Q?coIGOE0j+38j9Yl2WoZQkgLjDR5u6IK9KPdtwCzj+NskVFR/i81rOLczsw47?=
- =?us-ascii?Q?WwBgRaWeeryUoP9tJ1yIRq6HAYVPK1Zq?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5adab59b-bb97-4a1a-5b18-08da08ef0a14
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 14:53:18.9408
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0ZlqbsfBz+GhGICaRu6pvvPMLPpM2muLiY344Z1NIWQl3NqVKRhGrHsrlpedmmPDr4HlK9AC3c8SopGU4JMVLA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4473
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nVDyI-006KVX-DP;;;mid=<871qyz2tz5.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+Xkk/rie1UVhNBW+4aa3Bko7e6gG4T0Kg=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Kees Cook <keescook@chromium.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 573 ms - load_scoreonly_sql: 0.11 (0.0%),
+        signal_user_changed: 12 (2.0%), b_tie_ro: 10 (1.7%), parse: 1.12
+        (0.2%), extract_message_metadata: 16 (2.8%), get_uri_detail_list: 1.92
+        (0.3%), tests_pri_-1000: 25 (4.4%), tests_pri_-950: 1.37 (0.2%),
+        tests_pri_-900: 1.08 (0.2%), tests_pri_-90: 209 (36.5%), check_bayes:
+        207 (36.2%), b_tokenize: 8 (1.4%), b_tok_get_all: 8 (1.4%),
+        b_comp_prob: 2.6 (0.5%), b_tok_touch_all: 185 (32.2%), b_finish: 0.93
+        (0.2%), tests_pri_0: 291 (50.8%), check_dkim_signature: 0.65 (0.1%),
+        check_dkim_adsp: 3.2 (0.6%), poll_dns_idle: 1.21 (0.2%), tests_pri_10:
+        2.3 (0.4%), tests_pri_500: 11 (2.0%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 2/2] ptrace: Return the signal to continue with from
+ ptrace_stop
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-io->sgl is allocated by kzalloc(). The memory is set to zero.
-It is unnecessary to call memset again.
+Kees Cook <keescook@chromium.org> writes:
 
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
----
- drivers/scsi/elx/efct/efct_io.c | 1 -
- 1 file changed, 1 deletion(-)
+> On Tue, Mar 15, 2022 at 06:22:26PM -0500, Eric W. Biederman wrote:
+>> 
+>> The signal a task should continue with after a ptrace stop is
+>> inconsistently read, cleared, and sent.  Solve this by reading and
+>> clearing the signal to be sent in ptrace_stop.
+>> 
+>> In an ideal world everything except ptrace_signal would share a common
+>> implementation of continuing with the signal, so ptracers could count
+>> on the signal they ask to continue with actually being delivered.  For
+>> now retain bug compatibility and just return with the signal number
+>> the ptracer requested the code continue with.
+>> 
+>> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>> ---
+>>  include/linux/ptrace.h | 12 ++++++------
+>>  kernel/signal.c        | 31 ++++++++++++++++++-------------
+>>  2 files changed, 24 insertions(+), 19 deletions(-)
+>> 
+>> diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
+>> index 3e6b46e2b7be..15b3d176b6b4 100644
+>> --- a/include/linux/ptrace.h
+>> +++ b/include/linux/ptrace.h
+>> @@ -60,7 +60,7 @@ extern int ptrace_writedata(struct task_struct *tsk, char __user *src, unsigned
+>>  extern void ptrace_disable(struct task_struct *);
+>>  extern int ptrace_request(struct task_struct *child, long request,
+>>  			  unsigned long addr, unsigned long data);
+>> -extern void ptrace_notify(int exit_code, unsigned long message);
+>> +extern int ptrace_notify(int exit_code, unsigned long message);
+>> [...]
+>> -static void ptrace_stop(int exit_code, int why, int clear_code,
+>> +static int ptrace_stop(int exit_code, int why, int clear_code,
+>>  			unsigned long message, kernel_siginfo_t *info)
+>> [...]
+>> -static void ptrace_do_notify(int signr, int exit_code, int why, unsigned long message)
+>> +static int ptrace_do_notify(int signr, int exit_code, int why, unsigned long message)
+>> [...]
+>> -void ptrace_notify(int exit_code, unsigned long message)
+>> +int ptrace_notify(int exit_code, unsigned long message)
+>
+> Just for robustness, how about marking the functions that have switched
+> from void to int return as __must_check (or at least just ptrace_notify)?
 
-diff --git a/drivers/scsi/elx/efct/efct_io.c b/drivers/scsi/elx/efct/efct_io.c
-index c3247b951a76..c612f0a48839 100644
---- a/drivers/scsi/elx/efct/efct_io.c
-+++ b/drivers/scsi/elx/efct/efct_io.c
-@@ -62,7 +62,6 @@ efct_io_pool_create(struct efct *efct, u32 num_sgl)
- 			return NULL;
- 		}
- 
--		memset(io->sgl, 0, sizeof(*io->sgl) * num_sgl);
- 		io->sgl_allocated = num_sgl;
- 		io->sgl_count = 0;
- 
--- 
-2.35.1
+We can't.  There are historical cases that simply don't check if a
+signal should be sent after the function, and they exist for every
+function that is modified.
+
+If we can modify the code so that everyone is checking the return value
+than certainly, but that just doesn't happen to reflect how this
+ptrace helper is being used today.
+
+> With that and the style nit Oleg already mentioned, yeah, this looks
+> good too.
+
+Alright style nit fixed.
+
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+
+Eric
 

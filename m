@@ -2,76 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D2F4DD99F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7954DD95E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:01:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235576AbiCRMUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
+        id S236031AbiCRMDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236183AbiCRMUS (ORCPT
+        with ESMTP id S236020AbiCRMDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:20:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AAE1EC601;
-        Fri, 18 Mar 2022 05:19:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5533618B3;
-        Fri, 18 Mar 2022 12:18:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87544C340E8;
-        Fri, 18 Mar 2022 12:18:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647605939;
-        bh=H8pxo4tsDjKXFt3tUygCmfSFmNQBhKEe3tgt/Zdkk0I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S/Vh8yy5XhXcR8vvsLdF8f+/uNV7unzY/E0QW82g+2nzWCS1TmusJKrPfL829z6Oo
-         Ty6hvy2SGTEXnjy6u7vOI/VcdOY6B3wzY1cWpM4sZemoeFNnHf4bF4AfeIIPrvXq76
-         TWmzxkFbPGn4hFFhs/PW/yzD902vrnI5uaru/CfM=
-Date:   Fri, 18 Mar 2022 13:01:41 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Subject: Re: [PATCH v2 3/3] usb: dwc: host: add xhci_plat_priv quirk
- XHCI_SKIP_PHY_INIT
-Message-ID: <YjR0pXtB5pfnqHu1@kroah.com>
-References: <1646130507-26796-1-git-send-email-quic_c_sanm@quicinc.com>
- <1646130507-26796-4-git-send-email-quic_c_sanm@quicinc.com>
+        Fri, 18 Mar 2022 08:03:06 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76AC72D4D52;
+        Fri, 18 Mar 2022 05:01:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3269A1424;
+        Fri, 18 Mar 2022 05:01:48 -0700 (PDT)
+Received: from [10.57.43.230] (unknown [10.57.43.230])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7177A3F7F5;
+        Fri, 18 Mar 2022 05:01:46 -0700 (PDT)
+Message-ID: <65207fdf-c4ab-5165-dbda-8ab55b51adb7@arm.com>
+Date:   Fri, 18 Mar 2022 12:01:42 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646130507-26796-4-git-send-email-quic_c_sanm@quicinc.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] thunderbolt: Make iommu_dma_protection more accurate
+Content-Language: en-GB
+To:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
+        "michael.jamet@intel.com" <michael.jamet@intel.com>,
+        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+References: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
+ <BL1PR12MB515783C0F998169D49D92A55E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <BL1PR12MB51573F55B3C2B3922BAAA7F1E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <YjRvMk1kcbMwJvx+@lahna>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <YjRvMk1kcbMwJvx+@lahna>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 03:58:27PM +0530, Sandeep Maheswaram wrote:
-> dwc3 manages PHY by own DRD driver, so skip the management by
-> HCD core.
-> During runtime suspend phy was not getting suspend because
-> runtime_usage value is 2.
+On 2022-03-18 11:38, mika.westerberg@linux.intel.com wrote:
+> Hi Mario,
+> 
+> On Thu, Mar 17, 2022 at 08:36:13PM +0000, Limonciello, Mario wrote:
+>> Here is a proposal on top of what you did for this.
+>> The idea being check the ports right when the links are made if they exist
+>> (all the new USB4 stuff) and then check all siblings on TBT3 stuff.
+>>
+>> diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
+>> index 79b5abf9d042..89432456dbea 100644
+>> --- a/drivers/thunderbolt/acpi.c
+>> +++ b/drivers/thunderbolt/acpi.c
+>> @@ -14,6 +14,7 @@
+>>   static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+>>                                      void **return_value)
+>>   {
+>> +       enum nhi_iommu_status iommu_status = IOMMU_UNKNOWN;
+>>          struct fwnode_reference_args args;
+>>          struct fwnode_handle *fwnode;
+>>          struct tb_nhi *nhi = data;
+>> @@ -91,6 +92,8 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+>>                  if (link) {
+>>                          dev_dbg(&nhi->pdev->dev, "created link from %s\n",
+>>                                  dev_name(&pdev->dev));
+>> +                       if (iommu_status != IOMMU_DISABLED)
+>> +                               iommu_status = nhi_check_iommu_for_port(pdev);
+>>                  } else {
+>>                          dev_warn(&nhi->pdev->dev, "device link creation from %s failed\n",
+>>                                   dev_name(&pdev->dev));
+>> @@ -101,6 +104,7 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+>>
+>>   out_put:
+>>          fwnode_handle_put(args.fwnode);
+>> +       nhi->iommu_dma_protection = (iommu_status == IOMMU_ENABLED);
+>>          return AE_OK;
+>>   }
+>>
+>> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+>> index e12c2e266741..b5eb0cab392f 100644
+>> --- a/drivers/thunderbolt/nhi.c
+>> +++ b/drivers/thunderbolt/nhi.c
+>> @@ -1103,10 +1103,30 @@ static void nhi_check_quirks(struct tb_nhi *nhi)
+>>                  nhi->quirks |= QUIRK_AUTO_CLEAR_INT;
+>>   }
+>>
+>> +enum nhi_iommu_status nhi_check_iommu_for_port(struct pci_dev *pdev)
+>> +{
+>> +       if (!pci_is_pcie(pdev) ||
+>> +           !(pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT ||
+>> +            pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM)) {
+>> +               return IOMMU_UNKNOWN;
+>> +       }
+>> +
+>> +       if (!device_iommu_mapped(&pdev->dev)) {
+>> +               return IOMMU_DISABLED;
+>> +       }
+>> +
+>> +       if (!pdev->untrusted) {
+>> +               dev_info(&pdev->dev,
+>> +                       "Assuming unreliable Kernel DMA protection\n");
+>> +               return IOMMU_DISABLED;
+>> +       }
+>> +       return IOMMU_ENABLED;
+>> +}
+>> +
+>>   static void nhi_check_iommu(struct tb_nhi *nhi)
+>>   {
+>> -       struct pci_dev *pdev;
+>> -       bool port_ok = false;
+>> +       enum nhi_iommu_status iommu_status = nhi->iommu_dma_protection ?
+>> +                                       IOMMU_ENABLED : IOMMU_UNKNOWN;
+>>
+>>          /*
+>>           * Check for sibling devices that look like they should be our
+>> @@ -1117,23 +1137,13 @@ static void nhi_check_iommu(struct tb_nhi *nhi)
+>>           * otherwise even if translation is enabled for existing devices it
+>>           * may potentially be overridden for a future tunnelled endpoint.
+>>           */
+>> -       for_each_pci_bridge(pdev, nhi->pdev->bus) {
+>> -               if (!pci_is_pcie(pdev) ||
+>> -                   !(pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT ||
+>> -                     pci_pcie_type(pdev) == PCI_EXP_TYPE_DOWNSTREAM))
+>> -                       continue;
+>> -
+>> -               if (!device_iommu_mapped(&pdev->dev))
+>> -                       return;
+>> -
+>> -               if (!pdev->untrusted) {
+>> -                       dev_info(&nhi->pdev->dev,
+>> -                                "Assuming unreliable Kernel DMA protection\n");
+>> -                       return;
+>> -               }
+>> -               port_ok = true;
+>> +       if (iommu_status == IOMMU_UNKNOWN) {
+>> +               struct pci_dev *pdev;
+>> +               for_each_pci_bridge(pdev, nhi->pdev->bus)
+>> +                       if (iommu_status != IOMMU_DISABLED)
+>> +                               iommu_status = nhi_check_iommu_for_port(pdev);
+>>          }
+>> -       nhi->iommu_dma_protection = port_ok;
+>> +       nhi->iommu_dma_protection = (iommu_status == IOMMU_ENABLED);
+>>   }
+>>
+>>   static int nhi_init_msi(struct tb_nhi *nhi)
+>>
+>> diff --git a/drivers/thunderbolt/nhi.h b/drivers/thunderbolt/nhi.h
+>> index 69083aab2736..1622d49b1763 100644
+>> --- a/drivers/thunderbolt/nhi.h
+>> +++ b/drivers/thunderbolt/nhi.h
+>> @@ -11,6 +11,13 @@
+>>
+>>   #include <linux/thunderbolt.h>
+>>
+>> +enum nhi_iommu_status {
+>> +       IOMMU_UNKNOWN,
+>> +       IOMMU_DISABLED,
+>> +       IOMMU_ENABLED,
+>> +};
+>> +enum nhi_iommu_status nhi_check_iommu_for_port(struct pci_dev *pdev);
+>> +
+> 
+> This adds quite a lot code and complexity, and honestly I would like to
+> keep it as simple as possible (and this is not enough because we need to
+> make sure the DMAR bit is there so that none of the possible connected
+> devices were able to overwrite our memory already).
 
-I do not understand this last sentence, sorry.  Try rewriting this a bit
-to explain what is going on here.
+Shall we forget the standalone sibling check and just make the 
+pdev->untrusted check directly in tb_acpi_add_link() then? On reflection 
+I guess the DMAR bit makes iommu_dma_protection functionally dependent 
+on ACPI already, so we don't actually lose anything (and anyone can come 
+back and revisit firmware-agnostic methods later if a need appears).
 
-thanks,
-
-greg k-h
+Robin.

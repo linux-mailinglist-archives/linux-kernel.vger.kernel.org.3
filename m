@@ -2,135 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C344DD235
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 02:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B494DD240
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 02:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbiCRBDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 21:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
+        id S231361AbiCRBIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 21:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbiCRBC7 (ORCPT
+        with ESMTP id S231346AbiCRBIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 21:02:59 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 972B72571B9
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 18:01:40 -0700 (PDT)
-Received: from [10.20.42.25] (unknown [10.20.42.25])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxwM7t2TNiWz4LAA--.32529S3;
-        Fri, 18 Mar 2022 09:01:33 +0800 (CST)
-Subject: Re: [PATCH v2] mm: add access/dirty bit on numa page fault
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-References: <20220317065033.2635123-1-maobibo@loongson.cn>
- <YjMoMVWXoJH9cmuf@casper.infradead.org>
-From:   maobibo <maobibo@loongson.cn>
-Message-ID: <b373ce7e-d55a-03cf-abca-0863865cbd9c@loongson.cn>
-Date:   Fri, 18 Mar 2022 09:01:32 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        Thu, 17 Mar 2022 21:08:11 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC711AFE86;
+        Thu, 17 Mar 2022 18:06:53 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKQp007nCz4xL3;
+        Fri, 18 Mar 2022 12:06:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647565608;
+        bh=jwCusHMaKLzSx+fT/PqroC11hLNZXj+hbjCzMuHR6Ls=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=d61mUW8Zhegt3VhoKSxr6QQd3ryKM24Xdsh+yZ/kPAluEJSLrb9o39iABBijT7Pv/
+         quH7+h/lEY+8LXz94AF3sGsii1yL5HnV3yHZh14oB5sBl+8liqgAJa2pjEfVf9LSFB
+         6upkUbzuYUHoXwfrUX+6eqRfZGmz+Ryq+wN8sUMU6Nzo9l2TI8ioVE/HOUrrI2ffvR
+         f9oxVt88wayfbNf3BHpeEf/Ouu/fH/7BvXG0/giKCea8ClNkT1N7m3a0pS3sW5FYEk
+         ClbtIeg5GbDNdspCY0YXTgUh8n1P9KD70bXXRGZg8IUownWN+qWVqAY6N82XbLDtRb
+         eJaU8Is31M8oA==
+Date:   Fri, 18 Mar 2022 12:06:47 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
+        Julian Braha <julianbraha@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: linux-next: manual merge of the drm tree with the
+ drm-misc-fixes tree
+Message-ID: <20220318120647.2c89bf05@canb.auug.org.au>
+In-Reply-To: <20220318115544.0c977415@canb.auug.org.au>
+References: <20220318115544.0c977415@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <YjMoMVWXoJH9cmuf@casper.infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9BxwM7t2TNiWz4LAA--.32529S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cr15uFyDZr13trWrZw4fXwb_yoW5JF47pF
-        Z5CayYqFsrXr18AwsrGw1qyr1rXa48KFy3Cr9rta4Utws8urn7uryUW3yF9aykCry8tw4D
-        Jr4UWFWUua90q3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-        r21lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
-        AVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf
-        9x07bOoGdUUUUU=
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/G5twN28LIUIxKmeSldmhCtB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/G5twN28LIUIxKmeSldmhCtB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 03/17/2022 08:23 PM, Matthew Wilcox wrote:
-> On Thu, Mar 17, 2022 at 02:50:33AM -0400, Bibo Mao wrote:
->> On platforms like x86/arm which supports hw page walking, access
->> and dirty bit is set by hw, however on some platforms without
->> such hw functions, access and dirty bit is set by software in
->> next trap.
->>
->> During numa page fault, dirty bit can be added for old pte if
->> fail to migrate on write fault. And if it succeeds to migrate,
->> access bit can be added for migrated new pte, also dirty bit
->> can be added for write fault.
-> 
-> Is this a correctness problem, in which case this will need to be
-> backported, or is this a performance problem, in which case can you
-> share some numbers?
-It is only performance issue, and there is no obvious performance
-improvement for general workloads on my hand, but I do not test
-it on microbenchmark.
+On Fri, 18 Mar 2022 11:55:44 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the drm tree got a conflict in:
+>=20
+>   drivers/gpu/drm/bridge/Kconfig
+>=20
+> between commit:
+>=20
+>   3c3384050d68 ("drm: Don't make DRM_PANEL_BRIDGE dependent on DRM_KMS_HE=
+LPERS")
+>=20
+> from the drm-misc-fixes tree and commit:
+>=20
+>   803abfd8dda5 ("drm: bridge: fix unmet dependency on DRM_KMS_HELPER for =
+DRM_PANEL_BRIDGE")
+>=20
+> from the drm tree.
+>=20
+> I fixed it up (I just used the latter) and can carry the fix as
 
-> 
->> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
->> ---
->>  mm/memory.c | 21 ++++++++++++++++++++-
->>  1 file changed, 20 insertions(+), 1 deletion(-)
->>
->> diff --git a/mm/memory.c b/mm/memory.c
->> index c125c4969913..65813bec9c06 100644
->> --- a/mm/memory.c
->> +++ b/mm/memory.c
->> @@ -4404,6 +4404,22 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
->>  	if (migrate_misplaced_page(page, vma, target_nid)) {
->>  		page_nid = target_nid;
->>  		flags |= TNF_MIGRATED;
->> +
->> +		/*
->> +		 * update pte entry with access bit, and dirty bit for
->> +		 * write fault
->> +		 */
->> +		spin_lock(vmf->ptl);
->> +		pte = *vmf->pte;
->> +		pte = pte_mkyoung(pte);
->> +		if (was_writable) {
->> +			pte = pte_mkwrite(pte);
->> +			if (vmf->flags & FAULT_FLAG_WRITE)
->> +				pte = pte_mkdirty(pte);
->> +		}
->> +		set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
->> +		update_mmu_cache(vma, vmf->address, vmf->pte);
->> +		pte_unmap_unlock(vmf->pte, vmf->ptl);
->>  	} else {
->>  		flags |= TNF_MIGRATE_FAIL;
->>  		vmf->pte = pte_offset_map(vmf->pmd, vmf->address);
->> @@ -4427,8 +4443,11 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
->>  	old_pte = ptep_modify_prot_start(vma, vmf->address, vmf->pte);
->>  	pte = pte_modify(old_pte, vma->vm_page_prot);
->>  	pte = pte_mkyoung(pte);
->> -	if (was_writable)
->> +	if (was_writable) {
->>  		pte = pte_mkwrite(pte);
->> +		if (vmf->flags & FAULT_FLAG_WRITE)
->> +			pte = pte_mkdirty(pte);
->> +	}
->>  	ptep_modify_prot_commit(vma, vmf->address, vmf->pte, old_pte, pte);
->>  	update_mmu_cache(vma, vmf->address, vmf->pte);
->>  	pte_unmap_unlock(vmf->pte, vmf->ptl);
->> -- 
->> 2.31.1
->>
->>
+But that failed during configuration, so I went back and used the
+former change.
 
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/G5twN28LIUIxKmeSldmhCtB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIz2ycACgkQAVBC80lX
+0Gym7wf/e0IClI1oa2+eJ1eh3mGlRDgv2g9E2o7QjtJm69qjQlnTkU9VojX1l1UC
+hlTU/Dy7Ftkp9R9fjx7xSRC+ZJCCApSAx635tdY/dHm8MeufPflRXT4t2Eu/d8R7
+rlm9cCluUDib36ayR7mdLyGg3pYScTA5ilKS+ai43afsj9zPDHsWWmduGNFbIdbd
+oib20XtTvdZJhz9a9QD/z9wIwfAUP3YAOvI+hyG4fhJcY5aZYvmwnbYHt2VCgqWL
+hcp6a0GCZuAUZG4+aaWDJGBeVxzE0djG/XemYp90qBUNYd6U1Xmu+oXu0h5Ql2sD
+oDF0LUMiVQYeV7GgGIJGrB0ui3jEqw==
+=mpys
+-----END PGP SIGNATURE-----
+
+--Sig_/G5twN28LIUIxKmeSldmhCtB--

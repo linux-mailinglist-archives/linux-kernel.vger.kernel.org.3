@@ -2,124 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57394DD2D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 03:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1A84DD2D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 03:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbiCRCLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 22:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
+        id S231735AbiCRCM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 22:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiCRCK7 (ORCPT
+        with ESMTP id S230202AbiCRCMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 22:10:59 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1427625F66B;
-        Thu, 17 Mar 2022 19:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647569382; x=1679105382;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bcvdTm8vTC17tTtaKL6TbtagXdFa7r13SD1OdJ96w6M=;
-  b=meuZUM6a2CSYrm7VW+WrI585lKBNNW8HcQWtf+aSOp5r8/EPf/fWMw1k
-   5zOYKseYyod3t0SYFwiE18dbufEJPYJALTaN7LhMmdWqtHWLV75usxe6n
-   p8sV2XtX0X/mohvU6sJroXmFkwkRYmtExQwX4WFxr+LU1FK74HkOU9vbA
-   svEe/4kdFpdg2HgsRj0HFwS+WcbJCR3tVUc2Z1+lObdRYKfJjds85XmzT
-   65S88g//vwRo81CAD62e7VN1jCCjNJuBQW0191rmUQSMDiM3cVPvHYZWX
-   yhHAl44dMIVidBBeUTYfzD7tJeF13dPjSdOdPj8PFq9muYZQmXLgVokPi
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="239191312"
-X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
-   d="scan'208";a="239191312"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 19:09:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
-   d="scan'208";a="691143655"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Mar 2022 19:09:41 -0700
-Received: from mzaid-MOBL1.amr.corp.intel.com (mzaid-MOBL1.amr.corp.intel.com [10.255.228.81])
-        by linux.intel.com (Postfix) with ESMTP id F1664580A5D;
-        Thu, 17 Mar 2022 19:09:40 -0700 (PDT)
-Message-ID: <117f781f5bf8d1c3cee5f8580fb0c9bf8d049cc7.camel@linux.intel.com>
-Subject: Re: [PATCH v2 1/2] PCI/PM: refactor pci_pm_suspend_noirq()
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Rajvi Jingar <rajvi.jingar@intel.com>, rafael.j.wysocki@intel.com,
-        bhelgaas@google.com
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Date:   Thu, 17 Mar 2022 19:09:40 -0700
-In-Reply-To: <20220317233153.2617938-1-rajvi.jingar@intel.com>
-References: <20220317233153.2617938-1-rajvi.jingar@intel.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 17 Mar 2022 22:12:23 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BEA2B5AFE;
+        Thu, 17 Mar 2022 19:11:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647569464; x=1679105464;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oRaStKNDaOu3TSmH3+8cEhhm6JxyDKCuF64VgE2rLZs=;
+  b=swUyz+CPYMrm1jqKjJ9+Vb6s8KvzPqglVYdTNEGVEOZ2zfIXZO/SwVjU
+   1v3fn8AiM5OFw38VS3XW81s7YNNiHVL34wBq+AhMZzHAoCZ4yazHw1WYH
+   x+QowEriSwrvKOTRk4xNOA7mG2tUgkF9H2qMUsqbciM9RK0hYO6jZrbeA
+   k=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 17 Mar 2022 19:11:03 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 19:10:57 -0700
+Received: from mingxue-gv.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 17 Mar 2022 19:10:55 -0700
+Date:   Fri, 18 Mar 2022 10:10:52 +0800
+From:   Minghao Xue <quic_mingxue@quicinc.com>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+CC:     <mst@redhat.com>, <jasowang@redhat.com>, <quic_ztu@quicinc.com>,
+        <robh+dt@kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: virtio: mmio: add optional virtio,wakeup
+ property
+Message-ID: <20220318021052.GA16300@mingxue-gv.qualcomm.com>
+References: <1646733156-19333-1-git-send-email-quic_mingxue@quicinc.com>
+ <20220317063515.GA30789@mingxue-gv.qualcomm.com>
+ <YjMJ32SFXTLCuaRY@myrica>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YjMJ32SFXTLCuaRY@myrica>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rajvi,
+Hi Jean and folks,
+This is just an optional flag which could be used on an embedded system.
+For example, if we want to use an virtio-input device as a virtual power
+key to wake up the virtual machine, we can set this flag in the device
+tree.
+Currently, virio-mmio driver does not implement suspend/resume
+callback(maybe no need). So we want to check this flag and call
+enable_irq_wake()  accordingly in vm_find_vqs().
 
-On Thu, 2022-03-17 at 16:31 -0700, Rajvi Jingar wrote:
-> The state of the device is saved during pci_pm_suspend_noirq(), if it
-> has not already been saved, regardless of the skip_bus_pm flag value. So
-> skip_bus_pm check is removed before saving the device state.
+Regards,
+Minghao
+
+On Thu, Mar 17, 2022 at 10:13:51AM +0000, Jean-Philippe Brucker wrote:
+> Hi Minghao,
 > 
-> v2: add comments to the changes
-
-...
-
+> On Thu, Mar 17, 2022 at 02:35:15PM +0800, Minghao Xue wrote:
+> > Hi Jean,
+> > 
+> > Do you have any comment on this change? And do you consider to accpet
+> > this commit? Looking forward to your reply.
 > 
-> Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
-> Suggested-by: David E. Box <david.e.box@linux.intel.com>
-> ---
-
-Patch changelogs aren't kept in the commit message. Place them here after the
-"---" line. In this location, it won't affect applying the patch.
-
-David
-
->  drivers/pci/pci-driver.c | 18 ++++++------------
->  1 file changed, 6 insertions(+), 12 deletions(-)
+> Please send device-tree patches to devicetree@vger.kernel.org with the
+> maintainer "Rob Herring <robh+dt@kernel.org>" on Cc. Add the virtio list
+> virtualization@lists.linux-foundation.org for anything related to virtio.
+> (You can find that by running "scripts/get_maintainer.pl <your patch>")
 > 
-> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> index 588588cfda48..ffe76f238d7e 100644
-> --- a/drivers/pci/pci-driver.c
-> +++ b/drivers/pci/pci-driver.c
-> @@ -834,20 +834,14 @@ static int pci_pm_suspend_noirq(struct device *dev)
->  		}
->  	}
->  
-> -	if (pci_dev->skip_bus_pm) {
-> +	if (!pci_dev->state_saved) {
-> +		pci_save_state(pci_dev);
->  		/*
-> -		 * Either the device is a bridge with a child in D0 below it, or
-> -		 * the function is running for the second time in a row without
-> -		 * going through full resume, which is possible only during
-> -		 * suspend-to-idle in a spurious wakeup case.  The device should
-> -		 * be in D0 at this point, but if it is a bridge, it may be
-> -		 * necessary to save its state.
-> +		 * If the device is a bridge with a child in D0 below it, it
-> needs to
-> +		 * stay in D0, so check skip_bus_pm to avoid putting it into a
-> +		 * low-power state in that case.
->  		 */
-> -		if (!pci_dev->state_saved)
-> -			pci_save_state(pci_dev);
-> -	} else if (!pci_dev->state_saved) {
-> -		pci_save_state(pci_dev);
-> -		if (pci_power_manageable(pci_dev))
-> +		if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
->  			pci_prepare_to_sleep(pci_dev);
->  	}
->  
-
+> Regarding the patch itself it's outside my expertise, but I feel like
+> there should be more generic mechanism to solve this problem, and firmware
+> might not need to be involved if this is not describing a property of the
+> platform. Plenty of drivers outside virtio deal with IRQ lines as wakeup
+> source and I don't see similar properties in other device tree nodes, how
+> do they do it?  It looks like a lot of drivers call enable_irq_wake() in
+> their suspend() callback, so could we do the same for virtio-mmio?
+> 
+> Thanks,
+> Jean
+> 
+> > 
+> > Regards,
+> > Minghao
+> > 
+> > On Tue, Mar 08, 2022 at 05:52:36PM +0800, Minghao Xue wrote:
+> > > Some systems want to set the interrupt of virtio_mmio device
+> > > as a wakeup source. On such systems, we'll use the existence
+> > > of the "virtio,wakeup" property as a signal of requirement.
+> > > 
+> > > Signed-off-by: Minghao Xue <quic_mingxue@quicinc.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/virtio/mmio.yaml | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/virtio/mmio.yaml b/Documentation/devicetree/bindings/virtio/mmio.yaml
+> > > index 4b7a027..a5fe02a 100644
+> > > --- a/Documentation/devicetree/bindings/virtio/mmio.yaml
+> > > +++ b/Documentation/devicetree/bindings/virtio/mmio.yaml
+> > > @@ -31,6 +31,10 @@ properties:
+> > >      description: Required for devices making accesses thru an IOMMU.
+> > >      maxItems: 1
+> > >  
+> > > +  virtio,wakeup:
+> > > +    type: boolean
+> > > +    description: Required for setting irq of a virtio_mmio device as wakeup source.
+> > > +
+> > >  required:
+> > >    - compatible
+> > >    - reg
+> > > -- 
+> > > The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> > > a Linux Foundation Collaborative Project
+> > > 

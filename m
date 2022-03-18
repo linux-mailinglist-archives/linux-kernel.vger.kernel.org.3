@@ -2,63 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F124DE2AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A8E4DE2B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240754AbiCRUnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 16:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
+        id S240756AbiCRUp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 16:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240614AbiCRUnQ (ORCPT
+        with ESMTP id S235570AbiCRUp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 16:43:16 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688552878BA;
-        Fri, 18 Mar 2022 13:41:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647636117; x=1679172117;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Fq0wZbk8atxPuFaALjnooW2wpUoFFUKI6rkPZWH8VS8=;
-  b=DyXIa84j1h0dUr93EcQNRlkgURt7oFzDSF4/vsoKNpSzDMdtDyCK10G5
-   AQh4AVL9NR3agBdcnaV5hNMmeHrwkj1m9gOfy2lvfFDPRarErpEkmowJH
-   OHFkfM5vwWlCwTK2XZFvFMGzvTVwiXN8fM/ilcckpJHOxo7AWXgDTPyNh
-   4=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 Mar 2022 13:41:57 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 13:41:56 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 18 Mar 2022 13:41:56 -0700
-Received: from maru.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 18 Mar
- 2022 13:41:55 -0700
-From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>
-CC:     Jamie Iles <quic_jiles@quicinc.com>,
-        Graeme Gregory <quic_ggregory@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Subject: [PATCH v3] i2c: add tracepoints for I2C slave events
-Date:   Fri, 18 Mar 2022 13:41:33 -0700
-Message-ID: <20220318204133.657568-1-quic_jaehyoo@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 18 Mar 2022 16:45:56 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4492ECFA6
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 13:44:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=UtzMoHP3J3LWC+I942orkIBrjIM8G1XilIuT4M51tHE=; b=VWkUu2+DK1y8BJ9eySEeG0io17
+        TbXxfVTWttvwFdCbZ7nzuVr4NBGdFmOL80Z2U5eKjUo3F7PDt3TAPVF+2l9EoGcRMKT5pleQr6BxR
+        8HOZC/MPnSYTn3EKfojA22jZX9DH1k0117Ie/DO7nl10wo2LgAPxjy6O0+qWJgdjoftNDwi6wtzMQ
+        CdX39/BJFn6H+Z1se3AHVIwMkiD3Q+arUz8xNI4wTsNAq+uK0nh6ki4eZPVDSl+BlbtF3eL86/e7w
+        SjBFzlSRx0dxE1ZTFrOn+0y8LsWc9YTHg+Lq5953Brjazo0NrhcYql8rgrZVKUM7hopyB5Knb2xj2
+        oKczCTsA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nVJSP-002IYH-Py; Fri, 18 Mar 2022 20:44:21 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 646DB98623C; Fri, 18 Mar 2022 21:44:19 +0100 (CET)
+Date:   Fri, 18 Mar 2022 21:44:19 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, seanjc@google.com
+Subject: [RFC][PATCH] x86,static_call: Fix __static_call_return0 for i386
+Message-ID: <20220318204419.GT8939@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,178 +51,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I2C slave events tracepoints can be enabled by:
 
-	echo 1 > /sys/kernel/tracing/events/i2c_slave/enable
+Paolo reported that the instruction sequence that is used to replace:
 
-and logs in /sys/kernel/tracing/trace will look like:
+    call __static_call_return0
 
-	... i2c_slave: i2c-0 a=010 ret=0 WR_REQ []
-	... i2c_slave: i2c-0 a=010 ret=0 WR_RCV [02]
-	... i2c_slave: i2c-0 a=010 ret=0 WR_RCV [0c]
-	... i2c_slave: i2c-0 a=010 ret=0   STOP []
-	... i2c_slave: i2c-0 a=010 ret=0 RD_REQ [04]
-	... i2c_slave: i2c-0 a=010 ret=0 RD_PRO [b4]
-	... i2c_slave: i2c-0 a=010 ret=0  STOP []
+namely:
 
-formatted as:
+    66 66 48 31 c0	data16 data16 xor %rax,%rax
 
-	i2c-<adapter_nr>
-	a=<addr>
-	ret=<ret>	<- callback return value
-	<event>
-	[<data>]
+decodes to something else on i386, namely:
 
-trace printings can be selected by adding a filter like:
+    66 66 48		data16 dec %ax
+    31 c0		xor    %eax,%eax
 
-	echo adapter_nr==1 >/sys/kernel/tracing/events/i2c_slave/filter
+Which is a nonsensical sequence that happens to have the same outcome.
+*However* an important distinction is that it consists of 2
+instructions which is a problem when it needs to be overwriten with a
+regular call instruction again.
 
-Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+As such, replace the instruction with something that is a 5 byte single
+instruction and decodes the same on both i386 and x86_64.
+
+Fixes: 3f2a8fc4b15d ("static_call/x86: Add __static_call_return0()")
+Reported-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
-Changes in v3:
-* Made trace print even when a callback return value is non-zero and print
-  out the value too (Wolfram)
-* Added TRACE_DEFINE_ENUM export for events to make it useful for perf and
-  trace-cmd (Steven)
+ arch/x86/kernel/static_call.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Changes in v2:
-* Fixed trace_2c_slave call condition to optimize conditional compare logic
-  (Steven)
-* Fixed TP entry order to prevent wasting spaces in the ring buffer (Steven)
-* Replaced __get_dynamic_array with __array for storing 1-length data value
-  to make it faster and save space (Steven)
-
- drivers/i2c/i2c-core-slave.c     | 15 +++++++
- include/linux/i2c.h              |  8 +---
- include/trace/events/i2c_slave.h | 67 ++++++++++++++++++++++++++++++++
- 3 files changed, 84 insertions(+), 6 deletions(-)
- create mode 100644 include/trace/events/i2c_slave.h
-
-diff --git a/drivers/i2c/i2c-core-slave.c b/drivers/i2c/i2c-core-slave.c
-index 1589179d5eb9..e3765e12f93b 100644
---- a/drivers/i2c/i2c-core-slave.c
-+++ b/drivers/i2c/i2c-core-slave.c
-@@ -14,6 +14,9 @@
+--- a/arch/x86/kernel/static_call.c
++++ b/arch/x86/kernel/static_call.c
+@@ -12,10 +12,9 @@ enum insn_type {
+ };
  
- #include "i2c-core.h"
+ /*
+- * data16 data16 xorq %rax, %rax - a single 5 byte instruction that clears %rax
+- * The REX.W cancels the effect of any data16.
++ * cs cs cs xorl %eax, %eax - a single 5 byte instruction that clears %[er]ax
+  */
+-static const u8 xor5rax[] = { 0x66, 0x66, 0x48, 0x31, 0xc0 };
++static const u8 xor5rax[] = { 0x2e, 0x2e, 0x2e, 0x31, 0xc0 };
  
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/i2c_slave.h>
-+
- int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb)
- {
- 	int ret;
-@@ -79,6 +82,18 @@ int i2c_slave_unregister(struct i2c_client *client)
- }
- EXPORT_SYMBOL_GPL(i2c_slave_unregister);
+ static const u8 retinsn[] = { RET_INSN_OPCODE, 0xcc, 0xcc, 0xcc, 0xcc };
  
-+int i2c_slave_event(struct i2c_client *client,
-+		    enum i2c_slave_event event, u8 *val)
-+{
-+	int ret = client->slave_cb(client, event, val);
-+
-+	if (trace_i2c_slave_enabled())
-+		trace_i2c_slave(client, event, val, ret);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(i2c_slave_event);
-+
- /**
-  * i2c_detect_slave_mode - detect operation mode
-  * @dev: The device owning the bus
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 7d4f52ceb7b5..fbda5ada2afc 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -392,12 +392,8 @@ enum i2c_slave_event {
- int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
- int i2c_slave_unregister(struct i2c_client *client);
- bool i2c_detect_slave_mode(struct device *dev);
--
--static inline int i2c_slave_event(struct i2c_client *client,
--				  enum i2c_slave_event event, u8 *val)
--{
--	return client->slave_cb(client, event, val);
--}
-+int i2c_slave_event(struct i2c_client *client,
-+		    enum i2c_slave_event event, u8 *val);
- #else
- static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
- #endif
-diff --git a/include/trace/events/i2c_slave.h b/include/trace/events/i2c_slave.h
-new file mode 100644
-index 000000000000..811166abbe3a
---- /dev/null
-+++ b/include/trace/events/i2c_slave.h
-@@ -0,0 +1,67 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * I2C slave tracepoints
-+ *
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM i2c_slave
-+
-+#if !defined(_TRACE_I2C_SLAVE_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_I2C_SLAVE_H
-+
-+#include <linux/i2c.h>
-+#include <linux/tracepoint.h>
-+
-+TRACE_DEFINE_ENUM(I2C_SLAVE_READ_REQUESTED);
-+TRACE_DEFINE_ENUM(I2C_SLAVE_WRITE_REQUESTED);
-+TRACE_DEFINE_ENUM(I2C_SLAVE_READ_PROCESSED);
-+TRACE_DEFINE_ENUM(I2C_SLAVE_WRITE_RECEIVED);
-+TRACE_DEFINE_ENUM(I2C_SLAVE_STOP);
-+
-+#define show_event_type(type)						\
-+	__print_symbolic(type,						\
-+		{ I2C_SLAVE_READ_REQUESTED,	"RD_REQ" },		\
-+		{ I2C_SLAVE_WRITE_REQUESTED,	"WR_REQ" },		\
-+		{ I2C_SLAVE_READ_PROCESSED,	"RD_PRO" },		\
-+		{ I2C_SLAVE_WRITE_RECEIVED,	"WR_RCV" },		\
-+		{ I2C_SLAVE_STOP,		"  STOP" })
-+
-+TRACE_EVENT(i2c_slave,
-+	TP_PROTO(const struct i2c_client *client, enum i2c_slave_event event,
-+		 __u8 *val, int cb_ret),
-+	TP_ARGS(client, event, val, cb_ret),
-+	TP_STRUCT__entry(
-+		__field(int,				adapter_nr	)
-+		__field(int,				ret		)
-+		__field(__u16,				addr		)
-+		__field(__u16,				len		)
-+		__field(enum i2c_slave_event,		event		)
-+		__array(__u8,				buf,	1)	),
-+
-+	TP_fast_assign(
-+		__entry->adapter_nr = client->adapter->nr;
-+		__entry->addr = client->addr;
-+		__entry->event = event;
-+		__entry->ret = cb_ret;
-+		switch (event) {
-+		case I2C_SLAVE_READ_REQUESTED:
-+		case I2C_SLAVE_READ_PROCESSED:
-+		case I2C_SLAVE_WRITE_RECEIVED:
-+			__entry->len = 1;
-+			memcpy(__entry->buf, val, __entry->len);
-+			break;
-+		default:
-+			__entry->len = 0;
-+			break;
-+		}
-+		),
-+	TP_printk("i2c-%d a=%03x ret=%d %s [%*phD]",
-+		__entry->adapter_nr, __entry->addr, __entry->ret,
-+		show_event_type(__entry->event), __entry->len, __entry->buf
-+		));
-+
-+#endif /* _TRACE_I2C_SLAVE_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
--- 
-2.25.1
-

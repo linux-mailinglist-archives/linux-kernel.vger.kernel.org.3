@@ -2,52 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33954DE489
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 00:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 628524DE48B
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 00:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241536AbiCRXhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 19:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S241544AbiCRXhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 19:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233316AbiCRXhj (ORCPT
+        with ESMTP id S241558AbiCRXhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 19:37:39 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6199230CA85
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:36:20 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id b15-20020a05660214cf00b00648a910b964so5953609iow.19
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:36:20 -0700 (PDT)
+        Fri, 18 Mar 2022 19:37:53 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A39230CA8F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:36:34 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id q129so8428450oif.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:36:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=9510QlOxQvZ3nhopdTAXfUeaDVrn5TXlOAghoZpABDc=;
+        b=bLw+H1mUjkxQ5SZ5DN/+e74d5PKWXX6Zfr9EEhXwp2u2e4E6Y2z5avLxYH5kIw9Yfh
+         RdPw7yiMyyqp3C5MkBXxLWkQ/DYxlS6o3hboyYoaAFHVT1fssDwIuUApuSXfX73uZH/h
+         CE1yZWbsIFrR/kQvcLJTSxlk48QoaMZbDk7T8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=+MKfS9KaJOgzX6Bj06yPYh/Zoj+anW5sorP57L7zyBc=;
-        b=e1mdFounCPrBCj0iOLu+qHq7YV5s4kmI8GdimtGRcjiNIaI4pWGXU1K+4imsW85Amq
-         eD/RnvhFccKfl+Dv3nmF8U3R7ZRV0fbvc8Z/1bvmqLJPa2eg4klmj6F3R1hmD7x9APJp
-         VSKmVJj7JKfe0WhGhJWg0mCNM5KclDaRtwIKNfIT2/371e2pzpkG5EGH1+42rqNurRyK
-         Hd556aCxHHDHZLuDHk3q/B435gOeetVPwlFufgQFZSNGRSIfeuBgsSK9gBhieAllXmQL
-         hbwLhWE6GVTVIk4y5PWxpDEw1v5THaWtR/Tl5uc6MhB+j9zzju2/Lmp3LV/Ogeh7yiES
-         pdug==
-X-Gm-Message-State: AOAM532kaFDpfKmAG5zUa01TPUYbuvjvf6ig2Lj+LQbTJjOk1HwbuNEh
-        eGmO1ncCe1vsVOoAtiCWLuT8nC74kdic+2KTW7dFCuGVlRKB
-X-Google-Smtp-Source: ABdhPJwIjc6onNrC4ts9Hddc3mAEKea9094pQn3yJ4PnLYSGmik1Ce91bqu9jDx6JIda8yf2a5naBYE2Xdy4XL0TfgmeDpJtZtA4
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=9510QlOxQvZ3nhopdTAXfUeaDVrn5TXlOAghoZpABDc=;
+        b=HW2Mxyp8VCDLNHTCMtS2AxhgpGeIANQCkm3o8tDKXd6Ray78mAr/b5ZpVmj3+oqmci
+         LbpevN9SPMcp4afklys52NXNi3272hnPKxt3UT1E9rz2ocs8sHllwsZEGfQDC4H3Hpxu
+         ixl4EF+K1MB5GexlEGxiqPK+rpEmKuA8MWRN23TLRI1DMaAfG+ABcrUNQdza813MAcTg
+         immeCdGqXeyNouUBfl6osXlj/qPDp+KjhgZFvERbqDrAianfZBGUtsHR/BnGsxlGvYuD
+         i6MD6h5/pEnKwx4rDX4bfcAUAfJs8rLMPvL4QtLAlN6g980D8VmdBOZQGb+1OV20SXNv
+         rmbQ==
+X-Gm-Message-State: AOAM533bGUSrzRJTi0/R8CNOclbktNkIIeWM6xPMkJOn4sxwMN/AE2S/
+        UX39aUek8/k/ZEuJkvhwhakcOkjpgJcxiMIYeSO2pQ==
+X-Google-Smtp-Source: ABdhPJy7QbZ146Qy3U7WG9hK2aKW6Y4gfc9cFivoiww8VoFuLCNFF5uB9X+AFqCpc0IXGJSkTaHE8rAqOEgnqeaN6RE=
+X-Received: by 2002:aca:a9c8:0:b0:2da:45b6:b796 with SMTP id
+ s191-20020acaa9c8000000b002da45b6b796mr5062201oie.193.1647646592659; Fri, 18
+ Mar 2022 16:36:32 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 18 Mar 2022 16:36:32 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:264b:b0:31a:84d7:7281 with SMTP id
- n11-20020a056638264b00b0031a84d77281mr1983827jat.288.1647646579008; Fri, 18
- Mar 2022 16:36:19 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 16:36:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000eaff805da869d5b@google.com>
-Subject: [syzbot] net-next test error: WARNING in __napi_schedule
-From:   syzbot <syzbot+fb57d2a7c4678481a495@syzkaller.appspotmail.com>
-To:     Jason@zx2c4.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        wireguard@lists.zx2c4.com
+In-Reply-To: <CAD=FV=V9U-zzpYNLKxqg1xh+W-RXLzV6BxaO4ZVF0GVXBVujUQ@mail.gmail.com>
+References: <20220318015451.2869388-1-swboyd@chromium.org> <20220318015451.2869388-4-swboyd@chromium.org>
+ <CAD=FV=VJFoNgfMUHE5mUY6Uq2Jj5cyQVyW0osUm6jyHRE1no=w@mail.gmail.com>
+ <CAE-0n50HcLLUUDgiMc7u4Gx5gb-bcpO22iD9emHrnM8sx8nbOQ@mail.gmail.com> <CAD=FV=V9U-zzpYNLKxqg1xh+W-RXLzV6BxaO4ZVF0GVXBVujUQ@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 18 Mar 2022 16:36:32 -0700
+Message-ID: <CAE-0n534-bDXrGUPMxs9qb0F26mO7XyegSt+c4GXKR7ywegcqw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] platform/chrome: cros_ec_spi: Boot fingerprint
+ processor during probe
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev,
+        Guenter Roeck <groeck@chromium.org>,
+        Craig Hesling <hesling@chromium.org>,
+        Tom Hughes <tomhughes@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,57 +76,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Quoting Doug Anderson (2022-03-18 15:06:59)
+> Hi,
+>
+> On Fri, Mar 18, 2022 at 3:01 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > > > @@ -703,6 +706,37 @@ static void cros_ec_spi_dt_probe(struct cros_ec_spi *ec_spi, struct device *dev)
+> > > >         ret = of_property_read_u32(np, "google,cros-ec-spi-msg-delay", &val);
+> > > >         if (!ret)
+> > > >                 ec_spi->end_of_msg_delay = val;
+> > > > +
+> > > > +       if (!of_device_is_compatible(np, "google,cros-ec-fp"))
+> > > > +               return 0;
+> > >
+> > > I noticed in your previous patch that you not only added a device-tree
+> > > match for this device but also a "spi_device_id". ...but won't you
+> > > fail to do all this important GPIO work in that case?
+> >
+> > I don't know when the spi_device_id path will be used. Never? I can
+> > simply drop it from the spi_device_id list for now and we can take up
+> > this problem later or never.
+>
+> That's fine with me. I was guessing it was relevant for x86 but my
+> experience with the way x86 does things is pretty minimal.
+>
 
-syzbot found the following issue on:
+Ah, I think the x86 path also uses the of_device_id, but it is still
+google,cros-ec-spi so it won't be affected until conforming to the new
+binding.
 
-HEAD commit:    e89600ebeeb1 af_vsock: SOCK_SEQPACKET broken buffer test
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=134d43d5700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ef691629edb94d6a
-dashboard link: https://syzkaller.appspot.com/bug?extid=fb57d2a7c4678481a495
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+> > > > +       ec_spi->boot0 = devm_gpiod_get(dev, "boot0", 0);
+> > > > +       if (IS_ERR(ec_spi->boot0))
+> > > > +               return PTR_ERR(ec_spi->boot0);
+> > >
+> > > Right now these GPIOs don't actually need to be stored in the "ec_spi"
+> > > structure. They could just be local variables. I guess you're trying
+> > > to future proof?
+> >
+> > Sure I will drop them because they're not useful later and I can save on
+> > the kernel-doc.
+> >
+> > >
+> > >
+> > > > +       ec_spi->reset = devm_gpiod_get(dev, "reset", 0);
+> > > > +       if (IS_ERR(ec_spi->reset))
+> > > > +               return PTR_ERR(ec_spi->reset);
+> > > > +
+> > > > +       /*
+> > > > +        * Take the FPMCU out of reset and wait for it to boot if it's in
+> > > > +        * bootloader mode or held in reset. This isn't the normal flow because
+> > > > +        * typically the BIOS has already powered on the device to avoid the
+> > > > +        * multi-second delay waiting for the FPMCU to boot and be responsive.
+> > > > +        */
+> > > > +       if (gpiod_get_value(ec_spi->boot0) || gpiod_get_value(ec_spi->reset)) {
+> > > > +               /* Boot0 is sampled on reset deassertion */
+> > > > +               gpiod_set_value(ec_spi->boot0, 0);
+> > > > +               gpiod_set_value(ec_spi->reset, 1);
+> > > > +               usleep_range(1000, 2000);
+> > > > +               gpiod_set_value(ec_spi->reset, 0);
+> > > > +
+> > > > +               /* Wait for boot; there isn't a "boot done" signal */
+> > > > +               dev_info(dev, "Waiting for FPMCU to boot\n");
+> > > > +               msleep(2000);
+> > > > +       }
+> > >
+> > > You added the regulator to the bindings. On herobrine I know that the
+> > > regulator is a bit of a dummy (at least on herobrine), but I wonder if
+> > > you should still get/enable it here? In the device tree bindings you
+> > > listed it as not-optional so, in theory, you could use this to give an
+> > > error if someone didn't provide the regulator.
+> >
+> > Won't the regulator framework introduce a dummy supply if there isn't a
+> > supply in DT but this driver calls regulator_get()? Getting and enabling
+> > it here will make this even more independent though so it sounds like a
+> > good idea. That way we can make it a real regulator in the DTS as long
+> > as the firmware isn't controlling it.
+>
+> I was thinking of regulator_get_optional(). You know the call you use
+> when your regulator isn't "optional"? (Sorry, it always cracks me up
+> that "optional" is exactly opposite the meaning for regulator compared
+> to everyone else).
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fb57d2a7c4678481a495@syzkaller.appspotmail.com
+Oh my.
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1133 at net/core/dev.c:4268 ____napi_schedule net/core/dev.c:4268 [inline]
-WARNING: CPU: 0 PID: 1133 at net/core/dev.c:4268 __napi_schedule+0xe2/0x440 net/core/dev.c:5878
-Modules linked in:
-CPU: 0 PID: 1133 Comm: kworker/0:3 Not tainted 5.17.0-rc8-syzkaller-02525-ge89600ebeeb1 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: wg-crypt-wg0 wg_packet_decrypt_worker
-RIP: 0010:____napi_schedule net/core/dev.c:4268 [inline]
-RIP: 0010:__napi_schedule+0xe2/0x440 net/core/dev.c:5878
-Code: 74 4a e8 31 16 47 fa 31 ff 65 44 8b 25 47 c5 d0 78 41 81 e4 00 ff 0f 00 44 89 e6 e8 98 19 47 fa 45 85 e4 75 07 e8 0e 16 47 fa <0f> 0b e8 07 16 47 fa 65 44 8b 25 5f cf d0 78 31 ff 44 89 e6 e8 75
-RSP: 0018:ffffc900057d7c88 EFLAGS: 00010093
-RAX: 0000000000000000 RBX: ffff88801e680748 RCX: 0000000000000000
-RDX: ffff88801ccb0000 RSI: ffffffff8731aa92 RDI: 0000000000000003
-RBP: 0000000000000200 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff8731aa88 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff8880b9c00000 R14: 000000000003adc0 R15: ffff88801e118ec0
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fdaa5c65300 CR3: 0000000070af4000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- napi_schedule include/linux/netdevice.h:465 [inline]
- wg_queue_enqueue_per_peer_rx drivers/net/wireguard/queueing.h:204 [inline]
- wg_packet_decrypt_worker+0x408/0x5d0 drivers/net/wireguard/receive.c:510
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
+>
+>
+> > > BTW: it seems like it wouldn't be a _crazy_ amount of extra work to:
+> > >
+> > > 1. Add a sysfs hook for turning the regulator on/off
+> > >
+> > > 2. Change the Chrome OS userspace to actually use the sysfs hook if it's there.
+> > >
+> > > 3. Actually have the kernel in charge of turning the regulator off/on
+> > >
+> > > Doing this at the same time as the transition over to the more real
+> > > "cros-ec-fp" would be nice so we don't have to figure out how to
+> > > transition later. Said another way: If we don't transition now then I
+> > > guess later we'd have to find some way to detect that the regulator
+> > > specified in the kernel was actually a dummy and didn't really control
+> > > the power?
+> >
+> > I'd rather not expose regulator control to userspace through some other
+> > sysfs attribute. Instead I'd prefer the flashing logic that twiddles
+> > gpios and power live all in the kernel and have userspace interact with
+> > a character device to program the firmware.
+>
+> Yeah, that would be even better, you're right.
+>
+> Hmmm, so maybe the answer is to just delay adding the regulator until
+> we're actually ready to specify it correctly and have the flashing
+> happen in the kernel?
+>
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I can enable it during probe just so that if the BIOS isn't doing it
+we'll have something that works assuming the DT is actually controlling
+the regulator. Or do nothing. It doesn't matter right now.

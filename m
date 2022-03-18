@@ -2,284 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383844DDF3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B6D4DDF3E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239295AbiCRQm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
+        id S239309AbiCRQnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234993AbiCRQmZ (ORCPT
+        with ESMTP id S234993AbiCRQnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:42:25 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BF51D41AA
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:41:06 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id n15so7394985plh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:41:06 -0700 (PDT)
+        Fri, 18 Mar 2022 12:43:06 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFFB1D41AA;
+        Fri, 18 Mar 2022 09:41:47 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id mm4-20020a17090b358400b001c68e836fa6so4340551pjb.3;
+        Fri, 18 Mar 2022 09:41:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=YqeA3yzSovnWISu9O1IIYzrK5bErdUVNL8Ziq3eSYwE=;
-        b=WWKSAR2dgARpIW+G+PXd3YLnUwrniUXkKPt4go9LCVGTfI7J10WokWED37htpO3ypO
-         PRWjgCRVpAfvFv+fs3eZMCUSm95FrQTtkg6ASkXVMubxcEWKs/W75JAGMhxCKeTnOPuM
-         nwz7TlEXlYnApEeYVJpKxo40kB3RIcEHdgE6/nnnS9wJGfimhPImk+44654WHfr+rN12
-         Fv0J1cnKU5hBIPH8NJ/VlmiaAeOvyRzPECfkJftxdXKuFTTiOqLhgp1eHL8Ai7ikHygW
-         Oqt4tlJskcbTGGopUy1m2LHruXrlLjdPTHfb2NfyrhUQta5/BBu8zwaM7Goi9Q9izRnX
-         YKew==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KSGmpVI8uN21zYNyBxBAA5nNVcHc735cJRCpzBk9Njc=;
+        b=WZFnE78FkaigHA7v7qRb+dO1PG+CoDzlvOL3gw1FaKCT64U6kGKf4MBitm20+U3fUY
+         zBJiFo4heNqSBMYsgTE2KzGmMwg23Nt5vaXgLsmBlx8qnL3ifCK+HTfk1dK4rfGa1E+J
+         azuUQX9LXzKef3EM6z6fnEC0osLB/LUCZf6xXsKMNQ0+mwr+A692mr2LWuXZlZAqXSXo
+         qIWllFWBZS9zmK0ywu21GhcYT6w7YHxuJvPQ81A44hwrHrTiu7PfYNhxfW2JupsOKYRb
+         4XW02oacJIzeU1q0uZzTIUWD799DwaXZ33Q3Do4sq5ZvMWir8cJs0s8V23mZuFJOt6G1
+         yM+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=YqeA3yzSovnWISu9O1IIYzrK5bErdUVNL8Ziq3eSYwE=;
-        b=OjDZ8cKhdaqxhXLSg2bVpHESSLi73cphcNnep75mH7A9JCxnNUqk3MpfWDAq4/ybDV
-         A03wMN9ueZ3mFUpa4LuqECTUzooAJdY8l9B2AjdbxGNsYefCdbT93bC+PfgasW9k3xTy
-         t5ZcjHwujg99+OqJ5S+4SGjz797C3gDA/yT10nkjqEWrfjB8RZANPdsgGEI/WPEW+Pxv
-         bebHLrrQohvzfEtVOQGfBo/dWLTTk5YDjLpMfSUYAUPalngPiEAsohO1hAggxlHIbelG
-         8UIwxjNRAjCatkg9rmGGcVlbdbGGYDIS+NlpXA1uI8igvJdutWnXV29FjIf9uqXq66Ex
-         nxEQ==
-X-Gm-Message-State: AOAM532yP+MQtEyiL7nHU2TiHcD5OsPo1ZFTVCfjJ6dftuAemOLfXUqf
-        gVBgTcpuT8od4CQgEfFixFYXAg==
-X-Google-Smtp-Source: ABdhPJyXYHj5tfou62Tf3lMqf0AvHuY99MCgO1pcsZ+JpImXFJRu9csewD/PBr64ga/R0Dzup1yxYw==
-X-Received: by 2002:a17:902:70cc:b0:154:1cc8:9df8 with SMTP id l12-20020a17090270cc00b001541cc89df8mr333225plt.32.1647621665507;
-        Fri, 18 Mar 2022 09:41:05 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id y8-20020a17090aa40800b001c6ccb2c395sm327061pjp.9.2022.03.18.09.41.03
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=KSGmpVI8uN21zYNyBxBAA5nNVcHc735cJRCpzBk9Njc=;
+        b=Zr6fO6sdWott1HRoD3RHkf8+yQBbF0rg6fsc7me63YEfJ3lpUFBiSVxiOdN0FApfs8
+         L59CrIo6JhN0i2vaEpNvuyjxG5O4R97rylTxE8+rVKvs9zSrmVkAAIYDntM7dSHUFcVb
+         AAYaTZ1g4qy26D/cvofmMqTUNIGX34tyyHAbMLLaPNb/mxUiZYLJjwdrqagn3uaXUXfJ
+         /XMNSzsEfacMUYeyveZQaydhQnxAN8wfb1BcX/ZTucPAve0zW5yMK1Wk2NPAdrDOlPWz
+         lo4NZp1ByK52X8JW/VtXbiLsrBrQ/EsjAMrOJdnaH8j70AdKU+/vOsc/vTwWY/dtgtCl
+         +uuw==
+X-Gm-Message-State: AOAM532Re7Z8LYFzsyOgPGfC3RRtSJf+N2xKNfpPVd10FCd7/6Tsh8d1
+        ILCY4zYl94CcT7YxhVwlx7Y=
+X-Google-Smtp-Source: ABdhPJxq8hOnNeD8ltQ+doWSFriEfvMEmHsu4aD8GEXjDMw6roLzmDrESylkPyd2eHvtUCaI+i2SAA==
+X-Received: by 2002:a17:902:b590:b0:153:a243:3331 with SMTP id a16-20020a170902b59000b00153a2433331mr283230pls.129.1647621707058;
+        Fri, 18 Mar 2022 09:41:47 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:bd26:cec:b459:db6e])
+        by smtp.gmail.com with ESMTPSA id v16-20020a056a00149000b004f7ae2cbd3asm10258179pfu.166.2022.03.18.09.41.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 09:41:04 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 10:41:02 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v5] remoteproc: mediatek: Fix side effect of mt8195 sram
- power on
-Message-ID: <20220318164102.GA2898105@p14s>
-References: <20220318114200.4344-1-tinghan.shen@mediatek.com>
+        Fri, 18 Mar 2022 09:41:46 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Fri, 18 Mar 2022 09:41:44 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Brian Geffon <bgeffon@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH] zram: Add a huge_idle writeback mode
+Message-ID: <YjS2SJU7VE1bGb/F@google.com>
+References: <20220315172221.9522-1-bgeffon@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220318114200.4344-1-tinghan.shen@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220315172221.9522-1-bgeffon@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 07:42:00PM +0800, Tinghan Shen wrote:
-> The definition of L1TCM_SRAM_PDN bits on mt8195 is different to mt8192.
+On Tue, Mar 15, 2022 at 10:22:21AM -0700, Brian Geffon wrote:
+> Today it's only possible to write back as a page, idle, or huge.
+> A user might want to writeback pages which are huge and idle first
+> as these idle pages do not require decompression and make a good
+> first pass for writeback.
+
+Hi Brian,
+
+I am not sure how much the decompression overhead matter for idle pages
+writeback since it's already *very slow* path in zram but I agree that
+it would be a good first pass since the memory saving for huge writing
+would be cost efficient.
+
+Just out of curiosity. Do you have real usecase?
+
 > 
-> L1TCM_SRAM_PDN bits[3:0] control the power of mt8195 L1TCM SRAM.
-> 
-> L1TCM_SRAM_PDN bits[7:4] control the access path to EMI for SCP.
-> These bits have to be powered on to allow EMI access for SCP.
-> 
-> Bits[7:4] also affect audio DSP because audio DSP and SCP are
-> placed on the same hardware bus. If SCP cannot access EMI, audio DSP is
-> blocked too.
-> 
-> L1TCM_SRAM_PDN bits[31:8] are not used.
-> 
-> This fix removes modification of bits[7:4] when power on/off mt8195 SCP
-> L1TCM. It's because the modification introduces a short period of time
-> blocking audio DSP to access EMI. This was not a problem until we have
-> to load both SCP module and audio DSP module. audio DSP needs to access
-> EMI because it has source/data on DRAM. Audio DSP will have unexpected
-> behavior when it accesses EMI and the SCP driver blocks the EMI path at
-> the same time.
-> 
-> Fixes: 79111df414fc ("remoteproc: mediatek: Support mt8195 scp")
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> 
+> Signed-off-by: Brian Geffon <bgeffon@google.com>
 > ---
-> v5: rebased on rproc-next
-> v4: add Fixes and Reviewed-by tags
-> v3: fix build error
-> v2: apply comments about macro definition and function calls
-> ---
->  drivers/remoteproc/mtk_common.h |  2 +
->  drivers/remoteproc/mtk_scp.c    | 67 +++++++++++++++++++++++++--------
->  2 files changed, 53 insertions(+), 16 deletions(-)
+>  Documentation/admin-guide/blockdev/zram.rst |  6 ++++++
+>  drivers/block/zram/zram_drv.c               | 10 ++++++----
+>  2 files changed, 12 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-> index 71ce4977cb0b..ea6fa1100a00 100644
-> --- a/drivers/remoteproc/mtk_common.h
-> +++ b/drivers/remoteproc/mtk_common.h
-> @@ -54,6 +54,8 @@
->  #define MT8192_CORE0_WDT_IRQ		0x10030
->  #define MT8192_CORE0_WDT_CFG		0x10034
+> diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
+> index 3e11926a4df9..af1123bfaf92 100644
+> --- a/Documentation/admin-guide/blockdev/zram.rst
+> +++ b/Documentation/admin-guide/blockdev/zram.rst
+> @@ -343,6 +343,12 @@ Admin can request writeback of those idle pages at right timing via::
 >  
-> +#define MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS		GENMASK(7, 4)
+>  With the command, zram writeback idle pages from memory to the storage.
+>  
+> +Additionally, if a user choose to writeback only huge and idle pages
+> +this can be accomplished with::
 > +
->  #define SCP_FW_VER_LEN			32
->  #define SCP_SHARE_BUFFER_SIZE		288
->  
-> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-> index 38609153bf64..068edf21ea51 100644
-> --- a/drivers/remoteproc/mtk_scp.c
-> +++ b/drivers/remoteproc/mtk_scp.c
-> @@ -365,22 +365,22 @@ static int mt8183_scp_before_load(struct mtk_scp *scp)
->  	return 0;
->  }
->  
-> -static void mt8192_power_on_sram(void __iomem *addr)
-> +static void scp_sram_power_on(void __iomem *addr, u32 reserved_mask)
->  {
->  	int i;
->  
->  	for (i = 31; i >= 0; i--)
-> -		writel(GENMASK(i, 0), addr);
-> +		writel(GENMASK(i, 0) & ~reserved_mask, addr);
->  	writel(0, addr);
->  }
->  
-> -static void mt8192_power_off_sram(void __iomem *addr)
-> +static void scp_sram_power_off(void __iomem *addr, u32 reserved_mask)
->  {
->  	int i;
->  
->  	writel(0, addr);
->  	for (i = 0; i < 32; i++)
-> -		writel(GENMASK(i, 0), addr);
-> +		writel(GENMASK(i, 0) & ~reserved_mask, addr);
->  }
->  
->  static int mt8186_scp_before_load(struct mtk_scp *scp)
-> @@ -412,11 +412,32 @@ static int mt8192_scp_before_load(struct mtk_scp *scp)
->  	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
->  
->  	/* enable SRAM clock */
-> -	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
-> -	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
-> -	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
-> -	mt8192_power_on_sram(scp->reg_base + MT8192_L1TCM_SRAM_PDN);
-> -	mt8192_power_on_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
-> +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-> +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-> +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-> +	scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN, 0);
-> +	scp_sram_power_on(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
+> +        echo huge_idle > /sys/block/zramX/writeback
 > +
-> +	/* enable MPU for all memory regions */
-> +	writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
 > +
-> +	return 0;
-> +}
-> +
-> +static int mt8195_scp_before_load(struct mtk_scp *scp)
-> +{
-> +	/* clear SPM interrupt, SCP2SPM_IPC_CLR */
-> +	writel(0xff, scp->reg_base + MT8192_SCP2SPM_IPC_CLR);
-> +
-> +	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
-> +
-> +	/* enable SRAM clock */
-> +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-> +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-> +	scp_sram_power_on(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-> +	scp_sram_power_on(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
-> +			  MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS);
-> +	scp_sram_power_on(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
+>  If admin want to write a specific page in zram device to backing device,
+>  they could write a page index into the interface.
 >  
->  	/* enable MPU for all memory regions */
->  	writel(0xff, scp->reg_base + MT8192_CORE0_MEM_ATT_PREDEF);
-> @@ -572,11 +593,25 @@ static void mt8183_scp_stop(struct mtk_scp *scp)
->  static void mt8192_scp_stop(struct mtk_scp *scp)
->  {
->  	/* Disable SRAM clock */
-> -	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
-> -	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
-> -	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
-> -	mt8192_power_off_sram(scp->reg_base + MT8192_L1TCM_SRAM_PDN);
-> -	mt8192_power_off_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
-> +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-> +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-> +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-> +	scp_sram_power_off(scp->reg_base + MT8192_L1TCM_SRAM_PDN, 0);
-> +	scp_sram_power_off(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
-> +
-> +	/* Disable SCP watchdog */
-> +	writel(0, scp->reg_base + MT8192_CORE0_WDT_CFG);
-> +}
-> +
-> +static void mt8195_scp_stop(struct mtk_scp *scp)
-> +{
-> +	/* Disable SRAM clock */
-> +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_0, 0);
-> +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_1, 0);
-> +	scp_sram_power_off(scp->reg_base + MT8192_L2TCM_SRAM_PD_2, 0);
-> +	scp_sram_power_off(scp->reg_base + MT8192_L1TCM_SRAM_PDN,
-> +			   MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS);
-> +	scp_sram_power_off(scp->reg_base + MT8192_CPU0_SRAM_PD, 0);
+> diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+> index cb253d80d72b..f196902ae554 100644
+> --- a/drivers/block/zram/zram_drv.c
+> +++ b/drivers/block/zram/zram_drv.c
+> @@ -643,8 +643,8 @@ static int read_from_bdev_async(struct zram *zram, struct bio_vec *bvec,
+>  #define PAGE_WB_SIG "page_index="
 >  
->  	/* Disable SCP watchdog */
->  	writel(0, scp->reg_base + MT8192_CORE0_WDT_CFG);
-> @@ -922,11 +957,11 @@ static const struct mtk_scp_of_data mt8192_of_data = {
+>  #define PAGE_WRITEBACK 0
+> -#define HUGE_WRITEBACK 1
+> -#define IDLE_WRITEBACK 2
+> +#define HUGE_WRITEBACK (1<<0)
+> +#define IDLE_WRITEBACK (1<<1)
 >  
->  static const struct mtk_scp_of_data mt8195_of_data = {
->  	.scp_clk_get = mt8195_scp_clk_get,
-> -	.scp_before_load = mt8192_scp_before_load,
-> +	.scp_before_load = mt8195_scp_before_load,
->  	.scp_irq_handler = mt8192_scp_irq_handler,
->  	.scp_reset_assert = mt8192_scp_reset_assert,
->  	.scp_reset_deassert = mt8192_scp_reset_deassert,
-> -	.scp_stop = mt8192_scp_stop,
-> +	.scp_stop = mt8195_scp_stop,
->  	.scp_da_to_va = mt8192_scp_da_to_va,
->  	.host_to_scp_reg = MT8192_GIPC_IN_SET,
->  	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
-
-
-  GEN     Makefile
-  UPD     include/config/kernel.release
-  UPD     include/generated/utsrelease.h
-  CALL    /home/mpoirier/work/remoteproc/kernel-review/scripts/atomic/check-atomics.sh
-  CALL    /home/mpoirier/work/remoteproc/kernel-review/scripts/checksyscalls.sh
-  CHK     include/generated/compile.h
-  CC      init/version.o
-  AR      init/built-in.a
-  CC      kernel/sys.o
-  CC      net/ethtool/ioctl.o
-  CC      kernel/module.o
-  CC      kernel/trace/trace.o
-  CC      drivers/base/firmware_loader/main.o
-  CC      drivers/base/firmware_loader/builtin/main.o
-  AR      net/ethtool/built-in.a
-  AR      drivers/base/firmware_loader/builtin/built-in.a
-  AR      net/built-in.a
-  AR      drivers/base/firmware_loader/built-in.a
-  AR      drivers/base/built-in.a
-  CC      drivers/remoteproc/mtk_scp.o
-  CC      drivers/remoteproc/mtk_scp_ipi.o
-  CC      drivers/ras/ras.o
-  CC      drivers/remoteproc/stm32_rproc.o
-  CC      drivers/nvmem/core.o
-  AR      kernel/trace/built-in.a
-  AR      kernel/built-in.a
-/home/mpoirier/work/remoteproc/kernel-review/drivers/remoteproc/mtk_scp.c: In function ‘mt8186_scp_before_load’:
-/home/mpoirier/work/remoteproc/kernel-review/drivers/remoteproc/mtk_scp.c:396:2: error: implicit declaration of function ‘mt8192_power_on_sram’ [-Werror=implicit-function-declaration]
-  396 |  mt8192_power_on_sram(scp->reg_base + MT8183_SCP_SRAM_PDN);
-      |  ^~~~~~~~~~~~~~~~~~~~
-...
-
-No need to send me another revision right away - I won't apply your code for
-this merge window.
-
+>  
+>  static ssize_t writeback_store(struct device *dev,
+> @@ -664,6 +664,8 @@ static ssize_t writeback_store(struct device *dev,
+>  		mode = IDLE_WRITEBACK;
+>  	else if (sysfs_streq(buf, "huge"))
+>  		mode = HUGE_WRITEBACK;
+> +	else if (sysfs_streq(buf, "huge_idle"))
+> +		mode = IDLE_WRITEBACK | HUGE_WRITEBACK;
+>  	else {
+>  		if (strncmp(buf, PAGE_WB_SIG, sizeof(PAGE_WB_SIG) - 1))
+>  			return -EINVAL;
+> @@ -725,10 +727,10 @@ static ssize_t writeback_store(struct device *dev,
+>  				zram_test_flag(zram, index, ZRAM_UNDER_WB))
+>  			goto next;
+>  
+> -		if (mode == IDLE_WRITEBACK &&
+> +		if (mode & IDLE_WRITEBACK &&
+>  			  !zram_test_flag(zram, index, ZRAM_IDLE))
+>  			goto next;
+> -		if (mode == HUGE_WRITEBACK &&
+> +		if (mode & HUGE_WRITEBACK &&
+>  			  !zram_test_flag(zram, index, ZRAM_HUGE))
+>  			goto next;
+>  		/*
 > -- 
-> 2.18.0
+> 2.35.1.723.g4982287a31-goog
 > 

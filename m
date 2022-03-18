@@ -2,62 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184F64DD937
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0884DD939
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235962AbiCRLuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 07:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
+        id S235973AbiCRLuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 07:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbiCRLuG (ORCPT
+        with ESMTP id S235964AbiCRLuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 07:50:06 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671763E0F4;
-        Fri, 18 Mar 2022 04:48:46 -0700 (PDT)
-X-UUID: 02ebdfe18eed4ed697dd1f28074c298b-20220318
-X-UUID: 02ebdfe18eed4ed697dd1f28074c298b-20220318
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <jianjun.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2018278411; Fri, 18 Mar 2022 19:48:41 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 18 Mar 2022 19:48:40 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 18 Mar 2022 19:48:39 +0800
-Message-ID: <8b74600a0f9963328cfb278b0ea1131b5900df3b.camel@mediatek.com>
-Subject: Re: [PATCH v2 2/2] phy: mediatek: Add PCIe PHY driver
-From:   Jianjun Wang <jianjun.wang@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Chen-Yu Tsai" <wenst@chromium.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
-        <randy.wu@mediatek.com>, <jieyy.yang@mediatek.com>,
-        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
-        <jian.yang@mediatek.com>
-Date:   Fri, 18 Mar 2022 19:48:39 +0800
-In-Reply-To: <a3ccba54-9076-0966-f282-1943f10a0346@collabora.com>
-References: <20220318095417.2016-1-jianjun.wang@mediatek.com>
-         <20220318095417.2016-3-jianjun.wang@mediatek.com>
-         <a3ccba54-9076-0966-f282-1943f10a0346@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 18 Mar 2022 07:50:13 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AA52D39C9;
+        Fri, 18 Mar 2022 04:48:52 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V7W8En._1647604128;
+Received: from 30.225.24.52(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V7W8En._1647604128)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 18 Mar 2022 19:48:49 +0800
+Message-ID: <884cbd35-9d88-82a5-972a-39de2f4c8bc0@linux.alibaba.com>
+Date:   Fri, 18 Mar 2022 19:48:48 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH v4 00/21] fscache,erofs: fscache-based on-demand read
+ semantics
+Content-Language: en-US
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+To:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org
+References: <20220307123305.79520-1-jefflexu@linux.alibaba.com>
+In-Reply-To: <20220307123305.79520-1-jefflexu@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,307 +50,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angelo,
+Hi David,
 
-Thanks for all these suggestions, I'll fix them in the next version.
+We indeed value the fscache based on-demand read feature, and we believe
+fscache will benefit more scenarios then. Our community partners are
+also quite interested in this feature.
+
+Appreciate if you could take a look on it, and please let me know if you
+have any concern.
+
 
 Thanks.
+Jeffle
 
-On Fri, 2022-03-18 at 11:57 +0100, AngeloGioacchino Del Regno wrote:
-> Il 18/03/22 10:54, Jianjun Wang ha scritto:
-> > Add PCIe GEN3 PHY driver support on MediaTek chipsets.
-> > 
-> > Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> > ---
-> >   drivers/phy/mediatek/Kconfig        |  11 ++
-> >   drivers/phy/mediatek/Makefile       |   1 +
-> >   drivers/phy/mediatek/phy-mtk-pcie.c | 246
-> > ++++++++++++++++++++++++++++
-> >   3 files changed, 258 insertions(+)
-> >   create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
-> > 
-> > diff --git a/drivers/phy/mediatek/Kconfig
-> > b/drivers/phy/mediatek/Kconfig
-> > index 55f8e6c048ab..387ed1b3f2cc 100644
-> > --- a/drivers/phy/mediatek/Kconfig
-> > +++ b/drivers/phy/mediatek/Kconfig
-> > @@ -55,3 +55,14 @@ config PHY_MTK_MIPI_DSI
-> >   	select GENERIC_PHY
-> >   	help
-> >   	  Support MIPI DSI for Mediatek SoCs.
-> > +
-> > +config PHY_MTK_PCIE
-> > +	tristate "MediaTek PCIe-PHY Driver"
-> > +	depends on ARCH_MEDIATEK || COMPILE_TEST
-> > +	depends on OF
-> > +	select GENERIC_PHY
-> > +	help
-> > +	  Say 'Y' here to add support for MediaTek PCIe PHY driver.
-> > +	  This driver create the basic PHY instance and provides
-> > initialize
-> > +	  callback for PCIe GEN3 port, it supports software efuse
-> > +	  initialization.
-> > diff --git a/drivers/phy/mediatek/Makefile
-> > b/drivers/phy/mediatek/Makefile
-> > index ace660fbed3a..788c13147f63 100644
-> > --- a/drivers/phy/mediatek/Makefile
-> > +++ b/drivers/phy/mediatek/Makefile
-> > @@ -6,6 +6,7 @@
-> >   obj-$(CONFIG_PHY_MTK_TPHY)		+= phy-mtk-tphy.o
-> >   obj-$(CONFIG_PHY_MTK_UFS)		+= phy-mtk-ufs.o
-> >   obj-$(CONFIG_PHY_MTK_XSPHY)		+= phy-mtk-xsphy.o
-> > +obj-$(CONFIG_PHY_MTK_PCIE)		+= phy-mtk-pcie.o
-> >   
-> >   phy-mtk-hdmi-drv-y			:= phy-mtk-hdmi.o
-> >   phy-mtk-hdmi-drv-y			+= phy-mtk-hdmi-
-> > mt2701.o
-> > diff --git a/drivers/phy/mediatek/phy-mtk-pcie.c
-> > b/drivers/phy/mediatek/phy-mtk-pcie.c
-> > new file mode 100644
-> > index 000000000000..0f5d7c7e2b7e
-> > --- /dev/null
-> > +++ b/drivers/phy/mediatek/phy-mtk-pcie.c
-> > @@ -0,0 +1,246 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c) 2022 MediaTek Inc.
-> > + * Author: Jianjun Wang <jianjun.wang@mediatek.com>
-> > + */
-> > +
-> > +#include <linux/bits.h>
-> > +#include <linux/compiler_types.h>
-> > +#include <linux/module.h>
-> > +#include <linux/nvmem-consumer.h>
-> > +#include <linux/phy/phy.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/slab.h>
-> > +
-> > +#include "phy-mtk-io.h"
-> > +
-> > +#define PEXTP_ANA_GLB_00_REG		0x9000
-> > +#define PEXTP_ANA_LN0_TRX_REG		0xa000
-> > +#define PEXTP_ANA_TX_OFFSET		0x04
-> > +#define PEXTP_ANA_RX_OFFSET		0x3c
-> > +#define PEXTP_ANA_LANE_OFFSET		0x100
-> > +
-> > +/* PEXTP_GLB_00_REG[28:24] Internal Resistor Selection of TX Bias
-> > Current */
-> > +#define EFUSE_GLB_INTR_SEL		GENMASK(28, 24)
-> > +#define EFUSE_GLB_INTR_VAL(x)		((0x1f & (x)) << 24)
-> > +
-> > +/* PEXTP_ANA_LN_RX_REG[3:0] RX impedance selection */
-> > +#define EFUSE_LN_RX_SEL			GENMASK(3, 0)
-> > +#define EFUSE_LN_RX_VAL(x)		(0xf & (x))
-> > +
-> > +/* PEXTP_ANA_LN_TX_REG[5:2] TX PMOS impedance selection */
-> > +#define EFUSE_LN_TX_PMOS_SEL		GENMASK(5, 2)
-> > +#define EFUSE_LN_TX_PMOS_VAL(x)		((0xf & (x)) << 2)
-> > +
-> > +/* PEXTP_ANA_LN_TX_REG[11:8] TX NMOS impedance selection */
-> > +#define EFUSE_LN_TX_NMOS_SEL		GENMASK(11, 8)
-> > +#define EFUSE_LN_TX_NMOS_VAL(x)		((0xf & (x)) << 8)
-> > +
-> > +/* Efuse data for each lane */
-> 
-> What about some kerneldoc?
-> 
-> /**
->   * struct mtk_pcie_lane_efuse - eFuse data for each lane
->   * @tx_pmos:
->   ......etc :))
-> 
-> > +struct mtk_pcie_lane_efuse {
-> > +	u32 tx_pmos;
-> > +	u32 tx_nmos;
-> > +	u32 rx_data;
-> > +	bool lane_efuse_supported;
-> > +};
-> > +
-> 
-> Same here
-> 
-> /**
->   * struct mtk_pcie_phy - PCIe phy driver main structure
->   * @dev: ......
-> 
-> > +struct mtk_pcie_phy {
-> > +	struct device *dev;
-> > +	struct phy *phy;
-> > +	void __iomem *sif_base;
-> > +
-> > +	/*
-> > +	 * Support software efuse initialization,
-> > +	 * currently we only support 2 lane in maximum.
-> > +	 */
-> 
-> Obviously, if you add kerneldoc, this comment would get moved to that
-> kerneldoc.
-> 
-> > +	bool sw_efuse_supported;
-> > +	u32 efuse_glb_intr;
+
+On 3/7/22 8:32 PM, Jeffle Xu wrote:
+> changes since v3:
+> - cachefiles: The current implementation relies on the anonymous fd mechanism to avoid
+>   the dependence on the format of cache file. When cache file is opened
+>   for the first time, an anon_fd associated with the cache file is sent to
+>   user daemon. User daemon could fetch and write data to cache file with
+>   the given anon_fd. The following write to the anon_fd will finally
+>   call to cachefiles kernel module, which will write data to cache file in
+>   the latest format of cache file. Thus the on-demand read mode can
+>   keep working no matter how cache file format could change in the
+>   future. (patch 4)
+> - cachefiles: the on-demand read mode reuses the existing
+>   "/dev/cachefiles" devnode (patch 3)
+> - erofs: squash several commits implementing readahead into single
+>   commit (patch 20)
+> - erofs: refactor the readahead routine, so that it can read multiple
+>   pages each round (patch 20)
+> - patch 1 and 7 have already been cherry-picked by the maintainers, but
+>   have not been merged to the master. Keep them here for completeness.
 > 
 > 
-> > +	struct mtk_pcie_lane_efuse efuse[2];
+> RFC: https://lore.kernel.org/all/YbRL2glGzjfZkVbH@B-P7TQMD6M-0146.local/t/
+> v1: https://lore.kernel.org/lkml/47831875-4bdd-8398-9f2d-0466b31a4382@linux.alibaba.com/T/
+> v2: https://lore.kernel.org/all/2946d871-b9e1-cf29-6d39-bcab30f2854f@linux.alibaba.com/t/
+> v3: https://lore.kernel.org/lkml/20220209060108.43051-1-jefflexu@linux.alibaba.com/T/
 > 
-> If you dynamically allocate this one, you will be able to support any
-> number
-> of lanes, futureproofing this driver and giving it more flexibility.
+> [Background]
+> ============
+> Nydus [1] is a container image distribution service specially optimised
+> for distribution over network. Nydus is an excellent container image
+> acceleration solution, since it only pulls data from remote when it's
+> really needed, a.k.a. on-demand reading.
 > 
-> > +};
-> > +
+> erofs (Enhanced Read-Only File System) is a filesystem specially
+> optimised for read-only scenarios. (Documentation/filesystem/erofs.rst)
 > 
-> ..snip..
+> Recently we are focusing on erofs in container images distribution
+> scenario [2], trying to combine it with nydus. In this case, erofs can
+> be mounted from one bootstrap file (metadata) with (optional) multiple
+> data blob files (data) stored on another local filesystem. (All these
+> files are actually image files in erofs disk format.)
 > 
-> > +
-> > +static int mtk_pcie_efuse_read_for_lane(struct mtk_pcie_phy
-> > *pcie_phy,
-> > +					unsigned int lane)
-> > +{
-> > +	struct device *dev = pcie_phy->dev;
-> > +	struct mtk_pcie_lane_efuse *data;
-> > +	char efuse_id[15];
-> > +	int ret;
-> > +
-> > +	if (lane >= ARRAY_SIZE(pcie_phy->efuse))
-> > +		return dev_err_probe(pcie_phy->dev, -EINVAL,
-> > +				     "Requested lane number %d exceeds
-> > maximum %ld\n",
-> > +				     lane, ARRAY_SIZE(pcie_phy->efuse)
-> > - 1);
+> To accelerate the container startup (fetching container image from remote
+> and then start the container), we do hope that the bootstrap blob file
+> could support demand read. That is, erofs can be mounted and accessed
+> even when the bootstrap/data blob files have not been fully downloaded.
 > 
-> I don't like seeing dev_err_probe() outside of a probe function, but
-> I acknowledge
-> that the Linux documentation doesn't seem to give any direction about
-> that, so
-> this is a personal preference, at this point.
+> That means we have to manage the cache state of the bootstrap/data blob
+> files (if cache hit, read directly from the local cache; if cache miss,
+> fetch the data somehow). It would be painful and may be dumb for erofs to
+> implement the cache management itself. Thus we prefer fscache/cachefiles
+> to do the cache management. Besides, the demand-read feature shall be
+> general and it can benefit other using scenarios if it can be implemented
+> in fscache level.
 > 
-> > +
-> > +	data = &pcie_phy->efuse[lane];
-> > +
-> > +	snprintf(efuse_id, sizeof(efuse_id), "tx_ln%d_pmos", lane);
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &data-
-> > >tx_pmos);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "Failed to read %s\n",
-> > efuse_id);
-> > +
-> > +	snprintf(efuse_id, sizeof(efuse_id), "tx_ln%d_nmos", lane);
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &data-
-> > >tx_nmos);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "Failed to read %s\n",
-> > efuse_id);
-> > +
-> > +	snprintf(efuse_id, sizeof(efuse_id), "rx_ln%d", lane);
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &data-
-> > >rx_data);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "Failed to read %s\n",
-> > efuse_id);
-> > +
-> > +	if (!(data->tx_pmos || data->tx_nmos || data->rx_data))
-> > +		return dev_err_probe(dev, -EINVAL,
-> > +				     "No efuse data found for lane%d,
-> > but dts enable it\n",
-> > +				     lane);
-> > +
-> > +	data->lane_efuse_supported = true;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mtk_pcie_read_efuse(struct mtk_pcie_phy *pcie_phy)
-> > +{
-> > +	struct device *dev = pcie_phy->dev;
-> > +	bool nvmem_enabled;
-> > +	int ret;
-> > +
-> > +	nvmem_enabled = device_property_read_bool(dev, "nvmem-cells");
-> > +	if (!nvmem_enabled)
-> > +		return -ENODEV;
-> > +
-> > +	ret = nvmem_cell_read_variable_le_u32(dev, "glb_intr",
-> > +					      &pcie_phy-
-> > >efuse_glb_intr);
-> > +	if (ret)
-> > +		return dev_err_probe(dev, ret, "Failed to read
-> > glb_intr\n");
-> > +
-> > +	pcie_phy->sw_efuse_supported = true;
-> > +
-> > +	ret = mtk_pcie_efuse_read_for_lane(pcie_phy, 0);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = mtk_pcie_efuse_read_for_lane(pcie_phy, 1);
-> > +	if (ret)
-> > +		return ret;
+> [1] https://nydus.dev
+> [2] https://sched.co/pcdL
 > 
-> To give some more future-proofing to this driver, I would instead
-> either add a
-> u32 devicetree property "num-lanes" or, if the same SoC may not have
-> a different
-> number of lanes across controller instances, I would add a number of
-> lanes
-> parameter as data for each of_match.
 > 
-> You'd be at that point using a for loop here like:
+> [Overall Design]
+> ================
 > 
-> for (i = 0; i < pcie_phy->num_lanes, i++) {
-> 	ret = mtk_pcie_efuse_read_for_lane(pcie_phy, i);
-> 	if (ret)
-> 		return ret;
-> }
+> Please refer to patch 6 ("cachefiles: document on-demand read mode") for
+> more details.
 > 
-> Of course, the same logic would apply to mtk_pcie_phy_init(), where
-> you are
-> instead calling mtk_pcie_efuse_set_lane().
+> When working in original mode, cachefiles mainly serves as a local cache for
+> remote networking fs, while in on-demand read mode, cachefiles can boost the
+> scenario where on-demand read semantics is needed, e.g. container image
+> distribution.
 > 
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mtk_pcie_phy_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct phy_provider *provider;
-> > +	struct mtk_pcie_phy *pcie_phy;
-> > +
-> > +	pcie_phy = devm_kzalloc(dev, sizeof(*pcie_phy), GFP_KERNEL);
-> > +	if (!pcie_phy)
-> > +		return -ENOMEM;
-> > +
-> > +	pcie_phy->dev = dev;
-> > +
-> > +	pcie_phy->sif_base =
-> > devm_platform_ioremap_resource_byname(pdev, "sif");
-> > +	if (IS_ERR(pcie_phy->sif_base))
-> > +		return dev_err_probe(dev, PTR_ERR(pcie_phy->sif_base),
-> > +				     "Failed to map phy-sif base\n");
-> > +
-> > +	pcie_phy->phy = devm_phy_create(dev, dev->of_node,
-> > &mtk_pcie_phy_ops);
-> > +	if (IS_ERR(pcie_phy->phy))
-> > +		return dev_err_probe(dev, PTR_ERR(pcie_phy->phy),
-> > +				     "Failed to create PCIe phy\n");
-> > +
-> > +	/*
-> > +	 * Failed to read the efuse data is not a fatal problem,
-> > +	 * ignore the failure and keep going.
-> > +	 */
-> > +	mtk_pcie_read_efuse(pcie_phy);
+> The essential difference between these two modes is that, in original mode,
+> when cache miss, netfs itself will fetch data from remote, and then write the
+> fetched data into cache file. While in on-demand read mode, a user daemon is
+> responsible for fetching data and then writing to the cache file.
 > 
-> If you get an -EPROBE_DEFER here, you surely want to defer probing
-> this driver,
-> so, yes you're free to ignore the other failures, but you should fix
-> that corner
-> case.
+> The on-demand read mode relies on a simple protocol used for communication
+> between kernel and user daemon.
 > 
-> Everything else looks good, so, please make sure to add me to the
-> Cc's for the
-> next version of this series for me to give you a faster review.
+> The current implementation relies on the anonymous fd mechanism to avoid
+> the dependence on the format of cache file. When cache file is opened
+> for the first time, an anon_fd associated with the cache file is sent to
+> user daemon. With the given anon_fd, user daemon could fetch and write data
+> into the cache file in the background, even when kernel has not triggered
+> the cache miss. Besides, the write() syscall to the anon_fd will finally
+> call cachefiles kernel module, which will write data to cache file in
+> the latest format of cache file.
 > 
-> Regards,
-> Angelo
+> 1. cache miss
+> When cache miss, cachefiles kernel module will notify user daemon the
+> anon_fd, along with the requested file range. When notified, user dameon
+> needs to fetch data of the requested file range, and then write the fetched
+> data into cache file with the given anonymous fd. When finished
+> processing the request, user daemon needs to notify the kernel.
+> 
+> After notifying the user daemon, the kernel read routine will hang there,
+> until the request is handled by user daemon. When it's awaken by the
+> notification from user daemon, i.e. the corresponding hole has been filled
+> by the user daemon, it will retry to read from the same file range.
+> 
+> 2. cache hit
+> Once data is already ready in cache file, netfs will read from cache file directly.
+> 
+> 
+> [Advantage of fscache-based demand-read]
+> ========================================
+> 1. Asynchronous Prefetch
+> In current mechanism, fscache is responsible for cache state management,
+> while the data plane (fetch data from local/remote on cache miss) is
+> done on the user daemon side.
+> 
+> If data has already been ready in the backing file, the upper fs (e.g.
+> erofs) will read from the backing file directly and won't be trapped to
+> user space anymore. Thus the user daemon could fetch data (from remote)
+> asynchronously on the background, and thus accelerate the backing file
+> accessing in some degree.
+> 
+> 2. Support massive blob files
+> Besides this mechanism supports a large amount of backing files, and
+> thus can benefit the densely employed scenario.
+> 
+> In our using scenario, one container image can correspond to one
+> bootstrap file (required) and multiple data blob files (optional). For
+> example, one container image for node.js will corresponds to ~20 files
+> in total. In densely employed environment, there could be as many as
+> hundreds of containers and thus thousands of backing files on one
+> machine.
+> 
+> 
+> [Test]
+> ==========
+> You could start a quick test by
+> https://github.com/lostjeffle/demand-read-cachefilesd
+> 
+> 
+> 
+> Jeffle Xu (21):
+>   fscache: export fscache_end_operation()
+>   cachefiles: export write routine
+>   cachefiles: introduce on-demand read mode
+>   cachefiles: notify user daemon with anon_fd when opening cache file
+>   cachefiles: implement on-demand read
+>   cachefiles: document on-demand read mode
+>   erofs: use meta buffers for erofs_read_superblock()
+>   erofs: export erofs_map_blocks()
+>   erofs: add mode checking helper
+>   erofs: register global fscache volume
+>   erofs: add cookie context helper functions
+>   erofs: add anonymous inode managing page cache of blob file
+>   erofs: add erofs_fscache_read_pages() helper
+>   erofs: register cookie context for bootstrap blob
+>   erofs: implement fscache-based metadata read
+>   erofs: implement fscache-based data read for non-inline layout
+>   erofs: implement fscache-based data read for inline layout
+>   erofs: register cookie context for data blobs
+>   erofs: implement fscache-based data read for data blobs
+>   erofs: implement fscache-based data readahead
+>   erofs: add 'uuid' mount option
+> 
+>  .../filesystems/caching/cachefiles.rst        | 159 +++++
+>  fs/cachefiles/Kconfig                         |  11 +
+>  fs/cachefiles/daemon.c                        | 576 +++++++++++++++++-
+>  fs/cachefiles/internal.h                      |  48 ++
+>  fs/cachefiles/io.c                            |  72 ++-
+>  fs/cachefiles/namei.c                         |  16 +-
+>  fs/erofs/Makefile                             |   3 +-
+>  fs/erofs/data.c                               |  18 +-
+>  fs/erofs/fscache.c                            | 496 +++++++++++++++
+>  fs/erofs/inode.c                              |   6 +-
+>  fs/erofs/internal.h                           |  30 +
+>  fs/erofs/super.c                              | 106 +++-
+>  fs/fscache/internal.h                         |  11 -
+>  fs/nfs/fscache.c                              |   8 -
+>  include/linux/fscache.h                       |  15 +
+>  include/linux/netfs.h                         |   1 +
+>  include/trace/events/cachefiles.h             |   2 +
+>  include/uapi/linux/cachefiles.h               |  48 ++
+>  18 files changed, 1526 insertions(+), 100 deletions(-)
+>  create mode 100644 fs/erofs/fscache.c
+>  create mode 100644 include/uapi/linux/cachefiles.h
 > 
 
+-- 
+Thanks,
+Jeffle

@@ -2,180 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1244DE0CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED2B4DE103
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240044AbiCRSMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 14:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        id S240137AbiCRSZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 14:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233194AbiCRSMS (ORCPT
+        with ESMTP id S238890AbiCRSZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 14:12:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 015372EAF46
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:10:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647627057;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kc+pmtHfxIpRTamp8EGNmCLlGgRlmecF3rxkTdAqUlY=;
-        b=T6gRMrIZ0x3SDWltmcieSGUahXnvvOJsokA+UPJy5qr9ZzZ82FMivYs3ND3HVbhTO2NXwh
-        liKsWwKb6Baxr7qd5Znwe5D6Fs1t+sy6XEzrDJS+LjJE35XFNMu8R9TOB18Ur1rJx9VJMc
-        jCvfkCP5D7jR6lIb6vZgs6cAtSfORnA=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-620-A46hvKVNP8eL6gNDGi7D_Q-1; Fri, 18 Mar 2022 14:10:55 -0400
-X-MC-Unique: A46hvKVNP8eL6gNDGi7D_Q-1
-Received: by mail-qt1-f199.google.com with SMTP id p6-20020a05622a00c600b002e1cb9508e8so6101311qtw.20
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:10:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=kc+pmtHfxIpRTamp8EGNmCLlGgRlmecF3rxkTdAqUlY=;
-        b=5/O0oXRrhBWjF5gU6iUqCH2HE6oWI3JG9NHwrgvK0cxGF+P4v01ds1S/xmngV/x2BR
-         MKvrEVEkPCSnYYz0BAytKCrhQiBmMavZGx1ETiOQ16Bh7ljOHLYirLziCGA///fI9bpx
-         RXw4i2hI4cbaiw0QkqJaXOql3lAmBonBRwq7/oaMPOk/UhS+nZrtuVGPbzkcb11J1H/+
-         mWfWQ7S/bcy0+Dcgq2w+3DK8CMHvKL0tYV03bme1hrfXMuZLuJ3HyB6/SEVyGCVvBn2c
-         EOojPpa3Mf++3So8Sgkg4lmlBODG/kbrrsD/tWNBhNk7msVlABF7EgcURcDXwtSoeEAB
-         vULA==
-X-Gm-Message-State: AOAM533wZe2WNaPLuAjn02Aia9XOhP8oz1QJxMEnKBTP0Prgiv0/zAFP
-        RCRoesQmKO5EQvHAZlT+fGjCkMjqTmJu3OedzLddveYKUteiH2aTytS0TN6vRwpMHKr/vmabNQc
-        5vejcYl5UMpJjRCgvFNGGDrq1
-X-Received: by 2002:a37:9fd3:0:b0:67b:126d:df0 with SMTP id i202-20020a379fd3000000b0067b126d0df0mr6766715qke.784.1647627054892;
-        Fri, 18 Mar 2022 11:10:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzydYXtEHBUS6lsWzvgP7SJvGqnoFV/FidiOKPv4KYQyt102wQaiSPRTJbjFy4LGZSduMs8mg==
-X-Received: by 2002:a37:9fd3:0:b0:67b:126d:df0 with SMTP id i202-20020a379fd3000000b0067b126d0df0mr6766693qke.784.1647627054549;
-        Fri, 18 Mar 2022 11:10:54 -0700 (PDT)
-Received: from [192.168.8.138] (pool-96-230-100-15.bstnma.fios.verizon.net. [96.230.100.15])
-        by smtp.gmail.com with ESMTPSA id d13-20020a05622a15cd00b002e1df990d01sm6200193qty.71.2022.03.18.11.10.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 11:10:53 -0700 (PDT)
-Message-ID: <b3e5914f649a9cdc35fbbe9f399d3806f13c3a6f.camel@redhat.com>
-Subject: Re: [PATCH] drm/nouveau/bios: Rename prom_init() and friends
- functions
-From:   Lyude Paul <lyude@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 18 Mar 2022 14:10:52 -0400
-In-Reply-To: <9aebcbbf-aaba-f7e8-7397-18284e74ab0d@csgroup.eu>
-References: <2d97ae92b9c06214be0e088a72cf303eb591bf01.1646414295.git.christophe.leroy@csgroup.eu>
-         <47e09d6010852db928c0de29b89450ea7eee74d8.camel@redhat.com>
-         <edb9aabd-09af-ae0c-348d-f0500e3405d7@csgroup.eu>
-         <672043db-5290-293c-fde4-440989c78d09@csgroup.eu>
-         <9aebcbbf-aaba-f7e8-7397-18284e74ab0d@csgroup.eu>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Fri, 18 Mar 2022 14:25:36 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE3CEDF2F;
+        Fri, 18 Mar 2022 11:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647627857; x=1679163857;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=wpIS4R443Nce+z/m4Mc2carJ5M+X4U+cG/spU7q0iJU=;
+  b=MBb9M1/vjaNnIKvN8fe/t0g9yLSMQIIQPN9P1ZDa04QpAGJGvLqt6Py1
+   cikhcOfVVFRghA2XRHU4B2rHS4Vl27I+LONmU/hWbE6rPNTfkeBZejJpw
+   wNFWsnvA0uQVcSeGNAD4qMdC3F/oR2IIl5G67CPhyJGqnu1l6SAINfFbl
+   c+JPjC7e/ENy2GJds6OYdGuWPn9NXInB9OWMhUwnfhQUb5LyAH7YzEk6y
+   z6OHoa66psdsHwIXZKuTdKybAoFGs6KzqSiWE6H135jaH6z+h70/PFkeO
+   67hCvIKfenfSIyYGWfzxUX9t+UzsIwHN8TiLnXvAPRaZ4dB8BcY0JUpvJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="320404134"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="320404134"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:12:14 -0700
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="550837171"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:12:08 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nVH4S-002Ns0-Qz;
+        Fri, 18 Mar 2022 20:11:28 +0200
+Date:   Fri, 18 Mar 2022 20:11:28 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "'Rafael J . Wysocki '" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 4/6] i2c: mux: pinctrl: remove CONFIG_OF dependency and
+ use fwnode API
+Message-ID: <YjTLUL0umgw+ZVTU@smile.fi.intel.com>
+References: <20220318160059.328208-1-clement.leger@bootlin.com>
+ <20220318160059.328208-5-clement.leger@bootlin.com>
+ <YjSzPeWpcR/SSX1a@smile.fi.intel.com>
+ <20220318175630.0e235f41@fixe.home>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220318175630.0e235f41@fixe.home>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Whoops, sorry! I was unsure of the preference in name we should go with so I
-poked Ben on the side to ask them, but I can see they haven't yet responded.
-I'll poke thme again and see if I can get a response.
+On Fri, Mar 18, 2022 at 05:56:30PM +0100, Cl�ment L�ger wrote:
+> Le Fri, 18 Mar 2022 18:28:45 +0200,
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> a �crit :
+> > On Fri, Mar 18, 2022 at 05:00:50PM +0100, Cl�ment L�ger wrote:
+> > > In order to use i2c muxes with software_node when added with a struct
+> > > mfd_cell, switch to fwnode API. The fwnode layer will allow to use this
+> > > with both device_node and software_node.  
+> > 
+> > > -	struct device_node *np = dev->of_node;
+> > > +	struct fwnode_handle *np = dev_fwnode(dev);  
+> > 
+> > np is now a misleading name. Use fwnode.
+> 
+> Ok I thought np was meaning "node pointer" and it looked like okay to
+> avoid avoid a diff that is too huge. But agreed, I'll rename that.
 
-On Fri, 2022-03-18 at 10:55 +0100, Christophe Leroy wrote:
-> Hi Paul,
-> 
-> Le 05/03/2022 à 10:51, Christophe Leroy a écrit :
-> > 
-> > 
-> > Le 05/03/2022 à 08:38, Christophe Leroy a écrit :
-> > > 
-> > > 
-> > > Le 04/03/2022 à 21:24, Lyude Paul a écrit :
-> > > > This mostly looks good to me. Just one question (and one comment down 
-> > > > below
-> > > > that needs addressing). Is this with ppc32? (I ask because ppc64le 
-> > > > doesn't
-> > > > seem to hit this compilation error).
-> > > 
-> > > That's with PPC64, see 
-> > > http://kisskb.ellerman.id.au/kisskb/branch/chleroy/head/252ba609bea83234d2e35841c19ae84c67b43ec7/
-> > >  
-> > > 
-> > > 
-> > > But that's not (yet) with the mainline tree. That's work I'm doing to 
-> > > cleanup our asm/asm-protoypes.h header.
-> > > 
-> > > Since commit 4efca4ed05cb ("kbuild: modversions for EXPORT_SYMBOL() 
-> > > for asm") that file is dedicated to prototypes of functions defined in 
-> > > assembly. Therefore I'm trying to dispatch C functions prototypes in 
-> > > other headers. I wanted to move prom_init() prototype into asm/prom.h 
-> > > and then I hit the problem.
-> > > 
-> > > In the beginning I was thinking about just changing the name of the 
-> > > function in powerpc, but as I see that M68K, MIPS and SPARC also have 
-> > > a prom_init() function, I thought it would be better to change the 
-> > > name in shadowrom.c to avoid any future conflict like the one I got 
-> > > while reworking the headers.
-> > > 
-> > > 
-> > > > > @@ -57,8 +57,8 @@ prom_init(struct nvkm_bios *bios, const char
-> > > > > *name)
-> > > > >   const struct nvbios_source
-> > > > >   nvbios_rom = {
-> > > > >          .name = "PROM",
-> > > > > -       .init = prom_init,
-> > > > > -       .fini = prom_fini,
-> > > > > -       .read = prom_read,
-> > > > > +       .init = nvbios_rom_init,
-> > > > > +       .fini = nvbios_rom_fini,
-> > > > > +       .read = nvbios_rom_read,
-> > > > 
-> > > > Seeing as the source name is prom, I think using the naming convention
-> > > > nvbios_prom_* would be better then nvbios_rom_*.
-> > > > 
-> > > 
-> > > Yes I wasn't sure about the best naming as the file name is 
-> > > shadowrom.c and not shadowprom.c.
-> > > 
-> > > I will send v2 using nvbios_prom_* as a name.
-> > 
-> > While preparing v2 I remembered that in fact, I called the functions 
-> > nvbios_rom_* because the name of the nvbios_source struct is nvbios_rom, 
-> > so for me it made sense to use the name of the struct as a prefix for 
-> > the functions.
-> > 
-> > So I'm OK to change it to nvbios_prom_* but it looks less logical to me.
-> > 
-> > Please confirm you still prefer nvbios_prom as prefix to the function 
-> > names.
-> > 
-> 
-> Are you still expecting a v2 for this patch ?
-> 
-> As the name of the structure is nvbios_rom, do you really prefer the 
-> functions to be called nvbios_prom_* as you mentionned in your comment ?
-> 
-> In that case, do you also expect the structure name to be changed to 
-> nvbios_prom ?
-> 
-> Thanks
-> Christophe
-> 
+It's rather "in practice", np stands for "OF node pointer", while fwnode
+stands for "firmware node handle".
 
 -- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+With Best Regards,
+Andy Shevchenko
+
 

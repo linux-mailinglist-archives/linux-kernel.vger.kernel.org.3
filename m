@@ -2,93 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA704DD8B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF1C4DD8C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235651AbiCRLKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 07:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
+        id S235667AbiCRLN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 07:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234829AbiCRLKk (ORCPT
+        with ESMTP id S235663AbiCRLNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 07:10:40 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB50F3FAB;
-        Fri, 18 Mar 2022 04:09:20 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id q11so6693945pln.11;
-        Fri, 18 Mar 2022 04:09:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lx7WFraWRqWFHLNMuz3nmP2HSXVxWZbem12hqNhYjZU=;
-        b=jFP9n9CaSBOFMvqLz8WH0ZpJsYFJXndQiPHBbHQoU6JJaQr1euRdgamsJN94j2HZO1
-         oAJ3NHIkK5HV9yW+7NQ5eMKKpAEtFnmX7CTes98+Y5FNTEXNsMjGTg0bpVXh7hSg/QFY
-         mdvH8q8/vzAVzx3QQme+H8W/+pmPjB48PvOkrJE1cU0cbNOPdjZHHJAbkYxmu3ZWDYi+
-         7TBhy3qrpCm251oSIdu4oBJA9Y6DhhZ92wBzKBntp/zg8qKGhu0dPq0aCmpGDd17Y3x0
-         tCmFAmQ6P87wqediV/NiL3simAfjKUnb8LJi9q8OJOgtQnD5e6+rvIDvwnOlVMS7Pvbd
-         PPKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lx7WFraWRqWFHLNMuz3nmP2HSXVxWZbem12hqNhYjZU=;
-        b=O/2mMH2TdPWVrFn9S+/y9sJ9uBjir+WKOjjTcu2NoXSDyqYPzsUCD7WhG1PpASow3W
-         VZXEYtXG3P9OBEU5wIUKFSPVs3BGHUDbSPk0Ed6sgge4zCE5hsfQyjEil2NzsAGriPeF
-         FxgxohBAAQof3PLuok+yJ5yBXgJUzdM6cEE58oNUBDEDN2WS9+cIIqIjFhYZEW/OFfIc
-         VUPunfGdJgh6ReYeyQ/2zr8dJAAiVoXwGe4QQntgJBhkgymM2S4OkZTc4J6AsHuUye1t
-         CxBZMVcAEk5pBtE/jz285xsCR79GkqjuXKSrLPhakFXqNM+wwtD80wTQF6vWR279mvVk
-         9bFA==
-X-Gm-Message-State: AOAM533ET/iHjrPzy3EV1DEk+DKiI/OxWM3KwaAxmKjKMrcvW3x11+Qs
-        H7+GsQ4eya85bqh5NANqAXc=
-X-Google-Smtp-Source: ABdhPJyN51mYsMtk4gYcjQzFCx+w3nbA4g+6vgTP6OcFdyj0KXwRdncIlFoIuyUNx8Dhubq6PyEWJQ==
-X-Received: by 2002:a17:90a:d3d3:b0:1bf:2e8d:3175 with SMTP id d19-20020a17090ad3d300b001bf2e8d3175mr10814485pjw.2.1647601760038;
-        Fri, 18 Mar 2022 04:09:20 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-1.three.co.id. [180.214.232.1])
-        by smtp.gmail.com with ESMTPSA id h6-20020a636c06000000b00363a2533b17sm7204839pgc.8.2022.03.18.04.09.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 04:09:19 -0700 (PDT)
-Message-ID: <e819ad8f-eec5-b571-43b2-2fea01de84a0@gmail.com>
-Date:   Fri, 18 Mar 2022 18:09:14 +0700
+        Fri, 18 Mar 2022 07:13:25 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7955204A9C;
+        Fri, 18 Mar 2022 04:12:05 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id EC5731F45E88
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647601924;
+        bh=AHxx3HJHAKwRLhKmfPdNJCDcWqUZd1j6fsxx13RQRng=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HEExNe5UWQ76Ygt60cSdS31pkD7ajX866F5AmAGrVnXXYwyjwxbMfT44MRwUDQ1Bh
+         xbVwZaokRZeURHfPgYLH6bIrSRTNw6NSq1JOLFsk5osbSZ1bucY39Fo4fp7jzM9WPx
+         vRswXbqTWG16/gjhA+6B4J5tQih8IRBlY6Aw4PhHUHB0OlfXhihT8GrZpbuAahao9E
+         2Naiv2CG+nxtokyODO4iMenBTdtpyciTJE40g9VJk3QxiaVdpOf74ViuS0xyKY0SvL
+         Kn4SpwR8QQhZhnUsXBsB0rjg00ahdRJqOTpuKOdxfjsOdV4eqpKi+HYBwVS2nXrlz9
+         RQfP3nB6NEi2w==
+Message-ID: <2e0989c3-7132-6091-5c9e-5dc8d9af22e8@collabora.com>
+Date:   Fri, 18 Mar 2022 12:12:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5.16 00/28] 5.16.16-rc1 review
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: phy: mediatek: Add YAML schema for
+ PCIe PHY
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220317124526.768423926@linuxfoundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220317124526.768423926@linuxfoundation.org>
+To:     Jianjun Wang <jianjun.wang@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
+        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
+        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
+References: <20220318095417.2016-1-jianjun.wang@mediatek.com>
+ <20220318095417.2016-2-jianjun.wang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220318095417.2016-2-jianjun.wang@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/22 19.45, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.16 release.
-> There are 28 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Il 18/03/22 10:54, Jianjun Wang ha scritto:
+> Add YAML schema documentation for PCIe PHY on MediaTek chipsets.
 > 
+> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> ---
+>   .../bindings/phy/mediatek,pcie-phy.yaml       | 75 +++++++++++++++++++
+>   1 file changed, 75 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+> new file mode 100644
+> index 000000000000..868bf976568b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+> @@ -0,0 +1,75 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/mediatek,pcie-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek PCIe PHY
+> +
+> +maintainers:
+> +  - Jianjun Wang <jianjun.wang@mediatek.com>
+> +
+> +description: |
+> +  The PCIe PHY supports physical layer functionality for PCIe Gen3 port.
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt8195-pcie-phy
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0)
-and powerpc (ps3_defconfig, gcc 11.2.0).
+Since I don't expect this driver to be only for MT8195, but to be extended to
+support some more future MediaTek SoCs and, depending on the number of differences
+in the possible future Gen4 PHYs, even different gen's, I propose to add a generic
+compatible as const.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+So you'll have something like:
 
--- 
-An old man doll... just what I always wanted! - Clara
+- enum:
+     - mediatek,mt8195-pcie-phy
+- const: mediatek,pcie-gen3-phy
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+
+..snip..
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    phy@11e80000 {
+> +        compatible = "mediatek,mt8195-pcie-phy";
+
+... which would reflect here as
+
+compatible = "mediatek,mt8195-pcie-phy", "mediatek,pcie-gen3-phy"
+
+> +        #phy-cells = <0>;
+> +        reg = <0x11e80000 0x10000>;
+> +        reg-names = "sif";
+> +        nvmem-cells = <&pciephy_glb_intr>,
+> +                      <&pciephy_tx_ln0_pmos>,
+> +                      <&pciephy_tx_ln0_nmos>,
+> +                      <&pciephy_rx_ln0>,
+> +                      <&pciephy_tx_ln1_pmos>,
+> +                      <&pciephy_tx_ln1_nmos>,
+> +                      <&pciephy_rx_ln1>;
+> +        nvmem-cell-names = "glb_intr", "tx_ln0_pmos",
+> +                           "tx_ln0_nmos", "rx_ln0",
+> +                           "tx_ln1_pmos", "tx_ln1_nmos",
+> +                           "rx_ln1";
+> +        power-domains = <&spm 2>;
+> +    };
+
+
+Regards,
+Angelo

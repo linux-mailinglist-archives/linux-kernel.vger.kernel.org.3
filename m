@@ -2,79 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23634DD60E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBF54DD611
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233695AbiCRIZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 04:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54762 "EHLO
+        id S233750AbiCRIZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233545AbiCRIZH (ORCPT
+        with ESMTP id S233603AbiCRIZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:25:07 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0CF88780;
-        Fri, 18 Mar 2022 01:23:48 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8ED1C100009;
-        Fri, 18 Mar 2022 08:23:44 +0000 (UTC)
-Date:   Fri, 18 Mar 2022 09:23:43 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Wang Hai <wanghai38@huawei.com>
-Cc:     mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] media: platform: Fix build error
-Message-ID: <20220318082343.46m5xmnqmjw6q4s2@uno.localdomain>
-References: <20220318071028.1356775-1-wanghai38@huawei.com>
+        Fri, 18 Mar 2022 04:25:51 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C494585978
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 01:24:31 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KKcQZ6QVkz9sg4;
+        Fri, 18 Mar 2022 16:20:38 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 18 Mar 2022 16:24:29 +0800
+Subject: Re: [PATCH v2 09/11] mm/migration: fix potential page refcounts leak
+ in migrate_pages
+To:     Feng Tang <feng.tang@intel.com>
+CC:     <ziy@nvidia.com>, <baolin.wang@linux.alibaba.com>,
+        <ying.huang@intel.com>, <songmuchun@bytedance.com>,
+        <apopple@nvidia.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220318070800.GB436@shbuild999.sh.intel.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <4953e998-c088-29f7-e240-d27513bbfc93@huawei.com>
+Date:   Fri, 18 Mar 2022 16:24:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220318071028.1356775-1-wanghai38@huawei.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220318070800.GB436@shbuild999.sh.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Wang Hai
+On 2022/3/18 15:08, Feng Tang wrote:
+>> In -ENOMEM case, there might be some subpages of fail-to-migrate THPs
+>> left in thp_split_pages list. We should move them back to migration
+>> list so that they could be put back to the right list by the caller
+>> otherwise the page refcnt will be leaked here. Also adjust nr_failed
+>> and nr_thp_failed accordingly to make vm events account more accurate.
+>  
+> We just met a real world case for this when checking a malloc-oom
+> issue and our fix is similar with yours :).
+> 
 
-On Fri, Mar 18, 2022 at 03:10:28PM +0800, Wang Hai wrote:
-> If VIDEO_IMX_MIPI_CSIS is y but VIDEO_DEV is n, building failed:
->
-> drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_remove':
-> imx-mipi-csis.c:(.text+0x1f0): undefined reference to `v4l2_async_nf_unregister'
-> ld: imx-mipi-csis.c:(.text+0x1f8): undefined reference to `v4l2_async_nf_cleanup'
-> ld: imx-mipi-csis.c:(.text+0x200): undefined reference to `v4l2_async_unregister_subdev'
->
-> Set VIDEO_IMX_MIPI_CSIS to depend on VIDEO_DEV to fix it
->
-> Fixes: 4a598f62a03b ("media: platform/*/Kconfig: make manufacturer menus more uniform")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Wang Hai <wanghai38@huawei.com>
+Oh, what a coincidence! :)
 
-Thanks, my understanding is that is fixed in Mauro's VIDEO_DEV rework.
-[PATCH v2 00/67] media: Kconfig/Makefile reorg
+> So I think you can remove the 'potential' from the patch subject.
+> Feel free to add
+> 
+> Tested-by: Feng Tang <feng.tang@intel.com>
+> Reviewed-by: Feng Tang <feng.tang@intel.com>
 
+Many thanks for your test and comment!
 
-> ---
->  drivers/media/platform/nxp/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/media/platform/nxp/Kconfig b/drivers/media/platform/nxp/Kconfig
-> index 838abc9766b4..704fcf55697b 100644
-> --- a/drivers/media/platform/nxp/Kconfig
-> +++ b/drivers/media/platform/nxp/Kconfig
-> @@ -6,6 +6,7 @@ comment "NXP drivers"
->
->  config VIDEO_IMX_MIPI_CSIS
->  	tristate "NXP MIPI CSI-2 CSIS receiver found on i.MX7 and i.MX8 models"
-> +	depends on VIDEO_DEV
->  	select MEDIA_CONTROLLER
->  	select V4L2_FWNODE
->  	select VIDEO_V4L2_SUBDEV_API
-> --
-> 2.25.1
->
+> 
+> Thanks,
+> Feng
+> 
+>> Fixes: b5bade978e9b ("mm: migrate: fix the return value of migrate_pages()")
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> Reviewed-by: Zi Yan <ziy@nvidia.com>
+>> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+>> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>  mm/migrate.c | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index 63a87ef0996f..97dfd1f4870d 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1438,6 +1438,14 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>  				}
+>>  
+>>  				nr_failed_pages += nr_subpages;
+>> +				/*
+>> +				 * There might be some subpages of fail-to-migrate THPs
+>> +				 * left in thp_split_pages list. Move them back to migration
+>> +				 * list so that they could be put back to the right list by
+>> +				 * the caller otherwise the page refcnt will be leaked.
+>> +				 */
+>> +				list_splice_init(&thp_split_pages, from);
+>> +				nr_thp_failed += thp_retry;
+>>  				goto out;
+>>  			case -EAGAIN:
+>>  				if (is_thp)
+>> -- 
+>> 2.23.0
+> 
+> .
+> 
+

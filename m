@@ -2,183 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091104DD9D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:36:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAEDF4DD9D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236312AbiCRMiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
+        id S236322AbiCRMik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiCRMiB (ORCPT
+        with ESMTP id S230008AbiCRMii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:38:01 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD832E044C;
-        Fri, 18 Mar 2022 05:36:41 -0700 (PDT)
-Received: from [192.168.0.3] (ip5f5aef49.dynamic.kabel-deutschland.de [95.90.239.73])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 4DC3E61EA1923;
-        Fri, 18 Mar 2022 13:36:38 +0100 (CET)
-Content-Type: multipart/mixed; boundary="------------PSgvYZecXr1ufTM0pfUWlKet"
-Message-ID: <b9b00e0e-9182-783d-ae30-d67d778ae060@molgen.mpg.de>
-Date:   Fri, 18 Mar 2022 13:36:37 +0100
+        Fri, 18 Mar 2022 08:38:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1426B2E044C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:37:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC1CC1474;
+        Fri, 18 Mar 2022 05:37:19 -0700 (PDT)
+Received: from [10.57.88.118] (unknown [10.57.88.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5FBAE3F7F5;
+        Fri, 18 Mar 2022 05:37:18 -0700 (PDT)
+Subject: Re: [PATCH] arm64: fix clang warning about TRAMP_VALIAS
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20220316183833.1563139-1-arnd@kernel.org>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <92859987-5088-3b2c-3e51-e61222724d23@arm.com>
+Date:   Fri, 18 Mar 2022 12:37:12 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
+In-Reply-To: <20220316183833.1563139-1-arnd@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Dell.Client.Kernel@dell.com
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: ucsi_acpi: probe of USBC000:00 fails with ioremap error
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------PSgvYZecXr1ufTM0pfUWlKet
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Hi Arnd,
 
-Dear Linux folks,
+On 3/16/22 6:38 PM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The newly introduced TRAMP_VALIAS definition causes a build warning
+> with clang-14:
+> 
+> arch/arm64/include/asm/vectors.h:66:31: error: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Werror,-Wnull-pointer-arithmetic]
+>                  return (char *)TRAMP_VALIAS + SZ_2K * slot;
 
+It is? Good to know!
+(clang 11 doesn't seem to be so fussy)
 
-On a Dell Precision 3540, Linux 5.16.12 reports an ioremap error:
-
-     [    0.000000] Linux version 5.16.0-4-amd64 
-(debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-18) 11.2.0, GNU 
-ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT Debian 5.16.12-1 
-(2022-03-08)
-     [    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.16.0-4-amd64 
-root=UUID=c9342a55-b747-4442-b2f4-bc03eb7a51cf ro quiet noisapnp 
-log_buf_len=2M cryptomgr.notests btusb.enable_autosuspend=y 
-random.trust_cpu=on
-     […]
-     [    0.000000] DMI: Dell Inc. Precision 3540/0M14W7, BIOS 1.15.0 
-12/08/2021
-     […]
-     [   24.230968] videodev: Linux video capture interface: v2.00
-     [   24.237747] ioremap error for 0x78e31000-0x78e32000, requested 
-0x2, got 0x0
-     [   24.238100] ucsi_acpi: probe of USBC000:00 failed with error -12
-     […]
-     $ sudo more /proc/iomem
-     […]
-     78a04000-78ea2fff : ACPI Non-volatile Storage
-       78e31000-78e31fff : USBC000:00
-     […]
-
-This seems to happen on a lot of Dell devices, cf. bug 199741 (ioremap 
-error on Dell XPS 9370) [1].
+Just for some more background:
+TRAMP_VALIAS existed before, but it wasn't defined if KPTI is disabled at compile time, you can't
+do that without CONFIG_EXPERT.
+I thought these dummy definitions would be cleaner than #ifdef'ing the code.
 
 
-Kind regards,
+> Change the addition to something clang does not complain about.
 
-Paul
+Acked-by: James Morse <james.morse@arm.com>
 
 
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=199741
---------------PSgvYZecXr1ufTM0pfUWlKet
-Content-Type: text/plain; charset=UTF-8; name="iomem.txt"
-Content-Disposition: attachment; filename="iomem.txt"
-Content-Transfer-Encoding: base64
+Thanks!
 
-MDAwMDAwMDAtMDAwMDBmZmYgOiBSZXNlcnZlZAowMDAwMTAwMC0wMDA5ZGZmZiA6IFN5c3Rl
-bSBSQU0KMDAwOWUwMDAtMDAwOWVmZmYgOiBSZXNlcnZlZAowMDA5ZjAwMC0wMDA5ZmZmZiA6
-IFN5c3RlbSBSQU0KMDAwYTAwMDAtMDAwZmZmZmYgOiBSZXNlcnZlZAogIDAwMDAwMDAwLTAw
-MDAwMDAwIDogUENJIEJ1cyAwMDAwOjAwCiAgMDAwMDAwMDAtMDAwMDAwMDAgOiBQQ0kgQnVz
-IDAwMDA6MDAKICAwMDAwMDAwMC0wMDAwMDAwMCA6IFBDSSBCdXMgMDAwMDowMAogIDAwMDAw
-MDAwLTAwMDAwMDAwIDogUENJIEJ1cyAwMDAwOjAwCiAgMDAwMDAwMDAtMDAwMDAwMDAgOiBQ
-Q0kgQnVzIDAwMDA6MDAKICAwMDAwMDAwMC0wMDAwMDAwMCA6IFBDSSBCdXMgMDAwMDowMAog
-IDAwMDAwMDAwLTAwMDAwMDAwIDogUENJIEJ1cyAwMDAwOjAwCiAgMDAwMDAwMDAtMDAwMDAw
-MDAgOiBQQ0kgQnVzIDAwMDA6MDAKICAwMDBhMDAwMC0wMDBkZmZmZiA6IFBDSSBCdXMgMDAw
-MDowMAogICAgMDAwYzAwMDAtMDAwZGZmZmYgOiAwMDAwOjAwOjAyLjAKICAwMDBmMDAwMC0w
-MDBmZmZmZiA6IFN5c3RlbSBST00KMDAxMDAwMDAtM2ZmZmZmZmYgOiBTeXN0ZW0gUkFNCjQw
-MDAwMDAwLTQwM2ZmZmZmIDogUmVzZXJ2ZWQKICA0MDAwMDAwMC00MDNmZmZmZiA6IHBucCAw
-MDowMAo0MDQwMDAwMC02ZDg2Y2ZmZiA6IFN5c3RlbSBSQU0KNmQ4NmQwMDAtNmQ4NmRmZmYg
-OiBBQ1BJIE5vbi12b2xhdGlsZSBTdG9yYWdlCjZkODZlMDAwLTZkODZlZmZmIDogUmVzZXJ2
-ZWQKNmQ4NmYwMDAtNzM2MjhmZmYgOiBTeXN0ZW0gUkFNCjczNjI5MDAwLTczNmIyZmZmIDog
-UmVzZXJ2ZWQKNzM2YjMwMDAtNzgyZDhmZmYgOiBTeXN0ZW0gUkFNCjc4MmQ5MDAwLTc4OTg2
-ZmZmIDogUmVzZXJ2ZWQKNzg5ODcwMDAtNzhhMDNmZmYgOiBBQ1BJIFRhYmxlcwo3OGEwNDAw
-MC03OGVhMmZmZiA6IEFDUEkgTm9uLXZvbGF0aWxlIFN0b3JhZ2UKICA3OGUzMTAwMC03OGUz
-MWZmZiA6IFVTQkMwMDA6MDAKNzhlYTMwMDAtN2FiMjJmZmYgOiBSZXNlcnZlZAo3YWIyMzAw
-MC03YWNmZWZmZiA6IFVua25vd24gRTgyMCB0eXBlCjdhY2ZmMDAwLTdhY2ZmZmZmIDogU3lz
-dGVtIFJBTQo3YWQwMDAwMC03ZjdmZmZmZiA6IFJlc2VydmVkCiAgN2Q4MDAwMDAtN2Y3ZmZm
-ZmYgOiBHcmFwaGljcyBTdG9sZW4gTWVtb3J5CjdmODAwMDAwLWVmZmZmZmZmIDogUENJIEJ1
-cyAwMDAwOjAwCiAgN2Y4MDAwMDAtN2Y4MDBmZmYgOiAwMDAwOjAwOjE1LjAKICAgIDdmODAw
-MDAwLTdmODAwMWZmIDogbHBzc19kZXYKICAgICAgN2Y4MDAwMDAtN2Y4MDAxZmYgOiBpMmNf
-ZGVzaWdud2FyZS4wIGxwc3NfZGV2CiAgICA3ZjgwMDIwMC03ZjgwMDJmZiA6IGxwc3NfcHJp
-dgogICAgN2Y4MDA4MDAtN2Y4MDBmZmYgOiBpZG1hNjQuMAogICAgICA3ZjgwMDgwMC03Zjgw
-MGZmZiA6IGlkbWE2NC4wIGlkbWE2NC4wCiAgN2Y4MDEwMDAtN2Y4MDFmZmYgOiAwMDAwOjAw
-OjE1LjEKICAgIDdmODAxMDAwLTdmODAxMWZmIDogbHBzc19kZXYKICAgICAgN2Y4MDEwMDAt
-N2Y4MDExZmYgOiBpMmNfZGVzaWdud2FyZS4xIGxwc3NfZGV2CiAgICA3ZjgwMTIwMC03Zjgw
-MTJmZiA6IGxwc3NfcHJpdgogICAgN2Y4MDE4MDAtN2Y4MDFmZmYgOiBpZG1hNjQuMQogICAg
-ICA3ZjgwMTgwMC03ZjgwMWZmZiA6IGlkbWE2NC4xIGlkbWE2NC4xCiAgN2Y4MDIwMDAtN2Y4
-MDJmZmYgOiAwMDAwOjAwOjE5LjAKICAgIDdmODAyMDAwLTdmODAyMWZmIDogbHBzc19kZXYK
-ICAgICAgN2Y4MDIwMDAtN2Y4MDIxZmYgOiBpMmNfZGVzaWdud2FyZS4yIGxwc3NfZGV2CiAg
-ICA3ZjgwMjIwMC03ZjgwMjJmZiA6IGxwc3NfcHJpdgogIDgwMDAwMDAwLThmZmZmZmZmIDog
-MDAwMDowMDowMi4wCiAgOTAwMDAwMDAtYjFmZmZmZmYgOiBQQ0kgQnVzIDAwMDA6MDIKICAg
-IDkwMDAwMDAwLWIxZmZmZmZmIDogUENJIEJ1cyAwMDAwOjAzCiAgICAgIDkwMDAwMDAwLWIx
-ZmZmZmZmIDogUENJIEJ1cyAwMDAwOjA1CiAgYzAwMDAwMDAtZDAxZmZmZmYgOiBQQ0kgQnVz
-IDAwMDA6M2IKICAgIGMwMDAwMDAwLWNmZmZmZmZmIDogMDAwMDozYjowMC4wCiAgICBkMDAw
-MDAwMC1kMDFmZmZmZiA6IDAwMDA6M2I6MDAuMAogIGQ0MDAwMDAwLWVhMGZmZmZmIDogUENJ
-IEJ1cyAwMDAwOjAyCiAgICBkNDAwMDAwMC1lYTBmZmZmZiA6IFBDSSBCdXMgMDAwMDowMwog
-ICAgICBkNDAwMDAwMC1lOWVmZmZmZiA6IFBDSSBCdXMgMDAwMDowNQogICAgICBlOWYwMDAw
-MC1lOWZmZmZmZiA6IFBDSSBCdXMgMDAwMDozYQogICAgICAgIGU5ZjAwMDAwLWU5ZjBmZmZm
-IDogMDAwMDozYTowMC4wCiAgICAgICAgICBlOWYwMDAwMC1lOWYwZmZmZiA6IHhoY2ktaGNk
-CiAgICAgIGVhMDAwMDAwLWVhMGZmZmZmIDogUENJIEJ1cyAwMDAwOjA0CiAgICAgICAgZWEw
-MDAwMDAtZWEwM2ZmZmYgOiAwMDAwOjA0OjAwLjAKICAgICAgICAgIGVhMDAwMDAwLWVhMDNm
-ZmZmIDogdGh1bmRlcmJvbHQKICAgICAgICBlYTA0MDAwMC1lYTA0MGZmZiA6IDAwMDA6MDQ6
-MDAuMAogIGViMDAwMDAwLWViZmZmZmZmIDogMDAwMDowMDowMi4wCiAgZWMwMDAwMDAtZWMw
-ZmZmZmYgOiAwMDAwOjAwOjFmLjMKICBlYzEwMDAwMC1lYzFmZmZmZiA6IFBDSSBCdXMgMDAw
-MDozYwogICAgZWMxMDAwMDAtZWMxMDNmZmYgOiAwMDAwOjNjOjAwLjAKICAgICAgZWMxMDAw
-MDAtZWMxMDNmZmYgOiBudm1lCiAgZWMyMDAwMDAtZWMyZmZmZmYgOiBQQ0kgQnVzIDAwMDA6
-M2IKICAgIGVjMjAwMDAwLWVjMjNmZmZmIDogMDAwMDozYjowMC4wCiAgICBlYzI0MDAwMC1l
-YzI1ZmZmZiA6IDAwMDA6M2I6MDAuMAogIGVjMzAwMDAwLWVjM2ZmZmZmIDogUENJIEJ1cyAw
-MDAwOjAxCiAgICBlYzMwMDAwMC1lYzMwMGZmZiA6IDAwMDA6MDE6MDAuMAogICAgICBlYzMw
-MDAwMC1lYzMwMGZmZiA6IHJ0c3hfcGNpCiAgZWM0MDAwMDAtZWM0MWZmZmYgOiAwMDAwOjAw
-OjFmLjYKICAgIGVjNDAwMDAwLWVjNDFmZmZmIDogZTEwMDBlCiAgZWM0MjAwMDAtZWM0MmZm
-ZmYgOiAwMDAwOjAwOjE0LjAKICAgIGVjNDIwMDAwLWVjNDJmZmZmIDogeGhjaS1oY2QKICBl
-YzQzMDAwMC1lYzQzN2ZmZiA6IDAwMDA6MDA6MDQuMAogICAgZWM0MzAwMDAtZWM0MzdmZmYg
-OiBwcm9jX3RoZXJtYWwKICBlYzQzODAwMC1lYzQzYmZmZiA6IDAwMDA6MDA6MWYuMwogICAg
-ZWM0MzgwMDAtZWM0M2JmZmYgOiBJQ0ggSEQgYXVkaW8KICBlYzQzYzAwMC1lYzQzZmZmZiA6
-IDAwMDA6MDA6MTQuMwogICAgZWM0M2MwMDAtZWM0M2ZmZmYgOiBpd2x3aWZpCiAgZWM0NDAw
-MDAtZWM0NDFmZmYgOiAwMDAwOjAwOjE0LjIKICBlYzQ0MjAwMC1lYzQ0MjBmZiA6IDAwMDA6
-MDA6MWYuNAogIGVjNDQ0MDAwLWVjNDQ0ZmZmIDogMDAwMDowMDoxNi4wCiAgICBlYzQ0NDAw
-MC1lYzQ0NGZmZiA6IG1laV9tZQogIGVjNDQ3MDAwLWVjNDQ3ZmZmIDogMDAwMDowMDoxNC4y
-CiAgZWM0NDgwMDAtZWM0NDhmZmYgOiAwMDAwOjAwOjEyLjAKICAgIGVjNDQ4MDAwLWVjNDQ4
-ZmZmIDogSW50ZWwgUENIIHRoZXJtYWwgZHJpdmVyCiAgZWM0NDkwMDAtZWM0NDlmZmYgOiAw
-MDAwOjAwOjA4LjAKZjAwMDAwMDAtZjdmZmZmZmYgOiBQQ0kgTU1DT05GSUcgMDAwMCBbYnVz
-IDAwLTdmXQogIGYwMDAwMDAwLWY3ZmZmZmZmIDogUmVzZXJ2ZWQKICAgIGYwMDAwMDAwLWY3
-ZmZmZmZmIDogcG5wIDAwOjA2CmZjODAwMDAwLWZlN2ZmZmZmIDogUENJIEJ1cyAwMDAwOjAw
-CiAgZmQwMDAwMDAtZmQ2OWZmZmYgOiBwbnAgMDA6MDcKICBmZDZhMDAwMC1mZDZhZmZmZiA6
-IElOVDM0QkI6MDAKICAgIGZkNmEwMDAwLWZkNmFmZmZmIDogSU5UMzRCQjowMCBJTlQzNEJC
-OjAwCiAgZmQ2YjAwMDAtZmQ2Y2ZmZmYgOiBwbnAgMDA6MDcKICBmZDZkMDAwMC1mZDZkZmZm
-ZiA6IElOVDM0QkI6MDAKICAgIGZkNmQwMDAwLWZkNmRmZmZmIDogSU5UMzRCQjowMCBJTlQz
-NEJCOjAwCiAgZmQ2ZTAwMDAtZmQ2ZWZmZmYgOiBJTlQzNEJCOjAwCiAgICBmZDZlMDAwMC1m
-ZDZlZmZmZiA6IElOVDM0QkI6MDAgSU5UMzRCQjowMAogIGZkNmYwMDAwLWZkZmZmZmZmIDog
-cG5wIDAwOjA3CiAgZmUwMDAwMDAtZmUwMTBmZmYgOiBSZXNlcnZlZAogICAgZmUwMTAwMDAt
-ZmUwMTBmZmYgOiAwMDAwOjAwOjFmLjUKICBmZTIwMDAwMC1mZTdmZmZmZiA6IHBucCAwMDow
-NwpmZWMwMDAwMC1mZWMwMGZmZiA6IFJlc2VydmVkCiAgZmVjMDAwMDAtZmVjMDAzZmYgOiBJ
-T0FQSUMgMApmZWQwMDAwMC1mZWQwMDNmZiA6IEhQRVQgMAogIGZlZDAwMDAwLWZlZDAwM2Zm
-IDogUE5QMDEwMzowMApmZWQxMDAwMC1mZWQxN2ZmZiA6IHBucCAwMDowNgpmZWQxODAwMC1m
-ZWQxOGZmZiA6IHBucCAwMDowNgpmZWQxOTAwMC1mZWQxOWZmZiA6IHBucCAwMDowNgpmZWQy
-MDAwMC1mZWQzZmZmZiA6IHBucCAwMDowNgpmZWQ0NTAwMC1mZWQ4ZmZmZiA6IHBucCAwMDow
-NgpmZWQ5MDAwMC1mZWQ5MGZmZiA6IGRtYXIwCmZlZDkxMDAwLWZlZDkxZmZmIDogZG1hcjEK
-ZmVlMDAwMDAtZmVlMDBmZmYgOiBMb2NhbCBBUElDCiAgZmVlMDAwMDAtZmVlMDBmZmYgOiBS
-ZXNlcnZlZApmZjAwMDAwMC1mZmZmZmZmZiA6IFJlc2VydmVkCiAgZmYwMDAwMDAtZmZmZmZm
-ZmYgOiBwbnAgMDA6MDcKMTAwMDAwMDAwLTg3YzdmZmZmZiA6IFN5c3RlbSBSQU0KICAyMzJh
-MDAwMDAtMjMzNjAxZTNmIDogS2VybmVsIGNvZGUKICAyMzM4MDAwMDAtMjM0MDNjZmZmIDog
-S2VybmVsIHJvZGF0YQogIDIzNDIwMDAwMC0yMzQ0YWM0YmYgOiBLZXJuZWwgZGF0YQogIDIz
-NGFlMzAwMC0yMzRmZmZmZmYgOiBLZXJuZWwgYnNzCjg3YzgwMDAwMC04N2ZmZmZmZmYgOiBS
-QU0gYnVmZmVyCg==
+James
 
---------------PSgvYZecXr1ufTM0pfUWlKet--
+
+
+> I see this warning on 5.17-rc8, but did not test it on linux-next,
+> which may already have a fix.
+> 
+> diff --git a/arch/arm64/include/asm/vectors.h b/arch/arm64/include/asm/vectors.h
+> index f64613a96d53..bc9a2145f419 100644
+> --- a/arch/arm64/include/asm/vectors.h
+> +++ b/arch/arm64/include/asm/vectors.h
+> @@ -56,14 +56,14 @@ enum arm64_bp_harden_el1_vectors {
+>   DECLARE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector);
+>   
+>   #ifndef CONFIG_UNMAP_KERNEL_AT_EL0
+> -#define TRAMP_VALIAS	0
+> +#define TRAMP_VALIAS	0ul
+>   #endif
+>   
+>   static inline const char *
+>   arm64_get_bp_hardening_vector(enum arm64_bp_harden_el1_vectors slot)
+>   {
+>   	if (arm64_kernel_unmapped_at_el0())
+> -		return (char *)TRAMP_VALIAS + SZ_2K * slot;
+> +		return (char *)(TRAMP_VALIAS + SZ_2K * slot);
+>   
+>   	WARN_ON_ONCE(slot == EL1_VECTOR_KPTI);
+>   
+> 
+

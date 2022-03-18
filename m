@@ -2,137 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D524DE45A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 23:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D27144DE45C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 23:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241416AbiCRW5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 18:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
+        id S241425AbiCRW6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 18:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234425AbiCRW5A (ORCPT
+        with ESMTP id S234425AbiCRW6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 18:57:00 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850922CB193;
-        Fri, 18 Mar 2022 15:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647644140; x=1679180140;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Xpw1e+WCyhXngW08aawz7OWfMjoVe0z/2/nbVbuqEj4=;
-  b=UMtL8GnauD3cSCh/24t+jLKg3lPuB1oR8UXrMBXzTN5P1sgtVuFKw3AZ
-   2SCMOLECbE1KBGnLMpVCnghm8gbBNEOg0ccoMzHgZo8hJiTbRM8BoTxge
-   eH7PQjr6MVsWfVlXccaVYVTWe+YzNX4br5uL8spjoeU3K/vX3hDMqsotc
-   YfYSFF5VTQf2Ktn1/5bByQYSylRAfyw9gfy8Ny+irlejj+kpJi1XhUbPC
-   Uopm5QW17MVYRv5gRMrFbTpliqX5KJFzZgVC0huCvlBwvp5+vZfV+T6vJ
-   yS9jadgLjt+uA03mmF0WNmGsfgwal9h4AAEAWrIGFln2eZR4ygzRCv50O
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="317954231"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="317954231"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 15:55:40 -0700
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="599681950"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 15:55:39 -0700
-Date:   Fri, 18 Mar 2022 15:55:34 -0700
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 4/6] selftests/resctrl: Make resctrl_tests run using
- kselftest framework
-Message-ID: <YjUN5tnFtkMp17zt@otcwcpicx3.sc.intel.com>
-References: <20220318075807.2921063-1-tan.shaopeng@jp.fujitsu.com>
- <20220318075807.2921063-5-tan.shaopeng@jp.fujitsu.com>
+        Fri, 18 Mar 2022 18:58:11 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3F52D41FD
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 15:56:51 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id w17-20020a056830111100b005b22c584b93so6511649otq.11
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 15:56:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PLzyPUSjfo0Qtpj5gmZd3aXs/ZxVVAJIrjiNg+OPCHg=;
+        b=PWzsIQQCIcyveMJ9nhBODeJlRKnFyQEWhF7OC2D7N/QJkOdQ6YM/fOulb4LMqr/d+Y
+         h2mK0uAXa4P+LglwFvAmALzFBYaR1c61ZVS4w18xGGfbSeb8ia4nzQmW6ycemHJk0/hH
+         eFzCqha6TMLWYSgWiPBOObHDZFBVBYyKX82PA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=PLzyPUSjfo0Qtpj5gmZd3aXs/ZxVVAJIrjiNg+OPCHg=;
+        b=KeR6pmrb5KzahTaZEWkDNRUea260AjuPd1vgnr/HP5PQhx/ns3M53uhd2R05v5Yn0M
+         zCrhqdJtUgdUpOs7TxtFdZzS8/vz2Wfm7QFWwc21CUUx0eNcvitWiscgRZ+jqivP+ijr
+         vmh0IgrCg+fb7ogZA9qyRD6Yc3Eg10kSa6va+/Ypu5IBhWTxY2ERO5cQLW2JXZNgs60v
+         x36sO8aw4a5yTGQfTXnVEYQTfP+WeSARpGjf1H+ywRX0W4DHxgQ/E0jGGSMd3Pmj0nHW
+         OawRqmfEtmvSm5dDog81ckGIwdfKiptnr2OygVAOGzZydb0jAVs0VpU6C9cZ9FMR+Tnt
+         1CVA==
+X-Gm-Message-State: AOAM532XLNbeOpetUAFLmvBDBaB5W4ZFJLka6UmUCw/3v24OuXdUkDZW
+        nXeEiZ0Ciq7DxS1SZdlOhCbLvg==
+X-Google-Smtp-Source: ABdhPJy4i5EDcsoUlN68saZ/09C4VCIsWJfAbzbGOa4yNvDkoFlpTvlK83YrW3J05AREmJlmyQVRGQ==
+X-Received: by 2002:a05:6830:34aa:b0:5b2:613f:5523 with SMTP id c42-20020a05683034aa00b005b2613f5523mr4153857otu.40.1647644211102;
+        Fri, 18 Mar 2022 15:56:51 -0700 (PDT)
+Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
+        by smtp.gmail.com with ESMTPSA id 89-20020a9d0be2000000b005ae194ec5absm4316722oth.15.2022.03.18.15.56.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 15:56:50 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Fri, 18 Mar 2022 17:56:48 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.16 00/28] 5.16.16-rc1 review
+Message-ID: <YjUOMF6dvZ83YhSl@fedora64.linuxtx.org>
+References: <20220317124526.768423926@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220318075807.2921063-5-tan.shaopeng@jp.fujitsu.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220317124526.768423926@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 04:58:05PM +0900, Shaopeng Tan wrote:
-> In kselftest framework, all tests can be build/run at a time,
-					s/build/built/
-> and a sub test also can be build/run individually. As follows:
-			    s/build/built/
-> $ make kselftest-all TARGETS=resctrl
-> $ make -C tools/testing/selftests run_tests
-> $ make -C tools/testing/selftests TARGETS=resctrl run_tests
+On Thu, Mar 17, 2022 at 01:45:51PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.16 release.
+> There are 28 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> However, resctrl_tests cannot be run using kselftest framework,
-> users have to change directory to tools/testing/selftests/resctrl/,
-> run "make" to build executable file "resctrl_tests",
-> and run "sudo ./resctrl_tests" to execute the test.
+> Responses should be made by Sat, 19 Mar 2022 12:45:16 +0000.
+> Anything received after that time might be too late.
 > 
-> To build/run resctrl_tests using kselftest framework.
-> Modify tools/testing/selftests/Makefile
-> and tools/testing/selftests/resctrl/Makefile.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.16-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
 > 
-> Even after this change, users can still build/run resctrl_tests
-> without using framework as before.
+> thanks,
 > 
-> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> ---
->  tools/testing/selftests/Makefile         |  1 +
->  tools/testing/selftests/resctrl/Makefile | 17 ++++-------------
->  2 files changed, 5 insertions(+), 13 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index d08fe4cfe811..6138354b3760 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -52,6 +52,7 @@ TARGETS += proc
->  TARGETS += pstore
->  TARGETS += ptrace
->  TARGETS += openat2
-> +TARGETS += resctrl
->  TARGETS += rlimits
->  TARGETS += rseq
->  TARGETS += rtc
-> diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
-> index 6bcee2ec91a9..bee5fa8f1ac9 100644
-> --- a/tools/testing/selftests/resctrl/Makefile
-> +++ b/tools/testing/selftests/resctrl/Makefile
-> @@ -1,17 +1,8 @@
-> -CC = $(CROSS_COMPILE)gcc
->  CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2
-> -SRCS=$(wildcard *.c)
-> -OBJS=$(SRCS:.c=.o)
-> +CFLAGS += $(KHDR_INCLUDES)
->  
-> -all: resctrl_tests
-> +TEST_GEN_PROGS := resctrl_tests
->  
-> -$(OBJS): $(SRCS)
-> -	$(CC) $(CFLAGS) -c $(SRCS)
-> +include ../lib.mk
->  
-> -resctrl_tests: $(OBJS)
-> -	$(CC) $(CFLAGS) -o $@ $^
-> -
-> -.PHONY: clean
-> -
-> -clean:
-> -	$(RM) $(OBJS) resctrl_tests
-> +$(OUTPUT)/resctrl_tests: $(wildcard *.c)
-> -- 
-> 2.27.0
-> 
+> greg k-h
 
-Reviewed-by: Fenghua Yu <fenghua.yu@intel.com>
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-Thanks.
-
--Fenghua
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>

@@ -2,103 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A34904DDEE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C888A4DDEDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236578AbiCRQ1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
+        id S239235AbiCRQ07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239197AbiCRQ0x (ORCPT
+        with ESMTP id S239173AbiCRQ0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:26:53 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC346173F40;
-        Fri, 18 Mar 2022 09:24:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647620690; x=1679156690;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=TBKjAhVgKP/U4iexVGMziTlOqxmtOpmBiEFBCLgyO5M=;
-  b=IyUzd6PRKJimweN4/A0erGJOFlssYw1UaJAt4GStT9zfmBCptVc3gJO4
-   Vb4Ovp+kL4qlK6Ce/I1fFlYIwcljJg6N6E3XttyO4G2pXvcBKa2DVJF9l
-   9GQLVg6fTagtvfg0MwmTeECOHjFqCL2ylA4aFbBDhIMDvWlVEMnfQdZ3D
-   GiPawGqwnIXDK8DYlCELblbmAZokRIgR2vVEsmyCq6nHMH+5Nit180dWK
-   F4WTLTcvoESwY9UQTopkbfqU23qsKIVrAZB2g/U6APxDVaiZvXafWp2oJ
-   5xLXzLjcVmlGoO2xhwZUbUf+O9Po83RbiDq9jAklsVwCCetXDvM5HCEV5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="237112862"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="237112862"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 09:24:50 -0700
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="499309044"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 09:24:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nVFOX-002K6V-Bd;
-        Fri, 18 Mar 2022 18:24:05 +0200
-Date:   Fri, 18 Mar 2022 18:24:05 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "'Rafael J . Wysocki '" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 0/6] introduce fwnode in the I2C subsystem
-Message-ID: <YjSyJaUa+uuv3+zc@smile.fi.intel.com>
-References: <20220318160059.328208-1-clement.leger@bootlin.com>
+        Fri, 18 Mar 2022 12:26:49 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3513E160C3C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:24:35 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id r13so18021504ejd.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:24:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vJ9L0V5osggSMXilV0NUxdZ3YODQ2c0ZIQihzHn4ios=;
+        b=L11FSvmMxR/S/6J58hseaebFIGaY1w0GQZO0yjGrp1k0/LWn77MPX3oLnVkjnLa5VR
+         LTHnw3hZDmkoqVvtsOmvrvAv1apNvoCA4XOtpR8yn3emgjHbyE24KjF+ugN0bagp+Sau
+         pFEAfzk+AtQzHPGhS9ydM1oyairTwvQlgkBS4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vJ9L0V5osggSMXilV0NUxdZ3YODQ2c0ZIQihzHn4ios=;
+        b=cY+PWDh5TCo4RYaKVGEaPae0dgT0jxbrSPC1CzLugQNLsBFmt8lPmvwHhKVBNHykKU
+         YqDREvzbteKKT5esh9zqX/HlYJSoRIBT9L+joqn/1wkBr9ggRctZloysNnyt60INQlEk
+         aq4q5VYg+sSu6NeyTof3XgpuWDt8jvarBvSgkwJFrGxP9KvybuOe8rPGDuK2s/WppkPW
+         pgelawAaHZ+7osD7WLpvGsud5m3iF+ZlnWqAF8x1FfK28+DHgIdXczTa5CkqOTsSNiUa
+         6VOqvg129BZoEm+nb7veH3s4sj7w1mvLmLnt9qHFbQyyM2iDVKiX4jTJYBVip+SHSQCD
+         V/BQ==
+X-Gm-Message-State: AOAM533E5p3CzAmMkQxzyNV96MaEek8b85IUfB9S6UhRekdJS/6a/KfU
+        JmNvOsP4JZakXv14W59x6DHKGzmx4XP2c+W//0w=
+X-Google-Smtp-Source: ABdhPJwHRK0mtplJjHQ/vi7xVFx1xpl8bUSYW9rjKgZpdH6Dbdu9n++BplgPglZq0dCanWVDHQNvrg==
+X-Received: by 2002:a17:906:7316:b0:6d7:16be:b584 with SMTP id di22-20020a170906731600b006d716beb584mr9276329ejc.759.1647620673282;
+        Fri, 18 Mar 2022 09:24:33 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id h13-20020a056402280d00b00416d2f2b8a1sm4619149ede.79.2022.03.18.09.24.32
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 09:24:32 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id m30so2578286wrb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:24:32 -0700 (PDT)
+X-Received: by 2002:a5d:4491:0:b0:203:f63a:e89b with SMTP id
+ j17-20020a5d4491000000b00203f63ae89bmr3246004wrq.342.1647620671999; Fri, 18
+ Mar 2022 09:24:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220318160059.328208-1-clement.leger@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1647452154-16361-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1647452154-16361-7-git-send-email-quic_sbillaka@quicinc.com> <CAE-0n520pQKM7mFSE_00ER+F9RKUPrN+y4U8fmsxi7FoFMyOrA@mail.gmail.com>
+In-Reply-To: <CAE-0n520pQKM7mFSE_00ER+F9RKUPrN+y4U8fmsxi7FoFMyOrA@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 18 Mar 2022 09:24:17 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UWF8K9JPJXFSGMRK-HmCi+2jM3aN6Uy7hyDSu1_azF+w@mail.gmail.com>
+Message-ID: <CAD=FV=UWF8K9JPJXFSGMRK-HmCi+2jM3aN6Uy7hyDSu1_azF+w@mail.gmail.com>
+Subject: Re: [PATCH v5 6/9] drm/msm/dp: wait for hpd high before any sink interaction
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        quic_abhinavk@quicinc.com, quic_khsieh@quicinc.com,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, krzk+dt@kernel.org,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        quic_vproddut@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 05:00:46PM +0100, Clément Léger wrote:
-> In order to allow the I2C subsystem to be usable with fwnode, add
-> some functions to retrieve an i2c_adapter from a fwnode and use
-> these functions in both i2c mux and sfp. ACPI and device-tree are
-> handled to allow these modifications to work with both descriptions.
-> 
-> This series is a subset of the one that was first submitted as a larger
-> series to add swnode support [1]. In this one, it will be focused on
-> fwnode support only since it seems to have reach a consensus that
-> adding fwnode to subsystems makes sense.
-> 
-> [1] https://lore.kernel.org/netdev/YhPSkz8+BIcdb72R@smile.fi.intel.com/T/
+Hi,
 
-I have got two copies (?) of the series. I have no idea which one is correct.
-So, please take care of it and send the version we are supposed to review.
+On Thu, Mar 17, 2022 at 6:19 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Sankeerth Billakanti (2022-03-16 10:35:51)
+> >         The source device should ensure the sink is ready before
+> > proceeding to read the sink capability or performing any aux transactions.
+> > The sink will indicate its readiness by asserting the HPD line.
+> >
+> >         The eDP sink requires power from the source and its HPD line will
+> > be asserted only after the panel is powered on. The panel power will be
+> > enabled from the panel-edp driver.
+> >
+> >         The controller driver needs to wait for the hpd line to be asserted
+> > by the sink.
+> >
+> > Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+> > ---
+> >  drivers/gpu/drm/msm/dp/dp_aux.c     |  6 ++++++
+> >  drivers/gpu/drm/msm/dp/dp_catalog.c | 23 +++++++++++++++++++++++
+> >  drivers/gpu/drm/msm/dp/dp_catalog.h |  1 +
+> >  drivers/gpu/drm/msm/dp/dp_reg.h     |  7 ++++++-
+> >  4 files changed, 36 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/msm/dp/dp_aux.c b/drivers/gpu/drm/msm/dp/dp_aux.c
+> > index 6d36f63..2ddc303 100644
+> > --- a/drivers/gpu/drm/msm/dp/dp_aux.c
+> > +++ b/drivers/gpu/drm/msm/dp/dp_aux.c
+> > @@ -337,6 +337,12 @@ static ssize_t dp_aux_transfer(struct drm_dp_aux *dp_aux,
+> >                 goto exit;
+> >         }
+> >
+> > +       ret = dp_catalog_aux_wait_for_hpd_connect_state(aux->catalog);
+>
+> Why are we making aux transactions when hpd isn't asserted? Can we only
+> register the aux device once we know that state is "connected"? I'm
+> concerned that we're going to be possibly polling the connected bit up
+> to some amount of time (0x0003FFFF usecs?) for each aux transfer when
+> that doesn't make any sense to keep checking. We should be able to check
+> it once, register aux, and then when disconnect happens we can
+> unregister aux.
 
--- 
-With Best Regards,
-Andy Shevchenko
+This is for eDP and, unless someone wants to redesign it again, is
+just how it works.
+
+Specifically:
+
+1. On eDP you _always_ report "connected". This is because when an eDP
+panel is turned off (but still there) you actually have no way to
+detect it--you just have to assume it's there. And thus you _always_
+register the AUX bus.
+
+2. When we are asked to read the EDID that happens _before_ the normal
+prepare/enable steps. The way that this should work is that the
+request travels down to the panel. The panel turns itself on (waiting
+for any hardcoded delays it knows about) and then initiates an AUX
+transaction. The AUX transaction is in charge of waiting for HPD.
 
 
+For the DP case this should not cause any significant overhead, right?
+HPD should always be asserted so this is basically just one extra IO
+read confirming that HPD is asserted which should be almost nothing...
+You're just about to do a whole bunch of IO reads/writes in order to
+program the AUX transaction anyway.
+
+
+> > +       if (ret) {
+> > +               DRM_DEBUG_DP("DP sink not ready for aux transactions\n");
+> > +               goto exit;
+> > +       }
+> > +
+> >         dp_aux_update_offset_and_segment(aux, msg);
+> >         dp_aux_transfer_helper(aux, msg, true);
+> >
+> > diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> > index fac815f..2c3b0f7 100644
+> > --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
+> > +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
+> > @@ -242,6 +242,29 @@ void dp_catalog_aux_update_cfg(struct dp_catalog *dp_catalog)
+> >         phy_calibrate(phy);
+> >  }
+> >
+> > +int dp_catalog_aux_wait_for_hpd_connect_state(struct dp_catalog *dp_catalog)
+> > +{
+> > +       u32 state, hpd_en, timeout;
+> > +       struct dp_catalog_private *catalog = container_of(dp_catalog,
+> > +                               struct dp_catalog_private, dp_catalog);
+> > +
+> > +       hpd_en = dp_read_aux(catalog, REG_DP_DP_HPD_CTRL) &
+> > +                                       DP_DP_HPD_CTRL_HPD_EN;
+>
+> Use two lines
+>
+>         hpd_en = dp_read_aux();
+>         hpd_en &= DP_DP_HPD_CTRL_HPD_EN;
+>
+> > +
+> > +       /* no-hpd case */
+> > +       if (!hpd_en)
+> > +               return 0;
+
+I guess reading from hardware is fine, but I would have expected the
+driver to simply know whether HPD is used or not. Don't need to read
+it from hardware, do we? It's not like it's changing from minute to
+minute--this is something known at probe time.
+
+
+> > +       /* Poll for HPD connected status */
+> > +       timeout = dp_read_aux(catalog, REG_DP_DP_HPD_EVENT_TIME_0) &
+> > +                                       DP_HPD_CONNECT_TIME_MASK;
+> > +
+> > +       return readl_poll_timeout(catalog->io->dp_controller.aux.base +
+> > +                               REG_DP_DP_HPD_INT_STATUS,
+> > +                               state, state & DP_DP_HPD_STATE_STATUS_CONNECTED,
+> > +                               2000, timeout);
+
+The timeout that comes from hardware is really stored in microseconds?
+That's the units of the value passed to readl_poll_timeout(), right?
+Looking at your #defines, that means that your max value here is
+0x3fff which is 16383 microseconds or ~16 ms. That doesn't seem like
+nearly a long enough timeout to wait for a panel to power itself up.
+
+Also: I'm not sure why exactly you're using the timeout in the
+register here. Isn't the time you need to wait more about how long an
+eDP panel might conceivably need to power itself on? Most eDP panels
+I've seen have max delays of ~200 ms. I'd probably just wait 500 ms to
+be on the safe side.
+
+-Doug

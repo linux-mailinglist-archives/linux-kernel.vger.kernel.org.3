@@ -2,170 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC294DD68A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3069C4DD68C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234015AbiCRIzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 04:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53164 "EHLO
+        id S234026AbiCRIz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbiCRIz2 (ORCPT
+        with ESMTP id S234018AbiCRIzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:55:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8321F1D3063
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 01:54:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647593649;
+        Fri, 18 Mar 2022 04:55:51 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5034B1EB835;
+        Fri, 18 Mar 2022 01:54:32 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C34CE1C000C;
+        Fri, 18 Mar 2022 08:54:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1647593670;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=0Zb6QBd56zzeTvjztSna+nrWQNFaTfAaR5NapeEZA0o=;
-        b=ZGStNvMmj1Pgv8D+q7vhJ3Cusny3kC0oeobfPqQJYbM1xGlujMWL1ROXhv9ss0tAtYrAYq
-        Laa0Vuj+u0fkZuoyXrBIV+9UR8t1EdE7o1VokciXN4V+HpZ8pF5scr+CaSzdWowW3BR8hq
-        v+l2p5FEB5ZhsoYvhIT5QfoLe06jwKk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-ICezWsw6P0-QOFkzyJ4WuQ-1; Fri, 18 Mar 2022 04:54:06 -0400
-X-MC-Unique: ICezWsw6P0-QOFkzyJ4WuQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1032E296A617;
-        Fri, 18 Mar 2022 08:54:06 +0000 (UTC)
-Received: from localhost (ovpn-13-174.pek2.redhat.com [10.72.13.174])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 39B9543E917;
-        Fri, 18 Mar 2022 08:54:04 +0000 (UTC)
-Date:   Fri, 18 Mar 2022 16:54:01 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Coiby Xu <coxu@redhat.com>
-Cc:     Coiby Xu <coiby.xu@gmail.com>, kexec@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH v3 1/3] kexec: clean up
- arch_kexec_kernel_verify_sig
-Message-ID: <YjRIqdAH2nV+DRgW@MiWiFi-R3L-srv>
-References: <20220304020341.85583-1-coiby.xu@gmail.com>
- <20220304020341.85583-2-coiby.xu@gmail.com>
- <YjMtb7u3/sAWG0/7@MiWiFi-R3L-srv>
- <20220318024803.pkkwgknwur2y75mt@Rk>
- <YjP8DTnAZbq646rF@MiWiFi-R3L-srv>
- <20220318071824.yq3idr5eoogvtslb@Rk>
+        bh=pT+oSbSVAYKO0LoWynWo0gJMaQ1k3j6MYNtjFVs3Qf4=;
+        b=VWyQTt/7aftQxhKsTQxlBYPnCOEpX4NrL57t15NDiy615UM4EAzwzcLNO2hHNbH9ogU5lE
+        646hE1cm05KsBiQ0fgWO/CVdBdW1BuW8F9K511heJWJpJHYWB+IK4qdDfspIlHp5rbJHAy
+        dGiJWYo2629sL1QOdqyDZjTAyOjSQOZWgtwfQq9YYjlcclmiH4CbTlXo5Cj3UNuSRWYin5
+        csGZ++6Xpb8ae3f8EKpdsP8n2lfNscq2TGZQd7KnKuCvyhmHH07+G0OO6S93xFKWewqX+H
+        EBOTJSpr7HzU88lTtKVOcxAvTSa8nu/BEbL1P4y52h3ZmsQRFnQ7bnf3bBPtkg==
+Date:   Fri, 18 Mar 2022 09:54:28 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 06/46] media: sun6i-csi: Define and use variant to get
+ module clock rate
+Message-ID: <YjRIxGb0MAJ0f6WT@aptenodytes>
+References: <20220311143532.265091-1-paul.kocialkowski@bootlin.com>
+ <20220311143532.265091-7-paul.kocialkowski@bootlin.com>
+ <2060330.OBFZWjSADL@kista>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="QxR7joyd66HZ+5rA"
 Content-Disposition: inline
-In-Reply-To: <20220318071824.yq3idr5eoogvtslb@Rk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2060330.OBFZWjSADL@kista>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/18/22 at 03:18pm, Coiby Xu wrote:
-> On Fri, Mar 18, 2022 at 11:27:09AM +0800, Baoquan He wrote:
-> > On 03/18/22 at 10:48am, Coiby Xu wrote:
-> > > On Thu, Mar 17, 2022 at 08:45:35PM +0800, Baoquan He wrote:
-> > > > On 03/04/22 at 10:03am, Coiby Xu wrote:
-> > > > > From: Coiby Xu <coxu@redhat.com>
-> > > > >
-> > > > > commit 9ec4ecef0af7790551109283ca039a7c52de343c ("kexec_file,x86,
-> > > > > powerpc: factor out kexec_file_ops functions" allows implementing
-> > > > > the arch-specific implementation of kernel image verification
-> > > > > in kexec_file_ops->verify_sig. Currently, there is no arch-specific
-> > > > > implementation of arch_kexec_kernel_verify_sig. So clean it up.
-> > > >
-> > > > This is a nice cleanup, while the log may need to be improved. You
-> > > > should run ./scripts/checkpatch.pl on your patch before sending out.
-> > > > When we refer to a commit in log, please refer to
-> > > > Documentation/process/submitting-patches.rst.
-> > > 
-> > > Thanks for the reminder! I've used git pre-commit hook to run
-> > > scripts/checkpatch.pl automatically but obviously this hook doesn't
-> > > apply to "git rebase --continue" and currently this no git hook that
-> > > for this situation. I'll use the following trick [1] to avoid this
-> > > mistake in the future,
-> > >  $ git rebase -i HEAD~3 --reschedule-failed-exec --exec "git show | perl ./scripts/checkpatch.pl"
-> > 
-> > Sorry, Coiby. It could be late yesterday so I was dizzy when writing
-> > down the comment, I didn't make my concern clear. What I meant is
-> > the referenced commit in log should be taken in a standard format.
-> > Abstracted one paragraph of Documentation/process/submitting-patches.rst
-> > here. We usually take the first 12 characters of the commit SHA-1 ID
-> > in log, but not the whole of them.
-> > 
-> > =====
-> > If you want to refer to a specific commit, don't just refer to the
-> > SHA-1 ID of the commit. Please also include the oneline summary of
-> > the commit, to make it easier for reviewers to know what it is about.
-> > Example::
-> > 
-> >        Commit e21d2170f36602ae2708 ("video: remove unnecessary
-> >        platform_set_drvdata()") removed the unnecessary
-> >        platform_set_drvdata(), but left the variable "dev" unused,
-> >        delete it.
-> > =====
-> > 
-> > And the right parenthesis enclousing the commit subject is missing.
-> 
-> Thanks for the detailed explanation! Your message has got across to me
-> successfully:) I have ran scripts/checkpatch.pl manually after seeing your
-> first reply and checkpatch.pl reported the exact same issues as explained
-> by you today. My approach of avoiding making mistakes on format is to run
-> checkpatch.pl automatically in the git precommit hook so I don't need to
-> remember the details about format. I had expected the git precommit hook
-> could help me find the issues pointed out by you but obviously it failed.
-> So I tried to find out what's wrong. I think the format issues were
-> introduced when doing rebase to improve the old version and the precommit
-> hook wasn't triggered in this case. Another thing I still missed is I used
-> "git diff --cached | scripts/checkpatch.pl" in the pre-commit hook which
-> obviously won't check the format issue in the commit message (it only
-> check the format issue in the code). With the two problems resolved, I
-> shall not make format mistakes in the future:)
-> 
-> Btw, checkpatch.pl seems to requires referring to a specific commit on
-> the same line,
-> 
->     ERROR: Please use git commit description style 'commit <12+ chars of sha1> ("<title line>")' - ie: 'commit 9ec4ecef0af7 ("kexec_file,x86,powerpc: factor out kexec_file_ops functions")'
->     #6:     commit 9ec4ecef0af7 ("kexec_file,x86, powerpc: factor out
-> kexec_file_ops
->     functions") allows implementing the arch-specific implementation of kernel
->     total: 1 errors, 0 warnings, 61 lines checked
->     NOTE: For some of the reported defects, checkpatch may be able to
->           mechanically convert to the typical style using --fix or --fix-inplace.
->     "[PATCH] kexec: clean up arch_kexec_kernel_verify_sig" has style problems, please review.
->     NOTE: If any of the errors are false positives, please report
->           them to the maintainer, see CHECKPATCH in MAINTAINERS.
-> 
-> Is this a false positive?
 
-No, it's not. Youp probably copied the commit subject and modified it.
-Please copy below two lines into your patch to replace and try again.
+--QxR7joyd66HZ+5rA
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-commit 9ec4ecef0af7 ("kexec_file,x86,powerpc: factor out kexec_file_ops
-functions")
+Hi Jernej,
 
-> 
-> > 
-> > > 
-> > > [1] https://stackoverflow.com/a/70568833/1203522
-> > > 
-> > > 
-> > > --
-> > > Best regards,
-> > > Coiby
-> > > 
-> > 
-> 
-> -- 
+On Tue 15 Mar 22, 20:31, Jernej =C5=A0krabec wrote:
+> Dne petek, 11. marec 2022 ob 15:34:52 CET je Paul Kocialkowski napisal(a):
+> > Introduce a proper variant structure with the module clock rate
+> > instead of hardcoding it with a manual check on the compatible.
+> >=20
+> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > ---
+> >  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 48 ++++++++++++++-----
+> >  .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  4 ++
+> >  2 files changed, 40 insertions(+), 12 deletions(-)
+> >=20
+> > diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drive=
+rs/
+> media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > index 2355088fdc37..4a0d08e0ac25 100644
+> > --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > @@ -811,11 +811,17 @@ static int sun6i_csi_resources_setup(struct=20
+> sun6i_csi_device *csi_dev,
+> >  				     struct platform_device=20
+> *platform_dev)
+> >  {
+> >  	struct device *dev =3D csi_dev->dev;
+> > -	unsigned long clk_mod_rate;
+> > +	const struct sun6i_csi_variant *variant;
+>=20
+> Ideally, this should be sorted from longest to shortest.
+
+I typically try to have definitions with affectations first and then
+just definitions, sorted longest to shortest unless there is some dependency
+between definitions.
+
+> >  	void __iomem *io_base;
+> >  	int ret;
+> >  	int irq;
+> > =20
+> > +	/* Variant */
+>=20
+> I don't think this comment is very useful (nor one below for that matter.=
+)=20
+> Please remove it.
+
+It's not really a comment per-se, but rather a section header.
+I have similar ones for Clocks / Reset / Interrupt / Runtime PM so
+that's why it felt consistent to add one for Variant too.
+
+The point is to keep related topics grouped together and I'd rather keep it.
+
+Cheers,
+
+Paul
+
+> With that:
+> Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+>=20
 > Best regards,
-> Coiby
-> 
+> Jernej
+>=20
+> > +
+> > +	variant =3D of_device_get_match_data(dev);
+> > +	if (!variant)
+> > +		return -EINVAL;
+> > +
+> >  	/* Registers */
+> > =20
+> >  	io_base =3D devm_platform_ioremap_resource(platform_dev, 0);
+> > @@ -849,12 +855,7 @@ static int sun6i_csi_resources_setup(struct=20
+> sun6i_csi_device *csi_dev,
+> >  		return PTR_ERR(csi_dev->clk_ram);
+> >  	}
+> > =20
+> > -	if (of_device_is_compatible(dev->of_node, "allwinner,sun50i-a64-
+> csi"))
+> > -		clk_mod_rate =3D 300000000;
+> > -	else
+> > -		clk_mod_rate =3D 297000000;
+> > -
+> > -	ret =3D clk_set_rate_exclusive(csi_dev->clk_mod, clk_mod_rate);
+> > +	ret =3D clk_set_rate_exclusive(csi_dev->clk_mod, variant-
+> >clk_mod_rate);
+> >  	if (ret) {
+> >  		dev_err(dev, "failed to set mod clock rate\n");
+> >  		return ret;
+> > @@ -937,12 +938,35 @@ static int sun6i_csi_remove(struct platform_devic=
+e=20
+> *pdev)
+> >  	return 0;
+> >  }
+> > =20
+> > +static const struct sun6i_csi_variant sun6i_a31_csi_variant =3D {
+> > +	.clk_mod_rate	=3D 297000000,
+> > +};
+> > +
+> > +static const struct sun6i_csi_variant sun50i_a64_csi_variant =3D {
+> > +	.clk_mod_rate	=3D 300000000,
+> > +};
+> > +
+> >  static const struct of_device_id sun6i_csi_of_match[] =3D {
+> > -	{ .compatible =3D "allwinner,sun6i-a31-csi", },
+> > -	{ .compatible =3D "allwinner,sun8i-a83t-csi", },
+> > -	{ .compatible =3D "allwinner,sun8i-h3-csi", },
+> > -	{ .compatible =3D "allwinner,sun8i-v3s-csi", },
+> > -	{ .compatible =3D "allwinner,sun50i-a64-csi", },
+> > +	{
+> > +		.compatible	=3D "allwinner,sun6i-a31-csi",
+> > +		.data		=3D &sun6i_a31_csi_variant,
+> > +	},
+> > +	{
+> > +		.compatible	=3D "allwinner,sun8i-a83t-csi",
+> > +		.data		=3D &sun6i_a31_csi_variant,
+> > +	},
+> > +	{
+> > +		.compatible	=3D "allwinner,sun8i-h3-csi",
+> > +		.data		=3D &sun6i_a31_csi_variant,
+> > +	},
+> > +	{
+> > +		.compatible	=3D "allwinner,sun8i-v3s-csi",
+> > +		.data		=3D &sun6i_a31_csi_variant,
+> > +	},
+> > +	{
+> > +		.compatible	=3D "allwinner,sun50i-a64-csi",
+> > +		.data		=3D &sun50i_a64_csi_variant,
+> > +	},
+> >  	{},
+> >  };
+> > =20
+> > diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drive=
+rs/
+> media/platform/sunxi/sun6i-csi/sun6i_csi.h
+> > index 356661b413f8..3c4a3af6b897 100644
+> > --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+> > +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+> > @@ -59,6 +59,10 @@ struct sun6i_csi_device {
+> >  	int				planar_offset[3];
+> >  };
+> > =20
+> > +struct sun6i_csi_variant {
+> > +	unsigned long	clk_mod_rate;
+> > +};
+> > +
+> >  /**
+> >   * sun6i_csi_is_format_supported() - check if the format supported by =
+csi
+> >   * @csi:	pointer to the csi
+> > --=20
+> > 2.35.1
+> >=20
+> >=20
+>=20
+>=20
 
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--QxR7joyd66HZ+5rA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmI0SMQACgkQ3cLmz3+f
+v9HS0gf/TR9sni8XrcOWDHi7UkVmO2+KvCZ9Eyh4h5wbp7wKDBAmSdW3f6AaK27f
+I1WbaYh+IfOZ27jE+CwJFfjca6MXANBSwQNnFXBHjdJAJFpLRkFomg6Ap5Kkij3l
+OFAMwxOkTWvXj5gj/VkQkUb6n9e6FemkmvsuBIz1fFcpiJXbjRS0vxd/5z+ucj/F
+C4WTeroIB+CnXP0NFe4iHpFhZY6eI9LhaX5fxe2gx8QhZ5hCIvhWoV0ozOZ+JYJu
+s7kZt0Di/ZGar7zd+7gUjKOiobIMsbuV47ME+/BPqSSJcJERCAtspHTSSBPXBlZd
+GQPQnE2oCgtbOEHBfIxNbNUDK+sibA==
+=bjDU
+-----END PGP SIGNATURE-----
+
+--QxR7joyd66HZ+5rA--

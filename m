@@ -2,86 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218A24DD2FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 03:14:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E69C24DD2C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 03:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbiCRCPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 22:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S231693AbiCRCIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 22:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbiCRCPo (ORCPT
+        with ESMTP id S231683AbiCRCIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 22:15:44 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763FD160C20;
-        Thu, 17 Mar 2022 19:14:23 -0700 (PDT)
-Received: from apollo.. (unknown [IPv6:2a02:810b:4340:43bf:4685:ff:fe12:5967])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id CDB552223A;
-        Fri, 18 Mar 2022 03:14:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647569661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UjGNQPmkrb8JUzaM0myQifPCqXhpbLHTYcIXuersAbA=;
-        b=DahUYz3A8og3n8gjP1Z9+Th1OHtBIa0rcplJIT3MVxM8y9ul6xKi/XngxXtMzYohS+gAV/
-        YLFwHFGeqSqA0L+4kK1Z8qqy9IpOxlYL3zjAGLRSWpjzDkftSlJ95Q3+6t2njdP86nIXh9
-        4Z0NWP3rvzpbDd4QD/0ARKgdJ7BTvtk=
-From:   Michael Walle <michael@walle.cc>
-To:     horatiu.vultur@microchip.com
-Cc:     UNGLinuxDriver@microchip.com, davem@davemloft.net,
-        devicetree@vger.kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        robh+dt@kernel.org, Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH net-next 1/5] dt-bindings: net: lan966x: Extend with FDMA interrupt
-Date:   Fri, 18 Mar 2022 03:14:13 +0100
-Message-Id: <20220318021413.25810-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220317185159.1661469-2-horatiu.vultur@microchip.com>
-References: <20220317185159.1661469-2-horatiu.vultur@microchip.com>
+        Thu, 17 Mar 2022 22:08:46 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14121C64B9
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 19:07:27 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KKS3W2pl3z9sZv;
+        Fri, 18 Mar 2022 10:03:35 +0800 (CST)
+Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 18 Mar 2022 10:07:25 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500003.china.huawei.com
+ (7.185.36.200) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 18 Mar
+ 2022 10:07:25 +0800
+From:   Yu Liao <liaoyu15@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <ranjani.sridharan@linux.intel.com>
+CC:     <broonie@kernel.org>, <liaoyu15@huawei.com>, <liwei391@huawei.com>
+Subject: [PATCH -next] ASoC: SOF: topology: Fix memory leak in sof_control_load()
+Date:   Fri, 18 Mar 2022 10:16:16 +0800
+Message-ID: <20220318021616.2599630-1-liaoyu15@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500003.china.huawei.com (7.185.36.200)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Extend dt-bindings for lan966x with FDMA interrupt. This is generated
-> when receiving a frame or when a frame was transmitted. The interrupt
-> needs to be enable for each frame.
-> 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> ---
->  .../devicetree/bindings/net/microchip,lan966x-switch.yaml       | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml b/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
-> index 13812768b923..14e0bae5965f 100644
-> --- a/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
-> +++ b/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
-> @@ -39,6 +39,7 @@ properties:
->        - description: frame dma based extraction
->        - description: analyzer interrupt
->        - description: ptp interrupt
-> +      - description: fdma interrupt
->  
->    interrupt-names:
->      minItems: 1
-> @@ -47,6 +48,7 @@ properties:
->        - const: fdma
->        - const: ana
->        - const: ptp
-> +      - const: fdma
+scontrol doesn't get freed when kstrdup returns NULL.
+Fix by free iscontrol in that case.
 
-This interrupt is already described (three lines above), no?
+     scontrol = kzalloc(sizeof(*scontrol), GFP_KERNEL);
+     if (!scontrol)
+         return -ENOMEM;
 
--michael
+     scontrol->name = kstrdup(hdr->name, GFP_KERNEL);
+     if (!scontrol->name)
+         return -ENOMEM;
+
+Signed-off-by: Yu Liao <liaoyu15@huawei.com>
+---
+ sound/soc/sof/topology.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/sound/soc/sof/topology.c b/sound/soc/sof/topology.c
+index 367fbe2d5b31..88f34f43d693 100644
+--- a/sound/soc/sof/topology.c
++++ b/sound/soc/sof/topology.c
+@@ -905,8 +905,10 @@ static int sof_control_load(struct snd_soc_component *scomp, int index,
+ 		return -ENOMEM;
+ 
+ 	scontrol->name = kstrdup(hdr->name, GFP_KERNEL);
+-	if (!scontrol->name)
++	if (!scontrol->name) {
++		kfree(scontrol);
+ 		return -ENOMEM;
++	}
+ 
+ 	scontrol->scomp = scomp;
+ 	scontrol->access = kc->access;
+-- 
+2.25.1
+

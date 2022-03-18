@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2D64DE160
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4194DE162
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240173AbiCRSwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 14:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58464 "EHLO
+        id S240237AbiCRSxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 14:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiCRSwO (ORCPT
+        with ESMTP id S231321AbiCRSx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 14:52:14 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12242DE7AC;
-        Fri, 18 Mar 2022 11:50:55 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B207B1EC05ED;
-        Fri, 18 Mar 2022 19:50:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1647629449;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=XFF50C0H+qNuzyfJ9gFvxt706SYnHaCYL4psuRE0jGU=;
-        b=R1j43DXNqSrw1JFndx3Q5Q8jRNpNQGD4sZF2femKLhhfDtZeiYLRygOY8Uu8GVGkP1T395
-        ZvMslOthL/CMVx46zK3GzRpK4uMZQCCydfI1ZAJ+So8u12iBcSi2seABfFgdiHm2s8DZxM
-        Nehk9VGbbEbb5GcldRSMeSp2W8VnNlo=
-Date:   Fri, 18 Mar 2022 19:50:45 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dongli Si <kvmx86@gmail.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com, joerg.roedel@amd.com,
-        jolsa@kernel.org, kim.phillips@amd.com, liam.merwick@oracle.com,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        mark.rutland@arm.com, mingo@kernel.org, namhyung@kernel.org,
-        peterz@infradead.org, tglx@linutronix.de, x86@kernel.org
-Subject: Re: [PATCH v3] perf/x86/amd: Don't touch the Host-only bit inside
- the guest hypervisor
-Message-ID: <YjTUhRLmpP3PQbKr@zn.tnic>
-References: <YjIspMR0lm6+W/Pp@zn.tnic>
- <20220318030757.1706799-1-sidongli1997@gmail.com>
+        Fri, 18 Mar 2022 14:53:28 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31C2304AEB
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:52:07 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id m17-20020a923f11000000b002c10e8f4c44so5303862ila.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:52:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=/4mPg3CJhiYczFxDFNRkAaBcypBHoPLTRaLTCzvtw/I=;
+        b=HLcXK9zp4lAdzIx7GoJrVspbNWRRBukkCJC618R1jMJSwlmWPQJTlhT6HzRjcOTzND
+         0kHiovbnyrT2Aa6MaScXDSOq5XCwPEFfsys/ib8VbsnvY1cXB5L09B9QPelKLyZ+kqhJ
+         Nbe4a6ow95Qy9aEH4qqyD4EP6TrtsfbYdR7U4dQaXTGHx4BNtfrtmDMshn6rgDpJKmL3
+         b1trAiK5kc3BdWZvelZRI+f6eyNpNMx8PuF4wADn6j/G2qD9eMkiJcNZrG96q6qS+ZB0
+         +C+ZhTfe2TXXL3Mk4H5PYPcWVOSzd0E2TCUj4wyqBQZCegRwnKdQaGrVfyE6aUvtKi2O
+         T7LQ==
+X-Gm-Message-State: AOAM530mYWw3RS9ZJDDuKc0tLyao8qQLmgngHkcuCAKeJ+fKnvjvgjlF
+        oOErhbC9DQeY07W4jwMWgTNHkm1FXHWMhnt5ribEMHcmOgct
+X-Google-Smtp-Source: ABdhPJzU9Nigo5iCFfFbdXki7fcEbns1SuethIp2/0qBuen2s1zpDHhbiRu8WCIp2/WUkX0sFNX0ri5+1Qx8xXz5axsuhcCuyK+7
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220318030757.1706799-1-sidongli1997@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1746:b0:2c7:f247:b378 with SMTP id
+ y6-20020a056e02174600b002c7f247b378mr3302331ill.298.1647629527149; Fri, 18
+ Mar 2022 11:52:07 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 11:52:07 -0700
+In-Reply-To: <YjTJRQb9eMXdsHOE@debian>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000aff2c805da82a426@google.com>
+Subject: Re: [syzbot] WARNING: kobject bug in erofs_unregister_sysfs
+From:   syzbot <syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com>
+To:     chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        xiang@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 11:07:57AM +0800, Dongli Si wrote:
-> Hi Borislav, this is just to more clearly test if the current kernel is
-> running directly on the host.
-> 
-> If this is redundant, I can remove this "wrapper" and resend the patch,
-> the v4 patch code will be the same as the v1 patch.
+Hello,
 
-Yes please. Using
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-	hypervisor_is_type(X86_HYPER_NATIVE)
+Reported-and-tested-by: syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com
 
-directly is a lot more descriptive than "run_as_host".
+Tested on:
 
-Thx.
+commit:         a1108dcd erofs: rename ctime to mtime
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev
+kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
+dashboard link: https://syzkaller.appspot.com/bug?extid=f05ba4652c0471416eaf
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.

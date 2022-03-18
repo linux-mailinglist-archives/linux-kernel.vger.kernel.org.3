@@ -2,177 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279314DD297
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 02:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8D24DD2A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 02:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbiCRB4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 21:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
+        id S231680AbiCRB5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 21:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbiCRB4O (ORCPT
+        with ESMTP id S231645AbiCRB5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 21:56:14 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF3D21C049
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 18:54:56 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id w8so5901593pll.10
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 18:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rxw3CHXEYejW4ccJG856QD+F55RYD67woHuYROci7qY=;
-        b=gdTMA0vCi7X9A9ohLapQh8US+e2d60RkEr7Ib9edeaFroKoB6x/9n4A2lU7+WQAyHN
-         RG3T/kFfoEUYbF+516owpmIn1SCozFbWiENSEdpZZy9ic7B3fct2h/MsymuMu6CSprIN
-         vvMEKt/rUdC02qRyHrDTf7YBzfefl9DjJ/0Pc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rxw3CHXEYejW4ccJG856QD+F55RYD67woHuYROci7qY=;
-        b=eSzz+H5uaOxRWjwVONEOa6neqzpGyjYfYnaWBfTwqPO+TkYCVpOWd/Cziii5F5JqnR
-         nbGcaPkmsD5ByfyAAB+1Pe/Gy5Yi3pAwIMl7kPD2ylGTYMzmoGRt3D8VkUfLuG5HOkXx
-         /rUvExlD0FoZ9klEf5kHEp1yQ9HZdAjAjp9uHgG8uLpgLnE0BzJiom9Ng4gZ63LfVO8o
-         ik+AoJHVYH24L/GcuYwjOCP5BJOFBaDdfDCbZdC+Tz4fvnx0hGslwcxtyAS6HRgkheOo
-         qC3LVi0WME1IzYV9/y8DOcx+VAqR57pZQsd4EnuKeLvCCqqrMtOagKI12tPm3fnRos2u
-         Z2dQ==
-X-Gm-Message-State: AOAM5312isdoR/MRsQtn6aVXsZuw6whbmtprqjkoZE9sAblDG/L3E1Hn
-        PMc3QbVINQqjfv+d8aPfwy7hkwsGw2PsMw==
-X-Google-Smtp-Source: ABdhPJzsh0bkMdgCWzUa/NDTDzi6Tr0Yq5+hHOgXzbSg+iFkiCEFp5CxVi6Hfu8LOVgcVvbVf8NmmA==
-X-Received: by 2002:a17:902:f686:b0:151:d866:f657 with SMTP id l6-20020a170902f68600b00151d866f657mr7708777plg.112.1647568496456;
-        Thu, 17 Mar 2022 18:54:56 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:49cf:7701:359e:b28f])
-        by smtp.gmail.com with ESMTPSA id u10-20020a056a00124a00b004f783abfa0esm8050201pfi.28.2022.03.17.18.54.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 18:54:56 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Benson Leung <bleung@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Craig Hesling <hesling@chromium.org>,
-        Tom Hughes <tomhughes@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH v3 3/3] platform/chrome: cros_ec_spi: Boot fingerprint processor during probe
-Date:   Thu, 17 Mar 2022 18:54:50 -0700
-Message-Id: <20220318015451.2869388-4-swboyd@chromium.org>
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-In-Reply-To: <20220318015451.2869388-1-swboyd@chromium.org>
-References: <20220318015451.2869388-1-swboyd@chromium.org>
+        Thu, 17 Mar 2022 21:57:05 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E0124371F
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 18:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647568546; x=1679104546;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EJK4x0hK9K8Ye5woae5/ZoyknLFVeSFk8SGhFP0aqo8=;
+  b=aTMlpi9F3ZBFfNZz8uk5IlUYoqHzmdOax3g8qLWzBbRz23JcNZobOdnW
+   FwuE44vIqnfo4J32GDuOBBnwLB2jMQqjPHh7WjYxCPcH54IJLlshYGB+/
+   EYOwACyxSMi3KEueN9lncqBayOaMSUMkLZv3CRypK3ywsLmNsJDDaHG3C
+   mDuIY6k/uOia7+Z2Wq/kmpXjzjutQucufSJGuzAo0noDpGHC7rJggDExL
+   E7zwuVkUpBF/8bMl2h3KQrxgExRH0ZlSzrn1rlc2zEzetLBwDi9FksGcj
+   y1smVr/dEfBSwM1D1USKrCVrlVwdfJGIunERJaDdRPcafpxunVSVyY1s1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="256973888"
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="256973888"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 18:55:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="499057718"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 17 Mar 2022 18:55:44 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nV1qC-000EKl-0G; Fri, 18 Mar 2022 01:55:44 +0000
+Date:   Fri, 18 Mar 2022 09:55:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Subject: arch/arm/mach-ep93xx/clock.c:210:35: sparse: sparse: Using plain
+ integer as NULL pointer
+Message-ID: <202203180941.DKQMpy5R-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add gpio control to this driver so that the fingerprint device can be
-booted if the BIOS isn't doing it already. This eases bringup of new
-hardware as we don't have to wait for the BIOS to be ready, supports
-kexec where the GPIOs may not be configured by the previous boot stage,
-and is all around good hygiene because we control GPIOs for this device
-from the device driver.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   56e337f2cf1326323844927a04e9dbce9a244835
+commit: 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 ep93xx: clock: convert in-place to COMMON_CLK
+date:   5 months ago
+config: arm-randconfig-s031-20220317 (https://download.01.org/0day-ci/archive/20220318/202203180941.DKQMpy5R-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9645ccc7bd7a16cd73c3be9dee70cd702b03be37
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9645ccc7bd7a16cd73c3be9dee70cd702b03be37
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash
 
-Cc: Guenter Roeck <groeck@chromium.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Craig Hesling <hesling@chromium.org>
-Cc: Tom Hughes <tomhughes@chromium.org>
-Cc: Alexandru M Stan <amstan@chromium.org>
-Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> arch/arm/mach-ep93xx/clock.c:210:35: sparse: sparse: Using plain integer as NULL pointer
+   arch/arm/mach-ep93xx/clock.c:99:9: sparse: sparse: context imbalance in 'ep93xx_clk_enable' - different lock contexts for basic block
+   arch/arm/mach-ep93xx/clock.c:116:9: sparse: sparse: context imbalance in 'ep93xx_clk_disable' - different lock contexts for basic block
+   arch/arm/mach-ep93xx/clock.c:197:9: sparse: sparse: context imbalance in 'ep93xx_mux_set_parent_lock' - different lock contexts for basic block
+
+vim +210 arch/arm/mach-ep93xx/clock.c
+
+   205	
+   206	static int ep93xx_mux_determine_rate(struct clk_hw *hw,
+   207					struct clk_rate_request *req)
+   208	{
+   209		unsigned long rate = req->rate;
+ > 210		struct clk *best_parent = 0;
+   211		unsigned long __parent_rate;
+   212		unsigned long best_rate = 0, actual_rate, mclk_rate;
+   213		unsigned long best_parent_rate;
+   214		int __div = 0, __pdiv = 0;
+   215		int i;
+   216	
+   217		/*
+   218		 * Try the two pll's and the external clock
+   219		 * Because the valid predividers are 2, 2.5 and 3, we multiply
+   220		 * all the clocks by 2 to avoid floating point math.
+   221		 *
+   222		 * This is based on the algorithm in the ep93xx raster guide:
+   223		 * http://be-a-maverick.com/en/pubs/appNote/AN269REV1.pdf
+   224		 *
+   225		 */
+   226		for (i = 0; i < ARRAY_SIZE(mux_parents); i++) {
+   227			struct clk *parent = clk_get_sys(mux_parents[i], NULL);
+   228	
+   229			__parent_rate = clk_get_rate(parent);
+   230			mclk_rate = __parent_rate * 2;
+   231	
+   232			/* Try each predivider value */
+   233			for (__pdiv = 4; __pdiv <= 6; __pdiv++) {
+   234				__div = mclk_rate / (rate * __pdiv);
+   235				if (__div < 2 || __div > 127)
+   236					continue;
+   237	
+   238				actual_rate = mclk_rate / (__pdiv * __div);
+   239				if (is_best(rate, actual_rate, best_rate)) {
+   240					best_rate = actual_rate;
+   241					best_parent_rate = __parent_rate;
+   242					best_parent = parent;
+   243				}
+   244			}
+   245		}
+   246	
+   247		if (!best_parent)
+   248			return -EINVAL;
+   249	
+   250		req->best_parent_rate = best_parent_rate;
+   251		req->best_parent_hw = __clk_get_hw(best_parent);
+   252		req->rate = best_rate;
+   253	
+   254		return 0;
+   255	}
+   256	
+
 ---
- drivers/platform/chrome/cros_ec_spi.c | 42 +++++++++++++++++++++++++--
- 1 file changed, 39 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/platform/chrome/cros_ec_spi.c b/drivers/platform/chrome/cros_ec_spi.c
-index d0f9496076d6..13d413a2fe46 100644
---- a/drivers/platform/chrome/cros_ec_spi.c
-+++ b/drivers/platform/chrome/cros_ec_spi.c
-@@ -4,6 +4,7 @@
- // Copyright (C) 2012 Google, Inc
- 
- #include <linux/delay.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of.h>
-@@ -77,6 +78,8 @@ struct cros_ec_spi {
- 	unsigned int start_of_msg_delay;
- 	unsigned int end_of_msg_delay;
- 	struct kthread_worker *high_pri_worker;
-+	struct gpio_desc *boot0;
-+	struct gpio_desc *reset;
- };
- 
- typedef int (*cros_ec_xfer_fn_t) (struct cros_ec_device *ec_dev,
-@@ -690,7 +693,7 @@ static int cros_ec_cmd_xfer_spi(struct cros_ec_device *ec_dev,
- 	return cros_ec_xfer_high_pri(ec_dev, ec_msg, do_cros_ec_cmd_xfer_spi);
- }
- 
--static void cros_ec_spi_dt_probe(struct cros_ec_spi *ec_spi, struct device *dev)
-+static int cros_ec_spi_dt_probe(struct cros_ec_spi *ec_spi, struct device *dev)
- {
- 	struct device_node *np = dev->of_node;
- 	u32 val;
-@@ -703,6 +706,37 @@ static void cros_ec_spi_dt_probe(struct cros_ec_spi *ec_spi, struct device *dev)
- 	ret = of_property_read_u32(np, "google,cros-ec-spi-msg-delay", &val);
- 	if (!ret)
- 		ec_spi->end_of_msg_delay = val;
-+
-+	if (!of_device_is_compatible(np, "google,cros-ec-fp"))
-+		return 0;
-+
-+	ec_spi->boot0 = devm_gpiod_get(dev, "boot0", 0);
-+	if (IS_ERR(ec_spi->boot0))
-+		return PTR_ERR(ec_spi->boot0);
-+
-+	ec_spi->reset = devm_gpiod_get(dev, "reset", 0);
-+	if (IS_ERR(ec_spi->reset))
-+		return PTR_ERR(ec_spi->reset);
-+
-+	/*
-+	 * Take the FPMCU out of reset and wait for it to boot if it's in
-+	 * bootloader mode or held in reset. This isn't the normal flow because
-+	 * typically the BIOS has already powered on the device to avoid the
-+	 * multi-second delay waiting for the FPMCU to boot and be responsive.
-+	 */
-+	if (gpiod_get_value(ec_spi->boot0) || gpiod_get_value(ec_spi->reset)) {
-+		/* Boot0 is sampled on reset deassertion */
-+		gpiod_set_value(ec_spi->boot0, 0);
-+		gpiod_set_value(ec_spi->reset, 1);
-+		usleep_range(1000, 2000);
-+		gpiod_set_value(ec_spi->reset, 0);
-+
-+		/* Wait for boot; there isn't a "boot done" signal */
-+		dev_info(dev, "Waiting for FPMCU to boot\n");
-+		msleep(2000);
-+	}
-+
-+	return 0;
- }
- 
- static void cros_ec_spi_high_pri_release(void *worker)
-@@ -754,8 +788,10 @@ static int cros_ec_spi_probe(struct spi_device *spi)
- 	if (!ec_dev)
- 		return -ENOMEM;
- 
--	/* Check for any DT properties */
--	cros_ec_spi_dt_probe(ec_spi, dev);
-+	/* Check for any DT properties and boot FPMCU if applicable */
-+	err = cros_ec_spi_dt_probe(ec_spi, dev);
-+	if (err)
-+		return err;
- 
- 	spi_set_drvdata(spi, ec_dev);
- 	ec_dev->dev = dev;
--- 
-https://chromeos.dev
-
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

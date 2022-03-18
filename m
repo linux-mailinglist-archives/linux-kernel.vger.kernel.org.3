@@ -2,91 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11AF4DD8F1
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8D64DD8EF
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235778AbiCRLas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 07:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S235802AbiCRLaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 07:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235769AbiCRLam (ORCPT
+        with ESMTP id S235789AbiCRLaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 07:30:42 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1251ED062;
-        Fri, 18 Mar 2022 04:29:16 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 2FC531F45EB1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647602954;
-        bh=yR6YIljfGinF+pJoIGBmN8q7+1O8ZzcAnqybJw3gz6o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=E8KU89+4XqdG3J8L/OLvNgA8upKBw/lygW9TlmKTChO/fWZuTxAKqOVrkhGEHE5PR
-         c1Ryx3Vb+ETKbMRiLx6pJnL+NA2cDmyUdUJynygITn8Wb9TBa5wDM295sjIftjUl2B
-         MAg9nV3rdwRkQQpDBMxI0C90KVKWsDkNvPDrOuy1HDy4YCzPHEQgVfA7C1LsGVRhAj
-         pfu271TQ3FdfpyAjnkxjslqSIpCW4nytRx86bQwaPHHVJaPhfTN1btlb7QpB0l0lYA
-         8ZgZiIiTho3/i1kGNMNsbs/WiZ/aS8aDvQqp0uTJp4CRPanOklvbHzknoBcvPf4Zok
-         qLFCymsgSwXhw==
-Message-ID: <a6844feb-98d5-4f44-f8fa-87f47aa9ec93@collabora.com>
-Date:   Fri, 18 Mar 2022 12:29:11 +0100
+        Fri, 18 Mar 2022 07:30:52 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC661ED055;
+        Fri, 18 Mar 2022 04:29:32 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B26241EC0662;
+        Fri, 18 Mar 2022 12:29:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1647602966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=7cHjZTrO3pszQOYs78HUK2TVdaR3zSuUmPa3P4965TQ=;
+        b=VeMn+FV7lsd7524c97/dvErpkObi38LUan9DkmodjZQSeYnUrvs7EaaJuXn0hK/BI/NLtz
+        62womwRZey5rcx+VkO/8LsSXpmzNml/SwXDz2Iadftaplf3xGftTClz54F7KSC9VsZD5lo
+        KwtZsPVedAcImMNQwD6wjo7iSXsPItg=
+Date:   Fri, 18 Mar 2022 12:29:23 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
+        Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] x86/sev: Unroll string mmio with
+ CC_ATTR_GUEST_UNROLL_STRING_IO
+Message-ID: <YjRtE30Usxy8PurP@zn.tnic>
+References: <20220310112615.31133-1-joro@8bytes.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH V5 1/3] spi: mediatek: add spi memory support for ipm
- design
-Content-Language: en-US
-To:     Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20220318025027.31281-1-leilk.liu@mediatek.com>
- <20220318025027.31281-2-leilk.liu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220318025027.31281-2-leilk.liu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220310112615.31133-1-joro@8bytes.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 18/03/22 03:50, Leilk Liu ha scritto:
-> this patch add the support of spi-mem for ipm design.
+On Thu, Mar 10, 2022 at 12:26:15PM +0100, Joerg Roedel wrote:
+> From: Joerg Roedel <jroedel@suse.de>
 > 
-> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
-> ---
->   drivers/spi/spi-mt65xx.c | 302 ++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 301 insertions(+), 1 deletion(-)
+> The io specific memcpy/memset functions use string mmio accesses to do
+> their work. Under SEV the hypervisor can't emulate these instructions,
+> because they read/write directly from/to encrypted memory.
 > 
-> diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-> index 1a0b3208dfca..ea6223259060 100644
-> --- a/drivers/spi/spi-mt65xx.c
-> +++ b/drivers/spi/spi-mt65xx.c
+> KVM will inject a page fault exception into the guest when it is asked
+> to emulate string mmio instructions for an SEV guest:
+> 
+> 	BUG: unable to handle page fault for address: ffffc90000065068
+> 	#PF: supervisor read access in kernel mode
+> 	#PF: error_code(0x0000) - not-present page
+> 	PGD 8000100000067 P4D 8000100000067 PUD 80001000fb067 PMD 80001000fc067 PTE 80000000fed40173
+> 	Oops: 0000 [#1] PREEMPT SMP NOPTI
+> 	CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc7 #3
+> 
+> As string mmio for an SEV guest can not be supported by the
+> hypervisor, unroll the instructions for CC_ATTR_GUEST_UNROLL_STRING_IO
+> enabled kernels.
 
-...snip...
+What I'm missing in this description is why wasn't it a problem until now?
 
-> @@ -78,8 +79,21 @@
->   #define SPI_CMD_IPM_GET_TICKDLY_OFFSET    22
->   
->   #define SPI_CMD_IPM_GET_TICKDLY_MASK	GENMASK(24, 22)
-> +
-> +#define PIN_MODE_CFG(x)	((x) / 2)
-> +
-> +#define SPI_CFG3_IPM_PIN_MODE_OFFSET		0
+You mentioned something about libvirt adding TPMs and that causing this
+but I'm still unclear as to why exactly this is causing the issue. I'm
+guessing SEV guests didn't do string IO but libvirt adding a TPM is
+somehow causing them to use them now...
 
-This definition is useless, the offset is zero... and this is used
-to bitshift zero.
+> @@ -56,9 +55,8 @@ void memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+>  	}
+>  	rep_movs((void *)to, (const void *) from, n);
+>  }
+> -EXPORT_SYMBOL(memcpy_toio);
+>  
+> -void memset_io(volatile void __iomem *a, int b, size_t c)
+> +static void string_memset_io(volatile void __iomem *a, int b, size_t c)
 
+You can simply remove that wrapper and use memset() at the callsite.
 
-Please remove that, after which:
+Thx.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

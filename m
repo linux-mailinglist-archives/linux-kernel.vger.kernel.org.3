@@ -2,144 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7974DD9B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4BA4DD9C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236234AbiCRM2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
+        id S236262AbiCRMd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbiCRM2u (ORCPT
+        with ESMTP id S232023AbiCRMdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:28:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9181CCAC3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:27:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eD8tHWmaTx8P3KCt4/NT+8IXDEPFOlKb/XA8R7/3lFQ=; b=sD9r9ejmX3ReiEsAx5vVRKxbu7
-        ZA+L7FENoatLkfcIySOgzFLthOn4EYhE9TuB46R/BSsm0S/At7NT7/1nqJnOcylT+hzrfNe5O8Rsy
-        k0e+kMm4INgIpE4o5GGvcfWby/IgVC6zQv/Z7EJL4hEBE2pD+NQX0MqG/Z28jO9aqHWW2m/c3H4Ym
-        2FFQ/ohRAmVgBa6Q/woubnW6GvweG9jdDdn1e2lZAhXpdJko04sMUKqsHty8DsckMkpdQtqi65xuR
-        iQUgy/iJCSWbKDQ58YkoyxRieyZER2PRwW/0wKoVLZmATsn9Xx2zSsyYNorRA3SPD7PJOqUgnZRWv
-        Wg8mH7Vg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nVBh6-007vr7-Kh; Fri, 18 Mar 2022 12:27:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 14D003001C7;
-        Fri, 18 Mar 2022 13:26:56 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A2F9920D9D81E; Fri, 18 Mar 2022 13:26:56 +0100 (CET)
-Date:   Fri, 18 Mar 2022 13:26:56 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, jpoimboe@redhat.com,
-        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
-        rostedt@goodmis.org, naveen.n.rao@linux.vnet.ibm.com
-Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
-Message-ID: <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
-References: <20220318105140.43914-1-sv@linux.ibm.com>
- <20220318105140.43914-4-sv@linux.ibm.com>
+        Fri, 18 Mar 2022 08:33:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE382D7A80;
+        Fri, 18 Mar 2022 05:32:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CD27618A9;
+        Fri, 18 Mar 2022 12:32:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0983FC340E8;
+        Fri, 18 Mar 2022 12:32:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647606726;
+        bh=54Ok/2iGFXz3IZ7nZgvvP6ra5Se4bncRygsdoY+z6dM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HKXAayjtLN5gupy3uawEImcXQc4hsOau6wF6khve+EpQBY09MKAd7jzr0J0lhRC0e
+         ghbyueE5YTXdfA7jW9NAUJ0mlIJVzeOjhEbAGczpIPTsdcS4E22nVZUBo745tL+h53
+         iNuMRZXZEihHN4MuwdoTm9AKJZkOALS5O9K44Vdk=
+Date:   Fri, 18 Mar 2022 13:27:53 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Trevor Woerner <twoerner@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] serial: 8250_fintek: Finish support for the F81865
+Message-ID: <YjR6yfjUmHahbIym@kroah.com>
+References: <20220314121856.10112-1-twoerner@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220318105140.43914-4-sv@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220314121856.10112-1-twoerner@gmail.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 04:21:40PM +0530, Sathvika Vasireddy wrote:
-> This patch adds powerpc specific functions required for
-> 'objtool mcount' to work, and enables mcount for ppc.
-
-I would love to see more objtool enablement for Power :-)
-
-
-> diff --git a/tools/objtool/arch/powerpc/include/arch/elf.h b/tools/objtool/arch/powerpc/include/arch/elf.h
-> new file mode 100644
-> index 000000000000..3c8ebb7d2a6b
-> --- /dev/null
-> +++ b/tools/objtool/arch/powerpc/include/arch/elf.h
-> @@ -0,0 +1,8 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> +
-> +#ifndef _OBJTOOL_ARCH_ELF
-> +#define _OBJTOOL_ARCH_ELF
-> +
-> +#define R_NONE R_PPC_NONE
-> +
-> +#endif /* _OBJTOOL_ARCH_ELF */
-> diff --git a/tools/objtool/utils.c b/tools/objtool/utils.c
-> index d1fc6a123a6e..c9c14fa0dfd7 100644
-> --- a/tools/objtool/utils.c
-> +++ b/tools/objtool/utils.c
-> @@ -179,11 +179,29 @@ int create_mcount_loc_sections(struct objtool_file *file)
->  		loc = (unsigned long *)sec->data->d_buf + idx;
->  		memset(loc, 0, sizeof(unsigned long));
+On Mon, Mar 14, 2022 at 08:18:56AM -0400, Trevor Woerner wrote:
+> This driver only partially supports the F81865 device. The UART portions of
+> this SuperIO chip behave very similarly to the UART of the F81866, except
+> that the F81866 has 128-byte FIFOs whereas the F81865 has 16-byte FIFOs,
+> and the IRQ configuration is different. Therefore fill out the support for
+> the F81865 in the places where it is missing.
+> 
+> Tested at 1500000 baud on the iEi NANO-PV-D5251-R10 board.
+> 
+> Signed-off-by: Trevor Woerner <twoerner@gmail.com>
+> ---
+>  drivers/tty/serial/8250/8250_fintek.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_fintek.c b/drivers/tty/serial/8250/8250_fintek.c
+> index 251f0018ae8c..47b15d2d9901 100644
+> --- a/drivers/tty/serial/8250/8250_fintek.c
+> +++ b/drivers/tty/serial/8250/8250_fintek.c
+> @@ -63,7 +63,12 @@
+>  #define F81216_LDN_HIGH	0x4
 >  
-> -		if (elf_add_reloc_to_insn(file->elf, sec,
-> -					  idx * sizeof(unsigned long),
-> -					  R_X86_64_64,
-> -					  insn->sec, insn->offset))
-> -			return -1;
-> +		if (file->elf->ehdr.e_machine == EM_X86_64) {
-> +			if (elf_add_reloc_to_insn(file->elf, sec,
-> +						  idx * sizeof(unsigned long),
-> +						  R_X86_64_64,
-> +						  insn->sec, insn->offset))
-> +				return -1;
-> +		}
-> +
-> +		if (file->elf->ehdr.e_machine == EM_PPC64) {
-> +			if (elf_add_reloc_to_insn(file->elf, sec,
-> +						  idx * sizeof(unsigned long),
-> +						  R_PPC64_ADDR64,
-> +						  insn->sec, insn->offset))
-> +				return -1;
-> +		}
-> +
-> +		if (file->elf->ehdr.e_machine == EM_PPC) {
-> +			if (elf_add_reloc_to_insn(file->elf, sec,
-> +						  idx * sizeof(unsigned long),
-> +						  R_PPC_ADDR32,
-> +						  insn->sec, insn->offset))
-> +				return -1;
-> +		}
+>  /*
+> - * F81866/966 registers
+> + * F81866/865/966 registers
+> + *
+> + * The UART portion of the F81865 functions very similarly to the UART
+> + * portion of the F81866, so there's no need to duplicate all the #defines
+> + * etc. The only differences are: the F81866 has 128-byte FIFOs whereas the
+> + * F81865 has 16-byte FIFOs, and the IRQ configuration is different.
+>   *
+>   * The IRQ setting mode of F81866/966 is not the same with F81216 series.
+>   *	Level/Low: IRQ_MODE0:0, IRQ_MODE1:0
+> @@ -316,6 +321,7 @@ static void fintek_8250_set_termios(struct uart_port *port,
+>  		break;
+>  	case CHIP_ID_F81966:
+>  	case CHIP_ID_F81866:
+> +	case CHIP_ID_F81865:
+>  		reg = F81866_UART_CLK;
+>  		break;
+>  	default:
+> @@ -363,6 +369,7 @@ static void fintek_8250_set_termios_handler(struct uart_8250_port *uart)
+>  	case CHIP_ID_F81216H:
+>  	case CHIP_ID_F81966:
+>  	case CHIP_ID_F81866:
+> +	case CHIP_ID_F81865:
+>  		uart->port.set_termios = fintek_8250_set_termios;
+>  		break;
+>  
+> -- 
+> 2.35.1.455.g1a4874565f
+> 
 
-It appears to me that repeating this code 3 times doesn't really scale
-well, how about we introduce a helper like:
+Please resend the whole series, not just one patch out of the lot.  Also
+can you correctly "thread" them?  Using a tool like git send-email it
+happens automatically.  That way our tools can pick them up properly.
 
+thanks,
 
-int elf_reloc_type_long(struct elf *elf)
-{
-	switch (elf->ehdr.e_machine) {
-	case EM_X86_64:
-		return R_X86_64_64;
-	case EM_PPC64:
-		return R_PPC64_ADDR64;
-	case EM_PPC:
-		return R_PPC_ADDR32;
-	default:
-		WARN("unknown machine...")
-		exit(-1);
-	}
-}
-
-		if (elf_add_reloc_to_insn(file->elf, sec,
-					  idx * sizeof(unsigned long),
-					  elf_reloc_type_long(file->elf),
-					  insn->sec, insn->offset))
-			return -1;
-
+greg k-h

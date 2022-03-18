@@ -2,221 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D264A4DD635
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B014DD639
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233810AbiCRIbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 04:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S233811AbiCRIdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbiCRIbo (ORCPT
+        with ESMTP id S231201AbiCRIdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:31:44 -0400
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E058727CE0E
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 01:30:24 -0700 (PDT)
-Received: by mail-ua1-x929.google.com with SMTP id v20so2686887uat.9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 01:30:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0ogp3OEFkwZj8QEMXIkrMCD+Y2owy7GvkEn/U8LOX0o=;
-        b=Pf+BOEhya9aXXbYBUeUOBRRU7JhM5PstNvwRvh4CwFFLDHwwrqRxswcdt7fceLlQ9h
-         SbVt99hG/N/i2Yg1eI/N/pWGYA9GiLlX6qOIAZDvSYRQRWu4G4Uag0C3btZqkT4cjcZV
-         PKWRNnFOICcYpYs0aSRQn9QSo4YoxNA0h7fi8=
+        Fri, 18 Mar 2022 04:33:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 914EE27CE0C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 01:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647592344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z21mgAaVERhRl6nUpUORqr1xOUtC7LpDvCRsTkgirW0=;
+        b=Oz6agsZqUIe4VTbtHZE2dneUp2x9i2vbs0JrFGI80coVhPRjPqsNZCi/Lfmj0JqIHAsdZ8
+        OFzF1ty18fm1gZp0q+ROLGmFhPuB59vTMau39OMTYXuF0ZEaxrKGVHYsD26DEStySgo6a5
+        lzHf0vcGm0oiKqXwQ7gqqrQVK3Fs8Oc=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-107-K87ZefpDNhiuHkqfEr-hEg-1; Fri, 18 Mar 2022 04:32:23 -0400
+X-MC-Unique: K87ZefpDNhiuHkqfEr-hEg-1
+Received: by mail-pg1-f199.google.com with SMTP id i5-20020a639d05000000b003822fae3e50so559399pgd.8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 01:32:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0ogp3OEFkwZj8QEMXIkrMCD+Y2owy7GvkEn/U8LOX0o=;
-        b=4huRNitQCN/Dbp/pte0biPIZXUR1l5oyJwyOQcxTRwgv+1JPA3z5JxWBr6fKD89Dk3
-         qWrQt4QwrYEtxa+tC9kDqWV45ywNb0gFcnNb4nHQJMne7ZkXvsa7Uu98+S4Zy82wceui
-         TjuO1DRCnroM/nVpkLVXOPawx6fUGIglgIkYMpZHyVL1+ZM+idTjkglHSF2oKeVHYni/
-         O1r1xnuRvhPVGZaNW6ftORIqf5FEQ5nQGY2/jmM8gyJMDX+ObzpdXzJWbcxrhKBVWYnQ
-         DCUFwc2tUpzIRZLAW/Q4E5t00NR1WNvEuTRTCpTwxAHmelkz6E+exTF94VOUwAlQ/KsQ
-         udyA==
-X-Gm-Message-State: AOAM5327zNjr44N7DQuuKx9ZWhLpcIUzpszfzRhq04aNV9lmvrTv3a0Y
-        7sziTYfh7aqPvj1ggEho6f5pzLg/jDygOftKUTp7zz7oWomYmA==
-X-Google-Smtp-Source: ABdhPJz/KhorT3W/2hHA0L0YLN68M/lGOSgV2CAcFuel9OThQYS6ptUz2+hFO2ZOAyCDuApFRoXn3SWHOfIQdBeL9ps=
-X-Received: by 2002:ab0:2619:0:b0:354:ccac:32f with SMTP id
- c25-20020ab02619000000b00354ccac032fmr578951uao.46.1647592223830; Fri, 18 Mar
- 2022 01:30:23 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=z21mgAaVERhRl6nUpUORqr1xOUtC7LpDvCRsTkgirW0=;
+        b=x4iqz141dHXQEiD3IVa8bpuYSRROIJoyrbnHhfDk+chFdu+WH5mkfdgHovSLGbyH2Y
+         KiCJijX6xZY9RwPazhpVfXFAthO3dRowX0Z8iSAiIb8jhG+oh3RdbhPu0Q6EvPVJ80n0
+         rnZ1BOnOrghxmQLXY6SOgovq/vxumG3O2bDWxAqvdCnQBiySikvxNMgAqsl/+UHfYTLD
+         CNWkm0PfgMaNm2tTPXnfhP8mD1zSYidIzctM4Q9FzWYlyKUUhkPQ/DiHH9JKHSNzsk4E
+         CujBMUmZK3rXA4/u/HXjuti8LT+HJJP/+/e+C3EV4d3JZTxcTwEeFXaOJFBXKbadorc6
+         9tfw==
+X-Gm-Message-State: AOAM5311qpnqdOs3c9fPRk1EblZbq5lMVoDuxvYm75N5AwqpbFNUW1SR
+        RCfMcMtDvULYQHz3+a2uzPyheGCB+CvPKnPU79Mpor+OX1puai2zPlTvdMOYhcH9xiCTqM8bPNx
+        L1gw2vkreDfM3SMYL5Nrfs40Gt5qIq0dhxQxsj5ula7EJzM6uvMhkCTxhSJ6kmLhAKts5A7vqRA
+        ==
+X-Received: by 2002:a65:6943:0:b0:376:333b:1025 with SMTP id w3-20020a656943000000b00376333b1025mr7006336pgq.164.1647592341556;
+        Fri, 18 Mar 2022 01:32:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzFZCK1PpQfF+1W7Sj08bQLdJEW6ice992ozsF4Ucge04G9kGugKrcIqE+1t/SQpv8XG39h5Q==
+X-Received: by 2002:a65:6943:0:b0:376:333b:1025 with SMTP id w3-20020a656943000000b00376333b1025mr7006310pgq.164.1647592341165;
+        Fri, 18 Mar 2022 01:32:21 -0700 (PDT)
+Received: from [10.72.12.110] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id d9-20020a056a0010c900b004f774c13e96sm9313615pfu.19.2022.03.18.01.32.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 01:32:20 -0700 (PDT)
+Subject: Re: [RFC PATCH v3 4/4] ceph: replace base64url by the encoding used
+ for mailbox names
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220317154521.6615-1-lhenriques@suse.de>
+ <20220317154521.6615-5-lhenriques@suse.de>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <6ac92645-dede-b87c-3731-2280d59f8d8e@redhat.com>
+Date:   Fri, 18 Mar 2022 16:32:15 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220208084234.1684930-1-hsinyi@chromium.org> <CACvgo53u01BK_D0ZssV+gCepjxSz23Nr5Dy1qXeaAoJuu6VCFQ@mail.gmail.com>
- <KW6DNh6IRRgVJx9DfOFBnEqc4a0x-AnDXEbMxwpfEbk8dOn_KGVzAfo-slJWq-4nWW728Uc-OVpFh2w4fDE4-bxfkDuz1hFILRVvbcuXqaw=@emersion.fr>
- <CACvgo532-pC+7DLFCo=DWTX-OnJEJvSoTmQnt3_qLhiT4cqEMg@mail.gmail.com>
- <GYG6EVT1MqtmfKiPpMhDG9mpuATnmwVDq2PuE_dpDat5oQW_t1tUfm39lSWHj32D5r7mrog27sL4dkgdMYQ5BN830TfVOrgQ4Ts8LcO8Hcs=@emersion.fr>
- <CACvgo52+o9_ETC+1RKzqKkyw3ZJ28RjH0BqC9DfmNAKqByud8Q@mail.gmail.com>
- <d3f0cc20-d226-ee42-cc98-b469949cec9e@redhat.com> <YV87l-2XXzmZ2i6GuGd__uf85s2JQkbXt_qTQDYlbBh1kW2COJoNLUDinmLCokKyy-_0ZnIMUcZeW0GdJ8zF690iYi4ThKrjc09omNMe-0g=@emersion.fr>
- <d4f5e101-3dd5-2f3a-6c14-6b32ee37c223@redhat.com> <DM7TzJ-fZEHjoGXvMG8XLfJ2VxohRxotL40_0Vb4cAUvrELgV9BvPGbK6HAwOYOBCx8qXtY2LQ0xnZ-nlH_IVCyne7tMKfvkqxtoWI6MkTw=@emersion.fr>
- <16c1886f-d130-b299-9d09-ad11556f3bfd@amd.com>
-In-Reply-To: <16c1886f-d130-b299-9d09-ad11556f3bfd@amd.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Fri, 18 Mar 2022 16:29:57 +0800
-Message-ID: <CAJMQK-iW6zu7+cjSPHHDcLCj5Zj086qZ+oY62_onOzZcsXtTWQ@mail.gmail.com>
-Subject: Re: [Intel-gfx] [PATCH v8 1/3] gpu: drm: separate panel orientation
- property creating and value setting
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     Simon Ser <contact@emersion.fr>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        devicetree <devicetree@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        LAKML <linux-arm-kernel@lists.infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220317154521.6615-5-lhenriques@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 11:57 PM Harry Wentland <harry.wentland@amd.com> wrote:
+
+On 3/17/22 11:45 PM, Luís Henriques wrote:
+> The base64url encoding includes the '_' character, which may cause problems
+> in snapshot names (if the name starts with '_').  Thus, use the base64
+> encoding defined for IMAP mailbox names (RFC 3501), which uses '+' and ','
+> instead of '-' and '_'.
 >
-> On 2022-02-18 07:12, Simon Ser wrote:
-> > On Friday, February 18th, 2022 at 12:54, Hans de Goede <hdegoede@redhat.com> wrote:
-> >
-> >> On 2/18/22 12:39, Simon Ser wrote:
-> >>> On Friday, February 18th, 2022 at 11:38, Hans de Goede <hdegoede@redhat.com> wrote:
-> >>>
-> >>>> What I'm reading in the above is that it is being considered to allow
-> >>>> changing the panel-orientation value after the connector has been made
-> >>>> available to userspace; and let userspace know about this through a uevent.
-> >>>>
-> >>>> I believe that this is a bad idea, it is important to keep in mind here
-> >>>> what userspace (e.g. plymouth) uses this prorty for. This property is
-> >>>> used to rotate the image being rendered / shown on the framebuffer to
-> >>>> adjust for the panel orientation.
-> >>>>
-> >>>> So now lets assume we apply the correct upside-down orientation later
-> >>>> on a device with an upside-down mounted LCD panel. Then on boot the
-> >>>> following could happen:
-> >>>>
-> >>>> 1. amdgpu exports a connector for the LCD panel to userspace without
-> >>>> setting panel-orient=upside-down
-> >>>> 2. plymouth sees this and renders its splash normally, but since the
-> >>>> panel is upside-down it will now actually show upside-down
-> >>>
-> >>> At this point amdgpu hasn't probed the connector yet. So the connector
-> >>> will be marked as disconnected, and plymouth shouldn't render anything.
-> >>
-> >> If before the initial probe of the connector there is a /dev/dri/card0
-> >> which plymouth can access, then plymouth may at this point decide
-> >> to disable any seemingly unused crtcs, which will make the screen go black...
-> >>
-> >> I'm not sure if plymouth will actually do this, but AFAICT this would
-> >> not be invalid behavior for a userspace kms consumer to do and I
-> >> believe it is likely that mutter will disable unused crtcs.
-> >>
-> >> IMHO it is just a bad idea to register /dev/dri/card0 with userspace
-> >> before the initial connector probe is done. Nothing good can come
-> >> of that.
-> >>
-> >> If all the exposed connectors initially are going to show up as
-> >> disconnected anyways what is the value in registering /dev/dri/card0
-> >> with userspace early ?
-> >
-> > OK. I'm still unsure how I feel about this, but I think I agree with
-> > you. That said, the amdgpu architecture is quite involved with multiple
-> > abstraction levels, so I don't think I'm equipped to write a patch to
-> > fix this...
-> >
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>   fs/ceph/crypto.c | 51 ++++++++++++++++++++++++++++++++++++++++++++++--
+>   fs/ceph/crypto.h |  3 +++
+>   fs/ceph/dir.c    |  2 +-
+>   fs/ceph/inode.c  |  2 +-
+>   4 files changed, 54 insertions(+), 4 deletions(-)
 >
-> amdgpu_dm's connector registration already triggers a detection. See the
-> calls to dc_link_detect and amdgpu_dm_update_connector_after_detect in
-> amdgpu_dm_initialize_drm_device.
->
-> dc_link_detect is supposed to read the edid via
-> dm_helpers_read_local_edid and amdgpu_dm_update_connector_after_detect
-> will update the EDID on the connector via a
-> drm_connector_update_edid_property call.
->
-> This all happens at driver load.
->
-> I don't know why you're seeing the embedded connector as disconnected
-> unless the DP-MIPI bridge for some reason doesn't indicate that the panel
-> is connected at driver load.
->
-> Harry
->
-> > cc Daniel Vetter: can you confirm probing all connectors is a good thing
-> > to do on driver module load?
-> >
-> >>>> I guess the initial modeline is inherited from the video-bios, but
-> >>>> what about the physical size? Note that you cannot just change the
-> >>>> physical size later either, that gets used to determine the hidpi
-> >>>> scaling factor in the bootsplash, and changing that after the initial
-> >>>> bootsplash dislay will also look ugly
-> >>>>
-> >>>> b) Why you need the edid for the panel-orientation property at all,
-> >>>> typically the edid prom is part of the panel and the panel does not
-> >>>> know that it is mounted e.g. upside down at all, that is a property
-> >>>> of the system as a whole not of the panel as a standalone unit so
-> >>>> in my experience getting panel-orient info is something which comes
-> >>>> from the firmware /video-bios not from edid ?
-> >>>
-> >>> This is an internal DRM thing. The orientation quirks logic uses the
-> >>> mode size advertised by the EDID.
-> >>
-> >> The DMI based quirking does, yes. But e.g. the quirk code directly
-> >> reading this from the Intel VBT does not rely on the mode.
-> >>
-> >> But if you are planning on using a DMI based quirk for the steamdeck
-> >> then yes that needs the mode.
-> >>
-> >> Thee mode check is there for 2 reasons:
-> >>
-> >> 1. To avoid also applying the quirk to external displays, but
-> >> I think that that is also solved in most drivers by only checking for
-> >> a quirk at all on the eDP connector
-> >>
-> >> 2. Some laptop models ship with different panels in different badges
-> >> some of these are portrait (so need a panel-orient) setting and others
-> >> are landscape.
-> >
-> > That makes sense. So yeah the EDID mode based matching logic needs to
-> > stay to accomodate for these cases.
-> >
-> >>> I agree that at least in the Steam
-> >>> Deck case it may not make a lot of sense to use any info from the
-> >>> EDID, but that's needed for the current status quo.
-> >>
-> >> We could extend the DMI quirk mechanism to allow quirks which don't
-> >> do the mode check, for use on devices where we can guarantee neither
-> >> 1 nor 2 happens, then amdgpu could call the quirk code early simply
-> >> passing 0x0 as resolution.
-> >
-> > Yeah. But per the above amdgpu should maybe probe connectors on module
-> > load. If/when amdgpu is fixed to do this, then we don't need to disable
-> > the mode matching logic in panel-orientation quirks anymore.
+> diff --git a/fs/ceph/crypto.c b/fs/ceph/crypto.c
+> index caa9863dee93..d6f1c444ce91 100644
+> --- a/fs/ceph/crypto.c
+> +++ b/fs/ceph/crypto.c
+> @@ -7,6 +7,53 @@
+>   #include "mds_client.h"
+>   #include "crypto.h"
+>   
+> +static const char base64_table[65] =
+> +        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+,";
+> +
+> +int ceph_base64_encode(const u8 *src, int srclen, char *dst)
+> +{
+> +	u32 ac = 0;
+> +	int bits = 0;
+> +	int i;
+> +	char *cp = dst;
+> +
+> +	for (i = 0; i < srclen; i++) {
+> +		ac = (ac << 8) | src[i];
+> +		bits += 8;
+> +		do {
+> +			bits -= 6;
+> +			*cp++ = base64_table[(ac >> bits) & 0x3f];
+> +		} while (bits >= 6);
+> +	}
+> +	if (bits)
+> +		*cp++ = base64_table[(ac << (6 - bits)) & 0x3f];
+> +	return cp - dst;
+> +}
+> +
+> +int ceph_base64_decode(const char *src, int srclen, u8 *dst)
+> +{
+> +	u32 ac = 0;
+> +	int bits = 0;
+> +	int i;
+> +	u8 *bp = dst;
+> +
+> +	for (i = 0; i < srclen; i++) {
+> +		const char *p = strchr(base64_table, src[i]);
+> +
+> +		if (p == NULL || src[i] == 0)
+> +			return -1;
+> +		ac = (ac << 6) | (p - base64_table);
+> +		bits += 6;
+> +		if (bits >= 8) {
+> +			bits -= 8;
+> +			*bp++ = (u8)(ac >> bits);
+> +		}
+> +	}
+> +	if (ac & ((1 << bits) - 1))
+> +		return -1;
+> +	return bp - dst;
+> +}
+
+Maybe this should be in fs/crypto.c ?
+
+-- Xiubo
+
+> +
+>   static int ceph_crypt_get_context(struct inode *inode, void *ctx, size_t len)
+>   {
+>   	struct ceph_inode_info *ci = ceph_inode(inode);
+> @@ -260,7 +307,7 @@ int ceph_encode_encrypted_dname(struct inode *parent, struct qstr *d_name, char
+>   	}
+>   
+>   	/* base64 encode the encrypted name */
+> -	elen = fscrypt_base64url_encode(cryptbuf, len, buf);
+> +	elen = ceph_base64_encode(cryptbuf, len, buf);
+>   	dout("base64-encoded ciphertext name = %.*s\n", elen, buf);
+>   
+>   	WARN_ON(elen > (CEPH_NOHASH_NAME_MAX + SHA256_DIGEST_SIZE));
+> @@ -365,7 +412,7 @@ int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+>   			tname = &_tname;
+>   		}
+>   
+> -		declen = fscrypt_base64url_decode(name, name_len, tname->name);
+> +		declen = ceph_base64_decode(name, name_len, tname->name);
+>   		if (declen <= 0) {
+>   			ret = -EIO;
+>   			goto out;
+> diff --git a/fs/ceph/crypto.h b/fs/ceph/crypto.h
+> index 3273d076a9e5..d22316011810 100644
+> --- a/fs/ceph/crypto.h
+> +++ b/fs/ceph/crypto.h
+> @@ -93,6 +93,9 @@ static inline u32 ceph_fscrypt_auth_len(struct ceph_fscrypt_auth *fa)
+>    */
+>   #define CEPH_NOHASH_NAME_MAX (180 - SHA256_DIGEST_SIZE)
+>   
+> +int ceph_base64_encode(const u8 *src, int srclen, char *dst);
+> +int ceph_base64_decode(const char *src, int srclen, u8 *dst);
+> +
+>   void ceph_fscrypt_set_ops(struct super_block *sb);
+>   
+>   void ceph_fscrypt_free_dummy_policy(struct ceph_fs_client *fsc);
+> diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
+> index 5ae5cb778389..417d8c3a7edd 100644
+> --- a/fs/ceph/dir.c
+> +++ b/fs/ceph/dir.c
+> @@ -960,7 +960,7 @@ static int prep_encrypted_symlink_target(struct ceph_mds_request *req, const cha
+>   		goto out;
+>   	}
+>   
+> -	len = fscrypt_base64url_encode(osd_link.name, osd_link.len, req->r_path2);
+> +	len = ceph_base64_encode(osd_link.name, osd_link.len, req->r_path2);
+>   	req->r_path2[len] = '\0';
+>   out:
+>   	fscrypt_fname_free_buffer(&osd_link);
+> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+> index 359e29896f16..8fd493257e0b 100644
+> --- a/fs/ceph/inode.c
+> +++ b/fs/ceph/inode.c
+> @@ -875,7 +875,7 @@ static int decode_encrypted_symlink(const char *encsym, int enclen, u8 **decsym)
+>   	if (!sym)
+>   		return -ENOMEM;
+>   
+> -	declen = fscrypt_base64url_decode(encsym, enclen, sym);
+> +	declen = ceph_base64_decode(encsym, enclen, sym);
+>   	if (declen < 0) {
+>   		pr_err("%s: can't decode symlink (%d). Content: %.*s\n", __func__, declen, enclen, encsym);
+>   		kfree(sym);
 >
 
-Hi all,
-
-Thanks for all of the discussion. I'm not sure about how amd drm
-works, but for some SoC, the panel orientation is set in panel[1].
-The goal of this patch is to separate the property creation, so some
-drm can optionally create it earlier before drm_dev_register().
-
-I've sent the v9 to address some issues in v8, but the basic idea is
-still the same. It has no effect to
-drm_connector_set_panel_orientation_with_quirk() used in amdgpu and
-i915, they work the same as before. Do you think this is reasonable?
-
-[1]  https://elixir.bootlin.com/linux/v5.17-rc7/source/drivers/gpu/drm/panel/panel-edp.c#L556

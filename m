@@ -2,177 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2ACC4DE21D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9432F4DE223
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239439AbiCRUIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 16:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
+        id S240416AbiCRUKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 16:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiCRUIy (ORCPT
+        with ESMTP id S229792AbiCRUKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 16:08:54 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B45220827E;
-        Fri, 18 Mar 2022 13:07:35 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 1FEA2DFE54;
-        Fri, 18 Mar 2022 13:07:05 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xqDTUhigpXzr; Fri, 18 Mar 2022 13:07:04 -0700 (PDT)
-From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/4] power: supply: max17042_battery: Add unit conversion macros
-Date:   Fri, 18 Mar 2022 21:06:59 +0100
-Message-ID: <7342538.iIbC2pHGDl@pliszka>
-In-Reply-To: <1c4a7088-bcef-ca5c-ff3e-efd1049dc402@redhat.com>
-References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm> <f15c415a-ad08-ae4f-c79c-574964ab9cb0@kernel.org> <1c4a7088-bcef-ca5c-ff3e-efd1049dc402@redhat.com>
+        Fri, 18 Mar 2022 16:10:49 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBB523D76C;
+        Fri, 18 Mar 2022 13:09:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=O6uGUdoW6Lxm5JY3J83NMEK8xoTghOZASOlRneAdaZw=;
+        t=1647634168; x=1648843768; b=bQEwG1o/Vm4jlHUDF+ToofOnblLQp81bKySVJxlmbEbsTGn
+        4gvHkbTR8d8B3MxOztQno0siDPdV5gVSqAWK19RmH5esSBx41VpshuQQbAes/L7fDsZlG1FvbE+yW
+        km60nvngaxquE56d8CoLT9Pz71P0SHxF7cXiH4ITdhHSWhsZSluCGW/IxL43NADxXMySUK7FKMBCM
+        ZSiZ5bR3aU9bPSnXeY0LgBzU2MZoKNjydhmBzZEJnWDyXfp+xRxlh13U0E6fFejC/ZBY37KCpiV3f
+        exQi9IIl6VfLm+FroqGiypZHdOmoKjTfJbasmlV02WZMhDWilEIZixke0stAAqSA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nVIuF-00F0HF-AC;
+        Fri, 18 Mar 2022 21:09:03 +0100
+Message-ID: <1e61b0f21794e67fb4e87dc41fab90829d3c7cd6.camel@sipsolutions.net>
+Subject: Re: [RFC v1 07/10] iio: light: opt3001: add roadtest
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Date:   Fri, 18 Mar 2022 21:09:02 +0100
+In-Reply-To: <20220318154927.GA32172@axis.com>
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+         <20220311162445.346685-8-vincent.whitchurch@axis.com>
+         <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
+         <20220318154927.GA32172@axis.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart12830340.CDJkKcVGEf"; micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart12830340.CDJkKcVGEf
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
-From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-Date: Fri, 18 Mar 2022 21:06:59 +0100
-Message-ID: <7342538.iIbC2pHGDl@pliszka>
-In-Reply-To: <1c4a7088-bcef-ca5c-ff3e-efd1049dc402@redhat.com>
+On Fri, 2022-03-18 at 16:49 +0100, Vincent Whitchurch wrote:
+> 
+> It should be possible, but upstream QEMU doesn't have everything that we
+> need so some work is needed there.  Also, of course work is need to
+> provide user space for running the tests and communicating between the
+> virtual machine and the backend:
+> 
+> - We need user space, so build scripts would need to be provided to
+>   cross-compile busybox and Python (and whatever libraries it needs) for
+>   the target architecture.
 
-Hi Krzysztof, hi Hans,
+You could possibly use some nix recipes for all of this, but that's a
+fairly arcane thing (we use it, but ...)
 
-thanks for the review!
+> - We also use UML's hostfs feature to make things transparent to the
+>   user and to avoid having to set up things like networking for
+>   communication between the host and the backend.  I think QEMU's 9pfs
+>   support can be used as a rootfs too but it's not something I've
+>   personally tested.
 
-On pi=C4=85tek, 18 marca 2022 10:51:26 CET Hans de Goede wrote:
-> Hi,
->=20
-> On 3/18/22 10:06, Krzysztof Kozlowski wrote:
-> > On 18/03/2022 10:00, Hans de Goede wrote:
-> >> Hi,
-> >>=20
-> >> On 3/18/22 09:16, Krzysztof Kozlowski wrote:
-> >>> On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
-> >>>> Instead of sprinkling the code with magic numbers, put the unit
-> >>>> definitions used by the gauge into a set of macros. Macros are
-> >>>> used instead of simple defines in order to not require floating
-> >>>> point operations for divisions.
-> >>>>=20
-> >>>> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.s=
-m>
-> >>>> ---
-> >>>>=20
-> >>>>  drivers/power/supply/max17042_battery.c | 40 +++++++++++++++-------=
-=2D--
-> >>>>  1 file changed, 24 insertions(+), 16 deletions(-)
-> >>>>=20
-> >>>> diff --git a/drivers/power/supply/max17042_battery.c
-> >>>> b/drivers/power/supply/max17042_battery.c index
-> >>>> ab031bbfbe78..c019d6c52363 100644
-> >>>> --- a/drivers/power/supply/max17042_battery.c
-> >>>> +++ b/drivers/power/supply/max17042_battery.c
-> >>>> @@ -51,6 +51,15 @@
-> >>>>=20
-> >>>>  #define MAX17042_VMAX_TOLERANCE		50 /* 50 mV */
-> >>>>=20
-> >>>> +#define MAX17042_CURRENT_LSB		1562500ll /* =C2=B5V */
-> >>>=20
-> >>> Is this really long long? The usage in max17042_get_status() is with =
-int
-> >>> operand and result.
-> >>=20
-> >> The "ll" is part of the original code which these macros replace,
-> >> dropping the "ll" is IMHO out of scope for this patch, it would
-> >> clearly break the only change 1 thing per patch/commit rule.
-> >=20
-> > Not in max17042_get_status(). The usage there is without ll. Three other
-> > places use it in 64-bit context (result is 64-bit), so there indeed. But
-> > in max17042_get_status() this is now different.
->=20
-> Ah, good catch and there is a reason why it is not a ll there, a divide
-> is done on it, which is now a 64 bit divide which will break on 32 bit
-> builds...
->=20
-> Note that e.g. this existing block:
->=20
->         case POWER_SUPPLY_PROP_CURRENT_NOW:
->                 if (chip->pdata->enable_current_sense) {
->                         ret =3D regmap_read(map, MAX17042_Current, &data);
->                         if (ret < 0)
->                                 return ret;
->=20
->                         data64 =3D sign_extend64(data, 15) * 1562500ll;
->                         val->intval =3D div_s64(data64, chip->pdata->r_sn=
-s);
->                 } else {
->                         return -EINVAL;
->                 }
->                 break;
->=20
-> Solves this by using the div_s64 helper. So the code in
-> max17042_get_status() needs to be fixed to do the same.
->=20
-> The "ll" is necessary because 32768 * 1562500 =3D 51200000000 which does =
-not
-> fit in a 32 bit integer.
->=20
-> So fixing max17042_get_status() to use sign_extend64 + div_s64 fixes
-> a potential bug there and as such that really should be done in
-> a separate preparation patch with a Cc stable.
->=20
-> Regards,
->=20
-> Hans
+That works just fine, yes. We used to do exactly this in the wireless
+test suite before we switched to UML, but the switch to UML was due to
+the "time-travel" feature.
 
-Yes, I've already noticed that max17042_get_status was broken, but it manag=
-ed=20
-to slip out of my mind before sending the series - although I haven't caugh=
-t=20
-that I'm introducing a yet another breakage there :) I've actually thought=
-=20
-about removing the unit conversion from this place whatsoever, because this=
-=20
-function only ever cares about the sign of what's in MAX17042_Current, so i=
-t=20
-doesn't really need to do any division at all.
+https://w1.fi/cgit/hostap/tree/tests/hwsim/vm
 
-Best regards,
-Sebastian
---nextPart12830340.CDJkKcVGEf
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+has support for both UML and qemu/kvm.
 
------BEGIN PGP SIGNATURE-----
+> - We use virtio-i2c and virtio-gpio and use virtio-uml which uses the
+>   vhost-user API to communicate from UML to the backend.  The latest
+>   version of QEMU has support for vhost-user-i2c, but vhost-user-gpio
+>   doesn't seem to have been merged yet, so work is needed on the QEMU
+>   side.  This will also be true for other buses in the future, if they
+>   are implemented with new virtio devices.
+> 
+> - For MMIO, UML has virtio-mmio which allows implementing any PCIe
+>   device (and by extension any platform device) outside of UML, but last
+>   I checked, upstream QEMU did not have something similar.
 
-iQIzBAABCAAdFiEEIt2frgBqEUNYNmF86PI1zzvbw/8FAmI05mMACgkQ6PI1zzvb
-w/+rMBAAs2N32NouV7IdL8UY0uvxI9Xd9yWLCfcSd3fIYvQG0fgFAm5DLfL5L/3X
-kVB8Pu7zp59c4aDKDwHbRrufJAQ8LyMwKZ8dIWQBsrOTxY1BrEnlXM+kYQxYMCPX
-7q82qeyAtSgOzXQjAeT03owx1VxgHxsvnQ2EcRygie42lJnnzA7Oaq6bAHKikhWf
-jUPEYgCBnLzo85HFB+/QWORlpi1pOggGa/rJziMn3VE4lYl7CcDFxLPjqnsFtCqr
-gdUCuMQbcJB9BrNtOw0IfFyCAb9W9iXZVWS7xT7FtelpG38FuwqgAJpuGW13JrEO
-bvpohLMZx2J3aEklXgCc8zEnXaEtEC94s6z98Ms4i9gccfx7ItAmWxjEJGgxgpPJ
-PxN7Wq6jbEdx0zIgCas+w4cxWyoTskFxxBVdGoRhPVixh37NAFfNWISoL5QFVA6/
-RzuO3xlAll/ulmbJinlgQsDEsUSyYVEJJpPfWIBUgYTanJF+z4d/xvuQBUFKE9LR
-ivB/S9KEZyzzZ8UhOB1wDaku8HMY58BZDjtoYHDyUf3v2d0ICHoXTXJhWyLJf3zQ
-sftWx1KKRv9HtSxRh9ZQlSMcB26YGFCgK8fWTndqfngPzFNFy4h483xYVSMEp0Hr
-Ete62DQNo8C8TxpAs/ArWFVm0S0hswuDXK2N9xw/d46//7wOVUY=
-=52Ex
------END PGP SIGNATURE-----
+I think you have this a bit fuzzy.
 
---nextPart12830340.CDJkKcVGEf--
+The virtio_uml[.c] you speak of is the "bus" driver for virtio in UML.
+Obviously, qemu has support for virtio, so you don't need those bits.
+
+Now, virtio_uml is actually the virtio (bus) driver inside the kernel,
+like you'd have virtio-mmio/virtio-pci in qemu. However, virtio_uml
+doesn't implement the devices in the hypervisor, where most qemu devices
+are implemented, but uses vhost-user to run the device implementation in
+a separate userspace. [1]
+
+Now we're talking about vhost-user to talk to the device, and qemu
+supports this as well, in fact the vhost-user spec is part of qemu:
+https://git.qemu.org/?p=qemu.git;a=blob;f=docs/system/devices/vhost-user.rst;h=86128114fa3788a73679f0af38e141021087c828;hb=1d60bb4b14601e38ed17384277aa4c30c57925d3
+https://www.qemu.org/docs/master/interop/vhost-user.html
+
+The docs on how to use it are here:
+https://www.qemu.org/docs/master/system/devices/vhost-user.html
+
+So once you have a device implementation (regardless of whether it's for
+use with any of the virtio-i2c, arch/um/drivers/virt-pci.c, virtio-gpio,
+virtio-net, ... drivers) you can actually connect it to virtual machines
+running as UML or in qemu.
+
+(Actually, that's not strictly true today since it's
+arch/um/drivers/virt-pci.c and I didn't get a proper device ID assigned
+etc since it was for experimentation, I guess if we make this more
+commonly used then we should move it to drivers/pci/controller/virtio-
+pci.c and actually specify it in the OASIS virtio spec., at the very
+least it'd have to be possible to compile this and lib/logic_iomem.c on
+x86, but that's possible. Anyway I think PCI(e) is probably low on your
+list of things ...)
+
+>  - Also, some paths in this driver needs a modification to be tested
+>    under roadtest.  It uses wait_event_timeout() with a fixed value, but
+>    we cannot guarantee that this constraint is met in the test
+>    environment since it depends on things like CPU load on the host.
+> 
+>    (Also, we use UML's "time travel" feature which essentially
+>    fast-forwards through idle time, so the constraint can never be met
+>    in practice.)
+
+Wohoo! This makes me very happy, finally somebody else who uses it :-)
 
 
 
+[1] As an aside, you might be interested in usfstl (which you can find
+at https://github.com/linux-test-project/usfstl) which is one way you
+could implement the device side - though the focus here is on making a
+device implementation easy while under "time-travel" mode.
+
+If you ever want to use time-travel with multiple machines or actually
+with virtio devices, it also contains the necessary controller program
+to glue the entire simulation together. We use this very successfully to
+test the (real but compiled for x86) wifi firmware for iwlwifi together
+with the real driver actually seeing a PCIe device in UML, under time-
+travel :)
+
+johannes

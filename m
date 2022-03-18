@@ -2,189 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D344DE433
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 23:46:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E204DE43B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 23:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241372AbiCRWrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 18:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
+        id S241364AbiCRWtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 18:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234984AbiCRWrV (ORCPT
+        with ESMTP id S232802AbiCRWtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 18:47:21 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808DD22E962
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 15:45:58 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso11902441ooi.3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 15:45:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ekiD2sX45IwGk6wtsqdwxLttTAGZcGccRjZl1i6g1JA=;
-        b=dMDapo5gWo0mYQwoT0A/aOZqMdPyZSCOVsL5zPGffJvLJZp0AfN2E9xdlck/nSLv/N
-         hEsSe5KNbjsmefIhgIIv1yDVHMP+6YIgd44fW9U2d/c1Akfns382n70WbM/10yIkuHjZ
-         SUNIZp82WOT2MEcG49QwDBCrffF4++Gcu4CkY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ekiD2sX45IwGk6wtsqdwxLttTAGZcGccRjZl1i6g1JA=;
-        b=oq3Y9aqYTkMyVGHf/5wtnpxWSpdPz/rd/LzNbCojODPSnE62BYp9fr/sFORWYDjJgQ
-         CTCFGZIusw7ziFUDIunm7WV5Ug8dNa6RH+fC+G6ohMgNIaAu2wBqMQDRF/7C5hWXTjFj
-         aqiQ7FuRT2aOCBCN1aNerYhW4qFpyRnAhbjXMYEII5gs6oUnd4W5Ru8Qzol4VGsq7pit
-         ZWCsnP2GTw2cpr+fHUhlxcOvYhyM2de2FyMaBSaON+8msk/qtrylgI4xMUc2Tb0NHhtR
-         7i7gX2GBALJT81JEdFklHXH5LCuXoVLbMpdd7hY3I0D4ZVz9/pAKaRC3EzkfpPFOgCon
-         gA7A==
-X-Gm-Message-State: AOAM532OgEc9N4KA6O0idZhUHaCTOg9TaNRjFjKdDjxvAhyHPfy4/BqZ
-        mPXL9tjEBQeJq5tF5qOX6cPOgw==
-X-Google-Smtp-Source: ABdhPJziihDBziDyTkE7iKcLTBW6BUUFUpCgkLWdsk/9MySxxcozoxXb4xoR4U6FbxLxPWes+cEMkA==
-X-Received: by 2002:a05:6820:814:b0:322:b1b2:2456 with SMTP id bg20-20020a056820081400b00322b1b22456mr3591951oob.0.1647643557718;
-        Fri, 18 Mar 2022 15:45:57 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id x12-20020a056830244c00b005ad233e0ba3sm4330223otr.48.2022.03.18.15.45.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 15:45:57 -0700 (PDT)
-Subject: Re: [PATCH 7/9] usb: usbip: eliminate anonymous module_init &
- module_exit
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eli Cohen <eli@mellanox.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>,
-        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
-        Joachim Fritschi <jfritschi@freenet.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, netdev@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org, x86@kernel.org,
+        Fri, 18 Mar 2022 18:49:06 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1189D2CE06;
+        Fri, 18 Mar 2022 15:47:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647643667; x=1679179667;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FkHuNgc659yN21L5/D1sn0B4u/W0uIWKS75COKQLGJo=;
+  b=RRZIrE89wr/xrZpfPrxXoRFugaV2DihNKoLxDCvPZKuB6OSiX2XKvrQl
+   /MH7BjZSAXntPi2quO1aW1bbtRpC7ZMdtdewY8Hgf1cuXo0k2azomPnxJ
+   Hi8+WBpQZrwcyVpzOp3+3FX12z8iXOh3UFLtBTDiotO4nx+8G3AL9dEJ1
+   0i8eIw7zjtciJulTvQJ9uHMepEemYkHKhJYAXHUOiF1b4pR+rDAL3khet
+   1ml2fpV80VAdoP975xcvuNr5LB8LMUQMaU+m20PlhlODw6XAt3V0opGyf
+   ncFxROp+QJ11ufgFW+2lyHvVeEyy5sfr6IzTb7OqVWkyjpwwneQpDL6nP
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="256967138"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="256967138"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 15:47:46 -0700
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="542076895"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 15:47:46 -0700
+Date:   Fri, 18 Mar 2022 15:47:42 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220316192010.19001-1-rdunlap@infradead.org>
- <20220316192010.19001-8-rdunlap@infradead.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <282f4857-7b4f-810e-af0e-e9ca8129c7fc@linuxfoundation.org>
-Date:   Fri, 18 Mar 2022 16:45:54 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+Subject: Re: [PATCH v6 1/6] selftests/resctrl: Kill child process before
+ parent process terminates if SIGTERM is received
+Message-ID: <YjUMDvPd8hMNkUbG@otcwcpicx3.sc.intel.com>
+References: <20220318075807.2921063-1-tan.shaopeng@jp.fujitsu.com>
+ <20220318075807.2921063-2-tan.shaopeng@jp.fujitsu.com>
 MIME-Version: 1.0
-In-Reply-To: <20220316192010.19001-8-rdunlap@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318075807.2921063-2-tan.shaopeng@jp.fujitsu.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/22 1:20 PM, Randy Dunlap wrote:
-> Eliminate anonymous module_init() and module_exit(), which can lead to
-> confusion or ambiguity when reading System.map, crashes/oops/bugs,
-> or an initcall_debug log.
+On Fri, Mar 18, 2022 at 04:58:02PM +0900, Shaopeng Tan wrote:
+> In kselftest framework, a sub test is run using the timeout utility
+                                   s/is run/runs/
+> and it will send SIGTERM to the test upon timeout.
 > 
-> Give each of these init and exit functions unique driver-specific
-> names to eliminate the anonymous names.
+> In resctrl_tests, a child process is created by fork() to
+> run benchmark but SIGTERM is not set in sigaction().
+> If SIGTERM signal is received, the parent process will be killed,
+> but the child process still exists.
 > 
-> Example 1: (System.map)
->   ffffffff832fc78c t init
->   ffffffff832fc79e t init
->   ffffffff832fc8f8 t init
+> kill child process before parent process terminates
+
+s/kill/Kill the/        add "the" before "parent"
+
+> if SIGTERM signal is received.
 > 
-> Example 2: (initcall_debug log)
->   calling  init+0x0/0x12 @ 1
->   initcall init+0x0/0x12 returned 0 after 15 usecs
->   calling  init+0x0/0x60 @ 1
->   initcall init+0x0/0x60 returned 0 after 2 usecs
->   calling  init+0x0/0x9a @ 1
->   initcall init+0x0/0x9a returned 0 after 74 usecs
-> 
-> Fixes: 80fd9cd52de6 ("usbip: vudc: Add VUDC main file")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Krzysztof Opasiak <k.opasiak@samsung.com>
-> Cc: Igor Kotrasinski <i.kotrasinsk@samsung.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Valentina Manea <valentina.manea.m@gmail.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Shuah Khan <skhan@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 > ---
->   drivers/usb/usbip/vudc_main.c |    8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
+>  tools/testing/selftests/resctrl/resctrl_val.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> --- lnx-517-rc8.orig/drivers/usb/usbip/vudc_main.c
-> +++ lnx-517-rc8/drivers/usb/usbip/vudc_main.c
-> @@ -28,7 +28,7 @@ static struct platform_driver vudc_drive
->   
->   static struct list_head vudc_devices = LIST_HEAD_INIT(vudc_devices);
->   
-> -static int __init init(void)
-> +static int __init vudc_init(void)
->   {
->   	int retval = -ENOMEM;
->   	int i;
-> @@ -86,9 +86,9 @@ cleanup:
->   out:
->   	return retval;
->   }
-> -module_init(init);
-> +module_init(vudc_init);
->   
-> -static void __exit cleanup(void)
-> +static void __exit vudc_cleanup(void)
->   {
->   	struct vudc_device *udc_dev = NULL, *udc_dev2 = NULL;
->   
-> @@ -103,7 +103,7 @@ static void __exit cleanup(void)
->   	}
->   	platform_driver_unregister(&vudc_driver);
->   }
-> -module_exit(cleanup);
-> +module_exit(vudc_cleanup);
->   
->   MODULE_DESCRIPTION("USB over IP Device Controller");
->   MODULE_AUTHOR("Krzysztof Opasiak, Karol Kosik, Igor Kotrasinski");
-> 
+> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+> index 95224345c78e..b32b96356ec7 100644
+> --- a/tools/testing/selftests/resctrl/resctrl_val.c
+> +++ b/tools/testing/selftests/resctrl/resctrl_val.c
+> @@ -678,6 +678,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+>  	sigemptyset(&sigact.sa_mask);
+>  	sigact.sa_flags = SA_SIGINFO;
+>  	if (sigaction(SIGINT, &sigact, NULL) ||
+> +	    sigaction(SIGTERM, &sigact, NULL) ||
+>  	    sigaction(SIGHUP, &sigact, NULL)) {
+>  		perror("# sigaction");
+>  		ret = errno;
+> -- 
+> 2.27.0
 
-Thanks for fixing this.
+Please fix the typos.
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Reviewed-by: Fenghua Yu <fenghua.yu@intel.com>
 
-thanks,
--- Shuah
+Thanks.
+
+-Fenghua

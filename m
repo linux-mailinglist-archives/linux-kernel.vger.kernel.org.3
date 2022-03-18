@@ -2,506 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C2E4DE123
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E824DE145
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240173AbiCRSjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 14:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
+        id S240242AbiCRSm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 14:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239341AbiCRSjK (ORCPT
+        with ESMTP id S240144AbiCRSm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 14:39:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57C91BBE09
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647628669; x=1679164669;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DhhdJGjd4r9GQBkrHmE+4nHlFwq/k81vexNmL4L2f6c=;
-  b=PA8Hh1TAX/+/Nx+QO3E8hqVCSj50eGiOqD5f7htKBiYO9fF52u4Ceugs
-   jiZFpBwAAcPRraxOXBeXq/qBN3bO9WVHBUrrC0LiYitqOsG2BIhDUlS1H
-   PRVUD/aHVmbjwQ+K36yUZXGCZ0zJUmhSdTEh6WQ1YOsR027WhC3UrrOaN
-   gRv/3W2DN1P1qNclqoS5AHxiFwOsdSaLGf91CVCzmwsH0LuzYn0IPB/fA
-   9qOTzKgamvEIgyEMtUVxgBknuyCeIfPHHLJmEnVaRsOeyYryc/uWU7IZh
-   OgQ6HHD0OWmjINe91wHafYcYDx4Sj2LPtjeyLeHxXkvfPbmN7lVEI9XN2
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="256023946"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="256023946"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:37:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="599609129"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 18 Mar 2022 11:37:46 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVHTt-000F3Q-UR; Fri, 18 Mar 2022 18:37:45 +0000
-Date:   Sat, 19 Mar 2022 02:36:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wei Fu <wefu@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-        Liu Shaohua <liush@allwinnertech.com>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>
-Subject: [ammarfaizi2-block:palmer/linux/riscv-d1-merge 17/20]
- arch/riscv/include/asm/pgtable-64.h:92:2: error: expected assembly-time
- absolute expression
-Message-ID: <202203190244.24G89cJ9-lkp@intel.com>
+        Fri, 18 Mar 2022 14:42:26 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C7B2EA0E9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:41:07 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id p14so4127899lfe.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T68So5s+Mvf8Yxsi6hpGLQhvBaydZiJJcf2u3DNH8AQ=;
+        b=ZmBvasPMchpBJ8mkRKb7R3RhkkeHi7XstG7ccVRfInSia4wxmHPc+1XSCMLTTbtwoD
+         iBBZhG8pLYhyN+/NcRaXQ6YvBWpZBO0b6qFsSWL8b/QpLIBN/MEi/ZFczp9fnO89TfiE
+         WjskrGL3deHU2C25PjWZUp+gAg6DG/SMTBWTU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T68So5s+Mvf8Yxsi6hpGLQhvBaydZiJJcf2u3DNH8AQ=;
+        b=gdCrxLzztP9/p/WW/CYLm69woa8uXYw1eXkWGx6YcLLIsHsSmaAHC9b444x9OmGmp9
+         dBE64Sqn8rPb5FSj4Lbsjqb2X+UF9lG0isAibnV8gnKUJhlO1bsWJry07SV6jcYw+W5B
+         48ninoseZ+GY0ciwmkM4MwW1Fzsn9h2E0xU1dPI1oMljd1S6I3EB5mxsst2GKtxJ+8nd
+         UgM/RVk0f7TlHcx7i7WrRSIxxO8z58X/uNAje7lxZ+VxeanIKjufDkuUvvu17NQmBdZF
+         6kEF8owgBv3x0NNxG8+VBdi+2yDl7sBGJXfPBhFr1v3NZLFRRW/kshFaN1YmvWE0EB7h
+         do+w==
+X-Gm-Message-State: AOAM533pR1thrtKTvVhS2NJkZzzkq8nIfFTFrwqQK53uT0o+JMAJdMCd
+        CjaSxQ4Zbp2FcN2gTx6UEKr6FZG4c6pPzGWAclY=
+X-Google-Smtp-Source: ABdhPJzjYyB1xwXMknUnlasyhEts+3DLtVlrBRQoqE4nOriko/ziIpVQ1Pw+K2FOQUVk19m1GgI9Eg==
+X-Received: by 2002:a05:6512:3dab:b0:44a:247:2d8 with SMTP id k43-20020a0565123dab00b0044a024702d8mr4170601lfv.628.1647628865751;
+        Fri, 18 Mar 2022 11:41:05 -0700 (PDT)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
+        by smtp.gmail.com with ESMTPSA id v1-20020a2e6101000000b002480c4f33d5sm1116393ljb.132.2022.03.18.11.41.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 11:41:03 -0700 (PDT)
+Received: by mail-lj1-f172.google.com with SMTP id o6so12409277ljp.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:41:03 -0700 (PDT)
+X-Received: by 2002:a2e:804b:0:b0:247:e81f:87e9 with SMTP id
+ p11-20020a2e804b000000b00247e81f87e9mr7192968ljg.176.1647628863338; Fri, 18
+ Mar 2022 11:41:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220316213055.2351342-1-morbo@google.com> <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
+ <CAKwvOdkjb3uR+kqjfdKL5gqA8R+00c5=3E7uGGW+mGZ3QRsjqg@mail.gmail.com>
+ <YjSROmYwwGhpsXMl@smile.fi.intel.com> <CAKwvOdkEjrPUL4HuO3UKaUZAzVw=XV1bEOSj6HR5R1WTUSSZ4w@mail.gmail.com>
+ <CAGG=3QVCkF7RdbQ85MtKgUjm8qP79BESAUiGU3wSQc0+ExO0gA@mail.gmail.com> <CAKwvOd=1+JF6mxpM_K3xCYAr-R8nrj0s7tA9GwUybyiFdLpA2w@mail.gmail.com>
+In-Reply-To: <CAKwvOd=1+JF6mxpM_K3xCYAr-R8nrj0s7tA9GwUybyiFdLpA2w@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 18 Mar 2022 11:40:47 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wis4P8-=-0jmcDzGGuttZ3ESnq0LA5PMOVmKkPRwK1kEA@mail.gmail.com>
+Message-ID: <CAHk-=wis4P8-=-0jmcDzGGuttZ3ESnq0LA5PMOVmKkPRwK1kEA@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: acpi: use correct format characters
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Bill Wendling <morbo@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        Joe Perches <joe@perches.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-d1-merge
-head:   93a6d3583d613a2ff1c6d28060c78af8631e0d21
-commit: de8950b38c5be22611acbba781e7f0d298bc292b [17/20] riscv: add RISC-V Svpbmt extension support
-config: riscv-randconfig-r042-20220318 (https://download.01.org/0day-ci/archive/20220319/202203190244.24G89cJ9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/de8950b38c5be22611acbba781e7f0d298bc292b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-d1-merge
-        git checkout de8950b38c5be22611acbba781e7f0d298bc292b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/msm/ drivers/iio/adc/
+On Fri, Mar 18, 2022 at 11:29 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Should we add a note diagnostic to clang suggesting the explicit cast
+> as one method of silencing the warning?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On the compiler side, I would love to see warnings about the ambiguity
+of the sign of 'char' in the general case.
 
-All errors (new ones prefixed by >>):
+That said, I tried to add that to 'sparse' long long ago, and couldn't
+make it work sanely. All the approaches I tried all get _way_ too many
+false positives.
 
-   In file included from drivers/iio/adc/men_z188_adc.c:12:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
->> arch/riscv/include/asm/pgtable-64.h:92:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_IO);
-           ^
-   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:136:2: note: expanded from macro 'ALTERNATIVE'
-           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:102:2: note: expanded from macro '_ALTERNATIVE_CFG'
-           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-           ^
-   arch/riscv/include/asm/alternative-macros.h:99:2: note: expanded from macro '__ALTERNATIVE_CFG'
-           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:88:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
-            ^
-   <inline asm>:25:6: note: instantiated into assembly here
-   .org    . - (887b - 886b) + (889b - 888b)
-           ^
-   In file included from drivers/iio/adc/men_z188_adc.c:12:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
->> arch/riscv/include/asm/pgtable-64.h:92:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_IO);
-           ^
-   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:136:2: note: expanded from macro 'ALTERNATIVE'
-           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:102:2: note: expanded from macro '_ALTERNATIVE_CFG'
-           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-           ^
-   arch/riscv/include/asm/alternative-macros.h:99:2: note: expanded from macro '__ALTERNATIVE_CFG'
-           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:89:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
-            ^
-   <inline asm>:26:6: note: instantiated into assembly here
-   .org    . - (889b - 888b) + (887b - 886b)
-           ^
-   In file included from drivers/iio/adc/men_z188_adc.c:12:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
->> arch/riscv/include/asm/pgtable-64.h:92:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_IO);
-           ^
-   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:136:2: note: expanded from macro 'ALTERNATIVE'
-           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:102:2: note: expanded from macro '_ALTERNATIVE_CFG'
-           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-           ^
-   arch/riscv/include/asm/alternative-macros.h:99:2: note: expanded from macro '__ALTERNATIVE_CFG'
-           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:88:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
-            ^
-   <inline asm>:25:6: note: instantiated into assembly here
-   .org    . - (887b - 886b) + (889b - 888b)
-           ^
-   In file included from drivers/iio/adc/men_z188_adc.c:12:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:15:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
->> arch/riscv/include/asm/pgtable-64.h:92:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_IO);
-           ^
-   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:136:2: note: expanded from macro 'ALTERNATIVE'
-           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:102:2: note: expanded from macro '_ALTERNATIVE_CFG'
-           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-           ^
-   arch/riscv/include/asm/alternative-macros.h:99:2: note: expanded from macro '__ALTERNATIVE_CFG'
-           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:89:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
-            ^
-   <inline asm>:26:6: note: instantiated into assembly here
-   .org    . - (889b - 888b) + (887b - 886b)
-           ^
-   4 errors generated.
---
->> <inline asm>:25:6: error: expected assembly-time absolute expression
-   .org    . - (887b - 886b) + (889b - 888b)
-           ^
-   <inline asm>:26:6: error: expected assembly-time absolute expression
-   .org    . - (889b - 888b) + (887b - 886b)
-           ^
-   In file included from drivers/gpu/drm/msm/adreno/a6xx_gmu.c:9:
-   In file included from include/drm/drm_gem.h:40:
-   In file included from include/drm/drm_vma_manager.h:26:
-   In file included from include/drm/drm_mm.h:51:
-   In file included from include/drm/drm_print.h:31:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/riscv/include/asm/uaccess.h:12:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
-   arch/riscv/include/asm/pgtable-64.h:76:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_MTMASK);
-           ^
-   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:136:2: note: expanded from macro 'ALTERNATIVE'
-           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:102:2: note: expanded from macro '_ALTERNATIVE_CFG'
-           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-           ^
-   arch/riscv/include/asm/alternative-macros.h:99:2: note: expanded from macro '__ALTERNATIVE_CFG'
-           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:88:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
-            ^
-   <inline asm>:25:6: note: instantiated into assembly here
-   .org    . - (887b - 886b) + (889b - 888b)
-           ^
-   In file included from drivers/gpu/drm/msm/adreno/a6xx_gmu.c:9:
-   In file included from include/drm/drm_gem.h:40:
-   In file included from include/drm/drm_vma_manager.h:26:
-   In file included from include/drm/drm_mm.h:51:
-   In file included from include/drm/drm_print.h:31:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/riscv/include/asm/uaccess.h:12:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
-   arch/riscv/include/asm/pgtable-64.h:76:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_MTMASK);
-           ^
-   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:136:2: note: expanded from macro 'ALTERNATIVE'
-           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:102:2: note: expanded from macro '_ALTERNATIVE_CFG'
-           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-           ^
-   arch/riscv/include/asm/alternative-macros.h:99:2: note: expanded from macro '__ALTERNATIVE_CFG'
-           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:89:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
-            ^
-   <inline asm>:26:6: note: instantiated into assembly here
-   .org    . - (889b - 888b) + (887b - 886b)
-           ^
-   In file included from drivers/gpu/drm/msm/adreno/a6xx_gmu.c:9:
-   In file included from include/drm/drm_gem.h:40:
-   In file included from include/drm/drm_vma_manager.h:26:
-   In file included from include/drm/drm_mm.h:51:
-   In file included from include/drm/drm_print.h:31:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/riscv/include/asm/uaccess.h:12:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
->> arch/riscv/include/asm/pgtable-64.h:92:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_IO);
-           ^
-   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:136:2: note: expanded from macro 'ALTERNATIVE'
-           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:102:2: note: expanded from macro '_ALTERNATIVE_CFG'
-           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-           ^
-   arch/riscv/include/asm/alternative-macros.h:99:2: note: expanded from macro '__ALTERNATIVE_CFG'
-           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:88:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
-            ^
-   <inline asm>:25:6: note: instantiated into assembly here
-   .org    . - (887b - 886b) + (889b - 888b)
-           ^
-   In file included from drivers/gpu/drm/msm/adreno/a6xx_gmu.c:9:
-   In file included from include/drm/drm_gem.h:40:
-   In file included from include/drm/drm_vma_manager.h:26:
-   In file included from include/drm/drm_mm.h:51:
-   In file included from include/drm/drm_print.h:31:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/riscv/include/asm/uaccess.h:12:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
->> arch/riscv/include/asm/pgtable-64.h:92:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_IO);
-           ^
-   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:136:2: note: expanded from macro 'ALTERNATIVE'
-           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:102:2: note: expanded from macro '_ALTERNATIVE_CFG'
-           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-           ^
-   arch/riscv/include/asm/alternative-macros.h:99:2: note: expanded from macro '__ALTERNATIVE_CFG'
-           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:89:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
-            ^
-   <inline asm>:26:6: note: instantiated into assembly here
-   .org    . - (889b - 888b) + (887b - 886b)
-           ^
->> <inline asm>:25:6: error: expected assembly-time absolute expression
-   .org    . - (887b - 886b) + (889b - 888b)
-           ^
-   <inline asm>:26:6: error: expected assembly-time absolute expression
-   .org    . - (889b - 888b) + (887b - 886b)
-           ^
-   In file included from drivers/gpu/drm/msm/adreno/a6xx_gmu.c:9:
-   In file included from include/drm/drm_gem.h:40:
-   In file included from include/drm/drm_vma_manager.h:26:
-   In file included from include/drm/drm_mm.h:51:
-   In file included from include/drm/drm_print.h:31:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/riscv/include/asm/uaccess.h:12:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
-   arch/riscv/include/asm/pgtable-64.h:76:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_MTMASK);
-           ^
-   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:136:2: note: expanded from macro 'ALTERNATIVE'
-           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:102:2: note: expanded from macro '_ALTERNATIVE_CFG'
-           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-           ^
-   arch/riscv/include/asm/alternative-macros.h:99:2: note: expanded from macro '__ALTERNATIVE_CFG'
-           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:88:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
-            ^
-   <inline asm>:25:6: note: instantiated into assembly here
-   .org    . - (887b - 886b) + (889b - 888b)
-           ^
-   In file included from drivers/gpu/drm/msm/adreno/a6xx_gmu.c:9:
-   In file included from include/drm/drm_gem.h:40:
-   In file included from include/drm/drm_vma_manager.h:26:
-   In file included from include/drm/drm_mm.h:51:
-   In file included from include/drm/drm_print.h:31:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/riscv/include/asm/uaccess.h:12:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
-   arch/riscv/include/asm/pgtable-64.h:76:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_MTMASK);
-           ^
-   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:136:2: note: expanded from macro 'ALTERNATIVE'
-           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:102:2: note: expanded from macro '_ALTERNATIVE_CFG'
-           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-           ^
-   arch/riscv/include/asm/alternative-macros.h:99:2: note: expanded from macro '__ALTERNATIVE_CFG'
-           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:89:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
-            ^
-   <inline asm>:26:6: note: instantiated into assembly here
-   .org    . - (889b - 888b) + (887b - 886b)
-           ^
-   In file included from drivers/gpu/drm/msm/adreno/a6xx_gmu.c:9:
-   In file included from include/drm/drm_gem.h:40:
-   In file included from include/drm/drm_vma_manager.h:26:
-   In file included from include/drm/drm_mm.h:51:
-   In file included from include/drm/drm_print.h:31:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/riscv/include/asm/uaccess.h:12:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
->> arch/riscv/include/asm/pgtable-64.h:92:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_IO);
-           ^
-   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:136:2: note: expanded from macro 'ALTERNATIVE'
-           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:102:2: note: expanded from macro '_ALTERNATIVE_CFG'
-           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-           ^
-   arch/riscv/include/asm/alternative-macros.h:99:2: note: expanded from macro '__ALTERNATIVE_CFG'
-           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:88:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
-            ^
-   <inline asm>:25:6: note: instantiated into assembly here
-   .org    . - (887b - 886b) + (889b - 888b)
-           ^
-   In file included from drivers/gpu/drm/msm/adreno/a6xx_gmu.c:9:
-   In file included from include/drm/drm_gem.h:40:
-   In file included from include/drm/drm_vma_manager.h:26:
-   In file included from include/drm/drm_mm.h:51:
-   In file included from include/drm/drm_print.h:31:
-   In file included from include/linux/seq_file.h:12:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   In file included from arch/riscv/include/asm/uaccess.h:12:
-   In file included from arch/riscv/include/asm/pgtable.h:111:
->> arch/riscv/include/asm/pgtable-64.h:92:2: error: expected assembly-time absolute expression
-           ALT_SVPBMT(val, _PAGE_IO);
-           ^
-   arch/riscv/include/asm/errata_list.h:46:5: note: expanded from macro 'ALT_SVPBMT'
-   asm(ALTERNATIVE("li %0, 0\t\nnop", "li %0, %1\t\nslli %0,%0,%2", 0,     \
-       ^
-   arch/riscv/include/asm/alternative-macros.h:136:2: note: expanded from macro 'ALTERNATIVE'
-           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:102:2: note: expanded from macro '_ALTERNATIVE_CFG'
-           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
-           ^
-   arch/riscv/include/asm/alternative-macros.h:99:2: note: expanded from macro '__ALTERNATIVE_CFG'
-           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
-           ^
-   arch/riscv/include/asm/alternative-macros.h:89:3: note: expanded from macro 'ALT_NEW_CONTENT'
-           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
-            ^
-   <inline asm>:26:6: note: instantiated into assembly here
-   .org    . - (889b - 888b) + (887b - 886b)
-           ^
-   12 errors generated.
+I tried to come up with some way of figuring out "this code acts
+differently depending on whether 'char' is signed or not" and warning
+about it, and never could.
 
+And I suspect the same is true even for the much moire limited case of
+only format warnings.
 
-vim +92 arch/riscv/include/asm/pgtable-64.h
+Because it's a *bad* idea to use '%d' (or almost any other format
+specifier) together with a 'char' argument, but only if you don't know
+the range of the char argument.
 
-    87	
-    88	static inline u64 riscv_page_io(void)
-    89	{
-    90		u64 val;
-    91	
-  > 92		ALT_SVPBMT(val, _PAGE_IO);
-    93		return val;
-    94	}
-    95	
+But the other side of the argument is that quite often, people *do*
+know the range of the 'char' argument. If your 'char' type thing comes
+from some array or string that you control, and you used 'char' simply
+because you know you have small values (typical example: use it for an
+array of booleans etc), then it would be very annoying if the compiler
+warned you about using '%d'.
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+There is no reason to use '%hhd' when you know your data range is [0,1].
+
+So honestly, I don't think you can come up with a sane warning that
+doesn't cause *way* too many false positives and just annoys people.
+
+I'd love to be proven wrong. In fact, I'd _really_ love to be proven
+wrong for that generic case. The "sometimes 'char' is signed,
+sometimes it is unsigned, and it depends on the architecture and the
+compiler flags" can be a real problem.
+
+                Linus

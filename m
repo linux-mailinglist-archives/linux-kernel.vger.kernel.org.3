@@ -2,115 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB2E4DE24E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EDE34DE252
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240516AbiCRUUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 16:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
+        id S240583AbiCRUUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 16:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240356AbiCRUUJ (ORCPT
+        with ESMTP id S240356AbiCRUUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 16:20:09 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D790435271
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 13:18:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647634729; x=1679170729;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UTTL7SuR/mDVFiM3OSqgbi+QSiHjVLxzF7HcuMj4pFU=;
-  b=EzjxGbPdhitPpzblRTWN3B/DUTrPi6ScCif4TX6sJsGOAc/tERzmncqw
-   gOVsKQVTRJnB60dyKvQnmIHyUhvVr4jmI97wdOBY8frMSrT7p4ORYs0u2
-   y6u+jQT0r4y4NlXv0KM0+zr9O9qRKrhXr1ROiw2DGzUigBgdSXSh8nkSp
-   cxrBZb/lv+lofIoQJL3Gqssd21xKtPWni+yqx7c345S4OOdqaaJ98Pzrh
-   vMGB5Il6rPRsf4PcQ5LXYDpIAld9opgto/rdC8aSiU9d+D5D8+hcchSsy
-   qjB188i+xr71Mi8GjmwN1JXPcChKadv8F5qstTl78BRU3YHsR1yZJG89J
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="343652576"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="343652576"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 13:18:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="581870814"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 18 Mar 2022 13:18:48 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVJ3f-000F7j-MM; Fri, 18 Mar 2022 20:18:47 +0000
-Date:   Sat, 19 Mar 2022 04:18:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jlayton:ceph-sparse-read 14/15] net/ceph/osd_client.c:5847:50:
- error: incompatible types when initializing type 'struct ceph_sparse_extent
- *' using type 'struct ceph_sparse_extent'
-Message-ID: <202203190457.rN00jXWd-lkp@intel.com>
+        Fri, 18 Mar 2022 16:20:33 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A5AB2455;
+        Fri, 18 Mar 2022 13:19:13 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id v4so8279560pjh.2;
+        Fri, 18 Mar 2022 13:19:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HV4U7qntOGnpJQ2Afj++lgXG3IzP1EpW8jb1OgmKEbs=;
+        b=cv/wFbgGRgnZTrAo2iSw2ZYNZUvLSvO2ykavsVExcgFHItqQBTyFH7XfiGSzuYmgwA
+         Ed/JqSZs6k0xhbTvukrPZxEZWV4jv5BtS4zuCxqFqhs2oXgCojO8M1opGbEwTKSG4awU
+         lhBbN+i+NnMlCgMprP9pR+cCkED5e/56cGEarkY/Ah0B68BqRb4VcQ/YZN/fWJ6ZzWgb
+         sKicUq3R3HPPAKLMthT1J6DFsMHC27D8b35u/5XMiKH/TJ8FAXlzqZHDmEBL2uIpHWSa
+         MnyPKyGIYzKEJiYv7difK79cDiFRCJnz5WPIfDR2pzRioPQmcDWorTSHCivvHfRSseRM
+         TBSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HV4U7qntOGnpJQ2Afj++lgXG3IzP1EpW8jb1OgmKEbs=;
+        b=TpIz/hXueDbtS/AIxi1Vp/VzvwJbsmSnkPfxlOJUlSPG9o+1C7NOSZQvixMMMyWYMm
+         i4k8s5q5md/omP86IZ9nXPk1qNj9VNIaNb9wieD54FpPRdUyRP64op3YYirZeJ/ZHwcO
+         k5LchIgvLxn2hmAOsTRIeyWoCdJ/RUCT/kcoXCXmCdP143Rv8yImboCsEkaYUzkQC2Ac
+         eHiGPEd6pKpdrucQw15qFgS33BA4++LWAdV+IIh5D5fNx3Ot6nMKXPlXkK9QYFUkHRp+
+         WZ/b5liDxL3NgcSRm0PQGJIMqA4evkPfEfWB1SrHGVLRtPn0OZZefPWvtSskHJZWrSiq
+         2lvQ==
+X-Gm-Message-State: AOAM533VaUt7wxBkQ64eGqhfEXU9Y5TRLFUGSiQuVosGS+p+N/eWyRpe
+        e8HL0cul/0IhITtOVgKpYRKTQTDHQhN/gIVZkAk=
+X-Google-Smtp-Source: ABdhPJzS7VKxms885c65Z+VAIRBodeDJ9R0QcxFh8fU+8LTK7EQHr7jWlQVtwvzDdeaT2HcKmVDeVupzLGpfuzOqFwo=
+X-Received: by 2002:a17:90a:3906:b0:1bf:a0a6:d208 with SMTP id
+ y6-20020a17090a390600b001bfa0a6d208mr23331916pjb.21.1647634752753; Fri, 18
+ Mar 2022 13:19:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220317234827.447799-1-shy828301@gmail.com> <20220318012948.GE1544202@dread.disaster.area>
+ <YjP+oyoT9Y2SFt8L@casper.infradead.org> <CAHbLzkonVj63+up4-BCPm29yjaf_29asMFJHpXiZp96UjGGNSg@mail.gmail.com>
+ <YjTT5Meqdn8fiuC2@casper.infradead.org>
+In-Reply-To: <YjTT5Meqdn8fiuC2@casper.infradead.org>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 18 Mar 2022 13:19:00 -0700
+Message-ID: <CAHbLzkrE1sF2bcv=eB8szx047pUgMZzo9JuyADTCBzZ9V-+7XA@mail.gmail.com>
+Subject: Re: [v2 PATCH 0/8] Make khugepaged collapse readonly FS THP more consistent
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Dave Chinner <david@fromorbit.com>, vbabka@suse.cz,
+        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
+        songliubraving@fb.com, riel@surriel.com, ziy@nvidia.com,
+        akpm@linux-foundation.org, tytso@mit.edu, adilger.kernel@dilger.ca,
+        darrick.wong@oracle.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-sparse-read
-head:   dd42d5af0df78fdd04a5a93c0488211435bd32e6
-commit: 555a255575736e3b39f6b2c70574422439b765b6 [14/15] libceph: add sparse read support to OSD client
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220319/202203190457.rN00jXWd-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=555a255575736e3b39f6b2c70574422439b765b6
-        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
-        git fetch --no-tags jlayton ceph-sparse-read
-        git checkout 555a255575736e3b39f6b2c70574422439b765b6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+On Fri, Mar 18, 2022 at 11:48 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Fri, Mar 18, 2022 at 11:04:29AM -0700, Yang Shi wrote:
+> > I agree once page cache huge page is fully supported,
+> > READ_ONLY_THP_FOR_FS could be deprecated. But actually this patchset
+> > makes khugepaged collapse file THP more consistently. It guarantees
+> > the THP could be collapsed as long as file THP is supported and
+> > configured properly and there is suitable file vmas, it is not
+> > guaranteed by the current code. So it should be useful even though
+> > READ_ONLY_THP_FOR_FS is gone IMHO.
+>
+> I don't know if it's a good thing or not.  Experiments with 64k
+> PAGE_SIZE on arm64 shows some benchmarks improving and others regressing.
+> Just because we _can_ collapse a 2MB range of pages into a single 2MB
+> page doesn't mean we _should_.  I suspect the right size folio for any
+> given file will depend on the access pattern.  For example, dirtying a
+> few bytes in a folio will result in the entire folio being written back.
+> Is that what you want?  Maybe!  It may prompt the filesystem to defragment
+> that range, which would be good.  On the other hand, if you're bandwidth
+> limited, it may decrease your performance.  And if your media has limited
+> write endurance, it may result in your drive wearing out more quickly.
+>
+> Changing the heuristics should come with data.  Preferably from a wide
+> range of systems and use cases.  I know that's hard to do, but how else
+> can we proceed?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+TBH I don't think it belongs to "change the heuristics". Its users'
+decision if their workloads could benefit from huge pages or not. They
+could set THP to always/madivse/never per their workloads. The
+patchset is aimed to fix the misbehavior. The user visible issue is
+even though users enable READ_ONLY_THP_FOR_FS and configure THP to
+"always" (khugepaged always runs) and do expect their huge text
+section is backed by THP but THP may not be collapsed.
 
-All errors (new ones prefixed by >>):
+>
+> And I think you ignored my point that READ_ONLY_THP_FOR_FS required
+> no changes to filesystems.  It was completely invisible to them, by
+> design.  Now this patchset requires each filesystem to do something.
+> That's not a great step.
 
-   net/ceph/osd_client.c: In function 'convert_extent_map':
->> net/ceph/osd_client.c:5847:50: error: incompatible types when initializing type 'struct ceph_sparse_extent *' using type 'struct ceph_sparse_extent'
-    5847 |                 struct ceph_sparse_extent *ext = sr->sr_extent[i];
-         |                                                  ^~
+I don't mean to ignore your point. I do understand it is not perfect.
+I was thinking about making it FS agnostic in the first place. But I
+didn't think of a perfect way to do it at that time, so I followed
+what tmpfs does.
 
+However, by rethinking this we may be able to call
+khugepaged_enter_file() in filemap_fault(). I was concerned about the
+overhead in the page fault path. But it may be neglectable since
+khugepaged_enter_file() does bail out in the first place if the mm is
+already registered in khugepaged, just the first page fault needs to
+go through all the check, but the first page fault is typically a
+major fault so the overhead should be not noticeable comparing to the
+overhead of I/O. Calling khugepaged_enter() in page fault path is the
+approach used by anonymous THP too.
 
-vim +5847 net/ceph/osd_client.c
+>
+> P.S. khugepaged currently does nothing if a range contains a compound
+> page.  It assumes that the page is compound because it's now a THP.
+> Large folios break that assumption, so khugepaged will now never
+> collapse a range which includes large folios.  Thanks to commit
+>     mm/filemap: Support VM_HUGEPAGE for file mappings
+> we'll always try to bring in PMD-sized pages for MADV_HUGEPAGE, so
+> it _probably_ doesn't matter.  But it's something we should watch
+> for as filesystems grow support for large folios.
 
-  5840	
-  5841	#ifdef __BIG_ENDIAN
-  5842	static inline void convert_extent_map(struct ceph_sparse_read *sr)
-  5843	{
-  5844		int i;
-  5845	
-  5846		for (i = 0; i < sr->sr_count; i++) {
-> 5847			struct ceph_sparse_extent *ext = sr->sr_extent[i];
-  5848	
-  5849			ext->off = le64_to_cpu((__force __le32)ext->off);
-  5850			ext->len = le64_to_cpu((__force __le32)ext->len);
-  5851		}
-  5852	}
-  5853	#else
-  5854	static inline void convert_extent_map(struct ceph_sparse_read *sr)
-  5855	{
-  5856	}
-  5857	#endif
-  5858	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Yeah, I agree, thanks for reminding this. In addition I think the
+users of READ_ONLY_THP_FOR_FS should also expect the PMD-sized THP to
+be collapsed for their usecase with full page cache THP support since
+their benefits come from reduced TLB miss.

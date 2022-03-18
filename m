@@ -2,225 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AEE4DD84B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8A54DD857
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbiCRKnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        id S235192AbiCRKoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235590AbiCRKnB (ORCPT
+        with ESMTP id S233394AbiCRKox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 06:43:01 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EB82D7AAF
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:41:20 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id u3so10843172ljd.0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:41:20 -0700 (PDT)
+        Fri, 18 Mar 2022 06:44:53 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044F39D4F5;
+        Fri, 18 Mar 2022 03:43:33 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id yy13so16229669ejb.2;
+        Fri, 18 Mar 2022 03:43:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VWOV5BQly7uUTCsTTck4r1RI0yVIrTME1+42FK5fZQQ=;
-        b=SiW7FZZJDFCCmtv/P0k8Mtvt7QXorjlxwA7T0umUyjkegWZzZLlCvF0CnrOejE+Vvr
-         aaeDdNjLs6aIF7gx/lADEa0lxU/kH4CrbGZtc6KBTBbIOE7XPgha7c76W5bh5z/Drtzi
-         pGJxIj5HAvxprPe8MHKu9SyLBeLZ3INLaBb54WUjBUIsUbrokvUk4NaOcvIT2hAqWSPr
-         CHvJCxQi5252wXdMcw9y3iWNL54T/UqG0ZC5Bnvty3SrLwbKBjAJHvLIggbs2p2/mNa7
-         5XnXCvXkBVtXvsaGfY2B6CRwAk4kH3mDe9X1RAFDDKMTzlyusOaG7VB8JMFmCI9cFEkz
-         +WNw==
+        bh=+HJIH4AwD9mhOZx7mjtxfMP8PmXBGjgqbEfN/JeaejY=;
+        b=TZUTV/njW04HfdKUw7yc2OkbI6DNz7WXuRwtMDbUtS70fgPJFfvPeqyXM/AKIjKE5F
+         e/+mAatjqeIKdQFBGTk56f7yEF+se+uKKer0lytEW1p8bf14fiMWNOFYa3uOfCPb3uGj
+         q3KtvvqP/shZzOZ+SiQufDqLvYwIVp46X8FCyBYLT1tAi1koVzfmHyyVPt3N+prW+1Wj
+         /kPX/JBpR3WoosTD18t7Xbb19ZuUEQLjgcwu73cEAWZdXVsNxibHpwJTW++OVNvM4qnt
+         riBWRRR3D0EhV9cn+2ZGLSzyk8Apv1JXyH4XwgFaZqFyUmsR4NvDhVgU1rjuuGwVPYg1
+         N2Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VWOV5BQly7uUTCsTTck4r1RI0yVIrTME1+42FK5fZQQ=;
-        b=LyyuTDvB7saBd93sCe6RuSGp4rU8k52v7jPkpqh23olVgGF760icfh+LWhSEWLrCra
-         GIgGr9KbthOiPTR3bNShWT8kNIIQyX6bR+cEOxQSEo6NWAwR+08WmAmuLig8ccXuOttA
-         HnzD1hq9KUVxeytWIJfQIGSUSvElWSMVx3FiaM0b9ryLvynYcnWgql6KLnXTOEaEWlCf
-         Lh/EaN0qJZuemvjpw7w3Ex46sSSjy+DAfnNnettRpfoftK2CnV/AGOd/c8JgDXS/FwSH
-         gFWAho5xWsObhcgnxh8/L1PqPaHMt+2dXjHHWDo2BRn1xwfhSn+AHBXu6dgFbT956BaF
-         soWw==
-X-Gm-Message-State: AOAM532cNiqsvQ7o5Fm+yMgtZa7mljthCDOaPp4BIHn0kk/+p6tYVp9N
-        hhWK7BI4L3ZMkKPIUkroweJ1jN4JqTOfAYGPkLMBPg==
-X-Google-Smtp-Source: ABdhPJxDwbeLUz80HQ2n0RKN6rMdsWCsrNQgSGc5q2vCkMxhKZvT/2ipxlJ/taPnr0E2lKeN+kxT0S5nloOZaPOCaTs=
-X-Received: by 2002:a05:651c:1783:b0:249:43a8:b6f9 with SMTP id
- bn3-20020a05651c178300b0024943a8b6f9mr5374258ljb.273.1647600078120; Fri, 18
- Mar 2022 03:41:18 -0700 (PDT)
+        bh=+HJIH4AwD9mhOZx7mjtxfMP8PmXBGjgqbEfN/JeaejY=;
+        b=qsttq3wX/tyEkDAChYgALvjzbxYmAqOoJ094SYOT3Tini5nRUtmMYWKgTWQHDPMm21
+         cbRNJAp5wGR5OhvzurydTpoEiLgr//nV9ChhvGDgy0hmltASga6/iY3fW1aIUOJPX9Rk
+         uC6+qDEk5VHzzOhRpUaKQ4/GMyMxCDpQbc+JmFpLA5tS/CSRBQ1TKTe/cha8GMVsB/MR
+         VoWSlsF0iyohBA+6ctr1t1N2f6QQJVBG2TdfNXN4qFKjJD7wUDDHa3u5j9PwozDXmphg
+         OnkO+3SggQEKvndGmznIgCT2xR4glfaLXIUCq5D6r3SIEwGAaDKwdD1JFVOZ+r+l/Wt7
+         X1SA==
+X-Gm-Message-State: AOAM533iJ9cPzkfKSTLKNLmPJG5vGPF2NDb5c3duqX8dOGcmlIbdJTJG
+        E77coFviGG+VqAQOqJO9lAgAcfJ9cfwboam9f6Q=
+X-Google-Smtp-Source: ABdhPJxZJqxItgMA2zu+j+BAAmm9H1YkRPxFlE9tV3eghTdZ2GMv9Q9AawPTB/6VPWasa8lt1A17VvEgmlAcBrryISs=
+X-Received: by 2002:a17:907:968e:b0:6db:aed5:43c8 with SMTP id
+ hd14-20020a170907968e00b006dbaed543c8mr8188137ejc.636.1647600211292; Fri, 18
+ Mar 2022 03:43:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220315220549.2749328-1-chris.packham@alliedtelesis.co.nz>
- <20220315220549.2749328-2-chris.packham@alliedtelesis.co.nz>
- <CAPDyKFpMnno1RjnSMhgUAZc=q4erdNGEFYOW=k13MMMPti7aQA@mail.gmail.com>
- <4b27d0bf-cf30-9c96-f519-9df71091671c@alliedtelesis.co.nz> <88ec8037-38ef-2978-89dd-526f443a30ea@alliedtelesis.co.nz>
-In-Reply-To: <88ec8037-38ef-2978-89dd-526f443a30ea@alliedtelesis.co.nz>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 18 Mar 2022 11:40:41 +0100
-Message-ID: <CAPDyKFoo0GH0XwA3uZ-KF4Vbh2GxwPgia9eJTP+Nfi73COPy-w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: mmc: xenon: add AC5 compatible string
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     "huziji@marvell.com" <huziji@marvell.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <YjL4cEBXCQ1eSy48@smile.fi.intel.com> <20220317204126.GA723808@bhelgaas>
+In-Reply-To: <20220317204126.GA723808@bhelgaas>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 18 Mar 2022 12:42:18 +0200
+Message-ID: <CAHp75Veb4BqcGW=sCXEfrJ2ksvnXmjN-XZ5L6ttcQ8SJneg27w@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] PCI: Enable INTx quirk for ATI PCIe-USB adapter
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        micklorain@protonmail.com,
+        Alex Williamson <alex.williamson@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Mar 2022 at 04:41, Chris Packham
-<Chris.Packham@alliedtelesis.co.nz> wrote:
->
->
-> On 18/03/22 11:27, Chris Packham wrote:
+On Thu, Mar 17, 2022 at 11:12 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> On Thu, Mar 17, 2022 at 10:59:28AM +0200, Andy Shevchenko wrote:
+> > On Wed, Mar 16, 2022 at 04:15:48PM -0500, Bjorn Helgaas wrote:
+> > > On Wed, Mar 16, 2022 at 06:12:19PM +0200, Andy Shevchenko wrote:
+> > > > On Wed, Mar 16, 2022 at 06:52:09AM -0500, Bjorn Helgaas wrote:
+> > > > > On Wed, Mar 16, 2022 at 12:27:57PM +0200, Andy Shevchenko wrote:
+> > > > > > On Tue, Mar 15, 2022 at 03:22:31PM -0500, Bjorn Helgaas wrote:
+> > > > > > > On Tue, Mar 15, 2022 at 12:09:08PM +0200, Andy Shevchenko wrote:
+> > > > > > > > On Mon, Mar 14, 2022 at 02:42:53PM -0500, Bjorn Helgaas wrote:
+> > > > > > > > > On Mon, Mar 14, 2022 at 12:14:48PM +0200, Andy Shevchenko wrote:
+> > > > > > > > > > ATI PCIe-USB adapter advertises MSI, but it doesn't work
+> > > > > > > > > > if INTx is disabled.  Enable the respective quirk as
+> > > > > > > > > > it's done for other ATI devices on this chipset,
+> > > > > > > > > >
+> > > > > > > > > > Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on
+> > > > > > > > > > PCI devices")
+> > >
+> > > > > > > Anyway, I applied this to pci/msi for v5.18 with the following
+> > > > > > > commit log:
+> > > > > > >
+> > > > > > >     PCI: Disable broken MSI on ATI SB600 USB adapters
+> > > > > > >
+> > > > > > >     Some ATI SB600 USB adapters advertise MSI, but MSI doesn't
+> > > > > > >     work if INTx is disabled.  Disable MSI on these adapters.
+> > > > > >
+> > > > > > But IIUC MSI is _not_ disabled. That's why I have issued this
+> > > > > > version of the patch with different commit message. Did I
+> > > > > > misunderstand something?
+> > > > >
+> > > > > Oh, right, of course.  Sorry, I was asleep at the wheel.
+> > > >
+> > > > Are you going to fix that?
+> > >
+> > > Yes, of course, I'll do something with the commit message after we
+> > > figure out how to handle PCI_COMMAND_INTX_DISABLE.
+> > >
+> > > > > I guess it's just that for these devices, we don't disable INTx
+> > > > > when enabling MSI.  I can't remember why we disable INTx when
+> > > > > enabling MSI, but it raises the question of whether it's better to
+> > > > > leave INTx enabled or to just disable use of MSI completely.
+> > > >
+> > > > It's required by specification to disable INTx if I read 6.1.4.3
+> > > > Enabling Operation correctly.
+> > >
+> > > Thanks for the reference; I was looking for something like that.  But
+> > > I don't think this section requires us to set
+> > > PCI_COMMAND_INTX_DISABLE.  For the benefit of folks without the spec,
+> > > PCIe r6.0, sec 6.1.4.3 says:
+> > >
+> > >   To maintain backward compatibility, the MSI Enable bit in the
+> > >   Message Control Register for MSI and the MSI-X Enable bit in the
+> > >   Message Control Register for MSI-X are each Clear by default (MSI
+> > >   and MSI-X are both disabled). System configuration software Sets one
+> > >   of these bits to enable either MSI or MSI-X, but never both
+> > >   simultaneously. Behavior is undefined if both MSI and MSI-X are
+> > >   enabled simultaneously. Software disabling either mechanism during
+> > >   active operation may result in the Function dropping pending
+> > >   interrupt conditions or failing to recognize new interrupt
+> > >   conditions. While enabled for MSI or MSI-X operation, a Function is
+> > >   prohibited from using INTx interrupts (if implemented) to request
+> > >   service (MSI, MSI-X, and INTx are mutually exclusive).
+> > >
+> > > The only *software* constraints I see are (1) software must never
+> > > enable both MSI and MSI-X simultaneously, and (2) if software disables
+> > > MSI or MSI-X during active operation, the Function may fail to
+> > > generate an interrupt when it should.
+> > >
+> > > I read the last sentence as a constraint on the *hardware*: if either
+> > > MSI or MSI-X is enabled, the Function is not allowed to use INTx,
+> > > regardless of the state of PCI_COMMAND_INTX_DISABLE.
+> > >
+> > > I searched the spec for "Interrupt Disable", looking for situations
+> > > where software might be *required* to set it, but I didn't see
+> > > anything.
+> > >
+> > > I suspect "Interrupt Disable" was intended to help the OS stop all
+> > > activity from a device during hot-plug or reconfiguration, as hinted
+> > > at in sec 6.4, "Device Synchronization":
+> > >
+> > >   The ability of the driver and/or system software to block new
+> > >   Requests from the device is supported by the Bus Master Enable,
+> > >   SERR# Enable, and Interrupt Disable bits in the Command register
+> > >   (Section 7.5.1.1.3) of each device Function, and other such control
+> > >   bits.
+> > >
+> > > So I'm trying to figure out why when enabling MSI we need to set
+> > > PCI_COMMAND_INTX_DISABLE for most devices, but it's safe to skip that
+> > > for these quirked devices.
 > >
-> > On 17/03/22 23:13, Ulf Hansson wrote:
-> >> On Tue, 15 Mar 2022 at 23:05, Chris Packham
-> >> <chris.packham@alliedtelesis.co.nz> wrote:
-> >>> Import binding documentation from the Marvell SDK which adds
-> >>> marvell,ac5-sdhci compatible string and documents the requirements for
-> >>> the for the Xenon SDHCI controller on the 98DX2530.
-> >>>
-> >>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> >>> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> >>> ---
-> >>>
-> >>> Notes:
-> >>>      Changes in v3:
-> >>>      - Split from larger series
-> >>>      - Add review from Andrew
-> >>>      Changes in v2:
-> >>>      - New
-> >>>
-> >>>   .../bindings/mmc/marvell,xenon-sdhci.txt      | 52
-> >>> +++++++++++++++++++
-> >>>   1 file changed, 52 insertions(+)
-> >> Would you mind converting these bindings to the new yaml format, as
-> >> the first step?
-> >>
-> >> Up until this point, I have accepted only very small changes to the
-> >> legacy txt based bindings, but I am starting to think that it's time
-> >> to reject those too. We need all bindings to move to yaml.
-> >>
-> >> Sorry, if this causes additional churns for you.
-> >
-> > If it earns me some good karma it'll probably be worth it. Can I put
-> > you down as the maintainer in the yaml binding?
+> > I guess it's wrong wording in the last paragraph. It's not safe, but it's
+> > _required_ since HW doesn't follow PCI specification that clearly says:
+> > "MSI, MSI-X, and INTx are mutually exclusive".
 >
-> I've fired off a patch for converting the binding
+> I agree there's a defect in these SB600 devices.  My guess is that
+> PCI_COMMAND_INTX_DISABLE actually disables both INTx and MSI, when
+> it's only supposed to disable INTx.
 >
-> https://lore.kernel.org/linux-devicetree/20220318033521.1432767-1-chris.packham@alliedtelesis.co.nz/T/#u
-
-Thanks, I will have a look!
-
+> I'm pretty sure the spec doesn't actually require software to set
+> Interrupt Disable when enabling MSI, since MSI was added in PCI r2.2,
+> which included this text in sec 6.8.2:
 >
-> For this change specifically I might park it. When I looked at the
-> actual changes that were being made in the Marvell SDK they're doing
-> something weird with dma addresses and of_dma_get_range() which won't
-> work . The boards we're making won't have MMC and I don't have the
-> desire to help Marvell bring their code up to scratch (at least not for
-> a driver I don't need).
-
-I see.
-
-Then you deserve a special thanks for helping out with the DT conversion!
-
-Kind regards
-Uffe
-
+>   System configuration software sets [the MSI Enable] bit to enable
+>   MSI. ...  Once enabled, a function is prohibited from using its
+>   INTx# pin (if implemented) to request service (MSI and INTx# are
+>   mutually exclusive).
 >
-> >
-> >>
-> >> Kind regards
-> >> Uffe
-> >>
-> >>> diff --git
-> >>> a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
-> >>> b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
-> >>> index c51a62d751dc..43df466f0cb3 100644
-> >>> --- a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
-> >>> +++ b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
-> >>> @@ -14,6 +14,7 @@ Required Properties:
-> >>>     - "marvell,armada-ap806-sdhci": For controllers on Armada AP806.
-> >>>     - "marvell,armada-ap807-sdhci": For controllers on Armada AP807.
-> >>>     - "marvell,armada-cp110-sdhci": For controllers on Armada CP110.
-> >>> +  - "marvell,ac5-sdhci": For CnM on AC5, AC5X and derived.
-> >>>
-> >>>   - clocks:
-> >>>     Array of clocks required for SDHC.
-> >>> @@ -33,6 +34,13 @@ Required Properties:
-> >>>       in below.
-> >>>       Please also check property marvell,pad-type in below.
-> >>>
-> >>> +  * For "marvell,ac5-sdhci", one or two register areas.
-> >>> +    (reg-names "ctrl" & "decoder").
-> >>> +    The first one is mandatory for the Xenon IP registers.
-> >>> +    The second one is for systems where DMA mapping is required and
-> >>> is the
-> >>> +    related address decoder register (the value to configure is
-> >>> derived from
-> >>> +    the parent "dma-ranges").
-> >>> +
-> >>>     * For other compatible strings, one register area for Xenon IP.
-> >>>
-> >>>   Optional Properties:
-> >>> @@ -171,3 +179,47 @@ Example:
-> >>>
-> >>>                  marvell,pad-type = "sd";
-> >>>          };
-> >>> +
-> >>> +
-> >>> +- For eMMC with compatible "marvell,ac5-sdhci" with one reg range
-> >>> (no dma):
-> >>> +       sdhci0: sdhci@805c0000 {
-> >>> +               compatible = "marvell,ac5-sdhci";
-> >>> +               reg = <0x0 0x805c0000 0x0 0x300>;
-> >>> +               reg-names = "ctrl", "decoder";
-> >>> +               interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;
-> >>> +               clocks = <&core_clock>;
-> >>> +               clock-names = "core";
-> >>> +               status = "okay";
-> >>> +               bus-width = <8>;
-> >>> +               /*marvell,xenon-phy-slow-mode;*/
-> >>> +               non-removable;
-> >>> +               mmc-ddr-1_8v;
-> >>> +               mmc-hs200-1_8v;
-> >>> +               mmc-hs400-1_8v;
-> >>> +       };
-> >>> +
-> >>> +- For eMMC with compatible "marvell,ac5-sdhci" with two reg ranges
-> >>> (with dma):
-> >>> +       mmc_dma: mmc-dma-peripherals@80500000 {
-> >>> +               compatible = "simple-bus";
-> >>> +               #address-cells = <0x2>;
-> >>> +               #size-cells = <0x2>;
-> >>> +               ranges;
-> >>> +               dma-ranges = <0x2 0x0 0x2 0x80000000 0x1 0x0>;
-> >>> +               dma-coherent;
-> >>> +
-> >>> +               sdhci0: sdhci@805c0000 {
-> >>> +                       compatible = "marvell,ac5-sdhci",
-> >>> "marvell,armada-ap806-sdhci";
-> >>> +                       reg = <0x0 0x805c0000 0x0 0x300>, <0x0
-> >>> 0x80440230 0x0 0x4>;
-> >>> +                       reg-names = "ctrl", "decoder";
-> >>> +                       interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;
-> >>> +                       clocks = <&core_clock>;
-> >>> +                       clock-names = "core";
-> >>> +                       status = "okay";
-> >>> +                       bus-width = <8>;
-> >>> +                       /*marvell,xenon-phy-slow-mode;*/
-> >>> +                       non-removable;
-> >>> +                       mmc-ddr-1_8v;
-> >>> +                       mmc-hs200-1_8v;
-> >>> +                       mmc-hs400-1_8v;
-> >>> +               };
-> >>> +       };
-> >>> --
-> >>> 2.35.1
-> >>>
+> and Interrupt Disable was added later, in PCI r2.3, with no mention of
+> a connection with MSI.  All the specs from PCI r2.2 to PCIe r6.0
+> include the text above about not using INTx# if MSI or MSI-X is
+> enabled, but that's not the same as requiring software to set
+> Interrupt Disable.  Linux has set Interrupt Disable when enabling MSI
+> ever since MSI support was added [1], so I would hesitate to change
+> that even though I don't think it's required.
+
+Thanks for diving into the history of the specification. What I learnt
+about any of the specifications is that it usually has a lot of
+implications that are only understandable (known) to the specification
+author(s). This gives a room of misinterpretation. In any case I
+usually apply my common sense denominator, so I try to go with the
+straight logic. In this case it seems to me that keeping both enabled
+is illogical and Linux does the right thing (means the author of the
+Linux kernel implementation is on the same page with me).
+
+> What I don't like about PCI_DEV_FLAGS_MSI_INTX_DISABLE_BUG is that it
+> changes the generic code path in a sort of random way, i.e., this
+> device becomes yet another special case in how we handle Interrupt
+> Disable.
+>
+> What would you think about just setting pdev->no_msi instead, so we
+> don't try to use MSI at all on these devices?  I think that's what we
+> did before 306c54d0edb6.
+
+Yes, we did. But why should we go this way if it already established a
+special case disregarding my patch(es)? If you want to do that you
+need to explain why other devices on the same chipset should enable
+MSI and what's wrong with enabling MSI on the USB devices. My
+understanding is that the MSI is a good thing to have due to
+performance benefits and taking into account other devices that have
+already been using it on the other devices of the same chipset tells
+me that's okay. Moreover, the reporter of the bug confirmed that MSI
+works for them after applying this quirk fix.
+
+> [1] https://lore.kernel.org/all/200310032215.h93MFnjT005788@snoqualmie.dp.intel.com/ (search for PCI_COMMAND_INTX_DISABLE)
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,111 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E4D4DDEFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9804DDF05
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239259AbiCRQbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S239315AbiCRQbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbiCRQbA (ORCPT
+        with ESMTP id S239210AbiCRQbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:31:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0860DCB
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:29:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647620980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+IVUPPBkNn1zz7F/vU3QF00X14AGPypfULKyha54TtU=;
-        b=OCHKVyOgFBd9FPoQiMfTJIp8a/Zk/Nwf1J0IhT+1w0da7EaKW4R7pdrCfZ/YPwDyeRl8XG
-        DaoGagIJaYUsQM6PEPpJ5Dd9GDB+tP/NJqBBo5d6hT/rX9BHPxUG6BMXRa4tte2GvWTG9+
-        YfN/qYQHw0GuXSb1QCVU49DMWBrBGyE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-214-S-5SUzoGNEi8pl1jWhlO7A-1; Fri, 18 Mar 2022 12:29:37 -0400
-X-MC-Unique: S-5SUzoGNEi8pl1jWhlO7A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4F05A85A5BC;
-        Fri, 18 Mar 2022 16:29:37 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 315A6404D8FE;
-        Fri, 18 Mar 2022 16:29:37 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     mlevitsk@redhat.com
-Subject: [PATCH] KVM: x86: do not use KVM_X86_OP_OPTIONAL_RET0 for get_mt_mask
-Date:   Fri, 18 Mar 2022 12:29:37 -0400
-Message-Id: <20220318162937.2741151-1-pbonzini@redhat.com>
+        Fri, 18 Mar 2022 12:31:15 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E8B195302;
+        Fri, 18 Mar 2022 09:29:53 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22I7cSw0022149;
+        Fri, 18 Mar 2022 11:29:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=bZOlEfRg8T9t1B79/9gI2BtOG0E7AxmmrAD8lfrQVfY=;
+ b=cxK65f2/uAOtvEX3R8Rj+f4it+rm1WasLXI5OQ8Nj2ndlwpHKYqHZQ26BJb8/ghDOZ+g
+ rSQuQeTFdH84eYj7FxUDatE3iw8Aj+IZEc/DWhi8iyPCanlmIKyt40qxD54W/PRuxwlm
+ afEOLkDx6J0d++Iar4W+sVSxPTUSLWQ9v9Mb+m0tiVn4KVSblQwIJKsjaQRYqYnhQt/9
+ ofI+Ixpa45WnFRUfGKBX0Nn25xp2jX0i/jp7tjth0rCUS9f1h1geHx2unuOSBpNJm49V
+ xee1/+MrY8Wj9YdWpr4lig4/Zvd+dmPvJ3gPaRAbv954jjoqvEuiPmz6t76PLq9UZARA sA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3et642efpx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 18 Mar 2022 11:29:46 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 18 Mar
+ 2022 16:29:44 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Fri, 18 Mar 2022 16:29:44 +0000
+Received: from debianA11184.ad.cirrus.com (debianA11184.ad.cirrus.com [198.90.251.45])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 450F37C;
+        Fri, 18 Mar 2022 16:29:44 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+Subject: [PATCH 0/5] ASoC: Add a driver for the Cirrus Logic CS35L45 Smart Amplifier
+Date:   Fri, 18 Mar 2022 16:29:38 +0000
+Message-ID: <20220318162943.1578102-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-GUID: D_bFfSzULB-QA3qo-yHPCgAOR5Wto9Mw
+X-Proofpoint-ORIG-GUID: D_bFfSzULB-QA3qo-yHPCgAOR5Wto9Mw
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Levitsky <mlevitsk@redhat.com>
+This adds basic audio support for the Cirrus Logic CS35L45 amplifier.
 
-KVM_X86_OP_OPTIONAL_RET0 can only be used with 32-bit return values on 32-bit
-systems, because unsigned long is only 32-bits wide there and 64-bit values
-are returned in edx:eax.
+The first two patches add two generic helpers to ASoC, and patch 3 is
+a kunit test for patch 2.
 
-Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/include/asm/kvm-x86-ops.h | 2 +-
- arch/x86/kvm/svm/svm.c             | 6 ++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+James Schulman (1):
+  ASoC: cs35l45: Add driver for Cirrus Logic CS35L45 Smart Amp
 
-diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-index 29affccb353c..3c368b639c04 100644
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -87,7 +87,7 @@ KVM_X86_OP(deliver_interrupt)
- KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
- KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
- KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
--KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
-+KVM_X86_OP(get_mt_mask)
- KVM_X86_OP(load_mmu_pgd)
- KVM_X86_OP(has_wbinvd_exit)
- KVM_X86_OP(get_l2_tsc_offset)
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index fc5222a0f506..0884c3414a1b 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -3939,6 +3939,11 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
- 	return true;
- }
- 
-+static u64 svm_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-+{
-+	return 0;
-+}
-+
- static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
-@@ -4593,6 +4598,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.check_apicv_inhibit_reasons = avic_check_apicv_inhibit_reasons,
- 	.apicv_post_state_restore = avic_apicv_post_state_restore,
- 
-+	.get_mt_mask = svm_get_mt_mask,
- 	.get_exit_info = svm_get_exit_info,
- 
- 	.vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
+Richard Fitzgerald (4):
+  ASoC: soc.h: Add SOC_SINGLE_S_TLV() macro
+  ASoC: soc-utils: Add helper to calculate BCLK from TDM info
+  ASoC: soc-utils: Add kunit test for snd_soc_tdm_params_to_bclk()
+  ASoC: dt-bindings: cs35l45: Cirrus Logic CS35L45 Smart Amp
+
+ .../bindings/sound/cirrus,cs35l45.yaml        |  75 ++
+ MAINTAINERS                                   |   2 +
+ include/dt-bindings/sound/cs35l45.h           |  20 +
+ include/sound/soc.h                           |   4 +
+ sound/soc/Kconfig                             |   9 +-
+ sound/soc/Makefile                            |   5 +
+ sound/soc/codecs/Kconfig                      |  30 +
+ sound/soc/codecs/Makefile                     |   8 +
+ sound/soc/codecs/cs35l45-i2c.c                |  73 ++
+ sound/soc/codecs/cs35l45-spi.c                |  72 ++
+ sound/soc/codecs/cs35l45-tables.c             | 202 +++++
+ sound/soc/codecs/cs35l45.c                    | 689 ++++++++++++++++++
+ sound/soc/codecs/cs35l45.h                    | 213 ++++++
+ sound/soc/soc-utils-test.c                    | 186 +++++
+ sound/soc/soc-utils.c                         |  45 ++
+ 15 files changed, 1632 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml
+ create mode 100644 include/dt-bindings/sound/cs35l45.h
+ create mode 100644 sound/soc/codecs/cs35l45-i2c.c
+ create mode 100644 sound/soc/codecs/cs35l45-spi.c
+ create mode 100644 sound/soc/codecs/cs35l45-tables.c
+ create mode 100644 sound/soc/codecs/cs35l45.c
+ create mode 100644 sound/soc/codecs/cs35l45.h
+ create mode 100644 sound/soc/soc-utils-test.c
+
 -- 
-2.31.1
+2.30.2
 

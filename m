@@ -2,134 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D924DD28F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 02:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7E54DD293
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 02:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbiCRBw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 21:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
+        id S231612AbiCRB4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 21:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiCRBw0 (ORCPT
+        with ESMTP id S230315AbiCRB4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 21:52:26 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051C4196091
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 18:51:06 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id h14so11869725lfk.11
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 18:51:05 -0700 (PDT)
+        Thu, 17 Mar 2022 21:56:11 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9649821C060
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 18:54:53 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id q13so5895001plk.12
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 18:54:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RzHOurcRZLEPdx5A8AtvMQus3L3vLI1jvcmAUoK7M3M=;
-        b=QipcaPzemhcgIfEJYN144w0FnjRfqRUr/lWiEGEPhGe/qWrPlffischpqBrRPHT5m3
-         Qe3ydqH/K9tObWP9AdmckmHt49bsCYrU9T+CBDF9fX8Zs8e9aORdJWAYCX4yUAPM9H/j
-         m9xf6179ufuVV3J1o5iE6xXJG7Ck51v7CCX+0=
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yxBIhyBEiFAgJKygaBubKQqJRvLxov0I5kEUPytrKfg=;
+        b=WD5W3/fIsPgoTeHB0lZ/uXeTTgKgmcA9bCns//Gj0j+EyV0fU/LfNz8OO3QC3dh8HN
+         UGd85scVmHjhJbT6mtBGyPIl8bgmnzYiKbaVSr8yZp1J8ZKJTxl31DNziR2QJbuXFg44
+         02U8Ev9jUnkIfk6No6xYbBV21t0VKBUT25KiA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RzHOurcRZLEPdx5A8AtvMQus3L3vLI1jvcmAUoK7M3M=;
-        b=O5Bko5Yh2iTx1LrWhmMe43gGCKDW3gX5kQXMGVm43gXIEV9g6N7jgg/Le4FbbVcRm8
-         EbBcDJPJtnMYsZlDm1++RX4a8jCVrZ3mCmVZnEXog2i0JosZfAvAskP6218nTHHExr5/
-         /f+lDXLql10nthGHGckpoqs6FLUOhnut4OS6L1z3ANnLkjN0WR17Syv1N0THw7Prb0q3
-         eKCPgkQk4bR78eAMh+OdhElxV9YGp+LdqX616nGz+UGfym/jHRYQUzRDtxjOZMbmWwi+
-         bFGo3KEY9YDqae2YVtuoFCBgzXo0PxoP18tg7mH+OYjXPxQ7FBt+zOkKgLiHvDo0VCeB
-         LXAw==
-X-Gm-Message-State: AOAM532CK2+QZ3bDvaFYxaobiRHGv2Po/RX6zqd+RXQeviKadaezcUzB
-        PU9/Wnn2ZqH3SDEfZikt5pZaLCFiC+yX4bzCyeA=
-X-Google-Smtp-Source: ABdhPJyS8w8KP8QHVxUF5utZJmcOh+7Pt49EDbeAnk1mqoF9zTrfepHNiZgR0YdvGed/PS6l6Qz4Sw==
-X-Received: by 2002:a05:6512:34d2:b0:44a:b81:85c2 with SMTP id w18-20020a05651234d200b0044a0b8185c2mr674454lfr.689.1647568263931;
-        Thu, 17 Mar 2022 18:51:03 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id i27-20020a198c5b000000b004487eabc006sm612491lfj.253.2022.03.17.18.51.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 18:51:03 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id h11so9585601ljb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 18:51:02 -0700 (PDT)
-X-Received: by 2002:a05:651c:1509:b0:249:6cd6:96d8 with SMTP id
- e9-20020a05651c150900b002496cd696d8mr685036ljf.358.1647568262431; Thu, 17 Mar
- 2022 18:51:02 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yxBIhyBEiFAgJKygaBubKQqJRvLxov0I5kEUPytrKfg=;
+        b=chVc8UWmM+k0U+aIBlvM+7nhm/WiVCuknUGSvbvQE1u51MASileDqTWfnHi45YqFGv
+         /7qJAW6BQArE4bM/m9ZfVUPzG+ypyma3YxluRwh/MvdP2LHqv+Jh1HODc2hR237yDdhh
+         cTYoszACITJUYo/wq3bMj2jK/u2eLI9AEq96NjQUpPJH3g9nXcf3Sr0IY3TpUvq7Rki1
+         RoUZ3vdLuddqX3O0Z2Lg1fI5ZDHFJe+qbmrt/s/RVXxFeTBH2NwUc8rzjqiR2ls2z0y/
+         CtHCdfHOBCxp7e2RMWNdaeMfbnWqiTcycNX4Hm2i3ggtOU1jkgA+fbXgFiye8IOUsasW
+         rfsg==
+X-Gm-Message-State: AOAM532xz2N7qjRUYTASLvFevsOlT75RrDpwtIWieQru2na+C41YVsUK
+        2ElRYu6AITUYorbJcE9sJtvkIQ==
+X-Google-Smtp-Source: ABdhPJzeWkYn3YRTNXiVy9jq/jxHPBPwqdVFOCPMSFezW6Lfd5nhL4ppj1XX9OB13gwnZ/g2PT2lCw==
+X-Received: by 2002:a17:90b:789:b0:1bc:293c:1445 with SMTP id l9-20020a17090b078900b001bc293c1445mr19014934pjz.111.1647568493095;
+        Thu, 17 Mar 2022 18:54:53 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:49cf:7701:359e:b28f])
+        by smtp.gmail.com with ESMTPSA id u10-20020a056a00124a00b004f783abfa0esm8050201pfi.28.2022.03.17.18.54.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 18:54:52 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Benson Leung <bleung@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Craig Hesling <hesling@chromium.org>,
+        Tom Hughes <tomhughes@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH v3 0/3] Update cros-ec-spi for fingerprint devices
+Date:   Thu, 17 Mar 2022 18:54:47 -0700
+Message-Id: <20220318015451.2869388-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
 MIME-Version: 1.0
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com>
- <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com>
- <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
- <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
- <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
- <878rt8gwxa.fsf@oldenburg.str.redhat.com> <CAHk-=wiZtg-E5s1CEZgaSE=e38vFoP3y2aV-4R82jqmcUoD0Aw@mail.gmail.com>
- <20220318002555.GP614@gate.crashing.org> <CAHk-=wjRfJijS5yJsLFzyJS6HFh46q8Eu6EvjGGjJSZ1+m74_Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wjRfJijS5yJsLFzyJS6HFh46q8Eu6EvjGGjJSZ1+m74_Q@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 17 Mar 2022 18:50:46 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wibzB9fSXZf79FhjAvoLsPP0YG4VKjQy0jZE8BZj8uBOg@mail.gmail.com>
-Message-ID: <CAHk-=wibzB9fSXZf79FhjAvoLsPP0YG4VKjQy0jZE8BZj8uBOg@mail.gmail.com>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Florian Weimer <fweimer@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 6:21 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Now, compare that to just using inline asm: it's trivial, and we've
-> used it basically unchanged for three decades.
+This patch series introduces a DT binding for chromeos fingerprint
+devices and then implements support to boot those processors during
+driver probe if the BIOS hasn't done it already.
 
-Ok, so going _really_ far back, we used to have them literally written out:
+Changes from v2 (https://lore.kernel.org/r/20220317005814.2496302-1-swboyd@chromium.org):
+ * Dropped cros-ec spi dt properties that aren't of use right now
+ * Picked up tags
 
-        __asm__ __volatile__("pushfl ; popl %0 ; cli":"=r" (flags));
+Changes from v1 (https://lore.kernel.org/r/20220314232214.4183078-1-swboyd@chromium.org):
+ * Properly do the boot sequence
+ * Add a message that we're booting and delaying a while
+ * Fix typo in commit text
+ * Change binding to not spell out reset-gpios and indicate that boot0
+   is about asserting boot mode
+ * Split device id to different patch as it's a different topic from
+   booting
 
-in random code, and then in October 1992 switched those nasty things
-to instead use
+Stephen Boyd (3):
+  dt-bindings: chrome: Add ChromeOS fingerprint binding
+  platform/chrome: cros_ec_spi: Match cros-ec-fp compatible
+  platform/chrome: cros_ec_spi: Boot fingerprint processor during probe
 
-   #define cli() __asm__ __volatile__ ("cli"::)
+ .../bindings/chrome/google,cros-ec-fp.yaml    | 66 +++++++++++++++++++
+ drivers/platform/chrome/cros_ec_spi.c         | 44 ++++++++++++-
+ 2 files changed, 107 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/chrome/google,cros-ec-fp.yaml
 
-    #define save_flags(x) \
-    __asm__ __volatile__("pushfl ; popl %0":"=r" (x))
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: <devicetree@vger.kernel.org>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Craig Hesling <hesling@chromium.org>
+Cc: Tom Hughes <tomhughes@chromium.org>
+Cc: Alexandru M Stan <amstan@chromium.org>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Matthias Kaehlcke <mka@chromium.org>
 
-and the code was changed to actually use
+base-commit: ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2
+-- 
+https://chromeos.dev
 
-        save_flags(flags);
-        cli();
-
-instead of that open-coded raw asm.
-
-And the "memory" clobber was added early June, 1993:
-
-   #define save_flags(x) \
-  -__asm__ __volatile__("pushfl ; popl %0":"=r" (x))
-  +__asm__ __volatile__("pushfl ; popl %0":"=r" (x)::"memory")
-
-so that thing really has existed in pretty much that exact form for
-almost 30 years.
-
-There's been tweaks since (the "=r" became "=g" before becoming "=rm",
-comments have been added, "pushfl" became just "pushf" with x86-64,
-and the thing has moved around and is now called "native_save_fl()" in
-a completely different header file etc)
-
-But at no point was it ever as buggy as the actual gcc intrinsic seems
-to be today, nor have we needed to check for compiler versions etc.
-
-                  Linus

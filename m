@@ -2,181 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED204DE373
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 22:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBB74DE377
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 22:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241112AbiCRVW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 17:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
+        id S241114AbiCRVYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 17:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241103AbiCRVW1 (ORCPT
+        with ESMTP id S233199AbiCRVYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 17:22:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEC421FC6F;
-        Fri, 18 Mar 2022 14:21:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AE6B612AC;
-        Fri, 18 Mar 2022 21:21:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8EF4C36AE3;
-        Fri, 18 Mar 2022 21:21:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647638467;
-        bh=Vk5mzHbIg17vZ6G2aaaTRJ/qc3wtRp4U3dpTA+mQTzk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ELbYGJ5s13fJLbEKv95M5pVw7hO7DtSYZ0YpTw3usN05tXHbv2RI/LMOrZ9RvazFC
-         LKvWI9DHFrTXTdQ5NF2TNzFoQuiFV6G24Br9GEyC8hQHayVOTzJDPf+w1s2IMdy6yU
-         wqF+2/LEOGg59KR03baTx/feAPOiwR72Cu1smHzVen/JSY4ll7IJwKloDR1RUnuTLT
-         VhrSdPTUQt8lLE52izSQjSw/0mKq7ehBlQSqMiyXv70d3eNWHEPv3ZQT6CKSIbG/Sj
-         DYF2fr/vqXxhPOxtVSzMbHqaZm5yjFlwapmRWSrtHJHkI9yDBsyOZH82JGzw9qNIDQ
-         B+0vj43BUdwXQ==
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2e5a8a8c1cdso95489317b3.3;
-        Fri, 18 Mar 2022 14:21:07 -0700 (PDT)
-X-Gm-Message-State: AOAM533GGYVhVaqQnOb4korkjuBryjjBMfznHfUsdMGF1bnP4djVeMdf
-        ZLWUzWnKjaszKkuxcQGEnm4POyxOMHcn3X9XavU=
-X-Google-Smtp-Source: ABdhPJy9p6xLR9FKRtMxw8beAYraAaLqJ52YfwUWGPSjxPQqNRKqdW6sylYGLO220Y1ivS1CkbruJKJ4SGRK3Hm/jho=
-X-Received: by 2002:a81:a006:0:b0:2e5:963a:4c42 with SMTP id
- x6-20020a81a006000000b002e5963a4c42mr12976417ywg.73.1647638466787; Fri, 18
- Mar 2022 14:21:06 -0700 (PDT)
+        Fri, 18 Mar 2022 17:24:48 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A395B12A8CE;
+        Fri, 18 Mar 2022 14:23:29 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id t22so8062493plo.0;
+        Fri, 18 Mar 2022 14:23:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2BmyQc9COAz+CFFHGIH5Z7dnLZu2up259IT/mMqyKwA=;
+        b=L+vhqoATW9YNMxOqEnsdzSxNbsqE0sJ92yTz695PSy9KtO6+dsGkRYt1XIgJntG0mE
+         iEitr4gpruonb+5rpsiQCZNX9Y9YS4BMt8CRJXvv4Zsk0Ci/+xv0LiZDjQEbbvLxnOIf
+         YLLoSAZxJWdk+h/WV7zwC7AkYXy/jI6ByKGzgSWf82Cxm0TyT4Dqzm/v1KaiHM0H7CUm
+         pIzdT8+BN2wpj0fT/me8pRMvxtohnG8xc/zOc99jGfRFyZZmqTW0cYnwbEzt9WYoCW5O
+         kcqhkwiN1paM1R0ZCSNg6riNrH9DWYmJ2/KI7CgZRVUNbY9Rmw3PtpYDl8dP8jVTTv2q
+         5zNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2BmyQc9COAz+CFFHGIH5Z7dnLZu2up259IT/mMqyKwA=;
+        b=SYvVeDVBntY6x+KjA+IOE6hZdfmwzadToLsLGYB9cS0OO9fnhZpuEcrECv6UtKY0sd
+         RQkIN4xJITwB3jPO05BJJcIuZB+Ol/bcb0YvSGJDyi6YCRiqLSXJJJRfBRhKldwHliQs
+         aLn14GaW8fRtNDoPlTsb/Qe/l3WKt9C2lMwIMaSb3ow8+UMP/2m42XtW8yyfBunos0Be
+         LFHUhOU4RGLplx3TmxlUU+Zsi0aSfaktdk+7IdLduxnhrY7c2prpNxbpjmJ1ffKnw8wq
+         egpY8OtAFeOkDxvvS865O5xtRoqTmDhmxZJMkGwPX1rudcrJ+cl0q5EAyezU77mTmuGj
+         jrAg==
+X-Gm-Message-State: AOAM5337itSaUldrJQITMLEIw+5TdGLP+Wbf46HdB9CuJ1Zlzb0NJovd
+        vsZmGR0rqdWOiooiIRiC4LjSzDxlfAA=
+X-Google-Smtp-Source: ABdhPJzMJ4LvhdpPvm99eitLoAx/cZgPwowss9OOtgPJRDgG3ZjkjNXHJkSl99/Xwqq8s9cyWfWdHw==
+X-Received: by 2002:a17:90b:17c3:b0:1c6:b0ff:abf with SMTP id me3-20020a17090b17c300b001c6b0ff0abfmr5176509pjb.24.1647638608796;
+        Fri, 18 Mar 2022 14:23:28 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id ob13-20020a17090b390d00b001becfd7c6f3sm9383038pjb.27.2022.03.18.14.23.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 14:23:28 -0700 (PDT)
+Subject: Re: [PATCH net-next 1/2] net: dsa: mv88e6xxx: Require ops be
+ implemented to claim STU support
+To:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220318201321.4010543-1-tobias@waldekranz.com>
+ <20220318201321.4010543-2-tobias@waldekranz.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <b6447c89-4e72-a9b6-f731-3fefb2a835fa@gmail.com>
+Date:   Fri, 18 Mar 2022 14:23:21 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com> <20220318161528.1531164-14-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220318161528.1531164-14-benjamin.tissoires@redhat.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 18 Mar 2022 14:20:56 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5mKPT+Vw4FVFBokwnY1kkCm9i_HA3Pd2DUznHJfqV+4A@mail.gmail.com>
-Message-ID: <CAPhsuW5mKPT+Vw4FVFBokwnY1kkCm9i_HA3Pd2DUznHJfqV+4A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 13/17] HID: bpf: implement hid_bpf_get|set_bits
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220318201321.4010543-2-tobias@waldekranz.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 9:18 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> Export implement() outside of hid-core.c and use this and
+On 3/18/22 1:13 PM, Tobias Waldekranz wrote:
+> Simply having a physical STU table in the device doesn't do us any
+> good if there's no implementation of the relevant ops to access that
+> table. So ensure that chips that claim STU support can also talk to
+> the hardware.
+> 
+> This fixes an issue where chips that had a their ->info->max_sid
+> set (due to their family membership), but no implementation (due to
+> their chip-specific ops struct) would fail to probe.
+> 
+> Fixes: 49c98c1dc7d9 ("net: dsa: mv88e6xxx: Disentangle STU from VTU")
+> Reported-by: Marek Behún <kabel@kernel.org>
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
 
-Maybe rename implement() to something that makes sense?
-
-> hid_field_extract() to implement the helprs for hid-bpf.
->
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->
-> ---
->
-> changes in v3:
-> - renamed hid_{get|set}_data into hid_{get|set}_bits
->
-> changes in v2:
-> - split the series by bpf/libbpf/hid/selftests and samples
-> - allow for n > 32, by relying on memcpy
-> ---
->  drivers/hid/hid-bpf.c  | 29 +++++++++++++++++++++++++++++
->  drivers/hid/hid-core.c |  4 ++--
->  include/linux/hid.h    |  2 ++
->  3 files changed, 33 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/hid/hid-bpf.c b/drivers/hid/hid-bpf.c
-> index 45c87ff47324..650dd5e54919 100644
-> --- a/drivers/hid/hid-bpf.c
-> +++ b/drivers/hid/hid-bpf.c
-> @@ -122,6 +122,33 @@ static void hid_bpf_array_detach(struct hid_device *hdev, enum bpf_hid_attach_ty
->         }
->  }
->
-> +static int hid_bpf_get_bits(struct hid_device *hdev, u8 *buf, size_t buf_size, u64 offset, u32 n,
-> +                           u32 *data)
-> +{
-> +       if (n > 32)
-> +               return -EINVAL;
-> +
-> +       if (((offset + n) >> 3) >= buf_size)
-> +               return -E2BIG;
-> +
-> +       *data = hid_field_extract(hdev, buf, offset, n);
-> +       return n;
-> +}
-> +
-> +static int hid_bpf_set_bits(struct hid_device *hdev, u8 *buf, size_t buf_size, u64 offset, u32 n,
-> +                           u32 data)
-> +{
-> +       if (n > 32)
-> +               return -EINVAL;
-> +
-> +       if (((offset + n) >> 3) >= buf_size)
-> +               return -E2BIG;
-> +
-> +       /* data must be a pointer to a u32 */
-> +       implement(hdev, buf, offset, n, data);
-> +       return n;
-> +}
-> +
->  static int hid_bpf_run_progs(struct hid_device *hdev, struct hid_bpf_ctx_kern *ctx)
->  {
->         enum bpf_hid_attach_type type;
-> @@ -223,6 +250,8 @@ int __init hid_bpf_module_init(void)
->                 .pre_link_attach = hid_bpf_pre_link_attach,
->                 .post_link_attach = hid_bpf_post_link_attach,
->                 .array_detach = hid_bpf_array_detach,
-> +               .hid_get_bits = hid_bpf_get_bits,
-> +               .hid_set_bits = hid_bpf_set_bits,
->         };
->
->         bpf_hid_set_hooks(&hooks);
-> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> index 3182c39db006..4f669dcddc08 100644
-> --- a/drivers/hid/hid-core.c
-> +++ b/drivers/hid/hid-core.c
-> @@ -1416,8 +1416,8 @@ static void __implement(u8 *report, unsigned offset, int n, u32 value)
->         }
->  }
->
-> -static void implement(const struct hid_device *hid, u8 *report,
-> -                     unsigned offset, unsigned n, u32 value)
-> +void implement(const struct hid_device *hid, u8 *report, unsigned int offset, unsigned int n,
-> +              u32 value)
->  {
->         if (unlikely(n > 32)) {
->                 hid_warn(hid, "%s() called with n (%d) > 32! (%s)\n",
-> diff --git a/include/linux/hid.h b/include/linux/hid.h
-> index 66d949d10b78..7454e844324c 100644
-> --- a/include/linux/hid.h
-> +++ b/include/linux/hid.h
-> @@ -944,6 +944,8 @@ bool hid_compare_device_paths(struct hid_device *hdev_a,
->  s32 hid_snto32(__u32 value, unsigned n);
->  __u32 hid_field_extract(const struct hid_device *hid, __u8 *report,
->                      unsigned offset, unsigned n);
-> +void implement(const struct hid_device *hid, u8 *report, unsigned int offset, unsigned int n,
-> +              u32 value);
->
->  #ifdef CONFIG_PM
->  int hid_driver_suspend(struct hid_device *hdev, pm_message_t state);
-> --
-> 2.35.1
->
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

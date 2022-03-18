@@ -2,71 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53084DD8C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A44B24DD8CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235685AbiCRLP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 07:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
+        id S235704AbiCRLQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 07:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235663AbiCRLPz (ORCPT
+        with ESMTP id S235663AbiCRLQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 07:15:55 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836B313CA08;
-        Fri, 18 Mar 2022 04:14:37 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22I6jtN9030764;
-        Fri, 18 Mar 2022 06:13:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=25OExqpRdtn99nR8I4gVZwjSpyan9DNBBpY46fEeqiQ=;
- b=S+2bIs5FqkOiES9fM2wNuUR2Dwg5SwZFG/0fpdzjpcZZMAV7vSh8U1YC5J2jm5zduRKu
- nytU/4O2yGEZP/HU2CQSV5HHszwdYVEPPvAKR6w/kUDR4Kp/OaQSk2KP8V5jgHtZ7unr
- eAoLxNMWXfvUvpUrrPNCym5AGJ2zuOc04tYVDrIus/+fN+Myae96RfYQYGr6XU4N3DoF
- lfteGLvaXDDjBlIXGH4jePOsYOM3IDs83CHLTHAvaZW2S/PF15bmkwXW05UbIgkfSkem
- V7Gxdj2t9f7eFbMXOwhMoXG2Rxs8Pa9bpaPGBdhErkz5Itv1hJo7UuptFbS1OG1t1OK9 aA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3et642e4kg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 18 Mar 2022 06:13:45 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 18 Mar
- 2022 11:13:43 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Fri, 18 Mar 2022 11:13:43 +0000
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 628E1B16;
-        Fri, 18 Mar 2022 11:13:42 +0000 (UTC)
-Date:   Fri, 18 Mar 2022 11:13:42 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Lucas Tanure <tanureal@opensource.cirrus.com>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
-        <patches@opensource.cirrus.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        David Rhodes <drhodes@opensource.cirrus.com>
-Subject: Re: [PATCH v4 15/16] ASoC: dt-bindings: cs35l41: Document CS35l41
- External Boost
-Message-ID: <20220318111342.GM38351@ediswmail.ad.cirrus.com>
-References: <20220317093120.168534-1-tanureal@opensource.cirrus.com>
- <20220317093120.168534-16-tanureal@opensource.cirrus.com>
+        Fri, 18 Mar 2022 07:16:35 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782C51AA072;
+        Fri, 18 Mar 2022 04:15:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=gTrHSaows6P5rC0BqhyXnWLtvk2vll7NYVs5JyeogtQ=;
+  b=AY7tGrinlq3iYyC0wIS7teWB69QYqXAZfuCQXbHqrL5FSEQe2HFFCCV7
+   AbI7/YmIN3Utb3MR/Ylryb1zqwNja2ZtfwbsUHO25d2M5pnZvgZYHg2Fz
+   5rzMvl4Q7Ci77KfuyRoJtsZM1ukbhVp5zVFR2yH4O0/ggF0ddErfHmivT
+   0=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,192,1643670000"; 
+   d="scan'208";a="26861438"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 12:15:14 +0100
+Date:   Fri, 18 Mar 2022 12:15:14 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: julia@hadrien
+To:     Joe Perches <joe@perches.com>
+cc:     Julia Lawall <Julia.Lawall@inria.fr>,
+        Richard Henderson <rth@twiddle.net>,
+        kernel-janitors@vger.kernel.org,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: fix typos in comments
+In-Reply-To: <176f485c00e3c6c03ff794dc47f23702fc592a4f.camel@perches.com>
+Message-ID: <alpine.DEB.2.22.394.2203181215040.2686@hadrien>
+References: <20220318103729.157574-19-Julia.Lawall@inria.fr> <176f485c00e3c6c03ff794dc47f23702fc592a4f.camel@perches.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220317093120.168534-16-tanureal@opensource.cirrus.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: LEjEClKsQaTzOVIhsvz5BHsnT2E_ifs8
-X-Proofpoint-ORIG-GUID: LEjEClKsQaTzOVIhsvz5BHsnT2E_ifs8
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,25 +56,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 09:31:19AM +0000, Lucas Tanure wrote:
-> From: David Rhodes <drhodes@opensource.cirrus.com>
-> 
-> Document internal and external boost feature for ASoC CS35L41.
-> For internal boost the following properties are required:
-> - cirrus,boost-peak-milliamp
-> - cirrus,boost-ind-nanohenry
-> - cirrus,boost-cap-microfarad
-> 
-> For external boost, the GPIO1 must be configured as output,
-> so the following properties are required:
-> - cirrus,gpio1-src-select = <1>
-> - cirrus,gpio1-output-enable
-> 
-> Signed-off-by: David Rhodes <drhodes@opensource.cirrus.com>
-> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-> ---
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Thanks,
-Charles
+On Fri, 18 Mar 2022, Joe Perches wrote:
+
+> On Fri, 2022-03-18 at 11:37 +0100, Julia Lawall wrote:
+> > Various spelling mistakes in comments.
+> []
+> > diff --git a/arch/alpha/kernel/sys_eiger.c b/arch/alpha/kernel/sys_eiger.c
+> []
+> > @@ -148,7 +148,7 @@ eiger_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+> >
+> >  	/* The SRM console has already calculated out the IRQ value's for
+> >  	   option cards. As this works lets just read in the value already
+> > -	   set and change it to a useable value by Linux.
+> > +	   set and change it to a usable value by Linux.
+>
+> generally accepted alternative spelling.
+>
+> https://www.dictionary.com/browse/useable
+
+OK, thanks.
+
+julia

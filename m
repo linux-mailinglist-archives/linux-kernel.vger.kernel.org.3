@@ -2,108 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E53F4DD56A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C764DD570
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:47:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233231AbiCRHqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
+        id S233252AbiCRHsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbiCRHqt (ORCPT
+        with ESMTP id S232937AbiCRHsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:46:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B6C1F6845;
-        Fri, 18 Mar 2022 00:45:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DA3BB82180;
-        Fri, 18 Mar 2022 07:45:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56146C340E8;
-        Fri, 18 Mar 2022 07:45:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647589523;
-        bh=mfk69zuIPfhhcTWagGzypXujpE6TuqQQSU1CspPJeKs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eKc008nJ+OiKWUc2qQSi5Q9LljBP/znyiJF/qhEJ9AvzMmJkDTLksln/tCGe/16Ta
-         y4qUr6Yt8UwKHvsdlN+/UkBgN0JC1Fy21x3U6QR5wC2L5BrEgq7bgOuN0i4690udpD
-         3qq0xKUhqD3T327sOt1FRY5HukK9RYj+cUwfh12c=
-Date:   Fri, 18 Mar 2022 08:45:19 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-Cc:     mathias.nyman@intel.com, hzpeterchen@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        TonyWWang-oc@zhaoxin.com, weitaowang@zhaoxin.com,
-        CobeChen@zhaoxin.com, TimGuo@zhaoxin.com
-Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
-Message-ID: <YjQ4jzgRmrDJClUZ@kroah.com>
-References: <dedb789b-c1bb-34af-7887-78a3fc627e75@zhaoxin.com>
+        Fri, 18 Mar 2022 03:48:37 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043162BAE5C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 00:47:19 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id u17so8769561pfk.11
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 00:47:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i2Kxzfqa17JeX6zvSFdcAC9AxQ0uSV/1LhJKBQM+dBo=;
+        b=UaEE+RkmBrZgxg3Qvjtn9RTTC4YPIXWjUW3Bx10IPJLn++s9nnBXRZniYrNY6COzIK
+         IWkHYHzSzSedHDyCgxfuemUSGpOTx5zN1JmXRIf53whpuiafHr/G2sS4UNAIPiCXouCX
+         f7NU6IrexwNDdBmpVYRxBti1K01eoKRwavqtWnUNoWhKtBI3epsNz0UTwPO8TZNuRlwc
+         rP7AVwj8FBWqc8Z4X6K04uw11sUXFWJGOw0tKuSKZ36JJTwHaE+ZqQywCT0hkJ+t3rCz
+         dzFLUASMTSnQiZLWAimXIDIH94ns8HwpLb+C1q7OsjG3Mg72Y/9acnbkxQYG62WGtgNm
+         i8zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i2Kxzfqa17JeX6zvSFdcAC9AxQ0uSV/1LhJKBQM+dBo=;
+        b=Opf1WZubWuhoB+CUuJ1imxCLMvWBkISgXGpCXxBQvXjVmsCblOvs+8TJ+grv/G6I/w
+         hRlNbDy9+s6NF1NOJEgSzg2gRf8lt/dwo6EihDx8bHxRPLjGgYGfASAqxH5uV3/6bkUh
+         46IaT2XiQas22jbFZqPbT0srFFaSq2j/LA5EOwKVYmyl/pPihBAx2Wq3109358ef1x3r
+         Xox0KXzbp+3ddd7NqDw21WyKguKucErciAM7aEvVvW3TxwEqo5NQSo98R8w/ha1yTHp+
+         Ekwzr3rm2qeiWIbOZaOkO9bPld2PPoVNjIT8LBwVFFjzQ4ts6HMO6gD5TZOVFMZRdBtv
+         wrHg==
+X-Gm-Message-State: AOAM5333gDlP3vmkdBYD5Hq0Iody4hk0oV2XYi8QDVc/cOUxFnbXKmTL
+        iv8BMf4sOSQffmHO+Tg7W5fWmA==
+X-Google-Smtp-Source: ABdhPJzB6PRnA27+IVJTkfrLIjmVsbIVOijMyvlx7Btwx9xnKrLpV9UgKC2XAfpJ48RfsZJJk7x5bQ==
+X-Received: by 2002:a62:684:0:b0:4f7:803:d1b0 with SMTP id 126-20020a620684000000b004f70803d1b0mr8966912pfg.10.1647589638495;
+        Fri, 18 Mar 2022 00:47:18 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.233])
+        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004f72acd4dadsm8770941pfx.81.2022.03.18.00.47.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 00:47:18 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        apopple@nvidia.com, shy828301@gmail.com, rcampbell@nvidia.com,
+        hughd@google.com, xiyuyang19@fudan.edu.cn,
+        kirill.shutemov@linux.intel.com, zwisler@kernel.org,
+        hch@infradead.org
+Cc:     linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        duanxiongchun@bytedance.com, smuchun@gmail.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v5 0/6] Fix some bugs related to ramp and dax
+Date:   Fri, 18 Mar 2022 15:45:23 +0800
+Message-Id: <20220318074529.5261-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dedb789b-c1bb-34af-7887-78a3fc627e75@zhaoxin.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 03:32:14PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
-> On some situations, software handles TRB events slower than adding TRBs.
-> If the number of TRB events to be processed in a given interrupt is 256.
-> The local variable "event_ring_deq" that records in interrupt handler
-> is equal to software_dequeue. It will cause driver not update ERDP,then
-> software dequeue pointer is out of sync with ERDP on interrupt exit.
-> On the next interrupt, the event ring may full but driver will not
-> update ERDP as software_dequeue is equal to ERDP.
-> 
-> [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
-> [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7
-> inflight: CMD OUT
-> [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 00
-> 00 08 00
-> [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host not
-> responding to stop endpoint command.
-> [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
-> [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not responding,
-> assume dead
-> [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6
-> inflight: CMD
-> [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 00
-> 00 08 00
-> [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5
-> inflight: CMD
-> 
-> Fixed this issue by update software record local variable when handles 128
-> TRB events.
-> 
-> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-> ---
->  drivers/usb/host/xhci-ring.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index d0b6806..f970799 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -3141,6 +3141,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
->  		if (event_loop++ < TRBS_PER_SEGMENT / 2)
->  			continue;
->  		xhci_update_erst_dequeue(xhci, event_ring_deq);
-> +		event_ring_deq = xhci->event_ring->dequeue;
-> 
->  		/* ring is half-full, force isoc trbs to interrupt more often */
->  		if (xhci->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
-> -- 
-> 2.7.4
+This series is based on next-20220225.
 
-What commit id does this change fix?
+Patch 1-2 fix a cache flush bug, because subsequent patches depend on
+those on those changes, there are placed in this series.  Patch 3-4
+are preparation for fixing a dax bug in patch 5.  Patch 6 is code cleanup
+since the previous patch remove the usage of follow_invalidate_pte().
 
-thanks,
+v5:
+- Collect Reviewed-by from Dan Williams.
+- Fix panic reported by kernel test robot <oliver.sang@intel.com>.
+- Remove pmdpp parameter from follow_invalidate_pte() and fold it into follow_pte().
 
-greg k-h
+v4:
+- Fix compilation error on riscv.
+
+v3:
+- Based on next-20220225.
+
+v2:
+- Avoid the overly long line in lots of places suggested by Christoph.
+- Fix a compiler warning reported by kernel test robot since pmd_pfn()
+  is not defined when !CONFIG_TRANSPARENT_HUGEPAGE on powerpc architecture.
+- Split a new patch 4 for preparation of fixing the dax bug.
+
+Muchun Song (6):
+  mm: rmap: fix cache flush on THP pages
+  dax: fix cache flush on PMD-mapped pages
+  mm: rmap: introduce pfn_mkclean_range() to cleans PTEs
+  mm: pvmw: add support for walking devmap pages
+  dax: fix missing writeprotect the pte entry
+  mm: simplify follow_invalidate_pte()
+
+ fs/dax.c             | 82 +++++-----------------------------------------------
+ include/linux/mm.h   |  3 --
+ include/linux/rmap.h |  3 ++
+ mm/internal.h        | 26 +++++++++++------
+ mm/memory.c          | 81 +++++++++++++++------------------------------------
+ mm/page_vma_mapped.c | 16 +++++-----
+ mm/rmap.c            | 68 +++++++++++++++++++++++++++++++++++--------
+ 7 files changed, 114 insertions(+), 165 deletions(-)
+
+-- 
+2.11.0
+

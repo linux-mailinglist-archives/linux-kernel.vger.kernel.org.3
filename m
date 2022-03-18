@@ -2,289 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B874DDBBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0574DDBC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237335AbiCROgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
+        id S237347AbiCROgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 10:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237329AbiCROf5 (ORCPT
+        with ESMTP id S237329AbiCROgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:35:57 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F342D4D4B
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:34:37 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id kx13-20020a17090b228d00b001c6715c9847so6179885pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:34:37 -0700 (PDT)
+        Fri, 18 Mar 2022 10:36:31 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DEA2D41F8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:35:11 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id n11so6962086qtk.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:35:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=An29DlOhwyywWM/0aNvAUk8ND1vXD1la3RvLhYP8lEQ=;
-        b=UVb5VWQS5BSfYyR2Prb8yeaH36dZnLfCYyT+KtIS2wpMhv3oFxfjmRgyzXq2ZaDakG
-         PBFk757tKQnvNgN0H1TQEpkxcqP2rmFegKXLB+g0ToEwhv2mFlGIn+EZmE9cD2njB8s7
-         s9RF3K+yE+rabFL/pc/IAUggeGEa86oN3m16lh/u/hX4lNlap+h5vIEHsgKlNf+p6GK0
-         221PF4Pt/1rOccpYVkCjvjkzbAAop/6zV1KZOGxzeJya/IJhOnWU3NiWpI/RvGC2Vz6q
-         GPyF8wz1aaifCohB49+1rPgj04/9ymFt8LhVIkQdAmude92xN3ljzboGAMUxxdlAnAcF
-         YU8w==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=V7P4GZK3e6fyTq1pakb6Rzu6ZJgSaONaWTDE6DcGFrE=;
+        b=Z8bs2DWUWGLhWdOjyWlnn9HNRwNSjCyVUcQwAOiEKwFsEEBGPZoaf84h5nMF6qt5zR
+         7kb0mvD3zpe4gHTDcRv2+uUbN05ibi1sBC9y1YzAtE2cvQZ/kpD1DCjsBJlPwgXRJGxm
+         DnBROXIz5vhznVTym7m9zNChFlxun94xZI1j6sOEMN9AUFGd5JVe8mBYpCyvu7uEpCpc
+         fFCUPZjO4cPBKgqXGFY7pW7CVObso2wbO9F7yS5IPtSINUkqlDFHj6H/IxVTFzzFqyI8
+         bnCxb4XelWAKG8/zXQElVRTxW2/5b8bwZPkqUpuEbFfH4286/0fiRHe+p0lJ70yg0Ta9
+         L2Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=An29DlOhwyywWM/0aNvAUk8ND1vXD1la3RvLhYP8lEQ=;
-        b=IDYFNYB5O/WUp9fRMx3A+4s7r2DV3yA/kFzV4zUatL+sOpYz1UEyZZDmYP3tzIdmvI
-         wWgm/kG6MfFcEi6aK02Xj4Uxxt4/rwQmvmTJ3Jz9WXrXxuGcpIUEQTSh3/qXzKaWyFf4
-         9Sqm364oHFavqhNh5cDljwVdp6MID8PnbeMT0v0Ef/RVQKf5vhz7Qve6dGdM5YrzOJe0
-         /DEPUUauiSTa2RU7bTtUNBObVu3eAzSSQIiWBn4j9OysQu5rcXzNYXZfDZO6YHsNMhbM
-         G3wGhBYJvIMCGcXbTt4/rCvnK5EByC+GEZ/+1EL6fFLV8R5FekRi3+Z3LWEzRAz0w8a3
-         bEtA==
-X-Gm-Message-State: AOAM5315mPgn7k/2VN6+FFO6l5MFQy2tTZQnW/BaOSgzdqYTGPfguHZe
-        pWQN1kAc7e8dhLUXHi9ANj7/TXZ50ZzI
-X-Google-Smtp-Source: ABdhPJzfxVLDqnthtDOksvI+hE2Tf0NlsqP5P+fJ3tV3tm7eSkq/8uDtWyFCI7zL5buvoDRqjA0Ypg==
-X-Received: by 2002:a17:90b:4b8d:b0:1bf:1301:2514 with SMTP id lr13-20020a17090b4b8d00b001bf13012514mr11485632pjb.19.1647614077029;
-        Fri, 18 Mar 2022 07:34:37 -0700 (PDT)
-Received: from thinkpad ([117.217.178.61])
-        by smtp.gmail.com with ESMTPSA id a24-20020a637f18000000b003821e17819csm2956095pgd.61.2022.03.18.07.34.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 07:34:36 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 20:04:30 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Prasad Malisetty <quic_pmaliset@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rajatja@google.com, refactormyself@gmail.com,
-        quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-        swboyd@chromium.org
-Subject: Re: [PATCH v4] PCI: qcom: Add system PM support
-Message-ID: <20220318143430.GA4922@thinkpad>
-References: <1646679306-4768-1-git-send-email-quic_pmaliset@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=V7P4GZK3e6fyTq1pakb6Rzu6ZJgSaONaWTDE6DcGFrE=;
+        b=Y4/cxSeCRwqsGMvUOufmi+Ol9sKkPajHdVIZvp/iZcQS+ulAPZg4kCNxgur/5wu98t
+         06XWxsBO8rh5S/+S6AIwWv3yp9uzsgXJ4UClpi3GxCpUP2pZ1wQZlcH4RpKdHdRllERZ
+         +E3LTLB/V89P4dqOIKYYKWWjWnrQ6T+UuRZWOv+aDp/3pUyRk+sniCisU/auzoWcZZE5
+         CQNYaK5Ulu0UyTMChrnV1WK0wrxJPsfHndzVO13opbY/Uzk7349YXkFL+tv8MkokOpoK
+         yNkcR/OWhUTKETpjOV/VDpVCMjA77JY+o3KGpVHQDicxRUfIg/7DEpIPyKeE4g2TpB4S
+         97Vw==
+X-Gm-Message-State: AOAM53211Zw6xWVSPpa+TnQO/cL72EQhhd0D1N9MHzcxgXNHHcycN10F
+        81WxKBpVusxikWfhOYHiDhvr9H6YwUoa0QY67c3nTw==
+X-Google-Smtp-Source: ABdhPJwf+MEW47SH6CFA80X1s0ccNAZNyAoYqKtZ7oSbtZn2ydv7N6dD6IDjj6RCMmalJ+GCbbbNLtvE1RbOEg+mDqk=
+X-Received: by 2002:a05:622a:15c5:b0:2e1:cdc9:dd1c with SMTP id
+ d5-20020a05622a15c500b002e1cdc9dd1cmr7596184qty.79.1647614110831; Fri, 18 Mar
+ 2022 07:35:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646679306-4768-1-git-send-email-quic_pmaliset@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-13-glider@google.com>
+ <Ybnuup0eMnhrwp8e@FVFF77S0Q05N> <CANpmjNNLG0F9WzNnQkJX+QEqdxnhWstuag_9jrid7zdJgivHyw@mail.gmail.com>
+ <Ybn/DZb32ujokTnJ@FVFF77S0Q05N>
+In-Reply-To: <Ybn/DZb32ujokTnJ@FVFF77S0Q05N>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 18 Mar 2022 15:34:34 +0100
+Message-ID: <CAG_fn=U96hVmJxk17z+N8yFxxGABy4vE-FHJUGYNMZYbHG_hyg@mail.gmail.com>
+Subject: Re: [PATCH 12/43] kcsan: clang: retire CONFIG_KCSAN_KCOV_BROKEN
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Marco Elver <elver@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 12:25:06AM +0530, Prasad Malisetty wrote:
-> Add suspend_noirq and resume_noirq callbacks to handle
-> system suspend and resume in dwc PCIe controller driver.
-> 
-> When system suspends, send PME turnoff message to enter
-> link into L2 state. Along with powerdown the PHY, disable
-> pipe clock, switch gcc_pcie_1_pipe_clk_src to XO if mux is
-> supported and disable the pcie clocks, regulators.
-> 
-> When system resumes, PCIe link will be re-established and
-> setup rc settings.
-> 
-> Signed-off-by: Prasad Malisetty <quic_pmaliset@quicinc.com>
-> 
-> ---
-> Changes since v3:
-> 	- Replaced noirq hooks with normal suspend/resume hooks.
-> 	- Removed local variable and placed in function itself.
-> 
-> Changes since v2:
-> 	- Removed unnecessary variable initializations and comments.
-> 	- Removed platform specific variables declarations.
-> 	- Added MACRO names for the BIT shiftings.
-> 
-> Changes since v1:
-> 	- Removed unnecessary logs and modified log level suggested by Manivannan.
-> 	- Removed platform specific callbacks as PM support is generic.
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 97 ++++++++++++++++++++++++++++++++++
->  1 file changed, 97 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 6ab9089..4d29c80 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -48,6 +48,7 @@
->  #define PCIE20_PARF_PHY_REFCLK			0x4C
->  #define PHY_REFCLK_SSP_EN			BIT(16)
->  #define PHY_REFCLK_USE_PAD			BIT(12)
-> +#define PHY_POWER_DOWN				0x1
+On Wed, Dec 15, 2021 at 3:43 PM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Wed, Dec 15, 2021 at 02:39:43PM +0100, Marco Elver wrote:
+> > On Wed, 15 Dec 2021 at 14:33, Mark Rutland <mark.rutland@arm.com> wrote=
+:
+> > >
+> > > On Tue, Dec 14, 2021 at 05:20:19PM +0100, Alexander Potapenko wrote:
+> > > > kcov used to be broken prior to Clang 11, but right now that versio=
+n is
+> > > > already the minimum required to build with KCSAN, that is why we do=
+n't
+> > > > need KCSAN_KCOV_BROKEN anymore.
+> > >
+> > > Just to check, how is that requirement enforced?
+> >
+> > HAVE_KCSAN_COMPILER will only be true with Clang 11 or later, due to
+> > no prior compiler having "-tsan-distinguish-volatile=3D1".
+>
+> I see -- could we add wording to that effect into the commit messge?
 
-BIT(0)
+Will be done.
 
->  
->  #define PCIE20_PARF_DBI_BASE_ADDR		0x168
->  #define PCIE20_PARF_SLV_ADDR_SPACE_SIZE		0x16C
-> @@ -62,6 +63,8 @@
->  
->  #define PCIE20_ELBI_SYS_CTRL			0x04
->  #define PCIE20_ELBI_SYS_CTRL_LT_ENABLE		BIT(0)
-> +#define PCIE_PME_TURNOFF_MSG			BIT(4)
-> +#define PCIE_PM_LINKST_IN_L2			BIT(5)
->  
->  #define PCIE20_AXI_MSTR_RESP_COMP_CTRL0		0x818
->  #define CFG_REMOTE_RD_REQ_BRIDGE_SIZE_2K	0x4
-> @@ -73,6 +76,8 @@
->  
->  #define PCIE20_PARF_Q2A_FLUSH			0x1AC
->  
-> +#define PCIE20_PARF_PM_STTS			0x24
-> +
->  #define PCIE20_MISC_CONTROL_1_REG		0x8BC
->  #define DBI_RO_WR_EN				1
->  
-> @@ -1645,6 +1650,97 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  	return ret;
->  }
->  
-> +static int qcom_pcie_send_pme_turnoff_msg(struct qcom_pcie *pcie)
-> +{
-> +	int ret;
-> +	u32 val, poll_val;
-> +	struct dw_pcie *pci = pcie->pci;
-> +	struct device *dev = pci->dev;
-> +
-> +	val = readl(pcie->elbi + PCIE20_ELBI_SYS_CTRL);
-> +	val |= PCIE_PME_TURNOFF_MSG;
-> +	writel(val, pcie->elbi + PCIE20_ELBI_SYS_CTRL);
-> +
-> +	ret = readl_poll_timeout((pcie->parf + PCIE20_PARF_PM_STTS), poll_val,
-> +			(poll_val & PCIE_PM_LINKST_IN_L2),
-> +			10000, 100000);
-> +	if (!ret)
-> +		dev_dbg(dev, "Device entered L23_Ready state\n");
-> +	else
-> +		dev_err(dev, "Device failed to enter L23_Ready. PM_STTS 0x%x\n",
-> +			readl_relaxed(pcie->parf + PCIE20_PARF_PM_STTS));
-> +
-> +	return ret;
-> +}
-> +
-> +static void qcom_pcie_host_disable(struct qcom_pcie *pcie)
-> +{
-> +	qcom_ep_reset_assert(pcie);
-> +
-
-In the modem usecase, the endpoint uses the LINK_DOWN event for freeing up the
-resources. If PERST# gets asserted before turing off the PHY, the LINK_DOWN
-event will be missed in the endpoint. And moreover, modem cannot free up the
-resources in PERST# handler as it is a hard IRQ handler and the cleanup action
-might sleep. The deferring also doesn't work because, once PERST# event get's
-handled, the host will turn off the refclk and the access to DBI region will
-not be allowed.
-
-For this reason, I'd prefer to move this PERST# assertion to the end of the
-funtion.
-
-> +	/* Put PHY into POWER DOWN state */
-> +	phy_power_off(pcie->phy);
-> +
-> +	writel(PHY_POWER_DOWN, pcie->parf + PCIE20_PARF_PHY_CTRL);
-> +
-> +	if (pcie->cfg->ops->post_deinit)
-> +		pcie->cfg->ops->post_deinit(pcie);
-> +
-> +	/* Disable PCIe clocks and regulators */
-> +	pcie->cfg->ops->deinit(pcie);
-
-It is also required to add a 100ms delay here as PERST# reaches quickly before
-LINK_DOWN.
+> > > I see the core Makefiles enforce 10.0.1+, but I couldn't spot an expl=
+icit
+> > > version dependency in Kconfig.kcsan.
+> > >
+> > > Otherwise, this looks good to me!
+> >
+> > I think 5.17 will be Clang 11 only, so we could actually revert
+> > ea91a1d45d19469001a4955583187b0d75915759:
+> > https://lkml.kernel.org/r/Yao86FeC2ybOobLO@archlinux-ax161
+> >
+> > I should resend that to be added to the -kbuild tree.
+>
+> FWIW, that also works for me.
+>
+> Thanks,
+> Mark.
 
 
-	/*
-	 * Allow the LINK_DOWN event to reach the endpoint before PERST# assert.
-	 * This is required for resource cleanup in the endpoint for modem usecase.
-	 */
-	usleep_range(50000, 100000);
-	qcom_ep_reset_assert(pcie);
 
-> +}
-> +
-> +static int __maybe_unused qcom_pcie_pm_suspend(struct device *dev)
-> +{
-> +	int ret;
-> +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-> +	struct dw_pcie *pci = pcie->pci;
-> +
-> +	if (!dw_pcie_link_up(pci)) {
-> +		dev_dbg(dev, "Power has been turned off already\n");
+--=20
+Alexander Potapenko
+Software Engineer
 
-I think this debug message doesn't add any value, so just skip it.
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-> +		return 0;
-> +	}
-> +
-> +	ret = qcom_pcie_send_pme_turnoff_msg(pcie);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Power down the PHY, disable clock and regulators */
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
 
-You are also asserting PERST#.
+Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
+erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
+weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
+mich
+bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
 
-> +	qcom_pcie_host_disable(pcie);
-> +
-> +	return 0;
-> +}
-> +
-> +/* Resume the PCIe link */
-> +static int __maybe_unused qcom_pcie_pm_resume(struct device *dev)
-> +{
-> +	int ret;
-> +	struct qcom_pcie *pcie = dev_get_drvdata(dev);
-> +	struct dw_pcie *pci = pcie->pci;
-> +	struct pcie_port *pp = &pci->pp;
-> +
-> +	ret = qcom_pcie_host_init(pp);
-> +	if (ret) {
-> +		dev_err(dev, "cannot initialize host\n");
-> +		return ret;
-> +	}
-> +
-> +	dw_pcie_setup_rc(pp);
-> +
-> +	qcom_pcie_start_link(pci);
-> +
-> +	ret = dw_pcie_wait_for_link(pci);
-> +	if (ret) {
-> +		dev_err(dev, "Link never came up, Resume failed\n");
 
-dw_pcie_wait_for_link() itself prints the error in failure case. So just return
-directly.
-
-	return dw_pcie_wait_for_link(pci);
-
-Thanks,
-Mani
-
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct dev_pm_ops qcom_pcie_pm_ops = {
-> +	SET_SYSTEM_SLEEP_PM_OPS(qcom_pcie_pm_suspend, qcom_pcie_pm_resume)
-> +};
-> +
->  static const struct of_device_id qcom_pcie_match[] = {
->  	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
->  	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
-> @@ -1679,6 +1775,7 @@ static struct platform_driver qcom_pcie_driver = {
->  	.probe = qcom_pcie_probe,
->  	.driver = {
->  		.name = "qcom-pcie",
-> +		.pm = &qcom_pcie_pm_ops,
->  		.suppress_bind_attrs = true,
->  		.of_match_table = qcom_pcie_match,
->  	},
-> -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-> of Code Aurora Forum, hosted by The Linux Foundation
-> 
+This e-mail is confidential. If you received this communication by
+mistake, please don't forward it to anyone else, please erase all
+copies and attachments, and please let me know that it has gone to the
+wrong person.

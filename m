@@ -2,100 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA8C4DC70E
-	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 602794DC5B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 17 Mar 2022 13:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234426AbiCQNAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 09:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        id S233510AbiCQMVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 08:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234473AbiCQM7p (ORCPT
+        with ESMTP id S230499AbiCQMVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 08:59:45 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F24814752E
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:58:24 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id h126so10094777ybc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 05:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=elCXN/aHOy7vPjpH18ylJ1cP6WgAx65RKk7fRU7ojZc=;
-        b=GrXcH3YkxDoDgi9fve1WKPFK7la+x9vkdTRO0op5C6EH2jHfAjBM+56Fd3CvmdBXLR
-         qsLlIug6rIODldHVTUojqYGPpTXNbTAvrzk04RueHmokWCxZigGXfhBQmTz3FpeG0NFy
-         qzgEB+pcquNbq3ZQ4HWPoUnQSr5Ry8KL4l+nz/saBiR4V3kUXOijDay3DgBoKGOw3T/f
-         syzjCZgr9O1rB+Zobo+MEfaNWjUjy7Yh9AzHZ3bruEkhzc2SGiYUdWte0sJUi+J2GpJp
-         tvQsXro/S4gKuAx/Pd967T+4V84Xt/Uhjk3P2EgKZIWm2ba0E48+j45xW2zKUXbuLzIx
-         IyoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=elCXN/aHOy7vPjpH18ylJ1cP6WgAx65RKk7fRU7ojZc=;
-        b=j3/GNyC4ihWWP/IXpvsp/d2Rz7N7uWfCRkTT/Ix8iv+nrvUY30Mzu651X6h4Br21Lz
-         /t2U6hFje2qrIr/XckvJxQQyDG+up72uzg1ylKBegF8pwwcDWraWkqMVrjTh2FjQNsnA
-         ITA+9AwQrbvRPUFBb1olUAv//08JlOXjL1omqXHokjR4h3CLWe2aoruj/ZrV9P7kY13j
-         fQuP5f6pFBC14MOt3k6Ph5JnjANb6aV/jg1RDXDM72qPBYUD8H2k/j7qyU3gzpNMfXje
-         1JD/MM7YWw/b/YmmoXPfh36ZxIvpbu9VOAgO8oexCp7FW1ZPYBvhZl16vCpczTQ8IsR3
-         gHLA==
-X-Gm-Message-State: AOAM532jofI2aIKhxdKkw9QRybUOuGuf+KN9JJN1TgTV+jqvGpqz+XIz
-        sG88Uuiytq4s076MwILn/1tocb43XL38RCdlz9U=
-X-Google-Smtp-Source: ABdhPJz1Ykr9LGD7q5P8uDMtLdaPy1Y+vDOsRPd9uK7+wdlC3B64z9irPK+tLnlndwYC4ruP0bohf1f0eFROT2CQsOs=
-X-Received: by 2002:a25:d512:0:b0:61d:aded:1743 with SMTP id
- r18-20020a25d512000000b0061daded1743mr4517766ybe.526.1647521903702; Thu, 17
- Mar 2022 05:58:23 -0700 (PDT)
+        Thu, 17 Mar 2022 08:21:51 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4E41A94A5;
+        Thu, 17 Mar 2022 05:20:34 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KK5h51DdszcZxN;
+        Thu, 17 Mar 2022 20:15:33 +0800 (CST)
+Received: from huawei.com (10.175.104.170) by kwepemi500016.china.huawei.com
+ (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 17 Mar
+ 2022 20:20:31 +0800
+From:   Zhipeng Xie <xiezhipeng1@huawei.com>
+To:     <peterz@infradead.org>
+CC:     <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
+        <fanwentao@huawei.com>, <jolsa@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <mark.rutland@arm.com>, <mingo@redhat.com>, <namhyung@kernel.org>,
+        <xiezhipeng1@huawei.com>, <xiexiuqi@huawei.com>
+Subject: Re: PING: [PATCH v2] perf/core: Fix perf_mmap fail when CONFIG_PERF_USE_VMALLOC enabled
+Date:   Thu, 17 Mar 2022 21:19:41 -0400
+Message-ID: <20220318011941.19116-1-xiezhipeng1@huawei.com>
+X-Mailer: git-send-email 2.18.1
+In-Reply-To: <20220216165427.18270-1-xiezhipeng1@huawei.com>
+References: <20220216165427.18270-1-xiezhipeng1@huawei.com>
 MIME-Version: 1.0
-References: <20220315073949.7541-1-jiangshanlai@gmail.com> <YjH+VdHIiHZM3maD@hirez.programming.kicks-ass.net>
- <YjH+fAaH5yHGrxRu@hirez.programming.kicks-ass.net>
-In-Reply-To: <YjH+fAaH5yHGrxRu@hirez.programming.kicks-ass.net>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Thu, 17 Mar 2022 20:58:12 +0800
-Message-ID: <CAJhGHyDpa5oR7+cNv-Tj81uPFNmSKOqN2npCxfbo_zLwasVQrg@mail.gmail.com>
-Subject: Re: [PATCH V3 0/7] x86/entry: Clean up entry code
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.104.170]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 11:13 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Mar 16, 2022 at 04:12:21PM +0100, Peter Zijlstra wrote:
-> > On Tue, Mar 15, 2022 at 03:39:42PM +0800, Lai Jiangshan wrote:
-> >
-> > > Lai Jiangshan (7):
-> > >   x86/entry: Use idtentry macro for entry_INT80_compat
-> > >   x86/traps: Move pt_regs only in fixup_bad_iret()
-> > >   x86/entry: Switch the stack after error_entry() returns
-> > >   x86/entry: move PUSH_AND_CLEAR_REGS out of error_entry
-> > >   x86/entry: Move cld to the start of idtentry
-> > >   x86/entry: Don't call error_entry for XENPV
-> > >   x86/entry: Convert SWAPGS to swapgs and remove the definition of
-> > >     SWAPGS
-> >
-> > So AFAICT these patches are indeed correct.
-> >
-> > I do however worry a little bit about the I$ impact of patch 4, and
-> > there's a few niggles, but otherwise looks good.
-> >
-> > I'd love for some of the other x86 people to also look at this, but a
-> > tentative ACK on this.
-> >
->
-> Also, I forgot to mention; they no longer apply cleanly because I
-> sprinked ENDBR all over the place. Mostly trivial to fixup though.
+Ping again, sorry for the noise.
 
+On Thu, February 17, 2022 12:54 AM, Zhipeng Xie wrote:
+> 
+> Hi, Peter
+> 
+> Could you please review the V2 version?
+> 
+> On Wed, February 9, 2022 10:54 PM, Zhipeng Xie wrote:
+> > This problem can be reproduced with CONFIG_PERF_USE_VMALLOC enabled
+> > on both
+> > x86_64 and aarch64 arch when using sysdig -B(using ebpf)[1].
+> > sysdig -B works fine after rebuilding the kernel with
+> > CONFIG_PERF_USE_VMALLOC
+> > disabled.
+> >
+> > I tracked it down to the if condition event->rb->nr_pages != nr_pages in
+> > perf_mmap is true when CONFIG_PERF_USE_VMALLOC is enabled where
+> > event->rb->nr_pages = 1 and nr_pages = 2048 resulting perf_mmap to return
+> > -EINVAL.This is because when CONFIG_PERF_USE_VMALLOC is enabled,
+> > rb->nr_pages
+> > is always equal to 1.
+> >
+> > Arch with CONFIG_PERF_USE_VMALLOC enabled by default:
+> > arc/arm/csky/mips/sh/sparc/xtensa
+> > Arch with CONFIG_PERF_USE_VMALLOC disabled by default:
+> > x86_64/aarch64/...
+> >
+> > Fix this problem by using data_page_nr.
+> >
+> > [1] https://github.com/draios/sysdig
+> >
+> > Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
+> > ---
+> >  kernel/events/core.c        | 2 +-
+> >  kernel/events/internal.h    | 5 +++++
+> >  kernel/events/ring_buffer.c | 5 -----
+> >  3 files changed, 6 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > index 57c7197838db..370292effd32 100644
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -6352,7 +6352,7 @@ static int perf_mmap(struct file *file, struct
+> > vm_area_struct *vma)
+> >  again:
+> > mutex_lock(&event->mmap_mutex);
+> > if (event->rb) {
+> > -       if (event->rb->nr_pages != nr_pages) {
+> > +       if (data_page_nr(event->rb) != nr_pages) {
+> >         ret = -EINVAL;
+> >         goto unlock;
+> >     }
+> > diff --git a/kernel/events/internal.h b/kernel/events/internal.h
+> > index 082832738c8f..5816c0719dbf 100644
+> > --- a/kernel/events/internal.h
+> > +++ b/kernel/events/internal.h
+> > @@ -116,6 +116,11 @@ static inline int page_order(struct perf_buffer *rb)
+> >  }
+> >  #endif
+> >
+> > +static int data_page_nr(struct perf_buffer *rb)
+> > +{
+> > +   return rb->nr_pages << page_order(rb);
+> > +}
+> > +
+> >  static inline unsigned long perf_data_size(struct perf_buffer *rb)
+> >  {
+> > return rb->nr_pages << (PAGE_SHIFT + page_order(rb));
+> > diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+> > index 52868716ec35..fb35b926024c 100644
+> > --- a/kernel/events/ring_buffer.c
+> > +++ b/kernel/events/ring_buffer.c
+> > @@ -859,11 +859,6 @@ void rb_free(struct perf_buffer *rb)
+> >  }
+> >
+> >  #else
+> > -static int data_page_nr(struct perf_buffer *rb)
+> > -{
+> > -   return rb->nr_pages << page_order(rb);
+> > -}
+> > -
+> >  static struct page *
+> >  __perf_mmap_to_page(struct perf_buffer *rb, unsigned long pgoff)
+> >  {
+> > --
+> > 2.18.1
+> 
+> Best Regards,
+> Zhipeng Xie
 
-They can still be applied to the newest tip/master which already has
-sprinked ENDBR.  Is there a more proper branch for me to rebase the
-patches onto?
+Best Regards,
+Zhipeng Xie

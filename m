@@ -2,120 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9351B4DD1E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:20:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4164DD1E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbiCRAVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 20:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
+        id S231146AbiCRAYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 20:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbiCRAVe (ORCPT
+        with ESMTP id S229988AbiCRAYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 20:21:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6B1F1EB7;
-        Thu, 17 Mar 2022 17:20:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A582DB81F81;
-        Fri, 18 Mar 2022 00:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 38FDEC340EF;
-        Fri, 18 Mar 2022 00:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647562814;
-        bh=VhMA0U/HDQoA1cmOY4Bw3fD0npt5Q4VMst5fHYiRhmA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=P6Go+x8KVLt2xjAZm2WceBHay10DQUhwETNW0CAa436/pxozvw3gfdDDZLfBCeZjM
-         +iim+PYuyZVmXu3qGxseThgyfqcAWTDgH+SXULnOChAIZCYDpM0PUqby68bZWrttit
-         8IJ4xAVtwDxfSlZKUU5TPJfZ9Go3KAnIpAPs6uEbGFDQI9G/tiYIGjVd2F2JF7yp1D
-         84Eo4tyw4xeURBuNUU6v+qQ2iVY4qRomm3WfjQV/qVfHpGnOGydA1a6FzMfuRDNQQL
-         AJ+h3r9m1RKBZnO7xQGOlWhkD8t7SPy32MxvxWeX87Rg78FdTqWZp7v+euptDvT5LI
-         BZ60cpxZaNNFg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0E41BF0383F;
-        Fri, 18 Mar 2022 00:20:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 17 Mar 2022 20:24:39 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B44619D626;
+        Thu, 17 Mar 2022 17:23:21 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b19so9632112wrh.11;
+        Thu, 17 Mar 2022 17:23:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EUZS5i1fz1kAVVM80Oyu7b+mX6O5QtCzcdOhcl/QHOU=;
+        b=EqFWZ5eHPSolbx4tQvCZl+Q2JTRB/fXuFH9BjeWTK4jAKAVb6PTRAGug9WAbrk2UXe
+         ciaWvoPFO23aVrZKDwXLh059VIvo8btA5iTGOsiW2bAW/1KEePA1VvheichxFgswdqRn
+         ikJI2ZoE0tUa8rygZTxkWPLCQhcyf+26XSqsJke/Sd5WZ84as7rQl0MiS81U74hyLc55
+         LIu9Gd7JCW3OFke8+RKm0NHtzkFYTyH7lUMNBc5GhizqB808+YBdr/V3oExqSr0E+0Hj
+         r6WQ5xNiTg7voZQNAMuySEwlhQiYB/RG+ryBk3GwvUINdPgSgcKPZ50MpS755BveHCRB
+         caSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EUZS5i1fz1kAVVM80Oyu7b+mX6O5QtCzcdOhcl/QHOU=;
+        b=VO7LFDfK9To/n/jn3zNNigZ0BbzgcahU+0fjBGsxNQ/5G67CbYzSzCEC7yhZSiujRX
+         /KHmdFrmL2iktJawpCBl5B0UG91jVO/UZDsLG6OdbVeGkPGs0edXADu8nOThKTjumu9e
+         Hp0y2rpP+3N3e6qej8kVhO9u4913jsLnxmnrUjZ/KADg8fgia32KOcRB5wHXGSmGCI4g
+         sAG5AqQDl11X97HZZojana24xNBYBvd5dTr8XbHOM0oeMbtMuBsHTBmW1a9UyNYtlnoE
+         Lw+EuGhki90i9N68pLVDFNU3zx/5ebLaxDmB8H5ZFoKTqR2FTNerU/cBPUZEeIoOcl/L
+         QGqw==
+X-Gm-Message-State: AOAM530kQ6fU2m93QfyVE7s9Fsz4opCQ5nD199KR3EtM8mPFcTMqSZKs
+        VUpUBFZZr84lbOOIyaYmzdo=
+X-Google-Smtp-Source: ABdhPJzDt190+x1gAiJfV2NyyJQ7Ohh8/brsXamRrkHlsLOW2WrvCVh6+ledfezGgCck7Y2vWfM3gw==
+X-Received: by 2002:a5d:504d:0:b0:203:e60e:49ef with SMTP id h13-20020a5d504d000000b00203e60e49efmr5835724wrt.546.1647562999664;
+        Thu, 17 Mar 2022 17:23:19 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id g13-20020a05600c4ecd00b0038a0165f2fbsm6207260wmq.17.2022.03.17.17.23.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 17:23:18 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] Input: adi: remove redundant variable z
+Date:   Fri, 18 Mar 2022 00:23:18 +0000
+Message-Id: <20220318002318.80519-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5 net-next 00/15] net: bridge: Multiple Spanning Trees
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164756281405.28197.1278570234241451207.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Mar 2022 00:20:14 +0000
-References: <20220316150857.2442916-1-tobias@waldekranz.com>
-In-Reply-To: <20220316150857.2442916-1-tobias@waldekranz.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, andrew@lunn.ch,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
-        jiri@resnulli.us, ivecera@redhat.com, roopa@nvidia.com,
-        razor@blackwall.org, linux@armlinux.org.uk, petrm@nvidia.com,
-        idosch@nvidia.com, matt@codeconstruct.com.au, me@cooperlees.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Variable z is being assigned a value that is never read, the
+variable is redundant and can be removed.
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Cleans up clang scan build warning:
+drivers/input/joystick/adi.c:139:6: warning: Although the
+value stored to 'z' is used in the enclosing expression,
+the value is never actually read from 'z' [deadcode.DeadStores]
 
-On Wed, 16 Mar 2022 16:08:42 +0100 you wrote:
-> The bridge has had per-VLAN STP support for a while now, since:
-> 
-> https://lore.kernel.org/netdev/20200124114022.10883-1-nikolay@cumulusnetworks.com/
-> 
-> The current implementation has some problems:
-> 
-> - The mapping from VLAN to STP state is fixed as 1:1, i.e. each VLAN
->   is managed independently. This is awkward from an MSTP (802.1Q-2018,
->   Clause 13.5) point of view, where the model is that multiple VLANs
->   are grouped into MST instances.
-> 
-> [...]
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/input/joystick/adi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Here is the summary with links:
-  - [v5,net-next,01/15] net: bridge: mst: Multiple Spanning Tree (MST) mode
-    https://git.kernel.org/netdev/net-next/c/ec7328b59176
-  - [v5,net-next,02/15] net: bridge: mst: Allow changing a VLAN's MSTI
-    https://git.kernel.org/netdev/net-next/c/8c678d60562f
-  - [v5,net-next,03/15] net: bridge: mst: Support setting and reporting MST port states
-    https://git.kernel.org/netdev/net-next/c/122c29486e1f
-  - [v5,net-next,04/15] net: bridge: mst: Notify switchdev drivers of MST mode changes
-    https://git.kernel.org/netdev/net-next/c/87c167bb94ee
-  - [v5,net-next,05/15] net: bridge: mst: Notify switchdev drivers of VLAN MSTI migrations
-    https://git.kernel.org/netdev/net-next/c/6284c723d9b9
-  - [v5,net-next,06/15] net: bridge: mst: Notify switchdev drivers of MST state changes
-    https://git.kernel.org/netdev/net-next/c/7ae9147f4312
-  - [v5,net-next,07/15] net: bridge: mst: Add helper to map an MSTI to a VID set
-    https://git.kernel.org/netdev/net-next/c/cceac97afa09
-  - [v5,net-next,08/15] net: bridge: mst: Add helper to check if MST is enabled
-    https://git.kernel.org/netdev/net-next/c/48d57b2e5f43
-  - [v5,net-next,09/15] net: bridge: mst: Add helper to query a port's MST state
-    https://git.kernel.org/netdev/net-next/c/f54fd0e16306
-  - [v5,net-next,10/15] net: dsa: Validate hardware support for MST
-    https://git.kernel.org/netdev/net-next/c/332afc4c8c0d
-  - [v5,net-next,11/15] net: dsa: Pass VLAN MSTI migration notifications to driver
-    https://git.kernel.org/netdev/net-next/c/8e6598a7b0fa
-  - [v5,net-next,12/15] net: dsa: Handle MST state changes
-    https://git.kernel.org/netdev/net-next/c/7414af30b7d8
-  - [v5,net-next,13/15] net: dsa: mv88e6xxx: Disentangle STU from VTU
-    https://git.kernel.org/netdev/net-next/c/49c98c1dc7d9
-  - [v5,net-next,14/15] net: dsa: mv88e6xxx: Export STU as devlink region
-    https://git.kernel.org/netdev/net-next/c/7dc96039b967
-  - [v5,net-next,15/15] net: dsa: mv88e6xxx: MST Offloading
-    https://git.kernel.org/netdev/net-next/c/acaf4d2e36b3
-
-You are awesome, thank you!
+diff --git a/drivers/input/joystick/adi.c b/drivers/input/joystick/adi.c
+index 592c95b87f54..e10d57bf1180 100644
+--- a/drivers/input/joystick/adi.c
++++ b/drivers/input/joystick/adi.c
+@@ -123,7 +123,7 @@ static void adi_read_packet(struct adi_port *port)
+ {
+ 	struct adi *adi = port->adi;
+ 	struct gameport *gameport = port->gameport;
+-	unsigned char u, v, w, x, z;
++	unsigned char u, v, w, x;
+ 	int t[2], s[2], i;
+ 	unsigned long flags;
+ 
+@@ -136,7 +136,7 @@ static void adi_read_packet(struct adi_port *port)
+ 	local_irq_save(flags);
+ 
+ 	gameport_trigger(gameport);
+-	v = z = gameport_read(gameport);
++	v = gameport_read(gameport);
+ 
+ 	do {
+ 		u = v;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.35.1
 

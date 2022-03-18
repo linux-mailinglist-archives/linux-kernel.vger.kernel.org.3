@@ -2,90 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABDF14DDB8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13664DDB98
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237200AbiCROXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
+        id S237242AbiCROYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 10:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237215AbiCROWK (ORCPT
+        with ESMTP id S237339AbiCROXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:22:10 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F751BA692
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:20:33 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647613231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZNMXP6J9xWB0d8DtI6D+7sf/8u+0IpppoujJx7MrKmI=;
-        b=wk28hfwfAHtEmopuVMi4KZzVCZbYWy1+8VDduqmt8pdTcz7WklVl8OI0Pno30ndyZmWUug
-        yh4p0H0ujWaQ1961MV7VeDa3akFjup8zoFeVqEpR8sE0VcvVTlzEws9Yl/5L6IHRmnMDF9
-        Z54IWPfwd+pESUF3dQsIzXzWlNnPSWPXqTFMFYYRcYbBSW6ym9oE7T3cE1jYv5CZinCBvG
-        lOoyR7m2IfIO8BuMVjuWbHTMSBJzt4MQn7HczxKYo7ktnxURBRxUQOVw/NHhCO/bw+QEQY
-        MCrNuF0neFc9ae+o5k6i4t8ZvP/9EFe0fWtumfVmOv+AP5Oxvt4I180yM0o21g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647613231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZNMXP6J9xWB0d8DtI6D+7sf/8u+0IpppoujJx7MrKmI=;
-        b=KZbNAWr8ROW2Hh/vejVSNN+lV3s40JfRJychBsQh06zBmGwPib274QeHg77np/CDIFh9qd
-        XemdOoe2OqG2RdAA==
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv6 15/30] x86/boot: Port I/O: allow to hook up
- alternative helpers
-In-Reply-To: <20220317201054.5wdykfru5hhvukvd@black.fi.intel.com>
-References: <20220316020856.24435-1-kirill.shutemov@linux.intel.com>
- <20220316020856.24435-16-kirill.shutemov@linux.intel.com>
- <87czik22wk.ffs@tglx> <20220317201054.5wdykfru5hhvukvd@black.fi.intel.com>
-Date:   Fri, 18 Mar 2022 15:20:31 +0100
-Message-ID: <877d8rcpg0.ffs@tglx>
+        Fri, 18 Mar 2022 10:23:13 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55AA1945F9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:21:53 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 393323201DFB;
+        Fri, 18 Mar 2022 10:21:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Fri, 18 Mar 2022 10:21:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=JdbdOBlKB49jb2nrphcKT44xOINnms5GB3sKzc
+        O2L1k=; b=iEk7z0Zuxe+6HVX82QUUaCPSjmVdSopv7dIdwLb3x5Xky+97A91Y7A
+        hn1ywKTebamGBnLcPwG9dw5ivA1F6SXrpf+6ZaAtOKjGX2O9xxlsYNvyxMtbOF/0
+        bKoe+xGXMpmOsakZvSNS7Qmgf4P4VVMKsDyaF+t1QMd29fAg7/comaKs91nZIjud
+        AtUEnUJ0Hy9mzBvqJ2QD4zXH4tDsJXjTteQxTPxcI7175dPrfyrA7LXsOo2S2VgC
+        yEZuCClLRsK9vfU9MS2XxuDUhkc963V9c73oPqyUOGEDODNuev1vpwvm0WWG/5ut
+        RIKzDzNb3nKLTtdz+lr/yar+OHjlsTQA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=JdbdOBlKB49jb2nrp
+        hcKT44xOINnms5GB3sKzcO2L1k=; b=VbVHzMOA+5WVjK/pCHB5HSM2CjFkOuO9q
+        9kS8Q0SvuyyHRr7z7T4M43CERjgqxZdS4nua0axLoQvX2mnbqrGxtpQeH0e+eNeW
+        uyYdf5KgyFam2fSiI/AgL1qbEBDHEH0OQ8Cil8WY46TYo6Vap8i48Hck2gUitGSV
+        1OhRk0AdiJghYrFcFOcgGfZbZ944dz591Z1XPeslEk+TMrmf3KKvcwYrty29/xU3
+        WIO8l+Gubu2luOg+NdjVhiTuvJF1544hM9juVzgQWLdQOifEu838gGunDrLZdxzO
+        CsYLu/Y4PoGroNm5v9GqcHAHpohD5N316SRixKnajdK7fwxSzZ3ow==
+X-ME-Sender: <xms:fZU0YkXxZenZ5MGhE-eB77o9eVkIWOkuUr9dawIhlXbuu8sSqJkRZw>
+    <xme:fZU0YonUvYDfuFOJXgTQzUG76IcFqfHzwlCCIAyx_5DiXf4ROrxH77eWL5QWLDohE
+    il5hOFIyS6yIu5b9zk>
+X-ME-Received: <xmr:fZU0YobschH9IBpb2fZZyLmtDh41wQHD1Iu__Gn4SnWeqqBn2bywYg-GQGSZTMImORt6MNfXQDi5hsr7dc3zS0JSuX3ANL14TO7wSGg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefiedgieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepjeduvdfhkeekhfdtgeeihfeluddtvedthfektdelfeejgfeludfhteduveej
+    hefhnecuffhomhgrihhnpehfrhgvvgguvghskhhtohhprdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhho
+    rdhtvggthh
+X-ME-Proxy: <xmx:fZU0YjWF2jIgYsBFbkbfCwpna-T17k3bLBAvWCrFd3mU8ahSAoHiCQ>
+    <xmx:fZU0YukZ2PkOMIvXl78dPO_OiZbkfjGe3Eh4ecs5UWz6gG1wUDHYjw>
+    <xmx:fZU0Yof6_PnqujkBGD5dWKaucN2hX-tevpARc93zwMXS1VFoF_JHrQ>
+    <xmx:fZU0Yo4CbvhAoEvYRBaFCbZZKfOsqZapYoK93I4eipQBIGPQeLwA1Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 18 Mar 2022 10:21:48 -0400 (EDT)
+Date:   Fri, 18 Mar 2022 15:21:45 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] drm: Fix monochrome conversion for sdd130x
+Message-ID: <20220318142145.kwq46bf6exgce6wu@houat>
+References: <20220317081830.1211400-1-geert@linux-m68k.org>
+ <f94c0f44-36f1-e1a9-5963-5da0bafb8c90@redhat.com>
+ <YjSMWDFxTeJZZ/CB@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4yi27rkk2xdb5y6l"
+Content-Disposition: inline
+In-Reply-To: <YjSMWDFxTeJZZ/CB@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17 2022 at 23:10, Kirill A. Shutemov wrote:
-> On Thu, Mar 17, 2022 at 01:12:59PM +0100, Thomas Gleixner wrote:
->> #define DEFINE_PORT_IO_OPS()		\
->> 	struct port_io_ops pio_ops = {	\
->>         	.inb	= __inb,	\
->>         	.outb	= __outb,	\
->>         	.outw	= __outw, }
->> 
->> Hmm?
->
-> This kind of initializations are problematic. They generate run-time
-> relacations that kernel cannot handle in the boot stub. Linker complains
-> about this:
->
-> 	ld.lld: error: Unexpected run-time relocations (.rela) detected!
->
-> I will leave it as is, unless you have better ideas.
 
-Bah, did not think about that.
+--4yi27rkk2xdb5y6l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
+On Fri, Mar 18, 2022 at 03:42:48PM +0200, Andy Shevchenko wrote:
+> On Thu, Mar 17, 2022 at 12:39:57PM +0100, Javier Martinez Canillas wrote:
+> > On 3/17/22 09:18, Geert Uytterhoeven wrote:
+>=20
+> > By the way, you should probably request commit access to the drm-misc t=
+ree:
+> >=20
+> > https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html
+>=20
+> Does it really work? I tried and no one replied to request.
+> Keeping silent is a bad service. If people don't want a person
+> to have such access it should be well communicated.
 
-        tglx
+I don't see any issue on Gitlab to request commit access, so I'm not
+sure what you did exactly but it's not surprising you didn't get any
+answer.
+
+Maxime
+
+--4yi27rkk2xdb5y6l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYjSVeQAKCRDj7w1vZxhR
+xdn2AQCSuox1BSswX/dLm7nf6lTTrTUpEBZ4xfuzRQ/oH6MulQEAwBzsEAQemfKE
+hwdglbnvcWh/TFhjzCLDLVjZ5mpHigQ=
+=M2cQ
+-----END PGP SIGNATURE-----
+
+--4yi27rkk2xdb5y6l--

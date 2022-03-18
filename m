@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EB54DDD66
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F29D4DDD80
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238339AbiCRP6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 11:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
+        id S238380AbiCRQEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238323AbiCRP6L (ORCPT
+        with ESMTP id S231775AbiCRQEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 11:58:11 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3004099ED3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 08:56:48 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=cuibixuan@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V7XBZR6_1647619000;
-Received: from VM20210331-25.tbsite.net(mailfrom:cuibixuan@linux.alibaba.com fp:SMTPD_---0V7XBZR6_1647619000)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 18 Mar 2022 23:56:45 +0800
-From:   Bixuan Cui <cuibixuan@linux.alibaba.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     cuibixuan@linux.alibaba.com, rostedt@goodmis.org, mingo@redhat.com,
-        yi.zhang@huawei.com, jack@suse.cz
-Subject: [PATCH -next] jbd2: use the correct print format
-Date:   Fri, 18 Mar 2022 23:56:40 +0800
-Message-Id: <1647619000-17758-1-git-send-email-cuibixuan@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 18 Mar 2022 12:04:34 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA096277;
+        Fri, 18 Mar 2022 09:03:11 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id DF8B440014;
+        Fri, 18 Mar 2022 16:03:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1647619389;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wD9g/HyfpaihMjtAUh4hRheF6myO2JbJgNrI9rB+wpM=;
+        b=niLpGNlg/f7Eb9yWFuuV4URLO5ZVaT47aeZycwYZhe0Lcti8C0jBnboCDyt7W0ER1wlmcL
+        0sqXEsgx8e0aNVz2tVzZrSrIXkOCghV0IG7jd1Zln/K6F+GTt+2q732tJaHJzU8OHOk5gL
+        BwPFmfG9ypg25wNhRzipwPo/JtfWDwCnaCfEsI/Ew8i10K9YXibQ87zgriYFgUR36cAXUI
+        am+VmIzU4nF7tmQwWCSBlPMHB81ihV3Gl78qIMeWVAUS9PL86Syd95Q4gnet+iy6Mzsbu2
+        Zhc8gTb6qpvsAl5Sr7JkJtxiZTuGvRKg+cjQwIUC4U5PKTMoIZnHPGk67fTwqw==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "'Rafael J . Wysocki '" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+Subject: [PATCH 0/6] introduce fwnode in the I2C subsystem
+Date:   Fri, 18 Mar 2022 17:00:46 +0100
+Message-Id: <20220318160059.328208-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The print format error was found when using ftrace event:
-    <...>-1406 [000] .... 23599442.895823: jbd2_end_commit: dev 252,8 transaction -1866216965 sync 0 head -1866217368
-    <...>-1406 [000] .... 23599442.896299: jbd2_start_commit: dev 252,8 transaction -1866216964 sync 0
+In order to allow the I2C subsystem to be usable with fwnode, add
+some functions to retrieve an i2c_adapter from a fwnode and use
+these functions in both i2c mux and sfp. ACPI and device-tree are
+handled to allow these modifications to work with both descriptions.
 
-Print transaction and head with the unsigned format "%u" instead.
+This series is a subset of the one that was first submitted as a larger
+series to add swnode support [1]. In this one, it will be focused on
+fwnode support only since it seems to have reach a consensus that
+adding fwnode to subsystems makes sense.
 
-Fixes: 879c5e6b7cb4 ('jbd2: convert instrumentation from markers to tracepoints')
-Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
----
- include/trace/events/jbd2.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+[1] https://lore.kernel.org/netdev/YhPSkz8+BIcdb72R@smile.fi.intel.com/T/
 
-diff --git a/include/trace/events/jbd2.h b/include/trace/events/jbd2.h
-index a4dfe005983d..5be1aa1691fb 100644
---- a/include/trace/events/jbd2.h
-+++ b/include/trace/events/jbd2.h
-@@ -40,7 +40,7 @@ DECLARE_EVENT_CLASS(jbd2_commit,
- 	TP_STRUCT__entry(
- 		__field(	dev_t,	dev			)
- 		__field(	char,	sync_commit		  )
--		__field(	int,	transaction		  )
-+		__field(	tid_t,	transaction		  )
- 	),
- 
- 	TP_fast_assign(
-@@ -49,7 +49,7 @@ DECLARE_EVENT_CLASS(jbd2_commit,
- 		__entry->transaction	= commit_transaction->t_tid;
- 	),
- 
--	TP_printk("dev %d,%d transaction %d sync %d",
-+	TP_printk("dev %d,%d transaction %u sync %d",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev),
- 		  __entry->transaction, __entry->sync_commit)
- );
-@@ -97,8 +97,8 @@ TRACE_EVENT(jbd2_end_commit,
- 	TP_STRUCT__entry(
- 		__field(	dev_t,	dev			)
- 		__field(	char,	sync_commit		  )
--		__field(	int,	transaction		  )
--		__field(	int,	head		  	  )
-+		__field(	tid_t,	transaction		  )
-+		__field(	tid_t,	head		  	  )
- 	),
- 
- 	TP_fast_assign(
-@@ -108,7 +108,7 @@ TRACE_EVENT(jbd2_end_commit,
- 		__entry->head		= journal->j_tail_sequence;
- 	),
- 
--	TP_printk("dev %d,%d transaction %d sync %d head %d",
-+	TP_printk("dev %d,%d transaction %u sync %d head %u",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev),
- 		  __entry->transaction, __entry->sync_commit, __entry->head)
- );
+Clément Léger (6):
+  property: add fwnode_property_read_string_index()
+  i2c: fwnode: add fwnode_find_i2c_adapter_by_node()
+  i2c: of: use fwnode_get_i2c_adapter_by_node()
+  i2c: mux: pinctrl: remove CONFIG_OF dependency and use fwnode API
+  i2c: mux: add support for fwnode
+  net: sfp: add support for fwnode
+
+ drivers/base/property.c             | 48 +++++++++++++++++++++++++++++
+ drivers/i2c/Makefile                |  1 +
+ drivers/i2c/i2c-core-fwnode.c       | 41 ++++++++++++++++++++++++
+ drivers/i2c/i2c-core-of.c           | 30 ------------------
+ drivers/i2c/i2c-mux.c               | 39 +++++++++++------------
+ drivers/i2c/muxes/Kconfig           |  1 -
+ drivers/i2c/muxes/i2c-mux-pinctrl.c | 21 +++++++------
+ drivers/net/phy/sfp.c               | 46 +++++++++------------------
+ include/linux/i2c.h                 |  7 ++++-
+ include/linux/property.h            |  3 ++
+ 10 files changed, 142 insertions(+), 95 deletions(-)
+ create mode 100644 drivers/i2c/i2c-core-fwnode.c
+
 -- 
-2.19.1.6.gb485710b
+2.34.1
 

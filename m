@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CFD4DE0A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D294DE0A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239957AbiCRSCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 14:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
+        id S239948AbiCRSDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 14:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239942AbiCRSCq (ORCPT
+        with ESMTP id S231842AbiCRSDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 14:02:46 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936BC2A129C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:01:27 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a25so1909209lfm.10
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i1Ms63NIkd6E7s+RusloWQgZ7ue4LhJ4QsLqeHtSUJw=;
-        b=UmJ7ZODw+NbFnzVmsyjuDdBgu4T/BwFBuS2/0+3MpNrwys8fTBTfkYBO1USQX87RCc
-         GytlT2Sz0odsaeGpYDGyMwEBtfolTTfoXe/0/w8shAKFDO+IRj1la0blGBdQOVphsqY7
-         M3IJWHcNUuY3XpphtwP3Ccs3F0vVtc7X4tupL6zeR1RE0r6kEUnLdV6sv6abGBSKuAvT
-         qsz62NmNx+qchrEYSrn3OzEydIzwRraHZ8mwieJYb1vuVoLB/731mnpJMslLxnJ/Q8em
-         PiirQtwAVuwulvHUk2tiS2Du+CYiHYNqBE/RFHLy24dEqp6UfqUw5Ii145O69Lw/vjea
-         Ly/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i1Ms63NIkd6E7s+RusloWQgZ7ue4LhJ4QsLqeHtSUJw=;
-        b=Zi4BD0QehFhrYGzi0W6aNQD+S/wr67J4KreGXl/4nTu+xYf7SxF1E5QEtWAc834idt
-         OEqROUnWliqJlN6MTVXcyKd8DDxVr3iugMoUx7TNbOttOKhXHYNUnY6rhcJfp9qNGFPY
-         D4SRWnIT6uLqeMBjdqE5zAMpHNRLduDhFq9eweoMq4y0sHmEXoymE39VY5X/f/sSWJhk
-         IuKBna4PTfNZEwfIaD2CFSAxL+pIX8PebVuPNXXWT+uA3K2AQWGlL3WcH2Ls8z8YdQtd
-         oZvLzUVjrh3QnkRFPgju03pC8HpuYIXqi8ibcNZXoBUsNjsODIXYZgvRpUtJ/eaS5SLd
-         24NA==
-X-Gm-Message-State: AOAM532O61VPu68xRyePcYXvNdLWMxZixqlwewzDCb1iZaNoGpZaCRT/
-        1NOFgyh1qV5OzNGJ1+LOJ1RZzbYX+h8/IfRuQ562XA==
-X-Google-Smtp-Source: ABdhPJz6aj15Mk032FInyJsNGaIzC0VM6EnNcglPQg/SUnzZ2trHPqDTPq6Y0J4vC0VxLXeRF9Apc6TRZUmywwUSrg0=
-X-Received: by 2002:a05:6512:b9e:b0:44a:10eb:9607 with SMTP id
- b30-20020a0565120b9e00b0044a10eb9607mr1382981lfv.626.1647626485133; Fri, 18
- Mar 2022 11:01:25 -0700 (PDT)
+        Fri, 18 Mar 2022 14:03:49 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7782E8CFF;
+        Fri, 18 Mar 2022 11:02:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0Yy9CpCZpGFGgUuEZDwIZX23n2xP8D/MS6pjjuaf+JM=; b=NYskq7i5ZtPpWLlAkMYkR/LoTK
+        zRjWAbokWOXzl+7c1BzPUVaFL0Kh45L4+/WqPH7DtoZGuxLCCXwrfyoVNBCkKWGd6OFg2uSjBLyXx
+        yOdh8T3UdJ8+vnUKJFDPCdIlVzv04ktUVp0xXLXS5GbiaYyvI7DRl2MqBK382YHPb7qtHuDvYZAWO
+        UqlGqvaiR+qnja7Oc2OzN/Pm2IfevxZp/ZV7/i3aB1+GVeUG+zjhWvSonVEyBIuzaHiqhmkP8PQu9
+        obfxjy+UU6kK8TCAJjth+hCpY28s9KscdAENjEoyvQpY3AcukqNVJZe5vs8oQnv4kV3VTVGTQi4HL
+        jux9TOAg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nVGvi-002GhT-1v; Fri, 18 Mar 2022 18:02:26 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BB20598841D; Fri, 18 Mar 2022 19:02:25 +0100 (CET)
+Date:   Fri, 18 Mar 2022 19:02:25 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, seanjc@google.com
+Subject: Re: [PATCH v3 6/6] KVM: x86: allow defining return-0 static calls
+Message-ID: <20220318180225.GF14330@worktop.programming.kicks-ass.net>
+References: <20220217180831.288210-1-pbonzini@redhat.com>
+ <20220217180831.288210-7-pbonzini@redhat.com>
+ <3bbe3f8717cdf122f909a48e117dab6c09d8e0c8.camel@redhat.com>
+ <1dc56110-5f1b-6140-937c-bf4a28ddbe87@redhat.com>
+ <20220318172837.GQ8939@worktop.programming.kicks-ass.net>
+ <20220318174732.GE14330@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20220316213055.2351342-1-morbo@google.com> <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
- <CAKwvOdkjb3uR+kqjfdKL5gqA8R+00c5=3E7uGGW+mGZ3QRsjqg@mail.gmail.com> <YjSROmYwwGhpsXMl@smile.fi.intel.com>
-In-Reply-To: <YjSROmYwwGhpsXMl@smile.fi.intel.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 18 Mar 2022 11:01:13 -0700
-Message-ID: <CAKwvOdkEjrPUL4HuO3UKaUZAzVw=XV1bEOSj6HR5R1WTUSSZ4w@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: acpi: use correct format characters
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bill Wendling <morbo@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Joe Perches <joe@perches.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318174732.GE14330@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 7:04 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Mar 17, 2022 at 11:11:21AM -0700, Nick Desaulniers wrote:
-> > Our goal is to enable -Wformat for CC=clang.  Please see also:
-> > commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
-> > unnecessary %h[xudi] and %hh[xudi]")
->
-> Not that I agree on that commit for %h[h]x
->
->         signed char ch = -1;
->         printf("%x\n", ch);
->         printf("%hhx\n", ch);
+On Fri, Mar 18, 2022 at 06:47:32PM +0100, Peter Zijlstra wrote:
+> On Fri, Mar 18, 2022 at 06:28:37PM +0100, Peter Zijlstra wrote:
+> > > Related to this, I don't see anything in arch/x86/kernel/static_call.c that
+> > > limits this code to x86-64:
+> > > 
+> > >                 if (func == &__static_call_return0) {
+> > >                         emulate = code;
+> > >                         code = &xor5rax;
+> > >                 }
+> > > 
+> > > 
+> > > On 32-bit, it will be patched as "dec ax; xor eax, eax" or something like
+> > > that.  Fortunately it doesn't corrupt any callee-save register but it is not
+> > > just a bit funky, it's also not a single instruction.
+> > 
+> > Urggghh.. that's fairly yuck. So there's two options I suppose:
+> > 
+> > 	0x66, 0x66, 0x66, 0x31, 0xc0
+> 
+> Argh, that turns into: xorw %ax, %ax.
+> 
+> Let me see if there's another option.
 
-Will print:
-ffffffff
-ff
+Amazingly:
 
-Maybe we should reconsider our recommendations for signed types?
+  0x2e, 0x2e, 0x2e, 0x31, 0xc0
 
-It's probably worth adding `signed char` explicitly to
-Documentation/core-api/printk-formats.rst, as it is a distinct type
-from `char` in C.
--- 
-Thanks,
-~Nick Desaulniers
+seems to actually work.. I've build and ran and decoded the below on
+32bit and 64bit (arguably on the same 64bit host).
+
+
+---
+#include <stdio.h>
+
+long zero(void)
+{
+	long z = -1L;
+
+	asm (".byte 0x2e, 0x2e, 0x2e, 0x31, 0xc0" : "=a" (z) );
+
+	return z;
+}
+
+void main(void)
+{
+	printf("%ld\n", zero());
+}

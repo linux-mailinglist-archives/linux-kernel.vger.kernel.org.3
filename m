@@ -2,129 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9C74DDC21
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E224DDC24
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237704AbiCROuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S237556AbiCROul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 10:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237736AbiCROtQ (ORCPT
+        with ESMTP id S237880AbiCROu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:49:16 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C52A32EAF43
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:47:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 07B521515;
-        Fri, 18 Mar 2022 07:47:49 -0700 (PDT)
-Received: from [10.1.29.15] (e122027.cambridge.arm.com [10.1.29.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 292833F7D7;
-        Fri, 18 Mar 2022 07:47:46 -0700 (PDT)
-Message-ID: <049f8b0c-7c3e-8ee1-5ae0-a4348278ee63@arm.com>
-Date:   Fri, 18 Mar 2022 14:47:44 +0000
+        Fri, 18 Mar 2022 10:50:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B5BF1BD839
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:48:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647614896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AXh1kXJA2Arm+k9zVpD08NoMYuNv/3gU6u7CxBA2E8s=;
+        b=EXqf4ncJjwpJRhjIeLvaCJPaOcijVlXSW/lo00dGbhZBQMklY62UBKvHcv3tv/4jsuuU/X
+        Cy0UTDqmdKFPwDqDn3aBnE8V96lV2BRxP9K9VK6P3cttScVxQFPmNa/5qU7lhWESP0QtG3
+        sCOis8xCHp7ywW+TpOkpmUk2Ixrhl/E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-622-ZiK8pNwNPmCjf2x7J_dSuQ-1; Fri, 18 Mar 2022 10:48:13 -0400
+X-MC-Unique: ZiK8pNwNPmCjf2x7J_dSuQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80D99296A625;
+        Fri, 18 Mar 2022 14:48:12 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 16A4040D282F;
+        Fri, 18 Mar 2022 14:48:09 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <f5633dea0bfabd40ba548fc8502e5838c033fbae.camel@kernel.org>
+References: <f5633dea0bfabd40ba548fc8502e5838c033fbae.camel@kernel.org> <164692909854.2099075.9535537286264248057.stgit@warthog.procyon.org.uk> <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk> <306388.1647595110@warthog.procyon.org.uk>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        David Wysochanski <dwysocha@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 13/20] netfs: Add a netfs inode context
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Steven Price <steven.price@arm.com>
-Subject: Re: [PATCH v2 8/8] drm/panfrost: Switch to generic memory shrinker
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        virtualization@lists.linux-foundation.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-References: <20220314224253.236359-1-dmitry.osipenko@collabora.com>
- <20220314224253.236359-9-dmitry.osipenko@collabora.com>
- <4e6256d0-a3c6-ba01-c31f-a5757b79a9ce@arm.com>
- <3dda45b8-1f49-eefd-0167-1f3c13b2c73f@collabora.com>
- <b8d74d79-7d49-658f-5e0b-4a5da4fa2afc@collabora.com>
-Content-Language: en-GB
-In-Reply-To: <b8d74d79-7d49-658f-5e0b-4a5da4fa2afc@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <666407.1647614889.1@warthog.procyon.org.uk>
+Date:   Fri, 18 Mar 2022 14:48:09 +0000
+Message-ID: <666408.1647614889@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 14:41, Dmitry Osipenko wrote:
-> 
-> On 3/17/22 02:04, Dmitry Osipenko wrote:
->>
->> On 3/16/22 18:04, Steven Price wrote:
->>> On 14/03/2022 22:42, Dmitry Osipenko wrote:
->>>> Replace Panfrost's memory shrinker with a generic DRM memory shrinker.
->>>>
->>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->>>> ---
->>> I gave this a spin on my Firefly-RK3288 board and everything seems to
->>> work. So feel free to add a:
->>>
->>> Tested-by: Steven Price <steven.price@arm.com>
->>>
->>> As Alyssa has already pointed out you need to remove the
->>> panfrost_gem_shrinker.c file. But otherwise everything looks fine, and
->>> I'm very happy to see the shrinker code gone ;)
->>
->> Awesome, thank you.
-> 
-> Steven, could you please tell me how exactly you tested the shrinker?
-> 
-> I realized that today's IGT doesn't have any tests for the Panfrost's
-> madvise ioctl.
-> 
-> You may invoke "echo 2 > /proc/sys/vm/drop_caches" manually in order to
-> trigger shrinker while 3d app is running actively (like a game or
-> benchmark). Nothing crashing will be a good enough indicator that it
-> works okay.
-> 
-> I may get an RK board next week and then will be able to test it by
-> myself, so please don't hurry.
+Jeff Layton <jlayton@kernel.org> wrote:
 
-I have to admit it wasn't a very thorough test. I run glmark on the
-board with the following hack:
+> > +static inline bool netfs_is_cache_enabled(struct netfs_i_context *ctx)
+> > +{
+> > +#if IS_ENABLED(CONFIG_FSCACHE)
+> > +	struct fscache_cookie *cookie = ctx->cache;
+> > +
+> > +	return fscache_cookie_valid(cookie) && cookie->cache_priv &&
+> > +		fscache_cookie_enabled(cookie);
+> 
+> 
+> As you mentioned in the other thread, it may be cleaner to move the
+> cookie->cache_priv check into fscache_cookie_enabled. Is there ever a
+> case where you'd need to separate the two checks?
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-index b014dadcf51f..194dec00695a 100644
---- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-@@ -279,6 +279,14 @@ static int panfrost_ioctl_submit(struct drm_device *dev, void *data,
-        if (ret)
-                goto out_cleanup_job;
- 
-+       {
-+       struct shrink_control sc = {
-+               .nr_to_scan = 1000
-+       };
-+       dev->shmem_shrinker->base.scan_objects(&dev->shmem_shrinker->base,
-+                       &sc);
-+       }
-+
-        ret = panfrost_job_push(job);
-        if (ret)
-                goto out_cleanup_job;
+I'm not sure, but I'd prefer not to do it in this series as it would affect
+NFS plus some other operations, so will need retesting thoroughly.  I'd prefer
+to defer it.
 
-That hack was specifically because I had some doubts about the removal
-of the 'gpu_usecount' counter and wanted to ensure that purging as the
-job is submitted wouldn't cause problems.
+David
 
-The drop_caches file should also work AFAIK.
-
-Steve

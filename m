@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F224DD54C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A85D4DD54E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233146AbiCRHij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
+        id S233150AbiCRHj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbiCRHij (ORCPT
+        with ESMTP id S231796AbiCRHj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:38:39 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527491275C8;
-        Fri, 18 Mar 2022 00:37:21 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 18 Mar 2022 03:39:26 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D415E1275C8;
+        Fri, 18 Mar 2022 00:38:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKbSZ1ZH6z4xNm;
-        Fri, 18 Mar 2022 18:37:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647589040;
-        bh=IKLDZdzuNP/RMd5I9+dikiLBg/WA/Pgy519XXzgDQ5s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Q9ord5kVayLaoKNEHsNpmSLYa5QoidyIGUQ8BFwGCJU+UjNaCMUzjnLVN4nIVDwtQ
-         UPpOs101i55rtraGWo0gZFmt0CZUgz0y1k+LEN7nnkwcgwdC+eW0LcXHtkM28G4Wuj
-         GqdvhdKRsJTNO1GB//gcNYf5XRINq75EyJ+WXqH3yZXA0IAn0ITdYGj6cFA9bzR8wo
-         ijy1NNXRPhr1jSn1jMOWuFwiIWjjFrc8Jz7mKP/fuEp3K/bdL+8SwuqmvJZYsu8PcX
-         XlSZi2nNkt3CPJkBsVYqKG5TD4s11e07Nw5XkaaXbCim7Y/y0/cy/J2osuh4fVTsZE
-         PKY/sI+nF0QVg==
-Date:   Fri, 18 Mar 2022 18:37:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Olof Johansson <olof@lixom.net>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Andy Gross <agross@kernel.org>, Baruch Siach <baruch@tkos.co.il>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Sean Anderson <sean.anderson@seco.com>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: linux-next: manual merge of the usb tree with the qcom tree
-Message-ID: <20220318183717.7acac615@canb.auug.org.au>
-In-Reply-To: <YgTGihSrtlRR3DPC@kroah.com>
-References: <20220210141100.715b13e9@canb.auug.org.au>
-        <YgTGihSrtlRR3DPC@kroah.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 019BDCE2682;
+        Fri, 18 Mar 2022 07:38:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC11C340E8;
+        Fri, 18 Mar 2022 07:38:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647589083;
+        bh=AxYa/zqlb23t9aNEqNoBxeXNyxxUNH9velVcUXnbrBs=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=ZXsqqZwt3MTxzjLunOt951KQr3p351rn53IEJEQHaSADxUR1o1ZZ/ZzMEE2nTfGfY
+         o9ZPacgSbdvFVNjfVIAZx1arc3IBoNi/m4H8AM9n6UnPcyKW2IeAah/JbSAT8bO8DP
+         VYhzTmurArv58yUap15lz5sLETCd3oIrtyzhGZ/tPufFSUDnG2bYecz4riGG3NPhDt
+         SeUGEvF+caPoSFToSVhV35xCVB5wL7W4TLmua75hcORf7bKgBICKMRVVm9O6gcOGSb
+         wS/dkGare4OkMq4Lug1N+Gv0NMQyQOYouCNdT8hDiLG4aPrlnU1OX9ec5W7GkDfpdc
+         6iq3bTcNwUmbA==
+Message-ID: <e56005fe-6230-d451-a46a-ada5653a373c@kernel.org>
+Date:   Fri, 18 Mar 2022 02:38:01 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4cOHKNki2dlAKpjqULnr5b9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] MAINTAINERS: add a git repo for the Stratix10 Service
+ driver
+Content-Language: en-US
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     Tom Rix <trix@redhat.com>, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
+References: <20220223144908.399522-1-dinguyen@kernel.org>
+ <4d443650-1db3-fced-3167-e3476b6e20aa@redhat.com>
+ <93d1365c-2943-56e0-4ba8-6a4fe6194f3b@kernel.org>
+In-Reply-To: <93d1365c-2943-56e0-4ba8-6a4fe6194f3b@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,65 +59,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/4cOHKNki2dlAKpjqULnr5b9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-On Thu, 10 Feb 2022 09:02:18 +0100 Greg KH <greg@kroah.com> wrote:
->
-> On Thu, Feb 10, 2022 at 02:11:00PM +1100, Stephen Rothwell wrote:
-> >=20
-> > Today's linux-next merge of the usb tree got a conflict in:
-> >=20
-> >   arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> >=20
-> > between commit:
-> >=20
-> >   d1c10ab1494f ("arm64: dts: qcom: ipq6018: fix usb reference period")
-> >=20
-> > from the qcom tree and commit:
-> >=20
-> >   5726079cd486 ("arm64: dts: ipq6018: Use reference clock to set dwc3 p=
-eriod")
-> >=20
-> > from the usb tree.
-> >=20
-> > I fixed it up (I just use the latter) and can carry the fix as
-> > necessary. This is now fixed as far as linux-next is concerned, but any
-> > non trivial conflicts should be mentioned to your upstream maintainer
-> > when your tree is submitted for merging.  You may also want to consider
-> > cooperating with the maintainer of the conflicting tree to minimise any
-> > particularly complex conflicts.
-> >=20
-> > --=20
-> > Cheers,
-> > Stephen Rothwell =20
->=20
->=20
-> That is fine, thanks.
+On 3/18/22 02:25, Dinh Nguyen wrote:
+> 
+> 
+> On 3/15/22 06:09, Tom Rix wrote:
+>>
+>> On 2/23/22 6:49 AM, Dinh Nguyen wrote:
+>>> Add a git repo entry for the Stratix10 Service driver.
+>>>
+>>> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+>>> ---
+>>>   MAINTAINERS | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index ea3e6c914384..5752236bea80 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -9890,6 +9890,7 @@ F:    drivers/firmware/stratix10-rsu.c
+>>>   F:    drivers/firmware/stratix10-svc.c
+>>>   F:    include/linux/firmware/intel/stratix10-smc.h
+>>>   F:    include/linux/firmware/intel/stratix10-svc-client.h
+>>> +T:    git 
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git
+>>
+>> Can you check if your tree is ok ?
+>>
+>> Tom
+>>
+>>
+>>  > git clone 
+>> git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git
+>>
+>> Cloning into 'linux'...
+>> remote: Enumerating objects: 185, done.
+>> remote: Counting objects: 100% (185/185), done.
+>> remote: Compressing objects: 100% (4/4), done.
+>> remote: Total 8723742 (delta 182), reused 181 (delta 181), pack-reused 
+>> 8723557
+>> Receiving objects: 100% (8723742/8723742), 2.41 GiB | 2.78 MiB/s, done.
+>> Resolving deltas: 100% (7135708/7135708), done.
+>> warning: remote HEAD refers to nonexistent ref, unable to checkout.
+>>
+> 
+> 
+> Hmm...seeing the issue. Not sure what's going on, will troubleshoot.
+> 
 
-This is now a conflict between the usb tree and the arm-soc tree.
 
---=20
-Cheers,
-Stephen Rothwell
+Looks like I just fixed it, please try again. I didn't have a 'master' 
+branch.
 
---Sig_/4cOHKNki2dlAKpjqULnr5b9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI0Nq0ACgkQAVBC80lX
-0GyGaQf+I25Ts5WbkH3++SiIm4wI2ANOEX5YG5EvG4IbI1gHlZWVm2nCU4/A5ymM
-/N88UMBctFey13drC7Zi5iI14nA9LFugeeYwkHr0bPDnUyi2ry1mwwrPV4wunQ2a
-6l3H/cj9LoWSS8HE+MvATxs97bQo6K7QUlNMYpdj6elb777KB6SucSb1xBZjqmks
-T8giG8huyAtFarjY86dKsU1KASvcOwjz1mIXqG8bks+q6EE2FbbjqIPKWFCAJ+EK
-CtVvCtx8pJyuGrWmrH3u/yGHffWVAfZlaihiOvkqMusIKtv845zX9PpkDKQTDNRL
-wrD7AxU6wMOA0Qf9OG/Z90nydyFHGg==
-=+A03
------END PGP SIGNATURE-----
-
---Sig_/4cOHKNki2dlAKpjqULnr5b9--
+Dinh

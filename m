@@ -2,130 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160624DDBB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E735D4DDBBB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237314AbiCROdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        id S237320AbiCROfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 10:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235971AbiCROdq (ORCPT
+        with ESMTP id S233244AbiCROfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:33:46 -0400
-Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D344855A4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:32:25 -0700 (PDT)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id E139017DEB
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:32:24 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id VDeSnglBk22u3VDeSnCRYM; Fri, 18 Mar 2022 09:32:24 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xJSeFXEv0MsCLMmIo+zvVtrl7PN3UrB1l3mugyJKHT8=; b=zDm9kuwnQlobpoDtn2XNjkBuPZ
-        hUW1s395q3X7TtFciXA0KaKMOC09DkwYKrt1mI8zX9Ngk6dPNp22n0S7xnXHA2ST9ydFJcMRaxrR+
-        qw9B1LLQ0fvW6PlUlkvcLR60xIbZ9xVRfLs1CsaNLxAi3wVEoC/64XfwWsue19hkCThxEyV0hxf86
-        NeK6hrcmkhB8cQz3CndoVI+/XAARVzugXiaz46L2j9IJX88NIM+bhHdyVgx79nnqdELWHpTsRIdBb
-        VLcjqKgSa5NitiU6P4xhT7hpVnA0pSHlY9/CDqC+cBtpvJ7ZVRn5/mAIXm/3Zd1AMZCQtgIY0ZJf9
-        kjCt9Fqw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57538 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nVDeS-003Wqy-Am; Fri, 18 Mar 2022 14:32:24 +0000
-Date:   Fri, 18 Mar 2022 07:32:23 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: (adt7475) Use enum chips when loading
- attenuator settings
-Message-ID: <20220318143223.GA673001@roeck-us.net>
-References: <20220317223051.1227110-1-chris.packham@alliedtelesis.co.nz>
- <20220317223051.1227110-4-chris.packham@alliedtelesis.co.nz>
+        Fri, 18 Mar 2022 10:35:48 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3DB1945E7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:34:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647614069; x=1679150069;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OwmAYTkFkdcVZvm7QSe/7bEg6oDYfOaHQySbw9Qn9NE=;
+  b=e4hHuJoP1IoZcqAjMmFxLWYJV20LQo/CBrzKtRe8P6PfznfFOc91S9OP
+   b17Qw/iiAmJUf/7NR2/FRAvAXgwFxpXKPqXOYknfYlIvQnbDFdY8pAaxF
+   fEarZAQ09b6HH1xXVX60p247E2Fg2hQng3Zetuxe+mcvAtDOE/49kNLZE
+   BfoKIM1BkMLshVW/oOA2g2qxwYA1DcbOFypZv36IOsy+2Zvi82tcjduav
+   w5Aid6AyA3dMpIgn2d4Vnb7SF6akgt6dfjm/WbsFZXCFyvrHOS+vGLroG
+   hFy2Sydp89sDj9NIP0Gn4YdWe1QFMfbWuhr41cQulTxBiBZ7+rWsz3Ygk
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="257333726"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="257333726"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 07:34:02 -0700
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="645537258"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 07:33:59 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nVDfM-002HB6-3c;
+        Fri, 18 Mar 2022 16:33:20 +0200
+Date:   Fri, 18 Mar 2022 16:33:19 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] drm: Fix monochrome conversion for sdd130x
+Message-ID: <YjSYL5oPaDuCXOJQ@smile.fi.intel.com>
+References: <20220317081830.1211400-1-geert@linux-m68k.org>
+ <f94c0f44-36f1-e1a9-5963-5da0bafb8c90@redhat.com>
+ <YjSMWDFxTeJZZ/CB@smile.fi.intel.com>
+ <20220318142145.kwq46bf6exgce6wu@houat>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220317223051.1227110-4-chris.packham@alliedtelesis.co.nz>
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nVDeS-003Wqy-Am
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57538
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 1
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220318142145.kwq46bf6exgce6wu@houat>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 11:30:50AM +1300, Chris Packham wrote:
-> Simplify load_attenuators() by making use of enum chips instead of int.
+On Fri, Mar 18, 2022 at 03:21:45PM +0100, Maxime Ripard wrote:
+> On Fri, Mar 18, 2022 at 03:42:48PM +0200, Andy Shevchenko wrote:
+> > On Thu, Mar 17, 2022 at 12:39:57PM +0100, Javier Martinez Canillas wrote:
+> > > On 3/17/22 09:18, Geert Uytterhoeven wrote:
+> > 
+> > > By the way, you should probably request commit access to the drm-misc tree:
+> > > 
+> > > https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html
+> > 
+> > Does it really work? I tried and no one replied to request.
+> > Keeping silent is a bad service. If people don't want a person
+> > to have such access it should be well communicated.
 > 
+> I don't see any issue on Gitlab to request commit access, so I'm not
+> sure what you did exactly but it's not surprising you didn't get any
+> answer.
 
-That isn't the only thing the patch is doing.
+https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/311
 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v2:
->     - New
-> 
->  drivers/hwmon/adt7475.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index 6de501de41b2..ebe4a85eb62e 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -1569,7 +1569,7 @@ static int set_property_bit(const struct i2c_client *client, char *property,
->  	return ret;
->  }
->  
-> -static int load_attenuators(const struct i2c_client *client, int chip,
-> +static int load_attenuators(const struct i2c_client *client, enum chips chip,
->  			    struct adt7475_data *data)
->  {
->  	int ret;
-> @@ -1588,7 +1588,7 @@ static int load_attenuators(const struct i2c_client *client, int chip,
->  						data->config4);
->  		if (ret < 0)
->  			return ret;
-> -	} else if (chip == adt7473 || chip == adt7475) {
-> +	} else {
 
-This is the real change. Well, in theory. It doesn't really make a difference,
-it is just (currently) unnecessary but clarifies that the following code only
-applies to the two chips. It may be better to replace the if/else with a switch
-statement to clarify this. Dropping the conditional would not require to change
-the parameter type. That only really adds value if you also use a switch
-statement (without dummy default).
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks,
-Guenter
 
->  		set_property_bit(client, "adi,bypass-attenuator-in1",
->  				 &data->config2, 5);
->  

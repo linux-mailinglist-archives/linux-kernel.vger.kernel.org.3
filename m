@@ -2,302 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B0A4DD87E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E77F54DD878
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234975AbiCRKzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S235438AbiCRKyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235480AbiCRKzW (ORCPT
+        with ESMTP id S231610AbiCRKyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 06:55:22 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A3719953F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:54:03 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22I8Uh33023446;
-        Fri, 18 Mar 2022 10:53:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=t3uvsDIdKhsiwvX0gqMiuOC7GjUgy6HC7f0j4xg3EM8=;
- b=p8P6k4iRoTrNUq0XjloQLFbyjXanutjpbcdsvoq2xXQTHFT6S82/x0nxAOZ+taaSA9M1
- tC7Zn9H8qq4ZFxVePoUog6MSX43tIsBYsLaeCOC8zAxWQqGm3Eotrmr7rCHz+49ZoRnW
- FjYGPYOj8PRMn+6gKRotVjBeSLr8qXbvMGUWKlJVLby+jzXyTigi/r/aY8xcZrN2BuCU
- ORbLlz4xE/4TfVD7IKAXrogTm6mlQrgVQlkihyZaeJLn8VYWMcnnFKHrOrIAEJFJb+Im
- LLGz6kRmCf7rjORglLsLdosC1CAh5Mjw9vSI3lg/h9XIzZue3bQUXQ4TDPYrzfoT3kSj hw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev2b3a73d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 10:53:40 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22IArP9n010239;
-        Fri, 18 Mar 2022 10:53:39 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev2b3a72s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 10:53:39 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22IAqqpc026968;
-        Fri, 18 Mar 2022 10:53:37 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3euc6r4uc5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 10:53:37 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22IArYOu20447502
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Mar 2022 10:53:34 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6D1DB42042;
-        Fri, 18 Mar 2022 10:53:34 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A55484203F;
-        Fri, 18 Mar 2022 10:53:31 +0000 (GMT)
-Received: from li-c3569c4c-1ef8-11b2-a85c-ee139cda3133.ibm.com.com (unknown [9.43.86.72])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 18 Mar 2022 10:53:31 +0000 (GMT)
-From:   Sathvika Vasireddy <sv@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     jpoimboe@redhat.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
-        rostedt@goodmis.org, naveen.n.rao@linux.vnet.ibm.com,
-        sv@linux.ibm.com
-Subject: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
-Date:   Fri, 18 Mar 2022 16:21:40 +0530
-Message-Id: <20220318105140.43914-4-sv@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220318105140.43914-1-sv@linux.ibm.com>
-References: <20220318105140.43914-1-sv@linux.ibm.com>
+        Fri, 18 Mar 2022 06:54:15 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048E027CE28;
+        Fri, 18 Mar 2022 03:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oLvSw2t5Gik7RrQqyucAdo114MkDAZy96gLyodSGUTg=; b=nqsWO4HqKoLcyKzEO6AGJpgjpQ
+        2dSbDntUmrkIG5J7ZAxrFanDIdxMkpV0VBqkh84TO9gMPmCudQsIGdtH/9Rdvx4ekBPZKfGAkiMeN
+        TS/7ga1DuldRRpyFLITPIRf1MvxrlpQkjKD3RrngVta7T4H++TIAqgppn/XK5iCs+8r/yzHzy0OVV
+        FtMsikvtiwKoD6XtsOuoA7n85tVqloLm+xMgGLOJHC47bFwsffjyM5f3Mt57BNiDepjtBr9HXVW+b
+        ha7jire4r0bcBGlI6Pg2LudHd9QdC4gJ84dD7Edzt+D+/I6uhxi8IPAhV/niaGKug1FEQmZWlGeym
+        AcnRUZIg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nVADq-002BhC-5K; Fri, 18 Mar 2022 10:52:42 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7C0303001C7;
+        Fri, 18 Mar 2022 11:52:41 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5DE902D35E974; Fri, 18 Mar 2022 11:52:41 +0100 (CET)
+Date:   Fri, 18 Mar 2022 11:52:41 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
+        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        pbonzini@redhat.com, jmattson@google.com, like.xu.linux@gmail.com,
+        eranian@google.com, ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH 5/7] perf/x86/amd/core: Add PerfMonV2 counter control
+Message-ID: <YjRkeQ8C2CeMsUx6@hirez.programming.kicks-ass.net>
+References: <cover.1647498015.git.sandipan.das@amd.com>
+ <7958e729c6be0f682379bec81f115b8cd7cca1ad.1647498015.git.sandipan.das@amd.com>
+ <YjMfe7KyKp+a3Jkp@hirez.programming.kicks-ass.net>
+ <ea39ef1d-44a3-478d-f6fb-2120be67e745@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Fx24Gj7hsZC2kGiRj7WKjt8Dh0XH53RG
-X-Proofpoint-GUID: SEaYOOXrbhIX6xp6WVgslE39kc6lFypF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-18_07,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 phishscore=0 spamscore=0 mlxlogscore=999 clxscore=1015
- suspectscore=0 malwarescore=0 mlxscore=0 impostorscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203180055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea39ef1d-44a3-478d-f6fb-2120be67e745@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds powerpc specific functions required for
-'objtool mcount' to work, and enables mcount for ppc.
+On Fri, Mar 18, 2022 at 01:32:04PM +0530, Sandipan Das wrote:
+> On 3/17/2022 5:16 PM, Peter Zijlstra wrote:
 
-Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
----
- arch/powerpc/Kconfig                          |  1 +
- tools/objtool/Makefile                        |  4 ++
- tools/objtool/arch/powerpc/Build              |  1 +
- tools/objtool/arch/powerpc/decode.c           | 51 +++++++++++++++++++
- .../arch/powerpc/include/arch/cfi_regs.h      | 37 ++++++++++++++
- tools/objtool/arch/powerpc/include/arch/elf.h |  8 +++
- tools/objtool/utils.c                         | 28 ++++++++--
- 7 files changed, 125 insertions(+), 5 deletions(-)
- create mode 100644 tools/objtool/arch/powerpc/Build
- create mode 100644 tools/objtool/arch/powerpc/decode.c
- create mode 100644 tools/objtool/arch/powerpc/include/arch/cfi_regs.h
- create mode 100644 tools/objtool/arch/powerpc/include/arch/elf.h
+> > First and foremost, *please* tell me your shiny new hardware fixed the
+> > terrible behaviour that requires the wait_on_overflow hacks in
+> > amd_pmu_disable_all().
+> 
+> Unfortunately, that workaround is still required.
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index b779603978e1..5ddafd3ce210 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -225,6 +225,7 @@ config PPC
- 	select HAVE_MOD_ARCH_SPECIFIC
- 	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
- 	select HAVE_OPTPROBES
-+	select HAVE_OBJTOOL_MCOUNT
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_EVENTS_NMI		if PPC64
- 	select HAVE_PERF_REGS
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index 8404cf696954..06a9fcb4a0a3 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -49,6 +49,10 @@ ifeq ($(SRCARCH),x86)
- 	SUBCMD_MCOUNT := y
- endif
- 
-+ifeq ($(SRCARCH),powerpc)
-+        SUBCMD_MCOUNT := y
-+endif
-+
- export SUBCMD_CHECK SUBCMD_ORC SUBCMD_MCOUNT
- export srctree OUTPUT CFLAGS SRCARCH AWK
- include $(srctree)/tools/build/Makefile.include
-diff --git a/tools/objtool/arch/powerpc/Build b/tools/objtool/arch/powerpc/Build
-new file mode 100644
-index 000000000000..3ff1f00c6a47
---- /dev/null
-+++ b/tools/objtool/arch/powerpc/Build
-@@ -0,0 +1 @@
-+objtool-y += decode.o
-diff --git a/tools/objtool/arch/powerpc/decode.c b/tools/objtool/arch/powerpc/decode.c
-new file mode 100644
-index 000000000000..58988f88b315
---- /dev/null
-+++ b/tools/objtool/arch/powerpc/decode.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+
-+#include <objtool/check.h>
-+#include <objtool/elf.h>
-+#include <objtool/arch.h>
-+#include <objtool/warn.h>
-+#include <objtool/builtin.h>
-+
-+int arch_decode_instruction(struct objtool_file *file, const struct section *sec,
-+			    unsigned long offset, unsigned int maxlen,
-+			    unsigned int *len, enum insn_type *type,
-+			    unsigned long *immediate,
-+			    struct list_head *ops_list)
-+{
-+	u32 insn;
-+	unsigned int opcode;
-+	u64 imm;
-+
-+	*immediate = imm = 0;
-+	memcpy(&insn, sec->data->d_buf+offset, 4);
-+	*len = 4;
-+	*type = INSN_OTHER;
-+
-+	opcode = (insn >> 26);
-+
-+	switch (opcode) {
-+	case 18: /* bl */
-+		*type = INSN_CALL;
-+		break;
-+	}
-+	*immediate = imm;
-+	return 0;
-+}
-+
-+unsigned long arch_dest_reloc_offset(int addend)
-+{
-+	return addend;
-+}
-+
-+unsigned long arch_jump_destination(struct instruction *insn)
-+{
-+	return insn->offset +  insn->immediate;
-+}
-+
-+const char *arch_nop_insn(int len)
-+{
-+	return NULL;
-+}
-diff --git a/tools/objtool/arch/powerpc/include/arch/cfi_regs.h b/tools/objtool/arch/powerpc/include/arch/cfi_regs.h
-new file mode 100644
-index 000000000000..1369176c8a94
---- /dev/null
-+++ b/tools/objtool/arch/powerpc/include/arch/cfi_regs.h
-@@ -0,0 +1,37 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+
-+#ifndef _OBJTOOL_CFI_REGS_H
-+#define _OBJTOOL_CFI_REGS_H
-+
-+#define CFI_SP                  1
-+#define CFI_TOC                 2
-+#define CFI_R3                  3
-+#define CFI_R4                  4
-+#define CFI_R5                  5
-+#define CFI_R6                  6
-+#define CFI_R7                  7
-+#define CFI_R8                  8
-+#define CFI_R9                  9
-+#define CFI_R10                 10
-+#define CFI_R14                 14
-+#define CFI_R15                 15
-+#define CFI_R16                 16
-+#define CFI_R17                 17
-+#define CFI_R18                 18
-+#define CFI_R19                 19
-+#define CFI_R20                 20
-+#define CFI_R21                 21
-+#define CFI_R22                 22
-+#define CFI_R23                 23
-+#define CFI_R24                 24
-+#define CFI_R25                 25
-+#define CFI_R26                 26
-+#define CFI_R27                 27
-+#define CFI_R28                 28
-+#define CFI_R29                 29
-+#define CFI_R30                 30
-+#define CFI_R31                 31
-+#define CFI_LR                  32
-+#define CFI_NUM_REGS            33
-+
-+#endif
-diff --git a/tools/objtool/arch/powerpc/include/arch/elf.h b/tools/objtool/arch/powerpc/include/arch/elf.h
-new file mode 100644
-index 000000000000..3c8ebb7d2a6b
---- /dev/null
-+++ b/tools/objtool/arch/powerpc/include/arch/elf.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+
-+#ifndef _OBJTOOL_ARCH_ELF
-+#define _OBJTOOL_ARCH_ELF
-+
-+#define R_NONE R_PPC_NONE
-+
-+#endif /* _OBJTOOL_ARCH_ELF */
-diff --git a/tools/objtool/utils.c b/tools/objtool/utils.c
-index d1fc6a123a6e..c9c14fa0dfd7 100644
---- a/tools/objtool/utils.c
-+++ b/tools/objtool/utils.c
-@@ -179,11 +179,29 @@ int create_mcount_loc_sections(struct objtool_file *file)
- 		loc = (unsigned long *)sec->data->d_buf + idx;
- 		memset(loc, 0, sizeof(unsigned long));
- 
--		if (elf_add_reloc_to_insn(file->elf, sec,
--					  idx * sizeof(unsigned long),
--					  R_X86_64_64,
--					  insn->sec, insn->offset))
--			return -1;
-+		if (file->elf->ehdr.e_machine == EM_X86_64) {
-+			if (elf_add_reloc_to_insn(file->elf, sec,
-+						  idx * sizeof(unsigned long),
-+						  R_X86_64_64,
-+						  insn->sec, insn->offset))
-+				return -1;
-+		}
-+
-+		if (file->elf->ehdr.e_machine == EM_PPC64) {
-+			if (elf_add_reloc_to_insn(file->elf, sec,
-+						  idx * sizeof(unsigned long),
-+						  R_PPC64_ADDR64,
-+						  insn->sec, insn->offset))
-+				return -1;
-+		}
-+
-+		if (file->elf->ehdr.e_machine == EM_PPC) {
-+			if (elf_add_reloc_to_insn(file->elf, sec,
-+						  idx * sizeof(unsigned long),
-+						  R_PPC_ADDR32,
-+						  insn->sec, insn->offset))
-+				return -1;
-+		}
- 
- 		idx++;
- 	}
--- 
-2.31.1
-
+So much sadness :-(

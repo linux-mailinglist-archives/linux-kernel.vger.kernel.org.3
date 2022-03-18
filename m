@@ -2,47 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4BA4DD9C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:32:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140C04DD9BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236262AbiCRMd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56162 "EHLO
+        id S236250AbiCRMb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiCRMdZ (ORCPT
+        with ESMTP id S236244AbiCRMb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:33:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE382D7A80;
-        Fri, 18 Mar 2022 05:32:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CD27618A9;
-        Fri, 18 Mar 2022 12:32:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0983FC340E8;
-        Fri, 18 Mar 2022 12:32:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647606726;
-        bh=54Ok/2iGFXz3IZ7nZgvvP6ra5Se4bncRygsdoY+z6dM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HKXAayjtLN5gupy3uawEImcXQc4hsOau6wF6khve+EpQBY09MKAd7jzr0J0lhRC0e
-         ghbyueE5YTXdfA7jW9NAUJ0mlIJVzeOjhEbAGczpIPTsdcS4E22nVZUBo745tL+h53
-         iNuMRZXZEihHN4MuwdoTm9AKJZkOALS5O9K44Vdk=
-Date:   Fri, 18 Mar 2022 13:27:53 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Trevor Woerner <twoerner@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] serial: 8250_fintek: Finish support for the F81865
-Message-ID: <YjR6yfjUmHahbIym@kroah.com>
-References: <20220314121856.10112-1-twoerner@gmail.com>
+        Fri, 18 Mar 2022 08:31:56 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812752D639D;
+        Fri, 18 Mar 2022 05:30:37 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22ICSYai073187;
+        Fri, 18 Mar 2022 07:28:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1647606514;
+        bh=KVsqL5PONXeXTdj+ZWnKXa7WklM0B/Xva47rW9IApys=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=iBq2kHYVzgORaY3vqIOx1325CGnw6+e8oRtJ/DInwlaM16jrRMMtQp7bna9ytSWJ4
+         UdenPNBn4yHgn6S75W249YxWadw8KDMnHvZPIUPx1EABzExmQFBnX06+Jqy5tYVXKd
+         vc1ehuqnlDwwho6wDz1z/g5y+yEz8gGOFi5w16sA=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22ICSYIG026518
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 18 Mar 2022 07:28:34 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 18
+ Mar 2022 07:28:34 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 18 Mar 2022 07:28:34 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22ICSXcB009772;
+        Fri, 18 Mar 2022 07:28:33 -0500
+Date:   Fri, 18 Mar 2022 07:28:33 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Linus Walleij <linusw@kernel.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Michael Walle <michael@walle.cc>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Bert Vermeulen <bert@biot.com>,
+        John Crispin <john@phrozen.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Suman Anna <s-anna@ti.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-actions@lists.infradead.org>, <openbmc@lists.ozlabs.org>,
+        <linux-riscv@lists.infradead.org>, <linux-oxnas@groups.io>
+Subject: Re: [PATCH 18/18] dt-bindings: irqchip: ti: include generic schema
+Message-ID: <20220318122756.7jvpf73ebpo7qtdy@parsnip>
+References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
+ <20220317115705.450427-17-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220314121856.10112-1-twoerner@gmail.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220317115705.450427-17-krzysztof.kozlowski@canonical.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,62 +101,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 08:18:56AM -0400, Trevor Woerner wrote:
-> This driver only partially supports the F81865 device. The UART portions of
-> this SuperIO chip behave very similarly to the UART of the F81866, except
-> that the F81866 has 128-byte FIFOs whereas the F81865 has 16-byte FIFOs,
-> and the IRQ configuration is different. Therefore fill out the support for
-> the F81865 in the places where it is missing.
+On 12:57-20220317, Krzysztof Kozlowski wrote:
+> Include generic interrupt-controller.yaml and msi-controller.yaml
+> schema, which enforces node naming and other generic properties.
+> The schema requires now proper naming of node.
 > 
-> Tested at 1500000 baud on the iEi NANO-PV-D5251-R10 board.
-> 
-> Signed-off-by: Trevor Woerner <twoerner@gmail.com>
-> ---
->  drivers/tty/serial/8250/8250_fintek.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_fintek.c b/drivers/tty/serial/8250/8250_fintek.c
-> index 251f0018ae8c..47b15d2d9901 100644
-> --- a/drivers/tty/serial/8250/8250_fintek.c
-> +++ b/drivers/tty/serial/8250/8250_fintek.c
-> @@ -63,7 +63,12 @@
->  #define F81216_LDN_HIGH	0x4
->  
->  /*
-> - * F81866/966 registers
-> + * F81866/865/966 registers
-> + *
-> + * The UART portion of the F81865 functions very similarly to the UART
-> + * portion of the F81866, so there's no need to duplicate all the #defines
-> + * etc. The only differences are: the F81866 has 128-byte FIFOs whereas the
-> + * F81865 has 16-byte FIFOs, and the IRQ configuration is different.
->   *
->   * The IRQ setting mode of F81866/966 is not the same with F81216 series.
->   *	Level/Low: IRQ_MODE0:0, IRQ_MODE1:0
-> @@ -316,6 +321,7 @@ static void fintek_8250_set_termios(struct uart_port *port,
->  		break;
->  	case CHIP_ID_F81966:
->  	case CHIP_ID_F81866:
-> +	case CHIP_ID_F81865:
->  		reg = F81866_UART_CLK;
->  		break;
->  	default:
-> @@ -363,6 +369,7 @@ static void fintek_8250_set_termios_handler(struct uart_8250_port *uart)
->  	case CHIP_ID_F81216H:
->  	case CHIP_ID_F81966:
->  	case CHIP_ID_F81866:
-> +	case CHIP_ID_F81865:
->  		uart->port.set_termios = fintek_8250_set_termios;
->  		break;
->  
-> -- 
-> 2.35.1.455.g1a4874565f
-> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Please resend the whole series, not just one patch out of the lot.  Also
-can you correctly "thread" them?  Using a tool like git send-email it
-happens automatically.  That way our tools can pick them up properly.
 
-thanks,
+Reviewed-by: Nishanth Menon <nm@ti.com>
 
-greg k-h
+Thanks.
+
+[...]
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

@@ -2,108 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CC14DD510
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9218B4DD512
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbiCRHJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S232941AbiCRHKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiCRHJW (ORCPT
+        with ESMTP id S230269AbiCRHKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:09:22 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD0322287
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 00:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647587284; x=1679123284;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3+ru1OtoV1JaDhmrBMAF64b5LEXwd/7ge8uP0B7ptPs=;
-  b=D6l0A4EQsJuxiZfH0sm/8tCS8E+Fz0E5c0AXj25TPHyWOfbO8JD/0UCe
-   LcaToQ0fTKxSptoVTybauy7GIok2S5CXEc+2PX7x0UfzHo/3fiwYkaD+e
-   UiBqaPYHu0uzv5ZsoAA67QuXf9vhDhhlsAf28kTtIHLmAZBzIGNRnT8NM
-   vFqCpCiHkRkjzLtwalCKthppKnyJUYzcr/QgXUGnM96REDXPQnM3ssb2f
-   ooDLnlH5Mnq2ALULq3THtwpS1Rpl9RApZR8Gtii5CDKgDwSh8+xHm52E7
-   QRapKhXZ4nHP6+9n1VT7C4Imrw/Cg9djIf1hqIiCCH0y/M/CbrMnQEgF9
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="257025115"
-X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
-   d="scan'208";a="257025115"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 00:08:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
-   d="scan'208";a="541712979"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
-  by orsmga007.jf.intel.com with ESMTP; 18 Mar 2022 00:08:01 -0700
-Date:   Fri, 18 Mar 2022 15:08:00 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     ziy@nvidia.com, baolin.wang@linux.alibaba.com,
-        ying.huang@intel.com, songmuchun@bytedance.com, apopple@nvidia.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 09/11] mm/migration: fix potential page refcounts leak
- in migrate_pages
-Message-ID: <20220318070800.GB436@shbuild999.sh.intel.com>
+        Fri, 18 Mar 2022 03:10:34 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC35222A6;
+        Fri, 18 Mar 2022 00:09:16 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id z66so6150867qke.10;
+        Fri, 18 Mar 2022 00:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oisiYBwgNe77NYhtZp8TE9csHemqrDrXVik9thaoeSs=;
+        b=lDS9sTbAi2rvVxc/T+ptjJaKEJkFmYlaYuJhtpmrMcYNoMKRrPyUTOT+wXHXYriTix
+         mg1LAXbGYr6nYlP34ER5Cg3KdkbqdCnSnSFPEKOXIbcPhWJl9sANrptHvR/Oslcn/0yr
+         41qB1nc7EWl900TWKkaceLmCGBl3Gjl22EpJLL4mlqfWuHzli8ZutCFFoZlm5D0DTKxR
+         VdzGFdntFWZ+uNn0Db0pysbK/nDD/zosDIM+mlFvYpbwfHzue/Du0cj6gHA/dyPN8/Qq
+         Sw4t6UElOQDn7aW4yoqKq7Al5qrk8DXgkRMwuryJB9iSJrGhj2MvOQEdC5yzAMA9zHZQ
+         ETQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oisiYBwgNe77NYhtZp8TE9csHemqrDrXVik9thaoeSs=;
+        b=CHwqb9+Y0h/b1cj0qNX2PDY4IfMsCP7BS0D2vP0Ila2MzwbZdf3Jge+x9hqnxyA3C2
+         TYydnRAFYd0R8Um40UGgGf1/oJl61FqqgO6Njmts5/F0RFe0FGbBkBxbveSAreFxp69g
+         GuZLvkN2qnCe7YEd4FmAOmBCOsrzUvLQ+7YWGcYuSvnohxo7XNa7DReAFjtB8n/oG4Gw
+         hHI/R0gv9mlZBi63m5C53NbUu04fZR3TxvI/WBWTjhhaX3W5CxFev2TvDfiJVICLC5Tc
+         dmQrkElu2J3kjDzVyLOHBvx1Xn0qqzuepOSkNqr4pBj2SuDxcEZSEPbgTrNcCCNk5idK
+         254g==
+X-Gm-Message-State: AOAM5302DLifb1EXfRfytcTKnhz18cg4tN2uwNlpo7kZ6O1agaS/P31G
+        czB22hN9z/b8bmIrx4eDB6s=
+X-Google-Smtp-Source: ABdhPJz1NasfkBgDNZQy7NDmoLCJsUhMtZza6VpbOiXN44LcFwMBbkgOB4S7okVmQAgDzvYELtVseA==
+X-Received: by 2002:a05:620a:4493:b0:67b:1ead:13b8 with SMTP id x19-20020a05620a449300b0067b1ead13b8mr5011387qkp.716.1647587355584;
+        Fri, 18 Mar 2022 00:09:15 -0700 (PDT)
+Received: from tong-desktop.local (99-105-211-126.lightspeed.sntcca.sbcglobal.net. [99.105.211.126])
+        by smtp.googlemail.com with ESMTPSA id d6-20020ac85d86000000b002e1e20444b6sm5248731qtx.57.2022.03.18.00.09.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 00:09:15 -0700 (PDT)
+From:   Tong Zhang <ztong0001@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Tong Zhang <ztong0001@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Albrieux <jonathan.albrieux@gmail.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio:imu:bmi160: disable regulator in error path
+Date:   Fri, 18 Mar 2022 00:09:00 -0700
+Message-Id: <20220318070900.2499370-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> In -ENOMEM case, there might be some subpages of fail-to-migrate THPs
-> left in thp_split_pages list. We should move them back to migration
-> list so that they could be put back to the right list by the caller
-> otherwise the page refcnt will be leaked here. Also adjust nr_failed
-> and nr_thp_failed accordingly to make vm events account more accurate.
+regulator should be disabled in error path as mentioned in _regulator_put()
+
+[   16.233604] WARNING: CPU: 0 PID: 2177 at drivers/regulator/core.c:2257 _regulator_put
+[   16.240453] Call Trace:
+[   16.240572]  <TASK>
+[   16.240676]  regulator_put+0x26/0x40
+[   16.240853]  regulator_bulk_free+0x26/0x50
+[   16.241050]  release_nodes+0x3f/0x70
+[   16.241225]  devres_release_group+0x147/0x1c0
+[   16.241441]  ? bmi160_core_probe+0x175/0x3a0 [bmi160_core]
+
+Fixes: 5dea3fb066f0 ("iio: imu: bmi160: added regulator support")
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+---
+ drivers/iio/imu/bmi160/bmi160_core.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/iio/imu/bmi160/bmi160_core.c b/drivers/iio/imu/bmi160/bmi160_core.c
+index 824b5124a5f5..f12446edb5ce 100644
+--- a/drivers/iio/imu/bmi160/bmi160_core.c
++++ b/drivers/iio/imu/bmi160/bmi160_core.c
+@@ -730,7 +730,7 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
  
-We just met a real world case for this when checking a malloc-oom
-issue and our fix is similar with yours :).
+ 	ret = regmap_write(data->regmap, BMI160_REG_CMD, BMI160_CMD_SOFTRESET);
+ 	if (ret)
+-		return ret;
++		goto disable_regulator;
+ 
+ 	usleep_range(BMI160_SOFTRESET_USLEEP, BMI160_SOFTRESET_USLEEP + 1);
+ 
+@@ -741,29 +741,34 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
+ 	if (use_spi) {
+ 		ret = regmap_read(data->regmap, BMI160_REG_DUMMY, &val);
+ 		if (ret)
+-			return ret;
++		goto disable_regulator;
+ 	}
+ 
+ 	ret = regmap_read(data->regmap, BMI160_REG_CHIP_ID, &val);
+ 	if (ret) {
+ 		dev_err(dev, "Error reading chip id\n");
+-		return ret;
++		goto disable_regulator;
+ 	}
+ 	if (val != BMI160_CHIP_ID_VAL) {
+ 		dev_err(dev, "Wrong chip id, got %x expected %x\n",
+ 			val, BMI160_CHIP_ID_VAL);
+-		return -ENODEV;
++		ret = -ENODEV;
++		goto disable_regulator;
+ 	}
+ 
+ 	ret = bmi160_set_mode(data, BMI160_ACCEL, true);
+ 	if (ret)
+-		return ret;
++		goto disable_regulator;
+ 
+ 	ret = bmi160_set_mode(data, BMI160_GYRO, true);
+ 	if (ret)
+-		return ret;
++		goto disable_regulator;
+ 
+ 	return 0;
++
++disable_regulator:
++	regulator_bulk_disable(ARRAY_SIZE(data->supplies), data->supplies);
++	return ret;
+ }
+ 
+ static int bmi160_data_rdy_trigger_set_state(struct iio_trigger *trig,
+-- 
+2.25.1
 
-So I think you can remove the 'potential' from the patch subject.
-Feel free to add
-
-Tested-by: Feng Tang <feng.tang@intel.com>
-Reviewed-by: Feng Tang <feng.tang@intel.com>
-
-Thanks,
-Feng
-
-> Fixes: b5bade978e9b ("mm: migrate: fix the return value of migrate_pages()")
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
-> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
->  mm/migrate.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 63a87ef0996f..97dfd1f4870d 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1438,6 +1438,14 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->  				}
->  
->  				nr_failed_pages += nr_subpages;
-> +				/*
-> +				 * There might be some subpages of fail-to-migrate THPs
-> +				 * left in thp_split_pages list. Move them back to migration
-> +				 * list so that they could be put back to the right list by
-> +				 * the caller otherwise the page refcnt will be leaked.
-> +				 */
-> +				list_splice_init(&thp_split_pages, from);
-> +				nr_thp_failed += thp_retry;
->  				goto out;
->  			case -EAGAIN:
->  				if (is_thp)
-> -- 
-> 2.23.0

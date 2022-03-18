@@ -2,72 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C054DD99E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6414DD971
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236230AbiCRMU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
+        id S236057AbiCRMNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236224AbiCRMUW (ORCPT
+        with ESMTP id S229499AbiCRMNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:20:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A945193226;
-        Fri, 18 Mar 2022 05:19:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9697161865;
-        Fri, 18 Mar 2022 12:19:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84658C36AF8;
-        Fri, 18 Mar 2022 12:19:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647605943;
-        bh=19AlHIQ/CS5s6rs1YQGBfqvcfZuhfwWiLMpeXi48vmM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JLWHhXiSnLs9MwOta8eww1122sDoebX/txoVWIU12Lm0ENlMBsXIGDzI9ljUoIb9h
-         8bKjDKrJ8DUdiCWwE5OUGVxD+7c3vQedFZsXLiVvGgRTrCEbDgbcgEFCc7qXFo8wvJ
-         IKiWMbMY3dSTPULX3jvkjrt3Zcv236OGN4b0RfKY=
-Date:   Fri, 18 Mar 2022 13:10:53 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PING][PATCH v3 0/2] serial: 8250: Fixes for Oxford
- Semiconductor 950 UARTs
-Message-ID: <YjR2zeyAfeXHVa+0@kroah.com>
-References: <alpine.DEB.2.21.2202100424280.34636@angie.orcam.me.uk>
- <alpine.DEB.2.21.2203011748460.11354@angie.orcam.me.uk>
+        Fri, 18 Mar 2022 08:13:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 170521FAA18;
+        Fri, 18 Mar 2022 05:12:05 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C34171424;
+        Fri, 18 Mar 2022 05:12:04 -0700 (PDT)
+Received: from [10.57.88.118] (unknown [10.57.88.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B1CC63F7F5;
+        Fri, 18 Mar 2022 05:12:03 -0700 (PDT)
+Subject: Re: [PATCH 5.4 18/43] arm64: entry: Add macro for reading symbol
+ addresses from the trampoline
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Sasha Levin <sashal@kernel.org>
+References: <20220317124527.672236844@linuxfoundation.org>
+ <20220317124528.180267687@linuxfoundation.org>
+ <113e7675-4263-2a20-81d0-9634f03511d2@gmail.com>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <bc35996d-ec18-1923-38f4-81d16ed98b7a@arm.com>
+Date:   Fri, 18 Mar 2022 12:11:32 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2203011748460.11354@angie.orcam.me.uk>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <113e7675-4263-2a20-81d0-9634f03511d2@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 08:52:25PM +0000, Maciej W. Rozycki wrote:
-> On Sat, 12 Feb 2022, Maciej W. Rozycki wrote:
-> 
-> >  Here's v3 of the outstanding fixes for Oxford Semiconductor 950 UARTs.  
-> > As the change for the default FIFO rx trigger level has been already 
-> > merged with commit d7aff291d069 ("serial: 8250: Define RX trigger levels 
-> > for OxSemi 950 devices") only one patch of the original series remains.  
-> 
->  Ping for:
-> 
-> <https://lore.kernel.org/lkml/alpine.DEB.2.21.2202100424280.34636@angie.orcam.me.uk/>
+Hi Florian,
 
-These aren't in my review queue, can you resend?
+On 3/17/22 8:48 PM, Florian Fainelli wrote:
+> On 3/17/22 5:45 AM, Greg Kroah-Hartman wrote:
+>> From: James Morse <james.morse@arm.com>
+>>
+>> commit b28a8eebe81c186fdb1a0078263b30576c8e1f42 upstream.
+>>
+>> The trampoline code needs to use the address of symbols in the wider
+>> kernel, e.g. vectors. PC-relative addressing wouldn't work as the
+>> trampoline code doesn't run at the address the linker expected.
+>>
+>> tramp_ventry uses a literal pool, unless CONFIG_RANDOMIZE_BASE is
+>> set, in which case it uses the data page as a literal pool because
+>> the data page can be unmapped when running in user-space, which is
+>> required for CPUs vulnerable to meltdown.
+>>
+>> Pull this logic out as a macro, instead of adding a third copy
+>> of it.
+>>
+>> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+>> Signed-off-by: James Morse <james.morse@arm.com>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> 
+> This commit causes a linking failure with CONFIG_ARM_SDE_INTERFACE=y
+> enabled in the kernel:
+> 
+>    LD      .tmp_vmlinux.kallsyms1
+> /local/users/fainelli/buildroot/output/arm64/host/bin/aarch64-linux-ld:
+> arch/arm64/kernel/entry.o: in function `__sdei_asm_exit_trampoline':
+> /local/users/fainelli/buildroot/output/arm64/build/linux-custom/arch/arm64/kernel/entry.S:1352:
+> undefined reference to `__sdei_asm_trampoline_next_handler'
+> make[2]: *** [Makefile:1100: vmlinux] Error 1
+> make[1]: *** [package/pkg-generic.mk:295:
+> /local/users/fainelli/buildroot/output/arm64/build/linux-custom/.stamp_built]
+> Error 2
+> make: *** [Makefile:27: _all] Error 2
 
-thanks,
+... and with CONFIG_RANDOMIZE_BASE turned off, which is why allyesconfig didn't catch it.
+This is because I kept the next_handler bit of the label when it conflicted, which isn't needed
+because the __entry_tramp bit added by the macro serves the same purpose.
 
-greg k-h
+The below diff fixes it:
+----------%<----------
+diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+index e4b5a15c2e2e..cfc0bb6c49f7 100644
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -1190,7 +1190,7 @@ __entry_tramp_data_start:
+  __entry_tramp_data_vectors:
+         .quad   vectors
+  #ifdef CONFIG_ARM_SDE_INTERFACE
+-__entry_tramp_data___sdei_asm_trampoline_next_handler:
++__entry_tramp_data___sdei_asm_handler:
+         .quad   __sdei_asm_handler
+  #endif /* CONFIG_ARM_SDE_INTERFACE */
+         .popsection                             // .rodata
+@@ -1319,7 +1319,7 @@ ENTRY(__sdei_asm_entry_trampoline)
+          */
+  1:     str     x4, [x1, #(SDEI_EVENT_INTREGS + S_ORIG_ADDR_LIMIT)]
+  
+-       tramp_data_read_var     x4, __sdei_asm_trampoline_next_handler
++       tramp_data_read_var     x4, __sdei_asm_handler
+         br      x4
+  ENDPROC(__sdei_asm_entry_trampoline)
+  NOKPROBE(__sdei_asm_entry_trampoline)
+----------%<----------
+
+Good news - this didn't happen with v5.10.
+
+I don't see this in v5.4.185 yet.
+
+Greg/Sasha, what is least work for you?:
+A new version of this patch,
+A fixup on top of the series,
+Reposting the series with this fixed.
+
+
+Thanks for catching this!
+
+James

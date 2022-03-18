@@ -2,58 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4964DDCC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7EC4DDCCE
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237954AbiCRP0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 11:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55902 "EHLO
+        id S237974AbiCRP1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 11:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237957AbiCRP0n (ORCPT
+        with ESMTP id S237525AbiCRP1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 11:26:43 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CABBA301
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 08:25:24 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E54B61BF21A;
-        Fri, 18 Mar 2022 15:25:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647617122;
+        Fri, 18 Mar 2022 11:27:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7585B91A0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 08:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647617157;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XyvG+0AhV6GNZxavZndSgFd1DvfzNuoKrvusjJeU8vE=;
-        b=UsYH9OeBcFQ6hgH9ohMrhQ+cU1pfKK0vFkTLHxSk0YHw3H0fj6cr9oqytc3wyHsEDuouTb
-        /v6UGrSum7PT9kKgup9zugCZhxlGFtLYzhsQ2zbe7mp1qLs7Ok5lXc6aSFFOoiZI1q5GAE
-        2TBwmTtfvuV6EiQt/clDR/KewxpbeC/DywMmcoGwSr1j2EfJ7g51oDB18WHaswH5dMmaBC
-        2+omuK1g+4lai9lcIcM0ChSmIcNEQ+sIuvjclC2OrSiRk8GqucokirKUK4svZ/slntAeYZ
-        7xPg1TEWhM9cDCimSgM1ASHWhJNIlFbnp1FlaaAmgwGNb+9UKsHAc0Vajjb2Mw==
-Date:   Fri, 18 Mar 2022 16:25:21 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Subject: Re: [PATCH] drm: of: Properly try all possible cases for
- bridge/panel detection
-Message-ID: <YjSkYSGY/D82ONjl@aptenodytes>
-References: <20220309143200.111292-1-paul.kocialkowski@bootlin.com>
- <20220310145423.but7r7ul4j7h3wxw@houat>
- <YjIFAR2NSfjXdJGe@aptenodytes>
- <20220318151414.vxormel2vfgzss6t@houat>
+        bh=YgcqHRxTmDCbGkiSAVOP1j9BkIjlIyVpT+jmLkaAADU=;
+        b=cNV2o/LG+1LpZ5MTmmssHJBDtAQQ2GXeeVUdjQ0rUYy6WVqkIkTMaYYrxwVSmNVRWVtOtn
+        MzxfjE3hV2YsVf7kUXDKj0yTO5mKkJD8ngq1D7BqotEHY4fgLLQR6V9CenuoODT2qdrkE7
+        YQmad2lRCqTWlN6j5AuOH+Xds7fQFk8=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-262-5F1U-UC8MgO2IfZR1lsAww-1; Fri, 18 Mar 2022 11:25:56 -0400
+X-MC-Unique: 5F1U-UC8MgO2IfZR1lsAww-1
+Received: by mail-il1-f199.google.com with SMTP id s7-20020a92cc07000000b002c7ca805128so4672556ilp.16
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 08:25:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=YgcqHRxTmDCbGkiSAVOP1j9BkIjlIyVpT+jmLkaAADU=;
+        b=3PRFaEwD4iQ11GW+QoCOgZ89y8zeg87aRestSiqRY6attmAqHKKmZRZa6eDyQgvR/S
+         HPob/xCtFwL9W4cQAZ4C2CWTmpaYIGcZkh1tbJRcJCeA1FfotQBR73pAs1g9ttKNlsi+
+         ICM3jY7CZNXv77IHHD98euIRts7dtRRI/Weq3LKG7e28xv39y9dE2jjITl5s3Bi6wDeK
+         sJZZ/S3hctsMHZ73XDOwIYWAE0y8tui9kfxycalPBgmmDdFEfcN04ACdzRtElW8IagcA
+         GR2QsxbHi/tIlNVSzAD88VFmbl6kJ3o3JgbUppnSd5yDu2QVN6MNf4P1mhsJ2vlGPI97
+         5n0A==
+X-Gm-Message-State: AOAM530UvrjG2E08sHurFOopM6tWnooeVyyuaDAXw0ovONuyB6Bt+g8k
+        V+mUQgQJCjcW8RJRIHQNBzR4wr3KjPMo2F+ebqcrPes/JdYj3OEJpq7Oye8e2KpOVfKMs2opMf9
+        mrBJ9P7qUO9MfTJEjCqva1P+C
+X-Received: by 2002:a5d:8714:0:b0:636:13bb:bc89 with SMTP id u20-20020a5d8714000000b0063613bbbc89mr4675379iom.126.1647617155690;
+        Fri, 18 Mar 2022 08:25:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwcyHxS7oTYC5euABr1WRzoAYAf/D3IPiqrWGqWvUPQt0yOjkh75RYfZwdgiryk5BgacuoZcA==
+X-Received: by 2002:a5d:8714:0:b0:636:13bb:bc89 with SMTP id u20-20020a5d8714000000b0063613bbbc89mr4675361iom.126.1647617155387;
+        Fri, 18 Mar 2022 08:25:55 -0700 (PDT)
+Received: from redhat.com ([98.55.18.59])
+        by smtp.gmail.com with ESMTPSA id 201-20020a6b14d2000000b00640df82a01csm4447795iou.3.2022.03.18.08.25.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 08:25:55 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 09:25:52 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        James Turner <linuxkernel.foss@dmarc-none.turner.link>,
+        Xinhui Pan <Xinhui.Pan@amd.com>, regressions@lists.linux.dev,
+        kvm@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <Christian.Koenig@amd.com>
+Subject: Re: [REGRESSION] Too-low frequency limit for AMD GPU
+ PCI-passed-through to Windows VM
+Message-ID: <20220318092552.518a50ef.alex.williamson@redhat.com>
+In-Reply-To: <CADnq5_OE7JpffYggKsu92DAjur1CCSqZQ7LbMqcfmAk68FerDA@mail.gmail.com>
+References: <87ee57c8fu.fsf@turner.link>
+        <87sftfqwlx.fsf@dmarc-none.turner.link>
+        <BYAPR12MB4614E2CFEDDDEAABBAB986A0975E9@BYAPR12MB4614.namprd12.prod.outlook.com>
+        <87ee4wprsx.fsf@turner.link>
+        <4b3ed7f6-d2b6-443c-970e-d963066ebfe3@amd.com>
+        <87pmo8r6ob.fsf@turner.link>
+        <5a68afe4-1e9e-c683-e06d-30afc2156f14@leemhuis.info>
+        <CADnq5_MCKTLOfWKWvi94Q9-d5CGdWBoWVxEYL3YXOpMiPnLOyg@mail.gmail.com>
+        <87pmnnpmh5.fsf@dmarc-none.turner.link>
+        <CADnq5_NG_dQCYwqHM0umjTMg5Uud6zC4=MiscH91Y9v7mW9bJA@mail.gmail.com>
+        <092b825a-10ff-e197-18a1-d3e3a097b0e3@leemhuis.info>
+        <877d96to55.fsf@dmarc-none.turner.link>
+        <87lexdw8gd.fsf@turner.link>
+        <d541b534-8b83-b566-56eb-ea8baa7c998e@leemhuis.info>
+        <40b3084a-11b8-0962-4b33-34b56d3a87a3@molgen.mpg.de>
+        <bc714e87-d1dc-cdda-5a29-25820faaff40@leemhuis.info>
+        <20220318084625.27d42a51.alex.williamson@redhat.com>
+        <CADnq5_OE7JpffYggKsu92DAjur1CCSqZQ7LbMqcfmAk68FerDA@mail.gmail.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="QRbFUewSOUn4mwmT"
-Content-Disposition: inline
-In-Reply-To: <20220318151414.vxormel2vfgzss6t@houat>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,256 +105,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 18 Mar 2022 11:06:00 -0400
+Alex Deucher <alexdeucher@gmail.com> wrote:
 
---QRbFUewSOUn4mwmT
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Fri, Mar 18, 2022 at 10:46 AM Alex Williamson
+> <alex.williamson@redhat.com> wrote:
+> >
+> > On Fri, 18 Mar 2022 08:01:31 +0100
+> > Thorsten Leemhuis <regressions@leemhuis.info> wrote:
+> >  
+> > > On 18.03.22 06:43, Paul Menzel wrote:  
+> > > >
+> > > > Am 17.03.22 um 13:54 schrieb Thorsten Leemhuis:  
+> > > >> On 13.03.22 19:33, James Turner wrote:  
+> > > >>>  
+> > > >>>> My understanding at this point is that the root problem is probably
+> > > >>>> not in the Linux kernel but rather something else (e.g. the machine
+> > > >>>> firmware or AMD Windows driver) and that the change in f9b7f3703ff9
+> > > >>>> ("drm/amdgpu/acpi: make ATPX/ATCS structures global (v2)") simply
+> > > >>>> exposed the underlying problem.  
+> > > >>
+> > > >> FWIW: that in the end is irrelevant when it comes to the Linux kernel's
+> > > >> 'no regressions' rule. For details see:
+> > > >>
+> > > >> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/admin-guide/reporting-regressions.rst
+> > > >>
+> > > >> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/process/handling-regressions.rst
+> > > >>
+> > > >>
+> > > >> That being said: sometimes for the greater good it's better to not
+> > > >> insist on that. And I guess that might be the case here.  
+> > > >
+> > > > But who decides that?  
+> > >
+> > > In the end afaics: Linus. But he can't watch each and every discussion,
+> > > so it partly falls down to people discussing a regression, as they can
+> > > always decide to get him involved in case they are unhappy with how a
+> > > regression is handled. That obviously includes me in this case. I simply
+> > > use my best judgement in such situations. I'm still undecided if that
+> > > path is appropriate here, that's why I wrote above to see what James
+> > > would say, as he afaics was the only one that reported this regression.
+> > >  
+> > > > Running stuff in a virtual machine is not that uncommon.  
+> > >
+> > > No, it's about passing through a GPU to a VM, which is a lot less common
+> > > -- and afaics an area where blacklisting GPUs on the host to pass them
+> > > through is not uncommon (a quick internet search confirmed that, but I
+> > > might be wrong there).  
+> >
+> > Right, interference from host drivers and pre-boot environments is
+> > always a concern with GPU assignment in particular.  AMD GPUs have a
+> > long history of poor behavior relative to things like PCI secondary bus
+> > resets which we use to try to get devices to clean, reusable states for
+> > assignment.  Here a device is being bound to a host driver that
+> > initiates some sort of power control, unbound from that driver and
+> > exposed to new drivers far beyond the scope of the kernel's regression
+> > policy.  Perhaps it's possible to undo such power control when
+> > unbinding the device, but it's not necessarily a given that such a
+> > thing is possible for this device without a cold reset.
+> >
+> > IMO, it's not fair to restrict the kernel from such advancements.  If
+> > the use case is within a VM, don't bind host drivers.  It's difficult
+> > to make promises when dynamically switching between host and userspace
+> > drivers for devices that don't have functional reset mechanisms.
+> > Thanks,  
+> 
+> Additionally, operating the isolated device in a VM on a constrained
+> environment like a laptop may have other adverse side effects.  The
+> driver in the guest would ideally know that this is a laptop and needs
+> to properly interact with APCI to handle power management on the
+> device.  If that is not the case, the driver in the guest may end up
+> running the device out of spec with what the platform supports.  It's
+> also likely to break suspend and resume, especially on systems which
+> use S0ix since the firmware will generally only turn off certain power
+> rails if all of the devices on the rails have been put into the proper
+> state.  That state may vary depending on the platform requirements.
 
-Hi Maxime,
+Good point, devices with platform dependencies to manage thermal
+budgets, etc. should be considered "use at your own risk" relative to
+device assignment currently.  Thanks,
 
-On Fri 18 Mar 22, 16:14, Maxime Ripard wrote:
-> On Wed, Mar 16, 2022 at 04:40:49PM +0100, Paul Kocialkowski wrote:
-> > Hi Maxime,
-> >=20
-> > Thanks for the review!
-> >=20
-> > On Thu 10 Mar 22, 15:54, Maxime Ripard wrote:
-> > > Hi Paul,
-> > >=20
-> > > On Wed, Mar 09, 2022 at 03:32:00PM +0100, Paul Kocialkowski wrote:
-> > > > While bridge/panel detection was initially relying on the usual
-> > > > port/ports-based of graph detection, it was recently changed to
-> > > > perform the lookup on any child node that is not port/ports
-> > > > instead when such a node is available, with no fallback on the
-> > > > usual way.
-> > > >=20
-> > > > This results in breaking detection when a child node is present
-> > > > but does not contain any panel or bridge node, even when the
-> > > > usual port/ports-based of graph is there.
-> > > >=20
-> > > > In order to support both situations properly, this commit reworks
-> > > > the logic to try both options and not just one of the two: it will
-> > > > only return -EPROBE_DEFER when both have failed.
-> > > >=20
-> > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > > Fixes: 80253168dbfd ("drm: of: Lookup if child node has panel or br=
-idge")
-> > >=20
-> > > Thanks, it's in pretty good shape now, but I have a few bike sheds to=
- paint :)
-> > >=20
-> > > > ---
-> > > >  drivers/gpu/drm/drm_of.c | 93 +++++++++++++++++++++---------------=
-----
-> > > >  1 file changed, 49 insertions(+), 44 deletions(-)
-> > > >=20
-> > > > diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
-> > > > index 9d90cd75c457..67f1b7dfc892 100644
-> > > > --- a/drivers/gpu/drm/drm_of.c
-> > > > +++ b/drivers/gpu/drm/drm_of.c
-> > > > @@ -219,6 +219,35 @@ int drm_of_encoder_active_endpoint(struct devi=
-ce_node *node,
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(drm_of_encoder_active_endpoint);
-> > > > =20
-> > > > +static int drm_of_find_remote_panel_or_bridge(struct device_node *=
-remote,
-> > > > +					      struct drm_panel **panel,
-> > > > +					      struct drm_bridge **bridge)
-> > >=20
-> > > This function performs its look up directly on the struct device_node
-> > > passed as argument, so I don't think the "remote" in the name is grea=
-t.
-> > > Since it's static, we can just call it find_panel_or_bridge, what do =
-you
-> > > think?
-> >=20
-> > From a quick look at other DRM code I got the impression that static fu=
-nctions
-> > also usually carry the drm prefix but I might be wrong.
->=20
-> Not necessarily, see handle_conflicting_encoders, commit_tail, commit_wor=
-k,
-> convert_clip_rect_to_rect, edid_load, etc.
->=20
-> Most functions do, but it's not a rule or a convention.
+Alex
 
-Okay then, I'm fine with find_panel_or_bridge.
-
-> > > > +{
-> > > > +	int ret =3D -EPROBE_DEFER;
-> > > > +
-> > > > +	if (panel) {
-> > > > +		*panel =3D of_drm_find_panel(remote);
-> > > > +		if (!IS_ERR(*panel))
-> > > > +			ret =3D 0;
-> > >=20
-> > > return 0?
-> >=20
-> > The idea was to still go through the "*bridge =3D NULL;" path if a brid=
-ge
-> > pointer is provided, to preserve the original behavior of the function.
-> > There may or may not not be any hard expectation on that, in any case
-> > I feel like it would be good to avoid out-of-scope functional changes h=
-ere.
->=20
-> Then we could just clear it just like we clear the panel pointer in
-> drm_of_find_panel_or_bridge. It would be more consistent.
-
-Oh absolutely, I agree that would be best.
-
-> > > > +		else
-> > > > +			*panel =3D NULL;
-> > > > +
-> > > > +	}
-> > > > +
-> > > > +	/* No panel found yet, check for a bridge next. */
-> > > > +	if (bridge) {
-> > > > +		if (ret) {
-> > >=20
-> > > And the return above allows to remove that test
-> > >=20
-> > > > +			*bridge =3D of_drm_find_bridge(remote);
-> > > > +			if (*bridge)
-> > > > +				ret =3D 0;
-> > >=20
-> > > return 0?
-> > >=20
-> > > > +		} else {
-> > > > +			*bridge =3D NULL;
-> > > > +		}
-> > > > +
-> > > > +	}
-> > > > +
-> > > > +	return ret;
-> > >=20
-> > > And here we can just return -EPROBE_DEFER
-> > >=20
-> > > > +}
-> > > > +
-> > >=20
-> > > >  /**
-> > > >   * drm_of_find_panel_or_bridge - return connected panel or bridge =
-device
-> > > >   * @np: device tree node containing encoder output ports
-> > > > @@ -249,57 +278,33 @@ int drm_of_find_panel_or_bridge(const struct =
-device_node *np,
-> > > >  	if (panel)
-> > > >  		*panel =3D NULL;
-> > > > =20
-> > > > -	/**
-> > > > -	 * Devices can also be child nodes when we also control that devi=
-ce
-> > > > -	 * through the upstream device (ie, MIPI-DCS for a MIPI-DSI devic=
-e).
-> > > > -	 *
-> > > > -	 * Lookup for a child node of the given parent that isn't either =
-port
-> > > > -	 * or ports.
-> > > > -	 */
-> > > > -	for_each_available_child_of_node(np, remote) {
-> > > > -		if (of_node_name_eq(remote, "port") ||
-> > > > -		    of_node_name_eq(remote, "ports"))
-> > > > -			continue;
-> > > > -
-> > > > -		goto of_find_panel_or_bridge;
-> > > > +	/* Check for a graph on the device node first. */
-> > > > +	if (of_graph_is_present(np)) {
-> > > > +		remote =3D of_graph_get_remote_node(np, port, endpoint);
-> > > > +		if (remote) {
-> > > > +			ret =3D drm_of_find_remote_panel_or_bridge(remote, panel,
-> > > > +								 bridge);
-> > > > +			of_node_put(remote);
-> > > > +		}
-> > > >  	}
-> > > > =20
-> > > > -	/*
-> > > > -	 * of_graph_get_remote_node() produces a noisy error message if p=
-ort
-> > > > -	 * node isn't found and the absence of the port is a legit case h=
-ere,
-> > > > -	 * so at first we silently check whether graph presents in the
-> > > > -	 * device-tree node.
-> > > > -	 */
-> > > > -	if (!of_graph_is_present(np))
-> > > > -		return -ENODEV;
-> > > > -
-> > > > -	remote =3D of_graph_get_remote_node(np, port, endpoint);
-> > > > -
-> > > > -of_find_panel_or_bridge:
-> > > > -	if (!remote)
-> > > > -		return -ENODEV;
-> > > > +	/* Otherwise check for any child node other than port/ports. */
-> > > > +	if (ret) {
-> > > > +		for_each_available_child_of_node(np, remote) {
-> > > > +			if (of_node_name_eq(remote, "port") ||
-> > > > +			    of_node_name_eq(remote, "ports"))
-> > > > +				continue;
-> > > > =20
-> > > > -	if (panel) {
-> > > > -		*panel =3D of_drm_find_panel(remote);
-> > > > -		if (!IS_ERR(*panel))
-> > > > -			ret =3D 0;
-> > > > -		else
-> > > > -			*panel =3D NULL;
-> > > > -	}
-> > > > +			ret =3D drm_of_find_remote_panel_or_bridge(remote, panel,
-> > > > +								 bridge);
-> > > > +			of_node_put(remote);
-> > > > =20
-> > > > -	/* No panel found yet, check for a bridge next. */
-> > > > -	if (bridge) {
-> > > > -		if (ret) {
-> > > > -			*bridge =3D of_drm_find_bridge(remote);
-> > > > -			if (*bridge)
-> > > > -				ret =3D 0;
-> > > > -		} else {
-> > > > -			*bridge =3D NULL;
-> > > > +			/* Stop at the first found occurrence. */
-> > > > +			if (!ret)
-> > > > +				break;
-> > > >  		}
-> > > > -
-> > > >  	}
-> > > > =20
-> > > > -	of_node_put(remote);
-> > > >  	return ret;
-> > > >  }
-> > >=20
-> > > So the diff is fairly hard to read, but it ends up as:
-> >=20
-> > Yeah I agree, not sure what I can do about that.
->=20
-> Nothing, really. I don't expect any change there, it just happens sometim=
-es :)
-
-All right then :)
-
-I'll send another iteration soon.
-
-Cheers,
-
-Paul
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---QRbFUewSOUn4mwmT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmI0pGEACgkQ3cLmz3+f
-v9F38wgAiW0fsg1uHAG9RbQHGQPMR6EPkKAA+fF3K8Dw5S8e327Pbb37JOO0OaRq
-awMEK2tU+azdYXWM0AY8w2/6FrquKCQOeIIPUyCMNUvDdZYJR1VIcPFeOd75CoWX
-uQ6eq7Kp/BiWN0iQzOnXGZwEQWBaYirtzBIS/kbHmVHXoBV6RNSQ3paPffPiuqd0
-gbZ6SfUivqhd5F8DNqw9c/EmnRnVcVm5GEdm2hNh8btG9mOgAjWTOl4zT39Bk+JQ
-BhyuxGDH72Eqr+NolyiIVs/GkZRb4cfysQOFEqhu3gzdW+H4q88PbgaFrBQ72wEp
-iyuWUTkZWcyt3A2QZuCDSfmOk6ctlw==
-=CNx8
------END PGP SIGNATURE-----
-
---QRbFUewSOUn4mwmT--

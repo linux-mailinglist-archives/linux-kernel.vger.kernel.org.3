@@ -2,47 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BBA4DD6D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 971EE4DD6DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234226AbiCRJLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 05:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
+        id S234222AbiCRJL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 05:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbiCRJLc (ORCPT
+        with ESMTP id S232673AbiCRJLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 05:11:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1DC17ECE9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 02:10:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 816DAB82196
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:10:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E24E3C340EC;
-        Fri, 18 Mar 2022 09:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647594611;
-        bh=sRBWaFWpJBtULuRujYkGmhpJV4O9z37g1bx4HWyvXoo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M9AJ1H53oH0/ly2Qas1KU14ZWyYwT57KMHC/QiJL3IpLCArjQor/IhZHVbymHGOPo
-         r5dn4t9uS1MLpW8G5+XVRYLW7fPZVatig9VR4CeX/gS3ELoesYf3zgdBA0zik69Aw+
-         s8h3mrGUu35ZcImkDU8lc+krhsKeGPAajoIHuwaI=
-Date:   Fri, 18 Mar 2022 10:10:08 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sathish Kumar <skumark1902@gmail.com>
-Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8712: Fix CamelCase warnings
-Message-ID: <YjRMcEkM/L/nrC2N@kroah.com>
-References: <20220318090358.13559-1-skumark1902@gmail.com>
+        Fri, 18 Mar 2022 05:11:54 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65DE17ECE9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 02:10:36 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2e5757b57caso84770307b3.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 02:10:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=SoOE7enjlczkaHcgpHmrsmr2DcQS+ZcmLdn0xvYngVk=;
+        b=vDTC/X/BKsT1CpIB1SoY9u/5aWsxLWDeb2d55fKMk68OLcNVxzNpozhCDDEbFtUp3/
+         Ky2ZAfnCvwQIgemXjYHLbrfVPbuayv5RNmwPUJbMwXO65C6x1UfkjBCekGMScyj3P6sM
+         rsoTWDoOmLcY4aWt6uOjvv2LZvjPoiHumEEllj1IJjQDraxGbhDlqbGPbkBYA182hi9G
+         V/t52NxKJi6tR5Vr5sUJ2UKlLGsfn1G1eM28GDa1oNYNmIa1oMQqo8eUEXzjaxZYXhoh
+         g0475O7azSdRzIiQ4rq6nIzyGd9mpUAvLsfw5N389XUoNPjZUCY797RUcbTO1rXcKBST
+         pH2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SoOE7enjlczkaHcgpHmrsmr2DcQS+ZcmLdn0xvYngVk=;
+        b=cqrjghjhfV/eZkKojsYfe2cw9u1Jez0weGqwEFYnW3yRBeWYdBGQ6UqVYa+pCPHd2D
+         xlv9XW3E+qruhIO6oVwJlYRQlSR3qaDVPWUOEDEpMSLZt0HpKZaqTSLuFY/nbspVShpC
+         RoklBcDnOX4xkk3bSesalqnpSVQcl0BGnuBqUaArDIabDJ8tZcyXFZSz6ngibq3fS4qC
+         glvHGhMLkwgGEkxERHvch/hdkbEopP4r/l9GeRsUA523vx7n1qos414DqdZmKMO3Gd61
+         q1FUQXyJ42iUZ+ctFc7XuHF/sGMgcg7EaXSJ196MvuT6OOFdsYEiDV9pMQvzVdR2l5q/
+         S0kg==
+X-Gm-Message-State: AOAM531ngu1WDXw2uw63naRVtXP30jo5+6mVzrdt4vLJKdXqZZW7ZReF
+        fwT0RbL7XPGa84XSe/njoEcU7f1nJjICZt+1lnqCHr4c3Fm628i+
+X-Google-Smtp-Source: ABdhPJy8TixQgbClgZ5uoJxgJPjIe9tVY2iGR+lsYCpCozh+7gd1M4HOyB5Fg1JtlGtOAXLkpeBsI9dOh0Sf+/gWiDE=
+X-Received: by 2002:a0d:d187:0:b0:2dc:5d83:217d with SMTP id
+ t129-20020a0dd187000000b002dc5d83217dmr9945161ywd.189.1647594635542; Fri, 18
+ Mar 2022 02:10:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220318090358.13559-1-skumark1902@gmail.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220317124526.768423926@linuxfoundation.org>
+In-Reply-To: <20220317124526.768423926@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 18 Mar 2022 14:40:24 +0530
+Message-ID: <CA+G9fYvEFwrMDC30XLh6LWP-N=NATqSnkRkgo2QRk_Hs1uct+A@mail.gmail.com>
+Subject: Re: [PATCH 5.16 00/28] 5.16.16-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,31 +71,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 02:33:58PM +0530, Sathish Kumar wrote:
-> This patch fixes the checkpatch.pl warnings like:
-> CHECK: Avoid CamelCase: <blnEnableRxFF0Filter>
-> +   u8 blnEnableRxFF0Filter;
-> 
-> Signed-off-by: Sathish Kumar <skumark1902@gmail.com>
-> ---
->  drivers/staging/rtl8712/drv_types.h   | 2 +-
->  drivers/staging/rtl8712/rtl871x_cmd.c | 2 +-
->  drivers/staging/rtl8712/xmit_linux.c  | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8712/drv_types.h b/drivers/staging/rtl8712/drv_types.h
-> index a44d04effc8b..88845b46131f 100644
-> --- a/drivers/staging/rtl8712/drv_types.h
-> +++ b/drivers/staging/rtl8712/drv_types.h
-> @@ -157,7 +157,7 @@ struct _adapter {
->  	struct iw_statistics iwstats;
->  	int pid; /*process id from UI*/
->  	struct work_struct wk_filter_rx_ff0;
-> -	u8 blnEnableRxFF0Filter;
-> +	u8 bln_enable_rx_ff0_filter;
+On Thu, 17 Mar 2022 at 18:24, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.16.16 release.
+> There are 28 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 19 Mar 2022 12:45:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.16.16-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Why are you keeping the "bln" prefix here?  Why is that still needed?
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-thanks,
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-greg k-h
+## Build
+* kernel: 5.16.16-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.16.y
+* git commit: 106ac438092ed9bef8fb4c61ec6ad5aa9eedda32
+* git describe: v5.16.15-29-g106ac438092e
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
+.15-29-g106ac438092e
+
+## Test Regressions (compared to v5.16.14)
+No test regressions found.
+
+## Metric Regressions (compared to v5.16.14)
+No metric regressions found.
+
+## Test Fixes (compared to v5.16.14)
+No test fixes found.
+
+## Metric Fixes (compared to v5.16.14)
+No metric fixes found.
+
+## Test result summary
+total: 108765, pass: 92041, fail: 1149, skip: 14385, xfail: 1190
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 296 total, 293 passed, 3 failed
+* arm64: 47 total, 47 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 45 total, 41 passed, 4 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 41 total, 38 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 65 total, 50 passed, 15 failed
+* riscv: 32 total, 27 passed, 5 failed
+* s390: 26 total, 23 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 47 total, 47 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* pre[
+* prep-inline
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,231 +2,854 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39114DDFA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B5D4DDFAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239530AbiCRRNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 13:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
+        id S239538AbiCRRPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 13:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233128AbiCRRNt (ORCPT
+        with ESMTP id S239485AbiCRRP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 13:13:49 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050FE26133D;
-        Fri, 18 Mar 2022 10:12:28 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22IG4FCF032174;
-        Fri, 18 Mar 2022 17:12:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- from : subject : to : cc : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=BQ2H0GQa/SOwJvtlcZDgR0gFmmt/UIm4ZPpFTxsj6N0=;
- b=qzOczX1zakwkibptUlW6dMqBvcGztUyQBWbDoxFEuLsOANiQ0EuYlnwtJygqZ9REdxR4
- 76NQz3lb8Y7VUpUqkMkllD0gtgzCQ1c5p6/9ViAGMvDqPGpvkU3Wa4EjSj/ffS01UwUW
- IVAMj7noeDAAB/htySfhGeduLksFfNOtg1EY0ZzYqmbUcfiLFnQ4EfkCCbgERhs5OtHy
- oqw2ZyHUpedBbfbPiFWgVDi0VTsUxZo5hxbVOVMIV/PiC2AV+TDKZNTl8ulMVP4TDX32
- 7iN7iVDdS3wCbb1+4SNyig4Ygh1hFq3mzeEJD1f174x7GAsZCOHqtQ1wDbi48MRpu99j uQ== 
-Received: from aserp3030.oracle.com ([141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3et60rvfa6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Mar 2022 17:12:13 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22IH8p0b105378;
-        Fri, 18 Mar 2022 17:12:12 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2172.outbound.protection.outlook.com [104.47.73.172])
-        by aserp3030.oracle.com with ESMTP id 3et64u49xh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Mar 2022 17:12:12 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YNmh7Rh+S9drAfP1r7cMLzKrMyfaHUY9ts6zQLWD+/U7uStj5xvUVw+pYfQEhB6diXI6lmfiGqlIlBPsbB14gFVRWwL6u91UrSaP77auZt3a3pPjLUcn5U5U4EzwWXwiqATzK1a+FE4WGsZExJLUdfGZCcq9kD9UPi2Qkku4vBA0G7EH5YKZRG+Tx7Isj86oUAW3pBK46Zd4PVspGpdLmxxzj73iQd/0YUWd/6SNBZTlLl1hsS8mDZVuJB9CBGg/O8dYTHpljMmO8xzHFY5v7zTi54563RSZT34sxtqI5viGU3cJQ/6byT7w3nU5A87XQg/x6SY2v7v3MQSG6S8D3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BQ2H0GQa/SOwJvtlcZDgR0gFmmt/UIm4ZPpFTxsj6N0=;
- b=og5gShOjeiSbbjSVCekQz2dGMEQ7/+Dy3O8/YlsIqKG6VyqHOPusQIM4mhFvywP70kCNsysg8wwfRwGG26t81RyEZsAmaCN9w9cqteyG1dgSZXCt6/BIom2NUETObEunFFbfH99vcFCfElvtZzo+Vv9BaHcdKg2q2p+mDtN9iuxf3bMb9nI24wDoA/te0ibaVVLIpVrS11oWbXQkjIe1htE+lvWI/we6DyQffqkW3OuWyxVPxoBo4WgS452LvlCruWDuLDwJvZEqOOAXme1wikKoKSxGKfiL/7F0CmM7nn1TNbUu4gpjsba9K2FTnRggM48QfNWHg5fscLODjUqZPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 18 Mar 2022 13:15:29 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A976AEBAF2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 10:14:09 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id t6-20020a1709028c8600b001534eaec77bso4281689plo.7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 10:14:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BQ2H0GQa/SOwJvtlcZDgR0gFmmt/UIm4ZPpFTxsj6N0=;
- b=J68N6tplz/V342tn32u7f3HRtLXSNsWOToHZIpzbup76ilvFsoKjrJMq89bVfWeFZADiawnULf6oLSv6DXZ5/9sGE4AkEAo5zrKCZgmteaE8GmRJGnBiuJloMp/vFEzkHcespsss51vRxVucy2TMmGPagwjwPl4galcMhPiXGsM=
-Received: from BLAPR10MB4835.namprd10.prod.outlook.com (2603:10b6:208:331::11)
- by DM6PR10MB3241.namprd10.prod.outlook.com (2603:10b6:5:1a4::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.26; Fri, 18 Mar
- 2022 17:12:09 +0000
-Received: from BLAPR10MB4835.namprd10.prod.outlook.com
- ([fe80::5cee:6897:b292:12d0]) by BLAPR10MB4835.namprd10.prod.outlook.com
- ([fe80::5cee:6897:b292:12d0%7]) with mapi id 15.20.5081.019; Fri, 18 Mar 2022
- 17:12:09 +0000
-Message-ID: <052c5f12-4f2d-f302-c2a3-2f2b580e4b4d@oracle.com>
-Date:   Fri, 18 Mar 2022 17:12:01 +0000
-From:   Joao Martins <joao.m.martins@oracle.com>
-Subject: Re: iommufd(+vfio-compat) dirty tracking
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        yuzenghui <yuzenghui@huawei.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-References: <8338fe24-04ab-130a-1324-ab8f8e14816d@oracle.com>
- <20220214140649.GC4160@nvidia.com>
- <6198d35c-f810-cab1-8b43-2f817de2c1ea@oracle.com>
- <20220215162133.GV4160@nvidia.com>
- <7db79281-e72a-29f8-7192-07b739a63897@oracle.com>
- <20220223010303.GK10061@nvidia.com>
- <e4dba6f8-7f5b-e0d5-8ea8-5588459816f7@oracle.com>
- <20220225204424.GA219866@nvidia.com>
- <30066724-b100-a14e-e3d8-092645298d8a@oracle.com>
- <8448d7fb-3808-c4e8-66cf-4a3184c24ec0@oracle.com>
- <20220315192952.GN11336@nvidia.com>
- <6fd0bfdc-0918-e191-0170-abce6178ddaa@oracle.com>
- <c85a0d65-143e-6246-0d48-dec4e059e51a@oracle.com>
-Content-Language: en-US
-In-Reply-To: <c85a0d65-143e-6246-0d48-dec4e059e51a@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0050.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:60::14) To BLAPR10MB4835.namprd10.prod.outlook.com
- (2603:10b6:208:331::11)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f2d85960-c515-41f2-f782-08da09026f57
-X-MS-TrafficTypeDiagnostic: DM6PR10MB3241:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR10MB3241A529F1285819732A8794BB139@DM6PR10MB3241.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QWC3UiqxTWoiTOZpIRUZc8BWNLbGybYZmM8rAhMzjyah1oN9jXLqOrdjdDrOgs90zSj9o3KYEeY25ldP7KvHaDv0AtoFlV8tL9qaJR8WSeLQ1gUk/JMr2bYgv0MQ/nOJeCZFsBo6Kd0p7H1I313ynUvItQtqSZ6t+AebYoW8x8ZrczoQM+IMyuyd8QCh4qUKEhM6G9AMQVfe9R6FSTDhoL9nfEhK6yvwYy0C/FALvtKvTBf0qtElMHbs+ck6trkttrXfDcLmFI3yIfXJw+J0z6z8hi4O7+iZbqzmz5vV0OKVMUHoo3vleOrhNjXALOVL5DdyVggzYaliUEL4nrfC2sX5NFZwKGfN0FBKdH7hBL9uNo25/fMZVN1BF3tEg9iLI9mf5roddOnLJxVFwf6SHQzR8Wnlv47cMHngNLePeB/XPWwma59eHRrNtGDdPT6nqL3fwvfQRJC0/OseZOOaooD8fco5BHG6vI9M+OdLM94isfqsgPldotU+rHY9Sump1IcNwapwKRY6eLV7ZzpdE6ZkVipNEmZOOCJK7oEWiiWehN+lX2sM1qEwA9DXsSKhTuE1LUi4aLKQdXbV87PxhVPF8+I2skHZbqo++ze+yJe+uq9yGNTZ5Hykm+MBfXbTTrhB85LFQQ4NlGHuw4JK3XL5KZF1l/6QGNmwZ+HqBZZ3JAY0h9wgOn89hsYfyrjq+PAbNU0xOdNYg5G2TET2N4VruJUc1vN1cA+q1tHu8t0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB4835.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6486002)(8936002)(2906002)(66946007)(66476007)(31686004)(66556008)(83380400001)(36756003)(508600001)(8676002)(4326008)(38100700002)(54906003)(316002)(53546011)(31696002)(86362001)(5660300002)(7416002)(186003)(26005)(2616005)(6512007)(6916009)(6506007)(6666004)(14143004)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWhvRHNFZkY4c0hTQTNORVBWT3UvcDRLU20xTUM1ZmQxaU5pdjA4ZndNbGRr?=
- =?utf-8?B?ZFdsNmhKdWFkVkh5ckZ4czdLaEJ1cThmTU5EVzRGMUdVOFB2M1pFditURXUr?=
- =?utf-8?B?cElpY1NqT2wyaHNaWHI1SkVaMEpiZW9lampqMkE5eFdYMEx2U1hyQ0kwQTZT?=
- =?utf-8?B?TXV5eGlCVzlKMjdJYVhLRXIza21WdUE5RTI0d012ZktaS2hZd0xrMUsxa1VQ?=
- =?utf-8?B?azc3bFhrRFFhYVd5ZUNjaHp4TTlSSVowakhrR29tWVVJcG16YVNwK0d0YkRM?=
- =?utf-8?B?L0FPclJaSDhReWgxNmZIc2JyUGM0elNjdmg1Y1ROanpWMmdZZ1VXQk8wS3dW?=
- =?utf-8?B?L3B5QkxjbWFYU04zcXNCL0ZqQldsSHVlNGNxUWxxd1hQQUNtbFBmZXhXR29V?=
- =?utf-8?B?TU1wMnR6SmZNSzk0Z1B4a1BVOEZzRU5WR0xkS2J4WmxiS0pFWEU0QzFzNU4y?=
- =?utf-8?B?ZlM1NFh3WEtDVXY4cW04b3VYYWwwb1ptcEE1Z2xybWZ5cmMxL2FVcG5ya1FD?=
- =?utf-8?B?Yk9wWGQ5REEwcXJNM3RYbTVvY0orREdORU02NXh3YXVJOVExeVl0Wi9WQndr?=
- =?utf-8?B?dmJwRmlrZHZKTFhjeVJvUGI5WmVrc3E0Yi8rOFlpejVzbWZrbTRYbXVrSThs?=
- =?utf-8?B?OTUyZkxxbkNUTEFjb1NxU00yTkgzNGlOYmJIS3pST1Q1TFcyMnYyNVFNU3pW?=
- =?utf-8?B?TDEyMFV4bGdkWEg0dWJ3cy9QbExqczV3R3NmbXRqWWF6T0dMMHdRU1o0TXBv?=
- =?utf-8?B?TFU2TThXb3M1RVlSV0pHZkEyaUsxQXQrREJYdkVoMnBQczNJNTRhVE5ueE54?=
- =?utf-8?B?ZDJUcGVJeFo2YlRybkpkUWQraldBeVVEYTJyS1plVURnWUUxQUZ5VkpLMFBP?=
- =?utf-8?B?a2MrUlUwNER0WWF1QnJFWldJclRidzZnbU5BdXViM2IzeXU0UEdoU1Z4UjJZ?=
- =?utf-8?B?N1JnTG4zb1lkSGFGZVdNT3g3K0dnekI4cWNaekRFSWZmQ2dJNmI1eVBISzJO?=
- =?utf-8?B?SmlrTFpzY3F1eGZCVVE2WGNKNnpENUQzSXYzcWpnQ2wxamkzeUtEQVE5WU9G?=
- =?utf-8?B?WXBXMEJBRDNZL3FqdHhnU3pjSURWbEVYTUNNN0R1Q2FXaWI1MUhzbDkrSkhO?=
- =?utf-8?B?OU1QU2Y0SldQRjd2M3YyMEphOE9oMVl0eHZmb0grak5la0xObkVkeDB0ekRm?=
- =?utf-8?B?cEJUVUtwYm5Cc2hVelYyM2FpT2RpSFE3US9nWHh4K3QyUXZOSmpWcGYwSGhy?=
- =?utf-8?B?ZW8xNDNCZGcwNXVROGJ6RmRkZ3lIYUZZNlBvZVp4a0ZwNkc5UW91dTBSUmJL?=
- =?utf-8?B?cklUZzR4WHVEcnZXSFBKeEZ3Z0lUZFVaMGEwNlBSQWovMVN3YnNRMC9EbE5Q?=
- =?utf-8?B?YTFHS1hVMEwvL3paM3JFRzFVa0RMY0xkei9VYW1pbEgvVE5pRWFoTjRtZk5L?=
- =?utf-8?B?S2NpcTlETjJnRkVoWSt6SEY2RllIbDE0WGVaU0N3UzJlLzIzL3RKdEtIYWdY?=
- =?utf-8?B?OHhZSnovYmdLMVV1cmFLV3Z0TXI3NTdLcEs2ODQveGQyQzE3RkEzNkQwQkRT?=
- =?utf-8?B?dC9MeVk0ZUJKNWdnT2M1U0RoR0RJOEhYQlpwMThwNDJCV0wzNU94ekRYQUJa?=
- =?utf-8?B?QzVMblp5d0IyRThTMVJmaUQwelNJN0pBRjhWdEhWZWFRczAzSEJSWjczVjV5?=
- =?utf-8?B?bGJBMFJabUcvcGlaQTdhMVkrNjA3VEh2RERSN2dKY2YwaXZaaGdDa3cyMlNv?=
- =?utf-8?B?Z3ZIcExKQlQ3TDI5cys1aGRrTFViOFpuUlBxaitEMTlocEtwTWZoc3dFdk13?=
- =?utf-8?B?cjExZUg3NWdMaWhyMDM5TGJCbHdyaE5NN2ZHdTFtcFBwQktydm10cmtYbk5L?=
- =?utf-8?B?OXZxdkErZVNMOE9EaWNkV25SSUNSalJhMFFIQlQ5NVBHNGw1TmpKZ3hsaU4y?=
- =?utf-8?B?NGMzenl1NHVpbDRBcnUrRC9tZkg4VDI2aEVFbHh1bFNiWEZqalFUR0g3SWE0?=
- =?utf-8?B?eVVPM0Q4b1lnPT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2d85960-c515-41f2-f782-08da09026f57
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB4835.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 17:12:09.1310
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Uve4XOh7eDrV1/8RzbO5xnKYyERGxlUv8MobEFpmFnJP9AnxUBa2mQaBraIUQcKxaCUKSP0GPWsv0S1ygk7dKFixuI3yWZUA0QWCvdghRX4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3241
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10290 signatures=694221
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 phishscore=0
- suspectscore=0 mlxscore=0 adultscore=0 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203180091
-X-Proofpoint-ORIG-GUID: IbmJofV6S1zrtWMbTmOnYlttZUCnljzm
-X-Proofpoint-GUID: IbmJofV6S1zrtWMbTmOnYlttZUCnljzm
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=khjktHlzowN4ytrgBT5tnlvERq2qJMHYPTSaiHXT/6Y=;
+        b=ibFxLwNSYavWXfLITM5cbrq3e/ZgJQ4Mb5r+Cth+53DPTUjNxRUcEedBsAyKVVGKRF
+         oJnlKqSZNo040PfgfXFL26JuhIS1D3r7HiBB8Sgdpdm/Il3L27alkd5gJpfrHylcyIx/
+         cTZbxyrLcRwpWn4JRWGV7FYtpMuVZTIEwLREmJy/DuRxdJoL9B+lSaVhTp3x0JVQOYVA
+         nnEyBhkzg57r4ii1SxFzoN6Th7weC4smOLRIrhev2vgW3uHWw5FDLIGBvyIWHaQW0MCd
+         B7iPAS3QERVsgl9HLkxwxRy8X4aF13+SJZ+QgWu2OoAz9trTWzh/ylctx4uYviaALTc7
+         Vcpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=khjktHlzowN4ytrgBT5tnlvERq2qJMHYPTSaiHXT/6Y=;
+        b=WMMAjA7vvyLFcICGUV1JyQI1FZc2RjYYAt3d9sPGeEpNQeoMprInTdpOUPE5rZ+puH
+         2uIYUZmUia/wjy8AYn3S4/waejCFBmQj9j4UEMagPcmU0Sk1x4tBmOQzLLe7CuEhcHgR
+         fVz1GHOjvVCgDPvjsMQEdZqpaTDihle+GMyqOAG3ctVQwldFQUuK4gGMfXVCxsXQ4tcy
+         IfouvgUkjee3G/3O4BSiHtwSmYN4OG96vfE7+IF7q9iAsVoyA9JPglB872tNJXNrUR/9
+         PWZtHtr8lR13Fp+B9UhgA3VSjSR1FbqaXCVXWM85IvUSJstmM+dX5YaChZiCYgkhId/0
+         4H6g==
+X-Gm-Message-State: AOAM532pAY6hB5fpr95WxC2geoMG3RxFuYRjr4NbvaVWHXiH4P3a+BNh
+        zECflrHnPATF/ZKFo40XY26Z68ad82gP5g==
+X-Google-Smtp-Source: ABdhPJxJTofTb2ZtXSTPUF4FdRfDb9AnmMw0M+eT+8zMrrpvtqvyJ5K1zYM2UGLwDQOsBYEIBzGLVq+fAyEyTA==
+X-Received: from zllamas.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:4c])
+ (user=cmllamas job=sendgmr) by 2002:a17:90b:240e:b0:1b9:2963:d5a1 with SMTP
+ id nr14-20020a17090b240e00b001b92963d5a1mr22732726pjb.227.1647623649019; Fri,
+ 18 Mar 2022 10:14:09 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 17:14:05 +0000
+Message-Id: <20220318171405.2728855-1-cmllamas@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+Subject: [PATCH] fuse: fix integer type usage in uapi header
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alessio Balsini <balsini@android.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, kernel-team@android.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Carlos Llamas <cmllamas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/22 20:37, Joao Martins wrote:
-> On 3/16/22 16:36, Joao Martins wrote:
->> On 3/15/22 19:29, Jason Gunthorpe wrote:
->>> On Fri, Mar 11, 2022 at 01:51:32PM +0000, Joao Martins wrote:
->>>> On 2/28/22 13:01, Joao Martins wrote:
->>>>> On 2/25/22 20:44, Jason Gunthorpe wrote:
->>>>>> On Fri, Feb 25, 2022 at 07:18:37PM +0000, Joao Martins wrote:
->>>>>>> On 2/23/22 01:03, Jason Gunthorpe wrote:
->>>>>>>> On Tue, Feb 22, 2022 at 11:55:55AM +0000, Joao Martins wrote:
->>>>>> Questions I have:
->>>>>>  - Do we need ranges for some reason? You mentioned ARM SMMU wants
->>>>>>    ranges? how/what/why?
->>>>>>
-> 
-> An amend here.
-> 
-> Sigh, ARM turns out is slightly more unique compared to x86. As I am re-reviewing
-> the ARM side. Apparently you have two controls: one is a 'feature bit'
-> just like x86 and another is a modifier (arm-only).
-> 
-> The Context descriptor (CD) equivalent to AMD DTEs or Intel context descriptor
-> equivalent for second-level. That's the top-level enabler to actually a *second*
-> modifier bit per-PTE (or per-TTD for more accurate terminology) which is the so
-> called DBM (dirty-bit-modifier). The latter when set, changes the meaning of
-> read/write access-flags of the PTE AP[2].
-> 
-> If you have CD.HD enabled (aka HTTU is enabled) *and* PTE.DBM set, then a
-> transition in the SMMU from "writable Clean" to "written" means that the the
-> access bits go from "read-only" (AP[2] = 1) to "read/write" (AP[2] = 0)
-> if-and-only-if PTE.DBM = 1 (and does not generate a permission IO page fault
-> like it normally would be with DBM = 0). Same thing for stage-2, except that
-> the access-bits are reversed (S2AP[1] is set when "written" and it's cleared
-> when it's "writable" (when DBM is also set).
-> 
-> Now you could say that this allows you to control on a per-range basis.
-> Gah, no, more like a per-PTE basis is more accurate.
-> 
-> And in practice I suppose that means that dynamically switching on/off SMMU
-> dirty-tracking *dynamically* means not only setting CD.HD but also walking the
-> page tables, and atomically setting/clearing both the DBM and AP[2].
-> 
-> References:
-> 
-> DDI0487H, Table D5-30 Data access permissions
-> SMMU 3.2 spec, 3.13.3 Dirty flag hardware update
+Kernel uapi headers are supposed to use __[us]{8,16,32,64} defined by
+<linux/types.h> instead of 'uint32_t' and similar. This patch changes
+all the definitions in this header to use the correct type. Previous
+discussion of this topic can be found here:
 
-I updated my branch and added an SMMUv3 implementation of the whole thing (slightly based
-on the past work) and adjusted the 'set tracking' structure to cover this slightly
-different h/w construct above. At the high-level we have 'set_dirty_tracking_range' API,
-which is internal in iommufd obviously. The UAPI won't change ofc.
+  https://lkml.org/lkml/2019/6/5/18
 
-It's only compile-tested sadly as I have no SMMUv3.2 hardware, and to have this SMMUv3
-DBM/HTTU support there's some requirements on the processor that I am not sure they can be
-fully emulated. The Intel iommu implementation follows same model as AMD and I will get to
-that next with a compliant iommu emulation too.
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
+---
+ include/uapi/linux/fuse.h | 509 +++++++++++++++++++-------------------
+ 1 file changed, 253 insertions(+), 256 deletions(-)
 
-But now, I will be focusing on hw_pagetable UAPI part. I understand your thinking of being
-tied to the hw_pagetable obj as opposed to IOAS for the dirty tracking APIs.
+diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+index d6ccee961891..c6dc477306c1 100644
+--- a/include/uapi/linux/fuse.h
++++ b/include/uapi/linux/fuse.h
+@@ -199,11 +199,7 @@
+ #ifndef _LINUX_FUSE_H
+ #define _LINUX_FUSE_H
+ 
+-#ifdef __KERNEL__
+ #include <linux/types.h>
+-#else
+-#include <stdint.h>
+-#endif
+ 
+ /*
+  * Version negotiation:
+@@ -238,42 +234,42 @@
+    userspace works under 64bit kernels */
+ 
+ struct fuse_attr {
+-	uint64_t	ino;
+-	uint64_t	size;
+-	uint64_t	blocks;
+-	uint64_t	atime;
+-	uint64_t	mtime;
+-	uint64_t	ctime;
+-	uint32_t	atimensec;
+-	uint32_t	mtimensec;
+-	uint32_t	ctimensec;
+-	uint32_t	mode;
+-	uint32_t	nlink;
+-	uint32_t	uid;
+-	uint32_t	gid;
+-	uint32_t	rdev;
+-	uint32_t	blksize;
+-	uint32_t	flags;
++	__u64	ino;
++	__u64	size;
++	__u64	blocks;
++	__u64	atime;
++	__u64	mtime;
++	__u64	ctime;
++	__u32	atimensec;
++	__u32	mtimensec;
++	__u32	ctimensec;
++	__u32	mode;
++	__u32	nlink;
++	__u32	uid;
++	__u32	gid;
++	__u32	rdev;
++	__u32	blksize;
++	__u32	flags;
+ };
+ 
+ struct fuse_kstatfs {
+-	uint64_t	blocks;
+-	uint64_t	bfree;
+-	uint64_t	bavail;
+-	uint64_t	files;
+-	uint64_t	ffree;
+-	uint32_t	bsize;
+-	uint32_t	namelen;
+-	uint32_t	frsize;
+-	uint32_t	padding;
+-	uint32_t	spare[6];
++	__u64	blocks;
++	__u64	bfree;
++	__u64	bavail;
++	__u64	files;
++	__u64	ffree;
++	__u32	bsize;
++	__u32	namelen;
++	__u32	frsize;
++	__u32	padding;
++	__u32	spare[6];
+ };
+ 
+ struct fuse_file_lock {
+-	uint64_t	start;
+-	uint64_t	end;
+-	uint32_t	type;
+-	uint32_t	pid; /* tgid */
++	__u64	start;
++	__u64	end;
++	__u32	type;
++	__u32	pid; /* tgid */
+ };
+ 
+ /**
+@@ -562,149 +558,150 @@ enum fuse_notify_code {
+ #define FUSE_COMPAT_ENTRY_OUT_SIZE 120
+ 
+ struct fuse_entry_out {
+-	uint64_t	nodeid;		/* Inode ID */
+-	uint64_t	generation;	/* Inode generation: nodeid:gen must
+-					   be unique for the fs's lifetime */
+-	uint64_t	entry_valid;	/* Cache timeout for the name */
+-	uint64_t	attr_valid;	/* Cache timeout for the attributes */
+-	uint32_t	entry_valid_nsec;
+-	uint32_t	attr_valid_nsec;
++	__u64	nodeid;		/* Inode ID */
++	__u64	generation;	/* Inode generation: nodeid:gen must
++				 * be unique for the fs's lifetime
++				 */
++	__u64	entry_valid;	/* Cache timeout for the name */
++	__u64	attr_valid;	/* Cache timeout for the attributes */
++	__u32	entry_valid_nsec;
++	__u32	attr_valid_nsec;
+ 	struct fuse_attr attr;
+ };
+ 
+ struct fuse_forget_in {
+-	uint64_t	nlookup;
++	__u64	nlookup;
+ };
+ 
+ struct fuse_forget_one {
+-	uint64_t	nodeid;
+-	uint64_t	nlookup;
++	__u64	nodeid;
++	__u64	nlookup;
+ };
+ 
+ struct fuse_batch_forget_in {
+-	uint32_t	count;
+-	uint32_t	dummy;
++	__u32	count;
++	__u32	dummy;
+ };
+ 
+ struct fuse_getattr_in {
+-	uint32_t	getattr_flags;
+-	uint32_t	dummy;
+-	uint64_t	fh;
++	__u32	getattr_flags;
++	__u32	dummy;
++	__u64	fh;
+ };
+ 
+ #define FUSE_COMPAT_ATTR_OUT_SIZE 96
+ 
+ struct fuse_attr_out {
+-	uint64_t	attr_valid;	/* Cache timeout for the attributes */
+-	uint32_t	attr_valid_nsec;
+-	uint32_t	dummy;
++	__u64	attr_valid;	/* Cache timeout for the attributes */
++	__u32	attr_valid_nsec;
++	__u32	dummy;
+ 	struct fuse_attr attr;
+ };
+ 
+ #define FUSE_COMPAT_MKNOD_IN_SIZE 8
+ 
+ struct fuse_mknod_in {
+-	uint32_t	mode;
+-	uint32_t	rdev;
+-	uint32_t	umask;
+-	uint32_t	padding;
++	__u32	mode;
++	__u32	rdev;
++	__u32	umask;
++	__u32	padding;
+ };
+ 
+ struct fuse_mkdir_in {
+-	uint32_t	mode;
+-	uint32_t	umask;
++	__u32	mode;
++	__u32	umask;
+ };
+ 
+ struct fuse_rename_in {
+-	uint64_t	newdir;
++	__u64	newdir;
+ };
+ 
+ struct fuse_rename2_in {
+-	uint64_t	newdir;
+-	uint32_t	flags;
+-	uint32_t	padding;
++	__u64	newdir;
++	__u32	flags;
++	__u32	padding;
+ };
+ 
+ struct fuse_link_in {
+-	uint64_t	oldnodeid;
++	__u64	oldnodeid;
+ };
+ 
+ struct fuse_setattr_in {
+-	uint32_t	valid;
+-	uint32_t	padding;
+-	uint64_t	fh;
+-	uint64_t	size;
+-	uint64_t	lock_owner;
+-	uint64_t	atime;
+-	uint64_t	mtime;
+-	uint64_t	ctime;
+-	uint32_t	atimensec;
+-	uint32_t	mtimensec;
+-	uint32_t	ctimensec;
+-	uint32_t	mode;
+-	uint32_t	unused4;
+-	uint32_t	uid;
+-	uint32_t	gid;
+-	uint32_t	unused5;
++	__u32	valid;
++	__u32	padding;
++	__u64	fh;
++	__u64	size;
++	__u64	lock_owner;
++	__u64	atime;
++	__u64	mtime;
++	__u64	ctime;
++	__u32	atimensec;
++	__u32	mtimensec;
++	__u32	ctimensec;
++	__u32	mode;
++	__u32	unused4;
++	__u32	uid;
++	__u32	gid;
++	__u32	unused5;
+ };
+ 
+ struct fuse_open_in {
+-	uint32_t	flags;
+-	uint32_t	open_flags;	/* FUSE_OPEN_... */
++	__u32	flags;
++	__u32	open_flags;	/* FUSE_OPEN_... */
+ };
+ 
+ struct fuse_create_in {
+-	uint32_t	flags;
+-	uint32_t	mode;
+-	uint32_t	umask;
+-	uint32_t	open_flags;	/* FUSE_OPEN_... */
++	__u32	flags;
++	__u32	mode;
++	__u32	umask;
++	__u32	open_flags;	/* FUSE_OPEN_... */
+ };
+ 
+ struct fuse_open_out {
+-	uint64_t	fh;
+-	uint32_t	open_flags;
+-	uint32_t	padding;
++	__u64	fh;
++	__u32	open_flags;
++	__u32	padding;
+ };
+ 
+ struct fuse_release_in {
+-	uint64_t	fh;
+-	uint32_t	flags;
+-	uint32_t	release_flags;
+-	uint64_t	lock_owner;
++	__u64	fh;
++	__u32	flags;
++	__u32	release_flags;
++	__u64	lock_owner;
+ };
+ 
+ struct fuse_flush_in {
+-	uint64_t	fh;
+-	uint32_t	unused;
+-	uint32_t	padding;
+-	uint64_t	lock_owner;
++	__u64	fh;
++	__u32	unused;
++	__u32	padding;
++	__u64	lock_owner;
+ };
+ 
+ struct fuse_read_in {
+-	uint64_t	fh;
+-	uint64_t	offset;
+-	uint32_t	size;
+-	uint32_t	read_flags;
+-	uint64_t	lock_owner;
+-	uint32_t	flags;
+-	uint32_t	padding;
++	__u64	fh;
++	__u64	offset;
++	__u32	size;
++	__u32	read_flags;
++	__u64	lock_owner;
++	__u32	flags;
++	__u32	padding;
+ };
+ 
+ #define FUSE_COMPAT_WRITE_IN_SIZE 24
+ 
+ struct fuse_write_in {
+-	uint64_t	fh;
+-	uint64_t	offset;
+-	uint32_t	size;
+-	uint32_t	write_flags;
+-	uint64_t	lock_owner;
+-	uint32_t	flags;
+-	uint32_t	padding;
++	__u64	fh;
++	__u64	offset;
++	__u32	size;
++	__u32	write_flags;
++	__u64	lock_owner;
++	__u32	flags;
++	__u32	padding;
+ };
+ 
+ struct fuse_write_out {
+-	uint32_t	size;
+-	uint32_t	padding;
++	__u32	size;
++	__u32	padding;
+ };
+ 
+ #define FUSE_COMPAT_STATFS_SIZE 48
+@@ -714,36 +711,36 @@ struct fuse_statfs_out {
+ };
+ 
+ struct fuse_fsync_in {
+-	uint64_t	fh;
+-	uint32_t	fsync_flags;
+-	uint32_t	padding;
++	__u64	fh;
++	__u32	fsync_flags;
++	__u32	padding;
+ };
+ 
+ #define FUSE_COMPAT_SETXATTR_IN_SIZE 8
+ 
+ struct fuse_setxattr_in {
+-	uint32_t	size;
+-	uint32_t	flags;
+-	uint32_t	setxattr_flags;
+-	uint32_t	padding;
++	__u32	size;
++	__u32	flags;
++	__u32	setxattr_flags;
++	__u32	padding;
+ };
+ 
+ struct fuse_getxattr_in {
+-	uint32_t	size;
+-	uint32_t	padding;
++	__u32	size;
++	__u32	padding;
+ };
+ 
+ struct fuse_getxattr_out {
+-	uint32_t	size;
+-	uint32_t	padding;
++	__u32	size;
++	__u32	padding;
+ };
+ 
+ struct fuse_lk_in {
+-	uint64_t	fh;
+-	uint64_t	owner;
++	__u64	fh;
++	__u64	owner;
+ 	struct fuse_file_lock lk;
+-	uint32_t	lk_flags;
+-	uint32_t	padding;
++	__u32	lk_flags;
++	__u32	padding;
+ };
+ 
+ struct fuse_lk_out {
+@@ -751,145 +748,145 @@ struct fuse_lk_out {
+ };
+ 
+ struct fuse_access_in {
+-	uint32_t	mask;
+-	uint32_t	padding;
++	__u32	mask;
++	__u32	padding;
+ };
+ 
+ struct fuse_init_in {
+-	uint32_t	major;
+-	uint32_t	minor;
+-	uint32_t	max_readahead;
+-	uint32_t	flags;
+-	uint32_t	flags2;
+-	uint32_t	unused[11];
++	__u32	major;
++	__u32	minor;
++	__u32	max_readahead;
++	__u32	flags;
++	__u32	flags2;
++	__u32	unused[11];
+ };
+ 
+ #define FUSE_COMPAT_INIT_OUT_SIZE 8
+ #define FUSE_COMPAT_22_INIT_OUT_SIZE 24
+ 
+ struct fuse_init_out {
+-	uint32_t	major;
+-	uint32_t	minor;
+-	uint32_t	max_readahead;
+-	uint32_t	flags;
+-	uint16_t	max_background;
+-	uint16_t	congestion_threshold;
+-	uint32_t	max_write;
+-	uint32_t	time_gran;
+-	uint16_t	max_pages;
+-	uint16_t	map_alignment;
+-	uint32_t	flags2;
+-	uint32_t	unused[7];
++	__u32	major;
++	__u32	minor;
++	__u32	max_readahead;
++	__u32	flags;
++	__u16	max_background;
++	__u16	congestion_threshold;
++	__u32	max_write;
++	__u32	time_gran;
++	__u16	max_pages;
++	__u16	map_alignment;
++	__u32	flags2;
++	__u32	unused[7];
+ };
+ 
+ #define CUSE_INIT_INFO_MAX 4096
+ 
+ struct cuse_init_in {
+-	uint32_t	major;
+-	uint32_t	minor;
+-	uint32_t	unused;
+-	uint32_t	flags;
++	__u32	major;
++	__u32	minor;
++	__u32	unused;
++	__u32	flags;
+ };
+ 
+ struct cuse_init_out {
+-	uint32_t	major;
+-	uint32_t	minor;
+-	uint32_t	unused;
+-	uint32_t	flags;
+-	uint32_t	max_read;
+-	uint32_t	max_write;
+-	uint32_t	dev_major;		/* chardev major */
+-	uint32_t	dev_minor;		/* chardev minor */
+-	uint32_t	spare[10];
++	__u32	major;
++	__u32	minor;
++	__u32	unused;
++	__u32	flags;
++	__u32	max_read;
++	__u32	max_write;
++	__u32	dev_major;		/* chardev major */
++	__u32	dev_minor;		/* chardev minor */
++	__u32	spare[10];
+ };
+ 
+ struct fuse_interrupt_in {
+-	uint64_t	unique;
++	__u64	unique;
+ };
+ 
+ struct fuse_bmap_in {
+-	uint64_t	block;
+-	uint32_t	blocksize;
+-	uint32_t	padding;
++	__u64	block;
++	__u32	blocksize;
++	__u32	padding;
+ };
+ 
+ struct fuse_bmap_out {
+-	uint64_t	block;
++	__u64	block;
+ };
+ 
+ struct fuse_ioctl_in {
+-	uint64_t	fh;
+-	uint32_t	flags;
+-	uint32_t	cmd;
+-	uint64_t	arg;
+-	uint32_t	in_size;
+-	uint32_t	out_size;
++	__u64	fh;
++	__u32	flags;
++	__u32	cmd;
++	__u64	arg;
++	__u32	in_size;
++	__u32	out_size;
+ };
+ 
+ struct fuse_ioctl_iovec {
+-	uint64_t	base;
+-	uint64_t	len;
++	__u64	base;
++	__u64	len;
+ };
+ 
+ struct fuse_ioctl_out {
+-	int32_t		result;
+-	uint32_t	flags;
+-	uint32_t	in_iovs;
+-	uint32_t	out_iovs;
++	__s32	result;
++	__u32	flags;
++	__u32	in_iovs;
++	__u32	out_iovs;
+ };
+ 
+ struct fuse_poll_in {
+-	uint64_t	fh;
+-	uint64_t	kh;
+-	uint32_t	flags;
+-	uint32_t	events;
++	__u64	fh;
++	__u64	kh;
++	__u32	flags;
++	__u32	events;
+ };
+ 
+ struct fuse_poll_out {
+-	uint32_t	revents;
+-	uint32_t	padding;
++	__u32	revents;
++	__u32	padding;
+ };
+ 
+ struct fuse_notify_poll_wakeup_out {
+-	uint64_t	kh;
++	__u64	kh;
+ };
+ 
+ struct fuse_fallocate_in {
+-	uint64_t	fh;
+-	uint64_t	offset;
+-	uint64_t	length;
+-	uint32_t	mode;
+-	uint32_t	padding;
++	__u64	fh;
++	__u64	offset;
++	__u64	length;
++	__u32	mode;
++	__u32	padding;
+ };
+ 
+ struct fuse_in_header {
+-	uint32_t	len;
+-	uint32_t	opcode;
+-	uint64_t	unique;
+-	uint64_t	nodeid;
+-	uint32_t	uid;
+-	uint32_t	gid;
+-	uint32_t	pid;
+-	uint32_t	padding;
++	__u32	len;
++	__u32	opcode;
++	__u64	unique;
++	__u64	nodeid;
++	__u32	uid;
++	__u32	gid;
++	__u32	pid;
++	__u32	padding;
+ };
+ 
+ struct fuse_out_header {
+-	uint32_t	len;
+-	int32_t		error;
+-	uint64_t	unique;
++	__u32	len;
++	__s32		error;
++	__u64	unique;
+ };
+ 
+ struct fuse_dirent {
+-	uint64_t	ino;
+-	uint64_t	off;
+-	uint32_t	namelen;
+-	uint32_t	type;
++	__u64	ino;
++	__u64	off;
++	__u32	namelen;
++	__u32	type;
+ 	char name[];
+ };
+ 
+ /* Align variable length records to 64bit boundary */
+ #define FUSE_REC_ALIGN(x) \
+-	(((x) + sizeof(uint64_t) - 1) & ~(sizeof(uint64_t) - 1))
++	(((x) + sizeof(__u64) - 1) & ~(sizeof(__u64) - 1))
+ 
+ #define FUSE_NAME_OFFSET offsetof(struct fuse_dirent, name)
+ #define FUSE_DIRENT_ALIGN(x) FUSE_REC_ALIGN(x)
+@@ -907,106 +904,106 @@ struct fuse_direntplus {
+ 	FUSE_DIRENT_ALIGN(FUSE_NAME_OFFSET_DIRENTPLUS + (d)->dirent.namelen)
+ 
+ struct fuse_notify_inval_inode_out {
+-	uint64_t	ino;
+-	int64_t		off;
+-	int64_t		len;
++	__u64	ino;
++	__s64	off;
++	__s64	len;
+ };
+ 
+ struct fuse_notify_inval_entry_out {
+-	uint64_t	parent;
+-	uint32_t	namelen;
+-	uint32_t	padding;
++	__u64	parent;
++	__u32	namelen;
++	__u32	padding;
+ };
+ 
+ struct fuse_notify_delete_out {
+-	uint64_t	parent;
+-	uint64_t	child;
+-	uint32_t	namelen;
+-	uint32_t	padding;
++	__u64	parent;
++	__u64	child;
++	__u32	namelen;
++	__u32	padding;
+ };
+ 
+ struct fuse_notify_store_out {
+-	uint64_t	nodeid;
+-	uint64_t	offset;
+-	uint32_t	size;
+-	uint32_t	padding;
++	__u64	nodeid;
++	__u64	offset;
++	__u32	size;
++	__u32	padding;
+ };
+ 
+ struct fuse_notify_retrieve_out {
+-	uint64_t	notify_unique;
+-	uint64_t	nodeid;
+-	uint64_t	offset;
+-	uint32_t	size;
+-	uint32_t	padding;
++	__u64	notify_unique;
++	__u64	nodeid;
++	__u64	offset;
++	__u32	size;
++	__u32	padding;
+ };
+ 
+ /* Matches the size of fuse_write_in */
+ struct fuse_notify_retrieve_in {
+-	uint64_t	dummy1;
+-	uint64_t	offset;
+-	uint32_t	size;
+-	uint32_t	dummy2;
+-	uint64_t	dummy3;
+-	uint64_t	dummy4;
++	__u64	dummy1;
++	__u64	offset;
++	__u32	size;
++	__u32	dummy2;
++	__u64	dummy3;
++	__u64	dummy4;
+ };
+ 
+ /* Device ioctls: */
+ #define FUSE_DEV_IOC_MAGIC		229
+-#define FUSE_DEV_IOC_CLONE		_IOR(FUSE_DEV_IOC_MAGIC, 0, uint32_t)
++#define FUSE_DEV_IOC_CLONE		_IOR(FUSE_DEV_IOC_MAGIC, 0, __u32)
+ 
+ struct fuse_lseek_in {
+-	uint64_t	fh;
+-	uint64_t	offset;
+-	uint32_t	whence;
+-	uint32_t	padding;
++	__u64	fh;
++	__u64	offset;
++	__u32	whence;
++	__u32	padding;
+ };
+ 
+ struct fuse_lseek_out {
+-	uint64_t	offset;
++	__u64	offset;
+ };
+ 
+ struct fuse_copy_file_range_in {
+-	uint64_t	fh_in;
+-	uint64_t	off_in;
+-	uint64_t	nodeid_out;
+-	uint64_t	fh_out;
+-	uint64_t	off_out;
+-	uint64_t	len;
+-	uint64_t	flags;
++	__u64	fh_in;
++	__u64	off_in;
++	__u64	nodeid_out;
++	__u64	fh_out;
++	__u64	off_out;
++	__u64	len;
++	__u64	flags;
+ };
+ 
+ #define FUSE_SETUPMAPPING_FLAG_WRITE (1ull << 0)
+ #define FUSE_SETUPMAPPING_FLAG_READ (1ull << 1)
+ struct fuse_setupmapping_in {
+ 	/* An already open handle */
+-	uint64_t	fh;
++	__u64	fh;
+ 	/* Offset into the file to start the mapping */
+-	uint64_t	foffset;
++	__u64	foffset;
+ 	/* Length of mapping required */
+-	uint64_t	len;
++	__u64	len;
+ 	/* Flags, FUSE_SETUPMAPPING_FLAG_* */
+-	uint64_t	flags;
++	__u64	flags;
+ 	/* Offset in Memory Window */
+-	uint64_t	moffset;
++	__u64	moffset;
+ };
+ 
+ struct fuse_removemapping_in {
+ 	/* number of fuse_removemapping_one follows */
+-	uint32_t        count;
++	__u32	count;
+ };
+ 
+ struct fuse_removemapping_one {
+ 	/* Offset into the dax window start the unmapping */
+-	uint64_t        moffset;
++	__u64	moffset;
+ 	/* Length of mapping required */
+-	uint64_t	len;
++	__u64	len;
+ };
+ 
+ #define FUSE_REMOVEMAPPING_MAX_ENTRY   \
+ 		(PAGE_SIZE / sizeof(struct fuse_removemapping_one))
+ 
+ struct fuse_syncfs_in {
+-	uint64_t	padding;
++	__u64	padding;
+ };
+ 
+ /*
+@@ -1016,8 +1013,8 @@ struct fuse_syncfs_in {
+  * fuse_secctx, name, context
+  */
+ struct fuse_secctx {
+-	uint32_t	size;
+-	uint32_t	padding;
++	__u32	size;
++	__u32	padding;
+ };
+ 
+ /*
+@@ -1027,8 +1024,8 @@ struct fuse_secctx {
+  *
+  */
+ struct fuse_secctx_header {
+-	uint32_t	size;
+-	uint32_t	nr_secctx;
++	__u32	size;
++	__u32	nr_secctx;
+ };
+ 
+ #endif /* _LINUX_FUSE_H */
+-- 
+2.35.1.894.gb6a874cedc-goog
+

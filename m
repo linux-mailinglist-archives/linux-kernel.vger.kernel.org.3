@@ -2,87 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D354DD609
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C23634DD60E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbiCRIYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 04:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
+        id S233695AbiCRIZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbiCRIYh (ORCPT
+        with ESMTP id S233545AbiCRIZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:24:37 -0400
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4B08564B;
-        Fri, 18 Mar 2022 01:23:18 -0700 (PDT)
-Received: by mail-lf1-f45.google.com with SMTP id l20so12892964lfg.12;
-        Fri, 18 Mar 2022 01:23:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Dqb0ePcD+b4TLrpjZ4Tf1aNS6FbhCEj7cj4RHoou8S4=;
-        b=cmSfycSSApQ1TQbGMIjPmMDyEONVNiyf6LmAgV0GeS/RT1z97KAAlAigQphp64vP64
-         erzuQzXEhfLS57UGcK5DipZ5F70yagFKuPsa9iY3LLJ3j8xk2lJb2M8d8zgTBNrRubPZ
-         0QFczaPFbxcyYXEXW+47NZEb4U5YoJtAHZ3N4DQjIlRSowVIbRUs1ZhunJmIc76N99xn
-         8nwTr3WccVW0xtAz9reEtKuDIv/RRjRffeba62XIloj4y3p/cZGWY85853k2Y42NjPJU
-         bnnGzRWkssdvdIT80loKeoDsyTuVxElDFHN4qri/YhqSIP2o4wPUCo/C78AItSm7v9Jk
-         nvrw==
-X-Gm-Message-State: AOAM531X5e/zo1LuHh3e0XHawGEpm5A8EAcow4y6EDbUe4yE8sJFgOiA
-        IcoVDny+QwdraYNk3xXoaqw=
-X-Google-Smtp-Source: ABdhPJxRoKIVXIPH+RNx8CFPaHmYc10pgsp6noaAts7Pr/w3SgSSz8FVUcMbe1YpmF/TWXO/0zsQXQ==
-X-Received: by 2002:ac2:4c45:0:b0:449:fa17:5917 with SMTP id o5-20020ac24c45000000b00449fa175917mr3973606lfk.133.1647591796844;
-        Fri, 18 Mar 2022 01:23:16 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id f15-20020a056512228f00b0044758100491sm743659lfu.116.2022.03.18.01.23.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 01:23:16 -0700 (PDT)
-Message-ID: <99a2766a-610f-a164-a0e4-72d490dc13e4@kernel.org>
-Date:   Fri, 18 Mar 2022 09:23:14 +0100
+        Fri, 18 Mar 2022 04:25:07 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0CF88780;
+        Fri, 18 Mar 2022 01:23:48 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8ED1C100009;
+        Fri, 18 Mar 2022 08:23:44 +0000 (UTC)
+Date:   Fri, 18 Mar 2022 09:23:43 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Wang Hai <wanghai38@huawei.com>
+Cc:     mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] media: platform: Fix build error
+Message-ID: <20220318082343.46m5xmnqmjw6q4s2@uno.localdomain>
+References: <20220318071028.1356775-1-wanghai38@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/4] dt-bindings: power: supply: max17042: Add
- monitored-battery phandle
-Content-Language: en-US
-To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
- <20220318001048.20922-4-sebastian.krzyszkowiak@puri.sm>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220318001048.20922-4-sebastian.krzyszkowiak@puri.sm>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220318071028.1356775-1-wanghai38@huawei.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
-> In order to let the driver know about the characteristics of the monitored
-> battery, allow a standard "monitored-battery" property to be specified.
-> 
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Hello Wang Hai
+
+On Fri, Mar 18, 2022 at 03:10:28PM +0800, Wang Hai wrote:
+> If VIDEO_IMX_MIPI_CSIS is y but VIDEO_DEV is n, building failed:
+>
+> drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_remove':
+> imx-mipi-csis.c:(.text+0x1f0): undefined reference to `v4l2_async_nf_unregister'
+> ld: imx-mipi-csis.c:(.text+0x1f8): undefined reference to `v4l2_async_nf_cleanup'
+> ld: imx-mipi-csis.c:(.text+0x200): undefined reference to `v4l2_async_unregister_subdev'
+>
+> Set VIDEO_IMX_MIPI_CSIS to depend on VIDEO_DEV to fix it
+>
+> Fixes: 4a598f62a03b ("media: platform/*/Kconfig: make manufacturer menus more uniform")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Wang Hai <wanghai38@huawei.com>
+
+Thanks, my understanding is that is fixed in Mauro's VIDEO_DEV rework.
+[PATCH v2 00/67] media: Kconfig/Makefile reorg
+
+
 > ---
->  .../devicetree/bindings/power/supply/maxim,max17042.yaml      | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-
-
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-
-
-Best regards,
-Krzysztof
+>  drivers/media/platform/nxp/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/media/platform/nxp/Kconfig b/drivers/media/platform/nxp/Kconfig
+> index 838abc9766b4..704fcf55697b 100644
+> --- a/drivers/media/platform/nxp/Kconfig
+> +++ b/drivers/media/platform/nxp/Kconfig
+> @@ -6,6 +6,7 @@ comment "NXP drivers"
+>
+>  config VIDEO_IMX_MIPI_CSIS
+>  	tristate "NXP MIPI CSI-2 CSIS receiver found on i.MX7 and i.MX8 models"
+> +	depends on VIDEO_DEV
+>  	select MEDIA_CONTROLLER
+>  	select V4L2_FWNODE
+>  	select VIDEO_V4L2_SUBDEV_API
+> --
+> 2.25.1
+>

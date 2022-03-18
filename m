@@ -2,197 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2E34DE1D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 20:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6C64DE1E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 20:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240366AbiCRTgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 15:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
+        id S240401AbiCRTkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 15:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235675AbiCRTf5 (ORCPT
+        with ESMTP id S240381AbiCRTkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 15:35:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A2A2E9C7;
-        Fri, 18 Mar 2022 12:34:37 -0700 (PDT)
+        Fri, 18 Mar 2022 15:40:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07A210E040
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:38:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60FA8B82535;
-        Fri, 18 Mar 2022 19:34:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6E70C340EF;
-        Fri, 18 Mar 2022 19:34:33 +0000 (UTC)
-Date:   Fri, 18 Mar 2022 15:34:32 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Jan Kara <jack@suse.cz>, "Theodore Ts'o" <tytso@mit.edu>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>
-Subject: [PATCH] tracing: Have type enum modifications copy the strings
-Message-ID: <20220318153432.3984b871@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DD2D61BA3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 19:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C8A8EC340E8;
+        Fri, 18 Mar 2022 19:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647632336;
+        bh=j4D5K4Hhy82WdYf0r53E+7WeQiz17ZwELPCQ/Brt5Hc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=kOBGiu9GXNzFp988TFEhOjDI7KvYD1tm8HHbWZsBniAkdM+z6q+EvdbKYrj6nl9Gt
+         8xkMY0u5KjIfBqoP1QjCJiIs2mszffH44lR2TTElI8RpMyJ+nTxTNB1nWTiEQJh30Z
+         DgV1LpDZ32vbW6T6awfrD/Wel0t29buVGibP9v5mwFIMKsFBy49QM1xq8JcA4aWwZP
+         NibFhLjndA1fmAMZ9eVQtVeFa5VLNqxCKLo3fivhdk8ZZJ4xYN/qchm0LpsoWMpUoq
+         QSc/hGtVvTyX+jsGZN3efyATl+3HOa8IyR9oETRCWtpEveutEUjunhzgAliqnBf2so
+         IWouC0QhTiBlw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B25F6E6D402;
+        Fri, 18 Mar 2022 19:38:56 +0000 (UTC)
+Subject: Re: [GIT PULL] arm64-fixes for 5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YjTQQvDwjwIYQ+Cx@arm.com>
+References: <YjTQQvDwjwIYQ+Cx@arm.com>
+X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
+X-PR-Tracked-Message-Id: <YjTQQvDwjwIYQ+Cx@arm.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
+X-PR-Tracked-Commit-Id: 316e46f65a5497839857db08b6fbf60f568b165a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 34e047aa16c0123bbae8e2f6df33e5ecc1f56601
+Message-Id: <164763233672.31275.2714082286042648418.pr-tracker-bot@kernel.org>
+Date:   Fri, 18 Mar 2022 19:38:56 +0000
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+The pull request you sent on Fri, 18 Mar 2022 18:32:34 +0000:
 
-When an enum is used in the visible parts of a trace event that is
-exported to user space, the user space applications like perf and
-trace-cmd do not have a way to know what the value of the enum is. To
-solve this, at boot up (or module load) the printk formats are modified to
-replace the enum with their numeric value in the string output.
+> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
 
-Array fields of the event are defined by [<nr-elements>] in the type
-portion of the format file so that the user space parsers can correctly
-parse the array into the appropriate size chunks. But in some trace
-events, an enum is used in defining the size of the array, which once
-again breaks the parsing of user space tooling.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/34e047aa16c0123bbae8e2f6df33e5ecc1f56601
 
-This was solved the same way as the print formats were, but it modified
-the type strings of the trace event. This caused crashes in some
-architectures because, as supposed to the print string, is a const string
-value. This was not detected on x86, as it appears that const strings are
-still writable (at least in boot up), but other architectures this is not
-the case, and writing to a const string will cause a kernel fault.
+Thank you!
 
-To fix this, use kstrdup() to copy the type before modifying it. If the
-trace event is for the core kernel there's no need to free it because the
-string will be in use for the life of the machine being on line. For
-modules, create a link list to store all the strings being allocated for
-modules and when the module is removed, free them.
-
-Link: https://lore.kernel.org/all/yt9dr1706b4i.fsf@linux.ibm.com/
-
-Fixes: b3bc8547d3be ("tracing: Have TRACE_DEFINE_ENUM affect trace event types as well")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/trace_events.c | 62 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 61 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index ae9a3b8481f5..0d91152172c9 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -40,6 +40,14 @@ static LIST_HEAD(ftrace_generic_fields);
- static LIST_HEAD(ftrace_common_fields);
- static bool eventdir_initialized;
- 
-+static LIST_HEAD(module_strings);
-+
-+struct module_string {
-+	struct list_head	next;
-+	struct module		*module;
-+	char			*str;
-+};
-+
- #define GFP_TRACE (GFP_KERNEL | __GFP_ZERO)
- 
- static struct kmem_cache *field_cachep;
-@@ -2633,14 +2641,40 @@ static void update_event_printk(struct trace_event_call *call,
- 	}
- }
- 
-+static void add_str_to_module(struct module *module, char *str)
-+{
-+	struct module_string *modstr;
-+
-+	modstr = kmalloc(sizeof(*modstr), GFP_KERNEL);
-+
-+	/*
-+	 * If we failed to allocate memory here, then we'll just
-+	 * let the str memory leak when the module is removed.
-+	 * If this fails to allocate, there's worse problems than
-+	 * a leaked string on module removal.
-+	 */
-+	if (WARN_ON_ONCE(!modstr))
-+		return;
-+
-+	modstr->module = module;
-+	modstr->str = str;
-+
-+	list_add(&modstr->next, &module_strings);
-+}
-+
- static void update_event_fields(struct trace_event_call *call,
- 				struct trace_eval_map *map)
- {
- 	struct ftrace_event_field *field;
- 	struct list_head *head;
- 	char *ptr;
-+	char *str;
- 	int len = strlen(map->eval_string);
- 
-+	/* Dynamic events should never have field maps */
-+	if (WARN_ON_ONCE(call->flags & TRACE_EVENT_FL_DYNAMIC))
-+		return;
-+
- 	head = trace_get_fields(call);
- 	list_for_each_entry(field, head, link) {
- 		ptr = strchr(field->type, '[');
-@@ -2654,9 +2688,26 @@ static void update_event_fields(struct trace_event_call *call,
- 		if (strncmp(map->eval_string, ptr, len) != 0)
- 			continue;
- 
-+		str = kstrdup(field->type, GFP_KERNEL);
-+		if (WARN_ON_ONCE(!str))
-+			return;
-+		ptr = str + (ptr - field->type);
- 		ptr = eval_replace(ptr, map, len);
- 		/* enum/sizeof string smaller than value */
--		WARN_ON_ONCE(!ptr);
-+		if (WARN_ON_ONCE(!ptr)) {
-+			kfree(str);
-+			continue;
-+		}
-+
-+		/*
-+		 * If the event is part of a module, then we need to free the string
-+		 * when the module is removed. Otherwise, it will stay allocated
-+		 * until a reboot.
-+		 */
-+		if (call->module)
-+			add_str_to_module(call->module, str);
-+
-+		field->type = str;
- 	}
- }
- 
-@@ -2883,6 +2934,7 @@ static void trace_module_add_events(struct module *mod)
- static void trace_module_remove_events(struct module *mod)
- {
- 	struct trace_event_call *call, *p;
-+	struct module_string *modstr, *m;
- 
- 	down_write(&trace_event_sem);
- 	list_for_each_entry_safe(call, p, &ftrace_events, list) {
-@@ -2891,6 +2943,14 @@ static void trace_module_remove_events(struct module *mod)
- 		if (call->module == mod)
- 			__trace_remove_event_call(call);
- 	}
-+	/* Check for any strings allocade for this module */
-+	list_for_each_entry_safe(modstr, m, &module_strings, next) {
-+		if (modstr->module != mod)
-+			continue;
-+		list_del(&modstr->next);
-+		kfree(modstr->str);
-+		kfree(modstr);
-+	}
- 	up_write(&trace_event_sem);
- 
- 	/*
 -- 
-2.35.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

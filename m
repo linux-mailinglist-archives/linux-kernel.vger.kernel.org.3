@@ -2,105 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27784DD532
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0794DD56B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233039AbiCRH0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
+        id S233247AbiCRHqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233030AbiCRH0s (ORCPT
+        with ESMTP id S233224AbiCRHqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:26:48 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B972B8838;
-        Fri, 18 Mar 2022 00:25:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id ECBAFCE267D;
-        Fri, 18 Mar 2022 07:25:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E7BC340E8;
-        Fri, 18 Mar 2022 07:25:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647588327;
-        bh=e+TotuW7btKYlP/RTcFASwrb6g5bD2pM9PkeeMWjr6I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RRBVCpXcNRfL1tYBO2ZnXlu7YUhDHCVLicl1BZKnkFpaJlRpRKynQPOskFfYCryyF
-         /R0lOduaXWad5f6OvKhi+he5k4G063b0MAQN2VCV4b6OtesPzhk6et00gyGOuiJRT4
-         Vj+9mRu6RKMvTk94WYWFsdDmpHZ8QgnSliSddps23XEbV+fc9J0reFYxB8/x3IfTsz
-         KZMc3xhIkFfZCNODOzh4FVnJy1UcHC1LzVSayE201cn9+DtpmWTUt4d+WBSLSBVIQL
-         ys/MA0LHBWkIBEGlQK6Vcn7TPdG8RfmnmPT8IpxDVJorGg04eYShsRaDA8iPP8wbAd
-         Emkv5ndiNN53A==
-Message-ID: <93d1365c-2943-56e0-4ba8-6a4fe6194f3b@kernel.org>
-Date:   Fri, 18 Mar 2022 02:25:23 -0500
+        Fri, 18 Mar 2022 03:46:49 -0400
+X-Greylist: delayed 1121 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Mar 2022 00:45:23 PDT
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1810A1F51B3;
+        Fri, 18 Mar 2022 00:45:22 -0700 (PDT)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=50901776b7=fe@dev.tdt.de>)
+        id 1nV70J-000Tmn-MA; Fri, 18 Mar 2022 08:26:31 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1nV70I-000T4V-Ul; Fri, 18 Mar 2022 08:26:30 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id 3F9E8240049;
+        Fri, 18 Mar 2022 08:26:30 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id B16B4240040;
+        Fri, 18 Mar 2022 08:26:29 +0100 (CET)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+        by mail.dev.tdt.de (Postfix) with ESMTP id 3B1FB25F67;
+        Fri, 18 Mar 2022 08:26:29 +0100 (CET)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] MAINTAINERS: add a git repo for the Stratix10 Service
- driver
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-References: <20220223144908.399522-1-dinguyen@kernel.org>
- <4d443650-1db3-fced-3167-e3476b6e20aa@redhat.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <4d443650-1db3-fced-3167-e3476b6e20aa@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 18 Mar 2022 08:26:29 +0100
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Eckert.Florian@googlemail.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v4 1/2] leds: ktd20xx: Extension of the KTD20xx family of
+ LED drivers from Kinetic
+In-Reply-To: <20220212120857.GJ20866@duo.ucw.cz>
+References: <20220121140150.1729-1-fe@dev.tdt.de>
+ <20220121140150.1729-2-fe@dev.tdt.de>
+ <CAHp75Vd4pwFXoF=xS5cskM2GDNb6c6RXTYo3j3FLP+nuQVoRyg@mail.gmail.com>
+ <20220212120857.GJ20866@duo.ucw.cz>
+Message-ID: <7c973f04b4ecf1cd88d69e388edbb7e7@dev.tdt.de>
+X-Sender: fe@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-purgate-ID: 151534::1647588391-000005D6-B4761D2A/0/0
+X-purgate: clean
+X-purgate-type: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Pavel,
 
+Haven't seen the new ktd20xx for the next [1] kernel release yet.
+Do I still have to do something?
 
-On 3/15/22 06:09, Tom Rix wrote:
-> 
-> On 2/23/22 6:49 AM, Dinh Nguyen wrote:
->> Add a git repo entry for the Stratix10 Service driver.
->>
->> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
->> ---
->>   MAINTAINERS | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index ea3e6c914384..5752236bea80 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -9890,6 +9890,7 @@ F:    drivers/firmware/stratix10-rsu.c
->>   F:    drivers/firmware/stratix10-svc.c
->>   F:    include/linux/firmware/intel/stratix10-smc.h
->>   F:    include/linux/firmware/intel/stratix10-svc-client.h
->> +T:    git 
->> git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git
-> 
-> Can you check if your tree is ok ?
-> 
-> Tom
-> 
-> 
->  > git clone 
-> git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git
-> 
-> Cloning into 'linux'...
-> remote: Enumerating objects: 185, done.
-> remote: Counting objects: 100% (185/185), done.
-> remote: Compressing objects: 100% (4/4), done.
-> remote: Total 8723742 (delta 182), reused 181 (delta 181), pack-reused 
-> 8723557
-> Receiving objects: 100% (8723742/8723742), 2.41 GiB | 2.78 MiB/s, done.
-> Resolving deltas: 100% (7135708/7135708), done.
-> warning: remote HEAD refers to nonexistent ref, unable to checkout.
-> 
+Best regards,
 
+Florian Eckert
 
-Hmm...seeing the issue. Not sure what's going on, will troubleshoot.
-
-Dinh
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/log/?h=for-next

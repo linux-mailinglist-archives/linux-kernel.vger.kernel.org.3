@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933304DD5DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30EE54DD5DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233583AbiCRILZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 04:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S233603AbiCRILe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233521AbiCRILT (ORCPT
+        with ESMTP id S233610AbiCRIL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:11:19 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7436C1890E8;
-        Fri, 18 Mar 2022 01:10:01 -0700 (PDT)
-Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KKc8Z1J1ZzfYqT;
-        Fri, 18 Mar 2022 16:08:30 +0800 (CST)
+        Fri, 18 Mar 2022 04:11:29 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D479C25CB9F;
+        Fri, 18 Mar 2022 01:10:10 -0700 (PDT)
+Received: from kwepemi100002.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KKc8l4gMmzfYr1;
+        Fri, 18 Mar 2022 16:08:39 +0800 (CST)
 Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
+ kwepemi100002.china.huawei.com (7.221.188.188) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 18 Mar 2022 16:09:59 +0800
+ 15.1.2308.21; Fri, 18 Mar 2022 16:10:00 +0800
 Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
  (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 18 Mar
- 2022 16:09:58 +0800
+ 2022 16:09:59 +0800
 From:   Yu Kuai <yukuai3@huawei.com>
 To:     <axboe@kernel.dk>, <ming.lei@redhat.com>,
         <andriy.shevchenko@linux.intel.com>, <john.garry@huawei.com>,
         <yukuai3@huawei.com>, <bvanassche@acm.org>
 CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <yi.zhang@huawei.com>
-Subject: [PATCH RFC -next 2/3] blk-mq: call 'bt_wait_ptr()' later in blk_mq_get_tag()
-Date:   Fri, 18 Mar 2022 16:25:04 +0800
-Message-ID: <20220318082505.3025427-3-yukuai3@huawei.com>
+Subject: [PATCH RFC -next 3/3] sbitmap: improve the fairness of waitqueues' wake up
+Date:   Fri, 18 Mar 2022 16:25:05 +0800
+Message-ID: <20220318082505.3025427-4-yukuai3@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220318082505.3025427-1-yukuai3@huawei.com>
 References: <20220318082505.3025427-1-yukuai3@huawei.com>
@@ -54,50 +54,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bt_wait_ptr() will increase 'wait_index', however, if blk_mq_get_tag()
-get a tag successfully after bt_wait_ptr() is called and before
-sbitmap_prepare_to_wait() is called, then the 'ws' is skipped. This
-behavior might cause 8 waitqueues to be unbalanced.
+Currently, same waitqueue might be woken up continuously:
 
-Move bt_wait_ptr() later should reduce the problem when the disk is
-under high io preesure.
+__sbq_wake_up			__sbq_wake_up
+ sbq_wake_ptr -> assume	0	 sbq_wake_ptr -> 0
+ atomic_dec_return
+				 atomic_dec_return
+ atomic_cmpxchg -> succeed
+				 atomic_cmpxchg -> failed
+				  return true
+				__sbq_wake_up
+				 sbq_wake_ptr
+				  atomic_read(&sbq->wake_index) -> 0
+ sbq_index_atomic_inc -> inc to 1
+				  if (waitqueue_active(&ws->wait))
+				   if (wake_index != atomic_read(&sbq->wake_index))
+				    atomic_set(&sbq->wake_index, wake_index); -> reset from 1 to 0
+ wake_up_nr -> wake up first waitqueue
+				    // continue to wake up in first waitqueue
+
+To fix the problem, add a detection in sbq_wake_ptr() to avoid choose
+the same waitqueue; and refactor __sbq_wake_up() to increase
+'wake_index' before updating 'wait_cnt'.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- block/blk-mq-tag.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ lib/sbitmap.c | 50 ++++++++++++++++++++++++++------------------------
+ 1 file changed, 26 insertions(+), 24 deletions(-)
 
-diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-index 68ac23d0b640..a531351ab190 100644
---- a/block/blk-mq-tag.c
-+++ b/block/blk-mq-tag.c
-@@ -131,7 +131,7 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
- {
- 	struct blk_mq_tags *tags = blk_mq_tags_from_data(data);
- 	struct sbitmap_queue *bt;
--	struct sbq_wait_state *ws;
-+	struct sbq_wait_state *ws = NULL;
- 	DEFINE_SBQ_WAIT(wait);
- 	unsigned int tag_offset;
- 	int tag;
-@@ -155,7 +155,6 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
- 	if (data->flags & BLK_MQ_REQ_NOWAIT)
- 		return BLK_MQ_NO_TAG;
+diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+index bde0783e4ace..86b18eed83aa 100644
+--- a/lib/sbitmap.c
++++ b/lib/sbitmap.c
+@@ -583,6 +583,10 @@ static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
+ 		return NULL;
  
--	ws = bt_wait_ptr(bt, data->hctx);
- 	do {
- 		struct sbitmap_queue *bt_prev;
+ 	wake_index = atomic_read(&sbq->wake_index);
++
++	/* If this waitqueue is about to wake up, switch to the next */
++	if (atomic_read(&sbq->ws[wake_index].wait_cnt) <= 0)
++		wake_index = sbq_index_inc(wake_index);
+ 	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
+ 		struct sbq_wait_state *ws = &sbq->ws[wake_index];
  
-@@ -173,7 +172,8 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
- 		tag = __blk_mq_get_tag(data, bt);
- 		if (tag != BLK_MQ_NO_TAG)
- 			break;
+@@ -609,33 +613,31 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
+ 		return false;
+ 
+ 	wait_cnt = atomic_dec_return(&ws->wait_cnt);
+-	if (wait_cnt <= 0) {
+-		int ret;
 -
-+		if (!ws)
-+			ws = bt_wait_ptr(bt, data->hctx);
- 		sbitmap_prepare_to_wait(bt, ws, &wait, TASK_UNINTERRUPTIBLE);
+-		wake_batch = READ_ONCE(sbq->wake_batch);
+-
+-		/*
+-		 * Pairs with the memory barrier in sbitmap_queue_resize() to
+-		 * ensure that we see the batch size update before the wait
+-		 * count is reset.
+-		 */
+-		smp_mb__before_atomic();
++	if (wait_cnt > 0)
++		return false;
++	/*
++	 * Concurrent callers should call this function again
++	 * to wakeup a new batch on a different 'ws'.
++	 */
++	else if (wait_cnt < 0)
++		return true;
  
- 		tag = __blk_mq_get_tag(data, bt);
+-		/*
+-		 * For concurrent callers of this, the one that failed the
+-		 * atomic_cmpxhcg() race should call this function again
+-		 * to wakeup a new batch on a different 'ws'.
+-		 */
+-		ret = atomic_cmpxchg(&ws->wait_cnt, wait_cnt, wake_batch);
+-		if (ret == wait_cnt) {
+-			sbq_index_atomic_inc(&sbq->wake_index);
+-			wake_up_nr(&ws->wait, wake_batch);
+-			return false;
+-		}
++	/*
++	 * Increase 'wake_index' before updating 'wake_batch', in case that
++	 * concurrent callers wake up the same 'ws' again.
++	 */
++	sbq_index_atomic_inc(&sbq->wake_index);
++	wake_batch = READ_ONCE(sbq->wake_batch);
+ 
+-		return true;
+-	}
++	/*
++	 * Pairs with the memory barrier in sbitmap_queue_resize() to
++	 * ensure that we see the batch size update before the wait
++	 * count is reset.
++	 */
++	smp_mb__before_atomic();
+ 
++	atomic_set(&ws->wait_cnt, wake_batch);
++	wake_up_nr(&ws->wait, wake_batch);
+ 	return false;
+ }
+ 
 -- 
 2.31.1
 

@@ -2,160 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C834DDA8B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A224DDA93
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236693AbiCRNaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 09:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S236702AbiCRNbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiCRNaA (ORCPT
+        with ESMTP id S236677AbiCRNbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:30:00 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC7F180041;
-        Fri, 18 Mar 2022 06:28:41 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id n2so6959689plf.4;
-        Fri, 18 Mar 2022 06:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=T8TYfEa1ru48XVVByk53Qi+iGu8psJDdH3gD/7G0awo=;
-        b=oO8RZTq8u1xW4mLhlxq08I5LajCSO8NlGkg5Vwh7s2awgG2XSUSC6a3P+nJy+retw/
-         LCiXMgUxnM9xlH4jpZaRNrRRMHvJWTMjLyl+q1yLDPpi/a1ZLsDQHkrXv40owQEvs73R
-         QGDAMsc3akoKBKZTcgCeaOVSQ87uL4Pk0r3HQDG1hKObjGWQtbU+/+D6tYg7yW9TTbuN
-         8MwUUWNUZdEyCDf3FEsv4T2qZ08fOfSIzj7RQlCn9polG6uoGcRMTsk8v+s1RAY92tdQ
-         UF1ka9AbmXK8VK1k/yH43dJD8o0OsO8hH5v+hOHxqHLJEOS6MG3DRwY/XBpxt+jCrqDH
-         0bcg==
+        Fri, 18 Mar 2022 09:31:39 -0400
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A22E1C3496;
+        Fri, 18 Mar 2022 06:30:19 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id p15so3381360lfk.8;
+        Fri, 18 Mar 2022 06:30:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T8TYfEa1ru48XVVByk53Qi+iGu8psJDdH3gD/7G0awo=;
-        b=gTI5cTMU+q3gvrYk+vNZPgt4+ZovM6e0nCOW0lSMs1xbMPDFdDxq1m4uHu2yrmKk9S
-         LyfM5gONoU79tHWx8DUWbVDwTjapG6H55tdHm8+yNp8TyC3mREF8r94Kfg401zoiuxR5
-         zW5N94NCSVN68kEmG+fW42C7DWjytCIUbHmXgxFbtwvRE2qUiuJ0D/mWaDzBqO550poK
-         pSfzrL7dwc13lSXHmzY2g0Ivpq+E+wNr93Us9Nr6GyKVHSGm8HEpGiW1blLKnYk60l29
-         ubdKk4SW3pX4Qt9YGIlU5VpyjsTEG3BT4vdDCBK8pXdyUwojpTa7UQbv9W46Hr6XygG6
-         VD5A==
-X-Gm-Message-State: AOAM531znkZ9TtDDa+nmdlWOexSocv076iROQGnl4+vEYGRqI2z9cIVL
-        geR0/JbNnlzbYQpZRJLvi3M=
-X-Google-Smtp-Source: ABdhPJwPvzGyge1l9ML5FOiHonA62LG+hA/D3eyn/oX5UYdtkXemyceYIAS/eXsTqa3iLkL5Up/fqA==
-X-Received: by 2002:a17:90b:1bc7:b0:1c6:c3ac:894a with SMTP id oa7-20020a17090b1bc700b001c6c3ac894amr1347498pjb.125.1647610120543;
-        Fri, 18 Mar 2022 06:28:40 -0700 (PDT)
-Received: from odroid ([114.29.23.97])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056a00140a00b004c55d0dcbd1sm9635671pfu.120.2022.03.18.06.28.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 06:28:40 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 13:28:33 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>, linux-arch@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow
- path
-Message-ID: <20220318132833.GB1665646@odroid>
-References: <20220316224548.500123-1-namhyung@kernel.org>
- <20220316224548.500123-3-namhyung@kernel.org>
- <YjSBRNxzaE9c+F/1@boqun-archlinux>
- <20220318132424.GA1665646@odroid>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vq9qQSRELzxWkIVj+hUn/M+Bp2lpfseu1iZAEoXNp4A=;
+        b=GmUxunETtSe0nzMn6wg1Dkh1EgQTI9QoP+c2+ltEPvL+M55FXyrhQnYBXrx+OQldod
+         CqR0gyddT1Hlm3FVmvBFuS2QziKWIEK1ue+NsLzygCJBCbXp8ol+PewrxvOPiz4R74l3
+         bX+jrOT4UC/4zxsPWaTnTbuZ2JnS7dsaDTybTU5v9sOMajD8FA+TYtIUN4rEJrnKfBV9
+         7KAY+GohG4b/zQc191VmgHAockR6mbSMncj/wBjT0KW9AU/TDSZR+vbqrvlzE5p6KJ5J
+         8mdsblVqCAlqR3suRFYGd3H2YUc4M1D8q2+CtLOS+IqtkyWAF4p8QNizroHDFYvr6fDD
+         Zi1Q==
+X-Gm-Message-State: AOAM5320zsqmy6Lc9rbGDIrXxwHjizTxTN1dq+oSrQBoTolvHD61gcWI
+        d+bd2drPaFxYEYY8RB4yy5Q=
+X-Google-Smtp-Source: ABdhPJyYBFJsAEi9Ox3ftSywWBGbh5eMDlIwP/i63FzaSWzPLrE9zOrSgh9JWeoOZQHa1ow2OL1Tcg==
+X-Received: by 2002:a05:6512:689:b0:448:baa7:154e with SMTP id t9-20020a056512068900b00448baa7154emr5791258lfe.230.1647610217735;
+        Fri, 18 Mar 2022 06:30:17 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id h14-20020a05651c158e00b00247fda7844dsm954009ljq.90.2022.03.18.06.30.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 06:30:16 -0700 (PDT)
+Message-ID: <9e82c55a-51cb-1c1d-8314-cef75797f1ae@kernel.org>
+Date:   Fri, 18 Mar 2022 14:30:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220318132424.GA1665646@odroid>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RESEND v7 1/3] dt-bindings: mmc: mtk-sd: extend interrupts and
+ pinctrls properties
+Content-Language: en-US
+To:     Axe Yang <axe.yang@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        angelogioacchino.delregno@collabora.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220317101215.24985-1-axe.yang@mediatek.com>
+ <20220317101215.24985-2-axe.yang@mediatek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220317101215.24985-2-axe.yang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 01:24:24PM +0000, Hyeonggon Yoo wrote:
-> On Fri, Mar 18, 2022 at 08:55:32PM +0800, Boqun Feng wrote:
-> > On Wed, Mar 16, 2022 at 03:45:48PM -0700, Namhyung Kim wrote:
-> > [...]
-> > > @@ -209,6 +210,7 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
-> > >  								long timeout)
-> > >  {
-> > >  	struct semaphore_waiter waiter;
-> > > +	bool tracing = false;
-> > >  
-> > >  	list_add_tail(&waiter.list, &sem->wait_list);
-> > >  	waiter.task = current;
-> > > @@ -220,18 +222,28 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
-> > >  		if (unlikely(timeout <= 0))
-> > >  			goto timed_out;
-> > >  		__set_current_state(state);
-> > > +		if (!tracing) {
-> > > +			trace_contention_begin(sem, 0);
-> > 
-> > This looks a littl ugly ;-/
+On 17/03/2022 11:12, Axe Yang wrote:
+> Extend interrupts and pinctrls for SDIO wakeup interrupt feature.
+> This feature allow SDIO devices alarm asynchronous interrupt to host
+> even when host stop providing clock to SDIO card. An extra wakeup
+> interrupt and pinctrl states for SDIO DAT1 pin state switching are
+> required in this scenario.
 > 
-> I agree this can be simplified a bit.
+> Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+> ---
+>  .../devicetree/bindings/mmc/mtk-sd.yaml       | 24 ++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
 > 
-> > Maybe we can rename __down_common() to
-> > ___down_common() and implement __down_common() as:
-> > 
-> > 	static inline int __sched __down_common(...)
-> > 	{
-> > 		int ret;
-> > 		trace_contention_begin(sem, 0);
-> > 		ret = ___down_common(...);
-> > 		trace_contention_end(sem, ret);
-> > 		return ret;
-> > 	}
-> > 
-> > Thoughts?
-> >
-> 
-> But IMO inlining tracepoints is generally not a good idea.
-> Will increase kernel size a lot.
->
 
-Ah, it's already inlined. Sorry.
 
-> > Regards,
-> > Boqun
-> > 
-> > > +			tracing = true;
-> > > +		}
-> > >  		raw_spin_unlock_irq(&sem->lock);
-> > >  		timeout = schedule_timeout(timeout);
-> > >  		raw_spin_lock_irq(&sem->lock);
-> > > -		if (waiter.up)
-> > > +		if (waiter.up) {
-> > > +			trace_contention_end(sem, 0);
-> > >  			return 0;
-> > > +		}
-> > >  	}
-> > >  
-> > >   timed_out:
-> > > +	if (tracing)
-> > > +		trace_contention_end(sem, -ETIME);
-> > >  	list_del(&waiter.list);
-> > >  	return -ETIME;
-> > >  
-> > >   interrupted:
-> > > +	if (tracing)
-> > > +		trace_contention_end(sem, -EINTR);
-> > >  	list_del(&waiter.list);
-> > >  	return -EINTR;
-> > >  }
-> > > -- 
-> > > 2.35.1.894.gb6a874cedc-goog
-> > > 
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+
+Best regards,
+Krzysztof

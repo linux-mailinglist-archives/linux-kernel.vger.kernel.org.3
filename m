@@ -2,99 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AB54DDAEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C354DDAF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236878AbiCRNwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 09:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S236872AbiCRNw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236879AbiCRNwL (ORCPT
+        with ESMTP id S233947AbiCRNw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:52:11 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870D11EC64
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:50:41 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id f38so15965629ybi.3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:50:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=RUm+BHjHjBqeaGuCk1BVfImjY9k8WWn0rEUOHAWVbOo=;
-        b=ZrYBrPpWBM2RjpWfdZN9f4l+L1hi9t3P5mYL9wSgaSnK/Nk4frepBbdcKmTsYJ7+j9
-         acA3BibaO3H8q9tu+r4/KezhzKIjRZhkaJYnO+QVqGQeI+3frEYAz0cduOKhJfOkTl10
-         DhSBx3Tszo3h8lerAn+l2xf5XufG2sF2BVeFK+XW553fQ5cmA14677xN3tDrSpYuk22g
-         YmIFV7pjnFy5tVazayaancHTRXR5bevoIom+BkA2ZYv+bnpSQR9twbxChqcvGytbidjX
-         WgQwqVZ+Ge6RiV6WMP688SZfIEFpmrrVShgylANpHs7jaEDcVeHXLSnsRQAfd9of9gZz
-         2rNg==
+        Fri, 18 Mar 2022 09:52:58 -0400
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13B914003;
+        Fri, 18 Mar 2022 06:51:39 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id w27so14214540lfa.5;
+        Fri, 18 Mar 2022 06:51:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=RUm+BHjHjBqeaGuCk1BVfImjY9k8WWn0rEUOHAWVbOo=;
-        b=HFEj9sMxQqN05D+3xRkFXeP9Zqy2dC8lM1GR4kzF9f5qORkm9CuV81i+F4eJfjJQ/x
-         WJlTXVykhjrI3rvO9V8nMwReDfWxlmn4QDCj5njQyQdw02jxGZRasQboqyvXrugVYeZK
-         oJ8ZBMKJKxgBtQHk4OyvyxrGmZyQ1F0ot7kT6qg07tthIYhcK/jVcALF4X2png39FUQK
-         ++kLNMK3MWC49DE6nYYsgWXuRA2aP8+sMkzbDktEw31yssCw5Mu1Hs67hqQU5pVfVy7E
-         HOzq5bt9Noq9Enanjr3w194pPLrJv7UxFsWLHSeZCUW5RiH1WBinPyiEClaKEtxC8pW4
-         9OFg==
-X-Gm-Message-State: AOAM5313WfRYL8MkbyEQgwZJh6tNx/V0w2x/0rSyIV9xYgTUgI2mojmo
-        BH0RRBmHaNrHOudTDzxuHobTFm691UYBXzWqdcJ4GCxej1HrBQ==
-X-Google-Smtp-Source: ABdhPJxwwT/RlQuLBSkFMNQJLr+RmryRMNe1lGwD1wjxOkE0Rky/hlLyNr4KYAyZprGwSh1+xFnEWvgtlP3g5AmoM2Q=
-X-Received: by 2002:a25:ab81:0:b0:633:c474:9330 with SMTP id
- v1-20020a25ab81000000b00633c4749330mr1232292ybi.383.1647611440888; Fri, 18
- Mar 2022 06:50:40 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=b9OLIL3FU7iqHaTzdpvx9tQ2K5mp7MDYbZXYpsTAN0g=;
+        b=6sPVF8feYiio5yO03/5gLoyx7CmPsUvcUiO0etZ/0n4kqZ/6HjCpaiamBzuyXc8LBg
+         kQSfgZ0eXeqjujkFepLgGGY1WrpSNgmJD11H0ZsT08M5s5efoHgaEUbDz+3eakYUB1DL
+         9TFSfjsncKneAsEVrKJKzit0NTrXWtvirjAZex59ZQkIwbRysx6aO6aSKO8aaOlEYZwp
+         xyCWfIfn4PswklpvHzMv4nrZxDRwX4TG/Qg65W0VBJSkvPbcM/kloJlWgLqHCP98GjPG
+         DqBtl3CKYG0HYZFBz9R03foZxtJ8CY6oxRFnRaAm/R0TOhGOaVBznDGVv2eUDIHiDQHB
+         4fpQ==
+X-Gm-Message-State: AOAM532Ba6OaPlatfJR9ElgxYBD/q55rtQHu2fb58rEo9i+cWIUvi4q4
+        RPxRuZ/uYdbNAHQsOD12Ni4=
+X-Google-Smtp-Source: ABdhPJx7X5h60uL0s5bvwhRfCRBZftSK7GqJvL9XYD9AW6eJxvInfetEBomo2GlVtSq5cQ5G2u2Xag==
+X-Received: by 2002:a05:6512:1513:b0:448:39c0:def0 with SMTP id bq19-20020a056512151300b0044839c0def0mr5961595lfb.469.1647611497912;
+        Fri, 18 Mar 2022 06:51:37 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id l26-20020a2e701a000000b002463f024de9sm967013ljc.110.2022.03.18.06.51.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 06:51:37 -0700 (PDT)
+Message-ID: <319cf016-55fb-dcd4-9157-ad795c8e68ff@kernel.org>
+Date:   Fri, 18 Mar 2022 14:51:34 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6918:526c:b0:a7:a253:f724 with HTTP; Fri, 18 Mar 2022
- 06:50:40 -0700 (PDT)
-Reply-To: michellegoodman45@gmail.com
-From:   Michelle <michellegood044@gmail.com>
-Date:   Fri, 18 Mar 2022 13:50:40 +0000
-Message-ID: <CAJ5e1jaM3f3V9Rb620p+ZRnXqQ2ncNvm2Z2LTZYUcHYgVwfV6A@mail.gmail.com>
-Subject: Danke
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b29 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [michellegoodman45[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [michellegood044[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [michellegood044[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: phy: mediatek: Add YAML schema for
+ PCIe PHY
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
+        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
+        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
+References: <20220318095417.2016-1-jianjun.wang@mediatek.com>
+ <20220318095417.2016-2-jianjun.wang@mediatek.com>
+ <2e0989c3-7132-6091-5c9e-5dc8d9af22e8@collabora.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <2e0989c3-7132-6091-5c9e-5dc8d9af22e8@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo, ich hoffe du hast meine Nachricht erhalten.
-Ich brauche schnelle Antworten
-Danke.
-Michelle
+On 18/03/2022 12:12, AngeloGioacchino Del Regno wrote:
+> Il 18/03/22 10:54, Jianjun Wang ha scritto:
+>> Add YAML schema documentation for PCIe PHY on MediaTek chipsets.
+>>
+>> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+>> ---
+>>   .../bindings/phy/mediatek,pcie-phy.yaml       | 75 +++++++++++++++++++
+>>   1 file changed, 75 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+>> new file mode 100644
+>> index 000000000000..868bf976568b
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/phy/mediatek,pcie-phy.yaml
+>> @@ -0,0 +1,75 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/phy/mediatek,pcie-phy.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: MediaTek PCIe PHY
+>> +
+>> +maintainers:
+>> +  - Jianjun Wang <jianjun.wang@mediatek.com>
+>> +
+>> +description: |
+>> +  The PCIe PHY supports physical layer functionality for PCIe Gen3 port.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: mediatek,mt8195-pcie-phy
+> 
+> Since I don't expect this driver to be only for MT8195, but to be extended to
+> support some more future MediaTek SoCs and, depending on the number of differences
+> in the possible future Gen4 PHYs, even different gen's, I propose to add a generic
+> compatible as const.
+> 
+> So you'll have something like:
+> 
+> - enum:
+>      - mediatek,mt8195-pcie-phy
+> - const: mediatek,pcie-gen3-phy
+
+I am not sure if this is a good idea. How sure are you that there will
+be no different PCIe Gen3 PHY not compatible with this one?
+
+
+Best regards,
+Krzysztof

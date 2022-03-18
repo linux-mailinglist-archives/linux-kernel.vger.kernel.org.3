@@ -2,144 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEBE4DE46E
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 00:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0130B4DE46B
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 00:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241482AbiCRXMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 19:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
+        id S241416AbiCRXKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 19:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241477AbiCRXMo (ORCPT
+        with ESMTP id S232891AbiCRXKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 19:12:44 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC5DA111DE3;
-        Fri, 18 Mar 2022 16:11:23 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22IN4QwF013108;
-        Fri, 18 Mar 2022 18:04:26 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 22IN4P7s013107;
-        Fri, 18 Mar 2022 18:04:25 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Fri, 18 Mar 2022 18:04:25 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-Message-ID: <20220318230425.GT614@gate.crashing.org>
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com> <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 18 Mar 2022 19:10:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBD5F47EA
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:08:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA32A61642
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 23:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93020C340E8;
+        Fri, 18 Mar 2022 23:08:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647644935;
+        bh=A3Y689zBKJu2EqrYev8FF9G6KLLrbNU5CtFhDlAKkoo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=K4qsOy4oKGHU5z7hHaHsd6/bgIdYpZCLAFxzaTTDq/Z09ALl0lZ9uuxdgJ0hEErOt
+         K2mR/g4LceflzCDAQrtTYTVpUBPfO/3qZ2DZk/JTFDDXRR/cqc4TNvRc2iYi94J/GJ
+         ScAmwIlveiilEFuFeRfGVyC3OL3s9Hg4/cAtaqIcDjD6Sm2+V03qsLGJPr2u3iqoFe
+         xSugWArJvQ6PZFXSXPrYgU4OoM5uzeWeIqyYetfMgYZWnHh+NCfuTq8nLvGPkTIezK
+         NumgA30BPJiK0dtKhO/h4Xbuk/97wgzJ9Rl9qHNbRwYf/nzmW6w4FgD17DAb6DkgFj
+         zQGK8w9fZM5vQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/2] Fix CONFIG_X86_KERNEL_IBT for clang and ld.lld < 14.0.0
+Date:   Fri, 18 Mar 2022 16:07:45 -0700
+Message-Id: <20220318230747.3900772-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 02:39:34PM -0700, Linus Torvalds wrote:
-> I think compiler people should see inline asm as a really *good*
-> thing, because it allows people to have that "I'm going to do
-> something that nobody normal does, look away now" kind of escape
-> clause, letting the compiler concentrate on the things it does best.
+While testing -tip after the IBT bits were merged, our continuous
+integration noticed a crash with clang-11:
 
-There is a reason that we have the GCC inline asm extension at all.  It
-is not because the compiler developers think it is useless ;-)
+https://builds.tuxbuild.com/26ZRIuAPHx1L802ExiYCuLuvMhK/build.log
 
-It often *is* abused, or used in wrong, dangerous ways.  This often will
-go undetected for a long time, for all the same reasons you want to have
-inline asm in the first place (it is an escape hatch, much of what you
-do with it is outside of what the compiler can (and does) know about)!
+This crash is a separate issue from the one that is already being
+checked for with '-fcf-protection=branch -mfentry -pg'. This new crash
+was fixed in clang-12:
 
-> Yes, I realize inline asm isn't something compiler people love. And
-> yes, I realize that it might not give optimal code.
+https://github.com/llvm/llvm-project/commit/e0b89df2e0f0130881bf6c39bf31d7f6aac00e0f
 
-Some of us do love it.  But it should not be used when you do not need
-it, indeed to get better machine code genereated, but much more
-importantly to get more correct code, and much simpler code, simpler to
-read code.  All these things are connected.
+Unfortunately, I have not been able to tease out a simplified reproducer
+for this crash that always triggers. The reproducer in that commit
+message and the reproducer commented in the LLVM test do not trigger all
+the time (at least with the clang-11 that is in Debian/Ubuntu,
+assertions might make the crash always happen but we cannot count on
+that); even the full preprocessed files straight from the kernel source
+do not always trigger a crash.
 
-> (And here I separate 'intrinsic' and generic compiler builtins. I love
-> the builtins that allow me to tell the compiler something, or the
-> compiler to tell me something about the code: __builtin_unreachable()
-> and __builtin_constant_p() are both wonderful examples of those kinds
-> of things)
+As a result, this series proposes just having a hard version check for
+clang 14.0.0 and newer, which will cover this new clang-11 crash and the
+'-fcf-protection=branch -mfentry -pg' crash.
 
-I don't know what you mean when you say "intrinsic".  It is a worse name
-than a "built-in function", which is either not a function or not a
-built-in thing, so that name is rubbish; both "compiler intrinsic" and
-"intrinsic function" are even worse though!
+Adding a check for a version of clang that has not been released yet is
+a little riskier than dynamically testing the clang binary for an issue,
+as it is possible that someone is using/testing a version of clang from
+before a particular issue was fixed, while still having the same version
+number. However, our policy for version checks in the kernel has always
+been to use the final version of clang that will have the issue fixed,
+as people should be upgrading their compilers often if they are using
+prereleased versions.
 
-I like to say "builtin", which has no other meaning in the English
-language, so it cannot be easily understood to have properties it
-doesn't, not just from a misleading name anyway.
+In this particular instance, the '-fcf-protection=branch -mfentry -pg'
+crash has been fixed for over three months, which is plenty of time to
+upgrade:
 
-And yes, __builtin_unreachable() is nicer than having to write "1/0" in
-all those places, it is much clearer.  It is undefined behaviour to
-execute it exactly the same though.
+https://github.com/llvm/llvm-project/commit/dfcf69770bc522b9e411c66454934a37c1f35332
 
-__builtin_constant_p() is a curious one: it returns whether the compiler
-knows its argument to be constant, which is something C does not define
-(*cannot* define).  It is a curse as well as a blessing, moving from
-compiler bversion to compiler version can return false instead of true
-on the same expression, or the other way around, and the same when
-trying out different compilers of course.
+At the moment, I only know of one version of clang that is fairly widely
+used that will show this crash, which is Android's clang 14.0.2. We are
+in the process of getting a newer version (14.0.3) deployed to minimize
+the impact this change will have on various testing groups:
 
-> But an intrinsic for some odd target-specific thing that can't even be
-> portably generalized? Give me inline asm any day.
+https://android-review.googlesource.com/c/kernel/common/+/2032664
+https://android-review.googlesource.com/c/kernel/common/+/2032665
+https://android-review.googlesource.com/c/kernel/common/+/2032666
+https://gitlab.com/Linaro/tuxmake/-/merge_requests/244
 
-The vast majority of compiler builtins are for simple transformations
-that the machine can do, for example with vector instructions.  Using
-such builtins does *not* instruct the compiler to use those machine
-insns, even if the builtin name would suggest that; instead, it asks to
-have code generated that has such semantics.  So it can be optimised by
-the compiler, much more than what can be done with inline asm.
+If for some reason there are any reports of issues after this change,
+feel free to direct them to this cover letter and tell them to upgrade
+their compiler :)
 
-It also can be optimised better by the compiler than if you would
-open-code the transforms (if you ask to frobnicate something, the
-compiler will know you want to frobnicate that thing, and it will not
-always recognise that is what you want if you just write it out in more
-general code).
+The second patch just codifies the result of this discussion and issue:
 
-Well-chosen builtin names are also much more readable than the best
-inline asm can ever be, and it can express much more in a much smaller
-space, without so much opportunity to make mistakes, either.
+https://lore.kernel.org/r/202202241627.EEF3D5D2@keescook/
+https://github.com/ClangBuiltLinux/linux/issues/1606
 
-Builtins are good!
+This is based on -tip x86/core and it has survived an allmodconfig build
+with clang-11 through clang-15 (CC=clang and LLVM=1).
 
-> We can do things with inline asms that the compiler can't even _dream_
-> of, like the whole instruction rewriting thing we use.
+Nathan Chancellor (2):
+  x86/Kconfig: Only enable CONFIG_CC_HAS_IBT for clang >= 14.0.0
+  x86/Kconfig: Only allow CONFIG_X86_KERNEL_IBT with ld.lld >= 14.0.0
 
-Yes.  Inline asm is good as well!  Both things have their places.
-
-Some builtins are not well-conceived.  And some inline asm has the
-same problem :-(
-
-> I'd much rather have a powerful generic concept (eg "asm goto" is
-> lovely) than a specialized intrinsic that does only one thing, and
-> doesn't even do it well because it's untested and badly defined.
-
-Being generally applicable is a double-edged sword.  The trick is to
-have things more general when reasonable, and not when not.
+ arch/x86/Kconfig | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 
-Segher
+base-commit: 2f35e67f621fffc636cb802a4f93fd168cf38274
+-- 
+2.35.1
+

@@ -2,111 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC134DD1CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBEC4DD1D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbiCRAOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 20:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
+        id S230448AbiCRARs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 20:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiCRAOi (ORCPT
+        with ESMTP id S229441AbiCRARp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 20:14:38 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7998D19B08B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:13:21 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id yy13so14029232ejb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J6L19eqyYX4dJCc3XEpRDxDO0mhCk2mFkPhjOK7UiSQ=;
-        b=GeSJ4KYz58tHKZxX3/boqgrHRuZmFHBI9sOAa070OEI0Wapz8rONQwHrT4jv/9jeXJ
-         QQPJq/kVqzlEtaKjMqsYMeNN9AxQ4VoP8L0j5g5eKR3oZfiEpAfpH72syE/k+v1kiPeG
-         Q8ldjmLxpem6iXFiOdEji6Mp7d/vGptTgtNpw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J6L19eqyYX4dJCc3XEpRDxDO0mhCk2mFkPhjOK7UiSQ=;
-        b=29SsQ/pgdiW4NSO8qCOmkL5n6lRqztPvPDXz/9sbrYszNV7gc/F4pkgG9U1V2Va4cn
-         srsioBkgxjGQju4T5NRhvUTgVCKjUP5P5pL70/yqHlhfs7GlCO+rVUNOw5uMVODFWpFi
-         WldIiT758UhOaURrOOqmTEB0AzMZCffVwQfVTt37xtEiGPFOuT6Jdtmoxt2Pk0ZZgQSK
-         P6Z76ro+GY3jUbCIgjaCLJLEUeneXhbO8zN535VjaAY1L6b2BkWMKdSqxvFZtgMIGtqg
-         kyl/0eu3wBbF/65UVlne2xLB0Kf0g0bRjYUOnMsjLDN9R9v1WVhh3VDDESfzeyA7gUGG
-         JzIw==
-X-Gm-Message-State: AOAM531YnKYjE0q7OdXYa6O80UAsb++nYXhtBYagU2eRi+6ohAIXMouM
-        U032f4aSnrltP+rX1Ov4guYODUOsD8CXzXu2mFo=
-X-Google-Smtp-Source: ABdhPJzm7DJ8d7JwYvWanB0pqrncLBZqR/gZp3S+rFbP++fFfvniafPQqZAqi3LUGVMQp1swTOgiJw==
-X-Received: by 2002:a17:907:6e2a:b0:6db:c440:532b with SMTP id sd42-20020a1709076e2a00b006dbc440532bmr6808006ejc.95.1647562399516;
-        Thu, 17 Mar 2022 17:13:19 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id v26-20020a50955a000000b00418ebdb07ddsm3035596eda.56.2022.03.17.17.13.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Mar 2022 17:13:17 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id t11so9657225wrm.5
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:13:17 -0700 (PDT)
-X-Received: by 2002:a05:6000:1704:b0:203:d857:aa7a with SMTP id
- n4-20020a056000170400b00203d857aa7amr6072332wrc.513.1647562397219; Thu, 17
- Mar 2022 17:13:17 -0700 (PDT)
+        Thu, 17 Mar 2022 20:17:45 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FA52C2762
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:16:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647562588; x=1679098588;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=na3iWmZQcNakvcNrOYfMY8FuR11b8l0YzV4or8bGtXo=;
+  b=Qy3XOGIB5p+CokVPWlvjqmA7B8RGBJg0OWkjYs9MQsAS79ANQMcwTJ+a
+   JkgKU8bu58XUTJiGqpg2HUk529DXbgFR4MGIBtinO1RyUX/FqFeDPR/xV
+   pYd3lzy55j388RaraNyc+DFw8eJdqjXDl90xK3+NcfN+kbicrMoXREodQ
+   LbUpFpG2POCHIgXSuOGCfAjFzfwDvLoY4a6hIafpn4+AhblwBFQw20d1T
+   yCR19gA3mxKYsSCQpG3uxNgdQuosqu3YhFK//+U0gaMj+Y1Mvr67XB1Ho
+   gyJ+/pfyz7GPJ0yEIyVp2bAM4CCavXQnHH90wgyQWuAdkReTo1yg9UcPk
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="256740617"
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="256740617"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 17:16:27 -0700
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="715242207"
+Received: from dstanfie-mobl2.amr.corp.intel.com (HELO [10.212.178.19]) ([10.212.178.19])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 17:16:27 -0700
+Message-ID: <dd8be93c-ded6-b962-50d4-96b1c3afb2b7@intel.com>
+Date:   Thu, 17 Mar 2022 17:16:18 -0700
 MIME-Version: 1.0
-References: <1647452154-16361-1-git-send-email-quic_sbillaka@quicinc.com> <1647452154-16361-2-git-send-email-quic_sbillaka@quicinc.com>
-In-Reply-To: <1647452154-16361-2-git-send-email-quic_sbillaka@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 17 Mar 2022 17:13:03 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VAxdo9yjGS5d=W5s5OFo6BG6DyQr6WQxBv9r-vfU7D3Q@mail.gmail.com>
-Message-ID: <CAD=FV=VAxdo9yjGS5d=W5s5OFo6BG6DyQr6WQxBv9r-vfU7D3Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] arm64: dts: qcom: sc7280: rename edp_out label to mdss_edp_out
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Nadav Amit <namit@vmware.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        quic_abhinavk@quicinc.com, quic_khsieh@quicinc.com,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, krzk+dt@kernel.org,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        quic_vproddut@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        "lkp@lists.01.org" <lkp@lists.01.org>,
+        "lkp@intel.com" <lkp@intel.com>,
+        "ying.huang@intel.com" <ying.huang@intel.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>,
+        "fengwei.yin@intel.com" <fengwei.yin@intel.com>,
+        Andy Lutomirski <luto@kernel.org>
+References: <20220317090415.GE735@xsang-OptiPlex-9020>
+ <c85ae95a-6603-ca0d-a653-b3f2f7069e20@intel.com>
+ <3B958B13-75F0-4B81-B8CF-99CD140436EB@vmware.com>
+ <96f9b880-876f-bf4d-8eb0-9ae8bbc8df6d@intel.com>
+ <DC37F01B-A80F-4839-B4FB-C21F64943E64@vmware.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [x86/mm/tlb] 6035152d8e: will-it-scale.per_thread_ops -13.2%
+ regression
+In-Reply-To: <DC37F01B-A80F-4839-B4FB-C21F64943E64@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 3/17/22 13:32, Nadav Amit wrote:
+> I’m not married to this patch, but before a revert it would be good
+> to know why it even matters. I wonder whether you can confirm that
+> reverting the patch (without the rest of the series) even helps. If
+> it does, I’ll try to run some tests to understand what the heck is
+> going on.
 
-On Wed, Mar 16, 2022 at 10:36 AM Sankeerth Billakanti
-<quic_sbillaka@quicinc.com> wrote:
->
-> Rename the edp_out label in the sc7280 platform to mdss_edp_out
-> so that the nodes related to mdss are all grouped together in
-> the board specific files.
->
-> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> ---
->
-> Changes in v5:
->   - Change the order of patches
->   - Modify commit text
->
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+I went back and tested on a "Intel(R) Core(TM) i7-8086K CPU @ 4.00GHz"
+which is evidently a 6-core "Coffee Lake".  It needs retpolines:
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> /sys/devices/system/cpu/vulnerabilities/spectre_v2:Mitigation: Full
+generic retpoline, IBPB: conditional, IBRS_FW, STIBP: conditional, RSB
+filling
+
+I ran the will-it-scale test:
+
+	./malloc1_threads -s 30 -t 12
+
+and took the 30-second average "ops/sec" at the two commits:
+
+	4c1ba3923e:197876
+	6035152d8e:199367 +0.75%
+
+Where bigger is better.  So, a small win, but probably mostly in the
+noise.  The number of IPIs definitely went up, probably 3-4% to get that
+win.
+
+IPI costs go up the more threads you throw at it.  The retpolines do
+too, though because you do *more* of them.  Systems with no retpolines
+get hit harder by the IPI costs and have no upsides from removing the
+retpoline.
+
+So, we've got a small (<1%, possibly zero) win on the bulk of systems
+(which have retpolines).  Newer, retpoline-free systems see a
+double-digit regression.  The bigger the system, the bigger the
+regression (probably).
+
+I tend to think the bigger regression wins and we should probably revert
+the patch, or at least back out its behavior.
+
+Nadav, do you have some different data or a different take?

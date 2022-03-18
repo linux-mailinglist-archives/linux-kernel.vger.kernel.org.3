@@ -2,47 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593444DD419
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 06:13:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C91D14DD41D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 06:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232481AbiCRFOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 01:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S232501AbiCRFQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 01:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232469AbiCRFOg (ORCPT
+        with ESMTP id S232486AbiCRFP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 01:14:36 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F802719
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 22:13:17 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R471e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V7UWWcn_1647580393;
-Received: from B-X3VXMD6M-2058.local(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0V7UWWcn_1647580393)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 18 Mar 2022 13:13:14 +0800
-From:   xhao@linux.alibaba.com
-Reply-To: xhao@linux.alibaba.com
-Subject: Re: [RFC PATCH V1 0/3] mm/damon: Add CMA minotor support
-To:     David Hildenbrand <david@redhat.com>, sj@kernel.org
-Cc:     rongwei.wang@linux.alibaba.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        SeongJae Park <sj@kernel.org>
-References: <cover.1647378112.git.xhao@linux.alibaba.com>
- <a1e0a9e9-07ef-8d1c-a409-2b4fb12ed553@redhat.com>
- <6e6ef9fa-3916-3449-954d-efd63a959019@linux.alibaba.com>
- <d604d77e-636f-eb6d-0014-087d880de80e@redhat.com>
-Message-ID: <611f2ec6-04de-440a-3d54-c2bc34f45cf3@linux.alibaba.com>
-Date:   Fri, 18 Mar 2022 13:13:12 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Fri, 18 Mar 2022 01:15:58 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BFB17334B;
+        Thu, 17 Mar 2022 22:14:40 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id h6so240327ild.4;
+        Thu, 17 Mar 2022 22:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9uzyypCS0fU5RhepHZ/z8afzycS2STBlsgHkw71gu4w=;
+        b=OnFfktuJlXh8ibkbKObEfLL8t7fQG2VVrUpO3/jyob70JsqkXVmGj+Y0kHaUyVFVXL
+         cYdXMKkzVP6VpWHTJC32BAWKLbxqUMfov/5JLKIQCXjfbJzBEbfV+TMVPdlkVdR3mmjT
+         ThMG4+c8a3sBzw+PrxUE1aHEfqEZ0IWZHDikYcxXUipa7eXyZvnOZVvQmC5F0ntkfxfy
+         oRYqd7ysttWmI0xnimbDVXtrPWVNcSlh+Znmu5A6fuFxRO+wEfQlGAoPz2KAUnegHBGO
+         F2+Rl8vkPf6reIKKDx+NFyhTC3lesNM+quvJOxgnICM/bxIe7trNmVGkkks93qhstASB
+         bGSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9uzyypCS0fU5RhepHZ/z8afzycS2STBlsgHkw71gu4w=;
+        b=TPhYwMzXIvk8oTJ5HW6G3WUk9ljex1IUAXXcrwxW0FFGnwT+dpFGE5KVvXyXVnu/kS
+         OldsT27AJjvIgN8BYELdWvTHEIm6Wa4gWxaBOAMF8z+397ypu2xnFJLySX6zCwByKc5z
+         F9geEdhmmY/Dl3Y3+K2zMqRMBF6vn6TbthrEUOsnxpOHSW6Q/s2J+H66IPSXO0imn4Kf
+         zGq8DCbBQ98+diWW4+DltbY9qcv3jf5maYgKjigagR8d4IsCETdAlebzrIrIoTkqYZCZ
+         4hp9drrb9eEJMz/j12SxT8Dk7sL75TrPfh2X7n2HMJzfSh9TNMyZMfn2AmcYvWb74LhS
+         ssDg==
+X-Gm-Message-State: AOAM530//2BzQlY3ktjvfeeUBSH84Bn5U5kjsxElPtdW9x/8Y3MGjA69
+        238BY0Kx4siCFI3X2LU4E/YFGEgWcM3G3Nd21Gg=
+X-Google-Smtp-Source: ABdhPJyl6YDnmNyHwxiDVyH09VIlsh1wXp2n43w1sh4q76Jn4RnEN1bct0MYAledCHMDxnTMG+HmEfKKcr+jehfAHMs=
+X-Received: by 2002:a05:6e02:16c7:b0:2c7:e458:d863 with SMTP id
+ 7-20020a056e0216c700b002c7e458d863mr2856791ilx.71.1647580479470; Thu, 17 Mar
+ 2022 22:14:39 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <d604d77e-636f-eb6d-0014-087d880de80e@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+References: <20220316122419.933957-1-jolsa@kernel.org> <20220316122419.933957-10-jolsa@kernel.org>
+ <CAADnVQ+tNLEtbPY+=sZSoBicdSTx1YLgZJwnNuhnBkUcr5xozQ@mail.gmail.com>
+In-Reply-To: <CAADnVQ+tNLEtbPY+=sZSoBicdSTx1YLgZJwnNuhnBkUcr5xozQ@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 17 Mar 2022 22:14:28 -0700
+Message-ID: <CAEf4BzZtQaiUxQ-sm_hH2qKPRaqGHyOfEsW96DxtBHRaKLoL3Q@mail.gmail.com>
+Subject: Re: [PATCHv3 bpf-next 09/13] libbpf: Add bpf_program__attach_kprobe_multi_opts
+ function
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,48 +77,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 17, 2022 at 8:53 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Mar 16, 2022 at 5:26 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > +
+> > +struct bpf_link *
+> > +bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
+> > +                                     const char *pattern,
+> > +                                     const struct bpf_kprobe_multi_opts *opts)
+> > +{
+> > +       LIBBPF_OPTS(bpf_link_create_opts, lopts);
+> > +       struct kprobe_multi_resolve res = {
+> > +               .pattern = pattern,
+> > +       };
+> > +       struct bpf_link *link = NULL;
+> > +       char errmsg[STRERR_BUFSIZE];
+> > +       const unsigned long *addrs;
+> > +       int err, link_fd, prog_fd;
+> > +       const __u64 *cookies;
+> > +       const char **syms;
+> > +       bool retprobe;
+> > +       size_t cnt;
+> > +
+> > +       if (!OPTS_VALID(opts, bpf_kprobe_multi_opts))
+> > +               return libbpf_err_ptr(-EINVAL);
+> > +
+> > +       syms    = OPTS_GET(opts, syms, false);
+> > +       addrs   = OPTS_GET(opts, addrs, false);
+> > +       cnt     = OPTS_GET(opts, cnt, false);
+> > +       cookies = OPTS_GET(opts, cookies, false);
+> > +
+> > +       if (!pattern && !addrs && !syms)
+> > +               return libbpf_err_ptr(-EINVAL);
+> > +       if (pattern && (addrs || syms || cookies || cnt))
+> > +               return libbpf_err_ptr(-EINVAL);
+> > +       if (!pattern && !cnt)
+> > +               return libbpf_err_ptr(-EINVAL);
+> > +       if (addrs && syms)
+> > +               return libbpf_err_ptr(-EINVAL);
+> > +
+> > +       if (pattern) {
+> > +               err = libbpf_kallsyms_parse(resolve_kprobe_multi_cb, &res);
+> > +               if (err)
+> > +                       goto error;
+> > +               if (!res.cnt) {
+> > +                       err = -ENOENT;
+> > +                       goto error;
+> > +               }
+> > +               addrs = res.addrs;
+> > +               cnt = res.cnt;
+> > +       }
+>
+> Thanks Jiri.
+> Great stuff and a major milestone!
+> I've applied Masami's and your patches to bpf-next.
+>
+> But the above needs more work.
+> Currently test_progs -t kprobe_multi
+> takes 4 seconds on lockdep+debug kernel.
+> Mainly because of the above loop.
+>
+>     18.05%  test_progs       [kernel.kallsyms]   [k]
+> kallsyms_expand_symbol.constprop.4
+>     12.53%  test_progs       libc-2.28.so        [.] _IO_vfscanf
+>      6.31%  test_progs       [kernel.kallsyms]   [k] number
+>      4.66%  test_progs       [kernel.kallsyms]   [k] format_decode
+>      4.65%  test_progs       [kernel.kallsyms]   [k] string_nocheck
+>
+> Single test_skel_api() subtest takes almost a second.
+>
+> A cache inside libbpf probably won't help.
+> Maybe introduce a bpf iterator for kallsyms?
 
-On 3/18/22 12:42 AM, David Hildenbrand wrote:
-> On 17.03.22 08:03, Xin Hao wrote:
->> Hi David,
->>
->> On 3/16/22 11:09 PM, David Hildenbrand wrote:
->>> On 15.03.22 17:37, Xin Hao wrote:
->>>
->>> s/minotor/monitor/
->> Thanks,  i will fix it.
->>>> The purpose of these patches is to add CMA memory monitoring function.
->>>> In some memory tight scenarios, it will be a good choice to release more
->>>> memory by monitoring the CMA memory.
->>> I'm sorry, but it's hard to figure out what the target use case should
->>> be. Who will release CMA memory and how? Who will monitor that? What are
->>> the "some memory tight scenarios"? What's the overall design goal?
->> I may not be describing exactly what  i mean，My intention is to find out
->> how much of the reserved CMA space is actually used and which is unused,
->> For those that are not used, I understand that they can be released by
->> cma_release(). Of course, This is just a little personal thought that I
->> think is helpful for saving memory.
-> Hm, not quite. We can place movable allocations on cma areas, to be
-> migrated away once required for allocations via CMA. So just looking at
-> the pages allocated within a CMA area doesn't really tell you what's
-> actually going on.
+BPF iterator for kallsyms is a great idea! So many benefits:
+  - it should be significantly more efficient *and* simpler than
+parsing /proc/kallsyms;
+  - there were some upstream patches recording ksym length (i.e.,
+function size), don't remember if that ever landed or not, but besides
+that the other complication of even exposing that to user space were
+concerns about /proc/kallsyms format being an ABI. With the BPF
+iterator we can easily provide that symbol size without any breakage.
+This would be great!
+  - we can allow parameterizing iterator with options like: skip or
+include module symbols, specify a set of types of symbols (function,
+variable, etc), etc. This would speed everything up in common cases by
+not even decompressing irrelevant names.
 
-I don't think so,  the damon not looking at the pages allocate, It is 
-constantly monitoring who is using CMA area pages through tracking page 
-access bit
+In short, kallsyms iterator would be an immensely useful for any sort
+of tracing tool that deals with kernel stack traces or kallsyms in
+general.
 
-in the kernel via the kdamond.x thread, So through damon, it can tell us 
-about  the hot and cold distribution of CMA memory.
+But in this particular case, kprobe_multi_resolve_syms()
+implementation is extremely suboptimal. I didn't realize during review
+that kallsyms_lookup_name() is a linear scan... If that's not going to
+be changed to O(log(N)) some time soon, we need to reimplement
+kprobe_multi_resolve_syms(), probably.
 
---cc  SeongJae Park <sj@kernel.org>
+One way would be to sort user strings lexicographically and then do a
+linear scan over all kallsyms, for each symbol perform binary search
+over a sorted array of user strings. Stop once all the positions were
+"filled in" (we'd need to keep a bitmap or bool[], probably). This way
+it's going to be O(MlogN) instead of O(MN) as it is right now.
+
+BTW, Jiri, libbpf.map is supposed to have an alphabetically ordered
+list of functions, it would be good to move
+bpf_program__attach_kprobe_multi_opts a bit higher before libbpf_*
+functions.
 
 
-More about damon, you can refer to this 
-link：https://sjp38.github.io/post/damon/ 
-<https://sjp38.github.io/post/damon/>
 
 >
--- 
-Best Regards!
-Xin Hao
-
+> On the kernel side kprobe_multi_resolve_syms() looks similarly inefficient.
+> I'm not sure whether it would be a bottle neck though.
+>
+> Orthogonal to this issue please add a new stress test
+> to selftest/bpf that attaches to a lot of functions.

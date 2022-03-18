@@ -2,113 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C6D4DDA23
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 355F34DDA26
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236510AbiCRNIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 09:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
+        id S236523AbiCRNJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236503AbiCRNIW (ORCPT
+        with ESMTP id S232685AbiCRNJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:08:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2F22241CE
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:07:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96F8FB82339
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 13:07:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE8FAC340E8;
-        Fri, 18 Mar 2022 13:07:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647608821;
-        bh=1+FGMiZIMnO/PtgJ9+9szNYYRdwNfhYrmezJRHVz2qM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QVYp2/aFhrtwZgyUXZJYFU/8agGpwQVujuvMKIIiQf/CBRRoTTzIqBUb3xGanVHvR
-         GjNCPsTnKTwTH6qz8qnddSmxpEaS4T3T/2dJrmdGHyvr++P1TvbYV7tG+EVjjnf+xD
-         186i4jPBzVlDayjuA5UzNcKatWCmWL8l4XPehLRA=
-Date:   Fri, 18 Mar 2022 14:06:58 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Christian Vogel <vogelchr@vogel.cx>
-Cc:     linux-kernel@vger.kernel.org, zbr@ioremap.net
-Subject: Re: [PATCH 2/2] w1/ds2490: remove dump from ds_recv_status & less
- verbose
-Message-ID: <YjSD8us/T3eHDwB2@kroah.com>
-References: <20220311192833.1792-1-vogelchr@vogel.cx>
- <20220311192833.1792-3-vogelchr@vogel.cx>
+        Fri, 18 Mar 2022 09:09:04 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92B42986D2;
+        Fri, 18 Mar 2022 06:07:45 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id m30so1843350wrb.1;
+        Fri, 18 Mar 2022 06:07:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lHJUxhr0q/fLLgAgJ1hsxiSujF7pe5kTN3TD9F1pmy0=;
+        b=eVU8yYe+T+Yz5OFxsyacazuGOIeIzeIAWBxW+yz4AixAnUQl4NG8dtbNDDUoQcuW5A
+         mArinQxBe505cQ1LSfe3u7HzhddDxGdis20BSGKJIPCTWJSLS1+uG9zI1Ut8w7NF3fSO
+         piOJ5adSJ4D4oMuHbBYSBOa0zwvhC+pSct8SUOCDLynLEXB4nNZwyWGrNGubG7NAPFTx
+         avvzgcn2Qzkq6MWonzFHp3QoCvzWkuxbGIh1VH5uF9jb5mwqBkf7sCD2vsA/SO2jGMvO
+         kd2Ld2EkMx9doZKKhItEyB0bBA2CP5I9fFubIZ6+Sw9tulMP89vvqoBxlAQYzl81dvPE
+         eGKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lHJUxhr0q/fLLgAgJ1hsxiSujF7pe5kTN3TD9F1pmy0=;
+        b=jIk9NGkrGN/AVmrgt15PTLq8eCe5NhAaoMl0X8PUES0e4skfu4rJxFCC9fIRL9MXUo
+         UES8pwsWNmKUfkIlKQo3o+QXlCj8w/wV9fsb4BtI0/PiZOM0cI3bcLpoNjD7P9isZlRf
+         L2vgmBq7cxbCq2Y8NaG+QDOKjoSED3m8dQNAig4ANGEaG4k56gOOWaSribc6oi1IGl6u
+         xE22ISfipfh775h8oZpKZHW+cUeLDrmAz91XbaIPvnNxeLJPD7b+XEnET5LBE/vw5F3p
+         JFchEoOPbbSc2uiy2mo4Osz6fRvQ6gALalorNlpOg7vcZw01NwpoQ4ZSFLpl1+ylZ/1H
+         18tQ==
+X-Gm-Message-State: AOAM530sREK30JE8bC66NS6GQsq58BmSPp7nzrmeBwbCMpsg/5EEEMbi
+        Eyt2ay6dcfzAg0QXtpiFn7k=
+X-Google-Smtp-Source: ABdhPJzWrx+EvHGimSG8O/nEhVa0gGiVeJppmvHNj2YmE8uqF1T4tMrmEhErVyph5Md8Np0fx3vWXQ==
+X-Received: by 2002:a5d:47a3:0:b0:203:8cc3:3647 with SMTP id 3-20020a5d47a3000000b002038cc33647mr8161918wrb.321.1647608864120;
+        Fri, 18 Mar 2022 06:07:44 -0700 (PDT)
+Received: from elementary ([94.73.33.246])
+        by smtp.gmail.com with ESMTPSA id m3-20020a5d64a3000000b00203ed35b0aesm5927702wrp.108.2022.03.18.06.07.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 06:07:43 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 14:07:40 +0100
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     linux-input@vger.kernel.org,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jkosina@suse.cz>, stable@vger.kernel.org,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION] Right touchpad button disabled on Dell 7750
+Message-ID: <20220318130740.GA33535@elementary>
+References: <s5htubv32s8.wl-tiwai@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220311192833.1792-3-vogelchr@vogel.cx>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <s5htubv32s8.wl-tiwai@suse.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 08:28:33PM +0100, Christian Vogel wrote:
-> The ds_recv_status function has a "dump" parameter that is used only
-> once, and mixes in extremely verbose debugging to the kernel log with
-> fetching the status registers.
-> 
-> Removing the logging from ds_recv_status(), making logging explitic at
-> the one place where it was used. Also decoding of the status register
-> is turned off by default, and a module parameter added to re-enable.
-> 
-> Signed-off-by: Christian Vogel <vogelchr@vogel.cx>
-> ---
->  Documentation/w1/masters/ds2490.rst |  7 +++++++
->  drivers/w1/masters/ds2490.c         | 28 +++++++++++++++++++---------
->  2 files changed, 26 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/w1/masters/ds2490.rst b/Documentation/w1/masters/ds2490.rst
-> index 7e5b50f9c0f5..8aa455627aad 100644
-> --- a/Documentation/w1/masters/ds2490.rst
-> +++ b/Documentation/w1/masters/ds2490.rst
-> @@ -70,3 +70,10 @@ Notes and limitations.
->    or the host OS and more likely the host OS.
->  
->  03-06-2008 David Fries <David@Fries.net>
-> +
-> +Kernel Parameter
-> +----------------
-> +
-> +A kernel parameter verbose_dump=1 can be added to make the module
-> +decode the status register on errors in a very verbose way. By default
-> +this verbose decode is turned off.
-> diff --git a/drivers/w1/masters/ds2490.c b/drivers/w1/masters/ds2490.c
-> index f6664fc9596a..354a35726967 100644
-> --- a/drivers/w1/masters/ds2490.c
-> +++ b/drivers/w1/masters/ds2490.c
-> @@ -120,6 +120,10 @@
->  #define EP_DATA_OUT			2
->  #define EP_DATA_IN			3
->  
-> +static int verbose_dump;
-> +module_param(verbose_dump, int, 0644);
-> +MODULE_PARM_DESC(verbose_dump, "Generate a very verbose dump of the status registers on errors.");
-> +
->  struct ds_device {
->  	struct list_head	ds_entry;
->  
-> @@ -222,6 +226,9 @@ static void ds_dump_status(struct ds_device *dev, unsigned char *buf, int count)
->  	dev_info(&dev->udev->dev, "ep_status=0x%x, count=%d, status=%*phC",
->  		dev->ep[EP_STATUS], count, count, buf);
->  
-> +	if (!verbose_dump)
-> +		return;
-> +
+Hi Takashi,
 
-Please just turn all of these dev_info() lines into dev_dbg() and then
-the kernel-wide dynamic debugging logic will be used instead of a custom
-module parameter.
+Thanks for reporting the regression here.
 
-thanks,
+On Fri, Mar 18, 2022 at 12:42:31PM +0100, Takashi Iwai wrote:
+> Hi,
+> 
+> we received a bug report about the regression of the touchpad on Dell
+> 7750 laptop, the right touchpad button is disabled on recent kernels:
+>   https://bugzilla.suse.com/show_bug.cgi?id=1197243
+> 
+> Note that it's a physical button, not a virtual clickpad button.
+> 
+> The regression seems introduced by the upstream commit
+> 37ef4c19b4c659926ce65a7ac709ceaefb211c40 ("Input: clear
+> BTN_RIGHT/MIDDLE on buttonpads") that was backported to stable 5.16.x
+> kernel.
+> 
+> The device is managed by hid-multitouch driver, and the further
+> investigation revealed that it's rather an incorrectly recognized
+> buttonpad property; namely, ID_DG_BUTTONTYPE reports it being 0 =
+> clickable touchpad although it's not.  I built a test kernel to ignore
+> this check and it was confirmed to make the right button working again
+> by the reporter.
+> 
+> Is this check really correct in general?  Or do we need some
+> device-specific quirk?
 
-greg k-h
+A couple of days ago another user with the same laptop (Dell Precision
+7550 or 7750) emailed me to report the issue and I sent him a patch for
+testing.
+
+I he confirms that the patch works, I'll send it to the mailing list.
+
+I believe that your analysis of the regression is correct and I think
+that we'd need to add a quirk for the device.
+
+In case you want to have a look to the patch, I added it to this
+libinput [1] report.
+
+Thanks,
+Jose
+
+[1] https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/726#note_1303623

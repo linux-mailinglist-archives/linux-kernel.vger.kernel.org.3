@@ -2,69 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00434DD8B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A29504DD8BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235645AbiCRLJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 07:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S234824AbiCRLKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 07:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235642AbiCRLJT (ORCPT
+        with ESMTP id S235639AbiCRLJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 07:09:19 -0400
-Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845B3160694
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 04:07:56 -0700 (PDT)
-Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay12.hostedemail.com (Postfix) with ESMTP id D99401208D5;
-        Fri, 18 Mar 2022 11:07:54 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id 7DE6A2000D;
-        Fri, 18 Mar 2022 11:07:53 +0000 (UTC)
-Message-ID: <176f485c00e3c6c03ff794dc47f23702fc592a4f.camel@perches.com>
-Subject: Re: [PATCH] mm: fix typos in comments
-From:   Joe Perches <joe@perches.com>
-To:     Julia Lawall <Julia.Lawall@inria.fr>,
-        Richard Henderson <rth@twiddle.net>
-Cc:     kernel-janitors@vger.kernel.org,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 18 Mar 2022 04:07:52 -0700
-In-Reply-To: <20220318103729.157574-19-Julia.Lawall@inria.fr>
-References: <20220318103729.157574-19-Julia.Lawall@inria.fr>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Fri, 18 Mar 2022 07:09:58 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FAB129247;
+        Fri, 18 Mar 2022 04:08:38 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id gb19so7187592pjb.1;
+        Fri, 18 Mar 2022 04:08:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XCCbLTv9eWPD7TX/cN1YQ5eQJ43DRp8t/kpHrfAaI0E=;
+        b=dM0jr56G5E2Kcay4eeUFdb3j96R+pWouxXgQsgvucvcSbwPsWB4jKOqbLRA8z7mGHa
+         uoK5xhXKqSFjzlaExI3jTLYelpUwdxbgZjrgZon0XwRmACOVm2erl7RG110SE6rt8gCj
+         Y9CqEFJpj/FWimWGrdYchgcsGMtrh6Y1PItqhUv9KdTPCWfMxWMY6G2nmLN1WzBBOknF
+         ZsILZLtOI2E+Wrn6lnO5CoEN2fyHbrKEmZOZ6JLEZp4x3ZjKEnLVNRHtK3bk5k/HxCkG
+         gCPh1Efwy8cFzWKq3j8duAIyORHRSbgW8eW1J4VlNiwzR4iy1as9g94lYEVIqHBUXiWM
+         vKGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XCCbLTv9eWPD7TX/cN1YQ5eQJ43DRp8t/kpHrfAaI0E=;
+        b=jDHCCpvxZGNVOzO8ZgZUh7gC53QMWV11dAAKihaesCOiglBADPj3pzw/j1syQFB4TE
+         HR+oxm162MOAL7ogT7BzZzKOY1SqN1LIYSCcrWm099ox6sXEDmjICiETAbJlGDMfwPVq
+         AjIHm26ggYC+K77VWE2WhJ224L06FYk5bj3T4H1p7MLdHsDni+cSzjYV3W8I9EHs22vm
+         51uBZaQF99hH4p+feX7cgp3ZhYGqvts1gvl+FSLPexTs/VF1TEdhN3gP94/X8SHzzdr5
+         YAPL4ehONM+FCDSuNKHk7Lv4ebJGC4iOMBwv/Jurb3PHnpmGkcfHAklgRrTnPeiFxhyq
+         2GBA==
+X-Gm-Message-State: AOAM533yENgKyahUgKGrA9/t8iiGmbni5nnsmgZm3IAAkG+I9HA2jmdT
+        Is+dyMVjBaENeiwAbofcEII=
+X-Google-Smtp-Source: ABdhPJyvo+nwwwOZ1V/X+2hGkm5fS5cC9ixObTnuhBBc05bkF80hGBPypIamfCdAySXJ2o7SVoIBMg==
+X-Received: by 2002:a17:90b:240e:b0:1b9:2963:d5a1 with SMTP id nr14-20020a17090b240e00b001b92963d5a1mr21076681pjb.227.1647601717775;
+        Fri, 18 Mar 2022 04:08:37 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-1.three.co.id. [180.214.232.1])
+        by smtp.gmail.com with ESMTPSA id lp13-20020a17090b4a8d00b001c18b1114c8sm12128633pjb.10.2022.03.18.04.08.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 04:08:37 -0700 (PDT)
+Message-ID: <abef3e24-2d56-161b-9ed2-95a43292d371@gmail.com>
+Date:   Fri, 18 Mar 2022 18:08:31 +0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.15 00/25] 5.15.30-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220317124526.308079100@linuxfoundation.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220317124526.308079100@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Stat-Signature: x7ke1aw8edz91no8i5thucyw4zq3zu8b
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 7DE6A2000D
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19c3Gj+9w+SnUdOlsv8MpJuj/ml9126C9w=
-X-HE-Tag: 1647601673-641712
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-18 at 11:37 +0100, Julia Lawall wrote:
-> Various spelling mistakes in comments.
-[]
-> diff --git a/arch/alpha/kernel/sys_eiger.c b/arch/alpha/kernel/sys_eiger.c
-[]
-> @@ -148,7 +148,7 @@ eiger_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
->  
->  	/* The SRM console has already calculated out the IRQ value's for
->  	   option cards. As this works lets just read in the value already
-> -	   set and change it to a useable value by Linux.
-> +	   set and change it to a usable value by Linux.
+On 17/03/22 19.45, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.30 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
 
-generally accepted alternative spelling.
+Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0)
+and powerpc (ps3_defconfig, gcc 11.2.0).
 
-https://www.dictionary.com/browse/useable
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-
+-- 
+An old man doll... just what I always wanted! - Clara

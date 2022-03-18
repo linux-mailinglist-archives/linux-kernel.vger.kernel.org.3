@@ -2,59 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770B44DD1A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF824DD1B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbiCRAMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 20:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
+        id S230424AbiCRAMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 20:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbiCRAMI (ORCPT
+        with ESMTP id S230470AbiCRAMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 20:12:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E799E29CE;
-        Thu, 17 Mar 2022 17:10:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=UOOQMXKnC3EL2rzumcle1jcblKs+Qj46u7I1wgq3BX8=; b=ohfbQ4+XpS70ZtH4DYm373Ug5c
-        7SsD8IcKE5B7pJ4NnHkJMEW2kvq6T20I7X+bEW8Xp36helbB+dpPdnNpHEy4fY/ny/o35QCLaPXn4
-        KaSjDMO3bdX94U5UNZEPsp22HLkzAHRnbJCfHqDHY9erDhNQ66EbREQEpD1T+kg8hcUXZXvy1VPcQ
-        Zu2ujJzNGoZ9QHEIfPOTgatfGHmz+WN+QRvGfTBRA3S/Itch7K6T1w0lJzCrE+CIa0Ev/eGWv+jLO
-        PDQ7HAtLNe0SutdkdzN9nwVLEtHvvOMTVqsO4Ifyq9taLXV52HUUcC1qUZ1QtsbL5lELvJt+81/zI
-        kCw0J/nA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nV0CR-007SBE-Rt; Fri, 18 Mar 2022 00:10:36 +0000
-Message-ID: <99d45fe4-53ca-b966-e140-cd68b731292a@infradead.org>
-Date:   Thu, 17 Mar 2022 17:10:29 -0700
+        Thu, 17 Mar 2022 20:12:49 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C296114144A;
+        Thu, 17 Mar 2022 17:11:32 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id A77A9DFEB2;
+        Thu, 17 Mar 2022 17:11:02 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2At0dQUtSkzc; Thu, 17 Mar 2022 17:11:02 -0700 (PDT)
+From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH 0/4] MAX17055 model configuration via DT
+Date:   Fri, 18 Mar 2022 01:10:44 +0100
+Message-Id: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: mmotm 2022-03-16-17-42 uploaded (uml sub-x86_64, sched/fair, RCU)
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     broonie@kernel.org, mhocko@suse.cz, sfr@canb.auug.org.au,
-        linux-next@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        mm-commits@vger.kernel.org,
-        linux-um <linux-um@lists.infradead.org>, paulmck@kernel.org,
-        Richard Weinberger <richard@nod.at>,
-        Johannes Berg <johannes@sipsolutions.net>
-References: <20220317004304.95F89C340E9@smtp.kernel.org>
- <0f622499-36e1-ea43-ddc3-a8b3bb08d34b@infradead.org>
- <20220316213011.8cac447e692283a4b5d97f3d@linux-foundation.org>
- <917e9ce0-c8cf-61b2-d1ba-ebf25bbd979d@infradead.org>
- <20220317165100.2755c5ae6a3a08b7ecb06181@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220317165100.2755c5ae6a3a08b7ecb06181@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,66 +44,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently, there's no way to supply battery characteristics to max17042
+driver on device tree platforms. This series changes that in a way that's
+sufficient to configure MAX17055's m5 EZ algorithm, by using a standard
+"monitored-battery" phandle.
 
+Sebastian Krzyszkowiak (4):
+  power: supply: max17042_battery: Add unit conversion macros
+  power: supply: max17042_battery: use ModelCfg refresh on max17055
+  dt-bindings: power: supply: max17042: Add monitored-battery phandle
+  power: supply: max17042_battery: read battery properties from device
+    tree
 
-On 3/17/22 16:51, Andrew Morton wrote:
-> On Wed, 16 Mar 2022 21:52:44 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
-> 
->>>> In file included from ./arch/x86/include/generated/asm/rwonce.h:1:0,
->>>>                  from ../include/linux/compiler.h:248,
->>>>                  from ../include/linux/kernel.h:20,
->>>>                  from ../include/linux/cpumask.h:10,
->>>>                  from ../include/linux/energy_model.h:4,
->>>>                  from ../kernel/sched/fair.c:23:
->>>> ../include/linux/psi.h: In function ‘cgroup_move_task’:
->>>> ../include/linux/rcupdate.h:414:36: error: dereferencing pointer to incomplete type ‘struct css_set’
->>>>  #define RCU_INITIALIZER(v) (typeof(*(v)) __force __rcu *)(v)
->>>>                                     ^~~~
->>>
->>> Works For Me.  I tried `make x86_64_defconfig' and `make i386_defconfig' too.
->>>
->>> Can you please share that .config, or debug a bit?
->>
->> $ make ARCH=um SUBARCH=x86_64 defconfig
->>
-> 
-> I still can't reproduce this :(
-> 
->> This fixes the build error for me when CONFIG_PSI=n.
-> 
-> I have CONFIG_PSI=n
-
-There was also this report about linux-next, also with CONFIG_PSI=n:
-
-https://lore.kernel.org/all/EF33D230-9A8F-41C5-A38D-95128603224F@linux.ibm.com/
-
-but I just tried to build with the .config file supplied there and didn't
-have any build errors...
-
-If it was just me & mmotm, I could see it being a problem with applying
-patches, but this other report looks the same as my initial report.
-
-I dunno. If it persists, we will track it down and quash it.
-
->> ---
->>  include/linux/psi.h |    3 +++
->>  1 file changed, 3 insertions(+)
->>
->> --- mmotm-2022-0316-1742.orig/include/linux/psi.h
->> +++ mmotm-2022-0316-1742/include/linux/psi.h
->> @@ -53,6 +53,9 @@ static inline int psi_cgroup_alloc(struc
->>  static inline void psi_cgroup_free(struct cgroup *cgrp)
->>  {
->>  }
->> +
->> +#include <linux/cgroup-defs.h>
->> +
->>  static inline void cgroup_move_task(struct task_struct *p, struct css_set *to)
->>  {
->>  	rcu_assign_pointer(p->cgroups, to);
-> 
-> Nothing in -next touches psi.h so I am unable to determine which patch
-> needs fixing :(
+ .../bindings/power/supply/maxim,max17042.yaml |   4 +
+ drivers/power/supply/max17042_battery.c       | 163 ++++++++++++------
+ include/linux/power/max17042_battery.h        |   4 +
+ 3 files changed, 116 insertions(+), 55 deletions(-)
 
 -- 
-~Randy
+2.35.1
+

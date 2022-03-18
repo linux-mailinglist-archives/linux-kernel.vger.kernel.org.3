@@ -2,168 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE1A4DE0B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9B94DE0B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239985AbiCRSGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 14:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S239991AbiCRSGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 14:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239003AbiCRSGB (ORCPT
+        with ESMTP id S239979AbiCRSGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 14:06:01 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E439926D12A;
-        Fri, 18 Mar 2022 11:04:41 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id z3so7565482plg.8;
-        Fri, 18 Mar 2022 11:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WLw5aT9zVs0EZtCEb7VglCzhcgG8kUImgdGoeG9GVtU=;
-        b=h4XjFNIvnTxd7SCcqa4K1v3yCHtVZx1a4IiGsVy5mzRoao7zIm5Z8vE7dex62Wjs/z
-         +BfwO+qlQ2GblYO5rDNVIfyCpcee+MT+ZH4gRIZZLwxDVNTUInwDI1vOXfxDTZQSvZhD
-         dVyMtYaX1BbziVKOmRVkvsfHDd1264JoMAQmf7kqBJkPZeugN7F8JxSHtNEpDxV2N57N
-         nEXlza1aP73Z16QqooUm6u8ml/QPb/oUe9EDhC62fkwnFE7EfI/JboNlFlrxhgKp98m3
-         LnJxglLaS0bNmxyS6Vb0hCU05ZIYpD3U8UEoVHni0e88aH3p8IsN2dme9O4RepGWHF2S
-         CECQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WLw5aT9zVs0EZtCEb7VglCzhcgG8kUImgdGoeG9GVtU=;
-        b=5ukO14L7o6qoLz+gPMZkYRuPpD2KZOrq1hbIOyxrbCP9xb9WqQrP09YGRB+cqVBXYY
-         RoGkviF9HkgPYXI9HmIZeNiNeCRE7MRrnRb+zbkdYtGPfIt1NX2sr9fXtWkxqvC5jPR7
-         pxKVk/+/4yMX2NsmMeQyQSKy5cBfK3QKgHhbAJay13EtXbCG+bOeYkYBMAJPoOnqJHpH
-         j3wTk66l9H/9EnG4ssgwnoXQO78MG0Pc7Glp9TTgsonnQb2cen6V7r5wix92uhgE344A
-         1wSmnWi7pTAwNOx3W1NRgfBTI4BFTi2g/C2RZw0VR38hl1dqkeXGZim5jzyAITm9UfBy
-         nlUg==
-X-Gm-Message-State: AOAM532EMvQgPy8LBnicS1/bosyYu52ujSsYdf91uCGtmAsQ1vIEGXQt
-        nJYiyyTVOfy8hhJgavtvNKIBCoIdFJvGYytYs2c=
-X-Google-Smtp-Source: ABdhPJxHdDv5DRrnv94ev/44w4EUImE7+wTlEpf9gjK2FKARb3LV+FFA3II4f7AWpqyh8dNZs/Kk1ItNxk6tyCE1TE4=
-X-Received: by 2002:a17:90a:3b06:b0:1c6:7140:348d with SMTP id
- d6-20020a17090a3b0600b001c67140348dmr13534192pjc.99.1647626681305; Fri, 18
- Mar 2022 11:04:41 -0700 (PDT)
+        Fri, 18 Mar 2022 14:06:19 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F33270861
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:04:59 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nVGy9-0002dA-6A; Fri, 18 Mar 2022 19:04:57 +0100
+Message-ID: <2ea77295-e8a1-d312-e142-2e238f081993@leemhuis.info>
+Date:   Fri, 18 Mar 2022 19:04:56 +0100
 MIME-Version: 1.0
-References: <20220317234827.447799-1-shy828301@gmail.com> <20220318012948.GE1544202@dread.disaster.area>
- <YjP+oyoT9Y2SFt8L@casper.infradead.org>
-In-Reply-To: <YjP+oyoT9Y2SFt8L@casper.infradead.org>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Fri, 18 Mar 2022 11:04:29 -0700
-Message-ID: <CAHbLzkonVj63+up4-BCPm29yjaf_29asMFJHpXiZp96UjGGNSg@mail.gmail.com>
-Subject: Re: [v2 PATCH 0/8] Make khugepaged collapse readonly FS THP more consistent
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Dave Chinner <david@fromorbit.com>, vbabka@suse.cz,
-        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
-        songliubraving@fb.com, riel@surriel.com, ziy@nvidia.com,
-        akpm@linux-foundation.org, tytso@mit.edu, adilger.kernel@dilger.ca,
-        darrick.wong@oracle.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Satadru Pramanik <satadru@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        ronnie sahlberg <ronniesahlberg@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Zack Rusin <zackr@vmware.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: Regression report for mainline, extra issue [2022-03-18]
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1647626700;4b2687ab;
+X-HE-SMSGID: 1nVGy9-0002dA-6A
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 8:38 PM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Fri, Mar 18, 2022 at 12:29:48PM +1100, Dave Chinner wrote:
-> > On Thu, Mar 17, 2022 at 04:48:19PM -0700, Yang Shi wrote:
-> > >
-> > > Changelog
-> > > v2: * Collected reviewed-by tags from Miaohe Lin.
-> > >     * Fixed build error for patch 4/8.
-> > >
-> > > The readonly FS THP relies on khugepaged to collapse THP for suitable
-> > > vmas.  But it is kind of "random luck" for khugepaged to see the
-> > > readonly FS vmas (see report: https://lore.kernel.org/linux-mm/00f195d4-d039-3cf2-d3a1-a2c88de397a0@suse.cz/) since currently the vmas are registered to khugepaged when:
-> > >   - Anon huge pmd page fault
-> > >   - VMA merge
-> > >   - MADV_HUGEPAGE
-> > >   - Shmem mmap
-> > >
-> > > If the above conditions are not met, even though khugepaged is enabled
-> > > it won't see readonly FS vmas at all.  MADV_HUGEPAGE could be specified
-> > > explicitly to tell khugepaged to collapse this area, but when khugepaged
-> > > mode is "always" it should scan suitable vmas as long as VM_NOHUGEPAGE
-> > > is not set.
-> > >
-> > > So make sure readonly FS vmas are registered to khugepaged to make the
-> > > behavior more consistent.
-> > >
-> > > Registering the vmas in mmap path seems more preferred from performance
-> > > point of view since page fault path is definitely hot path.
-> > >
-> > >
-> > > The patch 1 ~ 7 are minor bug fixes, clean up and preparation patches.
-> > > The patch 8 converts ext4 and xfs.  We may need convert more filesystems,
-> > > but I'd like to hear some comments before doing that.
-> >
-> > After reading through the patchset, I have no idea what this is even
-> > doing or enabling. I can't comment on the last patch and it's effect
-> > on XFS because there's no high level explanation of the
-> > functionality or feature to provide me with the context in which I
-> > should be reviewing this patchset.
-> >
-> > I understand this has something to do with hugepages, but there's no
-> > explaination of exactly where huge pages are going to be used in the
-> > filesystem, what the problems with khugepaged and filesystems are
-> > that this apparently solves, what constraints it places on
-> > filesystems to enable huge pages to be used, etc.
-> >
-> > I'm guessing that the result is that we'll suddenly see huge pages
-> > in the page cache for some undefined set of files in some undefined
-> > set of workloads. But that doesn't help me understand any of the
-> > impacts it may have. e.g:
-> >
-> > - how does this relate to the folio conversion and use of large
-> >   pages in the page cache?
-> > - why do we want two completely separate large page mechanisms in
-> >   the page cache?
-> > - why is this limited to "read only VMAs" and how does the
-> >   filesystem actually ensure that the VMAs are read only?
-> > - what happens if we have a file that huge pages mapped into the
-> >   page cache via read only VMAs then has write() called on it via a
-> >   different file descriptor and so we need to dirty the page cache
-> >   that has huge pages in it?
-> >
-> > I've got a lot more questions, but to save me having to ask them,
-> > how about you explain what this new functionality actually does, why
-> > we need to support it, and why it is better than the fully writeable
-> > huge page support via folios that we already have in the works...
->
-> Back in Puerto Rico when we set up the THP Cabal, we had two competing
-> approaches for using larger pages in the page cache; mine (which turned
-> into folios after I realised that THPs were the wrong model) and Song
-> Liu's CONFIG_READ_ONLY_THP_FOR_FS.  Song's patches were ready earlier
-> (2019) and were helpful in unveiling some of the problems which needed
-> to be fixed.  The filesystem never sees the large pages because they're
-> only used for read-only files, and the pages are already Uptodate at
-> the point they're collapsed into a THP.  So there's no changes needed
-> to the filesystem.
->
-> This collection of patches I'm agnostic about.  As far as I can
-> tell, they're a way to improve how often the ROTHP feature gets used.
-> That doesn't really interest me since we're so close to having proper
-> support for large pages/folios in filesystems.  So I'm not particularly
-> interested in improving a feature that we're about to delete.  But I also
-> don't like it that the filesystem now has to do something; the ROTHP
-> feature is supposed to be completely transparent from the point of view
-> of the filesystem.
+Hi Linus! Just FYI, a couple of regression reports showed up in the
+last few days and I thought you might wanted to known about them
+a bit before releasing 5.17. Hence a quick manual regression
+report focusing on regression from this cycle:
 
-I agree once page cache huge page is fully supported,
-READ_ONLY_THP_FOR_FS could be deprecated. But actually this patchset
-makes khugepaged collapse file THP more consistently. It guarantees
-the THP could be collapsed as long as file THP is supported and
-configured properly and there is suitable file vmas, it is not
-guaranteed by the current code. So it should be useful even though
-READ_ONLY_THP_FOR_FS is gone IMHO.
 
->
+[ *NEW* ] HID: multitouch: right touchpad button is disabled on recent kernels
+------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/s5htubv32s8.wl-tiwai@suse.de/
+
+https://lore.kernel.org/stable/s5htubv32s8.wl-tiwai@suse.de/
+
+
+
+Introduced in 37ef4c19b4c6 (v5.17-rc5)
+
+
+
+Noteworthy links:
+
+* https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/726#note_=1303623
+
+Patch is available and was tested successfully today, but looks
+like José only wants to sent it out for review next week:
+* https://lore.kernel.org/stable/20220318160518.GA2950@elementary/
+
+
+[ *NEW* ] cifs: smb3: incorrect session setup check for multiuser mounts
+
+------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/CAH2r5mth2fYLzU5+oN09ipT7peRdyAiPCF-7_fLPsTpA-fKKLA@mail.gmail.com/
+
+https://lore.kernel.org/linux-cifs/CAH2r5mth2fYLzU5%2BoN09ipT7peRdyAiPCF-7_fLPsTpA-fKKLA@mail.gmail.com/
+
+Introduced in 73f9bfbe3d81 (v5.17-rc1)
+
+There are two patches to fix this, Steve might sent one to you
+soon:
+https://lore.kernel.org/linux-cifs/CANT5p=rkZMhzTd8n74%2BVh22qE11B_Mti5YEscGvpEf25Q39P_A@mail.gmail.com/
+
+
+cifs: Failure to access cifs mount of samba share after resume from sleep
+
+-------------------------------------------------------------------------
+
+https://linux-regtracking.leemhuis.info/regzbot/regression/CAFrh3J9soC36+BVuwHB=g9z_KB5Og2+p2_W+BBoBOZveErz14w@mail.gmail.com/
+https://lore.kernel.org/linux-cifs/CAFrh3J9soC36%2BBVuwHB=g9z_KB5Og2%2Bp2_W%2BBBoBOZveErz14w@mail.gmail.com/
+
+Introduced in v5.16..v5.17-rc5
+
+This was known for a while, but regzbot didn't sort it properly
+into the "regressions from this cycle" category. Sorry about that.
+Anyway:
+
+No fix in sight (devs tried in the past few days) and reporter
+has no way to test patches in the next few days:
+https://lore.kernel.org/linux-cifs/CANT5p=rgz95=wDnZ_ANCaQQbZ1NpW2%2BSE2Dm2XoSk7-dCy0g=g@mail.gmail.com/
+
+
+[ *NEW* ] "vmwgfx: probe of 0000:00:0f.0 failed with error -16" in guest
+
+------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/08e3a9b1-5ed3-be89-1d48-5d1061253789@leemhuis.info/
+
+https://lore.kernel.org/dri-devel/08e3a9b1-5ed3-be89-1d48-5d1061253789@leemhuis.info/
+
+https://bugzilla.kernel.org/show_bug.cgi?id=215678
+
+According to the bugzilla ticket it seems to be a regression from
+this cycle. A fix is available here (included in -next since early
+February :-/ ):
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=27599aacbaefcbf2af7b06b0029459bbf682000d
+
+But according to the patch description its fixing a issue introduced
+in 5.11. Not sure who's right.
+
+
+MISC
+----
+FWIW, I just noticed there is a new regression report in bko
+which I didn't look closer at yet; looks like it's a report
+from a distro (Fedora) kernel, but I'd thought I nevertheless
+briefly mention it:
+
+Bug 215696 - Kernel Oops since kernel-5.17 on dual socket Intel
+Xeon Gold servers - kernel NULL pointer dereference 
+https://bugzilla.kernel.org/show_bug.cgi?id=215696
+
+Ciao, Thorsten

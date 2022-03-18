@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106954DD1FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA7B4DD204
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiCRAku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 20:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
+        id S231237AbiCRArI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 20:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiCRAks (ORCPT
+        with ESMTP id S229482AbiCRArH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 20:40:48 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71913E994F;
-        Thu, 17 Mar 2022 17:39:30 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id j26so9728968wrb.1;
-        Thu, 17 Mar 2022 17:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7gsTkrihCJqnEHPeTUREyY+grPIvlwOYy2RYZrHaUHI=;
-        b=FLPx3v9O3yp794Fc9m8+3Fms180PmpDjbtrLO0Xu1i8qXrAd/9enHHAeShbg4oSb7t
-         md9G09lQyD5JyMP0ZOdKfNy4zxT1/xQDszXVsxP0F/x1wl9DLVVpLchZbrsin0Bk66P1
-         6vop8DECEbBHRj1ikoWDW3T6qUgGUzdvVDfOLlDTvrq+71zXZi95SfBq+N42khglWfuX
-         awl0h72ycsBAS7Vc2MvCwZJOkRdTx/T8lBcQ45hjGnfQ3EcTD2ycbkgFp385z3MYIC6P
-         APBPni1nM3HPfu7A1b4AouHvNpwkbgHS7k3Dshz85Qn2R5p6/e7AC7alVu8nhg2wvHKX
-         yjMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7gsTkrihCJqnEHPeTUREyY+grPIvlwOYy2RYZrHaUHI=;
-        b=h9r3Z7u5YrIMSxiZdaOgTqp+vaTPBcz7edOmEw36FGZa1qStVbF8CnI80P8VDdqOyx
-         z/HGxa9oeAqmBS52HR8cd0cJvFGv9LnJAu5upXRuNfFBV4WoCGg4ze1YWlV6aup2HGCe
-         HQAdA5Ol9llMwGVYu4AjlFdcPt7bDGUZelWmeBASUI6nOc+16RnM6C1k9f14+hZ6f4YW
-         A0/T3t5BGZT5slpgXWiRwSwmRJNIi39mJey54aRwPjotYBY8TAae64rhVHqsNbqiUcmD
-         05Lc5Cz59JCMXgirCsORy9bRuynPvF9Mz4W2Zb2wLuIf0A6bi2ZxybG/D616RJvuUagv
-         NXcA==
-X-Gm-Message-State: AOAM530f17/pLSJ0gxFjPeneVQgbVqe6OslyjcYZjVFBymUzy6dDmpIp
-        62OAli+eD4YJ4XwDXQrclYw=
-X-Google-Smtp-Source: ABdhPJwoQZOjUskNt5TU0ZyJE8Ju4uZEdL59fCI7gDoWZSkg2jY3/M90ILkKoeR3EvRnfG/qXKEatQ==
-X-Received: by 2002:a05:6000:18ac:b0:203:ecad:a203 with SMTP id b12-20020a05600018ac00b00203ecada203mr4249744wri.177.1647563969021;
-        Thu, 17 Mar 2022 17:39:29 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id 2-20020a1c1902000000b00380d3873d6asm5533293wmz.43.2022.03.17.17.39.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 17:39:28 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] scsi: message: fusion: mptbase: remove redundant variable dmp
-Date:   Fri, 18 Mar 2022 00:39:27 +0000
-Message-Id: <20220318003927.81471-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 17 Mar 2022 20:47:07 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C06247C2F
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647564349; x=1679100349;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=ioIK2vITaATAP80hVGQmV1FVy0+JSS1KHG27psb3DZw=;
+  b=fULJiA+Q3zI6eQTJPS9IkXX5SDNrxw4TaEk89fBT+mKGbXpuMryNuZQ3
+   jHDCBRVVcYojcqRgcqt5lLKEX/KC/pIMURJLkVg5SDdhxpWOu0I/3+XbQ
+   C7MNgnMaQXB3ezITuagCIa0tarxwxa70ZAuRXIakgpqC0QDZrd5Z4Qni5
+   fwai13RYIDQXTDOD02RxLRB8LkJpRi/JuSLjB0pdWiMA8+5nF9oHQG9Ub
+   9G+gpTBSCD4u0o36u+G5JAQIw3ivftLkGdrjO9JvKXhW06eqOaAoJYIJR
+   DhminPxYxh1W+0afgvj0HZJ9h0cGTP0DXF6f80j+kdDke5ShbTVWBJuq0
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="256964364"
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="256964364"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 17:45:49 -0700
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="516984044"
+Received: from dstanfie-mobl2.amr.corp.intel.com (HELO [10.212.178.19]) ([10.212.178.19])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 17:45:48 -0700
+Message-ID: <d4f62008-faa7-2931-5690-f29f9544b81b@intel.com>
+Date:   Thu, 17 Mar 2022 17:45:41 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Nadav Amit <namit@vmware.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "lkp@lists.01.org" <lkp@lists.01.org>,
+        "lkp@intel.com" <lkp@intel.com>,
+        "ying.huang@intel.com" <ying.huang@intel.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "zhengjun.xing@linux.intel.com" <zhengjun.xing@linux.intel.com>,
+        "fengwei.yin@intel.com" <fengwei.yin@intel.com>,
+        Andy Lutomirski <luto@kernel.org>
+References: <20220317090415.GE735@xsang-OptiPlex-9020>
+ <c85ae95a-6603-ca0d-a653-b3f2f7069e20@intel.com>
+ <3B958B13-75F0-4B81-B8CF-99CD140436EB@vmware.com>
+ <96f9b880-876f-bf4d-8eb0-9ae8bbc8df6d@intel.com>
+ <DC37F01B-A80F-4839-B4FB-C21F64943E64@vmware.com>
+ <dd8be93c-ded6-b962-50d4-96b1c3afb2b7@intel.com>
+ <A185DAD5-3AA7-445B-B57D-AFAF6B55D144@vmware.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [x86/mm/tlb] 6035152d8e: will-it-scale.per_thread_ops -13.2%
+ regression
+In-Reply-To: <A185DAD5-3AA7-445B-B57D-AFAF6B55D144@vmware.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable dmp is being assigned a value that is never read, the
-variable is redundant and can be removed.
+On 3/17/22 17:20, Nadav Amit wrote:
+> I don’t have other data right now. Let me run some measurements later
+> tonight. I understand your explanation, but I still do not see how
+> much “later” can the lazy check be that it really matters. Just
+> strange.
 
-Cleans up clang scan build warning:
-drivers/message/fusion/mptbase.c:6667:39: warning: Although
-the value stored to 'dmp' is used in the enclosing expression,
-the value is never actually read from 'dmp' [deadcode.DeadStores]
+These will-it-scale tests are really brutal.  They're usually sitting in
+really tight kernel entry/exit loops.  Everything is pounding on kernel
+locks and bouncing cachelines around like crazy.  It might only be a few
+thousand cycles between two successive kernel entries.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/message/fusion/mptbase.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Things like the call_single_queue cacheline have to be dragged from
+other CPUs *and* there are locks that you can spin on.  While a thread
+is doing all this spinning, it is forcing more and more threads into the
+lazy TLB state.  The longer you spin, the more threads have entered the
+kernel, contended on the mmap_lock and gone idle.
 
-diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
-index e90adfa57950..9b3ba2df71c7 100644
---- a/drivers/message/fusion/mptbase.c
-+++ b/drivers/message/fusion/mptbase.c
-@@ -6658,13 +6658,13 @@ static int mpt_summary_proc_show(struct seq_file *m, void *v)
- static int mpt_version_proc_show(struct seq_file *m, void *v)
- {
- 	u8	 cb_idx;
--	int	 scsi, fc, sas, lan, ctl, targ, dmp;
-+	int	 scsi, fc, sas, lan, ctl, targ;
- 	char	*drvname;
- 
- 	seq_printf(m, "%s-%s\n", "mptlinux", MPT_LINUX_VERSION_COMMON);
- 	seq_printf(m, "  Fusion MPT base driver\n");
- 
--	scsi = fc = sas = lan = ctl = targ = dmp = 0;
-+	scsi = fc = sas = lan = ctl = targ = 0;
- 	for (cb_idx = MPT_MAX_PROTOCOL_DRIVERS-1; cb_idx; cb_idx--) {
- 		drvname = NULL;
- 		if (MptCallbacks[cb_idx]) {
--- 
-2.35.1
+Is it really surprising that a loop that can take hundreds of locks can
+take a long time?
 
+                for_each_cpu(cpu, cfd->cpumask) {
+                        csd_lock(csd);
+			...
+		}

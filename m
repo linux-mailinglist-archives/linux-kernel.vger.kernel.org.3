@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CA84DD802
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 445844DD85B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235196AbiCRKkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        id S234109AbiCRKmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235157AbiCRKjL (ORCPT
+        with ESMTP id S235167AbiCRKjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Mar 2022 06:39:11 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4C489086;
-        Fri, 18 Mar 2022 03:37:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EEC8908A;
+        Fri, 18 Mar 2022 03:37:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=WssJ7bXMs5jv5up8s0wWhBYLgBJ2F9Cxv02znl0CftY=;
-  b=cVVkyu1szo66CnHG8WaePyCDVK+WjNeyg2/giz9+iPJl1FtIcFiknoFa
-   RoD7Ks7HXD5aOqCUZxv+kksui7crxnCoEi66obDWll4wIGS1E0Kh4flNR
-   72f2J/sR8bFMBDwqs0qAgALjT22YV7nw6xccX9qEgmp5uR2/P5F364W8v
+  bh=QtFW6Q+pfo+IdSPSw6/HTOFAVn24hdsGX+8wfv0Ib98=;
+  b=G72E4xSQfkVFZTg0XnMPo5ZsuOOfydikSaj5TMGIqVFTRqiztEBRI81S
+   kdJMhnqach7lQSPt0MfEVfFQWDG2Wli4fHgo84rrzolr8UNcXgRUFKgGm
+   aZwlAeVRggpN6hkDjLDw4iJbDInCUZsRRuSpbGPuSoVkg3SSaTSiXoDG9
    c=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.90,192,1643670000"; 
-   d="scan'208";a="8935672"
+   d="scan'208";a="8935673"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:37:40 +0100
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Russell King <linux@armlinux.org.uk>
-Cc:     kernel-janitors@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: rockchip: fix typos in comments
-Date:   Fri, 18 Mar 2022 11:37:27 +0100
-Message-Id: <20220318103729.157574-32-Julia.Lawall@inria.fr>
+To:     Paul Walmsley <paul@pwsan.com>
+Cc:     kernel-janitors@vger.kernel.org,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: OMAP1: fix typos in comments
+Date:   Fri, 18 Mar 2022 11:37:28 +0100
+Message-Id: <20220318103729.157574-33-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,20 +59,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- arch/arm/mach-rockchip/platsmp.c |    2 +-
+ arch/arm/mach-omap1/clock_data.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-rockchip/platsmp.c b/arch/arm/mach-rockchip/platsmp.c
-index 5ec58d004b7d..36915a073c23 100644
---- a/arch/arm/mach-rockchip/platsmp.c
-+++ b/arch/arm/mach-rockchip/platsmp.c
-@@ -137,7 +137,7 @@ static int rockchip_boot_secondary(unsigned int cpu, struct task_struct *idle)
- 		/*
- 		 * We communicate with the bootrom to active the cpus other
- 		 * than cpu0, after a blob of initialize code, they will
--		 * stay at wfe state, once they are actived, they will check
-+		 * stay at wfe state, once they are activated, they will check
- 		 * the mailbox:
- 		 * sram_base_addr + 4: 0xdeadbeaf
- 		 * sram_base_addr + 8: start address for pc
+diff --git a/arch/arm/mach-omap1/clock_data.c b/arch/arm/mach-omap1/clock_data.c
+index 3ebcd96efbff..c761e72563c1 100644
+--- a/arch/arm/mach-omap1/clock_data.c
++++ b/arch/arm/mach-omap1/clock_data.c
+@@ -818,7 +818,7 @@ int __init omap1_clk_init(void)
+ 		omap_readw(ARM_SYSST), omap_readw(DPLL_CTL),
+ 		omap_readw(ARM_CKCTL));
+ 
+-	/* We want to be in syncronous scalable mode */
++	/* We want to be in synchronous scalable mode */
+ 	omap_writew(0x1000, ARM_SYSST);
+ 
+ 
 

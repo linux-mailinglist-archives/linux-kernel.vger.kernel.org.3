@@ -2,142 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E654DDF52
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5944DDF4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:47:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238633AbiCRQuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
+        id S236102AbiCRQtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239301AbiCRQuM (ORCPT
+        with ESMTP id S230195AbiCRQtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:50:12 -0400
-Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEA62F09FF;
-        Fri, 18 Mar 2022 09:48:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1647622129; i=@motorola.com;
-        bh=4tTrL6MoObzkg36pxyIJNl57VWNIKMGSOhfyf5Pe+90=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
-         Content-Transfer-Encoding;
-        b=knoeRLLqLfIxUJLrusdgHQqTv9tvfsTTnjFwq3zg8NoU0692rxt9KwThX0qJyofzq
-         pR6graiEnGOUmEham3VHXJruvU/v2CGAZEHwoohOvDDcJqj84j2SlR31JTEen8hCSb
-         HqGTUgUXWJyuJRI+Uik54w475Lo46DWXgXW86+G8zv0CifvjLEgJE64SNMRAxvnE/N
-         I2ownRTONTtUIFbFA6SdiV6waPGB2jzqhDbzPF9BnkFsNvrCxx3ppGnVynlMRx3BqX
-         c+Nl2N0vcr5gu2c0CbhXq42z6jcO/7hmCupJK8zw+E5JMCWPGEYsueAL5+WPpGW5kL
-         MBf2Rx+WPPHxQ==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPIsWRWlGSWpSXmKPExsUyYU+Ds+6H7SZ
-  JBse/ilkca3vCbrF68VUmi+bF69ksOicuYbe4vGsOm8WiZa3MFgs2PmJ0YPeY3TGT1WPTqk42
-  j/1z17B7PP2xl9nj8ya5ANYo1sy8pPyKBNaMBbfWsRd8Eqi4uGATYwPjTb4uRi4OIYEpTBIbl
-  21kg3CWMEl07lvN3sXIycEmoCax4PUqZhBbREBW4vCV38wgRcwCE5gkGjqOMYIkhAWCJJZd3s
-  AGYrMIqEpcf/EMLM4rYCGx6cQaVhBbQkBe4tSyg0wQcUGJkzOfsIDYzEDx5q2zmScwcs9Ckpq
-  FJLWAkWkVo2VSUWZ6RkluYmaOrqGBga6hoYmuqa6FpV5ilW6iXmmxbmpicYmuoV5iebFeanGx
-  XnFlbnJOil5easkmRmBYphSxRu5gnN3zU+8QoyQHk5Ior8hykyQhvqT8lMqMxOKM+KLSnNTiQ
-  4wyHBxKErxiW4BygkWp6akVaZk5wBiBSUtw8CiJ8IaCpHmLCxJzizPTIVKnGHU5nl69spdZiC
-  UvPy9VSpx34VagIgGQoozSPLgRsHi9xCgrJczLyMDAIMRTkFqUm1mCKv+KUZyDUUmYVxtkCk9
-  mXgncpldARzABHdEoYARyREkiQkqqgUmNWefIbWUufSaTlQca9xgfYVSeKCYSo1Gglnz5t4Nk
-  54yNcskCys2igaWruvguBd9aujLJyif6NAv3sX6266KvLuQs9mNc99fMaXXAHUvxGSz+3T0Sp
-  TUbFDpc+M/WXnS5oWgwuyaVx31yjl29r7Oo6LScKe7lTY+6d8j+e1PMqfLbjV1xlqmwtbV5VJ
-  vek6LMeyu1L32/euJEw2HdItaA2EXl3x78XNJcNi/kzi+V7VazNkTvEol0uMOy8FaMy61iafd
-  ckenzpJ//5JcWe3/8mlPgaovnd365qkbpbphqNdPPRk12TbP1mljzRUvmLe6V3id07tEfyT+c
-  fXMEUzdGCf/Myql+P9f9xd4pSizFGYmGWsxFxYkAtr3+/lIDAAA=
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-31.tower-706.messagelabs.com!1647622128!4665!1
-X-Originating-IP: [144.188.128.67]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.81.10; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 22957 invoked from network); 18 Mar 2022 16:48:48 -0000
-Received: from unknown (HELO ilclpfpp01.lenovo.com) (144.188.128.67)
-  by server-31.tower-706.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 18 Mar 2022 16:48:48 -0000
-Received: from ilclmmrp01.lenovo.com (ilclmmrp01.mot.com [100.65.83.165])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 18 Mar 2022 12:49:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EFE2F09F6;
+        Fri, 18 Mar 2022 09:47:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ilclpfpp01.lenovo.com (Postfix) with ESMTPS id 4KKqhv6gmRzfBZq;
-        Fri, 18 Mar 2022 16:48:47 +0000 (UTC)
-Received: from p1g3.. (unknown [10.45.4.226])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: w36195)
-        by ilclmmrp01.lenovo.com (Postfix) with ESMTPSA id 4KKqhv5b7yzbvDd;
-        Fri, 18 Mar 2022 16:48:47 +0000 (UTC)
-From:   Dan Vacura <w36195@motorola.com>
-To:     linux-usb@vger.kernel.org
-Cc:     stable@vger.kernel.org, Dan Vacura <w36195@motorola.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bhupesh Sharma <bhupesh.sharma@st.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: uvc: Fix crash when encoding data for usb request
-Date:   Fri, 18 Mar 2022 11:47:06 -0500
-Message-Id: <20220318164706.22365-1-w36195@motorola.com>
-X-Mailer: git-send-email 2.32.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8A05B821BD;
+        Fri, 18 Mar 2022 16:47:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA48C340E8;
+        Fri, 18 Mar 2022 16:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647622062;
+        bh=YUFT5u1FeXv5hXDLhIL7XgE3OYqFqFNIcMaARLccIIw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=kYoO3qh0w0xWRjXusTea/pKrQf6FkPqFdhEFSanFDKg9rkB0G/ItfKJKgiuGpZWCC
+         k7cQ/epocZq1Su/kIG76o4pTnnjTBlLi/ITyDiqWs76SfKEwaVrtcHGCoFAsmWTk+c
+         t1bJvr7bQIhEf130sbSZB48FtsdMR77+c8F4FPw/ygcXqws/XTrWK7d0mrIdDF2Bdm
+         JR2fygLxGtI1frXubU7ciOzdSGyhUKBY09WBW7kGyQELLJLFFkvPbjSFZSDLkNyTKT
+         MKuWNjBvALXkjsg9kp/qSNplTRjcE+10k50uZqEgSJRUSXrY7QPQPf6GqyqKR5rfVK
+         3yBD/vnkpPh3Q==
+Date:   Fri, 18 Mar 2022 11:47:40 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        micklorain@protonmail.com,
+        Alex Williamson <alex.williamson@redhat.com>
+Subject: Re: [PATCH v1 1/1] PCI: Enable INTx quirk for ATI PCIe-USB adapter
+Message-ID: <20220318164740.GA816988@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75Veb4BqcGW=sCXEfrJ2ksvnXmjN-XZ5L6ttcQ8SJneg27w@mail.gmail.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the uvcg_video_pump() process, if an error occurs and
-uvcg_queue_cancel() is called, the buffer queue will be cleared out, but
-the current marker (queue->buf_used) of the active buffer (no longer
-active) is not reset. On the next iteration of uvcg_video_pump() the
-stale buf_used count will be used and the logic of min((unsigned
-int)len, buf->bytesused - queue->buf_used) may incorrectly calculate a
-nbytes size, causing an invalid memory access.
+On Fri, Mar 18, 2022 at 12:42:18PM +0200, Andy Shevchenko wrote:
+> On Thu, Mar 17, 2022 at 11:12 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Thu, Mar 17, 2022 at 10:59:28AM +0200, Andy Shevchenko wrote:
+> > > On Wed, Mar 16, 2022 at 04:15:48PM -0500, Bjorn Helgaas wrote:
+> > > > On Wed, Mar 16, 2022 at 06:12:19PM +0200, Andy Shevchenko wrote:
+> > > > > On Wed, Mar 16, 2022 at 06:52:09AM -0500, Bjorn Helgaas wrote:
+> > > > > > On Wed, Mar 16, 2022 at 12:27:57PM +0200, Andy Shevchenko wrote:
+> > > > > > > On Tue, Mar 15, 2022 at 03:22:31PM -0500, Bjorn Helgaas wrote:
+> > > > > > > > On Tue, Mar 15, 2022 at 12:09:08PM +0200, Andy Shevchenko wrote:
+> > > > > > > > > On Mon, Mar 14, 2022 at 02:42:53PM -0500, Bjorn Helgaas wrote:
+> > > > > > > > > > On Mon, Mar 14, 2022 at 12:14:48PM +0200, Andy Shevchenko wrote:
+> > > > > > > > > > > ATI PCIe-USB adapter advertises MSI, but it doesn't work
+> > > > > > > > > > > if INTx is disabled.  Enable the respective quirk as
+> > > > > > > > > > > it's done for other ATI devices on this chipset,
+> > > > > > > > > > >
+> > > > > > > > > > > Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on
+> > > > > > > > > > > PCI devices")
+> > > >
+> > > > > > > > Anyway, I applied this to pci/msi for v5.18 with the following
+> > > > > > > > commit log:
+> > > > > > > >
+> > > > > > > >     PCI: Disable broken MSI on ATI SB600 USB adapters
+> > > > > > > >
+> > > > > > > >     Some ATI SB600 USB adapters advertise MSI, but MSI doesn't
+> > > > > > > >     work if INTx is disabled.  Disable MSI on these adapters.
+> > > > > > >
+> > > > > > > But IIUC MSI is _not_ disabled. That's why I have issued this
+> > > > > > > version of the patch with different commit message. Did I
+> > > > > > > misunderstand something?
+> > > > > >
+> > > > > > Oh, right, of course.  Sorry, I was asleep at the wheel.
+> > > > >
+> > > > > Are you going to fix that?
+> > > >
+> > > > Yes, of course, I'll do something with the commit message after we
+> > > > figure out how to handle PCI_COMMAND_INTX_DISABLE.
+> > > >
+> > > > > > I guess it's just that for these devices, we don't disable INTx
+> > > > > > when enabling MSI.  I can't remember why we disable INTx when
+> > > > > > enabling MSI, but it raises the question of whether it's better to
+> > > > > > leave INTx enabled or to just disable use of MSI completely.
+> > > > >
+> > > > > It's required by specification to disable INTx if I read 6.1.4.3
+> > > > > Enabling Operation correctly.
+> > > >
+> > > > Thanks for the reference; I was looking for something like that.  But
+> > > > I don't think this section requires us to set
+> > > > PCI_COMMAND_INTX_DISABLE.  For the benefit of folks without the spec,
+> > > > PCIe r6.0, sec 6.1.4.3 says:
+> > > >
+> > > >   To maintain backward compatibility, the MSI Enable bit in the
+> > > >   Message Control Register for MSI and the MSI-X Enable bit in the
+> > > >   Message Control Register for MSI-X are each Clear by default (MSI
+> > > >   and MSI-X are both disabled). System configuration software Sets one
+> > > >   of these bits to enable either MSI or MSI-X, but never both
+> > > >   simultaneously. Behavior is undefined if both MSI and MSI-X are
+> > > >   enabled simultaneously. Software disabling either mechanism during
+> > > >   active operation may result in the Function dropping pending
+> > > >   interrupt conditions or failing to recognize new interrupt
+> > > >   conditions. While enabled for MSI or MSI-X operation, a Function is
+> > > >   prohibited from using INTx interrupts (if implemented) to request
+> > > >   service (MSI, MSI-X, and INTx are mutually exclusive).
+> > > >
+> > > > The only *software* constraints I see are (1) software must never
+> > > > enable both MSI and MSI-X simultaneously, and (2) if software disables
+> > > > MSI or MSI-X during active operation, the Function may fail to
+> > > > generate an interrupt when it should.
+> > > >
+> > > > I read the last sentence as a constraint on the *hardware*: if either
+> > > > MSI or MSI-X is enabled, the Function is not allowed to use INTx,
+> > > > regardless of the state of PCI_COMMAND_INTX_DISABLE.
+> > > >
+> > > > I searched the spec for "Interrupt Disable", looking for situations
+> > > > where software might be *required* to set it, but I didn't see
+> > > > anything.
+> > > >
+> > > > I suspect "Interrupt Disable" was intended to help the OS stop all
+> > > > activity from a device during hot-plug or reconfiguration, as hinted
+> > > > at in sec 6.4, "Device Synchronization":
+> > > >
+> > > >   The ability of the driver and/or system software to block new
+> > > >   Requests from the device is supported by the Bus Master Enable,
+> > > >   SERR# Enable, and Interrupt Disable bits in the Command register
+> > > >   (Section 7.5.1.1.3) of each device Function, and other such control
+> > > >   bits.
+> > > >
+> > > > So I'm trying to figure out why when enabling MSI we need to set
+> > > > PCI_COMMAND_INTX_DISABLE for most devices, but it's safe to skip that
+> > > > for these quirked devices.
+> > >
+> > > I guess it's wrong wording in the last paragraph. It's not safe, but it's
+> > > _required_ since HW doesn't follow PCI specification that clearly says:
+> > > "MSI, MSI-X, and INTx are mutually exclusive".
+> >
+> > I agree there's a defect in these SB600 devices.  My guess is that
+> > PCI_COMMAND_INTX_DISABLE actually disables both INTx and MSI, when
+> > it's only supposed to disable INTx.
+> >
+> > I'm pretty sure the spec doesn't actually require software to set
+> > Interrupt Disable when enabling MSI, since MSI was added in PCI r2.2,
+> > which included this text in sec 6.8.2:
+> >
+> >   System configuration software sets [the MSI Enable] bit to enable
+> >   MSI. ...  Once enabled, a function is prohibited from using its
+> >   INTx# pin (if implemented) to request service (MSI and INTx# are
+> >   mutually exclusive).
+> >
+> > and Interrupt Disable was added later, in PCI r2.3, with no mention of
+> > a connection with MSI.  All the specs from PCI r2.2 to PCIe r6.0
+> > include the text above about not using INTx# if MSI or MSI-X is
+> > enabled, but that's not the same as requiring software to set
+> > Interrupt Disable.  Linux has set Interrupt Disable when enabling MSI
+> > ever since MSI support was added [1], so I would hesitate to change
+> > that even though I don't think it's required.
+> 
+> Thanks for diving into the history of the specification. What I learnt
+> about any of the specifications is that it usually has a lot of
+> implications that are only understandable (known) to the specification
+> author(s). This gives a room of misinterpretation. In any case I
+> usually apply my common sense denominator, so I try to go with the
+> straight logic. In this case it seems to me that keeping both enabled
+> is illogical and Linux does the right thing (means the author of the
+> Linux kernel implementation is on the same page with me).
+> 
+> > What I don't like about PCI_DEV_FLAGS_MSI_INTX_DISABLE_BUG is that it
+> > changes the generic code path in a sort of random way, i.e., this
+> > device becomes yet another special case in how we handle Interrupt
+> > Disable.
+> >
+> > What would you think about just setting pdev->no_msi instead, so we
+> > don't try to use MSI at all on these devices?  I think that's what we
+> > did before 306c54d0edb6.
+> 
+> Yes, we did. But why should we go this way if it already established a
+> special case disregarding my patch(es)? If you want to do that you
+> need to explain why other devices on the same chipset should enable
+> MSI and what's wrong with enabling MSI on the USB devices. My
+> understanding is that the MSI is a good thing to have due to
+> performance benefits and taking into account other devices that have
+> already been using it on the other devices of the same chipset tells
+> me that's okay. Moreover, the reporter of the bug confirmed that MSI
+> works for them after applying this quirk fix.
 
-[80802.185460][  T315] configfs-gadget gadget: uvc: VS request completed
-with status -18.
-[80802.185519][  T315] configfs-gadget gadget: uvc: VS request completed
-with status -18.
-...
-uvcg_queue_cancel() is called and the queue is cleared out, but the
-marker queue->buf_used is not reset.
-...
-[80802.262328][ T8682] Unable to handle kernel paging request at virtual
-address ffffffc03af9f000
-...
-...
-[80802.263138][ T8682] Call trace:
-[80802.263146][ T8682]  __memcpy+0x12c/0x180
-[80802.263155][ T8682]  uvcg_video_pump+0xcc/0x1e0
-[80802.263165][ T8682]  process_one_work+0x2cc/0x568
-[80802.263173][ T8682]  worker_thread+0x28c/0x518
-[80802.263181][ T8682]  kthread+0x160/0x170
-[80802.263188][ T8682]  ret_from_fork+0x10/0x18
-[80802.263198][ T8682] Code: a8c12829 a88130cb a8c130
+I agree that MSI is generally to be preferred over INTx.  In this
+case, it's an old USB device and I don't think there's any real
+performance benefit.
 
-Fixes: d692522577c0 ("usb: gadget/uvc: Port UVC webcam gadget to use videobuf2 framework")
-Signed-off-by: Dan Vacura <w36195@motorola.com>
+The problem with enabling MSI on these USB devices is that the generic
+MSI code doesn't work correctly.  Since we've been using them without
+MSI in the past, and they have some defect that makes MSI not work
+correctly, it seems like the simplest solution is to avoid using MSI,
+something like the patch below.
 
----
-Changes in v2:
-- Add Fixes tag
+Would I prefer the same for all the other existing users of
+PCI_DEV_FLAGS_MSI_INTX_DISABLE_BUG?  Yes.  Enough to change the status
+quo, which would be a performance regression, and potentially break
+something?  Probably not.
 
- drivers/usb/gadget/function/uvc_queue.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
-index d852ac9e47e7..2cda982f3765 100644
---- a/drivers/usb/gadget/function/uvc_queue.c
-+++ b/drivers/usb/gadget/function/uvc_queue.c
-@@ -264,6 +264,8 @@ void uvcg_queue_cancel(struct uvc_video_queue *queue, int disconnect)
- 		buf->state = UVC_BUF_STATE_ERROR;
- 		vb2_buffer_done(&buf->buf.vb2_buf, VB2_BUF_STATE_ERROR);
- 	}
-+	queue->buf_used = 0;
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index d2dd6a6cda60..c0e6b031bb5d 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -2675,6 +2675,18 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_SERVERWORKS,
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_8132_BRIDGE,
+ 			 ht_enable_msi_mapping);
+ 
++static void quirk_no_msi(struct pci_dev *dev)
++{
++	pci_info(dev, "Disabling MSI to avoid hardware defect\n");
++	dev->no_msi = 1;
++}
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4386, quirk_no_msi);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4387, quirk_no_msi);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4388, quirk_no_msi);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4389, quirk_no_msi);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x438a, quirk_no_msi);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x438b, quirk_no_msi);
 +
- 	/* This must be protected by the irqlock spinlock to avoid race
- 	 * conditions between uvc_queue_buffer and the disconnection event that
- 	 * could result in an interruptible wait in uvc_dequeue_buffer. Do not
--- 
-2.32.0
-
+ /*
+  * The P5N32-SLI motherboards from Asus have a problem with MSI
+  * for the MCP55 NIC. It is not yet determined whether the MSI problem

@@ -2,96 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8934DD9F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7A04DD9F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236403AbiCRMsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
+        id S236423AbiCRMv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiCRMs3 (ORCPT
+        with ESMTP id S230008AbiCRMvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:48:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBE32E417C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:47:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A63ABB82267
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:47:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E302CC340E8;
-        Fri, 18 Mar 2022 12:47:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647607628;
-        bh=s/tR3vmJ6yluDHWR+/tWoJCyxW4zOMrmbL3tDyikWFA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RtXxBn4OFQ9FB2xH98Gr68EKBJpgpK6Nvtw40YUmKfM1YXhcw5bPcox4a9ceX0W2a
-         RIuptf52vePW8hqljxdb0TPZIMvWHheK30QhCpLgaCnIw6l1CWszcatFnwDkShmux+
-         jKz14+wlPLVnMISLpKJDfv6IoiDvgwLtZugPE6Us=
-Date:   Fri, 18 Mar 2022 13:47:03 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     vdasa@vmware.com
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, pv-drivers@vmware.com,
-        bryantan@vmware.com, rjalisatgi@vmware.com,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH RESEND] VMCI: Check exclusive_vectors when freeing
- interrupt 1
-Message-ID: <YjR/RyduLkaQevQp@kroah.com>
-References: <20220318055843.30606-1-vdasa@vmware.com>
+        Fri, 18 Mar 2022 08:51:55 -0400
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5481ED063;
+        Fri, 18 Mar 2022 05:50:36 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id w27so13947724lfa.5;
+        Fri, 18 Mar 2022 05:50:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OJu/+DhwQ4TG5+tIH51Zo9ItsMV5oal9aAoPrsbEoi8=;
+        b=ivXnSLtpOGaIMauHdRM7eGDHaDKj4RnX9Y5YODQ/G2BpToJJ/iSCriA4Z73IjGOUFW
+         CkaTD2E7qVV6Ws4S3b1s5UIoYQdp3D88wgpeUuoSQHSeby/wn3rX8mB5wnKlluOFL/Iy
+         vQOECIiWHAGdNJVmiWaFxXaURFd4Mkfu6Sg4RRCH1n/RUlh47A4Gc+M8z3gCsRIBBr2B
+         fPMEcMNv1504zycsJa/kRtGAIqU/9GSoVI2N9kILL8W+lQLkgh/3xe0LPCscU4QQCQNl
+         lxnCC0ohEio6ttxL4LpB+uC4b/K3EGaD66qQoSbiyZyB7UT+DJ4mARz2LQgymBrnrOE8
+         zelQ==
+X-Gm-Message-State: AOAM533etmiwV4+u5ehRl8XNCzQ05+3NpZGaIFAdZpFm2miXeLRwcNFy
+        CzzbQAZ7L2dyYuefQLXvl68=
+X-Google-Smtp-Source: ABdhPJyBkRrx7Z0uNMyc5zszBSpP9QRiZv8MKDpJewRS/0i0lodNGcX5PhVl8kjtJW8JfRMm+lnuWg==
+X-Received: by 2002:a05:6512:3981:b0:448:40e5:cf90 with SMTP id j1-20020a056512398100b0044840e5cf90mr5632455lfu.656.1647607834839;
+        Fri, 18 Mar 2022 05:50:34 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id v21-20020a2e2f15000000b002456e6cdab2sm944860ljv.93.2022.03.18.05.50.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 05:50:34 -0700 (PDT)
+Message-ID: <cd976ef0-767b-8cf0-8635-28aeaa6542a3@kernel.org>
+Date:   Fri, 18 Mar 2022 13:50:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220318055843.30606-1-vdasa@vmware.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V3 1/2] dt-bindings: mmc: sdhci-msm: Add gcc resets
+ strings
+Content-Language: en-US
+To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
+        ulf.hansson@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org
+Cc:     quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
+        quic_sartgarg@quicinc.com, quic_nitirawa@quicinc.com,
+        quic_sayalil@quicinc.com
+References: <1647532165-6302-1-git-send-email-quic_c_sbhanu@quicinc.com>
+ <1647532165-6302-2-git-send-email-quic_c_sbhanu@quicinc.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1647532165-6302-2-git-send-email-quic_c_sbhanu@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 10:58:43PM -0700, vdasa@vmware.com wrote:
-> From: Vishnu Dasa <vdasa@vmware.com>
+On 17/03/2022 16:49, Shaik Sajida Bhanu wrote:
+> Add gcc hardware reset supported strings for qcom-sdhci controller.
 > 
-> free_irq() may be called to free an interrupt that was not
-> allocated.  Add missing 'if' statement to check for
-> exclusive_vectors when freeing interrupt 1.
-> 
-> Fixes: cc68f2177fcb ("VMCI: dma dg: register dummy IRQ handlers for DMA datagrams")
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Reviewed-by: Bryan Tan <bryantan@vmware.com>
-> Reviewed-by: Rajesh Jalisatgi <rjalisatgi@vmware.com>
-> Signed-off-by: Vishnu Dasa <vdasa@vmware.com>
+> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
 > ---
->  drivers/misc/vmw_vmci/vmci_guest.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/mmc/sdhci-msm.txt | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/misc/vmw_vmci/vmci_guest.c b/drivers/misc/vmw_vmci/vmci_guest.c
-> index 6596a54daa88..57a6157209a1 100644
-> --- a/drivers/misc/vmw_vmci/vmci_guest.c
-> +++ b/drivers/misc/vmw_vmci/vmci_guest.c
-> @@ -862,7 +862,9 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
->  	return 0;
+> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.txt b/Documentation/devicetree/bindings/mmc/sdhci-msm.txt
+> index 6216ed7..f180111 100644
+> --- a/Documentation/devicetree/bindings/mmc/sdhci-msm.txt
+> +++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.txt
+> @@ -62,6 +62,10 @@ Required properties:
+>  - qcom,dll-config: Chipset and Platform specific value. Use this field to
+>  	specify the DLL_CONFIG register value as per Hardware Programming Guide.
 >  
->  err_free_bm_irq:
-> -	free_irq(pci_irq_vector(pdev, 1), vmci_dev);
-> +	if (vmci_dev->exclusive_vectors)
-> +		free_irq(pci_irq_vector(pdev, 1), vmci_dev);
-> +
->  err_free_irq:
->  	free_irq(pci_irq_vector(pdev, 0), vmci_dev);
->  	tasklet_kill(&vmci_dev->datagram_tasklet);
-> -- 
-> 2.25.1
-> 
+> +- resets: Phandle and reset specifier for the device's reset.
+> +- reset-names: List of reset signal name strings sorted in the same order as
+> +	       the resets property.
 
-You sent the previous version 2 days before this, and 5 days before
-that.  Please relax and don't start worrying unless it's been 2 weeks.
+Please list the actual names used in reset-names.
 
-thanks,
 
-greg k-h
+Best regards,
+Krzysztof

@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3514DE20A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C144DE20E
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240507AbiCRUA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 16:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S240475AbiCRUAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 16:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240477AbiCRUAt (ORCPT
+        with ESMTP id S234208AbiCRUAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 16:00:49 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F3D190597;
-        Fri, 18 Mar 2022 12:59:29 -0700 (PDT)
+        Fri, 18 Mar 2022 16:00:47 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD45718BCF9;
+        Fri, 18 Mar 2022 12:59:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1647633570; x=1679169570;
+  t=1647633568; x=1679169568;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=gOE+wFy3wrmELM7xqdd6P7H7txS9rRmT5Kfdc2TWyBM=;
-  b=c5os6xkwWbnDcbmthEk58oVM1eYi2rg0ctWRqKRQeUepTBF6cx4xDH/3
-   /UqXkQGOA/VXwnRnB/qAGdAPlkgLiCjN6nDZqgJ46fq6wbdMrVbkUc9t8
-   cUH+gnGpaX2k3H6/apzXbgB8wJqSwDWYQm52ykfZ7iqdrrxLiaORwWIdA
-   4=;
+  bh=Y1aGAs4aOCqD0J3jbovdMWXZkUVXFuAQ6wuBY9SWJsI=;
+  b=poHisdT+hOicmpV83I0mY7iwvxQqEYcwG0YU70rhh8EUBTORS2NAd3Hz
+   EYb9BCeYddfezRIYx+aonpoKoTpdK/8OzcOmONb5/ZZr+cZh/7ATYUkEi
+   zcMAgR7MVSjqA1BlahCFSfWUcUlMJvJBzwmBbQRxe8vdpoNTMOLExATjg
+   Y=;
 X-IronPort-AV: E=Sophos;i="5.90,192,1643673600"; 
-   d="scan'208";a="72190540"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 18 Mar 2022 19:59:29 +0000
+   d="scan'208";a="1000596690"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-31df91b1.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 18 Mar 2022 19:59:27 +0000
 Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com (Postfix) with ESMTPS id 015CC4200E;
-        Fri, 18 Mar 2022 19:59:29 +0000 (UTC)
-Received: from EX13D02UWC002.ant.amazon.com (10.43.162.6) by
+        by email-inbound-relay-pdx-2b-31df91b1.us-west-2.amazon.com (Postfix) with ESMTPS id 6004E41DEE;
+        Fri, 18 Mar 2022 19:59:27 +0000 (UTC)
+Received: from EX13D02UWB003.ant.amazon.com (10.43.161.48) by
  EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
  id 15.0.1497.32; Fri, 18 Mar 2022 19:59:27 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13D02UWC002.ant.amazon.com (10.43.162.6) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Fri, 18 Mar 2022 19:59:27 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX13D02UWB003.ant.amazon.com (10.43.161.48) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Fri, 18 Mar 2022 19:59:26 +0000
 Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
- (172.19.181.128) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
+ (172.19.181.128) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
  Server id 15.0.1497.32 via Frontend Transport; Fri, 18 Mar 2022 19:59:26
  +0000
 Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
-        id 892D417B8; Fri, 18 Mar 2022 19:59:25 +0000 (UTC)
+        id 8841A17C0; Fri, 18 Mar 2022 19:59:25 +0000 (UTC)
 From:   Ali Saidi <alisaidi@amazon.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, <german.gomez@arm.com>,
@@ -56,9 +56,9 @@ CC:     <alisaidi@amazon.com>, <benh@kernel.crashing.org>,
         <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
         <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
         <will@kernel.org>
-Subject: [PATCH v3 1/3] perf arm-spe: Use SPE data source for neoverse cores
-Date:   Fri, 18 Mar 2022 19:59:11 +0000
-Message-ID: <20220318195913.17459-2-alisaidi@amazon.com>
+Subject: [PATCH v3 2/3] perf mem: Support mem_lvl_num in c2c command
+Date:   Fri, 18 Mar 2022 19:59:12 +0000
+Message-ID: <20220318195913.17459-3-alisaidi@amazon.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220318195913.17459-1-alisaidi@amazon.com>
 References: <20220318195913.17459-1-alisaidi@amazon.com>
@@ -76,233 +76,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When synthesizing data from SPE, augment the type with source information
-for Arm Neoverse cores. The field is IMPLDEF but the Neoverse cores all use
-the same encoding. I can't find encoding information for any other SPE
-implementations to unify their choices with Arm's thus that is left for
-future work.
+In addition to summarizing data encoded in mem_lvl also support data
+encoded in mem_lvl_num.
 
-This change populates the mem_lvl_num for Neoverse cores instead of the
-deprecated mem_lvl namespace.
+Since other architectures don't seem to populate the mem_lvl_num field
+here there shouldn't be a change in functionality.
 
 Signed-off-by: Ali Saidi <alisaidi@amazon.com>
 ---
- .../util/arm-spe-decoder/arm-spe-decoder.c    |   1 +
- .../util/arm-spe-decoder/arm-spe-decoder.h    |  12 ++
- tools/perf/util/arm-spe.c                     | 109 +++++++++++++++---
- 3 files changed, 108 insertions(+), 14 deletions(-)
+ tools/perf/util/mem-events.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
-index 5e390a1a79ab..091987dd3966 100644
---- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
-+++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
-@@ -220,6 +220,7 @@ static int arm_spe_read_record(struct arm_spe_decoder *decoder)
+diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+index ed0ab838bcc5..e5e405185498 100644
+--- a/tools/perf/util/mem-events.c
++++ b/tools/perf/util/mem-events.c
+@@ -485,6 +485,7 @@ int c2c_decode_stats(struct c2c_stats *stats, struct mem_info *mi)
+ 	u64 daddr  = mi->daddr.addr;
+ 	u64 op     = data_src->mem_op;
+ 	u64 lvl    = data_src->mem_lvl;
++	u64 lnum   = data_src->mem_lvl_num;
+ 	u64 snoop  = data_src->mem_snoop;
+ 	u64 lock   = data_src->mem_lock;
+ 	u64 blk    = data_src->mem_blk;
+@@ -527,16 +528,18 @@ do {				\
+ 			if (lvl & P(LVL, UNC)) stats->ld_uncache++;
+ 			if (lvl & P(LVL, IO))  stats->ld_io++;
+ 			if (lvl & P(LVL, LFB)) stats->ld_fbhit++;
+-			if (lvl & P(LVL, L1 )) stats->ld_l1hit++;
+-			if (lvl & P(LVL, L2 )) stats->ld_l2hit++;
+-			if (lvl & P(LVL, L3 )) {
++			if (lvl & P(LVL, L1) || lnum == P(LVLNUM, L1))
++				stats->ld_l1hit++;
++			if (lvl & P(LVL, L2) || lnum == P(LVLNUM, L2))
++				stats->ld_l2hit++;
++			if (lvl & P(LVL, L3) || lnum == P(LVLNUM, L3)) {
+ 				if (snoop & P(SNOOP, HITM))
+ 					HITM_INC(lcl_hitm);
+ 				else
+ 					stats->ld_llchit++;
+ 			}
  
- 			break;
- 		case ARM_SPE_DATA_SOURCE:
-+			decoder->record.source = payload;
- 			break;
- 		case ARM_SPE_BAD:
- 			break;
-diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
-index 69b31084d6be..c81bf90c0996 100644
---- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
-+++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
-@@ -29,6 +29,17 @@ enum arm_spe_op_type {
- 	ARM_SPE_ST		= 1 << 1,
- };
- 
-+enum arm_spe_neoverse_data_source {
-+	ARM_SPE_NV_L1D        = 0x0,
-+	ARM_SPE_NV_L2         = 0x8,
-+	ARM_SPE_NV_PEER_CORE  = 0x9,
-+	ARM_SPE_NV_LCL_CLSTR  = 0xa,
-+	ARM_SPE_NV_SYS_CACHE  = 0xb,
-+	ARM_SPE_NV_PEER_CLSTR = 0xc,
-+	ARM_SPE_NV_REMOTE     = 0xd,
-+	ARM_SPE_NV_DRAM       = 0xe,
-+};
-+
- struct arm_spe_record {
- 	enum arm_spe_sample_type type;
- 	int err;
-@@ -40,6 +51,7 @@ struct arm_spe_record {
- 	u64 virt_addr;
- 	u64 phys_addr;
- 	u64 context_id;
-+	u16 source;
- };
- 
- struct arm_spe_insn;
-diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
-index d2b64e3f588b..a45d638d2f06 100644
---- a/tools/perf/util/arm-spe.c
-+++ b/tools/perf/util/arm-spe.c
-@@ -34,6 +34,7 @@
- #include "arm-spe-decoder/arm-spe-decoder.h"
- #include "arm-spe-decoder/arm-spe-pkt-decoder.h"
- 
-+#include <../../../arch/arm64/include/asm/cputype.h>
- #define MAX_TIMESTAMP (~0ULL)
- 
- struct arm_spe {
-@@ -45,6 +46,7 @@ struct arm_spe {
- 	struct perf_session		*session;
- 	struct machine			*machine;
- 	u32				pmu_type;
-+	u64				midr;
- 
- 	struct perf_tsc_conversion	tc;
- 
-@@ -399,33 +401,109 @@ static bool arm_spe__is_memory_event(enum arm_spe_sample_type type)
- 	return false;
- }
- 
--static u64 arm_spe__synth_data_source(const struct arm_spe_record *record)
-+static const struct midr_range neoverse_spe[] = {
-+	MIDR_ALL_VERSIONS(MIDR_NEOVERSE_N1),
-+	MIDR_ALL_VERSIONS(MIDR_NEOVERSE_N2),
-+	{},
-+};
-+
-+
-+static void arm_spe__synth_data_source_neoverse(const struct arm_spe_record *record,
-+						union perf_mem_data_src *data_src)
- {
--	union perf_mem_data_src	data_src = { 0 };
-+	/*
-+	 * Even though four levels of cache hierarchy are possible, no known
-+	 * production Neoverse systems currently include more than three levels
-+	 * so for the time being we assume three exist. If a production system
-+	 * is built with four the this function would have to be changed to
-+	 * detect the number of levels for reporting.
-+	 */
- 
--	if (record->op == ARM_SPE_LD)
--		data_src.mem_op = PERF_MEM_OP_LOAD;
--	else
--		data_src.mem_op = PERF_MEM_OP_STORE;
-+	switch (record->source) {
-+	case ARM_SPE_NV_L1D:
-+		data_src->mem_lvl = PERF_MEM_LVL_HIT;
-+		data_src->mem_lvl_num = PERF_MEM_LVLNUM_L1;
-+		break;
-+	case ARM_SPE_NV_L2:
-+		data_src->mem_lvl = PERF_MEM_LVL_HIT;
-+		data_src->mem_lvl_num = PERF_MEM_LVLNUM_L2;
-+		break;
-+	case ARM_SPE_NV_PEER_CORE:
-+		data_src->mem_lvl = PERF_MEM_LVL_HIT;
-+		data_src->mem_snoop = PERF_MEM_SNOOP_HITM;
-+		data_src->mem_lvl_num = PERF_MEM_LVLNUM_ANY_CACHE;
-+		break;
-+	/*
-+	 * We don't know if this is L1, L2 but we do know it was a cache-2-cache
-+	 * transfer, so set SNOOP_HITM
-+	 */
-+	case ARM_SPE_NV_LCL_CLSTR:
-+	case ARM_SPE_NV_PEER_CLSTR:
-+		data_src->mem_lvl = PERF_MEM_LVL_HIT;
-+		data_src->mem_snoop = PERF_MEM_SNOOP_HITM;
-+		data_src->mem_lvl_num = PERF_MEM_LVLNUM_ANY_CACHE;
-+		break;
-+	/*
-+	 * System cache is assumed to be L3
-+	 */
-+	case ARM_SPE_NV_SYS_CACHE:
-+		data_src->mem_lvl = PERF_MEM_LVL_HIT;
-+		data_src->mem_lvl_num = PERF_MEM_LVLNUM_L3;
-+		break;
-+	/*
-+	 * We don't know what level it hit in, except it came from the other
-+	 * socket
-+	 */
-+	case ARM_SPE_NV_REMOTE:
-+		data_src->mem_snoop = PERF_MEM_SNOOP_HITM;
-+		data_src->mem_remote = PERF_MEM_REMOTE_REMOTE;
-+		break;
-+	case ARM_SPE_NV_DRAM:
-+		data_src->mem_lvl = PERF_MEM_LVL_HIT;
-+		data_src->mem_lvl_num = PERF_MEM_LVLNUM_RAM;
-+		break;
-+	default:
-+		break;
-+	}
-+}
- 
-+static void arm_spe__synth_data_source_generic(const struct arm_spe_record *record,
-+						union perf_mem_data_src *data_src)
-+{
- 	if (record->type & (ARM_SPE_LLC_ACCESS | ARM_SPE_LLC_MISS)) {
--		data_src.mem_lvl = PERF_MEM_LVL_L3;
-+		data_src->mem_lvl = PERF_MEM_LVL_L3;
- 
- 		if (record->type & ARM_SPE_LLC_MISS)
--			data_src.mem_lvl |= PERF_MEM_LVL_MISS;
-+			data_src->mem_lvl |= PERF_MEM_LVL_MISS;
- 		else
--			data_src.mem_lvl |= PERF_MEM_LVL_HIT;
-+			data_src->mem_lvl |= PERF_MEM_LVL_HIT;
- 	} else if (record->type & (ARM_SPE_L1D_ACCESS | ARM_SPE_L1D_MISS)) {
--		data_src.mem_lvl = PERF_MEM_LVL_L1;
-+		data_src->mem_lvl = PERF_MEM_LVL_L1;
- 
- 		if (record->type & ARM_SPE_L1D_MISS)
--			data_src.mem_lvl |= PERF_MEM_LVL_MISS;
-+			data_src->mem_lvl |= PERF_MEM_LVL_MISS;
- 		else
--			data_src.mem_lvl |= PERF_MEM_LVL_HIT;
-+			data_src->mem_lvl |= PERF_MEM_LVL_HIT;
- 	}
- 
- 	if (record->type & ARM_SPE_REMOTE_ACCESS)
--		data_src.mem_lvl |= PERF_MEM_LVL_REM_CCE1;
-+		data_src->mem_lvl |= PERF_MEM_LVL_REM_CCE1;
-+}
-+
-+static u64 arm_spe__synth_data_source(const struct arm_spe_record *record, u64 midr)
-+{
-+	union perf_mem_data_src	data_src = { 0 };
-+	bool is_neoverse = is_midr_in_range(midr, neoverse_spe);
-+
-+	if (record->op & ARM_SPE_LD)
-+		data_src.mem_op = PERF_MEM_OP_LOAD;
-+	else
-+		data_src.mem_op = PERF_MEM_OP_STORE;
-+
-+	if (is_neoverse)
-+		arm_spe__synth_data_source_neoverse(record, &data_src);
-+	else
-+		arm_spe__synth_data_source_generic(record, &data_src);
- 
- 	if (record->type & (ARM_SPE_TLB_ACCESS | ARM_SPE_TLB_MISS)) {
- 		data_src.mem_dtlb = PERF_MEM_TLB_WK;
-@@ -446,7 +524,7 @@ static int arm_spe_sample(struct arm_spe_queue *speq)
- 	u64 data_src;
- 	int err;
- 
--	data_src = arm_spe__synth_data_source(record);
-+	data_src = arm_spe__synth_data_source(record, spe->midr);
- 
- 	if (spe->sample_flc) {
- 		if (record->type & ARM_SPE_L1D_MISS) {
-@@ -1183,6 +1261,8 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
- 	struct perf_record_auxtrace_info *auxtrace_info = &event->auxtrace_info;
- 	size_t min_sz = sizeof(u64) * ARM_SPE_AUXTRACE_PRIV_MAX;
- 	struct perf_record_time_conv *tc = &session->time_conv;
-+	const char *cpuid = perf_env__cpuid(session->evlist->env);
-+	u64 midr = strtol(cpuid, NULL, 16);
- 	struct arm_spe *spe;
- 	int err;
- 
-@@ -1202,6 +1282,7 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
- 	spe->machine = &session->machines.host; /* No kvm support */
- 	spe->auxtrace_type = auxtrace_info->type;
- 	spe->pmu_type = auxtrace_info->priv[ARM_SPE_PMU_TYPE];
-+	spe->midr = midr;
- 
- 	spe->timeless_decoding = arm_spe__is_timeless_decoding(spe);
- 
+-			if (lvl & P(LVL, LOC_RAM)) {
++			if (lvl & P(LVL, LOC_RAM) || lnum == P(LVLNUM, RAM)) {
+ 				stats->lcl_dram++;
+ 				if (snoop & P(SNOOP, HIT))
+ 					stats->ld_shared++;
 -- 
 2.32.0
 

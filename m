@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDE94DD6F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFB64DD6FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234326AbiCRJTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 05:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
+        id S234370AbiCRJUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 05:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234226AbiCRJTs (ORCPT
+        with ESMTP id S234357AbiCRJUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 05:19:48 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE473A718;
-        Fri, 18 Mar 2022 02:18:27 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2e5827a76f4so84837747b3.6;
-        Fri, 18 Mar 2022 02:18:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=93Roa/3/8LQ3dVHsgObT1jYsY41CAK9mz/gXRqikm30=;
-        b=IkFgb0vCzEk7JIMVqKU4ipMlEbrLvQQqvhHsh3gBpY0cv8/5Ga7HAjlLLHjdXDcler
-         x981MZ101BJaf3i4jE4eyVj/BTFrCaNehIujeTRPThewPKS1poByLlpysxu+rGCizLZX
-         Lgt8go5eKNWvaEtzbpYJL7JO72NecXzGwBHn0QGQKDFcDf1FQkniFx/8iNhY6mrM16JB
-         goMl1M4Cotu/f+f2R1vskmC2kcMYNAhNEERfPepAXttiXhxDQQzxM1QUzFccs94PpvNj
-         cQgLe9sTsWSFTcD8cOmMj7uZbMplZSe/3T1lNHiXu5K4kL0Antl6S1OHN9/wjwcdWjY7
-         zp/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=93Roa/3/8LQ3dVHsgObT1jYsY41CAK9mz/gXRqikm30=;
-        b=v3cIh/VS8FjPUA4j18SXQSS6uFkf22qUjXLNrg/AUp60KHMQRZ7ZcWsEtmki8iLeeY
-         g93q4PCBoCB0xTr2tyE0a2ZHxSteSkxAjdwPM39TTiinyUvqRFqxuJTNBnZxD1RGo5rC
-         eLYaYm4Ylxv9JbruCr5hk9oPR193/RzvIr962x9wb4w/GxYGL6TrvyO376Sg1qfWsFqq
-         l0xjEifZHTgwRiqs3Rmk3P0NDo4gJcy5UY6sYs7HOwwkhMEkJelC941hKMu3T7NFd5Xw
-         LyfW3lZpwASEEtFJWZRjsa7GbmJPk0i+a0nX3YL57QeOSzXDGyiJSWnq/LPfXz/gSTMj
-         pXNQ==
-X-Gm-Message-State: AOAM531Ev6aaSCjdFMm9coL/wbFHJBpFd5kcZ5/CHDfaQ25DBJMMdI7G
-        BcTS9diV8+ABM+wU7tTCGVwkUSe8K54ugRGMCU0=
-X-Google-Smtp-Source: ABdhPJznvvccngMD/MAdzLeM6mkJofMSVV+dHZB7JFy+Y/urLuHjzzJfZCmW1Lt+wROqlaHCNUJP7iR1NreG/UlMtzI=
-X-Received: by 2002:a0d:da45:0:b0:2d0:bd53:b39 with SMTP id
- c66-20020a0dda45000000b002d0bd530b39mr9968051ywe.463.1647595106909; Fri, 18
- Mar 2022 02:18:26 -0700 (PDT)
+        Fri, 18 Mar 2022 05:20:31 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDA249CAA;
+        Fri, 18 Mar 2022 02:19:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647595147; x=1679131147;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=f/Nxe2HpKj5azRQ4n5T71hqEGv6rZ+lgCpnIFJCkQwc=;
+  b=Y0Cs/VFk17lNXEazRqUjxwzf2OW9M73WxAHU2nwkLKkIQhNdF1l9lWdk
+   LCSbgOyyOUkkJi1ej1ho4l7GDuDD+nYf0a6dRIJcboG8+Bi/Czrh5xZtL
+   VMeq58Vg1uteUnb8HeQnZP3uuwAqpBdzE3JhJQ8l2g0oT7OT97bm57ZL5
+   OvBfRI1V3WAZPCpvR29UFN62AhwVo27YS5gZBor2sTxaaqhlL2b0CWhPg
+   vQrQKDgWgYbwLoWOuHtRZjx9hMjRx5hheTHvdH1NfaAtyzxJ7W40ERsXt
+   GmKtZUCVsNlgQk7YN8ppe+f02BWtQ347NB6WDYaXCEDmM14HnKs6zM/71
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="256826722"
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="256826722"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 02:19:07 -0700
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="558338927"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.255.31.171]) ([10.255.31.171])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 02:19:02 -0700
+Message-ID: <668591f8-68c0-943a-be3c-02c6bc5b5800@linux.intel.com>
+Date:   Fri, 18 Mar 2022 17:19:00 +0800
 MIME-Version: 1.0
-References: <1647237097-29172-1-git-send-email-hammerh0314@gmail.com>
- <1647237097-29172-3-git-send-email-hammerh0314@gmail.com> <20220317103319.7irzmjknsr4hlrq3@pengutronix.de>
-In-Reply-To: <20220317103319.7irzmjknsr4hlrq3@pengutronix.de>
-From:   hammer hsieh <hammerh0314@gmail.com>
-Date:   Fri, 18 Mar 2022 17:18:46 +0800
-Message-ID: <CAOX-t5641GnkVBa2JArL4b4jRDBcu9twMpZbj+0Y71x5mcvJbw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] pwm: sunplus-pwm: Add Sunplus SoC SP7021 PWM Driver
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org, robh+dt@kernel.org,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wells.lu@sunplus.com,
-        "hammer.hsieh" <hammer.hsieh@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 4/8] perf vendor events: Update events for IcelakeX
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20220317182858.484474-1-irogers@google.com>
+ <20220317182858.484474-4-irogers@google.com>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <20220317182858.484474-4-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,509 +76,849 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> =E6=96=BC 2022=E5=B9=
-=B43=E6=9C=8817=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=886:33=E5=AF=AB=
-=E9=81=93=EF=BC=9A
->
-> On Mon, Mar 14, 2022 at 01:51:37PM +0800, Hammer Hsieh wrote:
-> > Add Sunplus SoC SP7021 PWM Driver
-> >
-> > Signed-off-by: Hammer Hsieh <hammerh0314@gmail.com>
-> > ---
-> > Changes in v3:
-> >  - Addressed all comments from Uwe Kleine-K=C3=B6nig.
-> >
-> >  MAINTAINERS               |   1 +
-> >  drivers/pwm/Kconfig       |  11 +++
-> >  drivers/pwm/Makefile      |   1 +
-> >  drivers/pwm/pwm-sunplus.c | 232 ++++++++++++++++++++++++++++++++++++++=
-++++++++
-> >  4 files changed, 245 insertions(+)
-> >  create mode 100644 drivers/pwm/pwm-sunplus.c
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index e1cb7eb..6644bae 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -18535,6 +18535,7 @@ SUNPLUS PWM DRIVER
-> >  M:   Hammer Hsieh <hammerh0314@gmail.com>
-> >  S:   Maintained
-> >  F:   Documentation/devicetree/bindings/pwm/sunplus,sp7021-pwm.yaml
-> > +F:   drivers/pwm/pwm-sunplus.c
-> >
-> >  SUNPLUS RTC DRIVER
-> >  M:   Vincent Shih <vincent.sunplus@gmail.com>
-> > diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-> > index 21e3b05..54cfb50 100644
-> > --- a/drivers/pwm/Kconfig
-> > +++ b/drivers/pwm/Kconfig
-> > @@ -572,6 +572,17 @@ config PWM_SUN4I
-> >         To compile this driver as a module, choose M here: the module
-> >         will be called pwm-sun4i.
-> >
-> > +config PWM_SUNPLUS
-> > +     tristate "Sunplus PWM support"
-> > +     depends on ARCH_SUNPLUS || COMPILE_TEST
-> > +     depends on HAS_IOMEM && OF
-> > +     help
-> > +       Generic PWM framework driver for the PWM controller on
-> > +       Sunplus SoCs.
-> > +
-> > +       To compile this driver as a module, choose M here: the module
-> > +       will be called pwm-sunplus.
-> > +
-> >  config PWM_TEGRA
-> >       tristate "NVIDIA Tegra PWM support"
-> >       depends on ARCH_TEGRA || COMPILE_TEST
-> > diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-> > index 708840b..be58616 100644
-> > --- a/drivers/pwm/Makefile
-> > +++ b/drivers/pwm/Makefile
-> > @@ -53,6 +53,7 @@ obj-$(CONFIG_PWM_STM32)             +=3D pwm-stm32.o
-> >  obj-$(CONFIG_PWM_STM32_LP)   +=3D pwm-stm32-lp.o
-> >  obj-$(CONFIG_PWM_STMPE)              +=3D pwm-stmpe.o
-> >  obj-$(CONFIG_PWM_SUN4I)              +=3D pwm-sun4i.o
-> > +obj-$(CONFIG_PWM_SUNPLUS)    +=3D pwm-sunplus.o
-> >  obj-$(CONFIG_PWM_TEGRA)              +=3D pwm-tegra.o
-> >  obj-$(CONFIG_PWM_TIECAP)     +=3D pwm-tiecap.o
-> >  obj-$(CONFIG_PWM_TIEHRPWM)   +=3D pwm-tiehrpwm.o
-> > diff --git a/drivers/pwm/pwm-sunplus.c b/drivers/pwm/pwm-sunplus.c
-> > new file mode 100644
-> > index 0000000..b6ab077
-> > --- /dev/null
-> > +++ b/drivers/pwm/pwm-sunplus.c
-> > @@ -0,0 +1,232 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * PWM device driver for SUNPLUS SP7021 SoC
-> > + *
-> > + * Links:
-> > + *   Reference Manual:
-> > + *   https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
-> > + *
-> > + *   Reference Manual(PWM module):
-> > + *   https://sunplus.atlassian.net/wiki/spaces/doc/pages/461144198/12.=
-+Pulse+Width+Modulation+PWM
->
-> On that wiki page someone wants to make s/desable/disable/
->
 
-wiki page desable typo fixed.
 
-> > + *
-> > + * Limitations:
-> > + * - Only supports normal polarity.
-> > + * - It output low when PWM channel disabled.
-> > + * - When the parameters change, current running period will not be co=
-mpleted
-> > + *     and run new settings immediately.
-> > + * - In .apply() PWM output need to write register FREQ and DUTY. When=
- first write FREQ
-> > + *     done and not yet write DUTY, it has short timing gap use new FR=
-EQ and old DUTY.
->
-> good
->
-> > + *
-> > + * Author: Hammer Hsieh <hammerh0314@gmail.com>
-> > + */
-> > +#include <linux/clk.h>
-> > +#include <linux/io.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/pwm.h>
-> > +
-> > +#define SP7021_PWM_CONTROL0          0x000
-> > +#define SP7021_PWM_CONTROL1          0x004
->
-> The link above calls these PWM_MODE0 and PWM_MODE1, also the other
-> register names don't match.
->
-> > +#define SP7021_PWM_FREQ(ch)          (0x008 + 4 * (ch))
-> > +#define SP7021_PWM_DUTY(ch)          (0x018 + 4 * (ch))
-> > +#define SP7021_PWM_FREQ_MAX          GENMASK(15, 0)
-> > +#define SP7021_PWM_DUTY_MAX          GENMASK(7, 0)
-> > +#define SP7021_PWM_CONTROL_EN(ch)    BIT(ch)
->
-> I'm a big fan of consistently naming register defines. I'd do something
-> like:
->
->         #define SP7021_PWM_MODE0                0x000
->         #define SP7021_PWM_MODE0_PWMEN(ch)              BIT(ch)
->         #define SP7021_PWM_MODE0_BYPASS(ch)             BIT(8 + (ch))
->
->         #define SP7021_PWM_MODE1                0x004
->         #define SP7021_PWM_MODE1_CNTx_EN(ch)            BIT(ch)
->         ...
->
-> such that register names match the manual and register fields have the
-> register as a prefix. That way its easier spotable when there is a
-> mismatch. (e.g. someone tries to set SP7021_PWM_MODE1_CNTx_EN(1) in
-> SP7021_PWM_MODE0.)
->
->
-> > +#define SP7021_PWM_NUM                       4
-> > +#define SP7021_PWM_BYPASS_BIT_SHIFT  8
-> > +#define SP7021_PWM_DD_SEL_BIT_SHIFT  8
->
-> When you use the bit masks and FIELD_PREP you never should need a define
-> for a shift.
->
+On 3/18/2022 2:28 AM, Ian Rogers wrote:
+> Move from v1.11 to v1.12.
+> The change:
+> https://github.com/intel/event-converter-for-linux-perf/commit/fc680410402e394eed6a1ebd909c9f649d3ed3ef
+> moved certain "other" type of events in to the cache, memory and
+> pipeline topics. Update the perf json files for this change.
+> 
+> Tested:
+> ```
+> ...
+>    6: Parse event definition strings                                  : Ok
+> ...
+>   91: perf all PMU test                                               : Ok
+> ...
+> ```
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-ok, all define will be like below in next patch.
-and all u32 control0,control1;
-will change to u32 mode0, mode1;
+Reviewed-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-#define SP7021_PWM_MODE0                0x000
-#define SP7021_PWM_MODE0_PWMEN(ch)      BIT(ch)
-#define SP7021_PWM_MODE0_BYPASS(ch)     BIT(8 + (ch))
-#define SP7021_PWM_MODE1                0x004
-#define SP7021_PWM_MODE1_CNTx_EN(ch)    BIT(ch)
+> ---
+>   .../pmu-events/arch/x86/icelakex/cache.json   | 252 +++++++++++++++
+>   .../pmu-events/arch/x86/icelakex/memory.json  |  26 +-
+>   .../pmu-events/arch/x86/icelakex/other.json   | 287 ++----------------
+>   .../arch/x86/icelakex/pipeline.json           |  35 +++
+>   4 files changed, 324 insertions(+), 276 deletions(-)
+> 
+> diff --git a/tools/perf/pmu-events/arch/x86/icelakex/cache.json b/tools/perf/pmu-events/arch/x86/icelakex/cache.json
+> index 104409fd8647..3c4da0371df9 100644
+> --- a/tools/perf/pmu-events/arch/x86/icelakex/cache.json
+> +++ b/tools/perf/pmu-events/arch/x86/icelakex/cache.json
+> @@ -657,6 +657,30 @@
+>           "SampleAfterValue": "100003",
+>           "UMask": "0x80"
+>       },
+> +    {
+> +        "BriefDescription": "Counts demand instruction fetches and L1 instruction cache prefetches that hit in the L3 or were snooped from another core's caches on the same socket.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.DEMAND_CODE_RD.L3_HIT",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x3F803C0004",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts demand instruction fetches and L1 instruction cache prefetches that resulted in a snoop hit a modified line in another core's caches which forwarded the data.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.DEMAND_CODE_RD.L3_HIT.SNOOP_HITM",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x10003C0004",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+>       {
+>           "BriefDescription": "Counts demand instruction fetches and L1 instruction cache prefetches that hit a modified line in a distant L3 Cache or were snooped from a distant core's L1/L2 caches on this socket when the system is in SNC (sub-NUMA cluster) mode.",
+>           "Counter": "0,1,2,3",
+> @@ -681,6 +705,54 @@
+>           "SampleAfterValue": "100003",
+>           "UMask": "0x1"
+>       },
+> +    {
+> +        "BriefDescription": "Counts demand data reads that hit in the L3 or were snooped from another core's caches on the same socket.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.DEMAND_DATA_RD.L3_HIT",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x3F803C0001",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts demand data reads that resulted in a snoop hit a modified line in another core's caches which forwarded the data.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.DEMAND_DATA_RD.L3_HIT.SNOOP_HITM",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x10003C0001",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts demand data reads that resulted in a snoop that hit in another core, which did not forward the data.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.DEMAND_DATA_RD.L3_HIT.SNOOP_HIT_NO_FWD",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x4003C0001",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts demand data reads that resulted in a snoop hit in another core's caches which forwarded the unmodified data to the requesting core.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.DEMAND_DATA_RD.L3_HIT.SNOOP_HIT_WITH_FWD",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x8003C0001",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+>       {
+>           "BriefDescription": "Counts demand data reads that were supplied by a cache on a remote socket where a snoop hit a modified line in another core's caches which forwarded the data.",
+>           "Counter": "0,1,2,3",
+> @@ -729,6 +801,30 @@
+>           "SampleAfterValue": "100003",
+>           "UMask": "0x1"
+>       },
+> +    {
+> +        "BriefDescription": "Counts demand reads for ownership (RFO) requests and software prefetches for exclusive ownership (PREFETCHW) that hit in the L3 or were snooped from another core's caches on the same socket.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.DEMAND_RFO.L3_HIT",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x3F803C0002",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts demand reads for ownership (RFO) requests and software prefetches for exclusive ownership (PREFETCHW) that resulted in a snoop hit a modified line in another core's caches which forwarded the data.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.DEMAND_RFO.L3_HIT.SNOOP_HITM",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x10003C0002",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+>       {
+>           "BriefDescription": "Counts demand reads for ownership (RFO) requests and software prefetches for exclusive ownership (PREFETCHW) that hit a modified line in a distant L3 Cache or were snooped from a distant core's L1/L2 caches on this socket when the system is in SNC (sub-NUMA cluster) mode.",
+>           "Counter": "0,1,2,3",
+> @@ -753,6 +849,102 @@
+>           "SampleAfterValue": "100003",
+>           "UMask": "0x1"
+>       },
+> +    {
+> +        "BriefDescription": "Counts L1 data cache prefetch requests and software prefetches (except PREFETCHW) that hit in the L3 or were snooped from another core's caches on the same socket.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.HWPF_L1D_AND_SWPF.L3_HIT",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x3F803C0400",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts hardware prefetches to the L3 only that hit in the L3 or were snooped from another core's caches on the same socket.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.HWPF_L3.L3_HIT",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x80082380",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts hardware and software prefetches to all cache levels that hit in the L3 or were snooped from another core's caches on the same socket.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.PREFETCHES.L3_HIT",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x3F803C27F0",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that hit in the L3 or were snooped from another core's caches on the same socket.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.READS_TO_CORE.L3_HIT",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x3F003C0477",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that resulted in a snoop hit a modified line in another core's caches which forwarded the data.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.READS_TO_CORE.L3_HIT.SNOOP_HITM",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x10003C0477",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that resulted in a snoop that hit in another core, which did not forward the data.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.READS_TO_CORE.L3_HIT.SNOOP_HIT_NO_FWD",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x4003C0477",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that resulted in a snoop hit in another core's caches which forwarded the unmodified data to the requesting core.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.READS_TO_CORE.L3_HIT.SNOOP_HIT_WITH_FWD",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x8003C0477",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that were supplied by a cache on a remote socket where a snoop was sent and data was returned (Modified or Not Modified).",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.READS_TO_CORE.REMOTE_CACHE.SNOOP_FWD",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x1830000477",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+>       {
+>           "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that were supplied by a cache on a remote socket where a snoop hit a modified line in another core's caches which forwarded the data.",
+>           "Counter": "0,1,2,3",
+> @@ -801,6 +993,18 @@
+>           "SampleAfterValue": "100003",
+>           "UMask": "0x1"
+>       },
+> +    {
+> +        "BriefDescription": "Counts streaming stores that hit in the L3 or were snooped from another core's caches on the same socket.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.STREAMING_WR.L3_HIT",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x80080800",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+>       {
+>           "BriefDescription": "Demand and prefetch data reads",
+>           "CollectPEBSRecord": "2",
+> @@ -947,5 +1151,53 @@
+>           "SampleAfterValue": "100003",
+>           "Speculative": "1",
+>           "UMask": "0x4"
+> +    },
+> +    {
+> +        "BriefDescription": "Number of PREFETCHNTA instructions executed.",
+> +        "CollectPEBSRecord": "2",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0x32",
+> +        "EventName": "SW_PREFETCH_ACCESS.NTA",
+> +        "PEBScounters": "0,1,2,3",
+> +        "PublicDescription": "Counts the number of PREFETCHNTA instructions executed.",
+> +        "SampleAfterValue": "100003",
+> +        "Speculative": "1",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Number of PREFETCHW instructions executed.",
+> +        "CollectPEBSRecord": "2",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0x32",
+> +        "EventName": "SW_PREFETCH_ACCESS.PREFETCHW",
+> +        "PEBScounters": "0,1,2,3",
+> +        "PublicDescription": "Counts the number of PREFETCHW instructions executed.",
+> +        "SampleAfterValue": "100003",
+> +        "Speculative": "1",
+> +        "UMask": "0x8"
+> +    },
+> +    {
+> +        "BriefDescription": "Number of PREFETCHT0 instructions executed.",
+> +        "CollectPEBSRecord": "2",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0x32",
+> +        "EventName": "SW_PREFETCH_ACCESS.T0",
+> +        "PEBScounters": "0,1,2,3",
+> +        "PublicDescription": "Counts the number of PREFETCHT0 instructions executed.",
+> +        "SampleAfterValue": "100003",
+> +        "Speculative": "1",
+> +        "UMask": "0x2"
+> +    },
+> +    {
+> +        "BriefDescription": "Number of PREFETCHT1 or PREFETCHT2 instructions executed.",
+> +        "CollectPEBSRecord": "2",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0x32",
+> +        "EventName": "SW_PREFETCH_ACCESS.T1_T2",
+> +        "PEBScounters": "0,1,2,3",
+> +        "PublicDescription": "Counts the number of PREFETCHT1 or PREFETCHT2 instructions executed.",
+> +        "SampleAfterValue": "100003",
+> +        "Speculative": "1",
+> +        "UMask": "0x4"
+>       }
+>   ]
+> \ No newline at end of file
+> diff --git a/tools/perf/pmu-events/arch/x86/icelakex/memory.json b/tools/perf/pmu-events/arch/x86/icelakex/memory.json
+> index 9ebcd442e6d3..c10a1bbc66b1 100644
+> --- a/tools/perf/pmu-events/arch/x86/icelakex/memory.json
+> +++ b/tools/perf/pmu-events/arch/x86/icelakex/memory.json
+> @@ -169,7 +169,7 @@
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.DEMAND_CODE_RD.L3_MISS_LOCAL",
+>           "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F8CC00004",
+> +        "MSRValue": "0x3F84400004",
+>           "Offcore": "1",
+>           "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+>           "SampleAfterValue": "100003",
+> @@ -193,7 +193,7 @@
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.DEMAND_DATA_RD.L3_MISS_LOCAL",
+>           "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F8CC00001",
+> +        "MSRValue": "0x3F84400001",
+>           "Offcore": "1",
+>           "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+>           "SampleAfterValue": "100003",
+> @@ -217,7 +217,7 @@
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.DEMAND_RFO.L3_MISS_LOCAL",
+>           "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F0CC00002",
+> +        "MSRValue": "0x3F04400002",
+>           "Offcore": "1",
+>           "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+>           "SampleAfterValue": "100003",
+> @@ -241,7 +241,7 @@
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.HWPF_L1D_AND_SWPF.L3_MISS_LOCAL",
+>           "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F8CC00400",
+> +        "MSRValue": "0x3F84400400",
+>           "Offcore": "1",
+>           "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+>           "SampleAfterValue": "100003",
+> @@ -301,7 +301,7 @@
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.OTHER.L3_MISS_LOCAL",
+>           "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F8CC08000",
+> +        "MSRValue": "0x3F84408000",
+>           "Offcore": "1",
+>           "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+>           "SampleAfterValue": "100003",
+> @@ -313,7 +313,7 @@
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.PREFETCHES.L3_MISS_LOCAL",
+>           "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F8CC027F0",
+> +        "MSRValue": "0x3F844027F0",
+>           "Offcore": "1",
+>           "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+>           "SampleAfterValue": "100003",
+> @@ -337,7 +337,19 @@
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.READS_TO_CORE.L3_MISS_LOCAL",
+>           "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F0CC00477",
+> +        "MSRValue": "0x3F04400477",
+> +        "Offcore": "1",
+> +        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> +        "SampleAfterValue": "100003",
+> +        "UMask": "0x1"
+> +    },
+> +    {
+> +        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that missed the L3 Cache and were supplied by the local socket (DRAM or PMM), whether or not in Sub NUMA Cluster(SNC) Mode.  In SNC Mode counts PMM or DRAM accesses that are controlled by the close or distant SNC Cluster.",
+> +        "Counter": "0,1,2,3",
+> +        "EventCode": "0xB7, 0xBB",
+> +        "EventName": "OCR.READS_TO_CORE.L3_MISS_LOCAL_SOCKET",
+> +        "MSRIndex": "0x1a6,0x1a7",
+> +        "MSRValue": "0x70CC00477",
+>           "Offcore": "1",
+>           "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+>           "SampleAfterValue": "100003",
+> diff --git a/tools/perf/pmu-events/arch/x86/icelakex/other.json b/tools/perf/pmu-events/arch/x86/icelakex/other.json
+> index 43524f274307..1246b22769da 100644
+> --- a/tools/perf/pmu-events/arch/x86/icelakex/other.json
+> +++ b/tools/perf/pmu-events/arch/x86/icelakex/other.json
+> @@ -156,31 +156,7 @@
+>           "UMask": "0x1"
+>       },
+>       {
+> -        "BriefDescription": "Counts demand instruction fetches and L1 instruction cache prefetches that hit in the L3 or were snooped from another core's caches on the same socket.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.DEMAND_CODE_RD.L3_HIT",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F803C0004",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Counts demand instruction fetches and L1 instruction cache prefetches that resulted in a snoop hit a modified line in another core's caches which forwarded the data.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.DEMAND_CODE_RD.L3_HIT.SNOOP_HITM",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x10003C0004",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Counts demand instruction fetches and L1 instruction cache prefetches that the DRAM attached to this socket supplied the request.",
+> +        "BriefDescription": "Counts demand instruction fetches and L1 instruction cache prefetches that were supplied by DRAM attached to this socket, unless in Sub NUMA Cluster(SNC) Mode.  In SNC Mode counts only those DRAM accesses that are controlled by the close SNC Cluster.",
+>           "Counter": "0,1,2,3",
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.DEMAND_CODE_RD.LOCAL_DRAM",
+> @@ -228,55 +204,7 @@
+>           "UMask": "0x1"
+>       },
+>       {
+> -        "BriefDescription": "Counts demand data reads that hit in the L3 or were snooped from another core's caches on the same socket.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.DEMAND_DATA_RD.L3_HIT",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F803C0001",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Counts demand data reads that resulted in a snoop hit a modified line in another core's caches which forwarded the data.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.DEMAND_DATA_RD.L3_HIT.SNOOP_HITM",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x10003C0001",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Counts demand data reads that resulted in a snoop that hit in another core, which did not forward the data.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.DEMAND_DATA_RD.L3_HIT.SNOOP_HIT_NO_FWD",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x4003C0001",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Counts demand data reads that resulted in a snoop hit in another core's caches which forwarded the unmodified data to the requesting core.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.DEMAND_DATA_RD.L3_HIT.SNOOP_HIT_WITH_FWD",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x8003C0001",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Counts demand data reads that the DRAM attached to this socket supplied the request.",
+> +        "BriefDescription": "Counts demand data reads that were supplied by DRAM attached to this socket, unless in Sub NUMA Cluster(SNC) Mode.  In SNC Mode counts only those DRAM accesses that are controlled by the close SNC Cluster.",
+>           "Counter": "0,1,2,3",
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.DEMAND_DATA_RD.LOCAL_DRAM",
+> @@ -288,7 +216,7 @@
+>           "UMask": "0x1"
+>       },
+>       {
+> -        "BriefDescription": "Counts demand data reads that were supplied by PMM attached to this socket.",
+> +        "BriefDescription": "Counts demand data reads that were supplied by PMM attached to this socket, unless in Sub NUMA Cluster(SNC) Mode.  In SNC Mode counts only those PMM accesses that are controlled by the close SNC Cluster.",
+>           "Counter": "0,1,2,3",
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.DEMAND_DATA_RD.LOCAL_PMM",
+> @@ -384,31 +312,7 @@
+>           "UMask": "0x1"
+>       },
+>       {
+> -        "BriefDescription": "Counts demand reads for ownership (RFO) requests and software prefetches for exclusive ownership (PREFETCHW) that hit in the L3 or were snooped from another core's caches on the same socket.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.DEMAND_RFO.L3_HIT",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F803C0002",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Counts demand reads for ownership (RFO) requests and software prefetches for exclusive ownership (PREFETCHW) that resulted in a snoop hit a modified line in another core's caches which forwarded the data.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.DEMAND_RFO.L3_HIT.SNOOP_HITM",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x10003C0002",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Counts demand reads for ownership (RFO) requests and software prefetches for exclusive ownership (PREFETCHW) that the DRAM attached to this socket supplied the request.",
+> +        "BriefDescription": "Counts demand reads for ownership (RFO) requests and software prefetches for exclusive ownership (PREFETCHW) that were supplied by DRAM attached to this socket, unless in Sub NUMA Cluster(SNC) Mode.  In SNC Mode counts only those DRAM accesses that are controlled by the close SNC Cluster.",
+>           "Counter": "0,1,2,3",
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.DEMAND_RFO.LOCAL_DRAM",
+> @@ -420,7 +324,7 @@
+>           "UMask": "0x1"
+>       },
+>       {
+> -        "BriefDescription": "Counts demand reads for ownership (RFO) requests and software prefetches for exclusive ownership (PREFETCHW) that were supplied by PMM attached to this socket.",
+> +        "BriefDescription": "Counts demand reads for ownership (RFO) requests and software prefetches for exclusive ownership (PREFETCHW) that were supplied by PMM attached to this socket, unless in Sub NUMA Cluster(SNC) Mode.  In SNC Mode counts only those PMM accesses that are controlled by the close SNC Cluster.",
+>           "Counter": "0,1,2,3",
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.DEMAND_RFO.LOCAL_PMM",
+> @@ -492,19 +396,7 @@
+>           "UMask": "0x1"
+>       },
+>       {
+> -        "BriefDescription": "Counts L1 data cache prefetch requests and software prefetches (except PREFETCHW) that hit in the L3 or were snooped from another core's caches on the same socket.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.HWPF_L1D_AND_SWPF.L3_HIT",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F803C0400",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Counts L1 data cache prefetch requests and software prefetches (except PREFETCHW) that the DRAM attached to this socket supplied the request.",
+> +        "BriefDescription": "Counts L1 data cache prefetch requests and software prefetches (except PREFETCHW) that were supplied by DRAM attached to this socket, unless in Sub NUMA Cluster(SNC) Mode.  In SNC Mode counts only those DRAM accesses that are controlled by the close SNC Cluster.",
+>           "Counter": "0,1,2,3",
+>           "EventCode": "0xB7, 0xBB",
+>           "EventName": "OCR.HWPF_L1D_AND_SWPF.LOCAL_DRAM",
+> @@ -527,18 +419,6 @@
+>           "SampleAfterValue": "100003",
+>           "UMask": "0x1"
+>       },
+> -    {
+> -        "BriefDescription": "Counts hardware prefetches to the L3 only that hit in the L3 or were snooped from another core's caches on the same socket.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.HWPF_L3.L3_HIT",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x80082380",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+>       {
+>           "BriefDescription": "Counts hardware prefetches to the L3 only that were not supplied by the local socket's L1, L2, or L3 caches and the cacheline was homed in a remote socket.",
+>           "Counter": "0,1,2,3",
+> @@ -575,18 +455,6 @@
+>           "SampleAfterValue": "100003",
+>           "UMask": "0x1"
+>       },
+> -    {
+> -        "BriefDescription": "Counts hardware and software prefetches to all cache levels that hit in the L3 or were snooped from another core's caches on the same socket.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.PREFETCHES.L3_HIT",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F803C27F0",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+>       {
+>           "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that have any type of response.",
+>           "Counter": "0,1,2,3",
+> @@ -612,72 +480,48 @@
+>           "UMask": "0x1"
+>       },
+>       {
+> -        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that hit in the L3 or were snooped from another core's caches on the same socket.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.READS_TO_CORE.L3_HIT",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x3F003C0477",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that resulted in a snoop hit a modified line in another core's caches which forwarded the data.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.READS_TO_CORE.L3_HIT.SNOOP_HITM",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x10003C0477",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that resulted in a snoop that hit in another core, which did not forward the data.",
+> +        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that were supplied by DRAM attached to this socket, unless in Sub NUMA Cluster(SNC) Mode.  In SNC Mode counts only those DRAM accesses that are controlled by the close SNC Cluster.",
+>           "Counter": "0,1,2,3",
+>           "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.READS_TO_CORE.L3_HIT.SNOOP_HIT_NO_FWD",
+> +        "EventName": "OCR.READS_TO_CORE.LOCAL_DRAM",
+>           "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x4003C0477",
+> +        "MSRValue": "0x104000477",
+>           "Offcore": "1",
+>           "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+>           "SampleAfterValue": "100003",
+>           "UMask": "0x1"
+>       },
+>       {
+> -        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that resulted in a snoop hit in another core's caches which forwarded the unmodified data to the requesting core.",
+> +        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that were supplied by PMM attached to this socket, unless in Sub NUMA Cluster(SNC) Mode.  In SNC Mode counts only those PMM accesses that are controlled by the close SNC Cluster.",
+>           "Counter": "0,1,2,3",
+>           "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.READS_TO_CORE.L3_HIT.SNOOP_HIT_WITH_FWD",
+> +        "EventName": "OCR.READS_TO_CORE.LOCAL_PMM",
+>           "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x8003C0477",
+> +        "MSRValue": "0x100400477",
+>           "Offcore": "1",
+>           "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+>           "SampleAfterValue": "100003",
+>           "UMask": "0x1"
+>       },
+>       {
+> -        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that the DRAM attached to this socket supplied the request.",
+> +        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that were supplied by DRAM attached to this socket, whether or not in Sub NUMA Cluster(SNC) Mode.  In SNC Mode counts DRAM accesses that are controlled by the close or distant SNC Cluster.",
+>           "Counter": "0,1,2,3",
+>           "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.READS_TO_CORE.LOCAL_DRAM",
+> +        "EventName": "OCR.READS_TO_CORE.LOCAL_SOCKET_DRAM",
+>           "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x104000477",
+> +        "MSRValue": "0x70C000477",
+>           "Offcore": "1",
+>           "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+>           "SampleAfterValue": "100003",
+>           "UMask": "0x1"
+>       },
+>       {
+> -        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that were supplied by PMM attached to this socket.",
+> +        "BriefDescription": "Counts all data read, code read and RFO requests including demands and prefetches to the core caches (L1 or L2) that were supplied by PMM attached to this socket, whether or not in Sub NUMA Cluster(SNC) Mode.  In SNC Mode counts PMM accesses that are controlled by the close or distant SNC Cluster.",
+>           "Counter": "0,1,2,3",
+>           "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.READS_TO_CORE.LOCAL_PMM",
+> +        "EventName": "OCR.READS_TO_CORE.LOCAL_SOCKET_PMM",
+>           "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x100400477",
+> +        "MSRValue": "0x700C00477",
+>           "Offcore": "1",
+>           "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+>           "SampleAfterValue": "100003",
+> @@ -754,100 +598,5 @@
+>           "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+>           "SampleAfterValue": "100003",
+>           "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Counts streaming stores that hit in the L3 or were snooped from another core's caches on the same socket.",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0xB7, 0xBB",
+> -        "EventName": "OCR.STREAMING_WR.L3_HIT",
+> -        "MSRIndex": "0x1a6,0x1a7",
+> -        "MSRValue": "0x80080800",
+> -        "Offcore": "1",
+> -        "PublicDescription": "Offcore response can be programmed only with a specific pair of event select and counter MSR, and with specific event codes and predefine mask bit value in a dedicated MSR to specify attributes of the offcore transaction.",
+> -        "SampleAfterValue": "100003",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Number of PREFETCHNTA instructions executed.",
+> -        "CollectPEBSRecord": "2",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0x32",
+> -        "EventName": "SW_PREFETCH_ACCESS.NTA",
+> -        "PEBScounters": "0,1,2,3",
+> -        "PublicDescription": "Counts the number of PREFETCHNTA instructions executed.",
+> -        "SampleAfterValue": "100003",
+> -        "Speculative": "1",
+> -        "UMask": "0x1"
+> -    },
+> -    {
+> -        "BriefDescription": "Number of PREFETCHW instructions executed.",
+> -        "CollectPEBSRecord": "2",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0x32",
+> -        "EventName": "SW_PREFETCH_ACCESS.PREFETCHW",
+> -        "PEBScounters": "0,1,2,3",
+> -        "PublicDescription": "Counts the number of PREFETCHW instructions executed.",
+> -        "SampleAfterValue": "100003",
+> -        "Speculative": "1",
+> -        "UMask": "0x8"
+> -    },
+> -    {
+> -        "BriefDescription": "Number of PREFETCHT0 instructions executed.",
+> -        "CollectPEBSRecord": "2",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0x32",
+> -        "EventName": "SW_PREFETCH_ACCESS.T0",
+> -        "PEBScounters": "0,1,2,3",
+> -        "PublicDescription": "Counts the number of PREFETCHT0 instructions executed.",
+> -        "SampleAfterValue": "100003",
+> -        "Speculative": "1",
+> -        "UMask": "0x2"
+> -    },
+> -    {
+> -        "BriefDescription": "Number of PREFETCHT1 or PREFETCHT2 instructions executed.",
+> -        "CollectPEBSRecord": "2",
+> -        "Counter": "0,1,2,3",
+> -        "EventCode": "0x32",
+> -        "EventName": "SW_PREFETCH_ACCESS.T1_T2",
+> -        "PEBScounters": "0,1,2,3",
+> -        "PublicDescription": "Counts the number of PREFETCHT1 or PREFETCHT2 instructions executed.",
+> -        "SampleAfterValue": "100003",
+> -        "Speculative": "1",
+> -        "UMask": "0x4"
+> -    },
+> -    {
+> -        "BriefDescription": "TMA slots where no uops were being issued due to lack of back-end resources.",
+> -        "CollectPEBSRecord": "2",
+> -        "Counter": "0,1,2,3,4,5,6,7",
+> -        "EventCode": "0xa4",
+> -        "EventName": "TOPDOWN.BACKEND_BOUND_SLOTS",
+> -        "PEBScounters": "0,1,2,3,4,5,6,7",
+> -        "PublicDescription": "Counts the number of Top-down Microarchitecture Analysis (TMA) method's  slots where no micro-operations were being issued from front-end to back-end of the machine due to lack of back-end resources.",
+> -        "SampleAfterValue": "10000003",
+> -        "Speculative": "1",
+> -        "UMask": "0x2"
+> -    },
+> -    {
+> -        "BriefDescription": "TMA slots available for an unhalted logical processor. Fixed counter - architectural event",
+> -        "CollectPEBSRecord": "2",
+> -        "Counter": "Fixed counter 3",
+> -        "EventName": "TOPDOWN.SLOTS",
+> -        "PEBScounters": "35",
+> -        "PublicDescription": "Number of available slots for an unhalted logical processor. The event increments by machine-width of the narrowest pipeline as employed by the Top-down Microarchitecture Analysis method (TMA). The count is distributed among unhalted logical processors (hyper-threads) who share the same physical core. Software can use this event as the denominator for the top-level metrics of the TMA method. This architectural event is counted on a designated fixed counter (Fixed Counter 3).",
+> -        "SampleAfterValue": "10000003",
+> -        "Speculative": "1",
+> -        "UMask": "0x4"
+> -    },
+> -    {
+> -        "BriefDescription": "TMA slots available for an unhalted logical processor. General counter - architectural event",
+> -        "CollectPEBSRecord": "2",
+> -        "Counter": "0,1,2,3,4,5,6,7",
+> -        "EventCode": "0xa4",
+> -        "EventName": "TOPDOWN.SLOTS_P",
+> -        "PEBScounters": "0,1,2,3,4,5,6,7",
+> -        "PublicDescription": "Counts the number of available slots for an unhalted logical processor. The event increments by machine-width of the narrowest pipeline as employed by the Top-down Microarchitecture Analysis method. The count is distributed among unhalted logical processors (hyper-threads) who share the same physical core.",
+> -        "SampleAfterValue": "10000003",
+> -        "Speculative": "1",
+> -        "UMask": "0x1"
+>       }
+>   ]
+> \ No newline at end of file
+> diff --git a/tools/perf/pmu-events/arch/x86/icelakex/pipeline.json b/tools/perf/pmu-events/arch/x86/icelakex/pipeline.json
+> index 9a0b4907cb3a..068a3d46b443 100644
+> --- a/tools/perf/pmu-events/arch/x86/icelakex/pipeline.json
+> +++ b/tools/perf/pmu-events/arch/x86/icelakex/pipeline.json
+> @@ -728,6 +728,41 @@
+>           "Speculative": "1",
+>           "UMask": "0x1"
+>       },
+> +    {
+> +        "BriefDescription": "TMA slots where no uops were being issued due to lack of back-end resources.",
+> +        "CollectPEBSRecord": "2",
+> +        "Counter": "0,1,2,3,4,5,6,7",
+> +        "EventCode": "0xa4",
+> +        "EventName": "TOPDOWN.BACKEND_BOUND_SLOTS",
+> +        "PEBScounters": "0,1,2,3,4,5,6,7",
+> +        "PublicDescription": "Counts the number of Top-down Microarchitecture Analysis (TMA) method's  slots where no micro-operations were being issued from front-end to back-end of the machine due to lack of back-end resources.",
+> +        "SampleAfterValue": "10000003",
+> +        "Speculative": "1",
+> +        "UMask": "0x2"
+> +    },
+> +    {
+> +        "BriefDescription": "TMA slots available for an unhalted logical processor. Fixed counter - architectural event",
+> +        "CollectPEBSRecord": "2",
+> +        "Counter": "Fixed counter 3",
+> +        "EventName": "TOPDOWN.SLOTS",
+> +        "PEBScounters": "35",
+> +        "PublicDescription": "Number of available slots for an unhalted logical processor. The event increments by machine-width of the narrowest pipeline as employed by the Top-down Microarchitecture Analysis method (TMA). The count is distributed among unhalted logical processors (hyper-threads) who share the same physical core. Software can use this event as the denominator for the top-level metrics of the TMA method. This architectural event is counted on a designated fixed counter (Fixed Counter 3).",
+> +        "SampleAfterValue": "10000003",
+> +        "Speculative": "1",
+> +        "UMask": "0x4"
+> +    },
+> +    {
+> +        "BriefDescription": "TMA slots available for an unhalted logical processor. General counter - architectural event",
+> +        "CollectPEBSRecord": "2",
+> +        "Counter": "0,1,2,3,4,5,6,7",
+> +        "EventCode": "0xa4",
+> +        "EventName": "TOPDOWN.SLOTS_P",
+> +        "PEBScounters": "0,1,2,3,4,5,6,7",
+> +        "PublicDescription": "Counts the number of available slots for an unhalted logical processor. The event increments by machine-width of the narrowest pipeline as employed by the Top-down Microarchitecture Analysis method. The count is distributed among unhalted logical processors (hyper-threads) who share the same physical core.",
+> +        "SampleAfterValue": "10000003",
+> +        "Speculative": "1",
+> +        "UMask": "0x1"
+> +    },
+>       {
+>           "BriefDescription": "Number of uops decoded out of instructions exclusively fetched by decoder 0",
+>           "CollectPEBSRecord": "2",
 
-#define SP7021_PWM_FREQ(ch)             (0x008 + 4 * (ch))
-#define SP7021_PWM_FREQ_MAX             GENMASK(15, 0)
-
-#define SP7021_PWM_DUTY(ch)             (0x018 + 4 * (ch))
-#define SP7021_PWM_DUTY_DD_SEL(ch)      FIELD_PREP(GENMASK(9, 8), ch)
-#define SP7021_PWM_DUTY_MAX             GENMASK(7, 0)
-#define SP7021_PWM_DUTY_MASK            SP7021_PWM_DUTY_MAX
-#define SP7021_PWM_FREQ_SCALER          256
-#define SP7021_PWM_NUM                  4
-
-> > +#define SP7021_PWM_FREQ_SCALER               256
-> > +
-> > +struct sunplus_pwm {
-> > +     struct pwm_chip chip;
-> > +     void __iomem *base;
-> > +     struct clk *clk;
-> > +};
-> > +
-> > +static inline struct sunplus_pwm *to_sunplus_pwm(struct pwm_chip *chip=
-)
-> > +{
-> > +     return container_of(chip, struct sunplus_pwm, chip);
-> > +}
-> > +
-> > +static int sunplus_pwm_apply(struct pwm_chip *chip, struct pwm_device =
-*pwm,
-> > +                          const struct pwm_state *state)
-> > +{
-> > +     struct sunplus_pwm *priv =3D to_sunplus_pwm(chip);
-> > +     u32 dd_freq, duty, control0, control1;
-> > +     u64 max_period, period_ns, duty_ns, clk_rate;
-> > +
-> > +     if (state->polarity !=3D pwm->state.polarity)
-> > +             return -EINVAL;
-> > +
-> > +     if (!state->enabled) {
-> > +             /* disable pwm channel output */
-> > +             control0 =3D readl(priv->base + SP7021_PWM_CONTROL0);
-> > +             control0 &=3D ~SP7021_PWM_CONTROL_EN(pwm->hwpwm);
-> > +             writel(control0, priv->base + SP7021_PWM_CONTROL0);
-> > +             /* disable pwm channel clk source */
-> > +             control1 =3D readl(priv->base + SP7021_PWM_CONTROL1);
-> > +             control1 &=3D ~SP7021_PWM_CONTROL_EN(pwm->hwpwm);
-> > +             writel(control1, priv->base + SP7021_PWM_CONTROL1);
-> > +             return 0;
-> > +     }
-> > +
-> > +     clk_rate =3D clk_get_rate(priv->clk);
-> > +     /*
-> > +      * SP7021_PWM_FREQ_MAX 16 bits, SP7021_PWM_FREQ_SCALER 8 bits
-> > +      * NSEC_PER_SEC 30 bits, won't overflow.
-> > +      */
-> > +     max_period =3D mul_u64_u64_div_u64(SP7021_PWM_FREQ_MAX, (u64)SP70=
-21_PWM_FREQ_SCALER
-> > +                             * NSEC_PER_SEC, clk_rate);
-> > +
-> > +     period_ns =3D min(state->period, max_period);
-> > +     duty_ns =3D state->duty_cycle;
->
-> duty_ns =3D min(state->duty_cycle, period_ns);
->
-
-ok, but I think I will remove max_period calculation code.
-And take your another recomanded code.
-
-> > +
-> > +     /*
-> > +      * cal pwm freq and check value under range
-> > +      * clk_rate 202.5MHz 28 bits, period_ns max 82849185 27 bits, won=
-'t overflow.
-> > +      */
-> > +     dd_freq =3D mul_u64_u64_div_u64(clk_rate, period_ns, (u64)SP7021_=
-PWM_FREQ_SCALER
-> > +                             * NSEC_PER_SEC);
-> > +
-> > +     if (dd_freq =3D=3D 0)
-> > +             return -EINVAL;
-> > +
-> > +     if (dd_freq > SP7021_PWM_FREQ_MAX)
-> > +             dd_freq =3D SP7021_PWM_FREQ_MAX;
->
-> This cannot happen after period_ns was limited to max_period, can it?
-> I wonder if there is a max_period value that is cheaper to calculate
-> (e.g. no division) and still is good enough to ensure that the
-> calculation for dd_freq doesn't overflow. The reasoning there includes
-> clk_rate =3D 202.5 MHz. So maybe something like:
->
->         clk_rate =3D clk_get_rate(priv->clk);
->
->         /*
->          * The following calculations might overflow if clk is bigger
->          * than 256 GHz. In practise it's 202.5MHz, so this limitation
->          * is only theoretic.
->          */
->         if (clk_rate > (u64)SP7021_PWM_FREQ_SCALER * NSEC_PER_SEC)
->                 return -EINVAL;
->
->         /*
->          * With clk_rate limited above we have dd_freq <=3D state->period=
-,
->          * so this cannot overflow.
->          */
->         dd_freq =3D mul_u64_u64_div_u64(clk_rate, state->period,
->                                       (u64)SP7021_PWM_FREQ_SCALER * NSEC_=
-PER_SEC);
->
->         if (dd_freq =3D=3D 0)
->                 return -EINVAL;
->
->         if (dd_freq > SP7021_PWM_FREQ_MAX)
->                 dd_freq =3D SP7021_PWM_FREQ_MAX;
->
-
-ok, will modify it as your recomanded code.
-
->
-> > +     writel(dd_freq, priv->base + SP7021_PWM_FREQ(pwm->hwpwm));
-> > +
-> > +     /* cal and set pwm duty */
-> > +     control0 =3D readl(priv->base + SP7021_PWM_CONTROL0);
-> > +     control0 |=3D SP7021_PWM_CONTROL_EN(pwm->hwpwm);
-> > +     control1 =3D readl(priv->base + SP7021_PWM_CONTROL1);
-> > +     control1 |=3D SP7021_PWM_CONTROL_EN(pwm->hwpwm);
-> > +     if (duty_ns =3D=3D period_ns) {
-> > +             /* PWM channel output =3D high */
-> > +             control0 |=3D SP7021_PWM_CONTROL_EN(pwm->hwpwm + SP7021_P=
-WM_BYPASS_BIT_SHIFT);
-> > +             duty =3D SP7021_PWM_DUTY_MAX;
-> > +     } else {
-> > +             control0 &=3D ~SP7021_PWM_CONTROL_EN(pwm->hwpwm + SP7021_=
-PWM_BYPASS_BIT_SHIFT);
-> > +             /*
-> > +              * duty_ns <=3D period_ns 27 bits, SP7021_PWM_FREQ_SCALER=
- 8 bits
-> > +              * won't overflow.
-> > +              */
-> > +             duty =3D mul_u64_u64_div_u64(duty_ns, (u64)SP7021_PWM_FRE=
-Q_SCALER,
-> > +                                        period_ns);
->
-> Note this might configure a duty cycle that is too small.
-> Consider:
->
->         clk_rate =3D 202500000
->         period =3D 3333643
->         duty_cycle =3D 3306391
->
-> Then we get dd_freq =3D 2636 and duty =3D 253.
->
-> With dd_freq =3D 2636 and duty =3D 254 the resulting duty_cycle is
->
->         2636 * 1000000000 * 254 / 202500000 =3D 3306390.12345679
->
-> so 254 would be the better value. The problem is that you use period_ns
-> in the division which however is a bit of as the real period is a tad
-> smaller.
->
-> So the right thing to do here is:
->
->         duty =3D duty_ns * clk / (dd_freq * NSEC_PER_SEC)
->
-
-ok, duty calculation have two method
-duty =3D duty_ns *256 / period_ns
-duty =3D duty_ns * clk / (dd_freq * NSEC_PER_SEC)
-In this case , it is better with duty =3D duty_ns * clk / (dd_freq * NSEC_P=
-ER_SEC)
-will modify it.
-
-> > +             duty |=3D (pwm->hwpwm << SP7021_PWM_DD_SEL_BIT_SHIFT);
-> > +     }
-> > +     writel(duty, priv->base + SP7021_PWM_DUTY(pwm->hwpwm));
->
-> I don't understand the DDx SEL bitfield in this register. Is it right
-> that it is 0 for all 4 PWMs?
->
-
-PWM0 can select DD0 ~DD3, 0x9c007a18 dd_sel[9:8] and pwm0 duty[7:0]
-PWM1 can select DD0 ~DD3, 0x9c007a1c dd_sel[9:8] and pwm1 duty[7:0]
-PWM2 can select DD0 ~DD3, 0x9c007a20 dd_sel[9:8] and pwm2 duty[7:0]
-PWM3 can select DD0 ~DD3, 0x9c007a24 dd_sel[9:8] and pwm3 duty[7:0]
-I will design the driver settings as
-PWM0 select DD0
-PWM1 select DD1
-PWM2 select DD2
-PWM3 select DD3
-PWM DUTY REG contains dd_sel[9:8] and duty[7:0] for each pwm channel.
-once duty calculation done, must conbine dd_sel[9:8] =3D pwm->hwpwm (0
-or 1 or 2 or 3)
-then write it to PWM DUTY REG.
-before
-duty |=3D (pwm->hwpwm << SP7021_PWM_DD_SEL_BIT_SHIFT);
-after
-#define SP7021_PWM_DUTY_DD_SEL(ch)      FIELD_PREP(GENMASK(9, 8), ch)
-duty =3D SP7021_PWM_DUTY_DD_SEL(pwm->hwpwm) | duty;
-
-> > +     writel(control1, priv->base + SP7021_PWM_CONTROL1);
-> > +     writel(control0, priv->base + SP7021_PWM_CONTROL0);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static void sunplus_pwm_get_state(struct pwm_chip *chip, struct pwm_de=
-vice *pwm,
-> > +                               struct pwm_state *state)
-> > +{
-> > +     struct sunplus_pwm *priv =3D to_sunplus_pwm(chip);
-> > +     u32 control0, freq, duty;
-> > +     u64 clk_rate;
-> > +
-> > +     control0 =3D readl(priv->base + SP7021_PWM_CONTROL0);
-> > +
-> > +     if (control0 & BIT(pwm->hwpwm)) {
-> > +             clk_rate =3D clk_get_rate(priv->clk);
-> > +             freq =3D readl(priv->base + SP7021_PWM_FREQ(pwm->hwpwm));
->
-> I'd call this dd_freq to match the variable name in .apply().
->
-
-ok, will modify it.
-
-> > +             duty =3D readl(priv->base + SP7021_PWM_DUTY(pwm->hwpwm));
-> > +             duty &=3D ~GENMASK(9, 8);
->
-> That looks wrong, The bit field 9:8 is the divisor source select. Also
-> please introduce a define for GENMASK(9,8).
->
-
-ok, will modify it.
-#define SP7021_PWM_DUTY_MAX             GENMASK(7, 0)
-#define SP7021_PWM_DUTY_MASK            SP7021_PWM_DUTY_MAX
-For duty_cycle calculation, must mask dd_sel[9:8] and only get duty[7:0] va=
-lue.
-duty =3D readl(priv->base + SP7021_PWM_DUTY(pwm->hwpwm));
-before
-duty &=3D ~GENMASK(9, 8);
-after
-duty =3D FIELD_GET(SP7021_PWM_DUTY_MASK, duty);
-
-> > +             /*
-> > +              * freq 16 bits, SP7021_PWM_FREQ_SCALER 8 bits
-> > +              * NSEC_PER_SEC 30 bits, won't overflow.
-> > +              */
-> > +             state->period =3D DIV64_U64_ROUND_UP((u64)freq * (u64)SP7=
-021_PWM_FREQ_SCALER
-> > +                                             * NSEC_PER_SEC, clk_rate)=
-;
-> > +             /*
-> > +              * freq 16 bits, duty 8 bits, NSEC_PER_SEC 30 bits, won't=
- overflow.
-> > +              */
-> > +             state->duty_cycle =3D DIV64_U64_ROUND_UP((u64)freq * (u64=
-)duty * NSEC_PER_SEC,
-> > +                                                    clk_rate);
-> > +             state->enabled =3D true;
-> > +     } else {
-> > +             state->enabled =3D false;
-> > +     }
-> > +
-> > +     state->polarity =3D PWM_POLARITY_NORMAL;
-> > +}
-> > +
-> > +static const struct pwm_ops sunplus_pwm_ops =3D {
-> > +     .apply =3D sunplus_pwm_apply,
-> > +     .get_state =3D sunplus_pwm_get_state,
-> > +     .owner =3D THIS_MODULE,
-> > +};
-> > +
-> > +static void sunplus_pwm_clk_release(void *data)
-> > +{
-> > +     struct clk *clk =3D data;
-> > +
-> > +     clk_disable_unprepare(clk);
-> > +}
-> > +
-> > +static int sunplus_pwm_probe(struct platform_device *pdev)
-> > +{
-> > +     struct device *dev =3D &pdev->dev;
-> > +     struct sunplus_pwm *priv;
-> > +     int ret;
-> > +
-> > +     priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> > +     if (!priv)
-> > +             return -ENOMEM;
-> > +
-> > +     priv->base =3D devm_platform_ioremap_resource(pdev, 0);
-> > +     if (IS_ERR(priv->base))
-> > +             return PTR_ERR(priv->base);
-> > +
-> > +     priv->clk =3D devm_clk_get(dev, NULL);
-> > +     if (IS_ERR(priv->clk))
-> > +             return dev_err_probe(dev, PTR_ERR(priv->clk),
-> > +                                  "get pwm clock failed\n");
-> > +
-> > +     ret =3D clk_prepare_enable(priv->clk);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "failed to enable clock: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     ret =3D devm_add_action_or_reset(dev, sunplus_pwm_clk_release, pr=
-iv->clk);
-> > +     if (ret < 0) {
-> > +             dev_err(dev, "failed to release clock: %d\n", ret);
-> > +             return ret;
-> > +     }
-> > +
-> > +     priv->chip.dev =3D dev;
-> > +     priv->chip.ops =3D &sunplus_pwm_ops;
-> > +     priv->chip.npwm =3D SP7021_PWM_NUM;
-> > +
-> > +     ret =3D devm_pwmchip_add(dev, &priv->chip);
-> > +     if (ret < 0)
-> > +             return dev_err_probe(dev, ret, "Cannot register sunplus P=
-WM\n");
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct of_device_id sunplus_pwm_of_match[] =3D {
-> > +     { .compatible =3D "sunplus,sp7021-pwm", },
-> > +     {}
-> > +};
-> > +MODULE_DEVICE_TABLE(of, sunplus_pwm_of_match);
-> > +
-> > +static struct platform_driver sunplus_pwm_driver =3D {
-> > +     .probe          =3D sunplus_pwm_probe,
-> > +     .driver         =3D {
-> > +             .name   =3D "sunplus-pwm",
-> > +             .of_match_table =3D sunplus_pwm_of_match,
-> > +     },
-> > +};
-> > +module_platform_driver(sunplus_pwm_driver);
-> > +
-> > +MODULE_DESCRIPTION("Sunplus SoC PWM Driver");
-> > +MODULE_AUTHOR("Hammer Hsieh <hammerh0314@gmail.com>");
-> > +MODULE_LICENSE("GPL");
->
-> Best regards
-> Uwe
->
-> --
-> Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig       =
-     |
-> Industrial Linux Solutions                 | https://www.pengutronix.de/ =
-|
+-- 
+Zhengjun Xing

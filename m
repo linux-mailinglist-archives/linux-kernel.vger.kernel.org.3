@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3C44DD225
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4DD4DD227
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiCRA7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 20:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
+        id S231243AbiCRBA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 21:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiCRA7k (ORCPT
+        with ESMTP id S229599AbiCRBAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 20:59:40 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1347D19C594;
-        Thu, 17 Mar 2022 17:58:23 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id s11so8180904pfu.13;
-        Thu, 17 Mar 2022 17:58:23 -0700 (PDT)
+        Thu, 17 Mar 2022 21:00:24 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C13129C949
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:59:07 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id o13so3947394pgc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:59:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OjGU9QY9zP7JqWUA2HLfdO0yP2EkBCjSzBVQExa48+M=;
-        b=mBkrn2+VFQ5GqR4/ZqQ+d4mESCBPTgl0y+1hkn8prKgW206jTpxpkPyCM6a0BTi3h+
-         aXlXOby3u47XhQHQ6dV33GzYj1cIifrBT81FiOl2s9B+8xu+q8zO2bsVrno6Q3WfER6W
-         2rob2ls8JJ+kbocrJ+bO+bXP131GyoW2th0ujjd11P4mWmuU1KjLYtIavgFHn/ZVzvQr
-         to8TPvfw4GYxlBaTPYojv8xo/TVaf846rY5QNcqt14zN9REBh8r7slN2Q0YYK5ZLqKgo
-         FDWwuuSoKcMmcEosC0JEVNKG2C/pzqaClTOfZopn3KAPEF3gBdQzNCMZXJLuMlWU+HOa
-         XiSw==
+        bh=FWkUKKUfs4VYn5pehhvDhFVAi6lfMmcxFwsgAeoQ1uQ=;
+        b=HyYvAk3qp0AznsZ1/9IYiiHU6O8Np8bhXI3+eVmt18FxaLdD7bLohl48k7Qru/UY7D
+         sl5gMT1frvug45Dxe+py3+45R70xch08b8twcO5T+qIyvJdbBykNDQZ47jJMOtvswfba
+         Dk/XUwhO5HRDrzSrogn+ieZfo5rU0wtyWW/VFf2CZtrYt7jaDPdgBfFWg6WLGZBU9zvo
+         LpiXzT8mlIWid/bOuzePITPbq+GxdLOJy/qBievflfFiJ1mb3oI6xv5qqficut6FfKBj
+         RGOidAeM1rhnAGsxcc/TdMu/PvsJWBbRt/tfkZ3MV3HzTBGMj6K6Zr7voXO5s7/VGfvO
+         3TVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OjGU9QY9zP7JqWUA2HLfdO0yP2EkBCjSzBVQExa48+M=;
-        b=MPbkzAriAyLUXJBcEDoo86r/7h19EkhbTI1knyuabJgTP9Da8zlywtic0Sut3O8hh6
-         f4G+zbLwQYnFsNlJPlOjSAcKfo02AWrR7v1BX3j6w5T/dfRxtpq5ejfOXlBUDjJ7HPG0
-         G7bNcGlY4Yc+vqlfMMtBD4z+nqKIMx9rNVOjx82ghA0Z27OKldecsKYmT1zKOabPX8cl
-         4eIvQlgZoO6Mc8BeNKDJnLMcsWV28m+cRgPDD81tPkvVy3b//jIkVDlwIXwQ76rkjIxT
-         Q6QCj4Od65zBi43boHhl/lm4vtekwOm+0uMIei37QkD1WRwET7LIRAIJFakGqocWke0N
-         M3RQ==
-X-Gm-Message-State: AOAM533ib4VVbKEEr5dCqoWL202v3FtiCn4n9iu2ZJjpO4SKCU4f0PPi
-        lbtMbrhJ9o4P9KvaIa1/Dgc=
-X-Google-Smtp-Source: ABdhPJxFxlJRWclENUosyKaF5XSJ9FNLT76IEUwe4TLTXMUNJChv2tL+q+e5mZojvCACwwK5zA5r9Q==
-X-Received: by 2002:a63:c156:0:b0:37c:9955:ab24 with SMTP id p22-20020a63c156000000b0037c9955ab24mr5946676pgi.90.1647565102551;
-        Thu, 17 Mar 2022 17:58:22 -0700 (PDT)
+        bh=FWkUKKUfs4VYn5pehhvDhFVAi6lfMmcxFwsgAeoQ1uQ=;
+        b=vCaT5Jm01hmjQIDhSb3cLeFi2/xB6Y6HrOPNSykHSHIg2R5YinFmGp0OWV8Nryc/pI
+         4i2qBVzekqY/B+W9oE3osWrE6XqedCqAsrHhGGESBb6/UEzx/eM9yVl/NTl/UYMNly3F
+         rdkWM958of2TkbWC8+q1UEGrs4Xa3jmm1QOCicGHgJiRl9TKMxYXEo0+iOgwiIWmwK1K
+         T4dYZacy2lWUnJD/DpuaYNyGQ7hXK276QtxX0CwpYU6shic+4HDEIZKuh2VsU+Ir6e6c
+         pbOO11FVsaIDXHZzqpCSjwQF1fuWUWUe6Q74Bqpexyy30g+7Rr19P/PWwsAOgmtcPiOo
+         Zhpw==
+X-Gm-Message-State: AOAM53019Id4S746W3Ma0Is5LQ5QfS8f3TLE8WWfbad5ACB/RjjkshHK
+        5OwS7G9AineNvvDBVdgIqrE=
+X-Google-Smtp-Source: ABdhPJwNaMiQ05re71GC2MP+JezQKbqshGdZOGhfnKMpQT+6Q9lj3LnxhBazPqKYdQcktOZsdbtZgA==
+X-Received: by 2002:a63:a1a:0:b0:34d:a4a9:a8b9 with SMTP id 26-20020a630a1a000000b0034da4a9a8b9mr5854426pgk.176.1647565147035;
+        Thu, 17 Mar 2022 17:59:07 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id h7-20020a056a001a4700b004f70b86fd28sm7788636pfv.134.2022.03.17.17.58.20
+        by smtp.gmail.com with ESMTPSA id s14-20020a056a0008ce00b004f66dcd4f1csm8734514pfu.32.2022.03.17.17.59.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 17:58:22 -0700 (PDT)
+        Thu, 17 Mar 2022 17:59:06 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     james.smart@broadcom.com
-Cc:     dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+To:     mst@redhat.com
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] scsi: lpfc: Remove useless DMA-32 fallback configuration
-Date:   Fri, 18 Mar 2022 00:58:17 +0000
-Message-Id: <20220318005817.2141903-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] virito-pci-modern: Remove useless DMA-32 fallback configuration
+Date:   Fri, 18 Mar 2022 00:58:58 +0000
+Message-Id: <20220318005858.2141967-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -84,30 +83,22 @@ Simplify code and remove some dead code accordingly.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/scsi/lpfc/lpfc_init.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/virtio/virtio_pci_modern_dev.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index f5c363f663f6..e793c4183499 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -9187,8 +9187,6 @@ lpfc_sli_pci_mem_setup(struct lpfc_hba *phba)
+diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+index e8b3ff2b9fbc..dff0b15a239d 100644
+--- a/drivers/virtio/virtio_pci_modern_dev.c
++++ b/drivers/virtio/virtio_pci_modern_dev.c
+@@ -255,9 +255,6 @@ int vp_modern_probe(struct virtio_pci_modern_device *mdev)
+ 	}
  
- 	/* Set the device DMA mask size */
- 	error = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
--	if (error)
--		error = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
- 	if (error)
- 		return error;
- 	error = -ENODEV;
-@@ -11714,8 +11712,6 @@ lpfc_sli4_pci_mem_setup(struct lpfc_hba *phba)
- 
- 	/* Set the device DMA mask size */
- 	error = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
--	if (error)
--		error = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
- 	if (error)
- 		return error;
+ 	err = dma_set_mask_and_coherent(&pci_dev->dev, DMA_BIT_MASK(64));
+-	if (err)
+-		err = dma_set_mask_and_coherent(&pci_dev->dev,
+-						DMA_BIT_MASK(32));
+ 	if (err)
+ 		dev_warn(&pci_dev->dev, "Failed to enable 64-bit or 32-bit DMA.  Trying to continue, but this might not work.\n");
  
 -- 
 2.25.1

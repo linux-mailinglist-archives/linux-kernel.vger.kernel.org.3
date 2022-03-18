@@ -2,100 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F144DDA97
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFD44DDA9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236709AbiCRNd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 09:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
+        id S236714AbiCRNf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234702AbiCRNd4 (ORCPT
+        with ESMTP id S234702AbiCRNf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:33:56 -0400
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC43111DFA;
-        Fri, 18 Mar 2022 06:32:36 -0700 (PDT)
-Received: by mail-qk1-f175.google.com with SMTP id i65so904003qkd.7;
-        Fri, 18 Mar 2022 06:32:36 -0700 (PDT)
+        Fri, 18 Mar 2022 09:35:27 -0400
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F2C111DFA;
+        Fri, 18 Mar 2022 06:34:08 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id w12so14105038lfr.9;
+        Fri, 18 Mar 2022 06:34:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ws/WgsI+NgYJBvxRZWDWAq8NCIF4x7eB852P4+r+ZlQ=;
-        b=wrVA6N2gRNLSu9TR0BBzzIFYBDaBOCjTuWWRHWOcOahXcdaYjMj1P1UuBoQm7riiN6
-         hLiGg5YfEh2I37Wf9AgWwov0Qsy52QKmIM35X96N5uMfObrBMGMJi39ZggKLTaiGA+jz
-         4gVpNAZtimmh+g5ce6sa7K6i+kVp6QkbfU7ImA+BAxhROOA61bmmy8NdV2DPgvAgQmpO
-         kRpRZcUCMNs/bICRiaCrMkYlyCFsNUI9di5o23V/0SlMgZ7UP6pk7Sn8ykkNwYqgFWEP
-         wR28IMm1IXmtJgBGEbwzUuzDcCsdyQCNTBY9JmLxk1QCUMJpkeRakQaHZsL5mrK1Mqxm
-         gvHQ==
-X-Gm-Message-State: AOAM532MBEan0CHfmtei1R7LIR6gopRLNLgoPzL5s6rByou6CpV3yMUG
-        3mmdbtaaekyv86+eKB9Qw+BkjvKfaEaCsVMT
-X-Google-Smtp-Source: ABdhPJyATVE8LsURnvhzpkzCNNImVaW8iYxsiuhTCRpXp2xxmZQVJgt+8wRLKNW+X+MiTbQkjEAKxQ==
-X-Received: by 2002:ae9:f501:0:b0:67b:2d97:93c5 with SMTP id o1-20020ae9f501000000b0067b2d9793c5mr5796600qkg.380.1647610354924;
-        Fri, 18 Mar 2022 06:32:34 -0700 (PDT)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id j18-20020ac85c52000000b002e1b9897ae7sm5636584qtj.10.2022.03.18.06.32.34
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KhDv91PxFYgSkqcUvNWoeCSYMAJKbkYHzPzcZD3bfZQ=;
+        b=OCM/3J+h4x86f34CufIBP/6oPCFg5B4OVlbnqivOmVP2g2Z59nj9jQHUneLtxrQoIh
+         zT5neoZvMpjwYlFsnsrHbWT55DG+1CgxBTJt4q9oukKgUV4o5raS141k2wI/bGyTtgNd
+         /cKi+XBdlvdSO1I5sEKPHa5EhYbadVpM0T/gK31/seBQaWecu5LXFS3MYZvnKf5pG+zx
+         MnflFItzwjzi57P/oPXWhRGMIGQX1dGMDlNkQYjMOfw/KdGe/7fIzhaU8oomJ9xyoeas
+         KC4glOi3ssRZM4Oy2cpnIn1j5N2VfRwzYAcj+LDWKdPznrWbWGkbn5XuTTvIGP3NYJCR
+         OL4Q==
+X-Gm-Message-State: AOAM532qxBpMoLUIIWtSIgyat0XJrES8zwgKIjoBBMSOseqf9vF6A3NG
+        FUNpXUwxdbKR7TJlpSJ1Mf4=
+X-Google-Smtp-Source: ABdhPJzAX4hDzXlaImfjCBv77mcTgemyobKhvOpkMxrbOwUEhyizr85lnjxT3MWNPqa9YlT0XnMXzg==
+X-Received: by 2002:a05:6512:992:b0:448:2e2b:d452 with SMTP id w18-20020a056512099200b004482e2bd452mr5743658lft.632.1647610446550;
+        Fri, 18 Mar 2022 06:34:06 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id c1-20020a196541000000b00448bcdccb91sm757200lfj.231.2022.03.18.06.34.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 06:32:34 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2dbd97f9bfcso90763657b3.9;
-        Fri, 18 Mar 2022 06:32:34 -0700 (PDT)
-X-Received: by 2002:a81:59c4:0:b0:2e5:c7c3:5d29 with SMTP id
- n187-20020a8159c4000000b002e5c7c35d29mr7200941ywb.512.1647610353914; Fri, 18
- Mar 2022 06:32:33 -0700 (PDT)
+        Fri, 18 Mar 2022 06:34:05 -0700 (PDT)
+Message-ID: <fba6c4c7-8b81-de9b-5361-c0dfe9e701db@kernel.org>
+Date:   Fri, 18 Mar 2022 14:34:03 +0100
 MIME-Version: 1.0
-References: <20220309190631.1576372-1-kieran.bingham+renesas@ideasonboard.com>
-In-Reply-To: <20220309190631.1576372-1-kieran.bingham+renesas@ideasonboard.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 18 Mar 2022 14:32:22 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWmu1hzpf+yYicLLjRQFCC7voXUAY7An4EEgCDTNZsnQg@mail.gmail.com>
-Message-ID: <CAMuHMdWmu1hzpf+yYicLLjRQFCC7voXUAY7An4EEgCDTNZsnQg@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: renesas: falcon-cpu: Use INTC_EX for SN65DSI86
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 2/3] dt-bindings: arm: fsl: add toradex,verdin-imx8mp
+ et al.
+Content-Language: en-US
+To:     Marcel Ziswiler <marcel@ziswiler.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220317160122.341484-1-marcel@ziswiler.com>
+ <20220317160122.341484-3-marcel@ziswiler.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220317160122.341484-3-marcel@ziswiler.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 8:06 PM Kieran Bingham
-<kieran.bingham+renesas@ideasonboard.com> wrote:
-> The INTC block is a better choice for handling the interrupts on the V3U
-> as the INTC will always be powered, while the GPIO block may be
-> de-clocked if not in use. Further more, it may be likely to have a lower
-> power consumption as it does not need to drive the pins.
->
-> Switch the interrupt parent and interrupts definition from gpio1 to
-> irq0 on intc_ex, and configure the PFC accordingly.
->
-> Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
->
+On 17/03/2022 17:01, Marcel Ziswiler wrote:
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> 
+> Add toradex,verdin-imx8mp for the Verdin iMX8M Plus modules, its nonwifi
+> and wifi variants and the carrier boards (both Dahlia and the Verdin
+> Development Board) they may be mated in.
+> 
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 > ---
-> v2:
->
->  - Define irq0_pins, and ensure pinctrl is set in the bridge node.
+> 
+>  .../devicetree/bindings/arm/fsl.yaml          | 21 +++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.19.
 
-Gr{oetje,eeting}s,
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof

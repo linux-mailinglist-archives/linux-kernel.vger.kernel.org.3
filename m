@@ -2,325 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6964DDBB2
+	by mail.lfdr.de (Postfix) with ESMTP id 607054DDBB1
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237295AbiCRObs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S237320AbiCROcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 10:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237316AbiCRObq (ORCPT
+        with ESMTP id S234679AbiCROcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:31:46 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F759606CB
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:30:27 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id p8so9568279pfh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Y21L5VYRRuO7Md0Sv1CNvpdJBGvYW0pBnpZZyTAuB+I=;
-        b=gfMVLDcrUOultXZfP4iYKKNXaGn4fUrTsNS0wemUZM6OlNhqFkIBw9o2PzYaAw2Y+/
-         UJr9hZQ/2R5x4OFNui1SMEaFJ7yYERnPzD3ZBaD+7RK0WSSICwvqpwfyQu8deT2h5Ofq
-         vqqvFj1jXxvV7zpC3CriMsN3K8pXJBlMVZJ74u7U4WIG3P49Gb4/LC8nwn8OxUYgXasM
-         DWmh26Tvoi8lfhyfGpb59hcR68MsiA4SC4EMGXcXDUemBeWuewd6wSzb+HQsIqAfRZlD
-         CoH3NQSdS1/vQ3t9xYJMFCEyfOTbE9ZjKk8nsXiqRyTvTeMtzqO/rP6P8a/sVU1oJ1vX
-         xHfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Y21L5VYRRuO7Md0Sv1CNvpdJBGvYW0pBnpZZyTAuB+I=;
-        b=mo6LCffUptITnZnWVMQdSSl16IKOiZAuWhukJjRKa4m0cqhjx7fD4A0Qd+9gNIc1Yu
-         +PSwhGIyPDooT9HBKY5NV+bZbQ6iZ1cT3K8W/y23v9IjKQR58T+W82Kw1Uyvy1ZH4xVc
-         AFRpObe5cz7cuoh45MppqAXBS/F/1BUQkTpCYGEZV0TgyAE8RZKgh51WAzfnXgoHE3KE
-         V0KVXH3/jKsSi1AxkGcsH3XjwzJQU0ssYfOa4PHSsrCak+GhiKmk3d7ilsqxJih12knW
-         KuaOLu9zTodojlw3Ar3J9NcvTVPGXki1eyCyK08WYpN6+qafVMfhC2hP0FFMlhxiYNBg
-         w4FQ==
-X-Gm-Message-State: AOAM533DPsdMrgNAxZMqNv/0lDLEXPb7rWK/OU0I9CEWVOz5QJJZDokU
-        zRpkFOSmYmHCiMr8+BZHA/+yVyWulhg=
-X-Google-Smtp-Source: ABdhPJwKqVkrvhpqqBFV/EKEKO+kyStwmxQdU1LZm3biPo3uhf6hWIx8112T/IDcFFNiA10I52Djcg==
-X-Received: by 2002:a05:6a00:2168:b0:4f6:eb64:71dd with SMTP id r8-20020a056a00216800b004f6eb6471ddmr10077292pff.40.1647613826332;
-        Fri, 18 Mar 2022 07:30:26 -0700 (PDT)
-Received: from localhost ([47.251.4.198])
-        by smtp.gmail.com with ESMTPSA id d15-20020a056a00198f00b004f7109da1c4sm9714669pfl.205.2022.03.18.07.30.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 18 Mar 2022 07:30:26 -0700 (PDT)
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <jroedel@suse.de>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>
-Subject: [PATCH V4 7/7] x86/entry: Use idtentry macro for entry_INT80_compat
-Date:   Fri, 18 Mar 2022 22:30:16 +0800
-Message-Id: <20220318143016.124387-8-jiangshanlai@gmail.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20220318143016.124387-1-jiangshanlai@gmail.com>
-References: <20220318143016.124387-1-jiangshanlai@gmail.com>
+        Fri, 18 Mar 2022 10:32:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367B25C64F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:30:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7646B823DF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 14:30:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91AFC340E8;
+        Fri, 18 Mar 2022 14:30:47 +0000 (UTC)
+Date:   Fri, 18 Mar 2022 14:30:43 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        chinwen.chang@mediatek.com, nicholas.tang@mediatek.com,
+        yee.lee@mediatek.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] mm/kmemleak: Reset tag when compare object pointer
+Message-ID: <YjSXkyq6icIFx4GS@arm.com>
+References: <20220318034051.30687-1-Kuan-Ying.Lee@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318034051.30687-1-Kuan-Ying.Lee@mediatek.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+On Fri, Mar 18, 2022 at 11:40:48AM +0800, Kuan-Ying Lee wrote:
+> When we use HW-tag based kasan and enable vmalloc support, we hit
+> the following bug. It is due to comparison between tagged object
+> and non-tagged pointer.
+> 
+> We need to reset the kasan tag when we need to compare tagged object
+> and non-tagged pointer.
+> 
+> [    7.690429][T400001] init: kmemleak: [name:kmemleak&]Scan area larger than object 0xffffffe77076f440
+> [    7.691762][T400001] init: CPU: 4 PID: 1 Comm: init Tainted: G S      W         5.15.25-android13-0-g5cacf919c2bc #1
+> [    7.693218][T400001] init: Hardware name: MT6983(ENG) (DT)
+> [    7.693983][T400001] init: Call trace:
+> [    7.694508][T400001] init:  dump_backtrace.cfi_jt+0x0/0x8
+> [    7.695272][T400001] init:  dump_stack_lvl+0xac/0x120
+> [    7.695985][T400001] init:  add_scan_area+0xc4/0x244
+> [    7.696685][T400001] init:  kmemleak_scan_area+0x40/0x9c
+> [    7.697428][T400001] init:  layout_and_allocate+0x1e8/0x288
+> [    7.698211][T400001] init:  load_module+0x2c8/0xf00
+> [    7.698895][T400001] init:  __se_sys_finit_module+0x190/0x1d0
+> [    7.699701][T400001] init:  __arm64_sys_finit_module+0x20/0x30
+> [    7.700517][T400001] init:  invoke_syscall+0x60/0x170
+> [    7.701225][T400001] init:  el0_svc_common+0xc8/0x114
+> [    7.701933][T400001] init:  do_el0_svc+0x28/0xa0
+> [    7.702580][T400001] init:  el0_svc+0x60/0xf8
+> [    7.703196][T400001] init:  el0t_64_sync_handler+0x88/0xec
+> [    7.703964][T400001] init:  el0t_64_sync+0x1b4/0x1b8
+> [    7.704658][T400001] init: kmemleak: [name:kmemleak&]Object 0xf5ffffe77076b000 (size 32768):
+> [    7.705824][T400001] init: kmemleak: [name:kmemleak&]  comm "init", pid 1, jiffies 4294894197
+> [    7.707002][T400001] init: kmemleak: [name:kmemleak&]  min_count = 0
+> [    7.707886][T400001] init: kmemleak: [name:kmemleak&]  count = 0
+> [    7.708718][T400001] init: kmemleak: [name:kmemleak&]  flags = 0x1
+> [    7.709574][T400001] init: kmemleak: [name:kmemleak&]  checksum = 0
+> [    7.710440][T400001] init: kmemleak: [name:kmemleak&]  backtrace:
+> [    7.711284][T400001] init:      module_alloc+0x9c/0x120
+> [    7.712015][T400001] init:      move_module+0x34/0x19c
+> [    7.712735][T400001] init:      layout_and_allocate+0x1c4/0x288
+> [    7.713561][T400001] init:      load_module+0x2c8/0xf00
+> [    7.714291][T400001] init:      __se_sys_finit_module+0x190/0x1d0
+> [    7.715142][T400001] init:      __arm64_sys_finit_module+0x20/0x30
+> [    7.716004][T400001] init:      invoke_syscall+0x60/0x170
+> [    7.716758][T400001] init:      el0_svc_common+0xc8/0x114
+> [    7.717512][T400001] init:      do_el0_svc+0x28/0xa0
+> [    7.718207][T400001] init:      el0_svc+0x60/0xf8
+> [    7.718869][T400001] init:      el0t_64_sync_handler+0x88/0xec
+> [    7.719683][T400001] init:      el0t_64_sync+0x1b4/0x1b8
+> 
+> Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
 
-entry_INT80_compat is identical to idtentry macro except a special
-handling for %rax in the prolog.
-
-Add the prolog to idtentry and use idtentry for entry_INT80_compat.
-
-Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
----
- arch/x86/entry/entry_64.S        |  18 ++++++
- arch/x86/entry/entry_64_compat.S | 103 -------------------------------
- arch/x86/include/asm/idtentry.h  |  47 ++++++++++++++
- arch/x86/include/asm/proto.h     |   4 --
- 4 files changed, 65 insertions(+), 107 deletions(-)
-
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 9e8d0e259a7d..6ac070378d8b 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -375,6 +375,24 @@ SYM_CODE_START(\asmsym)
- 		pushq	$-1			/* ORIG_RAX: no syscall to restart */
- 	.endif
- 
-+	.if \vector == IA32_SYSCALL_VECTOR
-+		/*
-+		 * User tracing code (ptrace or signal handlers) might assume
-+		 * that the saved RAX contains a 32-bit number when we're
-+		 * invoking a 32-bit syscall.  Just in case the high bits are
-+		 * nonzero, zero-extend the syscall number.  (This could almost
-+		 * certainly be deleted with no ill effects.)
-+		 */
-+		movl	%eax, %eax
-+
-+		/*
-+		 * do_int80_syscall_32() expects regs->orig_ax to be user ax,
-+		 * and regs->ax to be $-ENOSYS.
-+		 */
-+		movq	%rax, (%rsp)
-+		movq	$-ENOSYS, %rax
-+	.endif
-+
- 	.if \vector == X86_TRAP_BP
- 		/*
- 		 * If coming from kernel space, create a 6-word gap to allow the
-diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
-index c5aeb0819707..6866151bbef3 100644
---- a/arch/x86/entry/entry_64_compat.S
-+++ b/arch/x86/entry/entry_64_compat.S
-@@ -315,106 +315,3 @@ sysret32_from_system_call:
- 	swapgs
- 	sysretl
- SYM_CODE_END(entry_SYSCALL_compat)
--
--/*
-- * 32-bit legacy system call entry.
-- *
-- * 32-bit x86 Linux system calls traditionally used the INT $0x80
-- * instruction.  INT $0x80 lands here.
-- *
-- * This entry point can be used by 32-bit and 64-bit programs to perform
-- * 32-bit system calls.  Instances of INT $0x80 can be found inline in
-- * various programs and libraries.  It is also used by the vDSO's
-- * __kernel_vsyscall fallback for hardware that doesn't support a faster
-- * entry method.  Restarted 32-bit system calls also fall back to INT
-- * $0x80 regardless of what instruction was originally used to do the
-- * system call.
-- *
-- * This is considered a slow path.  It is not used by most libc
-- * implementations on modern hardware except during process startup.
-- *
-- * Arguments:
-- * eax  system call number
-- * ebx  arg1
-- * ecx  arg2
-- * edx  arg3
-- * esi  arg4
-- * edi  arg5
-- * ebp  arg6
-- */
--SYM_CODE_START(entry_INT80_compat)
--	UNWIND_HINT_EMPTY
--	ENDBR
--	/*
--	 * Interrupts are off on entry.
--	 */
--	ASM_CLAC			/* Do this early to minimize exposure */
--	SWAPGS
--
--	/*
--	 * User tracing code (ptrace or signal handlers) might assume that
--	 * the saved RAX contains a 32-bit number when we're invoking a 32-bit
--	 * syscall.  Just in case the high bits are nonzero, zero-extend
--	 * the syscall number.  (This could almost certainly be deleted
--	 * with no ill effects.)
--	 */
--	movl	%eax, %eax
--
--	/* switch to thread stack expects orig_ax and rdi to be pushed */
--	pushq	%rax			/* pt_regs->orig_ax */
--	pushq	%rdi			/* pt_regs->di */
--
--	/* Need to switch before accessing the thread stack. */
--	SWITCH_TO_KERNEL_CR3 scratch_reg=%rdi
--
--	/* In the Xen PV case we already run on the thread stack. */
--	ALTERNATIVE "", "jmp .Lint80_keep_stack", X86_FEATURE_XENPV
--
--	movq	%rsp, %rdi
--	movq	PER_CPU_VAR(cpu_current_top_of_stack), %rsp
--
--	pushq	6*8(%rdi)		/* regs->ss */
--	pushq	5*8(%rdi)		/* regs->rsp */
--	pushq	4*8(%rdi)		/* regs->eflags */
--	pushq	3*8(%rdi)		/* regs->cs */
--	pushq	2*8(%rdi)		/* regs->ip */
--	pushq	1*8(%rdi)		/* regs->orig_ax */
--	pushq	(%rdi)			/* pt_regs->di */
--.Lint80_keep_stack:
--
--	pushq	%rsi			/* pt_regs->si */
--	xorl	%esi, %esi		/* nospec   si */
--	pushq	%rdx			/* pt_regs->dx */
--	xorl	%edx, %edx		/* nospec   dx */
--	pushq	%rcx			/* pt_regs->cx */
--	xorl	%ecx, %ecx		/* nospec   cx */
--	pushq	$-ENOSYS		/* pt_regs->ax */
--	pushq   %r8			/* pt_regs->r8 */
--	xorl	%r8d, %r8d		/* nospec   r8 */
--	pushq   %r9			/* pt_regs->r9 */
--	xorl	%r9d, %r9d		/* nospec   r9 */
--	pushq   %r10			/* pt_regs->r10*/
--	xorl	%r10d, %r10d		/* nospec   r10 */
--	pushq   %r11			/* pt_regs->r11 */
--	xorl	%r11d, %r11d		/* nospec   r11 */
--	pushq   %rbx                    /* pt_regs->rbx */
--	xorl	%ebx, %ebx		/* nospec   rbx */
--	pushq   %rbp                    /* pt_regs->rbp */
--	xorl	%ebp, %ebp		/* nospec   rbp */
--	pushq   %r12                    /* pt_regs->r12 */
--	xorl	%r12d, %r12d		/* nospec   r12 */
--	pushq   %r13                    /* pt_regs->r13 */
--	xorl	%r13d, %r13d		/* nospec   r13 */
--	pushq   %r14                    /* pt_regs->r14 */
--	xorl	%r14d, %r14d		/* nospec   r14 */
--	pushq   %r15                    /* pt_regs->r15 */
--	xorl	%r15d, %r15d		/* nospec   r15 */
--
--	UNWIND_HINT_REGS
--
--	cld
--
--	movq	%rsp, %rdi
--	call	do_int80_syscall_32
--	jmp	swapgs_restore_regs_and_return_to_usermode
--SYM_CODE_END(entry_INT80_compat)
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index 7924f27f5c8b..fac5db38c895 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -206,6 +206,20 @@ __visible noinstr void func(struct pt_regs *regs,			\
- 									\
- static noinline void __##func(struct pt_regs *regs, u32 vector)
- 
-+/**
-+ * DECLARE_IDTENTRY_IA32_EMULATION - Declare functions for int80
-+ * @vector:	Vector number (ignored for C)
-+ * @asm_func:	Function name of the entry point
-+ * @cfunc:	The C handler called from the ASM entry point (ignored for C)
-+ *
-+ * Declares two functions:
-+ * - The ASM entry point: asm_func
-+ * - The XEN PV trap entry point: xen_##asm_func (maybe unused)
-+ */
-+#define DECLARE_IDTENTRY_IA32_EMULATION(vector, asm_func, cfunc)	\
-+	asmlinkage void asm_func(void);					\
-+	asmlinkage void xen_##asm_func(void)
-+
- /**
-  * DECLARE_IDTENTRY_SYSVEC - Declare functions for system vector entry points
-  * @vector:	Vector number (ignored for C)
-@@ -432,6 +446,35 @@ __visible noinstr void func(struct pt_regs *regs,			\
- #define DECLARE_IDTENTRY_ERRORCODE(vector, func)			\
- 	idtentry vector asm_##func func has_error_code=1
- 
-+/*
-+ * 32-bit legacy system call entry.
-+ *
-+ * 32-bit x86 Linux system calls traditionally used the INT $0x80
-+ * instruction.  INT $0x80 lands here.
-+ *
-+ * This entry point can be used by 32-bit and 64-bit programs to perform
-+ * 32-bit system calls.  Instances of INT $0x80 can be found inline in
-+ * various programs and libraries.  It is also used by the vDSO's
-+ * __kernel_vsyscall fallback for hardware that doesn't support a faster
-+ * entry method.  Restarted 32-bit system calls also fall back to INT
-+ * $0x80 regardless of what instruction was originally used to do the
-+ * system call.
-+ *
-+ * This is considered a slow path.  It is not used by most libc
-+ * implementations on modern hardware except during process startup.
-+ *
-+ * Arguments:
-+ * eax  system call number
-+ * ebx  arg1
-+ * ecx  arg2
-+ * edx  arg3
-+ * esi  arg4
-+ * edi  arg5
-+ * ebp  arg6
-+ */
-+#define DECLARE_IDTENTRY_IA32_EMULATION(vector, asm_func, cfunc)	\
-+	idtentry vector asm_func cfunc has_error_code=0
-+
- /* Special case for 32bit IRET 'trap'. Do not emit ASM code */
- #define DECLARE_IDTENTRY_SW(vector, func)
- 
-@@ -638,6 +681,10 @@ DECLARE_IDTENTRY_IRQ(X86_TRAP_OTHER,	common_interrupt);
- DECLARE_IDTENTRY_IRQ(X86_TRAP_OTHER,	spurious_interrupt);
- #endif
- 
-+#ifdef CONFIG_IA32_EMULATION
-+DECLARE_IDTENTRY_IA32_EMULATION(IA32_SYSCALL_VECTOR,	entry_INT80_compat, do_int80_syscall_32);
-+#endif
-+
- /* System vector entry points */
- #ifdef CONFIG_X86_LOCAL_APIC
- DECLARE_IDTENTRY_SYSVEC(ERROR_APIC_VECTOR,		sysvec_error_interrupt);
-diff --git a/arch/x86/include/asm/proto.h b/arch/x86/include/asm/proto.h
-index feed36d44d04..c4d331fe65ff 100644
---- a/arch/x86/include/asm/proto.h
-+++ b/arch/x86/include/asm/proto.h
-@@ -28,10 +28,6 @@ void entry_SYSENTER_compat(void);
- void __end_entry_SYSENTER_compat(void);
- void entry_SYSCALL_compat(void);
- void entry_SYSCALL_compat_safe_stack(void);
--void entry_INT80_compat(void);
--#ifdef CONFIG_XEN_PV
--void xen_entry_INT80_compat(void);
--#endif
- #endif
- 
- void x86_configure_nx(void);
--- 
-2.19.1.6.gb485710b
-
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>

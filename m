@@ -2,62 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8759A4DDD13
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8B04DDD1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:38:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238143AbiCRPiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 11:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
+        id S238197AbiCRPjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 11:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237890AbiCRPht (ORCPT
+        with ESMTP id S237890AbiCRPjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 11:37:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784FE2631;
-        Fri, 18 Mar 2022 08:36:30 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 15:36:27 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647617788;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+9gAy6RHh9O8uXg9nZI6GD5pDs0VHy0Nr9DLkqnpXME=;
-        b=NulnQnanEodHA+WFvVz//atWbZvSctpj01qS53w1zxKQlpvj8URxNTqCXGH4p9MR+fU8nV
-        OA85MgfjX2brJr1PN08SK3vgSV5zx9RDznqPgiA0yLOx2/ATG+LuDbmblHFaAczZGZkvxf
-        gQdaA4T7cnAsZtFVzK1hUaBiSkTWUG+ky+pgdyFIkjcC6D3WMpx6JeeiEiDALOHj0Zw1Tf
-        VyH7uOblrnDK8HHVB3F4xv2MmpBZ1WSr8BQ6sP9R2hFf7pbXep1iDTXmIib2VY4lkCh4Vl
-        m+Crs8gD+rXS3/6k8GY0UwM4c1TKEyUD0fCm2Wcn/ch0ZhIO/zOasrxXa2YlGg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647617788;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+9gAy6RHh9O8uXg9nZI6GD5pDs0VHy0Nr9DLkqnpXME=;
-        b=PBt2//Ye1HrFV6mmpuwiimurAoK2TiUT+IK81wwYlO/XW0Ggcav+rhKufOs+7Qn42rAA/G
-        2J/tBMkoYHUJ8LAg==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] kbuild: Fixup the IBT kbuild changes
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <CAK7LNAQ2mYMnOKMQheVi+6byUFE3KEkjm1zcndNUfe0tORGvug@mail.gmail.com>
-References: <CAK7LNAQ2mYMnOKMQheVi+6byUFE3KEkjm1zcndNUfe0tORGvug@mail.gmail.com>
+        Fri, 18 Mar 2022 11:39:12 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD39B182;
+        Fri, 18 Mar 2022 08:37:53 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id g19so9735749pfc.9;
+        Fri, 18 Mar 2022 08:37:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=nw1gVfsrX5TVqVbU6JW2Pvb7rhoK13gC1EWpvY8GUzk=;
+        b=V9GZdjqUjhPWfzDhRwgSYuMGZqkZwUCDIu8Ly/vG0H6HALjQdpgWnhe1AkH/Hckq9t
+         EF3KVAcYrtH7o9jmUy46lFZiMW4KCWlE1zvbQQSAqOIjwVDgSJ8O2xgyHstQgMtN6Bpx
+         NiDgDYNnEBMOU8pGHkKT800OVIJ/BqXjQ5J0heIlD9LMQxXooyIZD+RD61JtSMBK5lkr
+         k7MbbskS7Uzxf9h/ACQ+sox3k135Sx8nz51lJ/msgxSUL4VYsyU4orAI3h5YUiIoWyEd
+         5EXGB32lRPALEhQyGkHDfBfNWOeks4Lk7EKi4Fl84VuIPgvf2sA0Twmyq2lL0lYAug9j
+         gFQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=nw1gVfsrX5TVqVbU6JW2Pvb7rhoK13gC1EWpvY8GUzk=;
+        b=ek6lz/8Vx7cCjJMtwHPQlD8c/y8lT9W46Uh0plcHJSK6rZyqtN9REV/VB5iJon0QQv
+         OPn3VCT0qSLSKBMFNm/oH5IWpVTuLCHC7nCugAdbXd19V+oy//IJgpk/iZFnOd+bV9dt
+         jEkWae5xJ8tmirerKdTdnco9VPXBzNSXWjC8mmSTg+A67dkoq+mECPQVz/BLkQFpa/JI
+         /rHJdJzAfHlUss3UBP7H6qiqekqrs+28M22LrOF7/4+WYdAi4i/5nvE47AOCSEJ5f80Y
+         UE1hkwJHOLofbd/VGhcw0eXD8p7txmkNPSDRn+ZfY45rqmIkK/aGe6l/A3S0NlIsi3LG
+         rLAA==
+X-Gm-Message-State: AOAM531cmBCunandLvCyi+iQrJYenMG1ZHC3rYHLOfyXHyOQElle96lD
+        uJ0EBUp3VLd06CIzKfqJ6tEOceyexS8=
+X-Google-Smtp-Source: ABdhPJwDUIHB6+NZdEJ+cPQLFdeJ68gW2iHEfXUiokmdBbTLYgDb67L2UC9qU0S/dsTC83peA/21Ng==
+X-Received: by 2002:a63:ef41:0:b0:381:7f41:64d8 with SMTP id c1-20020a63ef41000000b003817f4164d8mr8322625pgk.312.1647617873029;
+        Fri, 18 Mar 2022 08:37:53 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:bd26:cec:b459:db6e])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004e1414f0bb1sm10528428pfl.135.2022.03.18.08.37.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 08:37:52 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Fri, 18 Mar 2022 08:37:50 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+Cc:     Nadav Amit <nadav.amit@gmail.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Edgar Arriaga =?iso-8859-1?Q?Garc=EDa?= 
+        <edgararriaga@google.com>, Michal Hocko <mhocko@suse.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "# 5 . 10+" <stable@vger.kernel.org>
+Subject: Re: [PATCH V2,2/2] mm: madvise: skip unmapped vma holes passed to
+ process_madvise
+Message-ID: <YjSnTu9QZiiZQE7A@google.com>
+References: <4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com>
+ <YjEaFBWterxc3Nzf@google.com>
+ <20220315164807.7a9cf1694ee2db8709a8597c@linux-foundation.org>
+ <YjFAzuLKWw5eadtf@google.com>
+ <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
+ <20220316142906.e41e39d2315e35ef43f4aad6@linux-foundation.org>
+ <YjNhvhb7l2i9WTfF@google.com>
+ <CAJuCfpGBJev_h92S0xLEQXghGQzNPCsqWTunpVPJQX4WWPjGzw@mail.gmail.com>
+ <B49F17E4-8D3D-45FB-97E9-E0F906C88564@gmail.com>
+ <74852e90-003b-84b8-9836-72258e3c5057@quicinc.com>
 MIME-Version: 1.0
-Message-ID: <164761778730.389.10755640525998622093.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <74852e90-003b-84b8-9836-72258e3c5057@quicinc.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,204 +93,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/core branch of tip:
+On Fri, Mar 18, 2022 at 07:35:41PM +0530, Charan Teja Kalla wrote:
+> Thank you for valuable inputs.
+> 
+> On 3/18/2022 2:08 AM, Nadav Amit wrote:
+> >>>>>> IMO, it's worth to note in man page.
+> >>>>>>
+> >>>>> Or the current patch for just ENOMEM is sufficient here and we just have
+> >>>>> to update the man page?
+> >>>> I think the "On success, process_madvise() returns the number of bytes
+> >>>> advised" behaviour sounds useful.  But madvise() doesn't do that.
+> >>>>
+> >>>> RETURN VALUE
+> >>>>       On  success, madvise() returns zero.  On error, it returns -1 and errno
+> >>>>       is set to indicate the error.
+> >>>>
+> >>>> So why is it desirable in the case of process_madvise()?
+> >>> Since process_madvise deal with multiple ranges and could fail at one of
+> >>> them in the middle or pocessing, people could decide where the call
+> >>> failed and then make a strategy whether they will abort at the point or
+> >>> continue to hint next addresses. Here, problem of the strategy is API
+> >>> doesn't return any error vaule if it has processed any bytes so they
+> >>> would have limitation to decide a policy. That's the limitation for
+> >>> every vector IO syscalls, unfortunately.
+> >>>
+> >>>>
+> >>>>
+> >>>> And why was process_madvise() designed this way?   Or was it
+> >>>> always simply an error in the manpage?
+> >> Taking a closer look, indeed manpage seems to be wrong.
+> >> https://elixir.bootlin.com/linux/v5.17-rc8/source/mm/madvise.c#L1154
+> >> indicates that in the presence of unmapped holes madvise will skip
+> >> them but will return ENOMEM and that's what process_madvise is
+> >> ultimately returning in this case. So, the manpage claim of "This
+> >> return value may be less than the total number of requested bytes, if
+> >> an error occurred after some iovec elements were already processed."
+> >> does not reflect the reality in our case because the return value will
+> >> be -ENOMEM. After the desired behavior is finalized I'll modify the
+> >> manpage accordingly.
+> > Since process_madvise() might be used in sort of non-cooperative mode,
+> > I think that the caller cannot guarantee that it knows exactly the
+> > memory layout of the process whose memory it madvise’s. I know that
+> > MADV_DONTNEED for instance is not supported (at least today) by
+> > process_madvise(), but if it were, the caller may want which exact
+> > memory was madvise'd even if the target process ran some other
+> > memory layout changing syscalls (e.g., munmap()).
+> > 
+> > IOW, skipping holes and just returning the total number of madvise’d
+> > bytes might not be enough.
+> 
+> Then does the advised bytes range by default including holes is a
+> correct design?
+> Say the [start, len) range passed in the iovec by the user contains the
+> layout like, vma1 -- hole-- vma2 -- hole -- vma3.
+> 
+> Under ideal case, where all vma's are eligible for advise, the total
+> bytes processed returning should be vma3->end - vma1->start. This is
+> success case.
+> 
+>  Now, say that vma1 is succeeded but vma2(say VM_LOCKED) is failed at
+> advise. In such case processed bytes will be
+> vma2->start-vma1->start(still consider hole as bytes processed), so that
+> user may restart/skip at vma2, then continue. This return type will be
+> partially processed bytes.
+> 
+> If the system doesn't found any VMA in the passed range by user, it
+> returns ENOMEM as not a single advisable vma is found in the range.
 
-Commit-ID:     2f35e67f621fffc636cb802a4f93fd168cf38274
-Gitweb:        https://git.kernel.org/tip/2f35e67f621fffc636cb802a4f93fd168cf38274
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 18 Mar 2022 12:19:27 +01:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 18 Mar 2022 12:43:44 +01:00
-
-kbuild: Fixup the IBT kbuild changes
-
-Masahiro-san deemed my kbuild changes to support whole module objtool
-runs too terrible to live and gracefully provided an alternative.
-
-Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/CAK7LNAQ2mYMnOKMQheVi+6byUFE3KEkjm1zcndNUfe0tORGvug@mail.gmail.com
----
- scripts/Makefile.build | 68 ++++++++++++-----------------------------
- scripts/Makefile.lib   |  4 +-
- scripts/mod/modpost.c  | 12 +++----
- 3 files changed, 28 insertions(+), 56 deletions(-)
-
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 926d254..abf93d1 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -86,18 +86,12 @@ ifdef need-builtin
- targets-for-builtin += $(obj)/built-in.a
- endif
- 
--targets-for-modules :=
-+targets-for-modules := $(patsubst %.o, %.mod, $(filter %.o, $(obj-m)))
- 
--ifdef CONFIG_LTO_CLANG
--targets-for-modules += $(patsubst %.o, %.lto.o, $(filter %.o, $(obj-m)))
-+ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
-+targets-for-modules += $(patsubst %.o, %.prelink.o, $(filter %.o, $(obj-m)))
- endif
- 
--ifdef CONFIG_X86_KERNEL_IBT
--targets-for-modules += $(patsubst %.o, %.objtool, $(filter %.o, $(obj-m)))
--endif
--
--targets-for-modules += $(patsubst %.o, %.mod, $(filter %.o, $(obj-m)))
--
- ifdef need-modorder
- targets-for-modules += $(obj)/modules.order
- endif
-@@ -176,7 +170,7 @@ ifdef CONFIG_MODVERSIONS
- #   the actual value of the checksum generated by genksyms
- # o remove .tmp_<file>.o to <file>.o
- 
--ifdef CONFIG_LTO_CLANG
-+ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
- # Generate .o.symversions files for each .o with exported symbols, and link these
- # to the kernel and/or modules at the end.
- cmd_modversions_c =								\
-@@ -244,31 +238,16 @@ objtool_args =								\
- 	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
- 	$(if $(CONFIG_SLS), --sls)
- 
--cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $(@:.objtool=.o))
--cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$(@:.objtool=.o): $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
-+cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
-+cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
- 
- endif # CONFIG_STACK_VALIDATION
- 
--ifdef CONFIG_LTO_CLANG
-+ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
- 
- # Skip objtool for LLVM bitcode
- $(obj)/%.o: objtool-enabled :=
- 
--# objtool was skipped for LLVM bitcode, run it now that we have compiled
--# modules into native code
--$(obj)/%.lto.o: objtool-enabled = y
--$(obj)/%.lto.o: part-of-module := y
--
--else ifdef CONFIG_X86_KERNEL_IBT
--
--# Skip objtool on individual files
--$(obj)/%.o: objtool-enabled :=
--
--# instead run objtool on the module as a whole, right before
--# the final link pass with the linker script.
--$(obj)/%.objtool: objtool-enabled = y
--$(obj)/%.objtool: part-of-module := y
--
- else
- 
- # 'OBJECT_FILES_NON_STANDARD := y': skip objtool checking for a directory
-@@ -310,19 +289,24 @@ $(obj)/%.o: $(src)/%.c $(recordmcount_source) FORCE
- 	$(call if_changed_rule,cc_o_c)
- 	$(call cmd,force_checksrc)
- 
--ifdef CONFIG_LTO_CLANG
-+ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
- # Module .o files may contain LLVM bitcode, compile them into native code
- # before ELF processing
--quiet_cmd_cc_lto_link_modules = LTO [M] $@
--      cmd_cc_lto_link_modules =						\
-+quiet_cmd_cc_prelink_modules = LD [M]  $@
-+      cmd_cc_prelink_modules =						\
- 	$(LD) $(ld_flags) -r -o $@					\
--		$(shell [ -s $(@:.lto.o=.o.symversions) ] &&		\
--			echo -T $(@:.lto.o=.o.symversions))		\
-+               $(shell [ -s $(@:.prelink.o=.o.symversions) ] &&		\
-+                       echo -T $(@:.prelink.o=.o.symversions))		\
- 		--whole-archive $(filter-out FORCE,$^)			\
- 		$(cmd_objtool)
- 
--$(obj)/%.lto.o: $(obj)/%.o FORCE
--	$(call if_changed,cc_lto_link_modules)
-+# objtool was skipped for LLVM bitcode, run it now that we have compiled
-+# modules into native code
-+$(obj)/%.prelink.o: objtool-enabled = y
-+$(obj)/%.prelink.o: part-of-module := y
-+
-+$(obj)/%.prelink.o: $(obj)/%.o FORCE
-+	$(call if_changed,cc_prelink_modules)
- endif
- 
- cmd_mod = { \
-@@ -333,18 +317,6 @@ cmd_mod = { \
- $(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o FORCE
- 	$(call if_changed,mod)
- 
--#
--# Since objtool will re-write the file it will change the timestamps, therefore
--# it is critical that the %.objtool file gets a timestamp *after* objtool runs.
--#
--# Additionally, care must be had with ordering this rule against the other rules
--# that take %.o as a dependency.
--#
--cmd_objtool_mod = true $(cmd_objtool) ; touch $@
--
--$(obj)/%.objtool: $(obj)/%$(mod-prelink-ext).o FORCE
--	$(call if_changed,objtool_mod)
--
- quiet_cmd_cc_lst_c = MKLST   $@
-       cmd_cc_lst_c = $(CC) $(c_flags) -g -c -o $*.o $< && \
- 		     $(CONFIG_SHELL) $(srctree)/scripts/makelst $*.o \
-@@ -498,7 +470,7 @@ $(obj)/lib.a: $(lib-y) FORCE
- # Do not replace $(filter %.o,^) with $(real-prereqs). When a single object
- # module is turned into a multi object module, $^ will contain header file
- # dependencies recorded in the .*.cmd file.
--ifdef CONFIG_LTO_CLANG
-+ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
- quiet_cmd_link_multi-m = AR [M]  $@
- cmd_link_multi-m =						\
- 	$(cmd_update_lto_symversions);				\
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 79be57f..8bfc923 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -230,11 +230,11 @@ dtc_cpp_flags  = -Wp,-MMD,$(depfile).pre.tmp -nostdinc                    \
- 		 $(addprefix -I,$(DTC_INCLUDE))                          \
- 		 -undef -D__DTS__
- 
--ifeq ($(CONFIG_LTO_CLANG),y)
-+ifneq ($(CONFIG_LTO_CLANG)$(CONFIG_X86_KERNEL_IBT),)
- # With CONFIG_LTO_CLANG, .o files in modules might be LLVM bitcode, so we
- # need to run LTO to compile them into native code (.lto.o) before further
- # processing.
--mod-prelink-ext := .lto
-+mod-prelink-ext := .prelink
- endif
- 
- # Useful for describing the dependency of composite objects
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 6bfa332..09c3ab0 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1989,9 +1989,9 @@ static char *remove_dot(char *s)
- 		if (m && (s[n + m] == '.' || s[n + m] == 0))
- 			s[n] = 0;
- 
--		/* strip trailing .lto */
--		if (strends(s, ".lto"))
--			s[strlen(s) - 4] = '\0';
-+		/* strip trailing .prelink */
-+		if (strends(s, ".prelink"))
-+			s[strlen(s) - 8] = '\0';
- 	}
- 	return s;
- }
-@@ -2015,9 +2015,9 @@ static void read_symbols(const char *modname)
- 		/* strip trailing .o */
- 		tmp = NOFAIL(strdup(modname));
- 		tmp[strlen(tmp) - 2] = '\0';
--		/* strip trailing .lto */
--		if (strends(tmp, ".lto"))
--			tmp[strlen(tmp) - 4] = '\0';
-+		/* strip trailing .prelink */
-+		if (strends(tmp, ".prelink"))
-+			tmp[strlen(tmp) - 8] = '\0';
- 		mod = new_module(tmp);
- 		free(tmp);
- 	}
+As I mentioned in other reply, let's do not make any exception(i.e.,
+skipping hole) for vectored memory syscall but exact processed bytes
+on the exact ranges.

@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584354DD717
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8834DD719
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234390AbiCRJa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 05:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        id S234469AbiCRJa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 05:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234222AbiCRJa0 (ORCPT
+        with ESMTP id S234222AbiCRJaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 05:30:26 -0400
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6022E710D;
-        Fri, 18 Mar 2022 02:29:07 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id p15so2444758lfk.8;
-        Fri, 18 Mar 2022 02:29:07 -0700 (PDT)
+        Fri, 18 Mar 2022 05:30:55 -0400
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC87B2E711A;
+        Fri, 18 Mar 2022 02:29:36 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id s25so10561376lji.5;
+        Fri, 18 Mar 2022 02:29:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:from
          :subject:content-language:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=r/KSxIU//Kws3RC8d1JZQRYfzJorheEdEELxh9Sq7qA=;
-        b=2F6XDHOFeRVHgQgJwHSiTZG6g0T3ND7i4engvfIvHNpMsKG3k4LfqU0EEIYTfW8xvO
-         IA1KBO1NjM/N/ffhTsh54iOTSFxNWo4Qif7uDrWpcDsBVjTKL0G/8V2xiifw1aoQN0cZ
-         0og6nNsJjrOYsTIjadivCR7CiL1yNBd1XWuq0Q3oTou3WIyrayqebya+qUtjpdJ4D+m9
-         1vEHXMPEGoN+9JUgto+AmhJ9611UtvkAqcPJa1BM4xV5G73Yxh73/1Mpmulmi6sIkMFE
-         OYB7PSHIN3GZMq9/XwuUvB9nZl66YWVHbiyjS+vkkzeG2V183hUyaY4O1EcdiXmVstmY
-         LkTA==
-X-Gm-Message-State: AOAM533tYEZoCRJMEGtINc7G/LlcAFdsKVj6pUIavxKQ1lqpnZBYGMyk
-        sYWr3fjOQaiws4lUz8lQI6SvNWEZiMk=
-X-Google-Smtp-Source: ABdhPJx8xw66Z8uwazCQLCXROoTk/i0PVK2wYPF4n5X7S+EtHm/rvn1phJnuKrNseuP0HIrj1O+zqg==
-X-Received: by 2002:a05:6512:228b:b0:448:92d7:892a with SMTP id f11-20020a056512228b00b0044892d7892amr5521975lfu.543.1647595746040;
-        Fri, 18 Mar 2022 02:29:06 -0700 (PDT)
+        bh=JP93varl936CcJKPvOokM9x60gJyGqTR3tO80wLaHjw=;
+        b=4UBa1MrpF8UwC5WtEaG6fD9l0Phh7BpqHnPoVMYOk9aY7aKqvTQyFJlDVXOv1RyNsZ
+         D18ZBUD2Iok1S0GrK9VRAQT4IO4JiUyqkflFF1qac8XPRauSQvXhKco4Jb4lDMwgVAUv
+         35HnAruN+6VHzKxmfQqmzVgJwvC2CJ+iYslUqpfYnIt0DefrY6XMscpXJ/Ickc3dyCa5
+         YyoFKngWM4rcLJVbOL0penBUsnjOSiKl5flNn/YZ6pDqRCj1DUVPatH9NaIzYQ00SgIl
+         if2hgi+lMpZkVMwMNA8aTTI2C0oiLiWxqVh0OMN5XqM45eJS8sjOZq8OxmxAOBIYLyeZ
+         HvpA==
+X-Gm-Message-State: AOAM533aHIPUWHexFsdjXXb3yNIvPml3Cvqq1AnL0lTt7cO7vIih/o6j
+        5Qu3fsvuVrPcDY8laOtdeMJrjFKpxis=
+X-Google-Smtp-Source: ABdhPJyaySK0Yd0ffwNBswotDY0OD7OmAPS5rPZTeAOVNJFz6BnUFdl7UNzmHkXBWyCnx7iHjJuaDw==
+X-Received: by 2002:a2e:9cd:0:b0:244:d41d:69ef with SMTP id 196-20020a2e09cd000000b00244d41d69efmr5402375ljj.386.1647595774992;
+        Fri, 18 Mar 2022 02:29:34 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id x14-20020ac25dce000000b00448547b66a1sm764797lfq.266.2022.03.18.02.29.04
+        by smtp.googlemail.com with ESMTPSA id a6-20020ac25046000000b004477c9fad7asm766637lfm.115.2022.03.18.02.29.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 02:29:05 -0700 (PDT)
-Message-ID: <67600921-a4ea-367e-6b45-c4a1a12ae88b@kernel.org>
-Date:   Fri, 18 Mar 2022 10:29:03 +0100
+        Fri, 18 Mar 2022 02:29:34 -0700 (PDT)
+Message-ID: <d1fab3e6-a9ee-0d3e-9d4b-d082317d8b72@kernel.org>
+Date:   Fri, 18 Mar 2022 10:29:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 3/5 v2] dt-bindings: gnss: Rewrite sirfstar binding in
- YAML
+Subject: Re: [PATCH 4/5 v2] dt-bindings: gnss: Add two more chips
 Content-Language: en-US
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Johan Hovold <johan@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 References: <20220317225844.1262643-1-linus.walleij@linaro.org>
- <20220317225844.1262643-3-linus.walleij@linaro.org>
-In-Reply-To: <20220317225844.1262643-3-linus.walleij@linaro.org>
+ <20220317225844.1262643-4-linus.walleij@linaro.org>
+In-Reply-To: <20220317225844.1262643-4-linus.walleij@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -67,131 +66,30 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 17/03/2022 23:58, Linus Walleij wrote:
-> This rewrites the SiRFstar DT bindings in YAML.
+> The CSR GSD4t is a CSR product using the SiRFstarIV core, and
+> the CSR CSRG05TA03-ICJE-R is a CSR product using the SiRFstarV
+> core.
+> 
+> These chips have a SRESETN line that can be pulled low to hard
+> reset the chip and in some designs this is connected to a GPIO,
+> so add this as an optional property.
+> 
+> Update the example with a reset line so users see that it need
+> to be tagged as active low.
 > 
 > Cc: devicetree@vger.kernel.org
 > Cc: Krzysztof Kozlowski <krzk@kernel.org>
 > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
 > ChangeLog v1->v2:
-> - Change additionalProperties: false to uneavaluatedProperties: false
->   so new common properties get available immediately
-> - This should also make the checker robot happy about
->   lna-supply
+> - Add maxItems: 1 to the reset-gpios
 > ---
->  .../devicetree/bindings/gnss/sirfstar.txt     | 46 ------------
->  .../devicetree/bindings/gnss/sirfstar.yaml    | 71 +++++++++++++++++++
->  2 files changed, 71 insertions(+), 46 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/gnss/sirfstar.txt
->  create mode 100644 Documentation/devicetree/bindings/gnss/sirfstar.yaml
+>  Documentation/devicetree/bindings/gnss/sirfstar.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/gnss/sirfstar.txt b/Documentation/devicetree/bindings/gnss/sirfstar.txt
-> deleted file mode 100644
-> index f4252b6b660b..000000000000
-> --- a/Documentation/devicetree/bindings/gnss/sirfstar.txt
-> +++ /dev/null
-> @@ -1,46 +0,0 @@
-> -SiRFstar-based GNSS Receiver DT binding
-> -
-> -SiRFstar chipsets are used in GNSS-receiver modules produced by several
-> -vendors and can use UART, SPI or I2C interfaces.
-> -
-> -Please see Documentation/devicetree/bindings/gnss/gnss.txt for generic
-> -properties.
-> -
-> -Required properties:
-> -
-> -- compatible	: Must be one of
-> -
-> -			"fastrax,uc430"
-> -			"linx,r4"
-> -			"wi2wi,w2sg0004"
-> -			"wi2wi,w2sg0008i"
-> -			"wi2wi,w2sg0084i"
-> -
-> -- vcc-supply	: Main voltage regulator (pin name: 3V3_IN, VCC, VDD)
-> -
-> -Required properties (I2C):
-> -- reg		: I2C slave address
-> -
-> -Required properties (SPI):
-> -- reg		: SPI chip select address
-> -
-> -Optional properties:
-> -
-> -- sirf,onoff-gpios	: GPIO used to power on and off device (pin name: ON_OFF)
-> -- sirf,wakeup-gpios	: GPIO used to determine device power state
-> -			  (pin name: RFPWRUP, WAKEUP)
-> -- timepulse-gpios	: Time pulse GPIO (pin name: 1PPS, TM)
-> -
-> -Example:
-> -
-> -serial@1234 {
-> -	compatible = "ns16550a";
-> -
-> -	gnss {
-> -		compatible = "wi2wi,w2sg0084i";
-> -
-> -		vcc-supply = <&gnss_reg>;
-> -		sirf,onoff-gpios = <&gpio0 16 GPIO_ACTIVE_HIGH>;
-> -		sirf,wakeup-gpios = <&gpio0 17 GPIO_ACTIVE_HIGH>;
-> -	};
-> -};
-> diff --git a/Documentation/devicetree/bindings/gnss/sirfstar.yaml b/Documentation/devicetree/bindings/gnss/sirfstar.yaml
-> new file mode 100644
-> index 000000000000..9f80add3e61b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gnss/sirfstar.yaml
-> @@ -0,0 +1,71 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gnss/sirfstar.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: SiRFstar GNSS Receiver Device Tree Bindings
-> +
-> +allOf:
-> +  - $ref: gnss-common.yaml#
 
-The allOf should be just before "properties:" (also in patch #2).
 
-> +
-> +maintainers:
-> +  - Johan Hovold <johan@kernel.org>
-> +
-> +description:
-> +  The SiRFstar GNSS receivers have incarnated over the years in different
-> +  chips, starting from the SiRFstarIII which was a chip that was introduced in
-> +  2004 and used in a lot of dedicated GPS devices. In 2009 SiRF was acquired
-> +  by CSR (Cambridge Silicon Radio) and in 2012 the CSR GPS business was
-> +  acquired by Samsung, while some products remained with CSR. In 2014 CSR
-> +  was acquired by Qualcomm who still sell some of the SiRF products.
-> +
-> +  SiRF chips can be used over UART, I2C or SPI buses.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - fastrax,uc430
-> +      - linx,r4
-> +      - wi2wi,w2sg0004
-> +      - wi2wi,w2sg0008i
-> +      - wi2wi,w2sg0084i
-> +
-> +  reg:
-> +    description:
-> +      The I2C Address, SPI chip select address. Not required on UART buses.
-> +
-> +  vcc-supply:
-> +    description:
-> +      Main voltage regulator, pin names such as 3V3_IN, VCC, VDD.
-> +
-> +  timepulse-gpios:
-> +    description: Comes with pin names such as 1PPS or TM
-
-You don't need this, I think. It's coming from gnss-common.yaml.
-
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
 
 Best regards,

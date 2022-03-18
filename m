@@ -2,100 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6CF4DD895
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D5A4DD894
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234913AbiCRK7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
+        id S235527AbiCRK7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235525AbiCRK7Y (ORCPT
+        with ESMTP id S235523AbiCRK7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Mar 2022 06:59:24 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00809B1F;
-        Fri, 18 Mar 2022 03:58:01 -0700 (PDT)
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mow06-1nswK946us-00qVSx; Fri, 18 Mar 2022 11:58:00 +0100
-Received: by mail-wr1-f50.google.com with SMTP id x15so11180933wru.13;
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B3F283
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:58:00 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id mr5-20020a17090b238500b001c67366ae93so5582872pjb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:58:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references;
+        bh=iD3SQVbluqBYYl9Q69vFkPZdZHA/c5gFmaZJqTpGnFU=;
+        b=LB6IRGcklNnwQHkAZy+NfZBjeW2iyozb0k13pHIvTXLERYiuuiIQKxMQKG3jGjQDgH
+         5XRzkxwO7s4RQAjA8UmlZ1YslJwftMpAv/RkjHvsLISVeZHtV4qqd9Bd/Js6RUpOMlcR
+         vDv6K7HQ1iR2RCdmjNofYtP7kruyENxGSuGiokdOI++DeV6239nV5jZ54SbOzF5bB94t
+         5rcjjahQ1gI5eW+ynRue/5Tr6szEjF4NIWPIuMeG8KwNOldqh61PB5jwfuoERXyi4hNE
+         YhLwy+lgPIFL2ny4vnqdAYHj1Rw7oCXb0fYCSWjflD5vlNE45pplP5cRqitPb6OFbDqH
+         4gOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references;
+        bh=iD3SQVbluqBYYl9Q69vFkPZdZHA/c5gFmaZJqTpGnFU=;
+        b=sNEMWMLEamLGQvWzX6kD/GhMUej5GSqfCkPdNmqjv/MTlOVpDzLqsOKVFZV+IEQnfc
+         08orZLjBZtfFbQp8Uj92JUwawYuLxNe45at2BSDBUqtjStxYOdtKxTEOYj0Mzd3cm4Ya
+         OMXVyK0u8EH+EdQbfugydJHXc/jRhUIYfG/OFJlBPUALg3cAOPxeTS3a8LJNia+Ats0I
+         ioNHNAChzV1b2BZ/m9VDSLQ8HRd/+WMD8JpZDT2MD0FefnZEUYO/vUI3k52N12GrpH+M
+         dqIz0SvOUgA89lv7/OGoTCpD6K6skjDFXZBiERzNKgd3QUG3p6OEjJHbQxjPoVU+NT4x
+         DU8w==
+X-Gm-Message-State: AOAM533jxUHozjfY+nMJvZM8KaJ6UXTQjOKsVbyGh9lu1UzDO9u1rfSg
+        G1UBD6cmeF66UefC9wAvMUh8a/b8bOL3WLnLzEw=
+X-Google-Smtp-Source: ABdhPJz2XjBakfUvIu6Dk3uZ7H0HejvxnQ1wS/ofnXn23ahjHMcBc/HpZEz0xoC9PiU3Z1bfrlL9pg==
+X-Received: by 2002:a17:90b:1a8b:b0:1bf:89c2:3a0f with SMTP id ng11-20020a17090b1a8b00b001bf89c23a0fmr10229585pjb.215.1647601079714;
         Fri, 18 Mar 2022 03:57:59 -0700 (PDT)
-X-Gm-Message-State: AOAM530nLpnRw2lh8d/XGlJxSUVMv738a8Eef1fXYP1aJ8QUgkzCHN0S
-        Jp8oUXVwRj6oG0FTEAzA/Ovd6hsKeaClilFWToQ=
-X-Google-Smtp-Source: ABdhPJygvqeb8CKahN9tA6vLmPaz+02mK9I2rCGgT2X4jCD85oC9ykdBR8OhrX8VXnQE2mrZbs3glcwYUGyMCAmx2KA=
-X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
- e15-20020a5d6d0f000000b0020391571c48mr7518786wrq.192.1647601079616; Fri, 18
- Mar 2022 03:57:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220318083421.2062259-1-guoren@kernel.org>
-In-Reply-To: <20220318083421.2062259-1-guoren@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 18 Mar 2022 11:57:43 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0NMPVGVw7===uEOtNnu1hr1GqimMbZT+Kea1CUxRvPmw@mail.gmail.com>
-Message-ID: <CAK8P3a0NMPVGVw7===uEOtNnu1hr1GqimMbZT+Kea1CUxRvPmw@mail.gmail.com>
-Subject: Re: [PATCH] csky: Move to generic ticket-spinlock
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>, linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:bqnkdYmcXFrf1DzpYk9XzTVJPnWQH3Mt3pH+fe4KYxq9t6N47rW
- VeS3iUvTeI8rb2z5JN0/tmZuYHM0Nx8taeiEjeegyQMc385wFUKeyNpQIRCC9XK7mjq6Tgs
- iMiA7ZWeLk4gs1lHTJCCm8+XGDQcgvRxwaZXtk0hLNWcwJlXgTkj6Y8tMePyjCqiJ60JlcK
- JdhurD+XY9hNw4AWcukXg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fqN8OxJdcMQ=:uzws4P4sO+VIVhvDlqAfXt
- pFRqJxcPBHoot2Ex6x6Xr3LGO1DCaKHCfCe4x/kiR4IkiySc8q3fkF4py8CcPNAlpnnq2hYyT
- F/1GVQheRObYsXz+sTIdD/K3lLeebR7XzK+ITpt2HybgnhUE09Yy56Uxvo3gZayHesCxzMOCq
- pfjW/k93Ujtq7av1V8GhbllyJd0zN0o/kT9A7GXxfrASZJw7xMNBKdYrW70mo7XJ3fd2aUO3B
- 8SfuAvaDgwomRx9OWjuurJ3g+JFviBkYzw0sFhkpFBLKVNv1FrpCOVIkYwITNle1HEjGoh2j8
- cSbs2d1mtQaabbqs0+XHIrdWhmJp7NdHsaAuyxSooNPQjZ4SY+4tLFPygb9MATkgdVEc3PCrR
- PUsiUja6+6/7i00r7dOevu20zrgebvGcnI6UnbtTiHPW9SDFDna6VoMdFzIW3TRnDqazsmbpq
- nbDH3Ii4soTob+PwtJTcTpHuFx/EXQp+vREyvDJXjcL0cDcwhV0qaUQFv/V6G99uWdaTA3bL6
- 07l+A5Rlfu6SsDnxWyxThqGhEs/ropBj6nKOhIGfl2tbduSL3b93tMipL+/K2CSHn+F6DqGTp
- 7qcFQkXhAyJLHeILIDWnS+S4mL4VlOCoYQ5FOjPxOBTHUKDbCDM9erOzhfLxqJ1spSf7QwzBC
- YxlpwOHUwpEhxfuTWilZosO8q6HLVrzXn042xdSpaods6f9dWMdKuOqkVMOdQOO86IEE=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id h6-20020a056a00230600b004fa1209e0f3sm9897718pfh.23.2022.03.18.03.57.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 03:57:59 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Liam Beguin <liambeguin@gmail.com>,
+        Roger Quadros <rogerq@ti.com>, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] phy: ti: omap-usb2: Fix error handling in omap_usb2_enable_clocks
+Date:   Fri, 18 Mar 2022 10:57:46 +0000
+Message-Id: <20220318105748.19532-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <YjIC1hWuVN3qkdqx@shaak>
+References: <YjIC1hWuVN3qkdqx@shaak>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 9:34 AM <guoren@kernel.org> wrote:
-> @@ -3,6 +3,8 @@ generic-y += asm-offsets.h
->  generic-y += extable.h
->  generic-y += gpio.h
->  generic-y += kvm_para.h
-> +generic-y += ticket-lock.h
-> +generic-y += ticket-lock-types.h
->  generic-y += qrwlock.h
->  generic-y += user.h
->  generic-y += vmlinux.lds.h
+The corresponding API for clk_prepare_enable is clk_disable_unprepare.
+Make sure that the clock is unprepared on exit by changing clk_disable
+to clk_disable_unprepare.
 
-If these headers are not included from architecture-independent code,
-they should
-not be marked as generic-y, same as for the qrwlock.h header
+Fixes: ed31ee7cf1fe ("phy: ti: usb2: Fix logic on -EPROBE_DEFER")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+changes in v2:
+- fix typo in commit message.
+---
+ drivers/phy/ti/phy-omap-usb2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +#include <asm/ticket-lock.h>
->  #include <asm/qrwlock.h>
->
-> ...
-> +#include <asm/ticket-lock-types.h>
->  #include <asm-generic/qrwlock_types.h>
->
+diff --git a/drivers/phy/ti/phy-omap-usb2.c b/drivers/phy/ti/phy-omap-usb2.c
+index 3a505fe5715a..31a775877f6e 100644
+--- a/drivers/phy/ti/phy-omap-usb2.c
++++ b/drivers/phy/ti/phy-omap-usb2.c
+@@ -215,7 +215,7 @@ static int omap_usb2_enable_clocks(struct omap_usb *phy)
+ 	return 0;
+ 
+ err1:
+-	clk_disable(phy->wkupclk);
++	clk_disable_unprepare(phy->wkupclk);
+ 
+ err0:
+ 	return ret;
+-- 
+2.17.1
 
-So these should all become
-
-#include <asm-generic/...h>
-
-It would however make sense to have the trivial two-line version
-of the two header files and put them into asm-generic/spinlock.h
-and asm-generic/spinlock-types.h, replacing the current version.
-
-If you do that, then you need a 'generic-y' line for spinlock.h,
-but not for the other ones.
-
-       Arnd

@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B814DE0EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 264054DE0EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240075AbiCRSXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 14:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47662 "EHLO
+        id S240086AbiCRSXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 14:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238216AbiCRSXE (ORCPT
+        with ESMTP id S240071AbiCRSXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 14:23:04 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F642EDC24;
-        Fri, 18 Mar 2022 11:21:45 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso11122531ooi.1;
-        Fri, 18 Mar 2022 11:21:45 -0700 (PDT)
+        Fri, 18 Mar 2022 14:23:07 -0400
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B502F24FC;
+        Fri, 18 Mar 2022 11:21:46 -0700 (PDT)
+Received: by mail-oo1-xc33.google.com with SMTP id h16-20020a4a6f10000000b00320507b9ccfso11100509ooc.7;
+        Fri, 18 Mar 2022 11:21:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=EFq/sVrI6Bue9cyUSaoxy94ZUvixs96lvX2Ayzk148g=;
-        b=XL4gt5WtKnh6BRAWcdCkrOk/iSI1MuCEb8ti876b+hQfCIcjD3TdBIM1rrIoQMKFb5
-         2/zI5PX6qT3kO34xvNu77helHXZjAQ6bBhRroPKHKAr9txykWEGpSrqOFEudB63vtqal
-         2IonGmfrA8Z97oF3TbWAkY8VPLwsq3pL0XqCQth3A1ZFv4XIs3rW0xT1R3yVnG49o6q1
-         sEFH3i8t7mwshUWLsVK3z0oWzV/cYy3pconTuR2sMHZwrf68mYze5+J+jSHW6y5fE6Tl
-         FppVd+YCLFUZKU07lOMGWY7nGPSthxLl+8uTTgHfNsAhTWa0BH3G4OcR62EuHDCo8AmO
-         olQA==
+        bh=j+QdMtyiSO59yZ9pT2DUk0+ungQksss7IAC2RMRx8JY=;
+        b=Dj35BMC4ZLSKdPeAnhonAm3tkNbrnhAhXHI1QMaB+eKT8o9QP37T9539Yzifh+2u2I
+         0f/d1zTM0/2zhsAgbakV3tl5cZGwFq3fAwX0kukvVU4esjRoCJjC9dANqooMGBN0XOld
+         XUu2JVerXi160tmnjkiJOX1/wYGqnqODPYC2fDOZKXLQu2tpLd5IDoG3dpwPkLucG2Fk
+         VHeF5Cq5e3Ku9m3D9+VLpsAhcPjox1BI7DvVS0jTZexTZ4YUM3IZeAGzADSBw8dPU8l8
+         62JiLa1M6EmSBQBJlpsOD4BE+VNPPqwr0os88k13zVWOXKt6dOp33t3ZXLSdfvznkP6h
+         qWZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EFq/sVrI6Bue9cyUSaoxy94ZUvixs96lvX2Ayzk148g=;
-        b=6YNQ8lxI5SmgAdQ/qjSeKHDkbpNdaa0gDfX8qV12k17BejmY5cPM/QBsRpA0F/YBvg
-         rktixAvZ331DGkm+jfyvILT5yR8MtosLNtkeP1E6MDlLfPS7gQc55S6S1s2QRWPNLvEr
-         qv6JHGq20WPHFxaZk0uz6N96nwYKXop5zbQ03YiHA0wM6DmExkCewceozjrCj6mxFViJ
-         bzvRPJJfiGk/NjTK0Qc5kvoWCRr2Wm1f0/WqbHIdWbIY5i3L+ZZWnSrzSx0LYriEu/Bt
-         iW4ym1tVG64ciHjmAVHJftQKc7GF2dIBPL4zRfRpgbbgXu04HtYSaHOsVqRqF+tcNa/I
-         RQ5A==
-X-Gm-Message-State: AOAM531hn02hP4aZkawXgNpTYZxcG3afrIgXOwsZEnMktZ4iCSUcDTMW
-        rXUzTvLgy0SO1/9e0yHl5G+NQrCSujA=
-X-Google-Smtp-Source: ABdhPJw9GhRX4erUhtAT5Id9n5+iJ9Ol1/LXrywWzTVpG1srJ7g8PBzboHQsrlvS7U34RKL2WGFVjA==
-X-Received: by 2002:a05:6870:5489:b0:dd:c55d:9b52 with SMTP id f9-20020a056870548900b000ddc55d9b52mr2880191oan.63.1647627704780;
-        Fri, 18 Mar 2022 11:21:44 -0700 (PDT)
+        bh=j+QdMtyiSO59yZ9pT2DUk0+ungQksss7IAC2RMRx8JY=;
+        b=2HN7DpX9+VN3LHML39GB5E3/nbLq3yMobXMUGAR65H39Fx6TwqTD5HpAdGu9ggzt4k
+         QCQ04MAOdRdDcsoqcJVniuP3Vy3lBMYA5AVU0c5PX4SLqUm0RXKDlnbml11OC3cPSApE
+         VyrlnRNfNpD2hoHHlmW/U8KNlW8q2NPsUkUgONc9/8EYxBSiHj4yuZDgDe1kzejBRIUn
+         e90HN0gVXffzpk3Z0rVjHe6ZXmduv7aNXZMH53Qzeeru9CGLUoYvUEzGuQsLXr157cJK
+         8QEkRzlnx8rbPryBf3skqlJnsn356hb4u47HtPczmJKB6ccf/LzeZulFyyn/eiRPo6av
+         pcSw==
+X-Gm-Message-State: AOAM530j8xayCWqZBuLh2oKZKjpsECBJLoEd12qG9e4Ln3F6s37dicur
+        vwXArm5tyy5URDUl6Z9AzFU=
+X-Google-Smtp-Source: ABdhPJzoqpnPspGY5H/FuQeI26yBoKW6Ceqxv7z4625aKuVY1QZH4qc8VYsmgQsGtrVE9L5Jh7MDFQ==
+X-Received: by 2002:a4a:dcd6:0:b0:321:2728:d4cd with SMTP id h22-20020a4adcd6000000b003212728d4cdmr3233118oou.33.1647627705256;
+        Fri, 18 Mar 2022 11:21:45 -0700 (PDT)
 Received: from ian.penurio.us ([47.184.51.90])
         by smtp.gmail.com with ESMTPSA id v12-20020a056830140c00b005cb2f486230sm2889977otp.0.2022.03.18.11.21.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 11:21:44 -0700 (PDT)
+        Fri, 18 Mar 2022 11:21:45 -0700 (PDT)
 From:   Ian Pilcher <arequipeno@gmail.com>
 To:     pavel@ucw.cz
 Cc:     ian@penurio.us, linux-leds@vger.kernel.org,
         linux-kernel@vger.kernel.org, kabel@kernel.org
-Subject: [PATCH v9 1/2] docs: Add block device (blkdev) LED trigger documentation
-Date:   Fri, 18 Mar 2022 13:21:10 -0500
-Message-Id: <20220318182111.311204-2-arequipeno@gmail.com>
+Subject: [PATCH v9 2/2] leds: trigger: Add block device LED trigger
+Date:   Fri, 18 Mar 2022 13:21:11 -0500
+Message-Id: <20220318182111.311204-3-arequipeno@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220318182111.311204-1-arequipeno@gmail.com>
 References: <20220318182111.311204-1-arequipeno@gmail.com>
@@ -70,299 +70,1192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Documentation/ABI/testing/sysfs-class-led-trigger-blkdev to
-document:
+Add "blkdev" LED trigger to blink LEDs in response to block device
+activity.
 
-  * /sys/class/leds/<led>/blink_time
-  * /sys/class/leds/<led>/check_interval
-  * /sys/class/leds/<led>/blink_on_{read,write,discard,flush}
-  * /sys/class/leds/<led>/link_dev_by_path
-  * /sys/class/leds/<led>/unlink_dev_by_path
-  * /sys/class/leds/<led>/linked_devices
-
-Add /sys/block/<disk>/linked_leds to
-Documentation/ABI/stable/sysfs-block.
-
-Add overview in Documentation/leds/ledtrig-blkdev.rst.
+Add LEDS_TRIGGER_BLKDEV (tristate) config option to control building of
+the trigger.
 
 Signed-off-by: Ian Pilcher <arequipeno@gmail.com>
 ---
- Documentation/ABI/stable/sysfs-block          |  10 ++
- .../testing/sysfs-class-led-trigger-blkdev    |  68 ++++++++
- Documentation/leds/index.rst                  |   1 +
- Documentation/leds/ledtrig-blkdev.rst         | 155 ++++++++++++++++++
- 4 files changed, 234 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-class-led-trigger-blkdev
- create mode 100644 Documentation/leds/ledtrig-blkdev.rst
+ drivers/leds/trigger/Kconfig          |    9 +
+ drivers/leds/trigger/Makefile         |    1 +
+ drivers/leds/trigger/ledtrig-blkdev.c | 1139 +++++++++++++++++++++++++
+ 3 files changed, 1149 insertions(+)
+ create mode 100644 drivers/leds/trigger/ledtrig-blkdev.c
 
-diff --git a/Documentation/ABI/stable/sysfs-block b/Documentation/ABI/stable/sysfs-block
-index 8dd3e84a8aad..534f22d6aa46 100644
---- a/Documentation/ABI/stable/sysfs-block
-+++ b/Documentation/ABI/stable/sysfs-block
-@@ -101,6 +101,16 @@ Description:
- 		devices that support receiving integrity metadata.
+diff --git a/drivers/leds/trigger/Kconfig b/drivers/leds/trigger/Kconfig
+index dc6816d36d06..bda249068182 100644
+--- a/drivers/leds/trigger/Kconfig
++++ b/drivers/leds/trigger/Kconfig
+@@ -154,4 +154,13 @@ config LEDS_TRIGGER_TTY
  
+ 	  When build as a module this driver will be called ledtrig-tty.
  
-+What:		/sys/block/<disk>/linked_leds
-+Date:		March 2022
-+Contact:	Ian Pilcher <arequipeno@gmail.com>
-+Description:
-+		Directory that contains symbolic links to all LEDs that
-+		are associated with (linked to) this block device by the
-+		blkdev LED trigger.  Only present when at least one LED
-+		is linked.  (See Documentation/leds/ledtrig-blkdev.rst.)
++config LEDS_TRIGGER_BLKDEV
++	tristate "LED Trigger for block devices"
++	depends on BLOCK
++	help
++	  The blkdev LED trigger allows LEDs to be controlled by block device
++	  activity (reads and writes).
 +
++	  See Documentation/leds/ledtrig-blkdev.rst.
 +
- What:		/sys/block/<disk>/<partition>/alignment_offset
- Date:		April 2009
- Contact:	Martin K. Petersen <martin.petersen@oracle.com>
-diff --git a/Documentation/ABI/testing/sysfs-class-led-trigger-blkdev b/Documentation/ABI/testing/sysfs-class-led-trigger-blkdev
+ endif # LEDS_TRIGGERS
+diff --git a/drivers/leds/trigger/Makefile b/drivers/leds/trigger/Makefile
+index 25c4db97cdd4..d53bab5d93f1 100644
+--- a/drivers/leds/trigger/Makefile
++++ b/drivers/leds/trigger/Makefile
+@@ -16,3 +16,4 @@ obj-$(CONFIG_LEDS_TRIGGER_NETDEV)	+= ledtrig-netdev.o
+ obj-$(CONFIG_LEDS_TRIGGER_PATTERN)	+= ledtrig-pattern.o
+ obj-$(CONFIG_LEDS_TRIGGER_AUDIO)	+= ledtrig-audio.o
+ obj-$(CONFIG_LEDS_TRIGGER_TTY)		+= ledtrig-tty.o
++obj-$(CONFIG_LEDS_TRIGGER_BLKDEV)	+= ledtrig-blkdev.o
+diff --git a/drivers/leds/trigger/ledtrig-blkdev.c b/drivers/leds/trigger/ledtrig-blkdev.c
 new file mode 100644
-index 000000000000..9214439b01c7
+index 000000000000..999c48a7a45a
 --- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-led-trigger-blkdev
-@@ -0,0 +1,68 @@
-+What:		/sys/class/leds/<led>/blink_time
-+Date:		March 2022
-+Contact:	Ian Pilcher <arequipeno@gmail.com>
-+Description:
-+		Time (in milliseconds) that the LED will be on during a single
-+		"blink".
++++ b/drivers/leds/trigger/ledtrig-blkdev.c
+@@ -0,0 +1,1139 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +
-+What:		/sys/class/leds/<led>/check_interval
-+Date:		March 2022
-+Contact:	Ian Pilcher <arequipeno@gmail.com>
-+Description:
-+		Frequency (in milliseconds) with which block devices linked to
-+		this LED will be checked for activity and the LED will
-+		(potentially) be blinked.
++/*
++ *	Block device LED trigger
++ *
++ *	Copyright 2021-2022 Ian Pilcher <arequipeno@gmail.com>
++ */
 +
-+What:		/sys/class/leds/<led>/blink_on_read
-+Date:		March 2022
-+Contact:	Ian Pilcher <arequipeno@gmail.com>
-+Description:
-+		Boolean that determines whether the LED will blink in response
-+		to read activity on any of its linked block devices.
++#include <linux/blkdev.h>
++#include <linux/leds.h>
++#include <linux/module.h>
++#include <linux/part_stat.h>
++#include <linux/xarray.h>
 +
-+What:		/sys/class/leds/<led>/blink_on_write
-+Date:		March 2022
-+Contact:	Ian Pilcher <arequipeno@gmail.com>
-+Description:
-+		Boolean that determines whether the LED will blink in response
-+		to write activity on any of its linked block devices.
++/* Default, minimum & maximum blink duration (milliseconds) */
++#define BLKDEV_TRIG_BLINK_DEF	75
++#define BLKDEV_TRIG_BLINK_MIN	10
++#define BLKDEV_TRIG_BLINK_MAX	86400000  /* 24 hours */
 +
-+What:		/sys/class/leds/<led>/blink_on_discard
-+Date:		March 2022
-+Contact:	Ian Pilcher <arequipeno@gmail.com>
-+Description:
-+		Boolean that determines whether the LED will blink in response
-+		to discard activity on any of its linked block devices.
++/* Default, minimum & maximum activity check interval (milliseconds) */
++#define BLKDEV_TRIG_CHECK_DEF	100
++#define BLKDEV_TRIG_CHECK_MIN	25
++#define BLKDEV_TRIG_CHECK_MAX	86400000
 +
-+What:		/sys/class/leds/<led>/blink_on_flush
-+Date:		March 2022
-+Contact:	Ian Pilcher <arequipeno@gamil.com>
-+Description:
-+		Boolean that determines whether the LED will blink in response
-+		to cache flush activity on any of its linked block devices.
++/*
++ * If blkdev_trig_check() can't lock the mutex, how long to wait before trying
++ * again (milliseconds)
++ */
++#define BLKDEV_TRIG_CHECK_RETRY	5
 +
-+What:		/sys/class/leds/<led>/link_dev_by_path
-+Date:		March 2022
-+Contact:	Ian Pilcher <arequipeno@gmail.com>
-+Description:
-+		Associate a block device with this LED by writing the path to
-+		the device special file (e.g. /dev/sda) to this attribute.
-+		Symbolic links are followed.
++/* Mode for blkdev_get_by_path() & blkdev_put() */
++#define BLKDEV_TRIG_FMODE	0
 +
-+What:		/sys/class/leds/<led>/unlink_dev_by_path
-+Date:		March 2022
-+Contact:	Ian Pilcher <arequipeno@gmail.com>
-+Description:
-+		Remove the association between this LED and a block device by
-+		writing the path to the device special file (e.g. /dev/sda) to
-+		this attribute.  Symbolic links are followed.
++/* When unlinking a block device from an LED, is the blkdev being released? */
++enum blkdev_trig_unlink_mode {
++	BLKDEV_TRIG_RELEASING,
++	BLKDEV_TRIG_NOT_RELEASING
++};
 +
-+What:		/sys/class/leds/<led>/linked_devices
-+Date:		March 2022
-+Contact:	Ian Pilcher <arequipeno@gmail.com>
-+Description:
-+		Directory containing links to all block devices that are
-+		associated with this LED.  (Note that the names of the
-+		symbolic links in this directory are *kernel* names, which
-+		may not match the device special file paths written to
-+		link_device and unlink_device.)
-diff --git a/Documentation/leds/index.rst b/Documentation/leds/index.rst
-index e5d63b940045..e3c24e468cbc 100644
---- a/Documentation/leds/index.rst
-+++ b/Documentation/leds/index.rst
-@@ -10,6 +10,7 @@ LEDs
-    leds-class
-    leds-class-flash
-    leds-class-multicolor
-+   ledtrig-blkdev
-    ledtrig-oneshot
-    ledtrig-transient
-    ledtrig-usbport
-diff --git a/Documentation/leds/ledtrig-blkdev.rst b/Documentation/leds/ledtrig-blkdev.rst
-new file mode 100644
-index 000000000000..ae92aa559257
---- /dev/null
-+++ b/Documentation/leds/ledtrig-blkdev.rst
-@@ -0,0 +1,155 @@
-+.. SPDX-License-Identifier: GPL-2.0
++/* Every block device linked to at least one LED gets a "BTB" */
++struct blkdev_trig_bdev {
++	unsigned long		last_checked;
++	unsigned long		last_activity[NR_STAT_GROUPS];
++	unsigned long		ios[NR_STAT_GROUPS];
++	unsigned long		index;
++	struct block_device	*bdev;
++	struct xarray		linked_leds;
++};
 +
-+=================================
-+Block Device (blkdev) LED Trigger
-+=================================
++/* Every LED associated with the blkdev trigger gets one of these */
++struct blkdev_trig_led {
++	unsigned long		last_checked;
++	unsigned long		index;
++	unsigned long		mode;  /* must be ulong for atomic bit ops */
++	struct led_classdev	*led_cdev;
++	unsigned int		blink_msec;
++	unsigned int		check_jiffies;
++	struct xarray		linked_btbs;
++	struct hlist_node	all_leds_node;
++};
 +
-+Available when ``CONFIG_LEDS_TRIGGER_BLKDEV=y`` or
-+``CONFIG_LEDS_TRIGGER_BLKDEV=m``.
++/* Forward declarations to make this file compile in a more readable order */
++static void blkdev_trig_check(struct work_struct *work);
++static struct blkdev_trig_bdev *blkdev_trig_get_btb(const char *buf,
++						    size_t size);
++static struct block_device *blkdev_trig_get_bdev(const char *buf, size_t size,
++						 fmode_t mode);
++static int blkdev_trig_link(struct blkdev_trig_led *led,
++			    struct blkdev_trig_bdev *btb);
++static void blkdev_trig_put_btb(struct blkdev_trig_bdev *btb);
++static void blkdev_trig_btb_release(struct device *dev, void *res);
++static void blkdev_trig_unlink(struct blkdev_trig_led *led,
++			       struct blkdev_trig_bdev *btb,
++			       enum blkdev_trig_unlink_mode unlink_mode);
++static void blkdev_trig_update_btb(struct blkdev_trig_bdev *btb,
++				   unsigned long now);
++static bool blkdev_trig_blink(const struct blkdev_trig_led *led,
++			      const struct blkdev_trig_bdev *btb);
++static void blkdev_trig_sched_led(const struct blkdev_trig_led *led);
 +
-+See also:
++/* Index for next BTB or LED */
++static unsigned long blkdev_trig_next_index;
 +
-+* ``Documentation/ABI/testing/sysfs-class-led-trigger-blkdev``
-+* ``Documentation/ABI/stable/sysfs-block`` (``/sys/block/<disk>/linked_leds``)
++/* Protects everything except sysfs attributes */
++static DEFINE_MUTEX(blkdev_trig_mutex);
 +
-+Overview
-+========
++/* All LEDs associated with the trigger */
++static HLIST_HEAD(blkdev_trig_all_leds);
 +
-+.. note::
-+	The examples below use ``<LED>`` to refer to the name of a
-+	system-specific LED.  If no suitable LED is available on a test
-+	system (in a virtual machine, for example), it is possible to
-+	use a userspace LED.  (See ``Documentation/leds/uleds.rst``.)
++/* Delayed work to periodically check for activity & blink LEDs */
++static DECLARE_DELAYED_WORK(blkdev_trig_work, blkdev_trig_check);
 +
-+Verify that the ``blkdev`` LED trigger is available::
++/* When is the delayed work scheduled to run next (jiffies) */
++static unsigned long blkdev_trig_next_check;
 +
-+	# grep blkdev /sys/class/leds/<LED>/trigger
-+	... rfkill-none blkdev
++/* Total number of device-to-LED associations (links) */
++static unsigned int blkdev_trig_link_count;
 +
-+(If the previous command produces no output, you may need to load the trigger
-+module - ``modprobe ledtrig_blkdev``.  If the module is not available, check
-+the value of ``CONFIG_LEDS_TRIGGER_BLKDEV`` in your kernel configuration.)
++/* Empty attribute list, for next 2 declarations */
++static struct attribute *blkdev_trig_attrs_empty[] = { NULL };
 +
-+Associate the LED with the ``blkdev`` LED trigger::
++/* linked_leds sysfs directory for block devs linked to 1 or more LEDs */
++static const struct attribute_group blkdev_trig_linked_leds = {
++	.name	= "linked_leds",
++	.attrs	= blkdev_trig_attrs_empty,
++};
 +
-+	# echo blkdev > /sys/class/leds/<LED>/trigger
++/* linked_devices sysfs directory for each LED associated with the trigger */
++static const struct attribute_group blkdev_trig_linked_devs = {
++	.name	= "linked_devices",
++	.attrs	= blkdev_trig_attrs_empty,
++};
 +
-+	# cat /sys/class/leds/<LED>/trigger
-+	... rfkill-none [blkdev]
++/**
++ * blkdev_trig_activate() - Called when an LED is associated with the trigger.
++ * @led_cdev:	The LED
++ *
++ * Allocates & initializes the @blkdev_trig_led structure, adds it to the
++ * @blkdev_trig_all_leds list, and sets the LED's trigger data.
++ *
++ * Context:	Process context.  Takes and releases @blkdev_trig_mutex.
++ * Return:	``0`` on success, ``-errno`` on error.
++ */
++static int blkdev_trig_activate(struct led_classdev *led_cdev)
++{
++	struct blkdev_trig_led *led;
++	int err;
 +
-+Note that several new device attributes are available in the
-+``/sys/class/leds/<LED>`` directory.
++	led = kzalloc(sizeof(*led), GFP_KERNEL);
++	if (led == NULL)
++		return -ENOMEM;
 +
-+* ``link_dev_by_path`` and ``unlink_dev_by_path`` are used to manage the set of
-+  block devices associated with this LED.  The LED will blink in response to
-+  read or write activity on its linked devices.
++	err = mutex_lock_interruptible(&blkdev_trig_mutex);
++	if (err)
++		goto exit_free;
 +
-+* ``blink_on_read``, ``blink_on_write``, ``blink_on_discard``, and
-+  ``blink_on_flush`` are boolean values that determine whether the LED will
-+  blink when a particular type of activity is detected on one of its linked
-+  block devices.
++	if (blkdev_trig_next_index == ULONG_MAX) {
++		err = -EOVERFLOW;
++		goto exit_unlock;
++	}
 +
-+* ``blink_time`` is the duration (in milliseconds) of each blink of this LED.
-+  (The minimum value is 10 milliseconds.)
++	led->index = blkdev_trig_next_index++;
++	led->last_checked = jiffies;
++	led->mode = -1;  /* set all bits */
++	led->led_cdev = led_cdev;
++	led->blink_msec = BLKDEV_TRIG_BLINK_DEF;
++	led->check_jiffies = msecs_to_jiffies(BLKDEV_TRIG_CHECK_DEF);
++	xa_init(&led->linked_btbs);
 +
-+* ``check_interval`` is the frequency (in milliseconds) with which block devices
-+  linked to this LED will be checked for activity and the LED blinked (if the
-+  correct type of activity has occurred).
++	hlist_add_head(&led->all_leds_node, &blkdev_trig_all_leds);
++	led_set_trigger_data(led_cdev, led);
 +
-+* The ``linked_devices`` directory will contain a symbolic link to every device
-+  that is associated with this LED.
++exit_unlock:
++	mutex_unlock(&blkdev_trig_mutex);
++exit_free:
++	if (err)
++		kfree(led);
++	return err;
++}
 +
-+Link a block device to the LED::
++/**
++ * link_dev_by_path_store() - ``link_dev_by_path`` device attribute store
++ *			      function.
++ * @dev:	The LED device
++ * @attr:	The ``link_dev_by_path`` attribute (@dev_attr_link_dev_by_path)
++ * @buf:	The value written to the attribute, which should be the path to
++ *		the special file that represents the block device to be linked
++ *		to the LED (e.g. /dev/sda)
++ * @count:	The number of characters in @buf
++ *
++ * Calls blkdev_trig_get_btb() to find or create the BTB for the block device,
++ * checks that the device isn't already linked to this LED, and calls
++ * blkdev_trig_link() to create the link.
++ *
++ * Context:	Process context.  Takes and releases @blkdev_trig_mutex.
++ * Return:	@count on success, ``-errno`` on error.
++ */
++static ssize_t link_dev_by_path_store(struct device *dev,
++				      struct device_attribute *attr,
++				      const char *buf, size_t count)
++{
++	struct blkdev_trig_led *led = led_trigger_get_drvdata(dev);
++	struct blkdev_trig_bdev *btb;
++	int err;
 +
-+	# echo /dev/sda > /sys/class/leds/<LED>/link_dev_by_path
++	err = mutex_lock_interruptible(&blkdev_trig_mutex);
++	if (err)
++		return err;
 +
-+	# ls /sys/class/leds/<LED>/linked_devices
-+	sda
++	btb = blkdev_trig_get_btb(buf, count);
++	if (IS_ERR(btb)) {
++		err = PTR_ERR(btb);
++		goto exit_unlock;
++	}
 +
-+(The value written to ``link_dev_by_path`` must be the path of the device
-+special file, such as ``/dev/sda``, that represents the block device - or the
-+path of a symbolic link to such a device special file.)
++	if (xa_load(&btb->linked_leds, led->index) != NULL) {
++		err = -EEXIST;
++		goto exit_put_btb;
++	}
 +
-+Activity on the device will now cause the LED to blink.  The duration of each
-+blink (in milliseconds) can be adjusted by setting
-+``/sys/class/leds/<LED>/blink_time``.  (But see **check_interval and
-+blink_time** below.)
++	err = blkdev_trig_link(led, btb);
 +
-+Associate a second device with the LED::
++exit_put_btb:
++	if (err)
++		blkdev_trig_put_btb(btb);
++exit_unlock:
++	mutex_unlock(&blkdev_trig_mutex);
++	return err ? : count;
++}
 +
-+	# echo /dev/sdb > /sys/class/leds/<LED>/link_dev_by_path
++/**
++ * blkdev_trig_get_btb() - Find or create the BTB for a block device.
++ * @buf:	The value written to the ``link_dev_by_path`` attribute, which
++ *		should be the path to a special file that represents a block
++ *		device
++ * @count:	The number of characters in @buf
++ *
++ * Calls blkdev_trig_get_bdev() to get the block device represented by the path
++ * in @buf.  If the device already has a BTB (because it is already linked to
++ * an LED), simply returns the existing BTB.
++ *
++ * Otherwise, allocates a new BTB (as a device resource), creates the block
++ * device's ``linked_leds`` directory (attribute group), calls
++ * blkdev_trig_update_btb() to set the BTB's activity counters, and adds the
++ * BTB resource to the block device.
++ *
++ * Context:	Process context.  Caller must hold @blkdev_trig_mutex.
++ * Return:	Pointer to the BTB, error pointer on error.
++ */
++static struct blkdev_trig_bdev *blkdev_trig_get_btb(const char *buf,
++						    size_t count)
++{
++	struct block_device *bdev;
++	struct blkdev_trig_bdev *btb;
++	int err;
 +
-+	# ls /sys/class/leds/<LED>/linked_devices
-+	sda  sdb
++	bdev = blkdev_trig_get_bdev(buf, count, BLKDEV_TRIG_FMODE);
++	if (IS_ERR(bdev))
++		return ERR_CAST(bdev);
 +
-+When a block device is linked to one or more LEDs, the LEDs are linked from
-+the device's ``linked_leds`` directory::
++	btb = devres_find(&bdev->bd_device, blkdev_trig_btb_release,
++			  NULL, NULL);
++	if (btb != NULL) {
++		err = 0;
++		goto exit_put_bdev;
++	}
 +
-+	# ls /sys/class/block/sd{a,b}/linked_leds
-+	/sys/class/block/sda/linked_leds:
-+	<LED>
++	if (blkdev_trig_next_index == ULONG_MAX) {
++		err = -EOVERFLOW;
++		goto exit_put_bdev;
++	}
 +
-+	/sys/class/block/sdb/linked_leds:
-+	<LED>
++	btb = devres_alloc(blkdev_trig_btb_release, sizeof(*btb), GFP_KERNEL);
++	if (btb == NULL) {
++		err = -ENOMEM;
++		goto exit_put_bdev;
++	}
 +
-+(The ``linked_leds`` directory only exists when the block device is linked to
-+at least one LED.)
++	err = sysfs_create_group(bdev_kobj(bdev), &blkdev_trig_linked_leds);
++	if (err)
++		goto exit_free_btb;
 +
-+``check_interval`` and ``blink_time``
-+=====================================
++	btb->index = blkdev_trig_next_index++;
++	btb->bdev = bdev;
++	xa_init(&btb->linked_leds);
++	blkdev_trig_update_btb(btb, jiffies);
 +
-+* By default, linked block devices are checked for activity every 100
-+  milliseconds.  This frequency can be changed for an LED via the
-+  ``/sys/class/leds/<led>/check_interval`` attribute.  (The minimum value is 25
-+  milliseconds.)
++	devres_add(&bdev->bd_device, btb);
 +
-+* All block devices associated with an LED are checked for activity every
-+  ``check_interval`` milliseconds, and a blink is triggered if the correct type
-+  of activity (as determined by the LED's ``blink_on_*`` attributes) is
-+  detected.  The duration of an LED's blink is determined by its ``blink_time``
-+  attribute.  Thus (when the correct type of activity is detected), the LED will
-+  be on for ``blink_time`` milliseconds and off for
-+  ``check_interval - blink_time`` milliseconds.
++exit_free_btb:
++	if (err)
++		devres_free(btb);
++exit_put_bdev:
++	blkdev_put(bdev, BLKDEV_TRIG_FMODE);
++	return err ? ERR_PTR(err) : btb;
++}
 +
-+* The LED subsystem ignores new blink requests for an LED that is already in
-+  in the process of blinking, so setting a ``blink_time`` greater than or equal
-+  to ``check_interval`` will cause some blinks to be missed.
++/**
++ * blkdev_trig_get_bdev() - Get a block device by path.
++ * @buf:	The value written to the ``link_dev_by_path`` or
++ *		``unlink_dev_by_path`` attribute, which should be the path to a
++ *		special file that represents a block device
++ * @count:	The number of characters in @buf (not including its terminating
++ *		null)
++ *
++ * Copies @buf to a writable buffer, trims the trailing newline (if any), and
++ * calls blkdev_get_by_path() to resolve the block device.
++ *
++ * The caller must call blkdev_put() when finished with the device.
++ *
++ * Context:	Process context.
++ * Return:	The block device, or an error pointer.
++ */
++static struct block_device *blkdev_trig_get_bdev(const char *buf, size_t count,
++						 fmode_t mode)
++{
++	struct block_device *bdev;
++	char *path;
 +
-+* Because of processing times, scheduling latencies, etc., avoiding missed
-+  blinks actually requires a difference of at least a few milliseconds between
-+  the ``blink_time`` and ``check_interval``.  The required difference is likely
-+  to vary from system to system.  As a  reference, a Thecus N5550 NAS requires a
-+  difference of 7 milliseconds (e.g. ``check_interval == 100``,
-+  ``blink_time == 93``).
++	path = kmemdup(buf, count + 1, GFP_KERNEL);  /* +1 to include null */
++	if (path == NULL)
++		return ERR_PTR(-ENOMEM);
 +
-+* The default values (``check_interval == 100``, ``blink_time == 75``) cause the
-+  LED associated with a continuously active device to blink rapidly.  For a more
-+  "always on" effect, increase the ``blink_time`` (but not too much; see the
-+  previous bullet).
++	if (path[count - 1] == '\n')
++		path[count - 1] = 0;
 +
-+Other Notes
-+===========
++	bdev = blkdev_get_by_path(path, mode, THIS_MODULE);
++	kfree(path);
++	return bdev;
++}
 +
-+* Many (possibly all) types of block devices work with this trigger, including:
++/**
++ * blkdev_trig_update_btb() - Update a BTB's activity counters.
++ * @btb:	The BTB
++ *
++ * Checks each of the BTB's block device's I/O counters.  If the counter has
++ * changed since the last check, updates the counter and its timestamp in the
++ * BTB.
++ *
++ * Context:	Process context.  Caller must hold @blkdev_trig_mutex.
++ */
++static void blkdev_trig_update_btb(struct blkdev_trig_bdev *btb,
++				   unsigned long now)
++{
++	unsigned long new_ios;
++	enum stat_group i;
 +
-+  * SCSI (including SATA and USB) hard disk drives and SSDs
-+  * SCSI (including SATA and USB) optical drives
-+  * NVMe SSDs
-+  * SD cards
-+  * loopback block devices (``/dev/loop*``)
-+  * device mapper devices, such as LVM logical volumes
-+  * MD RAID devices
-+  * zRAM compressed RAM-disks
-+  * partitions on block devics that support them
++	for (i = STAT_READ; i <= STAT_FLUSH; ++i) {
 +
-+* The names of the symbolic links in ``/sys/class/leds/<LED>/linked_devices``
-+  are **kernel** names, which may not match the paths used for
-+  ``link_dev_by_path`` and ``unlink_dev_by_path``.  This is most likely when a
-+  symbolic link is used to refer to the device (as is common with logical
-+  volumes), but it can be true for any device, because nothing prevents the
-+  creation of device special files with arbitrary names (e.g.
-+  ``sudo mknod /foo b 8 0``).
++		new_ios = part_stat_read(btb->bdev, ios[i]);
 +
-+* The ``blkdev`` LED trigger supports many-to-many device/LED associations.
-+  A device can be associated with multiple LEDs, and an LED can be associated
-+  with multiple devices.
++		if (new_ios != btb->ios[i]) {
++			btb->ios[i] = new_ios;
++			btb->last_activity[i] = now;
++		}
++	}
++
++	btb->last_checked = now;
++}
++
++/**
++ * blkdev_trig_link() - "Link" a block device to an LED.
++ * @led:	The LED
++ * @btb:	The block device
++ *
++ * Called from link_dev_by_path_store() to create the link between an LED and a
++ * block device.
++ *
++ *   * Adds block device symlink to LED's ``linked_devices`` directory.
++ *   * Adds LED symlink to block devices's ``linked_leds`` directory.
++ *   * Adds the BTB to the LED's @linked_btbs and adds the LED to the BTB's
++ *     @linked_leds.
++ *   * If this is the first block device linked to this LED, calls
++ *     blkdev_trig_new_sched() to (if needed) schedule or reschedule the delayed
++ *     work which periodically checks for block device activity and blinks LEDs.
++ *
++ * Context:	Process context.  Caller must hold @blkdev_trig_mutex.
++ * Return:	0 on success, ``-errno`` on error.
++ */
++static int blkdev_trig_link(struct blkdev_trig_led *led,
++			    struct blkdev_trig_bdev *btb)
++{
++	bool led_first_link;
++	int err;
++
++	led_first_link = xa_empty(&led->linked_btbs);
++
++	err = xa_insert(&btb->linked_leds, led->index, led, GFP_KERNEL);
++	if (err)
++		return err;
++
++	err = xa_insert(&led->linked_btbs, btb->index, btb, GFP_KERNEL);
++	if (err)
++		goto error_erase_led;
++
++	/* Create /sys/class/block/<bdev>/linked_leds/<led> symlink */
++	err = sysfs_add_link_to_group(bdev_kobj(btb->bdev),
++				      blkdev_trig_linked_leds.name,
++				      &led->led_cdev->dev->kobj,
++				      led->led_cdev->name);
++	if (err)
++		goto error_erase_btb;
++
++	/* Create /sys/class/leds/<led>/linked_devices/<bdev> symlink */
++	err = sysfs_add_link_to_group(&led->led_cdev->dev->kobj,
++				      blkdev_trig_linked_devs.name,
++				      bdev_kobj(btb->bdev),
++				      dev_name(&btb->bdev->bd_device));
++	if (err)
++		goto error_remove_symlink;
++
++	/*
++	 * If this isn't the first block device linked to this LED, then the
++	 * delayed work schedule already reflects this LED.
++	 */
++	if (led_first_link)
++		blkdev_trig_sched_led(led);
++
++	++blkdev_trig_link_count;
++
++	return 0;
++
++error_remove_symlink:
++	sysfs_remove_link_from_group(bdev_kobj(btb->bdev),
++				     blkdev_trig_linked_leds.name,
++				     led->led_cdev->name);
++error_erase_btb:
++	xa_erase(&led->linked_btbs, btb->index);
++error_erase_led:
++	xa_erase(&btb->linked_leds, led->index);
++	return err;
++}
++
++/**
++ * blkdev_trig_sched_led() - Set the schedule of the delayed work when a new
++ *			     LED is added to the schedule.
++ * @led:	The LED
++ *
++ * Called from blkdev_trig_link() to set or adjust the schedule of the delayed
++ * work which periodically checks block devices for activity and blinks LEDs,
++ * if necessary.
++ *
++ *   * If no other links exist, the delayed work is scheduled.
++ *   * If the delayed work is already scheduled to run soon enough to
++ *     accommodate the newly linked LED's @check_jiffies, no change is made to
++ *     the delayed work's schedule.
++ *   * If the delayed work is already scheduled, but it isn't scheduled to
++ *     run soon enough, the schedule is modified.
++ *
++ * Context:	Process context.  Caller must hold @blkdev_trig_mutex.
++ */
++static void blkdev_trig_sched_led(const struct blkdev_trig_led *led)
++{
++	unsigned long delay = READ_ONCE(led->check_jiffies);
++	unsigned long check_by = jiffies + delay;
++
++	if (blkdev_trig_link_count == 0) {
++		WARN_ON(!schedule_delayed_work(&blkdev_trig_work, delay));
++		blkdev_trig_next_check = check_by;
++		return;
++	}
++
++	if (time_after_eq(check_by, blkdev_trig_next_check))
++		return;
++
++	WARN_ON(!mod_delayed_work(system_wq, &blkdev_trig_work, delay));
++	blkdev_trig_next_check = check_by;
++}
++
++/**
++ * unlink_dev_by_path_store() - ``unlink_dev_by_path`` device attribute store
++ *				function.
++ * @dev:	The LED device
++ * @attr:	The ``unlink_dev_by_path`` attribute
++ *		(@dev_attr_unlink_dev_by_path)
++ * @buf:	The value written to the attribute, which should be the path to
++ *		the special file that represents the block device to be unlinked
++ *		from the LED (e.g. /dev/sda)
++ * @count:	The number of characters in @buf
++ *
++ * Block device name is written to the attribute to "unlink" the block device
++ * from the LED.  I.e. the LED will no longer blink to show activity on that
++ * block device.
++ *
++ * Calls blkdev_trig_get_bdev() to get the block device represented by the path
++ * in @buf.  If the device has a BTB, searches the BTB's list of LEDs for a
++ * link to this LED and (if found) calls blkdev_trig_unlink() to destroy the
++ * link.
++ *
++ * Context:	Process context.  Takes and releases @blkdev_trig_mutex.
++ * Return:	@count on success, ``-errno`` on error.
++ */
++static ssize_t unlink_dev_by_path_store(struct device *dev,
++					struct device_attribute *attr,
++					const char *buf, size_t count)
++{
++	struct blkdev_trig_led *led = led_trigger_get_drvdata(dev);
++	struct block_device *bdev;
++	struct blkdev_trig_bdev *btb;
++	int err;
++
++	bdev = blkdev_trig_get_bdev(buf, count, BLKDEV_TRIG_FMODE);
++	if (IS_ERR(bdev))
++		return PTR_ERR(bdev);
++
++	err = mutex_lock_interruptible(&blkdev_trig_mutex);
++	if (err)
++		goto exit_put_bdev;
++
++	btb = devres_find(&bdev->bd_device, blkdev_trig_btb_release,
++			  NULL, NULL);
++	if (btb == NULL) {
++		err = -EUNATCH;  /* bdev isn't linked to any LED */
++		goto exit_unlock;
++	}
++
++	if (xa_load(&btb->linked_leds, led->index) == NULL) {
++		err = -EUNATCH;  /* bdev isn't linked to this LED */
++		goto exit_unlock;
++	}
++
++	blkdev_trig_unlink(led, btb, BLKDEV_TRIG_NOT_RELEASING);
++
++exit_unlock:
++	mutex_unlock(&blkdev_trig_mutex);
++exit_put_bdev:
++	blkdev_put(bdev, BLKDEV_TRIG_FMODE);
++	return err ? : count;
++}
++
++/**
++ * blkdev_trig_unlink() - "Unlink" a block device from an LED.
++ * @led:		The LED
++ * @btb:		The block device
++ * @unlink_mode:	Indicates whether the BTB is being released (because
++ *			the block device has been removed)
++ *
++ * Removes the link between an LED and a block device.
++ *
++ *   * Removes the BTB from the LED's @linked_btbs and removes the LED from
++ *     the BTB's @linked_leds.
++ *   * Removes the block device symlink from the LED's ``linked_devices``
++ *     directory.
++ *
++ * If the block device is **not** being released:
++ *
++ *   * Removes the LED symlink from the block device's ``linked_leds``
++ *     directory.
++ *   * Calls blkdev_trig_put_btb() to clean up the BTB, if required.
++ *
++ * If the removed link was the only one (i.e. there are no existing block
++ * device/LED links after its removal), cancels the periodic delayed work
++ * which checks for device activity.
++ *
++ * This function is called from multiple locations.
++ *
++ *   * unlink_dev_by_path_store() calls this function when a block device is
++ *     unlinked from an LED via the ``unlink_dev_by_path`` sysfs attribute.
++ *     (@unlink_mode == ``BLKDEV_TRIG_NOT_RELEASING``)
++ *   * blkdev_trig_deactivate() calls this function for each block device linked
++ *     to an LED that is being deactivated (disassociated from the trigger).
++ *     (@unlink_mode == ``BLKDEV_TRIG_NOT_RELEASING``).
++ *   * blkdev_trig_btb_release() calls this function for each LED linked to a
++ *     block device that has been removed from the system.  (@unlink_mode ==
++ *     ``BLKDEV_TRIG_RELEASING).
++ *
++ * Context:	Process context.  Caller must hold @blkdev_trig_mutex.
++ */
++static void blkdev_trig_unlink(struct blkdev_trig_led *led,
++			       struct blkdev_trig_bdev *btb,
++			       enum blkdev_trig_unlink_mode unlink_mode)
++{
++	--blkdev_trig_link_count;
++
++	if (blkdev_trig_link_count == 0)
++		WARN_ON(!cancel_delayed_work_sync(&blkdev_trig_work));
++
++	xa_erase(&btb->linked_leds, led->index);
++	xa_erase(&led->linked_btbs, btb->index);
++
++	/* Remove /sys/class/leds/<led>/linked_devices/<bdev> symlink */
++	sysfs_remove_link_from_group(&led->led_cdev->dev->kobj,
++				     blkdev_trig_linked_devs.name,
++				     dev_name(&btb->bdev->bd_device));
++
++	/*
++	 * If the BTB is being released, the driver core has already removed the
++	 * device's attribute groups, and the BTB will be freed automatically,
++	 * so only do these steps if the BTB is not being released.
++	 */
++	if (unlink_mode == BLKDEV_TRIG_NOT_RELEASING) {
++
++		/* Remove /sys/class/block/<bdev>/linked_leds/<led> symlink */
++		sysfs_remove_link_from_group(bdev_kobj(btb->bdev),
++					     blkdev_trig_linked_leds.name,
++					     led->led_cdev->name);
++		blkdev_trig_put_btb(btb);
++	}
++}
++
++/**
++ * blkdev_trig_put_btb() - Remove and free a BTB, if it is no longer needed.
++ * @btb:	The BTB
++ *
++ * Does nothing if the BTB (block device) is still linked to at least one LED.
++ *
++ * If the BTB is no longer linked to any LEDs, removes the block device's
++ * ``linked_leds`` directory (attribute group), removes the BTB from the
++ * block device's resource list, and frees the BTB.
++ *
++ * Called from blkdev_trig_unlink() (and in the link_dev_by_path_store() error
++ * path).
++ *
++ * Context:	Process context.  Caller must hold @blkdev_trig_mutex.
++ */
++static void blkdev_trig_put_btb(struct blkdev_trig_bdev *btb)
++{
++	struct block_device *bdev = btb->bdev;
++	int err;
++
++	if (xa_empty(&btb->linked_leds)) {
++
++		sysfs_remove_group(bdev_kobj(bdev), &blkdev_trig_linked_leds);
++		err = devres_destroy(&bdev->bd_device, blkdev_trig_btb_release,
++				     NULL, NULL);
++		WARN_ON(err);
++	}
++}
++
++/**
++ * blkdev_trig_deactivate() - Called when an LED is disassociated from the
++ *			      trigger.
++ * @led_cdev:	The LED
++ *
++ * Calls blkdev_trig_unlink() for each block device linked to the LED, removes
++ * the LED from the @blkdevtrig_all_leds list, and frees the @blkdev_trig_led.
++ *
++ * Context:	Process context.  Takes and releases @blkdev_trig_mutex.
++ */
++static void blkdev_trig_deactivate(struct led_classdev *led_cdev)
++{
++	struct blkdev_trig_led *led = led_get_trigger_data(led_cdev);
++	struct blkdev_trig_bdev *btb;
++	unsigned long index;
++
++	mutex_lock(&blkdev_trig_mutex);
++
++	xa_for_each (&led->linked_btbs, index, btb)
++		blkdev_trig_unlink(led, btb, BLKDEV_TRIG_NOT_RELEASING);
++
++	hlist_del(&led->all_leds_node);
++	kfree(led);
++
++	mutex_unlock(&blkdev_trig_mutex);
++}
++
++/**
++ * blkdev_trig_btb_release() - BTB device resource release function.
++ * @dev:	The block device
++ * @res:	The BTB
++ *
++ * Called by the driver core when a block device with a BTB is removed from
++ * the system.  Calls blkdev_trig_unlink() for each LED linked to the block
++ * device.
++ *
++ * Context:	Process context.  Takes and releases @blkdev_trig_mutex.
++ */
++static void blkdev_trig_btb_release(struct device *dev, void *res)
++{
++	struct blkdev_trig_bdev *btb = res;
++	struct blkdev_trig_led *led;
++	unsigned long index;
++
++	mutex_lock(&blkdev_trig_mutex);
++
++	xa_for_each (&btb->linked_leds, index, led)
++		blkdev_trig_unlink(led, btb, BLKDEV_TRIG_RELEASING);
++
++	mutex_unlock(&blkdev_trig_mutex);
++}
++
++/**
++ * blkdev_trig_check() - Check linked devices for activity and blink LEDs.
++ * @work:	Delayed work (@blkdev_trig_work)
++ *
++ * Called periodically (as delayed work) to check linked block devices for
++ * activity and blink LEDs.
++ *
++ *   * Iterates through all LEDs associated with the trigger.
++ *   * If an LED is due to be checked, iterates through the block devices (BTBs)
++ *     linked to the LED.
++ *   * If a block device has not already been checked during this pass, calls
++ *     blkdev_trig_update_btb() to update the BTB's activity counters and
++ *     timestamps.
++ *   * If the LED has not already been blinked during this pass, calls
++ *     blkdev_trig_blink() to blink it if the correct type of activity has
++ *     occurred since the LED was last checked.
++ *
++ * When finished, schedules itself to run again when the next LED is due to be
++ * checked.
++ *
++ * Context:	Process context.  Takes and releases @blkdev_trig_mutex.
++ */
++static void blkdev_trig_check(struct work_struct *work)
++{
++	struct blkdev_trig_led *led;
++	struct blkdev_trig_bdev *btb;
++	unsigned long index, delay, now, led_check, led_delay;
++	bool blinked;
++
++	if (!mutex_trylock(&blkdev_trig_mutex)) {
++		delay = msecs_to_jiffies(BLKDEV_TRIG_CHECK_RETRY);
++		goto exit_reschedule;
++	}
++
++	now = jiffies;
++	delay = ULONG_MAX;
++
++	hlist_for_each_entry (led, &blkdev_trig_all_leds, all_leds_node) {
++
++		led_check = led->last_checked + led->check_jiffies;
++
++		if (time_before_eq(led_check, now)) {
++
++			blinked = false;
++
++			xa_for_each (&led->linked_btbs, index, btb) {
++
++				if (btb->last_checked != now)
++					blkdev_trig_update_btb(btb, now);
++				if (!blinked)
++					blinked = blkdev_trig_blink(led, btb);
++			}
++
++			led->last_checked = now;
++			led_delay = led->check_jiffies;
++
++		} else {
++			led_delay = led_check - now;
++		}
++
++		if (led_delay < delay)
++			delay = led_delay;
++	}
++
++	mutex_unlock(&blkdev_trig_mutex);
++
++exit_reschedule:
++	WARN_ON_ONCE(delay == ULONG_MAX);
++	WARN_ON_ONCE(!schedule_delayed_work(&blkdev_trig_work, delay));
++}
++
++/**
++ * blkdev_trig_blink() - Blink an LED, if the correct type of activity has
++ *			 occurred on the block device.
++ * @led:	The LED
++ * @btb:	The block device
++ *
++ * Context:	Process context.  Caller must hold @blkdev_trig_mutex.
++ * Return:	``true`` if the LED is blinked, ``false`` if not.
++ */
++static bool blkdev_trig_blink(const struct blkdev_trig_led *led,
++			      const struct blkdev_trig_bdev *btb)
++{
++	unsigned long delay_on, delay_off;
++	enum stat_group i;
++	unsigned long mode, mask;
++
++	mode = READ_ONCE(led->mode);
++
++	for (i = STAT_READ, mask = 1; i <= STAT_FLUSH; ++i, mask <<= 1) {
++
++		if (!(mode & mask))
++			continue;
++
++		if (time_before_eq(btb->last_activity[i], led->last_checked))
++			continue;
++
++		delay_on = READ_ONCE(led->blink_msec);
++		delay_off = 1;	/* 0 leaves LED turned on */
++
++		led_blink_set_oneshot(led->led_cdev, &delay_on, &delay_off, 0);
++		return true;
++	}
++
++	return false;
++}
++
++/**
++ * blink_time_show() - ``blink_time`` device attribute show function.
++ * @dev:	The LED device
++ * @attr:	The ``blink_time`` attribute (@dev_attr_blink_time)
++ * @buf:	Output buffer
++ *
++ * Writes the current value of the LED's @blink_msec to @buf.
++ *
++ * Context:	Process context.
++ * Return:	The number of characters written to @buf.
++ */
++static ssize_t blink_time_show(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	const struct blkdev_trig_led *led = led_trigger_get_drvdata(dev);
++
++	return sprintf(buf, "%u\n", READ_ONCE(led->blink_msec));
++}
++
++/**
++ * blink_time_store() - ``blink_time`` device attribute store function.
++ * @dev:	The LED device
++ * @attr:	The ``blink_time`` attribute (@dev_attr_blink_time)
++ * @buf:	The new value (as written to the sysfs attribute)
++ * @count:	The number of characters in @buf
++ *
++ * Sets the LED's @blink_msec (the duration in milliseconds of one blink).
++ *
++ * Context:	Process context.
++ * Return:	@count on success, ``-errno`` on error.
++ */
++static ssize_t blink_time_store(struct device *dev,
++				struct device_attribute *attr,
++				const char *buf, size_t count)
++{
++	struct blkdev_trig_led *led = led_trigger_get_drvdata(dev);
++	unsigned int value;
++	int err;
++
++	err = kstrtouint(buf, 0, &value);
++	if (err)
++		return err;
++
++	if (value < BLKDEV_TRIG_BLINK_MIN || value > BLKDEV_TRIG_BLINK_MAX)
++		return -ERANGE;
++
++	WRITE_ONCE(led->blink_msec, value);
++	return count;
++}
++
++/**
++ * check_interval_show() - ``check_interval`` device attribute show function.
++ * @dev:	The LED device
++ * @attr:	The ``check_interval`` attribute (@dev_attr_check_interval)
++ * @buf:	Output buffer
++ *
++ * Writes the current value of the LED's @check_jiffies (converted to
++ * milliseconds) to @buf.
++ *
++ * Context:	Process context.
++ * Return:	The number of characters written to @buf.
++ */
++static ssize_t check_interval_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct blkdev_trig_led *led = led_trigger_get_drvdata(dev);
++
++	return sprintf(buf, "%u\n",
++		       jiffies_to_msecs(READ_ONCE(led->check_jiffies)));
++}
++
++/**
++ * check_interval_store() - ``check_interval`` device attribute store function
++ * @dev:	The LED device
++ * @attr:	The ``check_interval`` attribute (@dev_attr_check_interval)
++ * @buf:	The new value (as written to the sysfs attribute)
++ * @count:	The number of characters in @buf
++ *
++ * Sets the LED's @check_jiffies (after converting from milliseconds).
++ *
++ * Context:	Process context.
++ * Return:	@count on success, ``-errno`` on error.
++ */
++static ssize_t check_interval_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	struct blkdev_trig_led *led = led_trigger_get_drvdata(dev);
++	unsigned int value;
++	int err;
++
++	err = kstrtouint(buf, 0, &value);
++	if (err)
++		return err;
++
++	if (value < BLKDEV_TRIG_CHECK_MIN || value > BLKDEV_TRIG_CHECK_MAX)
++		return -ERANGE;
++
++	WRITE_ONCE(led->check_jiffies, msecs_to_jiffies(value));
++
++	return count;
++}
++
++/**
++ * blkdev_trig_mode_show() - Helper for boolean attribute show functions.
++ * @led:	The LED
++ * @buf:	Output buffer
++ * @bit:	Which bit to show
++ *
++ * Context:	Process context.
++ * Return:	The number of characters written to @buf.
++ */
++static int blkdev_trig_mode_show(const struct blkdev_trig_led *led, char *buf,
++				 enum stat_group bit)
++{
++	return sprintf(buf, READ_ONCE(led->mode) & (1 << bit) ? "Y\n" : "N\n");
++}
++
++/**
++ * blkdev_trig_mode_store() - Helper for boolean attribute store functions.
++ * @led:	The LED
++ * @buf:	The new value (as written to the sysfs attribute)
++ * @count:	The number of characters in @buf
++ * @bit:	Which bit to set
++ *
++ * Context:	Process context.
++ * Return:	@count on success, ``-errno`` on error.
++ */
++static int blkdev_trig_mode_store(struct blkdev_trig_led *led,
++				  const char *buf, size_t count,
++				  enum stat_group bit)
++{
++	bool set;
++	int err;
++
++	err = kstrtobool(buf, &set);
++	if (err)
++		return err;
++
++	if (set)
++		set_bit(bit, &led->mode);
++	else
++		clear_bit(bit, &led->mode);
++
++	return count;
++}
++
++/**
++ * blink_on_read_show() - ``blink_on_read`` device attribute show function.
++ * @dev:	The LED device
++ * @attr:	The ``blink_on_read`` attribute (@dev_attr_blink_on_read)
++ * @buf:	Output buffer
++ *
++ * Writes the current value of the LED's @mode read bit to @buf.
++ *
++ * Context:	Process context.
++ * Return:	The number of characters written to @buf.
++ */
++static ssize_t blink_on_read_show(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	return blkdev_trig_mode_show(led_trigger_get_drvdata(dev),
++				     buf, STAT_READ);
++}
++
++/**
++ * blink_on_read_store() - ``blink_on_read`` device attribute store function.
++ * @dev:	The LED device
++ * @attr:	The ``blink_on_read`` attribute (@dev_attr_blink_on_read)
++ * @buf:	The new value (as written to the sysfs attribute)
++ * @count:	The number of characters in @buf
++ *
++ * Sets or clears the LED's @mode read bit.
++ *
++ * Context:	Process context.
++ * Return:	@count on success, ``-errno`` on error.
++ */
++static ssize_t blink_on_read_store(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf, size_t count)
++{
++	return blkdev_trig_mode_store(led_trigger_get_drvdata(dev),
++				      buf, count, STAT_READ);
++}
++
++/**
++ * blink_on_write_show() - ``blink_on_write`` device attribute show function.
++ * @dev:	The LED device
++ * @attr:	The ``blink_on_write`` attribute (@dev_attr_blink_on_write)
++ * @buf:	Output buffer
++ *
++ * Writes the current value of the LED's @mode write bit to @buf.
++ *
++ * Context:	Process context.
++ * Return:	The number of characters written to @buf.
++ */
++static ssize_t blink_on_write_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	return blkdev_trig_mode_show(led_trigger_get_drvdata(dev),
++				     buf, STAT_WRITE);
++}
++
++/**
++ * blink_on_write_store() - ``blink_on_write`` device attribute store function.
++ * @dev:	The LED device
++ * @attr:	The ``blink_on_write`` attribute (@dev_attr_blink_on_write)
++ * @buf:	The new value (as written to the sysfs attribute)
++ * @count:	The number of characters in @buf
++ *
++ * Sets or clears the LED's @mode write bit.
++ *
++ * Context:	Process context.
++ * Return:	@count on success, ``-errno`` on error.
++ */
++static ssize_t blink_on_write_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	return blkdev_trig_mode_store(led_trigger_get_drvdata(dev),
++				      buf, count, STAT_WRITE);
++}
++
++/**
++ * blink_on_flush_show() - ``blink_on_flush`` device attribute show function.
++ * @dev:	The LED device
++ * @attr:	The ``blink_on_flush`` attribute (@dev_attr_blink_on_flush)
++ * @buf:	Output buffer
++ *
++ * Writes the current value of the LED's @mode flush bit to @buf.
++ *
++ * Context:	Process context.
++ * Return:	The number of characters written to @buf.
++ */
++static ssize_t blink_on_flush_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	return blkdev_trig_mode_show(led_trigger_get_drvdata(dev),
++				     buf, STAT_FLUSH);
++}
++
++/**
++ * blink_on_flush_store() - ``blink_on_flush`` device attribute store function.
++ * @dev:	The LED device
++ * @attr:	The ``blink_on_flush`` attribute (@dev_attr_blink_on_flush)
++ * @buf:	The new value (as written to the sysfs attribute)
++ * @count:	The number of characters in @buf
++ *
++ * Sets or clears the LED's @mode flush bit.
++ *
++ * Context:	Process context.
++ * Return:	@count on success, ``-errno`` on error.
++ */
++static ssize_t blink_on_flush_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	return blkdev_trig_mode_store(led_trigger_get_drvdata(dev),
++				      buf, count, STAT_FLUSH);
++}
++
++/**
++ * blink_on_discard_show() - ``blink_on_discard`` device attribute show
++ *			     function.
++ * @dev:	The LED device
++ * @attr:	The ``blink_on_discard`` attribute (@dev_attr_blink_on_discard)
++ * @buf:	Output buffer
++ *
++ * Writes the current value of the LED's @mode discard bit to @buf.
++ *
++ * Context:	Process context.
++ * Return:	The number of characters written to @buf.
++ */
++static ssize_t blink_on_discard_show(struct device *dev,
++				     struct device_attribute *attr, char *buf)
++{
++	return blkdev_trig_mode_show(led_trigger_get_drvdata(dev),
++				     buf, STAT_DISCARD);
++}
++
++/**
++ * blink_on_discard_store() - ``blink_on_discard`` device attribute store
++ *			      function.
++ * @dev:	The LED device
++ * @attr:	The ``blink_on_discard`` attribute (@dev_attr_blink_on_discard)
++ * @buf:	The new value (as written to the sysfs attribute)
++ * @count:	The number of characters in @buf
++ *
++ * Sets or clears the LED's @mode discard bit.
++ *
++ * Context:	Process context.
++ * Return:	@count on success, ``-errno`` on error.
++ */
++static ssize_t blink_on_discard_store(struct device *dev,
++				      struct device_attribute *attr,
++				      const char *buf, size_t count)
++{
++	return blkdev_trig_mode_store(led_trigger_get_drvdata(dev),
++				      buf, count, STAT_DISCARD);
++}
++
++/* Device attributes */
++static DEVICE_ATTR_WO(link_dev_by_path);
++static DEVICE_ATTR_WO(unlink_dev_by_path);
++static DEVICE_ATTR_RW(blink_time);
++static DEVICE_ATTR_RW(check_interval);
++static DEVICE_ATTR_RW(blink_on_read);
++static DEVICE_ATTR_RW(blink_on_write);
++static DEVICE_ATTR_RW(blink_on_flush);
++static DEVICE_ATTR_RW(blink_on_discard);
++
++/* Device attributes in LED directory (/sys/class/leds/<led>/...) */
++static struct attribute *blkdev_trig_attrs[] = {
++	&dev_attr_link_dev_by_path.attr,
++	&dev_attr_unlink_dev_by_path.attr,
++	&dev_attr_blink_time.attr,
++	&dev_attr_check_interval.attr,
++	&dev_attr_blink_on_read.attr,
++	&dev_attr_blink_on_write.attr,
++	&dev_attr_blink_on_flush.attr,
++	&dev_attr_blink_on_discard.attr,
++	NULL
++};
++
++/* Unnamed attribute group == no subdirectory */
++static const struct attribute_group blkdev_trig_attr_group = {
++	.attrs	= blkdev_trig_attrs,
++};
++
++/* Attribute groups for the trigger */
++static const struct attribute_group *blkdev_trig_attr_groups[] = {
++	&blkdev_trig_attr_group,   /* /sys/class/leds/<led>/... */
++	&blkdev_trig_linked_devs,  /* /sys/class/leds/<led>/linked_devices/ */
++	NULL
++};
++
++/* Trigger registration data */
++static struct led_trigger blkdev_trig_trigger = {
++	.name		= "blkdev",
++	.activate	= blkdev_trig_activate,
++	.deactivate	= blkdev_trig_deactivate,
++	.groups		= blkdev_trig_attr_groups,
++};
++
++/**
++ * blkdev_trig_init() - Block device LED trigger initialization.
++ *
++ * Registers the LED trigger.
++ *
++ * Return:	0 on success, ``-errno`` on failure.
++ */
++static int __init blkdev_trig_init(void)
++{
++	return led_trigger_register(&blkdev_trig_trigger);
++}
++module_init(blkdev_trig_init);
++
++/**
++ * blkdev_trig_exit() - Block device LED trigger module exit.
++ *
++ * Unregisters the LED trigger.
++ */
++static void __exit blkdev_trig_exit(void)
++{
++	led_trigger_unregister(&blkdev_trig_trigger);
++}
++module_exit(blkdev_trig_exit);
++
++MODULE_DESCRIPTION("Block device LED trigger");
++MODULE_AUTHOR("Ian Pilcher <arequipeno@gmail.com>");
++MODULE_LICENSE("GPL v2");
 -- 
 2.35.1
 

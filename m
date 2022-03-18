@@ -2,54 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7FD4DDD26
+	by mail.lfdr.de (Postfix) with ESMTP id 302044DDD25
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238264AbiCRPkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 11:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54840 "EHLO
+        id S238269AbiCRPlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 11:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238248AbiCRPkd (ORCPT
+        with ESMTP id S238265AbiCRPlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 11:40:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DDB3F8A1;
-        Fri, 18 Mar 2022 08:39:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9905E60E0A;
-        Fri, 18 Mar 2022 15:39:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DC4C340E8;
-        Fri, 18 Mar 2022 15:39:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647617954;
-        bh=R8ebpoqjNhXu1rNFBgcZHsertzVaDf5gOdcyrtK6Bxg=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=DvCdj0pfHPJr8oVMLRZmVbsuj/dtOhL1LaynNXxmzbJsT6qZUQJtX2wuOjKV7dneD
-         hGOvRJd3o+6RR9UDGdHM+OPxK+TsBBW3aZH6He7ayYVAZjOwUDieFNcj2tULt7CclH
-         HOqQyuNHRG3uNgj42k3e0qtOcKMfbr+w1hGPwMfuffKzxd9n6Vna83gbZT42tz4ya8
-         f4iFw+wsxbztJJsP59rXqzxu2gdrIGdlQPdo50m9lfX3UMASGjr3rsP3PgO+8tMXW8
-         guKymKAHWoMMBpw8QNwlD56HyYiw4ZF7sdKH/MwGy0gF9gqnZzEwSzJt+sdWBqbu3M
-         YrJ3dTcz5c9GA==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 18 Mar 2022 11:41:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E8321D2513
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 08:39:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4BF4E1515;
+        Fri, 18 Mar 2022 08:39:52 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B81A03F7D7;
+        Fri, 18 Mar 2022 08:39:50 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 15:39:40 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
+        peter.hilber@opensynergy.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [RFC PATCH 07/16] debugfs: Add signed versions of
+ debugfs_create_u32/64 helpers
+Message-ID: <YjSnvKV7dElpzTcd@e120937-lin>
+References: <20220227205608.30812-1-cristian.marussi@arm.com>
+ <20220227205608.30812-8-cristian.marussi@arm.com>
+ <YjSHXJZAlntzmyKZ@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH 03/30] ath6kl: fix typos in comments
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220314115354.144023-4-Julia.Lawall@inria.fr>
-References: <20220314115354.144023-4-Julia.Lawall@inria.fr>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     kernel-janitors@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164761795038.655.6145250258303604942.kvalo@kernel.org>
-Date:   Fri, 18 Mar 2022 15:39:12 +0000 (UTC)
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjSHXJZAlntzmyKZ@kroah.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,20 +50,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Julia Lawall <Julia.Lawall@inria.fr> wrote:
+On Fri, Mar 18, 2022 at 02:21:32PM +0100, Greg Kroah-Hartman wrote:
+> On Sun, Feb 27, 2022 at 08:55:59PM +0000, Cristian Marussi wrote:
+> > Add a few helpers to deal with signed values integers; built on existing
+> > debugfs internal helpers as the existing unsigned functions already do.
+> > 
+> > Make the simple_attr_write() internal helper detect the sign of the
+> > requested set operation from the related format string: this is needed
+> > to be able to properly parse negatively signed input strings.
+> > 
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > ---
 
-> Various spelling mistakes in comments.
-> Detected with the help of Coccinelle.
+Hi Greg,
+
+thanks for the feedback.
+
+> > Note that in the rest of the series I do NOT need the s64 WRITE/SET
+> > operations, that required the more invasive simple_attr_write() change,
+> > but it seemed odd to implement a get only debug_create_s32/64 API.
 > 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+> Let's wait to add them when we have a need for them with a in-kernel
+> user.  Otherwise I'll just end up removing them eventually when I sweep
+> for "is this used" cleanups.
+> 
 
-Patch applied to ath-next branch of ath.git, thanks.
+Ok, so just to double check what I understood(or not), I'll leave out the
+setters ops and implement instead the debufs_create_s32/s64 with only RO
+fops support, right ?
 
-b7d174479c8a ath6kl: fix typos in comments
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220314115354.144023-4-Julia.Lawall@inria.fr/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+Thanks,
+Cristian

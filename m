@@ -2,291 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5355C4DD39D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 04:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BEF4DD3A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 04:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbiCRDiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 23:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48310 "EHLO
+        id S232226AbiCRDkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 23:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiCRDiO (ORCPT
+        with ESMTP id S230402AbiCRDkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 23:38:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B8F2B244A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 20:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647574615;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=zxGXQ8pyGz1TR5bJw25kI48yQ0iV5cJOtc0fF/w965w=;
-        b=NKz1ht/h3t1LnRJ/fbvL7dNaE9pT9Q6/W+Vb4ANQLFHM7O5QpbSAbiSkghfDGZP80/lHtZ
-        gyLoHOm+BzqLSscYy7YOQ7OzGOqJncBTduo1TfCBawBiGoqzFCEadKfJvF4CmIlOE3R3eM
-        pO24UzwHmJg8THi/K4YRvpyF/Kh8NyY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-58BrhHofNuOBtxs6M3Tb1g-1; Thu, 17 Mar 2022 23:36:52 -0400
-X-MC-Unique: 58BrhHofNuOBtxs6M3Tb1g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80272811E80;
-        Fri, 18 Mar 2022 03:36:51 +0000 (UTC)
-Received: from localhost.net (unknown [10.22.16.191])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DEA291402400;
-        Fri, 18 Mar 2022 03:36:49 +0000 (UTC)
-From:   Nico Pache <npache@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Andre Almeida <andrealmeid@collabora.com>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joel Savitz <jsavitz@redhat.com>
-Subject: [PATCH v5] mm/oom_kill.c: futex: Close a race between do_exit and the oom_reaper
-Date:   Thu, 17 Mar 2022 21:36:21 -0600
-Message-Id: <20220318033621.626006-1-npache@redhat.com>
+        Thu, 17 Mar 2022 23:40:03 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CEE97280;
+        Thu, 17 Mar 2022 20:38:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RTCKKVxUpw1x9XRyIgUv1ZDhnrDBa0F9uoZcShZ5ROQ=; b=JkfWFbAv+F+G3EEQW2UTFpEasA
+        r1gBB7a+YbWHLd8cgnXvMP274qmJ7C7O4D/t/DSbeWHBa3meJy0nEyoLCqjWMeYipV5OwVDLjXBnG
+        XVYnMWrQicyrl+fWSrxSnBm7q+o8t6stf2Q1zg5VSVsNU2uCqed2HI/zv15i1Dnv7XNCYzOs7HRQL
+        Po++RG7VxNoybZvUtHVTSQpGB1UwMgLRG2MTszHT6PRzzgGB50QAyD1ROQC1WmrEFwMqDA64t4Mmn
+        z/dGjCLOAgodZY2o63IhZ4p25lyQk3BOaf/8Lem13MwuWvPbCZ1T1T/Krymttu+NQzppJLBO3XoOG
+        tVzRF0Dg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nV3RL-007aVA-Dh; Fri, 18 Mar 2022 03:38:11 +0000
+Date:   Fri, 18 Mar 2022 03:38:11 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Yang Shi <shy828301@gmail.com>, vbabka@suse.cz,
+        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
+        songliubraving@fb.com, riel@surriel.com, ziy@nvidia.com,
+        akpm@linux-foundation.org, tytso@mit.edu, adilger.kernel@dilger.ca,
+        darrick.wong@oracle.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [v2 PATCH 0/8] Make khugepaged collapse readonly FS THP more
+ consistent
+Message-ID: <YjP+oyoT9Y2SFt8L@casper.infradead.org>
+References: <20220317234827.447799-1-shy828301@gmail.com>
+ <20220318012948.GE1544202@dread.disaster.area>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318012948.GE1544202@dread.disaster.area>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pthread struct is allocated on PRIVATE|ANONYMOUS memory [1] which can
-be targeted by the oom reaper. This mapping is used to store the futex
-robust list; the kernel does not keep a copy of the robust list and instead
-references a userspace address to maintain the robustness during a process
-death. A race can occur between exit_mm and the oom reaper that allows
-the oom reaper to free the memory of the futex robust list before the
-exit path has handled the futex death:
+On Fri, Mar 18, 2022 at 12:29:48PM +1100, Dave Chinner wrote:
+> On Thu, Mar 17, 2022 at 04:48:19PM -0700, Yang Shi wrote:
+> > 
+> > Changelog
+> > v2: * Collected reviewed-by tags from Miaohe Lin.
+> >     * Fixed build error for patch 4/8.
+> > 
+> > The readonly FS THP relies on khugepaged to collapse THP for suitable
+> > vmas.  But it is kind of "random luck" for khugepaged to see the
+> > readonly FS vmas (see report: https://lore.kernel.org/linux-mm/00f195d4-d039-3cf2-d3a1-a2c88de397a0@suse.cz/) since currently the vmas are registered to khugepaged when:
+> >   - Anon huge pmd page fault
+> >   - VMA merge
+> >   - MADV_HUGEPAGE
+> >   - Shmem mmap
+> > 
+> > If the above conditions are not met, even though khugepaged is enabled
+> > it won't see readonly FS vmas at all.  MADV_HUGEPAGE could be specified
+> > explicitly to tell khugepaged to collapse this area, but when khugepaged
+> > mode is "always" it should scan suitable vmas as long as VM_NOHUGEPAGE
+> > is not set.
+> > 
+> > So make sure readonly FS vmas are registered to khugepaged to make the
+> > behavior more consistent.
+> > 
+> > Registering the vmas in mmap path seems more preferred from performance
+> > point of view since page fault path is definitely hot path.
+> > 
+> > 
+> > The patch 1 ~ 7 are minor bug fixes, clean up and preparation patches.
+> > The patch 8 converts ext4 and xfs.  We may need convert more filesystems,
+> > but I'd like to hear some comments before doing that.
+> 
+> After reading through the patchset, I have no idea what this is even
+> doing or enabling. I can't comment on the last patch and it's effect
+> on XFS because there's no high level explanation of the
+> functionality or feature to provide me with the context in which I
+> should be reviewing this patchset.
+> 
+> I understand this has something to do with hugepages, but there's no
+> explaination of exactly where huge pages are going to be used in the
+> filesystem, what the problems with khugepaged and filesystems are
+> that this apparently solves, what constraints it places on
+> filesystems to enable huge pages to be used, etc.
+> 
+> I'm guessing that the result is that we'll suddenly see huge pages
+> in the page cache for some undefined set of files in some undefined
+> set of workloads. But that doesn't help me understand any of the
+> impacts it may have. e.g:
+> 
+> - how does this relate to the folio conversion and use of large
+>   pages in the page cache?
+> - why do we want two completely separate large page mechanisms in
+>   the page cache?
+> - why is this limited to "read only VMAs" and how does the
+>   filesystem actually ensure that the VMAs are read only?
+> - what happens if we have a file that huge pages mapped into the
+>   page cache via read only VMAs then has write() called on it via a
+>   different file descriptor and so we need to dirty the page cache
+>   that has huge pages in it?
+> 
+> I've got a lot more questions, but to save me having to ask them,
+> how about you explain what this new functionality actually does, why
+> we need to support it, and why it is better than the fully writeable
+> huge page support via folios that we already have in the works...
 
-    CPU1                               CPU2
-------------------------------------------------------------------------
-    page_fault
-    out_of_memory
-    do_exit "signal"
-    wake_oom_reaper
-					oom_reaper
-                        		oom_reap_task_mm (invalidates mm)
-    exit_mm
-    exit_mm_release
-    futex_exit_release
-    futex_cleanup
-    exit_robust_list
-    get_user (EFAULT- can't access memory)
+Back in Puerto Rico when we set up the THP Cabal, we had two competing
+approaches for using larger pages in the page cache; mine (which turned
+into folios after I realised that THPs were the wrong model) and Song
+Liu's CONFIG_READ_ONLY_THP_FOR_FS.  Song's patches were ready earlier
+(2019) and were helpful in unveiling some of the problems which needed
+to be fixed.  The filesystem never sees the large pages because they're
+only used for read-only files, and the pages are already Uptodate at
+the point they're collapsed into a THP.  So there's no changes needed
+to the filesystem.
 
-While in the oom reaper thread, we must handle the futex cleanup without
-sleeping. To achieve this, add the boolean `try` to futex_exit_begin().
-This will control weather or not we use a trylock. Also introduce
-try_futex_exit_release() which will utilize the trylock version of the
-futex_cleanup_begin(). Also call kthread_use_mm in this context to assure
-the get_user call in futex_cleanup() does not return with EFAULT.
-
-If the robust list exists, and the mutex_trylock fails, we prevent the OOM
-reaper from concurrently reaping the mappings. If the dying task_struct
-does not contain a pointer in tsk->robust_list, we can assume there was
-either never one setup for this task struct, or the exit path's call to
-futex_cleanup() has properly handled the futex death, and we can safely
-reap this memory.
-
-Reproducer: https://gitlab.com/jsavitz/oom_futex_reproducer
-
-[1] https://elixir.bootlin.com/glibc/latest/source/nptl/allocatestack.c#L370
-
-Fixes: 212925802454 ("mm: oom: let oom_reap_task and exit_mmap run concurrently")
-Cc: Rafael Aquini <aquini@redhat.com>
-Cc: Waiman Long <longman@redhat.com>
-Cc: Baoquan He <bhe@redhat.com>
-Cc: Christoph von Recklinghausen <crecklin@redhat.com>
-Cc: Don Dutile <ddutile@redhat.com>
-Cc: Herton R. Krzesinski <herton@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Darren Hart <dvhart@infradead.org>
-Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: Andre Almeida <andrealmeid@collabora.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Co-developed-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-Signed-off-by: Nico Pache <npache@redhat.com>
----
- include/linux/futex.h | 14 ++++++++++++++
- kernel/futex/core.c   | 35 +++++++++++++++++++++++++++++++----
- mm/oom_kill.c         | 13 +++++++++++++
- 3 files changed, 58 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/futex.h b/include/linux/futex.h
-index b70df27d7e85..64d6e89294ac 100644
---- a/include/linux/futex.h
-+++ b/include/linux/futex.h
-@@ -71,9 +71,21 @@ static inline void futex_init_task(struct task_struct *tsk)
- 	mutex_init(&tsk->futex_exit_mutex);
- }
- 
-+static inline bool task_has_robust_list(struct task_struct *tsk)
-+{
-+	bool robust = false;
-+
-+	robust = tsk->robust_list != NULL;
-+#ifdef CONFIG_COMPAT
-+	robust |= tsk->compat_robust_list != NULL;
-+#endif
-+	return robust;
-+}
-+
- void futex_exit_recursive(struct task_struct *tsk);
- void futex_exit_release(struct task_struct *tsk);
- void futex_exec_release(struct task_struct *tsk);
-+bool try_futex_exit_release(struct task_struct *tsk);
- 
- long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
- 	      u32 __user *uaddr2, u32 val2, u32 val3);
-@@ -82,6 +94,8 @@ static inline void futex_init_task(struct task_struct *tsk) { }
- static inline void futex_exit_recursive(struct task_struct *tsk) { }
- static inline void futex_exit_release(struct task_struct *tsk) { }
- static inline void futex_exec_release(struct task_struct *tsk) { }
-+static inline bool task_has_robust_list(struct task_struct *tsk) { return false; }
-+static inline bool try_futex_exit_release(struct task_struct *tsk) { return true; }
- static inline long do_futex(u32 __user *uaddr, int op, u32 val,
- 			    ktime_t *timeout, u32 __user *uaddr2,
- 			    u32 val2, u32 val3)
-diff --git a/kernel/futex/core.c b/kernel/futex/core.c
-index 51dd822a8060..81aa60ce1ed6 100644
---- a/kernel/futex/core.c
-+++ b/kernel/futex/core.c
-@@ -37,6 +37,7 @@
- #include <linux/memblock.h>
- #include <linux/fault-inject.h>
- #include <linux/slab.h>
-+#include <linux/kthread.h>
- 
- #include "futex.h"
- #include "../locking/rtmutex_common.h"
-@@ -1047,7 +1048,7 @@ void futex_exit_recursive(struct task_struct *tsk)
- 	tsk->futex_state = FUTEX_STATE_DEAD;
- }
- 
--static void futex_cleanup_begin(struct task_struct *tsk)
-+static bool futex_cleanup_begin(struct task_struct *tsk, bool try)
- {
- 	/*
- 	 * Prevent various race issues against a concurrent incoming waiter
-@@ -1055,7 +1056,12 @@ static void futex_cleanup_begin(struct task_struct *tsk)
- 	 * tsk->futex_exit_mutex when it observes FUTEX_STATE_EXITING in
- 	 * attach_to_pi_owner().
- 	 */
--	mutex_lock(&tsk->futex_exit_mutex);
-+	if (try) {
-+		if (!mutex_trylock(&tsk->futex_exit_mutex))
-+			return false;
-+	} else {
-+		mutex_lock(&tsk->futex_exit_mutex);
-+	}
- 
- 	/*
- 	 * Switch the state to FUTEX_STATE_EXITING under tsk->pi_lock.
-@@ -1071,6 +1077,7 @@ static void futex_cleanup_begin(struct task_struct *tsk)
- 	raw_spin_lock_irq(&tsk->pi_lock);
- 	tsk->futex_state = FUTEX_STATE_EXITING;
- 	raw_spin_unlock_irq(&tsk->pi_lock);
-+	return true;
- }
- 
- static void futex_cleanup_end(struct task_struct *tsk, int state)
-@@ -1096,7 +1103,7 @@ void futex_exec_release(struct task_struct *tsk)
- 	 * futex is held on exec(), this provides at least as much state
- 	 * consistency protection which is possible.
- 	 */
--	futex_cleanup_begin(tsk);
-+	futex_cleanup_begin(tsk, false);
- 	futex_cleanup(tsk);
- 	/*
- 	 * Reset the state to FUTEX_STATE_OK. The task is alive and about
-@@ -1107,9 +1114,29 @@ void futex_exec_release(struct task_struct *tsk)
- 
- void futex_exit_release(struct task_struct *tsk)
- {
--	futex_cleanup_begin(tsk);
-+	futex_cleanup_begin(tsk, false);
-+	futex_cleanup(tsk);
-+	futex_cleanup_end(tsk, FUTEX_STATE_DEAD);
-+}
-+
-+/* Try to perform the futex_cleanup and return true if successful.
-+ * Designed to be called from the context of the OOM Reaper.
-+ */
-+bool try_futex_exit_release(struct task_struct *tsk)
-+{
-+	if (!futex_cleanup_begin(tsk, true))
-+		return false;
-+
-+	/* We are calling this from the context of a kthread. We need to
-+	 * instruct the kthread to use the address space of the given mm
-+	 * so the get_user won't return -EFAULT.
-+	 */
-+	kthread_use_mm(tsk->mm);
- 	futex_cleanup(tsk);
-+	kthread_unuse_mm(tsk->mm);
-+
- 	futex_cleanup_end(tsk, FUTEX_STATE_DEAD);
-+	return true;
- }
- 
- static int __init futex_init(void)
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 832fb330376e..f7834c53d874 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -44,6 +44,7 @@
- #include <linux/kthread.h>
- #include <linux/init.h>
- #include <linux/mmu_notifier.h>
-+#include <linux/futex.h>
- 
- #include <asm/tlb.h>
- #include "internal.h"
-@@ -587,6 +588,18 @@ static bool oom_reap_task_mm(struct task_struct *tsk, struct mm_struct *mm)
- 		goto out_unlock;
- 	}
- 
-+	/* We can't reap a process holding a robust_list; the pthread
-+	 * struct is allocated in userspace using PRIVATE | ANONYMOUS
-+	 * memory which when reaped before futex_cleanup() can leave
-+	 * the waiting process stuck. Try to perform the futex_cleanup,
-+	 * and if unsuccessful, skip the OOM reaping.
-+	 */
-+	if (task_has_robust_list(tsk) && !try_futex_exit_release(tsk)) {
-+		trace_skip_task_reaping(tsk->pid);
-+		pr_info("oom_reaper: skipping task as it contains a robust list");
-+		goto out_finish;
-+	}
-+
- 	trace_start_task_reaping(tsk->pid);
- 
- 	/* failed to reap part of the address space. Try again later */
--- 
-2.35.1
+This collection of patches I'm agnostic about.  As far as I can
+tell, they're a way to improve how often the ROTHP feature gets used.
+That doesn't really interest me since we're so close to having proper
+support for large pages/folios in filesystems.  So I'm not particularly
+interested in improving a feature that we're about to delete.  But I also
+don't like it that the filesystem now has to do something; the ROTHP
+feature is supposed to be completely transparent from the point of view
+of the filesystem.
 

@@ -2,279 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EC14DE072
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 785544DE03D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239963AbiCRRwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 13:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        id S239771AbiCRRuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 13:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239869AbiCRRvM (ORCPT
+        with ESMTP id S239763AbiCRRuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 13:51:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25B9B18CD24;
-        Fri, 18 Mar 2022 10:49:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0AF551570;
-        Fri, 18 Mar 2022 10:49:53 -0700 (PDT)
-Received: from eglon.cambridge.arm.com (eglon.cambridge.arm.com [10.1.196.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F4B53F7B4;
-        Fri, 18 Mar 2022 10:49:52 -0700 (PDT)
-From:   James Morse <james.morse@arm.com>
-To:     stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, james.morse@arm.com,
-        catalin.marinas@arm.com
-Subject: [stable:PATCH v4.19.235 22/22] arm64: Use the clearbhb instruction in mitigations
-Date:   Fri, 18 Mar 2022 17:48:42 +0000
-Message-Id: <20220318174842.2321061-23-james.morse@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220318174842.2321061-1-james.morse@arm.com>
-References: <20220318174842.2321061-1-james.morse@arm.com>
+        Fri, 18 Mar 2022 13:50:19 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F84D169B0A;
+        Fri, 18 Mar 2022 10:49:00 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u23so8846175ejt.1;
+        Fri, 18 Mar 2022 10:49:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rGjB7GqWMynjIA0+/6xQ+uE8T6CCVvUTw43NpwNkZK0=;
+        b=QR545lb7SAR4EZIGE3+S8kVIWFYqa/uw6jt9zzx70lDVNFQFPC30kX5SQjzRt2kFSN
+         l0VGp+O7X4QTc8qSqGQx/iDrnfL0paX/uWjhSzzPfvX1yvCIO2hhfBm+LwDUMA9ELKIp
+         vBwWLsoQAmzgEOv3uPAGayhzr3Rndxwkh5lYEDN5jBVAFnuh5yfwSuT/n6duxYsMr48s
+         sB9dY+F2xrtNUgmFi+8Xj6zNM8Y0kuVLTtjudMhQ9v+hjKqKt44rGyEX1UTdmcB1saEV
+         7CqKwQ39GZ1ScGYENFrv8RJJzsqtbKfigUe7MG4fSY2oEUISK5HsAJyM7DMnF00atm88
+         1/3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rGjB7GqWMynjIA0+/6xQ+uE8T6CCVvUTw43NpwNkZK0=;
+        b=Lm9TaZ6xwGC0qaqJ1AIWH7BGsiJYnjOasMWLRiDfpWDW/Gij0UoO5FwlPWfr8OuVrd
+         JjRXP6fAECal0AwZf8QOt+UPnWkZ1fO45nu30V4Exjim7KqMcDbl1F9tfqpOc90uKYzx
+         cMe89q+/xEQ0bF9oL0oOt0eE9e/pOqJ8b/Stcfv+z3w0W19UV5aipkxCAmmVpWNW47g3
+         5GLYzLWAHoMQp3yIuK1oBsWfmOY0XppTEqNbRRCZqB/M65wCKyePHW1NmQV2/wDRRYsh
+         3muqR7C2B2pjGX1vxTIJC5wNA+wlvajuv43DSXIAfn5ziZ1zvs9jAXsd7BqPSvKIEPML
+         iOUA==
+X-Gm-Message-State: AOAM53233p0qv819s96fpO1SbMwt+G9jXwc2BRfcBjoa0pH6BVOLYwtB
+        gMlBYCoQ2nR1GVCEo1cCdj4=
+X-Google-Smtp-Source: ABdhPJw9SvvLNSoXkEOZhN6kaI6NkYjOIMQn0VfoJ9rQkuBQfJm9/eKHSJ+Ti/1002viW91DmdPfpg==
+X-Received: by 2002:a17:907:3e19:b0:6da:86b9:acc with SMTP id hp25-20020a1709073e1900b006da86b90accmr10352798ejc.655.1647625739000;
+        Fri, 18 Mar 2022 10:48:59 -0700 (PDT)
+Received: from anparri.mshome.net (host-82-59-4-232.retail.telecomitalia.it. [82.59.4.232])
+        by smtp.gmail.com with ESMTPSA id y15-20020a170906518f00b006df87a2bb16sm3218730ejk.89.2022.03.18.10.48.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 10:48:58 -0700 (PDT)
+From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+To:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Hu <weh@microsoft.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-pci@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
+Subject: [PATCH 0/2] PCI: hv: Miscellaneous changes
+Date:   Fri, 18 Mar 2022 18:48:46 +0100
+Message-Id: <20220318174848.290621-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 228a26b912287934789023b4132ba76065d9491c upstream.
+Andrea Parri (Microsoft) (2):
+  PCI: hv: Use IDR to generate transaction IDs for VMBus hardening
+  PCI: hv: Fix synchronization between channel callback and
+    hv_compose_msi_msg()
 
-Future CPUs may implement a clearbhb instruction that is sufficient
-to mitigate SpectreBHB. CPUs that implement this instruction, but
-not CSV2.3 must be affected by Spectre-BHB.
+ drivers/pci/controller/pci-hyperv.c | 197 ++++++++++++++++++++--------
+ 1 file changed, 143 insertions(+), 54 deletions(-)
 
-Add support to use this instruction as the BHB mitigation on CPUs
-that support it. The instruction is in the hint space, so it will
-be treated by a NOP as older CPUs.
-
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-[ modified for stable: Use a KVM vector template instead of alternatives ]
-Signed-off-by: James Morse <james.morse@arm.com>
----
- arch/arm64/include/asm/assembler.h  |  7 +++++++
- arch/arm64/include/asm/cpufeature.h | 13 +++++++++++++
- arch/arm64/include/asm/sysreg.h     |  3 +++
- arch/arm64/include/asm/vectors.h    |  7 +++++++
- arch/arm64/kernel/cpu_errata.c      | 14 ++++++++++++++
- arch/arm64/kernel/cpufeature.c      |  1 +
- arch/arm64/kernel/entry.S           |  8 ++++++++
- arch/arm64/kvm/hyp/hyp-entry.S      |  6 ++++++
- 8 files changed, 59 insertions(+)
-
-diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
-index 3a5336ba745c..fc3d26c954a4 100644
---- a/arch/arm64/include/asm/assembler.h
-+++ b/arch/arm64/include/asm/assembler.h
-@@ -126,6 +126,13 @@
- 	hint	#20
- 	.endm
- 
-+/*
-+ * Clear Branch History instruction
-+ */
-+	.macro clearbhb
-+	hint	#22
-+	.endm
-+
- /*
-  * Sanitise a 64-bit bounded index wrt speculation, returning zero if out
-  * of bounds.
-diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-index 86a7dda74535..05f41d8f7db3 100644
---- a/arch/arm64/include/asm/cpufeature.h
-+++ b/arch/arm64/include/asm/cpufeature.h
-@@ -497,6 +497,19 @@ static inline bool supports_csv2p3(int scope)
- 	return csv2_val == 3;
- }
- 
-+static inline bool supports_clearbhb(int scope)
-+{
-+	u64 isar2;
-+
-+	if (scope == SCOPE_LOCAL_CPU)
-+		isar2 = read_sysreg_s(SYS_ID_AA64ISAR2_EL1);
-+	else
-+		isar2 = read_sanitised_ftr_reg(SYS_ID_AA64ISAR2_EL1);
-+
-+	return cpuid_feature_extract_unsigned_field(isar2,
-+						    ID_AA64ISAR2_CLEARBHB_SHIFT);
-+}
-+
- static inline bool system_supports_32bit_el0(void)
- {
- 	return cpus_have_const_cap(ARM64_HAS_32BIT_EL0);
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index 2afd6f23bef2..e90cf51b87ec 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -527,6 +527,9 @@
- #define ID_AA64ISAR1_JSCVT_SHIFT	12
- #define ID_AA64ISAR1_DPB_SHIFT		0
- 
-+/* id_aa64isar2 */
-+#define ID_AA64ISAR2_CLEARBHB_SHIFT	28
-+
- /* id_aa64pfr0 */
- #define ID_AA64PFR0_CSV3_SHIFT		60
- #define ID_AA64PFR0_CSV2_SHIFT		56
-diff --git a/arch/arm64/include/asm/vectors.h b/arch/arm64/include/asm/vectors.h
-index f222d8e033b3..695583b9a145 100644
---- a/arch/arm64/include/asm/vectors.h
-+++ b/arch/arm64/include/asm/vectors.h
-@@ -33,6 +33,12 @@ enum arm64_bp_harden_el1_vectors {
- 	 * canonical vectors.
- 	 */
- 	EL1_VECTOR_BHB_FW,
-+
-+	/*
-+	 * Use the ClearBHB instruction, before branching to the canonical
-+	 * vectors.
-+	 */
-+	EL1_VECTOR_BHB_CLEAR_INSN,
- #endif /* CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY */
- 
- 	/*
-@@ -44,6 +50,7 @@ enum arm64_bp_harden_el1_vectors {
- #ifndef CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY
- #define EL1_VECTOR_BHB_LOOP		-1
- #define EL1_VECTOR_BHB_FW		-1
-+#define EL1_VECTOR_BHB_CLEAR_INSN	-1
- #endif /* !CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY */
- 
- /* The vectors to use on return from EL0. e.g. to remap the kernel */
-diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-index f96ab92545d7..d0b7dd60861b 100644
---- a/arch/arm64/kernel/cpu_errata.c
-+++ b/arch/arm64/kernel/cpu_errata.c
-@@ -106,6 +106,8 @@ extern char __spectre_bhb_loop_k24_start[];
- extern char __spectre_bhb_loop_k24_end[];
- extern char __spectre_bhb_loop_k32_start[];
- extern char __spectre_bhb_loop_k32_end[];
-+extern char __spectre_bhb_clearbhb_start[];
-+extern char __spectre_bhb_clearbhb_end[];
- 
- static void __copy_hyp_vect_bpi(int slot, const char *hyp_vecs_start,
- 				const char *hyp_vecs_end)
-@@ -969,6 +971,7 @@ static void update_mitigation_state(enum mitigation_state *oldp,
-  * - Mitigated by a branchy loop a CPU specific number of times, and listed
-  *   in our "loop mitigated list".
-  * - Mitigated in software by the firmware Spectre v2 call.
-+ * - Has the ClearBHB instruction to perform the mitigation.
-  * - Has the 'Exception Clears Branch History Buffer' (ECBHB) feature, so no
-  *   software mitigation in the vectors is needed.
-  * - Has CSV2.3, so is unaffected.
-@@ -1108,6 +1111,9 @@ bool is_spectre_bhb_affected(const struct arm64_cpu_capabilities *entry,
- 	if (supports_csv2p3(scope))
- 		return false;
- 
-+	if (supports_clearbhb(scope))
-+		return true;
-+
- 	if (spectre_bhb_loop_affected(scope))
- 		return true;
- 
-@@ -1148,6 +1154,8 @@ static const char *kvm_bhb_get_vecs_end(const char *start)
- 		return __spectre_bhb_loop_k24_end;
- 	else if (start == __spectre_bhb_loop_k32_start)
- 		return __spectre_bhb_loop_k32_end;
-+	else if (start == __spectre_bhb_clearbhb_start)
-+		return __spectre_bhb_clearbhb_end;
- 
- 	return NULL;
- }
-@@ -1187,6 +1195,7 @@ static void kvm_setup_bhb_slot(const char *hyp_vecs_start)
- #define __spectre_bhb_loop_k8_start NULL
- #define __spectre_bhb_loop_k24_start NULL
- #define __spectre_bhb_loop_k32_start NULL
-+#define __spectre_bhb_clearbhb_start NULL
- 
- static void kvm_setup_bhb_slot(const char *hyp_vecs_start) { };
- #endif
-@@ -1205,6 +1214,11 @@ void spectre_bhb_enable_mitigation(const struct arm64_cpu_capabilities *entry)
- 	} else if (cpu_mitigations_off()) {
- 		pr_info_once("spectre-bhb mitigation disabled by command line option\n");
- 	} else if (supports_ecbhb(SCOPE_LOCAL_CPU)) {
-+		state = SPECTRE_MITIGATED;
-+	} else if (supports_clearbhb(SCOPE_LOCAL_CPU)) {
-+		kvm_setup_bhb_slot(__spectre_bhb_clearbhb_start);
-+		this_cpu_set_vectors(EL1_VECTOR_BHB_CLEAR_INSN);
-+
- 		state = SPECTRE_MITIGATED;
- 	} else if (spectre_bhb_loop_affected(SCOPE_LOCAL_CPU)) {
- 		switch (spectre_bhb_loop_affected(SCOPE_SYSTEM)) {
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 24ce5f5242c9..03b0fdccaf05 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -151,6 +151,7 @@ static const struct arm64_ftr_bits ftr_id_aa64isar1[] = {
- };
- 
- static const struct arm64_ftr_bits ftr_id_aa64isar2[] = {
-+	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_HIGHER_SAFE, ID_AA64ISAR2_CLEARBHB_SHIFT, 4, 0),
- 	ARM64_FTR_END,
- };
- 
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index e64fcb9ead83..85433a84783b 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -981,6 +981,7 @@ alternative_else_nop_endif
- #define BHB_MITIGATION_NONE	0
- #define BHB_MITIGATION_LOOP	1
- #define BHB_MITIGATION_FW	2
-+#define BHB_MITIGATION_INSN	3
- 
- 	.macro tramp_ventry, vector_start, regsize, kpti, bhb
- 	.align	7
-@@ -997,6 +998,11 @@ alternative_else_nop_endif
- 	__mitigate_spectre_bhb_loop	x30
- 	.endif // \bhb == BHB_MITIGATION_LOOP
- 
-+	.if	\bhb == BHB_MITIGATION_INSN
-+	clearbhb
-+	isb
-+	.endif // \bhb == BHB_MITIGATION_INSN
-+
- 	.if	\kpti == 1
- 	/*
- 	 * Defend against branch aliasing attacks by pushing a dummy
-@@ -1073,6 +1079,7 @@ ENTRY(tramp_vectors)
- #ifdef CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY
- 	generate_tramp_vector	kpti=1, bhb=BHB_MITIGATION_LOOP
- 	generate_tramp_vector	kpti=1, bhb=BHB_MITIGATION_FW
-+	generate_tramp_vector	kpti=1, bhb=BHB_MITIGATION_INSN
- #endif /* CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY */
- 	generate_tramp_vector	kpti=1, bhb=BHB_MITIGATION_NONE
- END(tramp_vectors)
-@@ -1135,6 +1142,7 @@ ENTRY(__bp_harden_el1_vectors)
- #ifdef CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY
- 	generate_el1_vector	bhb=BHB_MITIGATION_LOOP
- 	generate_el1_vector	bhb=BHB_MITIGATION_FW
-+	generate_el1_vector	bhb=BHB_MITIGATION_INSN
- #endif /* CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY */
- END(__bp_harden_el1_vectors)
- 	.popsection
-diff --git a/arch/arm64/kvm/hyp/hyp-entry.S b/arch/arm64/kvm/hyp/hyp-entry.S
-index 55ed2cb81dc6..01e518b82c49 100644
---- a/arch/arm64/kvm/hyp/hyp-entry.S
-+++ b/arch/arm64/kvm/hyp/hyp-entry.S
-@@ -392,4 +392,10 @@ ENTRY(__spectre_bhb_loop_k32_start)
- 	ldp	x0, x1, [sp, #(8 * 0)]
- 	add	sp, sp, #(8 * 2)
- ENTRY(__spectre_bhb_loop_k32_end)
-+
-+ENTRY(__spectre_bhb_clearbhb_start)
-+	esb
-+	clearbhb
-+	isb
-+ENTRY(__spectre_bhb_clearbhb_end)
- #endif
 -- 
-2.30.2
+2.25.1
 

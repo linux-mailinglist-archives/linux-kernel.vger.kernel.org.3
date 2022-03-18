@@ -2,102 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4244DD89C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 296FD4DD8A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235560AbiCRLA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 07:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S235589AbiCRLCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 07:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbiCRLA4 (ORCPT
+        with ESMTP id S231196AbiCRLB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 07:00:56 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808E52D7A8F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:59:37 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id n7-20020a17090aab8700b001c6aa871860so1902348pjq.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:59:37 -0700 (PDT)
+        Fri, 18 Mar 2022 07:01:57 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB912D7AB1;
+        Fri, 18 Mar 2022 04:00:37 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id b15so9814548edn.4;
+        Fri, 18 Mar 2022 04:00:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=JMgc3wka+o++Hf45XXTdLFL85p2TEAv1xtfwOX1r76c=;
-        b=AuNJiLAsKwFcK6iA+Zi89DPL7jrMeQNTswTDATRhGHGQ6i7F9xQiXUlp7F+CYjEFQX
-         zTH3aYxX7+Q40QPfHH0UxJjXD+YIh9mvxnlhPtYWKF//98nmVmKNVSnY51Jf4Dq47c/E
-         LDsdOpdkPsP9bC85I0Ppris6hlxo44ZsvKVk81trvQwK1FsXptjqOud45EHUkFZvK8Gq
-         GQKXJ151mXTravr/px/gbbsrpd4qZh+9hkZBRbCLlh/sHzY5RcqgY7VTqA6F8kRvX0TK
-         cSSlemwmfwiIlssb/lTzfIo2dWSUtoGRCih/hiQqoC+blPetmdWpIuYQ3KHZe6g/xZzI
-         n9Jw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vYU8KHDlhc9PWnkQzQUzeEkGlzVKxQ/lB8S8H2nuSmY=;
+        b=k51RC3cBs2n8/v1VP9zbgubwk4Hu4+nLkm9BczUwv0aQyj88OnVumTdsacL4VwTbZ1
+         n+4NtOVdNJhU+BItDSzIDMzIQlByVykE8U66vH3snu5XDqdcvgXmXQmQQRKf7/9BbICX
+         BedKdiKQw2tr5D0eXgFP3M2KS0sBc0Viv33hFkZrycjmF7haREKifosOdSY/Bc36OTMi
+         JQavZBk7uwLMR1FStwoCN2xZJaZB760cM3aCcMUW5pjCcoq4WR3FDZpbttpnQHh0lD71
+         HU5eawZnGx/7qEKNUP1gand5qdAbHuvns/wRcRH2tlS8Rn9DQUt2tbv2L4hnANKpT80U
+         DyOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=JMgc3wka+o++Hf45XXTdLFL85p2TEAv1xtfwOX1r76c=;
-        b=TlKT9Cs066y51V4MUzge+xQBtsg6klyHn3t/C+JdTOR6zsphNjXvD5GXNkGj2f8Xnc
-         S4/UZO8YEwtHgD0PZEmpoa1KNYRJylUuPFi8QJ7tua7URMA/xp4i9nP/Ge/5tfGTNVDN
-         BGiJjmzB1we/DQEpxA7HEzjMRS2jHUMu4PrgaQ4igoE66EycSCr3pdB4i/UvX9vO1Xnt
-         mu7X6cdpMrYsVN7PLwqPLAEHYUhLlz4O5Br/0+P/Q5Lp0kDkhDiqySAlFgXBB0YV5pkN
-         9+6wEbDnKUljWC0wStgeei3EeevGnOOlpdRp5RJhXyFQBfo4p3rt9lesHGyZ5VqqJ/W6
-         DzmQ==
-X-Gm-Message-State: AOAM530iJ5y0wMzfvi/CYofNCy9TQlzOMyDFaGvXXSiKtWkfpK9URu9R
-        Kwkqbux8VRaMQALgLrnyoF8=
-X-Google-Smtp-Source: ABdhPJwbsNlyjNQOdLY45VJtqKPS4IVi89HNLEj8CmVBUk5EsrBeA3YP8NMjNusRYeviVq2HoajRcg==
-X-Received: by 2002:a17:90b:4c44:b0:1bf:f00:3735 with SMTP id np4-20020a17090b4c4400b001bf0f003735mr21180733pjb.168.1647601177091;
-        Fri, 18 Mar 2022 03:59:37 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id z12-20020aa7888c000000b004f3fc6d95casm9420298pfe.20.2022.03.18.03.59.34
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vYU8KHDlhc9PWnkQzQUzeEkGlzVKxQ/lB8S8H2nuSmY=;
+        b=yUPKBwtEVj6JuRhqbqV48ZimTr164a9Pe6ZqXuATJ452BFMGcYO9EQ8eWTg+GUFJRw
+         dXtrQGq+y6SuzwXWOJRryi5spRGLBfeDsUeNfM7B89N8m/JR+XfM1FhxaP37xl2PBpVp
+         W73vZ+KbMwWJ1WYel3wvH52+tGQEp83j7sVyL10K1A5JPwbRP5wMJIT83tHiyeUP00Q6
+         AHsWqckyx2acSNxSLHDJiuTu96v2BnT8I6Aq4mCCSvYGn2J7led5M00bJWQWPl1fgzc0
+         nlg4jlT1tqYYJEbYrTgEuwGFBrKmtJE3y74qC6J/KoDTNafVRjYNwhiRnxlFuTcFWQXc
+         vdRA==
+X-Gm-Message-State: AOAM530dEmSInoRYvBnANctWjwtKtdYDnPWab6eyYP47hB7oOtHsPiHR
+        fiLhQXU6UrlDA5ZSAcK4aws=
+X-Google-Smtp-Source: ABdhPJzA/H9Q6ZuyDNrTOnqFx3nLBWtz3LjrWBNm5LmxAAO/ASdNyR5WFj7pI6SyWgxd0WfSrTFzag==
+X-Received: by 2002:a05:6402:d69:b0:418:f7bd:b076 with SMTP id ec41-20020a0564020d6900b00418f7bdb076mr7928379edb.268.1647601236250;
+        Fri, 18 Mar 2022 04:00:36 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id g21-20020a056402115500b00413c824e422sm3923863edw.72.2022.03.18.04.00.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 03:59:36 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Igor Grinberg <grinberg@compulab.co.il>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH v2] ARM: pxa: Change clk_disable to clk_disable_unprepare
-Date:   Fri, 18 Mar 2022 10:59:31 +0000
-Message-Id: <20220318105931.18480-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220316022122.7426-1-linmq006@gmail.com>
-References: <20220316022122.7426-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 18 Mar 2022 04:00:35 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 13:00:33 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+Cc:     andrew@lunn.ch, netdev@vger.kernel.org, robh+dt@kernel.org,
+        UNGLinuxDriver@microchip.com, woojung.huh@microchip.com,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v9 net-next 09/11] net: dsa: microchip: add support for
+ port mirror operations
+Message-ID: <20220318110033.nuwvrok6ywsagxwf@skbuf>
+References: <20220318085540.281721-1-prasanna.vengateshan@microchip.com>
+ <20220318085540.281721-10-prasanna.vengateshan@microchip.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318085540.281721-10-prasanna.vengateshan@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The corresponding API for clk_prepare_enable is clk_disable_unprepare,
-other than clk_disable.
+On Fri, Mar 18, 2022 at 02:25:38PM +0530, Prasanna Vengateshan wrote:
+> Added support for port_mirror_add() and port_mirror_del operations
+> 
+> Sniffing is limited to one port & alert the user if any new
+> sniffing port is selected
+> 
+> Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  drivers/net/dsa/microchip/lan937x_main.c | 84 ++++++++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+> 
+> diff --git a/drivers/net/dsa/microchip/lan937x_main.c b/drivers/net/dsa/microchip/lan937x_main.c
+> index c54aba6a05b5..5a57a2ce8992 100644
+> --- a/drivers/net/dsa/microchip/lan937x_main.c
+> +++ b/drivers/net/dsa/microchip/lan937x_main.c
+> @@ -98,6 +98,88 @@ static void lan937x_port_stp_state_set(struct dsa_switch *ds, int port,
+>  	ksz_update_port_member(dev, port);
+>  }
+>  
+> +static int lan937x_port_mirror_add(struct dsa_switch *ds, int port,
+> +				   struct dsa_mall_mirror_tc_entry *mirror,
+> +				   bool ingress)
 
-Fix this by changing clk_disable to clk_disable_unprepare.
+This function gained a new extack argument yesterday => your patch
+doesn't compile. Maybe you could even use the extack to propagate the
+"existing sniffer port" error.
 
-Fixes: 7a5d9a913f91 ("ARM: pxa: ulpi: fix ulpi timeout and slowpath warn")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-changes in v2:
-- fix typo in commit message.
----
- arch/arm/mach-pxa/cm-x300.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm/mach-pxa/cm-x300.c b/arch/arm/mach-pxa/cm-x300.c
-index 2e35354b61f5..fcf5b8fa5b9f 100644
---- a/arch/arm/mach-pxa/cm-x300.c
-+++ b/arch/arm/mach-pxa/cm-x300.c
-@@ -538,7 +538,7 @@ static int cm_x300_u2d_init(struct device *dev)
- 
- 		err = cm_x300_ulpi_phy_reset();
- 		if (err) {
--			clk_disable(pout_clk);
-+			clk_disable_unprepare(pout_clk);
- 			clk_put(pout_clk);
- 		}
- 	}
--- 
-2.17.1
-
+> +{
+> +	struct ksz_device *dev = ds->priv;
+> +	int ret, p;
+> +	u8 data;
+> +
+> +	/* Limit to one sniffer port
+> +	 * Check if any of the port is already set for sniffing
+> +	 * If yes, instruct the user to remove the previous entry & exit
+> +	 */
+> +	for (p = 0; p < dev->port_cnt; p++) {
+> +		/* Skip the current sniffing port */
+> +		if (p == mirror->to_local_port)
+> +			continue;
+> +
+> +		ret = lan937x_pread8(dev, p, P_MIRROR_CTRL, &data);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (data & PORT_MIRROR_SNIFFER) {
+> +			dev_err(dev->dev,
+> +				"Delete existing rules towards %s & try\n",
+> +				dsa_to_port(ds, p)->name);
+> +			return -EBUSY;
+> +		}
+> +	}
+> +
+> +	/* Configure ingress/egress mirroring */
+> +	if (ingress)
+> +		ret = lan937x_port_cfg(dev, port, P_MIRROR_CTRL, PORT_MIRROR_RX,
+> +				       true);
+> +	else
+> +		ret = lan937x_port_cfg(dev, port, P_MIRROR_CTRL, PORT_MIRROR_TX,
+> +				       true);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Configure sniffer port as other ports do not have
+> +	 * PORT_MIRROR_SNIFFER is set
+> +	 */
+> +	ret = lan937x_port_cfg(dev, mirror->to_local_port, P_MIRROR_CTRL,
+> +			       PORT_MIRROR_SNIFFER, true);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return lan937x_cfg(dev, S_MIRROR_CTRL, SW_MIRROR_RX_TX, false);
+> +}
+> +
+> +static void lan937x_port_mirror_del(struct dsa_switch *ds, int port,
+> +				    struct dsa_mall_mirror_tc_entry *mirror)
+> +{
+> +	struct ksz_device *dev = ds->priv;
+> +	bool in_use = false;
+> +	u8 data;
+> +	int p;
+> +
+> +	/* clear ingress/egress mirroring port */
+> +	if (mirror->ingress)
+> +		lan937x_port_cfg(dev, port, P_MIRROR_CTRL, PORT_MIRROR_RX,
+> +				 false);
+> +	else
+> +		lan937x_port_cfg(dev, port, P_MIRROR_CTRL, PORT_MIRROR_TX,
+> +				 false);
+> +
+> +	/* Check if any of the port is still referring to sniffer port */
+> +	for (p = 0; p < dev->port_cnt; p++) {
+> +		lan937x_pread8(dev, p, P_MIRROR_CTRL, &data);
+> +
+> +		if ((data & (PORT_MIRROR_RX | PORT_MIRROR_TX))) {
+> +			in_use = true;
+> +			break;
+> +		}
+> +	}
+> +
+> +	/* delete sniffing if there are no other mirroring rule exist */
+> +	if (!in_use)
+> +		lan937x_port_cfg(dev, mirror->to_local_port, P_MIRROR_CTRL,
+> +				 PORT_MIRROR_SNIFFER, false);
+> +}
+> +
+>  static void lan937x_config_cpu_port(struct dsa_switch *ds)
+>  {
+>  	struct ksz_device *dev = ds->priv;
+> @@ -508,6 +590,8 @@ const struct dsa_switch_ops lan937x_switch_ops = {
+>  	.port_bridge_leave = ksz_port_bridge_leave,
+>  	.port_stp_state_set = lan937x_port_stp_state_set,
+>  	.port_fast_age = ksz_port_fast_age,
+> +	.port_mirror_add = lan937x_port_mirror_add,
+> +	.port_mirror_del = lan937x_port_mirror_del,
+>  	.port_max_mtu = lan937x_get_max_mtu,
+>  	.port_change_mtu = lan937x_change_mtu,
+>  	.phylink_get_caps = lan937x_phylink_get_caps,
+> -- 
+> 2.30.2
+> 

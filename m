@@ -2,61 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9944DDCDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E467C4DDCE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238002AbiCRPal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 11:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
+        id S238006AbiCRPbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 11:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237995AbiCRPah (ORCPT
+        with ESMTP id S238005AbiCRPbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 11:30:37 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56241C4E03;
-        Fri, 18 Mar 2022 08:29:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wLbciClnuT4FSNA8HsmJGJalLFVE6s7HbXIbgp6eJdM=; b=IsuUGYajcuYM0U53vE46zyyASS
-        bNzQ5ALzgIrvDwvGPqV5TLTDXJ4eJnja9+7o4uSEsVqj9oSLTcs/MYIxj2KfzrTFACOd2QkSqbSBE
-        KG8MDdgDYJqAZ3NBtGSP8RO1M7xa8ojnj0bvjBa42fBtQEwHUI8SgKHznYePnkDpJOoNp2R2z2Pdt
-        IegysZDBkxF2MrLK+3/Ytc7dyOKAUQZO9yYbtZTj2g5fIcjwQDM03csHaiXvAq/n4rY1Tqt2I27C7
-        QE0wtXFSKZ9wkRC+coAy7Qr/EmMa86RAS+bl9P76wR0Sba3oWe61mp0sFBY6Mo/3wJCOlscUAD1CD
-        pNpWdAYw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nVEXN-0083dY-GX; Fri, 18 Mar 2022 15:29:09 +0000
-Date:   Fri, 18 Mar 2022 15:29:09 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     syzbot <syzbot+2b3af42c0644df1e4da9@syzkaller.appspotmail.com>
-Cc:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in inc_nlink (3)
-Message-ID: <YjSlRR/qd8AjIzRu@casper.infradead.org>
-References: <20220318151034.2395-1-hdanton@sina.com>
- <000000000000e8202805da7fc37b@google.com>
+        Fri, 18 Mar 2022 11:31:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EA6FD3C;
+        Fri, 18 Mar 2022 08:30:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93F9960C7E;
+        Fri, 18 Mar 2022 15:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 09289C340EC;
+        Fri, 18 Mar 2022 15:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647617415;
+        bh=MwYwxbv4H2vDZdYzgYQgazWn6tOyO+Fl3u/lBvW2CK8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=E9iCYBuvEUsRgGpoS6qT+iTNuw4CYlbnfQomOy1e7u6EZ2b2WsYMvil+JqDT99x+K
+         kQOvV6zMaMrVa1gsmhoK8dEPyT92+fz61tADi9fXvQ77wMsiIrVClXRhE3JHjIessT
+         XHYeuC+ia4hdAlQ5f3dov67eV1c89HDCeCtzk0wlpgcCScm526pDZ3PV6COtosZ3fp
+         XYTNxmLJM72TLrYl27j5tahh9ISK5BOuXTuy+wDfUNoPiOxr2ZbRbTmvlWqujwcyCj
+         Z5/J34qqKve8fioCM1cXem1RwjkJvG5tvQPP37u/tH97bSH9iuG6P870if4bpDAI3V
+         +fmG0B1UDutdw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0DF9E6D402;
+        Fri, 18 Mar 2022 15:30:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000e8202805da7fc37b@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v4 0/2] af_vsock: add two new tests for
+ SOCK_SEQPACKET
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164761741491.31796.2986635907714259777.git-patchwork-notify@kernel.org>
+Date:   Fri, 18 Mar 2022 15:30:14 +0000
+References: <97d6d8c6-f7b2-1b03-a3d9-f312c33134ec@sberdevices.ru>
+In-Reply-To: <97d6d8c6-f7b2-1b03-a3d9-f312c33134ec@sberdevices.ru>
+To:     Krasnov Arseniy Vladimirovich <AVKrasnov@sberdevices.ru>
+Cc:     sgarzare@redhat.com, oxffffaa@gmail.com, DDRokosov@sberdevices.ru,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 08:26:06AM -0700, syzbot wrote:
-> Hello,
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 17 Mar 2022 08:29:50 +0000 you wrote:
+> This adds two tests: for receive timeout and reading to invalid
+> buffer provided by user. I forgot to put both patches to main
+> patchset.
 > 
-> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> Arseniy Krasnov(2):
+> 
+> af_vsock: SOCK_SEQPACKET receive timeout test
+> af_vsock: SOCK_SEQPACKET broken buffer test
+> 
+> [...]
 
-FWIW, neither of Hillf's patches have made it to the list.
+Here is the summary with links:
+  - [net-next,v4,1/2] af_vsock: SOCK_SEQPACKET receive timeout test
+    https://git.kernel.org/netdev/net-next/c/efb3719f4ab0
+  - [net-next,v4,2/2] af_vsock: SOCK_SEQPACKET broken buffer test
+    https://git.kernel.org/netdev/net-next/c/e89600ebeeb1
 
-https://lore.kernel.org/linux-fsdevel/000000000000e8202805da7fc37b@google.com/T/#u
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Hillf, can you fix your mail setup?
+

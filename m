@@ -2,117 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006584DE19D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 20:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A00CF4DE19F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 20:11:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240218AbiCRTLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 15:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
+        id S240299AbiCRTNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 15:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbiCRTLh (ORCPT
+        with ESMTP id S233464AbiCRTNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 15:11:37 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975F71903C4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:10:17 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id g19so10237171pfc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:10:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IzmP5X2K1BS5f1i59g5bK2cyyZHxNOqC8TIBy5CRON4=;
-        b=TL+wPZUOExCQFV7t11tRDwapOCTIkSSbQ3UsI0+BOkK6x2ELC2+xCHZOx1E+I2zUwk
-         5NpYAK+IF8/D0YZD5qRYWVHtLBUFliQg23d4ZDDtJFNfQGHFB/xn+rJivIZ011tNWvXn
-         ml7a3xOpzyL0ARzIjGrzfZdybZDks/V/ioMucV2XagHr5dimIH4klZ1R2nLiFrawhnKY
-         RY9np4SEMrkH6ABb/FjkYc/+HmbXgCxfp7QfLX44cUlTJ374NW1SAgq2Iseqw60HPFPJ
-         2B0mFA6XJk9fLzR5/hjmjeYsXHrKlaUnpS3cK0VxeuZSNY4eTdYUDdmqZPOb+aaEhjuh
-         7nOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IzmP5X2K1BS5f1i59g5bK2cyyZHxNOqC8TIBy5CRON4=;
-        b=0v8eQ/MbQ9DnII4XaGmhkCS4Q9vLPLOJGmlC9TwXGISgEBjmPMkx4d89I5TlqxBNHp
-         uA7msrE/9R0193Znqved3eBkWt/EypbnBJpQGDUbZ3Nro1zpYo/XAe27V+4qejj9MRCW
-         qUmLfmmKQcPOQu0WmHwLKzEDNyzZSjs4MjKChduN7Ms15CyA5mGQZm6e96Tu+8mVJpt0
-         W7Q7nGqUDUOTJXwQe2nQ9Ab83DRBtnNZ5OGYFSfYFv3rVcQ4sZsmbhWJ5tAbOvUtdPaQ
-         km/0oG869wru2eCp13Sor2vzb/bzRR/siFHsVqfDKGK5KEsQucXyX6vMP9rM6s4o2gEq
-         lCpg==
-X-Gm-Message-State: AOAM5335K9/XCaeAesRPiJWrGWXvWhGP//kLpULLcu3HVFiCEVz3XYO0
-        S5ZYCaRQkAaPdMsAYn55iA1u+fSrLZM=
-X-Google-Smtp-Source: ABdhPJwTCoFRb4Bt/BtKUBmCoZ3A/qBpEhjsTq9nW8uLy5cCi0mR2bIVa0UIjj6KvHK2VbrNvhrI0Q==
-X-Received: by 2002:a62:8308:0:b0:4fa:7bcd:d0e6 with SMTP id h8-20020a628308000000b004fa7bcdd0e6mr1672788pfe.35.1647630616872;
-        Fri, 18 Mar 2022 12:10:16 -0700 (PDT)
-Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:a64c:198c:4e57:caeb])
-        by smtp.gmail.com with ESMTPSA id 16-20020a17090a199000b001bf4b1b268bsm8523113pji.44.2022.03.18.12.10.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 12:10:16 -0700 (PDT)
-From:   Daeho Jeong <daeho43@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Daeho Jeong <daehojeong@google.com>
-Subject: [PATCH] f2fs: make gc_urgent and gc_segment_mode sysfs node readable
-Date:   Fri, 18 Mar 2022 12:10:12 -0700
-Message-Id: <20220318191012.4113266-1-daeho43@gmail.com>
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+        Fri, 18 Mar 2022 15:13:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E47D0247C2C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:11:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3DB2111FB;
+        Fri, 18 Mar 2022 12:11:46 -0700 (PDT)
+Received: from [10.57.43.230] (unknown [10.57.43.230])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 716A13F766;
+        Fri, 18 Mar 2022 12:11:44 -0700 (PDT)
+Message-ID: <3b9cedd6-a084-5d87-2fdd-0da10146827b@arm.com>
+Date:   Fri, 18 Mar 2022 19:11:39 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] arm64: fix clang warning about TRAMP_VALIAS
+Content-Language: en-GB
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        James Morse <james.morse@arm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20220316183833.1563139-1-arnd@kernel.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220316183833.1563139-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daeho Jeong <daehojeong@google.com>
+On 2022-03-16 18:38, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The newly introduced TRAMP_VALIAS definition causes a build warning
+> with clang-14:
+> 
+> arch/arm64/include/asm/vectors.h:66:31: error: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Werror,-Wnull-pointer-arithmetic]
 
-Changed a way of showing values of them to use strings.
+Tangentially, all the other GNU extensions we depend on throughout Linux 
+are also GNU extensions. Do we know what's special about this one?
 
-Signed-off-by: Daeho Jeong <daehojeong@google.com>
----
- fs/f2fs/sysfs.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+Robin.
 
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index fe29bcb70f46..f2613cc83888 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -41,6 +41,16 @@ enum {
- 	ATGC_INFO,	/* struct atgc_management */
- };
- 
-+const char *gc_mode_names[MAX_GC_MODE] = {
-+	"GC_NORMAL",
-+	"GC_IDLE_CB",
-+	"GC_IDLE_GREEDY",
-+	"GC_IDLE_AT",
-+	"GC_URGENT_HIGH",
-+	"GC_URGENT_LOW",
-+	"GC_URGENT_MID"
-+};
-+
- struct f2fs_attr {
- 	struct attribute attr;
- 	ssize_t (*show)(struct f2fs_attr *, struct f2fs_sb_info *, char *);
-@@ -316,8 +326,13 @@ static ssize_t f2fs_sbi_show(struct f2fs_attr *a,
- 		return sysfs_emit(buf, "%u\n", sbi->compr_new_inode);
- #endif
- 
-+	if (!strcmp(a->attr.name, "gc_urgent"))
-+		return sysfs_emit(buf, "%s\n",
-+				gc_mode_names[sbi->gc_mode]);
-+
- 	if (!strcmp(a->attr.name, "gc_segment_mode"))
--		return sysfs_emit(buf, "%u\n", sbi->gc_segment_mode);
-+		return sysfs_emit(buf, "%s\n",
-+				gc_mode_names[sbi->gc_segment_mode]);
- 
- 	if (!strcmp(a->attr.name, "gc_reclaimed_segments")) {
- 		return sysfs_emit(buf, "%u\n",
--- 
-2.35.1.894.gb6a874cedc-goog
-
+>                  return (char *)TRAMP_VALIAS + SZ_2K * slot;
+> 
+> Change the addition to something clang does not complain about.
+> 
+> Fixes: bd09128d16fa ("arm64: Add percpu vectors for EL1")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   arch/arm64/include/asm/vectors.h | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> I see this warning on 5.17-rc8, but did not test it on linux-next,
+> which may already have a fix.
+> 
+> diff --git a/arch/arm64/include/asm/vectors.h b/arch/arm64/include/asm/vectors.h
+> index f64613a96d53..bc9a2145f419 100644
+> --- a/arch/arm64/include/asm/vectors.h
+> +++ b/arch/arm64/include/asm/vectors.h
+> @@ -56,14 +56,14 @@ enum arm64_bp_harden_el1_vectors {
+>   DECLARE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector);
+>   
+>   #ifndef CONFIG_UNMAP_KERNEL_AT_EL0
+> -#define TRAMP_VALIAS	0
+> +#define TRAMP_VALIAS	0ul
+>   #endif
+>   
+>   static inline const char *
+>   arm64_get_bp_hardening_vector(enum arm64_bp_harden_el1_vectors slot)
+>   {
+>   	if (arm64_kernel_unmapped_at_el0())
+> -		return (char *)TRAMP_VALIAS + SZ_2K * slot;
+> +		return (char *)(TRAMP_VALIAS + SZ_2K * slot);
+>   
+>   	WARN_ON_ONCE(slot == EL1_VECTOR_KPTI);
+>   

@@ -2,277 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286A24DD59F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8B64DD594
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233385AbiCRH40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
+        id S233358AbiCRHxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiCRH4Y (ORCPT
+        with ESMTP id S233351AbiCRHxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:56:24 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E501770B8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 00:55:04 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KKbqK2NnmzfZ4G
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 15:53:33 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+        Fri, 18 Mar 2022 03:53:16 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7911B2C80AF;
+        Fri, 18 Mar 2022 00:51:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1647589914; x=1679125914;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X6SwbwpiUB+B3bXRicDk7uV202lxEtcW7TukX+QpKN8=;
+  b=DqVM/hjZYvKAY5Iu+BILlRatyRjbaUmqOUdDuNfd3gI0QY+yc4+sYUbk
+   +6gUKboC2vrWOvEXp9ERrfP0TWHttJGaz93D7QTSkTvOxPg6F4RBFDRbc
+   KGcG4MGG6W0GkWgUFI7YG/kGzb5oUtFaymD1ZGjVjV7U6ZmW/hMF5rqJZ
+   YyQZNx7+CaBLJSAmOOGBRWY1LptMFXPcBUGWmzkVlL6cJh81asEkVSoF4
+   /J0yisW2tFu83F63HL+cd6fmd0MpK7eQWrBTBJdJlCI1L+7G6l0+meloV
+   FrtNDSXC/6cHL6tK+qcMtw9V9MIc4m3jTO/g21UUFgcX1fAG/glsh8Q/h
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,191,1643698800"; 
+   d="scan'208";a="157361859"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Mar 2022 00:51:53 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 18 Mar 2022 15:55:02 +0800
-Received: from huawei.com (10.67.174.169) by dggpemm500001.china.huawei.com
- (7.185.36.107) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 18 Mar
- 2022 15:55:02 +0800
-From:   Chen Lifu <chenlifu@huawei.com>
-To:     <patchwork@huawei.com>, <chenlifu@huawei.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     <miaoxie@huawei.com>, <weiyongjun1@huawei.com>,
-        <guohanjun@huawei.com>, <huawei.libin@huawei.com>,
-        <yuehaibing@huawei.com>, <rui.xiang@huawei.com>,
-        <zhaohongjiang@huawei.com>, <johnny.chenyi@huawei.com>,
-        <heying24@huawei.com>, <liaochang1@huawei.com>,
-        <lizhengyu3@huawei.com>, <chenjiahao16@huawei.com>,
-        <xuyihang@huawei.com>, <chris.zjh@huawei.com>,
-        <linyujun809@huawei.com>
-Subject: [PATCH -next] scripts: add compare-config utility
-Date:   Fri, 18 Mar 2022 15:54:21 +0800
-Message-ID: <20220318075421.606533-1-chenlifu@huawei.com>
-X-Mailer: git-send-email 2.35.1
+ 15.1.2375.17; Fri, 18 Mar 2022 00:51:53 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 18 Mar 2022 00:51:52 -0700
+Date:   Fri, 18 Mar 2022 08:54:50 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
+        <devicetree@vger.kernel.org>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <robh+dt@kernel.org>
+Subject: Re: [PATCH net-next 1/5] dt-bindings: net: lan966x: Extend with FDMA
+ interrupt
+Message-ID: <20220318075450.rvofpoc3m22g7jpj@soft-dev3-1.localhost>
+References: <20220317185159.1661469-2-horatiu.vultur@microchip.com>
+ <20220318021413.25810-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.169]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20220318021413.25810-1-michael@walle.cc>
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an alternative utility to compare two Linux .config files.
-Unlike existing utilities such as "diffconfig" in the Linux kernel tree,
-it prints detailed results in table style. It is useful sometimes,
-e.g. for those who need to analyze .config files through tables.
+The 03/18/2022 03:14, Michael Walle wrote:
+> 
+> > Extend dt-bindings for lan966x with FDMA interrupt. This is generated
+> > when receiving a frame or when a frame was transmitted. The interrupt
+> > needs to be enable for each frame.
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > ---
+> >  .../devicetree/bindings/net/microchip,lan966x-switch.yaml       | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml b/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+> > index 13812768b923..14e0bae5965f 100644
+> > --- a/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+> > +++ b/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+> > @@ -39,6 +39,7 @@ properties:
+> >        - description: frame dma based extraction
+> >        - description: analyzer interrupt
+> >        - description: ptp interrupt
+> > +      - description: fdma interrupt
+> >
+> >    interrupt-names:
+> >      minItems: 1
+> > @@ -47,6 +48,7 @@ properties:
+> >        - const: fdma
+> >        - const: ana
+> >        - const: ptp
+> > +      - const: fdma
+> 
+> This interrupt is already described (three lines above), no?
 
-Signed-off-by: Chen Lifu <chenlifu@huawei.com>
----
- scripts/compare-config | 199 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 199 insertions(+)
- create mode 100755 scripts/compare-config
+Yes you are right.
+So I will drop this patch in the next version.
 
-diff --git a/scripts/compare-config b/scripts/compare-config
-new file mode 100755
-index 000000000000..6da7c844b89c
---- /dev/null
-+++ b/scripts/compare-config
-@@ -0,0 +1,199 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# An utility to compare two .config files and print the results in table style.
-+#
-+
-+import sys
-+import argparse
-+import traceback
-+
-+def args_parser():
-+    comment = ("An utility to compare two .config files and "
-+               "print the results in table style.")
-+    parser = argparse.ArgumentParser(description = comment,
-+                                     formatter_class =
-+                                         argparse.RawTextHelpFormatter)
-+    parser.add_argument(dest = "old_file", nargs = "?",
-+                        metavar = "old-file",
-+                        default = ".config.old",
-+                        help = "specify old .config file "
-+                               "(default: .config.old)")
-+    parser.add_argument(dest = "new_file", nargs = "?",
-+                        metavar = "new-file",
-+                        default = ".config",
-+                        help = "specify new .config file "
-+                               "(default: .config)")
-+    parser.add_argument("-S", dest = "S", action = "store_true",
-+                        help = "print configs that exist in both files "
-+                               "and are equal")
-+    parser.add_argument("-C", dest = "C", action = "store_true",
-+                        help = "print configs that exist in both files "
-+                               "but are not equal")
-+    parser.add_argument("-O", dest = "O", action = "store_true",
-+                        help = "print configs that only exist in old-file")
-+    parser.add_argument("-N", dest = "N", action = "store_true",
-+                        help = "print configs that only exist in new-file")
-+    parser.add_argument("-y", dest = "y", action = "store_true",
-+                        help = "print configs that are y")
-+    parser.add_argument("-n", dest = "n", action = "store_true",
-+                        help = "print configs that are n (not set)")
-+    parser.add_argument("-m", dest = "m", action = "store_true",
-+                        help = "print configs that are m")
-+    parser.add_argument("-v", dest = "v", action = "store_true",
-+                        help = "print configs that are "
-+                               "string/hex/int value")
-+    parser.add_argument("--old", dest = "old", action = "store_true",
-+                        help = "filter configs base on old-file")
-+    parser.add_argument("--new", dest = "new", action = "store_true",
-+                        help = "filter configs base on new-file")
-+    return parser
-+
-+def usage():
-+    args_parser().parse_args(["-h"])
-+
-+def parse_args():
-+    args = args_parser().parse_args()
-+    setattr(args, "doptions", diff_options(args))
-+    setattr(args, "voptions", value_options(args))
-+    old = args.old or not args.new
-+    new = args.new or not args.old
-+    args.old = old
-+    args.new = new
-+    return args
-+
-+def diff_options(args):
-+    doptions = []
-+    if args.S: doptions.append("S")
-+    if args.C: doptions.append("C")
-+    if args.O: doptions.append("O")
-+    if args.N: doptions.append("N")
-+    if len(doptions) == 0:
-+        doptions = ["S", "C", "O", "N"]
-+    return doptions
-+
-+def value_options(args):
-+    voptions = set()
-+    if args.y: voptions.add("y")
-+    if args.n: voptions.add("n")
-+    if args.m: voptions.add("m")
-+    if args.v: voptions.add("v")
-+    if len(voptions) == 0:
-+        voptions = {"y", "n", "m", "v"}
-+    return voptions
-+
-+def test_value(val, voptions):
-+    if val is None: return False
-+    if val in voptions: return True
-+    return (not val in {"y", "n", "m"}) and ("v" in voptions)
-+
-+def format_exception():
-+    es = ""
-+    exc_type, exc_value, exc_traceback = sys.exc_info()
-+    exc_str = traceback.format_exception(exc_type, exc_value, exc_traceback)
-+    for s in exc_str:
-+        es += s
-+    return es
-+
-+def read_line(line):
-+    prefix = "CONFIG_"
-+    line = line.strip()
-+    if line.startswith(prefix):
-+        if line.find("=") == -1: return None, None
-+        name, val = line.split("=", 1)
-+        return name.strip(), val.strip()
-+    if line.endswith(" is not set"):
-+        beg = line.find(prefix)
-+        if beg == -1: return None, None
-+        name, val = line[beg:].split(" ", 1)
-+        return name, "n"
-+    return None, None
-+
-+def read_file(filename):
-+    configs = {}
-+    with open(filename, "r", encoding = "utf-8") as f:
-+        for line in f:
-+            name, val = read_line(line)
-+            if not name is None: configs[name] = val
-+    return configs
-+
-+def compare_files(old_file, new_file):
-+    result = {"S": {}, "C": {}, "O": {}, "N": {}}
-+    try:
-+        old_configs = read_file(old_file)
-+        new_configs = read_file(new_file)
-+        while len(old_configs) > 0:
-+            name, old_val = old_configs.popitem()
-+            new_val = new_configs.pop(name, None)
-+            if new_val is None:
-+                result["O"][name] = (old_val, None)
-+            elif old_val == new_val:
-+                result["S"][name] = (old_val, new_val)
-+            else:
-+                result["C"][name] = (old_val, new_val)
-+        while len(new_configs) > 0:
-+            name, new_val = new_configs.popitem()
-+            result["N"][name] = (None, new_val)
-+    except:
-+        print(format_exception())
-+        usage()
-+    return result
-+
-+def filter_output(result, args):
-+    output = {"S": {}, "C": {}, "O": {}, "N": {}}
-+    for opt in args.doptions:
-+        for name, val in result[opt].items():
-+            if (args.old and test_value(val[0], args.voptions) or
-+                args.new and test_value(val[1], args.voptions)):
-+                old_val = "-" if val[0] is None else val[0]
-+                new_val = "-" if val[1] is None else val[1]
-+                output[opt][name] = (old_val, new_val)
-+    return output
-+
-+def print_table(output, args):
-+    name_max_len = 8
-+    old_max_len  = 8
-+    new_max_len  = 8
-+    name_list = sum([list(output[opt].keys()) for opt in args.doptions], [])
-+    if len(name_list) > 0:
-+        name_max_len = len(max(name_list, key = len))
-+    val_list = sum([list(output[opt].values()) for opt in args.doptions], [])
-+    if len(val_list) > 0:
-+        old_max_len = len(max([val[0] for val in val_list], key = len))
-+        new_max_len = len(max([val[1] for val in val_list], key = len))
-+    diff_max_len = len(max([diff_types[opt] for opt in args.doptions], key = len))
-+    header = ["NAME", "DIFF", "OLD", "NEW"]
-+    # table row format
-+    row = ("{{:{}}}\t{{:{}}}\t{{:{}}}\t{{:{}}}"
-+           .format(min(max(name_max_len, len(header[0])), 40),
-+                   min(max(diff_max_len, len(header[1])), 40),
-+                   min(max(old_max_len,  len(header[2])), 40),
-+                   min(max(new_max_len,  len(header[3])), 40)))
-+    print(row.format(header[0], header[1], header[2], header[3]))
-+    for opt in args.doptions:
-+        for name, val in sorted(output[opt].items()):
-+            print(row.format(name, diff_types[opt], val[0], val[1]))
-+
-+def print_summary(output, args):
-+    diff_max_len = len(max([diff_types[opt] for opt in args.doptions], key = len))
-+    # summary line format
-+    line = "{{:{}}}: {{}}".format(max(diff_max_len, 8))
-+    print("\nSummary:")
-+    print(line.format("Old-file", args.old_file))
-+    print(line.format("New-file", args.new_file))
-+    total = 0
-+    for opt in args.doptions:
-+        count = len(output[opt])
-+        print(line.format(diff_types[opt], count))
-+        total += count
-+    print(line.format("Total", total))
-+
-+def print_result(result, args):
-+    output = filter_output(result, args)
-+    print_table(output, args)
-+    print_summary(output, args)
-+
-+diff_types = {"S": "Same", "C": "Changed", "O": "Old-only", "N": "New-only"}
-+args = parse_args()
-+result = compare_files(args.old_file, args.new_file)
-+print_result(result, args)
+> 
+> -michael
+
 -- 
-2.35.1
-
+/Horatiu

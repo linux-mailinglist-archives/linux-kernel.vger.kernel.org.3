@@ -2,160 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E374DD53F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED95E4DD542
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233098AbiCRHcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
+        id S233110AbiCRHdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbiCRHcW (ORCPT
+        with ESMTP id S231326AbiCRHdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:32:22 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FCE2409B;
-        Fri, 18 Mar 2022 00:31:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKbKL1pPrz4xc1;
-        Fri, 18 Mar 2022 18:31:02 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647588663;
-        bh=R46NlN+rYs6doRFo+GJBndwKot6DC5GziYeiRObNQ4U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=h4NBXydz457IEgAXIQbv0VKGseeU5MXQExWtc8m627tChqBEUC6Ssgsa7Ali75icZ
-         Mei/PNECQ96W7RjYFTt1cgtN4jbrbXTm+2iNy+jR6NH2MkuABS04UIr4DJF3pkRZha
-         JQ09v8zVqzsqyl/Vq5bpJ6QjFHbn3Dd/+nDgtza5Sjv7YaznBKj4Q1og51WQoELBps
-         45aI9t2+esXErdmZt9Wnuc/XXNCe2Q+eYlNt1ejRJTegFa0zZutgWzZgUhSnVH4N40
-         a7UGKOl1WRZ96zAjrjpQf4YLj3fkpkrj7u85r8cBFKdmmbrv4ftJAhBBuocjpKjcnD
-         1HLPzwlVfBplQ==
-Date:   Fri, 18 Mar 2022 18:31:01 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the pinctrl tree
-Message-ID: <20220318183101.16b8d056@canb.auug.org.au>
-In-Reply-To: <20220120142539.6d1fac12@canb.auug.org.au>
-References: <20211027220118.71a229ab@canb.auug.org.au>
-        <874k92bu4q.wl-maz@kernel.org>
-        <20211028080331.6d199082@sal.lan>
-        <20220120142539.6d1fac12@canb.auug.org.au>
+        Fri, 18 Mar 2022 03:33:41 -0400
+Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [203.148.12.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373843207E;
+        Fri, 18 Mar 2022 00:32:21 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
+ (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 18 Mar
+ 2022 15:32:17 +0800
+Received: from [10.29.8.49] (10.29.8.49) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 18 Mar
+ 2022 15:32:15 +0800
+Message-ID: <dedb789b-c1bb-34af-7887-78a3fc627e75@zhaoxin.com>
+Date:   Fri, 18 Mar 2022 15:32:14 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JdXxFheYXenaqAtzYWbWblL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
+Subject: [PATCH] USB: Fix xhci ERDP update issue
+To:     <mathias.nyman@intel.com>, <hzpeterchen@gmail.com>,
+        <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <TonyWWang-oc@zhaoxin.com>, <weitaowang@zhaoxin.com>,
+        <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.29.8.49]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/JdXxFheYXenaqAtzYWbWblL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On some situations, software handles TRB events slower than adding TRBs.
+If the number of TRB events to be processed in a given interrupt is 256.
+The local variable "event_ring_deq" that records in interrupt handler
+is equal to software_dequeue. It will cause driver not update ERDP,then
+software dequeue pointer is out of sync with ERDP on interrupt exit.
+On the next interrupt, the event ring may full but driver will not
+update ERDP as software_dequeue is equal to ERDP.
 
-Hi all,
+[  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
+[  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7 
+inflight: CMD OUT
+[  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 
+00 00 08 00
+[  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host 
+not responding to stop endpoint command.
+[  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
+[  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not 
+responding, assume dead
+[  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6 
+inflight: CMD
+[  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 
+00 00 08 00
+[  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5 
+inflight: CMD
 
-On Thu, 20 Jan 2022 14:25:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Thu, 28 Oct 2021 08:03:31 +0100 Mauro Carvalho Chehab <mchehab@kernel.=
-org> wrote:
-> >
-> > Em Wed, 27 Oct 2021 12:10:45 +0100
-> > Marc Zyngier <maz@kernel.org> escreveu:
-> >  =20
-> > > On Wed, 27 Oct 2021 12:01:18 +0100, Stephen Rothwell <sfr@canb.auug.o=
-rg.au> wrote:   =20
-> > > >=20
-> > > > After merging the pinctrl tree, today's linux-next build (htmldocs)
-> > > > produced this warning:
-> > > >=20
-> > > > include/linux/gpio/driver.h:284: warning: Function parameter or mem=
-ber 'parent_handler_data_array' not described in 'gpio_irq_chip'
-> > > >=20
-> > > > Introduced by commit
-> > > >=20
-> > > >   cfe6807d82e9 ("gpio: Allow per-parent interrupt data")
-> > > >=20
-> > > > But may actually be a problem with the tool :-(     =20
-> > >=20
-> > > I guess the tool doesn't like having two fields that are part of a
-> > > union documented together... Happy to tweak it if someone tells me how
-> > > this should be written.   =20
-> >=20
-> > Yes, that's the case. See, when you do:
-> >=20
-> > 	/**
-> > 	 * @parent_handler_data:
-> > 	 * @parent_handler_data_array:
-> > 	 *
-> > 	 * Data associated, and passed to, the handler for the parent
-> > 	 * interrupt. Can either be a single pointer if @per_parent_data
-> > 	 * is false, or an array of @num_parents pointers otherwise.  If
-> > 	 * @per_parent_data is true, @parent_handler_data_array cannot be
-> > 	 * NULL.
-> > 	 */
-> > 	union {
-> > 		void *parent_handler_data;
-> > 		void **parent_handler_data_array;
-> > 	};
-> >=20
-> > The tool will understand it as an undocumented "parent_handler_data" and
-> > a documented "parent_handler_data_array".
-> >=20
-> > It has to do that, as otherwise it won't get cases where people just ad=
-ds a
-> > @foo: as a template but actually forgets to fill it.
-> >=20
-> > The solution would be to add a description for both, e. g. something
-> > similar to:
-> >=20
-> > 	/**
-> > 	 * @parent_handler_data:
-> > 	 *
-> > 	 * If @per_parent_data is false, contains a single pointer=20
-> > 	 * with the data associated, and passed to, the handler for the=20
-> > 	 * parent interrupt.
-> > 	 *
-> > 	 * @parent_handler_data_array:
-> > 	 *
-> > 	 * If @per_parent_data is true, it should contain an array of=20
-> > 	 * @num_parents pointers with the data associated, and passed to,
-> > 	 * the handler for the parent interrupt. Cannot be NULL.
-> > 	 */ =20
->=20
-> I am still getting this warning.
+Fixed this issue by update software record local variable when handles 
+128 TRB events.
 
-I am still getting this warning.
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+---
+  drivers/usb/host/xhci-ring.c | 1 +
+  1 file changed, 1 insertion(+)
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index d0b6806..f970799 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -3141,6 +3141,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+  		if (event_loop++ < TRBS_PER_SEGMENT / 2)
+  			continue;
+  		xhci_update_erst_dequeue(xhci, event_ring_deq);
++		event_ring_deq = xhci->event_ring->dequeue;
 
---Sig_/JdXxFheYXenaqAtzYWbWblL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI0NTUACgkQAVBC80lX
-0GxkhQf/V09aUv7iiBT8ilAVTFUnmXb8qqoPUne7JZP/57vK9JvPYbzwWRFRHy3s
-HcbEwC+hi5R8pkbQwTNtZkSDYmpgucAdWBjCVJhj3FF51YpYqVVl6JyX9RlQgR8s
-tBA9M0SCMt9fhLAlRk8FFoNww04uG4Jifr++KMbrnLEmwaHIi5H0FrU9KJB8DgHR
-G+U2F6LDO2MSvqrMYkgrjeRJNtYq/jOG+G9D7xsFfMzQxUkJ59ZYepfAZ6scENYC
-TrKLLX7h9e/qAVW4Kn8CdXNOsoykgHWYYi5Ma+UXektZ9XKCKzie8KXtT9U2va5Z
-ROTpoA3tT2MWIl9HCmaOAW6igvtj5g==
-=bDUN
------END PGP SIGNATURE-----
-
---Sig_/JdXxFheYXenaqAtzYWbWblL--
+  		/* ring is half-full, force isoc trbs to interrupt more often */
+  		if (xhci->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
+-- 
+2.7.4

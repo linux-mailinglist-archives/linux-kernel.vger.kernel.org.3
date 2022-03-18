@@ -2,136 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA5B4DD3BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 04:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869E14DD3BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 04:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232296AbiCRDwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 23:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
+        id S232286AbiCRDvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 23:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbiCRDvs (ORCPT
+        with ESMTP id S232046AbiCRDvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 23:51:48 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9142AD08A
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 20:50:29 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id bg10so14661880ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 20:50:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=iq+O3k/FfZ9UjG3SjmgeqRh1gwUPMU+eljMxxt7oEZc=;
-        b=lg/VIzE4D9ivFVJ6/5/ProrD5xm9TSTHCbetBabNFK2ZUxvKluPViuE7YIolFCu+cU
-         53CnC+s5nvqJJY1bqJPMYjP5qwb7mMHqs5CwKWyJFVTjVbLCEOuxuHGpiiG+9y8hAqW+
-         +O+h3D71vvf5RfC0XyuSRrx504uHYHMLJJnwEd0SmYOik8SCTHRSAdsL2/zdhTviZ7GN
-         PzxOZO+jEWRx7pYTOyhWTuIuDIYgi4XbKyzopF5Dj6kqO2Alh3vfqgJzAgZGpZkO37rS
-         67zOWOUgZCjNxBPuzb7dBjwjqCRUEQrFBB6DFLum8EgP47Ox8R3HEujO0wAmAZbH0vt6
-         q+Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=iq+O3k/FfZ9UjG3SjmgeqRh1gwUPMU+eljMxxt7oEZc=;
-        b=PTW9ek5AIHWV3b6RnG1uRskgRh16BN5BJW8yeo0/DOx49RPX+W/36g6RUB8R6RA5Eu
-         EM7KtmovTrQdBofMRQ9FAxNyiZF3KGfc3Yv1iaHbhQLQsY+r5T/i37E5VsI9aVFSXjm2
-         hrnKT204bCmn+vSVM3jRTdcopJvRBkYw0FPQStpo0T9JgkYoBlY3XxHM0Q4qKst1RRuT
-         ZkVQhQMOu1nufVWrJV5LeJkcc+xkiUuJv2mXBCPfwVh8QO3Kb9xODrPNVLIROLk2+hTn
-         2E2AM54Qh8b1XT+7vOGYXDN4p+RkZiSSbRqizFLl9vPs74+AsjmnpL7xI0hJPBDVwJvq
-         APdg==
-X-Gm-Message-State: AOAM533BgrNiq6zN5SM8ANaqd1VYV/rzrRVy/EMYZOxjdpBsLKBNR6f+
-        0Jmm1LHKnpm8kmSNwFN9FZcRIB0/b+zn34xu7CAh0/ouxgo=
-X-Google-Smtp-Source: ABdhPJyzSsgDLUKXejs58647B/wPIb1icHFEKcguhtQ/C8QSl1mJIvEUuxp4YgtZNOQIEiLWhBuMmf7FAshGWQc9/68=
-X-Received: by 2002:a17:906:3109:b0:6cc:7a1:8db0 with SMTP id
- 9-20020a170906310900b006cc07a18db0mr7303848ejx.266.1647575427207; Thu, 17 Mar
- 2022 20:50:27 -0700 (PDT)
+        Thu, 17 Mar 2022 23:51:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8F12A1E86;
+        Thu, 17 Mar 2022 20:50:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F0E1617D0;
+        Fri, 18 Mar 2022 03:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DD85BC340EF;
+        Fri, 18 Mar 2022 03:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647575417;
+        bh=Uww6/9D2y4nrBnsntLSUJMYy+n/up9CmgOV1aFDe+/Q=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=dOv/Uujl9pEJcAqB+LODtHpJLJ80rxhJeDXwyrL9JTkTVz14Umc0lowWy421cDpAo
+         Hj/dH7hksmsbKo6HaZ10YjT2YXDANizwe57mdiWiZU1jjI/A9CBt4/Vz4cQqQg4Ee3
+         JbxqLcEZFQIw4zO9AtV/S+jAGhUTKMIXJFGdxcsEYrsXxqwsqQp10Cs2ouGoZ8+xdr
+         gZvtbVSYpVMJb+Woczqqmd/DZSiIdCjcoVYTFNN8E/6VO2BM8RwXbCPXR1xe5qh72U
+         +In97hQSh8/xWOGxQmTL1JXfqUwrn0M9kayGy8U6b3NvTDrk8eCh+K+HFX6635V+xp
+         x6kH4Ilo+Ajog==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BA1F9F03841;
+        Fri, 18 Mar 2022 03:50:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 18 Mar 2022 13:50:16 +1000
-Message-ID: <CAPM=9twzN9ybw1N=n6JWNQgUd9UNXBxis+PguKagt8DSbW=y6Q@mail.gmail.com>
-Subject: [git pull] drm fixes for 5.17-final
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v12 bpf-next 00/12] fprobe: Introduce fprobe function
+ entry/exit probe
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164757541675.26179.17727138330733641017.git-patchwork-notify@kernel.org>
+Date:   Fri, 18 Mar 2022 03:50:16 +0000
+References: <164735281449.1084943.12438881786173547153.stgit@devnote2>
+In-Reply-To: <164735281449.1084943.12438881786173547153.stgit@devnote2>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     jolsa@kernel.org, ast@kernel.org, andrii.nakryiko@gmail.com,
+        daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, rostedt@goodmis.org,
+        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        davem@davemloft.net
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hello:
 
-A few minor changes to finish things off, one mgag200 regression, imx
-fix and couple of panel changes.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Regards,
-Dave.
+On Tue, 15 Mar 2022 23:00:14 +0900 you wrote:
+> Hi,
+> 
+> Here is the 12th version of fprobe. This version fixes a possible gcc-11 issue which
+> was reported as kretprobes on arm issue, and also I updated the fprobe document.
+> 
+> The previous version (v11) is here[1];
+> 
+> [...]
 
-drm-fixes-2022-03-18:
-drm fixes for 5.17-rc9/final
+Here is the summary with links:
+  - [v12,bpf-next,01/12] ftrace: Add ftrace_set_filter_ips function
+    https://git.kernel.org/bpf/bpf-next/c/4f554e955614
+  - [v12,bpf-next,02/12] fprobe: Add ftrace based probe APIs
+    https://git.kernel.org/bpf/bpf-next/c/cad9931f64dc
+  - [v12,bpf-next,03/12] rethook: Add a generic return hook
+    https://git.kernel.org/bpf/bpf-next/c/54ecbe6f1ed5
+  - [v12,bpf-next,04/12] rethook: x86: Add rethook x86 implementation
+    https://git.kernel.org/bpf/bpf-next/c/75caf33eda24
+  - [v12,bpf-next,05/12] arm64: rethook: Add arm64 rethook implementation
+    https://git.kernel.org/bpf/bpf-next/c/83acdce68949
+  - [v12,bpf-next,06/12] powerpc: Add rethook support
+    https://git.kernel.org/bpf/bpf-next/c/02752bd99dc2
+  - [v12,bpf-next,07/12] ARM: rethook: Add rethook arm implementation
+    https://git.kernel.org/bpf/bpf-next/c/515a49173b80
+  - [v12,bpf-next,08/12] fprobe: Add exit_handler support
+    https://git.kernel.org/bpf/bpf-next/c/5b0ab78998e3
+  - [v12,bpf-next,09/12] fprobe: Add sample program for fprobe
+    https://git.kernel.org/bpf/bpf-next/c/6ee64cc3020b
+  - [v12,bpf-next,10/12] fprobe: Introduce FPROBE_FL_KPROBE_SHARED flag for fprobe
+    https://git.kernel.org/bpf/bpf-next/c/ab51e15d535e
+  - [v12,bpf-next,11/12] docs: fprobe: Add fprobe description to ftrace-use.rst
+    https://git.kernel.org/bpf/bpf-next/c/aba09b44a985
+  - [v12,bpf-next,12/12] fprobe: Add a selftest for fprobe
+    https://git.kernel.org/bpf/bpf-next/c/f4616fabab39
 
-imx:
-- Don't test bus flags in atomic check
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-mgag200:
-- Fix PLL setup on some models
 
-panel:
-- Fix bpp settings on Innolux G070Y2-L01
-- Fix DRM_PANEL_EDP Kconfig dependencies
-The following changes since commit 09688c0166e76ce2fb85e86b9d99be8b0084cdf9:
-
-  Linux 5.17-rc8 (2022-03-13 13:23:37 -0700)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-03-18
-
-for you to fetch changes up to ca5a5761ac542691a6b3520b6c5c047cf63b4b8d:
-
-  Merge tag 'drm-misc-fixes-2022-03-17' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2022-03-18
-13:32:54 +1000)
-
-----------------------------------------------------------------
-drm fixes for 5.17-rc9/final
-
-imx:
-- Don't test bus flags in atomic check
-
-mgag200:
-- Fix PLL setup on some models
-
-panel:
-- Fix bpp settings on Innolux G070Y2-L01
-- Fix DRM_PANEL_EDP Kconfig dependencies
-
-----------------------------------------------------------------
-Christoph Niedermaier (1):
-      drm/imx: parallel-display: Remove bus flags check in
-imx_pd_bridge_atomic_check()
-
-Dave Airlie (1):
-      Merge tag 'drm-misc-fixes-2022-03-17' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-
-Jocelyn Falempe (1):
-      drm/mgag200: Fix PLL setup for g200wb and g200ew
-
-Marek Vasut (1):
-      drm/panel: simple: Fix Innolux G070Y2-L01 BPP settings
-
-Thomas Zimmermann (2):
-      Merge drm/drm-fixes into drm-misc-fixes
-      drm: Don't make DRM_PANEL_BRIDGE dependent on DRM_KMS_HELPERS
-
- drivers/gpu/drm/bridge/Kconfig         | 2 +-
- drivers/gpu/drm/imx/parallel-display.c | 8 --------
- drivers/gpu/drm/mgag200/mgag200_pll.c  | 6 +++---
- drivers/gpu/drm/panel/Kconfig          | 1 +
- drivers/gpu/drm/panel/panel-simple.c   | 2 +-
- 5 files changed, 6 insertions(+), 13 deletions(-)

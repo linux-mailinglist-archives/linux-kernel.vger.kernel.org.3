@@ -2,144 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83AA4DD7F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9504DD84F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235085AbiCRKgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S235201AbiCRKnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235041AbiCRKgF (ORCPT
+        with ESMTP id S235232AbiCRKnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 06:36:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE3A325278A
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647599685;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e6SFRMKes32y2Epjb9bRfBHy+sHjP48gM2WVhKsacmY=;
-        b=MZtl9cnYEuydwSh1G3DkaGCt7GDKSAdJ+3CaXJeRLI69K7TfF9TSUuLVEaBuNgYSIX+4dB
-        yjAbMtACeQRaUjYD2FnVaa/M8aekW5kMOHzs1pKbUy/nPGgOcVRbUkSjnC50hwOZdkp8jR
-        CALtG+nJn1YrBtil98lGS35V3j807mg=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-624-q8hOKRhAOai4pS1PjarNVg-1; Fri, 18 Mar 2022 06:34:44 -0400
-X-MC-Unique: q8hOKRhAOai4pS1PjarNVg-1
-Received: by mail-pj1-f70.google.com with SMTP id bv2-20020a17090af18200b001c63c69a774so4850251pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:34:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=e6SFRMKes32y2Epjb9bRfBHy+sHjP48gM2WVhKsacmY=;
-        b=L3QTjApdqEP/KofCX/omuxNySnGPqKal7jUfq6kEliMK60lKMEuuqoXn7xnxFup0D1
-         rKY5dWvapx7v2qJti+sS0ZPtTiN6eQY5/301nfO6500tP+R0F964ngz17WNFmYhQJN5c
-         4I1lRYcJ9lXjZvUcSJ3TF6KIsj5TfMcJ5W0crygRHE74vo2agACLwqRhktxYozO7CwKc
-         OyzwazT9DWipWjnzFjl2gfB2/xoWvvCy6gXDl9xnT3oH8MQxU/N0/UxkUo3eYp1i0jcG
-         tEBZv8V8fwcyZ91AO0YzrPJ4aPIj05iItlGeFzXzdPkElhZeaL70sY/D1F2xmky2HtjT
-         NPSw==
-X-Gm-Message-State: AOAM5339nbostwd40kIcdmX+nlco6geuUFej9yRjWrddWgfAhSUgIWmh
-        HMjeZ+lZj+i/N+jVW8QHpCrYXcdZwZUP9XuaQyvl3qk7QkkklsbtG9wn4andj+De9Fyo2pZ9J1V
-        oVT4QRWXzTDISNwme7Y8ZqF2t
-X-Received: by 2002:a17:902:a5c7:b0:14f:e424:3579 with SMTP id t7-20020a170902a5c700b0014fe4243579mr9761883plq.74.1647599683229;
-        Fri, 18 Mar 2022 03:34:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwydLGW4oyMokHqUNqgiEVlQJ73WsUZSlWeUuNnFSrLoT8M8+9OxbPejRrRKRSgMpl8ZFsEyw==
-X-Received: by 2002:a17:902:a5c7:b0:14f:e424:3579 with SMTP id t7-20020a170902a5c700b0014fe4243579mr9761859plq.74.1647599682974;
-        Fri, 18 Mar 2022 03:34:42 -0700 (PDT)
-Received: from localhost ([240e:3a1:2e5:800:f995:6136:f760:a3d0])
-        by smtp.gmail.com with ESMTPSA id o24-20020a17090a5b1800b001c6aaafa5fbsm1575423pji.24.2022.03.18.03.34.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 03:34:42 -0700 (PDT)
-From:   Coiby Xu <coxu@redhat.com>
-To:     kexec@lists.infradead.org
-Cc:     Milan Broz <gmazyland@gmail.com>,
-        Thomas Staudt <tstaudt@de.ibm.com>,
-        Kairui Song <ryncsn@gmail.com>, dm-devel@redhat.com,
-        Mike Snitzer <snitzer@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Dave Young <dyoung@redhat.com>, linux-kernel@vger.kernel.org,
-        Alasdair Kergon <agk@redhat.com>
-Subject: [RFC 4/4] dm-crypt: reuse LUKS master key in kdump kernel
-Date:   Fri, 18 Mar 2022 18:34:23 +0800
-Message-Id: <20220318103423.286410-5-coxu@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220318103423.286410-1-coxu@redhat.com>
-References: <20220318103423.286410-1-coxu@redhat.com>
+        Fri, 18 Mar 2022 06:43:19 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD738908F;
+        Fri, 18 Mar 2022 03:42:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647600121; x=1679136121;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rjzHUXKaMYelhy/grqSbP+fUOQ01mEhxIDBfY5nDm6o=;
+  b=lla4JEy+ax4+u/JJ1Up8yNYW+WXM/6CqCUc/1CD3/HRFftTqG+nxiN0d
+   dhYRBXyqj+iYZ8Goh/p4S667nVp4Ahz+casi/h+5II/b3BZWN/QQHMI09
+   IH5hUhkHZ7fSA3881cT0PdHvpZq+pRsqUZw69H3YkiKcy6H/PJSppsAhV
+   TUpJho1IkI4N+jII3p69h3COQofypPZG6UVLVgfU1DnkQxLOX5v5EPmGe
+   1D49PslfcuFot6u+58yhLZkmJR+N7TIsmKa605VhvbMZKbiqSQZ0YcPz2
+   4A0yLeel/RvXIzJ7SBs3xfFitLtBmcHj2Z2Hi4JUbOxg510kI4hn3p4Ay
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="237057339"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="237057339"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 03:42:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="558370689"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga008.jf.intel.com with ESMTP; 18 Mar 2022 03:41:58 -0700
+Date:   Fri, 18 Mar 2022 18:34:57 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     cgel.zte@gmail.com
+Cc:     hao.wu@intel.com, trix@redhat.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] fpga: dfl: pci: Remove useless DMA-32 fallback
+ configuration
+Message-ID: <20220318103457.GA139589@yilunxu-OptiPlex-7050>
+References: <20220318005938.2142028-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318005938.2142028-1-chi.minghao@zte.com.cn>
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When libcryptsetup passes key string starting with ":kdump", dm-crypt
-will interpret it as reusing the LUKS master key in kdump kernel.
+On Fri, Mar 18, 2022 at 12:59:38AM +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> As stated in [1], dma_set_mask() with a 64-bit mask will never fail if
+> dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
 
-Signed-off-by: Coiby Xu <coxu@redhat.com>
----
- drivers/md/dm-crypt.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+The code change is good to me, but maybe the commit message could be
+improved. The reference [1] is not the best to make things clear, maybe
+[2] could be better undstood. It is even better if there is a brief
+introduction of the DMA API change in the commit message. It saves a lot
+of time for reviewers.
 
-diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-index 41f9ca377312..f3986036ec40 100644
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -42,6 +42,7 @@
- 
- #include <linux/device-mapper.h>
- #include <linux/kexec.h>
-+#include <linux/crash_dump.h>
- 
- #include "dm-audit.h"
- 
-@@ -2602,13 +2603,17 @@ static int crypt_set_key(struct crypt_config *cc, char *key)
- {
- 	int r = -EINVAL;
- 	int key_string_len = strlen(key);
-+	bool retrieve_kdump_key = false;
-+
-+	if (is_kdump_kernel() && !strncmp(key, ":kdump", 5))
-+		retrieve_kdump_key = true;
- 
- 	/* Hyphen (which gives a key_size of zero) means there is no key. */
--	if (!cc->key_size && strcmp(key, "-"))
-+	if (!retrieve_kdump_key && !cc->key_size && strcmp(key, "-"))
- 		goto out;
- 
- 	/* ':' means the key is in kernel keyring, short-circuit normal key processing */
--	if (key[0] == ':') {
-+	if (!retrieve_kdump_key && key[0] == ':') {
- 		r = crypt_set_keyring_key(cc, key + 1);
- 		goto out;
- 	}
-@@ -2620,9 +2625,15 @@ static int crypt_set_key(struct crypt_config *cc, char *key)
- 	kfree_sensitive(cc->key_string);
- 	cc->key_string = NULL;
- 
--	/* Decode key from its hex representation. */
--	if (cc->key_size && hex2bin(cc->key, key, cc->key_size) < 0)
--		goto out;
-+	if (retrieve_kdump_key) {
-+		r = retrive_kdump_luks_master_key(cc->key, &cc->key_size);
-+		if (r < 0)
-+			goto out;
-+	} else {
-+		/* Decode key from its hex representation. */
-+		if (cc->key_size && hex2bin(cc->key, key, cc->key_size) < 0)
-+			goto out;
-+	}
- 
- 	r = crypt_setkey(cc);
- 	if (!r)
--- 
-2.34.1
+I see there are plenty of similar places to change, could you make a
+patchset and change them in a batch?
 
+[2]: https://lists.linuxfoundation.org/pipermail/iommu/2019-February/033674.html
+
+Thanks,
+Yilun
+
+> 
+> Simplify code and remove some dead code accordingly.
+> 
+> [1]: https://lkml.org/lkml/2021/6/7/398
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>  drivers/fpga/dfl-pci.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> index 717ac9715970..42fdfa7a28d6 100644
+> --- a/drivers/fpga/dfl-pci.c
+> +++ b/drivers/fpga/dfl-pci.c
+> @@ -356,8 +356,6 @@ int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
+>  	pci_set_master(pcidev);
+>  
+>  	ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(64));
+> -	if (ret)
+> -		ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(32));
+>  	if (ret) {
+>  		dev_err(&pcidev->dev, "No suitable DMA support available.\n");
+>  		goto disable_error_report_exit;
+> -- 
+> 2.25.1

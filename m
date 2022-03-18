@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CF74DD6CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F244DD6D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234201AbiCRJGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 05:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
+        id S232673AbiCRJHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 05:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234214AbiCRJGE (ORCPT
+        with ESMTP id S234256AbiCRJHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 05:06:04 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2114.outbound.protection.outlook.com [40.107.93.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD69181158;
-        Fri, 18 Mar 2022 02:04:45 -0700 (PDT)
+        Fri, 18 Mar 2022 05:07:51 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2130.outbound.protection.outlook.com [40.107.212.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693591877D7;
+        Fri, 18 Mar 2022 02:06:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y7A3LjIpaJURaGHTRMOoxgJ9FM4Tb1aVN6bbh/3XzdIThIpPkqRdrGtvgI+MhuJmRzWZ+R1OQKLteXbQIsWTv9F3Tr2eCFHtpKOiHS/kRiguOYr3iZvCR6Rll428cN+MmwLqqab3zUOJYMC40QkMGk0NBWsP2Gz9rKtM1WmlBuwk2T17JyBzE7hOAh6VprffUhsGMfjuP9At9NP8Y0GwFa1eFx717BxnXftnQ4aVG0jBbBEUspnv8qNpiSoNmtxKtSKcE+VZTosU+WmB02auqVTqGh85AsziesPOVCZCTRXdl2fbMHNDL/svxBejetRbeHGdJC5zId37kuwp0AdzBA==
+ b=Sq5WQ7f6VgrJRLv/Ews8wyPjP7OURJqom+SfFgsYCZ8zyd2kP4TldUx1OWHC6iHcFRRkESXFlsJgI+u1QUE0F5VMIrZh05+DwX5ExwbLAZCSKwqMHsy3dF+/nqNTDr5usv107Oe+1yFCVD5UNDbW2JtoHAlbFwKaPmMiw3TVCWCay4p0DxjA+vbfr0XkrMM9XbXl67eue4gD9Sl3ZxJ1Osyz8aXIoZ85evZlQetCSwmYJajQZrPr0XhHvLOSfGCqSwluVAl1fa/IXGiTAvmZQxid2X37YTYziSOZg5SJnf+89dq0Yb8vCSJAja/s0hKZY/07EDIm8gnqopg06BOrBQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RfbXt52lRBXKjCRkDqP7H98wvEmCSPT3J3qz2FNSSDI=;
- b=XkTK46CemSNoLMhTuZoqomf/qtirSKJYUf6VBX/icWd/UWE69jf46Z6MTWkx6NrJ+CzX/iA9V8i5alVHMC5Tv2TC/bOZhluittNSfIGvpXgfiBZPGarKGA+B0mdGr0/A9K4JSCgJonF2Q0Yx8qaPDAfWMsvhSCJEw8oai5ZrUmyWZ2VLjiM9L9QDmSYAfiMjvMiOgGxEBAnwbxXFIEZKywgx1P6MfcaFx2XDeX4gXOePOJJIu8lBVDilj/mJqA0wwQRehdff6azb9saogc0P+Bsj/ert49fYbtZWjkWpOUSjfI6o9KK0LQ0A9AK17YfI0IQI6ZmICzZSVULGZjdIRg==
+ bh=KKOSOcatYmpNU9nFsqGWpUjmJ6AmfqBwIYhf5rBTYpE=;
+ b=Xmz1ID0gnYJ6bGF0dHiIMKLMDjp16cd+ZHz5gqd6Tkp+IVA46RViIASN0t0JWp9mAaXlunPmFWgxESO4CaT0tCdnTu82CO6OAM7VMuTKO3+4eLgFyQ/j5PYQu4xVwgfzTnSOHDD3gOoR09t+Jrmm/S0GHIsZ2DQRqNvMh9qAbvZgPoE6x32m7BUTEaKQOuHTXHJ62I5ofa3idDecQBsawtfE5WhLe+F6bw8yhYljFa6YWqpcMGb671YNtGT3XRNwEiIshPBajm8det88aryAOt3wxRRhSIO7NdwA4AYr1gy5LJkFwbH7wa4QjsN4M0OzOyHt7xW8IhtJH22HIJFVyA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fortanix.com; dmarc=pass action=none header.from=fortanix.com;
  dkim=pass header.d=fortanix.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fortanix.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RfbXt52lRBXKjCRkDqP7H98wvEmCSPT3J3qz2FNSSDI=;
- b=Wqnpqv+Y91gbOngFi5o3iqukwOTzPcFBewyb8BqRszWSv8R1Eh3aLQGlCSAYiZEDzBez3DjNwZq/NSAJ2isfGwmYzUI8gFRWbIsmL0DOOXarNHflj4EjGDN/xb1dYOc7u3uApvbiJf+rGxsm1teUvbM4+/ibpi8bxpEbiTzHZwg=
+ bh=KKOSOcatYmpNU9nFsqGWpUjmJ6AmfqBwIYhf5rBTYpE=;
+ b=CoblLBnmUWAqu2f+CbkyZNUT76WqGZfF0DByculvS7VZDMYZy1IkKkuR4C89Ojd6yFW3eigCroE8TkuipF8AZnOxa7BzpvWsjNdfZ18yoimOTgViVN/2Dw7sNigqJaMpHOEm8XpClswnIXs4qhj+ZLwJQoAnXGv8HW0tqbBEaAo=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=fortanix.com;
 Received: from PH0PR11MB5626.namprd11.prod.outlook.com (2603:10b6:510:ee::15)
  by CH0PR11MB5426.namprd11.prod.outlook.com (2603:10b6:610:d1::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Fri, 18 Mar
- 2022 09:04:43 +0000
+ 2022 09:06:32 +0000
 Received: from PH0PR11MB5626.namprd11.prod.outlook.com
  ([fe80::919c:b806:f259:e276]) by PH0PR11MB5626.namprd11.prod.outlook.com
  ([fe80::919c:b806:f259:e276%5]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
- 09:04:43 +0000
-Message-ID: <abe544be-46e9-15f6-98ca-808f3d22cca7@fortanix.com>
-Date:   Fri, 18 Mar 2022 10:04:37 +0100
+ 09:06:32 +0000
+Message-ID: <4198920d-298c-6565-5d97-9d0a8fcc8441@fortanix.com>
+Date:   Fri, 18 Mar 2022 10:06:25 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
 Subject: Re: [RFC PATCH v2 09/10] x86/cpu: Call ENCLS[EUPDATESVN] procedure in
@@ -55,67 +55,69 @@ Cc:     ashok.raj@intel.com
 References: <20220315010300.10199-1-cathy.zhang@intel.com>
  <20220315010300.10199-10-cathy.zhang@intel.com>
  <53e7d3a3-a576-7ef1-fa2d-d170fa1172a1@fortanix.com>
- <947c4872-df94-0091-ebbf-b733db4bd9d6@intel.com>
+ <e1682971-4821-8e57-3232-de7a72086991@fortanix.com>
+ <e121e972-7689-b2f3-5919-746e3a90cb36@intel.com>
 From:   Jethro Beekman <jethro@fortanix.com>
-In-Reply-To: <947c4872-df94-0091-ebbf-b733db4bd9d6@intel.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms010005040201080408040602"
-X-ClientProxiedBy: AM4PR0701CA0012.eurprd07.prod.outlook.com
- (2603:10a6:200:42::22) To PH0PR11MB5626.namprd11.prod.outlook.com
+In-Reply-To: <e121e972-7689-b2f3-5919-746e3a90cb36@intel.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms020204040904070104010800"
+X-ClientProxiedBy: AM4PR0701CA0005.eurprd07.prod.outlook.com
+ (2603:10a6:200:42::15) To PH0PR11MB5626.namprd11.prod.outlook.com
  (2603:10b6:510:ee::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 774dfe50-ca01-4918-13a2-08da08be573f
+X-MS-Office365-Filtering-Correlation-Id: aad8bf6a-5581-4c10-c134-08da08be9849
 X-MS-TrafficTypeDiagnostic: CH0PR11MB5426:EE_
-X-Microsoft-Antispam-PRVS: <CH0PR11MB54267D16F80FC635C57CBD4DAA139@CH0PR11MB5426.namprd11.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <CH0PR11MB5426F9912CA2763C4A0A9933AA139@CH0PR11MB5426.namprd11.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PHkSIdTYLCjY/ihf3Qh9SrIamzD7eC5RSdgQk9yMDVaI0ifcEBX+AY5sJlOFpurNPfIvk3VF5U7dZBEWNN/PA6BUnZIp338yhECWkS4DNaVGL85GqMmIGG+k/niJ/1SnxE3ldjix7p5BErmBoPMvy2/TkkE2bp9dPTs+W5aSQroBVunTQ1mddSjLtD2AQ4McoldLjFbuAChZMLY74j0SpiWcb3oeu5tTnM4o9VetdZY6slgCNwqF3TfB1DYsxRgsFmhcZpoVXCklLxQDjT/A56pnafPDAIkW23hwDZEvkxsUkgBd5X7Z8x0+8AW9eEGJmosDqFUFAwZV1G7iateseA12xaXzAO9TuXCYSW7VgDbSSBPhMVHK+G805wHxsLhi0GXYSoU7GN5ygBL1oXlWzG3lj/svnpN6JCWftbdhO1b91BiaC3h7Vn04aMC1mDbYzq/pRuobO3kGHu2+eGv0zTQ+hrfTm8vdbndouOyAruMborvfTZFHlYn5dv0yv8Sy3a9THkee6zuUlox2K7Hwe3/mcOjqrnguKcfc3/LkyIvlOcAjAilCeZYbQ046+Qf5zYD08bCeAZKDNuudH+3ZBfaxU2vhrRCrts6fersTt9MpWQaGhC/6XCDLpqVdz7S5tNohJhrfI6LL+Cr53aIKlD0cMnIAvaYlSx1e7llWyxH1I2sk6749Md7yfMsRM19J5FnkLWU0dyWVAdOpkv/psc3eNpKCgw6Ygp6GUmuCCNwZCOnAzhx32md6hLYjBlt9tHvLD7z+AkRQKF5srjcyig==
+X-Microsoft-Antispam-Message-Info: Mly6R2c203j1y3SywrNxlwiM2+eQKo2tNTiFDtuEsbH8CaD8fdoalEeahiQS09FNmYbSPTjemPG7+KQspXtppLgUFIayvQz146oMXpqr9R4O7M2qYJWhhawZFk6UApQRjYgN3SxDDWPW6tAltYKjPE4pbtYr6S4iE6CE/XRCP6otitCfSAbRlvX6yMKbXRRByVszeT9gPU9GLo+yXyRSGatSU7LfExffiP774vHh3b0r2nifY+KnP4zBzUsMcPPPh7tfUDwS57XvbPiiPw6Hgup+RQOfKOGM6GQf+bOQkQ3tzcG6P54zrSiKKzedgHChw9b+cz1m861ogpCTR0ZlKhmA55M/NceOnePk/u9oow1pti/hkucVEXPDPwHNGcaG/0fNFMrZZGgDVntiL34lgpWldT9CRk+jq7HMArwVcxt+J7i67nTv2sUncJwANDdPt9nE2JQ5bme57qljLhpbPZYksPQJoZuUuvVvZa2plENi+WNI1GTYJR8PICDw+0klUKygU5XjZH/RNgBIGcLR2JCFLDiv7xxyWUjZZWQdPfINhmU6/SfFXQJ5ul8LZjVSL5c+yPoC/+jid2QN2EV1LfPMKiybZ9+zjhj4wt2ucuk8Y4Dk9/tApA3HpuM/swY9BHNplR8XtxigniIR9IC1PSA3LwHi8R0JQqhV9Zu73eMhDuQswbGPrYmGhPC68liWOLcodGOGTgKn7Gu+eUE+5FhYZ6R8qOli60e1Z1rDcDAbcwhptPnY73+1IT95icPc/bdm4jnNSP/bYATCqUDDSg==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5626.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38350700002)(38100700002)(15650500001)(186003)(26005)(6506007)(33964004)(52116002)(53546011)(2616005)(6512007)(2906002)(83380400001)(66476007)(66556008)(66946007)(8676002)(31696002)(86362001)(110136005)(4326008)(8936002)(36756003)(316002)(31686004)(5660300002)(235185007)(508600001)(6486002)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dHpYaGZVb1FYNFZKVy9Jbmx0SmlQcituYnVQZklGdmYxSE9RcUFGeFdCT0U2?=
- =?utf-8?B?TUEzYlFFR3FsYzRvdzRPN3JBZ2N4ZDUzbGhvdjJ5TmdKOHFDdGxVbTZVWWhx?=
- =?utf-8?B?ckNZVGhVMmpxZlhFSVVHVkRJNktMYjFqOStCai9FMGdkc3JwVjVGWWxteTJl?=
- =?utf-8?B?Y0pCOWdrWnlMblJGUmdVb2xjV0kycmt6a2JCR3J3Vk50aGR0cGo5N0NJOHJa?=
- =?utf-8?B?M3pZUWtHWWZhMk45akZsdXQwUUxEakc5K2lSR0dmUkRlS0JVSEtRNzArWjI2?=
- =?utf-8?B?bWRZTG5pNFhFc09NZ3dTWWU1R3lZbGxYY1hKVXFxYzVIU3BMK2ZYc1FpaXMx?=
- =?utf-8?B?NGhFUlVjZHRjZGpoZVpyNTVOUXY3M3hxaVJ1dU8wdVdsUWFwVFRqZjZ0TW5u?=
- =?utf-8?B?bitFSkFpZE8wYVpiRTgyT0VHUUdRU0t1bEM3QkhTS3pENS9LekRPS0x5UXov?=
- =?utf-8?B?ZjZObnc3OEhFWHVuQVJUUU45d0M4Yzh4Y1hsUDZKYW4vZlVLOEw4RWZLSE96?=
- =?utf-8?B?SHUvdWZLd2xDSmo0K2kwOWV1OWhwNVpCMVgycjFGOEVZUm15VlVtRnE3Wm5J?=
- =?utf-8?B?K3haRUxPeXlMRjZub3VHVU5NdzgxdDE4Qm5oL2NDdG9mWUc1bkV6NFNsWWcr?=
- =?utf-8?B?ZG5SZVlOaWRQejhqdCs4OGY4VjZYSFhJTHN0ZXRSa0RIbTZJSjVCSjlMRlRy?=
- =?utf-8?B?ZFE0Y0ZrMXJRRncxYjJ6UjRrMml2YTBnSTdaTDVaOXdyNXdIMmxVdlBrUTJZ?=
- =?utf-8?B?K293cHRVQnFycjlRdXhqN3pHcForUXNzc0J5eWduT1lpWUxjdkFlQ2FKOU1w?=
- =?utf-8?B?NzBDWDNNM2RXeWRETjdVQS9leUN5SjlJWEhSeElWK3ZPa1lTWXhqOWhLK3Rp?=
- =?utf-8?B?VkwxdTlBdDZtRzBtV0N2TWYyd25BRkZ4c0xudHBiL0ZRNTk0dmJ0L1doblNr?=
- =?utf-8?B?TW51ZjJSUWVFVXhEM2ZmTXNPbEZWVmpUMUFhVXdpS21zVUJVWXd1czZRQW1z?=
- =?utf-8?B?VjlvQkIvYkQ1c0xoekwzd3BNakdrMUpsZUhITDlXZ2dtbys5M2lwNFJHOE12?=
- =?utf-8?B?TG9NaEhxUk13bHVBN2x0QUJ1OHRqTEx3UDJkWlo0K0Z6SUlmLytaeVhGcWFa?=
- =?utf-8?B?cVdHb1U0VHBLamFIK01jamZKQnZpQzBvU09CMnI5ZVBta0IyRnI2UStYd0JG?=
- =?utf-8?B?YWRyU0QrUDYzVzF3NVlQUHNEUGxQdGk1YTRxUGkxUzB5dGJpTzRUK1c1SEJa?=
- =?utf-8?B?VHNzV1ZrWjhsYnlFeWZBcGEyTDNXNjljOG9OSjhXU1hqM3dEUGF0QzNtdTBN?=
- =?utf-8?B?bGx2U250THRBeTlaQXorTWpjaERTckppWlRONUZKdCt2MGlwS3MxeTlOdnZm?=
- =?utf-8?B?d1J1dWJTaW03SnVUUE5rSDlhcGplczhtQVRNcmo2bjhsWXdRT1VCdzBkMXIy?=
- =?utf-8?B?R0lCekpXTlFqTFJsNVJVakJmQkcvUXpVU2Z1UGEwV2pJTDE3eU9iZG4rbUwr?=
- =?utf-8?B?amtGYkxYTGdzQTFoMkFGYjJOcnUvZHRCMVZKckNodTM2cDkyT3BkckZaanZs?=
- =?utf-8?B?MXFuU0xNcG1hU3FnWGtwYjdscFQwTVFDQUp1RVg2eCt3Yno4WCtyajdWYXJy?=
- =?utf-8?B?YXNycVpxOWlmVCtOMXpQby84VGN4aU1LaDFpSjFLRG9TWmZ1bGQwdUh6bWNx?=
- =?utf-8?B?am85cVErNEhJS3lTNWQzemoxNC9YMUxUYUNsNmJ6S2V5MGZXRDA4YWpJQjg4?=
- =?utf-8?B?TzljdVlnUXpHaHVxWGRNQnF4TFU0c20xY2xLbDJjdHRkWFpPWlhoQ0hYRndu?=
- =?utf-8?B?enN2cUhrYVIweXpnRmV4d1lYVkliZkxXdzNPRUFGRVpHeHAvWlhLZE44aTlV?=
- =?utf-8?B?WlZ2MCtrTmtpN2tBV25NRm9yaS9UdDk2YzlmSzZ2Y2hRbnNFVm5PeUUyT25n?=
- =?utf-8?Q?N0ES1VPedxQhYfHyhdVWUEY1N1Xcv4QJ?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V0JNWXhPNkdKSDZsN0N5ZVU4VHdzZk9EWUxzaTh4SGZHNjVkdzlpbUxEcXVL?=
+ =?utf-8?B?K3RTRnpQc3lwQ0d6QzR2SlRqdzBLOGR3NWlvUzZDV1RhZlJrME9QNk90RC93?=
+ =?utf-8?B?VW9hSXVWbUpIV2wvRlM3cjdWd1VWeVlmNWdoVEVVK3dFa0Vyb2kzeTBsMEFT?=
+ =?utf-8?B?Rndycnd3R1oyVlYvTFl5NDF4YWpHWG5zR0dVdkgwT2VEamh5NzFqd1JsQXFD?=
+ =?utf-8?B?MDRubjVNb2xTRTJPaStTNzlFQ3cwa1MwVllwYU5IVkNucm5ZdGFQWE1hMW80?=
+ =?utf-8?B?cGRvRkFvRFkyNElXNUVIUk53RUtGeUhwSlhvdjR2Ly9tOFhqM2pHZnhQNWho?=
+ =?utf-8?B?WFluSWV4RTczSGFRZzlSa1lXcnpsNjhaY25rR3ZRWDczTURQT2RtQWdWK0V0?=
+ =?utf-8?B?aVlnS0lxdUpzUlRyNkpjb1FEWFNqRUxmQk5XcW9hWUw2MGFKOC9vWTYyVERs?=
+ =?utf-8?B?bGJNQU9HRTBrK05xQ1BWRHVvZ1ZhelRTWDdKdWhzWE5NSDZsYVp2OWdwWXMz?=
+ =?utf-8?B?bE5MbjVGYzhlalUrR2dPSVY5bEhmSk1yYkNnOUU5cFE5MjRSSVQ4a0NTeVBu?=
+ =?utf-8?B?M0UraVJuandKZE8waU5sdFRpakk2a244UVhtT2orUDZjSnNLQVNxNHIvdW9o?=
+ =?utf-8?B?cTRkemlGRmUvM0xIUmo0dmplUXhNN1dITzB3ems4Y3ZsWG13aWR4ckZacEtR?=
+ =?utf-8?B?YXRnSk1RS2dpNVFtRThPdkxJdTNJOUNKQkQ4RWs4c2RwdXNwQjF4clcrck5t?=
+ =?utf-8?B?OE1wWXRPd3kzeDg2b1JiazNFNnFqSWdUVzkrNzN2L3dFZDNxWFAvMmU2Yjc2?=
+ =?utf-8?B?RlA0ZmhUNEhVUHdTRGlOOUplSUFPWEdsWlpwN1IzUGt4VVU4QUJTQ2VzUHRv?=
+ =?utf-8?B?dEQ4Q3krendMUC9Ba2ZFbVVBRDhvRGtUQzNocUV5cXFIVUNGZmVDYkJTMDRn?=
+ =?utf-8?B?ei9SQnUwd241UlN0UWpyb09Hd3lLQ25xVnM4MW5uY0lkN0hneWc0UDBKeGlL?=
+ =?utf-8?B?QlBvcjdvdU00U0tZTGJPK016N01GYlBheU13aFRYM2tHYnNpOWJPMFA1VXAv?=
+ =?utf-8?B?cjcvbkpIV29TZFpUcFdXVmJvRU1haHZaNFNOUzNONUVFNXpDYnRZME1JM0kx?=
+ =?utf-8?B?Ky8zZS9vR1ZUN2NiYmdnQ1NQQVpQRktsc1IzVDZGNjVjN3lHN2NsR3dnN01K?=
+ =?utf-8?B?b04yZGVUa01VdUdzazRrMXZ1RnZ6V0JRazIzdStLZ2UwdnBJR2lUeVp3YTh0?=
+ =?utf-8?B?d1lOaWRxdzVUcC9hYkdJQmRLbjFzcy9LdDV3NmNmWDJkaW5KOUQ1S0RMVjgy?=
+ =?utf-8?B?VmRxT1oxZmJxTVNnQWRVcDlNVFlHeHNaWkZnL01uTlJxMUprK1FBVmJBczd5?=
+ =?utf-8?B?bUlrcU1taUV5SWgxMG9YTXIrMHdzQWZXQVJBQ2lVbVYxK0V5V2haczhkUzJl?=
+ =?utf-8?B?WjI3ekxrUklBUmxpdmIzQlB4TFMyNk8xalVqaStTKzduUjZBVVYwajA4VDNj?=
+ =?utf-8?B?bGhZTFkvMm10alJSaGhmSUc2UTREQXg2SVV6RzQzR2xjVlQ0QWdjdDJva3dI?=
+ =?utf-8?B?UEFKdFR6MTYzVDVOa0hLNmgxWlpsRWFZTzdIckhBZjlmcVIyUTVKZzlHd3VT?=
+ =?utf-8?B?TlowRnZYWE0rQmIyRUM5eDdkMVc3M01PVVJDT3JuYnNhcmZoZDl6Uk9qc2gy?=
+ =?utf-8?B?dGZiLytFSTR0d25ubE1yWHIrUk5FQWo3SDZsZWh4bTBiRDRCeWJ2MlV6OFJx?=
+ =?utf-8?B?ZFRuTTlCUERJVXJZeTFoa1AvK0xJdVVwTjhhUGdEU0htd0xWV2doN1Q1M25p?=
+ =?utf-8?B?RTR4V1Irc2luVkJ4d0NtYy9OdWVMT2poZEVHUlhJek12YytIalBwU3VMTHFX?=
+ =?utf-8?B?VGdMTnVRVHQrSVJoaGxGa3pzRklaNDFRL3hpSTUwNHFDS3FsOTgxbGU0Q2Jv?=
+ =?utf-8?B?Uzh2QW9zaXNMSk9ZZnJoYW1Ba3hBUXZsWW9IUXd0SzJQMTUweisxVHQyRGRo?=
+ =?utf-8?B?V2JERWphU3R3PT0=?=
 X-OriginatorOrg: fortanix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 774dfe50-ca01-4918-13a2-08da08be573f
+X-MS-Exchange-CrossTenant-Network-Message-Id: aad8bf6a-5581-4c10-c134-08da08be9849
 X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5626.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 09:04:42.9562
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 09:06:31.9387
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: de7becae-4883-43e8-82c7-7dbdbb988ae6
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IOuqwbyIpoXExrKSMrUfKkTZErPVE18AjZtIgCgyvbfXUNt7Joao78oMkNor5wuDmNAXcV7ZsY5Gil0/kChu1Q==
+X-MS-Exchange-CrossTenant-UserPrincipalName: Rta8kzdS77l7Dphs9Pk6AlrIuWGl8bC9Wv0bEByTzKDhKxy6VE++cVBQDUAhFmbNJ+lE0XS4f0sN8jz78bY49g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5426
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -127,47 +129,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---------------ms010005040201080408040602
+--------------ms020204040904070104010800
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2022-03-16 16:42, Dave Hansen wrote:
-> On 3/16/22 02:46, Jethro Beekman wrote:
->>> +void update_cpusvn_intel(void) +{ +	sgx_lock_epc(); +	if
->>> (sgx_zap_pages())
->> Doing this automatically and unconditionally during a microcode
->> update seems undesirable. This requires the userland tooling that is
->> coordinating the microcode update to be aware of any SGX enclaves
->> that are running and possibly coordinate sequencing with the
->> processes containing those enclaves. This coupling does not exist
->> today.
+On 2022-03-16 16:47, Dave Hansen wrote:
+> On 3/16/22 03:24, Jethro Beekman wrote:
+>>> Doing this automatically and unconditionally during a microcode
+>>> update seems undesirable. This requires the userland tooling that
+>>> is coordinating the microcode update to be aware of any SGX
+>>> enclaves that are running and possibly coordinate sequencing with
+>>> the processes containing those enclaves. This coupling does not
+>>> exist today.
+>> Also, a microcode update may not affect SGX security at all and doing
+>> the EUPDATESVN procedure may not be required for this particular
+>> update. This case is called out specifically in the EUPDATESVN
+>> documentation.
 > 
-> "Today" in what?
+> I don't think Intel provides the metadata for the kernel to tell if an
+> update requires an EUPDATESVN procedure or not.  If this is inconvenient
+> for you, I'd suggest reporting this to the folks at Intel who can fix
+> it.  It doesn't seem like something which they are motivated to fix.
 
-In distros.
-
-> If a microcode update changes SGX behavior and bumps CPUSVN, it's
-> fundamentally incompatible with letting enclaves continue to run.  They
-> might as well be killed.
-
-It's not "fundamentally incompatible". It works fine today and will continue to work fine in CPUs that have EUPDATESVN support. Yes your enclaves are probably vulnerable to some attacks, but people run vulnerable software intentionally all the time.
-
-> But, seriously, if you can't handle enclaves being killed every few
-> months, don't use SGX.  The architecture doesn't allow data to be
-
-I don't think anyone is making a claim that there are enclaves that wouldn't be able handle this? Being able to deal with something is not the same as wanting to deal with something. My laptop can handle running out of battery in the middle of writing some new code. That doesn't mean I want my laptop to arbitrarily turn off at uncontrollable times?
-
-> persistent like normal x86.  It's fundamental to the architecture.  You
-> can also think of this as a shiny new SGX *testing* feature: one that
-> keeps enclave owners from becoming complacent and forgetting about what
-> the SGX architecture provides.
-
-Great idea, why not expand on this and just randomly call EREMOVE at timed intervals?
+Whether or not metadata is currently made available is orthogonal to creating a mechanism by which userspace can indidate that a particular microcode update shouldn't trigger the EUPDATESVN procedure.
 
 --
 Jethro Beekman | Fortanix
 
---------------ms010005040201080408040602
+--------------ms020204040904070104010800
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -241,8 +230,8 @@ b2Z+40UNtMF4MTK7zTGCA/MwggPvAgEBMIGWMIGBMQswCQYDVQQGEwJJVDEQMA4GA1UECAwH
 QmVyZ2FtbzEZMBcGA1UEBwwQUG9udGUgU2FuIFBpZXRybzEXMBUGA1UECgwOQWN0YWxpcyBT
 LnAuQS4xLDAqBgNVBAMMI0FjdGFsaXMgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIENBIEczAhAo
 rKRKpFwMN77KaahISgU8MA0GCWCGSAFlAwQCAQUAoIICLTAYBgkqhkiG9w0BCQMxCwYJKoZI
-hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjAzMTgwOTA0MzdaMC8GCSqGSIb3DQEJBDEiBCAZ
-+dgaO2iNzPC2pbDwMdXw3wapG6I5GKFdzpAcll/muDBsBgkqhkiG9w0BCQ8xXzBdMAsGCWCG
+hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjAzMTgwOTA2MjVaMC8GCSqGSIb3DQEJBDEiBCC3
+FFG2ZiZLsVuLksB1xrELspPRCX6YEWBwSlOi1+yCVDBsBgkqhkiG9w0BCQ8xXzBdMAsGCWCG
 SAFlAwQBKjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwDgYIKoZIhvcNAwICAgCAMA0GCCqG
 SIb3DQMCAgFAMAcGBSsOAwIHMA0GCCqGSIb3DQMCAgEoMIGnBgkrBgEEAYI3EAQxgZkwgZYw
 gYExCzAJBgNVBAYTAklUMRAwDgYDVQQIDAdCZXJnYW1vMRkwFwYDVQQHDBBQb250ZSBTYW4g
@@ -251,11 +240,11 @@ bnQgQXV0aGVudGljYXRpb24gQ0EgRzMCECispEqkXAw3vsppqEhKBTwwgakGCyqGSIb3DQEJ
 EAILMYGZoIGWMIGBMQswCQYDVQQGEwJJVDEQMA4GA1UECAwHQmVyZ2FtbzEZMBcGA1UEBwwQ
 UG9udGUgU2FuIFBpZXRybzEXMBUGA1UECgwOQWN0YWxpcyBTLnAuQS4xLDAqBgNVBAMMI0Fj
 dGFsaXMgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIENBIEczAhAorKRKpFwMN77KaahISgU8MA0G
-CSqGSIb3DQEBAQUABIIBAE8qpDYUp7A7WuT4vi/um2uGNOIRWOqpuPBl+ZXqAkX+8vvbH1DA
-iAxFK3i32v5IA6CeDmzZV+lm7Nt369CdwrwDUpsfWddtB3scT03YW7AYrHcCHsqRNZj1Mr1d
-Z2SoK0Yg3TP4Tu9bEcIyYqyv/qqzyjGZrKeyYjoTpDdIEKj01e9v42z1cT/mnj7iPkP6Chlm
-onNuDvVB0PzA572koUADiT0e83rMwjsc7X2UgYDDqlEratbbzZn0l0tWjZ1hqcfwLLXPZqHM
-UgHprpiS+TSx9SfBwkcukuy4oDWHp7DMpz5hQDzbnW+lK2ro1vFZ3sgjzdxOCsshTZTLUD1l
-OAoAAAAAAAA=
+CSqGSIb3DQEBAQUABIIBAG4rItSJrFejLpjcdggbr+CNXjQxoSVlOqxxdD2kJprBDUJFWDet
+1y/1rVAe51KWKQqQs81pBnhNirBJDjLGFMqtfge6/L9X+CAGH2TN8H6C2PnrBjkhhfHHLDCk
+HyCLi5zs69fui1g2ZpdbqMnyJi2Jh0LPI6hMtaHFoS7m8aumhuk2/wbruDJ0m4h4i7qiPo0/
+8d3fznXGIkz49jsIwfc/5ejd6p5YLaa1akTnw6LRUQ2EWSQ82hSUArWBx5AwkHKet98JGkAt
++UmTBaEzCVg08Ds02/A1ucAT60a9fiq2v61YEx/b/nb5QA7chmA6NOL2BK9ZQhVqKQRZ32ch
+1CkAAAAAAAA=
 
---------------ms010005040201080408040602--
+--------------ms020204040904070104010800--

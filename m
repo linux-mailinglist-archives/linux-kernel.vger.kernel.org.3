@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1590C4DD560
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB474DD55C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbiCRHpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
+        id S233168AbiCRHpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233176AbiCRHpo (ORCPT
+        with ESMTP id S231844AbiCRHpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:45:44 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F731F42D2;
-        Fri, 18 Mar 2022 00:44:25 -0700 (PDT)
-Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mbj3e-1o66GH3f4A-00dDLd; Fri, 18 Mar 2022 08:44:23 +0100
-Received: by mail-wr1-f42.google.com with SMTP id x15so10537017wru.13;
+        Fri, 18 Mar 2022 03:45:42 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796A51F42C9;
         Fri, 18 Mar 2022 00:44:23 -0700 (PDT)
-X-Gm-Message-State: AOAM531FTlH57ouvnkxx9jRG6mZfwgsSMPvRmeDZAIjdTb0ixiecWBdO
-        iVRx68m9YlLw62eogSi/YprB71p9jsSQfMaTnRc=
-X-Google-Smtp-Source: ABdhPJzIXhZOJi6NWdZqeu15CdJ5JFHp9oqnOe609rHntiPX/cWxExSEoXOsOalxM26KcvxA30q//5tG2XN3EpRswjE=
-X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
- e15-20020a5d6d0f000000b0020391571c48mr6942693wrq.192.1647589463306; Fri, 18
- Mar 2022 00:44:23 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KKbcj5SD7z4xgw;
+        Fri, 18 Mar 2022 18:44:21 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647589462;
+        bh=dsXOzAUhSDy56QPmWs67ignbc2RjTXOlVjnzLk0t7Mc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Avnjyr2LyFPke8fhYTv460SMTLoPxkUmqrdI6acLrzVmTYWTO+wASx9mmcyunTwAh
+         MpTqEOffMCUe9zgEOGujGs2YqNDLAJwd0Pnzi0T26qh1Hv5ALgGNEvilo1usuE1nOC
+         LKF3p9AisL3VhdI0QN2z1Dt8vmGuWMDRDZGV32UR4eeLXQZ4muMT9kzCdAiJpvc75x
+         Ujdf03AhSYHBuhfUaYb9j/LKbjXPce++l6OwoEZS1ziI++fqyQwPFSqySf0fOm/J9p
+         2uIiwXg4nI1bv3YnvtboHO5TUCSbt9WpYdznJGVAyMx7rBmNg90qet9GD0sQUGjBwq
+         LTCC2sK+GBARA==
+Date:   Fri, 18 Mar 2022 18:44:20 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Gross <agross@kernel.org>, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: linux-next: manual merge of the qcom tree with the imx-mxs tree
+Message-ID: <20220318184420.74d10227@canb.auug.org.au>
+In-Reply-To: <20220214093432.31152d57@canb.auug.org.au>
+References: <20220214093432.31152d57@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220318071130.163942-1-chenjiahao16@huawei.com>
-In-Reply-To: <20220318071130.163942-1-chenjiahao16@huawei.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 18 Mar 2022 08:44:07 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3==vLKZUOceuMh3X1U5_sN82Vpm8J_3P-H-+q3sKKMxg@mail.gmail.com>
-Message-ID: <CAK8P3a3==vLKZUOceuMh3X1U5_sN82Vpm8J_3P-H-+q3sKKMxg@mail.gmail.com>
-Subject: Re: [PATCH -next] uaccess: fix __access_ok limit setup in compat mode
-To:     Chen Jiahao <chenjiahao16@huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:xeXYH6qbgvt7UHc7zDtYFQsBnW61JIFhVjyTjlYhP91VSEkQz49
- 0Z6vAIYbrA2pEGDpoBZ70w5BJm3sRMSx6BUqn2aqTsWfOu4A2JagdEcssWF0FAv7iJrTMFZ
- u7B/I7ALAVCuhwe2BFnLqoT5XIUenK6PcZZwnHu3EzWanFOKEjI0h/VivNNgEB9sJ0GWRws
- eeZ2WRlF8xpSINOS9cK9g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0P+KlHjPBMg=:rHJzmBHGlNG+M2D+4oveca
- fkhqpwbBsOG1Am8s1I04Uba7/FMpmGRPd4LQK/mU5giubn919sik/YYf34X2I8ERQY9Hthzyg
- 1Qwckv4Cfaes3aWZruuMEuz+8cpf7ZCuAS9cDZs+N3ZkX34OVhwmHT34qZXz499ODx3AnJbkr
- 9PHykrskRoBzdE3nGz8T70SmxYd9stp0hWi94AkJZm992V0F417q3lt3OPlgzg2c7hLnc+Oca
- eIMVEFmXmrtzDyjRr1kvLy76XjOlCI4PfapxjKvF1t3s5NcBWqD12psaIbwXyhMcD9OWaQlbu
- zci7UdgyE/W4Ia30g7kXNmf/aMEVb5xQrsYGkyj5DZyK3gG9hyW0lQBEqn6RYSkPjS0ZqYJwv
- WXFg4ANP0+c+pLGvh4bK89VxOTfgd0Ij/jg5xj7R5+w5jtQTrbvzFOI6GZKZqKHQAfBGz4IxZ
- i5cRK65bL5jR80H4cegMEC3W3Zn5PucfA/5+2YVclRPaWDl7fOr4T4ir2pMYaPLZmrO2UeSP6
- PEJ13+uPLtWYBQiyKJp8aanVGAjLhXMik6QRkQM/s1X5mQMK14qDU8DDay2yKgsXb/wnkpY+x
- hzhGDTcn4kNw0AOeFIN3qtrq26yTI6L4/QHTgJRw7vm9X5HUUEBouZcFfSmO2f7ltpQSQ3f1r
- JNuaudGZJVXzCAD7SxL/IsQLrxUDxOOdjA/MzJ6UVQKVnlzVL26uNC4jpmcKrntW6lT1XmNUH
- LG+kOU6gkEc2stU35rgDD8KiNascE1WGszQhWkiuZZMQ6SmZMbkZDblhVt7HZlpsUxXlbMecc
- rBprlwCSN5g2bDZbnXegLvS3igBgIddgEWD7uQ02I/Y8QcOBlU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/KjGyJqwnBjB=FlYRastjKI8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,37 +59,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 8:11 AM Chen Jiahao <chenjiahao16@huawei.com> wrote:
+--Sig_/KjGyJqwnBjB=FlYRastjKI8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Mon, 14 Feb 2022 09:34:32 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> In __access_ok, TASK_SIZE_MAX is used to check if a memory access
-> is in user address space, but some cases may get omitted in compat
-> mode.
->
-> For example, a 32-bit testcase calling pread64(fd, buf, -1, 1)
-> and running in x86-64 kernel, the obviously illegal size "-1" will
-> get ignored by __access_ok. Since from the kernel point of view,
-> 32-bit userspace 0xffffffff is within the limit of 64-bit
-> TASK_SIZE_MAX.
->
-> Replacing the limit TASK_SIZE_MAX with TASK_SIZE in __access_ok
-> will fix the problem above.
+> Today's linux-next merge of the qcom tree got a conflict in:
+>=20
+>   arch/arm64/configs/defconfig
+>=20
+> between commits:
+>=20
+>   6e3807935e18 ("arm64: defconfig: re-order default configuration")
+>   dde8cd786e37 ("arm64: defconfig: rebuild default configuration")
+>=20
+> from the imx-mxs tree and commits:
+>=20
+>   cd7ce3e18afa ("arm64: defconfig: Enable SM8250 video clock controller")
+>   17ef0b4b441f ("arm64: defconfig: enable mcp251xfd driver")
+>=20
+> from the qcom tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc arch/arm64/configs/defconfig
+> index 2bb7765e5d82,bbe40f0fd620..000000000000
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@@ -383,9 -383,11 +385,12 @@@ CONFIG_ATH10K=3D
+>   CONFIG_ATH10K_PCI=3Dm
+>   CONFIG_ATH10K_SNOC=3Dm
+>   CONFIG_WCN36XX=3Dm
+> + CONFIG_ATH11K=3Dm
+> + CONFIG_ATH11K_AHB=3Dm
+> + CONFIG_ATH11K_PCI=3Dm
+>   CONFIG_BRCMFMAC=3Dm
+>   CONFIG_MWIFIEX=3Dm
+>  +CONFIG_MWIFIEX_SDIO=3Dm
+>   CONFIG_MWIFIEX_PCIE=3Dm
+>   CONFIG_WL18XX=3Dm
+>   CONFIG_WLCORE_SDIO=3Dm
+> @@@ -602,9 -607,9 +608,10 @@@ CONFIG_IMX_SC_WDT=3D
+>   CONFIG_QCOM_WDT=3Dm
+>   CONFIG_MESON_GXBB_WATCHDOG=3Dm
+>   CONFIG_MESON_WATCHDOG=3Dm
+>  +CONFIG_ARM_SMC_WATCHDOG=3Dy
+>   CONFIG_RENESAS_WDT=3Dy
+>   CONFIG_UNIPHIER_WATCHDOG=3Dy
+> + CONFIG_PM8916_WATCHDOG=3Dm
+>   CONFIG_BCM2835_WDT=3Dy
+>   CONFIG_MFD_ALTERA_SYSMGR=3Dy
+>   CONFIG_MFD_BD9571MWV=3Dy
+> @@@ -1009,6 -1021,10 +1016,7 @@@ CONFIG_SDM_DISPCC_845=3D
+>   CONFIG_SM_GCC_8350=3Dy
+>   CONFIG_SM_GPUCC_8150=3Dy
+>   CONFIG_SM_GPUCC_8250=3Dy
+>  -CONFIG_SM_DISPCC_8250=3Dy
+> + CONFIG_SM_VIDEOCC_8250=3Dy
+>   CONFIG_QCOM_HFPLL=3Dy
+>   CONFIG_CLK_GFM_LPASS_SM8250=3Dm
+>   CONFIG_CLK_RCAR_USB2_CLOCK_SEL=3Dy
+> @@@ -1042,11 -1058,10 +1050,12 @@@ CONFIG_RASPBERRYPI_POWER=3D
+>   CONFIG_FSL_DPAA=3Dy
+>   CONFIG_FSL_MC_DPIO=3Dy
+>   CONFIG_FSL_RCPM=3Dy
+>  +CONFIG_MTK_DEVAPC=3Dm
+>   CONFIG_MTK_PMIC_WRAP=3Dy
+> + CONFIG_MAILBOX=3Dy
+>   CONFIG_QCOM_AOSS_QMP=3Dy
+>   CONFIG_QCOM_COMMAND_DB=3Dy
+>  +CONFIG_QCOM_CPR=3Dy
+>   CONFIG_QCOM_GENI_SE=3Dy
+>   CONFIG_QCOM_RMTFS_MEM=3Dm
+>   CONFIG_QCOM_RPMH=3Dy
 
-I don't see what problem this fixes, the choice of TASK_SIZE_MAX in
-__access_ok() is intentional, as this means we can use a compile-time
-constant as the limit, which produces better code.
+This is now a conflict between the qcom tree and the arm-soc tree.
 
-Any user pointer between COMPAT_TASK_SIZE and TASK_SIZE_MAX is
-not accessible by a user process but will not let user space access
-any kernel data either, which is the point of the check.
+--=20
+Cheers,
+Stephen Rothwell
 
-In your example of using '-1' as the pointer, access_ok() returns true,
-so the kernel can go on to perform an unchecked __get_user() on
-__put_user() on 0xffffffffull, which causes page fault that is intercepted
-by the ex_table fixup.
+--Sig_/KjGyJqwnBjB=FlYRastjKI8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-This should not result in any user visible difference, in both cases
-user process will see a -EFAULT return code from its system call.
-Are you able to come up with a test case that shows an observable
-difference in behavior?
+-----BEGIN PGP SIGNATURE-----
 
-      Arnd
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI0OFUACgkQAVBC80lX
+0GxdFQf/YBH5t4Ph9WhcCA2CfidDsPZdFp8cFtQB/neuM0CoEDsfiITeXEiukpG/
+l2+66E42sG4VnSeM4s1yRV31dyKAmJot73IaGgNgivHQnW909vJ7XMyG/Ro+zW8o
+2yt31FIJQI/RGJ5SdomwQ7/+KSFbMP6kCFbcWrMzH95XMJ+XJZdSTnT9DuojEQiK
+FI4i9bYkATKxFtyv+OLzGOSwMsEOY9k6Sd9AN2IrnhkTyQqrUKiYerj1cTKEUjXl
+eYWpSW4sH/euwln1Kr1M8T/IZzsU3QiDaBqVxFY1PnPi/UykYeSrOWMk1DkZ5dok
+MGOFdZEwo1U8tIAdaU0gsVZ+bakKPQ==
+=c1qE
+-----END PGP SIGNATURE-----
+
+--Sig_/KjGyJqwnBjB=FlYRastjKI8--

@@ -2,97 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E224DDC24
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C42A4DDC30
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237556AbiCROul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
+        id S234666AbiCROwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 10:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237880AbiCROu2 (ORCPT
+        with ESMTP id S230257AbiCROwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:50:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B5BF1BD839
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647614896;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AXh1kXJA2Arm+k9zVpD08NoMYuNv/3gU6u7CxBA2E8s=;
-        b=EXqf4ncJjwpJRhjIeLvaCJPaOcijVlXSW/lo00dGbhZBQMklY62UBKvHcv3tv/4jsuuU/X
-        Cy0UTDqmdKFPwDqDn3aBnE8V96lV2BRxP9K9VK6P3cttScVxQFPmNa/5qU7lhWESP0QtG3
-        sCOis8xCHp7ywW+TpOkpmUk2Ixrhl/E=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-622-ZiK8pNwNPmCjf2x7J_dSuQ-1; Fri, 18 Mar 2022 10:48:13 -0400
-X-MC-Unique: ZiK8pNwNPmCjf2x7J_dSuQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80D99296A625;
-        Fri, 18 Mar 2022 14:48:12 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 16A4040D282F;
-        Fri, 18 Mar 2022 14:48:09 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <f5633dea0bfabd40ba548fc8502e5838c033fbae.camel@kernel.org>
-References: <f5633dea0bfabd40ba548fc8502e5838c033fbae.camel@kernel.org> <164692909854.2099075.9535537286264248057.stgit@warthog.procyon.org.uk> <164692883658.2099075.5745824552116419504.stgit@warthog.procyon.org.uk> <306388.1647595110@warthog.procyon.org.uk>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        David Wysochanski <dwysocha@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 13/20] netfs: Add a netfs inode context
+        Fri, 18 Mar 2022 10:52:42 -0400
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D4F261B;
+        Fri, 18 Mar 2022 07:51:22 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 385E128042B86;
+        Fri, 18 Mar 2022 15:51:21 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 2CB204ADE5; Fri, 18 Mar 2022 15:51:21 +0100 (CET)
+Date:   Fri, 18 Mar 2022 15:51:21 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
+        "michael.jamet@intel.com" <michael.jamet@intel.com>,
+        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH] thunderbolt: Make iommu_dma_protection more accurate
+Message-ID: <20220318145121.GA11127@wunner.de>
+References: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
+ <BL1PR12MB515783C0F998169D49D92A55E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <BL1PR12MB51573F55B3C2B3922BAAA7F1E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <YjRvMk1kcbMwJvx+@lahna>
+ <65207fdf-c4ab-5165-dbda-8ab55b51adb7@arm.com>
+ <YjSCWaq7Ej/2iJPp@lahna>
+ <78fc0426-c22a-ec62-f92b-0019bea5947e@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <666407.1647614889.1@warthog.procyon.org.uk>
-Date:   Fri, 18 Mar 2022 14:48:09 +0000
-Message-ID: <666408.1647614889@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <78fc0426-c22a-ec62-f92b-0019bea5947e@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Layton <jlayton@kernel.org> wrote:
+On Fri, Mar 18, 2022 at 02:08:16PM +0000, Robin Murphy wrote:
+> OK, so do we have any realistic options for identifying the correct PCI
+> devices, if USB4 PCIe adapters might be anywhere relative to their
+> associated NHI? Short of maintaining a list of known IDs, the only thought I
+> have left is that if we walk the whole PCI segment looking specifically for
+> hotplug-capable Gen1 ports, any system modern enough to have Thunderbolt is
+> *probably* not going to have any real PCIe Gen1 hotplug slots, so maybe
+> false negatives might be tolerable, but it still feels like a bit of a
+> sketchy heuristic.
 
-> > +static inline bool netfs_is_cache_enabled(struct netfs_i_context *ctx)
-> > +{
-> > +#if IS_ENABLED(CONFIG_FSCACHE)
-> > +	struct fscache_cookie *cookie = ctx->cache;
-> > +
-> > +	return fscache_cookie_valid(cookie) && cookie->cache_priv &&
-> > +		fscache_cookie_enabled(cookie);
-> 
-> 
-> As you mentioned in the other thread, it may be cleaner to move the
-> cookie->cache_priv check into fscache_cookie_enabled. Is there ever a
-> case where you'd need to separate the two checks?
+The Thunderbolt Device ROM contains the PCI slot number, so you can
+correlate the Thunderbolt switch ports with PCIe downstream ports
+and know exactly where PCIe tunnels are terminated.
 
-I'm not sure, but I'd prefer not to do it in this series as it would affect
-NFS plus some other operations, so will need retesting thoroughly.  I'd prefer
-to defer it.
+Code is here:
+* thunderbolt: Obtain PCI slot number from DROM
+  https://github.com/l1k/linux/commit/756f7148bc10
+* thunderbolt: Move upstream_port to struct tb
+  https://github.com/l1k/linux/commit/58f16e7dd431
+* thunderbolt: Correlate PCI devices with Thunderbolt ports
+  https://github.com/l1k/linux/commit/f53ea40a7487
 
-David
+I implemented that in 2018, so it won't apply cleanly to current
+mainline.  But I kept forward-porting it on my private branch and
+could push that to GitHub if anyone is interested.
 
+I don't know if this will work out-of-the-box for SoC-integrated
+Thunderbolt controllers.  It was developed with the discrete
+controllers in mind, which was the only thing available back then.
+
+Thanks,
+
+Lukas

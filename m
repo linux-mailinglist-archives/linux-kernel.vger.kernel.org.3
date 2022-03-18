@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 494334DE391
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 22:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C404DE397
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 22:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241163AbiCRVbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 17:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
+        id S241170AbiCRVfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 17:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233695AbiCRVbc (ORCPT
+        with ESMTP id S231609AbiCRVfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 17:31:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808E817A2FA;
-        Fri, 18 Mar 2022 14:30:13 -0700 (PDT)
+        Fri, 18 Mar 2022 17:35:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733AC1DA8FB;
+        Fri, 18 Mar 2022 14:34:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 308C3B825CC;
-        Fri, 18 Mar 2022 21:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C3EECC340ED;
-        Fri, 18 Mar 2022 21:30:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29CC1B825BC;
+        Fri, 18 Mar 2022 21:34:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 844B9C340E8;
+        Fri, 18 Mar 2022 21:34:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647639010;
-        bh=li9JCCb2DVPAKEDVDaLf5+VBVHfU25LQtkMzTQvIuZY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=WXdgABg+E1gRkcJQl3yaoqoIHYyBP6acymi8WtFFd3CXqFMl2NpFI19VE4fpvX5K/
-         cQie1FVdp5+jWD5GhAOrWm+SFdEjI/4CEX3XmOh4EBh94JbmXW7VLGuUQ/FpQhmrYZ
-         HoNUi4rOF8TijOCc66uc0RjeTPHMqfJBnYiXQr+nIRBVAvIr7w+MGZbpkh4UmP7rS9
-         jq3V8+l0mvLn1YxuI/WXIZ8+6/CAhxFLDEVmvCDKVSvCnKxLUTo4mcWwy9hGqP7dHM
-         V+wqGAjBYMu8F062lWaPsbWMy5eEo8HQGLW742lGgYMr0cDH3/92rmSz3A0RS6AVK0
-         j6w+mNPH4uqGQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A4D37E6D402;
-        Fri, 18 Mar 2022 21:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1647639253;
+        bh=/Z1/M59ERRvXYmQlgycDFVEYINXXv8fogwEEU16Qt4M=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=ZiR4AmRfKV8EXsbSsSYThjhv5snfOKECbUvrz/85NVtCPg6RpN8wdZgFA7tULHxL8
+         QQVcQyzjIEav97Ihf8ZNXPBARhz5OXmTQLGXZNtYQWds/uS05G+EzB2ryVZJ5s3Zzg
+         v1+/e9faKKmJOOTu1ezLrx6mY6h4XWiDiFzI3j/gFTq/AxtaBcXgmg1zdf4+lbTcOi
+         6lrV3ULA1mNwkID7upto1Gif4VR71Mc6VIt5KgJR4TLKoUdv81uZqS2KkQ0TkBjRER
+         zzpoqiKeFVUXSzaS49Oywk1xAsGpGcVGH5e1cZfpgSuiP9WX1gzt6hSBebkrHFLDKR
+         eCecZIx2ciQFA==
+Date:   Fri, 18 Mar 2022 14:34:13 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Luca Fancellu <Luca.Fancellu@arm.com>
+cc:     Julia Lawall <Julia.Lawall@inria.fr>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] xen/arm: fix typos in comments
+In-Reply-To: <50B35A3D-9848-4B89-8935-AD3A1330D7CF@arm.com>
+Message-ID: <alpine.DEB.2.22.394.2203181430300.2910984@ubuntu-linux-20-04-desktop>
+References: <20220318103729.157574-15-Julia.Lawall@inria.fr> <50B35A3D-9848-4B89-8935-AD3A1330D7CF@arm.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] atl1c: remove redundant assignment to variable size
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164763901067.24897.16807570827930422254.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Mar 2022 21:30:10 +0000
-References: <20220318005021.82073-1-colin.i.king@gmail.com>
-In-Reply-To: <20220318005021.82073-1-colin.i.king@gmail.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     chris.snook@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, gatis@mikrotik.com, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,30 +61,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 18 Mar 2022 00:50:21 +0000 you wrote:
-> Variable sie is being assigned a value that is never read. The
-> The assignment is redundant and can be removed.
+On Fri, 18 Mar 2022, Luca Fancellu wrote:
+> > On 18 Mar 2022, at 10:37, Julia Lawall <Julia.Lawall@inria.fr> wrote:
+> > 
+> > Various spelling mistakes in comments.
+> > Detected with the help of Coccinelle.
+> > 
+> > Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 > 
-> Cleans up clang scan build warning:
-> drivers/net/ethernet/atheros/atl1c/atl1c_main.c:1054:22: warning:
-> Although the value stored to 'size' is used in the enclosing
-> expression, the value is never actually read from 'size'
-> [deadcode.DeadStores]
-> 
-> [...]
+> Reviewed-by: Luca Fancellu <luca.fancellu@arm.com>
 
-Here is the summary with links:
-  - atl1c: remove redundant assignment to variable size
-    https://git.kernel.org/netdev/net-next/c/0978e5919c28
+Acked-by: Stefano Stabellini <sstabellini@kernel.org>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+I assume this patch will go via the trivial tree? If not and you want
+this patch to be picked up in the Xen tree let me know.

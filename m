@@ -2,55 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA7A4DE34B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 22:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0FE4DE349
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 22:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241067AbiCRVNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 17:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
+        id S241054AbiCRVNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 17:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241060AbiCRVNf (ORCPT
+        with ESMTP id S241048AbiCRVN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 17:13:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FD32DF3CC;
-        Fri, 18 Mar 2022 14:12:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08DFEB825AB;
-        Fri, 18 Mar 2022 21:12:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77B8BC340E8;
-        Fri, 18 Mar 2022 21:12:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647637933;
-        bh=63k8XZftRXMguFWX81BTU0yP2mywj2VvPSBftzYpSsg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PTs1UXtc6PhC9dVwQo7CYei9zDB0J902uB5hkjZhnDYdVw81/+hE1chJ+3v4HYVK+
-         IDwLXhAzRB32+0JyqbCb+zUQ4F94oCClztmUZ8Qx/biqQ/z0eDX7WQSixqIUQ3GJFe
-         tZaJEV1L0faQ8fBEgxum9HWXdlkMpEBlYeY+YZcD9NHJ+Xm7WltituECpX4GKoNbPm
-         Tep3wzErh8UUJ/SHZms+oneAFYf/7DWhkQ/kiK/ovh8qyT5BATqbAqSK8TXbP5EZxI
-         kywuFEvtWGn8SZHLheV4b9VK8aB7vdGwY6czvx6ynKoxRSyt10ms7kkLV2DQwMMeuq
-         raiHwmtI7TMTw==
-Date:   Fri, 18 Mar 2022 14:12:07 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     =?UTF-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-        Keyur Chudgar <keyur@os.amperecomputing.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Toan Le <toan@os.amperecomputing.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] drivers: net: xgene: Fix regression in CRC stripping
-Message-ID: <20220318141207.284972b7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220317144225.4005500-1-stgraber@ubuntu.com>
-References: <20220317144225.4005500-1-stgraber@ubuntu.com>
+        Fri, 18 Mar 2022 17:13:28 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6861A8C24
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 14:12:09 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id z8so10108337oix.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 14:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=n34Xs2LUJxel1XU83dIKxQOsnVS224E+z08R602YCdU=;
+        b=EvQpHpyMC77rLLEvn9MpsqWL0o8A2T7VFQvNGpeLOEH0VGsDX41YNdLPSvHrSXoRo6
+         8X7HcCJbTswjPPlHmbnBc/e+c/N9LwooWCRKufVh9wwI7lJkss7MWzi9Yb8zmdIuwAsO
+         JCDIrfe5wxbXu5CDc1/0OP4wu/zSOG7Nsc7DY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=n34Xs2LUJxel1XU83dIKxQOsnVS224E+z08R602YCdU=;
+        b=kWylai9jvvRr8MZkmc5IvN1tDBtLLn5GHfCx0ht1JLy956l9EhT4lscO5LrvHamA5Q
+         BRe8nfqLb7owz7dc7N2/h1+wuQ67cDo9uCzZsDFL9V5S+00j343F3LZ4SuMrfLjQbah5
+         Aeq6E0QZ5WG3R907q6b61MIb1RpSPu5hkUi6MotyKND+rOP6osjtaKsBtg4/hJS6HXCX
+         jXQ0cf2M+oCTGpHcT9QG+Bgqiy6zqRqdH02eEFaSEdmToFByzQbZC25Iknd4o74jEFgT
+         qP1TfqVXYFA+kJtw9/raz6u+LnOoIC3/icY8f1GWDsg+fgoHnSN/PyH9lZW0E8eEhOwk
+         Y0YA==
+X-Gm-Message-State: AOAM5322GkyDvzPbkJuBVZpFAarsOqA/8ap3T+zyMx5133LxVxev6w9b
+        uVo88Xcc/Yu6795fkx3eEl0cE05gG28CbxSogha2VqYYi1g=
+X-Google-Smtp-Source: ABdhPJw0zCFmhg5T+KaHMIkI9yocntmnv6XcFAgnwKNk6tLkUngfx+sEnsZubJNjXUqla/UYhwzVdjmiB7FhdH0czNU=
+X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
+ n62-20020acabd41000000b002ecff42814fmr5152331oif.63.1647637928460; Fri, 18
+ Mar 2022 14:12:08 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 18 Mar 2022 14:12:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAD=FV=WV+rssDpUdq0fVuVKf4b7DwTsFgodAX8wi-eLEoxTa3g@mail.gmail.com>
+References: <20220318015451.2869388-1-swboyd@chromium.org> <20220318015451.2869388-2-swboyd@chromium.org>
+ <CAD=FV=WV+rssDpUdq0fVuVKf4b7DwTsFgodAX8wi-eLEoxTa3g@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 18 Mar 2022 14:12:08 -0700
+Message-ID: <CAE-0n52Cy3KKUQBuzMUE0+r7DfQKPAFRnYijQHmuA5safhw6mg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: chrome: Add ChromeOS fingerprint binding
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, Guenter Roeck <groeck@chromium.org>,
+        Craig Hesling <hesling@chromium.org>,
+        Tom Hughes <tomhughes@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,61 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022 10:42:25 -0400 St=C3=A9phane Graber wrote:
-> From: Stephane Graber <stgraber@ubuntu.com>
->=20
-> All packets on ingress (except for jumbo) are terminated with a 4-bytes
-> CRC checksum. It's the responsability of the driver to strip those 4
-> bytes. Unfortunately a change dating back to March 2017 re-shuffled some
-> code and made the CRC stripping code effectively dead.
->=20
-> This change re-orders that part a bit such that the datalen is
-> immediately altered if needed.
->=20
-> Fixes: 4902a92270fb ("drivers: net: xgene: Add workaround for errata 10GE=
-_8/ENET_11")
-> Signed-off-by: Stephane Graber <stgraber@ubuntu.com>
-> Tested-by: Stephane Graber <stgraber@ubuntu.com>
-> Cc: stable@vger.kernel.org
-> ---
->  drivers/net/ethernet/apm/xgene/xgene_enet_main.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/apm/xgene/xgene_enet_main.c b/drivers/n=
-et/ethernet/apm/xgene/xgene_enet_main.c
-> index ff2d099aab21..3892790f04e0 100644
-> --- a/drivers/net/ethernet/apm/xgene/xgene_enet_main.c
-> +++ b/drivers/net/ethernet/apm/xgene/xgene_enet_main.c
-> @@ -696,6 +696,12 @@ static int xgene_enet_rx_frame(struct xgene_enet_des=
-c_ring *rx_ring,
->  	buf_pool->rx_skb[skb_index] =3D NULL;
-> =20
->  	datalen =3D xgene_enet_get_data_len(le64_to_cpu(raw_desc->m1));
-> +
-> +	/* strip off CRC as HW isn't doing this */
-> +	nv =3D GET_VAL(NV, le64_to_cpu(raw_desc->m0));
-> +	if (!nv)
-> +		datalen -=3D 4;
+Quoting Doug Anderson (2022-03-18 13:49:05)
+> Hi,
+>
+> On Thu, Mar 17, 2022 at 6:54 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > Add a binding to describe the fingerprint processor found on Chromebooks
+> > with a fingerprint sensor.
+>
+> It might be worth mentioning that previously these fingerprint devices
+> were described using "google,cros-ec-spi" just to provide context?
 
-Alternatively we could call skb_trim() below to remove the FCS.
-You call, but..
+Sure I squashed it in.
 
->  	skb_put(skb, datalen);
->  	prefetch(skb->data - NET_IP_ALIGN);
->  	skb->protocol =3D eth_type_trans(skb, ndev);
-> @@ -717,10 +723,7 @@ static int xgene_enet_rx_frame(struct xgene_enet_des=
-c_ring *rx_ring,
->  		}
->  	}
-> =20
-> -	nv =3D GET_VAL(NV, le64_to_cpu(raw_desc->m0));
->  	if (!nv) {
-> -		/* strip off CRC as HW isn't doing this */
-> -		datalen -=3D 4;
->  		goto skip_jumbo;
->  	}
-
-If you stick to moving the datalen adjustments this if will have a
-single statement so according to the kernel code style it has to lose
-the brackets.
-
+>
+>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: <devicetree@vger.kernel.org>
+> > Cc: Guenter Roeck <groeck@chromium.org>
+> > Cc: Douglas Anderson <dianders@chromium.org>
+> > Cc: Craig Hesling <hesling@chromium.org>
+> > Cc: Tom Hughes <tomhughes@chromium.org>
+> > Cc: Alexandru M Stan <amstan@chromium.org>
+> > Cc: Tzung-Bi Shih <tzungbi@kernel.org>
+> > Cc: Matthias Kaehlcke <mka@chromium.org>
+> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> > ---
+> >  .../bindings/chrome/google,cros-ec-fp.yaml    | 66 +++++++++++++++++++
+> >  1 file changed, 66 insertions(+)
+> >  create mode 100644 Documentation/
+>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>

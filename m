@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C604DDA6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D456C4DDA77
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236659AbiCRN0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 09:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        id S236667AbiCRN21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236648AbiCRN03 (ORCPT
+        with ESMTP id S231828AbiCRN2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:26:29 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEC1EE4C6;
-        Fri, 18 Mar 2022 06:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647609910; x=1679145910;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=InZ4gM0n9VmGhsbv3r77oTtxNorS/SN0pEblK/FfVAI=;
-  b=ALEkEIPVvrMuPq9Hkd/lNYdyhk8o3wIj0iHIwgmxSfAixOeo1/OKHzys
-   x/HwZKKrJWRw3db0q1I6XeeQgbAF2ijthPqRFxrExPdbyVnxNH8uTdKNI
-   ZvFYXulTHPpNgZ5o5arUpGBaVmAU1Xx4SW0UPNRQU9dLy7TfoT10+nS2t
-   InAWXY7HxeywHG6Y8148WVy+gOeMFJKy8f18JgAtm2M1s/hj78jUGhakZ
-   gcCJvPG1ZJ3Tn4I3vwdp86GKbSHBgB3UG+Nj6xBtndHWU/slqVbg3NK1v
-   Bn++0lVWxIwfz8/u7LfQCeKl67RvEr6Lu4r4XiASvi/0TJ6WOrwMyJzZ0
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="237745360"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="237745360"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:25:10 -0700
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="558438415"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:25:07 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 18 Mar 2022 15:25:04 +0200
-Date:   Fri, 18 Mar 2022 15:25:04 +0200
-From:   "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
-        "michael.jamet@intel.com" <michael.jamet@intel.com>,
-        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH] thunderbolt: Make iommu_dma_protection more accurate
-Message-ID: <YjSCWaq7Ej/2iJPp@lahna>
-References: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
- <BL1PR12MB515783C0F998169D49D92A55E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
- <BL1PR12MB51573F55B3C2B3922BAAA7F1E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
- <YjRvMk1kcbMwJvx+@lahna>
- <65207fdf-c4ab-5165-dbda-8ab55b51adb7@arm.com>
+        Fri, 18 Mar 2022 09:28:24 -0400
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E56EA34D;
+        Fri, 18 Mar 2022 06:27:06 -0700 (PDT)
+Received: by mail-qt1-f174.google.com with SMTP id i8so6801045qtx.6;
+        Fri, 18 Mar 2022 06:27:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bP9fF1LcUT/zcxuRZc/z2DEjzPpIQX03/s1Pv3V3kf0=;
+        b=5UKPSZbvGb/0pbStNYOFbfi314Bww++7D5w4D51BEflFGXurvKx52d1SvDuBeMUDiw
+         WOKBYdN83y3WFxnHKBXD9Gsng8ryGMt8HlNk79MghbCliL/Xrcu3Mkk2L+MdoGEXdSkO
+         guGdovShp1+JPPKKVdQCcEK/lTTrUiV6FbYa+DfVSdSgBIVgI3DNdC8n9TAEsNHVhY/0
+         HuZnJ1oRWqD9LKDPUKY/Wl/RtTF7hnove21xr/zesqt+zsfI3csbliQM0yIMpptcSMDF
+         DyCSllLdUPw+RWr2DetjWK9srX1AsId4eYw3JKZZb9y+FcssIBXoClRIwpSy/SanVWGH
+         Bbxw==
+X-Gm-Message-State: AOAM5337Zkk2Nm1/omd4+NtAwgzwhfdLsKIxXHG3iWXmjxLySsZyBIrd
+        6oG7FFB2L4PEMSTQVe8/NcfGetPII3Sskfzr
+X-Google-Smtp-Source: ABdhPJxgIlBRO2ugb8lkfUy2J9ELhXd3MWjNbdJCJ6YkZXK2I1/2WMTRTlNZjFq6OAwAXeAT6MZr6g==
+X-Received: by 2002:a05:622a:4d3:b0:2e1:bc11:3b97 with SMTP id q19-20020a05622a04d300b002e1bc113b97mr7329582qtx.189.1647610024845;
+        Fri, 18 Mar 2022 06:27:04 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id x20-20020ac85f14000000b002e1ee1c56c3sm4473337qta.76.2022.03.18.06.27.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 06:27:04 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id f38so15849049ybi.3;
+        Fri, 18 Mar 2022 06:27:04 -0700 (PDT)
+X-Received: by 2002:a25:bc8f:0:b0:628:8649:5c4b with SMTP id
+ e15-20020a25bc8f000000b0062886495c4bmr9844508ybk.207.1647610023986; Fri, 18
+ Mar 2022 06:27:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <65207fdf-c4ab-5165-dbda-8ab55b51adb7@arm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20220308223324.7456-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220308223324.7456-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220308223324.7456-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 18 Mar 2022 14:26:52 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW6Wo-Pd5xLp4AcfAxGvrEFq09pz_si0qWc91vgwBJnPA@mail.gmail.com>
+Message-ID: <CAMuHMdW6Wo-Pd5xLp4AcfAxGvrEFq09pz_si0qWc91vgwBJnPA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] arm64: dts: renesas: r9a07g054: Fillup the GPU node
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,30 +72,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+On Tue, Mar 8, 2022 at 11:33 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Renesas RZ/V2L SoC has Mali-G31 GPU, this patch fills up the GPU node and
+> adds opp table to RZ/V2L (R9A07G054) SoC DTSI.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-On Fri, Mar 18, 2022 at 12:01:42PM +0000, Robin Murphy wrote:
-> > This adds quite a lot code and complexity, and honestly I would like to
-> > keep it as simple as possible (and this is not enough because we need to
-> > make sure the DMAR bit is there so that none of the possible connected
-> > devices were able to overwrite our memory already).
-> 
-> Shall we forget the standalone sibling check and just make the
-> pdev->untrusted check directly in tb_acpi_add_link() then?
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.19.
 
-I think we should leave tb_acpi_add_link() untouched if possible ;-)
-This is because it is used to add the device links from firmware
-description that we need for proper power management of the tunneled
-devices. It has little to do with the identification of the external
-facing DMA-capable PCIe ports.
+Gr{oetje,eeting}s,
 
-Furthermore these links only exists in USB4 software connection manager
-systems so we do not have those in the existing Thunderbolt 3/4 systems
-that use firmware based connection manager (pretty much all out there).
+                        Geert
 
-> On reflection I guess the DMAR bit makes iommu_dma_protection
-> functionally dependent on ACPI already, so we don't actually lose
-> anything (and anyone can come back and revisit firmware-agnostic
-> methods later if a need appears).
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-I agree.
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

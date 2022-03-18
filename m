@@ -2,221 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BB24DDB29
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBADD4DDB32
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236992AbiCROEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
+        id S237011AbiCROGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 10:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236965AbiCROEN (ORCPT
+        with ESMTP id S233096AbiCROGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:04:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F232B5EE7;
-        Fri, 18 Mar 2022 07:02:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 785B461A08;
-        Fri, 18 Mar 2022 14:02:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C27C340E8;
-        Fri, 18 Mar 2022 14:02:50 +0000 (UTC)
-Date:   Fri, 18 Mar 2022 10:02:49 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Graeme Gregory <quic_ggregory@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2] i2c: add tracepoints for I2C slave events
-Message-ID: <20220318100249.3eb97c10@gandalf.local.home>
-In-Reply-To: <20220308163333.3985974-1-quic_jaehyoo@quicinc.com>
-References: <20220308163333.3985974-1-quic_jaehyoo@quicinc.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 18 Mar 2022 10:06:04 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32FE2BC1F7;
+        Fri, 18 Mar 2022 07:04:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647612284; x=1679148284;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jcrYNvI61V8kUynPI7hV1XW2k5B5q68nF1eRgoRh4Cw=;
+  b=dDJEJ29HrsHRd+6r/qCdPy516QHGxDqaRq/EUT0n6sbNFbLea75XmbCD
+   wq51msbMP6SYCDpDdeiLmbEq1an4FDMnYF3eOx3XORFnZsSB58t8oQIvS
+   h0eaq22hEdgeQHBGOP5FmUyVfZb9vguSF0Ec+nTFz2KcXnfQU1/m8p1V8
+   FoMbUJ9jItDq1htGWfd1wePRDnhVujtvt1M9UamaV7+9SvD5H99g5YDUG
+   9nQ/XLxCJ+EHy3SRYIdkqLGVgW+7bV76MF5Js/M2L0eRKOYTbx81WxJ8+
+   4Gp166EaeF/SOZxnn2JkVAmhdrZzxjBy4fcCjmBe8JopsjrEYEs+hxHpW
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="257089815"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="257089815"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 07:04:20 -0700
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="499258563"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 07:04:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nVDCc-002GJv-Mm;
+        Fri, 18 Mar 2022 16:03:38 +0200
+Date:   Fri, 18 Mar 2022 16:03:38 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Bill Wendling <morbo@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] gpiolib: acpi: use correct format characters
+Message-ID: <YjSROmYwwGhpsXMl@smile.fi.intel.com>
+References: <20220316213055.2351342-1-morbo@google.com>
+ <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
+ <CAKwvOdkjb3uR+kqjfdKL5gqA8R+00c5=3E7uGGW+mGZ3QRsjqg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdkjb3uR+kqjfdKL5gqA8R+00c5=3E7uGGW+mGZ3QRsjqg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Mar 2022 08:33:33 -0800
-Jae Hyun Yoo <quic_jaehyoo@quicinc.com> wrote:
+On Thu, Mar 17, 2022 at 11:11:21AM -0700, Nick Desaulniers wrote:
+> On Thu, Mar 17, 2022 at 2:07 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Wed, Mar 16, 2022 at 02:30:55PM -0700, Bill Wendling wrote:
 
-> I2C slave events tracepoints can be enabled by:
-> 
-> 	echo 1 > /sys/kernel/tracing/events/i2c_slave/enable
-> 
-> and logs in /sys/kernel/tracing/trace will look like:
-> 
-> 	... i2c_slave: i2c-0 a=010 WR_REQ []
-> 	... i2c_slave: i2c-0 a=010 WR_RCV [02]
-> 	... i2c_slave: i2c-0 a=010 WR_RCV [0c]
-> 	... i2c_slave: i2c-0 a=010   STOP []
-> 	... i2c_slave: i2c-0 a=010 RD_REQ [04]
-> 	... i2c_slave: i2c-0 a=010 RD_PRO [b4]
-> 	... i2c_slave: i2c-0 a=010   STOP []
-> 
-> formatted as:
-> 
-> 	i2c-<adapter-nr>
-> 	a=<addr>
-> 	<event>
-> 	[<data>]
-> 
-> trace printings can be selected by adding a filter like:
-> 
-> 	echo adapter_nr==1 >/sys/kernel/tracing/events/i2c_slave/filter
-> 
-> Signed-off-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-> ---
-> Changes v1 -> v2:
-> * Fixed trace_2c_slave call condition to optimize conditional compare logic
->   (Steven)
-> * Fixed TP entry order to prevent wasting spaces in the ring buffer (Steven)
-> * Replaced __get_dynamic_array with __array for storing 1-length data value
->   to make it faster and save space (Steven)
-> 
->  drivers/i2c/i2c-core-slave.c     | 15 +++++++++
->  include/linux/i2c.h              |  8 ++---
->  include/trace/events/i2c_slave.h | 57 ++++++++++++++++++++++++++++++++
->  3 files changed, 74 insertions(+), 6 deletions(-)
->  create mode 100644 include/trace/events/i2c_slave.h
-> 
-> diff --git a/drivers/i2c/i2c-core-slave.c b/drivers/i2c/i2c-core-slave.c
-> index 1589179d5eb9..4299de933ac6 100644
-> --- a/drivers/i2c/i2c-core-slave.c
-> +++ b/drivers/i2c/i2c-core-slave.c
-> @@ -14,6 +14,9 @@
->  
->  #include "i2c-core.h"
->  
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/i2c_slave.h>
-> +
->  int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb)
->  {
->  	int ret;
-> @@ -79,6 +82,18 @@ int i2c_slave_unregister(struct i2c_client *client)
->  }
->  EXPORT_SYMBOL_GPL(i2c_slave_unregister);
->  
-> +int i2c_slave_event(struct i2c_client *client,
-> +		    enum i2c_slave_event event, u8 *val)
-> +{
-> +	int ret = client->slave_cb(client, event, val);
-> +
-> +	if (trace_i2c_slave_enabled() && !ret)
-> +		trace_i2c_slave(client, event, val);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(i2c_slave_event);
-> +
->  /**
->   * i2c_detect_slave_mode - detect operation mode
->   * @dev: The device owning the bus
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> index 7d4f52ceb7b5..fbda5ada2afc 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -392,12 +392,8 @@ enum i2c_slave_event {
->  int i2c_slave_register(struct i2c_client *client, i2c_slave_cb_t slave_cb);
->  int i2c_slave_unregister(struct i2c_client *client);
->  bool i2c_detect_slave_mode(struct device *dev);
-> -
-> -static inline int i2c_slave_event(struct i2c_client *client,
-> -				  enum i2c_slave_event event, u8 *val)
-> -{
-> -	return client->slave_cb(client, event, val);
-> -}
-> +int i2c_slave_event(struct i2c_client *client,
-> +		    enum i2c_slave_event event, u8 *val);
->  #else
->  static inline bool i2c_detect_slave_mode(struct device *dev) { return false; }
->  #endif
-> diff --git a/include/trace/events/i2c_slave.h b/include/trace/events/i2c_slave.h
-> new file mode 100644
-> index 000000000000..3aaf5fb76796
-> --- /dev/null
-> +++ b/include/trace/events/i2c_slave.h
-> @@ -0,0 +1,57 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> +/*
-> + * I2C slave tracepoints
-> + *
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM i2c_slave
-> +
-> +#if !defined(_TRACE_I2C_SLAVE_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_I2C_SLAVE_H
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/tracepoint.h>
-> +
-> +TRACE_EVENT(i2c_slave,
-> +	TP_PROTO(const struct i2c_client *client, enum i2c_slave_event event,
-> +		 __u8 *val),
-> +	TP_ARGS(client, event, val),
-> +	TP_STRUCT__entry(
-> +		__field(int,				adapter_nr	)
-> +		__field(__u16,				addr		)
-> +		__field(__u16,				len		)
-> +		__field(enum i2c_slave_event,		event		)
-> +		__array(__u8, buf, 1)					),
-> +
-> +	TP_fast_assign(
-> +		__entry->adapter_nr = client->adapter->nr;
-> +		__entry->addr = client->addr;
-> +		__entry->event = event;
-> +		switch (event) {
-> +		case I2C_SLAVE_READ_REQUESTED:
-> +		case I2C_SLAVE_READ_PROCESSED:
-> +		case I2C_SLAVE_WRITE_RECEIVED:
-> +			__entry->len = 1;
-> +			memcpy(__entry->buf, val, __entry->len);
-> +			break;
-> +		default:
-> +			__entry->len = 0;
-> +			break;
-> +		}
-> +		),
-> +	TP_printk("i2c-%d a=%03x %s [%*phD]",
-> +		__entry->adapter_nr, __entry->addr,
-> +		__print_symbolic(__entry->event,
-> +				 { I2C_SLAVE_READ_REQUESTED,	"RD_REQ" },
-> +				 { I2C_SLAVE_WRITE_REQUESTED,	"WR_REQ" },
-> +				 { I2C_SLAVE_READ_PROCESSED,	"RD_PRO" },
-> +				 { I2C_SLAVE_WRITE_RECEIVED,	"WR_RCV" },
-> +				 { I2C_SLAVE_STOP,		"  STOP" }),
+> > NAK.
 
-For the above to be useful for perf and trace-cmd (user space tools) you
-will need to export them with:
+I hope you read my follow up to this.
 
-TRACE_DEFINE_ENUM(I2C_SLAVE_READ_REQUESTED);
-TRACE_DEFINE_ENUM(I2C_SLAVE_WRITE_REQUESTED);
-TRACE_DEFINE_ENUM(I2C_SLAVE_READ_PROCESSED);
-TRACE_DEFINE_ENUM(I2C_SLAVE_WRITE_PROCESSED);
-TRACE_DEFINE_ENUM(I2C_SLAVE_STOP);
+> Andy,
+> Our goal is to enable -Wformat for CC=clang.  Please see also:
+> commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
+> unnecessary %h[xudi] and %hh[xudi]")
 
-before the TRACE_EVENT()
+Not that I agree on that commit for %h[h]x
 
--- Steve
+	signed char ch = -1;
+	printf("%x\n", ch);
+	printf("%hhx\n", ch);
 
+That's why my first reaction on this change was NAK.
 
-> +		__entry->len, __entry->buf
-> +		));
-> +
-> +#endif /* _TRACE_I2C_SLAVE_H */
-> +
-> +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
+> and the lore link it cites.
+> https://lore.kernel.org/lkml/CAHk-=wgoxnmsj8GEVFJSvTwdnWm8wVJthefNk2n6+4TC=20e0Q@mail.gmail.com/
+> (I saw your follow up; this patch is one of the less controversial
+> ones though since the types are not ones that are promoted).
+
+That said, I hope you are very well aware of the case.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 

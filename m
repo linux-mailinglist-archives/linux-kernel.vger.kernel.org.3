@@ -2,123 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B854DD898
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4244DD89C
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235531AbiCRLAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 07:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
+        id S235560AbiCRLA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 07:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbiCRLAc (ORCPT
+        with ESMTP id S231196AbiCRLA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 07:00:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1EB194A8B;
-        Fri, 18 Mar 2022 03:59:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55DB16167A;
-        Fri, 18 Mar 2022 10:59:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C39BC340E8;
-        Fri, 18 Mar 2022 10:59:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647601152;
-        bh=vyWz3nZcjmadxmmuXhgRCMEK5Ta8y0I/eQrQ/ZUD/3s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NZybcPM1cXdhSey7QtCWKQeMA1AqbBLATP7ZF9VXUHzq8H1vu5Z/dJjhw8Uf/hPeQ
-         O1WT9HJGw/LobCGgFLgMUL/11ANxExYV7HNxo8idT5g9/Oi3OhYVMvr1xFxwaLlc5w
-         ys45yTeteZ+ngd4ljfqcrCH/0YRn9TrMUIQhDnQO5nKLn4uIz4lDPczrW8tkZkCJEp
-         sN6ESEVz8Ecmn60ad0J+t2Ousi+ghaIeo5PkfQBJBRsKGQ3e2raZ6iG3e7m/0I5hI9
-         xWyVyu1i4Vy5PBefCMo0ozq14KapkgC7yw4JiGBndDEkkR7ScOr8anNGSFox0y8zRn
-         BJl4lkd0zDcMw==
-Date:   Fri, 18 Mar 2022 11:59:08 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Peter Rosin <peda@axentia.se>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [v6 2/3] i2c: muxes: pca954x: Add MAX735x/MAX736x support
-Message-ID: <YjRl/DUeLIJJxuOi@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220216074613.235725-1-patrick.rudolph@9elements.com>
- <20220216074613.235725-3-patrick.rudolph@9elements.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7Nma04pQlY1cRCe6"
-Content-Disposition: inline
-In-Reply-To: <20220216074613.235725-3-patrick.rudolph@9elements.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 18 Mar 2022 07:00:56 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808E52D7A8F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:59:37 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id n7-20020a17090aab8700b001c6aa871860so1902348pjq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=JMgc3wka+o++Hf45XXTdLFL85p2TEAv1xtfwOX1r76c=;
+        b=AuNJiLAsKwFcK6iA+Zi89DPL7jrMeQNTswTDATRhGHGQ6i7F9xQiXUlp7F+CYjEFQX
+         zTH3aYxX7+Q40QPfHH0UxJjXD+YIh9mvxnlhPtYWKF//98nmVmKNVSnY51Jf4Dq47c/E
+         LDsdOpdkPsP9bC85I0Ppris6hlxo44ZsvKVk81trvQwK1FsXptjqOud45EHUkFZvK8Gq
+         GQKXJ151mXTravr/px/gbbsrpd4qZh+9hkZBRbCLlh/sHzY5RcqgY7VTqA6F8kRvX0TK
+         cSSlemwmfwiIlssb/lTzfIo2dWSUtoGRCih/hiQqoC+blPetmdWpIuYQ3KHZe6g/xZzI
+         n9Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=JMgc3wka+o++Hf45XXTdLFL85p2TEAv1xtfwOX1r76c=;
+        b=TlKT9Cs066y51V4MUzge+xQBtsg6klyHn3t/C+JdTOR6zsphNjXvD5GXNkGj2f8Xnc
+         S4/UZO8YEwtHgD0PZEmpoa1KNYRJylUuPFi8QJ7tua7URMA/xp4i9nP/Ge/5tfGTNVDN
+         BGiJjmzB1we/DQEpxA7HEzjMRS2jHUMu4PrgaQ4igoE66EycSCr3pdB4i/UvX9vO1Xnt
+         mu7X6cdpMrYsVN7PLwqPLAEHYUhLlz4O5Br/0+P/Q5Lp0kDkhDiqySAlFgXBB0YV5pkN
+         9+6wEbDnKUljWC0wStgeei3EeevGnOOlpdRp5RJhXyFQBfo4p3rt9lesHGyZ5VqqJ/W6
+         DzmQ==
+X-Gm-Message-State: AOAM530iJ5y0wMzfvi/CYofNCy9TQlzOMyDFaGvXXSiKtWkfpK9URu9R
+        Kwkqbux8VRaMQALgLrnyoF8=
+X-Google-Smtp-Source: ABdhPJwbsNlyjNQOdLY45VJtqKPS4IVi89HNLEj8CmVBUk5EsrBeA3YP8NMjNusRYeviVq2HoajRcg==
+X-Received: by 2002:a17:90b:4c44:b0:1bf:f00:3735 with SMTP id np4-20020a17090b4c4400b001bf0f003735mr21180733pjb.168.1647601177091;
+        Fri, 18 Mar 2022 03:59:37 -0700 (PDT)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id z12-20020aa7888c000000b004f3fc6d95casm9420298pfe.20.2022.03.18.03.59.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 03:59:36 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>,
+        Igor Grinberg <grinberg@compulab.co.il>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH v2] ARM: pxa: Change clk_disable to clk_disable_unprepare
+Date:   Fri, 18 Mar 2022 10:59:31 +0000
+Message-Id: <20220318105931.18480-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220316022122.7426-1-linmq006@gmail.com>
+References: <20220316022122.7426-1-linmq006@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The corresponding API for clk_prepare_enable is clk_disable_unprepare,
+other than clk_disable.
 
---7Nma04pQlY1cRCe6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix this by changing clk_disable to clk_disable_unprepare.
 
-On Wed, Feb 16, 2022 at 08:46:11AM +0100, Patrick Rudolph wrote:
-> Add support for the following Maxim chips using the existing PCA954x
-> driver:
-> - MAX7356
-> - MAX7357
-> - MAX7358
-> - MAX7367
-> - MAX7368
-> - MAX7369
->=20
-> All added Maxim chips behave like the PCA954x, where a single SMBUS byte
-> write selects up to 8 channels to be bridged to the primary bus.
->=20
-> The MAX7357 exposes 6 additional registers at Power-On-Reset and is
-> configured to:
->  - Disabled interrupts on bus locked up detection
->  - Enable bus locked-up clearing
->  - Disconnect only locked bus instead of all channels
->=20
-> While the MAX7357/MAX7358 have interrupt support, they don't act as
-> interrupt controller like the PCA9545 does. Thus don't enable IRQ support
-> and handle them like the PCA9548.
->=20
-> Tested using the MAX7357 and verified that the stalled bus is disconnected
-> while the other channels remain operational.
->=20
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Fixes: 7a5d9a913f91 ("ARM: pxa: ulpi: fix ulpi timeout and slowpath warn")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+changes in v2:
+- fix typo in commit message.
+---
+ arch/arm/mach-pxa/cm-x300.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Peter, are you happy with this patch series?
+diff --git a/arch/arm/mach-pxa/cm-x300.c b/arch/arm/mach-pxa/cm-x300.c
+index 2e35354b61f5..fcf5b8fa5b9f 100644
+--- a/arch/arm/mach-pxa/cm-x300.c
++++ b/arch/arm/mach-pxa/cm-x300.c
+@@ -538,7 +538,7 @@ static int cm_x300_u2d_init(struct device *dev)
+ 
+ 		err = cm_x300_ulpi_phy_reset();
+ 		if (err) {
+-			clk_disable(pout_clk);
++			clk_disable_unprepare(pout_clk);
+ 			clk_put(pout_clk);
+ 		}
+ 	}
+-- 
+2.17.1
 
-All the best,
-
-   Wolfram
-
-
---7Nma04pQlY1cRCe6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmI0ZfwACgkQFA3kzBSg
-KbYDDw//bVx/JYczUSag1uZnYX1KcJ+ylu1lZWgyL7TEQc8xeBluNsHUdkYXzway
-9uGkQIcB6bLCAymsW88MnLCKGQImGnZT3KIxtCnGwp/K5tTzAxAZkVrvLy6zvnnG
-xt+/rokDndBEQA8UThOp4iKlI5zCbpkCeNDXuu+AK95o0PNPP1w6smgCg86AnHzS
-BpZM3FscZyFpaNdLY2vwvbEY/Po6E/KwJr12u2IAp3h2VCkmpf9L3cBfmY0A+y5u
-ddrIwfTsTowa7rEX4HBzlU8Jo1pwN2NAVkeakMx2YE4Oq51aLO1M8w3LHouCCmwt
-jZNMlG2R75eDvQlrggWoUHH+rV/nIPVyE29r9jKu+qiPzkqJjbdnjOzX3ftmPCNF
-GmGOzTUITCgeyZVvuOzkK9qSYrK/xykM5C7rUMWKAxfUf0+k+CPJ+GJMEQquJ/ci
-YRZsgjDsnvID27TNxhyjpUDGBsjG/tZNi+3wj6lbOURdr/1TgWQUfR38BxxtowG5
-Ejm8mbXsQZ1cuIvPv7Swyk6soJSol+Cn5LPoN1dNSJgTMkUmztw34KGS46XRGrnU
-PH/9CVeTXX4grWtQnfSc88r/6yrAaDHYnUwQOFxfIUteeaD7z0viVLnSXFWtvXXj
-ibGjYU11QyrGp9Z4YAwg5khvGOcLoGNAhrlRy/Ew+TQDlyed7os=
-=8TIT
------END PGP SIGNATURE-----
-
---7Nma04pQlY1cRCe6--

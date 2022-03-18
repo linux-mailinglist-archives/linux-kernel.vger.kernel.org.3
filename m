@@ -2,117 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFD74DD5D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 056854DD5E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233546AbiCRILE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 04:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60876 "EHLO
+        id S233615AbiCRIRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233521AbiCRILC (ORCPT
+        with ESMTP id S232272AbiCRIRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:11:02 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2132.outbound.protection.outlook.com [40.107.255.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02648C7E4;
-        Fri, 18 Mar 2022 01:09:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=APp85Mg0nBONQApPOWzyiJ2OP53QXEiyCiEbeY8QxaEeBUqZdZoAeg5632bVGAyISesTJ2stW8jSHKLjVUPFhfvMVD82L7/4EBn7eyvJv2apPU4Tu02O0ct7bCfFOKafIVvAPneUfj7Sl+M8EaLo/KQDslJxjZtBUo97D0kZ5B5g/bp54DOfaPbbOLswy7RrquCFHa5/9fVgqg+i8Nz/RLG6CzYhbaLOSDF/EUclZp+YvAJefBVr8hiEwHMHKQbgyNOqo+oKEZlYbYbg23MDCsm1G/LHzSmglfXARqQkcFkkViBbObO2Ii4xhj7eNc46NMKKwxjU8eOBr8yNIAUGFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w5Jqp/4gcFrm3UGXbXyrognXL/xFgjXEti9YxUQ6Ot0=;
- b=B1yJvjzXsTbk07/xscsL7RZ0cN9BBdhDN24tuHqE4Ui6qoNYHDHkxlb2YnBxLN2YPFBmCQ8OgvfGiR3kna4BjUaLMVjaDfrt/WQ0LrDwYW/Pq1njcYqnvQXIoglHONLW7Dv2XbUxIAIJPq1uw0fFoHRBNrLNZp86DseWTMZnSTJ2DoudYk9wmCzOtV8arPiyC8wz2PF+Z1o6hQWKK0IdQUtfsB46lrq6SqVcv+i7ZRuE3265U1580Fze+OB0wCH+8nVqmz9WSewtrMrWORLLWVMPADXqCnEIEJ8OLjCsvLy04yll54/J4pIE+1qy+01Ak0N5Asc2nwqsjJ/aYMHoVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w5Jqp/4gcFrm3UGXbXyrognXL/xFgjXEti9YxUQ6Ot0=;
- b=DYuugi8nkD3XQVUn6zRU3XI9LWK8tyxdiT4xL7IKMYPKwRpiBeTwe/fnw+Z8MvqsKvtrCV41MbXLNWcrvhG5h5jFOx0z4JYmmeyNCb83Tq3zzgPjoucKmMY0z94C2mFAa1Ovo3RIz92cFLL1D7zdgzsEsn8HccwnXRTAK2xpECmXUXBfcjBbTBo/hX/fiWZFHaXGEQBciOjiX4sk006YJdiLbAayVin68ls64/3aPXr8XAV+w1q0ScC0stT2ZN+pOeErr7Ni2voeBSBmKgIqRp8qbtul1eg30aZFpjVvHG9MlGviPPBAufQo8+rwbuYDSuH4X7PocggmbxOu1f65EA==
-Received: from SG2PR06MB2315.apcprd06.prod.outlook.com (2603:1096:4:b::19) by
- SG2PR06MB3823.apcprd06.prod.outlook.com (2603:1096:4:ae::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5081.14; Fri, 18 Mar 2022 08:09:35 +0000
-Received: from SG2PR06MB2315.apcprd06.prod.outlook.com
- ([fe80::ac36:fcaf:45dc:f830]) by SG2PR06MB2315.apcprd06.prod.outlook.com
- ([fe80::ac36:fcaf:45dc:f830%6]) with mapi id 15.20.5061.026; Fri, 18 Mar 2022
- 08:09:35 +0000
-From:   Howard Chiu <howard_chiu@aspeedtech.com>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Troy Lee <troy_lee@aspeedtech.com>
-Subject: [PATCH v1] ARM: dts: aspeed: ast2600-evb: Enable RX delay for
- MAC0/MAC1
-Thread-Topic: [PATCH v1] ARM: dts: aspeed: ast2600-evb: Enable RX delay for
- MAC0/MAC1
-Thread-Index: Adg6mrvEVaC9ZcljR92LSXIT/D+xfQ==
-Date:   Fri, 18 Mar 2022 08:09:35 +0000
-Message-ID: <SG2PR06MB2315A7BAE2F1B384CDADB57FE6139@SG2PR06MB2315.apcprd06.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c959ac70-e38c-4975-7afd-08da08b6a3f2
-x-ms-traffictypediagnostic: SG2PR06MB3823:EE_
-x-microsoft-antispam-prvs: <SG2PR06MB38237FF7F2923AA7D081DA22E6139@SG2PR06MB3823.apcprd06.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lQamRmCZhxvGDqOdCYOQYcHRs1iI7ko+iEwl8qwFYc2NEZIrTr1/oCfmumScL9aMhc4JMayBgEYKHIHYqW0ocoamOmjM3h3A4JnL4mfKC6Mx1SmV2qGL9Im4fsKUtRjqnCiFGMoGO6i/LJUor8HsQHQ6CiA9a9ZUIPVJWsel0H8lYp+V11nw59+JomFzK79ck1kKYCi2goJmZb2CMNKfyO3aMxD03HP3YaeBOQOg/ayx3aPsNbqQV+shWGc024pYBLm/5g0bK7gBRr0iQBFNLT4kmgPrbNBI7SrDhjQ+4cpNyy1azEKGMv4w44V4l0DqyqMG5uk0APgDPyc1o/NH/HPWP0QEBN9fCXacJBczUXPIKe2D5jUSsVLG6Z9JA0T9pCu/LF8WITCMbuI1jeduMVixGv6OlE6hxrbr+lmjWnDQ/+aRg7NHLOMFyKhc1Yhtpuciro3wfJiPsOPuTumV+Lxy0/hvnCvY+ureqbmav8FeN3C/hH1AsX6HICso4S5eVJ2WFVf8epnVBPsiIPnaEDOxvRcwI7qR2h97DoAHfh4RUzaVz7O59U3mYDjNdPJncQMroAnMt6W8gAkRWqt0/CafD0fRV5p9IJ+xttTg5KrNgi6PmsfvxM9Hz1r+OL/av5LSGvipoe2jdl/UGBeotaoBs0jPspqX1NbZDE5rsqW8TQ7o8VRexZFJ41eTBFceezielBTHBlwavYngloqEqDCURC7DW2bM3yV8OR0QXPY3WXzYQmYUJH4qAZ10bNdhohVPA8FauojmfZY8xtQFfocQJ31QGsMBBBCg7oCyFbk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB2315.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(396003)(346002)(39840400004)(376002)(366004)(136003)(508600001)(107886003)(76116006)(66446008)(4326008)(64756008)(66476007)(66556008)(38100700002)(66946007)(8676002)(26005)(186003)(71200400001)(966005)(9686003)(7696005)(6506007)(38070700005)(122000001)(55016003)(110136005)(5660300002)(2906002)(316002)(83380400001)(33656002)(86362001)(8936002)(52536014);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DlYvnwgb2fbAmpS7DF9UYGORFClbZKvIB9hHZDE0WGBDarVSeOt/LY83oFzo?=
- =?us-ascii?Q?b7vODTTBSA5dopGqtlgrgvR2HCJ0tt1kZUCycz6Zzt016ttqvfCvl86bzKDY?=
- =?us-ascii?Q?nGiUEIhvop0RuU3tCcwejItFkiQf687/VRqxtddF4P0m7fxQ0lr11gytYPeo?=
- =?us-ascii?Q?Lc1bhhwa53j/O0DdrQWp0TghzjWmLiFT4r8YqLixwGA6wMdyN6A1dtTSeAEV?=
- =?us-ascii?Q?BpR2eFiy2z0afevhlWc0GRRxLPDptUHzBjThYcKH96jLyG5BAbq4kG9X8JYY?=
- =?us-ascii?Q?Pu3i44WWvEAKrhxiq61KYbEBR7QV0XwONkgjt5n77wSLxDBEfcCHt0vtm4e/?=
- =?us-ascii?Q?rsR32auj5MvNlnvcxX9N8o2aZ97RF916R7ZUHdu7eVe8a4G9NK4NVzg4A211?=
- =?us-ascii?Q?Fy67UdS1NBMHDz51SA6tXOuC3cQq9J6PfD3T6hg7OWhDvbHTZbc977ljt7pw?=
- =?us-ascii?Q?9lWCI2EaIu3yUs9uQEKRbU6hp8X7B/yAAsK5Cq5xzZzL56TQBIWw44qJe3tM?=
- =?us-ascii?Q?PCYt6bYksqlBRwlHkVC+rFO40eAPO+9qAjGD6yTH9ibUWbamXx3hxjXqtt05?=
- =?us-ascii?Q?fTS01vNILDaKiwSdmiptWeT6wLy/9L0ShwH+FU4oqWUih/hQlhrhOyTTI8Qa?=
- =?us-ascii?Q?qtQioWU/UZsRZzT2Q7kcsSZlZ/80TGBBTmheIXg/aaEoD0h9swil1zB739yB?=
- =?us-ascii?Q?xkUHVG7tRQhCyPwyz+oTdXkZEd6p7jAeFHQODI90fdoLrctB6+BfAt34YWE7?=
- =?us-ascii?Q?O2h8mm7X34RbV499B3VxGLDiMu0pS0O0jlqAizUt4JKqqZl0xrIkdybf9Jds?=
- =?us-ascii?Q?GzL0u3AcScZ1Fz1dhuaiBAwyjamCJUFefsxJzDsF9IYxmYOOMWEm3nnSGgyu?=
- =?us-ascii?Q?TZVGf4U7T3SpzUrRh7uTM/seUfzBiuc0/rsG4H9YRmq+HeolbgMU6jXHjOX1?=
- =?us-ascii?Q?hsgB6LNw4aiGyZRG0127XFYxHSC44/1QYnDQI/CWqOIIrria4AGjJWKaCI87?=
- =?us-ascii?Q?wAh0sAZ3BayOoYNkelCz8X6xlZSkXm8DCy2vTIO6BBkPm/spfAJm4KKyx6vm?=
- =?us-ascii?Q?DQegYd55iCzQycL1Bzevh2C2v9xufArOdJOgD8pX8//+dZ9/bKeMDQh1QKyv?=
- =?us-ascii?Q?oigpFxoqyH/p9uECs7D8Xk9tWt/8Z9LXAmoY8NGt4nIfv3QzdcWDZkK1OC/n?=
- =?us-ascii?Q?zIECuWqVX5UnB5sRiG8Zn4XjyF5jriXZDanRY3lGrVMHKx6BEps9cY/vmfrT?=
- =?us-ascii?Q?Ojln3QLyVNosuhpWb22zA/3UU3RIujgZNh+iHLL46RSaLagArjuVNaIB/wbR?=
- =?us-ascii?Q?mixgJWQpykqoJ5LSiP1dt91FikSQHDmpNgjvP/ABVOQPlhb8tZxgh5d9L0VL?=
- =?us-ascii?Q?igesNBZAG7wU6SSbhDKpnUDEGHdtXe5i4CIIqrNxh9nyaxv0zlBQa2I3NCAO?=
- =?us-ascii?Q?avr8z7vb3+EJsoe7v+dmKdYa2jSRkUVF254Y7zSoUHbqMuAy9oPLFA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 18 Mar 2022 04:17:08 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDF32D41E1;
+        Fri, 18 Mar 2022 01:15:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647591349; x=1679127349;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=MxZ3/UUA6jnsR2e2L79nuA1GZD7up32m7+v7rUHWY7E=;
+  b=JMhqT4LG/AHW7AwRqUTC9vlJ77YkRFOAK7rnkjC7rUVX2Wqg1CiTn6D6
+   Bmkpp9J8Qe/K9tQAxXiJdAClRwrR285yHFqWVi6nguXVTyg5s02YADjm3
+   9DtSNmm3p8L5JPp0OgabrCDegW2zPbT89419y4XigkQWsJ7DEO/zBQQtp
+   STpxc23QoWXTwvJAm3l9sQg6xHVp/+0o0WoMDklHpPhVj1ox1D3Tovvcu
+   PO+uAoXaWrvMbtmU+NAbgH6abU20I/A8oy+O/nr0dMA+LpL0fSUTo+lS+
+   3AkO66Q9TvO85WxHxMEGY6TRFp77cxPj7gEQZ3mCnLxO9WgrvV9OrAwu8
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="237704396"
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="237704396"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 01:15:49 -0700
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="558318665"
+Received: from zengguan-mobl1.ccr.corp.intel.com (HELO [10.254.213.254]) ([10.254.213.254])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 01:15:44 -0700
+Message-ID: <e8cc5ad7-951a-0448-074d-94eaa83b89b6@intel.com>
+Date:   Fri, 18 Mar 2022 16:15:32 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB2315.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c959ac70-e38c-4975-7afd-08da08b6a3f2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Mar 2022 08:09:35.3681
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NsNaXlU/GOh2uLkxy6wWhLCZERr/y3+n0SNLMJTSG2z3qS+q4ReNOFx6hVbFTQuQ7nOYbmKNbUCEuCH3PieuIlyOnQYeEuROJEskcHZTteQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3823
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 0/8] IPI virtualization support for VM
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+References: <20220304080725.18135-1-guang.zeng@intel.com>
+From:   Zeng Guang <guang.zeng@intel.com>
+In-Reply-To: <20220304080725.18135-1-guang.zeng@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,69 +80,225 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since mac0/1 and mac2/3 are physically located on different die,
-they have different properties by nature, which is mac0/1 has smaller delay=
- step.
-
-The property 'phy-mode' on ast2600 mac0 and mac1 is recommended to set to '=
-rgmii-rxid'
-which enables the RX interface delay from the PHY chip.
-Refer page 45 of SDK User Guide v08.00
-https://github.com/AspeedTech-BMC/openbmc/releases/download/v08.00/SDK_User=
-_Guide_v08.00.pdf
-
-Set mac delay according to the mactest result.
-
-Signed-off-by: Howard Chiu <howard_chiu@aspeedtech.com>
----
- arch/arm/boot/dts/aspeed-ast2600-evb.dts | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/boot/dts/aspeed-ast2600-evb.dts b/arch/arm/boot/dts/a=
-speed-ast2600-evb.dts
-index b7eb552640cb..db16ba307e97 100644
---- a/arch/arm/boot/dts/aspeed-ast2600-evb.dts
-+++ b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
-@@ -103,7 +103,7 @@ ethphy3: ethernet-phy@0 {
- &mac0 {
- 	status =3D "okay";
-=20
--	phy-mode =3D "rgmii";
-+	phy-mode =3D "rgmii-rxid";
- 	phy-handle =3D <&ethphy0>;
-=20
- 	pinctrl-names =3D "default";
-@@ -114,7 +114,7 @@ &mac0 {
- &mac1 {
- 	status =3D "okay";
-=20
--	phy-mode =3D "rgmii";
-+	phy-mode =3D "rgmii-rxid";
- 	phy-handle =3D <&ethphy1>;
-=20
- 	pinctrl-names =3D "default";
-@@ -141,6 +141,21 @@ &mac3 {
- 	pinctrl-0 =3D <&pinctrl_rgmii4_default>;
- };
-=20
-+&syscon {
-+	mac0-clk-delay =3D <0x10 0x0a
-+			  0x10 0x10
-+			  0x10 0x10>;
-+	mac1-clk-delay =3D <0x10 0x0a
-+			  0x10 0x10
-+			  0x10 0x10>;
-+	mac2-clk-delay =3D <0x08 0x04
-+			  0x08 0x04
-+			  0x08 0x04>;
-+	mac3-clk-delay =3D <0x08 0x04
-+			  0x08 0x04
-+			  0x08 0x04>;
-+};
-+
- &emmc_controller {
- 	status =3D "okay";
- };
---=20
-2.25.1
+On 3/4/2022 4:07 PM, Zeng, Guang wrote:
+> Currently, issuing an IPI except self-ipi in guest on Intel CPU
+> always causes a VM-exit. It can lead to non-negligible overhead
+> to some workloads involving frequent IPIs when running in VMs.
+>
+> IPI virtualization is a new VT-x feature, targeting to eliminate
+> VM-exits on source vCPUs when issuing unicast, physical-addressing
+> IPIs. Once it is enabled, the processor virtualizes following kinds
+> of operations that send IPIs without causing VM-exits:
+> - Memory-mapped ICR writes
+> - MSR-mapped ICR writes
+> - SENDUIPI execution
+>
+> This patch series implements IPI virtualization support in KVM.
+>
+> Patches 1-4 add tertiary processor-based VM-execution support
+> framework, which is used to enumerate IPI virtualization.
+>
+> Patch 5 handles APIC-write VM exit due to writes to ICR MSR when
+> guest works in x2APIC mode. This is a new case introduced by
+> Intel VT-x.
+>
+> Patch 6 disallow the APIC ID change unconditionally.
+>
+> Patch 7 provide userspace capability to set maximum possible VCPU
+> ID for current VM. IPIv can refer to this value to allocate memory
+> for PID-pointer table.
+>
+> Patch 8 implements IPI virtualization related function including
+> feature enabling through tertiary processor-based VM-execution in
+> various scenarios of VMCS configuration, PID table setup in vCPU
+> creation and vCPU block consideration.
+>
+> Document for IPI virtualization is now available at the latest "Intel
+> Architecture Instruction Set Extensions Programming Reference".
+>
+> Document Link:
+> https://software.intel.com/content/www/us/en/develop/download/intel-architecture-instruction-set-extensions-programming-reference.html
+>
+> We did experiment to measure average time sending IPI from source vCPU
+> to the target vCPU completing the IPI handling by kvm unittest w/ and
+> w/o IPI virtualization. When IPI virtualization enabled, it will reduce
+> 22.21% and 15.98% cycles consuming in xAPIC mode and x2APIC mode
+> respectively.
+>
+> --------------------------------------
+> KVM unittest:vmexit/ipi
+>
+> 2 vCPU, AP was modified to run in idle loop instead of halt to ensure
+> no VM exit impact on target vCPU.
+>
+>                  Cycles of IPI
+>                  xAPIC mode              x2APIC mode
+>          test    w/o IPIv  w/ IPIv       w/o IPIv  w/ IPIv
+>          1       6106      4816          4265      3768
+>          2       6244      4656          4404      3546
+>          3       6165      4658          4233      3474
+>          4       5992      4710          4363      3430
+>          5       6083      4741          4215      3551
+>          6       6238      4904          4304      3547
+>          7       6164      4617          4263      3709
+>          8       5984      4763          4518      3779
+>          9       5931      4712          4645      3667
+>          10      5955      4530          4332      3724
+>          11      5897      4673          4283      3569
+>          12      6140      4794          4178      3598
+>          13      6183      4728          4363      3628
+>          14      5991      4994          4509      3842
+>          15      5866      4665          4520      3739
+>          16      6032      4654          4229      3701
+>          17      6050      4653          4185      3726
+>          18      6004      4792          4319      3746
+>          19      5961      4626          4196      3392
+>          20      6194      4576          4433      3760
+>
+> Average cycles  6059      4713.1        4337.85   3644.8
+> %Reduction                -22.21%                 -15.98%
+>
+> --------------------------------------
+> IPI microbenchmark:
+> (https://lore.kernel.org/kvm/20171219085010.4081-1-ynorov@caviumnetworks.com)
+>
+> 2 vCPUs, 1:1 pin vCPU to pCPU, guest VM runs with idle=poll, x2APIC mode
+>
+> Result with IPIv enabled:
+>
+> Dry-run:                         0,             272798 ns
+> Self-IPI:                  5094123,           11114037 ns
+> Normal IPI:              131697087,          173321200 ns
+> Broadcast IPI:                   0,          155649075 ns
+> Broadcast lock:                  0,          161518031 ns
+>
+> Result with IPIv disabled:
+>
+> Dry-run:                         0,             272766 ns
+> Self-IPI:                  5091788,           11123699 ns
+> Normal IPI:              145215772,          174558920 ns
+> Broadcast IPI:                   0,          175785384 ns
+> Broadcast lock:                  0,          149076195 ns
+>
+>
+> As IPIv can benefit unicast IPI to other CPU, Normal IPI test case gain
+> about 9.73% time saving on average out of 15 test runs when IPIv is
+> enabled.
+>
+> Normal IPI statistics (unit:ns):
+>          test    w/o IPIv        w/ IPIv
+>          1       153346049       140907046
+>          2       147218648       141660618
+>          3       145215772       117890672
+>          4       146621682       136430470
+>          5       144821472       136199421
+>          6       144704378       131676928
+>          7       141403224       131697087
+>          8       144775766       125476250
+>          9       140658192       137263330
+>          10      144768626       138593127
+>          11      145166679       131946752
+>          12      145020451       116852889
+>          13      148161353       131406280
+>          14      148378655       130174353
+>          15      148903652       127969674
+>
+> Average time    145944306.6     131742993.1 ns
+> %Reduction                      -9.73%
+>
+> --------------------------------------
+> hackbench:
+>
+> 8 vCPUs, guest VM free run, x2APIC mode
+> ./hackbench -p -l 100000
+>
+>                  w/o IPIv        w/ IPIv
+> Time            91.887          74.605
+> %Reduction                      -18.808%
+>
+> 96 vCPUs, guest VM free run, x2APIC mode
+> ./hackbench -p -l 1000000
+>
+>                  w/o IPIv        w/ IPIv
+> Time            287.504         235.185
+> %Reduction                      -18.198%
+>
+> --------------------------------------
+> v6->v7:
+> 1. Revise kvm_apic_write_nodecode() on dealing with
+>     vICR busy bit in x2apic mode
+> 2. Merge PID-table memory allocation with max_vcpu_id
+>     into IPIv enabling patch
+> 3. Change to allocate PID-table, setup vCPU's PID-table
+>     entry and IPIv related VMCS fields once IPIv can
+>     be enabled, which support runtime enabling IPIv.
+>
+> v5->v6:
+> 1. Adapt kvm_apic_write_nodecode() implementation based
+>     on Sean's fix of x2apic's ICR register process.
+> 2. Drop the patch handling IPIv table entry setting in
+>     case APIC ID changed, instead applying Levitsky's patch
+>     to disallow setting APIC ID in any case.
+> 3. Drop the patch resizing the PID-pointer table on demand.
+>     Allow userspace to set maximum vcpu id at runtime that
+>     IPIv can refer to the practical value to allocate memory
+>     for PID-pointer table.
+>
+> v4 -> v5:
+> 1. Deal with enable_ipiv parameter following current
+>     vmcs configuration rule.
+> 2. Allocate memory for PID-pointer table dynamically
+> 3. Support guest runtime modify APIC ID in xAPIC mode
+> 4. Helper to judge possibility to take PI block in IPIv case
+>
+> v3 -> v4:
+> 1. Refine code style of patch 2
+> 2. Move tertiary control shadow build into patch 3
+> 3. Make vmx_tertiary_exec_control to be static function
+>
+> v2 -> v3:
+> 1. Misc change on tertiary execution control
+>     definition and capability setup
+> 2. Alternative to get tertiary execution
+>     control configuration
+>
+> v1 -> v2:
+> 1. Refine the IPIv enabling logic for VM.
+>     Remove ipiv_active definition per vCPU.
+>
+> --------------------------------------
+>
+> Chao Gao (1):
+>    KVM: VMX: enable IPI virtualization
+>
+> Maxim Levitsky (1):
+>    KVM: x86: lapic: don't allow to change APIC ID unconditionally
+>
+> Robert Hoo (4):
+>    x86/cpu: Add new VMX feature, Tertiary VM-Execution control
+>    KVM: VMX: Extend BUILD_CONTROLS_SHADOW macro to support 64-bit
+>      variation
+>    KVM: VMX: Detect Tertiary VM-Execution control when setup VMCS config
+>    KVM: VMX: dump_vmcs() reports tertiary_exec_control field as well
+>
+> Zeng Guang (2):
+>    KVM: x86: Add support for vICR APIC-write VM-Exits in x2APIC mode
+>    KVM: x86: Allow userspace set maximum VCPU id for VM
+>
+>   arch/x86/include/asm/kvm_host.h    |   6 ++
+>   arch/x86/include/asm/msr-index.h   |   1 +
+>   arch/x86/include/asm/vmx.h         |  11 +++
+>   arch/x86/include/asm/vmxfeatures.h |   5 +-
+>   arch/x86/kernel/cpu/feat_ctl.c     |   9 +-
+>   arch/x86/kvm/lapic.c               |  47 ++++++++--
+>   arch/x86/kvm/vmx/capabilities.h    |  13 +++
+>   arch/x86/kvm/vmx/evmcs.c           |   2 +
+>   arch/x86/kvm/vmx/evmcs.h           |   1 +
+>   arch/x86/kvm/vmx/posted_intr.c     |  15 ++-
+>   arch/x86/kvm/vmx/vmcs.h            |   1 +
+>   arch/x86/kvm/vmx/vmx.c             | 141 +++++++++++++++++++++++++++--
+>   arch/x86/kvm/vmx/vmx.h             |  65 +++++++------
+>   arch/x86/kvm/x86.c                 |  11 +++
+>   14 files changed, 280 insertions(+), 48 deletions(-)
+Kindly ping ! :)
 

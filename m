@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B4D4DE42A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 23:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B3D4DE42B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 23:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241358AbiCRWpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 18:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
+        id S241386AbiCRWpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 18:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241342AbiCRWpP (ORCPT
+        with ESMTP id S241343AbiCRWpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Mar 2022 18:45:15 -0400
 Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEDB19B07E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A7819B087;
         Fri, 18 Mar 2022 15:43:53 -0700 (PDT)
 Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22IK15Lm027630;
+        by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22IMbsiP020011;
         Fri, 18 Mar 2022 22:43:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pps0720;
- bh=v6iZXwA2Am8swC6551Es3v1s4q+s9epkgRTwcKxjD5I=;
- b=ZKmXMzKAjSa1mG8zimYXg3cPnPYnqgGlgznfrG9o3jVlxuqzXFPIa7+nfXsRiU5toM7k
- LsCXeSzmaGGhAHBeblEAeUdF+dhtP3yMsT9nqJ9OhYdzmeZZSGORSQ5P0YwbCdFcPnEQ
- mZaNiVWrt284+hlO+nzNfVBc1231vXrP9T7tW8gANBuOLikY4K7W7367Noz//fyR5EGa
- KZwi89lEq8VnciKLkarFaq9rp5z5r7n78P91i8G0yocg6j4aZRVZV7aEuuB4tT9dUiY9
- gUlPL3C0dJt5dUxvZnACEriUs7my+2T/DWIeLJcOYhAUx/ZDevw6gYajJx77pP0Lqdf0 dg== 
-Received: from g9t5009.houston.hpe.com (g9t5009.houston.hpe.com [15.241.48.73])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3evu2wc1hq-1
+ bh=BqkAywTgWdlW1+XBiXg5Rfy8g9DvAfqYPHFJLBdTzOk=;
+ b=ja2jcvQw1ZuQnneZx5pTsQ7ncsg2jrUi8WGCyRij34aRr4/nw/QSmFQli4ATQfjfdcjm
+ xlZmolnOnQiTORyC9vRo7yhile1VX07gsUvqAWNzN0pIa+9LaSEsX2QNmtcBHAcWMzhH
+ lbZ9TegffocGLCiz5QJhV0maQYZnp0kVIYERpfR+jTu262FQfeWvSy36XN+LSZYSjVUO
+ 9j1Kkl6ccFQ2y4UgbqlK3+5Y+UbKw4ls/87OGrd1BWO8MN8nerQn28OePeXDj53ymAVV
+ H0XckecD1aNdO28Ff9VU17Gy4GzMhfxZdDzIpCdkU1mOsL15CIM0t5RrNSHVMMdVg5KT 2A== 
+Received: from g4t3426.houston.hpe.com (g4t3426.houston.hpe.com [15.241.140.75])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3evu2wc1hs-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 22:43:13 +0000
+        Fri, 18 Mar 2022 22:43:14 +0000
 Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
-        by g9t5009.houston.hpe.com (Postfix) with ESMTP id D8C1858;
-        Fri, 18 Mar 2022 22:43:12 +0000 (UTC)
+        by g4t3426.houston.hpe.com (Postfix) with ESMTP id D6B904E;
+        Fri, 18 Mar 2022 22:43:13 +0000 (UTC)
 Received: from dog.eag.rdlabs.hpecorp.net (dog.eag.rdlabs.hpecorp.net [128.162.243.181])
-        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id F00C74A;
-        Fri, 18 Mar 2022 22:43:11 +0000 (UTC)
+        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id ED66149;
+        Fri, 18 Mar 2022 22:43:12 +0000 (UTC)
 From:   Mike Travis <mike.travis@hpe.com>
 To:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -48,16 +48,16 @@ Cc:     Mike Travis <mike.travis@hpe.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Russ Anderson <russ.anderson@hpe.com>,
         linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: [PATCH v3 1/3] x86/platform/uv: Update NMI Handler for UV5
-Date:   Fri, 18 Mar 2022 17:43:02 -0500
-Message-Id: <20220318224304.174967-2-mike.travis@hpe.com>
+Subject: [PATCH v3 2/3] x86/platform/uv: Update TSC sync state for UV5
+Date:   Fri, 18 Mar 2022 17:43:03 -0500
+Message-Id: <20220318224304.174967-3-mike.travis@hpe.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220318224304.174967-1-mike.travis@hpe.com>
 References: <20220318224304.174967-1-mike.travis@hpe.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: wEbrajT8OG6Uao5moFn5UQOCwWD0lOv3
-X-Proofpoint-GUID: wEbrajT8OG6Uao5moFn5UQOCwWD0lOv3
+X-Proofpoint-ORIG-GUID: HHwULhifDUkZaLVnbF7EARGsKPn2ztiA
+X-Proofpoint-GUID: HHwULhifDUkZaLVnbF7EARGsKPn2ztiA
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
@@ -77,73 +77,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update NMI handler to interface with UV5 hardware. This involves changing
-the EVENT_OCCURRED MMR used by the hardware and removes the check for
-which NMI function is supported by UV BIOS.  The newer NMI function is
-assumed supported on UV5 and above.
+Update TSC to not check TSC sync state for uv5+ as it is not available.
+It is assumed that TSC will always be in sync for multiple chassis and
+will pass the tests for the kernel to accept it as the clocksource.
+To disable this check use the kernel start options tsc=reliable
+clocksource=tsc.
 
 Signed-off-by: Mike Travis <mike.travis@hpe.com>
 Reviewed-by: Dimitri Sivanich <dimitri.sivanich@hpe.com>
 Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
 ---
-v3: Fix mistake in UVH_EXTIO_INT0_BROADCAST check.
-    Use true/false in setting bool flag.
-v2: Use bool flag to assume NMI support for UV5 and above.
+v2: Update patch description to be more explanatory.
 ---
- arch/x86/platform/uv/uv_nmi.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+ arch/x86/kernel/apic/x2apic_uv_x.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/platform/uv/uv_nmi.c b/arch/x86/platform/uv/uv_nmi.c
-index 1e9ff28bc2e0..6d2e9ae8576b 100644
---- a/arch/x86/platform/uv/uv_nmi.c
-+++ b/arch/x86/platform/uv/uv_nmi.c
-@@ -244,8 +244,10 @@ static inline bool uv_nmi_action_is(const char *action)
- /* Setup which NMI support is present in system */
- static void uv_nmi_setup_mmrs(void)
- {
-+	bool nmi_supported = false;
+diff --git a/arch/x86/kernel/apic/x2apic_uv_x.c b/arch/x86/kernel/apic/x2apic_uv_x.c
+index f5a48e66e4f5..387d6533549a 100644
+--- a/arch/x86/kernel/apic/x2apic_uv_x.c
++++ b/arch/x86/kernel/apic/x2apic_uv_x.c
+@@ -199,10 +199,16 @@ static void __init uv_tsc_check_sync(void)
+ 	int mmr_shift;
+ 	char *state;
+ 
+-	/* Different returns from different UV BIOS versions */
++	/* UV5+, sync state from bios not available, assumed valid */
++	if (!is_uv(UV2|UV3|UV4)) {
++		pr_debug("UV: TSC sync state for UV5+ assumed valid\n");
++		mark_tsc_async_resets("UV5+");
++		return;
++	}
 +
- 	/* First determine arch specific MMRs to handshake with BIOS */
--	if (UVH_EVENT_OCCURRED0_EXTIO_INT0_MASK) {
-+	if (UVH_EVENT_OCCURRED0_EXTIO_INT0_MASK) {	/* UV2,3,4 setup */
- 		uvh_nmi_mmrx = UVH_EVENT_OCCURRED0;
- 		uvh_nmi_mmrx_clear = UVH_EVENT_OCCURRED0_ALIAS;
- 		uvh_nmi_mmrx_shift = UVH_EVENT_OCCURRED0_EXTIO_INT0_SHFT;
-@@ -255,26 +257,25 @@ static void uv_nmi_setup_mmrs(void)
- 		uvh_nmi_mmrx_req = UVH_BIOS_KERNEL_MMR_ALIAS_2;
- 		uvh_nmi_mmrx_req_shift = 62;
++	/* UV2,3,4, UV BIOS TSC sync state available */
+ 	mmr = uv_early_read_mmr(UVH_TSC_SYNC_MMR);
+-	mmr_shift =
+-		is_uv2_hub() ? UVH_TSC_SYNC_SHIFT_UV2K : UVH_TSC_SYNC_SHIFT;
++	mmr_shift = is_uv2_hub() ? UVH_TSC_SYNC_SHIFT_UV2K : UVH_TSC_SYNC_SHIFT;
+ 	sync_state = (mmr >> mmr_shift) & UVH_TSC_SYNC_MASK;
  
--	} else if (UVH_EVENT_OCCURRED1_EXTIO_INT0_MASK) {
-+	} else if (UVH_EVENT_OCCURRED1_EXTIO_INT0_MASK) { /* UV5+ setup */
- 		uvh_nmi_mmrx = UVH_EVENT_OCCURRED1;
- 		uvh_nmi_mmrx_clear = UVH_EVENT_OCCURRED1_ALIAS;
- 		uvh_nmi_mmrx_shift = UVH_EVENT_OCCURRED1_EXTIO_INT0_SHFT;
- 		uvh_nmi_mmrx_type = "OCRD1-EXTIO_INT0";
- 
--		uvh_nmi_mmrx_supported = UVH_EXTIO_INT0_BROADCAST;
--		uvh_nmi_mmrx_req = UVH_BIOS_KERNEL_MMR_ALIAS_2;
--		uvh_nmi_mmrx_req_shift = 62;
-+		nmi_supported = true;		/* assume sync valid on UV5+ */
-+		uvh_nmi_mmrx_req = 0;		/* no request bit to clear */
- 
- 	} else {
--		pr_err("UV:%s:cannot find EVENT_OCCURRED*_EXTIO_INT0\n",
--			__func__);
-+		pr_err("UV:%s:NMI support not available on this system\n", __func__);
- 		return;
- 	}
- 
- 	/* Then find out if new NMI is supported */
--	if (likely(uv_read_local_mmr(uvh_nmi_mmrx_supported))) {
--		uv_write_local_mmr(uvh_nmi_mmrx_req,
--					1UL << uvh_nmi_mmrx_req_shift);
-+	if (likely(nmi_supported) || (uv_read_local_mmr(uvh_nmi_mmrx_supported))) {
-+		if (uvh_nmi_mmrx_req)
-+			uv_write_local_mmr(uvh_nmi_mmrx_req,
-+						1UL << uvh_nmi_mmrx_req_shift);
- 		nmi_mmr = uvh_nmi_mmrx;
- 		nmi_mmr_clear = uvh_nmi_mmrx_clear;
- 		nmi_mmr_pending = 1UL << uvh_nmi_mmrx_shift;
+ 	/* Check if TSC is valid for all sockets */
 -- 
 2.26.2
 

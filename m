@@ -2,83 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E784DD4E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 07:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D57434DD50A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbiCRGxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 02:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
+        id S232878AbiCRHFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiCRGxg (ORCPT
+        with ESMTP id S231237AbiCRHFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 02:53:36 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AF5205BC5;
-        Thu, 17 Mar 2022 23:52:19 -0700 (PDT)
-Received: from kwepemi100021.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KKZSb2N9HzcZxJ;
-        Fri, 18 Mar 2022 14:52:15 +0800 (CST)
-Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
- kwepemi100021.china.huawei.com (7.221.188.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 18 Mar 2022 14:52:17 +0800
-Received: from huawei.com (10.175.104.82) by kwepemm600001.china.huawei.com
- (7.193.23.3) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 18 Mar
- 2022 14:52:16 +0800
-From:   Wang Hai <wanghai38@huawei.com>
-To:     <mchehab@kernel.org>, <laurent.pinchart@ideasonboard.com>,
-        <jacopo@jmondi.org>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wanghai38@huawei.com>
-Subject: [PATCH -next] media: platform: Fix build error
-Date:   Fri, 18 Mar 2022 15:10:28 +0800
-Message-ID: <20220318071028.1356775-1-wanghai38@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 18 Mar 2022 03:05:49 -0400
+X-Greylist: delayed 527 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Mar 2022 00:04:28 PDT
+Received: from mxout012.mail.hostpoint.ch (mxout012.mail.hostpoint.ch [IPv6:2a00:d70:0:e::312])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77722261DF4;
+        Fri, 18 Mar 2022 00:04:25 -0700 (PDT)
+Received: from [10.0.2.46] (helo=asmtp013.mail.hostpoint.ch)
+        by mxout012.mail.hostpoint.ch with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95 (FreeBSD))
+        (envelope-from <code@reto-schneider.ch>)
+        id 1nV6WI-0007d5-Fb;
+        Fri, 18 Mar 2022 07:55:30 +0100
+Received: from dynamic-145-014-211-090.glattnet.ch ([145.14.211.90] helo=[192.168.33.151])
+        by asmtp013.mail.hostpoint.ch with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95 (FreeBSD))
+        (envelope-from <code@reto-schneider.ch>)
+        id 1nV6WI-0004PK-B1;
+        Fri, 18 Mar 2022 07:55:30 +0100
+X-Authenticated-Sender-Id: reto-schneider@reto-schneider.ch
+Message-ID: <71805121-883f-6b3f-f8dd-dffd93683dc9@reto-schneider.ch>
+Date:   Fri, 18 Mar 2022 07:55:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600001.china.huawei.com (7.193.23.3)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 0/2] rtl8xxxu: Fill up more TX information
+Content-Language: en-US
+To:     Chris Chiu <chris.chiu@canonical.com>, kvalo@kernel.org,
+        Jes.Sorensen@gmail.com, davem@davemloft.net, kuba@kernel.org
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220318024216.42204-1-chris.chiu@canonical.com>
+From:   Reto Schneider <code@reto-schneider.ch>
+In-Reply-To: <20220318024216.42204-1-chris.chiu@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If VIDEO_IMX_MIPI_CSIS is y but VIDEO_DEV is n, building failed:
+Hi
 
-drivers/media/platform/nxp/imx-mipi-csis.o: in function `mipi_csis_remove':
-imx-mipi-csis.c:(.text+0x1f0): undefined reference to `v4l2_async_nf_unregister'
-ld: imx-mipi-csis.c:(.text+0x1f8): undefined reference to `v4l2_async_nf_cleanup'
-ld: imx-mipi-csis.c:(.text+0x200): undefined reference to `v4l2_async_unregister_subdev'
+On 18.03.22 03:42, Chris Chiu wrote:
+> The antenna information is missing in rtl8xxxu and txrate is NULL
+> in 8188cu and 8192cu. Fill up the missing information for iw
+> commands.
 
-Set VIDEO_IMX_MIPI_CSIS to depend on VIDEO_DEV to fix it
+I tested older versions of this and it worked well. Will give this set a 
+try during next week.
 
-Fixes: 4a598f62a03b ("media: platform/*/Kconfig: make manufacturer menus more uniform")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
----
- drivers/media/platform/nxp/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/media/platform/nxp/Kconfig b/drivers/media/platform/nxp/Kconfig
-index 838abc9766b4..704fcf55697b 100644
---- a/drivers/media/platform/nxp/Kconfig
-+++ b/drivers/media/platform/nxp/Kconfig
-@@ -6,6 +6,7 @@ comment "NXP drivers"
- 
- config VIDEO_IMX_MIPI_CSIS
- 	tristate "NXP MIPI CSI-2 CSIS receiver found on i.MX7 and i.MX8 models"
-+	depends on VIDEO_DEV
- 	select MEDIA_CONTROLLER
- 	select V4L2_FWNODE
- 	select VIDEO_V4L2_SUBDEV_API
--- 
-2.25.1
-
+Kind regards,
+Reto

@@ -2,134 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C6F4DDF8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E5C4DDF91
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239488AbiCRREk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 13:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40818 "EHLO
+        id S239493AbiCRRGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 13:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbiCRREi (ORCPT
+        with ESMTP id S231357AbiCRRGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 13:04:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89F44FD36
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 10:03:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647622998;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VLZ3JS2/DyhoFGvu41Lcz0nqjayRDaII6Z+BmBWn99k=;
-        b=M28XVPMsjadVrjpL2QgmAq7JCutLMFdS1i8da0dBoycTGLtbvlEDg2WfC0JFz0vyVIU+3u
-        oR2JfvkET+RGUX6G+DbADZUWW2yR33T4UB8TpT6sTHB3YDWWdX17+z2QW2x6qUzSwPZIHe
-        Ps20Th65SLJG7jBY2POALaHpLJW15IA=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-641-C9sI6OL6OV-sQ_nnNYigpw-1; Fri, 18 Mar 2022 13:03:17 -0400
-X-MC-Unique: C9sI6OL6OV-sQ_nnNYigpw-1
-Received: by mail-qk1-f200.google.com with SMTP id y140-20020a376492000000b0067b14129a63so5700682qkb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 10:03:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VLZ3JS2/DyhoFGvu41Lcz0nqjayRDaII6Z+BmBWn99k=;
-        b=Ql226D0GSQ8f9gv80pR/cryy8ee0aC2PJZM5XD7KBBzaJPSoiDrf55k1TsAEpFNPsl
-         j79ll1aS8aQSn0qeenUvwvb+MZMarnULETvyp1dX+tYW2D80QqxHnD2/MoYbY7y4z1Aa
-         E89DJQsM8vS2M+Xakwd+ZA+637jS1dPaTFjnN+5th4rwFX1VASV/jAZDtAU/6oOT5P94
-         sTQCiUuZU/C5yBurMz4O8yiIZB8+3glMhOkPtp7kTBa2dyebkXwywOi7AjGpXnwruOoT
-         lDN5desv78IcKQe0gU58zGmVLEtWnwxQHAkP4s4ORZWeNaH51t6M4cXISL2Xl+QGcZFd
-         mhqg==
-X-Gm-Message-State: AOAM530Iyp27cG1cI1cbpn5zsBcW1AFvchXrP2WPJfZno168podLOAod
-        yN1np8tW/5Ws6hi27ufgYxFgXB2X7gs34ND8d1mQiVS69WoBDZTT7Sh2yHGStcdwLwwODrAcQrb
-        EPydZM/F7oligFuvRz1xjXsre
-X-Received: by 2002:a05:620a:e89:b0:49b:6677:8f8f with SMTP id w9-20020a05620a0e8900b0049b66778f8fmr6329422qkm.269.1647622996810;
-        Fri, 18 Mar 2022 10:03:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx23mxkbxLHxoLzswedr88Hz+bjJqaM2yOtqnFZyKdBO2BdHXW0k4mNF0tkPLUTeX7vf3lWPg==
-X-Received: by 2002:a05:620a:e89:b0:49b:6677:8f8f with SMTP id w9-20020a05620a0e8900b0049b66778f8fmr6329403qkm.269.1647622996525;
-        Fri, 18 Mar 2022 10:03:16 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id d12-20020a05620a158c00b00648ec3fcbdfsm3840968qkk.72.2022.03.18.10.03.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 10:03:16 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 10:03:12 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH] x86/sev: Add ENCODE_FRAME_POINTER after stack changed
- for #VC
-Message-ID: <20220318170312.rc2zgtubddg4dpya@treble>
-References: <20220316041612.71357-1-jiangshanlai@gmail.com>
- <20220317221943.6vhoqx3fdv7py6hi@treble>
- <CAJhGHyC1qPee2QOpgR8B+2Sd+XzfoJD3NL9biFZ5gKE-B9r_rQ@mail.gmail.com>
+        Fri, 18 Mar 2022 13:06:06 -0400
+Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.50.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C612F30DC53
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 10:04:45 -0700 (PDT)
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 3402A400F753F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:04:45 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id VG1tnOyzRXvvJVG1tnW11O; Fri, 18 Mar 2022 12:04:45 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+7bhs7zhD5PPrvce4gtrEYkBiXq9H8QorV7mnne5BjE=; b=WxZf40Ksd6u/2u8WEs8r3af6Tl
+        ZGSLb19+UH6xG3woBvQ+rL5RS5dR2uRKxUQRLIeMqTt6PIflrqD0uCut/BawBnOkMhcCQQbfK6mCL
+        9UqcjYcbQXNvne+G5m8TbajMbkvwd3sXKM5llDaUx63uYEOldN6UpqR0T29Ji/8zOZgUY9+CtnS80
+        IaG0id7h3s0lD5lMBekURuEf0E3UHNryt1U+nlOFPdh2lFvJzgE1rv7JuF1LS0laqkHjTsV9dvjjP
+        IxaA5bbHjQo0F24KbFmG/hz09jInIbkWS/QQVmqvpYmG3A1QSe0mp3fMi3ACkFcxXi28c4GRUkSY2
+        2H1jv2IQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57542 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nVG1s-000dRK-GZ; Fri, 18 Mar 2022 17:04:44 +0000
+Date:   Fri, 18 Mar 2022 10:04:43 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     bleung@chromium.org, groeck@chromium.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] platform/chrome: cros_kbd_led_backlight: support
+ OF match
+Message-ID: <20220318170443.GA687301@roeck-us.net>
+References: <20220314090835.3822093-1-tzungbi@kernel.org>
+ <20220314090835.3822093-5-tzungbi@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJhGHyC1qPee2QOpgR8B+2Sd+XzfoJD3NL9biFZ5gKE-B9r_rQ@mail.gmail.com>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220314090835.3822093-5-tzungbi@kernel.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nVG1s-000dRK-GZ
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57542
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 1
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 09:14:09AM +0800, Lai Jiangshan wrote:
-> On Fri, Mar 18, 2022 at 6:19 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> >
-> > On Wed, Mar 16, 2022 at 12:16:12PM +0800, Lai Jiangshan wrote:
-> > > From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> > >
-> > > In idtentry_vc(), the real frame is changed after it switches to new
-> > > stack, ENCODE_FRAME_POINTER should be called in case for unwinder.
-> > >
-> > > Cc: Joerg Roedel <jroedel@suse.de>
-> > > Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-> > > Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> > > ---
-> > >  arch/x86/entry/entry_64.S | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> > > index e20eabaa56b8..f99f2881ed83 100644
-> > > --- a/arch/x86/entry/entry_64.S
-> > > +++ b/arch/x86/entry/entry_64.S
-> > > @@ -540,6 +540,7 @@ SYM_CODE_START(\asmsym)
-> > >       call    vc_switch_off_ist
-> > >       movq    %rax, %rsp              /* Switch to new stack */
-> > >
-> > > +     ENCODE_FRAME_POINTER
-> > >       UNWIND_HINT_REGS
-> > >
-> > >       /* Update pt_regs */
-> >
-> > Looks right to me.  Any chance you have the ability to test this
-> > scenario by unwinding from #VC with CONFIG_FRAME_POINTER?
-> >
+On Mon, Mar 14, 2022 at 05:08:34PM +0800, Tzung-Bi Shih wrote:
+
+Nit: There should be some text here.
+
+Otherwise
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
+
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> ---
+> Changes from v1:
+> (https://patchwork.kernel.org/project/chrome-platform/patch/20220214053646.3088298-5-tzungbi@google.com/)
+> - Update email address accordingly.
+> - Use device_get_match_data() per review comment in v1.
 > 
-> I don't have the hardware to test it.  Actually, it was you to
-> inspire me to find this in the conversation of my patchset when
-> I tried to search all the code of switching of %rsp to see how
-> ENCODE_FRAME_POINTER and UNWIND_HINT_REGS are used once more.
-
-Ok, maybe Joerg can test it.  It looks obviously right to me though.
-Since it fixes a real frame pointer unwinding bug, it probably needs:
-
-  Fixes: a13644f3a53d ("x86/entry/64: Add entry code for #VC handler")
-
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-
--- 
-Josh
-
+>  drivers/platform/chrome/cros_kbd_led_backlight.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/chrome/cros_kbd_led_backlight.c b/drivers/platform/chrome/cros_kbd_led_backlight.c
+> index e26d1d4cd801..1f2750c830d4 100644
+> --- a/drivers/platform/chrome/cros_kbd_led_backlight.c
+> +++ b/drivers/platform/chrome/cros_kbd_led_backlight.c
+> @@ -10,7 +10,9 @@
+>  #include <linux/kernel.h>
+>  #include <linux/leds.h>
+>  #include <linux/module.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/property.h>
+>  #include <linux/slab.h>
+>  
+>  /**
+> @@ -127,7 +129,7 @@ static int keyboard_led_probe(struct platform_device *pdev)
+>  	const struct keyboard_led_drvdata *drvdata;
+>  	int error;
+>  
+> -	drvdata = acpi_device_get_match_data(&pdev->dev);
+> +	drvdata = device_get_match_data(&pdev->dev);
+>  	if (!drvdata)
+>  		return -EINVAL;
+>  
+> @@ -163,10 +165,21 @@ static const struct acpi_device_id keyboard_led_acpi_match[] = {
+>  MODULE_DEVICE_TABLE(acpi, keyboard_led_acpi_match);
+>  #endif
+>  
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id keyboard_led_of_match[] = {
+> +	{
+> +		.compatible = "google,cros-kbd-led-backlight",
+> +	},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, keyboard_led_of_match);
+> +#endif
+> +
+>  static struct platform_driver keyboard_led_driver = {
+>  	.driver		= {
+>  		.name	= "chromeos-keyboard-leds",
+>  		.acpi_match_table = ACPI_PTR(keyboard_led_acpi_match),
+> +		.of_match_table = of_match_ptr(keyboard_led_of_match),
+>  	},
+>  	.probe		= keyboard_led_probe,
+>  };

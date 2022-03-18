@@ -2,76 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F864DDAFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2514DDB02
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:55:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236893AbiCRNzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 09:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
+        id S236906AbiCRN4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233544AbiCRNzB (ORCPT
+        with ESMTP id S234767AbiCRN4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:55:01 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624A11905A5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:53:41 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id v130-20020a1cac88000000b00389d0a5c511so6699051wme.5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:53:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=b7mi92NL1Au3kNjhkOmUgX0hQow1JPh6u+4eSDIWQIc=;
-        b=ews3bommJQ0hcnjr0GmzZZsrJ9edQDWYNB7s1dAbprwYyCqVFkbq0B4fgr4MeMqQiT
-         8GKO27fK4hQOCZ1xPeLJOCXLMn2J4CyerFzfkU7YysLinkc2TfjJ2uONrhMjroLpMXOD
-         xnbC3eOToR1FeHhpEat9Pej0r6Li/PE1paGlYuBYmuXI9M1PQB5w+gPM0P7BJsTjKDx0
-         /NbU2o7b1Sv9CAQiKZsckUnTLb+mCwgeM7uNnw8wNixPotUFMLGYSkkyk3WqPKCQ4aA0
-         e8chTqjYbPjm5auPYnB/5tpp5P4VqKfcYsAJ+n5pS652kItbDYZdP/zlA/HoYRMv75KV
-         +1kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=b7mi92NL1Au3kNjhkOmUgX0hQow1JPh6u+4eSDIWQIc=;
-        b=yapIq76anUX5MXY5C7kDP7iGG7o6XyMKGz5HIrMGcrBUsm6J/f4GX8Ap4SLXlq4h2M
-         43uCMW8hnc+D27SUaHnnR6o/7QGyPGoSnPXJ6I6zg4NBBXqKziSA6rKNntq8j+iI7VfH
-         qjUox493Bj74EuvX0FwAqU0OSR9a/m8epo6GvEmuhHyD1v5ibNvgMrpXtjW6Qd5TN0Y7
-         WtKqzY86XFqONxBCG1jcjMWsZy+uh3ofPH2UpBqXwZKnkTqp5ZDFE6I8b2+JVmXuLfxf
-         V1He0hUqnzZVLSq7koxJFwgYXNXrxLT57JmUjVTqe1OKX8H3mWlhBFe0XqXHNoxRR1yD
-         mlNA==
-X-Gm-Message-State: AOAM530AWvdumj2ppVoxX+3ZGTiqIBHVBgLZQVdjYAiVD9QL0LOM4YIg
-        Nl3/mY93HH8npjeg3hlOuLc4sYIT0Tn8ig==
-X-Google-Smtp-Source: ABdhPJzbNwQi18YYbbmjFbq5mvgLobh+pg7PjXQ2Tq3BPsBF8eSR7ZTyQpPBTqXupvpWSH7bJsmHlg==
-X-Received: by 2002:a05:600c:35ce:b0:389:ec57:1d7f with SMTP id r14-20020a05600c35ce00b00389ec571d7fmr15752827wmq.149.1647611619732;
-        Fri, 18 Mar 2022 06:53:39 -0700 (PDT)
-Received: from [192.168.2.27] (85-70-151-113.rcd.o2.cz. [85.70.151.113])
-        by smtp.gmail.com with ESMTPSA id n16-20020a5d4010000000b001f07772457csm6252032wrp.101.2022.03.18.06.53.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 06:53:39 -0700 (PDT)
-Message-ID: <a5b9e66c-235b-51dd-234c-b543dbacc464@gmail.com>
-Date:   Fri, 18 Mar 2022 14:53:37 +0100
+        Fri, 18 Mar 2022 09:56:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02152BC0A;
+        Fri, 18 Mar 2022 06:55:25 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22ICo0ba017692;
+        Fri, 18 Mar 2022 13:54:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=CmuugitCsiIoZdFvs0YMKZjL7JFiE8ieqimDY88vAAM=;
+ b=f2H8e374dB1qrQ6+GMLWOu48Nr5hWvUDc5IvFZ3iEl6HXqqJbdEKz21//jv9v9npdBRU
+ CH7i3oJWuuu/7D37uJL2KYPYPXJ6g13bXWINZysF8bftBXz5g7KCFjIydSS5qS4bC79Z
+ HJG7rNaZsIC8D40iHkup3seBv6Ma7Ic/ECBheXi839YeK4yjstRKtmEG2GJ2TuyfH7k6
+ uUArpOaCdyylb0m5WGgFTivYyM7RO/S9jMeea0DMaPud4zylR+ZM4Tq0/C/j6odZG71X
+ cYxSPkan9Cic8aqVgs3ypc0twEe82E30IcNM/R3ibeTLxhqC3vH61I0CJ1VGx9WAibU1 8Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3evqgxcm21-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Mar 2022 13:54:49 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22IDsnAR030450;
+        Fri, 18 Mar 2022 13:54:49 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3evqgxcm1r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Mar 2022 13:54:49 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22IDs6CV014469;
+        Fri, 18 Mar 2022 13:54:48 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma02dal.us.ibm.com with ESMTP id 3etaj7haw5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Mar 2022 13:54:47 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22IDskWX11796948
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Mar 2022 13:54:46 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5C3CF124058;
+        Fri, 18 Mar 2022 13:54:46 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3ACE8124053;
+        Fri, 18 Mar 2022 13:54:46 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 18 Mar 2022 13:54:46 +0000 (GMT)
+Message-ID: <977ccc4b-3b30-f301-aa1c-ef2aaa32cacd@linux.ibm.com>
+Date:   Fri, 18 Mar 2022 09:54:46 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC 0/4] Support kdump with LUKS encryption by reusing LUKS
- master key
+ Thunderbird/91.6.2
+Subject: Re: [PATCH -next] tpm: ibmvtpm: Correct the return value in
+ tpm_ibmvtpm_probe()
 Content-Language: en-US
-To:     Coiby Xu <coxu@redhat.com>
-Cc:     kexec@lists.infradead.org, Thomas Staudt <tstaudt@de.ibm.com>,
-        Kairui Song <ryncsn@gmail.com>, dm-devel@redhat.com,
-        Mike Snitzer <snitzer@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Dave Young <dyoung@redhat.com>, linux-kernel@vger.kernel.org
-References: <20220318103423.286410-1-coxu@redhat.com>
- <c857dcf8-024e-ab8a-fd26-295ce2e0ae41@gmail.com>
- <20220318122110.7qjrnrduwytjle3w@Rk>
-From:   Milan Broz <gmazyland@gmail.com>
-In-Reply-To: <20220318122110.7qjrnrduwytjle3w@Rk>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca, nayna@linux.ibm.com
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220318060201.50488-1-xiujianfeng@huawei.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220318060201.50488-1-xiujianfeng@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YiSw2qE04a9iCtSMHbiVD-QtmStzjS0a
+X-Proofpoint-GUID: 7roJ80YeYJkjO4nawRHHPK0oX9wDvdyt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-18_10,2022-03-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ mlxlogscore=999 suspectscore=0 adultscore=0 priorityscore=1501
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
+ clxscore=1011 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203180075
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,49 +97,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 13:21, Coiby Xu wrote:
-...
->> Why is it not done through keyring and forcing kdump to retain key there
->> (under the same keyring key name as dm-crypt used)?
->> Kernel dm-crypt supports this already; LUKS2 uses keyring by default too.
->> That's all you need, or not? Why do you need to add another "kdump:" thing?
->> IOW why kdump cannot copy the key to keyring under the name dm-crypt
->> has in the mapping table and let dm-crypt activate the device almost without
->> code changes?
+
+
+On 3/18/22 02:02, Xiu Jianfeng wrote:
+> Currently it returns zero when CRQ response timed out, it should return
+> an error code instead.
 > 
-> Sorry, I haven't explained how kdump works. Once the 1st kernel crashes and
-> the system boots into the kdump kernel, the kdump kernel only have direct
-> access to the memory exclusively reserved for it i.e. the kdump kernel
-> loses the direct access to the keyring constructed in the 1st kernel. In
-> theory, the kdump kernel could do some "hacking" to find out the key
-> stored in the memory directly managed by the 1st kernel but I imagine
-> this would be difficult task (imagine I present the memory dump of my
-> computer to you and ask you to rebuild all the relevant kernel data
-> structures and find the key). Besides, it's not reliable to read the
-> memory directly managed by the first kernel for example the memory could
-> be corrupt. So we have to pass the master key from the 1st kernel to the kdump
-> kernel.
+> Fixes: d8d74ea3c002 ("tpm: ibmvtpm: Wait for buffer to be set before proceeding")
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-OK, then why you cannot store it to the (2nd) kdump kernel keyring?
-(From the kdump area copy, then you do not need to patch anything else
-in dm-crypt than that one line storing the key to the kdump area.)
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
-A clear approach would be to store the key in the 2nd kernel kdump keyring
-and allow userspace to read it.
-Then cryptsetup can just validate the key (LUKS key digest does not use Argon)
-and activates it without asking for a passphrase.
-Perhaps this will need some new cryptsetup option (or API call), but I think
-it can be done.
-
-Or, you can actually simulate it with
-   cryptsetup open ... --master-key-file <file>
-where this keyfile contains directly the volume key, not a passphrase.
-The key digest is verified in this case only; no costly PBKDF is needed.
-
-If you have a way to retrieve the kdump stored key to kdump userspace, this
-is perhaps a much simpler solution.
-
-All this is against all countermeasures to not expose encryption key
-directly - but if kdump is debugging environment, just saying...
-
-Milan
+> ---
+>   drivers/char/tpm/tpm_ibmvtpm.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtpm.c
+> index 3af4c07a9342..d3989b257f42 100644
+> --- a/drivers/char/tpm/tpm_ibmvtpm.c
+> +++ b/drivers/char/tpm/tpm_ibmvtpm.c
+> @@ -681,6 +681,7 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev,
+>   	if (!wait_event_timeout(ibmvtpm->crq_queue.wq,
+>   				ibmvtpm->rtce_buf != NULL,
+>   				HZ)) {
+> +		rc = -ENODEV;
+>   		dev_err(dev, "CRQ response timed out\n");
+>   		goto init_irq_cleanup;
+>   	}

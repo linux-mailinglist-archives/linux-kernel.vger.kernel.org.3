@@ -2,131 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C514DD565
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC27F4DD592
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbiCRHqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
+        id S233339AbiCRHxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233185AbiCRHqX (ORCPT
+        with ESMTP id S229499AbiCRHxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:46:23 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA07D1F42E0;
-        Fri, 18 Mar 2022 00:44:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647589498; x=1679125498;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=4qlZT+Fa4OCk7XLn6JGocR/sVD1bjrCN/O9P6N254W4=;
-  b=MpIxMZ+Gd46ydlzFmq6i9kUS1gdAe1AO6jxLXweVgVuMwWEDYPvAU4aw
-   JRg39MCXLYY0cO2PAww4OPrJUbVTNp39VZXsyP1HJx4n1enDUh8kczI6Z
-   jHlqXGHAVcg98oXRACSt8KLyPfZhn1nRui//cy92O7Q7LAKH2oVr8s3Fc
-   xjlhj+vhUCOVVkYzw9LzvYYHrJEtMqnDDH8v0lM4+Ino9nlXFTJOq4+VX
-   2wqLfGJrQbtg8x+BBX7j2X1/Kyy1+HlNly/cVNZAphQMHuoczxNzIq859
-   FV2ENVWvFLZuh275PETE5QLUPtyh4GW0JlhTBab2kenVAb3O5VGwAvoNZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="254641687"
-X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
-   d="scan'208";a="254641687"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 00:44:32 -0700
-X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
-   d="scan'208";a="558307329"
-Received: from chenyi-pc.sh.intel.com ([10.239.159.73])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 00:44:29 -0700
-From:   Chenyi Qiang <chenyi.qiang@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/3] KVM: Add document for KVM_CAP_X86_NOTIFY_VMEXIT and KVM_EXIT_NOTIFY
-Date:   Fri, 18 Mar 2022 15:49:55 +0800
-Message-Id: <20220318074955.22428-4-chenyi.qiang@intel.com>
+        Fri, 18 Mar 2022 03:53:09 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2139.outbound.protection.outlook.com [40.107.215.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DE42C809B;
+        Fri, 18 Mar 2022 00:51:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NY2cPV9+NJO4KUUuDDAcAZTDVU3Ws4mDxO8kdFdKTQ6Fi1uAWuJQLlvXJWH5f5KITfRKS4B5mF3hfzqZ4aBh/UTKCRLDVcLnu+liBaD5Y4mphmeyGbtW8tTFSxkziI6h/bcBLK/xhVQpv5QAxmb8Pqi1FL97TC/LteJZbM6gqfhcZzsm5rSrOJT7xAJx5uiOj+ocY08II94XQhpbReUxREky2kgvvIaukC+TVmMkTZu10GH6dz6E9nJuIZl+PUYIfdLEiHzonV8G1/xMAMQO/kviqjyzQspN6PzwDJVEveS/0mHPNr69dkHTslKS6bnAqFt6HwvTwIsSINBJLfeuGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r3suOggmh8vWhpKzX0q4hdAK+PiPcsVnABFhDdPd3NU=;
+ b=D3mhdv48t/n6/1jzul9onSfA4FTQ+S+KbdV+dsHvMzyUm4jVJ1n+SeQKRG8jstXSMBXEGt2/pi2TtN/om/KUUhDxoBDIynqOEuzKzCvvhvEG6Dkda5rv9Dn+cd/tg4Cx7ZoI+wf5YJ5xtTmD1PiMEBV960EWKB/Bbxn6pNkxjb7MdepT2velF69LfqhhOHvrS9XwdZnHI7I59z3UcTdafb31KX0wmmq4H3h1hkdnuFdOHVf7pbPsNLqvmn3j+a4Qx7sGh4h3NY9IX9fe/WXYfodySQhyUJpi3vKkpeMiDb5pFkFUPf67LDl1jFT5uMIsgs8wq+znmMoWsafXEzrbdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r3suOggmh8vWhpKzX0q4hdAK+PiPcsVnABFhDdPd3NU=;
+ b=RVMxYmSW7yGMiPS2pEt7WycTfF8okkNyHKLSOtrzjnV4qSA7Wfedr9+LUyGAF14mAyep4Y8FJqXec39qSCrrJIXpE+QK+Q1yo1N10TAO4Z0f5bOwZ4DHjpFbLUjJaHlHIDivVYVeY67oUjaXM8PmslL2fp2tyM/M/y+eeZzA3C4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
+ by HK0PR06MB2562.apcprd06.prod.outlook.com (2603:1096:203:67::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.16; Fri, 18 Mar
+ 2022 07:51:46 +0000
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::d924:a610:681d:6d59]) by HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::d924:a610:681d:6d59%5]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
+ 07:51:46 +0000
+From:   Guo Zhengkui <guozhengkui@vivo.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     zhengkui_guo@outlook.com, Guo Zhengkui <guozhengkui@vivo.com>
+Subject: [PATCH linux-next v2] selftests: net: change fprintf format specifiers
+Date:   Fri, 18 Mar 2022 15:50:13 +0800
+Message-Id: <20220318075013.48964-1-guozhengkui@vivo.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220318074955.22428-1-chenyi.qiang@intel.com>
-References: <20220318074955.22428-1-chenyi.qiang@intel.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1d21ee8a-837d-807d-14a4-4ee1af640089@vivo.com>
+References: <1d21ee8a-837d-807d-14a4-4ee1af640089@vivo.com>
+Content-Type: text/plain
+X-ClientProxiedBy: HK0PR01CA0068.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::32) To HK2PR06MB3492.apcprd06.prod.outlook.com
+ (2603:1096:202:2f::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8b29efe2-5598-4664-41c0-08da08b4267d
+X-MS-TrafficTypeDiagnostic: HK0PR06MB2562:EE_
+X-Microsoft-Antispam-PRVS: <HK0PR06MB2562C2513DB7450B73A58494C7139@HK0PR06MB2562.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4L13r9OtrtM+pcgTkmvw2pT1YM7LzfVAuLcf1k/tAe9s5kgGDjctELzfvjvhaBYQKbohMxoNWuM15kr7JvKc4M9zLdezwzloUIOivA7tsLruHB7AvbBwg5q607sdHBqnIK3uU1iHFOGtChzI+i3UtvM4gl18obbHrvxBjkwxnfKnrEdlknGp7D0n5Cm7lVpNebSikI4zN6yiH730OBD6Xq8Kwl9oUAAwy55tsLOeUyo1MDLszQo3PYsoYwDR2bpM2lYQjCAuIEcf8+CahbAjQvBWK6ULo6eeCdPDp2LNe/odS5wjEg9PB8wyB2nCS6BGmljVSW8DpMZs6ZWaRarKKMM/91+uku9jZCiYaUkV04NCbsfXKdBxir5obL86qGZOaTuOMaktNqAmqZwBKYI12baMyVXWhM/dCCdmaegvaAfDrGEks96puMPmqfcKZLeZasxZYohUQbZ4LfFzQZjxFIaKIR2FC/CmcO/x8RGvSHV7nT+w8S1naZhH6NSPvFHPsBs+tnOYt8uJjDgnPkA7WYQeAa8pGwr0OXxw3wBKBO992egTu6DjDI4nlu0wfYA2NJeRC08QxkOXCKr/93SNxyLtZijrsRXRawDuQ7fQtbnb5fSem45BLUQI3AFf8JfDRmvxlsphgh3JY9ht812dlKHynS0hynFdm2D7NNDJBxrROQd9mHJF8M6NRgFsInWk/EKN+oDbRHVejOkQb5Qe7A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(5660300002)(6506007)(186003)(26005)(52116002)(6512007)(316002)(83380400001)(6666004)(36756003)(66476007)(66556008)(2906002)(8676002)(66946007)(4326008)(38350700002)(86362001)(1076003)(2616005)(107886003)(6486002)(38100700002)(508600001)(110136005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Jp2WerYMIDoVOqe+pcSscgDErXnTGcRpbPgiznN4x+0/jID9N10c6b2DzkyY?=
+ =?us-ascii?Q?fP8qUQm4W1/qLtETmjveONZXBvSxM4I6ZCq1Cd2L5kkvcMk3d70ZRS6P4PW9?=
+ =?us-ascii?Q?jPDYvzGARzebWqcVtxw0/50+f11bveJ/Q668LQrBYsp+tzT8aVq35Nsie/NQ?=
+ =?us-ascii?Q?sLgx2UNkGR7uz1aRnZDLutujoO+BHRPxFQzFqMNb7cFRWFpEmnRL7wf60StA?=
+ =?us-ascii?Q?as6Q378ilLifQB09g9hGKgt+qgn5RQ0mF0cY/1RkANQFjpy4B0s/fPrJlQcR?=
+ =?us-ascii?Q?QKDaIiEM3ZHxBVS3zATEEffLwXreO3+gRXRmGZN3EQ0u5pLMck20ijqQnNuk?=
+ =?us-ascii?Q?KBc1qY645JDg+lzU1fBVmRZTqIkK90r8FJvv8gDLHEFbxd820cbUD4RUTwaC?=
+ =?us-ascii?Q?7S610gvpcyRZ+ziKNASSohTVt1xGtdjPwNqwhkFCMgCR/wPQ/v+vWKxskLoY?=
+ =?us-ascii?Q?veBISODNfqyXmH7nhwSZTxAMbpYT2WVmUBZSD/ClRqI6lAdPqfrUcE5SLgSV?=
+ =?us-ascii?Q?gjiaZh/y1V0pUlKoSE3pmpV+XnM+Id+jamlyow4YkXTMKO3ci7G8WtpzSgeJ?=
+ =?us-ascii?Q?rq0IBZBtZg9Q44SxEwfx9YYM4GATdC5UDk7grmpC5BU+JwDmID/yFFuw0RRf?=
+ =?us-ascii?Q?dBmDguTy+sh6ZGlUABoMg5UnV2lwWzMH0R9mnXhanRYamP7pepyzwE4i6wga?=
+ =?us-ascii?Q?L4E1KZTAmvED7k7JrgBvkxBTZ+jKo3MkKYPfs8zuDg5I39xblvEQWT81LJKP?=
+ =?us-ascii?Q?zXBuedk7eEHyThZh6MU6hLqMovwaMIIvmTA0f96ds3VKgdnOtc/DQXdHjI4X?=
+ =?us-ascii?Q?ESwCFfHuGhx+xR8luH7EBja4q0mm7WJIHvrhHgZRUPZSZJo7/x84YG7XrfmY?=
+ =?us-ascii?Q?mHa7I0NHE0UkQCdJWiZQsjVTSs6qJo03zOUFCwwbs8Y7yMMEeBhtgVAtqNm2?=
+ =?us-ascii?Q?bmp3xONYEuxg869bDRdTEfSiS1H3hP0M9TguT59sfQkih6HhVoAl/nZ26LVt?=
+ =?us-ascii?Q?+Xwle4zWgAKTSK8smz6zo+lhXCRxgM1MYWCuD6Vij3ldhfjyhcrer04XIOV+?=
+ =?us-ascii?Q?lE4tqAHgBKO/v3/LpXkXJki2Gg5AQmJs35uEYPfD+jbHJPI+TOEkOmutGRBe?=
+ =?us-ascii?Q?KLfxZ7Ejrhdgeq8jBiwXA+8VfaGn0+FINZuyHdDPRBuYj2p7pscoV3pnCjSu?=
+ =?us-ascii?Q?scz7w5supUZSeCIvqHeDzo0Ud8S8Sn5fLd2lUjB82eAiefyZrMK2VgR5//C+?=
+ =?us-ascii?Q?t59mqzWrz+P85ccgNJr3Yg/SB/osbSnztQCF9x9ebb8kLN+jpTuE/F5eGsUA?=
+ =?us-ascii?Q?CdQBu0hY6huqRt4Z78DDeq5YaYh+3Veb9W0yQRuYFjlChstu6OQGW4Za7VLf?=
+ =?us-ascii?Q?qFlJ8oIh6yCbAq/b04f03QAf8hU03LCuQJ9FR5EAhTsxWTaTuVKk+3olApBm?=
+ =?us-ascii?Q?/PTYnP+WtLGlBcH9jDp5jOBroSM2QiOX?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b29efe2-5598-4664-41c0-08da08b4267d
+X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 07:51:46.2193
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TCMYkwqhu0U+CqfBL71nu9cvcPdqVS/5iJJA+l/3NYd7a0meudCKP/QjVmgdTmnv5wX69fAUmonPq7LT1jVzTQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2562
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add brief documentation for KVM_CAP_X86_NOTIFY_VMEXIT, as well as the
-new field in kvm_run struct for the exit reason KVM_EXIT_NOTIFY.
+`cur64`, `start64` and `ts_delta` are int64_t. Change
+format specifiers in fprintf from '%lu' to '%ld'.
 
-Signed-off-by: Chenyi Qiang <chenyi.qiang@intel.com>
+It has been tested with gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+on x86_64.
+
+Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 ---
- Documentation/virt/kvm/api.rst | 39 ++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ tools/testing/selftests/net/txtimestamp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 9682b0a438bd..d60b03b5a63e 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -6199,6 +6199,26 @@ array field represents return values. The userspace should update the return
- values of SBI call before resuming the VCPU. For more details on RISC-V SBI
- spec refer, https://github.com/riscv/riscv-sbi-doc.
+diff --git a/tools/testing/selftests/net/txtimestamp.c b/tools/testing/selftests/net/txtimestamp.c
+index fabb1d555ee5..b8a52995a635 100644
+--- a/tools/testing/selftests/net/txtimestamp.c
++++ b/tools/testing/selftests/net/txtimestamp.c
+@@ -161,7 +161,7 @@ static void validate_timestamp(struct timespec *cur, int min_delay)
+ 	max_delay = min_delay + cfg_delay_tolerance_usec;
  
-+::
-+
-+    /* KVM_EXIT_NOTIFY */
-+    struct {
-+  #define KVM_NOTIFY_CONTEXT_INVALID	(1 << 0)
-+      __u32 data;
-+    } notify;
-+
-+Used on x86 systems. When the VM capability KVM_CAP_X86_NOTIFY_VMEXIT is
-+enabled and the parameter is non-negative, a VM exit generated if no event
-+window occurs in VM non-root mode for a specified amount of time. In some
-+special case, e.g. VM context invalid, it should exit to userspace with the
-+exit reason KVM_EXIT_NOTIFY for further handling. The "data" field contains
-+the more detailed info.
-+
-+Valid values for 'data' are:
-+
-+  - KVM_NOTIFY_CONTEXT_INVALID -- the VM context is corrupted and not valid
-+    in VMCS. It would run into unknown result if resume the target VM.
-+
- ::
+ 	if (cur64 < start64 + min_delay || cur64 > start64 + max_delay) {
+-		fprintf(stderr, "ERROR: %lu us expected between %d and %d\n",
++		fprintf(stderr, "ERROR: %ld us expected between %d and %d\n",
+ 				cur64 - start64, min_delay, max_delay);
+ 		test_failed = true;
+ 	}
+@@ -170,9 +170,9 @@ static void validate_timestamp(struct timespec *cur, int min_delay)
+ static void __print_ts_delta_formatted(int64_t ts_delta)
+ {
+ 	if (cfg_print_nsec)
+-		fprintf(stderr, "%lu ns", ts_delta);
++		fprintf(stderr, "%ld ns", ts_delta);
+ 	else
+-		fprintf(stderr, "%lu us", ts_delta / NSEC_PER_USEC);
++		fprintf(stderr, "%ld us", ts_delta / NSEC_PER_USEC);
+ }
  
- 		/* Fix the size of the union. */
-@@ -7085,6 +7105,25 @@ resource that is controlled with the H_SET_MODE hypercall.
- This capability allows a guest kernel to use a better-performance mode for
- handling interrupts and system calls.
- 
-+7.31 KVM_CAP_X86_NOTIFY_VMEXIT
-+------------------------------
-+
-+:Architectures: x86
-+:Target: VM
-+:Parameters: args[0] is the value of notify window
-+:Returns: 0 on success, -EINVAL if hardware doesn't support notify VM exit.
-+
-+This capability allows userspace to configure the notify VM exit on/off
-+in per-VM scope during VM creation. Notify VM exit is disabled by default.
-+When userspace provides a non-negative value in args[0], VMM would enable
-+this feature to trigger VM exit if no event window occurs in VM non-root
-+mode for a specified of time (notify window). The notify window is determined
-+by args[0].
-+
-+This capability is aimed to mitigate the threat that malicious VMs can
-+cause CPU stuck (due to event windows don't open up) and make the CPU
-+unavailable to host or other VMs.
-+
- 8. Other capabilities.
- ======================
- 
+ static void __print_timestamp(const char *name, struct timespec *cur,
 -- 
 2.17.1
 

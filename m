@@ -2,191 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1472C4DD896
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B854DD898
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235557AbiCRK7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
+        id S235531AbiCRLAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 07:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235538AbiCRK71 (ORCPT
+        with ESMTP id S231196AbiCRLAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 06:59:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFFF6DFD2;
-        Fri, 18 Mar 2022 03:58:08 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7182A16F3;
-        Fri, 18 Mar 2022 03:58:08 -0700 (PDT)
-Received: from [10.57.43.230] (unknown [10.57.43.230])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 519D23F7F5;
-        Fri, 18 Mar 2022 03:58:04 -0700 (PDT)
-Message-ID: <44dd4f16-3f0b-5289-c9a2-fe42341b0231@arm.com>
-Date:   Fri, 18 Mar 2022 10:57:59 +0000
+        Fri, 18 Mar 2022 07:00:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1EB194A8B;
+        Fri, 18 Mar 2022 03:59:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55DB16167A;
+        Fri, 18 Mar 2022 10:59:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C39BC340E8;
+        Fri, 18 Mar 2022 10:59:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647601152;
+        bh=vyWz3nZcjmadxmmuXhgRCMEK5Ta8y0I/eQrQ/ZUD/3s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NZybcPM1cXdhSey7QtCWKQeMA1AqbBLATP7ZF9VXUHzq8H1vu5Z/dJjhw8Uf/hPeQ
+         O1WT9HJGw/LobCGgFLgMUL/11ANxExYV7HNxo8idT5g9/Oi3OhYVMvr1xFxwaLlc5w
+         ys45yTeteZ+ngd4ljfqcrCH/0YRn9TrMUIQhDnQO5nKLn4uIz4lDPczrW8tkZkCJEp
+         sN6ESEVz8Ecmn60ad0J+t2Ousi+ghaIeo5PkfQBJBRsKGQ3e2raZ6iG3e7m/0I5hI9
+         xWyVyu1i4Vy5PBefCMo0ozq14KapkgC7yw4JiGBndDEkkR7ScOr8anNGSFox0y8zRn
+         BJl4lkd0zDcMw==
+Date:   Fri, 18 Mar 2022 11:59:08 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Peter Rosin <peda@axentia.se>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [v6 2/3] i2c: muxes: pca954x: Add MAX735x/MAX736x support
+Message-ID: <YjRl/DUeLIJJxuOi@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220216074613.235725-1-patrick.rudolph@9elements.com>
+ <20220216074613.235725-3-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 4/4 RESEND] PCI: hv: Propagate coherence from VMbus device
- to PCI device
-Content-Language: en-GB
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-References: <1647534311-2349-1-git-send-email-mikelley@microsoft.com>
- <1647534311-2349-5-git-send-email-mikelley@microsoft.com>
- <9c52c5a0-163d-e2dd-d95b-9f382e665215@arm.com>
- <PH0PR21MB302533BCD6707DAACC13E64DD7139@PH0PR21MB3025.namprd21.prod.outlook.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <PH0PR21MB302533BCD6707DAACC13E64DD7139@PH0PR21MB3025.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7Nma04pQlY1cRCe6"
+Content-Disposition: inline
+In-Reply-To: <20220216074613.235725-3-patrick.rudolph@9elements.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-18 05:12, Michael Kelley (LINUX) wrote:
-> From: Robin Murphy <robin.murphy@arm.com> Sent: Thursday, March 17, 2022 10:15 AM
->>
->> On 2022-03-17 16:25, Michael Kelley via iommu wrote:
->>> PCI pass-thru devices in a Hyper-V VM are represented as a VMBus
->>> device and as a PCI device.  The coherence of the VMbus device is
->>> set based on the VMbus node in ACPI, but the PCI device has no
->>> ACPI node and defaults to not hardware coherent.  This results
->>> in extra software coherence management overhead on ARM64 when
->>> devices are hardware coherent.
->>>
->>> Fix this by propagating the coherence of the VMbus device to the
->>> PCI device.  There's no effect on x86/x64 where devices are
->>> always hardware coherent.
->>>
->>> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
->>> ---
->>>    drivers/pci/controller/pci-hyperv.c | 17 +++++++++++++----
->>>    1 file changed, 13 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
->>> index ae0bc2f..14276f5 100644
->>> --- a/drivers/pci/controller/pci-hyperv.c
->>> +++ b/drivers/pci/controller/pci-hyperv.c
->>> @@ -49,6 +49,7 @@
->>>    #include <linux/refcount.h>
->>>    #include <linux/irqdomain.h>
->>>    #include <linux/acpi.h>
->>> +#include <linux/dma-map-ops.h>
->>>    #include <asm/mshyperv.h>
->>>
->>>    /*
->>> @@ -2142,9 +2143,9 @@ static void hv_pci_remove_slots(struct hv_pcibus_device
->> *hbus)
->>>    }
->>>
->>>    /*
->>> - * Set NUMA node for the devices on the bus
->>> + * Set NUMA node and DMA coherence for the devices on the bus
->>>     */
->>> -static void hv_pci_assign_numa_node(struct hv_pcibus_device *hbus)
->>> +static void hv_pci_assign_properties(struct hv_pcibus_device *hbus)
->>>    {
->>>    	struct pci_dev *dev;
->>>    	struct pci_bus *bus = hbus->bridge->bus;
->>> @@ -2167,6 +2168,14 @@ static void hv_pci_assign_numa_node(struct
->> hv_pcibus_device *hbus)
->>>    				     numa_map_to_online_node(
->>>    					     hv_dev->desc.virtual_numa_node));
->>>
->>> +		/*
->>> +		 * On ARM64, propagate the DMA coherence from the VMbus device
->>> +		 * to the corresponding PCI device. On x86/x64, these calls
->>> +		 * have no effect because DMA is always hardware coherent.
->>> +		 */
->>> +		dev_set_dma_coherent(&dev->dev,
->>> +			dev_is_dma_coherent(&hbus->hdev->device));
->>
->> Eww... if you really have to do this, I'd prefer to see a proper
->> hv_dma_configure() helper implemented and wired up to
->> pci_dma_configure(). Although since it's a generic property I guess at
->> worst pci_dma_configure could perhaps propagate coherency from the host
->> bridge to its children by itself in the absence of any other firmware
->> info. And it's built-in so could use arch_setup_dma_ops() like everyone
->> else.
->>
-> 
-> I'm not seeing an existing mechanism to provide a "helper" or override
-> of pci_dma_configure().   Could you elaborate?  Or is this something
-> that needs to be created?
 
-I mean something like the diff below (other #includes omitted for 
-clarity). Essentially if VMBus has its own way of describing parts of 
-the system, then for those parts it's nice if it could fit into the same 
-abstractions we use for firmware-based system description.
+--7Nma04pQlY1cRCe6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Cheers,
-Robin.
+On Wed, Feb 16, 2022 at 08:46:11AM +0100, Patrick Rudolph wrote:
+> Add support for the following Maxim chips using the existing PCA954x
+> driver:
+> - MAX7356
+> - MAX7357
+> - MAX7358
+> - MAX7367
+> - MAX7368
+> - MAX7369
+>=20
+> All added Maxim chips behave like the PCA954x, where a single SMBUS byte
+> write selects up to 8 channels to be bridged to the primary bus.
+>=20
+> The MAX7357 exposes 6 additional registers at Power-On-Reset and is
+> configured to:
+>  - Disabled interrupts on bus locked up detection
+>  - Enable bus locked-up clearing
+>  - Disconnect only locked bus instead of all channels
+>=20
+> While the MAX7357/MAX7358 have interrupt support, they don't act as
+> interrupt controller like the PCA9545 does. Thus don't enable IRQ support
+> and handle them like the PCA9548.
+>=20
+> Tested using the MAX7357 and verified that the stalled bus is disconnected
+> while the other channels remain operational.
+>=20
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 
------>8-----
-diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-index 588588cfda48..7d92ccad1569 100644
---- a/drivers/pci/pci-driver.c
-+++ b/drivers/pci/pci-driver.c
-@@ -20,6 +20,7 @@
-  #include <linux/of_device.h>
-  #include <linux/acpi.h>
-  #include <linux/dma-map-ops.h>
-+#include <linux/hyperv.h>
-  #include "pci.h"
-  #include "pcie/portdrv.h"
+Peter, are you happy with this patch series?
 
-@@ -1602,6 +1603,8 @@ static int pci_dma_configure(struct device *dev)
-  		struct acpi_device *adev = to_acpi_device_node(bridge->fwnode);
+All the best,
 
-  		ret = acpi_dma_configure(dev, acpi_get_dma_attr(adev));
-+	} else if (is_vmbus_dev(bridge)) {
-+		ret = hv_dma_configure(dev, device_get_dma_attr(bridge));
-  	}
+   Wolfram
 
-  	pci_put_host_bridge_device(bridge);
-diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-index f565a8938836..d1d4dd3d5a3a 100644
---- a/include/linux/hyperv.h
-+++ b/include/linux/hyperv.h
-@@ -1764,4 +1764,19 @@ static inline unsigned long virt_to_hvpfn(void *addr)
-  #define HVPFN_DOWN(x)	((x) >> HV_HYP_PAGE_SHIFT)
-  #define page_to_hvpfn(page)	(page_to_pfn(page) * NR_HV_HYP_PAGES_IN_PAGE)
 
-+static inline bool is_vmbus_dev(struct device *dev)
-+{
-+	/*
-+	 * dev->bus == &hv_bus would break when the caller is built-in
-+	 * and CONFIG_HYPERV=m, so look for it by name instead.
-+	 */
-+	return !strcmp(dev->bus->name, "vmbus");
-+}
-+
-+static inline int hv_dma_configure(struct device *dev, enum 
-dev_dma_attr attr)
-+{
-+	arch_setup_dma_ops(dev, 0, 0, NULL, attr == DEV_DMA_COHERENT);
-+	return 0;
-+}
-+
-  #endif /* _HYPERV_H */
+--7Nma04pQlY1cRCe6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmI0ZfwACgkQFA3kzBSg
+KbYDDw//bVx/JYczUSag1uZnYX1KcJ+ylu1lZWgyL7TEQc8xeBluNsHUdkYXzway
+9uGkQIcB6bLCAymsW88MnLCKGQImGnZT3KIxtCnGwp/K5tTzAxAZkVrvLy6zvnnG
+xt+/rokDndBEQA8UThOp4iKlI5zCbpkCeNDXuu+AK95o0PNPP1w6smgCg86AnHzS
+BpZM3FscZyFpaNdLY2vwvbEY/Po6E/KwJr12u2IAp3h2VCkmpf9L3cBfmY0A+y5u
+ddrIwfTsTowa7rEX4HBzlU8Jo1pwN2NAVkeakMx2YE4Oq51aLO1M8w3LHouCCmwt
+jZNMlG2R75eDvQlrggWoUHH+rV/nIPVyE29r9jKu+qiPzkqJjbdnjOzX3ftmPCNF
+GmGOzTUITCgeyZVvuOzkK9qSYrK/xykM5C7rUMWKAxfUf0+k+CPJ+GJMEQquJ/ci
+YRZsgjDsnvID27TNxhyjpUDGBsjG/tZNi+3wj6lbOURdr/1TgWQUfR38BxxtowG5
+Ejm8mbXsQZ1cuIvPv7Swyk6soJSol+Cn5LPoN1dNSJgTMkUmztw34KGS46XRGrnU
+PH/9CVeTXX4grWtQnfSc88r/6yrAaDHYnUwQOFxfIUteeaD7z0viVLnSXFWtvXXj
+ibGjYU11QyrGp9Z4YAwg5khvGOcLoGNAhrlRy/Ew+TQDlyed7os=
+=8TIT
+-----END PGP SIGNATURE-----
+
+--7Nma04pQlY1cRCe6--

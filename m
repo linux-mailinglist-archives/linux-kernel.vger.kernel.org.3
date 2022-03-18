@@ -2,56 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F194DDF6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1424DDF71
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239417AbiCRQ5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
+        id S239433AbiCRQ5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239393AbiCRQ5A (ORCPT
+        with ESMTP id S239430AbiCRQ52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:57:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872F3296D0E;
-        Fri, 18 Mar 2022 09:55:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 18 Mar 2022 12:57:28 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2D72BC1C9;
+        Fri, 18 Mar 2022 09:56:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BFC6B824B4;
-        Fri, 18 Mar 2022 16:55:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70EF2C340E8;
-        Fri, 18 Mar 2022 16:55:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647622537;
-        bh=9JaHpt1eeY9E1THu28YR+pbxmyrpHUckWqW73x7zOvo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=JDAeGVvZwKMADT8CzqgJ2r7VA+6pGy6+1GjXetBL8HL2k4f3AAmSRqB9LGaB1yIM0
-         AWvkiMiNK/IqSUoc8i9C0ahBQwsPhoFlRAKIb8VHbY1CcZmsV12FG9u7wWoocijC1v
-         csd+PkjFWvPJPMzbLZA0LfzgqhrEgdHtAeBsayeN+70+86jwf5lex8y9PmBcjhUG80
-         fa15rY383BaRqi7iWDbEyqmKAw++OvXy2AwNyhJsHZ5Kow9l1FBSZY1gOywxUAZZRq
-         jSsP8FhcQoSIoE6gC2UVmOStTg5CBMSVp6ASzZfDqZlPH3l+eClMwk60sxFlmHjs0F
-         pw1JcX6TcGllg==
-Date:   Fri, 18 Mar 2022 11:55:35 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Ira W . Snyder" <ira.snyder@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] x86/pci: drop ServerWorks / Broadcom CNB20LE PCI host
- bridge driver
-Message-ID: <20220318165535.GA840063@bhelgaas>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E66661F392;
+        Fri, 18 Mar 2022 16:56:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1647622567; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mp/9GH7VCVH6yRrvqWVAbBDtVnOlmtIXQvROfo3TzB8=;
+        b=d53Ia78bdfyuGJLCOxWXtyZaOvwAqUeXDzSLCF9NmwRRTeyXVsv/yetQY9oesHh69TLTXT
+        nYmYcnlYYWph0Tfp4VxXOSxDxc97dLAO2DB8LUsTaE5usZlnNFMnG8sNxtroVxubgDlxzA
+        qLuoFT8kgo5FEVMOy0jQ5jR1zOwYhh4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9FD501351D;
+        Fri, 18 Mar 2022 16:56:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Yy9iJae5NGIgCgAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 18 Mar 2022 16:56:07 +0000
+Message-ID: <2a4573e0-4a8d-52c1-d29b-66b13bfe376f@suse.com>
+Date:   Fri, 18 Mar 2022 17:56:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220310193419.457395-1-mat.jonczyk@o2.pl>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] platform/x86/dell: add buffer allocation/free functions
+ for SMI calls
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Dell.Client.Kernel@dell.com" <Dell.Client.Kernel@dell.com>
+Cc:     Stuart Hayes <stuart.w.hayes@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20220318150950.16843-1-jgross@suse.com>
+ <accf95548a8c4374b17c159b9b2d0098@AcuMS.aculab.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <accf95548a8c4374b17c159b9b2d0098@AcuMS.aculab.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------TM6SaXL8siRcJxQNQGUqgn4j"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,287 +74,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 08:34:19PM +0100, Mateusz Jończyk wrote:
-> The ServerWorks / Broadcom CNB20LE chipset was probably designed
-> for Intel Pentium III processors only. The dedicated driver for it
-> (implemented in arch/x86/pci/broadcom_bus.c) reads PCI windows
-> from this chipset, which is (if I understand correctly) needed mostly
-> for PCI hotplug and "option ROM mapping" [2]. This driver was written
-> without access to the documentation of CNB20LE and caused problems on
-> some servers, so it was soon disabled for all systems with ACPI enabled.
-> It appears that most systems with CNB20LE support ACPI and it is not
-> known whether the driver works correctly on most of those that don't.
-> 
-> On such old platforms, PCI hotplug is typically not used and
-> "reliability" (i.e. that the system boots at all) is more important.
-> So, delete this driver as it can cause more harm then good and there is
-> little benefit in keeping it in the kernel.
-> 
-> Details:
-> 
-> I was unable to find a description of this chipset. However, it was
-> almost exclusively used with the Pentium III processor (this CPU model
-> was used in all references to it that I examined where the CPU model
-> was provided: dmesgs in [1] and [2]; [3] page 2; [4]-[7]).
-> 
-> The CNB20LE driver was added to the kernel in 2010 (many years after
-> the introduction of Pentium III) in Linux 2.6.35 in
-> commit 3f6ea84a3035 ("PCI: read memory ranges out of Broadcom CNB20LE host bridge")
-> Soon, it caused problems on some Compaq Proliant DL320 servers [2] and
-> it was decided to disable the driver on all systems with ACPI enabled.
-> This went in
-> commit 30e664afb5cb ("x86/PCI: don't use native Broadcom CNB20LE driver when ACPI is available")
-> 
-> However, most of these systems mentioned (all except for [3], where it is not
-> known and [7]) support ACPI. I think that dmesg from the original system
-> on which the driver was developed can be found in [7]. It is possible
-> that CNB30LE used the same PCI ID and was also detected by this driver
-> [7], but it probably also was used with Pentium III.
-> 
-> [1] Jim Studt, Re: Problem with ServerWorks CNB20LE and lost interrupts
-> Linux Kernel Mailing List, https://lkml.org/lkml/2002/1/11/111
-> 
-> [2] RedHat Bug 665109 - e100 problems on old Compaq Proliant DL320
-> https://bugzilla.redhat.com/show_bug.cgi?id=665109
-> 
-> [3] R. Hughes-Jones, S. Dallison, G. Fairey, Performance Measurements on
-> Gigabit Ethernet NICs and Server Quality Motherboards,
-> http://datatag.web.cern.ch/papers/pfldnet2003-rhj.doc
-> 
-> [4] "Hardware for Linux",
-> Probe #d6b5151873 of Intel STL2-bd A28808-302 Desktop Computer (STL2)
-> https://linux-hardware.org/?probe=d6b5151873
-> 
-> [5] "Hardware for Linux", Probe #0b5d843f10 of Compaq ProLiant DL380
-> https://linux-hardware.org/?probe=0b5d843f10
-> 
-> [6] Ubuntu Forums, Dell Poweredge 2400 - Adaptec SCSI Bus AIC-7880
-> https://ubuntuforums.org/showthread.php?t=1689552
-> 
-> [7] Ira W. Snyder, "BISECTED: 2.6.35 (and -git) fail to boot: APIC problems"
-> https://lkml.org/lkml/2010/8/13/220
-> 
-> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: linux-pci@vger.kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Ira W. Snyder <ira.snyder@gmail.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> ---
-> 
-> Hello,
-> 
-> When trying to document CONFIG_PCI_CNB20LE_QUIRK for Kconfig I realised
-> that this driver probably may be removed from the kernel.
-> 
-> I am not sure what exactly the drawbacks of missing PCI bus window
-> information for this chipset are. In [2] there is a comment by Mr Bjorn
-> Helgaas:
->         I think the possibilities are:
->         [...]
->         2) Ignore _CRS and make broadcom_bus.c do nothing.  This gets us
->         back to the working situation of F13 [Fedora 13].  Since we
->         don't have any host bridge information, things like PCI hotplug
->         and option ROM mapping may not work, but that's the way it's
->         always been on these boxes.
-> 
-> I understand how host bridge windows are required for PCI hotplug, but I
-> don't know why they may be necessary for option ROM mapping.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------TM6SaXL8siRcJxQNQGUqgn4j
+Content-Type: multipart/mixed; boundary="------------0gPSdPzUPEcNzI04c8WYT5Ll";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: David Laight <David.Laight@ACULAB.COM>,
+ "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+ "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "Dell.Client.Kernel@dell.com" <Dell.Client.Kernel@dell.com>
+Cc: Stuart Hayes <stuart.w.hayes@gmail.com>,
+ Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>
+Message-ID: <2a4573e0-4a8d-52c1-d29b-66b13bfe376f@suse.com>
+Subject: Re: [PATCH] platform/x86/dell: add buffer allocation/free functions
+ for SMI calls
+References: <20220318150950.16843-1-jgross@suse.com>
+ <accf95548a8c4374b17c159b9b2d0098@AcuMS.aculab.com>
+In-Reply-To: <accf95548a8c4374b17c159b9b2d0098@AcuMS.aculab.com>
 
-The windows are required for management of PCI MMIO space, i.e., we
-can't assign space to PCI BARs unless we know what space is available
-to be assigned.  Mapping option ROMs is one instance where we may
-need to assign space for a BAR.
+--------------0gPSdPzUPEcNzI04c8WYT5Ll
+Content-Type: multipart/mixed; boundary="------------DDUITxrpMQFqvmeqif0y83vA"
 
-Presumably 3f6ea84a3035 ("PCI: read memory ranges out of Broadcom
-CNB20LE host bridge") was added because it fixed a problem.  Would we
-also fix a problem by removing this?  I hesitate to remove it on the
-grounds of "it might cause more harm than good" unless we have actual
-reports of problems.
+--------------DDUITxrpMQFqvmeqif0y83vA
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Bjorn
+T24gMTguMDMuMjIgMTY6MjIsIERhdmlkIExhaWdodCB3cm90ZToNCj4gRnJvbTogSnVlcmdl
+biBHcm9zcw0KPj4gU2VudDogMTggTWFyY2ggMjAyMiAxNToxMA0KPj4NCj4+IFRoZSBkY2Ri
+YXMgZHJpdmVyIGlzIHVzZWQgdG8gY2FsbCBTTUkgaGFuZGxlcnMgZm9yIGJvdGgsIGRjZGJh
+cyBhbmQNCj4+IGRlbGwtc21iaW9zLXNtbS4gQm90aCBkcml2ZXJzIGFsbG9jYXRlIGEgYnVm
+ZmVyIGZvciBjb21tdW5pY2F0aW5nDQo+PiB3aXRoIHRoZSBTTUkgaGFuZGxlci4gVGhlIHBo
+eXNpY2FsIGJ1ZmZlciBhZGRyZXNzIGlzIHRoZW4gcGFzc2VkIHRvDQo+PiB0aGUgY2FsbGVk
+IFNNSSBoYW5kbGVyIHZpYSAlZWJ4Lg0KPj4NCj4+IFVuZm9ydHVuYXRlbHkgdGhpcyBkb2Vz
+bid0IHdvcmsgd2hlbiBydW5uaW5nIGluIFhlbiBkb20wLCBhcyB0aGUNCj4+IHBoeXNpY2Fs
+IGFkZHJlc3Mgb2J0YWluZWQgdmlhIHZpcnRfdG9fcGh5cygpIGlzIG9ubHkgYSBndWVzdCBw
+aHlzaWNhbA0KPj4gYWRkcmVzcywgYW5kIG5vdCBhIG1hY2hpbmUgcGh5c2ljYWwgYWRkcmVz
+cyBhcyBuZWVkZWQgYnkgU01JLg0KPiANCj4gVGhlIHBoeXNpY2FsIGFkZHJlc3MgZnJvbSB2
+aXJ0X3RvX3BoeSgpIGlzIGFsd2F5cyB3cm9uZy4NCj4gVGhhdCBpcyB0aGUgcGh5c2ljYWwg
+YWRkcmVzcyB0aGUgY3B1IGhhcyBmb3IgdGhlIG1lbW9yeS4NCj4gV2hhdCB5b3Ugd2FudCBp
+cyB0aGUgYWRkcmVzcyB0aGUgZG1hIG1hc3RlciBpbnRlcmZhY2UgbmVlZHMgdG8gdXNlLg0K
+PiBUaGF0IGNhbiBiZSBkaWZmZXJlbnQgZm9yIGEgcGh5c2ljYWwgc3lzdGVtIC0gbm8gbmVl
+ZCBmb3IgdmlydHVhbGlzYXRpb24uDQo+IA0KPiBPbiB4ODYgdGhleSBkbyB1c3VhbGx5IG1h
+dGNoLCBidXQgYW55dGhpbmcgd2l0aCBhIGZ1bGwgaW9tbXUNCj4gd2lsbCBuZWVkIGNvbXBs
+ZXRlbHkgZGlmZmVyZW50IGFkZHJlc3Nlcy4NCg0KWWVzLCB0aGFua3MgZm9yIHJlbWluZGlu
+ZyBtZSBvZiB0aGF0Lg0KDQpUaGUgU01JIGhhbmRsZXIgaXMgcnVubmluZyBvbiB0aGUgY3B1
+LCByaWdodD8gU28gdXNpbmcgdGhlIERNQQ0KYWRkcmVzcyBpcyB3cm9uZyBpbiBjYXNlIG9m
+IGFuIElPTU1VLiBJIHJlYWxseSBuZWVkIHRoZSBtYWNoaW5lDQpwaHlzaWNhbCBhZGRyZXNz
+Lg0KDQoNCkp1ZXJnZW4NCg==
+--------------DDUITxrpMQFqvmeqif0y83vA
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  arch/x86/Kconfig            |  13 -----
->  arch/x86/pci/Makefile       |   1 -
->  arch/x86/pci/broadcom_bus.c | 112 ------------------------------------
->  arch/x86/pci/bus_numa.c     |   2 +-
->  4 files changed, 1 insertion(+), 127 deletions(-)
->  delete mode 100644 arch/x86/pci/broadcom_bus.c
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 9f5bd41bf660..577a588fe1ae 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -2656,19 +2656,6 @@ config MMCONF_FAM10H
->  	def_bool y
->  	depends on X86_64 && PCI_MMCONFIG && ACPI
->  
-> -config PCI_CNB20LE_QUIRK
-> -	bool "Read CNB20LE Host Bridge Windows" if EXPERT
-> -	depends on PCI
-> -	help
-> -	  Read the PCI windows out of the CNB20LE host bridge. This allows
-> -	  PCI hotplug to work on systems with the CNB20LE chipset which do
-> -	  not have ACPI.
-> -
-> -	  There's no public spec for this chipset, and this functionality
-> -	  is known to be incomplete.
-> -
-> -	  You should say N unless you know you need this.
-> -
->  config ISA_BUS
->  	bool "ISA bus support on modern systems" if EXPERT
->  	help
-> diff --git a/arch/x86/pci/Makefile b/arch/x86/pci/Makefile
-> index 48bcada5cabe..ca343d8c7964 100644
-> --- a/arch/x86/pci/Makefile
-> +++ b/arch/x86/pci/Makefile
-> @@ -22,6 +22,5 @@ obj-y				+= common.o early.o
->  obj-y				+= bus_numa.o
->  
->  obj-$(CONFIG_AMD_NB)		+= amd_bus.o
-> -obj-$(CONFIG_PCI_CNB20LE_QUIRK)	+= broadcom_bus.o
->  
->  ccflags-$(CONFIG_PCI_DEBUG)	+= -DDEBUG
-> diff --git a/arch/x86/pci/broadcom_bus.c b/arch/x86/pci/broadcom_bus.c
-> deleted file mode 100644
-> index 2db73613cada..000000000000
-> --- a/arch/x86/pci/broadcom_bus.c
-> +++ /dev/null
-> @@ -1,112 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0-or-later
-> -/*
-> - * Read address ranges from a Broadcom CNB20LE Host Bridge
-> - *
-> - * Copyright (c) 2010 Ira W. Snyder <iws@ovro.caltech.edu>
-> - */
-> -
-> -#include <linux/acpi.h>
-> -#include <linux/delay.h>
-> -#include <linux/dmi.h>
-> -#include <linux/pci.h>
-> -#include <linux/init.h>
-> -#include <asm/pci_x86.h>
-> -#include <asm/pci-direct.h>
-> -
-> -#include "bus_numa.h"
-> -
-> -static void __init cnb20le_res(u8 bus, u8 slot, u8 func)
-> -{
-> -	struct pci_root_info *info;
-> -	struct pci_root_res *root_res;
-> -	struct resource res;
-> -	u16 word1, word2;
-> -	u8 fbus, lbus;
-> -
-> -	/* read the PCI bus numbers */
-> -	fbus = read_pci_config_byte(bus, slot, func, 0x44);
-> -	lbus = read_pci_config_byte(bus, slot, func, 0x45);
-> -	info = alloc_pci_root_info(fbus, lbus, 0, 0);
-> -
-> -	/*
-> -	 * Add the legacy IDE ports on bus 0
-> -	 *
-> -	 * These do not exist anywhere in the bridge registers, AFAICT. I do
-> -	 * not have the datasheet, so this is the best I can do.
-> -	 */
-> -	if (fbus == 0) {
-> -		update_res(info, 0x01f0, 0x01f7, IORESOURCE_IO, 0);
-> -		update_res(info, 0x03f6, 0x03f6, IORESOURCE_IO, 0);
-> -		update_res(info, 0x0170, 0x0177, IORESOURCE_IO, 0);
-> -		update_res(info, 0x0376, 0x0376, IORESOURCE_IO, 0);
-> -		update_res(info, 0xffa0, 0xffaf, IORESOURCE_IO, 0);
-> -	}
-> -
-> -	/* read the non-prefetchable memory window */
-> -	word1 = read_pci_config_16(bus, slot, func, 0xc0);
-> -	word2 = read_pci_config_16(bus, slot, func, 0xc2);
-> -	if (word1 != word2) {
-> -		res.start = ((resource_size_t) word1 << 16) | 0x0000;
-> -		res.end   = ((resource_size_t) word2 << 16) | 0xffff;
-> -		res.flags = IORESOURCE_MEM;
-> -		update_res(info, res.start, res.end, res.flags, 0);
-> -	}
-> -
-> -	/* read the prefetchable memory window */
-> -	word1 = read_pci_config_16(bus, slot, func, 0xc4);
-> -	word2 = read_pci_config_16(bus, slot, func, 0xc6);
-> -	if (word1 != word2) {
-> -		res.start = ((resource_size_t) word1 << 16) | 0x0000;
-> -		res.end   = ((resource_size_t) word2 << 16) | 0xffff;
-> -		res.flags = IORESOURCE_MEM | IORESOURCE_PREFETCH;
-> -		update_res(info, res.start, res.end, res.flags, 0);
-> -	}
-> -
-> -	/* read the IO port window */
-> -	word1 = read_pci_config_16(bus, slot, func, 0xd0);
-> -	word2 = read_pci_config_16(bus, slot, func, 0xd2);
-> -	if (word1 != word2) {
-> -		res.start = word1;
-> -		res.end   = word2;
-> -		res.flags = IORESOURCE_IO;
-> -		update_res(info, res.start, res.end, res.flags, 0);
-> -	}
-> -
-> -	/* print information about this host bridge */
-> -	res.start = fbus;
-> -	res.end   = lbus;
-> -	res.flags = IORESOURCE_BUS;
-> -	printk(KERN_INFO "CNB20LE PCI Host Bridge (domain 0000 %pR)\n", &res);
-> -
-> -	list_for_each_entry(root_res, &info->resources, list)
-> -		printk(KERN_INFO "host bridge window %pR\n", &root_res->res);
-> -}
-> -
-> -static int __init broadcom_postcore_init(void)
-> -{
-> -	u8 bus = 0, slot = 0;
-> -	u32 id;
-> -	u16 vendor, device;
-> -
-> -#ifdef CONFIG_ACPI
-> -	/*
-> -	 * We should get host bridge information from ACPI unless the BIOS
-> -	 * doesn't support it.
-> -	 */
-> -	if (!acpi_disabled && acpi_os_get_root_pointer())
-> -		return 0;
-> -#endif
-> -
-> -	id = read_pci_config(bus, slot, 0, PCI_VENDOR_ID);
-> -	vendor = id & 0xffff;
-> -	device = (id >> 16) & 0xffff;
-> -
-> -	if (vendor == PCI_VENDOR_ID_SERVERWORKS &&
-> -	    device == PCI_DEVICE_ID_SERVERWORKS_LE) {
-> -		cnb20le_res(bus, slot, 0);
-> -		cnb20le_res(bus, slot, 1);
-> -	}
-> -	return 0;
-> -}
-> -
-> -postcore_initcall(broadcom_postcore_init);
-> diff --git a/arch/x86/pci/bus_numa.c b/arch/x86/pci/bus_numa.c
-> index 2752c02e3f0e..b4f5e668812e 100644
-> --- a/arch/x86/pci/bus_numa.c
-> +++ b/arch/x86/pci/bus_numa.c
-> @@ -59,7 +59,7 @@ void x86_pci_root_bus_resources(int bus, struct list_head *resources)
->  default_resources:
->  	/*
->  	 * We don't have any host bridge aperture information from the
-> -	 * "native host bridge drivers," e.g., amd_bus or broadcom_bus,
-> +	 * "native host bridge drivers", e.g. amd_bus,
->  	 * so fall back to the defaults historically used by pci_create_bus().
->  	 */
->  	printk(KERN_DEBUG "PCI: root bus %02x: using default resources\n", bus);
-> 
-> base-commit: ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2
-> -- 
-> 2.25.1
-> 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------DDUITxrpMQFqvmeqif0y83vA--
+
+--------------0gPSdPzUPEcNzI04c8WYT5Ll--
+
+--------------TM6SaXL8siRcJxQNQGUqgn4j
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmI0uacFAwAAAAAACgkQsN6d1ii/Ey8Y
+2Af9H+sA3gToLVqND0JUAgm34RV3HcBKtmpQrwauUp+n2SxJt7BkiulazKmckqT1f3cwxZCYdmJK
+y0z4QGH05zM2M+L8Zkij1zVgL+yT45i0ptVXqAbURrP5GRvPoAcCzdMcQRjFma+QxviH6iY6Tmp/
+yRixaeI76WgVtjPGpg50MevpkP1xnYI8a6Rm6g3yXH6D+UA5kooDyRiz8CGTepBffR1jdKBAjLwy
+PTbPY/KUMdeqfkOvj/5DAx5UvGFfY4DEkUf2WQ2F50AMQe8ZruD85Pi2SqTDkDin9YEeXOP1MJTj
+WFa6WWbs9CwlBtaXRbk9N56f5g2mhfeijLVIrQ7h8g==
+=qjJK
+-----END PGP SIGNATURE-----
+
+--------------TM6SaXL8siRcJxQNQGUqgn4j--

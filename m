@@ -2,62 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C07C4DDA63
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9653A4DDA62
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:22:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236631AbiCRNXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 09:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
+        id S229896AbiCRNXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236671AbiCRNXB (ORCPT
+        with ESMTP id S236647AbiCRNWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:23:01 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B0217C415
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:21:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647609702; x=1679145702;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eqV1QWw9TmNHxfIL5myyHjYQz1fBHsC6X3GwbFchzV8=;
-  b=F0WwRedXe1MJooh6Q//nPOHTS6XHiOBvPKH6kNaVkhQXziYGL9N0WPIO
-   l8H7KUspiK25ouQ1UiFbMgLbKBnbNpzC7764u3wvcXBqrsi6tF57uX3ky
-   K7YsIHJpRheaXVokyeiaQiRSfRLYbRvjD3CjU6oCMwIQLiWhv/BLSbjn5
-   ZSOEf0GAgo4KsI37xCjlMRHZ4xgb7jOHN0TBaZEmg/vrDb8tNYNiOyxN7
-   nHzzk1L9T0vxsENqEqbhGIXhTXvn6Fmuompv/MOswLMCKMQDCUa+MHAEg
-   3YytwcLzomT3dM81k4xAFSpCg3ACMAGxhBnmwS6la9xQjsKQGRucbLbJY
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="343567981"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="343567981"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:21:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="541838601"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 18 Mar 2022 06:21:40 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVCXz-000EmR-S0; Fri, 18 Mar 2022 13:21:39 +0000
-Date:   Fri, 18 Mar 2022 21:21:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Charan Teja Reddy <quic_charante@quicinc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.15
- 5191/5193] mm/compaction.c:761:15: error: redefinition of
- 'isolate_and_split_free_page'
-Message-ID: <202203182124.wIWFJftW-lkp@intel.com>
+        Fri, 18 Mar 2022 09:22:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E5917C415
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:21:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FF3C6198C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 13:21:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D350C340E8;
+        Fri, 18 Mar 2022 13:21:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647609695;
+        bh=Vm35F8NaPW4AkClK5FRsDrk1EowlZfCpGghmiZsPsRw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0EsiWoRregC4UH3nbNjSBWsCIpR9kjVoBUkljOb3mXromElfEPpFtVlyQ4WMZp+h2
+         LLmJ99emv2xIHD8J99gNyk2amwJo8f/ZdlBFwRh1X9whawMHdV6MXqmx5rNCSZVfjZ
+         mSlxOrHMe8HoNKJzxEgofsXXLW+sizAcpDZZljQA=
+Date:   Fri, 18 Mar 2022 14:21:32 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com,
+        peter.hilber@opensynergy.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [RFC PATCH 07/16] debugfs: Add signed versions of
+ debugfs_create_u32/64 helpers
+Message-ID: <YjSHXJZAlntzmyKZ@kroah.com>
+References: <20220227205608.30812-1-cristian.marussi@arm.com>
+ <20220227205608.30812-8-cristian.marussi@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220227205608.30812-8-cristian.marussi@arm.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,63 +58,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.15
-head:   f82f0ceba5827c9d5a3c9326c95f591ebf254003
-commit: f47b852faa4afaae0e534b616f2864bb587286e4 [5191/5193] ANDROID: implement wrapper for reverse migration
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220318/202203182124.wIWFJftW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/f47b852faa4afaae0e534b616f2864bb587286e4
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.15
-        git checkout f47b852faa4afaae0e534b616f2864bb587286e4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Sun, Feb 27, 2022 at 08:55:59PM +0000, Cristian Marussi wrote:
+> Add a few helpers to deal with signed values integers; built on existing
+> debugfs internal helpers as the existing unsigned functions already do.
+> 
+> Make the simple_attr_write() internal helper detect the sign of the
+> requested set operation from the related format string: this is needed
+> to be able to properly parse negatively signed input strings.
+> 
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> Note that in the rest of the series I do NOT need the s64 WRITE/SET
+> operations, that required the more invasive simple_attr_write() change,
+> but it seemed odd to implement a get only debug_create_s32/64 API.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Let's wait to add them when we have a need for them with a in-kernel
+user.  Otherwise I'll just end up removing them eventually when I sweep
+for "is this used" cleanups.
 
-All errors (new ones prefixed by >>):
+thanks,
 
->> mm/compaction.c:761:15: error: redefinition of 'isolate_and_split_free_page'
-   unsigned long isolate_and_split_free_page(struct page *page,
-                 ^
-   include/linux/compaction.h:230:22: note: previous definition is here
-   static unsigned long isolate_and_split_free_page(struct page *page,
-                        ^
-   1 error generated.
-
-
-vim +/isolate_and_split_free_page +761 mm/compaction.c
-
-   760	
- > 761	unsigned long isolate_and_split_free_page(struct page *page,
-   762							struct list_head *list)
-   763	{
-   764		unsigned long isolated;
-   765		unsigned int order;
-   766	
-   767		if (!PageBuddy(page))
-   768			return 0;
-   769	
-   770		order = buddy_order(page);
-   771		isolated = __isolate_free_page(page, order);
-   772		if (!isolated)
-   773			return 0;
-   774	
-   775		set_page_private(page, order);
-   776		list_add(&page->lru, list);
-   777	
-   778		split_map_pages(list);
-   779	
-   780		return isolated;
-   781	}
-   782	EXPORT_SYMBOL_GPL(isolate_and_split_free_page);
-   783	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+greg k-h

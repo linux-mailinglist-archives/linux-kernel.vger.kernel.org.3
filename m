@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF724DE304
+	by mail.lfdr.de (Postfix) with ESMTP id BC30C4DE305
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240921AbiCRU7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 16:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
+        id S240929AbiCRU7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 16:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234415AbiCRU7M (ORCPT
+        with ESMTP id S235895AbiCRU7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Mar 2022 16:59:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD451B9B
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA763886
         for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 13:57:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70FD2B825A7
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDC8C60C77
         for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 20:57:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 831B0C340ED;
-        Fri, 18 Mar 2022 20:57:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83ECCC340E8;
+        Fri, 18 Mar 2022 20:57:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647637070;
-        bh=V4OSHyfOu4o/KO9DW2GDd6OSr61IpFYVtU6AC8qxpzg=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=R8KnqL3lbzAbRqVEnAHgMUVQOda4ULxu+k1FJvxSsXabvOwm66pKUCgUmViWEHRZh
-         oi3K0ZZetJfEW+Ab7gYQLicXP0EaV0i/mJ3FxtvPlKf8xKVDcQN4EpGmwNfLFPQ+7V
-         fzNg/2xtdSy9ImA12olArM85adR2w1/cEtVCUxjT3lh/VUE2S8v+tA23CkfqqGl8pC
-         4oSCbWMSkplPhM6S8Mer1rE2wLJ04oCZWyG+EbhJe3KFlxXjQ867u3NfCWkXDryUEN
-         8tEWR5QRtJytUhH75xrl8Nr5MGPQwAcjzTDJr5e1Pb7DZVjb7YWpzK4tc4ilAIS7bA
-         /0TD+qFDyRKGA==
+        s=k20201202; t=1647637071;
+        bh=vndqZJnf+mtttA1cvC9HqQR34L16G84VxSZTW5w9S10=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=bUZMmmfHO2JFdxdEIjBGar/c5/UNtTtrztdOstAqdd/YFERWhO3QA3fUJUBA/zgfY
+         uRTxYIKUoF+z1k2fFN9GIS9GD/mujbQseJDmjdcwtWZevmwgYasPmR2udlSUDAr1AG
+         SuQm8RdYOxRLKpRkQVc10tuns82muVThSF2XIpCNDe9xiay11WZmwZmyEzl4g7x/Im
+         TrR69xiR9sgCyPY6K5BzFMoW85GIuuiLjhWsVTNvOUQEZUCq+wtnE8lhat8x4Y6jvk
+         6n+bYav1ERkskJb9Z4Y4qXkVGcKmsPTNnS/tM2H4ELPjVJXQg3cCAyKHQDJGCut1F3
+         TM3AWL8R9XPrA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Nicolin Chen <nicoleotsuka@gmail.com>, shengjiu.wang@nxp.com
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        festevam@gmail.com, Xiubo.Lee@gmail.com, shengjiu.wang@gmail.com,
-        lgirdwood@gmail.com
-In-Reply-To: <20220317041806.28230-1-nicoleotsuka@gmail.com>
-References: <20220317041806.28230-1-nicoleotsuka@gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add Shengjiu to maintainer list of sound/soc/fsl
-Message-Id: <164763706824.2336370.5050558733573751779.b4-ty@kernel.org>
-Date:   Fri, 18 Mar 2022 20:57:48 +0000
+To:     linux-kernel@vger.kernel.org,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20220318092609.130901-1-codrin.ciubotariu@microchip.com>
+References: <20220318092609.130901-1-codrin.ciubotariu@microchip.com>
+Subject: Re: [PATCH] ASoC: atmel: mchp-pdmc: print the correct property name
+Message-Id: <164763707026.2336370.9467659339240399342.b4-ty@kernel.org>
+Date:   Fri, 18 Mar 2022 20:57:50 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,11 +54,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 21:18:06 -0700, Nicolin Chen wrote:
-> Shengjiu has been actively working on latest FSL platforms and
-> keeping upstream effort as well, while I have been working on
-> other subsystem lately and cannot guarantee audio patch review
-> in the near term. So replacing with him in the maintainer list.
+On Fri, 18 Mar 2022 11:26:09 +0200, Codrin Ciubotariu wrote:
+> The correct property is 'microchip,mic-pos', not 'mchp,mic-pos', so
+> replace all occurences of 'mchp,mic-pos' with 'microchip,mic-pos'.
+> Fix a multi-line comment format while we are at it.
 > 
 > 
 
@@ -69,8 +67,8 @@ Applied to
 
 Thanks!
 
-[1/1] MAINTAINERS: Add Shengjiu to maintainer list of sound/soc/fsl
-      commit: d1129bbe141bf08c19d44a701869ac0780754e86
+[1/1] ASoC: atmel: mchp-pdmc: print the correct property name
+      commit: c639e85e93aa10ea0512ee416eead60da466e161
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

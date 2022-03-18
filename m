@@ -2,300 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638024DDDC5
+	by mail.lfdr.de (Postfix) with ESMTP id 189854DDDC4
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238622AbiCRQHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34990 "EHLO
+        id S238455AbiCRQIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238508AbiCRQHO (ORCPT
+        with ESMTP id S238551AbiCRQHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:07:14 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AD02DF3FE
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:05:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647619503; x=1679155503;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ps8pwtFCbdECf1j0rVuWEIMYt5m7RujZfzB4u4sOQ48=;
-  b=c0+Cbn2oeGF1bkXiKDPYdLFddqLUyEq/RBqFtaKhocXu9XJ573v/QxxC
-   s9mgSYi0iI39bInd8in4B5+bKO1IHRET0wnSi5pMfXRMyK0g5z5LikybS
-   qMjEvuzk+0d1FFT8H4xlkzXtXa5DggfYhdMH4m5lmySoTr2JScQIIxgjS
-   /9TCWgndUd1Gu/GkbnFz42Gr1u+m6wn3cXqeyGY7AKmYiKzLQnNjZ/REj
-   rmPCVeiCnnlA8CCWILbkRoJdAnnpj26og8GzlHXWPKyHbnHKwpicLa3kp
-   e/q7jF636DHIA9OcGqEEfZnjux82VajFTnJ55qeTotWyMM1kyZ2IcYf8n
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="320373221"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="320373221"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 09:05:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="645571660"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Mar 2022 09:04:56 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 218C710E; Fri, 18 Mar 2022 18:05:15 +0200 (EET)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     kirill.shutemov@linux.intel.com
-Cc:     aarcange@redhat.com, ak@linux.intel.com, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@intel.com, dave.hansen@linux.intel.com,
-        david@redhat.com, hpa@zytor.com, jgross@suse.com,
-        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
-        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
-        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-Subject: [PATCHv7.1 16/30] x86/boot: Port I/O: add decompression-time support for TDX
-Date:   Fri, 18 Mar 2022 19:05:14 +0300
-Message-Id: <20220318160514.66270-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220318153048.51177-17-kirill.shutemov@linux.intel.com>
-References: <20220318153048.51177-17-kirill.shutemov@linux.intel.com>
+        Fri, 18 Mar 2022 12:07:21 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324F910780E;
+        Fri, 18 Mar 2022 09:05:25 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id p9so12301624wra.12;
+        Fri, 18 Mar 2022 09:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=DcA4sJmL1QB2BCHWjNUio1zxaNFvTCw7JphHxVAAEoA=;
+        b=JJHvdmaVym95g2UhAg4NBJbDDWm/Zebay9zZCSUFhMjFa2hqua//t51YUGRvjkKfCq
+         sQ2M++r9mVsNbctEurLszZpw8XXIpVlVwVq3z5qF/K/DHCY8jwtfIFzziAwr77FGyFWf
+         EdEUr21cOi39LRKa89SWa1Wm8tvaqMBCGsgllw9x+Lg3mycoiUHIJUWGVwsAwCaux2fd
+         HcDRWOYSEBLqZDPBdUFOl+JR084a5gzO8qkoCfTbhoWBjematobV8y5omZs6cb7W9ys0
+         TTGBNHppseBhKuasDsIMysdrKU+88K86BjAz5BxLybkF8E/5iT/tbdrFCKktPyLHev3u
+         k/Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=DcA4sJmL1QB2BCHWjNUio1zxaNFvTCw7JphHxVAAEoA=;
+        b=v4ZIzXd8hfPOfp+viEa5BEl6UPl9k3kfZpgkHdDleg1c3icJ6HsdhAgJEv8VyxjJhs
+         aYggxaFUo73YGfaT5D9CioZoQBenSB3irScxajo3u9h1zLSIKjbN/VQDyNuaLw5LBPHU
+         Rof10G9VbwP5e+GWSosqmNpWNsmK3lEwCoSi4KeVfN6dIcCqSJswLC3K2jEEF6Ask8s4
+         4G+e8bfhuHLCbMCD6o6PwBeUab8JPKTCbZpHjP6NujW8pzrlX8DVpsRkeYIfSX33OYVu
+         wpn+ckAYHRXgaARcnJgkSaLX5TBxFYxA9dDc64aH10RjOCHjWv64K81kahGS40kDA931
+         j1sA==
+X-Gm-Message-State: AOAM530SGmm54nDF0m1d1jlRTyJv9hOD9KoEuol9k0jOGMDlz8s6qV9K
+        JBMmj6Wc2OFUFow5jRTi3BEnglMgTvNWLA==
+X-Google-Smtp-Source: ABdhPJwn9UVxOqp4FnLXXmD7jsk7zJUPQN6z4kSBqRl7+VCzvzQ4fKhcOMU+6m7D14IhOfWd6AIPZg==
+X-Received: by 2002:adf:a507:0:b0:203:f522:c01a with SMTP id i7-20020adfa507000000b00203f522c01amr3745533wrb.282.1647619522130;
+        Fri, 18 Mar 2022 09:05:22 -0700 (PDT)
+Received: from elementary ([94.73.33.246])
+        by smtp.gmail.com with ESMTPSA id 14-20020a5d47ae000000b00203f9af38f2sm1582990wrb.94.2022.03.18.09.05.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 09:05:21 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 17:05:18 +0100
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        Jiri Kosina <jkosina@suse.cz>, stable@vger.kernel.org,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION] Right touchpad button disabled on Dell 7750
+Message-ID: <20220318160518.GA2950@elementary>
+References: <s5htubv32s8.wl-tiwai@suse.de>
+ <20220318130740.GA33535@elementary>
+ <s5hlex72yno.wl-tiwai@suse.de>
+ <CAO-hwJK8QMjYhQAC8tp7hLWZjSB3JMBJXgpKmFZRSEqPUn3_iw@mail.gmail.com>
+ <s5hh77v2uov.wl-tiwai@suse.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <s5hh77v2uov.wl-tiwai@suse.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Port I/O instructions trigger #VE in the TDX environment. In response to
-the exception, kernel emulates these instructions using hypercalls.
+On Fri, Mar 18, 2022 at 03:37:20PM +0100, Takashi Iwai wrote:
+> So is it like below?  I'll build another kernel with that.
+> 
+> 
+> Thanks!
+> 
+> Takashi
+> 
+> -- 8< --
+> From: José Expósito <jose.exposito89@gmail.com>
+> Subject: [PATCH] HID: multitouch: fix Dell Precision 7550 and 7750 button type
+> 
+> The touchpad present in the Dell Precision 7550 and 7750 laptops
+> reports a HID_DG_BUTTONTYPE of type MT_BUTTONTYPE_CLICKPAD. However,
+> the device is not a clickpad, it is a touchpad with physical buttons.
+> 
+> In order to fix this issue, a quirk for the device was introduced in
+> libinput [1] [2] to disable the INPUT_PROP_BUTTONPAD property:
+> 
+> 	[Precision 7x50 Touchpad]
+> 	MatchBus=i2c
+> 	MatchUdevType=touchpad
+> 	MatchDMIModalias=dmi:*svnDellInc.:pnPrecision7?50*
+> 	AttrInputPropDisable=INPUT_PROP_BUTTONPAD
+> 
+> However, because of the change introduced in 37ef4c19b4 ("Input: clear
+> BTN_RIGHT/MIDDLE on buttonpads") the BTN_RIGHT key bit is not mapped
+> anymore breaking the device right click button.
+> 
+> In order to fix the issue, create a quirk for the device forcing its
+> button type to touchpad regardless of the value reported by the
+> firmware.
+> 
+> [1] https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/481
+> [2] https://bugzilla.redhat.com/show_bug.cgi?id=1868789
+> 
+> [ modified MT_CLS_BUTTONTYPE_TOUCHPAD quirk bits to base on MT_CLS_WIN8
+>   as suggested by Benjamin -- tiwai ]
+> 
+> Fixes: 37ef4c19b4 ("Input: clear BTN_RIGHT/MIDDLE on buttonpads")
+> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> 
+> ---
+>  drivers/hid/hid-ids.h        |    3 +++
+>  drivers/hid/hid-multitouch.c |   20 ++++++++++++++++++++
+>  2 files changed, 23 insertions(+)
+> 
+> --- a/drivers/hid/hid-ids.h
+> +++ b/drivers/hid/hid-ids.h
+> @@ -285,6 +285,9 @@
+>  
+>  #define USB_VENDOR_ID_CIDC		0x1677
+>  
+> +#define USB_VENDOR_ID_CIRQUE_CORP		0x0488
+> +#define USB_DEVICE_ID_DELL_PRECISION_7X50	0x120A
+> +
+>  #define USB_VENDOR_ID_CJTOUCH		0x24b8
+>  #define USB_DEVICE_ID_CJTOUCH_MULTI_TOUCH_0020	0x0020
+>  #define USB_DEVICE_ID_CJTOUCH_MULTI_TOUCH_0040	0x0040
+> --- a/drivers/hid/hid-multitouch.c
+> +++ b/drivers/hid/hid-multitouch.c
+> @@ -71,6 +71,7 @@ MODULE_LICENSE("GPL");
+>  #define MT_QUIRK_SEPARATE_APP_REPORT	BIT(19)
+>  #define MT_QUIRK_FORCE_MULTI_INPUT	BIT(20)
+>  #define MT_QUIRK_DISABLE_WAKEUP		BIT(21)
+> +#define MT_QUIRK_BUTTONTYPE_TOUCHPAD	BIT(22)
+>  
+>  #define MT_INPUTMODE_TOUCHSCREEN	0x02
+>  #define MT_INPUTMODE_TOUCHPAD		0x03
+> @@ -194,6 +195,7 @@ static void mt_post_parse(struct mt_devi
+>  #define MT_CLS_WIN_8_FORCE_MULTI_INPUT		0x0015
+>  #define MT_CLS_WIN_8_DISABLE_WAKEUP		0x0016
+>  #define MT_CLS_WIN_8_NO_STICKY_FINGERS		0x0017
+> +#define MT_CLS_BUTTONTYPE_TOUCHPAD		0x0018
+>  
+>  /* vendor specific classes */
+>  #define MT_CLS_3M				0x0101
+> @@ -302,6 +304,15 @@ static const struct mt_class mt_classes[
+>  			MT_QUIRK_CONTACT_CNT_ACCURATE |
+>  			MT_QUIRK_WIN8_PTP_BUTTONS,
+>  		.export_all_inputs = true },
+> +	{ .name = MT_CLS_BUTTONTYPE_TOUCHPAD,
+> +		.quirks = MT_QUIRK_ALWAYS_VALID |
+> +			MT_QUIRK_IGNORE_DUPLICATES |
+> +			MT_QUIRK_HOVERING |
+> +			MT_QUIRK_CONTACT_CNT_ACCURATE |
+> +			MT_QUIRK_STICKY_FINGERS |
+> +			MT_QUIRK_WIN8_PTP_BUTTONS |,
+> +			MT_QUIRK_BUTTONTYPE_TOUCHPAD,
+> +		.export_all_inputs = true },
+>  
+>  	/*
+>  	 * vendor specific classes
+> @@ -1286,6 +1297,9 @@ static int mt_touch_input_configured(str
+>  	    (app->buttons_count == 1))
+>  		td->is_buttonpad = true;
+>  
+> +	if (app->quirks & MT_QUIRK_BUTTONTYPE_TOUCHPAD)
+> +		td->is_buttonpad = false;
+> +
+>  	if (td->is_buttonpad)
+>  		__set_bit(INPUT_PROP_BUTTONPAD, input->propbit);
+>  
+> @@ -1875,6 +1889,12 @@ static const struct hid_device_id mt_dev
+>  		MT_USB_DEVICE(USB_VENDOR_ID_CHUNGHWAT,
+>  			USB_DEVICE_ID_CHUNGHWAT_MULTITOUCH) },
+>  
+> +	/* Cirque Corp (Dell Precision 7550 and 7750 touchpad) */
+> +	{ .driver_data = MT_CLS_BUTTONTYPE_TOUCHPAD,
+> +		HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
+> +			USB_VENDOR_ID_CIRQUE_CORP,
+> +			USB_DEVICE_ID_DELL_PRECISION_7X50) },
+> +
+>  	/* CJTouch panels */
+>  	{ .driver_data = MT_CLS_NSMU,
+>  		MT_USB_DEVICE(USB_VENDOR_ID_CJTOUCH,
 
-But during early boot, on the decompression stage, it is cumbersome to
-deal with #VE. It is cleaner to go to hypercalls directly, bypassing #VE
-handling.
 
-Hook up TDX-specific port I/O helpers if booting in TDX environment.
+Yes, that is the correct patch. The original reporter just emailed me
+and confirmed that the patch works and that the class used by the
+device is MT_CLS_WIN_8, as Benjamin pointed out.
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
----
- v7.1:
-   - Explicitly use pio_ops when override port I/O callbacks
----
- arch/x86/boot/compressed/Makefile |  2 +-
- arch/x86/boot/compressed/tdcall.S |  3 ++
- arch/x86/boot/compressed/tdx.c    | 61 +++++++++++++++++++++++++++++++
- arch/x86/include/asm/shared/tdx.h | 32 ++++++++++++++++
- arch/x86/include/asm/tdx.h        | 27 --------------
- 5 files changed, 97 insertions(+), 28 deletions(-)
- create mode 100644 arch/x86/boot/compressed/tdcall.S
+I'll wait a couple of days before sending the patch to the mailing list
+so the other users can test it as well.
 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 732f6b21ecbd..8fd0e6ae2e1f 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -101,7 +101,7 @@ ifdef CONFIG_X86_64
- endif
- 
- vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
--vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o
-+vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o
- 
- vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_thunk_$(BITS).o
- efi-obj-$(CONFIG_EFI_STUB) = $(objtree)/drivers/firmware/efi/libstub/lib.a
-diff --git a/arch/x86/boot/compressed/tdcall.S b/arch/x86/boot/compressed/tdcall.S
-new file mode 100644
-index 000000000000..46d0495e0d3a
---- /dev/null
-+++ b/arch/x86/boot/compressed/tdcall.S
-@@ -0,0 +1,3 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include "../../coco/tdx/tdcall.S"
-diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
-index 5f6d01a2f1f4..918a7606f53c 100644
---- a/arch/x86/boot/compressed/tdx.c
-+++ b/arch/x86/boot/compressed/tdx.c
-@@ -2,9 +2,65 @@
- 
- #include "../cpuflags.h"
- #include "../string.h"
-+#include "../io.h"
-+#include "error.h"
-+
-+#include <vdso/limits.h>
-+#include <uapi/asm/vmx.h>
- 
- #include <asm/shared/tdx.h>
- 
-+/* Called from __tdx_hypercall() for unrecoverable failure */
-+void __tdx_hypercall_failed(void)
-+{
-+	error("TDVMCALL failed. TDX module bug?");
-+}
-+
-+static inline unsigned int tdx_io_in(int size, u16 port)
-+{
-+	struct tdx_hypercall_args args = {
-+		.r10 = TDX_HYPERCALL_STANDARD,
-+		.r11 = EXIT_REASON_IO_INSTRUCTION,
-+		.r12 = size,
-+		.r13 = 0,
-+		.r14 = port,
-+	};
-+
-+	if (__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT))
-+		return UINT_MAX;
-+
-+	return args.r11;
-+}
-+
-+static inline void tdx_io_out(int size, u16 port, u32 value)
-+{
-+	struct tdx_hypercall_args args = {
-+		.r10 = TDX_HYPERCALL_STANDARD,
-+		.r11 = EXIT_REASON_IO_INSTRUCTION,
-+		.r12 = size,
-+		.r13 = 1,
-+		.r14 = port,
-+		.r15 = value,
-+	};
-+
-+	__tdx_hypercall(&args, 0);
-+}
-+
-+static inline u8 tdx_inb(u16 port)
-+{
-+	return tdx_io_in(1, port);
-+}
-+
-+static inline void tdx_outb(u8 value, u16 port)
-+{
-+	tdx_io_out(1, port, value);
-+}
-+
-+static inline void tdx_outw(u16 value, u16 port)
-+{
-+	tdx_io_out(2, port, value);
-+}
-+
- void early_tdx_detect(void)
- {
- 	u32 eax, sig[3];
-@@ -13,4 +69,9 @@ void early_tdx_detect(void)
- 
- 	if (memcmp(TDX_IDENT, sig, sizeof(sig)))
- 		return;
-+
-+	/* Use hypercalls instead of I/O instructions */
-+	pio_ops.f_inb  = tdx_inb;
-+	pio_ops.f_outb = tdx_outb;
-+	pio_ops.f_outw = tdx_outw;
- }
-diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-index 8209ba9ffe1a..e53f26228fbb 100644
---- a/arch/x86/include/asm/shared/tdx.h
-+++ b/arch/x86/include/asm/shared/tdx.h
-@@ -2,7 +2,39 @@
- #ifndef _ASM_X86_SHARED_TDX_H
- #define _ASM_X86_SHARED_TDX_H
- 
-+#include <linux/bits.h>
-+#include <linux/types.h>
-+
-+#define TDX_HYPERCALL_STANDARD  0
-+
-+#define TDX_HCALL_HAS_OUTPUT	BIT(0)
-+#define TDX_HCALL_ISSUE_STI	BIT(1)
-+
- #define TDX_CPUID_LEAF_ID	0x21
- #define TDX_IDENT		"IntelTDX    "
- 
-+#ifndef __ASSEMBLY__
-+
-+/*
-+ * Used in __tdx_hypercall() to pass down and get back registers' values of
-+ * the TDCALL instruction when requesting services from the VMM.
-+ *
-+ * This is a software only structure and not part of the TDX module/VMM ABI.
-+ */
-+struct tdx_hypercall_args {
-+	u64 r10;
-+	u64 r11;
-+	u64 r12;
-+	u64 r13;
-+	u64 r14;
-+	u64 r15;
-+};
-+
-+/* Used to request services from the VMM */
-+u64 __tdx_hypercall(struct tdx_hypercall_args *args, unsigned long flags);
-+
-+/* Called from __tdx_hypercall() for unrecoverable failure */
-+void __tdx_hypercall_failed(void);
-+
-+#endif /* !__ASSEMBLY__ */
- #endif /* _ASM_X86_SHARED_TDX_H */
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index ca23adaa6681..1093a5e5f446 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -3,16 +3,10 @@
- #ifndef _ASM_X86_TDX_H
- #define _ASM_X86_TDX_H
- 
--#include <linux/bits.h>
- #include <linux/init.h>
- #include <asm/ptrace.h>
- #include <asm/shared/tdx.h>
- 
--#define TDX_HYPERCALL_STANDARD  0
--
--#define TDX_HCALL_HAS_OUTPUT	BIT(0)
--#define TDX_HCALL_ISSUE_STI	BIT(1)
--
- /*
-  * SW-defined error codes.
-  *
-@@ -40,21 +34,6 @@ struct tdx_module_output {
- 	u64 r11;
- };
- 
--/*
-- * Used in __tdx_hypercall() to pass down and get back registers' values of
-- * the TDCALL instruction when requesting services from the VMM.
-- *
-- * This is a software only structure and not part of the TDX module/VMM ABI.
-- */
--struct tdx_hypercall_args {
--	u64 r10;
--	u64 r11;
--	u64 r12;
--	u64 r13;
--	u64 r14;
--	u64 r15;
--};
--
- /*
-  * Used by the #VE exception handler to gather the #VE exception
-  * info from the TDX module. This is a software only structure
-@@ -79,12 +58,6 @@ void __init tdx_early_init(void);
- u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
- 		      struct tdx_module_output *out);
- 
--/* Used to request services from the VMM */
--u64 __tdx_hypercall(struct tdx_hypercall_args *args, unsigned long flags);
--
--/* Called from __tdx_hypercall() for unrecoverable failure */
--void __tdx_hypercall_failed(void);
--
- void tdx_get_ve_info(struct ve_info *ve);
- 
- bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve);
--- 
-2.34.1
-
+Thanks for the quick response,
+Jose

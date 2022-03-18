@@ -2,140 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27E74DDEB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFFD4DDEC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239100AbiCRQXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
+        id S235675AbiCRQXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239072AbiCRQW0 (ORCPT
+        with ESMTP id S235610AbiCRQXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:22:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD40E388C;
-        Fri, 18 Mar 2022 09:19:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B06EBB824A7;
-        Fri, 18 Mar 2022 16:18:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6346C340E8;
-        Fri, 18 Mar 2022 16:18:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647620322;
-        bh=RgoWd82TMVKvPEj2mnBFasnr1ktgCyI38ZWKS1kuPxg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=APZoUKBgMpBIwFM0bEG+PS2SzirGBi23hexZigjRmwDwwGzCkbwv9ZuJD4lNeIdNv
-         xK3hW+2gO3tl28yY9flvMRxQbJVaRJ2q/2wrlQZzZook95jfPtVMedaofVZDgZx4d3
-         HLaBuYixoz1U85AzJ5iYmWPHmyKfETwYnEAGJ3Co=
-Date:   Fri, 18 Mar 2022 17:18:39 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     James Morse <james.morse@arm.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.4 18/43] arm64: entry: Add macro for reading symbol
- addresses from the trampoline
-Message-ID: <YjSw3wfvbhtjWRSG@kroah.com>
-References: <20220317124527.672236844@linuxfoundation.org>
- <20220317124528.180267687@linuxfoundation.org>
- <113e7675-4263-2a20-81d0-9634f03511d2@gmail.com>
- <bc35996d-ec18-1923-38f4-81d16ed98b7a@arm.com>
+        Fri, 18 Mar 2022 12:23:17 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488C95838B
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:19:36 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 2C2463201E3E;
+        Fri, 18 Mar 2022 12:18:50 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 18 Mar 2022 12:18:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=W0RtaiVVoWuDJFHs12YiGTwXGd5lX99ofXkpvP
+        buN/M=; b=ZGHO3Vd7IFoj1GyK1l6273ryTg0I/eVkqSUzVtrCkje71GM+kcqIkd
+        G8YfOBYH2poC/2y8VKHPqdbw6OWYqgVXR+pZ7/OcKnUsGFnYfqpz9n+NSpLzcxg3
+        Bbt7TDEoHMRwZkk5utXbvLcmGHJyYU1Sir+TiWwrBqcLtQBLdx6oKMqullp42bq3
+        kLlbttwB+yVtSwe8j6goGK8bhp2qir4iTqlMMOmuJPcLL4JjcYMuILxWFsGgAOzz
+        d53KQHekoMPR0NJdMDFObhPnrju0a7CCPWvyU8T4x/H2ObVUZCkkdcxQyjmOlUS9
+        uRuelEAHaD1qZrt2s/g4fl5eija+yf8A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=W0RtaiVVoWuDJFHs1
+        2YiGTwXGd5lX99ofXkpvPbuN/M=; b=Sg1aNxuhbeKW3dADtgBAJKe9zO6uT+Lhm
+        2QLxdFnWCmakrgRE8iDlBRd50QTnawTBL+FTxsmjRb/xGI3ojjHeq/bMIm5bBpRi
+        wO70npk24n5P/aVhscq4AmbkqS7UrMPgKBhP+R5BjWviAe0rETmF7+NBTXxrrOxz
+        hSHliveO/GXyb9pyMFGOvrkUsBNEap7qwv63p+xEO810lMhx51b7vB6l/hXSyEdj
+        LF3jWZ6Q/4Knhd9ENv3n1SsNL9tthJjuMynrpuR06DDfaDM57plwPKPW2cirEBBG
+        tCQaQuRLev2IBjokWNCKAjE82mbaWo8gpex01FbpaKAgcWdIOcfyQ==
+X-ME-Sender: <xms:6bA0YlhAq0ndjOUBe9dODegdLLP2_WZUpwdF8EHNQyGxyV6BqSETDQ>
+    <xme:6bA0YqCRzyJkn65lATBpfjpN_XK4TjgAQfpSoQ7a_RXODu3Mv8QWRnOthggiQ7fcJ
+    Y19_IDdA0YhWo2Vfbs>
+X-ME-Received: <xmr:6bA0YlEZF0YPAy6qHJeb9KUnj3w1bzBiewHsARksMyLxpAzmHI_NKQPQnWDfdrv9chL-Ae0Q-0DcT2iWq3cb7WNkcFqklY6ZpQksfqc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefiedgkeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucdnkfhovfculdeitddmnecujfgurhepfffhvffukf
+    hfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhmvgcutfhiphgrrhguuceo
+    mhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrthhtvghrnhepleekgeehhf
+    dutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieehgedunecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnh
+    hordhtvggthh
+X-ME-Proxy: <xmx:6bA0YqT5I3Linvec27AhQoNLHvXEPJIAl-M7oAzJI3Rlr12Gt4-JqA>
+    <xmx:6bA0YixnDoN4eWnaX1rxQ24R2CN51-Cg-zCazC3v_qHX_FNh5zIQUQ>
+    <xmx:6bA0Yg4SSoM5k8zSEW0jZlPUKpmalXbOW3rwKE8a1OOruyh6Z9xMBjB1ow>
+    <xmx:6bA0Yhn4cgo-d-CVOT_LU2mrZhwv4VWbYimR4-xdt92W8UJA3HCyIQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 18 Mar 2022 12:18:48 -0400 (EDT)
+Date:   Fri, 18 Mar 2022 17:18:47 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2] drm: of: Properly try all possible cases for
+ bridge/panel detection
+Message-ID: <20220318161847.ezi6yat4on7rvfdf@houat>
+References: <20220318160249.126431-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="z4cu6dac2674z2wt"
 Content-Disposition: inline
-In-Reply-To: <bc35996d-ec18-1923-38f4-81d16ed98b7a@arm.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220318160249.126431-1-paul.kocialkowski@bootlin.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 12:11:32PM +0000, James Morse wrote:
-> Hi Florian,
-> 
-> On 3/17/22 8:48 PM, Florian Fainelli wrote:
-> > On 3/17/22 5:45 AM, Greg Kroah-Hartman wrote:
-> > > From: James Morse <james.morse@arm.com>
-> > > 
-> > > commit b28a8eebe81c186fdb1a0078263b30576c8e1f42 upstream.
-> > > 
-> > > The trampoline code needs to use the address of symbols in the wider
-> > > kernel, e.g. vectors. PC-relative addressing wouldn't work as the
-> > > trampoline code doesn't run at the address the linker expected.
-> > > 
-> > > tramp_ventry uses a literal pool, unless CONFIG_RANDOMIZE_BASE is
-> > > set, in which case it uses the data page as a literal pool because
-> > > the data page can be unmapped when running in user-space, which is
-> > > required for CPUs vulnerable to meltdown.
-> > > 
-> > > Pull this logic out as a macro, instead of adding a third copy
-> > > of it.
-> > > 
-> > > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-> > > Signed-off-by: James Morse <james.morse@arm.com>
-> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> > 
-> > This commit causes a linking failure with CONFIG_ARM_SDE_INTERFACE=y
-> > enabled in the kernel:
-> > 
-> >    LD      .tmp_vmlinux.kallsyms1
-> > /local/users/fainelli/buildroot/output/arm64/host/bin/aarch64-linux-ld:
-> > arch/arm64/kernel/entry.o: in function `__sdei_asm_exit_trampoline':
-> > /local/users/fainelli/buildroot/output/arm64/build/linux-custom/arch/arm64/kernel/entry.S:1352:
-> > undefined reference to `__sdei_asm_trampoline_next_handler'
-> > make[2]: *** [Makefile:1100: vmlinux] Error 1
-> > make[1]: *** [package/pkg-generic.mk:295:
-> > /local/users/fainelli/buildroot/output/arm64/build/linux-custom/.stamp_built]
-> > Error 2
-> > make: *** [Makefile:27: _all] Error 2
-> 
-> ... and with CONFIG_RANDOMIZE_BASE turned off, which is why allyesconfig didn't catch it.
-> This is because I kept the next_handler bit of the label when it conflicted, which isn't needed
-> because the __entry_tramp bit added by the macro serves the same purpose.
-> 
-> The below diff fixes it:
-> ----------%<----------
-> diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-> index e4b5a15c2e2e..cfc0bb6c49f7 100644
-> --- a/arch/arm64/kernel/entry.S
-> +++ b/arch/arm64/kernel/entry.S
-> @@ -1190,7 +1190,7 @@ __entry_tramp_data_start:
->  __entry_tramp_data_vectors:
->         .quad   vectors
->  #ifdef CONFIG_ARM_SDE_INTERFACE
-> -__entry_tramp_data___sdei_asm_trampoline_next_handler:
-> +__entry_tramp_data___sdei_asm_handler:
->         .quad   __sdei_asm_handler
->  #endif /* CONFIG_ARM_SDE_INTERFACE */
->         .popsection                             // .rodata
-> @@ -1319,7 +1319,7 @@ ENTRY(__sdei_asm_entry_trampoline)
->          */
->  1:     str     x4, [x1, #(SDEI_EVENT_INTREGS + S_ORIG_ADDR_LIMIT)]
-> -       tramp_data_read_var     x4, __sdei_asm_trampoline_next_handler
-> +       tramp_data_read_var     x4, __sdei_asm_handler
->         br      x4
->  ENDPROC(__sdei_asm_entry_trampoline)
->  NOKPROBE(__sdei_asm_entry_trampoline)
-> ----------%<----------
-> 
-> Good news - this didn't happen with v5.10.
-> 
-> I don't see this in v5.4.185 yet.
-> 
-> Greg/Sasha, what is least work for you?:
-> A new version of this patch,
-> A fixup on top of the series,
-> Reposting the series with this fixed.
 
-Let me merge this into this commit.
+--z4cu6dac2674z2wt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks!
+On Fri, Mar 18, 2022 at 05:02:49PM +0100, Paul Kocialkowski wrote:
+> While bridge/panel detection was initially relying on the usual
+> port/ports-based of graph detection, it was recently changed to
+> perform the lookup on any child node that is not port/ports
+> instead when such a node is available, with no fallback on the
+> usual way.
+>=20
+> This results in breaking detection when a child node is present
+> but does not contain any panel or bridge node, even when the
+> usual port/ports-based of graph is there.
+>=20
+> In order to support both situations properly, this commit reworks
+> the logic to try both options and not just one of the two: it will
+> only return -EPROBE_DEFER when both have failed.
+>=20
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Fixes: 80253168dbfd ("drm: of: Lookup if child node has panel or bridge")
+> ---
+>=20
+> Changes since v1:
+> - Renamed remote to node;
+> - Renamed helper to find_panel_or_bridge;
+> - Cleared bridge pointer early;
+> - Returned early to make the code more concise;
+>=20
+> ---
+>  drivers/gpu/drm/drm_of.c | 98 ++++++++++++++++++++--------------------
+>  1 file changed, 49 insertions(+), 49 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
+> index 9d90cd75c457..63137c833b7a 100644
+> --- a/drivers/gpu/drm/drm_of.c
+> +++ b/drivers/gpu/drm/drm_of.c
+> @@ -219,6 +219,28 @@ int drm_of_encoder_active_endpoint(struct device_nod=
+e *node,
+>  }
+>  EXPORT_SYMBOL_GPL(drm_of_encoder_active_endpoint);
+> =20
+> +static int find_panel_or_bridge(struct device_node *node,
+> +				struct drm_panel **panel,
+> +				struct drm_bridge **bridge)
+> +{
+> +	if (panel) {
+> +		*panel =3D of_drm_find_panel(node);
+> +		if (!IS_ERR(*panel))
+> +			return 0;
+> +		else
+> +			*panel =3D NULL;
 
-greg k-h
+You don't need the else branch here, we already cleared panel in
+drm_of_find_panel_or_bridge
+
+Looks good otherwise, thanks!
+Maxime
+
+--z4cu6dac2674z2wt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYjSw5gAKCRDj7w1vZxhR
+xWMYAP9UxgWQ44wOKvarITHty4nCGtH+DXxERccY8JZh+3tr0wD/eIa4rSSsOg12
+DUrsZb8HDRBGNTMwSgMSFnfdBo2+2Qo=
+=mFT4
+-----END PGP SIGNATURE-----
+
+--z4cu6dac2674z2wt--

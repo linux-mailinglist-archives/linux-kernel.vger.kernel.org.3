@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F214DD847
+	by mail.lfdr.de (Postfix) with ESMTP id 508074DD845
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235406AbiCRKlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
+        id S235359AbiCRKkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235138AbiCRKjK (ORCPT
+        with ESMTP id S235142AbiCRKjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 06:39:10 -0400
+        Fri, 18 Mar 2022 06:39:11 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308262DB5B6;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364F22DC009;
         Fri, 18 Mar 2022 03:37:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=v9EcQBitnjr0Qd2gvKpLLlOpgJnTuOTcBN0LGyO+Pho=;
-  b=T565Mm0SyjWVfqpwOTVc9+ULQTmt55bzetBCDr6fNBDZ0ikKAA2dAWM3
-   99UXx6N8lf/sNp+A2fTLQ8VomBWnnd4qPjsSkcSRCEMQUpN5rMqMKT/eT
-   zlpdmrDa9HHtcn+mjEiPdmYKe1OsXEvMLhrLUOcYz6+peRlkRB3XwFOYA
-   k=;
+  bh=ZphuoB39pL6xZZufQxzdnxdgS8zf0Im5X+oikwRjYcw=;
+  b=g3CdAdWY9bJEc6RFC6ktvT1UJeVslcaFff1EvGy51J0tzj/mA/jo0+4f
+   3/6EkUOcZLqmK7xbr+4N6PUQ0WHSoarPfLXbfSLWzyVexLj2WGIQUL+w5
+   sqORu/9mIJDTZxaKZGj8ckd6aWYqOpyACFbDi8mVgRCNgBhdU2kBjcJXP
+   I=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.90,192,1643670000"; 
-   d="scan'208";a="8935661"
+   d="scan'208";a="8935662"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:37:39 +0100
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Daniel Mack <daniel@zonque.org>
-Cc:     kernel-janitors@vger.kernel.org,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
+To:     Linus Walleij <linusw@kernel.org>
+Cc:     kernel-janitors@vger.kernel.org, Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
         Russell King <linux@armlinux.org.uk>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: pxa: tavorevb: fix typos in comments
-Date:   Fri, 18 Mar 2022 11:37:20 +0100
-Message-Id: <20220318103729.157574-25-Julia.Lawall@inria.fr>
+Subject: [PATCH] ARM/ixp4xx: fix typos in comments
+Date:   Fri, 18 Mar 2022 11:37:21 +0100
+Message-Id: <20220318103729.157574-26-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,20 +57,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- arch/arm/mach-pxa/tavorevb.c |    2 +-
+ arch/arm/mach-ixp4xx/ixp4xx-of.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-pxa/tavorevb.c b/arch/arm/mach-pxa/tavorevb.c
-index a15eb3b9484d..39db392c2270 100644
---- a/arch/arm/mach-pxa/tavorevb.c
-+++ b/arch/arm/mach-pxa/tavorevb.c
-@@ -252,7 +252,7 @@ static uint16_t panel_init[] = {
- 	SMART_DAT(0x40), /* 16/18/19 BPP */
- 	SMART_DAT(0x00),
- 	SMART_CMD(0x00),
--	SMART_CMD(0x08), /* BP, FP Seting, BP=2H, FP=3H */
-+	SMART_CMD(0x08), /* BP, FP Setting, BP=2H, FP=3H */
- 	SMART_DAT(0x03),
- 	SMART_DAT(0x02),
- 	SMART_CMD(0x00),
+diff --git a/arch/arm/mach-ixp4xx/ixp4xx-of.c b/arch/arm/mach-ixp4xx/ixp4xx-of.c
+index f9904716ec7f..f543e2adae0c 100644
+--- a/arch/arm/mach-ixp4xx/ixp4xx-of.c
++++ b/arch/arm/mach-ixp4xx/ixp4xx-of.c
+@@ -46,7 +46,7 @@ static void __init ixp4xx_of_map_io(void)
+ }
+ 
+ /*
+- * We handle 4 differen SoC families. These compatible strings are enough
++ * We handle 4 different SoC families. These compatible strings are enough
+  * to provide the core so that different boards can add their more detailed
+  * specifics.
+  */
 

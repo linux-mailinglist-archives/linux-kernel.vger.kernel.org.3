@@ -2,49 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E334DDEF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2744DDF01
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239168AbiCRQa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
+        id S239198AbiCRQbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239155AbiCRQap (ORCPT
+        with ESMTP id S239226AbiCRQa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:30:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3442195D8D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:28:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F2C71515;
-        Fri, 18 Mar 2022 09:28:46 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA7D03F7B4;
-        Fri, 18 Mar 2022 09:28:44 -0700 (PDT)
-Message-ID: <7c75e5d4-75a2-8ea5-64ad-13794a6036b6@arm.com>
-Date:   Fri, 18 Mar 2022 17:28:43 +0100
+        Fri, 18 Mar 2022 12:30:58 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771D119455D;
+        Fri, 18 Mar 2022 09:29:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647620970; x=1679156970;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=xBTcRJLtKt62fcWPwLWQXbKps2DSAsxac8MlWJab0nU=;
+  b=Url5dC5A1prXyEu4rKVHgUd+PhobBZ2KavK0KqB4z9WjcPGEUIj2YOEb
+   VxLfrIzfPGOiRwBL+KHhBOe/yfKmCI3KhRq+Fc9sh/nmmXXFauX3BSaky
+   WWiwrYA10Llt4db7LRGEcZhf/Ya4VecE/Y5xVRH5Mbb+YP3xrN9fe2Cqu
+   hlMG5WMCCOTvxDdlT/81Yn/nlJ5eU6k6oECAW6yuasfZW+eh2O7DcUYsR
+   P8etR8AUEPvYWkpS0jyruM8K3VGNZQYU/hTebyvgk0W3nTiVcKqXrEty+
+   eG36hVV1cYsX72YVDA+nGKonicrQ9NYV8NwKd1btgPrw5oal5XaHIEhdX
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="257356961"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="257356961"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 09:29:30 -0700
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="550798759"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 09:29:25 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nVFT3-002KEd-Qt;
+        Fri, 18 Mar 2022 18:28:45 +0200
+Date:   Fri, 18 Mar 2022 18:28:45 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "'Rafael J . Wysocki '" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 4/6] i2c: mux: pinctrl: remove CONFIG_OF dependency and
+ use fwnode API
+Message-ID: <YjSzPeWpcR/SSX1a@smile.fi.intel.com>
+References: <20220318160059.328208-1-clement.leger@bootlin.com>
+ <20220318160059.328208-5-clement.leger@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] sched/fair: Refactor cpu_util_without()
-Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>, Ben Segall <bsegall@google.com>,
-        Patrick Bellasi <patrick.bellasi@matbug.net>,
-        Vincent Donnefort <Vincent.Donnefort@arm.com>,
-        linux-kernel@vger.kernel.org
-References: <20220301171727.812157-1-dietmar.eggemann@arm.com>
- <CAKfTPtD6i7oYZuAMYFmxFnRHETUAgKYV1gxoMiMjSksBs6Z=rg@mail.gmail.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <CAKfTPtD6i7oYZuAMYFmxFnRHETUAgKYV1gxoMiMjSksBs6Z=rg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220318160059.328208-5-clement.leger@bootlin.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,88 +83,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- Valentin Schneider <Valentin.Schneider@arm.com>
+On Fri, Mar 18, 2022 at 05:00:50PM +0100, Clément Léger wrote:
+> In order to use i2c muxes with software_node when added with a struct
+> mfd_cell, switch to fwnode API. The fwnode layer will allow to use this
+> with both device_node and software_node.
 
-On 02/03/2022 10:09, Vincent Guittot wrote:
-> On Tue, 1 Mar 2022 at 18:17, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> -	struct device_node *np = dev->of_node;
+> +	struct fwnode_handle *np = dev_fwnode(dev);
 
-[...]
+np is now a misleading name. Use fwnode.
 
-> I have only minor comment
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks for the review!
 
-[...]
-
->> +static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
->> +{
-
-[...]
-
->> +       if (sched_feat(UTIL_EST)) {
->> +               util_est = READ_ONCE(cfs_rq->avg.util_est.enqueued);
->> +
->> +               /*
->> +                * During wake-up, the task isn't enqueued yet and doesn't
->> +                * appear in the cfs_rq->avg.util_est.enqueued of any rq,
->> +                * so just add it (if needed) to "simulate" what will be
->> +                * cpu_util after the task has been enqueued.
->> +                */
->> +               if (dst_cpu == cpu)
->> +                       util_est += _task_util_est(p);
->> +
-> 
-> Could you add a comment that explains why the addition above will not
-> be removed below by the lsub_positive below so it isn't worth trying
-> to optimize such a case?
-
-Yes. I rewored the comments in cpu_util_next() so they also apply when
-called by cpu_util_without(). And I use a `if{}/else if{}` here too in v2.
->> +               /*
->> +                * Despite the following checks we still have a small window
->> +                * for a possible race, when an execl's select_task_rq_fair()
->> +                * races with LB's detach_task():
->> +                *
->> +                *   detach_task()
->> +                *     p->on_rq = TASK_ON_RQ_MIGRATING;
->> +                *     ---------------------------------- A
->> +                *     deactivate_task()                   \
->> +                *       dequeue_task()                     + RaceTime
->> +                *         util_est_dequeue()              /
->> +                *     ---------------------------------- B
->> +                *
->> +                * The additional check on "current == p" it's required to
->> +                * properly fix the execl regression and it helps in further
->> +                * reducing the chances for the above race.
->> +                */
->> +               if (unlikely(task_on_rq_queued(p) || current == p))
->> +                       lsub_positive(&util_est, _task_util_est(p));
-
-I did a lot of testing on mainline & v4.20 and there wasn't one
-occurrence of `p->on_rq == TASK_ON_RQ_MIGRATING` here. Not for WF_EXEC
-tasks (p->on_rq = TASK_ON_RQ_QUEUED) and in case of v4.20 not for
-WF_EXEC and WF_TTWU tasks (p->on_rq = 0). So I assume it's not needed. I
-left it in v2 though and mentioned it in the additional comment section
-of the patch.
-
-[...]
-
->>  static unsigned long cpu_util_without(int cpu, struct task_struct *p)
->>  {
-
-[...]
-
->>         /*
->>          * Covered cases:
->>          *
->> @@ -6560,82 +6609,8 @@ static unsigned long cpu_util_without(int cpu, struct task_struct *p)
->>          *    estimation of the spare capacity on that CPU, by just
->>          *    considering the expected utilization of tasks already
->>          *    runnable on that CPU.
-> 
-> The comment about the covered cases above should be moved in
-> cpu_util_next() which is where the cases are covered now
-
-Yes. I Incorporated it into the comments in cpu_util_next() in v2.
-
-[...]

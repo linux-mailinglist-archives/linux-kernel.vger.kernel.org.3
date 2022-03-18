@@ -2,148 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 527F54DD59C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 286A24DD59F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233364AbiCRHx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
+        id S233385AbiCRH40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiCRHx5 (ORCPT
+        with ESMTP id S231319AbiCRH4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:53:57 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E232C80AE;
-        Fri, 18 Mar 2022 00:52:39 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id qa43so15325230ejc.12;
-        Fri, 18 Mar 2022 00:52:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=A3PDqBaBritnZnP7hEtDx3b+3Mek9k1rJJXE3rj2Zy4=;
-        b=ZhK7KU7qoYASv+l399eftSrF3wUXJ5oaN/qiNPQfLwsgtl9bq6qAPmuIwnb6gPn0ZB
-         Qka724KGz5X2BfT0CpVuVLiUFF6ErQL4S44sSA2EAHDb58EiOtR+X0JhcrDOIOXDr7gZ
-         24X0jJU6Yly36s/6hxxD/++HUaP3eTkFSPpOuS6E98ndLpNpbRxSjVUp4DiS19ZWMUMu
-         GEZLON/wlJbHOJMBnDmO0miYuxztYiWcHQnwY9dXE4YRoHuXNZcfcHE6q90S0W4vd2s/
-         E5402c4bkMQiR9GoAj6vmeD+s0x6iiyOSxfREREz7Q0DFX+fA5A5h/8+7LQmFhYyPip0
-         XHFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=A3PDqBaBritnZnP7hEtDx3b+3Mek9k1rJJXE3rj2Zy4=;
-        b=HTbPdfVxetH/hc+154Zin+tBBX0PxOFfOrIXQJ58YaEU2nu4quEdl5tTkVZQDW/+LA
-         mmVy1EBPGdSO64opkZOfJ5FwnU78ry6OGrA38S1zDq0d7YAYjbOfwXwHsgil6KT/dx/K
-         QmFKuf5TDj151sWQGsah6ieqpppif7WZCHblXgBnzN4UscQ2lZT8TbmcWhIEULrpAgPv
-         SElhUmzRcNbPsYG7dvepsISCcKG09pMtfC+nFsTyGo0em3/MKvffIkinAwTaXsdu5F43
-         pH/cGGI/cwzlTmElQLzFOaX4w5YGDSoR8javkRvFMffdcfIi43RkINf8GWHowXlKONak
-         I8ag==
-X-Gm-Message-State: AOAM5308zdxQJxXrsRotPhMg5DLdo9dLYGDWlZ58lW1TfFYd0ynVYEWF
-        mUxKCpHpca4hoMFQRXL7jlU=
-X-Google-Smtp-Source: ABdhPJxVj9syTlN4gCx31UjIIGZaW675Iq81FFnD2LS0OTRzGHNcwcEKjUsDvxcdNAmVAaJyTmZAmA==
-X-Received: by 2002:a17:906:4fd2:b0:6db:21ba:e434 with SMTP id i18-20020a1709064fd200b006db21bae434mr8090239ejw.714.1647589957791;
-        Fri, 18 Mar 2022 00:52:37 -0700 (PDT)
-Received: from ubuntu2004 ([188.24.153.122])
-        by smtp.gmail.com with ESMTPSA id qw7-20020a1709066a0700b006dfa04dc2a4sm1534847ejc.56.2022.03.18.00.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 00:52:36 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 09:52:30 +0200
-From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Michael Walle <michael@walle.cc>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Bert Vermeulen <bert@biot.com>,
-        John Crispin <john@phrozen.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Suman Anna <s-anna@ti.com>, Lokesh Vutla <lokeshvutla@ti.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, openbmc@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-oxnas@groups.io
-Subject: Re: [PATCH 04/18] dt-bindings: irqchip: actions,owl-sirq: include
- generic schema
-Message-ID: <20220318075230.GA15068@ubuntu2004>
-References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
- <20220317115705.450427-3-krzysztof.kozlowski@canonical.com>
+        Fri, 18 Mar 2022 03:56:24 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E501770B8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 00:55:04 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KKbqK2NnmzfZ4G
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 15:53:33 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 18 Mar 2022 15:55:02 +0800
+Received: from huawei.com (10.67.174.169) by dggpemm500001.china.huawei.com
+ (7.185.36.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 18 Mar
+ 2022 15:55:02 +0800
+From:   Chen Lifu <chenlifu@huawei.com>
+To:     <patchwork@huawei.com>, <chenlifu@huawei.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <miaoxie@huawei.com>, <weiyongjun1@huawei.com>,
+        <guohanjun@huawei.com>, <huawei.libin@huawei.com>,
+        <yuehaibing@huawei.com>, <rui.xiang@huawei.com>,
+        <zhaohongjiang@huawei.com>, <johnny.chenyi@huawei.com>,
+        <heying24@huawei.com>, <liaochang1@huawei.com>,
+        <lizhengyu3@huawei.com>, <chenjiahao16@huawei.com>,
+        <xuyihang@huawei.com>, <chris.zjh@huawei.com>,
+        <linyujun809@huawei.com>
+Subject: [PATCH -next] scripts: add compare-config utility
+Date:   Fri, 18 Mar 2022 15:54:21 +0800
+Message-ID: <20220318075421.606533-1-chenlifu@huawei.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317115705.450427-3-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.169]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 12:56:51PM +0100, Krzysztof Kozlowski wrote:
-> Include generic interrupt-controller.yaml schema, which enforces node
-> naming and other generic properties.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+This is an alternative utility to compare two Linux .config files.
+Unlike existing utilities such as "diffconfig" in the Linux kernel tree,
+it prints detailed results in table style. It is useful sometimes,
+e.g. for those who need to analyze .config files through tables.
 
-Reviewed-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Signed-off-by: Chen Lifu <chenlifu@huawei.com>
+---
+ scripts/compare-config | 199 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 199 insertions(+)
+ create mode 100755 scripts/compare-config
 
-Thanks.
+diff --git a/scripts/compare-config b/scripts/compare-config
+new file mode 100755
+index 000000000000..6da7c844b89c
+--- /dev/null
++++ b/scripts/compare-config
+@@ -0,0 +1,199 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++#
++# An utility to compare two .config files and print the results in table style.
++#
++
++import sys
++import argparse
++import traceback
++
++def args_parser():
++    comment = ("An utility to compare two .config files and "
++               "print the results in table style.")
++    parser = argparse.ArgumentParser(description = comment,
++                                     formatter_class =
++                                         argparse.RawTextHelpFormatter)
++    parser.add_argument(dest = "old_file", nargs = "?",
++                        metavar = "old-file",
++                        default = ".config.old",
++                        help = "specify old .config file "
++                               "(default: .config.old)")
++    parser.add_argument(dest = "new_file", nargs = "?",
++                        metavar = "new-file",
++                        default = ".config",
++                        help = "specify new .config file "
++                               "(default: .config)")
++    parser.add_argument("-S", dest = "S", action = "store_true",
++                        help = "print configs that exist in both files "
++                               "and are equal")
++    parser.add_argument("-C", dest = "C", action = "store_true",
++                        help = "print configs that exist in both files "
++                               "but are not equal")
++    parser.add_argument("-O", dest = "O", action = "store_true",
++                        help = "print configs that only exist in old-file")
++    parser.add_argument("-N", dest = "N", action = "store_true",
++                        help = "print configs that only exist in new-file")
++    parser.add_argument("-y", dest = "y", action = "store_true",
++                        help = "print configs that are y")
++    parser.add_argument("-n", dest = "n", action = "store_true",
++                        help = "print configs that are n (not set)")
++    parser.add_argument("-m", dest = "m", action = "store_true",
++                        help = "print configs that are m")
++    parser.add_argument("-v", dest = "v", action = "store_true",
++                        help = "print configs that are "
++                               "string/hex/int value")
++    parser.add_argument("--old", dest = "old", action = "store_true",
++                        help = "filter configs base on old-file")
++    parser.add_argument("--new", dest = "new", action = "store_true",
++                        help = "filter configs base on new-file")
++    return parser
++
++def usage():
++    args_parser().parse_args(["-h"])
++
++def parse_args():
++    args = args_parser().parse_args()
++    setattr(args, "doptions", diff_options(args))
++    setattr(args, "voptions", value_options(args))
++    old = args.old or not args.new
++    new = args.new or not args.old
++    args.old = old
++    args.new = new
++    return args
++
++def diff_options(args):
++    doptions = []
++    if args.S: doptions.append("S")
++    if args.C: doptions.append("C")
++    if args.O: doptions.append("O")
++    if args.N: doptions.append("N")
++    if len(doptions) == 0:
++        doptions = ["S", "C", "O", "N"]
++    return doptions
++
++def value_options(args):
++    voptions = set()
++    if args.y: voptions.add("y")
++    if args.n: voptions.add("n")
++    if args.m: voptions.add("m")
++    if args.v: voptions.add("v")
++    if len(voptions) == 0:
++        voptions = {"y", "n", "m", "v"}
++    return voptions
++
++def test_value(val, voptions):
++    if val is None: return False
++    if val in voptions: return True
++    return (not val in {"y", "n", "m"}) and ("v" in voptions)
++
++def format_exception():
++    es = ""
++    exc_type, exc_value, exc_traceback = sys.exc_info()
++    exc_str = traceback.format_exception(exc_type, exc_value, exc_traceback)
++    for s in exc_str:
++        es += s
++    return es
++
++def read_line(line):
++    prefix = "CONFIG_"
++    line = line.strip()
++    if line.startswith(prefix):
++        if line.find("=") == -1: return None, None
++        name, val = line.split("=", 1)
++        return name.strip(), val.strip()
++    if line.endswith(" is not set"):
++        beg = line.find(prefix)
++        if beg == -1: return None, None
++        name, val = line[beg:].split(" ", 1)
++        return name, "n"
++    return None, None
++
++def read_file(filename):
++    configs = {}
++    with open(filename, "r", encoding = "utf-8") as f:
++        for line in f:
++            name, val = read_line(line)
++            if not name is None: configs[name] = val
++    return configs
++
++def compare_files(old_file, new_file):
++    result = {"S": {}, "C": {}, "O": {}, "N": {}}
++    try:
++        old_configs = read_file(old_file)
++        new_configs = read_file(new_file)
++        while len(old_configs) > 0:
++            name, old_val = old_configs.popitem()
++            new_val = new_configs.pop(name, None)
++            if new_val is None:
++                result["O"][name] = (old_val, None)
++            elif old_val == new_val:
++                result["S"][name] = (old_val, new_val)
++            else:
++                result["C"][name] = (old_val, new_val)
++        while len(new_configs) > 0:
++            name, new_val = new_configs.popitem()
++            result["N"][name] = (None, new_val)
++    except:
++        print(format_exception())
++        usage()
++    return result
++
++def filter_output(result, args):
++    output = {"S": {}, "C": {}, "O": {}, "N": {}}
++    for opt in args.doptions:
++        for name, val in result[opt].items():
++            if (args.old and test_value(val[0], args.voptions) or
++                args.new and test_value(val[1], args.voptions)):
++                old_val = "-" if val[0] is None else val[0]
++                new_val = "-" if val[1] is None else val[1]
++                output[opt][name] = (old_val, new_val)
++    return output
++
++def print_table(output, args):
++    name_max_len = 8
++    old_max_len  = 8
++    new_max_len  = 8
++    name_list = sum([list(output[opt].keys()) for opt in args.doptions], [])
++    if len(name_list) > 0:
++        name_max_len = len(max(name_list, key = len))
++    val_list = sum([list(output[opt].values()) for opt in args.doptions], [])
++    if len(val_list) > 0:
++        old_max_len = len(max([val[0] for val in val_list], key = len))
++        new_max_len = len(max([val[1] for val in val_list], key = len))
++    diff_max_len = len(max([diff_types[opt] for opt in args.doptions], key = len))
++    header = ["NAME", "DIFF", "OLD", "NEW"]
++    # table row format
++    row = ("{{:{}}}\t{{:{}}}\t{{:{}}}\t{{:{}}}"
++           .format(min(max(name_max_len, len(header[0])), 40),
++                   min(max(diff_max_len, len(header[1])), 40),
++                   min(max(old_max_len,  len(header[2])), 40),
++                   min(max(new_max_len,  len(header[3])), 40)))
++    print(row.format(header[0], header[1], header[2], header[3]))
++    for opt in args.doptions:
++        for name, val in sorted(output[opt].items()):
++            print(row.format(name, diff_types[opt], val[0], val[1]))
++
++def print_summary(output, args):
++    diff_max_len = len(max([diff_types[opt] for opt in args.doptions], key = len))
++    # summary line format
++    line = "{{:{}}}: {{}}".format(max(diff_max_len, 8))
++    print("\nSummary:")
++    print(line.format("Old-file", args.old_file))
++    print(line.format("New-file", args.new_file))
++    total = 0
++    for opt in args.doptions:
++        count = len(output[opt])
++        print(line.format(diff_types[opt], count))
++        total += count
++    print(line.format("Total", total))
++
++def print_result(result, args):
++    output = filter_output(result, args)
++    print_table(output, args)
++    print_summary(output, args)
++
++diff_types = {"S": "Same", "C": "Changed", "O": "Old-only", "N": "New-only"}
++args = parse_args()
++result = compare_files(args.old_file, args.new_file)
++print_result(result, args)
+-- 
+2.35.1
 
-> ---
->  .../bindings/interrupt-controller/actions,owl-sirq.yaml      | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/actions,owl-sirq.yaml b/Documentation/devicetree/bindings/interrupt-controller/actions,owl-sirq.yaml
-> index 5da333c644c9..c058810cf475 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/actions,owl-sirq.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/actions,owl-sirq.yaml
-> @@ -14,6 +14,9 @@ description: |
->    This interrupt controller is found in the Actions Semi Owl SoCs (S500, S700
->    and S900) and provides support for handling up to 3 external interrupt lines.
->  
-> +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
-> +
->  properties:
->    compatible:
->      enum:
-> @@ -46,7 +49,7 @@ required:
->    - '#interrupt-cells'
->    - 'interrupts'
->  
-> -additionalProperties: false
-> +unevaluatedProperties: false
->  
->  examples:
->    - |
-> -- 
-> 2.32.0
-> 

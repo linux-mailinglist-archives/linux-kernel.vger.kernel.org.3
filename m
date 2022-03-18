@@ -2,169 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815044DDF65
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E224DDF67
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239410AbiCRQxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
+        id S239388AbiCRQzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239398AbiCRQxL (ORCPT
+        with ESMTP id S233118AbiCRQzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:53:11 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262B8170D97
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:51:52 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id m12so10912876edc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZoPZaaC2NKmWX4pMUWovHOkjyoMteKBE1HWqQdjxHic=;
-        b=HeWOIunJl0UAOOBuf3sFMoQ5H0G4YvHE64MUshpGXCqPohbLwWv6CprzWDDtvQZV4a
-         gZp/IxMUTTx1ov0X4+Vytt7su/e4jtYsO/D7+kTb9CU6ARrJw3MeR8b7NRqQIiLqbZ+u
-         j0aPEH4e2LjldUZc5ZiqUuKcRxGdW0FHrgLL4hB6guAKbnFpXj4HPtEHgcCnG4QCJ52d
-         8sGtuj8e3Awdr6ViUqdpWzBCCokYpw3AL06YpXiNcCaFQKGz+GcgpjJZoJ7sHuMpdpCs
-         ymr/6dX8jq2mXYwwEaHQ6nDbFH7a9NCUu3d4CU2qQvzNicnQV+J46JfBwgvGB6WAPUvK
-         o4RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZoPZaaC2NKmWX4pMUWovHOkjyoMteKBE1HWqQdjxHic=;
-        b=xdHB4Vm8oVawqH3GnGSBb6AkOCAuYpwx6ZDWDqHNPk9KwZC3Dxacbep6gr1cvoZsAi
-         G6+epESXsIbC4e5YKIORZtvBQumZ9FNu0X753/9TX/XOBdix2GxzUKNBLLDvJTxVPf/k
-         bYBQVn5ibdvMXBJ2taTXhMEggEHzhsef4dZq30WzwyKH8iW8tFRhCut00UEa5TF8L0A/
-         KNRu6GprB7DiQIeDomwEHsrsC5tcIBDA0zH+IElAo1Qf5ymHLYGXzwli3ZdPywO4bj4p
-         VW/v0zkb1QhVi63qsZo/+DdCech+mg8H0lJkYqpmriI7zAR2S9fEiJbXM+w99WYJbaph
-         iaQg==
-X-Gm-Message-State: AOAM531m3sPVvk+Aslt1eYBLGeePXHLwPVkkQhsyhMheXpGozzEQ7IOL
-        Bk5QNVFMP+ind22e80UgCkPp9TEHPXisaCMcBY6ZRg==
-X-Google-Smtp-Source: ABdhPJy1ogHfzAiq8bCYwvn4PC5AAKNI1WF+ewG3yPW/hiP3cfUSSMXviPUH6oLPM47jn5XKjLbfbX9S5ZFPtLR/S0Y=
-X-Received: by 2002:a05:6402:289d:b0:419:437:ef4f with SMTP id
- eg29-20020a056402289d00b004190437ef4fmr5976676edb.110.1647622310479; Fri, 18
- Mar 2022 09:51:50 -0700 (PDT)
+        Fri, 18 Mar 2022 12:55:45 -0400
+Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3F8296D09
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:54:25 -0700 (PDT)
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id 2F5B69763F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:54:25 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id VFrsnkKfi22u3VFrtnFokQ; Fri, 18 Mar 2022 11:54:25 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Wi952GqghCdLpBfnclSbwbrPudUBqxfLgOmi5Y4q56U=; b=CTusl16pLAfpHfeZrbRLpkfDgx
+        N0YMEkZahV1OMNZOWzVdVKgRGp2UvL/oIpw+ggLxFkMcloArawFLKKFGTy1KAdf+ZMpRMBjK0sGLT
+        ey0slJBxe8vu/7VGW6uSwDzhvVs+z7CAduUOM4JsvUIM0XK7ru9IaIOKd9YPDXb7EwSUTwWtw8Bhw
+        1UqWwxxJI9mwcEMphufdDCjrZpcrGP6wK5W1QcGAvdcWmHA2gAPsuK5bPM/UiSuXxR9T9UzQpT/Vl
+        3+Fdmd1VfHOPyzhfe0evUVKHi+oT1AtjTqs4CBysQ3AExrzORFUHzt02EUlpQ3ckffZWbAxi+F1ig
+        TfBXn+Fg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57540 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nVFrs-000Xrz-G1; Fri, 18 Mar 2022 16:54:24 +0000
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Benson Leung <bleung@chromium.org>
+Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Rob Barnes <robbarnes@google.com>,
+        Rajat Jain <rajatja@google.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Parth Malkan <parthmalkan@google.com>
+Subject: [PATCH v2] platform/chrome: Re-introduce cros_ec_cmd_xfer and use it for ioctls
+Date:   Fri, 18 Mar 2022 09:54:22 -0700
+Message-Id: <20220318165422.686848-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220315172221.9522-1-bgeffon@google.com> <YjS2SJU7VE1bGb/F@google.com>
-In-Reply-To: <YjS2SJU7VE1bGb/F@google.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Fri, 18 Mar 2022 12:51:14 -0400
-Message-ID: <CADyq12wQ=vGaGoqt5RXJ5aYM1tQJ2BCT8cav-ONpPrCc85q-5Q@mail.gmail.com>
-Subject: Re: [PATCH] zram: Add a huge_idle writeback mode
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nVFrs-000Xrz-G1
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57540
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 6
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 12:41 PM Minchan Kim <minchan@kernel.org> wrote:
->
-> On Tue, Mar 15, 2022 at 10:22:21AM -0700, Brian Geffon wrote:
-> > Today it's only possible to write back as a page, idle, or huge.
-> > A user might want to writeback pages which are huge and idle first
-> > as these idle pages do not require decompression and make a good
-> > first pass for writeback.
->
-> Hi Brian,
->
-> I am not sure how much the decompression overhead matter for idle pages
-> writeback since it's already *very slow* path in zram but I agree that
-> it would be a good first pass since the memory saving for huge writing
-> would be cost efficient.
->
-> Just out of curiosity. Do you have real usecase?
+Commit 413dda8f2c6f ("platform/chrome: cros_ec_chardev: Use
+cros_ec_cmd_xfer_status helper") inadvertendly changed the userspace ABI.
+Previously, cros_ec ioctls would only report errors if the EC communication
+failed, and otherwise return success and the result of the EC
+communication. An EC command execution failure was reported in the EC
+response field. The above mentioned commit changed this behavior, and the
+ioctl itself would fail. This breaks userspace commands trying to analyze
+the EC command execution error since the actual EC command response is no
+longer reported to userspace.
 
-Hi Minchan,
-Thank you for taking a look. When we are thinking about writeback
-we're trying to be very sensitive to our devices storage endurance,
-for this reason we will have a fairly conservative writeback limit.
-Given that, we want to make sure we're maximizing what lands on disk
-while still minimizing the refault time. We could take the approach
-where we always writeback huge pages but then we may result in very
-quick refaults which would be a huge waste of time. So idle writeback
-is a must for us and being able to writeback the pages which have
-maximum value (huge) would be very useful.
+Fix the problem by re-introducing the cros_ec_cmd_xfer() helper, and use it
+to handle ioctl messages.
 
-Brian
+Fixes: 413dda8f2c6f ("platform/chrome: cros_ec_chardev: Use cros_ec_cmd_xfer_status helper")
+Cc: Daisuke Nojiri <dnojiri@chromium.org>
+Cc: Rob Barnes <robbarnes@google.com>
+Cc: Rajat Jain <rajatja@google.com>
+Cc: Brian Norris <briannorris@chromium.org>
+Cc: Parth Malkan <parthmalkan@google.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v2: Updated comments / return value description. No functional change.
 
+ drivers/platform/chrome/cros_ec_chardev.c   |  2 +-
+ drivers/platform/chrome/cros_ec_proto.c     | 50 +++++++++++++++++----
+ include/linux/platform_data/cros_ec_proto.h |  3 ++
+ 3 files changed, 45 insertions(+), 10 deletions(-)
 
+diff --git a/drivers/platform/chrome/cros_ec_chardev.c b/drivers/platform/chrome/cros_ec_chardev.c
+index e0bce869c49a..fd33de546aee 100644
+--- a/drivers/platform/chrome/cros_ec_chardev.c
++++ b/drivers/platform/chrome/cros_ec_chardev.c
+@@ -301,7 +301,7 @@ static long cros_ec_chardev_ioctl_xcmd(struct cros_ec_dev *ec, void __user *arg)
+ 	}
+ 
+ 	s_cmd->command += ec->cmd_offset;
+-	ret = cros_ec_cmd_xfer_status(ec->ec_dev, s_cmd);
++	ret = cros_ec_cmd_xfer(ec->ec_dev, s_cmd);
+ 	/* Only copy data to userland if data was received. */
+ 	if (ret < 0)
+ 		goto exit;
+diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+index c4caf2e2de82..ac1419881ff3 100644
+--- a/drivers/platform/chrome/cros_ec_proto.c
++++ b/drivers/platform/chrome/cros_ec_proto.c
+@@ -560,22 +560,28 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+ EXPORT_SYMBOL(cros_ec_query_all);
+ 
+ /**
+- * cros_ec_cmd_xfer_status() - Send a command to the ChromeOS EC.
++ * cros_ec_cmd_xfer() - Send a command to the ChromeOS EC.
+  * @ec_dev: EC device.
+  * @msg: Message to write.
+  *
+- * Call this to send a command to the ChromeOS EC. This should be used instead of calling the EC's
+- * cmd_xfer() callback directly. It returns success status only if both the command was transmitted
+- * successfully and the EC replied with success status.
++ * Call this to send a command to the ChromeOS EC. This should be used instead
++ * of calling the EC's cmd_xfer() callback directly. This function does not
++ * convert EC command execution error codes to Linux error codes. Most
++ * in-kernel users will want to use cros_ec_cmd_xfer_status() instead since
++ * that function implements the conversion.
+  *
+  * Return:
+- * >=0 - The number of bytes transferred
+- * <0 - Linux error code
++ * >0 - EC command was executed successfully. The return value is the number
++ *      of bytes returned by the EC (excluding the header).
++ * =0 - EC communication was successful. EC command execution results are
++ *      reported in msg->result. The result will be EC_RES_SUCCESS if the
++ *      command was executed successfully or report an EC command execution
++ *      error.
++ * <0 - EC communication error. Return value is the Linux error code.
+  */
+-int cros_ec_cmd_xfer_status(struct cros_ec_device *ec_dev,
+-			    struct cros_ec_command *msg)
++int cros_ec_cmd_xfer(struct cros_ec_device *ec_dev, struct cros_ec_command *msg)
+ {
+-	int ret, mapped;
++	int ret;
+ 
+ 	mutex_lock(&ec_dev->lock);
+ 	if (ec_dev->proto_version == EC_PROTO_VERSION_UNKNOWN) {
+@@ -616,6 +622,32 @@ int cros_ec_cmd_xfer_status(struct cros_ec_device *ec_dev,
+ 	ret = send_command(ec_dev, msg);
+ 	mutex_unlock(&ec_dev->lock);
+ 
++	return ret;
++}
++EXPORT_SYMBOL(cros_ec_cmd_xfer);
++
++/**
++ * cros_ec_cmd_xfer_status() - Send a command to the ChromeOS EC.
++ * @ec_dev: EC device.
++ * @msg: Message to write.
++ *
++ * Call this to send a command to the ChromeOS EC. This should be used instead of calling the EC's
++ * cmd_xfer() callback directly. It returns success status only if both the command was transmitted
++ * successfully and the EC replied with success status.
++ *
++ * Return:
++ * >=0 - The number of bytes transferred.
++ * <0 - Linux error code
++ */
++int cros_ec_cmd_xfer_status(struct cros_ec_device *ec_dev,
++			    struct cros_ec_command *msg)
++{
++	int ret, mapped;
++
++	ret = cros_ec_cmd_xfer(ec_dev, msg);
++	if (ret < 0)
++		return ret;
++
+ 	mapped = cros_ec_map_error(msg->result);
+ 	if (mapped) {
+ 		dev_dbg(ec_dev->dev, "Command result (err: %d [%d])\n",
+diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+index df3c78c92ca2..16931569adce 100644
+--- a/include/linux/platform_data/cros_ec_proto.h
++++ b/include/linux/platform_data/cros_ec_proto.h
+@@ -216,6 +216,9 @@ int cros_ec_prepare_tx(struct cros_ec_device *ec_dev,
+ int cros_ec_check_result(struct cros_ec_device *ec_dev,
+ 			 struct cros_ec_command *msg);
+ 
++int cros_ec_cmd_xfer(struct cros_ec_device *ec_dev,
++		     struct cros_ec_command *msg);
++
+ int cros_ec_cmd_xfer_status(struct cros_ec_device *ec_dev,
+ 			    struct cros_ec_command *msg);
+ 
+-- 
+2.35.1
 
-
->
-> >
-> > Signed-off-by: Brian Geffon <bgeffon@google.com>
-> > ---
-> >  Documentation/admin-guide/blockdev/zram.rst |  6 ++++++
-> >  drivers/block/zram/zram_drv.c               | 10 ++++++----
-> >  2 files changed, 12 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
-> > index 3e11926a4df9..af1123bfaf92 100644
-> > --- a/Documentation/admin-guide/blockdev/zram.rst
-> > +++ b/Documentation/admin-guide/blockdev/zram.rst
-> > @@ -343,6 +343,12 @@ Admin can request writeback of those idle pages at right timing via::
-> >
-> >  With the command, zram writeback idle pages from memory to the storage.
-> >
-> > +Additionally, if a user choose to writeback only huge and idle pages
-> > +this can be accomplished with::
-> > +
-> > +        echo huge_idle > /sys/block/zramX/writeback
-> > +
-> > +
-> >  If admin want to write a specific page in zram device to backing device,
-> >  they could write a page index into the interface.
-> >
-> > diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-> > index cb253d80d72b..f196902ae554 100644
-> > --- a/drivers/block/zram/zram_drv.c
-> > +++ b/drivers/block/zram/zram_drv.c
-> > @@ -643,8 +643,8 @@ static int read_from_bdev_async(struct zram *zram, struct bio_vec *bvec,
-> >  #define PAGE_WB_SIG "page_index="
-> >
-> >  #define PAGE_WRITEBACK 0
-> > -#define HUGE_WRITEBACK 1
-> > -#define IDLE_WRITEBACK 2
-> > +#define HUGE_WRITEBACK (1<<0)
-> > +#define IDLE_WRITEBACK (1<<1)
-> >
-> >
-> >  static ssize_t writeback_store(struct device *dev,
-> > @@ -664,6 +664,8 @@ static ssize_t writeback_store(struct device *dev,
-> >               mode = IDLE_WRITEBACK;
-> >       else if (sysfs_streq(buf, "huge"))
-> >               mode = HUGE_WRITEBACK;
-> > +     else if (sysfs_streq(buf, "huge_idle"))
-> > +             mode = IDLE_WRITEBACK | HUGE_WRITEBACK;
-> >       else {
-> >               if (strncmp(buf, PAGE_WB_SIG, sizeof(PAGE_WB_SIG) - 1))
-> >                       return -EINVAL;
-> > @@ -725,10 +727,10 @@ static ssize_t writeback_store(struct device *dev,
-> >                               zram_test_flag(zram, index, ZRAM_UNDER_WB))
-> >                       goto next;
-> >
-> > -             if (mode == IDLE_WRITEBACK &&
-> > +             if (mode & IDLE_WRITEBACK &&
-> >                         !zram_test_flag(zram, index, ZRAM_IDLE))
-> >                       goto next;
-> > -             if (mode == HUGE_WRITEBACK &&
-> > +             if (mode & HUGE_WRITEBACK &&
-> >                         !zram_test_flag(zram, index, ZRAM_HUGE))
-> >                       goto next;
-> >               /*
-> > --
-> > 2.35.1.723.g4982287a31-goog
-> >

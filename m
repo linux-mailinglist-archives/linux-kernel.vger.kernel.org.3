@@ -2,155 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE554DE1BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 20:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C47DF4DE1C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 20:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240341AbiCRTZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 15:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S240356AbiCRT0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 15:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239449AbiCRTZK (ORCPT
+        with ESMTP id S235549AbiCRT0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 15:25:10 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E899304AC5;
-        Fri, 18 Mar 2022 12:23:50 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id EF71D1F45C19
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647631428;
-        bh=WlSxsl1AsukIIoT+HgzKCmviZWgGsHJPvRrOsuv2jMo=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=jM4edW6w09UWqtmSOGEzQOsPEfY7cXe6gIGCHOxMZ8c6Hv82Sf4WL9YJL10v99060
-         4w8ErN+CrDUNSGP6uJBC3TycxdVc28S5a/5RB3ENmDEH/FBNF9sYd+Hk0kZfLuYtdI
-         htUPBgQvPM215lCR+lJ6iLDxdi+E2MeIGtiFqAcM6t6lhqazkBrThN0cAOSVvQk1p3
-         dJIRPlMw2Z/9nWO4cnp78zSe8R0Llz4N9v6cI9Yrj4hCgiOGFYvxzUWojB3LaMFob3
-         1rTZdwbc5zeeWClc/PQELSFfvpaH1bnfX7D+jYg/e87DrpoprnTCE1NjOk4YPVE1iW
-         EZ4Ynd4Mw6Xjw==
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        david@redhat.com, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V5 2/2] selftests: vm: Add test for Soft-Dirty PTE bit
-Organization: Collabora
-References: <20220317103323.94799-1-usama.anjum@collabora.com>
-        <20220317103323.94799-2-usama.anjum@collabora.com>
-Date:   Fri, 18 Mar 2022 15:23:43 -0400
-In-Reply-To: <20220317103323.94799-2-usama.anjum@collabora.com> (Muhammad
-        Usama Anjum's message of "Thu, 17 Mar 2022 15:33:22 +0500")
-Message-ID: <87ilsbyshs.fsf@collabora.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Fri, 18 Mar 2022 15:26:30 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DFF30CAAF
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:25:08 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id p15so18883863ejc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hXH9ELMuDY+iN+HFjZXoGFqlOaPPrjOGTbi3JNMxxVA=;
+        b=AVhQunjEnglxMNGkZ1ERYHtyQHblgxV8GZOCiAQAeZLEeFQ2gTXP6yTA0fG2AKamls
+         zRLXL+1ze6sD7aCthHCmdGBcTEBpeZHGP19fWFmWj3QRm4Ec8LapG9NigrYV8klby38u
+         IPpvH0OOkM+dkHvOxrYmon+uvdEfwhxxt37o4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hXH9ELMuDY+iN+HFjZXoGFqlOaPPrjOGTbi3JNMxxVA=;
+        b=4wOiaIcCA1/7W91yiZ24e9UVnQVW7yDbp1G3GcG6c7wAQzJTBouHbqd4XnRa7Of85z
+         cFijfxus4bTFXeTDUCCKOFict2s3NbScvAbIb77EVrwCi0lmx6Rvl5eXEyj2AQ6uvsph
+         3O6FIGmyZjyKynVLPP62l9x6Z1AsbZHkOtjYgvNLsyTHOsOzNdMluIaHsxytqQSPecAj
+         /A77vEolKtIiPqVMoAmcwbin1fYRKsmPejfrB1mBOWrZinrfrvZG2iqVLjDThsKYXGPX
+         jCfTCboZkYdFjhGGHlqLSyO/kPweSDgLsUMglh4RIw4DLuGjJrqBxcIrOcMcMsTBvggc
+         CrvA==
+X-Gm-Message-State: AOAM531+RJW02wEjF+GZtEzTSGBLdG+BpgmwClZrx6twAhf4XsqAERxK
+        ASdJUdCo6dPAioOnAtf2tc1GALm6QNsc6I8wclDB+A==
+X-Google-Smtp-Source: ABdhPJz+V9DZGjtY86DMYeyi3wTfGJ9WSF8zTZpI/KQBMaQZ5GADOS5tu4yWcHopXE3+Co3KTkyZHEqdfLmv5lcqISs=
+X-Received: by 2002:a17:906:7948:b0:6da:64ed:178e with SMTP id
+ l8-20020a170906794800b006da64ed178emr10705575ejo.523.1647631506866; Fri, 18
+ Mar 2022 12:25:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220318171405.2728855-1-cmllamas@google.com>
+In-Reply-To: <20220318171405.2728855-1-cmllamas@google.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Fri, 18 Mar 2022 20:24:55 +0100
+Message-ID: <CAJfpegsT6BO5P122wrKbni3qFkyHuq_0Qq4ibr05_SOa7gfvcw@mail.gmail.com>
+Subject: Re: [PATCH] fuse: fix integer type usage in uapi header
+To:     Carlos Llamas <cmllamas@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alessio Balsini <balsini@android.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel-team <kernel-team@android.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Muhammad Usama Anjum <usama.anjum@collabora.com> writes:
+On Fri, 18 Mar 2022 at 18:14, Carlos Llamas <cmllamas@google.com> wrote:
+>
+> Kernel uapi headers are supposed to use __[us]{8,16,32,64} defined by
+> <linux/types.h> instead of 'uint32_t' and similar. This patch changes
+> all the definitions in this header to use the correct type. Previous
+> discussion of this topic can be found here:
+>
+>   https://lkml.org/lkml/2019/6/5/18
 
-> new file mode 100644
-> index 0000000000000..3153ebac6909b
-> --- /dev/null
-> +++ b/tools/testing/selftests/vm/soft-dirty.c
-> @@ -0,0 +1,146 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <stdio.h>
-> +#include <string.h>
-> +#include <stdbool.h>
-> +#include <fcntl.h>
-> +#include <stdint.h>
-> +#include <malloc.h>
-> +#include <sys/mman.h>
-> +#include "../kselftest.h"
-> +#include "vm_util.h"
-> +
-> +#define PAGEMAP_FILE_PATH "/proc/self/pagemap"
-> +#define TEST_ITERATIONS 10000
-> +
-> +static void test_simple(int pagemap_fd, int pagesize)
-> +{
-> +	int i;
-> +	char *map;
-> +
-> +	map = aligned_alloc(pagesize, pagesize);
-> +	if (!map)
-> +		ksft_exit_fail_msg("mmap failed\n");
-> +
-> +	clear_softdirty();
-> +
-> +	for (i = 0 ; i < TEST_ITERATIONS; i++) {
-> +		if (pagemap_is_softdirty(pagemap_fd, map) == 1) {
-> +			ksft_print_msg("dirty bit was 1, but should be 0 (i=%d)\n", i);
-> +			break;
-> +		}
-> +
-> +		clear_softdirty();
-> +		// Write something to the page to get the dirty bit enabled on the page
-> +		map[0] = i % 255;
+This is effectively a revert of these two commits:
 
-you don't need this mod at all but at least it should be 256 :).  I think
-Either 'map[0] = !map[0]' or keeping the original 'map[0]++' is fine.
+4c82456eeb4d ("fuse: fix type definitions in uapi header")
+7e98d53086d1 ("Synchronize fuse header with one used in library")
 
-> +
-> +		if (pagemap_is_softdirty(pagemap_fd, map) == 0) {
-> +			ksft_print_msg("dirty bit was 0, but should be 1 (i=%d)\n", i);
-> +			break;
-> +		}
-> +
-> +		clear_softdirty();
-> +	}
-> +	free(map);
-> +
-> +	ksft_test_result(i == TEST_ITERATIONS, "Test %s\n", __func__);
-> +}
-> +
-> +static void test_vma_reuse(int pagemap_fd, int pagesize)
-> +{
-> +	char *map, *map2;
-> +
-> +	map = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
-> +	if (map == MAP_FAILED)
-> +		ksft_exit_fail_msg("mmap failed");
-> +
-> +	clear_softdirty();
-> +
-> +	/* Write to the page before unmapping and map the same size region again to check
-> +	 * if same memory region is gotten next time and if dirty bit is preserved across
-> +	 * this type of allocations.
-> +	 */
+And so we've gone full circle and back to having to modify the header
+to be usable in the cross platform library...
 
-This reads weird.  It should *not* be preserved across different
-mappings.  Also, we are not testing if the same region is reused, we are
-depending on it to test the sd bit.
+And also made lots of churn for what reason exactly?
 
-/* Ensures the soft-dirty bit is reset accross different mappings on the
-same address.  */
-
-> +	map[0]++;
-
-This is inconsistent with the other two tests.
-
-> +
-> +	munmap(map, pagesize);
-> +
-> +	map2 = mmap(NULL, pagesize, (PROT_READ | PROT_WRITE), (MAP_PRIVATE | MAP_ANON), -1, 0);
-> +	if (map2 == MAP_FAILED)
-> +		ksft_exit_fail_msg("mmap failed");
-> +
-> +	ksft_test_result(map == map2, "Test %s reused memory location\n", __func__);
-
-if map != map2, the test itself is broken, meaning we should skip it, not
-fail, i guess.
-
--- 
-Gabriel Krisman Bertazi
+Thanks,
+Miklos

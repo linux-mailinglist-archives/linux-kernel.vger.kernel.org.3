@@ -2,98 +2,489 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1029E4DD547
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E464DD54A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbiCRHgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
+        id S233020AbiCRHhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233128AbiCRHgW (ORCPT
+        with ESMTP id S233118AbiCRHhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:36:22 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DE9117C85
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 00:35:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 190F9CE2681
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:35:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6082AC340EC;
-        Fri, 18 Mar 2022 07:34:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647588901;
-        bh=v3i9Go38w1KBuJ9IR4jSwRlFv0/OgX9Lvxu9XyNe3AA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=F79Swd0cLTEvO/vG6RdChYwe1XLACl/P5GxiMAqQCtbXAABoOn3bff9ZB7iU/sYDJ
-         gl3lxph3anaNgQcS8vsyOsXdK2wWdjvEgn9lqXNGVKoB0OvIORm47th+gfjGBBQgQ8
-         QZVVOyfN5NYG9Vpl5qMPF65DV04H7BNxAAkyxFyM=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, Tejun Heo <tj@kernel.org>
-Subject: [PATCH] kernfs: remove unneeded #if 0 guard
-Date:   Fri, 18 Mar 2022 08:34:52 +0100
-Message-Id: <20220318073452.1486568-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
+        Fri, 18 Mar 2022 03:37:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA9FF117CAC
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 00:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647588953;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GzNFjAo0RPZKFTQwyjedWI9XHzy3bm2/jNOZZ7hWQyU=;
+        b=CI0xrnfQU6HHzUG/czmrOIqV56FsHKBey8nL1CLdDBNREZvXT3Qbow83Wa7KDiH3/KWonD
+        Ae7gKJ3BIwXHj+OaHIsHfwNztOLr3B4l7dRm923Rsf4QXk4EpueBXlPMAEKPRmgohmo5Ek
+        j4RyS2Ce0T1I6T6GGXcYVZCt0O5UpmY=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-553-HEiSd5zaOWag9J02VpaiGw-1; Fri, 18 Mar 2022 03:35:52 -0400
+X-MC-Unique: HEiSd5zaOWag9J02VpaiGw-1
+Received: by mail-qv1-f70.google.com with SMTP id h18-20020a05621402f200b00440cedaa9a2so5744706qvu.17
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 00:35:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GzNFjAo0RPZKFTQwyjedWI9XHzy3bm2/jNOZZ7hWQyU=;
+        b=qjr25ZPcFkdOm5XYPXksb+SRlxySc8QW2fZqO4Nkf0aQPu9ByBO7ra0q9VdDC2wipn
+         Qhk4BDKe7NNw9SfwfE+itqjjkg/7HaAgwnGeGNnrlJ1VmyxY+z1BfwUACJRTKCxvojMC
+         eJoDQgUlrlkwX9Dq2q9s3/rcV0KAOAcM19L8viI5faCJQmE5Yz+xHsETRZY2nHQfftrp
+         vUuadev/id1LAgxOTcO6Ni/lKxBCuXGJqW01TIA22U+/kacuzG3pjXUHkQOs+ySBPPXF
+         E3gtus4VFk3lQilU9oBbx+VJtJeVIX0zrELNNtGQeI5iphEJmDbIDqBr8JDS66qIOEOt
+         kitQ==
+X-Gm-Message-State: AOAM533QgfnirkRPS8wRsjhejZdDwv7RRNlUZWpAzVe+fmbCjzMCfjMS
+        RtoGhQCKALnE+CTo3sXc8b0K7sLRi4aUQHCoMIA1MakLb30N7Jop7/BlUnBAklGTfBzaKwb2fP8
+        nWsSNfu3Kq09aU19dUlODiEAJqMZmVJ69CBOWvYaL
+X-Received: by 2002:ac8:7dc3:0:b0:2e1:cfdc:1a28 with SMTP id c3-20020ac87dc3000000b002e1cfdc1a28mr6533756qte.459.1647588951592;
+        Fri, 18 Mar 2022 00:35:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzcfCzxB2GiiE1EZgAO8ubs6mFTZkie5QsUsmhHCWcEyawfkDfQjtm/s3GxJA7R7xhC+uSsob71mTOUMLJhJzA=
+X-Received: by 2002:ac8:7dc3:0:b0:2e1:cfdc:1a28 with SMTP id
+ c3-20020ac87dc3000000b002e1cfdc1a28mr6533739qte.459.1647588951273; Fri, 18
+ Mar 2022 00:35:51 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1412; h=from:subject; bh=v3i9Go38w1KBuJ9IR4jSwRlFv0/OgX9Lvxu9XyNe3AA=; b=owGbwMvMwCRo6H6F97bub03G02pJDEkmZtJfD/8L+/uEYV/0U+sZ8+Yym7iWnHLbfkTMZqas786S Y6YCHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRgHyG+Z7669UPKvQ4HtXWi69Qff Blv++2ywzz624GBs1Ivbb+nD6XdbW7g/hzJYddAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20201216064818.48239-1-jasowang@redhat.com> <20220224212314.1326-1-gdawar@xilinx.com>
+ <20220224212314.1326-20-gdawar@xilinx.com>
+In-Reply-To: <20220224212314.1326-20-gdawar@xilinx.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Fri, 18 Mar 2022 08:35:14 +0100
+Message-ID: <CAJaqyWe=UGMmL=AdDZpkQR5Og9bmuYUEDFN9L5cd1BLGmEFQaw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 19/19] vdpasim: control virtqueue support
+To:     Gautam Dawar <gautam.dawar@xilinx.com>
+Cc:     Gautam Dawar <gdawar@xilinx.com>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>,
+        Tanuj Murlidhar Kamde <tanujk@xilinx.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Longpeng <longpeng2@huawei.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel@vger.kernel.org, kvm list <kvm@vger.kernel.org>,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit f2eb478f2f32 ("kernfs: move struct kernfs_root out of the public
-view.") moved kernfs_root out of kernfs.h, but my debugging code of a
- #if 0 was left in accidentally.  Fix that up by removing the guards.
+On Thu, Feb 24, 2022 at 10:29 PM Gautam Dawar <gautam.dawar@xilinx.com> wrote:
+>
+> This patch introduces the control virtqueue support for vDPA
+> simulator. This is a requirement for supporting advanced features like
+> multiqueue.
+>
+> A requirement for control virtqueue is to isolate its memory access
+> from the rx/tx virtqueues. This is because when using vDPA device
+> for VM, the control virqueue is not directly assigned to VM. Userspace
+> (Qemu) will present a shadow control virtqueue to control for
+> recording the device states.
+>
+> The isolation is done via the virtqueue groups and ASID support in
+> vDPA through vhost-vdpa. The simulator is extended to have:
+>
+> 1) three virtqueues: RXVQ, TXVQ and CVQ (control virtqueue)
+> 2) two virtqueue groups: group 0 contains RXVQ and TXVQ; group 1
+>    contains CVQ
+> 3) two address spaces and the simulator simply implements the address
+>    spaces by mapping it 1:1 to IOTLB.
+>
+> For the VM use cases, userspace(Qemu) may set AS 0 to group 0 and AS 1
+> to group 1. So we have:
+>
+> 1) The IOTLB for virtqueue group 0 contains the mappings of guest, so
+>    RX and TX can be assigned to guest directly.
+> 2) The IOTLB for virtqueue group 1 contains the mappings of CVQ which
+>    is the buffers that allocated and managed by VMM only. So CVQ of
+>    vhost-vdpa is visible to VMM only. And Guest can not access the CVQ
+>    of vhost-vdpa.
+>
+> For the other use cases, since AS 0 is associated to all virtqueue
+> groups by default. All virtqueues share the same mapping by default.
+>
+> To demonstrate the function, VIRITO_NET_F_CTRL_MACADDR is
+> implemented in the simulator for the driver to set mac address.
+>
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> Signed-off-by: Gautam Dawar <gdawar@xilinx.com>
+> ---
+>  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 91 ++++++++++++++++++++++------
+>  drivers/vdpa/vdpa_sim/vdpa_sim.h     |  2 +
+>  drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 88 ++++++++++++++++++++++++++-
+>  3 files changed, 161 insertions(+), 20 deletions(-)
+>
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> index 659e2e2e4b0c..59611f18a3a8 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> @@ -96,11 +96,17 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
+>  {
+>         int i;
+>
+> -       for (i = 0; i < vdpasim->dev_attr.nvqs; i++)
+> +       spin_lock(&vdpasim->iommu_lock);
+> +
+> +       for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
+>                 vdpasim_vq_reset(vdpasim, &vdpasim->vqs[i]);
+> +               vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
+> +                                &vdpasim->iommu_lock);
+> +       }
+> +
+> +       for (i = 0; i < vdpasim->dev_attr.nas; i++)
+> +               vhost_iotlb_reset(&vdpasim->iommu[i]);
+>
+> -       spin_lock(&vdpasim->iommu_lock);
+> -       vhost_iotlb_reset(vdpasim->iommu);
+>         spin_unlock(&vdpasim->iommu_lock);
+>
+>         vdpasim->features = 0;
+> @@ -145,7 +151,7 @@ static dma_addr_t vdpasim_map_range(struct vdpasim *vdpasim, phys_addr_t paddr,
+>         dma_addr = iova_dma_addr(&vdpasim->iova, iova);
+>
+>         spin_lock(&vdpasim->iommu_lock);
+> -       ret = vhost_iotlb_add_range(vdpasim->iommu, (u64)dma_addr,
+> +       ret = vhost_iotlb_add_range(&vdpasim->iommu[0], (u64)dma_addr,
+>                                     (u64)dma_addr + size - 1, (u64)paddr, perm);
+>         spin_unlock(&vdpasim->iommu_lock);
+>
+> @@ -161,7 +167,7 @@ static void vdpasim_unmap_range(struct vdpasim *vdpasim, dma_addr_t dma_addr,
+>                                 size_t size)
+>  {
+>         spin_lock(&vdpasim->iommu_lock);
+> -       vhost_iotlb_del_range(vdpasim->iommu, (u64)dma_addr,
+> +       vhost_iotlb_del_range(&vdpasim->iommu[0], (u64)dma_addr,
+>                               (u64)dma_addr + size - 1);
+>         spin_unlock(&vdpasim->iommu_lock);
+>
+> @@ -250,8 +256,9 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr)
+>         else
+>                 ops = &vdpasim_config_ops;
+>
+> -       vdpasim = vdpa_alloc_device(struct vdpasim, vdpa, NULL, ops, 1,
+> -                                   1, dev_attr->name, false);
+> +       vdpasim = vdpa_alloc_device(struct vdpasim, vdpa, NULL, ops,
+> +                                   dev_attr->ngroups, dev_attr->nas,
+> +                                   dev_attr->name, false);
+>         if (IS_ERR(vdpasim)) {
+>                 ret = PTR_ERR(vdpasim);
+>                 goto err_alloc;
+> @@ -278,16 +285,20 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr)
+>         if (!vdpasim->vqs)
+>                 goto err_iommu;
+>
+> -       vdpasim->iommu = vhost_iotlb_alloc(max_iotlb_entries, 0);
+> +       vdpasim->iommu = kmalloc_array(vdpasim->dev_attr.nas,
+> +                                      sizeof(*vdpasim->iommu), GFP_KERNEL);
+>         if (!vdpasim->iommu)
+>                 goto err_iommu;
+>
+> +       for (i = 0; i < vdpasim->dev_attr.nas; i++)
+> +               vhost_iotlb_init(&vdpasim->iommu[i], 0, 0);
+> +
+>         vdpasim->buffer = kvmalloc(dev_attr->buffer_size, GFP_KERNEL);
+>         if (!vdpasim->buffer)
+>                 goto err_iommu;
+>
+>         for (i = 0; i < dev_attr->nvqs; i++)
+> -               vringh_set_iotlb(&vdpasim->vqs[i].vring, vdpasim->iommu,
+> +               vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
+>                                  &vdpasim->iommu_lock);
+>
+>         ret = iova_cache_get();
+> @@ -401,7 +412,11 @@ static u32 vdpasim_get_vq_align(struct vdpa_device *vdpa)
+>
+>  static u32 vdpasim_get_vq_group(struct vdpa_device *vdpa, u16 idx)
+>  {
+> -       return 0;
+> +       /* RX and TX belongs to group 0, CVQ belongs to group 1 */
+> +       if (idx == 2)
+> +               return 1;
+> +       else
+> +               return 0;
+>  }
+>
+>  static u64 vdpasim_get_device_features(struct vdpa_device *vdpa)
+> @@ -539,20 +554,53 @@ static struct vdpa_iova_range vdpasim_get_iova_range(struct vdpa_device *vdpa)
+>         return range;
+>  }
+>
+> +static int vdpasim_set_group_asid(struct vdpa_device *vdpa, unsigned int group,
+> +                                 unsigned int asid)
+> +{
+> +       struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> +       struct vhost_iotlb *iommu;
+> +       int i;
+> +
+> +       if (group > vdpasim->dev_attr.ngroups)
+> +               return -EINVAL;
+> +
+> +       if (asid > vdpasim->dev_attr.nas)
+> +               return -EINVAL;
+> +
+> +       iommu = &vdpasim->iommu[asid];
+> +
+> +       spin_lock(&vdpasim->lock);
+> +
+> +       for (i = 0; i < vdpasim->dev_attr.nvqs; i++)
+> +               if (vdpasim_get_vq_group(vdpa, i) == group)
+> +                       vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
 
-Fixes: f2eb478f2f32 ("kernfs: move struct kernfs_root out of the public view.")
-Reported-by: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Tejun Heo <tj@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- include/linux/kernfs.h | 20 --------------------
- 1 file changed, 20 deletions(-)
+The second argument to "vringh_set_iotlb" call must be simply "iommu".
+If not, we're effectively setting asid 0 to all virtqueue groups that
+match "group", making it impossible to change it.
 
-diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
-index 62aff082dc3f..e2ae15a6225e 100644
---- a/include/linux/kernfs.h
-+++ b/include/linux/kernfs.h
-@@ -185,26 +185,6 @@ struct kernfs_syscall_ops {
- 			 struct kernfs_root *root);
- };
- 
--#if 0
--struct kernfs_root {
--	/* published fields */
--	struct kernfs_node	*kn;
--	unsigned int		flags;	/* KERNFS_ROOT_* flags */
--
--	/* private fields, do not use outside kernfs proper */
--	struct idr		ino_idr;
--	u32			last_id_lowbits;
--	u32			id_highbits;
--	struct kernfs_syscall_ops *syscall_ops;
--
--	/* list of kernfs_super_info of this root, protected by kernfs_rwsem */
--	struct list_head	supers;
--
--	wait_queue_head_t	deactivate_waitq;
--	struct rw_semaphore	kernfs_rwsem;
--};
--#endif
--
- struct kernfs_node *kernfs_root_to_node(struct kernfs_root *root);
- 
- struct kernfs_open_file {
--- 
-2.35.1
+Thanks!
+
+> +                                        &vdpasim->iommu_lock);
+> +
+> +       spin_unlock(&vdpasim->lock);
+> +
+> +       return 0;
+> +}
+> +
+>  static int vdpasim_set_map(struct vdpa_device *vdpa, unsigned int asid,
+>                            struct vhost_iotlb *iotlb)
+>  {
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>         struct vhost_iotlb_map *map;
+> +       struct vhost_iotlb *iommu;
+>         u64 start = 0ULL, last = 0ULL - 1;
+>         int ret;
+>
+> +       if (asid >= vdpasim->dev_attr.nas)
+> +               return -EINVAL;
+> +
+>         spin_lock(&vdpasim->iommu_lock);
+> -       vhost_iotlb_reset(vdpasim->iommu);
+> +
+> +       iommu = &vdpasim->iommu[asid];
+> +       vhost_iotlb_reset(iommu);
+>
+>         for (map = vhost_iotlb_itree_first(iotlb, start, last); map;
+>              map = vhost_iotlb_itree_next(map, start, last)) {
+> -               ret = vhost_iotlb_add_range(vdpasim->iommu, map->start,
+> +               ret = vhost_iotlb_add_range(iommu, map->start,
+>                                             map->last, map->addr, map->perm);
+>                 if (ret)
+>                         goto err;
+> @@ -561,7 +609,7 @@ static int vdpasim_set_map(struct vdpa_device *vdpa, unsigned int asid,
+>         return 0;
+>
+>  err:
+> -       vhost_iotlb_reset(vdpasim->iommu);
+> +       vhost_iotlb_reset(iommu);
+>         spin_unlock(&vdpasim->iommu_lock);
+>         return ret;
+>  }
+> @@ -573,9 +621,12 @@ static int vdpasim_dma_map(struct vdpa_device *vdpa, unsigned int asid,
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>         int ret;
+>
+> +       if (asid >= vdpasim->dev_attr.nas)
+> +               return -EINVAL;
+> +
+>         spin_lock(&vdpasim->iommu_lock);
+> -       ret = vhost_iotlb_add_range_ctx(vdpasim->iommu, iova, iova + size - 1,
+> -                                       pa, perm, opaque);
+> +       ret = vhost_iotlb_add_range_ctx(&vdpasim->iommu[asid], iova,
+> +                                       iova + size - 1, pa, perm, opaque);
+>         spin_unlock(&vdpasim->iommu_lock);
+>
+>         return ret;
+> @@ -586,8 +637,11 @@ static int vdpasim_dma_unmap(struct vdpa_device *vdpa, unsigned int asid,
+>  {
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>
+> +       if (asid >= vdpasim->dev_attr.nas)
+> +               return -EINVAL;
+> +
+>         spin_lock(&vdpasim->iommu_lock);
+> -       vhost_iotlb_del_range(vdpasim->iommu, iova, iova + size - 1);
+> +       vhost_iotlb_del_range(&vdpasim->iommu[asid], iova, iova + size - 1);
+>         spin_unlock(&vdpasim->iommu_lock);
+>
+>         return 0;
+> @@ -611,8 +665,7 @@ static void vdpasim_free(struct vdpa_device *vdpa)
+>         }
+>
+>         kvfree(vdpasim->buffer);
+> -       if (vdpasim->iommu)
+> -               vhost_iotlb_free(vdpasim->iommu);
+> +       vhost_iotlb_free(vdpasim->iommu);
+>         kfree(vdpasim->vqs);
+>         kfree(vdpasim->config);
+>  }
+> @@ -643,6 +696,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
+>         .set_config             = vdpasim_set_config,
+>         .get_generation         = vdpasim_get_generation,
+>         .get_iova_range         = vdpasim_get_iova_range,
+> +       .set_group_asid         = vdpasim_set_group_asid,
+>         .dma_map                = vdpasim_dma_map,
+>         .dma_unmap              = vdpasim_dma_unmap,
+>         .free                   = vdpasim_free,
+> @@ -674,6 +728,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
+>         .set_config             = vdpasim_set_config,
+>         .get_generation         = vdpasim_get_generation,
+>         .get_iova_range         = vdpasim_get_iova_range,
+> +       .set_group_asid         = vdpasim_set_group_asid,
+>         .set_map                = vdpasim_set_map,
+>         .free                   = vdpasim_free,
+>  };
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> index 0be7c1e7ef80..622782e92239 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> @@ -41,6 +41,8 @@ struct vdpasim_dev_attr {
+>         size_t buffer_size;
+>         int nvqs;
+>         u32 id;
+> +       u32 ngroups;
+> +       u32 nas;
+>
+>         work_func_t work_fn;
+>         void (*get_config)(struct vdpasim *vdpasim, void *config);
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> index ed5ade4ae570..513970c05af2 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> @@ -26,10 +26,15 @@
+>  #define DRV_LICENSE  "GPL v2"
+>
+>  #define VDPASIM_NET_FEATURES   (VDPASIM_FEATURES | \
+> +                                (1ULL << VIRTIO_NET_F_MTU) | \
+>                                  (1ULL << VIRTIO_NET_F_MAC) | \
+> -                                (1ULL << VIRTIO_NET_F_MTU));
+> +                                (1ULL << VIRTIO_NET_F_CTRL_VQ) | \
+> +                                (1ULL << VIRTIO_NET_F_CTRL_MAC_ADDR));
+>
+> -#define VDPASIM_NET_VQ_NUM     2
+> +/* 3 virtqueues, 2 address spaces, 2 virtqueue groups */
+> +#define VDPASIM_NET_VQ_NUM     3
+> +#define VDPASIM_NET_AS_NUM     2
+> +#define VDPASIM_NET_GROUP_NUM  2
+>
+>  static void vdpasim_net_complete(struct vdpasim_virtqueue *vq, size_t len)
+>  {
+> @@ -63,6 +68,81 @@ static bool receive_filter(struct vdpasim *vdpasim, size_t len)
+>         return false;
+>  }
+>
+> +static virtio_net_ctrl_ack vdpasim_handle_ctrl_mac(struct vdpasim *vdpasim,
+> +                                                  u8 cmd)
+> +{
+> +       struct vdpasim_virtqueue *cvq = &vdpasim->vqs[2];
+> +       virtio_net_ctrl_ack status = VIRTIO_NET_ERR;
+> +       size_t read;
+> +
+> +       switch (cmd) {
+> +       case VIRTIO_NET_CTRL_MAC_ADDR_SET:
+> +               read = vringh_iov_pull_iotlb(&cvq->vring, &cvq->in_iov,
+> +                                            (void *)vdpasim->config.mac,
+> +                                            ETH_ALEN);
+> +               if (read == ETH_ALEN)
+> +                       status = VIRTIO_NET_OK;
+> +               break;
+> +       default:
+> +               break;
+> +       }
+> +
+> +       return status;
+> +}
+> +
+> +static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
+> +{
+> +       struct vdpasim_virtqueue *cvq = &vdpasim->vqs[2];
+> +       virtio_net_ctrl_ack status = VIRTIO_NET_ERR;
+> +       struct virtio_net_ctrl_hdr ctrl;
+> +       size_t read, write;
+> +       int err;
+> +
+> +       if (!(vdpasim->features & (1ULL << VIRTIO_NET_F_CTRL_VQ)))
+> +               return;
+> +
+> +       if (!cvq->ready)
+> +               return;
+> +
+> +       while (true) {
+> +               err = vringh_getdesc_iotlb(&cvq->vring, &cvq->in_iov,
+> +                                          &cvq->out_iov,
+> +                                          &cvq->head, GFP_ATOMIC);
+> +               if (err <= 0)
+> +                       break;
+> +
+> +               read = vringh_iov_pull_iotlb(&cvq->vring, &cvq->in_iov, &ctrl,
+> +                                            sizeof(ctrl));
+> +               if (read != sizeof(ctrl))
+> +                       break;
+> +
+> +               switch (ctrl.class) {
+> +               case VIRTIO_NET_CTRL_MAC:
+> +                       status = vdpasim_handle_ctrl_mac(vdpasim, ctrl.cmd);
+> +                       break;
+> +               default:
+> +                       break;
+> +               }
+> +
+> +               /* Make sure data is wrote before advancing index */
+> +               smp_wmb();
+> +
+> +               write = vringh_iov_push_iotlb(&cvq->vring, &cvq->out_iov,
+> +                                             &status, sizeof(status));
+> +               vringh_complete_iotlb(&cvq->vring, cvq->head, write);
+> +               vringh_kiov_cleanup(&cvq->in_iov);
+> +               vringh_kiov_cleanup(&cvq->out_iov);
+> +
+> +               /* Make sure used is visible before rasing the interrupt. */
+> +               smp_wmb();
+> +
+> +               local_bh_disable();
+> +               if (cvq->cb)
+> +                       cvq->cb(cvq->private);
+> +               local_bh_enable();
+> +       }
+> +}
+> +
+>  static void vdpasim_net_work(struct work_struct *work)
+>  {
+>         struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
+> @@ -77,6 +157,8 @@ static void vdpasim_net_work(struct work_struct *work)
+>         if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
+>                 goto out;
+>
+> +       vdpasim_handle_cvq(vdpasim);
+> +
+>         if (!txq->ready || !rxq->ready)
+>                 goto out;
+>
+> @@ -162,6 +244,8 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+>         dev_attr.id = VIRTIO_ID_NET;
+>         dev_attr.supported_features = VDPASIM_NET_FEATURES;
+>         dev_attr.nvqs = VDPASIM_NET_VQ_NUM;
+> +       dev_attr.ngroups = VDPASIM_NET_GROUP_NUM;
+> +       dev_attr.nas = VDPASIM_NET_AS_NUM;
+>         dev_attr.config_size = sizeof(struct virtio_net_config);
+>         dev_attr.get_config = vdpasim_net_get_config;
+>         dev_attr.work_fn = vdpasim_net_work;
+> --
+> 2.25.0
+>
 

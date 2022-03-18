@@ -2,95 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72714DDB66
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE694DDB67
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237172AbiCROQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        id S237164AbiCROQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 10:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237144AbiCROQT (ORCPT
+        with ESMTP id S237144AbiCROQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:16:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC66125718F;
-        Fri, 18 Mar 2022 07:14:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67730B823E0;
-        Fri, 18 Mar 2022 14:14:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12665C340EC;
-        Fri, 18 Mar 2022 14:14:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647612894;
-        bh=yTCl81Bijd2qcUVd8R+X71hdx9fBecmpYWObswzq7HE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dfSdF0aZTeZL279RotjOfSOG/aTFeqHy1u72eAPdMTpKDWV2qKOpdHhbraPMk/40I
-         wwpKR2uZ5mp7jhfP8majiRI86ged94Sz+MNl7+XV8YrBa/57Nvdl/gIfeT6oN+4Lzv
-         PccE7JTuL0ipwxa8ZLuUTI8oaFMcdVU4y5LJOX0CBJV+UUvM2AMRcI7wSj2JzDFRJ0
-         KbjxMB3Motj7KXu3ORPqjMvNxPWthzgUnZAX76wEubUFb7HopthhOU4tcH1bfrmsNL
-         vWCkw6EXEvCvWms6tvpOuNv6CwpKXnwz93e3iygpjI4N6l25g4IIY82iWLFV1PnrcG
-         tCZZQXJ0poDTg==
-Received: by pali.im (Postfix)
-        id 1CD9A9CF; Fri, 18 Mar 2022 15:14:51 +0100 (CET)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Hu Ziji <huziji@marvell.com>, Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <marek.behun@nic.cz>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Konstantin Porotchkin <kostap@marvell.com>
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Revert "mmc: sdhci-xenon: fix annoying 1.8V regulator warning"
-Date:   Fri, 18 Mar 2022 15:14:41 +0100
-Message-Id: <20220318141441.32329-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        Fri, 18 Mar 2022 10:16:09 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEF824F290;
+        Fri, 18 Mar 2022 07:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647612890; x=1679148890;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wKbKU3t/6V4styBQS4BOZSgHoaD4VUBToUeJ31eWRsM=;
+  b=pUcogFltzvahRZCGVmfPEy/mg9HFPij+Jxnaq6nd5Z7Qkcw5QMf6EcGn
+   7WGcJOQN54XBTd5uYQbkYhQuDAB3NHNWIU2ry9dEzVMANWbllFJCiVTrF
+   SXglLzq+IgWejTpoDBxqb/fYykVHJBJGp5sE7OFOd2mIaC3h4XcjCTqVN
+   8=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 18 Mar 2022 07:14:49 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 07:14:49 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 18 Mar 2022 07:14:48 -0700
+Received: from [10.110.88.130] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 18 Mar
+ 2022 07:14:48 -0700
+Message-ID: <7f376c43-3a37-4972-f614-180968ec59eb@quicinc.com>
+Date:   Fri, 18 Mar 2022 07:14:47 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2] i2c: add tracepoints for I2C slave events
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     Wolfram Sang <wsa@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Graeme Gregory <quic_ggregory@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+References: <20220308163333.3985974-1-quic_jaehyoo@quicinc.com>
+ <20220318100249.3eb97c10@gandalf.local.home>
+From:   Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+In-Reply-To: <20220318100249.3eb97c10@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit bb32e1987bc55ce1db400faf47d85891da3c9b9f.
+Hi Steven,
 
-Commit 1a3ed0dc3594 ("mmc: sdhci-xenon: fix 1.8v regulator stabilization")
-contains proper fix for the issue described in commit bb32e1987bc5 ("mmc:
-sdhci-xenon: fix annoying 1.8V regulator warning").
+On 3/18/2022 7:02 AM, Steven Rostedt wrote:
 
-Fixes: 8d876bf472db ("mmc: sdhci-xenon: wait 5ms after set 1.8V signal enable")
-Cc: stable@vger.kernel.org # 1a3ed0dc3594 ("mmc: sdhci-xenon: fix 1.8v regulator stabilization")
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
- drivers/mmc/host/sdhci-xenon.c | 10 ----------
- 1 file changed, 10 deletions(-)
+[...]
 
-diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/host/sdhci-xenon.c
-index 666cee4c7f7c..08e838400b52 100644
---- a/drivers/mmc/host/sdhci-xenon.c
-+++ b/drivers/mmc/host/sdhci-xenon.c
-@@ -241,16 +241,6 @@ static void xenon_voltage_switch(struct sdhci_host *host)
- {
- 	/* Wait for 5ms after set 1.8V signal enable bit */
- 	usleep_range(5000, 5500);
--
--	/*
--	 * For some reason the controller's Host Control2 register reports
--	 * the bit representing 1.8V signaling as 0 when read after it was
--	 * written as 1. Subsequent read reports 1.
--	 *
--	 * Since this may cause some issues, do an empty read of the Host
--	 * Control2 register here to circumvent this.
--	 */
--	sdhci_readw(host, SDHCI_HOST_CONTROL2);
- }
- 
- static unsigned int xenon_get_max_clock(struct sdhci_host *host)
--- 
-2.20.1
+>> +	TP_printk("i2c-%d a=%03x %s [%*phD]",
+>> +		__entry->adapter_nr, __entry->addr,
+>> +		__print_symbolic(__entry->event,
+>> +				 { I2C_SLAVE_READ_REQUESTED,	"RD_REQ" },
+>> +				 { I2C_SLAVE_WRITE_REQUESTED,	"WR_REQ" },
+>> +				 { I2C_SLAVE_READ_PROCESSED,	"RD_PRO" },
+>> +				 { I2C_SLAVE_WRITE_RECEIVED,	"WR_RCV" },
+>> +				 { I2C_SLAVE_STOP,		"  STOP" }),
+> 
+> For the above to be useful for perf and trace-cmd (user space tools) you
+> will need to export them with:
+> 
+> TRACE_DEFINE_ENUM(I2C_SLAVE_READ_REQUESTED);
+> TRACE_DEFINE_ENUM(I2C_SLAVE_WRITE_REQUESTED);
+> TRACE_DEFINE_ENUM(I2C_SLAVE_READ_PROCESSED);
+> TRACE_DEFINE_ENUM(I2C_SLAVE_WRITE_PROCESSED);
+> TRACE_DEFINE_ENUM(I2C_SLAVE_STOP);
+> 
+> before the TRACE_EVENT()
 
+Got it. I'll add it to v3.
+
+Thanks,
+Jae

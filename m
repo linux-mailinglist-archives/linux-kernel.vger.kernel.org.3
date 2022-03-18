@@ -2,136 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC584DDE9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDCB4DDEBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238890AbiCRQVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
+        id S239098AbiCRQXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238839AbiCRQSM (ORCPT
+        with ESMTP id S238956AbiCRQWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:18:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7056A1D78A8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647620199;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zxtKlJkyIEZXPkBD4bNBzWUwa71AXxO/hu9B1huGD20=;
-        b=fbstevU9gA/Aqe0HqT0pKW2h3LqcD69rO+O1WdQ2a90C3kzGh1FwgZIFe5X6PyyNL6kzmM
-        7dhZrShducMxc+1Yieukz0QHOFNQ52G9z24iSnX9VwPUy9Bs6zhQUplCjPZd6Vdv+Vlqui
-        d6SOOcwihfhtbZJ17oZfEo5lbjy1Pk4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-70-Wbp0rir3Ota5OBaIJneRkA-1; Fri, 18 Mar 2022 12:16:35 -0400
-X-MC-Unique: Wbp0rir3Ota5OBaIJneRkA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8F12580231F;
-        Fri, 18 Mar 2022 16:16:35 +0000 (UTC)
-Received: from llong.com (unknown [10.22.19.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4F7D5112D182;
-        Fri, 18 Mar 2022 16:16:35 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
-Subject: [PATCH 2/2] locking/rwsem: Wake readers in a reader-owned rwsem if first waiter is a reader
-Date:   Fri, 18 Mar 2022 12:16:09 -0400
-Message-Id: <20220318161609.1939957-3-longman@redhat.com>
-In-Reply-To: <20220318161609.1939957-1-longman@redhat.com>
-References: <20220318161609.1939957-1-longman@redhat.com>
+        Fri, 18 Mar 2022 12:22:44 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06888117991;
+        Fri, 18 Mar 2022 09:19:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647620368; x=1679156368;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=K35+NJn4cb9SB2tUyATnivg4yiRvcwab/IpVO7uv9zs=;
+  b=EvsZu8WP+wbpJBT/YXbXnJK+ct1167XMBjSeA9aJzOnBajSas6WiAvcm
+   InIY71URdKuXzLZux/jS/TTzrVl/vLCdf6uP8WyK1Mkb5iCca9GRIUS53
+   Okb+FeQC9f997R9F+yLsxjTrX1hhgtf1/uzJq8Dr0m8qGQpyTy2ExvB2g
+   LL0HnbtvQcteyQI+eIXLPgD0zxEU91iAsUJkLtk+QQfb6ytWu0AJ6hoU4
+   iuHGR+QiYj4Y6TLV9FlZ6wXQFqF4/ZsCopLArew0DDL9zYUhQu6QPiH9o
+   Y0jwYA3RYwkKcb1uoSlcN+dD+chqgAC0FZKx/PA7Ep3bqTl9svwXZqGAv
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="257114781"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="257114781"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 09:18:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="784286416"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga006.fm.intel.com with ESMTP; 18 Mar 2022 09:18:25 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 22IGIOmC024113;
+        Fri, 18 Mar 2022 16:18:24 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Wojciech Drewek <wojciech.drewek@intel.com>,
+        Marcin Szycik <marcin.szycik@linux.intel.com>,
+        Martyna Szapar-Mudlaw <martyna.szapar-mudlaw@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 net-next 0/5] ice: switch: debloat packet templates code
+Date:   Fri, 18 Mar 2022 17:17:08 +0100
+Message-Id: <20220318161713.680436-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In an analysis of a recent vmcore, a reader-owned rwsem was found with
-385 readers but no writer in the wait queue. That is kind of unusual
-but it may be caused by some race conditions that we have not fully
-understood yet. In such a case, all the readers in the wait queue should
-join the other reader-owners and acquire the read lock.
+This hunts down several places around packet templates/dummies for
+switch rules which are either repetitive, fragile or just not
+really readable code.
+It's a common need to add new packet templates and to review such
+changes as well, try to simplify both with the help of a pair
+macros and aliases.
 
-In rwsem_down_write_slowpath(), an incoming writer will try to wake
-up the front readers under such circumstance. That is not the case for
-rwsem_down_read_slowpath(), modify the code to do this. This includes the
-original supported case where the wait queue is empty and the incoming
-reader is going to wake up itself.
+bloat-o-meter is happy about that (built w/ LLVM 13):
 
-With CONFIG_LOCK_EVENT_COUNTS enabled, the newly added rwsem_rlock_rwake
-event counter had 13 hits right after the bootup of a 2-socket system. So
-the condition that a reader-owned rwsem has readers at the front of
-the wait queue does happen pretty frequently. This patch will help to
-speed thing up in such cases.
+add/remove: 0/1 grow/shrink: 1/1 up/down: 2/-1045 (-1043)
+Function                                     old     new   delta
+ice_fill_adv_dummy_packet                    289     291      +2
+ice_adv_add_update_vsi_list                  201       -    -201
+ice_add_adv_rule                            2950    2106    -844
+Total: Before=413901, After=412858, chg -0.25%
+add/remove: 53/52 grow/shrink: 0/0 up/down: 4660/-3988 (672)
+RO Data                                      old     new   delta
+ice_dummy_pkt_profiles                         -     672    +672
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/locking/lock_events_list.h |  1 +
- kernel/locking/rwsem.c            | 19 +++++++++++++------
- 2 files changed, 14 insertions(+), 6 deletions(-)
+Diffstat also looks nice, and adding new packet templates now takes
+less lines.
 
-diff --git a/kernel/locking/lock_events_list.h b/kernel/locking/lock_events_list.h
-index 97fb6f3f840a..9bb9f048848b 100644
---- a/kernel/locking/lock_events_list.h
-+++ b/kernel/locking/lock_events_list.h
-@@ -64,6 +64,7 @@ LOCK_EVENT(rwsem_rlock_steal)	/* # of read locks by lock stealing	*/
- LOCK_EVENT(rwsem_rlock_fast)	/* # of fast read locks acquired	*/
- LOCK_EVENT(rwsem_rlock_fail)	/* # of failed read lock acquisitions	*/
- LOCK_EVENT(rwsem_rlock_handoff)	/* # of read lock handoffs		*/
-+LOCK_EVENT(rwsem_rlock_rwake)	/* # of readers wakeup in slow path	*/
- LOCK_EVENT(rwsem_wlock)		/* # of write locks acquired		*/
- LOCK_EVENT(rwsem_wlock_fail)	/* # of failed write lock acquisitions	*/
- LOCK_EVENT(rwsem_wlock_handoff)	/* # of write lock handoffs		*/
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index f71a9693d05a..53f7f0b4724a 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -997,17 +997,24 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- 	count = atomic_long_add_return(adjustment, &sem->count);
- 
- 	/*
--	 * If there are no active locks, wake the front queued process(es).
--	 *
--	 * If there are no writers and we are first in the queue,
--	 * wake our own waiter to join the existing active readers !
-+	 * Do a rwsem_mark_wake() under one of the following conditions:
-+	 * 1) there is no active read or write lock.
-+	 * 2) there is no writer-owner (can be reader-owned) and the first
-+	 *    waiter is a reader.
- 	 */
- 	if (!(count & RWSEM_LOCK_MASK)) {
- 		clear_nonspinnable(sem);
- 		wake = true;
-+	} else if (!(count & RWSEM_WRITER_MASK)) {
-+		wake = rwsem_first_waiter(sem)->type == RWSEM_WAITING_FOR_READ;
-+		/*
-+		 * Check the number of cases where readers at the front
-+		 * of the previously non-empty wait list are to be woken.
-+		 */
-+		lockevent_cond_inc(rwsem_rlock_rwake,
-+				   wake && !(adjustment & RWSEM_FLAG_WAITERS));
- 	}
--	if (wake || (!(count & RWSEM_WRITER_MASK) &&
--		    (adjustment & RWSEM_FLAG_WAITERS)))
-+	if (wake)
- 		rwsem_mark_wake(sem, RWSEM_WAKE_ANY, &wake_q);
- 
- 	raw_spin_unlock_irq(&sem->wait_lock);
+We'll probably come out with dynamic template crafting in a while,
+but for now let's improve what we have currently.
+
+From v2[0]:
+ - rebase on top of the GTP changes;
+ - new: convert template search code to a rodata array (-1000 bytes
+   from .text, -400 bytes from ice.ko);
+ - collect Reviewed-by and Tested-by (Marcin, Michal).
+
+From v1[1]:
+ - rebase on top of the latest next-queue (to fix #3 not applying);
+ - adjust the kdoc accordingly to the function proto changes in #3;
+ - no functional changes.
+
+[0] https://lore.kernel.org/netdev/20220127154009.623304-1-alexandr.lobakin@intel.com
+[1] https://lore.kernel.org/netdev/20220124173116.739083-1-alexandr.lobakin@intel.com
+
+Alexander Lobakin (5):
+  ice: switch: add and use u16[] aliases to ice_adv_lkup_elem::{h,m}_u
+  ice: switch: unobscurify bitops loop in ice_fill_adv_dummy_packet()
+  ice: switch: use a struct to pass packet template params
+  ice: switch: use convenience macros to declare dummy pkt templates
+  ice: switch: convert packet template match code to rodata
+
+ drivers/net/ethernet/intel/ice/ice_switch.c | 489 ++++++++------------
+ drivers/net/ethernet/intel/ice/ice_switch.h |  12 +-
+ 2 files changed, 211 insertions(+), 290 deletions(-)
+
 -- 
-2.27.0
+2.35.1
 

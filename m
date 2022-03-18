@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288CF4DDA7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D89904DDA7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236677AbiCRN27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 09:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
+        id S236680AbiCRN3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236671AbiCRN25 (ORCPT
+        with ESMTP id S229896AbiCRN3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:28:57 -0400
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DC612221D;
-        Fri, 18 Mar 2022 06:27:33 -0700 (PDT)
-Received: by mail-qv1-f42.google.com with SMTP id jq9so6490182qvb.0;
-        Fri, 18 Mar 2022 06:27:33 -0700 (PDT)
+        Fri, 18 Mar 2022 09:29:16 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0957C6A;
+        Fri, 18 Mar 2022 06:27:57 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id v14so6831013qta.2;
+        Fri, 18 Mar 2022 06:27:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hQZn6HCdCoDBrk7b1VDHUCeUiTPMEvUNU16ddZWGYA4=;
-        b=FA2X/fFVxOYXJwFJw1B3f4+8l3cn18bCCWmHk2bILLlrHLtM+ls2U3jkRPxtlPMYXE
-         o6M9KV2tFGb+Ky8OP9y/fCAJ3HTwSVY6xZVqxnEMP8v/EdTTK5Hsd9JNos1i6IgdZ/i4
-         yjTIXRWrzfS3mQ+Ec1BzjhcDPZT9vuOf6s8sY8XFjKR1glHxTNITEfIjj4WkmXrn2vu/
-         QrfgQfcplZTqm477g2DZez27wbCdzFwOmU659lNGtIGLJ4nZY92YI9tTb8cnZ6CV7X1p
-         qI4f7V2i8jX1qQY3IOoDa9TFwzbOafvu6nmMjbAUR4JPi55GaHbarKqBX9r9jmZC1+Ez
-         xKLw==
-X-Gm-Message-State: AOAM531qFf2x5IwLSGrYRdjK+icr1JaXh4gbIoZr9gqNu9Esmd8C5TlH
-        uDBcFgkucFKbz9U4fuftv7UKJX09RZk4tNzW
-X-Google-Smtp-Source: ABdhPJyWrrtb3YLpsKtEloYgLiQI7TcgTjAK03CosJ/rBLDh7z1jol81QZ/p3nznVHyZsJCOd+m8ig==
-X-Received: by 2002:a05:6214:21c8:b0:440:ca81:cfae with SMTP id d8-20020a05621421c800b00440ca81cfaemr6623497qvh.19.1647610052536;
-        Fri, 18 Mar 2022 06:27:32 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id de26-20020a05620a371a00b0067dc7923b14sm3837101qkb.132.2022.03.18.06.27.32
+        bh=hwYsNjZl1OEA0rSc4LCpGf6eFyLL2xqbEphrx6Yl5Dg=;
+        b=YQ57QqWaUddnjqbkS0/3lrZqF4s2esB+vJxSP1gTzhgMCK7GbbOJlWAnv+YF8NK/mr
+         KSnfiVkana9xMwEaMXrhXTZSaPLxAde/woGGlvki1MiMt0teP4e16IkyhVvFPQ4IAtRS
+         wMeiYZhab3tZtBwokZRBVqdJ/flG8BONolTf4w2kGk4kJdN59FIG9IPqwY5qIG74Gr8A
+         dANJvAKaIsCYSIP7DgoIxSfOKze25Fx6oObfk4uMzz9aM/2QbAO7Zmpxl6zuFEmxE4/Z
+         HS48bQRNGStaRduQLSPfwuFjY0Pvm+eWG9rkr9RCgSRnRiTGsFtW/7CA7CrI4HrCq7oU
+         zQBg==
+X-Gm-Message-State: AOAM531WJgDmEsxBnvi4l5g8SqqrdTysjJFeBwl8gBMsfcE3bSSTp00u
+        Tc9eF3lsKJ/cHgfb5DB3FgBAsIJuVNdqiQXY
+X-Google-Smtp-Source: ABdhPJzr/8XxLHe9czn8uTip2PGqsesgcgLjFDAt9QSdxOlPvQEg7ROIY+kMpM17rPg/F+4KRhyukQ==
+X-Received: by 2002:a05:622a:195:b0:2e1:bce1:712b with SMTP id s21-20020a05622a019500b002e1bce1712bmr7439682qtw.114.1647610076307;
+        Fri, 18 Mar 2022 06:27:56 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id j11-20020a05622a038b00b002e1f0bc2e8csm3567523qtx.81.2022.03.18.06.27.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 06:27:32 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id u3so15840238ybh.5;
-        Fri, 18 Mar 2022 06:27:32 -0700 (PDT)
-X-Received: by 2002:a25:45:0:b0:633:96e2:2179 with SMTP id 66-20020a250045000000b0063396e22179mr10235365yba.393.1647610051868;
- Fri, 18 Mar 2022 06:27:31 -0700 (PDT)
+        Fri, 18 Mar 2022 06:27:56 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2e5a8a8c1cdso82301357b3.3;
+        Fri, 18 Mar 2022 06:27:55 -0700 (PDT)
+X-Received: by 2002:a81:24d6:0:b0:2e5:b253:f9fc with SMTP id
+ k205-20020a8124d6000000b002e5b253f9fcmr11309387ywk.438.1647610075527; Fri, 18
+ Mar 2022 06:27:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220308223324.7456-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220308223324.7456-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220308223324.7456-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220308223324.7456-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220308223324.7456-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220308223324.7456-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 18 Mar 2022 14:27:20 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWwPgg=N=QVwEwkBf8NAVi9rPYfT7Xwq9db8givN+d-Xw@mail.gmail.com>
-Message-ID: <CAMuHMdWwPgg=N=QVwEwkBf8NAVi9rPYfT7Xwq9db8givN+d-Xw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] arm64: dts: renesas: r9a07g054: Add OPP table
+Date:   Fri, 18 Mar 2022 14:27:44 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUs4X+A+kdmoaUxf2eqoYFQ6GhR2fqnAfdmn=yOHLWdCQ@mail.gmail.com>
+Message-ID: <CAMuHMdUs4X+A+kdmoaUxf2eqoYFQ6GhR2fqnAfdmn=yOHLWdCQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: renesas: r9a07g054: Add TSU node
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -62,8 +63,9 @@ Cc:     Magnus Damm <magnus.damm@gmail.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,7 +74,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Tue, Mar 8, 2022 at 11:33 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add OPP table for RZ/V2L SoC.
+> Add TSU and thermal-zones nodes to RZ/V2L (R9A07G054) SoC DTSI.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>

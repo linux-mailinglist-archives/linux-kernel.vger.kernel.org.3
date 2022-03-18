@@ -2,101 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD744DD818
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA644DD823
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235022AbiCRKiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S235068AbiCRKi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235074AbiCRKiE (ORCPT
+        with ESMTP id S231384AbiCRKi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 06:38:04 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CF92D88A0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:36:43 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id w27so13434655lfa.5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:36:43 -0700 (PDT)
+        Fri, 18 Mar 2022 06:38:56 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8C72D6CB0;
+        Fri, 18 Mar 2022 03:37:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uezAxvrMiMWp05gtOXieDCRlPfIaBrEY9L+wFxAHD0I=;
-        b=bNnyZSbzTBSvQFszb6I/F12rQ8T6cQ/10ECH/5aamuFpcWLXuGwqmi2qlA6OiaUIr+
-         V8TqpsR+t0/DyCMoEh0CzqowEErBChoYXYtogqepO3/rN15qn5ixhtqXSUnXgP8ImKUd
-         dquYpFAmazrx70ftgNlsqJnMu8VXtOfn5Fycx5s4naSptE35kQcC2TBiqr3KKFo+LcV1
-         5c8WxdJ3UMCLZsIfegAevCopkngxCuOIeY3nBuQeeddmK2uDHM1mtQLI5y+HsBtwRACr
-         XdDNr/3qHzJL/P06ND/wPSbT5RUHQjnOnE3omFv2FjybosKBFQxhzuagXroaERc3iONq
-         RREw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uezAxvrMiMWp05gtOXieDCRlPfIaBrEY9L+wFxAHD0I=;
-        b=ZjP1wW784+uklrznIdCEKTOnqP85qhZA3tAMgCJzPWBJkguNnwUQvdMASICO5zcYbb
-         hBG2ymSvvKTSht+We8MAO5PTn7QArrbXmxepN/7Tpfwhvhy9RD2tLV2AG0i6D9qEJ4UZ
-         cvp7xVnLZpUnxDyBELbbnGKV1H2dk8jmtTI6i124XzF3ncd9J6BeellW1Tw5wxUc9LTc
-         ctowH6OZjKkRW/llhWJWo1QvT+Ut1Rw7xVFn9qCL/guplQw7ykQmFc3x2PSbe8JhGWmf
-         4sGTRuuchBbxOgdcyJONxCgi+PQ/zm7ANz43ax/NLs979pEhJyUXQazTcEGgQ7YmZK/d
-         LPEw==
-X-Gm-Message-State: AOAM532W7MYF+iFwcPUkHfnL7OYg2MTvpipapsqt0fOlh3UnWMJkCN2K
-        MEkZUp4zd6YwMJmBg9VHPhO1bQOtHtSriKPXc1x3WPGJsOjTig==
-X-Google-Smtp-Source: ABdhPJzLDlZkIjkcjiJPHs6VSkUvvCx84qJ6fCSn3Un08tTkfHEJ5Nvoc5uZ9+oYemtT0HKnjD8/dVaewJpYQqnDfQA=
-X-Received: by 2002:ac2:4e98:0:b0:448:3039:d170 with SMTP id
- o24-20020ac24e98000000b004483039d170mr5958247lfr.233.1647599801563; Fri, 18
- Mar 2022 03:36:41 -0700 (PDT)
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sf+rc0zCqZilSU/qrDJuTcyDi78AjAWSo6ACkbY6BZo=;
+  b=G2sp7wMcbS8S0AGy725LnJd9FgJ775FVsMriKe7eVeBOc1+8puvLfbEw
+   63XGDfsCdsNXtMzIKlQAreoQptycDOY9LoPjgonE2PqSksyGe+1zTz7/1
+   tYHziJYPDYWrLeYz6kybBd3WD0ifyePoNw92wh787xCDtO0cQmeHLD5am
+   c=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,192,1643670000"; 
+   d="scan'208";a="8935627"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:37:35 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     linux-ia64@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ia64: fix typos in comments
+Date:   Fri, 18 Mar 2022 11:36:56 +0100
+Message-Id: <20220318103729.157574-1-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220316093740.GA7714@lst.de> <20220316093855.GC7714@lst.de>
- <CAPDyKFrH4L2Y2TOFyWPJ+_rrgvJPixR05XX_HWUU99h0MZhLuA@mail.gmail.com> <20220318091152.GB31758@lst.de>
-In-Reply-To: <20220318091152.GB31758@lst.de>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 18 Mar 2022 11:36:04 +0100
-Message-ID: <CAPDyKFohNVnrwcZSCGnv7X++FfQ0a3rdeMx3tvJ0eW-Afr9Tyg@mail.gmail.com>
-Subject: Re: [PATCH alternative 2] block: fix the REQ_OP_SECURE_ERASE handling
- to not leak erased data
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     axboe@kernel.dk, jaegeuk@kernel.org, chao@kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Daeho Jeong <daehojeong@google.com>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Mar 2022 at 10:11, Christoph Hellwig <hch@lst.de> wrote:
->
-> On Thu, Mar 17, 2022 at 10:44:01AM +0100, Ulf Hansson wrote:
-> > Stating that it can't work is probably not a correct statement.
-> > Certainly it can, but it depends on how "secure" (or clever) the
-> > implementation of the FTL is in the flash media. I mean, nothing
-> > prevents the FTL from doing a real erase on erase block level and
-> > simply let the "secure erase" request wait on that operation to be
-> > completed.
->
-> Well, that assumes it can find all the previous copied of the data.
-> Having worked with various higher end SSDs FTLs I know they can't,
-> so if an eMMC device could that would very much surpise me given
-> the overhead.
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-An eMMC is no different from an SSD in this regard, so you are most
-definitely correct. BTW, I was one of those guys working with FTLs
-myself, but it was a long time ago, when NAND/NOR flashes were less
-complicated to manage.
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-Anyway, to really make things work, one would need some additional low
-level partitioning  - or commands to tag the data for special
-purposes. eMMCs do have some support for things like this, but whether
-it actually works to serve this particular use case (secure erase), I
-really can't tell.
+---
+ arch/ia64/kernel/palinfo.c |    2 +-
+ arch/ia64/kernel/traps.c   |    2 +-
+ arch/ia64/mm/init.c        |    2 +-
+ arch/ia64/mm/tlb.c         |    4 ++--
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-Kind regards
-Uffe
+diff --git a/arch/ia64/kernel/palinfo.c b/arch/ia64/kernel/palinfo.c
+index 64189f04c1a4..b9ae093bfe37 100644
+--- a/arch/ia64/kernel/palinfo.c
++++ b/arch/ia64/kernel/palinfo.c
+@@ -120,7 +120,7 @@ static const char *mem_attrib[]={
+  * Input:
+  *	- a pointer to a buffer to hold the string
+  *	- a 64-bit vector
+- * Ouput:
++ * Output:
+  *	- a pointer to the end of the buffer
+  *
+  */
+diff --git a/arch/ia64/kernel/traps.c b/arch/ia64/kernel/traps.c
+index 753642366e12..53735b1d1be3 100644
+--- a/arch/ia64/kernel/traps.c
++++ b/arch/ia64/kernel/traps.c
+@@ -309,7 +309,7 @@ handle_fpu_swa (int fp_fault, struct pt_regs *regs, unsigned long isr)
+ 			/*
+ 			 * Lower 4 bits are used as a count. Upper bits are a sequence
+ 			 * number that is updated when count is reset. The cmpxchg will
+-			 * fail is seqno has changed. This minimizes mutiple cpus
++			 * fail is seqno has changed. This minimizes multiple cpus
+ 			 * resetting the count.
+ 			 */
+ 			if (current_jiffies > last.time)
+diff --git a/arch/ia64/mm/init.c b/arch/ia64/mm/init.c
+index 5d165607bf35..7ae1244ed8ec 100644
+--- a/arch/ia64/mm/init.c
++++ b/arch/ia64/mm/init.c
+@@ -451,7 +451,7 @@ mem_init (void)
+ 	memblock_free_all();
+ 
+ 	/*
+-	 * For fsyscall entrpoints with no light-weight handler, use the ordinary
++	 * For fsyscall entrypoints with no light-weight handler, use the ordinary
+ 	 * (heavy-weight) handler, but mark it by setting bit 0, so the fsyscall entry
+ 	 * code can tell them apart.
+ 	 */
+diff --git a/arch/ia64/mm/tlb.c b/arch/ia64/mm/tlb.c
+index 135b5135cace..ca060e7a2a46 100644
+--- a/arch/ia64/mm/tlb.c
++++ b/arch/ia64/mm/tlb.c
+@@ -174,7 +174,7 @@ __setup("nptcg=", set_nptcg);
+  * override table (in which case we should ignore the value from
+  * PAL_VM_SUMMARY).
+  *
+- * Kernel parameter "nptcg=" overrides maximum number of simultanesous ptc.g
++ * Kernel parameter "nptcg=" overrides maximum number of simultaneous ptc.g
+  * purges defined in either PAL_VM_SUMMARY or PAL override table. In this case,
+  * we should ignore the value from either PAL_VM_SUMMARY or PAL override table.
+  *
+@@ -516,7 +516,7 @@ int ia64_itr_entry(u64 target_mask, u64 va, u64 pte, u64 log_size)
+ 	if (i >= per_cpu(ia64_tr_num, cpu))
+ 		return -EBUSY;
+ 
+-	/*Record tr info for mca hander use!*/
++	/*Record tr info for mca handler use!*/
+ 	if (i > per_cpu(ia64_tr_used, cpu))
+ 		per_cpu(ia64_tr_used, cpu) = i;
+ 
+

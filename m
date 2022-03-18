@@ -2,98 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7B24DD3DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 05:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9D84DD3DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 05:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbiCREQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 00:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
+        id S232371AbiCRES3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 00:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiCREQm (ORCPT
+        with ESMTP id S231218AbiCRESY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 00:16:42 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAAF10E075;
-        Thu, 17 Mar 2022 21:15:23 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22I2uTfM010620;
-        Fri, 18 Mar 2022 04:15:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=AFMdLMGCUB3YlWtnONSwVOJtDrxK3jekktpnKjjgpxA=;
- b=cF1so1wt43b80klNeXaEb36uTuo5IGMpfs8CxbA/CdIsnoimA8MVCpJh0QbaBErRRyHp
- ZhyeDkuxl1RTHhqweC0e4uIDfqNdxNqk/je9ihBxn+7j2Ll0/CY1jf4LBP0ZWRVgZuiZ
- XKFcefy7uUJzlDoEiJ/rEM/iwqxBtA6kVXuWraJbWukhrIZmBd3EjS9jR0NQiop6vRzb
- OQd60u/t/2A+Dxl2Uxp9yllgFFqWmQHhs31o4cTN81KpG4qPT3NdQFlXTDUE1nGzMYD4
- 2idfSnydbpD2gzLjddWwQbLX4PoHlxkvtPtTCeE/zQP/afAV4M/i3S+PuhXfY+1888Wa 5g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev1w0v8cc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 04:15:02 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22I42BnA003994;
-        Fri, 18 Mar 2022 04:15:02 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ev1w0v8bn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 04:15:02 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22I49EZ6024921;
-        Fri, 18 Mar 2022 04:14:59 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 3erk58tsc0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 04:14:59 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22I4Euvw16580970
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Mar 2022 04:14:56 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6796EA4054;
-        Fri, 18 Mar 2022 04:14:56 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C4AB8A405C;
-        Fri, 18 Mar 2022 04:14:55 +0000 (GMT)
-Received: from localhost (unknown [9.43.127.134])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 18 Mar 2022 04:14:55 +0000 (GMT)
-Date:   Fri, 18 Mar 2022 09:44:53 +0530
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-ext4@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@kernel.org, hca@linux.ibm.com
-Subject: Re: [PATCHv3 02/10] ext4: Fix ext4_fc_stats trace point
-Message-ID: <20220318041453.fho5l6zsfapo37fk@riteshh-domain>
-References: <cover.1647057583.git.riteshh@linux.ibm.com>
- <b4b9691414c35c62e570b723e661c80674169f9a.1647057583.git.riteshh@linux.ibm.com>
- <yt9dr1706b4i.fsf@linux.ibm.com>
- <20220317145008.73nm7hqtccyjy353@riteshh-domain>
- <yt9d1qz05zk1.fsf@linux.ibm.com>
- <YjNzUImisNklfvae@thelio-3990X>
+        Fri, 18 Mar 2022 00:18:24 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C7118EEAE
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 21:17:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647577025; x=1679113025;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2MxLCCYcRMZsv9nSvPUgSb/KtDdbPIPTc7PZ1d97GB8=;
+  b=keQ8Eg2fNggk0jKvsV7tCk+op9ROmQb19yA5OIpUjEhZmu1WQlSIETSc
+   mJZ929bpA27xNh9L/XEScuBs7MoRZ+isJnVdXxM8XXDpI/7h3wxqdfHpy
+   /glcdB4IWrTy90x4L6IOJjuBFTb43GLwXaL35G+xC+Zul4b7ymkPvV6A5
+   HQkJkXksofdm4ot0slUe5pEx1lOFOcM2/CqU1ZL6DAJ2j1Xjb52Ox4v3J
+   6jTV4lfIQRbhHPpger+2k1WrrspVvppWiMyAprt1sVpYgTeYWAkk7VtCa
+   74xM4A+8NTvqlXkn2abYD/8iq62QajBV2iZtsqPcPcbk/MDiRcREpsmD8
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="343478504"
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="343478504"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 21:17:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
+   d="scan'208";a="517030987"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 17 Mar 2022 21:17:03 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nV42w-000EQ1-My; Fri, 18 Mar 2022 04:17:02 +0000
+Date:   Fri, 18 Mar 2022 12:16:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:asahi 28/174] include/linux/soc/apple/rtkit.h:223:5:
+ warning: no previous prototype for 'apple_rtkit_poll'
+Message-ID: <202203181210.tL0yqraP-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YjNzUImisNklfvae@thelio-3990X>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zsykd87ix3dUb09JX_ByuSB-IJYZ16i1
-X-Proofpoint-ORIG-GUID: jF-OQTpL0MXjG3KZoaPfYPZ32B4f3kdJ
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-18_05,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- impostorscore=0 clxscore=1011 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 bulkscore=0 malwarescore=0 phishscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203180021
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,73 +62,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/03/17 10:43AM, Nathan Chancellor wrote:
-> On Thu, Mar 17, 2022 at 05:11:42PM +0100, Sven Schnelle wrote:
-> > Hi,
-> >
-> > Ritesh Harjani <riteshh@linux.ibm.com> writes:
-> >
-> > > On 22/03/17 01:01PM, Sven Schnelle wrote:
-> > >> Ritesh Harjani <riteshh@linux.ibm.com> writes:
-> > >>
-> > >> [    0.958403] Hardware name: IBM 3906 M04 704 (z/VM 7.1.0)
-> > >> [    0.958407] Workqueue: eval_map_wq eval_map_work_func
-> > >>
-> > >> [    0.958446] Krnl PSW : 0704e00180000000 000000000090a9d6 (number+0x25e/0x3c0)
-> > >> [    0.958456]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
-> > >> [    0.958461] Krnl GPRS: 0000000000000058 00000000010de0ac 0000000000000001 00000000fffffffc
-> > >> [    0.958467]            0000038000047b80 0affffff010de0ab 0000000000000000 0000000000000000
-> > >> [    0.958481]            0000000000000020 0000038000000000 00000000010de0ad 00000000010de0ab
-> > >> [    0.958484]            0000000080312100 0000000000e68910 0000038000047b50 0000038000047ab8
-> > >> [    0.958494] Krnl Code: 000000000090a9c6: f0c84112b001        srp     274(13,%r4),1(%r11),8
-> > >> [    0.958494]            000000000090a9cc: 41202001            la      %r2,1(%r2)
-> > >> [    0.958494]           #000000000090a9d0: ecab0006c065        clgrj   %r10,%r11,12,000000000090a9dc
-> > >> [    0.958494]           >000000000090a9d6: d200b0004000        mvc     0(1,%r11),0(%r4)
-> > >> [    0.958494]            000000000090a9dc: 41b0b001            la      %r11,1(%r11)
-> > >> [    0.958494]            000000000090a9e0: a74bffff
-> > >>             aghi    %r4,-1
-> > >> [    0.958494]            000000000090a9e4: a727fff6            brctg   %r2,000000000090a9d0
-> > >> [    0.958494]            000000000090a9e8: a73affff            ahi     %r3,-1
-> > >> [    0.958575] Call Trace:
-> > >> [    0.958580]  [<000000000090a9d6>] number+0x25e/0x3c0
-> > >> [    0.958594] ([<0000000000289516>] update_event_printk+0xde/0x200)
-> > >> [    0.958602]  [<0000000000910020>] vsnprintf+0x4b0/0x7c8
-> > >> [    0.958606]  [<00000000009103e8>] snprintf+0x40/0x50
-> > >> [    0.958610]  [<00000000002893d2>] eval_replace+0x62/0xc8
-> > >> [    0.958614]  [<000000000028e2fe>] trace_event_eval_update+0x206/0x248
-> > >
-> > > This looks like you must have this patch from Steven as well [2].
-> > > Although I did test the patch and didn't see such a crash on my qemu box [3].
->
-> Indeed, commit b3bc8547d3be ("tracing: Have TRACE_DEFINE_ENUM affect
-> trace event types as well") from the ftrace tree is required to
-> reproduce this. The ftrace and ext4 changes alone are fine (my initial
-> bisect landed on a merge and I did two more bisects to confirm that).
->
-> > > [2]: https://lore.kernel.org/linux-ext4/20220310233234.4418186a@gandalf.local.home/
-> > > [3]: https://lore.kernel.org/linux-ext4/20220311051249.ltgqbjjothbrkbno@riteshh-domain/
-> > >
-> > > @Steven,
-> > > Sorry to bother. But does this crash strike anything obvious to you?
-> >
-> > Looking at the oops output again made me realizes that the snprintf
-> > tries to write into pages that are mapped RO. Talking to Heiko he
-> > mentioned that s390 maps rodata/text RO when setting up the initial
-> > mapping while x86 has a RW mapping in the beginning and changes that
-> > later to RO. I haven't verified that, but that might be a reason why it
-> > works on x86.
->
-> For what it's worth, this is reproducible on all of my x86 boxes during
-> the initial boot on next-20220316 and newer. I am happy to test any
-> patches or provide further information as necessary.
+tree:   https://github.com/AsahiLinux/linux asahi
+head:   c1fcb91bbcc8fd1b1f874e45f55cbba682351f3c
+commit: 73ad3599aa16b102655fbd9aa1576ae3c63466a3 [28/174] WIP: nvme-apple: add initial Apple SoC NVMe driver
+config: powerpc-randconfig-m031-20220318 (https://download.01.org/0day-ci/archive/20220318/202203181210.tL0yqraP-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/73ad3599aa16b102655fbd9aa1576ae3c63466a3
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux asahi
+        git checkout 73ad3599aa16b102655fbd9aa1576ae3c63466a3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/nvme/host/
 
-Thanks for reporting.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Could you please share your kernel config with which you are seeing this to be
-reproducible on x86?
+All warnings (new ones prefixed by >>):
 
--ritesh
+   In file included from drivers/nvme/host/apple.c:32:
+>> include/linux/soc/apple/rtkit.h:223:5: warning: no previous prototype for 'apple_rtkit_poll' [-Wmissing-prototypes]
+     223 | int apple_rtkit_poll(struct apple_rtkit *rtk)
+         |     ^~~~~~~~~~~~~~~~
 
->
-> Cheers,
-> Nathan
+
+vim +/apple_rtkit_poll +223 include/linux/soc/apple/rtkit.h
+
+b0aec24ea7a8e79 Hector Martin 2022-02-08  222  
+16b8a4a8997d359 Hector Martin 2022-02-08 @223  int apple_rtkit_poll(struct apple_rtkit *rtk)
+16b8a4a8997d359 Hector Martin 2022-02-08  224  {
+16b8a4a8997d359 Hector Martin 2022-02-08  225  	return -ENODEV;
+16b8a4a8997d359 Hector Martin 2022-02-08  226  }
+16b8a4a8997d359 Hector Martin 2022-02-08  227  
+
+:::::: The code at line 223 was first introduced by commit
+:::::: 16b8a4a8997d359639caf9b641cea8466e68c717 soc: apple: rtkit: Add recv_message_early callback and apple_rtkit_poll
+
+:::::: TO: Hector Martin <marcan@marcan.st>
+:::::: CC: Hector Martin <marcan@marcan.st>
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

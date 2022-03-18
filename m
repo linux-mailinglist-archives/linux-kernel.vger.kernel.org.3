@@ -2,119 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A4D4DD654
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D564DD656
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233870AbiCRIlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 04:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
+        id S233889AbiCRImF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233366AbiCRIlv (ORCPT
+        with ESMTP id S233881AbiCRImB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:41:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37796143C64;
-        Fri, 18 Mar 2022 01:40:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DFAD0B82198;
-        Fri, 18 Mar 2022 08:40:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC77C340F9;
-        Fri, 18 Mar 2022 08:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647592830;
-        bh=iUr5tRvZTo9rXrhUfHmBDsVjXAUzfQvdrJ4GOirMD1k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NKX3SMHtB+o8znU/U2KTE369qFnc8hXvVsOukLKqhwmETmkyjpUMSdrLeFv1xNn5T
-         MJyJTjAckKX4mKT6/mtDwr9pYbdnc45y8ZNx3Dj3mleoMjB1yGVBx0EYNhpPnsUf2v
-         3zXX1EklCxZTKWVyMKQh+verzBUIX40X5errq26vokUMTonsuiXmsRMIovokF6ph9U
-         iR+iVF6nab3JbFln6eZYgbeZVdLXTWM1VRCBH5Ek+cz3ZmE34EcjEwOcsYeAp524cO
-         QFOPXbBldio8bBwJyc+oP0i0sCY8H7FE2TmOSfw1OXmyjL/Qwg51p6EjEh1RW5O3i5
-         FvzQRJ1LQv1Uw==
-Received: by mail-vs1-f47.google.com with SMTP id k184so3345069vsc.2;
-        Fri, 18 Mar 2022 01:40:30 -0700 (PDT)
-X-Gm-Message-State: AOAM532kWteunkyYkQwcgg+5okmarNl8zJIkuLVUmwsMJQNwZCmWeBZh
-        xIgbL+Lvn0ZWMwsMymG1dmABhTLZBO5Or2Uw5HA=
-X-Google-Smtp-Source: ABdhPJyKftDFP/Db0LP/WpQBiK7L2dYAjVWhbklLPdx+VCrE7mm4BHhLc/G2CUjhluQs1dFX90+mXlVVyzM9CXgkfOk=
-X-Received: by 2002:a05:6102:311b:b0:324:e48a:75bc with SMTP id
- e27-20020a056102311b00b00324e48a75bcmr265902vsh.2.1647592829461; Fri, 18 Mar
- 2022 01:40:29 -0700 (PDT)
+        Fri, 18 Mar 2022 04:42:01 -0400
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AC517C412;
+        Fri, 18 Mar 2022 01:40:41 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id p6so5797139lfh.1;
+        Fri, 18 Mar 2022 01:40:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=x+aZsSUA8MQf/8QzgnABXBDq4WnY5Owhm5CoPJ80F7g=;
+        b=rJ3HldNqM/0pOtfNWGam+zcNph+gB7N5l0i0tz8VZhwjl8TREYRCFctMjV83GG8Yfz
+         s/CZMua9xIeL3/7IUNS/zvrJHQ5fxMiSfKaDCda8ww1Ib5nm+FL/zriNLjePM5usgfjJ
+         TRY6vO/MXUwPdcZTcy+UoEWy6QbjU2fgqXZBN6c13RIWfLQTwqVru0RT4PfGs/F7MmRI
+         xldA0FoGSF3hul37rfOHRkqIR0hqm8CyL6q6qPalT7cVPdj39eRB5yQwtwIm8uLsSLxo
+         5wo4CdX42R3Sd2hIIuId4BjU/x2RSTuJBKBxF//UkpM+0n9K5mQMocaDLGA4/YPiu7wi
+         TvLw==
+X-Gm-Message-State: AOAM531CJWrV8G+DUUfaGd5p6MytEO47v48S4FxElMKbk3I2YBqRS5Z3
+        5W50BjId6AdPwWPayu93wt0=
+X-Google-Smtp-Source: ABdhPJx7het/ER7SMI1T3LzCDB2G6vbr12KVLeWnqK0CSFgjlBYzApaS2EZB1CbIacc4hryCrLsDWg==
+X-Received: by 2002:a05:6512:3192:b0:448:6ef9:12f2 with SMTP id i18-20020a056512319200b004486ef912f2mr5280424lfe.483.1647592839934;
+        Fri, 18 Mar 2022 01:40:39 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id i24-20020a2e8658000000b0024806af7079sm840430ljj.43.2022.03.18.01.40.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 01:40:39 -0700 (PDT)
+Message-ID: <354ec362-0883-ccfe-9e19-7897318e5e08@kernel.org>
+Date:   Fri, 18 Mar 2022 09:40:36 +0100
 MIME-Version: 1.0
-References: <20220316232600.20419-1-palmer@rivosinc.com>
-In-Reply-To: <20220316232600.20419-1-palmer@rivosinc.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 18 Mar 2022 16:40:18 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQdhnxJ3gaJDCnd7-boz83GMxaW7tTNaA9hSHs92L_Zig@mail.gmail.com>
-Message-ID: <CAJF2gTQdhnxJ3gaJDCnd7-boz83GMxaW7tTNaA9hSHs92L_Zig@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Generic Ticket Spinlocks
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>, jszhang@kernel.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        openrisc@lists.librecores.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 4/4] power: supply: max17042_battery: read battery
+ properties from device tree
+Content-Language: en-US
+To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
+ <20220318001048.20922-5-sebastian.krzyszkowiak@puri.sm>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220318001048.20922-5-sebastian.krzyszkowiak@puri.sm>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
+On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
+> So far configuring the gauge was only possible using platform data,
+> with no way to provide the configuration on device tree-based platforms.
+> 
+> Change that by looking up the configuration values from monitored-battery
+> property. This is especially useful on models implementing ModelGauge m5 EZ
+> algorithm, such as MAX17055, as all the required configuration can be
+> derived from a "simple-battery" DT node there.
+> 
+> In order to be able to access power supply framework in get_of_pdata,
+> move devm_power_supply_register earlier in max17042_probe.
+> 
+> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+> ---
+>  drivers/power/supply/max17042_battery.c | 50 +++++++++++++++++++------
+>  include/linux/power/max17042_battery.h  |  1 +
+>  2 files changed, 40 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
+> index c39250349a1d..4c33565802d5 100644
+> --- a/drivers/power/supply/max17042_battery.c
+> +++ b/drivers/power/supply/max17042_battery.c
+> @@ -937,7 +937,9 @@ max17042_get_of_pdata(struct max17042_chip *chip)
+>  	struct device *dev = &chip->client->dev;
+>  	struct device_node *np = dev->of_node;
+>  	u32 prop;
+> +	u64 data64;
+>  	struct max17042_platform_data *pdata;
+> +	struct power_supply_battery_info *info;
+>  
+>  	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
+>  	if (!pdata)
+> @@ -961,6 +963,32 @@ max17042_get_of_pdata(struct max17042_chip *chip)
+>  	if (of_property_read_s32(np, "maxim,over-volt", &pdata->vmax))
+>  		pdata->vmax = INT_MAX;
+>  
+> +	if (pdata->enable_current_sense &&
+> +	    power_supply_get_battery_info(chip->battery, &info) == 0) {
+> +		pdata->config_data = devm_kzalloc(dev, sizeof(*pdata->config_data), GFP_KERNEL);
+> +		if (!pdata->config_data)
+> +			return NULL;
+> +
+> +		if (info->charge_full_design_uah != -EINVAL) {
+> +			data64 = (u64)info->charge_full_design_uah * pdata->r_sns;
+> +			do_div(data64, MAX17042_CAPACITY_LSB);
+> +			pdata->config_data->design_cap = (u16)data64;
+> +			pdata->enable_por_init = true;
+> +		}
+> +		if (info->charge_term_current_ua != -EINVAL) {
+> +			data64 = (u64)info->charge_term_current_ua * pdata->r_sns;
+> +			do_div(data64, MAX17042_CURRENT_LSB);
+> +			pdata->config_data->ichgt_term = (u16)data64;
+> +			pdata->enable_por_init = true;
+> +		}
+> +		if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055) {
+> +			if (info->voltage_max_design_uv > 4250000) {
+> +				pdata->config_data->model_cfg = MAX17055_MODELCFG_VCHG_BIT;
+> +				pdata->enable_por_init = true;
+> +			}
+> +		}
+> +	}
+> +
+>  	return pdata;
+>  }
+>  #endif
+> @@ -1092,16 +1120,23 @@ static int max17042_probe(struct i2c_client *client,
+>  		return -EINVAL;
+>  	}
+>  
+> +	i2c_set_clientdata(client, chip);
+> +	psy_cfg.drv_data = chip;
+> +	psy_cfg.of_node = dev->of_node;
+> +
+> +	chip->battery = devm_power_supply_register(&client->dev, max17042_desc,
+> +						   &psy_cfg);
+> +	if (IS_ERR(chip->battery)) {
+> +		dev_err(&client->dev, "failed: power supply register\n");
+> +		return PTR_ERR(chip->battery);
+> +	}
 
-Tested-by: Guo Ren <guoren@kernel.org>
+I don't think it is correct. You register power supply, thus making it
+available for system, before configuring most of the data. For short
+time the chip might report to the system bogus results and events.
 
-Could help involve the below patch in your series?
-
-https://lore.kernel.org/linux-arch/20220318083421.2062259-1-guoren@kernel.org/T/#u
-
-On Thu, Mar 17, 2022 at 1:14 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> Peter sent an RFC out about a year ago
-> <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>,
-> but after a spirited discussion it looks like we lost track of things.
-> IIRC there was broad consensus on this being the way to go, but there
-> was a lot of discussion so I wasn't sure.  Given that it's been a year,
-> I figured it'd be best to just send this out again formatted a bit more
-> explicitly as a patch.
->
-> This has had almost no testing (just a build test on RISC-V defconfig),
-> but I wanted to send it out largely as-is because I didn't have a SOB
-> from Peter on the code.  I had sent around something sort of similar in
-> spirit, but this looks completely re-written.  Just to play it safe I
-> wanted to send out almost exactly as it was posted.  I'd probably rename
-> this tspinlock and tspinlock_types, as the mis-match kind of makes my
-> eyes go funny, but I don't really care that much.  I'll also go through
-> the other ports and see if there's any more candidates, I seem to
-> remember there having been more than just OpenRISC but it's been a
-> while.
->
-> I'm in no big rush for this and given the complex HW dependencies I
-> think it's best to target it for 5.19, that'd give us a full merge
-> window for folks to test/benchmark it on their systems to make sure it's
-> OK.  RISC-V has a forward progress guarantee so we should be safe, but
-> these can always trip things up.
+Instead I think you should split it into two parts - init which happens
+before registering power supply and after.
 
 
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Best regards,
+Krzysztof

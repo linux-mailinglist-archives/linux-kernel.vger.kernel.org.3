@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508074DD845
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FD04DD821
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235359AbiCRKkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
+        id S235401AbiCRKkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235142AbiCRKjL (ORCPT
+        with ESMTP id S235158AbiCRKjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Mar 2022 06:39:11 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364F22DC009;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C522DC014;
         Fri, 18 Mar 2022 03:37:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=ZphuoB39pL6xZZufQxzdnxdgS8zf0Im5X+oikwRjYcw=;
-  b=g3CdAdWY9bJEc6RFC6ktvT1UJeVslcaFff1EvGy51J0tzj/mA/jo0+4f
-   3/6EkUOcZLqmK7xbr+4N6PUQ0WHSoarPfLXbfSLWzyVexLj2WGIQUL+w5
-   sqORu/9mIJDTZxaKZGj8ckd6aWYqOpyACFbDi8mVgRCNgBhdU2kBjcJXP
-   I=;
+  bh=Y4SWvaFF8SLF18WGHPMXLhVShwqcGA37JZXbsBYpEjo=;
+  b=fbWymSZZAY0ujoskteXjkICADm86iX6MRN0XTYcYCSXL6JV1QkHx0fB2
+   w5gO6LrOq1RgUSOVokIfsYPFw7Sr2wjdnDj0ogv9WpNPyvM1EUdxbubmi
+   2Z/DSD/fzkh/twvPersTHKHJnDzrZwl7se605ahqRwiB4/3wDNH8pkCy7
+   0=;
 Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.90,192,1643670000"; 
-   d="scan'208";a="8935662"
+   d="scan'208";a="8935665"
 Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
   by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 11:37:39 +0100
 From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Linus Walleij <linusw@kernel.org>
-Cc:     kernel-janitors@vger.kernel.org, Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc:     kernel-janitors@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
         Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM/ixp4xx: fix typos in comments
-Date:   Fri, 18 Mar 2022 11:37:21 +0100
-Message-Id: <20220318103729.157574-26-Julia.Lawall@inria.fr>
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] omap1: htc_herald: fix typos in comments
+Date:   Fri, 18 Mar 2022 11:37:22 +0100
+Message-Id: <20220318103729.157574-27-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -57,20 +57,20 @@ Detected with the help of Coccinelle.
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- arch/arm/mach-ixp4xx/ixp4xx-of.c |    2 +-
+ arch/arm/mach-omap1/board-htcherald.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-ixp4xx/ixp4xx-of.c b/arch/arm/mach-ixp4xx/ixp4xx-of.c
-index f9904716ec7f..f543e2adae0c 100644
---- a/arch/arm/mach-ixp4xx/ixp4xx-of.c
-+++ b/arch/arm/mach-ixp4xx/ixp4xx-of.c
-@@ -46,7 +46,7 @@ static void __init ixp4xx_of_map_io(void)
- }
- 
- /*
-- * We handle 4 differen SoC families. These compatible strings are enough
-+ * We handle 4 different SoC families. These compatible strings are enough
-  * to provide the core so that different boards can add their more detailed
-  * specifics.
-  */
+diff --git a/arch/arm/mach-omap1/board-htcherald.c b/arch/arm/mach-omap1/board-htcherald.c
+index 258304edf23e..d528b8497061 100644
+--- a/arch/arm/mach-omap1/board-htcherald.c
++++ b/arch/arm/mach-omap1/board-htcherald.c
+@@ -170,7 +170,7 @@ static const unsigned int htc_herald_keymap[] = {
+ 	KEY(3, 0, KEY_VOLUMEUP), /* Volume up */
+ 	KEY(4, 0, KEY_F2),  /* Right bar (landscape) */
+ 	KEY(5, 0, KEY_MAIL), /* Win key (portrait) */
+-	KEY(6, 0, KEY_DIRECTORY), /* Right bar (protrait) */
++	KEY(6, 0, KEY_DIRECTORY), /* Right bar (portrait) */
+ 	KEY(0, 1, KEY_LEFTCTRL), /* Windows key */
+ 	KEY(1, 1, KEY_COMMA),
+ 	KEY(2, 1, KEY_M),
 

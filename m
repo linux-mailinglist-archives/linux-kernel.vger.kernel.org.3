@@ -2,87 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9AA4DE013
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B014DE014
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239702AbiCRRiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 13:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
+        id S239680AbiCRRla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 13:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239693AbiCRRii (ORCPT
+        with ESMTP id S234956AbiCRRl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 13:38:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 756903076F8;
-        Fri, 18 Mar 2022 10:37:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CE191515;
-        Fri, 18 Mar 2022 10:37:19 -0700 (PDT)
-Received: from eglon.cambridge.arm.com (eglon.cambridge.arm.com [10.1.196.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 203123F7B4;
-        Fri, 18 Mar 2022 10:37:18 -0700 (PDT)
-From:   James Morse <james.morse@arm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     James Morse <james.morse@arm.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: fixup for [PATCH 5.4 18/43] arm64 entry: Add macro for reading symbol address from the trampoline
-Date:   Fri, 18 Mar 2022 17:37:13 +0000
-Message-Id: <20220318173713.2320567-1-james.morse@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <YjSxfK6bmH4P9IQl@kroah.com>
-References: <YjSxfK6bmH4P9IQl@kroah.com>
+        Fri, 18 Mar 2022 13:41:28 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C95196084
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 10:40:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cya1qLD0P42aWQWkjKaY3QBjbUjBXUzgtuTZm/iNADQ=; b=VYpN1CoBXGW19Y0/LzJfcfuerc
+        3eIeWuR++TJKWvOxX1KDba3UudDsT+Lr5buXNGmiQdlHdLMy/JU6q5+xYYx5srDlzTPkQiwnxHbde
+        S0bueT3j0CFJTgUGZnRiS5OLqV0LM3ro7zIV6g7Zqaa56e1zio+KIDc+62zFZYiR08VR0/YLlfMLw
+        /VPSTpc4xe8zlLuCptrq162W5jdbQdrfF+qb7pwaqSsLhwRSS/hRfirhXiJUCqKsGl4BDFDGXmqHW
+        anCypu1Y4iiXNBQavBxPuLcTtzuA6f5AOnLWvjxswQxc6Kd/Ep5Bu98mFt18A/KnBJrBWqfdYe8W1
+        VGiYLfqw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nVGZX-0089Iz-4V; Fri, 18 Mar 2022 17:39:31 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BE52598841D; Fri, 18 Mar 2022 18:39:30 +0100 (CET)
+Date:   Fri, 18 Mar 2022 18:39:30 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org
+Subject: Re: [PATCH v1 1/2] static_call: Properly initialise
+ DEFINE_STATIC_CALL_RET0()
+Message-ID: <20220318173930.GR8939@worktop.programming.kicks-ass.net>
+References: <1e0a61a88f52a460f62a58ffc2a5f847d1f7d9d8.1647253456.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1e0a61a88f52a460f62a58ffc2a5f847d1f7d9d8.1647253456.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__sdei_asm_trampoline_next_handler shouldn't have its own name as the
-tramp_data_read_var takes the symbol name, and generates the name for
-the value in the data page if CONFIG_RANDOMIZE_BASE is clear.
 
-This means when CONFIG_RANDOMIZE_BASE is clear, this code won't compile
-as __sdei_asm_trampoline_next_handler doesn't exist.
 
-Use the proper name, and let the macro do its thing.
-
-Reported-by: Florian Fainelli <f.fainelli@gmail.com>
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: James Morse <james.morse@arm.com>
----
- arch/arm64/kernel/entry.S | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index e4b5a15c2e2e..cfc0bb6c49f7 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -1190,7 +1190,7 @@ __entry_tramp_data_start:
- __entry_tramp_data_vectors:
- 	.quad	vectors
- #ifdef CONFIG_ARM_SDE_INTERFACE
--__entry_tramp_data___sdei_asm_trampoline_next_handler:
-+__entry_tramp_data___sdei_asm_handler:
- 	.quad	__sdei_asm_handler
- #endif /* CONFIG_ARM_SDE_INTERFACE */
- 	.popsection				// .rodata
-@@ -1319,7 +1319,7 @@ ENTRY(__sdei_asm_entry_trampoline)
- 	 */
- 1:	str	x4, [x1, #(SDEI_EVENT_INTREGS + S_ORIG_ADDR_LIMIT)]
- 
--	tramp_data_read_var     x4, __sdei_asm_trampoline_next_handler
-+	tramp_data_read_var     x4, __sdei_asm_handler
- 	br	x4
- ENDPROC(__sdei_asm_entry_trampoline)
- NOKPROBE(__sdei_asm_entry_trampoline)
--- 
-2.30.2
-
+Thanks!

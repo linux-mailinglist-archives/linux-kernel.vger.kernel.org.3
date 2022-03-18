@@ -2,120 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DC14DE11A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 155804DE11D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240171AbiCRSfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 14:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
+        id S240179AbiCRSfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 14:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237576AbiCRSfH (ORCPT
+        with ESMTP id S236954AbiCRSfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 14:35:07 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37BA1CFDA
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:33:48 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id kx13-20020a17090b228d00b001c6715c9847so6690411pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:33:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8eYD6V1H2eTxabk7DiQrQRT/zZ4eHdFF0vDlDZt1xas=;
-        b=ewU64KNEeZwytZF4An+dsvf1BP7k4U83MQd6onG03mYKzwvJoQl4qyHjLQs0oSWMp3
-         tM0aT1vxlatYEhWzCxIKabcD3D3NcoCSA/GxWDyU+KAAJDiYFZuYWQGOBaZX+uHQTM53
-         jPdp6xULDFi9D639TpwzwjkdL9Oz0toZhmU49RwKTErUvNhnsJaYTMRb3hfj5zIzJ4wm
-         n6PXOCT5cKyQGjdDoemy+aeFQp1DhCM4DMG4ZJn4Q75Yl+kUB+K7wR9TCKS3yZ+Gj8V4
-         uzeCvUID+J2qH0vocYC63Ga/NEPHYwwA4w45fo9owtXS+INCb0z/kgabtvtMF5vPvzE5
-         0upg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8eYD6V1H2eTxabk7DiQrQRT/zZ4eHdFF0vDlDZt1xas=;
-        b=Nmyejf886dX3CIgJzAh9y1OTS99QGRI3vqQQxnYPwtxN3wLBr/gNLtD8to4CoTORb1
-         ZgpUtnTO09Xg/XULvg1wcs6TC1QL6xwnnAMLKmfUMHfzIHOTv9ji6E+wvhEcgMrp7MwQ
-         fdl9Ct6DZ+eSG8KkcoSSfsFz9APIqy4pkQ3tEXwdmcWXlprCl5Hx1mPPNGDSmo1ZOGVm
-         k8WZHdecnpS2XCV70+RxCO9b5dZ4/Zww0Vt1JFlvcrSer04LJHB5pXhSh92F9wk6My4h
-         i+Ay6OddXQbo1mheMtw6LVTcHM9Y6pCFZTZoL6TDy3RNr1kj1/ohJxl61XPtKK0/shHK
-         d2+w==
-X-Gm-Message-State: AOAM532LZ7Ml1lTMjP99O7QhgI450r8BFVmsEGjPxVkIutAGsEJpAKDR
-        igK5OalHxeeAsk/asUwmMS7YxH0X+sSFduf5awtN
-X-Google-Smtp-Source: ABdhPJywNU/bgojq+Q9H5bL3LPlh2ncjnrZOFfaHuK+iqJkgz5S3CtJ71EEeIfA73BW3NNK1remnTn+kKCiHGr7GfM0=
-X-Received: by 2002:a17:90a:5b06:b0:1b8:b705:470b with SMTP id
- o6-20020a17090a5b0600b001b8b705470bmr12494149pji.168.1647628428016; Fri, 18
- Mar 2022 11:33:48 -0700 (PDT)
+        Fri, 18 Mar 2022 14:35:52 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB44171790;
+        Fri, 18 Mar 2022 11:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1647628451;
+        bh=ZtsPop+g0Zry4luXEYbjWFE5Bk+3qkCDzOGOdMK8b/w=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=RXj7qCmnq60WouHAUuvXOF3hB3i3YeTYytPX0akdz0CQ8Xusy/PFAzii4Qm0im8Sf
+         PZqfELdAhmvLkTFhnYE199d7EizFJfJy03/tD6bdBsVRTZQEs9coW0992uHvqCAZzh
+         IbaisNPXeKPQgXTD4l9rnZ4sHJCwW2SrFS0kEddk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MNbox-1nlQjo1hyl-00P6qY; Fri, 18 Mar 2022 19:34:11 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Add Inspiron 3505 to fan type blacklist
+Date:   Fri, 18 Mar 2022 19:34:08 +0100
+Message-Id: <20220318183408.13286-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220316213055.2351342-1-morbo@google.com> <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
- <CAKwvOdkjb3uR+kqjfdKL5gqA8R+00c5=3E7uGGW+mGZ3QRsjqg@mail.gmail.com>
- <YjSROmYwwGhpsXMl@smile.fi.intel.com> <CAKwvOdkEjrPUL4HuO3UKaUZAzVw=XV1bEOSj6HR5R1WTUSSZ4w@mail.gmail.com>
- <CAGG=3QVCkF7RdbQ85MtKgUjm8qP79BESAUiGU3wSQc0+ExO0gA@mail.gmail.com> <CAKwvOd=1+JF6mxpM_K3xCYAr-R8nrj0s7tA9GwUybyiFdLpA2w@mail.gmail.com>
-In-Reply-To: <CAKwvOd=1+JF6mxpM_K3xCYAr-R8nrj0s7tA9GwUybyiFdLpA2w@mail.gmail.com>
-From:   Bill Wendling <morbo@google.com>
-Date:   Fri, 18 Mar 2022 11:33:36 -0700
-Message-ID: <CAGG=3QXJ1P-9vAvONe8PKBzMe3se66GSL9gbA9UoLb7a5R33kA@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: acpi: use correct format characters
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        Joe Perches <joe@perches.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:LtUJNltOgob3JcDmitMuumEm09A/7QK9hg/LmVS7cmUXKk2SJO8
+ 7RdRvbZ9WvixFupTeb89WbPAKctL7Hhc14Aj/PeeVsJB4eMJP6Mm6UyN39GYuawRcF2N5jV
+ n+Tssf3QaFh03tLz/s31G96vEe6OSkmMbLGooMXd+C+bYZNTPtPU33Q5wk8T89GLTFKdNj6
+ eLqAruu2towvbX2CBFYIw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UrNlZpohNkI=:By9tbtr9fP6a8/tG2/lZN3
+ JaTFot3rXwTamB9H52VNYFQX3q6BsFIG/XprG5lWuXT5nvFmLJPMkr6ZoMJoHRXs+WH7tx3nP
+ PlOIKAKZyzcOfhpBgNRAYl8mOpCHsVwJ4kwdA1hvGSi/E7lsv4S0sHNsjwX7C7UFQCzN7Qb7O
+ Fk1GdPNsk3+VdxyNuT1AAM7rBcwLpcgcy5MdsMiX4YZNppjk+kOxcaqW2IY5cPa/3OG8/MjVC
+ OLlMqsdZ9F7EBAdOIVJYqPr8riL0lQnn43HAK3joy0piDRwKZXyiaXCBjQaRXK3NlYN7EdVII
+ 9xzxsLZgnIedyvQqBQO6j2A3ngZ022fQBvJlzQUrrhu/48SpfEjFTxU+W4Lt/Mymi/P2qJu10
+ oKl5cM+ukoGds7bbjzlzPH3Uh6KJRCGl88EuWHpQiAPLZsnqWuACFlfSB/79K3YpW3WfoMZ2v
+ bV8ejKRo+tY1aXpBzSYZVNEKKf31oxdaEQX9BGOi8LQ+RoSh/a/OsPjB6mzhxjJAt6ZuhDgJp
+ SipX5Lc08ocDBI9KtINYFYPLoB+KuRkQWoQHpeL6wnn1SxaRiaxNyp0bajvqjpj40OFIIFpCA
+ +i3ko3e0IUljnTPLNugZV//s47e6Fr2oZHPOEOKgEk0XMeDxTBTH1EgGWsokmjC9hK/boRjZz
+ GhOVN4rH+tOyONVsR32JB9XcPA7pCI2TTEHx58VKoa9OgGL6CCxZPPqHgUrvryJZI648fy/rR
+ tlGdNqt0MBLmpb3srJAIbm4NaoifTDvH3ulJbRZdX13io4ReKcWNKnQ+xmvDaDRBz2Nqxracm
+ f5ibjj+FN0AHh9h8HwT/ulgdT+xKE7/0AIDPvNPK0XOYkb10uOR0HArE3p50MLdPVT4EuK9j9
+ 0InETFbZhikHtDctWxRPq6wM5d3lf0reYiRIZK/8YOoQLkLj6+qgXo69Z+3nUh3P/FcdHDYYa
+ 5I8eN0km07Nr0721ZSaJFrZGEdQHhJJ3pRDFrLAOes6y+3goWaa86INtpvl1gw7YggLMAZhm+
+ lJOPvBYk2I9rHQ84ntUiXhh9Z1ZEjmyrUXPGna+KC85gykpZ621Dadedlubgj/qHIoC/gzmu7
+ 8u0o8oWzgpr73Q=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 11:29 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Fri, Mar 18, 2022 at 11:25 AM Bill Wendling <morbo@google.com> wrote:
-> >
-> > On Fri, Mar 18, 2022 at 11:01 AM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > On Fri, Mar 18, 2022 at 7:04 AM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > >
-> > > > On Thu, Mar 17, 2022 at 11:11:21AM -0700, Nick Desaulniers wrote:
-> > > > > Our goal is to enable -Wformat for CC=clang.  Please see also:
-> > > > > commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
-> > > > > unnecessary %h[xudi] and %hh[xudi]")
-> > > >
-> > > > Not that I agree on that commit for %h[h]x
-> > > >
-> > > >         signed char ch = -1;
-> > > >         printf("%x\n", ch);
-> > > >         printf("%hhx\n", ch);
-> > >
-> > > Will print:
-> > > ffffffff
-> > > ff
-> > >
-> > I noticed this. My first thought was to do something akin to:
-> >
-> >   printf("%x\n", (u8)ch);
-> >
-> > but went the route of removing the "h" qualifiers to be more in line
-> > with previous fixes. I will be happy to change this patch if that's
-> > what you would prefer.
->
-> Should we add a note diagnostic to clang suggesting the explicit cast
-> as one method of silencing the warning?
+Sadly, while firmware 1.5 fixed temperature labels on my
+Inspiron 3505, it also caused fan type calls to take
+ca. 4 seconds with the fan being at full speed.
+Fix the resulting delays by adding the model to the
+blacklist.
 
-I don't think we should offer multiple suggestions in the notes. It
-could become confusing and make the diagnostic messages much bigger.
-That doesn't mean we couldn't change the suggestion. :-)
+Tested on a Dell Inspiron 3505.
 
--bw
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index a14e810f5598..c34342253d6e 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1165,6 +1165,13 @@ static const struct dmi_system_id i8k_blacklist_fan=
+_type_dmi_table[] __initconst
+ 			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Inspiron 580 "),
+ 		},
+ 	},
++	{
++		.ident =3D "Dell Inspiron 3505",
++		.matches =3D {
++			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Inspiron 3505"),
++		},
++	},
+ 	{ }
+ };
+
+=2D-
+2.30.2
+

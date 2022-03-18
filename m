@@ -2,157 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6684DDFF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B34244DDFF7
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239660AbiCRRaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 13:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
+        id S237231AbiCRRbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 13:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239615AbiCRRaF (ORCPT
+        with ESMTP id S233290AbiCRRbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 13:30:05 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CDB38794
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 10:28:45 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id n15so7505609plh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 10:28:45 -0700 (PDT)
+        Fri, 18 Mar 2022 13:31:45 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB7A37BE3;
+        Fri, 18 Mar 2022 10:30:25 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id q1-20020a17090a4f8100b001c6575ae105so5980879pjh.0;
+        Fri, 18 Mar 2022 10:30:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=L3+RARgNnNJbe27/avpVeSt85+3sh/ylIsjNHSeDaWM=;
-        b=KKqFe6HDwI7jVlJZ+pP7+O3dWvHqRIneqwnoQXaQNs2/SkDvJMhHlcUCBPk0HJ/tGi
-         lORUxECO92MNSSyaumzrYUAbKuVFb0IKRFhFe52wUbJ7tVjFa76NwSNg4J8WsWE06icU
-         kaeqiSw3gdThITYF+XEzb/3zHZlBBoypPCCE0=
+        bh=1wKylVeXOlh5a/xJZmfHNeqpE/OOU4LWHviEMispbow=;
+        b=P7nIf6UKiM4fPEnynbxsjHAS81Z785zj3unC6tm/0AIdEzo2iqXmIxKvDUN4qN1MlO
+         2B8BLdVBKoTlPUQaagv2upR2GiuihkW91yTU1SSurPeoSjxGKOoMyNX6cJbCoU/oLRlC
+         2SPZNVFO/rGoBfHy8o/zKCyXVmmk+lv8dZ95gmq4Dou/oMsk8W94xifeOuv4RPiaOffO
+         cpwas7YgFlUe15Wks32njZ4PWyBA5uT/nXcqX7uWbUVKPUml+YOVQPE5Ur3IyM2TG1qs
+         sU0g4Xzc7t9bEH5YN+mBalXGlOL+qjIR+uA9v7q0XB76t5+QGqWcIcOVgqfsNmiQSTai
+         k+ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L3+RARgNnNJbe27/avpVeSt85+3sh/ylIsjNHSeDaWM=;
-        b=3KSfqHb8n5ZGxz9O8eoRxyxd3ELDIoiWHfPBnMvGoOmisFwOixj22sDAHqrYG6ZDJw
-         hLD697eV0ZXMwQWRs4RLbSdFbxce22Yri/7WbY2WOpq5QkBCi7+uAThF4BTMPuEoVbA4
-         Nbu8wb/mbMqVonicuaR924aKykaR0PRxGvOulYGhap4tzYbA+MhyfgIq4YPUBoOcZ8Gu
-         5Pg9x9QzQAJztEvpSUd2LMdwuZkMfqU+6psOlAHLaStzNsyNTqnpSqWaz392Eq1NOHJz
-         QjW5wTt7vPZqTqtQOwkAYhIct3DWh3oG2FoCz4PAhmCY/f4t8mSlLhj0bL2Fqvr5tJxA
-         blPQ==
-X-Gm-Message-State: AOAM530YiZYfLY82uLfgHrhOD9Pwn1/3ssoqHpskQmWX6svmzlK6OcOR
-        YJgXnLWzQRKaz1fpwRRf1T5BZg==
-X-Google-Smtp-Source: ABdhPJyMir8MSvctrzKkTGqF4tgMxTIkvl/491CdlrP8tUWgxhh81rBEknMWh9IsddJGpG0yWJCzPg==
-X-Received: by 2002:a17:90a:4a91:b0:1be:e51a:47df with SMTP id f17-20020a17090a4a9100b001bee51a47dfmr12395699pjh.40.1647624524568;
-        Fri, 18 Mar 2022 10:28:44 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f10-20020a056a00238a00b004f79504efc1sm10170994pfc.214.2022.03.18.10.28.44
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=1wKylVeXOlh5a/xJZmfHNeqpE/OOU4LWHviEMispbow=;
+        b=blsX4Nk3SpbPmyjasuLFL7oIDrXnTB3Hz2sDI7MDeDwirLqygsyrLCX6eOXaXApl/H
+         BjOjbJ5Thoc5Pyf/eSSefgtNc0CO3lC1HKrNmHfxVK2FxPc0VuPcJ+EId+EBap9KPoDb
+         CMV73RjtZJNMI22G0huWfkzwszj50JmlTCy55MhiDan/A3Q9l7zrluPWa/Lz4xBqF0lu
+         1ktAKZYX2nWVN5G9sg5LixQLtdzoM5FiA7BT7HMRuVgdmPT/UvTRneOvk/viqMycLkSs
+         PG7qDctdnF1/OBkNv9WHUb/obExoW6X3z9Bj4HyvAgjIksLe0lttvc92Rry64RJqrW8+
+         epRA==
+X-Gm-Message-State: AOAM530gSof/05LPRLicbiRn0wUTlgqqrQigUIjnunVpfHxrh4kcI7J7
+        pGBO5pHZaLMIJ/s6CQvguoM=
+X-Google-Smtp-Source: ABdhPJxD78C0n16ixwFCcF6HT6dXoMQUwcecD6VhKWgf3/RHBUjz/buDYder3UAVjtffqmkbxj3KwQ==
+X-Received: by 2002:a17:90b:3a91:b0:1bf:261e:7773 with SMTP id om17-20020a17090b3a9100b001bf261e7773mr22740003pjb.155.1647624625297;
+        Fri, 18 Mar 2022 10:30:25 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:20b4:90a0:8e2e:6022])
+        by smtp.gmail.com with ESMTPSA id h6-20020a056a00218600b004f65315bb37sm10665223pfi.13.2022.03.18.10.30.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 10:28:44 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 10:28:43 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, linux-api@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH 2/2] ptrace: Return the signal to continue with from
- ptrace_stop
-Message-ID: <202203181025.69760E3@keescook>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <87bl1kunjj.fsf@email.froward.int.ebiederm.org>
- <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
- <87o82gdlu9.fsf_-_@email.froward.int.ebiederm.org>
- <87tubyx0rg.fsf_-_@email.froward.int.ebiederm.org>
- <875yoe7qdp.fsf_-_@email.froward.int.ebiederm.org>
- <202203171210.1239C9CDA@keescook>
- <871qyz2tz5.fsf@email.froward.int.ebiederm.org>
+        Fri, 18 Mar 2022 10:30:24 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Fri, 18 Mar 2022 10:30:23 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Brian Geffon <bgeffon@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH] zram: Add a huge_idle writeback mode
+Message-ID: <YjTBryFvhCZXXJ5/@google.com>
+References: <20220315172221.9522-1-bgeffon@google.com>
+ <YjS2SJU7VE1bGb/F@google.com>
+ <CADyq12wQ=vGaGoqt5RXJ5aYM1tQJ2BCT8cav-ONpPrCc85q-5Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <871qyz2tz5.fsf@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CADyq12wQ=vGaGoqt5RXJ5aYM1tQJ2BCT8cav-ONpPrCc85q-5Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 09:52:46AM -0500, Eric W. Biederman wrote:
-> Kees Cook <keescook@chromium.org> writes:
-> 
-> > On Tue, Mar 15, 2022 at 06:22:26PM -0500, Eric W. Biederman wrote:
-> >> 
-> >> The signal a task should continue with after a ptrace stop is
-> >> inconsistently read, cleared, and sent.  Solve this by reading and
-> >> clearing the signal to be sent in ptrace_stop.
-> >> 
-> >> In an ideal world everything except ptrace_signal would share a common
-> >> implementation of continuing with the signal, so ptracers could count
-> >> on the signal they ask to continue with actually being delivered.  For
-> >> now retain bug compatibility and just return with the signal number
-> >> the ptracer requested the code continue with.
-> >> 
-> >> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> >> ---
-> >>  include/linux/ptrace.h | 12 ++++++------
-> >>  kernel/signal.c        | 31 ++++++++++++++++++-------------
-> >>  2 files changed, 24 insertions(+), 19 deletions(-)
-> >> 
-> >> diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
-> >> index 3e6b46e2b7be..15b3d176b6b4 100644
-> >> --- a/include/linux/ptrace.h
-> >> +++ b/include/linux/ptrace.h
-> >> @@ -60,7 +60,7 @@ extern int ptrace_writedata(struct task_struct *tsk, char __user *src, unsigned
-> >>  extern void ptrace_disable(struct task_struct *);
-> >>  extern int ptrace_request(struct task_struct *child, long request,
-> >>  			  unsigned long addr, unsigned long data);
-> >> -extern void ptrace_notify(int exit_code, unsigned long message);
-> >> +extern int ptrace_notify(int exit_code, unsigned long message);
-> >> [...]
-> >> -static void ptrace_stop(int exit_code, int why, int clear_code,
-> >> +static int ptrace_stop(int exit_code, int why, int clear_code,
-> >>  			unsigned long message, kernel_siginfo_t *info)
-> >> [...]
-> >> -static void ptrace_do_notify(int signr, int exit_code, int why, unsigned long message)
-> >> +static int ptrace_do_notify(int signr, int exit_code, int why, unsigned long message)
-> >> [...]
-> >> -void ptrace_notify(int exit_code, unsigned long message)
-> >> +int ptrace_notify(int exit_code, unsigned long message)
+On Fri, Mar 18, 2022 at 12:51:14PM -0400, Brian Geffon wrote:
+> On Fri, Mar 18, 2022 at 12:41 PM Minchan Kim <minchan@kernel.org> wrote:
 > >
-> > Just for robustness, how about marking the functions that have switched
-> > from void to int return as __must_check (or at least just ptrace_notify)?
+> > On Tue, Mar 15, 2022 at 10:22:21AM -0700, Brian Geffon wrote:
+> > > Today it's only possible to write back as a page, idle, or huge.
+> > > A user might want to writeback pages which are huge and idle first
+> > > as these idle pages do not require decompression and make a good
+> > > first pass for writeback.
+> >
+> > Hi Brian,
+> >
+> > I am not sure how much the decompression overhead matter for idle pages
+> > writeback since it's already *very slow* path in zram but I agree that
+> > it would be a good first pass since the memory saving for huge writing
+> > would be cost efficient.
+> >
+> > Just out of curiosity. Do you have real usecase?
 > 
-> We can't.  There are historical cases that simply don't check if a
-> signal should be sent after the function, and they exist for every
-> function that is modified.
+> Hi Minchan,
+> Thank you for taking a look. When we are thinking about writeback
+> we're trying to be very sensitive to our devices storage endurance,
+> for this reason we will have a fairly conservative writeback limit.
+> Given that, we want to make sure we're maximizing what lands on disk
+> while still minimizing the refault time. We could take the approach
+> where we always writeback huge pages but then we may result in very
+> quick refaults which would be a huge waste of time. So idle writeback
+> is a must for us and being able to writeback the pages which have
+> maximum value (huge) would be very useful.
 
-This seems at least worth documenting with a comment, otherwise we're
-just trading one kind of "weirdness" (setting/clearing
-current->exit_code) with another (ignoring the signal returned by
-ptrace_notify()).
-
-I see only two cases that would need comments:
-
-static inline void ptrace_event(int event, unsigned long message)
-{
-        if (unlikely(ptrace_event_enabled(current, event))) {
-                ptrace_notify((event << 8) | SIGTRAP, message);
-        } else if (event == PTRACE_EVENT_EXEC) {
-                /* legacy EXEC report via SIGTRAP */
-                if ((current->ptrace & (PT_PTRACED|PT_SEIZED)) == PT_PTRACED)
-                        send_sig(SIGTRAP, current, 0);
-        }
-}
-
-static void signal_delivered(struct ksignal *ksig, int stepping)
-{
-	...
-        if (stepping)
-                ptrace_notify(SIGTRAP, 0);
-}
-
-
--- 
-Kees Cook
+Thanks for sharing the thought. It really make sense to me and
+would be great if it goes on the description.

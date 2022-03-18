@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E91C94DD270
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 02:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4AF74DD272
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 02:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbiCRBbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 21:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
+        id S231517AbiCRBbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 21:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiCRBbL (ORCPT
+        with ESMTP id S229642AbiCRBbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 21:31:11 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4BBD114DDA;
-        Thu, 17 Mar 2022 18:29:53 -0700 (PDT)
-Received: from dread.disaster.area (pa49-186-150-27.pa.vic.optusnet.com.au [49.186.150.27])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 5D8DF533D8B;
-        Fri, 18 Mar 2022 12:29:50 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nV1R6-006lEJ-WE; Fri, 18 Mar 2022 12:29:49 +1100
-Date:   Fri, 18 Mar 2022 12:29:48 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
-        linmiaohe@huawei.com, songliubraving@fb.com, riel@surriel.com,
-        willy@infradead.org, ziy@nvidia.com, akpm@linux-foundation.org,
-        tytso@mit.edu, adilger.kernel@dilger.ca, darrick.wong@oracle.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v2 PATCH 0/8] Make khugepaged collapse readonly FS THP more
- consistent
-Message-ID: <20220318012948.GE1544202@dread.disaster.area>
-References: <20220317234827.447799-1-shy828301@gmail.com>
+        Thu, 17 Mar 2022 21:31:34 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C231207C8;
+        Thu, 17 Mar 2022 18:30:17 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id u10so9787869wra.9;
+        Thu, 17 Mar 2022 18:30:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y8hWtjydg1Uns+eOzqAaZoK2Vcd2nxaf7d5KD8AEEt4=;
+        b=hBcKG/WWy4HsVunBcI3ydG4SVMw/+29z7t+io0+b0TKqfjgmGEmZ6UIS16BlYMVnwH
+         LxM8FKgjziksWCiNEINZw5PnnjGyJ0TFNAGqqmfkffcNSldXqTB0ahWuMKbSLTla0rSm
+         aVCNkZcqC4xnqvxoIyrYoZe/yVo+ziL8w0HNivZbX7THsXlDKOltYyjBVlrpG6+OExVP
+         vNgFLlz++46k3zKIhiMIw6lbWM5rb35CI0eOcQJuefJdUr/J23F3Qp4XLu7ftVDezuAs
+         YgRPfekxmOYFaEu2294R2k5pLnxC8R9N46JAFHGHMsjZa5+h4eOh5bRzCemrU83DQHFp
+         kNog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y8hWtjydg1Uns+eOzqAaZoK2Vcd2nxaf7d5KD8AEEt4=;
+        b=p5QYPTrwP/qIjuGjux85VLUQQwYpph1HUehVB+z6XqNXDEAngPakVIjY/Srh4yoV+1
+         c/ScHrY/WMrIcGSUeByAwhXIsvjjaKl/xBGO9upyn7258xeoTSS10BOkG6+BRMO3vw/I
+         ujaRs/Yqnr1BJHJAa3tTbcsgQCKKhppk4Teqmo+YIMAuiFdHhTWzyKfyx6Gy2F8wdLx/
+         DB7MwLW1YJjiLJGllRpdeCPusaBYJjhn4MMcCDLsXwONPj1L/IuSI1NY1fgrmZjnFExO
+         dcgqzbwvj6EVU2wOw2P9ap1V0CQ2arRgtjhNEnT34tpblxOTAvwfG8niMUCDcoku2XjH
+         QTgQ==
+X-Gm-Message-State: AOAM533lCWveMCx/okfwuZWzMv3Agg9FhQvKqExSOuBssLCp51zFRfCJ
+        MGYn3opc8wO71n55HT6sFEE=
+X-Google-Smtp-Source: ABdhPJy44/ZTFxrG+FCtGZtXs1cj8lLzdIGlbJvYj5LgXRGfXlHaGY9J6mj7f3LTMs9tZivMYD9a9Q==
+X-Received: by 2002:a5d:59ab:0:b0:203:cc07:8d82 with SMTP id p11-20020a5d59ab000000b00203cc078d82mr5881291wrr.688.1647567015653;
+        Thu, 17 Mar 2022 18:30:15 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id n65-20020a1c2744000000b003862bfb509bsm9534520wmn.46.2022.03.17.18.30.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Mar 2022 18:30:15 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] nvmet: remove redundant assignment after left shift
+Date:   Fri, 18 Mar 2022 01:30:14 +0000
+Message-Id: <20220318013014.90698-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317234827.447799-1-shy828301@gmail.com>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=6233e091
-        a=sPqof0Mm7fxWrhYUF33ZaQ==:117 a=sPqof0Mm7fxWrhYUF33ZaQ==:17
-        a=kj9zAlcOel0A:10 a=o8Y5sQTvuykA:10 a=VwQbUJbxAAAA:8 a=7-415B0cAAAA:8
-        a=_g2WV56Gx8CI_Xe-bs8A:9 a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22
-        a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 04:48:19PM -0700, Yang Shi wrote:
-> 
-> Changelog
-> v2: * Collected reviewed-by tags from Miaohe Lin.
->     * Fixed build error for patch 4/8.
-> 
-> The readonly FS THP relies on khugepaged to collapse THP for suitable
-> vmas.  But it is kind of "random luck" for khugepaged to see the
-> readonly FS vmas (see report: https://lore.kernel.org/linux-mm/00f195d4-d039-3cf2-d3a1-a2c88de397a0@suse.cz/) since currently the vmas are registered to khugepaged when:
->   - Anon huge pmd page fault
->   - VMA merge
->   - MADV_HUGEPAGE
->   - Shmem mmap
-> 
-> If the above conditions are not met, even though khugepaged is enabled
-> it won't see readonly FS vmas at all.  MADV_HUGEPAGE could be specified
-> explicitly to tell khugepaged to collapse this area, but when khugepaged
-> mode is "always" it should scan suitable vmas as long as VM_NOHUGEPAGE
-> is not set.
-> 
-> So make sure readonly FS vmas are registered to khugepaged to make the
-> behavior more consistent.
-> 
-> Registering the vmas in mmap path seems more preferred from performance
-> point of view since page fault path is definitely hot path.
-> 
-> 
-> The patch 1 ~ 7 are minor bug fixes, clean up and preparation patches.
-> The patch 8 converts ext4 and xfs.  We may need convert more filesystems,
-> but I'd like to hear some comments before doing that.
+The left shift is followed by a re-assignment back to cc_css,
+the assignment is redundant. Fix this by replacing the <<=
+operator with << instead.
 
-After reading through the patchset, I have no idea what this is even
-doing or enabling. I can't comment on the last patch and it's effect
-on XFS because there's no high level explanation of the
-functionality or feature to provide me with the context in which I
-should be reviewing this patchset.
+Cleans up clang scan build warning:
+drivers/nvme/target/core.c:1124:10: warning: Although the value
+stored to 'cc_css' is used in the enclosing expression, the
+value is never actually read from 'cc_css' [deadcode.DeadStores]
 
-I understand this has something to do with hugepages, but there's no
-explaination of exactly where huge pages are going to be used in the
-filesystem, what the problems with khugepaged and filesystems are
-that this apparently solves, what constraints it places on
-filesystems to enable huge pages to be used, etc.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/nvme/target/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm guessing that the result is that we'll suddenly see huge pages
-in the page cache for some undefined set of files in some undefined
-set of workloads. But that doesn't help me understand any of the
-impacts it may have. e.g:
-
-- how does this relate to the folio conversion and use of large
-  pages in the page cache?
-- why do we want two completely separate large page mechanisms in
-  the page cache?
-- why is this limited to "read only VMAs" and how does the
-  filesystem actually ensure that the VMAs are read only?
-- what happens if we have a file that huge pages mapped into the
-  page cache via read only VMAs then has write() called on it via a
-  different file descriptor and so we need to dirty the page cache
-  that has huge pages in it?
-
-I've got a lot more questions, but to save me having to ask them,
-how about you explain what this new functionality actually does, why
-we need to support it, and why it is better than the fully writeable
-huge page support via folios that we already have in the works...
-
-Cheers,
-
-Dave.
-
+diff --git a/drivers/nvme/target/core.c b/drivers/nvme/target/core.c
+index 724a6d373340..75876f70a7eb 100644
+--- a/drivers/nvme/target/core.c
++++ b/drivers/nvme/target/core.c
+@@ -1121,7 +1121,7 @@ static inline u8 nvmet_cc_iocqes(u32 cc)
+ 
+ static inline bool nvmet_css_supported(u8 cc_css)
+ {
+-	switch (cc_css <<= NVME_CC_CSS_SHIFT) {
++	switch (cc_css << NVME_CC_CSS_SHIFT) {
+ 	case NVME_CC_CSS_NVM:
+ 	case NVME_CC_CSS_CSI:
+ 		return true;
 -- 
-Dave Chinner
-david@fromorbit.com
+2.35.1
+

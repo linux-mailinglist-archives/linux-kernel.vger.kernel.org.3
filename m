@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3148E4DD9E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80EA54DD9E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236398AbiCRMnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
+        id S236393AbiCRMnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236401AbiCRMmu (ORCPT
+        with ESMTP id S236364AbiCRMno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:42:50 -0400
-Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA192E35A3
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:41:31 -0700 (PDT)
-Received: from droid11-sz.amlogic.com (10.28.8.21) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Fri, 18 Mar 2022
- 20:41:31 +0800
-From:   Liang Yang <liang.yang@amlogic.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-mtd@lists.infradead.org>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 2/2] dt-bindings: nand: meson: refine Amlogic NAND controller driver
-Date:   Fri, 18 Mar 2022 20:41:20 +0800
-Message-ID: <20220318124121.26117-3-liang.yang@amlogic.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220318124121.26117-1-liang.yang@amlogic.com>
-References: <20220318124121.26117-1-liang.yang@amlogic.com>
+        Fri, 18 Mar 2022 08:43:44 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEC42E35A6;
+        Fri, 18 Mar 2022 05:42:25 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 7CA1022239;
+        Fri, 18 Mar 2022 13:42:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1647607344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2gI1By7d7pZODcR9Jrg5KJt0BGb720XzrAnoqlGIfr4=;
+        b=QvJUD4udt719Hh1uXXCDZXR4omi2XirBDFQ9PiSYxnxL6ALD9y/ey8k1tkzwj/W0o2GB6d
+        Vp7YevDYqptBt/awTEiOdtosRJMbCW9XSbE84+4Ca7V8Rb177Upw7r6RP/um3ZEacNhcXo
+        uVWeJKqzLAtsTeimAWBctdJxfx231Uw=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.8.21]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 18 Mar 2022 13:42:23 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     UNGLinuxDriver@microchip.com, davem@davemloft.net,
+        devicetree@vger.kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        robh+dt@kernel.org
+Subject: Re: [PATCH net-next 0/5] net: lan966x: Add support for FDMA
+In-Reply-To: <20220318121033.vklrsnxspg2f66dp@soft-dev3-1.localhost>
+References: <20220317185159.1661469-1-horatiu.vultur@microchip.com>
+ <20220318110731.27794-1-michael@walle.cc>
+ <20220318121033.vklrsnxspg2f66dp@soft-dev3-1.localhost>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <d05af3a88ef1bd846f0b9c6f548e2c45@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,159 +59,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-convert txt to yaml and refine the meson NFC clock document.
+Am 2022-03-18 13:10, schrieb Horatiu Vultur:
+> The 03/18/2022 12:07, Michael Walle wrote:
+>> > Currently when injecting or extracting a frame from CPU, the frame
+>> > is given to the HW each word at a time. There is another way to
+>> > inject/extract frames from CPU using FDMA(Frame Direct Memory Access).
+>> > In this way the entire frame is given to the HW. This improves both
+>> > RX and TX bitrate.
+>> 
+>> I wanted to test this. ping and such works fine and I'm also
+>> seeing fdma interrupts.
+> 
+> Thanks for testing this also on your board.
+> 
+>> But as soon as I try iperf3 I get a skb_panic
+>> (due to frame size?). Hope that splash below helps.
+> 
+> I have not seen this issue. But it looks like it is a problem that 
+> there
+> is no more space to add the FCS.
+> Can you tell me how you run iperf3 so I can also try it?
 
-Signed-off-by: Liang Yang <liang.yang@amlogic.com>
----
- .../bindings/mtd/amlogic,meson-nand.txt       | 60 ----------------
- .../bindings/mtd/amlogic,meson-nand.yaml      | 71 +++++++++++++++++++
- 2 files changed, 71 insertions(+), 60 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
- create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
+oh, I forgot to include the commandline.
 
-diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
-deleted file mode 100644
-index 5794ab1147c1..000000000000
---- a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
-+++ /dev/null
-@@ -1,60 +0,0 @@
--Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
--
--This file documents the properties in addition to those available in
--the MTD NAND bindings.
--
--Required properties:
--- compatible : contains one of:
--  - "amlogic,meson-gxl-nfc"
--  - "amlogic,meson-axg-nfc"
--- clocks     :
--	A list of phandle + clock-specifier pairs for the clocks listed
--	in clock-names.
--
--- clock-names: Should contain the following:
--	"core" - NFC module gate clock
--	"device" - device clock from eMMC sub clock controller
--	"rx" - rx clock phase
--	"tx" - tx clock phase
--
--- amlogic,mmc-syscon	: Required for NAND clocks, it's shared with SD/eMMC
--				controller port C
--
--Optional children nodes:
--Children nodes represent the available nand chips.
--
--Other properties:
--see Documentation/devicetree/bindings/mtd/nand-controller.yaml for generic bindings.
--
--Example demonstrate on AXG SoC:
--
--	sd_emmc_c_clkc: mmc@7000 {
--		compatible = "amlogic,meson-axg-mmc-clkc", "syscon";
--		reg = <0x0 0x7000 0x0 0x800>;
--	};
--
--	nand-controller@7800 {
--		compatible = "amlogic,meson-axg-nfc";
--		reg = <0x0 0x7800 0x0 0x100>;
--		#address-cells = <1>;
--		#size-cells = <0>;
--		interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
--
--		clocks = <&clkc CLKID_SD_EMMC_C>,
--			<&sd_emmc_c_clkc CLKID_MMC_DIV>,
--			<&sd_emmc_c_clkc CLKID_MMC_PHASE_RX>,
--			<&sd_emmc_c_clkc CLKID_MMC_PHASE_TX>;
--		clock-names = "core", "device", "rx", "tx";
--		amlogic,mmc-syscon = <&sd_emmc_c_clkc>;
--
--		pinctrl-names = "default";
--		pinctrl-0 = <&nand_pins>;
--
--		nand@0 {
--			reg = <0>;
--			#address-cells = <1>;
--			#size-cells = <1>;
--
--			nand-on-flash-bbt;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
-new file mode 100644
-index 000000000000..4de4962a40b7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
-@@ -0,0 +1,71 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/amlogic,mmc-clkc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Amlogic NAND Flash Controller (NFC) for GXBB/GXL/AXG family SoCs
-+
-+maintainers:
-+  - liang.yang@amlogic.com
-+
-+properties:
-+  compatible:
-+    enum:
-+      - "amlogic,meson-gxl-nfc"
-+      - "amlogic,meson-axg-nfc"
-+
-+  reg:
-+    maxItems: 2
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: "core", "device"
-+
-+  "#clock-cells":
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - "#clock-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    nand-controller@7800 {
-+	compatible = "amlogic,meson-axg-nfc";
-+	reg = <0x0 0x7800 0x0 0x100>,
-+	      <0x0 0x7000 0x0 0x800>;
-+        reg-names = "nfc", "emmc";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	interrupts = <GIC_SPI 34 IRQ_TYPE_EDGE_RISING>;
-+
-+	clocks = <&clkc CLKID_SD_EMMC_C>,
-+		<&clkc CLKID_FCLK_DIV2>;
-+	clock-names = "core", "device";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&nand_pins>;
-+
-+	nand@0 {
-+		reg = <0>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+
-+		nand-on-flash-bbt;
-+	};
-+     };
-+
-+...
--- 
-2.34.1
+# on the remote computer
+$ iperf3 --version
+iperf 3.6 (cJSON 1.5.2)
+Linux eddie01 4.19.0-18-686-pae #1 SMP Debian 4.19.208-1 (2021-09-29) 
+i686
+Optional features available: CPU affinity setting, IPv6 flow label, 
+SCTP, TCP congestion algorithm setting, sendfile / zerocopy, socket 
+pacing, authentication
+$ iperf3 -s
 
+# on the board
+$ iperf3 --version
+iperf 3.10.1 (cJSON 1.7.13)
+Linux buildroot 5.17.0-rc8-next-20220316-00058-gc6cb0628f2a6-dirty #385 
+SMP Fri Mar 18 13:34:26 CET 2022 armv7l
+Optional features available: CPU affinity setting, IPv6 flow label, TCP 
+congestion algorithm setting, sendfile / zerocopy, socket pacing, bind 
+to device, support IPv4 don't fragment
+$ iperf3 -c eddie01
+
+> Also I have a small diff that might fix the issue:
+> ---
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> @@ -534,6 +534,8 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32
+> *ifh, struct net_device *dev)
+>         struct lan966x_tx_dcb *next_dcb, *dcb;
+>         struct lan966x_tx *tx = &lan966x->tx;
+>         struct lan966x_db *next_db;
+> +       int needed_headroom;
+> +       int needed_tailroom;
+>         dma_addr_t dma_addr;
+>         int next_to_use;
+>         int err;
+> @@ -554,10 +556,11 @@ int lan966x_fdma_xmit(struct sk_buff *skb,
+> __be32 *ifh, struct net_device *dev)
+> 
+>         /* skb processing */
+>         skb_tx_timestamp(skb);
+
+btw. skb_tx_timestamp() should be as close to the handover
+of the frame to the hardware as possible, no?
+
+> -       if (skb_headroom(skb) < IFH_LEN * sizeof(u32)) {
+> -               err = pskb_expand_head(skb,
+> -                                      IFH_LEN * sizeof(u32) -
+> skb_headroom(skb),
+> -                                      0, GFP_ATOMIC);
+> +       needed_headroom = max_t(int, IFH_LEN * sizeof(u32) -
+> skb_headroom(skb), 0);
+> +       needed_tailroom = max_t(int, ETH_FCS_LEN - skb_tailroom(skb), 
+> 0);
+> +       if (needed_headroom || needed_tailroom) {
+> +               err = pskb_expand_head(skb, needed_headroom, 
+> needed_tailroom,
+> +                                      GFP_ATOMIC);
+>                 if (unlikely(err)) {
+>                         dev->stats.tx_dropped++;
+>                         err = NETDEV_TX_OK;
+
+Indeed this will fix the issue:
+
+# iperf3 -c eddie01
+Connecting to host eddie01, port 5201
+[  5] local 10.0.1.143 port 55342 connected to 10.0.1.42 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.01   sec  43.8 MBytes   364 Mbits/sec    0    245 KBytes
+[  5]   1.01-2.02   sec  43.8 MBytes   364 Mbits/sec    0    246 KBytes
+[  5]   2.02-3.03   sec  43.8 MBytes   364 Mbits/sec    0    259 KBytes
+
+# iperf3 -R -c eddie01
+Connecting to host eddie01, port 5201
+Reverse mode, remote host eddie01 is sending
+[  5] local 10.0.1.143 port 55346 connected to 10.0.1.42 port 5201
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  28.6 MBytes   240 Mbits/sec
+[  5]   1.00-2.00   sec  28.9 MBytes   242 Mbits/sec
+[  5]   2.00-3.00   sec  28.7 MBytes   241 Mbits/sec
+
+-michael

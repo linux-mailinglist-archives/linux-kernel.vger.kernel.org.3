@@ -2,118 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D771A4DD63F
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9224DD643
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233824AbiCRIfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 04:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
+        id S233812AbiCRIgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbiCRIfl (ORCPT
+        with ESMTP id S233764AbiCRIgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:35:41 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D9D19BFDF
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 01:34:22 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id k8-20020a05600c1c8800b003899c7ac55dso4297732wms.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 01:34:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=JBS5kufLWoBh6jQkmIuGyN5TkwDV0dVUAqqIzxduWmI=;
-        b=C2N9K5pfOPn/jknROvQpydIUdZhtPhgfzwtrdxtOqMriMgwmN9SOB0q2DoKREemaPT
-         TmgFRoaDNpM5mX8cYICfo4xIavieRqMs9XzIqr7WZ8clUs4S7jlUnll8qhWo7yr91dXO
-         zw1hNdAfijoFQZ6/ADo9cyiCR/3v9vQli9xaS4ShNCIygqVNhEoTHwWY291JHeMFK/Eu
-         BfSBEvyGvsO7WVTDdvR0Jez+kU0n6Ce55MtxzLdMozvdDgLBocXfMAGOQVhVtmpbUpv6
-         iHchIFSmE2FVAXoAYH2TZ2EuPxmm5C8FnGlmkkX4lAfv5rJsdC3PiBuXE2gf/pa2H4jG
-         Rz1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=JBS5kufLWoBh6jQkmIuGyN5TkwDV0dVUAqqIzxduWmI=;
-        b=6p1zF47NUAEsROsNijuDHaBhgeXn8QJ2SkQ5ac42i4CZMEf22xU1pTRGLqc2SVh944
-         MOskKmlxkMv89Iyoixm7SPjjZaiR4cdQ8gBrTMkMnYjOpdvBmS0juPbFBjGwOAwffZ7Q
-         KQW7DfwENOW+Bf/wayXENkrNc4c7WY5VXjU392oXlhsZhLzRs6ewEqqs1dXU2pWMIJVs
-         jiSfCDbRXpPlqHyF0QWFMXMoZDfUkLycX1pGDplaX34jzgDpjdQRFkfWG4kHWVcoaQB5
-         IVWj/qUZ/FXOnKYwhNAD3obCY5O20AldWjW/wscLa1aQv5q7odU7JgqJlf0zc+GLnIe9
-         3xTA==
-X-Gm-Message-State: AOAM530Xg+AEDbdj1aTR6pYpAEULY8uaq/5zEGNVN4AhoPhcATg+6jwk
-        +gGya1YKBY8K5qx248Au5eGvxA==
-X-Google-Smtp-Source: ABdhPJwdJb/+m+x3Q5ZCtXIp+6h80maidNey0nwW4zOpf/79eRHvrlLepalIv2+SeV8SZlK+2CGezw==
-X-Received: by 2002:a7b:c3d5:0:b0:389:a49f:c7e6 with SMTP id t21-20020a7bc3d5000000b00389a49fc7e6mr14808995wmj.99.1647592460780;
-        Fri, 18 Mar 2022 01:34:20 -0700 (PDT)
-Received: from [192.168.1.10] (i16-les01-ntr-213-44-230-108.sfr.lns.abo.bbox.fr. [213.44.230.108])
-        by smtp.gmail.com with ESMTPSA id d15-20020a056000186f00b0020384249361sm6603079wri.104.2022.03.18.01.34.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 01:34:20 -0700 (PDT)
-Message-ID: <ae37bbcc-14b9-8024-c10f-7a71bd90ff0e@baylibre.com>
-Date:   Fri, 18 Mar 2022 09:34:19 +0100
+        Fri, 18 Mar 2022 04:36:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234621FCD31;
+        Fri, 18 Mar 2022 01:34:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68391B80B2E;
+        Fri, 18 Mar 2022 08:34:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC57C340E8;
+        Fri, 18 Mar 2022 08:34:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647592482;
+        bh=8LsQHARc36osfxHPIM0ZbutdnqRcT4bVoo5JOGzezRk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BLhLgHS0EsguLvExFj1WKJgZJe69d7yOXU0MW77sz3Wpo0D2njetetnc+r68yufwx
+         HzhdbwKLDTNu3LN4GVsqj3tgVj9qTTvDYvh3CdB8dDEZsdxKRnnkPzrugRir/rjSkI
+         yfuPMPEUzyW8Ezs/Otxf8UIqgE6HwPW2BtUF63LutIKG3O23gxy4rziVRStC5QzB98
+         bCsbmOO+FWR7i7xmQxeOAqMvF3RdFluFfosDA6lfSbK1wwDj5jiwqLsu58gcBO7aVo
+         j++lcHX7ePMNPFcOWceUzTzy35ihmNTQr3vl5HQnsFWwgjJKIuA+pi1p3g5LYwaioh
+         q37i3dB/6CYvw==
+From:   guoren@kernel.org
+To:     palmer@rivosinc.com
+Cc:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] csky: Move to generic ticket-spinlock
+Date:   Fri, 18 Mar 2022 16:34:21 +0800
+Message-Id: <20220318083421.2062259-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/3] drm: bridge: it66121: Fix the register page length
-Content-Language: en-US
-To:     Nicolas Belin <nbelin@baylibre.com>, andrzej.hajda@intel.com,
-        robert.foss@linaro.org
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com
-References: <20220316135733.173950-1-nbelin@baylibre.com>
- <20220316135733.173950-3-nbelin@baylibre.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220316135733.173950-3-nbelin@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2022 14:57, Nicolas Belin wrote:
-> Set the register page length or window length to
-> 0x100 according to the documentation.
-> 
-> Fixes: 988156dc2fc9 ("drm: bridge: add it66121 driver")
-> Signed-off-by: Nicolas Belin <nbelin@baylibre.com>
-> ---
->   drivers/gpu/drm/bridge/ite-it66121.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/ite-it66121.c b/drivers/gpu/drm/bridge/ite-it66121.c
-> index 06b59b422c69..64912b770086 100644
-> --- a/drivers/gpu/drm/bridge/ite-it66121.c
-> +++ b/drivers/gpu/drm/bridge/ite-it66121.c
-> @@ -227,7 +227,7 @@ static const struct regmap_range_cfg it66121_regmap_banks[] = {
->   		.selector_mask = 0x1,
->   		.selector_shift = 0,
->   		.window_start = 0x00,
-> -		.window_len = 0x130,
-> +		.window_len = 0x100,
->   	},
->   };
->   
+From: Guo Ren <guoren@linux.alibaba.com>
 
-The documentation we have access to at [1] is confusing:
-Reg00 ~ Reg2F are accessible in any register bank.
-Reg30~ RegFF are accessible in register bank0
-Reg130~ Reg1BF are accessible in register bank1. These are HDMI packet registers.
+There is no benefit from custom implementation for ticket-spinlock,
+so move to generic ticket-spinlock for easy maintenance.
 
-But indeed it means:
-- Reg00 ~ Reg2F: are always accessible, whether bank0 or bank1 is set
-- Reg30~ RegFF: only when bank0 is set
-- Reg130~ Reg1BF: only when bank0 is set at Reg30~ RegF range
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ arch/csky/include/asm/Kbuild           |  2 +
+ arch/csky/include/asm/spinlock.h       | 82 +-------------------------
+ arch/csky/include/asm/spinlock_types.h | 20 +------
+ 3 files changed, 4 insertions(+), 100 deletions(-)
 
-So 0x100 is the right window_len here.
+diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
+index 904a18a818be..d94434288c31 100644
+--- a/arch/csky/include/asm/Kbuild
++++ b/arch/csky/include/asm/Kbuild
+@@ -3,6 +3,8 @@ generic-y += asm-offsets.h
+ generic-y += extable.h
+ generic-y += gpio.h
+ generic-y += kvm_para.h
++generic-y += ticket-lock.h
++generic-y += ticket-lock-types.h
+ generic-y += qrwlock.h
+ generic-y += user.h
+ generic-y += vmlinux.lds.h
+diff --git a/arch/csky/include/asm/spinlock.h b/arch/csky/include/asm/spinlock.h
+index 69f5aa249c5f..8bc179ba0d8d 100644
+--- a/arch/csky/include/asm/spinlock.h
++++ b/arch/csky/include/asm/spinlock.h
+@@ -3,87 +3,7 @@
+ #ifndef __ASM_CSKY_SPINLOCK_H
+ #define __ASM_CSKY_SPINLOCK_H
+ 
+-#include <linux/spinlock_types.h>
+-#include <asm/barrier.h>
+-
+-/*
+- * Ticket-based spin-locking.
+- */
+-static inline void arch_spin_lock(arch_spinlock_t *lock)
+-{
+-	arch_spinlock_t lockval;
+-	u32 ticket_next = 1 << TICKET_NEXT;
+-	u32 *p = &lock->lock;
+-	u32 tmp;
+-
+-	asm volatile (
+-		"1:	ldex.w		%0, (%2) \n"
+-		"	mov		%1, %0	 \n"
+-		"	add		%0, %3	 \n"
+-		"	stex.w		%0, (%2) \n"
+-		"	bez		%0, 1b   \n"
+-		: "=&r" (tmp), "=&r" (lockval)
+-		: "r"(p), "r"(ticket_next)
+-		: "cc");
+-
+-	while (lockval.tickets.next != lockval.tickets.owner)
+-		lockval.tickets.owner = READ_ONCE(lock->tickets.owner);
+-
+-	smp_mb();
+-}
+-
+-static inline int arch_spin_trylock(arch_spinlock_t *lock)
+-{
+-	u32 tmp, contended, res;
+-	u32 ticket_next = 1 << TICKET_NEXT;
+-	u32 *p = &lock->lock;
+-
+-	do {
+-		asm volatile (
+-		"	ldex.w		%0, (%3)   \n"
+-		"	movi		%2, 1	   \n"
+-		"	rotli		%1, %0, 16 \n"
+-		"	cmpne		%1, %0     \n"
+-		"	bt		1f         \n"
+-		"	movi		%2, 0	   \n"
+-		"	add		%0, %0, %4 \n"
+-		"	stex.w		%0, (%3)   \n"
+-		"1:				   \n"
+-		: "=&r" (res), "=&r" (tmp), "=&r" (contended)
+-		: "r"(p), "r"(ticket_next)
+-		: "cc");
+-	} while (!res);
+-
+-	if (!contended)
+-		smp_mb();
+-
+-	return !contended;
+-}
+-
+-static inline void arch_spin_unlock(arch_spinlock_t *lock)
+-{
+-	smp_mb();
+-	WRITE_ONCE(lock->tickets.owner, lock->tickets.owner + 1);
+-}
+-
+-static inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+-{
+-	return lock.tickets.owner == lock.tickets.next;
+-}
+-
+-static inline int arch_spin_is_locked(arch_spinlock_t *lock)
+-{
+-	return !arch_spin_value_unlocked(READ_ONCE(*lock));
+-}
+-
+-static inline int arch_spin_is_contended(arch_spinlock_t *lock)
+-{
+-	struct __raw_tickets tickets = READ_ONCE(lock->tickets);
+-
+-	return (tickets.next - tickets.owner) > 1;
+-}
+-#define arch_spin_is_contended	arch_spin_is_contended
+-
++#include <asm/ticket-lock.h>
+ #include <asm/qrwlock.h>
+ 
+ #endif /* __ASM_CSKY_SPINLOCK_H */
+diff --git a/arch/csky/include/asm/spinlock_types.h b/arch/csky/include/asm/spinlock_types.h
+index db87a12c3827..0bb7f6022a3b 100644
+--- a/arch/csky/include/asm/spinlock_types.h
++++ b/arch/csky/include/asm/spinlock_types.h
+@@ -3,25 +3,7 @@
+ #ifndef __ASM_CSKY_SPINLOCK_TYPES_H
+ #define __ASM_CSKY_SPINLOCK_TYPES_H
+ 
+-#ifndef __LINUX_SPINLOCK_TYPES_RAW_H
+-# error "please don't include this file directly"
+-#endif
+-
+-#define TICKET_NEXT	16
+-
+-typedef struct {
+-	union {
+-		u32 lock;
+-		struct __raw_tickets {
+-			/* little endian */
+-			u16 owner;
+-			u16 next;
+-		} tickets;
+-	};
+-} arch_spinlock_t;
+-
+-#define __ARCH_SPIN_LOCK_UNLOCKED	{ { 0 } }
+-
++#include <asm/ticket-lock-types.h>
+ #include <asm-generic/qrwlock_types.h>
+ 
+ #endif /* __ASM_CSKY_SPINLOCK_TYPES_H */
+-- 
+2.25.1
 
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-
-[1] https://rockchip.fr/radxa/IT66121_Register_List_Release_V1.0.pdf

@@ -2,281 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F364DD6E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A25E54DD705
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234289AbiCRJOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 05:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S234405AbiCRJYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 05:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234273AbiCRJOd (ORCPT
+        with ESMTP id S234377AbiCRJYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 05:14:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724517485D;
-        Fri, 18 Mar 2022 02:13:14 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KKdYW30M7zfYrj;
-        Fri, 18 Mar 2022 17:11:43 +0800 (CST)
-Received: from localhost.localdomain (10.175.103.91) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 18 Mar 2022 17:13:12 +0800
-From:   Wei Li <liwei391@huawei.com>
-To:     <acme@kernel.org>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@redhat.com>,
-        <namhyung@kernel.org>
-CC:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rui.xiang@huawei.com>, <guohanjun@huawei.com>
-Subject: [PATCH RESEND 2/2] perf tools: Enhance the matching of sub-commands
-Date:   Fri, 18 Mar 2022 17:22:45 +0800
-Message-ID: <20220318092245.2700489-3-liwei391@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220318092245.2700489-1-liwei391@huawei.com>
-References: <20220318092245.2700489-1-liwei391@huawei.com>
+        Fri, 18 Mar 2022 05:24:09 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61B72C57B2;
+        Fri, 18 Mar 2022 02:22:50 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id a17so8487631edm.9;
+        Fri, 18 Mar 2022 02:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=W2BhzbMIByCZCKGXGolyoW4FwzuuDiEDyr4ehhR2zyc=;
+        b=HgFmGCQP2uTDIsl/xFIfE3vd5PETPCWDs5LQ3H64TKvccSJQeJoaCj43JkWIJF3DJW
+         1rtlolw3oz5oaytS7J/v9VJuEk4wbKgxq4hBMKl3j8ZGeZ/JnsYjK+8M/mFh7jNCbm/t
+         wiJFEyIXgCCsb519wE3RHEb331heGql31QY6EhR5yLjq597xCAkV30bHCkc/qyH0Htrx
+         wdtxcxRvPrksfCGxgih6UZTuZEuApZq8uVpomJD1XPbWjPvbrpE+c9Rbmb+OYQwC5L9U
+         Th1KwQRPna9N3GM/mXUgWDJmIwUSh3c4zNCrLpOkrFBa+rEaVVE98xKcSCKHivQVvtE/
+         a2Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=W2BhzbMIByCZCKGXGolyoW4FwzuuDiEDyr4ehhR2zyc=;
+        b=d7JT2aB7jcIWvU4+0E/g/N9ynNrvdcuOxMFKPah4+8YfjUVfz0MZMXGRLvxdZELFPT
+         jyTJ92gIdhDytogPc1unpfiysuFz3QKdR67IhWCCybhgXlhfnb7g6u3o5xh6vWIGM6YY
+         SQqKitAEPZXNNMzhi/fUVyYygBijFe/NKHpWGDrsuJvLwSWuOaJjbj6UHthsLK0SHfYD
+         v1HuS8h/rMCbk5QsdK+gJ1BqamePXk34jFx38spT+LfvBAAithISBo9VbjMogkkqX6FE
+         33cGqbRMvDo9RRlq0RqAOlQkMUj9vsKS1lBZBqd/NM93F5ZF4FzB8mIpLQHG2MqFsLGY
+         CgaQ==
+X-Gm-Message-State: AOAM531/PRf1EklM01eai1KTqYzqGS3B3+3evD1Qb+PMdohbNScSvT7S
+        RarFnyrLmkE+Op9JtBsbsxjgkQz4p8KW1A==
+X-Google-Smtp-Source: ABdhPJxy4bt20DgxAxj4YsKg7TlYGZk8fXVnHcX4FUnQ8m6rjF8wTHhqAqGKwF19CkbU/q18ww4waw==
+X-Received: by 2002:a05:6402:d7:b0:413:673:ba2f with SMTP id i23-20020a05640200d700b004130673ba2fmr8456637edu.29.1647595369200;
+        Fri, 18 Mar 2022 02:22:49 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id bn14-20020a170906c0ce00b006c5ef0494besm3430520ejb.86.2022.03.18.02.22.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 02:22:48 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 10:22:46 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Nick Alcock <nick.alcock@oracle.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: [PATCHv3 bpf-next 09/13] libbpf: Add
+ bpf_program__attach_kprobe_multi_opts function
+Message-ID: <YjRPZj6Z8vuLeEZo@krava>
+References: <20220316122419.933957-1-jolsa@kernel.org>
+ <20220316122419.933957-10-jolsa@kernel.org>
+ <CAADnVQ+tNLEtbPY+=sZSoBicdSTx1YLgZJwnNuhnBkUcr5xozQ@mail.gmail.com>
+ <CAEf4BzZtQaiUxQ-sm_hH2qKPRaqGHyOfEsW96DxtBHRaKLoL3Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZtQaiUxQ-sm_hH2qKPRaqGHyOfEsW96DxtBHRaKLoL3Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We support short command 'rec*' for 'record' and 'rep*' for 'report' in
-lots of sub-commands, but the matching is not quite strict currnetly.
+On Thu, Mar 17, 2022 at 10:14:28PM -0700, Andrii Nakryiko wrote:
 
-It may be puzzling sometime, like we mis-type a 'recport' to report but
-it will perform 'record' in fact without any message.
+SNIP
 
-To fix this, add a check to ensure that the short cmd is valid prefix
-of the real command.
+> > But the above needs more work.
+> > Currently test_progs -t kprobe_multi
+> > takes 4 seconds on lockdep+debug kernel.
+> > Mainly because of the above loop.
+> >
+> >     18.05%  test_progs       [kernel.kallsyms]   [k]
+> > kallsyms_expand_symbol.constprop.4
+> >     12.53%  test_progs       libc-2.28.so        [.] _IO_vfscanf
+> >      6.31%  test_progs       [kernel.kallsyms]   [k] number
+> >      4.66%  test_progs       [kernel.kallsyms]   [k] format_decode
+> >      4.65%  test_progs       [kernel.kallsyms]   [k] string_nocheck
+> >
+> > Single test_skel_api() subtest takes almost a second.
+> >
+> > A cache inside libbpf probably won't help.
+> > Maybe introduce a bpf iterator for kallsyms?
+> 
+> BPF iterator for kallsyms is a great idea! So many benefits:
 
-Signed-off-by: Wei Li <liwei391@huawei.com>
----
- tools/perf/builtin-c2c.c       | 5 +++--
- tools/perf/builtin-kmem.c      | 2 +-
- tools/perf/builtin-kvm.c       | 9 +++++----
- tools/perf/builtin-lock.c      | 5 +++--
- tools/perf/builtin-mem.c       | 5 +++--
- tools/perf/builtin-sched.c     | 4 ++--
- tools/perf/builtin-script.c    | 6 ++++--
- tools/perf/builtin-stat.c      | 4 ++--
- tools/perf/builtin-timechart.c | 3 ++-
- 9 files changed, 25 insertions(+), 18 deletions(-)
+>   - it should be significantly more efficient *and* simpler than
+> parsing /proc/kallsyms;
+>   - there were some upstream patches recording ksym length (i.e.,
+> function size), don't remember if that ever landed or not, but besides
+> that the other complication of even exposing that to user space were
+> concerns about /proc/kallsyms format being an ABI. With the BPF
+> iterator we can easily provide that symbol size without any breakage.
+> This would be great!
 
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index 77dd4afacca4..8c5f106af46f 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -44,6 +44,7 @@
- #include "../perf.h"
- #include "pmu.h"
- #include "pmu-hybrid.h"
-+#include "string2.h"
- 
- struct c2c_hists {
- 	struct hists		hists;
-@@ -3025,9 +3026,9 @@ int cmd_c2c(int argc, const char **argv)
- 	if (!argc)
- 		usage_with_options(c2c_usage, c2c_options);
- 
--	if (!strncmp(argv[0], "rec", 3)) {
-+	if (!strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0])) {
- 		return perf_c2c__record(argc, argv);
--	} else if (!strncmp(argv[0], "rep", 3)) {
-+	} else if (!strncmp(argv[0], "rep", 3) && strcmp_prefix("report", argv[0])) {
- 		return perf_c2c__report(argc, argv);
- 	} else {
- 		usage_with_options(c2c_usage, c2c_options);
-diff --git a/tools/perf/builtin-kmem.c b/tools/perf/builtin-kmem.c
-index 99d7ff9a8eff..3358c73db43b 100644
---- a/tools/perf/builtin-kmem.c
-+++ b/tools/perf/builtin-kmem.c
-@@ -1946,7 +1946,7 @@ int cmd_kmem(int argc, const char **argv)
- 			kmem_page = 1;
- 	}
- 
--	if (!strncmp(argv[0], "rec", 3)) {
-+	if (!strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0])) {
- 		symbol__init(NULL);
- 		return __cmd_record(argc, argv);
- 	}
-diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
-index c6f352ee57e6..afdfc5931df6 100644
---- a/tools/perf/builtin-kvm.c
-+++ b/tools/perf/builtin-kvm.c
-@@ -24,6 +24,7 @@
- #include "util/ordered-events.h"
- #include "util/kvm-stat.h"
- #include "ui/ui.h"
-+#include "util/string2.h"
- 
- #include <sys/prctl.h>
- #ifdef HAVE_TIMERFD_SUPPORT
-@@ -1500,10 +1501,10 @@ static int kvm_cmd_stat(const char *file_name, int argc, const char **argv)
- 		goto perf_stat;
- 	}
- 
--	if (!strncmp(argv[1], "rec", 3))
-+	if (!strncmp(argv[1], "rec", 3) && strcmp_prefix("record", argv[1]))
- 		return kvm_events_record(&kvm, argc - 1, argv + 1);
- 
--	if (!strncmp(argv[1], "rep", 3))
-+	if (!strncmp(argv[1], "rep", 3) && strcmp_prefix("report", argv[1]))
- 		return kvm_events_report(&kvm, argc - 1 , argv + 1);
- 
- #ifdef HAVE_TIMERFD_SUPPORT
-@@ -1631,9 +1632,9 @@ int cmd_kvm(int argc, const char **argv)
- 		}
- 	}
- 
--	if (!strncmp(argv[0], "rec", 3))
-+	if (!strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0]))
- 		return __cmd_record(file_name, argc, argv);
--	else if (!strncmp(argv[0], "rep", 3))
-+	else if (!strncmp(argv[0], "rep", 3) && strcmp_prefix("report", argv[0]))
- 		return __cmd_report(file_name, argc, argv);
- 	else if (!strncmp(argv[0], "diff", 4))
- 		return cmd_diff(argc, argv);
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index d70131b7b1b1..7bf7662c6089 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -18,6 +18,7 @@
- #include "util/session.h"
- #include "util/tool.h"
- #include "util/data.h"
-+#include "util/string2.h"
- 
- #include <sys/types.h>
- #include <sys/prctl.h>
-@@ -997,9 +998,9 @@ int cmd_lock(int argc, const char **argv)
- 	if (!argc)
- 		usage_with_options(lock_usage, lock_options);
- 
--	if (!strncmp(argv[0], "rec", 3)) {
-+	if (!strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0])) {
- 		return __cmd_record(argc, argv);
--	} else if (!strncmp(argv[0], "report", 6)) {
-+	} else if (!strncmp(argv[0], "rep", 3) && strcmp_prefix("report", argv[0])) {
- 		trace_handler = &report_lock_ops;
- 		if (argc) {
- 			argc = parse_options(argc, argv,
-diff --git a/tools/perf/builtin-mem.c b/tools/perf/builtin-mem.c
-index fcf65a59bea2..ed0083d43e27 100644
---- a/tools/perf/builtin-mem.c
-+++ b/tools/perf/builtin-mem.c
-@@ -20,6 +20,7 @@
- #include "util/symbol.h"
- #include "util/pmu.h"
- #include "util/pmu-hybrid.h"
-+#include "util/string2.h"
- #include <linux/err.h>
- 
- #define MEM_OPERATION_LOAD	0x1
-@@ -496,9 +497,9 @@ int cmd_mem(int argc, const char **argv)
- 			mem.input_name = "perf.data";
- 	}
- 
--	if (!strncmp(argv[0], "rec", 3))
-+	if (!strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0]))
- 		return __cmd_record(argc, argv, &mem);
--	else if (!strncmp(argv[0], "rep", 3))
-+	else if (!strncmp(argv[0], "rep", 3) && strcmp_prefix("report", argv[0]))
- 		return report_events(argc, argv, &mem);
- 	else
- 		usage_with_options(mem_usage, mem_options);
-diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-index 72d446de9c60..c4615ae07b5d 100644
---- a/tools/perf/builtin-sched.c
-+++ b/tools/perf/builtin-sched.c
-@@ -3561,7 +3561,7 @@ int cmd_sched(int argc, const char **argv)
- 	if (!strcmp(argv[0], "script"))
- 		return cmd_script(argc, argv);
- 
--	if (!strncmp(argv[0], "rec", 3)) {
-+	if (!strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0])) {
- 		return __cmd_record(argc, argv);
- 	} else if (!strncmp(argv[0], "lat", 3)) {
- 		sched.tp_handler = &lat_ops;
-@@ -3581,7 +3581,7 @@ int cmd_sched(int argc, const char **argv)
- 		sched.tp_handler = &map_ops;
- 		setup_sorting(&sched, latency_options, latency_usage);
- 		return perf_sched__map(&sched);
--	} else if (!strncmp(argv[0], "rep", 3)) {
-+	} else if (!strncmp(argv[0], "rep", 3) && strcmp_prefix("replay", argv[0])) {
- 		sched.tp_handler = &replay_ops;
- 		if (argc) {
- 			argc = parse_options(argc, argv, replay_options, replay_usage, 0);
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 23bc0fb5a381..b800b4f5964b 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -3842,13 +3842,15 @@ int cmd_script(int argc, const char **argv)
- 	if (symbol__validate_sym_arguments())
- 		return -1;
- 
--	if (argc > 1 && !strncmp(argv[0], "rec", strlen("rec"))) {
-+	if (argc > 1 && !strncmp(argv[0], "rec", strlen("rec")) &&
-+		strcmp_prefix("record", argv[0])) {
- 		rec_script_path = get_script_path(argv[1], RECORD_SUFFIX);
- 		if (!rec_script_path)
- 			return cmd_record(argc, argv);
- 	}
- 
--	if (argc > 1 && !strncmp(argv[0], "rep", strlen("rep"))) {
-+	if (argc > 1 && !strncmp(argv[0], "rep", strlen("rep")) &&
-+		strcmp_prefix("report", argv[0])) {
- 		rep_script_path = get_script_path(argv[1], REPORT_SUFFIX);
- 		if (!rep_script_path) {
- 			fprintf(stderr,
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 3f98689dd687..f0e19c93f3f8 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -2271,11 +2271,11 @@ int cmd_stat(int argc, const char **argv)
- 	} else
- 		stat_config.csv_sep = DEFAULT_SEPARATOR;
- 
--	if (argc && !strncmp(argv[0], "rec", 3)) {
-+	if (argc && !strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0])) {
- 		argc = __cmd_record(argc, argv);
- 		if (argc < 0)
- 			return -1;
--	} else if (argc && !strncmp(argv[0], "rep", 3))
-+	} else if (argc && !strncmp(argv[0], "rep", 3) && strcmp_prefix("report", argv[0]))
- 		return __cmd_report(argc, argv);
- 
- 	interval = stat_config.interval;
-diff --git a/tools/perf/builtin-timechart.c b/tools/perf/builtin-timechart.c
-index 43bf4d67edb0..1b180cfcda74 100644
---- a/tools/perf/builtin-timechart.c
-+++ b/tools/perf/builtin-timechart.c
-@@ -35,6 +35,7 @@
- #include "util/tool.h"
- #include "util/data.h"
- #include "util/debug.h"
-+#include "util/string2.h"
- #include <linux/err.h>
- 
- #ifdef LACKS_OPEN_MEMSTREAM_PROTOTYPE
-@@ -1983,7 +1984,7 @@ int cmd_timechart(int argc, const char **argv)
- 		return -1;
- 	}
- 
--	if (argc && !strncmp(argv[0], "rec", 3)) {
-+	if (argc && !strncmp(argv[0], "rec", 3) && strcmp_prefix("record", argv[0])) {
- 		argc = parse_options(argc, argv, timechart_record_options,
- 				     timechart_record_usage,
- 				     PARSE_OPT_STOP_AT_NON_OPTION);
--- 
-2.25.1
+yes, great idea.. I was cc-ed on patches adding extra stuff to kallsyms:
+  https://lore.kernel.org/lkml/20220208184309.148192-7-nick.alcock@oracle.com/
 
+this could be way out ;-) cc-ing Nick
+
+>   - we can allow parameterizing iterator with options like: skip or
+> include module symbols, specify a set of types of symbols (function,
+> variable, etc), etc. This would speed everything up in common cases by
+> not even decompressing irrelevant names.
+> 
+> In short, kallsyms iterator would be an immensely useful for any sort
+> of tracing tool that deals with kernel stack traces or kallsyms in
+> general.
+
+I wonder we could make some use of it in perf as well, there's some
+guessing wrt symbol sizes when we parse kallsyms, so we could get
+rid of it.. I will work on that and try to add this
+
+> 
+> But in this particular case, kprobe_multi_resolve_syms()
+> implementation is extremely suboptimal. I didn't realize during review
+> that kallsyms_lookup_name() is a linear scan... If that's not going to
+> be changed to O(log(N)) some time soon, we need to reimplement
+> kprobe_multi_resolve_syms(), probably.
+> 
+> One way would be to sort user strings lexicographically and then do a
+> linear scan over all kallsyms, for each symbol perform binary search
+> over a sorted array of user strings. Stop once all the positions were
+> "filled in" (we'd need to keep a bitmap or bool[], probably). This way
+> it's going to be O(MlogN) instead of O(MN) as it is right now.
+
+ok, I did something similar in multi-trampoline patchset that you
+suggested, I think that will work here as well
+
+> 
+> BTW, Jiri, libbpf.map is supposed to have an alphabetically ordered
+> list of functions, it would be good to move
+> bpf_program__attach_kprobe_multi_opts a bit higher before libbpf_*
+> functions.
+
+ah right, sry.. I'll send fix with follow up changes
+
+thanks,
+jirka

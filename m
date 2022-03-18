@@ -2,53 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0184DDC96
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3294DDC9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237879AbiCRPQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 11:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
+        id S237890AbiCRPRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 11:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237869AbiCRPQo (ORCPT
+        with ESMTP id S236931AbiCRPRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 11:16:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFBC83D494;
-        Fri, 18 Mar 2022 08:15:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 799461515;
-        Fri, 18 Mar 2022 08:15:25 -0700 (PDT)
-Received: from [10.57.43.230] (unknown [10.57.43.230])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B748D3F7D7;
-        Fri, 18 Mar 2022 08:15:23 -0700 (PDT)
-Message-ID: <73e25ee3-c2f3-0a72-e5cc-04e51f650f2e@arm.com>
-Date:   Fri, 18 Mar 2022 15:15:19 +0000
+        Fri, 18 Mar 2022 11:17:30 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0253D494;
+        Fri, 18 Mar 2022 08:16:11 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id t33so8786094ybt.12;
+        Fri, 18 Mar 2022 08:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s7nTlpYa/I83xP+Stl6OjCxXKL7eS12QD0mo9SCq80Y=;
+        b=ou7Ya+Xj7TjLlCrlKkf3IPBywBvRPaOhRklCh3JoU/vaxf7ZUmUSEezXROjzWvWUJg
+         sBN00Po+jpzdZfnEr9tpaQh5GV5za+LNySiW0AiLqLNNxCKKfC+TRVZv/i8I2JcBuugP
+         Qbo7fpyC7K+dKEaDFZrg775asI15VLKp4thUVWNktijyehclRNP3Nq6yLkrSXRteYx1Y
+         hytYPOFS8amQe6p1S36M8J7dSynNu0F/IWWkLN8D3fv3c8WwG83UXxFc/6DEMWqh61CZ
+         2MUTXFZ/V2wr92D2auQXWWpqd7uQvffBQApDkooRRkE3ZyZaYJV435AXev1KZr6ROy6g
+         OS9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s7nTlpYa/I83xP+Stl6OjCxXKL7eS12QD0mo9SCq80Y=;
+        b=t4PkjOVLzzKHeiWdVVu+hXt8bVe4r1Ob4RSTg5Y1M2LpMENWny0UWyY3BF/T2WSBrl
+         aEfFoX87pa/OXrNbeKp9VYumJjj+9mx1eBhO9i1tkUT4TBXFpQcnSGdpAqpMDxHa4wh+
+         TLTwffQSN0nWnC9Ntx0XbfDATOjNBgv8jHeJyefH41ln/rcF9Idaal4epchIuXN6BV5B
+         6x1iIwAJmVA8HC5TmGzpm0WLHy0m9Nnr65kxjNQGlZpCPal6I5pFhh/J59z8eMExcoqu
+         vj/ocvT5ofpgBCd4C0JRpqJlegUNj3kAphhylrhr9CsFlj783fv+0GNpEOck0WmWQbIg
+         nNCw==
+X-Gm-Message-State: AOAM530lv2bElhncBMCyzCemD8o9dokXP38D56p8VfRrfWVrr+iuU7Ap
+        yK3EaC0OIw8OwR4eeusctYd3fqvz3FcIgeplG2k=
+X-Google-Smtp-Source: ABdhPJx8+OpNK1Acqr4z0QdPBHbq8pZ3F43JT+ore+pRi0yUyWniMQWBCJMH79m2IwL1cV3OCVCjPIIxN5Owo+wugyk=
+X-Received: by 2002:a25:8812:0:b0:633:7bd8:16ff with SMTP id
+ c18-20020a258812000000b006337bd816ffmr10358271ybl.645.1647616570656; Fri, 18
+ Mar 2022 08:16:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] thunderbolt: Make iommu_dma_protection more accurate
-Content-Language: en-GB
-To:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
-Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
-        "michael.jamet@intel.com" <michael.jamet@intel.com>,
-        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-References: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
- <BL1PR12MB515783C0F998169D49D92A55E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
- <BL1PR12MB51573F55B3C2B3922BAAA7F1E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
- <YjRvMk1kcbMwJvx+@lahna> <65207fdf-c4ab-5165-dbda-8ab55b51adb7@arm.com>
- <YjSCWaq7Ej/2iJPp@lahna> <78fc0426-c22a-ec62-f92b-0019bea5947e@arm.com>
- <YjSbfScU0Ssuca3y@lahna>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YjSbfScU0Ssuca3y@lahna>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220317012404.8069-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220317012404.8069-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220317012404.8069-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 18 Mar 2022 15:15:44 +0000
+Message-ID: <CA+V-a8ue5UKcXfNH0HDHvpDt=dc1UB1tT74yPeBgkFkQxx9mTA@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 3/5] gpio: gpiolib: Allow free() callback to be overridden
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,92 +77,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-18 14:47, mika.westerberg@linux.intel.com wrote:
-> On Fri, Mar 18, 2022 at 02:08:16PM +0000, Robin Murphy wrote:
->> On 2022-03-18 13:25, mika.westerberg@linux.intel.com wrote:
->>> Hi Robin,
->>>
->>> On Fri, Mar 18, 2022 at 12:01:42PM +0000, Robin Murphy wrote:
->>>>> This adds quite a lot code and complexity, and honestly I would like to
->>>>> keep it as simple as possible (and this is not enough because we need to
->>>>> make sure the DMAR bit is there so that none of the possible connected
->>>>> devices were able to overwrite our memory already).
->>>>
->>>> Shall we forget the standalone sibling check and just make the
->>>> pdev->untrusted check directly in tb_acpi_add_link() then?
->>>
->>> I think we should leave tb_acpi_add_link() untouched if possible ;-)
->>> This is because it is used to add the device links from firmware
->>> description that we need for proper power management of the tunneled
->>> devices. It has little to do with the identification of the external
->>> facing DMA-capable PCIe ports.
->>>
->>> Furthermore these links only exists in USB4 software connection manager
->>> systems so we do not have those in the existing Thunderbolt 3/4 systems
->>> that use firmware based connection manager (pretty much all out there).
->>>
->>>> On reflection I guess the DMAR bit makes iommu_dma_protection
->>>> functionally dependent on ACPI already, so we don't actually lose
->>>> anything (and anyone can come back and revisit firmware-agnostic
->>>> methods later if a need appears).
->>>
->>> I agree.
->>
->> OK, so do we have any realistic options for identifying the correct PCI
->> devices, if USB4 PCIe adapters might be anywhere relative to their
->> associated NHI? Short of maintaining a list of known IDs, the only thought I
->> have left is that if we walk the whole PCI segment looking specifically for
->> hotplug-capable Gen1 ports, any system modern enough to have Thunderbolt is
->> *probably* not going to have any real PCIe Gen1 hotplug slots, so maybe
->> false negatives might be tolerable, but it still feels like a bit of a
->> sketchy heuristic.
-> 
-> Indeed.
-> 
->> I suppose we could just look to see if any device anywhere is marked as
->> external-facing, and hope that if firmware's done that much then it's done
->> everything right. That's still at least slightly better than what we have
->> today, but AFAICS still carries significant risk of a false positive for an
->> add-in card that firmware didn't recognise.
-> 
-> The port in this case, that is marked as external facing, is the PCIe
-> root port that the add-in-card is connected to and that is known for the
-> firmware in advance.
-> 
->> I'm satisfied that we've come round to the right conclusion on the DMAR
->> opt-in - I'm in the middle or writing up patches for that now - but even
->> Microsoft's spec gives that as a separate requirement from the flagging of
->> external ports, with both being necessary for Kernel DMA Protection.
-> 
-> Is the problem that we are here trying to solve the fact that user can
-> disable the IOMMU protection from the command line? Or the fact that the
-> firmware might not declare all the ports properly so we may end up in a
-> situation that some of the ports do not get the full IOMMU protection.
+Hi Linus,
 
-It's about knowing whether or not firmware has declared the ports at 
-all. If it hasn't then the system is vulnerable to *some* degree of DMA 
-attacks regardless of anything else (the exact degree depending on 
-kernel config and user overrides). Complete mitigation is simply too 
-expensive to apply by default to every device the IOMMU layer is unsure 
-about. The Thunderbolt driver cannot be confident that protection is in 
-place unless it can somehow know that the IOMMU layer has seen that 
-untrusted property on the relevant ports.
-
-> These are Microsoft requirements for the OEMs in order to pass their
-> firmware test suite so here I would not expect to have issues. Otherwise
-> they simply cannot ship the thing with Windows installed.
-> 
-> IMHO we should just trust the firmare provided information here
-> (otherwise we are screwed anyway as there is no way to tell if the
-> devices connected prior the OS can still do DMA), and use the external
-> facing port indicator to idenfity the ports that need DMA protection.
-
-Indeed that's exactly what I want to do, but it begs the question of how 
-we *find* the firmware-provided information in the first place!
-
-I seem to have already started writing the dumb version that will walk 
-the whole PCI segment and assume the presence of any external-facing 
-port implies that we're good. Let me know if I should stop ;)
+On Thu, Mar 17, 2022 at 1:24 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> Allow free() callback to be overridden from irq_domain_ops for
+> hierarchical chips.
+>
+> This allows drivers to free any resources which are allocated during
+> populate_parent_alloc_arg().
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  drivers/gpio/gpiolib.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+Sorry to ping early, this patch and 4/5 hasn't been reviewed at all in
+previous versions. So I wanted to get your feedback before I post an
+non -RFC version of the series.
 
 Cheers,
-Robin.
+Prabhakar
+
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index defb7c464b87..aede442f610d 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -1187,15 +1187,18 @@ static void gpiochip_hierarchy_setup_domain_ops(struct irq_domain_ops *ops)
+>         ops->activate = gpiochip_irq_domain_activate;
+>         ops->deactivate = gpiochip_irq_domain_deactivate;
+>         ops->alloc = gpiochip_hierarchy_irq_domain_alloc;
+> -       ops->free = irq_domain_free_irqs_common;
+>
+>         /*
+> -        * We only allow overriding the translate() function for
+> +        * We only allow overriding the translate() and free() function for
+>          * hierarchical chips, and this should only be done if the user
+> -        * really need something other than 1:1 translation.
+> +        * really need something other than 1:1 translation for translate()
+> +        * callback and free if user wants to free up any resources which
+> +        * were allocated during callbacks for example populate_parent_alloc_arg.
+>          */
+>         if (!ops->translate)
+>                 ops->translate = gpiochip_hierarchy_irq_domain_translate;
+> +       if (!ops->free)
+> +               ops->free = irq_domain_free_irqs_common;
+>  }
+>
+>  static int gpiochip_hierarchy_add_domain(struct gpio_chip *gc)
+> --
+> 2.17.1
+>

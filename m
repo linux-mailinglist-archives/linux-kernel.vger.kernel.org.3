@@ -2,120 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BADB4DD1F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0FF4DD1EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiCRAdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 20:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S231171AbiCRA2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 20:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiCRAdj (ORCPT
+        with ESMTP id S231172AbiCRA1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 20:33:39 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AB58292DA9;
-        Thu, 17 Mar 2022 17:32:22 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 22I0Pv9f001636;
-        Thu, 17 Mar 2022 19:25:57 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 22I0Ptsh001632;
-        Thu, 17 Mar 2022 19:25:55 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Thu, 17 Mar 2022 19:25:55 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Florian Weimer <fweimer@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v5] x86: use builtins to read eflags
-Message-ID: <20220318002555.GP614@gate.crashing.org>
-References: <20220210223134.233757-1-morbo@google.com> <20220301201903.4113977-1-morbo@google.com> <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <878rt8gwxa.fsf@oldenburg.str.redhat.com> <CAHk-=wiZtg-E5s1CEZgaSE=e38vFoP3y2aV-4R82jqmcUoD0Aw@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiZtg-E5s1CEZgaSE=e38vFoP3y2aV-4R82jqmcUoD0Aw@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 17 Mar 2022 20:27:51 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67561A9C8C
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:26:34 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id q19so3900898pgm.6
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:26:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=epXL49XBlsiDoMlo5NLPPmLnmNNIAccQYNPU/Jj1s5U=;
+        b=OQD5axhv7UZBjF2qc0k4ko2pedX/Lb8CPTIHEJOhEh56Iz/yk+viKWMrq2p6xFCyEM
+         kRBWTSSBnO+9+wsWAAoTVSEIjR2kFKRrCrMosX67ivFF1zMC7yHuQuquUJM+7hfNbu7p
+         S/XvCHwsqWNKx6YSW4MX6oHqeXZ0EtpXakTAjED3FJf0O5V1HrdTjb6RDidcNsNJHPMi
+         4+fJy2oAIHttMBGXeP7pF7yyF8yPXQKRQK7c3b2LovgVmRmwZUdtjACISzhogS7GKk3R
+         yy/QuLcNaFKipgiHL+YaqwUugK6uieDFK/KVGjq2aK2duF0MuYRyafSvpFg2FiT+KPe9
+         PpQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=epXL49XBlsiDoMlo5NLPPmLnmNNIAccQYNPU/Jj1s5U=;
+        b=2JbDFCZWpjH/UisrJBIzlenw7mcNqjTGvugRx4NO8QeOqT2QAbqre2ZTGRQ+94a0uY
+         qJoxYLpgMSzPUdes99mtLS8WL/9VPSty/O9ys73QmAsqHFQlU0GWacJ18CYlod2fqNox
+         cBrVctKyc09tyJqrtiWZtNkkEaDwwA6jtZ4XiqNE+W/aC3vIHPGsMQtSaZtJ+e0orB9U
+         0+H4rTPjrqyKx7H+rrWeqcWAckvzzlQUJB1zaxq5lO8obyD6IHP8i+Zgpa710irly03R
+         qy4YOCwlB656Tqp29jvIEFW2evSIwMtW83Di/0951C7QIQsdpV8+byfY6pkLUKsxEizx
+         KPuQ==
+X-Gm-Message-State: AOAM532j/fJVtdXv/zgXUYlyzsfS1UmQjcRDzB+4v2ZL1eAGqQKxd913
+        AVf6Qt1mYDztdllRHNXN93vbDg2DUqEcUOBvgEs=
+X-Google-Smtp-Source: ABdhPJyeItmC3/Kc0NMOwglxNGnoxywDrL0VobQf2FWXQj16riiF/ji13DNFD/BXWxWmwgL1OSfouXTi9xNve0Yb46g=
+X-Received: by 2002:a63:c00c:0:b0:37c:942e:6c3c with SMTP id
+ h12-20020a63c00c000000b0037c942e6c3cmr5939196pgg.336.1647563193972; Thu, 17
+ Mar 2022 17:26:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220317152458.213689956@goodmis.org> <20220317152522.284233550@goodmis.org>
+ <CAEf4BzaN_HnyAkVYeUmYoxvW01cFKR2FW0MwZJBL3gvkRw0TYg@mail.gmail.com> <20220317194937.08584828@gandalf.local.home>
+In-Reply-To: <20220317194937.08584828@gandalf.local.home>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 17 Mar 2022 17:26:23 -0700
+Message-ID: <CAADnVQJSZhJo5XK-h6t8oHuNtiPxYx9Zjav=wvm92m-cpTpghw@mail.gmail.com>
+Subject: Re: [for-next][PATCH 03/13] fprobe: Add ftrace based probe APIs
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 01:36:19PM -0700, Linus Torvalds wrote:
->         asm volatile("# __raw_save_flags\n\t"
->                      "pushf ; pop %0"
->                      : "=rm" (flags)
->                      : /* no input */
->                      : "memory");
+On Thu, Mar 17, 2022 at 4:49 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Thu, 17 Mar 2022 15:03:33 -0700
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+>
+> > Do I understand correctly that this patch set was applied in your
+> > tree? I was under the impression that we agreed to route this through
+> > the bpf-next tree earlier (see [0]), but I might have misunderstood
+> > something, sorry.
+> >
+> > Either way, the reason it matters is because Jiri's multi-attach
+> > kprobe patch set ([1]) is depending on Masami's patches and having
+> > fprobe patches in bpf-next tree would simplify logistics
+> > significantly.
+>
+> I knew Jiri's patches were to go through the bpf tree, but I missed that
+> those were dependent on this and you wanted these to go through as well.
+>
+> I had just finished my automated tests that ran these patches. I haven't
+> pushed them to my next branch yet so I can hold them off. I don't have
+> anything dependent on them.
 
-> And is that "memory" clobber because it modifies the memory location
-> just below the current stack pointer?
-> 
-> No, not really - outside the kernel that might be an issue, but we
-> already have to build the kernel with -mno-red-zone, so if the
-> compiler uses that memory location, that would be a *HUGE* compiler
-> bug already.
+Excellent. Thanks for testing.
 
-There is the problem though that this might extend the stack, which
-isn't marked up anywhere, so the static checkers do not see the stack
-overflow, and it won't be noticed until runtime.  Or do the checkers
-consider such cases?
+> Would you be able to take these for-next patches directly (as they all have
+> been tested) and you can switch my signed-off-by to Reviewed-by.
+>
+> The first of the series is unrelated and will go through my tree. That's
+> the user_events patch.
 
-> So the "memory" clobber has absolutely nothing to do with the fact
-> that 'pushf' updates the stack pointer, writes to that location, and
-> the popf then undoes it.
-> 
-> It's literally because we don't want the compiler to move non-spill
-> memory accesses around it (or other asm statements wiht memory
-> clobbers), regardless of the fact that the sequence doesn't really
-> read or write memory in any way that is relevant to the compiler.
+Right.
+We're talking about this set:
+https://patchwork.kernel.org/project/netdevbpf/cover/164735281449.1084943.12438881786173547153.stgit@devnote2/
 
-Well, that, or the write of the code didn't consider this, just went
-"writes memory, so we clobber".
+I believe it has a small doc difference vs what you've tested.
+Looks like our CI is green on it too.
+We'll do additional testing and add your SOB and Tested-by
+before pushing.
 
-> > GCC doesn't have barriers in the built-ins (if we are talking about
-> > __builtin_ia32_readeflags_u64 and __builtin_ia32_writeeflags_u64).  I
-> > expect they are actually pretty useless, and were merely added for
-> > completeness of the intrinsics headers.
-> 
-> Yeah, without any kinds of ordering guarantees, I think those builtins
-> are basically only so in name. They might as well return a random
-> value - they're not *useful*, because they don't have any defined
-> behavior.
-
-No ordering wrt any other code, yes.  Which is not anything you can
-solve in only the builtin -- you need to consider the other code that
-you order with as well, change that code as well.
-
-> I mean, we *could* certainly use "read eflags" in the kernel, and yes,
-> in theory it would be lovely if we didn't have to encode it as a
-> "pushf/pop" sequence, and the compiler tracked the stack pointer for
-> us, and perhaps combined it with other stack pointer changes to the
-> point where the "popf" would never happen, it would just undo the %rsp
-> change at function exit time.
-> 
-> So yes, a builtin can improve code generation.
-
-Yes, and they are much easier to write, and can be written correctly by
-lookenspeepers who just *have* to twist every knob that they can -- more
-easily than inline asm anyway, which is unforgiving to the extreme.
-
-They are also much easier to read usually, make for cleaner code.  They
-certainly have their place.  But they should stay there, too :-)
-
-
-Segher
+Thanks!

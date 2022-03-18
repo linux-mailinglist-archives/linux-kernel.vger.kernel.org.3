@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF94B4DE27F
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0D64DE27E
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240668AbiCRU11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 16:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
+        id S240701AbiCRU1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 16:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237965AbiCRU1Q (ORCPT
+        with ESMTP id S240610AbiCRU1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 16:27:16 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6832A291B8D;
-        Fri, 18 Mar 2022 13:25:56 -0700 (PDT)
+        Fri, 18 Mar 2022 16:27:17 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5168F292D85;
+        Fri, 18 Mar 2022 13:25:57 -0700 (PDT)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 8AFA222438;
+        by ssl.serverraum.org (Postfix) with ESMTPSA id F02DB2244E;
         Fri, 18 Mar 2022 21:25:54 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647635154;
+        t=1647635155;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3/jJPQNTYcscMExGs+f7OHojmn6MFY4V2UBkBJ0zayk=;
-        b=BEWmlHe30j7R7YIwe4W1bdX2xwpBBXzYVyeTkBfBu3OwTw8RsAF2Y3yl9G+oEqP2BJUoJ/
-        lWj0K2ss5SzAnE1MVzOYknRmOmkwMywoQ+c2af8mVLPshRE9imamHZaCyu9sKvw3xeMWAf
-        WcYSAJ3KV909QqGaF9b8jMrXgz2CZwM=
+        bh=Sf4D+lq8p2304IqZfXohb7B3lm+eDnMGkVWOmv4VwzU=;
+        b=UbrVyxmqTc0GEjuVOwatzQjPI85cmOegG8tv0+XhhLh73Gykiyf3kTugkAiRy0QzRHML68
+        19WIYzg5/FC5yVT5Bfui/1fHOSIhs7KyqK4byFlyhnpqHnOpMfi5CxAVR7kt9tofU84nVO
+        KSiZTvKWLqvZkeENW3a1D4lMegGLSlI=
 From:   Michael Walle <michael@walle.cc>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     "David S . Miller" <davem@davemloft.net>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v2 4/8] MIPS: mscc: ocelot: fix load/save GPIO pinctrl name
-Date:   Fri, 18 Mar 2022 21:25:43 +0100
-Message-Id: <20220318202547.1650687-5-michael@walle.cc>
+Subject: [PATCH v2 5/8] MIPS: mscc: serval: fix pinctrl node names
+Date:   Fri, 18 Mar 2022 21:25:44 +0100
+Message-Id: <20220318202547.1650687-6-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220318202547.1650687-1-michael@walle.cc>
 References: <20220318202547.1650687-1-michael@walle.cc>
@@ -70,25 +70,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The pinctrl device tree binding will be converted to YAML format. All
 the pin nodes should end with "-pins". Fix them.
 
-Fixes: 15324652f612 ("MIPS: dts: ocelot: describe the load/save GPIO")
+Fixes: fe0052018a84 ("MIPS: mscc: Add serval support")
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- arch/mips/boot/dts/mscc/ocelot_pcb120.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/boot/dts/mscc/serval_common.dtsi | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/arch/mips/boot/dts/mscc/ocelot_pcb120.dts b/arch/mips/boot/dts/mscc/ocelot_pcb120.dts
-index cda6c5ff58ad..d348742c233d 100644
---- a/arch/mips/boot/dts/mscc/ocelot_pcb120.dts
-+++ b/arch/mips/boot/dts/mscc/ocelot_pcb120.dts
-@@ -27,7 +27,7 @@ phy_int_pins: phy-int-pins {
- 		function = "gpio";
+diff --git a/arch/mips/boot/dts/mscc/serval_common.dtsi b/arch/mips/boot/dts/mscc/serval_common.dtsi
+index 5b404836db5e..0893de420e27 100644
+--- a/arch/mips/boot/dts/mscc/serval_common.dtsi
++++ b/arch/mips/boot/dts/mscc/serval_common.dtsi
+@@ -82,38 +82,38 @@ i2c_pins: i2c-pins {
+ 		pins = "GPIO_7"; /* No "default" scl for i2c0 */
+ 		function = "twi";
  	};
- 
--	phy_load_save_pins: phy_load_save_pins {
-+	phy_load_save_pins: phy-load-save-pins {
- 		pins = "GPIO_10";
- 		function = "ptp2";
+-	i2cmux_pins_i: i2cmux-pins-i {
++	i2cmux_pins_i: i2cmux-pins {
+ 		pins = "GPIO_11", "GPIO_12", "GPIO_18", "GPIO_19",
+ 			"GPIO_20", "GPIO_21";
+ 		function = "twi_scl_m";
+ 		output-low;
  	};
+-	i2cmux_0: i2cmux-0 {
++	i2cmux_0: i2cmux-0-pins {
+ 		pins = "GPIO_11";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_1: i2cmux-1 {
++	i2cmux_1: i2cmux-1-pins {
+ 		pins = "GPIO_12";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_2: i2cmux-2 {
++	i2cmux_2: i2cmux-2-pins {
+ 		pins = "GPIO_18";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_3: i2cmux-3 {
++	i2cmux_3: i2cmux-3-pins {
+ 		pins = "GPIO_19";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_4: i2cmux-4 {
++	i2cmux_4: i2cmux-4-pins {
+ 		pins = "GPIO_20";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_5: i2cmux-5 {
++	i2cmux_5: i2cmux-5-pins {
+ 		pins = "GPIO_21";
+ 		function = "twi_scl_m";
+ 		output-high;
 -- 
 2.30.2
 

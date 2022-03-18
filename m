@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE434DDEA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6514DDE1B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239009AbiCRQUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
+        id S238459AbiCRQQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238818AbiCRQTb (ORCPT
+        with ESMTP id S236805AbiCRQQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:19:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3223D1760D9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:18:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647620279;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o+M0hzPfXbSknPCIGxa8xOYfbwK5d3tQ9k5sjS0RFo8=;
-        b=i5ennpafWwV2fDf8PJze9bJEdca0TNMd5sc6AQXvS9Eithypd+dFn/uvVqHxO0LLhdSzpB
-        ELUUYf1RvyCZZ+TBLrs0OIxmB30HVTleuXzxllvvFbqBdjOIZuxmEzVg87+qWRe6nqnh5s
-        bIkEabHNa2uAAvYM3u1MJCub9TKlWGk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-8ira-iG9MMGUCiNAErdmrA-1; Fri, 18 Mar 2022 12:17:58 -0400
-X-MC-Unique: 8ira-iG9MMGUCiNAErdmrA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 52C271C0691C;
-        Fri, 18 Mar 2022 16:17:57 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.192.159])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1EB7D7AD1;
-        Fri, 18 Mar 2022 16:17:53 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v3 14/17] HID: add implementation of bpf_hid_raw_request
-Date:   Fri, 18 Mar 2022 17:15:25 +0100
-Message-Id: <20220318161528.1531164-15-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
-References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
+        Fri, 18 Mar 2022 12:16:50 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A00263D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:15:30 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so5022527wmp.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:15:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Lcg0C4WbCSwnegOj3gPrFKrb+pmIXRsphWzUmjcgDh8=;
+        b=Wc9AcVsXkGm4lGKwlgfXQKLPr4Os+R6ImCHiLJ1gY46QbedjO/UoPR/sRrLMsLpkw8
+         n/w+za9LV7P0Q12ixcoqHoMR8VFoXEbG9Qc3QfbNvIJOqvzVXbBgqv2Lnuwo4S51XyKG
+         bVfi+jXi7jz756e39+YZuEduXBePuhjotkpktPC1MPiKbt8acVYQczGGK2dOkmd9jNG+
+         VLJKAEL5NBH+4gMOJKYvbFbPyp69pAPob3T80qGkrmiLmuWVjRXate3buxciX9E/I3tR
+         PI3Hn2eLbfgsPgb8F29+dF9D3o5uEzVMpdTV0Yq1cu3oUoeaf6yyYLOVVkRdeEVgg2g3
+         jfBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Lcg0C4WbCSwnegOj3gPrFKrb+pmIXRsphWzUmjcgDh8=;
+        b=iVjJPoj/rSSvsY6rVhafl6mQciiwNlsGjM2/rRYXPUJipD27p+5Si229/hf01dH4Nf
+         akb3LVe+bXsckHH9Ca4MURb2V1lsoKF+Ne1a+z51XvKqxsxUokz1Lp/sRASXDI22gWZS
+         X6cVLGCcaVazYhOfqwrevl0xa2eYvGWgMyS/97je5x10dJI9IiS2UGNOkzoYrReAFas9
+         8uT92aOya0bZSI07Qm0sTktnw7h+xN7+AFpUk8FsvpOT+TN7Wyn7mxUxzZDcJGIlNOFQ
+         KAYCPFmIMlBJeWBRzrtJ4Zo4sWF1f6mziHpQnWvpHgJqs06RFUwk3nEA1MNEljom9XcK
+         o2Uw==
+X-Gm-Message-State: AOAM531NXTWku4Ok8yRcuPjpIOPyFvcFDH9crYS37WM1E8WJoahIwXAv
+        2lKgV+W7C+N0Y0sktyM6icAnFg==
+X-Google-Smtp-Source: ABdhPJyszN4FecLmImArKgfh8woC6r3j7LmWXu7CNyu2HKA9oRy8RbVgfMHzUyqDVBnmoRqDtgnC9w==
+X-Received: by 2002:a1c:7719:0:b0:38b:7226:d366 with SMTP id t25-20020a1c7719000000b0038b7226d366mr15338501wmi.87.1647620128630;
+        Fri, 18 Mar 2022 09:15:28 -0700 (PDT)
+Received: from [192.168.2.222] ([109.76.4.19])
+        by smtp.gmail.com with ESMTPSA id f7-20020a0560001a8700b00203c23e55e0sm6789191wry.78.2022.03.18.09.15.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 09:15:28 -0700 (PDT)
+Message-ID: <e17e522f-75e9-a307-b56d-9ceb5b798c45@conchuod.ie>
+Date:   Fri, 18 Mar 2022 16:15:26 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] i2c: add support for microchip fpga i2c controllers
+Content-Language: en-US
+To:     Ben Dooks <ben.dooks@codethink.co.uk>,
+        Conor Dooley <conor.dooley@microchip.com>, wsa@kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        daire.mcnamara@microchip.com
+References: <20220315153206.833291-1-conor.dooley@microchip.com>
+ <cd90c33d-d4ea-de8a-9634-24d0cd394fe1@codethink.co.uk>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <cd90c33d-d4ea-de8a-9634-24d0cd394fe1@codethink.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,180 +76,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hook up BPF to hid_hw_raw_request.
-Not much to report here except that we need to export hid_get_report
-from hid-core so it gets available in hid-bpf.c
+On 18/03/2022 14:56, Ben Dooks wrote:
+> On 15/03/2022 15:32, Conor Dooley wrote:
+>> Add Microchip CoreI2C i2c controller support. This driver supports the
+>> "hard" i2c controller on the Microchip PolarFire SoC & the basic feature
+>> set for "soft" i2c controller implemtations in the FPGA fabric.
+>>
+>> Co-developed-by: Daire McNamara <daire.mcnamara@microchip.com>
+>> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>> ---
+>>   drivers/i2c/busses/Kconfig              |  11 +
+>>   drivers/i2c/busses/Makefile             |   1 +
+>>   drivers/i2c/busses/i2c-microchip-core.c | 487 ++++++++++++++++++++++++
+>>   3 files changed, 499 insertions(+)
+>>   create mode 100644 drivers/i2c/busses/i2c-microchip-core.c
+>>
+>> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+>> index a1bae59208e3..3d4d8e0e9de7 100644
+>> --- a/drivers/i2c/busses/Kconfig
+>> +++ b/drivers/i2c/busses/Kconfig
+>> @@ -781,6 +781,17 @@ config I2C_MESON
+>>         If you say yes to this option, support will be included for the
+>>         I2C interface on the Amlogic Meson family of SoCs.
+> 
+> snip
+> 
+>> +
+>> +static void mchp_corei2c_core_disable(struct mchp_corei2c_dev *idev)
+>> +{
+>> +    u8 ctrl = readl(idev->base + CORE_I2C_CTRL);
+>> +
+>> +    ctrl &= ~CTRL_ENS1;
+>> +    writel(ctrl, idev->base + CORE_I2C_CTRL);
+>> +}
+>> +
+>> +static void mchp_corei2c_core_enable(struct mchp_corei2c_dev *idev)
+>> +{
+>> +    u8 ctrl = readl(idev->base + CORE_I2C_CTRL);
+>> +
+>> +    ctrl |= CTRL_ENS1;
+>> +    writel(ctrl, idev->base + CORE_I2C_CTRL);
+>> +}
+> 
+> Not sure why you would use readl/writel with an u8, surely an
+> readb/writeb be better?
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Sure, can try drop it to b.
 
----
+> 
+> 
+>> +static irqreturn_t mchp_corei2c_handle_isr(struct mchp_corei2c_dev 
+>> *idev)
+>> +{
+>> +    u32 status = idev->isr_status;
+>> +    u8 ctrl;
+>> +
+>> +    if (!idev->buf) {
+>> +        dev_warn(idev->dev, "unexpected interrupt\n");
+>> +        return IRQ_HANDLED;
+>> +    }
+> 
+> is IRQ_HANDLED correct here?
 
-changes in v3:
-- export HID_*_REPORT definitions in uapi as they are not following
-  the specs
+Hmm, the dev_warn is probably incorrect too. For the mpfs, the interrupt 
+line isn't shared, but the generic fabric core could be. Ill change this.
 
-changes in v2:
-- split the series by bpf/libbpf/hid/selftests and samples
----
- drivers/hid/hid-bpf.c    | 63 ++++++++++++++++++++++++++++++++++++++++
- drivers/hid/hid-core.c   |  3 +-
- include/linux/hid.h      | 12 ++------
- include/uapi/linux/hid.h | 10 +++++++
- 4 files changed, 76 insertions(+), 12 deletions(-)
+> 
+>> +
+>> +static int mchp_corei2c_probe(struct platform_device *pdev)
+>> +{
+>> +    struct mchp_corei2c_dev *idev = NULL;
+>> +    struct resource *res;
+>> +    int irq, ret;
+>> +    u32 val;
+>> +
+>> +    idev = devm_kzalloc(&pdev->dev, sizeof(*idev), GFP_KERNEL);
+>> +    if (!idev)
+>> +        return -ENOMEM;
+>> +
+>> +    idev->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+>> +    if (IS_ERR(idev->base))
+>> +        return PTR_ERR(idev->base);
+>> +
+>> +    irq = platform_get_irq(pdev, 0);
+>> +    if (irq < 0)
+>> +        return dev_err_probe(&pdev->dev, irq,
+>> +                     "missing interrupt resource\n");
+>> +
+>> +    idev->i2c_clk = devm_clk_get(&pdev->dev, NULL);
+>> +    if (IS_ERR(idev->i2c_clk))
+>> +        return dev_err_probe(&pdev->dev, PTR_ERR(idev->i2c_clk),
+>> +                     "missing clock\n");
+>> +
+>> +    idev->dev = &pdev->dev;
+>> +    init_completion(&idev->msg_complete);
+>> +    spin_lock_init(&idev->lock);
+>> +
+>> +    val = device_property_read_u32(idev->dev, "clock-frequency",
+>> +                       &idev->bus_clk_rate);
+>> +    if (val) {
+>> +        dev_info(&pdev->dev, "default to 100kHz\n");
+>> +        idev->bus_clk_rate = 100000;
+>> +    }
+>> +
+>> +    if (idev->bus_clk_rate > 400000)
+>> +        return dev_err_probe(&pdev->dev, -EINVAL,
+>> +                     "clock-frequency too high: %d\n",
+>> +                     idev->bus_clk_rate);
+>> +
+>> +    ret = devm_request_irq(&pdev->dev, irq, mchp_corei2c_isr, 
+>> IRQF_SHARED,
+>> +                   pdev->name, idev);
+>> +    if (ret)
+>> +        return dev_err_probe(&pdev->dev, ret,
+>> +                     "failed to claim irq %d\n", irq);
+>> +
+>> +    ret = clk_prepare_enable(idev->i2c_clk);
+>> +    if (ret)
+>> +        return dev_err_probe(&pdev->dev, ret,
+>> +                     "failed to enable clock\n");
+>> +
+>> +    ret = mchp_corei2c_init(idev);
+>> +    if (ret)
+>> +        return dev_err_probe(&pdev->dev, ret,
+>> +                     "failed to program clock divider\n");
+> 
+> going to leak a prepared clock from here on?
 
-diff --git a/drivers/hid/hid-bpf.c b/drivers/hid/hid-bpf.c
-index 650dd5e54919..66724aa2ff42 100644
---- a/drivers/hid/hid-bpf.c
-+++ b/drivers/hid/hid-bpf.c
-@@ -149,6 +149,68 @@ static int hid_bpf_set_bits(struct hid_device *hdev, u8 *buf, size_t buf_size, u
- 	return n;
- }
- 
-+static int hid_bpf_raw_request(struct hid_device *hdev, u8 *buf, size_t size,
-+			       u8 rtype, u8 reqtype)
-+{
-+	struct hid_report *report;
-+	struct hid_report_enum *report_enum;
-+	u8 *dma_data;
-+	u32 report_len;
-+	int ret;
-+
-+	/* check arguments */
-+	switch (rtype) {
-+	case HID_INPUT_REPORT:
-+	case HID_OUTPUT_REPORT:
-+	case HID_FEATURE_REPORT:
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	switch (reqtype) {
-+	case HID_REQ_GET_REPORT:
-+	case HID_REQ_GET_IDLE:
-+	case HID_REQ_GET_PROTOCOL:
-+	case HID_REQ_SET_REPORT:
-+	case HID_REQ_SET_IDLE:
-+	case HID_REQ_SET_PROTOCOL:
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (size < 1)
-+		return -EINVAL;
-+
-+	report_enum = hdev->report_enum + rtype;
-+	report = hid_get_report(report_enum, buf);
-+	if (!report)
-+		return -EINVAL;
-+
-+	report_len = hid_report_len(report);
-+
-+	if (size > report_len)
-+		size = report_len;
-+
-+	dma_data = kmemdup(buf, size, GFP_KERNEL);
-+	if (!dma_data)
-+		return -ENOMEM;
-+
-+	ret = hid_hw_raw_request(hdev,
-+				 dma_data[0],
-+				 dma_data,
-+				 size,
-+				 rtype,
-+				 reqtype);
-+
-+	if (ret > 0)
-+		memcpy(buf, dma_data, ret);
-+
-+	kfree(dma_data);
-+	return ret;
-+}
-+
- static int hid_bpf_run_progs(struct hid_device *hdev, struct hid_bpf_ctx_kern *ctx)
- {
- 	enum bpf_hid_attach_type type;
-@@ -252,6 +314,7 @@ int __init hid_bpf_module_init(void)
- 		.array_detach = hid_bpf_array_detach,
- 		.hid_get_bits = hid_bpf_get_bits,
- 		.hid_set_bits = hid_bpf_set_bits,
-+		.hid_raw_request  = hid_bpf_raw_request,
- 	};
- 
- 	bpf_hid_set_hooks(&hooks);
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 4f669dcddc08..f4b5d22f0831 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -1686,8 +1686,7 @@ int hid_set_field(struct hid_field *field, unsigned offset, __s32 value)
- }
- EXPORT_SYMBOL_GPL(hid_set_field);
- 
--static struct hid_report *hid_get_report(struct hid_report_enum *report_enum,
--		const u8 *data)
-+struct hid_report *hid_get_report(struct hid_report_enum *report_enum, const u8 *data)
- {
- 	struct hid_report *report;
- 	unsigned int n = 0;	/* Normally report number is 0 */
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index 7454e844324c..2f1b40d48265 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -316,15 +316,6 @@ struct hid_item {
- #define HID_BAT_ABSOLUTESTATEOFCHARGE	0x00850065
- 
- #define HID_VD_ASUS_CUSTOM_MEDIA_KEYS	0xff310076
--/*
-- * HID report types --- Ouch! HID spec says 1 2 3!
-- */
--
--#define HID_INPUT_REPORT	0
--#define HID_OUTPUT_REPORT	1
--#define HID_FEATURE_REPORT	2
--
--#define HID_REPORT_TYPES	3
- 
- /*
-  * HID connect requests
-@@ -344,7 +335,7 @@ struct hid_item {
-  * HID device quirks.
-  */
- 
--/* 
-+/*
-  * Increase this if you need to configure more HID quirks at module load time
-  */
- #define MAX_USBHID_BOOT_QUIRKS 4
-@@ -946,6 +937,7 @@ __u32 hid_field_extract(const struct hid_device *hid, __u8 *report,
- 		     unsigned offset, unsigned n);
- void implement(const struct hid_device *hid, u8 *report, unsigned int offset, unsigned int n,
- 	       u32 value);
-+struct hid_report *hid_get_report(struct hid_report_enum *report_enum, const u8 *data);
- 
- #ifdef CONFIG_PM
- int hid_driver_suspend(struct hid_device *hdev, pm_message_t state);
-diff --git a/include/uapi/linux/hid.h b/include/uapi/linux/hid.h
-index b34492a87a8a..bb690343cf9a 100644
---- a/include/uapi/linux/hid.h
-+++ b/include/uapi/linux/hid.h
-@@ -42,6 +42,16 @@
- #define USB_INTERFACE_PROTOCOL_KEYBOARD	1
- #define USB_INTERFACE_PROTOCOL_MOUSE	2
- 
-+/*
-+ * HID report types --- Ouch! HID spec says 1 2 3!
-+ */
-+
-+#define HID_INPUT_REPORT	0
-+#define HID_OUTPUT_REPORT	1
-+#define HID_FEATURE_REPORT	2
-+
-+#define HID_REPORT_TYPES	3
-+
- /*
-  * HID class requests
-  */
--- 
-2.35.1
+Aye, good spot. Thanks.
 
+>> +    i2c_set_adapdata(&idev->adapter, idev);
+>> +    snprintf(idev->adapter.name, sizeof(idev->adapter.name),
+>> +         "Microchip I2C hw bus");
+>> +    idev->adapter.owner = THIS_MODULE;
+>> +    idev->adapter.algo = &mchp_corei2c_algo;
+>> +    idev->adapter.dev.parent = &pdev->dev;
+>> +    idev->adapter.dev.of_node = pdev->dev.of_node;
+>> +
+>> +    platform_set_drvdata(pdev, idev);
+>> +
+>> +    ret = i2c_add_adapter(&idev->adapter);
+>> +    if (ret) {
+>> +        clk_disable_unprepare(idev->i2c_clk);
+>> +        return ret;
+>> +    }
+>> +
+>> +    dev_info(&pdev->dev, "Microchip I2C Probe Complete\n");
+> 
+> not sure if necessary, doesn't the i2c core also announce?
+
+The only thing I see on boot is this, but I'll take a look and see if I 
+can do this via the core.
+
+> 
+>> +    return 0;
+>> +}
+>> +
+>> +static int mchp_corei2c_remove(struct platform_device *pdev)
+>> +{
+>> +    struct mchp_corei2c_dev *idev = platform_get_drvdata(pdev);
+>> +
+>> +    clk_disable_unprepare(idev->i2c_clk);
+>> +    i2c_del_adapter(&idev->adapter);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct of_device_id mchp_corei2c_of_match[] = {
+>> +    { .compatible = "microchip,mpfs-i2c" },
+>> +    { .compatible = "microchip,corei2c-rtl-v7" },
+>> +    {},
+>> +};
+>> +MODULE_DEVICE_TABLE(of, mchp_corei2c_of_match);
+>> +
+>> +static struct platform_driver mchp_corei2c_driver = {
+>> +    .probe = mchp_corei2c_probe,
+>> +    .remove = mchp_corei2c_remove,
+>> +    .driver = {
+>> +        .name = "microchip-corei2c",
+>> +        .of_match_table = mchp_corei2c_of_match,
+>> +    },
+>> +};
+>> +
+>> +module_platform_driver(mchp_corei2c_driver);
+>> +
+>> +MODULE_DESCRIPTION("Microchip CoreI2C bus driver");
+>> +MODULE_AUTHOR("Daire McNamara <daire.mcnamara@microchip.com>");
+>> +MODULE_AUTHOR("Conor Dooley <conor.dooley@microchip.com>");
+>> +MODULE_LICENSE("GPL v2");
+> 
+> 

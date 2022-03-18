@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D8A4DD1AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E5C4DD1B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:11:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiCRAM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 20:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
+        id S230459AbiCRANB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 20:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiCRAM2 (ORCPT
+        with ESMTP id S230448AbiCRAM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 20:12:28 -0400
+        Thu, 17 Mar 2022 20:12:59 -0400
 Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B21E29CE;
-        Thu, 17 Mar 2022 17:11:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5B4141479;
+        Thu, 17 Mar 2022 17:11:41 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 5B5F6E0063;
-        Thu, 17 Mar 2022 17:11:07 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id 7A512E007A;
+        Thu, 17 Mar 2022 17:11:11 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id pzRlI9UiGHba; Thu, 17 Mar 2022 17:11:06 -0700 (PDT)
+        with ESMTP id HS29Kj_9xdt9; Thu, 17 Mar 2022 17:11:10 -0700 (PDT)
 From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 To:     Hans de Goede <hdegoede@redhat.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
@@ -30,13 +30,12 @@ Cc:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         Purism Kernel Team <kernel@puri.sm>,
         Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH 1/4] power: supply: max17042_battery: Add unit conversion macros
-Date:   Fri, 18 Mar 2022 01:10:45 +0100
-Message-Id: <20220318001048.20922-2-sebastian.krzyszkowiak@puri.sm>
+Subject: [PATCH 2/4] power: supply: max17042_battery: use ModelCfg refresh on max17055
+Date:   Fri, 18 Mar 2022 01:10:46 +0100
+Message-Id: <20220318001048.20922-3-sebastian.krzyszkowiak@puri.sm>
 In-Reply-To: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
 References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -47,170 +46,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of sprinkling the code with magic numbers, put the unit
-definitions used by the gauge into a set of macros. Macros are
-used instead of simple defines in order to not require floating
-point operations for divisions.
+Unlike other models, max17055 doesn't require cell characterization
+data and operates on smaller amount of input variables (DesignCap,
+VEmpty, IChgTerm and ModelCfg). Input data can already be filled in
+by max17042_override_por_values, however model refresh bit has to be
+set after adjusting input variables in order to make them apply.
 
 Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 ---
- drivers/power/supply/max17042_battery.c | 40 +++++++++++++++----------
- 1 file changed, 24 insertions(+), 16 deletions(-)
+ drivers/power/supply/max17042_battery.c | 73 +++++++++++++++----------
+ include/linux/power/max17042_battery.h  |  3 +
+ 2 files changed, 48 insertions(+), 28 deletions(-)
 
 diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index ab031bbfbe78..c019d6c52363 100644
+index c019d6c52363..c39250349a1d 100644
 --- a/drivers/power/supply/max17042_battery.c
 +++ b/drivers/power/supply/max17042_battery.c
-@@ -51,6 +51,15 @@
- 
- #define MAX17042_VMAX_TOLERANCE		50 /* 50 mV */
- 
-+#define MAX17042_CURRENT_LSB		1562500ll /* µV */
-+#define MAX17042_CURRENT_RSENSE(x)	(x * MAX17042_CURRENT_LSB) /* µV */
-+#define MAX17042_CAPACITY_LSB		5000000ll /* µVh */
-+#define MAX17042_CAPACITY_RSENSE(x)	(x * MAX17042_CAPACITY_LSB) /* µVh */
-+#define MAX17042_TIME(x)		(x * 5625 / 1000) /* s */
-+#define MAX17042_VOLTAGE(x)		(x * 625 / 8) /* µV */
-+#define MAX17042_RESISTANCE(x)		(x / 4096) /* Ω */
-+#define MAX17042_TEMPERATURE(x)		(x / 256) /* °C */
+@@ -806,6 +806,13 @@ static inline void max17042_override_por_values(struct max17042_chip *chip)
+ 	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055)) {
+ 		max17042_override_por(map, MAX17047_V_empty, config->vempty);
+ 	}
 +
- struct max17042_chip {
- 	struct i2c_client *client;
- 	struct regmap *regmap;
-@@ -103,8 +112,7 @@ static int max17042_get_temperature(struct max17042_chip *chip, int *temp)
- 
- 	*temp = sign_extend32(data, 15);
- 	/* The value is converted into deci-centigrade scale */
--	/* Units of LSB = 1 / 256 degree Celsius */
--	*temp = *temp * 10 / 256;
-+	*temp = MAX17042_TEMPERATURE(*temp * 10);
- 	return 0;
++	if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055) {
++		max17042_override_por(map, MAX17055_ModelCfg, config->model_cfg);
++		// VChg is 1 by default, so allow it to be set to 0
++		regmap_update_bits(map, MAX17055_ModelCfg,
++				MAX17055_MODELCFG_VCHG_BIT, config->model_cfg);
++	}
  }
  
-@@ -161,7 +169,7 @@ static int max17042_get_status(struct max17042_chip *chip, int *status)
- 		return ret;
+ static int max17042_init_chip(struct max17042_chip *chip)
+@@ -814,44 +821,54 @@ static int max17042_init_chip(struct max17042_chip *chip)
+ 	int ret;
  
- 	avg_current = sign_extend32(data, 15);
--	avg_current *= 1562500 / chip->pdata->r_sns;
-+	avg_current *= MAX17042_CURRENT_LSB / chip->pdata->r_sns;
+ 	max17042_override_por_values(chip);
++
++	if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055) {
++		regmap_write_bits(map, MAX17055_ModelCfg,
++				  MAX17055_MODELCFG_REFRESH_BIT, MAX17055_MODELCFG_REFRESH_BIT);
++	}
++
+ 	/* After Power up, the MAX17042 requires 500mS in order
+ 	 * to perform signal debouncing and initial SOC reporting
+ 	 */
+ 	msleep(500);
  
- 	if (avg_current > 0)
- 		*status = POWER_SUPPLY_STATUS_CHARGING;
-@@ -181,7 +189,7 @@ static int max17042_get_battery_health(struct max17042_chip *chip, int *health)
- 		goto health_error;
+-	/* Initialize configuration */
+-	max17042_write_config_regs(chip);
+-
+-	/* write cell characterization data */
+-	ret = max17042_init_model(chip);
+-	if (ret) {
+-		dev_err(&chip->client->dev, "%s init failed\n",
+-			__func__);
+-		return -EIO;
+-	}
++	if ((chip->chip_type == MAXIM_DEVICE_TYPE_MAX17042) ||
++	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17047) ||
++	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17050)) {
++		/* Initialize configuration */
++		max17042_write_config_regs(chip);
++
++		/* write cell characterization data */
++		ret = max17042_init_model(chip);
++		if (ret) {
++			dev_err(&chip->client->dev, "%s init failed\n",
++				__func__);
++			return -EIO;
++		}
  
- 	/* bits [0-3] unused */
--	vavg = val * 625 / 8;
-+	vavg = MAX17042_VOLTAGE(val);
- 	/* Convert to millivolts */
- 	vavg /= 1000;
+-	ret = max17042_verify_model_lock(chip);
+-	if (ret) {
+-		dev_err(&chip->client->dev, "%s lock verify failed\n",
+-			__func__);
+-		return -EIO;
+-	}
+-	/* write custom parameters */
+-	max17042_write_custom_regs(chip);
++		ret = max17042_verify_model_lock(chip);
++		if (ret) {
++			dev_err(&chip->client->dev, "%s lock verify failed\n",
++				__func__);
++			return -EIO;
++		}
++		/* write custom parameters */
++		max17042_write_custom_regs(chip);
  
-@@ -190,7 +198,7 @@ static int max17042_get_battery_health(struct max17042_chip *chip, int *health)
- 		goto health_error;
+-	/* update capacity params */
+-	max17042_update_capacity_regs(chip);
++		/* update capacity params */
++		max17042_update_capacity_regs(chip);
  
- 	/* bits [0-3] unused */
--	vbatt = val * 625 / 8;
-+	vbatt = MAX17042_VOLTAGE(val);
- 	/* Convert to millivolts */
- 	vbatt /= 1000;
+-	/* delay must be atleast 350mS to allow VFSOC
+-	 * to be calculated from the new configuration
+-	 */
+-	msleep(350);
++		/* delay must be at least 350mS to allow VFSOC
++		 * to be calculated from the new configuration
++		 */
++		msleep(350);
  
-@@ -297,21 +305,21 @@ static int max17042_get_property(struct power_supply *psy,
- 		if (ret < 0)
- 			return ret;
+-	/* reset vfsoc0 reg */
+-	max17042_reset_vfsoc0_reg(chip);
++		/* reset vfsoc0 reg */
++		max17042_reset_vfsoc0_reg(chip);
  
--		val->intval = data * 625 / 8;
-+		val->intval = MAX17042_VOLTAGE(data);
- 		break;
- 	case POWER_SUPPLY_PROP_VOLTAGE_AVG:
- 		ret = regmap_read(map, MAX17042_AvgVCELL, &data);
- 		if (ret < 0)
- 			return ret;
+-	/* load new capacity params */
+-	max17042_load_new_capacity_params(chip);
++		/* load new capacity params */
++		max17042_load_new_capacity_params(chip);
++	}
  
--		val->intval = data * 625 / 8;
-+		val->intval = MAX17042_VOLTAGE(data);
- 		break;
- 	case POWER_SUPPLY_PROP_VOLTAGE_OCV:
- 		ret = regmap_read(map, MAX17042_OCVInternal, &data);
- 		if (ret < 0)
- 			return ret;
+ 	/* Init complete, Clear the POR bit */
+ 	regmap_update_bits(map, MAX17042_STATUS, STATUS_POR_BIT, 0x0);
+diff --git a/include/linux/power/max17042_battery.h b/include/linux/power/max17042_battery.h
+index c417abd2ab70..6943921cab5e 100644
+--- a/include/linux/power/max17042_battery.h
++++ b/include/linux/power/max17042_battery.h
+@@ -23,6 +23,8 @@
  
--		val->intval = data * 625 / 8;
-+		val->intval = MAX17042_VOLTAGE(data);
- 		break;
- 	case POWER_SUPPLY_PROP_CAPACITY:
- 		if (chip->pdata->enable_current_sense)
-@@ -328,7 +336,7 @@ static int max17042_get_property(struct power_supply *psy,
- 		if (ret < 0)
- 			return ret;
+ #define MAX17042_CHARACTERIZATION_DATA_SIZE 48
  
--		data64 = data * 5000000ll;
-+		data64 = MAX17042_CAPACITY_RSENSE(data);
- 		do_div(data64, chip->pdata->r_sns);
- 		val->intval = data64;
- 		break;
-@@ -337,7 +345,7 @@ static int max17042_get_property(struct power_supply *psy,
- 		if (ret < 0)
- 			return ret;
++#define MAX17055_MODELCFG_REFRESH_BIT	BIT(15)
++
+ enum max17042_register {
+ 	MAX17042_STATUS		= 0x00,
+ 	MAX17042_VALRT_Th	= 0x01,
+@@ -208,6 +210,7 @@ struct max17042_config_data {
+ 	u16	full_soc_thresh;	/* 0x13 */
+ 	u16	design_cap;	/* 0x18 */
+ 	u16	ichgt_term;	/* 0x1E */
++	u16	model_cfg;	/* 0xDB */
  
--		data64 = data * 5000000ll;
-+		data64 = MAX17042_CAPACITY_RSENSE(data);
- 		do_div(data64, chip->pdata->r_sns);
- 		val->intval = data64;
- 		break;
-@@ -346,7 +354,7 @@ static int max17042_get_property(struct power_supply *psy,
- 		if (ret < 0)
- 			return ret;
- 
--		data64 = data * 5000000ll;
-+		data64 = MAX17042_CAPACITY_RSENSE(data);
- 		do_div(data64, chip->pdata->r_sns);
- 		val->intval = data64;
- 		break;
-@@ -355,7 +363,7 @@ static int max17042_get_property(struct power_supply *psy,
- 		if (ret < 0)
- 			return ret;
- 
--		data64 = sign_extend64(data, 15) * 5000000ll;
-+		data64 = MAX17042_CAPACITY_RSENSE(sign_extend64(data, 15));
- 		val->intval = div_s64(data64, chip->pdata->r_sns);
- 		break;
- 	case POWER_SUPPLY_PROP_TEMP:
-@@ -397,7 +405,7 @@ static int max17042_get_property(struct power_supply *psy,
- 			if (ret < 0)
- 				return ret;
- 
--			data64 = sign_extend64(data, 15) * 1562500ll;
-+			data64 = MAX17042_CURRENT_RSENSE(sign_extend64(data, 15));
- 			val->intval = div_s64(data64, chip->pdata->r_sns);
- 		} else {
- 			return -EINVAL;
-@@ -409,7 +417,7 @@ static int max17042_get_property(struct power_supply *psy,
- 			if (ret < 0)
- 				return ret;
- 
--			data64 = sign_extend64(data, 15) * 1562500ll;
-+			data64 = MAX17042_CURRENT_RSENSE(sign_extend64(data, 15));
- 			val->intval = div_s64(data64, chip->pdata->r_sns);
- 		} else {
- 			return -EINVAL;
-@@ -420,7 +428,7 @@ static int max17042_get_property(struct power_supply *psy,
- 		if (ret < 0)
- 			return ret;
- 
--		data64 = data * 1562500ll;
-+		data64 = MAX17042_CURRENT_RSENSE(data);
- 		val->intval = div_s64(data64, chip->pdata->r_sns);
- 		break;
- 	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
-@@ -428,7 +436,7 @@ static int max17042_get_property(struct power_supply *psy,
- 		if (ret < 0)
- 			return ret;
- 
--		val->intval = data * 5625 / 1000;
-+		val->intval = MAX17042_TIME(data);
- 		break;
- 	default:
- 		return -EINVAL;
+ 	/* MG3 config */
+ 	u16	at_rate;	/* 0x04 */
 -- 
 2.35.1
 

@@ -2,169 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF284DDA02
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F804DDA08
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236445AbiCRM51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        id S236458AbiCRM7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234818AbiCRM5Y (ORCPT
+        with ESMTP id S234085AbiCRM7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:57:24 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52DC23457A;
-        Fri, 18 Mar 2022 05:56:05 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d15so5626232qty.8;
-        Fri, 18 Mar 2022 05:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=o+4kjV5M7AAhRV6+HUHDlhX1FtegGYf686kx5iPLbhM=;
-        b=axBLgwuquigWzrQ1tKUH1ihyDMq/qqvK0jUvPmXNAC7iR/iUu2O0ZM8nxF7wc0eePP
-         HJj/1kSdWGiVc987xgqdV+5kDO3K5hA1bKKmWk8FEYPcjFQwvxU5/ZVYiis5m1RPt3i8
-         ty10FRALip3F8QFywhetmrVk99HiyqbHe/D0Ta1maP1fqi41EZc9+olTylIaujbyxO4a
-         mDQ8NGNISmBK2IKuXUyNmBBF8Ib7Hv8ex27+xsTv9meKzBPUGG2uLkI/k79ang9CmlUe
-         OkwWVtA6upsTm3XOm33SlBAqwm4jgjIk+r2XcB6MjNvIzMrlpkfqA0n1JeU5rfAwN8ZM
-         wOsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=o+4kjV5M7AAhRV6+HUHDlhX1FtegGYf686kx5iPLbhM=;
-        b=ZsmXKCMShVxKMpRdXvouDEw1PJA4U4xJlrWFbgliOx2oKLWJM258hQWojP82C6nrXB
-         P0RjDNf3oqmZ1DYptezNS7a3bdF6Reov1++hEfu+OHZuwNjjV63SoBEW3VxDeFeeuU/r
-         s+qpAc1MmWFmsI7e1SQfgqj6zAPRz921u2W1YtH8NzZNNaHuCtY6E/k8czA+fdIYSvm1
-         rZ79r6IdrK5jW83VMfGMwx3J5Ok9GdkL85BhJ1NdzUH/cWRSlIsoEBuiMhR/VqYHCFAg
-         qMX2x0S35W7nivujHsehXygqgwN8dRQgEUS8fm8de6fjceJcqoFQ8IhApLYwB4wZDRcp
-         ELpg==
-X-Gm-Message-State: AOAM530klvlsdY7dSs/OH6Oe639tCqUhUGgjzO5YzxhHYpqla71gxDZy
-        YdQrGrIQah56DfolxAyTj8Q=
-X-Google-Smtp-Source: ABdhPJzQfTpBIudr3YDujX+wxBBXMN1W3gFT+2UU7kFEAwvObkd7vERyCRDjWFQizUEu2sOGQYxgvQ==
-X-Received: by 2002:a05:622a:8e:b0:2e1:fee4:8ca2 with SMTP id o14-20020a05622a008e00b002e1fee48ca2mr3888357qtw.431.1647608164801;
-        Fri, 18 Mar 2022 05:56:04 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id r14-20020ac85c8e000000b002e1d62ba775sm5690654qta.21.2022.03.18.05.56.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 05:56:03 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailauth.nyi.internal (Postfix) with ESMTP id C8FCF27C0054;
-        Fri, 18 Mar 2022 08:56:02 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 18 Mar 2022 08:56:02 -0400
-X-ME-Sender: <xms:YIE0YjJve060_gNtvlACuxZdgw8GAcIFU-XLwr8pG24ZVDukXIN_bw>
-    <xme:YIE0YnJgg3ZwDTs1dKRTCiyVxxA8IF33iJyLPQlxMMQLajAzEUjYekdXg15PtST99
-    g-FUEf_1wylh1C_Qg>
-X-ME-Received: <xmr:YIE0YrvUDjs-uRFxBOsfVhPCtUKNiB6eYpmw4mLubBhhANBUDM-lrkU4K-U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefiedggeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
-    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
-    htvghrnhepvdelieegudfggeevjefhjeevueevieetjeeikedvgfejfeduheefhffggedv
-    geejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
-    hoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieeg
-    qddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigi
-    hmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:YIE0YsYBuAPDft-ELbq0Jl5iKH9NCF6XLzMSGgwd72TI7-nSPv9o1Q>
-    <xmx:YIE0YqZpvHlvwwOy2Cnb7xoLikD8VF1lDXMNbPWxvKoAKzCBT1GUXg>
-    <xmx:YIE0YgC8EvZ47TqrTAmX2ZWJ4vn36L1GTtBtYiJDNGlxNlS-ZTdiaQ>
-    <xmx:YoE0Ygx40GUudZGYICpS4_Jd5IymmQs0w5bgDB7DqVVERR1CctFXzYYyTuo>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Mar 2022 08:56:00 -0400 (EDT)
-Date:   Fri, 18 Mar 2022 20:55:32 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>, linux-arch@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow
- path
-Message-ID: <YjSBRNxzaE9c+F/1@boqun-archlinux>
-References: <20220316224548.500123-1-namhyung@kernel.org>
- <20220316224548.500123-3-namhyung@kernel.org>
+        Fri, 18 Mar 2022 08:59:38 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 971C82AA879;
+        Fri, 18 Mar 2022 05:58:17 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:34786.918040143
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-117.13.170.79 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id E2DA4100132;
+        Fri, 18 Mar 2022 20:58:12 +0800 (CST)
+Received: from  ([117.13.170.79])
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 42c959ff59a34243a620c7ace1295b92 for elder@ieee.org;
+        Fri, 18 Mar 2022 20:58:13 CST
+X-Transaction-ID: 42c959ff59a34243a620c7ace1295b92
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 117.13.170.79
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+Subject: Re: [PATCH v6] staging: greybus: introduce pwm_ops::apply
+To:     Alex Elder <elder@linaro.org>, johan@kernel.org, elder@kernel.org,
+        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        elder@ieee.org
+References: <1647597432-27586-1-git-send-email-chensong_2000@189.cn>
+ <a4b3ad02-f1c7-c13b-7740-d5b9982bd7c7@linaro.org>
+From:   chensong <chensong_2000@189.cn>
+Message-ID: <a8b8def4-dbf0-cfd0-d456-265ab4fc8d7f@189.cn>
+Date:   Fri, 18 Mar 2022 20:58:12 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220316224548.500123-3-namhyung@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a4b3ad02-f1c7-c13b-7740-d5b9982bd7c7@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 03:45:48PM -0700, Namhyung Kim wrote:
-[...]
-> @@ -209,6 +210,7 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
->  								long timeout)
->  {
->  	struct semaphore_waiter waiter;
-> +	bool tracing = false;
->  
->  	list_add_tail(&waiter.list, &sem->wait_list);
->  	waiter.task = current;
-> @@ -220,18 +222,28 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
->  		if (unlikely(timeout <= 0))
->  			goto timed_out;
->  		__set_current_state(state);
-> +		if (!tracing) {
-> +			trace_contention_begin(sem, 0);
+hi Alex,
 
-This looks a littl ugly ;-/ Maybe we can rename __down_common() to
-___down_common() and implement __down_common() as:
+On 2022/3/18 下午8:15, Alex Elder wrote:
+> On 3/18/22 4:57 AM, Song Chen wrote:
+>> Introduce newer .apply function in pwm_ops to replace legacy operations
+>> including enable, disable, config and set_polarity.
+>>
+>> This guarantees atomic changes of the pwm controller configuration.
+>>
+>> Signed-off-by: Song Chen <chensong_2000@189.cn>
+> 
+> I had another comment suggestion but you've been through enough.
+> Thanks for working this to completion.
 
-	static inline int __sched __down_common(...)
-	{
-		int ret;
-		trace_contention_begin(sem, 0);
-		ret = ___down_common(...);
-		trace_contention_end(sem, ret);
-		return ret;
-	}
+sorry about that, i probably missed it somehow. Thanks for the 
+understanding.
 
-Thoughts?
+Song
 
-Regards,
-Boqun
-
-> +			tracing = true;
-> +		}
->  		raw_spin_unlock_irq(&sem->lock);
->  		timeout = schedule_timeout(timeout);
->  		raw_spin_lock_irq(&sem->lock);
-> -		if (waiter.up)
-> +		if (waiter.up) {
-> +			trace_contention_end(sem, 0);
->  			return 0;
-> +		}
->  	}
->  
->   timed_out:
-> +	if (tracing)
-> +		trace_contention_end(sem, -ETIME);
->  	list_del(&waiter.list);
->  	return -ETIME;
->  
->   interrupted:
-> +	if (tracing)
-> +		trace_contention_end(sem, -EINTR);
->  	list_del(&waiter.list);
->  	return -EINTR;
->  }
-> -- 
-> 2.35.1.894.gb6a874cedc-goog
+> 
+> Reviewed-by: Alex Elder <elder@linaro.org>
+> 
+>>
+>> ---
+>> v2:
+>> 1, define duty_cycle and period as u64 in gb_pwm_config_operation.
+>> 2, define duty and period as u64 in gb_pwm_config_request.
+>> 3, disable before configuring duty and period if the eventual goal
+>>     is a disabled state.
+>>
+>> v3:
+>> Regarding duty_cycle and period, I read more discussion in this thread,
+>> min, warn or -EINVAL, seems no perfect way acceptable for everyone.
+>> How about we limit their value to INT_MAX and throw a warning at the
+>> same time when they are wrong?
+>>
+>> v4:
+>> 1, explain why legacy operations are replaced.
+>> 2, cap the value of period and duty to U32_MAX.
+>>
+>> v5:
+>> 1, revise commit message.
+>>
+>> v6:
+>> 1, revise commit message.
+>> 2, explain why capping the value of period and duty to U32_MAX in
+>>     comment.
+>> ---
+>>   drivers/staging/greybus/pwm.c | 64 ++++++++++++++++++++++-------------
+>>   1 file changed, 40 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/drivers/staging/greybus/pwm.c 
+>> b/drivers/staging/greybus/pwm.c
+>> index 891a6a672378..ad20ec24031e 100644
+>> --- a/drivers/staging/greybus/pwm.c
+>> +++ b/drivers/staging/greybus/pwm.c
+>> @@ -204,43 +204,59 @@ static void gb_pwm_free(struct pwm_chip *chip, 
+>> struct pwm_device *pwm)
+>>       gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
+>>   }
+>> -static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
+>> -             int duty_ns, int period_ns)
+>> +static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+>> +            const struct pwm_state *state)
+>>   {
+>> +    int err;
+>> +    bool enabled = pwm->state.enabled;
+>> +    u64 period = state->period;
+>> +    u64 duty_cycle = state->duty_cycle;
+>>       struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+>> -    return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, 
+>> period_ns);
+>> -};
+>> +    /* Set polarity */
+>> +    if (state->polarity != pwm->state.polarity) {
+>> +        if (enabled) {
+>> +            gb_pwm_disable_operation(pwmc, pwm->hwpwm);
+>> +            enabled = false;
+>> +        }
+>> +        err = gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, 
+>> state->polarity);
+>> +        if (err)
+>> +            return err;
+>> +    }
+>> -static int gb_pwm_set_polarity(struct pwm_chip *chip, struct 
+>> pwm_device *pwm,
+>> -                   enum pwm_polarity polarity)
+>> -{
+>> -    struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+>> +    if (!state->enabled) {
+>> +        if (enabled)
+>> +            gb_pwm_disable_operation(pwmc, pwm->hwpwm);
+>> +        return 0;
+>> +    }
+>> -    return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
+>> -};
+>> +    /*
+>> +     * Set period and duty cycle
+>> +     *
+>> +     * PWM privodes 64-bit period and duty_cycle, but greybus only 
+>> accepts
+>> +     * 32-bit, so their values have to be limited to U32_MAX.
+>> +     */
+>> +    if (period > U32_MAX)
+>> +        period = U32_MAX;
+>> -static int gb_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
+>> -{
+>> -    struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+>> +    if (duty_cycle > period)
+>> +        duty_cycle = period;
+>> -    return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
+>> -};
+>> +    err = gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_cycle, period);
+>> +    if (err)
+>> +        return err;
+>> -static void gb_pwm_disable(struct pwm_chip *chip, struct pwm_device 
+>> *pwm)
+>> -{
+>> -    struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+>> +    /* enable/disable */
+>> +    if (!enabled)
+>> +        return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
+>> -    gb_pwm_disable_operation(pwmc, pwm->hwpwm);
+>> -};
+>> +    return 0;
+>> +}
+>>   static const struct pwm_ops gb_pwm_ops = {
+>>       .request = gb_pwm_request,
+>>       .free = gb_pwm_free,
+>> -    .config = gb_pwm_config,
+>> -    .set_polarity = gb_pwm_set_polarity,
+>> -    .enable = gb_pwm_enable,
+>> -    .disable = gb_pwm_disable,
+>> +    .apply = gb_pwm_apply,
+>>       .owner = THIS_MODULE,
+>>   };
+> 
 > 

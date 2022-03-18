@@ -2,117 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304E54DE1A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 20:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9603B4DE1B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 20:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240304AbiCRTOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 15:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
+        id S240327AbiCRTXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 15:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbiCRTOt (ORCPT
+        with ESMTP id S239449AbiCRTXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 15:14:49 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596D0F1EB0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:13:28 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id k6so551578plg.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:13:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bXrcO8k9WHY4LEyS2fhRDME4/GfOMRGHgZg4UE14WTs=;
-        b=iebizR8O8be3nBzdLU3hoQPgO8RnJmvjRTgTSwdJEiW6W336peFm1HV1Jr7nla8WAF
-         igKypm4cZ8RxRETI7VvpNZxw7VWQv73Rv1sJT7IWa7F9MjuIzfmsxxwdZk3wwlpT35sM
-         t8sT7WSKQf8GoicCzPsAD8gFAdcj5VpwpRAtJSDVnPVHjuiTeXLe7D4c7Iczx0WfFLgv
-         tRMSQ7R3yAKpW3pd+47LKynEakBQFZJKTyjxfmEa1+mdxiZDFeg6pESGA6sQpUbDTcUB
-         34YihZve2/QExHctdZDYFMHbhD623eOzXTHGCxiT3ccMaZadchIJjvz3HYJAKB3iJu/9
-         Umjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bXrcO8k9WHY4LEyS2fhRDME4/GfOMRGHgZg4UE14WTs=;
-        b=jHjjQnOx6iGvb/jNKfH/YO5LPq3I36iAEIG0xXyT+gdCa2Z2oNCdBrkqTHq09vuu/f
-         pXFmUFj7yCIZS6VbJtyzP/IR/hNlU+QyntDwJehPcVy5u2jLMOOX8/tNksPQzar6azuE
-         SEfBE4LL3l9BFPj8FThWpB6IMI1D+g3Go4hLu93zKX0XrFGY4Fr8mDPbVe+Wfi+VxUGZ
-         TdCWamNoCcJt9fjsJpRNaTMHz6HAC0b1GTj4+nL8b5UYZN1OXiaX4XsA799ypcG0Tlwi
-         bkZFfHso5XS4P4BjEroBO/ST7igcW8cNv4BhpvV9A/NrdqYOWIaCFkSwwY8s+4XsE936
-         E16A==
-X-Gm-Message-State: AOAM530iVZvCwc/FD/zEqJ3ogQQSY1qm4OQZ8AyoNk9jfTTIDo9/Lajw
-        uEeQW6AJSYCX7VMBA90f+7Bu9SPkzEg=
-X-Google-Smtp-Source: ABdhPJyGY9WMAzvWGk/JQ0eDzzUm2lvUtKvFkWC6DgcYE4wSrSoj+6fyzAL7UGXiUPIyOTdbB40Z3A==
-X-Received: by 2002:a17:902:ea04:b0:152:7cf:1b85 with SMTP id s4-20020a170902ea0400b0015207cf1b85mr959898plg.80.1647630807714;
-        Fri, 18 Mar 2022 12:13:27 -0700 (PDT)
-Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:a64c:198c:4e57:caeb])
-        by smtp.gmail.com with ESMTPSA id b13-20020a056a00114d00b004c122b90703sm10325451pfm.27.2022.03.18.12.13.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 12:13:27 -0700 (PDT)
-From:   Daeho Jeong <daeho43@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Daeho Jeong <daehojeong@google.com>
-Subject: [PATCH] f2fs: make gc_urgent and gc_segment_mode sysfs node readable
-Date:   Fri, 18 Mar 2022 12:13:23 -0700
-Message-Id: <20220318191323.4167565-1-daeho43@gmail.com>
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+        Fri, 18 Mar 2022 15:23:09 -0400
+X-Greylist: delayed 462 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Mar 2022 12:21:47 PDT
+Received: from smtp68.ord1d.emailsrvr.com (smtp68.ord1d.emailsrvr.com [184.106.54.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E562EDC0D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:21:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
+        s=20190130-41we5z8j; t=1647630844;
+        bh=j+0ohAmi9HWZJArU6TnTPJhcATINnKKBBR79VYiub/w=;
+        h=From:To:Subject:Date:From;
+        b=gqSkprVJmFWd4GEIZOXeYSz0EmXR1DWvRwO4QhzMBlHx6c+KmHZ8zRbY4vj9B+Jh5
+         PmJon/V5ZAfT64o7LXHjroz3eFSBGyyJSYjtL6S8JYQR5R0LuYK7b9Tkh/hpeRnmlJ
+         m30udf8nDVtNGE8ccRW1FFLCVRx2LUiMT49SMDzY=
+X-Auth-ID: abbotti@mev.co.uk
+Received: by smtp9.relay.ord1d.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id BA025C015A;
+        Fri, 18 Mar 2022 15:14:03 -0400 (EDT)
+From:   Ian Abbott <abbotti@mev.co.uk>
+To:     linux-man@vger.kernel.org
+Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        Ian Abbott <abbotti@mev.co.uk>
+Subject: [PATCH] ioctl_userfaultfd.2: Corrections for returned .ioctls members
+Date:   Fri, 18 Mar 2022 19:13:43 +0000
+Message-Id: <20220318191343.72812-1-abbotti@mev.co.uk>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Classification-ID: dae17b9c-d724-4394-a06a-be3edb530318-1-1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daeho Jeong <daehojeong@google.com>
+Support for the `UFFDIO_WRITEPROTECT` operation is not indicated in the
+`ioctls` member of `struct uffdio_api`.  It is indicated in the `ioctls`
+member of `struct uffdio_register` along with indications of support for
+the `UFFDIO_COPY`, `UFFDIO_WAKE` and `UFFDIO_ZEROPAGE` operations (and
+also the `UFFDIO_CONTINUE` operation supported since Linux 5.13 but
+that is not documented by this man page yet.)
 
-Changed a way of showing values of them to use strings.
-
-Signed-off-by: Daeho Jeong <daehojeong@google.com>
+Fixes: f559fa36a678 ("ioctl_userfaultfd.2: Add write-protect mode docs")
+Signed-off-by: Ian Abbott <abbotti@mev.co.uk>
 ---
- fs/f2fs/sysfs.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ man2/ioctl_userfaultfd.2 | 27 ++++++++++++++++++++-------
+ 1 file changed, 20 insertions(+), 7 deletions(-)
 
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index fe29bcb70f46..fb950a13375f 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -41,6 +41,16 @@ enum {
- 	ATGC_INFO,	/* struct atgc_management */
- };
- 
-+static const char *gc_mode_names[MAX_GC_MODE] = {
-+	"GC_NORMAL",
-+	"GC_IDLE_CB",
-+	"GC_IDLE_GREEDY",
-+	"GC_IDLE_AT",
-+	"GC_URGENT_HIGH",
-+	"GC_URGENT_LOW",
-+	"GC_URGENT_MID"
-+};
-+
- struct f2fs_attr {
- 	struct attribute attr;
- 	ssize_t (*show)(struct f2fs_attr *, struct f2fs_sb_info *, char *);
-@@ -316,8 +326,13 @@ static ssize_t f2fs_sbi_show(struct f2fs_attr *a,
- 		return sysfs_emit(buf, "%u\n", sbi->compr_new_inode);
- #endif
- 
-+	if (!strcmp(a->attr.name, "gc_urgent"))
-+		return sysfs_emit(buf, "%s\n",
-+				gc_mode_names[sbi->gc_mode]);
-+
- 	if (!strcmp(a->attr.name, "gc_segment_mode"))
--		return sysfs_emit(buf, "%u\n", sbi->gc_segment_mode);
-+		return sysfs_emit(buf, "%s\n",
-+				gc_mode_names[sbi->gc_segment_mode]);
- 
- 	if (!strcmp(a->attr.name, "gc_reclaimed_segments")) {
- 		return sysfs_emit(buf, "%u\n",
+diff --git a/man2/ioctl_userfaultfd.2 b/man2/ioctl_userfaultfd.2
+index 504f61d4b..e930af520 100644
+--- a/man2/ioctl_userfaultfd.2
++++ b/man2/ioctl_userfaultfd.2
+@@ -235,11 +235,6 @@ operation is supported.
+ The
+ .B UFFDIO_UNREGISTER
+ operation is supported.
+-.TP
+-.B 1 << _UFFDIO_WRITEPROTECT
+-The
+-.B UFFDIO_WRITEPROTECT
+-operation is supported.
+ .PP
+ This
+ .BR ioctl (2)
+@@ -333,8 +328,26 @@ If the operation is successful, the kernel modifies the
+ bit-mask field to indicate which
+ .BR ioctl (2)
+ operations are available for the specified range.
+-This returned bit mask is as for
+-.BR UFFDIO_API .
++This returned bit mask can contain the following bits:
++.TP
++.B 1 << _UFFDIO_COPY
++The
++.B UFFDIO_COPY
++operation is supported.
++.TP
++.B 1 << _UFFDIO_WAKE
++The
++.B UFFDIO_WAKE
++operation is supported.
++.TP
++.B 1 << _UFFDIO_WRITEPROTECT
++The
++.B UFFDIO_WRITEPROTECT
++.TP
++.B 1 << _UFFDIO_ZEROPAGE
++The
++.B UFFDIO_ZEROPAGE
++operation is supported.
+ .PP
+ This
+ .BR ioctl (2)
 -- 
-2.35.1.894.gb6a874cedc-goog
+2.35.1
 

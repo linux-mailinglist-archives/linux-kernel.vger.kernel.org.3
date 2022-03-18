@@ -2,155 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DC64DDA68
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C604DDA6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236645AbiCRNZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 09:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39688 "EHLO
+        id S236659AbiCRN0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiCRNZu (ORCPT
+        with ESMTP id S236648AbiCRN03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:25:50 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138D8E8875;
-        Fri, 18 Mar 2022 06:24:32 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id w4so6922982ply.13;
-        Fri, 18 Mar 2022 06:24:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=COTC0Zk9f9Pt+UMfVoj85/Sop+t7KdoHHeUTvF+YTag=;
-        b=mHapdPCHciu3q7LenQ4fh8UJL+Q4rqq3cN4EMxTtbCw9gyzMqGA0rSYuPlODSitxEm
-         0cMblSPQTVCMqFOAIvqa3D03Rvyhg145fXhr9BqEP9JpH7BCm+ZwOq9/zBfXJEnZmJsT
-         k6saq2JTAwMq537c3dNebEzegbfvB0EWRQ1ZWltRgyuB2qx/7wyiPJr6R8Z4l7jcmaNZ
-         g7RJ7qdAjWG5NXwacpiYyur5Y4aq8nV4tPB3MUqOhSd/8gZmY6Ym/bYO3WQ8p7BbIukI
-         1W0w0Zz5JXK+TGMMpHTpRKaQBk6xOYklxB96XAHu6wMqHycrmXe1ePgvvwEHDTfnp5Vy
-         InwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=COTC0Zk9f9Pt+UMfVoj85/Sop+t7KdoHHeUTvF+YTag=;
-        b=SU9Z03PMYEA09Sb6VnYzMZaPlNNk3i6ZqiYwAwXrWmVaFi2C/rcGstXo+xO3vVlEXk
-         Golp8dARmGi8GKHE/87Qx2mxbKhXWe2HpJDGWFZBSXelCLSnb3xrkG07vz2nejwmnSrZ
-         aYSEt9u3uuvM7pe467Ku802ZOXHZ9bSUQ4pmhUGWIVpKMo2V0KAoeBt/Y6dkPxj/GO1U
-         yJkWYmYRGmwlG2dpeiuPQZsqIsCx0l/5ij59ghKaFw32+GbfhPk7KCvx+AU8SyYgu9Fp
-         n4qi03ya6JQbzYAeL4O1WjvdUdtrO3oh5wCdBfhAKFZrvDZ6bIXvgL/tLKS3Pv60MHXk
-         bkRw==
-X-Gm-Message-State: AOAM533hMJ2S6x63+AC2BrBGdb0pBTj74Ke3uT4kD28wFK846fc1ohep
-        GeFXcgL5U5sg8y1iTnk9FXY=
-X-Google-Smtp-Source: ABdhPJy0fmo0l1fknGc8VC4xdrbqin2dGehRcHR3oaavSDsqGlkILea5ly/L4PH8mE1vzLnw4quyQw==
-X-Received: by 2002:a17:90b:352:b0:1c6:77e:a4f7 with SMTP id fh18-20020a17090b035200b001c6077ea4f7mr21584354pjb.77.1647609871527;
-        Fri, 18 Mar 2022 06:24:31 -0700 (PDT)
-Received: from odroid ([114.29.23.97])
-        by smtp.gmail.com with ESMTPSA id p128-20020a622986000000b004e1366dd88esm9455586pfp.160.2022.03.18.06.24.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 06:24:31 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 13:24:24 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>, linux-arch@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow
- path
-Message-ID: <20220318132424.GA1665646@odroid>
-References: <20220316224548.500123-1-namhyung@kernel.org>
- <20220316224548.500123-3-namhyung@kernel.org>
- <YjSBRNxzaE9c+F/1@boqun-archlinux>
+        Fri, 18 Mar 2022 09:26:29 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEC1EE4C6;
+        Fri, 18 Mar 2022 06:25:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647609910; x=1679145910;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=InZ4gM0n9VmGhsbv3r77oTtxNorS/SN0pEblK/FfVAI=;
+  b=ALEkEIPVvrMuPq9Hkd/lNYdyhk8o3wIj0iHIwgmxSfAixOeo1/OKHzys
+   x/HwZKKrJWRw3db0q1I6XeeQgbAF2ijthPqRFxrExPdbyVnxNH8uTdKNI
+   ZvFYXulTHPpNgZ5o5arUpGBaVmAU1Xx4SW0UPNRQU9dLy7TfoT10+nS2t
+   InAWXY7HxeywHG6Y8148WVy+gOeMFJKy8f18JgAtm2M1s/hj78jUGhakZ
+   gcCJvPG1ZJ3Tn4I3vwdp86GKbSHBgB3UG+Nj6xBtndHWU/slqVbg3NK1v
+   Bn++0lVWxIwfz8/u7LfQCeKl67RvEr6Lu4r4XiASvi/0TJ6WOrwMyJzZ0
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="237745360"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="237745360"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:25:10 -0700
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="558438415"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 06:25:07 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 18 Mar 2022 15:25:04 +0200
+Date:   Fri, 18 Mar 2022 15:25:04 +0200
+From:   "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
+        "michael.jamet@intel.com" <michael.jamet@intel.com>,
+        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH] thunderbolt: Make iommu_dma_protection more accurate
+Message-ID: <YjSCWaq7Ej/2iJPp@lahna>
+References: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
+ <BL1PR12MB515783C0F998169D49D92A55E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <BL1PR12MB51573F55B3C2B3922BAAA7F1E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <YjRvMk1kcbMwJvx+@lahna>
+ <65207fdf-c4ab-5165-dbda-8ab55b51adb7@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YjSBRNxzaE9c+F/1@boqun-archlinux>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <65207fdf-c4ab-5165-dbda-8ab55b51adb7@arm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 08:55:32PM +0800, Boqun Feng wrote:
-> On Wed, Mar 16, 2022 at 03:45:48PM -0700, Namhyung Kim wrote:
-> [...]
-> > @@ -209,6 +210,7 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
-> >  								long timeout)
-> >  {
-> >  	struct semaphore_waiter waiter;
-> > +	bool tracing = false;
-> >  
-> >  	list_add_tail(&waiter.list, &sem->wait_list);
-> >  	waiter.task = current;
-> > @@ -220,18 +222,28 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
-> >  		if (unlikely(timeout <= 0))
-> >  			goto timed_out;
-> >  		__set_current_state(state);
-> > +		if (!tracing) {
-> > +			trace_contention_begin(sem, 0);
-> 
-> This looks a littl ugly ;-/
+Hi Robin,
 
-I agree this can be simplified a bit.
-
-> Maybe we can rename __down_common() to
-> ___down_common() and implement __down_common() as:
+On Fri, Mar 18, 2022 at 12:01:42PM +0000, Robin Murphy wrote:
+> > This adds quite a lot code and complexity, and honestly I would like to
+> > keep it as simple as possible (and this is not enough because we need to
+> > make sure the DMAR bit is there so that none of the possible connected
+> > devices were able to overwrite our memory already).
 > 
-> 	static inline int __sched __down_common(...)
-> 	{
-> 		int ret;
-> 		trace_contention_begin(sem, 0);
-> 		ret = ___down_common(...);
-> 		trace_contention_end(sem, ret);
-> 		return ret;
-> 	}
-> 
-> Thoughts?
->
+> Shall we forget the standalone sibling check and just make the
+> pdev->untrusted check directly in tb_acpi_add_link() then?
 
-But IMO inlining tracepoints is generally not a good idea.
-Will increase kernel size a lot.
+I think we should leave tb_acpi_add_link() untouched if possible ;-)
+This is because it is used to add the device links from firmware
+description that we need for proper power management of the tunneled
+devices. It has little to do with the identification of the external
+facing DMA-capable PCIe ports.
 
-> Regards,
-> Boqun
-> 
-> > +			tracing = true;
-> > +		}
-> >  		raw_spin_unlock_irq(&sem->lock);
-> >  		timeout = schedule_timeout(timeout);
-> >  		raw_spin_lock_irq(&sem->lock);
-> > -		if (waiter.up)
-> > +		if (waiter.up) {
-> > +			trace_contention_end(sem, 0);
-> >  			return 0;
-> > +		}
-> >  	}
-> >  
-> >   timed_out:
-> > +	if (tracing)
-> > +		trace_contention_end(sem, -ETIME);
-> >  	list_del(&waiter.list);
-> >  	return -ETIME;
-> >  
-> >   interrupted:
-> > +	if (tracing)
-> > +		trace_contention_end(sem, -EINTR);
-> >  	list_del(&waiter.list);
-> >  	return -EINTR;
-> >  }
-> > -- 
-> > 2.35.1.894.gb6a874cedc-goog
-> > 
+Furthermore these links only exists in USB4 software connection manager
+systems so we do not have those in the existing Thunderbolt 3/4 systems
+that use firmware based connection manager (pretty much all out there).
+
+> On reflection I guess the DMAR bit makes iommu_dma_protection
+> functionally dependent on ACPI already, so we don't actually lose
+> anything (and anyone can come back and revisit firmware-agnostic
+> methods later if a need appears).
+
+I agree.

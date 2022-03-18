@@ -2,95 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8834DD719
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D094DD720
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234469AbiCRJa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 05:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        id S234505AbiCRJd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 05:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234222AbiCRJaz (ORCPT
+        with ESMTP id S234494AbiCRJdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 05:30:55 -0400
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC87B2E711A;
-        Fri, 18 Mar 2022 02:29:36 -0700 (PDT)
-Received: by mail-lj1-f170.google.com with SMTP id s25so10561376lji.5;
-        Fri, 18 Mar 2022 02:29:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=JP93varl936CcJKPvOokM9x60gJyGqTR3tO80wLaHjw=;
-        b=4UBa1MrpF8UwC5WtEaG6fD9l0Phh7BpqHnPoVMYOk9aY7aKqvTQyFJlDVXOv1RyNsZ
-         D18ZBUD2Iok1S0GrK9VRAQT4IO4JiUyqkflFF1qac8XPRauSQvXhKco4Jb4lDMwgVAUv
-         35HnAruN+6VHzKxmfQqmzVgJwvC2CJ+iYslUqpfYnIt0DefrY6XMscpXJ/Ickc3dyCa5
-         YyoFKngWM4rcLJVbOL0penBUsnjOSiKl5flNn/YZ6pDqRCj1DUVPatH9NaIzYQ00SgIl
-         if2hgi+lMpZkVMwMNA8aTTI2C0oiLiWxqVh0OMN5XqM45eJS8sjOZq8OxmxAOBIYLyeZ
-         HvpA==
-X-Gm-Message-State: AOAM533aHIPUWHexFsdjXXb3yNIvPml3Cvqq1AnL0lTt7cO7vIih/o6j
-        5Qu3fsvuVrPcDY8laOtdeMJrjFKpxis=
-X-Google-Smtp-Source: ABdhPJyaySK0Yd0ffwNBswotDY0OD7OmAPS5rPZTeAOVNJFz6BnUFdl7UNzmHkXBWyCnx7iHjJuaDw==
-X-Received: by 2002:a2e:9cd:0:b0:244:d41d:69ef with SMTP id 196-20020a2e09cd000000b00244d41d69efmr5402375ljj.386.1647595774992;
-        Fri, 18 Mar 2022 02:29:34 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id a6-20020ac25046000000b004477c9fad7asm766637lfm.115.2022.03.18.02.29.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 02:29:34 -0700 (PDT)
-Message-ID: <d1fab3e6-a9ee-0d3e-9d4b-d082317d8b72@kernel.org>
-Date:   Fri, 18 Mar 2022 10:29:32 +0100
+        Fri, 18 Mar 2022 05:33:52 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2111.outbound.protection.outlook.com [40.107.255.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A9F2E711A;
+        Fri, 18 Mar 2022 02:32:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SasJ1egRy/xkYptQxi9qKzmy34ipYHkTE0wfqe5V5g2voumx6pgl32izEzacFnKweus4ZU8WlkHq2ZxSSFYgAx6ScNt3uwCpfVu/D2K/rIJ6PbLmxfzVtyESd+NIXpstM/uMqdQjU0UYky83imd4RZIPSwX8kypSfHIDQkjWpuHe18lauepFxp7Ggrvnz1FyBZ6hVX4cYD5w9xUviaiByIqQvbb2mh/gkH+926oKU345uPEPVujEPxsw/BGe2MuLiSdQ4CESJYnjIhW+hj9+vKW1DHm5TMNbVPiMtsdBFGWOgGSsMNXG7xHCTGvvZubjn0hNJrzGvTI3SRv0/iVJFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZJ8JUXRC9splI7l+/I8k91c1zBltbWQpfTxc6o5vR8Y=;
+ b=hrZaED3qH02egVO13W5FXFMsgR1Sbu0eG19fP/iGgv6zU6dkDQq3vWLsjztfLhQzp8SXm5fghcoVE0kzK3EEN+pRFH01tZLMOBgXdxBc4lHB70U5VmvGwo+7/W52x/gzqZzlLO3gRqiDCi3PygQvInW3Hls3kMhdv3o02BNuP8OSqc2RFzXYYNdSEGHw/0AtoBdVJ1NFgzRf3WCPUfAMcIjUaCPGXrugmVl6FAOXaBhwEFly3DKk7p7pSGGso48znzGIWbaElzBuHevDnVFDvg6Q50CaNkbIzEEKmnh7JRhXEdlIQxXXMmIvdF9yg5Jm6HSOdI3h3R76BjMSsn8xrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZJ8JUXRC9splI7l+/I8k91c1zBltbWQpfTxc6o5vR8Y=;
+ b=GCHrOykGJ+3dfm6kjQ6hYn1gTtBBzVLkmQq/KVChWr0WjwLrAeDcHfXG0exhAnvc0NkOmQiOdMcqyJaSJC+PzinSqbkEibDYnrfrCAtzjsioNKS1/foA0WXchmae7PgkKl3HO6qr6MGcqOnLnd/9K8oVaK5CyTjNCoDCtuqAEh0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ KL1PR0601MB4514.apcprd06.prod.outlook.com (2603:1096:820:72::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Fri, 18 Mar
+ 2022 09:32:26 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::9d3f:ff3b:1948:d732]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::9d3f:ff3b:1948:d732%4]) with mapi id 15.20.5081.017; Fri, 18 Mar 2022
+ 09:32:26 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] qed: remove unnecessary memset in qed_init_fw_funcs
+Date:   Fri, 18 Mar 2022 17:31:53 +0800
+Message-Id: <20220318093153.521634-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HKAPR04CA0011.apcprd04.prod.outlook.com
+ (2603:1096:203:d0::21) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 4/5 v2] dt-bindings: gnss: Add two more chips
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Johan Hovold <johan@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220317225844.1262643-1-linus.walleij@linaro.org>
- <20220317225844.1262643-4-linus.walleij@linaro.org>
-In-Reply-To: <20220317225844.1262643-4-linus.walleij@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e9d3162a-fd7c-4f98-2c39-08da08c236d6
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB4514:EE_
+X-Microsoft-Antispam-PRVS: <KL1PR0601MB4514722A541A7DF37E17E68EAB139@KL1PR0601MB4514.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ba6KMHix/Hb+4ODpDe5w0kIQCTqE2AQE8C8NhgCdLgwxBdlcB9Uu4QVw30rv6bSAlLbOaLb8O+71yojbugjtdTpBhoZAeFT/VCMGd8+OaGdDGC2ks5vnlpns2OwGTuIQVipu5Jd5Ta1GaD3hx0+/lzZ1Hguz+ga8T0UiaYeo5evIU/InC0ajcAJQmNJgnICNrOVPuI7t6D8GTa3RX8pKm6qz7bvIkTMABSYrM9KUUpfiiu9u+mfmthRlmKsJAg/v/vuLnLQgtkCnNHr5iWYcXrTfE0E9R3pFM1iATpydTXBTrQYiBxeTec19rZtnsQaydcERROeCKnvfJGYpbFuYaVX2MFvDGjh8itlKEgaz+a9imAPsKGH/GXf0X1ONNmYu0XcI7lV0eP2oLqK+C+3mqJDJWlE3O97eAqTtfn7h2MOQ7qA/g6HQIQVpaftjnCDGostmJJh4avAlP171FxBLSMENOxPwZs97CdHlQwmUixLYaTFgCgm8O1ieXIWCE+LoEz8f92lNtMc44SiezCk+ENWwBhzZGiu7A60UXp9eq6N7iG6oW9isiYhgqH0boU+2McNqM3SZo5XecVmsYvCDsbzTf+ilZ9TPjhZKvytpelQ76Z+NrumITLSrzqilmOxUTO8PsOj/qk25JKEHD1rsA+3PooPzf6Wk8oAs2IgWwBsu0j0m/ufq0f99b9ZvBG8BOrBX3Aed1fUjy1pnR+yoQA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(6512007)(6666004)(8936002)(4744005)(6486002)(316002)(5660300002)(110136005)(38350700002)(38100700002)(86362001)(2906002)(186003)(1076003)(2616005)(26005)(36756003)(52116002)(107886003)(66946007)(66556008)(66476007)(4326008)(8676002)(508600001)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XeLIC9M/d9vQ/mmJFY17775mlOrFD10APym1bQkp+3cgs17YeZFOPQBI8Jjv?=
+ =?us-ascii?Q?8FQw3gMXtkaIk5SD74pKp9mNXsfb/x4osyxX2aOruhwaouwJF8GMzWU90OIp?=
+ =?us-ascii?Q?/oLJi55OKD5SWPQPgb+gD83IZY1NEJ5glAGc78SfmskMqUMsRtDMrRBe1lvo?=
+ =?us-ascii?Q?15BhJMOyLHd284lP3gxYd5Fva3+zY3B22Ale+toUeSqbqjA5EHRLSNiNX+nL?=
+ =?us-ascii?Q?0ORp2Dfriy54wVmDx24BE583k7nEu1rZ0aZBxajFHBSRasysRtxs8OjH7OUL?=
+ =?us-ascii?Q?UjAx6wGStFQH2PCNFHFbwlBRLVVfdKmqNhC+Nzt1/C+buZz8keBl0uvxHmIA?=
+ =?us-ascii?Q?7W5juzKdKL2c91rUG5A+UP9B7OlwVGxkGA5b3ec3UKfOb8rga/BGKSUZBKLM?=
+ =?us-ascii?Q?iWf01SjNFpxmKjkgMcieZB5fO0fktvPcxvz7kKMf+xJFyiEpp9e0p5kQe3hd?=
+ =?us-ascii?Q?bTUcaivHkoNJRoJbMyAKtpu7cdY+NHQjKwtWvDEQums7gtUM/Pd9qRMqLrqT?=
+ =?us-ascii?Q?Y2pJIkB48qQ6ppnG0c7KivbSddegrJfWcZs8AcTZ9B3DrShSBRwuZMMpRBRT?=
+ =?us-ascii?Q?n4aKBaI/lfUVj4FAdXNMlL+FoLsyHhcaU69tcJxpEKfqfv5/mortnEQeD4+f?=
+ =?us-ascii?Q?0+6+41fqQjOmYTlBbIFKCJLoBFoXlDT/jMGBD/lxQt8S4D5+s7b1H3kzUymU?=
+ =?us-ascii?Q?hytv9iuz6Lnix0ClBiMn+sSPQjYHw+4WWhEvXn4kqaaDBl80Fd0tqxLZ5LMb?=
+ =?us-ascii?Q?NJoaqwfWB1oZliV1/VAXUW3jqns98BaotydZV/j5/aCFvk/KJtvMNKy1g7a9?=
+ =?us-ascii?Q?R2LxSNvZ+p/KRh3uUvN4iyTHEv8gr9UDEobz0xIpvL9ZVp8+gPDeNGwJk5jM?=
+ =?us-ascii?Q?OGGp2nr3LVEMDcAWo5/qjJbpkneKHM/llciHuSf+LXvVNVPjUhHmEnuh/dQH?=
+ =?us-ascii?Q?MnCPzhYpAt7AvZVGnVnLD4eJ/mmpRxdYRbre3gv1bR8d7f/DWkd4ANhF/nTB?=
+ =?us-ascii?Q?rO186EcHMJ/XvX/ueR6L21nXsDNwuED5vKxHr2RD44VyxkhuTol9X949tNbe?=
+ =?us-ascii?Q?hFq+p9jJzJWDXBtS8DN+3XKWvaa5VOIwNwBT93zzClh4/YXASPULyTX5oKPZ?=
+ =?us-ascii?Q?n5a/0bY9d7pmGgOh52ySColLg4+r/a5LJT5Y4Pd1Xsj91hWeccY7jt8xroeV?=
+ =?us-ascii?Q?ymQpPNKyK3wXnHaQ+CDOs7FGPDm5vapAQZDf0gI6k/JRUHksbBHMX3xB5h0K?=
+ =?us-ascii?Q?e4Sv3BLprdnihZWEtbWv4qXBMga5iF78Y/eVyA/N001iit8CSi2MuQgM4rQX?=
+ =?us-ascii?Q?UDQkQDKY6tKP3Rql8YkJIK6XytCevF5YVChuZwaWu3ublr/XTG7DEOVF2hNl?=
+ =?us-ascii?Q?Dxpxw85CwWmtfCbi2s4Kez5cV0WORkDbzPj+sODg1rXs6h3t4oLRbzJQdrF3?=
+ =?us-ascii?Q?2U/WwTnDt8oUH5U2xwRkHE3rCsshtGWp?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9d3162a-fd7c-4f98-2c39-08da08c236d6
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 09:32:26.5529
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lEUmcQguyZIYOHTU2Xyw2nE5737OB8tmbvrwW7ofKK3hanFzZ/nHF5ICEJe0nn3tyur+0NQxVWSKEDskUZJpeA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4514
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2022 23:58, Linus Walleij wrote:
-> The CSR GSD4t is a CSR product using the SiRFstarIV core, and
-> the CSR CSRG05TA03-ICJE-R is a CSR product using the SiRFstarV
-> core.
-> 
-> These chips have a SRESETN line that can be pulled low to hard
-> reset the chip and in some designs this is connected to a GPIO,
-> so add this as an optional property.
-> 
-> Update the example with a reset line so users see that it need
-> to be tagged as active low.
-> 
-> Cc: devicetree@vger.kernel.org
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> ChangeLog v1->v2:
-> - Add maxItems: 1 to the reset-gpios
-> ---
->  Documentation/devicetree/bindings/gnss/sirfstar.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
+allocated_mem is allocated by kcalloc(). The memory is set to zero.
+It is unnecessary to call memset again.
 
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ drivers/net/ethernet/qlogic/qed/qed_init_fw_funcs.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_init_fw_funcs.c b/drivers/net/ethernet/qlogic/qed/qed_init_fw_funcs.c
+index 0ce37f2460a4..407029a36fa1 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_init_fw_funcs.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_init_fw_funcs.c
+@@ -1835,8 +1835,6 @@ struct phys_mem_desc *qed_fw_overlay_mem_alloc(struct qed_hwfn *p_hwfn,
+ 	if (!allocated_mem)
+ 		return NULL;
+ 
+-	memset(allocated_mem, 0, NUM_STORMS * sizeof(struct phys_mem_desc));
+-
+ 	/* For each Storm, set physical address in RAM */
+ 	while (buf_offset < buf_size) {
+ 		struct phys_mem_desc *storm_mem_desc;
+-- 
+2.35.1
 
-
-Best regards,
-Krzysztof

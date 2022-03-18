@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B297B4DD5FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB804DD5FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233723AbiCRITa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 04:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
+        id S233718AbiCRIUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233710AbiCRITU (ORCPT
+        with ESMTP id S230352AbiCRIUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:19:20 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150082.outbound.protection.outlook.com [40.107.15.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E07222A1;
-        Fri, 18 Mar 2022 01:17:57 -0700 (PDT)
+        Fri, 18 Mar 2022 04:20:42 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2056.outbound.protection.outlook.com [40.107.93.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A78222A6;
+        Fri, 18 Mar 2022 01:19:24 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VafPXqKeynrwhy1vs/2neTLMsb0oq/OmkjwNWn0SdUzGLDWZPbqlPKq3YtQl8LI7guq/d22qh0jzOV2LSAkPxfKUhTTW3nzYN5Tx4+lw74JmYIfhBnmz0bJxE05PWlb8aIzvJY2NvuOP61d9JMSicakZRhc7NpUprWnfBEOUQVJGPahRuZo5eo1UaEUOIfMTWohzUrBaJTfX6E+kn5aE7pPsItCzzz20dNTrCnubgmKGzuuQsGubjf4EnuB/tUnEiZAnOqkdfH7b30oCU+pZu/9dnzET6eufsWhvDXLq2oMrr+L+BfetBVyRaej94WC7yUzZcAoa/ru2ufScS/XRow==
+ b=W+KYv7SbbfJMQf8YGauhstYUwiuY+0adUoCZmksNeyad1YZ1pMcvz6BOKAgfrQw1Tsu/N9ESAeJNm/hIXhLAg16Dz/eLdkYDKqC9IhUTj/N4FvXa3oNqc1XHJ0JAsdJOFaTxPyOe2rjP4o6H7gzTBU+8NTVuL0qq0DjPwiKIKV41Q8F7oq0faRkBdmXnWlDYpjKnld6Zhb+ugQjRDmItUv9u815tGW/RVbikvfudoiqdiEchsM89bqPF3EIpoWDOHv8cNlVICGI7wuPT3sAtvNxufpsN6gFM0/yCMiQU8/gBv+d9uCA/YrrTgcMsCuNWlpvg6cZDwBBqX1wTeB+w+w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qSP+wNzua7vbfftMiEf1QRK1mgGgsnw1qa5RCzCG5rA=;
- b=LytNgXmk+vN6bwWYvwjArrlqRlUDSA4Iqf4jj+w9ytZVavj9z3pBKHESCrR942YAzsPcupbNUWe5fpsSGL2PeYnQJqETfYfyiqSNPDAivgEmJb9nLSS/7ZlNCFwoWSHK2fQxA/0wWqLYtdlSHsw6kV2RCMNpiMFWuAK8f5EjmbSHIIQJKdaNEgwDTg+csw4LLdbradOuSiP7/Qu63U6IT2aninuBN8pH+SEx+PXdQPK8hCevnhG2NXnveAEWjwuIxZ2orY/CWLHu+1jqQUYIUl0EA8ZF0DZDH5il0W7pxbVNxyU/ifkeLYdcfqbbtVQlezERMYsyPJ8MYZPvatfV+g==
+ bh=QA8HFQcA0NfKOVxdL7DEUW4GazqF+U1l66ujgH//YVo=;
+ b=C0sVrOp40fFenwmYD0Tqjmfe8dKDH4Lw8TKzVs+2q1MydRYQA+pqDhy29g/rE19CV/DhEJpOw8pLUyQkJRpqa1/S0eCPooXpybdQUo9QG/4pbB8pp4SEaq3xp9Xi498hSw3Sfhk5Ol/7PAQxQLtkx3iAM33tH4JtiMae0eUkLWgI/rlhMwo9Wi1lkbI9nF4CXI0E9HKGc0HQaw/tvPMfvaJNSdfXywGS4QaZvbulKgETFn6JWoEpin1kR8znLLMmhwTDAFAeW0DFGn6i8xd733h2vgM3N51d64wwWU/yCP/lZP1cLjNbWvyPBd56MLHKjCdKMt2vYs2G3Y9a1DnZhw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qSP+wNzua7vbfftMiEf1QRK1mgGgsnw1qa5RCzCG5rA=;
- b=sl0DvOoao/jITRqxfGVqLGr2oOaPRjBYSf505Icgwo0ccFTtVD+P+4wQYVvH7xLOtcKGYZqWJ7Qw1CgwJaqBi8dSKV2rucDrrEkFvkF2LKGN8od1fGM+etPQO9pTr25Q/8FEPYwOa9TboJZhSKVOCuhdi2tNSFbBomCs9wq7rBQ=
+ bh=QA8HFQcA0NfKOVxdL7DEUW4GazqF+U1l66ujgH//YVo=;
+ b=rcWcfGJD6LV0bDHSDNSO2akHjmMd0RAwmJHLf/IsMxZ8AsPHTRvCIXM74wiUxzVrrAyQNq/u3ljmIUUMMgtcJMmFqAC5eGQOgXYAcjhPiby9+HdA+Hg2mM2uaDpcxp+/jsgf0zchdPbOCdddqbaMGlPZF1F64OPpgCtqQdOWpiE=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB8PR04MB6346.eurprd04.prod.outlook.com (2603:10a6:10:10c::14)
- by VI1PR04MB6285.eurprd04.prod.outlook.com (2603:10a6:803:fc::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Fri, 18 Mar
- 2022 08:17:55 +0000
-Received: from DB8PR04MB6346.eurprd04.prod.outlook.com
- ([fe80::a8a5:945f:4d08:69c2]) by DB8PR04MB6346.eurprd04.prod.outlook.com
- ([fe80::a8a5:945f:4d08:69c2%4]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
- 08:17:55 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        mirela.rabulea@oss.nxp.com
-Cc:     hverkuil-cisco@xs4all.nl, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 5/5] media: imx-jpeg: Support dynamic resolution change
-Date:   Fri, 18 Mar 2022 16:16:55 +0800
-Message-Id: <bd6d78391efb8ab118662611f80849cc1aaf99f5.1647590462.git.ming.qian@nxp.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <cover.1647590462.git.ming.qian@nxp.com>
-References: <cover.1647590462.git.ming.qian@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR06CA0015.apcprd06.prod.outlook.com
- (2603:1096:4:186::7) To DB8PR04MB6346.eurprd04.prod.outlook.com
- (2603:10a6:10:10c::14)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN6PR1201MB0178.namprd12.prod.outlook.com
+ (2603:10b6:405:55::20) by DM4PR12MB5961.namprd12.prod.outlook.com
+ (2603:10b6:8:68::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Fri, 18 Mar
+ 2022 08:19:22 +0000
+Received: from BN6PR1201MB0178.namprd12.prod.outlook.com
+ ([fe80::944e:aab8:facf:fd8]) by BN6PR1201MB0178.namprd12.prod.outlook.com
+ ([fe80::944e:aab8:facf:fd8%8]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
+ 08:19:21 +0000
+Message-ID: <8b8c0949-7677-94dc-4a8f-9fcf1b4d2f2d@amd.com>
+Date:   Fri, 18 Mar 2022 13:48:58 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 6/7] perf/x86/amd/core: Add PerfMonV2 overflow handling
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
+        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        pbonzini@redhat.com, jmattson@google.com, like.xu.linux@gmail.com,
+        eranian@google.com, ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com
+References: <cover.1647498015.git.sandipan.das@amd.com>
+ <7d43b4ba8a7c3c0833495f3fabfcfc6df8db3732.1647498015.git.sandipan.das@amd.com>
+ <YjMjNvrGa7ZK/x3H@hirez.programming.kicks-ass.net>
+From:   Sandipan Das <sandipan.das@amd.com>
+In-Reply-To: <YjMjNvrGa7ZK/x3H@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BM1PR01CA0096.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00::12)
+ To BN6PR1201MB0178.namprd12.prod.outlook.com (2603:10b6:405:55::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2f886b7a-7006-4713-ef7b-08da08b7cdbc
-X-MS-TrafficTypeDiagnostic: VI1PR04MB6285:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR04MB62857DFF06B1DBBFB4C23275E7139@VI1PR04MB6285.eurprd04.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: d396611f-0649-4d16-c02b-08da08b800e5
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5961:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB59619B3BD892DD11609198998B139@DM4PR12MB5961.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nqme/2NP/xc1Yer/DIFZXPse4aWAG07fqXZ3AUKHk0lvkaTEoRQUAH76sT+5I7QOUykHD5mijFyJMvHcXhFO6VlFZpNXq4qX5BZsFbC0Q3qo9JNc7ekeVM3Ay9VCfFciZKybgVNY/LeG59vgYbKNfLEo8cW7c98EBpuVBg6Qcf4M6YaIBk2XbJJbTBS4M9xCzZtD5BW1YlOGh348i+0auS0ay/I7gseSV487lQls10QOSYz0plfsaC9w7kAsB4U8ut1fL72aiUIes123smOUqitaElgMJiZC/q+wq5BJcPSkMdmye867bfz1oPRKaZYp35okYA3LaX6IYTqVPxupSN/dOcyQrGaJNkwvE+QgbhyYaydgdx+scLbJ5nemM4hhn2fvgR5y4HkGS2Skt24lLVVVh6Eqkk+Q0AWOh3Xl0w4jyD560d9YR9f1TsuVSkii/GKij/w9EMEXRdOGH4BHRorokbeK/h/Qpj4eMlFUc4xSk8ho/ahc2RiY2MkuycD1Ja504o9H9hK4UvzbEejPZuYeQg8HiMKb+Uta15q9RcK5DXXljTIunztrzOHbc8z+rIPwS1TBpKOfB1ORGHoysYafPJ0rYEi99qfaxRq+9gyLPDizkatdhyJQYwm1tFTPaLGnd7PRhk4T0pLKm3e4JXbZKRxfV8g6HKmzYjxkPjcXuGaLyLIwzv5vJopd+/mpp3IBKCyLFVcqSaT2rvtFNA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6346.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(38350700002)(26005)(38100700002)(5660300002)(6506007)(4326008)(8676002)(66946007)(66556008)(66476007)(52116002)(86362001)(7416002)(8936002)(44832011)(6512007)(2616005)(316002)(508600001)(83380400001)(6486002)(36756003)(2906002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: TxszL/xIvxkkY6KQq0EtUqYTvFsw1y1CHu5/hTUeL7xPsRYHmxHICYuOfjJU1vBPcknBnVS5RW00sndmaH94NWiAEAwyBoERgdj4cWak2065j1weql3Onl4lhEiEi2cHfi3o10hWYInEjiKcIL99pQQEbg0s3iQELoFv7zNoCWKndaOI6ALCifImuI5eCctyhhNYhGOlQGNjjQMvfg5WGvX3hszJ0m4mj6ZFmHS05DrcyLjEmoD3takKWdPIrzqwdzTrGI7sFwBYUp1BkC8QEaO2G0TvUYYckiP7zED/7i4e3gvBiJ2h7VXncnuTdJGacmgh2z6r3l4MlGC90xT9zHb+mR6doJXPsMqQKAjDulbaqeii1z8iPoZf1p8WENU8myHOwRv0baWR8lgPWx69A+HIUNWwxCYYCxAzP4K+Lm8pxA937IVqXNaEOe6U7BHQJCXhOrD7oh7qPwP6a3763MgtNOol1rHBXNg5e+O2EvXjzgx7FFQOpGGDM/9eBpqjeBCPrghOgxiEqy9lkFDjvofNqxWAStXqtFsjc/D8doTxwlPCmzO+sH/zbOM3l7JrZsbxhp7/vShhqbBk5aOub1Bd/etof9INd/Tp3R/a0hAZHM3YtHXFAOOZaYkK1O9H4Y+IJfqyUcOKmRya0ywNadF7nLCbM6MVI2lY0/g81F1LX254kmJ98lYPQBfgBioiO0id1X09V6XVl0/YNL2wcsq0ZcaNX+ow0PvbsgSpE9I=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR1201MB0178.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(86362001)(66556008)(4326008)(66476007)(8676002)(83380400001)(2906002)(5660300002)(2616005)(186003)(26005)(6486002)(44832011)(36756003)(6916009)(7416002)(38100700002)(31686004)(8936002)(6506007)(508600001)(6512007)(53546011)(316002)(31696002)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LHHR8k5TGtiAYm1UVW1KHPv51aJFn92hi6F6A8vmUOtv1/X5ojs7XQLpY7JN?=
- =?us-ascii?Q?u6YlxGxZLDnVezveSU89/IC9NQ/WE0E3Qj6wZ4OP2EP9IFUBmk/C6JXl8ZQM?=
- =?us-ascii?Q?73nqGhw491ZZUbI4j3TlFmDnHqfYeWxHgmae1KUBaKJsl00iyrNFHCJiYF9F?=
- =?us-ascii?Q?rbUpZfi4axBFFOkAs/JVHeZRoEyfgaiIFfd7iJph0f3Zt53PNN669an4qn3v?=
- =?us-ascii?Q?axsvChHfHYPiJJPfxcXr5Bn27oPCxAEeo5lxf83/YKB5ESKjIf3wwJsJL7c4?=
- =?us-ascii?Q?ActzYKiMu3ovZzTNE9urzTmSrJqE2532p8jHWeW1jw8KqdJaKghRIiA4kQI0?=
- =?us-ascii?Q?ikW7GjIug1UJpIERBd7um2cyxnR1Rpyx8UeOQy1++oafsJkNxiC2jPCYc9Hk?=
- =?us-ascii?Q?J4ERTFCwem9Rf72nMiF9poTYXD+SwoY/AN4JiwYUf9c2QsFRW+/YvmJGUAma?=
- =?us-ascii?Q?iPjq7TFTSOnru336qxZjZrH62bsFGOOIxQuWASKCbjc6+d1hIE06q58j5MZS?=
- =?us-ascii?Q?ycZHZqrXJAAAn4jjudSFMaDyt+oNJi/zBI9Bz4+5KYSTx61QkifBAEbK2GBb?=
- =?us-ascii?Q?mslez/qxMmNH49oRD3tAGzqAhzso9nhIACBhOc9fOc0Rn5zxaENvVm3dbgoy?=
- =?us-ascii?Q?lGtfsBrt+kQV79MXTnvu82xvjR+bh9h0XHPchvjAkdPEM+wNZOk4z0Wn5z1r?=
- =?us-ascii?Q?x0ZRDozXkzhIxeVHmgNlBwBJkidcVX9dAo94gxaaJw6S8aftb1I7z1ePgs/f?=
- =?us-ascii?Q?BxLT0zvZPNYqzqlDRCdADlcu8qIZuLXpWj3scMHBnogTlWMMKeTplLR+ptyU?=
- =?us-ascii?Q?UAG3e2bKaCFH+EAye8sq1IaatzZ/AlSyP8SIYI4RZ1ceI9gVQ+UjA7vZ3NBA?=
- =?us-ascii?Q?eLzcgs7d+ai40jrMtyvTE3jNnZN6lW7/R4iEEZUYxk8spIAssX+mdtaqbLg1?=
- =?us-ascii?Q?XaSCkKFDnGlfCOfJM/YPZ00YCyj/pLT6tVotEEi4tI84CJDXn0Fm4Oqe3kmZ?=
- =?us-ascii?Q?F5g9WGlA4Jho1IL2bI0tksn6FNZQSkGYSogI3I3c+3nyBumO1zsicFSyCj4A?=
- =?us-ascii?Q?deQbWXNcdn+uOKg45YXaWCq+qhmeqik4EfVd4/D92lIvmgqueeOmHR3RQB/W?=
- =?us-ascii?Q?iXD/XyxMIJp+LjsC73CQuylyzYhtk+zbLqTu/GEtVBiJMzolvYRuaVqPfLv/?=
- =?us-ascii?Q?h1VC15Cn/kXV31ruQLqKdLu31dHf7PGAITurph1j+IMZ3tBgHzxyRGVonID0?=
- =?us-ascii?Q?V5VQitVYeZHGwzVHOGO4PBNi2exPFPo6ggLAx2ZMasYHT9/PMTbCZIKpobDw?=
- =?us-ascii?Q?LNPDoea1urgMxAcDPRqbLuX/600XhQl0lPSOL7Ja6YxbfDbZ6Po3z0t5LeQp?=
- =?us-ascii?Q?Zc+iBvkF1wkhrxawNXGxaRlVYqYVStqrCid3wUZkU3ayYEUMEIUF4vlOYjEL?=
- =?us-ascii?Q?m5dkY5WLtgXo3zIwFzS++j5n4inv0ErH?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f886b7a-7006-4713-ef7b-08da08b7cdbc
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6346.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bVBYTkFKa2Y0cmpoaXJOMWQ1T01aQ2JUK1VtS043NEpQU0V6VXlDQ3hsaU94?=
+ =?utf-8?B?RUxtT0lZRUpuVmZvNmdHdXd6V2hNbEpQdnhHcm92M0ZLeWNlWjZMRDAyczZT?=
+ =?utf-8?B?dmZLcU5WUkViR1ljdWsvZmxiT2JsbXIxemx3M2NrRDlrejFYY0VEblZTVllU?=
+ =?utf-8?B?M3dLYzNvUU9GSnc4UWRKWW9McWI2N0dVQUFHQnRSVGVJbDljRi9PTHJkcXlm?=
+ =?utf-8?B?NWlTZ1Z4M21rNmJEWmVsMmhoREREaVVWUnB2Rm01dkFVYmZrT3JGOHkwL2pZ?=
+ =?utf-8?B?ZFNuWWd3cDVVYXd0WlVxVC9HQUlXbjdZMnd3V3pyQnV0UTBYWVYwWlVSdUda?=
+ =?utf-8?B?djd1K1RHRG5nVDQrTGtsODhMeTFPWWp6V3RjSWE5aUkwVkErNzNSVTVUci95?=
+ =?utf-8?B?Tmh4dGRNZUl0VG1OVWovcWlsUnl2dDhsSWhXdEJYRVBTTUtDdEppV095ZEVh?=
+ =?utf-8?B?blV6RHJYQ1BHNXNFZXF0UThPSDdYZ1BhS05GMGZIOUR4SkVuMDMzaTlMRWdI?=
+ =?utf-8?B?dDROTGlzOGc3NFBwakNFYWVadDcrRHBqSXB0bXVnNFE2SWZvWTJWbCtSSlJ3?=
+ =?utf-8?B?bEU3MjNmV1NaYzhaMlR6azdvOUZQUmczN3EwQk9sbnNzRlRvVUdzWWdUM0Ry?=
+ =?utf-8?B?VStZNmRuMzdwVTl2T0swcHBhMkF0b0M2bVdoS3YwTnpXZ0phd1Q5QWNYREF6?=
+ =?utf-8?B?aTJZS2tlTlM5cUNDK1ZpVjZNOG5CNGtEa0tRaSt1eTFVekhOcGppU1dIZ0Jn?=
+ =?utf-8?B?dmJuKzVaRFltQmpRaTdESnovSjd0RzZKbzVPR053dDBMOHZmWFlOa0hOU0g1?=
+ =?utf-8?B?SzZ6c3B2NjNOaC8yYnR5aDloREVsd2dhYzVNTVhrZ2xjVTlXZThlT3dNaVd3?=
+ =?utf-8?B?K08raTRvb2R6c2VaR0tBemZIQk4wZTVNN0Rmb2JVb2V0cy9lYmEvTDIvRjBU?=
+ =?utf-8?B?M0pyclJmQ1VtbXN5ZXpZdHJuenRsOW01enh1MXhnbG83Q2NTYlYrVC9YNXZy?=
+ =?utf-8?B?MG1QTXh1SWJYZ0tXMHFiVmI3bDlpRXJSVWEzTHlwbDdyeG9idnEvZHBJa2JY?=
+ =?utf-8?B?c2hrbHRTUkUrSThxY203OVBqZzdaQUdvU05UdlJNZ3BPZ1k4T1N1MU4yMzJL?=
+ =?utf-8?B?Zi9RcHpPMDRnMWw5SzRtTTlwR1RteVpGcDd3SHYra3lhaGRpNFd2bUVRdlVU?=
+ =?utf-8?B?b0VrcFFLSkl1eHVIV28zdng1b3ZaVWViRTA2czc1L1R4V25ONWV2Rk5Qdk1Z?=
+ =?utf-8?B?N2ljRldkMU5odEFNRXRjcWJwN2tXVGc5YUNjMkExZUl4UzJGdlQ2OHA0TXg5?=
+ =?utf-8?B?aGo2VmdVU3ZldmlMbG9TNjUvK3BUZjc2b2oxWko0emt2M2YxUnFnOGo1c21t?=
+ =?utf-8?B?RVdtdzNMT2ZOdG9lSjhRQXI3Ni9kMW4yb2hWQ1l2QW1VSUFaeGpLZyszeTh0?=
+ =?utf-8?B?NmlndXdDcFYyNzY2Y0hnWG9vVUJxVVdkMHNkdjlXTUJOZk12WHhmTHkvQmZD?=
+ =?utf-8?B?b2o3OVRWSEZncU5YWXY3Y0krSU1YcUp1SzJCbjlicExiaTVDd3E5L2V1NjlZ?=
+ =?utf-8?B?UjJlSVIyYi9jV21xdm1heFlxM1hUc1dJVE5HQ2NoU3UvRkFkSW5TWnhOc3Jp?=
+ =?utf-8?B?MGpZbW5MQ0swWFUwY2VOam0wamFuQ2ZzT28rUXlkenRZcUVSa1grcEluRGo0?=
+ =?utf-8?B?WFExUXh6a1JpVmptUDlEZFhQa2FzWWdaUzNHQU1iUUJYdjRiSllYZ2NwbzBM?=
+ =?utf-8?B?eWVsQlA3MENQa1lBVlRBUkdTU09qanMra2trUlJKVjdIcUp1MGRWQnMzL1ZW?=
+ =?utf-8?B?N0g4MXpDTmRDUUlvQXFKaHg5RkprZWFvL052NHFaRlR1V3kzSG85RkttTExz?=
+ =?utf-8?B?aW40NmJJSktVYjc4dldlWXppV2NwdkVheWVCSTYrT2hPNHNmVTA4bFFLRGQv?=
+ =?utf-8?Q?rki+GLzj7LkNkseLF7s/cUPqqk0tnVr7?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d396611f-0649-4d16-c02b-08da08b800e5
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR1201MB0178.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 08:17:55.1970
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 08:19:21.1376
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kozNkaoXKbP2/inCbOCG9ijpaGPBpSHMs2m2xAaEAPYMnFCkPSss4+ANAd9g3RQ0HnWhiWppzZlBqhMUkeIyig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6285
+X-MS-Exchange-CrossTenant-UserPrincipalName: XV6PrcitWEojDeoY92NV4N38cJPRllnimYEjml5z1F+aTP+r9RfGk2adxZC7A/ZI0vVASDSiM4as7DvF/lOy0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5961
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -115,201 +129,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To support dynamic resolution change,
-driver should meet the following conditions:
-1. the previous pictures are all decoded before source change event.
-2. prevent decoding new resolution pictures with incorrect capture
-   buffer, until user handle source change event and setup capture.
-3. report correct fmt and resolution during source change.
 
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
----
- .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 69 ++++++++++++++-----
- .../media/platform/nxp/imx-jpeg/mxc-jpeg.h    |  2 +
- 2 files changed, 55 insertions(+), 16 deletions(-)
+On 3/17/2022 5:31 PM, Peter Zijlstra wrote:
+> On Thu, Mar 17, 2022 at 11:58:35AM +0530, Sandipan Das wrote:
+> 
+>> +static inline u64 amd_pmu_get_global_overflow(void)
+>> +{
+>> +	u64 status;
+>> +
+>> +	/* PerfCntrGlobalStatus is read-only */
+>> +	rdmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_STATUS, status);
+>> +
+>> +	return status & amd_pmu_global_cntr_mask;
+>> +}
+>> +
+>> +static inline void amd_pmu_ack_global_overflow(u64 status)
+>> +{
+>> +	/*
+>> +	 * PerfCntrGlobalStatus is read-only but an overflow acknowledgment
+>> +	 * mechanism exists; writing 1 to a bit in PerfCntrGlobalStatusClr
+>> +	 * clears the same bit in PerfCntrGlobalStatus
+>> +	 */
+>> +
+>> +	/* Only allow modifications to PerfCntrGlobalStatus.PerfCntrOvfl */
+>> +	status &= amd_pmu_global_cntr_mask;
+>> +	wrmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR, status);
+>> +}
+>> +
+>> +static bool amd_pmu_legacy_has_overflow(int idx)
+>> +{
+>> +	u64 counter;
+>> +
+>> +	rdmsrl(x86_pmu_event_addr(idx), counter);
+>> +
+>> +	return !(counter & BIT_ULL(x86_pmu.cntval_bits - 1));
+>> +}
+>> +
+>> +static bool amd_pmu_global_has_overflow(int idx)
+>> +{
+>> +	return amd_pmu_get_global_overflow() & BIT_ULL(idx);
+>> +}
+>> +
+>> +DEFINE_STATIC_CALL(amd_pmu_has_overflow, amd_pmu_legacy_has_overflow);
+>> +
+>>  /*
+>>   * When a PMC counter overflows, an NMI is used to process the event and
+>>   * reset the counter. NMI latency can result in the counter being updated
+>> @@ -613,7 +653,6 @@ static inline void amd_pmu_set_global_ctl(u64 ctl)
+>>  static void amd_pmu_wait_on_overflow(int idx)
+>>  {
+>>  	unsigned int i;
+>> -	u64 counter;
+>>  
+>>  	/*
+>>  	 * Wait for the counter to be reset if it has overflowed. This loop
+>> @@ -621,8 +660,7 @@ static void amd_pmu_wait_on_overflow(int idx)
+>>  	 * forever...
+>>  	 */
+>>  	for (i = 0; i < OVERFLOW_WAIT_COUNT; i++) {
+>> -		rdmsrl(x86_pmu_event_addr(idx), counter);
+>> -		if (counter & (1ULL << (x86_pmu.cntval_bits - 1)))
+>> +		if (!static_call(amd_pmu_has_overflow)(idx))
+>>  			break;
+>>  
+>>  		/* Might be in IRQ context, so can't sleep */
+> 
+> This scares me... please tell me you fixed that mess.
+> 
+>> @@ -718,6 +756,83 @@ static void amd_pmu_enable_event(struct perf_event *event)
+>>  	static_call(amd_pmu_enable_event)(event);
+>>  }
+>>  
+>> +static int amd_pmu_global_handle_irq(struct pt_regs *regs)
+>> +{
+>> +	struct perf_sample_data data;
+>> +	struct cpu_hw_events *cpuc;
+>> +	struct hw_perf_event *hwc;
+>> +	struct perf_event *event;
+>> +	u64 val, status, mask;
+>> +	int handled = 0, idx;
+>> +
+>> +	status = amd_pmu_get_global_overflow();
+>> +
+>> +	/* Check if any overflows are pending */
+>> +	if (!status)
+>> +		return 0;
+>> +
+>> +	/* Stop counting */
+>> +	amd_pmu_global_disable_all();
+> 
+> 
+> This seems weird to me, I'd first disable it, then read status. MSR
+> access is expensive, you want to shut down the PMU asap.
+> 
+> Also, this is written like PMI would not be the primary NMI source,
+> which seems somewhat unlikely.
+> 
 
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index 5bce74de7cf2..5584b40fb36d 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -933,13 +933,14 @@ static bool mxc_jpeg_source_change(struct mxc_jpeg_ctx *ctx,
- {
- 	struct device *dev = ctx->mxc_jpeg->dev;
- 	struct mxc_jpeg_q_data *q_data_cap;
--	bool src_chg = false;
- 
- 	if (!jpeg_src_buf->fmt)
--		return src_chg;
-+		return false;
- 
- 	q_data_cap = mxc_jpeg_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
--	if (q_data_cap->w != jpeg_src_buf->w || q_data_cap->h != jpeg_src_buf->h) {
-+	if (q_data_cap->fmt != jpeg_src_buf->fmt ||
-+	    q_data_cap->w != jpeg_src_buf->w ||
-+	    q_data_cap->h != jpeg_src_buf->h) {
- 		dev_dbg(dev, "Detected jpeg res=(%dx%d)->(%dx%d), pixfmt=%c%c%c%c\n",
- 			q_data_cap->w, q_data_cap->h,
- 			jpeg_src_buf->w, jpeg_src_buf->h,
-@@ -976,9 +977,16 @@ static bool mxc_jpeg_source_change(struct mxc_jpeg_ctx *ctx,
- 		mxc_jpeg_bytesperline(q_data_cap, jpeg_src_buf->fmt->precision);
- 		mxc_jpeg_sizeimage(q_data_cap);
- 		notify_src_chg(ctx);
--		src_chg = true;
-+		ctx->source_change = 1;
- 	}
--	return src_chg;
-+	return ctx->source_change ? true : false;
-+}
-+
-+static int mxc_jpeg_job_ready(void *priv)
-+{
-+	struct mxc_jpeg_ctx *ctx = priv;
-+
-+	return ctx->source_change ? 0 : 1;
- }
- 
- static void mxc_jpeg_device_run(void *priv)
-@@ -1028,6 +1036,13 @@ static void mxc_jpeg_device_run(void *priv)
- 
- 		return;
- 	}
-+	if (ctx->mxc_jpeg->mode == MXC_JPEG_DECODE) {
-+		if (ctx->source_change || mxc_jpeg_source_change(ctx, jpeg_src_buf)) {
-+			spin_unlock_irqrestore(&ctx->mxc_jpeg->hw_lock, flags);
-+			v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
-+			return;
-+		}
-+	}
- 
- 	mxc_jpeg_enable(reg);
- 	mxc_jpeg_set_l_endian(reg, 1);
-@@ -1074,6 +1089,7 @@ static void mxc_jpeg_set_last_buffer_dequeued(struct mxc_jpeg_ctx *ctx)
- 	q->last_buffer_dequeued = true;
- 	wake_up(&q->done_wq);
- 	ctx->stopped = 0;
-+	ctx->header_parsed = false;
- }
- 
- static int mxc_jpeg_decoder_cmd(struct file *file, void *priv,
-@@ -1167,6 +1183,8 @@ static int mxc_jpeg_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct mxc_jpeg_q_data *q_data = mxc_jpeg_get_q_data(ctx, q->type);
- 	int ret;
- 
-+	if (ctx->mxc_jpeg->mode == MXC_JPEG_DECODE && V4L2_TYPE_IS_CAPTURE(q->type))
-+		ctx->source_change = 0;
- 	dev_dbg(ctx->mxc_jpeg->dev, "Start streaming ctx=%p", ctx);
- 	q_data->sequence = 0;
- 
-@@ -1345,16 +1363,15 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
- 		dev_warn(dev, "Invalid user resolution 0x0");
- 		dev_warn(dev, "Keeping resolution from JPEG: %dx%d",
- 			 header.frame.width, header.frame.height);
--		q_data_out->w = header.frame.width;
--		q_data_out->h = header.frame.height;
- 	} else if (header.frame.width != q_data_out->w ||
- 		   header.frame.height != q_data_out->h) {
- 		dev_err(dev,
- 			"Resolution mismatch: %dx%d (JPEG) versus %dx%d(user)",
- 			header.frame.width, header.frame.height,
- 			q_data_out->w, q_data_out->h);
--		return -EINVAL;
- 	}
-+	q_data_out->w = header.frame.width;
-+	q_data_out->h = header.frame.height;
- 	if (header.frame.width % 8 != 0 || header.frame.height % 8 != 0) {
- 		dev_err(dev, "JPEG width or height not multiple of 8: %dx%d\n",
- 			header.frame.width, header.frame.height);
-@@ -1390,8 +1407,10 @@ static int mxc_jpeg_parse(struct mxc_jpeg_ctx *ctx, struct vb2_buffer *vb)
- 	jpeg_src_buf->fmt = mxc_jpeg_find_format(ctx, fourcc);
- 	jpeg_src_buf->w = header.frame.width;
- 	jpeg_src_buf->h = header.frame.height;
-+	ctx->header_parsed = true;
- 
--	mxc_jpeg_source_change(ctx, jpeg_src_buf);
-+	if (!v4l2_m2m_num_src_bufs_ready(ctx->fh.m2m_ctx))
-+		mxc_jpeg_source_change(ctx, jpeg_src_buf);
- 
- 	return 0;
- }
-@@ -1468,6 +1487,7 @@ static void mxc_jpeg_buf_finish(struct vb2_buffer *vb)
- 	if (list_empty(&q->done_list)) {
- 		vbuf->flags |= V4L2_BUF_FLAG_LAST;
- 		ctx->stopped = 0;
-+		ctx->header_parsed = false;
- 	}
- }
- 
-@@ -1613,26 +1633,42 @@ static int mxc_jpeg_enum_fmt_vid_cap(struct file *file, void *priv,
- 				     struct v4l2_fmtdesc *f)
- {
- 	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(priv);
-+	struct mxc_jpeg_q_data *q_data = mxc_jpeg_get_q_data(ctx, f->type);
- 
--	if (ctx->mxc_jpeg->mode == MXC_JPEG_ENCODE)
-+	if (ctx->mxc_jpeg->mode == MXC_JPEG_ENCODE) {
- 		return enum_fmt(mxc_formats, MXC_JPEG_NUM_FORMATS, f,
- 			MXC_JPEG_FMT_TYPE_ENC);
--	else
-+	} else if (!ctx->header_parsed) {
- 		return enum_fmt(mxc_formats, MXC_JPEG_NUM_FORMATS, f,
- 			MXC_JPEG_FMT_TYPE_RAW);
-+	} else {
-+		/* For the decoder CAPTURE queue, only enumerate the raw formats
-+		 * supported for the format currently active on OUTPUT
-+		 * (more precisely what was propagated on capture queue
-+		 * after jpeg parse on the output buffer)
-+		 */
-+		if (f->index)
-+			return -EINVAL;
-+		f->pixelformat = q_data->fmt->fourcc;
-+		strscpy(f->description, q_data->fmt->name, sizeof(f->description));
-+		return 0;
-+	}
- }
- 
- static int mxc_jpeg_enum_fmt_vid_out(struct file *file, void *priv,
- 				     struct v4l2_fmtdesc *f)
- {
- 	struct mxc_jpeg_ctx *ctx = mxc_jpeg_fh_to_ctx(priv);
-+	u32 type = ctx->mxc_jpeg->mode == MXC_JPEG_DECODE ?  MXC_JPEG_FMT_TYPE_ENC :
-+							     MXC_JPEG_FMT_TYPE_RAW;
-+	int ret;
- 
-+	ret = enum_fmt(mxc_formats, MXC_JPEG_NUM_FORMATS, f, type);
-+	if (ret)
-+		return ret;
- 	if (ctx->mxc_jpeg->mode == MXC_JPEG_DECODE)
--		return enum_fmt(mxc_formats, MXC_JPEG_NUM_FORMATS, f,
--				MXC_JPEG_FMT_TYPE_ENC);
--	else
--		return enum_fmt(mxc_formats, MXC_JPEG_NUM_FORMATS, f,
--				MXC_JPEG_FMT_TYPE_RAW);
-+		f->flags = V4L2_FMT_FLAG_DYN_RESOLUTION;
-+	return 0;
- }
- 
- static int mxc_jpeg_try_fmt(struct v4l2_format *f, const struct mxc_jpeg_fmt *fmt,
-@@ -2013,6 +2049,7 @@ static const struct v4l2_file_operations mxc_jpeg_fops = {
- };
- 
- static const struct v4l2_m2m_ops mxc_jpeg_m2m_ops = {
-+	.job_ready      = mxc_jpeg_job_ready,
- 	.device_run	= mxc_jpeg_device_run,
- };
- 
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
-index 82b38cc2dfab..9ae56e6e0fbe 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
-@@ -94,6 +94,8 @@ struct mxc_jpeg_ctx {
- 	unsigned int			stopping;
- 	unsigned int			stopped;
- 	unsigned int			slot;
-+	unsigned int			source_change;
-+	bool				header_parsed;
- };
- 
- struct mxc_jpeg_slot_data {
--- 
-2.33.0
+Yes, PMI is the primary NMI source. Will fix this.
 
+>> +
+>> +	cpuc = this_cpu_ptr(&cpu_hw_events);
+>> +
+>> +	/*
+>> +	 * Some chipsets need to unmask the LVTPC in a particular spot
+>> +	 * inside the nmi handler.  As a result, the unmasking was
+>> +	 * pushed into all the nmi handlers.
+>> +	 *
+>> +	 * This generic handler doesn't seem to have any issues where
+>> +	 * the unmasking occurs so it was left at the top.
+>> +	 *
+>> +	 * N.B. Taken from x86_pmu_handle_irq()
+>> +	 */
+> 
+> Please write an AMD specific comment here. Note how 'recent' Intel chips
+> ended up pushing this to the end of the handler. Verify with your
+> hardware team where they want this and write as much of the rationale as
+> you're allowed to share in the comment.
+> 
+
+Sure. I'll follow-up on this.
+
+>> +	apic_write(APIC_LVTPC, APIC_DM_NMI);
+>> +
+>> +	for (idx = 0; idx < x86_pmu.num_counters; idx++) {
+>> +		if (!test_bit(idx, cpuc->active_mask))
+>> +			continue;
+>> +
+>> +		event = cpuc->events[idx];
+>> +		hwc = &event->hw;
+>> +		val = x86_perf_event_update(event);
+>> +		mask = BIT_ULL(idx);
+>> +
+>> +		if (!(status & mask))
+>> +			continue;
+>> +
+>> +		/* Event overflow */
+>> +		handled++;
+>> +		perf_sample_data_init(&data, 0, hwc->last_period);
+>> +
+>> +		if (!x86_perf_event_set_period(event))
+>> +			continue;
+>> +
+>> +		if (perf_event_overflow(event, &data, regs))
+>> +			x86_pmu_stop(event, 0);
+>> +
+>> +		status &= ~mask;
+>> +	}
+>> +
+>> +	/*
+>> +	 * It should never be the case that some overflows are not handled as
+>> +	 * the corresponding PMCs are expected to be inactive according to the
+>> +	 * active_mask
+>> +	 */
+>> +	WARN_ON(status > 0);
+>> +
+>> +	/* Clear overflow bits */
+>> +	amd_pmu_ack_global_overflow(~status);
+>> +
+>> +	inc_irq_stat(apic_perf_irqs);
+>> +
+>> +	/* Resume counting */
+>> +	amd_pmu_global_enable_all(0);
+> 
+> I think this is broken vs perf_pmu_{dis,en}able(), note how
+> intel_pmu_handle_irq() saves/restores the enable state.
+> 
+
+Yes, it is. Will fix it.
+
+>> +
+>> +	return handled;
+>> +}
+>> +
+>> +DEFINE_STATIC_CALL(amd_pmu_handle_irq, x86_pmu_handle_irq);
+>> +
+>>  /*
+>>   * Because of NMI latency, if multiple PMC counters are active or other sources
+>>   * of NMIs are received, the perf NMI handler can handle one or more overflowed
+>> @@ -741,7 +856,7 @@ static int amd_pmu_handle_irq(struct pt_regs *regs)
+>>  	int handled;
+>>  
+>>  	/* Process any counter overflows */
+>> -	handled = x86_pmu_handle_irq(regs);
+>> +	handled = static_call(amd_pmu_handle_irq)(regs);
+>>  
+>>  	/*
+>>  	 * If a counter was handled, record a timestamp such that un-handled
+>> @@ -1041,6 +1156,8 @@ static int __init amd_core_pmu_init(void)
+>>  		static_call_update(amd_pmu_enable_all, amd_pmu_global_enable_all);
+>>  		static_call_update(amd_pmu_disable_all, amd_pmu_global_disable_all);
+>>  		static_call_update(amd_pmu_enable_event, amd_pmu_global_enable_event);
+>> +		static_call_update(amd_pmu_has_overflow, amd_pmu_global_has_overflow);
+>> +		static_call_update(amd_pmu_handle_irq, amd_pmu_global_handle_irq);
+>>  	}
+> 
+> Same, all this static_call() stuff is misguided.
+> 
+> Also, if you feel like it, you can create amd_pmu_v2.
+
+Sure.
+
+- Sandipan

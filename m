@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80D24DD7E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C9D4DD7D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 11:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234975AbiCRK1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 06:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
+        id S234943AbiCRKTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 06:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232767AbiCRK1X (ORCPT
+        with ESMTP id S234924AbiCRKTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 06:27:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 032E621D7D1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 03:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647599163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cPahNlL5NyYIZItK9gqEZnfxGSGcjbqtGMEovTIJSaI=;
-        b=VBREF/qqaAC20Kt/aGBhLR8SA6QdtuThNdpfbP0gnGPB2J+Gdb4vvwhLPf0hZOJUGFB95Y
-        JWcR3rRRxgNsSytgezb/E4RMROM4tjOeVB7JTjvcpLJnTeErjwqK2UZv5mxCB0P8uk3s+H
-        fR6pESPfVIHt2IiBV6Sg8eOWxqb9gfo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-oAxVD0cnOu6GHVR8iL81jw-1; Fri, 18 Mar 2022 06:26:00 -0400
-X-MC-Unique: oAxVD0cnOu6GHVR8iL81jw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 24A43866DFA;
-        Fri, 18 Mar 2022 10:26:00 +0000 (UTC)
-Received: from localhost (ovpn-13-174.pek2.redhat.com [10.72.13.174])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A71F6401474;
-        Fri, 18 Mar 2022 10:25:58 +0000 (UTC)
-Date:   Fri, 18 Mar 2022 18:25:54 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-Cc:     willy@infradead.org, kexec@lists.infradead.org,
-        yangtiezhu@loongson.cn, amit.kachhap@arm.com, hch@lst.de,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk
-Subject: Re: [PATCH v4 0/4] Convert vmcore to use an iov_iter
-Message-ID: <YjReMozc2vY4bn7K@MiWiFi-R3L-srv>
-References: <20220318093706.161534-1-bhe@redhat.com>
+        Fri, 18 Mar 2022 06:19:45 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796001FB518;
+        Fri, 18 Mar 2022 03:18:22 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KKg0f6BlmzfYnH;
+        Fri, 18 Mar 2022 18:16:50 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 18 Mar
+ 2022 18:18:19 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Subject: [PATCH bpf-next] bpf, arm64: sign return address for jited code
+Date:   Fri, 18 Mar 2022 06:29:36 -0400
+Message-ID: <20220318102936.838459-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220318093706.161534-1-bhe@redhat.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,70 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Forgot adding Andrew to CC, add him.
+Sign return address for jited code when the kernel is built with pointer
+authentication enabled.
 
-On 03/18/22 at 05:37pm, Baoquan He wrote:
-> Copy the description of v3 cover letter from Willy:
-> ===
-> For some reason several people have been sending bad patches to fix
-> compiler warnings in vmcore recently.  Here's how it should be done.
-> Compile-tested only on x86.  As noted in the first patch, s390 should
-> take this conversion a bit further, but I'm not inclined to do that
-> work myself.
-> 
-> This series resends Willy's v3 patches which includes patch 1~3, and
-> append one patch to clean up the open code pointed out by Al.
-> 
-> Al's concerns to v3 patches and my reply after investigation:
-> https://lore.kernel.org/all/YhiTN0MORoQmFFkO@MiWiFi-R3L-srv/T/#u
-> 
-> Willy's v3 patchset:
-> [PATCH v3 0/3] Convert vmcore to use an iov_iter
-> https://lore.kernel.org/all/20211213143927.3069508-1-willy@infradead.org/T/#u
-> 
-> Changelog:
-> ===
-> v4:
->  - Append one patch to replace the open code with iov_iter_count().
->    This is suggested by Al.
->  - Fix a indentation error by replacing space with tab in
->    arch/sh/kernel/crash_dump.c of patch 1 reported by checkpatch. The
->    rest of patch 1~3 are untouched.
->  - Add Christopy's Reviewed-by and my Acked-by for patch 1~3.
-> v3:
->  - Send the correct patches this time
-> v2:
->  - Removed unnecessary kernel-doc
->  - Included uio.h to fix compilation problems
->  - Made read_from_oldmem_iter static to avoid compile warnings during the
->    conversion
->  - Use iov_iter_truncate() (Christoph)
-> 
-> 
-> 
-> Baoquan He (1):
->   fs/proc/vmcore: Use iov_iter_count()
-> 
-> Matthew Wilcox (Oracle) (3):
->   vmcore: Convert copy_oldmem_page() to take an iov_iter
->   vmcore: Convert __read_vmcore to use an iov_iter
->   vmcore: Convert read_from_oldmem() to take an iov_iter
-> 
->  arch/arm/kernel/crash_dump.c     |  27 +------
->  arch/arm64/kernel/crash_dump.c   |  29 +------
->  arch/ia64/kernel/crash_dump.c    |  32 +-------
->  arch/mips/kernel/crash_dump.c    |  27 +------
->  arch/powerpc/kernel/crash_dump.c |  35 ++-------
->  arch/riscv/kernel/crash_dump.c   |  26 +------
->  arch/s390/kernel/crash_dump.c    |  13 ++--
->  arch/sh/kernel/crash_dump.c      |  29 ++-----
->  arch/x86/kernel/crash_dump_32.c  |  29 +------
->  arch/x86/kernel/crash_dump_64.c  |  48 ++++--------
->  fs/proc/vmcore.c                 | 130 +++++++++++++------------------
->  include/linux/crash_dump.h       |  19 ++---
->  12 files changed, 123 insertions(+), 321 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
+1. Sign lr with paciasp instruction before lr is pushed to stack. Since
+   paciasp acts like landing pads for function entry, no need to insert
+   bti instruction before paciasp.
+
+2. Authenticate lr with autiasp instruction after lr is poped from stack.
+
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ arch/arm64/net/bpf_jit.h      |  3 +++
+ arch/arm64/net/bpf_jit_comp.c | 11 +++++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
+index dd59b5ad8fe4..679c80aa1f2e 100644
+--- a/arch/arm64/net/bpf_jit.h
++++ b/arch/arm64/net/bpf_jit.h
+@@ -249,6 +249,9 @@
+ /* HINTs */
+ #define A64_HINT(x) aarch64_insn_gen_hint(x)
+ 
++#define A64_PACIASP A64_HINT(AARCH64_INSN_HINT_PACIASP)
++#define A64_AUTIASP A64_HINT(AARCH64_INSN_HINT_AUTIASP)
++
+ /* BTI */
+ #define A64_BTI_C  A64_HINT(AARCH64_INSN_HINT_BTIC)
+ #define A64_BTI_J  A64_HINT(AARCH64_INSN_HINT_BTIJ)
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index e850c69e128c..5dcf45e5944e 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -192,7 +192,7 @@ static bool is_addsub_imm(u32 imm)
+ }
+ 
+ /* Tail call offset to jump into */
+-#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
++#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) || IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
+ #define PROLOGUE_OFFSET 8
+ #else
+ #define PROLOGUE_OFFSET 7
+@@ -233,8 +233,11 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+ 	 *
+ 	 */
+ 
++	/* Sign lr */
++	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
++		emit(A64_PACIASP, ctx);
+ 	/* BTI landing pad */
+-	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
++	else if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
+ 		emit(A64_BTI_C, ctx);
+ 
+ 	/* Save FP and LR registers to stay align with ARM64 AAPCS */
+@@ -529,6 +532,10 @@ static void build_epilogue(struct jit_ctx *ctx)
+ 	/* Set return value */
+ 	emit(A64_MOV(1, A64_R(0), r0), ctx);
+ 
++	/* Authenticate lr */
++	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
++		emit(A64_AUTIASP, ctx);
++
+ 	emit(A64_RET(A64_LR), ctx);
+ }
+ 
+-- 
+2.30.2
 

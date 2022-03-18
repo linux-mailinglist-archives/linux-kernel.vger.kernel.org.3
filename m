@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04454DD947
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 622784DD948
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 12:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236002AbiCRL5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 07:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
+        id S236010AbiCRL62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 07:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbiCRL53 (ORCPT
+        with ESMTP id S232427AbiCRL61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 07:57:29 -0400
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48CE10429C;
-        Fri, 18 Mar 2022 04:56:06 -0700 (PDT)
-Received: by mail-lj1-f179.google.com with SMTP id bx44so4480890ljb.13;
-        Fri, 18 Mar 2022 04:56:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LpBDuSYRfhCjN2rL91mRm+RnyEuqAx1X5cQe2gIQXvU=;
-        b=pRUCnvYyE/VQbf9w/9SrFBLsuH43ScruqwEGCJZXCXUEoTGqYTh+T7wC2xOkbRUcX4
-         BRRGlOOI8uWZJAvZbYVg3lAIjwQeViCKVkwd9w6UzBIRG+wsDBW6WqUXqObc5XB0p0Jl
-         yKs2hXLEaG9JMHVkZBGa4azqyHDDG+Gd2KTwl07rpO/+4mZkI7+VWMAFXAb+eucVq3Ef
-         QN+SWrne0vNHWG+9ZAu0xWuktdLL58fznepB/SrwTLvOy+IOSFJCH35c/QrosVoWWdju
-         mGz2/MBH+UKFZ7gMbFIvSxUKvnCIX59SiSiYPjl7N3xsVS9OUnFKK5581W093gZQ47KD
-         R43Q==
-X-Gm-Message-State: AOAM530RPArbQ4aTXBB7/kqm+qiszeQRYI0wSZQYYmXvsgLDuZMtEjEm
-        GpFDBmdLVmWk57jIzDt/0UM=
-X-Google-Smtp-Source: ABdhPJwXxt19VE3E+LR/+1rHtFn/71OmpD0icPdohgbhWWTOiDk8Ulkt/mFgVGq4Zi2NlGCvJlo+Uw==
-X-Received: by 2002:a2e:9bd7:0:b0:248:ca3:ecf1 with SMTP id w23-20020a2e9bd7000000b002480ca3ecf1mr6179171ljj.66.1647604564930;
-        Fri, 18 Mar 2022 04:56:04 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id a11-20020a194f4b000000b004482e94a3b1sm819762lfk.19.2022.03.18.04.56.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 04:56:04 -0700 (PDT)
-Message-ID: <df985bc1-bb99-9623-ad78-b77329b8eba7@kernel.org>
-Date:   Fri, 18 Mar 2022 12:56:01 +0100
+        Fri, 18 Mar 2022 07:58:27 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5686F12F14F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 04:57:08 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R771e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V7W6.JF_1647604625;
+Received: from 30.0.159.17(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V7W6.JF_1647604625)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 18 Mar 2022 19:57:05 +0800
+Message-ID: <6cb97421-ab4a-2520-2503-10fec548edd0@linux.alibaba.com>
+Date:   Fri, 18 Mar 2022 19:58:07 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] arm64: dts: imx8mp: add ddr controller node to support
- EDAC on imx8mp
-Content-Language: en-US
-To:     Sherry Sun <sherry.sun@nxp.com>, robh+dt@kernel.org,
-        krzk+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        Dinh Nguyen <dinguyen@kernel.org>
-References: <20220318113526.15986-1-sherry.sun@nxp.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220318113526.15986-1-sherry.sun@nxp.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] mm/damon: Make the sampling more accurate
+To:     sj@kernel.org
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220318104948.26387-1-sj@kernel.org>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220318104948.26387-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 12:35, Sherry Sun wrote:
-> i.MX8MP use synopsys V3.70a ddr controller IP, so add edac support
-> for i.MX8MP based on "snps,ddrc-3.80a" synopsys edac driver.
+
+
+On 3/18/2022 6:49 PM, sj@kernel.org wrote:
+> On Fri, 18 Mar 2022 18:01:19 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
 > 
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 6 ++++++
->  1 file changed, 6 insertions(+)
+>>
+>> On 3/18/2022 5:40 PM, sj@kernel.org wrote:
+>>> Hi Baolin,
+>>>
+>>> On Fri, 18 Mar 2022 17:23:13 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+>>>
+>>>> When I try to sample the physical address with DAMON to migrate pages
+>>>> on tiered memory system, I found it will demote some cold regions mistakenly.
+>>>> Now we will choose an physical address in the region randomly, but if
+>>>> its corresponding page is not an online LRU page, we will ignore the
+>>>> accessing status in this cycle of sampling, and actually will be treated
+>>>> as a non-accessed region. Suppose a region including some non-LRU pages,
+>>>> it will be treated as a cold region with a high probability, and may be
+>>>> merged with adjacent cold regions, but there are some pages may be
+>>>> accessed we missed.
+>>>>
+>>>> So instead of ignoring the access status of this region if we did not find
+>>>> a valid page according to current sampling address, we can use last valid
+>>>> sampling address to help to make the sampling more accurate, then we can do
+>>>> a better decision.
+>>>
+>>> Well...  Offlined pages are also a valid part of the memory region, so treating
+>>> those as not accessed and making the memory region containing the offlined
+>>> pages looks colder seems legal to me.  IOW, this approach could make memory
+>>> regions containing many non-online-LRU pages as hot.
+>>
+>> IMO I don't think this is a problem, since if this region containing
+>> many non-online-LRU pages is treated as hot, which means threre are aome
+>> pages are hot, right? We can find them and promote them to fast memory
+>> (or do other schemes). Meanwhile, for non-online-LRU pages, we can
+>> filter them and do nothing for them, since we can not get a valid page
+>> struct for them.
 > 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> index 794d75173cf5..a6124a11d6ee 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> @@ -902,6 +902,12 @@
->  			interrupt-parent = <&gic>;
->  		};
->  
-> +		edacmc: memory-controller@3d400000 {
-> +			compatible = "snps,ddrc-3.80a";
-> +			reg = <0x3d400000 0x400000>;
-> +			interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
+> For some of DAMOS actions that you mentioned, that could make sense.  However,
+> that wouldn't make much sense for some other cases, especially for manual
+> DAMON-based access pattern profiling.
 
-This is not correct according to the bindings. Dinh's commit adding the
-compatible might not be correct, so please first fix bindings.
+I am not sure about this case, could you elaborate on how this can worse 
+the case you mentioned?
 
-While fixing bindings, order the compatibles by name (s goes before x).
+Like you said as below, we can split the regions to separate the hot 
+pages out of the hot regions containing some offline or non-lru pages, 
+that is also a benefit to improve the regions adjustment.
 
+> After all, we already have a mechanism for this case: adaptive regions
+> adjustment (or, regions split/merge).  That mechanism will eventually separate
+> out hot oneline-LRU pages in the memory regions.  Before the region is
+> adjusted, reporting the whole region as hot looks like a right result to me.
+> Of course, I admit that it could take too much time to converge to the optimal
+> regions, and there are many rooms for improvement of the regions adjustment
+> mechanism.  I think we should pursue the direction (improving the regions
+> adjustment mechanism).
 
-Best regards,
-Krzysztof
+Yes, agree.
+
+> FYI, I have some rough ideas for improving the mechanism including partitioning
+> regions into more than 2 sub-regions if we belive it is not making a good
+> progress.  Nevertheless, I'd like to first make a methodology for evaluating
+> current accuracy.  For that, I am planning to implement a page-granularity
+> access monitoring.
+
+Great, I think the page-granularity monitoring will be more suitable for 
+tiered memory system, which can reduce redundant demotion and promotion. 
+However, I still concern the overhead if the monitoring is a 
+page-granularity, especially for a large memory size. Anyway, I'd like 
+to help to test or review the new page-granularity monitoring when 
+you're ready to send out. Thanks.

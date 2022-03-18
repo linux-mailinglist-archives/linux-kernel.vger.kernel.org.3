@@ -2,203 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6824DE487
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 00:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D33954DE489
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 00:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241525AbiCRXgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 19:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S241536AbiCRXhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 19:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233316AbiCRXgv (ORCPT
+        with ESMTP id S233316AbiCRXhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 19:36:51 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2066.outbound.protection.outlook.com [40.107.101.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8558330A8B2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:35:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gYcqsb/e4UdTViY5sRJyP3U/0WYrcKQ14ch6c5xyJq8Yr3ZBcfqmG2cVDYToA/4H4tDHBMQgv4nqd5x7smk3/UPBI5c5IZGA4R2QlKp6MZfwolkbB87VLBzWtMlDMXcCPL08+Q+cw2ceceRFyn9YSNAVC5IfnQUeawRJ76cCzb5IO9BvqPbI2f1EclFjd+A/scVlUami+41bSNw79pCp5nDu5s9Ix/AHysrTbXp+5hf4P1onv6NFZ2rHcaneLmoCjJqFq2dKNte/DTXShYFhom5luPNYFXrafwEP+ygAKPaxmTUb1chRAd0trYKXew096iI4QzJzua/GcXrF5bKNxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AgaxtyDDtxXCY30zXGIsDImQt8UsE/pKaNU8TcFcpIg=;
- b=XFxc+Zy73bnbufPM5PukR8NtMvF293WeWSeRzKe8P1UqKnIF1PO9aKh5Y35FAe1btFHPT1iLETlkYq8+q5XY9nJr1pd/i7pOWZE8YHRoLiI2DeFnllgJwLVux5nuWTcgdhN+BjsxRNpxKlqDsUmo89aM4iu+vEE9lYUikKOqif8XthUEJIVfg88Am+RlStWb+nCBe3UIvlY82DOM5zoHGZhKi54pByN5YEgL/nCURVIcG6snJF9XK3PNK3AFbbSCGlbdIg9Y7IGlHQAlenhcXWVmg0Xh9g4Mj5GrXnXzIYqBgIC4hlnvPZ2ko+sGHMP54HumsYF5yOEM2yZk/hcGnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AgaxtyDDtxXCY30zXGIsDImQt8UsE/pKaNU8TcFcpIg=;
- b=E6lmyMx3MO9OGr+igprs2DWBiFrAFLQ6PdyZDqArxFmIH5D1KohurBqcnnNXeXSxUTMadk97ZH/DSWiVYfxEXTYR1NBZQFIbJONpiM9UWr7DRSkcgS/o2RG9D3k7UYCFFBAGa/jkZmDMJhfLVkCa+QmvJ5f+LOBjVh7GiZimAfWsbPijAMJ9/LgB8GBw9Axi4cc5DzcVDuuz5xkm5WxPULH+e7qBneR7ZbaHI9ZYNTdDa3gXWfAkTkZnQBzJl1FJAkQYkyPgJtA6Hi5qYw05nJz/0TirfMRUAAhEpSCUxcQuPDWblNIrD0fCMnKzDm6EN2cgY3QG+FWJVPMyQmBkkQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MN2PR12MB3453.namprd12.prod.outlook.com (2603:10b6:208:c3::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Fri, 18 Mar
- 2022 23:35:29 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::11a0:970a:4c24:c70c]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::11a0:970a:4c24:c70c%5]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
- 23:35:29 +0000
-Date:   Fri, 18 Mar 2022 20:35:27 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-Subject: Re: [PATCH v2 15/15] mm/gup: sanity-check with CONFIG_DEBUG_VM that
- anonymous pages are exclusive when (un)pinning
-Message-ID: <20220318233527.GB11336@nvidia.com>
-References: <20220315104741.63071-1-david@redhat.com>
- <20220315104741.63071-16-david@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220315104741.63071-16-david@redhat.com>
-X-ClientProxiedBy: MN2PR19CA0051.namprd19.prod.outlook.com
- (2603:10b6:208:19b::28) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Fri, 18 Mar 2022 19:37:39 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6199230CA85
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:36:20 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id b15-20020a05660214cf00b00648a910b964so5953609iow.19
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:36:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=+MKfS9KaJOgzX6Bj06yPYh/Zoj+anW5sorP57L7zyBc=;
+        b=e1mdFounCPrBCj0iOLu+qHq7YV5s4kmI8GdimtGRcjiNIaI4pWGXU1K+4imsW85Amq
+         eD/RnvhFccKfl+Dv3nmF8U3R7ZRV0fbvc8Z/1bvmqLJPa2eg4klmj6F3R1hmD7x9APJp
+         VSKmVJj7JKfe0WhGhJWg0mCNM5KclDaRtwIKNfIT2/371e2pzpkG5EGH1+42rqNurRyK
+         Hd556aCxHHDHZLuDHk3q/B435gOeetVPwlFufgQFZSNGRSIfeuBgsSK9gBhieAllXmQL
+         hbwLhWE6GVTVIk4y5PWxpDEw1v5THaWtR/Tl5uc6MhB+j9zzju2/Lmp3LV/Ogeh7yiES
+         pdug==
+X-Gm-Message-State: AOAM532kaFDpfKmAG5zUa01TPUYbuvjvf6ig2Lj+LQbTJjOk1HwbuNEh
+        eGmO1ncCe1vsVOoAtiCWLuT8nC74kdic+2KTW7dFCuGVlRKB
+X-Google-Smtp-Source: ABdhPJwIjc6onNrC4ts9Hddc3mAEKea9094pQn3yJ4PnLYSGmik1Ce91bqu9jDx6JIda8yf2a5naBYE2Xdy4XL0TfgmeDpJtZtA4
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b7bbea17-1db0-4f45-9af2-08da0937fc7a
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3453:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB345303B271A86F5426DFF907C2139@MN2PR12MB3453.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8RoLZ2sJcIcEsJwDozvOvYENIgTv9hNghjt/dZ6enoVDoZERzEDsMKU/kbA2IQ+AuoLTpbFe77ojcyyW/9Z8oFE271hlhh+N/cdX3ewXyZ0/XyxlY2g8eIGoMfcUonATDG5Gq8HhqG+N6YuQQoDm+W4aBrUIoOJjbhZlPNmmSEE/yZKBAUi58+1IJ2MVVcCvZYNmhvtMxn3w7JMEZvs/SU7ci3r6sggjWYnGVfO9H7xylLSBeS6M3KRkLAd/lF31+jrtyoDOUAJKepIh/HZCwjTAqBRvw2NhpWRXxuzib95t7i2jHbFHGXCyD61vCm/lKPbxfAX3sE0ClGgwqWta+d+gbuQJvEKRodWEcOV+NsJk4bwjASNWfxjgRS/DfHq/Rem4cvkhSxLqYUgqTh3W5hqLwxyH22vKIDuuX/DcRsUdJu0Fhx+/cJyZZqIn9Px3YHBjjtnAls9njULluQplBj3EZv08lcfpLpA7Ff4pACu7b169AL2cFX14+H5Cr9q7qjtKNtn8oIJXy6rUMT6kE6forUM1ru77S2he+rjViJLvZzVWI7IA6v3daZqoQoV+/rgbvMLOhxynMrE0W/Boe9sIOuRqWlFGNSSzwgeAZCjKi8YNIK8AS2TngY2rF/3F66HG/Y3IPyt3Xu3lbMf1Dw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(8936002)(7416002)(54906003)(1076003)(2906002)(83380400001)(6916009)(33656002)(316002)(38100700002)(86362001)(508600001)(6486002)(36756003)(6512007)(66476007)(8676002)(4326008)(66556008)(66946007)(186003)(26005)(6506007)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?T3m/vTq1gOwsFKNtvwuY8s3C6aDEZ+p01gqPbs+QM9VicaXUvuslGUheTyMr?=
- =?us-ascii?Q?BWBbbXjEcWF9xbANJ6hhTA0yEE8Cox1MRMYn21hdcdIUmyvYr9ccnYKe3kOI?=
- =?us-ascii?Q?dhilQvDWmXXcGcd/PLrU369juC49fREbvzSJNqwLZQZQRWRqgRTWpeTU/PO3?=
- =?us-ascii?Q?cA1twXQNM2iK9mMj0Edx00dVnBPxbfOuBwstK+QZFdGTEwAzGxahZqvyxGE/?=
- =?us-ascii?Q?jYr/J9Z1vuepLmWXf/pAbCxuSzwKQy3dtNficFVBkS0xld68BIbWGjnP5pNL?=
- =?us-ascii?Q?7zXpgMj45LSnjm+mijXyDmLmeuWY+edGfeP6TwBphaq29u+3IWzJ4IFWIw1f?=
- =?us-ascii?Q?Fngn9cBQHc+h9aNPIxiIJP5ynXcHy0Spj730EY9A/kifsnHYQeH7Sb0vBS+D?=
- =?us-ascii?Q?MwVgsgvWIaWEMmnJG4FiYQy+IQ31n27aUugEujg0cfdL/F1EHagapdui+bZF?=
- =?us-ascii?Q?FaHu4MMCJnXyatkVWa5gnLtUTozV0i7tx7+iWQIItjnryfufdg53hz7eAHxQ?=
- =?us-ascii?Q?1D2HzxIIIq0U2MvTg5Rqc7mivWSugc8i2X3BQFyeDNvQ2FRdSIHyP0LrUtD6?=
- =?us-ascii?Q?UZx5+NRfDjpahX4AGJhnX+iSoVGYsgBkyx0nkCq4VxqB81YnABqOUUok2UIp?=
- =?us-ascii?Q?l5MoraPOI9sIv3wcL8+l/87YuyL30gEsPe4/fvM7lh9NQ+jU28Hvk0fnyTrT?=
- =?us-ascii?Q?JM1MBtWRABrDk0yQscKRaSalPvg7zlijREXcpgTTbO04uLTZTf/+c7EqO5SG?=
- =?us-ascii?Q?MVQv+uHxQb0toUo/cAjOwxqdV2vaaEO6pQMGIfrLzCkdCsXYVswC8gegsEfN?=
- =?us-ascii?Q?xnQVMugkzcSjf4vnpmjQyo9nNtbC5X1jcDrbuEgvCFDECP0tiKR3jGetMR02?=
- =?us-ascii?Q?CQjWte22i6KQl5fL0/9VXXKXDKd6mfpHaBRdThEtrprwV4iAy6Bs3Y/ezDab?=
- =?us-ascii?Q?ksUWNPfqzPbzWfVH3sHuM40CGZkmRoeWSfvCtXn5oEOtp4gXidl7RJpI8rAd?=
- =?us-ascii?Q?MH81tzKHwCEcsvIKlD8SiGoD291LHCr5RF8XqydBY8OOJ4bMwxqmgqSQM5gh?=
- =?us-ascii?Q?xp0+EjqdKzm67qGxQ8VDRHHWF9NtSKxoulfDLWVNY9eszNp1a3B7uXS0bkEH?=
- =?us-ascii?Q?yX2mm3m5/KtCxzXeYCTo1rv1MaijIAeDM7rHL0Zpj7pQMzbo8lyJ+xBt31wG?=
- =?us-ascii?Q?AZIeaiT4540upHoo8bOrYHUJPsLqJhSTF/7MUXRjJ5RTFgHTizIZ5vBEo+5p?=
- =?us-ascii?Q?PfCn/zDPvsl2+KS1rmLK+bP6anNJDIB688rfp1nyWIy0eUzyGr03nRoo53Oo?=
- =?us-ascii?Q?ILQAQ7kKx9LHFOkYgrg1seIK0aHUafDlwEatxhnaqGCtUBuM/Hm5CaYftCKh?=
- =?us-ascii?Q?cPtaZIIO4GQpifpinKiSO4h/0T95jsEJ/bDhQgg7muglqZ6jG6G399b2qcSM?=
- =?us-ascii?Q?2KVDAgGWf9S9TgzfwV1gSmggqOUlzn17?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7bbea17-1db0-4f45-9af2-08da0937fc7a
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 23:35:29.2903
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Bh6M68MwxxHaluwQrvPQH+A2mE8FldOIRDTmPACMJxShgiKIvZvcWI8D5qtGp+WP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3453
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:264b:b0:31a:84d7:7281 with SMTP id
+ n11-20020a056638264b00b0031a84d77281mr1983827jat.288.1647646579008; Fri, 18
+ Mar 2022 16:36:19 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 16:36:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000eaff805da869d5b@google.com>
+Subject: [syzbot] net-next test error: WARNING in __napi_schedule
+From:   syzbot <syzbot+fb57d2a7c4678481a495@syzkaller.appspotmail.com>
+To:     Jason@zx2c4.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        wireguard@lists.zx2c4.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 11:47:41AM +0100, David Hildenbrand wrote:
-> Let's verify when (un)pinning anonymous pages that we always deal with
-> exclusive anonymous pages, which guarantees that we'll have a reliable
-> PIN, meaning that we cannot end up with the GUP pin being inconsistent
-> with he pages mapped into the page tables due to a COW triggered
-> by a write fault.
-> 
-> When pinning pages, after conditionally triggering GUP unsharing of
-> possibly shared anonymous pages, we should always only see exclusive
-> anonymous pages. Note that anonymous pages that are mapped writable
-> must be marked exclusive, otherwise we'd have a BUG.
-> 
-> When pinning during ordinary GUP, simply add a check after our
-> conditional GUP-triggered unsharing checks. As we know exactly how the
-> page is mapped, we know exactly in which page we have to check for
-> PageAnonExclusive().
-> 
-> When pinning via GUP-fast we have to be careful, because we can race with
-> fork(): verify only after we made sure via the seqcount that we didn't
-> race with concurrent fork() that we didn't end up pinning a possibly
-> shared anonymous page.
-> 
-> Similarly, when unpinning, verify that the pages are still marked as
-> exclusive: otherwise something turned the pages possibly shared, which
-> can result in random memory corruptions, which we really want to catch.
-> 
-> With only the pinned pages at hand and not the actual page table entries
-> we have to be a bit careful: hugetlb pages are always mapped via a
-> single logical page table entry referencing the head page and
-> PG_anon_exclusive of the head page applies. Anon THP are a bit more
-> complicated, because we might have obtained the page reference either via
-> a PMD or a PTE -- depending on the mapping type we either have to check
-> PageAnonExclusive of the head page (PMD-mapped THP) or the tail page
-> (PTE-mapped THP) applies: as we don't know and to make our life easier,
-> check that either is set.
-> 
-> Take care to not verify in case we're unpinning during GUP-fast because
-> we detected concurrent fork(): we might stumble over an anonymous page
-> that is now shared.
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
->  mm/gup.c         | 58 +++++++++++++++++++++++++++++++++++++++++++++++-
->  mm/huge_memory.c |  3 +++
->  mm/hugetlb.c     |  3 +++
->  3 files changed, 63 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 92dcd92f9d67..72e39b77da10 100644
-> +++ b/mm/gup.c
-> @@ -45,6 +45,38 @@ static void hpage_pincount_sub(struct page *page, int refs)
->  	atomic_sub(refs, compound_pincount_ptr(page));
->  }
->  
-> +static inline void sanity_check_pinned_pages(struct page **pages,
-> +					     unsigned long npages)
-> +{
-> +#ifdef CONFIG_DEBUG_VM
+Hello,
 
-Perhaps:
+syzbot found the following issue on:
 
-if (!IS_ENABLED(CONFIG_DEBUG_VM))
-   return;
+HEAD commit:    e89600ebeeb1 af_vsock: SOCK_SEQPACKET broken buffer test
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=134d43d5700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ef691629edb94d6a
+dashboard link: https://syzkaller.appspot.com/bug?extid=fb57d2a7c4678481a495
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-So this gets compilation coverage
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fb57d2a7c4678481a495@syzkaller.appspotmail.com
 
-Jason
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 1133 at net/core/dev.c:4268 ____napi_schedule net/core/dev.c:4268 [inline]
+WARNING: CPU: 0 PID: 1133 at net/core/dev.c:4268 __napi_schedule+0xe2/0x440 net/core/dev.c:5878
+Modules linked in:
+CPU: 0 PID: 1133 Comm: kworker/0:3 Not tainted 5.17.0-rc8-syzkaller-02525-ge89600ebeeb1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: wg-crypt-wg0 wg_packet_decrypt_worker
+RIP: 0010:____napi_schedule net/core/dev.c:4268 [inline]
+RIP: 0010:__napi_schedule+0xe2/0x440 net/core/dev.c:5878
+Code: 74 4a e8 31 16 47 fa 31 ff 65 44 8b 25 47 c5 d0 78 41 81 e4 00 ff 0f 00 44 89 e6 e8 98 19 47 fa 45 85 e4 75 07 e8 0e 16 47 fa <0f> 0b e8 07 16 47 fa 65 44 8b 25 5f cf d0 78 31 ff 44 89 e6 e8 75
+RSP: 0018:ffffc900057d7c88 EFLAGS: 00010093
+RAX: 0000000000000000 RBX: ffff88801e680748 RCX: 0000000000000000
+RDX: ffff88801ccb0000 RSI: ffffffff8731aa92 RDI: 0000000000000003
+RBP: 0000000000000200 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff8731aa88 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff8880b9c00000 R14: 000000000003adc0 R15: ffff88801e118ec0
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fdaa5c65300 CR3: 0000000070af4000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ napi_schedule include/linux/netdevice.h:465 [inline]
+ wg_queue_enqueue_per_peer_rx drivers/net/wireguard/queueing.h:204 [inline]
+ wg_packet_decrypt_worker+0x408/0x5d0 drivers/net/wireguard/receive.c:510
+ process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+ worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,100 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C564DDAD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C6F4DDADA
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:48:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236822AbiCRNte convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Mar 2022 09:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
+        id S236834AbiCRNtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236819AbiCRNtb (ORCPT
+        with ESMTP id S236109AbiCRNtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:49:31 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6D792DCB
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:48:11 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-230-7BPTG6E3OgCK3NW-RJ4mhA-1; Fri, 18 Mar 2022 13:48:08 +0000
-X-MC-Unique: 7BPTG6E3OgCK3NW-RJ4mhA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Fri, 18 Mar 2022 13:48:07 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Fri, 18 Mar 2022 13:48:07 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Baoquan He' <bhe@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "willy@infradead.org" <willy@infradead.org>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "yangtiezhu@loongson.cn" <yangtiezhu@loongson.cn>,
-        "amit.kachhap@arm.com" <amit.kachhap@arm.com>,
-        "hch@lst.de" <hch@lst.de>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
-Subject: RE: [PATCH v4 4/4] fs/proc/vmcore: Use iov_iter_count()
-Thread-Topic: [PATCH v4 4/4] fs/proc/vmcore: Use iov_iter_count()
-Thread-Index: AQHYOqvdJiWddWfO9ESrhwkm/5kbyKzFJutw
-Date:   Fri, 18 Mar 2022 13:48:07 +0000
-Message-ID: <1592a861bd9e46e5adf1431ad6bbd25c@AcuMS.aculab.com>
-References: <20220318093706.161534-1-bhe@redhat.com>
- <20220318093706.161534-5-bhe@redhat.com>
-In-Reply-To: <20220318093706.161534-5-bhe@redhat.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 18 Mar 2022 09:49:50 -0400
+Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A129E163E05
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:48:30 -0700 (PDT)
+Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 61EA210048445
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 13:48:30 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id VCxynvtdZwm8iVCxynxTSt; Fri, 18 Mar 2022 13:48:30 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=DpSTREz+ c=1 sm=1 tr=0 ts=62348dae
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=o8Y5sQTvuykA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=2GCAtCuT3wgT4q42L9EA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=1QYp7nWSJ3VYtGgxX5TKlOfQVqw+7WaVqX47zjJXg7A=; b=GPtW2r3sGhkZWVZWfCwPapDQU3
+        iGXALFfeiyOyyEv153wGjcvPyLhQnHtvxLAsR/uUg3hxtV84hWOLAeh6KogTg6EZ1VRtSIATsh4Rh
+        IX5uz2EMK/SObQynPSfci6ZVf;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33286 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nVCxx-000O6R-3d; Fri, 18 Mar 2022 07:48:29 -0600
+Subject: Re: [PATCH 5.16 00/28] 5.16.16-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220317124526.768423926@linuxfoundation.org>
+In-Reply-To: <20220317124526.768423926@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <a074ff6f-a339-bfbc-c408-3d1617fb4f57@w6rz.net>
+Date:   Fri, 18 Mar 2022 06:48:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nVCxx-000O6R-3d
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:33286
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baoquan He
-> Sent: 18 March 2022 09:37
-> 
-> To replace open coded iter->count. This makes code cleaner.
-...
-> diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
-> index 4cbb8db7c507..ed58a7edc821 100644
-> --- a/fs/proc/vmcore.c
-> +++ b/fs/proc/vmcore.c
-> @@ -319,21 +319,21 @@ static ssize_t __read_vmcore(struct iov_iter *iter, loff_t *fpos)
->  	u64 start;
->  	struct vmcore *m = NULL;
-> 
-> -	if (iter->count == 0 || *fpos >= vmcore_size)
-> +	if (!iov_iter_count(iter) || *fpos >= vmcore_size)
+On 3/17/22 5:45 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.16 release.
+> There are 28 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 19 Mar 2022 12:45:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.16-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-For some definition of 'cleaner' :-)
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-iter->count is clearly a simple, cheap structure member lookup.
-OTOH iov_iter_count(iter) might be an expensive traversal of
-the vector (or worse).
-
-So a quick read of the code by someone who isn't an expert
-in the iov functions leaves them wondering what is going on
-or having to spend time locating the definition ...
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Tested-by: Ron Economos <re@w6rz.net>
 

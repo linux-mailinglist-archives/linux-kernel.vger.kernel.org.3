@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380F94DDCB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 745134DDCC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237919AbiCRPXp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 18 Mar 2022 11:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S237944AbiCRP00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 11:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237139AbiCRPXm (ORCPT
+        with ESMTP id S237831AbiCRP0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 11:23:42 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D39B262411
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 08:22:23 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-150-J-EB7TRUPCa955UakG2Ikg-1; Fri, 18 Mar 2022 15:22:20 +0000
-X-MC-Unique: J-EB7TRUPCa955UakG2Ikg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Fri, 18 Mar 2022 15:22:20 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Fri, 18 Mar 2022 15:22:20 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Juergen Gross' <jgross@suse.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
+        Fri, 18 Mar 2022 11:26:23 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776B3A5E91;
+        Fri, 18 Mar 2022 08:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647617105; x=1679153105;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LlOEVehLpDxPQcChYnPKlnsRrBtAlMMFuCk3HXvGY80=;
+  b=Oh9+WeOWgT8HjzHe4TLar2R07De2kG9HBq5u3YbVFLW1Aq9hbVrXufjB
+   yTRpGFMknifNHKY706SaVvcpzt8OTEhdIKiz0SoFgcbpCZzE3JMonsd1W
+   HpiS1LF8xQPg8k4DkJmJNfzdcwwYf1H6stiY+V7XotJb7o1h22Q6wOvHw
+   LJtmpTvYbC6GOePCxW+nVbQX1sBQHGO79TiQh8AvJL2szHjb7Se/yXOiU
+   DQMwSQwyJVG925oLHnaJM1NQ8C1GaXRvQl4junbxnHiG+kSD+MBwKZsO/
+   khLw/7oSH6gqbij+DjBXDtuByiPx5+k3OXcFOPvM6wuudYxs6TOvNN8jp
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="343590069"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="343590069"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 08:25:02 -0700
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="715521623"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 08:24:57 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 18 Mar 2022 17:23:45 +0200
+Date:   Fri, 18 Mar 2022 17:23:45 +0200
+From:   "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "andreas.noever@gmail.com" <andreas.noever@gmail.com>,
+        "michael.jamet@intel.com" <michael.jamet@intel.com>,
+        "YehezkelShB@gmail.com" <YehezkelShB@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Dell.Client.Kernel@dell.com" <Dell.Client.Kernel@dell.com>
-CC:     Stuart Hayes <stuart.w.hayes@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] platform/x86/dell: add buffer allocation/free functions
- for SMI calls
-Thread-Topic: [PATCH] platform/x86/dell: add buffer allocation/free functions
- for SMI calls
-Thread-Index: AQHYOto/hyLOp/NEJ0S+JLWvPC30KazFQPKg
-Date:   Fri, 18 Mar 2022 15:22:19 +0000
-Message-ID: <accf95548a8c4374b17c159b9b2d0098@AcuMS.aculab.com>
-References: <20220318150950.16843-1-jgross@suse.com>
-In-Reply-To: <20220318150950.16843-1-jgross@suse.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH] thunderbolt: Make iommu_dma_protection more accurate
+Message-ID: <YjSkAcxLDFmVdhEq@lahna>
+References: <2d01fa50c2650c730b0244929097737918e302e7.1647533152.git.robin.murphy@arm.com>
+ <BL1PR12MB515783C0F998169D49D92A55E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <BL1PR12MB51573F55B3C2B3922BAAA7F1E2129@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <YjRvMk1kcbMwJvx+@lahna>
+ <65207fdf-c4ab-5165-dbda-8ab55b51adb7@arm.com>
+ <YjSCWaq7Ej/2iJPp@lahna>
+ <78fc0426-c22a-ec62-f92b-0019bea5947e@arm.com>
+ <YjSbfScU0Ssuca3y@lahna>
+ <73e25ee3-c2f3-0a72-e5cc-04e51f650f2e@arm.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <73e25ee3-c2f3-0a72-e5cc-04e51f650f2e@arm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,29 +75,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross
-> Sent: 18 March 2022 15:10
+Hi Robin,
+
+On Fri, Mar 18, 2022 at 03:15:19PM +0000, Robin Murphy wrote:
+> > IMHO we should just trust the firmare provided information here
+> > (otherwise we are screwed anyway as there is no way to tell if the
+> > devices connected prior the OS can still do DMA), and use the external
+> > facing port indicator to idenfity the ports that need DMA protection.
 > 
-> The dcdbas driver is used to call SMI handlers for both, dcdbas and
-> dell-smbios-smm. Both drivers allocate a buffer for communicating
-> with the SMI handler. The physical buffer address is then passed to
-> the called SMI handler via %ebx.
-> 
-> Unfortunately this doesn't work when running in Xen dom0, as the
-> physical address obtained via virt_to_phys() is only a guest physical
-> address, and not a machine physical address as needed by SMI.
+> Indeed that's exactly what I want to do, but it begs the question of how we
+> *find* the firmware-provided information in the first place!
 
-The physical address from virt_to_phy() is always wrong.
-That is the physical address the cpu has for the memory.
-What you want is the address the dma master interface needs to use.
-That can be different for a physical system - no need for virtualisation.
+Oh, right :) Its the combination of ACPI _DSD "ExternalFacingPort"
+(which we already set, dev->external_facing, dev->untrusted for the
+devices behind these ports IIRC) and the DMAR opt-in bit. All these are
+already read by the kernel.
 
-On x86 they do usually match, but anything with a full iommu
-will need completely different addresses.
+> I seem to have already started writing the dumb version that will walk the
+> whole PCI segment and assume the presence of any external-facing port
+> implies that we're good. Let me know if I should stop ;)
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+That sounds good to me, so don't stop just yet ;-)

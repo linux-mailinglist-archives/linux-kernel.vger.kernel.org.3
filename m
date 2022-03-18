@@ -2,68 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7734A4DE20B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 191884DE213
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240480AbiCRT7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 15:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
+        id S240469AbiCRT75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 15:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240455AbiCRT7q (ORCPT
+        with ESMTP id S240452AbiCRT7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 15:59:46 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0371318B279
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:58:27 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id mz9-20020a17090b378900b001c657559290so8877547pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 12:58:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=squareup.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gSuKdEg2QyJhGVNfcWhCG5mMthIWcw84Xj0bFaKk1K0=;
-        b=KH+L/4Qk3634chHzxtOMoyIVddByO58d/7/A0h80FTeBAJbnhRMDCSfJQDAQOksHKH
-         G71wBBqCOXQbvr1X2waAHVAbCDsbsDmq6DW68A7Ugl4/fYy2feLWzKvhaYZFirckTU0N
-         k506hPyxR2vRJ3qC9bD037EShGWKMaq28uutM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gSuKdEg2QyJhGVNfcWhCG5mMthIWcw84Xj0bFaKk1K0=;
-        b=D4/Zt2b6+SBGKTpP9RfKCf0+JAmSwG4Bf3KXJ5bib3G2rUL34gFyYXNA40sRzErcqo
-         D7OXtO/xVYHmfpjILkzt1Pp6qvrcmfZ/9/xdvBoW7XRkSV0u9w+QQz3Z1r12+Nc3j51+
-         nK21gIWGuCRBJGWivdjxkBJwIq8HngQPKUeHEXQDQqjy5cnDzNfWtkP5rjcvloXV9ZXt
-         h/A/z1rMZxfrEIL1SO8dv9Kl330sEmpoPej3g0RcpWA63i7H2h3pFQX4q0cVxgSKUj+c
-         Op+1tSp8FusTt6bchl1ZpjPNJBZL7CHwye/7x5qTnFBHPRU28ZlqdAnDi864vUNQ0VYp
-         plnA==
-X-Gm-Message-State: AOAM530ouoWoBGdx3chwJ4ibMkrv0zRzydzoQxRjMRgM2dpd9gX4F6wz
-        j/OPasXCrd7YmMWptWs/5Reo/g==
-X-Google-Smtp-Source: ABdhPJwea3tAlNGcP1X1B2LxKQwZ1tQvI0A/AlcaAT7AatFu5CkVcZG6W72QhVrGH0kLQdw3EaktcQ==
-X-Received: by 2002:a17:902:f68b:b0:154:2265:b605 with SMTP id l11-20020a170902f68b00b001542265b605mr1195748plg.84.1647633506410;
-        Fri, 18 Mar 2022 12:58:26 -0700 (PDT)
-Received: from localhost ([135.84.132.160])
-        by smtp.gmail.com with UTF8SMTPSA id q2-20020a638c42000000b003817671cb29sm7788797pgn.41.2022.03.18.12.58.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 12:58:26 -0700 (PDT)
-From:   Edmond Gagnon <egagnon@squareup.com>
-To:     Kalle Valo <kvalo@codeaurora.org>
-Cc:     Edmond Gagnon <egagnon@squareup.com>,
-        Benjamin Li <benl@squareup.com>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, wcn36xx@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] wcn36xx: Implement tx_rate reporting
-Date:   Fri, 18 Mar 2022 14:58:03 -0500
-Message-Id: <20220318195804.4169686-3-egagnon@squareup.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220318195804.4169686-1-egagnon@squareup.com>
-References: <20220318195804.4169686-1-egagnon@squareup.com>
+        Fri, 18 Mar 2022 15:59:51 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D832818CD30;
+        Fri, 18 Mar 2022 12:58:30 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id E55F4DF9DE;
+        Fri, 18 Mar 2022 12:58:29 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id udOeLCim9yMm; Fri, 18 Mar 2022 12:58:29 -0700 (PDT)
+From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/4] power: supply: max17042_battery: use ModelCfg refresh on max17055
+Date:   Fri, 18 Mar 2022 20:58:24 +0100
+Message-ID: <7080597.aeNJFYEL58@pliszka>
+In-Reply-To: <facf5551-bfc7-aeb4-daed-5bfcb8a36475@kernel.org>
+References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm> <20220318001048.20922-3-sebastian.krzyszkowiak@puri.sm> <facf5551-bfc7-aeb4-daed-5bfcb8a36475@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; boundary="nextPart7086655.44csPzL39Z"; micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,341 +44,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the driver reports a tx_rate of 6.0 MBit/s no matter the true
-rate:
+--nextPart7086655.44csPzL39Z
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
+From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Date: Fri, 18 Mar 2022 20:58:24 +0100
+Message-ID: <7080597.aeNJFYEL58@pliszka>
+In-Reply-To: <facf5551-bfc7-aeb4-daed-5bfcb8a36475@kernel.org>
 
-root@linaro-developer:~# iw wlan0 link
-Connected to 6c:f3:7f:eb:9b:92 (on wlan0)
-        SSID: SQ-DEVICETEST
-        freq: 5200
-        RX: 4141 bytes (32 packets)
-        TX: 2082 bytes (15 packets)
-        signal: -77 dBm
-        rx bitrate: 135.0 MBit/s MCS 6 40MHz short GI
-        tx bitrate: 6.0 MBit/s
+On pi=C4=85tek, 18 marca 2022 09:22:16 CET Krzysztof Kozlowski wrote:
+> On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
+> > Unlike other models, max17055 doesn't require cell characterization
+> > data and operates on smaller amount of input variables (DesignCap,
+> > VEmpty, IChgTerm and ModelCfg). Input data can already be filled in
+> > by max17042_override_por_values, however model refresh bit has to be
+> > set after adjusting input variables in order to make them apply.
+> >=20
+> > Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+> > ---
+> >=20
+> >  drivers/power/supply/max17042_battery.c | 73 +++++++++++++++----------
+> >  include/linux/power/max17042_battery.h  |  3 +
+> >  2 files changed, 48 insertions(+), 28 deletions(-)
+> >=20
+> > diff --git a/drivers/power/supply/max17042_battery.c
+> > b/drivers/power/supply/max17042_battery.c index
+> > c019d6c52363..c39250349a1d 100644
+> > --- a/drivers/power/supply/max17042_battery.c
+> > +++ b/drivers/power/supply/max17042_battery.c
+> > @@ -806,6 +806,13 @@ static inline void
+> > max17042_override_por_values(struct max17042_chip *chip)>=20
+> >  	    (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX17055)) {
+> >  	=09
+> >  		max17042_override_por(map, MAX17047_V_empty, config-
+>vempty);
+> >  =09
+> >  	}
+> >=20
+> > +
+> > +	if (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX17055) {
+> > +		max17042_override_por(map, MAX17055_ModelCfg, config-
+>model_cfg);
+> > +		// VChg is 1 by default, so allow it to be set to 0
+>=20
+> Consistent comment, so /* */
+>=20
+> I actually do not understand fully the comment and the code. You write
+> entire model_cfg to MAX17055_ModelCfg and then immediately do it again,
+> but with smaller mask. Why?
 
-        bss flags:      short-slot-time
-        dtim period:    1
-        beacon int:     100
+That's because VChg is 1 on POR, and max17042_override_por doesn't do anyth=
+ing=20
+when value equals 0 - which means that if the whole config->model_cfg is 0,=
+=20
+VChg won't get unset (which is needed for 4.2V batteries).
 
-This patch requests HAL_GLOBAL_CLASS_A_STATS_INFO via a hal_get_stats
-firmware message and reports it via ieee80211_tx_rate_update:
+This could actually be replaced with a single regmap_write.
 
-root@linaro-developer:~# iw wlan0 link
-Connected to 6c:f3:7f:eb:98:21 (on wlan0)
-        SSID: SQ-DEVICETEST
-        freq: 2412
-        RX: 440785 bytes (573 packets)
-        TX: 60526 bytes (571 packets)
-        signal: -64 dBm
-        rx bitrate: 72.2 MBit/s MCS 7 short GI
-        tx bitrate: 52.0 MBit/s MCS 5
+> > +		regmap_update_bits(map, MAX17055_ModelCfg,
+> > +				MAX17055_MODELCFG_VCHG_BIT,=20
+config->model_cfg);
+>=20
+> Can you align the continued line with previous line? Same in other
+> places if it is not aligned.
+>=20
+> > +	}
+> >=20
+> >  }
+> > =20
+> >  static int max17042_init_chip(struct max17042_chip *chip)
+> >=20
+> > @@ -814,44 +821,54 @@ static int max17042_init_chip(struct max17042_chip
+> > *chip)>=20
+> >  	int ret;
+>=20
+> Best regards,
+> Krzysztof
 
-        bss flags:      short-preamble short-slot-time
-        dtim period:    1
-        beacon int:     100
 
-Tested on MSM8939 with WCN3680B running CNSS-PR-2-0-1-2-c1-00083 with
-5.17, and verified by sniffing frames over the air with Wireshark to
-ensure the MCS indices match.
+--nextPart7086655.44csPzL39Z
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
-Signed-off-by: Edmond Gagnon <egagnon@squareup.com>
-Reviewed-by: Benjamin Li <benl@squareup.com>
----
- drivers/net/wireless/ath/wcn36xx/hal.h     |  7 ++-
- drivers/net/wireless/ath/wcn36xx/main.c    | 25 +++++++++
- drivers/net/wireless/ath/wcn36xx/smd.c     | 58 +++++++++++++++++++++
- drivers/net/wireless/ath/wcn36xx/smd.h     |  1 +
- drivers/net/wireless/ath/wcn36xx/txrx.c    | 59 ++++++++++++++++++++++
- drivers/net/wireless/ath/wcn36xx/txrx.h    |  2 +
- drivers/net/wireless/ath/wcn36xx/wcn36xx.h |  4 ++
- 7 files changed, 155 insertions(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/net/wireless/ath/wcn36xx/hal.h b/drivers/net/wireless/ath/wcn36xx/hal.h
-index 2a1db9756fd5..46a49f0a51b3 100644
---- a/drivers/net/wireless/ath/wcn36xx/hal.h
-+++ b/drivers/net/wireless/ath/wcn36xx/hal.h
-@@ -2626,7 +2626,12 @@ enum tx_rate_info {
- 	HAL_TX_RATE_SGI = 0x8,
- 
- 	/* Rate with Long guard interval */
--	HAL_TX_RATE_LGI = 0x10
-+	HAL_TX_RATE_LGI = 0x10,
-+
-+	/* VHT rates */
-+	HAL_TX_RATE_VHT20  = 0x20,
-+	HAL_TX_RATE_VHT40  = 0x40,
-+	HAL_TX_RATE_VHT80  = 0x80,
- };
- 
- struct ani_global_class_a_stats_info {
-diff --git a/drivers/net/wireless/ath/wcn36xx/main.c b/drivers/net/wireless/ath/wcn36xx/main.c
-index 70531f62777e..75453a3744a6 100644
---- a/drivers/net/wireless/ath/wcn36xx/main.c
-+++ b/drivers/net/wireless/ath/wcn36xx/main.c
-@@ -25,6 +25,7 @@
- #include <linux/rpmsg.h>
- #include <linux/soc/qcom/smem_state.h>
- #include <linux/soc/qcom/wcnss_ctrl.h>
-+#include <linux/workqueue.h>
- #include <net/ipv6.h>
- #include "wcn36xx.h"
- #include "testmode.h"
-@@ -960,6 +961,10 @@ static void wcn36xx_bss_info_changed(struct ieee80211_hw *hw,
- 			if (vif->type == NL80211_IFTYPE_STATION)
- 				wcn36xx_smd_add_beacon_filter(wcn, vif);
- 			wcn36xx_enable_keep_alive_null_packet(wcn, vif);
-+
-+			wcn->get_stats_sta = sta;
-+			wcn->get_stats_vif = vif;
-+			schedule_delayed_work(&wcn->get_stats_work, msecs_to_jiffies(3000));
- 		} else {
- 			wcn36xx_dbg(WCN36XX_DBG_MAC,
- 				    "disassociated bss %pM vif %pM AID=%d\n",
-@@ -967,6 +972,9 @@ static void wcn36xx_bss_info_changed(struct ieee80211_hw *hw,
- 				    vif->addr,
- 				    bss_conf->aid);
- 			vif_priv->sta_assoc = false;
-+			cancel_delayed_work_sync(&wcn->get_stats_work);
-+			wcn->get_stats_vif = NULL;
-+			wcn->get_stats_sta = NULL;
- 			wcn36xx_smd_set_link_st(wcn,
- 						bss_conf->bssid,
- 						vif->addr,
-@@ -1598,6 +1606,17 @@ static int wcn36xx_platform_get_resources(struct wcn36xx *wcn,
- 	return ret;
- }
- 
-+void wcn36xx_get_stats_work(struct work_struct *work)
-+{
-+	struct delayed_work *delayed_work = container_of(work, struct delayed_work, work);
-+	struct wcn36xx *wcn = container_of(delayed_work, struct wcn36xx, get_stats_work);
-+	int stats_status;
-+
-+	stats_status = wcn36xx_smd_get_stats(wcn, HAL_GLOBAL_CLASS_A_STATS_INFO);
-+
-+	schedule_delayed_work(&wcn->get_stats_work, msecs_to_jiffies(WCN36XX_HAL_STATS_INTERVAL));
-+}
-+
- static int wcn36xx_probe(struct platform_device *pdev)
- {
- 	struct ieee80211_hw *hw;
-@@ -1640,6 +1659,8 @@ static int wcn36xx_probe(struct platform_device *pdev)
- 		goto out_wq;
- 	}
- 
-+	INIT_DELAYED_WORK(&wcn->get_stats_work, wcn36xx_get_stats_work);
-+
- 	ret = dma_set_mask_and_coherent(wcn->dev, DMA_BIT_MASK(32));
- 	if (ret < 0) {
- 		wcn36xx_err("failed to set DMA mask: %d\n", ret);
-@@ -1713,6 +1734,10 @@ static int wcn36xx_remove(struct platform_device *pdev)
- 	__skb_queue_purge(&wcn->amsdu);
- 
- 	mutex_destroy(&wcn->hal_mutex);
-+
-+	cancel_delayed_work_sync(&wcn->get_stats_work);
-+	wcn->get_stats_vif = NULL;
-+	wcn->get_stats_sta = NULL;
- 	ieee80211_free_hw(hw);
- 
- 	return 0;
-diff --git a/drivers/net/wireless/ath/wcn36xx/smd.c b/drivers/net/wireless/ath/wcn36xx/smd.c
-index caeb68901326..ecb083d5b43a 100644
---- a/drivers/net/wireless/ath/wcn36xx/smd.c
-+++ b/drivers/net/wireless/ath/wcn36xx/smd.c
-@@ -2627,6 +2627,63 @@ int wcn36xx_smd_del_ba(struct wcn36xx *wcn, u16 tid, u8 direction, u8 sta_index)
- 	return ret;
- }
- 
-+int wcn36xx_smd_get_stats(struct wcn36xx *wcn, u32 stats_mask)
-+{
-+	struct wcn36xx_hal_stats_req_msg msg_body;
-+	struct wcn36xx_hal_stats_rsp_msg *rsp;
-+	void *rsp_body;
-+	int ret = 0;
-+
-+	if (stats_mask & ~HAL_GLOBAL_CLASS_A_STATS_INFO) {
-+		wcn36xx_err("stats_mask 0x%x contains unimplemented types\n",
-+			    stats_mask);
-+		return -EINVAL;
-+	}
-+
-+	mutex_lock(&wcn->hal_mutex);
-+	INIT_HAL_MSG(msg_body, WCN36XX_HAL_GET_STATS_REQ);
-+
-+	msg_body.sta_id = get_sta_index(wcn->get_stats_vif,
-+					wcn36xx_sta_to_priv(wcn->get_stats_sta));
-+	msg_body.stats_mask = stats_mask;
-+
-+	PREPARE_HAL_BUF(wcn->hal_buf, msg_body);
-+
-+	ret = wcn36xx_smd_send_and_wait(wcn, msg_body.header.len);
-+	if (ret) {
-+		wcn36xx_err("sending hal_get_stats failed\n");
-+		goto out;
-+	}
-+
-+	ret = wcn36xx_smd_rsp_status_check(wcn->hal_buf, wcn->hal_rsp_len);
-+	if (ret) {
-+		wcn36xx_err("hal_get_stats response failed err=%d\n", ret);
-+		goto out;
-+	}
-+
-+	rsp = (struct wcn36xx_hal_stats_rsp_msg *)wcn->hal_buf;
-+	rsp_body = (wcn->hal_buf + sizeof(struct wcn36xx_hal_stats_rsp_msg));
-+
-+	if (rsp->stats_mask != stats_mask) {
-+		wcn36xx_err("stat_mask 0x%x differs from requested 0x%x\n",
-+			    rsp->stats_mask, stats_mask);
-+		goto out;
-+	}
-+
-+	if (rsp->stats_mask & HAL_GLOBAL_CLASS_A_STATS_INFO) {
-+		ret = wcn36xx_report_tx_rate(wcn, (struct ani_global_class_a_stats_info *)rsp_body);
-+		if (ret) {
-+			wcn36xx_err("failed to report TX rate\n");
-+			goto out;
-+		}
-+		rsp_body += sizeof(struct ani_global_class_a_stats_info);
-+	}
-+out:
-+	mutex_unlock(&wcn->hal_mutex);
-+
-+	return ret;
-+}
-+
- static int wcn36xx_smd_trigger_ba_rsp(void *buf, int len, struct add_ba_info *ba_info)
- {
- 	struct wcn36xx_hal_trigger_ba_rsp_candidate *candidate;
-@@ -3316,6 +3373,7 @@ int wcn36xx_smd_rsp_process(struct rpmsg_device *rpdev,
- 	case WCN36XX_HAL_ADD_BA_SESSION_RSP:
- 	case WCN36XX_HAL_ADD_BA_RSP:
- 	case WCN36XX_HAL_DEL_BA_RSP:
-+	case WCN36XX_HAL_GET_STATS_RSP:
- 	case WCN36XX_HAL_TRIGGER_BA_RSP:
- 	case WCN36XX_HAL_UPDATE_CFG_RSP:
- 	case WCN36XX_HAL_JOIN_RSP:
-diff --git a/drivers/net/wireless/ath/wcn36xx/smd.h b/drivers/net/wireless/ath/wcn36xx/smd.h
-index 957cfa87fbde..a30f28f4130d 100644
---- a/drivers/net/wireless/ath/wcn36xx/smd.h
-+++ b/drivers/net/wireless/ath/wcn36xx/smd.h
-@@ -138,6 +138,7 @@ int wcn36xx_smd_add_ba_session(struct wcn36xx *wcn,
- int wcn36xx_smd_add_ba(struct wcn36xx *wcn, u8 session_id);
- int wcn36xx_smd_del_ba(struct wcn36xx *wcn, u16 tid, u8 direction, u8 sta_index);
- int wcn36xx_smd_trigger_ba(struct wcn36xx *wcn, u8 sta_index, u16 tid, u16 *ssn);
-+int wcn36xx_smd_get_stats(struct wcn36xx *wcn, u32 stats_mask);
- 
- int wcn36xx_smd_update_cfg(struct wcn36xx *wcn, u32 cfg_id, u32 value);
- 
-diff --git a/drivers/net/wireless/ath/wcn36xx/txrx.c b/drivers/net/wireless/ath/wcn36xx/txrx.c
-index df749b114568..ac55f8d62440 100644
---- a/drivers/net/wireless/ath/wcn36xx/txrx.c
-+++ b/drivers/net/wireless/ath/wcn36xx/txrx.c
-@@ -699,3 +699,62 @@ int wcn36xx_start_tx(struct wcn36xx *wcn,
- 
- 	return ret;
- }
-+
-+int wcn36xx_report_tx_rate(struct wcn36xx *wcn, struct ani_global_class_a_stats_info *stats)
-+{
-+	struct ieee80211_tx_info info;
-+	struct ieee80211_tx_rate *tx_rate;
-+
-+	memset(&info, 0, sizeof(struct ieee80211_tx_info));
-+	tx_rate = &info.status.rates[0];
-+
-+	tx_rate->idx = stats->mcs_index;
-+	tx_rate->count = 0;
-+	tx_rate->flags = 0;
-+
-+	if (stats->tx_rate_flags & HAL_TX_RATE_LEGACY) {
-+		// tx_rate is in units of 500kbps, while wcn36xx_rate_table's rates
-+		// are in units of 100kbps.
-+		unsigned int reported_rate = stats->tx_rate * 5;
-+		int i;
-+
-+		// Iterate over the legacy rates to convert bitrate to rate index.
-+		for (i = 0; i < ARRAY_SIZE(wcn36xx_rate_table); i++) {
-+			const struct wcn36xx_rate *rate = &wcn36xx_rate_table[i];
-+
-+			if (rate->encoding != RX_ENC_LEGACY) {
-+				wcn36xx_warn("legacy rate %u not present in rate table\n",
-+					     reported_rate);
-+				break;
-+			}
-+			if (rate->bitrate == reported_rate) {
-+				tx_rate->idx = rate->mcs_or_legacy_index;
-+				break;
-+			}
-+		}
-+	}
-+
-+	// HT?
-+	if (stats->tx_rate_flags & (HAL_TX_RATE_HT20 | HAL_TX_RATE_HT40))
-+		tx_rate->flags |= IEEE80211_TX_RC_MCS;
-+
-+	// VHT?
-+	if (stats->tx_rate_flags & (HAL_TX_RATE_VHT20 | HAL_TX_RATE_VHT40 | HAL_TX_RATE_VHT80))
-+		tx_rate->flags |= IEEE80211_TX_RC_VHT_MCS;
-+
-+	// SGI / LGI?
-+	if (stats->tx_rate_flags & HAL_TX_RATE_SGI)
-+		tx_rate->flags |= IEEE80211_TX_RC_SHORT_GI;
-+
-+	// 40MHz?
-+	if (stats->tx_rate_flags & (HAL_TX_RATE_HT40 | HAL_TX_RATE_VHT40))
-+		tx_rate->flags |= IEEE80211_TX_RC_40_MHZ_WIDTH;
-+
-+	// 80MHz?
-+	if (stats->tx_rate_flags & HAL_TX_RATE_VHT80)
-+		tx_rate->flags |= IEEE80211_TX_RC_80_MHZ_WIDTH;
-+
-+	ieee80211_tx_rate_update(wcn->hw, wcn->get_stats_sta, &info);
-+
-+	return 0;
-+}
-diff --git a/drivers/net/wireless/ath/wcn36xx/txrx.h b/drivers/net/wireless/ath/wcn36xx/txrx.h
-index b54311ffde9c..28cf45ce6c89 100644
---- a/drivers/net/wireless/ath/wcn36xx/txrx.h
-+++ b/drivers/net/wireless/ath/wcn36xx/txrx.h
-@@ -18,6 +18,7 @@
- #define _TXRX_H_
- 
- #include <linux/etherdevice.h>
-+#include <linux/string.h>
- #include "wcn36xx.h"
- 
- /* TODO describe all properties */
-@@ -164,5 +165,6 @@ int  wcn36xx_rx_skb(struct wcn36xx *wcn, struct sk_buff *skb);
- int wcn36xx_start_tx(struct wcn36xx *wcn,
- 		     struct wcn36xx_sta *sta_priv,
- 		     struct sk_buff *skb);
-+int wcn36xx_report_tx_rate(struct wcn36xx *wcn, struct ani_global_class_a_stats_info *stats);
- 
- #endif	/* _TXRX_H_ */
-diff --git a/drivers/net/wireless/ath/wcn36xx/wcn36xx.h b/drivers/net/wireless/ath/wcn36xx/wcn36xx.h
-index 80a4e7aea419..121195991ee2 100644
---- a/drivers/net/wireless/ath/wcn36xx/wcn36xx.h
-+++ b/drivers/net/wireless/ath/wcn36xx/wcn36xx.h
-@@ -32,6 +32,7 @@
- 
- #define WLAN_NV_FILE               "wlan/prima/WCNSS_qcom_wlan_nv.bin"
- #define WCN36XX_AGGR_BUFFER_SIZE 64
-+#define WCN36XX_HAL_STATS_INTERVAL 3000
- 
- extern unsigned int wcn36xx_dbg_mask;
- 
-@@ -295,6 +296,9 @@ struct wcn36xx {
- 
- 	spinlock_t survey_lock;		/* protects chan_survey */
- 	struct wcn36xx_chan_survey	*chan_survey;
-+	struct delayed_work get_stats_work;
-+	struct ieee80211_sta *get_stats_sta;
-+	struct ieee80211_vif *get_stats_vif;
- };
- 
- static inline bool wcn36xx_is_fw_version(struct wcn36xx *wcn,
--- 
-2.25.1
+iQIzBAABCAAdFiEEIt2frgBqEUNYNmF86PI1zzvbw/8FAmI05GAACgkQ6PI1zzvb
+w/+wJA/9GMBU1aHb9AcTnFkoZwyhIAeAKz+4/cb9YhRzCr3XnC73PBmVXkYh67T1
+I7x+reLYD3loA2p5BLp90Tpi892mnB18KdrzUDA4Ho0irsHVlC7vVcJRu7MgKHH/
+LfbQH7b9vvBY3v5WvbZkb2K1FOCr63/3KpLyn3LwtuRODnr48w6SyfiSONwsT3N4
+JAqg7kBriOCVBI8Wo0MWiJE+8DiVqqTMTgQhgx32pEk14AhUh63F//RqyDUHvVG4
+HmVoQWz8y+w1x/hJ9ISAWcA00rkFL14xyTt5EJf3RM3oREy4xMWeCaus8UOpS7je
+w+SZpuGFpbHwj3NPRtWfLzWudQfjV2fbLAyktWwMhVLwHAf5fbyHMP1sIJ9lZDlM
+b0sZzGlt3MwLpgNXYU7pK+8i53f46dNNcY2jDRbu/cNxA4sF+xyHlka6pjv/kohp
+SmHt2c5gysBeVD4UpvmOTarpxAWAaya5Tn9Gj4fcsQW7SaxmbHksgnmLm+WilLM7
+lmKrSQ4OYV578LDqi4A5GhVUJyauZlwiX5gbf1WJDpANQiM+7DWPsXOie+k0/Mhj
+hJ6fezC/ka+t5LEmPz/CjRSU2QnDmsVLXqXiLRtK94Y/xiBTGkVHF2FQngZJ3cwe
+o9SugyfZ4CLLtOH5YW+SrNnzl1RX5ES32j7fwjJrkp5jETKuDdI=
+=CbGF
+-----END PGP SIGNATURE-----
+
+--nextPart7086655.44csPzL39Z--
+
+
 

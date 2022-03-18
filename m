@@ -2,93 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FF24DD56D
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:47:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 394704DD61F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbiCRHrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
+        id S233764AbiCRIac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiCRHrl (ORCPT
+        with ESMTP id S230398AbiCRIa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:47:41 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0321A1F83F0;
-        Fri, 18 Mar 2022 00:46:23 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id o6-20020a17090a9f8600b001c6562049d9so7665811pjp.3;
-        Fri, 18 Mar 2022 00:46:22 -0700 (PDT)
+        Fri, 18 Mar 2022 04:30:29 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7BE1DFDCE
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 01:29:12 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id e13so6472119plh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 01:29:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qoi4QGgxrqjy788HWka9y5Q8veZdkoJr+j/YlxCsH+E=;
-        b=g9SqHeIRuugdjX+4WOujma7JC1opKvGijJAuXQg4tW3kvr2JaRNsfrAFJCg04cUhq0
-         lDF3i/9r93bV7k4vdBBpII39DbhLCJH+m/YA6vaNtvXGfiq45S0mgaG2h98Sb9+TGGBl
-         bVYoJhgliXG+iACkxW8I8kDQsCr2GsEINHMOrzXwPNhB/f+qd4jUyCnsoodE6mnia5Bw
-         UZ++mMjaa2LNh/d9rQX2YdgG/lBPyQjca99jOG9D8TWTRYZV2axIfd/CRDh/gaNKct9E
-         lntLTyXIAUNaK7rMp3sUMmnRj2ECdHL3YjibNhJmZhs+SIvX3JsxO8y8ejxGf7s9sNxj
-         XMoQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZerwMZnU5WRGenUWw/mrV6k1v4q9EhMydhshaosUPPY=;
+        b=T2JR3/lfNpGKK7qASyH6+wW97BBOWNrh7oRmcfnmWSqfgDCBAwtyhw6+z45yNahIVS
+         eT7DsjSjEvXTznTI7qXdOGBWQS7eFEssrIgW0IBCHbilYllZhz4kW2weUObdWIu+O4X8
+         KFf9ujVOZylaa3ymqWZq66ufRx7SrPJ6hbHD4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=qoi4QGgxrqjy788HWka9y5Q8veZdkoJr+j/YlxCsH+E=;
-        b=koA3njMzVR8nQaJ+vr+yVEorOrLZhMqg8RPFOH00zTa8k3YeVJWDZ4CD4Enl3bF1+P
-         X5bM2Y2cBysnt2hpP8iEzqCitBXKJrHD8LqXWsi2yUhoG3nSJlJiQ8oPeOzWhqcC8lmn
-         21lIlLZP9N2o4B2gQtNQPgVpRfZCoCKABSBv95gQD9s52GgcyQxJkxOGL0+XQ3npdMJg
-         th5EWZtztPADUDeJpDz26DerFCdocmMF4KrGbNbNrxqWdPGzKHr7emNB6NarY/9btVAX
-         GfeirmXDLGbNM5IxtnGcyFYSRBVZRij3DlWMYcO2D9Sdi2l8cIIYUl0AwOsMmYGVLrt+
-         GNDw==
-X-Gm-Message-State: AOAM531nVCFI6+gfSjTWH8i69Dr8pqUFQ6x6kDEx+zgKQadNWPpvRrTK
-        qdrtD6/CQb/bmCNSf62RnyM=
-X-Google-Smtp-Source: ABdhPJxZYm549yKrguPyJ2FQkzbsflhZ709jcp46n0H5+PvSUe8+uXf6aci4EwNuy9yt5eCwfqkK8w==
-X-Received: by 2002:a17:90b:3e88:b0:1bf:3a96:54c1 with SMTP id rj8-20020a17090b3e8800b001bf3a9654c1mr9781455pjb.244.1647589582458;
-        Fri, 18 Mar 2022 00:46:22 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-3.three.co.id. [180.214.232.3])
-        by smtp.gmail.com with ESMTPSA id k10-20020a056a00168a00b004f7e2a550ccsm8691490pfc.78.2022.03.18.00.46.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 00:46:21 -0700 (PDT)
-Message-ID: <7a3ac61d-bd82-9a97-7caf-5437f18d7cf2@gmail.com>
-Date:   Fri, 18 Mar 2022 14:46:16 +0700
+        bh=ZerwMZnU5WRGenUWw/mrV6k1v4q9EhMydhshaosUPPY=;
+        b=UR4jPhBusc6tlwq4NWpcU2Eg99ibBDMFjDWbXO4yUWlKS1kBTIeYmmnzQhVjKL309s
+         bg4Bvj/NlzpGJdde6pvNsvoHyaRq7Mu5BMvRklLMAlz72LYBv5wYF9sRC9NEq4saj7Ch
+         wigy1zT9dUxX9rgjxoTpL/yrkhtPHQP89lGmj0S/KXviuryrqT+JV8Kw4DX6DVQeJ1A9
+         IdDA3cwFHoHVuprUjMiFnceb0Duu1Q9AukcMCuuXNxkAx720N7FSYQcT0+iFLUTi3X/Y
+         SafuJzCBGlWNDIrAY6xRJmWyX16la8a+u1V7R0X5z7+XVPKJWh2ZH0zdWTbDFAyUkhJ8
+         XdvA==
+X-Gm-Message-State: AOAM532exyUAxA6t5YBhqEH8TQ5vDavq+TqffM/Ie+SPTmF6uF0CuJwG
+        Ej181qEFdnDslkuWJ17mZpE4gw==
+X-Google-Smtp-Source: ABdhPJxSlFaBTNqCJx14g1bDgmJ+YaO+Pg4LlRrGaMoIJ9J2tXiqSbojTVGwkQAUer85nUyOr+wzKQ==
+X-Received: by 2002:a17:90a:ba10:b0:1bf:6900:2c5d with SMTP id s16-20020a17090aba1000b001bf69002c5dmr20601000pjr.36.1647592151148;
+        Fri, 18 Mar 2022 01:29:11 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:435a:ce78:7223:1e88])
+        by smtp.gmail.com with ESMTPSA id q2-20020a056a00084200b004f761a7287dsm9404044pfk.131.2022.03.18.01.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 01:29:10 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Simon Ser <contact@emersion.fr>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH v9 0/4] Separate panel orientation property creating and value setting
+Date:   Fri, 18 Mar 2022 15:48:21 +0800
+Message-Id: <20220318074825.3359978-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5.10 00/23] 5.10.107-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220317124525.955110315@linuxfoundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220317124525.955110315@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/22 19.45, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.107 release.
-> There are 23 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+Some drivers, eg. mtk_drm and msm_drm, rely on the panel to set the
+orientation. Panel calls drm_connector_set_panel_orientation() to create
+orientation property and sets the value. However, connector properties
+can't be created after drm_dev_register() is called. The goal is to
+separate the orientation property creation, so drm drivers can create it
+earlier before drm_dev_register().
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0) and
-powerpc (ps3_defconfig, gcc 11.2.0).
+After this series, drm_connector_set_panel_orientation() works like
+before, so it won't affect other drm drivers. The only difference is that
+some drm drivers can call drm_connector_init_panel_orientation_property()
+earlier.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Hsin-Yi Wang (4):
+  gpu: drm: separate panel orientation property creating and value
+    setting
+  drm/mediatek: init panel orientation property
+  drm/msm: init panel orientation property
+  arm64: dts: mt8183: Add panel rotation
+
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  1 +
+ drivers/gpu/drm/drm_connector.c               | 58 ++++++++++++++-----
+ drivers/gpu/drm/mediatek/mtk_dsi.c            |  7 +++
+ drivers/gpu/drm/msm/dsi/dsi_manager.c         |  4 ++
+ include/drm/drm_connector.h                   |  2 +
+ 5 files changed, 59 insertions(+), 13 deletions(-)
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.35.1.894.gb6a874cedc-goog
+

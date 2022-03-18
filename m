@@ -2,294 +2,868 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D276C4DDFC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C69864DDFCC
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239601AbiCRRXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 13:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
+        id S239585AbiCRR0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 13:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239567AbiCRRX1 (ORCPT
+        with ESMTP id S234351AbiCRR0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 13:23:27 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88192E8435;
-        Fri, 18 Mar 2022 10:22:07 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id u16so11593448wru.4;
-        Fri, 18 Mar 2022 10:22:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=OsgMHHYk1Mg3ehLBa46jJiNlAAMsZ+ygXkxFtlRNjN8=;
-        b=gi4qp1nlcVQ+ZKV8YJdtJr/GdsyKaKrysjlOp5Zq/q4Mb2GSNL6kzh5Mh11lysyJc+
-         lnNL6aX7CStVzBmYI7UAhbBauLgLzJWOxU6AT8Hq6HECfB8Izrc3hDdAaLs0kVGoYFES
-         c9t2klB0ooyfRkpEB7J2AVZFpSR+s55XgsSjX71WZ1GDwwpCxQS2Tt/nb/R5WsvOSHDN
-         cXk/1ytIlIpaxvsLh+WVAwiBTGpV/Bs60YNV1u5bOQe/hELXQnNtZgUQMqltHQAq7ODM
-         8VG/nyYPAThue4TaiHZXWM1Qif+JGfZtNUircJbskBwInBxt/SRcR83qfUok0rSYwMjz
-         hxDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OsgMHHYk1Mg3ehLBa46jJiNlAAMsZ+ygXkxFtlRNjN8=;
-        b=KVBxayNp4ng4sVWlCPW7di/yTNQAwBSwytWpQfl8Ffbl+kJFuF6YO1TcwkDwhYqOSf
-         BGo1ScQm4lRt3/3b9kTPD9BYk8OAiEB5RQxA21/OYzyVqU1bM4ENZiu9lcNKb6EZjHFD
-         MT5GQtcPwc21sAup6xXMBSbeDCucYZyQCqKafhLlqNpG2XTdXmq6UkQEz3LhMjjSTvd5
-         8I9q4NsPrrWDDDvs4LVrt3awSHUOS/SIgSMtitq5lev1iTK8mZjM/N8v2BZbP2mxYz6C
-         hkfjSGk7DhCjvWs4aaEdo8ns7dCoWsK0DHNfcZUOBpnYrc45OoDOc88rRaPjEd19NtPR
-         58EQ==
-X-Gm-Message-State: AOAM531nYuIK1/qFcM01VI/j/HVLJDhuPq36T1SHXestgQcCka1/lhoW
-        VjLCU1vf5wQzu3KGpgHNoV75XtAgIr+tlf9hNhM=
-X-Google-Smtp-Source: ABdhPJxL0BJjipSRuIKXINR0A8L2jZRfj9IukqObOa2Z7KFikFlF9UeQLYbFI7K9vgwCj+38KKtIRgzFWbUyEVaD4HM=
-X-Received: by 2002:adf:dd4d:0:b0:203:f178:b78b with SMTP id
- u13-20020adfdd4d000000b00203f178b78bmr5448329wrm.93.1647624126346; Fri, 18
- Mar 2022 10:22:06 -0700 (PDT)
+        Fri, 18 Mar 2022 13:26:20 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E611D7602
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 10:24:59 -0700 (PDT)
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 22IHORAc003677;
+        Sat, 19 Mar 2022 02:24:27 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 22IHORAc003677
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1647624267;
+        bh=35I367xU8c5CW+QfILIBL2/k3kwgShaXiy+5gzj1Uo4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=fNEawWteaOg8ZIZn5qdWv4lFH9k/GsuB1zdu4WOQlTqypMBysGPz34gYji5XhJXqL
+         db7ZEi6Gd7V4pHVyxlwIxb3korFIA2jyCZEBi+PHBFUsK1rElHtg/HeXzPqIOMIFIu
+         9FFNTkoSd9bqJ4Z4Z4E4ydQvSn+S22+43t/4btFrchx2I1rjQIb4NhV2kJ6tD9D0Nw
+         J8GR4K9Fgc2W1T0vZR66ia+WLcO7zIaZ1ELBAi7N+SZAolLPQ3OkJb3gSfMDY/vCDk
+         SVGQ7rx97SUmdCURnZwjlXGNugpTN1d33685JTiuQ5sYx3rszNeUsaqI7lOgipszOJ
+         TaD3ymfZ3O23w==
+X-Nifty-SrcIP: [209.85.214.175]
+Received: by mail-pl1-f175.google.com with SMTP id w8so7455927pll.10;
+        Fri, 18 Mar 2022 10:24:27 -0700 (PDT)
+X-Gm-Message-State: AOAM533ShoqHuxR727zwIc8EJHdb3Y4ifiO7ZfbSxQsderCjhaFeYNio
+        uhRNHj94f4pilCOSwOkFe5o1alTfAmYL8h7QnVg=
+X-Google-Smtp-Source: ABdhPJxxtdylrxoJ6zzKluSdciVbkdIabAJjkNBDhyqJPZXerhCPhU2gNIJjdSZR9Fu84Oh3lqfXutS2Oa5kcmPekm8=
+X-Received: by 2002:a17:902:b68c:b0:153:bd06:85ad with SMTP id
+ c12-20020a170902b68c00b00153bd0685admr473528pls.99.1647624266434; Fri, 18 Mar
+ 2022 10:24:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220310234611.424743-1-robdclark@gmail.com> <20220310234611.424743-3-robdclark@gmail.com>
- <YjMGac4Hnjmg1wE8@phenom.ffwll.local> <3945551d-47d2-1974-f637-1dbc61e14702@amd.com>
- <CAF6AEGv36V8bLoDn5O1SW3iTUtzd3O1XeuT5gJxyLMxd1E-o3Q@mail.gmail.com>
- <865abcff-9f52-dca4-df38-b11189c739ff@amd.com> <CAF6AEGuoBeYoMTR6-KM9xGZ05XSSnSJWMDciawczi7qtiLN9Vw@mail.gmail.com>
- <915537e2-ac5b-ab0e-3697-2b16a9ec8f91@amd.com> <CAF6AEGsyFAOPmHqT7YX1wsukP4-gYAstCukr89r9w28V0YSCUw@mail.gmail.com>
- <3a475e5a-1090-e2f4-779c-6915fc8524b1@amd.com> <CAF6AEGtPrSdj=7AP1_puR+OgmL-qro0mWZDNngtaVPxpaCM76A@mail.gmail.com>
- <1c847474-8ee1-cc7e-3d4d-261a4e92fb2d@amd.com> <CAF6AEGuw45gi4f+mVs7cVyjCHY9O4N1O8OfuGHv-wAkzP3UpMA@mail.gmail.com>
- <dd7d3f20-8288-3a7c-a368-a08282746ff1@amd.com> <CAF6AEGvp+f4=EjQ9tWwcEafBEOAy6nCd8bOTqLXopiFhjx_Y_w@mail.gmail.com>
- <0e572944-66a0-f5a7-4517-3c437e668584@amd.com>
-In-Reply-To: <0e572944-66a0-f5a7-4517-3c437e668584@amd.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Fri, 18 Mar 2022 10:22:47 -0700
-Message-ID: <CAF6AEGvun2UrGvXbGSBnhagWQFpm1Qt4T=TscQSkw3ikZm2r5g@mail.gmail.com>
-Subject: Re: [PATCH 2/3] drm/msm/gpu: Park scheduler threads for system suspend
-To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Alexander.Deucher@amd.com" <Alexander.Deucher@amd.com>
+References: <20220318171405.2728855-1-cmllamas@google.com>
+In-Reply-To: <20220318171405.2728855-1-cmllamas@google.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 19 Mar 2022 02:23:42 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS41WRW-o60hxOCbOJo3Jqd0d1LkGbtjHgg98P5AvKKhg@mail.gmail.com>
+Message-ID: <CAK7LNAS41WRW-o60hxOCbOJo3Jqd0d1LkGbtjHgg98P5AvKKhg@mail.gmail.com>
+Subject: Re: [PATCH] fuse: fix integer type usage in uapi header
+To:     Carlos Llamas <cmllamas@google.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alessio Balsini <balsini@android.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 9:27 AM Andrey Grodzovsky
-<andrey.grodzovsky@amd.com> wrote:
+On Sat, Mar 19, 2022 at 2:14 AM Carlos Llamas <cmllamas@google.com> wrote:
 >
+> Kernel uapi headers are supposed to use __[us]{8,16,32,64} defined by
+> <linux/types.h> instead of 'uint32_t' and similar. This patch changes
+> all the definitions in this header to use the correct type. Previous
+> discussion of this topic can be found here:
 >
-> On 2022-03-18 12:20, Rob Clark wrote:
-> > On Fri, Mar 18, 2022 at 9:04 AM Andrey Grodzovsky
-> > <andrey.grodzovsky@amd.com> wrote:
-> >>
-> >> On 2022-03-17 16:35, Rob Clark wrote:
-> >>> On Thu, Mar 17, 2022 at 12:50 PM Andrey Grodzovsky
-> >>> <andrey.grodzovsky@amd.com> wrote:
-> >>>> On 2022-03-17 14:25, Rob Clark wrote:
-> >>>>> On Thu, Mar 17, 2022 at 11:10 AM Andrey Grodzovsky
-> >>>>> <andrey.grodzovsky@amd.com> wrote:
-> >>>>>> On 2022-03-17 13:35, Rob Clark wrote:
-> >>>>>>> On Thu, Mar 17, 2022 at 9:45 AM Christian K=C3=B6nig
-> >>>>>>> <christian.koenig@amd.com> wrote:
-> >>>>>>>> Am 17.03.22 um 17:18 schrieb Rob Clark:
-> >>>>>>>>> On Thu, Mar 17, 2022 at 9:04 AM Christian K=C3=B6nig
-> >>>>>>>>> <christian.koenig@amd.com> wrote:
-> >>>>>>>>>> Am 17.03.22 um 16:10 schrieb Rob Clark:
-> >>>>>>>>>>> [SNIP]
-> >>>>>>>>>>> userspace frozen !=3D kthread frozen .. that is what this pat=
-ch is
-> >>>>>>>>>>> trying to address, so we aren't racing between shutting down =
-the hw
-> >>>>>>>>>>> and the scheduler shoveling more jobs at us.
-> >>>>>>>>>> Well exactly that's the problem. The scheduler is supposed to =
-shoveling
-> >>>>>>>>>> more jobs at us until it is empty.
-> >>>>>>>>>>
-> >>>>>>>>>> Thinking more about it we will then keep some dma_fence instan=
-ce
-> >>>>>>>>>> unsignaled and that is and extremely bad idea since it can lea=
-d to
-> >>>>>>>>>> deadlocks during suspend.
-> >>>>>>>>> Hmm, perhaps that is true if you need to migrate things out of =
-vram?
-> >>>>>>>>> It is at least not a problem when vram is not involved.
-> >>>>>>>> No, it's much wider than that.
-> >>>>>>>>
-> >>>>>>>> See what can happen is that the memory management shrinkers want=
- to wait
-> >>>>>>>> for a dma_fence during suspend.
-> >>>>>>> we don't wait on fences in shrinker, only purging or evicting thi=
-ngs
-> >>>>>>> that are already ready.  Actually, waiting on fences in shrinker =
-path
-> >>>>>>> sounds like a pretty bad idea.
-> >>>>>>>
-> >>>>>>>> And if you stop the scheduler they will just wait forever.
-> >>>>>>>>
-> >>>>>>>> What you need to do instead is to drain the scheduler, e.g. call
-> >>>>>>>> drm_sched_entity_flush() with a proper timeout for each entity y=
-ou have
-> >>>>>>>> created.
-> >>>>>>> yeah, it would work to drain the scheduler.. I guess that might b=
-e the
-> >>>>>>> more portable approach as far as generic solution for suspend.
-> >>>>>>>
-> >>>>>>> BR,
-> >>>>>>> -R
-> >>>>>> I am not sure how this drains the scheduler ? Suppose we done the
-> >>>>>> waiting in drm_sched_entity_flush,
-> >>>>>> what prevents someone to push right away another job into the same
-> >>>>>> entity's queue  right after that ?
-> >>>>>> Shouldn't we first disable further pushing of jobs into entity bef=
-ore we
-> >>>>>> wait for  sched->job_scheduled ?
-> >>>>>>
-> >>>>> In the system suspend path, userspace processes will have already b=
-een
-> >>>>> frozen, so there should be no way to push more jobs to the schedule=
-r,
-> >>>>> unless they are pushed from the kernel itself.
-> >>>>> amdgpu_device_suspend
-> >>>> It was my suspicion but I wasn't sure about it.
-> >>>>
-> >>>>
-> >>>>> We don't do that in
-> >>>>> drm/msm, but maybe you need to to move things btwn vram and system
-> >>>>> memory?
-> >>>> Exactly, that was my main concern - if we use this method we have to=
- use
-> >>>> it in a point in
-> >>>> suspend sequence when all the in kernel job submissions activity alr=
-eady
-> >>>> suspended
-> >>>>
-> >>>>> But even in that case, if the # of jobs you push is bounded I
-> >>>>> guess that is ok?
-> >>>> Submissions to scheduler entities are using unbounded queue, the bou=
-nded
-> >>>> part is when
-> >>>> you extract next job from entity to submit to HW ring and it rejects=
- if
-> >>>> submission limit reached (drm_sched_ready)
-> >>>>
-> >>>> In general - It looks to me at least that what we what we want her i=
-s
-> >>>> more of a drain operation then flush (i.e.
-> >>>> we first want to disable any further job submission to entity's queu=
-e
-> >>>> and then flush all in flight ones). As example
-> >>>> for this i was looking at  flush_workqueue vs. drain_workqueue
-> >>> Would it be possible for amdgpu to, in the system suspend task,
-> >>>
-> >>> 1) first queue up all the jobs needed to migrate bos out of vram, and
-> >>> whatever other housekeeping jobs are needed
-> >>> 2) then drain gpu scheduler's queues
-> >>> 3) and then finally wait for jobs executing on GPU to complete
-> >>
-> >> We already do most of it in amdgpu_device_suspend,
-> >> amdgpu_device_ip_suspend_phase1
-> >> followed by amdgpu_device_evict_resources followed by
-> >> amdgpu_fence_driver_hw_fini is
-> >> exactly steps 1 + 3. What we are missing is step 2). For this step I
-> >> suggest adding a function
-> >> called drm_sched_entity_drain which basically sets entity->stopped =3D
-> >> true and then calls drm_sched_entity_flush.
-> >> This will both reject any new insertions into entity's job queue and
-> >> will flush all pending job submissions to HW from that entity.
-> >> One point is we need to make make drm_sched_entity_push_job return val=
-ue
-> >> so the caller knows about job enqueue
-> >> rejection.
-> > Hmm, seems like job enqueue that is rejected because we are in the
-> > process of suspending should be more of a WARN_ON() sort of thing?
-> > Not sure if there is something sensible to do for the caller at that
-> > point?
+>   https://lkml.org/lkml/2019/6/5/18
 >
->
-> What about the job's fence the caller is waiting on ? If we rejected
-> job submission the caller must know about it to not get stuck waiting
-> on that fence.
->
-
-Hmm, perhaps I'm not being imaginative enough, but this sort of
-scenario seems like it should only arise from a bug in the driver's
-suspend path, Ie. not doing all the job submission before shutting
-down the scheduler.  I don't think anything good is going to result
-either way, which is why I was thinking you'd want a WARN_ON() to help
-debug/fix that case.
-
->
-> >
-> >> What about runtime suspend ? I guess same issue with scheduler racing
-> >> against HW susppend is relevant there ?
-> > Runtime suspend should be ok, as long as the driver holds a runpm
-> > reference whenever the hw needs to be awake.  The problem with system
-> > suspend (at least if you are using pm_runtime_force_suspend() or doing
-> > something equivalent) is that it bypasses the runpm reference.
-> > (Which, IMO, seems like a bad design..)
->
->
-> I am not totally clear  yet - can you expand a bit why one case is ok
-> but the other
-> problematic ?
->
-
-Sure, normally pm_runtime_get/put increment a reference count, as long
-as there have been more get's than puts, the device won't runtime
-suspend.  So, for ex, msm's run_job fxn does a pm_runtime_get_sync().
-And retire_submit() which runs after job completes on GPU does a
-pm_runtime_put_autosuspend().
-
-System suspend, OTOH, bypasses this reference counting.  Which is why
-extra care is needed.
-
-BR,
--R
+> Signed-off-by: Carlos Llamas <cmllamas@google.com>
 
 
-> Andrey
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+
+You can fix include/uapi/linux/idxd.h as well if you are interested.
+
+
+
+
+
+
+> ---
+>  include/uapi/linux/fuse.h | 509 +++++++++++++++++++-------------------
+>  1 file changed, 253 insertions(+), 256 deletions(-)
 >
+> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+> index d6ccee961891..c6dc477306c1 100644
+> --- a/include/uapi/linux/fuse.h
+> +++ b/include/uapi/linux/fuse.h
+> @@ -199,11 +199,7 @@
+>  #ifndef _LINUX_FUSE_H
+>  #define _LINUX_FUSE_H
 >
-> >
-> >> Also, could you point to a particular buggy scenario where the race
-> >> between SW shceduler and suspend is causing a problem ?
-> > I wrote a piglit test[1] to try to trigger this scenario.. it isn't
-> > really that easy to hit
-> >
-> > BR,
-> > -R
-> >
-> > [1] https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2=
-Fgitlab.freedesktop.org%2Fmesa%2Fpiglit%2F-%2Fmerge_requests%2F643&amp;data=
-=3D04%7C01%7Candrey.grodzovsky%40amd.com%7C502ac8db4fb94b3b0e9d08da08fb270e=
-%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637832172051790527%7CUnknown%=
-7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6M=
-n0%3D%7C3000&amp;sdata=3Du2Fqq%2BZpmjFHQFK77xwxEA5092O3Nc%2FdCMllfejgnvU%3D=
-&amp;reserved=3D0
-> >
-> >> Andrey
-> >>
-> >>
-> >>> BR,
-> >>> -R
-> >>>
-> >>>> Andrey
-> >>>>
-> >>>>
-> >>>>> BR,
-> >>>>> -R
+> -#ifdef __KERNEL__
+>  #include <linux/types.h>
+> -#else
+> -#include <stdint.h>
+> -#endif
+>
+>  /*
+>   * Version negotiation:
+> @@ -238,42 +234,42 @@
+>     userspace works under 64bit kernels */
+>
+>  struct fuse_attr {
+> -       uint64_t        ino;
+> -       uint64_t        size;
+> -       uint64_t        blocks;
+> -       uint64_t        atime;
+> -       uint64_t        mtime;
+> -       uint64_t        ctime;
+> -       uint32_t        atimensec;
+> -       uint32_t        mtimensec;
+> -       uint32_t        ctimensec;
+> -       uint32_t        mode;
+> -       uint32_t        nlink;
+> -       uint32_t        uid;
+> -       uint32_t        gid;
+> -       uint32_t        rdev;
+> -       uint32_t        blksize;
+> -       uint32_t        flags;
+> +       __u64   ino;
+> +       __u64   size;
+> +       __u64   blocks;
+> +       __u64   atime;
+> +       __u64   mtime;
+> +       __u64   ctime;
+> +       __u32   atimensec;
+> +       __u32   mtimensec;
+> +       __u32   ctimensec;
+> +       __u32   mode;
+> +       __u32   nlink;
+> +       __u32   uid;
+> +       __u32   gid;
+> +       __u32   rdev;
+> +       __u32   blksize;
+> +       __u32   flags;
+>  };
+>
+>  struct fuse_kstatfs {
+> -       uint64_t        blocks;
+> -       uint64_t        bfree;
+> -       uint64_t        bavail;
+> -       uint64_t        files;
+> -       uint64_t        ffree;
+> -       uint32_t        bsize;
+> -       uint32_t        namelen;
+> -       uint32_t        frsize;
+> -       uint32_t        padding;
+> -       uint32_t        spare[6];
+> +       __u64   blocks;
+> +       __u64   bfree;
+> +       __u64   bavail;
+> +       __u64   files;
+> +       __u64   ffree;
+> +       __u32   bsize;
+> +       __u32   namelen;
+> +       __u32   frsize;
+> +       __u32   padding;
+> +       __u32   spare[6];
+>  };
+>
+>  struct fuse_file_lock {
+> -       uint64_t        start;
+> -       uint64_t        end;
+> -       uint32_t        type;
+> -       uint32_t        pid; /* tgid */
+> +       __u64   start;
+> +       __u64   end;
+> +       __u32   type;
+> +       __u32   pid; /* tgid */
+>  };
+>
+>  /**
+> @@ -562,149 +558,150 @@ enum fuse_notify_code {
+>  #define FUSE_COMPAT_ENTRY_OUT_SIZE 120
+>
+>  struct fuse_entry_out {
+> -       uint64_t        nodeid;         /* Inode ID */
+> -       uint64_t        generation;     /* Inode generation: nodeid:gen must
+> -                                          be unique for the fs's lifetime */
+> -       uint64_t        entry_valid;    /* Cache timeout for the name */
+> -       uint64_t        attr_valid;     /* Cache timeout for the attributes */
+> -       uint32_t        entry_valid_nsec;
+> -       uint32_t        attr_valid_nsec;
+> +       __u64   nodeid;         /* Inode ID */
+> +       __u64   generation;     /* Inode generation: nodeid:gen must
+> +                                * be unique for the fs's lifetime
+> +                                */
+> +       __u64   entry_valid;    /* Cache timeout for the name */
+> +       __u64   attr_valid;     /* Cache timeout for the attributes */
+> +       __u32   entry_valid_nsec;
+> +       __u32   attr_valid_nsec;
+>         struct fuse_attr attr;
+>  };
+>
+>  struct fuse_forget_in {
+> -       uint64_t        nlookup;
+> +       __u64   nlookup;
+>  };
+>
+>  struct fuse_forget_one {
+> -       uint64_t        nodeid;
+> -       uint64_t        nlookup;
+> +       __u64   nodeid;
+> +       __u64   nlookup;
+>  };
+>
+>  struct fuse_batch_forget_in {
+> -       uint32_t        count;
+> -       uint32_t        dummy;
+> +       __u32   count;
+> +       __u32   dummy;
+>  };
+>
+>  struct fuse_getattr_in {
+> -       uint32_t        getattr_flags;
+> -       uint32_t        dummy;
+> -       uint64_t        fh;
+> +       __u32   getattr_flags;
+> +       __u32   dummy;
+> +       __u64   fh;
+>  };
+>
+>  #define FUSE_COMPAT_ATTR_OUT_SIZE 96
+>
+>  struct fuse_attr_out {
+> -       uint64_t        attr_valid;     /* Cache timeout for the attributes */
+> -       uint32_t        attr_valid_nsec;
+> -       uint32_t        dummy;
+> +       __u64   attr_valid;     /* Cache timeout for the attributes */
+> +       __u32   attr_valid_nsec;
+> +       __u32   dummy;
+>         struct fuse_attr attr;
+>  };
+>
+>  #define FUSE_COMPAT_MKNOD_IN_SIZE 8
+>
+>  struct fuse_mknod_in {
+> -       uint32_t        mode;
+> -       uint32_t        rdev;
+> -       uint32_t        umask;
+> -       uint32_t        padding;
+> +       __u32   mode;
+> +       __u32   rdev;
+> +       __u32   umask;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_mkdir_in {
+> -       uint32_t        mode;
+> -       uint32_t        umask;
+> +       __u32   mode;
+> +       __u32   umask;
+>  };
+>
+>  struct fuse_rename_in {
+> -       uint64_t        newdir;
+> +       __u64   newdir;
+>  };
+>
+>  struct fuse_rename2_in {
+> -       uint64_t        newdir;
+> -       uint32_t        flags;
+> -       uint32_t        padding;
+> +       __u64   newdir;
+> +       __u32   flags;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_link_in {
+> -       uint64_t        oldnodeid;
+> +       __u64   oldnodeid;
+>  };
+>
+>  struct fuse_setattr_in {
+> -       uint32_t        valid;
+> -       uint32_t        padding;
+> -       uint64_t        fh;
+> -       uint64_t        size;
+> -       uint64_t        lock_owner;
+> -       uint64_t        atime;
+> -       uint64_t        mtime;
+> -       uint64_t        ctime;
+> -       uint32_t        atimensec;
+> -       uint32_t        mtimensec;
+> -       uint32_t        ctimensec;
+> -       uint32_t        mode;
+> -       uint32_t        unused4;
+> -       uint32_t        uid;
+> -       uint32_t        gid;
+> -       uint32_t        unused5;
+> +       __u32   valid;
+> +       __u32   padding;
+> +       __u64   fh;
+> +       __u64   size;
+> +       __u64   lock_owner;
+> +       __u64   atime;
+> +       __u64   mtime;
+> +       __u64   ctime;
+> +       __u32   atimensec;
+> +       __u32   mtimensec;
+> +       __u32   ctimensec;
+> +       __u32   mode;
+> +       __u32   unused4;
+> +       __u32   uid;
+> +       __u32   gid;
+> +       __u32   unused5;
+>  };
+>
+>  struct fuse_open_in {
+> -       uint32_t        flags;
+> -       uint32_t        open_flags;     /* FUSE_OPEN_... */
+> +       __u32   flags;
+> +       __u32   open_flags;     /* FUSE_OPEN_... */
+>  };
+>
+>  struct fuse_create_in {
+> -       uint32_t        flags;
+> -       uint32_t        mode;
+> -       uint32_t        umask;
+> -       uint32_t        open_flags;     /* FUSE_OPEN_... */
+> +       __u32   flags;
+> +       __u32   mode;
+> +       __u32   umask;
+> +       __u32   open_flags;     /* FUSE_OPEN_... */
+>  };
+>
+>  struct fuse_open_out {
+> -       uint64_t        fh;
+> -       uint32_t        open_flags;
+> -       uint32_t        padding;
+> +       __u64   fh;
+> +       __u32   open_flags;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_release_in {
+> -       uint64_t        fh;
+> -       uint32_t        flags;
+> -       uint32_t        release_flags;
+> -       uint64_t        lock_owner;
+> +       __u64   fh;
+> +       __u32   flags;
+> +       __u32   release_flags;
+> +       __u64   lock_owner;
+>  };
+>
+>  struct fuse_flush_in {
+> -       uint64_t        fh;
+> -       uint32_t        unused;
+> -       uint32_t        padding;
+> -       uint64_t        lock_owner;
+> +       __u64   fh;
+> +       __u32   unused;
+> +       __u32   padding;
+> +       __u64   lock_owner;
+>  };
+>
+>  struct fuse_read_in {
+> -       uint64_t        fh;
+> -       uint64_t        offset;
+> -       uint32_t        size;
+> -       uint32_t        read_flags;
+> -       uint64_t        lock_owner;
+> -       uint32_t        flags;
+> -       uint32_t        padding;
+> +       __u64   fh;
+> +       __u64   offset;
+> +       __u32   size;
+> +       __u32   read_flags;
+> +       __u64   lock_owner;
+> +       __u32   flags;
+> +       __u32   padding;
+>  };
+>
+>  #define FUSE_COMPAT_WRITE_IN_SIZE 24
+>
+>  struct fuse_write_in {
+> -       uint64_t        fh;
+> -       uint64_t        offset;
+> -       uint32_t        size;
+> -       uint32_t        write_flags;
+> -       uint64_t        lock_owner;
+> -       uint32_t        flags;
+> -       uint32_t        padding;
+> +       __u64   fh;
+> +       __u64   offset;
+> +       __u32   size;
+> +       __u32   write_flags;
+> +       __u64   lock_owner;
+> +       __u32   flags;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_write_out {
+> -       uint32_t        size;
+> -       uint32_t        padding;
+> +       __u32   size;
+> +       __u32   padding;
+>  };
+>
+>  #define FUSE_COMPAT_STATFS_SIZE 48
+> @@ -714,36 +711,36 @@ struct fuse_statfs_out {
+>  };
+>
+>  struct fuse_fsync_in {
+> -       uint64_t        fh;
+> -       uint32_t        fsync_flags;
+> -       uint32_t        padding;
+> +       __u64   fh;
+> +       __u32   fsync_flags;
+> +       __u32   padding;
+>  };
+>
+>  #define FUSE_COMPAT_SETXATTR_IN_SIZE 8
+>
+>  struct fuse_setxattr_in {
+> -       uint32_t        size;
+> -       uint32_t        flags;
+> -       uint32_t        setxattr_flags;
+> -       uint32_t        padding;
+> +       __u32   size;
+> +       __u32   flags;
+> +       __u32   setxattr_flags;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_getxattr_in {
+> -       uint32_t        size;
+> -       uint32_t        padding;
+> +       __u32   size;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_getxattr_out {
+> -       uint32_t        size;
+> -       uint32_t        padding;
+> +       __u32   size;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_lk_in {
+> -       uint64_t        fh;
+> -       uint64_t        owner;
+> +       __u64   fh;
+> +       __u64   owner;
+>         struct fuse_file_lock lk;
+> -       uint32_t        lk_flags;
+> -       uint32_t        padding;
+> +       __u32   lk_flags;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_lk_out {
+> @@ -751,145 +748,145 @@ struct fuse_lk_out {
+>  };
+>
+>  struct fuse_access_in {
+> -       uint32_t        mask;
+> -       uint32_t        padding;
+> +       __u32   mask;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_init_in {
+> -       uint32_t        major;
+> -       uint32_t        minor;
+> -       uint32_t        max_readahead;
+> -       uint32_t        flags;
+> -       uint32_t        flags2;
+> -       uint32_t        unused[11];
+> +       __u32   major;
+> +       __u32   minor;
+> +       __u32   max_readahead;
+> +       __u32   flags;
+> +       __u32   flags2;
+> +       __u32   unused[11];
+>  };
+>
+>  #define FUSE_COMPAT_INIT_OUT_SIZE 8
+>  #define FUSE_COMPAT_22_INIT_OUT_SIZE 24
+>
+>  struct fuse_init_out {
+> -       uint32_t        major;
+> -       uint32_t        minor;
+> -       uint32_t        max_readahead;
+> -       uint32_t        flags;
+> -       uint16_t        max_background;
+> -       uint16_t        congestion_threshold;
+> -       uint32_t        max_write;
+> -       uint32_t        time_gran;
+> -       uint16_t        max_pages;
+> -       uint16_t        map_alignment;
+> -       uint32_t        flags2;
+> -       uint32_t        unused[7];
+> +       __u32   major;
+> +       __u32   minor;
+> +       __u32   max_readahead;
+> +       __u32   flags;
+> +       __u16   max_background;
+> +       __u16   congestion_threshold;
+> +       __u32   max_write;
+> +       __u32   time_gran;
+> +       __u16   max_pages;
+> +       __u16   map_alignment;
+> +       __u32   flags2;
+> +       __u32   unused[7];
+>  };
+>
+>  #define CUSE_INIT_INFO_MAX 4096
+>
+>  struct cuse_init_in {
+> -       uint32_t        major;
+> -       uint32_t        minor;
+> -       uint32_t        unused;
+> -       uint32_t        flags;
+> +       __u32   major;
+> +       __u32   minor;
+> +       __u32   unused;
+> +       __u32   flags;
+>  };
+>
+>  struct cuse_init_out {
+> -       uint32_t        major;
+> -       uint32_t        minor;
+> -       uint32_t        unused;
+> -       uint32_t        flags;
+> -       uint32_t        max_read;
+> -       uint32_t        max_write;
+> -       uint32_t        dev_major;              /* chardev major */
+> -       uint32_t        dev_minor;              /* chardev minor */
+> -       uint32_t        spare[10];
+> +       __u32   major;
+> +       __u32   minor;
+> +       __u32   unused;
+> +       __u32   flags;
+> +       __u32   max_read;
+> +       __u32   max_write;
+> +       __u32   dev_major;              /* chardev major */
+> +       __u32   dev_minor;              /* chardev minor */
+> +       __u32   spare[10];
+>  };
+>
+>  struct fuse_interrupt_in {
+> -       uint64_t        unique;
+> +       __u64   unique;
+>  };
+>
+>  struct fuse_bmap_in {
+> -       uint64_t        block;
+> -       uint32_t        blocksize;
+> -       uint32_t        padding;
+> +       __u64   block;
+> +       __u32   blocksize;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_bmap_out {
+> -       uint64_t        block;
+> +       __u64   block;
+>  };
+>
+>  struct fuse_ioctl_in {
+> -       uint64_t        fh;
+> -       uint32_t        flags;
+> -       uint32_t        cmd;
+> -       uint64_t        arg;
+> -       uint32_t        in_size;
+> -       uint32_t        out_size;
+> +       __u64   fh;
+> +       __u32   flags;
+> +       __u32   cmd;
+> +       __u64   arg;
+> +       __u32   in_size;
+> +       __u32   out_size;
+>  };
+>
+>  struct fuse_ioctl_iovec {
+> -       uint64_t        base;
+> -       uint64_t        len;
+> +       __u64   base;
+> +       __u64   len;
+>  };
+>
+>  struct fuse_ioctl_out {
+> -       int32_t         result;
+> -       uint32_t        flags;
+> -       uint32_t        in_iovs;
+> -       uint32_t        out_iovs;
+> +       __s32   result;
+> +       __u32   flags;
+> +       __u32   in_iovs;
+> +       __u32   out_iovs;
+>  };
+>
+>  struct fuse_poll_in {
+> -       uint64_t        fh;
+> -       uint64_t        kh;
+> -       uint32_t        flags;
+> -       uint32_t        events;
+> +       __u64   fh;
+> +       __u64   kh;
+> +       __u32   flags;
+> +       __u32   events;
+>  };
+>
+>  struct fuse_poll_out {
+> -       uint32_t        revents;
+> -       uint32_t        padding;
+> +       __u32   revents;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_notify_poll_wakeup_out {
+> -       uint64_t        kh;
+> +       __u64   kh;
+>  };
+>
+>  struct fuse_fallocate_in {
+> -       uint64_t        fh;
+> -       uint64_t        offset;
+> -       uint64_t        length;
+> -       uint32_t        mode;
+> -       uint32_t        padding;
+> +       __u64   fh;
+> +       __u64   offset;
+> +       __u64   length;
+> +       __u32   mode;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_in_header {
+> -       uint32_t        len;
+> -       uint32_t        opcode;
+> -       uint64_t        unique;
+> -       uint64_t        nodeid;
+> -       uint32_t        uid;
+> -       uint32_t        gid;
+> -       uint32_t        pid;
+> -       uint32_t        padding;
+> +       __u32   len;
+> +       __u32   opcode;
+> +       __u64   unique;
+> +       __u64   nodeid;
+> +       __u32   uid;
+> +       __u32   gid;
+> +       __u32   pid;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_out_header {
+> -       uint32_t        len;
+> -       int32_t         error;
+> -       uint64_t        unique;
+> +       __u32   len;
+> +       __s32           error;
+> +       __u64   unique;
+>  };
+>
+>  struct fuse_dirent {
+> -       uint64_t        ino;
+> -       uint64_t        off;
+> -       uint32_t        namelen;
+> -       uint32_t        type;
+> +       __u64   ino;
+> +       __u64   off;
+> +       __u32   namelen;
+> +       __u32   type;
+>         char name[];
+>  };
+>
+>  /* Align variable length records to 64bit boundary */
+>  #define FUSE_REC_ALIGN(x) \
+> -       (((x) + sizeof(uint64_t) - 1) & ~(sizeof(uint64_t) - 1))
+> +       (((x) + sizeof(__u64) - 1) & ~(sizeof(__u64) - 1))
+>
+>  #define FUSE_NAME_OFFSET offsetof(struct fuse_dirent, name)
+>  #define FUSE_DIRENT_ALIGN(x) FUSE_REC_ALIGN(x)
+> @@ -907,106 +904,106 @@ struct fuse_direntplus {
+>         FUSE_DIRENT_ALIGN(FUSE_NAME_OFFSET_DIRENTPLUS + (d)->dirent.namelen)
+>
+>  struct fuse_notify_inval_inode_out {
+> -       uint64_t        ino;
+> -       int64_t         off;
+> -       int64_t         len;
+> +       __u64   ino;
+> +       __s64   off;
+> +       __s64   len;
+>  };
+>
+>  struct fuse_notify_inval_entry_out {
+> -       uint64_t        parent;
+> -       uint32_t        namelen;
+> -       uint32_t        padding;
+> +       __u64   parent;
+> +       __u32   namelen;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_notify_delete_out {
+> -       uint64_t        parent;
+> -       uint64_t        child;
+> -       uint32_t        namelen;
+> -       uint32_t        padding;
+> +       __u64   parent;
+> +       __u64   child;
+> +       __u32   namelen;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_notify_store_out {
+> -       uint64_t        nodeid;
+> -       uint64_t        offset;
+> -       uint32_t        size;
+> -       uint32_t        padding;
+> +       __u64   nodeid;
+> +       __u64   offset;
+> +       __u32   size;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_notify_retrieve_out {
+> -       uint64_t        notify_unique;
+> -       uint64_t        nodeid;
+> -       uint64_t        offset;
+> -       uint32_t        size;
+> -       uint32_t        padding;
+> +       __u64   notify_unique;
+> +       __u64   nodeid;
+> +       __u64   offset;
+> +       __u32   size;
+> +       __u32   padding;
+>  };
+>
+>  /* Matches the size of fuse_write_in */
+>  struct fuse_notify_retrieve_in {
+> -       uint64_t        dummy1;
+> -       uint64_t        offset;
+> -       uint32_t        size;
+> -       uint32_t        dummy2;
+> -       uint64_t        dummy3;
+> -       uint64_t        dummy4;
+> +       __u64   dummy1;
+> +       __u64   offset;
+> +       __u32   size;
+> +       __u32   dummy2;
+> +       __u64   dummy3;
+> +       __u64   dummy4;
+>  };
+>
+>  /* Device ioctls: */
+>  #define FUSE_DEV_IOC_MAGIC             229
+> -#define FUSE_DEV_IOC_CLONE             _IOR(FUSE_DEV_IOC_MAGIC, 0, uint32_t)
+> +#define FUSE_DEV_IOC_CLONE             _IOR(FUSE_DEV_IOC_MAGIC, 0, __u32)
+>
+>  struct fuse_lseek_in {
+> -       uint64_t        fh;
+> -       uint64_t        offset;
+> -       uint32_t        whence;
+> -       uint32_t        padding;
+> +       __u64   fh;
+> +       __u64   offset;
+> +       __u32   whence;
+> +       __u32   padding;
+>  };
+>
+>  struct fuse_lseek_out {
+> -       uint64_t        offset;
+> +       __u64   offset;
+>  };
+>
+>  struct fuse_copy_file_range_in {
+> -       uint64_t        fh_in;
+> -       uint64_t        off_in;
+> -       uint64_t        nodeid_out;
+> -       uint64_t        fh_out;
+> -       uint64_t        off_out;
+> -       uint64_t        len;
+> -       uint64_t        flags;
+> +       __u64   fh_in;
+> +       __u64   off_in;
+> +       __u64   nodeid_out;
+> +       __u64   fh_out;
+> +       __u64   off_out;
+> +       __u64   len;
+> +       __u64   flags;
+>  };
+>
+>  #define FUSE_SETUPMAPPING_FLAG_WRITE (1ull << 0)
+>  #define FUSE_SETUPMAPPING_FLAG_READ (1ull << 1)
+>  struct fuse_setupmapping_in {
+>         /* An already open handle */
+> -       uint64_t        fh;
+> +       __u64   fh;
+>         /* Offset into the file to start the mapping */
+> -       uint64_t        foffset;
+> +       __u64   foffset;
+>         /* Length of mapping required */
+> -       uint64_t        len;
+> +       __u64   len;
+>         /* Flags, FUSE_SETUPMAPPING_FLAG_* */
+> -       uint64_t        flags;
+> +       __u64   flags;
+>         /* Offset in Memory Window */
+> -       uint64_t        moffset;
+> +       __u64   moffset;
+>  };
+>
+>  struct fuse_removemapping_in {
+>         /* number of fuse_removemapping_one follows */
+> -       uint32_t        count;
+> +       __u32   count;
+>  };
+>
+>  struct fuse_removemapping_one {
+>         /* Offset into the dax window start the unmapping */
+> -       uint64_t        moffset;
+> +       __u64   moffset;
+>         /* Length of mapping required */
+> -       uint64_t        len;
+> +       __u64   len;
+>  };
+>
+>  #define FUSE_REMOVEMAPPING_MAX_ENTRY   \
+>                 (PAGE_SIZE / sizeof(struct fuse_removemapping_one))
+>
+>  struct fuse_syncfs_in {
+> -       uint64_t        padding;
+> +       __u64   padding;
+>  };
+>
+>  /*
+> @@ -1016,8 +1013,8 @@ struct fuse_syncfs_in {
+>   * fuse_secctx, name, context
+>   */
+>  struct fuse_secctx {
+> -       uint32_t        size;
+> -       uint32_t        padding;
+> +       __u32   size;
+> +       __u32   padding;
+>  };
+>
+>  /*
+> @@ -1027,8 +1024,8 @@ struct fuse_secctx {
+>   *
+>   */
+>  struct fuse_secctx_header {
+> -       uint32_t        size;
+> -       uint32_t        nr_secctx;
+> +       __u32   size;
+> +       __u32   nr_secctx;
+>  };
+>
+>  #endif /* _LINUX_FUSE_H */
+> --
+> 2.35.1.894.gb6a874cedc-goog
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada

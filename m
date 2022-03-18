@@ -2,97 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607054DDBB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 160624DDBB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237320AbiCROcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
+        id S237314AbiCROdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 10:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234679AbiCROcL (ORCPT
+        with ESMTP id S235971AbiCROdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:32:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367B25C64F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:30:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7646B823DF
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 14:30:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91AFC340E8;
-        Fri, 18 Mar 2022 14:30:47 +0000 (UTC)
-Date:   Fri, 18 Mar 2022 14:30:43 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        chinwen.chang@mediatek.com, nicholas.tang@mediatek.com,
-        yee.lee@mediatek.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] mm/kmemleak: Reset tag when compare object pointer
-Message-ID: <YjSXkyq6icIFx4GS@arm.com>
-References: <20220318034051.30687-1-Kuan-Ying.Lee@mediatek.com>
+        Fri, 18 Mar 2022 10:33:46 -0400
+Received: from gateway24.websitewelcome.com (gateway24.websitewelcome.com [192.185.50.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D344855A4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:32:25 -0700 (PDT)
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id E139017DEB
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 09:32:24 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id VDeSnglBk22u3VDeSnCRYM; Fri, 18 Mar 2022 09:32:24 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=xJSeFXEv0MsCLMmIo+zvVtrl7PN3UrB1l3mugyJKHT8=; b=zDm9kuwnQlobpoDtn2XNjkBuPZ
+        hUW1s395q3X7TtFciXA0KaKMOC09DkwYKrt1mI8zX9Ngk6dPNp22n0S7xnXHA2ST9ydFJcMRaxrR+
+        qw9B1LLQ0fvW6PlUlkvcLR60xIbZ9xVRfLs1CsaNLxAi3wVEoC/64XfwWsue19hkCThxEyV0hxf86
+        NeK6hrcmkhB8cQz3CndoVI+/XAARVzugXiaz46L2j9IJX88NIM+bhHdyVgx79nnqdELWHpTsRIdBb
+        VLcjqKgSa5NitiU6P4xhT7hpVnA0pSHlY9/CDqC+cBtpvJ7ZVRn5/mAIXm/3Zd1AMZCQtgIY0ZJf9
+        kjCt9Fqw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57538 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nVDeS-003Wqy-Am; Fri, 18 Mar 2022 14:32:24 +0000
+Date:   Fri, 18 Mar 2022 07:32:23 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] hwmon: (adt7475) Use enum chips when loading
+ attenuator settings
+Message-ID: <20220318143223.GA673001@roeck-us.net>
+References: <20220317223051.1227110-1-chris.packham@alliedtelesis.co.nz>
+ <20220317223051.1227110-4-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220318034051.30687-1-Kuan-Ying.Lee@mediatek.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220317223051.1227110-4-chris.packham@alliedtelesis.co.nz>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nVDeS-003Wqy-Am
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57538
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 1
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 11:40:48AM +0800, Kuan-Ying Lee wrote:
-> When we use HW-tag based kasan and enable vmalloc support, we hit
-> the following bug. It is due to comparison between tagged object
-> and non-tagged pointer.
+On Fri, Mar 18, 2022 at 11:30:50AM +1300, Chris Packham wrote:
+> Simplify load_attenuators() by making use of enum chips instead of int.
 > 
-> We need to reset the kasan tag when we need to compare tagged object
-> and non-tagged pointer.
-> 
-> [    7.690429][T400001] init: kmemleak: [name:kmemleak&]Scan area larger than object 0xffffffe77076f440
-> [    7.691762][T400001] init: CPU: 4 PID: 1 Comm: init Tainted: G S      W         5.15.25-android13-0-g5cacf919c2bc #1
-> [    7.693218][T400001] init: Hardware name: MT6983(ENG) (DT)
-> [    7.693983][T400001] init: Call trace:
-> [    7.694508][T400001] init:  dump_backtrace.cfi_jt+0x0/0x8
-> [    7.695272][T400001] init:  dump_stack_lvl+0xac/0x120
-> [    7.695985][T400001] init:  add_scan_area+0xc4/0x244
-> [    7.696685][T400001] init:  kmemleak_scan_area+0x40/0x9c
-> [    7.697428][T400001] init:  layout_and_allocate+0x1e8/0x288
-> [    7.698211][T400001] init:  load_module+0x2c8/0xf00
-> [    7.698895][T400001] init:  __se_sys_finit_module+0x190/0x1d0
-> [    7.699701][T400001] init:  __arm64_sys_finit_module+0x20/0x30
-> [    7.700517][T400001] init:  invoke_syscall+0x60/0x170
-> [    7.701225][T400001] init:  el0_svc_common+0xc8/0x114
-> [    7.701933][T400001] init:  do_el0_svc+0x28/0xa0
-> [    7.702580][T400001] init:  el0_svc+0x60/0xf8
-> [    7.703196][T400001] init:  el0t_64_sync_handler+0x88/0xec
-> [    7.703964][T400001] init:  el0t_64_sync+0x1b4/0x1b8
-> [    7.704658][T400001] init: kmemleak: [name:kmemleak&]Object 0xf5ffffe77076b000 (size 32768):
-> [    7.705824][T400001] init: kmemleak: [name:kmemleak&]  comm "init", pid 1, jiffies 4294894197
-> [    7.707002][T400001] init: kmemleak: [name:kmemleak&]  min_count = 0
-> [    7.707886][T400001] init: kmemleak: [name:kmemleak&]  count = 0
-> [    7.708718][T400001] init: kmemleak: [name:kmemleak&]  flags = 0x1
-> [    7.709574][T400001] init: kmemleak: [name:kmemleak&]  checksum = 0
-> [    7.710440][T400001] init: kmemleak: [name:kmemleak&]  backtrace:
-> [    7.711284][T400001] init:      module_alloc+0x9c/0x120
-> [    7.712015][T400001] init:      move_module+0x34/0x19c
-> [    7.712735][T400001] init:      layout_and_allocate+0x1c4/0x288
-> [    7.713561][T400001] init:      load_module+0x2c8/0xf00
-> [    7.714291][T400001] init:      __se_sys_finit_module+0x190/0x1d0
-> [    7.715142][T400001] init:      __arm64_sys_finit_module+0x20/0x30
-> [    7.716004][T400001] init:      invoke_syscall+0x60/0x170
-> [    7.716758][T400001] init:      el0_svc_common+0xc8/0x114
-> [    7.717512][T400001] init:      do_el0_svc+0x28/0xa0
-> [    7.718207][T400001] init:      el0_svc+0x60/0xf8
-> [    7.718869][T400001] init:      el0t_64_sync_handler+0x88/0xec
-> [    7.719683][T400001] init:      el0t_64_sync+0x1b4/0x1b8
-> 
-> Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+That isn't the only thing the patch is doing.
+
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     Changes in v2:
+>     - New
+> 
+>  drivers/hwmon/adt7475.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index 6de501de41b2..ebe4a85eb62e 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -1569,7 +1569,7 @@ static int set_property_bit(const struct i2c_client *client, char *property,
+>  	return ret;
+>  }
+>  
+> -static int load_attenuators(const struct i2c_client *client, int chip,
+> +static int load_attenuators(const struct i2c_client *client, enum chips chip,
+>  			    struct adt7475_data *data)
+>  {
+>  	int ret;
+> @@ -1588,7 +1588,7 @@ static int load_attenuators(const struct i2c_client *client, int chip,
+>  						data->config4);
+>  		if (ret < 0)
+>  			return ret;
+> -	} else if (chip == adt7473 || chip == adt7475) {
+> +	} else {
+
+This is the real change. Well, in theory. It doesn't really make a difference,
+it is just (currently) unnecessary but clarifies that the following code only
+applies to the two chips. It may be better to replace the if/else with a switch
+statement to clarify this. Dropping the conditional would not require to change
+the parameter type. That only really adds value if you also use a switch
+statement (without dummy default).
+
+Thanks,
+Guenter
+
+>  		set_property_bit(client, "adi,bypass-attenuator-in1",
+>  				 &data->config2, 5);
+>  

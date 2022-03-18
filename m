@@ -2,154 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FAB94DD52E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1C44DD531
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 08:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233017AbiCRHWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 03:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
+        id S233020AbiCRH0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 03:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232971AbiCRHWo (ORCPT
+        with ESMTP id S232971AbiCRH0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 03:22:44 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0872B882C;
-        Fri, 18 Mar 2022 00:21:26 -0700 (PDT)
-Received: from kwepemi100009.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KKb1p008Nz9sfJ;
-        Fri, 18 Mar 2022 15:17:33 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
- kwepemi100009.china.huawei.com (7.221.188.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 18 Mar 2022 15:21:24 +0800
-Received: from [10.174.177.238] (10.174.177.238) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 18 Mar 2022 15:21:23 +0800
-Message-ID: <165cff82-6210-9acf-c104-b6cae5d2a92e@huawei.com>
-Date:   Fri, 18 Mar 2022 15:21:23 +0800
+        Fri, 18 Mar 2022 03:26:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6AA2B2B4D;
+        Fri, 18 Mar 2022 00:24:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20BD4B820FD;
+        Fri, 18 Mar 2022 07:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1627C340E8;
+        Fri, 18 Mar 2022 07:24:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647588280;
+        bh=BfoKZy6B91Hiu61I3JtTMYU0kjXTJYatxUR/A7w6QKM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jv4I9aWN18i+RpqiME4Tu16flA6GoS6NLvmm/rNpSUqgBduuIeqZ2+pWXdTdYDwuI
+         MMFgDm88yex0Z8yQM2j7KzSgDND1ghEGYNcrMVnJlJn09bXbYqMBTxOgCsgraYwoUO
+         FDJI/2gyqslJ4kbaPmHeBXwwMyUnXWnM2+/jZa9TV6ClUSPE+gwvvvcrVkmNU+JO3Z
+         JMJbkYS3nWEK6D1Ekc/6TnAa/B8yGusd/JCQLi7xmixU0Mmy7N6PMHmNUrloD+jfmf
+         IbkiUGYs02aiK9trOw5xilOKxsf3seeCPa9WDFB6my5qrI2dY3X4bjuEinemMCR1sz
+         hOHWkId8ryfxg==
+Received: by mail-ua1-f48.google.com with SMTP id z10so2947430uaa.3;
+        Fri, 18 Mar 2022 00:24:40 -0700 (PDT)
+X-Gm-Message-State: AOAM530x0G6z+OJ1fni5PYaDFOEbVTQSx/U9MK567XOY69amjT9mUKIP
+        fdsBF+1bxzWxGEEXNWIwx0S2RqFSPOhqQk1WQWY=
+X-Google-Smtp-Source: ABdhPJxZF9Z+ZVoAdhpq0HZjK1nqC+y82LR7GvGRglz1nfW3jIhfJECm+nlETFHFF9JTp4BwdsUYrSjxCtoHTQhykoQ=
+X-Received: by 2002:ab0:26d9:0:b0:34c:609d:c23 with SMTP id
+ b25-20020ab026d9000000b0034c609d0c23mr2889947uap.84.1647588279723; Fri, 18
+ Mar 2022 00:24:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.0.2
-Subject: Re: [PATCH] iomap: fix an infinite loop in iomap_fiemap
-To:     "Darrick J. Wong" <djwong@kernel.org>
-CC:     <willy@infradead.org>, <viro@zeniv.linux.org.uk>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <houtao1@huawei.com>, <fangwei1@huawei.com>,
-        <hsiangkao@linux.alibaba.com>
-References: <20220315065745.3441989-1-guoxuenan@huawei.com>
- <20220317220511.GA8182@magnolia>
-From:   Guo Xuenan <guoxuenan@huawei.com>
-In-Reply-To: <20220317220511.GA8182@magnolia>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.238]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220316232600.20419-1-palmer@rivosinc.com> <11364105.8ZH9dyz9j6@diego>
+In-Reply-To: <11364105.8ZH9dyz9j6@diego>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 18 Mar 2022 15:24:28 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS3C_GHvLnrep_V3pz4bUOBMO-Tc5v5BpEt7V1EQxF0jw@mail.gmail.com>
+Message-ID: <CAJF2gTS3C_GHvLnrep_V3pz4bUOBMO-Tc5v5BpEt7V1EQxF0jw@mail.gmail.com>
+Subject: Re: [PATCH 0/5] Generic Ticket Spinlocks
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     linux-riscv@lists.infradead.org, peterz@infradead.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, mingo@redhat.com, Will Deacon <will@kernel.org>,
+        longman@redhat.com, boqun.feng@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        Arnd Bergmann <arnd@arndb.de>, jszhang@kernel.org,
+        wangkefeng.wang@huawei.com, openrisc@lists.librecores.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Darrick,
+Tested-by: Guo Ren <guoren@kernel.org>
 
-在 2022/3/18 6:05, Darrick J. Wong wrote:
-> On Tue, Mar 15, 2022 at 02:57:45PM +0800, Guo Xuenan wrote:
->> when get fiemap starting from MAX_LFS_FILESIZE, (maxbytes - *len) < start
->> will always true , then *len set zero. because of start offset is byhond
->> file size, for erofs filesystem it will always return iomap.length with
->> zero,iomap iterate will be infinite loop.
->>
->> In order to avoid this situation, it is better to calculate the actual
->> mapping length at first. If the len is 0, there is no need to continue
->> the operation.
->>
->> ------------[ cut here ]------------
->> WARNING: CPU: 7 PID: 905 at fs/iomap/iter.c:35 iomap_iter+0x97f/0xc70
->> Modules linked in: xfs erofs
->> CPU: 7 PID: 905 Comm: iomap Tainted: G        W         5.17.0-rc8 #27
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
->> RIP: 0010:iomap_iter+0x97f/0xc70
->> Code: 85 a1 fc ff ff e8 71 be 9c ff 0f 1f 44 00 00 e9 92 fc ff ff e8 62 be 9c ff 0f 0b b8 fb ff ff ff e9 fc f8 ff ff e8 51 be 9c ff <0f> 0b e9 2b fc ff ff e8 45 be 9c ff 0f 0b e9 e1 fb ff ff e8 39 be
->> RSP: 0018:ffff888060a37ab0 EFLAGS: 00010293
->> RAX: 0000000000000000 RBX: ffff888060a37bb0 RCX: 0000000000000000
->> RDX: ffff88807e19a900 RSI: ffffffff81a7da7f RDI: ffff888060a37be0
->> RBP: 7fffffffffffffff R08: 0000000000000000 R09: ffff888060a37c20
->> R10: ffff888060a37c67 R11: ffffed100c146f8c R12: 7fffffffffffffff
->> R13: 0000000000000000 R14: ffff888060a37bd8 R15: ffff888060a37c20
->> FS:  00007fd3cca01540(0000) GS:ffff888108780000(0000) knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 0000000020010820 CR3: 0000000054b92000 CR4: 00000000000006e0
->> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->> Call Trace:
->>   <TASK>
->>   iomap_fiemap+0x1c9/0x2f0
->>   erofs_fiemap+0x64/0x90 [erofs]
->>   do_vfs_ioctl+0x40d/0x12e0
->>   __x64_sys_ioctl+0xaa/0x1c0
->>   do_syscall_64+0x35/0x80
->>   entry_SYSCALL_64_after_hwframe+0x44/0xae
->>   </TASK>
->> ---[ end trace 0000000000000000 ]---
->> watchdog: BUG: soft lockup - CPU#7 stuck for 26s! [iomap:905]
->>
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: Guo Xuenan <guoxuenan@huawei.com>
->> ---
->>   fs/ioctl.c | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/ioctl.c b/fs/ioctl.c
->> index 1ed097e94af2..7f70e90766ed 100644
->> --- a/fs/ioctl.c
->> +++ b/fs/ioctl.c
->> @@ -171,8 +171,6 @@ int fiemap_prep(struct inode *inode, struct fiemap_extent_info *fieinfo,
->>   	u32 incompat_flags;
->>   	int ret = 0;
->>   
->> -	if (*len == 0)
->> -		return -EINVAL;
->>   	if (start > maxbytes)
->>   		return -EFBIG;
->>   
->> @@ -182,6 +180,9 @@ int fiemap_prep(struct inode *inode, struct fiemap_extent_info *fieinfo,
->>   	if (*len > maxbytes || (maxbytes - *len) < start)
->>   		*len = maxbytes - start;
->>   
->> +	if (*len == 0)
->> +		return -EINVAL;
-> Looks fine to me (and I don't even really mind pulling this in) but this
-> isn't a patch to fs/iomap/ -- doesn't the same issue potentially affect
-> the fiemap implementations that do not use iomap?
+On Thu, Mar 17, 2022 at 8:58 PM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
 >
-> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+> Hi,
 >
-> --D
+> Am Donnerstag, 17. M=C3=A4rz 2022, 00:25:55 CET schrieb Palmer Dabbelt:
+> > Peter sent an RFC out about a year ago
+> > <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-=
+ass.net/>,
+> > but after a spirited discussion it looks like we lost track of things.
+> > IIRC there was broad consensus on this being the way to go, but there
+> > was a lot of discussion so I wasn't sure.  Given that it's been a year,
+> > I figured it'd be best to just send this out again formatted a bit more
+> > explicitly as a patch.
+> >
+> > This has had almost no testing (just a build test on RISC-V defconfig),
+> > but I wanted to send it out largely as-is because I didn't have a SOB
+> > from Peter on the code.  I had sent around something sort of similar in
+> > spirit, but this looks completely re-written.  Just to play it safe I
+> > wanted to send out almost exactly as it was posted.  I'd probably renam=
+e
+> > this tspinlock and tspinlock_types, as the mis-match kind of makes my
+> > eyes go funny, but I don't really care that much.  I'll also go through
+> > the other ports and see if there's any more candidates, I seem to
+> > remember there having been more than just OpenRISC but it's been a
+> > while.
+> >
+> > I'm in no big rush for this and given the complex HW dependencies I
+> > think it's best to target it for 5.19, that'd give us a full merge
+> > window for folks to test/benchmark it on their systems to make sure it'=
+s
+> > OK.  RISC-V has a forward progress guarantee so we should be safe, but
+> > these can always trip things up.
+>
+> I've tested this on both the Qemu-Virt machine as well as the
+> Allwinner Nezha board (with a D1 SoC).
+>
+> Both of those are of course not necessarily the best platforms
+> for benchmarks I guess, as from what I gathered before I'd need
+> need multiple cores to actually get interesting measurements when
+> comparing different implementations. But at least everything that
+> worked before still works with this series ;-)
+>
+>
+> So, Series
+> Tested-by: Heiko Stuebner <heiko@sntech.de>
+>
+>
+> Heiko
+>
+>
 
-Thanks Darrick, you're right,there is something wrong with my statement. 
-In a strict sense, this modification here does not belong to fs/iomap, i 
-can change it to fs/vfs in v2 :) I have looked into the code of those 
-filesystem(btrfs,ext4,f2fs,nilfs2,ntfs3..) which don't use iomap, and 
-did some test. when start=0x7fffffffffffffff, and len = 0; btrfs: while 
-len==0, return -EINVAL directly; ext4: 
-ext4_get_es_cache->ext4_fiemap_check_ranges, return -EFBIG; f2fs: return 
--EFBIG; nilfs2: while len==0, do nothing and return 0; ntfs3: return 
--EFBIG directly; so, as far as i can see, just return -EINVAL earlyier in fiemap_prep has no side effect.
 
-Thanks.
+--=20
+Best Regards
+ Guo Ren
 
->> +
->>   	supported_flags |= FIEMAP_FLAG_SYNC;
->>   	supported_flags &= FIEMAP_FLAGS_COMPAT;
->>   	incompat_flags = fieinfo->fi_flags & ~supported_flags;
->> -- 
->> 2.22.0
->>
-> .
+ML: https://lore.kernel.org/linux-csky/

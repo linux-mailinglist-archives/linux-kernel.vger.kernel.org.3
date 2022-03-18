@@ -2,214 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F974DDAB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C076A4DDAB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 14:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236589AbiCRNkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 09:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S236751AbiCRNl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 09:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234389AbiCRNki (ORCPT
+        with ESMTP id S234389AbiCRNlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 09:40:38 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524B51C7C31
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:39:19 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id g17so14181676lfh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 06:39:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VD6iA//rl+G0UvkOMm0n4elOqulyLO/Rgg1ugKzl5M8=;
-        b=Mtl+So5/Jxp9GNKNlJjBsh+Bil+WakboMMsGp4hKJFPuYHwP4D2q1jZlMV06P6ocZB
-         jZrveQqftZmscyyD0wShKftQyIxD20+9ffsUuQ5/o2cpIB0kXaXvSrDDtBDGzErGq8I6
-         POmphZeOAxRsBbKs4qawH+BLivYvyau2uQ+IWKv/48DgHCB7p/VXYyp4X9q3zzmQ/Ryj
-         d/J0WIwN0ZB1ihb2VFDHcgaWQj2hbE1aP8dCt5D6XKNGVGCaweNi7lgCuZxAgSMbgeEB
-         tIpJ9D2XX9Il65VJAmVRhof7+/OhQ5aHnFRoiA1cyKLXZ3YnBoM49q1GsPZgsrdxORto
-         rqjQ==
+        Fri, 18 Mar 2022 09:41:53 -0400
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36725C74B1;
+        Fri, 18 Mar 2022 06:40:33 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id p15so3427696lfk.8;
+        Fri, 18 Mar 2022 06:40:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VD6iA//rl+G0UvkOMm0n4elOqulyLO/Rgg1ugKzl5M8=;
-        b=vzaFtOjlPetAFlyXiqqw9Ba3na+DQOZETy37q2d2VhAvfv3k5fXY7amrh7sKYmB7Y6
-         5IPgfw8UbCSUpsKdvAtpD1OQlOSfx+KnNYfs5clifFakJ0huBH/C2z2/zHc32XB/NHFy
-         52g9AGEWtOBEgkCvW5qHnSH7hNXSjrY0ogsZEsatOTeGXwha5N9GWqimEvzF6ftU+U2D
-         kvVNwn3UOolTKY2wkPvhWMa2ellJDqQtmbamvpViJbHuCBwptuM239m8SkBAs+8bqYDU
-         DuMX0Q5IfUnTYNJ7dyAYzmo2M1AYW8ouKhvAiSsRPycBwnIwgZYDNr1lDLeYMaXuyYu1
-         V/1g==
-X-Gm-Message-State: AOAM5334NZxxdtIusOWORBEX8MdY731dVzcAIkRy51G10uBy3cQ2+HlG
-        khMsRMzaUczRq5CNkYjKB0vr7vyPsQhJGBwj+6jIaw==
-X-Google-Smtp-Source: ABdhPJyRyNhnCTgNlv5CqHoQl4al/grplnra/gw9rcQSwMrSnJYHrkRYV2pjITN+iYPZ+sjmEUMY2McF1cx6dtsQqSE=
-X-Received: by 2002:a05:6512:3f99:b0:447:7fc0:8d3 with SMTP id
- x25-20020a0565123f9900b004477fc008d3mr6100043lfa.671.1647610757400; Fri, 18
- Mar 2022 06:39:17 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iuWM94KXc3sHuEczLPPtyGXuhzAg1rDstlM1ADE7s3M=;
+        b=XlWmW0sIAGbP6Xu+GrZaDkjSLuw0lzLyjAwInxWiKrngPGbK/6NpXJX02sgn4qHXv+
+         sIQApvxEnfo7iK+QMcHQlh2LURBnhAv8/JKYyfBqMkriUfDXLGC2vPLpNtZj+7Doh0pb
+         rBamfd6bNMkOoQrrjkCjcHTGbXSwRJF+Hv8xzmeMIe92iP8rxU01Q1BDNqHxk9hVpVSt
+         INelI/M8Y3WUgYBLWEnM17gAbDa7NWg9opxm4TaHACBoPSBhJ6S36SNOwwh/NOqcwg8w
+         kqphkjqsqfInUFSFJ1Hhi2RE3rCE5m+ymKsmekBHJsmbleL+qKcFEWtjXBN/Qcn/soo7
+         CHuA==
+X-Gm-Message-State: AOAM532EWECyTeBzNxBYXml9T4KrMorQHmpLbdsFmyFvpFS6Hm7awYFd
+        ti4iboXV9tEifL58RU90qoY=
+X-Google-Smtp-Source: ABdhPJzRWA/Ob0RieST3cFH09R5YU4a/GPnX/2Z2nYswG93mdyAF6PWgwC9uMegY4oc7gHWoPDs9oQ==
+X-Received: by 2002:ac2:5389:0:b0:448:90e8:b166 with SMTP id g9-20020ac25389000000b0044890e8b166mr6031739lfh.121.1647610831557;
+        Fri, 18 Mar 2022 06:40:31 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id q26-20020ac24a7a000000b004437f641a32sm854157lfp.15.2022.03.18.06.40.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 06:40:31 -0700 (PDT)
+Message-ID: <d4d69acd-72d3-dfe1-9a11-d6590d2d90d8@kernel.org>
+Date:   Fri, 18 Mar 2022 14:40:29 +0100
 MIME-Version: 1.0
-References: <20201211141656.24915-1-mw@semihalf.com> <CAPDyKFqsSO+f9iG8vccwXZXDDNHgLEg7bfUe-KfHn2C-ZnOU4A@mail.gmail.com>
- <20220314154033.4x74zscayee32rrj@pali> <CAPv3WKc4MFeLgnJMWx=YNT5Ta5yi6fVhb4f-Rf211FTEmkvyog@mail.gmail.com>
- <20220315230333.eyznbu5tuxneizbs@pali> <CAPv3WKc96vDsW_duXYMYbr3X05=-p28N5_cf2PHo-tiwDLjaWg@mail.gmail.com>
- <20220318130100.zkdaoviwzwhnixuh@pali> <20220318130615.hwa5fhzf2cyquwzr@pali>
-In-Reply-To: <20220318130615.hwa5fhzf2cyquwzr@pali>
-From:   Marcin Wojtas <mw@semihalf.com>
-Date:   Fri, 18 Mar 2022 14:39:05 +0100
-Message-ID: <CAPv3WKcAgYS8=CWt-JmTT+Jx9LUU588kkrG1Xo6=W=NUkZ9K4Q@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdhci-xenon: fix 1.8v regulator stabilization
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Ziji Hu <huziji@marvell.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Kostya Porotchkin <kostap@marvell.com>,
-        Alex Leibovich <alexl@marvell.com>,
-        "# 4.0+" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] dt-bindings: virtio: mmio: add optional virtio,wakeup
+ property
+Content-Language: en-US
+To:     Minghao Xue <quic_mingxue@quicinc.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     mst@redhat.com, jasowang@redhat.com, quic_ztu@quicinc.com,
+        robh+dt@kernel.org, virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1646733156-19333-1-git-send-email-quic_mingxue@quicinc.com>
+ <20220317063515.GA30789@mingxue-gv.qualcomm.com> <YjMJ32SFXTLCuaRY@myrica>
+ <20220318021052.GA16300@mingxue-gv.qualcomm.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220318021052.GA16300@mingxue-gv.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pali,
+On 18/03/2022 03:10, Minghao Xue wrote:
+> Hi Jean and folks,
+> This is just an optional flag which could be used on an embedded system.
+> For example, if we want to use an virtio-input device as a virtual power
+> key to wake up the virtual machine, we can set this flag in the device
+> tree.
+> Currently, virio-mmio driver does not implement suspend/resume
+> callback(maybe no need). So we want to check this flag and call
+> enable_irq_wake()  accordingly in vm_find_vqs().
 
-Thanks for testing!
+There is a generic wakeup-source property. How is this one different
+that you need a separate one?
 
-pt., 18 mar 2022 o 14:06 Pali Roh=C3=A1r <pali@kernel.org> napisa=C5=82(a):
->
-> On Friday 18 March 2022 14:01:00 Pali Roh=C3=A1r wrote:
-> > On Wednesday 16 March 2022 02:03:35 Marcin Wojtas wrote:
-> > > Hi Pali,
-> > >
-> > > =C5=9Br., 16 mar 2022 o 00:03 Pali Roh=C3=A1r <pali@kernel.org> napis=
-a=C5=82(a):
-> > > >
-> > > > Hello!
-> > > >
-> > > > On Monday 14 March 2022 16:51:25 Marcin Wojtas wrote:
-> > > > > Hi Pali,
-> > > > >
-> > > > >
-> > > > > pon., 14 mar 2022 o 16:40 Pali Roh=C3=A1r <pali@kernel.org> napis=
-a=C5=82(a):
-> > > > > >
-> > > > > > On Monday 11 January 2021 19:06:24 Ulf Hansson wrote:
-> > > > > > > On Fri, 11 Dec 2020 at 15:17, Marcin Wojtas <mw@semihalf.com>=
- wrote:
-> > > > > > > >
-> > > > > > > > From: Alex Leibovich <alexl@marvell.com>
-> > > > > > > >
-> > > > > > > > Automatic Clock Gating is a feature used for the power
-> > > > > > > > consumption optimisation. It turned out that
-> > > > > > > > during early init phase it may prevent the stable voltage
-> > > > > > > > switch to 1.8V - due to that on some platfroms an endless
-> > > > > > > > printout in dmesg can be observed:
-> > > > > > > > "mmc1: 1.8V regulator output did not became stable"
-> > > > > > > > Fix the problem by disabling the ACG at very beginning
-> > > > > > > > of the sdhci_init and let that be enabled later.
-> > > > > > > >
-> > > > > > > > Fixes: 3a3748dba881 ("mmc: sdhci-xenon: Add Marvell Xenon S=
-DHC core functionality")
-> > > > > > > > Signed-off-by: Alex Leibovich <alexl@marvell.com>
-> > > > > > > > Signed-off-by: Marcin Wojtas <mw@semihalf.com>
-> > > > > > > > Cc: stable@vger.kernel.org
-> > > > > > >
-> > > > > > > Applied for fixes (by fixing the typos), thanks!
-> > > > > >
-> > > > > > Hello!
-> > > > > >
-> > > > > > Is not this patch address same issue which was fixed by patch w=
-hich was
-> > > > > > merged earlier?
-> > > > > >
-> > > > > > bb32e1987bc5 ("mmc: sdhci-xenon: fix annoying 1.8V regulator wa=
-rning")
-> > > > > > https://lore.kernel.org/linux-mmc/CAPDyKFqAsvgAjfL-c9ukFNWeGJmu=
-fQosR2Eg9SKjXMVpNitdkA@mail.gmail.com/
-> > > > > >
-> > > > >
-> > > > > This indeed look similar. This fix was originally developed for C=
-N913x
-> > > > > platform without the mentioned patch (I'm wondering if it would a=
-lso
-> > > > > suffice to fix A3k board's problem). Anyway, I don't think we hav=
-e an
-> > > > > issue here, as everything seems to work fine on top of mainline L=
-inux
-> > > > > with both changes.
-> > > >
-> > > > Yea, there should be no issue. Just question is if we need _both_ f=
-ixes.
-> > > >
-> > > > I could probably try to revert bb32e1987bc5 and check what happens =
-on
-> > > > A3k board.
-> > > >
-> > >
-> > > Yes, that would be interesting. Please let me know whenever you find
-> > > time to check.
-> >
-> > Hello! Now I tested kernel with reverted commit bb32e1987bc5 ("mmc:
-> > sdhci-xenon: fix annoying 1.8V regulator warning") and issue is still
-> > fixed. I reverted also bb32e1987bc5 ("mmc: sdhci-xenon: fix annoying
-> > 1.8V regulator warning") commit and then issue appeared again.
->
-> I mean that I reverted also 1a3ed0dc3594 ("mmc: sdhci-xenon: fix 1.8v
-> regulator stabilization") commit and then issue appeared again.
->
-> > So any of this commit is fixing that issue on Armada 3720.
-> >
-
-I think both can stay, but if I had to choose, I'd keep 1a3ed0dc3594
-("mmc: sdhci-xenon: fix 1.8v regulator stabilization"):
-* Now we know for sure it fixes both Armada 3720 and CN913x/Armada 7k8k
-* Afaik this patch was checked with HW team (and IMO it looks a bit
-less hacky than the extra read :) ).
 
 Best regards,
-Marcin
-
-
-> > Should we revert one of them?
-> >
-> > > Best regards,
-> > > Marcin
-> > >
-> > > > > > >
-> > > > > > >
-> > > > > > > > ---
-> > > > > > > >  drivers/mmc/host/sdhci-xenon.c | 7 ++++++-
-> > > > > > > >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/h=
-ost/sdhci-xenon.c
-> > > > > > > > index c67611fdaa8a..4b05f6fdefb4 100644
-> > > > > > > > --- a/drivers/mmc/host/sdhci-xenon.c
-> > > > > > > > +++ b/drivers/mmc/host/sdhci-xenon.c
-> > > > > > > > @@ -168,7 +168,12 @@ static void xenon_reset_exit(struct sd=
-hci_host *host,
-> > > > > > > >         /* Disable tuning request and auto-retuning again *=
-/
-> > > > > > > >         xenon_retune_setup(host);
-> > > > > > > >
-> > > > > > > > -       xenon_set_acg(host, true);
-> > > > > > > > +       /*
-> > > > > > > > +        * The ACG should be turned off at the early init t=
-ime, in order
-> > > > > > > > +        * to solve a possile issues with the 1.8V regulato=
-r stabilization.
-> > > > > > > > +        * The feature is enabled in later stage.
-> > > > > > > > +        */
-> > > > > > > > +       xenon_set_acg(host, false);
-> > > > > > > >
-> > > > > > > >         xenon_set_sdclk_off_idle(host, sdhc_id, false);
-> > > > > > > >
-> > > > > > > > --
-> > > > > > > > 2.29.0
-> > > > > > > >
+Krzysztof

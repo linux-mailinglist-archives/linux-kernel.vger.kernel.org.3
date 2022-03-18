@@ -2,164 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0574DDBC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59ED04DDBC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 15:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237347AbiCROgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 10:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
+        id S237368AbiCROiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 10:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237329AbiCROgb (ORCPT
+        with ESMTP id S236567AbiCROip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 10:36:31 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DEA2D41F8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:35:11 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id n11so6962086qtk.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 07:35:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=V7P4GZK3e6fyTq1pakb6Rzu6ZJgSaONaWTDE6DcGFrE=;
-        b=Z8bs2DWUWGLhWdOjyWlnn9HNRwNSjCyVUcQwAOiEKwFsEEBGPZoaf84h5nMF6qt5zR
-         7kb0mvD3zpe4gHTDcRv2+uUbN05ibi1sBC9y1YzAtE2cvQZ/kpD1DCjsBJlPwgXRJGxm
-         DnBROXIz5vhznVTym7m9zNChFlxun94xZI1j6sOEMN9AUFGd5JVe8mBYpCyvu7uEpCpc
-         fFCUPZjO4cPBKgqXGFY7pW7CVObso2wbO9F7yS5IPtSINUkqlDFHj6H/IxVTFzzFqyI8
-         bnCxb4XelWAKG8/zXQElVRTxW2/5b8bwZPkqUpuEbFfH4286/0fiRHe+p0lJ70yg0Ta9
-         L2Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=V7P4GZK3e6fyTq1pakb6Rzu6ZJgSaONaWTDE6DcGFrE=;
-        b=Y4/cxSeCRwqsGMvUOufmi+Ol9sKkPajHdVIZvp/iZcQS+ulAPZg4kCNxgur/5wu98t
-         06XWxsBO8rh5S/+S6AIwWv3yp9uzsgXJ4UClpi3GxCpUP2pZ1wQZlcH4RpKdHdRllERZ
-         +E3LTLB/V89P4dqOIKYYKWWjWnrQ6T+UuRZWOv+aDp/3pUyRk+sniCisU/auzoWcZZE5
-         CQNYaK5Ulu0UyTMChrnV1WK0wrxJPsfHndzVO13opbY/Uzk7349YXkFL+tv8MkokOpoK
-         yNkcR/OWhUTKETpjOV/VDpVCMjA77JY+o3KGpVHQDicxRUfIg/7DEpIPyKeE4g2TpB4S
-         97Vw==
-X-Gm-Message-State: AOAM53211Zw6xWVSPpa+TnQO/cL72EQhhd0D1N9MHzcxgXNHHcycN10F
-        81WxKBpVusxikWfhOYHiDhvr9H6YwUoa0QY67c3nTw==
-X-Google-Smtp-Source: ABdhPJwf+MEW47SH6CFA80X1s0ccNAZNyAoYqKtZ7oSbtZn2ydv7N6dD6IDjj6RCMmalJ+GCbbbNLtvE1RbOEg+mDqk=
-X-Received: by 2002:a05:622a:15c5:b0:2e1:cdc9:dd1c with SMTP id
- d5-20020a05622a15c500b002e1cdc9dd1cmr7596184qty.79.1647614110831; Fri, 18 Mar
- 2022 07:35:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-13-glider@google.com>
- <Ybnuup0eMnhrwp8e@FVFF77S0Q05N> <CANpmjNNLG0F9WzNnQkJX+QEqdxnhWstuag_9jrid7zdJgivHyw@mail.gmail.com>
- <Ybn/DZb32ujokTnJ@FVFF77S0Q05N>
-In-Reply-To: <Ybn/DZb32ujokTnJ@FVFF77S0Q05N>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 18 Mar 2022 15:34:34 +0100
-Message-ID: <CAG_fn=U96hVmJxk17z+N8yFxxGABy4vE-FHJUGYNMZYbHG_hyg@mail.gmail.com>
-Subject: Re: [PATCH 12/43] kcsan: clang: retire CONFIG_KCSAN_KCOV_BROKEN
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 18 Mar 2022 10:38:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADA82E5753;
+        Fri, 18 Mar 2022 07:37:22 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id E95281F37F;
+        Fri, 18 Mar 2022 14:37:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647614240; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XNXcAYQW5Hz3fswspMidh1mhKM6SNhu/Xg3QEmgSjuo=;
+        b=nVlLwTw5JhuxSmkaEo0iKIxgJbmg6YvlZsS664H7PlXuiO1q81InlpRkPeypySZMXhZU97
+        n/Uh6uOoaVrYbkwwtaAmLWk9eiUyVhoXT2Zm65shJPIK6JF49nFLzkXG42298X9+kbhnId
+        IhVRiCCd36tkcueus49Yr0hYKKgAhNk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647614240;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XNXcAYQW5Hz3fswspMidh1mhKM6SNhu/Xg3QEmgSjuo=;
+        b=041PDJvY/a63e9IcGtaWYaJG2OGMoJ+BVkvxg5PwJL9neVI01m2Diaolgv/ZZIMfuYOdwW
+        DSnuQeGISxaOqJDQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id C6410A3B89;
+        Fri, 18 Mar 2022 14:37:20 +0000 (UTC)
+Date:   Fri, 18 Mar 2022 15:37:20 +0100
+Message-ID: <s5hh77v2uov.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Takashi Iwai <tiwai@suse.de>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        linux-input@vger.kernel.org,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        Jiri Kosina <jkosina@suse.cz>, stable@vger.kernel.org,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION] Right touchpad button disabled on Dell 7750
+In-Reply-To: <CAO-hwJK8QMjYhQAC8tp7hLWZjSB3JMBJXgpKmFZRSEqPUn3_iw@mail.gmail.com>
+References: <s5htubv32s8.wl-tiwai@suse.de>
+        <20220318130740.GA33535@elementary>
+        <s5hlex72yno.wl-tiwai@suse.de>
+        <CAO-hwJK8QMjYhQAC8tp7hLWZjSB3JMBJXgpKmFZRSEqPUn3_iw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 3:43 PM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Wed, Dec 15, 2021 at 02:39:43PM +0100, Marco Elver wrote:
-> > On Wed, 15 Dec 2021 at 14:33, Mark Rutland <mark.rutland@arm.com> wrote=
-:
+On Fri, 18 Mar 2022 15:06:55 +0100,
+Benjamin Tissoires wrote:
+> 
+> > > A couple of days ago another user with the same laptop (Dell Precision
+> > > 7550 or 7750) emailed me to report the issue and I sent him a patch for
+> > > testing.
 > > >
-> > > On Tue, Dec 14, 2021 at 05:20:19PM +0100, Alexander Potapenko wrote:
-> > > > kcov used to be broken prior to Clang 11, but right now that versio=
-n is
-> > > > already the minimum required to build with KCSAN, that is why we do=
-n't
-> > > > need KCSAN_KCOV_BROKEN anymore.
+> > > I he confirms that the patch works, I'll send it to the mailing list.
 > > >
-> > > Just to check, how is that requirement enforced?
-> >
-> > HAVE_KCSAN_COMPILER will only be true with Clang 11 or later, due to
-> > no prior compiler having "-tsan-distinguish-volatile=3D1".
->
-> I see -- could we add wording to that effect into the commit messge?
-
-Will be done.
-
-> > > I see the core Makefiles enforce 10.0.1+, but I couldn't spot an expl=
-icit
-> > > version dependency in Kconfig.kcsan.
+> > > I believe that your analysis of the regression is correct and I think
+> > > that we'd need to add a quirk for the device.
 > > >
-> > > Otherwise, this looks good to me!
+> > > In case you want to have a look to the patch, I added it to this
+> > > libinput [1] report.
 > >
-> > I think 5.17 will be Clang 11 only, so we could actually revert
-> > ea91a1d45d19469001a4955583187b0d75915759:
-> > https://lkml.kernel.org/r/Yao86FeC2ybOobLO@archlinux-ax161
+> > Great, I'll try to build and ask the reporter to test with the patch.
 > >
-> > I should resend that to be added to the -kbuild tree.
->
-> FWIW, that also works for me.
->
-> Thanks,
-> Mark.
+> 
+> As noticed on the libinput bug, I think the patch is wrong (not by a lot).
+> We should base the class on MT_CLS_WIN8, not MT_CLS_DEFAULT.
+> 
+> The testers might say that it's working, but this might create some
+> corner cases where it's not leading to more and more headaches with
+> your users.
+
+So is it like below?  I'll build another kernel with that.
 
 
+Thanks!
 
---=20
-Alexander Potapenko
-Software Engineer
+Takashi
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+-- 8< --
+From: José Expósito <jose.exposito89@gmail.com>
+Subject: [PATCH] HID: multitouch: fix Dell Precision 7550 and 7750 button type
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+The touchpad present in the Dell Precision 7550 and 7750 laptops
+reports a HID_DG_BUTTONTYPE of type MT_BUTTONTYPE_CLICKPAD. However,
+the device is not a clickpad, it is a touchpad with physical buttons.
 
-Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
-erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
-weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
-mich
-bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
+In order to fix this issue, a quirk for the device was introduced in
+libinput [1] [2] to disable the INPUT_PROP_BUTTONPAD property:
 
+	[Precision 7x50 Touchpad]
+	MatchBus=i2c
+	MatchUdevType=touchpad
+	MatchDMIModalias=dmi:*svnDellInc.:pnPrecision7?50*
+	AttrInputPropDisable=INPUT_PROP_BUTTONPAD
 
-This e-mail is confidential. If you received this communication by
-mistake, please don't forward it to anyone else, please erase all
-copies and attachments, and please let me know that it has gone to the
-wrong person.
+However, because of the change introduced in 37ef4c19b4 ("Input: clear
+BTN_RIGHT/MIDDLE on buttonpads") the BTN_RIGHT key bit is not mapped
+anymore breaking the device right click button.
+
+In order to fix the issue, create a quirk for the device forcing its
+button type to touchpad regardless of the value reported by the
+firmware.
+
+[1] https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/481
+[2] https://bugzilla.redhat.com/show_bug.cgi?id=1868789
+
+[ modified MT_CLS_BUTTONTYPE_TOUCHPAD quirk bits to base on MT_CLS_WIN8
+  as suggested by Benjamin -- tiwai ]
+
+Fixes: 37ef4c19b4 ("Input: clear BTN_RIGHT/MIDDLE on buttonpads")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+
+---
+ drivers/hid/hid-ids.h        |    3 +++
+ drivers/hid/hid-multitouch.c |   20 ++++++++++++++++++++
+ 2 files changed, 23 insertions(+)
+
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -285,6 +285,9 @@
+ 
+ #define USB_VENDOR_ID_CIDC		0x1677
+ 
++#define USB_VENDOR_ID_CIRQUE_CORP		0x0488
++#define USB_DEVICE_ID_DELL_PRECISION_7X50	0x120A
++
+ #define USB_VENDOR_ID_CJTOUCH		0x24b8
+ #define USB_DEVICE_ID_CJTOUCH_MULTI_TOUCH_0020	0x0020
+ #define USB_DEVICE_ID_CJTOUCH_MULTI_TOUCH_0040	0x0040
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -71,6 +71,7 @@ MODULE_LICENSE("GPL");
+ #define MT_QUIRK_SEPARATE_APP_REPORT	BIT(19)
+ #define MT_QUIRK_FORCE_MULTI_INPUT	BIT(20)
+ #define MT_QUIRK_DISABLE_WAKEUP		BIT(21)
++#define MT_QUIRK_BUTTONTYPE_TOUCHPAD	BIT(22)
+ 
+ #define MT_INPUTMODE_TOUCHSCREEN	0x02
+ #define MT_INPUTMODE_TOUCHPAD		0x03
+@@ -194,6 +195,7 @@ static void mt_post_parse(struct mt_devi
+ #define MT_CLS_WIN_8_FORCE_MULTI_INPUT		0x0015
+ #define MT_CLS_WIN_8_DISABLE_WAKEUP		0x0016
+ #define MT_CLS_WIN_8_NO_STICKY_FINGERS		0x0017
++#define MT_CLS_BUTTONTYPE_TOUCHPAD		0x0018
+ 
+ /* vendor specific classes */
+ #define MT_CLS_3M				0x0101
+@@ -302,6 +304,15 @@ static const struct mt_class mt_classes[
+ 			MT_QUIRK_CONTACT_CNT_ACCURATE |
+ 			MT_QUIRK_WIN8_PTP_BUTTONS,
+ 		.export_all_inputs = true },
++	{ .name = MT_CLS_BUTTONTYPE_TOUCHPAD,
++		.quirks = MT_QUIRK_ALWAYS_VALID |
++			MT_QUIRK_IGNORE_DUPLICATES |
++			MT_QUIRK_HOVERING |
++			MT_QUIRK_CONTACT_CNT_ACCURATE |
++			MT_QUIRK_STICKY_FINGERS |
++			MT_QUIRK_WIN8_PTP_BUTTONS |,
++			MT_QUIRK_BUTTONTYPE_TOUCHPAD,
++		.export_all_inputs = true },
+ 
+ 	/*
+ 	 * vendor specific classes
+@@ -1286,6 +1297,9 @@ static int mt_touch_input_configured(str
+ 	    (app->buttons_count == 1))
+ 		td->is_buttonpad = true;
+ 
++	if (app->quirks & MT_QUIRK_BUTTONTYPE_TOUCHPAD)
++		td->is_buttonpad = false;
++
+ 	if (td->is_buttonpad)
+ 		__set_bit(INPUT_PROP_BUTTONPAD, input->propbit);
+ 
+@@ -1875,6 +1889,12 @@ static const struct hid_device_id mt_dev
+ 		MT_USB_DEVICE(USB_VENDOR_ID_CHUNGHWAT,
+ 			USB_DEVICE_ID_CHUNGHWAT_MULTITOUCH) },
+ 
++	/* Cirque Corp (Dell Precision 7550 and 7750 touchpad) */
++	{ .driver_data = MT_CLS_BUTTONTYPE_TOUCHPAD,
++		HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
++			USB_VENDOR_ID_CIRQUE_CORP,
++			USB_DEVICE_ID_DELL_PRECISION_7X50) },
++
+ 	/* CJTouch panels */
+ 	{ .driver_data = MT_CLS_NSMU,
+ 		MT_USB_DEVICE(USB_VENDOR_ID_CJTOUCH,

@@ -2,76 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECFD94DDCC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4964DDCC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 16:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237951AbiCRP0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 11:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
+        id S237954AbiCRP0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 11:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237831AbiCRP0e (ORCPT
+        with ESMTP id S237957AbiCRP0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 11:26:34 -0400
-Received: from imap2.colo.codethink.co.uk (imap2.colo.codethink.co.uk [78.40.148.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBE9A5E91;
-        Fri, 18 Mar 2022 08:25:15 -0700 (PDT)
-Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.21])
-        by imap2.colo.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
-        id 1nVETX-0001qa-OJ; Fri, 18 Mar 2022 15:25:11 +0000
-Message-ID: <82efacaf-9dcb-f07a-dc2b-06668b1a745b@codethink.co.uk>
-Date:   Fri, 18 Mar 2022 15:25:10 +0000
+        Fri, 18 Mar 2022 11:26:43 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CABBA301
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 08:25:24 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E54B61BF21A;
+        Fri, 18 Mar 2022 15:25:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1647617122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XyvG+0AhV6GNZxavZndSgFd1DvfzNuoKrvusjJeU8vE=;
+        b=UsYH9OeBcFQ6hgH9ohMrhQ+cU1pfKK0vFkTLHxSk0YHw3H0fj6cr9oqytc3wyHsEDuouTb
+        /v6UGrSum7PT9kKgup9zugCZhxlGFtLYzhsQ2zbe7mp1qLs7Ok5lXc6aSFFOoiZI1q5GAE
+        2TBwmTtfvuV6EiQt/clDR/KewxpbeC/DywMmcoGwSr1j2EfJ7g51oDB18WHaswH5dMmaBC
+        2+omuK1g+4lai9lcIcM0ChSmIcNEQ+sIuvjclC2OrSiRk8GqucokirKUK4svZ/slntAeYZ
+        7xPg1TEWhM9cDCimSgM1ASHWhJNIlFbnp1FlaaAmgwGNb+9UKsHAc0Vajjb2Mw==
+Date:   Fri, 18 Mar 2022 16:25:21 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Subject: Re: [PATCH] drm: of: Properly try all possible cases for
+ bridge/panel detection
+Message-ID: <YjSkYSGY/D82ONjl@aptenodytes>
+References: <20220309143200.111292-1-paul.kocialkowski@bootlin.com>
+ <20220310145423.but7r7ul4j7h3wxw@houat>
+ <YjIFAR2NSfjXdJGe@aptenodytes>
+ <20220318151414.vxormel2vfgzss6t@houat>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] PCI: fu740: Drop to 2.5GT/s to fix initial device probing
- on some boards
-Content-Language: en-GB
-To:     linux-pci@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-References: <20220318152105.525824-1-ben.dooks@codethink.co.uk>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <20220318152105.525824-1-ben.dooks@codethink.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="QRbFUewSOUn4mwmT"
+Content-Disposition: inline
+In-Reply-To: <20220318151414.vxormel2vfgzss6t@houat>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 15:21, Ben Dooks wrote:
-> The fu740 PCIe core does not probe any devices on the SiFive Unmatched
-> board without this fix (or having U-Boot explicitly start the PCIe via
-> either boot-script or user command). The fix is to start the link at
-> 2.5GT/s speeds and once the link is up then change the maximum speed back
-> to the default.
-> 
-> The U-Boot driver claims to set the link-speed to 2.5GT/s to get the probe
-> to work (and U-Boot does print link up at 2.5GT/s) in the following code:
-> https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/pci/pcie_dw_sifive.c?id=v2022.01#L271
-> 
-> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
-> --
-> Note, this patch has had significant re-work since the previous 4
-> sets, including trying to fix style, message, reliance on the U-Boot
-> fix and the comments about usage of LINK_CAP and reserved fields.
 
-Apologies, it seems I forgot to do "git commit --amend" on the last
-file save. I've now sent a "V3"
+--QRbFUewSOUn4mwmT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi Maxime,
 
--- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
+On Fri 18 Mar 22, 16:14, Maxime Ripard wrote:
+> On Wed, Mar 16, 2022 at 04:40:49PM +0100, Paul Kocialkowski wrote:
+> > Hi Maxime,
+> >=20
+> > Thanks for the review!
+> >=20
+> > On Thu 10 Mar 22, 15:54, Maxime Ripard wrote:
+> > > Hi Paul,
+> > >=20
+> > > On Wed, Mar 09, 2022 at 03:32:00PM +0100, Paul Kocialkowski wrote:
+> > > > While bridge/panel detection was initially relying on the usual
+> > > > port/ports-based of graph detection, it was recently changed to
+> > > > perform the lookup on any child node that is not port/ports
+> > > > instead when such a node is available, with no fallback on the
+> > > > usual way.
+> > > >=20
+> > > > This results in breaking detection when a child node is present
+> > > > but does not contain any panel or bridge node, even when the
+> > > > usual port/ports-based of graph is there.
+> > > >=20
+> > > > In order to support both situations properly, this commit reworks
+> > > > the logic to try both options and not just one of the two: it will
+> > > > only return -EPROBE_DEFER when both have failed.
+> > > >=20
+> > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > > Fixes: 80253168dbfd ("drm: of: Lookup if child node has panel or br=
+idge")
+> > >=20
+> > > Thanks, it's in pretty good shape now, but I have a few bike sheds to=
+ paint :)
+> > >=20
+> > > > ---
+> > > >  drivers/gpu/drm/drm_of.c | 93 +++++++++++++++++++++---------------=
+----
+> > > >  1 file changed, 49 insertions(+), 44 deletions(-)
+> > > >=20
+> > > > diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
+> > > > index 9d90cd75c457..67f1b7dfc892 100644
+> > > > --- a/drivers/gpu/drm/drm_of.c
+> > > > +++ b/drivers/gpu/drm/drm_of.c
+> > > > @@ -219,6 +219,35 @@ int drm_of_encoder_active_endpoint(struct devi=
+ce_node *node,
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(drm_of_encoder_active_endpoint);
+> > > > =20
+> > > > +static int drm_of_find_remote_panel_or_bridge(struct device_node *=
+remote,
+> > > > +					      struct drm_panel **panel,
+> > > > +					      struct drm_bridge **bridge)
+> > >=20
+> > > This function performs its look up directly on the struct device_node
+> > > passed as argument, so I don't think the "remote" in the name is grea=
+t.
+> > > Since it's static, we can just call it find_panel_or_bridge, what do =
+you
+> > > think?
+> >=20
+> > From a quick look at other DRM code I got the impression that static fu=
+nctions
+> > also usually carry the drm prefix but I might be wrong.
+>=20
+> Not necessarily, see handle_conflicting_encoders, commit_tail, commit_wor=
+k,
+> convert_clip_rect_to_rect, edid_load, etc.
+>=20
+> Most functions do, but it's not a rule or a convention.
 
-https://www.codethink.co.uk/privacy.html
+Okay then, I'm fine with find_panel_or_bridge.
+
+> > > > +{
+> > > > +	int ret =3D -EPROBE_DEFER;
+> > > > +
+> > > > +	if (panel) {
+> > > > +		*panel =3D of_drm_find_panel(remote);
+> > > > +		if (!IS_ERR(*panel))
+> > > > +			ret =3D 0;
+> > >=20
+> > > return 0?
+> >=20
+> > The idea was to still go through the "*bridge =3D NULL;" path if a brid=
+ge
+> > pointer is provided, to preserve the original behavior of the function.
+> > There may or may not not be any hard expectation on that, in any case
+> > I feel like it would be good to avoid out-of-scope functional changes h=
+ere.
+>=20
+> Then we could just clear it just like we clear the panel pointer in
+> drm_of_find_panel_or_bridge. It would be more consistent.
+
+Oh absolutely, I agree that would be best.
+
+> > > > +		else
+> > > > +			*panel =3D NULL;
+> > > > +
+> > > > +	}
+> > > > +
+> > > > +	/* No panel found yet, check for a bridge next. */
+> > > > +	if (bridge) {
+> > > > +		if (ret) {
+> > >=20
+> > > And the return above allows to remove that test
+> > >=20
+> > > > +			*bridge =3D of_drm_find_bridge(remote);
+> > > > +			if (*bridge)
+> > > > +				ret =3D 0;
+> > >=20
+> > > return 0?
+> > >=20
+> > > > +		} else {
+> > > > +			*bridge =3D NULL;
+> > > > +		}
+> > > > +
+> > > > +	}
+> > > > +
+> > > > +	return ret;
+> > >=20
+> > > And here we can just return -EPROBE_DEFER
+> > >=20
+> > > > +}
+> > > > +
+> > >=20
+> > > >  /**
+> > > >   * drm_of_find_panel_or_bridge - return connected panel or bridge =
+device
+> > > >   * @np: device tree node containing encoder output ports
+> > > > @@ -249,57 +278,33 @@ int drm_of_find_panel_or_bridge(const struct =
+device_node *np,
+> > > >  	if (panel)
+> > > >  		*panel =3D NULL;
+> > > > =20
+> > > > -	/**
+> > > > -	 * Devices can also be child nodes when we also control that devi=
+ce
+> > > > -	 * through the upstream device (ie, MIPI-DCS for a MIPI-DSI devic=
+e).
+> > > > -	 *
+> > > > -	 * Lookup for a child node of the given parent that isn't either =
+port
+> > > > -	 * or ports.
+> > > > -	 */
+> > > > -	for_each_available_child_of_node(np, remote) {
+> > > > -		if (of_node_name_eq(remote, "port") ||
+> > > > -		    of_node_name_eq(remote, "ports"))
+> > > > -			continue;
+> > > > -
+> > > > -		goto of_find_panel_or_bridge;
+> > > > +	/* Check for a graph on the device node first. */
+> > > > +	if (of_graph_is_present(np)) {
+> > > > +		remote =3D of_graph_get_remote_node(np, port, endpoint);
+> > > > +		if (remote) {
+> > > > +			ret =3D drm_of_find_remote_panel_or_bridge(remote, panel,
+> > > > +								 bridge);
+> > > > +			of_node_put(remote);
+> > > > +		}
+> > > >  	}
+> > > > =20
+> > > > -	/*
+> > > > -	 * of_graph_get_remote_node() produces a noisy error message if p=
+ort
+> > > > -	 * node isn't found and the absence of the port is a legit case h=
+ere,
+> > > > -	 * so at first we silently check whether graph presents in the
+> > > > -	 * device-tree node.
+> > > > -	 */
+> > > > -	if (!of_graph_is_present(np))
+> > > > -		return -ENODEV;
+> > > > -
+> > > > -	remote =3D of_graph_get_remote_node(np, port, endpoint);
+> > > > -
+> > > > -of_find_panel_or_bridge:
+> > > > -	if (!remote)
+> > > > -		return -ENODEV;
+> > > > +	/* Otherwise check for any child node other than port/ports. */
+> > > > +	if (ret) {
+> > > > +		for_each_available_child_of_node(np, remote) {
+> > > > +			if (of_node_name_eq(remote, "port") ||
+> > > > +			    of_node_name_eq(remote, "ports"))
+> > > > +				continue;
+> > > > =20
+> > > > -	if (panel) {
+> > > > -		*panel =3D of_drm_find_panel(remote);
+> > > > -		if (!IS_ERR(*panel))
+> > > > -			ret =3D 0;
+> > > > -		else
+> > > > -			*panel =3D NULL;
+> > > > -	}
+> > > > +			ret =3D drm_of_find_remote_panel_or_bridge(remote, panel,
+> > > > +								 bridge);
+> > > > +			of_node_put(remote);
+> > > > =20
+> > > > -	/* No panel found yet, check for a bridge next. */
+> > > > -	if (bridge) {
+> > > > -		if (ret) {
+> > > > -			*bridge =3D of_drm_find_bridge(remote);
+> > > > -			if (*bridge)
+> > > > -				ret =3D 0;
+> > > > -		} else {
+> > > > -			*bridge =3D NULL;
+> > > > +			/* Stop at the first found occurrence. */
+> > > > +			if (!ret)
+> > > > +				break;
+> > > >  		}
+> > > > -
+> > > >  	}
+> > > > =20
+> > > > -	of_node_put(remote);
+> > > >  	return ret;
+> > > >  }
+> > >=20
+> > > So the diff is fairly hard to read, but it ends up as:
+> >=20
+> > Yeah I agree, not sure what I can do about that.
+>=20
+> Nothing, really. I don't expect any change there, it just happens sometim=
+es :)
+
+All right then :)
+
+I'll send another iteration soon.
+
+Cheers,
+
+Paul
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--QRbFUewSOUn4mwmT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmI0pGEACgkQ3cLmz3+f
+v9F38wgAiW0fsg1uHAG9RbQHGQPMR6EPkKAA+fF3K8Dw5S8e327Pbb37JOO0OaRq
+awMEK2tU+azdYXWM0AY8w2/6FrquKCQOeIIPUyCMNUvDdZYJR1VIcPFeOd75CoWX
+uQ6eq7Kp/BiWN0iQzOnXGZwEQWBaYirtzBIS/kbHmVHXoBV6RNSQ3paPffPiuqd0
+gbZ6SfUivqhd5F8DNqw9c/EmnRnVcVm5GEdm2hNh8btG9mOgAjWTOl4zT39Bk+JQ
+BhyuxGDH72Eqr+NolyiIVs/GkZRb4cfysQOFEqhu3gzdW+H4q88PbgaFrBQ72wEp
+iyuWUTkZWcyt3A2QZuCDSfmOk6ctlw==
+=CNx8
+-----END PGP SIGNATURE-----
+
+--QRbFUewSOUn4mwmT--

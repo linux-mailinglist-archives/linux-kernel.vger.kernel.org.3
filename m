@@ -2,109 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEDF4DD9D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D185A4DD9D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236322AbiCRMik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
+        id S236325AbiCRMj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiCRMii (ORCPT
+        with ESMTP id S230008AbiCRMj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:38:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1426B2E044C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:37:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC1CC1474;
-        Fri, 18 Mar 2022 05:37:19 -0700 (PDT)
-Received: from [10.57.88.118] (unknown [10.57.88.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5FBAE3F7F5;
-        Fri, 18 Mar 2022 05:37:18 -0700 (PDT)
-Subject: Re: [PATCH] arm64: fix clang warning about TRAMP_VALIAS
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20220316183833.1563139-1-arnd@kernel.org>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <92859987-5088-3b2c-3e51-e61222724d23@arm.com>
-Date:   Fri, 18 Mar 2022 12:37:12 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20220316183833.1563139-1-arnd@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 18 Mar 2022 08:39:57 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A564186155
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:38:38 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id m12so10075300edc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 05:38:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=emv9wIoHuW/0+Mue7gkgcmWzRTn4PFfkagkWpakJcrs=;
+        b=M5wQfmq/z/FKPVjq+47Po/RqEbKuMvj67UfLqVzJh6IuKsdyQRKGIUb/wUr82yQrrb
+         K9wnhVIUM4OGBonp9Fsu2Tb6UFi0C8hgscjGrK1dfexVce4BseOJnrFELR+Pb5lh9Mz/
+         lPG7rAVJXzcuD4WETVCePZQ/xj4Wsi+mEWI5wN89AL10POfVlj+vuOkinovmCOtbye7e
+         tqyf4BFg8xbvsA4lcpi5U7Mb/Gr6nWREB9mSjVM6zwIHRDpKBw9y50PyHsb4yP8QSC9W
+         qwtXResN/2RcvxFr12EhieqLkDCuW+VqaW0pwGGcXYKwNLtohRUovzUBfEA567AVKQcW
+         x2fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=emv9wIoHuW/0+Mue7gkgcmWzRTn4PFfkagkWpakJcrs=;
+        b=exEhCJNkFh10w1XIujdUOsXoqfMRpsL7ZeiVzkxqOPHX3wXMRnO02UYv75kAt1KlxN
+         B8DYjMnvX8T/SU6sAqRdKIE7kbk+QZP0lE79aYV0VCFem6iCOW/2lDdUqgX1rM/YtdG9
+         MkHPiXExk1fDp9HEl/u0vEXCAUcldqwXxHjlejycywSMvejeJbAuRHoNl9x8w8tC9iXz
+         S9FFhLSnsDENmg9z1zUi8vnGrQM7Bha6+3mtwIC1PrZXCA36lWO3LhJglz9fUiOgphYn
+         TXgNpDEFuDpkU5JbIYLaOgnrYnF0P8OA4kNfKqhj9idKi5J8WGFj2P7tpCDqhl5p3a4L
+         +HFQ==
+X-Gm-Message-State: AOAM533bomy7LBDi4kRhwe0oa/TRnG4p4g0M2JRqhxYWvKC3Wdi2QQvX
+        TehmEpiQ2cDPzImbHVFwlEI7IQ==
+X-Google-Smtp-Source: ABdhPJzJutF6wsaWpy3KsAJ9JxoY2Wo2IZxzKHylfpk0PzAV7KubDisRYh65NZ26JNTBQsAtDHRiIA==
+X-Received: by 2002:a05:6402:1e8b:b0:3da:58e6:9a09 with SMTP id f11-20020a0564021e8b00b003da58e69a09mr9048801edf.155.1647607117030;
+        Fri, 18 Mar 2022 05:38:37 -0700 (PDT)
+Received: from mbp-di-paolo.station (net-2-34-190-150.cust.vodafonedsl.it. [2.34.190.150])
+        by smtp.gmail.com with ESMTPSA id qk9-20020a1709077f8900b006dfbc4b9b83sm593907ejc.163.2022.03.18.05.38.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 18 Mar 2022 05:38:36 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH -next 00/11] support concurrent sync io for bfq on a
+ specail occasion
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <11fda851-a552-97ea-d083-d0288c17ba53@huawei.com>
+Date:   Fri, 18 Mar 2022 13:38:35 +0100
+Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <1AE1457D-AAE1-4A13-8593-451E9396028A@linaro.org>
+References: <20220305091205.4188398-1-yukuai3@huawei.com>
+ <e299180e-cdbd-0837-8478-5e397ac8166b@huawei.com>
+ <11fda851-a552-97ea-d083-d0288c17ba53@huawei.com>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Hi,
+could you please add pointers to the thread(s) where we have already =
+revised this series (if we have). I don't see any reference to that in =
+this cover letter.
 
-On 3/16/22 6:38 PM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The newly introduced TRAMP_VALIAS definition causes a build warning
-> with clang-14:
-> 
-> arch/arm64/include/asm/vectors.h:66:31: error: arithmetic on a null pointer treated as a cast from integer to pointer is a GNU extension [-Werror,-Wnull-pointer-arithmetic]
->                  return (char *)TRAMP_VALIAS + SZ_2K * slot;
+Paolo
 
-It is? Good to know!
-(clang 11 doesn't seem to be so fussy)
-
-Just for some more background:
-TRAMP_VALIAS existed before, but it wasn't defined if KPTI is disabled at compile time, you can't
-do that without CONFIG_EXPERT.
-I thought these dummy definitions would be cleaner than #ifdef'ing the code.
-
-
-> Change the addition to something clang does not complain about.
-
-Acked-by: James Morse <james.morse@arm.com>
-
-
-Thanks!
-
-James
-
-
-
-> I see this warning on 5.17-rc8, but did not test it on linux-next,
-> which may already have a fix.
-> 
-> diff --git a/arch/arm64/include/asm/vectors.h b/arch/arm64/include/asm/vectors.h
-> index f64613a96d53..bc9a2145f419 100644
-> --- a/arch/arm64/include/asm/vectors.h
-> +++ b/arch/arm64/include/asm/vectors.h
-> @@ -56,14 +56,14 @@ enum arm64_bp_harden_el1_vectors {
->   DECLARE_PER_CPU_READ_MOSTLY(const char *, this_cpu_vector);
->   
->   #ifndef CONFIG_UNMAP_KERNEL_AT_EL0
-> -#define TRAMP_VALIAS	0
-> +#define TRAMP_VALIAS	0ul
->   #endif
->   
->   static inline const char *
->   arm64_get_bp_hardening_vector(enum arm64_bp_harden_el1_vectors slot)
->   {
->   	if (arm64_kernel_unmapped_at_el0())
-> -		return (char *)TRAMP_VALIAS + SZ_2K * slot;
-> +		return (char *)(TRAMP_VALIAS + SZ_2K * slot);
->   
->   	WARN_ON_ONCE(slot == EL1_VECTOR_KPTI);
->   
-> 
+> Il giorno 17 mar 2022, alle ore 02:49, yukuai (C) <yukuai3@huawei.com> =
+ha scritto:
+>=20
+> friendly ping ...
+>=20
+> =E5=9C=A8 2022/03/11 14:31, yukuai (C) =E5=86=99=E9=81=93:
+>> friendly ping ...
+>> =E5=9C=A8 2022/03/05 17:11, Yu Kuai =E5=86=99=E9=81=93:
+>>> Currently, bfq can't handle sync io concurrently as long as they
+>>> are not issued from root group. This is because
+>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+>>> bfq_asymmetric_scenario().
+>>>=20
+>>> This patchset tries to support concurrent sync io if all the sync =
+ios
+>>> are issued from the same cgroup:
+>>>=20
+>>> 1) Count root_group into 'num_groups_with_pending_reqs', patch 1-5;
+>>>=20
+>>> 2) Don't idle if 'num_groups_with_pending_reqs' is 1, patch 6;
+>>>=20
+>>> 3) Don't count the group if the group doesn't have pending requests,
+>>> while it's child groups may have pending requests, patch 7;
+>>>=20
+>>> This is because, for example:
+>>> if sync ios are issued from cgroup /root/c1/c2, root, c1 and c2
+>>> will all be counted into 'num_groups_with_pending_reqs',
+>>> which makes it impossible to handle sync ios concurrently.
+>>>=20
+>>> 4) Decrease 'num_groups_with_pending_reqs' when the last queue =
+completes
+>>> all the requests, while child groups may still have pending
+>>> requests, patch 8-10;
+>>>=20
+>>> This is because, for example:
+>>> t1 issue sync io on root group, t2 and t3 issue sync io on the same
+>>> child group. num_groups_with_pending_reqs is 2 now.
+>>> After t1 stopped, num_groups_with_pending_reqs is still 2. sync io =
+from
+>>> t2 and t3 still can't be handled concurrently.
+>>>=20
+>>> fio test script: startdelay is used to avoid queue merging
+>>> [global]
+>>> filename=3D/dev/nvme0n1
+>>> allow_mounted_write=3D0
+>>> ioengine=3Dpsync
+>>> direct=3D1
+>>> ioscheduler=3Dbfq
+>>> offset_increment=3D10g
+>>> group_reporting
+>>> rw=3Drandwrite
+>>> bs=3D4k
+>>>=20
+>>> [test1]
+>>> numjobs=3D1
+>>>=20
+>>> [test2]
+>>> startdelay=3D1
+>>> numjobs=3D1
+>>>=20
+>>> [test3]
+>>> startdelay=3D2
+>>> numjobs=3D1
+>>>=20
+>>> [test4]
+>>> startdelay=3D3
+>>> numjobs=3D1
+>>>=20
+>>> [test5]
+>>> startdelay=3D4
+>>> numjobs=3D1
+>>>=20
+>>> [test6]
+>>> startdelay=3D5
+>>> numjobs=3D1
+>>>=20
+>>> [test7]
+>>> startdelay=3D6
+>>> numjobs=3D1
+>>>=20
+>>> [test8]
+>>> startdelay=3D7
+>>> numjobs=3D1
+>>>=20
+>>> test result:
+>>> running fio on root cgroup
+>>> v5.17-rc6:       550 Mib/s
+>>> v5.17-rc6-patched: 550 Mib/s
+>>>=20
+>>> running fio on non-root cgroup
+>>> v5.17-rc6:       349 Mib/s
+>>> v5.17-rc6-patched: 550 Mib/s
+>>>=20
+>>> Yu Kuai (11):
+>>>    block, bfq: add new apis to iterate bfq entities
+>>>    block, bfq: apply news apis where root group is not expected
+>>>    block, bfq: cleanup for __bfq_activate_requeue_entity()
+>>>    block, bfq: move the increasement of =
+'num_groups_with_pending_reqs' to
+>>>      it's caller
+>>>    block, bfq: count root group into 'num_groups_with_pending_reqs'
+>>>    block, bfq: do not idle if only one cgroup is activated
+>>>    block, bfq: only count parent bfqg when bfqq is activated
+>>>    block, bfq: record how many queues have pending requests in =
+bfq_group
+>>>    block, bfq: move forward __bfq_weights_tree_remove()
+>>>    block, bfq: decrease 'num_groups_with_pending_reqs' earlier
+>>>    block, bfq: cleanup bfqq_group()
+>>>=20
+>>>   block/bfq-cgroup.c  | 13 +++----
+>>>   block/bfq-iosched.c | 87 =
++++++++++++++++++++++++----------------------
+>>>   block/bfq-iosched.h | 41 +++++++++++++--------
+>>>   block/bfq-wf2q.c    | 56 +++++++++++++++--------------
+>>>   4 files changed, 106 insertions(+), 91 deletions(-)
+>>>=20
 

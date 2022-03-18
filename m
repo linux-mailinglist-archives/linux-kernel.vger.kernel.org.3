@@ -2,172 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732224DDF11
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B184DDF21
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239160AbiCRQct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        id S237714AbiCRQe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239196AbiCRQcl (ORCPT
+        with ESMTP id S229838AbiCRQeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:32:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974451AE625;
-        Fri, 18 Mar 2022 09:31:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FC09B82475;
-        Fri, 18 Mar 2022 16:31:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58498C340EC;
-        Fri, 18 Mar 2022 16:31:00 +0000 (UTC)
-Date:   Fri, 18 Mar 2022 12:30:58 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Ritesh Harjani <riteshh@linux.ibm.com>, linux-ext4@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, "Theodore Ts'o" <tytso@mit.edu>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@kernel.org
-Subject: Re: [PATCHv3 02/10] ext4: Fix ext4_fc_stats trace point
-Message-ID: <20220318123058.348938b1@gandalf.local.home>
-In-Reply-To: <20220317143938.745e1420@gandalf.local.home>
-References: <cover.1647057583.git.riteshh@linux.ibm.com>
-        <b4b9691414c35c62e570b723e661c80674169f9a.1647057583.git.riteshh@linux.ibm.com>
-        <yt9dr1706b4i.fsf@linux.ibm.com>
-        <20220317143938.745e1420@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 18 Mar 2022 12:34:25 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A033C2274D7;
+        Fri, 18 Mar 2022 09:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647621185; x=1679157185;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=3fSyc4Om/f1qBKQ2VmW5hQXw8+AXsDQPbICnqW/FgR0=;
+  b=SQYRr4wrWgQ6XVcfwOPFv9wvNsxbX5FYw9cBThf+WG1+/OJHR1EF27RZ
+   QwmN8JNoxFCeLjP9eVCllQFT82JZG9q4U09FVzW4F/1Qh1QLGou/H/jHM
+   PoPDI+Fg/h4x/C6EhjBqf2+wu80z931apdivkqk3yQlzmxLmBBqWBZQHT
+   DsJTwjCt+ivv/2N3ZahCESP75UGG+iSuO+A3X6sslZpfb24OXWwCjpRp3
+   zyrjJ5UoQtw9L+lh0cUobyNWlnme3enQ6qd6SVB5XdBYOvQNgFxRHrGDP
+   Iu7ug8XlfC9dELV8gHawI7ddA1f2MFHeZqGWPQJIJeaiZCzF8tkKvsVLf
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="320379302"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="320379302"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 09:33:02 -0700
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="635813087"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 09:32:56 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nVFWT-002KJ7-A0;
+        Fri, 18 Mar 2022 18:32:17 +0200
+Date:   Fri, 18 Mar 2022 18:32:17 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "'Rafael J . Wysocki '" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 6/6] net: sfp: add support for fwnode
+Message-ID: <YjS0EbKOUb4Q++mF@smile.fi.intel.com>
+References: <20220318160059.328208-1-clement.leger@bootlin.com>
+ <20220318160059.328208-7-clement.leger@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220318160059.328208-7-clement.leger@bootlin.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022 14:39:38 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, Mar 18, 2022 at 05:00:52PM +0100, Clément Léger wrote:
+> Add support to retrieve a i2c bus in sfp with a fwnode. This support
+> is using the fwnode API which also works with device-tree and ACPI.
+> For this purpose, the device-tree and ACPI code handling the i2c
+> adapter retrieval was factorized with the new code. This also allows
+> i2c devices using a software_node description to be used by sfp code.
 
-> [ here I wanted to add a patch, but I haven't figured out the best way to
->   fix it yet. ]
+> +		i2c = fwnode_find_i2c_adapter_by_node(np);
 
-Care to try this patch?
+Despite using this, I believe you may split this patch to at least two where
+first one is preparatory (converting whatever parts is possible to fwnode
+(looks like ACPI case may be optimized) followed by this change.
 
--- Steve
+-- 
+With Best Regards,
+Andy Shevchenko
 
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 7b558c72f595..e11e167b7809 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -40,6 +40,14 @@ static LIST_HEAD(ftrace_generic_fields);
- static LIST_HEAD(ftrace_common_fields);
- static bool eventdir_initialized;
- 
-+static LIST_HEAD(module_strings);
-+
-+struct module_string {
-+	struct list_head	next;
-+	struct module		*module;
-+	char			*str;
-+};
-+
- #define GFP_TRACE (GFP_KERNEL | __GFP_ZERO)
- 
- static struct kmem_cache *field_cachep;
-@@ -2643,14 +2651,40 @@ static void update_event_printk(struct trace_event_call *call,
- 	}
- }
- 
-+static void add_str_to_module(struct module *module, char *str)
-+{
-+	struct module_string *modstr;
-+
-+	modstr = kmalloc(sizeof(*modstr), GFP_KERNEL);
-+
-+	/*
-+	 * If we failed to allocate memory here, then we'll just
-+	 * let the str memory leak when the module is removed.
-+	 * If this fails to allocate, there's worse problems than
-+	 * a leaked string on module removal.
-+	 */
-+	if (WARN_ON_ONCE(!modstr))
-+		return;
-+
-+	modstr->module = module;
-+	modstr->str = str;
-+
-+	list_add(&modstr->next, &module_strings);
-+}
-+
- static void update_event_fields(struct trace_event_call *call,
- 				struct trace_eval_map *map)
- {
- 	struct ftrace_event_field *field;
- 	struct list_head *head;
- 	char *ptr;
-+	char *str;
- 	int len = strlen(map->eval_string);
- 
-+	/* Dynamic events should never have field maps */
-+	if (WARN_ON_ONCE(call->flags & TRACE_EVENT_FL_DYNAMIC))
-+		return;
-+
- 	head = trace_get_fields(call);
- 	list_for_each_entry(field, head, link) {
- 		ptr = strchr(field->type, '[');
-@@ -2664,9 +2698,26 @@ static void update_event_fields(struct trace_event_call *call,
- 		if (strncmp(map->eval_string, ptr, len) != 0)
- 			continue;
- 
-+		str = kstrdup(field->type, GFP_KERNEL);
-+		if (WARN_ON_ONCE(!str))
-+			return;
-+		ptr = str + (ptr - field->type);
- 		ptr = eval_replace(ptr, map, len);
- 		/* enum/sizeof string smaller than value */
--		WARN_ON_ONCE(!ptr);
-+		if (WARN_ON_ONCE(!ptr)) {
-+			kfree(str);
-+			continue;
-+		}
-+
-+		/*
-+		 * If the event is part of a module, then we need to free the string
-+		 * when the module is removed. Otherwise, it will stay allocated
-+		 * until a reboot.
-+		 */
-+		if (call->module)
-+			add_str_to_module(call->module, str);
-+
-+		field->type = str;
- 	}
- }
- 
-@@ -2893,6 +2944,7 @@ static void trace_module_add_events(struct module *mod)
- static void trace_module_remove_events(struct module *mod)
- {
- 	struct trace_event_call *call, *p;
-+	struct module_string *modstr, *m;
- 
- 	down_write(&trace_event_sem);
- 	list_for_each_entry_safe(call, p, &ftrace_events, list) {
-@@ -2901,6 +2953,14 @@ static void trace_module_remove_events(struct module *mod)
- 		if (call->module == mod)
- 			__trace_remove_event_call(call);
- 	}
-+	/* Check for any strings allocade for this module */
-+	list_for_each_entry_safe(modstr, m, &module_strings, next) {
-+		if (modstr->module != mod)
-+			continue;
-+		list_del(&modstr->next);
-+		kfree(modstr->str);
-+		kfree(modstr);
-+	}
- 	up_write(&trace_event_sem);
- 
- 	/*
+

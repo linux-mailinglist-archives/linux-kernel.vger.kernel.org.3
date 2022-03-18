@@ -2,48 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC2C4DD9CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091104DD9D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 13:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236295AbiCRMg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 08:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
+        id S236312AbiCRMiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 08:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiCRMgY (ORCPT
+        with ESMTP id S230008AbiCRMiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 08:36:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDD816F058;
-        Fri, 18 Mar 2022 05:35:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 18 Mar 2022 08:38:01 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD832E044C;
+        Fri, 18 Mar 2022 05:36:41 -0700 (PDT)
+Received: from [192.168.0.3] (ip5f5aef49.dynamic.kabel-deutschland.de [95.90.239.73])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92E64B8222A;
-        Fri, 18 Mar 2022 12:35:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEFAAC340E8;
-        Fri, 18 Mar 2022 12:35:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647606903;
-        bh=R1MtZEZnyo1aEDVr6iX13cBFbGZjHGeyUbJx2jlKALU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NPuHsTaKhCyPUzlg0kELaU5Ep3pXSGkeWF768MUFsMvJHEmlD6WwI1u5kwPuwYtp5
-         K5qNyLygCO2CIiPSU3seKkNBXQqmbCUPuWhTDRWKcIDv262KoPN1TL9tXPI1R1Ux5o
-         BDJEbKFAQnLXJWX44gy0oYstfzoNVtfUBp+dYw2o=
-Date:   Fri, 18 Mar 2022 13:34:51 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-Cc:     mathias.nyman@intel.com, hzpeterchen@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
-Subject: Re: [PATCH] USB: Fix xhci ERDP update issue
-Message-ID: <YjR8axt3EY1JJv05@kroah.com>
-References: <0a78380a-89bc-a51a-5cb3-e2f313d2c0a5@zhaoxin.com>
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 4DC3E61EA1923;
+        Fri, 18 Mar 2022 13:36:38 +0100 (CET)
+Content-Type: multipart/mixed; boundary="------------PSgvYZecXr1ufTM0pfUWlKet"
+Message-ID: <b9b00e0e-9182-783d-ae30-d67d778ae060@molgen.mpg.de>
+Date:   Fri, 18 Mar 2022 13:36:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0a78380a-89bc-a51a-5cb3-e2f313d2c0a5@zhaoxin.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Dell.Client.Kernel@dell.com
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: ucsi_acpi: probe of USBC000:00 fails with ioremap error
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,80 +43,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 08:17:50PM +0800, WeitaoWang-oc@zhaoxin.com wrote:
-> On some situations, software handles TRB events slower than adding TRBs.
-> If the number of TRB events to be processed in a given interrupt is 256.
-> The local variable "event_ring_deq" that records in interrupt handler
-> is equal to software_dequeue. It will cause driver not update ERDP,then
-> software dequeue pointer is out of sync with ERDP on interrupt exit.
-> On the next interrupt, the event ring may full but driver will not
-> update ERDP as software_dequeue is equal to ERDP.
-> 
-> [  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
-> [  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7
-> inflight: CMD OUT
-> [  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78
-> 00 00 08 00
-> [  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host
-> not responding to stop endpoint command.
-> [  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
-> [  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not
-> responding, assume dead
-> [  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6
-> inflight: CMD
-> [  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8
-> 00 00 08 00
-> [  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5
-> inflight: CMD
-> 
-> To avoid this issue by update software record local variable when
-> handles 128 TRB events.
-> 
-> Fixes: dc0ffbea5729 ("usb: host: xhci: update event ring dequeue pointer on purpose")
-> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-> ---
->  drivers/usb/host/xhci-ring.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index d0b6806275e0..f9707997969d 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -3141,6 +3141,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
->  		if (event_loop++ < TRBS_PER_SEGMENT / 2)
->  			continue;
->  		xhci_update_erst_dequeue(xhci, event_ring_deq);
-> +		event_ring_deq = xhci->event_ring->dequeue;
-> 
->  		/* ring is half-full, force isoc trbs to interrupt more often */
->  		if (xhci->isoc_bei_interval > AVOID_BEI_INTERVAL_MIN)
-> -- 
-> 2.17.1
+This is a multi-part message in MIME format.
+--------------PSgvYZecXr1ufTM0pfUWlKet
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Dear Linux folks,
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+On a Dell Precision 3540, Linux 5.16.12 reports an ioremap error:
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
+     [    0.000000] Linux version 5.16.0-4-amd64 
+(debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-18) 11.2.0, GNU 
+ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT Debian 5.16.12-1 
+(2022-03-08)
+     [    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.16.0-4-amd64 
+root=UUID=c9342a55-b747-4442-b2f4-bc03eb7a51cf ro quiet noisapnp 
+log_buf_len=2M cryptomgr.notests btusb.enable_autosuspend=y 
+random.trust_cpu=on
+     […]
+     [    0.000000] DMI: Dell Inc. Precision 3540/0M14W7, BIOS 1.15.0 
+12/08/2021
+     […]
+     [   24.230968] videodev: Linux video capture interface: v2.00
+     [   24.237747] ioremap error for 0x78e31000-0x78e32000, requested 
+0x2, got 0x0
+     [   24.238100] ucsi_acpi: probe of USBC000:00 failed with error -12
+     […]
+     $ sudo more /proc/iomem
+     […]
+     78a04000-78ea2fff : ACPI Non-volatile Storage
+       78e31000-78e31fff : USBC000:00
+     […]
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+This seems to happen on a lot of Dell devices, cf. bug 199741 (ioremap 
+error on Dell XPS 9370) [1].
 
-thanks,
 
-greg k-h's patch email bot
+Kind regards,
+
+Paul
+
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=199741
+--------------PSgvYZecXr1ufTM0pfUWlKet
+Content-Type: text/plain; charset=UTF-8; name="iomem.txt"
+Content-Disposition: attachment; filename="iomem.txt"
+Content-Transfer-Encoding: base64
+
+MDAwMDAwMDAtMDAwMDBmZmYgOiBSZXNlcnZlZAowMDAwMTAwMC0wMDA5ZGZmZiA6IFN5c3Rl
+bSBSQU0KMDAwOWUwMDAtMDAwOWVmZmYgOiBSZXNlcnZlZAowMDA5ZjAwMC0wMDA5ZmZmZiA6
+IFN5c3RlbSBSQU0KMDAwYTAwMDAtMDAwZmZmZmYgOiBSZXNlcnZlZAogIDAwMDAwMDAwLTAw
+MDAwMDAwIDogUENJIEJ1cyAwMDAwOjAwCiAgMDAwMDAwMDAtMDAwMDAwMDAgOiBQQ0kgQnVz
+IDAwMDA6MDAKICAwMDAwMDAwMC0wMDAwMDAwMCA6IFBDSSBCdXMgMDAwMDowMAogIDAwMDAw
+MDAwLTAwMDAwMDAwIDogUENJIEJ1cyAwMDAwOjAwCiAgMDAwMDAwMDAtMDAwMDAwMDAgOiBQ
+Q0kgQnVzIDAwMDA6MDAKICAwMDAwMDAwMC0wMDAwMDAwMCA6IFBDSSBCdXMgMDAwMDowMAog
+IDAwMDAwMDAwLTAwMDAwMDAwIDogUENJIEJ1cyAwMDAwOjAwCiAgMDAwMDAwMDAtMDAwMDAw
+MDAgOiBQQ0kgQnVzIDAwMDA6MDAKICAwMDBhMDAwMC0wMDBkZmZmZiA6IFBDSSBCdXMgMDAw
+MDowMAogICAgMDAwYzAwMDAtMDAwZGZmZmYgOiAwMDAwOjAwOjAyLjAKICAwMDBmMDAwMC0w
+MDBmZmZmZiA6IFN5c3RlbSBST00KMDAxMDAwMDAtM2ZmZmZmZmYgOiBTeXN0ZW0gUkFNCjQw
+MDAwMDAwLTQwM2ZmZmZmIDogUmVzZXJ2ZWQKICA0MDAwMDAwMC00MDNmZmZmZiA6IHBucCAw
+MDowMAo0MDQwMDAwMC02ZDg2Y2ZmZiA6IFN5c3RlbSBSQU0KNmQ4NmQwMDAtNmQ4NmRmZmYg
+OiBBQ1BJIE5vbi12b2xhdGlsZSBTdG9yYWdlCjZkODZlMDAwLTZkODZlZmZmIDogUmVzZXJ2
+ZWQKNmQ4NmYwMDAtNzM2MjhmZmYgOiBTeXN0ZW0gUkFNCjczNjI5MDAwLTczNmIyZmZmIDog
+UmVzZXJ2ZWQKNzM2YjMwMDAtNzgyZDhmZmYgOiBTeXN0ZW0gUkFNCjc4MmQ5MDAwLTc4OTg2
+ZmZmIDogUmVzZXJ2ZWQKNzg5ODcwMDAtNzhhMDNmZmYgOiBBQ1BJIFRhYmxlcwo3OGEwNDAw
+MC03OGVhMmZmZiA6IEFDUEkgTm9uLXZvbGF0aWxlIFN0b3JhZ2UKICA3OGUzMTAwMC03OGUz
+MWZmZiA6IFVTQkMwMDA6MDAKNzhlYTMwMDAtN2FiMjJmZmYgOiBSZXNlcnZlZAo3YWIyMzAw
+MC03YWNmZWZmZiA6IFVua25vd24gRTgyMCB0eXBlCjdhY2ZmMDAwLTdhY2ZmZmZmIDogU3lz
+dGVtIFJBTQo3YWQwMDAwMC03ZjdmZmZmZiA6IFJlc2VydmVkCiAgN2Q4MDAwMDAtN2Y3ZmZm
+ZmYgOiBHcmFwaGljcyBTdG9sZW4gTWVtb3J5CjdmODAwMDAwLWVmZmZmZmZmIDogUENJIEJ1
+cyAwMDAwOjAwCiAgN2Y4MDAwMDAtN2Y4MDBmZmYgOiAwMDAwOjAwOjE1LjAKICAgIDdmODAw
+MDAwLTdmODAwMWZmIDogbHBzc19kZXYKICAgICAgN2Y4MDAwMDAtN2Y4MDAxZmYgOiBpMmNf
+ZGVzaWdud2FyZS4wIGxwc3NfZGV2CiAgICA3ZjgwMDIwMC03ZjgwMDJmZiA6IGxwc3NfcHJp
+dgogICAgN2Y4MDA4MDAtN2Y4MDBmZmYgOiBpZG1hNjQuMAogICAgICA3ZjgwMDgwMC03Zjgw
+MGZmZiA6IGlkbWE2NC4wIGlkbWE2NC4wCiAgN2Y4MDEwMDAtN2Y4MDFmZmYgOiAwMDAwOjAw
+OjE1LjEKICAgIDdmODAxMDAwLTdmODAxMWZmIDogbHBzc19kZXYKICAgICAgN2Y4MDEwMDAt
+N2Y4MDExZmYgOiBpMmNfZGVzaWdud2FyZS4xIGxwc3NfZGV2CiAgICA3ZjgwMTIwMC03Zjgw
+MTJmZiA6IGxwc3NfcHJpdgogICAgN2Y4MDE4MDAtN2Y4MDFmZmYgOiBpZG1hNjQuMQogICAg
+ICA3ZjgwMTgwMC03ZjgwMWZmZiA6IGlkbWE2NC4xIGlkbWE2NC4xCiAgN2Y4MDIwMDAtN2Y4
+MDJmZmYgOiAwMDAwOjAwOjE5LjAKICAgIDdmODAyMDAwLTdmODAyMWZmIDogbHBzc19kZXYK
+ICAgICAgN2Y4MDIwMDAtN2Y4MDIxZmYgOiBpMmNfZGVzaWdud2FyZS4yIGxwc3NfZGV2CiAg
+ICA3ZjgwMjIwMC03ZjgwMjJmZiA6IGxwc3NfcHJpdgogIDgwMDAwMDAwLThmZmZmZmZmIDog
+MDAwMDowMDowMi4wCiAgOTAwMDAwMDAtYjFmZmZmZmYgOiBQQ0kgQnVzIDAwMDA6MDIKICAg
+IDkwMDAwMDAwLWIxZmZmZmZmIDogUENJIEJ1cyAwMDAwOjAzCiAgICAgIDkwMDAwMDAwLWIx
+ZmZmZmZmIDogUENJIEJ1cyAwMDAwOjA1CiAgYzAwMDAwMDAtZDAxZmZmZmYgOiBQQ0kgQnVz
+IDAwMDA6M2IKICAgIGMwMDAwMDAwLWNmZmZmZmZmIDogMDAwMDozYjowMC4wCiAgICBkMDAw
+MDAwMC1kMDFmZmZmZiA6IDAwMDA6M2I6MDAuMAogIGQ0MDAwMDAwLWVhMGZmZmZmIDogUENJ
+IEJ1cyAwMDAwOjAyCiAgICBkNDAwMDAwMC1lYTBmZmZmZiA6IFBDSSBCdXMgMDAwMDowMwog
+ICAgICBkNDAwMDAwMC1lOWVmZmZmZiA6IFBDSSBCdXMgMDAwMDowNQogICAgICBlOWYwMDAw
+MC1lOWZmZmZmZiA6IFBDSSBCdXMgMDAwMDozYQogICAgICAgIGU5ZjAwMDAwLWU5ZjBmZmZm
+IDogMDAwMDozYTowMC4wCiAgICAgICAgICBlOWYwMDAwMC1lOWYwZmZmZiA6IHhoY2ktaGNk
+CiAgICAgIGVhMDAwMDAwLWVhMGZmZmZmIDogUENJIEJ1cyAwMDAwOjA0CiAgICAgICAgZWEw
+MDAwMDAtZWEwM2ZmZmYgOiAwMDAwOjA0OjAwLjAKICAgICAgICAgIGVhMDAwMDAwLWVhMDNm
+ZmZmIDogdGh1bmRlcmJvbHQKICAgICAgICBlYTA0MDAwMC1lYTA0MGZmZiA6IDAwMDA6MDQ6
+MDAuMAogIGViMDAwMDAwLWViZmZmZmZmIDogMDAwMDowMDowMi4wCiAgZWMwMDAwMDAtZWMw
+ZmZmZmYgOiAwMDAwOjAwOjFmLjMKICBlYzEwMDAwMC1lYzFmZmZmZiA6IFBDSSBCdXMgMDAw
+MDozYwogICAgZWMxMDAwMDAtZWMxMDNmZmYgOiAwMDAwOjNjOjAwLjAKICAgICAgZWMxMDAw
+MDAtZWMxMDNmZmYgOiBudm1lCiAgZWMyMDAwMDAtZWMyZmZmZmYgOiBQQ0kgQnVzIDAwMDA6
+M2IKICAgIGVjMjAwMDAwLWVjMjNmZmZmIDogMDAwMDozYjowMC4wCiAgICBlYzI0MDAwMC1l
+YzI1ZmZmZiA6IDAwMDA6M2I6MDAuMAogIGVjMzAwMDAwLWVjM2ZmZmZmIDogUENJIEJ1cyAw
+MDAwOjAxCiAgICBlYzMwMDAwMC1lYzMwMGZmZiA6IDAwMDA6MDE6MDAuMAogICAgICBlYzMw
+MDAwMC1lYzMwMGZmZiA6IHJ0c3hfcGNpCiAgZWM0MDAwMDAtZWM0MWZmZmYgOiAwMDAwOjAw
+OjFmLjYKICAgIGVjNDAwMDAwLWVjNDFmZmZmIDogZTEwMDBlCiAgZWM0MjAwMDAtZWM0MmZm
+ZmYgOiAwMDAwOjAwOjE0LjAKICAgIGVjNDIwMDAwLWVjNDJmZmZmIDogeGhjaS1oY2QKICBl
+YzQzMDAwMC1lYzQzN2ZmZiA6IDAwMDA6MDA6MDQuMAogICAgZWM0MzAwMDAtZWM0MzdmZmYg
+OiBwcm9jX3RoZXJtYWwKICBlYzQzODAwMC1lYzQzYmZmZiA6IDAwMDA6MDA6MWYuMwogICAg
+ZWM0MzgwMDAtZWM0M2JmZmYgOiBJQ0ggSEQgYXVkaW8KICBlYzQzYzAwMC1lYzQzZmZmZiA6
+IDAwMDA6MDA6MTQuMwogICAgZWM0M2MwMDAtZWM0M2ZmZmYgOiBpd2x3aWZpCiAgZWM0NDAw
+MDAtZWM0NDFmZmYgOiAwMDAwOjAwOjE0LjIKICBlYzQ0MjAwMC1lYzQ0MjBmZiA6IDAwMDA6
+MDA6MWYuNAogIGVjNDQ0MDAwLWVjNDQ0ZmZmIDogMDAwMDowMDoxNi4wCiAgICBlYzQ0NDAw
+MC1lYzQ0NGZmZiA6IG1laV9tZQogIGVjNDQ3MDAwLWVjNDQ3ZmZmIDogMDAwMDowMDoxNC4y
+CiAgZWM0NDgwMDAtZWM0NDhmZmYgOiAwMDAwOjAwOjEyLjAKICAgIGVjNDQ4MDAwLWVjNDQ4
+ZmZmIDogSW50ZWwgUENIIHRoZXJtYWwgZHJpdmVyCiAgZWM0NDkwMDAtZWM0NDlmZmYgOiAw
+MDAwOjAwOjA4LjAKZjAwMDAwMDAtZjdmZmZmZmYgOiBQQ0kgTU1DT05GSUcgMDAwMCBbYnVz
+IDAwLTdmXQogIGYwMDAwMDAwLWY3ZmZmZmZmIDogUmVzZXJ2ZWQKICAgIGYwMDAwMDAwLWY3
+ZmZmZmZmIDogcG5wIDAwOjA2CmZjODAwMDAwLWZlN2ZmZmZmIDogUENJIEJ1cyAwMDAwOjAw
+CiAgZmQwMDAwMDAtZmQ2OWZmZmYgOiBwbnAgMDA6MDcKICBmZDZhMDAwMC1mZDZhZmZmZiA6
+IElOVDM0QkI6MDAKICAgIGZkNmEwMDAwLWZkNmFmZmZmIDogSU5UMzRCQjowMCBJTlQzNEJC
+OjAwCiAgZmQ2YjAwMDAtZmQ2Y2ZmZmYgOiBwbnAgMDA6MDcKICBmZDZkMDAwMC1mZDZkZmZm
+ZiA6IElOVDM0QkI6MDAKICAgIGZkNmQwMDAwLWZkNmRmZmZmIDogSU5UMzRCQjowMCBJTlQz
+NEJCOjAwCiAgZmQ2ZTAwMDAtZmQ2ZWZmZmYgOiBJTlQzNEJCOjAwCiAgICBmZDZlMDAwMC1m
+ZDZlZmZmZiA6IElOVDM0QkI6MDAgSU5UMzRCQjowMAogIGZkNmYwMDAwLWZkZmZmZmZmIDog
+cG5wIDAwOjA3CiAgZmUwMDAwMDAtZmUwMTBmZmYgOiBSZXNlcnZlZAogICAgZmUwMTAwMDAt
+ZmUwMTBmZmYgOiAwMDAwOjAwOjFmLjUKICBmZTIwMDAwMC1mZTdmZmZmZiA6IHBucCAwMDow
+NwpmZWMwMDAwMC1mZWMwMGZmZiA6IFJlc2VydmVkCiAgZmVjMDAwMDAtZmVjMDAzZmYgOiBJ
+T0FQSUMgMApmZWQwMDAwMC1mZWQwMDNmZiA6IEhQRVQgMAogIGZlZDAwMDAwLWZlZDAwM2Zm
+IDogUE5QMDEwMzowMApmZWQxMDAwMC1mZWQxN2ZmZiA6IHBucCAwMDowNgpmZWQxODAwMC1m
+ZWQxOGZmZiA6IHBucCAwMDowNgpmZWQxOTAwMC1mZWQxOWZmZiA6IHBucCAwMDowNgpmZWQy
+MDAwMC1mZWQzZmZmZiA6IHBucCAwMDowNgpmZWQ0NTAwMC1mZWQ4ZmZmZiA6IHBucCAwMDow
+NgpmZWQ5MDAwMC1mZWQ5MGZmZiA6IGRtYXIwCmZlZDkxMDAwLWZlZDkxZmZmIDogZG1hcjEK
+ZmVlMDAwMDAtZmVlMDBmZmYgOiBMb2NhbCBBUElDCiAgZmVlMDAwMDAtZmVlMDBmZmYgOiBS
+ZXNlcnZlZApmZjAwMDAwMC1mZmZmZmZmZiA6IFJlc2VydmVkCiAgZmYwMDAwMDAtZmZmZmZm
+ZmYgOiBwbnAgMDA6MDcKMTAwMDAwMDAwLTg3YzdmZmZmZiA6IFN5c3RlbSBSQU0KICAyMzJh
+MDAwMDAtMjMzNjAxZTNmIDogS2VybmVsIGNvZGUKICAyMzM4MDAwMDAtMjM0MDNjZmZmIDog
+S2VybmVsIHJvZGF0YQogIDIzNDIwMDAwMC0yMzQ0YWM0YmYgOiBLZXJuZWwgZGF0YQogIDIz
+NGFlMzAwMC0yMzRmZmZmZmYgOiBLZXJuZWwgYnNzCjg3YzgwMDAwMC04N2ZmZmZmZmYgOiBS
+QU0gYnVmZmVyCg==
+
+--------------PSgvYZecXr1ufTM0pfUWlKet--

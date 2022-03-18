@@ -2,104 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3B14DD208
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534854DD21A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbiCRAvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 20:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
+        id S231282AbiCRAzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 20:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiCRAvp (ORCPT
+        with ESMTP id S231266AbiCRAzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 20:51:45 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCED13DB61;
-        Thu, 17 Mar 2022 17:50:27 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id v130-20020a1cac88000000b00389d0a5c511so5898455wme.5;
-        Thu, 17 Mar 2022 17:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3pMEbKBsMpapDd8TCjE4RHFawECGaW/7eNS3lLK39RM=;
-        b=nurmfdO1iMIrBTlsO7SIBEuIZr5DueNEiSytzbs9NuL2KOS/DHR/ihWYxPNIKIvIos
-         qE2q38W5m0BtJEBxcRlYheiXOLooMSQf3rokqWtNO0i6qVOpzfADGXKZBGPZySVHe3xP
-         Os+26lqEw08MMVC4YINaAGUl0uGzucz7Wv1/MCy7vztqDnrqsPSVcHjEeVNpZoXZosEE
-         JO4gQ2RBB9Y+gIvpzQkIhFQ9T1ar5IgFM1rwDrPwR7PUE2cmGK91R6rK/Z3DNR4i0eLn
-         mmlgroZmqLPbYTueAZnwLINL5LYxYwTYE94eBxiT7Vz1fP6DMhAwsxFirkXj8IrsEHaR
-         zLpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3pMEbKBsMpapDd8TCjE4RHFawECGaW/7eNS3lLK39RM=;
-        b=35mzEG0vRlI1VCFqPJu6Y1Qfn4fWmyUV1bUOWXVuQ9hzON9UctFBAeHpo2cZTStc8X
-         FI0OoFGhodLf2bOaz6MieEHvVaNU9eKAG6DUsI3wDg5mtO2r160uOUgTy3B69UKL+zGf
-         JSJD+Wpdmxf8l/FDU0n1vR7bh3DStrV/zeeWJWLaVzlI1llAQp7QtvWwutIqVJ61piLw
-         B4XqgkD2cKpqPyEOdaD7kqZ9GTj9XJnK7tkxX16aJmIe2oHfjINdaHjSdDugJgJEgq88
-         6zP1KRK73wiGmFZt7XYF7xzEV5/mxL146irTn0c49bg19jNS/i3wO/x+jgH+5/JE9wt8
-         Gktg==
-X-Gm-Message-State: AOAM533j8J2h2RA3i9iGHwgN8eWJ+A3GuqOj/KcD8w1aRZAmYfcI9ko2
-        IscVGG7DYxgdHxNlveiUbJY=
-X-Google-Smtp-Source: ABdhPJxlOL4MExEm3h26Y4McVA9a+lQbSOcpch5+/PntdcTOqCOFkKirk/UG1u3K3uaNw444o89q6g==
-X-Received: by 2002:a05:600c:a4b:b0:37b:ea2b:5583 with SMTP id c11-20020a05600c0a4b00b0037bea2b5583mr14211291wmq.139.1647564625886;
-        Thu, 17 Mar 2022 17:50:25 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id n65-20020a1c2744000000b003862bfb509bsm9483720wmn.46.2022.03.17.17.50.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 17:50:25 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Chris Snook <chris.snook@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Gatis Peisenieks <gatis@mikrotik.com>, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] atl1c: remove redundant assignment to variable size
-Date:   Fri, 18 Mar 2022 00:50:21 +0000
-Message-Id: <20220318005021.82073-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 17 Mar 2022 20:55:45 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CE46186147;
+        Thu, 17 Mar 2022 17:54:24 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app3 (Coremail) with SMTP id cC_KCgCn+ckw2DNijhwFAA--.6684S2;
+        Fri, 18 Mar 2022 08:54:11 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-hams@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kuba@kernel.org, davem@davemloft.net, ralf@linux-mips.org,
+        jreuter@yaina.de, eric.dumazet@gmail.com, dan.carpenter@oracle.com,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH V5 0/2] Fix refcount leak and NPD bugs in ax25
+Date:   Fri, 18 Mar 2022 08:54:03 +0800
+Message-Id: <cover.1647563511.git.duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgCn+ckw2DNijhwFAA--.6684S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY-7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fKr1UJr1l4I8I3I
+        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+        GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
+        rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r
+        4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgAMAVZdtYwINgABsC
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable sie is being assigned a value that is never read. The
-The assignment is redundant and can be removed.
+The first patch fixes refcount leak in ax25 that could cause 
+ax25-ex-connected-session-now-listening-state-bug.
 
-Cleans up clang scan build warning:
-drivers/net/ethernet/atheros/atl1c/atl1c_main.c:1054:22: warning:
-Although the value stored to 'size' is used in the enclosing
-expression, the value is never actually read from 'size'
-[deadcode.DeadStores]
+The second patch fixes NPD bugs in ax25 timers.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/ethernet/atheros/atl1c/atl1c_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Duoming Zhou (2):
+  ax25: Fix refcount leaks caused by ax25_cb_del()
+  ax25: Fix NULL pointer dereferences in ax25 timers
 
-diff --git a/drivers/net/ethernet/atheros/atl1c/atl1c_main.c b/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
-index f50604f3e541..49459397993e 100644
---- a/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
-+++ b/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
-@@ -1051,7 +1051,7 @@ static int atl1c_setup_ring_resources(struct atl1c_adapter *adapter)
- 	 * each ring/block may need up to 8 bytes for alignment, hence the
- 	 * additional bytes tacked onto the end.
- 	 */
--	ring_header->size = size =
-+	ring_header->size =
- 		sizeof(struct atl1c_tpd_desc) * tpd_ring->count * tqc +
- 		sizeof(struct atl1c_rx_free_desc) * rfd_ring->count * rqc +
- 		sizeof(struct atl1c_recv_ret_status) * rfd_ring->count * rqc +
+ net/ax25/af_ax25.c   | 18 +++++++++++++-----
+ net/ax25/ax25_subr.c | 20 ++++++++++++++------
+ 2 files changed, 27 insertions(+), 11 deletions(-)
+
 -- 
-2.35.1
+2.17.1
 

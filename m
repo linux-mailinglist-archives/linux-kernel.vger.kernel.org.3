@@ -2,79 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970F74DDEEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4264DDEEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239093AbiCRQaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S239142AbiCRQaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239242AbiCRQ2E (ORCPT
+        with ESMTP id S239295AbiCRQ2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:28:04 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFD218EE8A;
-        Fri, 18 Mar 2022 09:26:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647620805; x=1679156805;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=dDLLHCtUYDvBeiYbbGUjNuufSA+5n9Dp9C2i70UwuFA=;
-  b=I1r3vVn7dCo/q3W8iBKQNxUWuGXq0/OiiAO8KJWEthjFLNzFmHVJYEqg
-   CD1xgUnEo9VaKVweIvyYpW8jYJAsPbBW3TyVqtHCgugCs5uIVvovVoArO
-   1wLdsg4l3Jx1s6zKcLkdcv+v/gLm0z469m24OUBnhmChowG4ybfC3q9Jj
-   juntF6z6EErZ6Bx+EHZAIIuTgA7eknR/wLBp1Dm6hdTWUqhTa7/ZTq/7x
-   iyYWxd54rCCMKRtvOLF/zzXFXxlkFJtXA93bMQAH+kPrOyU/Q5+fiwcCJ
-   52PglRQGeB8hsAZzJbMFYKwFkjrX7MeV2aPfI7PjdbRYThHEvf5dweRxJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="257356584"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="257356584"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 09:26:45 -0700
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="550797917"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 09:26:40 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nVFQP-002K9d-3x;
-        Fri, 18 Mar 2022 18:26:01 +0200
-Date:   Fri, 18 Mar 2022 18:26:00 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "'Rafael J . Wysocki '" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/6] property: add fwnode_property_read_string_index()
-Message-ID: <YjSymEpNH8vnkQ+L@smile.fi.intel.com>
-References: <20220318160059.328208-1-clement.leger@bootlin.com>
- <20220318160059.328208-2-clement.leger@bootlin.com>
+        Fri, 18 Mar 2022 12:28:19 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2111E8EB45;
+        Fri, 18 Mar 2022 09:27:00 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id q20so5138075wmq.1;
+        Fri, 18 Mar 2022 09:27:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bE1h98kHg/vd9+ySU9xBpk1/akQmX3fkJjCvR5e1UFo=;
+        b=hy6lTPQIMROkI7AC71s/JdvifauaVii3kjTQSK3CACbW+Znm42bLTWF2PmDxbHqiYm
+         pOy3YeWxSgNC+VnRyMpeivw4L4ZhlfD4hybXkRmFbKfuHmzt8gh2Iq+HmlA2bYo0zIuP
+         Batd9aytoEpIVY2XRev4uRIGhYf5QwLQQIADqVxin5cBha6RpcZojxZ7QNHOkoJmOO7W
+         7oMV6i9ZGbdYmp4qTd29EX60pgGHopH9iR2IbwwyYbnt4i1KCTqSm3p11jq4ayKuwdVO
+         5OBgSWBf1wTM4ZmUO7zC4R0e9ea6oBLGkxS5QNqeHuY4CYWsN1Vm8VW1KDIY5qtVKHRc
+         I4OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bE1h98kHg/vd9+ySU9xBpk1/akQmX3fkJjCvR5e1UFo=;
+        b=4Dk51458T3X58B5oVKebHAPKTg0foYnZ1qlz2SQXZaaOYSHtN0UauFiTHZi8xuY8KB
+         qlzEQ7Ydy8KIwNAqMmB7JAWprgaEjjnIrdpdurSzrlDhTHwD8rOMESbTgDw2CvXJPv6b
+         e32uIJrptsj2/spuSIOHpyHW+s7WDKvM5RxWk1Cj5armCYBRfBHXy/+LQcbFVcG0VeDw
+         Sw3TDpaHOoToDmjo3Pmg2Xk89Ot7nZDONTIDzwryGVghN7iQH0XLrG3LzA+8mBNrAAwa
+         1HRmlgN1f5c0bfZRaDLcGYCEzZyJxCdlrzp61wzyN3s4HEf3MXZmz+lGVECKpXqh9vIi
+         JjqA==
+X-Gm-Message-State: AOAM531Ccl4ekbJnnphE+R+oYC+W/Swk6JXFlNI1aBGNvXvUfuG4/kci
+        mEubCMr3Zhpcng1azpkppG8=
+X-Google-Smtp-Source: ABdhPJxcHQXFITXUohtVzboQWy1beygU8s+a6fSMmy3ce5G+kY8pFubSZ68W9GwXxJpYfWLZgsfsoA==
+X-Received: by 2002:a7b:c8c5:0:b0:389:d4f1:7cb with SMTP id f5-20020a7bc8c5000000b00389d4f107cbmr11847782wml.3.1647620818607;
+        Fri, 18 Mar 2022 09:26:58 -0700 (PDT)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id n18-20020a5d6612000000b00203fbd39059sm737811wru.42.2022.03.18.09.26.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 09:26:57 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 16:26:55 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 00/25] 5.15.30-rc1 review
+Message-ID: <YjSyz74SX8yCrNne@debian>
+References: <20220317124526.308079100@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220318160059.328208-2-clement.leger@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220317124526.308079100@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,29 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 05:00:47PM +0100, Clément Léger wrote:
-> Add fwnode_property_read_string_index() function which allows to
-> retrieve a string from an array by its index. This function is the
-> equivalent of of_property_read_string_index() but for fwnode support.
+Hi Greg,
 
-...
+On Thu, Mar 17, 2022 at 01:45:47PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.30 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 19 Mar 2022 12:45:16 +0000.
+> Anything received after that time might be too late.
 
-> +	values = kcalloc(nval, sizeof(*values), GFP_KERNEL);
-> +	if (!values)
-> +		return -ENOMEM;
-> +
-> +	ret = fwnode_property_read_string_array(fwnode, propname, values, nval);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	*string = values[index];
-> +out:
-> +	kfree(values);
+Build test:
+mips (gcc version 11.2.1 20220301): 62 configs -> no new failure
+arm (gcc version 11.2.1 20220301): 100 configs -> no new failure
+arm64 (gcc version 11.2.1 20220301): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220301): 4 configs -> no failure
 
-Here is UAF (use after free). How is it supposed to work?
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
 
--- 
-With Best Regards,
-Andy Shevchenko
+[1]. https://openqa.qa.codethink.co.uk/tests/904
+[2]. https://openqa.qa.codethink.co.uk/tests/909
+[3]. https://openqa.qa.codethink.co.uk/tests/910
 
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
 

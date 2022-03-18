@@ -2,112 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8331A4DD664
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB69F4DD66A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233922AbiCRIr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 04:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
+        id S232953AbiCRIsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233918AbiCRIrY (ORCPT
+        with ESMTP id S233968AbiCRIsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:47:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A662E625C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 01:46:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6183AB8219D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 08:46:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E1CC340E8;
-        Fri, 18 Mar 2022 08:46:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647593163;
-        bh=cWhrXvFTgU1ErDA0SpUZ0GqSHdi4e6cPHYhyBk/nnAk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=HkXAvEqfjW4y0Y9d10Fm4nJh6Pv3kZ8onmNVtoAG8zSMpgyvzOt6E7Fgs5YxQJqS3
-         0XtvCnUHrkgMONiKPca6DtFwKeRQakIjCyd1GCsuegsW7PQ+M8SBPEyL+AkoJPuQdH
-         B6YmSxSv7sjvV7DEAuFOYNK/MG6S4OcPZYZd0d+nTonhf+p6R9tdbWJjqXxOkmQ2iq
-         Ygzrb8BI2DpKiEgNQIRbrKdizN5pJdWX5jomUS+McL2C57j5YsMTjJM2x+9611/8cR
-         FyE7OYSlDsizFzz48RExcbrO2SOJvU/3HU2d1C0LWGQFzwqn7px0SCEcYSUJ+L6toI
-         9TaFGP1cKtlGA==
-From:   sj@kernel.org
-To:     SeongJae Park <sj@kernel.org>
-Cc:     roger.pau@citrix.com, jgross@suse.com, mheyne@amazon.de,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xen-blk{back,front}: Update contact points for buffer_squeeze_duration_ms and feature_persistent
-Date:   Fri, 18 Mar 2022 08:46:00 +0000
-Message-Id: <20220318084600.26243-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220301144628.2858-1-sj@kernel.org>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 18 Mar 2022 04:48:00 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8CC2BAE49;
+        Fri, 18 Mar 2022 01:46:41 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id 10so6351551qtz.11;
+        Fri, 18 Mar 2022 01:46:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HX28KG1ETTyJqfzKGPZZd77iKDoX+t1pmuXVdkh9BBc=;
+        b=Z5aK/m5hJp461lI1t0YTLkryZtCz8/3HW4RW38wNu7h2EGUqR5UuMrj7IZGKTu0qKc
+         xqozWfz6HUk279WPyFj16B30DdNahbNTYWsIbBSEex9sA3PsaUSBV+ktq32E+IVv++KN
+         JVM+hWttBMY+pzT/KNggcxpvmXVD20QHebxdo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HX28KG1ETTyJqfzKGPZZd77iKDoX+t1pmuXVdkh9BBc=;
+        b=iqkB9EPr+kS3dKXJLVr7vm0IDmZZbsrzgOMgHWezCBb9dAvQmXnU4A7C354OA7j4N9
+         ETHmjP7Plh9R0op4m3toeQ8uE+TLDSplPCHeEILZNfv84YvdjiNi3Hn5pQbqijTY0eLK
+         HMV41Mhym5wH7BkpXX16jjzA1f6yro+9hX/qRYZTaw5a4jDq0hq9lymF1Sp/BQoI5YYB
+         UvnbVusRt5UDgkcRdS4CrVCnINlbGb7eHpCMJOREs1LT29dm6HUHD60+e8LOI3NcEMYG
+         16hAQn76lmn5DK3UVTzFFColrCMqBb6HKazZzJnDSD3IrrVrlwZmZ2wprtMNe3uF8HzT
+         LImA==
+X-Gm-Message-State: AOAM533sSLEksIw52iNg/vDwWrdRimZDvZCJ98LS5ehY3tdDtKjR19+N
+        i8oa7Y7Pf6qiZrRA+N5PKukhY0HSO3yxpQUhgFw=
+X-Google-Smtp-Source: ABdhPJwbpE/yU8SuU3bVcc+6HfWkUhrdPIgYdcuCEFhWvubB6MvFcV8t9gzlh4c9xyYxHO1Eosyq9q6syDlj8eCbRI4=
+X-Received: by 2002:a05:622a:14c8:b0:2e1:d626:66ea with SMTP id
+ u8-20020a05622a14c800b002e1d62666eamr6640121qtx.58.1647593200510; Fri, 18 Mar
+ 2022 01:46:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <SG2PR06MB2315A7BAE2F1B384CDADB57FE6139@SG2PR06MB2315.apcprd06.prod.outlook.com>
+In-Reply-To: <SG2PR06MB2315A7BAE2F1B384CDADB57FE6139@SG2PR06MB2315.apcprd06.prod.outlook.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Fri, 18 Mar 2022 08:46:28 +0000
+Message-ID: <CACPK8XdYHb-PgVVQuTtMBokxu4GTObG7nCohm4dosK9XWzE9ow@mail.gmail.com>
+Subject: Re: [PATCH v1] ARM: dts: aspeed: ast2600-evb: Enable RX delay for MAC0/MAC1
+To:     Howard Chiu <howard_chiu@aspeedtech.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Troy Lee <troy_lee@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger and Juergen,
+Hi Howard,
 
+On Fri, 18 Mar 2022 at 08:09, Howard Chiu <howard_chiu@aspeedtech.com> wrote:
+>
+> Since mac0/1 and mac2/3 are physically located on different die,
+> they have different properties by nature, which is mac0/1 has smaller delay step.
+>
+> The property 'phy-mode' on ast2600 mac0 and mac1 is recommended to set to 'rgmii-rxid'
+> which enables the RX interface delay from the PHY chip.
+> Refer page 45 of SDK User Guide v08.00
+> https://github.com/AspeedTech-BMC/openbmc/releases/download/v08.00/SDK_User_Guide_v08.00.pdf
+>
+> Set mac delay according to the mactest result.
 
-May I ask your opinions to this patch, please?
+This bit confused me. How does the rxid relate to the mac delay
+numbers? Which device and code is responsible for using them?
 
-
-Thanks,
-SJ
-
-On Tue, 1 Mar 2022 14:46:28 +0000 SeongJae Park <sj@kernel.org> wrote:
-
-> SeongJae is currently listed as a contact point for some blk{back,front}
-> features, but he will not work for XEN for a while.  This commit
-> therefore updates the contact point to his colleague, Maximilian, who is
-> understanding the context and actively working with the features now.
-> 
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> Signed-off-by: Maximilian Heyne <mheyne@amazon.de>
+>
+> Signed-off-by: Howard Chiu <howard_chiu@aspeedtech.com>
 > ---
->  Documentation/ABI/testing/sysfs-driver-xen-blkback  | 4 ++--
->  Documentation/ABI/testing/sysfs-driver-xen-blkfront | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-xen-blkback b/Documentation/ABI/testing/sysfs-driver-xen-blkback
-> index a74dfe52dd76..7faf719af165 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-xen-blkback
-> +++ b/Documentation/ABI/testing/sysfs-driver-xen-blkback
-> @@ -29,7 +29,7 @@ Description:
->  What:           /sys/module/xen_blkback/parameters/buffer_squeeze_duration_ms
->  Date:           December 2019
->  KernelVersion:  5.6
-> -Contact:        SeongJae Park <sj@kernel.org>
-> +Contact:        Maximilian Heyne <mheyne@amazon.de>
->  Description:
->                  When memory pressure is reported to blkback this option
->                  controls the duration in milliseconds that blkback will not
-> @@ -39,7 +39,7 @@ Description:
->  What:           /sys/module/xen_blkback/parameters/feature_persistent
->  Date:           September 2020
->  KernelVersion:  5.10
-> -Contact:        SeongJae Park <sj@kernel.org>
-> +Contact:        Maximilian Heyne <mheyne@amazon.de>
->  Description:
->                  Whether to enable the persistent grants feature or not.  Note
->                  that this option only takes effect on newly created backends.
-> diff --git a/Documentation/ABI/testing/sysfs-driver-xen-blkfront b/Documentation/ABI/testing/sysfs-driver-xen-blkfront
-> index 61fd173fabfe..7f646c58832e 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-xen-blkfront
-> +++ b/Documentation/ABI/testing/sysfs-driver-xen-blkfront
-> @@ -12,7 +12,7 @@ Description:
->  What:           /sys/module/xen_blkfront/parameters/feature_persistent
->  Date:           September 2020
->  KernelVersion:  5.10
-> -Contact:        SeongJae Park <sj@kernel.org>
-> +Contact:        Maximilian Heyne <mheyne@amazon.de>
->  Description:
->                  Whether to enable the persistent grants feature or not.  Note
->                  that this option only takes effect on newly created frontends.
-> -- 
-> 2.17.1
+>  arch/arm/boot/dts/aspeed-ast2600-evb.dts | 19 +++++++++++++++++--
+>  1 file changed, 17 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm/boot/dts/aspeed-ast2600-evb.dts b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
+> index b7eb552640cb..db16ba307e97 100644
+> --- a/arch/arm/boot/dts/aspeed-ast2600-evb.dts
+> +++ b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
+> @@ -103,7 +103,7 @@ ethphy3: ethernet-phy@0 {
+>  &mac0 {
+>         status = "okay";
+>
+> -       phy-mode = "rgmii";
+> +       phy-mode = "rgmii-rxid";
+>         phy-handle = <&ethphy0>;
+>
+>         pinctrl-names = "default";
+> @@ -114,7 +114,7 @@ &mac0 {
+>  &mac1 {
+>         status = "okay";
+>
+> -       phy-mode = "rgmii";
+> +       phy-mode = "rgmii-rxid";
+>         phy-handle = <&ethphy1>;
+>
+>         pinctrl-names = "default";
+> @@ -141,6 +141,21 @@ &mac3 {
+>         pinctrl-0 = <&pinctrl_rgmii4_default>;
+>  };
+>
+> +&syscon {
+> +       mac0-clk-delay = <0x10 0x0a
+> +                         0x10 0x10
+> +                         0x10 0x10>;
+
+These properties aren't supported by the mainline kernel. Do you have
+some code coming for that support?
+
+> +       mac1-clk-delay = <0x10 0x0a
+> +                         0x10 0x10
+> +                         0x10 0x10>;
+> +       mac2-clk-delay = <0x08 0x04
+> +                         0x08 0x04
+> +                         0x08 0x04>;
+> +       mac3-clk-delay = <0x08 0x04
+> +                         0x08 0x04
+> +                         0x08 0x04>;
+> +};
+> +
+>  &emmc_controller {
+>         status = "okay";
+>  };
+> --
+> 2.25.1
+>

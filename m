@@ -2,143 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E8F4DE470
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 00:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 656E64DE472
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 00:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241462AbiCRXOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 19:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
+        id S241486AbiCRXTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 19:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238224AbiCRXOS (ORCPT
+        with ESMTP id S238224AbiCRXTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 19:14:18 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D67112D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647645173; x=1679181173;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+37l6VhLvMOfjePs+2KrK6+EHrgl4qSAJMmK1zIg7eg=;
-  b=k417+cg5BBvqnxhPtDijFtS1MZCEHi5vqgUs2BTV5p596+YsIOZnGSLv
-   dfdfhSfT0JB+9bh5I4n4fFpFiZH6ngn1x0lyVJQoKm5oOYfQavOvizsRU
-   yETa/rLBxze/V38Hly+0jp1ax45U03FL5354VqUWrVeD+dmOkzSPL0AJc
-   Szlw88WUa80+Li9SOvy98OnH7y2gY6pET/Nl7b6Bk6nrgd7fC4i83TWxj
-   xypuReQPZ70LrlgwCAtbEroJDsfO3n0km249hyqSBOMObjgOGvdoGxa5n
-   I7FPF0Z4TSNgdl6Fd2oRfqEgOftx0ECmlR3MJQyYyFz4lpg77lRQr3Mcu
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="237854538"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="237854538"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 16:12:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="558706495"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 18 Mar 2022 16:12:51 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVLm7-000FGx-9u; Fri, 18 Mar 2022 23:12:51 +0000
-Date:   Sat, 19 Mar 2022 07:12:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:asahi 169/174] apple.c:(.text.apple_nvme_suspend+0x40):
- undefined reference to `apple_rtkit_is_running'
-Message-ID: <202203190706.DQ5sFFlc-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 18 Mar 2022 19:19:37 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB80017F3C9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:18:15 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id i11so7569982plr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:18:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IVcHCcBYklMVp4ZyFJpnqeq2akbdktOMbyQu0M7lWkM=;
+        b=i6IuYY1bVJG39GO25gWKj5fXg0j0g3I1ecz1VrdlDqj3a1wuctE1U+LTJku3FqmExS
+         hYoE0JspcExfIyvNBOQqVMKx/OJZAk+UrfOqDU34OjVg4ar9ahcpI90IRKK9TTATJyKo
+         sYFPP+CrvR84SvMKeF17KtvCFS41Z8E1by0bBhZbwRaY2S4OzULATWkDBmzy+zm7+C6h
+         4CbQMWoZGcn0rcnx+n8PiNK5h2UUO8Vpa8QvtHafxxmqGIiMNfDrAS6V6raO6EFhgIkX
+         RmTzJ8+dtkMGdIQYTzz3OWpTXOd92HJS0/XWxD/chrQaICXkM0ThqSqoPBvCB2X9pDGS
+         0wBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=IVcHCcBYklMVp4ZyFJpnqeq2akbdktOMbyQu0M7lWkM=;
+        b=FGHB0luKtPP/o2qKnkSPkA9Qvz3c01OEUtwT7axBsbAl9MlK7aLNMDYt57+EJ0EJog
+         gx7opzeNMw7bGj0WkuChyfjD9jzlm5JwfHGMgcRMJ7CoEPo5w5N2J/HF4ujXJsiRc1Px
+         I1kAtsuiNuflsyi2xPkeLfcF9Pg4MlVym7Og96ITq2LJ2hdDb+EtgMzrf9z4z6TW598i
+         UQAl5pvaWwmapt0ubbwhmij/EfZ8W7pyVZwLFxoC5egLuqczsXt/HFlFTHkDGqkquQMZ
+         3IL63BHxiunzmVZQBn5awi+Ufnz7EUMaPRrhPWAXWQO9zgJa1PU0IAnK7/uuIp8werAg
+         gTvw==
+X-Gm-Message-State: AOAM531zreliZBJ2kjlm7cz8f1TMm+taiKfOnG/ompfAO/8Hq+4LWzmK
+        +AdzavZJ9xxhbfrjCOdQRPmjQQ==
+X-Google-Smtp-Source: ABdhPJxvNF2QqGdofMuiYHtC41lDTJzN93eVTLBVb+qhspMXCxsDm0j7jVlkPmTFfrsk+BhsNod8bA==
+X-Received: by 2002:a17:90a:4a06:b0:1c6:d786:10a8 with SMTP id e6-20020a17090a4a0600b001c6d78610a8mr14591pjh.207.1647645495306;
+        Fri, 18 Mar 2022 16:18:15 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id cd20-20020a056a00421400b004fa7d1b35b6sm562516pfb.80.2022.03.18.16.18.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 16:18:14 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 16:18:14 -0700 (PDT)
+X-Google-Original-Date: Fri, 18 Mar 2022 16:18:09 PDT (-0700)
+Subject:     Re: [PATCH] riscv module: remove (NOLOAD)
+In-Reply-To: <YhEelqnPDr1u4uTD@dev-arch.archlinux-ax161>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     maskray@google.com, nathan@kernel.org
+Message-ID: <mhng-7fe2c5d9-a8e6-4123-ac5c-0c9190792520@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux asahi
-head:   c1fcb91bbcc8fd1b1f874e45f55cbba682351f3c
-commit: 287f6be4f50a324ac0b189f6e2f8fad003c4ec2b [169/174] apple-nvme: Add support for suspend/resume
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220319/202203190706.DQ5sFFlc-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/287f6be4f50a324ac0b189f6e2f8fad003c4ec2b
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux asahi
-        git checkout 287f6be4f50a324ac0b189f6e2f8fad003c4ec2b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+On Sat, 19 Feb 2022 08:45:10 PST (-0800), nathan@kernel.org wrote:
+> On Fri, Feb 18, 2022 at 12:26:11AM -0800, Fangrui Song wrote:
+>> On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+>> inappropriate for .plt, .got, and .got.plt sections which are always
+>> SHT_PROGBITS.
+>>
+>> In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+>> and (NOLOAD) will be essentially ignored. In ld.lld, since
+>> https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+>> customize the output section type"), ld.lld will report a `section type
+>> mismatch` error. Just remove (NOLOAD) to fix the error.
+>>
+>> [1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+>> section should be marked as not loadable" on
+>> https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+>> outdated for ELF.
+>
+> Thank you for the patch! As mentioned on the arm64 patch, this needs
+> your Signed-off-by tag. With that provided:
+>
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+>
+> This needs to go to stable so that older trees with a newer toolchain do
+> not warn.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yep, just checking on that SOB line.  A 
 
-All errors (new ones prefixed by >>):
+Fixes: 596b0474d3d9 ("kbuild: preprocess module linker script")
 
-   arch/mips/kernel/head.o: in function `kernel_entry':
-   (.ref.text+0xac): relocation truncated to fit: R_MIPS_26 against `start_kernel'
-   init/main.o: in function `set_reset_devices':
-   main.c:(.init.text+0x20): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x30): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `debug_kernel':
-   main.c:(.init.text+0xa4): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0xb4): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `quiet_kernel':
-   main.c:(.init.text+0x128): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x138): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `warn_bootconfig':
-   main.c:(.init.text+0x1ac): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x1bc): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `init_setup':
-   main.c:(.init.text+0x238): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x258): additional relocation overflows omitted from the output
-   mips-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_sart_dma_setup':
-   apple.c:(.text.apple_nvme_sart_dma_setup+0x8c): undefined reference to `apple_sart_add_allowed_region'
-   mips-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_sart_dma_destroy':
-   apple.c:(.text.apple_nvme_sart_dma_destroy+0x34): undefined reference to `apple_sart_remove_allowed_region'
-   mips-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_probe':
-   apple.c:(.text.apple_nvme_probe+0x3e8): undefined reference to `apple_sart_get'
-   mips-linux-ld: apple.c:(.text.apple_nvme_probe+0x75c): undefined reference to `devm_apple_rtkit_init'
-   mips-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_disable':
-   apple.c:(.text.apple_nvme_disable+0x6c): undefined reference to `apple_rtkit_is_crashed'
-   mips-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_suspend':
->> apple.c:(.text.apple_nvme_suspend+0x40): undefined reference to `apple_rtkit_is_running'
->> mips-linux-ld: apple.c:(.text.apple_nvme_suspend+0x68): undefined reference to `apple_rtkit_shutdown'
-   mips-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_shutdown':
-   apple.c:(.text.apple_nvme_shutdown+0x40): undefined reference to `apple_rtkit_is_running'
-   mips-linux-ld: apple.c:(.text.apple_nvme_shutdown+0x68): undefined reference to `apple_rtkit_shutdown'
-   mips-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_remove':
-   apple.c:(.text.apple_nvme_remove+0x68): undefined reference to `apple_rtkit_is_running'
-   mips-linux-ld: apple.c:(.text.apple_nvme_remove+0x90): undefined reference to `apple_rtkit_shutdown'
-   mips-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_reset_work':
-   apple.c:(.text.apple_nvme_reset_work+0xa4): undefined reference to `apple_rtkit_is_crashed'
-   mips-linux-ld: apple.c:(.text.apple_nvme_reset_work+0x124): undefined reference to `apple_rtkit_is_running'
-   mips-linux-ld: apple.c:(.text.apple_nvme_reset_work+0x1dc): undefined reference to `apple_rtkit_shutdown'
-   mips-linux-ld: apple.c:(.text.apple_nvme_reset_work+0x20c): undefined reference to `apple_rtkit_reinit'
-   mips-linux-ld: apple.c:(.text.apple_nvme_reset_work+0x278): undefined reference to `apple_rtkit_boot'
-   mips-linux-ld: drivers/nvme/host/apple.o: in function `apple_nvme_timeout':
-   apple.c:(.text.apple_nvme_timeout+0x1a0): undefined reference to `apple_rtkit_is_crashed'
-   mips-linux-ld: drivers/media/platform/amphion/vpu_windsor.o: in function `vpu_windsor_pack_cmd':
-   vpu_windsor.c:(.text.vpu_windsor_pack_cmd+0xfc): undefined reference to `__divdi3'
-   mips-linux-ld: vpu_windsor.c:(.text.vpu_windsor_pack_cmd+0x118): undefined reference to `__moddi3'
-   mips-linux-ld: drivers/media/platform/amphion/vpu_malone.o: in function `vpu_malone_pack_cmd':
-   vpu_malone.c:(.text.vpu_malone_pack_cmd+0x260): undefined reference to `__divdi3'
-   mips-linux-ld: vpu_malone.c:(.text.vpu_malone_pack_cmd+0x27c): undefined reference to `__moddi3'
-   mips-linux-ld: drivers/media/platform/amphion/vdec.o: in function `vdec_get_debug_info':
-   vdec.c:(.text.vdec_get_debug_info+0x2a8): undefined reference to `__moddi3'
-   mips-linux-ld: vdec.c:(.text.vdec_get_debug_info+0x2d8): undefined reference to `__divdi3'
-   mips-linux-ld: vdec.c:(.text.vdec_get_debug_info+0x2f8): undefined reference to `__moddi3'
-   mips-linux-ld: vdec.c:(.text.vdec_get_debug_info+0x318): undefined reference to `__divdi3'
-   mips-linux-ld: vdec.c:(.text.vdec_get_debug_info+0x338): undefined reference to `__moddi3'
-   mips-linux-ld: vdec.c:(.text.vdec_get_debug_info+0x358): undefined reference to `__divdi3'
+seems appropriate as well.
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks!
+
+>
+>> ---
+>>  arch/riscv/include/asm/module.lds.h | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/arch/riscv/include/asm/module.lds.h b/arch/riscv/include/asm/module.lds.h
+>> index 4254ff2ff049..1075beae1ac6 100644
+>> --- a/arch/riscv/include/asm/module.lds.h
+>> +++ b/arch/riscv/include/asm/module.lds.h
+>> @@ -2,8 +2,8 @@
+>>  /* Copyright (C) 2017 Andes Technology Corporation */
+>>  #ifdef CONFIG_MODULE_SECTIONS
+>>  SECTIONS {
+>> -	.plt (NOLOAD) : { BYTE(0) }
+>> -	.got (NOLOAD) : { BYTE(0) }
+>> -	.got.plt (NOLOAD) : { BYTE(0) }
+>> +	.plt : { BYTE(0) }
+>> +	.got : { BYTE(0) }
+>> +	.got.plt : { BYTE(0) }
+>>  }
+>>  #endif
+>> --
+>> 2.35.1.265.g69c8d7142f-goog
+>>
+>>

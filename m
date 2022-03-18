@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F8D4DE10E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2601F4DE12F
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240144AbiCRSdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 14:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
+        id S240205AbiCRSkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 14:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238047AbiCRSdL (ORCPT
+        with ESMTP id S240191AbiCRSkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 14:33:11 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2B011CF44
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:29:47 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id bu29so15496612lfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:29:47 -0700 (PDT)
+        Fri, 18 Mar 2022 14:40:15 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38ACC1C886D
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:38:55 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id qa43so18591139ejc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:38:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JhBJua4MwTn16uw9UYiJEFGtN/+A3wWm3ncEcAGAznM=;
-        b=XveiTTIKo48Em6kpMiotlpRXPch6hY8GbRe9VEOQqpG6yRcjfb2uuLDWaH7MdWWew1
-         gI8m6zGyXqGBYZXFfD6uchEnbTiGVAMKYwtrir4sHAJ8zGXz6qPjRYwKaVh1dIgoD5Dr
-         p/bBCLdzfZWnm59rifezKBDWpY4ECydq3e1f6DbB9ztxomnVWx0X0OTb5N/R2NaqTfgh
-         HSY7TAbH+g7cVRBh1555JHIrBWYm/QyxHdHW/QN+mYGR/M20VP46tUat0iTb3tTMVIZh
-         6RAXHhN54Z3naU78SqEd065dR7pSMA9ePMsMcipIP7Ii0Q8haEBwngc91xEgEoxVmB9K
-         BZzg==
+        d=fairphone.com; s=fair;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zVqxXsnsA1LY8cZh5HtidQZ6OjQlcer9+l/ndoFCZzY=;
+        b=0GPHb7LYcRvV0cYr619kgGkNXh29aZ1bBS0X1XqBJg22GVMGqMop/Fmcw2gghkOpLI
+         TH/jF2MknNS+B7o+jM3fb31Yo/4amEjdUwNBwk6EwZxK4vP7a85oGidUknXa3fJrTk/N
+         oSOlY4bYnplz7A11froxUMvRPhprEFwnN3F86raLG/Weq+cgRvZfTyCQprFm+rBApJCz
+         SlbdZjwh7/y2bn2qlGW8+B4BdIvsZpj9qMtGugd4vQ1RIxIU7pbFhElFAe7r2OwNadgc
+         VN+gIgADqpI2L5zSE+49UxIRfq50gAMqTWWITfBLv0MnFZjfMgFAcnn4mgbqSeSVgY2+
+         Heug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JhBJua4MwTn16uw9UYiJEFGtN/+A3wWm3ncEcAGAznM=;
-        b=dDJUMvnFBZ8Gya5sZrViN/xHCA934SouGU99yf99U2Aax7qVEBjyOIZ/YovKbXumJK
-         AanPPzeVUAuqGdaAtoMqivFr5VlhUIu80kRMdE6P7fJezNbXeH0xpZaWkB48/Vv81cZN
-         Ukp+YvuvG8t7RkgsK/5HlzmtRI64nHyBHThnzUv8L99doIfoHv6sdLwHvMwEfLTeF6zQ
-         vgzZz4T90Hfljk7qgYDoo3dHvFOwQ6XFmqQ3QUxp5sMrchNUdJYOiKNoVvxGC5nkh9nn
-         JJwVq5QmA6MnQd/xzRWSI3p+zIij6FrlnuDqjtIQZ8X7lnB4ux8xj4wy17rQMP5ADLeZ
-         qe+Q==
-X-Gm-Message-State: AOAM530LPUQvXRVrCD5zxw4G+QV4VZ71nH773BshTRzE5xdZygspcZZx
-        x7dKlUZ5waaXraqYfpC2CNyMBb3fjE4Aa8npiLjM1w==
-X-Google-Smtp-Source: ABdhPJzWbK0oJgZeNdqhptZp02Vl7ghfW80F6ZRIb/Zd4pWxJsRPSII+iAwnJeFfon+0mgclS0LLAq7EF/vEp3LrrtU=
-X-Received: by 2002:a05:6512:b9e:b0:44a:10eb:9607 with SMTP id
- b30-20020a0565120b9e00b0044a10eb9607mr1450810lfv.626.1647628184755; Fri, 18
- Mar 2022 11:29:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220316213055.2351342-1-morbo@google.com> <YjL6K49CkH+YC4FQ@smile.fi.intel.com>
- <CAKwvOdkjb3uR+kqjfdKL5gqA8R+00c5=3E7uGGW+mGZ3QRsjqg@mail.gmail.com>
- <YjSROmYwwGhpsXMl@smile.fi.intel.com> <CAKwvOdkEjrPUL4HuO3UKaUZAzVw=XV1bEOSj6HR5R1WTUSSZ4w@mail.gmail.com>
- <CAGG=3QVCkF7RdbQ85MtKgUjm8qP79BESAUiGU3wSQc0+ExO0gA@mail.gmail.com>
-In-Reply-To: <CAGG=3QVCkF7RdbQ85MtKgUjm8qP79BESAUiGU3wSQc0+ExO0gA@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 18 Mar 2022 11:29:32 -0700
-Message-ID: <CAKwvOd=1+JF6mxpM_K3xCYAr-R8nrj0s7tA9GwUybyiFdLpA2w@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: acpi: use correct format characters
-To:     Bill Wendling <morbo@google.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zVqxXsnsA1LY8cZh5HtidQZ6OjQlcer9+l/ndoFCZzY=;
+        b=i2uY6kJ/E0X5BXD34evBC9mYQ0pD8Zox7jnsTSbyIU//YWLN4dVv1jbRWUjlhR6OFT
+         vKDzg9RAoo4VAAD6gN+7h6gwHDum0O3yeaqJYTac84fvrYCHjNkLVqUyU+9DC1RGMTrU
+         5Jy/CUzkKUgldHOseTBtM0jO1x2nzGfCuR33n/pD8rWlkGGEhhOdYFORTEk4qgzxibxY
+         /UbeX6HIhZXaJqX8VCKMkZze8tLCDt42r7Re3aVT3y8+Ae+WeOf7yJd3gzLkSwNcnyXn
+         KXzBfBlK+26byxSwG42oP0vqxq8SRnD6GTkHdJ/q2U/CKrkdHArG92o4oiDIq4XPBY5n
+         IV4w==
+X-Gm-Message-State: AOAM5310HbGHv7nTkjMQ6Ma1Oznooby/RTy9MDCah5LJNgy6q/mdind7
+        EV0HV7bT+C2WrR/gczxvqkjkG5Fu/k8IlA==
+X-Google-Smtp-Source: ABdhPJywc4UWZRd2+eQ+ys6dqt33WizzTPKOjPNdHSD5dskGiUT2AQqDpKCVX60LsFEPTMhbHNqHyg==
+X-Received: by 2002:a05:6402:5173:b0:415:f1e2:8d53 with SMTP id d19-20020a056402517300b00415f1e28d53mr10822200ede.95.1647628225727;
+        Fri, 18 Mar 2022 11:30:25 -0700 (PDT)
+Received: from otso.arnhem.chello.nl (a246182.upc-a.chello.nl. [62.163.246.182])
+        by smtp.gmail.com with ESMTPSA id y8-20020a50eb08000000b00418b114469csm4567551edp.52.2022.03.18.11.30.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 11:30:25 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        Joe Perches <joe@perches.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 0/6] UFS support on SM6350 & FP4
+Date:   Fri, 18 Mar 2022 19:29:58 +0100
+Message-Id: <20220318183004.858707-1-luca.weiss@fairphone.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 11:25 AM Bill Wendling <morbo@google.com> wrote:
->
-> On Fri, Mar 18, 2022 at 11:01 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Fri, Mar 18, 2022 at 7:04 AM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > On Thu, Mar 17, 2022 at 11:11:21AM -0700, Nick Desaulniers wrote:
-> > > > Our goal is to enable -Wformat for CC=clang.  Please see also:
-> > > > commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
-> > > > unnecessary %h[xudi] and %hh[xudi]")
-> > >
-> > > Not that I agree on that commit for %h[h]x
-> > >
-> > >         signed char ch = -1;
-> > >         printf("%x\n", ch);
-> > >         printf("%hhx\n", ch);
-> >
-> > Will print:
-> > ffffffff
-> > ff
-> >
-> I noticed this. My first thought was to do something akin to:
->
->   printf("%x\n", (u8)ch);
->
-> but went the route of removing the "h" qualifiers to be more in line
-> with previous fixes. I will be happy to change this patch if that's
-> what you would prefer.
+This series adds support for UFS on SM6350 which is used for internal
+storage.
 
-Should we add a note diagnostic to clang suggesting the explicit cast
-as one method of silencing the warning?
+Luca Weiss (6):
+  scsi: ufs: dt-bindings: Add SM6350 compatible string
+  dt-bindings: phy: qcom,qmp: Add SM6350 UFS PHY bindings
+  phy: qcom-qmp: Add SM6350 UFS PHY support
+  pinctrl: qcom: sm6350: fix order of UFS & SDC pins
+  arm64: dts: qcom: sm6350: Add UFS nodes
+  arm64: dts: qcom: sm7225-fairphone-fp4: Enable UFS
+
+ .../devicetree/bindings/phy/qcom,qmp-phy.yaml |  1 +
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     |  1 +
+ arch/arm64/boot/dts/qcom/sm6350.dtsi          | 79 +++++++++++++++++++
+ .../boot/dts/qcom/sm7225-fairphone-fp4.dts    | 18 +++++
+ drivers/phy/qualcomm/phy-qcom-qmp.c           |  3 +
+ drivers/pinctrl/qcom/pinctrl-sm6350.c         | 16 ++--
+ 6 files changed, 110 insertions(+), 8 deletions(-)
+
 -- 
-Thanks,
-~Nick Desaulniers
+2.35.1
+

@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B675C4DE2A8
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0B04DE2A7
 	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240722AbiCRUla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 16:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
+        id S240729AbiCRUlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 16:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240499AbiCRUl1 (ORCPT
+        with ESMTP id S240614AbiCRUl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 18 Mar 2022 16:41:27 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D566122BDC;
-        Fri, 18 Mar 2022 13:40:07 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id v35so17800502ybi.10;
-        Fri, 18 Mar 2022 13:40:07 -0700 (PDT)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F472467C8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 13:40:08 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a8so19199202ejc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 13:40:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vVp1w9NSmxaFeYurA8RKxT/i3A6lZfLYPbCAR6Ix1v0=;
-        b=Fxm0IYClQ7mZTdGPutUhNB+CcRqg2eAXb4Xrt8BiZlgOp61krOQGkOtPDOhyF25tFB
-         h9uVxt3DtI0l7RPfkUMBfociPLwcv8v82aWtqjxodZVc39L5KTz52+0jYJCWgNC2rynx
-         QSPEsSDqgvsUezpR368TyL3KkqZApW0xUreL4P5GqkYFkIrxzM7gm9xu4+VEhBWFFCjA
-         gOf9VtS3xcDn2dqESKrO3JQRayt/tp1eeYpb1NPw0kqlaS+Gm8jGxSJZo1+B7uxk3jQI
-         mxsdY/jMfIcY6QtTMhAJVOL/H1uxJUMN09p65818HGfoz1oLLWfyaBMvmHN3h9GB44yG
-         w1Jw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pzFK/L8jrb4SpzZ3v4GeCIos+dZnAZe5Zkw5DCwe97I=;
+        b=mjpANjH7f8JLct/KJ9f4LFEERuTp0htS9e48xmZcucHY2F80rDh1IK0jtzKzqY+1IF
+         4N7hHkHVUTYISboJRjmKklJjCBzwA/NA90tG2BRhBMDhdhjzX54FdL+Gpmh6v3/WBg+i
+         tt0rHfybejtyYbm+YoKRv4kQUQ2hL9oZTrE6cxt4dvEEPfQx/JexbwUNdBie4++LG0iF
+         05sA1rN3mum8FJ2U8EesrYgCckal5QBuaUATRaMgI55Mrj3VmkP2BMvXQw+6hvUe2gYe
+         7wImWsYF9hYHMF4x+WP74VH0ttzHhmzi3SxYHpOv3uDp2mrfqw4J5htr7e1xtpejAGBV
+         cHaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vVp1w9NSmxaFeYurA8RKxT/i3A6lZfLYPbCAR6Ix1v0=;
-        b=ELc0cH4A86IB41b1nMwml2KQ854FeG3Fp2XOAXa1kX9ljpMd1KVGau0Go4P0cL7gaY
-         P8aKw+MaX+g5aX6CA7o0f7e/5gwB3J/Y9yzjKV41VTJlJJx9mWLuXG4tX6o/KkcfH7DC
-         If8uE80eZ+94aSJrpSO6scZZUr5qOoXnDAQ3sBWqlSNeHuMGvxAAmNxNF2+J9rG3ifQy
-         uf490wFh2v88pieKd4m1Mj5cLjKGusBCr2NFPe0PTqbxRrMPiRLhc1GtmMQLYmIZWiDG
-         Ynz7idck/Oopk40GdpRZ0+TXy+jyWJIyBzb4kI9i74o4cvDquOL2VAzp/kdNE5ZunYxl
-         Vfug==
-X-Gm-Message-State: AOAM530Gj84vC8pVIoQ816PjIdlpfeCGhMBOJvHbRKuasUkInHGct49F
-        J8tpzUeMiauwtMH74fo4XiNpX+T/HruDEctzc5E=
-X-Google-Smtp-Source: ABdhPJww4JQScKFu65C+KZ/IY6mSJq4LNtDfEpDasGeaPwhtLJa0KbZioNUXf5I2xtaeR4leOrldqHNuqGTROpqOS2U=
-X-Received: by 2002:a25:3bd4:0:b0:633:6772:5ac1 with SMTP id
- i203-20020a253bd4000000b0063367725ac1mr11490111yba.431.1647636007056; Fri, 18
- Mar 2022 13:40:07 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pzFK/L8jrb4SpzZ3v4GeCIos+dZnAZe5Zkw5DCwe97I=;
+        b=jcdYQipidddxEgoRhUllnlThtt6UZFWIYmEReiLTgD7BFPuxdF0Npa9tashouliwbi
+         /ePPPuUf9mvpPj9V/2oVua36G7ydpO/Ih+4w3LyMcntCs8lhbhfIGWNf8IauUJEWFUwc
+         KPDunUMfiPJj0vW19jR0HTnWA91yZvivqw4hgWxjOVnEmo+QxiAYu5889nH+VxpwD2KG
+         oZMj647k8wV2GkGu29jwNm/ZF7vKG1AuJeBevKwr6sMRYrG+SngasZV8kLTxH9vn8Jki
+         wfK2UFchq+MqEgJGfSJGdHRtKLEgowZm+D8lVrUCULUZ7W3V070kcT395mYTVvQc4ePt
+         JpZw==
+X-Gm-Message-State: AOAM5331kj/Xu/bTbVR+MLx5PIpP9/igtvl0ITEvnjITJq2s36tlMnZN
+        TXZdvNvMIEZK7BiMTjt281E=
+X-Google-Smtp-Source: ABdhPJxg7ZgCLA60dgAE7NbXoT6njOvCfjxIWb6dYSD0ANfEhfQP1qM2O/mPHnBl1EP9uCJsw+TI0g==
+X-Received: by 2002:a17:906:743:b0:6d0:7f19:d737 with SMTP id z3-20020a170906074300b006d07f19d737mr10894755ejb.11.1647636006367;
+        Fri, 18 Mar 2022 13:40:06 -0700 (PDT)
+Received: from krava ([83.240.61.119])
+        by smtp.gmail.com with ESMTPSA id o2-20020a50d802000000b00410d7f0c52csm4697707edj.8.2022.03.18.13.40.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 13:40:06 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 21:40:04 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] perf evlist: Avoid iteration for empty evlist.
+Message-ID: <YjTuJLklOMmavh5C@krava>
+References: <20220317231643.550902-1-irogers@google.com>
 MIME-Version: 1.0
-References: <20220121010543.31385-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220121010543.31385-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <YgGfjMttGecxcuv+@robh.at.kernel.org>
-In-Reply-To: <YgGfjMttGecxcuv+@robh.at.kernel.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 18 Mar 2022 20:39:40 +0000
-Message-ID: <CA+V-a8v8y4MmZ8O_Nbii3wjmNv2sEcDMuXz4pgNkROrjQqMSLQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 2/4] media: dt-bindings: media: Document RZ/G2L CRU
-To:     Rob Herring <robh@kernel.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220317231643.550902-1-irogers@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -79,198 +73,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Thu, Mar 17, 2022 at 04:16:43PM -0700, Ian Rogers wrote:
+> As seen with 'perf stat --null ..' and reported in:
+> https://lore.kernel.org/lkml/YjCLcpcX2peeQVCH@kernel.org/
+> 
+> v2. Avoids setting evsel in the empty list case as suggested by Jiri
+>     Olsa <jolsa@kernel.org>.
+> Fixes: 472832d2c000 ("perf evlist: Refactor evlist__for_each_cpu()")
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-Thank you for the review.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-On Mon, Feb 7, 2022 at 10:39 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Fri, Jan 21, 2022 at 01:05:41AM +0000, Lad Prabhakar wrote:
-> > Document the CRU block found on Renesas RZ/G2L SoC's.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > v1->v2
-> > * Dropped CSI
-> > ---
-> >  .../bindings/media/renesas,rzg2l-cru.yaml     | 152 ++++++++++++++++++
-> >  1 file changed, 152 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
-> > new file mode 100644
-> > index 000000000000..a03fc6ef0117
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
-> > @@ -0,0 +1,152 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +# Copyright (C) 2022 Renesas Electronics Corp.
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/renesas,rzg2l-cru.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Renesas RZ/G2L Camera Data Receiving Unit (CRU)
-> > +
-> > +maintainers:
-> > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > +
-> > +description:
-> > +  The RZ/G2L Camera Data Receiving Unit (CRU) device provides video input
-> > +  capabilities for the Renesas RZ/G2L family of devices.
-> > +
-> > +  Depending on the instance the Image Processing input is connected to
-> > +  external SoC pins or to a CSI-2 receiver.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
->
-> Don't need oneOf when there is only 1 entry.
->
-There are two more SoC's to be added as soon this patch series get
-merged, so to keep the changes minimal later I will keep oneOf here.
+thanks,
+jirka
 
-> > +          - enum:
-> > +              - renesas,r9a07g044-cru     # RZ/G2{L,LC}
-> > +          - const: renesas,rzg2l-cru
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 3
-> > +
-> > +  interrupt-names:
-> > +    items:
-> > +      - const: image_conv
-> > +      - const: image_conv_err
-> > +      - const: axi_mst_err
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: CRU Main clock
-> > +      - description: CPU Register access clock
-> > +      - description: CRU image transfer clock
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: vclk
-> > +      - const: pclk
-> > +      - const: aclk
-> > +
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> > +  resets:
-> > +    items:
-> > +      - description: CRU_PRESETN reset terminal
-> > +      - description: CRU_ARESETN reset terminal
-> > +
-> > +  reset-names:
-> > +    items:
-> > +      - const: presetn
-> > +      - const: aresetn
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > +        unevaluatedProperties: false
-> > +        description:
-> > +          Input port node, single endpoint describing a parallel input source.
-> > +
-> > +        properties:
-> > +          endpoint:
-> > +            $ref: video-interfaces.yaml#
-> > +            unevaluatedProperties: false
-> > +
-> > +            properties:
-> > +              hsync-active: true
-> > +              vsync-active: true
-> > +              bus-width: true
-> > +              data-shift: true
-> > +
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description:
-> > +          Output port node, describing the RZ/G2L Image Processing module
-> > +          connected the CSI-2 receiver
->
-> > +
-> > +        properties:
-> > +          endpoint@0:
-> > +            $ref: /schemas/graph.yaml#/properties/endpoint
-> > +            description: Endpoint connected to CSI2.
-> > +
-> > +        anyOf:
-> > +          - required:
-> > +              - endpoint@0
->
-> You can drop all the endpoint stuff. Just 'endpoint' should be valid as
-> well for example. The graph schema covers all that.
->
-Will do.
-
-Cheers,
-Prabhakar
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - interrupt-names
-> > +  - clocks
-> > +  - clock-names
-> > +  - resets
-> > +  - reset-names
-> > +  - power-domains
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  # Device node example with CSI-2
-> > +  - |
-> > +    #include <dt-bindings/clock/r9a07g044-cpg.h>
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +
-> > +    cru: video@10830000 {
-> > +            compatible = "renesas,r9a07g044-cru", "renesas,rzg2l-cru";
-> > +            reg = <0x10830000 0x400>;
-> > +            interrupts = <GIC_SPI 167 IRQ_TYPE_LEVEL_HIGH>,
-> > +                         <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>,
-> > +                         <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
-> > +            interrupt-names = "image_conv", "image_conv_err", "axi_mst_err";
-> > +            clocks = <&cpg CPG_MOD R9A07G044_CRU_VCLK>,
-> > +                     <&cpg CPG_MOD R9A07G044_CRU_PCLK>,
-> > +                     <&cpg CPG_MOD R9A07G044_CRU_ACLK>;
-> > +            clock-names = "vclk", "pclk", "aclk";
-> > +            power-domains = <&cpg>;
-> > +            resets = <&cpg R9A07G044_CRU_PRESETN>,
-> > +                     <&cpg R9A07G044_CRU_ARESETN>;
-> > +            reset-names = "presetn", "aresetn";
-> > +
-> > +            ports {
-> > +                    #address-cells = <1>;
-> > +                    #size-cells = <0>;
-> > +
-> > +                    port@1 {
-> > +                            #address-cells = <1>;
-> > +                            #size-cells = <0>;
-> > +
-> > +                            reg = <1>;
-> > +
-> > +                            crucsi2: endpoint@0 {
-> > +                                    reg = <0>;
-> > +                                    remote-endpoint= <&csi2cru>;
-> > +                            };
-> > +                    };
-> > +            };
-> > +    };
-> > --
-> > 2.17.1
-> >
-> >
+> ---
+>  tools/perf/util/evlist.c | 28 +++++++++++++++++-----------
+>  1 file changed, 17 insertions(+), 11 deletions(-)
+> 
+> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> index 8134d45e2164..9bb79e049957 100644
+> --- a/tools/perf/util/evlist.c
+> +++ b/tools/perf/util/evlist.c
+> @@ -346,7 +346,7 @@ struct evlist_cpu_iterator evlist__cpu_begin(struct evlist *evlist, struct affin
+>  {
+>  	struct evlist_cpu_iterator itr = {
+>  		.container = evlist,
+> -		.evsel = evlist__first(evlist),
+> +		.evsel = NULL,
+>  		.cpu_map_idx = 0,
+>  		.evlist_cpu_map_idx = 0,
+>  		.evlist_cpu_map_nr = perf_cpu_map__nr(evlist->core.all_cpus),
+> @@ -354,16 +354,22 @@ struct evlist_cpu_iterator evlist__cpu_begin(struct evlist *evlist, struct affin
+>  		.affinity = affinity,
+>  	};
+>  
+> -	if (itr.affinity) {
+> -		itr.cpu = perf_cpu_map__cpu(evlist->core.all_cpus, 0);
+> -		affinity__set(itr.affinity, itr.cpu.cpu);
+> -		itr.cpu_map_idx = perf_cpu_map__idx(itr.evsel->core.cpus, itr.cpu);
+> -		/*
+> -		 * If this CPU isn't in the evsel's cpu map then advance through
+> -		 * the list.
+> -		 */
+> -		if (itr.cpu_map_idx == -1)
+> -			evlist_cpu_iterator__next(&itr);
+> +	if (evlist__empty(evlist)) {
+> +		/* Ensure the empty list doesn't iterate. */
+> +		itr.evlist_cpu_map_idx = itr.evlist_cpu_map_nr;
+> +	} else {
+> +		itr.evsel = evlist__first(evlist);
+> +		if (itr.affinity) {
+> +			itr.cpu = perf_cpu_map__cpu(evlist->core.all_cpus, 0);
+> +			affinity__set(itr.affinity, itr.cpu.cpu);
+> +			itr.cpu_map_idx = perf_cpu_map__idx(itr.evsel->core.cpus, itr.cpu);
+> +			/*
+> +			 * If this CPU isn't in the evsel's cpu map then advance
+> +			 * through the list.
+> +			 */
+> +			if (itr.cpu_map_idx == -1)
+> +				evlist_cpu_iterator__next(&itr);
+> +		}
+>  	}
+>  	return itr;
+>  }
+> -- 
+> 2.35.1.894.gb6a874cedc-goog
+> 

@@ -2,131 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656E64DE472
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 00:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807244DE479
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 00:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241486AbiCRXTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 19:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
+        id S241497AbiCRXZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 19:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238224AbiCRXTh (ORCPT
+        with ESMTP id S238224AbiCRXZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 19:19:37 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB80017F3C9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:18:15 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id i11so7569982plr.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:18:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IVcHCcBYklMVp4ZyFJpnqeq2akbdktOMbyQu0M7lWkM=;
-        b=i6IuYY1bVJG39GO25gWKj5fXg0j0g3I1ecz1VrdlDqj3a1wuctE1U+LTJku3FqmExS
-         hYoE0JspcExfIyvNBOQqVMKx/OJZAk+UrfOqDU34OjVg4ar9ahcpI90IRKK9TTATJyKo
-         sYFPP+CrvR84SvMKeF17KtvCFS41Z8E1by0bBhZbwRaY2S4OzULATWkDBmzy+zm7+C6h
-         4CbQMWoZGcn0rcnx+n8PiNK5h2UUO8Vpa8QvtHafxxmqGIiMNfDrAS6V6raO6EFhgIkX
-         RmTzJ8+dtkMGdIQYTzz3OWpTXOd92HJS0/XWxD/chrQaICXkM0ThqSqoPBvCB2X9pDGS
-         0wBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=IVcHCcBYklMVp4ZyFJpnqeq2akbdktOMbyQu0M7lWkM=;
-        b=FGHB0luKtPP/o2qKnkSPkA9Qvz3c01OEUtwT7axBsbAl9MlK7aLNMDYt57+EJ0EJog
-         gx7opzeNMw7bGj0WkuChyfjD9jzlm5JwfHGMgcRMJ7CoEPo5w5N2J/HF4ujXJsiRc1Px
-         I1kAtsuiNuflsyi2xPkeLfcF9Pg4MlVym7Og96ITq2LJ2hdDb+EtgMzrf9z4z6TW598i
-         UQAl5pvaWwmapt0ubbwhmij/EfZ8W7pyVZwLFxoC5egLuqczsXt/HFlFTHkDGqkquQMZ
-         3IL63BHxiunzmVZQBn5awi+Ufnz7EUMaPRrhPWAXWQO9zgJa1PU0IAnK7/uuIp8werAg
-         gTvw==
-X-Gm-Message-State: AOAM531zreliZBJ2kjlm7cz8f1TMm+taiKfOnG/ompfAO/8Hq+4LWzmK
-        +AdzavZJ9xxhbfrjCOdQRPmjQQ==
-X-Google-Smtp-Source: ABdhPJxvNF2QqGdofMuiYHtC41lDTJzN93eVTLBVb+qhspMXCxsDm0j7jVlkPmTFfrsk+BhsNod8bA==
-X-Received: by 2002:a17:90a:4a06:b0:1c6:d786:10a8 with SMTP id e6-20020a17090a4a0600b001c6d78610a8mr14591pjh.207.1647645495306;
-        Fri, 18 Mar 2022 16:18:15 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id cd20-20020a056a00421400b004fa7d1b35b6sm562516pfb.80.2022.03.18.16.18.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 16:18:14 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 16:18:14 -0700 (PDT)
-X-Google-Original-Date: Fri, 18 Mar 2022 16:18:09 PDT (-0700)
-Subject:     Re: [PATCH] riscv module: remove (NOLOAD)
-In-Reply-To: <YhEelqnPDr1u4uTD@dev-arch.archlinux-ax161>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     maskray@google.com, nathan@kernel.org
-Message-ID: <mhng-7fe2c5d9-a8e6-4123-ac5c-0c9190792520@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 18 Mar 2022 19:25:15 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26807CB02;
+        Fri, 18 Mar 2022 16:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647645835; x=1679181835;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fw5CouShSdBsa1NlwiPhlJnkwyVroPMYx6gZHCqRoXI=;
+  b=LUvLdZiFu7dMq7u5NoweMbG95MC0BC6pDhG1FLVul5Dgrz2MIGnynOcr
+   i3QOB68vgwK37nH00hnpmUzm9sjttn1nIrb3SHWZWEXQCLOfB+Cn2dgCS
+   iKyLVSqDljkNrtxebN6O0UVcI5tAnL7RiqraG/+ItFgeiMJh95vZtNwsC
+   y23VrwrH7uR1b0bg1My5wk64aTiLvZG3PIkTe/2KU6Jhmmq9PueS82jpk
+   EddnkujWnvgOpyhgVv8A5vlfC2FMrjyQ3krTZ/ugVQ8kWEaSIlofjxpmb
+   0JMJa2KdbRjxfsc+VWCjqUXLXQMqEBsaVu9rkpn6eJVs1WEsWeAuhSa66
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="237188681"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="237188681"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 16:23:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="581952226"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 18 Mar 2022 16:23:52 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nVLwl-000FHT-IT; Fri, 18 Mar 2022 23:23:51 +0000
+Date:   Sat, 19 Mar 2022 07:23:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Edmond Gagnon <egagnon@squareup.com>,
+        Kalle Valo <kvalo@codeaurora.org>
+Cc:     kbuild-all@lists.01.org, Edmond Gagnon <egagnon@squareup.com>,
+        Benjamin Li <benl@squareup.com>,
+        Jakub Kicinski <kuba@kernel.org>, wcn36xx@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] wcn36xx: Implement tx_rate reporting
+Message-ID: <202203190720.E8jZHrLo-lkp@intel.com>
+References: <20220318195804.4169686-3-egagnon@squareup.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318195804.4169686-3-egagnon@squareup.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 19 Feb 2022 08:45:10 PST (-0800), nathan@kernel.org wrote:
-> On Fri, Feb 18, 2022 at 12:26:11AM -0800, Fangrui Song wrote:
->> On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
->> inappropriate for .plt, .got, and .got.plt sections which are always
->> SHT_PROGBITS.
->>
->> In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
->> and (NOLOAD) will be essentially ignored. In ld.lld, since
->> https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
->> customize the output section type"), ld.lld will report a `section type
->> mismatch` error. Just remove (NOLOAD) to fix the error.
->>
->> [1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
->> section should be marked as not loadable" on
->> https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
->> outdated for ELF.
->
-> Thank you for the patch! As mentioned on the arm64 patch, this needs
-> your Signed-off-by tag. With that provided:
->
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
->
-> This needs to go to stable so that older trees with a newer toolchain do
-> not warn.
+Hi Edmond,
 
-Yep, just checking on that SOB line.  A 
+Thank you for the patch! Perhaps something to improve:
 
-Fixes: 596b0474d3d9 ("kbuild: preprocess module linker script")
+[auto build test WARNING on wireless-next/main]
+[also build test WARNING on kvalo-ath/ath-next next-20220318]
+[cannot apply to wireless/main kvalo-wireless-drivers/master v5.17-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-seems appropriate as well.
+url:    https://github.com/0day-ci/linux/commits/Edmond-Gagnon/wcn36xx-Implement-tx_rate-reporting/20220319-040030
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220319/202203190720.E8jZHrLo-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/ec06272b313bdabd805efd65a0a6c2a74b82803f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Edmond-Gagnon/wcn36xx-Implement-tx_rate-reporting/20220319-040030
+        git checkout ec06272b313bdabd805efd65a0a6c2a74b82803f
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/wireless/ath/wcn36xx/
 
-Thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
->> ---
->>  arch/riscv/include/asm/module.lds.h | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/riscv/include/asm/module.lds.h b/arch/riscv/include/asm/module.lds.h
->> index 4254ff2ff049..1075beae1ac6 100644
->> --- a/arch/riscv/include/asm/module.lds.h
->> +++ b/arch/riscv/include/asm/module.lds.h
->> @@ -2,8 +2,8 @@
->>  /* Copyright (C) 2017 Andes Technology Corporation */
->>  #ifdef CONFIG_MODULE_SECTIONS
->>  SECTIONS {
->> -	.plt (NOLOAD) : { BYTE(0) }
->> -	.got (NOLOAD) : { BYTE(0) }
->> -	.got.plt (NOLOAD) : { BYTE(0) }
->> +	.plt : { BYTE(0) }
->> +	.got : { BYTE(0) }
->> +	.got.plt : { BYTE(0) }
->>  }
->>  #endif
->> --
->> 2.35.1.265.g69c8d7142f-goog
->>
->>
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wireless/ath/wcn36xx/main.c:1604:6: warning: no previous prototype for 'wcn36xx_get_stats_work' [-Wmissing-prototypes]
+    1604 | void wcn36xx_get_stats_work(struct work_struct *work)
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/wcn36xx/main.c: In function 'wcn36xx_get_stats_work':
+>> drivers/net/wireless/ath/wcn36xx/main.c:1608:6: warning: variable 'stats_status' set but not used [-Wunused-but-set-variable]
+    1608 |  int stats_status;
+         |      ^~~~~~~~~~~~
+
+
+vim +/wcn36xx_get_stats_work +1604 drivers/net/wireless/ath/wcn36xx/main.c
+
+  1603	
+> 1604	void wcn36xx_get_stats_work(struct work_struct *work)
+  1605	{
+  1606		struct delayed_work *delayed_work = container_of(work, struct delayed_work, work);
+  1607		struct wcn36xx *wcn = container_of(delayed_work, struct wcn36xx, get_stats_work);
+> 1608		int stats_status;
+  1609	
+  1610		stats_status = wcn36xx_smd_get_stats(wcn, HAL_GLOBAL_CLASS_A_STATS_INFO);
+  1611	
+  1612		schedule_delayed_work(&wcn->get_stats_work, msecs_to_jiffies(WCN36XX_HAL_STATS_INTERVAL));
+  1613	}
+  1614	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

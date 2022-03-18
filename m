@@ -2,100 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483054DE40E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 23:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 851EE4DE41A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 23:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241324AbiCRWey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 18:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
+        id S241331AbiCRWgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 18:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbiCRWev (ORCPT
+        with ESMTP id S232757AbiCRWgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 18:34:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFD330CDAA;
-        Fri, 18 Mar 2022 15:33:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C9A5B825D5;
-        Fri, 18 Mar 2022 22:33:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E017C340ED;
-        Fri, 18 Mar 2022 22:33:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647642809;
-        bh=qI3HCaVnPopzq76RCyDfqmqAdYqunH01uTRZbf866/E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Z5TwEgdF//4M5OmCsB6AAkiINDIUp7vGWTnHQQ84+GhS0uHBFXlOn+Pod751y/gmv
-         z/bmRjuMjjEzJIwWarx8krJ+0FleS76ZwZBAHb0ZIXjSbxKnpXrYU646L9CZzL4k3S
-         BKJTcFozqUYwuv4zJuzW24TtYMqbh0Nh63AxIfCAx59n/+TlrSeLIc9Xl+fnkKECrx
-         kBB7BMUsSosFZpfXT7fKGV+gk1YgWu6KcNGmCBTSGgB9oJQjTK7vmr0M6sjrczNvXr
-         Q0YYgcuqVLazawCA6Kf7cmgKZloX/ONYlT/nYrOgeHsGGViH+WVyuIGIMv+73OvKzT
-         PM568R+zXRFEA==
-Message-ID: <98450e8a-b3e1-22d7-86fb-3c8456a36018@kernel.org>
-Date:   Fri, 18 Mar 2022 16:33:26 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH net-next v3 3/3] net: icmp: add reasons of the skb drops
- to icmp protocol
-Content-Language: en-US
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, xeb@mail.ru,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        Eric Dumazet <edumazet@google.com>, Martin Lau <kafai@fb.com>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Hao Peng <flyingpeng@tencent.com>,
-        Mengen Sun <mengensun@tencent.com>, dongli.zhang@oracle.com,
+        Fri, 18 Mar 2022 18:36:02 -0400
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762F330CDBA
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 15:34:42 -0700 (PDT)
+Received: from [IPv6:::1] ([IPv6:2601:646:8600:40c1:8f0c:2533:51ff:d719])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 22IMXbqB1001693
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Fri, 18 Mar 2022 15:33:37 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 22IMXbqB1001693
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022030301; t=1647642819;
+        bh=x1v0nq7kPt+f8iXcRaBG2tod+dalRNQHXEngMUyoFv0=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=wfzhfJmKI+EcGGBuGNNF7MHAcSmVBdhnqjh1Owep4oDnpzdedjVJFdokB68gVc1/u
+         ux6CpQ/XYpQnL/ZSjL4J7Edmi9UhV7/8aJUqqiZ0DavgKLcdZ2jSbKYn3ygpLyWJ3A
+         IPKBLexhQ6Q6ISTLI3U2f0AFAilY3aH4LCicE8rmzejW4eRETUHTTRZUNFzVN2cWCR
+         zcNp/uM0VqkCdejBzTg8jXdnZv2pcjPkSU1h7APbF1U/MZjuabG5EBIAbHVQt3rkaE
+         z/AlQhsfx70EW2kCGJ9Htt4uT2hwVw/cMsUwE5M7VF1L3sZOgzzZByNn0uocvnnFN3
+         +cg4QnKbJ5pfg==
+Date:   Fri, 18 Mar 2022 15:33:31 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Segher Boessenkool <segher@kernel.crashing.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+CC:     Andy Lutomirski <luto@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
         LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Biao Jiang <benbjiang@tencent.com>
-References: <20220316063148.700769-1-imagedong@tencent.com>
- <20220316063148.700769-4-imagedong@tencent.com>
- <20220316201853.0734280f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <4315b50e-9077-cc4b-010b-b38a2fbb7168@kernel.org>
- <20220316210534.06b6cfe0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <f787c35b-0984-ecaf-ad97-c7580fcdbbad@kernel.org>
- <CADxym3YM9FMFrTirxWQF7aDOpoEGq5bC4-xm2p0mF8shP+Q0Hw@mail.gmail.com>
- <a4032cff-0d48-2690-3c1f-a2ec6c54ffb4@kernel.org>
- <CADxym3bGVebdCTCXxg3xEcPwdfSQADLyPbLTJnPnwn+phqGp3A@mail.gmail.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <CADxym3bGVebdCTCXxg3xEcPwdfSQADLyPbLTJnPnwn+phqGp3A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Subject: Re: [PATCH v5] x86: use builtins to read eflags
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220318220901.GS614@gate.crashing.org>
+References: <CAGG=3QWh90r5C3gmTj9zxiJb-mwD=PGqGwZZTjAfyi1NCb1_9w@mail.gmail.com> <AC3D873E-A28B-41F1-8BF4-2F6F37BCEEB4@zytor.com> <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com> <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com> <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com> <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com> <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org> <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com> <20220318220901.GS614@gate.crashing.org>
+Message-ID: <8F6F31A0-0AFC-477D-8B5F-9E8B308CDDAA@zytor.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/18/22 1:26 AM, Menglong Dong wrote:
-> Yeah, PTYPE seems not suitable. I mean that replace SKB_DROP_REASON_PTYPE_ABSENT
-> that is used in __netif_receive_skb_core() with L3_PROTO, which means no L3
-> protocol handler (or other device handler) is not found for the
-> packet. This seems more
-> friendly and not code based.
-> 
->>> And use SKB_DROP_REASON_L4_PROTO for the L4 protocol problem,
->>> such as GRE version not supported, ICMP type not supported, etc.
-> Is this L4_PROTO followed by anyone?
+On March 18, 2022 3:09:01 PM PDT, Segher Boessenkool <segher@kernel=2Ecrash=
+ing=2Eorg> wrote:
+>On Fri, Mar 18, 2022 at 11:19:28AM -0700, Linus Torvalds wrote:
+>> Or rather, it's not the redzoning itself, but the fact that the
+>> compiler might use the word under the stack for random other things,
+>> and the pushf will then corrupt some local variable storage=2E
+>>=20
+>> I think it would be lovely to solve that in inline asm itself some way
+>> - by marking the stack pointer clobbered or something=2E
+>
+>Inline assembler does not allow you to change the stack pointer, in
+>principle=2E  You have to return everything to its original state before
+>you return control from the asm code, and you have to deal with what
+>happens if am interrupt comes in halfway through the asm, and all other
+>ABI things that may happen on your platform=2E
+>
+>> Because you have the same issue if an inline asm might need to do a
+>> function call - think magic calling conventions etc, but also possibly
+>> slow-path cases=2E
+>
+>Yes=2E  The compiler itself can deal with all the red zone restrictions -=
+-
+>precisely *because* it is in full control of the stack frame -- but
+>those restrictions are very real=2E  It generally is a very good idea to
+>have a redzone though, without it you pay much more than necessary for
+>frame setup and teardown in leaf functions (similar to some of what the
+>misnamed "shrink-wrapping" optimisation does, but the two are mostly
+>independent, the benefits add up)=2E
+>
+>> As mentioned, it's not an issue for the kernel proper due to
+>> -mno-red-zone which we need for entirely unrelated reasons=2E
+>
+>It might help to have some special clobber syntax that says "this asm
+>clobbers the red zone", so the compiler can arrange for the red zone to
+>contain nothing during the asm (it already does the same for function
+>calls, for example)=2E
+>
+>How bad is it to do the fail-safe general solution here though?  I=2Ee=2E=
+,
+>write actual assembler code:
+>
+># u16 getflags(void);
+>getflags:
+>	pushf
+>	pop %ax
+>	ret
+>
+>(or whatever the syntax is, my x86 is rusty)=2E
+>
+>> Side note and kind of related: we do have this in the kernel:
+>>=20
+>>   register unsigned long current_stack_pointer asm(_ASM_SP);
+>>   #define ASM_CALL_CONSTRAINT "+r" (current_stack_pointer)
+>>=20
+>> which *might* also solve the redzoning issue=2E
+>
+>The GCC documentation of inline asm says
+>  Another restriction is that the clobber list should not contain the
+>  stack pointer register=2E  This is because the compiler requires the
+>  value of the stack pointer to be the same after an 'asm' statement as
+>  it was on entry to the statement=2E  However, previous versions of GCC
+>  did not enforce this rule and allowed the stack pointer to appear in
+>  the list, with unclear semantics=2E  This behavior is deprecated and
+>  listing the stack pointer may become an error in future versions of
+>  GCC=2E
+>
+>> In the kernel we need it not because of redzoned stack use, but
+>> because we need the stack frame to be set up properly or objtool
+>> complains=2E
+>
+>If the kernel has special rules for the stack, it had better teach the
+>compiler about this special ABI, or there will be tears eventually=2E  If
+>the kernel requires only what the standard ABIs provide, it can trust
+>the compiler to do that correctly, this is one of the core jobs of a
+>compiler!
+>
+>
+>Segher
 
-how about just a generic
-	SKB_DROP_REASON_UNHANDLED_PROTO  /* protocol not implemented
-					  * or not supported
-					  */
-
-in place of current PTYPE_ABSENT (so a rename to remove a Linux code
-reference), and then use it for no L3 protocol handler, no L4 protocol
-handler, version extensions etc. The instruction pointer to symbol gives
-the context of the unsupported protocol.
+It is extremely common for inline assembly to be written using push/pop or=
+ call sequences, and not just because of eflags=2E In the kernel redzone is=
+ (currently) not supported (with FRED exception handling it would be possib=
+le to support it as a kernel-wide compile-time option), but there needs to =
+be a way to communicate this to the compiler=2E 

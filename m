@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF1C4DDF04
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0174DDF0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239303AbiCRQbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
+        id S238956AbiCRQbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239213AbiCRQbP (ORCPT
+        with ESMTP id S239160AbiCRQbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:31:15 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52194197FA7;
-        Fri, 18 Mar 2022 09:29:53 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22I7cSw2022149;
-        Fri, 18 Mar 2022 11:29:47 -0500
+        Fri, 18 Mar 2022 12:31:19 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3872197AF4;
+        Fri, 18 Mar 2022 09:29:58 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22ICwIRB029747;
+        Fri, 18 Mar 2022 11:29:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=E2Ca/oB4elvkgmoWONeTA/ymuvDOwmtGGZNN2Vs06l4=;
- b=gK6LEibl4YpQYcDDG50Pxr04y3AoWUWhnrDCQ9ts5+nNINsogqy6aYLgAYU5vlbBJUHi
- 2ivJ8aNZxed7hQG+IxHLTM23rw2KHw3xIqn8kPtztZd7x3yM+o2B/EQzklI9ckkOMakN
- AnBNfwc7RfSOJIqHxzSj6QNLfB8jWuYfrNTpbHUVq8/u0zJyfujb0mMDF+tz2jfxPLK9
- KBJqTkwJOYG89I+/EGT8JGJ+6EAuZ1OgIXDxBVMxfZMGMOjVTJXTzYADkh42I78EVqiN
- jIWzckj20Huzw2kO+2pnZ+KSo7tDZ5TMjpMKsQYcC23tbKVtTgDxzDgqCayB+51GHMBm uA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3et642efpx-3
+ bh=Hmp+e3L+kAYgJdvoCWrLD7ONmV9DbgAsNAh58tdvRMw=;
+ b=R1t1xPl0Hzih01vTatT/cMt5BOgywEkq9kPR06DjXwDsSVc3iOYdHveMfrWKF1zq4QXf
+ 4wOJq+snGqTzvwf7aymZN5Gr8y43Z2FWV2PiEr94z9kTQtJwiEN2knf1vI2cNUu5kc61
+ cKfIyHcVWmm4f2dlPDl0PjZ3dRlXmbKx7V2oJMTg5w5Ci1uUTOLrN9VblwymeD4q3npC
+ 0cadY15HPPIISZyf/ChVEfajR2AR7WVDuvipU4h+GkfthfU1dCFlj04MSsEXKXut3FNC
+ 5YBPB0rg7VcVkhU981/ab/Jr3F9wMsk7tCjKbvtT/+7Mm+g3f9aUwNJ3HMYxd2namjQM dA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3et5yp677a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 18 Mar 2022 11:29:47 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 18 Mar 2022 11:29:46 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 18 Mar
  2022 16:29:44 +0000
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
  Transport; Fri, 18 Mar 2022 16:29:44 +0000
 Received: from debianA11184.ad.cirrus.com (debianA11184.ad.cirrus.com [198.90.251.45])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 6766CB1A;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 786A411D1;
         Fri, 18 Mar 2022 16:29:44 +0000 (UTC)
 From:   Richard Fitzgerald <rf@opensource.cirrus.com>
 To:     <broonie@kernel.org>, <robh+dt@kernel.org>
 CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
-Subject: [PATCH 2/5] ASoC: soc-utils: Add helper to calculate BCLK from TDM info
-Date:   Fri, 18 Mar 2022 16:29:40 +0000
-Message-ID: <20220318162943.1578102-3-rf@opensource.cirrus.com>
+Subject: [PATCH 3/5] ASoC: soc-utils: Add kunit test for snd_soc_tdm_params_to_bclk()
+Date:   Fri, 18 Mar 2022 16:29:41 +0000
+Message-ID: <20220318162943.1578102-4-rf@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220318162943.1578102-1-rf@opensource.cirrus.com>
 References: <20220318162943.1578102-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: 8YMBUqMJvoIJEkQaCMBtoYLgA0rKSGzL
-X-Proofpoint-ORIG-GUID: 8YMBUqMJvoIJEkQaCMBtoYLgA0rKSGzL
+X-Proofpoint-ORIG-GUID: XGw-lCCx2IB54sRX3b7jkw8u0KfRZa45
+X-Proofpoint-GUID: XGw-lCCx2IB54sRX3b7jkw8u0KfRZa45
 X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,105 +66,260 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a helper function snd_soc_tdm_params_to_bclk() to calculate
-the bclk from params info and the tdm sots configuration.
+Create a new kunit test for soc-utils and use it to test
+snd_soc_tdm_params_to_bclk().
 
-When using a TDM frame of N slots of width W bits:
+The test uses a table of values to avoid the possibility that an
+on-the-fly generator contains the same algorithmic error as the
+function-under-test and so fails to detect a bug.
 
-   bclk = sample_rate * N * W
-
-As a convenience to simplify calling code, if the slot count or
-slot width are 0 a value will be obtained from the params. This
-allows calling code to use this one function to handle cases of
-TDM where only one parameter is fixed, or I2S where the slot width
-is fixed (for example to set a 32-bit slot for 24-bit samples).
-
-Also as a convenience the slot count can optionally be rounded up
-to a multiple. This is mainly useful for I2S systems, since I2S has
-two phases of LRCLK the number of slots is always a multiple of 2.
+There is no need to test every possible combination of values.
+Enough test cases are included to give confidence that the function
+is producing the correct results.
 
 Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 ---
- include/sound/soc.h   |  2 ++
- sound/soc/soc-utils.c | 45 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
+ sound/soc/Kconfig          |   9 +-
+ sound/soc/Makefile         |   5 +
+ sound/soc/soc-utils-test.c | 186 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 199 insertions(+), 1 deletion(-)
+ create mode 100644 sound/soc/soc-utils-test.c
 
-diff --git a/include/sound/soc.h b/include/sound/soc.h
-index e063b1ea9634..44dba25ccf9d 100644
---- a/include/sound/soc.h
-+++ b/include/sound/soc.h
-@@ -487,6 +487,8 @@ int snd_soc_calc_frame_size(int sample_size, int channels, int tdm_slots);
- int snd_soc_params_to_frame_size(struct snd_pcm_hw_params *params);
- int snd_soc_calc_bclk(int fs, int sample_size, int channels, int tdm_slots);
- int snd_soc_params_to_bclk(struct snd_pcm_hw_params *parms);
-+int snd_soc_tdm_params_to_bclk(struct snd_pcm_hw_params *params,
-+			       int tdm_width, int tdm_slots, int slot_multiple);
+diff --git a/sound/soc/Kconfig b/sound/soc/Kconfig
+index 5dcf77af07af..7d4747b6bab2 100644
+--- a/sound/soc/Kconfig
++++ b/sound/soc/Kconfig
+@@ -14,7 +14,7 @@ menuconfig SND_SOC
  
- /* set runtime hw params */
- int snd_soc_set_runtime_hwparams(struct snd_pcm_substream *substream,
-diff --git a/sound/soc/soc-utils.c b/sound/soc/soc-utils.c
-index a4efe7e52a8b..594cb311ff30 100644
---- a/sound/soc/soc-utils.c
-+++ b/sound/soc/soc-utils.c
-@@ -9,6 +9,7 @@
+ 	  If you want ASoC support, you should say Y here and also to the
+ 	  specific driver for your SoC platform below.
+-	  
++
+ 	  ASoC provides power efficient ALSA support for embedded battery powered
+ 	  SoC based systems like PDA's, Phones and Personal Media Players.
  
- #include <linux/platform_device.h>
- #include <linux/export.h>
-+#include <linux/math.h>
- #include <sound/core.h>
- #include <sound/pcm.h>
- #include <sound/pcm_params.h>
-@@ -52,6 +53,50 @@ int snd_soc_params_to_bclk(struct snd_pcm_hw_params *params)
- }
- EXPORT_SYMBOL_GPL(snd_soc_params_to_bclk);
+@@ -55,6 +55,13 @@ config SND_SOC_TOPOLOGY_KUNIT_TEST
+ 	  userspace applications such as pulseaudio, to prevent unnecessary
+ 	  problems.
  
-+/**
-+ * snd_soc_tdm_params_to_bclk - calculate bclk from params and tdm slot info.
-+ *
-+ * Calculate the bclk from the params sample rate and the tdm slot count and
-+ * tdm slot width. Either or both of tdm_width and tdm_slots can be 0.
-+ *
-+ * If tdm_width == 0 and tdm_slots > 0:	the params_width will be used.
-+ * If tdm_width > 0 and tdm_slots == 0:	the params_channels will be used
-+ *					as the slot count.
-+ * Both tdm_width and tdm_slots are 0:	this is equivalent to calling
-+ *					snd_soc_params_to_bclk().
-+ *
-+ * If slot_multiple > 1 the slot count (or params_channels if tdm_slots == 0)
-+ * will be rounded up to a multiple of this value. This is mainly useful for
-+ * I2S mode, which has a left and right phase so the number of slots is always
-+ * a multiple of 2.
-+ *
-+ * @params:        Pointer to struct_pcm_hw_params.
-+ * @tdm_width:     Width in bits of the tdm slots.
-+ * @tdm_slots:     Number of tdm slots per frame.
-+ * @slot_multiple: If >1 roundup slot count to a multiple of this value.
-+ *
-+ * Return: bclk frequency in Hz, else a negative error code if params format
-+ *	   is invalid.
-+ */
-+int snd_soc_tdm_params_to_bclk(struct snd_pcm_hw_params *params,
-+			       int tdm_width, int tdm_slots, int slot_multiple)
++config SND_SOC_UTILS_KUNIT_TEST
++	tristate "KUnit tests for SoC utils"
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  If you want to perform tests on ALSA SoC utils library say Y here.
++
+ config SND_SOC_ACPI
+ 	tristate
+ 
+diff --git a/sound/soc/Makefile b/sound/soc/Makefile
+index a7b37c06dc43..d4528962ac34 100644
+--- a/sound/soc/Makefile
++++ b/sound/soc/Makefile
+@@ -12,6 +12,11 @@ ifneq ($(CONFIG_SND_SOC_TOPOLOGY_KUNIT_TEST),)
+ obj-$(CONFIG_SND_SOC_TOPOLOGY_KUNIT_TEST) := soc-topology-test.o
+ endif
+ 
++ifneq ($(CONFIG_SND_SOC_UTILS_KUNIT_TEST),)
++# snd-soc-test-objs := soc-utils-test.o
++obj-$(CONFIG_SND_SOC_UTILS_KUNIT_TEST) := soc-utils-test.o
++endif
++
+ ifneq ($(CONFIG_SND_SOC_GENERIC_DMAENGINE_PCM),)
+ snd-soc-core-objs += soc-generic-dmaengine-pcm.o
+ endif
+diff --git a/sound/soc/soc-utils-test.c b/sound/soc/soc-utils-test.c
+new file mode 100644
+index 000000000000..5ad8e23af49a
+--- /dev/null
++++ b/sound/soc/soc-utils-test.c
+@@ -0,0 +1,186 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (C) 2022 Cirrus Logic, Inc. and
++//                    Cirrus Logic International Semiconductor Ltd.
++
++#include <kunit/test.h>
++#include <linux/module.h>
++#include <sound/pcm.h>
++#include <sound/pcm_params.h>
++#include <sound/soc.h>
++#include <uapi/sound/asound.h>
++
++static const struct {
++	u32 rate;
++	snd_pcm_format_t fmt;
++	u8 channels;
++	u8 tdm_width;
++	u8 tdm_slots;
++	u8 slot_multiple;
++	u32 bclk;
++} tdm_params_to_bclk_cases[] = {
++	/* rate		fmt	   channels tdm_width tdm_slots slot_multiple bclk */
++
++	/* From params only */
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 1,	0,	0,	0,	  128000 },
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 2,	0,	0,	0,	  256000 },
++	{   8000,  SNDRV_PCM_FORMAT_S24_LE, 1,	0,	0,	0,	  192000 },
++	{   8000,  SNDRV_PCM_FORMAT_S24_LE, 2,	0,	0,	0,	  384000 },
++	{   8000,  SNDRV_PCM_FORMAT_S32_LE, 1,	0,	0,	0,	  256000 },
++	{   8000,  SNDRV_PCM_FORMAT_S32_LE, 2,	0,	0,	0,	  512000 },
++	{  44100,  SNDRV_PCM_FORMAT_S16_LE, 1,	0,	0,	0,	  705600 },
++	{  44100,  SNDRV_PCM_FORMAT_S16_LE, 2,	0,	0,	0,	 1411200 },
++	{  44100,  SNDRV_PCM_FORMAT_S24_LE, 1,	0,	0,	0,	 1058400 },
++	{  44100,  SNDRV_PCM_FORMAT_S24_LE, 2,	0,	0,	0,	 2116800 },
++	{  44100,  SNDRV_PCM_FORMAT_S32_LE, 1,	0,	0,	0,	 1411200 },
++	{  44100,  SNDRV_PCM_FORMAT_S32_LE, 2,	0,	0,	0,	 2822400 },
++	{ 384000,  SNDRV_PCM_FORMAT_S16_LE, 1,	0,	0,	0,	 6144000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S16_LE, 2,	0,	0,	0,	12288000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S24_LE, 1,	0,	0,	0,	 9216000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S24_LE, 2,	0,	0,	0,	18432000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S32_LE, 1,	0,	0,	0,	12288000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S32_LE, 2,	0,	0,	0,	24576000 },
++
++	/* I2S from params */
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 1,	0,	0,	2,	  256000 },
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 2,	0,	0,	2,	  256000 },
++	{   8000,  SNDRV_PCM_FORMAT_S24_LE, 1,	0,	0,	2,	  384000 },
++	{   8000,  SNDRV_PCM_FORMAT_S24_LE, 2,	0,	0,	2,	  384000 },
++	{   8000,  SNDRV_PCM_FORMAT_S32_LE, 1,	0,	0,	2,	  512000 },
++	{   8000,  SNDRV_PCM_FORMAT_S32_LE, 2,	0,	0,	2,	  512000 },
++	{  44100,  SNDRV_PCM_FORMAT_S16_LE, 1,	0,	0,	2,	 1411200 },
++	{  44100,  SNDRV_PCM_FORMAT_S16_LE, 2,	0,	0,	2,	 1411200 },
++	{  44100,  SNDRV_PCM_FORMAT_S24_LE, 1,	0,	0,	2,	 2116800 },
++	{  44100,  SNDRV_PCM_FORMAT_S24_LE, 2,	0,	0,	2,	 2116800 },
++	{  44100,  SNDRV_PCM_FORMAT_S32_LE, 1,	0,	0,	2,	 2822400 },
++	{  44100,  SNDRV_PCM_FORMAT_S32_LE, 2,	0,	0,	2,	 2822400 },
++	{ 384000,  SNDRV_PCM_FORMAT_S16_LE, 1,	0,	0,	2,	12288000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S16_LE, 2,	0,	0,	2,	12288000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S24_LE, 1,	0,	0,	2,	18432000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S24_LE, 2,	0,	0,	2,	18432000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S32_LE, 1,	0,	0,	2,	24576000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S32_LE, 2,	0,	0,	2,	24576000 },
++
++	/* Fixed 8-slot TDM, other values from params */
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 1,	0,	8,	0,	 1024000 },
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 2,	0,	8,	0,	 1024000 },
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 3,	0,	8,	0,	 1024000 },
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 4,	0,	8,	0,	 1024000 },
++	{   8000,  SNDRV_PCM_FORMAT_S32_LE, 1,	0,	8,	0,	 2048000 },
++	{   8000,  SNDRV_PCM_FORMAT_S32_LE, 2,	0,	8,	0,	 2048000 },
++	{   8000,  SNDRV_PCM_FORMAT_S32_LE, 3,	0,	8,	0,	 2048000 },
++	{   8000,  SNDRV_PCM_FORMAT_S32_LE, 4,	0,	8,	0,	 2048000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S16_LE, 1,	0,	8,	0,	49152000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S16_LE, 2,	0,	8,	0,	49152000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S16_LE, 3,	0,	8,	0,	49152000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S16_LE, 4,	0,	8,	0,	49152000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S32_LE, 1,	0,	8,	0,	98304000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S32_LE, 2,	0,	8,	0,	98304000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S32_LE, 3,	0,	8,	0,	98304000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S32_LE, 4,	0,	8,	0,	98304000 },
++
++	/* Fixed 32-bit TDM, other values from params */
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 1,	32,	0,	0,	  256000 },
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 2,	32,	0,	0,	  512000 },
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 3,	32,	0,	0,	  768000 },
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 4,	32,	0,	0,	 1024000 },
++	{   8000,  SNDRV_PCM_FORMAT_S32_LE, 1,	32,	0,	0,	  256000 },
++	{   8000,  SNDRV_PCM_FORMAT_S32_LE, 2,	32,	0,	0,	  512000 },
++	{   8000,  SNDRV_PCM_FORMAT_S32_LE, 3,	32,	0,	0,	  768000 },
++	{   8000,  SNDRV_PCM_FORMAT_S32_LE, 4,	32,	0,	0,	 1024000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S16_LE, 1,	32,	0,	0,	12288000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S16_LE, 2,	32,	0,	0,	24576000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S16_LE, 3,	32,	0,	0,	36864000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S16_LE, 4,	32,	0,	0,	49152000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S32_LE, 1,	32,	0,	0,	12288000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S32_LE, 2,	32,	0,	0,	24576000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S32_LE, 3,	32,	0,	0,	36864000 },
++	{ 384000,  SNDRV_PCM_FORMAT_S32_LE, 4,	32,	0,	0,	49152000 },
++
++	/* Fixed 6-slot 24-bit TDM, other values from params */
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 1,	24,	6,	0,	 1152000 },
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 2,	24,	6,	0,	 1152000 },
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 3,	24,	6,	0,	 1152000 },
++	{   8000,  SNDRV_PCM_FORMAT_S16_LE, 4,	24,	6,	0,	 1152000 },
++	{   8000,  SNDRV_PCM_FORMAT_S24_LE, 1,	24,	6,	0,	 1152000 },
++	{   8000,  SNDRV_PCM_FORMAT_S24_LE, 2,	24,	6,	0,	 1152000 },
++	{   8000,  SNDRV_PCM_FORMAT_S24_LE, 3,	24,	6,	0,	 1152000 },
++	{   8000,  SNDRV_PCM_FORMAT_S24_LE, 4,	24,	6,	0,	 1152000 },
++	{ 192000,  SNDRV_PCM_FORMAT_S16_LE, 1,	24,	6,	0,	27648000 },
++	{ 192000,  SNDRV_PCM_FORMAT_S16_LE, 2,	24,	6,	0,	27648000 },
++	{ 192000,  SNDRV_PCM_FORMAT_S16_LE, 3,	24,	6,	0,	27648000 },
++	{ 192000,  SNDRV_PCM_FORMAT_S16_LE, 4,	24,	6,	0,	27648000 },
++	{ 192000,  SNDRV_PCM_FORMAT_S24_LE, 1,	24,	6,	0,	27648000 },
++	{ 192000,  SNDRV_PCM_FORMAT_S24_LE, 2,	24,	6,	0,	27648000 },
++	{ 192000,  SNDRV_PCM_FORMAT_S24_LE, 3,	24,	6,	0,	27648000 },
++	{ 192000,  SNDRV_PCM_FORMAT_S24_LE, 4,	24,	6,	0,	27648000 },
++};
++
++static void test_tdm_params_to_bclk_one(struct kunit *test,
++					unsigned int rate, snd_pcm_format_t fmt,
++					unsigned int channels,
++					unsigned int tdm_width, unsigned int tdm_slots,
++					unsigned int slot_multiple,
++					unsigned int expected_bclk)
 +{
-+	if (!tdm_slots)
-+		tdm_slots = params_channels(params);
++	struct snd_pcm_hw_params params;
++	int got_bclk;
 +
-+	if (slot_multiple > 1)
-+		tdm_slots = roundup(tdm_slots, slot_multiple);
++	_snd_pcm_hw_params_any(&params);
++	snd_mask_none(hw_param_mask(&params, SNDRV_PCM_HW_PARAM_FORMAT));
++	hw_param_interval(&params, SNDRV_PCM_HW_PARAM_RATE)->min = rate;
++	hw_param_interval(&params, SNDRV_PCM_HW_PARAM_RATE)->max = rate;
++	hw_param_interval(&params, SNDRV_PCM_HW_PARAM_CHANNELS)->min = channels;
++	hw_param_interval(&params, SNDRV_PCM_HW_PARAM_CHANNELS)->max = channels;
++	params_set_format(&params, fmt);
 +
-+	if (!tdm_width) {
-+		tdm_width = snd_pcm_format_width(params_format(params));
-+		if (tdm_width < 0)
-+			return tdm_width;
-+	}
-+
-+	return snd_soc_calc_bclk(params_rate(params), tdm_width, 1, tdm_slots);
++	got_bclk = snd_soc_tdm_params_to_bclk(&params, tdm_width, tdm_slots, slot_multiple);
++	pr_debug("%s: r=%u sb=%u ch=%u tw=%u ts=%u sm=%u expected=%u got=%d\n",
++		 __func__,
++		 rate, params_width(&params), channels, tdm_width, tdm_slots, slot_multiple,
++		 expected_bclk, got_bclk);
++	KUNIT_ASSERT_EQ(test, expected_bclk, (unsigned int)got_bclk);
 +}
-+EXPORT_SYMBOL_GPL(snd_soc_tdm_params_to_bclk);
 +
- static const struct snd_pcm_hardware dummy_dma_hardware = {
- 	/* Random values to keep userspace happy when checking constraints */
- 	.info			= SNDRV_PCM_INFO_INTERLEAVED |
++static void test_tdm_params_to_bclk(struct kunit *test)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(tdm_params_to_bclk_cases); ++i) {
++		test_tdm_params_to_bclk_one(test,
++					    tdm_params_to_bclk_cases[i].rate,
++					    tdm_params_to_bclk_cases[i].fmt,
++					    tdm_params_to_bclk_cases[i].channels,
++					    tdm_params_to_bclk_cases[i].tdm_width,
++					    tdm_params_to_bclk_cases[i].tdm_slots,
++					    tdm_params_to_bclk_cases[i].slot_multiple,
++					    tdm_params_to_bclk_cases[i].bclk);
++
++		if (tdm_params_to_bclk_cases[i].slot_multiple > 0)
++			continue;
++
++		/* Slot multiple 1 should have the same effect as multiple 0 */
++		test_tdm_params_to_bclk_one(test,
++					    tdm_params_to_bclk_cases[i].rate,
++					    tdm_params_to_bclk_cases[i].fmt,
++					    tdm_params_to_bclk_cases[i].channels,
++					    tdm_params_to_bclk_cases[i].tdm_width,
++					    tdm_params_to_bclk_cases[i].tdm_slots,
++					    1,
++					    tdm_params_to_bclk_cases[i].bclk);
++	}
++}
++
++static struct kunit_case soc_utils_test_cases[] = {
++	KUNIT_CASE(test_tdm_params_to_bclk),
++	{}
++};
++
++static struct kunit_suite soc_utils_test_suite = {
++	.name = "soc-utils",
++	.test_cases = soc_utils_test_cases,
++};
++
++kunit_test_suites(&soc_utils_test_suite);
++
++MODULE_DESCRIPTION("ASoC soc-utils kunit test");
++MODULE_LICENSE("GPL");
 -- 
 2.30.2
 

@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641A84DD605
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D354DD609
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 09:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbiCRIXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 04:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S233738AbiCRIYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 04:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbiCRIXj (ORCPT
+        with ESMTP id S232119AbiCRIYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:23:39 -0400
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F342B8802;
-        Fri, 18 Mar 2022 01:22:20 -0700 (PDT)
-Received: by mail-lf1-f41.google.com with SMTP id bt26so12949165lfb.3;
-        Fri, 18 Mar 2022 01:22:20 -0700 (PDT)
+        Fri, 18 Mar 2022 04:24:37 -0400
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4B08564B;
+        Fri, 18 Mar 2022 01:23:18 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id l20so12892964lfg.12;
+        Fri, 18 Mar 2022 01:23:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=WdC+9kFtPRLU8Xr2VfJ9VNN957Q7szvm+WcyzHVVvCM=;
-        b=ogYTvdJmrE50YCMN63x9iY9cKqES5AKjNptkcWxVQdxaJ5JRjL/P3X02JJD7SbbLXi
-         BS06lh0wRyc1/RXhqTIb6ygH+d5XEpQhmpRsY5+xXdCrdv2gM0SXxUa772gKrsY5I1Xj
-         Xx7BX1vbw/dEQtAhlY3Nwx8YnwbKViHvsdPinoBvzsf0q18ikRKcRgAJs4+omYBAr66H
-         s8PudQuFx49KX7CTwy8YYrPvURJqCKjHe67PtCpol7tcZwvnet/UQt9ZYSTNpq9ozLQE
-         xdZL3XufUMOVZvxHg4M0qfBO+N7fTKDL+Xebkzk+v2ecYL1B/B2Eg3M3xzw49GMvl527
-         D57Q==
-X-Gm-Message-State: AOAM5304pgv0Bs8wlliYs5bFP0HNAoWj/ll3AD1usBTfR3m1EqrZA9Mq
-        Ruvw9XXvLJFQgJnNNKFCfi4=
-X-Google-Smtp-Source: ABdhPJz5lbLQuVCD9p9A3FJwZ+IiYyxcDv4MnFzvf0qDcUGcB4EpfyR7zk6qTULeykX0YXOXi11BJg==
-X-Received: by 2002:a05:6512:22c9:b0:448:9448:2b4f with SMTP id g9-20020a05651222c900b0044894482b4fmr5307745lfu.194.1647591739099;
-        Fri, 18 Mar 2022 01:22:19 -0700 (PDT)
+        bh=Dqb0ePcD+b4TLrpjZ4Tf1aNS6FbhCEj7cj4RHoou8S4=;
+        b=cmSfycSSApQ1TQbGMIjPmMDyEONVNiyf6LmAgV0GeS/RT1z97KAAlAigQphp64vP64
+         erzuQzXEhfLS57UGcK5DipZ5F70yagFKuPsa9iY3LLJ3j8xk2lJb2M8d8zgTBNrRubPZ
+         0QFczaPFbxcyYXEXW+47NZEb4U5YoJtAHZ3N4DQjIlRSowVIbRUs1ZhunJmIc76N99xn
+         8nwTr3WccVW0xtAz9reEtKuDIv/RRjRffeba62XIloj4y3p/cZGWY85853k2Y42NjPJU
+         bnnGzRWkssdvdIT80loKeoDsyTuVxElDFHN4qri/YhqSIP2o4wPUCo/C78AItSm7v9Jk
+         nvrw==
+X-Gm-Message-State: AOAM531X5e/zo1LuHh3e0XHawGEpm5A8EAcow4y6EDbUe4yE8sJFgOiA
+        IcoVDny+QwdraYNk3xXoaqw=
+X-Google-Smtp-Source: ABdhPJxRoKIVXIPH+RNx8CFPaHmYc10pgsp6noaAts7Pr/w3SgSSz8FVUcMbe1YpmF/TWXO/0zsQXQ==
+X-Received: by 2002:ac2:4c45:0:b0:449:fa17:5917 with SMTP id o5-20020ac24c45000000b00449fa175917mr3973606lfk.133.1647591796844;
+        Fri, 18 Mar 2022 01:23:16 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id f11-20020a056512322b00b00447ead80e8csm742202lfe.188.2022.03.18.01.22.17
+        by smtp.googlemail.com with ESMTPSA id f15-20020a056512228f00b0044758100491sm743659lfu.116.2022.03.18.01.23.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 01:22:18 -0700 (PDT)
-Message-ID: <facf5551-bfc7-aeb4-daed-5bfcb8a36475@kernel.org>
-Date:   Fri, 18 Mar 2022 09:22:16 +0100
+        Fri, 18 Mar 2022 01:23:16 -0700 (PDT)
+Message-ID: <99a2766a-610f-a164-a0e4-72d490dc13e4@kernel.org>
+Date:   Fri, 18 Mar 2022 09:23:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 2/4] power: supply: max17042_battery: use ModelCfg refresh
- on max17055
+Subject: Re: [PATCH 3/4] dt-bindings: power: supply: max17042: Add
+ monitored-battery phandle
 Content-Language: en-US
 To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -53,9 +53,9 @@ To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
 Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
- <20220318001048.20922-3-sebastian.krzyszkowiak@puri.sm>
+ <20220318001048.20922-4-sebastian.krzyszkowiak@puri.sm>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220318001048.20922-3-sebastian.krzyszkowiak@puri.sm>
+In-Reply-To: <20220318001048.20922-4-sebastian.krzyszkowiak@puri.sm>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -70,50 +70,18 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
-> Unlike other models, max17055 doesn't require cell characterization
-> data and operates on smaller amount of input variables (DesignCap,
-> VEmpty, IChgTerm and ModelCfg). Input data can already be filled in
-> by max17042_override_por_values, however model refresh bit has to be
-> set after adjusting input variables in order to make them apply.
+> In order to let the driver know about the characteristics of the monitored
+> battery, allow a standard "monitored-battery" property to be specified.
 > 
+> Cc: devicetree@vger.kernel.org
 > Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 > ---
->  drivers/power/supply/max17042_battery.c | 73 +++++++++++++++----------
->  include/linux/power/max17042_battery.h  |  3 +
->  2 files changed, 48 insertions(+), 28 deletions(-)
+>  .../devicetree/bindings/power/supply/maxim,max17042.yaml      | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-> index c019d6c52363..c39250349a1d 100644
-> --- a/drivers/power/supply/max17042_battery.c
-> +++ b/drivers/power/supply/max17042_battery.c
-> @@ -806,6 +806,13 @@ static inline void max17042_override_por_values(struct max17042_chip *chip)
->  	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055)) {
->  		max17042_override_por(map, MAX17047_V_empty, config->vempty);
->  	}
-> +
-> +	if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055) {
-> +		max17042_override_por(map, MAX17055_ModelCfg, config->model_cfg);
-> +		// VChg is 1 by default, so allow it to be set to 0
 
-Consistent comment, so /* */
 
-I actually do not understand fully the comment and the code. You write
-entire model_cfg to MAX17055_ModelCfg and then immediately do it again,
-but with smaller mask. Why?
-
-> +		regmap_update_bits(map, MAX17055_ModelCfg,
-> +				MAX17055_MODELCFG_VCHG_BIT, config->model_cfg);
-
-Can you align the continued line with previous line? Same in other
-places if it is not aligned.
-
-> +	}
->  }
->  
->  static int max17042_init_chip(struct max17042_chip *chip)
-> @@ -814,44 +821,54 @@ static int max17042_init_chip(struct max17042_chip *chip)
->  	int ret;
->  
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
 
 Best regards,

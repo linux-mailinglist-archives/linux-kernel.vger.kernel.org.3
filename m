@@ -2,68 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1181F4DD4AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 07:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6012C4DD4B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 07:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbiCRGU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 02:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
+        id S232718AbiCRGaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 02:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiCRGUV (ORCPT
+        with ESMTP id S232712AbiCRG3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 02:20:21 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9145141D86;
-        Thu, 17 Mar 2022 23:19:02 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id kd12so5881882qvb.1;
-        Thu, 17 Mar 2022 23:19:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mdtS4i3yY9UNNOjJROv83jggfwRN/yRDkWJuxc/obNE=;
-        b=VK1XyM1461bgnDLYwq5WW39C4DA1YJKtE4R7hEKsgDcY2KpARw6EAR/kIwCsD+6cpz
-         mB017TbaQqs+AOWXXXTawLEhwdOTRFIabU80XGkvukwlRwIavxYLNkusuiuYgvrAmm1I
-         PerPiFbgrQGXXwAmQzj/7tIXZf1Ytj9tQ1Yr4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mdtS4i3yY9UNNOjJROv83jggfwRN/yRDkWJuxc/obNE=;
-        b=BI5p+ekYIBCl/MDKel9OQDEKxar3Q30usR71gZ6bpom5EnpJsXbVcRk1PaNBh3/xZx
-         ETPVH/wFYCHjmfrQbhOZ/DtMbAq9g4GuLx1QKfWbCVaipSMhCWs9oswVp9itnYY+cfQV
-         +R0gDo+cqzYE831AhTFyQG078JKSdoFa/ctF1tCseCkfNAotWLzDmL005qad65HU2MsG
-         /qg9OBeDwSKe9Tzaf80uahi6OBjcgSCYTCFQFrvHxrZ5ebvzjluVd+ut5T2cIm7mD3w7
-         zQns0RVGxcyUHC7aX3Jg3g/znEbcJwplLUaFW37P4HIPxVt7MdK7NgAUJhwfBnVAODVc
-         mh7w==
-X-Gm-Message-State: AOAM533DMa1/vgMkwjlyAOeIeutlE01eagOPwdV/Ew1pPjBE4JiiIJHu
-        swU2pfNhYZb95kUPqe2gdUE1F0sEKrvZyenXMXo/Ve4pbt3U/g==
-X-Google-Smtp-Source: ABdhPJxDDiTwL1J4WiCgUpWFC5w+o/LTsTpo9wXxAlaNierkjtHTP73dvxn7PsqnCUm9JvQztmVV+DKZs9+5Da/fAHM=
-X-Received: by 2002:ad4:5fc5:0:b0:435:4420:d056 with SMTP id
- jq5-20020ad45fc5000000b004354420d056mr6090637qvb.130.1647584342048; Thu, 17
- Mar 2022 23:19:02 -0700 (PDT)
+        Fri, 18 Mar 2022 02:29:54 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5E41118
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 23:28:36 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KKYvY1k6JzfYvf;
+        Fri, 18 Mar 2022 14:27:05 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 18 Mar 2022 14:28:34 +0800
+Subject: Re: [PATCH v3 2/2] mm/memory-failure.c: make non-LRU movable pages
+ unhandlable
+To:     David Hildenbrand <david@redhat.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <naoya.horiguchi@nec.com>, <shy828301@gmail.com>,
+        <mike.kravetz@oracle.com>
+References: <20220318073945.62164-1-linmiaohe@huawei.com>
+ <20220318073945.62164-3-linmiaohe@huawei.com>
+ <9f26eccb-d0f3-1c00-dce1-ab7fdd439fbb@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <6f613668-6cc8-13eb-df81-1bfc3d9e6f22@huawei.com>
+Date:   Fri, 18 Mar 2022 14:28:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20220317191527.96237-1-singh.kuldeep87k@gmail.com>
- <20220317191527.96237-4-singh.kuldeep87k@gmail.com> <87h77wxslh.wl-maz@kernel.org>
- <20220317211024.GA99538@9a2d8922b8f1> <87fsngxnff.wl-maz@kernel.org>
-In-Reply-To: <87fsngxnff.wl-maz@kernel.org>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Fri, 18 Mar 2022 06:18:50 +0000
-Message-ID: <CACPK8Xdv4bG=Haz5oe+gHotQ_B7=bMbZE3fNnHs-Ezy7Yje6Jg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] ARM: dts: aspeed: Remove arch timer clocks property
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <9f26eccb-d0f3-1c00-dce1-ab7fdd439fbb@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,54 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022 at 21:46, Marc Zyngier <maz@kernel.org> wrote:
->
-> On Thu, 17 Mar 2022 21:10:24 +0000,
-> Kuldeep Singh <singh.kuldeep87k@gmail.com> wrote:
+On 2022/3/17 20:11, David Hildenbrand wrote:
+> On 18.03.22 08:39, Miaohe Lin wrote:
+>> We can not really handle non-LRU movable pages in memory failure. Typically
+>> they are balloon, zsmalloc, etc. Assuming we run into a base (4K) non-LRU
+>> movable page, we could reach as far as identify_page_state(), it should not
+>> fall into any category except me_unknown. For the non-LRU compound movable
+>> pages, they could be taken for transhuge pages but it's unexpected to split
+>> non-LRU  movable pages using split_huge_page_to_list in memory_failure. So
+>> we could just simply make non-LRU  movable pages unhandlable to avoid these
+>> possible nasty cases.
+>>
+>> Suggested-by: Yang Shi <shy828301@gmail.com>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> Reviewed-by: Yang Shi <shy828301@gmail.com>
+>> Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>> ---
+>>  mm/memory-failure.c | 20 +++++++++++++-------
+>>  1 file changed, 13 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index ecf45961f3b6..bf14bea2ed93 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -1176,12 +1176,18 @@ void ClearPageHWPoisonTakenOff(struct page *page)
+>>   * does not return true for hugetlb or device memory pages, so it's assumed
+>>   * to be called only in the context where we never have such pages.
+>>   */
+>> -static inline bool HWPoisonHandlable(struct page *page)
+>> +static inline bool HWPoisonHandlable(struct page *page, unsigned long flags)
+>>  {
+>> -	return PageLRU(page) || __PageMovable(page) || is_free_buddy_page(page);
+>> +	bool movable = false;
+>> +
+>> +	/* Soft offline could mirgate non-LRU movable pages */
+> 
+> s/mirgate/migrate/
 
-> > >
-> > > >
-> > > > Moreover, clocks also matches incorrectly with the regex pattern.
-> > > > Remove this entry altogether to fix it.
-> > > > 'clocks' does not match any of the regexes: 'pinctrl-[0-9]+'
-> > >
-> > > NAK. That's not a reason to randomly butcher things.
-> >
-> > I hope I explained my reasons above.
->
-> My position on this sort of change remains. Blindly changing existing
-> DTs based on a warning provided by a tool that totally ignores the
-> reality of what is out there is not acceptable.
+OK. My mistake.
 
-Thanks Marc for stating this. I share this view; we shouldn't go
-around deleting parts of device trees for the sake of the bindings.
-It's been happening across the tree, and I think it's to the detriment
-of the supported hardware.
+> 
+>> +	if ((flags & MF_SOFT_OFFLINE) && __PageMovable(page))
+>> +		movable = true;
+> 
+> simply "return true" and drop "bool movable".
 
-In the case of this particular change: I suspect this property was
-there for early bringup, before the firmware was in place to configure
-CNTFRQ. Looking back in time we had:
+OK.
 
- clock-frequency = <25000000>;
- arm,cpu-registers-not-fw-configured;
+> 
+>> +
+>> +	return movable || PageLRU(page) || is_free_buddy_page(page);
+> 
 
-I'm not sure why that changed from clock-frequency to clocks when the
-device tree was mainlined.
-
-That was bringup. These days, the vendor u-boot programs CNTFRQ with a
-value for the system. This code is also in mainline u-boot, so as long
-as you're running one of those firmwares the standard method will
-work.
-
-The qemu model also sets CNTFRQ, so loading the kernel without going
-through u-boot will be fine there too.
-
-Given that, I think we can go ahead with removing the property in this case.
-
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-
-I'll take the patch through my aspeed tree.
-
-Cheers,
-
-Joel
+Many thanks for comment!

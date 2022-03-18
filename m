@@ -2,105 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D294DE0A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACEC04DE0AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 19:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239948AbiCRSDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 14:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
+        id S239973AbiCRSFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 14:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiCRSDt (ORCPT
+        with ESMTP id S239003AbiCRSFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 14:03:49 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7782E8CFF;
-        Fri, 18 Mar 2022 11:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0Yy9CpCZpGFGgUuEZDwIZX23n2xP8D/MS6pjjuaf+JM=; b=NYskq7i5ZtPpWLlAkMYkR/LoTK
-        zRjWAbokWOXzl+7c1BzPUVaFL0Kh45L4+/WqPH7DtoZGuxLCCXwrfyoVNBCkKWGd6OFg2uSjBLyXx
-        yOdh8T3UdJ8+vnUKJFDPCdIlVzv04ktUVp0xXLXS5GbiaYyvI7DRl2MqBK382YHPb7qtHuDvYZAWO
-        UqlGqvaiR+qnja7Oc2OzN/Pm2IfevxZp/ZV7/i3aB1+GVeUG+zjhWvSonVEyBIuzaHiqhmkP8PQu9
-        obfxjy+UU6kK8TCAJjth+hCpY28s9KscdAENjEoyvQpY3AcukqNVJZe5vs8oQnv4kV3VTVGTQi4HL
-        jux9TOAg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nVGvi-002GhT-1v; Fri, 18 Mar 2022 18:02:26 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BB20598841D; Fri, 18 Mar 2022 19:02:25 +0100 (CET)
-Date:   Fri, 18 Mar 2022 19:02:25 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, seanjc@google.com
-Subject: Re: [PATCH v3 6/6] KVM: x86: allow defining return-0 static calls
-Message-ID: <20220318180225.GF14330@worktop.programming.kicks-ass.net>
-References: <20220217180831.288210-1-pbonzini@redhat.com>
- <20220217180831.288210-7-pbonzini@redhat.com>
- <3bbe3f8717cdf122f909a48e117dab6c09d8e0c8.camel@redhat.com>
- <1dc56110-5f1b-6140-937c-bf4a28ddbe87@redhat.com>
- <20220318172837.GQ8939@worktop.programming.kicks-ass.net>
- <20220318174732.GE14330@worktop.programming.kicks-ass.net>
+        Fri, 18 Mar 2022 14:05:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E2819BFC4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 11:03:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C196661AD2
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:03:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10289C340E8;
+        Fri, 18 Mar 2022 18:03:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647626621;
+        bh=ZdiwMW3roY3Dba6xowNXVsMAmxI6ZyKJcnpFjdDdosg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JoxqQDlN85SQ5TCOoq32HJPyyoTWVUgFLPj360G6n3EG+hr6RaW14jHLgeHpQySi3
+         Mf/yhurs31p/BsrD6EXrBNfdo2JGHYrGSGMwiDCmgMpOS7HgVdsFFIUn1B4lRQGQwu
+         v/LjXjR5ikSnp1U/18oQ0iky14U1uF8hhu/8nzEWtNWsZRxwmiCzijhZDSPypW9d3Q
+         Fz8dk2r8NM2ELN13tmRy1qyetAVE4z3Ux81bjlHP61x1xqxVV7jDx8aeMFpCZOSE4l
+         6CLGPGkd2PhqP0pAD4OpX3ALFCibkXc2EUIeSoe9bZ1PR7WnxDio3Ir4i8EWigknbl
+         h7qTeLxg1Rfxg==
+Date:   Sat, 19 Mar 2022 02:02:45 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     syzbot <syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com>
+Cc:     chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        xiang@kernel.org
+Subject: Re: [syzbot] WARNING: kobject bug in erofs_unregister_sysfs
+Message-ID: <YjTJRQb9eMXdsHOE@debian>
+Mail-Followup-To: syzbot <syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com>,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        xiang@kernel.org
+References: <000000000000dda2f905da80c934@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220318174732.GE14330@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <000000000000dda2f905da80c934@google.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 06:47:32PM +0100, Peter Zijlstra wrote:
-> On Fri, Mar 18, 2022 at 06:28:37PM +0100, Peter Zijlstra wrote:
-> > > Related to this, I don't see anything in arch/x86/kernel/static_call.c that
-> > > limits this code to x86-64:
-> > > 
-> > >                 if (func == &__static_call_return0) {
-> > >                         emulate = code;
-> > >                         code = &xor5rax;
-> > >                 }
-> > > 
-> > > 
-> > > On 32-bit, it will be patched as "dec ax; xor eax, eax" or something like
-> > > that.  Fortunately it doesn't corrupt any callee-save register but it is not
-> > > just a bit funky, it's also not a single instruction.
-> > 
-> > Urggghh.. that's fairly yuck. So there's two options I suppose:
-> > 
-> > 	0x66, 0x66, 0x66, 0x31, 0xc0
+On Fri, Mar 18, 2022 at 09:39:20AM -0700, syzbot wrote:
+> Hello,
 > 
-> Argh, that turns into: xorw %ax, %ax.
+> syzbot found the following issue on:
 > 
-> Let me see if there's another option.
+> HEAD commit:    91265a6da44d Add linux-next specific files for 20220303
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11007413700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=617f79440a35673a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=f05ba4652c0471416eaf
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=137f17d9700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=114ebabd700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com
 
-Amazingly:
+It has already been fixed with
+https://lore.kernel.org/r/20220315132814.12332-1-dzm91@hust.edu.cn
 
-  0x2e, 0x2e, 0x2e, 0x31, 0xc0
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev
 
-seems to actually work.. I've build and ran and decoded the below on
-32bit and 64bit (arguably on the same 64bit host).
+Thanks,
+Gao Xiang
 
-
----
-#include <stdio.h>
-
-long zero(void)
-{
-	long z = -1L;
-
-	asm (".byte 0x2e, 0x2e, 0x2e, 0x31, 0xc0" : "=a" (z) );
-
-	return z;
-}
-
-void main(void)
-{
-	printf("%ld\n", zero());
-}
+> 
+> RBP: 00007fff8eeb06e0 R08: 00007fff8eeb0720 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000286 R12: 00000000200000b0
+> R13: 0000000000000004 R14: 0000000000000005 R15: 0000000000000002
+>  </TASK>
+> ------------[ cut here ]------------
+> kobject: '(null)' (ffff888077324190): is not initialized, yet kobject_put() is being called.
+> WARNING: CPU: 0 PID: 3610 at lib/kobject.c:750 kobject_put+0x22b/0x540 lib/kobject.c:750
+> Modules linked in:
+> CPU: 0 PID: 3610 Comm: syz-executor471 Not tainted 5.17.0-rc6-next-20220303-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:kobject_put+0x22b/0x540 lib/kobject.c:750
+> Code: e8 6a 83 67 fd 48 89 e8 48 c1 e8 03 42 80 3c 20 00 0f 85 94 02 00 00 48 8b 75 00 48 89 ea 48 c7 c7 c0 0d 2a 8a e8 c1 5b 07 05 <0f> 0b e9 32 fe ff ff e8 39 83 67 fd 4d 89 f9 48 89 e9 4c 89 f2 49
+> RSP: 0018:ffffc90003b9fc48 EFLAGS: 00010286
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: ffff88801c67ba80 RSI: ffffffff81602878 RDI: fffff52000773f7b
+> RBP: ffff888077324190 R08: 0000000000000000 R09: 0000000000000000
+> R10: ffffffff815fd23e R11: 0000000000000000 R12: dffffc0000000000
+> R13: ffff8880773241cc R14: ffff888073799cf8 R15: ffff8880207dc068
+> FS:  0000555556165300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fff8eeb1000 CR3: 000000001ac3f000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  erofs_unregister_sysfs+0x46/0x60 fs/erofs/sysfs.c:225
+>  erofs_put_super+0x37/0xb0 fs/erofs/super.c:771
+>  generic_shutdown_super+0x14c/0x400 fs/super.c:462
+>  kill_block_super+0x97/0xf0 fs/super.c:1394
+>  erofs_kill_sb+0x60/0x190 fs/erofs/super.c:752
+>  deactivate_locked_super+0x94/0x160 fs/super.c:332
+>  get_tree_bdev+0x573/0x760 fs/super.c:1294
+>  vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+>  do_new_mount fs/namespace.c:3025 [inline]
+>  path_mount+0x1320/0x1fa0 fs/namespace.c:3355
+>  do_mount fs/namespace.c:3368 [inline]
+>  __do_sys_mount fs/namespace.c:3576 [inline]
+>  __se_sys_mount fs/namespace.c:3553 [inline]
+>  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3553
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7fa80fa1344a
+> Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 a8 00 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007fff8eeb06c8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+> RAX: ffffffffffffffda RBX: 00007fff8eeb0720 RCX: 00007fa80fa1344a
+> RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007fff8eeb06e0
+> RBP: 00007fff8eeb06e0 R08: 00007fff8eeb0720 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000286 R12: 00000000200000b0
+> R13: 0000000000000004 R14: 0000000000000005 R15: 0000000000000002
+>  </TASK>
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches

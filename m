@@ -2,52 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0D74DE01A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E284DE028
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 18:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235185AbiCRRmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 13:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
+        id S239724AbiCRRo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 13:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239707AbiCRRmT (ORCPT
+        with ESMTP id S239714AbiCRRoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 13:42:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B16197AF1;
-        Fri, 18 Mar 2022 10:41:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4B7FB824F0;
-        Fri, 18 Mar 2022 17:40:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C420C340E8;
-        Fri, 18 Mar 2022 17:40:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647625257;
-        bh=y1kSwAeyUIPDD0WUz6meKPi7vm54XPFekIW69rri3cY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HCL2ClCbITt12Y9eqokJetjwA0tRnCwNDm412G4Ql1rs+kWvAlzVKXsC8JYDGSL6N
-         U95VkEqvnmbPNsg70bQc3bXxthHOUgXO69AT6NvQY4n1qkVYJ9GG//g5fduPgexaPE
-         0GZszFFZisqQiqD2OYD4MfVPlOx/c5HSdQS1g6vgGdX6g+HWh44YlOR81IrVV1mpVu
-         WIvlIaxL+7EE0zpw+10uHxyJxhabj6naed5nh4COB+flhrzzD/0ZxLE5Ceryx4Jyrh
-         vlVvBagxU0tJXKlRUdk78I8efZb7AM7NXI1xG8GhoEHVadnigj7Y9fV0kwk6Jynhgf
-         FReVWA2JgrjHw==
-Date:   Fri, 18 Mar 2022 11:40:55 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] nvmet: remove redundant assignment after left shift
-Message-ID: <YjTEJx2Uk2RN1+p5@C02CK6Q3MD6M>
-References: <20220318013014.90698-1-colin.i.king@gmail.com>
+        Fri, 18 Mar 2022 13:44:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 066A09F6C2;
+        Fri, 18 Mar 2022 10:43:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 977971515;
+        Fri, 18 Mar 2022 10:43:04 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 270B73F7B4;
+        Fri, 18 Mar 2022 10:43:03 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     joro@8bytes.org, baolu.lu@linux.intel.com,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
+Cc:     iommu@lists.linux-foundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mario.limonciello@amd.com, hch@lst.de
+Subject: [PATCH v2 0/2] thunderbolt: Make iommu_dma_protection more accurate
+Date:   Fri, 18 Mar 2022 17:42:56 +0000
+Message-Id: <cover.1647624084.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.28.0.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220318013014.90698-1-colin.i.king@gmail.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,16 +42,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 01:30:14AM +0000, Colin Ian King wrote:
-> The left shift is followed by a re-assignment back to cc_css,
-> the assignment is redundant. Fix this by replacing the <<=
-> operator with << instead.
-> 
-> Cleans up clang scan build warning:
-> drivers/nvme/target/core.c:1124:10: warning: Although the value
-> stored to 'cc_css' is used in the enclosing expression, the
-> value is never actually read from 'cc_css' [deadcode.DeadStores]
+OK, here's chapter 3 in the story of "but I really just want to
+remove iommu_present()", which is the second go at this approach
+on the Thunderbolt end, but now improving the IOMMU end as well
+since the subtlety of why that still matters has been clarified.
+Previous thread here:
 
-Looks good.
+https://lore.kernel.org/linux-iommu/f887686a-e7e4-f031-97e8-dbeb1c088095@arm.com/T/
 
-Reviewed-by: Keith Busch <kbusch@kernel.org>
+Thanks,
+Robin.
+
+
+Robin Murphy (2):
+  iommu: Add capability for pre-boot DMA protection
+  thunderbolt: Make iommu_dma_protection more accurate
+
+ drivers/iommu/intel/iommu.c  |  2 ++
+ drivers/thunderbolt/domain.c | 12 +++--------
+ drivers/thunderbolt/nhi.c    | 41 ++++++++++++++++++++++++++++++++++++
+ include/linux/iommu.h        |  7 ++++++
+ include/linux/thunderbolt.h  |  2 ++
+ 5 files changed, 55 insertions(+), 9 deletions(-)
+
+-- 
+2.28.0.dirty
+

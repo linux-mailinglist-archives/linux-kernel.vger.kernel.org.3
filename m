@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1904DD48B
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 06:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ABD34DD490
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 07:01:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbiCRGA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 02:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
+        id S232633AbiCRGCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 02:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiCRGA1 (ORCPT
+        with ESMTP id S229912AbiCRGCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 02:00:27 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2082.outbound.protection.outlook.com [40.107.223.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E432EB57B
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 22:59:09 -0700 (PDT)
+        Fri, 18 Mar 2022 02:02:13 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2074.outbound.protection.outlook.com [40.107.223.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8682EB57D
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 23:00:54 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DcwaBsNPy023DmaAXHjBCGAiQdOOVqztT+rViBrOYCoYSeWWGPzbUvTLxVGSd8zBvICd2C/Zt9AoWhU5/cj5iLStyreCoDfhBy0aAYnDEE50nWwl5MGScABGx5GrYxk+Nd2Bjs4bD3NvGxE+PEebVmxMV/7whA9YTCYU2rTS9GDt/dXGNd60IIbmSzdoDdDnkBZO/+Rr3DONcHsqpdBCjvbtpzA5nE686V7E+8PYuAXUlTe1L8p7G3sz5NcuaskGApZrK5KQpT2PKyjCqh8/BxG9FNYL3/hW4fTP+Q+KZ2y61wULuPn8664weA03WwBEP9aFkfdKoIQ8ZhjUbXWFlg==
+ b=Cig6z8qIKgdRBVjXo8xP0OmnoDpBW/PU8S5NVNGMyqormgqQfd9dn10wE34RfOJcvywOCzcOgIi+Co262Xd5KCjIev9E7lwkMhukT7ul1qUDY4uw7bPkbXNTF2ZkyBgFhDCI3Gh4LgvQ/aagd6bQel09gW2Vdu5bXDBK5obXBu8W/qFv4Th28JaxuiheUV9cB8RwS77iikMikwpNK+vYNsgDezSXh8x2hP5KdZFx4TFiYSlwzkWtIgshdlGEzhYyzAYv5vnUDy+l0DC4uUQ/KhOZZ4EpBXUc3/BHGlnW2jgkByrRil4hP6uCJsMYjBeHgKHsulpB8nTFEIqYmQZQog==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lCh6GmUXzrnJCdAMiDfY26axiq0ujeeb1vq13L2g7Yw=;
- b=emXV4+UAjswDxYXFhEjwo9McYgs0HlHzZTR8FXEovuokV5cszNnbuS+Roxy6zRtAQxfoBZIlHzWjyUxGbZA/emj7PTamJ+2FhoaJphCkaIGv7u8qRdXFDurbgptwCuY2htPF46Km8EJvWgnpFuGJ+vZaq+IUNYmgV96coS5LA/9HuNizWSPeYGKjTP1z1fSv3wC44cvRXzcs/BJKrCBizoCEX+aeBr9ioyg+r7p2tBqjW3cT5K0xjBEpo3FbFNsiqIDadNyRErbHKpMlDzwe6nHgnNtYeMDYW0J4WwJN/3cfBAnifUAf9KmwrjQj7ydEsV43IR1ehfpOuoyKtSQLTA==
+ bh=FJnfM67b0WZoHM19sGwdCrtCsA9UT9kUPn7jws6pRqk=;
+ b=fr53Ujh73+745Uv5agehK8uarUtml/DGhM5OQNyYIZkNWAKHom4ssGj/L/nEs7JKLkBMpC9uEuRFoOKF3/hNmaSF76NWG4YZoM03OmU3r87b9iOZcrixfc+UdTZIkCcRmkgDZ7Djj7+ytvMHqXNB19QeJPEpd8AAFnuVOiyxSA4rVAGFsquxLldt04/bcGtocJkIeVP+uAMdxEi0f++qFnOV3L8QL+cdOSthjGMP6fjd4HW47DMa6fobmZYG3q0612zrI9dOvkdFlwv1CRxKECwMPdA/Gfj0aidACebUesim+fnvfR1vTaeQA0OCcgbDgduWeZXeZX7BlJpysQFJSA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
  dkim=pass header.d=vmware.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lCh6GmUXzrnJCdAMiDfY26axiq0ujeeb1vq13L2g7Yw=;
- b=1cGfbJG/JgxR/TGvoiHy9GFn96cyOUQw5fT8q6IwynrmoOyPLVAVij3kG0YSHHc9PWrIgJLXK5VCPBlJ7lQeWv6MsXvM7ggvObplk9Ud/F44lL8N5ITfEwqRQ4rjR9LAslyNvtwzlp//w2avDwwbngk9FlMot/ZWlhS2IWsRBug=
+ bh=FJnfM67b0WZoHM19sGwdCrtCsA9UT9kUPn7jws6pRqk=;
+ b=RRfrvuRjTY3UNmYrrDSVbXrEHk+N2qX8/rljnwJ6vH4mKz2X0RccyzxXjvb7uTgT2i63/zrrkzVbX51fvYRINzKOWm5JsS6Zo74g6dQ3F5/CPc2XlKuXpvHCYP+c1w1HJ9OLbGURqaZRsWj/T7kOwJdvfh9WxHu80JzfpU6vE80=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vmware.com;
 Received: from BYAPR05MB3960.namprd05.prod.outlook.com (2603:10b6:a02:88::12)
  by BL0PR05MB4884.namprd05.prod.outlook.com (2603:10b6:208:57::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.7; Fri, 18 Mar
- 2022 05:59:07 +0000
+ 2022 06:00:52 +0000
 Received: from BYAPR05MB3960.namprd05.prod.outlook.com
  ([fe80::5d86:5648:18fe:a5ab]) by BYAPR05MB3960.namprd05.prod.outlook.com
  ([fe80::5d86:5648:18fe:a5ab%3]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
- 05:59:07 +0000
+ 06:00:52 +0000
 From:   vdasa@vmware.com
 To:     linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org
@@ -48,64 +48,64 @@ Cc:     gregkh@linuxfoundation.org, pv-drivers@vmware.com,
         bryantan@vmware.com, rjalisatgi@vmware.com,
         Vishnu Dasa <vdasa@vmware.com>,
         Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH RESEND] VMCI: Check exclusive_vectors when freeing interrupt 1
-Date:   Thu, 17 Mar 2022 22:58:43 -0700
-Message-Id: <20220318055843.30606-1-vdasa@vmware.com>
+Subject: [PATCH RESEND] VMCI: Release notification_bitmap in error path
+Date:   Thu, 17 Mar 2022 23:00:40 -0700
+Message-Id: <20220318060040.31621-1-vdasa@vmware.com>
 X-Mailer: git-send-email 2.35.1
 Reply-To: vdasa@vmware.com
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BY3PR04CA0016.namprd04.prod.outlook.com
- (2603:10b6:a03:217::21) To BYAPR05MB3960.namprd05.prod.outlook.com
+X-ClientProxiedBy: SJ0PR05CA0118.namprd05.prod.outlook.com
+ (2603:10b6:a03:334::33) To BYAPR05MB3960.namprd05.prod.outlook.com
  (2603:10b6:a02:88::12)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f7c9e37f-e8c8-45db-b3d7-08da08a469a0
+X-MS-Office365-Filtering-Correlation-Id: 50317b5e-6910-4a73-e41e-08da08a4a88f
 X-MS-TrafficTypeDiagnostic: BL0PR05MB4884:EE_
 X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
 X-MS-Exchange-AtpMessageProperties: SA|SL
-X-Microsoft-Antispam-PRVS: <BL0PR05MB488420B052811DF07CAECE6ACE139@BL0PR05MB4884.namprd05.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <BL0PR05MB48844F8F839C28A8C02217B3CE139@BL0PR05MB4884.namprd05.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xC4SLJgYnj6YWkL5GOy9ClBlobL5ZAWnHFW0I/Hrr5TifyE5wbzxOf/ocMGg33JJ77dD86AXUz0lYoknBSAT1e3EUxCp5ar9Artmh93ZVGY29SOcUiXUC0HvlYEGfxUAJnIFRFBvKAlxeODVf8nWlnKXjpVYr0xwBIa1xi0+5QHhfB0C++HSN+G9vic2NDZuqn5q6Gx7Kba9DRpxkB11JE6fex4trjQZ5NTcVR8SBuYM3Uyp7KbAAyLPZ9WFMqiQiQj2uYPyeD1qFVjfA4ieXp8r5xzIjh7dthfQlcGgq4ekZi67+iwnYe8JHbGBReAq9IhL43tyVZ5RFRXE4bBKE4q5Gc/r17voqdH5Bv3Ig4VwmlbhcdEcPt4Rntn8EUm3eFcETH1GVcpVMk/ojcZrgLHHcvIRn+aTKQKLFqDsV9MZe9IvcozxfnomyAl4nvNLr5OnYeBGr3y3r/fcwj4yPCDvTlKRmYdcUG/m6b2cH6sdWPHU6payOoIpArM2LUM0DqicsGM6m8BJHo/DD3nToqkk7Py+wYauwI5ebW9nvmqbSPP1V5/pkhEK/Xv0cloxBsh3cg6SO6XnG1OkuVITaFlx/TcLJTkyusbvnGejnCojnYYnUDRam2fesUc1b0hKi8UoUrDG5Mfd1JcyRac3zQZXucx7GW+jkyPIIHVCbtpwAjhW5V4d8X4GZnqG3qjxE4hBRsfFwvXFCD4Q9c68QQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR05MB3960.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(8676002)(4326008)(66476007)(66946007)(38350700002)(38100700002)(508600001)(86362001)(36756003)(6512007)(9686003)(6486002)(52116002)(26005)(186003)(6506007)(2616005)(54906003)(6666004)(8936002)(5660300002)(83380400001)(1076003)(2906002)(316002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: gd/F1dWl4Z3T+5wCETpnRst/kjQeeGO+GG2BA1WcxGkio8bK9TRquejlmyzh9HYyisw8chVDjI38VNEug5SjrhbkC+1IVYmd64pqDC5Kk8s618xgyvywXAKVg2M+jyv4FqqK0ZXIWvEFp5PLoQI3WOkkGjOA1fg7NO5VdzDpGapl3JL+ckRmaAzmu1PES5dOA9AH7EN6BBEFrHwqLePlVtzCudqxz8ejPtLW7/MrMoZc8nbwb/iuuuzHX0Zqn4k/pJSRdiACkcFIzFAQ1ySLHbAtwGrf/mKojVVkKSiICN0WRVNfMnaL10ad1UVFoOMzbZI1JYgBMBLH34rY2ZExaPeyJIPM3gxNfTBxdbUrsXxGBVcuUJ4qmudI9ppkDDt+Gy1HsYizctsXwI3j/oifDuiu4F3HS62yxRbhfnysJQUmErZw6wd2VAZ8p39hqt0SxvmQBZuRRl3H43elSF4+s1TDEN7Kbpfc5MsvWthgrFvoIChLwxl5Vnj/FTEvIzScK98895SpGTqYC6qvAe/NRsvnLX0+YW3703uUf4viF7lA/p4gVGFDKWuh9wEcCWv8VwWWFrU0EYoCWcVNQiW9QnI1F3DuoAljY1vb1dtTj/Bf/AO4rKpqOt3ltl+3VtafyTXe75BlvD+A0KAYUD+YjGRJV7QOPFCI8vsN9bk55l+yRRAWPlof6/iU/iSWMgycsZavCvIRPGiCnrAyYECf4w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR05MB3960.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(8676002)(4326008)(66476007)(66946007)(38350700002)(38100700002)(508600001)(86362001)(36756003)(6512007)(9686003)(6486002)(52116002)(26005)(186003)(6506007)(2616005)(54906003)(6666004)(8936002)(5660300002)(15650500001)(83380400001)(1076003)(2906002)(316002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6MV6gw46DNlf7sPR2iXuU65v0wfiMldYolOsVxV7li/HlDa0nmZ7qCxZn1Y9?=
- =?us-ascii?Q?/I0y20SRizxVEVlbFG5i7igIRkeLWPuEZAqyvnFQGVEdgQuYUA7C170U9iis?=
- =?us-ascii?Q?lIs2p+oQ7/LhQ+EfL3JTJJ3XGpzxgLubCm7bQf+rYI0HlvQ0Wz+5oY9R8UDk?=
- =?us-ascii?Q?4dQ2bAnAQSAK5cjtQivmXx0LIVSEJ/2qWJ/7L+NvY7sDr9nrNcpbeSNgO1E3?=
- =?us-ascii?Q?9kflDMjAWgPyhcxM4bUFKrsG7lMjHM/E/OTorVaOMU7tMAZuiYKccwzfaGUp?=
- =?us-ascii?Q?2v89k+56Ucz6//FyNrvimwcZ+EzBA7sCdrASAtzOlRW2VeCtLI5Bjuyuo287?=
- =?us-ascii?Q?eLbdA17BTauVnSYD36vfd+/ep32vXq2XKvNhq8Nog4ZkXpeOIdV/7KV3zEOb?=
- =?us-ascii?Q?aQx+SVkFLZYefj8FpKFaBtSdZlID82lRagIioYGK+o9oJdBuyF/5tpmWa8vX?=
- =?us-ascii?Q?VmpqtTdV3tUDFGtPIHv9QClFkzvVNUrue8uPVQxd1AtH7+HvzeYkCTSd7rUu?=
- =?us-ascii?Q?jvrnATgSv9+Or39WxnZYAU4Tx0pjCnD34Oy52Chj2LSVgMu2oGiTDdFxvKYC?=
- =?us-ascii?Q?nw0Bz/f2joBSTqTOwkelbmkMjkNSPgLz0GjPHth5daNCYQERnqYCW/o6fWFu?=
- =?us-ascii?Q?19mvXBngvaPftEoS6i6Ir9Q7ExZisdhnyYVHe7OkiLhJEsCpWwl34HiJlfYZ?=
- =?us-ascii?Q?/mHNMYDmMLcUooZb7ef14uFUiq/gKcZ5OIzoaPHt8lplzQyzw7LhZZsn/io/?=
- =?us-ascii?Q?Zj/5PairQfz89SrG2GrRnqBieQgrWUrpg48iEDxPftC8B/DZ9Fu3Kx2XyMzc?=
- =?us-ascii?Q?x+0lM6+8om02jFLkfa2mK4xJ3zBA05Do2QG7sOMFqT1OwZGrbSW9OA5rnSmF?=
- =?us-ascii?Q?yEePXr0P3FEM5g+d/KArHVoAWDLvyhwiZ8S3EiAvixFdW8tZKZJhzFqYdm4E?=
- =?us-ascii?Q?yOtMnpQG6Tz2Bszrj+4tLiotqnbqvd1iMBL0ZWVwu2p6fFPAnE2dQa7N/gMP?=
- =?us-ascii?Q?+ydj6YLytThL0feZPdlGu7bmUtOX0Yv1a5/2A/Q3XCw4W6D1B0NeWO6r3eV8?=
- =?us-ascii?Q?fOcmQ2QEDEcDxLAtpXTv3AFiVZsqdgyuF/pAF8oDsdF8gHwSEDK/nJvdopL4?=
- =?us-ascii?Q?IgqwO53AD1Cw8kNKXOOAjFheTZVf80ouGFyRAgfC+R386atY5AywOA+LJUPq?=
- =?us-ascii?Q?bnJVIdCwc5Cb+I5MTMbCdZqI3/4HvBZ///5s2t8Aav17UEBzvzuh+RCU0x4D?=
- =?us-ascii?Q?P6aM5ds6PxBiOe6dRhJnnsswHGCSCdzr4dtGWzPGG4pqj+v+w/E4iqCUUln5?=
- =?us-ascii?Q?Kzq85mzY0J9j4GB5ZAPd1XmYK+WlCN99414qYmciJfx3+naJD3uzl/p0hVx9?=
- =?us-ascii?Q?gT8bm6e+ID8ZsX9VBOBbEKl/3LvC5vz5s21M/6u52oM1H+Vas+oKn0JYHj0B?=
- =?us-ascii?Q?4YKbnNyWOiWUWo0X8yrgn4iYXaIi+qpZ?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?y8vTCBk73jKK2WLjsZhOOIB2qhY0bydwEc1/tUMjIFLLwEJl7syZbMnmAUWI?=
+ =?us-ascii?Q?3qnP+ssN9UJrUypfmBaY8s3LbZYmrarrSsrxs1KbFMGPWWpIlaOAmJWjrh82?=
+ =?us-ascii?Q?F1AVQaZd8I0wzNJYfnM/ArApVmHqgLrko2iumzojoiMarzcbQs7l21qNxWpx?=
+ =?us-ascii?Q?I2nzie8GvIZ7bJF/qEHeRyN2JuXIkrmZiCMQ/CdzAzY/reECjvrxKcwRniWT?=
+ =?us-ascii?Q?UBiENy3j59LIX+wNq5y3RkKAt/9PgduSSWfGDiuLypOLq1w87b4vWOjyWZ0T?=
+ =?us-ascii?Q?DVP5bG9+aGi58953XQR6+jYI88y/beaHUfbSlqeeZLNBUZ410fRWKWLuBbeR?=
+ =?us-ascii?Q?eeSmz2BARUNxUwq3Ev/G1NI2c+GSrZIROh99E8cxYaIGLvDwpu9brW/t5+J1?=
+ =?us-ascii?Q?umxjJpBV6+RIW+KfVlxUsTvD5edne+H0lEMuC3IxMuLsvsozl5eXBEvYzwAE?=
+ =?us-ascii?Q?YV4qe39KnGp8uypa2kUspIxJdSEHeaiFodUw5n0xKYYeuXEyGJYOHRBRvIq4?=
+ =?us-ascii?Q?DFyQk62iash+X7FlH9G1vgdIZoqzqfYt031vaLHaqD2kPuuhuLdfoe72RN/Q?=
+ =?us-ascii?Q?WXweflYNSpumpK+qP7I5UDtoyv+i5d96Qea2yL+ro4IzOFTw/w8B7A5sQGjS?=
+ =?us-ascii?Q?xlpiaqSbigqI/+73xtZo0JDXdm644VBe+7p4riEyGrZuT4LTmoBtMzlSoiG0?=
+ =?us-ascii?Q?r1fcucZQkIjRdPKIg51L2wUJXtvj/hvV7fx48xa158G9NlqZFYUJPetMsng9?=
+ =?us-ascii?Q?6y//mivk236orMWIwcpY1JXP0QY0AlDUOpdg6U7jo+t0+1gz1obgQrvR77i+?=
+ =?us-ascii?Q?xbQ/1yl9nFzhwmV/ZsvEMQOl9LZb78htLo2oGfc4R9KQXHqVudunuGVFhEwa?=
+ =?us-ascii?Q?E3QGTC/yIsvIXYrN7+CmVWlHi1RXUy4BAdGLUvV38rkTxWTQgvacRXi3G4+I?=
+ =?us-ascii?Q?b/7mLLOqxnG25G69eb1yehomq8RYU99dRmH2PKC3426ES1F/T1yIR6WzNqHs?=
+ =?us-ascii?Q?ehlV1GC7sHtwh21K51BddZwTFwR5hZCmdQbxhoF1Bj3bzSwp4o/9fk+j6S98?=
+ =?us-ascii?Q?burL9+HgVJDoMjO8SEf17fNfGAk8GBocqu+aMPqJsWpuAkUJBHT2Gr9lCtj1?=
+ =?us-ascii?Q?92Bb3VxAHFC+JqB9bDHkdNazyMA49UPWvlyoHAgqx+j8WkomQ9O50seAE2eP?=
+ =?us-ascii?Q?VnmJjjsOAF2wBzDJLKS0VDL8IkUu3Ktjmu4bRZqkw+aJ6DvK1033kq8snlBM?=
+ =?us-ascii?Q?Vn2p6xcoMFkWRxYeL/LVWSOkItpFO3nwnAvu33FQ/A0uXEu6EdduLefx1MSK?=
+ =?us-ascii?Q?LHZTgtXzBe1dao8JteQ3rmByMd8V0FNcayXTj7bYRWHllfT/D0VCYQkyDPKn?=
+ =?us-ascii?Q?OZ01hoFFNtdLUxPscr9z655kdGcMlJk4UTZ8UQ8RGIesq1zr+cgsnb+KKm2X?=
+ =?us-ascii?Q?xI2EVf/E7Hphq7TlYrMQl/7cwq5hBQQj?=
 X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f7c9e37f-e8c8-45db-b3d7-08da08a469a0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50317b5e-6910-4a73-e41e-08da08a4a88f
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR05MB3960.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 05:59:06.9425
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 06:00:52.4663
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KoEqnC2ynirtPCGuZCovj7v4XXX0JVgUkxF2bOytBHvkv3izgeBAl4dahFP0PHqjHrc0O1mPEdFD6Ih2MAJqMw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: TFc/ur6EILSjbZdmTdDAcdy4jWDd4aySPKdutovXWkQ8NpnREjRfoEwxRo56k9s8LBn4cNAEPOCWSkYZG7laNw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR05MB4884
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
@@ -119,34 +119,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Vishnu Dasa <vdasa@vmware.com>
 
-free_irq() may be called to free an interrupt that was not
-allocated.  Add missing 'if' statement to check for
-exclusive_vectors when freeing interrupt 1.
+notification_bitmap may not be released when VMCI_CAPS_DMA_DATAGRAM
+capability is missing from the device.  Add missing
+'err_free_notification_bitmap' label and use it instead of
+'err_free_data_buffers' to avoid this.
 
-Fixes: cc68f2177fcb ("VMCI: dma dg: register dummy IRQ handlers for DMA datagrams")
+Fixes: eed2298d9360 ("VMCI: dma dg: detect DMA datagram capability")
 Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 Reviewed-by: Bryan Tan <bryantan@vmware.com>
 Reviewed-by: Rajesh Jalisatgi <rjalisatgi@vmware.com>
 Signed-off-by: Vishnu Dasa <vdasa@vmware.com>
 ---
- drivers/misc/vmw_vmci/vmci_guest.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/misc/vmw_vmci/vmci_guest.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/misc/vmw_vmci/vmci_guest.c b/drivers/misc/vmw_vmci/vmci_guest.c
-index 6596a54daa88..57a6157209a1 100644
+index 981b19308e6f..6596a54daa88 100644
 --- a/drivers/misc/vmw_vmci/vmci_guest.c
 +++ b/drivers/misc/vmw_vmci/vmci_guest.c
-@@ -862,7 +862,9 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
- 	return 0;
+@@ -720,7 +720,7 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
+ 			dev_err(&pdev->dev,
+ 				"Missing capability: VMCI_CAPS_DMA_DATAGRAM\n");
+ 			error = -ENXIO;
+-			goto err_free_data_buffers;
++			goto err_free_notification_bitmap;
+ 		}
+ 	}
  
- err_free_bm_irq:
--	free_irq(pci_irq_vector(pdev, 1), vmci_dev);
-+	if (vmci_dev->exclusive_vectors)
-+		free_irq(pci_irq_vector(pdev, 1), vmci_dev);
-+
- err_free_irq:
- 	free_irq(pci_irq_vector(pdev, 0), vmci_dev);
- 	tasklet_kill(&vmci_dev->datagram_tasklet);
+@@ -884,6 +884,7 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
+ 	vmci_dev_g = NULL;
+ 	spin_unlock_irq(&vmci_dev_spinlock);
+ 
++err_free_notification_bitmap:
+ 	if (vmci_dev->notification_bitmap) {
+ 		vmci_write_reg(vmci_dev, VMCI_CONTROL_RESET, VMCI_CONTROL_ADDR);
+ 		dma_free_coherent(&pdev->dev, PAGE_SIZE,
 -- 
 2.25.1
 

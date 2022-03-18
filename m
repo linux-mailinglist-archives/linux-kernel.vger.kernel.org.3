@@ -2,123 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCA04DD70A
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:25:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8624DD70B
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 10:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234425AbiCRJ06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 05:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
+        id S234433AbiCRJ1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 05:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiCRJ0z (ORCPT
+        with ESMTP id S234443AbiCRJ1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 05:26:55 -0400
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50086.outbound.protection.outlook.com [40.107.5.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797A02AD0A9
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 02:25:36 -0700 (PDT)
+        Fri, 18 Mar 2022 05:27:09 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2107.outbound.protection.outlook.com [40.107.117.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6A42B5AD5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 02:25:48 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U3DNUTFmkx6KA+L/6elSUndAcEmfZURRQG3vcAIVI5Ic+oqcIJcxW7cv66+1SGU2nKxV/WT902kWcdo2KoriL9tnh43R3Up5Z2BfUH4sV7QYT2p16Dy1Zn0ErT62JRUi4KaEdCTzbJqiqrG32j9RZxL5ElKmGl4ZYXvTDiiA8+Ld0QdVQYBPBeB32d0SxKDhIxwcK724WxZgCk3RONU40WqcyT3rcmSDO1Clt18AN9Q/WtKrM1HOD26jg0zD4qaPgZyg96E7E5LEMBit6YBvr9WDR5HFpLfEXWovOb0bhfexeA1Al0WNdkkt1iV6JZyF+voaECx/RS0gR4/qSsSO0A==
+ b=jNxnSzjGqdutSzsDTPoIg/jJHKvrTdwGq4sn9jQ/zwESzlmCsTsxFLruUJOqUGK0GlYXK8cyR9H+VVafGBfAHG2VWJjeMW557a++0dJfRhiQ6MoTf3zXxLC6uHGqp2Nb2alnGt/3hx6zzQscVtYxYk6wBn/S3HVTUaBbK8vXjV7aCyNvSo4zBEKo0HqblSc0/Rs+Mvol+YQ740Z5XBycv6Eba8bcm3wbxEAxmxOB/WAI7HLEhJnQSzjIJOzUJqBYgC4KQ56jkTYYv2LJQBUibbvqg879xG8u5ymEvgsFxYYKel1MPyfURjRTTn5B59tDiguM+bAUyELewWLk52T7vw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1fVObxlB+VrJpVwemhItO0oMklaa5RLe6ab7u24PocY=;
- b=GxNhcBhxxsZoRZg+XwXb0tIk7OByR5nnGIMR3lq4kpMNmtN3rU9Opl0IDT8jOxXjzGrokyK9zJmCQsLKaxst2D+GZt9gd4nDQtABmqhLkplNQ50KUQZalnrblfJ6iaB4p01DWAGbCCz1L/36Xui+jh4eFysgnEI1gn+ZEdWL6p3hCJzjAShA2zZ77J5L9jvvTOME/GaWpRojYKwWabdo3M1whUT0bXPSy6Rtrsd1m3wCXH8kAC6jAa95BVMFivwXs9NOZSYrhG9Kw+/TdCv6Obi4sFK7otSExqn6vpSNcyavTB+pzWcn8Du/Mv32i/qMnHuc8KH4aipqEu47nGZnVw==
+ bh=esYWZXdkwMQo2u87gOmcsy5B4Ne0nTuYvbnqz1l/w4U=;
+ b=ICUo/eyM0j0HtdunuTACF+5ljPIitVVhSnR5c8L3g1ePuRfa5nN+2PGtEIhnXPlG1ngv/UlKX4jD23pDwuEbZTj2yXD6BzyfYnOOTk6VbpH/GLZBpChpQmaLIN3S0Oo4ONGLmuuFlRb22Oq6OuPc2fzag8aH8I/DTjLbNpH6dYqcPlclGyp3YhqmxrQTFd8E36nlwXbCiBR0fBoG21sppKtUGICSK6OSbzrn43H1moy/ebHUPFQrPoRWkbPwyeQVxmPcdRiruBpB1vd9PasN5mAuahGb9K7XbBCgaxjk4vXIwm4mGfWet0yz4CGMU13+XlpmtgXRGZjOwPLShFjhEQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1fVObxlB+VrJpVwemhItO0oMklaa5RLe6ab7u24PocY=;
- b=JQLH2I0TeXCEgYPJ2/vWaV7X5+Ou3B+THRg1OArkD/9dcY0MbkB6m7nr1EOnzr/xlZ5/+N79MSSh553wdWusbyiiH11WQjS0t1ovL9LsdTNC4WlW1hcRwj8ERtfdyv8vgzcin1lQX4Dr7GZ3aFNPR3Ql/ExAs9pkUozRkDsFD4c=
+ bh=esYWZXdkwMQo2u87gOmcsy5B4Ne0nTuYvbnqz1l/w4U=;
+ b=OPuUnuMewXnXWIxuaxMS0U24WzmWcGJk3yGl7YeewVtMEGQA67ZWWIQ5Gmq60l+stzQYwReOcf35J0EGZK0CK9f/solgft6v238tvHxOrLp0iDowRzWhtUx6eAqwVxAenPcNin4SWk1M0QelY+YIai+zLaIVuxWA9l4ndKCqvMc=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by PA4PR04MB7710.eurprd04.prod.outlook.com (2603:10a6:102:e6::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Fri, 18 Mar
- 2022 09:25:32 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::b09c:8ffe:8e02:7387]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::b09c:8ffe:8e02:7387%9]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
- 09:25:32 +0000
-Message-ID: <4bd97d512e95845d7dd5a44d7713c59832676ada.camel@oss.nxp.com>
-Subject: Re: [PATCH v2] drm/bridge: nwl-dsi: switch to devm_drm_of_get_bridge
-From:   Liu Ying <victor.liu@oss.nxp.com>
-To:     =?ISO-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Cc:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, p.zabel@pengutronix.de,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Date:   Fri, 18 Mar 2022 17:24:45 +0800
-In-Reply-To: <20220317175852.799432-1-jose.exposito89@gmail.com>
-References: <20220317175852.799432-1-jose.exposito89@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ PSAPR06MB4103.apcprd06.prod.outlook.com (2603:1096:301:30::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5081.14; Fri, 18 Mar 2022 09:25:45 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::9d3f:ff3b:1948:d732]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::9d3f:ff3b:1948:d732%4]) with mapi id 15.20.5081.017; Fri, 18 Mar 2022
+ 09:25:44 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
+        Abdun Nihaal <abdun.nihaal@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] staging: r8188eu: remove unnecessary memset in r8188eu
+Date:   Fri, 18 Mar 2022 17:24:48 +0800
+Message-Id: <20220318092459.519225-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.35.1
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: HK0PR01CA0066.apcprd01.prod.exchangelabs.com
- (2603:1096:203:a6::30) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0202.apcprd02.prod.outlook.com
+ (2603:1096:201:20::14) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ee3abe2e-5c91-492d-666a-08da08c13fd7
-X-MS-TrafficTypeDiagnostic: PA4PR04MB7710:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <PA4PR04MB771096753ABC299D91E13DC0D9139@PA4PR04MB7710.eurprd04.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 18485dbf-6bdd-4dea-3c1f-08da08c14751
+X-MS-TrafficTypeDiagnostic: PSAPR06MB4103:EE_
+X-Microsoft-Antispam-PRVS: <PSAPR06MB4103CC95759ACE97B08E3451AB139@PSAPR06MB4103.apcprd06.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EESW8RL4+e3nlgjfSCZCvBPPIEYsyiCTbwU1oVhtPjZWnP3MuIlJXVN+Caigdo603K6Y8+1xN006/i4on++l28OM05GY0vdcnlGjmeaq3HuRj6xdTBp7H21WJ/j+oc2Q8qOLBsEzbH2XUI7s1rEn1YkLMjwgZ8tmJ+2+x9bRclbLaJzio/bYktdEWFdzkt6nhON+OEBve+IbTnSBXFErzRZybjdFQ3wI07YEyA9XZ+pH57KmSylfVwTu3Pda4TA6UHM4dqOvbNoSgHTD39d9F3pjAC5xzHRfCo+qvSQZ7+xCU5iXlrSqr3ly+X/ciIQdg1j/Jmi+UAH8kUjAz+zle1oK76svo03CLJzJjnY1vXHUSMmS5oIuOar88TTgL1qwpWrQ0rxsKFD+6F+nay848htCbJIq+wiPG9fQd/JEvpxuYCMA3P7xovdBzpewLfw2zGKtNbnwBojd1kiGrTWUhMmYAng/uGqlMAEftuhdGqEcgNKrSTDl148JVmZIml2NBUkJjo9NlbjlRSXQtlmU21ajIP99vOBzRtP1YSFFhh/G8FffJVmWafgbnn03/GRGA2CMpIMAjhKKEylErUuXwa74vyl2cVRStjJ6JLmeeovuoH5/V2so4JAVGfCUGmA4u2zcgP9x7s870vNLhV4hxVpTywyM27FwmaX+GGeD4ChJOcS7hqNNiXzGEshUiNSi0o+K1VHqK/HoV0UQgeBVnVmBqJmoPUpw/LhVqkGXqNoqWoG15AUUQkGcEjSBTA+xwVdi3Qm8R0pqCX98sjEy+iTeCih4ha5V7hhcO1UHYCY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7416002)(86362001)(6486002)(508600001)(8936002)(66946007)(83380400001)(316002)(6916009)(66476007)(2906002)(66556008)(8676002)(38350700002)(38100700002)(52116002)(6666004)(4326008)(6512007)(6506007)(186003)(26005)(5660300002)(2616005)(99106002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ELltat1Sq2rLTQoBFzw7OoSk44jShcMJvrr9imjkVv1Jum7eDq4Xz3zMzR2yOFXok4Jul8yGd1qHupsCUCgMehOl+jtu6WTTEqHl6Vb7C33Z6BkOTnkWMpKbJUbUTgPhHq6Bzsaltlf5cb6byFWu99yejbgZk4diKhjG8RcQqyMgvegIGRnERy7WCZFX7Uze8q0CXIgib1iAmdNldm64KagthaEzU7K5AYuNswfDMnAs+7wPIyJEQulqv6amTklTLt7DNccjezzGuHPH8KY73Fv98Ph+x8Vz+e6u4iY8PgsaVno1jBqES9Iz/JbHTSrTd1LaZ+S6il1j+qwjdPBGrobXRNhjjzsiBG5x8w2mMM1Z0XgGLDMiBOLuLGPylOXAQJSumEmwIAEk1RzXTgr4D8OhDiEnqNC2abYbL5lgZfY3qnq225w/JZNAR74cIDqFZrzynLAGl8W3ua7rPKGc4PFSAydNj9KP9S3aqLwHRDQ0qlhsYgyh0D8fukDbHkugsZ0iREqepvqwLMseYcKr+4YMNl80pe1X6641KIYlDE4ht+On52Ap7+NZqPx/9rJx7W8FeHwhCbmHXqwchIN0hXzhO5TNYwQER1Jhwy3N9omAn3EccSAd2xC+i2kk9Qgrgdua9vhED4wnQkRgHj1rIraYkdhgfJr5Q1AKTr57iT5KER3D8yEl2Vc42VT0ztNz6zV/rwFSLEoBeoKbcTPMSw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(316002)(110136005)(2906002)(6486002)(186003)(52116002)(8936002)(6512007)(36756003)(5660300002)(83380400001)(66556008)(66476007)(66946007)(8676002)(107886003)(4326008)(2616005)(1076003)(38100700002)(38350700002)(6506007)(508600001)(26005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RVRxdTQxVzY3OTVtM3NoUGZLRWpxaWhFZDBrN2JxNk9IVEJmbzRvbXZXOHhh?=
- =?utf-8?B?WjM2NG55OVh4SGRnM211U2ZjSTN4SXZ5RlJmdTlDTC9RQmhidzJwOW5xUTJw?=
- =?utf-8?B?NUxGRVJmSHg5eFN0amsrSXlRU0xOSzQ5VHUxN08yYUxsQzNnTkJRMThkakJh?=
- =?utf-8?B?R21XUFhFM2lvRThzUncxVGJ3bmc0MU81RXozTWFiM2hNNVJUYkxaUVlLN3B2?=
- =?utf-8?B?QVVyRmw5ajdRSTR2TEtaWnJuTkhhR1kwL3RWZjlEYkN4Nm1DMTFYTUR6S1pi?=
- =?utf-8?B?UWFyUm9TUGNoOTUrZW5GRTc5dEZieEJteTZqd3loSmowRjVwdTdOck1xbmQz?=
- =?utf-8?B?UnlySFkyV1RpWkRiT0RIbWtkajhQZG1qZndmQnI2OHhNVzVoY0dUakVrM0o2?=
- =?utf-8?B?d2JuT1JXN2k3Zmh4MXNya3dMcHgzWUg1S3hjejc4eTcrUkYwaHFlblNsME1j?=
- =?utf-8?B?V3FCUEtEcHNtMlRXdmZ4SGR6cWppcWc2RktwY09GWEJNNTBBSndXWmZMSStq?=
- =?utf-8?B?TFlNaFpiUmxSdWcrT0pra0MzRVZKRUg0MnhPWkVNMk5LY3dQZ25sRHliMEhH?=
- =?utf-8?B?dERxK2N5TUhOcVhQTTFVL1U5RVhXSVRPTWlYTVR2MVAzTXpiNE5UVXR3c0Q2?=
- =?utf-8?B?Y3hTa2pwZDhpNS9DZVZBTjQzQU9jaUFDaDJNbzkwKzVYWW9nK0VVNFloR2ho?=
- =?utf-8?B?b2RiZENKQWF4Sk1Ma1g2QnllRjFzeEEycERMc1NNZXIwb1I5eVVMOEZtanVh?=
- =?utf-8?B?aGU3bytNRkJ4WVFLUG41dXNYemJudVRwNU10WkVzUmNzdVRxY0VKbHJJdVo5?=
- =?utf-8?B?Zm5CTW1HUEM0cUoybFRUVzY3QmcrWGcwdGsxakN3ZmhuVHIrZXY0MjEzVmNQ?=
- =?utf-8?B?cmZBMW1RQnJRQWVESGovRTdNa0loNWtMeUFINThBWFlLMituZkhuS2lzaVFS?=
- =?utf-8?B?UFpCeGU1ZU5mTTQ3bTNYZkhBc0MxUThYTGNiOERoN282QnNhUEtmQ0pjcVZP?=
- =?utf-8?B?UkFTUXNxaDJ5SlMyYmlSd0Q1QmRCMTRPaGNTK3VOYS9QT01KQ1NJVnhRZEQr?=
- =?utf-8?B?aVRqMXhOQ0NqWjNYdFVEMXFBQlZnUjBxZDJnRFFkTW14SXZqeGZadktXV3Fl?=
- =?utf-8?B?aUZSZ2JIL2h6U0pyU1Zpa2ZNNTlydFM1TURFNkwxM2U5Q0V2QjRNUWRBNDVT?=
- =?utf-8?B?R2dDeWZia2ZMZXZkVUxrZzlFdVAxblh0ZHBXb3VCZ3FKS0pnVStkU1lDM0c1?=
- =?utf-8?B?c2ErRjBtRDNKNXlhNXpOK2xuN2R3NVVVak9VOTNBY2hkaVlLMXVCbEZpSVFB?=
- =?utf-8?B?VEZkazVDUVF3cGNMa2Jqb1hCMlhPZEhsWmRGekt1cDR6ei9IMXVEZ1JvcnJK?=
- =?utf-8?B?WHBKMWN6LzNlOVNWSnllVEdHQVRDOC9mL3FZNVRYTitPOVIxdnU4ZGd5ZmRp?=
- =?utf-8?B?eHUyRzlZeTVGY0t3aGE2T3YrNGlzVXlmVmV2b2xrMHlIMk9LdUNxbGVqVzky?=
- =?utf-8?B?aDF0WGJWY2h2eUFtRUM3aWMxdEpjVE8zZEg0S2VhajJ5OWN3TjUwVGN4RjUv?=
- =?utf-8?B?bDVIby9hMWd6VWtvek1UU1RTTGJIWUlJWlJ6YTdnVG1YVnE4MVBQa0s5QWNO?=
- =?utf-8?B?alNKZVVGVVJVLzJnZWtmVXF0QklpWDhkTjhzdmE3QUNUOG10Q0FIVzRjdEFa?=
- =?utf-8?B?aEV1UlZob3NPZEFaSzRxdDlOZE5HNFU2MkdhdE9xZENTNHNRL2tFWkFOS29m?=
- =?utf-8?B?WTFqRC9Pait0VDZQN3gwbTlLRG9oQVpQUHdGQzZNZ3RLMkt6d3ZtR1JXS1dD?=
- =?utf-8?B?WWVWWFhsQ1h2ak96QVdpaE51OEZJamlFUHhLUHRaRnUzRkNiekVzeU5vcmps?=
- =?utf-8?B?VGZGcit0ZGRtNlFCMUF6WVVCTmtDVVdpVUVValRaR1JMM3V0OFdQcDJ2R0hi?=
- =?utf-8?B?S0trTkthWG5VUmpmaFloQkF2V3R3dHNoazFUV0JqMW0rSXA4MmVsM2V6VGxk?=
- =?utf-8?B?MlJ5UEJFanN3PT0=?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee3abe2e-5c91-492d-666a-08da08c13fd7
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cESWKf1MTfHycpBbqhAxE5S9ihGas9VwOEKzED4loTk3Fgml7fhomLT88U3A?=
+ =?us-ascii?Q?PztwQiYRD0eg8Wt1ZmLMEtTUEJ1jEmu/Py2o5xgcmxoVRCf8cWNQrNLRuYIE?=
+ =?us-ascii?Q?NnmlSinHSMuUdlfJaRH4Ha7whZIqQXovBP+EzmbLpcW+4DLjDx3PJcX/FDNs?=
+ =?us-ascii?Q?PqGF6svRYPEDemB6AQ8poapxqE47p9bXGgrucubCjE2MLYH43l4l/ucYDBLl?=
+ =?us-ascii?Q?z2o0J/BosgNicW6W46fGNyvGz+pcdy3kphaokCw+W2VZACobMBVrmCyX60A4?=
+ =?us-ascii?Q?+YwoUQ+M8u55CSI1YJ1MuB3jbr2/Mjll6UxdvC0Xx2Ca2+pfUV2JsgUr7WAx?=
+ =?us-ascii?Q?8/+KsgaMPV75PsGmVF78Gy7UMBSNhNM+w6l4RT/DCCYFygrsBjMNIyNa9W+K?=
+ =?us-ascii?Q?/p/YnTaZfsFihfNBkP+UHgpkP/QeIrYgKbgFAypfCZrz1M+Ft+4QBw5s32wu?=
+ =?us-ascii?Q?89d8iZE0H90gU/xHbN4nYJ0NAJ+DUvdwrYBDxq7hwnfMe5DBudk1UGLi7boG?=
+ =?us-ascii?Q?BPLejS3G+5uH8rNIFQaTeTLlJOS7Q/SXPi2gFfzmXbxScPMDohkDN1YyJbkh?=
+ =?us-ascii?Q?uLTfCiirClkDGp8i8kLKP4zM9ScdTnm9kYi9H8HIEF7VhalAzotXRe74wcuA?=
+ =?us-ascii?Q?9Et+0AdX/tp9k2KfrJ3C2BFEjU8fwOlxI+muARxQ57zUw7lBMN1Cx7qr70pL?=
+ =?us-ascii?Q?1J1U7RBy5gFN198qlT+jjSdWQNVq2/O8CN3DxNhU85AN86zULi2wHtb+yj8t?=
+ =?us-ascii?Q?7IfOJPu155Gk3wuLycky9lcC8rNCUzlA82gEKRElaPm6/RrKLp5GSUXKGiWy?=
+ =?us-ascii?Q?oHN+sBKuVRXal2dHJo8FCihA6cnXrxbOAFUp++/rskJbikBuH86xTXNgWsed?=
+ =?us-ascii?Q?ZLwKSPAjXF78MV4Oz7tvLdqOmAJ52hb3DZIK6QV7/FgI15h07XScCVfIDUCG?=
+ =?us-ascii?Q?d42AaSdqQtFDpp5iVps6lbzYYPAKbHOlnp35kD56f3nOzA0Nj2/pzEnVR5xI?=
+ =?us-ascii?Q?JmmtD8Bo+d3C/sgmLeWgKnRlcTMeG8C3/n3vDFOw0QS1gdSnOHYexGf5umi9?=
+ =?us-ascii?Q?2FUgmteWbhhL2/zshkLMhSr3VJ0lunWTQldPRU6G2muBWOKmQd95Ier4ZTgJ?=
+ =?us-ascii?Q?4RMzkq4Tn5XchfeVdWErdkVN2fcCo2TSvSQMGMxX15ppptvgdo//+ASRBEMX?=
+ =?us-ascii?Q?MTDzGeP+tGqN/ylyvZFOZJF2J0D621OTuoiqX0hB3//6E3BkXuKbhuzLMI65?=
+ =?us-ascii?Q?3hvcV91Wzd/k/FnJ7EaOnuUi3VFxUhrjl58uanpZG3srpwSK/L5JBY45Ml0I?=
+ =?us-ascii?Q?v/G6N6pleU29JiCPAfLx+KxZx+oZhuxnCXjxUNmj/7gqqkTSaPOWif/6pmv0?=
+ =?us-ascii?Q?17h0mxiNvzbxEsEGI/+NVx8M9dCnGfAkvg40SU+x3cIlyZXVeQT/km26BGBx?=
+ =?us-ascii?Q?rx7C+LcC7MaSsBDwkhLdPNgpPA97REAr?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18485dbf-6bdd-4dea-3c1f-08da08c14751
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 09:25:32.5243
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 09:25:44.8312
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EtzzuLC90JbI8H4omsWeoat/IrJgSq4SKwg3JiikiyQaQi3Nse6b5tnjQn8Bh3NaXsaiYOZd8MHm+3cz4J0ubA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7710
+X-MS-Exchange-CrossTenant-UserPrincipalName: Bdgu1UJsSSnVKV5xRZi7UEBnLQrkJIvBJlo+EAT8JpOJewnW8MhQ6hqVdYaACXp+dG/V+QS+Qjpv0BIMi7CuuA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4103
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,89 +114,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-03-17 at 18:58 +0100, José Expósito wrote:
-> The function "drm_of_find_panel_or_bridge" has been deprecated in
-> favor of "devm_drm_of_get_bridge".
-> 
-> Switch to the new function and reduce boilerplate.
-> 
-> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-> 
-> ---
-> 
-> v2: (Thanks to Liu Ying)
-> 
->  - Rebase on top of drm-misc-next
->  - Remove drm_of_panel_bridge_remove
-> ---
->  drivers/gpu/drm/bridge/nwl-dsi.c | 23 ++++-------------------
->  1 file changed, 4 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c
-> b/drivers/gpu/drm/bridge/nwl-dsi.c
-> index e34fb09b90b9..de62e3fc6a59 100644
-> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
-> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
-> @@ -912,19 +912,11 @@ static int nwl_dsi_bridge_attach(struct
-> drm_bridge *bridge,
->  {
->  	struct nwl_dsi *dsi = bridge_to_dsi(bridge);
->  	struct drm_bridge *panel_bridge;
-> -	struct drm_panel *panel;
-> -	int ret;
-> -
-> -	ret = drm_of_find_panel_or_bridge(dsi->dev->of_node, 1, 0,
-> &panel,
-> -					  &panel_bridge);
-> -	if (ret)
-> -		return ret;
->  
-> -	if (panel) {
-> -		panel_bridge = drm_panel_bridge_add(panel);
-> -		if (IS_ERR(panel_bridge))
-> -			return PTR_ERR(panel_bridge);
-> -	}
-> +	panel_bridge = devm_drm_of_get_bridge(dsi->dev, dsi->dev-
-> >of_node,
-> +					      1, 0);
-> +	if (IS_ERR(panel_bridge))
-> +		return PTR_ERR(panel_bridge);
->  
->  	if (!panel_bridge)
->  		return -EPROBE_DEFER;
+psetauthparm and precvpriv->pallocated_recv_buf are allocated by kzalloc().
+It is unnecessary to call memset again.
 
-I don't think panel_bridge can be NULL here, so this check can be
-removed.  However, even if this patch is not applied, the check is not
-necessary.  I think it can be removed with a separate patch.
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ drivers/staging/r8188eu/core/rtw_mlme.c      | 1 -
+ drivers/staging/r8188eu/hal/rtl8188eu_recv.c | 1 -
+ 2 files changed, 2 deletions(-)
 
-For this patch:
-Reviewed-by: Liu Ying <victor.liu@oss.nxp.com>
-
-> @@ -932,12 +924,6 @@ static int nwl_dsi_bridge_attach(struct
-> drm_bridge *bridge,
->  	return drm_bridge_attach(bridge->encoder, panel_bridge, bridge,
-> flags);
->  }
->  
-> -static void nwl_dsi_bridge_detach(struct drm_bridge *bridge)
-> -{	struct nwl_dsi *dsi = bridge_to_dsi(bridge);
-> -
-> -	drm_of_panel_bridge_remove(dsi->dev->of_node, 1, 0);
-> -}
-> -
->  static u32 *nwl_bridge_atomic_get_input_bus_fmts(struct drm_bridge
-> *bridge,
->  						 struct
-> drm_bridge_state *bridge_state,
->  						 struct drm_crtc_state
-> *crtc_state,
-> @@ -983,7 +969,6 @@ static const struct drm_bridge_funcs
-> nwl_dsi_bridge_funcs = {
->  	.mode_set		= nwl_dsi_bridge_mode_set,
->  	.mode_valid		= nwl_dsi_bridge_mode_valid,
->  	.attach			= nwl_dsi_bridge_attach,
-> -	.detach			= nwl_dsi_bridge_detach,
->  };
->  
->  static int nwl_dsi_parse_dt(struct nwl_dsi *dsi)
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+index 8d36ab955b96..6f0bff186477 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+@@ -1521,7 +1521,6 @@ int rtw_set_auth(struct adapter *adapter, struct security_priv *psecuritypriv)
+ 		res = _FAIL;
+ 		goto exit;
+ 	}
+-	memset(psetauthparm, 0, sizeof(struct setauth_parm));
+ 	psetauthparm->mode = (unsigned char)psecuritypriv->dot11AuthAlgrthm;
+ 	pcmd->cmdcode = _SetAuth_CMD_;
+ 	pcmd->parmbuf = (unsigned char *)psetauthparm;
+diff --git a/drivers/staging/r8188eu/hal/rtl8188eu_recv.c b/drivers/staging/r8188eu/hal/rtl8188eu_recv.c
+index 322b4549a92d..727e1adce1dc 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188eu_recv.c
++++ b/drivers/staging/r8188eu/hal/rtl8188eu_recv.c
+@@ -31,7 +31,6 @@ int	rtl8188eu_init_recv_priv(struct adapter *padapter)
+ 		res = _FAIL;
+ 		goto exit;
+ 	}
+-	memset(precvpriv->pallocated_recv_buf, 0, NR_RECVBUFF * sizeof(struct recv_buf) + 4);
+ 
+ 	precvpriv->precv_buf = (u8 *)N_BYTE_ALIGMENT((size_t)(precvpriv->pallocated_recv_buf), 4);
+ 
+-- 
+2.35.1
 

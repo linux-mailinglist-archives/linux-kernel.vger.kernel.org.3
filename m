@@ -2,193 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628524DE48B
+	by mail.lfdr.de (Postfix) with ESMTP id 16B064DE48A
 	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 00:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241544AbiCRXhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 19:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S241548AbiCRXiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 19:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241558AbiCRXhx (ORCPT
+        with ESMTP id S241541AbiCRXh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 19:37:53 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A39230CA8F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:36:34 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id q129so8428450oif.4
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=9510QlOxQvZ3nhopdTAXfUeaDVrn5TXlOAghoZpABDc=;
-        b=bLw+H1mUjkxQ5SZ5DN/+e74d5PKWXX6Zfr9EEhXwp2u2e4E6Y2z5avLxYH5kIw9Yfh
-         RdPw7yiMyyqp3C5MkBXxLWkQ/DYxlS6o3hboyYoaAFHVT1fssDwIuUApuSXfX73uZH/h
-         CE1yZWbsIFrR/kQvcLJTSxlk48QoaMZbDk7T8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=9510QlOxQvZ3nhopdTAXfUeaDVrn5TXlOAghoZpABDc=;
-        b=HW2Mxyp8VCDLNHTCMtS2AxhgpGeIANQCkm3o8tDKXd6Ray78mAr/b5ZpVmj3+oqmci
-         LbpevN9SPMcp4afklys52NXNi3272hnPKxt3UT1E9rz2ocs8sHllwsZEGfQDC4H3Hpxu
-         ixl4EF+K1MB5GexlEGxiqPK+rpEmKuA8MWRN23TLRI1DMaAfG+ABcrUNQdza813MAcTg
-         immeCdGqXeyNouUBfl6osXlj/qPDp+KjhgZFvERbqDrAianfZBGUtsHR/BnGsxlGvYuD
-         i6MD6h5/pEnKwx4rDX4bfcAUAfJs8rLMPvL4QtLAlN6g980D8VmdBOZQGb+1OV20SXNv
-         rmbQ==
-X-Gm-Message-State: AOAM533bGUSrzRJTi0/R8CNOclbktNkIIeWM6xPMkJOn4sxwMN/AE2S/
-        UX39aUek8/k/ZEuJkvhwhakcOkjpgJcxiMIYeSO2pQ==
-X-Google-Smtp-Source: ABdhPJy7QbZ146Qy3U7WG9hK2aKW6Y4gfc9cFivoiww8VoFuLCNFF5uB9X+AFqCpc0IXGJSkTaHE8rAqOEgnqeaN6RE=
-X-Received: by 2002:aca:a9c8:0:b0:2da:45b6:b796 with SMTP id
- s191-20020acaa9c8000000b002da45b6b796mr5062201oie.193.1647646592659; Fri, 18
- Mar 2022 16:36:32 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 18 Mar 2022 16:36:32 -0700
+        Fri, 18 Mar 2022 19:37:58 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2066.outbound.protection.outlook.com [40.107.94.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6257330CA9C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 16:36:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FDL3VfYnd6mxZpp3+rufoM1nlcvK8nAMj8FHCi9wMD0BRUqqDqkGeQjUq/OBkYFHzawWTVSN6mmSnn3M/Afriz6V8JNcgAd87lD8nkvDEQL/8qaa1I0G+koqpKBxSKK2Ooj/EfH/SZ1k4ZQ95SiBpifjXJ3elTu7uTZKnycg1IZIVKfD/jovqMBSV44yEX7ubrV9XaFzAp3mWWxXvQHm8jxjEhjKq/oxxEfUpBLJHawkVyoTZksNljnQo1ITo5WM/1O6HJnxAdaH2xrGE7+DYzqix3ON0sVWbeF6+s3O+OQgVYZz+MYEOrCpXyffRE82BDTKZxffzMe/w9CyxbmVQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=56B9zc8CbxHg1+CKJbzmP1/j1MyAEgBEBoszPsuzQ+c=;
+ b=Ggf6N6jmNKSloog6goAtV2DRpaeBMrvwP2MihiGrZi6Nvhl42tFG51+G9xHy1G/hvHkHPKPUKPx+LkofEXH4KHc4SIuqvPuEJtkHtxQKz2j4gbJXsJofsQv04qdrqX6e93r5zqjyvYkrsE6gGVzCX3ffp8nNptwa5PutNIiP62CeJjyTDmq6xZrbyKJHOBFrwPawJeTIMVxHfw0wfvQy5s67FwAz6QMCWZfQO5XfgsIvoVkxBzcsDKclSWQcJ8fQ9S4wobVoqBMX5Bf2KUcr6F22JOVv4APh5cbDWMPD8r8GxMSkFvONw0Zoj6P6jRcy5ekuhNug66mpmjnh6WnxEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=56B9zc8CbxHg1+CKJbzmP1/j1MyAEgBEBoszPsuzQ+c=;
+ b=Zb2Y1JKC6YlS3QcCyuDFfekDq/mA7zmm9pO0PKfuJ+lA7K/8Q4ocrPhmoKd2zAv7Alh5uzN4b3N/IjcG1Jh91Q3iRK9DC7vSvyNA1BxqMrTBzvZWO/p/Yw4wFElmv7mCOqF/56qJWTTJ24N7awV0zLLsrIkwjsCVLPkTEeFrHhLtR+ygCsTFKS9x0U5FVP4PppXwnmFcyVTyUUyi2THgDZzYGrThzHEiXs+KlubmddQMfDSxl57wjWP90iz7Bx4md6lF/Uas11dpnjAEFtYsgvic16yZ9hz+giMmtLno73pwfi5u9DwdYtRI0XSntdjAnA0kqExSK6hPqNtXHCmG2w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by SN1PR12MB2591.namprd12.prod.outlook.com (2603:10b6:802:30::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Fri, 18 Mar
+ 2022 23:36:37 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::11a0:970a:4c24:c70c]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::11a0:970a:4c24:c70c%5]) with mapi id 15.20.5081.018; Fri, 18 Mar 2022
+ 23:36:37 +0000
+Date:   Fri, 18 Mar 2022 20:36:35 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org,
+        Khalid Aziz <khalid.aziz@oracle.com>
+Subject: Re: [PATCH v2 00/15] mm: COW fixes part 2: reliable GUP pins of
+ anonymous pages
+Message-ID: <20220318233635.GC11336@nvidia.com>
+References: <20220315104741.63071-1-david@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315104741.63071-1-david@redhat.com>
+X-ClientProxiedBy: MN2PR11CA0011.namprd11.prod.outlook.com
+ (2603:10b6:208:23b::16) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-In-Reply-To: <CAD=FV=V9U-zzpYNLKxqg1xh+W-RXLzV6BxaO4ZVF0GVXBVujUQ@mail.gmail.com>
-References: <20220318015451.2869388-1-swboyd@chromium.org> <20220318015451.2869388-4-swboyd@chromium.org>
- <CAD=FV=VJFoNgfMUHE5mUY6Uq2Jj5cyQVyW0osUm6jyHRE1no=w@mail.gmail.com>
- <CAE-0n50HcLLUUDgiMc7u4Gx5gb-bcpO22iD9emHrnM8sx8nbOQ@mail.gmail.com> <CAD=FV=V9U-zzpYNLKxqg1xh+W-RXLzV6BxaO4ZVF0GVXBVujUQ@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 18 Mar 2022 16:36:32 -0700
-Message-ID: <CAE-0n534-bDXrGUPMxs9qb0F26mO7XyegSt+c4GXKR7ywegcqw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] platform/chrome: cros_ec_spi: Boot fingerprint
- processor during probe
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        chrome-platform@lists.linux.dev,
-        Guenter Roeck <groeck@chromium.org>,
-        Craig Hesling <hesling@chromium.org>,
-        Tom Hughes <tomhughes@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 35210681-3bd8-49b5-a35e-08da093824ce
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2591:EE_
+X-Microsoft-Antispam-PRVS: <SN1PR12MB2591F9FFB9A083EC7ADF577CC2139@SN1PR12MB2591.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VpUAUI9oxjBzNJCNJadOwgxElTT0SnJOwqodg4x4fVaPgvhGR5xeaBsNCA8LWDXDOwk/+/mIGYW1qBP4eVFoYKfwXU51wt+PCIL2daxQXIjIX6r/m8Q7Qgl/RRRJ5Y/SYg33DrTsYhUHgw9AzY/h3d3RX/6apeROP70XYQhlMj0csYG6PfHvnacBHTVn4Otybpij+ZFQwvw0cZ+9eqmw1VAhcDgjqua5I3tVgrbppWa8xlDSf3hv+9GvFtzslQQqWxN4qNnOpUxY9wCh4yZY6b9oWs3Kx6QqIlCZBKe6yxsSkRcJh48uSSUEshO0sS66FQGIUgWFWD7EKxtk/PauhwTwDZAx0MMyReqXaVtZCxtn2xclCe+LIyMKkaDcJThmS2X3c0QZVCJMTqsSLUIGHXBS2s1FgYYbrfBxtc2X1jAeA0L7axBNOfmFgekhioi0fxHG2cLV9h2/j3xVNtz5dPympM3lX70NZ1pA6DWQxj3Fu2PS6TzHdoOin5YRaQCVfvqngUbspWFMQBJE6l4IdAUoFNuMg2yOmaJrUZF2+vbuj9jlP9Mc+eOH0RAv/gUYDxHdyJfS3jl1a8Na8OqgrF9x0lbKUS6JUQLPs2PeJO9PeWmIkMDPLu855NYDfb4XPcvHDuulu6IvDOwGzItmrA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(6916009)(36756003)(6512007)(66946007)(4326008)(316002)(508600001)(66476007)(8676002)(8936002)(6506007)(5660300002)(2906002)(7416002)(2616005)(4744005)(1076003)(66556008)(38100700002)(186003)(83380400001)(33656002)(26005)(6486002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BzPvLaxKYtcU8DofzfKC3kduWOFSXS1Ps2Zt7D+JS0+LTkrMBYLnHX2urcWq?=
+ =?us-ascii?Q?4ZUIcpn0lnOXaMeSA051gY7J5EAThs8NM8JMNOApZWD2cw9b1YtGd3v+cznN?=
+ =?us-ascii?Q?jQGlctAs2zEl9RcmvFldejZj0JhkMXnNBT/BNSrPN/kSnfgLsIhb8j44Z3yC?=
+ =?us-ascii?Q?IwJViNMeyFe0Q2oRitBEW84m/o9ojeu22QZDgg4LIoiCO9/dRx052dEFLo8r?=
+ =?us-ascii?Q?C90fakM7RD9ZYaTC6ZnaPm/1KC/GYiXy3XAxZESxEWy2Mz0LxTdBAACHGtG/?=
+ =?us-ascii?Q?zYDDXE8lUR/Rp7DBVK0dfXgvcBmVM9xuq+9PeOHMmuwEol1jZfbl6kwot51k?=
+ =?us-ascii?Q?0HB7ErkDDD8vElgIqzObHDXgbdFXfXhxf6FxiylVjKMqJ7M3aMWvCCdu2SNh?=
+ =?us-ascii?Q?rmJhGbnWiJi5iYC3l411DF4fdPlB10i/avxjbAk2i7+Hs6cPo/VT4E7jKBrG?=
+ =?us-ascii?Q?By3y76Gp3Yu/A9glQ6rtM5NdSDnneSxy82MDOw2sMn2Yg18P+vwzNMa3xD9C?=
+ =?us-ascii?Q?AQhJpI4xvWjYmFGZkjf+DOy/6kjesT34ae4+VYap9kVZc7e7wt7EWn7YWp0D?=
+ =?us-ascii?Q?VuJeaxDTRoASFUQWqzU88nukv2yrmaJllo0Zlc8OaZ0CozbiEA3DAujk8iq0?=
+ =?us-ascii?Q?HcWTD60dQGlra2QJaHph7lHouk/J8Zxa6JwxHO09G45Y7ZOqZItOVjOaWOvj?=
+ =?us-ascii?Q?jQ5WCHqpO+nvAFrPwJVW4H4S2zD4XFCCl2HzCkVmixy0XxOr4iNLHQOugNZ3?=
+ =?us-ascii?Q?TxVtdMG70ZfXJjoHPAvebnlWOcuPVF1/tMbd8rpntFVW7iN+5RY1O+vM1laY?=
+ =?us-ascii?Q?3lhS9sCjO7KclRk6eP11QgWzSmPDrDq5mApe4bznc8jegU/wDEZCa4WL+sc+?=
+ =?us-ascii?Q?KZyuBT/TpBq3Mf2/Y3so/6GTKyIfzRc3k5Dl69dIAk++gWB9djq3heu5+f2L?=
+ =?us-ascii?Q?1//dLjJBDD56YeCoFh56CHg88HYdHmkvHJEUFL8zZyhTG9o0YPtq8rExZjGt?=
+ =?us-ascii?Q?mBh4lwqRk7pbEocSJsjJhbeTdMSwUovN/ZZ/P7a4JCySl7551f/BVBE0jEWO?=
+ =?us-ascii?Q?dmuvvoeFPt9rMsT+8vNFFc/rozXMJpOLScTN4EOeFZH6TN7Uu06EmlyTd5dk?=
+ =?us-ascii?Q?Cpv2f1klmByos8NbxE9wPyHWIUvvCHXPxqXKvFSpaFkiuCnQE2r6ex+ZYjc7?=
+ =?us-ascii?Q?fqEq4GLqBYaIfylNXrc1nMdheQuM7hakv1yifD4Keau4Gmk1A5u+AK/cel0O?=
+ =?us-ascii?Q?UoZt9c80rRWZ+y4Bn8gpl6M7QzexmOMhkjxAlULRfzzfJHeD9CKHb0BVlGU2?=
+ =?us-ascii?Q?rQdF3EgXFNBPsZ98jvfGkuEzBK44omA3R1EdBr5RiK+X7fDyBRo8uRjG2f95?=
+ =?us-ascii?Q?qACisUpgY82XwmmbYnM4k/lPV2tphWI9JiJM4nhTZJMr4SWFhwRgi2i1RfnM?=
+ =?us-ascii?Q?LIebUtOhoqPqm/kpuLpRwRVDzz0Cgm02?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35210681-3bd8-49b5-a35e-08da093824ce
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2022 23:36:37.0917
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dOamuNctbm8WlpBZP0guoSGaDZMfXeJe2OVs5gUS1IcLiO9YT97MVjWNwIFoq9WM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2591
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Doug Anderson (2022-03-18 15:06:59)
-> Hi,
->
-> On Fri, Mar 18, 2022 at 3:01 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > > > @@ -703,6 +706,37 @@ static void cros_ec_spi_dt_probe(struct cros_ec_spi *ec_spi, struct device *dev)
-> > > >         ret = of_property_read_u32(np, "google,cros-ec-spi-msg-delay", &val);
-> > > >         if (!ret)
-> > > >                 ec_spi->end_of_msg_delay = val;
-> > > > +
-> > > > +       if (!of_device_is_compatible(np, "google,cros-ec-fp"))
-> > > > +               return 0;
-> > >
-> > > I noticed in your previous patch that you not only added a device-tree
-> > > match for this device but also a "spi_device_id". ...but won't you
-> > > fail to do all this important GPIO work in that case?
-> >
-> > I don't know when the spi_device_id path will be used. Never? I can
-> > simply drop it from the spi_device_id list for now and we can take up
-> > this problem later or never.
->
-> That's fine with me. I was guessing it was relevant for x86 but my
-> experience with the way x86 does things is pretty minimal.
->
+On Tue, Mar 15, 2022 at 11:47:26AM +0100, David Hildenbrand wrote:
 
-Ah, I think the x86 path also uses the of_device_id, but it is still
-google,cros-ec-spi so it won't be affected until conforming to the new
-binding.
+> This series fixes memory corruptions when a GUP pin (FOLL_PIN) was taken
+> on an anonymous page and COW logic fails to detect exclusivity of the page
+> to then replacing the anonymous page by a copy in the page table: The
+> GUP pin lost synchronicity with the pages mapped into the page tables.
 
->
-> > > > +       ec_spi->boot0 = devm_gpiod_get(dev, "boot0", 0);
-> > > > +       if (IS_ERR(ec_spi->boot0))
-> > > > +               return PTR_ERR(ec_spi->boot0);
-> > >
-> > > Right now these GPIOs don't actually need to be stored in the "ec_spi"
-> > > structure. They could just be local variables. I guess you're trying
-> > > to future proof?
-> >
-> > Sure I will drop them because they're not useful later and I can save on
-> > the kernel-doc.
-> >
-> > >
-> > >
-> > > > +       ec_spi->reset = devm_gpiod_get(dev, "reset", 0);
-> > > > +       if (IS_ERR(ec_spi->reset))
-> > > > +               return PTR_ERR(ec_spi->reset);
-> > > > +
-> > > > +       /*
-> > > > +        * Take the FPMCU out of reset and wait for it to boot if it's in
-> > > > +        * bootloader mode or held in reset. This isn't the normal flow because
-> > > > +        * typically the BIOS has already powered on the device to avoid the
-> > > > +        * multi-second delay waiting for the FPMCU to boot and be responsive.
-> > > > +        */
-> > > > +       if (gpiod_get_value(ec_spi->boot0) || gpiod_get_value(ec_spi->reset)) {
-> > > > +               /* Boot0 is sampled on reset deassertion */
-> > > > +               gpiod_set_value(ec_spi->boot0, 0);
-> > > > +               gpiod_set_value(ec_spi->reset, 1);
-> > > > +               usleep_range(1000, 2000);
-> > > > +               gpiod_set_value(ec_spi->reset, 0);
-> > > > +
-> > > > +               /* Wait for boot; there isn't a "boot done" signal */
-> > > > +               dev_info(dev, "Waiting for FPMCU to boot\n");
-> > > > +               msleep(2000);
-> > > > +       }
-> > >
-> > > You added the regulator to the bindings. On herobrine I know that the
-> > > regulator is a bit of a dummy (at least on herobrine), but I wonder if
-> > > you should still get/enable it here? In the device tree bindings you
-> > > listed it as not-optional so, in theory, you could use this to give an
-> > > error if someone didn't provide the regulator.
-> >
-> > Won't the regulator framework introduce a dummy supply if there isn't a
-> > supply in DT but this driver calls regulator_get()? Getting and enabling
-> > it here will make this even more independent though so it sounds like a
-> > good idea. That way we can make it a real regulator in the DTS as long
-> > as the firmware isn't controlling it.
->
-> I was thinking of regulator_get_optional(). You know the call you use
-> when your regulator isn't "optional"? (Sorry, it always cracks me up
-> that "optional" is exactly opposite the meaning for regulator compared
-> to everyone else).
+I don't know much about most of this part of the mm, but nothing here
+gave me serious pause. We are trying to run this series in our RDMA
+testing. Will let you know.
 
-Oh my.
-
->
->
-> > > BTW: it seems like it wouldn't be a _crazy_ amount of extra work to:
-> > >
-> > > 1. Add a sysfs hook for turning the regulator on/off
-> > >
-> > > 2. Change the Chrome OS userspace to actually use the sysfs hook if it's there.
-> > >
-> > > 3. Actually have the kernel in charge of turning the regulator off/on
-> > >
-> > > Doing this at the same time as the transition over to the more real
-> > > "cros-ec-fp" would be nice so we don't have to figure out how to
-> > > transition later. Said another way: If we don't transition now then I
-> > > guess later we'd have to find some way to detect that the regulator
-> > > specified in the kernel was actually a dummy and didn't really control
-> > > the power?
-> >
-> > I'd rather not expose regulator control to userspace through some other
-> > sysfs attribute. Instead I'd prefer the flashing logic that twiddles
-> > gpios and power live all in the kernel and have userspace interact with
-> > a character device to program the firmware.
->
-> Yeah, that would be even better, you're right.
->
-> Hmmm, so maybe the answer is to just delay adding the regulator until
-> we're actually ready to specify it correctly and have the flashing
-> happen in the kernel?
->
-
-I can enable it during probe just so that if the BIOS isn't doing it
-we'll have something that works assuming the DT is actually controlling
-the regulator. Or do nothing. It doesn't matter right now.
+Thanks,
+Jason

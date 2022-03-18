@@ -2,108 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9D84DD3DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 05:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDD94DD3E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 05:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbiCRES3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 00:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
+        id S232376AbiCREUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 00:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiCRESY (ORCPT
+        with ESMTP id S230337AbiCREUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 00:18:24 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C7118EEAE
-        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 21:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647577025; x=1679113025;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2MxLCCYcRMZsv9nSvPUgSb/KtDdbPIPTc7PZ1d97GB8=;
-  b=keQ8Eg2fNggk0jKvsV7tCk+op9ROmQb19yA5OIpUjEhZmu1WQlSIETSc
-   mJZ929bpA27xNh9L/XEScuBs7MoRZ+isJnVdXxM8XXDpI/7h3wxqdfHpy
-   /glcdB4IWrTy90x4L6IOJjuBFTb43GLwXaL35G+xC+Zul4b7ymkPvV6A5
-   HQkJkXksofdm4ot0slUe5pEx1lOFOcM2/CqU1ZL6DAJ2j1Xjb52Ox4v3J
-   6jTV4lfIQRbhHPpger+2k1WrrspVvppWiMyAprt1sVpYgTeYWAkk7VtCa
-   74xM4A+8NTvqlXkn2abYD/8iq62QajBV2iZtsqPcPcbk/MDiRcREpsmD8
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="343478504"
-X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
-   d="scan'208";a="343478504"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 21:17:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,191,1643702400"; 
-   d="scan'208";a="517030987"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 17 Mar 2022 21:17:03 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nV42w-000EQ1-My; Fri, 18 Mar 2022 04:17:02 +0000
-Date:   Fri, 18 Mar 2022 12:16:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:asahi 28/174] include/linux/soc/apple/rtkit.h:223:5:
- warning: no previous prototype for 'apple_rtkit_poll'
-Message-ID: <202203181210.tL0yqraP-lkp@intel.com>
+        Fri, 18 Mar 2022 00:20:46 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8F7C7494;
+        Thu, 17 Mar 2022 21:19:28 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id kd12so5759126qvb.1;
+        Thu, 17 Mar 2022 21:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6kcbzzb3Q18Foqg/UI/G6Q3eVQppXaI7cSO8s/lZSlw=;
+        b=G4OMexrBtCk0ngOlF0XSIkaCzI6dYKXEDtEVfsDpieKqdAIIL98xZGbXHhExTahC9d
+         /JrwnabA10kIh5TLOWfBfqJpB801TlZWAuNcm9109vskjprQviJy/C4ietPbFJJMe0K3
+         AJd9hVeeqoPPwijrxfY/H+q1I5bYp5Zde8IMM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6kcbzzb3Q18Foqg/UI/G6Q3eVQppXaI7cSO8s/lZSlw=;
+        b=FcKvMDLrLuJN2pa8k5YcGpvqqrPyTnd2F2uZdSNPm3wUdUcz467umJFHFrzn+AyPyF
+         cI7mbsleMW4L605yky0Uavx4GTdkALjajN+kiQv5Cu29ls6mCMT9vUCtLhjkn0Hfp78c
+         D0HDF8pqG8NxkYcGmsDfRXlDRjzvn6xqenQu09USXcxw8t9Km1nywNkbGqznABo/03Xk
+         AkYxVbl90li4jILGlV9XvOv8WBKOoeftSUsIXO9q/BEYXBKDtDjtOiLK61i0Q0jky+8v
+         TYP4ME44tlJz0NbQQBPEd9/Lfm3LtzBXowcOV/Lk4Epkxo41Ml/qQMJr2fT+NBXGmQJ7
+         v1tQ==
+X-Gm-Message-State: AOAM53236eR5Q00Z2iYcYVfF8W5m8QGrzancqbd4OnFURj+5WvIZbqJ5
+        53qRjsz7ZzFrhb4a0bjm4j+1l8ABX2ebFtQEkRU=
+X-Google-Smtp-Source: ABdhPJw4eEeIPZiev+YGiA8kFv/XcltV3scqoPQ5ehYGPDeRNHMLJIwI3WfRTdA15nBn/8+56KWImz4dtdFktXjRkb0=
+X-Received: by 2002:a05:6214:d82:b0:440:efb8:cbb7 with SMTP id
+ e2-20020a0562140d8200b00440efb8cbb7mr3995622qve.65.1647577167220; Thu, 17 Mar
+ 2022 21:19:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220317211426.38940-1-eajames@linux.ibm.com>
+In-Reply-To: <20220317211426.38940-1-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Fri, 18 Mar 2022 04:19:15 +0000
+Message-ID: <CACPK8Xd42+NgTfS8ERagv-1GkAb8XiY8U71Q8Hz0wQ9dEUJekQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: fsi: Implement a timeout for polling status
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-spi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux asahi
-head:   c1fcb91bbcc8fd1b1f874e45f55cbba682351f3c
-commit: 73ad3599aa16b102655fbd9aa1576ae3c63466a3 [28/174] WIP: nvme-apple: add initial Apple SoC NVMe driver
-config: powerpc-randconfig-m031-20220318 (https://download.01.org/0day-ci/archive/20220318/202203181210.tL0yqraP-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/73ad3599aa16b102655fbd9aa1576ae3c63466a3
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux asahi
-        git checkout 73ad3599aa16b102655fbd9aa1576ae3c63466a3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/nvme/host/
+On Thu, 17 Mar 2022 at 21:14, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> The data transfer routines must poll the status register to
+> determine when more data can be shifted in or out. If the hardware
+> gets into a bad state, these polling loops may never exit. Prevent
+> this by returning an error if a timeout is exceeded.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This makes sense. We may even want to put this code in regardless.
 
-All warnings (new ones prefixed by >>):
+However, I'm wondering why the code in fsi_spi_status didn't catch this.
 
-   In file included from drivers/nvme/host/apple.c:32:
->> include/linux/soc/apple/rtkit.h:223:5: warning: no previous prototype for 'apple_rtkit_poll' [-Wmissing-prototypes]
-     223 | int apple_rtkit_poll(struct apple_rtkit *rtk)
-         |     ^~~~~~~~~~~~~~~~
+> static int fsi_spi_status(struct fsi_spi *ctx, u64 *status, const char *dir)
+> {
+>        int rc = fsi_spi_read_reg(ctx, SPI_FSI_STATUS, status);
+
+You mentioned the error condition is we get back 0xff. That means that
+status will be 0xffff_ffff_ffff_ffff ?
+
+Did you observe status being this value?
+
+>        if (rc)
+>                return rc;
+>
+>        if (*status & SPI_FSI_STATUS_ANY_ERROR) {
+
+I think that we're checking against 0xffe0f000.
+
+>                dev_err(ctx->dev, "%s error: %016llx\n", dir, *status);
+>
+>                rc = fsi_spi_reset(ctx);
+>                if (rc)
+>                        return rc;
+
+Is the problem here? fsi_spi_reset writes to the clock config
+registers, but doesn't read the status.
+
+Obviously doing the writes causes a call to fsi_spi_check_status, but
+that checks the FSI2SPI bridge, not the SPI master.
+
+...but it doesn't matter, because we're either going to return an
+error from the reset, or return EREMOTEIO, so there's no masking of
+the error.
+
+>
+>                return -EREMOTEIO;
+>        }
+>
+>        return 0;
+> }
 
 
-vim +/apple_rtkit_poll +223 include/linux/soc/apple/rtkit.h
+>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>  drivers/spi/spi-fsi.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
+> index b6c7467f0b59..d403a7a3021d 100644
+> --- a/drivers/spi/spi-fsi.c
+> +++ b/drivers/spi/spi-fsi.c
+> @@ -25,6 +25,7 @@
+>
+>  #define SPI_FSI_BASE                   0x70000
+>  #define SPI_FSI_INIT_TIMEOUT_MS                1000
+> +#define SPI_FSI_STATUS_TIMEOUT_MS      100
 
-b0aec24ea7a8e79 Hector Martin 2022-02-08  222  
-16b8a4a8997d359 Hector Martin 2022-02-08 @223  int apple_rtkit_poll(struct apple_rtkit *rtk)
-16b8a4a8997d359 Hector Martin 2022-02-08  224  {
-16b8a4a8997d359 Hector Martin 2022-02-08  225  	return -ENODEV;
-16b8a4a8997d359 Hector Martin 2022-02-08  226  }
-16b8a4a8997d359 Hector Martin 2022-02-08  227  
+Can you add a comment (or put something in the commit message) about
+why you chose 100ms.
 
-:::::: The code at line 223 was first introduced by commit
-:::::: 16b8a4a8997d359639caf9b641cea8466e68c717 soc: apple: rtkit: Add recv_message_early callback and apple_rtkit_poll
-
-:::::: TO: Hector Martin <marcan@marcan.st>
-:::::: CC: Hector Martin <marcan@marcan.st>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  #define SPI_FSI_MAX_RX_SIZE            8
+>  #define SPI_FSI_MAX_TX_SIZE            40
+>
+> @@ -299,6 +300,7 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+>                                  struct spi_transfer *transfer)
+>  {
+>         int rc = 0;
+> +       unsigned long end;
+>         u64 status = 0ULL;
+>
+>         if (transfer->tx_buf) {
+> @@ -315,10 +317,14 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+>                         if (rc)
+>                                 return rc;
+>
+> +                       end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
+>                         do {
+>                                 rc = fsi_spi_status(ctx, &status, "TX");
+>                                 if (rc)
+>                                         return rc;
+> +
+> +                               if (time_after(jiffies, end))
+> +                                       return -ETIMEDOUT;
+>                         } while (status & SPI_FSI_STATUS_TDR_FULL);
+>
+>                         sent += nb;
+> @@ -329,10 +335,14 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+>                 u8 *rx = transfer->rx_buf;
+>
+>                 while (transfer->len > recv) {
+> +                       end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
+>                         do {
+>                                 rc = fsi_spi_status(ctx, &status, "RX");
+>                                 if (rc)
+>                                         return rc;
+> +
+> +                               if (time_after(jiffies, end))
+> +                                       return -ETIMEDOUT;
+>                         } while (!(status & SPI_FSI_STATUS_RDR_FULL));
+>
+>                         rc = fsi_spi_read_reg(ctx, SPI_FSI_DATA_RX, &in);
+> --
+> 2.27.0
+>

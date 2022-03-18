@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163FA4DDE8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D224DDEA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 17:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238823AbiCRQUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 12:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
+        id S238819AbiCRQUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 12:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238778AbiCRQTK (ORCPT
+        with ESMTP id S238830AbiCRQTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:19:10 -0400
+        Fri, 18 Mar 2022 12:19:14 -0400
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB3B16F044;
-        Fri, 18 Mar 2022 09:17:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1CE18616D;
+        Fri, 18 Mar 2022 09:17:55 -0700 (PDT)
 Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22IE44PG002886;
-        Fri, 18 Mar 2022 12:17:49 -0400
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22IE44PH002886;
+        Fri, 18 Mar 2022 12:17:53 -0400
 Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3evfqpcu74-1
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3evfqpcu7c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 12:17:49 -0400
+        Fri, 18 Mar 2022 12:17:52 -0400
 Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 22IGHmWo035529
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 22IGHoNK035537
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Mar 2022 12:17:48 -0400
-Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+        Fri, 18 Mar 2022 12:17:50 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
  ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Fri, 18 Mar 2022 12:17:47 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ 15.2.986.14; Fri, 18 Mar 2022 12:17:50 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Fri, 18 Mar 2022 12:17:47 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Fri, 18 Mar 2022 12:17:47 -0400
+ 15.2.986.14; Fri, 18 Mar 2022 12:17:49 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Fri, 18 Mar 2022 12:17:49 -0400
 Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 22IGHWUk024583;
-        Fri, 18 Mar 2022 12:17:42 -0400
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 22IGHWUl024583;
+        Fri, 18 Mar 2022 12:17:43 -0400
 From:   <alexandru.tachici@analog.com>
 To:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <jic23@kernel.org>,
         Alexandru Tachici <alexandru.tachici@analog.com>
-Subject: [PATCH v2 5/8] iio: adc: ad7124: add sequencer support
-Date:   Fri, 18 Mar 2022 18:27:19 +0200
-Message-ID: <20220318162722.51215-6-alexandru.tachici@analog.com>
+Subject: [PATCH v2 6/8] iio: adc: ad7192: add sequencer support
+Date:   Fri, 18 Mar 2022 18:27:20 +0200
+Message-ID: <20220318162722.51215-7-alexandru.tachici@analog.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220318162722.51215-1-alexandru.tachici@analog.com>
 References: <20220318162722.51215-1-alexandru.tachici@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: aNya-2jyES27A6u5ASBYuCKrvCjURcRG
-X-Proofpoint-ORIG-GUID: aNya-2jyES27A6u5ASBYuCKrvCjURcRG
+X-Proofpoint-GUID: gQKQb3QIkJc_l1QJje8rBazbgYhb9FP_
+X-Proofpoint-ORIG-GUID: gQKQb3QIkJc_l1QJje8rBazbgYhb9FP_
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
  definitions=2022-03-18_11,2022-03-15_01,2022-02-23_01
@@ -74,88 +74,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alexandru Tachici <alexandru.tachici@analog.com>
 
-Add sequencer support for AD7124.
+Add sequencer support for AD7192.
 
 Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
 ---
- drivers/iio/adc/ad7124.c | 32 +++++++++++++++++++++++++-------
- 1 file changed, 25 insertions(+), 7 deletions(-)
+ drivers/iio/adc/ad7192.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/adc/ad7124.c b/drivers/iio/adc/ad7124.c
-index 428ec3e257d7..782b7cdd8ebe 100644
---- a/drivers/iio/adc/ad7124.c
-+++ b/drivers/iio/adc/ad7124.c
-@@ -43,6 +43,8 @@
- #define AD7124_STATUS_POR_FLAG_MSK	BIT(4)
- 
- /* AD7124_ADC_CONTROL */
-+#define AD7124_ADC_STATUS_EN_MSK	BIT(10)
-+#define AD7124_ADC_STATUS_EN(x)		FIELD_PREP(AD7124_ADC_STATUS_EN_MSK, x)
- #define AD7124_ADC_CTRL_REF_EN_MSK	BIT(8)
- #define AD7124_ADC_CTRL_REF_EN(x)	FIELD_PREP(AD7124_ADC_CTRL_REF_EN_MSK, x)
- #define AD7124_ADC_CTRL_PWR_MSK	GENMASK(7, 6)
-@@ -512,14 +514,27 @@ static int ad7124_set_channel(struct ad_sigma_delta *sd, unsigned int channel)
- 	return ret;
+diff --git a/drivers/iio/adc/ad7192.c b/drivers/iio/adc/ad7192.c
+index adff6472e075..e59753c61274 100644
+--- a/drivers/iio/adc/ad7192.c
++++ b/drivers/iio/adc/ad7192.c
+@@ -58,7 +58,8 @@
+ /* Mode Register Bit Designations (AD7192_REG_MODE) */
+ #define AD7192_MODE_SEL(x)	(((x) & 0x7) << 21) /* Operation Mode Select */
+ #define AD7192_MODE_SEL_MASK	(0x7 << 21) /* Operation Mode Select Mask */
+-#define AD7192_MODE_DAT_STA	BIT(20) /* Status Register transmission */
++#define AD7192_MODE_STA(x)	(((x) & 0x1) << 20) /* Status Register transmission */
++#define AD7192_MODE_STA_MASK	BIT(20) /* Status Register transmission Mask */
+ #define AD7192_MODE_CLKSRC(x)	(((x) & 0x3) << 18) /* Clock Source Select */
+ #define AD7192_MODE_SINC3	BIT(15) /* SINC3 Filter Select */
+ #define AD7192_MODE_ACX		BIT(14) /* AC excitation enable(AD7195 only)*/
+@@ -288,12 +289,25 @@ static int ad7192_set_mode(struct ad_sigma_delta *sd,
+ 	return ad_sd_write_reg(&st->sd, AD7192_REG_MODE, 3, st->mode);
  }
  
-+static int ad7124_append_status(struct ad_sigma_delta *sd, bool append)
++static int ad7192_append_status(struct ad_sigma_delta *sd, bool append)
 +{
-+	struct ad7124_state *st = container_of(sd, struct ad7124_state, sd);
++	struct ad7192_state *st = ad_sigma_delta_to_ad7192(sd);
 +
-+	st->adc_control &= ~AD7124_ADC_STATUS_EN_MSK;
-+	st->adc_control |= AD7124_ADC_STATUS_EN(append);
++	st->mode &= ~AD7192_MODE_STA_MASK;
++	st->mode |= AD7192_MODE_STA(append);
 +
-+	return ad_sd_write_reg(&st->sd, AD7124_ADC_CONTROL, 2, st->adc_control);
++	return ad_sd_write_reg(&st->sd, AD7192_REG_MODE, 3, st->mode);
 +}
 +
- static const struct ad_sigma_delta_info ad7124_sigma_delta_info = {
- 	.set_channel = ad7124_set_channel,
-+	.append_status = ad7124_append_status,
- 	.set_mode = ad7124_set_mode,
+ static const struct ad_sigma_delta_info ad7192_sigma_delta_info = {
+ 	.set_channel = ad7192_set_channel,
++	.append_status = ad7192_append_status,
+ 	.set_mode = ad7192_set_mode,
  	.has_registers = true,
- 	.addr_shift = 0,
+ 	.addr_shift = 3,
  	.read_mask = BIT(6),
 +	.status_ch_mask = GENMASK(3, 0),
- 	.data_reg = AD7124_DATA,
--	.irq_flags = IRQF_TRIGGER_FALLING
-+	.num_slots = 8,
-+	.irq_flags = IRQF_TRIGGER_FALLING,
++	.num_slots = 4,
+ 	.irq_flags = IRQF_TRIGGER_FALLING,
  };
  
- static int ad7124_read_raw(struct iio_dev *indio_dev,
-@@ -679,10 +694,11 @@ static int ad7124_update_scan_mode(struct iio_dev *indio_dev,
- 
- 	for (i = 0; i < st->num_channels; i++) {
- 		bit_set = test_bit(i, scan_mask);
--		ret = ad7124_spi_write_mask(st, AD7124_CHANNEL(i),
--					    AD7124_CHANNEL_EN_MSK,
--					    AD7124_CHANNEL_EN(bit_set),
--					    2);
-+		if (bit_set)
-+			ret = ad7124_set_channel(&st->sd, i);
-+		else
-+			ret = ad7124_spi_write_mask(st, AD7124_CHANNEL(i), AD7124_CHANNEL_EN_MSK,
-+						    0, 2);
- 		if (ret < 0)
- 			return ret;
- 	}
-@@ -906,12 +922,14 @@ static int ad7124_probe(struct spi_device *spi)
- 
- 	st->chip_info = info;
- 
--	ad_sd_init(&st->sd, indio_dev, spi, &ad7124_sigma_delta_info);
--
- 	indio_dev->name = st->chip_info->name;
- 	indio_dev->modes = INDIO_DIRECT_MODE;
- 	indio_dev->info = &ad7124_info;
- 
-+	ret = ad_sd_init(&st->sd, indio_dev, spi, &ad7124_sigma_delta_info);
-+	if (ret < 0)
-+		return ret;
-+
- 	ret = ad7124_of_parse_channel_config(indio_dev, spi->dev.of_node);
- 	if (ret < 0)
- 		return ret;
 -- 
 2.25.1
 

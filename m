@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2608A4DE309
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022574DE30D
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 21:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240949AbiCRU72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 16:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
+        id S240954AbiCRU7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 16:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240945AbiCRU7Y (ORCPT
+        with ESMTP id S240948AbiCRU7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 16:59:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355CD1AD96;
-        Fri, 18 Mar 2022 13:58:02 -0700 (PDT)
+        Fri, 18 Mar 2022 16:59:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7004AE2C;
+        Fri, 18 Mar 2022 13:58:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A944660EEB;
-        Fri, 18 Mar 2022 20:58:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C18C340E8;
-        Fri, 18 Mar 2022 20:57:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9ED360EE8;
+        Fri, 18 Mar 2022 20:58:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19ABBC340E8;
+        Fri, 18 Mar 2022 20:58:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647637081;
-        bh=3tZLC4OI4DmCNMJnIOo7RYTAi7LWN2qliV+IISVObGI=;
+        s=k20201202; t=1647637088;
+        bh=dJlguLWz9Eu/tegMYxnjfLVGayVps0C/hKd+hIGT7B4=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=LGPaCodP8eS/7klwaU8q0zEpjY3D6qASKNddY0k53Fyi4Gg4tbqZ/blZgzLUpyGIX
-         CwSf3M3qU5kWxh3Kkw4ca1kZBPXA9mnE2oUsnUBlU/YDrWmSMZMOhP9o7425bLgDzD
-         melUxHZuxnujObAWSmMTQxD7FDLYAew3fjDEFrzfaBTMC0hZmcFB6TBHo+BoIJezjP
-         90KoSdfybx45J4mbhFvuhgcUzfTRlSZtaBf9t4hO1TeVV9InVynuswec84kPEVlCvi
-         zZ8LTkqYaW1e1LdblqeRFwqO3YlQxMMAq70GL5JayVgNa6UXgmjsWSe5ClN0kNFWB+
-         uq+W6RRir0nmQ==
+        b=pZXbBUJxjPvbTDOofi7A65A0oJxaDpgdoSyqFMBL1b8skBA1pr5sk6EEHvwXPDgPJ
+         G6aqR+QI54plcHRBllUdGK22TZLn9KHYJGRgBTFKLjGp1o1iinjAT+fzphATgd8nTh
+         4s5PSbQwTsK4JASrNggdyparqjPjfJQZ2EAmR+DVGaTnNxzTQT9arnt6JCLfIEpK75
+         XaDRBPZwpQCCa/FvoZKgoo/EK49xE2YokGrd4cYWD9i5LPV9LiuUnMI60pR/Cva4SW
+         jvx9qTXCE3lL6xxynwVewN+nB6P7SqF8HYyKlrSJCkWG5wwpX+/XYB1lamXSvjgX88
+         9VVfcePRTflMg==
 From:   Mark Brown <broonie@kernel.org>
-To:     collinsd@codeaurora.org, lgirdwood@gmail.com,
-        linus.walleij@linaro.org, agross@kernel.org, robh+dt@kernel.org,
-        rnayak@codeaurora.org, bjorn.andersson@linaro.org,
-        Rohit Agarwal <quic_rohiagar@quicinc.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org
-In-Reply-To: <1647410837-22537-1-git-send-email-quic_rohiagar@quicinc.com>
-References: <1647410837-22537-1-git-send-email-quic_rohiagar@quicinc.com>
-Subject: Re: (subset) [PATCH 0/6] Add Power Domains and Regulators in SDX65
-Message-Id: <164763707833.2336544.6847647511365676482.b4-ty@kernel.org>
-Date:   Fri, 18 Mar 2022 20:57:58 +0000
+To:     linux-spi@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
+Cc:     joel@jms.id.au, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220317211426.38940-1-eajames@linux.ibm.com>
+References: <20220317211426.38940-1-eajames@linux.ibm.com>
+Subject: Re: [PATCH] spi: fsi: Implement a timeout for polling status
+Message-Id: <164763708679.2336580.18094786186372148755.b4-ty@kernel.org>
+Date:   Fri, 18 Mar 2022 20:58:06 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,33 +54,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 11:37:11 +0530, Rohit Agarwal wrote:
-> This series adds driver and dt-bindings related changes
-> in SDX65 to add power domains and regulators.
+On Thu, 17 Mar 2022 16:14:26 -0500, Eddie James wrote:
+> The data transfer routines must poll the status register to
+> determine when more data can be shifted in or out. If the hardware
+> gets into a bad state, these polling loops may never exit. Prevent
+> this by returning an error if a timeout is exceeded.
 > 
-> Thanks,
-> Rohit.
 > 
-> Rohit Agarwal (6):
->   regulator: dt-bindings: Add PMX65 compatibles
->   regulator: qcom-rpmh: Add support for SDX65
->   dt-bindings: power: Add rpm power domain bindings for SDX65
->   soc: qcom: rpmhpd: Add SDX65 power domains
->   dt-bindings: pinctrl: qcom-pmic-gpio: Add pmx65 support
->   pinctrl: qcom-pmic-gpio: Add support for pmx65
-> 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/6] regulator: dt-bindings: Add PMX65 compatibles
-      commit: e34855b99696433a26d86179552553c6c6fa69b8
-[2/6] regulator: qcom-rpmh: Add support for SDX65
-      commit: 5999f85ddeb436b4007878f251a30ccc8b9c638b
+[1/1] spi: fsi: Implement a timeout for polling status
+      commit: 89b35e3f28514087d3f1e28e8f5634fbfd07c554
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

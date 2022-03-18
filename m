@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4F34DD18E
-	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF204DD191
+	for <lists+linux-kernel@lfdr.de>; Fri, 18 Mar 2022 01:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiCRACS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 17 Mar 2022 20:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
+        id S230315AbiCRACd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 17 Mar 2022 20:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiCRACQ (ORCPT
+        with ESMTP id S229490AbiCRACc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 17 Mar 2022 20:02:16 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6889C17AD92;
-        Thu, 17 Mar 2022 17:00:58 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id x15so9578050wru.13;
-        Thu, 17 Mar 2022 17:00:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IIXshEu2SisdlfyC9FOixjGVdzZatqacST7BF1cavuM=;
-        b=CvfZ6nWFFRgf4JTHcIc5nt1kAhXSUr0ukL0Z48c8FAOwdK9Ee4fYROqjl6YwfDq91e
-         0AHh6SL/gAnETrsJgk2FLZdpTDvF88MQndNafFnUvMLHna5RLFI3fxMr80hTsRuNQwOe
-         pw9hRGpx/aGgBaS/hbjoT2M8Cqe1aSl4ND8W5JxpPpy4U+UWf1tyI8R5UeIoIIkciYkL
-         rCF13ws+idDApGAgqo5o1aNHRSndWdAfqLdsrtpbVVZGL9SLxOV2gfztQR1bDRDEVR4N
-         nGzHfFy9gc+HS+FNpbTiiRkEcw5D0O+/JmHv4q69EljIM4MVimLJxpkCputzm//x5W2Z
-         818Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IIXshEu2SisdlfyC9FOixjGVdzZatqacST7BF1cavuM=;
-        b=I2cQwqhPq9jRvNrOcp2YJq7vndG2s7NyDbqEWxmvejot53VjukZWVeCF54i0QfOCPl
-         FCFiNaBL2acHUBy1r4WPZI5VjJ7IKjXpgZK68IgILXPkO1n4CxOJ7sS0RFoaJiDrDFy7
-         2FwjLlDyLcUs4EkCJ6MAzwyPTmACJtRNVkYqYzFRhOEzzCRf0BZvWAbRzDlWyVSmbprw
-         B9vxJ56CGFR2g84E1PRmtGMz76oKpbM9vaGyFxcFjXV20mlwWn2DJtVUtryo4krUiCKE
-         U2UfTKwu/XDA8MRMYhClfaEAyyOCx053A1q1ysW8QpfJ1bubgSRfsl9uXe5Hd3iL+kWd
-         u3Ng==
-X-Gm-Message-State: AOAM530Wag1ZvzM780jDrIPozXoTKUsACWoADAKimcLsHF8p2iCGfWfG
-        gAlEs+s4UJK1+ETpOeSWTGI=
-X-Google-Smtp-Source: ABdhPJwyHsR2ZNVPsAvwcWnVhCNDiDCSshChLqWoCBzEErGVywBumpsRGk2DMjPx57WaR9Bfl2JdtA==
-X-Received: by 2002:adf:ebd0:0:b0:1e3:f9b:7b77 with SMTP id v16-20020adfebd0000000b001e30f9b7b77mr5717458wrn.691.1647561657036;
-        Thu, 17 Mar 2022 17:00:57 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id w6-20020adfee46000000b001e4bf01bdfbsm4973862wro.46.2022.03.17.17.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Mar 2022 17:00:56 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     David Airlie <airlied@linux.ie>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] amd64-agp: remove redundant assignment to variable i
-Date:   Fri, 18 Mar 2022 00:00:55 +0000
-Message-Id: <20220318000055.79280-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 17 Mar 2022 20:02:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D59117B0CD
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:01:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 831156145C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 00:01:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A26C340E9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 00:01:11 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cVMMhBG+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1647561668;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=uwfZ7u+3OUKgL2+/D4viVTjD3L/cggI1cxQSeUBNcqU=;
+        b=cVMMhBG+5LNG2ftoPOOeqCBW/p9iLQF9KuH+Z3Q16racCbvb8KnLC6zClLz4tlcx1sTqI0
+        Xnzw1NCvs5M5M3vkeKQC+EokVgGAp7qE75fNJw+tA6nEKR+8+PTJ3ipCSnqYOYoVf47SO6
+        WifSYDymXXT2Pm2nZbumlZlaH37lTQc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ffec849c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Fri, 18 Mar 2022 00:01:08 +0000 (UTC)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2e592e700acso75959207b3.5
+        for <linux-kernel@vger.kernel.org>; Thu, 17 Mar 2022 17:01:08 -0700 (PDT)
+X-Gm-Message-State: AOAM530WQhYksQWOKBwqvOb/8hLkJbf3elL2fWEoGYEwjc1aH9JbdVGS
+        yufLgXYVbrFpSp1nzWhpfiT5EC23Hb/51CBzZd4=
+X-Google-Smtp-Source: ABdhPJwVWHzVA9/oVu+v9YAWochheu96zGoBfiL9ysWNAsJYRohB0h4ZM53akO0WYjRYXdttDZpJBVwPfJnO85MPGHc=
+X-Received: by 2002:a0d:c681:0:b0:2db:9ffe:1f00 with SMTP id
+ i123-20020a0dc681000000b002db9ffe1f00mr9121007ywd.100.1647561668026; Thu, 17
+ Mar 2022 17:01:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 17 Mar 2022 18:00:57 -0600
+X-Gmail-Original-Message-ID: <CAHmME9q55ifnzxE9zLuLT=Hgjv=qcvjU-O-c8G=_o_V_O+p44Q@mail.gmail.com>
+Message-ID: <CAHmME9q55ifnzxE9zLuLT=Hgjv=qcvjU-O-c8G=_o_V_O+p44Q@mail.gmail.com>
+Subject: Large post detailing recent Linux RNG improvements
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,31 +63,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable i is being assigned a value that is never read, it is being
-re-assigned later in a for-loop. The assignment is redundant and can
-be removed.
+Hey folks,
 
-Cleans up clang scan build warning:
-drivers/char/agp/amd64-agp.c:336:2: warning: Value stored to 'i' is
-never read [deadcode.DeadStores]
+Thought I should mention here that I've written up the various RNG
+things I've been working on for 5.17 & 5.18 here:
+https://www.zx2c4.com/projects/linux-rng-5.17-5.18/ .
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/char/agp/amd64-agp.c | 1 -
- 1 file changed, 1 deletion(-)
+Feel free to discuss on list here if you'd like, or if you see
+something you don't like, I'll happily review patches!
 
-diff --git a/drivers/char/agp/amd64-agp.c b/drivers/char/agp/amd64-agp.c
-index dc78a4fb879e..5f64991c73bf 100644
---- a/drivers/char/agp/amd64-agp.c
-+++ b/drivers/char/agp/amd64-agp.c
-@@ -333,7 +333,6 @@ static int cache_nbs(struct pci_dev *pdev, u32 cap_ptr)
- 	if (!amd_nb_has_feature(AMD_NB_GART))
- 		return -ENODEV;
- 
--	i = 0;
- 	for (i = 0; i < amd_nb_num(); i++) {
- 		struct pci_dev *dev = node_to_amd_nb(i)->misc;
- 		if (fix_northbridge(dev, pdev, cap_ptr) < 0) {
--- 
-2.35.1
-
+Regards,
+Jason

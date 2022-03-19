@@ -2,111 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15CF4DE4BF
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 01:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6133B4DE4C4
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 01:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241612AbiCSAHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 20:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S241620AbiCSANa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 20:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240671AbiCSAHi (ORCPT
+        with ESMTP id S235207AbiCSAN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 20:07:38 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60CB2C2759
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 17:06:18 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id g5-20020a92dd85000000b002c79aa519f4so5624077iln.10
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 17:06:18 -0700 (PDT)
+        Fri, 18 Mar 2022 20:13:28 -0400
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599B22F09FA;
+        Fri, 18 Mar 2022 17:12:07 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id q5so13156665ljb.11;
+        Fri, 18 Mar 2022 17:12:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=TldexfC+x4ybJzXXpkOhJtDF8s88uiemOUBWnuW1AjY=;
-        b=1y37C+gI/jUWdFlxvR1xrVG8mH0rF0zFDOZEIqO8VIyFxHNeNX6TOvsbeOAishJZGO
-         q+quVx+Cjh9ELHT988zwk2SnMS+ecANXRZIWeH2Q9kN4GrN6tYF4aoWeIc7diLe1C/29
-         pPC9VMdJx1aJBJwqYv1/GtOZutpe+hI+7DJCJoI9uXDmfo/FGeXSIBXTRs9XskXW6DuZ
-         F9Tgu5lFxCnxNtzxH5qiIMoSvfEuog+6vMCN2kZ6gQ3HUZTls+e4HJjayqpqR6KynshI
-         BmhNvp12vBjRjMSgzAAi086O3WnYXB4r4+JxO5+ZgyBl15aIvz3Y+jRut+VnG36Lj8EJ
-         GNPg==
-X-Gm-Message-State: AOAM530p7nqnfwhyEhcz+zQ2izK5fGWMAaVYvuStOWFxonGQUWIzoRsU
-        UMZJ+rTfLfKALWIR+38XbolQ0cvnCT5vHBTF6P5sE3iQJ8Wg
-X-Google-Smtp-Source: ABdhPJyYLD4QTVdSn6ZbpL6AG/HH7TH+gDwlLsw81Do+tDZXXiPCdp9tQFzWp6J8wuRZn6teEq3HU4/HxHFOt0SoWapSLhtfdTIC
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RefRx5po0WHZQRy5R4kPGcVNk3NZW9epOkJFzUWcdCM=;
+        b=voMGWsSsW9PVH18lzz2o1FiGKYOCoFdP9pYQCBJ5FloBVmP0kIQETHTirgBiOpXKCX
+         u2OSEL1KPa+xzSWFKp+3HbIdpnSOtIXo2YbxjseCdkypWbxFyuRCGh5DFv/XqUcitzNk
+         1Qo+FS8Kn1zYtd0dB8bBTIdFJ0bDt2dkdlICEY4Iplgborrtyx3Q0oNy2DHU0DGdepxD
+         GGpwjuKFjpbAwu1l1y8zjDK287CbmUP/9vUKFPv51CN63zwX46z6Apk8ZVuuwpmPxEQV
+         oueQ4eYOfEd/6OvBuey2zhJyso6LWzB8W12BMRm7Bt7dc51qhhoeD5VDsSirZERqY/7R
+         Osfw==
+X-Gm-Message-State: AOAM532qhM/xHEyc4VmlHUm99lfwsLbAFapv95lcwH93LzqS8G1smWvG
+        XLXVjGKzH0Hwr+nLSUyykX/D5hmLNQ+AwGIb0k4=
+X-Google-Smtp-Source: ABdhPJyfkYN6A81HjzmJTCnynG8RKBtKMXJZnaNF5lbqXCG4MD+NtaaJEofHQBy7mJLyD8zPsbitqKp3/8sBZMUGMWE=
+X-Received: by 2002:a2e:82c5:0:b0:247:e81f:8b02 with SMTP id
+ n5-20020a2e82c5000000b00247e81f8b02mr7698337ljh.90.1647648725489; Fri, 18 Mar
+ 2022 17:12:05 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:d93:b0:317:ca63:2d38 with SMTP id
- l19-20020a0566380d9300b00317ca632d38mr5913727jaj.171.1647648377968; Fri, 18
- Mar 2022 17:06:17 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 17:06:17 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000048a02c05da870806@google.com>
-Subject: [syzbot] WARNING in floppy_check_events
-From:   syzbot <syzbot+43f787e4cfb1ef7b84a8@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, efremov@linux.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20220316224548.500123-1-namhyung@kernel.org> <20220316224548.500123-3-namhyung@kernel.org>
+ <YjSBRNxzaE9c+F/1@boqun-archlinux> <YjS2rlezTh9gdlDh@hirez.programming.kicks-ass.net>
+ <CAM9d7cjUR6shddKM2h9uFXgQf+0F504fnJmKRSfc3+PG3TmEyg@mail.gmail.com> <20220318180750.744f08d4@gandalf.local.home>
+In-Reply-To: <20220318180750.744f08d4@gandalf.local.home>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 18 Mar 2022 17:11:54 -0700
+Message-ID: <CAM9d7ci-91efxreUvLBhkAcs0rpngzR9+3BnZBDb4zLai2Ewcw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow path
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Byungchul Park <byungchul.park@lge.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Radoslaw Burny <rburny@google.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Mar 18, 2022 at 3:07 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Fri, 18 Mar 2022 14:55:27 -0700
+> Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> > > > This looks a littl ugly ;-/ Maybe we can rename __down_common() to
+> > > > ___down_common() and implement __down_common() as:
+> > > >
+> > > >       static inline int __sched __down_common(...)
+> > > >       {
+> > > >               int ret;
+> > > >               trace_contention_begin(sem, 0);
+> > > >               ret = ___down_common(...);
+> > > >               trace_contention_end(sem, ret);
+> > > >               return ret;
+> > > >       }
+> > > >
+> > > > Thoughts?
+> > >
+> > > Yeah, that works, except I think he wants a few extra
+> > > __set_current_state()'s like so:
+> >
+> > Not anymore, I decided not to because of noise in the task state.
+> >
+> > Also I'm considering two tracepoints for the return path to reduce
+> > the buffer size as Mathieu suggested.  Normally it'd return with 0
+> > so we can ignore it in the contention_end.  For non-zero cases,
+> > we can add a new tracepoint to save the return value.
+>
+> I don't think you need two tracepoints, but one that you can override.
+>
+> We have eprobes that let you create a trace event on top of a current trace
+> event that can limit or extend what is traced in the buffer.
+>
+> And I also have custom events that can be placed on top of any existing
+> tracepoint that has full access to what is sent into the tracepoint on not
+> just what is available to the trace event:
+>
+>   https://lore.kernel.org/all/20220312232551.181178712@goodmis.org/
 
-syzbot found the following issue on:
+Thanks for the info.  But it's unclear to me if it provides the custom
+event with the same or different name.  Can I use both of the original
+and the custom events at the same time?
 
-HEAD commit:    09688c0166e7 Linux 5.17-rc8
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13d09be9700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d35f9bc6884af6c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=43f787e4cfb1ef7b84a8
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+43f787e4cfb1ef7b84a8@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 3 PID: 12378 at drivers/block/floppy.c:1000 schedule_bh drivers/block/floppy.c:1000 [inline]
-WARNING: CPU: 3 PID: 12378 at drivers/block/floppy.c:1000 process_fd_request drivers/block/floppy.c:2851 [inline]
-WARNING: CPU: 3 PID: 12378 at drivers/block/floppy.c:1000 floppy_check_events+0x44a/0x560 drivers/block/floppy.c:4082
-Modules linked in:
-CPU: 3 PID: 12378 Comm: kworker/3:181 Not tainted 5.17.0-rc8-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Workqueue: events_freezable_power_ disk_events_workfn
-RIP: 0010:schedule_bh drivers/block/floppy.c:1000 [inline]
-RIP: 0010:process_fd_request drivers/block/floppy.c:2851 [inline]
-RIP: 0010:floppy_check_events+0x44a/0x560 drivers/block/floppy.c:4082
-Code: 05 17 81 02 0c 60 9b 7c 84 e8 62 f0 cf fc e9 ba fd ff ff 45 31 e4 e9 6e fc ff ff e8 20 70 43 fd e9 5b fd ff ff e8 86 f6 fb fc <0f> 0b eb b8 48 89 de 48 c7 c7 20 9f 6a 8c e8 33 e3 84 ff e9 e4 fb
-RSP: 0018:ffffc90028107cb0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff88805cdd8000 RSI: ffffffff847cc9aa RDI: 0000000000000003
-RBP: ffffffff907f72f0 R08: 0000000000000000 R09: ffffffff8c6b07a7
-R10: ffffffff847cc961 R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
-FS:  0000000000000000(0000) GS:ffff88802cd00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000f58f6db0 CR3: 0000000073008000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- disk_check_events+0xc2/0x420 block/disk-events.c:193
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks,
+Namhyung

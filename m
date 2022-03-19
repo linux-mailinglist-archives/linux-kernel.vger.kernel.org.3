@@ -2,101 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17E84DE68A
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 07:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA8B4DE690
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 07:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238985AbiCSGjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 02:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
+        id S240875AbiCSGlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 02:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231952AbiCSGjh (ORCPT
+        with ESMTP id S231952AbiCSGli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 02:39:37 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC55011799A;
-        Fri, 18 Mar 2022 23:38:15 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 6so6557655pgg.0;
-        Fri, 18 Mar 2022 23:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=GluDFdkBChva+jocW0SyMC3tuY/V24Q5GrrZHXeHqjY=;
-        b=dmAgLaV5v+UuQJZPxFMQ60+gTHVvTTCy2dgtlPo4NB7pESgqWaVIJ1nS/GZNpIMC4O
-         AAOrFBszlsetcmeL56Aqclu0KX52L933H53WWY9Boj5qUKKL4zwOmKdoQjebrf0lVRn2
-         qJl6crIW1HXl6bJV5EHazVyqI9/Qx79Lp0sAECmFGpFB/xWCRm+c+WwJwvo8mYJjoGSu
-         WkE9jfl6lCEMQY48LECZqwMSFHNJYMadfXOebfC0aM915NZUnQvTKajLzqETWsjBECnq
-         KCnNVjKrrJkNzoOoWXA7y9vvwqyNI+rL1cAL1yilms1isfyrmOWsZWfGPDWvnRUaevql
-         ctMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=GluDFdkBChva+jocW0SyMC3tuY/V24Q5GrrZHXeHqjY=;
-        b=G9fZrpkCcrCNPoDv0w+M1/3E04yp6PaGbg7Sg8JmvIUErSxL4RCaI4n80nwFB49IAp
-         IZ8QucywUWZ1CLInF+Jv5RMy2d2PQowXRi5iRRB9qvjPV/AMUnTwLYMumDaKRD02zpNA
-         zUO9g28ExnAPlrV8AC5HEVASmC9GuvKeDerlUcZ3AC33/ymmdjcAVgvJgFVKP6MiEGv3
-         fdVHBTAzRTj7VmVdyDDIq/qFw6Iy/GH4eUaWzr7W5LmdKkSL2Th/wFRE1c7looDIOEOf
-         Tl5UqWi2ntUNU9vhWcApL4DXlM7B05EauDkP359O2ni5hOU4EqGMG54QU9f3LPZ8t558
-         LLHA==
-X-Gm-Message-State: AOAM531FzqHDS3GW3Tkwet++a0acJe7Pma5fg0acqZjGmde+lSYykNos
-        hMpbUI6b6DWfgfu/KlxZv5+b9XJiqyOCrg==
-X-Google-Smtp-Source: ABdhPJxTVUrwj7oiSzs5uZYRcAMYaWGrhVuHFFsfiRjruylgzxUIJJI4LzGmBZ/71q2kw/PbVrObWg==
-X-Received: by 2002:aa7:8256:0:b0:4e0:78ad:eb81 with SMTP id e22-20020aa78256000000b004e078adeb81mr14187464pfn.30.1647671895288;
-        Fri, 18 Mar 2022 23:38:15 -0700 (PDT)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id y16-20020a637d10000000b00381268f2c6fsm9139077pgc.4.2022.03.18.23.38.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 23:38:14 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     pizza@shaftnet.org, kvalo@kernel.org, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH] cw1200: remove an unneeded NULL check on list iterator
-Date:   Sat, 19 Mar 2022 14:38:00 +0800
-Message-Id: <20220319063800.28791-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 19 Mar 2022 02:41:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D612E8CEB;
+        Fri, 18 Mar 2022 23:40:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B47DDB80189;
+        Sat, 19 Mar 2022 06:40:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF1FBC340EC;
+        Sat, 19 Mar 2022 06:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647672013;
+        bh=+tQGt//lSRZPhJkXDicQ1ZieebIlhDK1GC3VS9QAKnM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DjqGm2aWvDgEjFjvc8Q+X7VcPYxEazBs1Rpem1s7sI/erbbBBO9EF+tzljIdvNi8Y
+         VXlo+iYKJ4plAdAQer0E7khHcBkJCFjsrJ45v43z30ehOA6jJ73VLOTVws72QvpYrQ
+         Dnt00239Xs+B+0y6i8+8SfvuKPw2h5IZUv1UhCp4=
+Date:   Sat, 19 Mar 2022 07:40:03 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Carlos Llamas <cmllamas@google.com>,
+        Alessio Balsini <balsini@android.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel-team <kernel-team@android.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fuse: fix integer type usage in uapi header
+Message-ID: <YjV6w6UITwidXzNw@kroah.com>
+References: <20220318171405.2728855-1-cmllamas@google.com>
+ <CAJfpegsT6BO5P122wrKbni3qFkyHuq_0Qq4ibr05_SOa7gfvcw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfpegsT6BO5P122wrKbni3qFkyHuq_0Qq4ibr05_SOa7gfvcw@mail.gmail.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The list iterator 'item' is always non-NULL so it doesn't need to be
-checked. Thus just remove the unnecessary NULL check. Also remove the
-unnecessary initializer because the list iterator is always initialized.
+On Fri, Mar 18, 2022 at 08:24:55PM +0100, Miklos Szeredi wrote:
+> On Fri, 18 Mar 2022 at 18:14, Carlos Llamas <cmllamas@google.com> wrote:
+> >
+> > Kernel uapi headers are supposed to use __[us]{8,16,32,64} defined by
+> > <linux/types.h> instead of 'uint32_t' and similar. This patch changes
+> > all the definitions in this header to use the correct type. Previous
+> > discussion of this topic can be found here:
+> >
+> >   https://lkml.org/lkml/2019/6/5/18
+> 
+> This is effectively a revert of these two commits:
+> 
+> 4c82456eeb4d ("fuse: fix type definitions in uapi header")
 
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- drivers/net/wireless/st/cw1200/queue.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+That's a really odd commit, and should not have been recommended.  uapi
+headers have to use __u32 and friends, otherwise things can be wrong.
 
-diff --git a/drivers/net/wireless/st/cw1200/queue.c b/drivers/net/wireless/st/cw1200/queue.c
-index 12952b1c29df..05392598e273 100644
---- a/drivers/net/wireless/st/cw1200/queue.c
-+++ b/drivers/net/wireless/st/cw1200/queue.c
-@@ -90,7 +90,7 @@ static void __cw1200_queue_gc(struct cw1200_queue *queue,
- 			      bool unlock)
- {
- 	struct cw1200_queue_stats *stats = queue->stats;
--	struct cw1200_queue_item *item = NULL, *tmp;
-+	struct cw1200_queue_item *item, *tmp;
- 	bool wakeup_stats = false;
- 
- 	list_for_each_entry_safe(item, tmp, &queue->queue, head) {
-@@ -117,7 +117,7 @@ static void __cw1200_queue_gc(struct cw1200_queue *queue,
- 			queue->overfull = false;
- 			if (unlock)
- 				__cw1200_queue_unlock(queue);
--		} else if (item) {
-+		} else {
- 			unsigned long tmo = item->queue_timestamp + queue->ttl;
- 			mod_timer(&queue->gc, tmo);
- 			cw1200_pm_stay_awake(&stats->priv->pm_state,
--- 
-2.17.1
+> 7e98d53086d1 ("Synchronize fuse header with one used in library")
+> 
+> And so we've gone full circle and back to having to modify the header
+> to be usable in the cross platform library...
+> 
+> And also made lots of churn for what reason exactly?
 
+I think the original change above was wrong.
+
+thanks,
+
+greg k-h

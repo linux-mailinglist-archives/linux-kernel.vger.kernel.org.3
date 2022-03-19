@@ -2,174 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC404DEAF0
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 22:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF494DEAF3
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 22:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244225AbiCSVW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 17:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        id S243626AbiCSVZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 17:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243626AbiCSVWs (ORCPT
+        with ESMTP id S234541AbiCSVZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 17:22:48 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021C0F3A47;
-        Sat, 19 Mar 2022 14:21:25 -0700 (PDT)
-Received: from darkstar.musicnaut.iki.fi (85-76-3-17-nat.elisa-mobile.fi [85.76.3.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: aaro.koskinen)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 8051220AF5;
-        Sat, 19 Mar 2022 23:21:21 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1647724882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iDY17S7RCvDF9qiYuie8u8fzkGV4KkzgjhHnHykA8tk=;
-        b=bCbZEd9wb+b2O2zHn6wd1VCw1KePMyiGqG7liKfYRbq49DKQSqDHrpsUZJTJqSoz3siArC
-        oDVM00swXaN2tWb7gEuXQoaxutMz1E20iRwmkiw+Q9wzOy9FUMG8nXMdZo0ifAlbf9qPda
-        o0fAW0SaIfwjtBOIUPrp/VW+MwcRtyk=
-Date:   Sat, 19 Mar 2022 23:21:19 +0200
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     Tony Lindgren <tony@atomide.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Cc:     Paul Walmsley <paul@pwsan.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [RFC RFT PATCH 0/4] ARM: OMAP1: clock: Convert to CCF
-Message-ID: <20220319212119.GG1986@darkstar.musicnaut.iki.fi>
-References: <20220310233307.99220-1-jmkrzyszt@gmail.com>
- <YixWZ+IiN2l9jmzg@atomide.com>
- <20220319184952.GF1986@darkstar.musicnaut.iki.fi>
+        Sat, 19 Mar 2022 17:25:40 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EF517E18;
+        Sat, 19 Mar 2022 14:24:18 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id h13so13986165ede.5;
+        Sat, 19 Mar 2022 14:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KRLRxQFuDkV4XwZnkLpyAS1x2/YWT0F8R7jLRmwo6L4=;
+        b=ckFFKU9ntPEoMlOM/P4zkdVIRQ+5w4TtiUirfdI8b7/r/1k+VhpBhx/DlK/vCNiMkD
+         Bh6lOmkmHExMQXQj7oy246kLQ/HtynqmXdxscDyEJ1MpFeR3UwcfKgxQESw8zGKCcDMU
+         5OR6T0OehlPY6RMcd81mO5u7nqlwQph3L+YCc6s6iHSWmPnZnyhtHx6baxn4OeOmX+DU
+         1aIEPCogBFYj8XXdZSDUo60DbgR2xncPecAPESim9a/q83+E0d7lvsJL+6Lr9C7fJW8v
+         c7ihCZq57oP2DLbkoOhhChPLoBliQalFsYOTHDaHoTP27igjO3Eu4Tu+F7ogxS7sLR84
+         5hjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KRLRxQFuDkV4XwZnkLpyAS1x2/YWT0F8R7jLRmwo6L4=;
+        b=20pNi0E29nIrDdrNj3Y+dC8Pw95f6sYs0PXpVmtTgwR/+CPKUhXY12mPEbR8CfLP1t
+         VaAxjyDzdngnIfwFbAdA0yLwpDsZ91EtKCoFz9kGagN15a9LuUG8E8McH3mTpRwqZil6
+         5YtkB2VFSls3vxFtTV5K5gU7/Mf1sStC7eMKAMgjHDfl1RGTQMEK+yZWaOK4TAJYoc9n
+         zC8CP3uBnhXOLCclWq1Vqv6m3sLWKq7T8kK5tiVIiYrDVvHRLEjH7JG2NZTfmkpGCh2Q
+         K7c8J59EU5+5g5ulkWfqeRA9+P45MN5RmWi+Y65U5pnCNyxYbuAKmO2CdSE8kvLp+bAM
+         Vn4g==
+X-Gm-Message-State: AOAM533Ando1N7iha7q3ex/gYZrN+9SOCbxYaO+eSh/hB8JZe8UgWoqP
+        xOtXPh3P2aiTqzhDI2QJKiDYgkGB88Ydm59QNJrC4qivFqY=
+X-Google-Smtp-Source: ABdhPJx8xyZtjqqANjp1qdsdW4frrcybtDI8hcUIL1ci9B2xBFQ8Vnd+uMb38C+J/oBTTzDsIwFcsdexThI8WV8ND9Q=
+X-Received: by 2002:aa7:cb18:0:b0:413:3a7a:b5d6 with SMTP id
+ s24-20020aa7cb18000000b004133a7ab5d6mr15641286edt.254.1647725056396; Sat, 19
+ Mar 2022 14:24:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220319184952.GF1986@darkstar.musicnaut.iki.fi>
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1647724882; a=rsa-sha256; cv=none;
-        b=I1DHswTI7A5ca/cZd9nhOuu58fGsFhlGJrMzFEz3wHAwaTxrhMvM4BAis0lCoV+4+gQzz9
-        iU9Uv/Ha+3FAYQp6pYhNGK0PwDnlGKsFD0+gbXTH9fc4zZLu9r/F3utUw/zLo7HYL+Shl5
-        kiR2779eX49kRGqvQx76pYfW8bjfsos=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1647724882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iDY17S7RCvDF9qiYuie8u8fzkGV4KkzgjhHnHykA8tk=;
-        b=MOwC43AUk0Z/RE//O5IsMFCBT1FohW2xbiINA67irU2c7affmRIkINr3qUZ1ySBThJtkXE
-        jnVVko9wW6T/p14f1qaNE/D9A/uJbW2hksJ2qA6CBBPCve7GHkXq9EQ3zIV9jVdwd/1uSA
-        6WEjhgBOAw1HSKLbqPnKZdDBD00e/9A=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220313115704.301718-1-aford173@gmail.com> <a146f554-837a-d19a-425c-b1fd790a0497@lucaceresoli.net>
+ <MN2PR03MB5008F8DDC6DD934074EBBC0E93109@MN2PR03MB5008.namprd03.prod.outlook.com>
+ <59ee78c2-7d05-6d97-1ff2-36ea326be188@lucaceresoli.net> <MN2PR03MB500803388839E563D29CF25C93129@MN2PR03MB5008.namprd03.prod.outlook.com>
+In-Reply-To: <MN2PR03MB500803388839E563D29CF25C93129@MN2PR03MB5008.namprd03.prod.outlook.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Sat, 19 Mar 2022 16:24:05 -0500
+Message-ID: <CAHCN7xKZDTdKyMgCUOmKXrceC8Qhk8ES6xn5GFag-8Vt=NgpAA@mail.gmail.com>
+Subject: Re: [EXTERNAL] Re: [PATCH] clk: vc5: Enable VC5_HAS_PFD_FREQ_DBL on 5p49v6965
+To:     "Fillion, Claude" <Claude.Fillion@mksinst.com>
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "aford@beaconembedded.com" <aford@beaconembedded.com>,
+        "cstevens@beaconembedded.com" <cstevens@beaconembedded.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Marek Vasut <marek.vasut@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Mar 17, 2022 at 1:57 PM Fillion, Claude
+<Claude.Fillion@mksinst.com> wrote:
+>
+> Hello Luca,
+>
+> > -----Original Message-----
+> > From: Luca Ceresoli <luca@lucaceresoli.net>
+> > Sent: Tuesday, March 15, 2022 6:53 PM
+> > To: Fillion, Claude <Claude.Fillion@mksinst.com>; Adam Ford
+> > <aford173@gmail.com>; linux-clk@vger.kernel.org
+> > Cc: aford@beaconembedded.com; cstevens@beaconembedded.com;
+> > Michael Turquette <mturquette@baylibre.com>; Stephen Boyd
+> > <sboyd@kernel.org>; linux-kernel@vger.kernel.org; Marek Vasut
+> > <marek.vasut@gmail.com>
+> > Subject: Re: [EXTERNAL] Re: [PATCH] clk: vc5: Enable
+> > VC5_HAS_PFD_FREQ_DBL on 5p49v6965
+> >
+> > Hi Claude,
+> >
+> > [adding Marek in Cc:, the original author of the driver and also of the
+> > frequency doubler]
+> >
+> > On 15/03/22 20:34, Fillion, Claude wrote:
+> > > Hello Luca,
+> > >
+> > > I will defer to Adam, but a few comments:
+> > >
+> > >> -----Original Message-----
+> > >> From: Luca Ceresoli <luca@lucaceresoli.net>
+> > >> Sent: Tuesday, March 15, 2022 4:55 AM
+> > >> To: Adam Ford <aford173@gmail.com>; linux-clk@vger.kernel.org
+> > >> Cc: aford@beaconembedded.com; cstevens@beaconembedded.com;
+> > Fillion,
+> > >> Claude <Claude.Fillion@mksinst.com>; Michael Turquette
+> > >> <mturquette@baylibre.com>; Stephen Boyd <sboyd@kernel.org>; linux-
+> > >> kernel@vger.kernel.org
+> > >> Subject: [EXTERNAL] Re: [PATCH] clk: vc5: Enable
+> > VC5_HAS_PFD_FREQ_DBL
+> > >> on 5p49v6965
+> > >>
+> > >> This email originated outside of MKS.  Use caution when sharing
+> > >> information or opening attachments and links.
+> > >>
+> > >> --------------------------------------------------------------------=
+-
+> > >> -------------------------
+> > >> ----------------------------------------------
+> > >> Hi Adam, Claude,
+> > >>
+> > >> thanks for your patch.
+> > >>
+> > >> On 13/03/22 12:57, Adam Ford wrote:
+> > >>> The 5p49v6965 has a reference clock frequency doubler.
+> > >>> Enabling it adds versaclock_som.dbl to the clock tree, but the
+> > >>> output frequency remains correct.
+> > >>>
+> > >>> Suggested-by: Claude Fillion <Claude.Fillion@mksinst.com>
+> > >>> Signed-off-by: Adam Ford <aford173@gmail.com>
+> > >>>
+> > >>> diff --git a/drivers/clk/clk-versaclock5.c
+> > >>> b/drivers/clk/clk-versaclock5.c index e7be3e54b9be..4d190579e874
+> > >>> 100644
+> > >>> --- a/drivers/clk/clk-versaclock5.c
+> > >>> +++ b/drivers/clk/clk-versaclock5.c
+> > >>> @@ -1211,7 +1211,7 @@ static const struct vc5_chip_info
+> > >> idt_5p49v6965_info =3D {
+> > >>>   .model =3D IDT_VC6_5P49V6965,
+> > >>>   .clk_fod_cnt =3D 4,
+> > >>>   .clk_out_cnt =3D 5,
+> > >>> - .flags =3D VC5_HAS_BYPASS_SYNC_BIT,
+> > >>> + .flags =3D VC5_HAS_BYPASS_SYNC_BIT | VC5_HAS_PFD_FREQ_DBL,
+> > >>
+> > >>
+> > >> If my understanding is correct, the doubler is not mentioned by the
+> > >> datasheet, but it exists. Maybe it's worth a line of comment to help
+> > >> future readers not waste their time in finding out:
+> > >>   /* Frequency doubler not mentioned on datasheet */
+> > >>
+> > >
+> > > I see the doubler bit mentioned in Table 25 of both v6 and v6e specs.=
+  It is
+> > named differently, but appears to have the same purpose.
+> >
+> > Well, literally speaking what I wrote is correct: the _datasheet_ does =
+not
+> > mention the doubler. Table 25 you mention is on the "Register Descripti=
+on
+> > and Programming Guide".
+> >
+> > Practically speaking I would expect the datasheet to mention the hardwa=
+re
+> > blocks including the doubler, but apparently Renesas has a different op=
+inion
+> > and perhaps they are not alone.
+> >
+> > So I think you can forget about my proposal to add a comment.
+> >
+> > >> Can you confirm that:
+> > >>  - the en_ref_doubler bit value defaults to zero when reading it, as=
+ the
+> > >>    register guide says?
+> > >>  - if set to 1 the frequencies double?
+> > >>
+> > >> With that confirmed, the patch looks good.
+> > >>
+> > >> Thanks,
+> > >> --
+> > >> Luca
+> > >
+> > > I played around a bit with the programming board today and did not se=
+e
+> > what I expected to see.
+> > >
+> > > Using i2cget I see that the register in question (0x10) has a default=
+ value of
+> > 0xA0 for both 6901 and 6965.  Thus it seems disabled by default for bot=
+h
+> > parts.
+> >
+> > Coherently with the Register guide. OK.
+> >
+> > > Starting at my base frequency of 46.8MHz, setting the bit to 1 (i2cse=
+t)
+> > changes the output  frequency to 59.04MHz for the 6901 part, and to
+> > 47.7MHz for the 6965 part.  So setting the 'doubler' bit changes output
+> > frequency for both parts, but not the same amount.
+> > >
+> > > Not sure of the meaning, just want to pass the information along.
+> >
+> > Me neither.
+> >
+> > I have no clever idea, only this one that I consider unlikely: by enabl=
+ing the
+> > doubler you may have increased some internal frequency above its allowe=
+d
+> > range and thus the chip is not working properly anymore. Can you use a
+> > lower base frequency or check the PLL settings to ensure you are not
+> > exceeding some range?
+> >
+> > What output frequency are you measuring? OUT0 or another one? What
+> > frequency do you measure with en_ref_doubler =3D 0?
+> >
+> > --
+> > Luca
+>
+> Not sure what I did wrong with my earlier testing, but I am now seeing bo=
+th parts respond similarly to the doubler bit being set.
+>
+> With doubler bit disabled (register 0x10, value 0xa0), I set the output f=
+requencies to 1, 10, 100, and 46.8MHz.
+>
+> After setting doubler bit (0xa8), I saw frequencies of 1.260, 12.60, 126.=
+0, and 58.9 Mhz for both 6901 and 6965 parts.
+>
+> So from my testing the doubler bit seems to behave similarly for both par=
+ts.
+>
+> At this point I will leave my unofficial testing and move on to writing a=
+ consumer driver.
 
-On Sat, Mar 19, 2022 at 08:49:55PM +0200, Aaro Koskinen wrote:
-> On Sat, Mar 12, 2022 at 10:14:31AM +0200, Tony Lindgren wrote:
-> > * Janusz Krzysztofik <jmkrzyszt@gmail.com> [220310 23:32]:
-> > > The main motivation behind this series is planned resurection of OMAP1
-> > > camera driver.  Since OMAP1 clock internals have never been visible to
-> > > drivers, that driver used to use v4l2-clk to expose a pixel clock for a
-> > > sensor.  The v4l2-clk code has been recently depreciated and removed from
-> > > the media subtree, hence the need for an alternative solution.
-> > 
-> > Nice :) This will also help Arnd with building multi-v5 kernels.
-> 
-> This will need more testing still... The patch 4 is breaking at least 770
-> (the display/fb doesn't work anymore).
+I don't have a scope to measure the exact frequencies, but I was able
+to test it with both USB and Ethernet, which are clock from the
+versaclock, and I can check the output frequencies against the
+clk_summary in debugfs.
 
-Patches 1-3 are OK on Nokia 770, OSK and Palm TE.
+Without this patch:
 
-Patch 4 breaks 770, but OSK and Palm TE are OK.
+    clock-controller.mux              1        1        0    25000000
+        0     0  50000         Y
+       clock-controller.out0_sel_i2cb       0        0        0
+25000000          0     0  50000         Y
+       clock-controller.pfd           1        1        0    25000000
+        0     0  50000         Y
+          clock-controller.pll        1        1        0  2800000000
+        0     0  50000         Y
+             clock-controller.fod3       1        1        0
+24576000          0     0  50000         Y
+                clock-controller.out4       1        1        0
+24576000          0     0  50000         Y
+             clock-controller.fod2       0        0        0
+24000000          0     0  50000         Y
+                clock-controller.out3       0        0        0
+24000000          0     0  50000         Y
+             clock-controller.fod1       0        0        0
+24000000          0     0  50000         Y
+                clock-controller.out2       0        0        0
+24000000          0     0  50000         Y
+             clock-controller.fod0       0        0        0
+24000000          0     0  50000         Y
+                clock-controller.out1       0        0        0
+24000000          0     0  50000         Y
 
-Below is the problem with 770. As a quick hack, I tried replacing
-all clk_enable/disable()s with prepare_enable/disable_unprepare()s in
-drivers/video/fbdev/omap/hwa742.c and drivers/video/fbdev/omap/sossi.c
-and that seems to help...
 
-[    0.374389] omapfb: lph8923 rev 92 LCD detected, 16 data lines
-[    0.374816] omapfb: configured for panel lph8923
-[    0.383789] omapfb: LCDC initialized
-[    0.384216] ------------[ cut here ]------------
-[    0.384368] WARNING: CPU: 0 PID: 1 at drivers/clk/clk.c:1012 clk_core_enable+0x94/0xb0
-[    0.384613] Enabling unprepared ck_sossi
-[    0.384704] Modules linked in:
-[    0.384796] CPU: 0 PID: 1 Comm: swapper Not tainted 5.17.0-rc8-770-los_381206+-00072-gb2406fc1ddd4 #2
-[    0.385009] Hardware name: Nokia 770
-[    0.385101]  unwind_backtrace from show_stack+0x10/0x14
-[    0.385314]  show_stack from __warn+0xac/0xe4
-[    0.385528]  __warn from warn_slowpath_fmt+0x90/0xc8
-[    0.385711]  warn_slowpath_fmt from clk_core_enable+0x94/0xb0
-[    0.385894]  clk_core_enable from clk_core_enable_lock+0x18/0x2c
-[    0.386077]  clk_core_enable_lock from sossi_init+0xa0/0x258
-[    0.386260]  sossi_init from hwa742_init+0x90/0x538
-[    0.386474]  hwa742_init from omapfb_do_probe+0x200/0x68c
-[    0.386657]  omapfb_do_probe from mipid_spi_probe+0x1b4/0x230
-[    0.386840]  mipid_spi_probe from spi_probe+0x48/0x6c
-[    0.387054]  spi_probe from really_probe+0xac/0x2f0
-[    0.387237]  really_probe from __driver_probe_device+0x80/0xe4
-[    0.387390]  __driver_probe_device from driver_probe_device+0x30/0xd8
-[    0.387573]  driver_probe_device from __driver_attach+0x70/0xf0
-[    0.387756]  __driver_attach from bus_for_each_dev+0x74/0xc0
-[    0.387908]  bus_for_each_dev from bus_add_driver+0x14c/0x1d8
-[    0.388061]  bus_add_driver from driver_register+0x74/0x108
-[    0.388244]  driver_register from do_one_initcall+0x4c/0x1cc
-[    0.388427]  do_one_initcall from kernel_init_freeable+0x170/0x1f4
-[    0.388641]  kernel_init_freeable from kernel_init+0x10/0x108
-[    0.388824]  kernel_init from ret_from_fork+0x14/0x2c
-[    0.388977] Exception stack(0xc0c41fb0 to 0xc0c41ff8)
-[    0.389099] 1fa0:                                     00000000 00000000 00000000 00000000
-[    0.389282] 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    0.389434] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    0.389556] ---[ end trace 0000000000000000 ]---
-[    0.389709] omapfb omapfb: invalid SoSSI sync pattern: 00000000, 00000000
-[    0.389831] ------------[ cut here ]------------
-[    0.389923] WARNING: CPU: 0 PID: 1 at drivers/clk/clk.c:953 clk_core_disable+0xb4/0xcc
-[    0.390136] ck_sossi already disabled
-[    0.390228] Modules linked in:
-[    0.390319] CPU: 0 PID: 1 Comm: swapper Tainted: G        W         5.17.0-rc8-770-los_381206+-00072-gb2406fc1ddd4 #2
-[    0.390502] Hardware name: Nokia 770
-[    0.390594]  unwind_backtrace from show_stack+0x10/0x14
-[    0.390808]  show_stack from __warn+0xac/0xe4
-[    0.391021]  __warn from warn_slowpath_fmt+0x90/0xc8
-[    0.391204]  warn_slowpath_fmt from clk_core_disable+0xb4/0xcc
-[    0.391387]  clk_core_disable from clk_core_disable_lock+0x18/0x24
-[    0.391540]  clk_core_disable_lock from sossi_init+0x1bc/0x258
-[    0.391754]  sossi_init from hwa742_init+0x90/0x538
-[    0.391937]  hwa742_init from omapfb_do_probe+0x200/0x68c
-[    0.392120]  omapfb_do_probe from mipid_spi_probe+0x1b4/0x230
-[    0.392333]  mipid_spi_probe from spi_probe+0x48/0x6c
-[    0.392547]  spi_probe from really_probe+0xac/0x2f0
-[    0.392730]  really_probe from __driver_probe_device+0x80/0xe4
-[    0.392883]  __driver_probe_device from driver_probe_device+0x30/0xd8
-[    0.393066]  driver_probe_device from __driver_attach+0x70/0xf0
-[    0.393249]  __driver_attach from bus_for_each_dev+0x74/0xc0
-[    0.393402]  bus_for_each_dev from bus_add_driver+0x14c/0x1d8
-[    0.393585]  bus_add_driver from driver_register+0x74/0x108
-[    0.393737]  driver_register from do_one_initcall+0x4c/0x1cc
-[    0.393920]  do_one_initcall from kernel_init_freeable+0x170/0x1f4
-[    0.394134]  kernel_init_freeable from kernel_init+0x10/0x108
-[    0.394317]  kernel_init from ret_from_fork+0x14/0x2c
-[    0.394470] Exception stack(0xc0c41fb0 to 0xc0c41ff8)
-[    0.394592] 1fa0:                                     00000000 00000000 00000000 00000000
-[    0.394775] 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[    0.394958] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    0.395080] ---[ end trace 0000000000000000 ]---
-[    0.417907] omapfb omapfb: controller initialization failed (-19)
+With this patch:
 
-A.
+    clock-controller.mux              1        1        0    25000000
+        0     0  50000         Y
+       clock-controller.out0_sel_i2cb       0        0        0
+25000000          0     0  50000         Y
+       clock-controller.dbl           1        1        0    25000000
+        0     0  50000         Y
+          clock-controller.pfd        1        1        0    25000000
+        0     0  50000         Y
+             clock-controller.pll       1        1        0
+2800000000          0     0  50000         Y
+                clock-controller.fod3       1        1        0
+24576000          0     0  50000         Y
+                   clock-controller.out4       1        1        0
+24576000          0     0  50000         Y
+                clock-controller.fod2       0        0        0
+24000000          0     0  50000         Y
+                   clock-controller.out3       0        0        0
+24000000          0     0  50000         Y
+                clock-controller.fod1       0        0        0
+24000000          0     0  50000         Y
+                   clock-controller.out2       0        0        0
+24000000          0     0  50000         Y
+                clock-controller.fod0       0        0        0
+24000000          0     0  50000         Y
+                   clock-controller.out1       0        0        0
+24000000          0     0  50000         Y
+
+From what I can tell, the only thing that changes is the introduction
+of clock-controller.dbl into the clock dump.
+In my interpretation of reading the programmer's manual, the frequency
+that is doubled is the reference frequency, but based on looking at
+the clock dump, it's not obvious what's happening.
+
+Having said that, if Claude is measuring incorrect frequencies, I am
+fine with abandoning this patch.
+
+adam
+
+>
+> Regards,
+> Claude
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> This message and any attachments are intended only for the designated rec=
+ipient(s) and may contain confidential or proprietary information and be su=
+bject to the attorney-client privilege or other confidentiality protections=
+.  If you are not a designated recipient, you may not review, use, copy or =
+distribute this message or any attachments.  If you received this email in =
+error, please notify the sender by reply e-mail and permanently delete the =
+original and any copies of this message and any attachments thereto.  Thank=
+ you.

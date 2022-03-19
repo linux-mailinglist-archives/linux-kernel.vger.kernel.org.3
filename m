@@ -2,111 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764394DE6A9
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 08:19:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BE94DE6B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 08:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242364AbiCSHU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 03:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S242383AbiCSH0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 03:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231423AbiCSHUy (ORCPT
+        with ESMTP id S242364AbiCSH0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 03:20:54 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC6629C97C
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 00:19:34 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id g19so11347168pfc.9
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 00:19:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/Z8qKc5VVBPg1IRhLNVyUK1J5fxihYi2IheAZ3i/Q+w=;
-        b=MnHqwf5aaNB4+54EyUsY0n0WVyd9AGmT8aRziaNvaFe0eq7/mAEWE0aLJuJq5ockGo
-         3hTqrCJ/D8Z9GibW18PHcFnu8ockhfwqIMuqrXCGPOh2pCpk152ttmlidoc7EQPfOe7P
-         yPX9wUwgPGdgF2D71AJYzNvg0lnciBtYCI+J7uLTKRUgZi/Fz7BtWnFOCjtBdgTMNqHX
-         sEiTGmPEN1ZEjk/DHNyfGs6K/wZkOltwxfKOeXovPTt7qwuZjR9DlaERYG2ezMJK85Z6
-         KekqVfUXLhN1WxGVzPbesFhlpjhzQJtom38NrPCmJ8acDLqScU1Rb69JQfh+wc0ygM33
-         qxAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/Z8qKc5VVBPg1IRhLNVyUK1J5fxihYi2IheAZ3i/Q+w=;
-        b=q3hpng/1OeP9arl4dQWKSYsBhTu1xdae+dGh9OFhQCCs8JVZ88RaKcdis3XFgN/qO4
-         JIAzruIT9kKIm+W3pWl171V6aginf84JK38MpFG84R6kqBgo93RSyOVa9lx5RX/kKT9y
-         Xknr0i1YaPKzJqwr/A85AzjKVn9BSt9K5TlECguSiYFpb514x8+x/WG5rM0UEmdZOm9V
-         CaXh76zdHXJP7n1XcxE5ND1XoZvUFPzbIz/aExuE/V7Pq4Wymwu9cy6gMJPFQ/MzALZ8
-         FgwLyKK9cpWDjr/WWYwI/EsxBs4aOGGulrY0LbWwuFjFRnSgj3xyXmsEX2sNBMcDyca5
-         6osA==
-X-Gm-Message-State: AOAM532FtsrDayv5ZjrLBNqk2TWJxLxBQYIfy8fJnGx2YbXLZYBGYWgO
-        pRMJ3AfWQnX4ZOBo7jI8cx4=
-X-Google-Smtp-Source: ABdhPJwPPjIJAmHa4m3YxlpkZ2CFFFrOq7p11tnKTcUY31RutiHq9Tc/+MNRmnKJl+8Hs3c57UL8Cg==
-X-Received: by 2002:a63:1e4b:0:b0:381:c48:928b with SMTP id p11-20020a631e4b000000b003810c48928bmr10256472pgm.139.1647674373614;
-        Sat, 19 Mar 2022 00:19:33 -0700 (PDT)
-Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id z12-20020aa7888c000000b004f3fc6d95casm11825885pfe.20.2022.03.19.00.19.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 00:19:32 -0700 (PDT)
-From:   Nadav Amit <nadav.amit@gmail.com>
-X-Google-Original-From: Nadav Amit
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Nadav Amit <namit@vmware.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Srivatsa S . Bhat" <srivatsa.bhat@linux.vnet.ibm.com>
-Subject: [PATCH] smp: Fix offline cpu check in flush_smp_call_function_queue
-Date:   Sat, 19 Mar 2022 00:20:15 -0700
-Message-Id: <20220319072015.1495036-1-namit@vmware.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 19 Mar 2022 03:26:10 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6A6252A4
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 00:24:48 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id B7AA75C00FE;
+        Sat, 19 Mar 2022 03:24:45 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Sat, 19 Mar 2022 03:24:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:date:date:from:from:in-reply-to
+        :message-id:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=6zsYak
+        eys530iM/BufaiZKRdl2xMfzAFt+qW/2GIDJY=; b=K0yn7r70r13ys/2KTFFWAA
+        Mn4A0lAcRLo1OCtcK5lQI4Yu3RkOtGA+dtqzgd5qB6LFkg+tgKnC/OYBxvYVzihJ
+        t100GsarQ4VmBmu86y4CXiV+c1DXMYaAzY0mxOEGjS5HpuB4FGBOrtR2gpzlW4tG
+        Gwjj4TCsFtupu/SbMae1tWN+1yEIS8s4tBUqtC33yqxIXEnAbz7ZsN10lUO5TvnQ
+        Hhjj6/V3f36b1EzoKEqoNU52CLKntPNMhCltB5OrtIYWiflPB/EII6mFTaI47KIg
+        OR5ndgFPi6M00IJsiRVL1PrF21VdNYsed50s6UfCK4Ig+uz8ZHsL4bhv8yglAuKA
+        ==
+X-ME-Sender: <xms:PIU1Ym1RBhG-CszhjxyrKdZvm21eJKOR2A5l4Y29NzNM9YeaRSlZOw>
+    <xme:PIU1YpG1SssAAQwJhwqld2XIx2A774vYi0qBQZ9-Gs9uYV-WhQSiddgEuG-aXZjk9
+    2OR01GRYCkGiIFl4LA>
+X-ME-Received: <xmr:PIU1Yu7s-8THufQZP2Jo9qE4trc14-DMf0S-5w32PjACt97Rp0dT7BCwnlHsZBbuZVkjKR0lB0l_jjMdSAnlIwBbTsz85r6iOXw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefjedguddtiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefvkffhufffsedttdertddttddtnecuhfhrohhmpefhihhnnhcuvfhhrghi
+    nhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtthgvrh
+    hnpedtleetkeelkeekvdeujeehkefgvddtheehhfetieethfetfeeghfduheevveelleen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfthhhrg
+    hinheslhhinhhugidqmheikehkrdhorhhg
+X-ME-Proxy: <xmx:PYU1Yn0hbUqKMKjyOI9YdIVjlsmnAhoa9ax9sqEMx5uEh48rfpFe-g>
+    <xmx:PYU1YpFUDT7abG8j8WDsxG6L0RNE16PtFxDN_GVRBBzk0-VeaYm3xg>
+    <xmx:PYU1Yg_kOZpIYZ9L8uW_aJGWOD_TiQVC9suZV8-_9ayxrIztZZxjdg>
+    <xmx:PYU1YnP_RfU1ODldtHZCp5e2hxXK3TNnK9bMm-OzOepQ_Zb_9Epn8Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 19 Mar 2022 03:24:42 -0400 (EDT)
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     "Randy Dunlap" <rdunlap@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Message-Id: <650f5577599a701fdd632cdd469a9cea9788cdf3.1647674431.git.fthain@linux-m68k.org>
+From:   Finn Thain <fthain@linux-m68k.org>
+Subject: [PATCH] macintosh/via-pmu: Fix compiler warnings when CONFIG_PROC_FS
+ is disabled
+Date:   Sat, 19 Mar 2022 18:20:31 +1100
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nadav Amit <namit@vmware.com>
+drivers/macintosh/via-pmu.c:897:12: warning: 'pmu_battery_proc_show' defined but not used [-Wunused-function]
+ static int pmu_battery_proc_show(struct seq_file *m, void *v)
+            ^~~~~~~~~~~~~~~~~~~~~
+drivers/macintosh/via-pmu.c:871:12: warning: 'pmu_irqstats_proc_show' defined but not used [-Wunused-function]
+ static int pmu_irqstats_proc_show(struct seq_file *m, void *v)
+            ^~~~~~~~~~~~~~~~~~~~~~
+drivers/macintosh/via-pmu.c:860:12: warning: 'pmu_info_proc_show' defined but not used [-Wunused-function]
+ static int pmu_info_proc_show(struct seq_file *m, void *v)
+            ^~~~~~~~~~~~~~~~~~
 
-The check in flush_smp_call_function_queue() for callbacks that are sent
-to offline CPUs currently checks whether the queue is empty.
+Rearrange some code and add some #ifdefs to avoid unused code warnings
+when CONFIG_PROC_FS is disabled.
 
-However, flush_smp_call_function_queue() has just deleted all the
-callbacks from the queue and moved all the entries into a local list.
-This checks would only be positive if some callbacks were added in the
-short time after llist_del_all() was called. This does not seem to be
-the intention of this check.
-
-Change the check to look at the local list to which the entries were
-moved instead of the queue from which all the callbacks were just
-removed.
-
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Srivatsa S. Bhat <srivatsa.bhat@linux.vnet.ibm.com>
-Fixes: 8d056c48e4862 ("CPU hotplug, smp: flush any pending IPI callbacks before CPU offline")
-Signed-off-by: Nadav Amit <namit@vmware.com>
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Finn Thain <fthain@linux-m68k.org>
 ---
- kernel/smp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/macintosh/via-pmu.c | 61 ++++++++++++++++++++++---------------
+ 1 file changed, 36 insertions(+), 25 deletions(-)
 
-diff --git a/kernel/smp.c b/kernel/smp.c
-index d82439bac401..eb275b69d5f3 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -582,7 +582,7 @@ static void flush_smp_call_function_queue(bool warn_cpu_offline)
+diff --git a/drivers/macintosh/via-pmu.c b/drivers/macintosh/via-pmu.c
+index 55afa6dfa263..5ffebf29b630 100644
+--- a/drivers/macintosh/via-pmu.c
++++ b/drivers/macintosh/via-pmu.c
+@@ -173,10 +173,15 @@ static unsigned long async_req_locks;
+ #define NUM_IRQ_STATS 13
+ static unsigned int pmu_irq_stats[NUM_IRQ_STATS];
  
- 	/* There shouldn't be any pending callbacks on an offline CPU. */
- 	if (unlikely(warn_cpu_offline && !cpu_online(smp_processor_id()) &&
--		     !warned && !llist_empty(head))) {
-+		     !warned && entry != NULL)) {
- 		warned = true;
- 		WARN(1, "IPI on offline CPU %d\n", smp_processor_id());
++#ifdef CONFIG_PROC_FS
+ static struct proc_dir_entry *proc_pmu_root;
+ static struct proc_dir_entry *proc_pmu_info;
+ static struct proc_dir_entry *proc_pmu_irqstats;
+ static struct proc_dir_entry *proc_pmu_options;
++static struct proc_dir_entry *proc_pmu_batt[PMU_MAX_BATTERIES];
++static void pmu_proc_setup(void);
++#endif
++
+ static int option_server_mode;
  
+ int pmu_battery_count;
+@@ -185,7 +190,6 @@ unsigned int pmu_power_flags = PMU_PWR_AC_PRESENT;
+ struct pmu_battery_info pmu_batteries[PMU_MAX_BATTERIES];
+ static int query_batt_timer = BATTERY_POLLING_COUNT;
+ static struct adb_request batt_req;
+-static struct proc_dir_entry *proc_pmu_batt[PMU_MAX_BATTERIES];
+ 
+ int asleep;
+ 
+@@ -204,11 +208,7 @@ static int init_pmu(void);
+ static void pmu_start(void);
+ static irqreturn_t via_pmu_interrupt(int irq, void *arg);
+ static irqreturn_t gpio1_interrupt(int irq, void *arg);
+-static int pmu_info_proc_show(struct seq_file *m, void *v);
+-static int pmu_irqstats_proc_show(struct seq_file *m, void *v);
+-static int pmu_battery_proc_show(struct seq_file *m, void *v);
+ static void pmu_pass_intr(unsigned char *data, int len);
+-static const struct proc_ops pmu_options_proc_ops;
+ 
+ #ifdef CONFIG_ADB
+ const struct adb_driver via_pmu_driver = {
+@@ -551,26 +551,9 @@ static int __init via_pmu_dev_init(void)
+ 	}
+ #endif /* CONFIG_PPC32 */
+ 
+-	/* Create /proc/pmu */
+-	proc_pmu_root = proc_mkdir("pmu", NULL);
+-	if (proc_pmu_root) {
+-		long i;
+-
+-		for (i=0; i<pmu_battery_count; i++) {
+-			char title[16];
+-			sprintf(title, "battery_%ld", i);
+-			proc_pmu_batt[i] = proc_create_single_data(title, 0,
+-					proc_pmu_root, pmu_battery_proc_show,
+-					(void *)i);
+-		}
+-
+-		proc_pmu_info = proc_create_single("info", 0, proc_pmu_root,
+-				pmu_info_proc_show);
+-		proc_pmu_irqstats = proc_create_single("interrupts", 0,
+-				proc_pmu_root, pmu_irqstats_proc_show);
+-		proc_pmu_options = proc_create("options", 0600, proc_pmu_root,
+-						&pmu_options_proc_ops);
+-	}
++#ifdef CONFIG_PROC_FS
++	pmu_proc_setup();
++#endif
+ 	return 0;
+ }
+ 
+@@ -857,6 +840,7 @@ query_battery_state(void)
+ 			2, PMU_SMART_BATTERY_STATE, pmu_cur_battery+1);
+ }
+ 
++#ifdef CONFIG_PROC_FS
+ static int pmu_info_proc_show(struct seq_file *m, void *v)
+ {
+ 	seq_printf(m, "PMU driver version     : %d\n", PMU_DRIVER_VERSION);
+@@ -978,6 +962,33 @@ static const struct proc_ops pmu_options_proc_ops = {
+ 	.proc_write	= pmu_options_proc_write,
+ };
+ 
++static void pmu_proc_setup(void)
++{
++	long i;
++
++	/* Create /proc/pmu */
++	proc_pmu_root = proc_mkdir("pmu", NULL);
++	if (!proc_pmu_root)
++		return;
++
++	for (i = 0; i < pmu_battery_count; i++) {
++		char title[16];
++
++		sprintf(title, "battery_%ld", i);
++		proc_pmu_batt[i] =
++			proc_create_single_data(title, 0, proc_pmu_root,
++						pmu_battery_proc_show, (void *)i);
++	}
++
++	proc_pmu_info = proc_create_single("info", 0, proc_pmu_root,
++					   pmu_info_proc_show);
++	proc_pmu_irqstats = proc_create_single("interrupts", 0, proc_pmu_root,
++					       pmu_irqstats_proc_show);
++	proc_pmu_options = proc_create("options", 0600, proc_pmu_root,
++				       &pmu_options_proc_ops);
++}
++#endif /* CONFIG_PROC_FS */
++
+ #ifdef CONFIG_ADB
+ /* Send an ADB command */
+ static int pmu_send_request(struct adb_request *req, int sync)
 -- 
-2.25.1
+2.32.0
 

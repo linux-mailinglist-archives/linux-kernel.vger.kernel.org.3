@@ -2,121 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6AF4DE7A5
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 12:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AAE4DE7AE
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 12:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242822AbiCSLlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 07:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
+        id S242835AbiCSLm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 07:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237574AbiCSLlF (ORCPT
+        with ESMTP id S242841AbiCSLmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 07:41:05 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B86199EDA
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 04:39:45 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id c15so14247214ljr.9
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 04:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y5rb/Yqi5NN7XZ/MmiRVeK5TPw9M1I0RZCaA66Lu/5w=;
-        b=KAPBlkaGiCLm9fcSwqKhNljOouS1ZmsBfDXkobBg2aZkvyDAqe8q+MXw+oNH5r+VY8
-         3PQZAK48cKbABd9QS5gKUCURdcgo/lnSbHky5A5WTjTcylzSAQwzHM1E3CoGNyW4H4/Z
-         laOJCo8vmhbk0lQa6l6Le4b72IbETDg9kr60QlgfXcEKoxdcxzJ6NWK5GmuMfjzNHVDw
-         4QO06SbphYbjVAc+wglXcHVEQhuiu6y05BShmHMBvdVy9muQsZ9ZL2x86maRI8hONtVP
-         2PbTrD3ckJRvwXWlZIKgywjJiIQy2QBq6ivPPezlX+ItzMcs6RtMABkG78DodSnj+w+I
-         p56Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y5rb/Yqi5NN7XZ/MmiRVeK5TPw9M1I0RZCaA66Lu/5w=;
-        b=makLR3RinEaL5Qi7Rry92lYm/sowwvkJAS1qikMELtS0kriZzYNLJBgLBTB4scJG4/
-         WMeTiC4OEkbkS7wGKyzF92yRJZW6Q/DoFYy35RB9y30CgyafJi/GQZagkDMW3VgTbp/j
-         QNhD6wzy7pZbkrWSb3ON74t595h7BfqHzfNLxYhn4rC7P7ndexT0rZni8RDb4b5wKX04
-         6GkL6KMN+tK9Yv7b5eWWQOSA4xvh1wuBtf57/9chTYSwbhIRJyNJ9gvoCGvDaab80IH5
-         nNgafyVH5Ctkt581CQM9Ta+EQiIBAPv5fvmQ1p4M9P1hDkjmeQ9vkkna+5jAyCWzIZcs
-         RoGA==
-X-Gm-Message-State: AOAM530uhBHwYib0mtPK6xIDDcQFJOw4B9/jCR3n+In4yH+9fnhXfueN
-        XPum4CRkIMqj8imv7Ad4ln4tQRbhWKbrcSEpDFqE/w==
-X-Google-Smtp-Source: ABdhPJzROACa86AklSBYVBypFM4Wj7ORn2S6CpOACIDdXjNIhVDWVaICxTHt7pGEUv8kGzRGnNVXg/ZQKN8a8lgOiUE=
-X-Received: by 2002:a05:651c:2123:b0:247:e3b1:da81 with SMTP id
- a35-20020a05651c212300b00247e3b1da81mr9197167ljq.34.1647689983405; Sat, 19
- Mar 2022 04:39:43 -0700 (PDT)
+        Sat, 19 Mar 2022 07:42:51 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E36114DD9;
+        Sat, 19 Mar 2022 04:41:25 -0700 (PDT)
+X-UUID: 577617f00714400d84ef945d5a6fd7ac-20220319
+X-UUID: 577617f00714400d84ef945d5a6fd7ac-20220319
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 65843724; Sat, 19 Mar 2022 19:41:18 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 19 Mar 2022 19:41:17 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 19 Mar 2022 19:41:16 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>, <tzungbi@google.com>
+CC:     <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
+        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
+        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: [v5 0/4] ASoC: mediatek: mt8192: support rt1015p_rt5682s
+Date:   Sat, 19 Mar 2022 19:41:07 +0800
+Message-ID: <20220319114111.11496-1-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220317035542.272547-1-apatel@ventanamicro.com>
- <f1079093-54db-bd20-3342-b06d069c5d1f@codethink.co.uk> <CAK8P3a0Gt7TOT2zpNw7YNR=MNLBWVAADL5dBgY15ZL8sDW20HQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0Gt7TOT2zpNw7YNR=MNLBWVAADL5dBgY15ZL8sDW20HQ@mail.gmail.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Sat, 19 Mar 2022 17:09:31 +0530
-Message-ID: <CAK9=C2XGgfEZ890DgKmPXKw7=1BjnP-2L+_bpx+efX_rnw=_Nw@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: Increase range and default value of NR_CPUS
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Ben Dooks <ben.dooks@codethink.co.uk>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        RDNS_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 8:44 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Mar 18, 2022 at 3:46 PM Ben Dooks <ben.dooks@codethink.co.uk> wrote:
-> >
-> > On 17/03/2022 03:55, Anup Patel wrote:
-> > > Currently, the range and default value of NR_CPUS is too restrictive
-> > > for high-end RISC-V systems with large number of HARTs. The latest
-> > > QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
-> > > restrictive for QEMU as well.
->
-> If qemu allows 512, what is the reason for limiting the kernel to 256?
+The series reuses mt8192-mt6359-rt10150rt5682.c for supporting machine
+driver with rt1015p speaker amplifier and rt5682s headset codec.
 
-There is no particular reason. I will change this to 2-512 range to match
-the maximum number of CPUs supported by the QEMU virt machine.
+Changes form v4:
+  - split a large patch into three small patches for easy reviewing
+  - correct coding style
 
->
-> > > Other major architectures (such as
-> > > ARM64, x86_64, MIPS, etc) have a much higher range and default
-> > > value of NR_CPUS.
-> >
-> > What's the memory overhead for increasing this?
->
-> It's supposed to be very small, I would expect three main sources of overhead:
->
-> - cpumask_t variables, those grow once you go beyond the size of
->    an unsigned long (32 or 64 bits), so with the default just on the limit, this
->    makes no difference.
->    Note that you can run out of stack space with NR_CPUS values if
->    CONFIG_CPUMASK_OFFSTACK is disabled. Should not be
->    a problem for 512 or below.
+Changes from v3:
+  - fix build error: too many arguments for format
+    [-Werror-format-extra-args]
 
-Yes, the rationale is to have default NR_CPUS such that size of
-cpumask_t does not change for RV32 and RV64.
+Changes from v2:
+  - fix build warnings such as "data argument not used by format string"
 
->
-> - percpu variables: these are dynamically allocated based on the number of
->   CPUs at boot time, so they should not have any real impact.
->
-> - NR_CPUS sized arrays, these are sometimes used in place of
->   percpu data. This is only a problem if the array members individually
->   are more than a few bytes. There are not too many of these in the kernel,
->   as using those is discouraged.
+Changes from v1:
+  - uses the snd_soc_of_get_dai_link_codecs to complete the
+  configuration of dai_link's codecs
+  - uses definitions to simplifies card name and compatible name
 
-Separately, we are also trying to replace NR_CPUS sized arrays.
+Jiaxin Yu (4):
+  ASoC: dt-bindings: mt8192-mt6359: add new compatible and new
+    properties
+  ASoC: mediatek: mt8192: refactor for I2S3 DAI link of speaker
+  ASoC: mediatek: mt8192: refactor for I2S8/I2S9 DAI links of headset
+  ASoC: mediatek: mt8192: support rt1015p_rt5682s
 
-Regards,
-Anup
+ .../sound/mt8192-mt6359-rt1015-rt5682.yaml    |  29 +++
+ sound/soc/mediatek/Kconfig                    |   1 +
+ .../mt8192/mt8192-mt6359-rt1015-rt5682.c      | 201 +++++++++++-------
+ 3 files changed, 153 insertions(+), 78 deletions(-)
+
+-- 
+2.18.0
+

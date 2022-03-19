@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D284DEAE2
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 21:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 160D24DEA90
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 21:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244248AbiCSUsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 16:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
+        id S244106AbiCSUPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 16:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244246AbiCSUsa (ORCPT
+        with ESMTP id S244087AbiCSUPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 16:48:30 -0400
-X-Greylist: delayed 1975 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 19 Mar 2022 13:47:04 PDT
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF05F264828
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 13:47:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6ajcZfSkznJBpCyliSlqPagKhVWKG3TW6xOBEMsIzac=; b=pT0Adt9XqRLNv15aAKGfOgaJCl
-        /3v88gNHwz7bu8M5E4XjoGp4rSJB1TZQtaJHr9PG0USx7pP7sLgB+sUIS25zRG7tiuhRA5UUmjUoF
-        IMqS4CEPG4quEhWvjt4ZbwMMKOgRS6AuM1URLv3qg/1SvW/02xoV3NFD5DioprD1h9lXyCSGJmSU3
-        1rTWSsop99nDq6rNMDLzs79l4JRnmatvtgYCSvPVYjMH5NnijoMmthsw3bFZEYfm6bH5CwW+kvk6T
-        v0hUXsbluftG2VSsi3uObTPXsfw6qWwTgQbXCgCjT4FLWtsRDV8hfxzsd1yLKaZx1ZIr4LYyypl16
-        B2EiUx/A==;
-Received: from [187.39.124.208] (helo=[192.168.0.110])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nVfSE-00047T-NZ; Sat, 19 Mar 2022 21:13:39 +0100
-Message-ID: <c06a21cc-e1c1-e627-f908-ebc2a041e29a@igalia.com>
-Date:   Sat, 19 Mar 2022 17:13:21 -0300
+        Sat, 19 Mar 2022 16:15:10 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ECABF3
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 13:13:48 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso13259960pjb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 13:13:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ybhg95yFOnZ8Gx7hYH/STPgOcRSYtoONIdcVwWBj9xs=;
+        b=KMIQAg5HKfIs/DbNm1nEdvkBhAsJ8bnTP0O9YF7ErhQMpZTB3Ff3xrXpDPkTm2CwCo
+         a+7aoSvdZaVT24b9O8STb4KUjtrTT6pI50AU+8AYh5rVgh83awi0b4FzkuHuLJh7XCqP
+         c7quHdx/EFQfwt7nlndBIK4oe8lOpEoigu4wCIcF04x9i09cH1VgJSHl07Wn56Y7VBEp
+         1RhCXGWPRWoorfIADecIBdorgIVfZDW9ZvR71tG7vLGNHtBWZxD3luisSA+iRmWwIPvT
+         ZdEozZqnOAIfJOhuSt5yKbF0Ji8mcs82z0Ciq7APkX5MUdCPZNvKDWf42ds/OCeSwD6p
+         sR+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ybhg95yFOnZ8Gx7hYH/STPgOcRSYtoONIdcVwWBj9xs=;
+        b=3q7S+vbKGgAuqCX6jHKGmvre6L8xhbIdjQ62w5yCzxkMMGyuqqjuKM+WMmCxTQwLSA
+         NEc85pE6jQqOtgp1mHJqMQFN3dRXWhInsugC/mpETfoF2In1OXUWEPn4B5hvuuDhn74A
+         +nHHaDJ7iduNdFqZViyggEKGn3s/WC+OrAFs8Wo2LEvky26KyKwCKvhPPPziwsgWwMRX
+         tqM2J/V6f3ZdlGVpAO0ynxcRE+JS4ixKBjxfN16P/KhnccHJWCiJ8Ny+ORAjWMgL1D7e
+         DHQhqSsGQcvGLO7cwD0RMex5eZHI2688+TIhFsZ3r6rcuwMsmTUsc9y82x6NV7n/s/cc
+         BNbw==
+X-Gm-Message-State: AOAM5336oy0cO5REyOxXQkgsxM0IZB0CISkwiZPyoniqhdn1mKk9ZpQQ
+        YsMLACbq7ZobZ7svYdjcze0=
+X-Google-Smtp-Source: ABdhPJxNnO+eafhYL2t5d69XBdzY0Xucmf1hFod5sePQL8o7hwpjKKSsuf+rrm256mbCa7fsgowP6A==
+X-Received: by 2002:a17:903:2312:b0:154:22f3:23df with SMTP id d18-20020a170903231200b0015422f323dfmr5577566plh.82.1647720827985;
+        Sat, 19 Mar 2022 13:13:47 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:951a:ad0c:e44c:ff47])
+        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004f72acd4dadsm13722621pfx.81.2022.03.19.13.13.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Mar 2022 13:13:47 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH] xtensa: enable plugin support
+Date:   Sat, 19 Mar 2022 13:13:28 -0700
+Message-Id: <20220319201328.3006869-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC 0/4] Support kdump with LUKS encryption by reusing LUKS
- master key
-Content-Language: en-US
-To:     Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org
-Cc:     Milan Broz <gmazyland@gmail.com>,
-        Thomas Staudt <tstaudt@de.ibm.com>,
-        Kairui Song <ryncsn@gmail.com>, dm-devel@redhat.com,
-        Mike Snitzer <snitzer@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Dave Young <dyoung@redhat.com>, linux-kernel@vger.kernel.org
-References: <20220318103423.286410-1-coxu@redhat.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220318103423.286410-1-coxu@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 07:34, Coiby Xu wrote:
-> [...]
-> Based on Milan's feedback [1] on Kairui's ideas to support kdump with
-> LUKS encryption, this patch set addresses the above issues by
->  1) first saving the LUKS master key to kexec when opening the encrypted
->     device 
->  2) then saving the master key to the reserved memory for kdump when 
->     loading kdump kernel image.
-> 
-> So the LUKS master key never leaves the kernel space and once the key has
-> been saved to the reserved memory for kdump, it would be wiped 
-> immediately. If there is no security concern with this approach or any
-> other concern, I will drop the following assumptions made for this RFC
-> version in v1,
->  - only x86 is supported
->  - there is only one LUKS device for the system
-> 
-> to extend the support to other architectures including POWER, ARM and
-> s390x and address the case of multiple LUKS devices. Any feedback will be 
-> appreciated, thanks!
-> 
+Compiler plugins can be built starting with xtensa gcc 12. Enable plugin
+support for xtensa when gcc-12 or newer is used.
 
-Hi Coiby, thanks for the very interesting work!
-I confess I didn't review the code as I have not much experience in
-dm-crypt/key management, but I have a generic question related with the
-motivation of the patch set.
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ arch/xtensa/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-My understanding is that one (the main?) motivation of this series would
-be to protect the saved memory (vmcore) from being read by some
-"unauthorized" entity - in order to achieve this goal, it is hereby
-proposed to allow kdump kernel to access a memory-saved key and with
-that, mount an encrypted volume, saving the vmcore over there correct?
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index a02c3388f521..ad91836ce7a8 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -34,6 +34,7 @@ config XTENSA
+ 	select HAVE_DMA_CONTIGUOUS
+ 	select HAVE_EXIT_THREAD
+ 	select HAVE_FUNCTION_TRACER
++	select HAVE_GCC_PLUGINS if GCC_VERSION >= 120000
+ 	select HAVE_HW_BREAKPOINT if PERF_EVENTS
+ 	select HAVE_IRQ_TIME_ACCOUNTING
+ 	select HAVE_PCI
+-- 
+2.30.2
 
-So, what if instead of playing with the volume key, users with this
-concern address that by reserving some *unencrypted partition* for
-saving the vmcore, but then *encrypt the vmcore* itself! So, instead of
-requiring saving a full-volume key, mount everything, risk data
-corruption if something goes bad...we just have makedumpfile encrypting
-the vmcore with some preloaded key (which might be saved inside the
-kdump minimal intird, for example), and saving the encrypted file into a
-clear/unencrypted volume? This way we also prevent excessive memory
-consumption during kdump due to the lvm/dm-userspace paraphernalia usage.
-
-Does it make sense or am I being silly or missing something?
-Cheers,
-
-
-Guilherme

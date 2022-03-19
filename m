@@ -2,243 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CE34DE5E1
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 05:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216B24DE5E3
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 05:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241935AbiCSEDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 00:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
+        id S238534AbiCSELZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 00:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231640AbiCSEDZ (ORCPT
+        with ESMTP id S230088AbiCSELX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 00:03:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CDD17942B;
-        Fri, 18 Mar 2022 21:02:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5913EB82158;
-        Sat, 19 Mar 2022 04:02:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1168AC340EC;
-        Sat, 19 Mar 2022 04:02:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647662522;
-        bh=8s1Rb3BKfk6/ptqrc0ER3So3OgFRqJpX2kh+8F+4PAw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=E6EEmc9fVWUkNnvO3SJxBou1tQVbCsA5szsJDUGO0TvDjpa801AoPKaXTbmmrk+te
-         mbebj5TpAbmrZTuVVWTDdCsAuoqyVQQzQPcty+rN5xZswSb1WarCVbmdu2JbtX5Tlh
-         3/jzEI6UBkFcxjHZ1veM8eX5JQkuxtWa4hqOLHzwJnFFTniku9r/xJQOyEyyHXGvXx
-         6O+huf2mR/yh2EnJD7+duSv6mksY3djgwpEynZxaeKlddJg6fHRY1BtBAr1Da1C5g5
-         ZuiHuYp1pXPZmt7ytq6nVRq6LEWhAclXqzd0m+O9AffGr5NdyaqI8BGVQo4x/Km1ZW
-         DLH29i6xSlWJQ==
-Received: by mail-vs1-f53.google.com with SMTP id h126so4623864vsc.13;
-        Fri, 18 Mar 2022 21:02:02 -0700 (PDT)
-X-Gm-Message-State: AOAM5339bAn3Ceg3w5tOP0FXCYkWNYGM+w+RHL7DzMyvTdow8urkpngX
-        4c6TPheQqScj1xg2HsQPsnGgrIQMgEwC1thgwb8=
-X-Google-Smtp-Source: ABdhPJzYwDEORAK24zdYpS+W7WS9QwZnB2x8En/tDUrLGIbXr41obp2qynZmnNsN0GZyCgT4ZUzOi6VGwD8Ij8z7Gz4=
-X-Received: by 2002:a67:bc05:0:b0:324:eed0:ec29 with SMTP id
- t5-20020a67bc05000000b00324eed0ec29mr586232vsn.2.1647662520935; Fri, 18 Mar
- 2022 21:02:00 -0700 (PDT)
+        Sat, 19 Mar 2022 00:11:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0A21BE13A
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 21:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647663002; x=1679199002;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dGLMu86/na7XNy8AfG00unkjirXLfkOk8XkuuhsLmjk=;
+  b=DduIZKo+m9WFHIv4JTEIJx9fKJ0zuK6ZBcBCWV/kaCC9pYN5u23BxEkh
+   4AxISO3BZdABHyL5fwWSeDiG/Dx8XInIV/1/SQR6WiBBTvfg7g5o9F1H3
+   1gL7dZX7kYyGyMuZF+XkBp4GG/oV7z5jGclOu9L8W1Eo9Y1tftY9RjbvW
+   EygytCNwKByExlnp+JRdr9N7q3KfRwIwVmIhoHH43ZMsHdu4UjPpYvqIj
+   Bl/fm6ikO/T+VDuRip792SAMDPG5XhsbwC5+GahjVq/7CF4YpqUqdxOi8
+   14Th74qCeNNql0zkkff35yJufv9XLfmK/MQUGEnA9hHHAAryuHAb/t4nD
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="257467306"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="257467306"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 21:10:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="499476933"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 18 Mar 2022 21:09:59 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nVQPf-000FZ4-8c; Sat, 19 Mar 2022 04:09:59 +0000
+Date:   Sat, 19 Mar 2022 12:09:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: [peterz-queue:locking/core 17/19] arch/x86/kvm/x86.h:29:30: error:
+ too many arguments to function call, expected 0, have 1
+Message-ID: <202203191213.tC0sjaY7-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220318083421.2062259-1-guoren@kernel.org> <mhng-88509dbf-71a1-495a-84a7-3dffef8c77a5@palmer-ri-x1c9>
-In-Reply-To: <mhng-88509dbf-71a1-495a-84a7-3dffef8c77a5@palmer-ri-x1c9>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 19 Mar 2022 12:01:49 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTShUjTQ=7g3uW8JmPzkZSG0fWKK7fXgAsERSUfrCgzA0w@mail.gmail.com>
-Message-ID: <CAJF2gTShUjTQ=7g3uW8JmPzkZSG0fWKK7fXgAsERSUfrCgzA0w@mail.gmail.com>
-Subject: Re: [PATCH] csky: Move to generic ticket-spinlock
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+head:   200a79c670d24d4d9a75a6a9cbfd14af2f5d0ad9
+commit: 5c9f3806a4400c2957abeea9419547f856457a20 [17/19] lockdep: Fix -Wunused-parameter for _THIS_IP_
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220319/202203191213.tC0sjaY7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=5c9f3806a4400c2957abeea9419547f856457a20
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue locking/core
+        git checkout 5c9f3806a4400c2957abeea9419547f856457a20
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-On Sat, Mar 19, 2022 at 6:48 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> On Fri, 18 Mar 2022 01:34:21 PDT (-0700), guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > There is no benefit from custom implementation for ticket-spinlock,
-> > so move to generic ticket-spinlock for easy maintenance.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
->
-> Thanks, one less port to look at ;)
->
-> Looks like there were a few comments on the v1, and I wasn't going to
-> target this at the upcoming merge window anyway because I wanted to give
-Agree, we needn't so hurry.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> the various RISC-V vendors time to test stuff.  LMK if you want me to
-> add this to the others, but I was planning on posting a stable tag
-> either way so no big deal on my end.
-Yes, I hope csky's could be in the series. And I updated V2 with
-Arnd's suggestion, please have a look:
-https://lore.kernel.org/linux-arch/20220319035457.2214979-1-guoren@kernel.org/T/#t
+All errors (new ones prefixed by >>):
 
->
-> > ---
-> >  arch/csky/include/asm/Kbuild           |  2 +
-> >  arch/csky/include/asm/spinlock.h       | 82 +-------------------------
-> >  arch/csky/include/asm/spinlock_types.h | 20 +------
-> >  3 files changed, 4 insertions(+), 100 deletions(-)
-> >
-> > diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
-> > index 904a18a818be..d94434288c31 100644
-> > --- a/arch/csky/include/asm/Kbuild
-> > +++ b/arch/csky/include/asm/Kbuild
-> > @@ -3,6 +3,8 @@ generic-y += asm-offsets.h
-> >  generic-y += extable.h
-> >  generic-y += gpio.h
-> >  generic-y += kvm_para.h
-> > +generic-y += ticket-lock.h
-> > +generic-y += ticket-lock-types.h
-> >  generic-y += qrwlock.h
-> >  generic-y += user.h
-> >  generic-y += vmlinux.lds.h
-> > diff --git a/arch/csky/include/asm/spinlock.h b/arch/csky/include/asm/spinlock.h
-> > index 69f5aa249c5f..8bc179ba0d8d 100644
-> > --- a/arch/csky/include/asm/spinlock.h
-> > +++ b/arch/csky/include/asm/spinlock.h
-> > @@ -3,87 +3,7 @@
-> >  #ifndef __ASM_CSKY_SPINLOCK_H
-> >  #define __ASM_CSKY_SPINLOCK_H
-> >
-> > -#include <linux/spinlock_types.h>
-> > -#include <asm/barrier.h>
-> > -
-> > -/*
-> > - * Ticket-based spin-locking.
-> > - */
-> > -static inline void arch_spin_lock(arch_spinlock_t *lock)
-> > -{
-> > -     arch_spinlock_t lockval;
-> > -     u32 ticket_next = 1 << TICKET_NEXT;
-> > -     u32 *p = &lock->lock;
-> > -     u32 tmp;
-> > -
-> > -     asm volatile (
-> > -             "1:     ldex.w          %0, (%2) \n"
-> > -             "       mov             %1, %0   \n"
-> > -             "       add             %0, %3   \n"
-> > -             "       stex.w          %0, (%2) \n"
-> > -             "       bez             %0, 1b   \n"
-> > -             : "=&r" (tmp), "=&r" (lockval)
-> > -             : "r"(p), "r"(ticket_next)
-> > -             : "cc");
-> > -
-> > -     while (lockval.tickets.next != lockval.tickets.owner)
-> > -             lockval.tickets.owner = READ_ONCE(lock->tickets.owner);
-> > -
-> > -     smp_mb();
-> > -}
-> > -
-> > -static inline int arch_spin_trylock(arch_spinlock_t *lock)
-> > -{
-> > -     u32 tmp, contended, res;
-> > -     u32 ticket_next = 1 << TICKET_NEXT;
-> > -     u32 *p = &lock->lock;
-> > -
-> > -     do {
-> > -             asm volatile (
-> > -             "       ldex.w          %0, (%3)   \n"
-> > -             "       movi            %2, 1      \n"
-> > -             "       rotli           %1, %0, 16 \n"
-> > -             "       cmpne           %1, %0     \n"
-> > -             "       bt              1f         \n"
-> > -             "       movi            %2, 0      \n"
-> > -             "       add             %0, %0, %4 \n"
-> > -             "       stex.w          %0, (%3)   \n"
-> > -             "1:                                \n"
-> > -             : "=&r" (res), "=&r" (tmp), "=&r" (contended)
-> > -             : "r"(p), "r"(ticket_next)
-> > -             : "cc");
-> > -     } while (!res);
-> > -
-> > -     if (!contended)
-> > -             smp_mb();
-> > -
-> > -     return !contended;
-> > -}
-> > -
-> > -static inline void arch_spin_unlock(arch_spinlock_t *lock)
-> > -{
-> > -     smp_mb();
-> > -     WRITE_ONCE(lock->tickets.owner, lock->tickets.owner + 1);
-> > -}
-> > -
-> > -static inline int arch_spin_value_unlocked(arch_spinlock_t lock)
-> > -{
-> > -     return lock.tickets.owner == lock.tickets.next;
-> > -}
-> > -
-> > -static inline int arch_spin_is_locked(arch_spinlock_t *lock)
-> > -{
-> > -     return !arch_spin_value_unlocked(READ_ONCE(*lock));
-> > -}
-> > -
-> > -static inline int arch_spin_is_contended(arch_spinlock_t *lock)
-> > -{
-> > -     struct __raw_tickets tickets = READ_ONCE(lock->tickets);
-> > -
-> > -     return (tickets.next - tickets.owner) > 1;
-> > -}
-> > -#define arch_spin_is_contended       arch_spin_is_contended
-> > -
-> > +#include <asm/ticket-lock.h>
-> >  #include <asm/qrwlock.h>
-> >
-> >  #endif /* __ASM_CSKY_SPINLOCK_H */
-> > diff --git a/arch/csky/include/asm/spinlock_types.h b/arch/csky/include/asm/spinlock_types.h
-> > index db87a12c3827..0bb7f6022a3b 100644
-> > --- a/arch/csky/include/asm/spinlock_types.h
-> > +++ b/arch/csky/include/asm/spinlock_types.h
-> > @@ -3,25 +3,7 @@
-> >  #ifndef __ASM_CSKY_SPINLOCK_TYPES_H
-> >  #define __ASM_CSKY_SPINLOCK_TYPES_H
-> >
-> > -#ifndef __LINUX_SPINLOCK_TYPES_RAW_H
-> > -# error "please don't include this file directly"
-> > -#endif
-> > -
-> > -#define TICKET_NEXT  16
-> > -
-> > -typedef struct {
-> > -     union {
-> > -             u32 lock;
-> > -             struct __raw_tickets {
-> > -                     /* little endian */
-> > -                     u16 owner;
-> > -                     u16 next;
-> > -             } tickets;
-> > -     };
-> > -} arch_spinlock_t;
-> > -
-> > -#define __ARCH_SPIN_LOCK_UNLOCKED    { { 0 } }
-> > -
-> > +#include <asm/ticket-lock-types.h>
-> >  #include <asm-generic/qrwlock_types.h>
-> >
-> >  #endif /* __ASM_CSKY_SPINLOCK_TYPES_H */
+   In file included from arch/x86/kvm/x86.c:22:
+   In file included from arch/x86/kvm/mmu.h:7:
+   In file included from arch/x86/kvm/cpuid.h:5:
+>> arch/x86/kvm/x86.h:29:30: error: too many arguments to function call, expected 0, have 1
+           lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~
+   include/linux/ftrace.h:879:22: note: expanded from macro 'CALLER_ADDR0'
+   #define CALLER_ADDR0 ((unsigned long)ftrace_return_address0)
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/irqflags.h:23:15: note: 'lockdep_hardirqs_on_prepare' declared here
+     extern void lockdep_hardirqs_on_prepare(void);
+                 ^
+   In file included from arch/x86/kvm/x86.c:41:
+   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
+                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+      : ((x) & (bit1)) / ((bit1) / (bit2))))
+                       ^ ~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+--
+   In file included from arch/x86/kvm/emulate.c:28:
+>> arch/x86/kvm/x86.h:29:30: error: too many arguments to function call, expected 0, have 1
+           lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~
+   include/linux/ftrace.h:879:22: note: expanded from macro 'CALLER_ADDR0'
+   #define CALLER_ADDR0 ((unsigned long)ftrace_return_address0)
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/irqflags.h:23:15: note: 'lockdep_hardirqs_on_prepare' declared here
+     extern void lockdep_hardirqs_on_prepare(void);
+                 ^
+   1 error generated.
 
 
+vim +29 arch/x86/kvm/x86.h
 
--- 
-Best Regards
- Guo Ren
+65297341d8e15b Uros Bizjak         2021-08-09  12  
+bc908e091b3264 Sean Christopherson 2021-05-04  13  static __always_inline void kvm_guest_enter_irqoff(void)
+bc908e091b3264 Sean Christopherson 2021-05-04  14  {
+bc908e091b3264 Sean Christopherson 2021-05-04  15  	/*
+bc908e091b3264 Sean Christopherson 2021-05-04  16  	 * VMENTER enables interrupts (host state), but the kernel state is
+bc908e091b3264 Sean Christopherson 2021-05-04  17  	 * interrupts disabled when this is invoked. Also tell RCU about
+bc908e091b3264 Sean Christopherson 2021-05-04  18  	 * it. This is the same logic as for exit_to_user_mode().
+bc908e091b3264 Sean Christopherson 2021-05-04  19  	 *
+bc908e091b3264 Sean Christopherson 2021-05-04  20  	 * This ensures that e.g. latency analysis on the host observes
+bc908e091b3264 Sean Christopherson 2021-05-04  21  	 * guest mode as interrupt enabled.
+bc908e091b3264 Sean Christopherson 2021-05-04  22  	 *
+bc908e091b3264 Sean Christopherson 2021-05-04  23  	 * guest_enter_irqoff() informs context tracking about the
+bc908e091b3264 Sean Christopherson 2021-05-04  24  	 * transition to guest mode and if enabled adjusts RCU state
+bc908e091b3264 Sean Christopherson 2021-05-04  25  	 * accordingly.
+bc908e091b3264 Sean Christopherson 2021-05-04  26  	 */
+bc908e091b3264 Sean Christopherson 2021-05-04  27  	instrumentation_begin();
+bc908e091b3264 Sean Christopherson 2021-05-04  28  	trace_hardirqs_on_prepare();
+bc908e091b3264 Sean Christopherson 2021-05-04 @29  	lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+bc908e091b3264 Sean Christopherson 2021-05-04  30  	instrumentation_end();
+bc908e091b3264 Sean Christopherson 2021-05-04  31  
+bc908e091b3264 Sean Christopherson 2021-05-04  32  	guest_enter_irqoff();
+bc908e091b3264 Sean Christopherson 2021-05-04  33  	lockdep_hardirqs_on(CALLER_ADDR0);
+bc908e091b3264 Sean Christopherson 2021-05-04  34  }
+bc908e091b3264 Sean Christopherson 2021-05-04  35  
 
-ML: https://lore.kernel.org/linux-csky/
+:::::: The code at line 29 was first introduced by commit
+:::::: bc908e091b3264672889162733020048901021fb KVM: x86: Consolidate guest enter/exit logic to common helpers
+
+:::::: TO: Sean Christopherson <seanjc@google.com>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

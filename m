@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FE74DE92D
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 17:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FFE4DE925
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 16:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243568AbiCSQC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 12:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
+        id S243552AbiCSP5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 11:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243567AbiCSQCt (ORCPT
+        with ESMTP id S240571AbiCSP5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 12:02:49 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377102986F2
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 09:01:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647705688; x=1679241688;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/g53adEZmY5zvK1Z/UMrw6ZvrI8Ylr0AvgyWU3T0Dls=;
-  b=XqpNnv/nXpV2iS58P4bdiLoB1JDDySwNpGGZnp7fa4NhznsNEuJqwapM
-   +Gt5GhYJEjI73wKBvWfrtjfE4ZO2kYCWt5CADD52ZEAZk2fM03u8DSY+i
-   px4ZmnYuPkBX4dz4ZpD9q+wd38OjuhI7GNDe2o41yYco74fs8n+PyYvxT
-   qxrwTKiouUuPMqCClCCteaZX32GXqqbs+r4EQnie0+/bM09BwvWiAe/+G
-   I+7H+8x8BolbLOgNpCs6aNxryMBExU1NyBpW8ucMXiOOSupQSYdNXTcdT
-   jshr3eI8dUXKAUMlKyUiiPTCOqb0J1ia38vwhZXgF5Vr37fIplhEkwpBP
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="257257962"
-X-IronPort-AV: E=Sophos;i="5.90,194,1643702400"; 
-   d="scan'208";a="257257962"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 09:01:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,194,1643702400"; 
-   d="scan'208";a="551215193"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 19 Mar 2022 09:01:23 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVbW7-000G6K-47; Sat, 19 Mar 2022 16:01:23 +0000
-Date:   Sun, 20 Mar 2022 00:00:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Karsten Graul <kgraul@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: net/smc/smc_llc.c:40:1: warning: alignment 1 of 'struct smc_llc_hdr'
- is less than 4
-Message-ID: <202203192301.sqf7Lfs7-lkp@intel.com>
+        Sat, 19 Mar 2022 11:57:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5EE11C2DA8;
+        Sat, 19 Mar 2022 08:56:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46FBBB80D76;
+        Sat, 19 Mar 2022 15:56:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DEE1C340EC;
+        Sat, 19 Mar 2022 15:56:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647705376;
+        bh=mWgn1CBzOkYwjn82yecc5EtFhgvAOyNs7D+zgWA1Pzs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=a5u8j2xKVrouhv9yF6fTA3Rw6Q70jmd+Vz1ZcX+y02xqeghd2U3FLWrlniJaOXDuL
+         acCutNc4HbsZUSdDgaz9zqyGmdBDTfit6QJg5ltZx0TzsI3ynJlbx9kfPOGBduJkE+
+         1SRS/hIxYSenlBp6b5lwuC9LPIVLWz4KR32AkIf7/hJMLfbtiXy1kneVwNQtl8CGdY
+         nVYeGTsGab5Bvk1L3i4b2mVcOZNJuUKBGwyBjKX49tcPCMx8vWKaOvsGvOTTmFOwOz
+         CCSQwFlY0fLTVs/rESAh2N+z1k2tlFkdUPMOmL4JmbE8rIPgsh5efsRvD8EFMJ42Af
+         NSOpiPGtrs7rA==
+Date:   Sat, 19 Mar 2022 16:03:39 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     <alexandru.tachici@analog.com>
+Cc:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v2 4/8] iio: adc: ad_sigma_delta: Add sequencer support
+Message-ID: <20220319160339.47dd683d@jic23-huawei>
+In-Reply-To: <20220318162722.51215-5-alexandru.tachici@analog.com>
+References: <20220318162722.51215-1-alexandru.tachici@analog.com>
+        <20220318162722.51215-5-alexandru.tachici@analog.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,160 +56,358 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Karsten,
+On Fri, 18 Mar 2022 18:27:18 +0200
+<alexandru.tachici@analog.com> wrote:
 
-FYI, the error/warning still remains.
+> From: Alexandru Tachici <alexandru.tachici@analog.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   34e047aa16c0123bbae8e2f6df33e5ecc1f56601
-commit: b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196 net/smc: extend LLC layer for SMC-Rv2
-date:   5 months ago
-config: arm-randconfig-r032-20220319 (https://download.01.org/0day-ci/archive/20220319/202203192301.sqf7Lfs7-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b4ba4652b3f8b7c9bbb5786f8acf4724bdab2196
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash net/smc/
+If this is originally Lars' patch, the From should match
+Lars.  If you've taken if further than appropriate
+co-developed tag is needed.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Some sigma-delta chips support sampling of multiple
+> channels in continuous mode.
+> 
+> When the operating with more than one channel enabled,
+> the channel sequencer cycles through the enabled channels
+> in sequential order, from first channel to the last one.
+> If a channel is disabled, it is skipped by the sequencer.
+> 
+> If more than one channel is used in continuous mode,
+> instruct the device to append the status to the SPI transfer
+> (1 extra byte) every time we receive a sample.
+> All sigma-delta chips possessing a sampling sequencer have
+> this ability. Inside the status register there will be
+> the number of the converted channel. In this way, even
+> if the CPU won't keep up with the sampling rate, it won't
+> send to userspace wrong channel samples.
 
-All warnings (new ones prefixed by >>):
+It would be good to say what it does do if this happens as well
+as what it doesn't do.  You have it well commented below, but
+I think you should also mention it here.
 
->> net/smc/smc_llc.c:40:1: warning: alignment 1 of 'struct smc_llc_hdr' is less than 4 [-Wpacked-not-aligned]
-      40 | } __packed;             /* format defined in
-         | ^
-   In file included from <command-line>:
-   In function 'smc_llc_add_pending_send',
-       inlined from 'smc_llc_send_test_link' at net/smc/smc_llc.c:736:7,
-       inlined from 'smc_llc_testlink_work' at net/smc/smc_llc.c:2094:2:
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_555' declared with attribute error: must increase SMC_WR_BUF_SIZE to at least sizeof(struct smc_llc_msg)
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:409:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     409 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_556' declared with attribute error: must adapt SMC_WR_TX_SIZE to sizeof(struct smc_llc_msg); if not all smc_wr upper layer protocols use the same message size any more, must start to set link->wr_tx_sges[i].length on each individual smc_wr_tx_send()
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:412:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     412 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   In function 'smc_llc_add_pending_send',
-       inlined from 'smc_llc_send_message' at net/smc/smc_llc.c:760:7:
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_555' declared with attribute error: must increase SMC_WR_BUF_SIZE to at least sizeof(struct smc_llc_msg)
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:409:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     409 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_556' declared with attribute error: must adapt SMC_WR_TX_SIZE to sizeof(struct smc_llc_msg); if not all smc_wr upper layer protocols use the same message size any more, must start to set link->wr_tx_sges[i].length on each individual smc_wr_tx_send()
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:412:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     412 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   In function 'smc_llc_add_pending_send',
-       inlined from 'smc_llc_send_confirm_rkey' at net/smc/smc_llc.c:492:7:
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_555' declared with attribute error: must increase SMC_WR_BUF_SIZE to at least sizeof(struct smc_llc_msg)
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:409:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     409 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_556' declared with attribute error: must adapt SMC_WR_TX_SIZE to sizeof(struct smc_llc_msg); if not all smc_wr upper layer protocols use the same message size any more, must start to set link->wr_tx_sges[i].length on each individual smc_wr_tx_send()
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
-     303 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
-     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   net/smc/smc_llc.c:412:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     412 |         BUILD_BUG_ON_MSG(
-         |         ^~~~~~~~~~~~~~~~
+A few comments inline but the basic approach looks good to me.
+
+Thanks,
+
+Jonathan
 
 
-vim +40 net/smc/smc_llc.c
+> 
+> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+> ---
+>  drivers/iio/adc/ad_sigma_delta.c       | 134 +++++++++++++++++++++++--
+>  include/linux/iio/adc/ad_sigma_delta.h |  33 ++++++
+>  2 files changed, 157 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/ad_sigma_delta.c b/drivers/iio/adc/ad_sigma_delta.c
+> index ebcd52526cac..5d1932ad2a22 100644
+> --- a/drivers/iio/adc/ad_sigma_delta.c
+> +++ b/drivers/iio/adc/ad_sigma_delta.c
+> @@ -342,15 +342,47 @@ EXPORT_SYMBOL_NS_GPL(ad_sigma_delta_single_conversion, IIO_AD_SIGMA_DELTA);
+>  static int ad_sd_buffer_postenable(struct iio_dev *indio_dev)
+>  {
+>  	struct ad_sigma_delta *sigma_delta = iio_device_get_drvdata(indio_dev);
+> +	unsigned int i, slot, samples_buf_size;
+>  	unsigned int channel;
+> +	uint8_t *samples_buf;
+>  	int ret;
+>  
+> -	channel = find_first_bit(indio_dev->active_scan_mask,
+> -				 indio_dev->masklength);
+> -	ret = ad_sigma_delta_set_channel(sigma_delta,
+> -		indio_dev->channels[channel].address);
+> -	if (ret)
+> -		return ret;
+> +	if (sigma_delta->num_slots == 1) {
+> +		channel = find_first_bit(indio_dev->active_scan_mask,
+> +					 indio_dev->masklength);
+> +		ret = ad_sigma_delta_set_channel(sigma_delta,
+> +						 indio_dev->channels[channel].address);
+> +		if (ret)
+> +			return ret;
+> +		slot = 1;
+> +	} else {
+> +		/*
+> +		 * At this point update_scan_mode already enabled the required channels.
+> +		 * For sigma-delta sequencer drivers with multiple slots, an update_scan_mode
+> +		 * implementation is mandatory.
+> +		 */
+> +		slot = 0;
+> +		for_each_set_bit(i, indio_dev->active_scan_mask, indio_dev->masklength) {
+> +			sigma_delta->slots[slot] = indio_dev->channels[i].address;
+> +			slot++;
+> +		}
+> +	}
+> +
+> +	sigma_delta->active_slots = slot;
+> +	sigma_delta->current_slot = 0;
+> +
+> +	if (sigma_delta->active_slots > 1) {
+> +		ret = ad_sigma_delta_append_status(sigma_delta, true);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	samples_buf_size = slot * indio_dev->channels[0].scan_type.storagebits + sizeof(int64_t);
 
-    23	
-    24	struct smc_llc_hdr {
-    25		struct smc_wr_rx_hdr common;
-    26		union {
-    27			struct {
-    28				u8 length;	/* 44 */
-    29		#if defined(__BIG_ENDIAN_BITFIELD)
-    30				u8 reserved:4,
-    31				   add_link_rej_rsn:4;
-    32	#elif defined(__LITTLE_ENDIAN_BITFIELD)
-    33				u8 add_link_rej_rsn:4,
-    34				   reserved:4;
-    35	#endif
-    36			};
-    37			u16 length_v2;	/* 44 - 8192*/
-    38		};
-    39		u8 flags;
-  > 40	} __packed;		/* format defined in
-    41				 * IBM Shared Memory Communications Version 2
-    42				 * (https://www.ibm.com/support/pages/node/6326337)
-    43				 */
-    44	
+In general slot might be such that this size is not a multiple of 8 bytes so the timestamp
+would end up unaligned (it'll just go off the end currently) so you need an ALIGN() to
+force the size of slog * indio_dev->channels[0].scan_type.storagebits up to a multiple of 8.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +	samples_buf = krealloc(sigma_delta->samples_buf, samples_buf_size, GFP_KERNEL);
+> +	if (!samples_buf)
+> +		return -ENOMEM;
+
+Where is this freed?  Probably a case for a devm_krealloc()
+
+> +
+> +	sigma_delta->samples_buf = samples_buf;
+>  
+>  	spi_bus_lock(sigma_delta->spi->master);
+>  	sigma_delta->bus_locked = true;
+> @@ -386,6 +418,10 @@ static int ad_sd_buffer_postdisable(struct iio_dev *indio_dev)
+>  	sigma_delta->keep_cs_asserted = false;
+>  	ad_sigma_delta_set_mode(sigma_delta, AD_SD_MODE_IDLE);
+>  
+> +	if (sigma_delta->status_appended)
+> +		ad_sigma_delta_append_status(sigma_delta, false);
+> +
+> +	ad_sigma_delta_disable_all(sigma_delta);
+>  	sigma_delta->bus_locked = false;
+>  	return spi_bus_unlock(sigma_delta->spi->master);
+>  }
+> @@ -396,6 +432,10 @@ static irqreturn_t ad_sd_trigger_handler(int irq, void *p)
+>  	struct iio_dev *indio_dev = pf->indio_dev;
+>  	struct ad_sigma_delta *sigma_delta = iio_device_get_drvdata(indio_dev);
+>  	uint8_t *data = sigma_delta->rx_buf;
+> +	unsigned int transfer_size;
+> +	unsigned int sample_size;
+> +	unsigned int sample_pos;
+> +	unsigned int status_pos;
+>  	unsigned int reg_size;
+>  	unsigned int data_reg;
+>  
+> @@ -408,21 +448,63 @@ static irqreturn_t ad_sd_trigger_handler(int irq, void *p)
+>  	else
+>  		data_reg = AD_SD_REG_DATA;
+>  
+> +	/* Status word will be appended to the sample during transfer */
+> +	if (sigma_delta->status_appended)
+> +		transfer_size = reg_size + 1;
+> +	else
+> +		transfer_size = reg_size;
+> +
+>  	switch (reg_size) {
+>  	case 4:
+>  	case 2:
+>  	case 1:
+> -		ad_sd_read_reg_raw(sigma_delta, data_reg, reg_size, &data[0]);
+> +		status_pos = reg_size;
+> +		ad_sd_read_reg_raw(sigma_delta, data_reg, transfer_size, &data[0]);
+>  		break;
+>  	case 3:
+> +		status_pos = reg_size + 1;
+
+This would benefit from a comment.  Why is it not just reg_size?
+
+>  		/* We store 24 bit samples in a 32 bit word. Keep the upper
+>  		 * byte set to zero. */
+> -		ad_sd_read_reg_raw(sigma_delta, data_reg, reg_size, &data[1]);
+> +		ad_sd_read_reg_raw(sigma_delta, data_reg, transfer_size, &data[1]);
+>  		break;
+>  	}
+>  
+> -	iio_push_to_buffers_with_timestamp(indio_dev, data, pf->timestamp);
+> +	/*
+> +	 * For devices sampling only one channel at
+> +	 * once, there is no need for sample number tracking.
+> +	 */
+> +	if (sigma_delta->active_slots == 1) {
+> +		iio_push_to_buffers_with_timestamp(indio_dev, data, pf->timestamp);
+> +		goto irq_handled;
+> +	}
+> +
+> +	if (sigma_delta->status_appended) {
+> +		u8 converted_channel;
+>  
+> +		converted_channel = data[status_pos] & sigma_delta->info->status_ch_mask;
+> +		if (converted_channel != sigma_delta->slots[sigma_delta->current_slot]) {
+> +			/*
+> +			 * Desync occurred during continuous sampling of multiple channels.
+> +			 * Drop this incomplete sample and start from first channel again.
+> +			 */
+
+Good.  Add this detail to the commit message as well.
+
+> +
+> +			sigma_delta->current_slot = 0;
+> +			goto irq_handled;
+> +		}
+> +	}
+> +
+> +	sample_size = indio_dev->channels[0].scan_type.storagebits / 8;
+> +	sample_pos = sample_size * sigma_delta->current_slot;
+> +	memcpy(&sigma_delta->samples_buf[sample_pos], data, sample_size);
+> +	sigma_delta->current_slot++;
+> +
+> +	if (sigma_delta->current_slot == sigma_delta->active_slots) {
+> +		sigma_delta->current_slot = 0;
+> +		iio_push_to_buffers_with_timestamp(indio_dev, sigma_delta->samples_buf,
+> +						   pf->timestamp);
+> +	}
+> +
+> +irq_handled:
+>  	iio_trigger_notify_done(indio_dev->trig);
+>  	sigma_delta->irq_dis = false;
+>  	enable_irq(sigma_delta->spi->irq);
+> @@ -430,10 +512,17 @@ static irqreturn_t ad_sd_trigger_handler(int irq, void *p)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> +static bool ad_sd_validate_scan_mask(struct iio_dev *indio_dev, const unsigned long *mask)
+> +{
+> +	struct ad_sigma_delta *sigma_delta = iio_device_get_drvdata(indio_dev);
+> +
+> +	return bitmap_weight(mask, indio_dev->masklength) <= sigma_delta->num_slots;
+> +}
+> +
+>  static const struct iio_buffer_setup_ops ad_sd_buffer_setup_ops = {
+>  	.postenable = &ad_sd_buffer_postenable,
+>  	.postdisable = &ad_sd_buffer_postdisable,
+> -	.validate_scan_mask = &iio_validate_scan_mask_onehot,
+> +	.validate_scan_mask = &ad_sd_validate_scan_mask,
+>  };
+>  
+>  static irqreturn_t ad_sd_data_rdy_trig_poll(int irq, void *private)
+> @@ -513,8 +602,14 @@ static int devm_ad_sd_probe_trigger(struct device *dev, struct iio_dev *indio_de
+>   */
+>  int devm_ad_sd_setup_buffer_and_trigger(struct device *dev, struct iio_dev *indio_dev)
+>  {
+> +	struct ad_sigma_delta *sigma_delta = iio_device_get_drvdata(indio_dev);
+>  	int ret;
+>  
+> +	sigma_delta->slots = devm_kcalloc(dev, sigma_delta->num_slots,
+> +					  sizeof(*sigma_delta->slots), GFP_KERNEL);
+> +	if (!sigma_delta->slots)
+> +		return -ENOMEM;
+> +
+>  	ret = devm_iio_triggered_buffer_setup(dev, indio_dev,
+>  					      &iio_pollfunc_store_time,
+>  					      &ad_sd_trigger_handler,
+> @@ -541,6 +636,25 @@ int ad_sd_init(struct ad_sigma_delta *sigma_delta, struct iio_dev *indio_dev,
+>  {
+>  	sigma_delta->spi = spi;
+>  	sigma_delta->info = info;
+> +
+> +	/* If the field is unset in ad_sigma_delta_info, asume there can only be 1 slot. */
+> +	if (!info->num_slots)
+> +		sigma_delta->num_slots = 1;
+> +	else
+> +		sigma_delta->num_slots = info->num_slots;
+> +
+> +	if (sigma_delta->num_slots > 1) {
+> +		if (!indio_dev->info->update_scan_mode) {
+> +			dev_err(&spi->dev, "iio_dev lacks update_scan_mode().\n");
+> +			return -EINVAL;
+> +		}
+> +
+> +		if (!info->disable_all) {
+> +			dev_err(&spi->dev, "ad_sigma_delta_info lacks disable_all().\n");
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+>  	iio_device_set_drvdata(indio_dev, sigma_delta);
+>  
+>  	return 0;
+> diff --git a/include/linux/iio/adc/ad_sigma_delta.h b/include/linux/iio/adc/ad_sigma_delta.h
+> index c525fd51652f..b921ceb8adfd 100644
+> --- a/include/linux/iio/adc/ad_sigma_delta.h
+> +++ b/include/linux/iio/adc/ad_sigma_delta.h
+> @@ -32,26 +32,34 @@ struct iio_dev;
+>  /**
+>   * struct ad_sigma_delta_info - Sigma Delta driver specific callbacks and options
+>   * @set_channel: Will be called to select the current channel, may be NULL.
+> + * @append_status: Will be called to enable status append at the end of the sample, may be NULL.
+>   * @set_mode: Will be called to select the current mode, may be NULL.
+> + * @disable_all: Will be called to disable all channels, may be NULL.
+
+Not in the same order as the parameters below.
+
+>   * @postprocess_sample: Is called for each sampled data word, can be used to
+>   *		modify or drop the sample data, it, may be NULL.
+>   * @has_registers: true if the device has writable and readable registers, false
+>   *		if there is just one read-only sample data shift register.
+>   * @addr_shift: Shift of the register address in the communications register.
+>   * @read_mask: Mask for the communications register having the read bit set.
+> + * @status_ch_mask: Mask for the channel number stored in status register.
+>   * @data_reg: Address of the data register, if 0 the default address of 0x3 will
+>   *   be used.
+>   * @irq_flags: flags for the interrupt used by the triggered buffer
+> + * @num_slots: Number of sequencer slots
+>   */
+>  struct ad_sigma_delta_info {
+>  	int (*set_channel)(struct ad_sigma_delta *, unsigned int channel);
+> +	int (*append_status)(struct ad_sigma_delta *, bool append);
+> +	int (*disable_all)(struct ad_sigma_delta *);
+>  	int (*set_mode)(struct ad_sigma_delta *, enum ad_sigma_delta_mode mode);
+>  	int (*postprocess_sample)(struct ad_sigma_delta *, unsigned int raw_sample);
+>  	bool has_registers;
+>  	unsigned int addr_shift;
+>  	unsigned int read_mask;
+> +	unsigned int status_ch_mask;
+>  	unsigned int data_reg;
+>  	unsigned long irq_flags;
+> +	unsigned int num_slots;
+>  };
+>  
+>  /**
+> @@ -76,6 +84,13 @@ struct ad_sigma_delta {
+>  	uint8_t			comm;
+>  
+>  	const struct ad_sigma_delta_info *info;
+> +	unsigned int		active_slots;
+> +	unsigned int		current_slot;
+> +	unsigned int		num_slots;
+> +	bool			status_appended;
+> +	/* map slots to channels in order to know what to expect from devices */
+> +	unsigned int		*slots;
+> +	uint8_t			*samples_buf;
+>  
+>  	/*
+>  	 * DMA (thus cache coherency maintenance) requires the
+> @@ -97,6 +112,24 @@ static inline int ad_sigma_delta_set_channel(struct ad_sigma_delta *sd,
+>  	return 0;
+>  }
+>  
+> +static inline int ad_sigma_delta_append_status(struct ad_sigma_delta *sd, bool append)
+> +{
+> +	if (sd->info->append_status) {
+> +		sd->status_appended = append;
+> +		return sd->info->append_status(sd, append);
+
+Minor but usually a better idea to only set the cached state if
+the calls succeeds. So check return value of the call before updating
+sd->status_appended.  In some error cases you won't know whether it's
+set or not, but meh, we can't handle everything :)
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static inline int ad_sigma_delta_disable_all(struct ad_sigma_delta *sd)
+> +{
+> +	if (sd->info->disable_all)
+> +		return sd->info->disable_all(sd);
+> +
+> +	return 0;
+> +}
+> +
+>  static inline int ad_sigma_delta_set_mode(struct ad_sigma_delta *sd,
+>  	unsigned int mode)
+>  {
+

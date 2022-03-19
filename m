@@ -2,81 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4024DE9E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 18:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDA94DE9E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 19:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233639AbiCSRvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 13:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
+        id S237245AbiCSSFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 14:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbiCSRvf (ORCPT
+        with ESMTP id S231363AbiCSSFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 13:51:35 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300874DF44
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 10:50:12 -0700 (PDT)
-Received: from localhost.localdomain (abxi119.neoplus.adsl.tpnet.pl [83.9.2.119])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 3C8363F655;
-        Sat, 19 Mar 2022 18:50:10 +0100 (CET)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Bastian=20K=C3=B6cher?= <mail@kchr.de>,
-        Jeremy McNicoll <jeremymc@redhat.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: qcom: gcc-msm8994: Fix gpll4 width
-Date:   Sat, 19 Mar 2022 18:49:40 +0100
-Message-Id: <20220319174940.341137-1-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.35.1
+        Sat, 19 Mar 2022 14:05:36 -0400
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3528313DCD
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 11:04:12 -0700 (PDT)
+Received: from dslb-188-096-148-115.188.096.pools.vodafone-ip.de ([188.96.148.115] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1nVdQs-0003Vz-8r; Sat, 19 Mar 2022 19:04:06 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH] staging: r8188eu: remove local BIT macro
+Date:   Sat, 19 Mar 2022 19:03:42 +0100
+Message-Id: <20220319180342.3143734-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The gpll4 postdiv is actually a div4, so make sure that Linux is aware of
-this.
+The r8188eu driver defines a local BIT(x) macro. Remove this local macro
+and use the one from include/linux/bits.h.
 
-This fixes the following error messages:
+The global BIT macro returns an unsigned long value, the removed local
+BIT macro used a signed int.
 
-[    0.804491] mmc1: Card appears overclocked; req 200000000 Hz, actual 343999999 Hz
-[    0.805057] mmc1: Card appears overclocked; req 400000000 Hz, actual 687999999 Hz
+DYNAMIC_BB_DYNAMIC_TXPWR is defined as BIT(2), ~DYNAMIC_BB_DYNAMIC_TXPWR
+is passed to Switch_DM_Func as a u32 parameter. We need a cast in this
+case as ~DYNAMIC_BB_DYNAMIC_TXPWR is a 64-bit value on x86_64 systems.
 
-Fixes: aec89f78cf01 ("clk: qcom: Add support for msm8994 global clock controller")
-
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
-Cc: Petr Vorel <petr.vorel@gmail.com>
 
- drivers/clk/qcom/gcc-msm8994.c | 1 +
- 1 file changed, 1 insertion(+)
+Dear all,
 
-diff --git a/drivers/clk/qcom/gcc-msm8994.c b/drivers/clk/qcom/gcc-msm8994.c
-index f09499999eb3..6b702cdacbf2 100644
---- a/drivers/clk/qcom/gcc-msm8994.c
-+++ b/drivers/clk/qcom/gcc-msm8994.c
-@@ -77,6 +77,7 @@ static struct clk_alpha_pll gpll4_early = {
+this is the next attempt to get this right. I'm not sure if it should be
+labeled v3. Greg accepted all other patches of the "some rx cleanups"
+series, so I'm sending this as a single patch, starting at v1 again.
+
+Thanks to Greg and Dan for the feedback, I see that ((u32)BIT(2)) is not
+different from BIT(2) without the cast. Making the cast where
+DYNAMIC_BB_DYNAMIC_TXPWR is used is the better option.
+
+It seems that (u32)(~DYNAMIC_BB_DYNAMIC_TXPWR) and
+~(u32)DYNAMIC_BB_DYNAMIC_TXPWR do the same thing and it's ok to invert
+first and to cast afterwards. According to the C99 standard, a 64-bit
+unsigned int is cast to u32 by repeatedly adding U32_MAX + 1 until the
+result fits into a u32 - or simply by cutting off the upper 32bit.
+
+BTW the previous rtl8188eu driver used
+Switch_DM_Func(padapter, (u32)(~DYNAMIC_BB_DYNAMIC_TXPWR), false);
+as well.
+
+Thanks,
+Martin
+
+ drivers/staging/r8188eu/core/rtw_wlan_util.c | 4 ++--
+ drivers/staging/r8188eu/include/wifi.h       | 7 +------
+ 2 files changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
+index 665b077190bc..f32401deae9a 100644
+--- a/drivers/staging/r8188eu/core/rtw_wlan_util.c
++++ b/drivers/staging/r8188eu/core/rtw_wlan_util.c
+@@ -1276,13 +1276,13 @@ void update_IOT_info(struct adapter *padapter)
+ 		pmlmeinfo->turboMode_cts2self = 0;
+ 		pmlmeinfo->turboMode_rtsen = 1;
+ 		/* disable high power */
+-		Switch_DM_Func(padapter, (~DYNAMIC_BB_DYNAMIC_TXPWR), false);
++		Switch_DM_Func(padapter, (u32)(~DYNAMIC_BB_DYNAMIC_TXPWR), false);
+ 		break;
+ 	case HT_IOT_PEER_REALTEK:
+ 		/* rtw_write16(padapter, 0x4cc, 0xffff); */
+ 		/* rtw_write16(padapter, 0x546, 0x01c0); */
+ 		/* disable high power */
+-		Switch_DM_Func(padapter, (~DYNAMIC_BB_DYNAMIC_TXPWR), false);
++		Switch_DM_Func(padapter, (u32)(~DYNAMIC_BB_DYNAMIC_TXPWR), false);
+ 		break;
+ 	default:
+ 		pmlmeinfo->turboMode_cts2self = 0;
+diff --git a/drivers/staging/r8188eu/include/wifi.h b/drivers/staging/r8188eu/include/wifi.h
+index c331be19ff83..299553351246 100644
+--- a/drivers/staging/r8188eu/include/wifi.h
++++ b/drivers/staging/r8188eu/include/wifi.h
+@@ -4,14 +4,9 @@
+ #ifndef _WIFI_H_
+ #define _WIFI_H_
  
- static struct clk_alpha_pll_postdiv gpll4 = {
- 	.offset = 0x1dc0,
-+	.width = 4,
- 	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "gpll4",
++#include <linux/bits.h>
+ #include <linux/ieee80211.h>
+ 
+-#ifdef BIT
+-/* error	"BIT define occurred earlier elsewhere!\n" */
+-#undef BIT
+-#endif
+-#define BIT(x)	(1 << (x))
+-
+ #define WLAN_ETHHDR_LEN		14
+ #define WLAN_HDR_A3_LEN		24
+ #define WLAN_HDR_A3_QOS_LEN	26
 -- 
-2.35.1
+2.30.2
 

@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4308D4DEA9E
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 21:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB95F4DEAA1
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 21:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244127AbiCSU04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 16:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
+        id S244137AbiCSU1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 16:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239578AbiCSU0x (ORCPT
+        with ESMTP id S244130AbiCSU1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 16:26:53 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E6CEB7;
-        Sat, 19 Mar 2022 13:25:31 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id d15so8223844qty.8;
-        Sat, 19 Mar 2022 13:25:31 -0700 (PDT)
+        Sat, 19 Mar 2022 16:27:11 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0B835DFE;
+        Sat, 19 Mar 2022 13:25:49 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id m12so13846997edc.12;
+        Sat, 19 Mar 2022 13:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UOoYNkWbn3lmrKEsG1YOHnatThAIgskfCdr/GMzc900=;
+        b=FMHp5b8Oreenx13Q81cuS53VAtjTKHzEOymx+hJeJ58vvMQW7Tzk/rbarGHHFANROV
+         JEah+MBLJs9WIBok57cgluQ2hZ5Wae16wCUlihEYanNw96OZksh9xJxNfr86IPwPAzyc
+         m4AczSJoEbiYsvGvgOWCf1YFCM6LancgKC72Ml5HlAmzBUatdOdtOSv61+tNSgLWbMbh
+         0hR//Yr6zP5p3d3ukoNa8TL6QJgHojMJQ2K8BOdLp+c0pq/nmodWvjAMEMapM65ztzqT
+         2NvPSNlkI9l73SxQ9FJ4DteCc9ftS4c2Sfh1a+GIm01q+F8lFogP1BvIZUPIsZBhv2Yo
+         Z0rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Xp+N5oR8cNMK62aRPk8kZIBvTheB6GVjqMQFtxgItNY=;
-        b=g9hH9oO50mX/FtAQPE/VTLA3U/i0VISm7aw1xYEFmbt5ltiUvCOqa4fQEDhflOpJPv
-         ynrYGh41CN5saD0FkfQH+SJdV01sASKUPK4twUtYNzhUxniG9DADs0QUVDOrQW5r2MXm
-         k55G0zw27bsOElcZRUh474SJ2h6Clv4/f0ZAbXhtRGPhKlzt6YbXfSAnYyTlkt3s4YX1
-         Z6Z6o6V6NbVncm2Mhzii78I6G5gDK5chy1L4ATZehuAc60eJdO3l/bl2/9AIbI9k/Jdf
-         uPbqB+b0CRqaGKqRvEAMmxHuQL7cQzjkjGkNJFbfoURtdnkk1y03SyKE9Iy0/zRi4Et+
-         wgtQ==
-X-Gm-Message-State: AOAM530bYFeMd+xW84niJsyDl8x8wd2upseBcRcRWrAXGQyuhr4Ae2Vn
-        kGDDrKUyggYP5/nxa+PfHIOdxWKA5vzyWw==
-X-Google-Smtp-Source: ABdhPJy22V69G2sn5CzTCipKqSCrMoDq1IayC54TiCihJO7Kv2zFonrvTzWuha3ql3MkiigxvK9adQ==
-X-Received: by 2002:a05:622a:1a1d:b0:2e1:be1f:a4e8 with SMTP id f29-20020a05622a1a1d00b002e1be1fa4e8mr11352194qtb.371.1647721530594;
-        Sat, 19 Mar 2022 13:25:30 -0700 (PDT)
-Received: from dev0025.ash9.facebook.com (fwdproxy-ash-023.fbsv.net. [2a03:2880:20ff:17::face:b00c])
-        by smtp.gmail.com with ESMTPSA id d26-20020a05620a159a00b0067d4f5637d7sm5549434qkk.14.2022.03.19.13.25.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UOoYNkWbn3lmrKEsG1YOHnatThAIgskfCdr/GMzc900=;
+        b=UIEC2epbpHk/WE39sSGAwhhPXKxVTGJZ2VHgS4ajz7LQEmxndgYbtMZvQ7IDC2qpJ/
+         6CL+Ya19DljD8iSJwVuAcoXQKbGiA6mFWaJMJmSUXBygyJhC4SAxF7S4nVAXvDd6fr5M
+         7Ck5VBQ+nMvhMYjhdyX+3w+o1Wr3ilepgsjGbK9ZpNhGEpflJGteC+7xQVa9gKNfC4DQ
+         2YiYQ/myuvEyKRZMUSSMFjVz+61SMyka/ZrfFET5nNaKlZf4PImamIC8Gj/fTjwbqWBJ
+         UI6QRwY/Qum6x0TfsCrPqXb03pvPub/DFBxknsyTEmzklDJY9snnWNRdoDTP1xiwC2I5
+         IEeA==
+X-Gm-Message-State: AOAM530AZuH4YJtGupvzcZzlutItApnaIdQ3wQ9B+sEGvCy0jnwmJJ75
+        dkpmXxaLXFiaqKbIeDSWH98=
+X-Google-Smtp-Source: ABdhPJzRWWxkZjo8KpR/DyRgICpiuH6OzWnV5AJcws63ScJIbsO4Zcilfric4wFhqebc4++F7D2ImA==
+X-Received: by 2002:a05:6402:3590:b0:415:c162:f3d6 with SMTP id y16-20020a056402359000b00415c162f3d6mr16023255edc.124.1647721547808;
+        Sat, 19 Mar 2022 13:25:47 -0700 (PDT)
+Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id d23-20020aa7d5d7000000b00418f7b2f1dbsm4471945eds.71.2022.03.19.13.25.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 13:25:30 -0700 (PDT)
-Date:   Sat, 19 Mar 2022 13:25:26 -0700
-From:   David Vernet <void@manifault.com>
-To:     trix@redhat.com
-Cc:     jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        pmladek@suse.com, joe.lawrence@redhat.com, nathan@kernel.org,
-        ndesaulniers@google.com, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] livepatch: Reorder to use before freeing a pointer
-Message-ID: <20220319202526.hlkrfxdod5mmkvp4@dev0025.ash9.facebook.com>
-References: <20220319165159.2170650-1-trix@redhat.com>
+        Sat, 19 Mar 2022 13:25:47 -0700 (PDT)
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
+        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: [PATCH] netfilter: nf_tables: replace unnecessary use of list_for_each_entry_continue()
+Date:   Sat, 19 Mar 2022 21:25:26 +0100
+Message-Id: <20220319202526.2527974-1-jakobkoschel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220319165159.2170650-1-trix@redhat.com>
-User-Agent: NeoMutt/20211029
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 09:51:59AM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Clang static analysis reports this issue
-> livepatch-shadow-fix1.c:113:2: warning: Use of
->   memory after it is freed
->   pr_info("%s: dummy @ %p, prevented leak @ %p\n",
->   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> The pointer is freed in the previous statement.
-> Reorder the pr_info to report before the free.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  samples/livepatch/livepatch-shadow-fix1.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/samples/livepatch/livepatch-shadow-fix1.c b/samples/livepatch/livepatch-shadow-fix1.c
-> index 918ce17b43fda..6701641bf12d4 100644
-> --- a/samples/livepatch/livepatch-shadow-fix1.c
-> +++ b/samples/livepatch/livepatch-shadow-fix1.c
-> @@ -109,9 +109,9 @@ static void livepatch_fix1_dummy_leak_dtor(void *obj, void *shadow_data)
->  	void *d = obj;
->  	int **shadow_leak = shadow_data;
->  
-> -	kfree(*shadow_leak);
->  	pr_info("%s: dummy @ %p, prevented leak @ %p\n",
->  			 __func__, d, *shadow_leak);
-> +	kfree(*shadow_leak);
->  }
->  
->  static void livepatch_fix1_dummy_free(struct dummy *d)
-> -- 
-> 2.26.3
-> 
+Since there is no way for the previous list_for_each_entry() to exit
+early, this call to list_for_each_entry_continue() is always guaranteed
+to start with the first element of the list and can therefore be
+replaced with a call to list_for_each_entry().
 
-The fix looks good, though it looks like there is also a similar
-use-after-free in livepatch_fix2_dummy_leak_dtor() in
-livepatch-shadow-fix2.c. Could you please also fix that as part of this
-patch?
+In preparation to limit the scope of the list iterator to the list
+traversal loop, the list iterator variable 'rule' should not be used
+past the loop.
 
-Thanks,
-David
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+---
+ net/netfilter/nf_tables_api.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index d71a33ae39b3..bdd80136ef1d 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -8299,7 +8299,7 @@ static int nf_tables_commit_chain_prepare(struct net *net, struct nft_chain *cha
+ 	data_boundary = data + data_size;
+ 	size = 0;
+ 
+-	list_for_each_entry_continue(rule, &chain->rules, list) {
++	list_for_each_entry(rule, &chain->rules, list) {
+ 		if (!nft_is_active_next(net, rule))
+ 			continue;
+ 
+
+base-commit: 34e047aa16c0123bbae8e2f6df33e5ecc1f56601
+-- 
+2.25.1
+

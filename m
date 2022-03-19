@@ -2,132 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1282C4DEA00
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 19:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CC74DEA12
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 19:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243862AbiCSSVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 14:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
+        id S243890AbiCSSYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 14:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242170AbiCSSVI (ORCPT
+        with ESMTP id S233591AbiCSSYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 14:21:08 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B3919A558
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 11:19:46 -0700 (PDT)
-Received: from [192.168.1.101] (abxi119.neoplus.adsl.tpnet.pl [83.9.2.119])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id A90313F696;
-        Sat, 19 Mar 2022 19:19:44 +0100 (CET)
-Message-ID: <7575fca0-28dd-427c-022f-6087fbd7a34b@somainline.org>
-Date:   Sat, 19 Mar 2022 19:19:44 +0100
+        Sat, 19 Mar 2022 14:24:31 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A321C34AF
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 11:23:10 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id m3so6808009lfj.11
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 11:23:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to;
+        bh=uNibqQJsY18b43mdTlcpPHoa8q7iBzS63h/TZp5dtaM=;
+        b=Bj4QqncBVpaSjbv6iOLVmIT4TVDgGcnxbEtz56JTO2DaNqJrzQT7dxun7tEK/V+hmN
+         j5psQckDAdOJOMAmbxHhjH79umeJAMWk2hCj8wqhqQg4qn/JSwIZDZO+VlLsMmGNtw5N
+         1U1JiOjcoaL14fMSV8ZZ2ov4hQCynbgUZhQxDxoUeXDaHOCH/XA8A3TokptSA9cRQK5u
+         6W9XGLhEsoHGP9jYY3lQ4GHFMaEuih+/lF5p5IFucXYvGbKaJvkOoflf7fEeThxIjOXH
+         dJg5X21pW1nENLvw+oNi045G8f6SBMhDMirRpBJ62t+JqAv6GnvxfbHMg84geZyTNu6z
+         Pw2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to;
+        bh=uNibqQJsY18b43mdTlcpPHoa8q7iBzS63h/TZp5dtaM=;
+        b=d8rB3ElfX1uwURyo3dZbp+xyd0SccuHvdBqFZ9kgj8j3VEdBpHxT4Ey+6O7ZaNN9r+
+         RDAeyTdZn3/eWwsMaPnThhtUE9pPOLNrESUsLV6uebYoeud6LlKR0Jey1I8uoEI/q/sv
+         8Tw5SDN/Nme1ImL7bgt8r4BGxcu72wE0ZciLhxNUc24gDeVyFClsE/4ZAs5m4g4el7EZ
+         hEv9b/Qub4biAXwi8N2W/lVHzG/Km74xdiFefL2/PCFeOiqMdK1GmZch34n26TlkFd5l
+         R0F7N5p2lRVJyI8Rsrr85gbTxY4RIJQ5WR3caIM4HqyS8DXzYLdm/KW9h9yZ5CPL48Eg
+         1+fw==
+X-Gm-Message-State: AOAM5305eye28TtB8InnuU5ccpFvMDk4esX+CBWfnxr1NqO7oU83JwKR
+        NZkbxJZMH7+LpauX2SkrwtM=
+X-Google-Smtp-Source: ABdhPJz4sZaNj2/GJ3fVJKviJ07zqU9lPtNEOmz7QI2eyHqw5fBLL5c0ZuZbUvAUv/ixrZfo+NcWRA==
+X-Received: by 2002:ac2:4e06:0:b0:448:3218:2e22 with SMTP id e6-20020ac24e06000000b0044832182e22mr10146455lfr.369.1647714187792;
+        Sat, 19 Mar 2022 11:23:07 -0700 (PDT)
+Received: from [192.168.1.11] ([46.235.67.145])
+        by smtp.gmail.com with ESMTPSA id c1-20020a196541000000b00448bcdccb91sm1260932lfj.231.2022.03.19.11.23.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Mar 2022 11:23:07 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------0geXwsVQalqTa2xB0VGIHWeE"
+Message-ID: <57fc3806-86c6-b1b2-4c44-083b1b7afc8b@gmail.com>
+Date:   Sat, 19 Mar 2022 21:23:06 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 09/15] arm64: dts: qcom: msm8992-libra: Fix up the
- framebuffer
+ Thunderbird/91.6.1
+Subject: Re: [syzbot] divide error in dbNextAG
 Content-Language: en-US
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220319174645.340379-1-konrad.dybcio@somainline.org>
- <20220319174645.340379-10-konrad.dybcio@somainline.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220319174645.340379-10-konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+To:     syzbot <syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com>,
+        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000b1470105da9622aa@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <000000000000b1470105da9622aa@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is a multi-part message in MIME format.
+--------------0geXwsVQalqTa2xB0VGIHWeE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-On 19.03.2022 18:46, Konrad Dybcio wrote:
-> Make sure the necessary clocks are kept on after clk_cleanup (until MDSS
-> is properly handled by its own driver) and touch up the fb address to
-> prevent some weird shifting. It's still not perfect, but at least the
-> kernel log doesn't start a third deep into your screen..
+On 3/19/22 21:07, syzbot wrote:
+> Hello,
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
->  .../arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
+> syzbot found the following issue on:
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-> index e638fc489539..4e06641eb384 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-> @@ -29,13 +29,25 @@ chosen {
->  		#size-cells = <2>;
->  		ranges;
->  
-> -		framebuffer0: framebuffer@3404000 {
-> +		framebuffer0: framebuffer@3403f48 {
-Actually it turns out that 0x3400000 should be the address here and 2 lines below,
-instead of 0x3403f48 (thanks Stephan & lk2nd!)..
+> HEAD commit:    09688c0166e7 Linux 5.17-rc8
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=163e5015700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=70f75a89c7a0e6bc
+> dashboard link: https://syzkaller.appspot.com/bug?extid=46f5c25af73eb8330eb6
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=132c1d61700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
+> 
+> divide error: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 3622 Comm: syz-executor.0 Not tainted 5.17.0-rc8-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:dbNextAG+0xfc/0x5f0 fs/jfs/jfs_dmap.c:602
 
-If you don't mind this janky way of sending a fixup patch (resending a series of 15 seems a bit over the top), here's the fixed version:
+Looks like malicious fs image with bmp->db_numag == 0.
+
+#syz test:
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 
 
 
-From e01cb8b11d42e5885998faca3964b029563174e8 Mon Sep 17 00:00:00 2001
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
-Date: Sat, 19 Mar 2022 17:32:25 +0100
-Subject: [PATCH] arm64: dts: qcom: msm8992-libra: Fix up the framebuffer
 
-Make sure the necessary clocks are kept on after clk_cleanup (until MDSS
-is properly handled by its own driver) and touch up the fb address to
-prevent some weird shifting.
+With regards,
+Pavel Skripkin
+--------------0geXwsVQalqTa2xB0VGIHWeE
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- .../arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ZGlmZiAtLWdpdCBhL2ZzL2pmcy9qZnNfZG1hcC5jIGIvZnMvamZzL2pmc19kbWFwLmMKaW5k
+ZXggOTFmNGVjOTNkYWIxLi42MzNhOWFmZjA4NjggMTAwNjQ0Ci0tLSBhL2ZzL2pmcy9qZnNf
+ZG1hcC5jCisrKyBiL2ZzL2pmcy9qZnNfZG1hcC5jCkBAIC0xNDgsNiArMTQ4LDcgQEAgc3Rh
+dGljIGNvbnN0IHM4IGJ1ZHRhYlsyNTZdID0gewogICoJMAktIHN1Y2Nlc3MKICAqCS1FTk9N
+RU0JLSBpbnN1ZmZpY2llbnQgbWVtb3J5CiAgKgktRUlPCS0gaS9vIGVycm9yCisgKgktRUlO
+VkFMIC0gd3JvbmcgYm1hcCBkYXRhCiAgKi8KIGludCBkYk1vdW50KHN0cnVjdCBpbm9kZSAq
+aXBibWFwKQogewpAQCAtMTc5LDYgKzE4MCw5IEBAIGludCBkYk1vdW50KHN0cnVjdCBpbm9k
+ZSAqaXBibWFwKQogCWJtcC0+ZGJfbmZyZWUgPSBsZTY0X3RvX2NwdShkYm1wX2xlLT5kbl9u
+ZnJlZSk7CiAJYm1wLT5kYl9sMm5icGVycGFnZSA9IGxlMzJfdG9fY3B1KGRibXBfbGUtPmRu
+X2wybmJwZXJwYWdlKTsKIAlibXAtPmRiX251bWFnID0gbGUzMl90b19jcHUoZGJtcF9sZS0+
+ZG5fbnVtYWcpOworCWlmICghYm1wLT5kYl9udW1hZykKKwkJcmV0dXJuIC1FSU5WQUw7CisK
+IAlibXAtPmRiX21heGxldmVsID0gbGUzMl90b19jcHUoZGJtcF9sZS0+ZG5fbWF4bGV2ZWwp
+OwogCWJtcC0+ZGJfbWF4YWcgPSBsZTMyX3RvX2NwdShkYm1wX2xlLT5kbl9tYXhhZyk7CiAJ
+Ym1wLT5kYl9hZ3ByZWYgPSBsZTMyX3RvX2NwdShkYm1wX2xlLT5kbl9hZ3ByZWYpOwo=
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-index e638fc489539..7748b745a5df 100644
---- a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-@@ -29,13 +29,25 @@ chosen {
-                #size-cells = <2>;
-                ranges;
- 
--               framebuffer0: framebuffer@3404000 {
-+               framebuffer0: framebuffer@3400000 {
-                        compatible = "simple-framebuffer";
--                       reg = <0 0x3404000 0 (1080 * 1920 * 3)>;
-+                       reg = <0 0x3400000 0 (1080 * 1920 * 3)>;
-                        width = <1080>;
-                        height = <1920>;
-                        stride = <(1080 * 3)>;
-                        format = "r8g8b8";
-+                       /*
-+                        * That's a lot of clocks, but it's necessary due
-+                        * to unused clk cleanup & no panel driver yet..
-+                        */
-+                       clocks = <&mmcc MDSS_AHB_CLK>,
-+                                <&mmcc MDSS_AXI_CLK>,
-+                                <&mmcc MDSS_VSYNC_CLK>,
-+                                <&mmcc MDSS_MDP_CLK>,
-+                                <&mmcc MDSS_BYTE0_CLK>,
-+                                <&mmcc MDSS_PCLK0_CLK>,
-+                                <&mmcc MDSS_ESC0_CLK>;
-+                       power-domains = <&mmcc MDSS_GDSC>;
-                };
-        };
- 
--- 
-2.35.1
+--------------0geXwsVQalqTa2xB0VGIHWeE--

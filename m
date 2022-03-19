@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58294DEADF
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 21:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DD04DEADC
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 21:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244255AbiCSUse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 16:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
+        id S244204AbiCSUs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 16:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244198AbiCSUsX (ORCPT
+        with ESMTP id S244197AbiCSUsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 19 Mar 2022 16:48:23 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BFA25F659;
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460B5264828;
         Sat, 19 Mar 2022 13:47:00 -0700 (PDT)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 0183A223F7;
-        Sat, 19 Mar 2022 21:46:56 +0100 (CET)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id E026922438;
+        Sat, 19 Mar 2022 21:46:57 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647722817;
+        t=1647722818;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZVsJ/nky1D7q5dVEHn2yK6pFAX9Hr6zPq4c1Y4piQNM=;
-        b=IZVJgxuOwnY4TXVG44fb5ah7HtBmd5eOoULgTsVByFXlOADe4prNbKNKg5hPn81isXLaFJ
-        TTe+tYvtLRcOcYJU1sJrleDJas/HEUSL3AqHxY2YO7hnzjRML2S2tlRj0Cj3hUxqxqbqX1
-        iZh1/8Mu0qccX6FUK5Ghs68dCijOdPY=
+        bh=ATuFVnlVSTv5vBpDhKHuTqAId/TAl0VhsC8BKMw2kS8=;
+        b=AJJEGCDTP/6ty4hd/WxICeEmHHDMtFAy1HnFpqt9zhI6UAOAYvgMj8HHczNROBTaQoPWXg
+        El+0sQbMvwN1WWjCmpWVW2IkVU8vgkU1S6ZhQ5F3QgHyrdPB4+65CMTJcOy9ecuwV6vqOU
+        rn4cTf0d9lm/SrHCzQfzFM4OjykGjJo=
 From:   Michael Walle <michael@walle.cc>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     "David S . Miller" <davem@davemloft.net>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v3 3/6] MIPS: mscc: serval: rename pinctrl nodes
-Date:   Sat, 19 Mar 2022 21:46:25 +0100
-Message-Id: <20220319204628.1759635-4-michael@walle.cc>
+Subject: [PATCH v3 4/6] arm64: dts: sparx5: rename pinctrl nodes
+Date:   Sat, 19 Mar 2022 21:46:26 +0100
+Message-Id: <20220319204628.1759635-5-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220319204628.1759635-1-michael@walle.cc>
 References: <20220319204628.1759635-1-michael@walle.cc>
@@ -72,33 +72,35 @@ the pin nodes so they end with "-pins" to match the schema.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- arch/mips/boot/dts/mscc/serval_common.dtsi | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ .../dts/microchip/sparx5_pcb134_board.dtsi    | 26 +++++++++----------
+ .../dts/microchip/sparx5_pcb135_board.dtsi    | 10 +++----
+ 2 files changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/arch/mips/boot/dts/mscc/serval_common.dtsi b/arch/mips/boot/dts/mscc/serval_common.dtsi
-index 5b404836db5e..0893de420e27 100644
---- a/arch/mips/boot/dts/mscc/serval_common.dtsi
-+++ b/arch/mips/boot/dts/mscc/serval_common.dtsi
-@@ -82,38 +82,38 @@ i2c_pins: i2c-pins {
- 		pins = "GPIO_7"; /* No "default" scl for i2c0 */
- 		function = "twi";
- 	};
+diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
+index 33faf1f3264f..6f488e774215 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
++++ b/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
+@@ -325,69 +325,69 @@ &sgpio2 {
+ };
+ 
+ &gpio {
 -	i2cmux_pins_i: i2cmux-pins-i {
 +	i2cmux_pins_i: i2cmux-pins {
- 		pins = "GPIO_11", "GPIO_12", "GPIO_18", "GPIO_19",
- 			"GPIO_20", "GPIO_21";
+ 	       pins = "GPIO_16", "GPIO_17", "GPIO_18", "GPIO_19",
+ 		      "GPIO_20", "GPIO_22", "GPIO_36", "GPIO_35",
+ 		      "GPIO_50", "GPIO_51", "GPIO_56", "GPIO_57";
  		function = "twi_scl_m";
  		output-low;
  	};
 -	i2cmux_0: i2cmux-0 {
 +	i2cmux_0: i2cmux-0-pins {
- 		pins = "GPIO_11";
+ 		pins = "GPIO_16";
  		function = "twi_scl_m";
  		output-high;
  	};
 -	i2cmux_1: i2cmux-1 {
 +	i2cmux_1: i2cmux-1-pins {
- 		pins = "GPIO_12";
+ 		pins = "GPIO_17";
  		function = "twi_scl_m";
  		output-high;
  	};
@@ -122,7 +124,81 @@ index 5b404836db5e..0893de420e27 100644
  	};
 -	i2cmux_5: i2cmux-5 {
 +	i2cmux_5: i2cmux-5-pins {
- 		pins = "GPIO_21";
+ 		pins = "GPIO_22";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_6: i2cmux-6 {
++	i2cmux_6: i2cmux-6-pins {
+ 		pins = "GPIO_36";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_7: i2cmux-7 {
++	i2cmux_7: i2cmux-7-pins {
+ 		pins = "GPIO_35";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_8: i2cmux-8 {
++	i2cmux_8: i2cmux-8-pins {
+ 		pins = "GPIO_50";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_9: i2cmux-9 {
++	i2cmux_9: i2cmux-9-pins {
+ 		pins = "GPIO_51";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_10: i2cmux-10 {
++	i2cmux_10: i2cmux-10-pins {
+ 		pins = "GPIO_56";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_11: i2cmux-11 {
++	i2cmux_11: i2cmux-11-pins {
+ 		pins = "GPIO_57";
+ 		function = "twi_scl_m";
+ 		output-high;
+diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
+index ef96e6d8c6b3..d9e519bfbf68 100644
+--- a/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
++++ b/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
+@@ -59,28 +59,28 @@ led@7 {
+ };
+ 
+ &gpio {
+-	i2cmux_pins_i: i2cmux-pins-i {
++	i2cmux_pins_i: i2cmux-pins {
+ 	       pins = "GPIO_35", "GPIO_36",
+ 		      "GPIO_50", "GPIO_51";
+ 		function = "twi_scl_m";
+ 		output-low;
+ 	};
+-	i2cmux_s29: i2cmux-0 {
++	i2cmux_s29: i2cmux-0-pins {
+ 		pins = "GPIO_35";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_s30: i2cmux-1 {
++	i2cmux_s30: i2cmux-1-pins {
+ 		pins = "GPIO_36";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_s31: i2cmux-2 {
++	i2cmux_s31: i2cmux-2-pins {
+ 		pins = "GPIO_50";
+ 		function = "twi_scl_m";
+ 		output-high;
+ 	};
+-	i2cmux_s32: i2cmux-3 {
++	i2cmux_s32: i2cmux-3-pins {
+ 		pins = "GPIO_51";
  		function = "twi_scl_m";
  		output-high;
 -- 

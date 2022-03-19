@@ -2,745 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9174DE6D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 08:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E289A4DE6D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 08:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242434AbiCSHsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 03:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
+        id S242428AbiCSHst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 03:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240513AbiCSHsr (ORCPT
+        with ESMTP id S231882AbiCSHsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 03:48:47 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2090.outbound.protection.outlook.com [40.107.117.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F2A2E4173;
+        Sat, 19 Mar 2022 03:48:46 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E122E4177;
         Sat, 19 Mar 2022 00:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647676046; x=1679212046;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ueGWbsImG2opo67McsMcWatMTSy5Qk/7EZj4Pa7JO9Q=;
+  b=fE3oDvkf2GVlfACG5Ug/KDQPNdDqtHu3Rn/nJ0ba/1J+JlPoVnCuvpNO
+   QoWpP+zvKzjjS9/LpLzUKROrCq1LgvvJwYB1SQP4VmU9Lcuyis5amNivd
+   BoUQl0PKOnDZkf0LWLgYlIYT2aN7EuHI6FD7wYah/NMW6J2uBrCMk0C+R
+   Vny4tn+BcsSd+ChkI5BPLe8wsy2JRgJ4yb1YWEKMjuICkkmGza1yqz8/S
+   Abcn2swCdYH90EVBnrfEukNVblBgeBEwbl3tWcjXervUzam4/PBNtNOPv
+   IV6qVff32G+sPeKi7acmk0HvE2FjtmgZxTYM50teocs6L27XB5ETqvofy
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="237891904"
+X-IronPort-AV: E=Sophos;i="5.90,194,1643702400"; 
+   d="scan'208";a="237891904"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 00:47:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,194,1643702400"; 
+   d="scan'208";a="645881364"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Mar 2022 00:47:25 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sat, 19 Mar 2022 00:47:24 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21 via Frontend Transport; Sat, 19 Mar 2022 00:47:24 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.21; Sat, 19 Mar 2022 00:47:24 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c5gD9TYPZpexq4yZqLD0RgfRoEaVYaVzbVCJvbtu9V9c+SCo/US3sSCH2ev//Zh3no3lZBJZn0AhyC9Zwd2o0qA7Liq+YAMlwzPVydyHrdskYROlCDUTtzIyBsOMhGpCM1RBTeEB6JJT+t24jfIizfc/pF3IrbBrVDd8Wu8ShVyNbVIlQZZKLu4+Q+1yd+5TTAesfXxoXdI3G1hNg3lram8w2EuuqEMi6Jd79UpyLDf1HlIyD196vr8TTsEkv1LJgsAl6ldEJdWn08Hs0H6EyRZBznAaYLNGB4YLHBEUfWxd2m5UsZVDobN6haVCwZUyR5TY8sgg3SOvLt4YuXtl4g==
+ b=lfVoKHmR5lt3/J28JsaQaguUc9bnmieA3fx6JZujw/oY6fML5uexjEZk6r8IRT+OW7KTVD+Lp/8OblDGttJvux8b49Vf/Z85HbrNRBfyjg9uIVEFuExhlTFozwNnK6SMek3SG3Y/pYULou2uq9+0lNyKekGNdatWcePmu+wzoZFH4w0MMu9PWyxjYisfNbk/yTVajSxOADE8KFw5qiXbqbIm7GU4Xyhp9rVUQR/jkLWIEsMPjSbszvjhYOx2LGPOxX65/oBMpWMRa4GMwFr465oE0Vk282Jw3cs8SH1qAO1/fRKR7O6hUkvPZrx8Td96MvQdiDRq/SHd4OXTGJIsjA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ET+csLmSfPbu8SCQi36OPgUlT/AAhPDnefqiQBYJT04=;
- b=My5xWf2KxSjSGXsVadH0Hg9JMzWaUauMl1ZfiLWN+u5I3hySJ/cFDbuC/nZU3Bre9XsGiUuluZYM/q0lMHmrAaN9bUHs9BqWWU0wlQl0wLjTv0apaqaAxYrI88Gxb2vau10wd8gaKKrEI8y8vMcHFGUniL91Xc7eST4bmnT8ZvDIrth0/Nss6oIu+Mj6MK9L+/MQa6Sk5Uo6SdX258sg9VUb6WFJcY6Vd64qPFuMLhUye6tpOdsECRd07AEZV/vZyZ25KCHWPaS20jlQA8qrkAVQv1wGvm/tnwhUPtDvtjPNzb9Fi8163kiNXigH0P8JBwj/nYLaH6BouFxYB+qlHQ==
+ bh=ueGWbsImG2opo67McsMcWatMTSy5Qk/7EZj4Pa7JO9Q=;
+ b=QNgwJDoyFwD9vEoFSRqYzs6f0ucHaI09RejfySBsNY+/kC+nvKw7EDVYaDkasA85XCtpXAI3YTOviZKJt3gb134cEwrD5bTmQPhpAac9lJvkRfHtMXqza18lfSbM9J1WgH5xSC2NOcGSVO1o15B7xVyb37fEOTe9iwT8nwhkcHplqYMtRQQEkd2MGUEnozkSbYaZxqsCsndsOIDdyzi0DHtPYXHiQEBt8MVCtAPTo90BSvkEKSNphprj+0Z1hvzBUo5CPmepaB1TgcSC4Ya0tSyk8PJYLDNhK9F4fHwSoBS1xhSwt9G75PpIDpnxAjtXlwC7arShGJfRHgogCGqsXw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ET+csLmSfPbu8SCQi36OPgUlT/AAhPDnefqiQBYJT04=;
- b=QqzDSEw40kq6oH9+qxbRUeZ85yKsNR7yr5er+COTUxprxIqyt57GgviVC+TtBcb8KldpTmiSgmEw5xNNFtdRdqM+h/yrYkZynizg5ihjLBOyJfeGJPnXMWudznpdAzRB9rWApJ4X5Se6mWwsL2jBN2Xsgr9bUgECRyhNW8+rsA8=
-Received: from KL1P15301MB0295.APCP153.PROD.OUTLOOK.COM (2603:1096:820:11::20)
- by SG2P153MB0109.APCP153.PROD.OUTLOOK.COM (2603:1096:3:19::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5102.7; Sat, 19 Mar 2022 07:47:21 +0000
-Received: from KL1P15301MB0295.APCP153.PROD.OUTLOOK.COM
- ([fe80::45e1:56b5:9142:7517]) by KL1P15301MB0295.APCP153.PROD.OUTLOOK.COM
- ([fe80::45e1:56b5:9142:7517%4]) with mapi id 15.20.5102.008; Sat, 19 Mar 2022
- 07:47:21 +0000
-From:   Saurabh Singh Sengar <ssengar@microsoft.com>
-To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Wei Hu <weh@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [EXTERNAL] [PATCH 1/2] PCI: hv: Use IDR to generate transaction
- IDs for VMBus hardening
-Thread-Topic: [EXTERNAL] [PATCH 1/2] PCI: hv: Use IDR to generate transaction
- IDs for VMBus hardening
-Thread-Index: AQHYOvCC7YdFpbE8V0SVWDhoYbPEO6zGVFZw
-Date:   Sat, 19 Mar 2022 07:47:20 +0000
-Message-ID: <KL1P15301MB0295879FF28B67F3C521FFB3BE149@KL1P15301MB0295.APCP153.PROD.OUTLOOK.COM>
-References: <20220318174848.290621-1-parri.andrea@gmail.com>
- <20220318174848.290621-2-parri.andrea@gmail.com>
-In-Reply-To: <20220318174848.290621-2-parri.andrea@gmail.com>
-Accept-Language: en-IN, en-US
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by CY4PR11MB1494.namprd11.prod.outlook.com (2603:10b6:910:6::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.17; Sat, 19 Mar
+ 2022 07:47:23 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::c8aa:b5b2:dc34:e893]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::c8aa:b5b2:dc34:e893%8]) with mapi id 15.20.5081.019; Sat, 19 Mar 2022
+ 07:47:23 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "schnelle@linux.ibm.com" <schnelle@linux.ibm.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "svens@linux.ibm.com" <svens@linux.ibm.com>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "vneethv@linux.ibm.com" <vneethv@linux.ibm.com>,
+        "oberpar@linux.ibm.com" <oberpar@linux.ibm.com>,
+        "freude@linux.ibm.com" <freude@linux.ibm.com>,
+        "thuth@redhat.com" <thuth@redhat.com>,
+        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: RE: [PATCH v4 15/32] vfio: introduce KVM-owned IOMMU type
+Thread-Topic: [PATCH v4 15/32] vfio: introduce KVM-owned IOMMU type
+Thread-Index: AQHYN9xrQVYDc2PUskGgAyzdZ+WZ86y/fBmAgAAHrYCAAO/BAIAAFiEAgAQxgwCAAHI9gIABLEKA
+Date:   Sat, 19 Mar 2022 07:47:22 +0000
+Message-ID: <BN9PR11MB5276C1242BB4E770815D77968C149@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220314194451.58266-1-mjrosato@linux.ibm.com>
+ <20220314194451.58266-16-mjrosato@linux.ibm.com>
+ <20220314165033.6d2291a5.alex.williamson@redhat.com>
+ <20220314231801.GN11336@nvidia.com>
+ <9618afae-2a91-6e4e-e8c3-cb83e2f5c3d9@linux.ibm.com>
+ <20220315145520.GZ11336@nvidia.com>
+ <BN9PR11MB52762F1B395D27B1F82BBF0F8C139@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20220318134627.GJ11336@nvidia.com>
+In-Reply-To: <20220318134627.GJ11336@nvidia.com>
+Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=f716056b-3f87-4d1a-828f-f2691c62bafa;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-03-19T07:44:05Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
+ header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 20f2c119-3b3c-4b04-4827-08da097cb332
-x-ms-traffictypediagnostic: SG2P153MB0109:EE_
-x-ms-exchange-atpmessageproperties: SA|SL
-x-microsoft-antispam-prvs: <SG2P153MB0109504813788487DAD34115BE149@SG2P153MB0109.APCP153.PROD.OUTLOOK.COM>
+x-ms-office365-filtering-correlation-id: abb333ab-dbe4-423c-b317-08da097cb458
+x-ms-traffictypediagnostic: CY4PR11MB1494:EE_
+x-microsoft-antispam-prvs: <CY4PR11MB1494B3745FD871DCF9073B2E8C149@CY4PR11MB1494.namprd11.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: leFIn6tvL0diVXmq3GRxuEvF3iBjHj7OBZ9vARVL0nwa4uchnIOnszNPdP3jFUHMsCSD66p37u+3pZ/MNdx+UQTuS+YSnR46jiU3pOP6pq+GRoMsFU/IRxLVjHfDq6iqdGx2EMxFMiLVjyHUAakrQwfKNLrRBIrIVRZlOycQqMmGLwsE8LN4zvNiU5tH2tHLf7VHhHIdCQcOfGl3o2KrY4WKLq45bg+xYsk4C/NS+u/fDHBYKvhkALWZPRArUC06G0xUgkFfoGUKOf7L0TtDWzl/mbaxLCazpwon/5kf7qPoooXkcJwmLZjKstj9B9/CiSlzR9kQyYnePXXr4VzEuJuZa8JLVdk1Zhd5CipSFoqO6lecXub6CKAUGUUlWZXIiDmZudTq83Un206CqUi0G6zNDT3zlZ80WHTp9B+ggT1vDf8WRyJLPt+2Ru8qpYrykHI6DiHc3omC7nd748EZOZ7Y28Mr6AO9Nf7iDocynEbLB2PIQxUiqvHKX0sO0sp65547+39TFcXLC6movu3voruGIkSvb1+AquQcey7Vmi03BlgRlP2fsCcQWXWAujLRGfB1PdasApk09bnoOC1qARGmdIa7Ms549oD+kFE4ye+aDOigUH+up8Hmv+tiW1SmBW7CsMW4bmiog9ihVeDPM3aPuqwEFo4bxVcKNH42kZUnqm+eonKBQdGz4v6BC8kmrvsFhQGMNj373oyLnL2Gryn2TlwmY4vFcw1ouMnUA4a0V6lks0SIV4cocYtnEnixK5VhOvAd2+Nh1ACvnw/wlA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1P15301MB0295.APCP153.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(110136005)(54906003)(71200400001)(10290500003)(6506007)(7696005)(508600001)(186003)(26005)(66476007)(66446008)(9686003)(64756008)(66556008)(4326008)(83380400001)(8676002)(33656002)(66946007)(76116006)(921005)(316002)(5660300002)(55016003)(38070700005)(2906002)(8936002)(82960400001)(82950400001)(53546011)(86362001)(8990500004)(30864003)(38100700002)(122000001)(52536014)(579004);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: b5JxOWDwwlYEh6siEzAjG1ufxNMWwVBOkJGjhVTE8T2U4L9V2vwlC/1rJ/M1wLWxetn/Ea6hUrLNYnKvNzGAcCxM+j1ek6OAop+blq+hfolycmtAtGo7i2y0EHk9f2bub0cmDWPaGlZ/nlLXzFyNvDZqqZz/NLVkv7jC5+j5PzbbD6fYL4SV2R26S6MgTrWlRe65oKVwsdjazuDO9n2EgAB6bb09ZFlgBWuZL7OREVYDeHmpLSANv1pahUp023x5E3EFMwwqdhD/u6esdm75Bql2UVYK07HJ0IrwCrMIXADnupYDruvTekjoYURiPQ0+ie+Xa9fXYrHFWoBEMQX2hfeW34ReHalVHc3JUzBKtFZvPmmrNxLPhsvZ9BAyZ0xPaB/8mHsCPosRKpTOlyGtJQ9pY8KeSYH1V1JvpA4K1lc/jcayFHrT7vvuy5nTEk0denjj8ShiSuC4UR0l1NjgxG/JHlkVxk/zVAv94HVA9sv7B+n5wOGFEANDPdBqMjVwykyGgjCAge4PEis3B1n4ZZFYiz2pva4Cb+4iobJ40zMa6rwPEUaFpUunWHYAsaXQ4OlqFm5lo99l/gPycd7h7L7wBaN1pYcG1C+2FJDEbQ0zl+ik0klFKtSgjFX3h+Dz2wUXgX5SnE2rFJsesZ9nGZbcWrR//zMF51RfgYSETYxawcyLOgKi8pweEMuu0nfiJ2gN/PXNRRbtnvvDJiamfQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66556008)(8676002)(66476007)(4326008)(66446008)(64756008)(76116006)(66946007)(86362001)(38100700002)(508600001)(9686003)(71200400001)(26005)(7696005)(186003)(55016003)(38070700005)(6506007)(33656002)(54906003)(8936002)(5660300002)(52536014)(7406005)(7416002)(122000001)(2906002)(6916009)(83380400001)(316002)(82960400001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BXXHc/xWXRRmbKLkR6Ru4AqAZhkWYB9P4DeSUnHTXYdGng+Dok8Jir2UPBiW?=
- =?us-ascii?Q?TTWOC1TrGwulV+bj7j2XrAAyBB4yWyAwGMIOMouGKqAYulH9LH989pFthjFc?=
- =?us-ascii?Q?7WFGGA/7h4fBMPMiILnDDkfPMOSSeXK+OwJ+4kVAnZh6j2IAXLXAyqQvDVBS?=
- =?us-ascii?Q?J8wWfMPmKg6fiLQQwQY8mBfcqfywYwrzLDkdIWVTrR3jPclWkD3wK+zSoPJX?=
- =?us-ascii?Q?5uUl9zw2pOWGNucFVM6mXTKCWc7nPGOGb1nIeA90MZyrSezTQy5TzBAP4JiR?=
- =?us-ascii?Q?bejnLrbwWrUW7opLZ5a+crD5DgBRIhsIEHp2vPmDpE31+BdhHuqBmQZ4RB7m?=
- =?us-ascii?Q?QnQlUM6vYmrKCa6/gRkzJ7+FeKIXf3DsAaXVEOKXYIksH8HHco7leWQv1s9G?=
- =?us-ascii?Q?NyjpV/2sqeCIa7S5baB+zMHTQwNFFQjL+6A/Rws6dwpM+1qWKxYT8I3YdYpY?=
- =?us-ascii?Q?ORJ2M7uhSm32UeUE16O1CpftwbLWTF1IkqQj1UKTW5MVevUOUTk2CX1/X0zy?=
- =?us-ascii?Q?W/WjiMUNxQzUCn2qfQfdUmKYa30uGCKtN9SIYjdrOsMAoGTnWXVovYKSWJxl?=
- =?us-ascii?Q?s3Grss9W4Wj/FcguzRKdtYh/CXdRZERoZ2gFwnUyYzZnsYubhBrWBhKu3EQ8?=
- =?us-ascii?Q?ftJcvQ0QCfMnEayK4Gf71UYSdT0spueDIeIcWZYtSKkpiQiKQlo7BKROywfE?=
- =?us-ascii?Q?zybLOLdm9MElDmYS0gHK1k4J8mqWOF/twSsM0g7Vny/qTygjUXxRKhqmWp/g?=
- =?us-ascii?Q?9WwIpeC22wXi1ePtgOFClNUWVJpCCkjESvNdYA+5jWCC39r2CQ0QN+Axloh6?=
- =?us-ascii?Q?J5A3gPgnrEpH2VefUGUYubDakk/7UhpSdNRfAmuwkzIgoViZiHw8GEtAf+1g?=
- =?us-ascii?Q?oMnEMTwghDuIL3kHrfDOhChxLxBDso52B+8Gm+b3btv0Ms1XC6R6RCeloAs9?=
- =?us-ascii?Q?MDU8a4Wsmxg/M6BzATfmrDEEmYFddacYpzYAVf5onW8OShSh3m0mX4iOhxpf?=
- =?us-ascii?Q?jgweK6VyQqqQ+GFRrsGd+TmOmgKSklqvVrHnCOE2cRJAqaRr2azDXcfVXCN8?=
- =?us-ascii?Q?mvBhPt9h8IyNw4K21C+D3P+6f6pQvVe36BBDdPjab+XUyLONNcPG+WCuCPAX?=
- =?us-ascii?Q?6wq1+rUt6pCGuc5JLPib9T882bGtj3ulxq64+hAKF9DJKssV93WZBIA6V6Lo?=
- =?us-ascii?Q?gWFcJNZyIPSEbWwP0DbgkNVl6Pn1m4rLa1L/RZFOALQ1yy9Fzgto3rjWf+BY?=
- =?us-ascii?Q?mUpgv1lteGAU9uks+GQDBr8M1o/9PlS9Wn8APBhfUOTblvrNL962CpYH3BYV?=
- =?us-ascii?Q?FwrFbn+EVfaeMmD9bTtmB/b0lPDYAKzoVulaWmpK9EaJDRuPCnNueMt6s/Yw?=
- =?us-ascii?Q?DLp5nQOvAjKU82Qdxuw4mvCWs0zs?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QWlFa3JqSXZ5V05rNmR5WW1jZUorOXZ6OXQydW5Id3ZLcnVpalpkSkRiZjNG?=
+ =?utf-8?B?aFIzSm5VbStEdCs0dGxUOFAwWHlVN2FoTXpnalhCdXhMcWxPWGNMZGUrZWNC?=
+ =?utf-8?B?TVBnM0RtVXA3KzhpOFhvVjkyVFZCTmtpN3JaandpWkpCTEJDUXJjVnVpT2ZR?=
+ =?utf-8?B?anIvTDZCUzZLalorR1pDYlJoQXJ3Q2w1MkxmVUl6Y0lUeUdGQWhUeVFuQ05P?=
+ =?utf-8?B?QnFQWGxXM2dKVWUvNTI3QVlVNnF3di9wT0taNjRaT2xPZVB4eStuWkZ6QkNt?=
+ =?utf-8?B?ZSt3VDJsdFZiYURPS1dOS1pWWTZhUXpDZ1lhdWRrV2VaalZGck5TK2ZsRFZ0?=
+ =?utf-8?B?OFBSUy91NzlDZzh6YWVVeHpvWjhrUnlOd2JQREhxWmlTeWV2V1lNWDRjQlFT?=
+ =?utf-8?B?dGw0SWcrUXA2MC91aElRV2R5NGlMUEhQZTJHRnpRbnBTWERSa2E0R0FDdElD?=
+ =?utf-8?B?WXpNU0xCNVFwbDdCWXVuTk04Vm5USDBxZk5pcmJSM1dVZjZFLzQxM01oNWNl?=
+ =?utf-8?B?eElNcVYvRWhIeGxVZkdBUThUUTJMN2FmSzRRMW5sL09oSldXOGdIL1JkUWQz?=
+ =?utf-8?B?ZHBRT0Z1KzdXVDN4ckRGcll6NTZSOU1MQVMreERjMkF1cGNGSEI2bG9VOEdD?=
+ =?utf-8?B?eVZwYm5JRHdFRDZ4S0oyRHM5Mk9xM1EzdmdIV2ZsRjZJTElEUWpPUHNoa0Q3?=
+ =?utf-8?B?QTU5L3lyaW1rRWd3N01KRkVNMDVMTzBKc3FyU2d5SjJHbmkvV0drWWNwaWk0?=
+ =?utf-8?B?VjVJd1dUMFdNREtaeFkzOENmNVBsb2xJZ0crTGF5OVJRUllTaDlHMmVXcncv?=
+ =?utf-8?B?MktXdG1GZXhudlh1UmxlZTJhTVpqQ0RKcFJzTkxFNFI5REUvWXc1M2hDTTNy?=
+ =?utf-8?B?Ulh6Nmo5K3BndzRyNFAxTkVmVUhiV0dWQVJreWh4Wi9GOVByT005LzltZjFF?=
+ =?utf-8?B?Tmd3Z2pGUndFZ01VQldTTVJabjZVQW9CVVA3d0xjdU8zVjFITXZQZko1WmtT?=
+ =?utf-8?B?QnpGS3V2aGx1YmZIbzkwUnczTmJYUnZvNktycng2NGhSUkhWVU9YWjdDODVo?=
+ =?utf-8?B?SWQyR2lJUVRKbFcvRzh2UjBIYnUyZGpqdzBoaFIyWGhrRzNUdVdIQW5YZGdv?=
+ =?utf-8?B?ZHdUc0ZwbmVYeDk2azZKY292YStjMmh2UnRWODVkczBMVzEzQTdMelBLZWRZ?=
+ =?utf-8?B?ak16eC9XOEFxSEFzdk5leTBDN0xRZUg4Lzc4b0JiRWVpZkdFME9Sb1dkMHNu?=
+ =?utf-8?B?aUxsRWxPWi95SSt5UklBWjJSa00rNzlCdjd5YVBrV1lQUHRpRUJHSmJXOVBR?=
+ =?utf-8?B?Y1ZLRkxCWDM5UjNTNThwK2I2UWU3UVI0Sk9YZ2RNYW83RFFZUEhlRExwR010?=
+ =?utf-8?B?d0ZYWmllZ1REQm9KRTN3VXhoMzcwcG5vanJvQVBSdTlFN2RZQkNZbm5KbVB6?=
+ =?utf-8?B?alBYZ1JvZ0sreUVTeWJhYS9DZjRZSmY1enhaZ1RjUWw1TGYrOXU3Z3dyMUxq?=
+ =?utf-8?B?S3Z0MWVMSDBKMmJBaEZkWWRjQ0RUR0dielRQRzJ0NkJicWtlWXQvMVlxQ0xI?=
+ =?utf-8?B?Z3FOSGI4MCtxZWZBMWZ0ZWx6ZzIxUXd1UjRrd2ZDUW9hUExUWC9Udzd5Qm5W?=
+ =?utf-8?B?RWdWeXJURGlXcVdwaXN1aE5pUWxIcnBTWCt3cnZSb0RsTmhzeXlLamE1eGg0?=
+ =?utf-8?B?ak94UzZVZzZ0WjU4UWlGVU01K25rTEdaVElrWG1WYk9JbWI4Z0NmWDZOQXFx?=
+ =?utf-8?B?M1VTbG10VGhsMlEzWHZaOGZwOUdQUExIZ3NabDZsdHFmcHZSaFFGYmU4RlN0?=
+ =?utf-8?B?azh5WW8xcWo3U25XN09yb0tQSXRRelhhZEpoVGRpY2RoK1A1WEtnL2EzbDZP?=
+ =?utf-8?B?ZDM0NVBtVWFjQVNXSG1DZEFiZEljRW9pbUs0SFA2NFVkR3hVc3ZxMVBhSnNn?=
+ =?utf-8?Q?CTQSk3kQENe/j4r9PHEM7RA8xX+YqU3l?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: KL1P15301MB0295.APCP153.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20f2c119-3b3c-4b04-4827-08da097cb332
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Mar 2022 07:47:20.8758
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: abb333ab-dbe4-423c-b317-08da097cb458
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Mar 2022 07:47:22.9840
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: M/rNt10jXhh3fsDLKNmt6FA7hQroAr8kG9s41NLXHJYJftInamh1lc0WQKqrLb2Au9rYzPOd9A263vy/EZ6ruQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2P153MB0109
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: sIF3W7GmCbQA3Vb0r64lPDc7LExAczNcCptUzkbYXOQxGQDIkta4GjV3nd12pi8l7qnTlVqtXMAEOJF8rrbrVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1494
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-> Sent: 18 March 2022 23:19
-> To: KY Srinivasan <kys@microsoft.com>; Haiyang Zhang
-> <haiyangz@microsoft.com>; Stephen Hemminger
-> <sthemmin@microsoft.com>; Wei Liu <wei.liu@kernel.org>; Dexuan Cui
-> <decui@microsoft.com>; Michael Kelley (LINUX) <mikelley@microsoft.com>;
-> Wei Hu <weh@microsoft.com>; Lorenzo Pieralisi
-> <lorenzo.pieralisi@arm.com>; Rob Herring <robh@kernel.org>; Krzysztof
-> Wilczynski <kw@linux.com>; Bjorn Helgaas <bhelgaas@google.com>
-> Cc: linux-pci@vger.kernel.org; linux-hyperv@vger.kernel.org; linux-
-> kernel@vger.kernel.org; Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-> Subject: [EXTERNAL] [PATCH 1/2] PCI: hv: Use IDR to generate transaction =
-IDs
-> for VMBus hardening
->=20
-> Currently, pointers to guest memory are passed to Hyper-V as transaction
-> IDs in hv_pci.  In the face of errors or malicious behavior in Hyper-V,
-> hv_pci should not expose or trust the transaction IDs returned by
-> Hyper-V to be valid guest memory addresses.  Instead, use small integers
-> generated by IDR as request (transaction) IDs.
->=20
-> Suggested-by: Michael Kelley <mikelley@microsoft.com>
-> Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-> ---
->  drivers/pci/controller/pci-hyperv.c | 190 ++++++++++++++++++++--------
->  1 file changed, 135 insertions(+), 55 deletions(-)
->=20
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller=
-/pci-
-> hyperv.c
-> index ae0bc2fee4ca8..fbc62aab08fdc 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -495,6 +495,9 @@ struct hv_pcibus_device {
->  	spinlock_t device_list_lock;	/* Protect lists below */
->  	void __iomem *cfg_addr;
->=20
-> +	spinlock_t idr_lock; /* Serialize accesses to the IDR */
-> +	struct idr idr; /* Map guest memory addresses */
-> +
->  	struct list_head children;
->  	struct list_head dr_list;
->=20
-> @@ -1208,6 +1211,27 @@ static void hv_pci_read_config_compl(void
-> *context, struct pci_response *resp,
->  	complete(&comp->comp_pkt.host_event);
->  }
->=20
-> +static inline int alloc_request_id(struct hv_pcibus_device *hbus,
-> +				   void *ptr, gfp_t gfp)
-> +{
-> +	unsigned long flags;
-> +	int req_id;
-> +
-> +	spin_lock_irqsave(&hbus->idr_lock, flags);
-> +	req_id =3D idr_alloc(&hbus->idr, ptr, 1, 0, gfp);
-
-[Saurabh Singh Sengar] Many a place we are using alloc_request_id with GFP_=
-KERNEL, which results this allocation inside of spin lock with GFP_KERNEL.
-Is this a good opportunity to use idr_preload ?
-
-> +	spin_unlock_irqrestore(&hbus->idr_lock, flags);
-> +	return req_id;
-> +}
-> +
-> +static inline void remove_request_id(struct hv_pcibus_device *hbus, int
-> req_id)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&hbus->idr_lock, flags);
-> +	idr_remove(&hbus->idr, req_id);
-> +	spin_unlock_irqrestore(&hbus->idr_lock, flags);
-> +}
-> +
->  /**
->   * hv_read_config_block() - Sends a read config block request to
->   * the back-end driver running in the Hyper-V parent partition.
-> @@ -1232,7 +1256,7 @@ static int hv_read_config_block(struct pci_dev
-> *pdev, void *buf,
->  	} pkt;
->  	struct hv_read_config_compl comp_pkt;
->  	struct pci_read_block *read_blk;
-> -	int ret;
-> +	int req_id, ret;
->=20
->  	if (len =3D=3D 0 || len > HV_CONFIG_BLOCK_SIZE_MAX)
->  		return -EINVAL;
-> @@ -1250,16 +1274,19 @@ static int hv_read_config_block(struct pci_dev
-> *pdev, void *buf,
->  	read_blk->block_id =3D block_id;
->  	read_blk->bytes_requested =3D len;
->=20
-> +	req_id =3D alloc_request_id(hbus, &pkt.pkt, GFP_KERNEL);
-> +	if (req_id < 0)
-> +		return req_id;
-> +
->  	ret =3D vmbus_sendpacket(hbus->hdev->channel, read_blk,
-> -			       sizeof(*read_blk), (unsigned long)&pkt.pkt,
-> -			       VM_PKT_DATA_INBAND,
-> +			       sizeof(*read_blk), req_id,
-> VM_PKT_DATA_INBAND,
->=20
-> VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
->  	if (ret)
-> -		return ret;
-> +		goto exit;
->=20
->  	ret =3D wait_for_response(hbus->hdev,
-> &comp_pkt.comp_pkt.host_event);
->  	if (ret)
-> -		return ret;
-> +		goto exit;
->=20
->  	if (comp_pkt.comp_pkt.completion_status !=3D 0 ||
->  	    comp_pkt.bytes_returned =3D=3D 0) {
-> @@ -1267,11 +1294,14 @@ static int hv_read_config_block(struct pci_dev
-> *pdev, void *buf,
->  			"Read Config Block failed: 0x%x,
-> bytes_returned=3D%d\n",
->  			comp_pkt.comp_pkt.completion_status,
->  			comp_pkt.bytes_returned);
-> -		return -EIO;
-> +		ret =3D -EIO;
-> +		goto exit;
->  	}
->=20
->  	*bytes_returned =3D comp_pkt.bytes_returned;
-> -	return 0;
-> +exit:
-> +	remove_request_id(hbus, req_id);
-> +	return ret;
->  }
->=20
->  /**
-> @@ -1313,8 +1343,8 @@ static int hv_write_config_block(struct pci_dev
-> *pdev, void *buf,
->  	} pkt;
->  	struct hv_pci_compl comp_pkt;
->  	struct pci_write_block *write_blk;
-> +	int req_id, ret;
->  	u32 pkt_size;
-> -	int ret;
->=20
->  	if (len =3D=3D 0 || len > HV_CONFIG_BLOCK_SIZE_MAX)
->  		return -EINVAL;
-> @@ -1340,24 +1370,30 @@ static int hv_write_config_block(struct pci_dev
-> *pdev, void *buf,
->  	 */
->  	pkt_size +=3D sizeof(pkt.reserved);
->=20
-> +	req_id =3D alloc_request_id(hbus, &pkt.pkt, GFP_KERNEL);
-> +	if (req_id < 0)
-> +		return req_id;
-> +
->  	ret =3D vmbus_sendpacket(hbus->hdev->channel, write_blk, pkt_size,
-> -			       (unsigned long)&pkt.pkt,
-> VM_PKT_DATA_INBAND,
-> +			       req_id, VM_PKT_DATA_INBAND,
->=20
-> VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
->  	if (ret)
-> -		return ret;
-> +		goto exit;
->=20
->  	ret =3D wait_for_response(hbus->hdev, &comp_pkt.host_event);
->  	if (ret)
-> -		return ret;
-> +		goto exit;
->=20
->  	if (comp_pkt.completion_status !=3D 0) {
->  		dev_err(&hbus->hdev->device,
->  			"Write Config Block failed: 0x%x\n",
->  			comp_pkt.completion_status);
-> -		return -EIO;
-> +		ret =3D -EIO;
->  	}
->=20
-> -	return 0;
-> +exit:
-> +	remove_request_id(hbus, req_id);
-> +	return ret;
->  }
->=20
->  /**
-> @@ -1407,7 +1443,7 @@ static void hv_int_desc_free(struct hv_pci_dev
-> *hpdev,
->  	int_pkt->wslot.slot =3D hpdev->desc.win_slot.slot;
->  	int_pkt->int_desc =3D *int_desc;
->  	vmbus_sendpacket(hpdev->hbus->hdev->channel, int_pkt,
-> sizeof(*int_pkt),
-> -			 (unsigned long)&ctxt.pkt, VM_PKT_DATA_INBAND,
-> 0);
-> +			 0, VM_PKT_DATA_INBAND, 0);
->  	kfree(int_desc);
->  }
->=20
-> @@ -1688,9 +1724,8 @@ static void hv_compose_msi_msg(struct irq_data
-> *data, struct msi_msg *msg)
->  			struct pci_create_interrupt3 v3;
->  		} int_pkts;
->  	} __packed ctxt;
-> -
-> +	int req_id, ret;
->  	u32 size;
-> -	int ret;
->=20
->  	pdev =3D msi_desc_to_pci_dev(irq_data_get_msi_desc(data));
->  	dest =3D irq_data_get_effective_affinity_mask(data);
-> @@ -1750,15 +1785,18 @@ static void hv_compose_msi_msg(struct
-> irq_data *data, struct msi_msg *msg)
->  		goto free_int_desc;
->  	}
->=20
-> +	req_id =3D alloc_request_id(hbus, &ctxt.pci_pkt, GFP_ATOMIC);
-> +	if (req_id < 0)
-> +		goto free_int_desc;
-> +
->  	ret =3D vmbus_sendpacket(hpdev->hbus->hdev->channel,
-> &ctxt.int_pkts,
-> -			       size, (unsigned long)&ctxt.pci_pkt,
-> -			       VM_PKT_DATA_INBAND,
-> +			       size, req_id, VM_PKT_DATA_INBAND,
->=20
-> VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
->  	if (ret) {
->  		dev_err(&hbus->hdev->device,
->  			"Sending request for interrupt failed: 0x%x",
->  			comp.comp_pkt.completion_status);
-> -		goto free_int_desc;
-> +		goto remove_id;
->  	}
->=20
->  	/*
-> @@ -1811,7 +1849,7 @@ static void hv_compose_msi_msg(struct irq_data
-> *data, struct msi_msg *msg)
->  		dev_err(&hbus->hdev->device,
->  			"Request for interrupt failed: 0x%x",
->  			comp.comp_pkt.completion_status);
-> -		goto free_int_desc;
-> +		goto remove_id;
->  	}
->=20
->  	/*
-> @@ -1827,11 +1865,14 @@ static void hv_compose_msi_msg(struct
-> irq_data *data, struct msi_msg *msg)
->  	msg->address_lo =3D comp.int_desc.address & 0xffffffff;
->  	msg->data =3D comp.int_desc.data;
->=20
-> +	remove_request_id(hbus, req_id);
->  	put_pcichild(hpdev);
->  	return;
->=20
->  enable_tasklet:
->  	tasklet_enable(&channel->callback_event);
-> +remove_id:
-> +	remove_request_id(hbus, req_id);
->  free_int_desc:
->  	kfree(int_desc);
->  drop_reference:
-> @@ -2258,7 +2299,7 @@ static struct hv_pci_dev
-> *new_pcichild_device(struct hv_pcibus_device *hbus,
->  		u8 buffer[sizeof(struct pci_child_message)];
->  	} pkt;
->  	unsigned long flags;
-> -	int ret;
-> +	int req_id, ret;
->=20
->  	hpdev =3D kzalloc(sizeof(*hpdev), GFP_KERNEL);
->  	if (!hpdev)
-> @@ -2275,16 +2316,19 @@ static struct hv_pci_dev
-> *new_pcichild_device(struct hv_pcibus_device *hbus,
->  	res_req->message_type.type =3D
-> PCI_QUERY_RESOURCE_REQUIREMENTS;
->  	res_req->wslot.slot =3D desc->win_slot.slot;
->=20
-> +	req_id =3D alloc_request_id(hbus, &pkt.init_packet, GFP_KERNEL);
-> +	if (req_id < 0)
-> +		goto error;
-> +
->  	ret =3D vmbus_sendpacket(hbus->hdev->channel, res_req,
-> -			       sizeof(struct pci_child_message),
-> -			       (unsigned long)&pkt.init_packet,
-> +			       sizeof(struct pci_child_message), req_id,
->  			       VM_PKT_DATA_INBAND,
->=20
-> VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
->  	if (ret)
-> -		goto error;
-> +		goto remove_id;
->=20
->  	if (wait_for_response(hbus->hdev, &comp_pkt.host_event))
-> -		goto error;
-> +		goto remove_id;
->=20
->  	hpdev->desc =3D *desc;
->  	refcount_set(&hpdev->refs, 1);
-> @@ -2293,8 +2337,11 @@ static struct hv_pci_dev
-> *new_pcichild_device(struct hv_pcibus_device *hbus,
->=20
->  	list_add_tail(&hpdev->list_entry, &hbus->children);
->  	spin_unlock_irqrestore(&hbus->device_list_lock, flags);
-> +	remove_request_id(hbus, req_id);
->  	return hpdev;
->=20
-> +remove_id:
-> +	remove_request_id(hbus, req_id);
->  error:
->  	kfree(hpdev);
->  	return NULL;
-> @@ -2648,8 +2695,7 @@ static void hv_eject_device_work(struct
-> work_struct *work)
->  	ejct_pkt =3D (struct pci_eject_response *)&ctxt.pkt.message;
->  	ejct_pkt->message_type.type =3D PCI_EJECTION_COMPLETE;
->  	ejct_pkt->wslot.slot =3D hpdev->desc.win_slot.slot;
-> -	vmbus_sendpacket(hbus->hdev->channel, ejct_pkt,
-> -			 sizeof(*ejct_pkt), (unsigned long)&ctxt.pkt,
-> +	vmbus_sendpacket(hbus->hdev->channel, ejct_pkt, sizeof(*ejct_pkt),
-> 0,
->  			 VM_PKT_DATA_INBAND, 0);
->=20
->  	/* For the get_pcichild() in hv_pci_eject_device() */
-> @@ -2709,6 +2755,7 @@ static void hv_pci_onchannelcallback(void
-> *context)
->  	struct pci_dev_inval_block *inval;
->  	struct pci_dev_incoming *dev_message;
->  	struct hv_pci_dev *hpdev;
-> +	unsigned long flags;
->=20
->  	buffer =3D kmalloc(bufferlen, GFP_ATOMIC);
->  	if (!buffer)
-> @@ -2743,11 +2790,19 @@ static void hv_pci_onchannelcallback(void
-> *context)
->  		switch (desc->type) {
->  		case VM_PKT_COMP:
->=20
-> -			/*
-> -			 * The host is trusted, and thus it's safe to interpret
-> -			 * this transaction ID as a pointer.
-> -			 */
-> -			comp_packet =3D (struct pci_packet *)req_id;
-> +			if (req_id > INT_MAX) {
-> +				dev_err_ratelimited(&hbus->hdev->device,
-> +						    "Request ID >
-> INT_MAX\n");
-> +				break;
-> +			}
-> +			spin_lock_irqsave(&hbus->idr_lock, flags);
-> +			comp_packet =3D (struct pci_packet *)idr_find(&hbus-
-> >idr, req_id);
-> +			spin_unlock_irqrestore(&hbus->idr_lock, flags);
-> +			if (!comp_packet) {
-> +				dev_warn_ratelimited(&hbus->hdev->device,
-> +						     "Request ID not found\n");
-> +				break;
-> +			}
->  			response =3D (struct pci_response *)buffer;
->  			comp_packet->completion_func(comp_packet-
-> >compl_ctxt,
->  						     response,
-> @@ -2858,8 +2913,7 @@ static int hv_pci_protocol_negotiation(struct
-> hv_device *hdev,
->  	struct pci_version_request *version_req;
->  	struct hv_pci_compl comp_pkt;
->  	struct pci_packet *pkt;
-> -	int ret;
-> -	int i;
-> +	int req_id, ret, i;
->=20
->  	/*
->  	 * Initiate the handshake with the host and negotiate
-> @@ -2877,12 +2931,18 @@ static int hv_pci_protocol_negotiation(struct
-> hv_device *hdev,
->  	version_req =3D (struct pci_version_request *)&pkt->message;
->  	version_req->message_type.type =3D
-> PCI_QUERY_PROTOCOL_VERSION;
->=20
-> +	req_id =3D alloc_request_id(hbus, pkt, GFP_KERNEL);
-> +	if (req_id < 0) {
-> +		kfree(pkt);
-> +		return req_id;
-> +	}
-> +
->  	for (i =3D 0; i < num_version; i++) {
->  		version_req->protocol_version =3D version[i];
->  		ret =3D vmbus_sendpacket(hdev->channel, version_req,
-> -				sizeof(struct pci_version_request),
-> -				(unsigned long)pkt, VM_PKT_DATA_INBAND,
-> -
-> 	VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
-> +				       sizeof(struct pci_version_request),
-> +				       req_id, VM_PKT_DATA_INBAND,
-> +
-> VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
->  		if (!ret)
->  			ret =3D wait_for_response(hdev,
-> &comp_pkt.host_event);
->=20
-> @@ -2917,6 +2977,7 @@ static int hv_pci_protocol_negotiation(struct
-> hv_device *hdev,
->  	ret =3D -EPROTO;
->=20
->  exit:
-> +	remove_request_id(hbus, req_id);
->  	kfree(pkt);
->  	return ret;
->  }
-> @@ -3079,7 +3140,7 @@ static int hv_pci_enter_d0(struct hv_device *hdev)
->  	struct pci_bus_d0_entry *d0_entry;
->  	struct hv_pci_compl comp_pkt;
->  	struct pci_packet *pkt;
-> -	int ret;
-> +	int req_id, ret;
->=20
->  	/*
->  	 * Tell the host that the bus is ready to use, and moved into the
-> @@ -3098,8 +3159,14 @@ static int hv_pci_enter_d0(struct hv_device
-> *hdev)
->  	d0_entry->message_type.type =3D PCI_BUS_D0ENTRY;
->  	d0_entry->mmio_base =3D hbus->mem_config->start;
->=20
-> +	req_id =3D alloc_request_id(hbus, pkt, GFP_KERNEL);
-> +	if (req_id < 0) {
-> +		kfree(pkt);
-> +		return req_id;
-> +	}
-> +
->  	ret =3D vmbus_sendpacket(hdev->channel, d0_entry,
-> sizeof(*d0_entry),
-> -			       (unsigned long)pkt, VM_PKT_DATA_INBAND,
-> +			       req_id, VM_PKT_DATA_INBAND,
->=20
-> VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
->  	if (!ret)
->  		ret =3D wait_for_response(hdev, &comp_pkt.host_event);
-> @@ -3112,12 +3179,10 @@ static int hv_pci_enter_d0(struct hv_device
-> *hdev)
->  			"PCI Pass-through VSP failed D0 Entry with status
-> %x\n",
->  			comp_pkt.completion_status);
->  		ret =3D -EPROTO;
-> -		goto exit;
->  	}
->=20
-> -	ret =3D 0;
-> -
->  exit:
-> +	remove_request_id(hbus, req_id);
->  	kfree(pkt);
->  	return ret;
->  }
-> @@ -3175,11 +3240,10 @@ static int hv_send_resources_allocated(struct
-> hv_device *hdev)
->  	struct pci_resources_assigned *res_assigned;
->  	struct pci_resources_assigned2 *res_assigned2;
->  	struct hv_pci_compl comp_pkt;
-> +	int wslot, req_id, ret =3D 0;
->  	struct hv_pci_dev *hpdev;
->  	struct pci_packet *pkt;
->  	size_t size_res;
-> -	int wslot;
-> -	int ret;
->=20
->  	size_res =3D (hbus->protocol_version < PCI_PROTOCOL_VERSION_1_2)
->  			? sizeof(*res_assigned) : sizeof(*res_assigned2);
-> @@ -3188,7 +3252,11 @@ static int hv_send_resources_allocated(struct
-> hv_device *hdev)
->  	if (!pkt)
->  		return -ENOMEM;
->=20
-> -	ret =3D 0;
-> +	req_id =3D alloc_request_id(hbus, pkt, GFP_KERNEL);
-> +	if (req_id < 0) {
-> +		kfree(pkt);
-> +		return req_id;
-> +	}
->=20
->  	for (wslot =3D 0; wslot < 256; wslot++) {
->  		hpdev =3D get_pcichild_wslot(hbus, wslot);
-> @@ -3215,10 +3283,9 @@ static int hv_send_resources_allocated(struct
-> hv_device *hdev)
->  		}
->  		put_pcichild(hpdev);
->=20
-> -		ret =3D vmbus_sendpacket(hdev->channel, &pkt->message,
-> -				size_res, (unsigned long)pkt,
-> -				VM_PKT_DATA_INBAND,
-> -
-> 	VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
-> +		ret =3D vmbus_sendpacket(hdev->channel, &pkt->message,
-> size_res,
-> +				       req_id, VM_PKT_DATA_INBAND,
-> +
-> VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
->  		if (!ret)
->  			ret =3D wait_for_response(hdev,
-> &comp_pkt.host_event);
->  		if (ret)
-> @@ -3235,6 +3302,7 @@ static int hv_send_resources_allocated(struct
-> hv_device *hdev)
->  		hbus->wslot_res_allocated =3D wslot;
->  	}
->=20
-> +	remove_request_id(hbus, req_id);
->  	kfree(pkt);
->  	return ret;
->  }
-> @@ -3412,6 +3480,7 @@ static int hv_pci_probe(struct hv_device *hdev,
->  	spin_lock_init(&hbus->config_lock);
->  	spin_lock_init(&hbus->device_list_lock);
->  	spin_lock_init(&hbus->retarget_msi_interrupt_lock);
-> +	spin_lock_init(&hbus->idr_lock);
->  	hbus->wq =3D alloc_ordered_workqueue("hv_pci_%x", 0,
->  					   hbus->bridge->domain_nr);
->  	if (!hbus->wq) {
-> @@ -3419,6 +3488,7 @@ static int hv_pci_probe(struct hv_device *hdev,
->  		goto free_dom;
->  	}
->=20
-> +	idr_init(&hbus->idr);
->  	ret =3D vmbus_open(hdev->channel, pci_ring_size, pci_ring_size, NULL,
-> 0,
->  			 hv_pci_onchannelcallback, hbus);
->  	if (ret)
-> @@ -3537,6 +3607,7 @@ static int hv_pci_probe(struct hv_device *hdev,
->  	hv_free_config_window(hbus);
->  close:
->  	vmbus_close(hdev->channel);
-> +	idr_destroy(&hbus->idr);
->  destroy_wq:
->  	destroy_workqueue(hbus->wq);
->  free_dom:
-> @@ -3556,7 +3627,7 @@ static int hv_pci_bus_exit(struct hv_device *hdev,
-> bool keep_devs)
->  	struct hv_pci_compl comp_pkt;
->  	struct hv_pci_dev *hpdev, *tmp;
->  	unsigned long flags;
-> -	int ret;
-> +	int req_id, ret;
->=20
->  	/*
->  	 * After the host sends the RESCIND_CHANNEL message, it doesn't
-> @@ -3599,18 +3670,23 @@ static int hv_pci_bus_exit(struct hv_device
-> *hdev, bool keep_devs)
->  	pkt.teardown_packet.compl_ctxt =3D &comp_pkt;
->  	pkt.teardown_packet.message[0].type =3D PCI_BUS_D0EXIT;
->=20
-> +	req_id =3D alloc_request_id(hbus, &pkt.teardown_packet,
-> GFP_KERNEL);
-> +	if (req_id < 0)
-> +		return req_id;
-> +
->  	ret =3D vmbus_sendpacket(hdev->channel,
-> &pkt.teardown_packet.message,
-> -			       sizeof(struct pci_message),
-> -			       (unsigned long)&pkt.teardown_packet,
-> +			       sizeof(struct pci_message), req_id,
->  			       VM_PKT_DATA_INBAND,
->=20
-> VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
->  	if (ret)
-> -		return ret;
-> +		goto exit;
->=20
->  	if (wait_for_completion_timeout(&comp_pkt.host_event, 10 * HZ) =3D=3D
-> 0)
-> -		return -ETIMEDOUT;
-> +		ret =3D -ETIMEDOUT;
->=20
-> -	return 0;
-> +exit:
-> +	remove_request_id(hbus, req_id);
-> +	return ret;
->  }
->=20
->  /**
-> @@ -3648,6 +3724,7 @@ static int hv_pci_remove(struct hv_device *hdev)
->  	ret =3D hv_pci_bus_exit(hdev, false);
->=20
->  	vmbus_close(hdev->channel);
-> +	idr_destroy(&hbus->idr);
->=20
->  	iounmap(hbus->cfg_addr);
->  	hv_free_config_window(hbus);
-> @@ -3704,6 +3781,7 @@ static int hv_pci_suspend(struct hv_device *hdev)
->  		return ret;
->=20
->  	vmbus_close(hdev->channel);
-> +	idr_destroy(&hbus->idr);
->=20
->  	return 0;
->  }
-> @@ -3749,6 +3827,7 @@ static int hv_pci_resume(struct hv_device *hdev)
->=20
->  	hbus->state =3D hv_pcibus_init;
->=20
-> +	idr_init(&hbus->idr);
->  	ret =3D vmbus_open(hdev->channel, pci_ring_size, pci_ring_size, NULL,
-> 0,
->  			 hv_pci_onchannelcallback, hbus);
->  	if (ret)
-> @@ -3780,6 +3859,7 @@ static int hv_pci_resume(struct hv_device *hdev)
->  	return 0;
->  out:
->  	vmbus_close(hdev->channel);
-> +	idr_destroy(&hbus->idr);
->  	return ret;
->  }
->=20
-> --
-> 2.25.1
-
+PiBGcm9tOiBKYXNvbiBHdW50aG9ycGUgPGpnZ0BudmlkaWEuY29tPg0KPiBTZW50OiBGcmlkYXks
+IE1hcmNoIDE4LCAyMDIyIDk6NDYgUE0NCj4gDQo+IE9uIEZyaSwgTWFyIDE4LCAyMDIyIGF0IDA3
+OjAxOjE5QU0gKzAwMDAsIFRpYW4sIEtldmluIHdyb3RlOg0KPiA+ID4gRnJvbTogSmFzb24gR3Vu
+dGhvcnBlIDxqZ2dAbnZpZGlhLmNvbT4NCj4gPiA+IFNlbnQ6IFR1ZXNkYXksIE1hcmNoIDE1LCAy
+MDIyIDEwOjU1IFBNDQo+ID4gPg0KPiA+ID4gVGhlIGZpcnN0IGxldmVsIGlvbW11X2RvbWFpbiBo
+YXMgdGhlICd0eXBlMScgbWFwIGFuZCB1bm1hcCBhbmQgcGlucw0KPiA+ID4gdGhlIHBhZ2VzLiBU
+aGlzIGlzIHRoZSAxOjEgbWFwIHdpdGggdGhlIEdQQSBhbmQgZW5kcyB1cCBwaW5uaW5nIGFsbA0K
+PiA+ID4gZ3Vlc3QgbWVtb3J5IGJlY2F1c2UgdGhlIHBvaW50IGlzIHlvdSBkb24ndCB3YW50IHRv
+IHRha2UgYSBtZW1vcnkgcGluDQo+ID4gPiBvbiB5b3VyIHBlcmZvcm1hbmNlIHBhdGgNCj4gPiA+
+DQo+ID4gPiBUaGUgc2Vjb25kIGxldmVsIGlvbW11X2RvbWFpbiBwb2ludHMgdG8gYSBzaW5nbGUg
+SU8gcGFnZSB0YWJsZSBpbiBHUEENCj4gPiA+IGFuZCBpcyBjcmVhdGVkL2Rlc3Ryb3llZCB3aGVu
+ZXZlciB0aGUgZ3Vlc3QgdHJhcHMgdG8gdGhlIGh5cGVydmlzb3IgdG8NCj4gPiA+IG1hbmlwdWxh
+dGUgdGhlIGFuY2hvciAoaWUgdGhlIEdQQSBvZiB0aGUgZ3Vlc3QgSU8gcGFnZSB0YWJsZSkuDQo+
+ID4gPg0KPiA+DQo+ID4gQ2FuIHdlIHVzZSBjb25zaXN0ZW50IHRlcm1zIGFzIHVzZWQgaW4gaW9t
+bXVmZCBhbmQgaGFyZHdhcmUsIGkuZS4NCj4gPiB3aXRoIGZpcnN0LWxldmVsL3N0YWdlLTEgcmVm
+ZXJyaW5nIHRvIHRoZSBjaGlsZCAoR0lPVkEtPkdQQSkgd2hpY2ggaXMNCj4gPiBmdXJ0aGVyIG5l
+c3RlZCBvbiBzZWNvbmQtbGV2ZWwvc3RhZ2UtMiBhcyB0aGUgcGFyZW50IChHUEEtPkhQQSk/DQo+
+IA0KPiBIb25lc3RseSBJIGRvbid0IGxpa2UgaW5qZWN0aW5nIHRlcm1zIHRoYXQgb25seSBtYWtl
+IHNlbnNlIGZvcg0KPiB2aXJ0dWFsaXphdGlvbiBpbnRvIGlvbW11L3ZmaW8gbGFuZC4NCg0KMXN0
+LzJuZC1sZXZlbCBvciBzdGFnZS0xLzIgYXJlIGhhcmR3YXJlIHRlcm1zIG5vdCB0aWVkIHRvIHZp
+cnR1YWxpemF0aW9uLg0KR0lPVkEvR1BBIGFyZSBqdXN0IGV4YW1wbGVzIGluIHRoaXMgc3Rvcnku
+DQoNCj4gDQo+IFRoYXQgYXJlYSBpcyBpbnRlbmRlZCB0byBiZSBnZW5lcmFsLiBJZiB5b3UgdXNl
+IHdoYXQgaXQgZXhwb3NlcyBmb3INCj4gdmlydHVhbGl6YXRpb24sIHRoZW4gZ3JlYXQuDQo+IA0K
+PiBUaGlzIGlzIHdoeSBJIHByZWZlciB0byB1c2UgJ3VzZXIgcGFnZSB0YWJsZScgd2hlbiB0YWxr
+aW5nIGFib3V0IHRoZQ0KPiBHSU9WQS0+R1BBIG9yIFN0YWdlIDEgbWFwIGJlY2F1c2UgaXQgaXMg
+YSBwaHJhc2UgaW5kZXBlbmRlbnQgb2YNCj4gdmlydHVhbGl6YXRpb24gb3IgSFcgYW5kIGNsZWFy
+bHkgY29udmV5cyB3aGF0IGl0IGlzIHRvIHRoZSBrZXJuZWwgYW5kDQo+IGl0cyBpbmhlcmVudCBv
+cmRlciBpbiB0aGUgdHJhbnNsYXRpb24gc2NoZW1lLg0KDQpJIGZ1bGx5IGFncmVlIHdpdGggdGhp
+cyBwb2ludC4gVGhlIGNvbmZ1c2lvbiBvbmx5IGNvbWVzIHdoZW4geW91DQpzdGFydCB0YWxraW5n
+IGFib3V0IGZpcnN0L3NlY29uZCBsZXZlbCBpbiBhIHdheSBpbmNvbXBhdGlibGUgd2l0aA0Kd2hh
+dCBpb21tdS92ZmlvIGd1eXMgdHlwaWNhbGx5IHVuZGVyc3RhbmQuIPCfmIoNCg0KPiANCj4gVGhl
+IFMxL1MyIGlzIGdldHMgY29uZnVzaW5nIGJlY2F1c2UgdGhlIEhXIHBlb3BsZSBjaG9vc2UgdGhv
+c2UgbmFtZXMNCj4gc28gdGhhdCBTMSBpcyB0aGUgZmlyc3QgdHJhbnNsYXRpb24gYSBUTFAgc2Vl
+cyBhbmQgUzIgaXMgdGhlIHNlY29uZC4NCj4gDQo+IEJ1dCBmcm9tIGEgc29mdHdhcmUgbW9kZWws
+IHRoZSBTMiBpcyB0aGUgZmlyc3QgZG9tYWluIGNyZWF0ZWQgYW5kIHRoZQ0KPiBmaXJzdCBsZXZl
+bCBvZiB0aGUgdHJhbnNsYXRpb24gdHJlZSwgd2hpbGUgdGhlIFMxIGlzIHRoZSBzZWNvbmQgZG9t
+YWluDQo+IGNyZWF0ZWQgYW5kIHRoZSBzZWNvbmQgbGV2ZWwgb2YgdGhlIHRyYW5zbGF0aW9uIHRy
+ZWUuIGllIHRoZSBuYXR1cmFsDQo+IFNXIG51bWJlcnMgYXJlIGJhY2t3YXJkcy4NCg0KWWVzLCBJ
+IGdvdCB0aGlzIHBvaW50Lg0KDQo+IA0KPiBBbmQgSSBrbm93IE1hdHRoZXcgaXNuJ3Qgd29ya2lu
+ZyBvbiBIVyB0aGF0IGhhcyB0aGUgUzEvUzIgSFcgbmFtaW5nIDopDQo+IA0KPiBCdXQgeWVzLCBz
+aG91bGQgdHJ5IGhhcmRlciB0byBoYXZlIGdvb2QgbmFtZXMuIE1heWJlIGl0IHdpbGwgYmUNCj4g
+Y2xlYXJlciB3aXRoIGNvZGUuDQo+IA0KDQpZZXMuIGxldCdzIHRyeSB0byB1c2UgJ3VzZXIgcGFn
+ZSB0YWJsZScgYXMgcG9zc2libGUuIEJ1dCBpZiB0aGUgbGV2ZWxzL3N0YWdlcw0KYXJlIGluZXZp
+dGFibGUgaW4gZGVzY3JpcHRpb24gSSBwcmVmZXIgdG8gc3RheWluZyB3aXRoIHRoZSBoYXJkd2Fy
+ZSB0ZXJtcw0KZ2l2ZW4gaW9tbXUgZHJpdmVyIGhhcyB0byBkZWFsIHdpdGggaGFyZHdhcmUgbmFt
+aW5nIHRoaW5ncy4NCg0KVGhhbmtzDQpLZXZpbg0K

@@ -2,193 +2,679 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A21604DE85A
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 15:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 038D44DE85D
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 15:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242181AbiCSObr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 10:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
+        id S243110AbiCSOb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 10:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbiCSObp (ORCPT
+        with ESMTP id S231131AbiCSOb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 10:31:45 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2F942A13;
-        Sat, 19 Mar 2022 07:30:24 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id bg10so21999923ejb.4;
-        Sat, 19 Mar 2022 07:30:23 -0700 (PDT)
+        Sat, 19 Mar 2022 10:31:56 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EAC42EDC;
+        Sat, 19 Mar 2022 07:30:32 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id a5so11955927pfv.2;
+        Sat, 19 Mar 2022 07:30:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3L07OhLLiKO7cIOIKcwLPPuljJnOhL7LL3DqQ6v2pW8=;
+        b=FGfFRSFw3dgJSOjfsB5OJCum1gwONZeZujcWQD1WU11B9GPvRdp5MebXj9VSkDNPTy
+         llunRbXN4SwRWW/HxwDsP2U/XzrTP96Je8SaVw9bXu0AC8OuGVX0FuQoA6GA89gjloV7
+         Tj/PD5AEJfSJbn2Q8q+caK5pPjhrmMyixCUFEWKOhsJOUMj/oOuMABVWg9EzQzHgO7y5
+         U4ljUHujVzHDX6uIeX5lCgqy84ONhi4NVVcDIJntqpKn9tfM/B0d0DzLvXVK+1y8bg3D
+         fKLRqUl23wGeJavphTEMSr2Zdmk/Td0dAZWnuuMCIx2NpzzLheCMyni5N1lDdT9+O0Xf
+         Kdag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pMCksSCfBCH6lRrr4YOJuMdM6Zq0+qy0cl8Db9Zyz40=;
-        b=rTmdonx5AVV0oUi1g+YjztMRLYLQucfw0DVybjiKEmH+rrP7GljFwyd15jYAdceqwF
-         lPrsVloxFb/GVZcGHnkjUjvyvBmNtrvaaKdzt4Koi4lveVQ65jUx6yUfSCMXySThmq1r
-         RDUygGvffNKUyq4J70ZQkCrBPAcG1fUKnDS4pdXKBsWzYf6A8UvnfXyQzutB0h6Yy9d1
-         S/cCn7nR4Iq3pLIukrxY27jJ12x7Duf4ZzJSEGRC/jaFry0oh6wR49xRzLt/bGq0YCSm
-         WGQTO1U5S4ocz8CEXb1AfCedVJ/fJyx5SnO9cfmh7ZAVd1GSptimniGJekHugEDFBbCG
-         w7BQ==
-X-Gm-Message-State: AOAM5331u97Uowx4spgqkFw4TPkcVD1FPrxlkApFs8qxjsDnd2vMa6+c
-        hC8xbqzz0s5GEdMhl/ADQdk=
-X-Google-Smtp-Source: ABdhPJwfp6apknD6pSBLJZ8KXHAIi455ozkgX7IUny2JLz9DfmRFaZj7Lgh3EL3qwrp2vuVCEwUj2g==
-X-Received: by 2002:a17:907:6e93:b0:6df:8c1a:d08b with SMTP id sh19-20020a1709076e9300b006df8c1ad08bmr12438875ejc.557.1647700222339;
-        Sat, 19 Mar 2022 07:30:22 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id q5-20020aa7cc05000000b004129baa5a94sm5618401edt.64.2022.03.19.07.30.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Mar 2022 07:30:21 -0700 (PDT)
-Message-ID: <de57d12e-bb05-fdcb-0072-82d7e33141eb@kernel.org>
-Date:   Sat, 19 Mar 2022 15:30:20 +0100
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=3L07OhLLiKO7cIOIKcwLPPuljJnOhL7LL3DqQ6v2pW8=;
+        b=dV5Qj/iKvJBEljZkw4u9ZQCXskl+QdgrHxuG0/0H8kyW1cyzYlXw9HQEcllgYDRoDk
+         L6a33OvYTkdN8YxvMbaleUaD9BwFzL4nos4WBSktjNmayZL309IFHjFb15fjlID03oAH
+         E+psqlha6xnjpTMcbaAbe/wlaJK59knsg6vK7nvKycMprre5+d6YzRUL4ZMdPJdYxvWn
+         cSUUNblgqMNowZt9QkSfDJKkL9LP/F9QayRtuFVQbO5O4lGtyTzryWDMlX6Os/xTM8uB
+         Vc+kw2xZb7bkILu57Lh/YPZ+ZWvhfM8ELE71H0WSLaqq0Ywpw6M/JxkbS6ZVvAIB3shm
+         GWzw==
+X-Gm-Message-State: AOAM531EQaugD/HqCWCpw+1g8a7luFs9fXxjysY6TolRydqypbYRmyU+
+        rsrc4bAYBIh9q22X/6VpYFs=
+X-Google-Smtp-Source: ABdhPJx+su2PMIAtZdsW5Q3sx2lFaXH7HC4GW4KJcDx7D25roWRwsmi+bb6HVxLpranbOGFBuWLHbA==
+X-Received: by 2002:aa7:8d42:0:b0:4bd:265:def4 with SMTP id s2-20020aa78d42000000b004bd0265def4mr15225497pfe.24.1647700231531;
+        Sat, 19 Mar 2022 07:30:31 -0700 (PDT)
+Received: from localhost.localdomain ([50.7.60.25])
+        by smtp.gmail.com with ESMTPSA id q12-20020a17090a178c00b001bd036e11fdsm14886959pja.42.2022.03.19.07.30.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Mar 2022 07:30:31 -0700 (PDT)
+Sender: Huacai Chen <chenhuacai@gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+X-Google-Original-From: Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V8 01/22] Documentation: LoongArch: Add basic documentations
+Date:   Sat, 19 Mar 2022 22:31:09 +0800
+Message-Id: <20220319143130.1026432-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220319142759.1026237-1-chenhuacai@loongson.cn>
+References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 8/8] dt-bindings: pinctrl: convert ocelot-pinctrl to
- YAML format
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Quentin Schulz <quentin.schulz@bootlin.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-References: <20220318202547.1650687-1-michael@walle.cc>
- <20220318202547.1650687-9-michael@walle.cc>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220318202547.1650687-9-michael@walle.cc>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 21:25, Michael Walle wrote:
-> Convert the ocelot-pinctrl device tree binding to the new YAML format.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  .../bindings/pinctrl/mscc,ocelot-pinctrl.txt  |  42 -------
->  .../bindings/pinctrl/mscc,ocelot-pinctrl.yaml | 108 ++++++++++++++++++
->  2 files changed, 108 insertions(+), 42 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
-> deleted file mode 100644
-> index 5d84fd299ccf..000000000000
-> --- a/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
-> +++ /dev/null
-> @@ -1,42 +0,0 @@
-> -Microsemi Ocelot pin controller Device Tree Bindings
-> -----------------------------------------------------
-> -
-> -Required properties:
-> - - compatible		: Should be "mscc,ocelot-pinctrl",
-> -			  "mscc,jaguar2-pinctrl", "microchip,sparx5-pinctrl",
-> -			  "mscc,luton-pinctrl", "mscc,serval-pinctrl",
-> -			  "microchip,lan966x-pinctrl" or "mscc,servalt-pinctrl"
-> - - reg			: Address and length of the register set for the device
-> - - gpio-controller	: Indicates this device is a GPIO controller
-> - - #gpio-cells		: Must be 2.
-> -			  The first cell is the pin number and the
-> -			  second cell specifies GPIO flags, as defined in
-> -			  <dt-bindings/gpio/gpio.h>.
-> - - gpio-ranges		: Range of pins managed by the GPIO controller.
-> -
-> -
-> -The ocelot-pinctrl driver uses the generic pin multiplexing and generic pin
-> -configuration documented in pinctrl-bindings.txt.
-> -
-> -The following generic properties are supported:
-> - - function
-> - - pins
-> -
-> -Example:
-> -	gpio: pinctrl@71070034 {
-> -		compatible = "mscc,ocelot-pinctrl";
-> -		reg = <0x71070034 0x28>;
-> -		gpio-controller;
-> -		#gpio-cells = <2>;
-> -		gpio-ranges = <&gpio 0 0 22>;
-> -
-> -		uart_pins: uart-pins {
-> -				pins = "GPIO_6", "GPIO_7";
-> -				function = "uart";
-> -		};
-> -
-> -		uart2_pins: uart2-pins {
-> -				pins = "GPIO_12", "GPIO_13";
-> -				function = "uart2";
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..7149a6655623
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
-> @@ -0,0 +1,108 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/mscc,ocelot-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microsemi Ocelot pin controller
-> +
-> +maintainers:
-> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-> +  - Lars Povlsen <lars.povlsen@microchip.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,lan966x-pinctrl
-> +      - microchip,sparx5-pinctrl
-> +      - mscc,jaguar2-pinctrl
-> +      - mscc,luton-pinctrl
-> +      - mscc,ocelot-pinctrl
-> +      - mscc,serval-pinctrl
-> +      - mscc,servalt-pinctrl
-> +
-> +  reg:
-> +    items:
-> +      - description: Base address
-> +      - description: Extended pin configuration registers
-> +    minItems: 1
-> +
-> +  gpio-controller: true
-> +
-> +  '#gpio-cells':
-> +    const: 2
-> +
-> +  gpio-ranges: true
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
+Add some basic documentation for LoongArch. LoongArch is a new RISC ISA,
+which is a bit like MIPS or RISC-V. LoongArch includes a reduced 32-bit
+version (LA32R), a standard 32-bit version (LA32S) and a 64-bit version
+(LA64).
 
-These three interrupt related properties were not in original bindings.
-Is this something new or was actually before, just not documented? In
-any case mention it in commit msg.
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ Documentation/arch.rst                     |   1 +
+ Documentation/loongarch/features.rst       |   3 +
+ Documentation/loongarch/index.rst          |  21 ++
+ Documentation/loongarch/introduction.rst   | 345 +++++++++++++++++++++
+ Documentation/loongarch/irq-chip-model.rst | 168 ++++++++++
+ 5 files changed, 538 insertions(+)
+ create mode 100644 Documentation/loongarch/features.rst
+ create mode 100644 Documentation/loongarch/index.rst
+ create mode 100644 Documentation/loongarch/introduction.rst
+ create mode 100644 Documentation/loongarch/irq-chip-model.rst
 
+diff --git a/Documentation/arch.rst b/Documentation/arch.rst
+index 14bcd8294b93..41a66a8b38e4 100644
+--- a/Documentation/arch.rst
++++ b/Documentation/arch.rst
+@@ -13,6 +13,7 @@ implementation.
+    arm/index
+    arm64/index
+    ia64/index
++   loongarch/index
+    m68k/index
+    mips/index
+    nios2/index
+diff --git a/Documentation/loongarch/features.rst b/Documentation/loongarch/features.rst
+new file mode 100644
+index 000000000000..ebacade3ea45
+--- /dev/null
++++ b/Documentation/loongarch/features.rst
+@@ -0,0 +1,3 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++.. kernel-feat:: $srctree/Documentation/features loongarch
+diff --git a/Documentation/loongarch/index.rst b/Documentation/loongarch/index.rst
+new file mode 100644
+index 000000000000..d127e07a7ed3
+--- /dev/null
++++ b/Documentation/loongarch/index.rst
+@@ -0,0 +1,21 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++================================
++LoongArch-specific Documentation
++================================
++
++.. toctree::
++   :maxdepth: 2
++   :numbered:
++
++   introduction
++   irq-chip-model
++
++   features
++
++.. only::  subproject and html
++
++   Indices
++   =======
++
++   * :ref:`genindex`
+diff --git a/Documentation/loongarch/introduction.rst b/Documentation/loongarch/introduction.rst
+new file mode 100644
+index 000000000000..420c0d2ebcfb
+--- /dev/null
++++ b/Documentation/loongarch/introduction.rst
+@@ -0,0 +1,345 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=========================
++Introduction of LoongArch
++=========================
++
++LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V. LoongArch
++includes a reduced 32-bit version (LA32R), a standard 32-bit version (LA32S)
++and a 64-bit version (LA64). LoongArch has 4 privilege levels (PLV0~PLV3),
++PLV0 is the highest level which used by kernel, and PLV3 is the lowest level
++which used by applications. This document introduces the registers, basic
++instruction set, virtual memory and some other topics of LoongArch.
++
++Registers
++=========
++
++LoongArch registers include general purpose registers (GPRs), floating point
++registers (FPRs), vector registers (VRs) and control status registers (CSRs)
++used in privileged mode (PLV0).
++
++GPRs
++----
++
++LoongArch has 32 GPRs ($r0 - $r31), each one is 32bit wide in LA32 and 64bit
++wide in LA64. $r0 is always zero, and other registers has no special feature,
++but we actually have an ABI register convention as below.
++
++================= =============== =================== ============
++Name              Alias           Usage               Preserved
++                                                      across calls
++================= =============== =================== ============
++``$r0``           ``$zero``       Constant zero       Unused
++``$r1``           ``$ra``         Return address      No
++``$r2``           ``$tp``         TLS                 Unused
++``$r3``           ``$sp``         Stack pointer       Yes
++``$r4``-``$r11``  ``$a0``-``$a7`` Argument registers  No
++``$r4``-``$r5``   ``$v0``-``$v1`` Return value        No
++``$r12``-``$r20`` ``$t0``-``$t8`` Temp registers      No
++``$r21``          ``$x``          Reserved            Unused
++``$r22``          ``$fp``         Frame pointer       Yes
++``$r23``-``$r31`` ``$s0``-``$s8`` Static registers    Yes
++================= =============== =================== ============
++
++FPRs
++----
++
++LoongArch has 32 FPRs ($f0 - $f31), each one is 64bit wide. We also have an
++ABI register conversion as below.
++
++================= ================== =================== ============
++Name              Alias              Usage               Preserved
++                                                         across calls
++================= ================== =================== ============
++``$f0``-``$f7``   ``$fa0``-``$fa7``  Argument registers  No
++``$f0``-``$f1``   ``$fv0``-``$fv1``  Return value        No
++``$f8``-``$f23``  ``$ft0``-``$ft15`` Temp registers      No
++``$f24``-``$f31`` ``$fs0``-``$fs7``  Static registers    Yes
++================= ================== =================== ============
++
++VRs
++----
++
++LoongArch has 128bit vector extension (LSX, short for Loongson SIMD eXtention)
++and 256bit vector extension (LASX, short for Loongson Advanced SIMD eXtension).
++There are also 32 vector registers, for LSX is $v0 - $v31, and for LASX is $x0
++- $x31. FPRs and VRs are reused, e.g. the lower 128bits of $x0 is $v0, and the
++lower 64bits of $v0 is $f0, etc.
++
++CSRs
++----
++
++CSRs can only be used in privileged mode (PLV0):
++
++================= ===================================== ==============
++Address           Full Name                             Abbrev Name
++================= ===================================== ==============
++0x0               Current Mode information              CRMD
++0x1               Pre-exception Mode information        PRMD
++0x2               Extended Unit Enable                  EUEN
++0x3               Miscellaneous controller              MISC
++0x4               Exception Configuration               ECFG
++0x5               Exception Status                      ESTAT
++0x6               Exception Return Address              ERA
++0x7               Bad Virtual Address                   BADV
++0x8               Bad Instruction                       BADI
++0xC               Exception Entry Base address          EENTRY
++0x10              TLB Index                             TLBIDX
++0x11              TLB Entry High-order bits             TLBEHI
++0x12              TLB Entry Low-order bits 0            TLBELO0
++0x13              TLB Entry Low-order bits 1            TLBELO1
++0x18              Address Space Identifier              ASID
++0x19              Page Global Directory address for     PGDL
++                  Lower half address space
++0x1A              Page Global Directory address for     PGDH
++                  Higher half address space
++0x1B              Page Global Directory address         PGD
++0x1C              Page Walk Controller for Lower        PWCL
++                  half address space
++0x1D              Page Walk Controller for Higher       PWCH
++                  half address space
++0x1E              STLB Page Size                        STLBPS
++0x1F              Reduced Virtual Address Configuration RVACFG
++0x20              CPU Identifier                        CPUID
++0x21              Privileged Resource Configuration 1   PRCFG1
++0x22              Privileged Resource Configuration 2   PRCFG2
++0x23              Privileged Resource Configuration 3   PRCFG3
++0x30+n (0≤n≤15)   Data Save register                    SAVEn
++0x40              Timer Identifier                      TID
++0x41              Timer Configuration                   TCFG
++0x42              Timer Value                           TVAL
++0x43              Compensation of Timer Count           CNTC
++0x44              Timer Interrupt Clearing              TICLR
++0x60              LLBit Controller                      LLBCTL
++0x80              Implementation-specific Controller 1  IMPCTL1
++0x81              Implementation-specific Controller 2  IMPCTL2
++0x88              TLB Refill Exception Entry Base       TLBRENTRY
++                  address
++0x89              TLB Refill Exception BAD Virtual      TLBRBADV
++                  address
++0x8A              TLB Refill Exception Return Address   TLBRERA
++0x8B              TLB Refill Exception data SAVE        TLBRSAVE
++                  register
++0x8C              TLB Refill Exception Entry Low-order  TLBRELO0
++                  bits 0
++0x8D              TLB Refill Exception Entry Low-order  TLBRELO1
++                  bits 1
++0x8E              TLB Refill Exception Entry High-order TLBEHI
++                  bits
++0x8F              TLB Refill Exception Pre-exception    TLBRPRMD
++                  Mode information
++0x90              Machine Error Controller              MERRCTL
++0x91              Machine Error Information 1           MERRINFO1
++0x92              Machine Error Information 2           MERRINFO2
++0x93              Machine Error Exception Entry Base    MERRENTRY
++                  address
++0x94              Machine Error Exception Return        MERRERA
++                  address
++0x95              Machine Error Exception data SAVE     MERRSAVE
++                  register
++0x98              Cache TAGs                            CTAG
++0x180+n (0≤n≤3)   Direct Mapping configuration Window n DMWn
++0x200+2n (0≤n≤31) Performance Monitor Configuration n   PMCFGn
++0x201+2n (0≤n≤31) Performance Monitor overall Counter n PMCNTn
++0x300             Memory load/store WatchPoint          MWPC
++                  overall Controller
++0x301             Memory load/store WatchPoint          MWPS
++                  overall Status
++0x310+8n (0≤n≤7)  Memory load/store WatchPoint n        MWPnCFG1
++                  Configuration 1
++0x311+8n (0≤n≤7)  Memory load/store WatchPoint n        MWPnCFG2
++                  Configuration 2
++0x312+8n (0≤n≤7)  Memory load/store WatchPoint n        MWPnCFG3
++                  Configuration 3
++0x313+8n (0≤n≤7)  Memory load/store WatchPoint n        MWPnCFG4
++                  Configuration 4
++0x380             Fetch WatchPoint overall Controller   FWPC
++0x381             Fetch WatchPoint overall Status       FWPS
++0x390+8n (0≤n≤7)  Fetch WatchPoint n Configuration 1    FWPnCFG1
++0x391+8n (0≤n≤7)  Fetch WatchPoint n Configuration 2    FWPnCFG2
++0x392+8n (0≤n≤7)  Fetch WatchPoint n Configuration 3    FWPnCFG3
++0x393+8n (0≤n≤7)  Fetch WatchPoint n Configuration 4    FWPnCFG4
++0x500             Debug register                        DBG
++0x501             Debug Exception Return address        DERA
++0x502             Debug data SAVE register              DSAVE
++================= ===================================== ==============
++
++ERA，TLBRERA，MERREEA and ERA sometimes are also called EPC，TLBREPC
++MERREPC and DEPC.
++
++Basic Instruction Set
++=====================
++
++Instruction formats
++-------------------
++
++LoongArch has 32-bit wide instructions, and there are 9 instruction formats::
++
++  2R-type:    Opcode + Rj + Rd
++  3R-type:    Opcode + Rk + Rj + Rd
++  4R-type:    Opcode + Ra + Rk + Rj + Rd
++  2RI8-type:  Opcode + I8 + Rj + Rd
++  2RI12-type: Opcode + I12 + Rj + Rd
++  2RI14-type: Opcode + I14 + Rj + Rd
++  2RI16-type: Opcode + I16 + Rj + Rd
++  1RI21-type: Opcode + I21L + Rj + I21H
++  I26-type:   Opcode + I26L + I26H
++
++Rj and Rk are source operands (register), Rd is destination operand (register),
++and Ra is the additional operand (register) in 4R-type. I8/I12/I16/I21/I26 are
++8-bits/12-bits/16-bits/21-bits/26bits immediate data. 21bits/26bits immediate
++data are split into higher bits and lower bits in an instruction word, so you
++can see I21L/I21H and I26L/I26H here.
++
++Instruction names (Mnemonics)
++-----------------------------
++
++We only list the instruction names here, for details please read the references.
++
++Arithmetic Operation Instructions::
++
++  ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
++  SLT SLTU SLTI SLTUI
++  AND OR NOR XOR ANDN ORN ANDI ORI XORI
++  MUL.W MULH.W MULH.WU DIV.W DIV.WU MOD.W MOD.WU
++  MUL.D MULH.D MULH.DU DIV.D DIV.DU MOD.D MOD.DU
++  PCADDI PCADDU12I PCADDU18I
++  LU12I.W LU32I.D LU52I.D ADDU16I.D
++
++Bit-shift Instructions::
++
++  SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
++  SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
++
++Bit-manipulation Instructions::
++
++  EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
++  BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
++  REVB.2H REVB.4H REVB.2W REVB.D REVH.2W REVH.D BITREV.4B BITREV.8B BITREV.W BITREV.D
++  MASKEQZ MASKNEZ
++
++Branch Instructions::
++
++  BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
++
++Load/Store Instructions::
++
++  LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
++  LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W STX.D
++  LDPTR.W LDPTR.D STPTR.W STPTR.D
++  PRELD PRELDX
++
++Atomic Operation Instructions::
++
++  LL.W SC.W LL.D SC.D
++  AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D AMXOR.W AMXOR.D
++  AMMAX.W AMMAX.D AMMIN.W AMMIN.D
++
++Barrier Instructions::
++
++  IBAR DBAR
++
++Special Instructions::
++
++  SYSCALL BREAK CPUCFG NOP IDLE ERTN DBCL RDTIMEL.W RDTIMEH.W RDTIME.D ASRTLE.D ASRTGT.D
++
++Privileged Instructions::
++
++  CSRRD CSRWR CSRXCHG
++  IOCSRRD.B IOCSRRD.H IOCSRRD.W IOCSRRD.D IOCSRWR.B IOCSRWR.H IOCSRWR.W IOCSRWR.D
++  CACOP TLBP(TLBSRCH) TLBRD TLBWR TLBFILL TLBCLR TLBFLUSH INVTLB LDDIR LDPTE
++
++Virtual Memory
++==============
++
++LoongArch can use direct-mapped virtual memory and page-mapped virtual memory.
++
++Direct-mapped virtual memory is configured by CSR.DMWn (n=0~3), it has a simple
++relationship between virtual address (VA) and physical address (PA)::
++
++ VA = PA + FixedOffset
++
++Page-mapped virtual memory has arbitrary relationship between VA and PA, which
++is recorded in TLB and page tables. LoongArch's TLB includes a fully-associative
++MTLB (Multiple Page Size TLB) and set-associative STLB (Single Page Size TLB).
++
++By default, the whole virtual address space of LA32 is configured like this:
++
++============ =========================== =============================
++Name         Address Range               Attributes
++============ =========================== =============================
++``UVRANGE``  ``0x00000000 - 0x7FFFFFFF`` Page-mapped, Cached, PLV0~3
++``KPRANGE0`` ``0x80000000 - 0x9FFFFFFF`` Direct-mapped, Uncached, PLV0
++``KPRANGE1`` ``0xA0000000 - 0xBFFFFFFF`` Direct-mapped, Cached, PLV0
++``KVRANGE``  ``0xC0000000 - 0xFFFFFFFF`` Page-mapped, Cached, PLV0
++============ =========================== =============================
++
++User mode (PLV3) can only access UVRANGE. For direct-mapped KPRANGE0 and
++KPRANGE1, PA is equal to VA with bit30~31 cleared. For example, the uncached
++direct-mapped VA of 0x00001000 is 0x80001000, and the cached direct-mapped
++VA of 0x00001000 is 0xA0001000.
++
++By default, the whole virtual address space of LA64 is configured like this:
++
++============ ====================== ======================================
++Name         Address Range          Attributes
++============ ====================== ======================================
++``XUVRANGE`` ``0x0000000000000000 - Page-mapped, Cached, PLV0~3
++             0x3FFFFFFFFFFFFFFF``
++``XSPRANGE`` ``0x4000000000000000 - Direct-mapped, Cached / Uncached, PLV0
++             0x7FFFFFFFFFFFFFFF``
++``XKPRANGE`` ``0x8000000000000000 - Direct-mapped, Cached / Uncached, PLV0
++             0xBFFFFFFFFFFFFFFF``
++``XKVRANGE`` ``0xC000000000000000 - Page-mapped, Cached, PLV0
++             0xFFFFFFFFFFFFFFFF``
++============ ====================== ======================================
++
++User mode (PLV3) can only access XUVRANGE. For direct-mapped XSPRANGE and XKPRANGE,
++PA is equal to VA with bit60~63 cleared, and the cache attributes is configured by
++bit60~61 (0 is strongly-ordered uncached, 1 is coherent cached, and 2 is weakly-
++ordered uncached) in VA. Currently we only use XKPRANGE for direct mapping and
++XSPRANGE is reserved. As an example, the strongly-ordered uncached direct-mapped VA
++(in XKPRANGE) of 0x00000000 00001000 is 0x80000000 00001000, the coherent cached
++direct-mapped VA (in XKPRANGE) of 0x00000000 00001000 is 0x90000000 00001000, and
++the weakly-ordered uncached direct-mapped VA (in XKPRANGE) of 0x00000000 00001000
++is 0xA0000000 00001000.
++
++Relationship of Loongson and LoongArch
++======================================
++
++LoongArch is a RISC ISA which is different from any other existing ones, while
++Loongson is a family of processors. Loongson includes 3 series: Loongson-1 is
++the 32-bit processor series, Loongson-2 is the low-end 64-bit processor series,
++and Loongson-3 is the high-end 64-bit processor series. Old Loongson is based on
++MIPS, while New Loongson is based on LoongArch. Take Loongson-3 as an example:
++Loongson-3A1000/3B1500/3A2000/3A3000/3A4000 are MIPS-compatible, while Loongson-
++3A5000 (and future revisions) are all based on LoongArch.
++
++References
++==========
++
++Official web site of Loongson and LoongArch (Loongson Technology Corp. Ltd.):
++
++  http://www.loongson.cn/index.html
++
++Developer web site of Loongson and LoongArch (Software and Documentation):
++
++  http://www.loongnix.cn/index.php
++
++  https://github.com/loongson
++
++Documentation of LoongArch ISA:
++
++  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-Vol1-v1.00-CN.pdf (in Chinese)
++
++  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-Vol1-v1.00-EN.pdf (in English)
++
++Documentation of LoongArch ELF ABI:
++
++  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-ELF-ABI-v1.00-CN.pdf (in Chinese)
++
++  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-ELF-ABI-v1.00-EN.pdf (in English)
++
++Linux kernel repository of Loongson and LoongArch:
++
++  https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git
+diff --git a/Documentation/loongarch/irq-chip-model.rst b/Documentation/loongarch/irq-chip-model.rst
+new file mode 100644
+index 000000000000..bde112b81ace
+--- /dev/null
++++ b/Documentation/loongarch/irq-chip-model.rst
+@@ -0,0 +1,168 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=======================================
++IRQ chip model (hierarchy) of LoongArch
++=======================================
++
++Currently, LoongArch based processors (e.g. Loongson-3A5000) can only work together
++with LS7A chipsets. The irq chips in LoongArch computers include CPUINTC (CPU Core
++Interrupt Controller), LIOINTC (Legacy I/O Interrupt Controller), EIOINTC (Extended
++I/O Interrupt Controller), HTVECINTC (Hyper-Transport Vector Interrupt Controller),
++PCH-PIC (Main Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
++in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
++
++CPUINTC is a per-core controller (in CPU), LIOINTC/EIOINTC/HTVECINTC are per-package
++controllers (in CPU), while PCH-PIC/PCH-LPC/PCH-MSI are controllers out of CPU (i.e.,
++in chipsets). These controllers (in other words, irqchips) are linked in a hierarchy,
++and there are two models of hierarchy (legacy model and extended model).
++
++Legacy IRQ model
++================
++
++In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer interrupt go
++to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
++interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by HTVECINTC, and then go
++to LIOINTC, and then CPUINTC.
++
++ +---------------------------------------------+
++ |::                                           |
++ |                                             |
++ |    +-----+     +---------+     +-------+    |
++ |    | IPI | --> | CPUINTC | <-- | Timer |    |
++ |    +-----+     +---------+     +-------+    |
++ |                     ^                       |
++ |                     |                       |
++ |                +---------+     +-------+    |
++ |                | LIOINTC | <-- | UARTs |    |
++ |                +---------+     +-------+    |
++ |                     ^                       |
++ |                     |                       |
++ |               +-----------+                 |
++ |               | HTVECINTC |                 |
++ |               +-----------+                 |
++ |                ^         ^                  |
++ |                |         |                  |
++ |          +---------+ +---------+            |
++ |          | PCH-PIC | | PCH-MSI |            |
++ |          +---------+ +---------+            |
++ |            ^     ^           ^              |
++ |            |     |           |              |
++ |    +---------+ +---------+ +---------+      |
++ |    | PCH-LPC | | Devices | | Devices |      |
++ |    +---------+ +---------+ +---------+      |
++ |         ^                                   |
++ |         |                                   |
++ |    +---------+                              |
++ |    | Devices |                              |
++ |    +---------+                              |
++ |                                             |
++ |                                             |
++ +---------------------------------------------+
++
++Extended IRQ model
++==================
++
++In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer interrupt go
++to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
++interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by EIOINTC, and then go to
++to CPUINTC directly.
++
++ +--------------------------------------------------------+
++ |::                                                      |
++ |                                                        |
++ |         +-----+     +---------+     +-------+          |
++ |         | IPI | --> | CPUINTC | <-- | Timer |          |
++ |         +-----+     +---------+     +-------+          |
++ |                      ^       ^                         |
++ |                      |       |                         |
++ |               +---------+ +---------+     +-------+    |
++ |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
++ |               +---------+ +---------+     +-------+    |
++ |                ^       ^                               |
++ |                |       |                               |
++ |         +---------+ +---------+                        |
++ |         | PCH-PIC | | PCH-MSI |                        |
++ |         +---------+ +---------+                        |
++ |           ^     ^           ^                          |
++ |           |     |           |                          |
++ |   +---------+ +---------+ +---------+                  |
++ |   | PCH-LPC | | Devices | | Devices |                  |
++ |   +---------+ +---------+ +---------+                  |
++ |        ^                                               |
++ |        |                                               |
++ |   +---------+                                          |
++ |   | Devices |                                          |
++ |   +---------+                                          |
++ |                                                        |
++ |                                                        |
++ +--------------------------------------------------------+
++
++ACPI-related definitions
++========================
++
++CPUINTC::
++
++  ACPI_MADT_TYPE_CORE_PIC;
++  struct acpi_madt_core_pic;
++  enum acpi_madt_core_pic_version;
++
++LIOINTC::
++
++  ACPI_MADT_TYPE_LIO_PIC;
++  struct acpi_madt_lio_pic;
++  enum acpi_madt_lio_pic_version;
++
++EIOINTC::
++
++  ACPI_MADT_TYPE_EIO_PIC;
++  struct acpi_madt_eio_pic;
++  enum acpi_madt_eio_pic_version;
++
++HTVECINTC::
++
++  ACPI_MADT_TYPE_HT_PIC;
++  struct acpi_madt_ht_pic;
++  enum acpi_madt_ht_pic_version;
++
++PCH-PIC::
++
++  ACPI_MADT_TYPE_BIO_PIC;
++  struct acpi_madt_bio_pic;
++  enum acpi_madt_bio_pic_version;
++
++PCH-MSI::
++
++  ACPI_MADT_TYPE_MSI_PIC;
++  struct acpi_madt_msi_pic;
++  enum acpi_madt_msi_pic_version;
++
++PCH-LPC::
++
++  ACPI_MADT_TYPE_LPC_PIC;
++  struct acpi_madt_lpc_pic;
++  enum acpi_madt_lpc_pic_version;
++
++References
++==========
++
++Documentation of Loongson-3A5000:
++
++  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-3A5000-usermanual-1.02-CN.pdf (in Chinese)
++
++  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-3A5000-usermanual-1.02-EN.pdf (in English)
++
++Documentation of Loongson's LS7A chipset:
++
++  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-7A1000-usermanual-2.00-CN.pdf (in Chinese)
++
++  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-7A1000-usermanual-2.00-EN.pdf (in English)
++
++Attention: CPUINTC is CSR.ECFG/CSR.ESTAT and its interrupt controller described
++in Section 7.4 of "LoongArch Reference Manual, Vol 1"; LIOINTC is "Legacy I/O
++Interrupts" described in Section 11.1 of "Loongson 3A5000 Processor Reference
++Manual"; EIOINTC is "Extended I/O Interrupts" described in Section 11.2 of
++"Loongson 3A5000 Processor Reference Manual"; HTVECINTC is "HyperTransport
++Interrupts" described in Section 14.3 of "Loongson 3A5000 Processor Reference
++Manual"; PCH-PIC/PCH-MSI is "Interrupt Controller" described in Section 5 of
++"Loongson 7A1000 Bridge User Manual"; PCH-LPC is "LPC Interrupts" described in
++Section 24.3 of "Loongson 7A1000 Bridge User Manual".
+-- 
+2.27.0
 
-Best regards,
-Krzysztof

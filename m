@@ -2,113 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8434DE829
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 14:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B6E4DE82C
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 14:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243052AbiCSN2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 09:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
+        id S243061AbiCSNhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 09:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239627AbiCSN2I (ORCPT
+        with ESMTP id S234728AbiCSNhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 09:28:08 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FF98BF3A;
-        Sat, 19 Mar 2022 06:26:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sat, 19 Mar 2022 09:37:38 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038C82AA856;
+        Sat, 19 Mar 2022 06:36:16 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 415AFCE0F08;
-        Sat, 19 Mar 2022 13:26:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7985BC340EE;
-        Sat, 19 Mar 2022 13:26:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647696403;
-        bh=/cegirEsmDFTjrf/jcxsGyePYHoVLLLJoW1NFjz4T5Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UmxrhwNaCnUWbJzDElDW7iWolt4CGGYJhefwhRmFTmzo2j87XTi4xTuJVs36kD5JG
-         69RQ0mQCebSeuQ4AhaJApoX6VwElGf7V4BC8rfUkwWuvgpiaaPa3jGb3o+snOuTb2k
-         NOW79cQNRqST7BAGRYUWAORXaDzvmSAg2B6w248PC3R6nvaui/SHW8FJ2hedBRDgYo
-         coYR2xN+VaEyBa5EG9Wai4ohwlKADQhwfahLv5/R367rf9RlJFSK9pU+2Fz8mcgQcd
-         RVyhLuTavC+pBjRe+rn71qGpXmglQXXvufsvxt9fTW+IlNYvFfJGdI4qYf+k3jbdu9
-         86UD75gQwZlKg==
-Received: by mail-vk1-f174.google.com with SMTP id 6so2674029vkc.10;
-        Sat, 19 Mar 2022 06:26:43 -0700 (PDT)
-X-Gm-Message-State: AOAM530s6MDiQsg7xEctm4OZYypobALtrS0WGMDh/QERgpyC9wcqNSRy
-        X75QhuCwBE3gy4XQreoYWNTFwaOm8IVhBRentLU=
-X-Google-Smtp-Source: ABdhPJxG6qrxPivDMuPuCDhlEL9zUSIkjTquHlcXEinKt2wIvI4so3PHrSQEnmjVSdhEdSsEmEbGCrUxLkOxGgBZ5z8=
-X-Received: by 2002:a1f:7f17:0:b0:336:cede:7f97 with SMTP id
- o23-20020a1f7f17000000b00336cede7f97mr5353580vki.8.1647696402468; Sat, 19 Mar
- 2022 06:26:42 -0700 (PDT)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A0A611EC066E;
+        Sat, 19 Mar 2022 14:36:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1647696971;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=xEictqK1V+OBjlNczjwbgnx58hOyKDLuDwqBTIQK1nw=;
+        b=GYTxM8PltBVwgxy7+MjsO7hsoPzDvHfdoc6wY6u7E9V+zzlotdPpgqZfxJz+NiFcORcZah
+        DlixYt0pwO4gsccbMwiwsOAhcfEWiVFeU0QioSUPlgMjOyZfivbjOuyOwiWHr29YHwkcII
+        5jR1U3/mw6anuyUmlYTX+edelCAPkKc=
+Date:   Sat, 19 Mar 2022 14:36:06 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Jamie Heilman <jamie@audible.transient.net>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH -v1.2] kvm/emulate: Fix SETcc emulation function offsets
+ with SLS
+Message-ID: <YjXcRsR2T8WGnVjl@zn.tnic>
+References: <YjHYh3XRbHwrlLbR@zn.tnic>
+ <YjIwRR5UsTd3W4Bj@audible.transient.net>
+ <YjI69aUseN/IuzTj@zn.tnic>
+ <YjJFb02Fc0jeoIW4@audible.transient.net>
+ <YjJVWYzHQDbI6nZM@zn.tnic>
+ <20220316220201.GM8939@worktop.programming.kicks-ass.net>
+ <YjMBdMlhVMGLG5ws@zn.tnic>
+ <YjMS8eTOhXBOPFOe@zn.tnic>
+ <YjMVpfe/9ldmWX8W@hirez.programming.kicks-ass.net>
+ <94df38ce-6bd7-a993-7d9f-0a1418a1c8df@redhat.com>
 MIME-Version: 1.0
-References: <20220319035457.2214979-1-guoren@kernel.org> <20220319035457.2214979-2-guoren@kernel.org>
- <CAK8P3a3wMJv6-fGo_i4DnFMigj=ko4DN1XTe8oa1HzWLiX50yw@mail.gmail.com>
-In-Reply-To: <CAK8P3a3wMJv6-fGo_i4DnFMigj=ko4DN1XTe8oa1HzWLiX50yw@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 19 Mar 2022 21:26:31 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRvOLZPP_PYOEPMkr0S3vTSiPZOCFOmiVRXxi2QRu-vMA@mail.gmail.com>
-Message-ID: <CAJF2gTRvOLZPP_PYOEPMkr0S3vTSiPZOCFOmiVRXxi2QRu-vMA@mail.gmail.com>
-Subject: Re: [PATCH V2 1/5] asm-generic: ticket-lock: New generic ticket-based spinlock
-To:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        Openrisc <openrisc@lists.librecores.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <94df38ce-6bd7-a993-7d9f-0a1418a1c8df@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 7:52 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sat, Mar 19, 2022 at 4:54 AM <guoren@kernel.org> wrote:
-> >  /*
-> > - * You need to implement asm/spinlock.h for SMP support. The generic
-> > - * version does not handle SMP.
-> > + * Using ticket-spinlock.h as generic for SMP support.
-> >   */
-> >  #ifdef CONFIG_SMP
-> > -#error need an architecture specific asm/spinlock.h
-> > +#include <asm-generic/ticket-lock.h>
-> > +#ifdef CONFIG_QUEUED_RWLOCKS
-> > +#include <asm-generic/qrwlock.h>
-> > +#else
-> > +#error Please select ARCH_USE_QUEUED_RWLOCKS in architecture Kconfig
-> > +#endif
-> >  #endif
->
-> There is no need for the !CONFIG_SMP case, as asm/spinlock.h only ever
-> gets included for SMP builds in the first place. This was already a mistake
-> in the existing code, but your change would be the time to fix it.
->
-> I would also drop the !CONFIG_QUEUED_RWLOCKS case, just include
-> it unconditionally. If any architecture wants the ticket spinlock in
-> combination with a custom rwlock, they can simply include the
-> asm-generic/ticket-lock.h from their asm/spinlock.h, but more
-> likely any architecture that can use the ticket spinlock will also
-> want the qrwlock anyway.
-I agree, !CONFIG_SMP & !CONFIG_QUEUED_RWLOCKS are unnecessary.
+On Sat, Mar 19, 2022 at 02:24:06PM +0100, Paolo Bonzini wrote:
+> Sorry for responding late, I was sick the past few days.  Go ahead and apply
+> it to tip/x86/core with the rest of the SLS and IBT patches.  If you place
+> it in front of the actual insertion of the INT3 it will even be bisectable,
+> but I'm not sure if your commit hashes are already frozen.
 
-@Palmer, you could pick back the series, thx.
+I think they are and we need this fix in 5.17 where the SLS stuff went
+in. I'll send it to Linus tomorrow.
 
->
->      Arnd
+> Just one thing:
 
+Yeah, peterz can then do this ontop, before sending the IBT pile.
 
+Thx for letting us know!
 
 -- 
-Best Regards
- Guo Ren
+Regards/Gruss,
+    Boris.
 
-ML: https://lore.kernel.org/linux-csky/
+https://people.kernel.org/tglx/notes-about-netiquette

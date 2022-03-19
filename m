@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CFA4DE915
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 16:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1AE4DE917
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 16:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243517AbiCSPny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 11:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        id S243526AbiCSPoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 11:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243503AbiCSPnx (ORCPT
+        with ESMTP id S243519AbiCSPoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 11:43:53 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3248D393C2;
-        Sat, 19 Mar 2022 08:42:32 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id p15so7680346lfk.8;
-        Sat, 19 Mar 2022 08:42:32 -0700 (PDT)
+        Sat, 19 Mar 2022 11:44:00 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B2A419BD;
+        Sat, 19 Mar 2022 08:42:38 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id r22so14785311ljd.4;
+        Sat, 19 Mar 2022 08:42:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6ZeJmCk5mE5R2RccHBVmn2Ty11i285jE8gWuCxpKHAM=;
-        b=etnZaXT+cCQoaCs9sRpvFsEQsnbmphOmzCc0EYa/hQkW13cIbLsWLaVQ57hym7EiyD
-         9JfiyvKzrypHw7e9vTIhinDAIQ4u4GGZatRHqCRWWFUAeftkvXDgWT5d36ThYKzacbZo
-         lnyn4lBODMn7drMi/lCHvy8oEMMNYpNvsGeiPKpleGOF3zSi0W90qjW4+KrDl+uw3Yt+
-         na/w/sLZXUzMB6i+EupVNmNLk5MKL7H8LvBD9VfxjjV4MKRnC1zpZab0gSWGhDRWMn9u
-         7/wy0FWwhVtCZDzh5BcCnDnc7B+27a6038INslx/k9BW0vk+ai5HNCvAvA2upouhX2OQ
-         6U9A==
+        bh=kHXKQzwJmhlZm9Q6HsnUIDYvPEX0jMlvgPOzWlUbyPQ=;
+        b=Jr251LSi2pxWK1C2BVeKSm01mIZxEDFp8jRsd+N5zEOYRoKEV1hRMaRPkp6yuQiTzu
+         kd8mnZThjkWxv/R+UWZNPmjxY3e40Hc5/3MWvzfYEfalERwA8ANZFwE4REXdlDFcUg/D
+         afrbfyYz9lbnbj/DYNPtmWdqZG7j5VcJpv8VKUDJbVXLwvTofNW39om24qwJ9uPQ9Idn
+         +p/mLzQIOuRK6W0W2W9zPNWkqlx4X1Xt7v7uhB1h2tUf8694hMJOfTAs4YG78G4XtTIX
+         r+67pBlvduQUN0Vg2FgLc5o9tWw24flhiQmuXZEG42li0jlztU7M68dEgUkPNjqnRwxx
+         JI3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=6ZeJmCk5mE5R2RccHBVmn2Ty11i285jE8gWuCxpKHAM=;
-        b=Fmp9O4QdkC5s+TXjVAcDc1PjOoyyKSGoyxYxVXrKpSN0Ql2tgtYFkWTdebFil/2YjL
-         FTa3u9hvIOuVt1hPeVpN0b1s/oWxnDNdkM4f+d0609AOBjBfxoFGKbozmMnOTKYLeVtS
-         s9lWa64sTLKFFwFQW/TO2/utLgriU16oZluxcq0CHDEATycx2vu/KIlMD3hByg8On+hg
-         1QYhXE1OuPv8NuaPHROzvC/D2xDwzVDYqKvIjSY+dbG7fFEoPu6dsb4pfaWlFzqFpsgD
-         xwmWj8+clJB9sdnZ9wT6kHGsaL5QYNBkBZcNfgWBD6ok7Wjtl4H+IOYA5pRb530xGFyS
-         1kPg==
-X-Gm-Message-State: AOAM530rRY/CMqMeS6dXzrOwr/y/+/+ylPSUe/MUd5M+kKvNG0oXKqKB
-        AT+gyObwhaQXKxQN1Q7++Js=
-X-Google-Smtp-Source: ABdhPJztR0oMkcNXDn7kJhzWOx2ynSO0TwuQ+yCpxHJ0VRIBa9+CowgcpLYhfc2vkAnsXyKfYK/mJg==
-X-Received: by 2002:ac2:4825:0:b0:443:b112:e513 with SMTP id 5-20020ac24825000000b00443b112e513mr8936592lft.114.1647704550369;
-        Sat, 19 Mar 2022 08:42:30 -0700 (PDT)
+        bh=kHXKQzwJmhlZm9Q6HsnUIDYvPEX0jMlvgPOzWlUbyPQ=;
+        b=0D2/AfLYY7wX131eCwOkCsqKA2cz2E7J5dqv73KWijn/qnnFYW+sVnp7Gl7SekjJwB
+         tz8sWIuORaVsISlWmpu09pJ+BRWd1i4lbvlmO3o8j0h8Ep+3s0I6P2RuiwngTtyWCGv+
+         5+KTggkkvQJYWB8HNtwqVsqSbM9pZlS2Lh6k7TRh8dXe7TdpFkN4dUcd+kvEUSPlgpF1
+         M15pO71XEbkYg79Mc0B/6xh6mAtOO3QbkUweaQvNdMbmUqfsD4hoiZxEeFhAA5O7YUOa
+         /Qhs4Ye4KM6mUNlVSisgolYYJ0DCjS/NS4HmgfEdqEpHnCzgumo5gbAaGnb1VQtEDrOO
+         Juiw==
+X-Gm-Message-State: AOAM532sNVAhmOPQm34zbQDS1E6eOpgdgiFcWHoCfnVTtP2TO9LMzfx5
+        msJke2bgW2/UUPR3ncYwlgk=
+X-Google-Smtp-Source: ABdhPJwxdr62nhI7YmR79ve4MytrCU7uG/qS0hnhEnjCTyTf6sqzHDbIlrTHrTjQrmMLVIPaYPgIbQ==
+X-Received: by 2002:a2e:900a:0:b0:247:df2c:7607 with SMTP id h10-20020a2e900a000000b00247df2c7607mr9839891ljg.262.1647704557173;
+        Sat, 19 Mar 2022 08:42:37 -0700 (PDT)
 Received: from [192.168.2.145] (109-252-136-171.dynamic.spd-mgts.ru. [109.252.136.171])
-        by smtp.googlemail.com with ESMTPSA id b11-20020ac2410b000000b004457116a575sm1325583lfi.273.2022.03.19.08.42.29
+        by smtp.googlemail.com with ESMTPSA id k10-20020a2eb74a000000b0024965dbf2d8sm1215655ljo.82.2022.03.19.08.42.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Mar 2022 08:42:29 -0700 (PDT)
-Message-ID: <83bc4c12-13e3-d239-3845-a3541b1fbb2a@gmail.com>
-Date:   Sat, 19 Mar 2022 18:42:28 +0300
+        Sat, 19 Mar 2022 08:42:36 -0700 (PDT)
+Message-ID: <274dc445-b2c2-9a3a-df04-ded95f2223ad@gmail.com>
+Date:   Sat, 19 Mar 2022 18:42:35 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [Patch v5 1/4] memory: tegra: Add memory controller channels
- support
+Subject: Re: [Patch v5 3/4] dt-bindings: memory: Update reg maxitems for
+ tegra186
 Content-Language: en-US
 To:     Ashish Mhetre <amhetre@nvidia.com>,
         krzysztof.kozlowski@canonical.com, robh+dt@kernel.org,
@@ -64,9 +64,9 @@ To:     Ashish Mhetre <amhetre@nvidia.com>,
         linux-tegra@vger.kernel.org
 Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
 References: <20220316092525.4554-1-amhetre@nvidia.com>
- <20220316092525.4554-2-amhetre@nvidia.com>
+ <20220316092525.4554-4-amhetre@nvidia.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220316092525.4554-2-amhetre@nvidia.com>
+In-Reply-To: <20220316092525.4554-4-amhetre@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,96 +81,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 16.03.2022 12:25, Ashish Mhetre пишет:
 > From tegra186 onwards, memory controller support multiple channels.
-> Add support for mapping address spaces of these channels.
-> Make sure that number of channels are as expected on each SOC.
-> During error interrupts from memory controller, appropriate registers
-> from these channels need to be accessed for logging error info.
+> Reg items are updated with address and size of these channels.
+> Tegra186 has overall 5 memory controller channels. Tegra194 and tegra234
+> have overall 17 memory controller channels each.
+> There is 1 reg item for memory controller stream-id registers.
+> So update the reg maxItems to 18 in tegra186 devicetree documentation.
 > 
 > Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
 > ---
->  drivers/memory/tegra/mc.c       |  6 ++++
->  drivers/memory/tegra/tegra186.c | 52 +++++++++++++++++++++++++++++++++
->  drivers/memory/tegra/tegra194.c |  1 +
->  drivers/memory/tegra/tegra234.c |  1 +
->  include/soc/tegra/mc.h          |  7 +++++
->  5 files changed, 67 insertions(+)
+>  .../nvidia,tegra186-mc.yaml                   | 20 +++++++++++++------
+>  1 file changed, 14 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
-> index bf3abb6d8354..3cda1d9ad32a 100644
-> --- a/drivers/memory/tegra/mc.c
-> +++ b/drivers/memory/tegra/mc.c
-> @@ -749,6 +749,12 @@ static int tegra_mc_probe(struct platform_device *pdev)
->  	if (IS_ERR(mc->regs))
->  		return PTR_ERR(mc->regs);
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+> index 13c4c82fd0d3..3c4e231dc1de 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+> @@ -34,8 +34,8 @@ properties:
+>            - nvidia,tegra234-mc
 >  
-> +	if (mc->soc->ops && mc->soc->ops->map_regs) {
-> +		err = mc->soc->ops->map_regs(mc, pdev);
-> +		if (err < 0)
-> +			return err;
-> +	}
-> +
->  	mc->debugfs.root = debugfs_create_dir("mc", NULL);
+>    reg:
+> -    minItems: 1
+> -    maxItems: 3
+> +    minItems: 6
+> +    maxItems: 18
 >  
->  	if (mc->soc->ops && mc->soc->ops->probe) {
-> diff --git a/drivers/memory/tegra/tegra186.c b/drivers/memory/tegra/tegra186.c
-> index 3d153881abc1..a8a45e6ff1f1 100644
-> --- a/drivers/memory/tegra/tegra186.c
-> +++ b/drivers/memory/tegra/tegra186.c
-> @@ -139,11 +139,62 @@ static int tegra186_mc_probe_device(struct tegra_mc *mc, struct device *dev)
->  	return 0;
->  }
+>    interrupts:
+>      items:
+> @@ -142,7 +142,8 @@ allOf:
+>      then:
+>        properties:
+>          reg:
+> -          maxItems: 1
+> +          maxItems: 6
+> +          description: 5 memory controller channels and 1 for stream-id registers
 >  
-> +static int tegra186_mc_map_regs(struct tegra_mc *mc,
-> +				struct platform_device *pdev)
-> +{
-> +	struct device_node *np = pdev->dev.parent->of_node;
-> +	int num_dt_channels, reg_cells = 0;
-> +	struct resource *res;
-> +	int i, ret;
-> +	u32 val;
-> +
-> +	ret = of_property_read_u32(np, "#address-cells", &val);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "missing #address-cells property\n");
-> +		return ret;
-> +	}
-> +
-> +	reg_cells = val;
-> +
-> +	ret = of_property_read_u32(np, "#size-cells", &val);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "missing #size-cells property\n");
-> +		return ret;
-> +	}
-> +
-> +	reg_cells += val;
-> +
-> +	num_dt_channels = of_property_count_elems_of_size(pdev->dev.of_node, "reg",
-> +							  reg_cells * sizeof(u32));
-> +	/*
-> +	 * On tegra186 onwards, memory controller support multiple channels.
-> +	 * Apart from regular memory controller channels, there is one broadcast
-> +	 * channel and one for stream-id registers.
-> +	 */
-> +	if (num_dt_channels < mc->soc->num_channels + 2) {
-> +		dev_warn(&pdev->dev, "MC channels are missing, please update\n");
+>    - if:
+>        properties:
+> @@ -151,7 +152,8 @@ allOf:
+>      then:
+>        properties:
+>          reg:
+> -          minItems: 3
+> +          minItems: 18
+> +          description: 17 memory controller channels and 1 for stream-id registers
+>  
+>    - if:
+>        properties:
+> @@ -160,7 +162,8 @@ allOf:
+>      then:
+>        properties:
+>          reg:
+> -          minItems: 3
+> +          minItems: 18
+> +          description: 17 memory controller channels and 1 for stream-id registers
+>  
+>  additionalProperties: false
+>  
+> @@ -198,7 +201,12 @@ examples:
+>  
+>              external-memory-controller@2c60000 {
+>                  compatible = "nvidia,tegra186-emc";
+> -                reg = <0x0 0x02c60000 0x0 0x50000>;
+> +                reg = <0x0 0x02c00000 0x0 0x10000>,    /* MC-SID */
+> +                      <0x0 0x02c10000 0x0 0x10000>,    /* Broadcast channel */
+> +                      <0x0 0x02c20000 0x0 0x10000>,    /* MC0 */
+> +                      <0x0 0x02c30000 0x0 0x10000>,    /* MC1 */
+> +                      <0x0 0x02c40000 0x0 0x10000>,    /* MC2 */
+> +                      <0x0 0x02c50000 0x0 0x10000>;    /* MC3 */
+>                  interrupts = <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
+>                  clocks = <&bpmp TEGRA186_CLK_EMC>;
+>                  clock-names = "emc";
 
-Update what?
-
-> +		return 0;
-> +	}
-> +
-> +	mc->mcb_regs = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
-
-Can't we name each reg bank individually in the DT and then use
-devm_platform_ioremap_resource_byname()?
-
-...
-> @@ -212,6 +217,8 @@ struct tegra_mc {
->  	struct tegra_smmu *smmu;
->  	struct gart_device *gart;
->  	void __iomem *regs;
-> +	void __iomem *mcb_regs;
-> +	void __iomem *mc_regs[MC_MAX_CHANNELS];
-
-s/mc_regs/ch_regs/ ?
+This is the EMC node, not MC.

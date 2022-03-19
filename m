@@ -2,99 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189E24DE5F7
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 05:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E23724DE5FB
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 05:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242130AbiCSEhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 00:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
+        id S241888AbiCSEod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 00:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242120AbiCSEhk (ORCPT
+        with ESMTP id S229695AbiCSEoa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 00:37:40 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CC3195D8A;
-        Fri, 18 Mar 2022 21:36:19 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id s72so3710909pgc.5;
-        Fri, 18 Mar 2022 21:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=woWc2+lO22HzkiGe6tfKJYkKrmQ1CA7aDFe+SOO4MVo=;
-        b=jvaK9r3TsTbFAiCASU8hDVRNQR/TpJ+j/sFQLFC2SjXL9YegobThrGohsvNfZ6Q8jt
-         DPN/+rV1MiBPwD+nFUrE1T/1iDGAVJNSgknBYoSMSsu7XAJjOAbot4idH1LG8dt+Ep0f
-         YfAWMIgR9Sis/DmLnrLBHgBBSMvjynpCmHu9jxe2lbQDd0bpSSwgPAT6ua+7xOf+Dj/m
-         TLyfBkFb8U+0Z7uxJUkhyov54Fi6he1RpOOfex8k7kpXAn7LpEEatLY0Gqmeef0x+EU+
-         xVRfdLm595l1xco/GykoPHXsl9D2EFqsmBD1waf4Wlkj3atUrrr/ns0Lj5gZa7j5x/fW
-         1o+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=woWc2+lO22HzkiGe6tfKJYkKrmQ1CA7aDFe+SOO4MVo=;
-        b=cqMDUboGiJcujds3PzseUcpzyGxFUwwRIFrDRRoZRw4wR5ifrmgFa27wkdahQlgMaM
-         goEtx1GZE/epqtEQlRMrvuyV+C3EN9HMCeWxrkwQ/TelGPCg9RNDLxB+W0pTCSrXbh5N
-         AyVhIpT7ev6pgSHIFUkwkj1uu/4S7/rIgWtonGnfjGx4o2nRsipRwTu++HxDbn5HzXdI
-         orm0aoXhzV3b8/y+9s2f3y1flcON4rZuRHEvQimkccOrupDvLBHrogtdC/WyuWcksT8p
-         r8VJfKBTHQIulG21PHJ9JP52XA/zRrRxr7I7JWrEu1zdVSbLRWNqJA8lqis5AcQ2YVbk
-         iHlw==
-X-Gm-Message-State: AOAM5330BVtuxzGvoI0yS39mspyOWE8U0WVgE+hOyraZpEbFD7uN6G7c
-        1L5MgZ/teiHIqtjVezG20YU=
-X-Google-Smtp-Source: ABdhPJwHjXachEbC9jh3Il4IjkYfSCQZxQn2Flq3KZAULIDWsY9UAVu5opzZM6X/B6C8LY9CO8m6/Q==
-X-Received: by 2002:a65:5a0d:0:b0:381:3c1e:9aca with SMTP id y13-20020a655a0d000000b003813c1e9acamr10294707pgs.562.1647664578830;
-        Fri, 18 Mar 2022 21:36:18 -0700 (PDT)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id m125-20020a628c83000000b004f7baad5c20sm11027526pfd.144.2022.03.18.21.36.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 21:36:18 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     aelior@marvell.com, manishc@marvell.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH] qed: remove an unneed NULL check on list iterator
-Date:   Sat, 19 Mar 2022 12:36:06 +0800
-Message-Id: <20220319043606.23292-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 19 Mar 2022 00:44:30 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FD62FE53
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 21:43:08 -0700 (PDT)
+Received: from fsav114.sakura.ne.jp (fsav114.sakura.ne.jp [27.133.134.241])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 22J4h00x080510;
+        Sat, 19 Mar 2022 13:43:00 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav114.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav114.sakura.ne.jp);
+ Sat, 19 Mar 2022 13:43:00 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav114.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 22J4gx5J080507
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 19 Mar 2022 13:43:00 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <2efd5461-fccd-f1d9-7138-0a6767cbf5fe@I-love.SAKURA.ne.jp>
+Date:   Sat, 19 Mar 2022 13:42:59 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Subject: [PATCH v3 (repost)] workqueue: Warn flushing of kernel-global
+ workqueues
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,RCVD_IN_SBL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The define for_each_pci_dev(d) is:
- while ((d = pci_get_device(PCI_ANY_ID, PCI_ANY_ID, d)) != NULL)
+Since flush operation synchronously waits for completion, flushing
+kernel-global WQs (e.g. system_wq) might introduce possibility of deadlock
+due to unexpected locking dependency. Tejun Heo commented that it makes no
+sense at all to call flush_workqueue() on the shared WQs as the caller has
+no idea what it's gonna end up waiting for.
 
-Thus, the list iterator 'd' is always non-NULL so it doesn't need to
-be checked. So just remove the unnecessary NULL check. Also remove the
-unnecessary initializer because the list iterator is always initialized.
+Although there is flush_scheduled_work() which flushes system_wq WQ with
+"Think twice before calling this function! It's very easy to get into
+trouble if you don't take great care." warning message, syzbot found a
+circular locking dependency caused by flushing system_long_wq WQ [1].
+Therefore, let's change the direction to that developers had better use
+their local WQs if flush_workqueue() is inevitable.
 
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To give developers time to update their modules, for now just emit
+a warning message with ratelimit when flush_workqueue() is called on
+kernel-global WQs. We will eventually convert this warning message into
+WARN_ON() and kill flush_scheduled_work().
+
+This patch introduces __WQ_NO_FLUSH flag for emitting warning. Don't set
+this flag when creating your local WQs while updating your module, for
+destroy_workqueue() will involve flush operation.
+
+Theoretically, flushing specific work item using flush_work() queued on
+kernel-global WQs (which are !WQ_MEM_RECLAIM) has possibility of deadlock.
+But this patch does not emit warning when flush_work() is called on work
+items queued on kernel-global WQs, based on assumption that we can create
+kworker threads as needed and we won't hit max_active limit.
+
+Link: https://syzkaller.appspot.com/bug?extid=831661966588c802aae9 [1]
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 ---
- drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This patch has been in linux-next.git as commit b9c20da356db1b39 ("workqueue:
+Warn flushing of kernel-global workqueues") since next-20220301, and I got no
+failure reports. I think that this patch is safe to go to linux.git; then
+developers will find this patch and update their modules to use their local WQ.
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c b/drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c
-index 96a2077fd315..37af8395f1bd 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c
-@@ -161,11 +161,11 @@ EXPORT_SYMBOL(qed_vlan_get_ndev);
+Changes in v3:
+  Don't check flush_work() attempt.
+  Use a private WQ_ flag.
+Changes in v2:
+  Removed #ifdef CONFIG_PROVE_LOCKING=y check.
+  Also check flush_work() attempt.
+  Shorten warning message.
+  Introduced a public WQ_ flag, which is initially meant for use by
+  only system-wide WQs, but allows private WQs used by built-in modules
+  to use this flag for detecting unexpected flush attempts if they want.
+
+ include/linux/workqueue.h | 15 +++------------
+ kernel/workqueue.c        | 36 +++++++++++++++++++++++++++++-------
+ 2 files changed, 32 insertions(+), 19 deletions(-)
+
+diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+index 7fee9b6cfede..7b13fae377e2 100644
+--- a/include/linux/workqueue.h
++++ b/include/linux/workqueue.h
+@@ -339,6 +339,7 @@ enum {
+ 	__WQ_ORDERED		= 1 << 17, /* internal: workqueue is ordered */
+ 	__WQ_LEGACY		= 1 << 18, /* internal: create*_workqueue() */
+ 	__WQ_ORDERED_EXPLICIT	= 1 << 19, /* internal: alloc_ordered_workqueue() */
++	__WQ_NO_FLUSH           = 1 << 20, /* internal: warn flush_workqueue() */
  
- struct pci_dev *qed_validate_ndev(struct net_device *ndev)
- {
--	struct pci_dev *pdev = NULL;
-+	struct pci_dev *pdev;
- 	struct net_device *upper;
+ 	WQ_MAX_ACTIVE		= 512,	  /* I like 512, better ideas? */
+ 	WQ_MAX_UNBOUND_PER_CPU	= 4,	  /* 4 * #cpus for unbound wq */
+@@ -569,18 +570,8 @@ static inline bool schedule_work(struct work_struct *work)
+  * Forces execution of the kernel-global workqueue and blocks until its
+  * completion.
+  *
+- * Think twice before calling this function!  It's very easy to get into
+- * trouble if you don't take great care.  Either of the following situations
+- * will lead to deadlock:
+- *
+- *	One of the work items currently on the workqueue needs to acquire
+- *	a lock held by your code or its caller.
+- *
+- *	Your code is running in the context of a work routine.
+- *
+- * They will be detected by lockdep when they occur, but the first might not
+- * occur very often.  It depends on what work items are on the workqueue and
+- * what locks they need, which you have no control over.
++ * Please stop calling this function. If you need to flush kernel-global
++ * workqueue, please use your local workqueue.
+  *
+  * In most situations flushing the entire workqueue is overkill; you merely
+  * need to know that a particular work item isn't queued and isn't running.
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 33f1106b4f99..bc271579704f 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -2805,6 +2805,25 @@ static bool flush_workqueue_prep_pwqs(struct workqueue_struct *wq,
+ 	return wait;
+ }
  
- 	for_each_pci_dev(pdev) {
--		if (pdev && pdev->driver &&
-+		if (pdev->driver &&
- 		    !strcmp(pdev->driver->name, "qede")) {
- 			upper = pci_get_drvdata(pdev);
- 			if (upper->ifindex == ndev->ifindex)
++static void warn_flush_attempt(struct workqueue_struct *wq)
++{
++	/*
++	 * Since there are known in-tree modules which will emit this warning,
++	 * for now don't use WARN_ON() in order not to break kernel testing.
++	 *
++	 * Print whole traces with ratelimit, in order to make sure that
++	 * this warning is not overlooked while this warning does not flood
++	 * console and kernel log buffer.
++	 */
++	static DEFINE_RATELIMIT_STATE(flush_warn_rs, 600 * HZ, 1);
++
++	ratelimit_set_flags(&flush_warn_rs, RATELIMIT_MSG_ON_RELEASE);
++	if (!__ratelimit(&flush_warn_rs))
++		return;
++	pr_warn("Please do not flush %s WQ.\n", wq->name);
++	dump_stack();
++}
++
+ /**
+  * flush_workqueue - ensure that any scheduled work has run to completion.
+  * @wq: workqueue to flush
+@@ -2824,6 +2843,9 @@ void flush_workqueue(struct workqueue_struct *wq)
+ 	if (WARN_ON(!wq_online))
+ 		return;
+ 
++	if (unlikely(wq->flags & __WQ_NO_FLUSH))
++		warn_flush_attempt(wq);
++
+ 	lock_map_acquire(&wq->lockdep_map);
+ 	lock_map_release(&wq->lockdep_map);
+ 
+@@ -6054,17 +6076,17 @@ void __init workqueue_init_early(void)
+ 		ordered_wq_attrs[i] = attrs;
+ 	}
+ 
+-	system_wq = alloc_workqueue("events", 0, 0);
+-	system_highpri_wq = alloc_workqueue("events_highpri", WQ_HIGHPRI, 0);
+-	system_long_wq = alloc_workqueue("events_long", 0, 0);
+-	system_unbound_wq = alloc_workqueue("events_unbound", WQ_UNBOUND,
++	system_wq = alloc_workqueue("events", __WQ_NO_FLUSH, 0);
++	system_highpri_wq = alloc_workqueue("events_highpri", __WQ_NO_FLUSH | WQ_HIGHPRI, 0);
++	system_long_wq = alloc_workqueue("events_long", __WQ_NO_FLUSH, 0);
++	system_unbound_wq = alloc_workqueue("events_unbound", __WQ_NO_FLUSH | WQ_UNBOUND,
+ 					    WQ_UNBOUND_MAX_ACTIVE);
+ 	system_freezable_wq = alloc_workqueue("events_freezable",
+-					      WQ_FREEZABLE, 0);
++					      __WQ_NO_FLUSH | WQ_FREEZABLE, 0);
+ 	system_power_efficient_wq = alloc_workqueue("events_power_efficient",
+-					      WQ_POWER_EFFICIENT, 0);
++					      __WQ_NO_FLUSH | WQ_POWER_EFFICIENT, 0);
+ 	system_freezable_power_efficient_wq = alloc_workqueue("events_freezable_power_efficient",
+-					      WQ_FREEZABLE | WQ_POWER_EFFICIENT,
++					      __WQ_NO_FLUSH | WQ_FREEZABLE | WQ_POWER_EFFICIENT,
+ 					      0);
+ 	BUG_ON(!system_wq || !system_highpri_wq || !system_long_wq ||
+ 	       !system_unbound_wq || !system_freezable_wq ||
 -- 
-2.17.1
+2.32.0
+
 

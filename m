@@ -2,90 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1954DE600
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 05:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDA44DE606
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 05:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242051AbiCSEpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 00:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
+        id S241900AbiCSEvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 00:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241900AbiCSEpq (ORCPT
+        with ESMTP id S242105AbiCSEve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 00:45:46 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9282FE6F;
-        Fri, 18 Mar 2022 21:44:26 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id t187so6424734pgb.1;
-        Fri, 18 Mar 2022 21:44:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=ePtpQVr2/xAxWdpNXmu4SCKmYKeBJUhhz3S5bqyfLKU=;
-        b=EG1wDIRdERFcS6rtxwyxLTBB6svh5CPPWQdMfQI+XSxBmUMIKmRYMq/zH5/4vLa+gx
-         DI1Pn6b400nSXUuDiOnrisn9P7BXv7NG6SU7vRbQzHidcu2xbsK14JrkT9JgqnG7h5Av
-         enYIgTcxTdJIqQDQPLtsFze/RIbTs2cOlvHLx4A+y5wXDROiixLNoiK0AnupGWpndGqo
-         LNGtnQlLfjcAcgtlnlkpz/qThYhOKB3JJJ5HVht/Gtl4ffLOeRwQwd65Kcmtp4eZRGEX
-         OuBlI88RokcQCshQ+pfXivIrz2UEzD73qzyHQfqdAFHGskXWoZr/oE5vaycvMXH2j78f
-         mAHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ePtpQVr2/xAxWdpNXmu4SCKmYKeBJUhhz3S5bqyfLKU=;
-        b=IGSgGYapdhe+JCkifNT/ERMx4pCWPUovbDaAcorE3Tnd1DvMILkndsDI9GvXOdS2mb
-         luInlvey24P9zetM1AgJqXz2GX+Okui61ro1z6lyDveRudFrqqCI6o5jP7B1vB+6M09y
-         Ysma/KFklnvR3LEv+CTHkTizqIcZbsaXUBqsS9hvk+B31V3nT926FW/4iJfzPyVxazGj
-         iptXVEtwJdpf1HhbCvlA747BaiF5WtZduOxEh9caZc5S/mgkHhaI0OsMwIOyl0MN+u5Z
-         Vu560eIpqRynd0OHB7bj1XAWTecQE74ZCPa66JF4mD0dLu6aZLVJ8eKvIARkUcbvcB1e
-         S92Q==
-X-Gm-Message-State: AOAM531qADoPtaUl+jzPaGqfCJl1GS++N6R53le5agkDIEVDRAH/gj4y
-        eW7ZV2jtqqQg/PM+skW9W2lGwPLqLL4YqQ==
-X-Google-Smtp-Source: ABdhPJy7w74S5F0bIJTpM5fYznOxplyhk67otI6Uy9j8OyryERB8URYw+DyD067E3TaCC+XrvuDLKw==
-X-Received: by 2002:a63:710f:0:b0:378:c35a:3c3 with SMTP id m15-20020a63710f000000b00378c35a03c3mr10377084pgc.535.1647665065783;
-        Fri, 18 Mar 2022 21:44:25 -0700 (PDT)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id nu4-20020a17090b1b0400b001bf497a9324sm14301019pjb.31.2022.03.18.21.44.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 21:44:25 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     jassisinghbrar@gmail.com
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH] mailbox: remove an unneeded NULL check on list iterator
-Date:   Sat, 19 Mar 2022 12:44:16 +0800
-Message-Id: <20220319044416.24242-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 19 Mar 2022 00:51:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EEB3B3FA;
+        Fri, 18 Mar 2022 21:50:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A52060BAA;
+        Sat, 19 Mar 2022 04:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E7396C340F4;
+        Sat, 19 Mar 2022 04:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647665411;
+        bh=YL4W3lAmQSDP790yVzNoQ2deihGUAoSaEvgUDwfEUHU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=TansEaSlNRhBNiktfiizPPn5/OzNB+03eWy8Up7MjHlL1Eq1L58JveVD6CZkrzWw9
+         OHwS254/URkvAKrC0liDjMaCY6w9WOI/C8mrfU8hw69Sofw+wadE31pABYAf0rxMmj
+         hZI0LXFR6dp0138D0pYZwl8Is1DjwgG4nLJ4IlcYtj2jKPr23cAKdQr8DXujjRYZQp
+         xb0qPdqVaaZzFhJZjK2Pe4QoHCQwNW8wfufcMJhp6VLEjUGSWlBWBuojsDZSKCGVHY
+         LZGVMQ87GKhAjCPy5vfkgO11yYJct9kFVX+cGwv0k5UJW0Mrtw2QpvXKTeIjs5e6jO
+         h8nFaA1ijGGmA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CE2F5F0383F;
+        Sat, 19 Mar 2022 04:50:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH -next] nfc: st21nfca: remove unnecessary skb check before
+ kfree_skb()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164766541084.28065.2012315502960743033.git-patchwork-notify@kernel.org>
+Date:   Sat, 19 Mar 2022 04:50:10 +0000
+References: <20220318072728.2659578-1-yangyingliang@huawei.com>
+In-Reply-To: <20220318072728.2659578-1-yangyingliang@huawei.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        colin.king@intel.com, kuba@kernel.org, davem@davemloft.net,
+        krzk@kernel.org
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The list iterator is always non-NULL so it doesn't need to be checked.
-Thus just remove the unnecessary NULL check.
+Hello:
 
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- drivers/mailbox/tegra-hsp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/drivers/mailbox/tegra-hsp.c b/drivers/mailbox/tegra-hsp.c
-index acd0675da681..64eaee089b03 100644
---- a/drivers/mailbox/tegra-hsp.c
-+++ b/drivers/mailbox/tegra-hsp.c
-@@ -799,7 +799,7 @@ static int __maybe_unused tegra_hsp_resume(struct device *dev)
- 	struct tegra_hsp_doorbell *db;
- 
- 	list_for_each_entry(db, &hsp->doorbells, list) {
--		if (db && db->channel.chan)
-+		if (db->channel.chan)
- 			tegra_hsp_doorbell_startup(db->channel.chan);
- 	}
- 
+On Fri, 18 Mar 2022 15:27:28 +0800 you wrote:
+> The skb will be checked in kfree_skb(), so remove the outside check.
+> 
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/nfc/st21nfca/i2c.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+
+Here is the summary with links:
+  - [-next] nfc: st21nfca: remove unnecessary skb check before kfree_skb()
+    https://git.kernel.org/netdev/net-next/c/800c326bfa9c
+
+You are awesome, thank you!
 -- 
-2.17.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

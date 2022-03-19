@@ -2,190 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99284DEAB2
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 21:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E69F54DEACD
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 21:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244170AbiCSUlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 16:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
+        id S244183AbiCSUsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 16:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234183AbiCSUln (ORCPT
+        with ESMTP id S233213AbiCSUsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 16:41:43 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624F71C8A9E;
-        Sat, 19 Mar 2022 13:40:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647722421; x=1679258421;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Nd8cTOZCZJMffvQJDvB7Hp7HuDrz3fS77J4g0WJHxjQ=;
-  b=Dn6/KzYRQYyPshx2VVa7zg9pEHenDXmuUV9DxBANaos/z+H79nWNdGqA
-   YT6j/C3FJYxs0yxqdfrDVyTmJeCaMlRyTkFACowFarblZymId+jltf9SY
-   2cSfyWhpt7KGXrM0cpGxXeo/HbRp7P/nX1xMtqvKpX0KvR8X+KutAqc6e
-   jjbV24AslkSUcmCnqdYsYvgtNHybJx8oDwwxtssoeBMRuNRTP4nWk8kBt
-   QJDu4yc9ZgcL2EtzO70fCiAPQWwsmDniIdPuJCRoSRLQEYMfbd8vDCHsa
-   m3vbyvR+TlkT7STrjiSOldeDxqxPbqZlajQ023uJ4fq+RNDpDJ3+XCCM3
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="254894997"
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="254894997"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 13:40:21 -0700
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="542657573"
-Received: from llscottx-mobl1.amr.corp.intel.com (HELO [10.209.82.139]) ([10.209.82.139])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 13:40:20 -0700
-Message-ID: <aa810b71-89b2-f18e-5564-d65ed421b8d9@linux.intel.com>
-Date:   Sat, 19 Mar 2022 13:40:20 -0700
+        Sat, 19 Mar 2022 16:48:18 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2175B25F659;
+        Sat, 19 Mar 2022 13:46:56 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 57BCE2223B;
+        Sat, 19 Mar 2022 21:46:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1647722814;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YMrcuTT0rgA+lIv6Wyluo34FsA5qWN9Ip9lq9GLriBo=;
+        b=mzrWsPuuIcXCBtDrf2rUodRCMJ89OQKTXXbXwe26NkTIXtIz+k0kVlHx6pILsnMGn5zSlx
+        qZJ9Ck3xxwAaqUfxtgfg7rEu5eCWWjVEZPiedC5YgsnCJXvF7d14c/JB3S5wW8f+p9Qntx
+        8iJXbTNIMjJQwd/xr9suZhNMgLqXuT8=
+From:   Michael Walle <michael@walle.cc>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Quentin Schulz <quentin.schulz@bootlin.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v3 0/6] pinctrl: ocelot: convert to YAML format
+Date:   Sat, 19 Mar 2022 21:46:22 +0100
+Message-Id: <20220319204628.1759635-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/2] PCI/DPC: Disable DPC service when link is in L2/L3
- ready, L2 and L3 state
-Content-Language: en-US
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, bhelgaas@google.com
-Cc:     mika.westerberg@linux.intel.com, koba.ko@canonical.com,
-        Russell Currey <ruscur@russell.cc>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220127025418.1989642-1-kai.heng.feng@canonical.com>
- <20220127025418.1989642-2-kai.heng.feng@canonical.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20220127025418.1989642-2-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Convert the pinctrl ocelot binding to the new YAML format. Pin
+configuration nodes should have a "-pins" postfix. But unfortunately,
+there are many device trees which don't follow this. First rename
+all these nodes and then convert the binding to the YAML format so
+that the validation will pass.
 
+Because there were no maintainers before and there is none in
+MAINTAINERS I added Alexandre Belloni and Lars Povlsen, juding by
+the commits - to the binding as maintainers. Please tell me if you
+disagree.
 
-On 1/26/22 6:54 PM, Kai-Heng Feng wrote:
-> Since TLP and DLLP transmission is disabled for a Link in L2/L3 Ready,
-> L2 and L3 (i.e. device in D3hot and D3cold), and DPC depends on AER, so
+changes since v2:
+ - drop Fixes tag (and any "fix" or similar)
+ - one patch per SoC
+ - document difference between original txt and yaml binging in the
+   commit message
 
-Better description about the problem would be helpful. I know you
-have included a log in AER patch. But a quick summary of the problem
-in this patch will make it easier to read the patch.
+changes since v1:
+ - drop "Device Tree Binding" from the title of the binding
+ - describe reg properties and provide minItems and set it differently
+   depending on the compatible string
+ - skip interrupt description
+ - move required section after patternProperties
 
-> also disable DPC here.
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
-> v2:
->   - Wording change.
->   - Empty line dropped.
-> 
->   drivers/pci/pcie/dpc.c | 60 +++++++++++++++++++++++++++++++-----------
->   1 file changed, 44 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
-> index 3e9afee02e8d1..414258967f08e 100644
-> --- a/drivers/pci/pcie/dpc.c
-> +++ b/drivers/pci/pcie/dpc.c
-> @@ -343,13 +343,33 @@ void pci_dpc_init(struct pci_dev *pdev)
->   	}
->   }
->   
-> +static void dpc_enable(struct pcie_device *dev)
-> +{
-> +	struct pci_dev *pdev = dev->port;
-> +	u16 ctl;
-> +
-> +	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-> +	ctl = (ctl & 0xfff4) | PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN;
-> +	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-> +}
-> +
-> +static void dpc_disable(struct pcie_device *dev)
-> +{
-> +	struct pci_dev *pdev = dev->port;
-> +	u16 ctl;
-> +
-> +	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-> +	ctl &= ~(PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN);
-> +	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-> +}
-> +
->   #define FLAG(x, y) (((x) & (y)) ? '+' : '-')
->   static int dpc_probe(struct pcie_device *dev)
->   {
->   	struct pci_dev *pdev = dev->port;
->   	struct device *device = &dev->device;
->   	int status;
-> -	u16 ctl, cap;
-> +	u16 cap;
->   
->   	if (!pcie_aer_is_native(pdev) && !pcie_ports_dpc_native)
->   		return -ENOTSUPP;
-> @@ -364,10 +384,7 @@ static int dpc_probe(struct pcie_device *dev)
->   	}
->   
->   	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CAP, &cap);
-> -	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-> -
-> -	ctl = (ctl & 0xfff4) | PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN;
-> -	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-> +	dpc_enable(dev);
->   	pci_info(pdev, "enabled with IRQ %d\n", dev->irq);
->   
->   	pci_info(pdev, "error containment capabilities: Int Msg #%d, RPExt%c PoisonedTLP%c SwTrigger%c RP PIO Log %d, DL_ActiveErr%c\n",
-> @@ -380,22 +397,33 @@ static int dpc_probe(struct pcie_device *dev)
->   	return status;
->   }
->   
-> -static void dpc_remove(struct pcie_device *dev)
-> +static int dpc_suspend(struct pcie_device *dev)
->   {
-> -	struct pci_dev *pdev = dev->port;
-> -	u16 ctl;
-> +	dpc_disable(dev);
-> +	return 0;
-> +}
->   
-> -	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-> -	ctl &= ~(PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN);
-> -	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-> +static int dpc_resume(struct pcie_device *dev)
-> +{
-> +	dpc_enable(dev);
-> +	return 0;
-> +}
-> +
-> +static void dpc_remove(struct pcie_device *dev)
-> +{
-> +	dpc_disable(dev);
->   }
->   
->   static struct pcie_port_service_driver dpcdriver = {
-> -	.name		= "dpc",
-> -	.port_type	= PCIE_ANY_PORT,
-> -	.service	= PCIE_PORT_SERVICE_DPC,
-> -	.probe		= dpc_probe,
-> -	.remove		= dpc_remove,
-> +	.name			= "dpc",
-> +	.port_type		= PCIE_ANY_PORT,
-> +	.service		= PCIE_PORT_SERVICE_DPC,
-> +	.probe			= dpc_probe,
-> +	.suspend		= dpc_suspend,
-> +	.resume			= dpc_resume,
-> +	.runtime_suspend	= dpc_suspend,
-> +	.runtime_resume		= dpc_resume,
-> +	.remove			= dpc_remove,
->   };
->   
->   int __init pcie_dpc_init(void)
+Michael Walle (6):
+  MIPS: mscc: jaguar2: rename pinctrl nodes
+  MIPS: mscc: ocelot: rename pinctrl nodes
+  MIPS: mscc: serval: rename pinctrl nodes
+  arm64: dts: sparx5: rename pinctrl nodes
+  ARM: dts: lan966x: rename pinctrl nodes
+  dt-bindings: pinctrl: convert ocelot-pinctrl to YAML format
+
+ .../bindings/pinctrl/mscc,ocelot-pinctrl.txt  |  42 -------
+ .../bindings/pinctrl/mscc,ocelot-pinctrl.yaml | 108 ++++++++++++++++++
+ arch/arm/boot/dts/lan966x-pcb8291.dts         |   2 +-
+ .../dts/microchip/sparx5_pcb134_board.dtsi    |  26 ++---
+ .../dts/microchip/sparx5_pcb135_board.dtsi    |  10 +-
+ arch/mips/boot/dts/mscc/jaguar2_pcb110.dts    |  10 +-
+ arch/mips/boot/dts/mscc/jaguar2_pcb111.dts    |  10 +-
+ arch/mips/boot/dts/mscc/jaguar2_pcb118.dts    |   6 +-
+ arch/mips/boot/dts/mscc/ocelot.dtsi           |   4 +-
+ arch/mips/boot/dts/mscc/ocelot_pcb120.dts     |   6 +-
+ arch/mips/boot/dts/mscc/serval_common.dtsi    |  14 +--
+ 11 files changed, 152 insertions(+), 86 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.30.2
+

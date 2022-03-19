@@ -2,965 +2,493 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1004DE87F
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 15:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC2A4DE866
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 15:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243173AbiCSOgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 10:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S243124AbiCSOdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 10:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235651AbiCSOf6 (ORCPT
+        with ESMTP id S231131AbiCSOdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 10:35:58 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8DD1A80A;
-        Sat, 19 Mar 2022 07:34:36 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id c2so7116369pga.10;
-        Sat, 19 Mar 2022 07:34:36 -0700 (PDT)
+        Sat, 19 Mar 2022 10:33:08 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEE743384;
+        Sat, 19 Mar 2022 07:31:45 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id h1so13261344edj.1;
+        Sat, 19 Mar 2022 07:31:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9/q8EIMep+pPIGJcTbDuI+BITv/xYViANrpY9qUjLQw=;
-        b=neXDsGSyho78R0Cu6FZqjgR8xJcjTCEVpGWWvZ7/XlMeZq68uZVBQLOJUFtcJK+zjM
-         Ur402JCEuGx5Efcp0n7B6chc1saAdp5zryAdKxf3lKrMm6G9rmUBQvDSSn27ZVOTyd0a
-         BGnJU5Wv50Xz7fSDny5lZiFU0bEAQXEKMB1qGFPzBxhsx2La6UakgecwdkaASg1/9nMu
-         lbYRMW0wsAjCAy91A2k7xJTbjd0pUYFEMl11ynRGdPcxjOs2+BTN2rIRNcZaL9AYiBh5
-         APvZzBuBU5hQwy4gRc/k7p933nYralNk79s8v4wohZg+TfQcd4JLqE9Ysrv+vYD5Mtgb
-         KkrQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y4CzFVqtuLij5VKXYGjzDEEpcQrN2OuW4IgMTkoJKOM=;
+        b=m9v2MVf24TU/J9/OIsiIk68A1+P7YeXTmXlOdE78V0zm1SiOGuNUmzPZZytqIoW33N
+         RFHCG7UuFEs+jikOiIo9n8tlPfnOR7H4ENNT4i57cOZ8jZyvyLe92PNmHKFp16vEllpI
+         iSeeTmJumnApw3hD+ThjKqtDRlZlbH6nfAZ8CHf5LcCCtYygONKu129RHUSjMK0vd6Dp
+         p7BWWpFzleobSDjKLubEJwMcJQuYzZHfO5O28ztIndA3U5Ul4gwkGTMm2haxB9QfaPe1
+         zZL3s9kvlcr8g/f/lnPwtfKvvxc6A+Uy/R2jbdKp8Zw/FgXAiCBsYkPjfHb5hnmRCoEZ
+         7XcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=9/q8EIMep+pPIGJcTbDuI+BITv/xYViANrpY9qUjLQw=;
-        b=1l5p3frCHyUYxZRVuMKBF4KQcFnUv3B+ESsc4prAy2DfZ4PDtvOEb8yyt4koK7rlCY
-         n2wjyGQpKQCmHdFwehDroBrPEr8oZbXN+pePXmt+iPOTiQuyrzqdJlEHvPMYN8xqg3Lg
-         Vh2phdP7WTfYV8Lq3bLuNCFJBMxMTgS7r6Evtq3UGVuXU1cfXOhIcm1FpgubqtQ9IN0Z
-         pXgXTUBtNGay5iYTe5AJXTMUaYGFY3MQ8lYeUpkhsRoNmLINRxMtWL2emTXjdf7sdpt4
-         MfOzANt7mkeSDzAuGRYPJn1azPMpcWANJs3ZNav/Am5BvKsbzriyt2QwCM1zU/RS1iJI
-         XTFA==
-X-Gm-Message-State: AOAM533ewOp2srta59dlMzf2Y2+SR2LMnedaRfl/ArFmvDOomLD2Eu19
-        IHLTXHtPRSYMjFaCSarAeXE=
-X-Google-Smtp-Source: ABdhPJwKf5K8S5RjXf6vouzDQK9WjZUKJ5hNjGSt2caM5knTLrrhFld2wQwTO/xfYMY64U6FgUb2og==
-X-Received: by 2002:a63:d848:0:b0:381:f29f:64ca with SMTP id k8-20020a63d848000000b00381f29f64camr11469390pgj.332.1647700476270;
-        Sat, 19 Mar 2022 07:34:36 -0700 (PDT)
-Received: from localhost.localdomain ([50.7.60.25])
-        by smtp.gmail.com with ESMTPSA id q12-20020a17090a178c00b001bd036e11fdsm14886959pja.42.2022.03.19.07.34.28
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=y4CzFVqtuLij5VKXYGjzDEEpcQrN2OuW4IgMTkoJKOM=;
+        b=PklR2iySDrDxqmNvQ70JiYgF1gWMw2CZpMY9VF/rHnn1Ib0bAqMBF3s1782vJcuF0n
+         Ekza3XJLZwcTTrJe96AT1G+VDhcYFxId5rMdT1OItJcr0nwd7YJ6SZZu2Bi8meP+4AJT
+         BLdAOb8dyrPL4rtzScjIqy+rnSt+enTIx9GJoKqy+Mn6ZGSidRjfhlpTSjKYktEABIGI
+         Cd7GhakZK1yaDucQwBEzuyhpwrGpi4ksaO7aIBAvwvIL969lskJHmKPcQuG5JD0F+Yqb
+         V95M39QS6MfEoMVDLHoFW7VgGVPK8q1PHSuydxPoQ5Ad9cG0Wus07IT5vELrg1CTty/M
+         Kvzg==
+X-Gm-Message-State: AOAM532fqCZuKI+duW2aFPFk1CJ5+0nxL57FF6sCyV9xNDxCCekgIz9z
+        tJV77KCQOw4rRRWY6E7Prg3tb10ufHnUyg==
+X-Google-Smtp-Source: ABdhPJzDmFsfcgcfyfq6oVroPMLuTEVoOpzb3SoT/pM2p7HUrpS0GEHLWOrEa4wmHXHs0pARXKS10g==
+X-Received: by 2002:a05:6402:51d2:b0:415:c171:346c with SMTP id r18-20020a05640251d200b00415c171346cmr14477367edd.19.1647700304269;
+        Sat, 19 Mar 2022 07:31:44 -0700 (PDT)
+Received: from krava ([83.240.61.119])
+        by smtp.gmail.com with ESMTPSA id w12-20020a17090649cc00b006d0bee77b9asm4846644ejv.72.2022.03.19.07.31.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 07:34:35 -0700 (PDT)
-Sender: Huacai Chen <chenhuacai@gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-X-Google-Original-From: Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V8 07/22] LoongArch: Add atomic/locking headers
-Date:   Sat, 19 Mar 2022 22:31:15 +0800
-Message-Id: <20220319143130.1026432-7-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220319143130.1026432-1-chenhuacai@loongson.cn>
-References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143130.1026432-1-chenhuacai@loongson.cn>
+        Sat, 19 Mar 2022 07:31:43 -0700 (PDT)
+Date:   Sat, 19 Mar 2022 15:31:41 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCHv3 bpf-next 00/13] bpf: Add kprobe multi link
+Message-ID: <YjXpTZUI10RVCGPD@krava>
+References: <20220316122419.933957-1-jolsa@kernel.org>
+ <CAEf4BzbpjN6ca7D9KOTiFPOoBYkciYvTz0UJNp5c-_3ptm=Mrg@mail.gmail.com>
+ <YjXMSg+BSSOv0xd1@krava>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjXMSg+BSSOv0xd1@krava>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds common headers (atomic, bitops, barrier and locking)
-for basic LoongArch support.
+On Sat, Mar 19, 2022 at 01:27:56PM +0100, Jiri Olsa wrote:
+> On Fri, Mar 18, 2022 at 10:50:46PM -0700, Andrii Nakryiko wrote:
+> > On Wed, Mar 16, 2022 at 5:24 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > >
+> > > hi,
+> > > this patchset adds new link type BPF_TRACE_KPROBE_MULTI that attaches
+> > > kprobe program through fprobe API [1] instroduced by Masami.
+> > >
+> > > The fprobe API allows to attach probe on multiple functions at once very
+> > > fast, because it works on top of ftrace. On the other hand this limits
+> > > the probe point to the function entry or return.
+> > >
+> > >
+> > > With bpftrace support I see following attach speed:
+> > >
+> > >   # perf stat --null -r 5 ./src/bpftrace -e 'kprobe:x* { } i:ms:1 { exit(); } '
+> > >   Attaching 2 probes...
+> > >   Attaching 3342 functions
+> > >   ...
+> > >
+> > >   1.4960 +- 0.0285 seconds time elapsed  ( +-  1.91% )
+> > >
+> > > v3 changes:
+> > >   - based on latest fprobe post from Masami [2]
+> > >   - add acks
+> > >   - add extra comment to kprobe_multi_link_handler wrt entry ip setup [Masami]
+> > >   - keep swap_words_64 static and swap values directly in
+> > >     bpf_kprobe_multi_cookie_swap [Andrii]
+> > >   - rearrange locking/migrate setup in kprobe_multi_link_prog_run [Andrii]
+> > >   - move uapi fields [Andrii]
+> > >   - add bpf_program__attach_kprobe_multi_opts function [Andrii]
+> > >   - many small test changes [Andrii]
+> > >   - added tests for bpf_program__attach_kprobe_multi_opts
+> > >   - make kallsyms_lookup_name check for empty string [Andrii]
+> > >
+> > > v2 changes:
+> > >   - based on latest fprobe changes [1]
+> > >   - renaming the uapi interface to kprobe multi
+> > >   - adding support for sort_r to pass user pointer for swap functions
+> > >     and using that in cookie support to keep just single functions array
+> > >   - moving new link to kernel/trace/bpf_trace.c file
+> > >   - using single fprobe callback function for entry and exit
+> > >   - using kvzalloc, libbpf_ensure_mem functions
+> > >   - adding new k[ret]probe.multi sections instead of using current kprobe
+> > >   - used glob_match from test_progs.c, added '?' matching
+> > >   - move bpf_get_func_ip verifier inline change to seprate change
+> > >   - couple of other minor fixes
+> > >
+> > >
+> > > Also available at:
+> > >   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+> > >   bpf/kprobe_multi
+> > >
+> > > thanks,
+> > > jirka
+> > >
+> > >
+> > > [1] https://lore.kernel.org/bpf/164458044634.586276.3261555265565111183.stgit@devnote2/
+> > > [2] https://lore.kernel.org/bpf/164735281449.1084943.12438881786173547153.stgit@devnote2/
+> > > ---
+> > > Jiri Olsa (13):
+> > >       lib/sort: Add priv pointer to swap function
+> > >       kallsyms: Skip the name search for empty string
+> > >       bpf: Add multi kprobe link
+> > >       bpf: Add bpf_get_func_ip kprobe helper for multi kprobe link
+> > >       bpf: Add support to inline bpf_get_func_ip helper on x86
+> > >       bpf: Add cookie support to programs attached with kprobe multi link
+> > >       libbpf: Add libbpf_kallsyms_parse function
+> > >       libbpf: Add bpf_link_create support for multi kprobes
+> > >       libbpf: Add bpf_program__attach_kprobe_multi_opts function
+> > >       selftests/bpf: Add kprobe_multi attach test
+> > >       selftests/bpf: Add kprobe_multi bpf_cookie test
+> > >       selftests/bpf: Add attach test for bpf_program__attach_kprobe_multi_opts
+> > >       selftests/bpf: Add cookie test for bpf_program__attach_kprobe_multi_opts
+> > >
+> > 
+> > Ok, so I've integrated multi-attach kprobes into retsnoop. It was
+> > pretty straightforward. Here are some numbers for the speed of
+> > attaching and, even more importantly, detaching for a set of almost
+> > 400 functions. It's a bit less functions for fentry-based mode due to
+> > more limited BTF information for static functions. Note that retsnoop
+> > attaches two BPF programs for each kernel function, so it's actually
+> > two multi-attach kprobes, each attaching to 397 functions. For
+> > single-attach kprobe, we perform 397 * 2 = 794 attachments.
+> > 
+> > I've been invoking retsnoop with the following specified set of
+> > functions: -e '*sys_bpf*' -a ':kernel/bpf/syscall.c' -a
+> > ':kernel/bpf/verifier.c' -a ':kernel/bpf/btf.c' -a
+> > ':kernel/bpf/core.c'. So basically bpf syscall entry functions and all
+> > the discoverable functions from syscall.c, verifier.c, core.c and
+> > btf.c from kernel/bpf subdirectory.
+> > 
+> > Results:
+> > 
+> > fentry attach/detach (263 kfuncs): 2133 ms / 31671  ms (33 seconds)
+> > kprobe attach/detach (397 kfuncs): 3121 ms / 13195 ms (16 seconds)
+> > multi-kprobe attach/detach (397 kfuncs): 9 ms / 248 ms (0.25 seconds)
+> > 
+> > So as you can see, the speed up is tremendous! API is also very
+> > convenient, I didn't have to modify retsnoop internals much to
+> > accommodate multi-attach API. Great job!
+> 
+> nice! thanks for doing that so quickly
+> 
+> > 
+> > Now for the bad news. :(
+> > 
+> > Stack traces from multi-attach kretprobe are broken, which makes all
+> > this way less useful.
+> > 
+> > Below, see stack traces captured with multi- and single- kretprobes
+> > for two different use cases. Single kprobe stack traces make much more
+> > sense. Ignore that last function doesn't have actual address
+> > associated with it (i.e. for __sys_bpf and bpf_tracing_prog_attach,
+> > respectively). That's just how retsnoop is doing things, I think. We
+> > actually were capturing stack traces from inside __sys_bpf (first
+> > case) and bpf_tracing_prog_attach (second case).
+> > 
+> > MULTI KPROBE:
+> > ffffffff81185a80 __sys_bpf+0x0
+> > (kernel/bpf/syscall.c:4622:1)
+> > 
+> > SINGLE KPROBE:
+> > ffffffff81e0007c entry_SYSCALL_64_after_hwframe+0x44
+> > (arch/x86/entry/entry_64.S:113:0)
+> > ffffffff81cd2b15 do_syscall_64+0x35
+> > (arch/x86/entry/common.c:80:7)
+> >                  . do_syscall_x64
+> > (arch/x86/entry/common.c:50:12)
+> > ffffffff811881aa __x64_sys_bpf+0x1a
+> > (kernel/bpf/syscall.c:4765:1)
+> >                  __sys_bpf
+> > 
+> > 
+> > MULTI KPROBE:
+> > ffffffff811851b0 bpf_tracing_prog_attach+0x0
+> > (kernel/bpf/syscall.c:2708:1)
+> > 
+> > SINGLE KPROBE:
+> > ffffffff81e0007c entry_SYSCALL_64_after_hwframe+0x44
+> > (arch/x86/entry/entry_64.S:113:0)
+> > ffffffff81cd2b15 do_syscall_64+0x35
+> > (arch/x86/entry/common.c:80:7)
+> >                  . do_syscall_x64
+> > (arch/x86/entry/common.c:50:12)
+> > ffffffff811881aa __x64_sys_bpf+0x1a
+> > (kernel/bpf/syscall.c:4765:1)
+> > ffffffff81185e79 __sys_bpf+0x3f9
+> > (kernel/bpf/syscall.c:4705:9)
+> > ffffffff8118583a bpf_raw_tracepoint_open+0x19a
+> > (kernel/bpf/syscall.c:3069:6)
+> >                  bpf_tracing_prog_attach
+> > 
+> > You can see that in multi-attach kprobe we only get one entry, which
+> > is the very last function in the stack trace. We have no parent
+> > function captured whatsoever. Jiri, Masami, any ideas what's wrong and
+> > how to fix this? Let's try to figure this out and fix it before the
+> > feature makes it into the kernel release. Thanks in advance!
+> 
+> oops, I should have tried kstack with the bpftrace's kretprobe, I see the same:
+> 
+> 	# ./src/bpftrace -e 'kretprobe:x* { @[kstack] = count(); }'
+> 	Attaching 1 probe...
+> 	Attaching 3340probes
+> 	^C
+> 
+> 	@[
+> 	    xfs_trans_apply_dquot_deltas+0
+> 	]: 22
+> 	@[
+> 	    xlog_cil_commit+0
+> 	]: 22
+> 	@[
+> 	    xlog_grant_push_threshold+0
+> 	]: 22
+> 	@[
+> 	    xfs_trans_add_item+0
+> 	]: 22
+> 	@[
+> 	    xfs_log_reserve+0
+> 	]: 22
+> 	@[
+> 	    xlog_space_left+0
+> 	]: 22
+> 	@[
+> 	    xfs_buf_offset+0
+> 	]: 22
+> 	@[
+> 	    xfs_trans_free_dqinfo+0
+> 	]: 22
+> 	@[
+> 	    xlog_ticket_alloc+0
+> 	    xfs_log_reserve+5
+> 	]: 22
+> 	@[
+> 	    xfs_cil_prepare_item+0
+> 
+> 
+> I think it's because we set original ip for return probe to have
+> bpf_get_func_ip working properly, but it breaks backtrace of course 
+> 
+> I'm not sure we could bring along the original regs for return probe,
+> but I have an idea how to workaround the bpf_get_func_ip issue and
+> keep the registers intact for other helpers
 
-LoongArch has no native sub-word xchg/cmpxchg instructions now, but
-LoongArch-based CPUs support NUMA (e.g., quad-core Loongson-3A5000
-supports as many as 16 nodes, 64 cores in total). So, we emulate sub-
-word xchg/cmpxchg in software and use qspinlock/qrwlock rather than
-ticket locks.
+change below is using bpf_run_ctx to store link and entry ip on stack,
+where helpers can find it.. it fixed the retprobe backtrace for me
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+I had to revert the get_func_ip inline.. it's squashed in the change
+below for quick testing.. I'll send revert in separate patch with the
+formal change
+
+could you please test?
+
+thanks,
+jirka
+
+
 ---
- arch/loongarch/include/asm/atomic.h         | 358 ++++++++++++++++++++
- arch/loongarch/include/asm/barrier.h        |  51 +++
- arch/loongarch/include/asm/bitops.h         |  33 ++
- arch/loongarch/include/asm/bitrev.h         |  34 ++
- arch/loongarch/include/asm/cmpxchg.h        | 135 ++++++++
- arch/loongarch/include/asm/local.h          | 138 ++++++++
- arch/loongarch/include/asm/percpu.h         |  20 ++
- arch/loongarch/include/asm/spinlock.h       |  12 +
- arch/loongarch/include/asm/spinlock_types.h |  11 +
- 9 files changed, 792 insertions(+)
- create mode 100644 arch/loongarch/include/asm/atomic.h
- create mode 100644 arch/loongarch/include/asm/barrier.h
- create mode 100644 arch/loongarch/include/asm/bitops.h
- create mode 100644 arch/loongarch/include/asm/bitrev.h
- create mode 100644 arch/loongarch/include/asm/cmpxchg.h
- create mode 100644 arch/loongarch/include/asm/local.h
- create mode 100644 arch/loongarch/include/asm/percpu.h
- create mode 100644 arch/loongarch/include/asm/spinlock.h
- create mode 100644 arch/loongarch/include/asm/spinlock_types.h
-
-diff --git a/arch/loongarch/include/asm/atomic.h b/arch/loongarch/include/asm/atomic.h
-new file mode 100644
-index 000000000000..f0ed7f9c08c9
---- /dev/null
-+++ b/arch/loongarch/include/asm/atomic.h
-@@ -0,0 +1,358 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Atomic operations.
-+ *
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_ATOMIC_H
-+#define _ASM_ATOMIC_H
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0287176bfe9a..cf92f9c01556 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -13678,7 +13678,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 			continue;
+ 		}
+ 
+-		/* Implement tracing bpf_get_func_ip inline. */
++		/* Implement bpf_get_func_ip inline. */
+ 		if (prog_type == BPF_PROG_TYPE_TRACING &&
+ 		    insn->imm == BPF_FUNC_get_func_ip) {
+ 			/* Load IP address from ctx - 16 */
+@@ -13693,25 +13693,6 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 			continue;
+ 		}
+ 
+-#ifdef CONFIG_X86
+-		/* Implement kprobe_multi bpf_get_func_ip inline. */
+-		if (prog_type == BPF_PROG_TYPE_KPROBE &&
+-		    eatype == BPF_TRACE_KPROBE_MULTI &&
+-		    insn->imm == BPF_FUNC_get_func_ip) {
+-			/* Load IP address from ctx (struct pt_regs) ip */
+-			insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
+-						  offsetof(struct pt_regs, ip));
+-
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
+-			if (!new_prog)
+-				return -ENOMEM;
+-
+-			env->prog = prog = new_prog;
+-			insn      = new_prog->insnsi + i + delta;
+-			continue;
+-		}
+-#endif
+-
+ patch_call_imm:
+ 		fn = env->ops->get_func_proto(insn->imm, env->prog);
+ 		/* all functions that have prototype and verifier allowed
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 9a7b6be655e4..aefe33c08296 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -80,7 +80,8 @@ u64 bpf_get_stack(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+ static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
+ 				  u64 flags, const struct btf **btf,
+ 				  s32 *btf_id);
+-static u64 bpf_kprobe_multi_cookie(struct bpf_run_ctx *ctx, u64 ip);
++static u64 bpf_kprobe_multi_cookie(struct bpf_run_ctx *ctx);
++static u64 bpf_kprobe_multi_entry_ip(struct bpf_run_ctx *ctx);
+ 
+ /**
+  * trace_call_bpf - invoke BPF program
+@@ -1042,8 +1043,7 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_kprobe = {
+ 
+ BPF_CALL_1(bpf_get_func_ip_kprobe_multi, struct pt_regs *, regs)
+ {
+-	/* This helper call is inlined by verifier on x86. */
+-	return instruction_pointer(regs);
++	return bpf_kprobe_multi_entry_ip(current->bpf_ctx);
+ }
+ 
+ static const struct bpf_func_proto bpf_get_func_ip_proto_kprobe_multi = {
+@@ -1055,7 +1055,7 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_kprobe_multi = {
+ 
+ BPF_CALL_1(bpf_get_attach_cookie_kprobe_multi, struct pt_regs *, regs)
+ {
+-	return bpf_kprobe_multi_cookie(current->bpf_ctx, instruction_pointer(regs));
++	return bpf_kprobe_multi_cookie(current->bpf_ctx);
+ }
+ 
+ static const struct bpf_func_proto bpf_get_attach_cookie_proto_kmulti = {
+@@ -2220,15 +2220,16 @@ struct bpf_kprobe_multi_link {
+ 	struct bpf_link link;
+ 	struct fprobe fp;
+ 	unsigned long *addrs;
+-	/*
+-	 * The run_ctx here is used to get struct bpf_kprobe_multi_link in
+-	 * get_attach_cookie helper, so it can't be used to store data.
+-	 */
+-	struct bpf_run_ctx run_ctx;
+ 	u64 *cookies;
+ 	u32 cnt;
+ };
+ 
++struct bpf_kprobe_multi_run_ctx {
++	struct bpf_run_ctx run_ctx;
++	struct bpf_kprobe_multi_link *link;
++	unsigned long entry_ip;
++};
 +
-+#include <linux/types.h>
-+#include <asm/barrier.h>
-+#include <asm/cmpxchg.h>
-+#include <asm/compiler.h>
-+
-+#if _LOONGARCH_SZLONG == 32
-+#define __LL		"ll.w	"
-+#define __SC		"sc.w	"
-+#define __AMADD		"amadd.w	"
-+#define __AMAND_SYNC	"amand_db.w	"
-+#define __AMOR_SYNC	"amor_db.w	"
-+#define __AMXOR_SYNC	"amxor_db.w	"
-+#elif _LOONGARCH_SZLONG == 64
-+#define __LL		"ll.d	"
-+#define __SC		"sc.d	"
-+#define __AMADD		"amadd.d	"
-+#define __AMAND_SYNC	"amand_db.d	"
-+#define __AMOR_SYNC	"amor_db.d	"
-+#define __AMXOR_SYNC	"amxor_db.d	"
-+#endif
-+
-+#define ATOMIC_INIT(i)	  { (i) }
-+
-+/*
-+ * arch_atomic_read - read atomic variable
-+ * @v: pointer of type atomic_t
-+ *
-+ * Atomically reads the value of @v.
-+ */
-+#define arch_atomic_read(v)	READ_ONCE((v)->counter)
-+
-+/*
-+ * arch_atomic_set - set atomic variable
-+ * @v: pointer of type atomic_t
-+ * @i: required value
-+ *
-+ * Atomically sets the value of @v to @i.
-+ */
-+#define arch_atomic_set(v, i)	WRITE_ONCE((v)->counter, (i))
-+
-+#define ATOMIC_OP(op, I, asm_op)					\
-+static inline void arch_atomic_##op(int i, atomic_t *v)			\
-+{									\
-+	__asm__ __volatile__(						\
-+	"am"#asm_op"_db.w" " $zero, %1, %0	\n"			\
-+	: "+ZB" (v->counter)						\
-+	: "r" (I)							\
-+	: "memory");							\
-+}
-+
-+#define ATOMIC_OP_RETURN(op, I, asm_op, c_op)				\
-+static inline int arch_atomic_##op##_return_relaxed(int i, atomic_t *v)	\
-+{									\
-+	int result;							\
-+									\
-+	__asm__ __volatile__(						\
-+	"am"#asm_op"_db.w" " %1, %2, %0		\n"			\
-+	: "+ZB" (v->counter), "=&r" (result)				\
-+	: "r" (I)							\
-+	: "memory");							\
-+									\
-+	return result c_op I;						\
-+}
-+
-+#define ATOMIC_FETCH_OP(op, I, asm_op)					\
-+static inline int arch_atomic_fetch_##op##_relaxed(int i, atomic_t *v)	\
-+{									\
-+	int result;							\
-+									\
-+	__asm__ __volatile__(						\
-+	"am"#asm_op"_db.w" " %1, %2, %0		\n"			\
-+	: "+ZB" (v->counter), "=&r" (result)				\
-+	: "r" (I)							\
-+	: "memory");							\
-+									\
-+	return result;							\
-+}
-+
-+#define ATOMIC_OPS(op, I, asm_op, c_op)					\
-+	ATOMIC_OP(op, I, asm_op)					\
-+	ATOMIC_OP_RETURN(op, I, asm_op, c_op)				\
-+	ATOMIC_FETCH_OP(op, I, asm_op)
-+
-+ATOMIC_OPS(add, i, add, +)
-+ATOMIC_OPS(sub, -i, add, +)
-+
-+#define arch_atomic_add_return_relaxed	arch_atomic_add_return_relaxed
-+#define arch_atomic_sub_return_relaxed	arch_atomic_sub_return_relaxed
-+#define arch_atomic_fetch_add_relaxed	arch_atomic_fetch_add_relaxed
-+#define arch_atomic_fetch_sub_relaxed	arch_atomic_fetch_sub_relaxed
-+
-+#undef ATOMIC_OPS
-+
-+#define ATOMIC_OPS(op, I, asm_op)					\
-+	ATOMIC_OP(op, I, asm_op)					\
-+	ATOMIC_FETCH_OP(op, I, asm_op)
-+
-+ATOMIC_OPS(and, i, and)
-+ATOMIC_OPS(or, i, or)
-+ATOMIC_OPS(xor, i, xor)
-+
-+#define arch_atomic_fetch_and_relaxed	arch_atomic_fetch_and_relaxed
-+#define arch_atomic_fetch_or_relaxed	arch_atomic_fetch_or_relaxed
-+#define arch_atomic_fetch_xor_relaxed	arch_atomic_fetch_xor_relaxed
-+
-+#undef ATOMIC_OPS
-+#undef ATOMIC_FETCH_OP
-+#undef ATOMIC_OP_RETURN
-+#undef ATOMIC_OP
-+
-+static inline int arch_atomic_fetch_add_unless(atomic_t *v, int a, int u)
+ static void bpf_kprobe_multi_link_release(struct bpf_link *link)
+ {
+ 	struct bpf_kprobe_multi_link *kmulti_link;
+@@ -2282,18 +2283,21 @@ static int bpf_kprobe_multi_cookie_cmp(const void *a, const void *b, const void
+ 	return __bpf_kprobe_multi_cookie_cmp(a, b);
+ }
+ 
+-static u64 bpf_kprobe_multi_cookie(struct bpf_run_ctx *ctx, u64 ip)
++static u64 bpf_kprobe_multi_cookie(struct bpf_run_ctx *ctx)
+ {
++	struct bpf_kprobe_multi_run_ctx *run_ctx;
+ 	struct bpf_kprobe_multi_link *link;
++	u64 *cookie, entry_ip;
+ 	unsigned long *addr;
+-	u64 *cookie;
+ 
+ 	if (WARN_ON_ONCE(!ctx))
+ 		return 0;
+-	link = container_of(ctx, struct bpf_kprobe_multi_link, run_ctx);
++	run_ctx = container_of(current->bpf_ctx, struct bpf_kprobe_multi_run_ctx, run_ctx);
++	link = run_ctx->link;
++	entry_ip = run_ctx->entry_ip;
+ 	if (!link->cookies)
+ 		return 0;
+-	addr = bsearch(&ip, link->addrs, link->cnt, sizeof(ip),
++	addr = bsearch(&entry_ip, link->addrs, link->cnt, sizeof(entry_ip),
+ 		       __bpf_kprobe_multi_cookie_cmp);
+ 	if (!addr)
+ 		return 0;
+@@ -2301,10 +2305,22 @@ static u64 bpf_kprobe_multi_cookie(struct bpf_run_ctx *ctx, u64 ip)
+ 	return *cookie;
+ }
+ 
++static u64 bpf_kprobe_multi_entry_ip(struct bpf_run_ctx *ctx)
 +{
-+       int prev, rc;
++	struct bpf_kprobe_multi_run_ctx *run_ctx;
 +
-+	__asm__ __volatile__ (
-+		"0:	ll.w	%[p],  %[c]\n"
-+		"	beq	%[p],  %[u], 1f\n"
-+		"	add.w	%[rc], %[p], %[a]\n"
-+		"	sc.w	%[rc], %[c]\n"
-+		"	beqz	%[rc], 0b\n"
-+		"	b	2f\n"
-+		"1:\n"
-+		__WEAK_LLSC_MB
-+		"2:\n"
-+		: [p]"=&r" (prev), [rc]"=&r" (rc),
-+		  [c]"=ZB" (v->counter)
-+		: [a]"r" (a), [u]"r" (u)
-+		: "memory");
-+
-+	return prev;
++	run_ctx = container_of(current->bpf_ctx, struct bpf_kprobe_multi_run_ctx, run_ctx);
++	return run_ctx->entry_ip;
 +}
-+#define arch_atomic_fetch_add_unless arch_atomic_fetch_add_unless
 +
-+/*
-+ * arch_atomic_sub_if_positive - conditionally subtract integer from atomic variable
-+ * @i: integer value to subtract
-+ * @v: pointer of type atomic_t
-+ *
-+ * Atomically test @v and subtract @i if @v is greater or equal than @i.
-+ * The function returns the old value of @v minus @i.
-+ */
-+static inline int arch_atomic_sub_if_positive(int i, atomic_t *v)
+ static int
+ kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
+-			   struct pt_regs *regs)
++			   unsigned long entry_ip, struct pt_regs *regs)
+ {
++	struct bpf_kprobe_multi_run_ctx run_ctx = {
++		.link = link,
++		.entry_ip = entry_ip,
++	};
+ 	struct bpf_run_ctx *old_run_ctx;
+ 	int err;
+ 
+@@ -2315,7 +2331,7 @@ kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
+ 
+ 	migrate_disable();
+ 	rcu_read_lock();
+-	old_run_ctx = bpf_set_run_ctx(&link->run_ctx);
++	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+ 	err = bpf_prog_run(link->link.prog, regs);
+ 	bpf_reset_run_ctx(old_run_ctx);
+ 	rcu_read_unlock();
+@@ -2330,24 +2346,10 @@ static void
+ kprobe_multi_link_handler(struct fprobe *fp, unsigned long entry_ip,
+ 			  struct pt_regs *regs)
+ {
+-	unsigned long saved_ip = instruction_pointer(regs);
+ 	struct bpf_kprobe_multi_link *link;
+ 
+-	/*
+-	 * Because fprobe's regs->ip is set to the next instruction of
+-	 * dynamic-ftrace instruction, correct entry ip must be set, so
+-	 * that the bpf program can access entry address via regs as same
+-	 * as kprobes.
+-	 *
+-	 * Both kprobe and kretprobe see the entry ip of traced function
+-	 * as instruction pointer.
+-	 */
+-	instruction_pointer_set(regs, entry_ip);
+-
+ 	link = container_of(fp, struct bpf_kprobe_multi_link, fp);
+-	kprobe_multi_link_prog_run(link, regs);
+-
+-	instruction_pointer_set(regs, saved_ip);
++	kprobe_multi_link_prog_run(link, entry_ip, regs);
+ }
+ 
+ static int
+@@ -2514,7 +2516,11 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+ {
+ 	return -EOPNOTSUPP;
+ }
+-static u64 bpf_kprobe_multi_cookie(struct bpf_run_ctx *ctx, u64 ip)
++static u64 bpf_kprobe_multi_cookie(struct bpf_run_ctx *ctx)
 +{
-+	int result;
-+	int temp;
-+
-+	if (__builtin_constant_p(i)) {
-+		__asm__ __volatile__(
-+		"1:	ll.w	%1, %2		# atomic_sub_if_positive\n"
-+		"	addi.w	%0, %1, %3				\n"
-+		"	or	%1, %0, $zero				\n"
-+		"	blt	%0, $zero, 2f				\n"
-+		"	sc.w	%1, %2					\n"
-+		"	beq	$zero, %1, 1b				\n"
-+		"2:							\n"
-+		: "=&r" (result), "=&r" (temp),
-+		  "+" GCC_OFF_SMALL_ASM() (v->counter)
-+		: "I" (-i));
-+	} else {
-+		__asm__ __volatile__(
-+		"1:	ll.w	%1, %2		# atomic_sub_if_positive\n"
-+		"	sub.w	%0, %1, %3				\n"
-+		"	or	%1, %0, $zero				\n"
-+		"	blt	%0, $zero, 2f				\n"
-+		"	sc.w	%1, %2					\n"
-+		"	beq	$zero, %1, 1b				\n"
-+		"2:							\n"
-+		: "=&r" (result), "=&r" (temp),
-+		  "+" GCC_OFF_SMALL_ASM() (v->counter)
-+		: "r" (i));
-+	}
-+
-+	return result;
-+}
-+
-+#define arch_atomic_cmpxchg(v, o, n) (arch_cmpxchg(&((v)->counter), (o), (n)))
-+#define arch_atomic_xchg(v, new) (arch_xchg(&((v)->counter), (new)))
-+
-+/*
-+ * arch_atomic_dec_if_positive - decrement by 1 if old value positive
-+ * @v: pointer of type atomic_t
-+ */
-+#define arch_atomic_dec_if_positive(v)	arch_atomic_sub_if_positive(1, v)
-+
-+#ifdef CONFIG_64BIT
-+
-+#define ATOMIC64_INIT(i)    { (i) }
-+
-+/*
-+ * arch_atomic64_read - read atomic variable
-+ * @v: pointer of type atomic64_t
-+ *
-+ */
-+#define arch_atomic64_read(v)	READ_ONCE((v)->counter)
-+
-+/*
-+ * arch_atomic64_set - set atomic variable
-+ * @v: pointer of type atomic64_t
-+ * @i: required value
-+ */
-+#define arch_atomic64_set(v, i)	WRITE_ONCE((v)->counter, (i))
-+
-+#define ATOMIC64_OP(op, I, asm_op)					\
-+static inline void arch_atomic64_##op(long i, atomic64_t *v)		\
-+{									\
-+	__asm__ __volatile__(						\
-+	"am"#asm_op"_db.d " " $zero, %1, %0	\n"			\
-+	: "+ZB" (v->counter)						\
-+	: "r" (I)							\
-+	: "memory");							\
-+}
-+
-+#define ATOMIC64_OP_RETURN(op, I, asm_op, c_op)					\
-+static inline long arch_atomic64_##op##_return_relaxed(long i, atomic64_t *v)	\
-+{										\
-+	long result;								\
-+	__asm__ __volatile__(							\
-+	"am"#asm_op"_db.d " " %1, %2, %0		\n"			\
-+	: "+ZB" (v->counter), "=&r" (result)					\
-+	: "r" (I)								\
-+	: "memory");								\
-+										\
-+	return result c_op I;							\
-+}
-+
-+#define ATOMIC64_FETCH_OP(op, I, asm_op)					\
-+static inline long arch_atomic64_fetch_##op##_relaxed(long i, atomic64_t *v)	\
-+{										\
-+	long result;								\
-+										\
-+	__asm__ __volatile__(							\
-+	"am"#asm_op"_db.d " " %1, %2, %0		\n"			\
-+	: "+ZB" (v->counter), "=&r" (result)					\
-+	: "r" (I)								\
-+	: "memory");								\
-+										\
-+	return result;								\
-+}
-+
-+#define ATOMIC64_OPS(op, I, asm_op, c_op)				      \
-+	ATOMIC64_OP(op, I, asm_op)					      \
-+	ATOMIC64_OP_RETURN(op, I, asm_op, c_op)				      \
-+	ATOMIC64_FETCH_OP(op, I, asm_op)
-+
-+ATOMIC64_OPS(add, i, add, +)
-+ATOMIC64_OPS(sub, -i, add, +)
-+
-+#define arch_atomic64_add_return_relaxed	arch_atomic64_add_return_relaxed
-+#define arch_atomic64_sub_return_relaxed	arch_atomic64_sub_return_relaxed
-+#define arch_atomic64_fetch_add_relaxed		arch_atomic64_fetch_add_relaxed
-+#define arch_atomic64_fetch_sub_relaxed		arch_atomic64_fetch_sub_relaxed
-+
-+#undef ATOMIC64_OPS
-+
-+#define ATOMIC64_OPS(op, I, asm_op)					      \
-+	ATOMIC64_OP(op, I, asm_op)					      \
-+	ATOMIC64_FETCH_OP(op, I, asm_op)
-+
-+ATOMIC64_OPS(and, i, and)
-+ATOMIC64_OPS(or, i, or)
-+ATOMIC64_OPS(xor, i, xor)
-+
-+#define arch_atomic64_fetch_and_relaxed	arch_atomic64_fetch_and_relaxed
-+#define arch_atomic64_fetch_or_relaxed	arch_atomic64_fetch_or_relaxed
-+#define arch_atomic64_fetch_xor_relaxed	arch_atomic64_fetch_xor_relaxed
-+
-+#undef ATOMIC64_OPS
-+#undef ATOMIC64_FETCH_OP
-+#undef ATOMIC64_OP_RETURN
-+#undef ATOMIC64_OP
-+
-+static inline long arch_atomic64_fetch_add_unless(atomic64_t *v, long a, long u)
-+{
-+       long prev, rc;
-+
-+	__asm__ __volatile__ (
-+		"0:	ll.d	%[p],  %[c]\n"
-+		"	beq	%[p],  %[u], 1f\n"
-+		"	add.d	%[rc], %[p], %[a]\n"
-+		"	sc.d	%[rc], %[c]\n"
-+		"	beqz	%[rc], 0b\n"
-+		"	b	2f\n"
-+		"1:\n"
-+		__WEAK_LLSC_MB
-+		"2:\n"
-+		: [p]"=&r" (prev), [rc]"=&r" (rc),
-+		  [c] "=ZB" (v->counter)
-+		: [a]"r" (a), [u]"r" (u)
-+		: "memory");
-+
-+	return prev;
-+}
-+#define arch_atomic64_fetch_add_unless arch_atomic64_fetch_add_unless
-+
-+/*
-+ * arch_atomic64_sub_if_positive - conditionally subtract integer from atomic variable
-+ * @i: integer value to subtract
-+ * @v: pointer of type atomic64_t
-+ *
-+ * Atomically test @v and subtract @i if @v is greater or equal than @i.
-+ * The function returns the old value of @v minus @i.
-+ */
-+static inline long arch_atomic64_sub_if_positive(long i, atomic64_t *v)
-+{
-+	long result;
-+	long temp;
-+
-+	if (__builtin_constant_p(i)) {
-+		__asm__ __volatile__(
-+		"1:	ll.d	%1, %2	# atomic64_sub_if_positive	\n"
-+		"	addi.d	%0, %1, %3				\n"
-+		"	or	%1, %0, $zero				\n"
-+		"	blt	%0, $zero, 2f				\n"
-+		"	sc.d	%1, %2					\n"
-+		"	beq	%1, $zero, 1b				\n"
-+		"2:							\n"
-+		: "=&r" (result), "=&r" (temp),
-+		  "+" GCC_OFF_SMALL_ASM() (v->counter)
-+		: "I" (-i));
-+	} else {
-+		__asm__ __volatile__(
-+		"1:	ll.d	%1, %2	# atomic64_sub_if_positive	\n"
-+		"	sub.d	%0, %1, %3				\n"
-+		"	or	%1, %0, $zero				\n"
-+		"	blt	%0, $zero, 2f				\n"
-+		"	sc.d	%1, %2					\n"
-+		"	beq	%1, $zero, 1b				\n"
-+		"2:							\n"
-+		: "=&r" (result), "=&r" (temp),
-+		  "+" GCC_OFF_SMALL_ASM() (v->counter)
-+		: "r" (i));
-+	}
-+
-+	return result;
-+}
-+
-+#define arch_atomic64_cmpxchg(v, o, n) \
-+	((__typeof__((v)->counter))arch_cmpxchg(&((v)->counter), (o), (n)))
-+#define arch_atomic64_xchg(v, new) (arch_xchg(&((v)->counter), (new)))
-+
-+/*
-+ * arch_atomic64_dec_if_positive - decrement by 1 if old value positive
-+ * @v: pointer of type atomic64_t
-+ */
-+#define arch_atomic64_dec_if_positive(v)	arch_atomic64_sub_if_positive(1, v)
-+
-+#endif /* CONFIG_64BIT */
-+
-+#endif /* _ASM_ATOMIC_H */
-diff --git a/arch/loongarch/include/asm/barrier.h b/arch/loongarch/include/asm/barrier.h
-new file mode 100644
-index 000000000000..cc6c7e3f5ce6
---- /dev/null
-+++ b/arch/loongarch/include/asm/barrier.h
-@@ -0,0 +1,51 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef __ASM_BARRIER_H
-+#define __ASM_BARRIER_H
-+
-+#define __sync()	__asm__ __volatile__("dbar 0" : : : "memory")
-+
-+#define fast_wmb()	__sync()
-+#define fast_rmb()	__sync()
-+#define fast_mb()	__sync()
-+#define fast_iob()	__sync()
-+#define wbflush()	__sync()
-+
-+#define wmb()		fast_wmb()
-+#define rmb()		fast_rmb()
-+#define mb()		fast_mb()
-+#define iob()		fast_iob()
-+
-+/**
-+ * array_index_mask_nospec() - generate a ~0 mask when index < size, 0 otherwise
-+ * @index: array element index
-+ * @size: number of elements in array
-+ *
-+ * Returns:
-+ *     0 - (@index < @size)
-+ */
-+#define array_index_mask_nospec array_index_mask_nospec
-+static inline unsigned long array_index_mask_nospec(unsigned long index,
-+						    unsigned long size)
-+{
-+	unsigned long mask;
-+
-+	__asm__ __volatile__(
-+		"sltu	%0, %1, %2\n\t"
-+#if (_LOONGARCH_SZLONG == 32)
-+		"sub.w	%0, $r0, %0\n\t"
-+#elif (_LOONGARCH_SZLONG == 64)
-+		"sub.d	%0, $r0, %0\n\t"
-+#endif
-+		: "=r" (mask)
-+		: "r" (index), "r" (size)
-+		:);
-+
-+	return mask;
-+}
-+
-+#include <asm-generic/barrier.h>
-+
-+#endif /* __ASM_BARRIER_H */
-diff --git a/arch/loongarch/include/asm/bitops.h b/arch/loongarch/include/asm/bitops.h
-new file mode 100644
-index 000000000000..69e00f8d8034
---- /dev/null
-+++ b/arch/loongarch/include/asm/bitops.h
-@@ -0,0 +1,33 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_BITOPS_H
-+#define _ASM_BITOPS_H
-+
-+#include <linux/compiler.h>
-+
-+#ifndef _LINUX_BITOPS_H
-+#error only <linux/bitops.h> can be included directly
-+#endif
-+
-+#include <asm/barrier.h>
-+
-+#include <asm-generic/bitops/builtin-ffs.h>
-+#include <asm-generic/bitops/builtin-fls.h>
-+#include <asm-generic/bitops/builtin-__ffs.h>
-+#include <asm-generic/bitops/builtin-__fls.h>
-+
-+#include <asm-generic/bitops/ffz.h>
-+#include <asm-generic/bitops/fls64.h>
-+
-+#include <asm-generic/bitops/sched.h>
-+#include <asm-generic/bitops/hweight.h>
-+
-+#include <asm-generic/bitops/atomic.h>
-+#include <asm-generic/bitops/non-atomic.h>
-+#include <asm-generic/bitops/lock.h>
-+#include <asm-generic/bitops/le.h>
-+#include <asm-generic/bitops/ext2-atomic.h>
-+
-+#endif /* _ASM_BITOPS_H */
-diff --git a/arch/loongarch/include/asm/bitrev.h b/arch/loongarch/include/asm/bitrev.h
-new file mode 100644
-index 000000000000..46f275b9cdf7
---- /dev/null
-+++ b/arch/loongarch/include/asm/bitrev.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef __LOONGARCH_ASM_BITREV_H__
-+#define __LOONGARCH_ASM_BITREV_H__
-+
-+#include <linux/swab.h>
-+
-+static __always_inline __attribute_const__ u32 __arch_bitrev32(u32 x)
-+{
-+	u32 ret;
-+
-+	asm("bitrev.4b	%0, %1" : "=r"(ret) : "r"(__swab32(x)));
-+	return ret;
-+}
-+
-+static __always_inline __attribute_const__ u16 __arch_bitrev16(u16 x)
-+{
-+	u16 ret;
-+
-+	asm("bitrev.4b	%0, %1" : "=r"(ret) : "r"(__swab16(x)));
-+	return ret;
-+}
-+
-+static __always_inline __attribute_const__ u8 __arch_bitrev8(u8 x)
-+{
-+	u8 ret;
-+
-+	asm("bitrev.4b	%0, %1" : "=r"(ret) : "r"(x));
-+	return ret;
-+}
-+
-+#endif /* __LOONGARCH_ASM_BITREV_H__ */
-diff --git a/arch/loongarch/include/asm/cmpxchg.h b/arch/loongarch/include/asm/cmpxchg.h
-new file mode 100644
-index 000000000000..69c3e2b7827d
---- /dev/null
-+++ b/arch/loongarch/include/asm/cmpxchg.h
-@@ -0,0 +1,135 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef __ASM_CMPXCHG_H
-+#define __ASM_CMPXCHG_H
-+
-+#include <linux/build_bug.h>
-+
-+#define __xchg_asm(amswap_db, m, val)		\
-+({						\
-+		__typeof(val) __ret;		\
-+						\
-+		__asm__ __volatile__ (		\
-+		" "amswap_db" %1, %z2, %0 \n"	\
-+		: "+ZB" (*m), "=&r" (__ret)	\
-+		: "Jr" (val)			\
-+		: "memory");			\
-+						\
-+		__ret;				\
-+})
-+
-+extern unsigned long __xchg_small(volatile void *ptr, unsigned long x,
-+				  unsigned int size);
-+
-+static inline unsigned long __xchg(volatile void *ptr, unsigned long x,
-+				   int size)
-+{
-+	switch (size) {
-+	case 1:
-+	case 2:
-+		return __xchg_small(ptr, x, size);
-+
-+	case 4:
-+		return __xchg_asm("amswap_db.w", (volatile u32 *)ptr, (u32)x);
-+
-+	case 8:
-+		return __xchg_asm("amswap_db.d", (volatile u64 *)ptr, (u64)x);
-+
-+	default:
-+		BUILD_BUG();
-+	}
-+
 +	return 0;
 +}
-+
-+#define arch_xchg(ptr, x)						\
-+({									\
-+	__typeof__(*(ptr)) __res;					\
-+									\
-+	__res = (__typeof__(*(ptr)))					\
-+		__xchg((ptr), (unsigned long)(x), sizeof(*(ptr)));	\
-+									\
-+	__res;								\
-+})
-+
-+#define __cmpxchg_asm(ld, st, m, old, new)				\
-+({									\
-+	__typeof(old) __ret;						\
-+									\
-+	__asm__ __volatile__(						\
-+	"1:	" ld "	%0, %2		# __cmpxchg_asm \n"		\
-+	"	bne	%0, %z3, 2f			\n"		\
-+	"	or	$t0, %z4, $zero			\n"		\
-+	"	" st "	$t0, %1				\n"		\
-+	"	beq	$zero, $t0, 1b			\n"		\
-+	"2:						\n"		\
-+	: "=&r" (__ret), "=ZB"(*m)					\
-+	: "ZB"(*m), "Jr" (old), "Jr" (new)				\
-+	: "t0", "memory");						\
-+									\
-+	__ret;								\
-+})
-+
-+extern unsigned long __cmpxchg_small(volatile void *ptr, unsigned long old,
-+				     unsigned long new, unsigned int size);
-+
-+static inline unsigned long __cmpxchg(volatile void *ptr, unsigned long old,
-+				      unsigned long new, unsigned int size)
-+{
-+	switch (size) {
-+	case 1:
-+	case 2:
-+		return __cmpxchg_small(ptr, old, new, size);
-+
-+	case 4:
-+		return __cmpxchg_asm("ll.w", "sc.w", (volatile u32 *)ptr,
-+				     (u32)old, new);
-+
-+	case 8:
-+		return __cmpxchg_asm("ll.d", "sc.d", (volatile u64 *)ptr,
-+				     (u64)old, new);
-+
-+	default:
-+		BUILD_BUG();
-+	}
-+
-+	return 0;
-+}
-+
-+#define arch_cmpxchg_local(ptr, old, new)				\
-+	((__typeof__(*(ptr)))						\
-+		__cmpxchg((ptr),					\
-+			  (unsigned long)(__typeof__(*(ptr)))(old),	\
-+			  (unsigned long)(__typeof__(*(ptr)))(new),	\
-+			  sizeof(*(ptr))))
-+
-+#define arch_cmpxchg(ptr, old, new)					\
-+({									\
-+	__typeof__(*(ptr)) __res;					\
-+									\
-+	__res = arch_cmpxchg_local((ptr), (old), (new));		\
-+									\
-+	__res;								\
-+})
-+
-+#ifdef CONFIG_64BIT
-+#define arch_cmpxchg64_local(ptr, o, n)					\
-+  ({									\
-+	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
-+	arch_cmpxchg_local((ptr), (o), (n));				\
-+  })
-+
-+#define arch_cmpxchg64(ptr, o, n)					\
-+  ({									\
-+	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
-+	arch_cmpxchg((ptr), (o), (n));					\
-+  })
-+#else
-+#include <asm-generic/cmpxchg-local.h>
-+#define arch_cmpxchg64_local(ptr, o, n) __generic_cmpxchg64_local((ptr), (o), (n))
-+#define arch_cmpxchg64(ptr, o, n) arch_cmpxchg64_local((ptr), (o), (n))
-+#endif
-+
-+#endif /* __ASM_CMPXCHG_H */
-diff --git a/arch/loongarch/include/asm/local.h b/arch/loongarch/include/asm/local.h
-new file mode 100644
-index 000000000000..2052a2267337
---- /dev/null
-+++ b/arch/loongarch/include/asm/local.h
-@@ -0,0 +1,138 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ARCH_LOONGARCH_LOCAL_H
-+#define _ARCH_LOONGARCH_LOCAL_H
-+
-+#include <linux/percpu.h>
-+#include <linux/bitops.h>
-+#include <linux/atomic.h>
-+#include <asm/cmpxchg.h>
-+#include <asm/compiler.h>
-+
-+typedef struct {
-+	atomic_long_t a;
-+} local_t;
-+
-+#define LOCAL_INIT(i)	{ ATOMIC_LONG_INIT(i) }
-+
-+#define local_read(l)	atomic_long_read(&(l)->a)
-+#define local_set(l, i) atomic_long_set(&(l)->a, (i))
-+
-+#define local_add(i, l) atomic_long_add((i), (&(l)->a))
-+#define local_sub(i, l) atomic_long_sub((i), (&(l)->a))
-+#define local_inc(l)	atomic_long_inc(&(l)->a)
-+#define local_dec(l)	atomic_long_dec(&(l)->a)
-+
-+/*
-+ * Same as above, but return the result value
-+ */
-+static inline long local_add_return(long i, local_t *l)
-+{
-+	unsigned long result;
-+
-+	__asm__ __volatile__(
-+	"   " __AMADD " %1, %2, %0      \n"
-+	: "+ZB" (l->a.counter), "=&r" (result)
-+	: "r" (i)
-+	: "memory");
-+	result = result + i;
-+
-+	return result;
-+}
-+
-+static inline long local_sub_return(long i, local_t *l)
-+{
-+	unsigned long result;
-+
-+	__asm__ __volatile__(
-+	"   " __AMADD "%1, %2, %0       \n"
-+	: "+ZB" (l->a.counter), "=&r" (result)
-+	: "r" (-i)
-+	: "memory");
-+
-+	result = result - i;
-+
-+	return result;
-+}
-+
-+#define local_cmpxchg(l, o, n) \
-+	((long)cmpxchg_local(&((l)->a.counter), (o), (n)))
-+#define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
-+
-+/**
-+ * local_add_unless - add unless the number is a given value
-+ * @l: pointer of type local_t
-+ * @a: the amount to add to l...
-+ * @u: ...unless l is equal to u.
-+ *
-+ * Atomically adds @a to @l, so long as it was not @u.
-+ * Returns non-zero if @l was not @u, and zero otherwise.
-+ */
-+#define local_add_unless(l, a, u)				\
-+({								\
-+	long c, old;						\
-+	c = local_read(l);					\
-+	while (c != (u) && (old = local_cmpxchg((l), c, c + (a))) != c) \
-+		c = old;					\
-+	c != (u);						\
-+})
-+#define local_inc_not_zero(l) local_add_unless((l), 1, 0)
-+
-+#define local_dec_return(l) local_sub_return(1, (l))
-+#define local_inc_return(l) local_add_return(1, (l))
-+
-+/*
-+ * local_sub_and_test - subtract value from variable and test result
-+ * @i: integer value to subtract
-+ * @l: pointer of type local_t
-+ *
-+ * Atomically subtracts @i from @l and returns
-+ * true if the result is zero, or false for all
-+ * other cases.
-+ */
-+#define local_sub_and_test(i, l) (local_sub_return((i), (l)) == 0)
-+
-+/*
-+ * local_inc_and_test - increment and test
-+ * @l: pointer of type local_t
-+ *
-+ * Atomically increments @l by 1
-+ * and returns true if the result is zero, or false for all
-+ * other cases.
-+ */
-+#define local_inc_and_test(l) (local_inc_return(l) == 0)
-+
-+/*
-+ * local_dec_and_test - decrement by 1 and test
-+ * @l: pointer of type local_t
-+ *
-+ * Atomically decrements @l by 1 and
-+ * returns true if the result is 0, or false for all other
-+ * cases.
-+ */
-+#define local_dec_and_test(l) (local_sub_return(1, (l)) == 0)
-+
-+/*
-+ * local_add_negative - add and test if negative
-+ * @l: pointer of type local_t
-+ * @i: integer value to add
-+ *
-+ * Atomically adds @i to @l and returns true
-+ * if the result is negative, or false when
-+ * result is greater than or equal to zero.
-+ */
-+#define local_add_negative(i, l) (local_add_return(i, (l)) < 0)
-+
-+/* Use these for per-cpu local_t variables: on some archs they are
-+ * much more efficient than these naive implementations.  Note they take
-+ * a variable, not an address.
-+ */
-+
-+#define __local_inc(l)		((l)->a.counter++)
-+#define __local_dec(l)		((l)->a.counter++)
-+#define __local_add(i, l)	((l)->a.counter += (i))
-+#define __local_sub(i, l)	((l)->a.counter -= (i))
-+
-+#endif /* _ARCH_LOONGARCH_LOCAL_H */
-diff --git a/arch/loongarch/include/asm/percpu.h b/arch/loongarch/include/asm/percpu.h
-new file mode 100644
-index 000000000000..7d5b22ebd834
---- /dev/null
-+++ b/arch/loongarch/include/asm/percpu.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef __ASM_PERCPU_H
-+#define __ASM_PERCPU_H
-+
-+/* Use r21 for fast access */
-+register unsigned long __my_cpu_offset __asm__("$r21");
-+
-+static inline void set_my_cpu_offset(unsigned long off)
-+{
-+	__my_cpu_offset = off;
-+	csr_writeq(off, PERCPU_BASE_KS);
-+}
-+#define __my_cpu_offset __my_cpu_offset
-+
-+#include <asm-generic/percpu.h>
-+
-+#endif /* __ASM_PERCPU_H */
-diff --git a/arch/loongarch/include/asm/spinlock.h b/arch/loongarch/include/asm/spinlock.h
-new file mode 100644
-index 000000000000..7cb3476999be
---- /dev/null
-+++ b/arch/loongarch/include/asm/spinlock.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_SPINLOCK_H
-+#define _ASM_SPINLOCK_H
-+
-+#include <asm/processor.h>
-+#include <asm/qspinlock.h>
-+#include <asm/qrwlock.h>
-+
-+#endif /* _ASM_SPINLOCK_H */
-diff --git a/arch/loongarch/include/asm/spinlock_types.h b/arch/loongarch/include/asm/spinlock_types.h
-new file mode 100644
-index 000000000000..7458d036c161
---- /dev/null
-+++ b/arch/loongarch/include/asm/spinlock_types.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_SPINLOCK_TYPES_H
-+#define _ASM_SPINLOCK_TYPES_H
-+
-+#include <asm-generic/qspinlock_types.h>
-+#include <asm-generic/qrwlock_types.h>
-+
-+#endif
--- 
-2.27.0
-
++static u64 bpf_kprobe_multi_entry_ip(struct bpf_run_ctx *ctx)
+ {
+ 	return 0;
+ }

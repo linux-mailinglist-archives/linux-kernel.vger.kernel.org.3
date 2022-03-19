@@ -2,141 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF61D4DE76E
+	by mail.lfdr.de (Postfix) with ESMTP id 2539C4DE76D
 	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 11:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242679AbiCSKXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 06:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
+        id S242691AbiCSKXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 06:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234305AbiCSKXv (ORCPT
+        with ESMTP id S242685AbiCSKXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 06:23:51 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BBF7B123;
-        Sat, 19 Mar 2022 03:22:31 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id mm17-20020a17090b359100b001c6da62a559so664160pjb.3;
-        Sat, 19 Mar 2022 03:22:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=GLhF8DmIYKowj6xMrjeMsZUzUdhEYASC8MN5wXTnkRk=;
-        b=DvbOItb4RfSJTcx97gtTP9TPRSGCaL6Ne2ZcFfkz9NNIYWzYu2uX0OxgIWT6ltxevU
-         h3ztebFOKts09nfSqH8N7pODAC5OuQD+ORDjRphBU8t5y6tOQMTbzvx9qdE2sOpScK+M
-         SH9xOsMNpITCwV3ClrT46Qegb7PU6G5O77PZVC1zBwHxR+ODiFGSAA+Dov2UhPdiyv/L
-         ExehesMcqsCcZEWfBy/7aepcNsO/A5SMKdIIwANLal90AJwevdOzegxsEIFG2v6Qt40m
-         1z8YJ2FicTzB9c55k/7IDKUr3034H3HVIu/NI/01XwvErawmSky4HEHbcNDTqrIBppTe
-         LRdA==
+        Sat, 19 Mar 2022 06:23:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22ECF7B123
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 03:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647685353;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eYzCtz1CNfRKahEjWPEJ8iTJHu5ovNDwPIFtJOiY5m4=;
+        b=Y+TNcU86pPl1RyVzSzYJ5YGhbPOowTHIzjGWZ78D3wQ9LqRxvgUtvCcK0VoicFLqUhGH2B
+        4Koekf6nki1Kni/TEvLcaimcDd423YLgUe9j6m/e3WrO+pRthaeYi7CeGngeNzH28HiFZk
+        f7M5JDUHmqBGKlxF0/coxSiVyEwLWfQ=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-440-cn87F-O3OvmjSGXDJWUysg-1; Sat, 19 Mar 2022 06:22:31 -0400
+X-MC-Unique: cn87F-O3OvmjSGXDJWUysg-1
+Received: by mail-wm1-f70.google.com with SMTP id i6-20020a1c5406000000b0038c97ed0db5so290731wmb.7
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 03:22:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=GLhF8DmIYKowj6xMrjeMsZUzUdhEYASC8MN5wXTnkRk=;
-        b=V0HVTgmcwQUA74LEmyMN8NRlBNYQgtx5Ck2IBFemlnortJ9WpfvbC6JOm0AbJbbOf9
-         rn0Mxg8DggPwpryzDMactX7vEGU9oFfEyaedVSbaoBRoJOkEywYE08WxMLeLxkgdyJs0
-         Wc2kLRqTFVhHukX9hnxXjq9F73WdIsCcTmXJn6pKEFEpLld5igyVIFtodC9PpkEhPCf7
-         4utChNTDsYoDINl3Czu8c0iMnrAGW2VXVRwO632zanM0UrMb/eXzgey5sFVa0vAhBckf
-         Mj7ziepZirCFxfaPnXrg3WzrOuIXEf1OlYsnSGGr+mfMJ3uqvgsVQnZgs8PvE2lmEuol
-         q3zQ==
-X-Gm-Message-State: AOAM530yCx+1IAeMRHPCj8OlLT+Lw7XQnXfl7dGDjInSrOAmv8XohsRJ
-        Vx8Gmeu+xnuTps2VtXZSCHg=
-X-Google-Smtp-Source: ABdhPJxItdBeuZ986BhxfqVGuHimajxvXr1aVKDHILFU77ZEcHVA9vH1hpJMLIRPP+o1qnAab8Gfrw==
-X-Received: by 2002:a17:90b:228a:b0:1bc:7ca4:efaf with SMTP id kx10-20020a17090b228a00b001bc7ca4efafmr15751133pjb.245.1647685350822;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=eYzCtz1CNfRKahEjWPEJ8iTJHu5ovNDwPIFtJOiY5m4=;
+        b=CND5YNla8NM3M8D6XxDGpRAHCKQX2eSUmSQw4Bxn0CU0eOjFzqtUJJFMJoD+Rk72CH
+         MEQrXEHPMYAu4K1yXIzEJB5dFol6cXLdii2vtdGpQ09K7xSqxqdCM9lR39YoIopPPdZP
+         AnFtqzWrEWfn014pGxMjGVTyj4D6zAB0MrA0+RVyGksSzwC1FfteRKjfHR2Q/zZg9pGX
+         gPzawnMJW0JPuMbdkAoJv+or1KXHoOPZ8LAa2GcKQJd0bDJ8dy19/aHxoGhtvxiXPpX3
+         5cvh57WsCZfYRSvbqbMOtnt0R08lYPlvK1JIe4PvlqMEC9YjdnBOpjfvEBP4+4J6Qvsb
+         BYyg==
+X-Gm-Message-State: AOAM533If9cmRhSgpPzih66cdqPrH1z057SaWPRyF+lcZd8kZeVFmIEI
+        ZLC2f6M74nsSHWLpAGGzdaurO7Sxla+bxGU30IJlcPbmli+3wvQF0g4cali8PbSw9qgCEuIxbpf
+        YKdMskjPfX65L1gIGWuAyFA1+
+X-Received: by 2002:adf:fd02:0:b0:203:f2aa:37f2 with SMTP id e2-20020adffd02000000b00203f2aa37f2mr7569839wrr.396.1647685350472;
         Sat, 19 Mar 2022 03:22:30 -0700 (PDT)
-Received: from localhost.localdomain ([183.157.215.81])
-        by smtp.googlemail.com with ESMTPSA id b25-20020a637159000000b00381fda49d15sm7277646pgn.39.2022.03.19.03.22.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+X-Google-Smtp-Source: ABdhPJxfG/V414ObjvO0GfXKiNYm84GOq5X2QUhUrz5EcUsvg2AQ/ehs8iwkMJnK9/RAUcodn+cBtg==
+X-Received: by 2002:adf:fd02:0:b0:203:f2aa:37f2 with SMTP id e2-20020adffd02000000b00203f2aa37f2mr7569816wrr.396.1647685350211;
         Sat, 19 Mar 2022 03:22:30 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH] uvc: fix missing check to determine if element is found in list
-Date:   Sat, 19 Mar 2022 18:22:22 +0800
-Message-Id: <20220319102222.3079-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from ?IPV6:2003:d8:2f24:9200:124e:f0bf:6f8c:cbd8? (p200300d82f249200124ef0bf6f8ccbd8.dip0.t-ipconnect.de. [2003:d8:2f24:9200:124e:f0bf:6f8c:cbd8])
+        by smtp.gmail.com with ESMTPSA id v20-20020a7bcb54000000b0037fa63db8aasm12327769wmj.5.2022.03.19.03.22.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Mar 2022 03:22:29 -0700 (PDT)
+Message-ID: <0178ec26-f957-159d-a163-a98557de7156@redhat.com>
+Date:   Sat, 19 Mar 2022 11:22:28 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 15/15] mm/gup: sanity-check with CONFIG_DEBUG_VM that
+ anonymous pages are exclusive when (un)pinning
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220315104741.63071-1-david@redhat.com>
+ <20220315104741.63071-16-david@redhat.com>
+ <20220318233527.GB11336@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220318233527.GB11336@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The list iterator will point to a bogus position containing HEAD if
-the list is empty or the element is not found in list. This case
-should be checked before any use of the iterator, otherwise it will
-lead to a invalid memory access. The missing check here is before
-"pin = iterm->id;", just add check here to fix the security bug.
+On 19.03.22 00:35, Jason Gunthorpe wrote:
+> On Tue, Mar 15, 2022 at 11:47:41AM +0100, David Hildenbrand wrote:
+>> Let's verify when (un)pinning anonymous pages that we always deal with
+>> exclusive anonymous pages, which guarantees that we'll have a reliable
+>> PIN, meaning that we cannot end up with the GUP pin being inconsistent
+>> with he pages mapped into the page tables due to a COW triggered
+>> by a write fault.
+>>
+>> When pinning pages, after conditionally triggering GUP unsharing of
+>> possibly shared anonymous pages, we should always only see exclusive
+>> anonymous pages. Note that anonymous pages that are mapped writable
+>> must be marked exclusive, otherwise we'd have a BUG.
+>>
+>> When pinning during ordinary GUP, simply add a check after our
+>> conditional GUP-triggered unsharing checks. As we know exactly how the
+>> page is mapped, we know exactly in which page we have to check for
+>> PageAnonExclusive().
+>>
+>> When pinning via GUP-fast we have to be careful, because we can race with
+>> fork(): verify only after we made sure via the seqcount that we didn't
+>> race with concurrent fork() that we didn't end up pinning a possibly
+>> shared anonymous page.
+>>
+>> Similarly, when unpinning, verify that the pages are still marked as
+>> exclusive: otherwise something turned the pages possibly shared, which
+>> can result in random memory corruptions, which we really want to catch.
+>>
+>> With only the pinned pages at hand and not the actual page table entries
+>> we have to be a bit careful: hugetlb pages are always mapped via a
+>> single logical page table entry referencing the head page and
+>> PG_anon_exclusive of the head page applies. Anon THP are a bit more
+>> complicated, because we might have obtained the page reference either via
+>> a PMD or a PTE -- depending on the mapping type we either have to check
+>> PageAnonExclusive of the head page (PMD-mapped THP) or the tail page
+>> (PTE-mapped THP) applies: as we don't know and to make our life easier,
+>> check that either is set.
+>>
+>> Take care to not verify in case we're unpinning during GUP-fast because
+>> we detected concurrent fork(): we might stumble over an anonymous page
+>> that is now shared.
+>>
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>>  mm/gup.c         | 58 +++++++++++++++++++++++++++++++++++++++++++++++-
+>>  mm/huge_memory.c |  3 +++
+>>  mm/hugetlb.c     |  3 +++
+>>  3 files changed, 63 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/mm/gup.c b/mm/gup.c
+>> index 92dcd92f9d67..72e39b77da10 100644
+>> +++ b/mm/gup.c
+>> @@ -45,6 +45,38 @@ static void hpage_pincount_sub(struct page *page, int refs)
+>>  	atomic_sub(refs, compound_pincount_ptr(page));
+>>  }
+>>  
+>> +static inline void sanity_check_pinned_pages(struct page **pages,
+>> +					     unsigned long npages)
+>> +{
+>> +#ifdef CONFIG_DEBUG_VM
+> 
+> Perhaps:
+> 
+> if (!IS_ENABLED(CONFIG_DEBUG_VM))
+>    return;
+> 
+> So this gets compilation coverage
 
-In addition, the list iterator value will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the iterator
-value will be NULL if the element is not found in list, considering
-the (mis)use here: "if (iterm == NULL".
+Makes sense, that code should compile just fine without CONFIG_DEBUG_VM.
+Thanks!
 
-Use a new value 'it' as the list iterator, while use the old value
-'iterm' as a dedicated pointer to point to the found element, which
-1. can fix this bug, due to 'iterm' is NULL only if it's not found.
-2. do not need to change all the uses of 'iterm' after the loop.
-3. can also limit the scope of the list iterator 'it' *only inside*
-   the traversal loop by simply declaring 'it' inside the loop in the
-   future, as usage of the iterator outside of the list_for_each_entry
-   is considered harmful. https://lkml.org/lkml/2022/2/17/1032
-
-Fixes: d5e90b7a6cd1c ("[media] uvcvideo: Move to video_ioctl2")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- drivers/media/usb/uvc/uvc_v4l2.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 711556d13d03..e7cdc01ad277 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -871,6 +871,7 @@ static int uvc_ioctl_enum_input(struct file *file, void *fh,
- 	struct uvc_video_chain *chain = handle->chain;
- 	const struct uvc_entity *selector = chain->selector;
- 	struct uvc_entity *iterm = NULL;
-+	struct uvc_entity *it;
- 	u32 index = input->index;
- 	int pin = 0;
- 
-@@ -878,22 +879,27 @@ static int uvc_ioctl_enum_input(struct file *file, void *fh,
- 	    (chain->dev->quirks & UVC_QUIRK_IGNORE_SELECTOR_UNIT)) {
- 		if (index != 0)
- 			return -EINVAL;
--		list_for_each_entry(iterm, &chain->entities, chain) {
--			if (UVC_ENTITY_IS_ITERM(iterm))
-+		list_for_each_entry(it, &chain->entities, chain) {
-+			if (UVC_ENTITY_IS_ITERM(it)) {
-+				iterm = it;
- 				break;
-+			}
- 		}
--		pin = iterm->id;
-+		if (iterm)
-+			pin = iterm->id;
- 	} else if (index < selector->bNrInPins) {
- 		pin = selector->baSourceID[index];
--		list_for_each_entry(iterm, &chain->entities, chain) {
--			if (!UVC_ENTITY_IS_ITERM(iterm))
-+		list_for_each_entry(it, &chain->entities, chain) {
-+			if (!UVC_ENTITY_IS_ITERM(it))
- 				continue;
--			if (iterm->id == pin)
-+			if (it->id == pin) {
-+				iterm = it;
- 				break;
-+			}
- 		}
- 	}
- 
--	if (iterm == NULL || iterm->id != pin)
-+	if (iterm == NULL)
- 		return -EINVAL;
- 
- 	memset(input, 0, sizeof(*input));
 -- 
-2.17.1
+Thanks,
+
+David / dhildenb
 

@@ -2,97 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F45C4DE776
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 11:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D029D4DE77A
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 11:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242705AbiCSKgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 06:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
+        id S242709AbiCSKoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 06:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233854AbiCSKgN (ORCPT
+        with ESMTP id S233854AbiCSKn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 06:36:13 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E011DDFF9;
-        Sat, 19 Mar 2022 03:34:52 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id j15so7207380eje.9;
-        Sat, 19 Mar 2022 03:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1yzSwQ+aK8F7alc5D4LFhyK3CHYBa0cHOSVs8XZnnUk=;
-        b=HJPTyXg12nBvM05kaPUiHBJxd9M28E/YPUGYW8bGXBAdZYGUGQR48nT3LhiKMghPs3
-         NTU2FOQvh1C8X87UZOIgR/dm24RoyTdFCGdD5ZVbRYEDw49kopdUG+Sb1lTj3RlZhe95
-         eFl7xw46AHKWsT7ObV6AEn97nNdBDQoW1ZbvCpa/eqzMZm+Ju++8g4Ta/l6E172uzmGV
-         c/tluTo+vKkEXv8RaJSL3quryrzDtbJz+lXWGIrR3BBYoi6C7VFDf5kIIm82a23Z8FxJ
-         uJSwhhkRmnP1dbDXqDuTblLRbxaLkVgs4nS66dWd03lApNN/0afcqkWIc7ck+zaJPkMY
-         +M6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1yzSwQ+aK8F7alc5D4LFhyK3CHYBa0cHOSVs8XZnnUk=;
-        b=NAFJncL3jnV8gK96RCP+Wv3ukla8sNSWXGe23jNSR/nTuG/WpbcIVG+uCbGwWKSmLe
-         GrlHkLd6CQLrogwmVeDytTIxciA5ftlKElNtEUQBZhryAJulYxb1Ii3kIskTI7Z+pCQy
-         c2JgtMUGY4QDqwVtU/afXz/jRusPmIM7MlNu/JSFdf8HROIwfJbt13gr0jWkZC+AAp9z
-         5suxRuZCK3eWhSJ3kysciopX9KUrR3fapTgvqhyl90jyfng+VOy4v3XXeNBzfIq/9MBq
-         /HxrQUWCjLuJVKQsHFLRmvwSZrjq7euFueUJJXvA7hc+ULkIARVNSAL77nJZx/9roxgh
-         6Zxg==
-X-Gm-Message-State: AOAM531MvnJCUPX+znmeL/dWN1faNrsMbbq74OQ4aCvd61140J46kEWl
-        kKukCW5EmYW3QaDTDu4+Ftav28EOLuYB9ZM10/20jYc5rnY=
-X-Google-Smtp-Source: ABdhPJztrREL1ylmCH4+y++g7PpfbZG9f4sAnuOldGLAaLH1NhlBZGS+l0eyN2NCyywt6BTBG9Oa01d71jMGZvda9Mg=
-X-Received: by 2002:a17:906:f857:b0:6df:ae2d:73a0 with SMTP id
- ks23-20020a170906f85700b006dfae2d73a0mr8159457ejb.614.1647686090905; Sat, 19
- Mar 2022 03:34:50 -0700 (PDT)
+        Sat, 19 Mar 2022 06:43:59 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9065261323
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 03:42:36 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KLHTV0qwKzCqkS;
+        Sat, 19 Mar 2022 18:40:30 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Sat, 19 Mar 2022 18:42:33 +0800
+Subject: Re: [PATCH] mm/mempolicy: fix potential mpol_new leak in
+ shared_policy_replace
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     <kosaki.motohiro@jp.fujitsu.com>, <mgorman@suse.de>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220311093624.39546-1-linmiaohe@huawei.com>
+ <Yi9w7TCYbj+OLGXJ@dhcp22.suse.cz>
+ <26577566-ae1e-801c-8c64-89c2c89a487d@huawei.com>
+ <YjCwYpTbGzAj9kmg@dhcp22.suse.cz>
+ <24b2a9ef-eea0-09bd-6842-121d8436e56a@huawei.com>
+ <YjG0PsF25wpAEOY3@dhcp22.suse.cz>
+ <6ebebfd6-6356-e956-4fbc-0abaa58308ff@huawei.com>
+ <YjL5Y6ZrZ2eLnnTv@dhcp22.suse.cz>
+ <207bbd69-6678-5120-3760-e2bcd9803a14@huawei.com>
+Message-ID: <36b0ea44-39ab-bc52-1ae5-eca2cf832900@huawei.com>
+Date:   Sat, 19 Mar 2022 18:42:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20220319090142.137998-1-zhouzhouyi@gmail.com> <20220319100443.GA13956@breakpoint.cc>
-In-Reply-To: <20220319100443.GA13956@breakpoint.cc>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Sat, 19 Mar 2022 18:34:39 +0800
-Message-ID: <CAABZP2z6=4bC7qzDdPVjFB10NFioqtspXGTgw_=62o29=VFa+w@mail.gmail.com>
-Subject: Re: [PATCH] net:ipv4: send an ack when seg.ack > snd.nxt
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        David Miller <davem@davemloft.net>, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Wei Xu <xuweihf@ustc.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <207bbd69-6678-5120-3760-e2bcd9803a14@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Florian
+On 2022/3/17 17:34, Miaohe Lin wrote:
+> On 2022/3/17 17:03, Michal Hocko wrote:
+>> On Thu 17-03-22 10:05:08, Miaohe Lin wrote:
+>>> On 2022/3/16 17:56, Michal Hocko wrote:
+>>>> On Wed 16-03-22 14:39:37, Miaohe Lin wrote:
+>>>>> On 2022/3/15 23:27, Michal Hocko wrote:
+>>>>>> On Tue 15-03-22 21:42:29, Miaohe Lin wrote:
+>>>>>>> On 2022/3/15 0:44, Michal Hocko wrote:
+>>>>>>>> On Fri 11-03-22 17:36:24, Miaohe Lin wrote:
+>>>>>>>>> If mpol_new is allocated but not used in restart loop, mpol_new will be
+>>>>>>>>> freed via mpol_put before returning to the caller. But refcnt is not
+>>>>>>>>> initialized yet, so mpol_put could not do the right things and might
+>>>>>>>>> leak the unused mpol_new.
+>>>>>>>>
+>>>>>>>> The code is really hideous but is there really any bug there? AFAICS the
+>>>>>>>> new policy is only allocated in if (n->end > end) branch and that one
+>>>>>>>> will set the reference count on the retry. Or am I missing something?
+>>>>>>>>
+>>>>>>>
+>>>>>>> Many thanks for your comment.
+>>>>>>> IIUC, new policy is allocated via the below code:
+>>>>>>>
+>>>>>>> shared_policy_replace:
+>>>>>>> 	alloc_new:
+>>>>>>> 		write_unlock(&sp->lock);
+>>>>>>> 		ret = -ENOMEM;
+>>>>>>> 		n_new = kmem_cache_alloc(sn_cache, GFP_KERNEL);
+>>>>>>> 		if (!n_new)
+>>>>>>> 			goto err_out;
+>>>>>>> 		mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
+>>>>>>> 		if (!mpol_new)
+>>>>>>> 			goto err_out;
+>>>>>>> 		goto restart;
+>>>>>>>
+>>>>>>> And mpol_new' reference count will be set before used in n->end > end case. But
+>>>>>>> if that is "not" the case, i.e. mpol_new is not inserted into the rb_tree, mpol_new
+>>>>>>> will be freed via mpol_put before return:
+>>>>>>
+>>>>>> One thing I have missed previously is that the lock is dropped during
+>>>>>> the allocation so I guess the memory policy could have been changed
+>>>>>> during that time. Is this possible? Have you explored this possibility?
+>>>>>> Is this a theoretical problem or it can be triggered intentionally.
+>>>>>>
+>>>>>
+>>>>> This is found via code investigation. I think this could be triggered if there
+>>>>> are many concurrent mpol_set_shared_policy in place. But the user-visible effect
+>>>>> might be obscure as only sizeof(struct mempolicy) bytes leaks possiblely every time.
+>>>>>
+>>>>>> These details would be really interesting for the changelog so that we
+>>>>>> can judge how important this would be.
+>>>>>
+>>>>> This might not be that important as this issue should have been well-concealed for
+>>>>> almost ten years (since commit 42288fe366c4 ("mm: mempolicy: Convert shared_policy mutex to spinlock")).
+>>>>
+>>>> I think it is really worth to drill down to the bottom of the issue.
+>>>> While theoretically possible can be a good enough to justify the change
+>>>> it is usually preferred to describe the underlying problem for future
+>>>> maintainability. 
+>>>
+>>> This issue mainly causes mpol_new memory leaks and this is pointed out in the commit log.
+>>> Am I supposed to do something more to move forward this patch ? Could you point that out
+>>> for me?
+>>
+>> Sorry if I was not really clear. My main request is to have a clear
+>> insight whether this is a theretical issue or the leak could be really
+>> triggered. If the later we need to mark it properly and backport to
+>> older kernels because memory leaks can lead to DoS when they are
+>> reasonably easy to trigger.
+>>
+>> Is this more clear now?
+> 
+> I see. Many thanks. I would have a try to trigger this. :)
+> 
 
-Thank you for reviewing my patch ;-)
+This would be triggered easily with below code snippet in my virtual machine:
 
-On Sat, Mar 19, 2022 at 6:04 PM Florian Westphal <fw@strlen.de> wrote:
->
-> zhouzhouyi@gmail.com <zhouzhouyi@gmail.com> wrote:
-> > -     if (after(ack, tp->snd_nxt))
-> > +     if (after(ack, tp->snd_nxt)) {
-> > +             tcp_send_ack(sk);
-> >               return -1;
-> > +     }
->
-> If we really need to do this we need to
->   if (!(flag & FLAG_NO_CHALLENGE_ACK))
-Yes, we need to check FLAG_NO_CHALLENGE_ACK here to avoid two acks.
->         tcp_send_challenge_ack(sk);
->
-> ... else this might result in two acks?
-> Whats the problem thats being fixed here?
-We fix the code to let it match what RFC 793 page 72 has described. I
-guess this is also what the intermediate internet devices (routers,
-firewalls for example) expect us to do ;-)
+	shmid = shmget((key_t)5566, 1024 * PAGE_SIZE, 0666|IPC_CREAT);
+	shm = shmat(shmid, 0, 0);
+	loop {
+		mbind(shm, 1024 * PAGE_SIZE, MPOL_LOCAL, mask, maxnode, 0);
+		mbind(shm + 128 * PAGE_SIZE, 128 * PAGE_SIZE, MPOL_DEFAULT, mask, maxnode, 0);
+	}
 
-Thanks again
-Zhouyi
+If there're many process doing the above work, mpol_new will be leaked easily.
+So should I resend this patch with Cc stable? But it seems I'am not supposed
+to make this decision and the maintainer will take care of this?
+
+Many thanks. :)
+
+>>
+> 
+

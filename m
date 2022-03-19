@@ -2,76 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A79A4DE695
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 07:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7764DE69C
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 08:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242313AbiCSGwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 02:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
+        id S242318AbiCSHC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 03:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbiCSGwd (ORCPT
+        with ESMTP id S234579AbiCSHCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 02:52:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8201BF034;
-        Fri, 18 Mar 2022 23:51:11 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KLBNp304Xzcb3Z;
-        Sat, 19 Mar 2022 14:51:06 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 19 Mar
- 2022 14:51:09 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <leoyang.li@nxp.com>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>, <jakobkoschel@gmail.com>
-CC:     <linux-usb@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] usb: gadget: fsl_qe_udc: Add missing semicolon in qe_ep_dequeue()
-Date:   Sat, 19 Mar 2022 14:50:31 +0800
-Message-ID: <20220319065031.36928-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        Sat, 19 Mar 2022 03:02:49 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8216E19BE77
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 00:01:28 -0700 (PDT)
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id VT5ZnbL9ovjW4VT5ZnU3SP; Sat, 19 Mar 2022 08:01:27 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 19 Mar 2022 08:01:27 +0100
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Bottomley <James.Bottomley@SteelEye.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH] zorro: Fix a resource leak in zorro7xx_remove_one()
+Date:   Sat, 19 Mar 2022 08:01:24 +0100
+Message-Id: <247066a3104d25f9a05de8b3270fc3c848763bcc.1647673264.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/usb/gadget/udc/fsl_qe_udc.c: In function ‘qe_ep_dequeue’:
-drivers/usb/gadget/udc/fsl_qe_udc.c:1792:3: error: expected ‘;’ before ‘req’
-   req = iter;
-   ^~~
-Add missing semicolon to fix this.
+The error handling path of the probe releases a resource that is not freed
+in the remove function.
 
-Fixes: 838884110f0d ("usb: gadget: fsl: remove usage of list iterator past the loop body")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+In some cases, a ioremap() must be undone.
+
+Add the missing iounmap() call in the remove function.
+
+Fixes: 45804fbb00ee ("[SCSI] 53c700: Amiga Zorro NCR53c710 SCSI")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/usb/gadget/udc/fsl_qe_udc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/zorro7xx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.c b/drivers/usb/gadget/udc/fsl_qe_udc.c
-index d80a7fe5ff62..bf745358e28e 100644
---- a/drivers/usb/gadget/udc/fsl_qe_udc.c
-+++ b/drivers/usb/gadget/udc/fsl_qe_udc.c
-@@ -1788,7 +1788,7 @@ static int qe_ep_dequeue(struct usb_ep *_ep, struct usb_request *_req)
- 	/* make sure it's actually queued on this endpoint */
- 	list_for_each_entry(iter, &ep->queue, queue) {
- 		if (&iter->req != _req)
--			continue
-+			continue;
- 		req = iter;
- 		break;
- 	}
+diff --git a/drivers/scsi/zorro7xx.c b/drivers/scsi/zorro7xx.c
+index 27b9e2baab1a..7acf9193a9e8 100644
+--- a/drivers/scsi/zorro7xx.c
++++ b/drivers/scsi/zorro7xx.c
+@@ -159,6 +159,8 @@ static void zorro7xx_remove_one(struct zorro_dev *z)
+ 	scsi_remove_host(host);
+ 
+ 	NCR_700_release(host);
++	if (host->base > 0x01000000)
++		iounmap(hostdata->base);
+ 	kfree(hostdata);
+ 	free_irq(host->irq, host);
+ 	zorro_release_device(z);
 -- 
-2.17.1
+2.32.0
 

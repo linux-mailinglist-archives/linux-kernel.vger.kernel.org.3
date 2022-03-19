@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD964DE89D
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 15:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B834DE8AA
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 15:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243211AbiCSOkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 10:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
+        id S243246AbiCSOls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 10:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243230AbiCSOkH (ORCPT
+        with ESMTP id S243209AbiCSOlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 10:40:07 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12E78D6B5;
-        Sat, 19 Mar 2022 07:38:43 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id r22so1947917ejs.11;
-        Sat, 19 Mar 2022 07:38:43 -0700 (PDT)
+        Sat, 19 Mar 2022 10:41:44 -0400
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E431350AA;
+        Sat, 19 Mar 2022 07:40:22 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a8so22017488ejc.8;
+        Sat, 19 Mar 2022 07:40:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=YiSvu3h2MURJ52kikYps/FHyIHlianDqoRFaAApITKM=;
-        b=j6xeKKl8VK0NBU5pvkFbOE7v5RrA05hCjkOUdLVD87KMcr6HPAxN+JJ4v4FU52D9rg
-         rufVDymxJImYqUw+GW372OSqhzNJEmEEtfBdJaxgxRRN2e+TaefzOG5zcgV6NvZi5wr1
-         KEyAg/EtudGaRVBQ2mXKa6Jfot5DPzDjzo7ecHjxn1wpNdSvmQ2zMVYe8RiO1q1cvMUh
-         BeQW4sLjmRGOWCgrtNwnWhOuoW+Aqb4Fcpo++OHPeXkDlUc2RkSxJ8xFM5D53FWqCqhN
-         6B8gT/nshUnB+K/Tx+bMC88WQQSMoFgh+mdCFAM66ORidi0KNYNFR05Eb9dNSmElO/mu
-         VzMw==
-X-Gm-Message-State: AOAM533a0zQkKXuV+liRn2bttNbkjjhqLuF8kZUzh4O3Hfj95w4aQxYB
-        Er9KMM/I5ZllU9hMUEoMEcg=
-X-Google-Smtp-Source: ABdhPJxy7389KsjdEcoBs8HFFkzqqnLzY5jKJNB7r2IHGvyjvSoasFsmc5rxbFJwLesRSh+gR9lAnA==
-X-Received: by 2002:a17:907:7d93:b0:6da:8f57:68fa with SMTP id oz19-20020a1709077d9300b006da8f5768famr13695553ejc.42.1647700722186;
-        Sat, 19 Mar 2022 07:38:42 -0700 (PDT)
+        bh=51MF7CMveV1FPVM1stqHHfoXDZB2HvnqZFW3qb4HPvg=;
+        b=cjBBtzZ/bCyS/+mJFqLgANsj/Hg6naP00ah/JRvFX6qcHLekF8sLAz9Cx/2LsZTU8N
+         6rdSrDBwThcOLWNCtg78owr+dYIzkY2O90/i6ERLGbjW/wLO2blHc3OiZDSVLTES7fv5
+         6mC/UBxIS90ycAHkigaov20vnSV38kTdGLLxRCYkrTLA3EdPNEJVUVCohInSdeWsaTaR
+         NC1tovojcbmde5kd0h2j2fikTtKjCMVzAA+g6d8kv61UZP2B47cX+k7DV9W69NcdjLd4
+         NYYgnTYCHrALYwz/tRMi+4v/NXw1rla1T0qB+5qtS0SMLjBKcQAZn3Ak3aqaRuIWF1F2
+         agHg==
+X-Gm-Message-State: AOAM532vFkWGiQZudTIzE8njDyON/SS36IOEHjIS/I8UyLRaCn8JbRmX
+        a0X8Aj4y7m4rv4manBn64aU=
+X-Google-Smtp-Source: ABdhPJzTCHBns8Of5aWkggpbK2hL/YYJMUO6iz0EeO/XI+KIAn3YnmSkyRfVvIMxKQxf1sKzq+oq6A==
+X-Received: by 2002:a17:907:216f:b0:6ce:d85f:35cf with SMTP id rl15-20020a170907216f00b006ced85f35cfmr13488896ejb.517.1647700820629;
+        Sat, 19 Mar 2022 07:40:20 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id l12-20020a056402028c00b00418f7fc4bd8sm4198032edv.91.2022.03.19.07.38.40
+        by smtp.googlemail.com with ESMTPSA id u10-20020a50d94a000000b004131aa2525esm5752540edj.49.2022.03.19.07.40.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Mar 2022 07:38:41 -0700 (PDT)
-Message-ID: <cc6a0a89-a096-e954-b245-1857e9f94c4e@kernel.org>
-Date:   Sat, 19 Mar 2022 15:38:40 +0100
+        Sat, 19 Mar 2022 07:40:20 -0700 (PDT)
+Message-ID: <ae73a362-cbfe-4e33-37a3-61614fcde9c0@kernel.org>
+Date:   Sat, 19 Mar 2022 15:40:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 1/6] scsi: ufs: dt-bindings: Add SM6350 compatible string
+Subject: Re: [PATCH 2/6] dt-bindings: phy: qcom,qmp: Add SM6350 UFS PHY
+ bindings
 Content-Language: en-US
 To:     Luca Weiss <luca.weiss@fairphone.com>,
         linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220318183004.858707-1-luca.weiss@fairphone.com>
- <20220318183004.858707-2-luca.weiss@fairphone.com>
+ <20220318183004.858707-3-luca.weiss@fairphone.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220318183004.858707-2-luca.weiss@fairphone.com>
+In-Reply-To: <20220318183004.858707-3-luca.weiss@fairphone.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -73,17 +74,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 19:29, Luca Weiss wrote:
-> Document the compatible for the UFS found on SM6350.
+On 18/03/2022 19:30, Luca Weiss wrote:
+> Document the compatible string for the UFS PHY found in SM6350.
 > 
 > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 > ---
->  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 1 +
+>  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 1 +
 >  1 file changed, 1 insertion(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> index e20d9b087bb8..934aa9101ddd 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> @@ -39,6 +39,7 @@ properties:
+>        - qcom,sdm845-qmp-usb3-phy
+>        - qcom,sdm845-qmp-usb3-uni-phy
+>        - qcom,sm6115-qmp-ufs-phy
+> +      - qcom,sm6350-qmp-ufs-phy
 
-
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+Please also add constraints to clocks, resets and any other necessary
+properties in allOf:if:then section.
 
 
 Best regards,

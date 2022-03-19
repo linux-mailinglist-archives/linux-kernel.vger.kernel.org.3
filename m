@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541A34DE6ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 09:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF094DE6F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 09:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242458AbiCSIPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 04:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
+        id S242468AbiCSIRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 04:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233088AbiCSIPa (ORCPT
+        with ESMTP id S233088AbiCSIRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 04:15:30 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A834A1F634E;
-        Sat, 19 Mar 2022 01:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647677649; x=1679213649;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5/j8SFIJOg+tuUIcMYd0AoAB00s/OJZR63GPCgz2T7U=;
-  b=cm5JPduv9EzaGjf0A+41iIDDDzbznVjpCtXS5EMOK+t3LTyftbi6LCof
-   RxGmI22renaR/ellaLGmR9hBZdyi0Tq9zQXjdfYmNMY60O7MkSDwaY7MX
-   rjjHuMgCC0FYC/6a78VYpny1235gY8cMeP7D49CNgRVIYh1w7k678NUxa
-   8AsfD8oWDhxd6RRRAX24PV3rkusZ+UwtoopotSi6IrWC1EBaACqhMJ9gf
-   vuKq6YLSODovomEB52UpwypNh5WzGwSTl/LgkoSLe4siueRhOmFHdEk2O
-   ERHUBHZeb1N/pkevKqgIavGHJXsZVPUvICyO7ON8TbR7TNS8hEmsXbk2u
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="320491412"
-X-IronPort-AV: E=Sophos;i="5.90,194,1643702400"; 
-   d="scan'208";a="320491412"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 01:14:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,194,1643702400"; 
-   d="scan'208";a="691598370"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Mar 2022 01:14:04 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVUDr-000Fiu-9z; Sat, 19 Mar 2022 08:14:03 +0000
-Date:   Sat, 19 Mar 2022 16:13:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jane Chu <jane.chu@oracle.com>, david@fromorbit.com,
-        djwong@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-        vishal.l.verma@intel.com, dave.jiang@intel.com, agk@redhat.com,
-        snitzer@redhat.com, dm-devel@redhat.com, ira.weiny@intel.com,
-        willy@infradead.org, vgoyal@redhat.com,
-        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH v6 2/6] x86/mce: relocate set{clear}_mce_nospec()
- functions
-Message-ID: <202203191637.PK2oJUeq-lkp@intel.com>
-References: <20220319062833.3136528-3-jane.chu@oracle.com>
+        Sat, 19 Mar 2022 04:17:46 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60ED0231929
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 01:16:25 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id k10-20020a5d91ca000000b006414a00b160so6578898ior.18
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 01:16:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=WUWCxbYXpv8z4jcgvVVgbLnra2IcxUsgwjwIFM6opyw=;
+        b=i5v61RrDVoaAtKjbqZRA6cM83uHa2T6DxV6RL9CsBdeQXZuo5rjTn3Rf6tHE7Sgmf1
+         NQY5Vqx5bOV0ScIZ2qS42fv5KE+86dmvQkKTfrRtTYHbTqM4aZX2p6NwpzsgjJQsIWCt
+         9Ar8NJKuNC91wxii1+aGlfTk67MNV8Ovfjj3N5D1HHyUPibPkvk0uxyQFjaNm/7PamTz
+         xBIKmgpRNlhZSBsasxs+Dwx66XoS68DeXSQutvvF4vEmo/k++iEPtiWD5b99ZbqwC7v5
+         yyuoVMIEuxcjIYvBkhdy3vKk/ysWfDpML2sYkLgpUJs9H9vl7UM7oIxqlkhmh3L4AZh3
+         mjRg==
+X-Gm-Message-State: AOAM533/HCB8VX+S+8WIzUjP7qJ2qQCTUdvAf3t4lYtnrn9hgs4aYHyk
+        QdXddaFJHt7LJPjdLmTB7ktTTc8Vf4apt3b1Dm3XiElYcD8S
+X-Google-Smtp-Source: ABdhPJyPEwIAqyIUFL+CxixBlWaTZmYK6PeM/UNgXrwWC4dbze6a16I/59eg/9wLMvT9QQR9oi7rektbQwH1FARKkQaauaXpb5uG
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220319062833.3136528-3-jane.chu@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:d56:b0:319:f6bb:25e1 with SMTP id
+ d22-20020a0566380d5600b00319f6bb25e1mr6281612jak.242.1647677784786; Sat, 19
+ Mar 2022 01:16:24 -0700 (PDT)
+Date:   Sat, 19 Mar 2022 01:16:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000110dee05da8de18a@google.com>
+Subject: [syzbot] linux-next test error: WARNING in __napi_schedule
+From:   syzbot <syzbot+6f21ac9e27fca7e97623@syzkaller.appspotmail.com>
+To:     Jason@zx2c4.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,93 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jane,
+Hello,
 
-Thank you for the patch! Perhaps something to improve:
+syzbot found the following issue on:
 
-[auto build test WARNING on nvdimm/libnvdimm-for-next]
-[also build test WARNING on device-mapper-dm/for-next linus/master v5.17-rc8 next-20220318]
-[cannot apply to tip/x86/mm]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+HEAD commit:    6d72dda014a4 Add linux-next specific files for 20220318
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=124f5589700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5907d82c35688f04
+dashboard link: https://syzkaller.appspot.com/bug?extid=6f21ac9e27fca7e97623
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-url:    https://github.com/0day-ci/linux/commits/Jane-Chu/DAX-poison-recovery/20220319-143144
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm.git libnvdimm-for-next
-config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220319/202203191637.PK2oJUeq-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/71b9b09529b207ce15667c1f5fba4b727b6754e6
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jane-Chu/DAX-poison-recovery/20220319-143144
-        git checkout 71b9b09529b207ce15667c1f5fba4b727b6754e6
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/mm/pat/ fs/fuse/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6f21ac9e27fca7e97623@syzkaller.appspotmail.com
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3612 at net/core/dev.c:4268 ____napi_schedule net/core/dev.c:4268 [inline]
+WARNING: CPU: 0 PID: 3612 at net/core/dev.c:4268 __napi_schedule+0xe2/0x440 net/core/dev.c:5878
+Modules linked in:
+CPU: 0 PID: 3612 Comm: kworker/0:5 Not tainted 5.17.0-rc8-next-20220318-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: wg-crypt-wg0 wg_packet_decrypt_worker
+RIP: 0010:____napi_schedule net/core/dev.c:4268 [inline]
+RIP: 0010:__napi_schedule+0xe2/0x440 net/core/dev.c:5878
+Code: 74 4a e8 11 61 3c fa 31 ff 65 44 8b 25 d7 27 c6 78 41 81 e4 00 ff 0f 00 44 89 e6 e8 18 63 3c fa 45 85 e4 75 07 e8 ee 60 3c fa <0f> 0b e8 e7 60 3c fa 65 44 8b 25 f7 31 c6 78 31 ff 44 89 e6 e8 f5
+RSP: 0018:ffffc9000408fc78 EFLAGS: 00010093
+RAX: 0000000000000000 RBX: ffff88807fa90748 RCX: 0000000000000000
+RDX: ffff888019800000 RSI: ffffffff873c4802 RDI: 0000000000000003
+RBP: 0000000000000200 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff873c47f8 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff8880b9c00000 R14: 000000000003b100 R15: ffff88801cf90ec0
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f998512c300 CR3: 00000000707f2000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ napi_schedule include/linux/netdevice.h:465 [inline]
+ wg_queue_enqueue_per_peer_rx drivers/net/wireguard/queueing.h:204 [inline]
+ wg_packet_decrypt_worker+0x408/0x5d0 drivers/net/wireguard/receive.c:510
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
 
-All warnings (new ones prefixed by >>):
-
->> arch/x86/mm/pat/set_memory.c:1935:5: warning: no previous prototype for 'set_mce_nospec' [-Wmissing-prototypes]
-    1935 | int set_mce_nospec(unsigned long pfn, bool unmap)
-         |     ^~~~~~~~~~~~~~
->> arch/x86/mm/pat/set_memory.c:1968:5: warning: no previous prototype for 'clear_mce_nospec' [-Wmissing-prototypes]
-    1968 | int clear_mce_nospec(unsigned long pfn)
-         |     ^~~~~~~~~~~~~~~~
-
-
-vim +/set_mce_nospec +1935 arch/x86/mm/pat/set_memory.c
-
-  1927	
-  1928	#ifdef CONFIG_X86_64
-  1929	/*
-  1930	 * Prevent speculative access to the page by either unmapping
-  1931	 * it (if we do not require access to any part of the page) or
-  1932	 * marking it uncacheable (if we want to try to retrieve data
-  1933	 * from non-poisoned lines in the page).
-  1934	 */
-> 1935	int set_mce_nospec(unsigned long pfn, bool unmap)
-  1936	{
-  1937		unsigned long decoy_addr;
-  1938		int rc;
-  1939	
-  1940		/* SGX pages are not in the 1:1 map */
-  1941		if (arch_is_platform_page(pfn << PAGE_SHIFT))
-  1942			return 0;
-  1943		/*
-  1944		 * We would like to just call:
-  1945		 *      set_memory_XX((unsigned long)pfn_to_kaddr(pfn), 1);
-  1946		 * but doing that would radically increase the odds of a
-  1947		 * speculative access to the poison page because we'd have
-  1948		 * the virtual address of the kernel 1:1 mapping sitting
-  1949		 * around in registers.
-  1950		 * Instead we get tricky.  We create a non-canonical address
-  1951		 * that looks just like the one we want, but has bit 63 flipped.
-  1952		 * This relies on set_memory_XX() properly sanitizing any __pa()
-  1953		 * results with __PHYSICAL_MASK or PTE_PFN_MASK.
-  1954		 */
-  1955		decoy_addr = (pfn << PAGE_SHIFT) + (PAGE_OFFSET ^ BIT(63));
-  1956	
-  1957		if (unmap)
-  1958			rc = set_memory_np(decoy_addr, 1);
-  1959		else
-  1960			rc = set_memory_uc(decoy_addr, 1);
-  1961		if (rc)
-  1962			pr_warn("Could not invalidate pfn=0x%lx from 1:1 map\n", pfn);
-  1963		return rc;
-  1964	}
-  1965	EXPORT_SYMBOL(set_mce_nospec);
-  1966	
-  1967	/* Restore full speculative operation to the pfn. */
-> 1968	int clear_mce_nospec(unsigned long pfn)
-  1969	{
-  1970		return set_memory_wb((unsigned long) pfn_to_kaddr(pfn), 1);
-  1971	}
-  1972	EXPORT_SYMBOL(clear_mce_nospec);
-  1973	
 
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

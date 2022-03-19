@@ -2,175 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59C54DE837
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 14:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6F14DE83B
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 14:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243091AbiCSNvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 09:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
+        id S243096AbiCSN7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 09:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiCSNvk (ORCPT
+        with ESMTP id S229470AbiCSN7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 09:51:40 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA2C4092B;
-        Sat, 19 Mar 2022 06:50:18 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 509C21EC050D;
-        Sat, 19 Mar 2022 14:50:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1647697812;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=jJlfJmykQWJPhBfYoqtgY8oKqPHmS75DxWWyYkiPKaI=;
-        b=Zq+cltFjP7JTBzAHcxmTf3R1EKDOifjc3LUyYpXLC8lMo5OTaxE06WsNcqwmAicVwtVpHs
-        4KrxUvGzArKDabksCyc3t8lCVuaKnMOfiy0LMbLpckm7fA+T9mcfU/0V5JI3r1K4Fg1OED
-        CBpFXZ0NLY/mKMNbIWD/owF/SE9Tih8=
-Date:   Sat, 19 Mar 2022 14:50:07 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Jamie Heilman <jamie@audible.transient.net>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH -v1.2] kvm/emulate: Fix SETcc emulation function offsets
- with SLS
-Message-ID: <YjXfgsSZpVVdg0lv@zn.tnic>
-References: <YjI69aUseN/IuzTj@zn.tnic>
- <YjJFb02Fc0jeoIW4@audible.transient.net>
- <YjJVWYzHQDbI6nZM@zn.tnic>
- <20220316220201.GM8939@worktop.programming.kicks-ass.net>
- <YjMBdMlhVMGLG5ws@zn.tnic>
- <YjMS8eTOhXBOPFOe@zn.tnic>
- <YjMVpfe/9ldmWX8W@hirez.programming.kicks-ass.net>
- <94df38ce-6bd7-a993-7d9f-0a1418a1c8df@redhat.com>
- <YjXcRsR2T8WGnVjl@zn.tnic>
- <ad13632c-127d-ff5a-6530-5282e58521b1@redhat.com>
+        Sat, 19 Mar 2022 09:59:06 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0A840E6A
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 06:57:45 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id b67so8737419qkc.6
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 06:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Rac/T1uCgRkKdVo18Y1asxDHBvA6nYHko+ROAHe2fSM=;
+        b=U7q84Tbf4G3V8V++ECB85fFy8IR3FJ/HYRcJOeRqDuJWWAs+O60IvqQnZ006w6S7W2
+         pssocQszERkhx3B8tEh/j1alr9DydBSqcZKoNH0zHralT6o+oCtBo1Ms4hA0uPIhAmtW
+         OZNtlXP/JUP4r/S0MvBzyfNH/98lokgy3JQ6I1Nmd2I+i7C0yYGo5LBuAPpWW13ezmND
+         eFNthG6p0Ws9ZGCFXXnelH+x2RHiz38wkv1fUtTgUxe5QE/zam3nTxHeh25ZQ2Feertk
+         sGG5TQqdp3y8eT9wEWK/pkAd39JBRuHaDk4/AYz0khCBbLSV3PFtQJynL2JAi0GrefnE
+         cInQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Rac/T1uCgRkKdVo18Y1asxDHBvA6nYHko+ROAHe2fSM=;
+        b=GFVabMORoMyWOKG6IoFn0j1QHlOZ8mmYR9fqOP3gTPmlT6W2SovAnqzsIaLZMAtOiV
+         ZP5QTRkPuo9bitSWlkRXYCI9PDca7RNrJWURAc/KPFevT6Ys9NC/0V38T9+F0Vt3Tvat
+         wwdg8hYkS47idWa9y70fjdZbBeuADPUGox3mp0n0Zb7zrAs5IaktWn3a6HN0jLgyNest
+         O9Z9w6PiLWws4mnV7x1NYHGOMU7IqKhzdazNzVc8jAUcxlF3Pp8SqipfXcbEyCx27HjK
+         7wffuG9FnfOjOYi+ip9fcYzm3pSEBKV0zaW+9tY5h/DpqylAvDq5xgulWZd4XHcKZy/K
+         2mgQ==
+X-Gm-Message-State: AOAM530wOHEawMg/KwLxk4FUN10QZPN25pdBMDCO83Swz24LJkvVziIU
+        o5fHzEPugKW2T92crMkPFZMm7E5h6zDrWzFtuFu7ew==
+X-Google-Smtp-Source: ABdhPJwbCAq+lROdobsvSfxS5ilKi5RtnW3rDdKcN5MoX0ol9W11mVMTJX6h9MiMLfOc6jKANvyIVTY4A3Xe3k5UOxs=
+X-Received: by 2002:a05:620a:288a:b0:67b:3250:ada2 with SMTP id
+ j10-20020a05620a288a00b0067b3250ada2mr8367002qkp.358.1647698264502; Sat, 19
+ Mar 2022 06:57:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ad13632c-127d-ff5a-6530-5282e58521b1@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220319110422.8261-1-zhouzhouyi@gmail.com> <CANn89iK46rw910CUJV3Kgf=M=HA32_ctd0xragwcRnHCV_VhmQ@mail.gmail.com>
+ <CAABZP2yK2vCJcReJ_VvcqbkuEekvBpBJCyZ2geG=f83fv_RC=Q@mail.gmail.com>
+In-Reply-To: <CAABZP2yK2vCJcReJ_VvcqbkuEekvBpBJCyZ2geG=f83fv_RC=Q@mail.gmail.com>
+From:   Neal Cardwell <ncardwell@google.com>
+Date:   Sat, 19 Mar 2022 09:57:28 -0400
+Message-ID: <CADVnQy=shHKbvf4OZjX5-3CnFPOm3zyexbaH9XTLZBMk6pxeew@mail.gmail.com>
+Subject: Re: [PATCH v2] net:ipv4: send an ack when seg.ack > snd.nxt
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        David Miller <davem@davemloft.net>, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Wei Xu <xuweihf@ustc.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 02:41:20PM +0100, Paolo Bonzini wrote:
-> Nah, don't worry.  I'll take care of it, I'm still not 100% on top of things
-> but I can handle one patch. :)
+On Sat, Mar 19, 2022 at 7:34 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
+>
+> Thanks for reviewing my patch
+>
+> On Sat, Mar 19, 2022 at 7:14 PM Eric Dumazet <edumazet@google.com> wrote:
+> >
+> > On Sat, Mar 19, 2022 at 4:04 AM <zhouzhouyi@gmail.com> wrote:
+> > >
+> > > From: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > >
+> > > In RFC 793, page 72: "If the ACK acks something not yet sent
+> > > (SEG.ACK > SND.NXT) then send an ACK, drop the segment,
+> > > and return."
+> > >
+> > > Fix Linux's behavior according to RFC 793.
+> > >
+> > > Reported-by: Wei Xu <xuweihf@ustc.edu.cn>
+> > > Signed-off-by: Wei Xu <xuweihf@ustc.edu.cn>
+> > > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > ---
+> > > Thank Florian Westphal for pointing out
+> > > the potential duplicated ack bug in patch version 1.
+> >
+> > I am travelling this week, but I think your patch is not necessary and
+> > might actually be bad.
+> >
+> > Please provide more details of why nobody complained of this until today.
+> >
+> > Also I doubt you actually fully tested this patch, sending a V2 30
+> > minutes after V1.
+> >
+> > If yes, please provide a packetdrill test.
+> I am a beginner to TCP, although I have submitted once a patch to
+> netdev in 2013 (aaa0c23cb90141309f5076ba5e3bfbd39544b985), this is
+> first time I learned packetdrill test.
+> I think I should do the packetdrill test in the coming days, and
+> provide more details of how this (RFC793 related) can happen.
 
-Well, if you take it, then you'll have to give us an immutable branch,
-please, to merge it into x86/core so that peterz can do his IBT fix
-ontop before he sends the stuff during the merge window.
+In addition to a packetdrill test and a more detailed analysis of how
+this can happen, and the implications, I think there are at least a
+few other issues that need to be considered:
 
-In any case, here's the final version (did some commit message fixups +
-added tags).
+(1) AFAICT, adding an unconditional ACK if (after(ack, tp->snd_nxt))
+seems to open the potential for attackers to cause DoS attacks with
+something like the following:
 
-Thx.
+ (a) attacker injects one data packet in the A->B direction and one
+data packet in the B->A direction
 
----
-From: Borislav Petkov <bp@suse.de>
-Date: Wed, 16 Mar 2022 22:05:52 +0100
-Subject: [PATCH] kvm/emulate: Fix SETcc emulation function offsets with SLS
+ (b) endpoint A sends an ACK for the forged data sent to it, which
+will have an ACK beyond B's snd_nxt
 
-The commit in Fixes started adding INT3 after RETs as a mitigation
-against straight-line speculation.
+ (c) endpoint B sends an ACK for the forged data sent to it, which
+will have an ACK beyond A's snd_nxt
 
-The fastop SETcc implementation in kvm's insn emulator uses macro magic
-to generate all possible SETcc functions and to jump to them when
-emulating the respective instruction.
+ (d) endpoint B receives the ACK sent by A, causing B to send another
+ACK beyond A's snd_nxt
 
-However, it hardcodes the size and alignment of those functions to 4: a
-three-byte SETcc insn and a single-byte RET. BUT, with SLS, there's an
-INT3 that gets slapped after the RET, which brings the whole scheme out
-of alignment:
+ (e) endpoint A receives the ACK sent by B, causing A to send another
+ACK beyond B's snd_nxt
 
-  15:   0f 90 c0                seto   %al
-  18:   c3                      ret
-  19:   cc                      int3
-  1a:   0f 1f 00                nopl   (%rax)
-  1d:   0f 91 c0                setno  %al
-  20:   c3                      ret
-  21:   cc                      int3
-  22:   0f 1f 00                nopl   (%rax)
-  25:   0f 92 c0                setb   %al
-  28:   c3                      ret
-  29:   cc                      int3
+ (f) repeat (d) and (e) ad infinitum
 
-and this explodes like this:
+So AFAICT an attacker could send two data packets with 1 byte of data
+and cause the two endpoints to use up an unbounded amount of CPU and
+bandwidth sending ACKs in an "infinite loop".
 
-  int3: 0000 [#1] PREEMPT SMP PTI
-  CPU: 0 PID: 2435 Comm: qemu-system-x86 Not tainted 5.17.0-rc8-sls #1
-  Hardware name: Dell Inc. Precision WorkStation T3400  /0TP412, BIOS A14 04/30/2012
-  RIP: 0010:setc+0x5/0x8 [kvm]
-  Code: 00 00 0f 1f 00 0f b6 05 43 24 06 00 c3 cc 0f 1f 80 00 00 00 00 0f 90 c0 c3 cc 0f \
-	  1f 00 0f 91 c0 c3 cc 0f 1f 00 0f 92 c0 c3 cc <0f> 1f 00 0f 93 c0 c3 cc 0f 1f 00 \
-	  0f 94 c0 c3 cc 0f 1f 00 0f 95 c0
-  Call Trace:
-   <TASK>
-   ? x86_emulate_insn [kvm]
-   ? x86_emulate_instruction [kvm]
-   ? vmx_handle_exit [kvm_intel]
-   ? kvm_arch_vcpu_ioctl_run [kvm]
-   ? kvm_vcpu_ioctl [kvm]
-   ? __x64_sys_ioctl
-   ? do_syscall_64
-   ? entry_SYSCALL_64_after_hwframe
-   </TASK>
+To avoid this "infinite loop" of packets, if we really need to add an
+ACK in this case then the code should use the tcp_oow_rate_limited()
+helper to ensure that such ACKs are rate-limited. For more context on
+tcp_oow_rate_limited(), see:
 
-Raise the alignment value when SLS is enabled and use a macro for that
-instead of hard-coding naked numbers.
+f06535c599354 Merge branch 'tcp_ack_loops'
+4fb17a6091674 tcp: mitigate ACK loops for connections as tcp_timewait_sock
+f2b2c582e8242 tcp: mitigate ACK loops for connections as tcp_sock
+a9b2c06dbef48 tcp: mitigate ACK loops for connections as tcp_request_sock
+032ee4236954e tcp: helpers to mitigate ACK loops by rate-limiting
+out-of-window dupacks
 
-Fixes: e463a09af2f0 ("x86: Add straight-line-speculation mitigation")
-Reported-by: Jamie Heilman <jamie@audible.transient.net>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Jamie Heilman <jamie@audible.transient.net>
-Link: https://lore.kernel.org/r/YjGzJwjrvxg5YZ0Z@audible.transient.net
----
- arch/x86/kvm/emulate.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Note that f06535c599354 in particular mentions the case discussed in this patch:
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 5719d8cfdbd9..f321abb9a4a8 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -429,8 +429,11 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
- 	FOP_END
- 
- /* Special case for SETcc - 1 instruction per cc */
-+
-+#define SETCC_ALIGN	(4 * (1 + IS_ENABLED(CONFIG_SLS)))
-+
- #define FOP_SETCC(op) \
--	".align 4 \n\t" \
-+	".align " __stringify(SETCC_ALIGN) " \n\t" \
- 	".type " #op ", @function \n\t" \
- 	#op ": \n\t" \
- 	#op " %al \n\t" \
-@@ -1047,7 +1050,7 @@ static int em_bsr_c(struct x86_emulate_ctxt *ctxt)
- static __always_inline u8 test_cc(unsigned int condition, unsigned long flags)
- {
- 	u8 rc;
--	void (*fop)(void) = (void *)em_setcc + 4 * (condition & 0xf);
-+	void (*fop)(void) = (void *)em_setcc + SETCC_ALIGN * (condition & 0xf);
- 
- 	flags = (flags & EFLAGS_MASK) | X86_EFLAGS_IF;
- 	asm("push %[flags]; popf; " CALL_NOSPEC
--- 
-2.29.2
+    (2) RFC 793 (section 3.9, page 72) says: "If the ACK acknowledges
+        something not yet sent (SEG.ACK > SND.NXT) then send an ACK".
 
--- 
-Regards/Gruss,
-    Boris.
+(2) Please consider the potential that adding a new ACK in this
+scenario may introduce new, unanticipated side channels. For more on
+side channels, see:
 
-https://people.kernel.org/tglx/notes-about-netiquette
+  https://lwn.net/Articles/696868/
+  The TCP "challenge ACK" side channel
+
+  Principled Unearthing of TCP Side Channel Vulnerabilities
+  https://dl.acm.org/doi/10.1145/3319535.3354250
+
+best regards,
+neal

@@ -2,120 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED81E4DE7CE
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 13:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9394DE7D9
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 13:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242873AbiCSMP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 08:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
+        id S242892AbiCSM0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 08:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236834AbiCSMP5 (ORCPT
+        with ESMTP id S242882AbiCSM0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 08:15:57 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E792710
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 05:14:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1647692067;
-        bh=L9gQIAMbN+V9GevRugsHOEP8kZm7fCQRXiGNeNH5ZUE=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=gRhKifDoUUe1SBUDq9fPIi4CnfD38BkgcQ8hEQk4kAP09qPM8v0qfldOQlTKt3cmm
-         p2BNjPX4ZsARo8PKr3K02rQG2+fOUBWQ5KFEdawTx0f2h6wx4RP14KjMGVt1ZxNPXW
-         pWIpXfuWoa1O5wQIIn/ZLjAgixQHdTNLvIHGkzUM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.141.241]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MBUqL-1nO9a01XNX-00CzbR; Sat, 19
- Mar 2022 13:14:27 +0100
-Message-ID: <089e25bb-805d-81ac-2f91-69f03c716b0d@gmx.de>
-Date:   Sat, 19 Mar 2022 13:12:54 +0100
+        Sat, 19 Mar 2022 08:26:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AB32BB375
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 05:25:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E317F60906
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 12:25:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADA0DC340EC;
+        Sat, 19 Mar 2022 12:25:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647692715;
+        bh=VzIZ83awD2ygJPiTFC5oot4SImMZHSu28rTC7D4Gc5Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AcJv4Ajr+BLrfuYrVy2BncrW92PMQ+0HLA86yK2ELfTxiXVifgiNbCVknbiZwszez
+         ugonme2U5nA7NndYlCSZXUjyRnMMYSkHcCbBNwQlCXpS4uYepzRgxpFj57egmMy19A
+         XrOaiL1cLvXs4M/ZqgvcIk45jOxlE1vuXnsM5Cho=
+Date:   Sat, 19 Mar 2022 13:25:11 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nam Cao <namcaov@gmail.com>
+Cc:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: sm750fb: fix CamelCase names as reported by
+ checkpatch.pl
+Message-ID: <YjXLp2pdGUQIWcFg@kroah.com>
+References: <20220319103152.16142-1-namcaov@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [deller-parisc:for-next 23/24] include/linux/jump_label.h:266:16:
- error: implicit declaration of function 'atomic_read'
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-References: <202203191125.4vT2F6La-lkp@intel.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <202203191125.4vT2F6La-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:kkOXtj/FYF8DN/1oSHRkrPA4wYNa4MlQgVD3bhzcmGg04knsS1p
- 29Kkvp9xST/d8r7ZFSUM2O274eo0fI4pkK5zMIjnAYLiiTZKrwkmrvb8rsue4Db62kDEXsx
- U5QVZrpaWPVHUyuMYNDoiHJMvNLWK3FXuCyoXsU7CUn7dGekqzP/1r4L2O6ODV/bK2928cz
- gUI0b01XWvZNLf/6ZY8dw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fUfJEZzc4KY=:Tjn7Txf50fKA/1Yj33KAKd
- XXHkJBmWhMBhfbNqDnoDSQ7DZtGMCRcjt8aVhss7+Gc4Ui8wbP2m51Glek0gKsnhKHWWYo7U4
- Ry5Egvavsa7NMf7fFQxlXNxhhmwkeYI82t/JvlzCg/1w6AJ75n/l/7g4TFjtOzdvnD8cNIYK+
- 78fDgWMwxSztLZSIyUXrVWTelI7tJF+pBtGEzyrzQtA+plCLk4qliPlyO3hqPEJl5a8uUyidV
- XyXdzcm5z4VR3F1PVzk0Pj/J4iZrQIDRr6fiKcI/vzFLsRyj0fqmHW4Gjw/sCDiNj9WlXjHtx
- B8jsamug4dKmTqViJKXN1bpTk9BnWscgc7M+pqkDLF5fxFYqJqA14GnKXYJSGB4zG7T/jBQns
- yK8GKi+NQMIwAqPi7rGEGXvzTZZWnn4Z2gs640NHY7aapjj7SqndIfL/+H4YXo9UailaUMWND
- m0SWLPwvF2qlYvR0nyufrBNNrAPA5akct8mVIuqHuMMBShcrHG6f07/tiA5qm0OqomfRzedI8
- s7/PBB2LGJRdPeNT6QcMM4Iq7WCJy6azSdxiDGITyqc3W5k9kzWxj3W2gWuOFk0D4LUALriOM
- dL4PM0kI0ofJO8XdoZpNFlhkIARkEagcgBsTXoIVkLCk8BMdOxMrndsLlcADJc/wRnf7B6BAL
- H7BrimJipCNG2w8saiTQqu9B/iAXBDj2HD1m2g8DZhBK3COGVtZuoSFyFJYC1wGBWQF1WoiHe
- hWyf35TCxqQGtjGrWmrSMzqRT2BUpC1SIxGSqW37DOWP1N7zEObOaiCL8YdRiaXf3zaM0Kslf
- Rd6hAJXFUTSoQv2S6g411GcG7gYPGAGfwIFiXMoxBE0LAiEntq9fj35h1wbvJS0sgHp+hiUlU
- 00ckim6cIoUs8tmhAsxP8oCLPXYkOmcBSfSy/ot3y89BHNbwiHZ9LghxZjWknppmzMMlYDIWE
- DLJrW/UixoEfc3m8SFexvfJvayYF0fl5O3hO0G26TU3Pgw7yCu068Gi0qHvIUkj2eZuINIT1L
- fo77vkGdqPWhrTN81d5rwo3CvwxalRUpnAfde9IK93c/Y6rkW3cTtYugNYTE/t+ngg==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220319103152.16142-1-namcaov@gmail.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/19/22 04:38, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-li=
-nux.git for-next
-> head:   ca3ee5ad86cc1b9553d5bd6878957ad8c79dfb4a
-> commit: 0acfd47aee46a4dc7aedcc6470d52c35bf0a836c [23/24] parisc: Convert=
- parisc_requires_coherency() to static branch
-> config: parisc-defconfig (https://download.01.org/0day-ci/archive/202203=
-19/202203191125.4vT2F6La-lkp@intel.com/config)
-> compiler: hppa-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sb=
-in/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-=
-linux.git/commit/?id=3D0acfd47aee46a4dc7aedcc6470d52c35bf0a836c
->         git remote add deller-parisc https://git.kernel.org/pub/scm/linu=
-x/kernel/git/deller/parisc-linux.git
->         git fetch --no-tags deller-parisc for-next
->         git checkout 0acfd47aee46a4dc7aedcc6470d52c35bf0a836c
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.2.0 make.cr=
-oss O=3Dbuild_dir ARCH=3Dparisc prepare
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All error/warnings (new ones prefixed by >>):
->
->    In file included from arch/parisc/include/asm/processor.h:14,
->                     from arch/parisc/include/asm/spinlock.h:7,
->                     from arch/parisc/include/asm/atomic.h:22,
->                     from include/linux/atomic.h:7,
->                     from arch/parisc/include/asm/bitops.h:13,
->                     from include/linux/bitops.h:33,
->                     from include/linux/kernel.h:22,
->                     from arch/parisc/include/asm/bug.h:5,
->                     from include/linux/bug.h:5,
->                     from include/linux/page-flags.h:10,
->                     from kernel/bounds.c:10:
->    include/linux/jump_label.h: In function 'static_key_count':
->>> include/linux/jump_label.h:266:16: error: implicit declaration of func=
-tion 'atomic_read' [-Werror=3Dimplicit-function-declaration]
->      266 |         return atomic_read(&key->enabled);
+On Sat, Mar 19, 2022 at 11:31:52AM +0100, Nam Cao wrote:
+> Signed-off-by: Nam Cao <namcaov@gmail.com>
 
-Thanks, fixed now in for-next.
 
-Helge
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what is needed in order to
+  properly describe the change.
+
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

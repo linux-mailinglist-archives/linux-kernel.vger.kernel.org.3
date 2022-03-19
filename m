@@ -2,67 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4F04DE5C2
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 04:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 520414DE5D0
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 04:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242101AbiCSD7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 23:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
+        id S242193AbiCSEAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 00:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242050AbiCSD6x (ORCPT
+        with ESMTP id S242119AbiCSD7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 23:58:53 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D7B111DF9;
-        Fri, 18 Mar 2022 20:57:31 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22J3CLKu001925;
-        Sat, 19 Mar 2022 03:57:09 GMT
+        Fri, 18 Mar 2022 23:59:50 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6918C12A8F3;
+        Fri, 18 Mar 2022 20:57:52 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22J2ro58012531;
+        Sat, 19 Mar 2022 03:57:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=kKLElV237QkleibtFpSI78rAupFder9wqJSPK8gb4Kg=;
- b=c5xSFM/UZMShnxlXPQBphz0h+R+osLoheBnDzfZBHxNJYK+XxVKbjcb7u6OZb6bghaLH
- Vnh7EGv+Kc5dIPA2TYFwRrng7kYzKoBjARdDlNkFbKwaEmsD10m9W2R1cmBP/lbpthug
- wQJVEcYqMRyFu9KK0Fs8IcM1mOZ6j0Nf1ZSpttJQAUmRvqEBh27m8yEyOZdX1UexGd+V
- 5LSbbuxDcNCdtdUkF2wLpg2cv1sLeQ3d79hWrttyeykp3jBhE9AYZ+hgk84uGhYjL2ez
- Wozux+8fqJxZYyE2yoJQBtj9FDQVB0hcmeVWrzVeXl/iWhKCoJKGfOlNcq2GGDrzrZdT rQ== 
+ bh=dOCvppNUKgOlcA89bNUdrq8FTQRYfsjfsvR3rEo7hmg=;
+ b=rB4F0btdvmuQ8qSVzB0TI/MVdj6L1wLlPT1srOv4birzBP2VsA5D9mxqDnty9FGI031e
+ OhuXiDi8PP/hnk9+43pScgnlvc1Msx3IXhpur+XlVll5oz+03KUF4YG2ZJeO5ctAVyuc
+ ABInatOkvEpdjQe0XOBM3Vw23gTi3RCDw1NbsqI8/p8gXop58M1CrcTLpLi34DxilkOw
+ aIKWvxzBLmxogO1BmHkA0n6pbxmOlCrA4EQcUelFgQP2O0W9a5LqlQOoSqpIeuQaOZbZ
+ 7pKjNVt7qrQPqi5lf6wtbxwtbMHhpxhomcEA8IcEfMLaUK5a8MKBz0qkUbZ41JgSbvMB dA== 
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ew72a8106-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ew6ss016q-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 19 Mar 2022 03:57:09 +0000
+        Sat, 19 Mar 2022 03:57:15 +0000
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 22J3utTE007031;
-        Sat, 19 Mar 2022 03:57:08 GMT
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 22J3uvsm007045;
+        Sat, 19 Mar 2022 03:57:14 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3ew5kyshna-1
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3ew5kyshp1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 19 Mar 2022 03:57:08 +0000
+        Sat, 19 Mar 2022 03:57:14 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 22J3v5Qg007126;
-        Sat, 19 Mar 2022 03:57:08 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 22J3v5Qm007126;
+        Sat, 19 Mar 2022 03:57:13 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3ew5kyshmn-3;
-        Sat, 19 Mar 2022 03:57:08 +0000
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3ew5kyshmn-6;
+        Sat, 19 Mar 2022 03:57:13 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
-        damien.lemoal@opensource.wdc.com, jinpu.wang@cloud.ionos.com
+To:     Julia Lawall <Julia.Lawall@inria.fr>, linux-can@vger.kernel.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        liuqi115@huawei.com, hch@lst.de, Viswas.G@microchip.com,
-        chenxiang66@hisilicon.com, linuxarm@huawei.com,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Ajish.Koshy@microchip.com
-Subject: Re: [PATCH v2 0/4] scsi: libsas and users: Factor out internal abort code
-Date:   Fri, 18 Mar 2022 23:56:53 -0400
-Message-Id: <164766213030.31329.3570055457807072827.b4-ty@oracle.com>
+        Sean Wang <sean.wang@mediatek.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-rdma@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>,
+        linux-s390@vger.kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-clk@vger.kernel.org, linux-spi@vger.kernel.org,
+        Shayne Chen <shayne.chen@mediatek.com>, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Jiri Olsa <jolsa@kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        linux-staging@lists.linux.dev, Namhyung Kim <namhyung@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-power@fi.rohmeurope.com, linux-mtd@lists.infradead.org,
+        target-devel@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-mediatek@lists.infradead.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH 00/30] fix typos in comments
+Date:   Fri, 18 Mar 2022 23:56:56 -0400
+Message-Id: <164766213032.31329.14855996441316567317.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1647001432-239276-1-git-send-email-john.garry@huawei.com>
-References: <1647001432-239276-1-git-send-email-john.garry@huawei.com>
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 9_qatTbC3os9dQaciEafNfM-9sVWYHgu
-X-Proofpoint-ORIG-GUID: 9_qatTbC3os9dQaciEafNfM-9sVWYHgu
+X-Proofpoint-ORIG-GUID: ryygBDbx4ESlJehbCVsBuy2qL-PPuldd
+X-Proofpoint-GUID: ryygBDbx4ESlJehbCVsBuy2qL-PPuldd
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -73,28 +94,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Mar 2022 20:23:48 +0800, John Garry wrote:
+On Mon, 14 Mar 2022 12:53:24 +0100, Julia Lawall wrote:
 
-> This is a follow-on from the series to factor out the TMF code shared
-> between libsas LLDDs.
+> Various spelling mistakes in comments.
+> Detected with the help of Coccinelle.
 > 
-> The hisi_sas and pm8001 have an internal abort feature to abort pending
-> commands in the host controller, prior to being sent to the target. The
-> driver support implementation is naturally quite similar, so factor it
-> out.
-> 
-> [...]
 
 Applied to 5.18/scsi-queue, thanks!
 
-[1/4] scsi: libsas: Add sas_execute_internal_abort_single()
-      https://git.kernel.org/mkp/scsi/c/5c9bf3635b66
-[2/4] scsi: libsas: Add sas_execute_internal_abort_dev()
-      https://git.kernel.org/mkp/scsi/c/6a91c3e31578
-[3/4] scsi: pm8001: Use libsas internal abort support
-      https://git.kernel.org/mkp/scsi/c/2cbbf489778e
-[4/4] scsi: hisi_sas: Use libsas internal abort support
-      https://git.kernel.org/mkp/scsi/c/095478a6e5bf
+[02/30] scsi: lpfc: fix typos in comments
+        https://git.kernel.org/mkp/scsi/c/9a866e6aaf4e
+[17/30] scsi: elx: libefc_sli: fix typos in comments
+        https://git.kernel.org/mkp/scsi/c/8037185d1ad8
+[24/30] scsi: qla2xxx: fix typos in comments
+        https://git.kernel.org/mkp/scsi/c/5419e0f15622
+[25/30] treewide: fix typos in comments
+        https://git.kernel.org/mkp/scsi/c/9d05790f5187
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering

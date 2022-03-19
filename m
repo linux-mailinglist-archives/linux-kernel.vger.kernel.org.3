@@ -2,69 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988224DE691
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 07:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A79A4DE695
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 07:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242320AbiCSGlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 02:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52440 "EHLO
+        id S242313AbiCSGwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 02:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242038AbiCSGls (ORCPT
+        with ESMTP id S235400AbiCSGwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 02:41:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD7E2EDC2D;
-        Fri, 18 Mar 2022 23:40:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CA6060EB6;
-        Sat, 19 Mar 2022 06:40:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05816C340EC;
-        Sat, 19 Mar 2022 06:40:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647672027;
-        bh=viYE02J1bim8nBHAWboDp5DYEfpRJ17BEMz4UNNOdnU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zr4CKErzIVDSB4FnIo5cEgLuMrJd7u7+gyy8RoNiVGSwzE2x6NaT95/DuagddRLZU
-         G1P8Arj1cSUivwmHOZ5s9seZV2TrFnhKXcNSn32hCLwBuuzIf4h4qw2aftrvZlI2IH
-         40Gnp0KKSpSUvo7SqOZ9JUOMBSR8DjdIwyRHGvP4=
-Date:   Sat, 19 Mar 2022 07:40:18 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        Alessio Balsini <balsini@android.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, kernel-team@android.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fuse: fix integer type usage in uapi header
-Message-ID: <YjV60vyVkMXrkla/@kroah.com>
-References: <20220318171405.2728855-1-cmllamas@google.com>
+        Sat, 19 Mar 2022 02:52:33 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8201BF034;
+        Fri, 18 Mar 2022 23:51:11 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KLBNp304Xzcb3Z;
+        Sat, 19 Mar 2022 14:51:06 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 19 Mar
+ 2022 14:51:09 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <leoyang.li@nxp.com>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>, <jakobkoschel@gmail.com>
+CC:     <linux-usb@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] usb: gadget: fsl_qe_udc: Add missing semicolon in qe_ep_dequeue()
+Date:   Sat, 19 Mar 2022 14:50:31 +0800
+Message-ID: <20220319065031.36928-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220318171405.2728855-1-cmllamas@google.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 05:14:05PM +0000, Carlos Llamas wrote:
-> Kernel uapi headers are supposed to use __[us]{8,16,32,64} defined by
-> <linux/types.h> instead of 'uint32_t' and similar. This patch changes
-> all the definitions in this header to use the correct type. Previous
-> discussion of this topic can be found here:
-> 
->   https://lkml.org/lkml/2019/6/5/18
-> 
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
-> ---
->  include/uapi/linux/fuse.h | 509 +++++++++++++++++++-------------------
->  1 file changed, 253 insertions(+), 256 deletions(-)
+drivers/usb/gadget/udc/fsl_qe_udc.c: In function ‘qe_ep_dequeue’:
+drivers/usb/gadget/udc/fsl_qe_udc.c:1792:3: error: expected ‘;’ before ‘req’
+   req = iter;
+   ^~~
+Add missing semicolon to fix this.
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 838884110f0d ("usb: gadget: fsl: remove usage of list iterator past the loop body")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/usb/gadget/udc/fsl_qe_udc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.c b/drivers/usb/gadget/udc/fsl_qe_udc.c
+index d80a7fe5ff62..bf745358e28e 100644
+--- a/drivers/usb/gadget/udc/fsl_qe_udc.c
++++ b/drivers/usb/gadget/udc/fsl_qe_udc.c
+@@ -1788,7 +1788,7 @@ static int qe_ep_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+ 	/* make sure it's actually queued on this endpoint */
+ 	list_for_each_entry(iter, &ep->queue, queue) {
+ 		if (&iter->req != _req)
+-			continue
++			continue;
+ 		req = iter;
+ 		break;
+ 	}
+-- 
+2.17.1
+

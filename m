@@ -2,140 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2994DE4F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 02:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 532854DE4F4
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 02:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241693AbiCSBBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 21:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
+        id S241704AbiCSBPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 21:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbiCSBBj (ORCPT
+        with ESMTP id S241693AbiCSBPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 21:01:39 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CAF9BBAA
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:00:18 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id d7so13759390wrb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:00:18 -0700 (PDT)
+        Fri, 18 Mar 2022 21:15:08 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756A22BAE77
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:13:48 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id bt26so16572709lfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:13:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uCgXmCF718Hrjp6zjP2ObsCDhynsffIoLOmT0oY7piI=;
-        b=WtFcWDQ9K/wlk1pJX5HrnJ+O9tANSJHZLPqNmqRSHsIAVj803Y5ZHrN/mP9vsOBBrq
-         bE5dbOAxe6N9JrJ9Ni79S28Bkzm7ANWU3zoeKkC2RWH+e1V2N6GE3rBoW8GrSf6vYeI+
-         T9f3++f3DY0WEu7MGnPuNJMswCVbah/kpBz6MnWA1O3OZDLaNYgMWRzr478WrMQfheFj
-         drOaLp5ZpmcH823IdNCyPJQ0hqo7osBXdh5f0iwUilFpcIPuHflGhsCIsXCvmkLhNcfX
-         QJ1vf1NvGFCXfQYydx3gt0HrPKIRLQENHEVAhEX2uG2K7O8jlBUmF8NIDs2zyeRIJH+9
-         OY3w==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KewD06Vu0nsX23vq307ezHIhVg7q/YW1qUsCXfY0+3M=;
+        b=O31GPd4+a0dW/sfSFVN0SwhJZgZt45sr6T7Z4Ng79tgRtYB8w8KRyTai2p60eBV9gT
+         tcbw6Ny+Q/TkhccY9Fv3508KsvjxQWdbRgWksssxaccMi0rt7/bhQcRLGGgqLJRupW4n
+         VTasQHX/wzxA2xr2mC7BP2QpKgTAK1TvGaN4Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uCgXmCF718Hrjp6zjP2ObsCDhynsffIoLOmT0oY7piI=;
-        b=lVJzhasHNforfu6LDLX1DNnz78W0l/DzeYpzd7OwWReJhbxDKhSsSlzOfz6FZKlXUd
-         0E2MBtTBn1nHVX8iKoz4BkF7ASSPBOCkfZ9eh3fNA0egIbY90b0t71QriSyE6XDNNek1
-         CABSrHtCqOm68dxdi0IRqiZE57sm5o9tycker1cZ9A53Lm1FpcB9rf5rF0n6NBjO6bun
-         26ICdLZy0JdQd56SefEpzUR3p7sM7fGGuRGg0th33RNsaaotwunEWQbaYz7jV15+QYeE
-         uqrs+j+Ikf9D+IzXJ+s6FzsrXF+6yWmbrlrCHhYfUqW6k5YiMpf7AuQ1PuK2uW/pWKPH
-         yNAw==
-X-Gm-Message-State: AOAM532syq0PxCZGKDW0HO55gqGx75Y2emIUbAsBQprcn6PeRRqlfqs1
-        L+DctYh94vzwtCty0Rx6UlhDE7B646bmiw==
-X-Google-Smtp-Source: ABdhPJzAfVwdsmMy2QNjKZpbWpTsi5200cUlkB1ixbXlTpV3AIZoaYYRRH+/jX/s+K0eAe5UTjJSUA==
-X-Received: by 2002:adf:f881:0:b0:203:f9b1:a6ab with SMTP id u1-20020adff881000000b00203f9b1a6abmr3309208wrp.410.1647651617266;
-        Fri, 18 Mar 2022 18:00:17 -0700 (PDT)
-Received: from localhost ([2a00:79e0:9d:4:4d9a:ad76:b339:c04b])
-        by smtp.gmail.com with ESMTPSA id 189-20020a1c02c6000000b0038c57df82aasm7979491wmc.20.2022.03.18.18.00.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 18:00:16 -0700 (PDT)
-From:   Jann Horn <jannh@google.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH] selftests/seccomp: Don't call read() on TTY from background pgrp
-Date:   Sat, 19 Mar 2022 02:00:11 +0100
-Message-Id: <20220319010011.1374622-1-jannh@google.com>
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KewD06Vu0nsX23vq307ezHIhVg7q/YW1qUsCXfY0+3M=;
+        b=IQxKXcmKCb1ONU87iJCqfWVBMSdj3oC+4z4q7GhXkm8CV+7h/2hdxQP6qLBdowwYqx
+         ozInqO3vVPiW3rR2EwgWdIlFpNe4mFGE9gGNnmJd+msEFexcSynaUl7c2kNIAEbPO4cc
+         l31Ftc/ZPS8eO3UJokm7AAmpdFtCgQoIM/rbETa2c9WF8b9qGdj8eT5l+SXV0czz0YmV
+         bp8hWk8Liz+dZXXGyyewaLjSC0kDnHQr4uPEGSEG2UHjkKMpUXp84yEJ5/2Ew0ZCOOBk
+         QBalhLLjFNQfBwx6gzdfuph5Cwj7OBtUi2NpVHy8dsg7tlZfgUkLUpJG7qbTMxABBlIs
+         RN6w==
+X-Gm-Message-State: AOAM5328FQYaXDzUtgIgKaW9JxRNsSuxN/+WO/sc/U75lHqGqH/VrQs3
+        92D44NP3qA6jHpFxvYOMP7xt1QZCBKf8rTHSKV4=
+X-Google-Smtp-Source: ABdhPJyS1zcie+gt9p+WomatDuLDo1smDqBKORiZVCBSxNyCpCd6xzlI50MmeunGHqPqppwL7fGhBw==
+X-Received: by 2002:ac2:4a61:0:b0:448:1d0b:b6fb with SMTP id q1-20020ac24a61000000b004481d0bb6fbmr7334565lfp.321.1647652426511;
+        Fri, 18 Mar 2022 18:13:46 -0700 (PDT)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
+        by smtp.gmail.com with ESMTPSA id bq42-20020a056512152a00b00447431cc768sm1079608lfb.170.2022.03.18.18.13.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 18:13:43 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id bu29so16649605lfb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:13:42 -0700 (PDT)
+X-Received: by 2002:a05:6512:b13:b0:448:90c6:dc49 with SMTP id
+ w19-20020a0565120b1300b0044890c6dc49mr7786949lfu.542.1647652421984; Fri, 18
+ Mar 2022 18:13:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAGG=3QVu5QjQK8m2FWiYn-XQuVBjUGXcbznSbK22jVMB5GAutw@mail.gmail.com>
+ <F5296439-4CA3-4F31-BD91-5ED1510BC382@zytor.com> <CAKwvOdkk-C8HMemKs4+yoxvNDgTLmvZG1rmwjVXBqhsQ-cED5g@mail.gmail.com>
+ <CAHk-=whJfKN8Jag=8DS=pbZR3TY90znUOP6Km+TLRJ9dZEgNqw@mail.gmail.com>
+ <fd89333f-e470-a295-baf6-a736c55caeb5@citrix.com> <CAHk-=wj47CG0Y9GOFmGg4AYFvXhRFDX9x7E2Uxo9k-UX2wgR4g@mail.gmail.com>
+ <83b33afc-8502-0065-60bc-3a91528632d8@kernel.org> <CAHk-=wj1Z_zzY7ADxaarorK5sh2xkwbcHxJTzW=bsYChWJGBGg@mail.gmail.com>
+ <9a97330b-e5ee-7b7e-4c7a-cfdf15032094@citrix.com> <CAHk-=wgKBme-SdbkSxbQ4+c6tZdvY2fe1wP1TgJeuDAf+AgwMg@mail.gmail.com>
+ <20220318234212.GU614@gate.crashing.org>
+In-Reply-To: <20220318234212.GU614@gate.crashing.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 18 Mar 2022 18:13:25 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjZhTJJY3WV8=3vjZR6gONReXorRdNtM+T5syFSZqimEA@mail.gmail.com>
+Message-ID: <CAHk-=wjZhTJJY3WV8=3vjZR6gONReXorRdNtM+T5syFSZqimEA@mail.gmail.com>
+Subject: Re: [PATCH v5] x86: use builtins to read eflags
+To:     Segher Boessenkool <segher@kernel.crashing.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Bill Wendling <morbo@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 92d25637a3a4 ("kselftest: signal all child processes"), tests
-are executed in background process groups. This means that trying to read
-from stdin now throws SIGTTIN when stdin is a TTY, which breaks some
-seccomp selftests that try to use read(0, NULL, 0) as a dummy syscall.
+On Fri, Mar 18, 2022 at 4:47 PM Segher Boessenkool
+<segher@kernel.crashing.org> wrote:
+>>
+> > Marking '%rsp
+> > used makes the compiler understand it's not a leaf function.
+>
+> As I said before, this is explicitly incorrect code.  Always was, but
+> it is documented since a while (since GCC 9).  Clobbering the stack
+> pointer can never be correct, the stack pointer after an asm has to be
+> identical to the one before that asm!
 
-The simplest way to fix that is probably to just use -1 instead of 0 as
-the dummy read()'s FD.
+We've never clobbered the stack register.
 
-Fixes: 92d25637a3a4 ("kselftest: signal all child processes")
-Signed-off-by: Jann Horn <jannh@google.com>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+We've _marked_ it as an in-out register, but we obviously never
+actually change it (as far as the compiler can tell). That would very
+obviously never work.
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/=
-selftests/seccomp/seccomp_bpf.c
-index 9d126d7fabdb..313bb0cbfb1e 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -955,7 +955,7 @@ TEST(ERRNO_valid)
- 	ASSERT_EQ(0, ret);
-=20
- 	EXPECT_EQ(parent, syscall(__NR_getppid));
--	EXPECT_EQ(-1, read(0, NULL, 0));
-+	EXPECT_EQ(-1, read(-1, NULL, 0));
- 	EXPECT_EQ(E2BIG, errno);
- }
-=20
-@@ -974,7 +974,7 @@ TEST(ERRNO_zero)
-=20
- 	EXPECT_EQ(parent, syscall(__NR_getppid));
- 	/* "errno" of 0 is ok. */
--	EXPECT_EQ(0, read(0, NULL, 0));
-+	EXPECT_EQ(0, read(-1, NULL, 0));
- }
-=20
- /*
-@@ -995,7 +995,7 @@ TEST(ERRNO_capped)
- 	ASSERT_EQ(0, ret);
-=20
- 	EXPECT_EQ(parent, syscall(__NR_getppid));
--	EXPECT_EQ(-1, read(0, NULL, 0));
-+	EXPECT_EQ(-1, read(-1, NULL, 0));
- 	EXPECT_EQ(4095, errno);
- }
-=20
-@@ -1026,7 +1026,7 @@ TEST(ERRNO_order)
- 	ASSERT_EQ(0, ret);
-=20
- 	EXPECT_EQ(parent, syscall(__NR_getppid));
--	EXPECT_EQ(-1, read(0, NULL, 0));
-+	EXPECT_EQ(-1, read(-1, NULL, 0));
- 	EXPECT_EQ(12, errno);
- }
-=20
-@@ -2623,7 +2623,7 @@ void *tsync_sibling(void *data)
- 	ret =3D prctl(PR_GET_NO_NEW_PRIVS, 0, 0, 0, 0);
- 	if (!ret)
- 		return (void *)SIBLING_EXIT_NEWPRIVS;
--	read(0, NULL, 0);
-+	read(-1, NULL, 0);
- 	return (void *)SIBLING_EXIT_UNKILLED;
- }
-=20
+And even that marking must have been some gcc person telling us to do
+that, because I don't think we would have come up with it otherwise. I
+would guess it's what gcc uses internally to decide "I need this
+function to have a stack frame". And once you have a stack frame, the
+inline asm will automatically be put inside of it.
 
-base-commit: 34e047aa16c0123bbae8e2f6df33e5ecc1f56601
---=20
-2.35.1.894.gb6a874cedc-goog
+I spent a lot of time trying to find the origin of it.  Finding the
+commit in the kernel where it was first introduced is easy: looks like
+commit 0e8e2238b52e ("x86/xen: Add stack frame dependency to hypercall
+inline asm calls") was the first to use that trick, although it was a
+series of patches from Josh that did that to make objdump happy.
 
+And I found the culprit. It's you, on the gcc lists:
+
+    https://gcc.gnu.org/legacy-ml/gcc/2015-07/msg00080.html
+
+Heh.
+
+              Linus

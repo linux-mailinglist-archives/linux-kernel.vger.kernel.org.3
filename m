@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CC74DEA12
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 19:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CA34DEA16
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 19:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243890AbiCSSYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 14:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
+        id S243898AbiCSS1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 14:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233591AbiCSSYb (ORCPT
+        with ESMTP id S233591AbiCSS1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 14:24:31 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A321C34AF
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 11:23:10 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id m3so6808009lfj.11
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 11:23:10 -0700 (PDT)
+        Sat, 19 Mar 2022 14:27:43 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87D226E027;
+        Sat, 19 Mar 2022 11:26:21 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id r2so7942599ilh.0;
+        Sat, 19 Mar 2022 11:26:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to;
-        bh=uNibqQJsY18b43mdTlcpPHoa8q7iBzS63h/TZp5dtaM=;
-        b=Bj4QqncBVpaSjbv6iOLVmIT4TVDgGcnxbEtz56JTO2DaNqJrzQT7dxun7tEK/V+hmN
-         j5psQckDAdOJOMAmbxHhjH79umeJAMWk2hCj8wqhqQg4qn/JSwIZDZO+VlLsMmGNtw5N
-         1U1JiOjcoaL14fMSV8ZZ2ov4hQCynbgUZhQxDxoUeXDaHOCH/XA8A3TokptSA9cRQK5u
-         6W9XGLhEsoHGP9jYY3lQ4GHFMaEuih+/lF5p5IFucXYvGbKaJvkOoflf7fEeThxIjOXH
-         dJg5X21pW1nENLvw+oNi045G8f6SBMhDMirRpBJ62t+JqAv6GnvxfbHMg84geZyTNu6z
-         Pw2A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lNANWIYC3JPI1YjCRFPsg6S12NrqHbsTweXOTPTiyyQ=;
+        b=S/GdAu1IO91TmVCe4gRDoAvKXwWR2K/eY5uH5zhgMdJ5yGz1/KylrtEpX7dS0Hv+0t
+         jowreCdIl7piyamRXiBm4hAdkZEBAKDbtI00Zo+KTujLURCVgYW3ji9cb7IFxdP3XL4c
+         rXx5qFm1FpLdJmWKAc03driO4g4f0RlxlKb998CFXGP3KGhYb9L81yP//gzgh7UKnIzg
+         22oqN9k+VKQncy6vzWfH8h4koRvAZHsnGeXRTke9KBwPwftE7qUUQk7rlQ/PJgARdpoR
+         LGh+bzK99qdxMHjaYfiTFT5eTFKvQu1Mot348MIsAFXwZpbx21ezS7HoFypX85DB7z40
+         MkHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to;
-        bh=uNibqQJsY18b43mdTlcpPHoa8q7iBzS63h/TZp5dtaM=;
-        b=d8rB3ElfX1uwURyo3dZbp+xyd0SccuHvdBqFZ9kgj8j3VEdBpHxT4Ey+6O7ZaNN9r+
-         RDAeyTdZn3/eWwsMaPnThhtUE9pPOLNrESUsLV6uebYoeud6LlKR0Jey1I8uoEI/q/sv
-         8Tw5SDN/Nme1ImL7bgt8r4BGxcu72wE0ZciLhxNUc24gDeVyFClsE/4ZAs5m4g4el7EZ
-         hEv9b/Qub4biAXwi8N2W/lVHzG/Km74xdiFefL2/PCFeOiqMdK1GmZch34n26TlkFd5l
-         R0F7N5p2lRVJyI8Rsrr85gbTxY4RIJQ5WR3caIM4HqyS8DXzYLdm/KW9h9yZ5CPL48Eg
-         1+fw==
-X-Gm-Message-State: AOAM5305eye28TtB8InnuU5ccpFvMDk4esX+CBWfnxr1NqO7oU83JwKR
-        NZkbxJZMH7+LpauX2SkrwtM=
-X-Google-Smtp-Source: ABdhPJz4sZaNj2/GJ3fVJKviJ07zqU9lPtNEOmz7QI2eyHqw5fBLL5c0ZuZbUvAUv/ixrZfo+NcWRA==
-X-Received: by 2002:ac2:4e06:0:b0:448:3218:2e22 with SMTP id e6-20020ac24e06000000b0044832182e22mr10146455lfr.369.1647714187792;
-        Sat, 19 Mar 2022 11:23:07 -0700 (PDT)
-Received: from [192.168.1.11] ([46.235.67.145])
-        by smtp.gmail.com with ESMTPSA id c1-20020a196541000000b00448bcdccb91sm1260932lfj.231.2022.03.19.11.23.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Mar 2022 11:23:07 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------0geXwsVQalqTa2xB0VGIHWeE"
-Message-ID: <57fc3806-86c6-b1b2-4c44-083b1b7afc8b@gmail.com>
-Date:   Sat, 19 Mar 2022 21:23:06 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lNANWIYC3JPI1YjCRFPsg6S12NrqHbsTweXOTPTiyyQ=;
+        b=00iaIRQwAKEomei7I8Mz2Keog1CTDRjdsq/XAN+ncj5VrVZf5bCB4xevcrcozKNPr2
+         IKir/nq1z+Q11gg9KvPTUtDQXoY6SzNPOqd5en2cnLQfL3ag1wJs8hJUaCMdswgQcyn9
+         vrJLNfY+E5NvPQUfaK7yG/GsGunDWqFErKxbpQdVjkux+VlXWoLqvXdASb/hpSvEw+uO
+         UPtOOzsZDCklUl16iFAhlNCehe1GfmFZmtWgHL175A0IdJsbNXpq9WXxMBSJtnbQYIP4
+         3tfqF47sgIGo9BzGSWEOwZZyrkLcY/3UX7KS/qXTORRapvpgVjphmNFN3vDzJiSn6svC
+         l2/w==
+X-Gm-Message-State: AOAM530f3ifTjfzL0LClPXOlUS8H4F8zyh93MsZ7tgcc9bHCQt0t+t1m
+        7hzMonJs9OVdbStygLfKQRxU4y6R1sf4AqYAO4I=
+X-Google-Smtp-Source: ABdhPJw/C9Wd403XA8JuQ2/x2cxv72+XPl5KjndvByLTIP9PamTSXuYX1B8QVFIFH5cNUGq0EjfS/zF5WyMdP2FnGbE=
+X-Received: by 2002:a92:6406:0:b0:2bb:f1de:e13e with SMTP id
+ y6-20020a926406000000b002bbf1dee13emr6528304ilb.305.1647714381039; Sat, 19
+ Mar 2022 11:26:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [syzbot] divide error in dbNextAG
-Content-Language: en-US
-To:     syzbot <syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com>,
-        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000b1470105da9622aa@google.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <000000000000b1470105da9622aa@google.com>
+References: <20220316122419.933957-1-jolsa@kernel.org> <CAEf4BzbpjN6ca7D9KOTiFPOoBYkciYvTz0UJNp5c-_3ptm=Mrg@mail.gmail.com>
+ <YjXMSg+BSSOv0xd1@krava> <YjXpTZUI10RVCGPD@krava>
+In-Reply-To: <YjXpTZUI10RVCGPD@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Sat, 19 Mar 2022 11:26:10 -0700
+Message-ID: <CAEf4BzYbL0=ExUQOy3xZ-C2O6nQN3BVudBWESFNkgs0fr=uRmg@mail.gmail.com>
+Subject: Re: [PATCHv3 bpf-next 00/13] bpf: Add kprobe multi link
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,60 +76,260 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------0geXwsVQalqTa2xB0VGIHWeE
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Sat, Mar 19, 2022 at 7:31 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Sat, Mar 19, 2022 at 01:27:56PM +0100, Jiri Olsa wrote:
+> > On Fri, Mar 18, 2022 at 10:50:46PM -0700, Andrii Nakryiko wrote:
+> > > On Wed, Mar 16, 2022 at 5:24 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > > >
+> > > > hi,
+> > > > this patchset adds new link type BPF_TRACE_KPROBE_MULTI that attaches
+> > > > kprobe program through fprobe API [1] instroduced by Masami.
+> > > >
+> > > > The fprobe API allows to attach probe on multiple functions at once very
+> > > > fast, because it works on top of ftrace. On the other hand this limits
+> > > > the probe point to the function entry or return.
+> > > >
+> > > >
+> > > > With bpftrace support I see following attach speed:
+> > > >
+> > > >   # perf stat --null -r 5 ./src/bpftrace -e 'kprobe:x* { } i:ms:1 { exit(); } '
+> > > >   Attaching 2 probes...
+> > > >   Attaching 3342 functions
+> > > >   ...
+> > > >
+> > > >   1.4960 +- 0.0285 seconds time elapsed  ( +-  1.91% )
+> > > >
+> > > > v3 changes:
+> > > >   - based on latest fprobe post from Masami [2]
+> > > >   - add acks
+> > > >   - add extra comment to kprobe_multi_link_handler wrt entry ip setup [Masami]
+> > > >   - keep swap_words_64 static and swap values directly in
+> > > >     bpf_kprobe_multi_cookie_swap [Andrii]
+> > > >   - rearrange locking/migrate setup in kprobe_multi_link_prog_run [Andrii]
+> > > >   - move uapi fields [Andrii]
+> > > >   - add bpf_program__attach_kprobe_multi_opts function [Andrii]
+> > > >   - many small test changes [Andrii]
+> > > >   - added tests for bpf_program__attach_kprobe_multi_opts
+> > > >   - make kallsyms_lookup_name check for empty string [Andrii]
+> > > >
+> > > > v2 changes:
+> > > >   - based on latest fprobe changes [1]
+> > > >   - renaming the uapi interface to kprobe multi
+> > > >   - adding support for sort_r to pass user pointer for swap functions
+> > > >     and using that in cookie support to keep just single functions array
+> > > >   - moving new link to kernel/trace/bpf_trace.c file
+> > > >   - using single fprobe callback function for entry and exit
+> > > >   - using kvzalloc, libbpf_ensure_mem functions
+> > > >   - adding new k[ret]probe.multi sections instead of using current kprobe
+> > > >   - used glob_match from test_progs.c, added '?' matching
+> > > >   - move bpf_get_func_ip verifier inline change to seprate change
+> > > >   - couple of other minor fixes
+> > > >
+> > > >
+> > > > Also available at:
+> > > >   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+> > > >   bpf/kprobe_multi
+> > > >
+> > > > thanks,
+> > > > jirka
+> > > >
+> > > >
+> > > > [1] https://lore.kernel.org/bpf/164458044634.586276.3261555265565111183.stgit@devnote2/
+> > > > [2] https://lore.kernel.org/bpf/164735281449.1084943.12438881786173547153.stgit@devnote2/
+> > > > ---
+> > > > Jiri Olsa (13):
+> > > >       lib/sort: Add priv pointer to swap function
+> > > >       kallsyms: Skip the name search for empty string
+> > > >       bpf: Add multi kprobe link
+> > > >       bpf: Add bpf_get_func_ip kprobe helper for multi kprobe link
+> > > >       bpf: Add support to inline bpf_get_func_ip helper on x86
+> > > >       bpf: Add cookie support to programs attached with kprobe multi link
+> > > >       libbpf: Add libbpf_kallsyms_parse function
+> > > >       libbpf: Add bpf_link_create support for multi kprobes
+> > > >       libbpf: Add bpf_program__attach_kprobe_multi_opts function
+> > > >       selftests/bpf: Add kprobe_multi attach test
+> > > >       selftests/bpf: Add kprobe_multi bpf_cookie test
+> > > >       selftests/bpf: Add attach test for bpf_program__attach_kprobe_multi_opts
+> > > >       selftests/bpf: Add cookie test for bpf_program__attach_kprobe_multi_opts
+> > > >
+> > >
+> > > Ok, so I've integrated multi-attach kprobes into retsnoop. It was
+> > > pretty straightforward. Here are some numbers for the speed of
+> > > attaching and, even more importantly, detaching for a set of almost
+> > > 400 functions. It's a bit less functions for fentry-based mode due to
+> > > more limited BTF information for static functions. Note that retsnoop
+> > > attaches two BPF programs for each kernel function, so it's actually
+> > > two multi-attach kprobes, each attaching to 397 functions. For
+> > > single-attach kprobe, we perform 397 * 2 = 794 attachments.
+> > >
+> > > I've been invoking retsnoop with the following specified set of
+> > > functions: -e '*sys_bpf*' -a ':kernel/bpf/syscall.c' -a
+> > > ':kernel/bpf/verifier.c' -a ':kernel/bpf/btf.c' -a
+> > > ':kernel/bpf/core.c'. So basically bpf syscall entry functions and all
+> > > the discoverable functions from syscall.c, verifier.c, core.c and
+> > > btf.c from kernel/bpf subdirectory.
+> > >
+> > > Results:
+> > >
+> > > fentry attach/detach (263 kfuncs): 2133 ms / 31671  ms (33 seconds)
+> > > kprobe attach/detach (397 kfuncs): 3121 ms / 13195 ms (16 seconds)
+> > > multi-kprobe attach/detach (397 kfuncs): 9 ms / 248 ms (0.25 seconds)
+> > >
+> > > So as you can see, the speed up is tremendous! API is also very
+> > > convenient, I didn't have to modify retsnoop internals much to
+> > > accommodate multi-attach API. Great job!
+> >
+> > nice! thanks for doing that so quickly
+> >
+> > >
+> > > Now for the bad news. :(
+> > >
+> > > Stack traces from multi-attach kretprobe are broken, which makes all
+> > > this way less useful.
+> > >
+> > > Below, see stack traces captured with multi- and single- kretprobes
+> > > for two different use cases. Single kprobe stack traces make much more
+> > > sense. Ignore that last function doesn't have actual address
+> > > associated with it (i.e. for __sys_bpf and bpf_tracing_prog_attach,
+> > > respectively). That's just how retsnoop is doing things, I think. We
+> > > actually were capturing stack traces from inside __sys_bpf (first
+> > > case) and bpf_tracing_prog_attach (second case).
+> > >
+> > > MULTI KPROBE:
+> > > ffffffff81185a80 __sys_bpf+0x0
+> > > (kernel/bpf/syscall.c:4622:1)
+> > >
+> > > SINGLE KPROBE:
+> > > ffffffff81e0007c entry_SYSCALL_64_after_hwframe+0x44
+> > > (arch/x86/entry/entry_64.S:113:0)
+> > > ffffffff81cd2b15 do_syscall_64+0x35
+> > > (arch/x86/entry/common.c:80:7)
+> > >                  . do_syscall_x64
+> > > (arch/x86/entry/common.c:50:12)
+> > > ffffffff811881aa __x64_sys_bpf+0x1a
+> > > (kernel/bpf/syscall.c:4765:1)
+> > >                  __sys_bpf
+> > >
+> > >
+> > > MULTI KPROBE:
+> > > ffffffff811851b0 bpf_tracing_prog_attach+0x0
+> > > (kernel/bpf/syscall.c:2708:1)
+> > >
+> > > SINGLE KPROBE:
+> > > ffffffff81e0007c entry_SYSCALL_64_after_hwframe+0x44
+> > > (arch/x86/entry/entry_64.S:113:0)
+> > > ffffffff81cd2b15 do_syscall_64+0x35
+> > > (arch/x86/entry/common.c:80:7)
+> > >                  . do_syscall_x64
+> > > (arch/x86/entry/common.c:50:12)
+> > > ffffffff811881aa __x64_sys_bpf+0x1a
+> > > (kernel/bpf/syscall.c:4765:1)
+> > > ffffffff81185e79 __sys_bpf+0x3f9
+> > > (kernel/bpf/syscall.c:4705:9)
+> > > ffffffff8118583a bpf_raw_tracepoint_open+0x19a
+> > > (kernel/bpf/syscall.c:3069:6)
+> > >                  bpf_tracing_prog_attach
+> > >
+> > > You can see that in multi-attach kprobe we only get one entry, which
+> > > is the very last function in the stack trace. We have no parent
+> > > function captured whatsoever. Jiri, Masami, any ideas what's wrong and
+> > > how to fix this? Let's try to figure this out and fix it before the
+> > > feature makes it into the kernel release. Thanks in advance!
+> >
+> > oops, I should have tried kstack with the bpftrace's kretprobe, I see the same:
+> >
+> >       # ./src/bpftrace -e 'kretprobe:x* { @[kstack] = count(); }'
+> >       Attaching 1 probe...
+> >       Attaching 3340probes
+> >       ^C
+> >
+> >       @[
+> >           xfs_trans_apply_dquot_deltas+0
+> >       ]: 22
+> >       @[
+> >           xlog_cil_commit+0
+> >       ]: 22
+> >       @[
+> >           xlog_grant_push_threshold+0
+> >       ]: 22
+> >       @[
+> >           xfs_trans_add_item+0
+> >       ]: 22
+> >       @[
+> >           xfs_log_reserve+0
+> >       ]: 22
+> >       @[
+> >           xlog_space_left+0
+> >       ]: 22
+> >       @[
+> >           xfs_buf_offset+0
+> >       ]: 22
+> >       @[
+> >           xfs_trans_free_dqinfo+0
+> >       ]: 22
+> >       @[
+> >           xlog_ticket_alloc+0
+> >           xfs_log_reserve+5
+> >       ]: 22
+> >       @[
+> >           xfs_cil_prepare_item+0
+> >
+> >
+> > I think it's because we set original ip for return probe to have
+> > bpf_get_func_ip working properly, but it breaks backtrace of course
+> >
+> > I'm not sure we could bring along the original regs for return probe,
+> > but I have an idea how to workaround the bpf_get_func_ip issue and
+> > keep the registers intact for other helpers
+>
+> change below is using bpf_run_ctx to store link and entry ip on stack,
+> where helpers can find it.. it fixed the retprobe backtrace for me
+>
+> I had to revert the get_func_ip inline.. it's squashed in the change
+> below for quick testing.. I'll send revert in separate patch with the
+> formal change
+>
+> could you please test?
+>
 
-On 3/19/22 21:07, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    09688c0166e7 Linux 5.17-rc8
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=163e5015700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=70f75a89c7a0e6bc
-> dashboard link: https://syzkaller.appspot.com/bug?extid=46f5c25af73eb8330eb6
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=132c1d61700000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
-> 
-> divide error: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 3622 Comm: syz-executor.0 Not tainted 5.17.0-rc8-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:dbNextAG+0xfc/0x5f0 fs/jfs/jfs_dmap.c:602
+Yep, tried locally and now stack traces work as expected. Thanks!
+Please resubmit as a proper patch and add my ack:
 
-Looks like malicious fs image with bmp->db_numag == 0.
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-#syz test:
-git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> thanks,
+> jirka
+>
+>
+> ---
 
+[...]
 
+> -static u64 bpf_kprobe_multi_cookie(struct bpf_run_ctx *ctx, u64 ip)
+> +static u64 bpf_kprobe_multi_cookie(struct bpf_run_ctx *ctx)
+>  {
+> +       struct bpf_kprobe_multi_run_ctx *run_ctx;
+>         struct bpf_kprobe_multi_link *link;
+> +       u64 *cookie, entry_ip;
+>         unsigned long *addr;
+> -       u64 *cookie;
+>
+>         if (WARN_ON_ONCE(!ctx))
+>                 return 0;
+> -       link = container_of(ctx, struct bpf_kprobe_multi_link, run_ctx);
+> +       run_ctx = container_of(current->bpf_ctx, struct bpf_kprobe_multi_run_ctx, run_ctx);
+> +       link = run_ctx->link;
+> +       entry_ip = run_ctx->entry_ip;
 
+nit: this can be assigned after we checked that we have link->cookies
 
-With regards,
-Pavel Skripkin
---------------0geXwsVQalqTa2xB0VGIHWeE
-Content-Type: text/plain; charset=UTF-8; name="ph"
-Content-Disposition: attachment; filename="ph"
-Content-Transfer-Encoding: base64
+>         if (!link->cookies)
+>                 return 0;
+> -       addr = bsearch(&ip, link->addrs, link->cnt, sizeof(ip),
+> +       addr = bsearch(&entry_ip, link->addrs, link->cnt, sizeof(entry_ip),
+>                        __bpf_kprobe_multi_cookie_cmp);
+>         if (!addr)
+>                 return 0;
 
-ZGlmZiAtLWdpdCBhL2ZzL2pmcy9qZnNfZG1hcC5jIGIvZnMvamZzL2pmc19kbWFwLmMKaW5k
-ZXggOTFmNGVjOTNkYWIxLi42MzNhOWFmZjA4NjggMTAwNjQ0Ci0tLSBhL2ZzL2pmcy9qZnNf
-ZG1hcC5jCisrKyBiL2ZzL2pmcy9qZnNfZG1hcC5jCkBAIC0xNDgsNiArMTQ4LDcgQEAgc3Rh
-dGljIGNvbnN0IHM4IGJ1ZHRhYlsyNTZdID0gewogICoJMAktIHN1Y2Nlc3MKICAqCS1FTk9N
-RU0JLSBpbnN1ZmZpY2llbnQgbWVtb3J5CiAgKgktRUlPCS0gaS9vIGVycm9yCisgKgktRUlO
-VkFMIC0gd3JvbmcgYm1hcCBkYXRhCiAgKi8KIGludCBkYk1vdW50KHN0cnVjdCBpbm9kZSAq
-aXBibWFwKQogewpAQCAtMTc5LDYgKzE4MCw5IEBAIGludCBkYk1vdW50KHN0cnVjdCBpbm9k
-ZSAqaXBibWFwKQogCWJtcC0+ZGJfbmZyZWUgPSBsZTY0X3RvX2NwdShkYm1wX2xlLT5kbl9u
-ZnJlZSk7CiAJYm1wLT5kYl9sMm5icGVycGFnZSA9IGxlMzJfdG9fY3B1KGRibXBfbGUtPmRu
-X2wybmJwZXJwYWdlKTsKIAlibXAtPmRiX251bWFnID0gbGUzMl90b19jcHUoZGJtcF9sZS0+
-ZG5fbnVtYWcpOworCWlmICghYm1wLT5kYl9udW1hZykKKwkJcmV0dXJuIC1FSU5WQUw7CisK
-IAlibXAtPmRiX21heGxldmVsID0gbGUzMl90b19jcHUoZGJtcF9sZS0+ZG5fbWF4bGV2ZWwp
-OwogCWJtcC0+ZGJfbWF4YWcgPSBsZTMyX3RvX2NwdShkYm1wX2xlLT5kbl9tYXhhZyk7CiAJ
-Ym1wLT5kYl9hZ3ByZWYgPSBsZTMyX3RvX2NwdShkYm1wX2xlLT5kbl9hZ3ByZWYpOwo=
-
---------------0geXwsVQalqTa2xB0VGIHWeE--
+[...]

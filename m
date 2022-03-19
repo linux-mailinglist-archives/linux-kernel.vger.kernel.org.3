@@ -2,136 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A274DE822
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 14:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8434DE829
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 14:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243027AbiCSNZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 09:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
+        id S243052AbiCSN2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 09:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239627AbiCSNZe (ORCPT
+        with ESMTP id S239627AbiCSN2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 09:25:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 094A763B9
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 06:24:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647696252;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LAhEbRZv23sg+3l9XeDBt2uA5yTFBx5ccqYfvZx5ss0=;
-        b=a97JRUxzg4CE/rQdpZVSkOdC77qOwAwoB7fRaJ27EMkBWl+3ZHKQ1HcugfZL+YYd7UI6Pf
-        G30eOgp20DeLLnVWNhoL4+LN0GPZW7I6W+DPgR6YRRhliNh7mCjbkubxMJln48Bnl25vlg
-        cKiwazaNyYW0uG8TFd3CN7y0dzVsJ/4=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445-OuqtuUDNOUKI-A-HMvErJw-1; Sat, 19 Mar 2022 09:24:10 -0400
-X-MC-Unique: OuqtuUDNOUKI-A-HMvErJw-1
-Received: by mail-ed1-f72.google.com with SMTP id l24-20020a056402231800b00410f19a3103so6521257eda.5
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 06:24:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LAhEbRZv23sg+3l9XeDBt2uA5yTFBx5ccqYfvZx5ss0=;
-        b=kyk2DuiRceiQWuai0Q2C5O1cvm6dNE/q/Vm9FQumpEgz9/s+/+T+qdZUZ9Cm6YrmzI
-         zToXUgQ9DWJy+nDRC0HUZ1N4qvUzPr6Izuu0wcPRF9P+itKZ09n/F3OSj0fpiLMEuGi6
-         1cszu15Q1hYKBLpoV4q/FJgT21f+t172dD+6yI5fDSsp303laLvoHrLgfoInqz8KKBzz
-         YS3EJVmcnW2kVgD8efbMicZ5BL/tmAu5dKeGG/O1V5vk+DiTA/jDbh8de1FmWvi/j6PT
-         5aZ3CMEOIk/haenu/mjDcpFFNU5DhDPOJ3ECZW+j+1NjcUDOmokygsP87dBG9DH7ClUd
-         kpLA==
-X-Gm-Message-State: AOAM532E7CvGJgjorqjGeVyc5hvgabiwI9zTA8M5EWsO6dF6IDHWii5v
-        RReLpAXcbDH8Ov8716zsrIzvtlB2v0oVdBnlwQjWnHEN+Jq1QgyIUdKYYD0Ij463WEPN773MUNu
-        nWJzC2NgSB8u6cFMoGLjufoSG
-X-Received: by 2002:a17:907:7704:b0:6cf:48ac:b4a8 with SMTP id kw4-20020a170907770400b006cf48acb4a8mr13161273ejc.305.1647696249796;
-        Sat, 19 Mar 2022 06:24:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx8NFkT0ysq1q8SRtiCqUI2HWoJCMvPL0kr0rqzwobrsp24Q4Cv2FXmntZ0YbvOSbdqUcjf6A==
-X-Received: by 2002:a17:907:7704:b0:6cf:48ac:b4a8 with SMTP id kw4-20020a170907770400b006cf48acb4a8mr13161251ejc.305.1647696249538;
-        Sat, 19 Mar 2022 06:24:09 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id q2-20020a170906144200b006ceb8723de9sm4781578ejc.120.2022.03.19.06.24.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Mar 2022 06:24:08 -0700 (PDT)
-Message-ID: <94df38ce-6bd7-a993-7d9f-0a1418a1c8df@redhat.com>
-Date:   Sat, 19 Mar 2022 14:24:06 +0100
+        Sat, 19 Mar 2022 09:28:08 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FF98BF3A;
+        Sat, 19 Mar 2022 06:26:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 415AFCE0F08;
+        Sat, 19 Mar 2022 13:26:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7985BC340EE;
+        Sat, 19 Mar 2022 13:26:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647696403;
+        bh=/cegirEsmDFTjrf/jcxsGyePYHoVLLLJoW1NFjz4T5Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UmxrhwNaCnUWbJzDElDW7iWolt4CGGYJhefwhRmFTmzo2j87XTi4xTuJVs36kD5JG
+         69RQ0mQCebSeuQ4AhaJApoX6VwElGf7V4BC8rfUkwWuvgpiaaPa3jGb3o+snOuTb2k
+         NOW79cQNRqST7BAGRYUWAORXaDzvmSAg2B6w248PC3R6nvaui/SHW8FJ2hedBRDgYo
+         coYR2xN+VaEyBa5EG9Wai4ohwlKADQhwfahLv5/R367rf9RlJFSK9pU+2Fz8mcgQcd
+         RVyhLuTavC+pBjRe+rn71qGpXmglQXXvufsvxt9fTW+IlNYvFfJGdI4qYf+k3jbdu9
+         86UD75gQwZlKg==
+Received: by mail-vk1-f174.google.com with SMTP id 6so2674029vkc.10;
+        Sat, 19 Mar 2022 06:26:43 -0700 (PDT)
+X-Gm-Message-State: AOAM530s6MDiQsg7xEctm4OZYypobALtrS0WGMDh/QERgpyC9wcqNSRy
+        X75QhuCwBE3gy4XQreoYWNTFwaOm8IVhBRentLU=
+X-Google-Smtp-Source: ABdhPJxG6qrxPivDMuPuCDhlEL9zUSIkjTquHlcXEinKt2wIvI4so3PHrSQEnmjVSdhEdSsEmEbGCrUxLkOxGgBZ5z8=
+X-Received: by 2002:a1f:7f17:0:b0:336:cede:7f97 with SMTP id
+ o23-20020a1f7f17000000b00336cede7f97mr5353580vki.8.1647696402468; Sat, 19 Mar
+ 2022 06:26:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH -v1.2] kvm/emulate: Fix SETcc emulation function offsets
- with SLS
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     Jamie Heilman <jamie@audible.transient.net>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
-References: <YjGzJwjrvxg5YZ0Z@audible.transient.net>
- <YjHYh3XRbHwrlLbR@zn.tnic> <YjIwRR5UsTd3W4Bj@audible.transient.net>
- <YjI69aUseN/IuzTj@zn.tnic> <YjJFb02Fc0jeoIW4@audible.transient.net>
- <YjJVWYzHQDbI6nZM@zn.tnic>
- <20220316220201.GM8939@worktop.programming.kicks-ass.net>
- <YjMBdMlhVMGLG5ws@zn.tnic> <YjMS8eTOhXBOPFOe@zn.tnic>
- <YjMVpfe/9ldmWX8W@hirez.programming.kicks-ass.net>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YjMVpfe/9ldmWX8W@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220319035457.2214979-1-guoren@kernel.org> <20220319035457.2214979-2-guoren@kernel.org>
+ <CAK8P3a3wMJv6-fGo_i4DnFMigj=ko4DN1XTe8oa1HzWLiX50yw@mail.gmail.com>
+In-Reply-To: <CAK8P3a3wMJv6-fGo_i4DnFMigj=ko4DN1XTe8oa1HzWLiX50yw@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 19 Mar 2022 21:26:31 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRvOLZPP_PYOEPMkr0S3vTSiPZOCFOmiVRXxi2QRu-vMA@mail.gmail.com>
+Message-ID: <CAJF2gTRvOLZPP_PYOEPMkr0S3vTSiPZOCFOmiVRXxi2QRu-vMA@mail.gmail.com>
+Subject: Re: [PATCH V2 1/5] asm-generic: ticket-lock: New generic ticket-based spinlock
+To:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Waiman Long <longman@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        Openrisc <openrisc@lists.librecores.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/22 12:04, Peter Zijlstra wrote:
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> 
-> Depending on what Paolo wants, it might make sense to merge this into
-> tip/x86/urgent such that we can then resolve the merge conflict vs
-> tip/x86/core with something like the below:
+On Sat, Mar 19, 2022 at 7:52 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Sat, Mar 19, 2022 at 4:54 AM <guoren@kernel.org> wrote:
+> >  /*
+> > - * You need to implement asm/spinlock.h for SMP support. The generic
+> > - * version does not handle SMP.
+> > + * Using ticket-spinlock.h as generic for SMP support.
+> >   */
+> >  #ifdef CONFIG_SMP
+> > -#error need an architecture specific asm/spinlock.h
+> > +#include <asm-generic/ticket-lock.h>
+> > +#ifdef CONFIG_QUEUED_RWLOCKS
+> > +#include <asm-generic/qrwlock.h>
+> > +#else
+> > +#error Please select ARCH_USE_QUEUED_RWLOCKS in architecture Kconfig
+> > +#endif
+> >  #endif
+>
+> There is no need for the !CONFIG_SMP case, as asm/spinlock.h only ever
+> gets included for SMP builds in the first place. This was already a mistake
+> in the existing code, but your change would be the time to fix it.
+>
+> I would also drop the !CONFIG_QUEUED_RWLOCKS case, just include
+> it unconditionally. If any architecture wants the ticket spinlock in
+> combination with a custom rwlock, they can simply include the
+> asm-generic/ticket-lock.h from their asm/spinlock.h, but more
+> likely any architecture that can use the ticket spinlock will also
+> want the qrwlock anyway.
+I agree, !CONFIG_SMP & !CONFIG_QUEUED_RWLOCKS are unnecessary.
 
-Sorry for responding late, I was sick the past few days.  Go ahead and 
-apply it to tip/x86/core with the rest of the SLS and IBT patches.  If 
-you place it in front of the actual insertion of the INT3 it will even 
-be bisectable, but I'm not sure if your commit hashes are already frozen.
+@Palmer, you could pick back the series, thx.
 
-Just one thing:
+>
+>      Arnd
 
-> -#define SETCC_ALIGN	(4 * (1 + IS_ENABLED(CONFIG_SLS)))
-> +/*
-> + * Depending on .config the SETcc functions look like:
-> + *
-> + * setcc:
-> + * +0	ENDBR		[CONFIG_X86_KERNEL_IBT]
-> + * +4	SETcc	%al
-> + * +7	RET
-> + * +8	INT3		[CONFIG_SLS]
-> + *
-> + * Which gives possible sizes: 4, 5, 8, 9 which when rounded up to the
-> + * next power-of-two alignment become: 4, 8, 16.
-> + */
-> +#define SETCC_ALIGN	(4 * (1 + IS_ENABLED(CONFIG_SLS)) * (1 + HAS_KERNEL_IBT))
 
-This might be slightly nicer as (4 << IS_ENABLED(CONFIG_SLS) << 
-HAS_KERNEL_IBT.  Or maybe not, depends on your taste.
 
-It might also be worth doing:
+-- 
+Best Regards
+ Guo Ren
 
-#define SETCC_LENGTH (4 + IS_ENABLED(CONFIG_SLS) + 4 * HAS_KERNEL_IBT)
-#define SETCC_ALIGN  (4 << IS_ENABLED(CONFIG_SLS) << HAS_KERNEL_IBT)
-BUILD_BUG_ON(SETCC_LENGTH <= SETCC_ALIGN);
-
-Thanks,
-
-Paolo
-
+ML: https://lore.kernel.org/linux-csky/

@@ -2,178 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357E64DE50A
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 02:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 212834DE507
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 02:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241743AbiCSBqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 21:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
+        id S241741AbiCSBqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 21:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiCSBqq (ORCPT
+        with ESMTP id S229580AbiCSBqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 21:46:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A56282DE78F
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:45:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647654325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ieSlFoCeto0AVAtI6K8jKTyxvQGGjjQJE1a9Rco3C2E=;
-        b=hxc+gfE8xP2NhRESCeD7lfxGV0+KPnFs9/ffu6DB7H2YngvmwABSq14tcJHeF5PyuBOwhX
-        Gdm3lGNwrKP3FnXSzdS6y3v+F3tQW7J0lw94N2UK4UGV4ZivnZlFyFUQ1zAlhZRRbDBPuo
-        TBVByoYjoMikAbkNXgc8rFixrYsx0sI=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-168-OWImw656N1ivL0daZLvi2g-1; Fri, 18 Mar 2022 21:45:23 -0400
-X-MC-Unique: OWImw656N1ivL0daZLvi2g-1
-Received: by mail-pj1-f71.google.com with SMTP id o12-20020a17090a420c00b001c65aec76c0so5256520pjg.8
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:45:23 -0700 (PDT)
+        Fri, 18 Mar 2022 21:46:36 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445932DD98C
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:45:16 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id jo24so217948qvb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:45:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KkQmEP0AU8bSdcTRUOlOUawSBdGr8p6///xsFsEqdbY=;
+        b=SaVw2WOa2mwtdzj3aX1v5v2dOt63VrRXBrdTXp+q/KtFtUxsc8qbHK0bO0QjkSpubT
+         1y13NGchi3LG6Kf+QSRrtX/IMzlw3yuthJVMRCdU2KQdskJAfSmbMt2Eft08qO/TU9ss
+         IhkKNoKP8U0G2yyzXTA1d0FAg7DKN0YkKVjm81wE70oVAhUFy6wpYx1HoKHwjwSqeCmB
+         wYlU9Mzdzj4A+ThS1bFGDsldoC7b6Qqn9vLTbiKumxoaQV9dBEp9o7M6Ie9BdonxoyUm
+         vHDVZpHEoS+bZRFGvB9qzIIEBRCGodPBzSktO3GR8Df0ursnFrbrDqVQcWFEROjU6Vdo
+         /jEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ieSlFoCeto0AVAtI6K8jKTyxvQGGjjQJE1a9Rco3C2E=;
-        b=6868MXd6nTFmNK3nxX5d7/RI9f1H+F9XCcOoUDWCXYb0fcxrF4xbsyrDFjlXxySHoT
-         YB01XhmBOed/S1rbqALrc9s1wiHHaBkMeFeUdM6bD+yRySLb8gCTWAsvX4atb9Vr/IJE
-         BbfrlUAbuYcPn68l/ry9xto/7KTm0KxHMaQsoUMpt/3d9y91foCZUa4jtH+AaZIDogRJ
-         +XRjo7zQQTLsyvLlEeSem8Ljo3Azf3ufCDFrjMfB25haB5d5Y11xTpJnlIxh2ie3ck8p
-         P5wetjTO4OpbSOpUkAjIVogvl2My0wYIv477V5A9BxiL1D9zueCojiQmcHB4IBKTrXpu
-         6t0g==
-X-Gm-Message-State: AOAM533fWSQfExhMzOxnMbkoEGwGQaByeIx9iJKGlz5rBhD1gEM2mR6Q
-        DTkn0xJKe5m7oFPf1PGZiIUkxa2PaTSxcLyhlwAkUAPr3loO+I7Kodc5ZyulJAg4dRWLVhWzf0H
-        /ZkuE1kNlt0IhnqkXvw+veKnl
-X-Received: by 2002:a17:902:f60f:b0:151:4f66:55b4 with SMTP id n15-20020a170902f60f00b001514f6655b4mr2309251plg.127.1647654322695;
-        Fri, 18 Mar 2022 18:45:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz6kv1/v7LKf9RNEE8Smtok7Dg/0kGtE36CEGe6Q1XOCvrObPFLCmAnA8TsLXh6chusfsFb9A==
-X-Received: by 2002:a17:902:f60f:b0:151:4f66:55b4 with SMTP id n15-20020a170902f60f00b001514f6655b4mr2309227plg.127.1647654322331;
-        Fri, 18 Mar 2022 18:45:22 -0700 (PDT)
-Received: from localhost ([240e:3a1:2e5:800:f995:6136:f760:a3d0])
-        by smtp.gmail.com with ESMTPSA id u5-20020a056a00158500b004f745148736sm11647956pfk.179.2022.03.18.18.45.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 18:45:21 -0700 (PDT)
-Date:   Sat, 19 Mar 2022 09:41:23 +0800
-From:   Coiby Xu <coxu@redhat.com>
-To:     Milan Broz <gmazyland@gmail.com>
-Cc:     kexec@lists.infradead.org, Thomas Staudt <tstaudt@de.ibm.com>,
-        Kairui Song <ryncsn@gmail.com>, dm-devel@redhat.com,
-        Mike Snitzer <snitzer@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Dave Young <dyoung@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC 0/4] Support kdump with LUKS encryption by reusing LUKS
- master key
-Message-ID: <20220319014123.v26w2snihbuyd4fz@Rk>
-References: <20220318103423.286410-1-coxu@redhat.com>
- <c857dcf8-024e-ab8a-fd26-295ce2e0ae41@gmail.com>
- <20220318122110.7qjrnrduwytjle3w@Rk>
- <a5b9e66c-235b-51dd-234c-b543dbacc464@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KkQmEP0AU8bSdcTRUOlOUawSBdGr8p6///xsFsEqdbY=;
+        b=MtiICfp7aT+zGk9S5+Kgy2CtzcQ+Lbh/MaIv/jPOOKzoXQDBSa+il106F+gBI0cdog
+         +sbIH40fuK/9gASXwvApR7ZjG2p5lry+heT3QCrdBrfKzsafbZxkcH9SqJT+EUhRRRB2
+         yOxvxlYBnSpX7vPWxw/JHBrSQVH433AoHx7AOQqXFX7N+Zhy9CJbRKn+EKIAOcbuR9e1
+         PTSa+uiL9LHacx9c1cfcXXU/EK0tQKPDgGH6n5lX9I1DHbj7un7EehOU8UGskGXakdjk
+         MMQM3kaddcOXS7VrHi8PeJcPojTUyNWqdakrq552+/1bbrmFKsfvp2DwoG08KBIsGOZ2
+         vtFw==
+X-Gm-Message-State: AOAM530ZtajpSzFy8FhA3CfFzNVdcyvSZMHmtgoiH7r7+m358Q+Z/5T2
+        McOX7HCaJhC232B9eShbsZyPAolhVZ0SQmkPCyZiSw==
+X-Google-Smtp-Source: ABdhPJxmAfiQiJPHxu2Rc7BBfv2iLFQ4QhxKrhO09SuOt9pcK9+vJoTzkXCVzQhxizdkNa/I7WxBvyeXynoJqUFRSXQ=
+X-Received: by 2002:a05:6214:29e9:b0:439:eedb:dedf with SMTP id
+ jv9-20020a05621429e900b00439eedbdedfmr9213739qvb.15.1647654315245; Fri, 18
+ Mar 2022 18:45:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <a5b9e66c-235b-51dd-234c-b543dbacc464@gmail.com>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220319001635.4097742-1-khazhy@google.com> <ea2afc67b92f33dbf406c3ebf49a0da9c6ec1e5b.camel@hammerspace.com>
+In-Reply-To: <ea2afc67b92f33dbf406c3ebf49a0da9c6ec1e5b.camel@hammerspace.com>
+From:   Khazhy Kumykov <khazhy@google.com>
+Date:   Fri, 18 Mar 2022 18:45:04 -0700
+Message-ID: <CACGdZYJGm2VP0wHhqCegp+P0rKpEhdTdvjWK_T3+9FNHM3W8cw@mail.gmail.com>
+Subject: Re: [PATCH RFC] nfsd: avoid recursive locking through fsnotify
+To:     Trond Myklebust <trondmy@hammerspace.com>
+Cc:     "bfields@fieldses.org" <bfields@fieldses.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000032635b05da886a36"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 02:53:37PM +0100, Milan Broz wrote:
->On 18/03/2022 13:21, Coiby Xu wrote:
->...
->>>Why is it not done through keyring and forcing kdump to retain key there
->>>(under the same keyring key name as dm-crypt used)?
->>>Kernel dm-crypt supports this already; LUKS2 uses keyring by default too.
->>>That's all you need, or not? Why do you need to add another "kdump:" thing?
->>>IOW why kdump cannot copy the key to keyring under the name dm-crypt
->>>has in the mapping table and let dm-crypt activate the device almost without
->>>code changes?
->>
->>Sorry, I haven't explained how kdump works. Once the 1st kernel crashes and
->>the system boots into the kdump kernel, the kdump kernel only have direct
->>access to the memory exclusively reserved for it i.e. the kdump kernel
->>loses the direct access to the keyring constructed in the 1st kernel. In
->>theory, the kdump kernel could do some "hacking" to find out the key
->>stored in the memory directly managed by the 1st kernel but I imagine
->>this would be difficult task (imagine I present the memory dump of my
->>computer to you and ask you to rebuild all the relevant kernel data
->>structures and find the key). Besides, it's not reliable to read the
->>memory directly managed by the first kernel for example the memory could
->>be corrupt. So we have to pass the master key from the 1st kernel to the kdump
->>kernel.
->
->OK, then why you cannot store it to the (2nd) kdump kernel keyring?
->(From the kdump area copy, then you do not need to patch anything else
->in dm-crypt than that one line storing the key to the kdump area.)
+--00000000000032635b05da886a36
+Content-Type: text/plain; charset="UTF-8"
 
-cryptsetup stores the master key in the thread keyring
-(KEY_SPEC_THREAD_KEYRING). I couldn't come up with a easy way to store
-the key to the (2nd) kdump kernel keyring. For example, one problem is
-how can I know in adance the thread ID of cryptsetup? I imagine
-drivers/md/dm-crypt.c needs to support a new type of message in
-crypt_message so cryptsetup can tell dm-crypt to store the master key
-in the thread keyring as a preparation for opening the device. So one
-line change of code isn't sufficient. What's more important is I don't see 
-any benefit by doing so I regards storing the key to the kdump kernel
-keyring first as an unnecessary step.
-
+On Fri, Mar 18, 2022 at 5:36 PM Trond Myklebust <trondmy@hammerspace.com> wrote:
 >
->A clear approach would be to store the key in the 2nd kernel kdump keyring
->and allow userspace to read it.
->Then cryptsetup can just validate the key (LUKS key digest does not use Argon)
->and activates it without asking for a passphrase.
-
-Thanks for bringing my attention to validating the key! Currently I
-simply skip key validation in cryptsetup when implementing the
-"--kdump-master-key" option because it requires pass the master key to
-the user space. I have a side question, if somehow the master key is
-changed and the wrong key is used to get the expanded key, will it lead
-to a devastating effect say corrupting the user data on the disk?
-
->Perhaps this will need some new cryptsetup option (or API call), but I think
->it can be done.
+> Isn't that stack trace showing a slab direct reclaim, and not a
+> filesystem writeback situation?
 >
->Or, you can actually simulate it with
->  cryptsetup open ... --master-key-file <file>
->where this keyfile contains directly the volume key, not a passphrase.
->The key digest is verified in this case only; no costly PBKDF is needed.
->
->If you have a way to retrieve the kdump stored key to kdump userspace, this
->is perhaps a much simpler solution.
->
->All this is against all countermeasures to not expose encryption key
->directly - but if kdump is debugging environment, just saying...
+> Does memalloc_nofs_save()/restore() really fix this problem? It seems
+> to me that it cannot, particularly since knfsd is not a filesystem, and
+> so does not ever handle writeback of dirty pages.
 
-I respect and appreciate all the efforts done by you and other community
-members to increase security margin so the last thing I want to do is to
-reverse the security measures. Besides, I believe some users choose to
-dump vmcore to an encrypted disk exactly out of security concern. The
-only thing this patch set does about master key is to store it in the
-memory exclusively reserved for kdump. To be precise, storing the master
-key in the memory exclusively reserved for kdump may be different from
-what you mean by "exposing encryption key directly". This reserved memory
-won't be used by the 1st kernel (which means if we reserve 1GB more for
-the kdump kernel, the 1st kernel would have 1GB less kernel to use. And I
-would expect strong objection from the user due to a loss of 1GB memory).
-Only kexec knows how to store the master key in this exclusively reserved
-memory area and but kexec itself doesn't know to retrieve the master key in
-the 1st kernel. So the situation is similar to how expanded key is stored.
-struct crypto_aes_ctx has the expanded key, but there is no API to retrieve
-it. If you still think this line of reasoning doesn't convince you, how
-about encrypting the master key before storing the key to the kdump memory?
-kexec could calculate the SHA256 digest of loaded kdump kernel and initrd.
-We can use this SHA256 digest to get an encryption key and then encrypt
-the master key.
+Ah you're right. An alternative would be delaying the destroy_mark,
+which I am noticing now that, on mainline, the shrinker calls
+nfsd_file_dispose_list_delayed, something missing from the version of
+5.4 I was looking at.
 
+To my reading 9542e6a643fc6 ("nfsd: Containerise filecache
+laundrette") should have the effect of fixing this deadlock (and the
+message does explicitly call out notifier deadlocks) - maybe something
+to send towards stable?
 >
->Milan
+>
+> Cc: the linux-mm mailing list in search of answers to the above 2
+> questions.
+>
+> --
+> Trond Myklebust
+> Linux NFS client maintainer, Hammerspace
+> trond.myklebust@hammerspace.com
+>
 >
 
--- 
-Best regards,
-Coiby
+--00000000000032635b05da886a36
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
+MIIPmwYJKoZIhvcNAQcCoIIPjDCCD4gCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz1MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+h3dPtFviTyG11HYwTAYDVR0gBEUwQzBBBgkrBgEEAaAyASgwNDAyBggrBgEFBQcCARYmaHR0cHM6
+Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/BAIwADCBmgYIKwYBBQUH
+AQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2NhL2dzYXRs
+YXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29t
+L2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgwFoAUfMwKaNei6x4schvR
+zV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEBAE0ANr7NUOqEcZce4KYP
+SjzlrshSC8sgJ8dKDDbe35PL86vDuMIrytVjiV10p/YUofun9GeHBY6r5kTyh4be5FgftiiNtWzn
+U1W5cxLYMT1hKYxXxnM2sWMQGFl4TkxxbRoVZa3ou/NxFdAZeiQSwGnzk5oIDTBZQc8q3wMa1svm
+A5Rd4MVaIUt+hyk6seAldN6k4/O34O1l2V6D+/BwagyzLWvOeMEM9hClVF+F6a20yy4dcDsprFZZ
+Sk9JzUy9F6FM7L1wT2ndjTNDja4Y2tixf31KuisZLGKmDZsW/fXF1GgWDaM0DbYJwtE3kHylWnMk
+CN4PfYgIa15C5A9lXhExggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
+YWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIzIFNNSU1FIENBIDIwMjAC
+EAFEftjde/YEIFcjUXqhcBUwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILQcwviz
+mU2tR1tGskskBUwxNJHeIlLWmEuXXoRpcU4VMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
+KoZIhvcNAQkFMQ8XDTIyMDMxOTAxNDUxNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
+CwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZI
+hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBDSHo80q9W7dZX3oFQj0wXmJG9
+r64M07CcqExABkw6sv8VnczIuo3014GmgmP8uzxh4pJ6GHZzI+Qo0/HyN/LOSBL7ANCIEG7uFxXO
+UHYXh5yENN5RRYo8jGQ39RUUrjK92n5ufJTU3PUQEAHtDFRD1E/aEHqeVU+558EfrtEQy39Qdkx4
+7tRfifmkl3tAWJHYHerHHeIaVM8svu2ORoScUQRCZehd9UP1KxElMbr3slKslyVV57lulwfhl6sR
+tQYCZQpFTQSHbiX8LCkprOzbVM7MEzYCh7092xsXaqBjqPFLY1HslFg/VtQpkg8INSABL+bw4Q6n
+UOxi9/xU0ENL
+--00000000000032635b05da886a36--

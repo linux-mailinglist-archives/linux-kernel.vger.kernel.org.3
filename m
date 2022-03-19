@@ -2,79 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6049D4DE586
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 04:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A4B4DE5DA
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 04:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241942AbiCSDuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 23:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
+        id S229695AbiCSEAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 00:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234154AbiCSDuD (ORCPT
+        with ESMTP id S242143AbiCSEAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 23:50:03 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376F137BD2;
-        Fri, 18 Mar 2022 20:48:40 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KL6JX5cxWzfZ5w;
-        Sat, 19 Mar 2022 11:47:08 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sat, 19 Mar 2022 11:48:39 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 19 Mar
- 2022 11:48:38 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
-CC:     <paul.kocialkowski@bootlin.com>, <mchehab@kernel.org>
-Subject: [PATCH resend] media: i2c: ov5648: fix wrong pointer passed to IS_ERR() and PTR_ERR()
-Date:   Sat, 19 Mar 2022 11:58:06 +0800
-Message-ID: <20220319035806.3299264-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 19 Mar 2022 00:00:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B731AFD1F;
+        Fri, 18 Mar 2022 20:59:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E872B82601;
+        Sat, 19 Mar 2022 03:59:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 217DAC340F3;
+        Sat, 19 Mar 2022 03:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647662344;
+        bh=NCmSYpBpPOqdOKkO2yTy5z2+vGdb8Ya42Eaja7z7Ydo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cy9DNDH8kpFKUG0D8MCkuejTPlgI/3pjlWVoRY7y7BN7QewMSIn9+eCbeVjme0WeS
+         YGab4sFB0XxjPwlmiDBOUQLPGcvaTlDRMMY/YpahYaMcVZqs1dhj+fznUaCZRz0JYH
+         PeSyiLvyw5io6cUho8+MWOE63voDans1QeL+gxXPZKkPkLYSLIaTHm8AaPpOVZKTfk
+         0uvFeEdx14/h6Jf855UACHR8LvznmfGPeMqJQ3oko0dgVRtBbt1f3gZ3Ph9mNyuV8n
+         5XPh439oennaLYRCDYcthQPWrO0orKGEWSR/3lXk5SRfQQ5unV2g/cPNMfU6byAAMk
+         efqhtvpgz8lyg==
+Received: by mail-vs1-f48.google.com with SMTP id 185so958397vsq.8;
+        Fri, 18 Mar 2022 20:59:04 -0700 (PDT)
+X-Gm-Message-State: AOAM531/nZpsrYwbVv8nah+pD2z1suoqEXskhiWGC7CUZ3gQp+Wpwlnv
+        i7pDsFaImuLzsVJyc4UeRcs9kBg37ZDgYKM+d9Y=
+X-Google-Smtp-Source: ABdhPJyT2/M7uJmIdHKQUIA0qbp1v0uU+ddahjBl3cmFDN5cF5//qn59rYZQkwQ0ym7E8abdzkfttLhe2OYuc6nxFy0=
+X-Received: by 2002:a05:6102:dce:b0:322:b950:4728 with SMTP id
+ e14-20020a0561020dce00b00322b9504728mr4363733vst.51.1647662342936; Fri, 18
+ Mar 2022 20:59:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220318083421.2062259-1-guoren@kernel.org> <CAK8P3a0NMPVGVw7===uEOtNnu1hr1GqimMbZT+Kea1CUxRvPmw@mail.gmail.com>
+In-Reply-To: <CAK8P3a0NMPVGVw7===uEOtNnu1hr1GqimMbZT+Kea1CUxRvPmw@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 19 Mar 2022 11:58:52 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR=wTi6G7wFzOyUpQn72b3iKtAjzvBSFHNDgpPFboJs0w@mail.gmail.com>
+Message-ID: <CAJF2gTR=wTi6G7wFzOyUpQn72b3iKtAjzvBSFHNDgpPFboJs0w@mail.gmail.com>
+Subject: Re: [PATCH] csky: Move to generic ticket-spinlock
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>, linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IS_ERR() and PTR_ERR() use wrong pointer, it should be
-sensor->dovdd, fix it.
+Hi Arnd,
 
-Fixes: e43ccb0a045f ("media: i2c: Add support for the OV5648 image sensor")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/media/i2c/ov5648.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Fri, Mar 18, 2022 at 6:58 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Mar 18, 2022 at 9:34 AM <guoren@kernel.org> wrote:
+> > @@ -3,6 +3,8 @@ generic-y += asm-offsets.h
+> >  generic-y += extable.h
+> >  generic-y += gpio.h
+> >  generic-y += kvm_para.h
+> > +generic-y += ticket-lock.h
+> > +generic-y += ticket-lock-types.h
+> >  generic-y += qrwlock.h
+> >  generic-y += user.h
+> >  generic-y += vmlinux.lds.h
+>
+> If these headers are not included from architecture-independent code,
+> they should
+> not be marked as generic-y, same as for the qrwlock.h header
+>
+> > +#include <asm/ticket-lock.h>
+> >  #include <asm/qrwlock.h>
+> >
+> > ...
+> > +#include <asm/ticket-lock-types.h>
+> >  #include <asm-generic/qrwlock_types.h>
+> >
+>
+> So these should all become
+>
+> #include <asm-generic/...h>
+>
+> It would however make sense to have the trivial two-line version
+> of the two header files and put them into asm-generic/spinlock.h
+> and asm-generic/spinlock-types.h, replacing the current version.
+>
+> If you do that, then you need a 'generic-y' line for spinlock.h,
+> but not for the other ones.
+Thx for the suggestion, I've sent V2 based on Palmer's series to make
+the ticket spinlock more generic.
+Please have a look:
+https://lore.kernel.org/linux-arch/20220319035457.2214979-1-guoren@kernel.org/T/#t
 
-diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
-index 930ff6897044..dfcd33e9ee13 100644
---- a/drivers/media/i2c/ov5648.c
-+++ b/drivers/media/i2c/ov5648.c
-@@ -2498,9 +2498,9 @@ static int ov5648_probe(struct i2c_client *client)
- 
- 	/* DOVDD: digital I/O */
- 	sensor->dovdd = devm_regulator_get(dev, "dovdd");
--	if (IS_ERR(sensor->dvdd)) {
-+	if (IS_ERR(sensor->dovdd)) {
- 		dev_err(dev, "cannot get DOVDD (digital I/O) regulator\n");
--		ret = PTR_ERR(sensor->dvdd);
-+		ret = PTR_ERR(sensor->dovdd);
- 		goto error_endpoint;
- 	}
- 
--- 
-2.25.1
+>
+>        Arnd
 
+
+
+
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

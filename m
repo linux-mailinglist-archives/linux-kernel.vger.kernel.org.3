@@ -2,59 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C714DE583
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 04:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5453A4DE598
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 04:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241927AbiCSDre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 23:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
+        id S241956AbiCSD4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 23:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234154AbiCSDr3 (ORCPT
+        with ESMTP id S231802AbiCSD4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 23:47:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364F42B9631
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 20:46:07 -0700 (PDT)
+        Fri, 18 Mar 2022 23:56:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6F7201AD;
+        Fri, 18 Mar 2022 20:55:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D56C617B7
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 03:46:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0AA0C340E8;
-        Sat, 19 Mar 2022 03:46:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87152B825D5;
+        Sat, 19 Mar 2022 03:55:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB0EC340EC;
+        Sat, 19 Mar 2022 03:55:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647661566;
-        bh=G+NuDXG6v+YZYRYM7T7C+PGBCWMAjEc/P2kRROv+lq0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lMpLZWX4oi1Q1NT3X640UADThSxz6H7jK+ycrRA1WPcTO+/hMpGS5yjnVzDcY93Kc
-         /1wOYTJa4/UTduuHA2qiDM4NOBSYkBbVRVdfx/0EyaigMqw3IMIw49Nfq/lNbO39lt
-         slcRDM/uzUknfMVDag7ugGhtl0MZqnC4x8AVXbBXibmjpcpNj1CF6kms5gzTnZZc0h
-         V00Y/PLL4nP9K04vUGnmUsGDEvKVi0SkpCVmalVdDJTISv7mC/BxLbOr+itzB5h4J3
-         474oG2EdNH1tCpoLGLUDcsf0nCEQBA9keHI+VG/o2UyVbVAmHatsaQgRzV2VBBHOij
-         mVLBneZq4I6JQ==
-Date:   Sat, 19 Mar 2022 11:45:12 +0800
-From:   Gao Xiang <xiang@kernel.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     syzbot <syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        syzkaller-bugs@googlegroups.com, xiang@kernel.org
-Subject: Re: [syzbot] WARNING: kobject bug in erofs_unregister_sysfs
-Message-ID: <YjVRyIpIUN1jB8iK@debian>
-Mail-Followup-To: Muchun Song <songmuchun@bytedance.com>,
-        syzbot <syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        syzkaller-bugs@googlegroups.com, xiang@kernel.org
-References: <000000000000dda2f905da80c934@google.com>
- <00000000000009cf1e05da85bb31@google.com>
- <CAMZfGtWL-2+en7=FKBoPUwq1FMGYYqZCvB1jmJ7fhiQc1XX4oQ@mail.gmail.com>
+        s=k20201202; t=1647662113;
+        bh=YTk93zwuaGZlbGJYQpGVX2DQwDayvasBfkPYcHh8gIk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nKlhwcjbrbTFviWdQBTu3WNloG1jgLcDtDoTMwafpkUo0Wb84lOTYscr2NuACdEA7
+         TZkKNzeVChhvA35+Ku/YlGkd8r7mIqpVTmtozurPhoWQQrGiFRInRRxoBSAXoIabeh
+         Ix14wd0/aTu0OlnjrcGwqx+RRsvx1NlR8T0kx/Hv+GOoyW9S/KhCMcPbLJDmdNxFtc
+         /s50rZmR5fC1vJ1YHqyIg0J1dGzOIBNthyLLoxyjJ99FbY93Y7CtdFfn2U3PFiovGB
+         fKnsz5EUUnJGzuiKpsLj3VtAVyxzJZlj/a1DfpfrVdXrSuxpZ+xERjuUT+eJDpNuFv
+         8f/K8jPnqs0+Q==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
+        boqun.feng@gmail.com, longman@redhat.com, peterz@infradead.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        openrisc@lists.librecores.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V2 0/5] Generic Ticket Spinlocks
+Date:   Sat, 19 Mar 2022 11:54:52 +0800
+Message-Id: <20220319035457.2214979-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMZfGtWL-2+en7=FKBoPUwq1FMGYYqZCvB1jmJ7fhiQc1XX4oQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,41 +54,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 10:19:12AM +0800, Muchun Song wrote:
-> On Sat, Mar 19, 2022 at 6:33 AM syzbot
-> <syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com> wrote:
-> >
-> > syzbot has bisected this issue to:
-> >
-> > commit 2768c206f2c3e95c0e5cf2e7f846103fda7cd429
-> > Author: Muchun Song <songmuchun@bytedance.com>
-> > Date:   Thu Mar 3 01:15:36 2022 +0000
-> >
-> >     mm: list_lru: allocate list_lru_one only when needed
-> >
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1495694d700000
-> > start commit:   91265a6da44d Add linux-next specific files for 20220303
-> > git tree:       linux-next
-> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=1695694d700000
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1295694d700000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=617f79440a35673a
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=f05ba4652c0471416eaf
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=137f17d9700000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=114ebabd700000
-> >
-> > Reported-by: syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com
-> > Fixes: 2768c206f2c3 ("mm: list_lru: allocate list_lru_one only when needed")
-> 
-> Does this patch [1] fix the issue? If yes, I am confused why the Fixes tag
-> should be the commit 2768c206f2c3?  What am I missing here?
-> 
-> [1] https://lore.kernel.org/r/20220315132814.12332-1-dzm91@hust.edu.cn
+From: Guo Ren <guoren@linux.alibaba.com>
 
-I think it was an incorrect bisect so we could just ignore it.
-The fix is already pending for the next merge window.
+Palmer:
+Peter sent an RFC out about a year ago
+<https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>,
+but after a spirited discussion it looks like we lost track of things.
+IIRC there was broad consensus on this being the way to go, but there
+was a lot of discussion so I wasn't sure.  Given that it's been a year,
+I figured it'd be best to just send this out again formatted a bit more
+explicitly as a patch.
 
-Thanks,
-Gao Xiang
+This has had almost no testing (just a build test on RISC-V defconfig),
+but I wanted to send it out largely as-is because I didn't have a SOB
+from Peter on the code.  I had sent around something sort of similar in
+spirit, but this looks completely re-written.  Just to play it safe I
+wanted to send out almost exactly as it was posted.  I'd probably rename
+this tspinlock and tspinlock_types, as the mis-match kind of makes my
+eyes go funny, but I don't really care that much.  I'll also go through
+the other ports and see if there's any more candidates, I seem to
+remember there having been more than just OpenRISC but it's been a
+while.
 
-> 
-> Thanks.
+I'm in no big rush for this and given the complex HW dependencies I
+think it's best to target it for 5.19, that'd give us a full merge
+window for folks to test/benchmark it on their systems to make sure it's
+OK.  RISC-V has a forward progress guarantee so we should be safe, but
+these can always trip things up.
+
+Guo:
+Update V2 with Arnd's suggestion [1].
+
+[1] https://lore.kernel.org/linux-arch/CAK8P3a0NMPVGVw7===uEOtNnu1hr1GqimMbZT+Kea1CUxRvPmw@mail.gmail.com/raw
+
+Changes in V2:
+ - Follow Arnd suggestion to make the patch series more generic.
+ - Add csky in the series.
+ - Combine RISC-V's two patches into one.
+ - Modify openrisc's patch to suit the new generic version.
+
+Guo Ren (1):
+  csky: Move to generic ticket-spinlock
+
+Palmer Dabbelt (1):
+  RISC-V: Move to ticket-spinlocks & RW locks
+
+Peter Zijlstra (3):
+  asm-generic: ticket-lock: New generic ticket-based spinlock
+  asm-generic: qspinlock: Indicate the use of mixed-size atomics
+  openrisc: Move to ticket-spinlock
+
+ arch/csky/include/asm/Kbuild               |   3 +-
+ arch/csky/include/asm/spinlock.h           |  89 --------------
+ arch/csky/include/asm/spinlock_types.h     |  27 -----
+ arch/openrisc/Kconfig                      |   1 -
+ arch/openrisc/include/asm/Kbuild           |   7 +-
+ arch/openrisc/include/asm/spinlock.h       |  27 -----
+ arch/openrisc/include/asm/spinlock_types.h |   7 --
+ arch/riscv/Kconfig                         |   1 +
+ arch/riscv/include/asm/Kbuild              |   2 +
+ arch/riscv/include/asm/spinlock.h          | 135 ---------------------
+ arch/riscv/include/asm/spinlock_types.h    |  25 ----
+ include/asm-generic/qspinlock.h            |  30 +++++
+ include/asm-generic/spinlock.h             |  11 +-
+ include/asm-generic/spinlock_types.h       |  15 +++
+ include/asm-generic/ticket-lock-types.h    |  11 ++
+ include/asm-generic/ticket-lock.h          |  86 +++++++++++++
+ 16 files changed, 157 insertions(+), 320 deletions(-)
+ delete mode 100644 arch/csky/include/asm/spinlock.h
+ delete mode 100644 arch/csky/include/asm/spinlock_types.h
+ delete mode 100644 arch/openrisc/include/asm/spinlock.h
+ delete mode 100644 arch/openrisc/include/asm/spinlock_types.h
+ delete mode 100644 arch/riscv/include/asm/spinlock.h
+ delete mode 100644 arch/riscv/include/asm/spinlock_types.h
+ create mode 100644 include/asm-generic/spinlock_types.h
+ create mode 100644 include/asm-generic/ticket-lock-types.h
+ create mode 100644 include/asm-generic/ticket-lock.h
+
+-- 
+2.25.1
+

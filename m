@@ -2,324 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF494DEAF3
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 22:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 528874DEAF9
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 22:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243626AbiCSVZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 17:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
+        id S244240AbiCSVhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 17:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234541AbiCSVZk (ORCPT
+        with ESMTP id S234541AbiCSVhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 17:25:40 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EF517E18;
-        Sat, 19 Mar 2022 14:24:18 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id h13so13986165ede.5;
-        Sat, 19 Mar 2022 14:24:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KRLRxQFuDkV4XwZnkLpyAS1x2/YWT0F8R7jLRmwo6L4=;
-        b=ckFFKU9ntPEoMlOM/P4zkdVIRQ+5w4TtiUirfdI8b7/r/1k+VhpBhx/DlK/vCNiMkD
-         Bh6lOmkmHExMQXQj7oy246kLQ/HtynqmXdxscDyEJ1MpFeR3UwcfKgxQESw8zGKCcDMU
-         5OR6T0OehlPY6RMcd81mO5u7nqlwQph3L+YCc6s6iHSWmPnZnyhtHx6baxn4OeOmX+DU
-         1aIEPCogBFYj8XXdZSDUo60DbgR2xncPecAPESim9a/q83+E0d7lvsJL+6Lr9C7fJW8v
-         c7ihCZq57oP2DLbkoOhhChPLoBliQalFsYOTHDaHoTP27igjO3Eu4Tu+F7ogxS7sLR84
-         5hjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KRLRxQFuDkV4XwZnkLpyAS1x2/YWT0F8R7jLRmwo6L4=;
-        b=20pNi0E29nIrDdrNj3Y+dC8Pw95f6sYs0PXpVmtTgwR/+CPKUhXY12mPEbR8CfLP1t
-         VaAxjyDzdngnIfwFbAdA0yLwpDsZ91EtKCoFz9kGagN15a9LuUG8E8McH3mTpRwqZil6
-         5YtkB2VFSls3vxFtTV5K5gU7/Mf1sStC7eMKAMgjHDfl1RGTQMEK+yZWaOK4TAJYoc9n
-         zC8CP3uBnhXOLCclWq1Vqv6m3sLWKq7T8kK5tiVIiYrDVvHRLEjH7JG2NZTfmkpGCh2Q
-         K7c8J59EU5+5g5ulkWfqeRA9+P45MN5RmWi+Y65U5pnCNyxYbuAKmO2CdSE8kvLp+bAM
-         Vn4g==
-X-Gm-Message-State: AOAM533Ando1N7iha7q3ex/gYZrN+9SOCbxYaO+eSh/hB8JZe8UgWoqP
-        xOtXPh3P2aiTqzhDI2QJKiDYgkGB88Ydm59QNJrC4qivFqY=
-X-Google-Smtp-Source: ABdhPJx8xyZtjqqANjp1qdsdW4frrcybtDI8hcUIL1ci9B2xBFQ8Vnd+uMb38C+J/oBTTzDsIwFcsdexThI8WV8ND9Q=
-X-Received: by 2002:aa7:cb18:0:b0:413:3a7a:b5d6 with SMTP id
- s24-20020aa7cb18000000b004133a7ab5d6mr15641286edt.254.1647725056396; Sat, 19
- Mar 2022 14:24:16 -0700 (PDT)
+        Sat, 19 Mar 2022 17:37:05 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A7C39693
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 14:35:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647725743; x=1679261743;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/CYwDMy+oybOohIhRSbKiHUiRVArqo0RM764uz7Bx3s=;
+  b=LUUxkjmp/PylquwK6KHet2CPvWER8e8cYQr6BEZjytwejZqyYWbfFR0Q
+   Lw+qj9S2GlrsGDsGC6AVBqTVjbXJgDBcqe7aaLa4ur9gr+0b9ll3OxBj/
+   kSVaknVAyEKTwP8HhR27hd63BIpF0VZ3CR6DxBmpQzdO9q/Utj01o7MyD
+   kaOdNz8LhEnL9pOU0NJgjmR0YZpF5DBv07QqTDPswD084W+tSdQgIR7Qy
+   VcVNBHiLkirQ9zTeFFNvcgzKqkmNqXy6/v+K+wo6QyB5o9etq1f1l52vY
+   FkDvThzxGyJNDfZvTaETOLJhNxnMK7+LHbvA1Oeu/PLGmo6uouw778oe7
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="257522063"
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="257522063"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 14:35:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="517910576"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 19 Mar 2022 14:35:41 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nVgjc-000GJW-Os; Sat, 19 Mar 2022 21:35:40 +0000
+Date:   Sun, 20 Mar 2022 05:35:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lauri Kasanen <cand@gmx.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:506:5:
+ warning: no previous prototype for 'LZ4_decompress_safe_forceExtDict'
+Message-ID: <202203200545.zUPhx82w-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220313115704.301718-1-aford173@gmail.com> <a146f554-837a-d19a-425c-b1fd790a0497@lucaceresoli.net>
- <MN2PR03MB5008F8DDC6DD934074EBBC0E93109@MN2PR03MB5008.namprd03.prod.outlook.com>
- <59ee78c2-7d05-6d97-1ff2-36ea326be188@lucaceresoli.net> <MN2PR03MB500803388839E563D29CF25C93129@MN2PR03MB5008.namprd03.prod.outlook.com>
-In-Reply-To: <MN2PR03MB500803388839E563D29CF25C93129@MN2PR03MB5008.namprd03.prod.outlook.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sat, 19 Mar 2022 16:24:05 -0500
-Message-ID: <CAHCN7xKZDTdKyMgCUOmKXrceC8Qhk8ES6xn5GFag-8Vt=NgpAA@mail.gmail.com>
-Subject: Re: [EXTERNAL] Re: [PATCH] clk: vc5: Enable VC5_HAS_PFD_FREQ_DBL on 5p49v6965
-To:     "Fillion, Claude" <Claude.Fillion@mksinst.com>
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "aford@beaconembedded.com" <aford@beaconembedded.com>,
-        "cstevens@beaconembedded.com" <cstevens@beaconembedded.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marek Vasut <marek.vasut@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 1:57 PM Fillion, Claude
-<Claude.Fillion@mksinst.com> wrote:
->
-> Hello Luca,
->
-> > -----Original Message-----
-> > From: Luca Ceresoli <luca@lucaceresoli.net>
-> > Sent: Tuesday, March 15, 2022 6:53 PM
-> > To: Fillion, Claude <Claude.Fillion@mksinst.com>; Adam Ford
-> > <aford173@gmail.com>; linux-clk@vger.kernel.org
-> > Cc: aford@beaconembedded.com; cstevens@beaconembedded.com;
-> > Michael Turquette <mturquette@baylibre.com>; Stephen Boyd
-> > <sboyd@kernel.org>; linux-kernel@vger.kernel.org; Marek Vasut
-> > <marek.vasut@gmail.com>
-> > Subject: Re: [EXTERNAL] Re: [PATCH] clk: vc5: Enable
-> > VC5_HAS_PFD_FREQ_DBL on 5p49v6965
-> >
-> > Hi Claude,
-> >
-> > [adding Marek in Cc:, the original author of the driver and also of the
-> > frequency doubler]
-> >
-> > On 15/03/22 20:34, Fillion, Claude wrote:
-> > > Hello Luca,
-> > >
-> > > I will defer to Adam, but a few comments:
-> > >
-> > >> -----Original Message-----
-> > >> From: Luca Ceresoli <luca@lucaceresoli.net>
-> > >> Sent: Tuesday, March 15, 2022 4:55 AM
-> > >> To: Adam Ford <aford173@gmail.com>; linux-clk@vger.kernel.org
-> > >> Cc: aford@beaconembedded.com; cstevens@beaconembedded.com;
-> > Fillion,
-> > >> Claude <Claude.Fillion@mksinst.com>; Michael Turquette
-> > >> <mturquette@baylibre.com>; Stephen Boyd <sboyd@kernel.org>; linux-
-> > >> kernel@vger.kernel.org
-> > >> Subject: [EXTERNAL] Re: [PATCH] clk: vc5: Enable
-> > VC5_HAS_PFD_FREQ_DBL
-> > >> on 5p49v6965
-> > >>
-> > >> This email originated outside of MKS.  Use caution when sharing
-> > >> information or opening attachments and links.
-> > >>
-> > >> --------------------------------------------------------------------=
--
-> > >> -------------------------
-> > >> ----------------------------------------------
-> > >> Hi Adam, Claude,
-> > >>
-> > >> thanks for your patch.
-> > >>
-> > >> On 13/03/22 12:57, Adam Ford wrote:
-> > >>> The 5p49v6965 has a reference clock frequency doubler.
-> > >>> Enabling it adds versaclock_som.dbl to the clock tree, but the
-> > >>> output frequency remains correct.
-> > >>>
-> > >>> Suggested-by: Claude Fillion <Claude.Fillion@mksinst.com>
-> > >>> Signed-off-by: Adam Ford <aford173@gmail.com>
-> > >>>
-> > >>> diff --git a/drivers/clk/clk-versaclock5.c
-> > >>> b/drivers/clk/clk-versaclock5.c index e7be3e54b9be..4d190579e874
-> > >>> 100644
-> > >>> --- a/drivers/clk/clk-versaclock5.c
-> > >>> +++ b/drivers/clk/clk-versaclock5.c
-> > >>> @@ -1211,7 +1211,7 @@ static const struct vc5_chip_info
-> > >> idt_5p49v6965_info =3D {
-> > >>>   .model =3D IDT_VC6_5P49V6965,
-> > >>>   .clk_fod_cnt =3D 4,
-> > >>>   .clk_out_cnt =3D 5,
-> > >>> - .flags =3D VC5_HAS_BYPASS_SYNC_BIT,
-> > >>> + .flags =3D VC5_HAS_BYPASS_SYNC_BIT | VC5_HAS_PFD_FREQ_DBL,
-> > >>
-> > >>
-> > >> If my understanding is correct, the doubler is not mentioned by the
-> > >> datasheet, but it exists. Maybe it's worth a line of comment to help
-> > >> future readers not waste their time in finding out:
-> > >>   /* Frequency doubler not mentioned on datasheet */
-> > >>
-> > >
-> > > I see the doubler bit mentioned in Table 25 of both v6 and v6e specs.=
-  It is
-> > named differently, but appears to have the same purpose.
-> >
-> > Well, literally speaking what I wrote is correct: the _datasheet_ does =
-not
-> > mention the doubler. Table 25 you mention is on the "Register Descripti=
-on
-> > and Programming Guide".
-> >
-> > Practically speaking I would expect the datasheet to mention the hardwa=
-re
-> > blocks including the doubler, but apparently Renesas has a different op=
-inion
-> > and perhaps they are not alone.
-> >
-> > So I think you can forget about my proposal to add a comment.
-> >
-> > >> Can you confirm that:
-> > >>  - the en_ref_doubler bit value defaults to zero when reading it, as=
- the
-> > >>    register guide says?
-> > >>  - if set to 1 the frequencies double?
-> > >>
-> > >> With that confirmed, the patch looks good.
-> > >>
-> > >> Thanks,
-> > >> --
-> > >> Luca
-> > >
-> > > I played around a bit with the programming board today and did not se=
-e
-> > what I expected to see.
-> > >
-> > > Using i2cget I see that the register in question (0x10) has a default=
- value of
-> > 0xA0 for both 6901 and 6965.  Thus it seems disabled by default for bot=
-h
-> > parts.
-> >
-> > Coherently with the Register guide. OK.
-> >
-> > > Starting at my base frequency of 46.8MHz, setting the bit to 1 (i2cse=
-t)
-> > changes the output  frequency to 59.04MHz for the 6901 part, and to
-> > 47.7MHz for the 6965 part.  So setting the 'doubler' bit changes output
-> > frequency for both parts, but not the same amount.
-> > >
-> > > Not sure of the meaning, just want to pass the information along.
-> >
-> > Me neither.
-> >
-> > I have no clever idea, only this one that I consider unlikely: by enabl=
-ing the
-> > doubler you may have increased some internal frequency above its allowe=
-d
-> > range and thus the chip is not working properly anymore. Can you use a
-> > lower base frequency or check the PLL settings to ensure you are not
-> > exceeding some range?
-> >
-> > What output frequency are you measuring? OUT0 or another one? What
-> > frequency do you measure with en_ref_doubler =3D 0?
-> >
-> > --
-> > Luca
->
-> Not sure what I did wrong with my earlier testing, but I am now seeing bo=
-th parts respond similarly to the doubler bit being set.
->
-> With doubler bit disabled (register 0x10, value 0xa0), I set the output f=
-requencies to 1, 10, 100, and 46.8MHz.
->
-> After setting doubler bit (0xa8), I saw frequencies of 1.260, 12.60, 126.=
-0, and 58.9 Mhz for both 6901 and 6965 parts.
->
-> So from my testing the doubler bit seems to behave similarly for both par=
-ts.
->
-> At this point I will leave my unofficial testing and move on to writing a=
- consumer driver.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   34e047aa16c0123bbae8e2f6df33e5ecc1f56601
+commit: baec970aa5ba11099ad7a91773350c91fb2113f0 mips: Add N64 machine type
+date:   1 year, 2 months ago
+config: mips-randconfig-r001-20220319 (https://download.01.org/0day-ci/archive/20220320/202203200545.zUPhx82w-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=baec970aa5ba11099ad7a91773350c91fb2113f0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout baec970aa5ba11099ad7a91773350c91fb2113f0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
 
-I don't have a scope to measure the exact frequencies, but I was able
-to test it with both USB and Ethernet, which are clock from the
-versaclock, and I can check the output frequencies against the
-clk_summary in debugfs.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Without this patch:
+All warnings (new ones prefixed by >>):
 
-    clock-controller.mux              1        1        0    25000000
-        0     0  50000         Y
-       clock-controller.out0_sel_i2cb       0        0        0
-25000000          0     0  50000         Y
-       clock-controller.pfd           1        1        0    25000000
-        0     0  50000         Y
-          clock-controller.pll        1        1        0  2800000000
-        0     0  50000         Y
-             clock-controller.fod3       1        1        0
-24576000          0     0  50000         Y
-                clock-controller.out4       1        1        0
-24576000          0     0  50000         Y
-             clock-controller.fod2       0        0        0
-24000000          0     0  50000         Y
-                clock-controller.out3       0        0        0
-24000000          0     0  50000         Y
-             clock-controller.fod1       0        0        0
-24000000          0     0  50000         Y
-                clock-controller.out2       0        0        0
-24000000          0     0  50000         Y
-             clock-controller.fod0       0        0        0
-24000000          0     0  50000         Y
-                clock-controller.out1       0        0        0
-24000000          0     0  50000         Y
+   arch/mips/boot/compressed/decompress.c:38:6: warning: no previous prototype for 'error' [-Wmissing-prototypes]
+      38 | void error(char *x)
+         |      ^~~~~
+   In file included from arch/mips/boot/compressed/../../../../lib/decompress_unlz4.c:10,
+                    from arch/mips/boot/compressed/decompress.c:60:
+   arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:484:5: warning: no previous prototype for 'LZ4_decompress_safe_withPrefix64k' [-Wmissing-prototypes]
+     484 | int LZ4_decompress_safe_withPrefix64k(const char *source, char *dest,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:506:5: warning: no previous prototype for 'LZ4_decompress_safe_forceExtDict' [-Wmissing-prototypes]
+     506 | int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/boot/compressed/decompress.c:81:6: warning: no previous prototype for '__stack_chk_fail' [-Wmissing-prototypes]
+      81 | void __stack_chk_fail(void)
+         |      ^~~~~~~~~~~~~~~~
+   arch/mips/boot/compressed/decompress.c:86:6: warning: no previous prototype for 'decompress_kernel' [-Wmissing-prototypes]
+      86 | void decompress_kernel(unsigned long boot_heap_start)
+         |      ^~~~~~~~~~~~~~~~~
 
 
-With this patch:
+vim +/LZ4_decompress_safe_forceExtDict +506 arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c
 
-    clock-controller.mux              1        1        0    25000000
-        0     0  50000         Y
-       clock-controller.out0_sel_i2cb       0        0        0
-25000000          0     0  50000         Y
-       clock-controller.dbl           1        1        0    25000000
-        0     0  50000         Y
-          clock-controller.pfd        1        1        0    25000000
-        0     0  50000         Y
-             clock-controller.pll       1        1        0
-2800000000          0     0  50000         Y
-                clock-controller.fod3       1        1        0
-24576000          0     0  50000         Y
-                   clock-controller.out4       1        1        0
-24576000          0     0  50000         Y
-                clock-controller.fod2       0        0        0
-24000000          0     0  50000         Y
-                   clock-controller.out3       0        0        0
-24000000          0     0  50000         Y
-                clock-controller.fod1       0        0        0
-24000000          0     0  50000         Y
-                   clock-controller.out2       0        0        0
-24000000          0     0  50000         Y
-                clock-controller.fod0       0        0        0
-24000000          0     0  50000         Y
-                   clock-controller.out1       0        0        0
-24000000          0     0  50000         Y
+cffb78b0e0b3a3 Kyungsik Lee 2013-07-08  505  
+2209fda323e2fd Gao Xiang    2018-10-30 @506  int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+2209fda323e2fd Gao Xiang    2018-10-30  507  				     int compressedSize, int maxOutputSize,
+2209fda323e2fd Gao Xiang    2018-10-30  508  				     const void *dictStart, size_t dictSize)
+2209fda323e2fd Gao Xiang    2018-10-30  509  {
+2209fda323e2fd Gao Xiang    2018-10-30  510  	return LZ4_decompress_generic(source, dest,
+2209fda323e2fd Gao Xiang    2018-10-30  511  				      compressedSize, maxOutputSize,
+2209fda323e2fd Gao Xiang    2018-10-30  512  				      endOnInputSize, decode_full_block,
+2209fda323e2fd Gao Xiang    2018-10-30  513  				      usingExtDict, (BYTE *)dest,
+2209fda323e2fd Gao Xiang    2018-10-30  514  				      (const BYTE *)dictStart, dictSize);
+2209fda323e2fd Gao Xiang    2018-10-30  515  }
+2209fda323e2fd Gao Xiang    2018-10-30  516  
 
-From what I can tell, the only thing that changes is the introduction
-of clock-controller.dbl into the clock dump.
-In my interpretation of reading the programmer's manual, the frequency
-that is doubled is the reference frequency, but based on looking at
-the clock dump, it's not obvious what's happening.
+:::::: The code at line 506 was first introduced by commit
+:::::: 2209fda323e2fd2a2d0885595fd5097717f8d2aa lib/lz4: update LZ4 decompressor module
 
-Having said that, if Claude is measuring incorrect frequencies, I am
-fine with abandoning this patch.
+:::::: TO: Gao Xiang <gaoxiang25@huawei.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
-adam
-
->
-> Regards,
-> Claude
->
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> This message and any attachments are intended only for the designated rec=
-ipient(s) and may contain confidential or proprietary information and be su=
-bject to the attorney-client privilege or other confidentiality protections=
-.  If you are not a designated recipient, you may not review, use, copy or =
-distribute this message or any attachments.  If you received this email in =
-error, please notify the sender by reply e-mail and permanently delete the =
-original and any copies of this message and any attachments thereto.  Thank=
- you.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,68 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212834DE507
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 02:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B98A4DE503
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 02:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241741AbiCSBqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 21:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
+        id S241757AbiCSBvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 21:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiCSBqg (ORCPT
+        with ESMTP id S229580AbiCSBvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 21:46:36 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445932DD98C
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:45:16 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id jo24so217948qvb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:45:16 -0700 (PDT)
+        Fri, 18 Mar 2022 21:51:14 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A2220D50F;
+        Fri, 18 Mar 2022 18:49:54 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id n2so8444457plf.4;
+        Fri, 18 Mar 2022 18:49:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KkQmEP0AU8bSdcTRUOlOUawSBdGr8p6///xsFsEqdbY=;
-        b=SaVw2WOa2mwtdzj3aX1v5v2dOt63VrRXBrdTXp+q/KtFtUxsc8qbHK0bO0QjkSpubT
-         1y13NGchi3LG6Kf+QSRrtX/IMzlw3yuthJVMRCdU2KQdskJAfSmbMt2Eft08qO/TU9ss
-         IhkKNoKP8U0G2yyzXTA1d0FAg7DKN0YkKVjm81wE70oVAhUFy6wpYx1HoKHwjwSqeCmB
-         wYlU9Mzdzj4A+ThS1bFGDsldoC7b6Qqn9vLTbiKumxoaQV9dBEp9o7M6Ie9BdonxoyUm
-         vHDVZpHEoS+bZRFGvB9qzIIEBRCGodPBzSktO3GR8Df0ursnFrbrDqVQcWFEROjU6Vdo
-         /jEQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=Q02eiM3XJSRXNKlCMmRjIwRa2jlfkAb9LyshPAOVqOQ=;
+        b=NQk0sloTCeVMjv6qT4ZA1yJLqMWXvZgWPUVOuFiedFkXGt1CKRcCymZTadxu2NTHkd
+         cwGYZjyhxtYBa4qwDpEtWVWkoXKWcufWKn5jtQaZqZqLqtEnxndOn9ykQgVv4WZt4GwZ
+         BW4Sgdq0UpLzTZYDreAZ1VdIph2SqUPbNjIOpe8U97OXSHdgzGZLA4ts8Sx3+/Hr1b51
+         ToDeOSEkKRovPMn+kTEGsrgyhKooNOIPdVXK4yI9r3SScxz5bDU9kM1tBERhZEz6pUd3
+         P/zzMaKAklHdAcZNu5OtRpqmmrgMIEnTlw/je5RaAiOBg1h5nkqi8yQePXmUj4A9TWnz
+         1GLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KkQmEP0AU8bSdcTRUOlOUawSBdGr8p6///xsFsEqdbY=;
-        b=MtiICfp7aT+zGk9S5+Kgy2CtzcQ+Lbh/MaIv/jPOOKzoXQDBSa+il106F+gBI0cdog
-         +sbIH40fuK/9gASXwvApR7ZjG2p5lry+heT3QCrdBrfKzsafbZxkcH9SqJT+EUhRRRB2
-         yOxvxlYBnSpX7vPWxw/JHBrSQVH433AoHx7AOQqXFX7N+Zhy9CJbRKn+EKIAOcbuR9e1
-         PTSa+uiL9LHacx9c1cfcXXU/EK0tQKPDgGH6n5lX9I1DHbj7un7EehOU8UGskGXakdjk
-         MMQM3kaddcOXS7VrHi8PeJcPojTUyNWqdakrq552+/1bbrmFKsfvp2DwoG08KBIsGOZ2
-         vtFw==
-X-Gm-Message-State: AOAM530ZtajpSzFy8FhA3CfFzNVdcyvSZMHmtgoiH7r7+m358Q+Z/5T2
-        McOX7HCaJhC232B9eShbsZyPAolhVZ0SQmkPCyZiSw==
-X-Google-Smtp-Source: ABdhPJxmAfiQiJPHxu2Rc7BBfv2iLFQ4QhxKrhO09SuOt9pcK9+vJoTzkXCVzQhxizdkNa/I7WxBvyeXynoJqUFRSXQ=
-X-Received: by 2002:a05:6214:29e9:b0:439:eedb:dedf with SMTP id
- jv9-20020a05621429e900b00439eedbdedfmr9213739qvb.15.1647654315245; Fri, 18
- Mar 2022 18:45:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220319001635.4097742-1-khazhy@google.com> <ea2afc67b92f33dbf406c3ebf49a0da9c6ec1e5b.camel@hammerspace.com>
-In-Reply-To: <ea2afc67b92f33dbf406c3ebf49a0da9c6ec1e5b.camel@hammerspace.com>
-From:   Khazhy Kumykov <khazhy@google.com>
-Date:   Fri, 18 Mar 2022 18:45:04 -0700
-Message-ID: <CACGdZYJGm2VP0wHhqCegp+P0rKpEhdTdvjWK_T3+9FNHM3W8cw@mail.gmail.com>
-Subject: Re: [PATCH RFC] nfsd: avoid recursive locking through fsnotify
-To:     Trond Myklebust <trondmy@hammerspace.com>
-Cc:     "bfields@fieldses.org" <bfields@fieldses.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000032635b05da886a36"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Q02eiM3XJSRXNKlCMmRjIwRa2jlfkAb9LyshPAOVqOQ=;
+        b=bnKhhsq2gRJKRWSerOViWoQfdm9n6ni5XA5L+PvCkFsNQAvYFWF3EQepN444XpCFfj
+         wFGlywT7BoWmI/nx/JdGDopz5HnePY2J7fAKMRESI7/oYCQ1zBIPNm8QXDQkV0vVfE9O
+         L1g4rZHeGD9DKrDHYR0G45dwQ6kdAwRwpr9gsCzq1VcdiS1NZVo8lfaQ1R4/KKSmiNcf
+         OR3oyiGe/ypRUKCcLqeacJnOLN1GsQmXc6Q4UmVSNjuNt1skwqlfqllx2H1cxkLjfbr9
+         L4aBjZ4jWmE2f7pq0y6c/698OBg6Y/UbZB1wcuLIRhQSeiWO7Pm+ChVWQw/qxczC3u4t
+         HgEg==
+X-Gm-Message-State: AOAM530tOJFXqD7zkraGMxJBF/MKQxQGKws4pfR9km6etJaqu7/yY8+s
+        sKVdV0fRfgQF2/m8+e2SpytaulpXHSs=
+X-Google-Smtp-Source: ABdhPJw0jscNMSfB7pOIIQFN1e3+hXBhAY11gDdy3cDRTQGXy5G3Bkxu9SEz+zb3rEAG6R0DIrAMBg==
+X-Received: by 2002:a17:902:b097:b0:154:2bda:bd38 with SMTP id p23-20020a170902b09700b001542bdabd38mr1126028plr.155.1647654594199;
+        Fri, 18 Mar 2022 18:49:54 -0700 (PDT)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id h13-20020a056a00230d00b004f427ffd485sm11738659pfh.143.2022.03.18.18.49.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 18 Mar 2022 18:49:53 -0700 (PDT)
+From:   Tony Huang <tonyhuang.sunplus@gmail.com>
+To:     ulf.hansson@linaro.org, robh+dt@kernel.org, lhjeff911@gmail.com,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de
+Cc:     wells.lu@sunplus.com, tony.huang@sunplus.com,
+        Tony Huang <tonyhuang.sunplus@gmail.com>
+Subject: [PATCH v4 0/2] Add mmc driver for Sunplus SP7021 SOC
+Date:   Sat, 19 Mar 2022 09:50:10 +0800
+Message-Id: <cover.1647652688.git.tonyhuang.sunplus@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,114 +66,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000032635b05da886a36
-Content-Type: text/plain; charset="UTF-8"
+This is a patch series for mmc driver for Sunplus SP7021 SOC.
 
-On Fri, Mar 18, 2022 at 5:36 PM Trond Myklebust <trondmy@hammerspace.com> wrote:
->
-> Isn't that stack trace showing a slab direct reclaim, and not a
-> filesystem writeback situation?
->
-> Does memalloc_nofs_save()/restore() really fix this problem? It seems
-> to me that it cannot, particularly since knfsd is not a filesystem, and
-> so does not ever handle writeback of dirty pages.
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-Ah you're right. An alternative would be delaying the destroy_mark,
-which I am noticing now that, on mainline, the shrinker calls
-nfsd_file_dispose_list_delayed, something missing from the version of
-5.4 I was looking at.
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-To my reading 9542e6a643fc6 ("nfsd: Containerise filecache
-laundrette") should have the effect of fixing this deadlock (and the
-message does explicitly call out notifier deadlocks) - maybe something
-to send towards stable?
->
->
-> Cc: the linux-mm mailing list in search of answers to the above 2
-> questions.
->
-> --
-> Trond Myklebust
-> Linux NFS client maintainer, Hammerspace
-> trond.myklebust@hammerspace.com
->
->
+Tony Huang (2):
+  dt-binding: mmc: Add mmc yaml file for Sunplus SP7021
+  mmc: Add mmc driver for Sunplus SP7021
 
---00000000000032635b05da886a36
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+ .../devicetree/bindings/mmc/sunplus,mmc.yaml       |   79 +
+ MAINTAINERS                                        |    7 +
+ drivers/mmc/host/Kconfig                           |    9 +
+ drivers/mmc/host/Makefile                          |    1 +
+ drivers/mmc/host/sunplus_mmc.c                     | 2195 ++++++++++++++++++++
+ 5 files changed, 2291 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mmc/sunplus,mmc.yaml
+ create mode 100644 drivers/mmc/host/sunplus_mmc.c
 
-MIIPmwYJKoZIhvcNAQcCoIIPjDCCD4gCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz1MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-h3dPtFviTyG11HYwTAYDVR0gBEUwQzBBBgkrBgEEAaAyASgwNDAyBggrBgEFBQcCARYmaHR0cHM6
-Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/BAIwADCBmgYIKwYBBQUH
-AQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2NhL2dzYXRs
-YXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29t
-L2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgwFoAUfMwKaNei6x4schvR
-zV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEBAE0ANr7NUOqEcZce4KYP
-SjzlrshSC8sgJ8dKDDbe35PL86vDuMIrytVjiV10p/YUofun9GeHBY6r5kTyh4be5FgftiiNtWzn
-U1W5cxLYMT1hKYxXxnM2sWMQGFl4TkxxbRoVZa3ou/NxFdAZeiQSwGnzk5oIDTBZQc8q3wMa1svm
-A5Rd4MVaIUt+hyk6seAldN6k4/O34O1l2V6D+/BwagyzLWvOeMEM9hClVF+F6a20yy4dcDsprFZZ
-Sk9JzUy9F6FM7L1wT2ndjTNDja4Y2tixf31KuisZLGKmDZsW/fXF1GgWDaM0DbYJwtE3kHylWnMk
-CN4PfYgIa15C5A9lXhExggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
-YWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIzIFNNSU1FIENBIDIwMjAC
-EAFEftjde/YEIFcjUXqhcBUwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILQcwviz
-mU2tR1tGskskBUwxNJHeIlLWmEuXXoRpcU4VMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
-KoZIhvcNAQkFMQ8XDTIyMDMxOTAxNDUxNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
-CwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZI
-hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBDSHo80q9W7dZX3oFQj0wXmJG9
-r64M07CcqExABkw6sv8VnczIuo3014GmgmP8uzxh4pJ6GHZzI+Qo0/HyN/LOSBL7ANCIEG7uFxXO
-UHYXh5yENN5RRYo8jGQ39RUUrjK92n5ufJTU3PUQEAHtDFRD1E/aEHqeVU+558EfrtEQy39Qdkx4
-7tRfifmkl3tAWJHYHerHHeIaVM8svu2ORoScUQRCZehd9UP1KxElMbr3slKslyVV57lulwfhl6sR
-tQYCZQpFTQSHbiX8LCkprOzbVM7MEzYCh7092xsXaqBjqPFLY1HslFg/VtQpkg8INSABL+bw4Q6n
-UOxi9/xU0ENL
---00000000000032635b05da886a36--
+-- 
+2.7.4
+

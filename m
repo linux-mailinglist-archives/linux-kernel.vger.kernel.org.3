@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF094DE6F3
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 09:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E52B4DE6F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 09:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242468AbiCSIRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 04:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
+        id S242472AbiCSISf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 04:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233088AbiCSIRq (ORCPT
+        with ESMTP id S233088AbiCSISe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 04:17:46 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60ED0231929
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 01:16:25 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id k10-20020a5d91ca000000b006414a00b160so6578898ior.18
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 01:16:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=WUWCxbYXpv8z4jcgvVVgbLnra2IcxUsgwjwIFM6opyw=;
-        b=i5v61RrDVoaAtKjbqZRA6cM83uHa2T6DxV6RL9CsBdeQXZuo5rjTn3Rf6tHE7Sgmf1
-         NQY5Vqx5bOV0ScIZ2qS42fv5KE+86dmvQkKTfrRtTYHbTqM4aZX2p6NwpzsgjJQsIWCt
-         9Ar8NJKuNC91wxii1+aGlfTk67MNV8Ovfjj3N5D1HHyUPibPkvk0uxyQFjaNm/7PamTz
-         xBIKmgpRNlhZSBsasxs+Dwx66XoS68DeXSQutvvF4vEmo/k++iEPtiWD5b99ZbqwC7v5
-         yyuoVMIEuxcjIYvBkhdy3vKk/ysWfDpML2sYkLgpUJs9H9vl7UM7oIxqlkhmh3L4AZh3
-         mjRg==
-X-Gm-Message-State: AOAM533/HCB8VX+S+8WIzUjP7qJ2qQCTUdvAf3t4lYtnrn9hgs4aYHyk
-        QdXddaFJHt7LJPjdLmTB7ktTTc8Vf4apt3b1Dm3XiElYcD8S
-X-Google-Smtp-Source: ABdhPJyPEwIAqyIUFL+CxixBlWaTZmYK6PeM/UNgXrwWC4dbze6a16I/59eg/9wLMvT9QQR9oi7rektbQwH1FARKkQaauaXpb5uG
+        Sat, 19 Mar 2022 04:18:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E905C23193D;
+        Sat, 19 Mar 2022 01:17:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84C8260DB4;
+        Sat, 19 Mar 2022 08:17:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78192C340EC;
+        Sat, 19 Mar 2022 08:17:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647677834;
+        bh=XKOQjqIaURxgBzAC86d2mUm8wd3h7T9RaXyq8DIm5MU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=herOR2Ypvi98+mCJGFrD9bfd8rZH/+UE7Gad4k5Zda5Vt8fIyMEQRsFmqxukYcOSn
+         CArPvPGzHu2n+UY5I8Pd3d1L9Q79yiZltv0OesnYPuV/LjOo2pynTvOaAFBOeOXEwK
+         7gC8Om8TZrwu3CACnuwqKBhjm7USf5gOx89IlLj4=
+Date:   Sat, 19 Mar 2022 09:17:10 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     James Morse <james.morse@arm.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: fixup for [PATCH 5.4 18/43] arm64 entry: Add macro for reading
+ symbol address from the trampoline
+Message-ID: <YjWRhoKQAbojIGu2@kroah.com>
+References: <YjSxfK6bmH4P9IQl@kroah.com>
+ <20220318173713.2320567-1-james.morse@arm.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:d56:b0:319:f6bb:25e1 with SMTP id
- d22-20020a0566380d5600b00319f6bb25e1mr6281612jak.242.1647677784786; Sat, 19
- Mar 2022 01:16:24 -0700 (PDT)
-Date:   Sat, 19 Mar 2022 01:16:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000110dee05da8de18a@google.com>
-Subject: [syzbot] linux-next test error: WARNING in __napi_schedule
-From:   syzbot <syzbot+6f21ac9e27fca7e97623@syzkaller.appspotmail.com>
-To:     Jason@zx2c4.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318173713.2320567-1-james.morse@arm.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,57 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Mar 18, 2022 at 05:37:13PM +0000, James Morse wrote:
+> __sdei_asm_trampoline_next_handler shouldn't have its own name as the
+> tramp_data_read_var takes the symbol name, and generates the name for
+> the value in the data page if CONFIG_RANDOMIZE_BASE is clear.
+> 
+> This means when CONFIG_RANDOMIZE_BASE is clear, this code won't compile
+> as __sdei_asm_trampoline_next_handler doesn't exist.
+> 
+> Use the proper name, and let the macro do its thing.
+> 
+> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
+> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+>  arch/arm64/kernel/entry.S | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+> index e4b5a15c2e2e..cfc0bb6c49f7 100644
+> --- a/arch/arm64/kernel/entry.S
+> +++ b/arch/arm64/kernel/entry.S
+> @@ -1190,7 +1190,7 @@ __entry_tramp_data_start:
+>  __entry_tramp_data_vectors:
+>  	.quad	vectors
+>  #ifdef CONFIG_ARM_SDE_INTERFACE
+> -__entry_tramp_data___sdei_asm_trampoline_next_handler:
+> +__entry_tramp_data___sdei_asm_handler:
+>  	.quad	__sdei_asm_handler
+>  #endif /* CONFIG_ARM_SDE_INTERFACE */
+>  	.popsection				// .rodata
+> @@ -1319,7 +1319,7 @@ ENTRY(__sdei_asm_entry_trampoline)
+>  	 */
+>  1:	str	x4, [x1, #(SDEI_EVENT_INTREGS + S_ORIG_ADDR_LIMIT)]
+>  
+> -	tramp_data_read_var     x4, __sdei_asm_trampoline_next_handler
+> +	tramp_data_read_var     x4, __sdei_asm_handler
+>  	br	x4
+>  ENDPROC(__sdei_asm_entry_trampoline)
+>  NOKPROBE(__sdei_asm_entry_trampoline)
+> -- 
+> 2.30.2
+> 
 
-syzbot found the following issue on:
+Thanks, now queued up.
 
-HEAD commit:    6d72dda014a4 Add linux-next specific files for 20220318
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=124f5589700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5907d82c35688f04
-dashboard link: https://syzkaller.appspot.com/bug?extid=6f21ac9e27fca7e97623
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6f21ac9e27fca7e97623@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3612 at net/core/dev.c:4268 ____napi_schedule net/core/dev.c:4268 [inline]
-WARNING: CPU: 0 PID: 3612 at net/core/dev.c:4268 __napi_schedule+0xe2/0x440 net/core/dev.c:5878
-Modules linked in:
-CPU: 0 PID: 3612 Comm: kworker/0:5 Not tainted 5.17.0-rc8-next-20220318-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: wg-crypt-wg0 wg_packet_decrypt_worker
-RIP: 0010:____napi_schedule net/core/dev.c:4268 [inline]
-RIP: 0010:__napi_schedule+0xe2/0x440 net/core/dev.c:5878
-Code: 74 4a e8 11 61 3c fa 31 ff 65 44 8b 25 d7 27 c6 78 41 81 e4 00 ff 0f 00 44 89 e6 e8 18 63 3c fa 45 85 e4 75 07 e8 ee 60 3c fa <0f> 0b e8 e7 60 3c fa 65 44 8b 25 f7 31 c6 78 31 ff 44 89 e6 e8 f5
-RSP: 0018:ffffc9000408fc78 EFLAGS: 00010093
-RAX: 0000000000000000 RBX: ffff88807fa90748 RCX: 0000000000000000
-RDX: ffff888019800000 RSI: ffffffff873c4802 RDI: 0000000000000003
-RBP: 0000000000000200 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff873c47f8 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff8880b9c00000 R14: 000000000003b100 R15: ffff88801cf90ec0
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f998512c300 CR3: 00000000707f2000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- napi_schedule include/linux/netdevice.h:465 [inline]
- wg_queue_enqueue_per_peer_rx drivers/net/wireguard/queueing.h:204 [inline]
- wg_packet_decrypt_worker+0x408/0x5d0 drivers/net/wireguard/receive.c:510
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+greg k-h

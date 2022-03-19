@@ -2,98 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A944E18CA
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 23:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 744104E18CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 23:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244278AbiCSWSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 18:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
+        id S244266AbiCSWYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 18:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236193AbiCSWSG (ORCPT
+        with ESMTP id S234421AbiCSWYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 18:18:06 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2FF19ABC4
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 15:16:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647728204; x=1679264204;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6dYfmkcIyCAPrBT5TULXnQbOQ/f76+B48352NpuKJpI=;
-  b=eOMZNJh8/fehkvljEg0PR9fl5luIn1HULAH8tCiwOC8NTeG3YXB0m6TC
-   AHIN92ITvZIJFXVBpRs7yjDSkKAAgSrcy5IV2wui69trtvgJsil397wnH
-   2p1WXvNCGrJmZ/r/RQW3i+GXiPMxlbjwvN8ARoFQfofjtQYQMl4Wmr/9W
-   JrokncJBw649X147E2P+/u59YmFg0JC5pmBZ26E2PqTQWOkBLtj2aDcyY
-   4JENQXGcF5uK21OvrrvvwGhvuxHCYEJbUUXrK94fiMYnT+KzlWLiex/6L
-   /5DhznLbxcV4Og37Q9KiMDvuBFZFgXoUyU0MPPp+swLpvGXF5FFXhZifc
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="244803815"
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="244803815"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 15:16:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="715994112"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 19 Mar 2022 15:16:41 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVhNJ-000GKb-79; Sat, 19 Mar 2022 22:16:41 +0000
-Date:   Sun, 20 Mar 2022 06:16:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: powerpc-linux-ld: warning: orphan section `.init.plt' from
- `drivers/platform/chrome/cros_ec_trace.o' being placed in section
- `.init.plt'
-Message-ID: <202203200632.36TZEYf8-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 19 Mar 2022 18:24:04 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEB6231930
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 15:22:42 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d81518795fso98801097b3.0
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 15:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=OkSdEnZDxkie6HpV+Cq3FfZcGdO9k6Q2dedvGrihz4k=;
+        b=kHBbs+54TQt8YvMHJ4P15RTiz6iMnXCDYI6xGPXQeLnigv02pyh3ovt9kgRJ1j2lLb
+         t4+AOulByIuiIQh70uHNxxuclxQ/kSABl46uzAYW0Iwf7WaycffXcHKeDQq4ZQeN2izO
+         98I8Fd89vVvic/c6V2SlbxEdUy0Q5/V0h0R7fCy3LMOjX8/QgE7sH4fxMcZ/BngDA4L7
+         syOqscHseotKX75Nl/04HrFQ9UXUZTUc9qBOPT93mEsz+vf+rIQd8Kb3sWVBwZDMgccf
+         TlCZJk7vUU623Vpff7hAprVly+y/6kpn8qfGsVhAJG6WBx4N5PBfYryxSAymDBy8gcyH
+         YT+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=OkSdEnZDxkie6HpV+Cq3FfZcGdO9k6Q2dedvGrihz4k=;
+        b=lC7DsQV0ZHjrzpzSkbBR2KBOTScV/gIgB1z2AZDAKjuMPQHiD4E4rvHYXNe5PEVNWZ
+         H+Jz7b3bnOKEB9SZR2m8oPaTAsoziMty7YDxL9uGqcSDPeYls1e828PBtLRIAiLZ4WUc
+         VvGaKg6bV9LTNcsPevGeXwIl+cd0baWGjzD781UQ2FsCKtmAUfxixbMrZ8Y1Tvx7VHm0
+         DVWqZ32qDAGjjhEFXAgc9xO+mKBdUMI88L+cI00NFEinz9p6h8BOw+U4D0sltCz5g8P8
+         KHEtesSFCArDN64p1E5vEb6H1EYGgCI/XtkPGIwDVX9K05YGvGNNDgpLd3aVJI/XFMxF
+         K5IA==
+X-Gm-Message-State: AOAM5320rjqmvodZQ5IKqmMrgmapBdj67pA/3tJMQzLvKhVKToRlobVR
+        VxouGAsRS7Uon2KgkcggjULIMnZB
+X-Google-Smtp-Source: ABdhPJwBJbOZ/XB3qdeuKan76xVvlKrJlJwjVdqavArroy0vYh8wzbTjEMoyDcySwnRgwhJGfVbTY7DWnQ==
+X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:f299:d506:bab:fff8])
+ (user=morbo job=sendgmr) by 2002:a25:d304:0:b0:633:64ce:99c6 with SMTP id
+ e4-20020a25d304000000b0063364ce99c6mr16652532ybf.433.1647728561817; Sat, 19
+ Mar 2022 15:22:41 -0700 (PDT)
+Date:   Sat, 19 Mar 2022 15:22:28 -0700
+In-Reply-To: <20220316213055.2351342-1-morbo@google.com>
+Message-Id: <20220319222228.4160598-1-morbo@google.com>
+Mime-Version: 1.0
+References: <20220316213055.2351342-1-morbo@google.com>
+X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+Subject: [PATCH v2] gpiolib: acpi: use correct format characters
+From:   Bill Wendling <morbo@google.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc:     torvalds@linux-foundation.org, Bill Wendling <morbo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
+When compiling with -Wformat, clang emits the following warning:
 
-FYI, the error/warning still remains.
+drivers/gpio/gpiolib-acpi.c:393:4: warning: format specifies type
+'unsigned char' but the argument has type 'int' [-Wformat]
+                        pin);
+                        ^~~
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   34e047aa16c0123bbae8e2f6df33e5ecc1f56601
-commit: 8581fd402a0cf80b5298e3b225e7a7bd8f110e69 treewide: Add missing includes masked by cgroup -> bpf dependency
-date:   4 months ago
-config: powerpc-randconfig-c024-20220320 (https://download.01.org/0day-ci/archive/20220320/202203200632.36TZEYf8-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8581fd402a0cf80b5298e3b225e7a7bd8f110e69
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8581fd402a0cf80b5298e3b225e7a7bd8f110e69
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
+The types of these arguments are unconditionally defined, so this patch
+updates the format character to the correct ones casts to unsigned to
+retain the behavior or the "hh" modifier..
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Bill Wendling <morbo@google.com>
+---
+v2 - Cast "pin" to retain the same width as the original.
+---
+ drivers/gpio/gpiolib-acpi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
->> powerpc-linux-ld: warning: orphan section `.init.plt' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.init.plt'
->> powerpc-linux-ld: warning: orphan section `.init.plt' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.init.plt'
->> powerpc-linux-ld: warning: orphan section `.init.plt' from `drivers/platform/chrome/cros_ec_trace.o' being placed in section `.init.plt'
-
+diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+index a5495ad31c9c..92dd9b8784f2 100644
+--- a/drivers/gpio/gpiolib-acpi.c
++++ b/drivers/gpio/gpiolib-acpi.c
+@@ -388,9 +388,9 @@ static acpi_status acpi_gpiochip_alloc_event(struct acpi_resource *ares,
+ 
+ 	if (pin <= 255) {
+ 		char ev_name[5];
+-		sprintf(ev_name, "_%c%02hhX",
++		sprintf(ev_name, "_%c%02X",
+ 			agpio->triggering == ACPI_EDGE_SENSITIVE ? 'E' : 'L',
+-			pin);
++			(unsigned char)pin);
+ 		if (ACPI_SUCCESS(acpi_get_handle(handle, ev_name, &evt_handle)))
+ 			handler = acpi_gpio_irq_handler;
+ 	}
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1.894.gb6a874cedc-goog
+

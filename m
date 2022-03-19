@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2CF4DEA1D
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 19:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F9B4DEA1E
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 19:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243912AbiCSSdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 14:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
+        id S243921AbiCSSdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 14:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233591AbiCSSdP (ORCPT
+        with ESMTP id S243914AbiCSSd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 14:33:15 -0400
-Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAC72986DD
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 11:31:54 -0700 (PDT)
-Received: from authenticated-user (box.fidei.email [71.19.144.250])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        by box.fidei.email (Postfix) with ESMTPSA id B21BC803CA;
-        Sat, 19 Mar 2022 14:31:50 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
-        t=1647714711; bh=EtOzveuYpbIzrvMLsvYzRia5wtbe+9LxI+L60WoPqeQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MpgnnCJIBbIsOLZHl5JP7ZKPVjFAtlwqSTXbNoLv3TobUPr+TotQ05dZXfK980fzE
-         o8Cgs2jVrW40Bm9bg/gBuw8TtZ2CFMDOlx+XxwIMngv6XIFXzOgsHnsyPykKtQ0Gzd
-         R3zfEf53DQUZLO3q/4hJ002jkweI6o1ON6/jq6pVoEAbTKWVEzKF+5YB7KMdXM6xSz
-         7z0jgxnHMtI6YwH7hxLjFj60a0Hlb5hx/jp8lVqCPzaF+Hs6v/2ItY061+X3fAU17v
-         nf4NhKOYGx1a9wtKwq73vphY2R1ce2m/5mGbFMseBKOsB6iYvft8kqeb5cHTHuSciI
-         atVxLYMKa9+Ag==
-Message-ID: <32eaf406-aca7-a17a-813a-631616480e42@dorminy.me>
-Date:   Sat, 19 Mar 2022 14:31:49 -0400
+        Sat, 19 Mar 2022 14:33:29 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F7F2986E5
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 11:32:07 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id w28-20020a05660205dc00b00645d3cdb0f7so7401233iox.10
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 11:32:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=IZtuSSe7h4ygjSJ8KqApgw4dc4sgkX0YCgrh7z/0rTY=;
+        b=2TvJk7jg3sEDkk9gjibTuDm8WR+50rqMHEzyTkmSmZHr88xfqslrplIxGCJJZhvQMS
+         2fD8tb4/4rL0o+WbAYhvzRkNsg1zuDrMVPeonoQLNPTqi+ucqo3KHBa5RLRi47Vksihd
+         TS1lVPW26TH1oW04Z3KeCZfyKkfSvd1cVrDwjQnYNgHZR1xA9lCWlLfTklJBcnBJ2PnZ
+         6bt7B4EHhJVOt5PXaNZQ5FSLbOEJHOHaSf3TumUR74e5NmVZjbMPkmCXd+9bEFZdeKEL
+         ZFMtdUzuILGdhdDkXrGsWY4r1vFFaH4vSgpmsLtWvQ6GbAjVEmT40o/EAcf7aAim/SaI
+         85QA==
+X-Gm-Message-State: AOAM53315IHc/d3xEqWjWUCfJKZjpjn93ilyzsRH8uMObhEqssTH6APS
+        xdqvQdUdAwGOlfvTW/G7iUhW+PK31JyYJ6RNTfGZFfBOjGwQ
+X-Google-Smtp-Source: ABdhPJz+S/WggbwwTQF2cGT56obUcB+F64Vr0b60Mm58ZevgA41kJhUpY+YFb6eHnCWtztmTdjo8L5wOPZ8aKhUCSJusjifjz6bK
 MIME-Version: 1.0
-Subject: Re: [PATCH] btrfs: raid56: do blk_check_plugged check twice while
- writing
-Content-Language: en-US
-To:     Yusuf Khan <yusisamerican@gmail.com>, linux-btrfs@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, dsterba@suse.com,
-        josef@toxicpanda.com, clm@fb.com
-References: <20220319011840.16213-1-yusisamerican@gmail.com>
-From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-In-Reply-To: <20220319011840.16213-1-yusisamerican@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Received: by 2002:a05:6638:490f:b0:317:d121:a93a with SMTP id
+ cx15-20020a056638490f00b00317d121a93amr6918348jab.35.1647714727210; Sat, 19
+ Mar 2022 11:32:07 -0700 (PDT)
+Date:   Sat, 19 Mar 2022 11:32:07 -0700
+In-Reply-To: <57fc3806-86c6-b1b2-4c44-083b1b7afc8b@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000001b61605da967bae@google.com>
+Subject: Re: [syzbot] divide error in dbNextAG
+From:   syzbot <syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        paskripkin@gmail.com, shaggy@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,33 +56,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yusuf:
+Hello,
 
-On 3/18/22 21:18, Yusuf Khan wrote:
-> Do the check to see if the drive was connected twice in case that
-> the first was a fluke.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Block plugging is not actually about checking the connectivity of the 
-drive; it's about batching IO submission. Specifically, when a client of 
-the block layer (a filesystem or DM device, for instance) knows that it 
-needs to send a whole batch of IO to disk from a thread, it can request 
-the thread's be temporarily delayed, with blk_start_plug() 
-(block/blk-core.c has a lengthy great comment about it). Then it submits 
-its batch of requests. Finally, it requests the plug be released. This 
-is useful because it can allow better IO by releasing a large, 
-potentially better ordered batch at once.
+Reported-and-tested-by: syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
 
-In this particular case, to my understanding, blk_check_plug() checks 
-whether the current thread is plugged, and, if it is, it adds the rbio 
-to a list; when the plug expires, perhaps from the thread going to 
-sleep, the plug callback gets called, specifically btrfs_raid_unplug(), 
-which sorts the pending IOs.
+Tested on:
 
-As such, it shouldn't be necessary to check whether the thread is 
-plugged twice. Your change description is a little light on *why* you'd 
-like to check twice; maybe I'm missing something.
+commit:         34e047aa Merge tag 'arm64-fixes' of git://git.kernel.o..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=70f75a89c7a0e6bc
+dashboard link: https://syzkaller.appspot.com/bug?extid=46f5c25af73eb8330eb6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14c2cd33700000
 
-Hope this helps,
-
-Sweet Tea
-
+Note: testing is done by a robot and is best-effort only.

@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA434DE7C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 13:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A21494DE7C8
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 13:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbiCSMFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 08:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
+        id S241515AbiCSMNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 08:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241515AbiCSME6 (ORCPT
+        with ESMTP id S236834AbiCSMNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 08:04:58 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E0C1E3FE
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 05:03:36 -0700 (PDT)
-X-UUID: ebf6dc5df6f644b495dd8bbf58981c4a-20220319
-X-UUID: ebf6dc5df6f644b495dd8bbf58981c4a-20220319
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1670526193; Sat, 19 Mar 2022 20:03:29 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Sat, 19 Mar 2022 20:03:27 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 19 Mar 2022 20:03:26 +0800
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     <broonie@kernel.org>
-CC:     <angelogioacchino.delregno@collabora.com>,
-        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
-        <alsa-devel@alsa-project.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>
-Subject: [PATCH] ASoC: mediatek: mt6358: add missing EXPORT_SYMBOLs
-Date:   Sat, 19 Mar 2022 20:03:25 +0800
-Message-ID: <20220319120325.11882-1-jiaxin.yu@mediatek.com>
+        Sat, 19 Mar 2022 08:13:36 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11D67460D
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 05:12:15 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id z16so11768827pfh.3
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 05:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e3X2tV+keGbsYSbHq09ZXywcQX5PSv7w44lhkAPv5lw=;
+        b=BjHsw0mvLUvarLSC8WSX/z2bDCV9Ys0dIKCBECBHrwoAVRHgDqcB4hewr0fxb5bc4Z
+         k7AbAL00hQGqtFXBm9ksabyMIl0CPtsIbnMbIcyte5tX7UaHxOtIFokBg5apXwHwgiM6
+         YJoCjviQg4zD4Bsc3CkauV9irEFh+UQ5PhUrqYdYWD3PHIKN7JvKypD7/6N3aqw4F1yC
+         VSsFZAHkxWoWxx/fca2/k6sc0RAm1DL3LFmTm+7crrE8GicKOq6/oAsO3Lcp/k+KHEzW
+         yCi93exj3LdJWp50theehgjfx3XuksAcwpjoXXRclHe3khT/D0toBbXjtbln26pUSZgI
+         mj/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e3X2tV+keGbsYSbHq09ZXywcQX5PSv7w44lhkAPv5lw=;
+        b=TIOhZVyNjRhmRXPAknDH+Q8gLO7boLhSNnqKE66jPjd+uvJT+cnflQ+scY1106wMns
+         e35g1k1LVMVEIJJwd2tX/OUqEFy7Cstz8QGkta1bsN4ubrQ6+BO62ICRDdFTBh77eFHO
+         z3K6kDMnjI+aiN7OBnNiv3knFccDNplBzZWdMsLAT3qWBre9UjnpdLqzWJszzvsHK3Vi
+         bBPflz+cnoQKEDZwmsbxYh8AWVLtN+9Eo+YWZTL1GCUHKCdni+IV4ykpdovjaPhibCbc
+         S/K6FaL85fcIq8AVtshh5j/EZQHrSbon85TQYfr1c9v2ZOuFXzp5Cs5im3YS7HCOg90J
+         o2kA==
+X-Gm-Message-State: AOAM531ORUIDwMKJlTdQ8jB9xR0+kpdEdCIdoIfU7NhivY6nbxV3mnHp
+        hJJJN5mDUMCsZp7WsfxJz5OvzNhJElpvaw==
+X-Google-Smtp-Source: ABdhPJypAFKeWc4pTz3U+RtY8y8FZ46cOZnnU3lPnAP+NuKamOo8h3FNBLpurSzehAOlyuDfISU3cQ==
+X-Received: by 2002:a05:6a00:815:b0:4f6:ee04:30af with SMTP id m21-20020a056a00081500b004f6ee0430afmr14593413pfk.15.1647691935126;
+        Sat, 19 Mar 2022 05:12:15 -0700 (PDT)
+Received: from localhost.localdomain ([122.167.7.108])
+        by smtp.gmail.com with ESMTPSA id pg5-20020a17090b1e0500b001bf48f8904fsm16192254pjb.49.2022.03.19.05.12.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Mar 2022 05:12:14 -0700 (PDT)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v2] RISC-V: Increase range and default value of NR_CPUS
+Date:   Sat, 19 Mar 2022 17:42:06 +0530
+Message-Id: <20220319121206.95919-1-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes the following build errors when mt6358 is configured as module:
+Currently, the range and default value of NR_CPUS is too restrictive
+for high-end RISC-V systems with large number of HARTs. The latest
+QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
+restrictive for QEMU as well. Other major architectures (such as
+ARM64, x86_64, MIPS, etc) have a much higher range and default
+value of NR_CPUS.
 
->> ERROR: modpost: "mt6358_set_mtkaif_protocol"
->> [sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.ko] undefined!
->> ERROR: modpost: "mt6358_set_mtkaif_protocol"
->> [sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.ko] undefined!
+This patch increases NR_CPUS range to 2-512 and default value to
+XLEN (i.e. 32 for RV32 and 64 for RV64).
 
-Fixes: 6a8d4198ca80 ("ASoC: mediatek: mt6358: add codec driver")
-Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 ---
- sound/soc/codecs/mt6358.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Changes since v1:
+ - Updated NR_CPUS range to 2-512 which reflects maximum number of
+   CPUs supported by QEMU virt machine.
+---
+ arch/riscv/Kconfig | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/codecs/mt6358.c b/sound/soc/codecs/mt6358.c
-index 9b263a9a669d..4c7b5d940799 100644
---- a/sound/soc/codecs/mt6358.c
-+++ b/sound/soc/codecs/mt6358.c
-@@ -107,6 +107,7 @@ int mt6358_set_mtkaif_protocol(struct snd_soc_component *cmpnt,
- 	priv->mtkaif_protocol = mtkaif_protocol;
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(mt6358_set_mtkaif_protocol);
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 5adcbd9b5e88..423ac17f598c 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -274,10 +274,11 @@ config SMP
+ 	  If you don't know what to do here, say N.
  
- static void playback_gpio_set(struct mt6358_priv *priv)
- {
-@@ -273,6 +274,7 @@ int mt6358_mtkaif_calibration_enable(struct snd_soc_component *cmpnt)
- 			   1 << RG_AUD_PAD_TOP_DAT_MISO_LOOPBACK_SFT);
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(mt6358_mtkaif_calibration_enable);
+ config NR_CPUS
+-	int "Maximum number of CPUs (2-32)"
+-	range 2 32
++	int "Maximum number of CPUs (2-512)"
++	range 2 512
+ 	depends on SMP
+-	default "8"
++	default "32" if 32BIT
++	default "64" if 64BIT
  
- int mt6358_mtkaif_calibration_disable(struct snd_soc_component *cmpnt)
- {
-@@ -296,6 +298,7 @@ int mt6358_mtkaif_calibration_disable(struct snd_soc_component *cmpnt)
- 	capture_gpio_reset(priv);
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(mt6358_mtkaif_calibration_disable);
- 
- int mt6358_set_mtkaif_calibration_phase(struct snd_soc_component *cmpnt,
- 					int phase_1, int phase_2)
-@@ -310,6 +313,7 @@ int mt6358_set_mtkaif_calibration_phase(struct snd_soc_component *cmpnt,
- 			   phase_2 << RG_AUD_PAD_TOP_PHASE_MODE2_SFT);
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(mt6358_set_mtkaif_calibration_phase);
- 
- /* dl pga gain */
- enum {
+ config HOTPLUG_CPU
+ 	bool "Support for hot-pluggable CPUs"
 -- 
 2.25.1
 

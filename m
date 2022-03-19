@@ -2,73 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F9B4DEA1E
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 19:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE0A4DEA31
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 19:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243921AbiCSSdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 14:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
+        id S243938AbiCSSvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 14:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243914AbiCSSd3 (ORCPT
+        with ESMTP id S239382AbiCSSvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 14:33:29 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F7F2986E5
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 11:32:07 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id w28-20020a05660205dc00b00645d3cdb0f7so7401233iox.10
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 11:32:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=IZtuSSe7h4ygjSJ8KqApgw4dc4sgkX0YCgrh7z/0rTY=;
-        b=2TvJk7jg3sEDkk9gjibTuDm8WR+50rqMHEzyTkmSmZHr88xfqslrplIxGCJJZhvQMS
-         2fD8tb4/4rL0o+WbAYhvzRkNsg1zuDrMVPeonoQLNPTqi+ucqo3KHBa5RLRi47Vksihd
-         TS1lVPW26TH1oW04Z3KeCZfyKkfSvd1cVrDwjQnYNgHZR1xA9lCWlLfTklJBcnBJ2PnZ
-         6bt7B4EHhJVOt5PXaNZQ5FSLbOEJHOHaSf3TumUR74e5NmVZjbMPkmCXd+9bEFZdeKEL
-         ZFMtdUzuILGdhdDkXrGsWY4r1vFFaH4vSgpmsLtWvQ6GbAjVEmT40o/EAcf7aAim/SaI
-         85QA==
-X-Gm-Message-State: AOAM53315IHc/d3xEqWjWUCfJKZjpjn93ilyzsRH8uMObhEqssTH6APS
-        xdqvQdUdAwGOlfvTW/G7iUhW+PK31JyYJ6RNTfGZFfBOjGwQ
-X-Google-Smtp-Source: ABdhPJz+S/WggbwwTQF2cGT56obUcB+F64Vr0b60Mm58ZevgA41kJhUpY+YFb6eHnCWtztmTdjo8L5wOPZ8aKhUCSJusjifjz6bK
+        Sat, 19 Mar 2022 14:51:20 -0400
+X-Greylist: delayed 27184 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 19 Mar 2022 11:49:57 PDT
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F67621D7EF;
+        Sat, 19 Mar 2022 11:49:57 -0700 (PDT)
+Received: from darkstar.musicnaut.iki.fi (85-76-3-17-nat.elisa-mobile.fi [85.76.3.17])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 90D401B005E7;
+        Sat, 19 Mar 2022 20:49:54 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1647715795;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UZiM45VyUb2qyeM2RPKLOiRoIP0g6aqsRFs2FjvcgMs=;
+        b=nxWUY/hMxJdb2PwmYVBvX+fR1NveAJnAKYoJFBJAG/GUG8xvSw2fz52G6Xo7wKHVSr0qwn
+        y39uFTLQKpAJ2LOb1jdTkPjk/Zt5T5jreEhYN8yP4TF9UQhAyQu/oY1k0KrkW8wEcc62wx
+        hgWZdU0Ir9TEgYVwQvuA77rpIIpnzBAWdTNFDE/OOASjwzPcwCHVKHWp8J5ObeXTUrPPQF
+        Duxt2vtLvOlF83OUlNBDJVr7FW8Gx/lf19F0Wjk2lqqS05+WB9Tp3Q8fhmjAXMDEKbV9Rm
+        JQ36TlD+HL+7kDAn5ARVDvKbi+A8x4ygbfpY6IVeLZ7fg8GsHqUwI2oyqpeYEg==
+Date:   Sat, 19 Mar 2022 20:49:52 +0200
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Paul Walmsley <paul@pwsan.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [RFC RFT PATCH 0/4] ARM: OMAP1: clock: Convert to CCF
+Message-ID: <20220319184952.GF1986@darkstar.musicnaut.iki.fi>
+References: <20220310233307.99220-1-jmkrzyszt@gmail.com>
+ <YixWZ+IiN2l9jmzg@atomide.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:490f:b0:317:d121:a93a with SMTP id
- cx15-20020a056638490f00b00317d121a93amr6918348jab.35.1647714727210; Sat, 19
- Mar 2022 11:32:07 -0700 (PDT)
-Date:   Sat, 19 Mar 2022 11:32:07 -0700
-In-Reply-To: <57fc3806-86c6-b1b2-4c44-083b1b7afc8b@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000001b61605da967bae@google.com>
-Subject: Re: [syzbot] divide error in dbNextAG
-From:   syzbot <syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        paskripkin@gmail.com, shaggy@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YixWZ+IiN2l9jmzg@atomide.com>
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1647715795; a=rsa-sha256;
+        cv=none;
+        b=XXxZOctinU4m+znhMMf9d6S+wOdBCmt0XyYtVcfB49SQV+My3T/COD9lnwqsHqGmemMSKt
+        xUDRk3eFN4xj4Yux0YCVP/m/6Y9WwNbzDvxSa1ydkD1n+xmpirjWvZTydgl3mC/bAkZTz3
+        OE7QN4T3EazF7J9VmhmkHSy5jEaPkcAo5kGTQifvI4qRdFJWRHIBIl+HJVkszX/osqg7Qw
+        EyUck589BQEubVQwgJ+9kfzPJyeYPOjAdXbHI7OIffaGDKYhJcDXbxlMjrW24x/4lc3OS+
+        mVsbOA3le7oxnC0zYMp1VvmDIiN16CEbqDKm8LeYxUaM6XGdyWlucQc1J9dgsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1647715795;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UZiM45VyUb2qyeM2RPKLOiRoIP0g6aqsRFs2FjvcgMs=;
+        b=UYpNc8T8xI9LyrGirHytNxANqphjTTOj7resU82lQ3iQE5zo6nFg23tVN4gleAXzWN9YZS
+        PXjwkOj10cw49XsQDTm6mMsTiVWCPbuoCjgZfUFG6Nb3s0lIL1CYM1ybfAMJNZFbUiOAGU
+        c7mS7Cnx23qRqn+qyW+ncAgS++2xTayKtNvic4hOA1bSXrE1U+AgNBIBVPQjkMI5xazmH7
+        v9SsbokuHStuXPoaK/wmYE4/4LxZxJu13UnbAZpVzYXKEjyNxEfDwD2Ad5mQxuoaKh4bTe
+        tl9s6P83zykboVBrXzizFQ8eGHwvU4W1LvSQqe+B9Fj24rL9q6ko5D7/FfLBRg==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+On Sat, Mar 12, 2022 at 10:14:31AM +0200, Tony Lindgren wrote:
+> * Janusz Krzysztofik <jmkrzyszt@gmail.com> [220310 23:32]:
+> > The main motivation behind this series is planned resurection of OMAP1
+> > camera driver.  Since OMAP1 clock internals have never been visible to
+> > drivers, that driver used to use v4l2-clk to expose a pixel clock for a
+> > sensor.  The v4l2-clk code has been recently depreciated and removed from
+> > the media subtree, hence the need for an alternative solution.
+> 
+> Nice :) This will also help Arnd with building multi-v5 kernels.
 
-Reported-and-tested-by: syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
+This will need more testing still... The patch 4 is breaking at least 770
+(the display/fb doesn't work anymore).
 
-Tested on:
-
-commit:         34e047aa Merge tag 'arm64-fixes' of git://git.kernel.o..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=70f75a89c7a0e6bc
-dashboard link: https://syzkaller.appspot.com/bug?extid=46f5c25af73eb8330eb6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14c2cd33700000
-
-Note: testing is done by a robot and is best-effort only.
+A.

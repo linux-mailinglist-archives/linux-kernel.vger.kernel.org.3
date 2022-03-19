@@ -2,119 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C754DE526
+	by mail.lfdr.de (Postfix) with ESMTP id 66C924DE525
 	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 03:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241809AbiCSCTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 22:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
+        id S241816AbiCSCW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 22:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234956AbiCSCTT (ORCPT
+        with ESMTP id S234956AbiCSCW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 22:19:19 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC39E21BC43
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 19:17:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647656279; x=1679192279;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=z4Cs0ow1M4JthoY8HqDsc9XZW1awCZDbzJDMivL0Mh4=;
-  b=Wykcp+uNKZ22VajUtEBHjyARuJy+XXrRw2VSqyuE3mABegyY/cym8zGy
-   tbtox7yTiLV0rNBjPxX7yVeIElmxq9K6/K6bZnIxNMy5Dip85cgetlVmC
-   U2S0wwWy4KQ0icHNADyqIKm6HstrYYqvYri/6DV0lhetFxFpYvqVP47Lv
-   SeZAzsUfr3eG7B/gmdRIWLFrNQ4tiMX4VxD5BsL9TQtmyjlXjN7Uxqg0q
-   r0XR8mpSWCPbzQpdNA+hGkqbTOm08nEnsHyTaWaKEP4cvS2EFIQW388YP
-   W4segB+JD6VDid5d60TFuF8knigez9aIxYstavJV5ABKAsCtqFJ8UeAMf
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="254836180"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="254836180"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 19:17:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="499458160"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 18 Mar 2022 19:17:57 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVOfE-000FR5-Tr; Sat, 19 Mar 2022 02:17:56 +0000
-Date:   Sat, 19 Mar 2022 10:17:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [ammarfaizi2-block:rostedt/linux-trace/ftrace/core 53/57]
- arch/arm64/kernel/probes/rethook.c:11:22: warning: no previous prototype for
- function 'arch_rethook_trampoline_callback'
-Message-ID: <202203191007.YShhz8AJ-lkp@intel.com>
+        Fri, 18 Mar 2022 22:22:28 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF43278572
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 19:21:05 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2dbd8777564so108894807b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 19:21:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sCZT+zb7EAFnc6hRGhTEdVJUiTHs/qJW5IO9CJAQOWU=;
+        b=L4Rm7D8CY/Cy1ItHtYjZ+zkXORPWp0pJGh+Usl1EQm/ngUTzG0x49cbRDbFNase4ds
+         ttWjz57n96zbgo2S09nW5pp/61QCoum8yjBa5YMMaLsM5RfShwVfEVKgdbfCvpkpyDwB
+         O5rKlkfrYJvVBw1ilfZTV7/G3YLRCfHrG2HKbSvQneNFHItNzhpJ8U0H0FMCuulnYmN0
+         kAAKNvi7JSe5L+8vZtads4j1YFtI/5bBpubOCasgAOlHPIySkboA3+y4goPlq4QA+ny0
+         eLdgPEU+Gb8LijLucwdV5RN98wBWXPO48g8OJoCgbxpCAgcIpOjw8TxICSruv6xlae87
+         YFlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sCZT+zb7EAFnc6hRGhTEdVJUiTHs/qJW5IO9CJAQOWU=;
+        b=1jC1V53iRbVm2esxxSgeRLaVUpsz58qVQwcVZtb9hZp9aIZ1k7mPZzn7QX+go/PcNG
+         Yx8E/9tvTHwkCMlPUbNni7u72MYDSFvL4i0f+UXS/vSizYidrN+s72IxWzsBFtnkQxtK
+         8Ng+jkn1UYCXR2utFky9iZsS2Fr+jS16b1A4Kpffa0pXi6A0A1v4gk6y2/m1KeY/WCFN
+         ZOvXLllU8bbGrwe4oYaDZTUHsSA/Lc3M4sRrFeObrw82C9YoQaFfcvnoAKs31Vnngqq4
+         YHz6ZOVMDXmHPX2RI4YVBU8PMC4jqEnALLD7L72GNgR2FXw8/yh5FB+wW8mMmD63in1J
+         CoJA==
+X-Gm-Message-State: AOAM532wlHRk0rBieyGRBk+BJDNMb5jtyrlE2IxMa5ANvK6ahXr+HvJU
+        ZFbysT8jTlPb7R2feO48VOD7g6K+0SJxy2PFhEBVhn2X/tNdfQ==
+X-Google-Smtp-Source: ABdhPJxedKVItQZjB0XAwvylwOmrCH/rILDsFqkrh8ho0TeJVllNoHD5cX3XGmiHQg2AlPTJIHh5MI4bJ6NUkWDKzS0=
+X-Received: by 2002:a0d:d203:0:b0:2e3:3db4:7de1 with SMTP id
+ u3-20020a0dd203000000b002e33db47de1mr14219633ywd.458.1647656465178; Fri, 18
+ Mar 2022 19:21:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <000000000000dda2f905da80c934@google.com> <00000000000009cf1e05da85bb31@google.com>
+In-Reply-To: <00000000000009cf1e05da85bb31@google.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Sat, 19 Mar 2022 10:19:12 +0800
+Message-ID: <CAMZfGtWL-2+en7=FKBoPUwq1FMGYYqZCvB1jmJ7fhiQc1XX4oQ@mail.gmail.com>
+Subject: Re: [syzbot] WARNING: kobject bug in erofs_unregister_sysfs
+To:     syzbot <syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        syzkaller-bugs@googlegroups.com, xiang@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block rostedt/linux-trace/ftrace/core
-head:   03cd03b5c3f9836e625a99fa603b4683dc1ebb47
-commit: 6b142311f91040c847702773bdf441afdc658984 [53/57] fprobe: Add exit_handler support
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220319/202203191007.YShhz8AJ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/6b142311f91040c847702773bdf441afdc658984
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block rostedt/linux-trace/ftrace/core
-        git checkout 6b142311f91040c847702773bdf441afdc658984
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/probes/
+On Sat, Mar 19, 2022 at 6:33 AM syzbot
+<syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com> wrote:
+>
+> syzbot has bisected this issue to:
+>
+> commit 2768c206f2c3e95c0e5cf2e7f846103fda7cd429
+> Author: Muchun Song <songmuchun@bytedance.com>
+> Date:   Thu Mar 3 01:15:36 2022 +0000
+>
+>     mm: list_lru: allocate list_lru_one only when needed
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1495694d700000
+> start commit:   91265a6da44d Add linux-next specific files for 20220303
+> git tree:       linux-next
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=1695694d700000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1295694d700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=617f79440a35673a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=f05ba4652c0471416eaf
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=137f17d9700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=114ebabd700000
+>
+> Reported-by: syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com
+> Fixes: 2768c206f2c3 ("mm: list_lru: allocate list_lru_one only when needed")
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Does this patch [1] fix the issue? If yes, I am confused why the Fixes tag
+should be the commit 2768c206f2c3?  What am I missing here?
 
-All warnings (new ones prefixed by >>):
+[1] https://lore.kernel.org/r/20220315132814.12332-1-dzm91@hust.edu.cn
 
->> arch/arm64/kernel/probes/rethook.c:11:22: warning: no previous prototype for function 'arch_rethook_trampoline_callback' [-Wmissing-prototypes]
-   unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-                        ^
-   arch/arm64/kernel/probes/rethook.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/arch_rethook_trampoline_callback +11 arch/arm64/kernel/probes/rethook.c
-
-371ce29069762d9 Masami Hiramatsu 2022-03-15   9  
-371ce29069762d9 Masami Hiramatsu 2022-03-15  10  /* This is called from arch_rethook_trampoline() */
-371ce29069762d9 Masami Hiramatsu 2022-03-15 @11  unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-371ce29069762d9 Masami Hiramatsu 2022-03-15  12  {
-371ce29069762d9 Masami Hiramatsu 2022-03-15  13  	return rethook_trampoline_handler(regs, regs->regs[29]);
-371ce29069762d9 Masami Hiramatsu 2022-03-15  14  }
-371ce29069762d9 Masami Hiramatsu 2022-03-15  15  NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
-371ce29069762d9 Masami Hiramatsu 2022-03-15  16  
-
-:::::: The code at line 11 was first introduced by commit
-:::::: 371ce29069762d992f8dcaa9ecabb6ff78a73f22 arm64: rethook: Add arm64 rethook implementation
-
-:::::: TO: Masami Hiramatsu <mhiramat@kernel.org>
-:::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks.

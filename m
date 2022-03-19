@@ -2,136 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03EB4DE54A
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 04:11:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646E14DE553
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 04:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241888AbiCSDMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 23:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
+        id S241903AbiCSDUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 23:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241882AbiCSDMl (ORCPT
+        with ESMTP id S231569AbiCSDUV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 23:12:41 -0400
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8FB20094D
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 20:11:21 -0700 (PDT)
-Received: by mail-vk1-xa2a.google.com with SMTP id 134so3395703vkz.12
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 20:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DPWkpEZTUPx8RezVYIweJltfbI2PstSaIw69Jkk1LgA=;
-        b=SCIWl/14VSpA5cOd0Lwaoa1Kf3xHGcWMoESYsocaRg2Gut/yFp8ifxnBAnvkP2gz9Y
-         2apsTQZ/jGJvR1BXCxH0Knp85D2Qzt+tuIoUAp9shcvxlAoEubSSxVPInCcz5EFRNEQm
-         9+PmghRAO6RoU+Bxeh6f4yMnVm9JqmTVMBZxQwkfILnV5GpUZAnShVs2NkkUrWg97MVa
-         YyMr2EfmQoQiQ0qAEEiPCsc8rgEscohw/A9EsaXbv1QGORD5aR3bH3/3ZsUBeAFH2R2b
-         Sb8fLcR03p308VBkhhdfk4ukE7liTmo+jfC9S9e+3Qtmfvs5A5pFPt5pgX3NdGDqrOPT
-         z+0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DPWkpEZTUPx8RezVYIweJltfbI2PstSaIw69Jkk1LgA=;
-        b=5o9Zvn7FhpePur4mzD/eSNxeExaCjDzttMlbHk6157/X4KyAsL/mFGb45N7KGcLeIH
-         6CNqi9qQkfewSd4rI7P+wxe9ZknUapyqf/CYfPzoBSKIn+WAgJPUaU0kbFQbDn2VdIMU
-         rB5azi2bPjhu7BFej86G/GbP5dqWBg4j/RaobAJtqTF8BDXYob64hox009m191QnGApU
-         PByIkRW5+zwpjdJOBKqMfAaY4dWaYtO/2kYXQsh2v45eCbSH+DIUCVQgY8NdXxEKiZp4
-         LW6D7t6n/j+a//gLl71CvpNAZdsYOkEOgshaUcivYX9Ssm7o7RAT0c+dq+ytv763bWmv
-         diIQ==
-X-Gm-Message-State: AOAM533jUKwiuUv68nUqe8qH7oxi5YphIdPoSQXEZIVbuwZJm2ob9uIw
-        d1th2zmTNQ7wDo0uSKpWcJR5h1uUBJJdFf07zITd8w==
-X-Google-Smtp-Source: ABdhPJy/iE22VepUPG4b5BxoTJh/Okw9HmCdMV+xoYJkkoh2isbFfIcgEUs0IHWCL1BtdLwbslwt8FedPDz0XzORp6w=
-X-Received: by 2002:a05:6122:2089:b0:337:bb38:9145 with SMTP id
- i9-20020a056122208900b00337bb389145mr4778638vkd.14.1647659480347; Fri, 18 Mar
- 2022 20:11:20 -0700 (PDT)
+        Fri, 18 Mar 2022 23:20:21 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EEA326D5
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 20:19:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647659940; x=1679195940;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ijC+RvfLXuTSiKQ2ed5zSGoSdIy/RoQ7r8TmJ1x81rk=;
+  b=AOdDA92/15Qy9ul9Roy8pCHRsgjUo1euO5ifDrTHMYClk1oYOxtJJk8y
+   zPczBLlF+r07PL0xFZMFbTo+mQ9hJYTpqW3WEUacRGx47MmxEzUVtj9BL
+   I13WlknRmBkxJ8OvEwlZpdUK4F8fM7F7LZ71DpttRe1bsXdzyThfv+wVz
+   Jf5JZv+mBDXVc2ADlcyYgYXENQ8VmW3uo1Nb4dKq5KvRBKhBeud/9jpAS
+   pP4N8+JbINH2Ks6YW05E672C1bccVyYjWgg1YtUEoxjt/HoSk+fsa2/nr
+   m0j/RbFm5h8ODeII2RdAUQU3g0M+GVlAQcHZor969HlL9Xk0emV2v1CSq
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="343704994"
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="343704994"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 20:18:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
+   d="scan'208";a="715755627"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 18 Mar 2022 20:18:58 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nVPcH-000FTF-RC; Sat, 19 Mar 2022 03:18:57 +0000
+Date:   Sat, 19 Mar 2022 11:18:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kees:for-next/execve 12/15] fs/binfmt_elf_test.c:52:1: warning: the
+ frame size of 1056 bytes is larger than 1024 bytes
+Message-ID: <202203191122.mbOGJL7c-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220309021230.721028-1-yuzhao@google.com> <20220309021230.721028-7-yuzhao@google.com>
- <CAGsJ_4xfL7h6M92WGusxbTxQzHOJDj4X4AuC=0HgrEyAYJaJFg@mail.gmail.com>
-In-Reply-To: <CAGsJ_4xfL7h6M92WGusxbTxQzHOJDj4X4AuC=0HgrEyAYJaJFg@mail.gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Fri, 18 Mar 2022 21:11:09 -0600
-Message-ID: <CAOUHufbiSShp=khZFL6BmJKNNkG-LBrsPoLwYxewcgtZhi5tFg@mail.gmail.com>
-Subject: Re: [PATCH v9 06/14] mm: multi-gen LRU: minimal implementation
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        x86 <x86@kernel.org>, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 9:01 PM Barry Song <21cnbao@gmail.com> wrote:
->
-> > +static int folio_inc_gen(struct lruvec *lruvec, struct folio *folio, bool reclaiming)
-> > +{
-> > +       unsigned long old_flags, new_flags;
-> > +       int type = folio_is_file_lru(folio);
-> > +       struct lru_gen_struct *lrugen = &lruvec->lrugen;
-> > +       int new_gen, old_gen = lru_gen_from_seq(lrugen->min_seq[type]);
-> > +
-> > +       do {
-> > +               new_flags = old_flags = READ_ONCE(folio->flags);
-> > +               VM_BUG_ON_FOLIO(!(new_flags & LRU_GEN_MASK), folio);
-> > +
-> > +               new_gen = ((new_flags & LRU_GEN_MASK) >> LRU_GEN_PGOFF) - 1;
-> > +               new_gen = (old_gen + 1) % MAX_NR_GENS;
->
-> new_gen is assigned twice, i assume you mean
->                old_gen = ((new_flags & LRU_GEN_MASK) >> LRU_GEN_PGOFF) - 1;
->                new_gen = (old_gen + 1) % MAX_NR_GENS;
->
-> or do you always mean new_gen =  lru_gen_from_seq(min_seq) + 1?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/execve
+head:   dd664099002db909912a23215f8775c97f7f4f10
+commit: 9e1a3ce0a952450a1163cc93ab1df6d4fa8c8155 [12/15] binfmt_elf: Introduce KUnit test
+config: powerpc-randconfig-r031-20220318 (https://download.01.org/0day-ci/archive/20220319/202203191122.mbOGJL7c-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=9e1a3ce0a952450a1163cc93ab1df6d4fa8c8155
+        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
+        git fetch --no-tags kees for-next/execve
+        git checkout 9e1a3ce0a952450a1163cc93ab1df6d4fa8c8155
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Thanks a lot for your attention to details!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The first line should be in the next patch but I overlooked during the
-last refactoring:
+All warnings (new ones prefixed by >>):
 
-  new_gen = ((new_flags & LRU_GEN_MASK) >> LRU_GEN_PGOFF) - 1;
-+ /* folio_update_gen() has promoted this page? */
-+ if (new_gen >= 0 && new_gen != old_gen)
-+ return new_gen;
-+
-  new_gen = (old_gen + 1) % MAX_NR_GENS;
+   In file included from fs/binfmt_elf.c:2351:
+   fs/binfmt_elf_test.c: In function 'total_mapping_size_test':
+>> fs/binfmt_elf_test.c:52:1: warning: the frame size of 1056 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+      52 | }
+         | ^
+
+
+vim +52 fs/binfmt_elf_test.c
+
+     3	
+     4	static void total_mapping_size_test(struct kunit *test)
+     5	{
+     6		struct elf_phdr empty[] = {
+     7			{ .p_type = PT_LOAD, .p_vaddr = 0, .p_memsz = 0, },
+     8			{ .p_type = PT_INTERP, .p_vaddr = 10, .p_memsz = 999999, },
+     9		};
+    10		/*
+    11		 * readelf -lW /bin/mount | grep '^  .*0x0' | awk '{print "\t\t{ .p_type = PT_" \
+    12		 *				$1 ", .p_vaddr = " $3 ", .p_memsz = " $6 ", },"}'
+    13		 */
+    14		struct elf_phdr mount[] = {
+    15			{ .p_type = PT_PHDR, .p_vaddr = 0x00000040, .p_memsz = 0x0002d8, },
+    16			{ .p_type = PT_INTERP, .p_vaddr = 0x00000318, .p_memsz = 0x00001c, },
+    17			{ .p_type = PT_LOAD, .p_vaddr = 0x00000000, .p_memsz = 0x0033a8, },
+    18			{ .p_type = PT_LOAD, .p_vaddr = 0x00004000, .p_memsz = 0x005c91, },
+    19			{ .p_type = PT_LOAD, .p_vaddr = 0x0000a000, .p_memsz = 0x0022f8, },
+    20			{ .p_type = PT_LOAD, .p_vaddr = 0x0000d330, .p_memsz = 0x000d40, },
+    21			{ .p_type = PT_DYNAMIC, .p_vaddr = 0x0000d928, .p_memsz = 0x000200, },
+    22			{ .p_type = PT_NOTE, .p_vaddr = 0x00000338, .p_memsz = 0x000030, },
+    23			{ .p_type = PT_NOTE, .p_vaddr = 0x00000368, .p_memsz = 0x000044, },
+    24			{ .p_type = PT_GNU_PROPERTY, .p_vaddr = 0x00000338, .p_memsz = 0x000030, },
+    25			{ .p_type = PT_GNU_EH_FRAME, .p_vaddr = 0x0000b490, .p_memsz = 0x0001ec, },
+    26			{ .p_type = PT_GNU_STACK, .p_vaddr = 0x00000000, .p_memsz = 0x000000, },
+    27			{ .p_type = PT_GNU_RELRO, .p_vaddr = 0x0000d330, .p_memsz = 0x000cd0, },
+    28		};
+    29		size_t mount_size = 0xE070;
+    30		/* https://lore.kernel.org/linux-fsdevel/YfF18Dy85mCntXrx@fractal.localdomain */
+    31		struct elf_phdr unordered[] = {
+    32			{ .p_type = PT_LOAD, .p_vaddr = 0x00000000, .p_memsz = 0x0033a8, },
+    33			{ .p_type = PT_LOAD, .p_vaddr = 0x0000d330, .p_memsz = 0x000d40, },
+    34			{ .p_type = PT_LOAD, .p_vaddr = 0x00004000, .p_memsz = 0x005c91, },
+    35			{ .p_type = PT_LOAD, .p_vaddr = 0x0000a000, .p_memsz = 0x0022f8, },
+    36		};
+    37	
+    38		/* No headers, no size. */
+    39		KUNIT_EXPECT_EQ(test, total_mapping_size(NULL, 0), 0);
+    40		KUNIT_EXPECT_EQ(test, total_mapping_size(empty, 0), 0);
+    41		/* Empty headers, no size. */
+    42		KUNIT_EXPECT_EQ(test, total_mapping_size(empty, 1), 0);
+    43		/* No PT_LOAD headers, no size. */
+    44		KUNIT_EXPECT_EQ(test, total_mapping_size(&empty[1], 1), 0);
+    45		/* Empty PT_LOAD and non-PT_LOAD headers, no size. */
+    46		KUNIT_EXPECT_EQ(test, total_mapping_size(empty, 2), 0);
+    47	
+    48		/* Normal set of PT_LOADS, and expected size. */
+    49		KUNIT_EXPECT_EQ(test, total_mapping_size(mount, ARRAY_SIZE(mount)), mount_size);
+    50		/* Unordered PT_LOADs result in same size. */
+    51		KUNIT_EXPECT_EQ(test, total_mapping_size(unordered, ARRAY_SIZE(unordered)), mount_size);
+  > 52	}
+    53	
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

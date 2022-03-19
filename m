@@ -2,120 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF424DE7E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 13:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0394DE7F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 13:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242916AbiCSMlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 08:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
+        id S242931AbiCSMrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 08:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234790AbiCSMlg (ORCPT
+        with ESMTP id S234790AbiCSMrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 08:41:36 -0400
-Received: from imap2.colo.codethink.co.uk (imap2.colo.codethink.co.uk [78.40.148.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE444338D;
-        Sat, 19 Mar 2022 05:40:15 -0700 (PDT)
-Received: from cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net ([86.15.83.122] helo=[192.168.0.21])
-        by imap2.colo.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
-        id 1nVYNP-0001Oy-P6; Sat, 19 Mar 2022 12:40:11 +0000
-Message-ID: <9cc22be4-abba-ef75-a340-af7afb08f480@codethink.co.uk>
-Date:   Sat, 19 Mar 2022 12:40:10 +0000
+        Sat, 19 Mar 2022 08:47:15 -0400
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF8B43AC0;
+        Sat, 19 Mar 2022 05:45:54 -0700 (PDT)
+Received: by mail-vk1-xa29.google.com with SMTP id h205so4052651vke.4;
+        Sat, 19 Mar 2022 05:45:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TOMGYmaATQC2z13UyvSGmscWZ1Ke2cRO2FHb2Uve4+c=;
+        b=H2shOi2EAOzGFJtpVsRsTpiG5Kz4xpnCa3MGNiZBROxxo3CUttZA+GU/rsDYwAnB8z
+         dytXpQzdTt3qZlJJCf6+4+e/zIg4HUNUo5eEVZFdVdSHPyAkEnmAhgi5IGeQREuJ4NdB
+         GN0OMABVxth+oNA2qGjhdsSQ3LkZ8/exdo3KKeH27krMSI8x60bBzqa9jyapIAJ/ylwR
+         0+oLyV42aPGla/O4dXdBp3OIpJus/ouddIfD0m1sXnee8w6NoaZj4CjeFMgQWbeeyYK2
+         P8odlP1/iGxLJJZut0uI/haoY9GlsG+XSrRj2Y4oxOueyu8z+0BbHVA4s1qFF+AoxZUJ
+         D8WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TOMGYmaATQC2z13UyvSGmscWZ1Ke2cRO2FHb2Uve4+c=;
+        b=lhp0UdiDqRwNWtf/2M06J+n1ygnURos6jWzo7sc5N0pUzhhvRPgXVvT4zrRLi5c3jp
+         QSRumj1rej5seP35GfG3tne677z62aR8tRFKL8VvIbFeJj9Nbprk+00dmiZTx1oo/lc6
+         59UWn6ZmAGKraluyCN3Z/muZFOD+z53/gli63AQ8P9R4xdG3emeUbmqAV6ZKVsBdCqye
+         Vp25yFuUnmC7YXBqX5/bsCfcjKyw7DEpQ+osEOEd9eCppQ1BC36044ZLalgUUCKqwldw
+         FMUpFaS+LX81uRGKk2UneHVZFASUhja1hmJPqZx4e1U8KbSHoomaEIyH7ZvdhCmBXp3r
+         A0QQ==
+X-Gm-Message-State: AOAM530NZf1N2VqrRcj25332kH7yGd/OQGCrmDRKtM+lLDeanwcjNd2l
+        oGRlMGCZymXEm2FJiPzrp4hhvcMkAMAgSgLxNvkaztVJwGw=
+X-Google-Smtp-Source: ABdhPJxjG9+XKDL2nuKi2W+QM9BrUWAJzSd68nq9Al1JVaNMnKFacS0NNJmC0amrXWYex35MjoU0mITjbMjNi5r5L3E=
+X-Received: by 2002:a05:6122:8c8:b0:32a:7010:c581 with SMTP id
+ 8-20020a05612208c800b0032a7010c581mr5241750vkg.32.1647693953310; Sat, 19 Mar
+ 2022 05:45:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [V3] PCI: fu740: Drop to 2.5GT/s to fix initial device probing on
- some boards
-Content-Language: en-GB
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, bhelgaas@google.com,
-        robh@kernel.org, lorenzo.pieralisi@arm.com,
-        greentime.hu@sifive.com, Paul Walmsley <paul.walmsley@sifive.com>
-References: <mhng-0c8e7e26-5480-4573-b7f6-27b09f06de59@palmer-ri-x1c9>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <mhng-0c8e7e26-5480-4573-b7f6-27b09f06de59@palmer-ri-x1c9>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <751829.1647648125@warthog.procyon.org.uk>
+In-Reply-To: <751829.1647648125@warthog.procyon.org.uk>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Sat, 19 Mar 2022 13:46:25 +0100
+Message-ID: <CAOi1vP_sEj7i8YbbwJibbSG=BCVp4E9BAo=JF0aC79xBNC8wcA@mail.gmail.com>
+Subject: Re: Coordinating netfslib pull request with the ceph pull request
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ceph Development <ceph-devel@vger.kernel.org>,
+        linux-cachefs@redhat.com, linux-afs@lists.infradead.org,
+        linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 23:03, Palmer Dabbelt wrote:
-> On Fri, 18 Mar 2022 08:24:30 PDT (-0700), ben.dooks@codethink.co.uk wrote:
->> The fu740 PCIe core does not probe any devices on the SiFive Unmatched
->> board without this fix (or having U-Boot explicitly start the PCIe via
->> either boot-script or user command). The fix is to start the link at
->> 2.5GT/s speeds and once the link is up then change the maximum speed back
->> to the default.
->>
->> The U-Boot driver claims to set the link-speed to 2.5GT/s to get the 
->> probe
->> to work (and U-Boot does print link up at 2.5GT/s) in the following code:
->> https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/pci/pcie_dw_sifive.c?id=v2022.01#L271 
->>
->>
->> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
->> -- 
-> 
-> A "--" triggers some mail handles to think the rest of this is a 
-> signature, git folks usually use a "---" to indicate a comment that 
-> shouldn't be part of what's eventually merged (like this changelog stuff).
-> 
->> Note, this patch has had significant re-work since the previous 4
->> sets, including trying to fix style, message, reliance on the U-Boot
->> fix and the comments about usage of LINK_CAP and reserved fields.
->>
->> v2:
->> - fix issues with Gen1/2.5GTs
->> - updated comment on the initial probe
->> - run tests with both uninitialised and initialsed pcie from uboot
->> ---
->>  drivers/pci/controller/dwc/pcie-fu740.c | 52 ++++++++++++++++++++++++-
->>  1 file changed, 51 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/pci/controller/dwc/pcie-fu740.c 
->> b/drivers/pci/controller/dwc/pcie-fu740.c
->> index 842b7202b96e..ecac0364178a 100644
->> --- a/drivers/pci/controller/dwc/pcie-fu740.c
->> +++ b/drivers/pci/controller/dwc/pcie-fu740.c
->> @@ -181,10 +181,60 @@ static int fu740_pcie_start_link(struct dw_pcie 
->> *pci)
-> 
-> Is there an errata?  IIUC this will trigger the workaround on all 
-> FU740s, but from the description it seems like more of a board bug than 
-> a chip bug.  The distinction doesn't really matter, as there's only one 
-> board for this chip (and I'm assuming that'll always be the case), but 
-> if there's an errata (or any way this is documented) it might make 
-> things a bit easier to sort out if we end up with another similar 
-> chip/board.
-> 
-> Either way
-> 
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> 
-> I'm assuming you, or someone else, has tested this on the board?  I'm 
-> pretty sure I've got one lying around somewhere, but I don't regularly 
-> use it.  I can dust it off if nobody else has tried this, but happy to 
-> avoid the need to do so.
+On Sat, Mar 19, 2022 at 1:02 AM David Howells <dhowells@redhat.com> wrote:
+>
+> Hi Ilya,
+>
+> Since my fscache-next branch[1] is dependent on patches in the ceph/master
+> branch, I think I need to coordinate my netfslib pull request with your ceph
+> pull request for the upcoming merge window.
+>
+> David
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-next
+>
 
+Hi David,
 
-I've been trying this on my own Unmatched board, where I often use
-network boot. We have also tested with a new-ish U-Boot (2022.01 I
-think) with both "pci enum" and not. It has been on our test board
-for over a week without an issue.
+Given how your branch is structured, it sounds like the easiest would
+be for you to send the netfslib pull request after I send the ceph pull
+request.  Or do you have some tighter coordination in mind?
 
-I will have a look for v4 about changing the WARN_ON() to something
-more useful.
+Thanks,
 
-
--- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
-
-https://www.codethink.co.uk/privacy.html
+                Ilya

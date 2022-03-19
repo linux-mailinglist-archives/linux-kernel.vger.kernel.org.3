@@ -2,95 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0394DE7F1
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 13:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA20C4DE7F5
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 13:54:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242931AbiCSMrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 08:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
+        id S242957AbiCSMzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 08:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234790AbiCSMrP (ORCPT
+        with ESMTP id S242324AbiCSMzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 08:47:15 -0400
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF8B43AC0;
-        Sat, 19 Mar 2022 05:45:54 -0700 (PDT)
-Received: by mail-vk1-xa29.google.com with SMTP id h205so4052651vke.4;
-        Sat, 19 Mar 2022 05:45:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TOMGYmaATQC2z13UyvSGmscWZ1Ke2cRO2FHb2Uve4+c=;
-        b=H2shOi2EAOzGFJtpVsRsTpiG5Kz4xpnCa3MGNiZBROxxo3CUttZA+GU/rsDYwAnB8z
-         dytXpQzdTt3qZlJJCf6+4+e/zIg4HUNUo5eEVZFdVdSHPyAkEnmAhgi5IGeQREuJ4NdB
-         GN0OMABVxth+oNA2qGjhdsSQ3LkZ8/exdo3KKeH27krMSI8x60bBzqa9jyapIAJ/ylwR
-         0+oLyV42aPGla/O4dXdBp3OIpJus/ouddIfD0m1sXnee8w6NoaZj4CjeFMgQWbeeyYK2
-         P8odlP1/iGxLJJZut0uI/haoY9GlsG+XSrRj2Y4oxOueyu8z+0BbHVA4s1qFF+AoxZUJ
-         D8WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TOMGYmaATQC2z13UyvSGmscWZ1Ke2cRO2FHb2Uve4+c=;
-        b=lhp0UdiDqRwNWtf/2M06J+n1ygnURos6jWzo7sc5N0pUzhhvRPgXVvT4zrRLi5c3jp
-         QSRumj1rej5seP35GfG3tne677z62aR8tRFKL8VvIbFeJj9Nbprk+00dmiZTx1oo/lc6
-         59UWn6ZmAGKraluyCN3Z/muZFOD+z53/gli63AQ8P9R4xdG3emeUbmqAV6ZKVsBdCqye
-         Vp25yFuUnmC7YXBqX5/bsCfcjKyw7DEpQ+osEOEd9eCppQ1BC36044ZLalgUUCKqwldw
-         FMUpFaS+LX81uRGKk2UneHVZFASUhja1hmJPqZx4e1U8KbSHoomaEIyH7ZvdhCmBXp3r
-         A0QQ==
-X-Gm-Message-State: AOAM530NZf1N2VqrRcj25332kH7yGd/OQGCrmDRKtM+lLDeanwcjNd2l
-        oGRlMGCZymXEm2FJiPzrp4hhvcMkAMAgSgLxNvkaztVJwGw=
-X-Google-Smtp-Source: ABdhPJxjG9+XKDL2nuKi2W+QM9BrUWAJzSd68nq9Al1JVaNMnKFacS0NNJmC0amrXWYex35MjoU0mITjbMjNi5r5L3E=
-X-Received: by 2002:a05:6122:8c8:b0:32a:7010:c581 with SMTP id
- 8-20020a05612208c800b0032a7010c581mr5241750vkg.32.1647693953310; Sat, 19 Mar
- 2022 05:45:53 -0700 (PDT)
+        Sat, 19 Mar 2022 08:55:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1311B173F52;
+        Sat, 19 Mar 2022 05:53:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3AF160C39;
+        Sat, 19 Mar 2022 12:53:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC2FC340EC;
+        Sat, 19 Mar 2022 12:53:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647694437;
+        bh=WHSVyei0s202CUQ9+4FxBCZNiRYzegEfDi9q+wuk0fE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BCcJFQ/K6aXAIK5v8lXtCDDyl5ZuZuXxmFcUIqZ8cr7HbdHCTO0cZOUGP0kTHigpf
+         ZgCipL4QXSq4wYpcKV/SwvBXECFHn8Hte9QJUR1cKFNaV0qknAd6qXMzYjnR0xLr21
+         X6tqlD+GTIVRcKU9xSlHOVzMxhEdlkvLTZgqyefw=
+Date:   Sat, 19 Mar 2022 13:52:58 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     James Morse <james.morse@arm.com>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        catalin.marinas@arm.com
+Subject: Re: [stable:PATCH v4.19.235 00/22] arm64: Mitigate spectre style
+ branch history side channels
+Message-ID: <YjXSKlUk1a2jR1il@kroah.com>
+References: <20220318174842.2321061-1-james.morse@arm.com>
 MIME-Version: 1.0
-References: <751829.1647648125@warthog.procyon.org.uk>
-In-Reply-To: <751829.1647648125@warthog.procyon.org.uk>
-From:   Ilya Dryomov <idryomov@gmail.com>
-Date:   Sat, 19 Mar 2022 13:46:25 +0100
-Message-ID: <CAOi1vP_sEj7i8YbbwJibbSG=BCVp4E9BAo=JF0aC79xBNC8wcA@mail.gmail.com>
-Subject: Re: Coordinating netfslib pull request with the ceph pull request
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ceph Development <ceph-devel@vger.kernel.org>,
-        linux-cachefs@redhat.com, linux-afs@lists.infradead.org,
-        linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318174842.2321061-1-james.morse@arm.com>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 1:02 AM David Howells <dhowells@redhat.com> wrote:
->
-> Hi Ilya,
->
-> Since my fscache-next branch[1] is dependent on patches in the ceph/master
-> branch, I think I need to coordinate my netfslib pull request with your ceph
-> pull request for the upcoming merge window.
->
-> David
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-next
->
+On Fri, Mar 18, 2022 at 05:48:20PM +0000, James Morse wrote:
+> Hello!
+> 
+> There is the v4.19 backport with the k=8 typo and SDEI name thing both
+> fixed.
+> 
+> Again, its the KVM templates patch that doesn't exist upstream, this is
+> necessary because the infrastructure for older kernels is very
+> different, and the dependencies for what was a rewrite are huge.
 
-Hi David,
+Many thanks for these, all now queued up!
 
-Given how your branch is structured, it sounds like the easiest would
-be for you to send the netfslib pull request after I send the ceph pull
-request.  Or do you have some tighter coordination in mind?
-
-Thanks,
-
-                Ilya
+greg k-h

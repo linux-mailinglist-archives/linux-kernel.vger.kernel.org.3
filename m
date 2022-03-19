@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3722B4DEAA7
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 21:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8037D4DEAAA
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 21:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244144AbiCSUdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 16:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
+        id S244152AbiCSUfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 16:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235693AbiCSUdN (ORCPT
+        with ESMTP id S235693AbiCSUfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 16:33:13 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06828A0BC4
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 13:31:52 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id o10so4244080ejd.1
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 13:31:51 -0700 (PDT)
+        Sat, 19 Mar 2022 16:35:15 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCD211BDBF
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 13:33:53 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id t1so13912342edc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 13:33:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=N2nH/6HpwTaCP8txEBQYJMA9Qv7Ene1XvLcUIwNblbw=;
-        b=kfuhmI16RfQ5XyFFwfPWGNgI9FebAcYFdOTi3tz2cN4I4aoMO4xPY9VHdrL9nZF/7K
-         vdSTLgdaQsJoDVjANXS9JhkKNerMkb6jawwr1kJrdLQ0tyDzK2KbJVwypyLIP7nCgFgY
-         DNfLVVptJow8+Bl77Zjd9BdzXpmDiiX3CNCwfXhKQAUZtaP9m0kxE/MS8XH0vlClPDUE
-         5WNFQ2R+RXx8SnbnTROzpSXuH5ih2Pmpfi0vBOnRtsOcIE8FVjwoesE4B+YG0VHogs/J
-         T4GDiQJm50R5E62bx3g24//zKomA9pTdJPU7nIfEfrmMsRvGIU1yBL1Vllrj2ngYr8ph
-         5dnA==
+        bh=1j/LMABFlKxiQiqNjegxYwlhyzGKpOnQ73hq4DOupwE=;
+        b=OhL3haaGthCsvRcFFsS4y9PSbMbS1jur2LY3uaicYJHh6mz0cs8cB914hTuLd1KYbX
+         Rf5gHj8CefeqBeSoVvm0DEmZCPRnDGx78RnSNWAKWQrp5oKe6hV/QYEm1FHMPobWxC68
+         G0wne6ppuXcDrmjl/B3+XEm6XpaW/uLvXkrlOz7al5QlnCgSofeGe009sv8yCOD5jCzO
+         oGA5qewS0nN2pgYeh3fWXLlkDYEZj2JM32gWIM0E2QoDnALZvzRuuz2evW+8Hyj5TtPw
+         nKS7Med5/e8K5fNXKiSjBLVlgaqfMyfOvdTYfDSYjRCEpnHmuOgWbOH9KZhhpPF1UEnU
+         suRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=N2nH/6HpwTaCP8txEBQYJMA9Qv7Ene1XvLcUIwNblbw=;
-        b=t4Rrk4M9qn/gZnMXTyx9/kjudUmz3rdiq2ZD00CTPuXe9jLQ4e1tIB6Bvk4Rt8NOhB
-         USk5hlIh6MRAMZ+3QCEzvA9bLK/p0AIYbyYb+hoT0RTa6Ct14Hi9AxfGJDULD/pB3suq
-         jg5WRmnr6wkdOlE9SEYTVmgw6vbdcoSmzP1nOa4qjzyBYNsrFLTTPoG/jRrM+ylkzMPC
-         xmALl9U/TDjjGU7Yt/2T+tQgmuB2PHIXa6G0RiJruSn7vtisQE9TksTZHks8nkPVsgA3
-         PvoQ0rTMGEW42TfV/OGJnHON/RTiukUiQUt4bRzCOjMJoS7OwcmjkUGtBVy0VJyOhVip
-         McEw==
-X-Gm-Message-State: AOAM533PjRkGrIf6tuKdh1dhtnYbOh9PuY/dVbS2A3Uqubq98Hnuh2C0
-        qmL2IOm5WIlzguUJZXtzyUs=
-X-Google-Smtp-Source: ABdhPJy2jy/Jz2ohQfbL8TIY6ppZp7c+/CgYz508Ye0DFQEnqTl1Zam648bwg3+tsspZpsfx5Lt5Hg==
-X-Received: by 2002:a17:906:5cb:b0:6cf:954:d84d with SMTP id t11-20020a17090605cb00b006cf0954d84dmr14694950ejt.560.1647721910365;
-        Sat, 19 Mar 2022 13:31:50 -0700 (PDT)
+        bh=1j/LMABFlKxiQiqNjegxYwlhyzGKpOnQ73hq4DOupwE=;
+        b=f2rSppZweTgyMyXvHLMa4bFtkDJbWBg5qhnMxygXElT7AuerjZcxjyKgPO3c8j9l0G
+         WGSUFMUc7t3wqQ2Bx12xtvHi0WI4g5A55GnRH5QMDPaiSy2LVyp2m0iRa7nEGu1V6TJa
+         +LS8KMkeHRGJqQLy607RyHQEqVz4ASGMDHddQh7f3za2yS/sJIEsvTlk0TWIoc552Rg7
+         y6ksZQiebZNZnliKmFJDU1NQctx2h7N87J/I9/lsg209skjFrC9XnDkky2ideZNBKG63
+         DCup80iWBLKaNytBnj0EC90+Mw87J1TnelXo7TPvK6d9IDll9AkCz4wJwH7VJTpj/KTx
+         I/Xg==
+X-Gm-Message-State: AOAM533AF4EBjFZp7x+D0tlNLN4pR3guUwi3w40D3m83ZdadiFVCWP3U
+        B/P5kErOODOPdYUqgk+R0H0=
+X-Google-Smtp-Source: ABdhPJy33rKC4Gw1Jo82NEMpvN5QnC3XHUf5i9Rsa6zScCExBsILtOPJuQEzDBJV9m2/d7kA77hOVg==
+X-Received: by 2002:a50:d711:0:b0:410:a51a:77c5 with SMTP id t17-20020a50d711000000b00410a51a77c5mr15801434edi.154.1647722032176;
+        Sat, 19 Mar 2022 13:33:52 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id g15-20020a170906520f00b006cd07ba40absm5131441ejm.160.2022.03.19.13.31.49
+        by smtp.googlemail.com with ESMTPSA id gl2-20020a170906e0c200b006a767d52373sm5174158ejb.182.2022.03.19.13.33.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 13:31:49 -0700 (PDT)
+        Sat, 19 Mar 2022 13:33:51 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     Mark Fasheh <mark@fasheh.com>
+To:     Matt Porter <mporter@kernel.crashing.org>
 Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
-        linux-kernel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        John Hubbard <jhubbard@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH] ocfs2: fix check if list iterator did find an element
-Date:   Sat, 19 Mar 2022 21:31:06 +0100
-Message-Id: <20220319203106.2541700-1-jakobkoschel@gmail.com>
+Subject: [PATCH] rapidio: remove unnecessary use of list iterator
+Date:   Sat, 19 Mar 2022 21:33:44 +0100
+Message-Id: <20220319203344.2547702-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,51 +76,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of setting 'res' to NULL, it should only be set if
-the suitable element was found.
+req->map is set in the valid case and always equals 'map' if the break
+was hit. It therefore is unnecessary to use the list iterator variable
+and the use of 'map' can be replaced with req->map.
 
-In the original code 'res' would have been set to an incorrect pointer
-if the list is empty.
-
-In preparation to limit the scope of the list iterator to the list
-traversal loop, use a dedicated pointer pointing to the found element [1].
+This is done in preparation to limit the scope of a list iterator to
+the list traversal loop [1].
 
 Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- fs/ocfs2/dlm/dlmdebug.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/rapidio/devices/rio_mport_cdev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/ocfs2/dlm/dlmdebug.c b/fs/ocfs2/dlm/dlmdebug.c
-index d442cf5dda8a..be5e9ed7da8d 100644
---- a/fs/ocfs2/dlm/dlmdebug.c
-+++ b/fs/ocfs2/dlm/dlmdebug.c
-@@ -541,7 +541,7 @@ static void *lockres_seq_start(struct seq_file *m, loff_t *pos)
- 	struct debug_lockres *dl = m->private;
- 	struct dlm_ctxt *dlm = dl->dl_ctxt;
- 	struct dlm_lock_resource *oldres = dl->dl_res;
--	struct dlm_lock_resource *res = NULL;
-+	struct dlm_lock_resource *res = NULL, *iter;
- 	struct list_head *track_list;
-
- 	spin_lock(&dlm->track_lock);
-@@ -556,11 +556,11 @@ static void *lockres_seq_start(struct seq_file *m, loff_t *pos)
+diff --git a/drivers/rapidio/devices/rio_mport_cdev.c b/drivers/rapidio/devices/rio_mport_cdev.c
+index 7df466e22282..2cdc054e53a5 100644
+--- a/drivers/rapidio/devices/rio_mport_cdev.c
++++ b/drivers/rapidio/devices/rio_mport_cdev.c
+@@ -915,7 +915,7 @@ rio_dma_transfer(struct file *filp, u32 transfer_mode,
+ 			goto err_req;
  		}
+
+-		if (xfer->length + xfer->offset > map->size) {
++		if (xfer->length + xfer->offset > req->map->size) {
+ 			ret = -EINVAL;
+ 			goto err_req;
+ 		}
+@@ -927,7 +927,7 @@ rio_dma_transfer(struct file *filp, u32 transfer_mode,
+ 		}
+
+ 		sg_set_buf(req->sgt.sgl,
+-			   map->virt_addr + (baddr - map->phys_addr) +
++			   req->map->virt_addr + (baddr - req->map->phys_addr) +
+ 				xfer->offset, xfer->length);
  	}
 
--	list_for_each_entry(res, track_list, tracking) {
--		if (&res->tracking == &dlm->tracking_list)
--			res = NULL;
--		else
--			dlm_lockres_get(res);
-+	list_for_each_entry(iter, track_list, tracking) {
-+		if (&iter->tracking != &dlm->tracking_list) {
-+			dlm_lockres_get(iter);
-+			res = iter;
-+		}
- 		break;
- 	}
- 	spin_unlock(&dlm->track_lock);
 
 base-commit: 34e047aa16c0123bbae8e2f6df33e5ecc1f56601
 --

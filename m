@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FF94DE948
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 17:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA434DE94D
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 17:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243627AbiCSQWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 12:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
+        id S243632AbiCSQcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 12:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiCSQW3 (ORCPT
+        with ESMTP id S229707AbiCSQcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 12:22:29 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC1F4F9D9
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 09:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TaPRwk54uOaTIhLcPdxclCqUMjErChJEk70TXoqt3aY=; b=YX1neCymYmxSjj4ifP3UiFHH0g
-        GNK3b0HUEjqposVPxi9thgU9q9yesWoUgNm1VT6/0MyVO7avf1EigM0yA4nGNAdKUYgYCR8r9rZY5
-        LT3u6mMJLGVlzfvDIeLf/yRQUFY8MM1y6diJiFjYMDm0lTYd8og8pdbfkSJu87NPish9wv4UJT/tr
-        bIGx2AipfFMN/ChqOA9+wVRFyjKwI7eqrmmU5mxtIY3pbf+LI5wibt1PlJ3Dy1R/wqR4s29HYSCGJ
-        fMhRSrYPx3o3utBVpz3lIru4gUm8Jp1tnilADTo3VI50xslNCdtlFP8VArDXG97Qnw/b4mzv/R27e
-        Zhq26KYQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nVboj-008wiX-11; Sat, 19 Mar 2022 16:20:37 +0000
-Date:   Sat, 19 Mar 2022 16:20:37 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, naoya.horiguchi@nec.com,
-        shy828301@gmail.com, mike.kravetz@oracle.com, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] mm/memory-failure.c: avoid calling
- invalidate_inode_page() with unexpected pages
-Message-ID: <YjYC1XaeDPosSIDa@casper.infradead.org>
-References: <20220320051334.44502-1-linmiaohe@huawei.com>
- <20220320051334.44502-2-linmiaohe@huawei.com>
+        Sat, 19 Mar 2022 12:32:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB5D23F9C1;
+        Sat, 19 Mar 2022 09:31:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC26DB801BE;
+        Sat, 19 Mar 2022 16:31:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED249C340EC;
+        Sat, 19 Mar 2022 16:31:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647707462;
+        bh=wRvWM489UeSI+c+0E3Ykx681mCS+MQ5SYG34PY6iOWw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=b8WXKmfCE0UOKsWUcbi5kt0GCBs6xHX910QkjBJVjRGiUrj0wbDJTdorzAHFrbpye
+         bWHTMQiYRUcWH9plbzzQR2f3PSsa/IE7oSZ+Tjn6nrKNRFHotpi76FcUokcoswziF2
+         yBJV9im5R+Sr7lr/48oL+h0AKFPDxmN5DP1Rp5dob4H8Mh0yAtqwPS53SpyAbQlpZE
+         9jpOPw+sXKgewJiTY4vWxo8n4PiMHswXejZ3dAHAYO9qVUuRDKxCriUtAPPi0DdYXo
+         VR0Tft931DZGLf5r+R0dC2qZRyS3BCgLWmjugRX0kHOL47a9ZwEQxZIf3FrAPo3lC5
+         rkF9gCAX853KQ==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-sgx@vger.kernel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
+        64-BIT))
+Subject: [PATCH] x86/sgx: Allow RW for TCS pages
+Date:   Sat, 19 Mar 2022 18:30:10 +0200
+Message-Id: <20220319163010.101686-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220320051334.44502-2-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,44 +58,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 01:13:33PM +0800, Miaohe Lin wrote:
-> invalidate_inode_page() can invalidate the pages in the swap cache because
-> the check of page->mapping != mapping is removed via Matthew's patch titled
-> "mm/truncate: Inline invalidate_complete_page() into its one caller". But
-> invalidate_inode_page() is not expected to deal with the pages in the swap
-> cache. Also non-lru movable page can reach here too. They're not page cache
-> pages. Skip these pages by checking PageSwapCache and PageLRU to fix this
-> unexpected issue.
+Not allowing to set RW for added TCS pages leads only to a special case
+to be handled in the user space run-time. Thus, allow permissions to be
+set RW. Originally, it would have probably made more sense to check up
+that the permissions are RW.
 
-I disagree with this changelog.
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ arch/x86/kernel/cpu/sgx/ioctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-invalidate_inode_page() should not be called for pages which are not
-in the page cache.
+diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+index 83df20e3e633..f79761ad0400 100644
+--- a/arch/x86/kernel/cpu/sgx/ioctl.c
++++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+@@ -215,7 +215,7 @@ static int sgx_validate_secinfo(struct sgx_secinfo *secinfo)
+ 	 * CPU will silently overwrite the permissions as zero, which means
+ 	 * that we need to validate it ourselves.
+ 	 */
+-	if (pt == SGX_SECINFO_TCS && perm)
++	if (pt == SGX_SECINFO_TCS && (perm != 0 || perm != (PROT_READ | PROT_WRITE)))
+ 		return -EINVAL;
+ 
+ 	if (secinfo->flags & SGX_SECINFO_RESERVED_MASK)
+-- 
+2.35.1
 
-And then the patch shouldn't test PageLRU (which is actually wrong) or
-PageSwapCache().  It should simply be:
-
-+	if (!PageHuge(page) && !PageAnon(page))
-
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/memory-failure.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 5444a8ef4867..ecf45961f3b6 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -2178,7 +2178,7 @@ static int __soft_offline_page(struct page *page)
->  		return 0;
->  	}
->  
-> -	if (!PageHuge(page))
-> +	if (!PageHuge(page) && PageLRU(page) && !PageSwapCache(page))
->  		/*
->  		 * Try to invalidate first. This should work for
->  		 * non dirty unmapped page cache pages.
-> -- 
-> 2.23.0
-> 
-> 

@@ -2,148 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75C44DE518
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 02:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A19B4DE51F
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 03:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241795AbiCSB5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 21:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
+        id S241782AbiCSCEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 22:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234358AbiCSB5i (ORCPT
+        with ESMTP id S235982AbiCSCEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 21:57:38 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8D12DF3DC
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647654978; x=1679190978;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sWnJUofww7turhwDyuiBzaZ/P/p8Lx1HnfGJwYBWq5k=;
-  b=Og+yjvKY8p6YbW7Yi03y4ZTihv5fmjAYsb77REVJVVDZm6TIrlMRFoP/
-   2ZxCDpnHrGbnDy8xAKu9fsD4H2J846mnzAQiGk8PWHToDh8ZTMpuJC5Yh
-   ZAIyRKQB2JuGUVYlhX0BVfrmDnLpz5j0g5DK6iX1pXslYAuP4//xbi7TE
-   k/d194ukt1GnKBxoPN6m9yejflgVR4xhmyP7rZZQFOz+WhhJMbD3wLoCp
-   YqFh+L8QmFjYcdBsmyle+dFAG0g16CgIVZh6YQ7fLR8685RNp9axw44qo
-   2DK0WD3UChcdWVbCNE3NqBgzWtj19du2SsalR8h8ONyCnudAW1o5ZFRw/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="343699510"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="343699510"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 18:55:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="715738408"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 18 Mar 2022 18:55:56 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVOJw-000FPT-9Q; Sat, 19 Mar 2022 01:55:56 +0000
-Date:   Sat, 19 Mar 2022 09:55:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 221/2335] drivers/xen/grant-table.c:411:22: error:
- implicit declaration of function 'xen_gfn_to_pfn'; did you mean
- 'xen_cr3_to_pfn'?
-Message-ID: <202203190905.87HwuS9w-lkp@intel.com>
+        Fri, 18 Mar 2022 22:04:46 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572469683F
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 19:03:27 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id n2so8459385plf.4
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 19:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xoAR2yJVMUeB0bOOrib4HlR43jGO+3UNSvj/b9LiFUQ=;
+        b=aNK7F9MGvu9GmcJTkBB1frsQTl+WFfM31pE8duZPG/4vLLu1sV8crLU1Cjqt6ZITBV
+         j+ebcjdv7EEakCVNOmFTCad+rRqiylDyuit2aDM3kqwICNqk8IVP9Kw2C0K+0fqDTlgd
+         HidoSZmLFdKJ62j9Tey+JqCvKeuR7G8B/D8DU169H/d4Lg4OtgYks7zl8jsBqwYgjwiP
+         /xQBjnhKGUvX86jVpltZ9UVSzLCuKx5/mhhWxJ9TjGX0TwB6yiVjEBbbsTf740SHZbZ6
+         L6VhC0ALhnGwOGKScXhMnPcZq0PjKtMn30sVgzl71M6PXrqiClBe/r0qwAtnOYP+qWa9
+         12kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xoAR2yJVMUeB0bOOrib4HlR43jGO+3UNSvj/b9LiFUQ=;
+        b=sQl/TcUscd1zlUk545ISuIYU5IP9k4Saxnt0E8r8tX9jZsCoHAbsOFSfd3Tii+9w9I
+         39ht1XGXra25vfZcCg0bg8GdpHzwi1sRAfahZcC7M20xE7x+dA5gI49DLzjk+HPdGcZP
+         5ITXjwGv/pwa8bIuHsPwZV2RYrR15mmRbWzrKIWD9m9XXT7JUtbxYfBxr8PUdOovRkSR
+         fbZyRIUmVwpH+hrRwYUR2wzplcYSD7gv6507FhDQgYNEgmPY5JEal8zeJHgKgmWgZITA
+         scA6GiwzBugQuHpOB2yByzdh+9qFaaFPuU8oT0FktkHs5a+JX8azzg/bMASFniwakZJh
+         /4Ww==
+X-Gm-Message-State: AOAM530CFVjLTLFdf0G/OZscm0+hQD3jeVAn4Blgd5x2Kgr3AflFp6ht
+        ooSHjQcO8AP27Cc4a5CDHsU=
+X-Google-Smtp-Source: ABdhPJwTP3VMs0asgQeocvUNjtfID3/u/2reGMDGPKYUq8a2WBpC0xyak0M/1dQ+o9h1SLCVcackkw==
+X-Received: by 2002:a17:902:e94e:b0:154:3a4:c5e8 with SMTP id b14-20020a170902e94e00b0015403a4c5e8mr2413704pll.19.1647655406845;
+        Fri, 18 Mar 2022 19:03:26 -0700 (PDT)
+Received: from localhost.localdomain ([119.3.102.56])
+        by smtp.gmail.com with ESMTPSA id t9-20020a056a0021c900b004f7b425211bsm10225674pfj.36.2022.03.18.19.03.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 19:03:26 -0700 (PDT)
+From:   Bang Li <libang.linuxer@gmail.com>
+To:     vgupta@kernel.org
+Cc:     peterz@infradead.org, mingo@kernel.org, valentin.schneider@arm.com,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Bang Li <libang.linuxer@gmail.com>
+Subject: [PATCH] ARC: remove redundant READ_ONCE() in cmpxchg loop
+Date:   Sat, 19 Mar 2022 10:03:16 +0800
+Message-Id: <20220319020316.142479-1-libang.linuxer@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   85293bf3fca6d85608cff1447ce3097583f15fab
-commit: dbfd8a446611c67366513c5798b018f9d1b6123b [221/2335] headers/prep: Rename API: gfn_to_pfn() => xen_gfn_to_pfn()
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220319/202203190905.87HwuS9w-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=dbfd8a446611c67366513c5798b018f9d1b6123b
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout dbfd8a446611c67366513c5798b018f9d1b6123b
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+This patch reverts commit 7082a29c22ac ("ARC: use ACCESS_ONCE in cmpxchg
+loop").
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It is not necessary to use READ_ONCE() because cmpxchg contains barrier. We
+can get it from commit d57f727264f1 ("ARC: add compiler barrier to LLSC
+based cmpxchg").
 
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/include/asm/page.h:76,
-                    from arch/x86/include/asm/thread_info.h:12,
-                    from include/linux/thread_info.h:59,
-                    from arch/x86/include/asm/preempt.h:7,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:10,
-                    from include/linux/memblock.h:12,
-                    from drivers/xen/grant-table.c:36:
-   drivers/xen/grant-table.c: In function 'gnttab_add_deferred':
->> drivers/xen/grant-table.c:411:22: error: implicit declaration of function 'xen_gfn_to_pfn'; did you mean 'xen_cr3_to_pfn'? [-Werror=implicit-function-declaration]
-     411 |   page = pfn_to_page(xen_gfn_to_pfn(gfn));
-         |                      ^~~~~~~~~~~~~~
-   include/asm-generic/memory_model.h:25:40: note: in definition of macro '__pfn_to_page'
-      25 | #define __pfn_to_page(pfn) (vmemmap + (pfn))
-         |                                        ^~~
-   drivers/xen/grant-table.c:411:10: note: in expansion of macro 'pfn_to_page'
-     411 |   page = pfn_to_page(xen_gfn_to_pfn(gfn));
-         |          ^~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +411 drivers/xen/grant-table.c
-
-   399	
-   400	static void gnttab_add_deferred(grant_ref_t ref, bool readonly,
-   401					struct page *page)
-   402	{
-   403		struct deferred_entry *entry;
-   404		gfp_t gfp = (in_atomic() || irqs_disabled()) ? GFP_ATOMIC : GFP_KERNEL;
-   405		const char *what = KERN_WARNING "leaking";
-   406	
-   407		entry = kmalloc(sizeof(*entry), gfp);
-   408		if (!page) {
-   409			unsigned long gfn = gnttab_interface->read_frame(ref);
-   410	
- > 411			page = pfn_to_page(xen_gfn_to_pfn(gfn));
-   412			get_page(page);
-   413		}
-   414	
-   415		if (entry) {
-   416			unsigned long flags;
-   417	
-   418			entry->ref = ref;
-   419			entry->ro = readonly;
-   420			entry->page = page;
-   421			entry->warn_delay = 60;
-   422			spin_lock_irqsave(&gnttab_list_lock, flags);
-   423			list_add_tail(&entry->list, &deferred_list);
-   424			if (!timer_pending(&deferred_timer)) {
-   425				deferred_timer.expires = jiffies + HZ;
-   426				add_timer(&deferred_timer);
-   427			}
-   428			spin_unlock_irqrestore(&gnttab_list_lock, flags);
-   429			what = KERN_DEBUG "deferring";
-   430		}
-   431		printk("%s g.e. %#x (pfn %#lx)\n",
-   432		       what, ref, page ? page_to_pfn(page) : -1);
-   433	}
-   434	
-
+Signed-off-by: Bang Li <libang.linuxer@gmail.com>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/arc/kernel/smp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arc/kernel/smp.c b/arch/arc/kernel/smp.c
+index 78e6d069b1c1..56c23f3e1309 100644
+--- a/arch/arc/kernel/smp.c
++++ b/arch/arc/kernel/smp.c
+@@ -274,7 +274,7 @@ static void ipi_send_msg_one(int cpu, enum ipi_msg_type msg)
+ 	 * and read back old value
+ 	 */
+ 	do {
+-		new = old = READ_ONCE(*ipi_data_ptr);
++		new = old = *ipi_data_ptr;
+ 		new |= 1U << msg;
+ 	} while (cmpxchg(ipi_data_ptr, old, new) != old);
+ 
+-- 
+2.25.1
+

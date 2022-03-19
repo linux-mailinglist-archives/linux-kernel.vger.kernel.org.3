@@ -2,161 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57DE4DE5F2
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 05:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 189E24DE5F7
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 05:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242115AbiCSEcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 00:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
+        id S242130AbiCSEhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 00:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242084AbiCSEcX (ORCPT
+        with ESMTP id S242120AbiCSEhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 00:32:23 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B92D1CE2
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 21:31:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647664262; x=1679200262;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4TXtpZTFhKTJaQUWw6yi2Wr6LG+46KjXcInPX4RItVg=;
-  b=mW7uGW8jAe7bev8oqEqJUxgZsGG+6KFyQiDESzrfD14JRLRZL6VKVuZx
-   0rVz8xnUxy+FiaT37QTD5/cye2GpbPRg5LDrqzMSNIv4zCVkjBeqZmgi4
-   P3Xbsju6j95rXsaDgEPCRZbq7KhzE9QYUR/jUMn53u0yGkM9txgWp6yDO
-   SRSwIsowQHs+VYJsm04bwauR1y3zQA3lXrI5raIJraAXbU15Z79OUi0eP
-   hUSyZoCrAfCdvMmqeJmBboAQnHGvgdn0FsVsL/FMdoo2oLKlnrAbnQA9l
-   CGn3QrgpLE4Pvu8pvJPAU2u9lxHV3MJQtSJ5heKJq/kscyrCiD73H5P3c
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="257468108"
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="257468108"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2022 21:31:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,192,1643702400"; 
-   d="scan'208";a="647768257"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 18 Mar 2022 21:31:00 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVQjz-000FaO-UN; Sat, 19 Mar 2022 04:30:59 +0000
-Date:   Sat, 19 Mar 2022 12:30:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:locking/core 17/19] arch/x86/kvm/x86.h:29:2: error:
- too many arguments to function 'lockdep_hardirqs_on_prepare'
-Message-ID: <202203191233.qMjpfK62-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 19 Mar 2022 00:37:40 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CC3195D8A;
+        Fri, 18 Mar 2022 21:36:19 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id s72so3710909pgc.5;
+        Fri, 18 Mar 2022 21:36:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=woWc2+lO22HzkiGe6tfKJYkKrmQ1CA7aDFe+SOO4MVo=;
+        b=jvaK9r3TsTbFAiCASU8hDVRNQR/TpJ+j/sFQLFC2SjXL9YegobThrGohsvNfZ6Q8jt
+         DPN/+rV1MiBPwD+nFUrE1T/1iDGAVJNSgknBYoSMSsu7XAJjOAbot4idH1LG8dt+Ep0f
+         YfAWMIgR9Sis/DmLnrLBHgBBSMvjynpCmHu9jxe2lbQDd0bpSSwgPAT6ua+7xOf+Dj/m
+         TLyfBkFb8U+0Z7uxJUkhyov54Fi6he1RpOOfex8k7kpXAn7LpEEatLY0Gqmeef0x+EU+
+         xVRfdLm595l1xco/GykoPHXsl9D2EFqsmBD1waf4Wlkj3atUrrr/ns0Lj5gZa7j5x/fW
+         1o+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=woWc2+lO22HzkiGe6tfKJYkKrmQ1CA7aDFe+SOO4MVo=;
+        b=cqMDUboGiJcujds3PzseUcpzyGxFUwwRIFrDRRoZRw4wR5ifrmgFa27wkdahQlgMaM
+         goEtx1GZE/epqtEQlRMrvuyV+C3EN9HMCeWxrkwQ/TelGPCg9RNDLxB+W0pTCSrXbh5N
+         AyVhIpT7ev6pgSHIFUkwkj1uu/4S7/rIgWtonGnfjGx4o2nRsipRwTu++HxDbn5HzXdI
+         orm0aoXhzV3b8/y+9s2f3y1flcON4rZuRHEvQimkccOrupDvLBHrogtdC/WyuWcksT8p
+         r8VJfKBTHQIulG21PHJ9JP52XA/zRrRxr7I7JWrEu1zdVSbLRWNqJA8lqis5AcQ2YVbk
+         iHlw==
+X-Gm-Message-State: AOAM5330BVtuxzGvoI0yS39mspyOWE8U0WVgE+hOyraZpEbFD7uN6G7c
+        1L5MgZ/teiHIqtjVezG20YU=
+X-Google-Smtp-Source: ABdhPJwHjXachEbC9jh3Il4IjkYfSCQZxQn2Flq3KZAULIDWsY9UAVu5opzZM6X/B6C8LY9CO8m6/Q==
+X-Received: by 2002:a65:5a0d:0:b0:381:3c1e:9aca with SMTP id y13-20020a655a0d000000b003813c1e9acamr10294707pgs.562.1647664578830;
+        Fri, 18 Mar 2022 21:36:18 -0700 (PDT)
+Received: from ubuntu.huawei.com ([119.3.119.18])
+        by smtp.googlemail.com with ESMTPSA id m125-20020a628c83000000b004f7baad5c20sm11027526pfd.144.2022.03.18.21.36.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 21:36:18 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     aelior@marvell.com, manishc@marvell.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Subject: [PATCH] qed: remove an unneed NULL check on list iterator
+Date:   Sat, 19 Mar 2022 12:36:06 +0800
+Message-Id: <20220319043606.23292-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
-head:   200a79c670d24d4d9a75a6a9cbfd14af2f5d0ad9
-commit: 5c9f3806a4400c2957abeea9419547f856457a20 [17/19] lockdep: Fix -Wunused-parameter for _THIS_IP_
-config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220319/202203191233.qMjpfK62-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=5c9f3806a4400c2957abeea9419547f856457a20
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue locking/core
-        git checkout 5c9f3806a4400c2957abeea9419547f856457a20
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The define for_each_pci_dev(d) is:
+ while ((d = pci_get_device(PCI_ANY_ID, PCI_ANY_ID, d)) != NULL)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thus, the list iterator 'd' is always non-NULL so it doesn't need to
+be checked. So just remove the unnecessary NULL check. Also remove the
+unnecessary initializer because the list iterator is always initialized.
 
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kvm/cpuid.h:5,
-                    from arch/x86/kvm/mmu.h:7,
-                    from arch/x86/kvm/x86.c:22:
-   arch/x86/kvm/x86.h: In function 'kvm_guest_enter_irqoff':
->> arch/x86/kvm/x86.h:29:2: error: too many arguments to function 'lockdep_hardirqs_on_prepare'
-      29 |  lockdep_hardirqs_on_prepare(CALLER_ADDR0);
-         |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/x86/include/asm/special_insns.h:10,
-                    from arch/x86/include/asm/processor.h:25,
-                    from arch/x86/include/asm/cpufeature.h:5,
-                    from arch/x86/include/asm/thread_info.h:53,
-                    from include/linux/thread_info.h:60,
-                    from arch/x86/include/asm/preempt.h:7,
-                    from include/linux/preempt.h:78,
-                    from include/linux/percpu.h:6,
-                    from include/linux/context_tracking_state.h:5,
-                    from include/linux/hardirq.h:5,
-                    from include/linux/kvm_host.h:7,
-                    from arch/x86/kvm/x86.c:19:
-   include/linux/irqflags.h:23:15: note: declared here
-      23 |   extern void lockdep_hardirqs_on_prepare(void);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
---
-   In file included from arch/x86/kvm/vmx/../cpuid.h:5,
-                    from arch/x86/kvm/vmx/evmcs.c:7:
-   arch/x86/kvm/vmx/../x86.h: In function 'kvm_guest_enter_irqoff':
->> arch/x86/kvm/vmx/../x86.h:29:2: error: too many arguments to function 'lockdep_hardirqs_on_prepare'
-      29 |  lockdep_hardirqs_on_prepare(CALLER_ADDR0);
-         |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/x86/include/asm/special_insns.h:10,
-                    from arch/x86/include/asm/processor.h:25,
-                    from arch/x86/include/asm/cpufeature.h:5,
-                    from arch/x86/include/asm/thread_info.h:53,
-                    from include/linux/thread_info.h:60,
-                    from arch/x86/include/asm/preempt.h:7,
-                    from include/linux/preempt.h:78,
-                    from include/linux/smp.h:110,
-                    from arch/x86/kvm/vmx/evmcs.c:4:
-   include/linux/irqflags.h:23:15: note: declared here
-      23 |   extern void lockdep_hardirqs_on_prepare(void);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/lockdep_hardirqs_on_prepare +29 arch/x86/kvm/x86.h
-
-65297341d8e15b Uros Bizjak         2021-08-09  12  
-bc908e091b3264 Sean Christopherson 2021-05-04  13  static __always_inline void kvm_guest_enter_irqoff(void)
-bc908e091b3264 Sean Christopherson 2021-05-04  14  {
-bc908e091b3264 Sean Christopherson 2021-05-04  15  	/*
-bc908e091b3264 Sean Christopherson 2021-05-04  16  	 * VMENTER enables interrupts (host state), but the kernel state is
-bc908e091b3264 Sean Christopherson 2021-05-04  17  	 * interrupts disabled when this is invoked. Also tell RCU about
-bc908e091b3264 Sean Christopherson 2021-05-04  18  	 * it. This is the same logic as for exit_to_user_mode().
-bc908e091b3264 Sean Christopherson 2021-05-04  19  	 *
-bc908e091b3264 Sean Christopherson 2021-05-04  20  	 * This ensures that e.g. latency analysis on the host observes
-bc908e091b3264 Sean Christopherson 2021-05-04  21  	 * guest mode as interrupt enabled.
-bc908e091b3264 Sean Christopherson 2021-05-04  22  	 *
-bc908e091b3264 Sean Christopherson 2021-05-04  23  	 * guest_enter_irqoff() informs context tracking about the
-bc908e091b3264 Sean Christopherson 2021-05-04  24  	 * transition to guest mode and if enabled adjusts RCU state
-bc908e091b3264 Sean Christopherson 2021-05-04  25  	 * accordingly.
-bc908e091b3264 Sean Christopherson 2021-05-04  26  	 */
-bc908e091b3264 Sean Christopherson 2021-05-04  27  	instrumentation_begin();
-bc908e091b3264 Sean Christopherson 2021-05-04  28  	trace_hardirqs_on_prepare();
-bc908e091b3264 Sean Christopherson 2021-05-04 @29  	lockdep_hardirqs_on_prepare(CALLER_ADDR0);
-bc908e091b3264 Sean Christopherson 2021-05-04  30  	instrumentation_end();
-bc908e091b3264 Sean Christopherson 2021-05-04  31  
-bc908e091b3264 Sean Christopherson 2021-05-04  32  	guest_enter_irqoff();
-bc908e091b3264 Sean Christopherson 2021-05-04  33  	lockdep_hardirqs_on(CALLER_ADDR0);
-bc908e091b3264 Sean Christopherson 2021-05-04  34  }
-bc908e091b3264 Sean Christopherson 2021-05-04  35  
-
-:::::: The code at line 29 was first introduced by commit
-:::::: bc908e091b3264672889162733020048901021fb KVM: x86: Consolidate guest enter/exit logic to common helpers
-
-:::::: TO: Sean Christopherson <seanjc@google.com>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
-
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 ---
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c b/drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c
+index 96a2077fd315..37af8395f1bd 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c
+@@ -161,11 +161,11 @@ EXPORT_SYMBOL(qed_vlan_get_ndev);
+ 
+ struct pci_dev *qed_validate_ndev(struct net_device *ndev)
+ {
+-	struct pci_dev *pdev = NULL;
++	struct pci_dev *pdev;
+ 	struct net_device *upper;
+ 
+ 	for_each_pci_dev(pdev) {
+-		if (pdev && pdev->driver &&
++		if (pdev->driver &&
+ 		    !strcmp(pdev->driver->name, "qede")) {
+ 			upper = pci_get_drvdata(pdev);
+ 			if (upper->ifindex == ndev->ifindex)
+-- 
+2.17.1
+

@@ -2,172 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250BA4DE70B
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 09:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4204DE704
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 09:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242516AbiCSI0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 04:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S242494AbiCSI0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 04:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242502AbiCSI0b (ORCPT
+        with ESMTP id S233088AbiCSIZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 04:26:31 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77EE27CE29;
-        Sat, 19 Mar 2022 01:25:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647678308; x=1679214308;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cU11GNeosPZBQkVRru6KUOZgbrqb9oXf2R1mmb41wX8=;
-  b=nUbblIjBgh5iYzbCT8+H9R0bogbl5Mjdn8yD1xCPy1Fi7Ub4N3mkVxMa
-   FN80DRtYvvJYgYS4VcGcMm3zOJcUhjTVQ3yxTZLDRgQmeuf1n0VTAtxqw
-   YlbKWdIyVtRd1EWFd4BO+TAbSCRO2njdfIa4528zPB+nlUlzqMLUvFqQb
-   TFeFLhCA5dpMmpulaDuO1Qn6MWFL73Xd6iEmWAhpxeU6ilSr528mB3UKr
-   XDW/Y9g4msxUC08b91LltEezmKQgOX15VX5i0tUiFV2PiP+a/DTFyU80E
-   OI4l+ke5YucHsZRFxkRYUQ5D3Ckmx3kTi3HapXolAXtyTO1WBKFrbN5Ug
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10290"; a="343721168"
-X-IronPort-AV: E=Sophos;i="5.90,194,1643702400"; 
-   d="scan'208";a="343721168"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 01:25:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,194,1643702400"; 
-   d="scan'208";a="822924166"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Mar 2022 01:25:04 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVUOV-000FjU-HW; Sat, 19 Mar 2022 08:25:03 +0000
-Date:   Sat, 19 Mar 2022 16:24:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jane Chu <jane.chu@oracle.com>, david@fromorbit.com,
-        djwong@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-        vishal.l.verma@intel.com, dave.jiang@intel.com, agk@redhat.com,
-        snitzer@redhat.com, dm-devel@redhat.com, ira.weiny@intel.com,
-        willy@infradead.org, vgoyal@redhat.com,
-        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org
-Subject: Re: [PATCH v6 2/6] x86/mce: relocate set{clear}_mce_nospec()
- functions
-Message-ID: <202203191603.mQUQZZV5-lkp@intel.com>
-References: <20220319062833.3136528-3-jane.chu@oracle.com>
+        Sat, 19 Mar 2022 04:25:58 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B5427CE26;
+        Sat, 19 Mar 2022 01:24:36 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id s25so13941406lji.5;
+        Sat, 19 Mar 2022 01:24:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/ZpwHLQU+wmeCbu/+G/e1bt058wLloUaoM6rRJWzX2w=;
+        b=DJNAfZI9glvof+R+9AsDOymBUSQGXACtnv7dvlJQQEgvbUSWDUOgX5XISdPn+rIR58
+         OiT8eG4zSIxaHrZi+XcXJKUFQakRoCNNVtsUFMIIyN1D51u/cneuivhimssLvvLDS+BX
+         Kl4Ok1kPRWmAfIledIpwp/6rhssj1Nd/+TRYm7ZqQYj20dAsIQ/xjL5QTThus236/Q3W
+         pPXOtpkPay8UpZmcvERp9POaAD7x4ib+wxEhnzwJb1xlMTSd6gYwWNrM6xm0fDUmGzfd
+         YiKvurcwKGK5ypt22E1W5MlFk1M3VOh8CCQlKa8QNb3a1/gI0GPTRDbR5Alskwet5Ubk
+         6A5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/ZpwHLQU+wmeCbu/+G/e1bt058wLloUaoM6rRJWzX2w=;
+        b=8KzvjUa1CCZ5qNJxt8KyuBpbBQ94X7T4PMEYawaK4aGM80k25mWu4zMqm0R7oflOe+
+         PCl/XfNXULw5v92zNWPui+idCTT59VFPgfm1d0Rag7gYZT5kWoEO6BIfxSFwJPKyRmD2
+         dRzdKshmgLpeOyhL6x7UXDyoX4lCZkhVadi7RvW5XjMHyP5xcRNy5mh71v/8DwJsajLm
+         7UCrhscfojUtCoIzKHv6Gb0tEr+V7zsBL+rBqdgpUbseTOPuR8Pd6caaoKnKv6PMMC6o
+         gc8N6oSpMT5+eRuLl1MaH37l5jtE209UtymSHWpOUnVT0swG+EyJkkawQzy/ILRQSesA
+         6lKA==
+X-Gm-Message-State: AOAM530YdtDzkxIy3KSlc0+pkQn4GmP5t3mXCBDJUI/o3LqHFw2X/vr0
+        9MmXdc6HwjxGE0YcrmsZUZbJQmXb4N8=
+X-Google-Smtp-Source: ABdhPJyZ2UsDbC5F5eTFm1ubxR/1o29YAZM4C0C4KHStzRN8blY/0Q/TrWEVjWw+WlnXPv8mueqrbw==
+X-Received: by 2002:a05:651c:17a3:b0:245:f39e:f2d2 with SMTP id bn35-20020a05651c17a300b00245f39ef2d2mr8861978ljb.490.1647678274018;
+        Sat, 19 Mar 2022 01:24:34 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.72.203])
+        by smtp.gmail.com with ESMTPSA id bi2-20020a0565120e8200b004484aaaf818sm1232576lfb.13.2022.03.19.01.24.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Mar 2022 01:24:33 -0700 (PDT)
+Subject: Re: [PATCH v2 7/8] ARM: dts: lan9662-pcb8291: fix pinctrl node name
+To:     Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Quentin Schulz <quentin.schulz@bootlin.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+References: <20220318202547.1650687-1-michael@walle.cc>
+ <20220318202547.1650687-8-michael@walle.cc>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <cf2a6d1a-bf98-e382-2623-e44e5979ca29@gmail.com>
+Date:   Sat, 19 Mar 2022 11:24:31 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220319062833.3136528-3-jane.chu@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220318202547.1650687-8-michael@walle.cc>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jane,
+Hello!
 
-Thank you for the patch! Perhaps something to improve:
+On 3/18/22 11:25 PM, Michael Walle wrote:
 
-[auto build test WARNING on nvdimm/libnvdimm-for-next]
-[also build test WARNING on device-mapper-dm/for-next linus/master v5.17-rc8 next-20220318]
-[cannot apply to tip/x86/mm]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> The pinctrl device tree binding will be converted to YAML format. All
+> the pin nodes should end with "-pins". Fix them.
 
-url:    https://github.com/0day-ci/linux/commits/Jane-Chu/DAX-poison-recovery/20220319-143144
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm.git libnvdimm-for-next
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220319/202203191603.mQUQZZV5-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6e70e4056dff962ec634c5bd4f2f4105a0bef71)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/71b9b09529b207ce15667c1f5fba4b727b6754e6
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jane-Chu/DAX-poison-recovery/20220319-143144
-        git checkout 71b9b09529b207ce15667c1f5fba4b727b6754e6
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/mm/pat/ fs/fuse/
+   It does end with "pins" already, right?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 290deaa10c50 ("ARM: dts: add DT for lan966 SoC and 2-port board pcb8291")
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  arch/arm/boot/dts/lan966x-pcb8291.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
+> index 3281af90ac6d..3c7e3a7d6f14 100644
+> --- a/arch/arm/boot/dts/lan966x-pcb8291.dts
+> +++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
+> @@ -35,7 +35,7 @@ fc3_b_pins: fcb3-spi-pins {
+>  		function = "fc3_b";
+>  	};
+>  
+> -	can0_b_pins:  can0_b_pins {
+> +	can0_b_pins:  can0-b-pins {
 
-All warnings (new ones prefixed by >>):
+   Mhm, I can't even see what is changed here... :-/
 
->> arch/x86/mm/pat/set_memory.c:1935:5: warning: no previous prototype for function 'set_mce_nospec' [-Wmissing-prototypes]
-   int set_mce_nospec(unsigned long pfn, bool unmap)
-       ^
-   arch/x86/mm/pat/set_memory.c:1935:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int set_mce_nospec(unsigned long pfn, bool unmap)
-   ^
-   static 
->> arch/x86/mm/pat/set_memory.c:1968:5: warning: no previous prototype for function 'clear_mce_nospec' [-Wmissing-prototypes]
-   int clear_mce_nospec(unsigned long pfn)
-       ^
-   arch/x86/mm/pat/set_memory.c:1968:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int clear_mce_nospec(unsigned long pfn)
-   ^
-   static 
-   2 warnings generated.
+[...]
 
-
-vim +/set_mce_nospec +1935 arch/x86/mm/pat/set_memory.c
-
-  1927	
-  1928	#ifdef CONFIG_X86_64
-  1929	/*
-  1930	 * Prevent speculative access to the page by either unmapping
-  1931	 * it (if we do not require access to any part of the page) or
-  1932	 * marking it uncacheable (if we want to try to retrieve data
-  1933	 * from non-poisoned lines in the page).
-  1934	 */
-> 1935	int set_mce_nospec(unsigned long pfn, bool unmap)
-  1936	{
-  1937		unsigned long decoy_addr;
-  1938		int rc;
-  1939	
-  1940		/* SGX pages are not in the 1:1 map */
-  1941		if (arch_is_platform_page(pfn << PAGE_SHIFT))
-  1942			return 0;
-  1943		/*
-  1944		 * We would like to just call:
-  1945		 *      set_memory_XX((unsigned long)pfn_to_kaddr(pfn), 1);
-  1946		 * but doing that would radically increase the odds of a
-  1947		 * speculative access to the poison page because we'd have
-  1948		 * the virtual address of the kernel 1:1 mapping sitting
-  1949		 * around in registers.
-  1950		 * Instead we get tricky.  We create a non-canonical address
-  1951		 * that looks just like the one we want, but has bit 63 flipped.
-  1952		 * This relies on set_memory_XX() properly sanitizing any __pa()
-  1953		 * results with __PHYSICAL_MASK or PTE_PFN_MASK.
-  1954		 */
-  1955		decoy_addr = (pfn << PAGE_SHIFT) + (PAGE_OFFSET ^ BIT(63));
-  1956	
-  1957		if (unmap)
-  1958			rc = set_memory_np(decoy_addr, 1);
-  1959		else
-  1960			rc = set_memory_uc(decoy_addr, 1);
-  1961		if (rc)
-  1962			pr_warn("Could not invalidate pfn=0x%lx from 1:1 map\n", pfn);
-  1963		return rc;
-  1964	}
-  1965	EXPORT_SYMBOL(set_mce_nospec);
-  1966	
-  1967	/* Restore full speculative operation to the pfn. */
-> 1968	int clear_mce_nospec(unsigned long pfn)
-  1969	{
-  1970		return set_memory_wb((unsigned long) pfn_to_kaddr(pfn), 1);
-  1971	}
-  1972	EXPORT_SYMBOL(clear_mce_nospec);
-  1973	
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+MBR, Sergey

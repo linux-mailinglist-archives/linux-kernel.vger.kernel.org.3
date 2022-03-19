@@ -2,110 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5D64DE921
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 16:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D6B4DE92A
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 16:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243545AbiCSPza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 11:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
+        id S243556AbiCSQBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 12:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240571AbiCSPz2 (ORCPT
+        with ESMTP id S232547AbiCSQBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 11:55:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A573A19BFD2
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 08:54:07 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nVbOY-0002zn-69; Sat, 19 Mar 2022 16:53:34 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-5e0d-31a6-08b1-9333.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5e0d:31a6:8b1:9333])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B3DDF4F317;
-        Sat, 19 Mar 2022 15:53:30 +0000 (UTC)
-Date:   Sat, 19 Mar 2022 16:53:30 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     trix@redhat.com
-Cc:     mani@kernel.org, thomas.kopp@microchip.com, wg@grandegger.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] can: mcp251xfd: return errors from
- mcp251xfd_register_get_dev_id
-Message-ID: <20220319155330.d62uvu47pujhjocy@pengutronix.de>
-References: <20220319153128.2164120-1-trix@redhat.com>
+        Sat, 19 Mar 2022 12:01:00 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B47219A561;
+        Sat, 19 Mar 2022 08:59:38 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id d10so22212355eje.10;
+        Sat, 19 Mar 2022 08:59:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8GTIMWQve+g7wKIIsMEJALGjWCTbDmifDv5C0pWR1mM=;
+        b=a5xvYHlvl3R8AQ0C3wjzNthnrBkCQ64fZ3NdgDvpeo2sYFWR7vVKJxfoSVjIaUbb91
+         LjBEAxQ5S5Tv6q3nZpqzXHad4YPtjl/t2UFLepYBbYvx6KKq/jfa0jZzxNllid6J/SjI
+         oadBNva70xUediy4wrvv4SZAm67TaFAT5ngoanjGKCa8N+j7mBIaJyoMtA/oS+Or62vG
+         siGcZpt6qslVh0wqMBcxmxvWwOVbHiORwiRgTUKDYTR+SUjKEp5JGKIBecSxrvwnefh3
+         t8Mbf2q8dHMSa9Vb1gqWG3vMSqxzl6y7eUu8oIwgeL2Y3hrPFhef1F9eH39mhMw69Cdu
+         SXDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8GTIMWQve+g7wKIIsMEJALGjWCTbDmifDv5C0pWR1mM=;
+        b=PmfmicZePT/7YpKtaJAAXMYeLuCatQWcvrwqx3jYz482lHeE3fN5n98amcRZ25cw1U
+         ikkXNekxrRg8I9/psiYSqNmnrBgCAXFZBbJ/M5CB1Lh51dVM+mRgh0ocAtwsI/Kvy0LT
+         8QyO9mngaJ/4UkP+/ocqXY/jTiSw1nIt/ZhUQAU7vOIg1tA4BQrtx3ot0Nz5bojQikQA
+         13WUzIMsvanIQHSTPbcRhsVvmwqF3+rejdp2L2QHAuQB8WojpFOh9XiyePSyzFtsr+Gw
+         itUVP/KFnnlFqHlhwcDGwPra0fIPv9coUCKaqasMinJygQqbEEhg24H7S3ncIF36vTFX
+         4BvQ==
+X-Gm-Message-State: AOAM5300M98Ngui8pjbNkbJgwr5sYFUM8cLUPtgV+zfbTPLRj7/upqhO
+        8+aSBUrvdlX1ZffiPJVCSvE=
+X-Google-Smtp-Source: ABdhPJwnka6fXpm7aOvyQf5QPKnfzcNr+LOOu0fmSGTuddcAPR24PWqME2x4vz2NG03ZCY5yOnmjOg==
+X-Received: by 2002:a17:906:6886:b0:6df:8b7b:499e with SMTP id n6-20020a170906688600b006df8b7b499emr13801188ejr.289.1647705576710;
+        Sat, 19 Mar 2022 08:59:36 -0700 (PDT)
+Received: from anparri (host-82-59-4-232.retail.telecomitalia.it. [82.59.4.232])
+        by smtp.gmail.com with ESMTPSA id l9-20020a1709060cc900b006ce04bb8668sm4902499ejh.184.2022.03.19.08.59.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Mar 2022 08:59:36 -0700 (PDT)
+Date:   Sat, 19 Mar 2022 16:59:28 +0100
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     Saurabh Singh Sengar <ssengar@microsoft.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Wei Hu <weh@microsoft.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXTERNAL] [PATCH 1/2] PCI: hv: Use IDR to generate transaction
+ IDs for VMBus hardening
+Message-ID: <20220319155928.GA2951@anparri>
+References: <20220318174848.290621-1-parri.andrea@gmail.com>
+ <20220318174848.290621-2-parri.andrea@gmail.com>
+ <KL1P15301MB0295879FF28B67F3C521FFB3BE149@KL1P15301MB0295.APCP153.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ynf2esusfukglzhk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220319153128.2164120-1-trix@redhat.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <KL1P15301MB0295879FF28B67F3C521FFB3BE149@KL1P15301MB0295.APCP153.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> > @@ -1208,6 +1211,27 @@ static void hv_pci_read_config_compl(void
+> > *context, struct pci_response *resp,
+> >  	complete(&comp->comp_pkt.host_event);
+> >  }
+> > 
+> > +static inline int alloc_request_id(struct hv_pcibus_device *hbus,
+> > +				   void *ptr, gfp_t gfp)
+> > +{
+> > +	unsigned long flags;
+> > +	int req_id;
+> > +
+> > +	spin_lock_irqsave(&hbus->idr_lock, flags);
+> > +	req_id = idr_alloc(&hbus->idr, ptr, 1, 0, gfp);
+> 
+> [Saurabh Singh Sengar] Many a place we are using alloc_request_id with GFP_KERNEL, which results this allocation inside of spin lock with GFP_KERNEL.
 
---ynf2esusfukglzhk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That's a bug.
 
-On 19.03.2022 08:31:28, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
->=20
-> Clang static analysis reports this issue
-> mcp251xfd-core.c:1813:7: warning: The left operand
->   of '&' is a garbage value
->   FIELD_GET(MCP251XFD_REG_DEVID_ID_MASK, dev_id),
->   ^                                      ~~~~~~
->=20
-> dev_id is set in a successful call to
-> mcp251xfd_register_get_dev_id().  Though the status
-> of calls made by mcp251xfd_register_get_dev_id()
-> are checked and handled, their status' are not
-> returned.  So return err.
->=20
-> Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD =
-SPI CAN")
-> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Thanks for your patch, applied to linux-can/testing.
+> Is this a good opportunity to use idr_preload ?
 
-regards,
-Marc
+I'd rather fix (and 'simplify' a bit the interface) by doing:
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+static inline int alloc_request_id(struct hv_pcibus_device *hbus, void *ptr)
+{
+	unsigned long flags;
+	int req_id;
 
---ynf2esusfukglzhk
-Content-Type: application/pgp-signature; name="signature.asc"
+	spin_lock_irqsave(&hbus->idr_lock, flags);
+	req_id = idr_alloc(&hbus->idr, ptr, 1, 0, GFP_ATOMIC);
+	spin_unlock_irqrestore(&hbus->idr_lock, flags);
+	return req_id;
+}
 
------BEGIN PGP SIGNATURE-----
+Thoughts?
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmI1/HcACgkQrX5LkNig
-012uEAgAhmQLM9+G2jVF/9a2t7pFA4UKyqfdbBR+4jLttIfKO6FZKMcPubSTDsw9
-QxnM2nOYAufwvSmhgoNuo2/pFWV0JCrzb1DwvbeHUI4rm8JWGNIKT8IWPwznNmIi
-4pHg5No4rSU4b/eUeyesiSpuqxRgUXCaZ/ReYMRUpOtc/f6vATqdTWZ1SPEq+9Cl
-kBQ4BBSSLCLzFWkr01SZfUGWM3AazzUM23EPh8bx2KJ2jaki2sZxkXQAc13OSRBW
-+DaRZu4Rk/DTaPXqmBGTD+5dX13d5CF/7p4l0ERJZSPJKZdZWDA3Imcn+ynGRuCJ
-zbQplLUyon4OuqH+/U5tYREWRtEdMA==
-=ySfD
------END PGP SIGNATURE-----
-
---ynf2esusfukglzhk--
+Thanks,
+  Andrea

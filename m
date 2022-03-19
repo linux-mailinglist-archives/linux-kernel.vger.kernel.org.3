@@ -2,115 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0384DE4F6
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 02:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C51C4DE4F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 02:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241713AbiCSBSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 21:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
+        id S241718AbiCSBWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 21:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbiCSBR6 (ORCPT
+        with ESMTP id S232002AbiCSBWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 21:17:58 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC4C2BB7EE
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:16:37 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 00A5C3200D78;
-        Fri, 18 Mar 2022 21:16:33 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 18 Mar 2022 21:16:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=BuzvtTqDk6f0Smw5E
-        Nzbj0bjU7GjOoh4sZORUG04JeY=; b=P3PsPreo282SrYl4BjMlc5BrrpouzAPxn
-        CRCu/VVqoLQ6X6Xt0JK59IsHIX70LUZ4CY1SsDdvqYD+Qk2bMs2Vf7HcjHW+CRrP
-        DBsWmc7cs1OTSIkZottIzLkNBIL7+f0HR3B1v2Lc5dhdmc2z3aD+KDV8MBSONhAM
-        lCCtFUf/B8C6VJDeSnR8wrXgL4wrSwcOh4wEpNiS8c7HLpwG+3V6V8k8KWI4hDZC
-        s4GpJSvQI5B8QirKZk8e9TlprH3ZaO/YR3feZWFkBhhx8txmAGOE0BrpnlzT1Hhy
-        3vwWY2z1oG0iP0Ajt9+iQ/Y8q/vsJwp/VPHQZCp+aSYdWxtyujF2g==
-X-ME-Sender: <xms:8S41Yo1SJY76S135ZR1sBNyHKtR_IjYWdlBgA_VNaKyAM81A40-o_Q>
-    <xme:8S41YjHwALaklX64HoPg_yWx_UpklYMq3El0Ghje9IPqPkzVSOwuOLJEkGrv0SaNG
-    l1uStqrtLRx2k5Wuwc>
-X-ME-Received: <xmr:8S41Yg6jvjj5EEgxBqOxEb7yYZzopLat7VdDROzqIjr5RdH7BaKpT0d4Pd3bl8xNEdNdsXw7YZZK802lbkM9i26lAqy5DMNd0uA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefjedgfedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfv
-    hhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrth
-    htvghrnhephffhjeejvdejtdejjeeffeefjefgieeijeegveeljeeffffgueevkeehieek
-    vdetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdptddurdhorhhgpdhgihhthhhusg
-    hushgvrhgtohhnthgvnhhtrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
-    rghmpehmrghilhhfrhhomhepfhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
-X-ME-Proxy: <xmx:8S41Yh1tdSn2befUzGH03Db_CYJM8y_0mtcBvTY6WNMU-E4V64hlFQ>
-    <xmx:8S41YrFHByC2nR3JlC0IGwixkzu0Sg5IH30P_I_t8coMMrq_wBAXkQ>
-    <xmx:8S41Yq8olUOuPfzSpDwNk5L1UqoNgsSrgLN6TseIyNzatKI5DqAumA>
-    <xmx:8S41YgQ6166YyOexK8jak1_s53Mp_yDaZwRKy8s04G37KFI2Deevow>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Mar 2022 21:16:31 -0400 (EDT)
-Date:   Sat, 19 Mar 2022 12:16:38 +1100 (AEDT)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     kernel test robot <lkp@intel.com>
-cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: via-pmu-event.c:undefined reference to `input_event'
-In-Reply-To: <202203190015.8LPNVVK5-lkp@intel.com>
-Message-ID: <c22262dc-b71c-bc9-b5b6-1abc593bdc4d@linux-m68k.org>
-References: <202203190015.8LPNVVK5-lkp@intel.com>
+        Fri, 18 Mar 2022 21:22:09 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3421E1081A5;
+        Fri, 18 Mar 2022 18:20:49 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id p17so8401740plo.9;
+        Fri, 18 Mar 2022 18:20:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tVxiWu7GNyhnLn9AtcfYyZRc2VNjBYlYu44IiOTszec=;
+        b=DaXCRIX6d6aCRxjipuNP0d9OC2oBuHC4ht8pR0HOgOLvY+PmSmwJWmTlH0HrlcB12F
+         izZnGzljMGcRWp0t4u0IM8LZujbGuMCKGe/QMpgKxCAMEQD5abZwzIR/pCOXzG72UAbZ
+         cMyfYumazIXjV8XxYVuDUrJFDcNdRISYoNrosSivABbxo3wtrgMIB8dgnNqPTUlbeHCu
+         eFmA459ktUEwVIFF0W4StAFQdUW0Eei99oj6Qds8mncTFmjDS6Bpj/zSLvBHlIjrERMu
+         44GO/p85is2vk+4RONmiN+BfQoZu6BQ8hNSu6s7hhXLGd3hbYXu8kIskE/TKZSOIBNil
+         hv/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tVxiWu7GNyhnLn9AtcfYyZRc2VNjBYlYu44IiOTszec=;
+        b=nnNcX03Gryx+YKBwDOG0u27YA9yGA41Aov+z++X1VXxxJs0jrQJ/AdXau5557EWKko
+         3F60kS+6zeIp/f+CdnyNGbeL36K8Jths7LSar+oQS4XxgOzRytVuJvOh+QCfpNosJHi9
+         Om/+RhJY/xi4SAOHb6ECGeVYXy1+wlG/UrhVaaSbLwzsnoz66Hhde3nRQrUuqzz41pms
+         ZDnqWeBieT/4MTkzRzXITqCytIafCf8v2J12h/3ZwN9StZODuFfQ5sdgmJwwqeOxCfbU
+         rEwyf9RsQ/8zdjt8QSqfasZxOr8AuCQqSm84FW0S1gwuvGSXy6O8cgQbnuqpxpZ5BP4W
+         mz/g==
+X-Gm-Message-State: AOAM533vT71mBciWoYL0I9TPxMang3kd6WCrZyFluCw4fAHE7/CC7E5J
+        pnAG1eY+PuR/4I4KvS1/OqHjkHhJBLyJOQ==
+X-Google-Smtp-Source: ABdhPJy/ZCWTYv3oI4AO33xLBRg5mUZPR2AtEhvCUH2xa/H8PUZS0IQnoAFGeLXsWEqaah/i6Dp8uA==
+X-Received: by 2002:a17:902:d4c2:b0:151:d590:a13d with SMTP id o2-20020a170902d4c200b00151d590a13dmr2252605plg.85.1647652848448;
+        Fri, 18 Mar 2022 18:20:48 -0700 (PDT)
+Received: from yusufkhan-MS-7B17.lan ([24.17.200.29])
+        by smtp.gmail.com with ESMTPSA id ep2-20020a17090ae64200b001c6a7c22aedsm2962162pjb.37.2022.03.18.18.20.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 18:20:48 -0700 (PDT)
+From:   Yusuf Khan <yusisamerican@gmail.com>
+To:     linux-btrfs@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, dsterba@suse.com,
+        josef@toxicpanda.com, clm@fb.com,
+        Yusuf Khan <yusisamerican@gmail.com>
+Subject: [PATCH] btrfs: raid56: do blk_check_plugged check twice while writing
+Date:   Fri, 18 Mar 2022 18:18:40 -0700
+Message-Id: <20220319011840.16213-1-yusisamerican@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 19 Mar 2022, kernel test robot wrote:
+Do the check to see if the drive was connected twice in case that
+the first was a fluke.
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   551acdc3c3d2b6bc97f11e31dcf960bc36343bfc
-> commit: ebd722275f9cfc6752e29d2412fa3816ca05764b macintosh/via-pmu: Replace via-pmu68k driver with via-pmu driver
-> date:   3 years, 8 months ago
-> config: m68k-randconfig-r021-20220317 (https://download.01.org/0day-ci/archive/20220319/202203190015.8LPNVVK5-lkp@intel.com/config)
-> compiler: m68k-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ebd722275f9cfc6752e29d2412fa3816ca05764b
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout ebd722275f9cfc6752e29d2412fa3816ca05764b
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    m68k-linux-ld: drivers/macintosh/via-pmu-event.o: in function `via_pmu_event':
-> >> via-pmu-event.c:(.text+0x32): undefined reference to `input_event'
-> >> m68k-linux-ld: via-pmu-event.c:(.text+0x54): undefined reference to `input_event'
->    m68k-linux-ld: drivers/macintosh/via-pmu-event.o: in function `via_pmu_event_init':
-> >> via-pmu-event.c:(.init.text+0xe): undefined reference to `input_allocate_device'
-> >> m68k-linux-ld: via-pmu-event.c:(.init.text+0x56): undefined reference to `input_register_device'
-> >> m68k-linux-ld: via-pmu-event.c:(.init.text+0x68): undefined reference to `input_free_device'
+Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
+---
+ fs/btrfs/raid56.c | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
-That config file has CONFIG_INPUT=n which is unusual. The problem affects 
-m68k builds since I enabled the driver 3 years ago but powerpc builds have 
-always been affected by this.
+diff --git a/fs/btrfs/raid56.c b/fs/btrfs/raid56.c
+index 0e239a4c3b26..f652900d7569 100644
+--- a/fs/btrfs/raid56.c
++++ b/fs/btrfs/raid56.c
+@@ -1750,18 +1750,23 @@ int raid56_parity_write(struct bio *bio, struct btrfs_io_context *bioc,
+ 
+ 	cb = blk_check_plugged(btrfs_raid_unplug, fs_info, sizeof(*plug));
+ 	if (cb) {
+-		plug = container_of(cb, struct btrfs_plug_cb, cb);
+-		if (!plug->info) {
+-			plug->info = fs_info;
+-			INIT_LIST_HEAD(&plug->rbio_list);
++		cpu_relax();
++		cb = blk_check_plugged(btrfs_raid_unplug, fs_info, sizeof(*plug));
++		if (cb) {
++			plug = container_of(cb, struct btrfs_plug_cb, cb);
++			if (!plug->info) {
++				plug->info = fs_info;
++				INIT_LIST_HEAD(&plug->rbio_list);
++			}
++			list_add_tail(&rbio->plug_list, &plug->rbio_list);
++			return 0;
+ 		}
+-		list_add_tail(&rbio->plug_list, &plug->rbio_list);
+-		ret = 0;
+-	} else {
+-		ret = __raid56_parity_write(rbio);
+-		if (ret)
+-			btrfs_bio_counter_dec(fs_info);
++		btrfs_warn(fs_info,
++"during a write operation, the first check to see if the drive was plugged in failed, seccond check succeeded, write continued");
+ 	}
++	ret = __raid56_parity_write(rbio);
++	if (ret)
++		btrfs_bio_counter_dec(fs_info);
+ 	return ret;
+ }
+ 
+-- 
+2.25.1
 
-via_pmu_event() does nothing unless the hardware happens to be a 
-particular powerpc PMU models but that logic is questionable (see comment 
-in via-pmu-event.c). So I think the best solution is to make the 
-via_pmu_event() code conditional on CONFIG_INPUT.
-
-I'll send a patch to that effect.

@@ -2,185 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9B04DE74C
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 10:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA93B4DE758
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 10:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242629AbiCSJhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 05:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
+        id S242640AbiCSJw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 05:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242627AbiCSJhq (ORCPT
+        with ESMTP id S242627AbiCSJw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 05:37:46 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C9727682D;
-        Sat, 19 Mar 2022 02:36:26 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id i23-20020a9d6117000000b005cb58c354e6so1695227otj.10;
-        Sat, 19 Mar 2022 02:36:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uy+1eKTB+JOqH9ugZeFOQ3QEkLKT7rVLVRCW8ChDEEI=;
-        b=CI/DdxTDhHuesgA4pEAjrcH349fvDHT7gnrLCuodcRRzG9/lFd0zpSTiKU2dAl8sIa
-         oLhyCSaplVepH7CSHVtjmTMMptUtS1GvVfNXJa/cvmg1CU1/bVwqKXO2JaTGIe6z9mzP
-         xehpZQtTHAkpAar+OwRyYzfR5FXIMhUiQDLasJ8spbS84/IvqNGD5O6v9m0Cs8wCiYd8
-         2C2wCk2zrXsAGT1x1v7RqMyZgiCpkx3qaRGLZI8IYpEoKZeJAi9aZkKbWU7Mbx4A46Cv
-         s9nnhm0ejUU5UtXmM1QeyGIoayX8Jsim2iystSAZMPcLr/WUpDumv1TXJKcMDLpk3Bz/
-         kMbA==
+        Sat, 19 Mar 2022 05:52:57 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB202BA3C9
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 02:51:36 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id d19-20020a0566022bf300b00645eba5c992so6764191ioy.4
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 02:51:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uy+1eKTB+JOqH9ugZeFOQ3QEkLKT7rVLVRCW8ChDEEI=;
-        b=4ggCMp97uvPhcZjK7CpghaFxmmrYerIvDga3RO7B/wsA/tVHz4oXBplbHbWdF866HB
-         xOI6I2G9tUU6MlRQTwqvXUgSJDWNiX+snEr2QzD9Kc6hszZVVSjF3qO19B0STTTGDh7I
-         V/fjlvQyaY4TmBlW7SQPTzwF2dk3h+9UYUyP5uVgjwvWvVowqendowYkLVP7tAsGZU6P
-         pyQdA33fcEvIxcv+k46En/Dx3fRen2mHtD+xPBCCTNAQe3xDzPMsMRBMN4kaoYFfPZRr
-         YshWZxAVXEL0RsaKLZrA0TtiaSSq9NNNOnMrxxsh4qs/bIKAvDLIQFs+lXHk6AAAKOOC
-         koug==
-X-Gm-Message-State: AOAM531hVoR5gjXWJscVnEfkyEjbsUlcWSYst0LcXO8Re4KVRyIsYOjL
-        Hy5DPppLCATlcMZHuRCFLvkRmaFsr9hjsprnUCE=
-X-Google-Smtp-Source: ABdhPJxttmgU2KO+KHNJuxjRV3sNDDnjxXwzWANgANwl+IjiPqEEuo/Gvb1gWA56jP1Z4Yfcz3WYRsELGeVWQeG28Zo=
-X-Received: by 2002:a9d:5cc8:0:b0:5b2:35ae:7ad6 with SMTP id
- r8-20020a9d5cc8000000b005b235ae7ad6mr4491355oti.275.1647682585482; Sat, 19
- Mar 2022 02:36:25 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to:cc;
+        bh=jhZ9LHXLcGgNvRmAI0911k++ThQT7lxCqrZCQddaBZY=;
+        b=Z+eSUEtILx68sDcZFzLo+AqhbBoBH0aIELa9lPEArh+CPa2kwhbA73EMmf5yeV0F0R
+         Jr7KkorcdNpblcSE+AmRdZ+z/n6rQz7UN7mw/A0DYEImIO+cbH36Gz3GGJcRW+0j0JsK
+         Ur1x41iAEoBHp10CtEL24QsVagKc6AVu1SSuQ9HrKqk7YRSdSs7EPkMttRNl+A6s9Ws7
+         pRSoexD7tYEKUIy3G9NVK8rgQQHfpIQCh10eK8Ld9LYFPXBaaJorTWzPf0nIyWrtzx92
+         lwhaRy7EPS56rDuZp/pZYmZMFQHan5o1m3FelO0ZmL3ypRaeCO+ghMoMT9v900JUaPwX
+         wpmA==
+X-Gm-Message-State: AOAM532bSp8rhcsKAUh+jxHMT9G0pbX8d7nJTcP9gMhc7uK0Fptzhf8N
+        Q5KKo+EqaTojj2gukAsFKLdMBBKbRDTRCRolPyTS1R6NlWFI
+X-Google-Smtp-Source: ABdhPJyaDVo0K+O/GWqYBRU07/OPALXzlx64ZzzabnjvFrobjoQsxOlqdJCi6PQBORUrTzMFqxkWYKS2OuTAz8Qjr72m14pxrGjA
 MIME-Version: 1.0
-References: <20220319001635.4097742-1-khazhy@google.com> <ea2afc67b92f33dbf406c3ebf49a0da9c6ec1e5b.camel@hammerspace.com>
-In-Reply-To: <ea2afc67b92f33dbf406c3ebf49a0da9c6ec1e5b.camel@hammerspace.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Sat, 19 Mar 2022 11:36:13 +0200
-Message-ID: <CAOQ4uxgTJdcO-xZbtTSUkjD2g0vSHr=PLFc6-T6RgO0u5DS=0g@mail.gmail.com>
-Subject: Re: [PATCH RFC] nfsd: avoid recursive locking through fsnotify
-To:     Trond Myklebust <trondmy@hammerspace.com>, Jan Kara <jack@suse.cz>
-Cc:     "bfields@fieldses.org" <bfields@fieldses.org>,
-        "khazhy@google.com" <khazhy@google.com>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jeff Layton <jlayton@kernel.org>
+X-Received: by 2002:a92:7d0a:0:b0:2c6:4310:8390 with SMTP id
+ y10-20020a927d0a000000b002c643108390mr6341320ilc.93.1647683495657; Sat, 19
+ Mar 2022 02:51:35 -0700 (PDT)
+Date:   Sat, 19 Mar 2022 02:51:35 -0700
+In-Reply-To: <20220319095121.2517-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000760a6205da8f35e5@google.com>
+Subject: Re: [syzbot] net-next test error: WARNING in __napi_schedule
+From:   syzbot <syzbot+fb57d2a7c4678481a495@syzkaller.appspotmail.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     bigeasy@linutronix.de, hdanton@sina.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 9:02 AM Trond Myklebust <trondmy@hammerspace.com> wrote:
+> On Fri, 18 Mar 2022 16:36:19 -0700
+>> Hello,
+>> 
+>> syzbot found the following issue on:
+>> 
+>> HEAD commit:    e89600ebeeb1 af_vsock: SOCK_SEQPACKET broken buffer test
+>> git tree:       net-next
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=134d43d5700000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=ef691629edb94d6a
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=fb57d2a7c4678481a495
+>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>> 
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+fb57d2a7c4678481a495@syzkaller.appspotmail.com
+>> 
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 0 PID: 1133 at net/core/dev.c:4268 ____napi_schedule net/core/dev.c:4268 [inline]
+>> WARNING: CPU: 0 PID: 1133 at net/core/dev.c:4268 __napi_schedule+0xe2/0x440 net/core/dev.c:5878
+>> Modules linked in:
+>> CPU: 0 PID: 1133 Comm: kworker/0:3 Not tainted 5.17.0-rc8-syzkaller-02525-ge89600ebeeb1 #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+>> Workqueue: wg-crypt-wg0 wg_packet_decrypt_worker
+>> RIP: 0010:____napi_schedule net/core/dev.c:4268 [inline]
+>> RIP: 0010:__napi_schedule+0xe2/0x440 net/core/dev.c:5878
+>> Code: 74 4a e8 31 16 47 fa 31 ff 65 44 8b 25 47 c5 d0 78 41 81 e4 00 ff 0f 00 44 89 e6 e8 98 19 47 fa 45 85 e4 75 07 e8 0e 16 47 fa <0f> 0b e8 07 16 47 fa 65 44 8b 25 5f cf d0 78 31 ff 44 89 e6 e8 75
+>> RSP: 0018:ffffc900057d7c88 EFLAGS: 00010093
+>> RAX: 0000000000000000 RBX: ffff88801e680748 RCX: 0000000000000000
+>> RDX: ffff88801ccb0000 RSI: ffffffff8731aa92 RDI: 0000000000000003
+>> RBP: 0000000000000200 R08: 0000000000000000 R09: 0000000000000001
+>> R10: ffffffff8731aa88 R11: 0000000000000000 R12: 0000000000000000
+>> R13: ffff8880b9c00000 R14: 000000000003adc0 R15: ffff88801e118ec0
+>> FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 00007fdaa5c65300 CR3: 0000000070af4000 CR4: 00000000003506f0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>  <TASK>
+>>  napi_schedule include/linux/netdevice.h:465 [inline]
+>>  wg_queue_enqueue_per_peer_rx drivers/net/wireguard/queueing.h:204 [inline]
+>>  wg_packet_decrypt_worker+0x408/0x5d0 drivers/net/wireguard/receive.c:510
+>>  process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+>>  worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+>>  kthread+0x2e9/0x3a0 kernel/kthread.c:377
+>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>>  </TASK>
 >
-> On Fri, 2022-03-18 at 17:16 -0700, Khazhismel Kumykov wrote:
-> > fsnotify_add_inode_mark may allocate with GFP_KERNEL, which may
-> > result
-> > in recursing back into nfsd, resulting in deadlock. See below stack.
-> >
-> > nfsd            D    0 1591536      2 0x80004080
-> > Call Trace:
-> >  __schedule+0x497/0x630
-> >  schedule+0x67/0x90
-> >  schedule_preempt_disabled+0xe/0x10
-> >  __mutex_lock+0x347/0x4b0
-> >  fsnotify_destroy_mark+0x22/0xa0
-> >  nfsd_file_free+0x79/0xd0 [nfsd]
-> >  nfsd_file_put_noref+0x7c/0x90 [nfsd]
-> >  nfsd_file_lru_dispose+0x6d/0xa0 [nfsd]
-> >  nfsd_file_lru_scan+0x57/0x80 [nfsd]
-> >  do_shrink_slab+0x1f2/0x330
-> >  shrink_slab+0x244/0x2f0
-> >  shrink_node+0xd7/0x490
-> >  do_try_to_free_pages+0x12f/0x3b0
-> >  try_to_free_pages+0x43f/0x540
-> >  __alloc_pages_slowpath+0x6ab/0x11c0
-> >  __alloc_pages_nodemask+0x274/0x2c0
-> >  alloc_slab_page+0x32/0x2e0
-> >  new_slab+0xa6/0x8b0
-> >  ___slab_alloc+0x34b/0x520
-> >  kmem_cache_alloc+0x1c4/0x250
-> >  fsnotify_add_mark_locked+0x18d/0x4c0
-> >  fsnotify_add_mark+0x48/0x70
-> >  nfsd_file_acquire+0x570/0x6f0 [nfsd]
-> >  nfsd_read+0xa7/0x1c0 [nfsd]
-> >  nfsd3_proc_read+0xc1/0x110 [nfsd]
-> >  nfsd_dispatch+0xf7/0x240 [nfsd]
-> >  svc_process_common+0x2f4/0x610 [sunrpc]
-> >  svc_process+0xf9/0x110 [sunrpc]
-> >  nfsd+0x10e/0x180 [nfsd]
-> >  kthread+0x130/0x140
-> >  ret_from_fork+0x35/0x40
-> >
-> > Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
-> > ---
-> >  fs/nfsd/filecache.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > Marking this RFC since I haven't actually had a chance to test this,
-> > we
-> > we're seeing this deadlock for some customers.
-> >
-> > diff --git a/fs/nfsd/filecache.c b/fs/nfsd/filecache.c
-> > index fdf89fcf1a0c..a14760f9b486 100644
-> > --- a/fs/nfsd/filecache.c
-> > +++ b/fs/nfsd/filecache.c
-> > @@ -121,6 +121,7 @@ nfsd_file_mark_find_or_create(struct nfsd_file
-> > *nf)
-> >         struct fsnotify_mark    *mark;
-> >         struct nfsd_file_mark   *nfm = NULL, *new;
-> >         struct inode *inode = nf->nf_inode;
-> > +       unsigned int pflags;
-> >
-> >         do {
-> >                 mutex_lock(&nfsd_file_fsnotify_group->mark_mutex);
-> > @@ -149,7 +150,10 @@ nfsd_file_mark_find_or_create(struct nfsd_file
-> > *nf)
-> >                 new->nfm_mark.mask = FS_ATTRIB|FS_DELETE_SELF;
-> >                 refcount_set(&new->nfm_ref, 1);
-> >
-> > +               /* fsnotify allocates, avoid recursion back into nfsd
-> > */
-> > +               pflags = memalloc_nofs_save();
-> >                 err = fsnotify_add_inode_mark(&new->nfm_mark, inode,
-> > 0);
-> > +               memalloc_nofs_restore(pflags);
-> >
-> >                 /*
-> >                  * If the add was successful, then return the object.
+> See if what was added in fbd9a2ceba5c ("net: Add lockdep asserts to ____napi_schedule().")
+> makes sense given irq disabled.
 >
-> Isn't that stack trace showing a slab direct reclaim, and not a
-> filesystem writeback situation?
+> Hillf
 >
-> Does memalloc_nofs_save()/restore() really fix this problem? It seems
-> to me that it cannot, particularly since knfsd is not a filesystem, and
-> so does not ever handle writeback of dirty pages.
+> #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/  e89600ebeeb1
+
+This crash does not have a reproducer. I cannot test it.
+
 >
-
-Maybe NOFS throttles direct reclaims to the point that the problem is
-harder to hit?
-
-This report came in at good timing for me.
-
-It demonstrates an issue I did not predict for "volatile"' fanotify marks [1].
-As far as I can tell, nfsd filecache is currently the only fsnotify backend that
-frees fsnotify marks in memory shrinker. "volatile" fanotify marks would also
-be evictable in that way, so they would expose fanotify to this deadlock.
-
-For the short term, maybe nfsd filecache can avoid the problem by checking
-mutex_is_locked(&nfsd_file_fsnotify_group->mark_mutex) and abort the
-shrinker. I wonder if there is a place for a helper mutex_is_locked_by_me()?
-
-Jan,
-
-A relatively simple fix would be to allocate fsnotify_mark_connector in
-fsnotify_add_mark() and free it, if a connector already exists for the object.
-I don't think there is a good reason to optimize away this allocation
-for the case of a non-first group to set a mark on an object?
-
-Thanks,
-Amir.
-
-
-
-[1] https://lore.kernel.org/linux-fsdevel/20220307155741.1352405-1-amir73il@gmail.com/
+> --- x/net/core/dev.c
+> +++ y/net/core/dev.c
+> @@ -4265,8 +4265,8 @@ static inline void ____napi_schedule(str
+>  {
+>  	struct task_struct *thread;
+>  
+> -	lockdep_assert_softirq_will_run();
+>  	lockdep_assert_irqs_disabled();
+> +	lockdep_assert_softirq_will_run();
+>  
+>  	if (test_bit(NAPI_STATE_THREADED, &napi->state)) {
+>  		/* Paired with smp_mb__before_atomic() in
+> --

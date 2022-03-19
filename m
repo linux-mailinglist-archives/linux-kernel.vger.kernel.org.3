@@ -2,164 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B7F4DE511
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 02:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BAF4DE520
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 03:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241780AbiCSBxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 18 Mar 2022 21:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
+        id S241804AbiCSCFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 18 Mar 2022 22:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234358AbiCSBxu (ORCPT
+        with ESMTP id S235982AbiCSCE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 18 Mar 2022 21:53:50 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23242BA3DF
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:52:29 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id kx13-20020a17090b228d00b001c6715c9847so7398109pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 18:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I2GCQYtNCvHneKPvqBxPgh7d4klDBlXKREmCz25G780=;
-        b=So2FKFlBbMD2uXtFKZMbtzcFA7RW/QQvMo7auHkc61XysLXkTxezMyrEYFonuuNa/s
-         K+iAOpT4cx+d4e4ligVQ9HTFGJ67kY8kUQaSPnOUFx4kSWVpFMO611LA7oB5jLihETNx
-         24JVPyKKIy/TnmXWkSJ+0yjs0GQ8No0A3QA4I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I2GCQYtNCvHneKPvqBxPgh7d4klDBlXKREmCz25G780=;
-        b=Yh1NvdpipnYImsteL4TFohrprk05e3s2A2N7XxQFCSux2+phAu4zhc7kjfLYETWtuK
-         JVYl14+Xac3dSXP6lj8Z7msa0AEDYFKS4WgqvkYepf/g9+J7K5e/+dHVGjy+jgXd930p
-         wdPer9Y6BOgklYyWN2d5ronj3rEPVb38YYrBZFHrBnt0Vu3VDiAPR8FiJ5Bfn2+5ESi0
-         pKL8nP1tRI4Fd5Ave5GYNrF1xMHaevTCEtNOniaJOKQGSB4AnG22OYExALMoudhkGYmf
-         vzE6s9rAeLbgCKaey/pHZdOi1vTY9tber1UC8Ica7otsihbLoSDKoRks1hchW202r4vZ
-         pIpA==
-X-Gm-Message-State: AOAM530Vta4its15HMF6cPWYEvXkGjv+J2x0NPBOno/ooyFhwjtcyG02
-        HqOdWUDQggg3gi6vWv8UNdlB6w==
-X-Google-Smtp-Source: ABdhPJydSlMDaH/0+OWuuH5oo0/PLeGUj3t9jjA3cCV/2EPN1v2GkZ/tWrwr4jUvProJ1Ai6yjCiQw==
-X-Received: by 2002:a17:903:41c7:b0:154:25bf:7d20 with SMTP id u7-20020a17090341c700b0015425bf7d20mr2270392ple.113.1647654749482;
-        Fri, 18 Mar 2022 18:52:29 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:bd64:9503:150c:fb20])
-        by smtp.gmail.com with UTF8SMTPSA id y34-20020a056a00182200b004f71c56a7e8sm10734724pfa.213.2022.03.18.18.52.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 18:52:28 -0700 (PDT)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v2] mmc: core: Set HS clock speed before sending HS CMD13
-Date:   Fri, 18 Mar 2022 18:52:22 -0700
-Message-Id: <20220318185139.v2.1.I484f4ee35609f78b932bd50feed639c29e64997e@changeid>
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+        Fri, 18 Mar 2022 22:04:57 -0400
+Received: from mail-4327.protonmail.ch (mail-4327.protonmail.ch [185.70.43.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA18D1207D9
+        for <linux-kernel@vger.kernel.org>; Fri, 18 Mar 2022 19:03:37 -0700 (PDT)
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        by mail-4321.protonmail.ch (Postfix) with ESMTPS id 4KL3pT4Zh1z4xx3L
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 01:54:25 +0000 (UTC)
+Authentication-Results: mail-4321.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="UYhvRppa"
+Date:   Sat, 19 Mar 2022 01:54:09 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail2; t=1647654861;
+        bh=+zmtPIV9tSSZgwxIVl/xkVQsn7YJY/XahHOFfrwoDrY=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=UYhvRppalZ8CuCT5vsLMgYUHwuFNe4KtGhTdp3GOAqBDJZcKiLrikt1BHvmDMCuvC
+         uqxEqG5IRxm0OI4sSQFrwrAqZVNXAhS8FTB8NsUAuZUnf0a6sNg7puKpgDBm/Om2V7
+         U+0ZLY59dOc6SvQ39rotoZKevG+jxYVpkWEHhtJNqgIp6PW9L+iTOfY0Rbo+F6ma/U
+         8OPcPJ/4XQTvKw2Ky6dPMQqU8YY84mdNtkxroJI1jjKs/eg85iflFy7U62IU3tBL4D
+         LTemHkpa5aKvCXp8+OMGLWGPpreDLOyLh+BZjf14eerPklEIKi19I5gML2c7s81fjO
+         kdmFRKnAbmhwQ==
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+From:   David Cohen <dacohen@pm.me>
+Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Reply-To: David Cohen <dacohen@pm.me>
+Subject: Re: [PATCH v2] PM: fix dynamic debug within pm_pr_debug()
+Message-ID: <YjU3sfYLcEqK1Usd@jiban.lan>
+In-Reply-To: <CAJZ5v0gqpQTuNN0WpnEd4dAQmnR=BXSoH_w7kkAxOG7xkftW6Q@mail.gmail.com>
+References: <20220312043624.40732-1-dacohen@pm.me> <CAJZ5v0gqpQTuNN0WpnEd4dAQmnR=BXSoH_w7kkAxOG7xkftW6Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Way back in commit 4f25580fb84d ("mmc: core: changes frequency to
-hs_max_dtr when selecting hs400es"), Rockchip engineers noticed that
-some eMMC don't respond to SEND_STATUS commands very reliably if they're
-still running at a low initial frequency. As mentioned in that commit,
-JESD84-B51 P49 suggests a sequence in which the host:
-1. sets HS_TIMING
-2. bumps the clock ("<= 52 MHz")
-3. sends further commands
+On Thu, Mar 17, 2022 at 02:45:11PM +0100, Rafael J. Wysocki wrote:
+> On Sat, Mar 12, 2022 at 5:37 AM David Cohen <dacohen@pm.me> wrote:
+> >
+> > Currently, pm_pr_debug() and pm_deferred_pr_debug() use __pm_pr_debug()
+> > to filter pm debug messages based on pm_debug_messages_on flag.
+> > According to __pm_pr_debug() implementation, pm_deferred_pr_debug()
+> > indirectly calls printk_deferred() within __pm_pr_debug() which doesn't
+> > support dynamic debug, but pm_pr_debug() indirectly calls pr_debug()
+>
+> I'm not sure what you mean by pm_pr_debug().  There's no such thing in
+> the kernel tree.
+>
+> Assuming that it means pm_pr_dbg(), it doesn't call pr_debug():
 
-It doesn't exactly require that we don't use a lower-than-52MHz
-frequency, but in practice, these eMMC don't like it.
+Yeah, I apologize for the typo. I meant pm_pr_dbg(). I can fix that if
+you're ok with the patch as per comments below.
 
-The aforementioned commit tried to get that right for HS400ES, although
-it's unclear whether this ever truly worked as committed into mainline,
-as other changes/refactoring adjusted the sequence in conflicting ways:
+>
+> #define pm_pr_dbg(fmt, ...) __pm_pr_dbg(false, fmt, ##__VA_ARGS__)
+>
+> and
+>
+> void __pm_pr_dbg(bool defer, const char *fmt, ...)
+> {
+> ...
+>         if (defer)
+>                printk_deferred(KERN_DEBUG "PM: %pV", &vaf);
+>         else
+>                printk(KERN_DEBUG "PM: %pV", &vaf);
+>
+> And as I said printk(KERN_DEBUG ...) is not equivalent to
+> pr_debug(...), because it is not dynamic printk().
 
-08573eaf1a70 ("mmc: mmc: do not use CMD13 to get status after speed mode
-switch")
+The problem is not about __pm_pr_dbg() calling printk(). The problem is
+the pm files that used to call pr_debug() were modified to call
+pm_pr_dbg() in order to be behing the pm_debug_messages_on flag, as per
+this commit:
+8d8b2441db96 PM / sleep: Do not print debug messages by default
 
-53e60650f74e ("mmc: core: Allow CMD13 polling when switching to HS mode
-for mmc")
+That's the moment dynamic debug was no longer available for kernel pm files=
+.
 
-In any case, today we do step 3 before step 2. Let's fix that, and also
-apply the same logic to HS200/400, where this eMMC has problems too.
+>
+> pm_pr_dbg() is not dynamic printk() on purpose, so they both can be
+> controlled independently.
 
-Resolves errors like this seen when booting some RK3399 Gru/Scarlet
-systems:
+The current solution is all or nothing (using pm_debug_messages_on). The
+patch I'm sending is making dynamic debug available on the kernel pm
+files, while still allowing the pm_debug_messages_on flag to work
+independently.
 
-[    2.058881] mmc1: CQHCI version 5.10
-[    2.097545] mmc1: SDHCI controller on fe330000.mmc [fe330000.mmc] using ADMA
-[    2.209804] mmc1: mmc_select_hs400es failed, error -84
-[    2.215597] mmc1: error -84 whilst initialising MMC card
-[    2.417514] mmc1: mmc_select_hs400es failed, error -110
-[    2.423373] mmc1: error -110 whilst initialising MMC card
-[    2.605052] mmc1: mmc_select_hs400es failed, error -110
-[    2.617944] mmc1: error -110 whilst initialising MMC card
-[    2.835884] mmc1: mmc_select_hs400es failed, error -110
-[    2.841751] mmc1: error -110 whilst initialising MMC card
-
-Fixes: 08573eaf1a70 ("mmc: mmc: do not use CMD13 to get status after speed mode switch")
-Fixes: 53e60650f74e ("mmc: core: Allow CMD13 polling when switching to HS mode for mmc")
-Fixes: 4f25580fb84d ("mmc: core: changes frequency to hs_max_dtr when selecting hs400es")
-Cc: Shawn Lin <shawn.lin@rock-chips.com>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
-
-Changes in v2:
- * Use ext_csd.hs200_max_dtr for HS200
- * Retest on top of 3b6c472822f8 ("mmc: core: Improve fallback to speed
-   modes if eMMC HS200 fails")
-
- drivers/mmc/core/mmc.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/mmc/core/mmc.c b/drivers/mmc/core/mmc.c
-index e7ea45386c22..b75fa4b67964 100644
---- a/drivers/mmc/core/mmc.c
-+++ b/drivers/mmc/core/mmc.c
-@@ -1385,12 +1385,17 @@ static int mmc_select_hs400es(struct mmc_card *card)
- 	}
- 
- 	mmc_set_timing(host, MMC_TIMING_MMC_HS);
-+
-+	/*
-+	 * Bump to HS frequency. Some cards don't handle SEND_STATUS reliably
-+	 * at the initial frequency.
-+	 */
-+	mmc_set_clock(host, card->ext_csd.hs_max_dtr);
-+
- 	err = mmc_switch_status(card, true);
- 	if (err)
- 		goto out_err;
- 
--	mmc_set_clock(host, card->ext_csd.hs_max_dtr);
--
- 	/* Switch card to DDR with strobe bit */
- 	val = EXT_CSD_DDR_BUS_WIDTH_8 | EXT_CSD_BUS_WIDTH_STROBE;
- 	err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
-@@ -1482,6 +1487,12 @@ static int mmc_select_hs200(struct mmc_card *card)
- 		old_timing = host->ios.timing;
- 		mmc_set_timing(host, MMC_TIMING_MMC_HS200);
- 
-+		/*
-+		 * Bump to HS200 frequency. Some cards don't handle SEND_STATUS
-+		 * reliably at the initial frequency.
-+		 */
-+		mmc_set_clock(host, card->ext_csd.hs200_max_dtr);
-+
- 		/*
- 		 * For HS200, CRC errors are not a reliable way to know the
- 		 * switch failed. If there really is a problem, we would expect
--- 
-2.35.1.894.gb6a874cedc-goog
+Regards, David
 

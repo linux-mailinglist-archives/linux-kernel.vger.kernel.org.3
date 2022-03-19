@@ -2,110 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D584DE7A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 12:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6AF4DE7A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 12:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242815AbiCSLjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 07:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
+        id S242822AbiCSLlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 07:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbiCSLjj (ORCPT
+        with ESMTP id S237574AbiCSLlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 07:39:39 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AE586E16;
-        Sat, 19 Mar 2022 04:38:17 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 094082223B;
-        Sat, 19 Mar 2022 12:38:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647689895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zmfB9xFrYldmqq1FLPQ4/Iztnp51kdC7eGjZLGK9R9I=;
-        b=nK72s+a+CriFy2uCBz7cVC/oV2dJ7STsg5K6+FvOMXhbU9OHAvyFezhKJEonlNukjIE/At
-        iOXENIVw/Ky8/ukxJLQk4qnF9236PXkZDjyKrMEr+u4yWjrEg/Q+8XVa+s9iLb4n4DtONH
-        11Plc7zM79jDmEgGlak5dmfX2BOKI3A=
+        Sat, 19 Mar 2022 07:41:05 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B86199EDA
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 04:39:45 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id c15so14247214ljr.9
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 04:39:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y5rb/Yqi5NN7XZ/MmiRVeK5TPw9M1I0RZCaA66Lu/5w=;
+        b=KAPBlkaGiCLm9fcSwqKhNljOouS1ZmsBfDXkobBg2aZkvyDAqe8q+MXw+oNH5r+VY8
+         3PQZAK48cKbABd9QS5gKUCURdcgo/lnSbHky5A5WTjTcylzSAQwzHM1E3CoGNyW4H4/Z
+         laOJCo8vmhbk0lQa6l6Le4b72IbETDg9kr60QlgfXcEKoxdcxzJ6NWK5GmuMfjzNHVDw
+         4QO06SbphYbjVAc+wglXcHVEQhuiu6y05BShmHMBvdVy9muQsZ9ZL2x86maRI8hONtVP
+         2PbTrD3ckJRvwXWlZIKgywjJiIQy2QBq6ivPPezlX+ItzMcs6RtMABkG78DodSnj+w+I
+         p56Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y5rb/Yqi5NN7XZ/MmiRVeK5TPw9M1I0RZCaA66Lu/5w=;
+        b=makLR3RinEaL5Qi7Rry92lYm/sowwvkJAS1qikMELtS0kriZzYNLJBgLBTB4scJG4/
+         WMeTiC4OEkbkS7wGKyzF92yRJZW6Q/DoFYy35RB9y30CgyafJi/GQZagkDMW3VgTbp/j
+         QNhD6wzy7pZbkrWSb3ON74t595h7BfqHzfNLxYhn4rC7P7ndexT0rZni8RDb4b5wKX04
+         6GkL6KMN+tK9Yv7b5eWWQOSA4xvh1wuBtf57/9chTYSwbhIRJyNJ9gvoCGvDaab80IH5
+         nNgafyVH5Ctkt581CQM9Ta+EQiIBAPv5fvmQ1p4M9P1hDkjmeQ9vkkna+5jAyCWzIZcs
+         RoGA==
+X-Gm-Message-State: AOAM530uhBHwYib0mtPK6xIDDcQFJOw4B9/jCR3n+In4yH+9fnhXfueN
+        XPum4CRkIMqj8imv7Ad4ln4tQRbhWKbrcSEpDFqE/w==
+X-Google-Smtp-Source: ABdhPJzROACa86AklSBYVBypFM4Wj7ORn2S6CpOACIDdXjNIhVDWVaICxTHt7pGEUv8kGzRGnNVXg/ZQKN8a8lgOiUE=
+X-Received: by 2002:a05:651c:2123:b0:247:e3b1:da81 with SMTP id
+ a35-20020a05651c212300b00247e3b1da81mr9197167ljq.34.1647689983405; Sat, 19
+ Mar 2022 04:39:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Sat, 19 Mar 2022 12:38:14 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Quentin Schulz <quentin.schulz@bootlin.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 7/8] ARM: dts: lan9662-pcb8291: fix pinctrl node name
-In-Reply-To: <cf2a6d1a-bf98-e382-2623-e44e5979ca29@gmail.com>
-References: <20220318202547.1650687-1-michael@walle.cc>
- <20220318202547.1650687-8-michael@walle.cc>
- <cf2a6d1a-bf98-e382-2623-e44e5979ca29@gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <e7467fe3a8dae5f5af84d595a0c4ab16@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220317035542.272547-1-apatel@ventanamicro.com>
+ <f1079093-54db-bd20-3342-b06d069c5d1f@codethink.co.uk> <CAK8P3a0Gt7TOT2zpNw7YNR=MNLBWVAADL5dBgY15ZL8sDW20HQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a0Gt7TOT2zpNw7YNR=MNLBWVAADL5dBgY15ZL8sDW20HQ@mail.gmail.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Sat, 19 Mar 2022 17:09:31 +0530
+Message-ID: <CAK9=C2XGgfEZ890DgKmPXKw7=1BjnP-2L+_bpx+efX_rnw=_Nw@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: Increase range and default value of NR_CPUS
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Ben Dooks <ben.dooks@codethink.co.uk>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Mar 18, 2022 at 8:44 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Mar 18, 2022 at 3:46 PM Ben Dooks <ben.dooks@codethink.co.uk> wrote:
+> >
+> > On 17/03/2022 03:55, Anup Patel wrote:
+> > > Currently, the range and default value of NR_CPUS is too restrictive
+> > > for high-end RISC-V systems with large number of HARTs. The latest
+> > > QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
+> > > restrictive for QEMU as well.
+>
+> If qemu allows 512, what is the reason for limiting the kernel to 256?
 
-Am 2022-03-19 09:24, schrieb Sergei Shtylyov:
-> Hello!
-> 
-> On 3/18/22 11:25 PM, Michael Walle wrote:
-> 
->> The pinctrl device tree binding will be converted to YAML format. All
->> the pin nodes should end with "-pins". Fix them.
-> 
->    It does end with "pins" already, right?
+There is no particular reason. I will change this to 2-512 range to match
+the maximum number of CPUs supported by the QEMU virt machine.
 
-It ends with "_pins". Please note the underscore.
+>
+> > > Other major architectures (such as
+> > > ARM64, x86_64, MIPS, etc) have a much higher range and default
+> > > value of NR_CPUS.
+> >
+> > What's the memory overhead for increasing this?
+>
+> It's supposed to be very small, I would expect three main sources of overhead:
+>
+> - cpumask_t variables, those grow once you go beyond the size of
+>    an unsigned long (32 or 64 bits), so with the default just on the limit, this
+>    makes no difference.
+>    Note that you can run out of stack space with NR_CPUS values if
+>    CONFIG_CPUMASK_OFFSTACK is disabled. Should not be
+>    a problem for 512 or below.
 
->> Fixes: 290deaa10c50 ("ARM: dts: add DT for lan966 SoC and 2-port board 
->> pcb8291")
->> Signed-off-by: Michael Walle <michael@walle.cc>
->> ---
->>  arch/arm/boot/dts/lan966x-pcb8291.dts | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts 
->> b/arch/arm/boot/dts/lan966x-pcb8291.dts
->> index 3281af90ac6d..3c7e3a7d6f14 100644
->> --- a/arch/arm/boot/dts/lan966x-pcb8291.dts
->> +++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
->> @@ -35,7 +35,7 @@ fc3_b_pins: fcb3-spi-pins {
->>  		function = "fc3_b";
->>  	};
->> 
->> -	can0_b_pins:  can0_b_pins {
->> +	can0_b_pins:  can0-b-pins {
-> 
->    Mhm, I can't even see what is changed here... :-/
+Yes, the rationale is to have default NR_CPUS such that size of
+cpumask_t does not change for RV32 and RV64.
 
-The name of the node, s/_/-/
+>
+> - percpu variables: these are dynamically allocated based on the number of
+>   CPUs at boot time, so they should not have any real impact.
+>
+> - NR_CPUS sized arrays, these are sometimes used in place of
+>   percpu data. This is only a problem if the array members individually
+>   are more than a few bytes. There are not too many of these in the kernel,
+>   as using those is discouraged.
 
--michael
+Separately, we are also trying to replace NR_CPUS sized arrays.
+
+Regards,
+Anup

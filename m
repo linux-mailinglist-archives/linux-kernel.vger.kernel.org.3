@@ -2,225 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413454DE9F6
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 19:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1282C4DEA00
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 19:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243860AbiCSSMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 14:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
+        id S243862AbiCSSVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 14:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243839AbiCSSMB (ORCPT
+        with ESMTP id S242170AbiCSSVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 14:12:01 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FE891370;
-        Sat, 19 Mar 2022 11:10:40 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id q5so284402plg.3;
-        Sat, 19 Mar 2022 11:10:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=JwC7vhtQbQObnQh1/kjr7PyY5SjPha1pc6pp5W08Wzc=;
-        b=f8X9UI5vPpI5KvEnKtInL9ihdzjDL/TKiV+XaaUynfbej3n+Ep9wvdwkAZp9r80B6d
-         NBYI+MGJ9nfNlCEe+xK2yhKn0x8zaEnlsDWRzT9pHClrVXHV359KC3U99HGA1G5QacVb
-         qyAdT+t6f43tO/+bCChrO/3h3VS5GQPr9pYMj4wqTMZw/z9H4E1Uy0yVc2f/YxarcdtB
-         r/Z69wrQLySRmyX53rtMRc1E+klIZL3VrPkYLH1zNj4tLTPEBLLIldL/bNICMxzCm+dH
-         G+BM+NXk9YnOCRbl+WbompKhGHDAXxj17mYo9llhQYdL6yyotqufQJCb647v6UZCjPLu
-         ic4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=JwC7vhtQbQObnQh1/kjr7PyY5SjPha1pc6pp5W08Wzc=;
-        b=1uhc3kXsdBs9v3w7c5VwWkDQKDKWundpyeW8PzysXNdKWH7J6/lQF6eht+l6tIzziu
-         0wrl+p32nivFEZf5HtFuqFwnnQiR/qMkglcQYg07Mp8yr01DaRNMu4Fnxq95CuAWehrS
-         FWUzQ9mTHT7yQ2GNJ3Xc6r0u4dm+TkSq2nIPCZc8cuWRsAs5s16b1Lu5DdDrUtoxjhVM
-         TgzWHxCB8ZHyq7MZXNfoYB1qrt91zPLimuKGq1TX2RrK/URaq8lP7XcW/zLf3ucs6p8n
-         Ucy5kFVkfyMzUWZrfkt5j8BDBR1En+CdjApu78QwCKppLH9rEKkYBDRZNlSGytOD8R2z
-         Yc4w==
-X-Gm-Message-State: AOAM5300D/WPH7sWgfwPicB9Cgb5Ko4IynNNJx8KoZQsbzbB4ZtFhy5O
-        r+GMlmjrfTeLaMTqTZmRgf8=
-X-Google-Smtp-Source: ABdhPJz6dHl3t4bQ8bYv8ZaZRf9mtLo7QrIeDaZ/MxGeuGi1Q5Lnb4Aikd04XGALFuQoZR7Hl4CjtA==
-X-Received: by 2002:a17:902:c745:b0:151:e8fa:629b with SMTP id q5-20020a170902c74500b00151e8fa629bmr5443495plq.90.1647713440059;
-        Sat, 19 Mar 2022 11:10:40 -0700 (PDT)
-Received: from localhost.localdomain ([115.99.145.231])
-        by smtp.gmail.com with ESMTPSA id nu4-20020a17090b1b0400b001bf497a9324sm16413981pjb.31.2022.03.19.11.10.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 11:10:39 -0700 (PDT)
-From:   Jagath Jog J <jagathjog1996@gmail.com>
-To:     dan@dlrobertson.com, jic23@kernel.org, andy.shevchenko@gmail.com
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 5/5] iio: accel: bma400: Add step change event
-Date:   Sat, 19 Mar 2022 23:40:23 +0530
-Message-Id: <20220319181023.8090-6-jagathjog1996@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220319181023.8090-1-jagathjog1996@gmail.com>
-References: <20220319181023.8090-1-jagathjog1996@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 19 Mar 2022 14:21:08 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B3919A558
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 11:19:46 -0700 (PDT)
+Received: from [192.168.1.101] (abxi119.neoplus.adsl.tpnet.pl [83.9.2.119])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id A90313F696;
+        Sat, 19 Mar 2022 19:19:44 +0100 (CET)
+Message-ID: <7575fca0-28dd-427c-022f-6087fbd7a34b@somainline.org>
+Date:   Sat, 19 Mar 2022 19:19:44 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 09/15] arm64: dts: qcom: msm8992-libra: Fix up the
+ framebuffer
+Content-Language: en-US
+To:     ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220319174645.340379-1-konrad.dybcio@somainline.org>
+ <20220319174645.340379-10-konrad.dybcio@somainline.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220319174645.340379-10-konrad.dybcio@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added support for event when there is a detection of single step
-or double step change. INT1 pin is used to interrupt and event
-is pushed to userspace.
 
-Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
+
+On 19.03.2022 18:46, Konrad Dybcio wrote:
+> Make sure the necessary clocks are kept on after clk_cleanup (until MDSS
+> is properly handled by its own driver) and touch up the fb address to
+> prevent some weird shifting. It's still not perfect, but at least the
+> kernel log doesn't start a third deep into your screen..
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+>  .../arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
+> index e638fc489539..4e06641eb384 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
+> +++ b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
+> @@ -29,13 +29,25 @@ chosen {
+>  		#size-cells = <2>;
+>  		ranges;
+>  
+> -		framebuffer0: framebuffer@3404000 {
+> +		framebuffer0: framebuffer@3403f48 {
+Actually it turns out that 0x3400000 should be the address here and 2 lines below,
+instead of 0x3403f48 (thanks Stephan & lk2nd!)..
+
+If you don't mind this janky way of sending a fixup patch (resending a series of 15 seems a bit over the top), here's the fixed version:
+
+
+
+From e01cb8b11d42e5885998faca3964b029563174e8 Mon Sep 17 00:00:00 2001
+From: Konrad Dybcio <konrad.dybcio@somainline.org>
+Date: Sat, 19 Mar 2022 17:32:25 +0100
+Subject: [PATCH] arm64: dts: qcom: msm8992-libra: Fix up the framebuffer
+
+Make sure the necessary clocks are kept on after clk_cleanup (until MDSS
+is properly handled by its own driver) and touch up the fb address to
+prevent some weird shifting.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 ---
- drivers/iio/accel/bma400.h      |  2 +
- drivers/iio/accel/bma400_core.c | 72 +++++++++++++++++++++++++++++++++
- 2 files changed, 74 insertions(+)
+ .../arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iio/accel/bma400.h b/drivers/iio/accel/bma400.h
-index 65bbc80cbb7f..c833119bb42e 100644
---- a/drivers/iio/accel/bma400.h
-+++ b/drivers/iio/accel/bma400.h
-@@ -39,6 +39,7 @@
- #define BMA400_INT_STAT0_REG        0x0e
- #define BMA400_INT_STAT1_REG        0x0f
- #define BMA400_INT_STAT2_REG        0x10
-+#define BMA400_INT12_MAP_REG	    0x23
+diff --git a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
+index e638fc489539..7748b745a5df 100644
+--- a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
++++ b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
+@@ -29,13 +29,25 @@ chosen {
+                #size-cells = <2>;
+                ranges;
  
- /* Temperature register */
- #define BMA400_TEMP_DATA_REG        0x11
-@@ -54,6 +55,7 @@
- #define BMA400_STEP_CNT3_REG        0x17
- #define BMA400_STEP_STAT_REG        0x18
- #define BMA400_STEP_INT_MSK         BIT(0)
-+#define BMA400_STEP_STAT_MASK	    GENMASK(1, 0)
+-               framebuffer0: framebuffer@3404000 {
++               framebuffer0: framebuffer@3400000 {
+                        compatible = "simple-framebuffer";
+-                       reg = <0 0x3404000 0 (1080 * 1920 * 3)>;
++                       reg = <0 0x3400000 0 (1080 * 1920 * 3)>;
+                        width = <1080>;
+                        height = <1920>;
+                        stride = <(1080 * 3)>;
+                        format = "r8g8b8";
++                       /*
++                        * That's a lot of clocks, but it's necessary due
++                        * to unused clk cleanup & no panel driver yet..
++                        */
++                       clocks = <&mmcc MDSS_AHB_CLK>,
++                                <&mmcc MDSS_AXI_CLK>,
++                                <&mmcc MDSS_VSYNC_CLK>,
++                                <&mmcc MDSS_MDP_CLK>,
++                                <&mmcc MDSS_BYTE0_CLK>,
++                                <&mmcc MDSS_PCLK0_CLK>,
++                                <&mmcc MDSS_ESC0_CLK>;
++                       power-domains = <&mmcc MDSS_GDSC>;
+                };
+        };
  
- /*
-  * Read-write configuration registers
-diff --git a/drivers/iio/accel/bma400_core.c b/drivers/iio/accel/bma400_core.c
-index 305643e99eb5..79321e41df51 100644
---- a/drivers/iio/accel/bma400_core.c
-+++ b/drivers/iio/accel/bma400_core.c
-@@ -26,6 +26,7 @@
- #include <linux/iio/trigger.h>
- #include <linux/iio/triggered_buffer.h>
- #include <linux/iio/trigger_consumer.h>
-+#include <linux/iio/events.h>
- 
- #include "bma400.h"
- 
-@@ -69,6 +70,7 @@ struct bma400_data {
- 	int scale;
- 	struct iio_trigger *trig;
- 	int steps_enabled;
-+	bool step_event_en;
- 	/* Correct time stamp alignment */
- 	struct {
- 		__be16 buff[3];
-@@ -166,6 +168,12 @@ static const struct iio_chan_spec_ext_info bma400_ext_info[] = {
- 	{ }
- };
- 
-+static const struct iio_event_spec bma400_step_detect_event = {
-+	.type = IIO_EV_TYPE_CHANGE,
-+	.dir = IIO_EV_DIR_NONE,
-+	.mask_separate = BIT(IIO_EV_INFO_ENABLE),
-+};
-+
- #define BMA400_ACC_CHANNEL(_index, _axis) { \
- 	.type = IIO_ACCEL, \
- 	.modified = 1, \
-@@ -208,6 +216,8 @@ static const struct iio_chan_spec bma400_channels[] = {
- 		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED) |
- 				      BIT(IIO_CHAN_INFO_ENABLE),
- 		.scan_index = -1, /* No buffer support */
-+		.event_spec = &bma400_step_detect_event,
-+		.num_event_specs = 1,
- 	},
- 
- 	IIO_CHAN_SOFT_TIMESTAMP(4),
-@@ -858,6 +868,59 @@ static int bma400_write_raw_get_fmt(struct iio_dev *indio_dev,
- 	}
- }
- 
-+static int bma400_read_event_config(struct iio_dev *indio_dev,
-+				    const struct iio_chan_spec *chan,
-+				    enum iio_event_type type,
-+				    enum iio_event_direction dir)
-+{
-+	struct bma400_data *data = iio_priv(indio_dev);
-+
-+	switch (chan->type) {
-+	case IIO_STEPS:
-+		switch (type) {
-+		case IIO_EV_TYPE_CHANGE:
-+			return data->steps_enabled;
-+		default:
-+			return -EINVAL;
-+		}
-+	default:
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+static int bma400_write_event_config(struct iio_dev *indio_dev,
-+				     const struct iio_chan_spec *chan,
-+				     enum iio_event_type type,
-+				     enum iio_event_direction dir, int state)
-+{
-+	int ret;
-+	struct bma400_data *data = iio_priv(indio_dev);
-+
-+	switch (chan->type) {
-+	case IIO_STEPS:
-+		switch (type) {
-+		case IIO_EV_TYPE_CHANGE:
-+			mutex_lock(&data->mutex);
-+			ret = regmap_update_bits(data->regmap,
-+						 BMA400_INT12_MAP_REG,
-+						 BMA400_STEP_INT_MSK,
-+						 FIELD_PREP(BMA400_STEP_INT_MSK,
-+							    state));
-+			mutex_unlock(&data->mutex);
-+			if (ret)
-+				return ret;
-+			data->steps_enabled = state;
-+			return 0;
-+		default:
-+			return -EINVAL;
-+		}
-+	default:
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
- static int bma400_data_rdy_trigger_set_state(struct iio_trigger *trig,
- 					     bool state)
- {
-@@ -890,6 +953,8 @@ static const struct iio_info bma400_info = {
- 	.read_avail        = bma400_read_avail,
- 	.write_raw         = bma400_write_raw,
- 	.write_raw_get_fmt = bma400_write_raw_get_fmt,
-+	.read_event_config = bma400_read_event_config,
-+	.write_event_config = bma400_write_event_config,
- };
- 
- static const struct iio_trigger_ops bma400_trigger_ops = {
-@@ -945,6 +1010,13 @@ static irqreturn_t bma400_interrupt(int irq, void *private)
- 	if (status & BMA400_INT_DRDY_MSK)
- 		iio_trigger_poll_chained(data->trig);
- 
-+	if (status & (BMA400_STEP_STAT_MASK << 8)) {
-+		iio_push_event(indio_dev,
-+			       IIO_EVENT_CODE(IIO_STEPS, 0, IIO_NO_MOD,
-+					      IIO_EV_DIR_NONE,
-+					      IIO_EV_TYPE_CHANGE, 0, 0, 0),
-+			       iio_get_time_ns(indio_dev));
-+		}
- out:
- 	return IRQ_HANDLED;
- }
 -- 
-2.17.1
-
+2.35.1

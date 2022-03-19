@@ -2,92 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D604DE936
-	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 17:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A354DE933
+	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 17:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243597AbiCSQMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 12:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S243588AbiCSQFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 12:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239355AbiCSQML (ORCPT
+        with ESMTP id S239355AbiCSQFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 12:12:11 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DBF3D1F0;
-        Sat, 19 Mar 2022 09:10:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647706250; x=1679242250;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jT2K8DJWA+z2Zz3dGYKXYccoMAG+5tTycAaznfXpHQA=;
-  b=Vuo4BX2e+bqRWw8DJNA81ot5CibUPZSiUTYjiH0JDdSwRmw37xKXtAHM
-   Ko/GQyBylP2XLSc/7wcfS10kUxhdzc0zkXYmu4JtuzpGn6oK1IpBvwGsF
-   8l9XsotLdZ2RO/49CgXa/NboMd/IeA1THOLw6JLu6jpruy+RlQqggtzeb
-   Y1Ulkmo49LuPjr2FKHj3FinBuc7jLVXr7MWMhcB4YjwIrwHn4ZV253eip
-   da7Y8ieWG9GFr1G+uaMxAd7h1bH1d0L7cR0TDcK2iWl30ubjE4ha1WwSN
-   fchURRw0a5ym6jt2p3/sM4V8dvyhnflSe0rhAsBgXjfq1U9J2yAg4AzFn
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="239469487"
-X-IronPort-AV: E=Sophos;i="5.90,194,1643702400"; 
-   d="scan'208";a="239469487"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 09:10:50 -0700
-X-IronPort-AV: E=Sophos;i="5.90,194,1643702400"; 
-   d="scan'208";a="715921144"
-Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314) ([10.237.222.76])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 09:10:47 -0700
-Date:   Sat, 19 Mar 2022 16:10:38 +0000
-From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        marco.chiappero@intel.com, fiona.trahe@intel.com,
-        wojciech.ziemba@intel.com, qat-linux@intel.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: qat: Fix unsigned comparison with less than zero
-Message-ID: <YjYAfqkhjeDD+glJ@silpixa00400314>
-References: <1647569459-18376-1-git-send-email-baihaowen@meizu.com>
+        Sat, 19 Mar 2022 12:05:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43731D2532;
+        Sat, 19 Mar 2022 09:04:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7307FB80D77;
+        Sat, 19 Mar 2022 16:04:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45679C340EC;
+        Sat, 19 Mar 2022 16:04:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647705851;
+        bh=aBAvLOR8rDN70mh20uxHrqjsroR6gpSJwnuy4ZCVi0M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ArMOBI7g2kqxYWB68e590jwwf5oXoYoYNe3T/u7qXxHoLaBFIXUxF4soI3rkjQFTY
+         xj9YKzXE6ellrF7kcfdNE7UTRe2Da+9lHyRKwFUG6DKwSz+E8q4fnZODUTYGU2R7jA
+         c+s+6EP6xJvVoHjmKzzne7M9ei7zZ4DZyxizZHzuTMdZjHC9KTpQ6BIhDPtwi9W9fn
+         mdoSoB3vzmg2ZPgjXwB6x2Aw5Gqs/cOmA8o6OTUiDIFyjxv1NJmd59B65nFjIEuWIK
+         iLRJ4LW7xoCqMNBBdQA6da1prK3O0xdD6VqR1rX9q0KZfuOjWY8PRT6/4TtudAgvsg
+         3iNVaKOE8Og8w==
+Date:   Sat, 19 Mar 2022 16:11:35 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     <alexandru.tachici@analog.com>
+Cc:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 6/8] iio: adc: ad7192: add sequencer support
+Message-ID: <20220319161135.5c7153e7@jic23-huawei>
+In-Reply-To: <20220318162722.51215-7-alexandru.tachici@analog.com>
+References: <20220318162722.51215-1-alexandru.tachici@analog.com>
+        <20220318162722.51215-7-alexandru.tachici@analog.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1647569459-18376-1-git-send-email-baihaowen@meizu.com>
-Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
- Collinstown Industrial Park, Leixlip, County Kildare - Ireland
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 10:10:59AM +0800, Haowen Bai wrote:
-> drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c:67:5-8: WARNING: Unsigned expression compared with zero: ret < 0
+On Fri, 18 Mar 2022 18:27:20 +0200
+<alexandru.tachici@analog.com> wrote:
+
+> From: Alexandru Tachici <alexandru.tachici@analog.com>
 > 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> Add sequencer support for AD7192.
+> 
+> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
 > ---
->  drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/iio/adc/ad7192.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c b/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c
-> index 6d10edc..0143835 100644
-> --- a/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c
-> +++ b/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c
-> @@ -52,7 +52,7 @@ static const char *const dev_cfg_services[] = {
->  static int get_service_enabled(struct adf_accel_dev *accel_dev)
->  {
->  	char services[ADF_CFG_MAX_VAL_LEN_IN_BYTES] = {0};
-> -	u32 ret;
-> +	s32 ret;
+> diff --git a/drivers/iio/adc/ad7192.c b/drivers/iio/adc/ad7192.c
+> index adff6472e075..e59753c61274 100644
+> --- a/drivers/iio/adc/ad7192.c
+> +++ b/drivers/iio/adc/ad7192.c
+> @@ -58,7 +58,8 @@
+>  /* Mode Register Bit Designations (AD7192_REG_MODE) */
+>  #define AD7192_MODE_SEL(x)	(((x) & 0x7) << 21) /* Operation Mode Select */
+>  #define AD7192_MODE_SEL_MASK	(0x7 << 21) /* Operation Mode Select Mask */
+> -#define AD7192_MODE_DAT_STA	BIT(20) /* Status Register transmission */
+> +#define AD7192_MODE_STA(x)	(((x) & 0x1) << 20) /* Status Register transmission */
+> +#define AD7192_MODE_STA_MASK	BIT(20) /* Status Register transmission Mask */
+>  #define AD7192_MODE_CLKSRC(x)	(((x) & 0x3) << 18) /* Clock Source Select */
+>  #define AD7192_MODE_SINC3	BIT(15) /* SINC3 Filter Select */
+>  #define AD7192_MODE_ACX		BIT(14) /* AC excitation enable(AD7195 only)*/
+> @@ -288,12 +289,25 @@ static int ad7192_set_mode(struct ad_sigma_delta *sd,
+>  	return ad_sd_write_reg(&st->sd, AD7192_REG_MODE, 3, st->mode);
+>  }
 >  
->  	ret = adf_cfg_get_param_value(accel_dev, ADF_GENERAL_SEC,
->  				      ADF_SERVICES_ENABLED, services);
-A fix for this is already in the cryptodev tree:
-    844318dfd31f ("crypto: qat - fix a signedness bug in get_service_enabled()")
+> +static int ad7192_append_status(struct ad_sigma_delta *sd, bool append)
+> +{
+> +	struct ad7192_state *st = ad_sigma_delta_to_ad7192(sd);
+> +
+> +	st->mode &= ~AD7192_MODE_STA_MASK;
+> +	st->mode |= AD7192_MODE_STA(append);
+> +
+Another case where I would prefer the state cache be updated after the write
+succeeds unless there is some reason that doesn't make sense.
+
++ Swash patch 8 into this one so we don't leave a broken driver inbetween.
 
 Thanks,
 
--- 
-Giovanni
+Jonathan
+
+> +	return ad_sd_write_reg(&st->sd, AD7192_REG_MODE, 3, st->mode);
+> +}
+> +
+>  static const struct ad_sigma_delta_info ad7192_sigma_delta_info = {
+>  	.set_channel = ad7192_set_channel,
+> +	.append_status = ad7192_append_status,
+>  	.set_mode = ad7192_set_mode,
+>  	.has_registers = true,
+>  	.addr_shift = 3,
+>  	.read_mask = BIT(6),
+> +	.status_ch_mask = GENMASK(3, 0),
+> +	.num_slots = 4,
+>  	.irq_flags = IRQF_TRIGGER_FALLING,
+>  };
+>  
+

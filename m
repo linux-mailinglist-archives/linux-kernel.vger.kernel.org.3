@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2895E4E1CC0
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 17:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314F34E1CB3
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 17:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245541AbiCTQ36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 12:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
+        id S245531AbiCTQ3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 12:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245469AbiCTQ3i (ORCPT
+        with ESMTP id S245468AbiCTQ3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 20 Mar 2022 12:29:38 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EA034641;
-        Sun, 20 Mar 2022 09:28:14 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id o30-20020a05600c511e00b0038c9cfb79cbso459452wms.1;
-        Sun, 20 Mar 2022 09:28:14 -0700 (PDT)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C64F344DC;
+        Sun, 20 Mar 2022 09:28:15 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id r190-20020a1c2bc7000000b0038a1013241dso7237256wmr.1;
+        Sun, 20 Mar 2022 09:28:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=8P3wAYvgFlPve71dG0z5aPiI1G8WoaU4vYr3l4vmoOE=;
-        b=SFtzoD64TaQzPSLPWXnXCW7cW+np83Bf6OQnuSus43XleVePiClweVC3y4JFv+jT9a
-         bb7q9P/mkk0hjCT+w/RiFK/W4p29/Dq0+U0xLc3Qed9pU1O69bmIS4y4S8z08SmT20v7
-         c9uB9aEUZDlrteDwrhXJDyEbGcZ4sl0YhF4hXhK1QNOFTYiESAZzc1bgqcevu/ywnKYJ
-         oQENVuC6L8Wo6p/++tNda2hoDQsDtOSMD+ItG3mgkLsh5qYHG46WAI4GN7kMe6ypybLv
-         PYnZEpTWlBivOmnjsEO15ZIWXi6M6LOagKQI4iV98H8zK6qGZkd3bP9V1gEj89bQtCix
-         TZIA==
+        bh=XhL5PcXPAVYZIaqVjbCyrF3IgCwpUk1BeN4L/hsgGTo=;
+        b=lvVwhd3NFXJB1ApopmbOb4WGqxnI5aZIi/oFdTKyxa3QGvWs1vq+wc5nCJvXSoFl2a
+         Z4PSWz7wFVt8r+ZyC+bPngeGL0ylzuB6AyokuE3XePfet6eHsNUMwicaV849FC/ONAzf
+         gUcNNubL0r8iH21j8tPgUo1H/9XCVqS3kXCbE+kYbnG2VqpvKRfH7odqRpV1Ml6yL7dU
+         Z2TgCYtbDbCSCQyEXE+z5E8t1RbtE7uw0c7TRnm+IK0DW++XGdJRVxCZyUtjVz4dVN6H
+         seIdVDNlTjrgUD5Y8dmH/lZEeghG8H719NgaN27wnhNfC5HYclzxRb6PYX+TcVT0iw2O
+         5hgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8P3wAYvgFlPve71dG0z5aPiI1G8WoaU4vYr3l4vmoOE=;
-        b=qis2QJZJbzq/xr79XdpaJRRNfum7C1dM93majSw/tsI3YQQG74O2WdapnWfhJxUyZ/
-         90z2+DfXa90za1std4AXmdFohWAy57HVbReMTiBMiQdW0jagaRqVkSfrN7ePW0mkGiad
-         aPvITdTft99fRjXRA8JY+zxwFxDiYxrvizVNb3GVEXglngDWvudUsDCCt0VT+JqifeGt
-         pi8hKCrtMHuI3lVb33xI2VdqObpv6EAcE8gC7ivba7DfeUG8nu8TcOGHIyTPWSpvlJQU
-         Jkcu91AjeehQT4cUzoB+gsr6VPoophZPytSY+DUsMtzbql35HWu9Ab9stP710+uPChW+
-         Ntig==
-X-Gm-Message-State: AOAM532R+8yY0wKbJVWSnyM/W7FeDbseY+I7gY+WOA19E3ro5NaKrxkd
-        bpToMLLaVKGOV76VM6iwjRjvppaHdeI=
-X-Google-Smtp-Source: ABdhPJz1GOmXaYQZUAA0skYDcx6omh1lEo3AeWkKPBF6mOQaprrVroYAY0T2KtU2owtV9IlwtGbYQg==
-X-Received: by 2002:a05:600c:a06:b0:37b:fdd8:4f8 with SMTP id z6-20020a05600c0a0600b0037bfdd804f8mr24304139wmp.41.1647793692871;
-        Sun, 20 Mar 2022 09:28:12 -0700 (PDT)
+        bh=XhL5PcXPAVYZIaqVjbCyrF3IgCwpUk1BeN4L/hsgGTo=;
+        b=3bhU2mIqSHx6rNFqk25kLZspst7ERapvgvVGzRDk0tWgfwNGeKznw1I3Vmu+EUGx34
+         G+PTWsMDa3CeeHSurdiBTKsByGaasDaaxgIKw7ADTfAcLXRXP4c/ttZE5oFflpRkKU1V
+         osrYo65ZTMU/jYwDxFFT7xIPHV5g5UOCkHjWcvFcWw4XhCxKgIGoHA0svPV8QxBaV90i
+         DqjQ2u9d+Hjk7X2upgvcP0u60cE1rZobs5v3Zi5T+Rrf1CYo9A717rh1+WZuio3LITF4
+         zvIQMYTyo7VTC6Wd+ZCRcPqBHeEAAsYyzI0ohaGEVtwImwFcBLyQvE2jrnnHGLFOIWiS
+         1ufg==
+X-Gm-Message-State: AOAM53101NvWUXmHVpo2Q6nQFLYCBq5sMYqhSONWQSvmQ4tqFBkwG5AJ
+        pF3SH70BfuH//+KLP36zOeL/H/mlPHo=
+X-Google-Smtp-Source: ABdhPJxKzWiavPeOkd3SpgHfRfE4hVaqD6LqknQUXwhrlb2Pg4Sr0Gzivp4d7/v+NX+Q9+ApYn68Ag==
+X-Received: by 2002:a05:600c:4e55:b0:38c:a453:d99a with SMTP id e21-20020a05600c4e5500b0038ca453d99amr1925787wmq.184.1647793694073;
+        Sun, 20 Mar 2022 09:28:14 -0700 (PDT)
 Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
-        by smtp.googlemail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm6760085wry.53.2022.03.20.09.28.11
+        by smtp.googlemail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm6760085wry.53.2022.03.20.09.28.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 09:28:12 -0700 (PDT)
+        Sun, 20 Mar 2022 09:28:13 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -56,9 +56,9 @@ To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         Ansuel Smith <ansuelsmth@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v3 02/18] clk: qcom: gcc-ipq806x: skip pxo/cxo fixed clk if already present
-Date:   Sun, 20 Mar 2022 12:34:14 +0100
-Message-Id: <20220320113430.26076-3-ansuelsmth@gmail.com>
+Subject: [PATCH v3 03/18] clk: qcom: gcc-ipq806x: add PXO_SRC in clk table
+Date:   Sun, 20 Mar 2022 12:34:15 +0100
+Message-Id: <20220320113430.26076-4-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220320113430.26076-1-ansuelsmth@gmail.com>
 References: <20220320113430.26076-1-ansuelsmth@gmail.com>
@@ -74,55 +74,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Skip pxo/cxo clock registration if they are already defined in DTS as fixed
-clock.
+PXO_SRC is currently defined in the gcc include and referenced in the
+ipq8064 DTSI. Correctly provide a clk after gcc probe to fix kernel
+panic if a driver starts to actually use it.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/clk/qcom/gcc-ipq806x.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ drivers/clk/qcom/gcc-ipq806x.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
-index d6b7adb4be38..27f6d7626abb 100644
+index 27f6d7626abb..7271d3afdc89 100644
 --- a/drivers/clk/qcom/gcc-ipq806x.c
 +++ b/drivers/clk/qcom/gcc-ipq806x.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-+#include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/regmap.h>
- #include <linux/reset-controller.h>
-@@ -3061,15 +3062,22 @@ static int gcc_ipq806x_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct regmap *regmap;
-+	struct clk *clk;
- 	int ret;
+@@ -26,6 +26,8 @@
+ #include "clk-hfpll.h"
+ #include "reset.h"
  
--	ret = qcom_cc_register_board_clk(dev, "cxo_board", "cxo", 25000000);
--	if (ret)
--		return ret;
-+	clk = clk_get(dev, "cxo");
-+	if (IS_ERR(clk)) {
-+		ret = qcom_cc_register_board_clk(dev, "cxo_board", "cxo", 25000000);
-+		if (ret)
-+			return ret;
-+	}
++static struct clk_regmap pxo = { };
++
+ static struct clk_pll pll0 = {
+ 	.l_reg = 0x30c4,
+ 	.m_reg = 0x30c8,
+@@ -2754,6 +2756,7 @@ static struct clk_dyn_rcg ubi32_core2_src_clk = {
+ };
  
--	ret = qcom_cc_register_board_clk(dev, "pxo_board", "pxo", 25000000);
--	if (ret)
--		return ret;
-+	clk = clk_get(dev, "pxo");
-+	if (IS_ERR(clk)) {
-+		ret = qcom_cc_register_board_clk(dev, "pxo_board", "pxo", 25000000);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	ret = qcom_cc_probe(pdev, &gcc_ipq806x_desc);
+ static struct clk_regmap *gcc_ipq806x_clks[] = {
++	[PXO_SRC] = NULL,
+ 	[PLL0] = &pll0.clkr,
+ 	[PLL0_VOTE] = &pll0_vote,
+ 	[PLL3] = &pll3.clkr,
+@@ -3083,6 +3086,10 @@ static int gcc_ipq806x_probe(struct platform_device *pdev)
  	if (ret)
+ 		return ret;
+ 
++	clk = clk_get(dev, "pxo");
++	pxo.hw = *__clk_get_hw(clk);
++	gcc_ipq806x_clks[PXO_SRC] = &pxo;
++
+ 	regmap = dev_get_regmap(dev, NULL);
+ 	if (!regmap)
+ 		return -ENODEV;
 -- 
 2.34.1
 

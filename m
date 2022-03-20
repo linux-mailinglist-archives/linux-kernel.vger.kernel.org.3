@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C389C4E1D4B
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 19:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADA84E1D4C
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 19:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245743AbiCTSEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 14:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
+        id S245759AbiCTSEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 14:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiCTSEi (ORCPT
+        with ESMTP id S229713AbiCTSEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 14:04:38 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D52A3A72C
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 11:03:14 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id bg31-20020a05600c3c9f00b00381590dbb33so7296217wmb.3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 11:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=Wur3Gr2lZCA8WSdLdjbJrUbR8JebUaR8BljbfzA1wHE=;
-        b=Ggv9TffUnipbh1pKUc1k8M7NX5m0uX/GmuHOCDbRrQ3QE5BNe3mNiv4wSWrBiZlhQ+
-         9rlVECFOklXwSB2tMOo4Yio67kyHT7EzRW+k8ESZRCFuN5Nx2qvMnxavIvaok0xbzfNb
-         R57A2QGk01k0exi993vSHbj15PNmvvm3gUgcUW5xwUyIkMshF2KuZemP+UWh7t1KptMh
-         NT9x/BcuQpjjpubJtBsZbEOsCrUpcgIgv6IouUQxlHS+uHV4F8UvOJ+5TjoUGJYLKkoN
-         OswuTFxwPh7uHi6iy23mhAowAavWH4U8GDCJH5ILXRR8q1xZGXmSw+D07M5q+L9YPBsx
-         G9+A==
+        Sun, 20 Mar 2022 14:04:47 -0400
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316723C713;
+        Sun, 20 Mar 2022 11:03:24 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id k125so10383741qkf.0;
+        Sun, 20 Mar 2022 11:03:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=Wur3Gr2lZCA8WSdLdjbJrUbR8JebUaR8BljbfzA1wHE=;
-        b=4x1mL4WcRw9w37PhlTT/q94rkqWhdqv8W2h220Gnn9LH1TVDmf/8946lryP86J2D6j
-         69Qo8FOnJFv/y2wc4ksc9hmjbb96rIdwtTwzNqqOQH8ZV0cc7NXT2wo+OT3HPRHKrO9n
-         fNUFiAnK/V8bbm5gwkBW7WenjTzU/nd8ZK51SmuprEg/Fx5l6y1niZqtiFbcMeLzI41A
-         PkhAIB8+MxV8JIy/3Xdwrh5oncRlvqX+33k+NjtAh8cSSmEfSqxFsvWsRm4Mb9NXp9qm
-         Brp+xlz1mbZejSFTzNVl/bKBsioJrJWNUZQpjEBr4BtjEpGq/9rMCD30vWgu+SEIF5uU
-         8Hzg==
-X-Gm-Message-State: AOAM530BqV45KuqjS717+FYNFi6/ti1QFjmCnDxxH74dfO5D9Udn4r5b
-        bTZK+U6cnoiGPST+ggvywi/NIQ==
-X-Google-Smtp-Source: ABdhPJxvHYeRUXTjFPf76c0NGheufnBvl4MJZkjFWLVW09XU/Gu4wlmGmU4t/Lys/fhzY+bO1UDWcA==
-X-Received: by 2002:a05:600c:3506:b0:389:d567:e9fa with SMTP id h6-20020a05600c350600b00389d567e9famr16229794wmq.74.1647799392724;
-        Sun, 20 Mar 2022 11:03:12 -0700 (PDT)
-Received: from [192.168.0.69] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b00389cc36a3bfsm15630498wmp.6.2022.03.20.11.03.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Mar 2022 11:03:12 -0700 (PDT)
-Message-ID: <cda7eaa6-fb99-0d32-24fb-758b9363ee6d@linaro.org>
-Date:   Sun, 20 Mar 2022 18:03:10 +0000
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uFYTlV3ZvJ5BnTSe102STqzCL7q/7lu5pRd287m26OU=;
+        b=vbT2I5RSwJx0Cs2NZEPJ0+iHj/ynzZFBPrwv4902+RIjtywOnPU0hDtykAdkYr9nwe
+         xfmNm14/cMfyrGoo6RPXtCQIMcR9xC+0Xw3a/tjGuoswsBiMiTH47j5FORPA1uE8MnPT
+         Fu0i/XwgmZTviSlMud99M2yVQ4Tr0HHIst/meISrScA8czS+5rOKFHgZdBO3NCcRltu2
+         VSjFplJMQyqYNmWmC3PTy2mT8vCcZaEDe3fHaM1QqJIuzJZ1OGzqu2ZHjgkU0zvARpSp
+         spDkFBMlrkgleNfBueKng2fAGLBZaLyeFzohcYdyPXclUXM2Re+oKXxc6tBZqvvpZq+r
+         JWig==
+X-Gm-Message-State: AOAM533hAIbzpyCpvQoY8KTzJ1XBpQ2Wb32yJ2LsEihRlnX/Gki0DgMG
+        1Zdu/LbaVpLWQUn+KWs4Yg==
+X-Google-Smtp-Source: ABdhPJzdIBtEYUOictCAqbOBGdBoDlXAOfB8oyzDiVx1mSkD20ZXRm1ghfcgtIDuTNitJe9dBvE9aA==
+X-Received: by 2002:a05:620a:290f:b0:67b:3212:d529 with SMTP id m15-20020a05620a290f00b0067b3212d529mr10754269qkp.4.1647799403232;
+        Sun, 20 Mar 2022 11:03:23 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:c6d:21ec:c4f5:bb3:5269:3b0e])
+        by smtp.gmail.com with ESMTPSA id w3-20020a05622a190300b002e1f084d84bsm8163270qtc.50.2022.03.20.11.03.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Mar 2022 11:03:21 -0700 (PDT)
+Received: (nullmailer pid 3128961 invoked by uid 1000);
+        Sun, 20 Mar 2022 18:03:15 -0000
+Date:   Sun, 20 Mar 2022 14:03:15 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        David Rhodes <drhodes@opensource.cirrus.com>
+Subject: Re: [PATCH v4 15/16] ASoC: dt-bindings: cs35l41: Document CS35l41
+ External Boost
+Message-ID: <YjdsY9tcuDmvYYQk@robh.at.kernel.org>
+References: <20220317093120.168534-1-tanureal@opensource.cirrus.com>
+ <20220317093120.168534-16-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 2/2] wcn36xx: Implement tx_rate reporting
-Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Edmond Gagnon <egagnon@squareup.com>,
-        Kalle Valo <kvalo@codeaurora.org>
-Cc:     Benjamin Li <benl@squareup.com>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, wcn36xx@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220318195804.4169686-1-egagnon@squareup.com>
- <20220318195804.4169686-3-egagnon@squareup.com>
- <c8f31312-5356-704e-1f55-89c9f5888238@linaro.org>
-In-Reply-To: <c8f31312-5356-704e-1f55-89c9f5888238@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220317093120.168534-16-tanureal@opensource.cirrus.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,44 +69,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2022 13:21, Bryan O'Donoghue wrote:
-> On 18/03/2022 19:58, Edmond Gagnon wrote:
->> +    INIT_DELAYED_WORK(&wcn->get_stats_work, wcn36xx_get_stats_work);
+On Thu, Mar 17, 2022 at 09:31:19AM +0000, Lucas Tanure wrote:
+> From: David Rhodes <drhodes@opensource.cirrus.com>
 > 
-> Instead of forking a worker and polling we could add the relevant SMD 
-> command to
+> Document internal and external boost feature for ASoC CS35L41.
+> For internal boost the following properties are required:
+> - cirrus,boost-peak-milliamp
+> - cirrus,boost-ind-nanohenry
+> - cirrus,boost-cap-microfarad
 > 
-> static int wcn36xx_smd_tx_compl_ind(struct wcn36xx *wcn, void *buf, 
-> size_t len)
-> {
->      wcn36xx_smd_get_stats(wcn, 0xSomeMask);
-> }
+> For external boost, the GPIO1 must be configured as output,
+> so the following properties are required:
+> - cirrus,gpio1-src-select = <1>
+> - cirrus,gpio1-output-enable
 > 
-> That way we only ever ask for and report a new TX data rate when we know 
-> a TX event - and hence a potential TX data-rate update - has taken place.
-> 
+> Signed-off-by: David Rhodes <drhodes@opensource.cirrus.com>
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
 > ---
-> bod
-> 
+>  .../bindings/sound/cirrus,cs35l41.yaml        | 44 +++++++++++++++++--
+>  1 file changed, 41 insertions(+), 3 deletions(-)
 
-Thinking a bit more
+With the indentation fixed,
 
-- Do the SMD get_stats in the tx completion
-   This might be a problem initiating another SMD transaction inside
-   of an SMD callback. But is the most straight forward way to
-   get the data while avoiding alot of needless polling.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-- Schedule your worker from the TX completion
-   Again you should only care about gathering the data when you know
-   something has happened which necessitates gathering that data
-   like TX completion
-
-- Schedule your worker from the RX indication routine
-   Seems not as logical as the first two but it might be easier
-   to schedule the worker in the RX data handler
-
-Either way, I do think you should only gather this data on an event, not 
-as a continuous poll.
-
----
-bod

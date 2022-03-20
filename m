@@ -2,110 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0814E1BE9
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 14:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1DD4E1BEE
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 14:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245192AbiCTNvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 09:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
+        id S245202AbiCTOA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 10:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232852AbiCTNvt (ORCPT
+        with ESMTP id S237731AbiCTOAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 09:51:49 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FE216F6CE;
-        Sun, 20 Mar 2022 06:50:26 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id g19so13386869pfc.9;
-        Sun, 20 Mar 2022 06:50:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=3gEfZ5eoe+zbYqKcw6UvYGVoZnHKD5O1CTE0CBSi2mE=;
-        b=nsghIvdv68eBtZZ0SDUbUPSL5nju06yT5n/GjGTKOfgqJb8EWucdgLSR2hXoNVrZvJ
-         UBPJMiTChOHP8fwFwAEsM/dEgurTQBf6AsRNJSSDwBImjhQiKBX2XWRhDFLvFkZ3/EaR
-         id9Re3UivtKF0oUzrRbr2lwyTGJvyjieVnvSzXT//V1i/S0EImyu0YiHa0qJohmuSATE
-         IgyGsIgsh6wZ38NKqRVykWvayq8J9XVzS825FxS6tDa/DYb0FhENjLwK7aw0L7/xo/rY
-         LVcApfnbn2vxR9wQuqwmSNBDeMoHCGYXDxt95jNUC6aoXf0nKxDBEeZ/oJVo7kl6Ux5s
-         WZEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=3gEfZ5eoe+zbYqKcw6UvYGVoZnHKD5O1CTE0CBSi2mE=;
-        b=j2HCD6HyiPDqCy+72Ju3eOT0+b6FxqKn3yRWq3JRfHkI9iKEJlhE6mXT2ryLGESphi
-         isnsBXwF5oKsaNZmRyZSTAec9NJHL2del6lZK8jXspxL3ryh+5/WgkMD94XrQjjrp17q
-         x6egTL4wDocCpqSNfvGU0WHjFSSoEaOowE2iV9i+i52ria76AFlmT2KidO1G8Zyevly8
-         SFQm1fbU3DWu8daYd0+4yXzJfTsNZABVp6QurJDf6jbm5x3QTM6FIJcSKc/gldagqMFo
-         V5DBILyL9gaTJeXOISzZTSPopTxqo573nHSsRcgrvfRbHRug2abMJJTxsxZUgzJuUNa8
-         dRpQ==
-X-Gm-Message-State: AOAM533yzf3sQ7Uk2xMnoVj3hqPvwR0v0oDmqiXmfD3J3Myo8bQZbSAH
-        fP85+6ePO4bl1uPLWErvam8=
-X-Google-Smtp-Source: ABdhPJyFFt6taN93Z87S4wW6DOaTHETcem7tz2A/oFRRe32+e0RtBWKz5INAo2FXZZuipwvlLzKUug==
-X-Received: by 2002:a05:6a00:8cc:b0:4bc:3def:b616 with SMTP id s12-20020a056a0008cc00b004bc3defb616mr19519125pfu.18.1647784225783;
-        Sun, 20 Mar 2022 06:50:25 -0700 (PDT)
-Received: from localhost.localdomain ([36.24.165.243])
-        by smtp.googlemail.com with ESMTPSA id q17-20020aa79831000000b004f769d0c323sm16473559pfl.100.2022.03.20.06.50.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 06:50:25 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     sfrench@samba.org
-Cc:     sprasad@microsoft.com, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-kernel@vger.kernel.org,
-        jakobkoschel@gmail.com, Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH] cifs: fix incorrect use of list iterator after the loop
-Date:   Sun, 20 Mar 2022 21:50:15 +0800
-Message-Id: <20220320135015.19794-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 20 Mar 2022 10:00:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 950D91AEC8B
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 06:58:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647784738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3gIYKIjaOECMtm4Bek+mmjhj5KdamiLQaFTROx28ngw=;
+        b=MCgOP9uYtg22Bj0QRvhVh6D7gbynMCJBgLZIfqI6sx5mPwGbtCmG3z+FTpSE0VdJ7Hp83K
+        M4bH+Nqs3NkR/W+R6hCpXyWoC2sHMYE/o9mLUnx8KOBzxC4K/svVvPIKQjyL607B6vsAaM
+        kdPonXGlgZrbWGXjfUURhSw1Q6YWSP4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-558-uMsEtdMzPsChwp490qW2og-1; Sun, 20 Mar 2022 09:58:54 -0400
+X-MC-Unique: uMsEtdMzPsChwp490qW2og-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 733D5811E76;
+        Sun, 20 Mar 2022 13:58:54 +0000 (UTC)
+Received: from starship (unknown [10.40.192.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2CB5540C1421;
+        Sun, 20 Mar 2022 13:58:53 +0000 (UTC)
+Message-ID: <4e020c1e6431769a583e66639b51215d69b5eac9.camel@redhat.com>
+Subject: Re: [PATCH v3 6/6] KVM: x86: allow defining return-0 static calls
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Cc:     seanjc@google.com
+Date:   Sun, 20 Mar 2022 15:58:52 +0200
+In-Reply-To: <1dc56110-5f1b-6140-937c-bf4a28ddbe87@redhat.com>
+References: <20220217180831.288210-1-pbonzini@redhat.com>
+         <20220217180831.288210-7-pbonzini@redhat.com>
+         <3bbe3f8717cdf122f909a48e117dab6c09d8e0c8.camel@redhat.com>
+         <1dc56110-5f1b-6140-937c-bf4a28ddbe87@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug is here:
-if (!tcon) {
-	resched = true;
-	list_del_init(&ses->rlist);
-	cifs_put_smb_ses(ses);
+On Fri, 2022-03-18 at 17:29 +0100, Paolo Bonzini wrote:
+> On 3/17/22 18:43, Maxim Levitsky wrote:
+> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> > index 20f64e07e359..3388072b2e3b 100644
+> > --- a/arch/x86/include/asm/kvm-x86-ops.h
+> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> > @@ -88,7 +88,7 @@ KVM_X86_OP(deliver_interrupt)
+> >   KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
+> >   KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
+> >   KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
+> > -KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
+> > +KVM_X86_OP(get_mt_mask)
+> >   KVM_X86_OP(load_mmu_pgd)
+> >   KVM_X86_OP(has_wbinvd_exit)
+> >   KVM_X86_OP(get_l2_tsc_offset)
+> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > index a09b4f1a18f6..0c09292b0611 100644
+> > --- a/arch/x86/kvm/svm/svm.c
+> > +++ b/arch/x86/kvm/svm/svm.c
+> > @@ -4057,6 +4057,11 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
+> >          return true;
+> >   }
+> >   
+> > +static u64 svm_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> > +{
+> > +       return 0;
+> > +}
+> > +
+> >   static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+> >   {
+> >          struct vcpu_svm *svm = to_svm(vcpu);
+> > @@ -4718,6 +4723,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+> >          .check_apicv_inhibit_reasons = avic_check_apicv_inhibit_reasons,
+> >          .apicv_post_state_restore = avic_apicv_post_state_restore,
+> >   
+> > +       .get_mt_mask = svm_get_mt_mask,
+> >          .get_exit_info = svm_get_exit_info,
+> >   
+> >          .vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
+> 
+> Thanks, I'll send it as a complete patch.  Please reply there with your 
+> Signed-off-by.
 
-Because the list_for_each_entry() never exits early (without any
-break/goto/return inside the loop), the iterator 'ses' after the
-loop will always be an pointer to a invalid struct containing the
-HEAD (&pserver->smb_ses_list). As a result, the uses of 'ses' above
-will lead to a invalid memory access.
 
-The original intention should have been to walk each entry 'ses' in
-'&tmp_ses_list', delete '&ses->rlist' and put 'ses'. So fix it with
-a list_for_each_entry_safe().
+Honestly, I haven't meant to include this as a fix, but only as a proof of the issue,
+but I don't have anything against using this until the underlying issue is fixed.
 
-Fixes: 3663c9045f51a ("cifs: check reconnects for channels of active tcons too")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- fs/cifs/smb2pdu.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 7e7909b1ae11..f82d6fcb5c64 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -3858,8 +3858,10 @@ void smb2_reconnect_server(struct work_struct *work)
- 	tcon = kzalloc(sizeof(struct cifs_tcon), GFP_KERNEL);
- 	if (!tcon) {
- 		resched = true;
--		list_del_init(&ses->rlist);
--		cifs_put_smb_ses(ses);
-+		list_for_each_entry_safe(ses, ses2, &tmp_ses_list, rlist) {
-+			list_del_init(&ses->rlist);
-+			cifs_put_smb_ses(ses);
-+		}
- 		goto done;
- 	}
- 
+Best regards,
+	Maxim Levitsky
 
-base-commit: 14702b3b2438e2f2d07ae93b5d695c166e5c83d1
--- 
-2.17.1
+> 
+> Related to this, I don't see anything in arch/x86/kernel/static_call.c 
+> that limits this code to x86-64:
+> 
+>                  if (func == &__static_call_return0) {
+>                          emulate = code;
+>                          code = &xor5rax;
+>                  }
+> 
+> 
+> On 32-bit, it will be patched as "dec ax; xor eax, eax" or something 
+> like that.  Fortunately it doesn't corrupt any callee-save register but 
+> it is not just a bit funky, it's also not a single instruction.
+> 
+> Paolo
+> 
+
 

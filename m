@@ -2,74 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B0D4E1D14
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 18:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B424E1D07
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 18:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245696AbiCTRV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 13:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
+        id S245682AbiCTRLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 13:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242321AbiCTRV0 (ORCPT
+        with ESMTP id S245670AbiCTRL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 13:21:26 -0400
-X-Greylist: delayed 169 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 20 Mar 2022 10:20:01 PDT
-Received: from mail.as201155.net (mail.as201155.net [185.84.6.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80D4D9EA0
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 10:20:01 -0700 (PDT)
-Received: from smtps.newmedia-net.de ([2a05:a1c0:0:de::167]:44818 helo=webmail.newmedia-net.de)
-        by mail.as201155.net with esmtps  (TLS1) tls TLS_DHE_RSA_WITH_AES_256_CBC_SHA
-        (Exim 4.94.2)
-        (envelope-from <s.gottschall@newmedia-net.de>)
-        id 1nVzAs-0002wx-2w; Sun, 20 Mar 2022 18:17:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=newmedia-net.de; s=mikd;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID; bh=R3xvPyH2LO2SeAjGMqviHKQ0YssFVFGDLalsy+a32Pc=;
-        b=kDB5vFIRFcO7i37wsDvKCkiJyqObUP5nPcTw0GVON66/JXSOUrL0ehd80CczxceYFi3y7rSMxitanR3VrD21zhptzBwaxfUHv1L5GuAHAZFEA8UhiRP/2C/WxzICmHQB9hiXnlAq2A/96bMs2T5kz4ZtiNGebiotv6dOy+J++Ag=;
-Message-ID: <233074c3-03dc-cf8b-a597-da0fb5d98be0@newmedia-net.de>
-Date:   Sun, 20 Mar 2022 18:17:01 +0100
+        Sun, 20 Mar 2022 13:11:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BBD92843;
+        Sun, 20 Mar 2022 10:10:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DB84B80EE5;
+        Sun, 20 Mar 2022 17:10:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72D7DC340F4;
+        Sun, 20 Mar 2022 17:10:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647796202;
+        bh=k8jdFKcrSKfMwqREooBwt0Pw3gzreCUO94w2x/+dUdI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ubvd0zhv1WwabWYRB/ruxIzjFdiDYG4CByetdlUM24XsF1+v9DE42Ex+PaQxiSRvW
+         mBdRza0NAiLUWSnQtC7uLWTvQNiRh3gXssNAJ8iePXoECzi8rqD9G3euKYdGsj6q2V
+         7kGczQQS/lJsFoUzJuTSD5THn/rkqA1nvs8oJ+OHMaLNA1vmSJUrd84MBYva3b7jwC
+         o8GULG5TvJn/2kieilnFXdsRwFsaBpg5yT5Tu0q5WbQTTMajlEuRxlN2ca1QWXOCOW
+         oPAh+zRY0WdCdJENCKu78tuqeGQiDNkAe6rL3gYCRfSX15EuqiuiOZpQ4xiOEjHZNk
+         zgygWTZSJSsVg==
+Date:   Sun, 20 Mar 2022 17:17:26 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Jagath Jog J <jagathjog1996@gmail.com>
+Cc:     dan@dlrobertson.com, andy.shevchenko@gmail.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/5] iio: accel: bma400: changing scale min and max
+ macro values
+Message-ID: <20220320171726.7a4bd968@jic23-huawei>
+In-Reply-To: <20220319181023.8090-3-jagathjog1996@gmail.com>
+References: <20220319181023.8090-1-jagathjog1996@gmail.com>
+        <20220319181023.8090-3-jagathjog1996@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101
- Thunderbird/99.0
-Subject: Re: [PATCH] ath9k: initialize arrays at compile time
-To:     John Crispin <john@phrozen.org>, trix@redhat.com, toke@toke.dk,
-        kvalo@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220320152028.2263518-1-trix@redhat.com>
- <af6042d0-952f-f497-57e7-37fef45a1f76@phrozen.org>
-From:   Sebastian Gottschall <s.gottschall@newmedia-net.de>
-In-Reply-To: <af6042d0-952f-f497-57e7-37fef45a1f76@phrozen.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Received:  from [81.201.155.134] (helo=[172.21.254.4])
-        by webmail.newmedia-net.de with esmtpsa (TLSv1:AES128-SHA:128)
-        (Exim 4.72)
-        (envelope-from <s.gottschall@newmedia-net.de>)
-        id 1nVzAs-0005Nq-NN; Sun, 20 Mar 2022 18:17:02 +0100
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 20.03.2022 um 17:48 schrieb John Crispin:
->
->
-> On 20.03.22 16:20, trix@redhat.com wrote:
->> array[size] = { 0 };
->
-> should this not be array[size] = { }; ?!
->
-> If I recall correctly { 0 } will only set the first element of the 
-> struct/array to 0 and leave random data in all others elements
->
->     John
+On Sat, 19 Mar 2022 23:40:20 +0530
+Jagath Jog J <jagathjog1996@gmail.com> wrote:
 
-You are right, john
+> Changing the scale macro values to match the bma400 sensitivity
+> for 1 LSB of all the available ranges.
+> 
+> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
+This needs a fixes tag and should be the first patch in the series.
+I'd also like the maths to be described as these numbers are (I assume)
+calculated based on the range and the bit depth of the sensor?
+If you can add a comment in the code, then we'll have a convenient
+reference alongside the numbers.
 
-Sebastian
+> ---
+>  drivers/iio/accel/bma400.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iio/accel/bma400.h b/drivers/iio/accel/bma400.h
+> index e938da5a57b4..cfc2c9bacec8 100644
+> --- a/drivers/iio/accel/bma400.h
+> +++ b/drivers/iio/accel/bma400.h
+> @@ -83,8 +83,8 @@
+>  #define BMA400_ACC_ODR_MIN_WHOLE_HZ 25
+>  #define BMA400_ACC_ODR_MIN_HZ       12
+>  
+> -#define BMA400_SCALE_MIN            38357
+> -#define BMA400_SCALE_MAX            306864
+> +#define BMA400_SCALE_MIN            9583
+> +#define BMA400_SCALE_MAX            76669
+>  
+>  #define BMA400_NUM_REGULATORS       2
+>  #define BMA400_VDD_REGULATOR        0
 

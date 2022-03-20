@@ -2,93 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFC84E1D6A
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 19:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 556364E1D71
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 19:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343527AbiCTShA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 14:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S1343541AbiCTSsR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 20 Mar 2022 14:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233851AbiCTSg6 (ORCPT
+        with ESMTP id S1343537AbiCTSsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 14:36:58 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D106C98F71
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 11:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647801334; x=1679337334;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CJTg6RW7q07VNR0unQQdewucX2kShEL7FdcEu9hjfdg=;
-  b=Jt1tSl231SLO80/aS8tF+Qg5PDp1uG8i5gDhEh533h+19PKFi1/2/8jZ
-   c518wXVWu6wbzDEnTayN0AV5r0QgwAI/GmBdrutLkHKyhDM84jQ/AaCkZ
-   XuPLudvw72REI6/KG1573G9IXbewucf1BnOsnfFlIFmEQnit//XBC7kdv
-   REsL7PRT+GUHhWHz4LnaNQ7X80wI7taA+cb25MsV63/DJMZHOWhSOCn7K
-   jC8BdPFpe1DOHiK90kyXzBw0RsH4cYn+lKqBmgJUrmQ/2MW6bXe8xVHJN
-   wYbaav6uRqTRJmkR7NmRPbZMM4l6QzuMf0p+XPO54NP8+/nYa+P8VrpYx
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="254986064"
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="254986064"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 11:35:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="518166623"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 20 Mar 2022 11:35:33 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nW0Oq-000H9X-G5; Sun, 20 Mar 2022 18:35:32 +0000
-Date:   Mon, 21 Mar 2022 02:34:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:master 1564/2335] ./usr/include/linux/netdevice.h:29:10:
- fatal error: 'uapi/linux/if.h' file not found
-Message-ID: <202203210209.hNJFRhoP-lkp@intel.com>
+        Sun, 20 Mar 2022 14:48:15 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC129180048
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 11:46:50 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-211-OvTu6yGEPO-aZeWLosJXtg-1; Sun, 20 Mar 2022 18:46:46 +0000
+X-MC-Unique: OvTu6yGEPO-aZeWLosJXtg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Sun, 20 Mar 2022 18:46:46 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Sun, 20 Mar 2022 18:46:46 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'trix@redhat.com'" <trix@redhat.com>,
+        "toke@toke.dk" <toke@toke.dk>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>
+CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] ath9k: initialize arrays at compile time
+Thread-Topic: [PATCH] ath9k: initialize arrays at compile time
+Thread-Index: AQHYPG4UGesvc0U9PEWregiQnXO486zIm6Kg
+Date:   Sun, 20 Mar 2022 18:46:46 +0000
+Message-ID: <d06ce4fa239645cc9de48c1062f58f14@AcuMS.aculab.com>
+References: <20220320152028.2263518-1-trix@redhat.com>
+In-Reply-To: <20220320152028.2263518-1-trix@redhat.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-head:   85293bf3fca6d85608cff1447ce3097583f15fab
-commit: 928b32ae19a729802c77e9754fb7b9d4fe05bf0a [1564/2335] headers/deps: net: Optimize <uapi/linux/netdevice.h>
-config: i386-randconfig-a012-20220314 (https://download.01.org/0day-ci/archive/20220321/202203210209.hNJFRhoP-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=928b32ae19a729802c77e9754fb7b9d4fe05bf0a
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip master
-        git checkout 928b32ae19a729802c77e9754fb7b9d4fe05bf0a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+From: trix@redhat.com <trix@redhat.com>
+> Sent: 20 March 2022 15:20
+> 
+> Early clearing of arrays with
+> memset(array, 0, size);
+> is equivilent to initializing the array in its decl with
+> array[size] = { 0 };
+> 
+> Since compile time is preferred over runtime,
+> convert the memsets to initializations.
+...
+> diff --git a/drivers/net/wireless/ath/ath9k/ar9003_calib.c
+> b/drivers/net/wireless/ath/ath9k/ar9003_calib.c
+> index dc24da1ff00b1..39fcc158cb159 100644
+> --- a/drivers/net/wireless/ath/ath9k/ar9003_calib.c
+> +++ b/drivers/net/wireless/ath/ath9k/ar9003_calib.c
+> @@ -891,10 +891,9 @@ static void ar9003_hw_tx_iq_cal_outlier_detection(struct ath_hw *ah,
+>  {
+>  	int i, im, nmeasurement;
+>  	int magnitude, phase;
+> -	u32 tx_corr_coeff[MAX_MEASUREMENT][AR9300_MAX_CHAINS];
+> +	u32 tx_corr_coeff[MAX_MEASUREMENT][AR9300_MAX_CHAINS] = { 0 };
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+For a two dimensional array that needs to be {{0}} (or {}).
+And, since there is only one definitions of 'coeff' it can
+be static!
+(Currently on 96 bytes - si not a real problem on-stack.)
 
-All errors (new ones prefixed by >>):
+Although I just failed to find the lock that stops
+concurrent execution on multiple cpu.
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/netdevice.h:29:10: fatal error: 'uapi/linux/if.h' file not found
-   #include <uapi/linux/if.h>
-            ^~~~~~~~~~~~~~~~~
-   1 error generated.
+	David
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

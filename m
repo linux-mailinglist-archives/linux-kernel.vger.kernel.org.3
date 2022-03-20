@@ -2,184 +2,585 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE054E1E4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 00:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A64764E1E51
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 00:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343832AbiCTXus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 19:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
+        id S1343840AbiCTXvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 19:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232866AbiCTXuq (ORCPT
+        with ESMTP id S244543AbiCTXvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 19:50:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5101B51E71;
-        Sun, 20 Mar 2022 16:49:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D41466125C;
-        Sun, 20 Mar 2022 23:49:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A396C340F7;
-        Sun, 20 Mar 2022 23:49:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647820161;
-        bh=LdVIHoHItcWladjunHHE0TqmokWx34dd4pkenmbLtic=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cGZp03PLkkg7WjyUJH075nQZRGuldahnVs/gF8U1zra6NQ1upmIkD0CeLx54VWJO5
-         E5iniwFtkXnkPI6pbQd5kcW/3oBSVkKeHQjCdHm42WqPloHOHMk4+d9J94VyVyMc4L
-         va8xny3AZNWvP4ankJO04Ba6mx/3K7dKqVJLkkpxLHVCfm+FzvTGMBCWJs0hiiGlhu
-         985selWu5XMI3lruSNxroriY9octOOZWCP5ZlqeLJq6icpoCZ41wHvptN9tRlUvlF2
-         43KiXulyMx28u0AniBrVYk81FnZg6gDbu239OlxtbVb7OH4FkGvJ8dTNBlLnBfepO3
-         oAyZv9majtYmg==
-Received: by mail-vs1-f42.google.com with SMTP id i186so9656358vsc.9;
-        Sun, 20 Mar 2022 16:49:21 -0700 (PDT)
-X-Gm-Message-State: AOAM5329DNLFG/BWfb68DWVxtp+ik5Rwg0xrzWQCjHFV0cxomR4ysaLo
-        tSPHVCsoS436lFHMUwFA8CjTqS2zYtnQ/JUjXlA=
-X-Google-Smtp-Source: ABdhPJwzZ7sQ8nqc3/evn0mCeSVPLU9IvQI1EMLbzj7obkq7PpVtp3nW3lxsuUT4URfmvdsv+ieEuyG9qH76lKdBsy0=
-X-Received: by 2002:a05:6102:38c6:b0:31b:b386:e467 with SMTP id
- k6-20020a05610238c600b0031bb386e467mr6809705vst.8.1647820160139; Sun, 20 Mar
- 2022 16:49:20 -0700 (PDT)
+        Sun, 20 Mar 2022 19:51:19 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9080B522EF
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 16:49:53 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 1CB612C019B;
+        Sun, 20 Mar 2022 23:49:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1647820191;
+        bh=lCPyLlWQ4FdAnsv0n2n8LKIYqgmOtZ7E2JEhTjiooNs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SnVE8MIOvVYHJoXQgxgm9s4En72omayURRZLE2iYUgVNXEY33bc5K/inZJK90gQ3H
+         LtFFq9GTaHBB7dEuAhg2kel70Im5Yfg1+zELjKW7ZM6Ex3aUYVTmW/qn0vNm8zuQPr
+         Ygq6nbM4KtGwx4KlWXPk0OU/kQtuCXKNAO/8DuLpxk3K5bSAiFFKGUaCVYmXnR0Cb+
+         tb9QCWg4x2GgB4W2z76ddegRDcrGLICJj36VECT3R29yTSiqRVUINJmWBZGEZI8VIz
+         4GkVWXCWfhMz0jb5XwsDurHTeID9N1L41dymoYSWQSUA73wJJB7BFfIffybwXCqB0/
+         V2Ee1+/sf6s2w==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6237bd9e0000>; Mon, 21 Mar 2022 12:49:50 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 5AE5D13ECD2;
+        Mon, 21 Mar 2022 12:49:50 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id C1A1E2A2679; Mon, 21 Mar 2022 12:49:46 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     ulf.hansson@linaro.org, robh+dt@kernel.org, huziji@marvell.com
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v2] dt-bindings: mmc: xenon: Convert to JSON schema
+Date:   Mon, 21 Mar 2022 12:49:38 +1300
+Message-Id: <20220320234938.1946259-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220313012221.1755483-1-guoren@kernel.org> <mhng-b034f45a-521b-4c80-a314-4ddf1a1dc534@palmer-mbp2014>
-In-Reply-To: <mhng-b034f45a-521b-4c80-a314-4ddf1a1dc534@palmer-mbp2014>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 21 Mar 2022 07:49:09 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR6Pd3nVKt9e=rdMynBV0-EOmy5ZbndduEJiQLLe6vdpA@mail.gmail.com>
-Message-ID: <CAJF2gTR6Pd3nVKt9e=rdMynBV0-EOmy5ZbndduEJiQLLe6vdpA@mail.gmail.com>
-Subject: Re: [PATCH V2] arch: patch_text: Fixup last cpu should be master
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=o8Y5sQTvuykA:10 a=gEfo2CItAAAA:8 a=KKAkSRfTAAAA:8 a=M5GUcnROAAAA:8 a=VwQbUJbxAAAA:8 a=_badudf8mMiDdwQJQ4YA:9 a=sptkURWiP4Gy88Gu7hUp:22 a=cvBusfyB2V15izCimMoJ:22 a=OBjm3rFKGHvpk9ecZwUJ:22 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 2:05 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Sat, 12 Mar 2022 17:22:21 PST (-0800), guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > These patch_text implementations are using stop_machine_cpuslocked
-> > infrastructure with atomic cpu_count. The original idea: When the
-> > master CPU patch_text, the others should wait for it. But current
-> > implementation is using the first CPU as master, which couldn't
-> > guarantee the remaining CPUs are waiting. This patch changes the
-> > last CPU as the master to solve the potential risk.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > Cc: Peter Zijlstra <peterz@infradead.org
-> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> > Cc: Chris Zankel <chris@zankel.net>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> >
-> > ---
-> > Changes in V2:
-> >  - Fixup last cpu should be num_online_cpus() by Max Filippov
-> >  - Fixup typos found by Max Filippov
-> > ---
-> >  arch/arm64/kernel/patching.c      | 4 ++--
-> >  arch/csky/kernel/probes/kprobes.c | 2 +-
-> >  arch/riscv/kernel/patch.c         | 2 +-
-> >  arch/xtensa/kernel/jump_label.c   | 2 +-
-> >  4 files changed, 5 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/arch/arm64/kernel/patching.c b/arch/arm64/kernel/patching.c
-> > index 771f543464e0..33e0fabc0b79 100644
-> > --- a/arch/arm64/kernel/patching.c
-> > +++ b/arch/arm64/kernel/patching.c
-> > @@ -117,8 +117,8 @@ static int __kprobes aarch64_insn_patch_text_cb(void *arg)
-> >       int i, ret = 0;
-> >       struct aarch64_insn_patch *pp = arg;
-> >
-> > -     /* The first CPU becomes master */
-> > -     if (atomic_inc_return(&pp->cpu_count) == 1) {
-> > +     /* The last CPU becomes master */
-> > +     if (atomic_inc_return(&pp->cpu_count) == num_online_cpus()) {
-> >               for (i = 0; ret == 0 && i < pp->insn_cnt; i++)
-> >                       ret = aarch64_insn_patch_text_nosync(pp->text_addrs[i],
-> >                                                            pp->new_insns[i]);
-> > diff --git a/arch/csky/kernel/probes/kprobes.c b/arch/csky/kernel/probes/kprobes.c
-> > index 42920f25e73c..34ba684d5962 100644
-> > --- a/arch/csky/kernel/probes/kprobes.c
-> > +++ b/arch/csky/kernel/probes/kprobes.c
-> > @@ -30,7 +30,7 @@ static int __kprobes patch_text_cb(void *priv)
-> >       struct csky_insn_patch *param = priv;
-> >       unsigned int addr = (unsigned int)param->addr;
-> >
-> > -     if (atomic_inc_return(&param->cpu_count) == 1) {
-> > +     if (atomic_inc_return(&param->cpu_count) == num_online_cpus()) {
-> >               *(u16 *) addr = cpu_to_le16(param->opcode);
-> >               dcache_wb_range(addr, addr + 2);
-> >               atomic_inc(&param->cpu_count);
-> > diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
-> > index 0b552873a577..765004b60513 100644
-> > --- a/arch/riscv/kernel/patch.c
-> > +++ b/arch/riscv/kernel/patch.c
-> > @@ -104,7 +104,7 @@ static int patch_text_cb(void *data)
-> >       struct patch_insn *patch = data;
-> >       int ret = 0;
-> >
-> > -     if (atomic_inc_return(&patch->cpu_count) == 1) {
-> > +     if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
-> >               ret =
-> >                   patch_text_nosync(patch->addr, &patch->insn,
-> >                                           GET_INSN_LENGTH(patch->insn));
->
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
->
-> It's better if these sorts of things get split up: there's really no
-> dependency between these diffs and having them together just makes for a
-> merge/test headache for everyone.
-I'm Okay with split patches, @Arnd Bergmann what's your opinion?
-We've got all arch vendors' agreements (arm64, csky, riscv, xtensa).
+Convert the marvell,xenon-sdhci binding to JSON schema. Currently the
+in-tree dts files don't validate because they use sdhci@ instead of mmc@
+as required by the generic mmc-controller schema.
 
->
-> I'm OK taking this through the RISC-V tree if other folks ack it, but
-> for now I'm going to assume it's going to go in via somewhere else.
-Arnd has given some comments on unnecessary #error, maybe I need to update V2.
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
 
->
-> > diff --git a/arch/xtensa/kernel/jump_label.c b/arch/xtensa/kernel/jump_label.c
-> > index 61cf6497a646..b67efcd7e32c 100644
-> > --- a/arch/xtensa/kernel/jump_label.c
-> > +++ b/arch/xtensa/kernel/jump_label.c
-> > @@ -40,7 +40,7 @@ static int patch_text_stop_machine(void *data)
-> >  {
-> >       struct patch *patch = data;
-> >
-> > -     if (atomic_inc_return(&patch->cpu_count) == 1) {
-> > +     if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
-> >               local_patch_text(patch->addr, patch->data, patch->sz);
-> >               atomic_inc(&patch->cpu_count);
-> >       } else {
+Notes:
+    Changes in v2:
+    - Update MAINTAINERS entry
+    - Incorporate feedback from Krzysztof
 
+ .../bindings/mmc/marvell,xenon-sdhci.txt      | 173 -----------
+ .../bindings/mmc/marvell,xenon-sdhci.yaml     | 272 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 273 insertions(+), 174 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-s=
+dhci.txt
+ create mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-s=
+dhci.yaml
 
+diff --git a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.tx=
+t b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
+deleted file mode 100644
+index c51a62d751dc..000000000000
+--- a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
++++ /dev/null
+@@ -1,173 +0,0 @@
+-Marvell Xenon SDHCI Controller device tree bindings
+-This file documents differences between the core mmc properties
+-described by mmc.txt and the properties used by the Xenon implementation=
+.
+-
+-Multiple SDHCs might be put into a single Xenon IP, to save size and cos=
+t.
+-Each SDHC is independent and owns independent resources, such as registe=
+r sets,
+-clock and PHY.
+-Each SDHC should have an independent device tree node.
+-
+-Required Properties:
+-- compatible: should be one of the following
+-  - "marvell,armada-3700-sdhci": For controllers on Armada-3700 SoC.
+-  Must provide a second register area and marvell,pad-type.
+-  - "marvell,armada-ap806-sdhci": For controllers on Armada AP806.
+-  - "marvell,armada-ap807-sdhci": For controllers on Armada AP807.
+-  - "marvell,armada-cp110-sdhci": For controllers on Armada CP110.
+-
+-- clocks:
+-  Array of clocks required for SDHC.
+-  Require at least input clock for Xenon IP core. For Armada AP806 and
+-  CP110, the AXI clock is also mandatory.
+-
+-- clock-names:
+-  Array of names corresponding to clocks property.
+-  The input clock for Xenon IP core should be named as "core".
+-  The input clock for the AXI bus must be named as "axi".
+-
+-- reg:
+-  * For "marvell,armada-3700-sdhci", two register areas.
+-    The first one for Xenon IP register. The second one for the Armada 3=
+700 SoC
+-    PHY PAD Voltage Control register.
+-    Please follow the examples with compatible "marvell,armada-3700-sdhc=
+i"
+-    in below.
+-    Please also check property marvell,pad-type in below.
+-
+-  * For other compatible strings, one register area for Xenon IP.
+-
+-Optional Properties:
+-- marvell,xenon-sdhc-id:
+-  Indicate the corresponding bit index of current SDHC in
+-  SDHC System Operation Control Register Bit[7:0].
+-  Set/clear the corresponding bit to enable/disable current SDHC.
+-  If Xenon IP contains only one SDHC, this property is optional.
+-
+-- marvell,xenon-phy-type:
+-  Xenon support multiple types of PHYs.
+-  To select eMMC 5.1 PHY, set:
+-  marvell,xenon-phy-type =3D "emmc 5.1 phy"
+-  eMMC 5.1 PHY is the default choice if this property is not provided.
+-  To select eMMC 5.0 PHY, set:
+-  marvell,xenon-phy-type =3D "emmc 5.0 phy"
+-
+-  All those types of PHYs can support eMMC, SD and SDIO.
+-  Please note that this property only presents the type of PHY.
+-  It doesn't stand for the entire SDHC type or property.
+-  For example, "emmc 5.1 phy" doesn't mean that this Xenon SDHC only
+-  supports eMMC 5.1.
+-
+-- marvell,xenon-phy-znr:
+-  Set PHY ZNR value.
+-  Only available for eMMC PHY.
+-  Valid range =3D [0:0x1F].
+-  ZNR is set as 0xF by default if this property is not provided.
+-
+-- marvell,xenon-phy-zpr:
+-  Set PHY ZPR value.
+-  Only available for eMMC PHY.
+-  Valid range =3D [0:0x1F].
+-  ZPR is set as 0xF by default if this property is not provided.
+-
+-- marvell,xenon-phy-nr-success-tun:
+-  Set the number of required consecutive successful sampling points
+-  used to identify a valid sampling window, in tuning process.
+-  Valid range =3D [1:7].
+-  Set as 0x4 by default if this property is not provided.
+-
+-- marvell,xenon-phy-tun-step-divider:
+-  Set the divider for calculating TUN_STEP.
+-  Set as 64 by default if this property is not provided.
+-
+-- marvell,xenon-phy-slow-mode:
+-  If this property is selected, transfers will bypass PHY.
+-  Only available when bus frequency lower than 55MHz in SDR mode.
+-  Disabled by default. Please only try this property if timing issues
+-  always occur with PHY enabled in eMMC HS SDR, SD SDR12, SD SDR25,
+-  SD Default Speed and HS mode and eMMC legacy speed mode.
+-
+-- marvell,xenon-tun-count:
+-  Xenon SDHC SoC usually doesn't provide re-tuning counter in
+-  Capabilities Register 3 Bit[11:8].
+-  This property provides the re-tuning counter.
+-  If this property is not set, default re-tuning counter will
+-  be set as 0x9 in driver.
+-
+-- marvell,pad-type:
+-  Type of Armada 3700 SoC PHY PAD Voltage Controller register.
+-  Only valid when "marvell,armada-3700-sdhci" is selected.
+-  Two types: "sd" and "fixed-1-8v".
+-  If "sd" is selected, SoC PHY PAD is set as 3.3V at the beginning and i=
+s
+-  switched to 1.8V when later in higher speed mode.
+-  If "fixed-1-8v" is selected, SoC PHY PAD is fixed 1.8V, such as for eM=
+MC.
+-  Please follow the examples with compatible "marvell,armada-3700-sdhci"
+-  in below.
+-
+-Example:
+-- For eMMC:
+-
+-	sdhci@aa0000 {
+-		compatible =3D "marvell,armada-ap806-sdhci";
+-		reg =3D <0xaa0000 0x1000>;
+-		interrupts =3D <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>
+-		clocks =3D <&emmc_clk>,<&axi_clk>;
+-		clock-names =3D "core", "axi";
+-		bus-width =3D <4>;
+-		marvell,xenon-phy-slow-mode;
+-		marvell,xenon-tun-count =3D <11>;
+-		non-removable;
+-		no-sd;
+-		no-sdio;
+-
+-		/* Vmmc and Vqmmc are both fixed */
+-	};
+-
+-- For SD/SDIO:
+-
+-	sdhci@ab0000 {
+-		compatible =3D "marvell,armada-cp110-sdhci";
+-		reg =3D <0xab0000 0x1000>;
+-		interrupts =3D <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>
+-		vqmmc-supply =3D <&sd_vqmmc_regulator>;
+-		vmmc-supply =3D <&sd_vmmc_regulator>;
+-		clocks =3D <&sdclk>, <&axi_clk>;
+-		clock-names =3D "core", "axi";
+-		bus-width =3D <4>;
+-		marvell,xenon-tun-count =3D <9>;
+-	};
+-
+-- For eMMC with compatible "marvell,armada-3700-sdhci":
+-
+-	sdhci@aa0000 {
+-		compatible =3D "marvell,armada-3700-sdhci";
+-		reg =3D <0xaa0000 0x1000>,
+-		      <phy_addr 0x4>;
+-		interrupts =3D <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>
+-		clocks =3D <&emmcclk>;
+-		clock-names =3D "core";
+-		bus-width =3D <8>;
+-		mmc-ddr-1_8v;
+-		mmc-hs400-1_8v;
+-		non-removable;
+-		no-sd;
+-		no-sdio;
+-
+-		/* Vmmc and Vqmmc are both fixed */
+-
+-		marvell,pad-type =3D "fixed-1-8v";
+-	};
+-
+-- For SD/SDIO with compatible "marvell,armada-3700-sdhci":
+-
+-	sdhci@ab0000 {
+-		compatible =3D "marvell,armada-3700-sdhci";
+-		reg =3D <0xab0000 0x1000>,
+-		      <phy_addr 0x4>;
+-		interrupts =3D <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>
+-		vqmmc-supply =3D <&sd_regulator>;
+-		/* Vmmc is fixed */
+-		clocks =3D <&sdclk>;
+-		clock-names =3D "core";
+-		bus-width =3D <4>;
+-
+-		marvell,pad-type =3D "sd";
+-	};
+diff --git a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.ya=
+ml b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+new file mode 100644
+index 000000000000..eae7498686af
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+@@ -0,0 +1,272 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mmc/marvell,xenon-sdhci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Marvell Xenon SDHCI Controller
++
++description: |
++  This file documents differences between the core MMC properties descri=
+bed by
++  mmc-controller.yaml and the properties used by the Xenon implementatio=
+n.
++
++  Multiple SDHCs might be put into a single Xenon IP, to save size and c=
+ost.
++  Each SDHC is independent and owns independent resources, such as regis=
+ter
++  sets, clock and PHY.
++
++  Each SDHC should have an independent device tree node.
++
++maintainers:
++  - Ulf Hansson <ulf.hansson@linaro.org>
++
++properties:
++  compatible:
++    oneOf:
++      - enum:
++          - marvell,armada-3700-sdhci
++          - marvell,armada-cp110-sdhci
++          - marvell,armada-ap807-sdhci
++          - marvell,armada-ap806-sdhci
++
++      - items:
++          - const: marvell,armada-ap807-sdhci
++          - const: marvell,armada-ap806-sdhci
++
++  reg:
++    minItems: 1
++    maxItems: 2
++    description: |
++      For "marvell,armada-3700-sdhci", two register areas.  The first on=
+e
++      for Xenon IP register. The second one for the Armada 3700 SoC PHY =
+PAD
++      Voltage Control register.  Please follow the examples with compati=
+ble
++      "marvell,armada-3700-sdhci" in below.
++      Please also check property marvell,pad-type in below.
++
++      For other compatible strings, one register area for Xenon IP.
++
++  clocks:
++    minItems: 1
++    maxItems: 2
++
++  clock-names:
++    minItems: 1
++    items:
++      - const: core
++      - const: axi
++
++  marvell,xenon-sdhc-id:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 7
++    description: |
++      Indicate the corresponding bit index of current SDHC in SDHC Syste=
+m
++      Operation Control Register Bit[7:0].  Set/clear the corresponding =
+bit to
++      enable/disable current SDHC.
++
++  marvell,xenon-phy-type:
++    $ref: /schemas/types.yaml#/definitions/string
++    enum:
++      - "emmc 5.1 phy"
++      - "emmc 5.0 phy"
++    description: |
++      Xenon support multiple types of PHYs. To select eMMC 5.1 PHY, set:
++      marvell,xenon-phy-type =3D "emmc 5.1 phy" eMMC 5.1 PHY is the defa=
+ult
++      choice if this property is not provided.  To select eMMC 5.0 PHY, =
+set:
++      marvell,xenon-phy-type =3D "emmc 5.0 phy"
++
++      All those types of PHYs can support eMMC, SD and SDIO. Please note=
+ that
++      this property only presents the type of PHY.  It doesn't stand for=
+ the
++      entire SDHC type or property.  For example, "emmc 5.1 phy" doesn't=
+ mean
++      that this Xenon SDHC only supports eMMC 5.1.
++
++  marvell,xenon-phy-znr:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 0x1f
++    default: 0xf
++    description: |
++      Set PHY ZNR value.
++      Only available for eMMC PHY.
++
++  marvell,xenon-phy-zpr:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 0x1f
++    default: 0xf
++    description: |
++      Set PHY ZPR value.
++      Only available for eMMC PHY.
++
++  marvell,xenon-phy-nr-success-tun:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 1
++    maximum: 7
++    default: 0x4
++    description: |
++      Set the number of required consecutive successful sampling points
++      used to identify a valid sampling window, in tuning process.
++
++  marvell,xenon-phy-tun-step-divider:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    default: 64
++    description: |
++      Set the divider for calculating TUN_STEP.
++
++  marvell,xenon-phy-slow-mode:
++    type: boolean
++    description: |
++      If this property is selected, transfers will bypass PHY.
++      Only available when bus frequency lower than 55MHz in SDR mode.
++      Disabled by default. Please only try this property if timing issue=
+s
++      always occur with PHY enabled in eMMC HS SDR, SD SDR12, SD SDR25,
++      SD Default Speed and HS mode and eMMC legacy speed mode.
++
++  marvell,xenon-tun-count:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    default: 0x9
++    description: |
++      Xenon SDHC SoC usually doesn't provide re-tuning counter in
++      Capabilities Register 3 Bit[11:8].
++      This property provides the re-tuning counter.
++
++allOf:
++  - $ref: mmc-controller.yaml#
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: marvell,armada-3700-sdhci
++
++    then:
++      properties:
++        reg:
++          items:
++            - description: Xenon IP registers
++            - description: Armada 3700 SoC PHY PAD Voltage Control regis=
+ter
++          minItems: 2
++
++        marvell,pad-type:
++          enum:
++            - sd
++            - fixed-1-8v
++          description: |
++            Type of Armada 3700 SoC PHY PAD Voltage Controller register.
++            If "sd" is selected, SoC PHY PAD is set as 3.3V at the begin=
+ning
++            and is switched to 1.8V when later in higher speed mode.
++            If "fixed-1-8v" is selected, SoC PHY PAD is fixed 1.8V, such=
+ as for
++            eMMC.
++            Please follow the examples with compatible
++            "marvell,armada-3700-sdhci" in below.
++
++      required:
++        - marvell,pad-type
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - marvell,armada-cp110-sdhci
++              - marvell,armada-ap807-sdhci
++              - marvell,armada-ap806-sdhci
++
++    then:
++      properties:
++        clocks:
++          minItems: 2
++
++        clock-names:
++          items:
++            - const: core
++            - const: axi
++
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    // For eMMC
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    mmc@aa0000 {
++      compatible =3D "marvell,armada-ap807-sdhci", "marvell,armada-ap806=
+-sdhci";
++      reg =3D <0xaa0000 0x1000>;
++      interrupts =3D <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
++      clocks =3D <&emmc_clk 0>, <&axi_clk 0>;
++      clock-names =3D "core", "axi";
++      bus-width =3D <4>;
++      marvell,xenon-phy-slow-mode;
++      marvell,xenon-tun-count =3D <11>;
++      non-removable;
++      no-sd;
++      no-sdio;
++
++      /* Vmmc and Vqmmc are both fixed */
++    };
++
++  - |
++    // For SD/SDIO
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    mmc@ab0000 {
++      compatible =3D "marvell,armada-cp110-sdhci";
++      reg =3D <0xab0000 0x1000>;
++      interrupts =3D <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
++      vqmmc-supply =3D <&sd_vqmmc_regulator>;
++      vmmc-supply =3D <&sd_vmmc_regulator>;
++      clocks =3D <&sdclk 0>, <&axi_clk 0>;
++      clock-names =3D "core", "axi";
++      bus-width =3D <4>;
++      marvell,xenon-tun-count =3D <9>;
++    };
++
++  - |
++    // For eMMC with compatible "marvell,armada-3700-sdhci":
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    mmc@aa0000 {
++      compatible =3D "marvell,armada-3700-sdhci";
++      reg =3D <0xaa0000 0x1000>,
++            <0x17808 0x4>;
++      interrupts =3D <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
++      clocks =3D <&emmcclk 0>;
++      clock-names =3D "core";
++      bus-width =3D <8>;
++      mmc-ddr-1_8v;
++      mmc-hs400-1_8v;
++      non-removable;
++      no-sd;
++      no-sdio;
++
++      /* Vmmc and Vqmmc are both fixed */
++
++      marvell,pad-type =3D "fixed-1-8v";
++    };
++
++  - |
++    // For SD/SDIO with compatible "marvell,armada-3700-sdhci":
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    mmc@ab0000 {
++      compatible =3D "marvell,armada-3700-sdhci";
++      reg =3D <0xab0000 0x1000>,
++            <0x17808 0x4>;
++      interrupts =3D <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
++      vqmmc-supply =3D <&sd_regulator>;
++      /* Vmmc is fixed */
++      clocks =3D <&sdclk 0>;
++      clock-names =3D "core";
++      bus-width =3D <4>;
++
++      marvell,pad-type =3D "sd";
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 05fd080b82f3..8e0a19d3b8d5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11595,7 +11595,7 @@ MARVELL XENON MMC/SD/SDIO HOST CONTROLLER DRIVER
+ M:	Hu Ziji <huziji@marvell.com>
+ L:	linux-mmc@vger.kernel.org
+ S:	Supported
+-F:	Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
++F:	Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+ F:	drivers/mmc/host/sdhci-xenon*
+=20
+ MATROX FRAMEBUFFER DRIVER
+--=20
+2.35.1
 
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/

@@ -2,151 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7694E1AE7
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 10:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A61C14E1AED
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 10:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244471AbiCTJk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 05:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
+        id S243762AbiCTJni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 05:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243912AbiCTJkd (ORCPT
+        with ESMTP id S239506AbiCTJng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 05:40:33 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE05A140E7
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 02:39:04 -0700 (PDT)
-Received: from integral2.. (unknown [182.2.42.189])
-        by gnuweeb.org (Postfix) with ESMTPSA id 0797F7E335;
-        Sun, 20 Mar 2022 09:39:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1647769144;
-        bh=BuWwbvbdO1pAfMLZtLiokH1rP8SoQ7kLSInYGGGXMhg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kdnl13VXhHYGESqMLY0vF7YRt97GWcB5+OaEz4Gg55d5dm/lOKGzYEk8MtTZBZMit
-         OKtQxTLqKB80mkKA8pit287FgFBPTCowBq/JUBcCpKtYsyeAmR5Yw/aKOzM5+rFCZK
-         su756yLKNStlVTjU4ElSGMzJCOZARrmsmhczBzWJydaGMR4iZ+HY1SBqborb9MzYbT
-         pAxsR4zRYYT06m/SdoYgdUHJBAjw2J9nzZIoZ1EEY87fjKC6auA9j3A2d5SvEdDp/c
-         mvm0DXO3PWidxbrd/CjbRsf0MyH+QOupHNaON4slhyhc5Y3wjYCGzM3z3pmXh88cea
-         iTXfJF1S5Y20w==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Nugraha <richiisei@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [RFC PATCH v1 6/6] tools/include/string: Implement `strdup()` and `strndup()`
-Date:   Sun, 20 Mar 2022 16:37:50 +0700
-Message-Id: <20220320093750.159991-7-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
-References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
+        Sun, 20 Mar 2022 05:43:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F7749F84;
+        Sun, 20 Mar 2022 02:42:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5762B80DB3;
+        Sun, 20 Mar 2022 09:42:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA43C340E9;
+        Sun, 20 Mar 2022 09:42:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647769331;
+        bh=m+CrXHcs1IMz031io+qrVwSLHQcIkDc2WgYRBJMoU5I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SJCZbu5FTyVw0taTsBz0vOAiE+XN0VdhH5f9jqSD6hhSETTg2crd9GcDC3tMqcq9O
+         crMsDdveov+dpqa5KsNJLxCkdzYtdp7u/knUnkWSQB5/SH5br4ZXr6A8qXBPIzV+tO
+         KWUXxmCuYOH1l1sRamcEmt9hNAeKvyKJxwDVxNN6NsUuJA0L8eBaJbsn7La85DMoyO
+         0Db5sSXyhbZImY+adn7DqnDhUscYF7vfYJpaJHXaM5juFox+JK+HtfpxPNJnv0x6HD
+         Z4VxOnPUYP3u3qSTQjlmiMBVwAk8ELMWyGsHzaTSSLDQx4PDHN9T2t17D9qLCdUYr4
+         2HSZAlJoKtZGw==
+Date:   Sun, 20 Mar 2022 10:42:05 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
+        jie.deng@intel.com, sven@svenpeter.dev, bence98@sch.bme.hu,
+        lukas.bulwahn@gmail.com, arnd@arndb.de, olof@lixom.net,
+        andriy.shevchenko@linux.intel.com, tali.perry@nuvoton.com,
+        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
+        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 01/11] arm: dts: add new property for NPCM i2c module
+Message-ID: <Yjb27Qbl8VRFZTkm@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski@canonical.com, yangyicong@hisilicon.com,
+        semen.protsenko@linaro.org, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, lukas.bulwahn@gmail.com, arnd@arndb.de,
+        olof@lixom.net, andriy.shevchenko@linux.intel.com,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220303083141.8742-1-warp5tw@gmail.com>
+ <20220303083141.8742-2-warp5tw@gmail.com>
+ <YjTrgia/VX6rBT1r@shikoro>
+ <CACD3sJarf9jBny8ru0YihehT4C6k1pqw9Ln+5a+Rs6_F_o6=AQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zy3zYHWxJ9cmIO3t"
+Content-Disposition: inline
+In-Reply-To: <CACD3sJarf9jBny8ru0YihehT4C6k1pqw9Ln+5a+Rs6_F_o6=AQ@mail.gmail.com>
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add strdup and strndup support. These functions are only available on
-architectures that have my_syscall6() macro from nolibc.
 
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- tools/include/nolibc/string.h | 68 +++++++++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+--zy3zYHWxJ9cmIO3t
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
-index 4554b6fcb400..413c65f7c853 100644
---- a/tools/include/nolibc/string.h
-+++ b/tools/include/nolibc/string.h
-@@ -9,6 +9,10 @@
- 
- #include "std.h"
- 
-+static void free(void *ptr);
-+static void *malloc(size_t len);
-+static void *realloc(void *old_ptr, size_t new_size);
-+
- /*
-  * As much as possible, please keep functions alphabetically sorted.
-  */
-@@ -127,6 +131,70 @@ size_t nolibc_strlen(const char *str)
- 		nolibc_strlen((str));           \
- })
- 
-+static __attribute__((unused))
-+char *strdup(const char *str)
-+{
-+	size_t allocated = 2048;
-+	size_t i;
-+	char *ret;
-+	char *tmp;
-+
-+	ret = malloc(allocated);
-+	if (__builtin_expect(!ret, 0))
-+		return NULL;
-+
-+	i = 0;
-+	for (;;) {
-+		char c = *str;
-+		if (!c)
-+			break;
-+
-+		if (i == allocated) {
-+			allocated += 2048;
-+			tmp = realloc(ret, allocated);
-+			if (__builtin_expect(!tmp, 0)) {
-+				free(ret);
-+				return NULL;
-+			}
-+			ret = tmp;
-+		}
-+
-+		ret[i++] = c;
-+		str++;
-+	}
-+
-+	ret[i] = '\0';
-+	return ret;
-+}
-+
-+static __attribute__((unused))
-+char *strndup(const char *str, size_t maxlen)
-+{
-+	size_t i;
-+	char *ret;
-+
-+	ret = malloc(maxlen + 1);
-+	if (__builtin_expect(!ret, 0))
-+		return NULL;
-+
-+	i = 0;
-+	for (;;) {
-+		char c = *str;
-+		if (!c)
-+			break;
-+
-+		if (i == maxlen)
-+			break;
-+
-+		ret[i++] = c;
-+		str++;
-+	}
-+
-+	ret[i] = '\0';
-+	return ret;
-+}
-+
-+
- static __attribute__((unused))
- size_t strlcat(char *dst, const char *src, size_t size)
- {
--- 
-Ammar Faizi
+Hi Tyrone,
 
+> There are still some discussions for the patch V4 and it might take
+> some time though.
+
+Take your time, I am not in a hurry. Just wanted to outline the best
+process so it will be easier to apply the new version.
+
+> Yes, the dts patch could be submitted via arm-soc.
+
+Great.
+
+> I really appreciate your comments.
+
+Thank you and happy hacking,
+
+   Wolfram
+
+
+--zy3zYHWxJ9cmIO3t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmI29u0ACgkQFA3kzBSg
+KbYWaQ/+OmWLzRVx0uITX7+yRTH8JlxcvGXr/kxT3kHYYKURJbJQLUDXrLgAasbq
+Yaf+7x9LECjsNF2zpr6ndF/pxvClrDmVdH7MMjjXrpMVgcFFQiJFufMkDDURtT+w
+ed7maEfDwwk1gjnrgZfmIKONhnrw0PwOxu+W+5N+gT7cX/i6/cmm4k9OMV18VJLs
+hMhz/DXuYFwqj/NKrDbQSqeRp9hPmNWXMWHWBaJARZOL6rB7/uLwM2JvJOJl/1gS
+X5upnQGJIBQs9LQ8TKFZqBHLb6HUBi4YE/EKGfVsAmJh48TdaIe4ava7X1ec41wc
+MBKW64Q5Hqmh85pSZLwTqkbhS/4xFIDUClPuV3ED8RzOdVWD9EMc3ubXrxYppEU1
+dTsp76kgMJjVoa17zizzMx2dvvceuonI0QPZvltb/qoWWeGrPt6HS5Lr+GzMtQ+e
+6tuIcmCxQnbIPVNvsXAO+ISzw4g07AEJTHD7azy3PMVRoo6YBajHiwWbRC9Q6+Iw
+H1BYlsOIvrVrYyydfN1gnxycbnwGDVu3ZVy+CCwIAeU4QLzHW+HobLHQg+U76wOr
+sz/KN/t+7XzP3bHUiLI9DjBP/PLxs5A2fJqNMZi8MiOH6WGAFPOJ+cP4GRN5F4Hk
+1xyPmSk+WQHr33vieTjYoG3hIAuMvJQPvbyyVAsl8rT0o/3/Ic4=
+=7k8X
+-----END PGP SIGNATURE-----
+
+--zy3zYHWxJ9cmIO3t--

@@ -2,172 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C33F4E1B88
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 13:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 955024E1B90
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 13:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241969AbiCTMLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 08:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
+        id S245040AbiCTMSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 08:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbiCTMLK (ORCPT
+        with ESMTP id S232356AbiCTMST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 08:11:10 -0400
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECC53DDD1;
-        Sun, 20 Mar 2022 05:09:47 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id w25so15021197edi.11;
-        Sun, 20 Mar 2022 05:09:47 -0700 (PDT)
+        Sun, 20 Mar 2022 08:18:19 -0400
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E3D40A0D;
+        Sun, 20 Mar 2022 05:16:56 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id r22so4958908ejs.11;
+        Sun, 20 Mar 2022 05:16:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:content-language:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=09MJ3F+SKFH/o6mzuUI5CFbfCkCq8QY9FgJU9k73OZc=;
-        b=fiRC911N6/W6iGbV1JRrSUO87WXp9WRuMNaCtvHy0RX3SanCyN0mfgEK6tpDa/FHUJ
-         ZdLVla7ZBETDHCBIO+bgeQUjbZzqj1FtmHE/8AbH2jucxn1IGHc08jMsGG+FHZuE9gjR
-         wtDhbteeJ1e1W1ATm0NN8byiIxMGH5Kbxx4pIa9TZKhTZiKYHE43nA5cTpUHQm9nTRqv
-         b3dNSHava7sqq2AY3fkZ4lKuwUTSCgQlSlRh9ApsyTKGljisLjnqrZ6DV7WTykYfeuP0
-         LIrn1WE16GO4mMqxqKYS8Tb+HaPmkHv9o+0fplHQEhR288hRub76cKdqxqTL4gSoyyaQ
-         Ry9w==
-X-Gm-Message-State: AOAM531q1bKi9Qupk9ZjLxtSv8zM6f7b8TntDCG/jYK17yDfQfyxKCUQ
-        jTogCwt5AT2IyVetP2nT4vY=
-X-Google-Smtp-Source: ABdhPJxJw0uAM+k7E1tqS8+6bFI30rkfWXjj31C1g20y/9V+mDiczOByjIKW0euKEIwV3OiVfosgQA==
-X-Received: by 2002:aa7:d156:0:b0:419:bc7:acd6 with SMTP id r22-20020aa7d156000000b004190bc7acd6mr11821446edo.239.1647778186114;
-        Sun, 20 Mar 2022 05:09:46 -0700 (PDT)
+        bh=0m+DD8jcICWmSL15nXNS8VPv5AmHQkrE/XIE2Q+G2GE=;
+        b=rjU7Mt2sfeaVa6ld32t3QpGQxMsT/6pnsdUPcIfeygGhnAotB/S5kQ/Vvn3kH/88FS
+         XXoIDChtGEvWGbpomF+bQFI1z/IHJQST6D+dnaJKxWhsdf33wMPtnM95JdsGdK2W4P18
+         wyOqe6e1JelHl4VQovCmFtU06Aum2al+h5yTU3ioiV9a76/YG8fdINN2u6XHy8ScGt+L
+         ltfuexe3ext2STap6lSTwEFD1MqygbpJd0VQ5PeYyJ8Dm0CiJQkAxLvNTVGuGsoORJPe
+         lCZgel/PSju56dRhTfMDVnovzI2vZY42V0UdDdk9U6fliTpz8KqjdJYdKLBie3pgpeDE
+         8TGA==
+X-Gm-Message-State: AOAM5325AxbFjAT6jilzC5aabBJb0pyAnMV+a/cHgQQDIZuDTTaxto26
+        8ZUkHTNP/OSj0pMNT3/AJMo=
+X-Google-Smtp-Source: ABdhPJxT5vk1JEx9+TNT5+JbcYdHzOLhGcIkH/AVyoEc/atVyPY2CknAwBKJ25W/gAZfMZtie3BKwA==
+X-Received: by 2002:a17:907:3f9e:b0:6da:842e:873e with SMTP id hr30-20020a1709073f9e00b006da842e873emr16743467ejc.383.1647778615069;
+        Sun, 20 Mar 2022 05:16:55 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id z21-20020a1709063a1500b006da6436819dsm5790038eje.173.2022.03.20.05.09.44
+        by smtp.googlemail.com with ESMTPSA id u24-20020a1709064ad800b006d70e40bd9esm5846284ejt.15.2022.03.20.05.16.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Mar 2022 05:09:45 -0700 (PDT)
-Message-ID: <ce32768b-d68f-a5dd-ff68-4b90089c88f2@kernel.org>
-Date:   Sun, 20 Mar 2022 13:09:43 +0100
+        Sun, 20 Mar 2022 05:16:54 -0700 (PDT)
+Message-ID: <56dabe01-d44a-9c6d-aee5-da606f557b93@kernel.org>
+Date:   Sun, 20 Mar 2022 13:16:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 14/16] dt-bindings: clock: Convert qcom,krait-cc to
- yaml
-Content-Language: en-US
-To:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20220318160827.8860-1-ansuelsmth@gmail.com>
- <20220318160827.8860-15-ansuelsmth@gmail.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220318160827.8860-15-ansuelsmth@gmail.com>
+Subject: Re: [PATCH] memory: samsung: exynos5422-dmc: Avoid some over memory
+ allocation
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <69d7e69346986e2fdb994d4382954c932f9f0993.1647760213.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <69d7e69346986e2fdb994d4382954c932f9f0993.1647760213.git.christophe.jaillet@wanadoo.fr>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 17:08, Ansuel Smith wrote:
-> Convert qcom,krait-cc to yaml and add missing l2 clocks and names
-> definiton.
-
-lang typo.
-
+On 20/03/2022 08:10, Christophe JAILLET wrote:
+> 'dmc->counter' is a 'struct devfreq_event_dev **', so there is some
+> over memory allocation. 'counters_size' should be computed with
+> 'sizeof(struct devfreq_event_dev *)'.
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> Use 'sizeof(*dmc->counter)' instead to fix it.
+> 
+> While at it, use devm_kcalloc() instead of devm_kzalloc()+open coded
+> multiplication.
+> 
+> Fixes: 6e7674c3c6df ("memory: Add DMC driver for Exynos5422")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->  .../bindings/clock/qcom,krait-cc.txt          | 34 ----------
->  .../bindings/clock/qcom,krait-cc.yaml         | 63 +++++++++++++++++++
->  2 files changed, 63 insertions(+), 34 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.txt
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
+> devm_kmalloc_array() could also be used to save a few cycles because the
+> array is fully initialized a few lines below.
+> ---
+>  drivers/memory/samsung/exynos5422-dmc.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,krait-cc.txt b/Documentation/devicetree/bindings/clock/qcom,krait-cc.txt
-> deleted file mode 100644
-> index 030ba60dab08..000000000000
-> --- a/Documentation/devicetree/bindings/clock/qcom,krait-cc.txt
-> +++ /dev/null
-> @@ -1,34 +0,0 @@
-> -Krait Clock Controller
-> -
-> -PROPERTIES
-> -
-> -- compatible:
-> -	Usage: required
-> -	Value type: <string>
-> -	Definition: must be one of:
-> -			"qcom,krait-cc-v1"
-> -			"qcom,krait-cc-v2"
-> -
-> -- #clock-cells:
-> -	Usage: required
-> -	Value type: <u32>
-> -	Definition: must be 1
-> -
-> -- clocks:
-> -	Usage: required
-> -	Value type: <prop-encoded-array>
-> -	Definition: reference to the clock parents of hfpll, secondary muxes.
-> -
-> -- clock-names:
-> -	Usage: required
-> -	Value type: <stringlist>
-> -	Definition: must be "hfpll0", "hfpll1", "acpu0_aux", "acpu1_aux", "qsb".
-> -
-> -Example:
-> -
-> -	kraitcc: clock-controller {
-> -		compatible = "qcom,krait-cc-v1";
-> -		clocks = <&hfpll0>, <&hfpll1>, <&acpu0_aux>, <&acpu1_aux>, <qsb>;
-> -		clock-names = "hfpll0", "hfpll1", "acpu0_aux", "acpu1_aux", "qsb";
-> -		#clock-cells = <1>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml b/Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
-> new file mode 100644
-> index 000000000000..f89b70ab01ae
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,krait-cc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Krait Clock Controller
-> +
-> +maintainers:
-> +  - Ansuel Smith <ansuelsmth@gmail.com>
-> +
-> +description: |
-> +  Qualcomm Krait Clock Controller used to correctly scale the CPU and the L2
-> +  rates.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,krait-cc-v1
-> +      - qcom,krait-cc-v2
-> +
-> +  clocks:
-> +    items:
-> +      - description: phandle to hfpll for CPU0 mux
-> +      - description: phandle to hfpll for CPU1 mux
-> +      - description: phandle to hfpll for L2 mux
-> +      - description: phandle to CPU0 aux clock
-> +      - description: phandle to CPU1 aux clock
-> +      - description: phandle to L2 aux clock
-> +      - description: phandle to QSB fixed clk
 
-None of these were in original bindings, original DTS (because it does
-not exist), original driver. Therefore you do not need to change
-bindings during conversion.
+Thanks, looks good. I'll take it after merge window.
 
-I propose to add them in second commit with explanation why do you add them.
 
 Best regards,
 Krzysztof

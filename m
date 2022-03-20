@@ -2,68 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EA64E1AD2
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 10:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C73FE4E1ADD
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 10:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243073AbiCTJU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 05:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
+        id S243211AbiCTJc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 05:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237201AbiCTJUx (ORCPT
+        with ESMTP id S235912AbiCTJcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 05:20:53 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616E02CE12
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 02:19:30 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id h63so13807006iof.12
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 02:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gSgE6yqkno7KzD+jL8KRzD/isTc5hJCWP4hnpiIR8X0=;
-        b=CsH4edHw8WSKA94Lkc0rOnB7epUJgnoD9Z8QTIYRO+a7K5/9ktJb4FXPKuKdspVABe
-         yO0B/EVW1+xR5TwBuBHBxQLHZVzQA0TtjFk3FeuKxKNnJbSMzPL3PF6amOdMsFRZ5FJf
-         8+ULmopFYRwJzxXyZwFBXiB39pkcHq/ySbCSubyQ8wTiNHWUd+bDswhEjebmqkMkoZF2
-         JN+MyQEDLTZuREXBzgl/oI1/ro9up2bOsQZE0fbod8i0DseBXBPEjm2J+qwIBlHztvWc
-         VnVUJdbWnTWIgbCTeMflxK0zEbDn4BHzZ1gNX7sOddt7rMJzg+IMupiLUULkBl4Rm/El
-         6H4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gSgE6yqkno7KzD+jL8KRzD/isTc5hJCWP4hnpiIR8X0=;
-        b=M8vE0S7cCX4VwBzyDy4hwDOae7SFgYVCphR6SjSsciOTkhbAB5T1/u43BD3rCvR0wu
-         +zK/88D+7lDnnAarVuggBT6U78shiBTdGX2tJm87yMS0kYyBexIcojAE61pTOQvrVtxj
-         N4piTsC+4ayekX1pfSj420/EqbSKgHqFxQvlKO2SH5raPDnHKfh8Np8z3IHYUMmtD3au
-         Rqrqbh7EQW5u+/ZNchMGQMEBoX8PFimhxKPxRMwBKh1bMdZNrDnDTxPCtX0tp+z4SGlR
-         7RvGbakUVbq4zbj2RsiHZBDkWgPcJxRStTVy1+S0cEkEfZjj6sb/F1CisQ5r1wqYL0JQ
-         ddtg==
-X-Gm-Message-State: AOAM532G9aCA1mU2MXgF4DWFcOnBU7DSxim0fgqOtUnSrV8tu/cShB8W
-        /IlYvbnmUbNDV3M3Omj1wUYL1+RZI+UN9RARrPA=
-X-Google-Smtp-Source: ABdhPJwx5w7JImU6Tkv500kqsx5RX2SPwULSRkx+D7lzBJknKujzkeLLzikMQyYbCqkLa86AF4+AVAEjSZatRWHJpJk=
-X-Received: by 2002:a05:6638:531:b0:317:af7d:d934 with SMTP id
- j17-20020a056638053100b00317af7dd934mr7797245jar.307.1647767969638; Sun, 20
- Mar 2022 02:19:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220319083301.87400-1-gch981213@gmail.com>
-In-Reply-To: <20220319083301.87400-1-gch981213@gmail.com>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Sun, 20 Mar 2022 17:19:18 +0800
-Message-ID: <CAJsYDVLORFCt75Nv1+3wNd2=mMhHQm6Hb_iQ_HGO=Qgg6iV0eQ@mail.gmail.com>
-Subject: Re: [PATCH] mtd: spinand: gigadevice: fix Quad IO for GD5F1GQ5UExxG
-To:     linux-mtd@lists.infradead.org
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Stefan Roese <sr@denx.de>,
-        Reto Schneider <reto.schneider@husqvarnagroup.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        open list <linux-kernel@vger.kernel.org>
+        Sun, 20 Mar 2022 05:32:23 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8102DAB5
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 02:30:59 -0700 (PDT)
+Received: from [192.168.1.101] (unknown [88.235.220.59])
+        by gnuweeb.org (Postfix) with ESMTPSA id B19977E2BC;
+        Sun, 20 Mar 2022 09:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1647768658;
+        bh=ygkrm1RT86tyG8j/iRFsG6RBtkprW94+sdWpA72M23g=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=iRorJ7lpwjGI+5bAXnD11w50y3D0M4kIeiuKV11AUxq5EwUATViGgDdmJy2RYcXLq
+         hpDaPpc5u3oIyAOdjcEIR9IJlVKq2m49l24ORVZ4Y9Cc8JCPk3hTNExeJZ2YI16bLw
+         L7ixiy8sEFON+dzXkkf1DwSpWJ9UGJsda+0cG2+xoRzK4PJkWYkZv2vrHOyo/ZJsyv
+         eHI+3pgFd3OrW9UErrviJRaw3EBlbqJoOmWp48WVZrdWMLsAA30HQ4GHJKMDt6RFg7
+         BVvq632iyyrMCi1f8AjzJM/DHUAYyZO93yq4N2bGfumqgCTcHJfvI1/8HzwoKnEZNU
+         RFt7kAuHiVpDw==
+Message-ID: <e0fb4826470cc052b59c8cba6319df160908af5d.camel@gnuweeb.org>
+Subject: Re: [PATCH] boot install: Partially refactor the logic for
+ detecting bootloader
+From:   Beru Shinsetsu <windowz414@gnuweeb.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Date:   Sun, 20 Mar 2022 12:30:51 +0300
+In-Reply-To: <YjZJDP21H+ngnQb4@zn.tnic>
+References: <20220316173221.5937-1-windowz414@gnuweeb.org>
+         <2E28CA0C-34F2-4985-86CC-B1823AF8D747@alien8.de>
+         <7b4f98d92a57af35c927aef6c85373f8eeeab29c.camel@gnuweeb.org>
+         <221F34C3-C3E0-4401-BEF2-422F11BF8324@alien8.de>
+         <9fa42069edf92d0ca7d64e967e1b9c0030d9a6ec.camel@gnuweeb.org>
+         <YjZJDP21H+ngnQb4@zn.tnic>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,25 +60,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Sat, 2022-03-19 at 22:20 +0100, Borislav Petkov wrote:
+> On Thu, Mar 17, 2022 at 04:46:48PM +0300, Beru Shinsetsu wrote:
+> > > Well, I saw this on SLE15-SP4 (brand new) yesterday while I haven't
+> > > seen it on previous service packs. So this doesn't look like it has
+> > > been there since 2007. I'll try to debug it when I get a chance.
+> > 
+> > Hmm alright. Good luck from now! Hope everything goes flawlessly.
+> 
+> Here it is:
+> 
+> From arch/x86/boot/install.sh:
+> 
+> ...
+> # User may have a custom install script
+> 
+> if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+> if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+> ...
+> 
+> so distros *usually* should supply a custom, distro-specific
+> installkernel script which does that. The distros which you are seeing
+> it on simply don't have that script installed and I need to talk to
+> distro people as to what the rule there is for supplying such a script
+> now.
+> 
+> Because most distros should supply it though and those new distros
+> dropping it looks like some new "strategy" or so.
+> 
+> We'll see.
 
-On Sat, Mar 19, 2022 at 4:33 PM Chuanhong Guo <gch981213@gmail.com> wrote:
-> [...]
-> --- a/drivers/mtd/nand/spi/gigadevice.c
-> +++ b/drivers/mtd/nand/spi/gigadevice.c
-> @@ -39,6 +39,14 @@ static SPINAND_OP_VARIANTS(read_cache_variants_f,
->                 SPINAND_PAGE_READ_FROM_CACHE_OP_3A(true, 0, 1, NULL, 0),
->                 SPINAND_PAGE_READ_FROM_CACHE_OP_3A(false, 0, 0, NULL, 0));
->
-> +static SPINAND_OP_VARIANTS(read_cache_variants_q5,
-> +               SPINAND_PAGE_READ_FROM_CACHE_QUADIO_OP(0, 2, NULL, 0),
-
-I just noticed that only GD5F1GQ5 has 2 dummy bytes. GD5F2GQ5 and
-GD5F4GQ6 have 4 dummy bytes instead.
-I'll rename this variant to 1gq5 and submit a new version of this with
-a series of
-patches for other GD SPI NANDs.
-
+I have seen that, and I had pretty much the same thoughts as well. Arch
+isn't quite new either. And as I said, installing from AUR works pretty
+fine (package is `linux-mainline`, it also compiles the kernel on
+*your* PC locally, then installs it as a PacMan package). Just
+compiling manually doesn't. I suppose that's one of the quirks of the
+distro being installed manually by the user from the very first stage.
+Not even counting Gentoo though, I haven't tried it out as I'm scared
+it can explode my laptop as it *compiles the whole system locally*. But
+let's see how it goes. Thank you so much by the way!
 -- 
-Regards,
-Chuanhong Guo
+Beru Shinsetsu

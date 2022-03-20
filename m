@@ -2,300 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE11E4E1B46
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 12:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8D04E1B4C
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 12:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244319AbiCTLKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 07:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
+        id S244596AbiCTLSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 07:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238061AbiCTLK3 (ORCPT
+        with ESMTP id S238061AbiCTLSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 07:10:29 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FAB4FC75
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 04:09:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647774546; x=1679310546;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kS7nB5wKB0lFLr05hGgs0Zt0HxhfWwY+aKIBo4angRg=;
-  b=HbJDPM6Tk4AecFmKOve844EvgiWxOXTEo0acq4s62YHrxJdRZAjqxGbN
-   jiUg6iv3DSckYUXfdKoqKzLUWRArBP/9Mh0pVzAp99wPlzhdPZ+d4NexB
-   bpXPU66jOQLnfEDZDGbCj/RTZKGgLp9DyNtTRbZCuqPoNDZCI2Kpprihb
-   vI2eIM9Y7rxcDY55/nomhORzypMYMh/19y30u21bpg7hIXNPCp4fOaw56
-   eNAEiTHAkMs3qGl6sy0XpRzCblBGBJ1ppWK7r7+56IxAcJjM2+fXSykwy
-   tqEn7YENJVDj+odBSIMW7uMMhhYE3BZppatJoYLNNt8ovT+hxQR8lGghy
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="256203186"
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="256203186"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 04:09:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="499853126"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 20 Mar 2022 04:09:04 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVtQl-000Gqx-Cb; Sun, 20 Mar 2022 11:09:03 +0000
-Date:   Sun, 20 Mar 2022 19:08:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:nvme-rfc 5/12] drivers/soc/apple/rtkit-internal.h:21:51:
- warning: format '%llx' expects argument of type 'long long unsigned int',
- but argument 5 has type 'dma_addr_t' {aka 'unsigned int'}
-Message-ID: <202203201919.HHwaX0TL-lkp@intel.com>
+        Sun, 20 Mar 2022 07:18:35 -0400
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30392BD2F2;
+        Sun, 20 Mar 2022 04:17:11 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id r23so15054320edb.0;
+        Sun, 20 Mar 2022 04:17:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:content-language:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=UBrDULiQVv8qxD7aYk4AWDstYoyKO8wQgQDksvjZNBs=;
+        b=eLHgmZq9SYW/32r7bdY7CJhzqMVTydAb6ir4w0ZT82j63lZrVumIYxcv5B0l3c2WRK
+         KA2r/5wlm0eQxh8vXORs8weQ30byMz8n1qvjOzGmsxIdKeG1D+aQRIFZoapsR3NIq/mD
+         rMfH9RpvsEh9i2qGBF1g2lPllITuIiOsK6qTVYB8E7Msf8xZaI6xizufSxofyYrFnlOW
+         ADoDlIDAxVaH5tkP2IX5wmjs219h/C4JEie2XqG7wNXtNGUrKCyhgIOTdl+TwTt36Vkx
+         J/s5Q7Flsy+eoGK+P6L0zK2WaaVnkfEpHaLUNSdsNAVUlTsgeOM/wdMjuzuh6zYLAGAy
+         X+Sw==
+X-Gm-Message-State: AOAM532snYgpPw6MsFrUay8xNilPp5fU0xVNLSDFQgLf6yCYE1CDQrt+
+        D1P5srtz2eRK2VNZUf6sk7g=
+X-Google-Smtp-Source: ABdhPJzzD7CQ3301T4Ke3RFmfvEMu27FcuKTvmOQ/AXeBDDer+OgK12keT4aB51VBVcCiO8mOYQK4A==
+X-Received: by 2002:aa7:d74d:0:b0:419:1d7:adcc with SMTP id a13-20020aa7d74d000000b0041901d7adccmr14877107eds.407.1647775029588;
+        Sun, 20 Mar 2022 04:17:09 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id sc18-20020a1709078a1200b006d6f8c77695sm5774734ejc.101.2022.03.20.04.17.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Mar 2022 04:17:08 -0700 (PDT)
+Message-ID: <e2565939-5b0e-1282-b76f-6402399fcfc0@kernel.org>
+Date:   Sun, 20 Mar 2022 12:17:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v3 6/6] dt-bindings: pinctrl: convert ocelot-pinctrl to
+ YAML format
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Quentin Schulz <quentin.schulz@bootlin.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+References: <20220319204628.1759635-1-michael@walle.cc>
+ <20220319204628.1759635-7-michael@walle.cc>
+ <89f9b797-e4b8-139a-d9e6-ebe71779b943@kernel.org>
+ <3949a4c3271473b73851b0970bdb58b8@walle.cc>
+In-Reply-To: <3949a4c3271473b73851b0970bdb58b8@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux nvme-rfc
-head:   668a74289aa4cdde7d55e4f602043ece670ea71c
-commit: 5f102aac51098ef778ed49811de43091e05ca895 [5/12] soc: apple: rtkit: Add RTKit IPC library
-config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220320/202203201919.HHwaX0TL-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/5f102aac51098ef778ed49811de43091e05ca895
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux nvme-rfc
-        git checkout 5f102aac51098ef778ed49811de43091e05ca895
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/soc/
+On 20/03/2022 12:08, Michael Walle wrote:
+> Am 2022-03-20 11:54, schrieb Krzysztof Kozlowski:
+>> On 19/03/2022 21:46, Michael Walle wrote:
+>>> Convert the ocelot-pinctrl device tree binding to the new YAML format.
+>>>
+>>> Additionally to the original binding documentation, add interrupt
+>>> properties which are optional and already used on several SoCs like
+>>> SparX-5, Luton, Ocelot and LAN966x but were not documented before.
+>>>
+>>> Also, on the sparx5 and the lan966x SoCs there are two items for the
+>>> reg property.
+>>>
+>>> Signed-off-by: Michael Walle <michael@walle.cc>
+>>> ---
+>>>  .../bindings/pinctrl/mscc,ocelot-pinctrl.txt  |  42 -------
+>>>  .../bindings/pinctrl/mscc,ocelot-pinctrl.yaml | 108 
+>>> ++++++++++++++++++
+>>>  2 files changed, 108 insertions(+), 42 deletions(-)
+>>>  delete mode 100644 
+>>> Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
+>>>  create mode 100644 
+>>> Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
+>>>
+>>> diff --git 
+>>> a/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt 
+>>> b/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
+>>> deleted file mode 100644
+>>> index 5d84fd299ccf..000000000000
+>>> --- 
+>>> a/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
+>>> +++ /dev/null
+>>> @@ -1,42 +0,0 @@
+>>> -Microsemi Ocelot pin controller Device Tree Bindings
+>>> -----------------------------------------------------
+>>> -
+>>> -Required properties:
+>>> - - compatible		: Should be "mscc,ocelot-pinctrl",
+>>> -			  "mscc,jaguar2-pinctrl", "microchip,sparx5-pinctrl",
+>>> -			  "mscc,luton-pinctrl", "mscc,serval-pinctrl",
+>>> -			  "microchip,lan966x-pinctrl" or "mscc,servalt-pinctrl"
+>>> - - reg			: Address and length of the register set for the device
+>>> - - gpio-controller	: Indicates this device is a GPIO controller
+>>> - - #gpio-cells		: Must be 2.
+>>> -			  The first cell is the pin number and the
+>>> -			  second cell specifies GPIO flags, as defined in
+>>> -			  <dt-bindings/gpio/gpio.h>.
+>>> - - gpio-ranges		: Range of pins managed by the GPIO controller.
+>>> -
+>>> -
+>>> -The ocelot-pinctrl driver uses the generic pin multiplexing and 
+>>> generic pin
+>>> -configuration documented in pinctrl-bindings.txt.
+>>> -
+>>> -The following generic properties are supported:
+>>> - - function
+>>> - - pins
+>>> -
+>>> -Example:
+>>> -	gpio: pinctrl@71070034 {
+>>> -		compatible = "mscc,ocelot-pinctrl";
+>>> -		reg = <0x71070034 0x28>;
+>>> -		gpio-controller;
+>>> -		#gpio-cells = <2>;
+>>> -		gpio-ranges = <&gpio 0 0 22>;
+>>> -
+>>> -		uart_pins: uart-pins {
+>>> -				pins = "GPIO_6", "GPIO_7";
+>>> -				function = "uart";
+>>> -		};
+>>> -
+>>> -		uart2_pins: uart2-pins {
+>>> -				pins = "GPIO_12", "GPIO_13";
+>>> -				function = "uart2";
+>>> -		};
+>>> -	};
+>>> diff --git 
+>>> a/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml 
+>>> b/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
+>>> new file mode 100644
+>>> index 000000000000..7149a6655623
+>>> --- /dev/null
+>>> +++ 
+>>> b/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
+>>> @@ -0,0 +1,108 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/pinctrl/mscc,ocelot-pinctrl.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Microsemi Ocelot pin controller
+>>> +
+>>> +maintainers:
+>>> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+>>> +  - Lars Povlsen <lars.povlsen@microchip.com>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - microchip,lan966x-pinctrl
+>>> +      - microchip,sparx5-pinctrl
+>>> +      - mscc,jaguar2-pinctrl
+>>> +      - mscc,luton-pinctrl
+>>> +      - mscc,ocelot-pinctrl
+>>> +      - mscc,serval-pinctrl
+>>> +      - mscc,servalt-pinctrl
+>>> +
+>>> +  reg:
+>>> +    items:
+>>> +      - description: Base address
+>>> +      - description: Extended pin configuration registers
+>>> +    minItems: 1
+>>> +
+>>> +  gpio-controller: true
+>>> +
+>>> +  '#gpio-cells':
+>>> +    const: 2
+>>> +
+>>> +  gpio-ranges: true
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupt-controller: true
+>>> +
+>>> +  "#interrupt-cells":
+>>> +    const: 2
+>>
+>> Thanks for the changes in other files, but I think you did not respond
+>> to my comments here. Can you address them?
+> 
+> Sorry, I might missunderstood you. They are currently used on all except
+> on serval and servalt SoCs like described in the updated commit message.
+> I thought it was clear from the commit message, so I didn't answer your
+> questions in v2. Or is there something else?
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+No, it's okay.
 
-All warnings (new ones prefixed by >>):
-
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/soc/apple/rtkit.c:241:27: note: in expansion of macro 'FIELD_GET'
-     241 |         dma_addr_t iova = FIELD_GET(APPLE_RTKIT_BUFFER_REQUEST_IOVA, msg);
-         |                           ^~~~~~~~~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/soc/apple/rtkit.c:61:41: note: in expansion of macro 'GENMASK'
-      61 | #define APPLE_RTKIT_BUFFER_REQUEST_IOVA GENMASK(41, 0)
-         |                                         ^~~~~~~
-   drivers/soc/apple/rtkit.c:241:37: note: in expansion of macro 'APPLE_RTKIT_BUFFER_REQUEST_IOVA'
-     241 |         dma_addr_t iova = FIELD_GET(APPLE_RTKIT_BUFFER_REQUEST_IOVA, msg);
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
-      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
-         |                  ^~
-   include/linux/compiler_types.h:326:23: note: in definition of macro '__compiletime_assert'
-     326 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:346:9: note: in expansion of macro '_compiletime_assert'
-     346 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:21:9: note: in expansion of macro 'BUILD_BUG_ON'
-      21 |         BUILD_BUG_ON(((n) & ((n) - 1)) != 0)
-         |         ^~~~~~~~~~~~
-   include/linux/bitfield.h:71:17: note: in expansion of macro '__BUILD_BUG_ON_NOT_POWER_OF_2'
-      71 |                 __BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +                 \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:72:56: note: in expansion of macro '__bf_shf'
-      72 |                                               (1ULL << __bf_shf(_mask))); \
-         |                                                        ^~~~~~~~
-   include/linux/bitfield.h:125:17: note: in expansion of macro '__BF_FIELD_CHECK'
-     125 |                 __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/soc/apple/rtkit.c:241:27: note: in expansion of macro 'FIELD_GET'
-     241 |         dma_addr_t iova = FIELD_GET(APPLE_RTKIT_BUFFER_REQUEST_IOVA, msg);
-         |                           ^~~~~~~~~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/soc/apple/rtkit.c:61:41: note: in expansion of macro 'GENMASK'
-      61 | #define APPLE_RTKIT_BUFFER_REQUEST_IOVA GENMASK(41, 0)
-         |                                         ^~~~~~~
-   drivers/soc/apple/rtkit.c:241:37: note: in expansion of macro 'APPLE_RTKIT_BUFFER_REQUEST_IOVA'
-     241 |         dma_addr_t iova = FIELD_GET(APPLE_RTKIT_BUFFER_REQUEST_IOVA, msg);
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/soc/apple/rtkit-internal.h:5,
-                    from drivers/soc/apple/rtkit.c:9:
-   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
-      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
-         |                  ^~
-   include/linux/bitfield.h:126:44: note: in definition of macro 'FIELD_GET'
-     126 |                 (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
-         |                                            ^~~~~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/soc/apple/rtkit.c:61:41: note: in expansion of macro 'GENMASK'
-      61 | #define APPLE_RTKIT_BUFFER_REQUEST_IOVA GENMASK(41, 0)
-         |                                         ^~~~~~~
-   drivers/soc/apple/rtkit.c:241:37: note: in expansion of macro 'APPLE_RTKIT_BUFFER_REQUEST_IOVA'
-     241 |         dma_addr_t iova = FIELD_GET(APPLE_RTKIT_BUFFER_REQUEST_IOVA, msg);
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
-      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
-         |                  ^~
-   include/linux/bitfield.h:42:38: note: in definition of macro '__bf_shf'
-      42 | #define __bf_shf(x) (__builtin_ffsll(x) - 1)
-         |                                      ^
-   drivers/soc/apple/rtkit.c:241:27: note: in expansion of macro 'FIELD_GET'
-     241 |         dma_addr_t iova = FIELD_GET(APPLE_RTKIT_BUFFER_REQUEST_IOVA, msg);
-         |                           ^~~~~~~~~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/soc/apple/rtkit.c:61:41: note: in expansion of macro 'GENMASK'
-      61 | #define APPLE_RTKIT_BUFFER_REQUEST_IOVA GENMASK(41, 0)
-         |                                         ^~~~~~~
-   drivers/soc/apple/rtkit.c:241:37: note: in expansion of macro 'APPLE_RTKIT_BUFFER_REQUEST_IOVA'
-     241 |         dma_addr_t iova = FIELD_GET(APPLE_RTKIT_BUFFER_REQUEST_IOVA, msg);
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/printk.h:555,
-                    from include/asm-generic/bug.h:22,
-                    from arch/mips/include/asm/bug.h:42,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/mips/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from include/linux/swait.h:7,
-                    from include/linux/completion.h:12,
-                    from drivers/soc/apple/rtkit-internal.h:7,
-                    from drivers/soc/apple/rtkit.c:9:
->> drivers/soc/apple/rtkit-internal.h:21:51: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 5 has type 'dma_addr_t' {aka 'unsigned int'} [-Wformat=]
-      21 | #define rtk_dbg(format, arg...) dev_dbg(rtk->dev, "RTKit: " format, ##arg)
-         |                                                   ^~~~~~~~~
-   include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynamic_func_call'
-     134 |                 func(&id, ##__VA_ARGS__);               \
-         |                             ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:166:9: note: in expansion of macro '_dynamic_func_call'
-     166 |         _dynamic_func_call(fmt,__dynamic_dev_dbg,               \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:9: note: in expansion of macro 'dynamic_dev_dbg'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:30: note: in expansion of macro 'dev_fmt'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                              ^~~~~~~
-   drivers/soc/apple/rtkit-internal.h:21:33: note: in expansion of macro 'dev_dbg'
-      21 | #define rtk_dbg(format, arg...) dev_dbg(rtk->dev, "RTKit: " format, ##arg)
-         |                                 ^~~~~~~
-   drivers/soc/apple/rtkit.c:245:9: note: in expansion of macro 'rtk_dbg'
-     245 |         rtk_dbg("buffer request for 0x%zx bytes at 0x%llx\n", size, iova);
-         |         ^~~~~~~
-   In file included from <command-line>:
-   include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
-      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
-         |                             ^~
-   include/linux/compiler_types.h:326:23: note: in definition of macro '__compiletime_assert'
-     326 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:346:9: note: in expansion of macro '_compiletime_assert'
-     346 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:62:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      62 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
-         |                 ^~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:111:17: note: in expansion of macro '__BF_FIELD_CHECK'
-     111 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/soc/apple/rtkit.c:265:25: note: in expansion of macro 'FIELD_PREP'
-     265 |                 reply = FIELD_PREP(APPLE_RTKIT_SYSLOG_TYPE,
-         |                         ^~~~~~~~~~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/soc/apple/rtkit.c:63:33: note: in expansion of macro 'GENMASK'
-      63 | #define APPLE_RTKIT_SYSLOG_TYPE GENMASK(59, 52)
-         |                                 ^~~~~~~
-   drivers/soc/apple/rtkit.c:265:36: note: in expansion of macro 'APPLE_RTKIT_SYSLOG_TYPE'
-     265 |                 reply = FIELD_PREP(APPLE_RTKIT_SYSLOG_TYPE,
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
-      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
-         |                  ^~
-   include/linux/compiler_types.h:326:23: note: in definition of macro '__compiletime_assert'
-     326 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:346:9: note: in expansion of macro '_compiletime_assert'
-     346 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:62:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      62 |                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
-         |                 ^~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:111:17: note: in expansion of macro '__BF_FIELD_CHECK'
-     111 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/soc/apple/rtkit.c:265:25: note: in expansion of macro 'FIELD_PREP'
-     265 |                 reply = FIELD_PREP(APPLE_RTKIT_SYSLOG_TYPE,
-         |                         ^~~~~~~~~~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/soc/apple/rtkit.c:63:33: note: in expansion of macro 'GENMASK'
-      63 | #define APPLE_RTKIT_SYSLOG_TYPE GENMASK(59, 52)
-         |                                 ^~~~~~~
-   drivers/soc/apple/rtkit.c:265:36: note: in expansion of macro 'APPLE_RTKIT_SYSLOG_TYPE'
-     265 |                 reply = FIELD_PREP(APPLE_RTKIT_SYSLOG_TYPE,
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
-      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
-         |                             ^~
-   include/linux/compiler_types.h:326:23: note: in definition of macro '__compiletime_assert'
-     326 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   include/linux/compiler_types.h:346:9: note: in expansion of macro '_compiletime_assert'
-     346 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:64:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      64 |                 BUILD_BUG_ON_MSG((_mask) == 0, _pfx "mask is zero");    \
-         |                 ^~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:111:17: note: in expansion of macro '__BF_FIELD_CHECK'
-     111 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^~~~~~~~~~~~~~~~
-   drivers/soc/apple/rtkit.c:265:25: note: in expansion of macro 'FIELD_PREP'
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
 
-vim +21 drivers/soc/apple/rtkit-internal.h
-
-    17	
-    18	#define rtk_err(format, arg...) dev_err(rtk->dev, "RTKit: " format, ##arg)
-    19	#define rtk_warn(format, arg...) dev_warn(rtk->dev, "RTKit: " format, ##arg)
-    20	#define rtk_info(format, arg...) dev_info(rtk->dev, "RTKit: " format, ##arg)
-  > 21	#define rtk_dbg(format, arg...) dev_dbg(rtk->dev, "RTKit: " format, ##arg)
-    22	
-    23	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

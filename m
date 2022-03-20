@@ -2,272 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB804E1DBE
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 21:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B14864E1DC1
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 21:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236833AbiCTUgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 16:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
+        id S243643AbiCTUpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 16:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233463AbiCTUgE (ORCPT
+        with ESMTP id S233463AbiCTUpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 16:36:04 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D57A527C2
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 13:34:40 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id u30-20020a4a6c5e000000b00320d8dc2438so16941643oof.12
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 13:34:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=ecrgKv+b8Qeggg1m7l22EYC1uE+osTsOg8aZ/gQrc3c=;
-        b=L2OdXyzopGapOhtxUiD1olNWsog6SVvxO2+TwdCHkd9/zNE86IjCpFFZpsp8BN2GEI
-         5DFp3S03qv2z5qQ4TrUwzXlLelaoFATL9AXezdFEbkTFQiEsj+NmvxgFiENaIPoJrAW+
-         gz+DFDN3FRz5Jrs+lnwUBm27BayUgsTDVm/Eo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=ecrgKv+b8Qeggg1m7l22EYC1uE+osTsOg8aZ/gQrc3c=;
-        b=rlIdMQrGSWb4cyHx6vmhRcnJZ3QB4n0Zw0cddQsQOLB3nD5HysVnNgB6sa/fYNi/Ba
-         bz97pJ22PpubYZ/cXOhMac1ba6o64ZNfAmmNpjAxRhrUT2WqAePPpATAEt1m2DZ2K4dl
-         XUrePFQos91oe/zUpU4p81IeW9eCKsTW0nswQfUzky5SGeUHWYUQUgUTIvopwCMxTQrz
-         sRdlWrPs4QmJi1NZkz/DNLN0g95ehBHUktXjJxwqDvZ7TFBKC0iVyWOc0jdvdmzKrt8X
-         cQra2iGKW4swtUdLhJ+KZftI7WmWPcgyk/4u2BnSa2uX2Cokr4rcGG4EpB9Uct+CeYvJ
-         sRzw==
-X-Gm-Message-State: AOAM530eEV7msWK1b5CtoPcDoeKItjVAKnFwLjaVc8oE7neUBmP0Rp4Y
-        9kSxq3iR9HL9yZoTg39+wD5TSaFpBvkGQz1a
-X-Google-Smtp-Source: ABdhPJxgfMgmJ+9i6NRWWCmg8QrOEvSBzV+HMqriiacBhX+UTzbI8FLq0ySeegivnN9/9clcdxmVhA==
-X-Received: by 2002:a4a:d78b:0:b0:324:10fd:ef59 with SMTP id c11-20020a4ad78b000000b0032410fdef59mr5754659oou.49.1647808479262;
-        Sun, 20 Mar 2022 13:34:39 -0700 (PDT)
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com. [209.85.161.47])
-        by smtp.gmail.com with ESMTPSA id d66-20020aca3645000000b002eccb84aa7dsm6500424oia.19.2022.03.20.13.34.38
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Mar 2022 13:34:38 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id w3-20020a4ac183000000b0031d806bbd7eso16901441oop.13
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 13:34:38 -0700 (PDT)
-X-Received: by 2002:a05:6870:b487:b0:dd:c79d:18ab with SMTP id
- y7-20020a056870b48700b000ddc79d18abmr5649870oap.205.1647808477753; Sun, 20
- Mar 2022 13:34:37 -0700 (PDT)
+        Sun, 20 Mar 2022 16:45:43 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C42DFD9;
+        Sun, 20 Mar 2022 13:44:18 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 4C0B7E0167;
+        Sun, 20 Mar 2022 13:44:18 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 79DKE2slsi-k; Sun, 20 Mar 2022 13:44:17 -0700 (PDT)
+From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/4] power: supply: max17042_battery: use ModelCfg refresh on max17055
+Date:   Sun, 20 Mar 2022 21:44:12 +0100
+Message-ID: <2957015.e9J7NaK4W3@pliszka>
+In-Reply-To: <5d43031e-382d-b12c-bba2-0e630fbec1ad@kernel.org>
+References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm> <7080597.aeNJFYEL58@pliszka> <5d43031e-382d-b12c-bba2-0e630fbec1ad@kernel.org>
 MIME-Version: 1.0
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 20 Mar 2022 13:34:21 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj4fFjx2pgbGNBM4wJs3=eReZ05EQyprzgT2Jv8qJ2vJg@mail.gmail.com>
-Message-ID: <CAHk-=wj4fFjx2pgbGNBM4wJs3=eReZ05EQyprzgT2Jv8qJ2vJg@mail.gmail.com>
-Subject: Linux 5.17
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart3296970.aeNJFYEL58"; micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So we had an extra week of at the end of this release cycle, and I'm
-happy to report that it was very calm indeed.  We could probably have
-skipped it with not a lot of downside, but we did get a few
-last-minute reverts and fixes in and avoid some brown-paper bugs that
-would otherwise have been stable fodder, so it's all good.
+--nextPart3296970.aeNJFYEL58
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
+From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Date: Sun, 20 Mar 2022 21:44:12 +0100
+Message-ID: <2957015.e9J7NaK4W3@pliszka>
+In-Reply-To: <5d43031e-382d-b12c-bba2-0e630fbec1ad@kernel.org>
 
-And that calm last week can very much be seen from the appended
-shortlog - there really aren't a lot of commits in here, and it's all
-pretty small. Most of it is in drivers (net, usb, drm), with some core
-networking, and some tooling updates too.
+On niedziela, 20 marca 2022 13:18:49 CET Krzysztof Kozlowski wrote:
+> On 18/03/2022 20:58, Sebastian Krzyszkowiak wrote:
+> > On pi=C4=85tek, 18 marca 2022 09:22:16 CET Krzysztof Kozlowski wrote:
+> >> On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
+> >>> Unlike other models, max17055 doesn't require cell characterization
+> >>> data and operates on smaller amount of input variables (DesignCap,
+> >>> VEmpty, IChgTerm and ModelCfg). Input data can already be filled in
+> >>> by max17042_override_por_values, however model refresh bit has to be
+> >>> set after adjusting input variables in order to make them apply.
+> >>>=20
+> >>> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+> >>> ---
+> >>>=20
+> >>>  drivers/power/supply/max17042_battery.c | 73 +++++++++++++++--------=
+=2D-
+> >>>  include/linux/power/max17042_battery.h  |  3 +
+> >>>  2 files changed, 48 insertions(+), 28 deletions(-)
+> >>>=20
+> >>> diff --git a/drivers/power/supply/max17042_battery.c
+> >>> b/drivers/power/supply/max17042_battery.c index
+> >>> c019d6c52363..c39250349a1d 100644
+> >>> --- a/drivers/power/supply/max17042_battery.c
+> >>> +++ b/drivers/power/supply/max17042_battery.c
+> >>> @@ -806,6 +806,13 @@ static inline void
+> >>> max17042_override_por_values(struct max17042_chip *chip)>
+> >>>=20
+> >>>  	    (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX17055)) {
+> >>>  	=09
+> >>>  		max17042_override_por(map, MAX17047_V_empty, config-
+> >>=20
+> >> vempty);
+> >>=20
+> >>>  	}
+> >>>=20
+> >>> +
+> >>> +	if (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX17055) {
+> >>> +		max17042_override_por(map, MAX17055_ModelCfg, config-
+> >>=20
+> >> model_cfg);
+> >>=20
+> >>> +		// VChg is 1 by default, so allow it to be set to 0
+> >>=20
+> >> Consistent comment, so /* */
+> >>=20
+> >> I actually do not understand fully the comment and the code. You write
+> >> entire model_cfg to MAX17055_ModelCfg and then immediately do it again,
+> >> but with smaller mask. Why?
+> >=20
+> > That's because VChg is 1 on POR, and max17042_override_por doesn't do
+> > anything when value equals 0 - which means that if the whole
+> > config->model_cfg is 0, VChg won't get unset (which is needed for 4.2V
+> > batteries).
+> >=20
+> > This could actually be replaced with a single regmap_write.
+>=20
+> I got it now. But if config->model_cfg is 0, should VChg be unset?
 
-It really is small enough that you can just scroll through the details
-below, and the one-liner summaries will give a good flavor of what
-happened last week.
+That's a good question.
 
-Of course, this means that the merge window for 5.18 will be open
-starting tomorrow, and I already have about a dozen pull requests
-waiting in my inbox. I appreciate the early pull requests: it gives me
-that warm and fuzzy feeling of "this was all ready in plenty of time".
-Judging by the statistics in linux-next, it looks like 5.18 will be a
-bit bigger than 5.17 was, but hopefully without some of the drama.
+max17042_override_por doesn't override the register value when the given va=
+lue=20
+equals zero in order to not override POR defaults with unset platform data.=
+=20
+This way one can set only the registers that they want to change in `config=
+`=20
+and the rest are untouched. This, however, only works if we assume that zer=
+o=20
+means "don't touch", which isn't the case for ModelCfg.
 
-So go test this, and we'll get 5.18 started tomorrow.
+On the Librem 5, we need to unset VChg bit because our battery is only bein=
+g=20
+charged up to 4.2V. Allowing to unset this bit only without having to touch=
+=20
+the rest of the register was the motivation behind the current version of t=
+his=20
+patch, however, thinking about it now I can see that it fails to do that in=
+=20
+the opposite case - when the DT contains a simple-battery with maximum volt=
+age=20
+higher than 4.25V, VChg will be set in config->model_cfg causing the whole=
+=20
+register to be overwritten.
 
-                   Linus
+So, I see two possible solutions:
 
----
+1) move VChg handling to a separate variable in struct max17042_config_data=
+=2E=20
+This way model_cfg can stay zero when there's no need to touch the rest of =
+the=20
+register. This minimizes changes over current code.
 
-Alan Stern (2):
-      usb: usbtmc: Fix bug in pipe direction for control transfers
-      usb: gadget: Fix use-after-free bug by not setting udc->dev.driver
+2) remove max17042_override_por_values in its current shape altogether and=
+=20
+make it only deal with the values that are actually being set by the driver=
+=20
+(and only extend it in the future as it gains more ability). Currently most=
+ of=20
+this function is only usable with platform data - is there actually any use=
+r=20
+of max17042 that would need to configure the gauge without DT in the mainli=
+ne=20
+kernel? My quick search didn't find any. Do we need or want to keep platfor=
+m=20
+data support at all?
 
-Arnd Bergmann (2):
-      arm64: fix clang warning about TRAMP_VALIAS
-      arm64: errata: avoid duplicate field initializer
+I'm leaning towards option 2, as it seems to me that currently this driver =
+is=20
+being cluttered quite a lot by what's essentially a dead code. Adding new=20
+parameters to read from DT for POR initialization (which is necessary for=20
+other models than MAX17055) should be rather easy, but trying to fit them i=
+nto=20
+current platform_data-oriented code may be not.
 
-Bartosz Golaszewski (1):
-      Revert "gpio: Revert regression in sysfs-gpio (gpiolib.c)"
+Regards,
+Sebastian
+--nextPart3296970.aeNJFYEL58
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
-Borislav Petkov (1):
-      kvm/emulate: Fix SETcc emulation function offsets with SLS
+-----BEGIN PGP SIGNATURE-----
 
-Brian Masney (1):
-      crypto: qcom-rng - ensure buffer for generate is completely filled
+iQIzBAABCAAdFiEEIt2frgBqEUNYNmF86PI1zzvbw/8FAmI3khwACgkQ6PI1zzvb
+w//8VA//RbpNAFv5HMrfF8HJSGTu79QpRPowLM/TXgSFxiQ4yQxhPy/yWvCXIAN2
+pDr703YyU9NMQVEp9r+OE3OrOE5Qh4n2V6Lq8lClz1aamcfX9ZcTrDRnuv4BNJLk
+TWD4j05gaj5Sg8PgU4Bi/1qE9nlPS+X20KWkYPjfhPoEWet4f7hzZVbeVDXsY56z
+5I1d8CMXd9UJ5X6JXLfvNlkERmpzBuR3OsjNa/QC82Itxfy10qBUqDnH6zv0R8vm
+n46FX2Ja6Xsrl4rU8gcNeQJoVgD4/MmSt/8pj4o0jjcATTwH5bcfWAz4PsFB0Ygp
+9w5EOo330Sn73ENUPHic+oDb3EYLv6LKtYLp1QJxH9DcCdwJyGeXkd3MDAvel7jB
+6sHmLZgO071fkQ8iCJ7cT6tU7D87C7YqJngArZU6tKJ2+XK2PcPPXqKwQgH9N2iC
+aKWOxjLt2f4pbeuCImCeIp1Wy8PPMY3noLLQPLWmz878egxw+otg1tVFd94bi3qO
+N8Bje9SW6PCTibVGxC0htHEeuIGvpXmp6utx9v277RXvgueTBpt3LHyxPBuH8xH/
+exiAC6x+CTdH0PhpfCKAu4Y5gS+Rlz00+dg+XhSUyb/HKypWu5x7ykxA8JitFdaq
+QGil5M9EFbUB3WmMyRCYVgGTY0By9fkkh+2aDObjNhG9GPoFNWQ=
+=l8wm
+-----END PGP SIGNATURE-----
 
-Christoph Niedermaier (1):
-      drm/imx: parallel-display: Remove bus flags check in
-imx_pd_bridge_atomic_check()
+--nextPart3296970.aeNJFYEL58--
 
-Claudiu Beznea (1):
-      net: dsa: microchip: add spi_device_id tables
 
-Dan Carpenter (1):
-      usb: gadget: rndis: prevent integer overflow in rndis_set_response()
 
-David Jeffery (1):
-      scsi: fnic: Finish scsi_cmnd before dropping the spinlock
-
-Doug Berger (1):
-      net: bcmgenet: skip invalid partial checksums
-
-Eric Dumazet (1):
-      net/packet: fix slab-out-of-bounds access in packet_recvmsg()
-
-Florian Westphal (2):
-      Revert "netfilter: nat: force port remap to prevent shadowing
-well-known ports"
-      Revert "netfilter: conntrack: tag conntracks picked up in local out h=
-ook"
-
-Guo Ziliang (1):
-      mm: swap: get rid of livelock in swapin readahead
-
-H. Nikolaus Schaller (1):
-      partially Revert "usb: musb: Set the DT node on the child device"
-
-Haimin Zhang (1):
-      af_key: add __GFP_ZERO flag for compose_sadb_supported in
-function pfkey_register
-
-Hannes Reinecke (1):
-      nvmet: revert "nvmet: make discovery NQN configurable"
-
-Ian Rogers (2):
-      perf evlist: Avoid iteration for empty evlist.
-      perf parse-events: Ignore case in topdown.slots check
-
-Ivan Vecera (1):
-      iavf: Fix hang during reboot/shutdown
-
-Jakub Kicinski (1):
-      Add Paolo Abeni to networking maintainers
-
-Jason Wang (1):
-      vhost: allow batching hint without size
-
-Jiasheng Jiang (2):
-      atm: eni: Add check for dma_map_single
-      hv_netvsc: Add check for kvmalloc_array
-
-Jiyong Park (1):
-      vsock: each transport cycles only on its own sockets
-
-Jocelyn Falempe (1):
-      drm/mgag200: Fix PLL setup for g200wb and g200ew
-
-Joseph Qi (1):
-      ocfs2: fix crash when initialize filecheck kobj fails
-
-Juerg Haefliger (1):
-      net: phy: mscc: Add MODULE_FIRMWARE macros
-
-Kalle Valo (1):
-      Revert "ath10k: drop beacon and probe response which leak from
-other channel"
-
-Kurt Cancemi (1):
-      net: phy: marvell: Fix invalid comparison in the resume and
-suspend functions
-
-Linus Torvalds (1):
-      Linux 5.17
-
-Linus Walleij (1):
-      Input: zinitix - do not report shadow fingers
-
-Maciej Fijalkowski (1):
-      ice: fix NULL pointer dereference in ice_update_vsi_tx_ring_stats()
-
-Manish Chopra (1):
-      bnx2x: fix built-in kernel driver load failure
-
-Marek Vasut (1):
-      drm/panel: simple: Fix Innolux G070Y2-L01 BPP settings
-
-Matt Lupfer (1):
-      scsi: mpt3sas: Page fault in reply q processing
-
-Miaoqian Lin (1):
-      net: dsa: Add missing of_node_put() in dsa_port_parse_of
-
-Michael Petlan (1):
-      perf symbols: Fix symbol size calculation condition
-
-Michael Walle (1):
-      net: mdio: mscc-miim: fix duplicate debugfs entry
-
-Ming Lei (1):
-      block: release rq qos structures for queue without disk
-
-Nicolas Dichtel (1):
-      net: handle ARPHRD_PIMREG in dev_is_mac_header_xmit()
-
-Niels Dossche (1):
-      alx: acquire mutex for alx_reinit in alx_change_mtu
-
-Pablo Neira Ayuso (1):
-      netfilter: nf_tables: disable register tracking
-
-Pavel Skripkin (1):
-      Input: aiptek - properly check endpoint type
-
-Przemyslaw Patynowski (1):
-      iavf: Fix double free in iavf_reset_task
-
-Qian Cai (1):
-      configs/debug: restore DEBUG_INFO=3Dy for overriding
-
-Rafael J. Wysocki (1):
-      Revert "ACPI: scan: Do not add device IDs from _CID if _HID is not va=
-lid"
-
-Randy Dunlap (1):
-      efi: fix return value of __setup handlers
-
-Sabrina Dubroca (1):
-      esp6: fix check on ipv6_skip_exthdr's return value
-
-Steve French (1):
-      smb3: fix incorrect session setup check for multiuser mounts
-
-Sudheer Mogilappagari (1):
-      ice: destroy flow director filter mutex after releasing VSIs
-
-Tadeusz Struk (1):
-      net: ipv6: fix skb_over_panic in __ip6_append_data
-
-Thomas Zimmermann (1):
-      drm: Don't make DRM_PANEL_BRIDGE dependent on DRM_KMS_HELPERS
-
-Uwe Kleine-K=C3=B6nig (1):
-      counter: Stop using dev_get_drvdata() to get the counter device
-
-Vladimir Oltean (2):
-      Revert "arm64: dts: freescale: Fix 'interrupt-map' parent address cel=
-ls"
-      net: mscc: ocelot: fix backwards compatibility with single-chain
-tc-flower offload
-
-Yosry Ahmed (1):
-      selftests: vm: fix clang build error multiple output files

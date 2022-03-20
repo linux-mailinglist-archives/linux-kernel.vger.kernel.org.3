@@ -2,49 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8BB4E1BA9
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 13:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED304E1BB9
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 13:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245084AbiCTMdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 08:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
+        id S245094AbiCTMnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 08:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238798AbiCTMdV (ORCPT
+        with ESMTP id S245084AbiCTMnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 08:33:21 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69C0129261;
-        Sun, 20 Mar 2022 05:31:58 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id qa43so24969627ejc.12;
-        Sun, 20 Mar 2022 05:31:58 -0700 (PDT)
+        Sun, 20 Mar 2022 08:43:47 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F087A1A8479
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 05:42:23 -0700 (PDT)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C7FD73F221
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 12:42:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647780136;
+        bh=SdUWMHmZ193wUTPTiF7ipsfDvKGml1ecvzIaMqPfwIA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=LfUJ6lGthumwv+dNyqAWulrgsWx8nIDqdll3IHySJE5nLrX9EL8CRTVvgpTf8Rjmn
+         /YePMW5Luo6ilQ0pgRSCe+K24oYeBs1L4G/324jYeLcfCBqxQ/WR3bRLadAhBIOCLS
+         N5PcVuaNzevEE7h0PInLw2h+9O50eUwNMLWFS+tXg5GapjccfmXD7uSORfd1tpzQgV
+         M1AR3NBCIRKpuJlgKHNJgeNV70vcvQ9q8Z0klOQOULuczqdoRfaed/i36yqhcKserO
+         2c61nn/nUWE7ny5R6dkwtjsdzDJzVxez3oGXgt7Gji6FDQY+Bdv+aZpD7oq8HxLpr8
+         1R3HfTsPMkIQA==
+Received: by mail-ej1-f71.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so5940295ejw.9
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 05:42:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=BFYdZiXw/eFAD7943y4ojts/SbsmJ5s3mAERW9ZqUmQ=;
-        b=QZLd442qQphlgnccaXawAAEP1mfGMogBwq+y+ZcMlJPeRDOCwgSNOT24oCgyX2OYOg
-         tVXplIIzz0ZuYOuF7k1lUwHmCdKtRi5Ya3l+iH+V8CPTjaSUT7rEgD0bEVIMTUnxZVWv
-         u2ZGoDFMDVSiCNTCW99tPW+VUzAy/VMNtH6KhMrKshF5AV1KHqebKn7pDA00hXOV+NMX
-         47E1m0eSrwsIv5kcmFbAdbey5UZ/DMOKqdAtG0vgVHb8CnocFbLQrJSxLFz1ytqF/pRb
-         8q6ing/uD+DrqqzLutKvxwvvOddIbII3UVQE791KFW/qr0kvR8TVuo/ZmN78hN4PEnbz
-         +LFg==
-X-Gm-Message-State: AOAM530oj91FnmLm4SsmRMK5b2UujLJUmA5KjqVEdHQrd9ylLCtWQaMQ
-        7oboyjNr/Iz0LrlwOOA68/Y=
-X-Google-Smtp-Source: ABdhPJzMwY0jdWTIGYQCaWFHvskjGM1PR9I4ncwINQ3+Tzx86M77tiIlPiHBh5BsD8pwZD30GVmQ6A==
-X-Received: by 2002:a17:907:86a3:b0:6da:870c:af44 with SMTP id qa35-20020a17090786a300b006da870caf44mr16234430ejc.445.1647779517155;
-        Sun, 20 Mar 2022 05:31:57 -0700 (PDT)
+        bh=SdUWMHmZ193wUTPTiF7ipsfDvKGml1ecvzIaMqPfwIA=;
+        b=BLHwy7ZIccO1sM9EuP63BdpwFcLL4iAmh7ag6pBYXGvAjcBf64qX53wQYB06u3tMTL
+         R/Sn3pdcbAEayW6iYUVoh1ozD7v4nwoUOwjnLrmE9UiTnlAt9gu/mb1uO792GwMSVtTt
+         udhBtPNMep1aMAucmswpKrEWCax9cHDL1LLHtOQ+E0D+2MAsp1z2ABZuyC3VHdY22roE
+         HKJMMvJBbKguiAWpQ1MIUymdB4LOlrbZbLHWRlAGI4s8uABGEYdi8hT/mifiLMv68yQ3
+         gsDXm9jBAtf0UseWt0b4q7AaG4j2Yp1+HjCp8ryU6i8j+SgVJK8B2k3lT8SBzWVPmvDh
+         ERAw==
+X-Gm-Message-State: AOAM532uNAazfWSexlr8Tc47/1f+ZByGalif3J5rNY3hUqHkY7+hHu8H
+        LDM8GXyUrdNq/YscIeIz7cwVMQdZ44AnmEYlkSnABOR76GaYWQ8xCHKp/9agFcmg3EBdfPlvI5l
+        CmAUxoQUFfsaFB3meDpocruS7GVZY4zEpxVNaVtfjuQ==
+X-Received: by 2002:a05:6402:484:b0:415:d931:cb2f with SMTP id k4-20020a056402048400b00415d931cb2fmr18507932edv.287.1647780134923;
+        Sun, 20 Mar 2022 05:42:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwFr8QjIsnRNA97/xRKhcXrC9HuSe14EplGK5C5xpZHxfHczzlRSkdY15/du/MsMa43QLRVZw==
+X-Received: by 2002:a05:6402:484:b0:415:d931:cb2f with SMTP id k4-20020a056402048400b00415d931cb2fmr18507916edv.287.1647780134738;
+        Sun, 20 Mar 2022 05:42:14 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id f6-20020a0564021e8600b00412ae7fda95sm6781002edf.44.2022.03.20.05.31.54
+        by smtp.gmail.com with ESMTPSA id c14-20020a170906340e00b006ce98f2581asm5788379ejb.205.2022.03.20.05.42.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Mar 2022 05:31:56 -0700 (PDT)
-Message-ID: <81aa7be7-0bfa-05e6-624a-393e6810dc61@kernel.org>
-Date:   Sun, 20 Mar 2022 13:31:53 +0100
+        Sun, 20 Mar 2022 05:42:14 -0700 (PDT)
+Message-ID: <74db8a20-7cce-ff86-7ae4-466416443ba9@canonical.com>
+Date:   Sun, 20 Mar 2022 13:42:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [Patch v5 1/4] memory: tegra: Add memory controller channels
- support
+Subject: Re: [Patch v5 3/4] dt-bindings: memory: Update reg maxitems for
+ tegra186
 Content-Language: en-US
 To:     Ashish Mhetre <amhetre@nvidia.com>, robh+dt@kernel.org,
         thierry.reding@gmail.com, digetx@gmail.com, jonathanh@nvidia.com,
@@ -52,16 +72,15 @@ To:     Ashish Mhetre <amhetre@nvidia.com>, robh+dt@kernel.org,
         linux-tegra@vger.kernel.org
 Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
 References: <20220316092525.4554-1-amhetre@nvidia.com>
- <20220316092525.4554-2-amhetre@nvidia.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220316092525.4554-2-amhetre@nvidia.com>
+ <20220316092525.4554-4-amhetre@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220316092525.4554-4-amhetre@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,82 +89,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 16/03/2022 10:25, Ashish Mhetre wrote:
 > From tegra186 onwards, memory controller support multiple channels.
-> Add support for mapping address spaces of these channels.
-> Make sure that number of channels are as expected on each SOC.
-> During error interrupts from memory controller, appropriate registers
-> from these channels need to be accessed for logging error info.
+> Reg items are updated with address and size of these channels.
+> Tegra186 has overall 5 memory controller channels. Tegra194 and tegra234
+> have overall 17 memory controller channels each.
+> There is 1 reg item for memory controller stream-id registers.
+> So update the reg maxItems to 18 in tegra186 devicetree documentation.
 > 
 > Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
 > ---
->  drivers/memory/tegra/mc.c       |  6 ++++
->  drivers/memory/tegra/tegra186.c | 52 +++++++++++++++++++++++++++++++++
->  drivers/memory/tegra/tegra194.c |  1 +
->  drivers/memory/tegra/tegra234.c |  1 +
->  include/soc/tegra/mc.h          |  7 +++++
->  5 files changed, 67 insertions(+)
+>  .../nvidia,tegra186-mc.yaml                   | 20 +++++++++++++------
+>  1 file changed, 14 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
-> index bf3abb6d8354..3cda1d9ad32a 100644
-> --- a/drivers/memory/tegra/mc.c
-> +++ b/drivers/memory/tegra/mc.c
-> @@ -749,6 +749,12 @@ static int tegra_mc_probe(struct platform_device *pdev)
->  	if (IS_ERR(mc->regs))
->  		return PTR_ERR(mc->regs);
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+> index 13c4c82fd0d3..3c4e231dc1de 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
+> @@ -34,8 +34,8 @@ properties:
+>            - nvidia,tegra234-mc
 >  
-> +	if (mc->soc->ops && mc->soc->ops->map_regs) {
-> +		err = mc->soc->ops->map_regs(mc, pdev);
-> +		if (err < 0)
-> +			return err;
-> +	}
-> +
->  	mc->debugfs.root = debugfs_create_dir("mc", NULL);
->  
->  	if (mc->soc->ops && mc->soc->ops->probe) {
-> diff --git a/drivers/memory/tegra/tegra186.c b/drivers/memory/tegra/tegra186.c
-> index 3d153881abc1..a8a45e6ff1f1 100644
-> --- a/drivers/memory/tegra/tegra186.c
-> +++ b/drivers/memory/tegra/tegra186.c
-> @@ -139,11 +139,62 @@ static int tegra186_mc_probe_device(struct tegra_mc *mc, struct device *dev)
->  	return 0;
->  }
->  
-> +static int tegra186_mc_map_regs(struct tegra_mc *mc,
-> +				struct platform_device *pdev)
-> +{
-> +	struct device_node *np = pdev->dev.parent->of_node;
-> +	int num_dt_channels, reg_cells = 0;
-> +	struct resource *res;
-> +	int i, ret;
-> +	u32 val;
-> +
-> +	ret = of_property_read_u32(np, "#address-cells", &val);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "missing #address-cells property\n");
-> +		return ret;
-> +	}
-> +
-> +	reg_cells = val;
-> +
-> +	ret = of_property_read_u32(np, "#size-cells", &val);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "missing #size-cells property\n");
-> +		return ret;
-> +	}
-> +
-> +	reg_cells += val;
-> +
-> +	num_dt_channels = of_property_count_elems_of_size(pdev->dev.of_node, "reg",
-> +							  reg_cells * sizeof(u32));
-> +	/*
-> +	 * On tegra186 onwards, memory controller support multiple channels.
-> +	 * Apart from regular memory controller channels, there is one broadcast
-> +	 * channel and one for stream-id registers.
-> +	 */
-> +	if (num_dt_channels < mc->soc->num_channels + 2) {
-> +		dev_warn(&pdev->dev, "MC channels are missing, please update\n");
+>    reg:
+> -    minItems: 1
+> -    maxItems: 3
+> +    minItems: 6
+> +    maxItems: 18
 
-How did you address our previous comments about ABI break? I really do
-not see it.
+Still ABI break and now the in-kernel DTS will report dt check errors.
+
+I think you ignored the comments you got about breaking ABI.
 
 Best regards,
 Krzysztof

@@ -2,87 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915274E1AC5
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 09:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D722C4E1AD0
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 10:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242873AbiCTIW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 04:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
+        id S242983AbiCTJQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 05:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240333AbiCTIWX (ORCPT
+        with ESMTP id S239040AbiCTJQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 04:22:23 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3764BFDA;
-        Sun, 20 Mar 2022 01:21:00 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id q14so3034534ljc.12;
-        Sun, 20 Mar 2022 01:21:00 -0700 (PDT)
+        Sun, 20 Mar 2022 05:16:07 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BC62676;
+        Sun, 20 Mar 2022 02:14:44 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id bx5so10763665pjb.3;
+        Sun, 20 Mar 2022 02:14:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=H5jqTsReHjJpHbnZQQczWjSuTqgW0vC/dZTYtBAjSnc=;
-        b=EPr3LbdzLYezPN2YQME62GNvv4acBq0u420N6LQEEBYBigFexkTSTeivHD2BFSoRKA
-         TBDYmIfSod8wh4bWAUOo7bxtCzbU5aRVZFpY4vI/6LK09LNyCXVxxzFDYRzqQ0KTjb4T
-         ZTgZbAex8YYSFEEbw3r0czvOmIdCcu4Wj5WH5zlMcDeYcpiZBiZu0oipMx7bsft7O46Z
-         fClGWrXcsyovrAHcRkHXrscHGTXt+kOzO73KeuxufoWt+GoGnOp4mwdlMMz0JwZuokc0
-         QYKg+tSYAzdoTQyF20bNaaDtlztEUkM95tG5tSkeR60z/yi7PxuNIVdBShLA6zd+gjSz
-         PPLQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=YZtjwFSvgZdoHvpS1R74J2Mec4aRfjaVSNT59r7RniE=;
+        b=UQoC4QgqZzB7+fqf97HxGKF2g7R8OE1RNGIcOGK7NPZQBb46nvCcwygsA0oMB430Et
+         VFkbjTUhdPaX1MrulWLZ8/x458ac/fcQC1SpQxYz3/vOByyXIL0iM4h0l+i5xdg3lIR2
+         EHsI2n/JD2y6vqhLVH8sEgMu3x5Hy017RIyqXW8351ofcsJhshvwwAxXtMnYaRirf0cg
+         2qM/jQPUAGQhVlmgMMfcJJBfWQ33UMFtHgtti0Gfwpy93EKB9GF/raRPH+MZojjPjLfe
+         aCatww+ik2KUNWWCwjQ0r4sbt1veNjskedAgvg89/I1KmU4t5uFL1jD1d1e8uM/AHaQ9
+         oNcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=H5jqTsReHjJpHbnZQQczWjSuTqgW0vC/dZTYtBAjSnc=;
-        b=ULxkanb4t5cwWSUFtaZQGLWH+6cCoWq9ded4+j0FTg/E+4QzgzT7L6HZIN4HLzEde2
-         4SouQk3U+GzsOu7d850Ta6rns8WT8HA9l6aOX2bz4kfmtFJ2Mrblqw0kYVWQVJRfdDKF
-         gv6sK5AKcbxrPwIsnXpO9wCG7cGjRlYbwdwFeMhgYipNX6sWmP8hjsH+ZzpdR18W+moS
-         T6T5m/VV78mRpQIlKM1TusCOFa9HzQrcs82xbkAhMet9bltwma2reAHWQKPr5bNJmwQg
-         IwB+BJjxTnG3xEJfbyJ99zKP82Q5sJDHrdYRrhMpoPZDvVynODoRwj9uLKziWCh/0ogt
-         ioeg==
-X-Gm-Message-State: AOAM5309ldlJU2xGAJlSvZbsIonNy0HKhQCFaIhW6uVtrZuzXtc8g2kG
-        0nOPQ8vE5WjljgPVijYYsUm9RcwEv/xdEQ==
-X-Google-Smtp-Source: ABdhPJyw/MvUqES6wCAvnMJzwx5rx3Rs/R3I4PaI3L3m2x9GWui8eCx2CTqr1K2n1TEwNhy4wu/DYw==
-X-Received: by 2002:a2e:2a45:0:b0:246:430d:805 with SMTP id q66-20020a2e2a45000000b00246430d0805mr11487117ljq.439.1647764457911;
-        Sun, 20 Mar 2022 01:20:57 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.78.200])
-        by smtp.gmail.com with ESMTPSA id v29-20020ac25b1d000000b00448ac0a2d88sm1501433lfn.47.2022.03.20.01.20.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Mar 2022 01:20:57 -0700 (PDT)
-Subject: Re: [PATCH v2 7/8] ARM: dts: lan9662-pcb8291: fix pinctrl node name
-To:     Michael Walle <michael@walle.cc>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Quentin Schulz <quentin.schulz@bootlin.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-References: <20220318202547.1650687-1-michael@walle.cc>
- <20220318202547.1650687-8-michael@walle.cc>
- <cf2a6d1a-bf98-e382-2623-e44e5979ca29@gmail.com>
- <e7467fe3a8dae5f5af84d595a0c4ab16@walle.cc>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <0e791aa5-4ff1-8348-04fb-508a53246de1@gmail.com>
-Date:   Sun, 20 Mar 2022 11:20:55 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <e7467fe3a8dae5f5af84d595a0c4ab16@walle.cc>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=YZtjwFSvgZdoHvpS1R74J2Mec4aRfjaVSNT59r7RniE=;
+        b=De2oCHhNiqCvwdgo5szzlM+cgsdu0gCrGR6sJSct8JyZOaWovJt1M+f1y2ilA3ryqb
+         gjbct1Vkg1u0if7g7QJv9uGk8heSmSX2D9kU1ysrNyBCZE1pIXAdG3QHgrthpNP9jkZ5
+         OhmeKBV8KycvV4z51dly6vC6hdC/h9ULVZzn6rnquqW+uY7OoEY1rD/ZIxQADVgS629J
+         AhbF/aLx7TXTGPdgjYNIAzhrlRh66ZhqtSgT0BX8VmQdC60GVuVyyAvSrYbGuxiBPw9s
+         pAzCR4XhpOyClAloLViav1EYhcsVpdOM+HCTxW9ufeg+lgB4TrUWFER9JWmnbXvJFaw0
+         TPTw==
+X-Gm-Message-State: AOAM530RDIgs5Rj5BdAkt4M7qGjqXLgc7GLTsYxFae2OJusDCXRQp0mM
+        HH5jExeP5WdyMCn6CQGmorg=
+X-Google-Smtp-Source: ABdhPJybsiIaerQmBOFGDSIRjft+5GYWO+fJLPqiZP09CzaFELfQl1aODHduLNr8ncJkdUJJztehgA==
+X-Received: by 2002:a17:902:d507:b0:151:f3dd:dd50 with SMTP id b7-20020a170902d50700b00151f3dddd50mr7725722plg.35.1647767683885;
+        Sun, 20 Mar 2022 02:14:43 -0700 (PDT)
+Received: from localhost.localdomain ([36.24.165.243])
+        by smtp.googlemail.com with ESMTPSA id y12-20020a17090a784c00b001c6bdafc995sm6909299pjl.3.2022.03.20.02.14.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Mar 2022 02:14:43 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     jakobkoschel@gmail.com
+Cc:     akpm@osdl.org, hverkuil-cisco@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        mchehab@kernel.org, v4l@cerqueira.org, xiam0nd.tong@gmail.com,
+        yangyingliang@huawei.com
+Subject: Re: [PATCH] saa7134: fix incorrect check to determine if no element is found in list
+Date:   Sun, 20 Mar 2022 17:14:38 +0800
+Message-Id: <20220320091438.16329-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <86AD565C-ADD2-4000-BF99-487EF9FCDB2F@gmail.com>
+References: <86AD565C-ADD2-4000-BF99-487EF9FCDB2F@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,41 +69,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/19/22 2:38 PM, Michael Walle wrote:
-
-[...]
->>> The pinctrl device tree binding will be converted to YAML format. All
->>> the pin nodes should end with "-pins". Fix them.
->>
->>    It does end with "pins" already, right?
+On Sun, 20 Mar 2022 07:12:33 +0100,
+Jakob Koschel <jakobkoschel@gmail.com> wrote:
+> > On 20. Mar 2022, at 03:57, Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
+> > 
+> > The bug is here: "if (dev == NULL)".
+> > 
+> > The list iterator value will *always* be set and non-NULL by
+> > list_for_each_entry(), so it is incorrect to assume that the iterator
+> > value will be NULL if the list is empty or no element is found in list.
+> > 
+> > Use a new value 'iter' as the list iterator, while use the old value
+> > 'req' as a dedicated pointer to point to the found element, which
+> > 1. can fix this bug, due to now 'req' is NULL only if it's not found.
+> > 2. do not need to change all the uses of 'req' after the loop.
+> > 3. can also limit the scope of the list iterator 'iter' *only inside*
+> >   the traversal loop by simply declaring 'iter' inside the loop in the
+> >   future, as usage of the iterator outside of the list_for_each_entry
+> >   is considered harmful. https://lkml.org/lkml/2022/2/17/1032
+> > 
+> > Fixes: 4aabf6331f89c ("[PATCH] v4l: (951) Make saa7134-oss as a stand-alone module")
+> > Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> > ---
+> > drivers/media/pci/saa7134/saa7134-alsa.c | 11 +++++++----
+> > 1 file changed, 7 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/media/pci/saa7134/saa7134-alsa.c b/drivers/media/pci/saa7134/saa7134-alsa.c
+> > index fb24d2ed3621..4955f7e7c5bf 100644
+> > --- a/drivers/media/pci/saa7134/saa7134-alsa.c
+> > +++ b/drivers/media/pci/saa7134/saa7134-alsa.c
+> > @@ -1215,18 +1215,21 @@ static int alsa_device_exit(struct saa7134_dev *dev)
+> > static int saa7134_alsa_init(void)
+> > {
+> > 	struct saa7134_dev *dev = NULL;
+> > +	struct saa7134_dev *iter;
+> > 
+> > 	saa7134_dmasound_init = alsa_device_init;
+> > 	saa7134_dmasound_exit = alsa_device_exit;
+> > 
+> > 	pr_info("saa7134 ALSA driver for DMA sound loaded\n");
+> > 
+> > -	list_for_each_entry(dev, &saa7134_devlist, devlist) {
+> > -		if (dev->pci->device == PCI_DEVICE_ID_PHILIPS_SAA7130)
+> > +	list_for_each_entry(iter, &saa7134_devlist, devlist) {
+> > +		dev = iter;
+> > +
+> > +		if (iter->pci->device == PCI_DEVICE_ID_PHILIPS_SAA7130)
+> > 			pr_info("%s/alsa: %s doesn't support digital audio\n",
+> > -				dev->name, saa7134_boards[dev->board].name);
+> > +				iter->name, saa7134_boards[iter->board].name);
+> > 		else
+> > -			alsa_device_init(dev);
+> > +			alsa_device_init(iter);
+> > 	}
+> > 
+> > 	if (dev == NULL)
 > 
-> It ends with "_pins". Please note the underscore.
-
-   Ah!
-
->>> Fixes: 290deaa10c50 ("ARM: dts: add DT for lan966 SoC and 2-port board pcb8291")
->>> Signed-off-by: Michael Walle <michael@walle.cc>
->>> ---
->>>  arch/arm/boot/dts/lan966x-pcb8291.dts | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
->>> index 3281af90ac6d..3c7e3a7d6f14 100644
->>> --- a/arch/arm/boot/dts/lan966x-pcb8291.dts
->>> +++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
->>> @@ -35,7 +35,7 @@ fc3_b_pins: fcb3-spi-pins {
->>>          function = "fc3_b";
->>>      };
->>>
->>> -    can0_b_pins:  can0_b_pins {
->>> +    can0_b_pins:  can0-b-pins {
->>
->>    Mhm, I can't even see what is changed here... :-/
+> I could be wrong, but judging from the printed message "saa7134 ALSA: no saa7134 cards found"
+> and how the code is structured, I got the impression that the intention for this code was
+> to only execute if the list is empty. 
 > 
-> The name of the node, s/_/-/
+> There is no break or anything so it's not looking for a specific element.
+> 
+> It might make more sense to simply replace this check with:
+> 	if (list_empty(&saa7134_devlist))
 
-   Indeed! I must have been blind then, sorry. :-)
+Oh, yes. I think you are right. In addtion, the unneeded initializer for
+'dev' can also be removed because the list iterator is always initialized.
 
-> -michael
+Thank you for the suggestion!
 
-MBR, Sergey
+--
+Xiaomeng Tong

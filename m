@@ -2,126 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9522B4E1B93
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 13:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA534E1B98
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 13:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245058AbiCTMWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 08:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S245066AbiCTM3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 08:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245052AbiCTMUP (ORCPT
+        with ESMTP id S245019AbiCTM3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 08:20:15 -0400
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEDE1EEC7;
-        Sun, 20 Mar 2022 05:18:52 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id b15so15072602edn.4;
-        Sun, 20 Mar 2022 05:18:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=0ngaHSzUacrYaeOGJ+j5/OjSsoxw0oxsf+1Qqz4bC0E=;
-        b=Lkps+qH/iqATOKd/DDLWbq3l2YgsSDWZUsljt7tmW0/cz+jTiV45+VKkgyVDXTR4yL
-         y+oaIyJty7htghbAeUveKJpLRcRs6gaiOQvRTiiiCnOrWAoILKRayGEqjIrj4prUShW5
-         +BzmgjntX5hZoQBD0aLk1/dK2ox6j8S4FHX6rFbCWsCDopEH83/BubvsJU0vKS8hPFZ7
-         eka3X+bWZjgUgV7Vy183Af9XqxuKbyeTnkauO2bV2nmRa8VjpuSEHBm+27JkAvzp0t4U
-         tcM2xLAFmaWANCVHsAQ2XMT62ZSXuZfZUMBEGnLDNev5oHsIyyacmA5PEqeGQTImfjrR
-         b7Uw==
-X-Gm-Message-State: AOAM5313uGI4CYypvDG0L7ckVl9PI9tblC/bx803nEUgw41gotez6j6x
-        b8yePSUhmv/8CIaSq02CMDE=
-X-Google-Smtp-Source: ABdhPJzXA2wIFJ4JL7RhzGich0KS3Vh2dxbivOsInGQMtbtarLE/kL4X++EBMMTk6Yz+D+yCsfuWyw==
-X-Received: by 2002:aa7:dbd0:0:b0:416:633c:a0cc with SMTP id v16-20020aa7dbd0000000b00416633ca0ccmr18225070edt.349.1647778730960;
-        Sun, 20 Mar 2022 05:18:50 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id p3-20020a1709060e8300b006d0e8ada804sm5667823ejf.127.2022.03.20.05.18.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Mar 2022 05:18:50 -0700 (PDT)
-Message-ID: <5d43031e-382d-b12c-bba2-0e630fbec1ad@kernel.org>
-Date:   Sun, 20 Mar 2022 13:18:49 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 2/4] power: supply: max17042_battery: use ModelCfg refresh
- on max17055
-Content-Language: en-US
-To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
- <20220318001048.20922-3-sebastian.krzyszkowiak@puri.sm>
- <facf5551-bfc7-aeb4-daed-5bfcb8a36475@kernel.org>
- <7080597.aeNJFYEL58@pliszka>
-In-Reply-To: <7080597.aeNJFYEL58@pliszka>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Sun, 20 Mar 2022 08:29:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6C120F7E;
+        Sun, 20 Mar 2022 05:28:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8814CB80E5C;
+        Sun, 20 Mar 2022 12:28:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC28C340E9;
+        Sun, 20 Mar 2022 12:28:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647779285;
+        bh=0AMjHqXYqQt/Dw4rOqZiu812pqzr9WBYwEqgRxhLCCw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SLlRB1Oq2fIcwWMQBF6P6sYZph2IYUCT70/hn6bS2wXmRTI1Eq+SLAurUTmVjp6NN
+         xFFwInFMKWt+OKvkiAgu7IGsGz0PF1w/sLiBK+cDt7f8t13M/PKmafa/W4/Y3oUfSr
+         Szah1kVgRtInDLytD9v/4f8JqAM+auUezghUYFG6PDQTKcXDFT64v9A5szDju/1TuE
+         zTTcK0xAgR/Qy7B+ASJniN09YgkTN/1bnE/eH22AhcN7nrF2/ea6q7RmH3Wyztw6zW
+         RG63Fs1oyfN7VeEipYb0l0NHed4aPd5QlIjcOsmUdVVQwnbEi0t+qVzukYacoDQENh
+         1ualVRpwlvAqA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nVufC-00FlS9-JZ; Sun, 20 Mar 2022 12:28:02 +0000
+Date:   Sun, 20 Mar 2022 12:28:01 +0000
+Message-ID: <87lex4yfji.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Jan Kara <jack@suse.cz>, "Theodore Ts'o" <tytso@mit.edu>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+Subject: Re: [PATCH] tracing: Have type enum modifications copy the strings
+In-Reply-To: <20220318153432.3984b871@gandalf.local.home>
+References: <20220318153432.3984b871@gandalf.local.home>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rostedt@goodmis.org, linux-kernel@vger.kernel.org, mingo@kernel.org, akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org, svens@linux.ibm.com, riteshh@linux.ibm.com, jack@suse.cz, tytso@mit.edu, harshadshirwadkar@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 20:58, Sebastian Krzyszkowiak wrote:
-> On piątek, 18 marca 2022 09:22:16 CET Krzysztof Kozlowski wrote:
->> On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
->>> Unlike other models, max17055 doesn't require cell characterization
->>> data and operates on smaller amount of input variables (DesignCap,
->>> VEmpty, IChgTerm and ModelCfg). Input data can already be filled in
->>> by max17042_override_por_values, however model refresh bit has to be
->>> set after adjusting input variables in order to make them apply.
->>>
->>> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
->>> ---
->>>
->>>  drivers/power/supply/max17042_battery.c | 73 +++++++++++++++----------
->>>  include/linux/power/max17042_battery.h  |  3 +
->>>  2 files changed, 48 insertions(+), 28 deletions(-)
->>>
->>> diff --git a/drivers/power/supply/max17042_battery.c
->>> b/drivers/power/supply/max17042_battery.c index
->>> c019d6c52363..c39250349a1d 100644
->>> --- a/drivers/power/supply/max17042_battery.c
->>> +++ b/drivers/power/supply/max17042_battery.c
->>> @@ -806,6 +806,13 @@ static inline void
->>> max17042_override_por_values(struct max17042_chip *chip)> 
->>>  	    (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055)) {
->>>  		
->>>  		max17042_override_por(map, MAX17047_V_empty, config-
->> vempty);
->>>  	
->>>  	}
->>>
->>> +
->>> +	if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055) {
->>> +		max17042_override_por(map, MAX17055_ModelCfg, config-
->> model_cfg);
->>> +		// VChg is 1 by default, so allow it to be set to 0
->>
->> Consistent comment, so /* */
->>
->> I actually do not understand fully the comment and the code. You write
->> entire model_cfg to MAX17055_ModelCfg and then immediately do it again,
->> but with smaller mask. Why?
+On Fri, 18 Mar 2022 19:34:32 +0000,
+Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
-> That's because VChg is 1 on POR, and max17042_override_por doesn't do anything 
-> when value equals 0 - which means that if the whole config->model_cfg is 0, 
-> VChg won't get unset (which is needed for 4.2V batteries).
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> This could actually be replaced with a single regmap_write.
+> When an enum is used in the visible parts of a trace event that is
+> exported to user space, the user space applications like perf and
+> trace-cmd do not have a way to know what the value of the enum is. To
+> solve this, at boot up (or module load) the printk formats are modified to
+> replace the enum with their numeric value in the string output.
 > 
+> Array fields of the event are defined by [<nr-elements>] in the type
+> portion of the format file so that the user space parsers can correctly
+> parse the array into the appropriate size chunks. But in some trace
+> events, an enum is used in defining the size of the array, which once
+> again breaks the parsing of user space tooling.
+> 
+> This was solved the same way as the print formats were, but it modified
+> the type strings of the trace event. This caused crashes in some
+> architectures because, as supposed to the print string, is a const string
+> value. This was not detected on x86, as it appears that const strings are
+> still writable (at least in boot up), but other architectures this is not
+> the case, and writing to a const string will cause a kernel fault.
+> 
+> To fix this, use kstrdup() to copy the type before modifying it. If the
+> trace event is for the core kernel there's no need to free it because the
+> string will be in use for the life of the machine being on line. For
+> modules, create a link list to store all the strings being allocated for
+> modules and when the module is removed, free them.
+> 
+> Link: https://lore.kernel.org/all/yt9dr1706b4i.fsf@linux.ibm.com/
+> 
+> Fixes: b3bc8547d3be ("tracing: Have TRACE_DEFINE_ENUM affect trace event types as well")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-I got it now. But if config->model_cfg is 0, should VChg be unset?
+This fixes booting on arm64 with ext4 as a module, so FWIW:
 
+Tested-by: Marc Zyngier <maz@kernel.org>
 
-Best regards,
-Krzysztof
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

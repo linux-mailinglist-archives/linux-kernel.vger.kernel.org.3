@@ -2,89 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B514E1D66
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 19:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C42D4E1D68
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 19:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343519AbiCTSW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 14:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
+        id S1343524AbiCTSYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 14:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343525AbiCTSW4 (ORCPT
+        with ESMTP id S245631AbiCTSYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 14:22:56 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7F4B2461;
-        Sun, 20 Mar 2022 11:21:33 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id g8so10373641qke.2;
-        Sun, 20 Mar 2022 11:21:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oPdW0uQBICw2w2s6z7oX0GuZ2TK0AjcRKwcp07VDTDw=;
-        b=E6z3VV4bxe5/39iTC4mTV3w4kqrrbRU8xDbR+BKTCN3jO4POy/JwETfcrgLiwVIXAc
-         rpOyTnnwHdSAp0gfXAGyhj6luvqlJR4yC8ock5s8dOEMB/2jzgZANa1GjGqcWZQHpsxq
-         WpwvqIrrSJt8s0O3ObF2n9yKSomYCUVLHrwh/qvkJZ1xEr1qS53iE0uASCGk/1xdmqtW
-         j+MoWscgtI/Zmoy7tMo47Fh+wZpAFgtyDIXM5JtOUMvuOEbE8CgrWkE7g7fEUvQpNdyo
-         seQqukyUnr+1jU9rbdoeAnGtKJ3esJ2NlKdlIO8Nme8y7MlX0mMzfmfoI0Kn1pb2As8b
-         wOXg==
-X-Gm-Message-State: AOAM533PJNA7SoklXp76C6nA/Q0S7jUuS+9l+phLizD/l+8ZoO8h6bgC
-        IACk81mo5YSfyT6H5IF9EQ==
-X-Google-Smtp-Source: ABdhPJzm2Wq9gtCCw6Qe4aAHLbmv/3ntFY0cGl2S5wwgMTsq9ONra4LkTTv0rGAIbzvI9XBq2JoGlQ==
-X-Received: by 2002:a37:2e42:0:b0:67e:6d80:2707 with SMTP id u63-20020a372e42000000b0067e6d802707mr5256523qkh.365.1647800492624;
-        Sun, 20 Mar 2022 11:21:32 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:c6d:21ec:c4f5:bb3:5269:3b0e])
-        by smtp.gmail.com with ESMTPSA id h8-20020ac87d48000000b002e1c6faae9csm10092811qtb.28.2022.03.20.11.21.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 11:21:31 -0700 (PDT)
-Received: (nullmailer pid 3157573 invoked by uid 1000);
-        Sun, 20 Mar 2022 18:20:08 -0000
-Date:   Sun, 20 Mar 2022 14:20:08 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowsk <krzysztof.kozlowski@canonical.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Hector Martin <marcan@marcan.st>,
-        Rob Herring <robh+dt@kernel.org>,
-        Joey Gouly <joey.gouly@arm.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: nvmem: Add apple,efuses
-Message-ID: <YjdwWHQNg8Ro+DIr@robh.at.kernel.org>
-References: <20220312165837.40687-1-sven@svenpeter.dev>
+        Sun, 20 Mar 2022 14:24:01 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B7FDBA307
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 11:22:38 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-78-9I9hYJ2mP1O2tU6vbhRIkg-1; Sun, 20 Mar 2022 18:22:35 +0000
+X-MC-Unique: 9I9hYJ2mP1O2tU6vbhRIkg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Sun, 20 Mar 2022 18:22:35 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Sun, 20 Mar 2022 18:22:35 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Ammar Faizi' <ammarfaizi2@gnuweeb.org>, Willy Tarreau <w@1wt.eu>
+CC:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Nugraha <richiisei@gmail.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [RFC PATCH v1 3/6] tools/nolibc: i386: Implement syscall with 6
+ arguments
+Thread-Topic: [RFC PATCH v1 3/6] tools/nolibc: i386: Implement syscall with 6
+ arguments
+Thread-Index: AQHYPD5aHmXDAqFOcUemVcZ8MoFj5azIOuNwgAAkJgCAADQfYA==
+Date:   Sun, 20 Mar 2022 18:22:35 +0000
+Message-ID: <f99f135ffd1345d29f545938cdaa7973@AcuMS.aculab.com>
+References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
+ <20220320093750.159991-4-ammarfaizi2@gnuweeb.org>
+ <2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com>
+ <263c1f21-c0d6-deb1-d45e-66fd35715447@gnuweeb.org>
+In-Reply-To: <263c1f21-c0d6-deb1-d45e-66fd35715447@gnuweeb.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220312165837.40687-1-sven@svenpeter.dev>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Mar 2022 17:58:36 +0100, Sven Peter wrote:
-> Apple SoCs come with eFuses used to store factory-programmed data
-> such as calibration settings for the PCIe and Type-C PHY.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
-> v2 -> v3:
->   - added r-b tag
-> v1 -> v2:
->   - fixed indentation issue pointed out by Krzysztof Kozlowski
-> 
->  .../bindings/nvmem/apple,efuses.yaml          | 50 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
-> 
+RnJvbTogQW1tYXIgRmFpemkNCj4gU2VudDogMjAgTWFyY2ggMjAyMiAxNTowNA0KPiBPbiAzLzIw
+LzIyIDg6MTAgUE0sIERhdmlkIExhaWdodCB3cm90ZToNCj4gPiBGcm9tOiBBbW1hciBGYWl6aQ0K
+PiA+PiBTZW50OiAyMCBNYXJjaCAyMDIyIDA5OjM4DQo+ID4+DQo+ID4+IEluIGkzODYsIHRoZSA2
+dGggYXJndW1lbnQgb2Ygc3lzY2FsbCBnb2VzIGluICVlYnAuIEhvd2V2ZXIsIGJvdGggQ2xhbmcN
+Cj4gPj4gYW5kIEdDQyBjYW5ub3QgdXNlICVlYnAgaW4gdGhlIGNsb2JiZXIgbGlzdCBhbmQgaW4g
+dGhlICJyIiBjb25zdHJhaW50DQo+ID4+IHdpdGhvdXQgdXNpbmcgLWZvbWl0LWZyYW1lLXBvaW50
+ZXIuIFRvIG1ha2UgaXQgYWx3YXlzIGF2YWlsYWJsZSBmb3IgYW55DQo+ID4+IGtpbmQgb2YgY29t
+cGlsYXRpb24sIHRoZSBiZWxvdyB3b3JrYXJvdW5kIGlzIGltcGxlbWVudGVkLg0KPiA+Pg0KPiA+
+PiBGb3IgY2xhbmcgKHRoZSBBc3NlbWJseSBzdGF0ZW1lbnQgY2FuJ3QgY2xvYmJlciAlZWJwKToN
+Cj4gPj4gICAgMSkgU2F2ZSB0aGUgJWVicCB2YWx1ZSB0byB0aGUgcmVkem9uZSBhcmVhIC00KCVl
+c3ApLg0KPiA+DQo+ID4gaTM4NiBkb2Vzbid0IGhhdmUgYSByZWR6b25lLg0KPiA+IElmIHlvdSBn
+ZXQgYSBzaWduYWwgaXQgd2lsbCB0cmFzaCAtNCglc3ApDQo+IA0KPiBPSywgSSBtaXNzZWQgdGhh
+dCBvbmUuIFRoYW5rcyBmb3IgcmV2aWV3aW5nIHRoaXMuDQo+IA0KLi4uDQo+ID4NCj4gPiBPbmUg
+cG9zc2liaWxpdHkgbWlnaHQgYmUgdG8gZG86DQo+ID4gCXB1c2ggYXJnNg0KPiA+IAlwdXNoICVl
+YnANCj4gPiAJbW92ICAlZWJwLCA0KCVzcCkNCj4gDQo+IERpZCB5b3UgbWVhbiBgbW92IDQoJWVz
+cCksICVlYnBgPw0KPiANCj4gPiAJaW50ICAweDgwDQo+ID4gCXBvcCAgJWVicA0KPiA+IAlhZGQg
+ICVlc3AsNA0KPiANCj4gSSB0aGluayB5b3VyIHNvbHV0aW9uIGlzIGJldHRlciB0aGFuIHRoZSB4
+Y2hnIGFwcHJvYWNoICh3aXRoIHRoZSAzcmQgbGluZQ0KPiBmaXhlZCkuIFdpbGwgdGFrZSB0aGlz
+IGluIGZvciB0aGUgbmV4dCB2ZXJzaW9uLg0KDQpJdCBoYXMgdG8gYmUgc2FpZCB0aGF0IGFsdGhv
+dWdoIEkndmUgYmVlbiB3cml0aW5nIHg4NiBhc20NCmZvciA0MCB5ZWFycyAoYW5kIG90aGVycyBm
+b3IgbG9uZ2VyKSBJIGNhbiBuZXZlciBhY3R1YWxseQ0KcmVtZW1iZXIgdGhlIGV4YWN0IHN5bnRh
+eCBvciBvcmRlciBvZiB0aGUgb3BlcmFuZHMhDQpQcm9iYWJseSBiZWNhdXNlIGl0IGlzIHJhbmRv
+bWx5IGRpZmZlcmVudCBiZXR3ZWVuIGFzc2VtYmxlcnMuDQpZb3Ugd2FudCB0aGUgJ21lbW9yeSBy
+ZWFkJyBpbnN0cnVjdGlvbjogOGIgL3IuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJl
+c3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsx
+IDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-Acked-by: Rob Herring <robh@kernel.org>

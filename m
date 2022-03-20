@@ -2,296 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65794E1C18
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 15:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BE64E1C22
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 15:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245288AbiCTOva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 10:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
+        id S245303AbiCTPAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 11:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238877AbiCTOv2 (ORCPT
+        with ESMTP id S234277AbiCTPAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 10:51:28 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D54D9E99;
-        Sun, 20 Mar 2022 07:50:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A8659CE1011;
-        Sun, 20 Mar 2022 14:50:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 589DAC340E9;
-        Sun, 20 Mar 2022 14:49:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647787801;
-        bh=D7lCT9NowQDd5LC7h5VdPtA58AH9iAhEA2bA752V190=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BwtJ9WO0EFCr2R1DmUxan78yIzhHoJ3a6AXujCwt8uQVB/EuNA8cWJgSTB2jmdtgu
-         d3omkVCvMrfHqMppzfOPwrdK7vSxYOdBlmtUWSPCE7bIIFe8g1oPelh+t8FfJz4bjH
-         rU4GbWWfYYUPn+w2oPAAUGGqPaiu33DJF7B5euHj30OXdYntw3/acdRe6V6Bg/2ZHz
-         ihPiaY0ksGon5eIzOcRgfvOo4fk+bAWo1mx/O4E7nUS94mHq8eIZc76Bzip1qnblUt
-         9Tj6GA8g2wcu/LPGaKDBt46pfQy9wAooJe+3Syg6Ee35C9gXMqwWTV3/1YZHIDQtg2
-         2oaukbeCUQxeA==
-Date:   Sun, 20 Mar 2022 14:57:24 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Cixi Geng <gengcixi@gmail.com>
-Cc:     lars@metafoo.de, robh+dt@kernel.org, orsonzhai@gmail.com,
-        baolin.wang7@gmail.com, zhang.lyra@gmail.com, lgirdwood@gmail.com,
-        broonie@kernel.org, yuming.zhu1@unisoc.com,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 7/7] iio: adc: sc27xx: add Ump9620 ADC suspend and
- resume pm support
-Message-ID: <20220320145724.5513f466@jic23-huawei>
-In-Reply-To: <20220311164628.378849-8-gengcixi@gmail.com>
-References: <20220311164628.378849-1-gengcixi@gmail.com>
-        <20220311164628.378849-8-gengcixi@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sun, 20 Mar 2022 11:00:07 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA277252A7;
+        Sun, 20 Mar 2022 07:58:42 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id h13so15317967ede.5;
+        Sun, 20 Mar 2022 07:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6CWKYqtc6RNurgp1Shg9+uzBqze9ab4UhblI0+K5cmI=;
+        b=PGK/WAiBLLLv1ANzctUPJNhTeChLRPH2mcx474dFIyf1wx2B8stuR5QqcZEQXSLDwR
+         KNTM4ry7OcNw2kw8PzF42T6fV7U/fV4rji78zUg6qU96Y/sXtkMYvPeBkQMA39kLOxbp
+         dUkDomsawh1vzNFC8eIUcbMXfv3EBky41qugGgJBpX0CJkGTE3OMrGv7MFY/cWF37Lei
+         dsK7VC8UjIN3bfIjzBGQK3+dJe9tjgDYGIe1RY+ikUJDnmkimleBl3IayqxR7k+Xq+Rr
+         YItqBLDFCLdxEtpzoSZxx7vZzZ07pJx1NVArgDSWElQ1o28pQocK0f3h2geYSspU2vBO
+         Tedw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6CWKYqtc6RNurgp1Shg9+uzBqze9ab4UhblI0+K5cmI=;
+        b=iC8Qdyu3IYCkjZjFTv7LqxAz/7NE5OHvEkYfnFkpsIS9swG0LWaqXlpqqFjRyK+rm1
+         Eqf2AmlvKuvnVrp5SQLnsFNZs5AtGqUooXEui25UXub7QeNxV8Avg1SmAOso8bZUQbt1
+         q2RXta7YZ95y43FEpYGAh5Z+a8BkVL8eku9KuiS7+TOZn1+92kPe3i7EhlV24gjpeDew
+         bt6RcAwjNC4gyayuPFpZC3OBu75QQw8hm+fid3ubdm9cWn4J1xYF+koL1xw6CJxX83uv
+         2HfaQRxwBmBww9VjdqEXGIzuGyq79YIS0BTQXL/EywxNMIdiPChCBg0/UCtTEoXYODoi
+         0+WQ==
+X-Gm-Message-State: AOAM531OmT2rQ6PsEmDgE9/KhbiTZwNRN8gJy4ejBr1mwOzvsIrK9cuy
+        Y73N49LRwGI0wnmilbNEklI=
+X-Google-Smtp-Source: ABdhPJwGPSVhIpLvxJg/c2edQLm4kUKv1BOGx7QLgyAAd7cNW2pLWB5MBPiQAAFD3IVIrqOPbr4qPQ==
+X-Received: by 2002:a05:6402:4248:b0:416:9c69:4f80 with SMTP id g8-20020a056402424800b004169c694f80mr18798105edb.83.1647788320960;
+        Sun, 20 Mar 2022 07:58:40 -0700 (PDT)
+Received: from anparri (host-82-59-4-232.retail.telecomitalia.it. [82.59.4.232])
+        by smtp.gmail.com with ESMTPSA id g11-20020a170906538b00b006ae38eb0561sm5970408ejo.195.2022.03.20.07.58.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Mar 2022 07:58:40 -0700 (PDT)
+Date:   Sun, 20 Mar 2022 15:58:33 +0100
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Wei Hu <weh@microsoft.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] PCI: hv: Use IDR to generate transaction IDs for
+ VMBus hardening
+Message-ID: <20220320145833.GA1393@anparri>
+References: <20220318174848.290621-1-parri.andrea@gmail.com>
+ <20220318174848.290621-2-parri.andrea@gmail.com>
+ <PH0PR21MB3025016203AAB9AB6ECB6A3ED7149@PH0PR21MB3025.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR21MB3025016203AAB9AB6ECB6A3ED7149@PH0PR21MB3025.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Mar 2022 00:46:28 +0800
-Cixi Geng <gengcixi@gmail.com> wrote:
-
-> From: Cixi Geng <cixi.geng1@unisoc.com>
+On Sat, Mar 19, 2022 at 04:20:13PM +0000, Michael Kelley (LINUX) wrote:
+> From: Andrea Parri (Microsoft) <parri.andrea@gmail.com> Sent: Friday, March 18, 2022 10:49 AM
+> > 
+> > Currently, pointers to guest memory are passed to Hyper-V as transaction
+> > IDs in hv_pci.  In the face of errors or malicious behavior in Hyper-V,
+> > hv_pci should not expose or trust the transaction IDs returned by
+> > Hyper-V to be valid guest memory addresses.  Instead, use small integers
+> > generated by IDR as request (transaction) IDs.
 > 
-> Ump9620 ADC suspend and resume pm optimization, configuration
-> 0x6490_ 0350(PAD_ CLK26M_ SINOUT_ PMIC_ 1P8 ) bit 8.
-> 
-> Signed-off-by: Yuming Zhu <yuming.zhu1@unisoc.com>
-> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-> ---
->  drivers/iio/adc/sc27xx_adc.c | 88 ++++++++++++++++++++++++++++++++++--
->  1 file changed, 84 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
-> index e9b680e9c275..b038b1dfc91f 100644
-> --- a/drivers/iio/adc/sc27xx_adc.c
-> +++ b/drivers/iio/adc/sc27xx_adc.c
-> @@ -11,6 +11,7 @@
->  #include <linux/regmap.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/slab.h>
-> +#include <linux/pm_runtime.h>
->  
->  /* PMIC global registers definition */
->  #define SC2730_MODULE_EN		0x1808
-> @@ -83,6 +84,9 @@
->  /* ADC default channel reference voltage is 2.8V */
->  #define SC27XX_ADC_REFVOL_VDD28		2800000
->  
-> +/* 10s delay before suspending the ADC IP */
-> +#define SC27XX_ADC_AUTOSUSPEND_DELAY	10000
-> +
->  enum sc27xx_pmic_type {
->  	SC27XX_ADC,
->  	SC2721_ADC,
-> @@ -96,6 +100,7 @@ enum ump96xx_scale_cal {
->  };
->  
->  struct sc27xx_adc_data {
-> +	struct iio_dev *indio_dev;
->  	struct device *dev;
->  	struct regulator *volref;
->  	struct regmap *regmap;
-> @@ -605,6 +610,9 @@ static int sc27xx_adc_read(struct sc27xx_adc_data *data, int channel,
->  		return ret;
->  	}
->  
-> +	if (data->var_data->pmic_type == UMP9620_ADC)
-> +		pm_runtime_get_sync(data->indio_dev->dev.parent);
+> I had expected that this code would use the next_request_id_callback
+> mechanism because of the race conditions that mechanism solves.  And
+> to protect against a malicious Hyper-V sending a bogus second message
+> with the same requestID, the requestID needs to be freed in the
+> onchannelcallback function as is done with vmbus_request_addr().
 
-If you need the indio_dev in here then pass it in to the function. 
-Don't introduce a hack / loop of references like this.
+I think I should elaborate on the design underlying this submission;
+roughly, the present solution diverges from the 'generic' requestor
+mechanism you mentioned above in two main aspects:
 
-> +
->  	/*
->  	 * According to the sc2721 chip data sheet, the reference voltage of
->  	 * specific channel 30 and channel 31 in ADC module needs to be set from
-> @@ -688,6 +696,11 @@ static int sc27xx_adc_read(struct sc27xx_adc_data *data, int channel,
->  		}
->  	}
->  
-> +	if (data->var_data->pmic_type == UMP9620_ADC) {
-> +		pm_runtime_mark_last_busy(data->indio_dev->dev.parent);
-> +		pm_runtime_put_autosuspend(data->indio_dev->dev.parent);
-> +	}
-> +
->  	hwspin_unlock_raw(data->hwlock);
->  
->  	if (!ret)
-> @@ -927,9 +940,11 @@ static int sc27xx_adc_enable(struct sc27xx_adc_data *data)
->  
->  	/* Enable 26MHz crvstal oscillator wait cycles for UMP9620 ADC */
->  	if (data->var_data->pmic_type == UMP9620_ADC) {
-> -		ret = regmap_update_bits(data->regmap, UMP9620_XTL_WAIT_CTRL0,
-> -					 UMP9620_XTL_WAIT_CTRL0_EN,
-> -					 UMP9620_XTL_WAIT_CTRL0_EN);
-> +		pm_runtime_get(data->dev);
+  A) it 'moves' the ID removal into hv_compose_msi_msg() and other
+     functions,
 
-Why the queued version?  Is there a race condition, or do we not actually need it
-turned on at all at this point?
+  B) it adopts some ad-hoc locking scheme in the channel callback.
 
-> +		if (ret) {
-> +			dev_err(data->dev, "failed to set the UMP9620 ADC clk26m bit8 on IP\n");
+AFAICT, such changes preserve the 'confidentiality' and correctness
+guarantees of the generic approach (modulo the issue discussed here
+with Saurabh).
 
-This level of detail may make sense in the implementation of the runtime pm, but it doesn't
-make sense here where that detail isn't available.
+These changes are justified by the bug/fix discussed in 2/2.  For
+concreteness, consider a solution based on the VMbus requestor as
+reported at the end of this email.
 
-> +			goto clean_adc_clk26m_bit8;
+AFAICT, this solution can't fix the bug discussed in 2/2.  Moreover
+(and looking back at (A-B)), we observe that:
 
-As such I'd also rename this label.  It's just runtime_get failed - we shouldn't care about
-the details here.
+  1) locking in the channel callback is not quite as desired: we'd
+     want a request_addr_callback_nolock() say and 'protected' it
+     together with ->completion_func();
 
-> +		}
->  	}
->  
->  	/* Enable ADC work clock */
-> @@ -971,6 +986,10 @@ static int sc27xx_adc_enable(struct sc27xx_adc_data *data)
->  	regmap_update_bits(data->regmap, data->var_data->module_en,
->  			   SC27XX_MODULE_ADC_EN, 0);
->  
-> +clean_adc_clk26m_bit8:
-> +	if (data->var_data->pmic_type == UMP9620_ADC)
-> +		pm_runtime_put(data->dev);
-> +
->  	return ret;
->  }
->  
-> @@ -1069,6 +1088,8 @@ static int sc27xx_adc_probe(struct platform_device *pdev)
->  	if (!indio_dev)
->  		return -ENOMEM;
->  
-> +	platform_set_drvdata(pdev, indio_dev);
-> +
->  	sc27xx_data = iio_priv(indio_dev);
->  
->  	sc27xx_data->regmap = dev_get_regmap(dev->parent, NULL);
-> @@ -1111,7 +1132,10 @@ static int sc27xx_adc_probe(struct platform_device *pdev)
->  		}
->  	}
->  
-> +	sc27xx_data->dev = dev;
->  	sc27xx_data->var_data = pdata;
-> +	sc27xx_data->indio_dev = indio_dev;
-Why?  Any time I see the iio_dev pointed to by the iio_priv() data it
-rings alarm bells.  There should be no situation where you need to
-do this.
+  2) hv_compose_msi_msg() doesn't know the value of the request ID
+     it has allocated (hv_compose_msi_msg() -> vmbus_sendpacket();
+     cf. also remove_request_id() in the current submission).
 
-> +
->  	sc27xx_data->var_data->init_scale(sc27xx_data);
->  
->  	ret = sc27xx_adc_enable(sc27xx_data);
-> @@ -1126,14 +1150,35 @@ static int sc27xx_adc_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> +	indio_dev->dev.parent = dev;
->  	indio_dev->name = dev_name(dev);
->  	indio_dev->modes = INDIO_DIRECT_MODE;
->  	indio_dev->info = &sc27xx_info;
->  	indio_dev->channels = sc27xx_channels;
->  	indio_dev->num_channels = ARRAY_SIZE(sc27xx_channels);
-> +
-> +	if (sc27xx_data->var_data->pmic_type == UMP9620_ADC) {
-> +		pm_runtime_set_autosuspend_delay(dev,
-> +						 SC27XX_ADC_AUTOSUSPEND_DELAY);
-> +		pm_runtime_use_autosuspend(dev);
-> +		pm_runtime_set_suspended(dev);
-> +		pm_runtime_enable(dev);
-> +		pm_runtime_get(dev);
+Hope this helps clarify the problems at stake, and move fortward to a
+'final' solution...
 
-Why does turning it on here make sense?  If it is already on you can
-set the state with pm_runtime_set_active().
+Thanks,
+  Andrea
 
-> +	}
-> +
->  	ret = devm_iio_device_register(dev, indio_dev);
-> -	if (ret)
-> +	if (ret) {
->  		dev_err(dev, "could not register iio (ADC)");
-> +		goto err_iio_register;
-> +	}
-> +
-> +	return 0;
-> +
-> +err_iio_register:
-> +	if (sc27xx_data->var_data->pmic_type == UMP9620_ADC) {
-> +		pm_runtime_put(dev);
-> +		pm_runtime_disable(dev);
-> +	}
->  
->  	return ret;
->  }
-> @@ -1148,11 +1193,46 @@ static const struct of_device_id sc27xx_adc_of_match[] = {
->  };
->  MODULE_DEVICE_TABLE(of, sc27xx_adc_of_match);
->  
-> +static int sc27xx_adc_runtime_suspend(struct device *dev)
-> +{
-> +	struct sc27xx_adc_data *sc27xx_data = iio_priv(dev_get_drvdata(dev));
-> +
-> +	/* clean the UMP9620 ADC clk26m bit8 on IP */
-> +	if (sc27xx_data->var_data->pmic_type == UMP9620_ADC)
-> +		regmap_update_bits(sc27xx_data->regmap, UMP9620_XTL_WAIT_CTRL0,
-> +				UMP9620_XTL_WAIT_CTRL0_EN, 0);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sc27xx_adc_runtime_resume(struct device *dev)
-> +{
-> +	int ret = 0;
 
-Value not used, so don't set it.
-
-> +	struct sc27xx_adc_data *sc27xx_data = iio_priv(dev_get_drvdata(dev));
-> +
-> +	/* set the UMP9620 ADC clk26m bit8 on IP */
-> +	if (sc27xx_data->var_data->pmic_type == UMP9620_ADC) {
-> +		ret = regmap_update_bits(sc27xx_data->regmap, UMP9620_XTL_WAIT_CTRL0,
-> +				UMP9620_XTL_WAIT_CTRL0_EN, UMP9620_XTL_WAIT_CTRL0_EN);
-> +		if (ret) {
-> +			dev_err(dev, "failed to set the UMP9620 ADC clk26m bit8 on IP\n");
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct dev_pm_ops sc27xx_adc_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(sc27xx_adc_runtime_suspend, sc27xx_adc_runtime_resume, NULL)
-
-I'm curious, could you safely use DEFINE_RUNTIME_DEV_PM_OPS()
-which would also supply sleep functions via pm_runtime_force_suspend.
-Seems likely to work 'fine' though may not be the best possible implementation
-of suspend and resume ops.
-
-Even if not, for new code this should be using the new macro 
-RUNTIME_PM_OPS() in conjunction with pm_ptr() below.
-
-> +};
-> +
->  static struct platform_driver sc27xx_adc_driver = {
->  	.probe = sc27xx_adc_probe,
->  	.driver = {
->  		.name = "sc27xx-adc",
->  		.of_match_table = sc27xx_adc_of_match,
-> +		.pm	= &sc27xx_adc_pm_ops,
-pm_ptr()
-
->  	},
->  };
->  
-
+diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+index ae0bc2fee4ca8..bd99dd12d367b 100644
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -91,6 +91,9 @@ static enum pci_protocol_version_t pci_protocol_versions[] = {
+ /* space for 32bit serial number as string */
+ #define SLOT_NAME_SIZE 11
+ 
++/* Size of requestor for VMbus */
++#define HV_PCI_RQSTOR_SIZE 64
++
+ /*
+  * Message Types
+  */
+@@ -1407,7 +1410,7 @@ static void hv_int_desc_free(struct hv_pci_dev *hpdev,
+ 	int_pkt->wslot.slot = hpdev->desc.win_slot.slot;
+ 	int_pkt->int_desc = *int_desc;
+ 	vmbus_sendpacket(hpdev->hbus->hdev->channel, int_pkt, sizeof(*int_pkt),
+-			 (unsigned long)&ctxt.pkt, VM_PKT_DATA_INBAND, 0);
++			 0, VM_PKT_DATA_INBAND, 0);
+ 	kfree(int_desc);
+ }
+ 
+@@ -2649,7 +2652,7 @@ static void hv_eject_device_work(struct work_struct *work)
+ 	ejct_pkt->message_type.type = PCI_EJECTION_COMPLETE;
+ 	ejct_pkt->wslot.slot = hpdev->desc.win_slot.slot;
+ 	vmbus_sendpacket(hbus->hdev->channel, ejct_pkt,
+-			 sizeof(*ejct_pkt), (unsigned long)&ctxt.pkt,
++			 sizeof(*ejct_pkt), 0,
+ 			 VM_PKT_DATA_INBAND, 0);
+ 
+ 	/* For the get_pcichild() in hv_pci_eject_device() */
+@@ -2696,8 +2699,9 @@ static void hv_pci_onchannelcallback(void *context)
+ 	const int packet_size = 0x100;
+ 	int ret;
+ 	struct hv_pcibus_device *hbus = context;
++	struct vmbus_channel *chan = hbus->hdev->channel;
+ 	u32 bytes_recvd;
+-	u64 req_id;
++	u64 req_id, req_addr;
+ 	struct vmpacket_descriptor *desc;
+ 	unsigned char *buffer;
+ 	int bufferlen = packet_size;
+@@ -2743,11 +2747,13 @@ static void hv_pci_onchannelcallback(void *context)
+ 		switch (desc->type) {
+ 		case VM_PKT_COMP:
+ 
+-			/*
+-			 * The host is trusted, and thus it's safe to interpret
+-			 * this transaction ID as a pointer.
+-			 */
+-			comp_packet = (struct pci_packet *)req_id;
++			req_addr = chan->request_addr_callback(chan, req_id);
++			if (!req_addr || req_addr == VMBUS_RQST_ERROR) {
++				dev_warn_ratelimited(&hbus->hdev->device,
++						     "Invalid request ID\n");
++				break;
++			}
++			comp_packet = (struct pci_packet *)req_addr;
+ 			response = (struct pci_response *)buffer;
+ 			comp_packet->completion_func(comp_packet->compl_ctxt,
+ 						     response,
+@@ -3419,6 +3425,10 @@ static int hv_pci_probe(struct hv_device *hdev,
+ 		goto free_dom;
+ 	}
+ 
++	hdev->channel->next_request_id_callback = vmbus_next_request_id;
++	hdev->channel->request_addr_callback = vmbus_request_addr;
++	hdev->channel->rqstor_size = HV_PCI_RQSTOR_SIZE;
++
+ 	ret = vmbus_open(hdev->channel, pci_ring_size, pci_ring_size, NULL, 0,
+ 			 hv_pci_onchannelcallback, hbus);
+ 	if (ret)
+@@ -3749,6 +3759,10 @@ static int hv_pci_resume(struct hv_device *hdev)
+ 
+ 	hbus->state = hv_pcibus_init;
+ 
++	hdev->channel->next_request_id_callback = vmbus_next_request_id;
++	hdev->channel->request_addr_callback = vmbus_request_addr;
++	hdev->channel->rqstor_size = HV_PCI_RQSTOR_SIZE;
++
+ 	ret = vmbus_open(hdev->channel, pci_ring_size, pci_ring_size, NULL, 0,
+ 			 hv_pci_onchannelcallback, hbus);
+ 	if (ret)

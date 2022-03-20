@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E1D4E1CD5
+	by mail.lfdr.de (Postfix) with ESMTP id 49A804E1CD4
 	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 17:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244738AbiCTQab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 12:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
+        id S245573AbiCTQah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 12:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245520AbiCTQ3t (ORCPT
+        with ESMTP id S245517AbiCTQ3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 12:29:49 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F45C34B93;
-        Sun, 20 Mar 2022 09:28:26 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id l1-20020a05600c4f0100b00389645443d2so7232959wmq.2;
-        Sun, 20 Mar 2022 09:28:25 -0700 (PDT)
+        Sun, 20 Mar 2022 12:29:54 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A8935261;
+        Sun, 20 Mar 2022 09:28:27 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id q8so6500159wrc.0;
+        Sun, 20 Mar 2022 09:28:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=/RImxULSEIcXltj7eh82B63gODFmYdSpUPrpbmj5VVA=;
-        b=ZZiaMuUEyV4HvlJOVouI/OC79i49piYPR5WHC39tHtECxTQKhyQZb1WUWqTAQmFkLR
-         lu1OybqNPFotogVxetuStr+IJ8tXfhfi66iqr8Qqk4w6BeBIPAreS44Ur1RP3J4fWiNe
-         Dvc56vEk6d7FBrYOJRdDK8iho5fnTAEYYdn320CP08j+NUFoZLkIajGGAQhdgK4nYEv7
-         t/Qz2oAm0MfE6DdtlqtMZ+9turKuAUatDWoS+VwNUzMOx+MkqdJ15deNJNY+jXHVIVux
-         wNo0czahyAl/Bv1zYsZAJzrbdEF46qppopzrqE8/Armke+LyHMwLSD0xW0TZ/QR2Ah6A
-         4YUw==
+        bh=QkfgyebL6ZDeFyix3jLmVd6pOSFa+uhSyC95dgb9bxk=;
+        b=fSEwj5Ha6UFb9CDLegqXD8R9svLc6ia09ioy5Uz4x/0iaa2PPVWwuWyib+xnHXQDxw
+         X4rQhvpfSjQepD1eW5UBb6n8fFqnth1s+b4wjLVwhxoZ7iabMQzLEVoE6fT/1iq+ptWW
+         xZXDOLbVNG/d2O38D+3OnQ1cewaYUrdJo3fvI1Cg3RW1L9iCJSn/Sc+Qt9wAQKMhuYqi
+         kkaY0il8kVG0Xf8to0zzf+GtRwltnfXXaXNknChJnKG0uhBrO+xbe6YcXSoddBlBxUHK
+         zL6kbiq0th4RDbFsd5aFCpAt1gFk8jWHt3Vp/Z7WUUNCtR9r9jmjSzMuShl+LSXY0F4/
+         tZug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/RImxULSEIcXltj7eh82B63gODFmYdSpUPrpbmj5VVA=;
-        b=sBdaTEhd1cquVZMCDvl4BDXauKBtSTBoC/oalQ2VgOSppNiqRbEn3PVhBeUR2bqZqJ
-         GflEYgkPsyMSxFFJuwwrC4+JYCEtE/+zBp1Vt/fdYytShFRVqdN4qCuRlnGuBFCW20aX
-         IbInxTtrgEyyoq95V4uaMOp7/ijPBFPZEs2UAR06ICzyVovJyQee9XTPoMe37qBAxeo2
-         u3Lqf9hKHTd4mDxR+7dl5qJlaHCp+pfWPsGlSNDCJ4fx5Xcye6fSrRx9LVRxorEaQHxV
-         FCStwIJEeHtUfWQwJRhQIfP8PF46Kql9SqqvyKRxTmQl5AXQNdpcQWnm3DieRdLpQgi5
-         VlmA==
-X-Gm-Message-State: AOAM5308cDCZPPKty/YYh0XgItW2YZCVPiR1VZyI1RtjszuCCrHG/DH4
-        QUE0wKp+0S9bTsRmmRYu8Lg=
-X-Google-Smtp-Source: ABdhPJzve9llFzsE3nFRzkBjHx/1boMbc3OIRcvsEC49wNYUIkDmckX5hLtbrjeowdNghouE2q36Cg==
-X-Received: by 2002:a05:600c:3506:b0:389:d567:e9fa with SMTP id h6-20020a05600c350600b00389d567e9famr15982077wmq.74.1647793704443;
-        Sun, 20 Mar 2022 09:28:24 -0700 (PDT)
+        bh=QkfgyebL6ZDeFyix3jLmVd6pOSFa+uhSyC95dgb9bxk=;
+        b=1uxjvn8FMA5dpAiJbTibKynoA0YGIRQqmigF2b8eDgE4tCDSeP6CuBoDDh7ylzoumx
+         ++3CebnTtetf52FVJNGs2yqJEjBEVAeyWT+DExj36flcCdxkmoNMCAqZCokMdOLop/9u
+         bCWuj0KtInzuFhkLfoOO6T902pHR8hKWWVuuwxZkQBsz6/LUas4FZ3h/4+sT0ngFX5+g
+         qKx2hfmRukwWQNc14tiOVt+YVZsB4r9pMwUyDj80kflodk4GIoeJ9WBMjb14CZHTJWWL
+         NIceNVB+1T2/smTOBIWXvE0qGDakQNv5WeLg02bcKXxE68FCUsz/jOwjX3xscdpRHUgP
+         fpXg==
+X-Gm-Message-State: AOAM530jdB1I0yVO0NXPJclQmJsFo4AfRnipZRYJSWUHihzcZ6JCgao1
+        laAH/ocoVd4eabyQI5/pSJA=
+X-Google-Smtp-Source: ABdhPJwZ5bTmi6XVP7H3D54Q3pixThOtRzOZ/HdyY5HsjmWAWQKGNYj6WF2pCJPgYUG2GfFXYdNTaA==
+X-Received: by 2002:a5d:6205:0:b0:1e4:b3fd:9ba8 with SMTP id y5-20020a5d6205000000b001e4b3fd9ba8mr14862298wru.426.1647793705557;
+        Sun, 20 Mar 2022 09:28:25 -0700 (PDT)
 Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
-        by smtp.googlemail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm6760085wry.53.2022.03.20.09.28.23
+        by smtp.googlemail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm6760085wry.53.2022.03.20.09.28.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 09:28:24 -0700 (PDT)
+        Sun, 20 Mar 2022 09:28:25 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -56,9 +56,9 @@ To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         Ansuel Smith <ansuelsmth@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v3 12/18] clk: qcom: clk-krait: add apq/ipq8064 errata workaround
-Date:   Sun, 20 Mar 2022 12:34:24 +0100
-Message-Id: <20220320113430.26076-13-ansuelsmth@gmail.com>
+Subject: [PATCH v3 13/18] clk: qcom: clk-krait: add enable disable ops
+Date:   Sun, 20 Mar 2022 12:34:25 +0100
+Message-Id: <20220320113430.26076-14-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220320113430.26076-1-ansuelsmth@gmail.com>
 References: <20220320113430.26076-1-ansuelsmth@gmail.com>
@@ -74,82 +74,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add apq/ipq8064 errata workaround where the sec_src clock gating needs to
-be disabled during switching. To enable this set disable_sec_src_gating
-in the mux struct.
+Add enable/disable ops for krait mux. On disable the mux is set to the
+safe selection.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/clk/qcom/clk-krait.c | 16 ++++++++++++++++
- drivers/clk/qcom/clk-krait.h |  1 +
- drivers/clk/qcom/krait-cc.c  |  1 +
- 3 files changed, 18 insertions(+)
+ drivers/clk/qcom/clk-krait.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
 diff --git a/drivers/clk/qcom/clk-krait.c b/drivers/clk/qcom/clk-krait.c
-index b6b7650dbf15..7ba5dbc72bce 100644
+index 7ba5dbc72bce..061af57b0ec2 100644
 --- a/drivers/clk/qcom/clk-krait.c
 +++ b/drivers/clk/qcom/clk-krait.c
-@@ -18,13 +18,23 @@
- static DEFINE_SPINLOCK(krait_clock_reg_lock);
+@@ -85,7 +85,25 @@ static u8 krait_mux_get_parent(struct clk_hw *hw)
+ 	return clk_mux_val_to_index(hw, mux->parent_map, 0, sel);
+ }
  
- #define LPL_SHIFT	8
-+#define SECCLKAGD	BIT(4)
++static int krait_mux_enable(struct clk_hw *hw)
++{
++	struct krait_mux_clk *mux = to_krait_mux_clk(hw);
 +
- static void __krait_mux_set_sel(struct krait_mux_clk *mux, int sel)
- {
- 	unsigned long flags;
- 	u32 regval;
- 
- 	spin_lock_irqsave(&krait_clock_reg_lock, flags);
++	__krait_mux_set_sel(mux, mux->en_mask);
 +
- 	regval = krait_get_l2_indirect_reg(mux->offset);
++	return 0;
++}
 +
-+	/* apq/ipq8064 Errata: disable sec_src clock gating during switch. */
-+	if (mux->disable_sec_src_gating) {
-+		regval |= SECCLKAGD;
-+		krait_set_l2_indirect_reg(mux->offset, regval);
-+	}
++static void krait_mux_disable(struct clk_hw *hw)
++{
++	struct krait_mux_clk *mux = to_krait_mux_clk(hw);
 +
- 	regval &= ~(mux->mask << mux->shift);
- 	regval |= (sel & mux->mask) << mux->shift;
- 	if (mux->lpl) {
-@@ -33,6 +43,12 @@ static void __krait_mux_set_sel(struct krait_mux_clk *mux, int sel)
- 	}
- 	krait_set_l2_indirect_reg(mux->offset, regval);
- 
-+	/* apq/ipq8064 Errata: re-enabled sec_src clock gating. */
-+	if (mux->disable_sec_src_gating) {
-+		regval &= ~SECCLKAGD;
-+		krait_set_l2_indirect_reg(mux->offset, regval);
-+	}
++	__krait_mux_set_sel(mux, mux->safe_sel);
++}
 +
- 	/* Wait for switch to complete. */
- 	mb();
- 	udelay(1);
-diff --git a/drivers/clk/qcom/clk-krait.h b/drivers/clk/qcom/clk-krait.h
-index 9120bd2f5297..f930538c539e 100644
---- a/drivers/clk/qcom/clk-krait.h
-+++ b/drivers/clk/qcom/clk-krait.h
-@@ -15,6 +15,7 @@ struct krait_mux_clk {
- 	u8		safe_sel;
- 	u8		old_index;
- 	bool		reparent;
-+	bool		disable_sec_src_gating;
- 
- 	struct clk_hw	hw;
- 	struct notifier_block   clk_nb;
-diff --git a/drivers/clk/qcom/krait-cc.c b/drivers/clk/qcom/krait-cc.c
-index 299eb4c81d96..cb8b267f1dc5 100644
---- a/drivers/clk/qcom/krait-cc.c
-+++ b/drivers/clk/qcom/krait-cc.c
-@@ -157,6 +157,7 @@ krait_add_sec_mux(struct device *dev, struct clk *qsb, int id,
- 	mux->shift = 2;
- 	mux->parent_map = sec_mux_map;
- 	mux->hw.init = &init;
-+	mux->disable_sec_src_gating = true;
- 
- 	init.name = kasprintf(GFP_KERNEL, "krait%s_sec_mux", s);
- 	if (!init.name)
+ const struct clk_ops krait_mux_clk_ops = {
++	.enable = krait_mux_enable,
++	.disable = krait_mux_disable,
+ 	.set_parent = krait_mux_set_parent,
+ 	.get_parent = krait_mux_get_parent,
+ 	.determine_rate = __clk_mux_determine_rate_closest,
 -- 
 2.34.1
 

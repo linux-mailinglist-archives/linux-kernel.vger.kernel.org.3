@@ -2,189 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791764E1AAF
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 08:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20EA4E1AAD
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 08:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244971AbiCTH13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 03:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
+        id S244985AbiCTHqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 03:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238644AbiCTH10 (ORCPT
+        with ESMTP id S236841AbiCTHq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 03:27:26 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20061E098D
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 00:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647761161; x=1679297161;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=56P2OUjwQxXbL3U3aFHsH9FyVLP+P+Me0B076HwrZLI=;
-  b=EY3ybDb1aZaAk60ThCBonUm5lpSoWktygWSknfQ3qMQ9/Vijm5dhHRmv
-   qr0w5aPZkGz1DwlaHFCoiTvGxCFPARBQyXRUWx79C3CuPyBkZ5iIjQ3wN
-   JWqYiJErmW0fzFQ5PlbCFogB4Rx0t2HzBEDt6RR+65t+FFBxAcywEsanU
-   4CqRHAz3jbv217cv6EeB9vg3N9jVR0fsFqTWnfgpSrav+FTCu1iWZapVo
-   cbr3G55hMUqAFVUu3Vt1B16ffedmQ0IPamRSzvpOgIoOEY2JK4ZvNj7iD
-   CNBBluSVt5CU3NCW8XptmXF2xoJ9Ws2BY0URMshEzNXRMK7NNEfY8FWr2
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="343792654"
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="343792654"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 00:26:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="648189085"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 20 Mar 2022 00:25:59 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVpws-000GgH-FN; Sun, 20 Mar 2022 07:25:58 +0000
-Date:   Sun, 20 Mar 2022 15:24:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Sun, 20 Mar 2022 03:46:29 -0400
+Received: from sender4-of-o53.zoho.com (sender4-of-o53.zoho.com [136.143.188.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA68BB6;
+        Sun, 20 Mar 2022 00:45:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1647762300; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=EDNwVrXEK6Oway1Y2ekLuadKuWPFi4I44XhEaZyHQXnMt2h3ridc6vNPri2vgOzOy2Nt50ux/qDYMCtHeDF1KvuSVulYALVnDxUbM+wkC5hw8UtWTCcZ4OWIK+VWp8CLMU48I+hd1gQoxBwcpV6vrvkNEEGaCFFy0EsKhIvzQC0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1647762300; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=w5LyUHJofJCyeKMRiw9YiX9jA/Wm8ilUQt322JAg2Fw=; 
+        b=SjKBYcx+1k6Nu3WNqwDNuVa8u6nac4CrkGv9HXeOx8H+wPAgvjWM8ikrE8KdIyfFYZzaSZCgn9Ph16Guzv2g+zPjHZuQ87KPrx/CJPa7zGWppowfaoTeoCkbdrstOXFR6rz1tWBk6jfvulaQm5fOBYW4JeCs1f4u7SPnZczRgE4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=anirudhrb.com;
+        spf=pass  smtp.mailfrom=mail@anirudhrb.com;
+        dmarc=pass header.from=<mail@anirudhrb.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1647762300;
+        s=zoho; d=anirudhrb.com; i=mail@anirudhrb.com;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+        bh=w5LyUHJofJCyeKMRiw9YiX9jA/Wm8ilUQt322JAg2Fw=;
+        b=pZaPNAdbrS0juZd3ejmm6jiH3ppZvGIDxtGR9vjxotKMgPYbaQzc6otg5n17GIVn
+        jnpyllYpV2Pm/+07mkHsq0G9qH1NutaJWnCKKUj4l3nfuJS9SFHG1L9CJP1RMHPWtN2
+        5wNaWm/1DyDXXHQp5p1whUOhe34j7hCaxpIhshCs=
+Received: from localhost.localdomain (49.207.204.88 [49.207.204.88]) by mx.zohomail.com
+        with SMTPS id 1647762299802751.4615773189689; Sun, 20 Mar 2022 00:44:59 -0700 (PDT)
+From:   Anirudh Rayabharam <mail@anirudhrb.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Anirudh Rayabharam <mail@anirudhrb.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [dhowells-fs:netfs-lib 44/59] fs/netfs/objects.c:48:2: error:
- implicit declaration of function 'netfs_proc_add_writeback'
-Message-ID: <202203201546.NwQXcQOd-lkp@intel.com>
+Subject: [PATCH v2] vhost: handle error while adding split ranges to iotlb
+Date:   Sun, 20 Mar 2022 13:14:49 +0530
+Message-Id: <20220320074449.4909-1-mail@anirudhrb.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-lib
-head:   be5db4483c9c2527fc63622f257ffd916ac87c98
-commit: 72ab86a3e8b3709b611f7a709382fad7be00df69 [44/59] netfs: Add a procfile to list in-progress requests
-config: s390-randconfig-c005-20220320 (https://download.01.org/0day-ci/archive/20220320/202203201546.NwQXcQOd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?id=72ab86a3e8b3709b611f7a709382fad7be00df69
-        git remote add dhowells-fs https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
-        git fetch --no-tags dhowells-fs netfs-lib
-        git checkout 72ab86a3e8b3709b611f7a709382fad7be00df69
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash fs/netfs/
+vhost_iotlb_add_range_ctx() handles the range [0, ULONG_MAX] by
+splitting it into two ranges and adding them separately. The return
+value of adding the first range to the iotlb is currently ignored.
+Check the return value and bail out in case of an error.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Fixes: e2ae38cf3d91 ("vhost: fix hung thread due to erroneous iotlb entries")
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+---
 
-All errors (new ones prefixed by >>):
+v2:
+- Add "Fixes:" tag and "Reviewed-by:".
 
->> fs/netfs/objects.c:48:2: error: implicit declaration of function 'netfs_proc_add_writeback' [-Werror,-Wimplicit-function-declaration]
-           netfs_proc_add_writeback(rreq);
-           ^
-   fs/netfs/objects.c:48:2: note: did you mean 'netfs_proc_add_rreq'?
-   fs/netfs/internal.h:51:20: note: 'netfs_proc_add_rreq' declared here
-   static inline void netfs_proc_add_rreq(struct netfs_io_request *rreq) {}
-                      ^
->> fs/netfs/objects.c:80:2: error: implicit declaration of function 'netfs_proc_del_writeback' [-Werror,-Wimplicit-function-declaration]
-           netfs_proc_del_writeback(rreq);
-           ^
-   fs/netfs/objects.c:80:2: note: did you mean 'netfs_proc_del_rreq'?
-   fs/netfs/internal.h:52:20: note: 'netfs_proc_del_rreq' declared here
-   static inline void netfs_proc_del_rreq(struct netfs_io_request *rreq) {}
-                      ^
-   2 errors generated.
+v1:
+https://lore.kernel.org/kvm/20220312141121.4981-1-mail@anirudhrb.com/
 
+---
+ drivers/vhost/iotlb.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-vim +/netfs_proc_add_writeback +48 fs/netfs/objects.c
-
-    10	
-    11	/*
-    12	 * Allocate an I/O request and initialise it.
-    13	 */
-    14	struct netfs_io_request *netfs_alloc_request(struct address_space *mapping,
-    15						     struct file *file,
-    16						     loff_t start, size_t len,
-    17						     enum netfs_io_origin origin)
-    18	{
-    19		static atomic_t debug_ids;
-    20		struct inode *inode = file ? file_inode(file) : mapping->host;
-    21		struct netfs_i_context *ctx = netfs_i_context(inode);
-    22		struct netfs_io_request *rreq;
-    23		int ret;
-    24	
-    25		rreq = kzalloc(sizeof(struct netfs_io_request), GFP_KERNEL);
-    26		if (!rreq)
-    27			return ERR_PTR(-ENOMEM);
-    28	
-    29		rreq->start	= start;
-    30		rreq->len	= len;
-    31		rreq->origin	= origin;
-    32		rreq->netfs_ops	= ctx->ops;
-    33		rreq->mapping	= mapping;
-    34		rreq->inode	= inode;
-    35		rreq->i_size	= i_size_read(inode);
-    36		rreq->debug_id	= atomic_inc_return(&debug_ids);
-    37		INIT_LIST_HEAD(&rreq->subrequests);
-    38		refcount_set(&rreq->ref, 1);
-    39		__set_bit(NETFS_RREQ_IN_PROGRESS, &rreq->flags);
-    40		if (rreq->netfs_ops->init_request) {
-    41			ret = rreq->netfs_ops->init_request(rreq, file);
-    42			if (ret < 0) {
-    43				kfree(rreq);
-    44				return ERR_PTR(ret);
-    45			}
-    46		}
-    47	
-  > 48		netfs_proc_add_writeback(rreq);
-    49		netfs_stat(&netfs_n_rh_rreq);
-    50		return rreq;
-    51	}
-    52	
-    53	void netfs_get_request(struct netfs_io_request *rreq, enum netfs_rreq_ref_trace what)
-    54	{
-    55		int r;
-    56	
-    57		__refcount_inc(&rreq->ref, &r);
-    58		trace_netfs_rreq_ref(rreq->debug_id, r + 1, what);
-    59	}
-    60	
-    61	void netfs_clear_subrequests(struct netfs_io_request *rreq, bool was_async)
-    62	{
-    63		struct netfs_io_subrequest *subreq;
-    64	
-    65		while (!list_empty(&rreq->subrequests)) {
-    66			subreq = list_first_entry(&rreq->subrequests,
-    67						  struct netfs_io_subrequest, rreq_link);
-    68			list_del(&subreq->rreq_link);
-    69			netfs_put_subrequest(subreq, was_async,
-    70					     netfs_sreq_trace_put_clear);
-    71		}
-    72	}
-    73	
-    74	static void netfs_free_request(struct work_struct *work)
-    75	{
-    76		struct netfs_io_request *rreq =
-    77			container_of(work, struct netfs_io_request, work);
-    78	
-    79		trace_netfs_rreq(rreq, netfs_rreq_trace_free);
-  > 80		netfs_proc_del_writeback(rreq);
-    81		netfs_clear_subrequests(rreq, false);
-    82		if (rreq->netfs_ops->free_request)
-    83			rreq->netfs_ops->free_request(rreq);
-    84		if (rreq->cache_resources.ops)
-    85			rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
-    86		kfree_rcu(rreq, rcu);
-    87		netfs_stat_d(&netfs_n_rh_rreq);
-    88	}
-    89	
-
+diff --git a/drivers/vhost/iotlb.c b/drivers/vhost/iotlb.c
+index 40b098320b2a..5829cf2d0552 100644
+--- a/drivers/vhost/iotlb.c
++++ b/drivers/vhost/iotlb.c
+@@ -62,8 +62,12 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
+ 	 */
+ 	if (start == 0 && last == ULONG_MAX) {
+ 		u64 mid = last / 2;
++		int err = vhost_iotlb_add_range_ctx(iotlb, start, mid, addr,
++				perm, opaque);
++
++		if (err)
++			return err;
+ 
+-		vhost_iotlb_add_range_ctx(iotlb, start, mid, addr, perm, opaque);
+ 		addr += mid + 1;
+ 		start = mid + 1;
+ 	}
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

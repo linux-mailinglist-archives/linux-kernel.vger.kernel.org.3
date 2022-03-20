@@ -2,80 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2094E1A02
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 06:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20834E1A4F
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 07:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244752AbiCTFqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 01:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
+        id S244766AbiCTGIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 02:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234851AbiCTFqv (ORCPT
+        with ESMTP id S234851AbiCTGIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 01:46:51 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C6E36169;
-        Sat, 19 Mar 2022 22:45:28 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KLmr96GsSzCqhy;
-        Sun, 20 Mar 2022 13:43:21 +0800 (CST)
-Received: from dggpemm500015.china.huawei.com (7.185.36.181) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Sun, 20 Mar 2022 13:45:26 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500015.china.huawei.com
- (7.185.36.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Sun, 20 Mar
- 2022 13:45:25 +0800
-From:   Wang ShaoBo <bobo.shaobowang@huawei.com>
-CC:     <cj.chengjian@huawei.com>, <liwei391@huawei.com>,
-        <bobo.shaobowang@huawei.com>, <antoniu.miclaus@analog.com>,
-        <Nuno.Sa@analog.com>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <jic23@kernel.org>,
-        <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2] iio:filter:admv8818: select REGMAP_SPI for ADMV8818
-Date:   Sun, 20 Mar 2022 13:54:57 +0800
-Message-ID: <20220320055457.254983-1-bobo.shaobowang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 20 Mar 2022 02:08:11 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0401BCC515
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 23:06:47 -0700 (PDT)
+Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 22K66XMY067405;
+        Sun, 20 Mar 2022 15:06:33 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
+ Sun, 20 Mar 2022 15:06:33 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 22K66W6e067290
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sun, 20 Mar 2022 15:06:33 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <e4203c4f-9c3d-6e33-06e8-052676cc5af1@I-love.SAKURA.ne.jp>
+Date:   Sun, 20 Mar 2022 15:06:30 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggeme702-chm.china.huawei.com (10.1.199.98) To
- dggpemm500015.china.huawei.com (7.185.36.181)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 (repost)] workqueue: Warn flushing of kernel-global
+ workqueues
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <2efd5461-fccd-f1d9-7138-0a6767cbf5fe@I-love.SAKURA.ne.jp>
+ <CAHk-=wgiCVcF4vJCOcg1hDw9PMT6zNSgt-pPuZL8ihWEcVv3eg@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CAHk-=wgiCVcF4vJCOcg1hDw9PMT6zNSgt-pPuZL8ihWEcVv3eg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-admv8818 driver needs __devm_regmap_init_spi() which is defined
-when CONFIG_REGMAP_SPI is set and struct regmap_config when
-CONFIG_REGMAP is set, so automatically select CONFIG_REGMAP_SPI
-which also sets CONFIG_REGMAP.
+On 2022/03/20 2:15, Linus Torvalds wrote:
+> On Fri, Mar 18, 2022 at 9:43 PM Tetsuo Handa
+> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+>>
+>> Since flush operation synchronously waits for completion, flushing
+>> kernel-global WQs (e.g. system_wq) might introduce possibility of deadlock
+>> due to unexpected locking dependency. Tejun Heo commented that it makes no
+>> sense at all to call flush_workqueue() on the shared WQs as the caller has
+>> no idea what it's gonna end up waiting for.
+> 
+> NAK on this patch for a very simple reason:
+> 
+>   static inline void flush_scheduled_work(void)
+>   {
+>         flush_workqueue(system_wq);
+>   }
+> 
+> and now grep for flush_scheduled_work().
 
-Fixes: f34fe888ad05 ("iio:filter:admv8818: add support for ADMV8818")
-Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
----
- drivers/iio/filter/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+I know there are in-tree flush_scheduled_work() users.
 
-diff --git a/drivers/iio/filter/Kconfig b/drivers/iio/filter/Kconfig
-index 3ae35817ad82..a85b345ea14e 100644
---- a/drivers/iio/filter/Kconfig
-+++ b/drivers/iio/filter/Kconfig
-@@ -8,6 +8,7 @@ menu "Filters"
- config ADMV8818
- 	tristate "Analog Devices ADMV8818 High-Pass and Low-Pass Filter"
- 	depends on SPI && COMMON_CLK && 64BIT
-+	select REGMAP_SPI
- 	help
- 	  Say yes here to build support for Analog Devices ADMV8818
- 	  2 GHz to 18 GHz, Digitally Tunable, High-Pass and Low-Pass Filter.
--- 
-2.25.1
+> 
+> The *other* system workqueue flushes may be rare and "that subsystem
+> should just be converted to do its own workqueue".
+> 
+> But flush_scheduled_work() is literally exported as an explicit and
+> separate interface,
+> 
+> The fact that the function has a big warning in the comment above it
+> doesn't change that fact. At the very least, this patch has to be
+> preceded by a couple of other patches that fix a couple of subsystems
+> and document "this is what you should do".
+
+This change was in Tejun's todo list
+( https://lore.kernel.org/all/YgnQGZWT%2Fn3VAITX@slm.duckdns.org ).
+But scrubbing the existing users will need some time.
+
+This patch is intended for
+
+  (a) preventing developers from adding more flush_workqueue() calls on
+      kernel-global WQs.
+
+  (b) serving as an anchor to be referenced from individual patches
+
+.
+
+> 
+> Because suddenly saying "hey, we gave you this interface, now we're
+> warning about it because it's going to go away" without actually
+> showing how to do it instead is not acceptable.
+
+This patch avoids emitting "WARNING:" in order not to disturb kernel testing.
+This change is not as urgent as security fix. We can wait for several release
+cycles until all in-tree users update their modules. I don't want to send
+blind conversion patches, for what the proper fix is depends on what that
+module is doing. For example, commit 081bdc9fe05bb232 ("RDMA/ib_srp: Fix a
+deadlock") chose just removing flush_workqueue(system_long_wq) call. This
+change is expected to be carefully handled by each module's maintainers.
+
+> 
+> And honestly, I don't personally see a good conversion. We literally
+> have all those "schedule_{delayed_}work{_on}()" etc helper functions
+> that are *designed* to use this system_wq. People *need* the ability
+> to flush those things, even if it's only for module unload.
+
+Users of all those "schedule_{delayed_}work{_on}()" etc helper functions
+need to be updated only if flush_workqueue() is needed. And even if
+flush_workqueue() happens only upon module unload, there is possibility
+of deadlock.
+
+> 
+> So I really think this patch on its own is completely broken. It'd not
+> pointing to a way forward, it's just saying "don't do this" with no
+> really acceptable way to not do it.
+
+If you want how to convert, I can include it into patch description.
+
+> 
+> Removing flush_scheduled_work() needs to be paired with removing the
+> "schedule_{delayed_}work{_on}()" helpers too.
+
+No need to remove the "schedule_{delayed_}work{_on}()" helpers.
+Those who don't need flush_workqueue() can continue using these helpers.
+
+Those who need flush_workqueue() can convert
+
+  schedule_work(some_work);
+
+into
+
+  queue_work(some_workqueue_for_that_module, some_work);
+
+.
+
+> 
+> And I don't see you having a good alternative.
+
+What alternative are you expecting? We already have alternatives.
+This change (replacing system_wq with module's local workqueue as
+an example) is a matter of doing
+
+  (1) add
+
+        some_workqueue_for_that_module = alloc_workqueue("some_name", 0, 0);
+
+      into module's __init function.
+
+  (2) add
+
+        destroy_workqueue(some_workqueue_for_that_module);
+
+      into module's __exit function.
+
+  (3) replace
+
+        schedule_work(some_work);
+
+      with
+
+        queue_work(some_workqueue_for_that_module, some_work);
+
+      throughout that module.
+
+  (4) replace
+
+        flush_scheduled_work();
+
+      with
+
+        flush_workqueue(some_workqueue_for_that_module);
+
+      throughout that module.
+
+if flush_scheduled_work() cannot be avoided.
+
+> 
+> So until that clear way forward exists, NAK.
+
+We know that allocating a !WQ_MEM_RECLAIM workqueue consumes little
+resource ( https://lore.kernel.org/all/YhUq70Y%2FtKGGNbR0@slm.duckdns.org ).
+This is a step by step conversion if flush_workqueue() is unavoidable.
+
+Again, we already have alternatives. Why NAK?
+
+> 
+>              Linus
 

@@ -2,95 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05384E1BCC
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 14:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBB74E1BD2
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 14:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245125AbiCTNN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 09:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
+        id S245143AbiCTNQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 09:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245124AbiCTNN0 (ORCPT
+        with ESMTP id S236759AbiCTNQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 09:13:26 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1108A1F630;
-        Sun, 20 Mar 2022 06:12:02 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V7f.E1k_1647781918;
-Received: from 30.240.112.73(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V7f.E1k_1647781918)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 20 Mar 2022 21:12:00 +0800
-Message-ID: <78cefd4c-f735-2ec4-0c09-35c8191280c5@linux.alibaba.com>
-Date:   Sun, 20 Mar 2022 21:11:58 +0800
+        Sun, 20 Mar 2022 09:16:45 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B7B3192F;
+        Sun, 20 Mar 2022 06:15:22 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22K8NxdQ029675;
+        Sun, 20 Mar 2022 13:14:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=pp1; bh=cFVIwF9yYVTiRJkYUmq32sKgvro0yz9kJgAFCojfzyE=;
+ b=so/Uaj6ZCzt4OFV6op3z5XC0Aniqmm5+98hrVGILSgLA/UlXYfVnwvyE7BfWfXNYyoan
+ MGQlo+y7r46oWYgDGCfswciOe+3oBHIdiWJKrN6IsCwAoa6SwxehqfkffQMRu7EzkmWi
+ IWz1YzJ7fys6j1Z1hcgiYJEZyObi4I5yIOwpbFnbxjccrV7kf+FQgLSHlgWtNyYdS5qr
+ qYXJTyI2Zy6NUlttro2YbqFKsyQ7aS2glAcYF8U3cRUv1tOI25CQ18oxcGhrerhKe1OI
+ BMF39Mkylr3tEaCABUxM4RQ09IZKXESFyk5byGNjG/GJth5WXW60xghTtZvJPtAEveqL Yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ewrtkqjew-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 20 Mar 2022 13:14:52 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22KDEpfq003716;
+        Sun, 20 Mar 2022 13:14:51 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ewrtkqjem-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 20 Mar 2022 13:14:51 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22KDACFt007130;
+        Sun, 20 Mar 2022 13:14:49 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ew6t8t1hy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 20 Mar 2022 13:14:49 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22KDElB739715298
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 20 Mar 2022 13:14:47 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 506CE42042;
+        Sun, 20 Mar 2022 13:14:47 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 048414203F;
+        Sun, 20 Mar 2022 13:14:47 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sun, 20 Mar 2022 13:14:46 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Jan Kara <jack@suse.cz>, "Theodore Ts'o" <tytso@mit.edu>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+Subject: Re: [PATCH] tracing: Have type enum modifications copy the strings
+References: <20220318153432.3984b871@gandalf.local.home>
+Date:   Sun, 20 Mar 2022 14:14:46 +0100
+In-Reply-To: <20220318153432.3984b871@gandalf.local.home> (Steven Rostedt's
+        message of "Fri, 18 Mar 2022 15:34:32 -0400")
+Message-ID: <yt9d5yo8rcjd.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: uJEVLYBGmTLnaGnqHzkeM2KjkP3M5DtT
+X-Proofpoint-ORIG-GUID: XAsz1rZJpP9cI-IyYaa037Z8NuzOM3RY
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [BUG] kernel side can NOT trigger memory error with einj
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "graeme.gregory@linaro.org" <graeme.gregory@linaro.org>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "myron.stowe@redhat.com" <myron.stowe@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>
-References: <8c40a492-9461-2b43-6ec9-06bfc7a0e77f@linux.alibaba.com>
- <YjIeff7ESJB/amYA@agluck-desk3.sc.intel.com>
- <f93a5532-3e07-edf4-38ca-142a0f1d78d7@linux.alibaba.com>
- <1421c3ac3d3c4438a6ff18f193f8a41c@intel.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <1421c3ac3d3c4438a6ff18f193f8a41c@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-20_04,2022-03-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ impostorscore=0 mlxlogscore=999 malwarescore=0 clxscore=1011 phishscore=0
+ spamscore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203200097
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/3/18 AM12:57, Luck, Tony 写道:
->> -       rc = apei_exec_run(&trigger_ctx, ACPI_EINJ_TRIGGER_ERROR);
->> +       ptr = kmap(pfn_to_page(pfn));
->> +       tmp = *(ptr + (param1 & ~ PAGE_MASK));
-> 
-> That hack works when the trigger action is just trying to access the injected
-> location. But on Intel platforms the trigger "kicks" the patrol scrubber in the
-> memory controller to access the address. So the error is triggered not by
-> an access from the core, but by internal memory controller access.
-> 
-> This results in a different error signature (for an uncorrected error injection
-> it will be a UCNA or SRAO in Intel acronym-speak).
+Hi Steve,
 
-As far as I know, APEI only defines five injection instructions, ACPI_EINJ_READ_REGISTER,
-ACPI_EINJ_READ_REGISTER_VALUE, ACPI_EINJ_WRITE_REGISTER, ACPI_EINJ_WRITE_REGISTER_VALUE and
-ACPI_EINJ_NOOP. ACPI_EINJ_TRIGGER_ERROR action should run one of them, I don't see
-any of them will kick the patrol scrubber. For example, trigger with ACPI_EINJ_READ_REGISTER:
+Steven Rostedt <rostedt@goodmis.org> writes:
 
-apei_exec_run(&trigger_ctx, ACPI_EINJ_TRIGGER_ERROR)
-    __apei_exec_run	// ins=0
-        => apei_exec_read_register
-            => apei_read
-                => acpi_os_read_memory
-                    => acpi_map_vaddr_lookup    /* lookup VA of PA from acpi_ioremap */
-                    => acpi_os_ioremap
-		    => acpi_os_read_iomem
-			=> *(u32 *) value = readl(virt_addr);
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+>
+> When an enum is used in the visible parts of a trace event that is
+> exported to user space, the user space applications like perf and
+> trace-cmd do not have a way to know what the value of the enum is. To
+> solve this, at boot up (or module load) the printk formats are modified to
+> replace the enum with their numeric value in the string output.
+>
+> Array fields of the event are defined by [<nr-elements>] in the type
+> portion of the format file so that the user space parsers can correctly
+> parse the array into the appropriate size chunks. But in some trace
+> events, an enum is used in defining the size of the array, which once
+> again breaks the parsing of user space tooling.
+>
+> This was solved the same way as the print formats were, but it modified
+> the type strings of the trace event. This caused crashes in some
+> architectures because, as supposed to the print string, is a const string
+> value. This was not detected on x86, as it appears that const strings are
+> still writable (at least in boot up), but other architectures this is not
+> the case, and writing to a const string will cause a kernel fault.
+>
+> To fix this, use kstrdup() to copy the type before modifying it. If the
+> trace event is for the core kernel there's no need to free it because the
+> string will be in use for the life of the machine being on line. For
+> modules, create a link list to store all the strings being allocated for
+> modules and when the module is removed, free them.
+>
+> Link: https://lore.kernel.org/all/yt9dr1706b4i.fsf@linux.ibm.com/
+>
+> Fixes: b3bc8547d3be ("tracing: Have TRACE_DEFINE_ENUM affect trace event types as well")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-As we can see, the error is triggered by access from the core. However, the physical
-address can NOT be mapped by acpi_os_ioremap.
+This fixes the crash seen on s390. Thanks!
 
-If I missed anything, please let me know. Thank you very much.
-
-Best Regards,
-Shuai
-
-
+Tested-by: Sven Schnelle <svens@linux.ibm.com>

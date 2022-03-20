@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CA54E196C
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 03:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DA44E1972
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 03:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244633AbiCTCPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 22:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56924 "EHLO
+        id S244668AbiCTCPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 22:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234519AbiCTCO7 (ORCPT
+        with ESMTP id S244659AbiCTCPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 22:14:59 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77B813D07;
-        Sat, 19 Mar 2022 19:13:37 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id b16so13398723ioz.3;
-        Sat, 19 Mar 2022 19:13:37 -0700 (PDT)
+        Sat, 19 Mar 2022 22:15:10 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E8F13FAE;
+        Sat, 19 Mar 2022 19:13:47 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id z7so13422439iom.1;
+        Sat, 19 Mar 2022 19:13:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=UF0SVjvxkvLMkbZAod4g1NcoKI8o6ZW/ztSqINDD0q4=;
-        b=ZKMlN2GU3jJR1H89yyTJ6sqQrzN53DDvgY3CPDh5WdjV0pb8RepkZMrlVmLTm8Yp+T
-         Q/yvTL064+4oyP/rR5TyJWn1DiRpykJaS7tl4TaTYCxvqzQdDRAnwhscXX+3cV+5B4Do
-         QtfrI4qNFYAVR613PcdXUkwnuQHv44bgDMXz6Pb5a3ytx5Eas7sxzc9NNLcRX1NRsn+f
-         d3swGX729eB09tKw4cyNgXEPwWneainm6n1v37tZ42dukJ7XA9RuvyPJadSSHlP/5FE3
-         AjmTFQ8J+RIliswKmt+XhOeOqhATndcyEkMg9suYO5cXglZ8Il4nG7+v28s9xMTYQ4N7
-         vqGQ==
-X-Gm-Message-State: AOAM531+bPMiqXF9VyWxes34FyJwxO1B6q7RYnTmCZ9k0FYwGYOIdjBp
-        vK+O/3S7a/NYGHOdudq1/Q==
-X-Google-Smtp-Source: ABdhPJwU2UMo2D/EvMgpqw90b/mGuw0WecnJreqQYWqeR/rv2y/4GyVZvigkx7FKlaHcaQn9Q9IgfA==
-X-Received: by 2002:a05:6638:1249:b0:321:2e10:c276 with SMTP id o9-20020a056638124900b003212e10c276mr1754149jas.304.1647742416902;
-        Sat, 19 Mar 2022 19:13:36 -0700 (PDT)
+        bh=p25aMwhGOhWBbd8mkmtLP5nuvXeH2abYeqFXOGvGry8=;
+        b=Rm61mx5RgWiKZrEgqhKg29pV2493fcET4AwxPFqDBQj3NaU78kfbrXRlzViaTW5Dr3
+         iPly6+HtXlyN8aZyU9p56TsFzagCx8h2k5pGXQuiEKhdkkqNoBLPLg/gVpKWSaVgWEas
+         2cZ/MHqpbCwnfjvtYyjHRcNs4gX8LxrcJ43KBlAi+QGEN2TzYxzcBK0gGEuNUBRhfI5p
+         w4re0w4Ep7BNXL+4Z7MUMaJYs8QLdj+BHSHM9jyPxBkyqxUth2BOr65XIoUuclHdGQkM
+         zKkDKsTHUcriL2jfNcf8fHgbVXGjF4egvsJdJKy5JzcVagNoqAFR1+lv7smV5MLXh40G
+         +ZoA==
+X-Gm-Message-State: AOAM530fA/MZW0iT+FGe17t0QsaEOyU5DPdAKXqGqI90y21tDQjqkuRX
+        yymZSaxDgoqYhsTldAnf1Krm9REdBw==
+X-Google-Smtp-Source: ABdhPJzpRREMVFbQIB8DGhakLsihdCAOKb7CdwEKr94yCa5Mz0je5jMM5kxUI1MCdjm137NZP75rUw==
+X-Received: by 2002:a6b:8bd7:0:b0:646:2804:5c73 with SMTP id n206-20020a6b8bd7000000b0064628045c73mr7270589iod.112.1647742426317;
+        Sat, 19 Mar 2022 19:13:46 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id a3-20020a5ec303000000b006496b4dd21csm2735762iok.5.2022.03.19.19.13.34
+        by smtp.gmail.com with ESMTPSA id v18-20020a6b5b12000000b00645bd8bd288sm6619523ioh.47.2022.03.19.19.13.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 19:13:35 -0700 (PDT)
-Received: (nullmailer pid 2990514 invoked by uid 1000);
+        Sat, 19 Mar 2022 19:13:45 -0700 (PDT)
+Received: (nullmailer pid 2990521 invoked by uid 1000);
         Sun, 20 Mar 2022 02:13:33 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Ashish Mhetre <amhetre@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-tegra@vger.kernel.org, robh+dt@kernel.org, digetx@gmail.com,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski@canonical.com,
-        vdumpa@nvidia.com, Snikam@nvidia.com, devicetree@vger.kernel.org
-In-Reply-To: <20220316092525.4554-4-amhetre@nvidia.com>
-References: <20220316092525.4554-1-amhetre@nvidia.com> <20220316092525.4554-4-amhetre@nvidia.com>
-Subject: Re: [Patch v5 3/4] dt-bindings: memory: Update reg maxitems for tegra186
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        ulf.hansson@linaro.org, huziji@marvell.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org
+In-Reply-To: <20220318033521.1432767-1-chris.packham@alliedtelesis.co.nz>
+References: <20220318033521.1432767-1-chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH] dt-bindings: mmc: xenon: Convert to JSON schema
 Date:   Sat, 19 Mar 2022 20:13:33 -0600
-Message-Id: <1647742413.932927.2990513.nullmailer@robh.at.kernel.org>
+Message-Id: <1647742413.974061.2990520.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -61,27 +60,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Mar 2022 14:55:24 +0530, Ashish Mhetre wrote:
+On Fri, 18 Mar 2022 16:35:21 +1300, Chris Packham wrote:
+> Convert the marvell,xenon-sdhci binding to JSON schema. This is a fairly
+> direct conversion so there are some requirements that are documented in
+> prose but not currently enforced.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+>  .../bindings/mmc/marvell,xenon-sdhci.txt      | 173 ------------
+>  .../bindings/mmc/marvell,xenon-sdhci.yaml     | 252 ++++++++++++++++++
+>  2 files changed, 252 insertions(+), 173 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
+>  create mode 100644 Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml:38:13: [warning] wrong indentation: expected 14 but found 12 (indentation)
+./Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml:41:13: [warning] wrong indentation: expected 14 but found 12 (indentation)
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.example.dt.yaml: memory-controller@2c00000: reg: [[0, 46137344, 0, 720896]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.example.dt.yaml: memory-controller@2c00000: external-memory-controller@2c60000:reg: [[0, 46137344, 0, 65536], [0, 46202880, 0, 65536], [0, 46268416, 0, 65536], [0, 46333952, 0, 65536], [0, 46399488, 0, 65536], [0, 46465024, 0, 65536]] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.example.dt.yaml: memory-controller@2c00000: external-memory-controller@2c60000:reg: [[0, 46137344, 0, 65536], [0, 46202880, 0, 65536], [0, 46268416, 0, 65536], [0, 46333952, 0, 65536], [0, 46399488, 0, 65536], [0, 46465024, 0, 65536]] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.example.dt.yaml: memory-controller@2c00000: reg: [[0, 46137344, 0, 720896]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
 
 doc reference errors (make refcheckdocs):
+MAINTAINERS: Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.txt
 
-See https://patchwork.ozlabs.org/patch/1606062
+See https://patchwork.ozlabs.org/patch/1606868
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

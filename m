@@ -2,71 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F574E1AB8
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 08:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 335444E1ABA
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 09:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242621AbiCTHy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 03:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
+        id S241515AbiCTIDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 04:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241285AbiCTHyx (ORCPT
+        with ESMTP id S233639AbiCTIDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 03:54:53 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BA538795;
-        Sun, 20 Mar 2022 00:53:30 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id p8so13018611pfh.8;
-        Sun, 20 Mar 2022 00:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YdfDvLiYSkwoveTevrFyxDKIAlT96ozvId3O7lsxmG0=;
-        b=fnIJAOczZfkcMTWxm71ikrU6gEZlqXkgoBp02rK9vmFvGqokGO6q7F4OOi9OF1tIOB
-         YVXJj0ICg/MJxS365Px2eOqE0pGKiu8LWvFL+JZeozosE8v5+rc8u8/edZPB/yq+T5zc
-         00/E4kRq8N5RKxHfNuI5IVxviXDdK8durx0YX21qoNOELe5fgwOUxZyBvXZm+5l6hRk3
-         9WwuwwXWXVaqSawbzyHKfiUpClVopJNdmABS9eabkLvZCH2SYizwGtNb/AnNGT+jkeui
-         Z2zP47M3DXSYgzIbsLktAR92RkrFDuaje4FvV5j3pRU0TQ8T1WDOYvqAwHkGpWfIxLqx
-         nLeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YdfDvLiYSkwoveTevrFyxDKIAlT96ozvId3O7lsxmG0=;
-        b=UcAmuHFKefDFnyBG/kZHpyp+NUfS86BXUkzAzRtHkKosdaRcoQstjY9DT64cudqgXx
-         SXMep9UqspRROxonRLuCUjbp2t4EM0ND7t2/XZBFoD+a7S1cob82mrH/RDuo4NMY6X78
-         T/1b2xAKXxFrzcTVG7YXP8ZuzyMo+4WXKguctukTUik1C84onv+CSyPqWJV4yQctmdSs
-         dXgCiT0b8UwFHJFI5rgYXt/KwUV+sTyP0dnimD5DR2PSyb317Ofv7G7Cu5FYXFNhn5Up
-         5GZY82CWF9EtbLWNjkWyf4DFmJa8AnohUO/TKlkgCEbYB1u8timEmMlEfZir/ubRvHwY
-         wy3Q==
-X-Gm-Message-State: AOAM533YmDC+sW5OYsyv5IYzsN7rra1L4kFAf3BMEeE/4/bQzrWqQPlq
-        2OyCe2OXH3PkMVjqsMWDY8Y=
-X-Google-Smtp-Source: ABdhPJxiDmjx7mx8m64J0PZxBOiWCifW7YmdHFPCmKLgxX7B4hFnkhIuncFr2s0uHcqIOMhdMIY3GQ==
-X-Received: by 2002:aa7:8c45:0:b0:4f6:bf82:7aba with SMTP id e5-20020aa78c45000000b004f6bf827abamr18350033pfd.20.1647762809470;
-        Sun, 20 Mar 2022 00:53:29 -0700 (PDT)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id c5-20020a056a00248500b004f6b5ddcc65sm15162247pfv.199.2022.03.20.00.53.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 00:53:28 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] bpf: Simplify check in btf_parse_hdr()
-Date:   Sun, 20 Mar 2022 15:52:40 +0800
-Message-Id: <20220320075240.1001728-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 20 Mar 2022 04:03:48 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC165AED8
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 01:02:25 -0700 (PDT)
+Message-ID: <4d388304-ad4d-3341-f129-72b919e26c8d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1647763343; h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=HN2H8NFrDnmtCi5Xm0QbCRnITcDffxzFEAo6OfrDIX4=;
+        b=SZLiHXarMcOdG9sloZDS/0kOHQVJmTPJZv0iWQOJ4U6H9z6fLyh3107AlqPTJXmdsYNJDT
+        0qRJXUd0tpKxNtEsypMSgTyuG//0/YNf9vzSR3oTpau8xF+iL5w516TWf07ErL4DTavdM5
+        3d6aYmbBTYCfBe/6O0UHjGrkK4A24ro=
+Date:   Sun, 20 Mar 2022 11:02:22 +0300
 MIME-Version: 1.0
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Vasily Averin <vasily.averin@linux.dev>
+Subject: [PATCH] mailmap: update Vasily Averin's email address
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org
+Reply-To: vasily.averin@linux.dev
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,28 +47,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace offsetof(hdr_len) + sizeof(hdr_len) with offsetofend(hdr_len) to
-simplify the check for correctness of btf_data_size in btf_parse_hdr()
+I'm moving to a @linux.dev account. Map my old addresses.
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+Signed-off-by: Vasily Averin <vasily.averin@linux.dev>
 ---
- kernel/bpf/btf.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+  .mailmap | 4 ++++
+  1 file changed, 4 insertions(+)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 6d9e711cb5d4..97fd853db16b 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4480,8 +4480,7 @@ static int btf_parse_hdr(struct btf_verifier_env *env)
- 	btf = env->btf;
- 	btf_data_size = btf->data_size;
- 
--	if (btf_data_size <
--	    offsetof(struct btf_header, hdr_len) + sizeof(hdr->hdr_len)) {
-+	if (btf_data_size < offsetofend(struct btf_header, hdr_len)) {
- 		btf_verifier_log(env, "hdr_len not found");
- 		return -EINVAL;
- 	}
+diff --git a/.mailmap b/.mailmap
+index 97ccdf147111..d3a8eea4ac0c 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -389,6 +389,10 @@ Uwe Kleine-König <ukleinek@strlen.de>
+  Uwe Kleine-König <ukl@pengutronix.de>
+  Uwe Kleine-König <Uwe.Kleine-Koenig@digi.com>
+  Valdis Kletnieks <Valdis.Kletnieks@vt.edu>
++Vasily Averin <vasily.averin@linux.dev> <vvs@virtuozzo.com>
++Vasily Averin <vasily.averin@linux.dev> <vvs@openvz.org>
++Vasily Averin <vasily.averin@linux.dev> <vvs@parallels.com>
++Vasily Averin <vasily.averin@linux.dev> <vvs@sw.ru>
+  Vinod Koul <vkoul@kernel.org> <vinod.koul@intel.com>
+  Vinod Koul <vkoul@kernel.org> <vinod.koul@linux.intel.com>
+  Vinod Koul <vkoul@kernel.org> <vkoul@infradead.org>
 -- 
-2.35.1
+2.25.1
 

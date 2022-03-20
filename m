@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835FC4E1DE2
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 22:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1114C4E1DE5
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 22:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241991AbiCTVMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 17:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
+        id S1343694AbiCTVNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 17:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343707AbiCTVL7 (ORCPT
+        with ESMTP id S234691AbiCTVNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 17:11:59 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63D1160C20;
-        Sun, 20 Mar 2022 14:10:35 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id v22so4472364wra.2;
-        Sun, 20 Mar 2022 14:10:35 -0700 (PDT)
+        Sun, 20 Mar 2022 17:13:47 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC461760D8
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 14:12:23 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id x4so14857456iop.7
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 14:12:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SnrtPlmOffeZj6T7GE+tanB2uK1Y6oGCWk5gspUCR0Q=;
-        b=dgDD7JBM5aF973Pd+bCKYP7HarHcawC9pIaR0mu/mSl7zG7daUDk3Ai8g+EdRhnhtG
-         VGMUW5/JrtAtJ9QOXbM796A0wnAd2HdQ36ezr32V3Rmz+CeCof1/iOXUT3rToMJK/Gw/
-         zJfjoh+cQ+jgJAX+DcGqJTx29ahYIB7vZin9eof4ufDYkpLOHmNMpYE9P7TMFgvI5EGD
-         D5ghqND03oNtKXoeEvYS3igEYKK/dOQj67ybvZzY1YdA7I//3JuRG/WCnAiv/chCGibt
-         tdzasKtdOPuNC3aTRvPQTt4qRK57U3jo3Wgw81T6QxydahCV0mGI28XP/QwEojzZcNP1
-         3UhA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Yzq93xtEK5Ypv1Cyb7lhCiwNr/P453Ucxb4rl4WdV38=;
+        b=ElcsB4TYJb9n+5lEitobm3ZSjG3fkDFL4FH2b5LtN5EuGK2YoxHWRIyBVXcRbZqTrh
+         OQ1EpTA2na4VWdB9XKHqjKsdyCgN6tePkJ6dc7+GxsO7mMmhIVxsCRwKMK+N9NOQ/HNV
+         LlS7PghQOViEjUvwusdHtnhkqHXSt0cmZy1CSD+vcurd6bAoHGKk7wf7wRv0Q6+/N7rx
+         ewyFg2p6sbedUSmXPqhA7f3W3q8FgrOJzoBzG5jctH9CBGYycpNNOXuUOG5Eu3luxfhf
+         CqWoVvlwQe1WFMoawM2J6/gj/1Lv85tVrvFfC/+4TkuStWniZ9LXb5oV3bl3q8XjD1Ji
+         ZVIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SnrtPlmOffeZj6T7GE+tanB2uK1Y6oGCWk5gspUCR0Q=;
-        b=kPK0nhGzD4GMo6Fs/DKL3QgVwhQyn0tG4qtZ1YKR3vySZHUAeoDS07ev0eU+0pLRXv
-         XzqdGlZ3scqCL17m2osxWVfRDswnv23hJQEiMJUAybFpr4/PvVgdINfWwiOMg3PgriNc
-         4vmkozMZPxN+TVzX6KXkTmkXDkG8/quEi8adTbjC8Yt7IFQ8ZVh1bUwxC5+hkjVXe6V5
-         qwXfN6GNQ2EalW5ur1om5KgkY++xSc05h/SZDvOJmAVJKC4yjKJrWQJZp+Z3QLJK7T37
-         bLSiSdG69ym8k4eFM5bcxrmvDsiR+csX1XeB7XOW+zBhJRPwLRNCwVmuAxN0+fU+SnzI
-         YtSw==
-X-Gm-Message-State: AOAM533Ps60O2NwOXzIAoyehneBqtCRAmBfKK4sBtaXfB7Wj/r/vP697
-        xrmjQSb4CYnE6rRbtA/0dWw=
-X-Google-Smtp-Source: ABdhPJwiU+n1q6r5/cPaRlWWrMm2PghCqUJO1nCR4tiXAbP510ymFnq2c37jzDiAJb/5AXhuZnU7Ow==
-X-Received: by 2002:a05:6000:1e09:b0:204:44a:7837 with SMTP id bj9-20020a0560001e0900b00204044a7837mr5438144wrb.6.1647810634467;
-        Sun, 20 Mar 2022 14:10:34 -0700 (PDT)
-Received: from jernej-laptop.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id u8-20020a5d4348000000b00203dbfa4ff2sm11613911wrr.34.2022.03.20.14.10.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 14:10:34 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        kernel test robot <lkp@intel.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: sunxi-ng: sun6i-rtc: include clk/sunxi-ng.h
-Date:   Sun, 20 Mar 2022 22:10:32 +0100
-Message-ID: <2620573.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20220320210905.6606-1-alexandre.belloni@bootlin.com>
-References: <20220320210905.6606-1-alexandre.belloni@bootlin.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Yzq93xtEK5Ypv1Cyb7lhCiwNr/P453Ucxb4rl4WdV38=;
+        b=Q45iZy1m8LoP3h3rl2A1iOuQfCqEET81HRqgJ+jsk2skMADo+LTXkWzdVQYzoZAD/W
+         FgBlU51x4g84JviNZarC5rZfEBGWZJjWnR788YoMAUMM+QzXRmxxZW+juXHnzBCUv7Zr
+         x8fSDHrsdaVlgR4wMjdTPlwYlbNQi/QlcNvRSvEuPSjfj5CBwUkL0NZGP4QCmYf7CXh/
+         BQLmC6iVbmkY8X90ZpK+VwD21MGpEpVplLAA2VAgDrYZPivMoaNgKqWkmlJjk+0zVi0m
+         FDAH0uB4y8g9Cp93YsihIRjl2y8av51DwLIFOe4ft9Lxem/S364OfVXXwsTmjwQ5MaJO
+         2uxQ==
+X-Gm-Message-State: AOAM532YMHcFmlSOseZGJ4zl4qeLAEyUcfyrNIaaet7KIomt9zKEMHGV
+        WiNA+EQOxqhq27WefwahfKuqRDL39cFBMYWqwFY=
+X-Google-Smtp-Source: ABdhPJxXUF1MDgaHESvndGgNAfueV5hDhUmlQZXL2rsHzov3A69R7SKlyP5c9fE1iCLMyjpZiFZXIz4EviVnVZvBtDo=
+X-Received: by 2002:a05:6638:1351:b0:31a:299b:6d87 with SMTP id
+ u17-20020a056638135100b0031a299b6d87mr9859261jad.22.1647810742908; Sun, 20
+ Mar 2022 14:12:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <57133fafc4d74377a4a08d98e276d58fe4a127dc.1647115974.git.andreyknvl@google.com>
+ <CA+fCnZe-zj8Xqi5ACz0FjRX92b5KnnP=qKCjEck0=mAjV0nohA@mail.gmail.com> <CANpmjNN-UPGOwkYWiOWX5DeSBWnYcobWb+M1ZyWMuSbzJQcFsg@mail.gmail.com>
+In-Reply-To: <CANpmjNN-UPGOwkYWiOWX5DeSBWnYcobWb+M1ZyWMuSbzJQcFsg@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Sun, 20 Mar 2022 22:12:12 +0100
+Message-ID: <CA+fCnZc5Kz5AdttmbzC_Jj8=Q_yNz_iOoa9Jiu7trK8tVm+w4g@mail.gmail.com>
+Subject: Re: [PATCH] kasan, scs: collect stack traces from shadow stack
+To:     Marco Elver <elver@google.com>
+Cc:     andrey.konovalov@linux.dev,
+        Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Florian Mayer <fmayer@google.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,41 +82,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne nedelja, 20. marec 2022 ob 22:09:04 CET je Alexandre Belloni napisal(a):
-> This solves:
-> >> drivers/clk/sunxi-ng/ccu-sun6i-rtc.c:334:5: warning: no previous
-> >> prototype for 'sun6i_rtc_ccu_probe' [-Wmissing-prototypes]
->      334 | int sun6i_rtc_ccu_probe(struct device *dev, void __iomem *reg)
-> 
->          |     ^~~~~~~~~~~~~~~~~~~
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On Mon, Mar 14, 2022 at 9:57 AM Marco Elver <elver@google.com> wrote:
+>
+> > Another option here is to instruct stack depot to get the stack from
+> > the Shadow Call Stack. This would avoid copying the frames twice.
+>
+> Yes, I think a stack_depot_save_shadow() would be appropriate if it
+> saves a copy.
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
-> ---
->  drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-> b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c index 712fda22efd5..8a10bade7e0d
-> 100644
-> --- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-> +++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-> @@ -9,6 +9,8 @@
->  #include <linux/module.h>
->  #include <linux/of_device.h>
-> 
-> +#include <linux/clk/sunxi-ng.h>
-> +
->  #include "ccu_common.h"
-> 
->  #include "ccu_div.h"
-
-
-
-
+Sounds good, will do in v2.

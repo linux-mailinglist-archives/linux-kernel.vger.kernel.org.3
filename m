@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9326A4E1A57
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 07:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5B64E1A59
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 07:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244781AbiCTGOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 02:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
+        id S244788AbiCTGOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 02:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244770AbiCTGOA (ORCPT
+        with ESMTP id S244782AbiCTGOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 02:14:00 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B6FE9CB0;
-        Sat, 19 Mar 2022 23:12:37 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id yy13so24262484ejb.2;
-        Sat, 19 Mar 2022 23:12:37 -0700 (PDT)
+        Sun, 20 Mar 2022 02:14:47 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33002DD4A
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 23:13:22 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id n15so10215384plh.2
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 23:13:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=AOf15Uifu6mNC41PoBAC4RTkLBaEgYGDLYzJh3J5xkA=;
-        b=jsSu1SOezKFKyDYcFs9V3J+Bi6K7i9oIe2RZpQ2UrJNtFPQIfaXAtLpKE0GpZFg4jO
-         IXktysanjYGn9lOpzf11f0pQMHHFW8IxT5PZvJgkOalbDRUqZ1aQfkX2lRNxcl65zrfz
-         L+zpetp7fAQErpEbXHmeO1LTjekUNUskdFsa2bDKLBltURYrRa7xkhnHIqs+ruj6gmX0
-         i+CuqJFfe9ZdlKh/sOa8H5WIzb19aJxymrNJYwk3yiruOGOGpafV5K5opnJ9MMNe9WuF
-         Gyf7at/+uY+fvpwP75jg069ETAatN63i6jguBY9IV3y/Dc0/Sdl61c8iIh/0/YfLfjiR
-         M5Bw==
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ATwV3kKv7WjeaQbxwSKHzxc1JHIEcUZVk8IFPARJOcw=;
+        b=fZEJMGkd+NV1NKWLGyW28bpPAFGP6pnIJ3E74/N2ZNjYtpTxD0oMcKuM8hqWTf0ReZ
+         +xZ25SYY0HQ+NzV2IV6dqi5y9bHTu6qHM0aKvH6Rgty7uBmlSVV34XCMkXA8BEV4bXQZ
+         Mg6zaAPkxBc61eNRADICSMq8VbbrPrudYBM9Db3UCyI712hl/LNDvEE26RR5xNQIIkby
+         LxU4v6c/wDTaKajz9BGtpWGyLwjNPLvGx2LESzUahl3rkk3oVQzd0aYskX/pv+gbpm7W
+         u644/jUDgqjuBgmMx6kDW3CrSL1MKd39R6eiiSxQvxweFYtoDF2GJbP5DzJFCGKQ2RZj
+         llxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=AOf15Uifu6mNC41PoBAC4RTkLBaEgYGDLYzJh3J5xkA=;
-        b=LFAcHBT26RAU/czzHBsMm4Zn51QrQu2Qkwr3TSTldJsyHpLWIqnkL+Y3zxVxL6egWk
-         m/sRDMDq0j81Vb/Sv0tlVEfxcCGN7iITBUT07c+BIa4/uX5nMB8GiMpx5qjP04lvtBFK
-         z3EKz2/4d1Lc8L/DJi59to0ampr6DT0JrOIfkfkDb9pi9Cc6u7n3+xCnkzvx4afu4WrH
-         ywZCHH0ql2eNzgOWq8zZPqeieq7HsFcTM/oCBkP6ewSA7YeSo469RdhvEycVzWGQjCU8
-         J1m0NoCMVT2C0q9ihDB4/UO96ExXaPOw9Ycl3oXkfaLFolNDixgbq4UPAM9yC3aATPPA
-         mM9A==
-X-Gm-Message-State: AOAM532iJ1CC0f43K+pfwXb+L5WgPFOZJSeI+c3ax7FjQGAsouMF7LM9
-        BrRtgYMbld42K7Wdudzymwo=
-X-Google-Smtp-Source: ABdhPJynmNBiTeobfKVqqsa6B2BrvQFCWf2wAmIK8GGVZPpbkmJJhOHqGht/Evk6zyM0KaMpIANRbg==
-X-Received: by 2002:a17:906:6a13:b0:6db:ab28:9f00 with SMTP id qw19-20020a1709066a1300b006dbab289f00mr15624102ejc.296.1647756756285;
-        Sat, 19 Mar 2022 23:12:36 -0700 (PDT)
-Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.gmail.com with ESMTPSA id o17-20020a056402439100b0041938757232sm105086edc.17.2022.03.19.23.12.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 19 Mar 2022 23:12:35 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
-Subject: Re: [PATCH] saa7134: fix incorrect check to determine if no element
- is found in list
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-In-Reply-To: <20220320025718.10053-1-xiam0nd.tong@gmail.com>
-Date:   Sun, 20 Mar 2022 07:12:33 +0100
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        yangyingliang@huawei.com, akpm@osdl.org, v4l@cerqueira.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <86AD565C-ADD2-4000-BF99-487EF9FCDB2F@gmail.com>
-References: <20220320025718.10053-1-xiam0nd.tong@gmail.com>
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-X-Mailer: Apple Mail (2.3693.60.0.1.1)
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ATwV3kKv7WjeaQbxwSKHzxc1JHIEcUZVk8IFPARJOcw=;
+        b=F9+ilZ8NDfs9N2tSz+cknYJmIr6Zkl5T0Xm2JRaj0rfUIxWhOMy4+4/9CQ+aNfNlgr
+         QYssacsCmNrED0X9WrfOolORZFUHtbv0+93b6xH4kJWLROkBCbMDLzFeNlVe4u7zk8UX
+         qsvuNr4I4olWA7FBQsmyxX4qOFZ/ey7o4PUsMLAP7osnE/bSzDSffg5dMNMCwo0F6tqI
+         pvHJTYSe7TO2vUe1fJY94K9UpFOMYLaNXZ2+RdKWl0+1u5wMufVhF4QjrbFDfYuvw6iZ
+         ovc646UkVs/mxltjGl0l2ZXGntXK014TumaqZjAzNQi+PHVSO0ApcZohCDVHo5FX+yTy
+         uq+g==
+X-Gm-Message-State: AOAM530YyrumAxovBCSjTKsImquSzqOCsRwkoiHH7kxSb8FapLH7QP0b
+        A9du3MwnmLbj24XZecCAOtQ=
+X-Google-Smtp-Source: ABdhPJxR/AM8uHUbJiT7giuOK8er0MPtqxNzRTX8O0xC1v5KkNLSScOfzhQnwTL41N99DrWFHO4EQw==
+X-Received: by 2002:a17:90b:3e8c:b0:1bf:4043:daa with SMTP id rj12-20020a17090b3e8c00b001bf40430daamr19767053pjb.233.1647756801445;
+        Sat, 19 Mar 2022 23:13:21 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id k1-20020a056a00134100b004f78df32666sm15679359pfu.198.2022.03.19.23.13.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Mar 2022 23:13:20 -0700 (PDT)
+Message-ID: <6236c600.1c69fb81.7cd4.a900@mx.google.com>
+X-Google-Original-Message-ID: <20220320061319.GA2323336@cgel.zte@gmail.com>
+Date:   Sun, 20 Mar 2022 06:13:19 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     bsingharora@gmail.com, akpm@linux-foundation.org,
+        yang.yang29@zte.com.cn, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] delayacct: track delays from ksm cow
+References: <20220316133420.2131707-1-yang.yang29@zte.com.cn>
+ <412dc01c-8829-eac2-52c7-3f704dbb5a98@redhat.com>
+ <6232970f.1c69fb81.4e365.c9f2@mx.google.com>
+ <4e76476b-1da0-09c5-7dc4-0b2db796a549@redhat.com>
+ <62330402.1c69fb81.d2ba6.0538@mx.google.com>
+ <987bd014-c5ab-52cb-627e-2085560cb327@redhat.com>
+ <6233e342.1c69fb81.692f.6286@mx.google.com>
+ <2bb1c357-5335-9d96-d862-bd51c1014193@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2bb1c357-5335-9d96-d862-bd51c1014193@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,87 +79,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 18, 2022 at 09:24:44AM +0100, David Hildenbrand wrote:
+> On 18.03.22 02:41, CGEL wrote:
+> > On Thu, Mar 17, 2022 at 11:05:22AM +0100, David Hildenbrand wrote:
+> >> On 17.03.22 10:48, CGEL wrote:
+> >>> On Thu, Mar 17, 2022 at 09:17:13AM +0100, David Hildenbrand wrote:
+> >>>> On 17.03.22 03:03, CGEL wrote:
+> >>>>> On Wed, Mar 16, 2022 at 03:56:23PM +0100, David Hildenbrand wrote:
+> >>>>>> On 16.03.22 14:34, cgel.zte@gmail.com wrote:
+> >>>>>>> From: Yang Yang <yang.yang29@zte.com.cn>
+> >>>>>>>
+> >>>>>>> Delay accounting does not track the delay of ksm cow.  When tasks
+> >>>>>>> have many ksm pages, it may spend a amount of time waiting for ksm
+> >>>>>>> cow.
+> >>>>>>>
+> >>>>>>> To get the impact of tasks in ksm cow, measure the delay when ksm
+> >>>>>>> cow happens. This could help users to decide whether to user ksm
+> >>>>>>> or not.
+> >>>>>>>
+> >>>>>>> Also update tools/accounting/getdelays.c:
+> >>>>>>>
+> >>>>>>>     / # ./getdelays -dl -p 231
+> >>>>>>>     print delayacct stats ON
+> >>>>>>>     listen forever
+> >>>>>>>     PID     231
+> >>>>>>>
+> >>>>>>>     CPU             count     real total  virtual total    delay total  delay average
+> >>>>>>>                      6247     1859000000     2154070021     1674255063          0.268ms
+> >>>>>>>     IO              count    delay total  delay average
+> >>>>>>>                         0              0              0ms
+> >>>>>>>     SWAP            count    delay total  delay average
+> >>>>>>>                         0              0              0ms
+> >>>>>>>     RECLAIM         count    delay total  delay average
+> >>>>>>>                         0              0              0ms
+> >>>>>>>     THRASHING       count    delay total  delay average
+> >>>>>>>                         0              0              0ms
+> >>>>>>>     KSM             count    delay total  delay average
+> >>>>>>>                      3635      271567604              0ms
+> >>>>>>>
+> >>>>>>
+> >>>>>> TBH I'm not sure how particularly helpful this is and if we want this.
+> >>>>>>
+> >>>>> Thanks for replying.
+> >>>>>
+> >>>>> Users may use ksm by calling madvise(, , MADV_MERGEABLE) when they want
+> >>>>> save memory, it's a tradeoff by suffering delay on ksm cow. Users can
+> >>>>> get to know how much memory ksm saved by reading
+> >>>>> /sys/kernel/mm/ksm/pages_sharing, but they don't know what the costs of
+> >>>>> ksm cow delay, and this is important of some delay sensitive tasks. If
+> >>>>> users know both saved memory and ksm cow delay, they could better use
+> >>>>> madvise(, , MADV_MERGEABLE).
+> >>>>
+> >>>> But that happens after the effects, no?
+> >>>>
+> >>>> IOW a user already called madvise(, , MADV_MERGEABLE) and then gets the
+> >>>> results.
+> >>>>
+> >>> Image user are developing or porting their applications on experiment
+> >>> machine, they could takes those benchmark as feedback to adjust whether
+> >>> to use madvise(, , MADV_MERGEABLE) or it's range.
+> >>
+> >> And why can't they run it with and without and observe performance using
+> >> existing metrics (or even application-specific metrics?)?
+> >>
+> >>
+> > I think the reason why we need this patch, is just like why we need                                                                                                     
+> > swap,reclaim,thrashing getdelay information. When system is complex,
+> > it's hard to precise tell which kernel activity impact the observe
+> > performance or application-specific metrics, preempt? cgroup throttle?
+> > swap? reclaim? IO?
+> > 
+> > So if we could get the factor's precise impact data, when we are tunning
+> > the factor(for this patch it's ksm), it's more efficient.
+> > 
+> 
+> I'm not convinced that we want to make or write-fault handler more
+> complicated for such a corner case with an unclear, eventual use case.
 
+IIRC, KSM is designed for VM. But recently we found KSM works well for
+system with many containers(save about 10%~20% of total memroy), and
+container technology is more popular today, so KSM may be used more.
 
-> On 20. Mar 2022, at 03:57, Xiaomeng Tong <xiam0nd.tong@gmail.com> =
-wrote:
->=20
-> The bug is here: "if (dev =3D=3D NULL)".
->=20
-> The list iterator value will *always* be set and non-NULL by
-> list_for_each_entry(), so it is incorrect to assume that the iterator
-> value will be NULL if the list is empty or no element is found in =
-list.
->=20
-> Use a new value 'iter' as the list iterator, while use the old value
-> 'req' as a dedicated pointer to point to the found element, which
-> 1. can fix this bug, due to now 'req' is NULL only if it's not found.
-> 2. do not need to change all the uses of 'req' after the loop.
-> 3. can also limit the scope of the list iterator 'iter' *only inside*
->   the traversal loop by simply declaring 'iter' inside the loop in the
->   future, as usage of the iterator outside of the list_for_each_entry
->   is considered harmful. https://lkml.org/lkml/2022/2/17/1032
->=20
-> Fixes: 4aabf6331f89c ("[PATCH] v4l: (951) Make saa7134-oss as a =
-stand-alone module")
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-> ---
-> drivers/media/pci/saa7134/saa7134-alsa.c | 11 +++++++----
-> 1 file changed, 7 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/media/pci/saa7134/saa7134-alsa.c =
-b/drivers/media/pci/saa7134/saa7134-alsa.c
-> index fb24d2ed3621..4955f7e7c5bf 100644
-> --- a/drivers/media/pci/saa7134/saa7134-alsa.c
-> +++ b/drivers/media/pci/saa7134/saa7134-alsa.c
-> @@ -1215,18 +1215,21 @@ static int alsa_device_exit(struct saa7134_dev =
-*dev)
-> static int saa7134_alsa_init(void)
-> {
-> 	struct saa7134_dev *dev =3D NULL;
-> +	struct saa7134_dev *iter;
->=20
-> 	saa7134_dmasound_init =3D alsa_device_init;
-> 	saa7134_dmasound_exit =3D alsa_device_exit;
->=20
-> 	pr_info("saa7134 ALSA driver for DMA sound loaded\n");
->=20
-> -	list_for_each_entry(dev, &saa7134_devlist, devlist) {
-> -		if (dev->pci->device =3D=3D =
-PCI_DEVICE_ID_PHILIPS_SAA7130)
-> +	list_for_each_entry(iter, &saa7134_devlist, devlist) {
-> +		dev =3D iter;
-> +
-> +		if (iter->pci->device =3D=3D =
-PCI_DEVICE_ID_PHILIPS_SAA7130)
-> 			pr_info("%s/alsa: %s doesn't support digital =
-audio\n",
-> -				dev->name, =
-saa7134_boards[dev->board].name);
-> +				iter->name, =
-saa7134_boards[iter->board].name);
-> 		else
-> -			alsa_device_init(dev);
-> +			alsa_device_init(iter);
-> 	}
->=20
-> 	if (dev =3D=3D NULL)
+To reduce the impact for write-fault handler, we may write a new function
+with ifdef CONFIG_KSM inside to do this job?
 
-I could be wrong, but judging from the printed message "saa7134 ALSA: no =
-saa7134 cards found"
-and how the code is structured, I got the impression that the intention =
-for this code was
-to only execute if the list is empty.=20
+> IIRC, whenever using KSM you're already agreeing to eventually pay a
+> performance price, and the price heavily depends on other factors in the
+> system. Simply looking at the number of write-faults might already give
+> an indication what changed with KSM being enabled.
+> 
+While saying "you're already agreeing to pay a performance price", I think
+this is the shortcoming of KSM that putting off it being used more widely.
+It's not easy for user/app to decide how to use madvise(, ,MADV_MERGEABLE).
 
-There is no break or anything so it's not looking for a specific =
-element.
+Is there a more easy way to use KSM, enjoying memory saving while minimum
+the performance price for container? We think it's possible, and are working
+for a new patch: provide a knob for cgroup to enable/disable KSM for all tasks
+in this cgroup, so if your container is delay sensitive just leave it, and if
+not you can easy to enable KSM without modify app code.
 
-It might make more sense to simply replace this check with:
-	if (list_empty(&saa7134_devlist))
+Before using the new knob, user might want to know the precise impact of KSM.
+I think write-faults is indirection. If indirection is good enough, why we need
+taskstats and PSI? By the way, getdelays support container statistics.
 
-> --=20
-> 2.17.1
->=20
+Thanks.
 
-	Jakob
-
+> Having that said, I'd like to hear other opinions.
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb

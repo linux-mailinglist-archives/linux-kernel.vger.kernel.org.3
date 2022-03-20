@@ -2,100 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB96F4E1A60
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 07:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 435224E1A66
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 07:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244799AbiCTGYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 02:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60210 "EHLO
+        id S244810AbiCTGah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 02:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiCTGX5 (ORCPT
+        with ESMTP id S244803AbiCTGag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 02:23:57 -0400
-Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88B511DD32
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 23:22:33 -0700 (PDT)
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id VoxRnDXVQAWDQVoxRnHo6V; Sun, 20 Mar 2022 07:22:31 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 20 Mar 2022 07:22:31 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org
-Subject: [PATCH] ASoC: SOF: topology: Avoid open coded arithmetic in memory allocation
-Date:   Sun, 20 Mar 2022 07:22:26 +0100
-Message-Id: <3bbf03cfd1966bc6fb6dd0939e039fc161078a61.1647757329.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 20 Mar 2022 02:30:36 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D09F1EA5
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 23:29:13 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id w19-20020aa79553000000b004fa64758b82so4547140pfq.22
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 23:29:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=pTQSsxIlkBPo9ol3laqZr6EZUg9HnSuNMLdKC6CgJnI=;
+        b=MjNuB7pQS36FRtkr5V5HQ/WRzAJjTJaNZlyef+Fh+n7LjwkvvVKkNX/Q6J5fpZVk09
+         ZYkvHFhKV7oqaOkZaWEcqIpM/1tOx/M89KLU5fnfXHD8PzEJelNL8HKtf7CVJ06sUI/m
+         InDJ/fsiY9s0Xrek4JiYDin4KNtXw07MSlbJNZxH+jH1enMe89LrnSXepc5iDZtznFKo
+         O8YMDy2qTgmf/DXxwpMJIGNRitrksR0aXIimCha31KOmsxQ3pT/8xd/dZl/2UaIg+lmH
+         9a+zp5ALPKY6YdmelTztpLT8DZD8vSp+wExnojjxWd5Ivoy13ymarFu4zVEVZgTX3PJz
+         QlEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=pTQSsxIlkBPo9ol3laqZr6EZUg9HnSuNMLdKC6CgJnI=;
+        b=cOtio4sNs7mPtTIzHbT9vdUZXaDxb0Uw3ZDhDiwDRC4tFqJYnPsUuELTm5LEjk24Pu
+         86fUEqwg0UDv6PyxIE6MO2EE3dLwWkEcQq+1DWMAtkehx84S4EHoCZBUZISN4q0Vil2Q
+         3Jxgqxz7HFnHi/ZefdYpZNLc6bU1ptRUq/toDfit7rs1Oel9PJvCL+u8oD0eOADQdymZ
+         j1hLsvT3vfO9bq+f9rESSDAo6P7tU+gz65B79OktwY7fdRG60fd8bmhH0GXvsYu15vPU
+         ae9KGIzGsmuzguaKeoNxSsMwdzURghUG38ajPESD8qdGeAUxT6NdktWQOCOJkZDmp0oU
+         luJw==
+X-Gm-Message-State: AOAM533kWTtllZGM4nfnbOsp8pM9gxT1KhAX23fN0w67OlScfN4Ldky7
+        Fh/9NyQy7g2Yd/Iz1wFR9DsjbB3mSf9b
+X-Google-Smtp-Source: ABdhPJzEfILg58BTVYLAkOhB8WANcXb+O7vPEIE1o+0VN5WQQxPW2P8F1TlwBt2OfMQyCAK7fRD4vg20Jmji
+X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:5445:bc31:4f4a:d610])
+ (user=rajatja job=sendgmr) by 2002:a17:90a:8b91:b0:1be:db25:eecd with SMTP id
+ z17-20020a17090a8b9100b001bedb25eecdmr19986137pjn.10.1647757752500; Sat, 19
+ Mar 2022 23:29:12 -0700 (PDT)
+Date:   Sat, 19 Mar 2022 23:29:05 -0700
+Message-Id: <20220320062907.3272903-1-rajatja@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+Subject: [PATCH v4 1/2] PCI: Rename "pci_dev->untrusted" to "pci_dev->poses_dma_risk"
+From:   Rajat Jain <rajatja@google.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        iommu@lists.linux-foundation.org
+Cc:     Rajat Jain <rajatja@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use kcalloc() instead of kzalloc()+open coded multiplication.
-This is safer and saves a few lines of code.
+Rename the field to make it more clear, that the device can execute DMA
+attacks on the system, and thus the system may need protection from
+such attacks from this device.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+No functional change intended.
+
+Signed-off-by: Rajat Jain <rajatja@google.com>
 ---
- sound/soc/sof/topology.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+v4: Initial version, created based on comments on other patch
 
-diff --git a/sound/soc/sof/topology.c b/sound/soc/sof/topology.c
-index 369693cc6d10..8e9d8e079d68 100644
---- a/sound/soc/sof/topology.c
-+++ b/sound/soc/sof/topology.c
-@@ -1096,7 +1096,6 @@ static int sof_widget_parse_tokens(struct snd_soc_component *scomp, struct snd_s
- 	const struct sof_token_info *token_list = ipc_tplg_ops->token_list;
- 	struct snd_soc_tplg_private *private = &tw->priv;
- 	int num_tuples = 0;
--	size_t size;
- 	int ret, i;
+
+ drivers/iommu/dma-iommu.c   | 6 +++---
+ drivers/iommu/intel/iommu.c | 2 +-
+ drivers/iommu/iommu.c       | 2 +-
+ drivers/pci/ats.c           | 2 +-
+ drivers/pci/pci.c           | 2 +-
+ drivers/pci/probe.c         | 8 ++++----
+ drivers/pci/quirks.c        | 2 +-
+ include/linux/pci.h         | 5 +++--
+ 8 files changed, 15 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index d85d54f2b549..ce10bfa86cf7 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -497,14 +497,14 @@ static int iova_reserve_iommu_regions(struct device *dev,
+ 	return ret;
+ }
  
- 	if (count > 0 && !object_token_list) {
-@@ -1109,8 +1108,7 @@ static int sof_widget_parse_tokens(struct snd_soc_component *scomp, struct snd_s
- 		num_tuples += token_list[object_token_list[i]].count;
+-static bool dev_is_untrusted(struct device *dev)
++static bool dev_poses_dma_risk(struct device *dev)
+ {
+-	return dev_is_pci(dev) && to_pci_dev(dev)->untrusted;
++	return dev_is_pci(dev) && to_pci_dev(dev)->poses_dma_risk;
+ }
  
- 	/* allocate memory for tuples array */
--	size = sizeof(struct snd_sof_tuple) * num_tuples;
--	swidget->tuples = kzalloc(size, GFP_KERNEL);
-+	swidget->tuples = kcalloc(num_tuples, sizeof(*swidget->tuples), GFP_KERNEL);
- 	if (!swidget->tuples)
- 		return -ENOMEM;
+ static bool dev_use_swiotlb(struct device *dev)
+ {
+-	return IS_ENABLED(CONFIG_SWIOTLB) && dev_is_untrusted(dev);
++	return IS_ENABLED(CONFIG_SWIOTLB) && dev_poses_dma_risk(dev);
+ }
  
-@@ -1547,7 +1545,6 @@ static int sof_link_load(struct snd_soc_component *scomp, int index, struct snd_
- 	const struct sof_token_info *token_list = ipc_tplg_ops->token_list;
- 	struct snd_soc_tplg_private *private = &cfg->priv;
- 	struct snd_sof_dai_link *slink;
--	size_t size;
- 	u32 token_id = 0;
- 	int num_tuples = 0;
- 	int ret, num_sets;
-@@ -1659,8 +1656,7 @@ static int sof_link_load(struct snd_soc_component *scomp, int index, struct snd_
- 	}
+ /**
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 92fea3fbbb11..2e963a153c71 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -5570,7 +5570,7 @@ intel_iommu_enable_nesting(struct iommu_domain *domain)
+  */
+ static bool risky_device(struct pci_dev *pdev)
+ {
+-	if (pdev->untrusted) {
++	if (pdev->poses_dma_risk) {
+ 		pci_info(pdev,
+ 			 "Skipping IOMMU quirk for dev [%04X:%04X] on untrusted PCI link\n",
+ 			 pdev->vendor, pdev->device);
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 8b86406b7162..81433aab0245 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -1522,7 +1522,7 @@ static int iommu_get_def_domain_type(struct device *dev)
+ {
+ 	const struct iommu_ops *ops = dev->bus->iommu_ops;
  
- 	/* allocate memory for tuples array */
--	size = sizeof(struct snd_sof_tuple) * num_tuples;
--	slink->tuples = kzalloc(size, GFP_KERNEL);
-+	slink->tuples = kcalloc(num_tuples, sizeof(*slink->tuples), GFP_KERNEL);
- 	if (!slink->tuples) {
- 		kfree(slink->hw_configs);
- 		kfree(slink);
+-	if (dev_is_pci(dev) && to_pci_dev(dev)->untrusted)
++	if (dev_is_pci(dev) && to_pci_dev(dev)->poses_dma_risk)
+ 		return IOMMU_DOMAIN_DMA;
+ 
+ 	if (ops->def_domain_type)
+diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
+index c967ad6e2626..6390fbeaaa02 100644
+--- a/drivers/pci/ats.c
++++ b/drivers/pci/ats.c
+@@ -42,7 +42,7 @@ bool pci_ats_supported(struct pci_dev *dev)
+ 	if (!dev->ats_cap)
+ 		return false;
+ 
+-	return (dev->untrusted == 0);
++	return (dev->poses_dma_risk == 0);
+ }
+ EXPORT_SYMBOL_GPL(pci_ats_supported);
+ 
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 9ecce435fb3f..526d26f2011b 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -958,7 +958,7 @@ static void pci_std_enable_acs(struct pci_dev *dev)
+ 	ctrl |= (cap & PCI_ACS_UF);
+ 
+ 	/* Enable Translation Blocking for external devices and noats */
+-	if (pci_ats_disabled() || dev->external_facing || dev->untrusted)
++	if (pci_ats_disabled() || dev->external_facing || dev->poses_dma_risk)
+ 		ctrl |= (cap & PCI_ACS_TB);
+ 
+ 	pci_write_config_word(dev, pos + PCI_ACS_CTRL, ctrl);
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 17a969942d37..7ae1ed312c47 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -1587,7 +1587,7 @@ static void set_pcie_thunderbolt(struct pci_dev *dev)
+ 		dev->is_thunderbolt = 1;
+ }
+ 
+-static void set_pcie_untrusted(struct pci_dev *dev)
++static void pci_check_if_dev_poses_dma_risk(struct pci_dev *dev)
+ {
+ 	struct pci_dev *parent;
+ 
+@@ -1596,8 +1596,8 @@ static void set_pcie_untrusted(struct pci_dev *dev)
+ 	 * untrusted as well.
+ 	 */
+ 	parent = pci_upstream_bridge(dev);
+-	if (parent && (parent->untrusted || parent->external_facing))
+-		dev->untrusted = true;
++	if (parent && (parent->poses_dma_risk || parent->external_facing))
++		dev->poses_dma_risk = true;
+ }
+ 
+ static void pci_set_removable(struct pci_dev *dev)
+@@ -1862,7 +1862,7 @@ int pci_setup_device(struct pci_dev *dev)
+ 	/* Need to have dev->cfg_size ready */
+ 	set_pcie_thunderbolt(dev);
+ 
+-	set_pcie_untrusted(dev);
++	pci_check_if_dev_poses_dma_risk(dev);
+ 
+ 	/* "Unknown power state" */
+ 	dev->current_state = PCI_UNKNOWN;
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index d2dd6a6cda60..5c601c6c30bf 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -5122,7 +5122,7 @@ static int pci_quirk_enable_intel_spt_pch_acs(struct pci_dev *dev)
+ 	ctrl |= (cap & PCI_ACS_CR);
+ 	ctrl |= (cap & PCI_ACS_UF);
+ 
+-	if (pci_ats_disabled() || dev->external_facing || dev->untrusted)
++	if (pci_ats_disabled() || dev->external_facing || dev->poses_dma_risk)
+ 		ctrl |= (cap & PCI_ACS_TB);
+ 
+ 	pci_write_config_dword(dev, pos + INTEL_SPT_ACS_CTRL, ctrl);
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 678fecdf6b81..75547fd5587c 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -444,13 +444,14 @@ struct pci_dev {
+ 	unsigned int	shpc_managed:1;		/* SHPC owned by shpchp */
+ 	unsigned int	is_thunderbolt:1;	/* Thunderbolt controller */
+ 	/*
+-	 * Devices marked being untrusted are the ones that can potentially
++	 * Devices marked with "poses_dma_risk" can potentially
+ 	 * execute DMA attacks and similar. They are typically connected
+ 	 * through external ports such as Thunderbolt but not limited to
+ 	 * that. When an IOMMU is enabled they should be getting full
+ 	 * mappings to make sure they cannot access arbitrary memory.
+ 	 */
+-	unsigned int	untrusted:1;
++	unsigned int	poses_dma_risk:1;
++
+ 	/*
+ 	 * Info from the platform, e.g., ACPI or device tree, may mark a
+ 	 * device as "external-facing".  An external-facing device is
 -- 
-2.32.0
+2.35.1.894.gb6a874cedc-goog
 

@@ -2,75 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CD64E1BD9
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 14:22:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE504E1BD6
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 14:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245149AbiCTNXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 09:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
+        id S245138AbiCTNVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 09:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237391AbiCTNXW (ORCPT
+        with ESMTP id S236759AbiCTNVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 09:23:22 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6343D1CB
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 06:21:58 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id bg31-20020a05600c3c9f00b00381590dbb33so7086608wmb.3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 06:21:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CiwhGRNrXz4QNizMa/oAhqtF2xiNgjqkYli9zHg8NMo=;
-        b=ooINi4qmadEwMMSSbUh9xuE2GUMZdFzpXR1++zh7EgKuDr1/NmJNrR7aEgX9YEYnqR
-         j/C7WHJwAEaroHujPrPBwHaVKiGIbu1nwhw6Bvq+dEbjefo+cmS41dhKhkQ7W2enDIcn
-         FwsFB9BzT3mLwMM+/x6ZL3laea9/DI7YnSRRxUERp8zMouKs6KjyFAF0jRCtuQjp1GFb
-         NzO6gACyZQm+mAnPo/n3gilRevnFb/8ycSHL5qutcWmYhYgL/Hn1gcm7GD7dGf2KMLkg
-         14giC/KDFp/is73wLuzsjr6B2mi5ks2+ehWaq7GJRiCaKi+k83jrzVLsf4GEDI/JshXs
-         kKcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CiwhGRNrXz4QNizMa/oAhqtF2xiNgjqkYli9zHg8NMo=;
-        b=CzveUV+hUqFKT5i1dNOvSp8bJa+nzLao/67MYI85tffDyIwaDoy0VztmqbXuJ4iAWn
-         C5Gr111omkLnmerzu7si5WbNw67kQI7dizonPXWwXRLdRShnMzBOX+Ou0SseBj8nmoku
-         99ogKlegdx+GZIpilCkm40bsc+uiV4p4gO+uX7S1SP/L0QPrN7M11HjH8A8ETRxHQU8/
-         54S/8Y0eITgI58DCN1MB5pzTZJnvAMV8s0dVscIV62MektRtZsg6XgTzifPYLvETbQyZ
-         wiO5FKgyEHkVW9Npu9WByoct9Gyx57c6uJfIwfT9u4Sc8vyW6LpvZ15Td9QQjGPTY4UT
-         aC5w==
-X-Gm-Message-State: AOAM532bTfMpdtu9dz4GgK86/tEvAEh/i1sUxmphNBnzVBt0b4/Hpnx3
-        kuA6yfSav8tuOD4HfMSV8pWRsw==
-X-Google-Smtp-Source: ABdhPJwpvkdAY6cBXr3dOsU2mQlSFPo8+WDyEP4JRfxs73L2obnJJNJLtCZo6KY0b0mYyHj82adJdg==
-X-Received: by 2002:a7b:c2aa:0:b0:389:891f:1fd1 with SMTP id c10-20020a7bc2aa000000b00389891f1fd1mr23391259wmk.138.1647782517417;
-        Sun, 20 Mar 2022 06:21:57 -0700 (PDT)
-Received: from [192.168.0.69] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id l9-20020a5d6d89000000b00203d62072c4sm11795831wrs.43.2022.03.20.06.21.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Mar 2022 06:21:56 -0700 (PDT)
-Message-ID: <c8f31312-5356-704e-1f55-89c9f5888238@linaro.org>
-Date:   Sun, 20 Mar 2022 13:21:55 +0000
+        Sun, 20 Mar 2022 09:21:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813333D1C7;
+        Sun, 20 Mar 2022 06:19:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20D05B80E66;
+        Sun, 20 Mar 2022 13:19:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 718DCC340E9;
+        Sun, 20 Mar 2022 13:19:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647782382;
+        bh=SCGdKUEDkIMap61ZmLEGQ7FDg23JeKgWxqSZvQCp27A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T89lYZFv94rarsxQmg+CEwLkcFfJa4MaI6lxYG1kUlIBy6Tey0mz4hiLpjfHxm95g
+         VKxSfKLCwVDBzmUkoLdO7cyhjN06nUrWOCLrFYGC3SySmDl9M30J7RDyD43zJgkQ+C
+         DgetlioF2m+ueQZQQ0qV20etsgQFt0Xs5j45r1qE3iGauzcU6cFIIhUcV496dFeKDp
+         PGr2K2aHtrP5hUSaBgNAh62tNyLiWPruc8lqgp0HPTNzR8f238a9u7Z+iJrtGVcROz
+         ZQUvnKwyHtVPCaC9eHCoyliliKdPtyFFHJByRYiEa3HFabP6IDdiK9WaNx7e5bAIuU
+         sI4pT117LvvCA==
+Date:   Sun, 20 Mar 2022 13:27:07 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de>
+Cc:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drivers: iio: fix a few code style issues
+Message-ID: <20220320132707.44d2a48a@jic23-huawei>
+In-Reply-To: <20220312180343.8935-1-alexander.vorwerk@stud.uni-goettingen.de>
+References: <20220312180343.8935-1-alexander.vorwerk@stud.uni-goettingen.de>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 2/2] wcn36xx: Implement tx_rate reporting
-Content-Language: en-US
-To:     Edmond Gagnon <egagnon@squareup.com>,
-        Kalle Valo <kvalo@codeaurora.org>
-Cc:     Benjamin Li <benl@squareup.com>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, wcn36xx@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220318195804.4169686-1-egagnon@squareup.com>
- <20220318195804.4169686-3-egagnon@squareup.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20220318195804.4169686-3-egagnon@squareup.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,21 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/2022 19:58, Edmond Gagnon wrote:
-> +	INIT_DELAYED_WORK(&wcn->get_stats_work, wcn36xx_get_stats_work);
+On Sat, 12 Mar 2022 19:03:43 +0100
+Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de> wrote:
 
-Instead of forking a worker and polling we could add the relevant SMD 
-command to
+> * Fix indent in else statement
+> * Remove unnecessary 'else' after 'break'
+> * Remove space in '* attr'
+> 
+> Signed-off-by: Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de>
 
-static int wcn36xx_smd_tx_compl_ind(struct wcn36xx *wcn, void *buf, 
-size_t len)
-{
-     wcn36xx_smd_get_stats(wcn, 0xSomeMask);
-}
+Applied to the togreg branch of iio.git and pushed out as testing to let the
+autobuilders see if they can find any problems.
 
-That way we only ever ask for and report a new TX data rate when we know 
-a TX event - and hence a potential TX data-rate update - has taken place.
+Note that I'll be rebasing the tree after rc1.
 
----
-bod
+Thanks,
+
+Jonathan
+
+> ---
+>  drivers/iio/industrialio-buffer.c | 4 ++--
+>  drivers/iio/industrialio-core.c   | 3 +--
+>  2 files changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
+> index 208b5193c621..15c5405853d7 100644
+> --- a/drivers/iio/industrialio-buffer.c
+> +++ b/drivers/iio/industrialio-buffer.c
+> @@ -915,7 +915,7 @@ static int iio_verify_update(struct iio_dev *indio_dev,
+>  		if (scan_mask == NULL)
+>  			return -EINVAL;
+>  	} else {
+> -	    scan_mask = compound_mask;
+> +		scan_mask = compound_mask;
+>  	}
+>  
+>  	config->scan_bytes = iio_compute_scan_bytes(indio_dev,
+> @@ -1649,7 +1649,7 @@ static int __iio_buffer_alloc_sysfs_and_mask(struct iio_buffer *buffer,
+>  	}
+>  
+>  	attrn = buffer_attrcount + scan_el_attrcount + ARRAY_SIZE(iio_buffer_attrs);
+> -	attr = kcalloc(attrn + 1, sizeof(* attr), GFP_KERNEL);
+> +	attr = kcalloc(attrn + 1, sizeof(*attr), GFP_KERNEL);
+>  	if (!attr) {
+>  		ret = -ENOMEM;
+>  		goto error_free_scan_mask;
+> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+> index 409c278a4c2c..346c8fbf18a4 100644
+> --- a/drivers/iio/industrialio-core.c
+> +++ b/drivers/iio/industrialio-core.c
+> @@ -892,8 +892,7 @@ static int __iio_str_to_fixpoint(const char *str, int fract_mult,
+>  		} else if (*str == '\n') {
+>  			if (*(str + 1) == '\0')
+>  				break;
+> -			else
+> -				return -EINVAL;
+> +			return -EINVAL;
+>  		} else if (!strncmp(str, " dB", sizeof(" dB") - 1) && scale_db) {
+>  			/* Ignore the dB suffix */
+>  			str += sizeof(" dB") - 1;
 

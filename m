@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CC74E1CA4
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 17:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2895E4E1CC0
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 17:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245511AbiCTQ3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 12:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
+        id S245541AbiCTQ36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 12:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239460AbiCTQ3h (ORCPT
+        with ESMTP id S245469AbiCTQ3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 12:29:37 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55773344FD;
-        Sun, 20 Mar 2022 09:28:13 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id bg31-20020a05600c3c9f00b00381590dbb33so7222684wmb.3;
-        Sun, 20 Mar 2022 09:28:13 -0700 (PDT)
+        Sun, 20 Mar 2022 12:29:38 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EA034641;
+        Sun, 20 Mar 2022 09:28:14 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id o30-20020a05600c511e00b0038c9cfb79cbso459452wms.1;
+        Sun, 20 Mar 2022 09:28:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=oYnAnrWU13qc8rQ7MPOxKFwqoXsKN+1WmTS68IkDyt4=;
-        b=duToya5GyaLrkMJnWO2Ls+N6vIz4sThEzI6BF9OYmhyrvl2ruxuAfIao2I+rTdaSxw
-         vtKjV3zt1JeGbrLC3LH77YcdTpotON/o+N9hXrKbwXwsnp2eu9LZk55EKEdegcdJH8nc
-         9FopJPT3Ga9wLmX+fRy2UJ3xmZgsIXOCzwcoowAuU274HQGiJ2sPETOzW5adLwcxdN6J
-         vwjj2m4+PMmLjCTRlMzvDM1i008MbYFC91MrF8TgYYm6XkH6XynhZbGfq3noMXWt9F9p
-         wb86T2fp/y9DXDctCyM6lVPgW3qijB+nasEaHRHzoWSEULfQCAe96nPRxbdJjmMNQhaG
-         /HCw==
+        bh=8P3wAYvgFlPve71dG0z5aPiI1G8WoaU4vYr3l4vmoOE=;
+        b=SFtzoD64TaQzPSLPWXnXCW7cW+np83Bf6OQnuSus43XleVePiClweVC3y4JFv+jT9a
+         bb7q9P/mkk0hjCT+w/RiFK/W4p29/Dq0+U0xLc3Qed9pU1O69bmIS4y4S8z08SmT20v7
+         c9uB9aEUZDlrteDwrhXJDyEbGcZ4sl0YhF4hXhK1QNOFTYiESAZzc1bgqcevu/ywnKYJ
+         oQENVuC6L8Wo6p/++tNda2hoDQsDtOSMD+ItG3mgkLsh5qYHG46WAI4GN7kMe6ypybLv
+         PYnZEpTWlBivOmnjsEO15ZIWXi6M6LOagKQI4iV98H8zK6qGZkd3bP9V1gEj89bQtCix
+         TZIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oYnAnrWU13qc8rQ7MPOxKFwqoXsKN+1WmTS68IkDyt4=;
-        b=tO8yRoCZxVMsm+9C4JZJNoL6bG5toPHoEgBeZHJci/KhImNuZUUX4jdnjOjVq3W9kh
-         qf9pWKg0PFn36ArL/c79RhIuEVe7zgJqp64jmluZsIe+Pwnsp9Oxju2QrdZZI1KHLzAr
-         E+cdulUSJxo+gb25V8/+VZLnQoaVkfMOQBL3XpftFb8s+X6XqqteA+m0DL0StK/V/FQh
-         VY6wELNxP/zL6o0QupUmmwuMXsu1gPkM4NLUuzQSAskjgTAnbiTrE/Kl5l32sQURnq2q
-         8PxHctC1GRRfj/vTkehnWWgQIW9IEf9Y82MSl3gNUnBR7t8tyZ8Q5SxvtIgPCfqhBj3+
-         MK+Q==
-X-Gm-Message-State: AOAM5303J64dTi7U/0WVPzRUNHjVdJD2hn+kTWEUqZM/5y4wpQKikBLv
-        apHO2hSDnK8wAxyVzIco7DTOP+M8FJE=
-X-Google-Smtp-Source: ABdhPJzsF2L39vQVemrWbD2ydWVKnPPXKF1H8NNqmf5MZ1reKui8rBG7oZSXKiz9gJuAoFmP0qhQ/g==
-X-Received: by 2002:a05:600c:3d0e:b0:38c:9b5e:52c0 with SMTP id bh14-20020a05600c3d0e00b0038c9b5e52c0mr4428465wmb.3.1647793691696;
-        Sun, 20 Mar 2022 09:28:11 -0700 (PDT)
+        bh=8P3wAYvgFlPve71dG0z5aPiI1G8WoaU4vYr3l4vmoOE=;
+        b=qis2QJZJbzq/xr79XdpaJRRNfum7C1dM93majSw/tsI3YQQG74O2WdapnWfhJxUyZ/
+         90z2+DfXa90za1std4AXmdFohWAy57HVbReMTiBMiQdW0jagaRqVkSfrN7ePW0mkGiad
+         aPvITdTft99fRjXRA8JY+zxwFxDiYxrvizVNb3GVEXglngDWvudUsDCCt0VT+JqifeGt
+         pi8hKCrtMHuI3lVb33xI2VdqObpv6EAcE8gC7ivba7DfeUG8nu8TcOGHIyTPWSpvlJQU
+         Jkcu91AjeehQT4cUzoB+gsr6VPoophZPytSY+DUsMtzbql35HWu9Ab9stP710+uPChW+
+         Ntig==
+X-Gm-Message-State: AOAM532R+8yY0wKbJVWSnyM/W7FeDbseY+I7gY+WOA19E3ro5NaKrxkd
+        bpToMLLaVKGOV76VM6iwjRjvppaHdeI=
+X-Google-Smtp-Source: ABdhPJz1GOmXaYQZUAA0skYDcx6omh1lEo3AeWkKPBF6mOQaprrVroYAY0T2KtU2owtV9IlwtGbYQg==
+X-Received: by 2002:a05:600c:a06:b0:37b:fdd8:4f8 with SMTP id z6-20020a05600c0a0600b0037bfdd804f8mr24304139wmp.41.1647793692871;
+        Sun, 20 Mar 2022 09:28:12 -0700 (PDT)
 Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
-        by smtp.googlemail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm6760085wry.53.2022.03.20.09.28.10
+        by smtp.googlemail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm6760085wry.53.2022.03.20.09.28.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 09:28:11 -0700 (PDT)
+        Sun, 20 Mar 2022 09:28:12 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -56,9 +56,9 @@ To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         Ansuel Smith <ansuelsmth@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v3 01/18] clk: introduce clk_hw_get_index_of_parent new API
-Date:   Sun, 20 Mar 2022 12:34:13 +0100
-Message-Id: <20220320113430.26076-2-ansuelsmth@gmail.com>
+Subject: [PATCH v3 02/18] clk: qcom: gcc-ipq806x: skip pxo/cxo fixed clk if already present
+Date:   Sun, 20 Mar 2022 12:34:14 +0100
+Message-Id: <20220320113430.26076-3-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220320113430.26076-1-ansuelsmth@gmail.com>
 References: <20220320113430.26076-1-ansuelsmth@gmail.com>
@@ -74,57 +74,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clk can have multiple parents. Some clk may require to get the cached
-index of other parent that are not current associated with the clk.
-We have clk_hw_get_parent_index() that returns the index of the current
-parent but we can't get the index of other parents of the provided clk.
-Introduce clk_hw_get_index_of_parent() to get the cached index of the
-parent of the provided clk. This permits a direct access of the internal
-clk_fetch_parent_index().
+Skip pxo/cxo clock registration if they are already defined in DTS as fixed
+clock.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/clk/clk.c            | 14 ++++++++++++++
- include/linux/clk-provider.h |  1 +
- 2 files changed, 15 insertions(+)
+ drivers/clk/qcom/gcc-ipq806x.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 8de6a22498e7..bdd70a88394c 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -1726,6 +1726,20 @@ int clk_hw_get_parent_index(struct clk_hw *hw)
- }
- EXPORT_SYMBOL_GPL(clk_hw_get_parent_index);
+diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
+index d6b7adb4be38..27f6d7626abb 100644
+--- a/drivers/clk/qcom/gcc-ipq806x.c
++++ b/drivers/clk/qcom/gcc-ipq806x.c
+@@ -10,6 +10,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/clk.h>
+ #include <linux/clk-provider.h>
+ #include <linux/regmap.h>
+ #include <linux/reset-controller.h>
+@@ -3061,15 +3062,22 @@ static int gcc_ipq806x_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct regmap *regmap;
++	struct clk *clk;
+ 	int ret;
  
-+/**
-+ * clk_hw_get_index_of_parent - return the index of the parent clock
-+ * @hw: clk_hw associated with the clk being consumed
-+ * @parent: clk_hw of the parent to be fetched the index of
-+ *
-+ * Fetches and returns the index of parent clock provided.
-+ * Returns -EINVAL if the given parent index can't be provided.
-+ */
-+int clk_hw_get_index_of_parent(struct clk_hw *hw, const struct clk_hw *parent)
-+{
-+	return clk_fetch_parent_index(hw->core, parent->core);
-+}
-+EXPORT_SYMBOL_GPL(clk_hw_get_index_of_parent);
-+
- /*
-  * Update the orphan status of @core and all its children.
-  */
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index 2faa6f7aa8a8..5708c0b3ef1c 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -1198,6 +1198,7 @@ unsigned int clk_hw_get_num_parents(const struct clk_hw *hw);
- struct clk_hw *clk_hw_get_parent(const struct clk_hw *hw);
- struct clk_hw *clk_hw_get_parent_by_index(const struct clk_hw *hw,
- 					  unsigned int index);
-+int clk_hw_get_index_of_parent(struct clk_hw *hw, const struct clk_hw *parent);
- int clk_hw_get_parent_index(struct clk_hw *hw);
- int clk_hw_set_parent(struct clk_hw *hw, struct clk_hw *new_parent);
- unsigned int __clk_get_enable_count(struct clk *clk);
+-	ret = qcom_cc_register_board_clk(dev, "cxo_board", "cxo", 25000000);
+-	if (ret)
+-		return ret;
++	clk = clk_get(dev, "cxo");
++	if (IS_ERR(clk)) {
++		ret = qcom_cc_register_board_clk(dev, "cxo_board", "cxo", 25000000);
++		if (ret)
++			return ret;
++	}
+ 
+-	ret = qcom_cc_register_board_clk(dev, "pxo_board", "pxo", 25000000);
+-	if (ret)
+-		return ret;
++	clk = clk_get(dev, "pxo");
++	if (IS_ERR(clk)) {
++		ret = qcom_cc_register_board_clk(dev, "pxo_board", "pxo", 25000000);
++		if (ret)
++			return ret;
++	}
+ 
+ 	ret = qcom_cc_probe(pdev, &gcc_ipq806x_desc);
+ 	if (ret)
 -- 
 2.34.1
 

@@ -2,114 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEC74E1C59
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 16:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880464E1C6E
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 16:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245403AbiCTPtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 11:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
+        id S245425AbiCTP5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 11:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233295AbiCTPte (ORCPT
+        with ESMTP id S245419AbiCTP5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 11:49:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF71240902;
-        Sun, 20 Mar 2022 08:48:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63D6EB80B95;
-        Sun, 20 Mar 2022 15:48:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CFBAC340E9;
-        Sun, 20 Mar 2022 15:48:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647791288;
-        bh=gF1b2RX+zCM5oK/wIC5CVU46M+hHdRSc8f+Jo5E+QXs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jOTc3Ka7YW3qC4S9fMrs+dNMGWeuTnjTNOuVqCMwIcZkwGwQ8jHm09WY/P2cTMstr
-         MjDl9MffxLSmYPvV9dso9orb79Z0FrxPm/SSM7Pc//j+UNFW5lRPU/Xc8+WVyUt/XJ
-         no2dn2HTT/0AIl1DdFP3B8FK56lS543ulIUSRltKYDhregPxT/lHFzk65FLmOEg9fa
-         GAQZJc4q8u8F8BkVhuez6OQbJgAm4n9ExJJ9zjpxVxQm0mZZu7MaJOy0n4XR+aJMNH
-         0vwL1dcz7cf4wFurwK1psZgpc6tsOSPyEA2UJ/bRiyposKsnqo0cayEn3qPZYqj7eR
-         u30aGmkuh2+Cg==
-Date:   Sun, 20 Mar 2022 15:55:31 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v5 1/3] iio: temperature: ltc2983: Don't hard code
- defined constants in messages
-Message-ID: <20220320155531.19e13a5c@jic23-huawei>
-In-Reply-To: <20220307203606.87258-1-andriy.shevchenko@linux.intel.com>
-References: <20220307203606.87258-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sun, 20 Mar 2022 11:57:23 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBFD54194
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 08:56:00 -0700 (PDT)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+        by gnuweeb.org (Postfix) with ESMTPSA id A68447E2C4
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 15:55:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1647791759;
+        bh=MUkfzPrle+kb1qYPBpYlCE1LTNjiPsoixowosGS7nsA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rzMkkXtRmMr1W5s+aSU1JiQ8ibociU8exrReBgL86vaELhs27ausvcszlN3A4JGVD
+         b/CAEoVOAektHKqTpXuX+eZ5ucFWPj/NTg3rzOk6eqT+UIAH9JeX7AE0pFXIB/Ucxm
+         wiK1CQca+de0mIsJLv2er+EJud5rbZ2BeSfXl58iTLOn+6v+aNH0SGUel+MfSoa6Db
+         WtHoV8MYuz+8KhLPLT9hgrNQsq3pwNytqmp4JupCmcn+hESQ39yhPomt9H0pTLQH/e
+         W6MZAISY/XQGYXdlbYP+dH5ptcFfQg9cdaj+mqKWAMHLw7tXWF6+CGawP907KFt0f5
+         Xw6aglT/G4d/A==
+Received: by mail-lf1-f41.google.com with SMTP id e16so7029093lfc.13
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 08:55:59 -0700 (PDT)
+X-Gm-Message-State: AOAM532U4Eu2OLE13xMwSJ+Vcrvwxu7LcqHP4S/ktL1qFXHV+mWou2y9
+        /mpJCDhdR/lwqpDvGS3YcV2g/yblRNJHqctbMwk=
+X-Google-Smtp-Source: ABdhPJyi66E5LNkV2GYJBrRGfMSl8Uczfua83fXipEG1krylx/uA3kfQ2Pj/GGE/YO1BV43AP12cyKYkbXX5LxtmaVI=
+X-Received: by 2002:a05:6512:c08:b0:448:56a2:b936 with SMTP id
+ z8-20020a0565120c0800b0044856a2b936mr11559647lfu.636.1647791757801; Sun, 20
+ Mar 2022 08:55:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org> <20220320093750.159991-7-ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20220320093750.159991-7-ammarfaizi2@gnuweeb.org>
+From:   Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+Date:   Sun, 20 Mar 2022 22:55:46 +0700
+X-Gmail-Original-Message-ID: <CAOG64qPc7ZT414CS6HoYF+mvDgYGomFCSpMqsb_FznnwHjU6dA@mail.gmail.com>
+Message-ID: <CAOG64qPc7ZT414CS6HoYF+mvDgYGomFCSpMqsb_FznnwHjU6dA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 6/6] tools/include/string: Implement `strdup()` and `strndup()`
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
+        Nugraha <richiisei@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  7 Mar 2022 22:36:04 +0200
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On Sun, Mar 20, 2022 at 4:37 PM Ammar Faizi wrote:
+> +}
+> +
+> +
 
-> In a couple of messages the constants, which have their definitions,
-> are hard coded into the message text. Unhardcode them.
->=20
-> While at it, add a trailing \n where it's currently missing.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-Series applied to the togreg branch of iio.git, but that will be rebased
-so for now this will only be visible in the testing branch intended to
-let 0-day poke at it.
+(Trivial) Got double newlines here, one newline should be good.
 
-Thanks,
+>  static __attribute__((unused))
+>  size_t strlcat(char *dst, const char *src, size_t size)
+>  {
 
-Jonathan
-
-> ---
-> v5: no changes
-> v4: no changes
-> v3: added \n, used %u (Joe)
->  drivers/iio/temperature/ltc2983.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/iio/temperature/ltc2983.c b/drivers/iio/temperature/=
-ltc2983.c
-> index 301c3f13fb26..94d6dd4db47a 100644
-> --- a/drivers/iio/temperature/ltc2983.c
-> +++ b/drivers/iio/temperature/ltc2983.c
-> @@ -409,8 +409,8 @@ static struct ltc2983_custom_sensor *__ltc2983_custom=
-_sensor_new(
->  	new_custom->size =3D n_entries * n_size;
->  	/* check Steinhart size */
->  	if (is_steinhart && new_custom->size !=3D LTC2983_CUSTOM_STEINHART_SIZE=
-) {
-> -		dev_err(dev, "Steinhart sensors size(%zu) must be 24",
-> -							new_custom->size);
-> +		dev_err(dev, "Steinhart sensors size(%zu) must be %u\n", new_custom->s=
-ize,
-> +			LTC2983_CUSTOM_STEINHART_SIZE);
->  		return ERR_PTR(-EINVAL);
->  	}
->  	/* Check space on the table. */
-> @@ -1299,8 +1299,8 @@ static int ltc2983_parse_dt(struct ltc2983_data *st)
->  		if (sensor.chan < LTC2983_MIN_CHANNELS_NR ||
->  		    sensor.chan > LTC2983_MAX_CHANNELS_NR) {
->  			ret =3D -EINVAL;
-> -			dev_err(dev,
-> -				"chan:%d must be from 1 to 20\n", sensor.chan);
-> +			dev_err(dev, "chan:%d must be from %u to %u\n", sensor.chan,
-> +				LTC2983_MIN_CHANNELS_NR, LTC2983_MAX_CHANNELS_NR);
->  			goto put_child;
->  		} else if (channel_avail_mask & BIT(sensor.chan)) {
->  			ret =3D -EINVAL;
-
+-- Viro

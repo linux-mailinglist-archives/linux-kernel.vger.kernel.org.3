@@ -2,104 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556364E1D71
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 19:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 286104E1D74
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 19:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343541AbiCTSsR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 20 Mar 2022 14:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
+        id S1343550AbiCTStd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 14:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343537AbiCTSsP (ORCPT
+        with ESMTP id S240513AbiCTSt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 14:48:15 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC129180048
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 11:46:50 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-211-OvTu6yGEPO-aZeWLosJXtg-1; Sun, 20 Mar 2022 18:46:46 +0000
-X-MC-Unique: OvTu6yGEPO-aZeWLosJXtg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Sun, 20 Mar 2022 18:46:46 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Sun, 20 Mar 2022 18:46:46 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'trix@redhat.com'" <trix@redhat.com>,
-        "toke@toke.dk" <toke@toke.dk>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>
-CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] ath9k: initialize arrays at compile time
-Thread-Topic: [PATCH] ath9k: initialize arrays at compile time
-Thread-Index: AQHYPG4UGesvc0U9PEWregiQnXO486zIm6Kg
-Date:   Sun, 20 Mar 2022 18:46:46 +0000
-Message-ID: <d06ce4fa239645cc9de48c1062f58f14@AcuMS.aculab.com>
-References: <20220320152028.2263518-1-trix@redhat.com>
-In-Reply-To: <20220320152028.2263518-1-trix@redhat.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sun, 20 Mar 2022 14:49:28 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE4A3389A;
+        Sun, 20 Mar 2022 11:48:04 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id k125so10426525qkf.0;
+        Sun, 20 Mar 2022 11:48:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zNUU20JYr/XCYRrX4tGKAZ+3B2SaozQZu855ahnTeKE=;
+        b=glTDFPoca9PS2ONsuCo+PuObwnUsz37m0GEghXHJ4RaRYO4z2gqTIXIXPXYGSTWjwi
+         qOkA7ZBwKHSLnpnlLJFio+x5n1OZWGumDTMR+Z0jomdRIvxKr2wz7hOhoLJlTSAf7xco
+         oo6jZ+Rgk2C0bMVtlrRGLvdg5SRiR2hnqL5bvETA734Y6rxipo01jxtwKHjGyU4XhEPi
+         uSYysjFFmyYMezdVpTsl8jCrly9p6bLpSVInUkQ5e282j5dFK+D03bXwWzC2fKxi/5gz
+         uJnFX/FiN9Loxycu9H+PVrbX7nMpFRQLogs4DmJXFRxb1MbKRy2Gw+ik9p9OsTweMkXT
+         w6jw==
+X-Gm-Message-State: AOAM532NuANWwv8DM1rtYsEJOgu2GyFrbCPYvcZonoCQGMy9kPD38fPS
+        Y0XgvwT7LI5UzCHFimfzYQ==
+X-Google-Smtp-Source: ABdhPJyhERCoe29vpwn80+Bn0p6qmL/P6VevxfzOyv+qt6vppZBPu8RpmQgniVLAwbjJLDfybonECQ==
+X-Received: by 2002:a05:620a:25cb:b0:67e:9ae8:1563 with SMTP id y11-20020a05620a25cb00b0067e9ae81563mr1128808qko.222.1647802084011;
+        Sun, 20 Mar 2022 11:48:04 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:c6d:21ec:c4f5:bb3:5269:3b0e])
+        by smtp.gmail.com with ESMTPSA id s31-20020a05622a1a9f00b002e1df010316sm10605821qtc.80.2022.03.20.11.47.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Mar 2022 11:48:02 -0700 (PDT)
+Received: (nullmailer pid 3198157 invoked by uid 1000);
+        Sun, 20 Mar 2022 18:47:56 -0000
+Date:   Sun, 20 Mar 2022 14:47:56 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>, Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] dt-bindings: timer: Document arm, cortex-a7-timer
+ in arch timer
+Message-ID: <Yjd23Gro6B6zWCrO@robh.at.kernel.org>
+References: <20220317191527.96237-1-singh.kuldeep87k@gmail.com>
+ <20220317191527.96237-3-singh.kuldeep87k@gmail.com>
+ <558f0c92-c499-daca-e1ad-2b16137f8c06@arm.com>
+ <20220317212508.GB99538@9a2d8922b8f1>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220317212508.GB99538@9a2d8922b8f1>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: trix@redhat.com <trix@redhat.com>
-> Sent: 20 March 2022 15:20
+On Fri, Mar 18, 2022 at 02:55:08AM +0530, Kuldeep Singh wrote:
+> On Thu, Mar 17, 2022 at 08:25:12PM +0000, Robin Murphy wrote:
+> > On 2022-03-17 19:15, Kuldeep Singh wrote:
+> > > Renesas RZ/N1D platform uses compatible "arm,cortex-a7-timer" in
+> > > conjugation with "arm,armv7-timer". Since, initial entry is not
+> > > documented, it start raising dtbs_check warnings.
+> > > 
+> > > ['arm,cortex-a7-timer', 'arm,armv7-timer'] is too long
+> > > 'arm,cortex-a7-timer' is not one of ['arm,armv7-timer', 'arm,armv8-timer']
+> > > 'arm,cortex-a7-timer' is not one of ['arm,cortex-a15-timer']
+> > > 
+> > > Document this compatible to address it. The motivation to add this
+> > > change is taken from an already existing entry "arm,cortex-a15-timer".
+> > > Please note, this will not hurt any arch timer users.
+> > 
+> > Eh, if it's never been documented or supported, I say just get rid of it.
+> > The arch timer interface is by definition part of a CPU, and we can tell
+> > what the CPU is by reading its ID registers. Indeed that's how the driver
+> > handles the non-zero number of CPU-specific errata that already exist - we
+> > don't need compatibles for that.
+> > 
+> > In some ways it might have been nice to have *SoC-specific* compatibles
+> > given the difficulty some integrators seem to have had in wiring up a stable
+> > count *to* the interface, but it's not like they could be magically added to
+> > already-deployed DTs after a bug is discovered, and nor could we have
+> > mandated them from day 1 just in case and subsequently maintained a binding
+> > that is just an ever-growing list of every SoC. Oh well.
 > 
-> Early clearing of arrays with
-> memset(array, 0, size);
-> is equivilent to initializing the array in its decl with
-> array[size] = { 0 };
+> Robin, A similar discussion was already done on v1 thread. Please see
+> below for details:
+> https://lore.kernel.org/linux-devicetree/20220317065925.GA9158@9a2d8922b8f1/
+> https://lore.kernel.org/linux-devicetree/726bde76-d792-febf-d364-6eedeb748c3b@canonical.com/
 > 
-> Since compile time is preferred over runtime,
-> convert the memsets to initializations.
-...
-> diff --git a/drivers/net/wireless/ath/ath9k/ar9003_calib.c
-> b/drivers/net/wireless/ath/ath9k/ar9003_calib.c
-> index dc24da1ff00b1..39fcc158cb159 100644
-> --- a/drivers/net/wireless/ath/ath9k/ar9003_calib.c
-> +++ b/drivers/net/wireless/ath/ath9k/ar9003_calib.c
-> @@ -891,10 +891,9 @@ static void ar9003_hw_tx_iq_cal_outlier_detection(struct ath_hw *ah,
->  {
->  	int i, im, nmeasurement;
->  	int magnitude, phase;
-> -	u32 tx_corr_coeff[MAX_MEASUREMENT][AR9300_MAX_CHAINS];
-> +	u32 tx_corr_coeff[MAX_MEASUREMENT][AR9300_MAX_CHAINS] = { 0 };
+> And final outcome of discussion turns out to add this compatible string.
 
-For a two dimensional array that needs to be {{0}} (or {}).
-And, since there is only one definitions of 'coeff' it can
-be static!
-(Currently on 96 bytes - si not a real problem on-stack.)
+I agree with Robin on dropping. More specific here is not useful. If 
+we're going to add some cores, then we should add every core 
+implementation.
 
-Although I just failed to find the lock that stops
-concurrent execution on multiple cpu.
+If one has a big.LITTLE system with A15/A7 what would be the right 
+compatible value?
 
-	David
+> 
+> I see people with different set of perspective in regard to whether keep
+> compatible string or not. We should have some sort of evidences to
+> support claims so that next time when similar situation arises, we'll be
+> aware beforehand how to proceed.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Every situation tends to be different.
 
+Rob

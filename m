@@ -2,194 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14864E1DC1
+	by mail.lfdr.de (Postfix) with ESMTP id B2CE74E1DC2
 	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 21:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243643AbiCTUpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 16:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
+        id S1343641AbiCTUxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 16:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233463AbiCTUpn (ORCPT
+        with ESMTP id S233463AbiCTUxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 16:45:43 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C42DFD9;
-        Sun, 20 Mar 2022 13:44:18 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 4C0B7E0167;
-        Sun, 20 Mar 2022 13:44:18 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 79DKE2slsi-k; Sun, 20 Mar 2022 13:44:17 -0700 (PDT)
-From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/4] power: supply: max17042_battery: use ModelCfg refresh on max17055
-Date:   Sun, 20 Mar 2022 21:44:12 +0100
-Message-ID: <2957015.e9J7NaK4W3@pliszka>
-In-Reply-To: <5d43031e-382d-b12c-bba2-0e630fbec1ad@kernel.org>
-References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm> <7080597.aeNJFYEL58@pliszka> <5d43031e-382d-b12c-bba2-0e630fbec1ad@kernel.org>
+        Sun, 20 Mar 2022 16:53:49 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E703B542
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 13:52:25 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id n16so9197663ile.11
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 13:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=amL/UE7zs4t+GbvQwTwptS5fVw1JEGvaoyRruxO2PoI=;
+        b=eiN6aoC/d7xBm2fmS6GXLzCSV1cdC+bvO0UXbvOSCwrPRYE61s8JaKKaJDNbW2FbMu
+         8Glo/fnK4rXMyl1CN3LJHwGi8UhXd0YRjZ31YM0EotuR8bX+2gCySfbOO2N+1K0ZG/zH
+         rHRna/2O3StGolRfDVaahMliom9HdyAehdj9Agju6pV7IsJ3OiWoeCxMKqClTUTpckBx
+         fiVm3w1G/aDHlo5WHtk4d9d5NFZJYTZIge09K5Gigaru/koyDq7tUn3v5vW8M2fPsrrT
+         M8Hi6+TiempjF8gmk2PX0jiohxlrhWdF54i6pTsGgZkbaMa2BcdrEv4OmnqoVHyf58ue
+         RjjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=amL/UE7zs4t+GbvQwTwptS5fVw1JEGvaoyRruxO2PoI=;
+        b=jgicngW0Do+7ZMAz9iXri65Cf6HTHws8CiYTgKFY6XbesohE89tNhALAvXrbOIz1lh
+         aRXJnMjkoGElQ8V2ZxxVrkw41legeiD6zyTbmZO8E4/bzrFuiv/fY02FTRshkJyEatTX
+         mkJ2AcKIReMtc2e7oLrM7hwbyBJTBTFUJ0mdgI5QEtKsehaEUFPUDDRG2PCVBAfZL4OA
+         WyVmnth0yEi6mnaSLCIuHi9nDbn7N31YYORxrwOJUk1sBLIA/mWk+29iIxWAWZJR9zN7
+         xW00H3OGOTe0y6UDbid0OBEG0vVnnfl68Y2cAw7uqMm4rRbNH93Bx/Gf0lrd2obUhPOE
+         tWEw==
+X-Gm-Message-State: AOAM5304CeAShzcKqJV524r3naBOigSSeS8JeKEw/D4ZoIMMzqTuQjXj
+        XekRojeRl7YPD44vTEOXoCw=
+X-Google-Smtp-Source: ABdhPJxjKvyN438cwi4RqQKo5WRyYxgx5sn5XUjTndVAv47o+eFAdOd5o97GwgvK1Denw5rgMk5b0Q==
+X-Received: by 2002:a05:6e02:1986:b0:2c8:2b30:4913 with SMTP id g6-20020a056e02198600b002c82b304913mr723866ilf.81.1647809544451;
+        Sun, 20 Mar 2022 13:52:24 -0700 (PDT)
+Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:c72f:3c30:c692:940a])
+        by smtp.gmail.com with ESMTPSA id e17-20020a5d8ad1000000b00644d51bbffcsm7996318iot.36.2022.03.20.13.52.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Mar 2022 13:52:23 -0700 (PDT)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2] soc: imx: imx8m-blk-ctrl: Fix IMX8MN_DISPBLK_PD_ISI hang
+Date:   Sun, 20 Mar 2022 15:52:12 -0500
+Message-Id: <20220320205212.701548-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart3296970.aeNJFYEL58"; micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart3296970.aeNJFYEL58
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
-From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-Date: Sun, 20 Mar 2022 21:44:12 +0100
-Message-ID: <2957015.e9J7NaK4W3@pliszka>
-In-Reply-To: <5d43031e-382d-b12c-bba2-0e630fbec1ad@kernel.org>
+The imx8mn clock list for the ISI lists four clocks, but DOMAIN_MAX_CLKS
+was set to 3.  Because of this, attempts to enable the fourth clock failed,
+threw some splat, and ultimately hung.
 
-On niedziela, 20 marca 2022 13:18:49 CET Krzysztof Kozlowski wrote:
-> On 18/03/2022 20:58, Sebastian Krzyszkowiak wrote:
-> > On pi=C4=85tek, 18 marca 2022 09:22:16 CET Krzysztof Kozlowski wrote:
-> >> On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
-> >>> Unlike other models, max17055 doesn't require cell characterization
-> >>> data and operates on smaller amount of input variables (DesignCap,
-> >>> VEmpty, IChgTerm and ModelCfg). Input data can already be filled in
-> >>> by max17042_override_por_values, however model refresh bit has to be
-> >>> set after adjusting input variables in order to make them apply.
-> >>>=20
-> >>> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-> >>> ---
-> >>>=20
-> >>>  drivers/power/supply/max17042_battery.c | 73 +++++++++++++++--------=
-=2D-
-> >>>  include/linux/power/max17042_battery.h  |  3 +
-> >>>  2 files changed, 48 insertions(+), 28 deletions(-)
-> >>>=20
-> >>> diff --git a/drivers/power/supply/max17042_battery.c
-> >>> b/drivers/power/supply/max17042_battery.c index
-> >>> c019d6c52363..c39250349a1d 100644
-> >>> --- a/drivers/power/supply/max17042_battery.c
-> >>> +++ b/drivers/power/supply/max17042_battery.c
-> >>> @@ -806,6 +806,13 @@ static inline void
-> >>> max17042_override_por_values(struct max17042_chip *chip)>
-> >>>=20
-> >>>  	    (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX17055)) {
-> >>>  	=09
-> >>>  		max17042_override_por(map, MAX17047_V_empty, config-
-> >>=20
-> >> vempty);
-> >>=20
-> >>>  	}
-> >>>=20
-> >>> +
-> >>> +	if (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX17055) {
-> >>> +		max17042_override_por(map, MAX17055_ModelCfg, config-
-> >>=20
-> >> model_cfg);
-> >>=20
-> >>> +		// VChg is 1 by default, so allow it to be set to 0
-> >>=20
-> >> Consistent comment, so /* */
-> >>=20
-> >> I actually do not understand fully the comment and the code. You write
-> >> entire model_cfg to MAX17055_ModelCfg and then immediately do it again,
-> >> but with smaller mask. Why?
-> >=20
-> > That's because VChg is 1 on POR, and max17042_override_por doesn't do
-> > anything when value equals 0 - which means that if the whole
-> > config->model_cfg is 0, VChg won't get unset (which is needed for 4.2V
-> > batteries).
-> >=20
-> > This could actually be replaced with a single regmap_write.
->=20
-> I got it now. But if config->model_cfg is 0, should VChg be unset?
+Fixes: 7f511d514e8c ("soc: imx: imx8m-blk-ctrl: add i.MX8MN DISP blk-ctrl")
+Signed-off-by: Adam Ford <aford173@gmail.com>
 
-That's a good question.
-
-max17042_override_por doesn't override the register value when the given va=
-lue=20
-equals zero in order to not override POR defaults with unset platform data.=
-=20
-This way one can set only the registers that they want to change in `config=
-`=20
-and the rest are untouched. This, however, only works if we assume that zer=
-o=20
-means "don't touch", which isn't the case for ModelCfg.
-
-On the Librem 5, we need to unset VChg bit because our battery is only bein=
-g=20
-charged up to 4.2V. Allowing to unset this bit only without having to touch=
-=20
-the rest of the register was the motivation behind the current version of t=
-his=20
-patch, however, thinking about it now I can see that it fails to do that in=
-=20
-the opposite case - when the DT contains a simple-battery with maximum volt=
-age=20
-higher than 4.25V, VChg will be set in config->model_cfg causing the whole=
-=20
-register to be overwritten.
-
-So, I see two possible solutions:
-
-1) move VChg handling to a separate variable in struct max17042_config_data=
-=2E=20
-This way model_cfg can stay zero when there's no need to touch the rest of =
-the=20
-register. This minimizes changes over current code.
-
-2) remove max17042_override_por_values in its current shape altogether and=
-=20
-make it only deal with the values that are actually being set by the driver=
-=20
-(and only extend it in the future as it gains more ability). Currently most=
- of=20
-this function is only usable with platform data - is there actually any use=
-r=20
-of max17042 that would need to configure the gauge without DT in the mainli=
-ne=20
-kernel? My quick search didn't find any. Do we need or want to keep platfor=
-m=20
-data support at all?
-
-I'm leaning towards option 2, as it seems to me that currently this driver =
-is=20
-being cluttered quite a lot by what's essentially a dead code. Adding new=20
-parameters to read from DT for POR initialization (which is necessary for=20
-other models than MAX17055) should be rather easy, but trying to fit them i=
-nto=20
-current platform_data-oriented code may be not.
-
-Regards,
-Sebastian
---nextPart3296970.aeNJFYEL58
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEIt2frgBqEUNYNmF86PI1zzvbw/8FAmI3khwACgkQ6PI1zzvb
-w//8VA//RbpNAFv5HMrfF8HJSGTu79QpRPowLM/TXgSFxiQ4yQxhPy/yWvCXIAN2
-pDr703YyU9NMQVEp9r+OE3OrOE5Qh4n2V6Lq8lClz1aamcfX9ZcTrDRnuv4BNJLk
-TWD4j05gaj5Sg8PgU4Bi/1qE9nlPS+X20KWkYPjfhPoEWet4f7hzZVbeVDXsY56z
-5I1d8CMXd9UJ5X6JXLfvNlkERmpzBuR3OsjNa/QC82Itxfy10qBUqDnH6zv0R8vm
-n46FX2Ja6Xsrl4rU8gcNeQJoVgD4/MmSt/8pj4o0jjcATTwH5bcfWAz4PsFB0Ygp
-9w5EOo330Sn73ENUPHic+oDb3EYLv6LKtYLp1QJxH9DcCdwJyGeXkd3MDAvel7jB
-6sHmLZgO071fkQ8iCJ7cT6tU7D87C7YqJngArZU6tKJ2+XK2PcPPXqKwQgH9N2iC
-aKWOxjLt2f4pbeuCImCeIp1Wy8PPMY3noLLQPLWmz878egxw+otg1tVFd94bi3qO
-N8Bje9SW6PCTibVGxC0htHEeuIGvpXmp6utx9v277RXvgueTBpt3LHyxPBuH8xH/
-exiAC6x+CTdH0PhpfCKAu4Y5gS+Rlz00+dg+XhSUyb/HKypWu5x7ykxA8JitFdaq
-QGil5M9EFbUB3WmMyRCYVgGTY0By9fkkh+2aDObjNhG9GPoFNWQ=
-=l8wm
------END PGP SIGNATURE-----
-
---nextPart3296970.aeNJFYEL58--
-
-
+diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
+index a0a0d2d7ca4a..7109f0d508e2 100644
+--- a/drivers/soc/imx/imx8m-blk-ctrl.c
++++ b/drivers/soc/imx/imx8m-blk-ctrl.c
+@@ -50,7 +50,7 @@ struct imx8m_blk_ctrl_domain_data {
+ 	u32 mipi_phy_rst_mask;
+ };
+ 
+-#define DOMAIN_MAX_CLKS 3
++#define DOMAIN_MAX_CLKS 4
+ 
+ struct imx8m_blk_ctrl_domain {
+ 	struct generic_pm_domain genpd;
+-- 
+2.34.1
 

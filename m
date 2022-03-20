@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543BC4DE718
+	by mail.lfdr.de (Postfix) with ESMTP id 0937C4DE717
 	for <lists+linux-kernel@lfdr.de>; Sat, 19 Mar 2022 09:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242531AbiCSIjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 04:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
+        id S242520AbiCSIji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 04:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242513AbiCSIjh (ORCPT
+        with ESMTP id S232549AbiCSIjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 04:39:37 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1003C2BE2D2
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 01:38:15 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KLDkf1tpXzfYxR;
-        Sat, 19 Mar 2022 16:36:42 +0800 (CST)
+        Sat, 19 Mar 2022 04:39:36 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A452BE2D0
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 01:38:14 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KLDmK5VnlzcZyB;
+        Sat, 19 Mar 2022 16:38:09 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 19 Mar
@@ -28,10 +28,12 @@ To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>,
         <david@redhat.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH v4 0/2] A few fixup patches for memory failure
-Date:   Sun, 20 Mar 2022 13:13:32 +0800
-Message-ID: <20220320051334.44502-1-linmiaohe@huawei.com>
+Subject: [PATCH v4 1/2] mm/memory-failure.c: avoid calling invalidate_inode_page() with unexpected pages
+Date:   Sun, 20 Mar 2022 13:13:33 +0800
+Message-ID: <20220320051334.44502-2-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20220320051334.44502-1-linmiaohe@huawei.com>
+References: <20220320051334.44502-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -49,34 +51,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi everyone,
-This series contains a patch to avoid calling invalidate_inode_page()
-with unexpected pages and another one to make non-LRU movable pages
-unhandlable. More details can be found in the respective changelogs.
-Thanks!
+invalidate_inode_page() can invalidate the pages in the swap cache because
+the check of page->mapping != mapping is removed via Matthew's patch titled
+"mm/truncate: Inline invalidate_complete_page() into its one caller". But
+invalidate_inode_page() is not expected to deal with the pages in the swap
+cache. Also non-lru movable page can reach here too. They're not page cache
+pages. Skip these pages by checking PageSwapCache and PageLRU to fix this
+unexpected issue.
 
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
-v3->v4:
-  fix typo and drop "bool movable" per David. Thanks David.
-v2->v3:
-  drop patch "mm/memory-failure.c: fix race with changing page compound again"
-  collect reviewed-by and acked-by tag
-  fix stale commit id in the commit log
-v1->v2:
-  drop "mm/memory-failure.c: fix wrong user reference report"
-  make non-LRU movable pages unhandlable
-  fix confusing commit log and introduce MF_MSG_DIFFERENT_PAGE_SIZE
-  Many thanks Naoya, Mike and Yang Shi for review!
----
+ mm/memory-failure.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Miaohe Lin (2):
-  mm/memory-failure.c: avoid calling invalidate_inode_page() with
-    unexpected pages
-  mm/memory-failure.c: make non-LRU movable pages unhandlable
-
- mm/memory-failure.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
-
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 5444a8ef4867..ecf45961f3b6 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -2178,7 +2178,7 @@ static int __soft_offline_page(struct page *page)
+ 		return 0;
+ 	}
+ 
+-	if (!PageHuge(page))
++	if (!PageHuge(page) && PageLRU(page) && !PageSwapCache(page))
+ 		/*
+ 		 * Try to invalidate first. This should work for
+ 		 * non dirty unmapped page cache pages.
 -- 
 2.23.0
 

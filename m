@@ -2,140 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76944E199E
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 05:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FEB4E199F
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 05:23:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239038AbiCTEYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 00:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
+        id S244689AbiCTEZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 00:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiCTEYU (ORCPT
+        with ESMTP id S239729AbiCTEZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 00:24:20 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77692DE6
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 21:22:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647750177; x=1679286177;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WTLFWEqeosb8lH+Hi260hgFz7tFyOK6/NMh25T9kJus=;
-  b=hNIXX/ffGUw2lL5W6rNU+vfaeDBhJJrs3Dvv1jvo3v3kIXcF6m4b3jpX
-   jIqGCso8vCe/C2Yhi7E8bAY+d0qmfl+G85Rza69AsrA96Xomg73LmBv+m
-   LHDqCM6Pj1A2n2MELNLHT/TaFUUsSCKoTqac1yjAZCwUr0sASve7yNhqb
-   E1c7g+Xrs7fxVms8/+ohKwUNEqYyMSHmCArDB6vm5l5WgN79USkVChdMD
-   dbjgtYZjhGV0fPPglnTEJmQX217znHJxVLa3dps/SPO6LgZ4RuR9AIcuB
-   FDPGB/i5kMm2z/0XQccqT2RhGHtKvIKrHZyCi0l/2kYoyl7pD5KEnKxvk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="257295345"
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="257295345"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 21:22:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="600115199"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Mar 2022 21:22:55 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVn5j-000GZD-2u; Sun, 20 Mar 2022 04:22:55 +0000
-Date:   Sun, 20 Mar 2022 12:21:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: drivers/watchdog/rc32434_wdt.c:176:37: sparse: sparse: incorrect
- type in initializer (different address spaces)
-Message-ID: <202203201245.WYJq6i13-lkp@intel.com>
+        Sun, 20 Mar 2022 00:25:09 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AED312A9A
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 21:23:45 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id jo24so1850854qvb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 21:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jhlV91ifQAUPW5Se8C3/lqG0qPR8p3g2utUbCEWboO0=;
+        b=WBz1/kTJ2ypHPEsIYv8F3KK9hQ7D9UFfHUXFyi9fKSbJLE5fTuf/LZ6rUERk3wRsbg
+         1yjR7l+Krktuj3y6uM6J6XJOGbFzd4WHZp9EdLEFaPBcYmoTpg8xtPOA5shm6YPJPcm8
+         sk/kPJ/UFFjCLudJG/mloDxWHuLrI4Exyh7iB0DJGwepB89+I7r/yuQS0ZcmfxxEnokk
+         m6Ozed4ULIMdY1I5EoxMM24RAd1p+yX16GkjilScS92qNNHdGjDRilxRmudPiPVd1HrD
+         pCcIxl0gu4Ssq+JXI8A5v6/l6R2pCFYkoGsPqkl1KnUX/CAzGbK10907BQA9OHUUAp7q
+         7tiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jhlV91ifQAUPW5Se8C3/lqG0qPR8p3g2utUbCEWboO0=;
+        b=TcmyIBIy3kprTp3o1KXjewsHqHmTWBDzMoB1AI1ixIY9kmk7MiohDB81beNgEq+HfW
+         BcRzEQSK0+CbihShygO9bUBe22AiI07WBbJsuNUkSAkguhaol4DHECG6/2ssn1ONUtK0
+         L2cyCJZnZhP0u1Yggm5zyh6MJPsllfHWWQv1E0LofiZhRfTWPKORnmEbSGZg2wz4zFB8
+         6ymhNLK8/JMdw7L1FgqQrCszwIaEabcOPzt5ZMJxcrhpOTOcb/FZ4RxrwF3Gk5Q34Gu4
+         mjul4zIjB7be8yxK56eyX9ByKfgyxgV8CRw4JBnYKgZrLLS87hUGF6g+KYkAAVXRnHRD
+         LWMQ==
+X-Gm-Message-State: AOAM530kdXNOABeZ0raNCOzRLhQfhusOxTw6HLGnNiPA+HHc8jbAhOdj
+        QrTWkLK7o4ivRttz8kRniHM=
+X-Google-Smtp-Source: ABdhPJxlG6nL/g9YxYseZBTdJyktbe5yYMMIqnD3PBoEAh+c7Xoioxj6d11GSE7Q6a9q56nTPzSqKw==
+X-Received: by 2002:ad4:404b:0:b0:440:dee0:4ab3 with SMTP id r11-20020ad4404b000000b00440dee04ab3mr11837169qvp.129.1647750223396;
+        Sat, 19 Mar 2022 21:23:43 -0700 (PDT)
+Received: from localhost.localdomain ([159.223.186.39])
+        by smtp.gmail.com with ESMTPSA id c3-20020ac87d83000000b002e1d1b3df15sm9036463qtd.44.2022.03.19.21.23.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Mar 2022 21:23:43 -0700 (PDT)
+From:   "Ryan C. England" <rcengland@gmail.com>
+To:     gregkh@linuxfoundation.com
+Cc:     lee.jones@linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        "Ryan C. England" <rcengland@gmail.com>
+Subject: [PATCH 2/2] staging: axis-fifo: Fixed parenthesis styling issues
+Date:   Sun, 20 Mar 2022 04:23:40 +0000
+Message-Id: <20220320042340.49222-1-rcengland@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   34e047aa16c0123bbae8e2f6df33e5ecc1f56601
-commit: ddb002d6d6af12c45dd9d565cadf0f40b36b7c25 MIPS: uaccess: Reduce number of nested macros
-date:   11 months ago
-config: mips-randconfig-s032-20220319 (https://download.01.org/0day-ci/archive/20220320/202203201245.WYJq6i13-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ddb002d6d6af12c45dd9d565cadf0f40b36b7c25
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ddb002d6d6af12c45dd9d565cadf0f40b36b7c25
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/watchdog/
+Fixed open parenthesis alignment issues.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Ryan C. England <rcengland@gmail.com>
+---
+ drivers/staging/axis-fifo/axis-fifo.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-
-sparse warnings: (new ones prefixed by >>)
-   command-line: note: in included file:
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
-   builtin:0:0: sparse: this was the original definition
->> drivers/watchdog/rc32434_wdt.c:176:37: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected char const [noderef] __user *__p @@     got char const * @@
-   drivers/watchdog/rc32434_wdt.c:176:37: sparse:     expected char const [noderef] __user *__p
-   drivers/watchdog/rc32434_wdt.c:176:37: sparse:     got char const *
-   drivers/watchdog/rc32434_wdt.c:246:27: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected int ( *write )( ... ) @@     got int ( * )( ... ) @@
-   drivers/watchdog/rc32434_wdt.c:246:27: sparse:     expected int ( *write )( ... )
-   drivers/watchdog/rc32434_wdt.c:246:27: sparse:     got int ( * )( ... )
-
-vim +176 drivers/watchdog/rc32434_wdt.c
-
-03ec58568a3c66 Florian Fainelli 2008-02-25  163  
-03ec58568a3c66 Florian Fainelli 2008-02-25  164  static ssize_t rc32434_wdt_write(struct file *file, const char *data,
-03ec58568a3c66 Florian Fainelli 2008-02-25  165  				size_t len, loff_t *ppos)
-03ec58568a3c66 Florian Fainelli 2008-02-25  166  {
-03ec58568a3c66 Florian Fainelli 2008-02-25  167  	if (len) {
-03ec58568a3c66 Florian Fainelli 2008-02-25  168  		if (!nowayout) {
-03ec58568a3c66 Florian Fainelli 2008-02-25  169  			size_t i;
-03ec58568a3c66 Florian Fainelli 2008-02-25  170  
-03ec58568a3c66 Florian Fainelli 2008-02-25  171  			/* In case it was set long ago */
-03ec58568a3c66 Florian Fainelli 2008-02-25  172  			expect_close = 0;
-03ec58568a3c66 Florian Fainelli 2008-02-25  173  
-03ec58568a3c66 Florian Fainelli 2008-02-25  174  			for (i = 0; i != len; i++) {
-03ec58568a3c66 Florian Fainelli 2008-02-25  175  				char c;
-03ec58568a3c66 Florian Fainelli 2008-02-25 @176  				if (get_user(c, data + i))
-03ec58568a3c66 Florian Fainelli 2008-02-25  177  					return -EFAULT;
-03ec58568a3c66 Florian Fainelli 2008-02-25  178  				if (c == 'V')
-0af98d37e85e69 Phil Sutter      2009-02-08  179  					expect_close = 42;
-03ec58568a3c66 Florian Fainelli 2008-02-25  180  			}
-03ec58568a3c66 Florian Fainelli 2008-02-25  181  		}
-0af98d37e85e69 Phil Sutter      2009-02-08  182  		rc32434_wdt_ping();
-03ec58568a3c66 Florian Fainelli 2008-02-25  183  		return len;
-03ec58568a3c66 Florian Fainelli 2008-02-25  184  	}
-03ec58568a3c66 Florian Fainelli 2008-02-25  185  	return 0;
-03ec58568a3c66 Florian Fainelli 2008-02-25  186  }
-03ec58568a3c66 Florian Fainelli 2008-02-25  187  
-
-:::::: The code at line 176 was first introduced by commit
-:::::: 03ec58568a3c66cac4b23ff74db95c966a1521de [WATCHDOG] Add support for the IDT RC32434 watchdog
-
-:::::: TO: Florian Fainelli <florian.fainelli@telecomint.eu>
-:::::: CC: Wim Van Sebroeck <wim@iguana.be>
-
+diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
+index dfd2b357f484..4720d6f877bc 100644
+--- a/drivers/staging/axis-fifo/axis-fifo.c
++++ b/drivers/staging/axis-fifo/axis-fifo.c
+@@ -383,10 +383,10 @@ static ssize_t axis_fifo_read(struct file *f, char __user *buf,
+ 		 */
+ 		mutex_lock(&fifo->read_lock);
+ 		ret = wait_event_interruptible_timeout(fifo->read_queue,
+-			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
+-				 (read_timeout >= 0) ?
+-				  msecs_to_jiffies(read_timeout) :
+-				  MAX_SCHEDULE_TIMEOUT);
++						       ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
++						       (read_timeout >= 0) ?
++						       msecs_to_jiffies(read_timeout) :
++						       MAX_SCHEDULE_TIMEOUT);
+ 
+ 		if (ret <= 0) {
+ 			if (ret == 0) {
+@@ -526,11 +526,11 @@ static ssize_t axis_fifo_write(struct file *f, const char __user *buf,
+ 		 */
+ 		mutex_lock(&fifo->write_lock);
+ 		ret = wait_event_interruptible_timeout(fifo->write_queue,
+-			ioread32(fifo->base_addr + XLLF_TDFV_OFFSET)
+-				 >= words_to_write,
+-				 (write_timeout >= 0) ?
+-				  msecs_to_jiffies(write_timeout) :
+-				  MAX_SCHEDULE_TIMEOUT);
++						       ioread32(fifo->base_addr + XLLF_TDFV_OFFSET)
++						       >= words_to_write,
++						       (write_timeout >= 0) ?
++						       msecs_to_jiffies(write_timeout) :
++						       MAX_SCHEDULE_TIMEOUT);
+ 
+ 		if (ret <= 0) {
+ 			if (ret == 0) {
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+

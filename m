@@ -2,108 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A02B4E1DE8
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 22:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6975E4E1DEA
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 22:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343715AbiCTVOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 17:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S1343720AbiCTVPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 17:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbiCTVOp (ORCPT
+        with ESMTP id S1343723AbiCTVNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 17:14:45 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C682C5132A
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 14:13:21 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id w21so5289764pgm.7
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 14:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8QgnP7UE8gcARv7sLJZW+I9q72JODMo6EJTdNQS+2wU=;
-        b=SQzxoz7s5621WVGH6xw4gN/niC6ixiYE3upMb078Vd/5NI1Dsx5FgoXdwpwhQHq41T
-         eLKKEh1nh594gaDoiqcAEVqgjxOd4/eEg3nt8IdlPcZqePOXzmT+RtWHO0sWjjlCfwRt
-         WPGOOilKoJRqGxShU2FHfEpQmFzSdmTXwtg7z6HDuzLIf6yRMIwAj5VrZclQsnKbIwka
-         nnGT+Zz+DNV7zcWpUqSamcVdvm24ublAKfAd0IZYhC5d3fdYjf2Ea76Pg1S60eM0/k/z
-         TJgjcDGZBPeh/Yb1Rf37A/ACQeAoXfbBijNU09G0cpnUvBiE8VD9HOrqe+kLY7vfify3
-         H0kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8QgnP7UE8gcARv7sLJZW+I9q72JODMo6EJTdNQS+2wU=;
-        b=T0WXHpHfGbY/rnCfA8kdsPXpBIeRTrnV3JTMCKHaAkXWoglMQCzUwUT23bFI9T4h6b
-         VwT+D9a2SWjRfltmpB77+NhqG8ab3iqLLD6DNps983nxJw/eKl/9h94Xg++9zHbnnIY7
-         LQsr4JBA/sS9X9J8h3a/VGuOkmjf4bOPw08gsnHexq2O7N9eJYuAPbWaD6BOFRHRmYJy
-         Btep/in/Lht6P9kDql3HHGJPX5uheuiy3j6Wg1HVdZUAsDANRJJJZMvG6FtjoiU65hf/
-         L8B/LoCpL1g7I/PmUdns6mCGVjDQesMOx5n0qAtKswe8SFN1/XFp7dVJuvMi2FoAUHph
-         eFfg==
-X-Gm-Message-State: AOAM530T9FjNz/1tVscYjyBWOxEMauu4vuMNeZAgnPeD0TXIaRJ50dyP
-        wHqaSn5nf4zOLcxfxKLqOnc=
-X-Google-Smtp-Source: ABdhPJzgq/DRYZUuTy6XlEDhoZLKJRWamc37XxFO1vFMmcGnSWJE6gOse8hFzfojkx/YIdUJAwM+Qg==
-X-Received: by 2002:a62:643:0:b0:4f7:2b29:159a with SMTP id 64-20020a620643000000b004f72b29159amr20763476pfg.16.1647810801203;
-        Sun, 20 Mar 2022 14:13:21 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id k10-20020a056a00168a00b004f7e2a550ccsm16708922pfc.78.2022.03.20.14.13.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 14:13:18 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 06:13:16 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Jonas Bonn <jonas@southpole.se>,
-        Openrisc <openrisc@lists.librecores.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 5/5] openrisc: Move to ticket-spinlock
-Message-ID: <YjeY7CfaFKjr8IUc@antec>
-References: <20220319035457.2214979-6-guoren@kernel.org>
- <202203200824.EQJTy8pW-lkp@intel.com>
- <CAJF2gTQXgXJjX6h5d_5tM312Ky_QfCKm-wLZP2SJBuYtHvE9xQ@mail.gmail.com>
- <CAAfxs74xtts3bzMGsVp9fOyxfZzj1vQPgrEsquXFa6AGAAC+_w@mail.gmail.com>
+        Sun, 20 Mar 2022 17:13:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BF11760DC;
+        Sun, 20 Mar 2022 14:12:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84B166123C;
+        Sun, 20 Mar 2022 21:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62BAEC340ED;
+        Sun, 20 Mar 2022 21:12:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647810751;
+        bh=hLpKnRD3ITRJU2ilav2q6ufwlJgxfqoW4ypzibIIJO0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gvyEQIn7viEeCiKVyUWkm5NIC+gdon9weyKl0dvvmfQV7coD9W9r3Fm3YFIBaswu7
+         96DH6zi/irShSC0GHRSpZqCNC8bCtCPbLBfuURaeN4Qkc9I3xyu1B/F55BPSWn0OzT
+         Ye9oyuuXwf6sIwtlTsK8y1u/DBW6np8NXyZkZn/qLVG/nBpb+qAAp0p4fqbV3qMLsS
+         NBCMZIHyBOXJHsA8z7zElfNqEpYeNS6Zml07ADKE9ok/8FxDXBecJlgMr22ZmH0DWR
+         Mi5XDeknn7inOAOtyYJBQ1wqRe084cUC2S92k+IU9sERrPlol06KGCYSH/YhI8T1/H
+         4DYVgaIMdfw/A==
+Date:   Sun, 20 Mar 2022 23:13:31 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm/tpm_ftpm_tee: Return true/false (not 1/0) from bool
+ functions
+Message-ID: <YjeY+7CI6n7gUdVX@kernel.org>
+References: <1647574525-25152-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAfxs74xtts3bzMGsVp9fOyxfZzj1vQPgrEsquXFa6AGAAC+_w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1647574525-25152-1-git-send-email-baihaowen@meizu.com>
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 12:36:31PM +0900, Stafford Horne wrote:
-> On Sun, Mar 20, 2022, 12:05 PM Guo Ren <guoren@kernel.org> wrote:
+On Fri, Mar 18, 2022 at 11:35:25AM +0800, Haowen Bai wrote:
+> Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> functions.
 > 
-> > Hi openrisc guys,
-> >
-> > >    kernel/signal.c:2625:49: sparse:     expected struct sighand_struct
-> > *sighand
-> > >    kernel/signal.c:2625:49: sparse:     got struct sighand_struct
-> > [noderef] __rcu *sighand
-> >
-> > Some warning here, Is that all right? I don't think it is because of
-> > changing arch_spinlock_t from struct qspinlock to atomic_t.
-> >
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+>  drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> I haven't built or tested this series yet.  But this doesn't look like a
-> new problem. It looks like this patch series may have introduced a new
-> instance of the existing issue.
+> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+> index 6e32355..5c23342 100644
+> --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> @@ -177,7 +177,7 @@ static u8 ftpm_tee_tpm_op_status(struct tpm_chip *chip)
+>  
+>  static bool ftpm_tee_tpm_req_canceled(struct tpm_chip *chip, u8 status)
+>  {
+> -	return 0;
+> +	return false;
+>  }
+>  
+>  static const struct tpm_class_ops ftpm_tee_tpm_ops = {
+> -- 
+> 2.7.4
 > 
-> I have some patches to clean up sparse warnings and I've seen this pattern
-> before but haven't spent the time to clean it up. This is a good
-> opportunity to do that now.  Let me have a look in the next few days.
 
-Hello Guo Ren,
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-I was able to build the patch series for OpenRISC, but after applying the
-openrisc SMP kernel build no longer can boot.  It doesn't boot on single core
-system or multi-core systems.  I don't get any console output to help with
-debugging it.
-
-It may take be a bit longer to debug this.
-
--Stafford
+BR, Jarkko

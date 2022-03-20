@@ -2,342 +2,419 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BDF4E1B4E
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 12:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B91114E1B4F
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 12:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244672AbiCTLZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 07:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42828 "EHLO
+        id S244700AbiCTLae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 07:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbiCTLZh (ORCPT
+        with ESMTP id S232223AbiCTLac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 07:25:37 -0400
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329831BE
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 04:24:11 -0700 (PDT)
-Received: (wp-smtpd smtp.tlen.pl 4765 invoked from network); 20 Mar 2022 12:24:08 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1647775448; bh=Mb6YQxTeiTCQKbvPvBuct/l1eebjez49QX7SC8v5on4=;
-          h=Subject:To:Cc:From;
-          b=EQ5A6wSTjYgEv/ckwHhvAAM/p1k6sV+kzgLdeBmpByHIKzWTDh3RoAG83GClN+O50
-           wBrfdVKykhEa6pe75pYRB3Uo2TDyre03q1t4D8lKlePPky9iEQOzIfgva+wkAw5Irw
-           tU9fH2IEQRnzVXCLWf2sYUUjnrzGWFl6/Zp73gPA=
-Received: from aafe9.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.134.9])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <helgaas@kernel.org>; 20 Mar 2022 12:24:08 +0100
-Message-ID: <633193c1-3ffd-9568-6e2b-9e73997a9d8a@o2.pl>
-Date:   Sun, 20 Mar 2022 12:23:56 +0100
+        Sun, 20 Mar 2022 07:30:32 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFB82AE10
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 04:29:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647775748; x=1679311748;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dBq0OSMa9X004PJvexP6BCkyqeRPN1aSAJ0JYfwwMJk=;
+  b=kAUNvX/jHo2z76WYQMVQu1FQ78kki5ptMO7SYrKBMtsHXur3hFWb07Go
+   mrjSpEKvL8WuBlSzbLExoZ34jleGdQK/8NAyepy3JbpZSJUmgs2wMghSJ
+   ftm11WXe80ujYS8QvWtg/QzFXMebOVJWZHOED18tmvEa3TrKNojpnPYc6
+   rK9u1u+ufyhTdPYm5TZr185sn0Ri+wS1EIHJkXyKBUkl4I9X+xpewpBP9
+   udZQ8fk7VgZM7Q3OBxObIzsC3hSn4EJIAb4XUMI9k7xzs0AJFivfmg+Rh
+   vEaLg1AphrPQZr3u27nHc5IFJY/lN9pCYHCZ7AtwJXaMHGjBclISBam/D
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="239542986"
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="239542986"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 04:29:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="518081222"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 20 Mar 2022 04:29:06 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nVtk9-000Grw-RW; Sun, 20 Mar 2022 11:29:05 +0000
+Date:   Sun, 20 Mar 2022 19:28:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [bvanassche:ufs-for-next 317/317]
+ drivers/scsi/ufs/ufshcd-crypto.c:24:30: error: 'struct ufs_hba' has no
+ member named 'crypto_cfg_register'
+Message-ID: <202203201943.V8TSsqLr-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] x86/pci: drop ServerWorks / Broadcom CNB20LE PCI host
- bridge driver
-Content-Language: en-GB
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Ira W . Snyder" <ira.snyder@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20220318165535.GA840063@bhelgaas>
-From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
-In-Reply-To: <20220318165535.GA840063@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 5a29b842077e77491d24652796bff7ff
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [gcO0]                               
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W dniu 18.03.2022 o 17:55, Bjorn Helgaas pisze:
-> On Thu, Mar 10, 2022 at 08:34:19PM +0100, Mateusz Jończyk wrote:
->> The ServerWorks / Broadcom CNB20LE chipset was probably designed
->> for Intel Pentium III processors only. The dedicated driver for it
->> (implemented in arch/x86/pci/broadcom_bus.c) reads PCI windows
->> from this chipset, which is (if I understand correctly) needed mostly
->> for PCI hotplug and "option ROM mapping" [2]. This driver was written
->> without access to the documentation of CNB20LE and caused problems on
->> some servers, so it was soon disabled for all systems with ACPI enabled.
->> It appears that most systems with CNB20LE support ACPI and it is not
->> known whether the driver works correctly on most of those that don't.
->>
->> On such old platforms, PCI hotplug is typically not used and
->> "reliability" (i.e. that the system boots at all) is more important.
->> So, delete this driver as it can cause more harm then good and there is
->> little benefit in keeping it in the kernel.
->>
->> Details:
->>
->> I was unable to find a description of this chipset. However, it was
->> almost exclusively used with the Pentium III processor (this CPU model
->> was used in all references to it that I examined where the CPU model
->> was provided: dmesgs in [1] and [2]; [3] page 2; [4]-[7]).
->>
->> The CNB20LE driver was added to the kernel in 2010 (many years after
->> the introduction of Pentium III) in Linux 2.6.35 in
->> commit 3f6ea84a3035 ("PCI: read memory ranges out of Broadcom CNB20LE host bridge")
->> Soon, it caused problems on some Compaq Proliant DL320 servers [2] and
->> it was decided to disable the driver on all systems with ACPI enabled.
->> This went in
->> commit 30e664afb5cb ("x86/PCI: don't use native Broadcom CNB20LE driver when ACPI is available")
->>
->> However, most of these systems mentioned (all except for [3], where it is not
->> known and [7]) support ACPI. I think that dmesg from the original system
->> on which the driver was developed can be found in [7]. It is possible
->> that CNB30LE used the same PCI ID and was also detected by this driver
->> [7], but it probably also was used with Pentium III.
-[snip]
->>
->> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Borislav Petkov <bp@alien8.de>
->> Cc: Dave Hansen <dave.hansen@linux.intel.com>
->> Cc: x86@kernel.org
->> Cc: linux-pci@vger.kernel.org
->> Cc: "H. Peter Anvin" <hpa@zytor.com>
->> Cc: Ira W. Snyder <ira.snyder@gmail.com>
->> Cc: Bjorn Helgaas <bhelgaas@google.com>
->>
->> ---
->>
->> Hello,
->>
->> When trying to document CONFIG_PCI_CNB20LE_QUIRK for Kconfig I realised
->> that this driver probably may be removed from the kernel.
->>
->> I am not sure what exactly the drawbacks of missing PCI bus window
->> information for this chipset are. In [2] there is a comment by Mr Bjorn
->> Helgaas:
->>         I think the possibilities are:
->>         [...]
->>         2) Ignore _CRS and make broadcom_bus.c do nothing.  This gets us
->>         back to the working situation of F13 [Fedora 13].  Since we
->>         don't have any host bridge information, things like PCI hotplug
->>         and option ROM mapping may not work, but that's the way it's
->>         always been on these boxes.
->>
->> I understand how host bridge windows are required for PCI hotplug, but I
->> don't know why they may be necessary for option ROM mapping.
-> The windows are required for management of PCI MMIO space, i.e., we
-> can't assign space to PCI BARs unless we know what space is available
-> to be assigned.  Mapping option ROMs is one instance where we may
-> need to assign space for a BAR.
->
-> Presumably 3f6ea84a3035 ("PCI: read memory ranges out of Broadcom
-> CNB20LE host bridge") was added because it fixed a problem. 
+tree:   https://github.com/bvanassche/linux ufs-for-next
+head:   905917fe701f16ad2d895c3fef85ca92efd86a06
+commit: 905917fe701f16ad2d895c3fef85ca92efd86a06 [317/317] scsi: ufs: Split struct ufs_hba
+config: arm-randconfig-r021-20220320 (https://download.01.org/0day-ci/archive/20220320/202203201943.V8TSsqLr-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/bvanassche/linux/commit/905917fe701f16ad2d895c3fef85ca92efd86a06
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche ufs-for-next
+        git checkout 905917fe701f16ad2d895c3fef85ca92efd86a06
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/scsi/ufs/
 
-The main advertised feature of this driver is PCI hotplug support.
-It is the only benefit mentioned in Kconfig and the description of this commit,
-so I think it was the primary motivation for writing this driver.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Would we
-> also fix a problem by removing this? I hesitate to remove it on the
-> grounds of "it might cause more harm than good" unless we have actual
-> reports of problems.
+All errors (new ones prefixed by >>):
 
-This driver looks unused and broken, and was designed for very old hardware.
-It is probably unnecessary to keep it in the kernel as PCI hotplug is typically
-not used for hardware that is so old. There are no actual problem reports, though.
+   drivers/scsi/ufs/ufshcd-crypto.c: In function 'ufshcd_program_key':
+>> drivers/scsi/ufs/ufshcd-crypto.c:24:30: error: 'struct ufs_hba' has no member named 'crypto_cfg_register'
+      24 |         u32 slot_offset = hba->crypto_cfg_register + slot * sizeof(*cfg);
+         |                              ^~
+   In file included from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/module.h:12,
+                    from drivers/scsi/ufs/ufshcd.h:15,
+                    from drivers/scsi/ufs/ufshcd-crypto.c:6:
+   drivers/scsi/ufs/ufshcd-crypto.c: In function 'ufshcd_crypto_keyslot_program':
+>> include/linux/container_of.h:19:54: error: 'struct ufs_hba' has no member named 'crypto_profile'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                                                      ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   drivers/scsi/ufs/ufshcd-crypto.c:56:17: note: in expansion of macro 'container_of'
+      56 |                 container_of(profile, struct ufs_hba, crypto_profile);
+         |                 ^~~~~~~~~~~~
+>> include/linux/compiler_types.h:287:27: error: expression in static assertion is not an integer
+     287 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   drivers/scsi/ufs/ufshcd-crypto.c:56:17: note: in expansion of macro 'container_of'
+      56 |                 container_of(profile, struct ufs_hba, crypto_profile);
+         |                 ^~~~~~~~~~~~
+   In file included from <command-line>:
+>> include/linux/compiler_types.h:140:41: error: 'struct ufs_hba' has no member named 'crypto_profile'
+     140 | #define __compiler_offsetof(a, b)       __builtin_offsetof(a, b)
+         |                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/stddef.h:17:33: note: in expansion of macro '__compiler_offsetof'
+      17 | #define offsetof(TYPE, MEMBER)  __compiler_offsetof(TYPE, MEMBER)
+         |                                 ^~~~~~~~~~~~~~~~~~~
+   include/linux/container_of.h:22:28: note: in expansion of macro 'offsetof'
+      22 |         ((type *)(__mptr - offsetof(type, member))); })
+         |                            ^~~~~~~~
+   drivers/scsi/ufs/ufshcd-crypto.c:56:17: note: in expansion of macro 'container_of'
+      56 |                 container_of(profile, struct ufs_hba, crypto_profile);
+         |                 ^~~~~~~~~~~~
+>> drivers/scsi/ufs/ufshcd-crypto.c:57:59: error: 'struct ufs_hba' has no member named 'crypto_cap_array'
+      57 |         const union ufs_crypto_cap_entry *ccap_array = hba->crypto_cap_array;
+         |                                                           ^~
+>> drivers/scsi/ufs/ufshcd-crypto.c:67:30: error: 'struct ufs_hba' has no member named 'crypto_capabilities'; did you mean 'capabilities'?
+      67 |         for (i = 0; i < hba->crypto_capabilities.num_crypto_cap; i++) {
+         |                              ^~~~~~~~~~~~~~~~~~~
+         |                              capabilities
+   In file included from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/module.h:12,
+                    from drivers/scsi/ufs/ufshcd.h:15,
+                    from drivers/scsi/ufs/ufshcd-crypto.c:6:
+   drivers/scsi/ufs/ufshcd-crypto.c: In function 'ufshcd_crypto_keyslot_evict':
+>> include/linux/container_of.h:19:54: error: 'struct ufs_hba' has no member named 'crypto_profile'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                                                      ^~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   drivers/scsi/ufs/ufshcd-crypto.c:114:17: note: in expansion of macro 'container_of'
+     114 |                 container_of(profile, struct ufs_hba, crypto_profile);
+         |                 ^~~~~~~~~~~~
+>> include/linux/compiler_types.h:287:27: error: expression in static assertion is not an integer
+     287 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   drivers/scsi/ufs/ufshcd-crypto.c:114:17: note: in expansion of macro 'container_of'
+     114 |                 container_of(profile, struct ufs_hba, crypto_profile);
+         |                 ^~~~~~~~~~~~
+   In file included from <command-line>:
+>> include/linux/compiler_types.h:140:41: error: 'struct ufs_hba' has no member named 'crypto_profile'
+     140 | #define __compiler_offsetof(a, b)       __builtin_offsetof(a, b)
+         |                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/stddef.h:17:33: note: in expansion of macro '__compiler_offsetof'
+      17 | #define offsetof(TYPE, MEMBER)  __compiler_offsetof(TYPE, MEMBER)
+         |                                 ^~~~~~~~~~~~~~~~~~~
+   include/linux/container_of.h:22:28: note: in expansion of macro 'offsetof'
+      22 |         ((type *)(__mptr - offsetof(type, member))); })
+         |                            ^~~~~~~~
+   drivers/scsi/ufs/ufshcd-crypto.c:114:17: note: in expansion of macro 'container_of'
+     114 |                 container_of(profile, struct ufs_hba, crypto_profile);
+         |                 ^~~~~~~~~~~~
+   drivers/scsi/ufs/ufshcd-crypto.c: In function 'ufshcd_crypto_enable':
+>> drivers/scsi/ufs/ufshcd-crypto.c:125:43: error: 'struct ufs_hba' has no member named 'crypto_profile'
+     125 |         blk_crypto_reprogram_all_keys(&hba->crypto_profile);
+         |                                           ^~
+   drivers/scsi/ufs/ufshcd-crypto.c: In function 'ufshcd_hba_init_crypto_capabilities':
+   drivers/scsi/ufs/ufshcd-crypto.c:171:14: error: 'struct ufs_hba' has no member named 'crypto_capabilities'; did you mean 'capabilities'?
+     171 |         hba->crypto_capabilities.reg_val =
+         |              ^~~~~~~~~~~~~~~~~~~
+         |              capabilities
+   drivers/scsi/ufs/ufshcd-crypto.c:173:12: error: 'struct ufs_hba' has no member named 'crypto_cfg_register'
+     173 |         hba->crypto_cfg_register =
+         |            ^~
+   drivers/scsi/ufs/ufshcd-crypto.c:174:27: error: 'struct ufs_hba' has no member named 'crypto_capabilities'; did you mean 'capabilities'?
+     174 |                 (u32)hba->crypto_capabilities.config_array_ptr * 0x100;
+         |                           ^~~~~~~~~~~~~~~~~~~
+         |                           capabilities
+   drivers/scsi/ufs/ufshcd-crypto.c:175:12: error: 'struct ufs_hba' has no member named 'crypto_cap_array'
+     175 |         hba->crypto_cap_array =
+         |            ^~
+   drivers/scsi/ufs/ufshcd-crypto.c:176:45: error: 'struct ufs_hba' has no member named 'crypto_capabilities'; did you mean 'capabilities'?
+     176 |                 devm_kcalloc(hba->dev, hba->crypto_capabilities.num_crypto_cap,
+         |                                             ^~~~~~~~~~~~~~~~~~~
+         |                                             capabilities
+   drivers/scsi/ufs/ufshcd-crypto.c:177:40: error: 'struct ufs_hba' has no member named 'crypto_cap_array'
+     177 |                              sizeof(hba->crypto_cap_array[0]), GFP_KERNEL);
+         |                                        ^~
+   In file included from include/linux/build_bug.h:5,
+                    from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/module.h:12,
+                    from drivers/scsi/ufs/ufshcd.h:15,
+                    from drivers/scsi/ufs/ufshcd-crypto.c:6:
+   drivers/scsi/ufs/ufshcd-crypto.c:178:17: error: 'struct ufs_hba' has no member named 'crypto_cap_array'
+     178 |         if (!hba->crypto_cap_array) {
+         |                 ^~
+   include/linux/compiler.h:58:52: note: in definition of macro '__trace_if_var'
+      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+   drivers/scsi/ufs/ufshcd-crypto.c:178:9: note: in expansion of macro 'if'
+     178 |         if (!hba->crypto_cap_array) {
+         |         ^~
+   drivers/scsi/ufs/ufshcd-crypto.c:178:17: error: 'struct ufs_hba' has no member named 'crypto_cap_array'
+     178 |         if (!hba->crypto_cap_array) {
+         |                 ^~
+   include/linux/compiler.h:58:61: note: in definition of macro '__trace_if_var'
+      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                             ^~~~
+   drivers/scsi/ufs/ufshcd-crypto.c:178:9: note: in expansion of macro 'if'
+     178 |         if (!hba->crypto_cap_array) {
+         |         ^~
+   drivers/scsi/ufs/ufshcd-crypto.c:178:17: error: 'struct ufs_hba' has no member named 'crypto_cap_array'
+     178 |         if (!hba->crypto_cap_array) {
+         |                 ^~
+   include/linux/compiler.h:69:10: note: in definition of macro '__trace_if_value'
+      69 |         (cond) ?                                        \
+         |          ^~~~
+   include/linux/compiler.h:56:28: note: in expansion of macro '__trace_if_var'
+      56 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ^~~~~~~~~~~~~~
+   drivers/scsi/ufs/ufshcd-crypto.c:178:9: note: in expansion of macro 'if'
+     178 |         if (!hba->crypto_cap_array) {
+         |         ^~
+   drivers/scsi/ufs/ufshcd-crypto.c:185:39: error: 'struct ufs_hba' has no member named 'crypto_profile'
+     185 |                         hba->dev, &hba->crypto_profile,
+         |                                       ^~
+   drivers/scsi/ufs/ufshcd-crypto.c:186:30: error: 'struct ufs_hba' has no member named 'crypto_capabilities'; did you mean 'capabilities'?
+     186 |                         hba->crypto_capabilities.config_count + 1);
+         |                              ^~~~~~~~~~~~~~~~~~~
+         |                              capabilities
+   drivers/scsi/ufs/ufshcd-crypto.c:190:12: error: 'struct ufs_hba' has no member named 'crypto_profile'
+     190 |         hba->crypto_profile.ll_ops = ufshcd_crypto_ops;
+         |            ^~
+   drivers/scsi/ufs/ufshcd-crypto.c:192:12: error: 'struct ufs_hba' has no member named 'crypto_profile'
+     192 |         hba->crypto_profile.max_dun_bytes_supported = 8;
+         |            ^~
+   drivers/scsi/ufs/ufshcd-crypto.c:193:12: error: 'struct ufs_hba' has no member named 'crypto_profile'
+     193 |         hba->crypto_profile.dev = hba->dev;
+         |            ^~
+   drivers/scsi/ufs/ufshcd-crypto.c:199:42: error: 'struct ufs_hba' has no member named 'crypto_capabilities'; did you mean 'capabilities'?
+     199 |         for (cap_idx = 0; cap_idx < hba->crypto_capabilities.num_crypto_cap;
+         |                                          ^~~~~~~~~~~~~~~~~~~
+         |                                          capabilities
+   drivers/scsi/ufs/ufshcd-crypto.c:201:20: error: 'struct ufs_hba' has no member named 'crypto_cap_array'
+     201 |                 hba->crypto_cap_array[cap_idx].reg_val =
+         |                    ^~
+   drivers/scsi/ufs/ufshcd-crypto.c:206:52: error: 'struct ufs_hba' has no member named 'crypto_cap_array'
+     206 |                                                 hba->crypto_cap_array[cap_idx]);
+         |                                                    ^~
+   drivers/scsi/ufs/ufshcd-crypto.c:208:28: error: 'struct ufs_hba' has no member named 'crypto_profile'
+     208 |                         hba->crypto_profile.modes_supported[blk_mode_num] |=
+         |                            ^~
+   drivers/scsi/ufs/ufshcd-crypto.c:209:36: error: 'struct ufs_hba' has no member named 'crypto_cap_array'
+     209 |                                 hba->crypto_cap_array[cap_idx].sdus_mask * 512;
+         |                                    ^~
+   drivers/scsi/ufs/ufshcd-crypto.c: In function 'ufshcd_init_crypto':
+   drivers/scsi/ufs/ufshcd-crypto.c:232:36: error: 'struct ufs_hba' has no member named 'crypto_capabilities'; did you mean 'capabilities'?
+     232 |         for (slot = 0; slot < hba->crypto_capabilities.config_count + 1; slot++)
+         |                                    ^~~~~~~~~~~~~~~~~~~
+         |                                    capabilities
+   drivers/scsi/ufs/ufshcd-crypto.c: In function 'ufshcd_crypto_register':
+   drivers/scsi/ufs/ufshcd-crypto.c:239:41: error: 'struct ufs_hba' has no member named 'crypto_profile'
+     239 |                 blk_crypto_register(&hba->crypto_profile, q);
 
-If this driver will not be removed or marked BROKEN yet, I think that
-PCI_CNB20LE_QUIRK could be made to depend on X86_32.
-I have pretty good data that this chipset works only with 32-bit processors.
 
-Greetings,
+vim +24 drivers/scsi/ufs/ufshcd-crypto.c
 
-Mateusz
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   19  
+1bc726e26ef317 Eric Biggers    2020-07-10   20  static int ufshcd_program_key(struct ufs_hba *hba,
+1bc726e26ef317 Eric Biggers    2020-07-10   21  			      const union ufs_crypto_cfg_entry *cfg, int slot)
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   22  {
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   23  	int i;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  @24  	u32 slot_offset = hba->crypto_cfg_register + slot * sizeof(*cfg);
+1bc726e26ef317 Eric Biggers    2020-07-10   25  	int err = 0;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   26  
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   27  	ufshcd_hold(hba, false);
+1bc726e26ef317 Eric Biggers    2020-07-10   28  
+1bc726e26ef317 Eric Biggers    2020-07-10   29  	if (hba->vops && hba->vops->program_key) {
+1bc726e26ef317 Eric Biggers    2020-07-10   30  		err = hba->vops->program_key(hba, cfg, slot);
+1bc726e26ef317 Eric Biggers    2020-07-10   31  		goto out;
+1bc726e26ef317 Eric Biggers    2020-07-10   32  	}
+1bc726e26ef317 Eric Biggers    2020-07-10   33  
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   34  	/* Ensure that CFGE is cleared before programming the key */
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   35  	ufshcd_writel(hba, 0, slot_offset + 16 * sizeof(cfg->reg_val[0]));
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   36  	for (i = 0; i < 16; i++) {
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   37  		ufshcd_writel(hba, le32_to_cpu(cfg->reg_val[i]),
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   38  			      slot_offset + i * sizeof(cfg->reg_val[0]));
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   39  	}
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   40  	/* Write dword 17 */
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   41  	ufshcd_writel(hba, le32_to_cpu(cfg->reg_val[17]),
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   42  		      slot_offset + 17 * sizeof(cfg->reg_val[0]));
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   43  	/* Dword 16 must be written last */
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   44  	ufshcd_writel(hba, le32_to_cpu(cfg->reg_val[16]),
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   45  		      slot_offset + 16 * sizeof(cfg->reg_val[0]));
+1bc726e26ef317 Eric Biggers    2020-07-10   46  out:
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   47  	ufshcd_release(hba);
+1bc726e26ef317 Eric Biggers    2020-07-10   48  	return err;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   49  }
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   50  
+cb77cb5abe1f4f Eric Biggers    2021-10-18   51  static int ufshcd_crypto_keyslot_program(struct blk_crypto_profile *profile,
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   52  					 const struct blk_crypto_key *key,
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   53  					 unsigned int slot)
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   54  {
+cb77cb5abe1f4f Eric Biggers    2021-10-18   55  	struct ufs_hba *hba =
+cb77cb5abe1f4f Eric Biggers    2021-10-18   56  		container_of(profile, struct ufs_hba, crypto_profile);
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  @57  	const union ufs_crypto_cap_entry *ccap_array = hba->crypto_cap_array;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   58  	const struct ufs_crypto_alg_entry *alg =
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   59  			&ufs_crypto_algs[key->crypto_cfg.crypto_mode];
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   60  	u8 data_unit_mask = key->crypto_cfg.data_unit_size / 512;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   61  	int i;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   62  	int cap_idx = -1;
+6500251e590657 Pujin Shi       2020-10-02   63  	union ufs_crypto_cfg_entry cfg = {};
+1bc726e26ef317 Eric Biggers    2020-07-10   64  	int err;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   65  
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   66  	BUILD_BUG_ON(UFS_CRYPTO_KEY_SIZE_INVALID != 0);
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  @67  	for (i = 0; i < hba->crypto_capabilities.num_crypto_cap; i++) {
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   68  		if (ccap_array[i].algorithm_id == alg->ufs_alg &&
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   69  		    ccap_array[i].key_size == alg->ufs_key_size &&
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   70  		    (ccap_array[i].sdus_mask & data_unit_mask)) {
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   71  			cap_idx = i;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   72  			break;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   73  		}
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   74  	}
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   75  
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   76  	if (WARN_ON(cap_idx < 0))
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   77  		return -EOPNOTSUPP;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   78  
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   79  	cfg.data_unit_size = data_unit_mask;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   80  	cfg.crypto_cap_idx = cap_idx;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   81  	cfg.config_enable = UFS_CRYPTO_CONFIGURATION_ENABLE;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   82  
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   83  	if (ccap_array[cap_idx].algorithm_id == UFS_CRYPTO_ALG_AES_XTS) {
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   84  		/* In XTS mode, the blk_crypto_key's size is already doubled */
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   85  		memcpy(cfg.crypto_key, key->raw, key->size/2);
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   86  		memcpy(cfg.crypto_key + UFS_CRYPTO_KEY_MAX_SIZE/2,
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   87  		       key->raw + key->size/2, key->size/2);
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   88  	} else {
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   89  		memcpy(cfg.crypto_key, key->raw, key->size);
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   90  	}
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   91  
+1bc726e26ef317 Eric Biggers    2020-07-10   92  	err = ufshcd_program_key(hba, &cfg, slot);
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   93  
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   94  	memzero_explicit(&cfg, sizeof(cfg));
+1bc726e26ef317 Eric Biggers    2020-07-10   95  	return err;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   96  }
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   97  
+1bc726e26ef317 Eric Biggers    2020-07-10   98  static int ufshcd_clear_keyslot(struct ufs_hba *hba, int slot)
+70297a8ac7a7a4 Satya Tangirala 2020-07-06   99  {
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  100  	/*
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  101  	 * Clear the crypto cfg on the device. Clearing CFGE
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  102  	 * might not be sufficient, so just clear the entire cfg.
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  103  	 */
+6500251e590657 Pujin Shi       2020-10-02  104  	union ufs_crypto_cfg_entry cfg = {};
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  105  
+1bc726e26ef317 Eric Biggers    2020-07-10  106  	return ufshcd_program_key(hba, &cfg, slot);
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  107  }
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  108  
+cb77cb5abe1f4f Eric Biggers    2021-10-18  109  static int ufshcd_crypto_keyslot_evict(struct blk_crypto_profile *profile,
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  110  				       const struct blk_crypto_key *key,
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  111  				       unsigned int slot)
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  112  {
+cb77cb5abe1f4f Eric Biggers    2021-10-18  113  	struct ufs_hba *hba =
+cb77cb5abe1f4f Eric Biggers    2021-10-18  114  		container_of(profile, struct ufs_hba, crypto_profile);
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  115  
+1bc726e26ef317 Eric Biggers    2020-07-10  116  	return ufshcd_clear_keyslot(hba, slot);
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  117  }
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  118  
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  119  bool ufshcd_crypto_enable(struct ufs_hba *hba)
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  120  {
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  121  	if (!(hba->caps & UFSHCD_CAP_CRYPTO))
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  122  		return false;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  123  
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  124  	/* Reset might clear all keys, so reprogram all the keys. */
+cb77cb5abe1f4f Eric Biggers    2021-10-18 @125  	blk_crypto_reprogram_all_keys(&hba->crypto_profile);
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  126  	return true;
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  127  }
+70297a8ac7a7a4 Satya Tangirala 2020-07-06  128  
 
-> Bjorn
->
->> ---
->>  arch/x86/Kconfig            |  13 -----
->>  arch/x86/pci/Makefile       |   1 -
->>  arch/x86/pci/broadcom_bus.c | 112 ------------------------------------
->>  arch/x86/pci/bus_numa.c     |   2 +-
->>  4 files changed, 1 insertion(+), 127 deletions(-)
->>  delete mode 100644 arch/x86/pci/broadcom_bus.c
->>
->> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->> index 9f5bd41bf660..577a588fe1ae 100644
->> --- a/arch/x86/Kconfig
->> +++ b/arch/x86/Kconfig
->> @@ -2656,19 +2656,6 @@ config MMCONF_FAM10H
->>  	def_bool y
->>  	depends on X86_64 && PCI_MMCONFIG && ACPI
->>  
->> -config PCI_CNB20LE_QUIRK
->> -	bool "Read CNB20LE Host Bridge Windows" if EXPERT
->> -	depends on PCI
->> -	help
->> -	  Read the PCI windows out of the CNB20LE host bridge. This allows
->> -	  PCI hotplug to work on systems with the CNB20LE chipset which do
->> -	  not have ACPI.
->> -
->> -	  There's no public spec for this chipset, and this functionality
->> -	  is known to be incomplete.
->> -
->> -	  You should say N unless you know you need this.
->> -
->>  config ISA_BUS
->>  	bool "ISA bus support on modern systems" if EXPERT
->>  	help
->> diff --git a/arch/x86/pci/Makefile b/arch/x86/pci/Makefile
->> index 48bcada5cabe..ca343d8c7964 100644
->> --- a/arch/x86/pci/Makefile
->> +++ b/arch/x86/pci/Makefile
->> @@ -22,6 +22,5 @@ obj-y				+= common.o early.o
->>  obj-y				+= bus_numa.o
->>  
->>  obj-$(CONFIG_AMD_NB)		+= amd_bus.o
->> -obj-$(CONFIG_PCI_CNB20LE_QUIRK)	+= broadcom_bus.o
->>  
->>  ccflags-$(CONFIG_PCI_DEBUG)	+= -DDEBUG
->> diff --git a/arch/x86/pci/broadcom_bus.c b/arch/x86/pci/broadcom_bus.c
->> deleted file mode 100644
->> index 2db73613cada..000000000000
->> --- a/arch/x86/pci/broadcom_bus.c
->> +++ /dev/null
->> @@ -1,112 +0,0 @@
->> -// SPDX-License-Identifier: GPL-2.0-or-later
->> -/*
->> - * Read address ranges from a Broadcom CNB20LE Host Bridge
->> - *
->> - * Copyright (c) 2010 Ira W. Snyder <iws@ovro.caltech.edu>
->> - */
->> -
->> -#include <linux/acpi.h>
->> -#include <linux/delay.h>
->> -#include <linux/dmi.h>
->> -#include <linux/pci.h>
->> -#include <linux/init.h>
->> -#include <asm/pci_x86.h>
->> -#include <asm/pci-direct.h>
->> -
->> -#include "bus_numa.h"
->> -
->> -static void __init cnb20le_res(u8 bus, u8 slot, u8 func)
->> -{
->> -	struct pci_root_info *info;
->> -	struct pci_root_res *root_res;
->> -	struct resource res;
->> -	u16 word1, word2;
->> -	u8 fbus, lbus;
->> -
->> -	/* read the PCI bus numbers */
->> -	fbus = read_pci_config_byte(bus, slot, func, 0x44);
->> -	lbus = read_pci_config_byte(bus, slot, func, 0x45);
->> -	info = alloc_pci_root_info(fbus, lbus, 0, 0);
->> -
->> -	/*
->> -	 * Add the legacy IDE ports on bus 0
->> -	 *
->> -	 * These do not exist anywhere in the bridge registers, AFAICT. I do
->> -	 * not have the datasheet, so this is the best I can do.
->> -	 */
->> -	if (fbus == 0) {
->> -		update_res(info, 0x01f0, 0x01f7, IORESOURCE_IO, 0);
->> -		update_res(info, 0x03f6, 0x03f6, IORESOURCE_IO, 0);
->> -		update_res(info, 0x0170, 0x0177, IORESOURCE_IO, 0);
->> -		update_res(info, 0x0376, 0x0376, IORESOURCE_IO, 0);
->> -		update_res(info, 0xffa0, 0xffaf, IORESOURCE_IO, 0);
->> -	}
->> -
->> -	/* read the non-prefetchable memory window */
->> -	word1 = read_pci_config_16(bus, slot, func, 0xc0);
->> -	word2 = read_pci_config_16(bus, slot, func, 0xc2);
->> -	if (word1 != word2) {
->> -		res.start = ((resource_size_t) word1 << 16) | 0x0000;
->> -		res.end   = ((resource_size_t) word2 << 16) | 0xffff;
->> -		res.flags = IORESOURCE_MEM;
->> -		update_res(info, res.start, res.end, res.flags, 0);
->> -	}
->> -
->> -	/* read the prefetchable memory window */
->> -	word1 = read_pci_config_16(bus, slot, func, 0xc4);
->> -	word2 = read_pci_config_16(bus, slot, func, 0xc6);
->> -	if (word1 != word2) {
->> -		res.start = ((resource_size_t) word1 << 16) | 0x0000;
->> -		res.end   = ((resource_size_t) word2 << 16) | 0xffff;
->> -		res.flags = IORESOURCE_MEM | IORESOURCE_PREFETCH;
->> -		update_res(info, res.start, res.end, res.flags, 0);
->> -	}
->> -
->> -	/* read the IO port window */
->> -	word1 = read_pci_config_16(bus, slot, func, 0xd0);
->> -	word2 = read_pci_config_16(bus, slot, func, 0xd2);
->> -	if (word1 != word2) {
->> -		res.start = word1;
->> -		res.end   = word2;
->> -		res.flags = IORESOURCE_IO;
->> -		update_res(info, res.start, res.end, res.flags, 0);
->> -	}
->> -
->> -	/* print information about this host bridge */
->> -	res.start = fbus;
->> -	res.end   = lbus;
->> -	res.flags = IORESOURCE_BUS;
->> -	printk(KERN_INFO "CNB20LE PCI Host Bridge (domain 0000 %pR)\n", &res);
->> -
->> -	list_for_each_entry(root_res, &info->resources, list)
->> -		printk(KERN_INFO "host bridge window %pR\n", &root_res->res);
->> -}
->> -
->> -static int __init broadcom_postcore_init(void)
->> -{
->> -	u8 bus = 0, slot = 0;
->> -	u32 id;
->> -	u16 vendor, device;
->> -
->> -#ifdef CONFIG_ACPI
->> -	/*
->> -	 * We should get host bridge information from ACPI unless the BIOS
->> -	 * doesn't support it.
->> -	 */
->> -	if (!acpi_disabled && acpi_os_get_root_pointer())
->> -		return 0;
->> -#endif
->> -
->> -	id = read_pci_config(bus, slot, 0, PCI_VENDOR_ID);
->> -	vendor = id & 0xffff;
->> -	device = (id >> 16) & 0xffff;
->> -
->> -	if (vendor == PCI_VENDOR_ID_SERVERWORKS &&
->> -	    device == PCI_DEVICE_ID_SERVERWORKS_LE) {
->> -		cnb20le_res(bus, slot, 0);
->> -		cnb20le_res(bus, slot, 1);
->> -	}
->> -	return 0;
->> -}
->> -
->> -postcore_initcall(broadcom_postcore_init);
->> diff --git a/arch/x86/pci/bus_numa.c b/arch/x86/pci/bus_numa.c
->> index 2752c02e3f0e..b4f5e668812e 100644
->> --- a/arch/x86/pci/bus_numa.c
->> +++ b/arch/x86/pci/bus_numa.c
->> @@ -59,7 +59,7 @@ void x86_pci_root_bus_resources(int bus, struct list_head *resources)
->>  default_resources:
->>  	/*
->>  	 * We don't have any host bridge aperture information from the
->> -	 * "native host bridge drivers," e.g., amd_bus or broadcom_bus,
->> +	 * "native host bridge drivers", e.g. amd_bus,
->>  	 * so fall back to the defaults historically used by pci_create_bus().
->>  	 */
->>  	printk(KERN_DEBUG "PCI: root bus %02x: using default resources\n", bus);
->>
->> base-commit: ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2
->> -- 
->> 2.25.1
->>
+:::::: The code at line 24 was first introduced by commit
+:::::: 70297a8ac7a7a4a3284c2eb20fefefbe72dab338 scsi: ufs: UFS crypto API
 
+:::::: TO: Satya Tangirala <satyat@google.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

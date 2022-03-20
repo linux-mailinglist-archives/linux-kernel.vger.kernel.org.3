@@ -2,192 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B13454E1D18
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 18:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B32D4E1D28
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 18:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245715AbiCTRYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 13:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S245721AbiCTRdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 13:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245698AbiCTRY2 (ORCPT
+        with ESMTP id S229713AbiCTRdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 13:24:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857D426E2;
-        Sun, 20 Mar 2022 10:22:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sun, 20 Mar 2022 13:33:35 -0400
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F42C1777C5
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 10:32:08 -0700 (PDT)
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4KM4Yx48lbz1qy4d;
+        Sun, 20 Mar 2022 18:32:05 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4KM4Yw6JJxz1qqkC;
+        Sun, 20 Mar 2022 18:32:04 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id AZNAXHq-zqdT; Sun, 20 Mar 2022 18:32:03 +0100 (CET)
+X-Auth-Info: PRG5CVsyc2awA5undKWlsYbTr46vvzvy3CjZzJKLMMmL+/aS5lMla6dWJ55goAm+
+Received: from igel.home (ppp-46-244-164-143.dynamic.mnet-online.de [46.244.164.143])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34F77B80EE5;
-        Sun, 20 Mar 2022 17:22:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A896C340E9;
-        Sun, 20 Mar 2022 17:22:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647796976;
-        bh=JQECpMcoOI6HhlrXeGL0n9bXm/PyRPOysYHPy2+o1mM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NMpwFlA3KwuTp7IV3o+MUowc+aMaqP6AVMPex2wGz/oY4aTG7qidcYEcuV2GzLzxt
-         9KImuDFfYJfnTFXnGdTuIkc/PxC79ceY6xdwyLLNEb98QqP52zTD9ClBpUK4UX9nit
-         DAkn2k/WVRap/ggaq/7D+5Fl1C/b7JOxqIs7YEaft1J5ewwdvmIxMh8BNFwenbUdnB
-         ypau4CpDrWCzQYHm4Mz3FILM75HCwOJsdZbSmMxFABdoc0Ms75C28RYY2ehhGOCek6
-         MM6qK0FslkSoqYlQFgUuvLNvUPdBjpBHlgEoIZwHpAda5+KtC78kfsdVk6sG0ZTPHN
-         bpfSA/7Fm1nqw==
-Date:   Sun, 20 Mar 2022 17:30:21 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     dan@dlrobertson.com, andy.shevchenko@gmail.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/5] iio: accel: bma400: Add separate channel for
- step counter
-Message-ID: <20220320173021.220ee3c6@jic23-huawei>
-In-Reply-To: <20220319181023.8090-5-jagathjog1996@gmail.com>
-References: <20220319181023.8090-1-jagathjog1996@gmail.com>
-        <20220319181023.8090-5-jagathjog1996@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Sun, 20 Mar 2022 18:32:03 +0100 (CET)
+Received: by igel.home (Postfix, from userid 1000)
+        id 68B1B2C3A4A; Sun, 20 Mar 2022 18:32:03 +0100 (CET)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     John Crispin <john@phrozen.org>
+Cc:     trix@redhat.com, toke@toke.dk, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ath9k: initialize arrays at compile time
+References: <20220320152028.2263518-1-trix@redhat.com>
+        <af6042d0-952f-f497-57e7-37fef45a1f76@phrozen.org>
+X-Yow:  I'm using my X-RAY VISION to obtain a rare glimpse of the
+ INNER WORKINGS of this POTATO!!
+Date:   Sun, 20 Mar 2022 18:32:03 +0100
+In-Reply-To: <af6042d0-952f-f497-57e7-37fef45a1f76@phrozen.org> (John
+        Crispin's message of "Sun, 20 Mar 2022 17:48:31 +0100")
+Message-ID: <87a6dko7ho.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 19 Mar 2022 23:40:22 +0530
-Jagath Jog J <jagathjog1996@gmail.com> wrote:
+On Mär 20 2022, John Crispin wrote:
 
-> Added channel for step counter which can be enable or disable
-> through the sysfs interface.
-> 
-> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
-hi Jagath,
+> If I recall correctly { 0 } will only set the first element of the
+> struct/array to 0 and leave random data in all others elements
 
-Been a long time since we had a steps counter. Good to have 
-support on another device.
+An initializer always initializes the _whole_ object.
 
-One minor thing inline, but otherwise looks good to me.
+The subject is also wrong, all initializers are executed at run time
+(automatic variables cannot be initialized at compile time).
 
-Jonathan
-
-> ---
->  drivers/iio/accel/bma400.h      |  1 +
->  drivers/iio/accel/bma400_core.c | 47 ++++++++++++++++++++++++++++++---
->  2 files changed, 44 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/iio/accel/bma400.h b/drivers/iio/accel/bma400.h
-> index b306a5ad513a..65bbc80cbb7f 100644
-> --- a/drivers/iio/accel/bma400.h
-> +++ b/drivers/iio/accel/bma400.h
-> @@ -53,6 +53,7 @@
->  #define BMA400_STEP_CNT1_REG        0x16
->  #define BMA400_STEP_CNT3_REG        0x17
->  #define BMA400_STEP_STAT_REG        0x18
-> +#define BMA400_STEP_INT_MSK         BIT(0)
->  
->  /*
->   * Read-write configuration registers
-> diff --git a/drivers/iio/accel/bma400_core.c b/drivers/iio/accel/bma400_core.c
-> index 797403c7dd85..305643e99eb5 100644
-> --- a/drivers/iio/accel/bma400_core.c
-> +++ b/drivers/iio/accel/bma400_core.c
-> @@ -68,6 +68,7 @@ struct bma400_data {
->  	int oversampling_ratio;
->  	int scale;
->  	struct iio_trigger *trig;
-> +	int steps_enabled;
->  	/* Correct time stamp alignment */
->  	struct {
->  		__be16 buff[3];
-> @@ -202,6 +203,13 @@ static const struct iio_chan_spec bma400_channels[] = {
->  			.endianness = IIO_LE,
->  		},
->  	},
-> +	{
-> +		.type = IIO_STEPS,
-> +		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED) |
-> +				      BIT(IIO_CHAN_INFO_ENABLE),
-> +		.scan_index = -1, /* No buffer support */
-> +	},
-> +
->  	IIO_CHAN_SOFT_TIMESTAMP(4),
->  };
->  
-> @@ -686,13 +694,28 @@ static int bma400_read_raw(struct iio_dev *indio_dev,
->  {
->  	struct bma400_data *data = iio_priv(indio_dev);
->  	int ret;
-> +	u32 steps_raw;
->  
->  	switch (mask) {
->  	case IIO_CHAN_INFO_PROCESSED:
-> -		mutex_lock(&data->mutex);
-> -		ret = bma400_get_temp_reg(data, val, val2);
-> -		mutex_unlock(&data->mutex);
-> -		return ret;
-> +		switch (chan->type) {
-> +		case IIO_STEPS:
-> +			mutex_lock(&data->mutex);
-> +			ret = regmap_bulk_read(data->regmap, BMA400_STEP_CNT0_REG,
-> +					       &steps_raw, 3 * sizeof(u8));
-> +			mutex_unlock(&data->mutex);
-> +			if (ret)
-> +				return ret;
-> +			*val = steps_raw & 0x00FFFFFF;
-
-No need for an endian conversion in here?  I'd also intialize steps_raw = 0 before
-the bulk read then you shouldn't need to mask as you only read 3 bytes in.
-
-> +			return IIO_VAL_INT;
-> +		case IIO_TEMP:
-> +			mutex_lock(&data->mutex);
-> +			ret = bma400_get_temp_reg(data, val, val2);
-> +			mutex_unlock(&data->mutex);
-> +			return ret;
-> +		default:
-> +			return -EINVAL;
-> +		}
->  	case IIO_CHAN_INFO_RAW:
->  		mutex_lock(&data->mutex);
->  		ret = bma400_get_accel_reg(data, chan, val);
-> @@ -733,6 +756,9 @@ static int bma400_read_raw(struct iio_dev *indio_dev,
->  
->  		*val = data->oversampling_ratio;
->  		return IIO_VAL_INT;
-> +	case IIO_CHAN_INFO_ENABLE:
-> +		*val = data->steps_enabled;
-> +		return IIO_VAL_INT;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -798,6 +824,17 @@ static int bma400_write_raw(struct iio_dev *indio_dev,
->  		ret = bma400_set_accel_oversampling_ratio(data, val);
->  		mutex_unlock(&data->mutex);
->  		return ret;
-> +	case IIO_CHAN_INFO_ENABLE:
-> +		if (data->steps_enabled == val)
-> +			return 0;
-> +
-> +		mutex_lock(&data->mutex);
-> +		ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG1_REG,
-> +					 BMA400_STEP_INT_MSK,
-> +					 FIELD_PREP(BMA400_STEP_INT_MSK, !!val));
-> +		mutex_unlock(&data->mutex);
-> +		data->steps_enabled = val;
-> +		return ret;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -814,6 +851,8 @@ static int bma400_write_raw_get_fmt(struct iio_dev *indio_dev,
->  		return IIO_VAL_INT_PLUS_MICRO;
->  	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
->  		return IIO_VAL_INT;
-> +	case IIO_CHAN_INFO_ENABLE:
-> +		return IIO_VAL_INT;
->  	default:
->  		return -EINVAL;
->  	}
-
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."

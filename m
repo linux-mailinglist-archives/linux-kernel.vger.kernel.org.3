@@ -2,111 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C704E1915
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 01:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFC04E1917
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 01:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244417AbiCTADE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 20:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
+        id S244423AbiCTAJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 20:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239436AbiCTADC (ORCPT
+        with ESMTP id S239436AbiCTAJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 20:03:02 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C71D5EBF3;
-        Sat, 19 Mar 2022 17:01:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1647734472;
-        bh=hFobiD0Av9I4hKkI1kP4GGFNq/s/44RpeMZwSfBgc3c=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=PqKCQoexUgpht1kHUKyWOcgIyUGvwdsEF2BKQ4ntC7CxqdifOJlD7m1jZRDrV8HoV
-         gxqSxo/y/MPcb5FQDJXBPZJolT+MC5eodSMtlPUgg4lyceVyw7MRymanITcbTJbtQ5
-         GHYmxd202Jzv6Q+KWJWAU5kBiBsLTGl+b/TzQKLo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.3.204]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MvbBk-1oKvuw0B6c-00sdcZ; Sun, 20
- Mar 2022 01:01:12 +0100
-Subject: Re: [PATCH v4 1/9] serial: core: move RS485 configuration tasks from
- drivers into core
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     u.kleine-koenig@pengutronix.de, linux@armlinux.org.uk,
-        richard.genoud@gmail.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, lukas@wunner.de,
-        p.rosenberger@kunbus.com
-References: <20220228023928.1067-1-LinoSanfilippo@gmx.de>
- <20220228023928.1067-2-LinoSanfilippo@gmx.de>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <9cf25a55-9597-74d3-7829-6422c8a5a73c@gmx.de>
-Date:   Sun, 20 Mar 2022 01:01:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sat, 19 Mar 2022 20:09:14 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117881680B5
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 17:07:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647734872; x=1679270872;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ll23AWeQwxMxKA3iJWQrr3g1ATxSTxgS0IONQBLrEFk=;
+  b=AvZKV+pBz/wxF8SIhawKB47FJv5w6mtF/U7CNHttp7MjXh/rdzQDifbT
+   9Gw8V1u04Z1FFzzBh9oETAKGfdQdGcMC+5uqmkzCLtJAITlMQ1wLWePDC
+   s4niYigbt4AgkgAwUfMhILq/o1InN/nvlCQUoUUGFrFdTN79IK9V0fcKZ
+   O14ez9chg6mUUriKkwbN4B/bjNO/j9NaNzD/1AHa8gBRkO7OQA5gzya4c
+   qdrlUnzjj0GNSA2mfyTV5rw9oUyOA33mnfYO2t1zSmxgAocqctWNjpIj9
+   sv9FWPA8orGgSva1W2c3VpEpr1tizOY6z8khpCutl8U/eX9lzJwdTd7H8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="318045515"
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="318045515"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 17:07:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="636232092"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 19 Mar 2022 17:07:50 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nVj6r-000GOP-I3; Sun, 20 Mar 2022 00:07:49 +0000
+Date:   Sun, 20 Mar 2022 08:07:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-ixp4xx/common-pci.c:143:5: warning: no previous
+ prototype for 'ixp4xx_pci_write'
+Message-ID: <202203200849.3dFXVKxt-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220228023928.1067-2-LinoSanfilippo@gmx.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:AUxWCItz1tm+yKQXwbhBjD4S3BmYFzw2v+jNazO1T0kwTCkHtob
- Pecyzp8X20LCrqzhrqfQDinKYmR+24IRLddX89cKYxPqgSYzE5yq3zeyMNG/JeyXJuvCoes
- XNksQk+zEi+BQjku9iX6cgR4Bgf3Yv5b0OJMxgCEcWDJTS0ZgGvQ3d8BCRneK1uL14tG+kl
- 5KSP4UDwyoJeZPqvd2JWQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:USVa+vBjMjo=:YU3b7lq8uHCDGNS9biTLoT
- ci09eq5EIElP6ylgBJdoQkG75c22H3fbdRoeYsBXFCveZ7IqiyoVJaYy8xdMAy2dPUsYm6L8V
- QyeA50MtuZTBZjg1EnWcKYlbg8GC9kTzaS7QzVAn9FR9LPYCVt/hHuc/BKZ4br/qh5wd+3+ev
- LIgOJLv54mNCgyRuH6t6jAMDKfxMHjirhJ8/cVNrt3KUoYk96bZhSKB59wqd0xxKdWelaclBa
- yH/bm6Gaq1lbPZfF2dEoLAzmyZAm5TVNrvNCyFyELkrM0vg3GPxF8aqb6rMwB9/Ma/MxEE7/B
- NgvXNdpXKKfzrL3y5dGYLD39xGgCH6wMuFNX7EGN1qUKfavrgPOBnJgrC+/zBGW1uxuXhOlj0
- 0u6GfvleGUFA6oFIQNVea1ZBxIrriS72JMF5oEZtZVMB0psslFmZklTqs8wzvbk4TsGw943lH
- +qLyWQrxXxve3cuZBRroBFkW6vgFfKxmtYzT5LNeA/Nl/O7s8HWmGMF8JCrkcHwmXQRDRsZ7X
- NOvGQlChwTIQwWPgL3X2PJQ8cvrQRQVNWDuRkvDkmAdT9rJAexFZW/4FgF2DvhNPHFfq0H6tD
- 9rcblGibdNSvmHIzy9DmFUIum7J5/OTggTPSFnswYqSpWQeCPT3kWnv16cQO24PU8jYHPrSNZ
- 1exYdbSkpj3JsYmHj9ane/69lHJqLWrPOoFziqTUHcc8f5s3V1KDIIBc8Ro64/Luk5fTJBleh
- +pw+nz6XbmD5HzR60WkMTAT6XwFtcSIL7fOE7DiCNgpikxWJmfvSNpcJdlTIEnRFGXFruwL3Y
- E/t4LTQwHNBuUxmUOpz9JfJugc/LaAksGp17Ua3jCAjB0mkWww5iLOzukP2YQHosdpbNauRO0
- j+4AqAFnE2uD0WvkDJTY4Q8enKVotRqb6vIzoQBGfdohEnAj8IRvhjVit7wi2YPIexQ7MJ1BZ
- rmPHt7bVL3iWLrgQLr+QGn2Q8NF21SjKHnwjegSqlGlkUMxrrs6CbbWnOoe4GsqVlFTPf0j4u
- fccIrwmBb93tk3XuWP5FiCmC6rWWcAvzvaAM3x2d/L0qWMP53H284y9G8Ycry3cslN4C3ugZt
- r07LEfxtuwD/s0=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg, Jiri,
+Hi Linus,
 
-On 28.02.22 at 03:39, Lino Sanfilippo wrote:
-> Several drivers that support setting the RS485 configuration via userspa=
-ce
-> implement one or more of the following tasks:
->
-> - in case of an invalid RTS configuration (both RTS after send and RTS o=
-n
->   send set or both unset) fall back to enable RTS on send and disable RT=
-S
->   after send
->
-> - nullify the padding field of the returned serial_rs485 struct
->
-> - copy the configuration into the uart port struct
->
-> - limit RTS delays to 100 ms
->
-> Move these tasks into the serial core to make them generic and to provid=
-e
-> a consistent behaviour among all drivers.
->
+FYI, the error/warning still remains.
 
-is this patch series mergeable now? Or is there anything else to do from m=
-y side?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   34e047aa16c0123bbae8e2f6df33e5ecc1f56601
+commit: d5d9f7ac58ea1041375a028f143ca5784693ea86 ARM/ixp4xx: Make NEED_MACH_IO_H optional
+date:   9 months ago
+config: arm-buildonly-randconfig-r004-20220320 (https://download.01.org/0day-ci/archive/20220320/202203200849.3dFXVKxt-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d5d9f7ac58ea1041375a028f143ca5784693ea86
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d5d9f7ac58ea1041375a028f143ca5784693ea86
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
-Regards,
-Lino
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   arch/arm/mach-ixp4xx/common-pci.c:94:5: warning: no previous prototype for 'ixp4xx_pci_read_errata' [-Wmissing-prototypes]
+      94 | int ixp4xx_pci_read_errata(u32 addr, u32 cmd, u32* data)
+         |     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm/mach-ixp4xx/common-pci.c:121:5: warning: no previous prototype for 'ixp4xx_pci_read_no_errata' [-Wmissing-prototypes]
+     121 | int ixp4xx_pci_read_no_errata(u32 addr, u32 cmd, u32* data)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/arm/mach-ixp4xx/common-pci.c:143:5: warning: no previous prototype for 'ixp4xx_pci_write' [-Wmissing-prototypes]
+     143 | int ixp4xx_pci_write(u32 addr, u32 cmd, u32 data)
+         |     ^~~~~~~~~~~~~~~~
+
+
+vim +/ixp4xx_pci_write +143 arch/arm/mach-ixp4xx/common-pci.c
+
+^1da177e4c3f41 Linus Torvalds  2005-04-16  142  
+^1da177e4c3f41 Linus Torvalds  2005-04-16 @143  int ixp4xx_pci_write(u32 addr, u32 cmd, u32 data)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  144  {    
+^1da177e4c3f41 Linus Torvalds  2005-04-16  145  	unsigned long flags;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  146  	int retval = 0;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  147  
+bd31b85960a7fc Thomas Gleixner 2009-07-03  148  	raw_spin_lock_irqsave(&ixp4xx_pci_lock, flags);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  149  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  150  	*PCI_NP_AD = addr;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  151  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  152  	/* set up the write */
+^1da177e4c3f41 Linus Torvalds  2005-04-16  153  	*PCI_NP_CBE = cmd;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  154  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  155  	/* execute the write by writing to NP_WDATA */
+^1da177e4c3f41 Linus Torvalds  2005-04-16  156  	*PCI_NP_WDATA = data;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  157  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  158  	if(check_master_abort())
+^1da177e4c3f41 Linus Torvalds  2005-04-16  159  		retval = 1;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  160  
+bd31b85960a7fc Thomas Gleixner 2009-07-03  161  	raw_spin_unlock_irqrestore(&ixp4xx_pci_lock, flags);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  162  	return retval;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  163  }
+^1da177e4c3f41 Linus Torvalds  2005-04-16  164  
+
+:::::: The code at line 143 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

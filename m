@@ -2,46 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F214E1BF1
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 15:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A62724E1BF2
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 15:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245213AbiCTODs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 10:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36236 "EHLO
+        id S245207AbiCTOFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 10:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237560AbiCTODm (ORCPT
+        with ESMTP id S237560AbiCTOFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 10:03:42 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26F241AFE9A
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 07:02:17 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 22KE1vIf026472;
-        Sun, 20 Mar 2022 15:01:57 +0100
-Date:   Sun, 20 Mar 2022 15:01:57 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     "'Ammar Faizi'" <ammarfaizi2@gnuweeb.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Nugraha <richiisei@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [RFC PATCH v1 3/6] tools/nolibc: i386: Implement syscall with 6
- arguments
-Message-ID: <20220320140157.GB26349@1wt.eu>
-References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
- <20220320093750.159991-4-ammarfaizi2@gnuweeb.org>
- <2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com>
+        Sun, 20 Mar 2022 10:05:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 522DF3A5E6
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 07:04:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647785048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HEnmlDwpyZjcuvzIqjP5JJWtowc3f3ehGNPzqFNCQBM=;
+        b=gTpMHy0L0zP9j4qW0CunPMZdY2BnDVNYVAD1JsNz28i+aSpMCtAxmehFKXkLF9KYodzgi3
+        263K9OZaNxFKofM+cJRHkTXbtpkZaWTCZzDuhD3gUtHF48q+EEtMVuxpI0kcGX109PTpVF
+        1WACXxX5aOIHZO8McQr+l27nZnEIlWA=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-385-Z38d-yHfPDOR44y5lDbtNQ-1; Sun, 20 Mar 2022 10:04:07 -0400
+X-MC-Unique: Z38d-yHfPDOR44y5lDbtNQ-1
+Received: by mail-ej1-f70.google.com with SMTP id h22-20020a1709060f5600b006b11a2d3dcfso6066806ejj.4
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 07:04:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HEnmlDwpyZjcuvzIqjP5JJWtowc3f3ehGNPzqFNCQBM=;
+        b=QV4PXSg+ZjmqF2iDEmDH9U1CXM2IT471WSACR35l1bdOA55x6JfBC54eSkeomfWhfV
+         dYI8ZYP9qGNP1ybGlIROkuX/MlTF7o/qMMJgNlA+K7V+XTPEDY2DHMgm423obKNgDll3
+         Pw4iY2CtNdIBI1zR2yV8TFrS1RdfoGYq2ceDIRhAAexc+cS3dOJS+vd6FVFPT2iArWLb
+         6VTTdPZK1rj3tihHpnY4w07vx5wytH+dgSqldM62q3aniUxEM125CLPQ+BHj0z2QBk2r
+         ZT+5F59MGXvGewTowqqn2gJ/WVuYMMqgkkeM/YD+7eloPU5WJ/aRsNRyZQwllHqHUlHM
+         mONg==
+X-Gm-Message-State: AOAM531DWP4oGfcIB+KlGs4/3VKxynT9VoYjBEFFkNvH47fhmpk1vUhL
+        M9PQJj/EbCW5haSkRdQ4W3dXp3kMpBacRU21uwtnZArP3LHibQEDHFuRXllQeyKvDFaYKTJpYos
+        8u2o86X3VthBoEIfuMB8DUyg4
+X-Received: by 2002:a17:907:72c3:b0:6df:91a4:32f4 with SMTP id du3-20020a17090772c300b006df91a432f4mr14980697ejc.638.1647785045903;
+        Sun, 20 Mar 2022 07:04:05 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxQGmyirZNe9b6sO0PJWsvv8mPfxVD8wfCRdvfa3DBmcAbh8uwX5f45eC15Bdc86Lph4lJSRA==
+X-Received: by 2002:a17:907:72c3:b0:6df:91a4:32f4 with SMTP id du3-20020a17090772c300b006df91a432f4mr14980663ejc.638.1647785045490;
+        Sun, 20 Mar 2022 07:04:05 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id u18-20020a17090617d200b006db07a16cf5sm5863067eje.77.2022.03.20.07.04.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Mar 2022 07:04:04 -0700 (PDT)
+Message-ID: <6970ccc4-1c42-23fa-0b31-99b102ed76c8@redhat.com>
+Date:   Sun, 20 Mar 2022 15:04:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e335ac54db44f1d8496583d97f9dab0@AcuMS.aculab.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH -v1.2] kvm/emulate: Fix SETcc emulation function offsets
+ with SLS
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Jamie Heilman <jamie@audible.transient.net>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
+References: <YjI69aUseN/IuzTj@zn.tnic>
+ <YjJFb02Fc0jeoIW4@audible.transient.net> <YjJVWYzHQDbI6nZM@zn.tnic>
+ <20220316220201.GM8939@worktop.programming.kicks-ass.net>
+ <YjMBdMlhVMGLG5ws@zn.tnic> <YjMS8eTOhXBOPFOe@zn.tnic>
+ <YjMVpfe/9ldmWX8W@hirez.programming.kicks-ass.net>
+ <94df38ce-6bd7-a993-7d9f-0a1418a1c8df@redhat.com> <YjXcRsR2T8WGnVjl@zn.tnic>
+ <ad13632c-127d-ff5a-6530-5282e58521b1@redhat.com> <YjXfgsSZpVVdg0lv@zn.tnic>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YjXfgsSZpVVdg0lv@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,29 +93,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On 3/19/22 14:50, Borislav Petkov wrote:
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 5719d8cfdbd9..f321abb9a4a8 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -429,8 +429,11 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+>   	FOP_END
+>   
+>   /* Special case for SETcc - 1 instruction per cc */
+> +
+> +#define SETCC_ALIGN	(4 * (1 + IS_ENABLED(CONFIG_SLS)))
+> +
+>   #define FOP_SETCC(op) \
+> -	".align 4 \n\t" \
+> +	".align " __stringify(SETCC_ALIGN) " \n\t" \
+>   	".type " #op ", @function \n\t" \
+>   	#op ": \n\t" \
+>   	#op " %al \n\t" \
+> @@ -1047,7 +1050,7 @@ static int em_bsr_c(struct x86_emulate_ctxt *ctxt)
+>   static __always_inline u8 test_cc(unsigned int condition, unsigned long flags)
+>   {
+>   	u8 rc;
+> -	void (*fop)(void) = (void *)em_setcc + 4 * (condition & 0xf);
+> +	void (*fop)(void) = (void *)em_setcc + SETCC_ALIGN * (condition & 0xf);
+>   
+>   	flags = (flags & EFLAGS_MASK) | X86_EFLAGS_IF;
+>   	asm("push %[flags]; popf; " CALL_NOSPEC
 
-On Sun, Mar 20, 2022 at 01:10:33PM +0000, David Laight wrote:
-> And using xchg is slow - it is always locked.
+So this is what I squashed in:
 
-Note that we don't really care here, as it remains minimal compared to
-an mmap() call.
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index f321abb9a4a8..e86d610dc6b7 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -430,7 +430,19 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+  
+  /* Special case for SETcc - 1 instruction per cc */
+  
+-#define SETCC_ALIGN	(4 * (1 + IS_ENABLED(CONFIG_SLS)))
++/*
++ * Depending on .config the SETcc functions look like:
++ *
++ * SETcc %al   [3 bytes]
++ * RET         [1 byte]
++ * INT3        [1 byte; CONFIG_SLS]
++ *
++ * Which gives possible sizes 4 or 5.  When rounded up to the
++ * next power-of-two alignment they become 4 or 8.
++ */
++#define SETCC_LENGTH	(4 + IS_ENABLED(CONFIG_SLS))
++#define SETCC_ALIGN	(4 << IS_ENABLED(CONFIG_SLS))
++static_assert(SETCC_LENGTH <= SETCC_ALIGN);
+  
+  #define FOP_SETCC(op) \
+  	".align " __stringify(SETCC_ALIGN) " \n\t" \
 
-> One possibility might be to do:
-> 	push arg6
-> 	push %ebp
-> 	mov  %ebp, 4(%sp)
-> 	int  0x80
-> 	pop  %ebp
-> 	add  %esp,4
-> 
-> Although I'm not sure you really want to allocate 4k pages
-> for every malloc() call.
+Paolo
 
-Well, it depends. I would argue that we don't even need malloc() but
-on the other hand this is essentially used to write small regtests so
-we don't really care about the waste here if someone really needs it.
-
-I'd rather get Ammar's motivations for malloc() in the first place.
-
-Willy

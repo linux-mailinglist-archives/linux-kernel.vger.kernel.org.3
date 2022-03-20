@@ -2,188 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CB74E191B
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 01:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CDE4E191F
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 01:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244434AbiCTAQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 20:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        id S244439AbiCTAUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 20:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239436AbiCTAQt (ORCPT
+        with ESMTP id S242988AbiCTAUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 20:16:49 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242241AA8EB;
-        Sat, 19 Mar 2022 17:15:27 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id c15so15688172ljr.9;
-        Sat, 19 Mar 2022 17:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xg1HAwX6al3B4/kYZjuhrKZfPnLwkpdiAw2iONwgAW8=;
-        b=Cb4CUk2daFpfNV5ns0oFdrFWetjl/jc0PsI2rn81+CoNkdmBrQyhC4xXcgUvMEu4Oc
-         z0T19wX8m3C7LVHV3xbZbe0CeSPw417pBCCC+f7xv58dy2ZMqu02SZyIBwbiJTeJ+uYD
-         WEOgG82g7ouyIHesmtc62aROCx5h3w/5V1w5eQzZVAKN5eaD9aZJ1ChmdmQY3Ko9ZDuD
-         DWfKnpW7pUu+b0oCulLY2hXNa9zioL2QaJJv5FJ8eI5TcWoAdb78YTDQbad3Qx/a5Hy0
-         ybVocT1nZY2gpckZpvijgQ5iUys0F3/b0LC7sBIp1Y5WvCEP+GKMLriDGmbbNHNpVpH8
-         WLUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xg1HAwX6al3B4/kYZjuhrKZfPnLwkpdiAw2iONwgAW8=;
-        b=ghTD3wZigvJ0Ez7vtuY2Oz8Rzmz6DEtDqvXI4qNRuzU5VU3SIE8JpibGu/LgZsWBz2
-         dln5ridWOBji5MbixbL/qOhl33OznnXnFrGRmk9aRu2YslMwNlxg+nn8Ngn8cSBlxjPo
-         3JxlVwDqulvUDmACG1Ucjc0bCWCu6ujtLLL6vzHeoGCq88uORiCcdz3DeM10K3JlcVz3
-         9O0/lbba+bHHKRvzAV+fiV3IzI9US3ZHPaggIcPp/NBLMuBNxEI2iWt6G2tmLkUGNZY5
-         mGukNVzwiMQzXBfnuiz2+XVHltx3DJaNp63mhQxHqjYfKueRGYjcuzM1kxMsFMyCkNqX
-         TAQA==
-X-Gm-Message-State: AOAM5311rudUD7OuxbPFuqFxvptK1e5waQMmK3V7pQYKMUHZq2W3jzzG
-        1nGoUwCI64M7DEfWY/cpalU=
-X-Google-Smtp-Source: ABdhPJx+8p7l5v0hEGeTAW8gYg1ItZk1pTj0mqkknJDkzJp/26+4Ikpnko3kjnF4Qt89T28hmYXLYg==
-X-Received: by 2002:a05:651c:a08:b0:247:eb2e:fb04 with SMTP id k8-20020a05651c0a0800b00247eb2efb04mr10574613ljq.524.1647735325216;
-        Sat, 19 Mar 2022 17:15:25 -0700 (PDT)
-Received: from dell.intranet (178235254230.gdansk.vectranet.pl. [178.235.254.230])
-        by smtp.gmail.com with ESMTPSA id v21-20020a2e2f15000000b002456e6cdab2sm1666413ljv.93.2022.03.19.17.15.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 17:15:24 -0700 (PDT)
-From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
-To:     Tony Lindgren <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>
-Cc:     Paul Walmsley <paul@pwsan.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [RFC RFT PATCH 0/4] ARM: OMAP1: clock: Convert to CCF
-Date:   Sun, 20 Mar 2022 01:15:22 +0100
-Message-ID: <3093204.5fSG56mABF@dell>
-In-Reply-To: <20220319212119.GG1986@darkstar.musicnaut.iki.fi>
-References: <20220310233307.99220-1-jmkrzyszt@gmail.com> <20220319184952.GF1986@darkstar.musicnaut.iki.fi> <20220319212119.GG1986@darkstar.musicnaut.iki.fi>
+        Sat, 19 Mar 2022 20:20:41 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ABACF
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 17:19:18 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id A08AD5C0132;
+        Sat, 19 Mar 2022 20:19:16 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Sat, 19 Mar 2022 20:19:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=1KWw8iPmqC/RJ7lj8
+        bikVFsFdvOQq5BykeGEYNahjAI=; b=G9YOGXFFD8rH6m7jJU0rxRQo0xm5DaVIA
+        T6efpmRDOU5869ufb8ywrQFme0UEpieNsl3QPn8SX5u44bdlSxYRy/k1KEURKDTJ
+        3h3TJpkw2OQYsUJnQsy27kj3mpIBTHlDb6LUCcLbUzZEO4MItyuI+2azCXbcu7kk
+        PaGwejMms6f600QpBvod5yOXcsAvuSbaPGRV6qdmyw7MKT80XOD3uZ4UO/khQEb1
+        5bbW0qMmQLsiiOACI56fnzxkJII9DZobUSqWaEYtcstRdcPI5I7yNC3+/OYFYNm4
+        CN/yT/LitBc/4bMWKqTJpR0FkNkT0In54cXP8pvEfC9y3vMOGNWLA==
+X-ME-Sender: <xms:A3M2Yr-ebUyA8OjINorHIN3nQzkUVA0AfV84FBQ0zAByoC3ihX1u5g>
+    <xme:A3M2YntNVknNTmOOdSKjZgXiv69mhIkPRdKalFcJdY0vryoQZWXBQ5OISCUfWvb8i
+    nsC1SKkv6PfUkHPLs8>
+X-ME-Received: <xmr:A3M2YpDXH9In7taJaLAEHemSmJUPpQ4osXun08WDcEio01l489B9UVtI2rUXnBEZHJg2ahKLm5rEh1nPH1_ZNcYfttY86hlzwSg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudefledgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfv
+    hhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrth
+    htvghrnhepffduhfegfedvieetudfgleeugeehkeekfeevfffhieevteelvdfhtdevffet
+    uedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfh
+    hthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
+X-ME-Proxy: <xmx:A3M2YneU3fAvXjnjYmbxX5bjLpcZyt2sozfcMySxRf4Q5XonDuRWZQ>
+    <xmx:A3M2YgPlsu13AOCVdXtj-Sd_oPkc648STdzKjDkeMXhjZLgfguWwtA>
+    <xmx:A3M2YpnQliiUAP_BXm7sTOMymqpIb7aUo57YuqW55oPAdZWTq4HGWA>
+    <xmx:BHM2YlpQxfnBibhvu3ibT5ZUEeFIdB5tH1t2qrLdVQkArqFvmnsxAA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 19 Mar 2022 20:19:12 -0400 (EDT)
+Date:   Sun, 20 Mar 2022 11:19:18 +1100 (AEDT)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] macintosh/via-pmu: Fix build failure when CONFIG_INPUT
+ is disabled
+In-Reply-To: <CAMuHMdVLCX0uPOCQos=cd5Z5pbm-++uVyV-fzMGyPi6oD3+SZw@mail.gmail.com>
+Message-ID: <64b6d65-5d5d-23d2-dc8a-c31fc5853349@linux-m68k.org>
+References: <cb1828050f8c9ef801b2bdf79eccd6c52afed26b.1647663509.git.fthain@linux-m68k.org> <CAMuHMdVLCX0uPOCQos=cd5Z5pbm-++uVyV-fzMGyPi6oD3+SZw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aaro,
+On Sat, 19 Mar 2022, Geert Uytterhoeven wrote:
 
-On Saturday, 19 March 2022 22:21:19 CET Aaro Koskinen wrote:
-> Hi,
+> On Sat, Mar 19, 2022 at 5:23 AM Finn Thain <fthain@linux-m68k.org> wrote:
+> > drivers/macintosh/via-pmu-event.o: In function `via_pmu_event':
+> > via-pmu-event.c:(.text+0x44): undefined reference to `input_event'
+> > via-pmu-event.c:(.text+0x68): undefined reference to `input_event'
+> > via-pmu-event.c:(.text+0x94): undefined reference to `input_event'
+> > via-pmu-event.c:(.text+0xb8): undefined reference to `input_event'
+> > drivers/macintosh/via-pmu-event.o: In function `via_pmu_event_init':
+> > via-pmu-event.c:(.init.text+0x20): undefined reference to `input_allocate_device'
+> > via-pmu-event.c:(.init.text+0xc4): undefined reference to `input_register_device'
+> > via-pmu-event.c:(.init.text+0xd4): undefined reference to `input_free_device'
+> > make[1]: *** [Makefile:1155: vmlinux] Error 1
+> > make: *** [Makefile:350: __build_one_by_one] Error 2
+> >
+> > Don't call into the input subsystem unless CONFIG_INPUT is built-in.
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Cc: Michael Ellerman <mpe@ellerman.id.au>
+> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Signed-off-by: Finn Thain <fthain@linux-m68k.org>
 > 
-> On Sat, Mar 19, 2022 at 08:49:55PM +0200, Aaro Koskinen wrote:
-> > On Sat, Mar 12, 2022 at 10:14:31AM +0200, Tony Lindgren wrote:
-> > > * Janusz Krzysztofik <jmkrzyszt@gmail.com> [220310 23:32]:
-> > > > The main motivation behind this series is planned resurection of OMAP1
-> > > > camera driver.  Since OMAP1 clock internals have never been visible to
-> > > > drivers, that driver used to use v4l2-clk to expose a pixel clock for a
-> > > > sensor.  The v4l2-clk code has been recently depreciated and removed from
-> > > > the media subtree, hence the need for an alternative solution.
-> > > 
-> > > Nice :) This will also help Arnd with building multi-v5 kernels.
-> > 
-> > This will need more testing still... The patch 4 is breaking at least 770
-> > (the display/fb doesn't work anymore).
-> 
-> Patches 1-3 are OK on Nokia 770, OSK and Palm TE.
-> 
-> Patch 4 breaks 770, but OSK and Palm TE are OK.
-> 
-> Below is the problem with 770. As a quick hack, I tried replacing
-> all clk_enable/disable()s with prepare_enable/disable_unprepare()s in
-> drivers/video/fbdev/omap/hwa742.c and drivers/video/fbdev/omap/sossi.c
-> and that seems to help...
-> 
-> [    0.374389] omapfb: lph8923 rev 92 LCD detected, 16 data lines
-> [    0.374816] omapfb: configured for panel lph8923
-> [    0.383789] omapfb: LCDC initialized
-> [    0.384216] ------------[ cut here ]------------
-> [    0.384368] WARNING: CPU: 0 PID: 1 at drivers/clk/clk.c:1012 clk_core_enable+0x94/0xb0
-> [    0.384613] Enabling unprepared ck_sossi
-
-Yes, I've identified still a few drivers that need to be updated, I'll 
-prepare v2 of PATCH 3/4 and resubmit.
-
-Thanks,
-Janusz
-
-> [    0.384704] Modules linked in:
-> [    0.384796] CPU: 0 PID: 1 Comm: swapper Not tainted 5.17.0-rc8-770-los_381206+-00072-gb2406fc1ddd4 #2
-> [    0.385009] Hardware name: Nokia 770
-> [    0.385101]  unwind_backtrace from show_stack+0x10/0x14
-> [    0.385314]  show_stack from __warn+0xac/0xe4
-> [    0.385528]  __warn from warn_slowpath_fmt+0x90/0xc8
-> [    0.385711]  warn_slowpath_fmt from clk_core_enable+0x94/0xb0
-> [    0.385894]  clk_core_enable from clk_core_enable_lock+0x18/0x2c
-> [    0.386077]  clk_core_enable_lock from sossi_init+0xa0/0x258
-> [    0.386260]  sossi_init from hwa742_init+0x90/0x538
-> [    0.386474]  hwa742_init from omapfb_do_probe+0x200/0x68c
-> [    0.386657]  omapfb_do_probe from mipid_spi_probe+0x1b4/0x230
-> [    0.386840]  mipid_spi_probe from spi_probe+0x48/0x6c
-> [    0.387054]  spi_probe from really_probe+0xac/0x2f0
-> [    0.387237]  really_probe from __driver_probe_device+0x80/0xe4
-> [    0.387390]  __driver_probe_device from driver_probe_device+0x30/0xd8
-> [    0.387573]  driver_probe_device from __driver_attach+0x70/0xf0
-> [    0.387756]  __driver_attach from bus_for_each_dev+0x74/0xc0
-> [    0.387908]  bus_for_each_dev from bus_add_driver+0x14c/0x1d8
-> [    0.388061]  bus_add_driver from driver_register+0x74/0x108
-> [    0.388244]  driver_register from do_one_initcall+0x4c/0x1cc
-> [    0.388427]  do_one_initcall from kernel_init_freeable+0x170/0x1f4
-> [    0.388641]  kernel_init_freeable from kernel_init+0x10/0x108
-> [    0.388824]  kernel_init from ret_from_fork+0x14/0x2c
-> [    0.388977] Exception stack(0xc0c41fb0 to 0xc0c41ff8)
-> [    0.389099] 1fa0:                                     00000000 00000000 00000000 00000000
-> [    0.389282] 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> [    0.389434] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> [    0.389556] ---[ end trace 0000000000000000 ]---
-> [    0.389709] omapfb omapfb: invalid SoSSI sync pattern: 00000000, 00000000
-> [    0.389831] ------------[ cut here ]------------
-> [    0.389923] WARNING: CPU: 0 PID: 1 at drivers/clk/clk.c:953 clk_core_disable+0xb4/0xcc
-> [    0.390136] ck_sossi already disabled
-> [    0.390228] Modules linked in:
-> [    0.390319] CPU: 0 PID: 1 Comm: swapper Tainted: G        W         5.17.0-rc8-770-los_381206+-00072-gb2406fc1ddd4 #2
-> [    0.390502] Hardware name: Nokia 770
-> [    0.390594]  unwind_backtrace from show_stack+0x10/0x14
-> [    0.390808]  show_stack from __warn+0xac/0xe4
-> [    0.391021]  __warn from warn_slowpath_fmt+0x90/0xc8
-> [    0.391204]  warn_slowpath_fmt from clk_core_disable+0xb4/0xcc
-> [    0.391387]  clk_core_disable from clk_core_disable_lock+0x18/0x24
-> [    0.391540]  clk_core_disable_lock from sossi_init+0x1bc/0x258
-> [    0.391754]  sossi_init from hwa742_init+0x90/0x538
-> [    0.391937]  hwa742_init from omapfb_do_probe+0x200/0x68c
-> [    0.392120]  omapfb_do_probe from mipid_spi_probe+0x1b4/0x230
-> [    0.392333]  mipid_spi_probe from spi_probe+0x48/0x6c
-> [    0.392547]  spi_probe from really_probe+0xac/0x2f0
-> [    0.392730]  really_probe from __driver_probe_device+0x80/0xe4
-> [    0.392883]  __driver_probe_device from driver_probe_device+0x30/0xd8
-> [    0.393066]  driver_probe_device from __driver_attach+0x70/0xf0
-> [    0.393249]  __driver_attach from bus_for_each_dev+0x74/0xc0
-> [    0.393402]  bus_for_each_dev from bus_add_driver+0x14c/0x1d8
-> [    0.393585]  bus_add_driver from driver_register+0x74/0x108
-> [    0.393737]  driver_register from do_one_initcall+0x4c/0x1cc
-> [    0.393920]  do_one_initcall from kernel_init_freeable+0x170/0x1f4
-> [    0.394134]  kernel_init_freeable from kernel_init+0x10/0x108
-> [    0.394317]  kernel_init from ret_from_fork+0x14/0x2c
-> [    0.394470] Exception stack(0xc0c41fb0 to 0xc0c41ff8)
-> [    0.394592] 1fa0:                                     00000000 00000000 00000000 00000000
-> [    0.394775] 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> [    0.394958] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> [    0.395080] ---[ end trace 0000000000000000 ]---
-> [    0.417907] omapfb omapfb: controller initialization failed (-19)
-> 
-> A.
+> Thanks for your patch!
 > 
 
+Thanks for your review.
 
+> > --- a/drivers/macintosh/Makefile
+> > +++ b/drivers/macintosh/Makefile
+> > @@ -12,7 +12,10 @@ obj-$(CONFIG_MAC_EMUMOUSEBTN)        += mac_hid.o
+> >  obj-$(CONFIG_INPUT_ADBHID)     += adbhid.o
+> >  obj-$(CONFIG_ANSLCD)           += ans-lcd.o
+> >
+> > -obj-$(CONFIG_ADB_PMU)          += via-pmu.o via-pmu-event.o
+> > +obj-$(CONFIG_ADB_PMU)          += via-pmu.o
+> > +ifeq ($(CONFIG_INPUT), y)
+> > +obj-$(CONFIG_ADB_PMU)          += via-pmu-event.o
+> > +endif
+> 
+> Alternatively, you can introduce an invisible Kconfig symbol that
+> is y if ADB_PMU && INPUT, to control the build of via-pmu.o.
+> 
 
+There is some precent for that (DVB_AV7110_IR, PINCTRL_FALCON, 
+DVB_AV7110_IR) in recent code but it's a bit of a stretch.
 
+Adding the new Kconfig symbol would add complexity and it would only get 
+used in two places.
+
+I appreciate the general preference for declarative style over imperative. 
+But is there a stronger argument against conditionals in Makefiles?
+
+> >  obj-$(CONFIG_ADB_PMU_LED)      += via-pmu-led.o
+> >  obj-$(CONFIG_PMAC_BACKLIGHT)   += via-pmu-backlight.o
+> >  obj-$(CONFIG_ADB_CUDA)         += via-cuda.o
+> > diff --git a/drivers/macintosh/via-pmu.c b/drivers/macintosh/via-pmu.c
+> > index 4b98bc26a94b..55afa6dfa263 100644
+> > --- a/drivers/macintosh/via-pmu.c
+> > +++ b/drivers/macintosh/via-pmu.c
+> > @@ -1457,12 +1457,14 @@ pmu_handle_data(unsigned char *data, int len)
+> >                 if (pmu_battery_count)
+> >                         query_battery_state();
+> >                 pmu_pass_intr(data, len);
+> > +#ifdef CONFIG_INPUT
+> >                 /* len == 6 is probably a bad check. But how do I
+> >                  * know what PMU versions send what events here? */
+> >                 if (len == 6) {
+> >                         via_pmu_event(PMU_EVT_POWER, !!(data[1]&8));
+> >                         via_pmu_event(PMU_EVT_LID, data[1]&1);
+> >                 }
+> > +#endif
+> 
+> Additionally, if that new symbol is not enabled, a dummy via_pmu_event()
+> can be provided, so you don't need to add an #ifdef to the driver anymore.
+> 
+
+Adding a dummy function to be used in only one place seems questionable to 
+me. I'm not expecting new call sites to appear outside of that ifdef.
+
+Some of the arguments against ifdefs (reduced test and checker coverage, 
+readability harm) don't really apply in this case.

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB9E4E1CB7
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 17:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F20194E1CC4
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 17:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245516AbiCTQ3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 12:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
+        id S245556AbiCTQaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 12:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245475AbiCTQ3k (ORCPT
+        with ESMTP id S245479AbiCTQ3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 12:29:40 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05081344FD;
-        Sun, 20 Mar 2022 09:28:17 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id d7so17849512wrb.7;
-        Sun, 20 Mar 2022 09:28:16 -0700 (PDT)
+        Sun, 20 Mar 2022 12:29:42 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3243C344DC;
+        Sun, 20 Mar 2022 09:28:18 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id u16so16850496wru.4;
+        Sun, 20 Mar 2022 09:28:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=8h0dp/sRCWnE/SzxqBhwWtp3OCJwunZ7486W2HMfBko=;
-        b=B0atMPIder4N8TYzrHjKga4/7nhsneKYsEcoH6kos02/gg5Yn2wwVo/AA73vcSdScA
-         5+6kZJGk0GqaIWEuFkJeI2/yCIAH5X+FxabhJzXcedFjtZCcgSnU7nq6Qeeiod1cj85+
-         26dN+n5uOgJOJNPJGDoOzxudbCnM7cpJlOt+nCMgRzsXBr689x7Llduc/k2f6i7Mqjzs
-         U5Cs0O6e8/ewWfPwxqBFjsSxHhHoeqDm+Ug9duoj525HZZJZrI38MtdgcLip8mA5Jfgn
-         HJcz1dNOM7zU3V/7xbvUBJ1TPTR31rDa580elBXgdYOUpe1hynwQM2v9NmPQLrCSRdUV
-         2ZRA==
+        bh=KJy+bVD9Yq3kRrz9Gx7NWpfnxrb/beBV0JaHxbyWaTA=;
+        b=cEoglGD+MtPj1LCuCCZuLMiLqdVULATaMu0uGt9BgJy8BBxAqnLp+KqyEDvgNd1Lq/
+         t2U9TbqbI1R9d+Gwm/fc1tEMl9/n+KanIP//vi/Il+HoJloMDxOxf0aJ/ffCY5zY0jVp
+         DZz3MhFSdyuHrPj4p6XnfYpUVAjeQb7quikiu/AEZrsp2rHIJ6QIboUvdjw4lSCCdEzm
+         c+N2PGnnfo5N6xqS6sxRDOaNR8CItuup4tKai+7el0Ty1rurZ5FEUpcNzwiYwufq62Wt
+         F7YuNz6TH7FcqJ5oxvU2mBIzYG5P13yRhf00mtat3legkY7d7pV2pMIwwAkI+dFqlTKJ
+         2XZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8h0dp/sRCWnE/SzxqBhwWtp3OCJwunZ7486W2HMfBko=;
-        b=H//iICjD7Lf55ewOUOF/c7KKA0/fHP8F1xy3wwVVw1Xx8KAYenPWKqWDFsEVdnLMC6
-         VhsM5ldaJrg7fX4HJWQ5hp/sFKK7IcWixDeI9nDcPaf6XqcEl+9AROM7oKQEbajJGsnu
-         uHurP/79NMmSqDD04XjzpQb4bc5vfmzn4QZ11rNNrcWDg2JJ8Lom0R0d3fW2HgTRX2O7
-         Ll88PQMNuoAtANgc2Dp9doBg6xyDbcjXk1SEAq/q7le/S7bnb+lYhUnObUkRWfeHgrDo
-         uxbSBeTs/rcVgnr6HVsgfOIxncOy67eed29ugDNh+n/jCcYv9CY8h1l/1n77e8eS8f9L
-         V1UQ==
-X-Gm-Message-State: AOAM533RYuJAatKTk2rpvKo5R6fQCO/DEqQMPZ/jgfaNdHFHHmA86Z90
-        V2Yg5PjOfAunzQB3/nQ6WOE3dmFBeMo=
-X-Google-Smtp-Source: ABdhPJzVnwSL99bC9SXDX+khcfZLP0yrgqadr9Ahdtx3UDvRCpWSKetOLw+Ppv/JNS9xkqj+x1qA1g==
-X-Received: by 2002:adf:a4ce:0:b0:203:fce0:755e with SMTP id h14-20020adfa4ce000000b00203fce0755emr7469376wrb.510.1647793695282;
-        Sun, 20 Mar 2022 09:28:15 -0700 (PDT)
+        bh=KJy+bVD9Yq3kRrz9Gx7NWpfnxrb/beBV0JaHxbyWaTA=;
+        b=zYLtqLq3tpz3hERA9le0mWSPsYKfJm5wPXKFfo82ve8TzPVRJFeQ/KbacGGXIuIY5A
+         M394n+ujwRJ0ISO9RJaXZUu1+LYP2gl8Tkyi5ub4WUDTMrKSCgybSKNCu2Iaz8XAouNJ
+         LtSOYTeNnqiwwBfStRsP5HN3OeMV/0WZKqiE3UMiyZeohVkBNA5CLOdGT6uL6jMca04V
+         iaerhT7NzQZueSh0tJ7jHZmnniJ8RNGBNHuZK2ldNpoertCa5VsSL4I9F9TDJ58lC04K
+         VeekpooRk/s/NjpGhsr0OEm7UjDW41KopUBbsfAMCY7XD6ea/Pcys0cvXRl/ObIRs0ZX
+         YwHQ==
+X-Gm-Message-State: AOAM5320ubd+JFGws/V7e2AERjbHH7ziO75cQZje0/ifP6Df5GZd/NPh
+        4iQcxK0Pn/3LY/mUS8LP5IzD1MYzLxM=
+X-Google-Smtp-Source: ABdhPJw2JIU7ooviqse14YqNA/qhNtEj6Knv7qKcUYq0tPlvtH8e24pjHNNqEE7r0N8gpygJxg96kA==
+X-Received: by 2002:a5d:584a:0:b0:203:97f6:5975 with SMTP id i10-20020a5d584a000000b0020397f65975mr15150068wrf.612.1647793696495;
+        Sun, 20 Mar 2022 09:28:16 -0700 (PDT)
 Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
-        by smtp.googlemail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm6760085wry.53.2022.03.20.09.28.14
+        by smtp.googlemail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm6760085wry.53.2022.03.20.09.28.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 09:28:14 -0700 (PDT)
+        Sun, 20 Mar 2022 09:28:16 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -56,9 +56,9 @@ To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         Ansuel Smith <ansuelsmth@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v3 04/18] clk: qcom: clk-hfpll: use poll_timeout macro
-Date:   Sun, 20 Mar 2022 12:34:16 +0100
-Message-Id: <20220320113430.26076-5-ansuelsmth@gmail.com>
+Subject: [PATCH v3 05/18] clk: qcom: kpss-xcc: convert to parent data API
+Date:   Sun, 20 Mar 2022 12:34:17 +0100
+Message-Id: <20220320113430.26076-6-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220320113430.26076-1-ansuelsmth@gmail.com>
 References: <20220320113430.26076-1-ansuelsmth@gmail.com>
@@ -74,45 +74,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use regmap_read_poll_timeout macro instead of do-while structure.
+Convert the driver to parent data API. From the Documentation pll8_vote
+and pxo should be declared in the DTS so fw_name can be used instead of
+parent_names. Name is still used to save regression on old definition.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/clk/qcom/clk-hfpll.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/clk/qcom/kpss-xcc.c | 25 ++++++++-----------------
+ 1 file changed, 8 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/clk/qcom/clk-hfpll.c b/drivers/clk/qcom/clk-hfpll.c
-index e847d586a73a..a4e347eb4d4d 100644
---- a/drivers/clk/qcom/clk-hfpll.c
-+++ b/drivers/clk/qcom/clk-hfpll.c
-@@ -12,6 +12,8 @@
- #include "clk-regmap.h"
- #include "clk-hfpll.h"
+diff --git a/drivers/clk/qcom/kpss-xcc.c b/drivers/clk/qcom/kpss-xcc.c
+index 4fec1f9142b8..347f70e9f5fe 100644
+--- a/drivers/clk/qcom/kpss-xcc.c
++++ b/drivers/clk/qcom/kpss-xcc.c
+@@ -12,9 +12,9 @@
+ #include <linux/clk.h>
+ #include <linux/clk-provider.h>
  
-+#define HFPLL_BUSY_WAIT_TIMEOUT	100
-+
- #define PLL_OUTCTRL	BIT(0)
- #define PLL_BYPASSNL	BIT(1)
- #define PLL_RESET_N	BIT(2)
-@@ -72,13 +74,12 @@ static void __clk_hfpll_enable(struct clk_hw *hw)
- 	regmap_update_bits(regmap, hd->mode_reg, PLL_RESET_N, PLL_RESET_N);
+-static const char *aux_parents[] = {
+-	"pll8_vote",
+-	"pxo",
++static const struct clk_parent_data aux_parents[] = {
++	{ .name = "pll8_vote", .fw_name = "pll8_vote" },
++	{ .name = "pxo", .fw_name = "pxo" },
+ };
  
- 	/* Wait for PLL to lock. */
--	if (hd->status_reg) {
--		do {
--			regmap_read(regmap, hd->status_reg, &val);
--		} while (!(val & BIT(hd->lock_bit)));
--	} else {
-+	if (hd->status_reg)
-+		regmap_read_poll_timeout(regmap, hd->status_reg, val,
-+					 !(val & BIT(hd->lock_bit)), USEC_PER_MSEC * 2,
-+					 HFPLL_BUSY_WAIT_TIMEOUT * USEC_PER_MSEC);
-+	else
- 		udelay(60);
--	}
+ static unsigned int aux_parent_map[] = {
+@@ -32,8 +32,8 @@ MODULE_DEVICE_TABLE(of, kpss_xcc_match_table);
+ static int kpss_xcc_driver_probe(struct platform_device *pdev)
+ {
+ 	const struct of_device_id *id;
+-	struct clk *clk;
+ 	void __iomem *base;
++	struct clk_hw *hw;
+ 	const char *name;
  
- 	/* Enable PLL output. */
- 	regmap_update_bits(regmap, hd->mode_reg, PLL_OUTCTRL, PLL_OUTCTRL);
+ 	id = of_match_device(kpss_xcc_match_table, &pdev->dev);
+@@ -55,24 +55,15 @@ static int kpss_xcc_driver_probe(struct platform_device *pdev)
+ 		base += 0x28;
+ 	}
+ 
+-	clk = clk_register_mux_table(&pdev->dev, name, aux_parents,
+-				     ARRAY_SIZE(aux_parents), 0, base, 0, 0x3,
+-				     0, aux_parent_map, NULL);
++	hw = __devm_clk_hw_register_mux(&pdev->dev, NULL, name, ARRAY_SIZE(aux_parents),
++					NULL, NULL, aux_parents, 0, base, 0, 0x3,
++					0, aux_parent_map, NULL);
+ 
+-	platform_set_drvdata(pdev, clk);
+-
+-	return PTR_ERR_OR_ZERO(clk);
+-}
+-
+-static int kpss_xcc_driver_remove(struct platform_device *pdev)
+-{
+-	clk_unregister_mux(platform_get_drvdata(pdev));
+-	return 0;
++	return PTR_ERR_OR_ZERO(hw);
+ }
+ 
+ static struct platform_driver kpss_xcc_driver = {
+ 	.probe = kpss_xcc_driver_probe,
+-	.remove = kpss_xcc_driver_remove,
+ 	.driver = {
+ 		.name = "kpss-xcc",
+ 		.of_match_table = kpss_xcc_match_table,
 -- 
 2.34.1
 

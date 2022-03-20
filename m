@@ -2,140 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE1E4E1D62
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 19:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B514E1D66
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 19:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343504AbiCTSQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 14:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
+        id S1343519AbiCTSW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 14:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343505AbiCTSQ3 (ORCPT
+        with ESMTP id S1343525AbiCTSW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 14:16:29 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8B7527EC;
-        Sun, 20 Mar 2022 11:15:05 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id n35so5768846wms.5;
-        Sun, 20 Mar 2022 11:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hBX2k7bP0JuTGs4Va/cZqoPnNWMc+mP7VB6dwkEnym8=;
-        b=a7edImwHxElUp+nxiHhoczI85uybUug2XQbZiUj8jMu6GG9oZjIyONWdpgH98fh0W2
-         wg7cBnyT85R9tRkGV5SQm3qjxZkdTdKD6FPHX50zQXHVP9ZsMiXplcHGGSkIicsGE6fD
-         sX7DW+Psq/1IeC/wWv2uw+kMKaLkeygDVvBk7d/4hn0GGTcmvjGwyc8exMaRmZngbYFw
-         0uQWQddLDXWQh34kd4kf/BBJmPkJKMTkQOAX6OSwsR2tzDfbi1dg4I6+EuEa82Xczkk3
-         tyb2MIR2ooKbgL8fTjyxm6bWeha43bgPtKiXwS22r7cPQZ+5fvrANHu8IY33Q5wqXVwv
-         JIDA==
+        Sun, 20 Mar 2022 14:22:56 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7F4B2461;
+        Sun, 20 Mar 2022 11:21:33 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id g8so10373641qke.2;
+        Sun, 20 Mar 2022 11:21:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hBX2k7bP0JuTGs4Va/cZqoPnNWMc+mP7VB6dwkEnym8=;
-        b=HxPyogpQUkS+jCJi291GdsEq+gcicRQh8zOZ6HlvcMbZhEXjpBTxawt69MonkwKJxa
-         gJ98yLg79SwpTdE13xf+fbREvewC1lLOLZcpC8ctNoX5pIB6IJ5cNDyn5zVfnB0DNt6T
-         WN3hoDtzZGsqgznPNhQfkqYGgc+TUIZ5q8ycEsEvHU7KXIUCIf1ikwD7SkgVUSByP151
-         gihy7WfIIQl9+3YeEH2SQn394WIv6LLAbRJYV/IacJx2T1C1Dka1c8ddJeDd4drRTS8C
-         fT0LyBB4vzFTXekQLON4iu1gQxgkWkNNS10GN7JVLJgbwIam6M2O9tgbljUvAEG/RmsT
-         rpdw==
-X-Gm-Message-State: AOAM53266yFL7qhHOjs9MBkLEccEH1akWL7MmOxph4fGdpBxWJcJHpST
-        i4M8JtPDJTXBuuj5q6lFzda3cBPFiZB6Auq+
-X-Google-Smtp-Source: ABdhPJyveFwD1BJnTecZ7BvTG+hVgQovZ0eEhZCc0YsQ1xX+FrRyk5mGeQO6lFVJvUIYkVDodWGjZg==
-X-Received: by 2002:a05:600c:4e0d:b0:38c:a6da:adec with SMTP id b13-20020a05600c4e0d00b0038ca6daadecmr946252wmq.145.1647800104485;
-        Sun, 20 Mar 2022 11:15:04 -0700 (PDT)
-Received: from [192.168.0.160] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id a18-20020a05600c349200b0038ca453a887sm1598598wmq.19.2022.03.20.11.15.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Mar 2022 11:15:04 -0700 (PDT)
-Message-ID: <fd0b3fea-4b40-ffba-442f-00908a5335a9@gmail.com>
-Date:   Sun, 20 Mar 2022 19:15:02 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oPdW0uQBICw2w2s6z7oX0GuZ2TK0AjcRKwcp07VDTDw=;
+        b=E6z3VV4bxe5/39iTC4mTV3w4kqrrbRU8xDbR+BKTCN3jO4POy/JwETfcrgLiwVIXAc
+         rpOyTnnwHdSAp0gfXAGyhj6luvqlJR4yC8ock5s8dOEMB/2jzgZANa1GjGqcWZQHpsxq
+         WpwvqIrrSJt8s0O3ObF2n9yKSomYCUVLHrwh/qvkJZ1xEr1qS53iE0uASCGk/1xdmqtW
+         j+MoWscgtI/Zmoy7tMo47Fh+wZpAFgtyDIXM5JtOUMvuOEbE8CgrWkE7g7fEUvQpNdyo
+         seQqukyUnr+1jU9rbdoeAnGtKJ3esJ2NlKdlIO8Nme8y7MlX0mMzfmfoI0Kn1pb2As8b
+         wOXg==
+X-Gm-Message-State: AOAM533PJNA7SoklXp76C6nA/Q0S7jUuS+9l+phLizD/l+8ZoO8h6bgC
+        IACk81mo5YSfyT6H5IF9EQ==
+X-Google-Smtp-Source: ABdhPJzm2Wq9gtCCw6Qe4aAHLbmv/3ntFY0cGl2S5wwgMTsq9ONra4LkTTv0rGAIbzvI9XBq2JoGlQ==
+X-Received: by 2002:a37:2e42:0:b0:67e:6d80:2707 with SMTP id u63-20020a372e42000000b0067e6d802707mr5256523qkh.365.1647800492624;
+        Sun, 20 Mar 2022 11:21:32 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:c6d:21ec:c4f5:bb3:5269:3b0e])
+        by smtp.gmail.com with ESMTPSA id h8-20020ac87d48000000b002e1c6faae9csm10092811qtb.28.2022.03.20.11.21.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Mar 2022 11:21:31 -0700 (PDT)
+Received: (nullmailer pid 3157573 invoked by uid 1000);
+        Sun, 20 Mar 2022 18:20:08 -0000
+Date:   Sun, 20 Mar 2022 14:20:08 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowsk <krzysztof.kozlowski@canonical.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Hector Martin <marcan@marcan.st>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joey Gouly <joey.gouly@arm.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: nvmem: Add apple,efuses
+Message-ID: <YjdwWHQNg8Ro+DIr@robh.at.kernel.org>
+References: <20220312165837.40687-1-sven@svenpeter.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [patch] console_codes.4: ffix
-Content-Language: en-US
-To:     "G. Branden Robinson" <g.branden.robinson@gmail.com>
-Cc:     nick black <dankamongmen@gmail.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
-References: <YeEc2pYvKEckcAmv@schwarzgerat.orthanc>
- <CAN4uE+p-uKzHNYry2YhCMfEFBQ2jUqpDAGx=+eha01w-L4fAjg@mail.gmail.com>
- <20220320160217.gws42lklp6ishzub@localhost.localdomain>
-From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
-In-Reply-To: <20220320160217.gws42lklp6ishzub@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220312165837.40687-1-sven@svenpeter.dev>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, nick, and Branden!
+On Sat, 12 Mar 2022 17:58:36 +0100, Sven Peter wrote:
+> Apple SoCs come with eFuses used to store factory-programmed data
+> such as calibration settings for the PCIe and Type-C PHY.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> ---
+> v2 -> v3:
+>   - added r-b tag
+> v1 -> v2:
+>   - fixed indentation issue pointed out by Krzysztof Kozlowski
+> 
+>  .../bindings/nvmem/apple,efuses.yaml          | 50 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+> 
 
-On 3/20/22 17:02, G. Branden Robinson wrote:
-> Hi Nick,
-> 
-> Alex has been waiting on me for a review of this patch.  I took longer
-> than I should have because I thought he was expecting a technical
-> evaluation of the accuracy of the sequences documented.[1]  Now I see it
-> was just a matter of man(7) and tbl(1) syntactical and style review.
-
-No, you were originally right.  I did mean both, but especially
-"a technical evaluation of the accuracy of the sequences documented".
-You did it anyway, so thanks! :)
-
-> 
-> Easy bits first.
-> 
->> Remove CSI prefix from the list of non-CSI escapes.
-> 
-> +1
-> 
->> End all items of said list with periods, matching other sections of
->> the page.
-> 
-> +1
-> 
->> Fix up the busted OSC command list (reset palette and set palette).
-> 
->>  ESC ]  OSC     T{
->> -(Should be: Operating system command)
->> -ESC ] P \fInrrggbb\fP: set palette, with parameter
->> -given in 7 hexadecimal digits after the final P :-(.
->> -Here \fIn\fP is the color (0\(en15), and \fIrrggbb\fP indicates
->> +Operating System Command prefix.
->> +T}
->> +ESC ] R                Reset palette.
->> +ESC ] P                T{
->> +Set palette, with parameter given in 7 hexadecimal digits \fInrrggbb\fP after
->> +the final P. Here \fIn\fP is the color (0\(en15), and \fIrrggbb\fP indicates
->>  the red/green/blue values (0\(en255).
->> -ESC ] R: reset palette
->>  T}
-> 
-> Yes, this was majorly hosed up, syntactically.  What you have is good
-> repair to obvious damage.  +1.
-> 
-> I have some suggestions for further improvement, but please don't gate
-> the patch application on these.
-[...]
-
-Okay, thanks!
-
-nick, can you please resend the patch?  I've lost the original email.
-
-Cheers,
-
-Alex
-
--- 
-Alejandro Colomar
-Linux man-pages comaintainer; https://www.kernel.org/doc/man-pages/
-http://www.alejandro-colomar.es/
+Acked-by: Rob Herring <robh@kernel.org>

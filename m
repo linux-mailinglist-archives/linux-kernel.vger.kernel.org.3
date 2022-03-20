@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47F34E198B
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 04:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A884E198C
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 04:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239450AbiCTDcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 23:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S242184AbiCTDfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 23:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiCTDcT (ORCPT
+        with ESMTP id S231244AbiCTDfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 23:32:19 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AAA3D4B4;
-        Sat, 19 Mar 2022 20:30:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647747057; x=1679283057;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=h1aRh4JEaVV6XjY9nMDTKMmS36IDjBZFJm+89+Hc6nU=;
-  b=h78V8YhoQiLynBzGlgHuyQl6F3hUPKq7xzgqHqpq+Ws6N+FBseidR5qe
-   GonL0yzGIrpyD1EgIq0r+F4wdxY7dbdOZQzBzieuLos50IW7FCPtyRxti
-   gbHAQ5NwkJWZAgNDtJn2v6kEK/vs65AIXnBv1+q1ndpsay95qck/AsvJV
-   1erdCcuhTLl5jhVvcQbAJwhB2MEe4KiDb6sztxTMDsJHZQtu5y8DVoV4T
-   n+AgXR3yCFUQyk6g4U6ciGeF/5Bjk2nky5iRMJ68hru80ExraXGcGCkjc
-   DCcEAW5SRQARMEEMq37rddrl+WIMjZT95NHzLU6xvGvqes98YdmHiWT+z
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="257539876"
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="257539876"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 20:30:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="517985806"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 19 Mar 2022 20:30:54 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVmHN-000GWN-Np; Sun, 20 Mar 2022 03:30:53 +0000
-Date:   Sun, 20 Mar 2022 11:30:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jagath Jog J <jagathjog1996@gmail.com>, dan@dlrobertson.com,
-        jic23@kernel.org, andy.shevchenko@gmail.com
-Cc:     kbuild-all@lists.01.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/5] iio: accel: bma400: Add triggered buffer support
-Message-ID: <202203201124.OLMstZaW-lkp@intel.com>
-References: <20220319181023.8090-4-jagathjog1996@gmail.com>
+        Sat, 19 Mar 2022 23:35:19 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B9439BBF
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 20:33:56 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id h196so9563482qke.12
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 20:33:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AE/BXY7F2KOdTssv98/tsVCVvRVwtSj3MkZKgJjE5vc=;
+        b=foBrR5EryWGwNwgjnDx/Obcd/RLWgFzR+sE3TcdOQabxWQUQHQ4mX6taWXpEImn3Yx
+         O4MqKBfWvNPpbGOGrTGyebQIqYaVHCRaokkvu6snpTt3IZj2OIV2LQGtMNGSr3bOJKsM
+         nOfMgBI/s9VpGnG4RB77QVaE2lal22Ta9sAyrRiJzASFHbZSMVRwwamxL9jpAYuXu2kt
+         KIrUX52xO+fEQEtxvXvXVCGEgQ4vBKNN/+F6Q+d/X2BJSenXibdZ6jawCOsKFal5D9Bp
+         ozKDDRayHzjbVbzDCk/Tz2JHimrC8ejeNk0MKjlj98vcmqkIZGtsFIXVuAK8JRkVKhG5
+         itXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AE/BXY7F2KOdTssv98/tsVCVvRVwtSj3MkZKgJjE5vc=;
+        b=S04EKskOoWyC9k1C74HQ2e4tdkN2OMTHCRkt6bP/Z89zx2Qcc5GS8NApa+D+rzcs1W
+         e7rqDoK5aYIawRp5LdR+HExfLeUmaONlqvxXuNZStYXhBsxgFm05TXfMR2l0Nfv4g/tB
+         7xXWaRpghYf9f8PXXuZhhHLcrRtTSwecSh2Qpf+HK2ohQTym6/UCdUGLyVMhCi1KquDr
+         LYimxxaVftV/47Mt7xHTNF4FGtyTT+m0tD0G6ZL6R4j+MsG/uS2HNm2rVaY5gfOfro8U
+         vlU98Z2XhkVnqMhr+XXOZkbLXLv5ZGHLjXX+F2KBIgLzOZEwgk3e3gXajUYsHs1LnrI7
+         4m3Q==
+X-Gm-Message-State: AOAM530f4ulBPfqgPEyb8r9n7aZYpi76mbn3hqtFunyjhtShGChz2SL6
+        gQ9YPvPfiw/1PddENpdLpMc=
+X-Google-Smtp-Source: ABdhPJz2dyv1mrOQ4RZ3BPPCQ1QJj7P7SK5PWCQUaFblmIjV9r7zPOHHQtCLeh297KhYgXpAXnWNyg==
+X-Received: by 2002:a05:620a:2985:b0:67d:b9ac:90b2 with SMTP id r5-20020a05620a298500b0067db9ac90b2mr9923453qkp.436.1647747235069;
+        Sat, 19 Mar 2022 20:33:55 -0700 (PDT)
+Received: from localhost.localdomain ([159.223.186.39])
+        by smtp.gmail.com with ESMTPSA id j4-20020a37c244000000b0067d79a3fd0esm6250340qkm.106.2022.03.19.20.33.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Mar 2022 20:33:54 -0700 (PDT)
+From:   "Ryan C. England" <rcengland@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     arve@android.com, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        "Ryan C. England" <rcengland@gmail.com>
+Subject: [PATCH] staging: android: ashmem: Fixed a struct coding style issue
+Date:   Sun, 20 Mar 2022 03:33:37 +0000
+Message-Id: <20220320033337.47118-1-rcengland@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220319181023.8090-4-jagathjog1996@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,63 +69,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jagath,
+Fixed a coding style issue.
 
-Thank you for the patch! Perhaps something to improve:
+Signed-off-by: Ryan C. England <rcengland@gmail.com>
+---
+ drivers/staging/android/ashmem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[auto build test WARNING on v5.17-rc8]
-[cannot apply to jic23-iio/togreg next-20220318]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Jagath-Jog-J/iio-accel-bma400-Add-support-for-buffer-and-step/20220320-021114
-base:    09688c0166e76ce2fb85e86b9d99be8b0084cdf9
-config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220320/202203201124.OLMstZaW-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/8dc9a46d5af9a53917108ce2b103b3d9a50986a5
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jagath-Jog-J/iio-accel-bma400-Add-support-for-buffer-and-step/20220320-021114
-        git checkout 8dc9a46d5af9a53917108ce2b103b3d9a50986a5
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iio/accel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/iio/accel/bma400_core.c:906:13: sparse: sparse: restricted __le16 degrades to integer
-
-vim +906 drivers/iio/accel/bma400_core.c
-
-   891	
-   892	static irqreturn_t bma400_interrupt(int irq, void *private)
-   893	{
-   894		struct iio_dev *indio_dev = private;
-   895		struct bma400_data *data = iio_priv(indio_dev);
-   896		int ret;
-   897		__le16 status;
-   898	
-   899		mutex_lock(&data->mutex);
-   900		ret = regmap_bulk_read(data->regmap, BMA400_INT_STAT0_REG, &status,
-   901				       sizeof(status));
-   902		mutex_unlock(&data->mutex);
-   903		if (ret)
-   904			goto out;
-   905	
- > 906		if (status & BMA400_INT_DRDY_MSK)
-   907			iio_trigger_poll_chained(data->trig);
-   908	
-   909	out:
-   910		return IRQ_HANDLED;
-   911	}
-   912	
-
+diff --git a/drivers/staging/android/ashmem.c b/drivers/staging/android/ashmem.c
+index ddbde3f8430e..f2bf7995b403 100644
+--- a/drivers/staging/android/ashmem.c
++++ b/drivers/staging/android/ashmem.c
+@@ -377,7 +377,7 @@ ashmem_vmfile_get_unmapped_area(struct file *file, unsigned long addr,
+ 
+ static int ashmem_mmap(struct file *file, struct vm_area_struct *vma)
+ {
+-	static struct file_operations vmfile_fops;
++	const struct file_operations vmfile_fops;
+ 	struct ashmem_area *asma = file->private_data;
+ 	int ret = 0;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+

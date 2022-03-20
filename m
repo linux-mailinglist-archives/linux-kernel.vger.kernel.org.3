@@ -2,121 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F1A4E1980
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 03:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B564E1984
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 04:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242206AbiCTC6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 19 Mar 2022 22:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
+        id S244672AbiCTDCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 19 Mar 2022 23:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234222AbiCTC6v (ORCPT
+        with ESMTP id S234222AbiCTDCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 19 Mar 2022 22:58:51 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71A51CD7CC;
-        Sat, 19 Mar 2022 19:57:29 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id n18so10023399plg.5;
-        Sat, 19 Mar 2022 19:57:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=f2V16VQGlEWJs89nhNWj6KgqYUtM5qh8Hz8sytX12p4=;
-        b=pdWxJ7QA1+glIkDG1YQnhFIGl+qLfJ8DOxeaivhlqCO620c7QuOQU8dRFRvvAwDawb
-         SiuBPPwIP38sm6p6t5Y3o67ToHT+qTrf687WU84cJSj3Y620hHR8DrbaPLFgKOdw95IR
-         PuCBdT4SUsLYfgK7Z5ruzCWikb7gPdUfAUkk+T3z4aamXiZ3ZlCZ6ddRm9fMlLggDvjO
-         hzUp+7wxeGugd5cvRLg64hJuD12Dgzl+j9XW7mSzLekD+fYmyO4KZcEZjms3mGx8qZNl
-         Wu7u0DnDpRqUcngg5J/xsw5aeW1eNro4Ubj6+kTi89GVUn0rYnSy0LDy0ps+xP1qNKFc
-         YLNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=f2V16VQGlEWJs89nhNWj6KgqYUtM5qh8Hz8sytX12p4=;
-        b=AnJADTQgLd9Rc4I7ME8iodJbouAV0Rp1BpGSzQn53paF4koSCh/dcAXsvyDR6CuF5q
-         jHg7OyD2uMY0fe7ybHkdruDzi8ujKRK3WvhTm2AKaKIdzZrjv8J4a25dlEhQQlnIO5lF
-         h5BU9OEyFAv6+t6pAZPnq5KIUkSlQxV3YQPFvKmaHomhcG/kdgQez9uzomI6j8WlqPWi
-         iPjmRyHoHF2AemBCTabTz9y+F1gq+ApuexmZsb2RdtbDQjFLewzIYCB7xu+7WTsEF6VE
-         PPQbE5LEdpoWG8gOQLyYjkek1eOy2x3cYV2yAeTJJ5Fr8/88GuED/O7QUYB0Qrf1ZcgI
-         lkXQ==
-X-Gm-Message-State: AOAM532j13RBg1nlysgdbejJxH+z+zESZtkLUrK3xj5akuHvpTmo4ktC
-        8bF7NsPGNgetypgMkirXCqCeOwd20g4hww==
-X-Google-Smtp-Source: ABdhPJytm3dCJedsBHgku/N7tF2qD0s90eclfziKIjxIcwzdaYaqNXHFzd6eJtX4zrffRV2HSaG24Q==
-X-Received: by 2002:a17:902:7608:b0:153:32d3:f721 with SMTP id k8-20020a170902760800b0015332d3f721mr6746661pll.168.1647745048256;
-        Sat, 19 Mar 2022 19:57:28 -0700 (PDT)
-Received: from localhost.localdomain ([183.157.215.81])
-        by smtp.googlemail.com with ESMTPSA id q2-20020a056a00084200b004f761a7287dsm14947368pfk.131.2022.03.19.19.57.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 19:57:27 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     mchehab@kernel.org
-Cc:     hverkuil-cisco@xs4all.nl, yangyingliang@huawei.com, akpm@osdl.org,
-        v4l@cerqueira.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jakobkoschel@gmail.com,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH] saa7134: fix incorrect check to determine if no element is found in list
-Date:   Sun, 20 Mar 2022 10:57:18 +0800
-Message-Id: <20220320025718.10053-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 19 Mar 2022 23:02:19 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF09F21FF7D
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 20:00:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647745255; x=1679281255;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=j5+Llm7g5e2zUDcYP4XXhcx4gklcdN5/avsNT/A3Vk4=;
+  b=mVpAPDRapTTPNlAugP0FVBWxpNW9mUq3NvTXwmxInJKsuNhJUCe0ongH
+   nt4V/vWRLVaLrWOrmSs+wcaWjMjutrAVa5KxlTc6QaKc1tEKi+HPnhT2X
+   KfRSWrpiGGgsKTt65hDWxYy9D550ZZSttApL3ydHb0boPxkIhvZA6jUlb
+   puNBMYO1Wt1VGIhzZGLp/QP7l7UD46MmC+Ta6O9V+vTwN9nGbZP5bgbQf
+   gf+54FUMQ2n6nnrkH6vwvROVfJ++Hj/16USWNofRWtXgbyo6Du8aek95k
+   Q4tmByf36e2lllac+ZHNtbxq1h++ajTCHBgDZmM/DnbnJp7fiLlBRMm3A
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="244818242"
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="244818242"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2022 20:00:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="517980634"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 19 Mar 2022 20:00:53 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nVloL-000GVS-3C; Sun, 20 Mar 2022 03:00:53 +0000
+Date:   Sun, 20 Mar 2022 11:00:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>
+Subject: drivers/dma/dw-edma/dw-edma-v0-core.c:326
+ dw_edma_v0_core_write_chunk() warn: inconsistent indenting
+Message-ID: <202203201029.ZsGgjczC-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug is here: "if (dev == NULL)".
+Hi Gustavo,
 
-The list iterator value will *always* be set and non-NULL by
-list_for_each_entry(), so it is incorrect to assume that the iterator
-value will be NULL if the list is empty or no element is found in list.
+First bad commit (maybe != root cause):
 
-Use a new value 'iter' as the list iterator, while use the old value
-'req' as a dedicated pointer to point to the found element, which
-1. can fix this bug, due to now 'req' is NULL only if it's not found.
-2. do not need to change all the uses of 'req' after the loop.
-3. can also limit the scope of the list iterator 'iter' *only inside*
-   the traversal loop by simply declaring 'iter' inside the loop in the
-   future, as usage of the iterator outside of the list_for_each_entry
-   is considered harmful. https://lkml.org/lkml/2022/2/17/1032
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   34e047aa16c0123bbae8e2f6df33e5ecc1f56601
+commit: e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec dmaengine: dw-edma: Add support for the HDMA feature
+date:   1 year ago
+config: ia64-randconfig-m031-20220320 (https://download.01.org/0day-ci/archive/20220320/202203201029.ZsGgjczC-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
 
-Fixes: 4aabf6331f89c ("[PATCH] v4l: (951) Make saa7134-oss as a stand-alone module")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- drivers/media/pci/saa7134/saa7134-alsa.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/media/pci/saa7134/saa7134-alsa.c b/drivers/media/pci/saa7134/saa7134-alsa.c
-index fb24d2ed3621..4955f7e7c5bf 100644
---- a/drivers/media/pci/saa7134/saa7134-alsa.c
-+++ b/drivers/media/pci/saa7134/saa7134-alsa.c
-@@ -1215,18 +1215,21 @@ static int alsa_device_exit(struct saa7134_dev *dev)
- static int saa7134_alsa_init(void)
- {
- 	struct saa7134_dev *dev = NULL;
-+	struct saa7134_dev *iter;
- 
- 	saa7134_dmasound_init = alsa_device_init;
- 	saa7134_dmasound_exit = alsa_device_exit;
- 
- 	pr_info("saa7134 ALSA driver for DMA sound loaded\n");
- 
--	list_for_each_entry(dev, &saa7134_devlist, devlist) {
--		if (dev->pci->device == PCI_DEVICE_ID_PHILIPS_SAA7130)
-+	list_for_each_entry(iter, &saa7134_devlist, devlist) {
-+		dev = iter;
-+
-+		if (iter->pci->device == PCI_DEVICE_ID_PHILIPS_SAA7130)
- 			pr_info("%s/alsa: %s doesn't support digital audio\n",
--				dev->name, saa7134_boards[dev->board].name);
-+				iter->name, saa7134_boards[iter->board].name);
- 		else
--			alsa_device_init(dev);
-+			alsa_device_init(iter);
- 	}
- 
- 	if (dev == NULL)
+New smatch warnings:
+drivers/dma/dw-edma/dw-edma-v0-core.c:326 dw_edma_v0_core_write_chunk() warn: inconsistent indenting
+drivers/dma/dw-edma/dw-edma-v0-core.c:418 dw_edma_v0_core_start() warn: inconsistent indenting
+
+Old smatch warnings:
+drivers/dma/dw-edma/dw-edma-v0-core.c:350 dw_edma_v0_core_write_chunk() warn: inconsistent indenting
+
+vim +326 drivers/dma/dw-edma/dw-edma-v0-core.c
+
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  300  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  301  static void dw_edma_v0_core_write_chunk(struct dw_edma_chunk *chunk)
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  302  {
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  303  	struct dw_edma_burst *child;
+756c3ef93492af Arnd Bergmann    2019-07-22  304  	struct dw_edma_v0_lli __iomem *lli;
+756c3ef93492af Arnd Bergmann    2019-07-22  305  	struct dw_edma_v0_llp __iomem *llp;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  306  	u32 control = 0, i = 0;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  307  	int j;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  308  
+756c3ef93492af Arnd Bergmann    2019-07-22  309  	lli = chunk->ll_region.vaddr;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  310  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  311  	if (chunk->cb)
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  312  		control = DW_EDMA_V0_CB;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  313  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  314  	j = chunk->bursts_alloc;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  315  	list_for_each_entry(child, &chunk->burst->list, list) {
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  316  		j--;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  317  		if (!j)
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  318  			control |= (DW_EDMA_V0_LIE | DW_EDMA_V0_RIE);
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  319  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  320  		/* Channel control */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  321  		SET_LL_32(&lli[i].control, control);
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  322  		/* Transfer size */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  323  		SET_LL_32(&lli[i].transfer_size, child->sz);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  324  		/* SAR */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  325  		#ifdef CONFIG_64BIT
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18 @326  			SET_LL_64(&lli[i].sar.reg, child->sar);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  327  		#else /* CONFIG_64BIT */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  328  			SET_LL_32(&lli[i].sar.lsb, lower_32_bits(child->sar));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  329  			SET_LL_32(&lli[i].sar.msb, upper_32_bits(child->sar));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  330  		#endif /* CONFIG_64BIT */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  331  		/* DAR */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  332  		#ifdef CONFIG_64BIT
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  333  			SET_LL_64(&lli[i].dar.reg, child->dar);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  334  		#else /* CONFIG_64BIT */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  335  			SET_LL_32(&lli[i].dar.lsb, lower_32_bits(child->dar));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  336  			SET_LL_32(&lli[i].dar.msb, upper_32_bits(child->dar));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  337  		#endif /* CONFIG_64BIT */
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  338  		i++;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  339  	}
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  340  
+756c3ef93492af Arnd Bergmann    2019-07-22  341  	llp = (void __iomem *)&lli[i];
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  342  	control = DW_EDMA_V0_LLP | DW_EDMA_V0_TCB;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  343  	if (!chunk->cb)
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  344  		control |= DW_EDMA_V0_CB;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  345  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  346  	/* Channel control */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  347  	SET_LL_32(&llp->control, control);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  348  	/* Linked list */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  349  	#ifdef CONFIG_64BIT
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  350  		SET_LL_64(&llp->llp.reg, chunk->ll_region.paddr);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  351  	#else /* CONFIG_64BIT */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  352  		SET_LL_32(&llp->llp.lsb, lower_32_bits(chunk->ll_region.paddr));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  353  		SET_LL_32(&llp->llp.msb, upper_32_bits(chunk->ll_region.paddr));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  354  	#endif /* CONFIG_64BIT */
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  355  }
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  356  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  357  void dw_edma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  358  {
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  359  	struct dw_edma_chan *chan = chunk->chan;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  360  	struct dw_edma *dw = chan->chip->dw;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  361  	u32 tmp;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  362  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  363  	dw_edma_v0_core_write_chunk(chunk);
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  364  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  365  	if (first) {
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  366  		/* Enable engine */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  367  		SET_RW_32(dw, chan->dir, engine_en, BIT(0));
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  368  		if (dw->mf == EDMA_MF_HDMA_COMPAT) {
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  369  			switch (chan->id) {
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  370  			case 0:
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  371  				SET_RW_COMPAT(dw, chan->dir, ch0_pwr_en,
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  372  					      BIT(0));
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  373  				break;
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  374  			case 1:
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  375  				SET_RW_COMPAT(dw, chan->dir, ch1_pwr_en,
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  376  					      BIT(0));
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  377  				break;
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  378  			case 2:
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  379  				SET_RW_COMPAT(dw, chan->dir, ch2_pwr_en,
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  380  					      BIT(0));
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  381  				break;
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  382  			case 3:
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  383  				SET_RW_COMPAT(dw, chan->dir, ch3_pwr_en,
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  384  					      BIT(0));
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  385  				break;
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  386  			case 4:
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  387  				SET_RW_COMPAT(dw, chan->dir, ch4_pwr_en,
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  388  					      BIT(0));
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  389  				break;
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  390  			case 5:
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  391  				SET_RW_COMPAT(dw, chan->dir, ch5_pwr_en,
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  392  					      BIT(0));
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  393  				break;
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  394  			case 6:
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  395  				SET_RW_COMPAT(dw, chan->dir, ch6_pwr_en,
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  396  					      BIT(0));
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  397  				break;
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  398  			case 7:
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  399  				SET_RW_COMPAT(dw, chan->dir, ch7_pwr_en,
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  400  					      BIT(0));
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  401  				break;
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  402  			}
+e0c1d53891c43a Gustavo Pimentel 2021-02-18  403  		}
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  404  		/* Interrupt unmask - done, abort */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  405  		tmp = GET_RW_32(dw, chan->dir, int_mask);
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  406  		tmp &= ~FIELD_PREP(EDMA_V0_DONE_INT_MASK, BIT(chan->id));
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  407  		tmp &= ~FIELD_PREP(EDMA_V0_ABORT_INT_MASK, BIT(chan->id));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  408  		SET_RW_32(dw, chan->dir, int_mask, tmp);
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  409  		/* Linked list error */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  410  		tmp = GET_RW_32(dw, chan->dir, linked_list_err_en);
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  411  		tmp |= FIELD_PREP(EDMA_V0_LINKED_LIST_ERR_MASK, BIT(chan->id));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  412  		SET_RW_32(dw, chan->dir, linked_list_err_en, tmp);
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  413  		/* Channel control */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  414  		SET_CH_32(dw, chan->dir, chan->id, ch_control1,
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  415  			  (DW_EDMA_V0_CCS | DW_EDMA_V0_LLE));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  416  		/* Linked list */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  417  		#ifdef CONFIG_64BIT
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18 @418  			SET_CH_64(dw, chan->dir, chan->id, llp.reg,
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  419  				  chunk->ll_region.paddr);
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  420  		#else /* CONFIG_64BIT */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  421  			SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
+6f4722b1d1ebf2 Arnd Bergmann    2019-07-22  422  				  lower_32_bits(chunk->ll_region.paddr));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  423  			SET_CH_32(dw, chan->dir, chan->id, llp.msb,
+6f4722b1d1ebf2 Arnd Bergmann    2019-07-22  424  				  upper_32_bits(chunk->ll_region.paddr));
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  425  		#endif /* CONFIG_64BIT */
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  426  	}
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  427  	/* Doorbell */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  428  	SET_RW_32(dw, chan->dir, doorbell,
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  429  		  FIELD_PREP(EDMA_V0_DOORBELL_CH_MASK, chan->id));
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  430  }
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  431  
+
+:::::: The code at line 326 was first introduced by commit
+:::::: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
+
+:::::: TO: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
+:::::: CC: Vinod Koul <vkoul@kernel.org>
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

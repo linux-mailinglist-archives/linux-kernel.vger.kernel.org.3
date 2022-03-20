@@ -2,118 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951944E1B16
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 11:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7E94E1B26
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 11:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244077AbiCTKoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 06:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+        id S244105AbiCTK4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 06:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235555AbiCTKoH (ORCPT
+        with ESMTP id S231442AbiCTK4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 06:44:07 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220144B85A
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 03:42:45 -0700 (PDT)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-        by gnuweeb.org (Postfix) with ESMTPSA id 482587E331
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 10:42:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1647772964;
-        bh=cslQqgZ7BRLt7KwLkN6alHsy0RvZ6fR/hvzrpU/IQcw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bFDGdfBQ3owjAm/4oBfunZS+DrEyK0awO7Qz5oGktEcPCnImR0wZgBv+LNd7aIC1i
-         fGyvC6p4/FN/DDQPq228Zj2yJixTbwoCcoKkpJ0/AzFbX0uMA43D+mh2L252TLLN5B
-         /ncMD+AGOhrx61gIsxzAKanZnCRzwtqnmuL1M091E9UV2Aeznl/4I3VTVCcEfGwE/I
-         C1+DL4Si5HQ6+QxLauMO6t+W60QB8B0vo+6an6k8Y4FJUMgbHM+dG2rH91/RIHUJxJ
-         9Bch068lVennn7YcAryshledQyBPUmKNHe1fzSmjiEwXmFaZsJpbiDozN9PbcIA1fW
-         fKf+RyhIyrJhA==
-Received: by mail-lj1-f169.google.com with SMTP id 17so16566831lji.1
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 03:42:44 -0700 (PDT)
-X-Gm-Message-State: AOAM531ErKTrPcPJFFILQU7YYrjOvs6pCzF61wlPDqp7nlHCX+oQ4GqE
-        0BEZ1fsnm/8F29FccehLrBypY7ynozxSBjJiZEY=
-X-Google-Smtp-Source: ABdhPJz2Mt7MudHlBHTgwknr9S1NVKeLSs8DnEm5oR+qe5t2az/z3e9HK824k1yGmqCzAFBlGv5uyg0SUiaDNrsvLlQ=
-X-Received: by 2002:a2e:7d05:0:b0:247:ed41:690d with SMTP id
- y5-20020a2e7d05000000b00247ed41690dmr12102096ljc.92.1647772962093; Sun, 20
- Mar 2022 03:42:42 -0700 (PDT)
+        Sun, 20 Mar 2022 06:56:07 -0400
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EA6419A4;
+        Sun, 20 Mar 2022 03:54:44 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id g20so14952437edw.6;
+        Sun, 20 Mar 2022 03:54:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DoyDLcneBed/lxmrHnHYG/MOmh/NiMvZkZDcOvMscXc=;
+        b=gnc4bfrWBvpS5qFmT3uS9pkqTMi2Zfk8OKf57gAXSV1hCffjRbdLVUSmA8YYRJ5TFC
+         hmLFkJ90gqboXdQVxFc92lq7ppIW5XmCk8z0UAwTSDZGawSTepUcDh8VQMu+0P/Qc44j
+         OPx53De17oeq32H8MBOCanaQcR3pen8UjO7EL2EaKPZpWMv6hvsKe9CsAM8Tl1TrQVs8
+         AdrxhZQQsspTtZZMsHadDNZ2rRjaLAbAW1Wa8q8ln8cRqVAVQaWswIOEQkekoXDhZE48
+         VI9co/iasNr2cIVOxihGNV/Ob2F8A8whqUpZay4bKQaKzA5pqqbXPIk/z2E07dveantR
+         8Qhg==
+X-Gm-Message-State: AOAM531xJhR2rvJZw/kDiB2pcCeyMbqTA3TblttbqnlyKLWi3DDzZna7
+        qbR761jJLuntBrs7sSTqD3Q=
+X-Google-Smtp-Source: ABdhPJxRIf8p/xeRo0ISGGexM1bBEv6iPxznNuiPCRws8lrVQk+QCr+5/1RPN3EyO6HOz5GsSH1T7Q==
+X-Received: by 2002:a50:e081:0:b0:401:8823:c9a8 with SMTP id f1-20020a50e081000000b004018823c9a8mr18092848edl.401.1647773681899;
+        Sun, 20 Mar 2022 03:54:41 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id z22-20020a17090655d600b006d229436793sm5699993ejp.223.2022.03.20.03.54.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Mar 2022 03:54:41 -0700 (PDT)
+Message-ID: <89f9b797-e4b8-139a-d9e6-ebe71779b943@kernel.org>
+Date:   Sun, 20 Mar 2022 11:54:39 +0100
 MIME-Version: 1.0
-References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
- <20220320093750.159991-4-ammarfaizi2@gnuweeb.org> <CAOG64qO5b30GjyYxoRj9QLJpfaa-o40W1oYL0XuZ8C5QX17bww@mail.gmail.com>
-In-Reply-To: <CAOG64qO5b30GjyYxoRj9QLJpfaa-o40W1oYL0XuZ8C5QX17bww@mail.gmail.com>
-From:   Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Date:   Sun, 20 Mar 2022 17:42:30 +0700
-X-Gmail-Original-Message-ID: <CAOG64qPyXS-NVE6wV2fs8ho5B88ziZrO9mL3cgZrLRqf6tmmQA@mail.gmail.com>
-Message-ID: <CAOG64qPyXS-NVE6wV2fs8ho5B88ziZrO9mL3cgZrLRqf6tmmQA@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 3/6] tools/nolibc: i386: Implement syscall with 6 arguments
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
-        Nugraha <richiisei@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>, x86@kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 6/6] dt-bindings: pinctrl: convert ocelot-pinctrl to
+ YAML format
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Quentin Schulz <quentin.schulz@bootlin.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+References: <20220319204628.1759635-1-michael@walle.cc>
+ <20220319204628.1759635-7-michael@walle.cc>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220319204628.1759635-7-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 5:33 PM Alviro Iskandar Setiawan wrote:
-> On Sun, Mar 20, 2022 at 4:37 PM Ammar Faizi wrote:
-> > In i386, the 6th argument of syscall goes in %ebp. However, both Clang
-> > and GCC cannot use %ebp in the clobber list and in the "r" constraint
-> > without using -fomit-frame-pointer. To make it always available for any
-> > kind of compilation, the below workaround is implemented.
-> >
-> > For clang (the Assembly statement can't clobber %ebp):
-> >   1) Save the %ebp value to the redzone area -4(%esp).
-> >   2) Load the 6-th argument from memory to %ebp.
-> >   3) Subtract the %esp by 4.
-> >   4) Do the syscall (int $0x80).
-> >   5) Pop %ebp.
->
-> I don't think you can safely use redzone from inline Assembly. The
-> compiler may also use redzone for a leaf function. In case the syscall
-> is done at the same time, your %ebp saving will clobber the redzone
-> that the compiler uses.
->
-> > For GCC, fortunately it has a #pragma that can force a specific function
-> > to be compiled with -fomit-frame-pointer, so it can always use "r"(var)
-> > where `var` is a variable bound to %ebp.
-> >
-> > Cc: x86@kernel.org
-> > Cc: llvm@lists.linux.dev
-> > Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> [...]
-> > +#if defined(__clang__)
-> > +static inline long ____do_syscall6(long eax, long ebx, long ecx, long edx,
-> > +                                  long esi, long edi, long ebp)
-> > +{
-> > +       __asm__ volatile (
-> > +               "movl   %%ebp, -4(%%esp)\n\t"
-> > +               "movl   %[arg6], %%ebp\n\t"
-> > +               "subl   $4, %%esp\n\t"
-> > +               "int    $0x80\n\t"
-> > +               "popl   %%ebp\n\t"
-> > +               : "=a"(eax)
-> > +               : "a"(eax), "b"(ebx), "c"(ecx), "d"(edx), "S"(esi), "D"(edi),
-> > +                 [arg6]"m"(ebp)
-> > +               : "memory", "cc"
-> > +       );
-> > +       return eax;
-> > +}
-> > +
->
-> -4(%esp) may be used by the compiler on a leaf call, you can't clobber that.
+On 19/03/2022 21:46, Michael Walle wrote:
+> Convert the ocelot-pinctrl device tree binding to the new YAML format.
+> 
+> Additionally to the original binding documentation, add interrupt
+> properties which are optional and already used on several SoCs like
+> SparX-5, Luton, Ocelot and LAN966x but were not documented before.
+> 
+> Also, on the sparx5 and the lan966x SoCs there are two items for the
+> reg property.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  .../bindings/pinctrl/mscc,ocelot-pinctrl.txt  |  42 -------
+>  .../bindings/pinctrl/mscc,ocelot-pinctrl.yaml | 108 ++++++++++++++++++
+>  2 files changed, 108 insertions(+), 42 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
+> deleted file mode 100644
+> index 5d84fd299ccf..000000000000
+> --- a/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
+> +++ /dev/null
+> @@ -1,42 +0,0 @@
+> -Microsemi Ocelot pin controller Device Tree Bindings
+> -----------------------------------------------------
+> -
+> -Required properties:
+> - - compatible		: Should be "mscc,ocelot-pinctrl",
+> -			  "mscc,jaguar2-pinctrl", "microchip,sparx5-pinctrl",
+> -			  "mscc,luton-pinctrl", "mscc,serval-pinctrl",
+> -			  "microchip,lan966x-pinctrl" or "mscc,servalt-pinctrl"
+> - - reg			: Address and length of the register set for the device
+> - - gpio-controller	: Indicates this device is a GPIO controller
+> - - #gpio-cells		: Must be 2.
+> -			  The first cell is the pin number and the
+> -			  second cell specifies GPIO flags, as defined in
+> -			  <dt-bindings/gpio/gpio.h>.
+> - - gpio-ranges		: Range of pins managed by the GPIO controller.
+> -
+> -
+> -The ocelot-pinctrl driver uses the generic pin multiplexing and generic pin
+> -configuration documented in pinctrl-bindings.txt.
+> -
+> -The following generic properties are supported:
+> - - function
+> - - pins
+> -
+> -Example:
+> -	gpio: pinctrl@71070034 {
+> -		compatible = "mscc,ocelot-pinctrl";
+> -		reg = <0x71070034 0x28>;
+> -		gpio-controller;
+> -		#gpio-cells = <2>;
+> -		gpio-ranges = <&gpio 0 0 22>;
+> -
+> -		uart_pins: uart-pins {
+> -				pins = "GPIO_6", "GPIO_7";
+> -				function = "uart";
+> -		};
+> -
+> -		uart2_pins: uart2-pins {
+> -				pins = "GPIO_12", "GPIO_13";
+> -				function = "uart2";
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
+> new file mode 100644
+> index 000000000000..7149a6655623
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
+> @@ -0,0 +1,108 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/mscc,ocelot-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microsemi Ocelot pin controller
+> +
+> +maintainers:
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> +  - Lars Povlsen <lars.povlsen@microchip.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - microchip,lan966x-pinctrl
+> +      - microchip,sparx5-pinctrl
+> +      - mscc,jaguar2-pinctrl
+> +      - mscc,luton-pinctrl
+> +      - mscc,ocelot-pinctrl
+> +      - mscc,serval-pinctrl
+> +      - mscc,servalt-pinctrl
+> +
+> +  reg:
+> +    items:
+> +      - description: Base address
+> +      - description: Extended pin configuration registers
+> +    minItems: 1
+> +
+> +  gpio-controller: true
+> +
+> +  '#gpio-cells':
+> +    const: 2
+> +
+> +  gpio-ranges: true
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 2
 
-Using xchgl to preserve %ebp in the same place where the arg6 is
-stored in memory is a better solution and doesn't clobber anything.
+Thanks for the changes in other files, but I think you did not respond
+to my comments here. Can you address them?
 
-    xchgl %ebp, %[arg6]
-    int    $0x80
-    xchgl %ebp, %[arg6]
 
--- Viro
+Best regards,
+Krzysztof

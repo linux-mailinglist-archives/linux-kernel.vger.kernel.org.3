@@ -2,150 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C5B4E1B3C
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 12:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E57DD4E1B40
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 12:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244396AbiCTLFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 07:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
+        id S244439AbiCTLHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 07:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240444AbiCTLFR (ORCPT
+        with ESMTP id S239698AbiCTLHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 07:05:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A0344830B
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 04:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647774233;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hFzoF0hHDOlcsVq7gujqkCRBLubjXsP/Roy3iuwOSII=;
-        b=Ctk/kkVHy/4bBCwUafn+kN/3gUHcCx2YGUkD2dpeT04jA+Lm5kxdTNuP/dobd6q5g0BQSG
-        VDfHMYN+wyu7qy9RmGh9qJuFqTtRemy3Q5gtIRU17qKmT9qGXjT+Eep6q3cNDmQmrKzy6U
-        /38GokP1xAbv1iCcuVpbIN5DsEES6wc=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-638-71jkyQlPOli4e9pqJHQiiw-1; Sun, 20 Mar 2022 07:03:51 -0400
-X-MC-Unique: 71jkyQlPOli4e9pqJHQiiw-1
-Received: by mail-ej1-f69.google.com with SMTP id jx2-20020a170907760200b006dfc374c502so1982019ejc.7
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 04:03:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hFzoF0hHDOlcsVq7gujqkCRBLubjXsP/Roy3iuwOSII=;
-        b=g2NXDoX3fdlscz9vDDk9h5PGj3TIPBPBKjXreSPvNPVXoaGLy7mbgendFbG1f1kT04
-         oe5Iz8558M1OarmR87qXLI4qRF9QHZEoNNLtR+4SV3KYKbZDaH7RD350YshSoDlUUQrO
-         X4UVBrAZgTeYhkkTBG7vTNaZRMg0MaFQ8VOSUr2popC+yZmX25eCVvRvaVnSIahuG/3U
-         /e4cV5l5iw6Ck0c58Tj5V3wsYblNq+32RPKZxfAJ+Vet9UYcRtZa22miG90o/TIZT3OF
-         04gkzf+dM9n54FOIHhmgt2s58gI+4/ygxncw4AotMqrbVsmmWhKSrfCBbHAUpP01V6KK
-         Exmg==
-X-Gm-Message-State: AOAM533lzUOMh/0s1ZUhOP0ERppHnLcPTzNu8dYWw5ENoQr0v+dA8MvJ
-        a6wFfSG51D+enA+n5Tr0RqxuXJePeCZbfxi21MjcwDkqOMfy/+cfHxcX/DgG8ZtKok1r/buyAw5
-        Km7qlAONgyLvHIi66Clg9dgoX
-X-Received: by 2002:a50:bf0f:0:b0:410:c512:cb6f with SMTP id f15-20020a50bf0f000000b00410c512cb6fmr18241296edk.262.1647774230356;
-        Sun, 20 Mar 2022 04:03:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwjjAtm3/nvXUKsceBT8RN+aLhHOJTRyYxPZll7mzodeHfVLEMC07NKkUsLeu6jNKkhDa9glA==
-X-Received: by 2002:a50:bf0f:0:b0:410:c512:cb6f with SMTP id f15-20020a50bf0f000000b00410c512cb6fmr18241282edk.262.1647774230126;
-        Sun, 20 Mar 2022 04:03:50 -0700 (PDT)
-Received: from redhat.com ([2.55.132.0])
-        by smtp.gmail.com with ESMTPSA id q22-20020a170906771600b006cf8a37ebf5sm5743141ejm.103.2022.03.20.04.03.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 04:03:49 -0700 (PDT)
-Date:   Sun, 20 Mar 2022 07:03:45 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tools/virtio: Test virtual address range detection
-Message-ID: <20220320070309-mutt-send-email-mst@kernel.org>
-References: <c1895bcc240d413ff067f982b6e653996ace9887.camel@infradead.org>
- <20220221170217.5bq7nhr3pvchku5x@sgarzare-redhat>
- <75d5002ad505b476c81c0b92c0d624824e93d6ac.camel@infradead.org>
- <20220222013121-mutt-send-email-mst@kernel.org>
- <8e60951973cab3a3d27a3c7f18d866cdb804e663.camel@infradead.org>
- <YhVvOsI0+xVAKHdr@casper.infradead.org>
+        Sun, 20 Mar 2022 07:07:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1AB483B7;
+        Sun, 20 Mar 2022 04:06:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 903D761024;
+        Sun, 20 Mar 2022 11:06:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE91C340E9;
+        Sun, 20 Mar 2022 11:06:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647774385;
+        bh=SP5ZRF6K2CwwSMhfOFPEhqyOMkG4BmnjUX8ER/LN6KI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iNEbPirAIpNppN6yZr4kSqeQlf0HXpdHKmiMwhSHm9en3gzX9g0NThzW2Zgsr0w/q
+         r+r6cUUGAMqUQ8IUw3kKqXmmSJYXr+rMtWrP8VanGT3Zztch5LJqKeOhxjBvyAEYUC
+         K9kd36B4o4gWryTFeBsT15pPu9XMLFdoF4IPVvW8FESeFeaLg2+PtgcqdeakOtP2n3
+         KuHWnfCGZr83T5PWQW58fGj0++SxJogkcqjaf7A7/ldCz6i29TfC+iwK6MRT4E/3Ir
+         WCJxun7ISWsLv44gx9ocITZmAqmuQ9dUH9vMkfrmdiZBpo3aDkA3Vl9i94qJI/wBP4
+         uI87uaJTPDQ4w==
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Luca Weiss <luca.weiss@fairphone.com>
+Subject: [RFT] ufs: qcom: drop custom Android boot parameters
+Date:   Sun, 20 Mar 2022 12:06:16 +0100
+Message-Id: <20220320110616.18355-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhVvOsI0+xVAKHdr@casper.infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 11:18:18PM +0000, Matthew Wilcox wrote:
-> On Tue, Feb 22, 2022 at 07:58:33AM +0000, David Woodhouse wrote:
-> > On Tue, 2022-02-22 at 01:31 -0500, Michael S. Tsirkin wrote:
-> > > On Mon, Feb 21, 2022 at 05:18:48PM +0000, David Woodhouse wrote:
-> > > > 
-> > > > [dwoodhou@i7 virtio]$ sudo ~/virtio_test
-> > > > Detected virtual address range 0x1000-0x7ffffffff000
-> > > > spurious wakeups: 0x0 started=0x100000 completed=0x100000
-> > > > 
-> > > > Although in some circumstances I also see a different build failure:
-> > > > 
-> > > > cc -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h   -c -o vringh_test.o vringh_test.c
-> 
-> Trying to test this myself ...
-> 
-> $ cd tools/virtio/
-> $ make
-> ...
-> cc -lpthread  virtio_test.o virtio_ring.o   -o virtio_test
-> /usr/bin/ld: virtio_ring.o: in function `spin_lock':
-> /home/willy/kernel/folio/tools/virtio/./linux/spinlock.h:16: undefined reference to `pthread_spin_lock'
-> 
-> So this is not the only problem here?
+The QCOM UFS driver requires an androidboot.bootdevice command line
+argument matching the UFS device name.  If the name is different, it
+refuses to probe.  Thise androidboot.bootdevice is provided by
+stock/vendor (from an Android-based device) bootloader.
 
-Could you let me know which system and gcc version have this problem, for inclusion
-in the commit log?
+This does not make sense from Linux point of view.  Driver should be
+able to boot regardless of bootloader.  Driver should not depend on some
+Android custom environment data.
 
-> > > > In file included from ./linux/uio.h:3,
-> > > >                  from ./linux/../../../include/linux/vringh.h:15,
-> > > >                  from ./linux/vringh.h:1,
-> > > >                  from vringh_test.c:9:
-> > > > ./linux/../../../include/linux/uio.h:10:10: fatal error: linux/mm_types.h: No such file or directory
-> > > >    10 | #include <linux/mm_types.h>
-> > > >       |          ^~~~~~~~~~~~~~~~~~
-> > > > compilation terminated.
-> > > > make: *** [<builtin>: vringh_test.o] Error 1
-> > > 
-> > > Which tree has this build failure? In mine linux/uio.h does not
-> > > include linux/mm_types.h.
-> > 
-> > Strictly it's
-> > https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/xen-evtchn-kernel
-> > but I'm sure my part isn't relevant; it's just v5.17-rc5.
-> > 
-> >  $ git blame include/linux/uio.h | grep mm_types.h
-> > d9c19d32d86fa (Matthew Wilcox (Oracle) 2021-10-18 10:39:06 -0400  10) #include <linux/mm_types.h>
-> >  $ git describe --tags d9c19d32d86fa
-> > v5.16-rc4-37-gd9c19d32d86f
-> 
-> grr.  Originally, I had this doing a typebusting cast, but hch objected,
-> so I had to include mm_types.h.  This should fix it ...
-> 
-> $ git diff
-> diff --git a/tools/virtio/linux/mm_types.h b/tools/virtio/linux/mm_types.h
-> new file mode 100644
-> index 000000000000..3b0fc9bc5b8f
-> --- /dev/null
-> +++ b/tools/virtio/linux/mm_types.h
-> @@ -0,0 +1,3 @@
-> +struct folio {
-> +       struct page page;
-> +};
-> 
-> At least, it makes it compile for me.
+Cc: Luca Weiss <luca.weiss@fairphone.com>
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+---
+
+Not tested, please kindly provide tests.
+
+See also:
+https://lore.kernel.org/linux-devicetree/f61abc2b-3ce8-7b1f-3d28-8a4a03ec58eb@kernel.org/T/#u
+---
+ drivers/scsi/ufs/ufs-qcom.c | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+index 0d2e950d0865..586c0e567ff9 100644
+--- a/drivers/scsi/ufs/ufs-qcom.c
++++ b/drivers/scsi/ufs/ufs-qcom.c
+@@ -957,18 +957,6 @@ static const struct reset_control_ops ufs_qcom_reset_ops = {
+ 	.deassert = ufs_qcom_reset_deassert,
+ };
+ 
+-#define	ANDROID_BOOT_DEV_MAX	30
+-static char android_boot_dev[ANDROID_BOOT_DEV_MAX];
+-
+-#ifndef MODULE
+-static int __init get_android_boot_dev(char *str)
+-{
+-	strlcpy(android_boot_dev, str, ANDROID_BOOT_DEV_MAX);
+-	return 1;
+-}
+-__setup("androidboot.bootdevice=", get_android_boot_dev);
+-#endif
+-
+ /**
+  * ufs_qcom_init - bind phy with controller
+  * @hba: host controller instance
+@@ -988,9 +976,6 @@ static int ufs_qcom_init(struct ufs_hba *hba)
+ 	struct resource *res;
+ 	struct ufs_clk_info *clki;
+ 
+-	if (strlen(android_boot_dev) && strcmp(android_boot_dev, dev_name(dev)))
+-		return -ENODEV;
+-
+ 	host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
+ 	if (!host) {
+ 		err = -ENOMEM;
+-- 
+2.32.0
 

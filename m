@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA9D4E1C49
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 16:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D40FD4E1C48
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 16:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245321AbiCTPed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 11:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
+        id S245279AbiCTPd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 11:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235517AbiCTPeb (ORCPT
+        with ESMTP id S241296AbiCTPd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 11:34:31 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86181CB1E
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 08:33:07 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id s14-20020a056e021a0e00b002c7c03a5d81so6416212ild.9
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 08:33:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=MIhvRryijrTzJR8twQ1HqBta+GyTfRS9hVvbodg7+Pw=;
-        b=TuvOPLA/CDOHRcmZhHP5u2ARVIn5gwmqJjYREqjQq6rdK6zXH5aMc0w/hqoP0Z3YUQ
-         BItb3JyiVyhFEht/OGkPMhsUrs1xzoUFQCGIXKQmsghzaKVo70QsPJKWB3YKNoTPIB/B
-         eEDVpiAsKiGRupnR4Jihb/VUJ64ESmC5nK8f4INyjG6cj6JnKXbFrduVtlJc20NvyeaP
-         BwDN3KFpO0HOAo0z7urwQB1NXg/0+HJqaloHSbhQ6tk+0/KucdlBO0mAgbAdDGYp4bgc
-         tuAmCU6yc0wZwuZdtNTPiwn+oaXX5T/1gK6QJjoie/mqBplZQ+vD6skaDGYoYYjGGKUD
-         z3vQ==
-X-Gm-Message-State: AOAM530z8E1KpCqNVs1xNI9yR5oCfHFg6oRl2VIn9rZYYwK2F9I3+U88
-        0uXSyulwNdFBrTvfhJCqZZjuhEt9zDAVZ1DJxRYEnmLfmREi
-X-Google-Smtp-Source: ABdhPJzqSo43we9ySOJWMo+7EZIm5ZoV9Z81zrjpsC0WvsLPo7j5HPGjquoRJXHc1QVgGqyFHExy7nvak8ozzrAL+QCt4GTIMkhR
+        Sun, 20 Mar 2022 11:33:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE401C934;
+        Sun, 20 Mar 2022 08:32:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4C5D6B80DC3;
+        Sun, 20 Mar 2022 15:32:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414E6C340EE;
+        Sun, 20 Mar 2022 15:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647790321;
+        bh=I2fW2DdqNLY/ug4CBXSippa33Z0N+xv29/G1k8QsKmM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JOaOpGdu7fFqvE6fUZxBZxUMph0BWJx8Bp+4/wdUadaARpL4pZEh7k5yY88GIDvhm
+         syJi9YcMeD5ar+0knenq/PS7RhiNC2wiwr90K3NRDkdcgBc36y9rr6euWE1gzUGagZ
+         xpzGIIXu4IkvhQO+rmgAt22DZKWhPPxw6m8OYUt7ePUCkFQyxSKMvQ62oHWNGAJCcm
+         jFSn78SgT17gTvMTuJh0L+3XA8RGFVGvHRHrAcWJeSIPdYpxD44uzww6ifErv2VNtl
+         JXVZ9quP5busRu610z2LHoX3a7RFzhPIWHKO1Gqju7cJs2Us0FvEySKGLksTQrCHgZ
+         48AYBcq+irnlw==
+Date:   Sun, 20 Mar 2022 15:39:25 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     trix@redhat.com
+Cc:     roan@protonic.nl, lars@metafoo.de, nathan@kernel.org,
+        ndesaulniers@google.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] iio: scd4x: check return of scd4x_write_and_fetch
+Message-ID: <20220320153925.12bb01eb@jic23-huawei>
+In-Reply-To: <20220301025223.223223-1-trix@redhat.com>
+References: <20220301025223.223223-1-trix@redhat.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a69:b0:2c8:115b:c614 with SMTP id
- w9-20020a056e021a6900b002c8115bc614mr3010781ilv.61.1647790387202; Sun, 20 Mar
- 2022 08:33:07 -0700 (PDT)
-Date:   Sun, 20 Mar 2022 08:33:07 -0700
-In-Reply-To: <20220320152154.2662-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b1939b05daa81821@google.com>
-Subject: Re: [syzbot] INFO: rcu detected stall in gc_worker (3)
-From:   syzbot <syzbot+eec403943a2a2455adaa@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,27 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 28 Feb 2022 18:52:23 -0800
+trix@redhat.com wrote:
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
+> From: Tom Rix <trix@redhat.com>
+> 
+> Clang static analysis reports this problem
+> scd4x.c:474:10: warning: The left operand of '==' is a
+>   garbage value
+>   if (val == 0xff) {
+>       ~~~ ^
+> val is only set from a successful call to scd4x_write_and_fetch()
+> So check it's return.
+> 
+> Fixes: 49d22b695cbb ("drivers: iio: chemical: Add support for Sensirion SCD4x CO2 sensor")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { 1-... } 2642 jiffies s: 2057 root: 0x2/.
-rcu: blocking rcu_node structures (internal RCU debug):
-Task dump for CPU 1:
-task:syz-executor212 state:R  running task     stack:26424 pid: 4080 ppid:  4063 flags:0x0000000e
-Call Trace:
- <TASK>
- </TASK>
+Hi Tom,
 
+This looks good to me.  Timing was a bit unfortunate so now I'll queue this up for post
+rc1.  Hence applied to my local copy of fixes-togreg (which includes the stuff that
+should go in during the merge window) but not pushed out until I can rebase on rc1.
 
-Tested on:
+Thanks,
 
-commit:         91265a6d Add linux-next specific files for 20220303
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=13f1becb700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=617f79440a35673a
-dashboard link: https://syzkaller.appspot.com/bug?extid=eec403943a2a2455adaa
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11d0caeb700000
+Jonathan
+
+> ---
+> v2: rework return on error logic to be similar to existing code
+> 
+>  drivers/iio/chemical/scd4x.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/chemical/scd4x.c b/drivers/iio/chemical/scd4x.c
+> index 20d4e7584e923..37143b5526ee6 100644
+> --- a/drivers/iio/chemical/scd4x.c
+> +++ b/drivers/iio/chemical/scd4x.c
+> @@ -471,12 +471,15 @@ static ssize_t calibration_forced_value_store(struct device *dev,
+>  	ret = scd4x_write_and_fetch(state, CMD_FRC, arg, &val, sizeof(val));
+>  	mutex_unlock(&state->lock);
+>  
+> +	if (ret)
+> +		return ret;
+> +
+>  	if (val == 0xff) {
+>  		dev_err(dev, "forced calibration has failed");
+>  		return -EINVAL;
+>  	}
+>  
+> -	return ret ?: len;
+> +	return len;
+>  }
+>  
+>  static IIO_DEVICE_ATTR_RW(calibration_auto_enable, 0);
 

@@ -2,54 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D22B4E1C37
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 16:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B464E1C44
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 16:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241296AbiCTPO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 11:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
+        id S245362AbiCTPXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 11:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbiCTPOv (ORCPT
+        with ESMTP id S238221AbiCTPXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 11:14:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB412CE3A;
-        Sun, 20 Mar 2022 08:13:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E335FB80E47;
-        Sun, 20 Mar 2022 15:13:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 717A3C340E9;
-        Sun, 20 Mar 2022 15:13:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647789203;
-        bh=dIrdSkDayyt2W+Bbvgmfrz/vkuTTAijlyK1oC0ZZ4KQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=H5EfJW0KkFZALD5ehFwPwYaY1q+QqYvkTcL1M3ondAK7pwGfQ2PuQRPuS+ICtBiF5
-         JfRHcMNdy6MkZRHMN/AEiI3vXw++cjrbklKZGb4Yr/qoAiP1VezeWzLznLtOKO2LKS
-         zvYEPOw0E7gr2pzwQoeUjrd0gJtOlcAzzkz04ZnHn+6CPKFUGItQwo74sy4uzTZ93u
-         BNX2sKnKkX3gdggyjJ3z+QJJ20GdGXntcX5Jg3p9f2myhv1t8YjanLnuCISGdWKDqT
-         3ajkjvMs4wfyFLIW0AVbkZRERg455Btm4ywthBRxg0L63RlP10xzjU99+NwFrPX73I
-         X7U4rZBEGcjqg==
-Date:   Sun, 20 Mar 2022 15:20:47 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Zizhuang Deng <sunsetdzz@gmail.com>
-Cc:     Jonathan.Cameron@huawei.com, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org,
-        Paul Cercueil <paul.cercueil@analog.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] iio: dac: ad5592r: Fix the missing return value.
-Message-ID: <20220320152047.2a04a62e@jic23-huawei>
-In-Reply-To: <20220310125450.4164164-1-sunsetdzz@gmail.com>
-References: <20220310125450.4164164-1-sunsetdzz@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sun, 20 Mar 2022 11:23:52 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA6C1AEC90
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 08:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647789749; x=1679325749;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7h7VKqjqREY/mBDGPxzGzD0dmkyuCZT5dWmwIMhSAlE=;
+  b=d1JlAMa9seKbXggxc8nDUAmD1KxcaC9bqtcsjjWIjl3w/SVsM6fBFXgP
+   KgjVh639+7jt80rll9IeMyHpNUwizgQu0iMzjsRZvS+CLvkL11JB92XCY
+   YBSM7L2s1+9kHQqOACIdlsaZTX7w1GYOhLrC7XBc03Ivil2VGt0te+cK8
+   U4rDmWJr5Jj739ykAWZCCu9wsJxaKlUF8ahIqJ1NgBnLQ3H/82OBqxiil
+   8Xprfyf17ZIZWuSCvlEV6HNE1W1VjuMfTvvK7dCNzvqlUCnypHlsFh/dU
+   8aymG7rE6WHevfdU4FacopJSA9v0jLkG2Ls6DTciwRfXn1iRJfgNOW5Hw
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10291"; a="343836269"
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="343836269"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 08:22:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
+   d="scan'208";a="716193914"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 20 Mar 2022 08:22:27 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nVxNz-000H1I-3G; Sun, 20 Mar 2022 15:22:27 +0000
+Date:   Sun, 20 Mar 2022 23:22:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 1563/2335] ./usr/include/linux/if_link.h:5:10:
+ fatal error: 'uapi/linux/netlink.h' file not found
+Message-ID: <202203202314.QNWyvGYM-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,34 +62,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Mar 2022 20:54:50 +0800
-Zizhuang Deng <sunsetdzz@gmail.com> wrote:
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   85293bf3fca6d85608cff1447ce3097583f15fab
+commit: f9feb19bd4ff82d90e72d9471ed90de86b38aeb5 [1563/2335] headers/deps: net: Optimize <uapi/linux/if_link.h>
+config: i386-randconfig-a012-20220314 (https://download.01.org/0day-ci/archive/20220320/202203202314.QNWyvGYM-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=f9feb19bd4ff82d90e72d9471ed90de86b38aeb5
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout f9feb19bd4ff82d90e72d9471ed90de86b38aeb5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-> The third call to `fwnode_property_read_u32` did not record
-> the return value, resulting in `channel_offstate` possibly
-> being assigned the wrong value.
-> 
-> Signed-off-by: Zizhuang Deng <sunsetdzz@gmail.com>
-Hi,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Definitely rather odd looking and I think your conclusion is correct.
-+CC Paul for confirmation that this isn't doing something clever..
+All errors (new ones prefixed by >>):
 
-> ---
->  drivers/iio/dac/ad5592r-base.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/dac/ad5592r-base.c b/drivers/iio/dac/ad5592r-base.c
-> index a424b7220b61..4434c1b2a322 100644
-> --- a/drivers/iio/dac/ad5592r-base.c
-> +++ b/drivers/iio/dac/ad5592r-base.c
-> @@ -522,7 +522,7 @@ static int ad5592r_alloc_channels(struct iio_dev *iio_dev)
->  		if (!ret)
->  			st->channel_modes[reg] = tmp;
->  
-> -		fwnode_property_read_u32(child, "adi,off-state", &tmp);
-> +		ret = fwnode_property_read_u32(child, "adi,off-state", &tmp);
->  		if (!ret)
->  			st->channel_offstate[reg] = tmp;
->  	}
+   In file included from <built-in>:1:
+>> ./usr/include/linux/if_link.h:5:10: fatal error: 'uapi/linux/netlink.h' file not found
+   #include <uapi/linux/netlink.h>
+            ^~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

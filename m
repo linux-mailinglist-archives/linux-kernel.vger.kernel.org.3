@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6274E1AE4
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 10:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 438554E1AE6
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 10:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243508AbiCTJkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 05:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
+        id S243622AbiCTJkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 05:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243323AbiCTJkL (ORCPT
+        with ESMTP id S243310AbiCTJkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 05:40:11 -0400
+        Sun, 20 Mar 2022 05:40:13 -0400
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8D311A20
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 02:38:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2724111A20
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 02:38:51 -0700 (PDT)
 Received: from integral2.. (unknown [182.2.42.189])
-        by gnuweeb.org (Postfix) with ESMTPSA id 89E937E324;
-        Sun, 20 Mar 2022 09:38:44 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 1E4AA7E32F;
+        Sun, 20 Mar 2022 09:38:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1647769127;
-        bh=CqkJi4gcwtTSWVKYAtlVVoCfJnF5oK9/pwQGZcP0YAI=;
+        s=default; t=1647769130;
+        bh=BXzzI1AHGnhVngox7MmLibr5gzV+RXSwMy3QZ9xcVDU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mGobdSn1ABsRF1yZIw4UyIDUlCf6GLC/BcGhWqquifBfpRLRVigYYA3QVTyau/AzM
-         RODzfjiCsBtSKmg1Vm+Fgcds7AASdN/On/Q/j9s4K0bMaGt4UenVh5rpfhO71iNdk9
-         jPJjIPhfJ8m6ODIfznfjq0Bl3sQ1E/iPGWsZq8TBZmYPWOJRn4Z32hcJYo0uKN5mno
-         8S9+rI+nkTT7pULN5HRakimI58lIYnOEq5/7wDt9BiT2DDrEq5z2EUfvl8YsiAshR9
-         +b+T64414N+X/Mi78/xtzlsWQA6g8KcNiYj7SJMc5zatdIGfndyrymBS0j43E/V43f
-         UHKKIdWrKSOLw==
+        b=PTXPJDYF2yyWTk2sjoZoOISwOfNp+Dtv5i7SIky2i2yas1T444ZvVGGLkVk3EzOjH
+         4/bKKvJ7R4O2R1VLa7LAQgbBO5tSF8Ug2oVkaZt+2MqqM7GpVY6naWZtmcOFVompyt
+         MbWyGY7ctisWzmb1UjtNLGPVBsS4h7WuiDP1S7M1Uu8Ae8LTnHkEWbaVTbMWLBnixW
+         V2rjfsLBzG7wqKElpn5ykqst5hc47ubw9NVJqDleB9MGj8OzzhHkr5edJDxYBRPePR
+         nWZ1jZk3dkoPWz855mUHE/nQshvZqjGbDAWflvxgXx4spVeHXXVCDSOgkXBnogArYw
+         ObuL9eGCYEaSg==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Willy Tarreau <w@1wt.eu>
 Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
@@ -35,10 +35,10 @@ Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Nugraha <richiisei@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [RFC PATCH v1 1/6] tools/nolibc: x86-64: Update System V ABI document link
-Date:   Sun, 20 Mar 2022 16:37:45 +0700
-Message-Id: <20220320093750.159991-2-ammarfaizi2@gnuweeb.org>
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>, llvm@lists.linux.dev
+Subject: [RFC PATCH v1 2/6] tools/nolibc: Make the entry point not weak for clang
+Date:   Sun, 20 Mar 2022 16:37:46 +0700
+Message-Id: <20220320093750.159991-3-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
 References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
@@ -53,26 +53,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The old link no longer works, update it.
+Budilig with clang yields the following error:
+```
+  <inline asm>:3:1: error: _start changed binding to STB_GLOBAL
+  .global _start
+  ^
+  1 error generated.
+```
+Don't make the entry point weak if we're compiling with clang.
 
+Cc: llvm@lists.linux.dev
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- tools/include/nolibc/arch-x86_64.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/include/nolibc/arch-aarch64.h | 2 ++
+ tools/include/nolibc/arch-arm.h     | 2 ++
+ tools/include/nolibc/arch-i386.h    | 2 ++
+ tools/include/nolibc/arch-mips.h    | 2 ++
+ tools/include/nolibc/arch-riscv.h   | 2 ++
+ tools/include/nolibc/arch-x86_64.h  | 2 ++
+ 6 files changed, 12 insertions(+)
 
-diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
-index fe517c16cd4d..a7b70ea51b68 100644
---- a/tools/include/nolibc/arch-x86_64.h
-+++ b/tools/include/nolibc/arch-x86_64.h
-@@ -61,7 +61,7 @@ struct sys_stat_struct {
-  *   - see also x86-64 ABI section A.2 AMD64 Linux Kernel Conventions, A.2.1
-  *     Calling Conventions.
-  *
-- * Link x86-64 ABI: https://gitlab.com/x86-psABIs/x86-64-ABI/-/wikis/x86-64-psABI
-+ * Link x86-64 ABI: https://gitlab.com/x86-psABIs/x86-64-ABI/-/wikis/home
+diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
+index 87d9e434820c..5084cd58b429 100644
+--- a/tools/include/nolibc/arch-aarch64.h
++++ b/tools/include/nolibc/arch-aarch64.h
+@@ -183,7 +183,9 @@ struct sys_stat_struct {
+ 
+ /* startup code */
+ asm(".section .text\n"
++#if !defined(__clang__)
+     ".weak _start\n"
++#endif
+     ".global _start\n"
+     "_start:\n"
+     "ldr x0, [sp]\n"              // argc (x0) was in the stack
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index 001a3c8c9ad5..b3f135a615a6 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -176,7 +176,9 @@ struct sys_stat_struct {
+ 
+ /* startup code */
+ asm(".section .text\n"
++#if !defined(__clang__)
+     ".weak _start\n"
++#endif
+     ".global _start\n"
+     "_start:\n"
+ #if defined(__THUMBEB__) || defined(__THUMBEL__)
+diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+index d7e4d53325a3..82bf797849ae 100644
+--- a/tools/include/nolibc/arch-i386.h
++++ b/tools/include/nolibc/arch-i386.h
+@@ -175,7 +175,9 @@ struct sys_stat_struct {
   *
   */
+ asm(".section .text\n"
++#if !defined(__clang__)
+     ".weak _start\n"
++#endif
+     ".global _start\n"
+     "_start:\n"
+     "pop %eax\n"                // argc   (first arg, %eax)
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index c9a6aac87c6d..719d3808614d 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -190,7 +190,9 @@ struct sys_stat_struct {
  
+ /* startup code, note that it's called __start on MIPS */
+ asm(".section .text\n"
++#if !defined(__clang__)
+     ".weak __start\n"
++#endif
+     ".set nomips16\n"
+     ".global __start\n"
+     ".set    noreorder\n"
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+index bc10b7b5706d..a9704affd7de 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/arch-riscv.h
+@@ -184,7 +184,9 @@ struct sys_stat_struct {
+ 
+ /* startup code */
+ asm(".section .text\n"
++#if !defined(__clang__)
+     ".weak _start\n"
++#endif
+     ".global _start\n"
+     "_start:\n"
+     ".option push\n"
+diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
+index a7b70ea51b68..f453f1a05a48 100644
+--- a/tools/include/nolibc/arch-x86_64.h
++++ b/tools/include/nolibc/arch-x86_64.h
+@@ -198,7 +198,9 @@ struct sys_stat_struct {
+  *
+  */
+ asm(".section .text\n"
++#if !defined(__clang__)
+     ".weak _start\n"
++#endif
+     ".global _start\n"
+     "_start:\n"
+     "pop %rdi\n"                // argc   (first arg, %rdi)
 -- 
 Ammar Faizi
 

@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EC44E1BDC
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 14:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC9D4E1BE2
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 14:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245155AbiCTNYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 09:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
+        id S245163AbiCTN0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 09:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237391AbiCTNYQ (ORCPT
+        with ESMTP id S235524AbiCTN0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 09:24:16 -0400
+        Sun, 20 Mar 2022 09:26:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F54C4D;
-        Sun, 20 Mar 2022 06:22:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE823FDB5;
+        Sun, 20 Mar 2022 06:25:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A42C96111A;
-        Sun, 20 Mar 2022 13:22:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9B33C340ED;
-        Sun, 20 Mar 2022 13:22:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEF3D610A3;
+        Sun, 20 Mar 2022 13:25:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9258AC340F2;
+        Sun, 20 Mar 2022 13:25:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647782572;
-        bh=zrk7xunDQEgKK4bMZN7k+PEFnf6KxwypnsecQUf+/7U=;
+        s=k20201202; t=1647782707;
+        bh=HrB34Tu2zfRgzLPUpdgGO6lDIFScGxCJvI1REvQYs+4=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nezu0mRQRK6HUEQqgAKr3YTh8NS9o4SumGwjxuuVoLuyyAEBxAS2fSlAdZui2FtTW
-         xDEJZQDzrqsIhvyVcyK8u1vfiW9E6jEyLYLTepNOQHWxIaWiayZeLw941IvE0nA7xy
-         ZXk+GUcJ4u+VTuz27RjDUByjKBBmEu/g3Aps8/wwVaBqqxD7aJK+8KyKShtyi/vx/n
-         z8A/gxfK5MdljvqYuargSt7UEj3dSTHufdsrz5z6+58IibGEqpRF9vZlVIhF6X/Isv
-         pdAlIpxDn1W2xVy+H/y+Fopo467dCdz0EmX5iBfjiH53TcgZDUTGXCHoTMD/v3gsR7
-         Eky8/RT7O2QCw==
-Date:   Sun, 20 Mar 2022 13:30:14 +0000
+        b=I/Fyb/B+R04dTO+VFmPdHgppdiy1mudWW0VcOBHgH/52uLcW2sVg4fS4y1G3EzN+w
+         6kzYb5ENxh4e2aYbzyAgy5ZiX14dFr4BA52lhmSA4CDBcMrKS/zIpxSrZIhgLC6Ggr
+         G3+DfXfuD2CzlTF8B7raXVv0ve8hQBDpxAbHGNHMVb/M2YccPKFiwTRs6W8IlKqXnK
+         ORfFR2VlykbHGA8MoVjsFdXbunKzUNmpZDNyOnHXtIk9JTvqzHRSE8mEzz+hhNNZyM
+         OiJevBrm6roj7JqSfZeOCl4dKKELbSJ7oZprc6a5v4jr5urPTrImQLLp943rk7M00C
+         4USHYp2VfpqAw==
+Date:   Sun, 20 Mar 2022 13:32:29 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Cixi Geng <gengcixi@gmail.com>
 Cc:     lars@metafoo.de, robh+dt@kernel.org, orsonzhai@gmail.com,
@@ -40,12 +40,12 @@ Cc:     lars@metafoo.de, robh+dt@kernel.org, orsonzhai@gmail.com,
         broonie@kernel.org, yuming.zhu1@unisoc.com,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 1/7] dt-bindings:iio:adc: add sprd,ump9620-adc
- dtbindings
-Message-ID: <20220320133014.7f5cb5b9@jic23-huawei>
-In-Reply-To: <20220311164628.378849-2-gengcixi@gmail.com>
+Subject: Re: [PATCH V2 2/7] iio: adc: sc27xx: fix read big scale voltage not
+ right
+Message-ID: <20220320133229.6026f51a@jic23-huawei>
+In-Reply-To: <20220311164628.378849-3-gengcixi@gmail.com>
 References: <20220311164628.378849-1-gengcixi@gmail.com>
-        <20220311164628.378849-2-gengcixi@gmail.com>
+        <20220311164628.378849-3-gengcixi@gmail.com>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -60,81 +60,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Mar 2022 00:46:22 +0800
+On Sat, 12 Mar 2022 00:46:23 +0800
 Cixi Geng <gengcixi@gmail.com> wrote:
 
 > From: Cixi Geng <cixi.geng1@unisoc.com>
-
-In title, use dt-binding instead of dtbindings at the end.
-
 > 
-> sprd,ump9620-adc is one variant of sc27xx series, add ump9620 in
-> dtbindings.
-
-dt-bindings.
-
+> Fix wrong configuration value of SC27XX_ADC_SCALE_MASK and
+> SC27XX_ADC_SCALE_SHIFT by spec documetation.
 > 
-> Signed-off-by: Chunyan Zhang <zhang.lyra@gmail.com>
+> Signed-off-by: Yuming Zhu <yuming.zhu1@unisoc.com>
 > Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> 
+No blank lines in a tag block (they break people's scripts)
+Also, if this is a fix, I'd expect a fixes tag.
 
-If the patch was authored by Chunyan Zhang, it should be From: Chunyan Zhang,
-if it is more complex than you simply passing the patch on then we should
-see a co-developed to indicate that.
+> Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
+> ---
+>  drivers/iio/adc/sc27xx_adc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
+> index 00098caf6d9e..aee076c8e2b1 100644
+> --- a/drivers/iio/adc/sc27xx_adc.c
+> +++ b/drivers/iio/adc/sc27xx_adc.c
+> @@ -36,8 +36,8 @@
+>  
+>  /* Bits and mask definition for SC27XX_ADC_CH_CFG register */
+>  #define SC27XX_ADC_CHN_ID_MASK		GENMASK(4, 0)
+> -#define SC27XX_ADC_SCALE_MASK		GENMASK(10, 8)
+> -#define SC27XX_ADC_SCALE_SHIFT		8
+> +#define SC27XX_ADC_SCALE_MASK		GENMASK(10, 9)
+> +#define SC27XX_ADC_SCALE_SHIFT		9
 
-Patch looks good to me
+This driver would benefit from use of FIELD_GET() / FIELD_PREP()
+but that is obviously unrelated to this particular series.
+
 
 Jonathan
 
-> ---
->  .../bindings/iio/adc/sprd,sc2720-adc.yaml     | 30 +++++++++++++++++--
->  1 file changed, 27 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.yaml b/Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.yaml
-> index caa3ee0b4b8c..331b08fb1761 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.yaml
-> @@ -20,6 +20,7 @@ properties:
->        - sprd,sc2723-adc
->        - sprd,sc2730-adc
->        - sprd,sc2731-adc
-> +      - sprd,ump9620-adc
 >  
->    reg:
->      maxItems: 1
-> @@ -37,9 +38,32 @@ properties:
->      maxItems: 2
->  
->    nvmem-cell-names:
-> -    items:
-> -      - const: big_scale_calib
-> -      - const: small_scale_calib
-> +    description: Names for each nvmem-cells specified.
-> +
-> +if:
-> +  not:
-> +    properties:
-> +      compatible:
-> +        contains:
-> +          enum:
-> +            - sprd,ump9620-adc
-> +then:
-> +  properties:
-> +    nvmem-cell-names:
-> +      items:
-> +        - const: big_scale_calib
-> +        - const: small_scale_calib
-> +
-> +else:
-> +  properties:
-> +    nvmem-cell-names:
-> +      items:
-> +        - const: big_scale_calib1
-> +        - const: big_scale_calib2
-> +        - const: small_scale_calib1
-> +        - const: small_scale_calib2
-> +        - const: vbat_det_cal1
-> +        - const: vbat_det_cal2
->  
->  required:
->    - compatible
+>  /* Bits definitions for SC27XX_ADC_INT_EN registers */
+>  #define SC27XX_ADC_IRQ_EN		BIT(0)
 

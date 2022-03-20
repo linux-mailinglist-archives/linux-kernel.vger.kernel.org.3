@@ -2,136 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7304E1CE0
+	by mail.lfdr.de (Postfix) with ESMTP id CA1E44E1CE1
 	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 17:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242222AbiCTQif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 12:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
+        id S240361AbiCTQi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 12:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242949AbiCTQic (ORCPT
+        with ESMTP id S239159AbiCTQiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 12:38:32 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AF43EAB5;
-        Sun, 20 Mar 2022 09:37:09 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id s8so13574055pfk.12;
-        Sun, 20 Mar 2022 09:37:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=l5y2O5eH0uz4RqUV+g+CVqKPa9GF0DiPMGgxFfF92Z4=;
-        b=WfTrmjxf6qB8DHA3S1LUOhT3UuO407oKcxOU285vY5JhyTe5mLiJK1Z75xSrTY8CER
-         JyjuInZj4nuM7Eaxw/BsXtyM11Vz02oZ2mtmWLC/g5rJNtAxxjJCpBx/J0V3yFnH8HbM
-         MgmYsxWBylHhozkp8m8ilMWGB7Aimzc7hGoKxP0fDd8+0NWFx8ncEW7X0oJ8fjeAATlr
-         jJB6BKc1HdLgEvFdvMSrGXGG/s6zxWJFAggqz4AmILV9pgNERgy8FqQtYkfkZt5JLmeD
-         4sitkdPh9tLhNbBQDZjlwd/DuoaaGqZ5XR7hDxHEr8wCRLAp6/JrEeSHb+eqE2F6su40
-         BxkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=l5y2O5eH0uz4RqUV+g+CVqKPa9GF0DiPMGgxFfF92Z4=;
-        b=RPWRVT0WCv1lAvAjxP0N8IdtMhHe2+vJFS9t0lniytHJ1ep74eEXyQWerAFFMfVUDe
-         Ckgc0POYo5LsUnUhUHtPtQLKgz2hpqjLli8Ylx8gNTha4OqDK5mfnqiISfY+icIULx7H
-         PmoauMGo7SXSWzQHD/7IOU/zewBT4hbSBC19ezEurijbIXHnpQuJ0yC/7fJ+cvCXttI9
-         Mo7cj74Z42yCDlm29GNaJVQzTG4lyN/tKa7O8CeCJxy/u9UJNyDxK4JmQIVPPO3DSgBN
-         v/bXJ3wLUdhISrQl92jqpuXY3wcup9ew1LDLGGcFs22l2U1w2vPOJSfuZhhWKX504sTz
-         wRuw==
-X-Gm-Message-State: AOAM532FUlN0i4HnlJR8S/RHpYjwvF24AubH5OtWMS8EbvdZPvcnMdh+
-        pqiTYjdk2T27Y3djLwoXk38=
-X-Google-Smtp-Source: ABdhPJzgb2p1evISFTPaTJWiw1LjEItmF2jn/t0+UOhObYSZsu+WojxuIlFa2+I93NUrw7R5XeAfHw==
-X-Received: by 2002:a65:614e:0:b0:380:bfd9:d4ea with SMTP id o14-20020a65614e000000b00380bfd9d4eamr15080781pgv.92.1647794228474;
-        Sun, 20 Mar 2022 09:37:08 -0700 (PDT)
-Received: from localhost.localdomain ([2402:4000:2381:95dc:514b:b97f:b05c:6ff1])
-        by smtp.gmail.com with ESMTPSA id z6-20020a17090a8b8600b001c70c8e4040sm1485535pjn.27.2022.03.20.09.37.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 09:37:08 -0700 (PDT)
-From:   Husni Faiz <ahamedhusni73@gmail.com>
-To:     mchehab@kernel.org, gregkh@linuxfoundation.org
-Cc:     Husni Faiz <ahamedhusni73@gmail.com>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH v2 2/2] media: av7110: fix prohibited spaces in switch statement
-Date:   Sun, 20 Mar 2022 22:06:18 +0530
-Message-Id: <20220320163618.41054-2-ahamedhusni73@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220320163618.41054-1-ahamedhusni73@gmail.com>
-References: <20220225155622.585621-1-ahamedhusni73@gmail.com>
- <20220320163618.41054-1-ahamedhusni73@gmail.com>
+        Sun, 20 Mar 2022 12:38:25 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103803EAB5
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 09:37:02 -0700 (PDT)
+Received: from [192.168.12.80] (unknown [182.2.69.4])
+        by gnuweeb.org (Postfix) with ESMTPSA id 7A33B7E2DA;
+        Sun, 20 Mar 2022 16:36:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1647794221;
+        bh=7HDpyaqJ3Esg6x9zu/669IsMjA3/gjhXtFUxFcLvI2g=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=t/OJzLcPJ6palU0G8VBm8GL7mgyhaL4txMim5jjNoSSqxL+IHDtr9KTKTCFY3pajw
+         boHc4Vs/H+D0WddZYUyGN98VqfBFrtB8eeKi/9oBKsu6Wgz0HgoQUW5/xqgXLHVhJg
+         sangfkhey3/s3f7qGLgt5vdq83QQiB3222pw5lZpM1AYT1Y2rtroMdFY+YnQlzU6fo
+         nJ1BTvZdtVKaz1x0n8tj9izDxMa4lasTqKhcgHU/I++Ss/FKyrylGxEZ2j9hQwrD1k
+         erV9fk3ubqkvgPIORXHXwhI8eOY0Ub7x2OHrkPBzjVRUj747PFguEuvtO6X5xCg08H
+         o/NV20RDq6loQ==
+Message-ID: <c7129520-5e9a-f9d1-cc12-5af9456c917f@gnuweeb.org>
+Date:   Sun, 20 Mar 2022 23:36:55 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Nugraha <richiisei@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
+ <20220320093750.159991-6-ammarfaizi2@gnuweeb.org>
+ <20220320161644.GF8067@1wt.eu>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [RFC PATCH v1 5/6] tools/nolibc/stdlib: Implement `malloc()`,
+ `calloc()`, `realloc()` and `free()`
+In-Reply-To: <20220320161644.GF8067@1wt.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes "space prohibited before that ':'" checkpatch error
-in the switch statements.
+On 3/20/22 11:16 PM, Willy Tarreau wrote:
+> Ammar,
+> 
+> a few points below:
+> 
+> On Sun, Mar 20, 2022 at 04:37:49PM +0700, Ammar Faizi wrote:
+>> +struct nolibc_heap {
+>> +	size_t	len;
+>> +	char	user_p[] __attribute__((__aligned__));
+>> +};
+> 
+> Note that many programs assume that malloc() returns a field aligned
+> to 2*sizeof(pointer) and unless I'm mistaken, above the user pointer
+> will only be aligned by one pointer. This may have an impact when the
+> compiler decides to use SIMD instructions.
 
-Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
-Signed-off-by: Husni Faiz <ahamedhusni73@gmail.com>
----
-V1->V2: Prohibited space fix after patch review.
+Section 7.20.3 of C99 states this about `malloc()`:
+"""
+   The pointer returned if the allocation succeeds is suitably aligned
+   so that it may be assigned to a pointer to any type of object.
+"""
 
- drivers/staging/media/av7110/av7110_av.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+And this is what GCC doc says about __attribute__((__aligned__)):
+"""
+   The aligned attribute specifies a minimum alignment for the variable
+   or structure field, measured in bytes. When specified, alignment must
+   be an integer constant power of 2. Specifying no alignment argument
+   implies the maximum alignment for the target, which is often, but by
+   no means always, 8 or 16 bytes.
+"""
 
-diff --git a/drivers/staging/media/av7110/av7110_av.c b/drivers/staging/media/av7110/av7110_av.c
-index 1d42862e9669..ab7cf496b454 100644
---- a/drivers/staging/media/av7110/av7110_av.c
-+++ b/drivers/staging/media/av7110/av7110_av.c
-@@ -595,10 +595,10 @@ static int find_pes_header(u8 const *buf, long int length, int *frags)
- 			case PROG_STREAM_MAP:
- 			case PRIVATE_STREAM2:
- 			case PROG_STREAM_DIR:
--			case ECM_STREAM     :
--			case EMM_STREAM     :
--			case PADDING_STREAM :
--			case DSM_CC_STREAM  :
-+			case ECM_STREAM:
-+			case EMM_STREAM:
-+			case PADDING_STREAM:
-+			case DSM_CC_STREAM:
- 			case ISO13522_STREAM:
- 			case PRIVATE_STREAM1:
- 			case AUDIO_STREAM_S ... AUDIO_STREAM_E:
-@@ -659,10 +659,10 @@ void av7110_p2t_write(u8 const *buf, long int length, u16 pid, struct av7110_p2t
- 			case PROG_STREAM_MAP:
- 			case PRIVATE_STREAM2:
- 			case PROG_STREAM_DIR:
--			case ECM_STREAM     :
--			case EMM_STREAM     :
--			case PADDING_STREAM :
--			case DSM_CC_STREAM  :
-+			case ECM_STREAM:
-+			case EMM_STREAM:
-+			case PADDING_STREAM:
-+			case DSM_CC_STREAM:
- 			case ISO13522_STREAM:
- 			case PRIVATE_STREAM1:
- 			case AUDIO_STREAM_S ... AUDIO_STREAM_E:
-@@ -773,10 +773,10 @@ static void p_to_t(u8 const *buf, long int length, u16 pid, u8 *counter,
- 		case PROG_STREAM_MAP:
- 		case PRIVATE_STREAM2:
- 		case PROG_STREAM_DIR:
--		case ECM_STREAM     :
--		case EMM_STREAM     :
--		case PADDING_STREAM :
--		case DSM_CC_STREAM  :
-+		case ECM_STREAM:
-+		case EMM_STREAM:
-+		case PADDING_STREAM:
-+		case DSM_CC_STREAM:
- 		case ISO13522_STREAM:
- 		case PRIVATE_STREAM1:
- 		case AUDIO_STREAM_S ... AUDIO_STREAM_E:
+Link: https://gcc.gnu.org/onlinedocs/gcc-11.2.0/gcc/Common-Variable-Attributes.html#Common-Variable-Attributes
+
+Simple experiment on Linux x86-64...
+
+```
+ammarfaizi2@integral2:/tmp$ cat > test.c
+#include <stdio.h>
+int main(void)
+{
+	printf("alignof = %zu\n", __alignof__(long double));
+	return 0;
+}
+ammarfaizi2@integral2:/tmp$ gcc -o test test.c
+ammarfaizi2@integral2:/tmp$ ./test
+alignof = 16
+ammarfaizi2@integral2:/tmp$
+```
+
+We have `long double` which requires 16 byte alignment. So
+__attribute__((__aligned__)) should cover this. And yes, it's true that
+it's 2*sizeof(void*), but importantly for the above reason.
+
+>> +#ifndef offsetof
+>> +#define offsetof(TYPE, FIELD) ((size_t) &((TYPE *)0)->FIELD)
+>> +#endif
+>> +
+>> +#ifndef container_of
+>> +#define container_of(PTR, TYPE, FIELD) ({			\
+>> +	__typeof__(((TYPE *)0)->FIELD) *__FIELD_PTR = (PTR);	\
+>> +	(TYPE *)((char *) __FIELD_PTR - offsetof(TYPE, FIELD));	\
+>> +})
+>> +#endif
+> 
+> These ones are independent on the malloc code and should move to a
+> different patch and likely to a different file. I'm seeing we already
+> have a few macros in types.h and since it's shared by almost everything
+> it might be more suitable there.
+
+OK, will do it in the v2. Thanks!
+
 -- 
-2.25.1
-
+Ammar Faizi

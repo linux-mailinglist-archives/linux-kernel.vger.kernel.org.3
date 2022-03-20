@@ -2,218 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BE64E1C22
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 15:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A904E1C9B
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 17:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245303AbiCTPAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 11:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
+        id S245481AbiCTQ3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 12:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbiCTPAH (ORCPT
+        with ESMTP id S235658AbiCTQ3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 11:00:07 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA277252A7;
-        Sun, 20 Mar 2022 07:58:42 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id h13so15317967ede.5;
-        Sun, 20 Mar 2022 07:58:42 -0700 (PDT)
+        Sun, 20 Mar 2022 12:29:37 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7151B344DC;
+        Sun, 20 Mar 2022 09:28:12 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id v130-20020a1cac88000000b00389d0a5c511so9112998wme.5;
+        Sun, 20 Mar 2022 09:28:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6CWKYqtc6RNurgp1Shg9+uzBqze9ab4UhblI0+K5cmI=;
-        b=PGK/WAiBLLLv1ANzctUPJNhTeChLRPH2mcx474dFIyf1wx2B8stuR5QqcZEQXSLDwR
-         KNTM4ry7OcNw2kw8PzF42T6fV7U/fV4rji78zUg6qU96Y/sXtkMYvPeBkQMA39kLOxbp
-         dUkDomsawh1vzNFC8eIUcbMXfv3EBky41qugGgJBpX0CJkGTE3OMrGv7MFY/cWF37Lei
-         dsK7VC8UjIN3bfIjzBGQK3+dJe9tjgDYGIe1RY+ikUJDnmkimleBl3IayqxR7k+Xq+Rr
-         YItqBLDFCLdxEtpzoSZxx7vZzZ07pJx1NVArgDSWElQ1o28pQocK0f3h2geYSspU2vBO
-         Tedw==
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KcOijGi5og4ld2tvnsTePSNTR92XBpj3TQ2NlwE7kBU=;
+        b=mGTn9mZmezpJmG0UBF31vGiOajqAuzDPLPA6zisTAVAbeaCnW0aqhG0R091L5HURZv
+         5UXkCxK34eZ+5P66lbJBuX/yzfD2nHD+rujXEUidmknXPryaFp0INVsOjVN5ztNaxESD
+         Rz81RsrG/UlJ5qTFats5GtgTwVS/oJgwUB4xrKWla47FH4f7dzeCwSiv27BGTxVQfpXa
+         GMfahz2fC2SwmYe51ILTheLQ1NUfkemAG+zXDGULO3hZRSKgkSQBbPjO1fKkJ1Fe8CR+
+         4dvtVmfOT25aasIjFVQ1/H+pI8eYlS935zBOcfD1VL1UyzeH7Bt6IjdPvA+or3TSfbfB
+         UicQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6CWKYqtc6RNurgp1Shg9+uzBqze9ab4UhblI0+K5cmI=;
-        b=iC8Qdyu3IYCkjZjFTv7LqxAz/7NE5OHvEkYfnFkpsIS9swG0LWaqXlpqqFjRyK+rm1
-         Eqf2AmlvKuvnVrp5SQLnsFNZs5AtGqUooXEui25UXub7QeNxV8Avg1SmAOso8bZUQbt1
-         q2RXta7YZ95y43FEpYGAh5Z+a8BkVL8eku9KuiS7+TOZn1+92kPe3i7EhlV24gjpeDew
-         bt6RcAwjNC4gyayuPFpZC3OBu75QQw8hm+fid3ubdm9cWn4J1xYF+koL1xw6CJxX83uv
-         2HfaQRxwBmBww9VjdqEXGIzuGyq79YIS0BTQXL/EywxNMIdiPChCBg0/UCtTEoXYODoi
-         0+WQ==
-X-Gm-Message-State: AOAM531OmT2rQ6PsEmDgE9/KhbiTZwNRN8gJy4ejBr1mwOzvsIrK9cuy
-        Y73N49LRwGI0wnmilbNEklI=
-X-Google-Smtp-Source: ABdhPJwGPSVhIpLvxJg/c2edQLm4kUKv1BOGx7QLgyAAd7cNW2pLWB5MBPiQAAFD3IVIrqOPbr4qPQ==
-X-Received: by 2002:a05:6402:4248:b0:416:9c69:4f80 with SMTP id g8-20020a056402424800b004169c694f80mr18798105edb.83.1647788320960;
-        Sun, 20 Mar 2022 07:58:40 -0700 (PDT)
-Received: from anparri (host-82-59-4-232.retail.telecomitalia.it. [82.59.4.232])
-        by smtp.gmail.com with ESMTPSA id g11-20020a170906538b00b006ae38eb0561sm5970408ejo.195.2022.03.20.07.58.38
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KcOijGi5og4ld2tvnsTePSNTR92XBpj3TQ2NlwE7kBU=;
+        b=NiySuYzkHBmTTs9rUykBfzP+59OmutW9/wh0v1NB6vHehu42SQQJ8/dvLOx3X287kU
+         BTzAjeUD80PPHRNL16kWIdpIW8TyPOYGrWtSd6HZ3DE9MP9XhVzVFE5pI93SzQUqx0zd
+         zLTDRbP8tq8zrcLALQI7jYeQZ7H3XUZ44Z/zTQxZeHWgc9vj0iEtn+VtAgk+uaXlsqB5
+         Ptd+c3hKsEmvkeT9tHORhj2sgExqiOprw1gZrWi+c0X1GHQVvAr2p0KeQGjRc78Ntw3g
+         1iwtymYw+YyyXU0Ve84f6TXLnVbJUwe+lRcynNlHankObLSa1hRzZEH+tTMnMKIDaoSc
+         O7vA==
+X-Gm-Message-State: AOAM532ZbaAF5h1b60+EB32vp/apcD2jDtF99tdGtu7rMcAyOC7JPutV
+        IHBLmd3osfOQvt2snU7dTC0=
+X-Google-Smtp-Source: ABdhPJz3tifzxDAWJ1uNsnjFJEcL933i0CUw51N/qATmVkMutDHoNGHno7FLG2vHZ13hcfwNgDjkAg==
+X-Received: by 2002:a7b:c381:0:b0:37b:e01f:c1c0 with SMTP id s1-20020a7bc381000000b0037be01fc1c0mr24568393wmj.98.1647793690646;
+        Sun, 20 Mar 2022 09:28:10 -0700 (PDT)
+Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
+        by smtp.googlemail.com with ESMTPSA id y6-20020a05600015c600b00203fa70b4ebsm6760085wry.53.2022.03.20.09.28.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 07:58:40 -0700 (PDT)
-Date:   Sun, 20 Mar 2022 15:58:33 +0100
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Wei Hu <weh@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] PCI: hv: Use IDR to generate transaction IDs for
- VMBus hardening
-Message-ID: <20220320145833.GA1393@anparri>
-References: <20220318174848.290621-1-parri.andrea@gmail.com>
- <20220318174848.290621-2-parri.andrea@gmail.com>
- <PH0PR21MB3025016203AAB9AB6ECB6A3ED7149@PH0PR21MB3025.namprd21.prod.outlook.com>
+        Sun, 20 Mar 2022 09:28:10 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH v3 00/18] Modernize rest of the krait drivers
+Date:   Sun, 20 Mar 2022 12:34:12 +0100
+Message-Id: <20220320113430.26076-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR21MB3025016203AAB9AB6ECB6A3ED7149@PH0PR21MB3025.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 04:20:13PM +0000, Michael Kelley (LINUX) wrote:
-> From: Andrea Parri (Microsoft) <parri.andrea@gmail.com> Sent: Friday, March 18, 2022 10:49 AM
-> > 
-> > Currently, pointers to guest memory are passed to Hyper-V as transaction
-> > IDs in hv_pci.  In the face of errors or malicious behavior in Hyper-V,
-> > hv_pci should not expose or trust the transaction IDs returned by
-> > Hyper-V to be valid guest memory addresses.  Instead, use small integers
-> > generated by IDR as request (transaction) IDs.
-> 
-> I had expected that this code would use the next_request_id_callback
-> mechanism because of the race conditions that mechanism solves.  And
-> to protect against a malicious Hyper-V sending a bogus second message
-> with the same requestID, the requestID needs to be freed in the
-> onchannelcallback function as is done with vmbus_request_addr().
+This is a follow-up to the ipq806x gcc modernize series. Manu cleanup
+changes and also some discoveries of wrong definition notice only with
+all these conversions.
 
-I think I should elaborate on the design underlying this submission;
-roughly, the present solution diverges from the 'generic' requestor
-mechanism you mentioned above in two main aspects:
+The first patch is an improvement of the clk_hw_get_parent_index. The
+original idea of clk_hw_get_parent_index was to give a way to access the
+parent index but for some reason the final version limited it to the
+current index. We change it to give the current parent if is not
+provided and to give the requested parent if provided. Any user of this
+function is updated to follow the new implementation.
 
-  A) it 'moves' the ID removal into hv_compose_msi_msg() and other
-     functions,
+The patch 2 and 3 are some additional fixes for gcc.
+The first one is a fix that register the pxo and cxo fixed clock only if
+they are not defined in DTS.
+The patch 3 require some explaination. In short is a big HACK to prevent
+kernel panic with this series.
 
-  B) it adopts some ad-hoc locking scheme in the channel callback.
+The kpss-xcc driver is a mess.
+The Documentation declare that the clocks should be provided but for some
+reason it was never followed.
+In fact in the ipq8064 DTSI only the clocks for l2cc are declared but
+for cpu0 and cpu1 the clocks are not defined.
+The kpss-xcc driver use parent_names so the clks are ignored and never
+used so till now it wasn't a problem (ignoring the fact that they
+doesn't follow documentation at all)
+On top of that, the l2cc node declare the pxo clock in a really strange
+way. It's declared using the PXO_SRC gcc clock that is never defined in
+the gcc ipq8064 clock table. (the correct way was to declare a fixed
+clock in dts and reference that)
+To prevent any kind of problem we use the patch 3 and provide the clk
+for PXO_SRC in the gcc clock table. We manually provide the clk after
+gcc probe.
 
-AFAICT, such changes preserve the 'confidentiality' and correctness
-guarantees of the generic approach (modulo the issue discussed here
-with Saurabh).
+Patch 4 is just a minor cleanup where we use the poll macro
 
-These changes are justified by the bug/fix discussed in 2/2.  For
-concreteness, consider a solution based on the VMbus requestor as
-reported at the end of this email.
+Patch 5 is the actually kpss-xcc conversion to parent data
 
-AFAICT, this solution can't fix the bug discussed in 2/2.  Moreover
-(and looking back at (A-B)), we observe that:
+Patch 6-7 should be a fixup of a real conver case
 
-  1) locking in the channel callback is not quite as desired: we'd
-     want a request_addr_callback_nolock() say and 'protected' it
-     together with ->completion_func();
+Patch 8 converts the krait-cc to parent_data
+Patch 9 give some love to the code with some minor fixup
+Patch 10 drop the hardcoded safe sel and use the new
+clk_hw_get_parent_index to get the safe parent index.
+(also I discovered that the parent order was wrong)
 
-  2) hv_compose_msi_msg() doesn't know the value of the request ID
-     it has allocated (hv_compose_msi_msg() -> vmbus_sendpacket();
-     cf. also remove_request_id() in the current submission).
+Patch 11 is an additional fixup to force the reset of the muxes even
+more.
 
-Hope this helps clarify the problems at stake, and move fortward to a
-'final' solution...
+Patch 12-13 are some additiona taken from the qsdk that were missing in
+the upstream driver
 
-Thanks,
-  Andrea
+Patch 14 converts krait-cc to yaml
 
+Patch 15 add to krait-cc Documentation the L2 clocks
 
-diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-index ae0bc2fee4ca8..bd99dd12d367b 100644
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -91,6 +91,9 @@ static enum pci_protocol_version_t pci_protocol_versions[] = {
- /* space for 32bit serial number as string */
- #define SLOT_NAME_SIZE 11
- 
-+/* Size of requestor for VMbus */
-+#define HV_PCI_RQSTOR_SIZE 64
-+
- /*
-  * Message Types
-  */
-@@ -1407,7 +1410,7 @@ static void hv_int_desc_free(struct hv_pci_dev *hpdev,
- 	int_pkt->wslot.slot = hpdev->desc.win_slot.slot;
- 	int_pkt->int_desc = *int_desc;
- 	vmbus_sendpacket(hpdev->hbus->hdev->channel, int_pkt, sizeof(*int_pkt),
--			 (unsigned long)&ctxt.pkt, VM_PKT_DATA_INBAND, 0);
-+			 0, VM_PKT_DATA_INBAND, 0);
- 	kfree(int_desc);
- }
- 
-@@ -2649,7 +2652,7 @@ static void hv_eject_device_work(struct work_struct *work)
- 	ejct_pkt->message_type.type = PCI_EJECTION_COMPLETE;
- 	ejct_pkt->wslot.slot = hpdev->desc.win_slot.slot;
- 	vmbus_sendpacket(hbus->hdev->channel, ejct_pkt,
--			 sizeof(*ejct_pkt), (unsigned long)&ctxt.pkt,
-+			 sizeof(*ejct_pkt), 0,
- 			 VM_PKT_DATA_INBAND, 0);
- 
- 	/* For the get_pcichild() in hv_pci_eject_device() */
-@@ -2696,8 +2699,9 @@ static void hv_pci_onchannelcallback(void *context)
- 	const int packet_size = 0x100;
- 	int ret;
- 	struct hv_pcibus_device *hbus = context;
-+	struct vmbus_channel *chan = hbus->hdev->channel;
- 	u32 bytes_recvd;
--	u64 req_id;
-+	u64 req_id, req_addr;
- 	struct vmpacket_descriptor *desc;
- 	unsigned char *buffer;
- 	int bufferlen = packet_size;
-@@ -2743,11 +2747,13 @@ static void hv_pci_onchannelcallback(void *context)
- 		switch (desc->type) {
- 		case VM_PKT_COMP:
- 
--			/*
--			 * The host is trusted, and thus it's safe to interpret
--			 * this transaction ID as a pointer.
--			 */
--			comp_packet = (struct pci_packet *)req_id;
-+			req_addr = chan->request_addr_callback(chan, req_id);
-+			if (!req_addr || req_addr == VMBUS_RQST_ERROR) {
-+				dev_warn_ratelimited(&hbus->hdev->device,
-+						     "Invalid request ID\n");
-+				break;
-+			}
-+			comp_packet = (struct pci_packet *)req_addr;
- 			response = (struct pci_response *)buffer;
- 			comp_packet->completion_func(comp_packet->compl_ctxt,
- 						     response,
-@@ -3419,6 +3425,10 @@ static int hv_pci_probe(struct hv_device *hdev,
- 		goto free_dom;
- 	}
- 
-+	hdev->channel->next_request_id_callback = vmbus_next_request_id;
-+	hdev->channel->request_addr_callback = vmbus_request_addr;
-+	hdev->channel->rqstor_size = HV_PCI_RQSTOR_SIZE;
-+
- 	ret = vmbus_open(hdev->channel, pci_ring_size, pci_ring_size, NULL, 0,
- 			 hv_pci_onchannelcallback, hbus);
- 	if (ret)
-@@ -3749,6 +3759,10 @@ static int hv_pci_resume(struct hv_device *hdev)
- 
- 	hbus->state = hv_pcibus_init;
- 
-+	hdev->channel->next_request_id_callback = vmbus_next_request_id;
-+	hdev->channel->request_addr_callback = vmbus_request_addr;
-+	hdev->channel->rqstor_size = HV_PCI_RQSTOR_SIZE;
-+
- 	ret = vmbus_open(hdev->channel, pci_ring_size, pci_ring_size, NULL, 0,
- 			 hv_pci_onchannelcallback, hbus);
- 	if (ret)
+Patch 16 finally adds all this stuff to the ipq8064 dtsi (and fix the
+stupid PXO_SRC phandle)
+
+Patch 17 converts the kpss-acc driver to yaml and fix some Documentation
+error
+
+Patch 18 convets the kpss-gcc driver to yaml
+
+I tested this series on a ipq8064 SoC by running a cache benchmark test
+to make sure the changes are correct and we don't silently cause
+regressions. Also I compared the output of the clk_summary every time
+and we finally have a sane output where the mux are correctly placed in
+the correct parent. (till now we had the cpu aux clock all over the
+place, probably never cause problems but who knows.)
+
+v3:
+- Split Documentation files for kpss and krait-cc
+v2:
+- introduce new API instead of fixing the existing one
+- do not reorganize variables in krait-cc
+- fix some comments error and improve it
+- return better error for patch 7
+- fix missing new line on patch 16
+
+Ansuel Smith (18):
+  clk: introduce clk_hw_get_index_of_parent new API
+  clk: qcom: gcc-ipq806x: skip pxo/cxo fixed clk if already present
+  clk: qcom: gcc-ipq806x: add PXO_SRC in clk table
+  clk: qcom: clk-hfpll: use poll_timeout macro
+  clk: qcom: kpss-xcc: convert to parent data API
+  clk: qcom: clk-krait: unlock spin after mux completion
+  clk: qcom: clk-krait: add hw_parent check for div2_round_rate
+  clk: qcom: krait-cc: convert to parent_data API
+  clk: qcom: krait-cc: drop pr_info and register qsb only if needed
+  clk: qcom: krait-cc: drop hardcoded safe_sel
+  clk: qcom: krait-cc: force sec_mux to QSB
+  clk: qcom: clk-krait: add apq/ipq8064 errata workaround
+  clk: qcom: clk-krait: add enable disable ops
+  dt-bindings: clock: Convert qcom,krait-cc to yaml
+  dt-bindings: clock: Add L2 clocks to qcom,krait-cc Documentation
+  ARM: dts: qcom: qcom-ipq8064: add missing krait-cc compatible and
+    clocks
+  dt-bindings: arm: msm: Convert kpss-acc driver Documentation to yaml
+  dt-bindings: arm: msm: Convert kpss-gcc driver Documentation to yaml
+
+ .../bindings/arm/msm/qcom,kpss-acc.txt        |  49 -----
+ .../bindings/arm/msm/qcom,kpss-acc.yaml       |  88 +++++++++
+ .../bindings/arm/msm/qcom,kpss-gcc.txt        |  44 -----
+ .../bindings/arm/msm/qcom,kpss-gcc.yaml       |  68 +++++++
+ .../bindings/clock/qcom,krait-cc.txt          |  34 ----
+ .../bindings/clock/qcom,krait-cc.yaml         |  63 ++++++
+ arch/arm/boot/dts/qcom-ipq8064.dtsi           |  20 +-
+ drivers/clk/clk.c                             |  14 ++
+ drivers/clk/qcom/clk-hfpll.c                  |  13 +-
+ drivers/clk/qcom/clk-krait.c                  |  44 ++++-
+ drivers/clk/qcom/clk-krait.h                  |   1 +
+ drivers/clk/qcom/gcc-ipq806x.c                |  27 ++-
+ drivers/clk/qcom/kpss-xcc.c                   |  25 +--
+ drivers/clk/qcom/krait-cc.c                   | 186 ++++++++++--------
+ include/linux/clk-provider.h                  |   1 +
+ 15 files changed, 441 insertions(+), 236 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
+
+-- 
+2.34.1
+

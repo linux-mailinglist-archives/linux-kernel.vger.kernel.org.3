@@ -2,81 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BB84E1D87
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 20:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F1E4E1D8B
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 20:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343578AbiCTTJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 15:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
+        id S1343583AbiCTTNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 15:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233934AbiCTTJi (ORCPT
+        with ESMTP id S233934AbiCTTNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 15:09:38 -0400
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA4731221;
-        Sun, 20 Mar 2022 12:08:14 -0700 (PDT)
-Received: by mail-qk1-f170.google.com with SMTP id s16so10404916qks.4;
-        Sun, 20 Mar 2022 12:08:14 -0700 (PDT)
+        Sun, 20 Mar 2022 15:13:40 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E693D51335;
+        Sun, 20 Mar 2022 12:12:16 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id p9so18123925wra.12;
+        Sun, 20 Mar 2022 12:12:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SuadMlxSfGkGnsBDB8PuNxLZRp2FTuY3R2jg6AcqHr4=;
+        b=cAWsPuY+dAwLlzkkRH6DCeUHwMA4C6NXJNsQ8IeKuaC18Vy/QUUDQLNhjmKkv3LRed
+         Ohop4SUuSFLz9Z/g5CRXR5NqfboUJorDD+vd4wCHhJ4SF7wbh9KTM1dy8Pn4aXPyKfuZ
+         xRbcIM6lVsVUF+oNAOvTxmQvIZAMMR7VkA3W8rdtgefsrNzaSz7xxxuiM45uaaZ91Kl/
+         Gf8Qn8gMHdQpVkPMRAkzblnIRDRFFJjt+X4cI781jnt9j4NQlIUZmQ00B5vJ/dF50+DP
+         1s2Ae9RqF1n27KfDzXzWXoDo6zZ2fbp+KV64gkhcrbjKpwe/6QkjeE5EjlCREc8lU1uD
+         UcEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=j9jB6hCoAeek2so+uIbbjJIZdsM49+J+dmzdAcWuE6U=;
-        b=hAaOVe0S/Wp8xdSsggeKtrbcoxGpvSP36S5g77qomweEH+mybh2PwtYDwYSecq0Ha3
-         G3NbWWVxViMc2caj6YPNsgEMjIo6eGFD0V5fb4v5FhGUBVTSlrCToEyxMqCt6/ERkZCe
-         dNTnNOEthHkZroFX9wSMfoK82l6cmtiTfH7WGZECBoavXKTiZqWrBie9KG9BgjtN0Gal
-         q68M1+2s0VXaW6CiSxnX1U3gDkZ1u9J0krLBUIPEUEet0LnAq56ssCOMz7t/iTrRhRut
-         YkReoAJ8EXN28w5EKeE86rcgruVhRhPfx95xNJVqNrwsrzPg+qB1GxV3rUIa20XI2NKN
-         AvGQ==
-X-Gm-Message-State: AOAM532Y0IQiEPE0QkAi9vu9+iZJoq1brXGs6HfNB85alopqi3385Otu
-        gg1Nivauq42hl9f8hmtg9A==
-X-Google-Smtp-Source: ABdhPJwnjk5ENlSemC+yJtR3JNmQohdlidXxuypc1ZAitRfT9b5WukCjAwdyT7jKx+Dv6jF301Xvng==
-X-Received: by 2002:a37:65c5:0:b0:67b:3232:8cc8 with SMTP id z188-20020a3765c5000000b0067b32328cc8mr10773814qkb.170.1647803293628;
-        Sun, 20 Mar 2022 12:08:13 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:c6d:21ec:c4f5:bb3:5269:3b0e])
-        by smtp.gmail.com with ESMTPSA id v3-20020a05622a188300b002e1cbca8ea4sm10706141qtc.59.2022.03.20.12.08.11
+        bh=SuadMlxSfGkGnsBDB8PuNxLZRp2FTuY3R2jg6AcqHr4=;
+        b=dYc5r4JYB/btMjaRxSPU76lvNKK6M+IOnT2oFLPBwPLBNC3cAYJ8yoLrWRjXLKqhn6
+         qAhRhr1kkv5lxOc02K64W/CeaPLtlkjV0hMh3fWyHrfULsaHDtuoPVBUu3HWLSU0nlmv
+         SX82M1T9SyJrFrQqxvTBZw9w6IkkH+orgHZPq9vtagsDRXLEWpoKgH4J7jcA5EQrpUbz
+         eNs0gN5izhu4dMw7LNv+VRcVH0xexqYnDzaPurJIqQ0TQttmWQFKzQR7nPSEOMW+cTPv
+         d+11I1sGdrqgQ0CrsFQUB8IkgjI2fPoQpgHrw+l6X0XxKlocDmlQnasyxGEjtLFXqgT8
+         yaPw==
+X-Gm-Message-State: AOAM531TICOpI5Zl9SS8n0KyJtCqc2fZYkN5mWS9UeTSK/Zpun8PEoqq
+        dNdqoH1nUQ3Vt8YxoEN4Ma23hy/mHHhvKA==
+X-Google-Smtp-Source: ABdhPJwmVCRh/nSo8JwY6wGhgFb66Atq+7YapGPSAxjUkBI/ZPClgC+Rhb0Fvoj3MGqb8p/vAgh61w==
+X-Received: by 2002:a5d:650d:0:b0:1f0:19c:a066 with SMTP id x13-20020a5d650d000000b001f0019ca066mr15363551wru.149.1647803535394;
+        Sun, 20 Mar 2022 12:12:15 -0700 (PDT)
+Received: from elementary ([94.73.33.246])
+        by smtp.gmail.com with ESMTPSA id p12-20020a5d48cc000000b001e6114938a8sm11496825wrs.56.2022.03.20.12.12.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 12:08:12 -0700 (PDT)
-Received: (nullmailer pid 3230186 invoked by uid 1000);
-        Sun, 20 Mar 2022 19:08:10 -0000
-Date:   Sun, 20 Mar 2022 15:08:10 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: virtio,mmio: Allow setting devices
- 'dma-coherent'
-Message-ID: <Yjd7mhLw/aKVSsS7@robh.at.kernel.org>
-References: <20220310013528.549030-1-robh@kernel.org>
+        Sun, 20 Mar 2022 12:12:15 -0700 (PDT)
+Date:   Sun, 20 Mar 2022 20:12:13 +0100
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        Jiri Kosina <jkosina@suse.cz>, stable@vger.kernel.org,
+        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION] Right touchpad button disabled on Dell 7750
+Message-ID: <20220320191213.GA7905@elementary>
+References: <s5htubv32s8.wl-tiwai@suse.de>
+ <20220318130740.GA33535@elementary>
+ <s5hlex72yno.wl-tiwai@suse.de>
+ <CAO-hwJK8QMjYhQAC8tp7hLWZjSB3JMBJXgpKmFZRSEqPUn3_iw@mail.gmail.com>
+ <s5hlex61hwu.wl-tiwai@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220310013528.549030-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <s5hlex61hwu.wl-tiwai@suse.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 09 Mar 2022 19:35:27 -0600, Rob Herring wrote:
-> 'virtio,mmio' devices are always coherent within a guest. As Arm DTs
-> are default non-coherent, the 'dma-coherent' property needs to be set on
-> the virtio device to mark them as such. This aligns with the QEMU 'virt'
-> machine DTB.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/virtio/mmio.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+On Sat, Mar 19, 2022 at 09:10:57AM +0100, Takashi Iwai wrote:
+> Indeed the first patch caused the wrong button mapping.
+> Jose's revised patch was confirmed to work fine.
 
-Applied, thanks!
+Thanks for confirming that the patch was tested Takashi.
+
+I just emailed it:
+https://lore.kernel.org/linux-input/20220320190602.7484-1-jose.exposito89@gmail.com/
+
+Jose

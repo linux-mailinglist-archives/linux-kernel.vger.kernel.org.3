@@ -2,88 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F1E4E1D8B
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 20:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D934E1D8F
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 20:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343583AbiCTTNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 15:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
+        id S1343590AbiCTTQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 15:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233934AbiCTTNk (ORCPT
+        with ESMTP id S233934AbiCTTQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 15:13:40 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E693D51335;
-        Sun, 20 Mar 2022 12:12:16 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id p9so18123925wra.12;
-        Sun, 20 Mar 2022 12:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SuadMlxSfGkGnsBDB8PuNxLZRp2FTuY3R2jg6AcqHr4=;
-        b=cAWsPuY+dAwLlzkkRH6DCeUHwMA4C6NXJNsQ8IeKuaC18Vy/QUUDQLNhjmKkv3LRed
-         Ohop4SUuSFLz9Z/g5CRXR5NqfboUJorDD+vd4wCHhJ4SF7wbh9KTM1dy8Pn4aXPyKfuZ
-         xRbcIM6lVsVUF+oNAOvTxmQvIZAMMR7VkA3W8rdtgefsrNzaSz7xxxuiM45uaaZ91Kl/
-         Gf8Qn8gMHdQpVkPMRAkzblnIRDRFFJjt+X4cI781jnt9j4NQlIUZmQ00B5vJ/dF50+DP
-         1s2Ae9RqF1n27KfDzXzWXoDo6zZ2fbp+KV64gkhcrbjKpwe/6QkjeE5EjlCREc8lU1uD
-         UcEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SuadMlxSfGkGnsBDB8PuNxLZRp2FTuY3R2jg6AcqHr4=;
-        b=dYc5r4JYB/btMjaRxSPU76lvNKK6M+IOnT2oFLPBwPLBNC3cAYJ8yoLrWRjXLKqhn6
-         qAhRhr1kkv5lxOc02K64W/CeaPLtlkjV0hMh3fWyHrfULsaHDtuoPVBUu3HWLSU0nlmv
-         SX82M1T9SyJrFrQqxvTBZw9w6IkkH+orgHZPq9vtagsDRXLEWpoKgH4J7jcA5EQrpUbz
-         eNs0gN5izhu4dMw7LNv+VRcVH0xexqYnDzaPurJIqQ0TQttmWQFKzQR7nPSEOMW+cTPv
-         d+11I1sGdrqgQ0CrsFQUB8IkgjI2fPoQpgHrw+l6X0XxKlocDmlQnasyxGEjtLFXqgT8
-         yaPw==
-X-Gm-Message-State: AOAM531TICOpI5Zl9SS8n0KyJtCqc2fZYkN5mWS9UeTSK/Zpun8PEoqq
-        dNdqoH1nUQ3Vt8YxoEN4Ma23hy/mHHhvKA==
-X-Google-Smtp-Source: ABdhPJwmVCRh/nSo8JwY6wGhgFb66Atq+7YapGPSAxjUkBI/ZPClgC+Rhb0Fvoj3MGqb8p/vAgh61w==
-X-Received: by 2002:a5d:650d:0:b0:1f0:19c:a066 with SMTP id x13-20020a5d650d000000b001f0019ca066mr15363551wru.149.1647803535394;
-        Sun, 20 Mar 2022 12:12:15 -0700 (PDT)
-Received: from elementary ([94.73.33.246])
-        by smtp.gmail.com with ESMTPSA id p12-20020a5d48cc000000b001e6114938a8sm11496825wrs.56.2022.03.20.12.12.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 12:12:15 -0700 (PDT)
-Date:   Sun, 20 Mar 2022 20:12:13 +0100
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        Jiri Kosina <jkosina@suse.cz>, stable@vger.kernel.org,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION] Right touchpad button disabled on Dell 7750
-Message-ID: <20220320191213.GA7905@elementary>
-References: <s5htubv32s8.wl-tiwai@suse.de>
- <20220318130740.GA33535@elementary>
- <s5hlex72yno.wl-tiwai@suse.de>
- <CAO-hwJK8QMjYhQAC8tp7hLWZjSB3JMBJXgpKmFZRSEqPUn3_iw@mail.gmail.com>
- <s5hlex61hwu.wl-tiwai@suse.de>
+        Sun, 20 Mar 2022 15:16:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378D2D3AF3;
+        Sun, 20 Mar 2022 12:15:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA9176121F;
+        Sun, 20 Mar 2022 19:15:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B809C340EE;
+        Sun, 20 Mar 2022 19:15:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647803730;
+        bh=5yU1VY41IGpB26hHV6JgEd0Xh2QyTxC+F9+H8KW7OsY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=u6DkRcZ8fJI95fjed2Wb/xkpzXzZXcJ6T3ppsjhbWJDs/X0De6DQQV0uBOX70SJ0b
+         dyoqIOrG4iWEmaAWpKtc074CZ9O75ITf6vKKl8xXsQvnS25JBT1yZu/aWUDETL0WZc
+         XI3PM30mymypLSbkJk01Trr0zgX3Gx9UVHj9N8zz1fcw/DP+KEoIdq/L6bOgqQlTo1
+         qQ9JKFz3HR7YVj1YF8X0j6OUy6qHNCF+cBLr5Gfa8j2O+gmaw5Mdr1gAeCBu46xJ2P
+         Lj6GhXUkh3W7AT/ZWYXQs6IbQcQ8SWslHxcwvXOhTOebOkj2z7HHlTLozoNS2CRvgb
+         +qJt+V9uiNOLg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     Edmond Gagnon <egagnon@squareup.com>,
+        Benjamin Li <benl@squareup.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, wcn36xx@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] wcn36xx: Implement tx_rate reporting
+In-Reply-To: <cda7eaa6-fb99-0d32-24fb-758b9363ee6d@linaro.org> (Bryan
+        O'Donoghue's message of "Sun, 20 Mar 2022 18:03:10 +0000")
+References: <20220318195804.4169686-1-egagnon@squareup.com>
+        <20220318195804.4169686-3-egagnon@squareup.com>
+        <c8f31312-5356-704e-1f55-89c9f5888238@linaro.org>
+        <cda7eaa6-fb99-0d32-24fb-758b9363ee6d@linaro.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date:   Sun, 20 Mar 2022 21:15:25 +0200
+Message-ID: <87pmmgo2pe.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <s5hlex61hwu.wl-tiwai@suse.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 09:10:57AM +0100, Takashi Iwai wrote:
-> Indeed the first patch caused the wrong button mapping.
-> Jose's revised patch was confirmed to work fine.
+Bryan O'Donoghue <bryan.odonoghue@linaro.org> writes:
 
-Thanks for confirming that the patch was tested Takashi.
+> On 20/03/2022 13:21, Bryan O'Donoghue wrote:
+>> On 18/03/2022 19:58, Edmond Gagnon wrote:
+>>> +=C2=A0=C2=A0=C2=A0 INIT_DELAYED_WORK(&wcn->get_stats_work, wcn36xx_get=
+_stats_work);
+>>
+>> Instead of forking a worker and polling we could add the relevant
+>> SMD command to
+>>
+>> static int wcn36xx_smd_tx_compl_ind(struct wcn36xx *wcn, void *buf,
+>> size_t len)
+>> {
+>>  =C2=A0=C2=A0=C2=A0 wcn36xx_smd_get_stats(wcn, 0xSomeMask);
+>> }
+>>
+>> That way we only ever ask for and report a new TX data rate when we
+>> know a TX event - and hence a potential TX data-rate update - has
+>> taken place.
+>>
+>> ---
+>> bod
+>>
+>
+> Thinking a bit more
+>
+> - Do the SMD get_stats in the tx completion
+>   This might be a problem initiating another SMD transaction inside
+>   of an SMD callback. But is the most straight forward way to
+>   get the data while avoiding alot of needless polling.
+>
+> - Schedule your worker from the TX completion
+>   Again you should only care about gathering the data when you know
+>   something has happened which necessitates gathering that data
+>   like TX completion
+>
+> - Schedule your worker from the RX indication routine
+>   Seems not as logical as the first two but it might be easier
+>   to schedule the worker in the RX data handler
+>
+> Either way, I do think you should only gather this data on an event,
+> not as a continuous poll.
 
-I just emailed it:
-https://lore.kernel.org/linux-input/20220320190602.7484-1-jose.exposito89@gmail.com/
+I agree, a continuous poll is not a good idea as it affects power
+consumption. What about struct ieee80211_ops::sta_statistics? AFAIK
+that's called only when user space is requestings stats so the overhead
+should be minimal.
 
-Jose
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes

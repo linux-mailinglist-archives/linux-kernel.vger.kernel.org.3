@@ -2,127 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6264E1B39
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 12:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6085D4E1B3B
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 12:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244319AbiCTLCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 07:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
+        id S244357AbiCTLDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 07:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233345AbiCTLCH (ORCPT
+        with ESMTP id S244292AbiCTLCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 07:02:07 -0400
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6223A46656;
-        Sun, 20 Mar 2022 04:00:43 -0700 (PDT)
-Received: by mail-ed1-f54.google.com with SMTP id k10so1218281edj.2;
-        Sun, 20 Mar 2022 04:00:43 -0700 (PDT)
+        Sun, 20 Mar 2022 07:02:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 583F446658
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 04:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647774085;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=70n8djccLGvTwEN3SXJpGKJYJ4sRqN4FFre0FvejuPA=;
+        b=P7iB13VbBDhg3XpHaGk4H3g8PLTrkbcUTlgnx6pvs1Y16E5xhmIoTrbH6lzJgTN7P+usbN
+        D+FcRirUlCadfSpCFiZ92TtNLO1ghq6rYrQMyRaLVOKcF9S7w+28+s+HUvnf8fZba+6kXq
+        63F/i4CitxjzulNGC2w6kDnwo2fvfig=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-49-OJp3mviXPG6U3yMt3ThEig-1; Sun, 20 Mar 2022 07:01:24 -0400
+X-MC-Unique: OJp3mviXPG6U3yMt3ThEig-1
+Received: by mail-ej1-f69.google.com with SMTP id m12-20020a1709062acc00b006cfc98179e2so5956200eje.6
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 04:01:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:content-language:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=UcgHC2iDV9/2F3OSRK8axWbWLeeDPOH9bkq+3/RKRnI=;
-        b=D+AvUvNaCfELEa52AVOGWsGBYsx0BNXDcppuK0YLpGQKrL/KB8zFYBJ3dB5xvV7Zw+
-         vemXmB+cHuVFognnZIwlUJCPgu5mW2WP8fX3W58RdBTJsAeUYXNHpeBAeMkCRyXie3U0
-         ICn49IOu5Z4rHfpFlU75Vxb6RllKMRPXecUr7SxVo2zgCYielvIcuEI8rdZpKHPAKR9V
-         +UKzQTPAfSU5F1AcMVAuNntf1hLU5ZZBxGwVVx5pNHj65VnaWTjd06KujBVibUd8nNkg
-         HC5JFNu8xdGVKHGpv1BnjRB9tvKU098i00hxw1XfGUIQQXtzRmJbV97A8d88tPXk94yy
-         ZnoQ==
-X-Gm-Message-State: AOAM532y8JmjARFUoytQTMe7AidFnOiB7htAkQj7BSAz7jKSmQ/7md0j
-        yuGjQ/BWv41RHwoQSYq9DkR2OPQGlFU=
-X-Google-Smtp-Source: ABdhPJxRTuLruUTDTZsAJVUshE+SpdS5Zkp55qyuD9JyUZ0J4JGG+LRYWQALmKuoSvu94aJGeiYzzA==
-X-Received: by 2002:a05:6402:1742:b0:419:2707:747a with SMTP id v2-20020a056402174200b004192707747amr5398544edx.238.1647774041560;
-        Sun, 20 Mar 2022 04:00:41 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id b11-20020a170906728b00b006df8494d384sm5395666ejl.122.2022.03.20.04.00.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Mar 2022 04:00:40 -0700 (PDT)
-Message-ID: <f61abc2b-3ce8-7b1f-3d28-8a4a03ec58eb@kernel.org>
-Date:   Sun, 20 Mar 2022 12:00:39 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=70n8djccLGvTwEN3SXJpGKJYJ4sRqN4FFre0FvejuPA=;
+        b=IfSFkuFoPA7p75MSTvFtPJzeFD4sLmM7Ark5WBkrvQzUPy66ZHe1NmDRNQqzZxwK4D
+         lhJXsqvwAnyAJaizEcdQZmKvBLnTksDQyZrV7Ee+SvLrl/63DwLuM9Ht9X8Lgy1eyN9Z
+         +v9HDl31cSwF23rCXDTWnz56C3ZXigE/QTsMwXMhm+LuCb2v9QIX82eFNddXDmsK2NNH
+         N5f6nGjDAFxrYgwO/QKYDbnNudLS3wLKz6Lkq9w1Y8y/1xuwVvpwoyE+VIhveqIOl7Zz
+         bzrtaqqjSZe2SRcGzRJaOKOMSbxwEr4FH6JBItEEgGevKq/Lmr8p+fWVjKeCuE40TMfm
+         zs+A==
+X-Gm-Message-State: AOAM531eWrcqNiTJqElDIMMWKaXe1m0389uETp9+j2k5BfaLQIU6XEro
+        mVXmIJS0HwqL8nkjohGHUgR9DV0R6u8Z9n6iUAR01rA6mKS8UkEzGkpE1doYoikFw11JCXgwL6D
+        Cv6q/qinR7vBYC8Vzt2uhvbYz
+X-Received: by 2002:a17:907:728b:b0:6df:8f3b:28ae with SMTP id dt11-20020a170907728b00b006df8f3b28aemr15008464ejc.336.1647774083262;
+        Sun, 20 Mar 2022 04:01:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwy07Ub9HgPan/haxPXZAmsmftl771vhR4MLzcj9Pv2RUOJsuF09d0skyISjV6IqXosGrJIhQ==
+X-Received: by 2002:a17:907:728b:b0:6df:8f3b:28ae with SMTP id dt11-20020a170907728b00b006df8f3b28aemr15008448ejc.336.1647774083039;
+        Sun, 20 Mar 2022 04:01:23 -0700 (PDT)
+Received: from redhat.com ([2.55.132.0])
+        by smtp.gmail.com with ESMTPSA id o7-20020a17090608c700b006cef23cf158sm5731563eje.175.2022.03.20.04.01.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Mar 2022 04:01:22 -0700 (PDT)
+Date:   Sun, 20 Mar 2022 07:01:19 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tools/virtio: Test virtual address range detection
+Message-ID: <20220320065640-mutt-send-email-mst@kernel.org>
+References: <c1895bcc240d413ff067f982b6e653996ace9887.camel@infradead.org>
+ <20220221170217.5bq7nhr3pvchku5x@sgarzare-redhat>
+ <75d5002ad505b476c81c0b92c0d624824e93d6ac.camel@infradead.org>
+ <20220222013121-mutt-send-email-mst@kernel.org>
+ <8e60951973cab3a3d27a3c7f18d866cdb804e663.camel@infradead.org>
+ <YhVvOsI0+xVAKHdr@casper.infradead.org>
+ <YjH3H9KvTFAayTPY@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 5/6] arm64: dts: qcom: sm6350: Add UFS nodes
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220318183004.858707-1-luca.weiss@fairphone.com>
- <20220318183004.858707-6-luca.weiss@fairphone.com>
- <c88ed4b5-2e44-c3fd-ff2b-b4bee1354765@kernel.org>
- <CIO22P1JZY5F.1BYJF4HT2OOUW@otso>
-In-Reply-To: <CIO22P1JZY5F.1BYJF4HT2OOUW@otso>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjH3H9KvTFAayTPY@casper.infradead.org>
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/03/2022 19:29, Luca Weiss wrote:
-> Hi Krzysztof,
+On Wed, Mar 16, 2022 at 02:41:35PM +0000, Matthew Wilcox wrote:
+> On Tue, Feb 22, 2022 at 11:18:18PM +0000, Matthew Wilcox wrote:
+> > On Tue, Feb 22, 2022 at 07:58:33AM +0000, David Woodhouse wrote:
+> > > On Tue, 2022-02-22 at 01:31 -0500, Michael S. Tsirkin wrote:
+> > > > On Mon, Feb 21, 2022 at 05:18:48PM +0000, David Woodhouse wrote:
+> > > > > 
+> > > > > [dwoodhou@i7 virtio]$ sudo ~/virtio_test
+> > > > > Detected virtual address range 0x1000-0x7ffffffff000
+> > > > > spurious wakeups: 0x0 started=0x100000 completed=0x100000
+> > > > > 
+> > > > > Although in some circumstances I also see a different build failure:
+> > > > > 
+> > > > > cc -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h   -c -o vringh_test.o vringh_test.c
+> > 
+> > Trying to test this myself ...
+> > 
+> > $ cd tools/virtio/
+> > $ make
+> > ...
+> > cc -lpthread  virtio_test.o virtio_ring.o   -o virtio_test
+> > /usr/bin/ld: virtio_ring.o: in function `spin_lock':
+> > /home/willy/kernel/folio/tools/virtio/./linux/spinlock.h:16: undefined reference to `pthread_spin_lock'
+> > 
+> > So this is not the only problem here?
 > 
-> On Sat Mar 19, 2022 at 3:43 PM CET, Krzysztof Kozlowski wrote:
->> On 18/03/2022 19:30, Luca Weiss wrote:
->>> Add the necessary nodes for UFS and its PHY.
->>>
->>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>> ---
->>>  arch/arm64/boot/dts/qcom/sm6350.dtsi | 79 ++++++++++++++++++++++++++++
->>>  1 file changed, 79 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
->>> index d7c9edff19f7..c5c93b6bcd2a 100644
->>> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
->>> @@ -541,6 +541,85 @@ uart2: serial@98c000 {
->>>  			};
->>>  		};
->>>  
->>> +		ufs_mem_hc: ufshc@1d84000 {
->>
->> Generic node name, so ufs.
+> FYI, this fixes it for me:
 > 
-> With the node name changes UFS doesn't probe anymore.
+> diff --git a/tools/virtio/Makefile b/tools/virtio/Makefile
+> index 0d7bbe49359d..83b6a522d0d2 100644
+> --- a/tools/virtio/Makefile
+> +++ b/tools/virtio/Makefile
+> @@ -5,7 +5,7 @@ virtio_test: virtio_ring.o virtio_test.o
+>  vringh_test: vringh_test.o vringh.o virtio_ring.o
 > 
-> [    1.893762] ufshcd-qcom 1d84000.ufs: ufshcd_variant_hba_init: variant qcom init failed err -19
-> [    1.902674] ufshcd-qcom 1d84000.ufs: Initialization failed
-> [    1.908391] ufshcd-qcom 1d84000.ufs: ufshcd_pltfrm_init() failed -19
-> 
-> I didn't debug this in detail but it's likely from the
-> androidboot.bootdevice=1d84000.ufshc parameter in cmdline that
-> ufs-qcom.c uses to fail probe with -ENODEV for all UFS other than the
-> selected one. Not sure why this behavior exists in mainline (didn't look
-> into this either).
-> 
-> This cmdline parameter (among many others) is added by the stock
-> bootloader and as far as I know there's no way to turn that off.
+>  CFLAGS += -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h
+> -LDFLAGS += -lpthread
+> +LDFLAGS += -pthread
+>  vpath %.c ../../drivers/virtio ../../drivers/vhost
+>  mod:
+>         ${MAKE} -C `pwd`/../.. M=`pwd`/vhost_test V=${V}
 
-I see now in the driver weird Android code like:
-  static char android_boot_dev[ANDROID_BOOT_DEV_MAX];
-  ....
-  if (strlen(android_boot_dev) && strcmp(android_boot_dev, dev_name(dev)))
+gcc documentation seems to say this is neeed in cflags too:
 
-This is wrong. How is Android boot arguments needed for UFS? UFS is
-independent of Android... what if you run it with different bootloader
-and different system?
+       -pthread
+           Define additional macros required for using the POSIX threads library.  You should use this option consistently for both
+           compilation and linking.  This option is supported on GNU/Linux targets, most other Unix derivatives, and also on x86
+           Cygwin and MinGW targets.
 
-I understand that it is inconvenient for you to change the name, but
-looking at driver code, I insist even more. :)
+right?
 
+-- 
+MST
 
-Best regards,
-Krzysztof

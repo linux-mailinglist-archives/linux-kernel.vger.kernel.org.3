@@ -2,61 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEDE4E1A88
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 07:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A384E1A8C
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 07:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244919AbiCTGqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 02:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S244511AbiCTGsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 02:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244902AbiCTGpy (ORCPT
+        with ESMTP id S233808AbiCTGso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 02:45:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF0B496B1
-        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 23:44:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77108B80D35
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 06:44:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B34F3C340E9;
-        Sun, 20 Mar 2022 06:44:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647758656;
-        bh=dusrF4VlCWfYYYamjBKQmqBPwlcj57b1Mbg7bVk1D1w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GzuyWQQv019Bx3WnDhsZi5gsyQEMYMu2jAAaiPD38Gq+msk8VlJK7UD4oKzwlTDgb
-         1A1X+o2A3Q7i8EEMTP/hhvD91tzsURPO1T/wBhLULaFZz4/SVgm4OqPgnakbt9Mjeq
-         TTYyNap2oevUM/fh+4GuHSKD/nA/mPs4E3VOjbHU=
-Date:   Sun, 20 Mar 2022 07:44:11 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Ryan C. England" <rcengland@gmail.com>
-Cc:     gregkh@linuxfoundation.com, lee.jones@linaro.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] staging: axis-fifo: Fixed parenthesis styling issues
-Message-ID: <YjbNO3VHGYbm6Si+@kroah.com>
-References: <20220320042340.49222-1-rcengland@gmail.com>
+        Sun, 20 Mar 2022 02:48:44 -0400
+Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47D9021C738
+        for <linux-kernel@vger.kernel.org>; Sat, 19 Mar 2022 23:47:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Qoe0Q
+        87GoOSKxDOa3TOmujaoYWgqnESMTLvey+TXN2A=; b=b5+ffn+dEonmblcgKajhw
+        FfL4onbcLKkXEx0YECiXLG9u5QuSsHc1CFybzPNIlqpbbpMTLmAbbQRPFpEoe0Zz
+        AkNLuNU+p1pLu5gNsQe41aZ+Bsl3fxInCWpb7HMteTO74jJub9Mu214Dj8ijD1LL
+        mknGj9mh5Ew39mlxa6HVGY=
+Received: from localhost.localdomain (unknown [120.204.79.168])
+        by smtp9 (Coremail) with SMTP id DcCowAAHR7+MzTZiBF6iBw--.41935S4;
+        Sun, 20 Mar 2022 14:46:45 +0800 (CST)
+From:   lizhe <sensor1010@163.com>
+To:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, sensor1010@163.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers/bus/brcmstb_gisb.c : Remove the suppress_bind_attrs attribute of the driver
+Date:   Sat, 19 Mar 2022 23:45:29 -0700
+Message-Id: <20220320064529.12827-1-sensor1010@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220320042340.49222-1-rcengland@gmail.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcCowAAHR7+MzTZiBF6iBw--.41935S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZw13tr1rZFWruFy7Cr1xZrb_yoW3Wrb_uF
+        W2vFs3CrnY9r1kta40qrnI9rWIkF13uwn3Xa4fK34fAa4jqF1UZF18urZrJa1DG345ta4q
+        yr1DG3WxC34rJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_sqWUUUUUU==
+X-Originating-IP: [120.204.79.168]
+X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/1tbiuBnIq1QHO+Nd7wABs6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 04:23:40AM +0000, Ryan C. England wrote:
-> Fixed open parenthesis alignment issues.
-> 
-> Signed-off-by: Ryan C. England <rcengland@gmail.com>
-> ---
->  drivers/staging/axis-fifo/axis-fifo.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
+Even if platform_driver does not set suppress_bind_attrs attribute,
+when registering with platform_driver_probe,  the value of
+suppress_bind_attrs is still true, see __platform_driver_probe()
 
-Where is patch 1/2 in this series?
+Signed-off-by: lizhe <sensor1010@163.com>
+---
+ drivers/bus/brcmstb_gisb.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/bus/brcmstb_gisb.c b/drivers/bus/brcmstb_gisb.c
+index 183d5cc37d42..b0c3704777e9 100644
+--- a/drivers/bus/brcmstb_gisb.c
++++ b/drivers/bus/brcmstb_gisb.c
+@@ -536,7 +536,6 @@ static struct platform_driver brcmstb_gisb_arb_driver = {
+ 		.name	= "brcm-gisb-arb",
+ 		.of_match_table = brcmstb_gisb_arb_of_match,
+ 		.pm	= &brcmstb_gisb_arb_pm_ops,
+-		.suppress_bind_attrs = true,
+ 	},
+ };
+ 
+-- 
+2.25.1
+

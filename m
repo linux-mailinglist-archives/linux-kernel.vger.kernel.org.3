@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1092D4E1D02
-	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 18:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB0B4E1D04
+	for <lists+linux-kernel@lfdr.de>; Sun, 20 Mar 2022 18:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245666AbiCTRE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 13:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
+        id S245670AbiCTRIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 13:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245663AbiCTRE4 (ORCPT
+        with ESMTP id S235400AbiCTRIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 13:04:56 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFB64C40F
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 10:03:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647795812; x=1679331812;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4KLxCogkaJgL1I4Qp9As2MeVvJ0l1Sntjslo9WZHLMA=;
-  b=WBlHF88RwBg87Mqb7n9J5gyZARSTRgVPUj/+1JR02XKQAYh1Nnl7kZco
-   5BXoEVF5bM3ywl2HA2EdoXVMQcW0BAhp1UkCCA8ZxUsJpDIUn4q3z4fZj
-   ZaD0Y0FkOzVtc65u+77n5FchjbuGjTgTsxjcDAMuLpg7UZOvTc8RO7F1n
-   LMFZmwUgCDe7c5OrNOGumDQieT912GmDbeFycCqGoN1+QC1mGHkrsMxe0
-   jQ6IN89C21Thd5m9qWt9abj3h70ZjNurcCHSmLLznMLZZm7WC9gxKbws/
-   SG38+6TGGp5pZ2ZS41oomkoNWxXkdiQ4hWXterF8bb0a7n3dWoQL8KihZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="343844027"
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="343844027"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 10:03:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,195,1643702400"; 
-   d="scan'208";a="823848173"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Mar 2022 10:03:31 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nVyxm-000H6P-FY; Sun, 20 Mar 2022 17:03:30 +0000
-Date:   Mon, 21 Mar 2022 01:03:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [ardb:efi-psci 2/2] drivers/firmware/psci/psci.c:152:2: warning:
- unannotated fall-through between switch labels
-Message-ID: <202203210042.UJZ5llHd-lkp@intel.com>
+        Sun, 20 Mar 2022 13:08:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E167554BF7;
+        Sun, 20 Mar 2022 10:06:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DF8C60DBE;
+        Sun, 20 Mar 2022 17:06:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F077C340EE;
+        Sun, 20 Mar 2022 17:06:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647796018;
+        bh=YMAWP0dJkPTQxKibh5zTVpYw4JhL6kvUUt0ygV/sKVg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z50jxHHPQUV9ASv50t+aJlg84fIDhH8AwnZEkb91WUhz73lrWIz5UNqQzjF5VfTdh
+         IsIfIfgUm5jvGv4D0LEft1Z5aFLHiZzudNu8J3jyI/VnJakOoTck/9787OQcHiFMl4
+         dvXn7vHCUruD+Ab/K833/vhtf/VdJFC6A/nh9HzuwX0FmoMC+dy+Uj+IAxEZvX+Iev
+         ZDrwKI2JDPfhCWjSA9dGTwBhK1mcp/hT7InQHS7sjpKbZDqJOfJm9ZbNI3DspdbYzq
+         oL4cf9+khUJWQD2Q2CYI+yH8vgFbmm5NTKdAUAOXBEvjFGCjCwLKW0soE5cEWiwpvM
+         pL+SKO96WFQeA==
+Date:   Sun, 20 Mar 2022 17:14:22 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Jagath Jog J <jagathjog1996@gmail.com>
+Cc:     dan@dlrobertson.com, andy.shevchenko@gmail.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/5] iio: accel: bma400: conversion to device-managed
+ function
+Message-ID: <20220320171422.614a4f25@jic23-huawei>
+In-Reply-To: <20220319181023.8090-2-jagathjog1996@gmail.com>
+References: <20220319181023.8090-1-jagathjog1996@gmail.com>
+        <20220319181023.8090-2-jagathjog1996@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,86 +57,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-psci
-head:   4b8d4b95fbd43459a4b0ae3f9020a912f7621884
-commit: 4b8d4b95fbd43459a4b0ae3f9020a912f7621884 [2/2] efi: arm: implement PSCI method backed by EFI runtime code
-config: arm64-randconfig-r022-20220320 (https://download.01.org/0day-ci/archive/20220321/202203210042.UJZ5llHd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=4b8d4b95fbd43459a4b0ae3f9020a912f7621884
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb efi-psci
-        git checkout 4b8d4b95fbd43459a4b0ae3f9020a912f7621884
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/firmware/psci/
+On Sat, 19 Mar 2022 23:40:19 +0530
+Jagath Jog J <jagathjog1996@gmail.com> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> This is a conversion to device-managed by using devm_iio_device_register
+> inside probe function, now disabling the regulator and putting bma400 to
+> power down via a devm_add_action_or_reset() hook.
+> 
+> The dev_set_drvdata() call, bma400_remove() function and hooks in the I2C
+> and SPI driver struct is removed as devm_iio_device_register function is
+> used to automatically unregister on driver detach.
+> 
+> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
 
-All warnings (new ones prefixed by >>):
+Hi Jagath,
 
->> drivers/firmware/psci/psci.c:152:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   drivers/firmware/psci/psci.c:152:2: note: insert '__attribute__((fallthrough));' to silence this warning
-           default:
-           ^
-           __attribute__((fallthrough)); 
-   drivers/firmware/psci/psci.c:152:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   drivers/firmware/psci/psci.c:94:20: warning: unused function 'psci_power_state_loses_context' [-Wunused-function]
-   static inline bool psci_power_state_loses_context(u32 state)
-                      ^
-   2 warnings generated.
+There is an oddity in the existing driver that has lead this in
+what I think is the wrong direction.  See below.
+
+> ---
+>  drivers/iio/accel/bma400.h      |  2 --
+>  drivers/iio/accel/bma400_core.c | 39 ++++++++++++++-------------------
+>  drivers/iio/accel/bma400_i2c.c  |  8 -------
+>  drivers/iio/accel/bma400_spi.c  |  8 -------
+>  4 files changed, 17 insertions(+), 40 deletions(-)
+> 
+> diff --git a/drivers/iio/accel/bma400.h b/drivers/iio/accel/bma400.h
+> index c4c8d74155c2..e938da5a57b4 100644
+> --- a/drivers/iio/accel/bma400.h
+> +++ b/drivers/iio/accel/bma400.h
+> @@ -94,6 +94,4 @@ extern const struct regmap_config bma400_regmap_config;
+>  
+>  int bma400_probe(struct device *dev, struct regmap *regmap, const char *name);
+>  
+> -void bma400_remove(struct device *dev);
+> -
+>  #endif
+> diff --git a/drivers/iio/accel/bma400_core.c b/drivers/iio/accel/bma400_core.c
+> index fd2647b728d3..dcc7549c7a0e 100644
+> --- a/drivers/iio/accel/bma400_core.c
+> +++ b/drivers/iio/accel/bma400_core.c
+> @@ -793,6 +793,19 @@ static const struct iio_info bma400_info = {
+>  	.write_raw_get_fmt = bma400_write_raw_get_fmt,
+>  };
+>  
+> +static void bma400_disable(void *data_ptr)
+> +{
+> +	struct bma400_data *data = data_ptr;
+> +	int ret;
+> +
+> +	ret = bma400_set_power_mode(data, POWER_MODE_SLEEP);
+> +	if (ret)
+> +		dev_warn(data->dev, "Failed to put device into sleep mode (%pe)\n",
+> +			 ERR_PTR(ret));
+> +
+> +	regulator_bulk_disable(ARRAY_SIZE(data->regulators), data->regulators);
+
+So this raised alarm bells.  You almost never want a devm callback to do two things.
+
+The reason it 'looks' like this might be ok is that the driver is currently calling
+bma400_set_power_mode(data, POWER_MODE_SLEEP) in error paths during probe.
+I think it should be.  If you make that modification first you'll see that to
+keep a clean: "only undo things you have done" approach you'll then need
+to have a pair of devm_add_action_or_reset() callbacks so as to cover the
+disabling of the regulators when the power enabling fails and then to
+cover the change to sleep mode if anything else fails.
 
 
-vim +152 drivers/firmware/psci/psci.c
+Jonathan
 
-   131	
-   132	static unsigned long __invoke_psci_fn_efi(unsigned long function_id,
-   133				unsigned long arg0, unsigned long arg1,
-   134				unsigned long arg2)
-   135	{
-   136		unsigned long flags, ret;
-   137	
-   138		switch (function_id) {
-   139		case PSCI_0_2_FN_PSCI_VERSION:
-   140			return PSCI_VERSION(0, 2);
-   141		case PSCI_0_2_FN_MIGRATE_INFO_TYPE:
-   142			return PSCI_0_2_TOS_MP;
-   143		case PSCI_0_2_FN_CPU_SUSPEND:
-   144		case PSCI_0_2_FN_CPU_OFF:
-   145		case PSCI_0_2_FN_CPU_ON:
-   146		case PSCI_0_2_FN_AFFINITY_INFO:
-   147		case PSCI_0_2_FN64_CPU_SUSPEND:
-   148		case PSCI_0_2_FN64_CPU_ON:
-   149		case PSCI_0_2_FN64_AFFINITY_INFO:
-   150			if (WARN_ON_ONCE(!efi_psci.psci_handler ||
-   151					 !efi_enabled(EFI_RUNTIME_SERVICES)))
- > 152		default:
-   153				return PSCI_RET_NOT_SUPPORTED;
-   154			break;
-   155		}
-   156	
-   157		raw_local_irq_save(flags);
-   158		efi_set_pgd(&efi_mm);
-   159	
-   160		ret = efi_psci.psci_handler(function_id, arg0, arg1, arg2);
-   161	
-   162		efi_set_pgd(current->active_mm);
-   163		raw_local_irq_restore(flags);
-   164	
-   165		return ret;
-   166	}
-   167	
+> +}
+> +
+>  int bma400_probe(struct device *dev, struct regmap *regmap, const char *name)
+>  {
+>  	struct iio_dev *indio_dev;
+> @@ -822,31 +835,13 @@ int bma400_probe(struct device *dev, struct regmap *regmap, const char *name)
+>  	indio_dev->num_channels = ARRAY_SIZE(bma400_channels);
+>  	indio_dev->modes = INDIO_DIRECT_MODE;
+>  
+> -	dev_set_drvdata(dev, indio_dev);
+> -
+> -	return iio_device_register(indio_dev);
+> -}
+> -EXPORT_SYMBOL(bma400_probe);
+> -
+> -void bma400_remove(struct device *dev)
+> -{
+> -	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+> -	struct bma400_data *data = iio_priv(indio_dev);
+> -	int ret;
+> -
+> -	mutex_lock(&data->mutex);
+> -	ret = bma400_set_power_mode(data, POWER_MODE_SLEEP);
+> -	mutex_unlock(&data->mutex);
+> -
+> +	ret = devm_add_action_or_reset(dev, bma400_disable, data);
+>  	if (ret)
+> -		dev_warn(dev, "Failed to put device into sleep mode (%pe)\n", ERR_PTR(ret));
+> -
+> -	regulator_bulk_disable(ARRAY_SIZE(data->regulators),
+> -			       data->regulators);
+> +		return ret;
+>  
+> -	iio_device_unregister(indio_dev);
+> +	return devm_iio_device_register(dev, indio_dev);
+>  }
+> -EXPORT_SYMBOL(bma400_remove);
+> +EXPORT_SYMBOL(bma400_probe);
+>  
+>  MODULE_AUTHOR("Dan Robertson <dan@dlrobertson.com>");
+>  MODULE_DESCRIPTION("Bosch BMA400 triaxial acceleration sensor core");
+> diff --git a/drivers/iio/accel/bma400_i2c.c b/drivers/iio/accel/bma400_i2c.c
+> index f50df5310beb..56da06537562 100644
+> --- a/drivers/iio/accel/bma400_i2c.c
+> +++ b/drivers/iio/accel/bma400_i2c.c
+> @@ -27,13 +27,6 @@ static int bma400_i2c_probe(struct i2c_client *client,
+>  	return bma400_probe(&client->dev, regmap, id->name);
+>  }
+>  
+> -static int bma400_i2c_remove(struct i2c_client *client)
+> -{
+> -	bma400_remove(&client->dev);
+> -
+> -	return 0;
+> -}
+> -
+>  static const struct i2c_device_id bma400_i2c_ids[] = {
+>  	{ "bma400", 0 },
+>  	{ }
+> @@ -52,7 +45,6 @@ static struct i2c_driver bma400_i2c_driver = {
+>  		.of_match_table = bma400_of_i2c_match,
+>  	},
+>  	.probe    = bma400_i2c_probe,
+> -	.remove   = bma400_i2c_remove,
+>  	.id_table = bma400_i2c_ids,
+>  };
+>  
+> diff --git a/drivers/iio/accel/bma400_spi.c b/drivers/iio/accel/bma400_spi.c
+> index 9f622e37477b..96dc9c215401 100644
+> --- a/drivers/iio/accel/bma400_spi.c
+> +++ b/drivers/iio/accel/bma400_spi.c
+> @@ -87,13 +87,6 @@ static int bma400_spi_probe(struct spi_device *spi)
+>  	return bma400_probe(&spi->dev, regmap, id->name);
+>  }
+>  
+> -static int bma400_spi_remove(struct spi_device *spi)
+> -{
+> -	bma400_remove(&spi->dev);
+> -
+> -	return 0;
+> -}
+> -
+>  static const struct spi_device_id bma400_spi_ids[] = {
+>  	{ "bma400", 0 },
+>  	{ }
+> @@ -112,7 +105,6 @@ static struct spi_driver bma400_spi_driver = {
+>  		.of_match_table = bma400_of_spi_match,
+>  	},
+>  	.probe    = bma400_spi_probe,
+> -	.remove   = bma400_spi_remove,
+>  	.id_table = bma400_spi_ids,
+>  };
+>  
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

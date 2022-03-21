@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD544E25F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C946B4E25F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347128AbiCUMFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
+        id S1347149AbiCUMFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347125AbiCUMFD (ORCPT
+        with ESMTP id S1347126AbiCUMFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:05:03 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F71244757;
-        Mon, 21 Mar 2022 05:03:37 -0700 (PDT)
+        Mon, 21 Mar 2022 08:05:08 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9942659B;
+        Mon, 21 Mar 2022 05:03:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647864217; x=1679400217;
+  t=1647864223; x=1679400223;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=+CuPH+HypRoZXbuORf30rMah9KyYyENnN7sT2e3g5CY=;
-  b=vcnYC7JKw0w7cnZvrVN8cijSakWV1xL59dDs8KYMNOaIeffXys5cp/33
-   s0XcsIl0V867UCipmy4Qpicw/1zU8JAQgCaYys2JDQtk0POpsYOFXYm18
-   mGkY0QNKa3eSNFt5Nt2UbwPa4aiAjFv8q4MdP+ioXPG9LN8Rnd181mL2g
-   8=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 21 Mar 2022 05:03:37 -0700
+  bh=m1EMEvnuw4KcMR2XVcW7wIik1nwW4ZLC1f4ZafqxuJ8=;
+  b=iROuT2yf0IFGfKL7+jZu3Pn+SCum8aeCX5irUM2AOE1TA41SGPlet98d
+   ofFcuyB2v/JKL6Nft4vzg5+ufdUsmjvmHvUfeXVkIogrKep6eY/ghcN2i
+   3xnGwJp+On+xqlKNT3LfB7aHfGmhF7Xh8WMzrGC/5wGkohpNhXy/DPsPm
+   4=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Mar 2022 05:03:41 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 05:03:36 -0700
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 05:03:40 -0700
 Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 21 Mar 2022 05:03:36 -0700
+ 15.2.986.22; Mon, 21 Mar 2022 05:03:40 -0700
 Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 21 Mar 2022 05:03:31 -0700
+ 15.2.986.22; Mon, 21 Mar 2022 05:03:36 -0700
 From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
@@ -47,9 +47,9 @@ To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <judyhsiao@chromium.org>
 CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
         "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v5 2/3] arm64: dts: qcom: sc7280: Add pinmux for I2S speaker and Headset
-Date:   Mon, 21 Mar 2022 17:29:18 +0530
-Message-ID: <1647863959-3289-3-git-send-email-quic_srivasam@quicinc.com>
+Subject: [PATCH v5 3/3] arm64: dts: qcom: sc7280: add lpass lpi pin controller node
+Date:   Mon, 21 Mar 2022 17:29:19 +0530
+Message-ID: <1647863959-3289-4-git-send-email-quic_srivasam@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1647863959-3289-1-git-send-email-quic_srivasam@quicinc.com>
 References: <1647863959-3289-1-git-send-email-quic_srivasam@quicinc.com>
@@ -68,162 +68,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add AMP enable node and pinmux for primary and secondary I2S
-for SC7280 based platforms.
+Add LPASS LPI pinctrl node required for Audio functionality on sc7280
+based platforms.
 
 Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 34 +++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi       | 21 +++++++++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi           | 41 ++++++++++++++++++++++++++
- 3 files changed, 96 insertions(+)
+ arch/arm64/boot/dts/qcom/sc7280.dtsi | 147 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 147 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-index dc17f20..de646d9 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-@@ -530,6 +530,26 @@ ap_ec_spi: &spi10 {
- 	drive-strength = <2>;
- };
- 
-+&pri_mi2s_data0 {
-+	drive-strength = <6>;
-+};
-+
-+&pri_mi2s_data1 {
-+	drive-strength = <6>;
-+};
-+
-+&pri_mi2s_mclk {
-+	drive-strength = <6>;
-+};
-+
-+&pri_mi2s_sclk {
-+	drive-strength = <6>;
-+};
-+
-+&pri_mi2s_ws {
-+	drive-strength = <6>;
-+};
-+
- &qspi_cs0 {
- 	bias-disable;
- 	drive-strength = <8>;
-@@ -610,6 +630,20 @@ ap_ec_spi: &spi10 {
- 	drive-strength = <10>;
- };
- 
-+&sec_mi2s_data0 {
-+	drive-strength = <6>;
-+	bias-disable;
-+};
-+
-+&sec_mi2s_sclk {
-+	drive-strength = <6>;
-+	bias-disable;
-+};
-+
-+&sec_mi2s_ws {
-+	drive-strength = <6>;
-+};
-+
- /* PINCTRL - board-specific pinctrl */
- 
- &pm7325_gpios {
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 688fa95..4a7b18a 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -462,7 +462,28 @@
- 	drive-strength = <10>;
- };
- 
-+&sec_mi2s_data0 {
-+	drive-strength = <6>;
-+	bias-disable;
-+};
-+
-+&sec_mi2s_sclk {
-+	drive-strength = <6>;
-+	bias-disable;
-+};
-+
-+&sec_mi2s_ws {
-+	drive-strength = <6>;
-+};
-+
- &tlmm {
-+	amp_en: amp-en {
-+		pins = "gpio63";
-+		function = "gpio";
-+		bias-pull-down;
-+		drive-strength = <2>;
-+	};
-+
- 	bt_en: bt-en {
- 		pins = "gpio85";
- 		function = "gpio";
 diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index f0b64be..8d8cec5 100644
+index 8d8cec5..499299a 100644
 --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -3527,6 +3527,31 @@
- 				function = "pcie1_clkreqn";
- 			};
- 
-+			pri_mi2s_data0: pri-mi2s-data0 {
-+				pins = "gpio98";
-+				function = "mi2s0_data0";
-+			};
-+
-+			pri_mi2s_data1: pri-mi2s-data1 {
-+				pins = "gpio99";
-+				function = "mi2s0_data1";
-+			};
-+
-+			pri_mi2s_mclk: pri-mi2s-mclk {
-+				pins = "gpio96";
-+				function = "pri_mi2s";
-+			};
-+
-+			pri_mi2s_sclk: pri-mi2s-sclk {
-+				pins = "gpio97";
-+				function = "mi2s0_sck";
-+			};
-+
-+			pri_mi2s_ws: pri-mi2s-ws {
-+				pins = "gpio100";
-+				function = "mi2s0_ws";
-+			};
-+
- 			qspi_clk: qspi-clk {
- 				pins = "gpio14";
- 				function = "qspi_clk";
-@@ -4261,6 +4286,22 @@
- 				drive-strength = <2>;
- 				bias-bus-hold;
- 			};
-+
-+			sec_mi2s_data0: sec-mi2s-data0 {
-+				pins = "gpio107";
-+				function = "mi2s1_data0";
-+			};
-+
-+			sec_mi2s_sclk: sec-mi2s-sclk {
-+				pins = "gpio106";
-+				function = "mi2s1_sck";
-+			};
-+
-+			sec_mi2s_ws: sec-mi2s-ws {
-+				pins = "gpio108";
-+				function = "mi2s1_ws";
-+			};
-+
+@@ -1987,6 +1987,153 @@
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
  		};
  
- 		imem@146a5000 {
++		lpass_tlmm: pinctrl@33c0000 {
++			compatible = "qcom,sc7280-lpass-lpi-pinctrl";
++			reg = <0 0x33c0000 0x0 0x20000>,
++				<0 0x3550000 0x0 0x10000>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-ranges = <&lpass_tlmm 0 0 15>;
++
++			#clock-cells = <1>;
++
++			dmic01_active: dmic01-active {
++				clk {
++					pins = "gpio6";
++					function = "dmic1_clk";
++					drive-strength = <8>;
++					output-high;
++				};
++
++				data {
++					pins = "gpio7";
++					function = "dmic1_data";
++					drive-strength = <8>;
++				};
++			};
++
++			dmic01_sleep: dmic01-sleep {
++				clk {
++					pins = "gpio6";
++					function = "dmic1_clk";
++					drive-strength = <2>;
++					bias-disable;
++					output-low;
++				};
++
++				data {
++					pins = "gpio7";
++					function = "dmic1_data";
++					drive-strength = <2>;
++					pull-down;
++				};
++			};
++
++			dmic23_active: dmic02-active {
++				clk {
++					pins = "gpio8";
++					function = "dmic2_clk";
++					drive-strength = <8>;
++					output-high;
++				};
++
++				data {
++					pins = "gpio9";
++					function = "dmic2_data";
++					drive-strength = <8>;
++				};
++			};
++
++			dmic23_sleep: dmic02-sleep {
++				clk {
++					pins = "gpio8";
++					function = "dmic2_clk";
++					drive-strength = <2>;
++					bias-disable;
++					output-low;
++				};
++
++				data {
++					pins = "gpio9";
++					function = "dmic2_data";
++					drive-strength = <2>;
++					pull-down;
++				};
++			};
++
++			rx_swr_active: rx-swr-active {
++				clk {
++					pins = "gpio3";
++					function = "swr_rx_clk";
++					drive-strength = <2>;
++					slew-rate = <1>;
++					bias-disable;
++				};
++
++				data {
++					pins = "gpio4", "gpio5";
++					function = "swr_rx_data";
++					drive-strength = <2>;
++					slew-rate = <1>;
++					bias-bus-hold;
++				};
++			};
++
++			rx_swr_sleep: rx-swr-sleep {
++				clk {
++					pins = "gpio3";
++					function = "swr_rx_clk";
++					drive-strength = <2>;
++					input-enable;
++					bias-pull-down;
++				};
++
++				data {
++					pins = "gpio4", "gpio5";
++					function = "swr_rx_data";
++					drive-strength = <2>;
++					input-enable;
++					bias-pull-down;
++				};
++			};
++
++			tx_swr_active: tx-swr-active {
++				clk {
++					pins = "gpio0";
++					function = "swr_tx_clk";
++					drive-strength = <2>;
++					slew-rate = <1>;
++					bias-disable;
++				};
++
++				data {
++					pins = "gpio1", "gpio2", "gpio14";
++					function = "swr_tx_data";
++					drive-strength = <2>;
++					slew-rate = <1>;
++					bias-bus-hold;
++				};
++			};
++
++			tx_swr_sleep: tx-swr-sleep {
++				clk {
++					pins = "gpio0";
++					function = "swr_tx_clk";
++					drive-strength = <2>;
++					input-enable;
++					bias-pull-down;
++				};
++
++				data {
++					pins = "gpio1", "gpio2", "gpio14";
++					function = "swr_tx_data";
++					drive-strength = <2>;
++					input-enable;
++					bias-bus-hold;
++				};
++			};
++		};
++
+ 		gpu: gpu@3d00000 {
+ 			compatible = "qcom,adreno-635.0", "qcom,adreno";
+ 			reg = <0 0x03d00000 0 0x40000>,
 -- 
 2.7.4
 

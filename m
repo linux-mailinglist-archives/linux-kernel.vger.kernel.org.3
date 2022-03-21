@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3614E3340
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CACF94E3367
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiCUWxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 18:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
+        id S230383AbiCUWya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 18:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbiCUWxe (ORCPT
+        with ESMTP id S230393AbiCUWyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:53:34 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A693CD8C4;
-        Mon, 21 Mar 2022 15:32:47 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 757FB113;
-        Mon, 21 Mar 2022 15:32:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1647901967;
-        bh=r4WfNG3naLSNSTH3OBiFqFDpGWTK1IXv86OvRgH10fE=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=JZaLni9ntUONhphJ4aBgcdP+8Gzhh9K7hIuy/QQZiKY+0zXguJRz0ccqKZJyWqi7d
-         /Z/OkLBd+MGcXdNPbW+A2F+P8TcfWnZDoXpdyOgBs9RDlu/koEDbcFhniCLTY6Qgcb
-         sDXjCDg4XQAKNvV+xGrU7sUjElNDkaxX4fJE23CQ=
-Date:   Mon, 21 Mar 2022 15:32:43 -0700
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        linux-i2c@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] ic2: mux: pca9541: add delayed-release support
-Message-ID: <Yjj9C5PgBfgmXyp7@hatter.bewilderbeest.net>
-References: <20220201001810.19516-1-zev@bewilderbeest.net>
- <ae14fd3c-2f50-b982-c61c-9db3bb28c809@axentia.se>
- <Yh1O6w56zsNtNRbb@hatter.bewilderbeest.net>
- <f3c56f5a-6a6b-039c-9fdf-a994d054645d@axentia.se>
- <YiAPKGSDJrO+MxLR@hatter.bewilderbeest.net>
- <YjRmUokDFPezGI5B@shikoro>
+        Mon, 21 Mar 2022 18:54:19 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A137380F70;
+        Mon, 21 Mar 2022 15:33:00 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 15:32:53 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1647901979;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4OY/H+zb0RIXu5WxaVqPmTsIU0BzpBHr2Aoo03K23OQ=;
+        b=lWfBFFlwAImoY6uLwKWFs0S0tB3p39fYyxokhIeIaZPj4jja16BD+f2jryUMXCpvSoQH58
+        KeNgR9rDqZZ733hMRZ75cM3upum9/Xboyi1T1hrsp4FdNCyEUqd/OOG+FlIywmGiFjuF4e
+        0dwiI5FqWUCpfqADo77fjlQiIREimSI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        Shuah Khan <shuah@kernel.org>, Yang Shi <shy828301@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Hugh Dickins <hughd@google.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 4/5] mm: truncate: split huge page cache page to a
+ non-zero order if possible.
+Message-ID: <Yjj9FaoChB3u0Gbh@carbon.dhcp.thefacebook.com>
+References: <20220321142128.2471199-1-zi.yan@sent.com>
+ <20220321142128.2471199-5-zi.yan@sent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YjRmUokDFPezGI5B@shikoro>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220321142128.2471199-5-zi.yan@sent.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 04:00:34AM PDT, Wolfram Sang wrote:
->
->Can someone give me a summary What is the status of this series?
->
+On Mon, Mar 21, 2022 at 10:21:27AM -0400, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> To minimize the number of pages after a huge page truncation, we do not
+> need to split it all the way down to order-0. The huge page has at most
+> three parts, the part before offset, the part to be truncated, the part
+> remaining at the end. Find the greatest common power of two multiplier of
+> the non-zero values of them as the new order, so we can split the huge
+> page to this order and keep the remaining pages as large and as few as
+> possible.
 
-I had been hoping Peter might offer any further thoughts on my last 
-email regarding the feasibility/proper approach for implementing some 
-sort of automated avoidance of the problem scenario he pointed out -- or 
-alternately, if we think a written warning in the bindings is 
-sufficient, I can send a v3 with that incorporated.
+Would you mind please to describe the algorithm in more details?
 
-
-Thanks,
-Zev
-
+Thanks!

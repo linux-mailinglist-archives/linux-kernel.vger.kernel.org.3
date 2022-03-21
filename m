@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813E94E24EF
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF534E24EE
 	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346661AbiCULEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 07:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
+        id S1346650AbiCULE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 07:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346597AbiCULDz (ORCPT
+        with ESMTP id S1346602AbiCULDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Mar 2022 07:03:55 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E931914DFEA
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:02:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE329D4DE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:02:29 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647860546;
+        s=2020; t=1647860548;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=RhYPZxFc16XcJVa5C1sOmlr6nw9J2jPvm4r0gjQ+Roo=;
-        b=Jnlczzz+/EIfzmhBgU2kqiPv4OaG7j6Zoa0BomWh9o4AT5dL8vErIhAPmTIjAhLnaFkxg4
-        Q+GRbf1EHp2H6dSFwqUHOGT+MWvA9KIhrgdR27X6A73FumbPEQxG2KZDVxczox69iIbHGD
-        grnWvH0wL8aG2WIUc3e7da4QsrmCDhcj/vvyLnBN4hNpWi1eI0+J9GVzqkpK3bqUjpLysE
-        aAZPyb0sAk3DiwECLuqGffioQOKEID+ymZVdnN+cbpxPs9xIVa1tDPXka1TzwBTUbT/xuf
-        oppPginRPWyPQEy29HTiZsIFQGE3a8ROwjbpgQeFZOI7R8LlCkjlz9yBUCfsyg==
+        bh=fRyAQrj5X8b3qtvkTVjf+JkcNhrIcho5k+KJpvlBlf0=;
+        b=epapMmQlSGKdch0VC8T42keRMe1y8ABr1IeLzkr+gizIQCCgnOL60nDiir1Gw5tub580IX
+        UKWGuq9QD5CI7KNTQAj5Z7Qsmj8hi6zHqMcp+YYFgHQBfBF1Zu/FxpA/ktCHTdXLvQQJvf
+        OeN+063Xh6Du4rBMKBmZLqx+JOOX4+ZUDwph4xCknR51YHqbr2wKuZBIhqhXoodA4OQRWQ
+        ZQJl4P6f/z96IpEo1c1MDKXNfVX25d65HvHMiVcuf1nsUKia1bAGQ8yyC9bVfb7agHpV8l
+        jwSgcL9tFub5iLm/v66dtbDGG2Tg0YebWFNi0U15IS2vBqDVGOq9XdsI1Qddjg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647860546;
+        s=2020e; t=1647860548;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=RhYPZxFc16XcJVa5C1sOmlr6nw9J2jPvm4r0gjQ+Roo=;
-        b=TYbZKnWgNXUa8qf4VMCBNwKp1HTcf0BuyEa3S0tVygwM1Y06tKRafJ+4HDtBtnCUOkdsI4
-        qGnqjr7JCuYUozAQ==
+        bh=fRyAQrj5X8b3qtvkTVjf+JkcNhrIcho5k+KJpvlBlf0=;
+        b=qzIVXNj3fwPK6ivjxceys7oAf0Uc/epleLnN0RIivQOZfQ+HsdVhuk/xqnrM56Fn/Lg7fc
+        3TbHerdQyjWMc/AA==
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [GIT pull] timers/core for v5.18-rc1
+Subject: [GIT pull] x86/irq for v5.18-rc1
 References: <164786042536.122591.4459156564791679956.tglx@xen13>
-Message-ID: <164786042893.122591.10484394565817935694.tglx@xen13>
+Message-ID: <164786043041.122591.4693682080153649212.tglx@xen13>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Date:   Mon, 21 Mar 2022 12:02:25 +0100 (CET)
+Date:   Mon, 21 Mar 2022 12:02:27 +0100 (CET)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -56,31 +56,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Linus,
 
-please pull the latest timers/core branch from:
+please pull the latest x86/irq branch from:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers-core-2022=
--03-21
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-irq-2022-03-=
+21
 
-up to:  b166e52541f2: Merge tag 'timers-v5.18-rc1' of https://git.linaro.org/=
-people/daniel.lezcano/linux into timers/core
+up to:  449972c67ea7: x86/PCI: Fix coding style in PIRQ table search functions
 
 
-Timers and timekeeping updates:
+X86 PCI interrupt updates:
 
- Core code:
+ - Cleanup and robustify the PCI interrupt routing table handling
 
-    - Make the NOHZ handling of the timekeeping/tick core more robust to
-      prevent a rare jiffies update stall.
+ - Add support for Intel 82378ZB/82379AB, SiS85C497 PIRQ routers
 
-    - Handle softirqs in the NOHZ/idle case correctly
+ - Fix the ALi M1487 router handling
 
- Drivers:
-
-    - Add support for event stream scaling of the 1GHz counter on ARM(64)
-
-    - Correct an error code check in the timer-of layer
-
-    - The usual cleanups and improvements all over the place
+ - Handle the IRT routing table format in AMI BIOSes correctly
 
 
 Thanks,
@@ -88,985 +80,693 @@ Thanks,
 	tglx
 
 ------------------>
-Alim Akhtar (3):
-      clocksource/drivers/exynos_mct: Remove mct interrupt index enum
-      clocksource/drivers/exynos_mct: Bump up mct max irq number
-      clocksource/drivers/exynos_mct: Increase the size of name array
-
-Claudiu Beznea (3):
-      clocksource/drivers/timer-microchip-pit64b: Remove mmio selection
-      clocksource/drivers/timer-microchip-pit64b: Use notrace
-      clocksource/drivers/timer-microchip-pit64b: Use 5MHz for clockevent
-
-David Heidelberg (1):
-      dt-bindings: timer: Tegra: Convert text bindings to yaml
-
-Drew Fustini (1):
-      clocksource/drivers/timer-ti-dm: Fix regression from errata i940 fix
-
-Frederic Weisbecker (4):
-      tick: Detect and fix jiffies update stall
-      tick/rcu: Remove obsolete rcu_needs_cpu() parameters
-      tick/rcu: Stop allowing RCU_SOFTIRQ in idle
-      lib/irq_poll: Declare IRQ_POLL softirq vector as ksoftirqd-parking safe
-
-Guillaume Ranquet (1):
-      clocksource/drivers/timer-of: Check return value of of_iomap in timer_o=
-f_base_init()
-
-Krzysztof Kozlowski (1):
-      clocksource/drivers/exynos_mct: Handle DTS with higher number of interr=
-upts
-
-Marc Zyngier (1):
-      clocksource/drivers/arm_arch_timer: Use event stream scaling when avail=
-able
-
-Nathan Chancellor (1):
-      clocksource/drivers/imx-tpm: Move tpm_read_sched_clock() under CONFIG_A=
-RM
-
-Peng Fan (6):
-      clocksource/drivers/imx-sysctr: Drop IRQF_IRQPOLL
-      clocksource/drivers/imx-tpm: Drop IRQF_IRQPOLL
-      clocksource/drivers/imx-tpm: Mark two variable with __ro_after_init
-      clocksource/drivers/imx-tpm: Add CLOCK_EVT_FEAT_DYNIRQ
-      clocksource/drivers/imx-tpm: Update name of clkevt
-      clocksource/drivers/imx-tpm: Exclude sched clock for ARM64
-
-Waiman Long (1):
-      clocksource: Add a Kconfig option for WATCHDOG_MAX_SKEW
+Maciej W. Rozycki (11):
+      x86/PCI: Show the physical address of the $PIR table
+      x86/PCI: Include function number in $PIR table dump
+      x86/PCI: Also match function number in $PIR table
+      x86/PCI: Handle IRQ swizzling with PIRQ routers
+      x86/PCI: Add support for the Intel 82378ZB/82379AB (SIO/SIO.A) PIRQ rou=
+ter
+      x86/PCI: Disambiguate SiS85C503 PIRQ router code entities
+      x86/PCI: Add support for the SiS85C497 PIRQ router
+      x86/PCI: Handle PIRQ routing tables with no router device given
+      x86/PCI: Add $IRT PIRQ routing table support
+      x86/PCI: Fix ALi M1487 (IBC) PIRQ router link value interpretation
+      x86/PCI: Fix coding style in PIRQ table search functions
 
 
- .../bindings/timer/nvidia,tegra-timer.yaml         | 150 +++++++++++++++++++=
-++
- .../bindings/timer/nvidia,tegra20-timer.txt        |  24 ----
- .../bindings/timer/nvidia,tegra210-timer.txt       |  36 -----
- .../bindings/timer/nvidia,tegra30-timer.txt        |  28 ----
- arch/arm/boot/dts/dra7-l4.dtsi                     |   5 +-
- arch/arm/boot/dts/dra7.dtsi                        |   8 +-
- drivers/clocksource/Kconfig                        |   1 -
- drivers/clocksource/arm_arch_timer.c               |  13 +-
- drivers/clocksource/exynos_mct.c                   |  39 +++---
- drivers/clocksource/timer-imx-sysctr.c             |   2 +-
- drivers/clocksource/timer-imx-tpm.c                |  14 +-
- drivers/clocksource/timer-microchip-pit64b.c       |   8 +-
- drivers/clocksource/timer-of.c                     |   6 +-
- drivers/clocksource/timer-ti-dm-systimer.c         |   4 +-
- include/clocksource/arm_arch_timer.h               |   1 +
- include/linux/interrupt.h                          |  11 +-
- include/linux/rcutiny.h                            |   3 +-
- include/linux/rcutree.h                            |   2 +-
- kernel/rcu/tree.c                                  |   3 +-
- kernel/time/Kconfig                                |   9 ++
- kernel/time/clocksource.c                          |   8 +-
- kernel/time/tick-sched.c                           |  77 ++++++++---
- kernel/time/tick-sched.h                           |   4 +
- 23 files changed, 299 insertions(+), 157 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra-time=
-r.yaml
- delete mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra20-ti=
-mer.txt
- delete mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra210-t=
-imer.txt
- delete mode 100644 Documentation/devicetree/bindings/timer/nvidia,tegra30-ti=
-mer.txt
+ arch/x86/include/asm/pci_x86.h |   8 +
+ arch/x86/pci/irq.c             | 372 ++++++++++++++++++++++++++++++++++-----=
+--
+ 2 files changed, 315 insertions(+), 65 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/timer/nvidia,tegra-timer.yaml =
-b/Documentation/devicetree/bindings/timer/nvidia,tegra-timer.yaml
-new file mode 100644
-index 000000000000..b78209cd0f28
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/nvidia,tegra-timer.yaml
-@@ -0,0 +1,150 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/timer/nvidia,tegra-timer.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x86.h
+index 490411dba438..7be45daaf31d 100644
+--- a/arch/x86/include/asm/pci_x86.h
++++ b/arch/x86/include/asm/pci_x86.h
+@@ -90,6 +90,14 @@ struct irq_routing_table {
+ 	struct irq_info slots[0];
+ } __attribute__((packed));
+=20
++struct irt_routing_table {
++	u32 signature;			/* IRT_SIGNATURE should be here */
++	u8 size;			/* Number of entries provided */
++	u8 used;			/* Number of entries actually used */
++	u16 exclusive_irqs;		/* IRQs devoted exclusively to PCI usage */
++	struct irq_info slots[0];
++} __packed;
 +
-+title: NVIDIA Tegra timer
+ extern unsigned int pcibios_irq_mask;
+=20
+ extern raw_spinlock_t pci_config_lock;
+diff --git a/arch/x86/pci/irq.c b/arch/x86/pci/irq.c
+index 97b63e35e152..9be158078f66 100644
+--- a/arch/x86/pci/irq.c
++++ b/arch/x86/pci/irq.c
+@@ -25,6 +25,8 @@
+ #define PIRQ_SIGNATURE	(('$' << 0) + ('P' << 8) + ('I' << 16) + ('R' << 24))
+ #define PIRQ_VERSION 0x0100
+=20
++#define IRT_SIGNATURE	(('$' << 0) + ('I' << 8) + ('R' << 16) + ('T' << 24))
 +
-+maintainers:
-+  - Stephen Warren <swarren@nvidia.com>
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: nvidia,tegra210-timer
-+    then:
-+      properties:
-+        interrupts:
-+          # Either a single combined interrupt or up to 14 individual interr=
-upts
-+          minItems: 1
-+          maxItems: 14
-+          description: >
-+            A list of 14 interrupts; one per each timer channels 0 through 13
-+
-+  - if:
-+      properties:
-+        compatible:
-+          oneOf:
-+            - items:
-+                - enum:
-+                    - nvidia,tegra114-timer
-+                    - nvidia,tegra124-timer
-+                    - nvidia,tegra132-timer
-+                - const: nvidia,tegra30-timer
-+            - items:
-+                - const: nvidia,tegra30-timer
-+                - const: nvidia,tegra20-timer
-+    then:
-+      properties:
-+        interrupts:
-+          # Either a single combined interrupt or up to 6 individual interru=
-pts
-+          minItems: 1
-+          maxItems: 6
-+          description: >
-+            A list of 6 interrupts; one per each of timer channels 1 through=
- 5,
-+            and one for the shared interrupt for the remaining channels.
-+
-+  - if:
-+      properties:
-+        compatible:
-+          const: nvidia,tegra20-timer
-+    then:
-+      properties:
-+        interrupts:
-+          # Either a single combined interrupt or up to 4 individual interru=
-pts
-+          minItems: 1
-+          maxItems: 4
-+          description: |
-+            A list of 4 interrupts; one per timer channel.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: nvidia,tegra210-timer
-+        description: >
-+          The Tegra210 timer provides fourteen 29-bit timer counters and one=
- 32-bit
-+          timestamp counter. The TMRs run at either a fixed 1 MHz clock rate=
- derived
-+          from the oscillator clock (TMR0-TMR9) or directly at the oscillato=
-r clock
-+          (TMR10-TMR13). Each TMR can be programmed to generate one-shot, pe=
-riodic,
-+          or watchdog interrupts.
-+      - items:
-+          - enum:
-+              - nvidia,tegra114-timer
-+              - nvidia,tegra124-timer
-+              - nvidia,tegra132-timer
-+          - const: nvidia,tegra30-timer
-+      - items:
-+          - const: nvidia,tegra30-timer
-+          - const: nvidia,tegra20-timer
-+        description: >
-+          The Tegra30 timer provides ten 29-bit timer channels, a single 32-=
-bit free
-+          running counter, and 5 watchdog modules. The first two channels ma=
-y also
-+          trigger a legacy watchdog reset.
-+      - const: nvidia,tegra20-timer
-+        description: >
-+          The Tegra20 timer provides four 29-bit timer channels and a single=
- 32-bit free
-+          running counter. The first two channels may also trigger a watchdo=
-g reset.
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts: true
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: timer
-+
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    timer@60005000 {
-+        compatible =3D "nvidia,tegra30-timer", "nvidia,tegra20-timer";
-+        reg =3D <0x60005000 0x400>;
-+        interrupts =3D <0 0 IRQ_TYPE_LEVEL_HIGH>,
-+                     <0 1 IRQ_TYPE_LEVEL_HIGH>,
-+                     <0 41 IRQ_TYPE_LEVEL_HIGH>,
-+                     <0 42 IRQ_TYPE_LEVEL_HIGH>,
-+                     <0 121 IRQ_TYPE_LEVEL_HIGH>,
-+                     <0 122 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks =3D <&tegra_car 214>;
-+    };
-+  - |
-+    #include <dt-bindings/clock/tegra210-car.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    timer@60005000 {
-+        compatible =3D "nvidia,tegra210-timer";
-+        reg =3D <0x60005000 0x400>;
-+        interrupts =3D <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 178 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 179 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks =3D <&tegra_car TEGRA210_CLK_TIMER>;
-+        clock-names =3D "timer";
-+    };
-diff --git a/Documentation/devicetree/bindings/timer/nvidia,tegra20-timer.txt=
- b/Documentation/devicetree/bindings/timer/nvidia,tegra20-timer.txt
-deleted file mode 100644
-index 4a864bd10d3d..000000000000
---- a/Documentation/devicetree/bindings/timer/nvidia,tegra20-timer.txt
-+++ /dev/null
-@@ -1,24 +0,0 @@
--NVIDIA Tegra20 timer
--
--The Tegra20 timer provides four 29-bit timer channels and a single 32-bit fr=
-ee
--running counter. The first two channels may also trigger a watchdog reset.
--
--Required properties:
--
--- compatible : should be "nvidia,tegra20-timer".
--- reg : Specifies base physical address and size of the registers.
--- interrupts : A list of 4 interrupts; one per timer channel.
--- clocks : Must contain one entry, for the module clock.
--  See ../clocks/clock-bindings.txt for details.
--
--Example:
--
--timer {
--	compatible =3D "nvidia,tegra20-timer";
--	reg =3D <0x60005000 0x60>;
--	interrupts =3D <0 0 0x04
--			0 1 0x04
--			0 41 0x04
--			0 42 0x04>;
--	clocks =3D <&tegra_car 132>;
--};
-diff --git a/Documentation/devicetree/bindings/timer/nvidia,tegra210-timer.tx=
-t b/Documentation/devicetree/bindings/timer/nvidia,tegra210-timer.txt
-deleted file mode 100644
-index 032cda96fe0d..000000000000
---- a/Documentation/devicetree/bindings/timer/nvidia,tegra210-timer.txt
-+++ /dev/null
-@@ -1,36 +0,0 @@
--NVIDIA Tegra210 timer
--
--The Tegra210 timer provides fourteen 29-bit timer counters and one 32-bit
--timestamp counter. The TMRs run at either a fixed 1 MHz clock rate derived
--from the oscillator clock (TMR0-TMR9) or directly at the oscillator clock
--(TMR10-TMR13). Each TMR can be programmed to generate one-shot, periodic,
--or watchdog interrupts.
--
--Required properties:
--- compatible : "nvidia,tegra210-timer".
--- reg : Specifies base physical address and size of the registers.
--- interrupts : A list of 14 interrupts; one per each timer channels 0 through
--  13.
--- clocks : Must contain one entry, for the module clock.
--  See ../clocks/clock-bindings.txt for details.
--
--timer@60005000 {
--	compatible =3D "nvidia,tegra210-timer";
--	reg =3D <0x0 0x60005000 0x0 0x400>;
--	interrupts =3D <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 178 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 179 IRQ_TYPE_LEVEL_HIGH>;
--	clocks =3D <&tegra_car TEGRA210_CLK_TIMER>;
--	clock-names =3D "timer";
--};
-diff --git a/Documentation/devicetree/bindings/timer/nvidia,tegra30-timer.txt=
- b/Documentation/devicetree/bindings/timer/nvidia,tegra30-timer.txt
-deleted file mode 100644
-index 1761f53ee36f..000000000000
---- a/Documentation/devicetree/bindings/timer/nvidia,tegra30-timer.txt
-+++ /dev/null
-@@ -1,28 +0,0 @@
--NVIDIA Tegra30 timer
--
--The Tegra30 timer provides ten 29-bit timer channels, a single 32-bit free
--running counter, and 5 watchdog modules. The first two channels may also
--trigger a legacy watchdog reset.
--
--Required properties:
--
--- compatible : For Tegra30, must contain "nvidia,tegra30-timer".  Otherwise,
--  must contain '"nvidia,<chip>-timer", "nvidia,tegra30-timer"' where
--  <chip> is tegra124 or tegra132.
--- reg : Specifies base physical address and size of the registers.
--- interrupts : A list of 6 interrupts; one per each of timer channels 1
--    through 5, and one for the shared interrupt for the remaining channels.
--- clocks : Must contain one entry, for the module clock.
--  See ../clocks/clock-bindings.txt for details.
--
--timer {
--	compatible =3D "nvidia,tegra30-timer", "nvidia,tegra20-timer";
--	reg =3D <0x60005000 0x400>;
--	interrupts =3D <0 0 0x04
--		      0 1 0x04
--		      0 41 0x04
--		      0 42 0x04
--		      0 121 0x04
--		      0 122 0x04>;
--	clocks =3D <&tegra_car 214>;
--};
-diff --git a/arch/arm/boot/dts/dra7-l4.dtsi b/arch/arm/boot/dts/dra7-l4.dtsi
-index 956a26d52a4c..0a11bacffc1f 100644
---- a/arch/arm/boot/dts/dra7-l4.dtsi
-+++ b/arch/arm/boot/dts/dra7-l4.dtsi
-@@ -3482,8 +3482,7 @@ timer14: timer@0 {
- 				ti,timer-pwm;
- 			};
- 		};
--
--		target-module@2c000 {			/* 0x4882c000, ap 17 02.0 */
-+		timer15_target: target-module@2c000 {	/* 0x4882c000, ap 17 02.0 */
- 			compatible =3D "ti,sysc-omap4-timer", "ti,sysc";
- 			reg =3D <0x2c000 0x4>,
- 			      <0x2c010 0x4>;
-@@ -3511,7 +3510,7 @@ timer15: timer@0 {
- 			};
- 		};
+ static int broken_hp_bios_irq9;
+ static int acer_tm360_irqrouting;
 =20
--		target-module@2e000 {			/* 0x4882e000, ap 19 14.0 */
-+		timer16_target: target-module@2e000 {	/* 0x4882e000, ap 19 14.0 */
- 			compatible =3D "ti,sysc-omap4-timer", "ti,sysc";
- 			reg =3D <0x2e000 0x4>,
- 			      <0x2e010 0x4>;
-diff --git a/arch/arm/boot/dts/dra7.dtsi b/arch/arm/boot/dts/dra7.dtsi
-index 42bff117656c..97ce0c4f1df7 100644
---- a/arch/arm/boot/dts/dra7.dtsi
-+++ b/arch/arm/boot/dts/dra7.dtsi
-@@ -1339,20 +1339,20 @@ timer@0 {
- };
+@@ -74,7 +76,7 @@ static inline struct irq_routing_table *pirq_check_routing_=
+table(u8 *addr)
+ 	int i;
+ 	u8 sum;
 =20
- /* Local timers, see ARM architected timer wrap erratum i940 */
--&timer3_target {
-+&timer15_target {
- 	ti,no-reset-on-init;
- 	ti,no-idle;
- 	timer@0 {
--		assigned-clocks =3D <&l4per_clkctrl DRA7_L4PER_TIMER3_CLKCTRL 24>;
-+		assigned-clocks =3D <&l4per3_clkctrl DRA7_L4PER3_TIMER15_CLKCTRL 24>;
- 		assigned-clock-parents =3D <&timer_sys_clk_div>;
- 	};
- };
-=20
--&timer4_target {
-+&timer16_target {
- 	ti,no-reset-on-init;
- 	ti,no-idle;
- 	timer@0 {
--		assigned-clocks =3D <&l4per_clkctrl DRA7_L4PER_TIMER4_CLKCTRL 24>;
-+		assigned-clocks =3D <&l4per3_clkctrl DRA7_L4PER3_TIMER16_CLKCTRL 24>;
- 		assigned-clock-parents =3D <&timer_sys_clk_div>;
- 	};
- };
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index cfb8ea0df3b1..1ea556e75494 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -713,7 +713,6 @@ config INGENIC_OST
- config MICROCHIP_PIT64B
- 	bool "Microchip PIT64B support"
- 	depends on OF || COMPILE_TEST
--	select CLKSRC_MMIO
- 	select TIMER_OF
- 	help
- 	  This option enables Microchip PIT64B timer for Atmel
-diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_a=
-rch_timer.c
-index 1ecd52f903b8..9ab8221ee3c6 100644
---- a/drivers/clocksource/arm_arch_timer.c
-+++ b/drivers/clocksource/arm_arch_timer.c
-@@ -880,10 +880,19 @@ static void __arch_timer_setup(unsigned type,
- 	clockevents_config_and_register(clk, arch_timer_rate, 0xf, max_delta);
- }
-=20
--static void arch_timer_evtstrm_enable(int divider)
-+static void arch_timer_evtstrm_enable(unsigned int divider)
- {
- 	u32 cntkctl =3D arch_timer_get_cntkctl();
-=20
-+#ifdef CONFIG_ARM64
-+	/* ECV is likely to require a large divider. Use the EVNTIS flag. */
-+	if (cpus_have_const_cap(ARM64_HAS_ECV) && divider > 15) {
-+		cntkctl |=3D ARCH_TIMER_EVT_INTERVAL_SCALE;
-+		divider -=3D 8;
-+	}
-+#endif
-+
-+	divider =3D min(divider, 15U);
- 	cntkctl &=3D ~ARCH_TIMER_EVT_TRIGGER_MASK;
- 	/* Set the divider and enable virtual event stream */
- 	cntkctl |=3D (divider << ARCH_TIMER_EVT_TRIGGER_SHIFT)
-@@ -912,7 +921,7 @@ static void arch_timer_configure_evtstream(void)
- 		lsb++;
-=20
- 	/* enable event stream */
--	arch_timer_evtstrm_enable(max(0, min(lsb, 15)));
-+	arch_timer_evtstrm_enable(max(0, lsb));
- }
-=20
- static void arch_counter_set_user_access(void)
-diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mc=
-t.c
-index 6db3d5511b0f..f29c812b70c9 100644
---- a/drivers/clocksource/exynos_mct.c
-+++ b/drivers/clocksource/exynos_mct.c
-@@ -60,27 +60,18 @@
- #define MCT_CLKEVENTS_RATING		350
- #endif
-=20
-+/* There are four Global timers starting with 0 offset */
-+#define MCT_G0_IRQ	0
-+/* Local timers count starts after global timer count */
-+#define MCT_L0_IRQ	4
-+/* Max number of IRQ as per DT binding document */
-+#define MCT_NR_IRQS	20
-+
- enum {
- 	MCT_INT_SPI,
- 	MCT_INT_PPI
- };
-=20
--enum {
--	MCT_G0_IRQ,
--	MCT_G1_IRQ,
--	MCT_G2_IRQ,
--	MCT_G3_IRQ,
--	MCT_L0_IRQ,
--	MCT_L1_IRQ,
--	MCT_L2_IRQ,
--	MCT_L3_IRQ,
--	MCT_L4_IRQ,
--	MCT_L5_IRQ,
--	MCT_L6_IRQ,
--	MCT_L7_IRQ,
--	MCT_NR_IRQS,
--};
--
- static void __iomem *reg_base;
- static unsigned long clk_rate;
- static unsigned int mct_int_type;
-@@ -89,7 +80,11 @@ static int mct_irqs[MCT_NR_IRQS];
- struct mct_clock_event_device {
- 	struct clock_event_device evt;
- 	unsigned long base;
--	char name[10];
-+	/**
-+	 *  The length of the name must be adjusted if number of
-+	 *  local timer interrupts grow over two digits
-+	 */
-+	char name[11];
- };
-=20
- static void exynos4_mct_write(unsigned int value, unsigned long offset)
-@@ -541,6 +536,11 @@ static int __init exynos4_timer_interrupts(struct device=
-_node *np,
- 	 * irqs are specified.
- 	 */
- 	nr_irqs =3D of_irq_count(np);
-+	if (nr_irqs > ARRAY_SIZE(mct_irqs)) {
-+		pr_err("exynos-mct: too many (%d) interrupts configured in DT\n",
-+			nr_irqs);
-+		nr_irqs =3D ARRAY_SIZE(mct_irqs);
-+	}
- 	for (i =3D MCT_L0_IRQ; i < nr_irqs; i++)
- 		mct_irqs[i] =3D irq_of_parse_and_map(np, i);
-=20
-@@ -553,11 +553,14 @@ static int __init exynos4_timer_interrupts(struct devic=
-e_node *np,
- 		     mct_irqs[MCT_L0_IRQ], err);
- 	} else {
- 		for_each_possible_cpu(cpu) {
--			int mct_irq =3D mct_irqs[MCT_L0_IRQ + cpu];
-+			int mct_irq;
- 			struct mct_clock_event_device *pcpu_mevt =3D
- 				per_cpu_ptr(&percpu_mct_tick, cpu);
-=20
- 			pcpu_mevt->evt.irq =3D -1;
-+			if (MCT_L0_IRQ + cpu >=3D ARRAY_SIZE(mct_irqs))
-+				break;
-+			mct_irq =3D mct_irqs[MCT_L0_IRQ + cpu];
-=20
- 			irq_set_status_flags(mct_irq, IRQ_NOAUTOEN);
- 			if (request_irq(mct_irq,
-diff --git a/drivers/clocksource/timer-imx-sysctr.c b/drivers/clocksource/tim=
-er-imx-sysctr.c
-index 55a8e198d2a1..523e37662a6e 100644
---- a/drivers/clocksource/timer-imx-sysctr.c
-+++ b/drivers/clocksource/timer-imx-sysctr.c
-@@ -110,7 +110,7 @@ static struct timer_of to_sysctr =3D {
- 	},
- 	.of_irq =3D {
- 		.handler		=3D sysctr_timer_interrupt,
--		.flags			=3D IRQF_TIMER | IRQF_IRQPOLL,
-+		.flags			=3D IRQF_TIMER,
- 	},
- 	.of_clk =3D {
- 		.name =3D "per",
-diff --git a/drivers/clocksource/timer-imx-tpm.c b/drivers/clocksource/timer-=
-imx-tpm.c
-index 2cdc077a39f5..bd64a8a8427f 100644
---- a/drivers/clocksource/timer-imx-tpm.c
-+++ b/drivers/clocksource/timer-imx-tpm.c
-@@ -32,8 +32,8 @@
- #define TPM_C0SC_CHF_MASK		(0x1 << 7)
- #define TPM_C0V				0x24
-=20
--static int counter_width;
--static void __iomem *timer_base;
-+static int counter_width __ro_after_init;
-+static void __iomem *timer_base __ro_after_init;
-=20
- static inline void tpm_timer_disable(void)
- {
-@@ -73,12 +73,12 @@ static unsigned long tpm_read_current_timer(void)
- {
- 	return tpm_read_counter();
- }
--#endif
-=20
- static u64 notrace tpm_read_sched_clock(void)
- {
- 	return tpm_read_counter();
- }
-+#endif
-=20
- static int tpm_set_next_event(unsigned long delta,
- 				struct clock_event_device *evt)
-@@ -127,9 +127,9 @@ static irqreturn_t tpm_timer_interrupt(int irq, void *dev=
-_id)
- static struct timer_of to_tpm =3D {
- 	.flags =3D TIMER_OF_IRQ | TIMER_OF_BASE | TIMER_OF_CLOCK,
- 	.clkevt =3D {
--		.name			=3D "i.MX7ULP TPM Timer",
-+		.name			=3D "i.MX TPM Timer",
- 		.rating			=3D 200,
--		.features		=3D CLOCK_EVT_FEAT_ONESHOT,
-+		.features		=3D CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_DYNIRQ,
- 		.set_state_shutdown	=3D tpm_set_state_shutdown,
- 		.set_state_oneshot	=3D tpm_set_state_oneshot,
- 		.set_next_event		=3D tpm_set_next_event,
-@@ -137,7 +137,7 @@ static struct timer_of to_tpm =3D {
- 	},
- 	.of_irq =3D {
- 		.handler		=3D tpm_timer_interrupt,
--		.flags			=3D IRQF_TIMER | IRQF_IRQPOLL,
-+		.flags			=3D IRQF_TIMER,
- 	},
- 	.of_clk =3D {
- 		.name =3D "per",
-@@ -150,10 +150,10 @@ static int __init tpm_clocksource_init(void)
- 	tpm_delay_timer.read_current_timer =3D &tpm_read_current_timer;
- 	tpm_delay_timer.freq =3D timer_of_rate(&to_tpm) >> 3;
- 	register_current_timer_delay(&tpm_delay_timer);
--#endif
-=20
- 	sched_clock_register(tpm_read_sched_clock, counter_width,
- 			     timer_of_rate(&to_tpm) >> 3);
-+#endif
-=20
- 	return clocksource_mmio_init(timer_base + TPM_CNT,
- 				     "imx-tpm",
-diff --git a/drivers/clocksource/timer-microchip-pit64b.c b/drivers/clocksour=
-ce/timer-microchip-pit64b.c
-index cfa4ec7ef396..abce83d2f00b 100644
---- a/drivers/clocksource/timer-microchip-pit64b.c
-+++ b/drivers/clocksource/timer-microchip-pit64b.c
-@@ -42,8 +42,7 @@
- #define MCHP_PIT64B_LSBMASK		GENMASK_ULL(31, 0)
- #define MCHP_PIT64B_PRES_TO_MODE(p)	(MCHP_PIT64B_MR_PRES & ((p) << 8))
- #define MCHP_PIT64B_MODE_TO_PRES(m)	((MCHP_PIT64B_MR_PRES & (m)) >> 8)
--#define MCHP_PIT64B_DEF_CS_FREQ		5000000UL	/* 5 MHz */
--#define MCHP_PIT64B_DEF_CE_FREQ		32768		/* 32 KHz */
-+#define MCHP_PIT64B_DEF_FREQ		5000000UL	/* 5 MHz */
-=20
- #define MCHP_PIT64B_NAME		"pit64b"
-=20
-@@ -165,7 +164,7 @@ static u64 mchp_pit64b_clksrc_read(struct clocksource *cs)
- 	return mchp_pit64b_cnt_read(mchp_pit64b_cs_base);
- }
-=20
--static u64 mchp_pit64b_sched_read_clk(void)
-+static u64 notrace mchp_pit64b_sched_read_clk(void)
- {
- 	return mchp_pit64b_cnt_read(mchp_pit64b_cs_base);
- }
-@@ -418,7 +417,6 @@ static int __init mchp_pit64b_init_clkevt(struct mchp_pit=
-64b_timer *timer,
- static int __init mchp_pit64b_dt_init_timer(struct device_node *node,
- 					    bool clkevt)
- {
--	u32 freq =3D clkevt ? MCHP_PIT64B_DEF_CE_FREQ : MCHP_PIT64B_DEF_CS_FREQ;
- 	struct mchp_pit64b_timer timer;
- 	unsigned long clk_rate;
- 	u32 irq =3D 0;
-@@ -446,7 +444,7 @@ static int __init mchp_pit64b_dt_init_timer(struct device=
-_node *node,
+-	rt =3D (struct irq_routing_table *) addr;
++	rt =3D (struct irq_routing_table *)addr;
+ 	if (rt->signature !=3D PIRQ_SIGNATURE ||
+ 	    rt->version !=3D PIRQ_VERSION ||
+ 	    rt->size % 16 ||
+@@ -84,35 +86,103 @@ static inline struct irq_routing_table *pirq_check_routi=
+ng_table(u8 *addr)
+ 	for (i =3D 0; i < rt->size; i++)
+ 		sum +=3D addr[i];
+ 	if (!sum) {
+-		DBG(KERN_DEBUG "PCI: Interrupt Routing Table found at 0x%p\n",
+-			rt);
++		DBG(KERN_DEBUG "PCI: Interrupt Routing Table found at 0x%lx\n",
++		    __pa(rt));
+ 		return rt;
  	}
+ 	return NULL;
+ }
 =20
- 	/* Initialize mode (prescaler + SGCK bit). To be used at runtime. */
--	ret =3D mchp_pit64b_init_mode(&timer, freq);
-+	ret =3D mchp_pit64b_init_mode(&timer, MCHP_PIT64B_DEF_FREQ);
- 	if (ret)
- 		goto irq_unmap;
-=20
-diff --git a/drivers/clocksource/timer-of.c b/drivers/clocksource/timer-of.c
-index 529cc6a51cdb..c3f54d9912be 100644
---- a/drivers/clocksource/timer-of.c
-+++ b/drivers/clocksource/timer-of.c
-@@ -157,9 +157,9 @@ static __init int timer_of_base_init(struct device_node *=
-np,
- 	of_base->base =3D of_base->name ?
- 		of_io_request_and_map(np, of_base->index, of_base->name) :
- 		of_iomap(np, of_base->index);
--	if (IS_ERR(of_base->base)) {
--		pr_err("Failed to iomap (%s)\n", of_base->name);
--		return PTR_ERR(of_base->base);
-+	if (IS_ERR_OR_NULL(of_base->base)) {
-+		pr_err("Failed to iomap (%s:%s)\n", np->name, of_base->name);
-+		return of_base->base ? PTR_ERR(of_base->base) : -ENOMEM;
- 	}
-=20
- 	return 0;
-diff --git a/drivers/clocksource/timer-ti-dm-systimer.c b/drivers/clocksource=
-/timer-ti-dm-systimer.c
-index 5c40ca1d4740..f19a1f0bb432 100644
---- a/drivers/clocksource/timer-ti-dm-systimer.c
-+++ b/drivers/clocksource/timer-ti-dm-systimer.c
-@@ -695,9 +695,9 @@ static int __init dmtimer_percpu_quirk_init(struct device=
-_node *np, u32 pa)
- 		return 0;
- 	}
-=20
--	if (pa =3D=3D 0x48034000)		/* dra7 dmtimer3 */
-+	if (pa =3D=3D 0x4882c000)           /* dra7 dmtimer15 */
- 		return dmtimer_percpu_timer_init(np, 0);
--	else if (pa =3D=3D 0x48036000)	/* dra7 dmtimer4 */
-+	else if (pa =3D=3D 0x4882e000)      /* dra7 dmtimer16 */
- 		return dmtimer_percpu_timer_init(np, 1);
-=20
- 	return 0;
-diff --git a/include/clocksource/arm_arch_timer.h b/include/clocksource/arm_a=
-rch_timer.h
-index e715bdb720d5..057c8964aefb 100644
---- a/include/clocksource/arm_arch_timer.h
-+++ b/include/clocksource/arm_arch_timer.h
-@@ -56,6 +56,7 @@ enum arch_timer_spi_nr {
- #define ARCH_TIMER_EVT_TRIGGER_MASK	(0xF << ARCH_TIMER_EVT_TRIGGER_SHIFT)
- #define ARCH_TIMER_USR_VT_ACCESS_EN	(1 << 8) /* virtual timer registers */
- #define ARCH_TIMER_USR_PT_ACCESS_EN	(1 << 9) /* physical timer registers */
-+#define ARCH_TIMER_EVT_INTERVAL_SCALE	(1 << 17) /* EVNTIS in the ARMv8 ARM */
-=20
- #define ARCH_TIMER_EVT_STREAM_PERIOD_US	100
- #define ARCH_TIMER_EVT_STREAM_FREQ				\
-diff --git a/include/linux/interrupt.h b/include/linux/interrupt.h
-index 9367f1cb2e3c..f40754caaefa 100644
---- a/include/linux/interrupt.h
-+++ b/include/linux/interrupt.h
-@@ -579,7 +579,16 @@ enum
- 	NR_SOFTIRQS
- };
-=20
--#define SOFTIRQ_STOP_IDLE_MASK (~(1 << RCU_SOFTIRQ))
 +/*
-+ * The following vectors can be safely ignored after ksoftirqd is parked:
++ * Handle the $IRT PCI IRQ Routing Table format used by AMI for its BCP
++ * (BIOS Configuration Program) external tool meant for tweaking BIOS
++ * structures without the need to rebuild it from sources.  The $IRT
++ * format has been invented by AMI before Microsoft has come up with its
++ * $PIR format and a $IRT table is therefore there in some systems that
++ * lack a $PIR table.
 + *
-+ * _ RCU:
-+ * 	1) rcutree_migrate_callbacks() migrates the queue.
-+ * 	2) rcu_report_dead() reports the final quiescent states.
++ * It uses the same PCI BIOS 2.1 format for interrupt routing entries
++ * themselves but has a different simpler header prepended instead,
++ * occupying 8 bytes, where a `$IRT' signature is followed by one byte
++ * specifying the total number of interrupt routing entries allocated in
++ * the table, then one byte specifying the actual number of entries used
++ * (which the BCP tool can take advantage of when modifying the table),
++ * and finally a 16-bit word giving the IRQs devoted exclusively to PCI.
++ * Unlike with the $PIR table there is no alignment guarantee.
 + *
-+ * _ IRQ_POLL: irq_poll_cpu_dead() migrates the queue
++ * Given the similarity of the two formats the $IRT one is trivial to
++ * convert to the $PIR one, which we do here, except that obviously we
++ * have no information as to the router device to use, but we can handle
++ * it by matching PCI device IDs actually seen on the bus against ones
++ * that our individual routers recognise.
++ *
++ * Reportedly there is another $IRT table format where a 16-bit word
++ * follows the header instead that points to interrupt routing entries
++ * in a $PIR table provided elsewhere.  In that case this code will not
++ * be reached though as the $PIR table will have been chosen instead.
 + */
-+#define SOFTIRQ_HOTPLUG_SAFE_MASK (BIT(RCU_SOFTIRQ) | BIT(IRQ_POLL_SOFTIRQ))
++static inline struct irq_routing_table *pirq_convert_irt_table(u8 *addr)
++{
++	struct irt_routing_table *ir;
++	struct irq_routing_table *rt;
++	u16 size;
++	u8 sum;
++	int i;
++
++	ir =3D (struct irt_routing_table *)addr;
++	if (ir->signature !=3D IRT_SIGNATURE || !ir->used || ir->size < ir->used)
++		return NULL;
++
++	DBG(KERN_DEBUG "PCI: $IRT Interrupt Routing Table found at 0x%lx\n",
++	    __pa(ir));
++
++	size =3D sizeof(*rt) + ir->used * sizeof(rt->slots[0]);
++	rt =3D kzalloc(size, GFP_KERNEL);
++	if (!rt)
++		return NULL;
++
++	rt->signature =3D PIRQ_SIGNATURE;
++	rt->version =3D PIRQ_VERSION;
++	rt->size =3D size;
++	rt->exclusive_irqs =3D ir->exclusive_irqs;
++	for (i =3D 0; i < ir->used; i++)
++		rt->slots[i] =3D ir->slots[i];
++
++	addr =3D (u8 *)rt;
++	sum =3D 0;
++	for (i =3D 0; i < size; i++)
++		sum +=3D addr[i];
++	rt->checksum =3D -sum;
 =20
- /* map softirq index to softirq name. update 'softirq_to_name' in
-  * kernel/softirq.c when adding a new softirq.
-diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
-index 858f4d429946..5fed476f977f 100644
---- a/include/linux/rcutiny.h
-+++ b/include/linux/rcutiny.h
-@@ -64,9 +64,8 @@ static inline void rcu_softirq_qs(void)
- 		rcu_tasks_qs(current, (preempt)); \
- 	} while (0)
-=20
--static inline int rcu_needs_cpu(u64 basemono, u64 *nextevt)
-+static inline int rcu_needs_cpu(void)
- {
--	*nextevt =3D KTIME_MAX;
- 	return 0;
- }
-=20
-diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
-index 53209d669400..6cc91291d078 100644
---- a/include/linux/rcutree.h
-+++ b/include/linux/rcutree.h
-@@ -19,7 +19,7 @@
-=20
- void rcu_softirq_qs(void);
- void rcu_note_context_switch(bool preempt);
--int rcu_needs_cpu(u64 basem, u64 *nextevt);
-+int rcu_needs_cpu(void);
- void rcu_cpu_stall_reset(void);
++	return rt;
++}
 =20
  /*
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index a4c25a6283b0..80faf2273ce9 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -1086,9 +1086,8 @@ void rcu_irq_enter_irqson(void)
-  * Just check whether or not this CPU has non-offloaded RCU callbacks
-  * queued.
+  *  Search 0xf0000 -- 0xfffff for the PCI IRQ Routing Table.
   */
--int rcu_needs_cpu(u64 basemono, u64 *nextevt)
-+int rcu_needs_cpu(void)
+-
+ static struct irq_routing_table * __init pirq_find_routing_table(void)
  {
--	*nextevt =3D KTIME_MAX;
- 	return !rcu_segcblist_empty(&this_cpu_ptr(&rcu_data)->cblist) &&
- 		!rcu_rdp_is_offloaded(this_cpu_ptr(&rcu_data));
- }
-diff --git a/kernel/time/Kconfig b/kernel/time/Kconfig
-index 04bfd62f5e5c..27b7868b5c30 100644
---- a/kernel/time/Kconfig
-+++ b/kernel/time/Kconfig
-@@ -181,5 +181,14 @@ config HIGH_RES_TIMERS
- 	  hardware is not capable then this option only increases
- 	  the size of the kernel image.
+ 	u8 *addr;
+ 	struct irq_routing_table *rt;
 =20
-+config CLOCKSOURCE_WATCHDOG_MAX_SKEW_US
-+	int "Clocksource watchdog maximum allowable skew (in =CE=BCs)"
-+	depends on CLOCKSOURCE_WATCHDOG
-+	range 50 1000
-+	default 100
-+	help
-+	  Specify the maximum amount of allowable watchdog skew in
-+	  microseconds before reporting the clocksource to be unstable.
-+
- endmenu
- endif
-diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-index 1cf73807b450..95d7ca35bdf2 100644
---- a/kernel/time/clocksource.c
-+++ b/kernel/time/clocksource.c
-@@ -107,7 +107,13 @@ static u64 suspend_start;
-  * This delay could be due to SMIs, NMIs, or to VCPU preemptions.  Used as
-  * a lower bound for cs->uncertainty_margin values when registering clocks.
-  */
--#define WATCHDOG_MAX_SKEW (100 * NSEC_PER_USEC)
-+#ifdef CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US
-+#define MAX_SKEW_USEC	CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US
-+#else
-+#define MAX_SKEW_USEC	100
-+#endif
-+
-+#define WATCHDOG_MAX_SKEW (MAX_SKEW_USEC * NSEC_PER_USEC)
-=20
- #ifdef CONFIG_CLOCKSOURCE_WATCHDOG
- static void clocksource_watchdog_work(struct work_struct *work);
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index 17a283ce2b20..2d76c91b85de 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -169,6 +169,8 @@ static ktime_t tick_init_jiffy_update(void)
- 	return period;
- }
-=20
-+#define MAX_STALLED_JIFFIES 5
-+
- static void tick_sched_do_timer(struct tick_sched *ts, ktime_t now)
- {
- 	int cpu =3D smp_processor_id();
-@@ -196,6 +198,21 @@ static void tick_sched_do_timer(struct tick_sched *ts, k=
-time_t now)
- 	if (tick_do_timer_cpu =3D=3D cpu)
- 		tick_do_update_jiffies64(now);
-=20
-+	/*
-+	 * If jiffies update stalled for too long (timekeeper in stop_machine()
-+	 * or VMEXIT'ed for several msecs), force an update.
-+	 */
-+	if (ts->last_tick_jiffies !=3D jiffies) {
-+		ts->stalled_jiffies =3D 0;
-+		ts->last_tick_jiffies =3D READ_ONCE(jiffies);
-+	} else {
-+		if (++ts->stalled_jiffies =3D=3D MAX_STALLED_JIFFIES) {
-+			tick_do_update_jiffies64(now);
-+			ts->stalled_jiffies =3D 0;
-+			ts->last_tick_jiffies =3D READ_ONCE(jiffies);
-+		}
-+	}
-+
- 	if (ts->inidle)
- 		ts->got_idle_tick =3D 1;
- }
-@@ -768,7 +785,7 @@ static inline bool local_timer_softirq_pending(void)
-=20
- static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
- {
--	u64 basemono, next_tick, next_tmr, next_rcu, delta, expires;
-+	u64 basemono, next_tick, delta, expires;
- 	unsigned long basejiff;
- 	unsigned int seq;
-=20
-@@ -791,7 +808,7 @@ static ktime_t tick_nohz_next_event(struct tick_sched *ts=
-, int cpu)
- 	 * minimal delta which brings us back to this place
- 	 * immediately. Lather, rinse and repeat...
- 	 */
--	if (rcu_needs_cpu(basemono, &next_rcu) || arch_needs_cpu() ||
-+	if (rcu_needs_cpu() || arch_needs_cpu() ||
- 	    irq_work_needs_cpu() || local_timer_softirq_pending()) {
- 		next_tick =3D basemono + TICK_NSEC;
- 	} else {
-@@ -802,10 +819,8 @@ static ktime_t tick_nohz_next_event(struct tick_sched *t=
-s, int cpu)
- 		 * disabled this also looks at the next expiring
- 		 * hrtimer.
- 		 */
--		next_tmr =3D get_next_timer_interrupt(basejiff, basemono);
--		ts->next_timer =3D next_tmr;
--		/* Take the next rcu event into account */
--		next_tick =3D next_rcu < next_tmr ? next_rcu : next_tmr;
-+		next_tick =3D get_next_timer_interrupt(basejiff, basemono);
-+		ts->next_timer =3D next_tick;
+ 	if (pirq_table_addr) {
+-		rt =3D pirq_check_routing_table((u8 *) __va(pirq_table_addr));
++		rt =3D pirq_check_routing_table((u8 *)__va(pirq_table_addr));
+ 		if (rt)
+ 			return rt;
+ 		printk(KERN_WARNING "PCI: PIRQ table NOT found at pirqaddr\n");
  	}
+-	for (addr =3D (u8 *) __va(0xf0000); addr < (u8 *) __va(0x100000); addr +=3D=
+ 16) {
++
++	for (addr =3D (u8 *)__va(0xf0000); addr < (u8 *)__va(0x100000); addr +=3D 1=
+6) {
+ 		rt =3D pirq_check_routing_table(addr);
+ 		if (rt)
+ 			return rt;
+ 	}
++
++	for (addr =3D (u8 *)__va(0xf0000); addr < (u8 *)__va(0x100000); addr++) {
++		rt =3D pirq_convert_irt_table(addr);
++		if (rt)
++			return rt;
++	}
+ 	return NULL;
+ }
 =20
- 	/*
-@@ -984,6 +999,45 @@ static void tick_nohz_full_update_tick(struct tick_sched=
- *ts)
- 	__tick_nohz_full_update_tick(ts, ktime_get());
+@@ -121,7 +191,6 @@ static struct irq_routing_table * __init pirq_find_routin=
+g_table(void)
+  *  bridges.  It's a gross hack, but since there are no other known
+  *  ways how to get a list of buses, we have to go this way.
+  */
+-
+ static void __init pirq_peer_trick(void)
+ {
+ 	struct irq_routing_table *rt =3D pirq_table;
+@@ -135,7 +204,8 @@ static void __init pirq_peer_trick(void)
+ #ifdef DEBUG
+ 		{
+ 			int j;
+-			DBG(KERN_DEBUG "%02x:%02x slot=3D%02x", e->bus, e->devfn/8, e->slot);
++			DBG(KERN_DEBUG "%02x:%02x.%x slot=3D%02x",
++			    e->bus, e->devfn / 8, e->devfn % 8, e->slot);
+ 			for (j =3D 0; j < 4; j++)
+ 				DBG(" %d:%02x/%04x", j, e->irq[j].link, e->irq[j].bitmap);
+ 			DBG("\n");
+@@ -155,7 +225,6 @@ static void __init pirq_peer_trick(void)
+  *  Code for querying and setting of IRQ routes on various interrupt routers.
+  *  PIC Edge/Level Control Registers (ELCR) 0x4d0 & 0x4d1.
+  */
+-
+ void elcr_set_level_irq(unsigned int irq)
+ {
+ 	unsigned char mask =3D 1 << (irq & 7);
+@@ -253,6 +322,15 @@ static void write_pc_conf_nybble(u8 base, u8 index, u8 v=
+al)
+ 	pc_conf_set(reg, x);
  }
 =20
 +/*
-+ * A pending softirq outside an IRQ (or softirq disabled section) context
-+ * should be waiting for ksoftirqd to handle it. Therefore we shouldn't
-+ * reach here due to the need_resched() early check in can_stop_idle_tick().
++ * FinALi pirq rules are as follows:
 + *
-+ * However if we are between CPUHP_AP_SMPBOOT_THREADS and CPU_TEARDOWN_CPU o=
-n the
-+ * cpu_down() process, softirqs can still be raised while ksoftirqd is parke=
-d,
-+ * triggering the below since wakep_softirqd() is ignored.
++ * - bit 0 selects between INTx Routing Table Mapping Registers,
 + *
++ * - bit 3 selects the nibble within the INTx Routing Table Mapping Register,
++ *
++ * - bits 7:4 map to bits 3:0 of the PCI INTx Sensitivity Register.
 + */
-+static bool report_idle_softirq(void)
+ static int pirq_finali_get(struct pci_dev *router, struct pci_dev *dev,
+ 			   int pirq)
+ {
+@@ -260,11 +338,13 @@ static int pirq_finali_get(struct pci_dev *router, stru=
+ct pci_dev *dev,
+ 		0, 9, 3, 10, 4, 5, 7, 6, 0, 11, 0, 12, 0, 14, 0, 15
+ 	};
+ 	unsigned long flags;
++	u8 index;
+ 	u8 x;
+=20
++	index =3D (pirq & 1) << 1 | (pirq & 8) >> 3;
+ 	raw_spin_lock_irqsave(&pc_conf_lock, flags);
+ 	pc_conf_set(PC_CONF_FINALI_LOCK, PC_CONF_FINALI_LOCK_KEY);
+-	x =3D irqmap[read_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, pirq - 1)];
++	x =3D irqmap[read_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, index)];
+ 	pc_conf_set(PC_CONF_FINALI_LOCK, 0);
+ 	raw_spin_unlock_irqrestore(&pc_conf_lock, flags);
+ 	return x;
+@@ -278,13 +358,15 @@ static int pirq_finali_set(struct pci_dev *router, stru=
+ct pci_dev *dev,
+ 	};
+ 	u8 val =3D irqmap[irq];
+ 	unsigned long flags;
++	u8 index;
+=20
+ 	if (!val)
+ 		return 0;
+=20
++	index =3D (pirq & 1) << 1 | (pirq & 8) >> 3;
+ 	raw_spin_lock_irqsave(&pc_conf_lock, flags);
+ 	pc_conf_set(PC_CONF_FINALI_LOCK, PC_CONF_FINALI_LOCK_KEY);
+-	write_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, pirq - 1, val);
++	write_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, index, val);
+ 	pc_conf_set(PC_CONF_FINALI_LOCK, 0);
+ 	raw_spin_unlock_irqrestore(&pc_conf_lock, flags);
+ 	return 1;
+@@ -293,7 +375,7 @@ static int pirq_finali_set(struct pci_dev *router, struct=
+ pci_dev *dev,
+ static int pirq_finali_lvl(struct pci_dev *router, struct pci_dev *dev,
+ 			   int pirq, int irq)
+ {
+-	u8 mask =3D ~(1u << (pirq - 1));
++	u8 mask =3D ~((pirq & 0xf0u) >> 4);
+ 	unsigned long flags;
+ 	u8 trig;
+=20
+@@ -579,6 +661,81 @@ static int pirq_cyrix_set(struct pci_dev *router, struct=
+ pci_dev *dev, int pirq,
+ 	return 1;
+ }
+=20
++
++/*
++ *	PIRQ routing for the SiS85C497 AT Bus Controller & Megacell (ATM)
++ *	ISA bridge used with the SiS 85C496/497 486 Green PC VESA/ISA/PCI
++ *	Chipset.
++ *
++ *	There are four PCI INTx#-to-IRQ Link registers provided in the
++ *	SiS85C497 part of the peculiar combined 85C496/497 configuration
++ *	space decoded by the SiS85C496 PCI & CPU Memory Controller (PCM)
++ *	host bridge, at 0xc0/0xc1/0xc2/0xc3 respectively for the PCI INT
++ *	A/B/C/D lines.  Bit 7 enables the respective link if set and bits
++ *	3:0 select the 8259A IRQ line as follows:
++ *
++ *	0000 : Reserved
++ *	0001 : Reserved
++ *	0010 : Reserved
++ *	0011 : IRQ3
++ *	0100 : IRQ4
++ *	0101 : IRQ5
++ *	0110 : IRQ6
++ *	0111 : IRQ7
++ *	1000 : Reserved
++ *	1001 : IRQ9
++ *	1010 : IRQ10
++ *	1011 : IRQ11
++ *	1100 : IRQ12
++ *	1101 : Reserved
++ *	1110 : IRQ14
++ *	1111 : IRQ15
++ *
++ *	We avoid using a reserved value for disabled links, hence the
++ *	choice of IRQ15 for that case.
++ *
++ *	References:
++ *
++ *	"486 Green PC VESA/ISA/PCI Chipset, SiS 85C496/497", Rev 3.0,
++ *	Silicon Integrated Systems Corp., July 1995
++ */
++
++#define PCI_SIS497_INTA_TO_IRQ_LINK	0xc0u
++
++#define PIRQ_SIS497_IRQ_MASK		0x0fu
++#define PIRQ_SIS497_IRQ_ENABLE		0x80u
++
++static int pirq_sis497_get(struct pci_dev *router, struct pci_dev *dev,
++			   int pirq)
 +{
-+	static int ratelimit;
-+	unsigned int pending =3D local_softirq_pending();
++	int reg;
++	u8 x;
 +
-+	if (likely(!pending))
-+		return false;
++	reg =3D pirq;
++	if (reg >=3D 1 && reg <=3D 4)
++		reg +=3D PCI_SIS497_INTA_TO_IRQ_LINK - 1;
 +
-+	/* Some softirqs claim to be safe against hotplug and ksoftirqd parking */
-+	if (!cpu_active(smp_processor_id())) {
-+		pending &=3D ~SOFTIRQ_HOTPLUG_SAFE_MASK;
-+		if (!pending)
-+			return false;
-+	}
-+
-+	if (ratelimit < 10)
-+		return false;
-+
-+	/* On RT, softirqs handling may be waiting on some lock */
-+	if (!local_bh_blocked())
-+		return false;
-+
-+	pr_warn("NOHZ tick-stop error: local softirq work is pending, handler #%02x=
-!!!\n",
-+		pending);
-+	ratelimit++;
-+
-+	return true;
++	pci_read_config_byte(router, reg, &x);
++	return (x & PIRQ_SIS497_IRQ_ENABLE) ? (x & PIRQ_SIS497_IRQ_MASK) : 0;
 +}
 +
- static bool can_stop_idle_tick(int cpu, struct tick_sched *ts)
- {
- 	/*
-@@ -1010,17 +1064,8 @@ static bool can_stop_idle_tick(int cpu, struct tick_sc=
-hed *ts)
- 	if (need_resched())
- 		return false;
-=20
--	if (unlikely(local_softirq_pending())) {
--		static int ratelimit;
--
--		if (ratelimit < 10 && !local_bh_blocked() &&
--		    (local_softirq_pending() & SOFTIRQ_STOP_IDLE_MASK)) {
--			pr_warn("NOHZ tick-stop error: Non-RCU local softirq work is pending, han=
-dler #%02x!!!\n",
--				(unsigned int) local_softirq_pending());
--			ratelimit++;
--		}
-+	if (unlikely(report_idle_softirq()))
- 		return false;
--	}
-=20
- 	if (tick_nohz_full_enabled()) {
- 		/*
-diff --git a/kernel/time/tick-sched.h b/kernel/time/tick-sched.h
-index d952ae393423..504649513399 100644
---- a/kernel/time/tick-sched.h
-+++ b/kernel/time/tick-sched.h
-@@ -49,6 +49,8 @@ enum tick_nohz_mode {
-  * @timer_expires_base:	Base time clock monotonic for @timer_expires
-  * @next_timer:		Expiry time of next expiring timer for debugging purpose on=
-ly
-  * @tick_dep_mask:	Tick dependency mask - is set, if someone needs the tick
-+ * @last_tick_jiffies:	Value of jiffies seen on last tick
-+ * @stalled_jiffies:	Number of stalled jiffies detected across ticks
++static int pirq_sis497_set(struct pci_dev *router, struct pci_dev *dev,
++			   int pirq, int irq)
++{
++	int reg;
++	u8 x;
++
++	reg =3D pirq;
++	if (reg >=3D 1 && reg <=3D 4)
++		reg +=3D PCI_SIS497_INTA_TO_IRQ_LINK - 1;
++
++	pci_read_config_byte(router, reg, &x);
++	x &=3D ~(PIRQ_SIS497_IRQ_MASK | PIRQ_SIS497_IRQ_ENABLE);
++	x |=3D irq ? (PIRQ_SIS497_IRQ_ENABLE | irq) : PIRQ_SIS497_IRQ_MASK;
++	pci_write_config_byte(router, reg, x);
++	return 1;
++}
++
+ /*
+  *	PIRQ routing for SiS 85C503 router used in several SiS chipsets.
+  *	We have to deal with the following issues here:
+@@ -640,11 +797,12 @@ static int pirq_cyrix_set(struct pci_dev *router, struc=
+t pci_dev *dev, int pirq,
+  *				bit 6-4 are probably unused, not like 5595
   */
- struct tick_sched {
- 	struct hrtimer			sched_timer;
-@@ -77,6 +79,8 @@ struct tick_sched {
- 	u64				next_timer;
- 	ktime_t				idle_expires;
- 	atomic_t			tick_dep_mask;
-+	unsigned long			last_tick_jiffies;
-+	unsigned int			stalled_jiffies;
- };
 =20
- extern struct tick_sched *tick_get_tick_sched(int cpu);
+-#define PIRQ_SIS_IRQ_MASK	0x0f
+-#define PIRQ_SIS_IRQ_DISABLE	0x80
+-#define PIRQ_SIS_USB_ENABLE	0x40
++#define PIRQ_SIS503_IRQ_MASK	0x0f
++#define PIRQ_SIS503_IRQ_DISABLE	0x80
++#define PIRQ_SIS503_USB_ENABLE	0x40
+=20
+-static int pirq_sis_get(struct pci_dev *router, struct pci_dev *dev, int pir=
+q)
++static int pirq_sis503_get(struct pci_dev *router, struct pci_dev *dev,
++			   int pirq)
+ {
+ 	u8 x;
+ 	int reg;
+@@ -653,10 +811,11 @@ static int pirq_sis_get(struct pci_dev *router, struct =
+pci_dev *dev, int pirq)
+ 	if (reg >=3D 0x01 && reg <=3D 0x04)
+ 		reg +=3D 0x40;
+ 	pci_read_config_byte(router, reg, &x);
+-	return (x & PIRQ_SIS_IRQ_DISABLE) ? 0 : (x & PIRQ_SIS_IRQ_MASK);
++	return (x & PIRQ_SIS503_IRQ_DISABLE) ? 0 : (x & PIRQ_SIS503_IRQ_MASK);
+ }
+=20
+-static int pirq_sis_set(struct pci_dev *router, struct pci_dev *dev, int pir=
+q, int irq)
++static int pirq_sis503_set(struct pci_dev *router, struct pci_dev *dev,
++			   int pirq, int irq)
+ {
+ 	u8 x;
+ 	int reg;
+@@ -665,8 +824,8 @@ static int pirq_sis_set(struct pci_dev *router, struct pc=
+i_dev *dev, int pirq, i
+ 	if (reg >=3D 0x01 && reg <=3D 0x04)
+ 		reg +=3D 0x40;
+ 	pci_read_config_byte(router, reg, &x);
+-	x &=3D ~(PIRQ_SIS_IRQ_MASK | PIRQ_SIS_IRQ_DISABLE);
+-	x |=3D irq ? irq: PIRQ_SIS_IRQ_DISABLE;
++	x &=3D ~(PIRQ_SIS503_IRQ_MASK | PIRQ_SIS503_IRQ_DISABLE);
++	x |=3D irq ? irq : PIRQ_SIS503_IRQ_DISABLE;
+ 	pci_write_config_byte(router, reg, x);
+ 	return 1;
+ }
+@@ -800,11 +959,18 @@ static __init int intel_router_probe(struct irq_router =
+*r, struct pci_dev *route
+ 		return 0;
+=20
+ 	switch (device) {
++		u8 rid;
+ 	case PCI_DEVICE_ID_INTEL_82375:
+ 		r->name =3D "PCEB/ESC";
+ 		r->get =3D pirq_esc_get;
+ 		r->set =3D pirq_esc_set;
+ 		return 1;
++	case PCI_DEVICE_ID_INTEL_82378:
++		pci_read_config_byte(router, PCI_REVISION_ID, &rid);
++		/* Tell 82378IB (rev < 3) and 82378ZB/82379AB apart.  */
++		if ((rid & 0xfu) < 3)
++			break;
++		fallthrough;
+ 	case PCI_DEVICE_ID_INTEL_82371FB_0:
+ 	case PCI_DEVICE_ID_INTEL_82371SB_0:
+ 	case PCI_DEVICE_ID_INTEL_82371AB_0:
+@@ -846,7 +1012,7 @@ static __init int intel_router_probe(struct irq_router *=
+r, struct pci_dev *route
+ 	case PCI_DEVICE_ID_INTEL_ICH10_3:
+ 	case PCI_DEVICE_ID_INTEL_PATSBURG_LPC_0:
+ 	case PCI_DEVICE_ID_INTEL_PATSBURG_LPC_1:
+-		r->name =3D "PIIX/ICH";
++		r->name =3D "SIO/PIIX/ICH";
+ 		r->get =3D pirq_piix_get;
+ 		r->set =3D pirq_piix_set;
+ 		return 1;
+@@ -865,7 +1031,7 @@ static __init int intel_router_probe(struct irq_router *=
+r, struct pci_dev *route
+ 	     device <=3D PCI_DEVICE_ID_INTEL_DH89XXCC_LPC_MAX)
+ 	||  (device >=3D PCI_DEVICE_ID_INTEL_PANTHERPOINT_LPC_MIN &&
+ 	     device <=3D PCI_DEVICE_ID_INTEL_PANTHERPOINT_LPC_MAX)) {
+-		r->name =3D "PIIX/ICH";
++		r->name =3D "SIO/PIIX/ICH";
+ 		r->get =3D pirq_piix_get;
+ 		r->set =3D pirq_piix_set;
+ 		return 1;
+@@ -958,13 +1124,19 @@ static __init int serverworks_router_probe(struct irq_=
+router *r,
+=20
+ static __init int sis_router_probe(struct irq_router *r, struct pci_dev *rou=
+ter, u16 device)
+ {
+-	if (device !=3D PCI_DEVICE_ID_SI_503)
+-		return 0;
+-
+-	r->name =3D "SIS";
+-	r->get =3D pirq_sis_get;
+-	r->set =3D pirq_sis_set;
+-	return 1;
++	switch (device) {
++	case PCI_DEVICE_ID_SI_496:
++		r->name =3D "SiS85C497";
++		r->get =3D pirq_sis497_get;
++		r->set =3D pirq_sis497_set;
++		return 1;
++	case PCI_DEVICE_ID_SI_503:
++		r->name =3D "SiS85C503";
++		r->get =3D pirq_sis503_get;
++		r->set =3D pirq_sis503_set;
++		return 1;
++	}
++	return 0;
+ }
+=20
+ static __init int cyrix_router_probe(struct irq_router *r, struct pci_dev *r=
+outer, u16 device)
+@@ -1084,10 +1256,32 @@ static struct pci_dev *pirq_router_dev;
+  *	chipset" ?
+  */
+=20
++static bool __init pirq_try_router(struct irq_router *r,
++				   struct irq_routing_table *rt,
++				   struct pci_dev *dev)
++{
++	struct irq_router_handler *h;
++
++	DBG(KERN_DEBUG "PCI: Trying IRQ router for [%04x:%04x]\n",
++	    dev->vendor, dev->device);
++
++	for (h =3D pirq_routers; h->vendor; h++) {
++		/* First look for a router match */
++		if (rt->rtr_vendor =3D=3D h->vendor &&
++		    h->probe(r, dev, rt->rtr_device))
++			return true;
++		/* Fall back to a device match */
++		if (dev->vendor =3D=3D h->vendor &&
++		    h->probe(r, dev, dev->device))
++			return true;
++	}
++	return false;
++}
++
+ static void __init pirq_find_router(struct irq_router *r)
+ {
+ 	struct irq_routing_table *rt =3D pirq_table;
+-	struct irq_router_handler *h;
++	struct pci_dev *dev;
+=20
+ #ifdef CONFIG_PCI_BIOS
+ 	if (!rt->signature) {
+@@ -1106,50 +1300,95 @@ static void __init pirq_find_router(struct irq_router=
+ *r)
+ 	DBG(KERN_DEBUG "PCI: Attempting to find IRQ router for [%04x:%04x]\n",
+ 	    rt->rtr_vendor, rt->rtr_device);
+=20
+-	pirq_router_dev =3D pci_get_domain_bus_and_slot(0, rt->rtr_bus,
+-						      rt->rtr_devfn);
+-	if (!pirq_router_dev) {
+-		DBG(KERN_DEBUG "PCI: Interrupt router not found at "
+-			"%02x:%02x\n", rt->rtr_bus, rt->rtr_devfn);
+-		return;
++	/* Use any vendor:device provided by the routing table or try all.  */
++	if (rt->rtr_vendor) {
++		dev =3D pci_get_domain_bus_and_slot(0, rt->rtr_bus,
++						  rt->rtr_devfn);
++		if (dev && pirq_try_router(r, rt, dev))
++			pirq_router_dev =3D dev;
++	} else {
++		dev =3D NULL;
++		for_each_pci_dev(dev) {
++			if (pirq_try_router(r, rt, dev)) {
++				pirq_router_dev =3D dev;
++				break;
++			}
++		}
+ 	}
+=20
+-	for (h =3D pirq_routers; h->vendor; h++) {
+-		/* First look for a router match */
+-		if (rt->rtr_vendor =3D=3D h->vendor &&
+-			h->probe(r, pirq_router_dev, rt->rtr_device))
+-			break;
+-		/* Fall back to a device match */
+-		if (pirq_router_dev->vendor =3D=3D h->vendor &&
+-			h->probe(r, pirq_router_dev, pirq_router_dev->device))
+-			break;
++	if (pirq_router_dev) {
++		dev_info(&pirq_router_dev->dev, "%s IRQ router [%04x:%04x]\n",
++			 pirq_router.name,
++			 pirq_router_dev->vendor, pirq_router_dev->device);
++	} else {
++		DBG(KERN_DEBUG "PCI: Interrupt router not found at %02x:%02x\n",
++		    rt->rtr_bus, rt->rtr_devfn);
+ 	}
+-	dev_info(&pirq_router_dev->dev, "%s IRQ router [%04x:%04x]\n",
+-		 pirq_router.name,
+-		 pirq_router_dev->vendor, pirq_router_dev->device);
+=20
+ 	/* The device remains referenced for the kernel lifetime */
+ }
+=20
+-static struct irq_info *pirq_get_info(struct pci_dev *dev)
++/*
++ * We're supposed to match on the PCI device only and not the function,
++ * but some BIOSes build their tables with the PCI function included
++ * for motherboard devices, so if a complete match is found, then give
++ * it precedence over a slot match.
++ */
++static struct irq_info *pirq_get_dev_info(struct pci_dev *dev)
+ {
+ 	struct irq_routing_table *rt =3D pirq_table;
+ 	int entries =3D (rt->size - sizeof(struct irq_routing_table)) /
+ 		sizeof(struct irq_info);
++	struct irq_info *slotinfo =3D NULL;
+ 	struct irq_info *info;
+=20
+ 	for (info =3D rt->slots; entries--; info++)
+-		if (info->bus =3D=3D dev->bus->number &&
+-			PCI_SLOT(info->devfn) =3D=3D PCI_SLOT(dev->devfn))
+-			return info;
+-	return NULL;
++		if (info->bus =3D=3D dev->bus->number) {
++			if (info->devfn =3D=3D dev->devfn)
++				return info;
++			if (!slotinfo &&
++			    PCI_SLOT(info->devfn) =3D=3D PCI_SLOT(dev->devfn))
++				slotinfo =3D info;
++		}
++	return slotinfo;
++}
++
++/*
++ * Buses behind bridges are typically not listed in the PIRQ routing table.
++ * Do the usual dance then and walk the tree of bridges up adjusting the
++ * pin number accordingly on the way until the originating root bus device
++ * has been reached and then use its routing information.
++ */
++static struct irq_info *pirq_get_info(struct pci_dev *dev, u8 *pin)
++{
++	struct pci_dev *temp_dev =3D dev;
++	struct irq_info *info;
++	u8 temp_pin =3D *pin;
++	u8 dpin =3D temp_pin;
++
++	info =3D pirq_get_dev_info(dev);
++	while (!info && temp_dev->bus->parent) {
++		struct pci_dev *bridge =3D temp_dev->bus->self;
++
++		temp_pin =3D pci_swizzle_interrupt_pin(temp_dev, temp_pin);
++		info =3D pirq_get_dev_info(bridge);
++		if (info)
++			dev_warn(&dev->dev,
++				 "using bridge %s INT %c to get INT %c\n",
++				 pci_name(bridge),
++				 'A' + temp_pin - 1, 'A' + dpin - 1);
++
++		temp_dev =3D bridge;
++	}
++	*pin =3D temp_pin;
++	return info;
+ }
+=20
+ static int pcibios_lookup_irq(struct pci_dev *dev, int assign)
+ {
+-	u8 pin;
+ 	struct irq_info *info;
+ 	int i, pirq, newirq;
++	u8 dpin, pin;
+ 	int irq =3D 0;
+ 	u32 mask;
+ 	struct irq_router *r =3D &pirq_router;
+@@ -1157,8 +1396,8 @@ static int pcibios_lookup_irq(struct pci_dev *dev, int =
+assign)
+ 	char *msg =3D NULL;
+=20
+ 	/* Find IRQ pin */
+-	pci_read_config_byte(dev, PCI_INTERRUPT_PIN, &pin);
+-	if (!pin) {
++	pci_read_config_byte(dev, PCI_INTERRUPT_PIN, &dpin);
++	if (!dpin) {
+ 		dev_dbg(&dev->dev, "no interrupt pin\n");
+ 		return 0;
+ 	}
+@@ -1171,20 +1410,21 @@ static int pcibios_lookup_irq(struct pci_dev *dev, in=
+t assign)
+ 	if (!pirq_table)
+ 		return 0;
+=20
+-	info =3D pirq_get_info(dev);
++	pin =3D dpin;
++	info =3D pirq_get_info(dev, &pin);
+ 	if (!info) {
+ 		dev_dbg(&dev->dev, "PCI INT %c not found in routing table\n",
+-			'A' + pin - 1);
++			'A' + dpin - 1);
+ 		return 0;
+ 	}
+ 	pirq =3D info->irq[pin - 1].link;
+ 	mask =3D info->irq[pin - 1].bitmap;
+ 	if (!pirq) {
+-		dev_dbg(&dev->dev, "PCI INT %c not routed\n", 'A' + pin - 1);
++		dev_dbg(&dev->dev, "PCI INT %c not routed\n", 'A' + dpin - 1);
+ 		return 0;
+ 	}
+ 	dev_dbg(&dev->dev, "PCI INT %c -> PIRQ %02x, mask %04x, excl %04x",
+-		'A' + pin - 1, pirq, mask, pirq_table->exclusive_irqs);
++		'A' + dpin - 1, pirq, mask, pirq_table->exclusive_irqs);
+ 	mask &=3D pcibios_irq_mask;
+=20
+ 	/* Work around broken HP Pavilion Notebooks which assign USB to
+@@ -1226,7 +1466,7 @@ static int pcibios_lookup_irq(struct pci_dev *dev, int =
+assign)
+ 				newirq =3D i;
+ 		}
+ 	}
+-	dev_dbg(&dev->dev, "PCI INT %c -> newirq %d", 'A' + pin - 1, newirq);
++	dev_dbg(&dev->dev, "PCI INT %c -> newirq %d", 'A' + dpin - 1, newirq);
+=20
+ 	/* Check if it is hardcoded */
+ 	if ((pirq & 0xf0) =3D=3D 0xf0) {
+@@ -1260,15 +1500,17 @@ static int pcibios_lookup_irq(struct pci_dev *dev, in=
+t assign)
+ 			return 0;
+ 		}
+ 	}
+-	dev_info(&dev->dev, "%s PCI INT %c -> IRQ %d\n", msg, 'A' + pin - 1, irq);
++	dev_info(&dev->dev, "%s PCI INT %c -> IRQ %d\n",
++		 msg, 'A' + dpin - 1, irq);
+=20
+ 	/* Update IRQ for all devices with the same pirq value */
+ 	for_each_pci_dev(dev2) {
+-		pci_read_config_byte(dev2, PCI_INTERRUPT_PIN, &pin);
+-		if (!pin)
++		pci_read_config_byte(dev2, PCI_INTERRUPT_PIN, &dpin);
++		if (!dpin)
+ 			continue;
+=20
+-		info =3D pirq_get_info(dev2);
++		pin =3D dpin;
++		info =3D pirq_get_info(dev2, &pin);
+ 		if (!info)
+ 			continue;
+ 		if (info->irq[pin - 1].link =3D=3D pirq) {
 

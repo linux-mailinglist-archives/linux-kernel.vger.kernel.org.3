@@ -2,117 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2114E2317
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBE54E231C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345765AbiCUJQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
+        id S1345768AbiCUJQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236571AbiCUJQQ (ORCPT
+        with ESMTP id S236571AbiCUJQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:16:16 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5EC34643
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:14:51 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:f1f2:313b:fe05:3e70])
-        by baptiste.telenet-ops.be with bizsmtp
-        id 8xEo2700F0qZUsV01xEopp; Mon, 21 Mar 2022 10:14:49 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nWE7k-005nvc-F8; Mon, 21 Mar 2022 10:14:48 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nWE7k-00Ewuz-3D; Mon, 21 Mar 2022 10:14:48 +0100
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [GIT PULL] m68k updates for v5.18
-Date:   Mon, 21 Mar 2022 10:14:43 +0100
-Message-Id: <20220321091443.3563010-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 21 Mar 2022 05:16:39 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A360F33EA1;
+        Mon, 21 Mar 2022 02:15:14 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id a11so7484251qtb.12;
+        Mon, 21 Mar 2022 02:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=UDlYPAQBAOlLXBbFBOerVAwIN2CtIDqxO6mOQnxtBt8=;
+        b=W8Byhw7YaHbu5C9YCddrrjz9P8+J4EhFPoPEWcsXXW1b7sOaCfegJrcK6DZhkDyc9b
+         oLOXTXJK4Zwtr09FZhmSM8CvJC5UsvlUnD4+gFWtW5P3H/4mED8PfbagF4rpjrP4sscJ
+         TkFrT6KdhDKZbE5V3ifobaWetZJN+m9cbwz+7y8nvt6J7CEzH9FqnT5xZZRw0lDnwOkB
+         ElqLVe8UQ7xPH3U4QDaagnvdD4rWNWZ8KjVFyqt30SqRzPlCSvdmE6QBH0NV97FP4+sX
+         lTYsw79fgdj/V5IaeeTP1GQLrCOaMuxsmm2VHRFR1+Ebk39iDKdaOMkS7tBnujXM5+9+
+         TmMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=UDlYPAQBAOlLXBbFBOerVAwIN2CtIDqxO6mOQnxtBt8=;
+        b=MOmIY+3//3H6DrWMaMtUOTLfxRscQYZsVmU2C7wJvEfmDhNK/6A/cxjA0W7Eg1BI2Q
+         A0s1f9Ombd8dPnE9g3ldSv6zqwv0dP9vaLMIAO4V/Sfw316gE+tA9GfopL0ksmoqv8V9
+         xvQ2ZD2lmlKUchfGpXqZrA8xWYxQOGospJ0KQ0bi7JfX8SabZNHPQZ9bg+jx0Id5XK1U
+         7W/cOB4U6mQ6bIehiwL6HMWo9flj6nOeL8k5rTFss1EBiIg8HeqrFD+3O3TVkL5sG2Uv
+         RDu6ZChHaQr3lxxmbYW24gtlAqci1jXWkN/eva5wVXZNA3bubAADAA8Q0Qf8SIqw7+4L
+         oxog==
+X-Gm-Message-State: AOAM5315wCDWa7felJqPDRlF9O7zPxxCDBybiyl6SF7Hr3RX00yJUK5V
+        KbsI/cH/1a+qEhM4xn9ik1vHXtdmri7xt4G5BligHGM6tuc=
+X-Google-Smtp-Source: ABdhPJx6afM3anilCbMCFrKf4jg+CYfcVO0zYYZm56r5PmbeJlvV/EOJLyPGEyQCfRZG2xHq9Ghe76SJ3VlQC5uOtsY=
+X-Received: by 2002:a05:622a:143:b0:2e0:b7c8:3057 with SMTP id
+ v3-20020a05622a014300b002e0b7c83057mr15557151qtw.179.1647854113688; Mon, 21
+ Mar 2022 02:15:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CAPmgiUJVaACDyWkEhpC5Tfk233t-Tw6_f-Y99KLUDqv6dEq0tw@mail.gmail.com>
+ <YjMFTSKZp9eX/c4k@localhost.localdomain> <CAPmgiUJsd-gdq=JG1rF8BHfpADeS45rcVWwnC2qKE=7W1EryiQ@mail.gmail.com>
+ <YjdVHgildbWO7diJ@localhost.localdomain>
+In-Reply-To: <YjdVHgildbWO7diJ@localhost.localdomain>
+From:   hui li <juanfengpy@gmail.com>
+Date:   Mon, 21 Mar 2022 17:15:02 +0800
+Message-ID: <CAPmgiUK90T212icXkSJ2vSiCjXbUqO-fptNLL7NF6SMDAyTtRg@mail.gmail.com>
+Subject: Re: [PATCH] proc: fix dentry/inode overinstantiating under /proc/${pid}/net
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	Hi Linus,
+proc_misc_dentry_ops is a general ops for dentry under /proc, except
+for "/proc/${pid}/net"=EF=BC=8Cother dentries may also use there own ops to=
+o,
+so I think change proc_misc_d_delete may be better?
+see patch under: https://lkml.org/lkml/2022/3/17/319
 
-The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
-
-  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git tags/m68k-for-v5.18-tag1
-
-for you to fetch changes up to 0d52a01a266ba21840c7cb02e1de39c503759dda:
-
-  m68k: defconfig: Disable fbdev on Sun3/3x (2022-02-28 12:00:16 +0100)
-
-----------------------------------------------------------------
-m68k updates for v5.18
-
-  - Fix frame buffers backed by deferred I/O,
-  - Defconfig updates,
-  - Minor fixes and improvements.
-
-----------------------------------------------------------------
-Geert Uytterhoeven (3):
-      m68k: mm: Remove check for VM_IO to fix deferred I/O
-      m68k: defconfig: Update defconfigs for v5.17-rc3
-      m68k: defconfig: Disable fbdev on Sun3/3x
-
-Laurent Vivier (1):
-      m68k: Add asm/config.h
-
- arch/m68k/amiga/config.c             |  1 +
- arch/m68k/apollo/config.c            |  1 +
- arch/m68k/atari/config.c             |  1 +
- arch/m68k/bvme6000/config.c          |  1 +
- arch/m68k/configs/amiga_defconfig    |  6 ++----
- arch/m68k/configs/apollo_defconfig   |  6 ++----
- arch/m68k/configs/atari_defconfig    |  5 +----
- arch/m68k/configs/bvme6000_defconfig |  5 +----
- arch/m68k/configs/hp300_defconfig    |  6 ++----
- arch/m68k/configs/mac_defconfig      |  5 +----
- arch/m68k/configs/multi_defconfig    |  6 ++----
- arch/m68k/configs/mvme147_defconfig  |  5 +----
- arch/m68k/configs/mvme16x_defconfig  |  5 +----
- arch/m68k/configs/q40_defconfig      |  5 +----
- arch/m68k/configs/sun3_defconfig     |  8 +-------
- arch/m68k/configs/sun3x_defconfig    |  8 +-------
- arch/m68k/hp300/config.c             |  1 +
- arch/m68k/include/asm/config.h       | 33 +++++++++++++++++++++++++++++++++
- arch/m68k/kernel/setup_mm.c          | 23 +----------------------
- arch/m68k/mac/config.c               |  1 +
- arch/m68k/mm/fault.c                 |  2 --
- arch/m68k/mvme147/config.c           |  1 +
- arch/m68k/mvme16x/config.c           |  1 +
- arch/m68k/q40/config.c               |  1 +
- 24 files changed, 59 insertions(+), 78 deletions(-)
- create mode 100644 arch/m68k/include/asm/config.h
-
-Thanks for pulling!
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+Alexey Dobriyan <adobriyan@gmail.com> =E4=BA=8E2022=E5=B9=B43=E6=9C=8821=E6=
+=97=A5=E5=91=A8=E4=B8=80 00:24=E5=86=99=E9=81=93=EF=BC=9A
+>
+> When a process exits, /proc/${pid}, and /proc/${pid}/net dentries are flu=
+shed.
+> However some leaf dentries like /proc/${pid}/net/arp_cache aren't.
+> That's because respective PDEs have proc_misc_d_revalidate() hook which
+> returns 1 and leaves dentries/inodes in the LRU.
+>
+> Force revalidation/lookup on everything under /proc/${pid}/net by inherit=
+ing
+> proc_net_dentry_ops.
+>
+> Fixes: c6c75deda813 ("proc: fix lookup in /proc/net subdirectories after =
+setns(2)")
+> Reported-by: hui li <juanfengpy@gmail.com>
+> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+> ---
+>
+>  fs/proc/generic.c  |    4 ++++
+>  fs/proc/proc_net.c |    3 +++
+>  2 files changed, 7 insertions(+)
+>
+> --- a/fs/proc/generic.c
+> +++ b/fs/proc/generic.c
+> @@ -448,6 +448,10 @@ static struct proc_dir_entry *__proc_create(struct p=
+roc_dir_entry **parent,
+>         proc_set_user(ent, (*parent)->uid, (*parent)->gid);
+>
+>         ent->proc_dops =3D &proc_misc_dentry_ops;
+> +       /* Revalidate everything under /proc/${pid}/net */
+> +       if ((*parent)->proc_dops =3D=3D &proc_net_dentry_ops) {
+> +               pde_force_lookup(ent);
+> +       }
+>
+>  out:
+>         return ent;
+> --- a/fs/proc/proc_net.c
+> +++ b/fs/proc/proc_net.c
+> @@ -376,6 +376,9 @@ static __net_init int proc_net_ns_init(struct net *ne=
+t)
+>
+>         proc_set_user(netd, uid, gid);
+>
+> +       /* Seed dentry revalidation for /proc/${pid}/net */
+> +       pde_force_lookup(netd);
+> +
+>         err =3D -EEXIST;
+>         net_statd =3D proc_net_mkdir(net, "stat", netd);
+>         if (!net_statd)

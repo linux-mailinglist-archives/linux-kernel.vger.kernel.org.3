@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254CE4E2E8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB7A4E2E8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351492AbiCUQyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 12:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
+        id S1351499AbiCUQyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 12:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351475AbiCUQxv (ORCPT
+        with ESMTP id S1351465AbiCUQxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:53:51 -0400
+        Mon, 21 Mar 2022 12:53:53 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755FA174BA1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:52:23 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 8343E3201DA2;
-        Mon, 21 Mar 2022 12:52:21 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C01B176D1C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:52:27 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id D8A853201F01;
+        Mon, 21 Mar 2022 12:52:25 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 21 Mar 2022 12:52:22 -0400
+  by compute4.internal (MEProxy); Mon, 21 Mar 2022 12:52:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
          h=cc:cc:content-transfer-encoding:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=5nQpEZL6uoaGwo
-        qyCOgh7yCZkXCs5xzAO7/dEUKTT+0=; b=CAtQijKbAa1HWvg5Tpk7zi2d5FkuFF
-        aLTNGI76WDQ22B00KJKLI34LbvcaU1EIdqWbga6GcEcquNCAtkIuNQnX1gkJ0CfS
-        qeynsyLAicgu0w6mh4UFOfN4I+UhwfFJ6fQ/dGF4xV1lCG2CeB8L3oXexxLX3MTu
-        cFsXC7a+o3WyWjek76mwkgfXU4lLpPkcRT3U4zEk+V+aYop+0oDBoyXy6oXm5Jx8
-        CN75O1hNTC0zvOKD+4Gn/4VmVnzKoa+5X+2lNikK/I/AQutTfItUqs3hTJF6LRo9
-        zvrtvBug2La3VEmVJbGH2BYeE0yKN2OvU+augQNt/FhqElCdFoxaAL6w==
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=ESszksCEES65bf
+        hqx+u2sQyVlxPEvY4CKlsiAv1DpcI=; b=MnjD+VCawenSZyPsGTG6DQkUoHqoBF
+        4K/AhJXs9FTJUM6uCDUaLrC6u/ZGu1fyb+riCwkazbTOYVXolXl1S3qWdb810D+F
+        olCUQZjQwDS8CZYPznbMJON+u5/UNOAuG/R2pnJ1PsygpPLPfeGo2EjiXHTxuW9l
+        79XHI1mTFoUcGALwcjYTHHS6UaW3m+ZYQiIGrW4Q7dO54K2WIn8mLYVI05L4BQpl
+        4RSWWQbSFc43t3HB5tZ0h1J+hYSMcMQ9ZWeH1y5eNXFHLUWytW9rs7JH2Jwe8BBr
+        ymrYwwZylrHNZoxqAbLx0r1EhnmWiT6K9D9xIP7KPziZfUgbLiU78iCg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=5nQpEZ
-        L6uoaGwoqyCOgh7yCZkXCs5xzAO7/dEUKTT+0=; b=E9MPCUh24viES5QQonaStG
-        Emdx3GaIzqVI3u1pDCc4LgmYtxl6uSuFQVewDbo4g96i/1oEtGVwFHToqzhEXq5d
-        pB/oaaimaAOP6G80vau2wYTzqllX1aS2GOzf+KvyJJ+MH6EBMAy/WcSLEbgjcQyG
-        KQwCWEI9v0vLJAHDRN5Xmt8yjxyttI0VX1ZRMwdKQc5loImHSCA3h3jFsQU8jyt5
-        GZXH4ofkItVZUff2bF34rt21WcQheTlId9TDDPKi5GR/Z22LmeiqSEdKErISxFSk
-        xmunL5eQz6XaZNcMv+1hhlXEsBa61MwIxsOKhRUfnx5OIL9ekpR6CrEMuFYIfHdQ
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=ESszks
+        CEES65bfhqx+u2sQyVlxPEvY4CKlsiAv1DpcI=; b=i4uZGESsv9zgKKUfYbkePZ
+        mbKl67WKeZYpLZ6J64ZibwH4h6TKuD2q8U0BKQdUe+RkzUNtlCjEI7XORqI8ExtS
+        a9ctIlDquf4z53UNt1k67Urtj3M5RZjkuqmFQdHvTOfY6uE/rS3qcYhOO4aHZPow
+        J2R+/oUhvUEweiniWHMNG3N3rZ9ZFKekNS4HR0UrYOTE4W+GsBgf0y82N17lWTRn
+        AfhSYHEBucKSLBqsFHykAUp7iC4RQBSXNJ0+CmR8lzm5/a7G1RPbb2Dd11uC+87f
+        +5T3e0w8ZuhCcbn9haMospKkkQrD1YTw2YL/B1yxWkTTI+HFeSpS/nKPR6rTCqGw
         ==
-X-ME-Sender: <xms:RK04YiJxzI8qj4NwnBdZ-Y2IHsr8Vdot6DC_JM-rzbnaT7ugDzxC6w>
-    <xme:RK04YqLT_vYLuKHsiVURFTfTRGGv7uHXKe63__Voq0yFXYMqIVN7IcNgs5pAfRyzk
-    AHlCRdsGC2sjLlVJas>
-X-ME-Received: <xmr:RK04YisAXKkNkTXFZe8x2mIXjr2kBGRWWWGd9FgdgGCYWtTVgF_yS_BWpL_cVmzjpAdZCuGIGiV0yl4vR7IJ_GJ5Y4GhDJtCcRnRKdDIZbWlI6oj2nj7BWaSpGPpDJY>
+X-ME-Sender: <xms:Sa04YpoQtP8JD_Nzkm5BmD-KxD6wvftItSa2SNNAjZrnNlZJeF51Jw>
+    <xme:Sa04YrqJg8j3XUPECNxa4oyJEWsP1dX2axymFjbJfcdBCa6mStmkw4AbO6e6ovhkm
+    PJnweHHRv-n8nHDYTA>
+X-ME-Received: <xmr:Sa04YmMYl8jwQXdhyK59BWZKHaqI09hYklDQ94JlgV3MKHpJ38EkVq-6s2ZfuMC3szc9fXRRJib4sBzvgsyTVfnSWddiZ3_u94kSEphYYWRj_F2LwiCglDDn9oabs5k>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegfedgleehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcu
     rfgvthgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvg
     hrnheptedvkeetleeuffffhfekteetffeggffgveehieelueefvddtueffveevlefhfeej
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvg
+    necuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehmrghilhhfrhhomhepshhvvg
     hnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:RK04YnYg2nr1hJNOWlPXTMUks-2H0efnzclxBsnIalOBIBQA_1qTmg>
-    <xmx:RK04YpaaFcV7Of1hkB4lnLh9-nBO1iQJgu8Lgs8zvp5rt0OQMZzJ8Q>
-    <xmx:RK04YjAyRGr2z10e97ukpIcBxnEyiNVKUE9o1xMWj0j_sAYE78mztg>
-    <xmx:Ra04YtpSkRzBiptfuiK9vZ2u97Ex7a9999tVQBOgLCsaivNN49o85g>
+X-ME-Proxy: <xmx:Sa04Yk7AZcIWHED8uDSNdGtvSCHhK2FSfx4A-_o4QEbVy_SXBJgo8w>
+    <xmx:Sa04Yo65RFj0WUlUsc-pC237o5NlUdBluJ6-i2Ve3--zbYuSxaV-JA>
+    <xmx:Sa04YsgxxwfpWgvR09XrHWbfR2YD9VBmmH6nkRWwqB0xqrD-mc45oA>
+    <xmx:Sa04Yoy7z88C30C364-vIiczR8zbSFjv8Ik1XU7tgqAMgwQeSIbtPw>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 21 Mar 2022 12:52:18 -0400 (EDT)
+ 21 Mar 2022 12:52:23 -0400 (EDT)
 From:   Sven Peter <sven@svenpeter.dev>
 To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
         Christoph Hellwig <hch@lst.de>,
@@ -69,11 +69,10 @@ Cc:     Sven Peter <sven@svenpeter.dev>, Hector Martin <marcan@marcan.st>,
         Rob Herring <robh+dt@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 7/9] nvme-apple: Serialize command issue
-Date:   Mon, 21 Mar 2022 17:50:47 +0100
-Message-Id: <20220321165049.35985-8-sven@svenpeter.dev>
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: [PATCH 8/9] nvme-apple: Add support for multiple power domains
+Date:   Mon, 21 Mar 2022 17:50:48 +0100
+Message-Id: <20220321165049.35985-9-sven@svenpeter.dev>
 X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 In-Reply-To: <20220321165049.35985-1-sven@svenpeter.dev>
 References: <20220321165049.35985-1-sven@svenpeter.dev>
@@ -89,52 +88,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Hector Martin <marcan@marcan.st>
 
-This controller shouldn't need serialization of command issue since
-the SQ is replaced by a simple array and commands are issued by writing
-the array index to a MMIO register.
-Without serialization however sometimes commands are still executed
-correctly and appear in the CQ but never trigger an interrupt.
+Turns out we really need this, as the APCIE_ST*_SYS domains really do
+hard-depend on ANS2, at least on t6000.
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-[sven: added our best guess why this needs to be done]
+Signed-off-by: Hector Martin <marcan@marcan.st>
 Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
- drivers/nvme/host/apple.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/nvme/host/apple.c | 67 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
 diff --git a/drivers/nvme/host/apple.c b/drivers/nvme/host/apple.c
-index 587d6c7014a0..a4193429564e 100644
+index a4193429564e..d89b4ab80169 100644
 --- a/drivers/nvme/host/apple.c
 +++ b/drivers/nvme/host/apple.c
-@@ -292,6 +292,7 @@ static void apple_nvmmu_inval(struct apple_nvme_queue *q, unsigned int tag)
- static void apple_nvme_submit_cmd(struct apple_nvme_queue *q,
- 				  struct nvme_command *cmd)
- {
-+	struct apple_nvme *anv = queue_to_apple_nvme(q);
- 	u32 tag = nvme_tag_from_cid(cmd->common.command_id);
- 	struct apple_nvmmu_tcb *tcb = &q->tcbs[tag];
+@@ -29,6 +29,7 @@
+ #include <linux/of_platform.h>
+ #include <linux/once.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_domain.h>
+ #include <linux/soc/apple/rtkit.h>
+ #include <linux/soc/apple/sart.h>
+ #include <linux/reset.h>
+@@ -178,6 +179,10 @@ struct apple_nvme {
+ 	void __iomem *mmio_coproc;
+ 	void __iomem *mmio_nvme;
  
-@@ -308,7 +309,18 @@ static void apple_nvme_submit_cmd(struct apple_nvme_queue *q,
- 		tcb->dma_flags |= APPLE_ANS_TCB_DMA_FROM_DEVICE;
- 
- 	memcpy(&q->sqes[tag], cmd, sizeof(*cmd));
++	struct device **pd_dev;
++	struct device_link **pd_link;
++	int pd_count;
 +
-+	/*
-+	 * This lock here doesn't make much sense at a first glace but
-+	 * removing it will result in occasional missed completetion
-+	 * interrupts even though the commands still appear on the CQ.
-+	 * It's unclear why this happens but our best guess is that
-+	 * there is a bug in the firmware triggered when a write to the
-+	 * CQ and the SQ happen simultaneously.
-+	 */
-+	spin_lock_irq(&anv->lock);
- 	writel(tag, q->sq_db);
-+	spin_unlock_irq(&anv->lock);
+ 	struct apple_sart *sart;
+ 	struct apple_rtkit *rtk;
+ 	struct reset_control *reset;
+@@ -1313,6 +1318,62 @@ static int apple_nvme_queue_alloc(struct apple_nvme *anv,
+ 	return 0;
  }
  
- /*
++static void apple_nvme_detach_genpd(struct apple_nvme *anv)
++{
++	int i;
++
++	if (anv->pd_count <= 1)
++		return;
++
++	for (i = anv->pd_count - 1; i >= 0; i--) {
++		if (anv->pd_link[i])
++			device_link_del(anv->pd_link[i]);
++		if (!IS_ERR_OR_NULL(anv->pd_dev[i]))
++			dev_pm_domain_detach(anv->pd_dev[i], true);
++	}
++}
++
++static int apple_nvme_attach_genpd(struct apple_nvme *anv)
++{
++	struct device *dev = anv->dev;
++	int i;
++
++	anv->pd_count = of_count_phandle_with_args(dev->of_node,
++						   "power-domains",
++						   "#power-domain-cells");
++	if (anv->pd_count <= 1)
++		return 0;
++
++	anv->pd_dev = devm_kcalloc(dev, anv->pd_count, sizeof(*anv->pd_dev),
++				   GFP_KERNEL);
++	if (!anv->pd_dev)
++		return -ENOMEM;
++
++	anv->pd_link = devm_kcalloc(dev, anv->pd_count, sizeof(*anv->pd_link),
++				    GFP_KERNEL);
++	if (!anv->pd_link)
++		return -ENOMEM;
++
++	for (i = 0; i < anv->pd_count; i++) {
++		anv->pd_dev[i] = dev_pm_domain_attach_by_id(dev, i);
++		if (IS_ERR(anv->pd_dev[i])) {
++			apple_nvme_detach_genpd(anv);
++			return PTR_ERR(anv->pd_dev[i]);
++		}
++
++		anv->pd_link[i] = device_link_add(dev, anv->pd_dev[i],
++						  DL_FLAG_STATELESS |
++						  DL_FLAG_PM_RUNTIME |
++						  DL_FLAG_RPM_ACTIVE);
++		if (!anv->pd_link[i]) {
++			apple_nvme_detach_genpd(anv);
++			return -EINVAL;
++		}
++	}
++
++	return 0;
++}
++
+ static int apple_nvme_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -1327,6 +1388,10 @@ static int apple_nvme_probe(struct platform_device *pdev)
+ 	anv->adminq.is_adminq = true;
+ 	platform_set_drvdata(pdev, anv);
+ 
++	ret = apple_nvme_attach_genpd(anv);
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "Failed to attach power domains");
++
+ 	if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64)))
+ 		return -ENXIO;
+ 
+@@ -1435,6 +1500,8 @@ static int apple_nvme_remove(struct platform_device *pdev)
+ 	if (apple_rtkit_is_running(anv->rtk))
+ 		apple_rtkit_shutdown(anv->rtk);
+ 
++	apple_nvme_detach_genpd(anv);
++
+ 	return 0;
+ }
+ 
 -- 
 2.25.1
 

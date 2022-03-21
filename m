@@ -2,153 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830F74E1F10
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E908F4E1F13
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242162AbiCUCfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 22:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
+        id S1344210AbiCUChJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 22:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238487AbiCUCfq (ORCPT
+        with ESMTP id S238487AbiCUChH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 22:35:46 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F461CB3E
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:34:22 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id z10-20020a056602080a00b00645b9fdc630so9714804iow.5
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:34:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=QUoEilwGQJjP61Rbh2F5H2HodIumWRf1OPJbJQ3Sj30=;
-        b=hKjf01h6yhdDU+92hdccbLOIZO6tznwFMQML8cM5QBKndWI8mPMTqcit81JqbJO3+b
-         jJcTGp/1Ubwjw+nF7zdhlVVinTGYeJzzuvSHr/xoyM5TAf5sif8px4AE02uyIEOxFfVz
-         qWwgPzu9P8dEQWz7uicmBwJf76aytdWgRsxKjNkurP31BKSad8Yq4B2G0Vef9G7s/ATz
-         6yI2toOOU287L0mECEYPRZEqGxMZ+X54KmyOn7VBo5zPZW7B16QwguVFAeL/6xp1ye4V
-         18c5zd8nj+QRmPPVVOe4AuWtYpxJy6vopkdMnohvaeBIk9FG6nseuYswXOrhE9nVlDnF
-         RUdg==
-X-Gm-Message-State: AOAM533hUf0Maa8CqMrG59GQJzHxAgo5jUl87qPHILrkHir3+iWDDGG6
-        h95+OpKtnCmDqjFtXDh6mYzGV/irq+EgCIYEYpKQsLtIj9x4
-X-Google-Smtp-Source: ABdhPJzAK13m+gUK9RaNc20ucH1OYiQqrDun+TrkHcBIsnzAAFBfFE6CgTLlnkUGXF+BZkdkQ2Bly31xNhTpgQ/hQ3vLEbT9M2Ea
+        Sun, 20 Mar 2022 22:37:07 -0400
+Received: from mg.sunplus.com (unknown [113.196.136.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAB6A4C7A6;
+        Sun, 20 Mar 2022 19:35:40 -0700 (PDT)
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.202
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(10880:0:AUTH_RELAY)
+        (envelope-from <tony.huang@sunplus.com>); Mon, 21 Mar 2022 10:35:52 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Mon, 21 Mar 2022 10:35:46 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Mon, 21 Mar 2022 10:35:46 +0800
+From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Tony Huang <tonyhuang.sunplus@gmail.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "lhjeff911@gmail.com" <lhjeff911@gmail.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
+CC:     =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: RE: [PATCH v4 1/2] dt-binding: mmc: Add mmc yaml file for Sunplus
+ SP7021
+Thread-Topic: [PATCH v4 1/2] dt-binding: mmc: Add mmc yaml file for Sunplus
+ SP7021
+Thread-Index: AQHYOzO5KyAdMjgPQEaJFU8W2wW2NazHonKAgAF9QKA=
+Date:   Mon, 21 Mar 2022 02:35:46 +0000
+Message-ID: <cab5bdafed86451a99cd59da3b1c5a38@sphcmbx02.sunplus.com.tw>
+References: <cover.1647652688.git.tonyhuang.sunplus@gmail.com>
+ <27dba330ec0c1cd7edbcec53083f78169713a42e.1647652688.git.tonyhuang.sunplus@gmail.com>
+ <c78aa9fa-8001-2c48-7a25-1f44f9952c9b@kernel.org>
+In-Reply-To: <c78aa9fa-8001-2c48-7a25-1f44f9952c9b@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.54]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Received: by 2002:a02:5b85:0:b0:319:ff85:ff5 with SMTP id
- g127-20020a025b85000000b00319ff850ff5mr10161038jab.250.1647830061515; Sun, 20
- Mar 2022 19:34:21 -0700 (PDT)
-Date:   Sun, 20 Mar 2022 19:34:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000778f1005dab1558e@google.com>
-Subject: [syzbot] possible deadlock in pipe_write
-From:   syzbot <syzbot+011e4ea1da6692cf881c@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    56e337f2cf13 Revert "gpio: Revert regression in sysfs-gpio..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13f00f7e700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d35f9bc6884af6c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=011e4ea1da6692cf881c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133235c5700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1248ca89700000
-
-Bisection is inconclusive: the issue happens on the oldest tested release.
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12f235c5700000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11f235c5700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16f235c5700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+011e4ea1da6692cf881c@syzkaller.appspotmail.com
-
-============================================
-WARNING: possible recursive locking detected
-5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0 Not tainted
---------------------------------------------
-syz-executor190/3593 is trying to acquire lock:
-ffff888078020868 (&pipe->mutex/1){+.+.}-{3:3}, at: __pipe_lock fs/pipe.c:103 [inline]
-ffff888078020868 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_write+0x132/0x1c00 fs/pipe.c:431
-
-but task is already holding lock:
-ffff888078020468 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_lock_nested fs/pipe.c:82 [inline]
-ffff888078020468 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_lock fs/pipe.c:90 [inline]
-ffff888078020468 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_wait_readable+0x39b/0x420 fs/pipe.c:1049
-
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(&pipe->mutex/1);
-  lock(&pipe->mutex/1);
-
- *** DEADLOCK ***
-
- May be due to missing lock nesting notation
-
-1 lock held by syz-executor190/3593:
- #0: ffff888078020468 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_lock_nested fs/pipe.c:82 [inline]
- #0: ffff888078020468 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_lock fs/pipe.c:90 [inline]
- #0: ffff888078020468 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_wait_readable+0x39b/0x420 fs/pipe.c:1049
-
-stack backtrace:
-CPU: 1 PID: 3593 Comm: syz-executor190 Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_deadlock_bug kernel/locking/lockdep.c:2956 [inline]
- check_deadlock kernel/locking/lockdep.c:2999 [inline]
- validate_chain kernel/locking/lockdep.c:3788 [inline]
- __lock_acquire.cold+0x213/0x3a9 kernel/locking/lockdep.c:5027
- lock_acquire kernel/locking/lockdep.c:5639 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
- __mutex_lock_common kernel/locking/mutex.c:600 [inline]
- __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
- __pipe_lock fs/pipe.c:103 [inline]
- pipe_write+0x132/0x1c00 fs/pipe.c:431
- call_write_iter include/linux/fs.h:2074 [inline]
- do_iter_readv_writev+0x47a/0x750 fs/read_write.c:725
- do_iter_write+0x188/0x710 fs/read_write.c:851
- vfs_iter_write+0x70/0xa0 fs/read_write.c:892
- iter_file_splice_write+0x723/0xc70 fs/splice.c:689
- do_splice_from fs/splice.c:767 [inline]
- do_splice+0xb7e/0x1960 fs/splice.c:1079
- __do_splice+0x134/0x250 fs/splice.c:1144
- __do_sys_splice fs/splice.c:1350 [inline]
- __se_sys_splice fs/splice.c:1332 [inline]
- __x64_sys_splice+0x198/0x250 fs/splice.c:1332
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fb9ac14bca9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fb9ac0fe308 EFLAGS: 00000246 ORIG_RAX: 0000000000000113
-RAX: fffffff
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+RGVhciBLcnp5c3p0b2Y6DQoNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
+ZGluZ3MvbW1jL3N1bnBsdXMsbW1jLnlhbWwNCj4gPiBAQCAtMCwwICsxLDc5IEBADQo+ID4gKyMg
+U1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9ubHkgT1IgQlNELTItQ2xhdXNlKSAj
+IENvcHlyaWdodA0KPiA+ICsoQykgU3VucGx1cyBMdGQuIENvLiAyMDIxICVZQU1MIDEuMg0KPiA+
+ICstLS0NCj4gPiArJGlkOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9tbWMvc3VucGx1
+cyxtbWMueWFtbCMNCj4gPiArJHNjaGVtYTogaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2No
+ZW1hcy9jb3JlLnlhbWwjDQo+ID4gKw0KPiA+ICt0aXRsZTogc3VucGx1cyBNTUMgY29udHJvbGxl
+cg0KPiANCj4gcy9zdW5wbHVzL1N1bnBsdXMvDQo+IA0KDQpCZWxvdyBpcyBteSBtb2RpZmljYXRp
+b246DQp0aXRsZTogU3VucGx1cyBNTUMgQ29udHJvbGxlcg0KDQo+ID4gKw0KPiA+ICthbGxPZjoN
+Cj4gPiArICAtICRyZWY6ICJtbWMtY29udHJvbGxlci55YW1sIg0KPiANCj4gYWxsT2YgYmVsb3cg
+bWFpbnRhaW5lcnMsDQo+IA0KDQpJIHdpbGwgbW9kaWZ5IGl0Lg0KDQo+ID4gKw0KPiA+ICttYWlu
+dGFpbmVyczoNCj4gPiArICAtIFRvbnkgSHVhbmcgPHRvbnlodWFuZy5zdW5wbHVzQGdtYWlsLmNv
+bT4NCj4gPiArICAtIExpLWhhbyBLdW8gPGxoamVmZjkxMUBnbWFpbC5jb20+DQo+ID4gKw0KPiA+
+ICtwcm9wZXJ0aWVzOg0KPiA+ICsgIGNvbXBhdGlibGU6DQo+ID4gKyAgICBlbnVtOg0KPiA+ICsg
+ICAgICAtIHN1bnBsdXMsbW1jLXYxDQo+ID4gKyAgICAgIC0gc3VucGx1cyxtbWMtdjINCj4gDQo+
+IEhvdyBkaWQgdGhpcyBoYXBwZW4/IFZlcnNpb25zIG9mIGJsb2NrcyBhcmUgdXN1YWxseSBkaXNj
+b3VyYWdlZCwgdW5sZXNzIHlvdQ0KPiBoYXZlIGNsZWFyIHNwZWNpZmljYXRpb24sLiBUaGUgcHJl
+dmlvdXMgZGlzY3Vzc2lvbiBkaWQgbm90IGVuZCB3aXRoICJhZGQgdjEgYW5kDQo+IHYyIi4NCj4g
+DQo+IERvIHlvdSBoYXZlIGNsZWFyIGRvY3VtZW50YXRpb24vc3BlY2lmaWNhdGlvbiBvZiB0aGVz
+ZSBibG9ja3M/IElmIG5vLCBwbGVhc2UNCj4gdXNlIFNvQyBjb21wYXRpYmxlcy4NCj4gDQoNCnYx
+OiBzdXBwb3J0IFNESU8gMi4wCQkJCQkJCQ0KdjI6IHN1cHBvcnQgZU1NQyA0LjQxCQkJCQkJCQ0K
+VGhlIHJlZ2lzdGVyIGJhc2UgYWRkcmVzcyBhbmQgb2Zmc2V0IGFkZHJlc3Mgb2YgZW1tYyBhbmQg
+c2QgY2FyZCBhcmUgZGlmZmVyZW50LgkJCQkJCQkNCmVNTUMgYW5kIHNkY2FyZCBhcmUgaW5kaXZp
+ZHVhbCBoYXJkd2FyZSBzZXR0aW5ncwkJCQkJCQkNCldlIG5lZWQgdmVyc2lvbiB0byBkaXN0aW5n
+dWlzaCBkaWZmZXJlbnQgc3BlZWRzCQkJCQkJCQ0KDQo+ID4gKw0KPiA+ICsgIHJlZzoNCj4gPiAr
+ICAgIG1heEl0ZW1zOiAxDQo+ID4gKw0KPiA+ICsgIGludGVycnVwdHM6DQo+ID4gKyAgICBtYXhJ
+dGVtczogMQ0KPiA+ICsNCj4gPiArICBjbG9ja3M6DQo+ID4gKyAgICBtaW5JdGVtczogMQ0KPiAN
+Cj4gbWF4SXRlbXMNCj4gDQoNCkkgd2lsbCBtb2RpZnkgaXQuDQoNCj4gPiArDQo+ID4gKyAgcmVz
+ZXRzOg0KPiA+ICsgICAgbWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgbWF4LWZyZXF1ZW5jeTog
+dHJ1ZQ0KPiA+ICsNCj4gPiArcmVxdWlyZWQ6DQo+ID4gKyAgLSBjb21wYXRpYmxlDQo+ID4gKyAg
+LSByZWcNCj4gPiArICAtIGludGVycnVwdHMNCj4gPiArICAtIGNsb2Nrcw0KPiA+ICsgIC0gcmVz
+ZXRzDQo+ID4gKw0KPiA+ICt1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZhbHNlDQo+ID4gKw0KPiA+
+ICtleGFtcGxlczoNCj4gPiArICAtIHwNCj4gPiArICAgICNpbmNsdWRlIDxkdC1iaW5kaW5ncy9p
+bnRlcnJ1cHQtY29udHJvbGxlci9pcnEuaD4NCj4gPiArICAgICNpbmNsdWRlIDxkdC1iaW5kaW5n
+cy9pbnRlcnJ1cHQtY29udHJvbGxlci9hcm0tZ2ljLmg+DQo+ID4gKyAgICBtbWMwOiBtbWNAOWMw
+MDNiMDAgew0KPiA+ICsgICAgICAgIGNvbXBhdGlibGUgPSAic3VucGx1cyxtbWMtdjIiOw0KPiA+
+ICsgICAgICAgIHJlZyA9IDwweDljMDAzYjAwIDB4MTgwPjsNCj4gPiArICAgICAgICBpbnRlcnJ1
+cHRzID0gPDIwIElSUV9UWVBFX0xFVkVMX0hJR0g+Ow0KPiA+ICsgICAgICAgIGNsb2NrcyA9IDwm
+Y2xrYyAweDRlPjsNCj4gPiArICAgICAgICByZXNldHMgPSA8JnJzdGMgMHgzZT47DQo+ID4gKyAg
+ICAgICAgYnVzLXdpZHRoID0gPDg+Ow0KPiA+ICsgICAgICAgIG1heC1mcmVxdWVuY3kgPSA8NTIw
+MDAwMDA+Ow0KPiA+ICsgICAgICAgIG5vbi1yZW1vdmFibGU7DQo+ID4gKyAgICAgICAgZGlzYWJs
+ZS13cDsNCj4gPiArICAgICAgICBjYXAtbW1jLWhpZ2hzcGVlZDsNCj4gPiArICAgICAgICBtbWMt
+ZGRyLTNfM3Y7DQo+ID4gKyAgICAgICAgbm8tc2RpbzsNCj4gPiArICAgICAgICBuby1zZDsNCj4g
+PiArICAgIH07DQo+ID4gKw0KPiA+ICsgICAgbW1jMTogbW1jQDljMDAzZTgwIHsNCj4gPiArICAg
+ICAgIGNvbXBhdGlibGUgPSAic3VucGx1cyxtbWMtdjEiOw0KPiA+ICsgICAgICAgcmVnID0gPDB4
+OWMwMDNlODAgMHgyODA+Ow0KPiA+ICsgICAgICAgaW50ZXJydXB0cyA9IDwyMSBJUlFfVFlQRV9M
+RVZFTF9ISUdIPjsNCj4gPiArICAgICAgIGNsb2NrcyA9IDwmY2xrYyAweDRmPjsNCj4gPiArICAg
+ICAgIHJlc2V0cyA9IDwmcnN0YyAweDNmPjsNCj4gPiArICAgICAgIHBpbmN0cmwtbmFtZXMgPSAi
+ZGVmYXVsdCI7DQo+ID4gKyAgICAgICBwaW5jdHJsLTAgPSA8Jm1tYzFfbXV4ICZtbWMxX211eF9j
+ZD47DQo+ID4gKyAgICAgICBtYXgtZnJlcXVlbmN5ID0gPDUyMDAwMDAwPjsNCj4gPiArICAgICAg
+IGRpc2FibGUtd3A7DQo+ID4gKyAgICAgICBjYXAtc2QtaGlnaHNwZWVkOw0KPiA+ICsgICAgICAg
+bm8tc2RpbzsNCj4gPiArICAgICAgIG5vLW1tYzsNCj4gPiArICAgIH07DQo+ID4gZGlmZiAtLWdp
+dCBhL01BSU5UQUlORVJTIGIvTUFJTlRBSU5FUlMgaW5kZXggZmIxOGNlNy4uMmQ5MTQzMSAxMDA2
+NDQNCj4gPiAtLS0gYS9NQUlOVEFJTkVSUw0KPiA+ICsrKyBiL01BSU5UQUlORVJTDQo+ID4gQEAg
+LTE4MjQyLDYgKzE4MjQyLDEyIEBAIEw6CW5ldGRldkB2Z2VyLmtlcm5lbC5vcmcNCj4gPiAgUzoJ
+TWFpbnRhaW5lZA0KPiA+ICBGOglkcml2ZXJzL25ldC9ldGhlcm5ldC9kbGluay9zdW5kYW5jZS5j
+DQo+ID4NCj4gPiArU1VOUExVUyBNTUMgRFJJVkVSDQo+ID4gK006CVRvbnkgSHVhbmcgPHRvbnlo
+dWFuZy5zdW5wbHVzQGdtYWlsLmNvbT4NCj4gPiArTTogTGktaGFvIEt1byA8bGhqZWZmOTExQGdt
+YWlsLmNvbT4NCj4gDQo+IFdyb25nIGluZGVudGF0aW9uLg0KDQpJIHdpbGwgbW9kaWZ5IGl0Lg0K
+DQo+IA0KPiA+ICtTOglNYWludGFpbmVkDQo+ID4gK0Y6CURvY3VtZW50YXRpb24vZGV2aWNldHJl
+ZS9iaW5kaW5ncy9tbWMvc3VucGx1LG1tYy55YW1sDQo+IA0KPiBXcm9uZyBmaWxlIG5hbWUuDQo+
+IA0KDQpJIHdpbGwgbW9kaWZ5IGl0Lg0KDQo=

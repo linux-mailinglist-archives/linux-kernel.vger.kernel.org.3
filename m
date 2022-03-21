@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FCE4E2BD0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BA44E2BD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350029AbiCUPTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        id S1349986AbiCUPTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349932AbiCUPTP (ORCPT
+        with ESMTP id S1349942AbiCUPTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:19:15 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D4B111DDC;
-        Mon, 21 Mar 2022 08:17:50 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id m30so11324524wrb.1;
-        Mon, 21 Mar 2022 08:17:50 -0700 (PDT)
+        Mon, 21 Mar 2022 11:19:16 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42472EDF0B;
+        Mon, 21 Mar 2022 08:17:51 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id t11so21180761wrm.5;
+        Mon, 21 Mar 2022 08:17:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=XhL5PcXPAVYZIaqVjbCyrF3IgCwpUk1BeN4L/hsgGTo=;
-        b=cHFxeW+dNxRnim5lHgkGnYGLUOXrAntyIXQ97bgPETSh50ci0sSBCoYftpHi8HNr45
-         E5VVBYCnOoxRpeLzSxqZDGQQSZai4X1NzRWBwu08C/WoT00RwSqGymMFZf+J+KkO412i
-         kegSRwz5mS3LFDjpt0OfbvkZ7JkEpuNgJGEX7KNOKXxVCFO3RqDhgQ1p/cZpeJpXcoP4
-         YicRMjXgRDnD9sA6dh0Q3XlYMgr6sLEaQnsc/DI+fUHkK+x25q/Cch5ciktMxsAjyDLo
-         r7fCbrCL6fR5JUqT+4kbKkFt5Q+y3+A/3yGKEZ3u+R0doExMbi+5S9PIbP4c55Hw8Beu
-         D4fQ==
+        bh=8h0dp/sRCWnE/SzxqBhwWtp3OCJwunZ7486W2HMfBko=;
+        b=Z60PkwuF45a94nU3pDR2UUzDhsn150Rvh2gB+Ung2m71vatdGxrP4dLJWflsoYAdHz
+         +pjCVTMpDWLMKyl2Y6OSxmlNqJXfaHPaEGk5shhm2ccExJW89JB+0qaO0/fSa04rv3T7
+         HkBFAsEyVKs54e6bcul0kgdwcnHYaukpYhOG6+ww8ynG9LOyMetAkTMA76/7rBqIq2dd
+         KwWHOh57/IgSp44MmaT8smsC4HbRkJa7/EsjjbLceCjxay+dPBmwjvArVs3jn0EtPrTH
+         P7nWco+sg6wLdA01JHRTN2gJLqpcRq+mQ/Ak1FA4apu5sqt9KlVxhUdA9d7xK9KUSZ0z
+         E1tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XhL5PcXPAVYZIaqVjbCyrF3IgCwpUk1BeN4L/hsgGTo=;
-        b=BSHn4fpFAKlmiTaokoyxfBsr16+lzMVKem+mAFca0VgZhxqt17qpLkP7gwHT6ynzHk
-         pusOITr80WEaGm9h/yRixuA1fz1WD/A5+fSxTE16qU0uT70VQrwnWn6rhOwKmWN72tVg
-         eQ/91ftTDVDA2lE45PvCSrc20dHyJwMPE5tfHBARh8ebVfVcSL6XX8vMWP13Eft/YSzp
-         Hx0APkzR8iYSYw+9TbaRVF0Dx0B5biquzv6QWmTM6CjjIDXbrmK6FtY0UHiq6w8UabTM
-         JSODF0T94M2w+x2ISsC0s7JZ4u6XL+l6FSBDo0efs2yv6oMRYIV95mMCcXA8P2LaCxzw
-         hJGQ==
-X-Gm-Message-State: AOAM53144HGU4EAS+T1XiduI7Ut0GWpiyHXpnhJ3iG/o2IZvIAWjxxNj
-        Oe/idAe+rodSPBb9Y3lsBs8=
-X-Google-Smtp-Source: ABdhPJy4fxPuhDbY7wiV30NpnJ0j4pmlrHKEwDEiCM3xIxrH7V/wV6fzz38BHzg62VuhqUHaM1UaCw==
-X-Received: by 2002:adf:f50d:0:b0:203:f72c:e26a with SMTP id q13-20020adff50d000000b00203f72ce26amr12386883wro.620.1647875868677;
-        Mon, 21 Mar 2022 08:17:48 -0700 (PDT)
+        bh=8h0dp/sRCWnE/SzxqBhwWtp3OCJwunZ7486W2HMfBko=;
+        b=XmdQAK609T26LXwWNGLC+/jRDvZBhHGQuzO0InL8NU21VyEQsLSnf8T0ASuoXHz816
+         BHrcVisgXC9FhgX9cwEAD0kbmsAa0WNnLS4Nzcfeq0/kRRo35TW5UEeh7LbpNlUoSkfo
+         QVTDj1Topn7xLDeWL+zVp4FLabNnCMHDUm/1Pc+Xb21tXuVbYBCDzHi3t1Tf4qeYXG6H
+         tIpDfnLYMHyuwGO3CXxEtrAZgzEgzHKfQmSzXScelyy+vmumt4h+a9Iwv+h9mlMBWn4A
+         d1xKRRynHTVkouYFfFpuGEcy41TeCr6qMVLKSuNF4AfzLrkql+f214HhumOsWtfuYURD
+         XJ6Q==
+X-Gm-Message-State: AOAM530/XLef8lXAqvHa1KdWQ/MB9mZ4xm3uZN2PxdNA5mXX6o9olRiq
+        BD1h5DpKT7o9edKVonuuVqo=
+X-Google-Smtp-Source: ABdhPJyVphV0iTWxd2pv7sbyrbbMdvHxY2Wi0G2Zz9gj2N03j3KbicFxC/kSLrtfYCP2vxAfCxbfcw==
+X-Received: by 2002:a5d:504d:0:b0:203:e60e:49ef with SMTP id h13-20020a5d504d000000b00203e60e49efmr18601562wrt.546.1647875869752;
+        Mon, 21 Mar 2022 08:17:49 -0700 (PDT)
 Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
-        by smtp.googlemail.com with ESMTPSA id 10-20020a5d47aa000000b00204012e4373sm7239729wrb.101.2022.03.21.08.17.47
+        by smtp.googlemail.com with ESMTPSA id 10-20020a5d47aa000000b00204012e4373sm7239729wrb.101.2022.03.21.08.17.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 08:17:48 -0700 (PDT)
+        Mon, 21 Mar 2022 08:17:49 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -57,9 +57,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Ansuel Smith <ansuelsmth@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v4 03/18] clk: qcom: gcc-ipq806x: add PXO_SRC in clk table
-Date:   Mon, 21 Mar 2022 15:48:10 +0100
-Message-Id: <20220321144825.11736-4-ansuelsmth@gmail.com>
+Subject: [PATCH v4 04/18] clk: qcom: clk-hfpll: use poll_timeout macro
+Date:   Mon, 21 Mar 2022 15:48:11 +0100
+Message-Id: <20220321144825.11736-5-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220321144825.11736-1-ansuelsmth@gmail.com>
 References: <20220321144825.11736-1-ansuelsmth@gmail.com>
@@ -75,47 +75,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PXO_SRC is currently defined in the gcc include and referenced in the
-ipq8064 DTSI. Correctly provide a clk after gcc probe to fix kernel
-panic if a driver starts to actually use it.
+Use regmap_read_poll_timeout macro instead of do-while structure.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/clk/qcom/gcc-ipq806x.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/clk/qcom/clk-hfpll.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
-index 27f6d7626abb..7271d3afdc89 100644
---- a/drivers/clk/qcom/gcc-ipq806x.c
-+++ b/drivers/clk/qcom/gcc-ipq806x.c
-@@ -26,6 +26,8 @@
+diff --git a/drivers/clk/qcom/clk-hfpll.c b/drivers/clk/qcom/clk-hfpll.c
+index e847d586a73a..a4e347eb4d4d 100644
+--- a/drivers/clk/qcom/clk-hfpll.c
++++ b/drivers/clk/qcom/clk-hfpll.c
+@@ -12,6 +12,8 @@
+ #include "clk-regmap.h"
  #include "clk-hfpll.h"
- #include "reset.h"
  
-+static struct clk_regmap pxo = { };
++#define HFPLL_BUSY_WAIT_TIMEOUT	100
 +
- static struct clk_pll pll0 = {
- 	.l_reg = 0x30c4,
- 	.m_reg = 0x30c8,
-@@ -2754,6 +2756,7 @@ static struct clk_dyn_rcg ubi32_core2_src_clk = {
- };
+ #define PLL_OUTCTRL	BIT(0)
+ #define PLL_BYPASSNL	BIT(1)
+ #define PLL_RESET_N	BIT(2)
+@@ -72,13 +74,12 @@ static void __clk_hfpll_enable(struct clk_hw *hw)
+ 	regmap_update_bits(regmap, hd->mode_reg, PLL_RESET_N, PLL_RESET_N);
  
- static struct clk_regmap *gcc_ipq806x_clks[] = {
-+	[PXO_SRC] = NULL,
- 	[PLL0] = &pll0.clkr,
- 	[PLL0_VOTE] = &pll0_vote,
- 	[PLL3] = &pll3.clkr,
-@@ -3083,6 +3086,10 @@ static int gcc_ipq806x_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
+ 	/* Wait for PLL to lock. */
+-	if (hd->status_reg) {
+-		do {
+-			regmap_read(regmap, hd->status_reg, &val);
+-		} while (!(val & BIT(hd->lock_bit)));
+-	} else {
++	if (hd->status_reg)
++		regmap_read_poll_timeout(regmap, hd->status_reg, val,
++					 !(val & BIT(hd->lock_bit)), USEC_PER_MSEC * 2,
++					 HFPLL_BUSY_WAIT_TIMEOUT * USEC_PER_MSEC);
++	else
+ 		udelay(60);
+-	}
  
-+	clk = clk_get(dev, "pxo");
-+	pxo.hw = *__clk_get_hw(clk);
-+	gcc_ipq806x_clks[PXO_SRC] = &pxo;
-+
- 	regmap = dev_get_regmap(dev, NULL);
- 	if (!regmap)
- 		return -ENODEV;
+ 	/* Enable PLL output. */
+ 	regmap_update_bits(regmap, hd->mode_reg, PLL_OUTCTRL, PLL_OUTCTRL);
 -- 
 2.34.1
 

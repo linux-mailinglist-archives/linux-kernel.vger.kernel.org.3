@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429FC4E3445
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E56D54E344D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbiCUX2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
+        id S233027AbiCUX2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233118AbiCUX1w (ORCPT
+        with ESMTP id S233420AbiCUX2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:27:52 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8A5373862
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:23:58 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id q11so18502269iod.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:23:58 -0700 (PDT)
+        Mon, 21 Mar 2022 19:28:05 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A9E38E35C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:24:42 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id e22so18471112ioe.11
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:24:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GHF3cFazCIoxzIiOtqaFuckKc05p9fdKsgGJfNA9D2o=;
-        b=LDMyjvO/V3+/QXwyYENuqy8ZBs0SlM4uwxolvAZszXia2K6axwEU2awIRBeWQGTR3T
-         9TYYzFQBuOZj7ftksUNbiVySc1jeLP/c2Yt8d6zui+GTSrZNBajjn5XmcaPm8Y696sQI
-         wN323Sgmvx8tw6p73QD00RSHV23Pg8Y+323gA=
+        bh=el7X0/I9BxVvXyltPGgPKnaWWzQR127MIa0+mKXEO7c=;
+        b=RjRgYceVtreHHGPV6SDBdpbGC/2X996EYXsQrsFBgA0PF0UJsNDwk7KLbgRHIS+nKq
+         WXqvm64Deh7zFofuSyCrJDvIAgIguStZnSsFOXBwfXrGAMnLsr4UMJVJMIrXkumBoY6D
+         PsNrwbrYEpu5PoonmlypXek2YXUjrGChILvOY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=GHF3cFazCIoxzIiOtqaFuckKc05p9fdKsgGJfNA9D2o=;
-        b=foOOvynUCnlJX6mD6pE3neXvcUBQzS2zU+lHprUBjezS729as2teH7NxfRRGxoRuLw
-         IGUWssnKlh51Pdz7UZaYhZjghJm+MeeedF4KCqDgCmsP0++WjURk/qZIyE25Cg+2RwnA
-         ZIdEQEC6TXOEDZquKHMKSdWPY5xTzbQCQTOsMd99azld+r9NCUekkmeXiN54mul4rVjo
-         u9f0KL4fhcg7orkZu/hNnTgIwyfgdLiDwDHAlluTqzp+D0c/63Ad+uS8CLb2pA2VxtdI
-         xTnRe4hkrLQERvSZ1ZYyoejBBBjc5Xwn8O1ZyeFJHVM5kgZyBnNZo46oBnICYxLBjmI0
-         Ie6A==
-X-Gm-Message-State: AOAM533dBTvmraHmE/8it8pRSjxP81HXJPOZZ2zjKR9kDztSLg8teBEH
-        K6XFPH/ZTbUYlCDIiJgLf699+g==
-X-Google-Smtp-Source: ABdhPJzwPaM9ZesW78h/QPEGfn7eux7dVCYblcA2h1hpgRCLIr2AkHNOSzQj0nHf1ee/SozCr7QEAQ==
-X-Received: by 2002:a05:6638:2505:b0:319:a7f4:131e with SMTP id v5-20020a056638250500b00319a7f4131emr11758347jat.309.1647905037805;
-        Mon, 21 Mar 2022 16:23:57 -0700 (PDT)
+        bh=el7X0/I9BxVvXyltPGgPKnaWWzQR127MIa0+mKXEO7c=;
+        b=xf7W+ytWlOdE3crj3Lw6uQBRb927j6VHyAG2G7QUd8RLIuq2qF+lVtVmYKT+OY/Tk+
+         Bb1knmoLE74mFIFtQ3XdcaAdAeq+Lk1tweNH080/Of2lIXSYh3UVlNBF3QD25TFWq57t
+         NxgWWeJHv5D4RmeQihFEaFpcgZqnFVqlIMU9uSRmA008heUCb/9bZbrKCs0nJ+7S7GSf
+         avNkuTQJXXTfBDhu6ykXbsfdMdafFKBvpZCDv9HwhtACAq5/6san8XQtqYR3E2ZEYOcj
+         bskesG+AYLoWgvMn+7itIg2LPybcUw3AaSJ/SRIjxH9iSUN3HaPNm+Oaht9QczK1fW0V
+         SEpw==
+X-Gm-Message-State: AOAM5312eDSKg8bvS7J0dtsfcjtbkr9CgMwfYX6GCme3doqG/CJvO/rM
+        wIOzgsC8kdP7O/f/p+uKI5Frwg==
+X-Google-Smtp-Source: ABdhPJxei6toAYvqk4OOJgQioUtQSoogeCjgLgdbQQoMuBuPep0JzrF+zBT7MZAKbdBcicdgsK+Qwg==
+X-Received: by 2002:a05:6638:3d0d:b0:321:396b:1ad8 with SMTP id cl13-20020a0566383d0d00b00321396b1ad8mr4280824jab.198.1647905082348;
+        Mon, 21 Mar 2022 16:24:42 -0700 (PDT)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id k10-20020a056e0205aa00b002c8266e72e8sm2750556ils.62.2022.03.21.16.23.57
+        by smtp.gmail.com with ESMTPSA id r9-20020a6bd909000000b00649276ea9fesm8948306ioc.7.2022.03.21.16.24.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 16:23:57 -0700 (PDT)
-Subject: Re: [PATCH 5.4 00/17] 5.4.187-rc1 review
+        Mon, 21 Mar 2022 16:24:42 -0700 (PDT)
+Subject: Re: [PATCH 4.19 00/57] 4.19.236-rc1 review
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
 Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
@@ -55,14 +55,14 @@ Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
         jonathanh@nvidia.com, f.fainelli@gmail.com,
         sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220321133217.148831184@linuxfoundation.org>
+References: <20220321133221.984120927@linuxfoundation.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7917a373-c4eb-b71f-7580-ceef593e714c@linuxfoundation.org>
-Date:   Mon, 21 Mar 2022 17:23:56 -0600
+Message-ID: <f4ed40b0-e796-f726-eac3-7dd1f36ef892@linuxfoundation.org>
+Date:   Mon, 21 Mar 2022 17:24:41 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
+In-Reply-To: <20220321133221.984120927@linuxfoundation.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -76,9 +76,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/22 7:52 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.187 release.
-> There are 17 patches in this series, all will be posted as a response
+On 3/21/22 7:51 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.236 release.
+> There are 57 patches in this series, all will be posted as a response
 > to this one.  If anyone has any issues with these being applied, please
 > let me know.
 > 
@@ -86,9 +86,9 @@ On 3/21/22 7:52 AM, Greg Kroah-Hartman wrote:
 > Anything received after that time might be too late.
 > 
 > The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.187-rc1.gz
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.236-rc1.gz
 > or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
 > and the diffstat can be found below.
 > 
 > thanks,

@@ -2,85 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59374E2F4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 538904E2F5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350138AbiCURqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
+        id S1350516AbiCURur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241430AbiCURqe (ORCPT
+        with ESMTP id S238056AbiCURuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:46:34 -0400
-Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch [IPv6:2001:1600:3:17::1909])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB91E3B020
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:45:08 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KMhpV75KZzMqBgV;
-        Mon, 21 Mar 2022 18:45:06 +0100 (CET)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KMhpV4lQ6zlhRV4;
-        Mon, 21 Mar 2022 18:45:06 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        David Howells <dhowells@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Paul Moore <paul@paul-moore.com>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v1 1/1] certs: Explain the rational to call panic()
-Date:   Mon, 21 Mar 2022 18:45:48 +0100
-Message-Id: <20220321174548.510516-2-mic@digikod.net>
-In-Reply-To: <20220321174548.510516-1-mic@digikod.net>
-References: <20220321174548.510516-1-mic@digikod.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 21 Mar 2022 13:50:44 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE6A1CFF1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:49:18 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d7eaa730d9so130923137b3.13
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:49:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=EfaFOAjTPM5RAgOXYIyeEo3JBWHCWxVtr2STLBqFs7s=;
+        b=XezFlHzxJB2Eg24lT23dIi1UOjH1SC9rD0AzLHQc2tEXmBwhaht9zUDBLON/lvPCV5
+         1Fil2ITDxsCx+153W6MRIKG+umsGpiiTtrYdo/8ZyKWAo46J2d+bahS1RLgek8hSC5II
+         o2ZCDXsnbEykSiI56nnXDAlXYMojAtIhDCFEj2q5sYXVBewtjVbi/en0173Y+6ColLQj
+         tofapO3SyQtYiF7Wu9go37pUalfBIrD1sxIv9WFQsjNQflLO6iiwKmpo+YdbkTW5N/su
+         vvQ8zjGqb63uA+vmD7NDG0fG5Mq3/PH1q4r+YMCr3FBln0C55ceInba9U9VUyapfDVCh
+         xHyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=EfaFOAjTPM5RAgOXYIyeEo3JBWHCWxVtr2STLBqFs7s=;
+        b=Rhbd6i3ytYuusAKLSY8XuniBJ8rcBrU2wXA5pKFF1HdFxHfVaw99n2ltuwkd9bCYqp
+         ZW/5JmDI9d87uiBp25hJY8rkiJVxi5cIYz3grvHJSZ0OwMvn0Yt6/zF0OSArer7fezCG
+         hYvStyMiCgfjYS80lh/pVyvd7zbw/21eP9Yln30N+fsSKmNtfNxhjY5rjeEt4/l3CczN
+         uvPPjEu0ydrU6081Jt3jsGvrIcH8nHEc0ifZsQpEXlysg3eNYSMtx5eyMsRud4CQygTP
+         glUyIgkJcjnA7NJuFaAsYMLpYHCFCiMosUIBRIridAnBsvH4O46ELFHKkjIQvB0NQrjF
+         QUIA==
+X-Gm-Message-State: AOAM533j/VeQQuMEXcdzjyjn0xABy34NaTDhJmVR0JFZAuJt6W5JyDyT
+        ZNMhhnP939ITTpWLSfui69eV5UGu
+X-Google-Smtp-Source: ABdhPJzXwGBbgCHT+vdwAS30l2sFHl+TVGAD3H33rlJfbVU9f5mzjAhSlqZjPldQ38H+fdwgEfRJ+m69AQ==
+X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:27bd:2eea:bd8:2ea5])
+ (user=morbo job=sendgmr) by 2002:a25:2043:0:b0:633:6cee:4aee with SMTP id
+ g64-20020a252043000000b006336cee4aeemr22966645ybg.628.1647884957542; Mon, 21
+ Mar 2022 10:49:17 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 10:49:12 -0700
+In-Reply-To: <20220316213118.2352683-1-morbo@google.com>
+Message-Id: <20220321174912.164113-1-morbo@google.com>
+Mime-Version: 1.0
+References: <20220316213118.2352683-1-morbo@google.com>
+X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+Subject: [PATCH] soc: qcom: smem: use correct format characters
+From:   Bill Wendling <morbo@google.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc:     Bill Wendling <morbo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
+When compiling with -Wformat, clang emits the following warnings:
 
-The blacklist_init() function calls panic() for memory allocation
-errors.  This change documents the reason why we don't return -ENODEV.
+drivers/soc/qcom/smem.c:847:41: warning: format specifies type 'unsigned
+short' but the argument has type 'unsigned int' [-Wformat]
+                        dev_err(smem->dev, "bad host %hu\n", remote_host);
+                                                     ~~~     ^~~~~~~~~~~
+                                                     %u
+./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+        dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                               ~~~     ^~~~~~~~~~~
+./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                             ~~~    ^~~~~~~~~~~
+drivers/soc/qcom/smem.c:852:47: warning: format specifies type 'unsigned
+short' but the argument has type 'unsigned int' [-Wformat]
+                        dev_err(smem->dev, "duplicate host %hu\n", remote_host);
+                                                           ~~~     ^~~~~~~~~~~
+                                                           %u
+./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+        dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                               ~~~     ^~~~~~~~~~~
+./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                             ~~~    ^~~~~~~~~~~
 
-Suggested-by: Paul Moore <paul@paul-moore.com> [1]
-Requested-by: Jarkko Sakkinen <jarkko@kernel.org> [1]
-Link: https://lore.kernel.org/r/YjeW2r6Wv55Du0bJ@iki.fi [1]
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Link: https://lore.kernel.org/r/20220321174548.510516-2-mic@digikod.net
+The types of these arguments are unconditionally defined, so this patch
+updates the format character to the correct one and change type of
+remote_host to "u16" to match with other types.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Signed-off-by: Bill Wendling <morbo@google.com>
 ---
- certs/blacklist.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/soc/qcom/smem.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/certs/blacklist.c b/certs/blacklist.c
-index 486ce0dd8e9c..ac26bcf9b9a5 100644
---- a/certs/blacklist.c
-+++ b/certs/blacklist.c
-@@ -307,6 +307,14 @@ static int restrict_link_for_blacklist(struct key *dest_keyring,
+diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+index e2057d8f1eff..9dd325df5682 100644
+--- a/drivers/soc/qcom/smem.c
++++ b/drivers/soc/qcom/smem.c
+@@ -819,7 +819,7 @@ qcom_smem_enumerate_partitions(struct qcom_smem *smem, u16 local_host)
+ 	struct smem_partition_header *header;
+ 	struct smem_ptable_entry *entry;
+ 	struct smem_ptable *ptable;
+-	unsigned int remote_host;
++	u16 remote_host;
+ 	u16 host0, host1;
+ 	int i;
  
- /*
-  * Initialise the blacklist
-+ *
-+ * The blacklist_init() function is registered as an initcall via
-+ * device_initcall().  As a result the functionality doesn't load and the
-+ * kernel continues on executing.  While cleanly returning -ENODEV could be
-+ * acceptable for some non-critical kernel parts, if the blacklist keyring
-+ * fails to load it defeats the certificate/key based deny list for signed
-+ * modules.  If a critical piece of security functionality that users expect to
-+ * be present fails to initialize, panic()ing is likely the right thing to do.
-  */
- static int __init blacklist_init(void)
- {
+@@ -844,12 +844,12 @@ qcom_smem_enumerate_partitions(struct qcom_smem *smem, u16 local_host)
+ 			continue;
+ 
+ 		if (remote_host >= SMEM_HOST_COUNT) {
+-			dev_err(smem->dev, "bad host %hu\n", remote_host);
++			dev_err(smem->dev, "bad host %u\n", remote_host);
+ 			return -EINVAL;
+ 		}
+ 
+ 		if (smem->partitions[remote_host]) {
+-			dev_err(smem->dev, "duplicate host %hu\n", remote_host);
++			dev_err(smem->dev, "duplicate host %u\n", remote_host);
+ 			return -EINVAL;
+ 		}
+ 
 -- 
-2.35.1
+2.35.1.894.gb6a874cedc-goog
 

@@ -2,237 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A792E4E1EDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 02:39:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE06E4E1EDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 02:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344070AbiCUBlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 21:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
+        id S1344052AbiCUBqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 21:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344048AbiCUBlA (ORCPT
+        with ESMTP id S234768AbiCUBqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 21:41:00 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75663B540;
-        Sun, 20 Mar 2022 18:39:34 -0700 (PDT)
-X-UUID: d03bf63df1a945b4abd172d97eef40ff-20220321
-X-UUID: d03bf63df1a945b4abd172d97eef40ff-20220321
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <leilk.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 90882289; Mon, 21 Mar 2022 09:39:28 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 21 Mar 2022 09:39:26 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 21 Mar 2022 09:39:26 +0800
-From:   Leilk Liu <leilk.liu@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        Leilk Liu <leilk.liu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH V6 3/3] spi: mediatek: support hclk
-Date:   Mon, 21 Mar 2022 09:39:22 +0800
-Message-ID: <20220321013922.24067-4-leilk.liu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220321013922.24067-1-leilk.liu@mediatek.com>
-References: <20220321013922.24067-1-leilk.liu@mediatek.com>
+        Sun, 20 Mar 2022 21:46:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 387CF5F45
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 18:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647827120;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mrGOJLeYO4kxv1PcAb4WwM1yZJ2NAcruFxRY/Piqipk=;
+        b=ZrJ6IF+muhmAN6fKnVMSWlwzJz+zm9Ha985R9oNw93rUnWcxXXQZsBeiUU/lHqXy0mRkeB
+        C0xOZBcpAFXSgnIXbD27T+LiC8Ehp1RN7mKTjTEd6FUcJ9NkGeoZPJKL0QGLgehnA56Jqz
+        4CIL0ONyADLJ3bmulvE1JZn23ZgCwAE=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-425-EKdlQwU1PSWgwAApJ67MaA-1; Sun, 20 Mar 2022 21:45:18 -0400
+X-MC-Unique: EKdlQwU1PSWgwAApJ67MaA-1
+Received: by mail-pl1-f199.google.com with SMTP id n17-20020a170902f61100b001538c882549so4963087plg.18
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 18:45:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mrGOJLeYO4kxv1PcAb4WwM1yZJ2NAcruFxRY/Piqipk=;
+        b=zxKVfb3Huuuzx9LoMNGf93nPmyCgj5BL3hfyptuv2N7zBi8fb6Wad2EdaBuAAhX9FE
+         9SG6VtAggZvTEjQvBfmw+TKZuF8e3R5JN4tEgVvnCP4E6DWXIS+JafbcO6r29S2b980N
+         cK85fzRufDdCgkCco+381v+d8hjdn+r+wQ9JdwT5v4nFnF+PuwWVE3Bm6zRor7yhT9BW
+         hLyNL8TAPFxtZ66qRbB+Hvj9fxdZ9/4coxjLQguO95PMhgh/F1BFp9hjMdvQ8bE6zP2O
+         9p+kiwajuPxdAhKuGdup1/jc8qJ5Jc08YLnDDCeBVCQC0idfn9Gz3puy9B1qBmMSvPLy
+         oAGg==
+X-Gm-Message-State: AOAM531isX0Uqvl0jNBr/8SkQpRxnQklpcBT6v3ntUtJ2JuGyyk1UWau
+        +Ki+4M3kEZHveVG/cV6xr6TGGMVl/o/6nKVmpN0bGYd2tIUlL57yX+MUxQBOT9Enl5lkmLE1SML
+        V4k3s2AyaesxlNv2GU2vK/y8w
+X-Received: by 2002:a17:903:404b:b0:154:297b:7125 with SMTP id n11-20020a170903404b00b00154297b7125mr9676478pla.11.1647827117632;
+        Sun, 20 Mar 2022 18:45:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJysQCPDHeU47c8jpQLkfUpZf+9xpLC0+nNHh3e0J3hAwhF8jvdr0t58bH/P0+tdQeNlmTwPDw==
+X-Received: by 2002:a17:903:404b:b0:154:297b:7125 with SMTP id n11-20020a170903404b00b00154297b7125mr9676460pla.11.1647827117312;
+        Sun, 20 Mar 2022 18:45:17 -0700 (PDT)
+Received: from localhost ([240e:3a1:2e5:800:f995:6136:f760:a3d0])
+        by smtp.gmail.com with ESMTPSA id o65-20020a17090a0a4700b001bef5cffea7sm18971387pjo.0.2022.03.20.18.45.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Mar 2022 18:45:16 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 09:41:50 +0800
+From:   Coiby Xu <coxu@redhat.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     kexec@lists.infradead.org, Milan Broz <gmazyland@gmail.com>,
+        Thomas Staudt <tstaudt@de.ibm.com>,
+        Kairui Song <ryncsn@gmail.com>, dm-devel@redhat.com,
+        Mike Snitzer <snitzer@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Dave Young <dyoung@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC 0/4] Support kdump with LUKS encryption by reusing LUKS
+ master key
+Message-ID: <20220321014150.w6wux5azabweu7dr@Rk>
+References: <20220318103423.286410-1-coxu@redhat.com>
+ <c06a21cc-e1c1-e627-f908-ebc2a041e29a@igalia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <c06a21cc-e1c1-e627-f908-ebc2a041e29a@igalia.com>
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-this patch adds hclk support.
+On Sat, Mar 19, 2022 at 05:13:21PM -0300, Guilherme G. Piccoli wrote:
+>On 18/03/2022 07:34, Coiby Xu wrote:
+>> [...]
+>> Based on Milan's feedback [1] on Kairui's ideas to support kdump with
+>> LUKS encryption, this patch set addresses the above issues by
+>>  1) first saving the LUKS master key to kexec when opening the encrypted
+>>     device
+>>  2) then saving the master key to the reserved memory for kdump when
+>>     loading kdump kernel image.
+>>
+>> So the LUKS master key never leaves the kernel space and once the key has
+>> been saved to the reserved memory for kdump, it would be wiped
+>> immediately. If there is no security concern with this approach or any
+>> other concern, I will drop the following assumptions made for this RFC
+>> version in v1,
+>>  - only x86 is supported
+>>  - there is only one LUKS device for the system
+>>
+>> to extend the support to other architectures including POWER, ARM and
+>> s390x and address the case of multiple LUKS devices. Any feedback will be
+>> appreciated, thanks!
+>>
+>
+>Hi Coiby, thanks for the very interesting work!
 
-Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/spi/spi-mt65xx.c | 85 ++++++++++++++++++++++++++++++++--------
- 1 file changed, 69 insertions(+), 16 deletions(-)
+Hi Guilherme,
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 0f91c176b878..99ce570a88a7 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -129,7 +129,7 @@ struct mtk_spi {
- 	u32 state;
- 	int pad_num;
- 	u32 *pad_sel;
--	struct clk *parent_clk, *sel_clk, *spi_clk;
-+	struct clk *parent_clk, *sel_clk, *spi_clk, *spi_hclk;
- 	struct spi_transfer *cur_transfer;
- 	u32 xfer_len;
- 	u32 num_xfered;
-@@ -1204,25 +1204,40 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 		goto err_put_master;
- 	}
- 
-+	mdata->spi_hclk = devm_clk_get_optional(&pdev->dev, "hclk");
-+	if (IS_ERR(mdata->spi_hclk)) {
-+		ret = PTR_ERR(mdata->spi_hclk);
-+		dev_err(&pdev->dev, "failed to get hclk: %d\n", ret);
-+		goto err_put_master;
-+	}
-+
-+	ret = clk_prepare_enable(mdata->spi_hclk);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "failed to enable hclk (%d)\n", ret);
-+		goto err_put_master;
-+	}
-+
- 	ret = clk_prepare_enable(mdata->spi_clk);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "failed to enable spi_clk (%d)\n", ret);
--		goto err_put_master;
-+		goto err_disable_spi_hclk;
- 	}
- 
- 	ret = clk_set_parent(mdata->sel_clk, mdata->parent_clk);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "failed to clk_set_parent (%d)\n", ret);
--		clk_disable_unprepare(mdata->spi_clk);
--		goto err_put_master;
-+		goto err_disable_spi_clk;
- 	}
- 
- 	mdata->spi_clk_hz = clk_get_rate(mdata->spi_clk);
- 
--	if (mdata->dev_comp->no_need_unprepare)
-+	if (mdata->dev_comp->no_need_unprepare) {
- 		clk_disable(mdata->spi_clk);
--	else
-+		clk_disable(mdata->spi_hclk);
-+	} else {
- 		clk_disable_unprepare(mdata->spi_clk);
-+		clk_disable_unprepare(mdata->spi_hclk);
-+	}
- 
- 	pm_runtime_enable(&pdev->dev);
- 
-@@ -1262,6 +1277,10 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 
- err_disable_runtime_pm:
- 	pm_runtime_disable(&pdev->dev);
-+err_disable_spi_clk:
-+	clk_disable_unprepare(mdata->spi_clk);
-+err_disable_spi_hclk:
-+	clk_disable_unprepare(mdata->spi_hclk);
- err_put_master:
- 	spi_master_put(master);
- 
-@@ -1277,8 +1296,10 @@ static int mtk_spi_remove(struct platform_device *pdev)
- 
- 	mtk_spi_reset(mdata);
- 
--	if (mdata->dev_comp->no_need_unprepare)
-+	if (mdata->dev_comp->no_need_unprepare) {
- 		clk_unprepare(mdata->spi_clk);
-+		clk_unprepare(mdata->spi_hclk);
-+	}
- 
- 	return 0;
- }
-@@ -1294,8 +1315,10 @@ static int mtk_spi_suspend(struct device *dev)
- 	if (ret)
- 		return ret;
- 
--	if (!pm_runtime_suspended(dev))
-+	if (!pm_runtime_suspended(dev)) {
- 		clk_disable_unprepare(mdata->spi_clk);
-+		clk_disable_unprepare(mdata->spi_hclk);
-+	}
- 
- 	return ret;
- }
-@@ -1312,11 +1335,20 @@ static int mtk_spi_resume(struct device *dev)
- 			dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
- 			return ret;
- 		}
-+
-+		ret = clk_prepare_enable(mdata->spi_hclk);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to enable spi_hclk (%d)\n", ret);
-+			clk_disable_unprepare(mdata->spi_clk);
-+			return ret;
-+		}
- 	}
- 
- 	ret = spi_master_resume(master);
--	if (ret < 0)
-+	if (ret < 0) {
- 		clk_disable_unprepare(mdata->spi_clk);
-+		clk_disable_unprepare(mdata->spi_hclk);
-+	}
- 
- 	return ret;
- }
-@@ -1328,10 +1360,13 @@ static int mtk_spi_runtime_suspend(struct device *dev)
- 	struct spi_master *master = dev_get_drvdata(dev);
- 	struct mtk_spi *mdata = spi_master_get_devdata(master);
- 
--	if (mdata->dev_comp->no_need_unprepare)
-+	if (mdata->dev_comp->no_need_unprepare) {
- 		clk_disable(mdata->spi_clk);
--	else
-+		clk_disable(mdata->spi_hclk);
-+	} else {
- 		clk_disable_unprepare(mdata->spi_clk);
-+		clk_disable_unprepare(mdata->spi_hclk);
-+	}
- 
- 	return 0;
- }
-@@ -1342,13 +1377,31 @@ static int mtk_spi_runtime_resume(struct device *dev)
- 	struct mtk_spi *mdata = spi_master_get_devdata(master);
- 	int ret;
- 
--	if (mdata->dev_comp->no_need_unprepare)
-+	if (mdata->dev_comp->no_need_unprepare) {
- 		ret = clk_enable(mdata->spi_clk);
--	else
-+		if (ret < 0) {
-+			dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
-+			return ret;
-+		}
-+		ret = clk_enable(mdata->spi_hclk);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to enable spi_hclk (%d)\n", ret);
-+			clk_disable(mdata->spi_clk);
-+			return ret;
-+		}
-+	} else {
- 		ret = clk_prepare_enable(mdata->spi_clk);
--	if (ret < 0) {
--		dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
--		return ret;
-+		if (ret < 0) {
-+			dev_err(dev, "failed to prepare_enable spi_clk (%d)\n", ret);
-+			return ret;
-+		}
-+
-+		ret = clk_prepare_enable(mdata->spi_hclk);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to prepare_enable spi_hclk (%d)\n", ret);
-+			clk_disable_unprepare(mdata->spi_clk);
-+			return ret;
-+		}
- 	}
- 
- 	return 0;
+I'm glad this work interests you and thanks for sharing your thoughts!
+
+>I confess I didn't review the code as I have not much experience in
+>dm-crypt/key management, but I have a generic question related with the
+>motivation of the patch set.
+>
+>My understanding is that one (the main?) motivation of this series would
+>be to protect the saved memory (vmcore) from being read by some
+>"unauthorized" entity - in order to achieve this goal, it is hereby
+>proposed to allow kdump kernel to access a memory-saved key and with
+>that, mount an encrypted volume, saving the vmcore over there correct?
+
+>
+>So, what if instead of playing with the volume key, users with this
+>concern address that by reserving some *unencrypted partition* for
+>saving the vmcore, but then *encrypt the vmcore* itself! So, instead of
+>requiring saving a full-volume key, mount everything, risk data
+>corruption if something goes bad...we just have makedumpfile encrypting
+>the vmcore with some preloaded key (which might be saved inside the
+>kdump minimal intird, for example), and saving the encrypted file into a
+>clear/unencrypted volume? This way we also prevent excessive memory
+>consumption during kdump due to the lvm/dm-userspace paraphernalia usage.
+
+I believe some users have security concern for where to save vmcore.
+This use case exactly fits your description and your proposed solution
+shall be good for this type of users. But I think many more users may
+just choose to encrypt the hard drive when installing the system and
+they would naturally expect kdump to work for the case of full disk
+encryption. So your proposed solution may not address the latter case 
+where there is a much large user base.
+
+>
+>Does it make sense or am I being silly or missing something?
+>Cheers,
+>
+>
+>Guilherme
+>
+>_______________________________________________
+>kexec mailing list
+>kexec@lists.infradead.org
+>http://lists.infradead.org/mailman/listinfo/kexec
+>
+
 -- 
-2.25.1
+Best regards,
+Coiby
 

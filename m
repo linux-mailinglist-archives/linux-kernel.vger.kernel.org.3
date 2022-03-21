@@ -2,111 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB18E4E2037
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 06:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A202C4E203B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 06:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344436AbiCUFqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 01:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
+        id S1344439AbiCUFto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 01:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237634AbiCUFqm (ORCPT
+        with ESMTP id S239497AbiCUFtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 01:46:42 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412EB3467E;
-        Sun, 20 Mar 2022 22:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647841518; x=1679377518;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5jpBW6uLsQb0YnPNbiHNaZP2OmTuH9tT+u8HihjWK8Y=;
-  b=jobQ4oOHQ30u19jP0tFiCUv8wdZK55VOlsq0JKs+Mn2ia9mjB08tHETt
-   BMeQUw15WlM34FtGuV6Acgx4mz4Gyo+R/dOxv8uGBfxVvTKo2w8mE5m+k
-   vLTSGijA24dVRC29fcqudFiu+Vvny0jxI7hgvlFY36+4Hx7jfFgyVC3xd
-   c=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Mar 2022 22:45:17 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 22:45:16 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 20 Mar 2022 22:45:16 -0700
-Received: from [10.216.35.92] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 20 Mar
- 2022 22:45:13 -0700
-Message-ID: <c808dc08-09c8-bb08-6656-18dd649af036@quicinc.com>
-Date:   Mon, 21 Mar 2022 11:14:56 +0530
+        Mon, 21 Mar 2022 01:49:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53903D1D2;
+        Sun, 20 Mar 2022 22:48:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=j8jygMLBU6SSeav0bbkOBAn+x2USxyEbIANEGgFAwMs=; b=xzbAKm8SuxUNWLafXjW57WLJh/
+        rf7Llxuwejd4Zm7J4gkSuJR4dmnV+QiAutYzYqk2aButnAyBVj37VEipkh+qoxOf9lHOv6fFheOd/
+        9OTq/uLPoLT0kdlfY6ltCIpMMdNtkssSH9RnPq/7lzBk89SnVRkl71cxUa0/Xs3TOS2nnIMtaCVQq
+        ZqRzr5HM98Ucc7EE1gMHwwR1goMkBwd4yCT+xOoX7vNvpW99UP0i9f+/yvBKQPk+2uokyZYbQhxeY
+        Ie3oeSK0uvgrbMF5M6doag2HqCmkw/x1yjiTnjSP5FhZUCTYnQYBoDioQAQIEUzxVqMyIlD7Vkl1e
+        5Ea7Z8EQ==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWAtq-006bgS-B2; Mon, 21 Mar 2022 05:48:14 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: [PATCH] Docs/admin: alphabetize some kernel-parameters
+Date:   Sun, 20 Mar 2022 22:48:13 -0700
+Message-Id: <20220321054813.5059-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v1 2/4] arm64: dts: qcom: sc7280: Add 'piglin' to the
- crd-r3 compatible strings
-Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Stephen Boyd <swboyd@chromium.org>, <devicetree@vger.kernel.org>,
-        "Douglas Anderson" <dianders@chromium.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220316172814.v1.1.I2deda8f2cd6adfbb525a97d8fee008a8477b7b0e@changeid>
- <20220316172814.v1.2.Ib0fbb7e5218201c81a2d064ff13c9bc1b0863212@changeid>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <20220316172814.v1.2.Ib0fbb7e5218201c81a2d064ff13c9bc1b0863212@changeid>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Move some out-of-place kernel parameters into their correct
+locations.
+Also add a HIBERNATION keyword in kernel-parameters.rst.
 
-On 3/17/2022 5:58 AM, Matthias Kaehlcke wrote:
-> With newer bootloader versions the crd-r3 (aka CRD 1.0 and 2.0) is
-> identified as a 'piglin' board (like the IDP2 board), instead of 'hoglin'
-> Add the compatible strings 'google,piglin-rev{3,4}'. The hoglin entries
-> are kept to make sure the board keeps booting with older bootloader
-> versions.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+---
+This is the first of several similar patches. Hopefully breaking
+them up will help with patch problems. If there are other suggestions,
+please let me know.
 
-The older bootloaders really look for the google,hoglin-rev3/google,hoglin-rev4
-compatibles or just google,hoglin? If its just google,hoglin, won;t it pick the
-crd-rev5+ dtb now?
+Alternate subject: Sorting is hard, let's go shopping
 
-> 
-> The compatible string 'google,piglin' (without revision information) is
-> still used by the IDP2 board, which is not expected to evolve further.
-> 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> 
->   arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
-> index 7a028b9248c3..344338ad8a01 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
-> @@ -12,7 +12,10 @@
->   
->   / {
->   	model = "Qualcomm Technologies, Inc. sc7280 CRD platform (rev3 - 4)";
-> -	compatible = "qcom,sc7280-crd", "google,hoglin-rev3", "google,hoglin-rev4", "qcom,sc7280";
-> +	compatible = "qcom,sc7280-crd",
-> +		     "google,hoglin-rev3", "google,hoglin-rev4",
-> +		     "google,piglin-rev3", "google,piglin-rev4",
-> +		     "qcom,sc7280";
->   
->   	aliases {
->   		serial0 = &uart5;
+ Documentation/admin-guide/kernel-parameters.rst |    1 
+ Documentation/admin-guide/kernel-parameters.txt |  113 +++++++-------
+ 2 files changed, 58 insertions(+), 56 deletions(-)
+
+--- linux-next-20220318.orig/Documentation/admin-guide/kernel-parameters.txt
++++ linux-next-20220318/Documentation/admin-guide/kernel-parameters.txt
+@@ -563,6 +563,20 @@
+ 
+ 	cio_ignore=	[S390]
+ 			See Documentation/s390/common_io.rst for details.
++
++	clearcpuid=BITNUM[,BITNUM...] [X86]
++			Disable CPUID feature X for the kernel. See
++			arch/x86/include/asm/cpufeatures.h for the valid bit
++			numbers. Note the Linux specific bits are not necessarily
++			stable over kernel options, but the vendor specific
++			ones should be.
++			Also note that user programs calling CPUID directly
++			or using the feature without checking anything
++			will still see it. This just prevents it from
++			being used by the kernel or shown in /proc/cpuinfo.
++			Also note the kernel might malfunction if you disable
++			some critical bits.
++
+ 	clk_ignore_unused
+ 			[CLK]
+ 			Prevents the clock framework from automatically gating
+@@ -631,19 +645,6 @@
+ 			Defaults to zero when built as a module and to
+ 			10 seconds when built into the kernel.
+ 
+-	clearcpuid=BITNUM[,BITNUM...] [X86]
+-			Disable CPUID feature X for the kernel. See
+-			arch/x86/include/asm/cpufeatures.h for the valid bit
+-			numbers. Note the Linux specific bits are not necessarily
+-			stable over kernel options, but the vendor specific
+-			ones should be.
+-			Also note that user programs calling CPUID directly
+-			or using the feature without checking anything
+-			will still see it. This just prevents it from
+-			being used by the kernel or shown in /proc/cpuinfo.
+-			Also note the kernel might malfunction if you disable
+-			some critical bits.
+-
+ 	cma=nn[MG]@[start[MG][-end[MG]]]
+ 			[KNL,CMA]
+ 			Sets the size of kernel global memory area for
+@@ -950,6 +951,8 @@
+ 			dump out devices still on the deferred probe list after
+ 			retrying.
+ 
++	delayacct	[KNL] Enable per-task delay accounting
++
+ 	dell_smm_hwmon.ignore_dmi=
+ 			[HW] Continue probing hardware even if DMI data
+ 			indicates that the driver is running on unsupported
+@@ -1003,17 +1006,6 @@
+ 	disable=	[IPV6]
+ 			See Documentation/networking/ipv6.rst.
+ 
+-	hardened_usercopy=
+-                        [KNL] Under CONFIG_HARDENED_USERCOPY, whether
+-                        hardening is enabled for this boot. Hardened
+-                        usercopy checking is used to protect the kernel
+-                        from reading or writing beyond known memory
+-                        allocation boundaries as a proactive defense
+-                        against bounds-checking flaws in the kernel's
+-                        copy_to_user()/copy_from_user() interface.
+-                on      Perform hardened usercopy checks (default).
+-                off     Disable hardened usercopy checks.
+-
+ 	disable_radix	[PPC]
+ 			Disable RADIX MMU mode on POWER9
+ 
+@@ -1316,17 +1308,6 @@
+ 			force: enforce the use of EDAC to report H/W event.
+ 			default: on.
+ 
+-	ekgdboc=	[X86,KGDB] Allow early kernel console debugging
+-			ekgdboc=kbd
+-
+-			This is designed to be used in conjunction with
+-			the boot argument: earlyprintk=vga
+-
+-			This parameter works in place of the kgdboc parameter
+-			but can only be used if the backing tty is available
+-			very early in the boot process. For early debugging
+-			via a serial port see kgdboc_earlycon instead.
+-
+ 	edd=		[EDD]
+ 			Format: {"off" | "on" | "skip[mbr]"}
+ 
+@@ -1388,6 +1369,17 @@
+ 	eisa_irq_edge=	[PARISC,HW]
+ 			See header of drivers/parisc/eisa.c.
+ 
++	ekgdboc=	[X86,KGDB] Allow early kernel console debugging
++			Format: ekgdboc=kbd
++
++			This is designed to be used in conjunction with
++			the boot argument: earlyprintk=vga
++
++			This parameter works in place of the kgdboc parameter
++			but can only be used if the backing tty is available
++			very early in the boot process. For early debugging
++			via a serial port see kgdboc_earlycon instead.
++
+ 	elanfreq=	[X86-32]
+ 			See comment before function elanfreq_setup() in
+ 			arch/x86/kernel/cpu/cpufreq/elanfreq.c.
+@@ -1586,6 +1578,17 @@
+ 			Format: <unsigned int> such that (rxsize & ~0x1fffc0) == 0.
+ 			Default: 1024
+ 
++	hardened_usercopy=
++                        [KNL] Under CONFIG_HARDENED_USERCOPY, whether
++                        hardening is enabled for this boot. Hardened
++                        usercopy checking is used to protect the kernel
++                        from reading or writing beyond known memory
++                        allocation boundaries as a proactive defense
++                        against bounds-checking flaws in the kernel's
++                        copy_to_user()/copy_from_user() interface.
++                on      Perform hardened usercopy checks (default).
++                off     Disable hardened usercopy checks.
++
+ 	hardlockup_all_cpu_backtrace=
+ 			[KNL] Should the hard-lockup detector generate
+ 			backtraces on all cpus.
+@@ -1606,6 +1609,15 @@
+ 			corresponding firmware-first mode error processing
+ 			logic will be disabled.
+ 
++	hibernate=	[HIBERNATION]
++		noresume	Don't check if there's a hibernation image
++				present during boot.
++		nocompress	Don't compress/decompress hibernation images.
++		no		Disable hibernation and resume.
++		protect_image	Turn on image protection during restoration
++				(that will set all pages holding image data
++				during restoration read-only).
++
+ 	highmem=nn[KMG]	[KNL,BOOT] forces the highmem zone to have an exact
+ 			size of <nn>. This works even on boxes that have no
+ 			highmem otherwise. This also works to reduce highmem
+@@ -3185,16 +3197,6 @@
+ 			firmware feature for updating multiple TCE entries
+ 			at a time.
+ 
+-	onenand.bdry=	[HW,MTD] Flex-OneNAND Boundary Configuration
+-
+-			Format: [die0_boundary][,die0_lock][,die1_boundary][,die1_lock]
+-
+-			boundary - index of last SLC block on Flex-OneNAND.
+-				   The remaining blocks are configured as MLC blocks.
+-			lock	 - Configure if Flex-OneNAND boundary should be locked.
+-				   Once locked, the boundary cannot be changed.
+-				   1 indicates lock status, 0 indicates unlock status.
+-
+ 	mtdset=		[ARM]
+ 			ARM/S3C2412 JIVE boot control
+ 
+@@ -3441,8 +3443,6 @@
+ 
+ 	noclflush	[BUGS=X86] Don't use the CLFLUSH instruction
+ 
+-	delayacct	[KNL] Enable per-task delay accounting
+-
+ 	nodsp		[SH] Disable hardware DSP at boot time.
+ 
+ 	noefi		Disable EFI runtime services support.
+@@ -3744,6 +3744,16 @@
+ 			For example, to override I2C bus2:
+ 			omap_mux=i2c2_scl.i2c2_scl=0x100,i2c2_sda.i2c2_sda=0x100
+ 
++	onenand.bdry=	[HW,MTD] Flex-OneNAND Boundary Configuration
++
++			Format: [die0_boundary][,die0_lock][,die1_boundary][,die1_lock]
++
++			boundary - index of last SLC block on Flex-OneNAND.
++				   The remaining blocks are configured as MLC blocks.
++			lock	 - Configure if Flex-OneNAND boundary should be locked.
++				   Once locked, the boundary cannot be changed.
++				   1 indicates lock status, 0 indicates unlock status.
++
+ 	oops=panic	Always panic on oopses. Default is to just kill the
+ 			process, but there is a small probability of
+ 			deadlocking the machine.
+@@ -5071,15 +5081,6 @@
+ 			Useful for devices that are detected asynchronously
+ 			(e.g. USB and MMC devices).
+ 
+-	hibernate=	[HIBERNATION]
+-		noresume	Don't check if there's a hibernation image
+-				present during boot.
+-		nocompress	Don't compress/decompress hibernation images.
+-		no		Disable hibernation and resume.
+-		protect_image	Turn on image protection during restoration
+-				(that will set all pages holding image data
+-				during restoration read-only).
+-
+ 	retain_initrd	[RAM] Keep initrd memory after extraction
+ 
+ 	rfkill.default_state=
+--- linux-next-20220318.orig/Documentation/admin-guide/kernel-parameters.rst
++++ linux-next-20220318/Documentation/admin-guide/kernel-parameters.rst
+@@ -113,6 +113,7 @@ parameter is applicable::
+ 	FB	The frame buffer device is enabled.
+ 	FTRACE	Function tracing enabled.
+ 	GCOV	GCOV profiling is enabled.
++	HIBERNATION HIBERNATION is enabled.
+ 	HW	Appropriate hardware is enabled.
+ 	IA-64	IA-64 architecture is enabled.
+ 	IMA     Integrity measurement architecture is enabled.

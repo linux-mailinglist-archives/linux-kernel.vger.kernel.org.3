@@ -2,131 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03564E1EF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F8A4E1EFD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344145AbiCUCIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 22:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
+        id S1344153AbiCUCTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 22:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344137AbiCUCIt (ORCPT
+        with ESMTP id S1344147AbiCUCT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 22:08:49 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96475BD08
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:07:24 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id c11so9301391pgu.11
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:07:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2dJnNJv7tm7UdVVNql3/erHAUxpmpE++s8tQq8p65Yc=;
-        b=mu/10eV1z+dHYGAsdcf9q8Aabh+EEP6gv8Zlf8rKwMJHk9e89FS7GS5uLHgRyQrQW4
-         Ct/aNefRA3L4NHnVFXVksmW8dLFKvbTMZSYFPPDYxCwUmCcBUy8FQqXo4jU9aW4O5LNL
-         G28HpkWyi5RSqomgMMNT5F65J/9pb9x4mvI9Wvk56nFgf0OvB1Xmou9y4oC1KoySzTmP
-         o1EFEcERaW48bE/dogVZvCPvtDIYtQlGmwXIvgcBrAcCa2S4WwnGd2ktgy+Dxb2oLNsb
-         uRmu8RLWe9yXUp7yoSeuMNWDpyCHoI1pgWpwFayu8/g4yEia74hMkvsOmUIm05MsRg2z
-         B6vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2dJnNJv7tm7UdVVNql3/erHAUxpmpE++s8tQq8p65Yc=;
-        b=tYhe2olHzFu0WqApB10VwO6luzX7m5d/CsEjAqtQMFkWVBU2Qd/VEKUXkJagFP4fVl
-         StpZP95r7Je98DZjzHEfF8smFHEO/X2LHDhZxddD5SMQdPMUx49siYMsIzBiVRUmk/CP
-         UImJ8IP7mnOnH4wqw37GcclAll4PK05O/+HI6mkdxMvpBzmVXj45poUPKoORhdwzJ/Vz
-         /cwdyAnkbAn1p7FAf41n0zM8zjHxKK5ymYXQWwHXj6WPobxyfDXsUsQSAj2eBALrml8z
-         RksLfkmWkJR/Y3yWfGSecsbhcD83jwTKhhlhdfWwwiS6XY8aeiX5P4fIU+GLnzAJzgBb
-         Kvuw==
-X-Gm-Message-State: AOAM530ppTR6xqmQg99RbP28iQaLyajxGHy4fAc3eF2LamCO4cowoDB9
-        lVrrf2XEYMAa3Nx7Hks7Hz16HA==
-X-Google-Smtp-Source: ABdhPJzq6K073T30dDUYD8wJP7MMTAw+cUTD/IS/UWpKHIhyrTvuoP/jdZkYeB94PcZPbbr/gShQEg==
-X-Received: by 2002:a65:6202:0:b0:382:1fbd:5bb3 with SMTP id d2-20020a656202000000b003821fbd5bb3mr13319263pgv.194.1647828443928;
-        Sun, 20 Mar 2022 19:07:23 -0700 (PDT)
-Received: from google.com (201.59.83.34.bc.googleusercontent.com. [34.83.59.201])
-        by smtp.gmail.com with ESMTPSA id b9-20020a056a000cc900b004f7a986fc78sm17867328pfv.11.2022.03.20.19.07.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 19:07:23 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 02:07:19 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alessio Balsini <balsini@android.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel-team <kernel-team@android.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fuse: fix integer type usage in uapi header
-Message-ID: <Yjfd1+k83U+meSbi@google.com>
-References: <20220318171405.2728855-1-cmllamas@google.com>
- <CAJfpegsT6BO5P122wrKbni3qFkyHuq_0Qq4ibr05_SOa7gfvcw@mail.gmail.com>
+        Sun, 20 Mar 2022 22:19:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A441EEFF
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:18:03 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KMJC25BjNzfYqW;
+        Mon, 21 Mar 2022 10:16:30 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 21 Mar 2022 10:18:01 +0800
+Subject: Re: [PATCH v4 1/2] mm/memory-failure.c: avoid calling
+ invalidate_inode_page() with unexpected pages
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>,
+        <shy828301@gmail.com>, <mike.kravetz@oracle.com>,
+        <david@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220320051334.44502-1-linmiaohe@huawei.com>
+ <20220320051334.44502-2-linmiaohe@huawei.com>
+ <YjYC1XaeDPosSIDa@casper.infradead.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <0d5f2c97-992b-442c-9ecf-26ba363461aa@huawei.com>
+Date:   Mon, 21 Mar 2022 10:18:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJfpegsT6BO5P122wrKbni3qFkyHuq_0Qq4ibr05_SOa7gfvcw@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YjYC1XaeDPosSIDa@casper.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 08:24:55PM +0100, Miklos Szeredi wrote:
-> On Fri, 18 Mar 2022 at 18:14, Carlos Llamas <cmllamas@google.com> wrote:
-> >
-> > Kernel uapi headers are supposed to use __[us]{8,16,32,64} defined by
-> > <linux/types.h> instead of 'uint32_t' and similar. This patch changes
-> > all the definitions in this header to use the correct type. Previous
-> > discussion of this topic can be found here:
-> >
-> >   https://lkml.org/lkml/2019/6/5/18
+On 2022/3/20 0:20, Matthew Wilcox wrote:
+> On Sun, Mar 20, 2022 at 01:13:33PM +0800, Miaohe Lin wrote:
+>> invalidate_inode_page() can invalidate the pages in the swap cache because
+>> the check of page->mapping != mapping is removed via Matthew's patch titled
+>> "mm/truncate: Inline invalidate_complete_page() into its one caller". But
+>> invalidate_inode_page() is not expected to deal with the pages in the swap
+>> cache. Also non-lru movable page can reach here too. They're not page cache
+>> pages. Skip these pages by checking PageSwapCache and PageLRU to fix this
+>> unexpected issue.
 > 
-> This is effectively a revert of these two commits:
+> I disagree with this changelog.
 > 
-> 4c82456eeb4d ("fuse: fix type definitions in uapi header")
-> 7e98d53086d1 ("Synchronize fuse header with one used in library")
+> invalidate_inode_page() should not be called for pages which are not
+> in the page cache.
+>
+> And then the patch shouldn't test PageLRU (which is actually wrong) or
+> PageSwapCache().  It should simply be:
+> > +	if (!PageHuge(page) && !PageAnon(page))
+
+If we reach here, the page can be one of the PageHuge, __PageMovable and PageLRU.
+If above code is used, __PageMovable can pass the check and enter the invalidate_inode_page
+unexpectedly. So I think PageLRU check is necessary here. But it seems PageSwapCache
+is only reliable when PageAnon, so might we should do:
+
++	if (!PageHuge(page) && PageLRU(page) && !PageAnon(page))
+
+Am I miss something? Many thanks for comment.
+
 > 
-> And so we've gone full circle and back to having to modify the header
-> to be usable in the cross platform library...
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  mm/memory-failure.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index 5444a8ef4867..ecf45961f3b6 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -2178,7 +2178,7 @@ static int __soft_offline_page(struct page *page)
+>>  		return 0;
+>>  	}
+>>  
+>> -	if (!PageHuge(page))
+>> +	if (!PageHuge(page) && PageLRU(page) && !PageSwapCache(page))
+>>  		/*
+>>  		 * Try to invalidate first. This should work for
+>>  		 * non dirty unmapped page cache pages.
+>> -- 
+>> 2.23.0
+>>
+>>
 > 
-> And also made lots of churn for what reason exactly?
+> .
+> 
 
-There are currently only two uapi headers making use of C99 types and
-one is <linux/fuse.h>. This approach results in different typedefs being
-selected when compiling for userspace vs the kernel. Plus only __u32 and
-similar types align with the coding style as described in 5(e).
-
-Yet, there is still the cross platform concern you mention. I think the
-best way to accommodate this while still conforming with the __u32 types
-is to follow something similar to 1a95916f5465 ("drm: Add compatibility
-#ifdefs for *BSD"). Basically doing this:
-
-  #if defined(__KERNEL__) || defined(__linux__)
-  #include <linux/types.h>
-  #else
-  #include <stdint.h>
-  typedef uint16_t __u16;
-  typedef int32_t  __s32;
-  typedef uint32_t __u32;
-  typedef int64_t  __s64;
-  typedef uint64_t __u64;
-  #endif
-
-This alternative selects the correct uapi types for both __KERNEL__ and
-__linux__ cases which is the main goal of this patch and it's just minor
-fixes from 7e98d53086d1 ("Synchronize header with one used in library").
-
-I see there where previous attempts to address similar changes here:
-  https://lkml.org/lkml/2013/3/11/620
-  https://lkml.org/lkml/2013/4/15/487
-
-So, if you agree with the approach above I'd be happy to send a separate
-patch on top to address the *BSD compatibility.
-
-Thanks,
-Carlos Llamas

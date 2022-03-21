@@ -2,110 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B3B4E2B36
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9276E4E2B41
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:51:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349634AbiCUOuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
+        id S1349655AbiCUOwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349608AbiCUOuJ (ORCPT
+        with ESMTP id S241954AbiCUOwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:50:09 -0400
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBC8BEE;
-        Mon, 21 Mar 2022 07:48:43 -0700 (PDT)
-Received: by mail-qv1-f45.google.com with SMTP id k7so6124309qvc.4;
-        Mon, 21 Mar 2022 07:48:43 -0700 (PDT)
+        Mon, 21 Mar 2022 10:52:36 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCFC13CE1;
+        Mon, 21 Mar 2022 07:51:09 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id qa43so30254756ejc.12;
+        Mon, 21 Mar 2022 07:51:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jqRjch6tyjBRaSVUUFlp08VNF6RPYjibRnCDu58F8vA=;
+        b=di3CoWBOCbwf869QXrOfgLORMD8gxsbotvsj4hTYNWGdvQmAtbk65lFUkZgykBkeLl
+         99ivTEOuTH07ip0ylXumguCG1bT4NRrduINA2LBku3wfEb9qUcpmeAhh5nbWQbmL0O4N
+         L0zSMPFI8/Nxx+SugpxFRqPQw3Xx3jqU7QcwVKjof2/qRnLGWpdGnrtVIGqYj1HWxaBK
+         uhTOMZ4AUIaVaOtiMvUsX/ZgEVkodJhR2RZROujoIATqiaE9jhJVofphJgDJ64uAjQbL
+         x/4WuI6bMWfVQ2gwBYurEQO9/DVfCvr5+Sz/DSI6nAh26AEOklXphjeAOksh5Rrl9hRL
+         UqqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5DZRqsc/WV1yIwtHhKy6Su/O4u6fIrVwk8MROJjz5EA=;
-        b=xzhPc0jDqxPb/ugXhzgijaZKaiGPmCplTXq0YQ10GWkOYv2fpyhxCKbN8nDdtj6WmJ
-         bz2v5NiY0HhUnkaFx3C98Ao8m2jPD9TmQPByUnl/wCeSgdmzYIwGw8R1/GL0GMNpEmuO
-         fe+l09Ds4YZN+tNVpGmtz08X/4rfVudP4qXU0lwNn1ttn/X2BVbwzrUxQAPSafpTTRzz
-         ZKdn+m592NkRMfK4wEfDZNJKGyMz/T+xsCIkUwwEa8LSbCpR7jqZr8Bz8RGQ1RDBNjB2
-         6Oq79W0Hknt22VZPVLgmWDnkK43HQWaFB8Npj0nuTsNR665Ve/G1Sa+RfkXN3yqrSYdd
-         Mr/g==
-X-Gm-Message-State: AOAM531zdvPtU3W/P1ofx6Q6/nPuPCfbUX3PWLzNoq6F8W7h6aIGG8uQ
-        PFK3ux2EY2Z4M511GCs15UOTFR3PwjY5UQ==
-X-Google-Smtp-Source: ABdhPJykIqMPSLKFMBD6DlgpbN01fruI6HzMZgctrIJgpEAwWz7zpgEmVrtJHnNjPzI/UDB4+9c67g==
-X-Received: by 2002:a05:6214:21e2:b0:441:a5d:59fa with SMTP id p2-20020a05621421e200b004410a5d59famr9111313qvj.5.1647874121933;
-        Mon, 21 Mar 2022 07:48:41 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id a36-20020a05620a43a400b0067e95f1248asm1786823qkp.45.2022.03.21.07.48.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 07:48:41 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id u103so28444281ybi.9;
-        Mon, 21 Mar 2022 07:48:41 -0700 (PDT)
-X-Received: by 2002:a25:45:0:b0:633:96e2:2179 with SMTP id 66-20020a250045000000b0063396e22179mr23066319yba.393.1647874121306;
- Mon, 21 Mar 2022 07:48:41 -0700 (PDT)
+        bh=jqRjch6tyjBRaSVUUFlp08VNF6RPYjibRnCDu58F8vA=;
+        b=4Yl3LhPQ++6fvIWvUffES5diqM/3BnxO2/CHLFY8YgmjGCOpwddKA4M3ZT7bnliC+J
+         SsIidE3lY8Fdfc+COiKpwT6KEucl5sFD6FRKUlKtubv7WGrGpkkOc4gD0XdIOB+92BQQ
+         k9munxKHaK0JamOcTF3m8IXGHAMeuugD/RmjynDXILePPBNEj6NlEt7FpzZfPcCNwvcb
+         LxvReKKYmcYli/+soV166zfui5E3tMj3DtuQ+eD3dN8GrF/3Jo4LImZuK/+lxb6+GKVF
+         ArlXt7oiiKM0yrRPLZvzjYd2pfdxID772I7RCnSWs3XeAjTd8B2SsMnCtZbTznIEnqfd
+         MkbA==
+X-Gm-Message-State: AOAM530BanlXrgmqyzDvYEa0hA5uKLnIMYHfQRg0mVsoipBPmwvuP9EL
+        ciwQ6bIdKzQVBOixmY2gUGYFT+HHMUrnKUeVqOoh7PPATxk=
+X-Google-Smtp-Source: ABdhPJxiV2O0fqsz7GdPU3QAtvtcGIAvFWYk4TrrlrPLsVCxvY2GJb40FjXssPrwPxryJsTV3VfwAaLxzxH7K9Dd/cI=
+X-Received: by 2002:a17:907:968e:b0:6db:aed5:43c8 with SMTP id
+ hd14-20020a170907968e00b006dbaed543c8mr20870537ejc.636.1647874267193; Mon, 21
+ Mar 2022 07:51:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAHk-=wj4fFjx2pgbGNBM4wJs3=eReZ05EQyprzgT2Jv8qJ2vJg@mail.gmail.com>
- <20220321101654.3570822-1-geert@linux-m68k.org>
-In-Reply-To: <20220321101654.3570822-1-geert@linux-m68k.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 21 Mar 2022 15:48:30 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWsrW0WFB+B6wGg2k4wo1qk1xi2s2sbaw44=uVvVpopHw@mail.gmail.com>
-Message-ID: <CAMuHMdWsrW0WFB+B6wGg2k4wo1qk1xi2s2sbaw44=uVvVpopHw@mail.gmail.com>
-Subject: Re: Build regressions/improvements in v5.17
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     sparclinux <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>
+References: <20220321133241.121367-1-shreeya.patel@collabora.com>
+In-Reply-To: <20220321133241.121367-1-shreeya.patel@collabora.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 21 Mar 2022 16:49:56 +0200
+Message-ID: <CAHp75VeoOakph=cz8Ly-mf-j4qLoeNXjr-64BeDjoKbgwiuJyg@mail.gmail.com>
+Subject: Re: [PATCH v3] gpio: Restrict usage of GPIO chip irq members before initialization
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, krisman@collabora.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        alvaro.soliverez@collabora.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 3:00 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> JFYI, when comparing v5.17[1] to v5.17-rc8[3], the summaries are:
->   - build errors: +5/-0
+On Mon, Mar 21, 2022 at 3:33 PM Shreeya Patel
+<shreeya.patel@collabora.com> wrote:
+>
+> GPIO chip irq members are exposed before they could be completely
+> initialized and this leads to race conditions.
+>
+> One such issue was observed for the gc->irq.domain variable which
+> was accessed through the I2C interface in gpiochip_to_irq() before
+> it could be initialized by gpiochip_add_irqchip(). This resulted in
+> Kernel NULL pointer dereference.
+>
+> Following are the logs for reference :-
+>
+> kernel: Call Trace:
+> kernel:  gpiod_to_irq+0x53/0x70
+> kernel:  acpi_dev_gpio_irq_get_by+0x113/0x1f0
+> kernel:  i2c_acpi_get_irq+0xc0/0xd0
+> kernel:  i2c_device_probe+0x28a/0x2a0
+> kernel:  really_probe+0xf2/0x460
+> kernel: RIP: 0010:gpiochip_to_irq+0x47/0xc0
+>
+> To avoid such scenarios, restrict usage of GPIO chip irq members before
+> they are completely initialized.
 
-  + /kisskb/src/crypto/blake2b_generic.c: error: the frame size of
-2288 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  =>
-109:1
 
-sparc64-gcc11/sparc-allmodconfig
+LGTM, thanks.
 
-  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: assignment
-makes pointer from integer without a cast [-Werror=int-conversion]:
-=> 324:9, 317:9
-  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit
-declaration of function 'ioport_map'
-[-Werror=implicit-function-declaration]:  => 317:11
-  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit
-declaration of function 'ioport_unmap'
-[-Werror=implicit-function-declaration]:  => 338:15
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-um-x86_64/um-all{mod,yes}config
+> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+> ---
+>
+> Changes in v3
+>   - Move the gc->irq.initialized check inside gpiochip_to_irq().
+>   - Rename gc to GPIO chip.
+>   - Add barrier() to avoid compiler reordering.
+>
+> Changes in v2
+>   - Make gc_irq_initialized flag a member of gpio_irq_chip structure.
+>   - Make use of barrier() to avoid reordering of flag initialization
+> before other gc irq members are initialized.
+>
+>
+>  drivers/gpio/gpiolib.c      | 19 +++++++++++++++++++
+>  include/linux/gpio/driver.h |  9 +++++++++
+>  2 files changed, 28 insertions(+)
+>
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index defb7c464b87..4ff68f48b87f 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -1404,6 +1404,16 @@ static int gpiochip_to_irq(struct gpio_chip *gc, unsigned int offset)
+>  {
+>         struct irq_domain *domain = gc->irq.domain;
+>
+> +#ifdef CONFIG_GPIOLIB_IRQCHIP
+> +       /*
+> +        * Avoid race condition with other code, which tries to lookup
+> +        * an IRQ before the irqchip has been properly registered,
+> +        * i.e. while gpiochip is still being brought up.
+> +        */
+> +       if (!gc->irq.initialized)
+> +               return -EPROBE_DEFER;
+> +#endif
+> +
+>         if (!gpiochip_irqchip_irq_valid(gc, offset))
+>                 return -ENXIO;
+>
+> @@ -1593,6 +1603,15 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
+>
+>         acpi_gpiochip_request_interrupts(gc);
+>
+> +       /*
+> +        * Using barrier() here to prevent compiler from reordering
+> +        * gc->irq.initialized before initialization of above
+> +        * GPIO chip irq members.
+> +        */
+> +       barrier();
+> +
+> +       gc->irq.initialized = true;
+> +
+>         return 0;
+>  }
+>
+> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+> index b0728c8ad90c..f8996b46f430 100644
+> --- a/include/linux/gpio/driver.h
+> +++ b/include/linux/gpio/driver.h
+> @@ -218,6 +218,15 @@ struct gpio_irq_chip {
+>          */
+>         bool per_parent_data;
+>
+> +       /**
+> +        * @initialized:
+> +        *
+> +        * Flag to track GPIO chip irq member's initialization.
+> +        * This flag will make sure GPIO chip irq members are not used
+> +        * before they are initialized.
+> +        */
+> +       bool initialized;
+> +
+>         /**
+>          * @init_hw: optional routine to initialize hardware before
+>          * an IRQ chip will be added. This is quite useful when
+> --
+> 2.30.2
+>
 
-  + error: arch/powerpc/kvm/book3s_64_entry.o: relocation truncated to
-fit: R_PPC64_REL14 (stub) against symbol `machine_check_common'
-defined in .text section in arch/powerpc/kernel/head_64.o:  =>
-(.text+0x3e4)
 
-powerpc-gcc5/powerpc-allyesconfig
-
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/f443e374ae131c168a065ea1748feac6b2e76613/ (96 out of 98 configs)
-> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/09688c0166e76ce2fb85e86b9d99be8b0084cdf9/ (96 out of 98 configs)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+With Best Regards,
+Andy Shevchenko

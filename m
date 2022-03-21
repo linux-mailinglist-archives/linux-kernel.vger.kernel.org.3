@@ -2,81 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F314E27FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 152644E27FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348066AbiCUNpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34624 "EHLO
+        id S1348073AbiCUNrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348059AbiCUNpc (ORCPT
+        with ESMTP id S243433AbiCUNrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:45:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6C151A835
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:44:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647870246;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pnAmXlnXLTHp0iSG/dGGWw30Ukf/zjdTAa7UkhvknLc=;
-        b=aVBRxxITTGGbp+oJTOjne1qhiwC0UxeCqJFIXMV9AW2Ze+u2JiTCJlz9V0bfC0csW1sFR8
-        20Fr4BmfHOUO6cfDy5CEbu443VFK35YnJrqey6ESTtwEd8iUFURt8yq55DespmZiP462hV
-        gTomVAdlJh47ebTeB7jVrjNL2EO9wXY=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-dL8skpVHMiCYMldbCl7Ftw-1; Mon, 21 Mar 2022 09:44:05 -0400
-X-MC-Unique: dL8skpVHMiCYMldbCl7Ftw-1
-Received: by mail-qt1-f197.google.com with SMTP id x9-20020ac81209000000b002e0659131baso2878685qti.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:44:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pnAmXlnXLTHp0iSG/dGGWw30Ukf/zjdTAa7UkhvknLc=;
-        b=j5h0FAxDNNDt8pw0h4ZjgfV/fDNWCc87Yrpw0+mlF32sQlkXwo+o7q+PJkJnwtif7n
-         hfMnlPsL9gM0cZMQQzhCvA9ytHk9pcThwfD5ZTN1Ony+avq4wJLmxueU3ClwnXvJSbtC
-         rk2agxotMfbZRqV1XYZL3fhlAaV1JKX0UsV36/wcC5AViPAzzY6bAHdAnsqYu/Yi2Sfo
-         4XjXGvkFCu7n7ueeXvhXcy+hWVCGLW59VuP9vnSzAkvd5LV97oRFYiVRfKz/LbjFFd1A
-         XJaNAZFOORDRY5w13P6g+r79k2750DtuKXVHRBRtGRFPjR2/0HL8RuzCFwsoeXBTKIOh
-         cr1g==
-X-Gm-Message-State: AOAM532tL5dh0AEiiAoiVFD+R7dCGHnwLroK87nQdZBFK2euFenWAFUN
-        qZ8a6xwI+LB2kO3KcjrwyG9hVH4sOvvhlxu33ijMRqqbaFzBkKJh7OaJzXBc/PRFPT7b6yBtxKG
-        SUzd7V3HS/E1JaDqrjqzXiUdC
-X-Received: by 2002:a05:622a:1052:b0:2e1:fe6b:377d with SMTP id f18-20020a05622a105200b002e1fe6b377dmr13196876qte.229.1647870245102;
-        Mon, 21 Mar 2022 06:44:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyCbc10lLPdAfISHXGX6/OQIVT02pfqbNlUvvEv/dlqMfFKGpEgfAK1zb2wblj6cYu2rsDSkg==
-X-Received: by 2002:a05:622a:1052:b0:2e1:fe6b:377d with SMTP id f18-20020a05622a105200b002e1fe6b377dmr13196847qte.229.1647870244882;
-        Mon, 21 Mar 2022 06:44:04 -0700 (PDT)
-Received: from xps13 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
-        by smtp.gmail.com with ESMTPSA id v3-20020a05622a188300b002e1cbca8ea4sm12420986qtc.59.2022.03.21.06.44.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 06:44:04 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 09:44:03 -0400
-From:   Brian Masney <bmasney@redhat.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>
-Subject: Re: [RFT] ufs: qcom: drop custom Android boot parameters
-Message-ID: <YjiBIx+QY2EtFBtO@xps13>
-References: <20220320110616.18355-1-krzk@kernel.org>
+        Mon, 21 Mar 2022 09:47:05 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B908FE42;
+        Mon, 21 Mar 2022 06:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=stoOcJD0eaw+antCVXYE5HdTB9WrC+aoeH6CaUsJyK4=; b=tgCQHP8Sa6HjdIXrmLPZdk4OJA
+        xTpO9JQZWUe96EbdaSjjf1DhB5Dv464kIlSy64PpgyDe3izdegtMd1mHAMoFlUlx++SQnDK2m3Wc/
+        3sqcuvaP0vEgtzs593DyBn3qagm9XUNFy7HKuM5kxZOcvO+s4/wiCH6i5PqSl2yzixNJ2dC0WuMAZ
+        pfdHWC1zZhRc0bE2G+EGDsePUCHbJOCkmhcasQGvGMDj89CSKioAKRjv0td9qHnGiEncGvmVJP8Vd
+        Aw37XCq4WnC1FMmTee3OkDtcB37umI4gmvfoy8/sxiw2iD83ytQsD10NAkEZ73uL7FjdWpveNMTJU
+        4Q568sYA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWILX-00AboM-Ms; Mon, 21 Mar 2022 13:45:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 73B293002BE;
+        Mon, 21 Mar 2022 14:45:17 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 020D92008B7A2; Mon, 21 Mar 2022 14:45:16 +0100 (CET)
+Date:   Mon, 21 Mar 2022 14:45:16 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        mhiramat@kernel.org, rostedt@goodmis.org, ast@kernel.org,
+        hjl.tools@gmail.com, rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net>
+References: <20220321140327.777f9554@canb.auug.org.au>
+ <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+ <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+ <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220320110616.18355-1-krzk@kernel.org>
-User-Agent: Mutt/2.0.7 (2021-05-04)
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,21 +68,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 12:06:16PM +0100, Krzysztof Kozlowski wrote:
-> The QCOM UFS driver requires an androidboot.bootdevice command line
-> argument matching the UFS device name.  If the name is different, it
-> refuses to probe.  Thise androidboot.bootdevice is provided by
-> stock/vendor (from an Android-based device) bootloader.
+On Mon, Mar 21, 2022 at 02:08:23PM +0100, Peter Zijlstra wrote:
+> On Mon, Mar 21, 2022 at 02:04:05PM +0100, Peter Zijlstra wrote:
+> > On Mon, Mar 21, 2022 at 01:55:49PM +0100, Peter Zijlstra wrote:
+> > > On Mon, Mar 21, 2022 at 02:03:27PM +1100, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > > 
+> > > > After merging the tip tree, today's linux-next build (x864 allmodconfig)
+> > > > produced these new warnings:
+> > > > 
+> > > > vmlinux.o: warning: objtool: arch_rethook_prepare()+0x55: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > vmlinux.o: warning: objtool: arch_rethook_trampoline_callback()+0x3e: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x93e: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x5f2: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x4a7: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x81: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x90: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x8c: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x9b: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > 
+> > > Hurmph, lemme go figure out where that code comes from, I've not seen
+> > > those.
+> > 
+> > Ahh, something tracing. I'll go do some patches on top of it.
 > 
-> This does not make sense from Linux point of view.  Driver should be
-> able to boot regardless of bootloader.  Driver should not depend on some
-> Android custom environment data.
-> 
-> Cc: Luca Weiss <luca.weiss@fairphone.com>
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Also, that x86 patch has never his x86@kernel.org and doesn't have an
+> ACK from any x86 person :-(((
 
-I encountered that same code a few months ago and thought then that
-this code doesn't belong here.
+Worse, it adds a 3rd return trampoline without replacing any of the
+existing two :-(
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
-
+Why was this merged?

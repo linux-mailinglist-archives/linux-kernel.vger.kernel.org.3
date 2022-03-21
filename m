@@ -2,90 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42234E2250
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E954E2251
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:39:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345331AbiCUIkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 04:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
+        id S1345336AbiCUIkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 04:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345232AbiCUIkQ (ORCPT
+        with ESMTP id S245345AbiCUIks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 04:40:16 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F2B21821;
-        Mon, 21 Mar 2022 01:38:50 -0700 (PDT)
-Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MOAJt-1nhXAu00Dp-00OUpg; Mon, 21 Mar 2022 09:38:49 +0100
-Received: by mail-wr1-f43.google.com with SMTP id p9so19575698wra.12;
-        Mon, 21 Mar 2022 01:38:48 -0700 (PDT)
-X-Gm-Message-State: AOAM532zG0r5Z7rmM/TUx5+bv2dR352oQSPnVsHLMof6qJLc5NhDkEFu
-        lCYGE7lFqzKMgVHeWdElQNzVt2eqxFAptLDVSY0=
-X-Google-Smtp-Source: ABdhPJzC1aPs0mRRzYw94T1L169g4imODEwIVrWcSBzsU4X1Z77CvsT1+Hkq9ngveBo9XP4ELRkzqz2K49xJzH0geF4=
-X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
- k10-20020a5d66ca000000b00203fb72a223mr10115814wrw.12.1647851928676; Mon, 21
- Mar 2022 01:38:48 -0700 (PDT)
+        Mon, 21 Mar 2022 04:40:48 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA552CE26
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 01:39:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647851964; x=1679387964;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HB/vZMUvPhTjNC0m1ZXaoTqOu/2wu23OUlCr4eJMhP4=;
+  b=jMPkbCyiKkTJ1beaT7csY5mehxWt/a5IM+J3l6Li38Px8kKehjuotiM4
+   v0PoW+1o3R5DLR+/04lnbvVmjKMTnMvuqoOKu18K/vJqZzOe9Asha5xtJ
+   9W4NET1gCJNai8JiMOOgxgShl5ZYwRezhHbGp1UaGUMLi7q8m1JOsAfPx
+   dZKL2GAiuK3Gf5IL6/zV2CuwQchSMNbKXaKfyITJpIXJJLZ+mvgaDMqpo
+   EM8iglNDZHFKQDkhlBXJ8l4KMF3neBW/b1dq9lljj/fnH9n+v0GT/5l4P
+   V6ylOVFf+5u/BajBQDwFiKpNGVFbG+oVKUwUUUr7nimO/mxxz6Y4uVTud
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="257448381"
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="257448381"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 01:39:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="716417894"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 21 Mar 2022 01:39:22 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWDZR-000Her-QU; Mon, 21 Mar 2022 08:39:21 +0000
+Date:   Mon, 21 Mar 2022 16:38:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:master 1896/2335] ./usr/include/linux/rtnetlink.h:5:10:
+ fatal error: 'uapi/linux/types.h' file not found
+Message-ID: <202203211625.3a7oYbCY-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-3-chenhuacai@loongson.cn>
-In-Reply-To: <20220319143817.1026708-3-chenhuacai@loongson.cn>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 21 Mar 2022 09:38:32 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2gKGuMTLawFSf1hd3LY7rCVUquTPVHMcxBTok6+y-Rag@mail.gmail.com>
-Message-ID: <CAK8P3a2gKGuMTLawFSf1hd3LY7rCVUquTPVHMcxBTok6+y-Rag@mail.gmail.com>
-Subject: Re: [PATCH V8 10/22] LoongArch: Add exception/interrupt handling
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:hrZpOzbz9UmNY/btGpxVdxrIMhvMeFOM+sdnRcOMkJDPD6kxYJc
- /GWI2Wuawvw6GiZ1GJ7/fhxD6VCq86O+wUK9RqmvazaoHZSdzLl+vMow33tuaJyqnY+ojx5
- ucdD73T34t9SqPtHkNxiVkqG52UUKvDgEUS2PZcTjICGBSSqkh2ho9QeUgS6qOqgGbDeFe0
- L8pyadSbr0/hpkirl1fiA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vJ5rL7UIry4=:zhPxe3hGPfuwfe68NqQ39G
- /sg3ea8jlmvaAl/x7P3QkfnPJlSRuuvTCY5CkigfQheRQOaV1qrlxzLUTQZzQxLXztaDxy+Bm
- 5z9iC/asCl4Ek5Mjx+2MRRjYYmlcOSEDO+BldRQg1Yh9uEKxA0JuXrDILpW6jpaJ5gjOFbKF8
- CjBubhF9SLbFmOSZvQmzetyA3oXipZGhx7DseuxAv4AYIGzEQI2SLmKtE6S/2Br0hNFz6oRTN
- PqrUCctd0G15oQtXW2L8b5bndNyTnFcfAIP0T1hTtizw3nw2AixWsNes0/XeirbWIyJsfUFMp
- C+RFyZ3g6IZIC5IqwZcYMmA0D17qO6AlLHQ9rTOnXNXfKaYoLIOA2i3qddjw7MVlbw1SGgWgt
- pIWWwbw3kM9Ht8bo2zOWWQKfcveil6POPPRcBqEeRXTXSky22E0zN2veXNvQcO06lpw7v8Ide
- 4WfQi8x6kU0ha+B24QNpvC7VEq0NWL+nAY4YGoVPIeiK7+pI3w/wjJSXDqj24kbi/iv1MICFi
- lltIooFhcV42kXNXJeE07ZqptRftLoW8n0XXTTQboYEzLnSIDSYyI2T0fASu8v0JLTxAUkdJb
- j/B/GqQLJlyo2Jqm8avNGt8jC01oiliIZYcnKTahJaCsMYJZ4XiOJphS0DHwVFqoO9cNQf9Bw
- CijxPiFdbsMDGrpAYjPWsaYWOPNQDJVWRyd5+F6xmDwlxnhKF6GxjjPvKuRHL6AxxpKtr9WfH
- P3AnvY3TWO+UH19L+G7vaRzPp4uIeRv1E574+xL3XRxW8M+Eclsao9gdyoWCJtrFkmJs/hlIo
- wcXGmjvZz7yjXU423lsFoSKWbWFqnmrxVlZO5pcQFwumJOSRpo=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+head:   85293bf3fca6d85608cff1447ce3097583f15fab
+commit: e04eea06973aee3a517cb39f8e9f54176e2a2aae [1896/2335] headers/deps: net: Optimize <uapi/linux/rtnetlink.h> dependencies
+config: i386-randconfig-a012-20220314 (https://download.01.org/0day-ci/archive/20220321/202203211625.3a7oYbCY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a6ec1e3d798f8eab43fb3a91028c6ab04e115fcb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=e04eea06973aee3a517cb39f8e9f54176e2a2aae
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip master
+        git checkout e04eea06973aee3a517cb39f8e9f54176e2a2aae
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-> +unsigned long eentry;
-> +EXPORT_SYMBOL_GPL(eentry);
-> +unsigned long tlbrentry;
-> +EXPORT_SYMBOL_GPL(tlbrentry);
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Why are these exported to modules? Maybe add a comment here, or remove
-the export if it's not actually needed.
+All errors (new ones prefixed by >>):
 
-       Arnd
+   In file included from <built-in>:1:
+>> ./usr/include/linux/rtnetlink.h:5:10: fatal error: 'uapi/linux/types.h' file not found
+   #include <uapi/linux/types.h>
+            ^~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

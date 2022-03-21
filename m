@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBA64E2AF2
+	by mail.lfdr.de (Postfix) with ESMTP id 02B064E2AF1
 	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349443AbiCUOe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S1349409AbiCUOfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349846AbiCUOdK (ORCPT
+        with ESMTP id S1349857AbiCUOdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:33:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DCDA1AF;
-        Mon, 21 Mar 2022 07:30:31 -0700 (PDT)
+        Mon, 21 Mar 2022 10:33:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EC8B99
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:30:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 019D0B8170B;
-        Mon, 21 Mar 2022 14:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22526C340EE;
-        Mon, 21 Mar 2022 14:30:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647873028;
-        bh=BJoJxM62oVu3PvwNK+c15fauttUCWAVfzzp/YPFUujo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qMJEj8Zo3BFaBw5Q+l5pug8Oa22PK9dZbWcMe5AZda5rqrEYZ9Q0GqaeZYcv6+vY0
-         hWLJ/CgZbWa1zThm38J7rqx0Qn2DSBAUKLS1squ35QlSdse+oWuIHOXT/LF4V1JzAx
-         /3J374DD0Ze1ReNwYDnSDVRhfdgPSt4acP5ab1efSe4YY8SZrusWmMX+eqlIXHw2qn
-         QwAqDNyi5hKLk3Em2C761jdzMrwE1znLJU7qDV6YR1/HxqATZ4pBrW1RB9FpqAlyRz
-         g7v6Jfh4CdtdXjXA5SOZBZ7BLx9odpD2PRdGtyTmkiu9ntV+iCKPvSz/mCPx7xozeS
-         X+Qam1RbisLAQ==
-Date:   Mon, 21 Mar 2022 14:30:22 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Darren Hart <darren@os.amperecomputing.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Arm <linux-arm-kernel@lists.infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        "D . Scott Phillips" <scott@os.amperecomputing.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        stable@vger.kernel.org, Barry Song <21cnbao@gmail.com>
-Subject: Re: [PATCH v3] topology: make core_mask include at least
- cluster_siblings
-Message-ID: <20220321143021.GB11145@willie-the-truck>
-References: <CAKfTPtDe+i0fwV10m2sX2xkJGBrO8B+RQogDDij8ioJAT5+wAw@mail.gmail.com>
- <e91bcc83-37c8-dcca-e088-8b3fcd737b2c@arm.com>
- <YieXQD7uG0+R5QBq@fedora>
- <7ac47c67-0b5e-5caa-20bb-a0100a0cb78f@arm.com>
- <YijxUAuufpBKLtwy@fedora>
- <9398d7ad-30e7-890a-3e18-c3011c383585@arm.com>
- <Yi9zUuroS1vHWexY@fedora>
- <eb33745a-9d63-89b1-1245-9d1e0e04a169@arm.com>
- <YjIAQKwfa3/vr/kU@fedora>
- <YjIIfS6HkvlrdAHS@bogus>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 550E560AF7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 14:30:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E53C340E8;
+        Mon, 21 Mar 2022 14:30:37 +0000 (UTC)
+Date:   Mon, 21 Mar 2022 10:30:35 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>
+Subject: [GIT PULL] tracing/rtla: Updates to the RTLA tool
+Message-ID: <20220321103035.564a1df5@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjIIfS6HkvlrdAHS@bogus>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 03:55:41PM +0000, Sudeep Holla wrote:
-> On Wed, Mar 16, 2022 at 08:20:32AM -0700, Darren Hart wrote:
-> > On Wed, Mar 16, 2022 at 03:48:50PM +0100, Dietmar Eggemann wrote:
-> 
-> [...]
-> 
-> > >
-> > > Yeah, I can see your point. It's the smaller hack. My solution just
-> > > prevents us to manipulate the coregroup mask only to get the MC layer
-> > > degenerated by the core topology code. But people might say that's a
-> > > clever thing to do here. So I'm fine with your original solution as well.
-> > >
-> > > [...]
-> >
-> > Thanks Dietmar,
-> >
-> > Sudeep, do we have sufficient consensus to pull in this patch?
-> 
-> Indeed. I have already Acked, and sure after all these discussions we have
-> concluded that this is the best we can do though not matches everyone's taste.
-> 
-> Greg or Will(not sure why he had asked since v3 doesn't touch arm64),
-> Can one of you pick this patch ?
 
-Right, this doesn't touch arm64 any more so I don't think I'm the right
-person to queue it.
+Linus,
 
-Will
+I'm sending this as a separate pull request from my normal tracing tree, as
+it had dependencies to commits in your tree but not in my development
+branch. As it only affects the tools/ directory, I kept it separate as it
+has no changes to the kernel itself.
+
+Real Time Linux Analysis Tool updates for 5.18
+
+Changes to RTLA:
+
+ - Support for adjusting tracing_threashold
+
+ - Add -a (auto) option to make it easier for users to debug in the field
+
+ - Add -e option to add more events to the trace
+
+ - Add --trigger option to add triggers to events
+
+ - Add --filter option to filter events
+
+ - Add support to save histograms to the file
+
+ - Add --dma-latency to set /dev/cpu_dma_latency
+
+ - Other fixes and cleanups
+
+Please pull the latest trace-rtla-v5.18 tree, which can be found at:
+
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+trace-rtla-v5.18
+
+Tag SHA1: cc921ea64d6df1bb8955ff5762dbcdc408e34264
+Head SHA1: 75016ca3acd0de79868ef5b0694195fe05288ade
+
+
+Daniel Bristot de Oliveira (15):
+      rtla/osnoise: Add support to adjust the tracing_thresh
+      rtla/osnoise: Add an option to set the threshold
+      rtla/osnoise: Add the automatic trace option
+      rtla/timerlat: Add the automatic trace option
+      rtla/trace: Add trace events helpers
+      rtla: Add -e/--event support
+      rtla/trace: Add trace event trigger helpers
+      rtla: Add --trigger support
+      rtla/trace: Add trace event filter helpers
+      rtla: Add --filter support
+      rtla/trace: Save event histogram output to a file
+      rtla: Check for trace off also in the trace instance
+      rtla/osnoise: Fix osnoise hist stop tracing message
+      rtla/timerlat: Add --dma-latency option
+      rtla: Tools main loop cleanup
+
+----
+ Documentation/tools/rtla/common_options.rst        |  19 ++
+ .../tools/rtla/common_osnoise_options.rst          |  10 +
+ .../tools/rtla/common_timerlat_options.rst         |  12 +
+ tools/tracing/rtla/src/osnoise.c                   |  83 +++++
+ tools/tracing/rtla/src/osnoise.h                   |   8 +
+ tools/tracing/rtla/src/osnoise_hist.c              |  95 +++++-
+ tools/tracing/rtla/src/osnoise_top.c               |  91 +++++-
+ tools/tracing/rtla/src/timerlat_hist.c             | 108 ++++++-
+ tools/tracing/rtla/src/timerlat_top.c              | 103 +++++-
+ tools/tracing/rtla/src/trace.c                     | 345 +++++++++++++++++++++
+ tools/tracing/rtla/src/trace.h                     |  23 ++
+ tools/tracing/rtla/src/utils.c                     |  33 ++
+ tools/tracing/rtla/src/utils.h                     |   1 +
+ 13 files changed, 903 insertions(+), 28 deletions(-)
+---------------------------

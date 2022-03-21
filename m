@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE9B4E23B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:57:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5134E23C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346081AbiCUJ6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
+        id S1346079AbiCUJ7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346123AbiCUJ6E (ORCPT
+        with ESMTP id S233295AbiCUJ7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:58:04 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386D4137022
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:56:39 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 22L9jw6V079101;
-        Mon, 21 Mar 2022 17:45:58 +0800 (GMT-8)
-        (envelope-from dylan_hung@aspeedtech.com)
-Received: from DylanHung-PC.aspeed.com (192.168.2.216) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 21 Mar
- 2022 17:56:24 +0800
-From:   Dylan Hung <dylan_hung@aspeedtech.com>
-To:     <robh+dt@kernel.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
-        <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <p.zabel@pengutronix.de>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-CC:     <BMC-SW@aspeedtech.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2 3/3] ARM: dts: aspeed: add reset properties into MDIO nodes
-Date:   Mon, 21 Mar 2022 17:56:48 +0800
-Message-ID: <20220321095648.4760-4-dylan_hung@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220321095648.4760-1-dylan_hung@aspeedtech.com>
-References: <20220321095648.4760-1-dylan_hung@aspeedtech.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.216]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 22L9jw6V079101
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 21 Mar 2022 05:59:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D41D137029;
+        Mon, 21 Mar 2022 02:57:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EBD5C1042;
+        Mon, 21 Mar 2022 02:57:46 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.22.222])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 125BC3F766;
+        Mon, 21 Mar 2022 02:57:43 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
+        viresh.kumar@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, cristian.marussi@arm.com,
+        sudeep.holla@arm.com, matthias.bgg@gmail.com
+Subject: [RESEND][PATCH 0/8] Introduce support for artificial Energy Model
+Date:   Mon, 21 Mar 2022 09:57:21 +0000
+Message-Id: <20220321095729.20655-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add reset control properties into MDIO nodes.  The 4 MDIO controllers in
-AST2600 SOC share one reset control bit SCU50[3].
+Hi all,
 
-Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
-Cc: stable@vger.kernel.org
----
- arch/arm/boot/dts/aspeed-g6.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+This patch set adds new callback and support for artificial Energy Model (EM).
+The new EMs have artificially generated performance states.
+Such EMs can be created from lean information sources, such
+as the relative energy efficiency between CPUs. The ACPI based
+platforms provide this information
+(ACPI 6.4, s5.2.12.14 'GIC CPU Interface (GICC) Structure'
+'Processor Power efficiency Class' field).
 
-diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
-index c32e87fad4dc..ab20ea8d829d 100644
---- a/arch/arm/boot/dts/aspeed-g6.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g6.dtsi
-@@ -181,6 +181,7 @@ mdio0: mdio@1e650000 {
- 			status = "disabled";
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pinctrl_mdio1_default>;
-+			resets = <&syscon ASPEED_RESET_MII>;
- 		};
- 
- 		mdio1: mdio@1e650008 {
-@@ -191,6 +192,7 @@ mdio1: mdio@1e650008 {
- 			status = "disabled";
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pinctrl_mdio2_default>;
-+			resets = <&syscon ASPEED_RESET_MII>;
- 		};
- 
- 		mdio2: mdio@1e650010 {
-@@ -201,6 +203,7 @@ mdio2: mdio@1e650010 {
- 			status = "disabled";
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pinctrl_mdio3_default>;
-+			resets = <&syscon ASPEED_RESET_MII>;
- 		};
- 
- 		mdio3: mdio@1e650018 {
-@@ -211,6 +214,7 @@ mdio3: mdio@1e650018 {
- 			status = "disabled";
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pinctrl_mdio4_default>;
-+			resets = <&syscon ASPEED_RESET_MII>;
- 		};
- 
- 		mac0: ftgmac@1e660000 {
+Artificial EMs might require to directly provide the 'cost' of
+the generated performance state. This patch set adds a new callback
+.get_cost() for this. The EM framework does not force any model
+or formula, it's up to the platform code.
+
+Artificial EMs aim to leverage the Energy Aware Scheduler
+(EAS). Other frameworks relying on performance states
+information (i.e. IPA/DTPM) must be informed of the
+EM type and might be prevented from using it. This patch
+sets also does this by introducing a new flag:
+EM_PERF_DOMAIN_ARTIFICIAL.
+
+The patch set is based on current linux-next, where some
+changes to OPP & EM are queuing.
+
+The patch set also contains (patch 7/8 and patch 8/8) logic which prevents
+two EM's client frameworks from using this new EM type. Some other approach,
+using 'milli-watts', has been proposed and discussed, but refused [1].
+This new flag is more precised and should not leave space for
+wrong interpretation.
+
+Shortly after this patch set you will see a patch set implementing the
+platform code and registering this new EM.
+
+Regards,
+Lukasz Luba
+
+[1] https://lore.kernel.org/linux-pm/20220207073036.14901-1-lukasz.luba@arm.com/
+
+Lukasz Luba (7):
+  PM: EM: Add .get_cost() callback
+  PM: EM: Use the new .get_cost() callback while registering EM
+  PM: EM: Change the order of arguments in the .active_power() callback
+  PM: EM: Remove old debugfs files and print all 'flags'
+  Documentation: EM: Add artificial EM registration description
+  thermal: cooling: Check Energy Model type in cpufreq_cooling and
+    devfreq_cooling
+  powercap: DTPM: Check for Energy Model type
+
+Pierre Gondois (1):
+  PM: EM: Add artificial EM flag
+
+ Documentation/power/energy-model.rst  | 24 +++++++++-
+ drivers/cpufreq/mediatek-cpufreq-hw.c |  4 +-
+ drivers/cpufreq/scmi-cpufreq.c        |  4 +-
+ drivers/opp/of.c                      |  6 +--
+ drivers/powercap/dtpm_cpu.c           |  2 +-
+ drivers/thermal/cpufreq_cooling.c     |  2 +-
+ drivers/thermal/devfreq_cooling.c     |  8 ++--
+ include/linux/energy_model.h          | 35 +++++++++++++--
+ kernel/power/energy_model.c           | 63 +++++++++++++++------------
+ 9 files changed, 101 insertions(+), 47 deletions(-)
+
 -- 
-2.25.1
+2.17.1
 

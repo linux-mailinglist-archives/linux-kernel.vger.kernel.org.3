@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB574E2870
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 910864E2869
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348290AbiCUN4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
+        id S1348331AbiCUN4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348152AbiCUNzh (ORCPT
+        with ESMTP id S1347775AbiCUNzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Mar 2022 09:55:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20229FC6;
-        Mon, 21 Mar 2022 06:54:10 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA92DF3;
+        Mon, 21 Mar 2022 06:54:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6FF8B816C8;
-        Mon, 21 Mar 2022 13:54:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1C88C340E8;
-        Mon, 21 Mar 2022 13:54:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CD1B612A5;
+        Mon, 21 Mar 2022 13:54:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7997C340E8;
+        Mon, 21 Mar 2022 13:54:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647870848;
-        bh=gLeSm+kYDTDJwYvsRbW95g1ycycVjdO+9MYwfDntsOw=;
+        s=korg; t=1647870851;
+        bh=Fd3GNLBWLpAQg28E20Y5JU8ZhkbdqyTX5nf57xBq0O4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kGdAsvk2hQPL/bep8UjCFAhwwcB/E/fIRmbK47YLfHMJPlZUCs1oGvjcAgxEzY94o
-         LjBRVaDvyDlwyI09/W/mvDNRC2uMkN1xJ2S9LpVo/26I+R0GLRhufTFwLE6xLMbjHx
-         WMFom5nnFB3CJOFN53nbo4qIecDpqHZ+CPnD4bMo=
+        b=G96mgvT+CnCl2SgxqoknjEWlLFjIDR/IYMVfJPgKB1zVbspBX+5wOCF4XyLGsF0J/
+         w1ogzYmgHCW68pTf1DaqxBf16KzakWP1n3IQa4yJVPLn120KQxsrEHx2DPxOam3C8P
+         mmB6Uv3I5/z1fbGTFbTWV2CKbA5/PoxiKphJ5bB4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        Octavian Purdila <octavian.purdila@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 15/22] efi: fix return value of __setup handlers
-Date:   Mon, 21 Mar 2022 14:51:46 +0100
-Message-Id: <20220321133218.057138436@linuxfoundation.org>
+Subject: [PATCH 4.14 16/22] net/packet: fix slab-out-of-bounds access in packet_recvmsg()
+Date:   Mon, 21 Mar 2022 14:51:47 +0100
+Message-Id: <20220321133218.086482158@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220321133217.602054917@linuxfoundation.org>
 References: <20220321133217.602054917@linuxfoundation.org>
@@ -60,79 +56,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 9feaf8b387ee0ece9c1d7add308776b502a35d0c ]
+[ Upstream commit c700525fcc06b05adfea78039de02628af79e07a ]
 
-When "dump_apple_properties" is used on the kernel boot command line,
-it causes an Unknown parameter message and the string is added to init's
-argument strings:
+syzbot found that when an AF_PACKET socket is using PACKET_COPY_THRESH
+and mmap operations, tpacket_rcv() is queueing skbs with
+garbage in skb->cb[], triggering a too big copy [1]
 
-  Unknown kernel command line parameters "dump_apple_properties
-    BOOT_IMAGE=/boot/bzImage-517rc6 efivar_ssdt=newcpu_ssdt", will be
-    passed to user space.
+Presumably, users of af_packet using mmap() already gets correct
+metadata from the mapped buffer, we can simply make sure
+to clear 12 bytes that might be copied to user space later.
 
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-     dump_apple_properties
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc6
-     efivar_ssdt=newcpu_ssdt
+BUG: KASAN: stack-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
+BUG: KASAN: stack-out-of-bounds in packet_recvmsg+0x56c/0x1150 net/packet/af_packet.c:3489
+Write of size 165 at addr ffffc9000385fb78 by task syz-executor233/3631
 
-Similarly when "efivar_ssdt=somestring" is used, it is added to the
-Unknown parameter message and to init's environment strings, polluting
-them (see examples above).
+CPU: 0 PID: 3631 Comm: syz-executor233 Not tainted 5.17.0-rc7-syzkaller-02396-g0b3660695e80 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x336 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ memcpy+0x39/0x60 mm/kasan/shadow.c:66
+ memcpy include/linux/fortify-string.h:225 [inline]
+ packet_recvmsg+0x56c/0x1150 net/packet/af_packet.c:3489
+ sock_recvmsg_nosec net/socket.c:948 [inline]
+ sock_recvmsg net/socket.c:966 [inline]
+ sock_recvmsg net/socket.c:962 [inline]
+ ____sys_recvmsg+0x2c4/0x600 net/socket.c:2632
+ ___sys_recvmsg+0x127/0x200 net/socket.c:2674
+ __sys_recvmsg+0xe2/0x1a0 net/socket.c:2704
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fdfd5954c29
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffcf8e71e48 EFLAGS: 00000246 ORIG_RAX: 000000000000002f
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fdfd5954c29
+RDX: 0000000000000000 RSI: 0000000020000500 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 000000000000000d R09: 000000000000000d
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffcf8e71e60
+R13: 00000000000f4240 R14: 000000000000c1ff R15: 00007ffcf8e71e54
+ </TASK>
 
-Change the return value of the __setup functions to 1 to indicate
-that the __setup options have been handled.
+addr ffffc9000385fb78 is located in stack of task syz-executor233/3631 at offset 32 in frame:
+ ____sys_recvmsg+0x0/0x600 include/linux/uio.h:246
 
-Fixes: 58c5475aba67 ("x86/efi: Retrieve and assign Apple device properties")
-Fixes: 475fb4e8b2f4 ("efi / ACPI: load SSTDs from EFI variables")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-efi@vger.kernel.org
-Cc: Lukas Wunner <lukas@wunner.de>
-Cc: Octavian Purdila <octavian.purdila@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Matt Fleming <matt@codeblueprint.co.uk>
-Link: https://lore.kernel.org/r/20220301041851.12459-1-rdunlap@infradead.org
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+this frame has 1 object:
+ [32, 160) 'addr'
+
+Memory state around the buggy address:
+ ffffc9000385fa80: 00 04 f3 f3 f3 f3 f3 00 00 00 00 00 00 00 00 00
+ ffffc9000385fb00: 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00
+>ffffc9000385fb80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 f3
+                                                                ^
+ ffffc9000385fc00: f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00 f1
+ ffffc9000385fc80: f1 f1 f1 00 f2 f2 f2 00 f2 f2 f2 00 00 00 00 00
+==================================================================
+
+Fixes: 0fb375fb9b93 ("[AF_PACKET]: Allow for > 8 byte hardware addresses.")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Link: https://lore.kernel.org/r/20220312232958.3535620-1-eric.dumazet@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/efi/apple-properties.c | 2 +-
- drivers/firmware/efi/efi.c              | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ net/packet/af_packet.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/efi/apple-properties.c b/drivers/firmware/efi/apple-properties.c
-index 9f6bcf173b0e..aa42d228762f 100644
---- a/drivers/firmware/efi/apple-properties.c
-+++ b/drivers/firmware/efi/apple-properties.c
-@@ -30,7 +30,7 @@ static bool dump_properties __initdata;
- static int __init dump_properties_enable(char *arg)
- {
- 	dump_properties = true;
--	return 0;
-+	return 1;
- }
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index 1381bfcb3cf0..92394595920c 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -2285,8 +2285,11 @@ static int tpacket_rcv(struct sk_buff *skb, struct net_device *dev,
+ 					copy_skb = skb_get(skb);
+ 					skb_head = skb->data;
+ 				}
+-				if (copy_skb)
++				if (copy_skb) {
++					memset(&PACKET_SKB_CB(copy_skb)->sa.ll, 0,
++					       sizeof(PACKET_SKB_CB(copy_skb)->sa.ll));
+ 					skb_set_owner_r(copy_skb, sk);
++				}
+ 			}
+ 			snaplen = po->rx_ring.frame_size - macoff;
+ 			if ((int)snaplen < 0) {
+@@ -3442,6 +3445,8 @@ static int packet_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+ 	sock_recv_ts_and_drops(msg, sk, skb);
  
- __setup("dump_apple_properties", dump_properties_enable);
-diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-index a3dc6cb7326a..24365601fbbf 100644
---- a/drivers/firmware/efi/efi.c
-+++ b/drivers/firmware/efi/efi.c
-@@ -230,7 +230,7 @@ static int __init efivar_ssdt_setup(char *str)
- 		memcpy(efivar_ssdt, str, strlen(str));
- 	else
- 		pr_warn("efivar_ssdt: name too long: %s\n", str);
--	return 0;
-+	return 1;
- }
- __setup("efivar_ssdt=", efivar_ssdt_setup);
+ 	if (msg->msg_name) {
++		const size_t max_len = min(sizeof(skb->cb),
++					   sizeof(struct sockaddr_storage));
+ 		int copy_len;
+ 
+ 		/* If the address length field is there to be filled
+@@ -3464,6 +3469,10 @@ static int packet_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+ 				msg->msg_namelen = sizeof(struct sockaddr_ll);
+ 			}
+ 		}
++		if (WARN_ON_ONCE(copy_len > max_len)) {
++			copy_len = max_len;
++			msg->msg_namelen = copy_len;
++		}
+ 		memcpy(msg->msg_name, &PACKET_SKB_CB(skb)->sa, copy_len);
+ 	}
  
 -- 
 2.34.1

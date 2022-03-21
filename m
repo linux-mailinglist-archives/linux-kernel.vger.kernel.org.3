@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0734E2A73
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D620E4E29D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349126AbiCUOPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
+        id S1350762AbiCUOKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349719AbiCUOIj (ORCPT
+        with ESMTP id S1349187AbiCUODa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:08:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BF243EDC;
-        Mon, 21 Mar 2022 07:03:18 -0700 (PDT)
+        Mon, 21 Mar 2022 10:03:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6813D179B31;
+        Mon, 21 Mar 2022 07:00:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FD08B816C8;
-        Mon, 21 Mar 2022 14:03:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 770F9C340E8;
-        Mon, 21 Mar 2022 14:03:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECCF5B816D9;
+        Mon, 21 Mar 2022 14:00:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46EB5C340E8;
+        Mon, 21 Mar 2022 14:00:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871388;
-        bh=qPfk6gLyWnnbd5V+f6dbSOSO0L4BM1LgWP0BU6fEpnw=;
+        s=korg; t=1647871231;
+        bh=9va7i0UBnXMSeAaAVcsHFRavvtK2XEjhGrOO5GIvqVQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IX7Pd5JjqPeJyySR41hDA6xFgE9wRAbXuiOOZ2+etto1hs9iNJ2eVlysH3x1qneSg
-         On6LDeurXUYs8ir7CxcRanw0Uv6x+xqYwy1A1GIGDO/ehwoeb4EuCViFIT4Wybu+R6
-         x7OkFJYSwqd79KTcVAZN85MlxU+r14e7apBSxrxw=
+        b=ds/HY491DlO3lKoTumydRwyZoDSXj++xMMeWr5ZgvnrYGSxZ1t/SgvBAtnKGPMl+4
+         tKsJH2XxgYECUZVZCYv3s/AtszGlZuPpvwVQfXT75PEiXYG0526Y5h8d3U6W71Xl4n
+         kbPYOEMDbvlayLMcxgcIRcIHfiOgo/2SB/I/t0zs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Juerg Haefliger <juergh@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 13/37] atm: eni: Add check for dma_map_single
-Date:   Mon, 21 Mar 2022 14:52:55 +0100
-Message-Id: <20220321133221.679081884@linuxfoundation.org>
+Subject: [PATCH 5.15 20/32] net: phy: mscc: Add MODULE_FIRMWARE macros
+Date:   Mon, 21 Mar 2022 14:52:56 +0100
+Message-Id: <20220321133221.149048542@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
-References: <20220321133221.290173884@linuxfoundation.org>
+In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
+References: <20220321133220.559554263@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Juerg Haefliger <juerg.haefliger@canonical.com>
 
-[ Upstream commit 0f74b29a4f53627376cf5a5fb7b0b3fa748a0b2b ]
+[ Upstream commit f1858c277ba40172005b76a31e6bb931bfc19d9c ]
 
-As the potential failure of the dma_map_single(),
-it should be better to check it and return error
-if fails.
+The driver requires firmware so define MODULE_FIRMWARE so that modinfo
+provides the details.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: fa164e40c53b ("net: phy: mscc: split the driver into separate files")
+Signed-off-by: Juerg Haefliger <juergh@canonical.com>
+Link: https://lore.kernel.org/r/20220316151835.88765-1-juergh@canonical.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/atm/eni.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/phy/mscc/mscc_main.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/atm/eni.c b/drivers/atm/eni.c
-index 422753d52244..a31ffe16e626 100644
---- a/drivers/atm/eni.c
-+++ b/drivers/atm/eni.c
-@@ -1112,6 +1112,8 @@ DPRINTK("iovcnt = %d\n",skb_shinfo(skb)->nr_frags);
- 	skb_data3 = skb->data[3];
- 	paddr = dma_map_single(&eni_dev->pci_dev->dev,skb->data,skb->len,
- 			       DMA_TO_DEVICE);
-+	if (dma_mapping_error(&eni_dev->pci_dev->dev, paddr))
-+		return enq_next;
- 	ENI_PRV_PADDR(skb) = paddr;
- 	/* prepare DMA queue entries */
- 	j = 0;
+diff --git a/drivers/net/phy/mscc/mscc_main.c b/drivers/net/phy/mscc/mscc_main.c
+index 6e32da28e138..f2e3a67198dd 100644
+--- a/drivers/net/phy/mscc/mscc_main.c
++++ b/drivers/net/phy/mscc/mscc_main.c
+@@ -2685,3 +2685,6 @@ MODULE_DEVICE_TABLE(mdio, vsc85xx_tbl);
+ MODULE_DESCRIPTION("Microsemi VSC85xx PHY driver");
+ MODULE_AUTHOR("Nagaraju Lakkaraju");
+ MODULE_LICENSE("Dual MIT/GPL");
++
++MODULE_FIRMWARE(MSCC_VSC8584_REVB_INT8051_FW);
++MODULE_FIRMWARE(MSCC_VSC8574_REVB_INT8051_FW);
 -- 
 2.34.1
 

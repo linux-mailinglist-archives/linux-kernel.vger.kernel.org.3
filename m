@@ -2,207 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BFC4E2455
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:28:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFA14E2454
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:27:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346338AbiCUK3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 06:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
+        id S1346327AbiCUK3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 06:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244351AbiCUK3W (ORCPT
+        with ESMTP id S244351AbiCUK3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 06:29:22 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EECABF66
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 03:27:57 -0700 (PDT)
+        Mon, 21 Mar 2022 06:29:17 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A7BDA6E3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 03:27:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647858477; x=1679394477;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=LDF4W4xRXP4neOhFFxNRxYCmc5oPsktu1t/2i1GPpFI=;
-  b=GPhSUKAnxWzMVt5WS58a2h1Q/y04N+wAMvkbZpmyNNbOSkwx1m/D2Ye+
-   D1I735Bl79A651r8RBMDSL5/p2Ei/uQRANbczYGr8DG6NThOwV19JqdAr
-   yPNArO753uCm17JjmUU7wdp3YcyZi2rxoulLdBXO/4mJ2W2fQjZpDY+AP
-   +P5BvAuKWxhQFP4CbDQ5DX0gbr/wNIFuBCrgjjbUpvcC40OW6TGFzuoOf
-   0Dy37KrrXNLHX7BCOZvy+QGDqPOK3eRvJJS7XLYEUVOSw/5A6eJJbYkIX
-   oozdhesiHfLIRsLyuBlxuDS+GwAhLDFwZBpxQfOyXaQFnOqrzbTtEi9fQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="244990888"
+  t=1647858472; x=1679394472;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lwNcIeH9h9aZfu+Rz06TkUw+UBoRgaE7boHdn7yY4gc=;
+  b=CuiELwNFCS2aYqFCfCy834/c+OawbgN/1LiHM6zoU55WlUXxqbc7aDO5
+   WSgyo3JzMrjJESt6/o+g54kaEWvPrytYSbxRnwjab/nns9k690LFPMBdn
+   3lpbqGyAhBoa3T2SiIelpz4HL7wAcZ7/RGT9MSv+Zz/TvXavr5gNjOe9W
+   9t1HmzvV94bxNMVqkHrNsNjw4EyslsJTUgDmil5E7oQctakTPNyeOFTnL
+   aWGFfbQ4djVkpwxZxIAXaC7bNyxzFcX5goMe6oh3XEFtEpDkUMmvG6MtL
+   +rmBN5EAcinU9YZvvk+H0ExRRGTXbTdVXr6SMf95Jel1YfdTy8etKRaMD
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="239675071"
 X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="244990888"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 03:27:43 -0700
+   d="scan'208";a="239675071"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 03:27:51 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="559806927"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.213.169]) ([10.254.213.169])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 03:27:39 -0700
-Message-ID: <d62ef788-c6b9-8259-88cc-486efaade2b7@linux.intel.com>
-Date:   Mon, 21 Mar 2022 18:27:37 +0800
+   d="scan'208";a="692129385"
+Received: from pglc00034.png.intel.com ([10.221.207.54])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Mar 2022 03:27:49 -0700
+From:   kah.jing.lee@intel.com
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, radu.bacrau@intel.com,
+        tien.sung.ang@intel.com, Kah Jing Lee <kah.jing.lee@intel.com>
+Subject: [PATCH v2] firmware: stratix10-rsu: extend RSU driver to get DCMF status
+Date:   Mon, 21 Mar 2022 18:27:46 +0800
+Message-Id: <20220321102746.29917-1-kah.jing.lee@intel.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC 03/11] iommu: Add attach/detach_dev_pasid domain ops
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>
-References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
- <20220320064030.2936936-4-baolu.lu@linux.intel.com>
- <BL1PR11MB527174765D1253AB4B88D2AD8C169@BL1PR11MB5271.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <BL1PR11MB527174765D1253AB4B88D2AD8C169@BL1PR11MB5271.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/21 15:13, Tian, Kevin wrote:
->> From: Lu Baolu<baolu.lu@linux.intel.com>
->> Sent: Sunday, March 20, 2022 2:40 PM
->>
->> Attaching an IOMMU domain to a PASID of a device is a generic operation
->> for modern IOMMU drivers which support PASID-granular DMA address
->> translation. Currently visible usage scenarios include (but not limited):
->>
->>   - SVA
->>   - kernel DMA with PASID
->>   - hardware-assist mediated device
->>
->> This adds a pair of common domain ops for this purpose and implements a
->> couple of wrapper helpers for in-kernel usage.
->>
->> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
->> ---
->>   include/linux/iommu.h | 22 ++++++++++++++++++++++
->>   drivers/iommu/iommu.c | 41
->> +++++++++++++++++++++++++++++++++++++++++
->>   2 files changed, 63 insertions(+)
->>
->> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
->> index 3e179b853380..e51845b9a146 100644
->> --- a/include/linux/iommu.h
->> +++ b/include/linux/iommu.h
->> @@ -268,6 +268,8 @@ struct iommu_ops {
->>    * struct iommu_domain_ops - domain specific operations
->>    * @attach_dev: attach an iommu domain to a device
->>    * @detach_dev: detach an iommu domain from a device
->> + * @attach_dev_pasid: attach an iommu domain to a pasid of device
->> + * @detach_dev_pasid: detach an iommu domain from a pasid of device
->>    * @map: map a physically contiguous memory region to an iommu domain
->>    * @map_pages: map a physically contiguous set of pages of the same size
->> to
->>    *             an iommu domain.
->> @@ -285,6 +287,10 @@ struct iommu_ops {
->>   struct iommu_domain_ops {
->>   	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
->>   	void (*detach_dev)(struct iommu_domain *domain, struct device
->> *dev);
->> +	int (*attach_dev_pasid)(struct iommu_domain *domain,
->> +				struct device *dev, ioasid_t id);
->> +	void (*detach_dev_pasid)(struct iommu_domain *domain,
->> +				 struct device *dev, ioasid_t id);
->>
->>   	int (*map)(struct iommu_domain *domain, unsigned long iova,
->>   		   phys_addr_t paddr, size_t size, int prot, gfp_t gfp);
->> @@ -678,6 +684,11 @@ int iommu_group_claim_dma_owner(struct
->> iommu_group *group, void *owner);
->>   void iommu_group_release_dma_owner(struct iommu_group *group);
->>   bool iommu_group_dma_owner_claimed(struct iommu_group *group);
->>
->> +int iommu_attach_device_pasid(struct iommu_domain *domain,
->> +			      struct device *dev, ioasid_t pasid);
->> +void iommu_detach_device_pasid(struct iommu_domain *domain,
->> +			       struct device *dev, ioasid_t pasid);
->> +
->>   #else /* CONFIG_IOMMU_API */
->>
->>   struct iommu_ops {};
->> @@ -1046,6 +1057,17 @@ static inline bool
->> iommu_group_dma_owner_claimed(struct iommu_group *group)
->>   {
->>   	return false;
->>   }
->> +
->> +static inline int iommu_attach_device_pasid(struct iommu_domain
->> *domain,
->> +					    struct device *dev, ioasid_t pasid)
->> +{
->> +	return -ENODEV;
->> +}
->> +
->> +static inline void iommu_detach_device_pasid(struct iommu_domain
->> *domain,
->> +					     struct device *dev, ioasid_t pasid)
->> +{
->> +}
->>   #endif /* CONFIG_IOMMU_API */
->>
->>   /**
->> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->> index 0c42ece25854..78c71ee15f36 100644
->> --- a/drivers/iommu/iommu.c
->> +++ b/drivers/iommu/iommu.c
->> @@ -3167,3 +3167,44 @@ bool iommu_group_dma_owner_claimed(struct
->> iommu_group *group)
->>   	return user;
->>   }
->>   EXPORT_SYMBOL_GPL(iommu_group_dma_owner_claimed);
->> +
->> +int iommu_attach_device_pasid(struct iommu_domain *domain,
->> +			      struct device *dev, ioasid_t pasid)
->> +{
->> +	struct iommu_group *group;
->> +	int ret = -EINVAL;
->> +
->> +	if (!domain->ops->attach_dev_pasid)
->> +		return -EINVAL;
->> +
->> +	group = iommu_group_get(dev);
->> +	if (!group)
->> +		return -ENODEV;
->> +
->> +	mutex_lock(&group->mutex);
->> +	if (iommu_group_device_count(group) != 1)
->> +		goto out_unlock;
-> Need move the reason of above limitation from iommu_sva_bind_device()
-> to here:
-> 
-> 	/*
-> 	 * To keep things simple, SVA currently doesn't support IOMMU groups
-> 	 * with more than one device. Existing SVA-capable systems are not
-> 	 * affected by the problems that required IOMMU groups (lack of ACS
-> 	 * isolation, device ID aliasing and other hardware issues).
-> 	 */
-> 	if (iommu_group_device_count(group) != 1)
-> 		goto out_unlock;
+From: Kah Jing Lee <kah.jing.lee@intel.com>
 
-Yes. We need a comment around this code. But it's not only for SVA but
-also for all pasid attachment feature. I need more inputs to judge
-whether this limitation is reasonable.
+Extend RSU driver to get DCMF status.
 
-> 
-> btw I didn't see any safeguard on above assumption in device hotplug path
-> to a group which already has SVA enabled...
-> 
+The status of each DCMF is reported. The currently used DCMF is used as
+reference, while the other three are compared against it to determine if
+they are corrupted.
 
-Agreed.
+DCMF = Decision Configuration Management Firmware.
+RSU = Remote System Update
 
-Best regards,
-baolu
+Signed-off-by: Radu Bacrau <radu.bacrau@intel.com>
+Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
+---
+Changelog v2:
+* Fix the compilation error, missing declaration for COMMAND_RSU_DCMF_STATUS
+---
+ drivers/firmware/stratix10-rsu.c              | 131 +++++++++++++++++-
+ .../firmware/intel/stratix10-svc-client.h     |   4 +-
+ 2 files changed, 128 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/firmware/stratix10-rsu.c b/drivers/firmware/stratix10-rsu.c
+index 9378075d04e9..856bc03ca07c 100644
+--- a/drivers/firmware/stratix10-rsu.c
++++ b/drivers/firmware/stratix10-rsu.c
+@@ -24,12 +24,16 @@
+ #define RSU_DCMF1_MASK			GENMASK_ULL(63, 32)
+ #define RSU_DCMF2_MASK			GENMASK_ULL(31, 0)
+ #define RSU_DCMF3_MASK			GENMASK_ULL(63, 32)
++#define RSU_DCMF0_STATUS_MASK		GENMASK_ULL(15, 0)
++#define RSU_DCMF1_STATUS_MASK		GENMASK_ULL(31, 16)
++#define RSU_DCMF2_STATUS_MASK		GENMASK_ULL(47, 32)
++#define RSU_DCMF3_STATUS_MASK		GENMASK_ULL(63, 48)
+ 
+ #define RSU_TIMEOUT	(msecs_to_jiffies(SVC_RSU_REQUEST_TIMEOUT_MS))
+ 
+ #define INVALID_RETRY_COUNTER		0xFF
+ #define INVALID_DCMF_VERSION		0xFF
+-
++#define INVALID_DCMF_STATUS		0xFFFFFFFF
+ 
+ typedef void (*rsu_callback)(struct stratix10_svc_client *client,
+ 			     struct stratix10_svc_cb_data *data);
+@@ -49,6 +53,10 @@ typedef void (*rsu_callback)(struct stratix10_svc_client *client,
+  * @dcmf_version.dcmf1: Quartus dcmf1 version
+  * @dcmf_version.dcmf2: Quartus dcmf2 version
+  * @dcmf_version.dcmf3: Quartus dcmf3 version
++ * @dcmf_status.dcmf0: dcmf0 status
++ * @dcmf_status.dcmf1: dcmf1 status
++ * @dcmf_status.dcmf2: dcmf2 status
++ * @dcmf_status.dcmf3: dcmf3 status
+  * @retry_counter: the current image's retry counter
+  * @max_retry: the preset max retry value
+  */
+@@ -73,6 +81,13 @@ struct stratix10_rsu_priv {
+ 		unsigned int dcmf3;
+ 	} dcmf_version;
+ 
++	struct {
++		unsigned int dcmf0;
++		unsigned int dcmf1;
++		unsigned int dcmf2;
++		unsigned int dcmf3;
++	} dcmf_status;
++
+ 	unsigned int retry_counter;
+ 	unsigned int max_retry;
+ };
+@@ -129,7 +144,7 @@ static void rsu_command_callback(struct stratix10_svc_client *client,
+ 	struct stratix10_rsu_priv *priv = client->priv;
+ 
+ 	if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
+-		dev_warn(client->dev, "FW doesn't support notify\n");
++		dev_warn(client->dev, "Secure FW doesn't support notify\n");
+ 	else if (data->status == BIT(SVC_STATUS_ERROR))
+ 		dev_err(client->dev, "Failure, returned status is %lu\n",
+ 			BIT(data->status));
+@@ -139,7 +154,7 @@ static void rsu_command_callback(struct stratix10_svc_client *client,
+ 
+ /**
+  * rsu_retry_callback() - Callback from Intel service layer for getting
+- * the current image's retry counter from the firmware
++ * the current image's retry counter from firmware
+  * @client: pointer to client
+  * @data: pointer to callback data structure
+  *
+@@ -156,7 +171,7 @@ static void rsu_retry_callback(struct stratix10_svc_client *client,
+ 	if (data->status == BIT(SVC_STATUS_OK))
+ 		priv->retry_counter = *counter;
+ 	else if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
+-		dev_warn(client->dev, "FW doesn't support retry\n");
++		dev_warn(client->dev, "Secure FW doesn't support retry\n");
+ 	else
+ 		dev_err(client->dev, "Failed to get retry counter %lu\n",
+ 			BIT(data->status));
+@@ -181,7 +196,7 @@ static void rsu_max_retry_callback(struct stratix10_svc_client *client,
+ 	if (data->status == BIT(SVC_STATUS_OK))
+ 		priv->max_retry = *max_retry;
+ 	else if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
+-		dev_warn(client->dev, "FW doesn't support max retry\n");
++		dev_warn(client->dev, "Secure FW doesn't support max retry\n");
+ 	else
+ 		dev_err(client->dev, "Failed to get max retry %lu\n",
+ 			BIT(data->status));
+@@ -215,6 +230,35 @@ static void rsu_dcmf_version_callback(struct stratix10_svc_client *client,
+ 	complete(&priv->completion);
+ }
+ 
++/**
++ * rsu_dcmf_status_callback() - Callback from Intel service layer for getting
++ * the DCMF status
++ * @client: pointer to client
++ * @data: pointer to callback data structure
++ *
++ * Callback from Intel service layer for DCMF status
++ */
++static void rsu_dcmf_status_callback(struct stratix10_svc_client *client,
++				     struct stratix10_svc_cb_data *data)
++{
++	struct stratix10_rsu_priv *priv = client->priv;
++	unsigned long long *value = (unsigned long long *)data->kaddr1;
++
++	if (data->status == BIT(SVC_STATUS_OK)) {
++		priv->dcmf_status.dcmf0 = FIELD_GET(RSU_DCMF0_STATUS_MASK,
++						    *value);
++		priv->dcmf_status.dcmf1 = FIELD_GET(RSU_DCMF1_STATUS_MASK,
++						    *value);
++		priv->dcmf_status.dcmf2 = FIELD_GET(RSU_DCMF2_STATUS_MASK,
++						    *value);
++		priv->dcmf_status.dcmf3 = FIELD_GET(RSU_DCMF3_STATUS_MASK,
++						    *value);
++	} else
++		dev_err(client->dev, "failed to get DCMF status\n");
++
++	complete(&priv->completion);
++}
++
+ /**
+  * rsu_send_msg() - send a message to Intel service layer
+  * @priv: pointer to rsu private data
+@@ -361,7 +405,8 @@ static ssize_t max_retry_show(struct device *dev,
+ 	if (!priv)
+ 		return -ENODEV;
+ 
+-	return sprintf(buf, "0x%08x\n", priv->max_retry);
++	return scnprintf(buf, sizeof(priv->max_retry),
++			 "0x%08x\n", priv->max_retry);
+ }
+ 
+ static ssize_t dcmf0_show(struct device *dev,
+@@ -408,6 +453,61 @@ static ssize_t dcmf3_show(struct device *dev,
+ 	return sprintf(buf, "0x%08x\n", priv->dcmf_version.dcmf3);
+ }
+ 
++static ssize_t dcmf0_status_show(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
++
++	if (!priv)
++		return -ENODEV;
++
++	if (priv->dcmf_status.dcmf0 == INVALID_DCMF_STATUS)
++		return -EIO;
++
++	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf0);
++}
++
++static ssize_t dcmf1_status_show(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
++
++	if (!priv)
++		return -ENODEV;
++
++	if (priv->dcmf_status.dcmf1 == INVALID_DCMF_STATUS)
++		return -EIO;
++
++	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf1);
++}
++
++static ssize_t dcmf2_status_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
++
++	if (!priv)
++		return -ENODEV;
++
++	if (priv->dcmf_status.dcmf2 == INVALID_DCMF_STATUS)
++		return -EIO;
++
++	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf2);
++}
++
++static ssize_t dcmf3_status_show(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
++
++	if (!priv)
++		return -ENODEV;
++
++	if (priv->dcmf_status.dcmf3 == INVALID_DCMF_STATUS)
++		return -EIO;
++
++	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf3);
++}
+ static ssize_t reboot_image_store(struct device *dev,
+ 				  struct device_attribute *attr,
+ 				  const char *buf, size_t count)
+@@ -484,6 +584,10 @@ static DEVICE_ATTR_RO(dcmf0);
+ static DEVICE_ATTR_RO(dcmf1);
+ static DEVICE_ATTR_RO(dcmf2);
+ static DEVICE_ATTR_RO(dcmf3);
++static DEVICE_ATTR_RO(dcmf0_status);
++static DEVICE_ATTR_RO(dcmf1_status);
++static DEVICE_ATTR_RO(dcmf2_status);
++static DEVICE_ATTR_RO(dcmf3_status);
+ static DEVICE_ATTR_WO(reboot_image);
+ static DEVICE_ATTR_WO(notify);
+ 
+@@ -500,6 +604,10 @@ static struct attribute *rsu_attrs[] = {
+ 	&dev_attr_dcmf1.attr,
+ 	&dev_attr_dcmf2.attr,
+ 	&dev_attr_dcmf3.attr,
++	&dev_attr_dcmf0_status.attr,
++	&dev_attr_dcmf1_status.attr,
++	&dev_attr_dcmf2_status.attr,
++	&dev_attr_dcmf3_status.attr,
+ 	&dev_attr_reboot_image.attr,
+ 	&dev_attr_notify.attr,
+ 	NULL
+@@ -532,6 +640,10 @@ static int stratix10_rsu_probe(struct platform_device *pdev)
+ 	priv->dcmf_version.dcmf2 = INVALID_DCMF_VERSION;
+ 	priv->dcmf_version.dcmf3 = INVALID_DCMF_VERSION;
+ 	priv->max_retry = INVALID_RETRY_COUNTER;
++	priv->dcmf_status.dcmf0 = INVALID_DCMF_STATUS;
++	priv->dcmf_status.dcmf1 = INVALID_DCMF_STATUS;
++	priv->dcmf_status.dcmf2 = INVALID_DCMF_STATUS;
++	priv->dcmf_status.dcmf3 = INVALID_DCMF_STATUS;
+ 
+ 	mutex_init(&priv->lock);
+ 	priv->chan = stratix10_svc_request_channel_byname(&priv->client,
+@@ -561,6 +673,13 @@ static int stratix10_rsu_probe(struct platform_device *pdev)
+ 		stratix10_svc_free_channel(priv->chan);
+ 	}
+ 
++	ret = rsu_send_msg(priv, COMMAND_RSU_DCMF_STATUS,
++			   0, rsu_dcmf_status_callback);
++	if (ret) {
++		dev_err(dev, "Error, getting DCMF status %i\n", ret);
++		stratix10_svc_free_channel(priv->chan);
++	}
++
+ 	ret = rsu_send_msg(priv, COMMAND_RSU_RETRY, 0, rsu_retry_callback);
+ 	if (ret) {
+ 		dev_err(dev, "Error, getting RSU retry %i\n", ret);
+diff --git a/include/linux/firmware/intel/stratix10-svc-client.h b/include/linux/firmware/intel/stratix10-svc-client.h
+index 19781b0f6429..420b747b4a03 100644
+--- a/include/linux/firmware/intel/stratix10-svc-client.h
++++ b/include/linux/firmware/intel/stratix10-svc-client.h
+@@ -111,12 +111,14 @@ enum stratix10_svc_command_code {
+ 	COMMAND_RECONFIG_DATA_SUBMIT,
+ 	COMMAND_RECONFIG_DATA_CLAIM,
+ 	COMMAND_RECONFIG_STATUS,
+-	COMMAND_RSU_STATUS,
++	/* for RSU */
++    COMMAND_RSU_STATUS = 10,
+ 	COMMAND_RSU_UPDATE,
+ 	COMMAND_RSU_NOTIFY,
+ 	COMMAND_RSU_RETRY,
+ 	COMMAND_RSU_MAX_RETRY,
+ 	COMMAND_RSU_DCMF_VERSION,
++	COMMAND_RSU_DCMF_STATUS,
+ };
+ 
+ /**
+-- 
+2.26.2
+

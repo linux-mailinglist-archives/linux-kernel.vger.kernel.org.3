@@ -2,116 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28394E1EF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC124E1EF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344120AbiCUCCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 22:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
+        id S1344136AbiCUCHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 22:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238328AbiCUCC2 (ORCPT
+        with ESMTP id S238328AbiCUCHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 22:02:28 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2106.outbound.protection.outlook.com [40.92.99.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19FA13EA2
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:01:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KYF56w1Q5axFmcmbLIxFa5bkbxGEIu9CPgh6wr+1x+Ko2ePNI/6wtBKSvPeMy+33QVyxxnh7pT/2ggRS7THbuznUE7Odo+ZJBzMLg8qcaK9UhL3rjxCKyhfi8/CQ5SRgyrAI9MKFhiWkLxqSS/3Cv870DhrPq+kAedmq3GU2RsTwex6bz3pqYVPgFtRGmGSLCMNzb1MPlO5JNtGZC3xmd3nnx4YdNeCNHg9CB7RegSOSRYZbNdsDL46teh4QbroC6BsR1gO0VdUflB3xQ7ctvetmQwQ7VZ3mrXC4vPIXV4mzFCYbW+hVotep6nkBrSq2PJdvQXx1nDR7szWaF+X1Mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2YNnk5eQb5BGqqIcbU/vBzIutbU4RVn5NkMGqnqt9A4=;
- b=M+PdQKQjTQp2iNxTynDNel91Cmi7Pjf7UjQGwyLmrivFo8A6oL7yyrj7FCg/c0fAOf4M6rU672gkuSTm//Gc8o048iyQTftEQf7elXYgMV/J+ESHsNTbLRKtbEEhOkJBoULU3qaQuvid5kWx67feHVh+mpBOARznulCFDgSXeLRzblll4UjkyfnBvUs4QNhMXi5q7i2UnFDpiIz5TB1fHnneK2ujKsExmVlhKqRmCbfvKm6Rejc6JUGMw9xpzstux4bx7PH0IP7Zjsd9A1lb/J1ZN6SmPortog9Icm6TbAg33AeAAHxarSVkxbw+UNTfh05JY3GRuTKJsb7tLtgDVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2YNnk5eQb5BGqqIcbU/vBzIutbU4RVn5NkMGqnqt9A4=;
- b=SrscpTfIuWv2nIBhPeCTINBTvEW9lG6h6uGldKa95an6l35rDpGtGra/W7Zj3Z5xKPtCqY42s2iJCGROT6zLFfbjhjWY1gTKQiboBljvrHfkpRUAmPH6SKz4xq/KV+N6Ftqmm8WzhFkMx2nidMwPkMPLOukf+lNnADGUR7MM8Kt0fMGbdZu7T3nYcHmXey7nCB5d2A9j5RQleEc4AtroDvHi0E8L3o7gagWzYTdPhkf68BtRFFw+KAEKUkVCXcQtkm5t5wL3kibic+mpJ89PLf9czwnBpkNyVbv+qwaA49Vnoqfi24SYcwCF/uloa1xn3LSQSPR8X2viTuAgNgxVVA==
-Received: from OSZP286MB2078.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:16f::10)
- by TYYP286MB1083.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:ca::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Mon, 21 Mar
- 2022 02:01:02 +0000
-Received: from OSZP286MB2078.JPNP286.PROD.OUTLOOK.COM
- ([fe80::e505:230d:4122:cd2a]) by OSZP286MB2078.JPNP286.PROD.OUTLOOK.COM
- ([fe80::e505:230d:4122:cd2a%7]) with mapi id 15.20.5081.022; Mon, 21 Mar 2022
- 02:01:02 +0000
-From:   Cui Alan <AlanCui4080@outlook.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: How can I post my patch to others
-Thread-Topic: How can I post my patch to others
-Thread-Index: Adg8xy6diPuA5dDSQlWeVWPHyWF58Q==
-Date:   Mon, 21 Mar 2022 02:01:02 +0000
-Message-ID: <OSZP286MB2078A6845CBAE9AC43F7E70BAD169@OSZP286MB2078.JPNP286.PROD.OUTLOOK.COM>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-tmn:  [n77C+Fjp3ZIJMYHLojKaEdIuzyFv5PznFOuOoUulh8qYy8ps1csozvtZC+Iej1DxvpgIPCB+Sik=]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3bd189c1-a366-48fc-73c1-08da0adea6a4
-x-ms-traffictypediagnostic: TYYP286MB1083:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: n1HPpejn8sOF0usqTP7YYbsvtOInnlm2S4iEPYM9bB8uKvRVrq2N/wLtkejeINk0iyxhqAhsTaNNNHKx+Pw3NwfCcZ/GJzP14zJtmEuSS7kYgivbV2LbrqYx9WGcmt4xU2mGbkJbB0la9KPRkJJXAIwvQaDKCsie26eUOcFMKRH/az8+l5YX3Hx3JObuj+astaQV+shm07egb3PaIn7MhwfAWdsl4fZqbs6k8L9lq5Pe8DGADhYdScwBGmsNasdxE09fVV7S0LGUkS2d+uH81xsuk5G5et8e0hDpVnVWLBoP5h13dK6I9AVLhegwOmPRfxc+KAGa8+s/0EynJ67NN+tyjPTaMaHmgZZtUe2Bes9aIhsN+EsQBj68NUpPGBuVboSsKSRK0gXPwtd9ck6MzoFY8BX1FL+b6N90K/tX5MxROx40oJdPBrXpOPU+AHt5hKZFo3GJWwij/flMeoirBXPzVLZQr/eYwu0FLXi0agFAbGt24rrZdT+1yfW5lqk/F1RvRQySlQ+HjROvTrc33tkJVl1bUIcZ1+NtlNEkr22CSo1pgKRJjpD/wbAEwKDu7GO7q23uiLreiqdaMdjHjw==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5mNhIinztpZfwQmUHwCwZLTrtyyEMzqtE0brNie63k+M1eH1gw1w1nNTMWTy?=
- =?us-ascii?Q?e12f0e5oMNCJ4b9aesOAM0N2v41Bh5m3zONf7ITS6+SUPHIFNxlFgcDcdG2p?=
- =?us-ascii?Q?NDKbVNi8pZFB9TsZ3m4chyioNaWjHnt1guZhbvhQ8CdDXOwdi3X59Oyoeysk?=
- =?us-ascii?Q?3BqMCgidpjXDTkLE7yZT9YZmtshNaeh2j+NsG4wumEr25ofGRBRlmUNFU+j7?=
- =?us-ascii?Q?QdarqFw6aZZRzJTOv+bhEdDWskouMf/jsuW6dJBv8di4uFz6yzH+qlgmAa2I?=
- =?us-ascii?Q?IkIjwAFcD7Ud4wRoqIki3wC/CUE9mDv/DKy0TTExrX2EB7flYGN2XSOwZO8g?=
- =?us-ascii?Q?hYFSR+VnnjbtCmEPrYNwX834DUezVUJgrYatZpd6mbvTa7PQT13M/8wRqGm+?=
- =?us-ascii?Q?SH2paIchhpmWBSdL/Y/HPJcWXJ4ku4xmqJapEUUeLIzGwyUrMnA+sr9uzmcw?=
- =?us-ascii?Q?cdNxnmTDL7en4Aqal6mKai0/BwCg13ARCapFoql7WlM20ucFBzR5Mic3Fz3I?=
- =?us-ascii?Q?xSUwSEuzKrpEUJ4c4/bkZFfvAq3w0XC+hrBA4j470ql31Oa9y0yiLNmo1JAC?=
- =?us-ascii?Q?+ub3g3DH+8boK35ywudGXZdErEW00r5kZ+agXJZfStpETQTPGebPXTaG/ehf?=
- =?us-ascii?Q?KUetA45NUrA9+igKhcr4dyRm3xbEQk/7LzJshE2oF3XHGNkdDp0gUqNzZZkA?=
- =?us-ascii?Q?2bzMj5IzGLHXslIda8RZ/R6+j3Iakt7QM7xcvhTSTcOkZPnYSOeV6OxEMBq+?=
- =?us-ascii?Q?pDed5VdZwatU7qu37pCtYA1bzZIUbNlvlqDm8psfSj3rvsfqx/yhRgMoqpH4?=
- =?us-ascii?Q?LZ+i/SeTXvuMgQU8vTJxAeBnns/XnGiS20q/8xjmimIPlLdrT87P6jFHAdxM?=
- =?us-ascii?Q?2MXjJjepcJW8ggdGJL/L8EKeQnTYuSgFqvKMhJ8AHSMCB0oejK/WUy3I9DDC?=
- =?us-ascii?Q?WNoEr1G0y/WzdtwH0RLbo1piPLxpGJ4A8vhky7kYdeIznU8jEgVlzAdtf0G4?=
- =?us-ascii?Q?GfnGSDKFWDSic/5g+oOxuCFKBtMlZk6Dn2UJxe3QoV3IlfTb5cY1l58E3ln9?=
- =?us-ascii?Q?i/ZkT7Tb/qqdqeyFUvyVAlJ9UZVDZq9ADd9Kouuv4oMtUHpZuJ6Wqy+wr9im?=
- =?us-ascii?Q?akc4x1IK9ncpHaG5z+jsPASsEGs4TZzPk2QwT5Qncto86bN9/aC6+RrBz+8t?=
- =?us-ascii?Q?V59R1qfhT7BhelarfSGlAclteJ7owgdbqn/uiw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 20 Mar 2022 22:07:34 -0400
+Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E9A627CF9;
+        Sun, 20 Mar 2022 19:06:07 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id D8ADBFF93C;
+        Mon, 21 Mar 2022 02:06:05 +0000 (UTC)
+Date:   Mon, 21 Mar 2022 03:06:03 +0100
+From:   Max Staudt <max@enpas.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+Message-ID: <20220321030603.2feac810.max@enpas.org>
+In-Reply-To: <20220317205542.2re5x73gqys5fl2n@pengutronix.de>
+References: <20220307214303.1822590-1-max@enpas.org>
+        <20220314215843.xxf6rdxxfwb255s4@pengutronix.de>
+        <20220317211822.7d74b49c.max@enpas.org>
+        <20220317205542.2re5x73gqys5fl2n@pengutronix.de>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSZP286MB2078.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3bd189c1-a366-48fc-73c1-08da0adea6a4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2022 02:01:02.0534
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYP286MB1083
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,MISSING_HEADERS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Collaborators,
+On Thu, 17 Mar 2022 21:55:42 +0100
+Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 
-I'm going to post a patch, but I still don't know whatever can I simply pos=
-t the PATCH to others in the "linux-kernel" mailing list. It's said that I =
-can do that to make PATCH examined by others. I don't want to pollute the m=
-ain list.
+> On 17.03.2022 21:18:22, Max Staudt wrote:
+> > > > +/* Bits in elm->cmds_todo */
+> > > > +enum ELM_TODO {    
+> > >         ^^^^^^^^
+> > > small caps please, and Vincent alreadt commented on the name.  
+> > 
+> > Small caps? Sorry, that's not possible in plain ASCII.
+> > You probably mean something else, but I'm not sure what?  
+> 
+> I meant to say lowercase, sorry for the confusion.
 
-I didn't subscribe the "linux-kernel" mailing list, so I'd rather get an Cc=
-.
+Ah, thanks for the clarification!
 
-Sincerely,
-a.
+
+> > > > +	/* Regular parsing */
+> > > > +	switch (elm->state) {
+> > > > +	case ELM_RECEIVING:
+> > > > +		if (elm327_parse_frame(elm, len)) {
+> > > > +			/* Parse an error line. */
+> > > > +			elm327_parse_error(elm, len);
+> > > > +
+> > > > +			/* Start afresh. */
+> > > > +			elm327_kick_into_cmd_mode(elm);
+> > > > +		}
+> > > > +		break;
+> > > > +	default:
+> > > > +		break;
+> > > > +	}
+> > > > +}
+> > > > +
+> > > > +/* Assumes elm->lock taken. */
+> > > > +static void elm327_handle_prompt(struct elmcan *elm)
+> > > > +{
+> > > > +	struct can_frame *frame = &elm->can_frame;
+> > > > +	char local_txbuf[20];    
+> > > 
+> > > How can you be sure, that the local_txbuf is large enough?  
+> > 
+> > It's filled in this very same function, with sprintf() or a strcpy()
+> > from one of the short strings in elm327_init_script (see next quote
+> > below). I've calculated the maximum length that can occur out of all
+> > these possibilities in the current code, and set that as the length
+> > of local_txbuf.  
+> 
+> You can use something like "local_txbuf[sizeof("ATZ;ATDT0815;ATH")]"
+> with the longest ATZ command you can produce here.
+
+That's a great idea, thanks!
+
+
+> > > > +	/* Reconfigure ELM327 step by step as indicated by
+> > > > elm->cmds_todo */
+> > > > +	if (test_bit(TODO_INIT, &elm->cmds_todo)) {
+> > > > +		strcpy(local_txbuf, *elm->next_init_cmd);    
+> > > 
+> > > strncpy()  
+> > 
+> > For this, there would have to be an entry in elm327_init_script
+> > that is longer than sizeof(local_txbuf) - 1. I highly doubt there
+> > ever will be, and even if someone does come up with one (maybe a
+> > huge new command in a future ELM327 revision), then strncpy would
+> > silently cut off the end and induce unexpected failure. Most
+> > importantly, this failure would be silent - the driver doesn't
+> > check the ELM's responses by design!
+> > 
+> > I suggest an assert here. How about something like this?
+> > 
+> > 	if (strlen(*elm->next_init_cmd) < sizeof(local_txbuf))
+> > 		strcpy(local_txbuf, *elm->next_init_cmd);
+> > 	else
+> > 		WARN_ONCE(...)
+> >
+> > If elm327_init_script contains an item longer than this buffer, then
+> > the buffer size needs to be increased. Simple programming error
+> > IMHO. I'd also add a comment to state this, next to
+> > elm327_init_script.
+> > 
+> > What do you think?  
+> 
+> You can use BUILD_BUG_ON() (see linux/build_bug.h) inside your C
+> function to make a compile time check, or static_assert() outside of C
+> functions.
+
+Thanks! But... what would be the expression being checked? The desire
+is to compare the size of local_txbuf against the size of each member
+of elm327_init_script - it seems counterintuitive to me to loop over
+them all and have a BUILD_BUG_ON() as the loop body. Does the compiler
+optimise that away?
+
+
+> > > > +	} else if (test_and_clear_bit(TODO_SILENT_MONITOR,
+> > > > &elm->cmds_todo)) {
+> > > > +		sprintf(local_txbuf, "ATCSM%i\r",
+> > > > +			!(!(elm->can.ctrlmode &
+> > > > CAN_CTRLMODE_LISTENONLY)));    
+> > > 
+> > > snprintf()  
+> > 
+> > See above. This size is predictable, and used to size local_txbuf.
+> > 
+> > Thinking about it, since this size is easily predictable, the
+> > compiler could also do it, and that would turn snprintf() into a
+> > compile time check.
+> > 
+> > Unfortunately I couldn't make GCC shout at me for giving snprintf()
+> > too small a buffer to fit all possible expansions of this format
+> > string. Is this even possible?  
+> 
+> In user space, I've seen warnings like that, not sure about the
+> kernel.
+
+Ditto.
+
+Okay, then I can plop in snprintf() anyway, and maybe the compiler will
+start shouting a few years down the road when this kind of warning is
+enabled in kernel builds. Unless you no longer see the need :)
+
+
+> > > > +static int elmcan_netdev_open(struct net_device *dev)
+> > > > +{
+> > > > +	struct elmcan *elm = netdev_priv(dev);
+> > > > +	int err;
+> > > > +
+> > > > +	spin_lock_bh(&elm->lock);
+> > > > +	if (elm->hw_failure) {
+> > > > +		netdev_err(elm->dev, "Refusing to open
+> > > > interface after a hardware fault has been detected.\n");
+> > > > +		spin_unlock_bh(&elm->lock);
+> > > > +		return -EIO;
+> > > > +	}    
+> > > 
+> > > How to recover from this error?  
+> > 
+> > The user can detach and reattach the ldisc as often as desired.
+> > 
+> > There is currently no intention to recover automatically. Once
+> > elm->hw_failure is set, something really weird must have happened
+> > such as unexpected characters on the UART. Since these devices are
+> > usually a PIC right next to a UART-USB bridge chip, which is why I
+> > deem this indicative of hardware too faulty to be trusted in any
+> > way.
+> > 
+> > Regular "expected" errors are parsed and dealt with by sending error
+> > frames in elm327_parse_error(). These do not trigger hw_failure.  
+> 
+> Ok, in other drivers I usually do a full reset during an ifdown/ifup
+> cycle....at least for non hot plug-able devices.
+
+Yeah, this one is hotpluggable by definition, and I'm not sure that
+resuming communications is a good idea once a UART sanity test in the
+driver has failed. In case the UART is unreliable, trying to reset the
+interface may do more harm than good.
+
+And if anyone builds this interface internally into their product,
+non-hotpluggable and with this driver, then may mercy be upon them.
+This driver really isn't meant for them. All ELM327 devices I've ever
+seen are a UART via RS232, USB, BT, or TCP, and hot-pluggable by the
+user.
+
+I have thought about a reset as a thing to maybe implement later down
+the road, but so far when I tried to implement more lenient error
+handling, I got a bad feeling about it.
+
+Fun fact: elm327_hw_failure() used to be called elm327_panic() in early
+versions of the driver, because I just give up on UART errors :)
+
+
+> > > > +	elm->txbuf = kmalloc(ELM327_SIZE_TXBUF, GFP_KERNEL);
+> > > >  
+> > > 
+> > > Why do you allocate an extra buffer?  
+> > 
+> > If I remember correctly, I was told that this is preferred because
+> > drivers can DMA out of the aligned buffer. I didn't question that. I
+> > can simply allocate a buffer as part of struct elmcan if you
+> > prefer.  
+> 
+> You can force proper alignment with marking the memory as
+> ____cacheline_aligned. Extra bonus for checking (and optimizing)
+> structure packing with the "pahole" tool.
+
+Thanks! Will do then, this simplifies things.
+
+
+
+Max

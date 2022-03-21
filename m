@@ -2,41 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F384E2529
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E4B74E2516
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346742AbiCULXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 07:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
+        id S1346674AbiCULQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 07:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244534AbiCULXd (ORCPT
+        with ESMTP id S233736AbiCULQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 07:23:33 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479598BE07
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:22:08 -0700 (PDT)
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N0Zfg-1oJnn02Sxg-00wU2x for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022
- 12:22:06 +0100
-Received: by mail-wr1-f51.google.com with SMTP id h23so19596652wrb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:22:06 -0700 (PDT)
-X-Gm-Message-State: AOAM530X7E0KC2rIoQRsjD9iOrJqooVD8sbi1Y9vIL0/z+uTvjtcveCP
-        CKtIibq/7QVQOHFVgPqQNsNIvmXwvuM5WjjiwD4=
-X-Google-Smtp-Source: ABdhPJwXz+ToNHL4TpOoh+HdlcxuOPou7dXTvfzP0iFHuBYr3vtjBj/zXXognFOzrqzkSJ6ZJ2iZfEfVsapaC/m5OFY=
-X-Received: by 2002:adf:d081:0:b0:1ef:9378:b7cc with SMTP id
- y1-20020adfd081000000b001ef9378b7ccmr17934085wrh.407.1647856084986; Mon, 21
- Mar 2022 02:48:04 -0700 (PDT)
+        Mon, 21 Mar 2022 07:16:42 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9A554F99;
+        Mon, 21 Mar 2022 04:15:14 -0700 (PDT)
+Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MhDEq-1o1iwU4Btq-00eIp5; Mon, 21 Mar 2022 12:15:13 +0100
+Received: by mail-wm1-f51.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so7460077wmb.4;
+        Mon, 21 Mar 2022 04:15:12 -0700 (PDT)
+X-Gm-Message-State: AOAM531nrNOtTOrV1uTHOBAJuVJiM0llPWnSOSRP2RHda1BJHRBEqeoy
+        kcKHu2aW3KVq8lxPnojYv4A8PCYDQekmi/j6LTU=
+X-Google-Smtp-Source: ABdhPJzKxQl6VSttlmzvEi1hOv2leyycaxxTRshXcWMv4AXgfyXlahFpsNNQtY+AZ5wBEfDoPO06uRJRVwd5uyfNNS0=
+X-Received: by 2002:a05:600c:4b83:b0:38c:49b5:5bfc with SMTP id
+ e3-20020a05600c4b8300b0038c49b55bfcmr24337091wmp.33.1647857360314; Mon, 21
+ Mar 2022 03:09:20 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-6-chenhuacai@loongson.cn>
- <CAK8P3a2kroHVN3fTabuFVMz08SXytz-SC8X11BxxszsUCksJ4g@mail.gmail.com> <CAAhV-H6zE7p6Tq8rg1Fq5cK5L38z-VHjxsZ+qm8+Cp5x=u_bUQ@mail.gmail.com>
-In-Reply-To: <CAAhV-H6zE7p6Tq8rg1Fq5cK5L38z-VHjxsZ+qm8+Cp5x=u_bUQ@mail.gmail.com>
+In-Reply-To: <20220319142759.1026237-1-chenhuacai@loongson.cn>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 21 Mar 2022 10:47:49 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a38nUyAt8gGEYregqivdP7NsXS0RuU1NX4_EAVvwGQBWA@mail.gmail.com>
-Message-ID: <CAK8P3a38nUyAt8gGEYregqivdP7NsXS0RuU1NX4_EAVvwGQBWA@mail.gmail.com>
-Subject: Re: [PATCH V8 13/22] LoongArch: Add system call support
+Date:   Mon, 21 Mar 2022 11:09:04 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a12dY57+ZPEREAUrsNf45S0_4-yYHen6p0-PjJEivjczg@mail.gmail.com>
+Message-ID: <CAK8P3a12dY57+ZPEREAUrsNf45S0_4-yYHen6p0-PjJEivjczg@mail.gmail.com>
+Subject: Re: [PATCH V8 00/22] arch: Add basic LoongArch support
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -50,86 +47,58 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Christian Brauner <brauner@kernel.org>
+        Huacai Chen <chenhuacai@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:6Sdg7j3qeyi0JviKcSTH/8653SBzjKu9ug2Sw0Hpt4uS18JxEWY
- KDcZsgk91o0vT2Iy9qivzeTne6MFsz9wNBcfYjBoQX/tApAvCgGyo9S14EIwByHviOiVxzK
- GaCMsk0xfcBM7skGsDjbrHm/Xe4nOfeXuBMttpOfRrDz8y7ttqt+CHrW8aK8YTz6kQtQ4rO
- 17Xwk8nV2rx3vgE5nYqsg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:uiHtc6eMwng=:YAmD1V3uh3qIAn1NWi6kHG
- qmI0ZiuYUhs0w/buIBlo/VvsW9SMI0PaG9lkoBFv7DGDhseAg1LoNt7y8ZBFJ+rA3/CB7Zp0b
- dBnSfyJTlb0jM+tE/VsWoggxFJC8tlwcLHri5CbwaYkz73db+IpKETDPUuLX3vy9nzv+lPAwZ
- SxgIdIRBeQgGV//UUuGdCqKwiHjN4o3r8wi1t0ccF8jbgJGwQHfciWj6X+ysvpwrEW69ldpFt
- zFL+amq1IFojTxMqCntXmmdK68UaWhxLlc30svjUjOAxpOQ0iLURoMWPyUjRP2vl7m8jD6Sar
- lHo3GK7WfgKv8UqQeu/th/XqvmhbXo5LrZtW8QdUxnY4OSDdF8z605D18MgSJpH3pO8dbRoku
- wdcEUTHI/YyjFjiBloCeJyTm7qJcgaDd4kNrYPslY5UVkp1Hk9kdhB/yNQuAEPZIlk9DI3R/t
- ewp4WTxxp1Ea7FwIM3UfOofVYy2w55+3o3TRUDmJJyBBpKAWmTUxQGuQe7SLyF134D8WeY0B2
- sMYYaCmWF9uk2T22RvoJjZ1XlqH/YStZJLapzxNQB9nOX6P0AFOl5LSAjY7InB5Z87RCVf8zl
- xw/PrL9bWO75NDWTPp0QXMf/HxMqgeHSYn6q8kW1el2wtC6638DYZnrQVk3yGmVtE5AvfF/hG
- sxPG/yaSW9MRF8fkRHSq9D93Xd+hAGHn+D8SzmXxtSZOpQlBfiffPdwtHCsHn7AbTF/2oriwt
- txE5BwtEHp/iAND+IRAw12bcp23XJ+Oqlh19PXyvJVZsoenIVd0vHNXjRTTLZ7s4aPxR071gI
- Q+sMO93G/mnKvL7sM3mQ2kCvC6mkzmsF0qtwLk2qlUkYMvKtog=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:ZnGkfk570X1mQgyfANU13nhtx8Unvo25TN3oV2Riz+Tha+mptO5
+ LUYkQe3vwkCqXCPjGIjuR3VgXdTqpzTiYgDl6npzESHpjpMEhoKv+I80lWpGVDjWpkjjrss
+ hF3Fr68I/fRF+wzC16d2CX08JR7qLFF39jGBieyiFIHDmIBhx3hQOUw/y1aA4z87NQzin/t
+ EEavyeCv3+D9aNMwhTA8w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:gTy4IGEUdE0=:9wy/OcskBTsPHIi+puE+dH
+ 08jh+kRc/1DFhA9C9Z0/G2JBNxpJNsb3hBSaGRyJ+9JhoBCfz8R56X55PAg7E104WpkVe1LTX
+ 8oKRwaYaD4qxgOtTWZNyL4JSxGB5a3rj7Bz5ndCUhxv/44SYOzsfU8LGiPWF6F+uBobPKoKrQ
+ DlV6s26wKQcphKt3c0V61+X3ZolWwnyqK8wTu6qszfhMjRyQ4dPa9ihsFwj9AK2VEy4lRxzE6
+ IfNSFPgNz64o4q089G5P8f9+9is2Cmb0/iP/MkqfGCewWMd+WdPR87a3qBwTeDoxzC1G6y9XB
+ oeEyTWP7KrRZayvw/Hg0SLjRnDpt5x24L/dqoqWbTJf8jAIsmEwUazMtdMw3/1z1wLnuvThEw
+ 4ZU+JN6SV3kV1tgcj49y/fCdQqI+MJ7ehV7mrjIEQ3h8W3S3kAWEzNbgUW4x7LmyjYfZH6T1H
+ xmEdDSMrYV+807AugkiCbRlYa/N4acUIxlFf+uUAcLL8cZUyg2ndFTJxFFcdDfx3XXOxc9UGc
+ 1C759GZ8UVEB0L4bzV5OFMw5d8VTWIHhx+aYG2LwKusfWVTwUz1etR6SbqZKu0wIjgavL5uE/
+ IiaGfRuYWZzLiB8PJlVggKIsh7KB0+e9iW5xuss4CvkFMMO4ijuSRVFwNNe8RCr4weGzBYq65
+ sjX2vKjFJxlxGeqYyphYf4xigEtsVZM1opX3yBMu/Ptzn2oo4g2vM+MMd0byMmvwGzACe1h01
+ lW6SqAO/ge5nib1z1BpwlEXwZDBE1wDGZm0qxSNmj3QUJ+Pq0caAdd6LLhRbeHLv+jRXx8L/A
+ 1XPsupWL4sg7tIeAfiPSA/Xtc/qoJT2tDwJEnudA1lBFKZ9kO4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:41 AM Huacai Chen <chenhuacai@kernel.org> wrote:
-> On Mon, Mar 21, 2022 at 5:01 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> > >
-> > > This patch adds system call support and related uaccess.h for LoongArch.
-> > >
-> > > Q: Why keep __ARCH_WANT_NEW_STAT definition while there is statx:
-> > > A: Until the latest glibc release (2.34), statx is only used for 32-bit
-> > >    platforms, or 64-bit platforms with 32-bit timestamp. I.e., Most 64-
-> > >    bit platforms still use newstat now.
-> > >
-> > > Q: Why keep _ARCH_WANT_SYS_CLONE definition while there is clone3:
-> > > A: The latest glibc release (2.34) has some basic support for clone3 but
-> > >    it isn't complete. E.g., pthread_create() and spawni() have converted
-> > >    to use clone3 but fork() will still use clone. Moreover, some seccomp
-> > >    related applications can still not work perfectly with clone3.
-> >
-> > Please leave those out of the mainline kernel support though: Any users
-> > of existing glibc binaries can keep using patched kernels for the moment,
-> > and then later drop those pages when the proper glibc support gets
-> > merged.
-> The glibc commit d8ea0d0168b190bdf138a20358293c939509367f ("Add an
-> internal wrapper for clone, clone2 and clone3") modified nearly
-> everything in order to move to clone3(), except arch_fork() which used
-> by fork(). And I cannot find any submitted patches to solve it. So I
-> don't think this is just a forget, maybe there are other fundamental
-> problems?
+On Sat, Mar 19, 2022 at 3:27 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+>
+> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> are already added in the next revision of ACPI Specification (current
+> revision is 6.4).
+>
+> This patchset is adding basic LoongArch support in mainline kernel, we
+> can see a complete snapshot here:
+> https://github.com/loongson/linux/tree/loongarch-next
 
-I don't think there are fundamental issues, they probably did not consider
-it necessary because so far all architectures supported clone().
+This looks fine to me for the most part, and I only had comments on
+a couple of things that we we had discussed before. I think the syscall
+interface and the spinlock implementation bits can be addressed now
+by leaving the controversial bits out of the submission, but the boot
+interface still remains to be resolved.
 
-Adding Christian Brauner and H.J. Lu for clarificatoin.
+As discussed before, I think the best way to do this is to not have a
+documented custom interface but instead use the UEFI wrapper
+code for both the (current) ACPI based boot and potential DT based
+embedded systems that may get added later.
 
-> > > +#define __get_user(x, ptr) \
-> > > +({                                                                     \
-> > > +       int __gu_err = 0;                                               \
-> > > +                                                                       \
-> > > +       __chk_user_ptr(ptr);                                            \
-> > > +       __get_user_common((x), sizeof(*(ptr)), ptr);                    \
-> > > +       __gu_err;                                                       \
-> > > +})
-> >
-> > It would be good to also provide a
-> > __kernel_kernel_nofault()/__put_kernel_nofault()
-> > implementation, as the default based on __get_user()/__put_user is not
-> > ideal.
-> They are provided in this file below.
-
-Ok, I see them now, not sure what I did wrong when I looked earlier.
-
-        Arnd
+       Arnd

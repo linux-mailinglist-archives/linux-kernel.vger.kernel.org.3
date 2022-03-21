@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F964E2978
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7AD4E29F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348985AbiCUOE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
+        id S1350005AbiCUOJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349118AbiCUN7P (ORCPT
+        with ESMTP id S1349003AbiCUODO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:59:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A471764C;
-        Mon, 21 Mar 2022 06:57:50 -0700 (PDT)
+        Mon, 21 Mar 2022 10:03:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA6D1760CA;
+        Mon, 21 Mar 2022 07:00:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD3CA6126A;
-        Mon, 21 Mar 2022 13:57:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8C80C340E8;
-        Mon, 21 Mar 2022 13:57:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47EBE611CF;
+        Mon, 21 Mar 2022 14:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5635AC340E8;
+        Mon, 21 Mar 2022 14:00:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871069;
-        bh=JBwT2FpWuW+DXrzrhNxMCQ2pX1GZUCBphhPILV5OTbU=;
+        s=korg; t=1647871209;
+        bh=HNI1dha5r5/aV4+8R/lLlKF+uCGDZHZnncogH9gUa+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OXqbDg7l+fn4GsmxsJ5hi0BssIi07/caBCeAhk+Hel+SqackmIkIiOQx8ebVbqvhs
-         smo58B9oISV20GFC8IWCcw1MxVbSQQ7umhSjL32SBHpQF6lEyZa8MkyROiwLTuDD5A
-         DnSHtX7iKJ5tpHBeh/hzGTnO82q7pruat6iZ2vQI=
+        b=wPPv1QRqufrtvt5zZvYeg/Jr8thbcbgn72VnjEnC83hFYf6zZJbIADzjGXqmSkK20
+         VCxOGAGqVvywhDAP6yN0cRodKJHI3btroVztgdkHZAyspEu4o2MhtE+qUJ8ndX/ONJ
+         72eozrnFfFg2ZEPcNlVQED7xpIZGSOrpbaOfUn9k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 5.4 12/17] usb: gadget: rndis: prevent integer overflow in rndis_set_response()
-Date:   Mon, 21 Mar 2022 14:52:48 +0100
-Message-Id: <20220321133217.511729578@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 13/32] iavf: Fix double free in iavf_reset_task
+Date:   Mon, 21 Mar 2022 14:52:49 +0100
+Message-Id: <20220321133220.947912427@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
-References: <20220321133217.148831184@linuxfoundation.org>
+In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
+References: <20220321133220.559554263@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +59,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
 
-commit 65f3324f4b6fed78b8761c3b74615ecf0ffa81fa upstream.
+[ Upstream commit 16b2dd8cdf6f4e0597c34899de74b4d012b78188 ]
 
-If "BufOffset" is very large the "BufOffset + 8" operation can have an
-integer overflow.
+Fix double free possibility in iavf_disable_vf, as crit_lock is
+freed in caller, iavf_reset_task. Add kernel-doc for iavf_disable_vf.
+Remove mutex_unlock in iavf_disable_vf.
+Without this patch there is double free scenario, when calling
+iavf_reset_task.
 
-Cc: stable@kernel.org
-Fixes: 38ea1eac7d88 ("usb: gadget: rndis: check size of RNDIS_MSG_SET command")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20220301080424.GA17208@kili
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e85ff9c631e1 ("iavf: Fix deadlock in iavf_reset_task")
+Signed-off-by: Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
+Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/rndis.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/intel/iavf/iavf_main.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/gadget/function/rndis.c
-+++ b/drivers/usb/gadget/function/rndis.c
-@@ -640,6 +640,7 @@ static int rndis_set_response(struct rnd
- 	BufLength = le32_to_cpu(buf->InformationBufferLength);
- 	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
- 	if ((BufLength > RNDIS_MAX_TOTAL_SIZE) ||
-+	    (BufOffset > RNDIS_MAX_TOTAL_SIZE) ||
- 	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE))
- 		    return -EINVAL;
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
+index 711e8c7f62de..7fca9dd8dcf6 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -2133,6 +2133,13 @@ static void iavf_watchdog_task(struct work_struct *work)
+ 		queue_delayed_work(iavf_wq, &adapter->watchdog_task, HZ * 2);
+ }
  
++/**
++ * iavf_disable_vf - disable VF
++ * @adapter: board private structure
++ *
++ * Set communication failed flag and free all resources.
++ * NOTE: This function is expected to be called with crit_lock being held.
++ **/
+ static void iavf_disable_vf(struct iavf_adapter *adapter)
+ {
+ 	struct iavf_mac_filter *f, *ftmp;
+@@ -2187,7 +2194,6 @@ static void iavf_disable_vf(struct iavf_adapter *adapter)
+ 	memset(adapter->vf_res, 0, IAVF_VIRTCHNL_VF_RESOURCE_SIZE);
+ 	iavf_shutdown_adminq(&adapter->hw);
+ 	adapter->netdev->flags &= ~IFF_UP;
+-	mutex_unlock(&adapter->crit_lock);
+ 	adapter->flags &= ~IAVF_FLAG_RESET_PENDING;
+ 	iavf_change_state(adapter, __IAVF_DOWN);
+ 	wake_up(&adapter->down_waitqueue);
+-- 
+2.34.1
+
 
 

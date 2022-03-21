@@ -2,120 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343294E2C7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B044E2C86
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350404AbiCUPmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37598 "EHLO
+        id S1350428AbiCUPnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350396AbiCUPmI (ORCPT
+        with ESMTP id S1350507AbiCUPnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:42:08 -0400
+        Mon, 21 Mar 2022 11:43:10 -0400
 Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0588174BAB
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:40:41 -0700 (PDT)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220321154037epoutp01cb75fd9f63713e24471324550836c1ce~eb53IIhkm1143611436epoutp01o
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:40:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220321154037epoutp01cb75fd9f63713e24471324550836c1ce~eb53IIhkm1143611436epoutp01o
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227A4177094
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:41:43 -0700 (PDT)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220321154141epoutp01a2f1ba9607fde7f6594792afca74ff03~eb6zJgcvo1140711407epoutp01p
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:41:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220321154141epoutp01a2f1ba9607fde7f6594792afca74ff03~eb6zJgcvo1140711407epoutp01p
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1647877237;
-        bh=H4iRtxP6C5+ANDGPqZZQuSeAZjGVh0tOl4ULnsl9gF4=;
+        s=mail20170921; t=1647877301;
+        bh=O1HQT/885gkVXT9rzN+2h0d6pOqAcBP4cDszVi8TFxQ=;
         h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=ke6bNTERlh8w6kpV6W+/0kgFCjfd3XkfzYavaoLLpRyLtHeN04skK499xvd5SHCLo
-         7VAdbwzpPVekCAw27eUi3CX1IjHCWWUoKkJJQtQMqSYM5hYipgxXMJxtBSZ8Cxzutc
-         0KjlJRMtiC/TgXv59wBaWS0GoTc7GzBXFe0nF1AI=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220321154035epcas5p4d39f34ca3d71432ae23165e81af8e0e6~eb51rIRzZ0673006730epcas5p4x;
-        Mon, 21 Mar 2022 15:40:35 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.182]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4KMf2k5MpQz4x9Pr; Mon, 21 Mar
-        2022 15:40:30 +0000 (GMT)
+        b=lGrhB2K91eQLqlZS1TIUu29spH3q1kroHpBasOlD4OPra/EX8Ty2cbUjyB1R2Ue8F
+         CiNwv70sZF8Fb8x7STwdzmkeRuqr5JVHWUru8o4gbakX5YURl8wMc+owxy1MHpvJPU
+         /x65c963baM/MvoacplxKvPpFY47mM29cqDsiF2s=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220321154140epcas5p3dbfc222f169b1b101042b407ee25f8f3~eb6x2TEbA1960819608epcas5p3Y;
+        Mon, 21 Mar 2022 15:41:40 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KMf3z4D9Fz4x9Pr; Mon, 21 Mar
+        2022 15:41:35 +0000 (GMT)
 Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
         epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EA.BA.12523.E6C98326; Tue, 22 Mar 2022 00:40:30 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220321154030epcas5p4165b1c4926701e7489138fc879c1d153~eb5wsQJz80673006730epcas5p4v;
-        Mon, 21 Mar 2022 15:40:30 +0000 (GMT)
+        BE.DA.12523.FAC98326; Tue, 22 Mar 2022 00:41:35 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220321154135epcas5p233cbad96d408145559a48ca0f5c9b0c8~eb6tKk6ge2171521715epcas5p2a;
+        Mon, 21 Mar 2022 15:41:35 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220321154030epsmtrp2cd58b657aabfffc0c1f1ba90deb3fa09~eb5wra_5M2183021830epsmtrp2o;
-        Mon, 21 Mar 2022 15:40:30 +0000 (GMT)
-X-AuditID: b6c32a4a-5a1ff700000030eb-d5-62389c6e571a
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220321154135epsmtrp1f6b47c8ad891baebce0b344d6f205e31~eb6tJo0PT1508015080epsmtrp1l;
+        Mon, 21 Mar 2022 15:41:35 +0000 (GMT)
+X-AuditID: b6c32a4a-5a1ff700000030eb-45-62389caf62ba
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A0.E0.03370.D6C98326; Tue, 22 Mar 2022 00:40:30 +0900 (KST)
+        67.E0.03370.EAC98326; Tue, 22 Mar 2022 00:41:34 +0900 (KST)
 Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
         (KnoxPortal) with ESMTPA id
-        20220321154028epsmtip27251cc62b8a265afbe155e8c0c0c9bdf~eb5u9bLVs2608826088epsmtip2V;
-        Mon, 21 Mar 2022 15:40:28 +0000 (GMT)
+        20220321154133epsmtip218668a6deeef3b4f4288c87e1d36c8fe~eb6rdOCBc3051430514epsmtip2W;
+        Mon, 21 Mar 2022 15:41:33 +0000 (GMT)
 From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzk@kernel.org>,
-        "'Andy Gross'" <agross@kernel.org>,
+To:     "'Luca Weiss'" <luca.weiss@fairphone.com>,
+        <linux-arm-msm@vger.kernel.org>
+Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, "'Andy Gross'" <agross@kernel.org>,
         "'Bjorn Andersson'" <bjorn.andersson@linaro.org>,
         "'Avri Altman'" <avri.altman@wdc.com>,
-        "'James E.J. Bottomley'" <jejb@linux.ibm.com>,
-        "'Martin K. Petersen'" <martin.petersen@oracle.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Krzysztof Kozlowski'" <krzk+dt@kernel.org>,
+        <linux-scsi@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Cc:     "'Amit Pundir'" <amit.pundir@linaro.org>,
-        "'Luca Weiss'" <luca.weiss@fairphone.com>,
-        "'Brian Masney'" <bmasney@redhat.com>
-In-Reply-To: <20220321151853.24138-1-krzk@kernel.org>
-Subject: RE: [PATCH v2] ufs: qcom: drop custom Android boot parameters
-Date:   Mon, 21 Mar 2022 21:10:27 +0530
-Message-ID: <004d01d83d39$fe7859c0$fb690d40$@samsung.com>
+In-Reply-To: <20220321133318.99406-2-luca.weiss@fairphone.com>
+Subject: RE: [PATCH v2 1/6] scsi: ufs: dt-bindings: Add SM6350 compatible
+ string
+Date:   Mon, 21 Mar 2022 21:11:32 +0530
+Message-ID: <004e01d83d3a$25313910$6f93ab30$@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHm5rph065Vo85hpgWhCOFVvI1RFwHl86VRrJ12saA=
+Thread-Index: AQDQr1gGFOqfu4YzJCL3IxFGIQ6RUQJHsVu4AXhMAmeuuxV/cA==
 Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAJsWRmVeSWpSXmKPExsWy7bCmum7eHIskg7uTNCzOPf7NYvFhxSJG
-        i5c/r7JZnN7/jsXixNkzLBaLbmxjsjh/fgO7xcT9Z9ktLu+aw2bRfX0Hm8XDFUYWy4//Y3Lg
-        8WhresnqsWlVJ5vHnWt72DwmLDrA6PHx6S0Wj/f7rrJ5fN4k59F+oJspgCMq2yYjNTEltUgh
-        NS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6FolhbLEnFKgUEBicbGS
-        vp1NUX5pSapCRn5xia1SakFKToFJgV5xYm5xaV66Xl5qiZWhgYGRKVBhQnZG2yHNgpliFb/f
-        LWNpYGwV7mLk5JAQMJFYMLmHqYuRi0NIYDejxIqrE5khnE+MEvPvPmOBcD4zSsz6tJQVpuXc
-        7j5WiMQuRonXJz6zQTgvGSVO7TwMVsUmoCuxY3EbWEJE4DuTxNyeFrAWZoEGRonfLXeZQao4
-        BUwlXh45AdYhLOAm0bZ4LhuIzSKgKtHWuheshlfAUuLJiflsELagxMmZT1hAbGYBeYntb+cw
-        Q9ykIPHz6TKgORxA26wkTq1WhygRl3h59Ag7yF4JgSscEr9/HASrkRBwkThx3hGiVVji1fEt
-        7BC2lMTnd3vZIEqyJXp2GUOEaySWzjvGAmHbSxy4MocFpIRZQFNi/S59iE18Er2/nzBBdPJK
-        dLQJQVSrSjS/uwrVKS0xsbsbGoYeEqt2T2SawKg4C8lbs5C8NQvJ/bMQli1gZFnFKJlaUJyb
-        nlpsWmCUl1oOj+7k/NxNjOCkrOW1g/Hhgw96hxiZOBgPMUpwMCuJ8C7+YJ4kxJuSWFmVWpQf
-        X1Sak1p8iNEUGNYTmaVEk/OBeSGvJN7QxNLAxMzMzMTS2MxQSZz3dPqGRCGB9MSS1OzU1ILU
-        Ipg+Jg5OqQamBJNlsj55O268SJka1i9wRX2SDYNHqBGnv3+l1F7F6ynvX29g+THr9YXJ7duS
-        vSY1JFzQXB/2fmtNzTLfAL9lDKxTnjy9XcuxtTfAaV3EneBZFzaLx+ceiDubHDl93uG20qkF
-        jZo8U5QikjS2y3kIz9t7eOGV9x6/GaSXr6vqqih+Gio+73oWk+B7pmOGjNddlrLJb55fWPu5
-        ISv98C6pW4ExzyOKJeY5XbL6wM/3XUT29lYd+fvVXXdK97+R563XmvjxIZfvz6pLcv6FJtGB
-        5zbLqzNPNUmLKvnvO/nJUbEfXpmCZS9Ot/NdXpHd3Xh69/KQhW6B4RG729c4zJM4wJhst2tP
-        T3N1z7NWcz0lluKMREMt5qLiRAC+zJtXUwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJIsWRmVeSWpSXmKPExsWy7bCSvG7eHIskg1lvmSzOPf7NYvFhxSJG
-        i5c/r7JZnN7/jsXixNkzLBaLbmxjsjh/fgO7xcT9Z9ktLu+aw2bRfX0Hm8XDFUYWy4//Y3Lg
-        8WhresnqsWlVJ5vHnWt72DwmLDrA6PHx6S0Wj/f7rrJ5fN4k59F+oJspgCOKyyYlNSezLLVI
-        3y6BK6PtkGbBTLGK3++WsTQwtgp3MXJySAiYSJzb3cfaxcjFISSwg1Fi75aHzBAJaYnrGyew
-        Q9jCEiv/PWeHKHrOKLH442o2kASbgK7EjsVtbCAJEYG/TBLfL3eAVTELNDFKLG86zgLR0sYo
-        sWjlDLAWTgFTiZdHTrCC2MICbhJti+eCxVkEVCXaWveC7eYVsJR4cmI+G4QtKHFy5hOgQRxA
-        U/Uk2jYygoSZBeQltr+dA3WqgsTPp8tYQUpEBKwkTq1WhygRl3h59Aj7BEbhWUgGzUIYNAvJ
-        oFlIOhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAiOTS2tHYx7Vn3QO8TIxMF4
-        iFGCg1lJhHfxB/MkId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqemFqQWwWSZ
-        ODilGphW1GX+MY0T2Jieeibr/KOUuOMJNrx2mj9fS3O2qlz9wL2mNe7P5tNOaWHTy4/ZygtM
-        M1qutCvmtvJM87MHew0ndAvs23d1lX3U81Mm2TFrT7y5sbvp6f2jszq6W1Q2Pjh/8A2D95eD
-        +9wn8RTIGTqsF5rOyP2vcsXCJy3MrGYzsuQeB9w/H/7j6OvGkBNJTS/LF+vyWvT0MG/XfOwY
-        XlW+se6//J7G/Yw+O76d09wTL5q90FKqqLKHVbeivOXNm66GrYZfzge8XblGgeHo4eS+IIH5
-        omoTzrVV5gYn9PnMr7coNwtTtNu1+VRPjcC8f+928Jdemr70b8jew9rsWraijyUf9m219fO2
-        M77B9FyJpTgj0VCLuag4EQBrTr00PAMAAA==
-X-CMS-MailID: 20220321154030epcas5p4165b1c4926701e7489138fc879c1d153
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCJsWRmVeSWpSXmKPExsWy7bCmuu76ORZJBk2LFCzOPf7NYvHy51U2
+        i9P737FYzD9yjtXi5ax7bBYT959lt7i8aw6bRff1HWwWD1cYWSz4Y2fRuvcIu8Xm738ZHXg8
+        2ppesnpsWtXJ5nHn2h42j/931rJ7fN4k59F+oJspgC0q2yYjNTEltUghNS85PyUzL91WyTs4
+        3jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6EQlhbLEnFKgUEBicbGSvp1NUX5pSapCRn5x
+        ia1SakFKToFJgV5xYm5xaV66Xl5qiZWhgYGRKVBhQnZG18szrAWdfBV7Dr1nb2Bcyt3FyMkh
+        IWAise/QbNYuRi4OIYHdjBKrmtcxQzifGCVmTj4E5XxmlJg36Q8TTMvF+d+hWnYxSuw5spUF
+        wnnJKPHszFSwKjYBXYkdi9vYQGwRgQCJU9uOgBUxCzQyS2x7f4MFJMEpYCdx4ukTIJuDQ1gg
+        SOLyHjYQk0VAVaJ7QiJIBa+ApcT2GW/ZIWxBiZMzn4B1MgvIS2x/O4cZ4iAFiZ9Pl7FCrHKS
+        uHztEjNEjbjEy6NH2CFqjnBInHouCWG7SEyfMBeqV1ji1fEtUDVSEi/729hBTpAQyJbo2WUM
+        Ea6RWDrvGAuEbS9x4MocsIOZBTQl1u/Sh9jEJ9H7+wkTRCevREebEES1qkTzu6tQndISE7u7
+        WSFsD4m3hyawTGBUnIXkr1lI/pqF5P5ZCMsWMLKsYpRMLSjOTU8tNi0wyksth8d2cn7uJkZw
+        8tXy2sH48MEHvUOMTByMhxglOJiVRHgXfzBPEuJNSaysSi3Kjy8qzUktPsRoCgzricxSosn5
+        wPSfVxJvaGJpYGJmZmZiaWxmqCTOezp9Q6KQQHpiSWp2ampBahFMHxMHp1QD07pX668z7+ZX
+        ShEP/+k7IVu4edv1d6Y32KcZ54luUj0qsM/wTmj6bsmZO3LimSfzH9q9cmvGS7Hnn76ypPaI
+        h6+5zbiZN4szR0lrj83MhHuinRusljhNTRG1M8xdGDH1Ko+R7VQ3jl+/jm1kyA/cESj8YGUY
+        z5sHJfXJlpnPNjg9zb6+/cehBTJ6c06nFsz5tbg+Kfr+ayF2g2vR1cuv5q4M3fX7yesq5eTQ
+        6XIKvf4xv54wrBEM/e+1dXIR2/0F+6692vIi6qdA1Dl+vv+hL+ct7rfnYvVQ9j8qs2/Z68c3
+        e11CVjeHXfZ5V/7s8s+DoXdWFugxvF9uc2fbP5NdBo80nh0TDzq42qahYrbuvQwlluKMREMt
+        5qLiRAAnHvS6RwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLIsWRmVeSWpSXmKPExsWy7bCSvO76ORZJBv80LM49/s1i8fLnVTaL
+        0/vfsVjMP3KO1eLlrHtsFhP3n2W3uLxrDptF9/UdbBYPVxhZLPhjZ9G69wi7xebvfxkdeDza
+        ml6yemxa1cnmcefaHjaP/3fWsnt83iTn0X6gmymALYrLJiU1J7MstUjfLoEro+vlGdaCTr6K
+        PYfeszcwLuXuYuTkkBAwkbg4/ztrFyMXh5DADkaJw20HGCES0hLXN05gh7CFJVb+e84OUfSc
+        UaLnyTtWkASbgK7EjsVtbCC2iECAxKltR1hAipgFOpklpm1cDzX2IKPEhw8nwUZxCthJnHj6
+        hAXEFgbqmPV7F3MXIwcHi4CqRPeERJAwr4ClxPYZb9khbEGJkzNByjmAhupJtG0EO45ZQF5i
+        +9s5zBDHKUj8fLqMFeIGJ4nL1y4xQ9SIS7w8eoR9AqPwLCSTZiFMmoVk0iwkHQsYWVYxSqYW
+        FOem5xYbFhjlpZbrFSfmFpfmpesl5+duYgTHoJbWDsY9qz7oHWJk4mA8xCjBwawkwrv4g3mS
+        EG9KYmVValF+fFFpTmrxIUZpDhYlcd4LXSfjhQTSE0tSs1NTC1KLYLJMHJxSDUzRP7KfvN3e
+        KWhkFJs6r+ju1eoEq6lnnr66X/+xJ4D736yG9wxL69z7q/QXZPOnL7kXKpx75YCj5erZjMvj
+        Vuimces0nJ7E53h5i02VFU9Tpe9R8WTREzq/d2/SEXjwRXfn2YAQ0ciKF1PL6vuEngeIPDBu
+        2PykRSk2ffGtjbsL3i/0KnB9K+T478//P6dncu1/XcqoXnjdy/T39XXLZi3MlxHY/799XUCb
+        fsFrz/3nA67mL9NMt3mXUZRZvfxUxNPJT0VleF4fvPE6JUNi4mqLzX4qnremHZf7cN0jQpbp
+        3S2ZCbeFiv6IT8l+uvnrM504h5n+V3uOHAuuEJ+deVz83Bm+IOPFGc6/j62p4UpWYinOSDTU
+        Yi4qTgQA8Za9QjADAAA=
+X-CMS-MailID: 20220321154135epcas5p233cbad96d408145559a48ca0f5c9b0c8
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220321151913epcas5p45ad53c827e3c87633acd29443322d0b5
-References: <CGME20220321151913epcas5p45ad53c827e3c87633acd29443322d0b5@epcas5p4.samsung.com>
-        <20220321151853.24138-1-krzk@kernel.org>
+X-CMS-RootMailID: 20220321133352epcas5p493c209ac3f6edbb820cbaba1b4265525
+References: <20220321133318.99406-1-luca.weiss@fairphone.com>
+        <CGME20220321133352epcas5p493c209ac3f6edbb820cbaba1b4265525@epcas5p4.samsung.com>
+        <20220321133318.99406-2-luca.weiss@fairphone.com>
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
@@ -129,87 +130,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 >-----Original Message-----
->From: Krzysztof Kozlowski [mailto:krzk@kernel.org]
->Sent: Monday, March 21, 2022 8:49 PM
->To: Andy Gross <agross@kernel.org>; Bjorn Andersson
-><bjorn.andersson@linaro.org>; Alim Akhtar <alim.akhtar@samsung.com>;
->Avri Altman <avri.altman@wdc.com>; James E.J. Bottomley
-><jejb@linux.ibm.com>; Martin K. Petersen <martin.petersen@oracle.com>;
->linux-arm-msm@vger.kernel.org; linux-scsi@vger.kernel.org; linux-
+>From: Luca Weiss [mailto:luca.weiss@fairphone.com]
+>Sent: Monday, March 21, 2022 7:03 PM
+>To: linux-arm-msm@vger.kernel.org
+>Cc: ~postmarketos/upstreaming@lists.sr.ht; phone-devel@vger.kernel.org;
+>Luca Weiss <luca.weiss@fairphone.com>; Andy Gross <agross@kernel.org>;
+>Bjorn Andersson <bjorn.andersson@linaro.org>; Alim Akhtar
+><alim.akhtar@samsung.com>; Avri Altman <avri.altman@wdc.com>; Rob
+>Herring <robh+dt@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>;
+>linux-scsi@vger.kernel.org; devicetree@vger.kernel.org; linux-
 >kernel@vger.kernel.org
->Cc: Krzysztof Kozlowski <krzk@kernel.org>; Amit Pundir
-><amit.pundir@linaro.org>; Luca Weiss <luca.weiss@fairphone.com>; Brian
->Masney <bmasney@redhat.com>
->Subject: [PATCH v2] ufs: qcom: drop custom Android boot parameters
+>Subject: [PATCH v2 1/6] scsi: ufs: dt-bindings: Add SM6350 compatible
+string
 >
->The QCOM UFS driver requires an androidboot.bootdevice command line
->argument matching the UFS device name.  If the name is different, it
-refuses
->to probe.  This androidboot.bootdevice is provided by stock/vendor (from an
->Android-based device) bootloader.
+>Document the compatible for the UFS found on SM6350.
 >
->This does not make sense from Linux point of view.  Driver should be able
-to
->boot regardless of bootloader.  Driver should not depend on some Android
->custom environment data.
->
->Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
->Tested-by: Amit Pundir <amit.pundir@linaro.org>
->Tested-by: Luca Weiss <luca.weiss@fairphone.com>
->Reviewed-by: Brian Masney <bmasney@redhat.com>
->Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->
+>Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+>---
 
 Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
->---
+>Changes in v2:
+>- add second hunk for clock validation
 >
->Changes since v1
->1. Fix commit msg typo (Alim).
->2. Add tags.
+> Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
+> 1 file changed, 2 insertions(+)
 >
->See also:
->https://lore.kernel.org/linux-devicetree/f61abc2b-3ce8-7b1f-3d28-
->8a4a03ec58eb@kernel.org/T/#u
->---
-> drivers/scsi/ufs/ufs-qcom.c | 15 ---------------
-> 1 file changed, 15 deletions(-)
->
->diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index
->0d2e950d0865..586c0e567ff9 100644
->--- a/drivers/scsi/ufs/ufs-qcom.c
->+++ b/drivers/scsi/ufs/ufs-qcom.c
->@@ -957,18 +957,6 @@ static const struct reset_control_ops
->ufs_qcom_reset_ops = {
-> 	.deassert = ufs_qcom_reset_deassert,
-> };
->
->-#define	ANDROID_BOOT_DEV_MAX	30
->-static char android_boot_dev[ANDROID_BOOT_DEV_MAX];
->-
->-#ifndef MODULE
->-static int __init get_android_boot_dev(char *str) -{
->-	strlcpy(android_boot_dev, str, ANDROID_BOOT_DEV_MAX);
->-	return 1;
->-}
->-__setup("androidboot.bootdevice=", get_android_boot_dev); -#endif
->-
-> /**
->  * ufs_qcom_init - bind phy with controller
->  * @hba: host controller instance
->@@ -988,9 +976,6 @@ static int ufs_qcom_init(struct ufs_hba *hba)
-> 	struct resource *res;
-> 	struct ufs_clk_info *clki;
->
->-	if (strlen(android_boot_dev) && strcmp(android_boot_dev,
->dev_name(dev)))
->-		return -ENODEV;
->-
-> 	host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
-> 	if (!host) {
-> 		err = -ENOMEM;
+>diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>index 5b3a2157f7e5..dcd32c10205a 100644
+>--- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>+++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>@@ -27,6 +27,7 @@ properties:
+>           - qcom,msm8996-ufshc
+>           - qcom,msm8998-ufshc
+>           - qcom,sdm845-ufshc
+>+          - qcom,sm6350-ufshc
+>           - qcom,sm8150-ufshc
+>           - qcom,sm8250-ufshc
+>           - qcom,sm8350-ufshc
+>@@ -125,6 +126,7 @@ allOf:
+>           contains:
+>             enum:
+>               - qcom,sdm845-ufshc
+>+              - qcom,sm6350-ufshc
+>               - qcom,sm8150-ufshc
+>     then:
+>       properties:
 >--
->2.32.0
+>2.35.1
 
 

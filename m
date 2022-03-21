@@ -2,88 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE83F4E305A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C34F4E305D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352376AbiCUTBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 15:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
+        id S1352383AbiCUTCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 15:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352369AbiCUTBG (ORCPT
+        with ESMTP id S1352369AbiCUTCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 15:01:06 -0400
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513A8369DC;
-        Mon, 21 Mar 2022 11:59:41 -0700 (PDT)
-Received: by mail-oo1-f54.google.com with SMTP id p10-20020a056820044a00b00320d7d4af22so20349241oou.4;
-        Mon, 21 Mar 2022 11:59:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=73x0qYLjzeZuIXhmRDyrl6vRXlCeCtzIqpI54Vo0sbs=;
-        b=Z4opopJdHO8BBGlxj7/Rt4wnorD28BWZVwsCzDUYegcMa4iTEzK4dg+YWmtfANmk7x
-         oEBP35hNE7sW1rCvdOZ83+/RxRuPMT4uS+Dpc0+Bu8AFITxJO/86PIMcrwuxtsEkdK5K
-         mHpxxkiaY5s3RmsriaW0CSIiHjdt+btsjoPTN+AD2N3ldxkUDf+HsDJ+ZGOC2KgKngYj
-         BIyeNDId22qE7vymgP5v530xXy/WXLHAzgHG7NlJT4/nZOlMJZFy4wOdJCB51V1eFUd2
-         RFpl9YsGt30N5ahpJZG37QVpY/ELACYlxMAItH3VnG4FJ1mM8+USAGDLe4qdm3nzcnkS
-         ct4Q==
-X-Gm-Message-State: AOAM532GB9zRUntj3fq33LrE24Le1oW7k8kgWT1hgZVgU3LnrvFRJ4EY
-        mrUn47Fmjf8M04ZjmMe3Wg==
-X-Google-Smtp-Source: ABdhPJxgbEazPHPMPO+95ThHUNIOg+ZQxsJywLAxuuMJFl05QUPRZcDGfwRfTM8eyqoNlvbTIxgU2w==
-X-Received: by 2002:a05:6870:462a:b0:dd:f4f7:24be with SMTP id z42-20020a056870462a00b000ddf4f724bemr236406oao.39.1647889180650;
-        Mon, 21 Mar 2022 11:59:40 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 69-20020a9d0bcb000000b005af83322c6asm7581938oth.12.2022.03.21.11.59.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 11:59:39 -0700 (PDT)
-Received: (nullmailer pid 368895 invoked by uid 1000);
-        Mon, 21 Mar 2022 18:59:38 -0000
-Date:   Mon, 21 Mar 2022 13:59:38 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 4/5 v2] dt-bindings: gnss: Add two more chips
-Message-ID: <YjjLGgjlw7zAJt9K@robh.at.kernel.org>
-References: <20220317225844.1262643-1-linus.walleij@linaro.org>
- <20220317225844.1262643-4-linus.walleij@linaro.org>
+        Mon, 21 Mar 2022 15:02:00 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409013EB81
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:00:34 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nWNGY-0001D5-7r; Mon, 21 Mar 2022 20:00:31 +0100
+Message-ID: <b3c39447-c02a-a021-8a4f-499aa962980c@leemhuis.info>
+Date:   Mon, 21 Mar 2022 20:00:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317225844.1262643-4-linus.walleij@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: Regression from 3c196f056666 ("drm/amdgpu: always reset the asic
+ in suspend (v2)") on suspend?
+Content-Language: en-US
+To:     dod@debian.org, Eric Valette <eric.valette@free.fr>,
+        Salvatore Bonaccorso <carnil@debian.org>
+Cc:     Sasha Levin <sashal@kernel.org>, David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        1005005@bugs.debian.org, Evan Quan <evan.quan@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexdeucher@gmail.com>
+References: <Ygf7KuWyc0d4HIFu@eldamar.lan>
+ <CADnq5_MWqz7-XhOS4zfuzi3=_nKa72iYaO0BcKNcVDwEvZ+YHw@mail.gmail.com>
+ <61c2b2ce-d749-3723-ad27-f40e1c49d967@leemhuis.info>
+ <3873010.MHq7AAxBmi@ylum>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <3873010.MHq7AAxBmi@ylum>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1647889234;f9afec0b;
+X-HE-SMSGID: 1nWNGY-0001D5-7r
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 11:58:43PM +0100, Linus Walleij wrote:
-> The CSR GSD4t is a CSR product using the SiRFstarIV core, and
-> the CSR CSRG05TA03-ICJE-R is a CSR product using the SiRFstarV
-> core.
+On 21.03.22 19:49, Dominique Dumont wrote:
+> On Monday, 21 March 2022 09:57:59 CET Thorsten Leemhuis wrote:
+>> Dominique/Salvatore/Eric, what's the status of this regression?
+>> According to the debian bug tracker the problem is solved with 5.16 and
+>> 5.17, but was 5.15 ever fixed?
 > 
-> These chips have a SRESETN line that can be pulled low to hard
-> reset the chip and in some designs this is connected to a GPIO,
-> so add this as an optional property.
+> I don't think so.
 > 
-> Update the example with a reset line so users see that it need
-> to be tagged as active low.
+> On kernel side, the commit fixing this issue is
+> e55a3aea418269266d84f426b3bd70794d3389c8 . 
 > 
-> Cc: devicetree@vger.kernel.org
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> ChangeLog v1->v2:
-> - Add maxItems: 1 to the reset-gpios
-> ---
->  Documentation/devicetree/bindings/gnss/sirfstar.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> According to the logs of [1] , this commit landed in v5.17-rc3
+> 
+> HTH
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 
-Applied, thanks.
+And from there it among others got backported to 5.15.22:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-5.15.y&id=8a15ac1786c92dce6ecbeb4e4c237f5f80c2c703
+
+https://lwn.net/Articles/884107/
+
+Another indicator that Eric's problem is something else.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
 

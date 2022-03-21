@@ -2,119 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119DC4E32FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D19FD4E3309
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiCUWrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 18:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        id S229895AbiCUWsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 18:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiCUWrA (ORCPT
+        with ESMTP id S229845AbiCUWsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:47:00 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECB136627B;
-        Mon, 21 Mar 2022 15:26:20 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 77B891F43C7A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647901578;
-        bh=B8Pb07hkCfW+xPaMdiwdl2p2fFiGYRzPCnnydlob/vg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tr6qLx7D1I+cpf7Bg25M1DfpHYW3LmJzrS546wmKykxyPgOQv1Df3Rntju+oWv201
-         1Ra/PeOakKqLV/N3BEUPbzEaYb0wn1biZgAZA65z7cMHgQsuxjTGm3bpqjzW59xCGk
-         5jhd37GA0/JDDEMVWyMozFZN9JK48X3vUMl+o8x/BB1h00W5ATPRwwTdYFbXNLc9ep
-         RF5R5bwIIjsOsc+qU22Boj5yX79cEyZo4KS94s1yRpcME8W8RJ4VU7JDonUHzP2zr3
-         LGR7UELzrHvuqenyN4atQ0SwuxsVfoD3SIGKIZANQ2uKd+Tscr4Miw5sZXKZ/l+G1Q
-         n99LtvS7z+gkw==
-Date:   Mon, 21 Mar 2022 18:26:13 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        Hui Liu <hui.liu@mediatek.com>
-Subject: Re: [PATCH v4 06/22] arm64: dts: mt8192: Add xhci node
-Message-ID: <20220321222613.aro6m72hoyubsggg@notapiano>
-References: <20220318144534.17996-1-allen-kh.cheng@mediatek.com>
- <20220318144534.17996-7-allen-kh.cheng@mediatek.com>
+        Mon, 21 Mar 2022 18:48:12 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FE23A592C;
+        Mon, 21 Mar 2022 15:28:29 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id 17-20020a9d0611000000b005b251571643so11450201otn.2;
+        Mon, 21 Mar 2022 15:28:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P30I1IvBZVWzxnjjs8xKnvlDjjaGWLFseUJUE0t0iug=;
+        b=CrB+tMlFpjHTSXg8Gn2v8DWc7jPVjtUqLQ9CAHIZh1fY/0P633UHu7U/0Bgi+Vga5r
+         rXzASm9uKs403Y8WSjJxCkCoE1K2PUlGnTahtR919klWYuRFFt6NLob7hPejQCwjt3A0
+         0cIrdgZ2UqBn876GtK8jo1s/kEL+AAA1UQTwhadZiDVPFykLBLLNNI56gVUM45Q4P9UH
+         64B+VHllK1G8OLxgF7PvAiNNXcpDQ0R5CV2U3HFljF1w0/K6QP7cevdJ829zuPMpXhwz
+         eyUL9GVLyu2uQ1cVR4QvhdPmXpkZ2uxEXLIv276wE1KqKW63BLkBsTeA+a5Kjia8DYwI
+         ne3A==
+X-Gm-Message-State: AOAM531ueoXZTkDMZaXw19ZulsYy/Wn4v3gJdLINOB6vzhYvD3aZrH7U
+        L2bJCzDjY3uA6txGvtldaA==
+X-Google-Smtp-Source: ABdhPJwhjaMdN3trRKuth/6PhzKCiyCDabep5R8B9rofsON9bTADl679fotxe+oPsBcjqvQOnCb4+Q==
+X-Received: by 2002:a9d:7994:0:b0:5b2:3110:e69c with SMTP id h20-20020a9d7994000000b005b23110e69cmr8812492otm.267.1647901708497;
+        Mon, 21 Mar 2022 15:28:28 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g8-20020acab608000000b002ecf38fb699sm8030714oif.38.2022.03.21.15.28.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 15:28:27 -0700 (PDT)
+Received: (nullmailer pid 653541 invoked by uid 1000);
+        Mon, 21 Mar 2022 22:28:25 -0000
+Date:   Mon, 21 Mar 2022 17:28:25 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Moudy Ho <moudy.ho@mediatek.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>, tfiga@chromium.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        jason-jh.lin@mediatek.com, river.cheng@mediatek.com,
+        linux-kernel@vger.kernel.org, roy-cw.yeh@mediatek.com,
+        srv_heupstream@mediatek.com,
+        Jernej Skrabec <jernej.skrabec@siol.net>, pihsun@chromium.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, hsinyi@google.com,
+        linux-arm-kernel@lists.infradead.org,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        randy.wu@mediatek.com,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        allen-kh.cheng@mediatek.com, sj.huang@mediatek.com,
+        linux-mediatek@lists.infradead.org, drinkcat@chromium.org,
+        menghui.lin@mediatek.com,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Rob Landley <rob@landley.net>
+Subject: Re: [PATCH v14 3/6] dt-bindings: soc: mediatek: move out common
+ module from display folder
+Message-ID: <Yjj8CanzmdHeX7qz@robh.at.kernel.org>
+References: <20220317143926.15835-1-moudy.ho@mediatek.com>
+ <20220317143926.15835-4-moudy.ho@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220318144534.17996-7-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220317143926.15835-4-moudy.ho@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 10:45:18PM +0800, Allen-KH Cheng wrote:
-> Add xhci node for mt8192 SoC.
+On Thu, 17 Mar 2022 22:39:23 +0800, Moudy Ho wrote:
+> In order to share the same hardware information with MDP3,
+> change the MUTEX dt-binding to the path "soc/mediatek".
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 > ---
->  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
+>  .../bindings/{display => soc}/mediatek/mediatek,mutex.yaml      | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>  rename Documentation/devicetree/bindings/{display => soc}/mediatek/mediatek,mutex.yaml (97%)
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 28b93b76fe17..6bc36a4076f4 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -10,6 +10,7 @@
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/interrupt-controller/irq.h>
->  #include <dt-bindings/pinctrl/mt8192-pinfunc.h>
-> +#include <dt-bindings/phy/phy.h>
->  #include <dt-bindings/power/mt8192-power.h>
->  
->  / {
-> @@ -718,6 +719,29 @@
->  			status = "disabled";
->  		};
->  
-> +		xhci: usb@11200000 {
-> +			compatible = "mediatek,mt8192-xhci",
-> +				     "mediatek,mtk-xhci";
-> +			reg = <0 0x11200000 0 0x1000>,
-> +			      <0 0x11203e00 0 0x0100>;
-> +			reg-names = "mac", "ippc";
-> +			interrupts-extended = <&gic GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			interrupt-names = "host";
-> +			phys = <&u2port0 PHY_TYPE_USB2>,
-> +			       <&u3port0 PHY_TYPE_USB3>;
-> +			assigned-clocks = <&topckgen CLK_TOP_USB_TOP_SEL>,
-> +					  <&topckgen CLK_TOP_SSUSB_XHCI_SEL>;
-> +			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D5_D4>,
-> +						 <&topckgen CLK_TOP_UNIVPLL_D5_D4>;
-> +			clocks = <&infracfg CLK_INFRA_SSUSB>,
-> +				 <&infracfg CLK_INFRA_SSUSB_XHCI>,
-> +				 <&apmixedsys CLK_APMIXED_USBPLL>;
-> +			clock-names = "sys_ck", "xhci_ck", "ref_ck";
-> +			wakeup-source;
-> +			mediatek,syscon-wakeup = <&pericfg 0x420 102>;
-> +			status = "disabled";
-> +		};
-> +
->  		nor_flash: spi@11234000 {
->  			compatible = "mediatek,mt8192-nor";
->  			reg = <0 0x11234000 0 0xe0>;
-> -- 
-> 2.18.0
-> 
-> 
+
+Acked-by: Rob Herring <robh@kernel.org>

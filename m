@@ -2,60 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9A34E2343
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A32414E2349
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345863AbiCUJ0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
+        id S1345876AbiCUJ1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345757AbiCUJ0c (ORCPT
+        with ESMTP id S1345861AbiCUJ1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:26:32 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B85F5E151
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:25:05 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 184421F37C;
-        Mon, 21 Mar 2022 09:25:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1647854704; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 21 Mar 2022 05:27:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E25CF65154
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:25:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647854735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=96Bv5aE8PEDXaSGILYsP0oGMBpkf8E19n9UPqtaGhf4=;
-        b=TGa08Icyse5ulErUKT8NFKM+p66QbjQEqgQxwvMzfMpDCS/2EEBcyxzdPFTgiljsRhQ6TV
-        /c/DBmAUlhRaqfkymCVTb9cAECpSrnFoPPIoANuXl+XwvrwT7eEdyTo+fZZT4Iye6Tznn3
-        Jz8B6eFq7T9xX3VAOszflAaUGdo7tjk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1647854704;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=96Bv5aE8PEDXaSGILYsP0oGMBpkf8E19n9UPqtaGhf4=;
-        b=mVmI29Mpp3hGzjFT8RY3go45dcii+E3rtP6pXpuYu+HycgyZq38V+E7jYvqMc37b41drD+
-        0sIl14R1xNmaFrAA==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BCF05A3B87;
-        Mon, 21 Mar 2022 09:25:03 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 3F9ABA0610; Mon, 21 Mar 2022 10:25:03 +0100 (CET)
-Date:   Mon, 21 Mar 2022 10:25:03 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Bixuan Cui <cuibixuan@linux.alibaba.com>
-Cc:     linux-kernel@vger.kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, yi.zhang@huawei.com, jack@suse.cz
-Subject: Re: [PATCH -next] jbd2: use the correct print format
-Message-ID: <20220321092503.liyi6eqrar52cc5n@quack3.lan>
-References: <1647619000-17758-1-git-send-email-cuibixuan@linux.alibaba.com>
+        bh=GzohBbkrXG4LXx7mo3/JLEha1Z8wnON9GrcgVqSwS/Y=;
+        b=UbP75GyGALyKef6rFedLwC281x+CcooNeA7xh34InzUtPgjlWcnQMaLWcnVZzaCzrYUbYU
+        CArPmUGWapV+ioHbMb7EK1bepM49VzRqXiSdSEX03ezsTTcy+0otrSFT6J/hDBSLsJHZrs
+        VKHfEd0MqCucHMyPfZCjm5uwt/UiuJ8=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-381-ioT026ynNiWXfdDsJNW_2Q-1; Mon, 21 Mar 2022 05:25:33 -0400
+X-MC-Unique: ioT026ynNiWXfdDsJNW_2Q-1
+Received: by mail-pf1-f199.google.com with SMTP id w19-20020aa79553000000b004fa64758b82so6177305pfq.22
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:25:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=GzohBbkrXG4LXx7mo3/JLEha1Z8wnON9GrcgVqSwS/Y=;
+        b=Gs97eD3vKnX6G2kYjf6hygwxg6n0XWi7tmNN+NTthr4QmHmq6Oid7WdXHjJZGANnZm
+         Ndpmg9Eq9kWPZmlGVkhHYpu3nmMOAq6wFu8M8bF93nKim4r24PMUrUgQaT5QdS1xcMCZ
+         QmerPVvcnTZzq2bZ5LiGb8jZCY580iLngqe9KY4xLBxNU7cLC0I0CvsijHmD+Vu+T/ST
+         m13ItYQKMn2+p3CA7x4+U/5bWSC6GhSnuz+YDXwS/HDFllmjLRNPgh6RWlv0XwFYtovV
+         OnOOexzOavPQQZR3DPT2SDea06VRoyjDeQJOvQFKsnZ74QC8KSIOlHIlzdrmuCzw9a3/
+         M91Q==
+X-Gm-Message-State: AOAM533ZwfDwZolaYNk/+rwK8NyHbGWU39fqORpLHXs07jlb2TvGAvyx
+        mqP6WKGi5NHpk2tFoQ5+FrqfqGHRR2JQW6J5v7afj5iUMBZn8t6J0WzGAMXVLixYaYoAFp1Zr0d
+        Vh6fd1REvfOJTbg9j66nSlBRJd0spgSuC03M8KEF8
+X-Received: by 2002:a05:6a00:2182:b0:4fa:6d20:d95d with SMTP id h2-20020a056a00218200b004fa6d20d95dmr16423572pfi.83.1647854732190;
+        Mon, 21 Mar 2022 02:25:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy5GIeW+QMX4U4V2zHohKqElMK7B6VgQJYnzw3N7Tv/o+8SUhfr7/r1sr09VsGyUW1SRSGOo/l09OeZwZL0rvE=
+X-Received: by 2002:a05:6a00:2182:b0:4fa:6d20:d95d with SMTP id
+ h2-20020a056a00218200b004fa6d20d95dmr16423547pfi.83.1647854731876; Mon, 21
+ Mar 2022 02:25:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1647619000-17758-1-git-send-email-cuibixuan@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20220320190602.7484-1-jose.exposito89@gmail.com>
+In-Reply-To: <20220320190602.7484-1-jose.exposito89@gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 21 Mar 2022 10:25:20 +0100
+Message-ID: <CAO-hwJKZUSTaWUpE_vsvAs-MNoZ8UJLgxiCyQ6OzwHYFZszf2w@mail.gmail.com>
+Subject: Re: [PATCH] HID: multitouch: fix Dell Precision 7550 and 7750 button type
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     jkosina@suse.cz, tiwai@suse.de, regressions@leemhuis.info,
+        peter.hutterer@who-t.net, linux-input@vger.kernel.org,
+        stable@vger.kernel.org, regressions@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,71 +77,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 18-03-22 23:56:40, Bixuan Cui wrote:
-> The print format error was found when using ftrace event:
->     <...>-1406 [000] .... 23599442.895823: jbd2_end_commit: dev 252,8 transaction -1866216965 sync 0 head -1866217368
->     <...>-1406 [000] .... 23599442.896299: jbd2_start_commit: dev 252,8 transaction -1866216964 sync 0
-> 
-> Print transaction and head with the unsigned format "%u" instead.
-> 
-> Fixes: 879c5e6b7cb4 ('jbd2: convert instrumentation from markers to tracepoints')
-> Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+Hi Jos=C3=A9,
 
-Makes sense. Thanks for the fix. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+On Sun, Mar 20, 2022 at 8:06 PM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gm=
+ail.com> wrote:
+>
+> The touchpad present in the Dell Precision 7550 and 7750 laptops
+> reports a HID_DG_BUTTONTYPE of type MT_BUTTONTYPE_CLICKPAD. However,
+> the device is not a clickpad, it is a touchpad with physical buttons.
+>
+> In order to fix this issue, a quirk for the device was introduced in
+> libinput [1] [2] to disable the INPUT_PROP_BUTTONPAD property:
+>
+>         [Precision 7x50 Touchpad]
+>         MatchBus=3Di2c
+>         MatchUdevType=3Dtouchpad
+>         MatchDMIModalias=3Ddmi:*svnDellInc.:pnPrecision7?50*
+>         AttrInputPropDisable=3DINPUT_PROP_BUTTONPAD
+>
+> However, because of the change introduced in 37ef4c19b4 ("Input: clear
+> BTN_RIGHT/MIDDLE on buttonpads") the BTN_RIGHT key bit is not mapped
+> anymore breaking the device right click button.
+>
+> In order to fix the issue, create a quirk for the device forcing its
+> button type to touchpad regardless of the value reported by the
+> firmware.
+>
+> [1] https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/481
+> [2] https://bugzilla.redhat.com/show_bug.cgi?id=3D1868789
+>
+> Fixes: 37ef4c19b4 ("Input: clear BTN_RIGHT/MIDDLE on buttonpads")
+> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
 > ---
->  include/trace/events/jbd2.h | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/trace/events/jbd2.h b/include/trace/events/jbd2.h
-> index a4dfe005983d..5be1aa1691fb 100644
-> --- a/include/trace/events/jbd2.h
-> +++ b/include/trace/events/jbd2.h
-> @@ -40,7 +40,7 @@ DECLARE_EVENT_CLASS(jbd2_commit,
->  	TP_STRUCT__entry(
->  		__field(	dev_t,	dev			)
->  		__field(	char,	sync_commit		  )
-> -		__field(	int,	transaction		  )
-> +		__field(	tid_t,	transaction		  )
->  	),
->  
->  	TP_fast_assign(
-> @@ -49,7 +49,7 @@ DECLARE_EVENT_CLASS(jbd2_commit,
->  		__entry->transaction	= commit_transaction->t_tid;
->  	),
->  
-> -	TP_printk("dev %d,%d transaction %d sync %d",
-> +	TP_printk("dev %d,%d transaction %u sync %d",
->  		  MAJOR(__entry->dev), MINOR(__entry->dev),
->  		  __entry->transaction, __entry->sync_commit)
->  );
-> @@ -97,8 +97,8 @@ TRACE_EVENT(jbd2_end_commit,
->  	TP_STRUCT__entry(
->  		__field(	dev_t,	dev			)
->  		__field(	char,	sync_commit		  )
-> -		__field(	int,	transaction		  )
-> -		__field(	int,	head		  	  )
-> +		__field(	tid_t,	transaction		  )
-> +		__field(	tid_t,	head		  	  )
->  	),
->  
->  	TP_fast_assign(
-> @@ -108,7 +108,7 @@ TRACE_EVENT(jbd2_end_commit,
->  		__entry->head		= journal->j_tail_sequence;
->  	),
->  
-> -	TP_printk("dev %d,%d transaction %d sync %d head %d",
-> +	TP_printk("dev %d,%d transaction %u sync %d head %u",
->  		  MAJOR(__entry->dev), MINOR(__entry->dev),
->  		  __entry->transaction, __entry->sync_commit, __entry->head)
->  );
-> -- 
-> 2.19.1.6.gb485710b
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+
+Thanks for the patch.
+However, I'd like to put this one on hold for a bit. I am discussing
+it right now with Peter and we are trying to see what are the possible
+implications of starting to fix those in the kernel one by one.
+
+So Jiri, please hold on before applying this one.
+
+Cheers,
+Benjamin
+
+>  drivers/hid/hid-ids.h        |  3 +++
+>  drivers/hid/hid-multitouch.c | 20 ++++++++++++++++++++
+>  2 files changed, 23 insertions(+)
+>
+> diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+> index 78bd3ddda442..6cf7a5b6835b 100644
+> --- a/drivers/hid/hid-ids.h
+> +++ b/drivers/hid/hid-ids.h
+> @@ -287,6 +287,9 @@
+>
+>  #define USB_VENDOR_ID_CIDC             0x1677
+>
+> +#define USB_VENDOR_ID_CIRQUE_CORP              0x0488
+> +#define USB_DEVICE_ID_DELL_PRECISION_7X50      0x120A
+> +
+>  #define USB_VENDOR_ID_CJTOUCH          0x24b8
+>  #define USB_DEVICE_ID_CJTOUCH_MULTI_TOUCH_0020 0x0020
+>  #define USB_DEVICE_ID_CJTOUCH_MULTI_TOUCH_0040 0x0040
+> diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
+> index 99eabfb4145b..f012cf8e0b8c 100644
+> --- a/drivers/hid/hid-multitouch.c
+> +++ b/drivers/hid/hid-multitouch.c
+> @@ -71,6 +71,7 @@ MODULE_LICENSE("GPL");
+>  #define MT_QUIRK_SEPARATE_APP_REPORT   BIT(19)
+>  #define MT_QUIRK_FORCE_MULTI_INPUT     BIT(20)
+>  #define MT_QUIRK_DISABLE_WAKEUP                BIT(21)
+> +#define MT_QUIRK_BUTTONTYPE_TOUCHPAD   BIT(22)
+>
+>  #define MT_INPUTMODE_TOUCHSCREEN       0x02
+>  #define MT_INPUTMODE_TOUCHPAD          0x03
+> @@ -194,6 +195,7 @@ static void mt_post_parse(struct mt_device *td, struc=
+t mt_application *app);
+>  #define MT_CLS_WIN_8_FORCE_MULTI_INPUT         0x0015
+>  #define MT_CLS_WIN_8_DISABLE_WAKEUP            0x0016
+>  #define MT_CLS_WIN_8_NO_STICKY_FINGERS         0x0017
+> +#define MT_CLS_BUTTONTYPE_TOUCHPAD             0x0018
+>
+>  /* vendor specific classes */
+>  #define MT_CLS_3M                              0x0101
+> @@ -302,6 +304,15 @@ static const struct mt_class mt_classes[] =3D {
+>                         MT_QUIRK_CONTACT_CNT_ACCURATE |
+>                         MT_QUIRK_WIN8_PTP_BUTTONS,
+>                 .export_all_inputs =3D true },
+> +       { .name =3D MT_CLS_BUTTONTYPE_TOUCHPAD,
+> +               .quirks =3D MT_QUIRK_ALWAYS_VALID |
+> +                       MT_QUIRK_IGNORE_DUPLICATES |
+> +                       MT_QUIRK_HOVERING |
+> +                       MT_QUIRK_CONTACT_CNT_ACCURATE |
+> +                       MT_QUIRK_STICKY_FINGERS |
+> +                       MT_QUIRK_WIN8_PTP_BUTTONS |
+> +                       MT_QUIRK_BUTTONTYPE_TOUCHPAD,
+> +               .export_all_inputs =3D true },
+>
+>         /*
+>          * vendor specific classes
+> @@ -1286,6 +1297,9 @@ static int mt_touch_input_configured(struct hid_dev=
+ice *hdev,
+>             (app->buttons_count =3D=3D 1))
+>                 td->is_buttonpad =3D true;
+>
+> +       if (app->quirks & MT_QUIRK_BUTTONTYPE_TOUCHPAD)
+> +               td->is_buttonpad =3D false;
+> +
+>         if (td->is_buttonpad)
+>                 __set_bit(INPUT_PROP_BUTTONPAD, input->propbit);
+>
+> @@ -1872,6 +1886,12 @@ static const struct hid_device_id mt_devices[] =3D=
+ {
+>                 MT_USB_DEVICE(USB_VENDOR_ID_CHUNGHWAT,
+>                         USB_DEVICE_ID_CHUNGHWAT_MULTITOUCH) },
+>
+> +       /* Cirque Corp (Dell Precision 7550 and 7750 touchpad) */
+> +       { .driver_data =3D MT_CLS_BUTTONTYPE_TOUCHPAD,
+> +               HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
+> +                       USB_VENDOR_ID_CIRQUE_CORP,
+> +                       USB_DEVICE_ID_DELL_PRECISION_7X50) },
+> +
+>         /* CJTouch panels */
+>         { .driver_data =3D MT_CLS_NSMU,
+>                 MT_USB_DEVICE(USB_VENDOR_ID_CJTOUCH,
+> --
+> 2.25.1
+>
+

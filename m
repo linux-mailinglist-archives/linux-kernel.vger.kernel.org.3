@@ -2,155 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C314E2A62
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014144E2A72
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349300AbiCUOZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S1347503AbiCUOZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350378AbiCUOVC (ORCPT
+        with ESMTP id S1350775AbiCUOVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:21:02 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8346C177099
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:13:35 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id t19so1050421qtc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=SpcQ2fQs0B6gsc0zmrC1AWzw07HBH7voJSyZVgn+CmY=;
-        b=YMmPb6ufUoPO1xJawFqx/pw7tcukS4GdHAOpTMI6TNm1HeyLUsenwKkAlmFC5sskS9
-         G+wNHb8XVZRirIOXD5IKpxnzUczJMsQkb3lb26bM4xIpkG0BSfd+K9hOZug87/lkap3n
-         loetXdhMOO4esSZ12p6xttO72PGLNa5Hjolu+3w+yQPa2P/PJi6jx/BzjMHrk3CRVets
-         x7Dsj4N9NW7rj0axqNTcVj/HX2wMlYDfqvxQ/+uge9Lm786bX2wDZMSBj82IRVskN39c
-         UY8Q8tqzp7am3VQ1xUTUHBNkExHsBO5n5rJvr14CodpI8BFubxJhna6n/VaZsQlP+qru
-         6A0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=SpcQ2fQs0B6gsc0zmrC1AWzw07HBH7voJSyZVgn+CmY=;
-        b=yd0chaq98YJmI46V6lxIzSpKWuv+3rTeSSKdHAgWCgy841oQoYWcT8QFoiiwhBvUsW
-         TSL/dB1IN20CWCmE2PtPKFw5NPVstbp5x3RdQbXmgovruAD8zJD/sbcIn6gIQS2gTj+i
-         WREUTfRG+fkOARG9Vl71gJs+q7/+VVIq175Z7/GOPoNTLsoACAiYt+mLjq+vZeUZYu4U
-         zLMEx1udxYVxysXM7Q1QqQcggtJNxRRccdYiLI7iJJGpzisLWQSZYL4OeG78GtgQ4hrY
-         YE7OJAWGdk5m/AO8KmxZ7TiajgVmbhkpBq8tBLbR33dliePpbu1jXoNH/yeFYLnB9hKg
-         kqJA==
-X-Gm-Message-State: AOAM532dwxGnMq0ZxJSO9XzC/4srEgolk60zQJc7+T8DE2AK300FQ9ko
-        P7ba7Pc+pc/aI9I+ttPRimHobgLnQ6CwVSA5FdGNtA==
-X-Google-Smtp-Source: ABdhPJyWAH+sDRJ270zMfxco+YyNWJFwLR4+S6xqqYj7oSaBnbkhA+KnL9o9TtC8VsgFFIuLqvJvGIdWalshA80NzoM=
-X-Received: by 2002:a05:622a:1709:b0:2e1:2cbd:6139 with SMTP id
- h9-20020a05622a170900b002e12cbd6139mr16332484qtk.578.1647872011635; Mon, 21
- Mar 2022 07:13:31 -0700 (PDT)
+        Mon, 21 Mar 2022 10:21:21 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2065.outbound.protection.outlook.com [40.107.220.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD15F193152
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:14:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IL94MDKqN85l3Irnq3X13JTYK1Xll0cNLpV6OqLN8tttRD0rlDkyPgeIO3PAXxl35LqitfCm2HSLQO68bZRGxk6KzZgrHGPRp4H1YFFYDpBPog2luJEOZs7wfAU9rt1UyXDKga2BWxBHADTmeuxa/qzBVxpU6xCXpa9nI7uTICg52lzqSC6JhlVa0fawC4ETQih/bOB83EtPmq3NmrvhX2KWQnxkflfcfC10+WhFeMrD6gt/gTTmF+gFR1OnV62dB6MRW9zVub5+rAyI2o0X8JE45TNzo00nhRiyFq3wymzLhmgn2KvaeNGKj0D/4w1/JyDPpmDOu+eHELfS5GL+Rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XKZru733Z7BIJrMwQ6nHX/4BdQQJsYiP8NR5wpoD9m4=;
+ b=jW8uNcuzQGijArTWROBc24ywiatpL9MUTj72nZqr7AxpQHiOY/Enoc1xivvQa558t2uX97kUw1WrEAFzS0Vjccj8Dk7c9YCDG+nsbXayGhrY+SgKa8BUjw6fvpiRsDUXM8fbt13Sjljg6oZOM2Hg1St+YQNKjdLanB191UgkmU6YY/w4ujsCehRVxDABDjNKAKL0XJURcpeeiYnywoEnntqQ6b7zE0t1xRp1RXPpEQAlllKIbGwDPIplIyUdi9wpTrlHz69sqbghaOu1jzEEPuUaVQLC8riKEbmi24SmGSaqGzAZdOkRdRmc2ik7Wu3hzYqVgg83XHwr3nUVP0O3Bw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=lists.linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XKZru733Z7BIJrMwQ6nHX/4BdQQJsYiP8NR5wpoD9m4=;
+ b=B0RU6Oi+SVv9H7IE5PobLssjYzletKsnc7LBV0Jr1AdcpeHN9loe6agpm33X1l1LC7YJs0cSVd2fmFMsUeldqFbiX5HhuAGUDRE/RhQliD/aFH3VuW13jixPHhVA4bCFH/wY9HOYwGc7hy3opQMTem8z4YztkjXxRVF9NG74PU08rI7U034TQrMAHd7qtZ9lL2z91ahHN60JJsCdtcfjy76l4+tEX5PlXDW6zMOs12wD+dmc3Mzk1SY3DaEwQQ1gIbyWrUM6BP7ekk1i0b18WhwLE4Xwl1WNwsnuZVNrkc+17AdfGV1A+6sF5VXKgTUR1mL/z4wcyLAJzd0++tmI8A==
+Received: from BN6PR14CA0025.namprd14.prod.outlook.com (2603:10b6:404:13f::11)
+ by DM5PR12MB2566.namprd12.prod.outlook.com (2603:10b6:4:b4::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Mon, 21 Mar
+ 2022 14:13:36 +0000
+Received: from BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:13f:cafe::d9) by BN6PR14CA0025.outlook.office365.com
+ (2603:10b6:404:13f::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.23 via Frontend
+ Transport; Mon, 21 Mar 2022 14:13:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ BN8NAM11FT059.mail.protection.outlook.com (10.13.177.120) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5081.14 via Frontend Transport; Mon, 21 Mar 2022 14:13:34 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Mon, 21 Mar
+ 2022 14:13:20 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 21 Mar
+ 2022 07:13:20 -0700
+Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server id 15.2.986.22 via Frontend Transport; Mon, 21 Mar
+ 2022 07:13:18 -0700
+From:   Eli Cohen <elic@nvidia.com>
+To:     <mst@redhat.com>, <jwang@redhat.com>
+CC:     <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, Eli Cohen <elic@nvidia.com>
+Subject: [PATCH] vdpa/mlx5: Avoid processing works if workqueue was destroyed
+Date:   Mon, 21 Mar 2022 16:13:03 +0200
+Message-ID: <20220321141303.9586-1-elic@nvidia.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-14-glider@google.com>
- <YbjHerrHit/ZqXYs@kroah.com> <CAG_fn=XX3vbuo=cyG8C1Syv_JXiQ1rnfoffKqEc-N8uLei5T2A@mail.gmail.com>
- <Yby5Rwr0jgAcK4th@kroah.com>
-In-Reply-To: <Yby5Rwr0jgAcK4th@kroah.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 21 Mar 2022 15:12:55 +0100
-Message-ID: <CAG_fn=V1bCUkrE_d2hwm+XVip35pRspHzjYaXhU_PfyJE0QwoA@mail.gmail.com>
-Subject: Re: [PATCH 13/43] kmsan: add KMSAN runtime core
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a0731429-cf0a-4256-1a71-08da0b44fccb
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2566:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB2566A5AF634CB166F6E8E018AB169@DM5PR12MB2566.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nXM5OUeP7PQHYBtXOKZQKcPQSqJhKf7wM+Eg0BxpTIqAPlxqO0JhrYTcX00o6E+WB/ILt2DXXYQJn4Fb56yQxmzBXBtk0brpdn1U6NvQSso182MWuukHjtNDuCLbBQgCU/DdfbusZmXrDJRfaMImQC6wrohGWfj5amf3/LmvQFm+OTsqHQSMungLmNyestK8PzR60CCqnd3aE2/ZwChOFY46ThEr853MjJwGnPNAfPL1sO/JW+51/7MU34fGl88i4HmztyqzX48QAIpBOe/uEfE6wCWwfZvqIkIlZyGhYJg0N2KYU8TC1z6edXHH0HkQQ8XkbcLwCHIJ6ajijDjOtlow3S6ruvVoDaaVrqY8Sm7OKbXVlg/tbzYYLek1Bt2GqN9hB8GuCcebY+Bth7JOYCEOfxymc0xykN3xJCyv14GVcQopwes1NYrwjBUq9uUPEqskFA1yjJkaWsxRLT+VA3GCYRGgEX9ioTSEoaeIu6hB0jFIIga9DAu9DWR7UBL5edQS0VqhL5RpjD/KgiVEMiDdJeQ2BLmCGzt6ONmMoBHr5BzBK0T+6v3qFhi6rurtTMVCuoUIYJzOaXqBjhPL1dg62IogHvilJMSWjS6ZEjcQ+XAp80sz6dzAWUg5qOfXDZ2tNpTngcxQUdIr6sD0kQGIOD0xsXsEob+ba9hMyBGBu9tnWyt0PNwcvdZXLRg+7P3igS6qcqXQ6DDIgWK3yg==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(86362001)(336012)(426003)(47076005)(36860700001)(356005)(81166007)(83380400001)(40460700003)(36756003)(316002)(54906003)(508600001)(70206006)(70586007)(110136005)(4326008)(8676002)(1076003)(186003)(7696005)(82310400004)(2906002)(5660300002)(107886003)(2616005)(8936002)(6666004)(26005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 14:13:34.1635
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0731429-cf0a-4256-1a71-08da0b44fccb
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2566
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >
-> > Just to make sure I don't misunderstand - for example for "kmsan: mm:
-> > call KMSAN hooks from SLUB code", would it be better to pull the code
-> > in mm/kmsan/core.c implementing kmsan_slab_alloc() and
-> > kmsan_slab_free() into that patch?
->
-> Yes.
->
-> > I thought maintainers would prefer to have patches to their code
-> > separated from KMSAN code, but if it's not true, I can surely fix
-> > that.
->
-> As a maintainer, I want to know what the function call that you just
-> added to my subsystem to call does.  Wouldn't you?  Put it all in the
-> same patch.
+If mlx5_vdpa gets unloaded while a VM is running, the workqueue will be
+destroyed. However, vhost might still have reference to the kick
+function and might attempt to push new works. This could lead to null
+pointer dereference.
 
-Ok, will be done in v2, thanks!
+To fix this, set mvdev->wq to NULL just before destroying and verify
+that the workqueue is not NULL in mlx5_vdpa_kick_vq before attempting to
+push a new work.
 
-> Think about submitting a patch series as telling a story.  You need to
-> show the progression forward of the feature so that everyone can
-> understand what is going on.  To just throw tiny snippets at us is
-> impossible to follow along with what your goal is.
->
-> You want reviewers to be able to easily see if the things you describe
-> being done in the changelog actually are implemented in the diff.
-> Dividing stuff up by files does not show that at all.
->
-> thanks,
->
-> greg k-h
+Fixes: 5262912ef3cf ("vdpa/mlx5: Add support for control VQ and MAC setting")
+Signed-off-by: Eli Cohen <elic@nvidia.com>
+---
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index 5d7f3e8000c6..5c9cb0fc3e7a 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -1669,7 +1669,7 @@ static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
+ 		return;
+ 
+ 	if (unlikely(is_ctrl_vq_idx(mvdev, idx))) {
+-		if (!mvdev->cvq.ready)
++		if (!mvdev->wq || !mvdev->cvq.ready)
+ 			return;
+ 
+ 		wqent = kzalloc(sizeof(*wqent), GFP_ATOMIC);
+@@ -2736,9 +2736,12 @@ static void mlx5_vdpa_dev_del(struct vdpa_mgmt_dev *v_mdev, struct vdpa_device *
+ 	struct mlx5_vdpa_mgmtdev *mgtdev = container_of(v_mdev, struct mlx5_vdpa_mgmtdev, mgtdev);
+ 	struct mlx5_vdpa_dev *mvdev = to_mvdev(dev);
+ 	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
++	struct workqueue_struct *wq;
+ 
+ 	mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
+-	destroy_workqueue(mvdev->wq);
++	wq = mvdev->wq;
++	mvdev->wq = NULL;
++	destroy_workqueue(wq);
+ 	_vdpa_unregister_device(dev);
+ 	mgtdev->ndev = NULL;
+ }
+-- 
+2.35.1
 
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
-
-Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
-erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
-weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
-mich
-bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
-
-
-This e-mail is confidential. If you received this communication by
-mistake, please don't forward it to anyone else, please erase all
-copies and attachments, and please let me know that it has gone to the
-wrong person.

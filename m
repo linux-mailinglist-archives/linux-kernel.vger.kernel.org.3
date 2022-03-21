@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46E54E2448
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D4A4E244C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346288AbiCUK0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 06:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S1346318AbiCUK2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 06:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346241AbiCUK0o (ORCPT
+        with ESMTP id S1346241AbiCUK20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 06:26:44 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9B1AC92C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 03:25:19 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id x6-20020a923006000000b002bea39c3974so7129576ile.12
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 03:25:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=dfW60HFiHGAShL8WQ035qSGxvkVFI45Rn0aZ23BkU28=;
-        b=pCaXxVNHNKxt5CCRcouQnij6pF56GCyVlUAgV36ZMnFojmc+IiQofEZlpSsa78jexA
-         u74Rql/5LB1otTnCeVqVzu+DmUsAAuHwquIDaIKgquEr+qWF2aXA02FU448gMT08LlbZ
-         +SiLe6sOU569hHEi+xPtsjzyPjWVQi5awRIFcme3KbXCStEQebOMMGqwbVVtxP2t9Evi
-         u38gqCv/zprRimuoyf3Cv4lNo+GIF+UjUqW2eVaL9Ogs/98s7h/riNfL1xxBy6DMtz4W
-         3XN92IAYTzVbZCP+bNhjtJNRMh1VN1Qo7926p26HOey22UDTCHr7U5sKx08vtFcb3amZ
-         T6lA==
-X-Gm-Message-State: AOAM530wlJXK84ZNMVrXCzEZfhjN7QFXZtoxnc8sRa+v3F6PYYfHag0E
-        fev1kXrgbOEVYpPGraAslBp2wlYk1RhGuwJH8YZgnJokEAQ8
-X-Google-Smtp-Source: ABdhPJzTTfOJKl5sHEqG/aH+fRC99gL8AQSHgsFCfD+Y3/oMzeqUJ5gW/d/Cnhwf0JiDWw7bg0Os01JLLPMauK0QHoCaDBrPR/j2
+        Mon, 21 Mar 2022 06:28:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5845D64C2;
+        Mon, 21 Mar 2022 03:27:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 80D6A1F385;
+        Mon, 21 Mar 2022 10:26:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1647858419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=p2mtkALxVHViPF31UbfaqQerGr40TgNnHKOVHFVrOOw=;
+        b=AOwffkojH/O2e3D8l4Ml/Y+GkM9ZRfwEmLWzJnupq3KTm7wMIoWlUifzCsIGiLozLRXg9i
+        n0jQpN8lSwtcc2lL7IlDhSqGcV86n+ipQum6fMpTXj5IFXl4om5LwQoTSDCarq8LnB5Y9g
+        vx6n0EmFHajqGAeBTtUdvOyAZVDC59I=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3080013AD5;
+        Mon, 21 Mar 2022 10:26:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id T8HoCfNSOGIuegAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 21 Mar 2022 10:26:59 +0000
+Message-ID: <9143f2f8-9f96-66f4-0020-64918481606c@suse.com>
+Date:   Mon, 21 Mar 2022 11:26:58 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8796:0:b0:645:bd36:3833 with SMTP id
- f22-20020a5d8796000000b00645bd363833mr9579909ion.158.1647858318498; Mon, 21
- Mar 2022 03:25:18 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 03:25:18 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b6df0f05dab7e92c@google.com>
-Subject: [syzbot] WARNING in kvm_mmu_notifier_invalidate_range_start (2)
-From:   syzbot <syzbot+6bde52d89cfdf9f61425@syzkaller.appspotmail.com>
-To:     agordeev@linux.ibm.com, aleksandar.qemu.devel@gmail.com,
-        alexandru.elisei@arm.com, benh@kernel.crashing.org,
-        borntraeger@linux.ibm.com, bp@alien8.de, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, dave.hansen@linux.intel.com,
-        david@redhat.com, dja@axtens.net, frankja@linux.ibm.com,
-        gor@linux.ibm.com, hca@linux.ibm.com, hpa@zytor.com,
-        imbrenda@linux.ibm.com, james.morse@arm.com, jmattson@google.com,
-        joro@8bytes.org, kvm@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, lukas.bulwahn@gmail.com,
-        maciej.szmigiero@oracle.com, maz@kernel.org, mingo@redhat.com,
-        mpe@ellerman.id.au, paulus@samba.org, pbonzini@redhat.com,
-        seanjc@google.com, suzuki.poulose@arm.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH 1/1] xen/blkfront: fix comment for need_copy
+Content-Language: en-US
+To:     =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>,
+        Dongli Zhang <dongli.zhang@oracle.com>
+Cc:     linux-block@vger.kernel.org, xen-devel@lists.xenproject.org,
+        boris.ostrovsky@oracle.com, sstabellini@kernel.org,
+        axboe@kernel.dk, linux-kernel@vger.kernel.org
+References: <20220317220930.5698-1-dongli.zhang@oracle.com>
+ <YjhN4neEJMs04JEN@Air-de-Roger>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <YjhN4neEJMs04JEN@Air-de-Roger>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------HDqalv0XKUt4dz6fA0XKZSyr"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,85 +68,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------HDqalv0XKUt4dz6fA0XKZSyr
+Content-Type: multipart/mixed; boundary="------------3da2YXrQFw7IfIqTv3HvrD0W";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>,
+ Dongli Zhang <dongli.zhang@oracle.com>
+Cc: linux-block@vger.kernel.org, xen-devel@lists.xenproject.org,
+ boris.ostrovsky@oracle.com, sstabellini@kernel.org, axboe@kernel.dk,
+ linux-kernel@vger.kernel.org
+Message-ID: <9143f2f8-9f96-66f4-0020-64918481606c@suse.com>
+Subject: Re: [PATCH 1/1] xen/blkfront: fix comment for need_copy
+References: <20220317220930.5698-1-dongli.zhang@oracle.com>
+ <YjhN4neEJMs04JEN@Air-de-Roger>
+In-Reply-To: <YjhN4neEJMs04JEN@Air-de-Roger>
 
-syzbot found the following issue on:
+--------------3da2YXrQFw7IfIqTv3HvrD0W
+Content-Type: multipart/mixed; boundary="------------k1urJJizQ7n30a6sz3vlkF5u"
 
-HEAD commit:    56e337f2cf13 Revert "gpio: Revert regression in sysfs-gpio..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13821b8d700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d35f9bc6884af6c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=6bde52d89cfdf9f61425
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12a2d0a9700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d34fd9700000
+--------------k1urJJizQ7n30a6sz3vlkF5u
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-The issue was bisected to:
+T24gMjEuMDMuMjIgMTE6MDUsIFJvZ2VyIFBhdSBNb25uw6kgd3JvdGU6DQo+IE9uIFRodSwg
+TWFyIDE3LCAyMDIyIGF0IDAzOjA5OjMwUE0gLTA3MDAsIERvbmdsaSBaaGFuZyB3cm90ZToN
+Cj4+IFRoZSAnbmVlZF9jb3B5JyBpcyBzZXQgd2hlbiBycV9kYXRhX2RpcihyZXEpIHJldHVy
+bnMgV1JJVEUsIGluIG9yZGVyIHRvDQo+PiBjb3B5IHRoZSB3cml0dGVuIGRhdGEgdG8gcGVy
+c2lzdGVudCBwYWdlLg0KPj4NCj4+ICIubmVlZF9jb3B5ID0gcnFfZGF0YV9kaXIocmVxKSAm
+JiBpbmZvLT5mZWF0dXJlX3BlcnNpc3RlbnQsIg0KPiANCj4gSSB3b3VsZCBhbHNvIGFkZDoN
+Cj4gDQo+IEZpeGVzOiBjMDA0YTZmZTBjNDAgKCdibG9jay94ZW4tYmxrZnJvbnQ6IE1ha2Ug
+aXQgcnVubmluZyBvbiA2NEtCIHBhZ2UgZ3JhbnVsYXJpdHknKQ0KDQpIbW0sIGEgIkZpeGVz
+OiIgdGFnIGZvciBhIGNoYW5nZSBpbiBhIGNvbW1lbnQ/DQoNClRoaXMgbWlnaHQgZ2VuZXJh
+dGUgYWRkaXRpb25hbCB3b3JrIGUuZy4gZm9yIGRvd25zdHJlYW1zICh3ZSBhdCBTVVNFIGhh
+dmUNCnNjcmlwdHMgY2hlY2tpbmcgIkZpeGVzOiIgdGFncyBhbmQgcmVxdWlyZSBzdWNoIGNo
+YW5nZXMgdG8gYmUgYXBwbGllZCB0bw0Ka2VybmVscyBoYXZpbmcgdGhlIGZpeGVkIHBhdGNo
+IGFwcGxpZWQpLg0KDQpUaGF0IHNhaWQgSSdkIHByZWZlciBub3QgaGF2aW5nIGEgIkZpeGVz
+OiIgdGFnIGZvciBzdWNoIGNoYW5nZXMsIGJ1dCBtYXliZQ0KdGhpcyBpcyBqdXN0IGR1ZSB0
+byB0aGUgZmFjdCB0aGF0IGl0IHdvdWxkIGJlIG1lIGhhdmluZyB0byBhcHBseSB0aGlzDQpw
+YXRjaCB0byB0aGUgU1VTRSBrZXJuZWxzLi4uDQoNCg0KSnVlcmdlbg0K
+--------------k1urJJizQ7n30a6sz3vlkF5u
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-commit ed922739c9199bf515a3e7fec3e319ce1edeef2a
-Author: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-Date:   Mon Dec 6 19:54:28 2021 +0000
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-    KVM: Use interval tree to do fast hva lookup in memslots
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=142aa59d700000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=162aa59d700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=122aa59d700000
+--------------k1urJJizQ7n30a6sz3vlkF5u--
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6bde52d89cfdf9f61425@syzkaller.appspotmail.com
-Fixes: ed922739c919 ("KVM: Use interval tree to do fast hva lookup in memslots")
+--------------3da2YXrQFw7IfIqTv3HvrD0W--
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3599 at arch/x86/kvm/../../../virt/kvm/kvm_main.c:529 __kvm_handle_hva_range arch/x86/kvm/../../../virt/kvm/kvm_main.c:529 [inline]
-WARNING: CPU: 0 PID: 3599 at arch/x86/kvm/../../../virt/kvm/kvm_main.c:529 kvm_mmu_notifier_invalidate_range_start+0x97a/0xb20 arch/x86/kvm/../../../virt/kvm/kvm_main.c:714
-Modules linked in:
-CPU: 0 PID: 3599 Comm: syz-executor221 Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__kvm_handle_hva_range arch/x86/kvm/../../../virt/kvm/kvm_main.c:529 [inline]
-RIP: 0010:kvm_mmu_notifier_invalidate_range_start+0x97a/0xb20 arch/x86/kvm/../../../virt/kvm/kvm_main.c:714
-Code: 00 48 c7 c2 60 0c a2 89 be b9 01 00 00 48 c7 c7 c0 10 a2 89 c6 05 ed 71 76 0c 01 e8 79 84 ff 07 e9 73 ff ff ff e8 b6 cd 6f 00 <0f> 0b e9 88 fc ff ff e8 aa cd 6f 00 0f 0b e9 58 fc ff ff e8 9e cd
-RSP: 0018:ffffc90001caf948 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 000000002000d000 RCX: 0000000000000000
-RDX: ffff888020d83a00 RSI: ffffffff8108f27a RDI: 0000000000000003
-RBP: ffffc90002b76290 R08: 000000002000d000 R09: ffffc90002b762e3
-R10: ffffffff8108eb1c R11: 0000000000000001 R12: ffffc90002b7f240
-R13: ffffc90002b75000 R14: ffffc90001cafc18 R15: 000000002000d000
-FS:  0000555555a55300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000088 CR3: 0000000074ce9000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- mn_hlist_invalidate_range_start mm/mmu_notifier.c:493 [inline]
- __mmu_notifier_invalidate_range_start+0x2ff/0x800 mm/mmu_notifier.c:548
- mmu_notifier_invalidate_range_start include/linux/mmu_notifier.h:459 [inline]
- move_page_tables+0x2642/0x2d20 mm/mremap.c:498
- move_vma+0x48c/0xf40 mm/mremap.c:629
- mremap_to mm/mremap.c:862 [inline]
- __do_sys_mremap+0xf01/0x1560 mm/mremap.c:972
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f11faab5089
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc17608428 EFLAGS: 00000246 ORIG_RAX: 0000000000000019
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f11faab5089
-RDX: 0000000000001000 RSI: fffffffffffffe74 RDI: 000000002000d000
-RBP: 00007f11faa79070 R08: 0000000020007000 R09: 0000000000000000
-R10: 0000000000000003 R11: 0000000000000246 R12: 00007f11faa79100
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+--------------HDqalv0XKUt4dz6fA0XKZSyr
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmI4UvIFAwAAAAAACgkQsN6d1ii/Ey91
+AwgAk7qUzQY7ppbSKnwccCfalJb2WWdN/Zo7e7wkqLz0ShjGLzCdOaDvq5JXOIx40ns0Z1Pm//pC
+5pDpXvaVHkuFEZBOHoD3EhFp6dJUhAwFJLnpH81RvRQRP7m9jt5NBpgznQtaGl20sSxuvu6d1B6z
+GlAI3egjKVvJaShMVpsykIpI8CJTZ8daQFxSBi+2A2oqQ5zHbmm6587wI1uu+Vi0thqD3gOIakPB
+cENVrLpeIK9Adj1vIMSZXbSM+L/ND02G//BrSA9UTKUmdfMabVudUX6s9nbyVUt/kw6ZDzDHt5mY
+q6dDewl9nnA1SuoxN3BDXb/LGhsKB86nFRdkqIFclQ==
+=142m
+-----END PGP SIGNATURE-----
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--------------HDqalv0XKUt4dz6fA0XKZSyr--

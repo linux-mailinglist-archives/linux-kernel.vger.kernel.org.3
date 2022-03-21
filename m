@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF014E29D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825654E298D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351772AbiCUOLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S1348914AbiCUOFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348747AbiCUOCi (ORCPT
+        with ESMTP id S1349169AbiCUN7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:02:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D353B565;
-        Mon, 21 Mar 2022 06:59:34 -0700 (PDT)
+        Mon, 21 Mar 2022 09:59:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F83D22513;
+        Mon, 21 Mar 2022 06:58:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7162612A1;
-        Mon, 21 Mar 2022 13:59:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6D0DC340E8;
-        Mon, 21 Mar 2022 13:59:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4A5FB81598;
+        Mon, 21 Mar 2022 13:58:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F026C340E8;
+        Mon, 21 Mar 2022 13:58:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871157;
-        bh=+EgaiHZSotoZIM9JUYSNx32Rt1/zHze/2ZvDe21kRe4=;
+        s=korg; t=1647871085;
+        bh=9BTH4l2nUijaCftcHoyPmyiVcOiGnzGXNLmpimNUF+w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qpu29IsLfGbLvJMyi9hAzBNQsV1SPVI6ipysti6b/IecbiKTN3AtxrT1ms43GLmVB
-         0t1LCsz1l2WLyZjq9J/Y8jrAhfOuLtsUUhXi9ekrDN7zD67oxLiE3yix9UoxBBYTuL
-         Bdh4r3c1EajA2TmqiAPU/y8J3LKQqSJihd/78IUk=
+        b=bb+45hAll1IA8gcfZWTyCSDGj6YRLbDiC48Bg2aAFUpUcKPmIEUQQX+PUczEGNtX0
+         Yghpx0WfzalHN3AsWZmHGNCA3OPx64l/0Kaa8+RZ1DKR7bCFAXutUpPYGV3E3yzlxS
+         Xm378gO3qlWu9pnJb3GU+R2Y1ObzoPO3/tSdJCGw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 08/30] net/packet: fix slab-out-of-bounds access in packet_recvmsg()
+        stable@vger.kernel.org, Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Junxiao Bi <junxiao.bi@oracle.com>,
+        Changwei Ge <gechangwei@live.cn>, Gang He <ghe@suse.com>,
+        Jun Piao <piaojun@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.4 02/17] ocfs2: fix crash when initialize filecheck kobj fails
 Date:   Mon, 21 Mar 2022 14:52:38 +0100
-Message-Id: <20220321133219.889728310@linuxfoundation.org>
+Message-Id: <20220321133217.223599318@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
-References: <20220321133219.643490199@linuxfoundation.org>
+In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
+References: <20220321133217.148831184@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,119 +60,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Joseph Qi <joseph.qi@linux.alibaba.com>
 
-[ Upstream commit c700525fcc06b05adfea78039de02628af79e07a ]
+commit 7b0b1332cfdb94489836b67d088a779699f8e47e upstream.
 
-syzbot found that when an AF_PACKET socket is using PACKET_COPY_THRESH
-and mmap operations, tpacket_rcv() is queueing skbs with
-garbage in skb->cb[], triggering a too big copy [1]
+Once s_root is set, genric_shutdown_super() will be called if
+fill_super() fails.  That means, we will call ocfs2_dismount_volume()
+twice in such case, which can lead to kernel crash.
 
-Presumably, users of af_packet using mmap() already gets correct
-metadata from the mapped buffer, we can simply make sure
-to clear 12 bytes that might be copied to user space later.
+Fix this issue by initializing filecheck kobj before setting s_root.
 
-BUG: KASAN: stack-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
-BUG: KASAN: stack-out-of-bounds in packet_recvmsg+0x56c/0x1150 net/packet/af_packet.c:3489
-Write of size 165 at addr ffffc9000385fb78 by task syz-executor233/3631
-
-CPU: 0 PID: 3631 Comm: syz-executor233 Not tainted 5.17.0-rc7-syzkaller-02396-g0b3660695e80 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xf/0x336 mm/kasan/report.c:255
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- memcpy+0x39/0x60 mm/kasan/shadow.c:66
- memcpy include/linux/fortify-string.h:225 [inline]
- packet_recvmsg+0x56c/0x1150 net/packet/af_packet.c:3489
- sock_recvmsg_nosec net/socket.c:948 [inline]
- sock_recvmsg net/socket.c:966 [inline]
- sock_recvmsg net/socket.c:962 [inline]
- ____sys_recvmsg+0x2c4/0x600 net/socket.c:2632
- ___sys_recvmsg+0x127/0x200 net/socket.c:2674
- __sys_recvmsg+0xe2/0x1a0 net/socket.c:2704
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fdfd5954c29
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcf8e71e48 EFLAGS: 00000246 ORIG_RAX: 000000000000002f
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fdfd5954c29
-RDX: 0000000000000000 RSI: 0000000020000500 RDI: 0000000000000005
-RBP: 0000000000000000 R08: 000000000000000d R09: 000000000000000d
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffcf8e71e60
-R13: 00000000000f4240 R14: 000000000000c1ff R15: 00007ffcf8e71e54
- </TASK>
-
-addr ffffc9000385fb78 is located in stack of task syz-executor233/3631 at offset 32 in frame:
- ____sys_recvmsg+0x0/0x600 include/linux/uio.h:246
-
-this frame has 1 object:
- [32, 160) 'addr'
-
-Memory state around the buggy address:
- ffffc9000385fa80: 00 04 f3 f3 f3 f3 f3 00 00 00 00 00 00 00 00 00
- ffffc9000385fb00: 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00
->ffffc9000385fb80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 f3
-                                                                ^
- ffffc9000385fc00: f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00 f1
- ffffc9000385fc80: f1 f1 f1 00 f2 f2 f2 00 f2 f2 f2 00 00 00 00 00
-==================================================================
-
-Fixes: 0fb375fb9b93 ("[AF_PACKET]: Allow for > 8 byte hardware addresses.")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Link: https://lore.kernel.org/r/20220312232958.3535620-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/20220310081930.86305-1-joseph.qi@linux.alibaba.com
+Fixes: 5f483c4abb50 ("ocfs2: add kobject for online file check")
+Signed-off-by: Joseph Qi <joseph.qi@linux.alibaba.com>
+Cc: Mark Fasheh <mark@fasheh.com>
+Cc: Joel Becker <jlbec@evilplan.org>
+Cc: Junxiao Bi <junxiao.bi@oracle.com>
+Cc: Changwei Ge <gechangwei@live.cn>
+Cc: Gang He <ghe@suse.com>
+Cc: Jun Piao <piaojun@huawei.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/packet/af_packet.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ fs/ocfs2/super.c |   22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index a31334b92be7..d0c95d7dd292 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -2278,8 +2278,11 @@ static int tpacket_rcv(struct sk_buff *skb, struct net_device *dev,
- 					copy_skb = skb_get(skb);
- 					skb_head = skb->data;
- 				}
--				if (copy_skb)
-+				if (copy_skb) {
-+					memset(&PACKET_SKB_CB(copy_skb)->sa.ll, 0,
-+					       sizeof(PACKET_SKB_CB(copy_skb)->sa.ll));
- 					skb_set_owner_r(copy_skb, sk);
-+				}
- 			}
- 			snaplen = po->rx_ring.frame_size - macoff;
- 			if ((int)snaplen < 0) {
-@@ -3434,6 +3437,8 @@ static int packet_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
- 	sock_recv_ts_and_drops(msg, sk, skb);
- 
- 	if (msg->msg_name) {
-+		const size_t max_len = min(sizeof(skb->cb),
-+					   sizeof(struct sockaddr_storage));
- 		int copy_len;
- 
- 		/* If the address length field is there to be filled
-@@ -3456,6 +3461,10 @@ static int packet_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
- 				msg->msg_namelen = sizeof(struct sockaddr_ll);
- 			}
- 		}
-+		if (WARN_ON_ONCE(copy_len > max_len)) {
-+			copy_len = max_len;
-+			msg->msg_namelen = copy_len;
-+		}
- 		memcpy(msg->msg_name, &PACKET_SKB_CB(skb)->sa, copy_len);
+--- a/fs/ocfs2/super.c
++++ b/fs/ocfs2/super.c
+@@ -1100,17 +1100,6 @@ static int ocfs2_fill_super(struct super
+ 		goto read_super_error;
  	}
  
--- 
-2.34.1
-
+-	root = d_make_root(inode);
+-	if (!root) {
+-		status = -ENOMEM;
+-		mlog_errno(status);
+-		goto read_super_error;
+-	}
+-
+-	sb->s_root = root;
+-
+-	ocfs2_complete_mount_recovery(osb);
+-
+ 	osb->osb_dev_kset = kset_create_and_add(sb->s_id, NULL,
+ 						&ocfs2_kset->kobj);
+ 	if (!osb->osb_dev_kset) {
+@@ -1128,6 +1117,17 @@ static int ocfs2_fill_super(struct super
+ 		goto read_super_error;
+ 	}
+ 
++	root = d_make_root(inode);
++	if (!root) {
++		status = -ENOMEM;
++		mlog_errno(status);
++		goto read_super_error;
++	}
++
++	sb->s_root = root;
++
++	ocfs2_complete_mount_recovery(osb);
++
+ 	if (ocfs2_mount_local(osb))
+ 		snprintf(nodestr, sizeof(nodestr), "local");
+ 	else
 
 

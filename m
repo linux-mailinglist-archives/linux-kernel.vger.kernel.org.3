@@ -2,148 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4574E338A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A064E3393
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiCUWwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 18:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S229743AbiCUWy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 18:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbiCUWvx (ORCPT
+        with ESMTP id S230282AbiCUWyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:51:53 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEF546AE60
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:41:43 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a8so32747327ejc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:41:43 -0700 (PDT)
+        Mon, 21 Mar 2022 18:54:36 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13A13CE87B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:33:13 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id q14so8509954ljc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:33:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9lfgL3STyhcbUTg/2mdbbAna/81RZPKVO1DCdewIE0c=;
-        b=gyWTW65QfHhxvHH2bxgBaFULc3nQpwZVt/AImeBaMsagLh7ZILfBIv+cpBZ1WSMI9Y
-         TOPeV02sp4XiVQ8lLN4FhnC7+vP3gy404ImwUap5qVGjKFQLADRuLKDINVF1PWzZB4oh
-         U1mEyqWzxsu3MtArm0qnwbxI0Tx9hdG/LVKbNXemcrBdZ3oknTgvP+A4O4F1hDotj6c7
-         FVqupN7ClUGTVzfsEfmwX4wkAgsXCHqtd+IxXQCc+4lmBRSffgJC9BQPVBCIHWW3kbD/
-         9j6hHMT86dOmHX2WVzZ5qGs1t/Zz97eNKhrycXInFxW646D96NZqUdSy6LBktZ2feENm
-         LGqg==
+        bh=BH/ZvdHwavygsraND3jZ9umdlqtC3J2xs3HpZjL2mwo=;
+        b=c9f3Pm5IXTpo39kOd0g++gJvtwaFhoqGjkoHxlqOe7Xi1L7cCP3CuQXXRVkJjdLjuo
+         IE79P2+w5wFiYpdJmX0ofyWAZYycl34hnsS8D4ynzd82H5n4Ly8vXdsyUlivtGQuBnmL
+         b9SF9v0advLxASxQduWy0nkNPxJMmDIwkXSzI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9lfgL3STyhcbUTg/2mdbbAna/81RZPKVO1DCdewIE0c=;
-        b=eyIger7lDwxXIqADINbBSoWNEe4uqo9TnUTHjzowYeCJucJ1j7RaaBYA0q5s8oykd6
-         nCiOYyYo+HTiRgr/Ed8YbCjrzWwduVSkrTVn7mn4HUgea+RRENFtJTuOuEI73v548pCN
-         d7EtY+NzetWrKaAn/Mh1AjSVOBXxiXBXqojcEQrauFtVEtFA/mdXAPv/Q6nxqrjykGX3
-         eIbT6RBM+cruyZ0XKeMZpGcw5Nqcbezlk2D++Zgj/qaHcBalEzG29dq0ikbzX1G4X4Tn
-         igkUbsVevp7YNCHRGIjcEzLyCmxnhjjIOCjHOfm5myCoBIn1YwjSU/03CUfJKBH/CNDf
-         HN3w==
-X-Gm-Message-State: AOAM532xpLjthvf59fk9f9cqMZ6uyFvaSimc6Cre04R/3cC2RbBwJfev
-        2Jp5Oz6hMrUjCRBhz8WTd6YMEbZZ4q3t126hOoFVRpZYbISvjA==
-X-Google-Smtp-Source: ABdhPJyawG4O85guPSFaNHQuFtdGjIUfvponf4x7mJ068IZhUDgnWrnpRgCdV86cGiMMISGbZ7KYluPjZMFypJf0Ncc=
-X-Received: by 2002:a2e:6804:0:b0:245:f269:618 with SMTP id
- c4-20020a2e6804000000b00245f2690618mr16315718lja.198.1647900072176; Mon, 21
- Mar 2022 15:01:12 -0700 (PDT)
+        bh=BH/ZvdHwavygsraND3jZ9umdlqtC3J2xs3HpZjL2mwo=;
+        b=IwIAJOGIV70rZTKxpLsooUJ+Hks/A+wEcJhTguXFE4VMcQy51e+XYocWiCctZ7x6nA
+         Gs4wfS1ze5eRuiLB1TSIlb3q7tbSe3bqzo2x9qB3rmk4oZiBw/od3vSeTR6OPFm41uEU
+         YgywSGkZRk6AYi0onyLou6Qj1sggY13cmN10nEQxv1JSUM5QqwHbRbzu7u0wGTBGcN1c
+         36Ql7m3HYBKektoDWSRIUJYjXOVCCxjDZFOSq+MOnFYFz5fBINjrB9TlPKsHeBIwIC5a
+         gfHZjFpR2h/fcUnN2TGU2UjywASsCQAiR16BQe3hFxccy97JdIqbpMAJFmlQbyGe1bua
+         cRMA==
+X-Gm-Message-State: AOAM530VW7f9ngiAsGNEQWKI+sf5tq/lNYXJWjSe+RzkBXj8xxymKcPv
+        3wS3iR/OgvHVr/jYbDHt8N9r0S//2l60jGwBFC0=
+X-Google-Smtp-Source: ABdhPJwBc6EONckhenm5IaiH/Z4Mv128h+5O6h1QUc8m/y9R/nrrSdEhUdQRLLmZHauk5Ll4VPNIYg==
+X-Received: by 2002:ac2:5fa8:0:b0:448:7e92:3be0 with SMTP id s8-20020ac25fa8000000b004487e923be0mr16036386lfe.148.1647900217819;
+        Mon, 21 Mar 2022 15:03:37 -0700 (PDT)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
+        by smtp.gmail.com with ESMTPSA id l24-20020a2e99d8000000b002497e14723esm720642ljj.86.2022.03.21.15.03.35
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 15:03:36 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id e16so12638110lfc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:03:35 -0700 (PDT)
+X-Received: by 2002:a05:6512:2294:b0:448:6c86:3c78 with SMTP id
+ f20-20020a056512229400b004486c863c78mr15507615lfu.531.1647900215381; Mon, 21
+ Mar 2022 15:03:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220321002638.379672-1-mizhang@google.com> <20220321002638.379672-4-mizhang@google.com>
-In-Reply-To: <20220321002638.379672-4-mizhang@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 21 Mar 2022 15:00:45 -0700
-Message-ID: <CALzav=dU5TPfhp1=n+zo+AcPkL4rpWCRpMCL91vE5z20R+mmjg@mail.gmail.com>
-Subject: Re: [PATCH 3/4] KVM: x86/mmu: explicitly check nx_hugepage in disallowed_hugepage_adjust()
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ben Gardon <bgardon@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Peter Xu <peterx@redhat.com>, Ben Gardon <bgorden@google.com>
+References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
+ <CAK8P3a12dY57+ZPEREAUrsNf45S0_4-yYHen6p0-PjJEivjczg@mail.gmail.com>
+ <CAHk-=wj81Cgjb5xj=ghB0oEA4ronnc=WKZLTPGpJYPUn=QcQ5g@mail.gmail.com> <CAK8P3a33TZm2NZg28KbCCeLzLvf759_5r8hr-rcWftci9qinog@mail.gmail.com>
+In-Reply-To: <CAK8P3a33TZm2NZg28KbCCeLzLvf759_5r8hr-rcWftci9qinog@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 21 Mar 2022 15:03:18 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiHLUK8oew17oD=4v-7DXUEDAbrup+7oZ8Stq0m9S2EGQ@mail.gmail.com>
+Message-ID: <CAHk-=wiHLUK8oew17oD=4v-7DXUEDAbrup+7oZ8Stq0m9S2EGQ@mail.gmail.com>
+Subject: Re: [PATCH V8 00/22] arch: Add basic LoongArch support
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 5:26 PM Mingwei Zhang <mizhang@google.com> wrote:
+On Mon, Mar 21, 2022 at 2:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Add extra check to specify the case of nx hugepage and allow KVM to
-> reconstruct large mapping after dirty logging is disabled. Existing code
-> works only for nx hugepage but the condition is too general in that does
-> not consider other usage case (such as dirty logging).
+> I can prepare a pull request when it gets to that, but I think the boot protocol
+> should be fixed first, and that makes it 5.19 material.
 
-KVM calls kvm_mmu_zap_collapsible_sptes() when dirty logging is
-disabled. Why is that not sufficient?
+Thanks. No problem on 5.19, it's not like I don't have enough pending
+for this merge window already..
 
-> Moreover, existing
-> code assumes that a present PMD or PUD indicates that there exist 'smaller
-> SPTEs' under the paging structure. This assumption may no be true if
-> consider the zapping leafs only behavior in MMU.
-
-Good point. Although, that code just got reverted. Maybe say something like:
-
-  This assumption may not be true in the future if KVM gains support
-for zapping only leaf SPTEs.
-
->
-> Missing the check causes KVM incorrectly regards the faulting page as a NX
-> huge page and refuse to map it at desired level. And this leads to back
-> performance in shadow mmu and potentiall TDP mmu.
-
-s/potentiall/potentially/
-
->
-> Fixes: b8e8c8303ff2 ("kvm: mmu: ITLB_MULTIHIT mitigation")
-> Cc: stable@vger.kernel.org
->
-> Reviewed-by: Ben Gardon <bgardon@google.com>
-> Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 5628d0ba637e..4d358c273f6c 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -2919,6 +2919,16 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
->             cur_level == fault->goal_level &&
->             is_shadow_present_pte(spte) &&
->             !is_large_pte(spte)) {
-> +               struct kvm_mmu_page *sp;
-> +               u64 page_mask;
-> +               /*
-> +                * When nx hugepage flag is not set, there is no reason to
-> +                * go down to another level. This helps demand paging to
-> +                * generate large mappings.
-> +                */
-> +               sp = to_shadow_page(spte & PT64_BASE_ADDR_MASK);
-> +               if (!sp->lpage_disallowed)
-> +                       return;
->                 /*
->                  * A small SPTE exists for this pfn, but FNAME(fetch)
->                  * and __direct_map would like to create a large PTE
-> @@ -2926,8 +2936,8 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
->                  * patching back for them into pfn the next 9 bits of
->                  * the address.
->                  */
-> -               u64 page_mask = KVM_PAGES_PER_HPAGE(cur_level) -
-> -                               KVM_PAGES_PER_HPAGE(cur_level - 1);
-> +               page_mask = KVM_PAGES_PER_HPAGE(cur_level) -
-> +                       KVM_PAGES_PER_HPAGE(cur_level - 1);
->                 fault->pfn |= fault->gfn & page_mask;
->                 fault->goal_level--;
->         }
-> --
-> 2.35.1.894.gb6a874cedc-goog
->
+                 Linus

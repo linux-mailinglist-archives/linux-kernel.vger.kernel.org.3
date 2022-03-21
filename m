@@ -2,156 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389C64E2F40
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB0A4E2F45
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345896AbiCURmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
+        id S1350072AbiCURod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345607AbiCURml (ORCPT
+        with ESMTP id S1349403AbiCURob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:42:41 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3540B51595
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:41:15 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id q5so20872309ljb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:41:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uvDP/aC4k2MIgLQCzM4tXzCki/AhzE/DRELx6D6TcvQ=;
-        b=LCiQ2cBeGHtozeXWAJvmRWwSIzciVtKWGB8pQ78lb5TjP5X+NgKn+rLgOWRq24XaeK
-         DTNFFZpR+k3YjUjF9zPc65gJ3uf7BKFTAvH3NVZHBFjJ/VZk6a5ivjm3Mfxpao9gvvcw
-         4DT7pcwi+m7tjMt7OpjXBs9QtMSlGHIt+rwu4eTg93rv27aDIE07WU9KWBeCCMGcImBn
-         YlWs4EQHe9A9pkK7DbJ8VXa1sOwxHS27xRoLlWWuLfv4cPPk6TsH3V3lPgA+b0THxn65
-         k8aitxmEIG3KeprGwDXtbPyaZnh4Gluqo+Ubvbu5MXkex5SDhMZbrVOhE/yqj099Leyr
-         qzJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uvDP/aC4k2MIgLQCzM4tXzCki/AhzE/DRELx6D6TcvQ=;
-        b=Vo0MYfguMLFGIPzCYmBQC0BopqF/IUoabajhHWKw/ABpgU084lJjhMtjU2c1ysm0xx
-         sMsTY1wCc8RamzO+RlvXLzknC22PzitfXBbzMfwGu16eFxvIvKnJW8RBdIDPqB+r25N7
-         sgKZ06TeH2YyWWRkteho55uf+C4rGUfU77v57EWEte/i2rRuSVNj5QLrfXlAJtbqmpkx
-         RCgeaib5aURmRNeWdGdWDAytF0r3qrM8DazCEMyjRgu/6sanBzlf1iauWuXm5T4pTgZT
-         utyHdp27hhBs5cFIgHtju9JVR/4FvEAmGQiky/wLHWNMPMJC+s9AQImH40eMiGkmdncB
-         kgFA==
-X-Gm-Message-State: AOAM532JV/Ueb/76PCsz6duMi83FENxqQ9Mn2bF/1T3Vhc82yW6xiYB0
-        RrSqiF5JtcXslm9tkOvoUXEj49T1AvqbWIJL5v1Pt5irZYBB5s02
-X-Google-Smtp-Source: ABdhPJzbEpirlUxNiDc0Pp6FcUiq9WvkQhNk8nak3G1dOD4WBSldy75o+lwnjBnpM+YiU6CE7/fcbaaUZBHsyMqJarc=
-X-Received: by 2002:a2e:a0c9:0:b0:249:171b:1b06 with SMTP id
- f9-20020a2ea0c9000000b00249171b1b06mr16403679ljm.420.1647884472740; Mon, 21
- Mar 2022 10:41:12 -0700 (PDT)
+        Mon, 21 Mar 2022 13:44:31 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CA5DFF
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:43:01 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22LHgqcv000374;
+        Mon, 21 Mar 2022 12:42:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1647884572;
+        bh=w1nssn3aZv3EvnBbeSHoVlZA7OBBWbfhVwK6ZRd350A=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=nC62Q8oW8++CQMPC1p4CAkSWBrjQdp6p80If1ZrYwtWvySL+YxejaOM9VhYr/Atdd
+         vMOLTmbWtA6A0TltvdlCHYnj2RV41Pb/Bywd+KgUOVxuab4liQTZpbIHFgcpxeKvYr
+         oRYFYjCzxVRxsBqx8hbzHp73HEYp8edhuQ7mdkL4=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22LHgqJk027761
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 21 Mar 2022 12:42:52 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 21
+ Mar 2022 12:42:52 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 21 Mar 2022 12:42:52 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22LHgpei021588;
+        Mon, 21 Mar 2022 12:42:52 -0500
+Date:   Mon, 21 Mar 2022 23:12:51 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     <Tudor.Ambarus@microchip.com>
+CC:     <michael@walle.cc>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
+        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <Nicolas.Ferre@microchip.com>
+Subject: Re: [PATCH v2 3/8] mtd: spi-nor: core: Use auto-detection only once
+Message-ID: <20220321174251.ehhobu26tgoxrbps@ti.com>
+References: <20220228111712.111737-1-tudor.ambarus@microchip.com>
+ <20220228111712.111737-4-tudor.ambarus@microchip.com>
+ <20220321121455.bpql7x4ebhq7s36l@ti.com>
+ <b4e8c044-f16a-a72d-6047-c42cdcc253f1@microchip.com>
 MIME-Version: 1.0
-References: <202203211432.Fx74gYS9-lkp@intel.com>
-In-Reply-To: <202203211432.Fx74gYS9-lkp@intel.com>
-From:   Joanne Koong <joannelkoong@gmail.com>
-Date:   Mon, 21 Mar 2022 10:41:01 -0700
-Message-ID: <CAJnrk1bqXmtSjvevnuBBqYWsZeQsMPYJhZRCXVrQnwqowBZ00Q@mail.gmail.com>
-Subject: Re: [ammarfaizi2-block:bpf/bpf-next/master 244/254]
- kernel/bpf/verifier.c:13499:47: sparse: sparse: cast from restricted gfp_t
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <b4e8c044-f16a-a72d-6047-c42cdcc253f1@microchip.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 11:58 PM kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://github.com/ammarfaizi2/linux-block bpf/bpf-next/master
-> head:   7ada3787e91c89b0aa7abf47682e8e587b855c13
-> commit: b00fa38a9c1cba044a32a601b49a55a18ed719d1 [244/254] bpf: Enable non-atomic allocations in local storage
-> config: csky-randconfig-s032-20220320 (https://download.01.org/0day-ci/archive/20220321/202203211432.Fx74gYS9-lkp@intel.com/config)
-> compiler: csky-linux-gcc (GCC) 11.2.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # apt-get install sparse
->         # sparse version: v0.6.4-dirty
->         # https://github.com/ammarfaizi2/linux-block/commit/b00fa38a9c1cba044a32a601b49a55a18ed719d1
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block bpf/bpf-next/master
->         git checkout b00fa38a9c1cba044a32a601b49a55a18ed719d1
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky SHELL=/bin/bash kernel/bpf/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
->
-> sparse warnings: (new ones prefixed by >>)
-> >> kernel/bpf/verifier.c:13499:47: sparse: sparse: cast from restricted gfp_t
->    kernel/bpf/verifier.c:13501:47: sparse: sparse: cast from restricted gfp_t
->    kernel/bpf/verifier.c:13746:38: sparse: sparse: subtraction of functions? Share your drugs
->    kernel/bpf/verifier.c: note: in included file (through include/linux/uaccess.h, include/linux/sched/task.h, include/linux/sched/signal.h, ...):
->    arch/csky/include/asm/uaccess.h:121:17: sparse: sparse: cast removes address space '__user' of expression
->    arch/csky/include/asm/uaccess.h:121:17: sparse: sparse: asm output is not an lvalue
->    arch/csky/include/asm/uaccess.h:121:17: sparse: sparse: cast removes address space '__user' of expression
->    arch/csky/include/asm/uaccess.h:121:17: sparse: sparse: generating address of non-lvalue (11)
->    kernel/bpf/verifier.c: note: in included file (through include/linux/bpf.h, include/linux/bpf-cgroup.h):
->    include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
->    include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
->    include/linux/bpfptr.h:63:40: sparse: sparse: cast to non-scalar
->    include/linux/bpfptr.h:63:40: sparse: sparse: cast from non-scalar
->    include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
->    include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
->    include/linux/bpfptr.h:63:40: sparse: sparse: cast to non-scalar
->    include/linux/bpfptr.h:63:40: sparse: sparse: cast from non-scalar
->    include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
->    include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
->    include/linux/bpfptr.h:63:40: sparse: sparse: cast to non-scalar
->    include/linux/bpfptr.h:63:40: sparse: sparse: cast from non-scalar
->    include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
->    include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
->    include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
->    include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
->
-> vim +13499 kernel/bpf/verifier.c
->
->  13236
-[...]
->  13485                          new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
->  13486                          if (!new_prog)
->  13487                                  return -ENOMEM;
->  13488
->  13489                          delta    += cnt - 1;
->  13490                          env->prog = prog = new_prog;
->  13491                          insn      = new_prog->insnsi + i + delta;
->  13492                          goto patch_call_imm;
->  13493                  }
->  13494
->  13495                  if (insn->imm == BPF_FUNC_task_storage_get ||
->  13496                      insn->imm == BPF_FUNC_sk_storage_get ||
->  13497                      insn->imm == BPF_FUNC_inode_storage_get) {
->  13498                          if (env->prog->aux->sleepable)
->  13499                                  insn_buf[0] = BPF_MOV64_IMM(BPF_REG_5, (__s32)GFP_KERNEL);
->  13500                          else
->  13501                                  insn_buf[0] = BPF_MOV64_IMM(BPF_REG_5, (__s32)GFP_ATOMIC);
+On 21/03/22 12:50PM, Tudor.Ambarus@microchip.com wrote:
+> On 3/21/22 14:14, Pratyush Yadav wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On 28/02/22 01:17PM, Tudor Ambarus wrote:
+> >> In case spi_nor_match_name() returned NULL, the auto detection was
+> >> issued twice. There's no reason to try to detect the same chip twice,
+> >> do the auto detection only once.
+> >>
+> >> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> >> ---
+> >>  drivers/mtd/spi-nor/core.c | 10 ++++++----
+> >>  1 file changed, 6 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> >> index f87cb7d3daab..b1d6fa65417d 100644
+> >> --- a/drivers/mtd/spi-nor/core.c
+> >> +++ b/drivers/mtd/spi-nor/core.c
+> >> @@ -2894,13 +2894,15 @@ static const struct flash_info *spi_nor_match_name(struct spi_nor *nor,
+> >>  static const struct flash_info *spi_nor_get_flash_info(struct spi_nor *nor,
+> >>                                                      const char *name)
+> >>  {
+> >> -     const struct flash_info *info = NULL;
+> >> +     const struct flash_info *info = NULL, *detected_info = NULL;
+> >>
+> >>       if (name)
+> >>               info = spi_nor_match_name(nor, name);
+> >>       /* Try to auto-detect if chip name wasn't specified or not found */
+> >> -     if (!info)
+> >> -             info = spi_nor_read_id(nor);
+> >> +     if (!info) {
+> >> +             detected_info = spi_nor_read_id(nor);
+> >> +             info = detected_info;
+> >> +     }
+> >>       if (IS_ERR_OR_NULL(info))
+> >>               return ERR_PTR(-ENOENT);
+> >>
+> >> @@ -2908,7 +2910,7 @@ static const struct flash_info *spi_nor_get_flash_info(struct spi_nor *nor,
+> >>        * If caller has specified name of flash model that can normally be
+> >>        * detected using JEDEC, let's verify it.
+> >>        */
+> >> -     if (name && info->id_len) {
+> >> +     if (name && !detected_info && info->id_len) {
+> >>               const struct flash_info *jinfo;
+> >>
+> >>               jinfo = spi_nor_read_id(nor);
+> > 
+> > I think the flow can be a little bit better. How about:
+> > 
+> >         if (name)
+> >                 info = spi_nor_match_name();
+> > 
+> >         if (!info) {
+> >                 info = spi_nor_read_id();
+> >                 if (IS_ERR_OR_NULL(info))
+> >                         return ERR_PTR(-ENOENT);
+> > 
+> >                 return info;
+> >         }
+> 
+> Here we miss the IS_ERR check in case info is retrieved with spi_nor_match_name().
+> Do you expect spi_nor_match_name() to ever return an error? As it is now it doesn't.
+> I'm fine either way. In case you want me to follow your suggestion, give me a sign
+> and I'll make a dedicated patch to move the IS_ERR_OR_NULL check. Will add your
+> Suggested-by tag.
 
-Sorry for causing this, I will submit a fix.
+I think it should be safe to assume it won't ever return an error since 
+all it does is iterate over an array that is always present. I don't see 
+that changing in the foreseeable future either. So I think not having 
+the IS_ERR check is fine.
 
->  13502                          insn_buf[1] = *insn;
->  13503                          cnt = 2;
->  13504
->  13505                          new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
->  13506                          if (!new_prog)
->  13507                                  return -ENOMEM;
->  13508
-[...]
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

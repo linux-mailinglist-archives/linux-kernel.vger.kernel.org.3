@@ -2,237 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B794E2AC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC82C4E2AAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349390AbiCUOa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
+        id S1349327AbiCUO30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349248AbiCUO1w (ORCPT
+        with ESMTP id S1349266AbiCUO1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:27:52 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DDF1CFF2;
-        Mon, 21 Mar 2022 07:21:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1647872486; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OrL7JO2qfltrw/AE5sARmYQoFlwPHN9MKzIkP6MbteQ=;
-        b=FiO5IEc4KUCJur80gcUWfmv9JtIlEXAhMwSjf7MpfcFBkIeW11dfIFh8/QAASUWOYaWH/H
-        dJljtTifWLI/szjjcBPbBgjgZOrUhotfeROesy0QAuAZNHargCrwPPDtNr8u7CdNEd1YHl
-        bFU2t86NDxH/Zr3wddrLz1pLt3Se/Rw=
-Date:   Mon, 21 Mar 2022 14:21:16 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v5 3/3] drm/panel : innolux-ej030na and abt-y030xx067a :
- add .enable and .disable
-To:     Christophe Branchereau <cbranchereau@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Message-Id: <GJM39R.I3L8ZIKHOJ252@crapouillou.net>
-In-Reply-To: <20220321133651.291592-4-cbranchereau@gmail.com>
-References: <20220321133651.291592-1-cbranchereau@gmail.com>
-        <20220321133651.291592-4-cbranchereau@gmail.com>
+        Mon, 21 Mar 2022 10:27:53 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E38C1EC64;
+        Mon, 21 Mar 2022 07:21:38 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 158285C00D8;
+        Mon, 21 Mar 2022 10:21:36 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 21 Mar 2022 10:21:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=pSy3YPBu+/Cd5RMyqASVwEfmerfJzG0+Vw1/6k
+        t87sA=; b=q6QxiZEU+ohV+10FvyUKIjGnTSRoSHlpvgwfEjwGOEAoXLK4/5BGA8
+        m5isDzhoavsFa5mTRfFhuqpiaK0YU2MEap8p+gijWkWV5gZPsackzZxZrNqYQN0u
+        WrOusrwDGmnpIyYT5bH4G5B1mJcIdnLuVOfj2FgFezdTazAc/ybeah5MOZoCxMUa
+        OqYSjAMVUlWz0xA76X07Dnyytc1bJoi4BEcnuATbU2qcb665cPKm8ZwplkCjwh2/
+        fwCfScohXyloR60UCfhWwhhDflV2Lln3XbnbrPGPkLTjrUnU6S9aqMrt/zhf/1nd
+        RV/Q7cGtRIzVELUCYqnPo15SqGHIDhdw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:reply-to
+        :sender:subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; bh=pSy3YPBu+/Cd5RMyqASVwEfmerfJz
+        G0+Vw1/6kt87sA=; b=LC8/kYesZQOQYQx9X9RDewurhSgCk8hOaVNhxzXVC+nSO
+        7IViV8GgubEILjRSAD0WpdYGrzQCq0oyaY8C58B4jZfabDntJ3Bgkur8ivD/SW+X
+        g0IzzdzcUMnYYfdRQPqNiWJo9uHfK0i3dl8uy7mxIw3Hj56kh7wqGh9h1nYpaKri
+        izkSqQyLhFoq4yt9z0dCrC7rCKLHLDA1G+MZpAPBlXppyrG17MeeUIQcrRAFJq/u
+        fVXfQtTWLlMPRXhktgY4w9BJKqimG2jL8Ax35dHwW78GaScamlP39Rgu3XNGGyCs
+        Y6kxwK6DC5tpeT9xyrrbszqJKPZy/vVyB0wY+BTnQ==
+X-ME-Sender: <xms:74k4YmOs5kcvvsumISPb4PXxlgvnUrjOETRnM1SKOTnJEiLgZuQ9Jg>
+    <xme:74k4Yk90Uul-Mq9nWqk8cpt-wDIHP78el9vmNmA4yeYpAJARQtxwvpsIIyP-rluyU
+    sHwPF9S22ieve4GAg>
+X-ME-Received: <xmr:74k4YtTXzh69-91kmcVwpTrsrOGAx5aDbPzi1QZvNR2ex8QWJ79O8__j_kt06l1h3xqcMRazilgvrSsylA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegfedgieegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkfforhgggfestdhqredtredttdenucfhrhhomhepkghiucgjrghn
+    uceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepleetvddtvd
+    dttdetffdvkeehffdtjefhkedtheffjeehvdejueektedukedufeffnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepiihirdihrghnsehsvghnth
+    drtghomh
+X-ME-Proxy: <xmx:74k4YmvJTQhjWY4XgDxgH8_LoSoSxiPwg5Ix_ErkrMcTzVLshSjwuw>
+    <xmx:74k4Yueo_CDuci9zK4yYNrzZvt5e87G8o1Xcw0GruJVVlX8WRGQ1Rw>
+    <xmx:74k4Yq0QLpO_tR0zmoxSkuJStzuU58SucSM3dR2IR_aX7pmY75qvfA>
+    <xmx:8Ik4YvVCixI7snTcY0DJRrx_WuEK400ytexsm9MOHmfPTT5A6-0o9g>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Mar 2022 10:21:35 -0400 (EDT)
+From:   Zi Yan <zi.yan@sent.com>
+To:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Shuah Khan <shuah@kernel.org>, Yang Shi <shy828301@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Hugh Dickins <hughd@google.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Zi Yan <ziy@nvidia.com>
+Subject: [RFC PATCH 0/5] Split a huge page to any lower order pages
+Date:   Mon, 21 Mar 2022 10:21:23 -0400
+Message-Id: <20220321142128.2471199-1-zi.yan@sent.com>
+X-Mailer: git-send-email 2.35.1
+Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+From: Zi Yan <ziy@nvidia.com>
 
-Le lun., mars 21 2022 at 14:36:51 +0100, Christophe Branchereau=20
-<cbranchereau@gmail.com> a =E9crit :
-> Following the introduction of bridge_atomic_enable in the ingenic
-> drm driver, the crtc is enabled between .prepare and .enable, if
-> it exists.
->=20
-> Add it so the backlight is only enabled after the crtc is, to avoid
-> graphical issues.
->=20
-> Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
+Hi all,
 
-Didn't Sam acked it?
+With Matthew's huge pagecache page patches merged, we are able to handle any
+size pagecache pages, but currently split_huge_page can only split a huge p=
+age
+to order-0 pages. This can easily erase the benefit of having huge pagecache
+pages, when operations like truncate might want to keep pages larger than
+order-0. In response, here is the patches to add support for splitting a hu=
+ge
+page to any lower order pages.
 
-> ---
->  drivers/gpu/drm/panel/panel-abt-y030xx067a.c  | 31=20
-> +++++++++++++++++--
->  drivers/gpu/drm/panel/panel-innolux-ej030na.c | 31=20
-> ++++++++++++++++---
->  2 files changed, 55 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/panel/panel-abt-y030xx067a.c=20
-> b/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
-> index f043b484055b..ddfacaeac1d4 100644
-> --- a/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
-> +++ b/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
-> @@ -140,7 +140,7 @@ static const struct reg_sequence=20
-> y030xx067a_init_sequence[] =3D {
->  	{ 0x03, REG03_VPOSITION(0x0a) },
->  	{ 0x04, REG04_HPOSITION1(0xd2) },
->  	{ 0x05, REG05_CLIP | REG05_NVM_VREFRESH | REG05_SLBRCHARGE(0x2) },
-> -	{ 0x06, REG06_XPSAVE | REG06_NT },
-> +	{ 0x06, REG06_NT },
->  	{ 0x07, 0 },
->  	{ 0x08, REG08_PANEL(0x1) | REG08_CLOCK_DIV(0x2) },
->  	{ 0x09, REG09_SUB_BRIGHT_R(0x20) },
-> @@ -183,8 +183,6 @@ static int y030xx067a_prepare(struct drm_panel=20
-> *panel)
->  		goto err_disable_regulator;
->  	}
->=20
-> -	msleep(120);
-> -
->  	return 0;
->=20
->  err_disable_regulator:
-> @@ -202,6 +200,30 @@ static int y030xx067a_unprepare(struct drm_panel=20
-> *panel)
->  	return 0;
->  }
->=20
-> +static int y030xx067a_enable(struct drm_panel *panel)
-> +{
-> +
-> +	struct y030xx067a *priv =3D to_y030xx067a(panel);
-> +
-> +	regmap_set_bits(priv->map, 0x06, REG06_XPSAVE);
-> +
-> +	if (panel->backlight) {
-> +		/* Wait for the picture to be ready before enabling backlight */
-> +		msleep(120);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int y030xx067a_disable(struct drm_panel *panel)
-> +{
-> +	struct y030xx067a *priv =3D to_y030xx067a(panel);
-> +
-> +	regmap_clear_bits(priv->map, 0x06, REG06_XPSAVE);
-> +
-> +	return 0;
-> +}
-> +
->  static int y030xx067a_get_modes(struct drm_panel *panel,
->  				struct drm_connector *connector)
->  {
-> @@ -239,6 +261,8 @@ static int y030xx067a_get_modes(struct drm_panel=20
-> *panel,
->  static const struct drm_panel_funcs y030xx067a_funcs =3D {
->  	.prepare	=3D y030xx067a_prepare,
->  	.unprepare	=3D y030xx067a_unprepare,
-> +	.enable		=3D y030xx067a_enable,
-> +	.disable	=3D y030xx067a_disable,
->  	.get_modes	=3D y030xx067a_get_modes,
->  };
->=20
-> @@ -246,6 +270,7 @@ static const struct regmap_config=20
-> y030xx067a_regmap_config =3D {
->  	.reg_bits =3D 8,
->  	.val_bits =3D 8,
->  	.max_register =3D 0x15,
-> +	.cache_type =3D REGCACHE_FLAT,
+The patchset is on top of mmotm-2022-03-16-17-42.
 
-I understand that this is added because the panel registers are=20
-write-only and read as zero, and it is needed for=20
-regmap_{clear,set}_bits to work.
+* Patch 1 and 2 add new_order parameter split_page_memcg() and
+  split_page_owner() and prepare for upcoming changes.
+* Patch 3 adds split_huge_page_to_list_to_order() to split a huge page
+  to any lower order. The original split_huge_page_to_list() calls
+  split_huge_page_to_list_to_order() with new_order =3D 0.
+* Patch 4 uses split_huge_page_to_list_to_order() in huge pagecache page
+  truncation instead of split the huge page all the way down to order-0.
+* Patch 5 adds a test API to debugfs and test cases in
+  split_huge_page_test selftests.
 
-This information should definitely be added to the commit message.
+Comments and/or suggestions are welcome.
 
-If you can add it inline here, and I'll update the commit message when=20
-applying the patch.
+Zi Yan (5):
+  mm: memcg: make memcg huge page split support any order split.
+  mm: page_owner: add support for splitting to any order in split
+    page_owner.
+  mm: thp: split huge page to any lower order pages.
+  mm: truncate: split huge page cache page to a non-zero order if
+    possible.
+  mm: huge_memory: enable debugfs to split huge pages to any order.
 
-Cheers,
--Paul
+ include/linux/huge_mm.h                       |   8 +
+ include/linux/memcontrol.h                    |   2 +-
+ include/linux/page_owner.h                    |  12 +-
+ mm/huge_memory.c                              | 139 +++++++----
+ mm/memcontrol.c                               |  10 +-
+ mm/page_alloc.c                               |   4 +-
+ mm/page_owner.c                               |  13 +-
+ mm/truncate.c                                 |  33 ++-
+ .../selftests/vm/split_huge_page_test.c       | 219 +++++++++++++++---
+ 9 files changed, 347 insertions(+), 93 deletions(-)
 
->  };
->=20
->  static int y030xx067a_probe(struct spi_device *spi)
-> diff --git a/drivers/gpu/drm/panel/panel-innolux-ej030na.c=20
-> b/drivers/gpu/drm/panel/panel-innolux-ej030na.c
-> index c558de3f99be..6de7370185cd 100644
-> --- a/drivers/gpu/drm/panel/panel-innolux-ej030na.c
-> +++ b/drivers/gpu/drm/panel/panel-innolux-ej030na.c
-> @@ -80,8 +80,6 @@ static const struct reg_sequence=20
-> ej030na_init_sequence[] =3D {
->  	{ 0x47, 0x08 },
->  	{ 0x48, 0x0f },
->  	{ 0x49, 0x0f },
-> -
-> -	{ 0x2b, 0x01 },
->  };
->=20
->  static int ej030na_prepare(struct drm_panel *panel)
-> @@ -109,8 +107,6 @@ static int ej030na_prepare(struct drm_panel=20
-> *panel)
->  		goto err_disable_regulator;
->  	}
->=20
-> -	msleep(120);
-> -
->  	return 0;
->=20
->  err_disable_regulator:
-> @@ -128,6 +124,31 @@ static int ej030na_unprepare(struct drm_panel=20
-> *panel)
->  	return 0;
->  }
->=20
-> +static int ej030na_enable(struct drm_panel *panel)
-> +{
-> +	struct ej030na *priv =3D to_ej030na(panel);
-> +
-> +	/* standby off */
-> +	regmap_write(priv->map, 0x2b, 0x01);
-> +
-> +	if (panel->backlight) {
-> +		/* Wait for the picture to be ready before enabling backlight */
-> +		msleep(120);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int ej030na_disable(struct drm_panel *panel)
-> +{
-> +	struct ej030na *priv =3D to_ej030na(panel);
-> +
-> +	/* standby on */
-> +	regmap_write(priv->map, 0x2b, 0x00);
-> +
-> +	return 0;
-> +}
-> +
->  static int ej030na_get_modes(struct drm_panel *panel,
->  			     struct drm_connector *connector)
->  {
-> @@ -165,6 +186,8 @@ static int ej030na_get_modes(struct drm_panel=20
-> *panel,
->  static const struct drm_panel_funcs ej030na_funcs =3D {
->  	.prepare	=3D ej030na_prepare,
->  	.unprepare	=3D ej030na_unprepare,
-> +	.enable		=3D ej030na_enable,
-> +	.disable	=3D ej030na_disable,
->  	.get_modes	=3D ej030na_get_modes,
->  };
->=20
-> --
-> 2.35.1
->=20
-
+--=20
+2.35.1
 

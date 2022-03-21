@@ -2,94 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A294E2D19
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF7B4E2D1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350623AbiCUQFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 12:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
+        id S1350631AbiCUQGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 12:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346093AbiCUQFS (ORCPT
+        with ESMTP id S237967AbiCUQGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:05:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1314B1B7B6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:03:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647878632;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DJyMtVQ5+0AfNUolDd6Lt5IE2lynsgQekcoq9taq1eE=;
-        b=IOvk/7E/Q5EY/4Ty3aXlbsCfpdRBwSHglMVr7BngFFma4b0kkWfFgVd7uvcKrH7uB6ifYZ
-        VJpy5p5IdKXhLyw9oN3FcAHwwG7eq2VEhKeSKIHtlJfznjm/FNnHLRQld3DCmoigIhQyqF
-        E0cM42Zbtn83cR4Xa2nusKVCLiNxM1s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-279-tqlhcQEaOwuiuk4cCIL_Kg-1; Mon, 21 Mar 2022 12:03:51 -0400
-X-MC-Unique: tqlhcQEaOwuiuk4cCIL_Kg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6ABC8811E84;
-        Mon, 21 Mar 2022 16:03:50 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6BC0C2166B40;
-        Mon, 21 Mar 2022 16:03:49 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAG48ez2AAk6JpZAA6GPVgvCmKimXHJXO906e=r=WGU06k=HB3A@mail.gmail.com>
-References: <CAG48ez2AAk6JpZAA6GPVgvCmKimXHJXO906e=r=WGU06k=HB3A@mail.gmail.com> <000000000000778f1005dab1558e@google.com>
-To:     Jann Horn <jannh@google.com>
-Cc:     dhowells@redhat.com,
-        syzbot <syzbot+011e4ea1da6692cf881c@syzkaller.appspotmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Subject: Re: [syzbot] possible deadlock in pipe_write
+        Mon, 21 Mar 2022 12:06:34 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1BB1EC53;
+        Mon, 21 Mar 2022 09:05:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kTrt/5pX9PnRnJo5oHL3WG+33ty/9VWvLwvtG9fEbwU=; b=qih6R7TEe0pxJ3/a/75RkzBjxc
+        +a1QvWKlo6ZJJprM2R1stVMA7yf1zF4Mo3mzZujtDOjnMAWfzUlkMnBEfk04R0x3maynyzfbX7I/n
+        cJzC8KZuwAFyb/ztnVg00qgEuTx+cFLxHMvDksyrnD8LdyL/sOBc6BUqenK3qJYSNSo0SbQ6sMXgD
+        LxZZyUK9dIgPePC9k2yPopKt3YJIQlZ1WUMcoWoltXIhvM7ywN8T+kXacUDSsX8GtpifX5I3s0F7t
+        Rz19BXeliWl94b64QDKLzJ8BJKcMqO22GU5TwRgxMSgf/tsA7hNNksnuX4gWC9K41T5gKnRDm9+7l
+        7EukiD1A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWKWF-003AQa-Bv; Mon, 21 Mar 2022 16:04:31 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3080130031D;
+        Mon, 21 Mar 2022 17:04:28 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AC7FA26718E94; Mon, 21 Mar 2022 17:04:28 +0100 (CET)
+Date:   Mon, 21 Mar 2022 17:04:28 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        mhiramat@kernel.org, ast@kernel.org, hjl.tools@gmail.com,
+        rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <YjiiDFHIQg78QwSb@hirez.programming.kicks-ass.net>
+References: <20220321140327.777f9554@canb.auug.org.au>
+ <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+ <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+ <20220321112805.1393f9b9@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1037988.1647878628.1@warthog.procyon.org.uk>
-Date:   Mon, 21 Mar 2022 16:03:48 +0000
-Message-ID: <1037989.1647878628@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321112805.1393f9b9@gandalf.local.home>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jann Horn <jannh@google.com> wrote:
+On Mon, Mar 21, 2022 at 11:28:05AM -0400, Steven Rostedt wrote:
+> On Mon, 21 Mar 2022 14:04:05 +0100
+> Peter Zijlstra <peterz@infradead.org> wrote:
 
-> The syz reproducer is:
-> 
-> #{"threaded":true,"procs":1,"slowdown":1,"sandbox":"","close_fds":false}
-> pipe(&(0x7f0000000240)={<r0=>0xffffffffffffffff, <r1=>0xffffffffffffffff})
-> pipe2(&(0x7f00000001c0)={0xffffffffffffffff, <r2=>0xffffffffffffffff}, 0x80)
-> splice(r0, 0x0, r2, 0x0, 0x1ff, 0x0)
-> vmsplice(r1, &(0x7f00000006c0)=[{&(0x7f0000000080)="b5", 0x1}], 0x1, 0x0)
-> 
-> That 0x80 is O_NOTIFICATION_PIPE (==O_EXCL).
-> 
-> It looks like the bug is that when you try to splice between a normal
-> pipe and a notification pipe, get_pipe_info(..., true) fails, so
-> splice() falls back to treating the notification pipe like a normal
-> pipe - so we end up in iter_file_splice_write(), which first locks the
-> input pipe, then calls vfs_iter_write(), which locks the output pipe.
-> 
-> I think this probably (?) can't actually lead to deadlocks, since
-> you'd need another way to nest locking a normal pipe into locking a
-> watch_queue pipe, but the lockdep annotations don't make that clear.
+> > Also, folks, I'm thinking we should start to move to __fexit__, if CET
+> > SHSTK ever wants to come to kernel land return trampolines will
+> > insta-stop working.
+> > 
+> > Hjl, do you think we could get -mfexit to go along with -mfentry ?
 
-Is this then a bug/feature in iter_file_splice_write() rather than in the
-watch queue code, per se?
+> int funcA () {
+> 	[..]
+> 	return funcB();
+> }
 
-David
+> This currently works with function graph and kretprobe tracing because of
+> the shadow stack. Let's say we traced both funcA and funcB
+> 
+> funcA:
+> 	call __fentry__
+			push funcA on trace-stack
+> 
+> 	[..]
+> 	jmp funcB
+> 
+> funcB:
+> 	call __fentry__
+			push funcB on trace-stack
+> 
+> 	[..]
+	call __fexit__
+			pop trace-stack until empty
+			  'exit funcB'
+			  'exit funcA'
 
+> 	ret
+
+> 
+> That is, the current algorithm traces the end of both funcA and funcB
+> without issue, because of how the shadow stack works.
+
+And it all works, no? Or what am I missing?

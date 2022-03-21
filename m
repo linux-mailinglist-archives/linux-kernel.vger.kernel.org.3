@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075504E298C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FC04E2A03
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348974AbiCUOEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
+        id S1349953AbiCUOJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349111AbiCUN7L (ORCPT
+        with ESMTP id S1348982AbiCUODN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:59:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400CE10CC;
-        Mon, 21 Mar 2022 06:57:46 -0700 (PDT)
+        Mon, 21 Mar 2022 10:03:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C91174BA7;
+        Mon, 21 Mar 2022 07:00:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD594B81598;
-        Mon, 21 Mar 2022 13:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F938C340E8;
-        Mon, 21 Mar 2022 13:57:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9F33B816E4;
+        Mon, 21 Mar 2022 14:00:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E43C340E8;
+        Mon, 21 Mar 2022 14:00:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871063;
-        bh=iAWoA/KtW5sunOlZanpzjYKJC7pZGFvMadTuEFgrzKQ=;
+        s=korg; t=1647871201;
+        bh=dja4BpNU5v3FWoo+Pg9KabpZUGDnbBswDF7NRHePqXI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lygqz3ANgmJZkHhbMqmsoIRtBqAA7iox7PIFFMMOhjMUKU/ugSQl63V1R1WKnmpZW
-         22wxyzjOcSVgnSr1aRnw8L73pDQ1THNO0YfJg05Kq7rwzy/++Ov40eQObzE5AZUcYh
-         QMRgUcCcxCv+lDEJPnrd0Qnl1PCLJ178py23n+hQ=
+        b=RhnkBQ1wLJgk/PLLRnzKc8i8gaTVtsmlzIZS94jEi+f7IFxeKK9yUOTf1ZyttaKJ3
+         YxYDaQbmlf5MwBp3QEmUXvI3Xqe32huN+e4d7EnbpyOa6fM7vcpMneWTLXEHJrS4Bl
+         EOXet4hEJA91xbH7pDRXFXRmCyMUk7JDCpknvM+c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Kurt Cancemi <kurt@x64architecture.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 10/17] net: dsa: Add missing of_node_put() in dsa_port_parse_of
+Subject: [PATCH 5.15 10/32] net: phy: marvell: Fix invalid comparison in the resume and suspend functions
 Date:   Mon, 21 Mar 2022 14:52:46 +0100
-Message-Id: <20220321133217.455384427@linuxfoundation.org>
+Message-Id: <20220321133220.861556589@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
-References: <20220321133217.148831184@linuxfoundation.org>
+In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
+References: <20220321133220.559554263@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Kurt Cancemi <kurt@x64architecture.com>
 
-[ Upstream commit cb0b430b4e3acc88c85e0ad2e25f2a25a5765262 ]
+[ Upstream commit 837d9e49402eaf030db55a49f96fc51d73b4b441 ]
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+This bug resulted in only the current mode being resumed and suspended when
+the PHY supported both fiber and copper modes and when the PHY only supported
+copper mode the fiber mode would incorrectly be attempted to be resumed and
+suspended.
 
-Fixes: 6d4e5c570c2d ("net: dsa: get port type at parse time")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220316082602.10785-1-linmq006@gmail.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 3758be3dc162 ("Marvell phy: add functions to suspend and resume both interfaces: fiber and copper links.")
+Signed-off-by: Kurt Cancemi <kurt@x64architecture.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220312201512.326047-1-kurt@x64architecture.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/dsa/dsa2.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/phy/marvell.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/net/dsa/dsa2.c b/net/dsa/dsa2.c
-index 70e6fc2edd30..1f27641f9cc0 100644
---- a/net/dsa/dsa2.c
-+++ b/net/dsa/dsa2.c
-@@ -669,6 +669,7 @@ static int dsa_port_parse_of(struct dsa_port *dp, struct device_node *dn)
- 		struct net_device *master;
+diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+index cfda625dbea5..4d726ee03ce2 100644
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -1693,8 +1693,8 @@ static int marvell_suspend(struct phy_device *phydev)
+ 	int err;
  
- 		master = of_find_net_device_by_node(ethernet);
-+		of_node_put(ethernet);
- 		if (!master)
- 			return -EPROBE_DEFER;
+ 	/* Suspend the fiber mode first */
+-	if (!linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
+-			       phydev->supported)) {
++	if (linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
++			      phydev->supported)) {
+ 		err = marvell_set_page(phydev, MII_MARVELL_FIBER_PAGE);
+ 		if (err < 0)
+ 			goto error;
+@@ -1728,8 +1728,8 @@ static int marvell_resume(struct phy_device *phydev)
+ 	int err;
  
+ 	/* Resume the fiber mode first */
+-	if (!linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
+-			       phydev->supported)) {
++	if (linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
++			      phydev->supported)) {
+ 		err = marvell_set_page(phydev, MII_MARVELL_FIBER_PAGE);
+ 		if (err < 0)
+ 			goto error;
 -- 
 2.34.1
 

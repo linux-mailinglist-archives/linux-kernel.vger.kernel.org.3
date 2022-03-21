@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE794E2836
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8594E2879
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348202AbiCUNyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S1348370AbiCUN5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348199AbiCUNx6 (ORCPT
+        with ESMTP id S1348328AbiCUN4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:53:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B980C15DAAF;
-        Mon, 21 Mar 2022 06:52:25 -0700 (PDT)
+        Mon, 21 Mar 2022 09:56:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589E6167DC;
+        Mon, 21 Mar 2022 06:54:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50D6BB8167A;
-        Mon, 21 Mar 2022 13:52:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 958A8C340E8;
-        Mon, 21 Mar 2022 13:52:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7CF96126E;
+        Mon, 21 Mar 2022 13:54:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07723C340E8;
+        Mon, 21 Mar 2022 13:54:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647870742;
-        bh=fpwEGy7qyqIzw/EoLzTzCh+MYouUTid2kizSLm3pK2g=;
+        s=korg; t=1647870876;
+        bh=s316ygrdqc1xWuck3n4IO4eDMiOmMRS+C0SCMzq6M5s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jk48Xqe8wVin9P+ue7JLKqDDfK7lP+Yr3XQYe5ECHSaidniw3Gc4qQ3E+fk/tJTaM
-         ormPzcOIKnxQWuWQHfHI/OE8vbnQN0Lm3+v4f/1P8MhP8I2/9hSpkCKtmF9nUDwdQO
-         Rr2hmDxRwyArmmLMLar0Gic6SS0ll4ywUdr72qHo=
+        b=AZ5tPpgEurU+aDYxNESB3aFrb3ehBYsMjEDtZ+Y9xO+MRI9p+3OgOSSOH1V7YPV92
+         NcN94sZWueE3/YTrRbwsS9HdJnTuVNobhzEX1V2HAsfpAmYXKShToJf0P0tB5OShIk
+         1TvIW6Ou7orb3nOlPqJwQugqqGUtph5JuRc/q0d4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Julian Braha <julianbraha@gmail.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        stable@vger.kernel.org, Quentin Schulz <foss+kernel@0leil.net>,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 04/16] ARM: 9178/1: fix unmet dependency on BITREVERSE for HAVE_ARCH_BITREVERSE
-Date:   Mon, 21 Mar 2022 14:51:34 +0100
-Message-Id: <20220321133216.779243669@linuxfoundation.org>
+Subject: [PATCH 4.14 04/22] arm64: dts: rockchip: fix rk3399-puma eMMC HS400 signal integrity
+Date:   Mon, 21 Mar 2022 14:51:35 +0100
+Message-Id: <20220321133217.734580952@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133216.648316863@linuxfoundation.org>
-References: <20220321133216.648316863@linuxfoundation.org>
+In-Reply-To: <20220321133217.602054917@linuxfoundation.org>
+References: <20220321133217.602054917@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Julian Braha <julianbraha@gmail.com>
+From: Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
 
-[ Upstream commit 11c57c3ba94da74c3446924260e34e0b1950b5d7 ]
+[ Upstream commit 62966cbdda8a92f82d966a45aa671e788b2006f7 ]
 
-Resending this to properly add it to the patch tracker - thanks for letting
-me know, Arnd :)
+There are signal integrity issues running the eMMC at 200MHz on Puma
+RK3399-Q7.
 
-When ARM is enabled, and BITREVERSE is disabled,
-Kbuild gives the following warning:
+Similar to the work-around found for RK3399 Gru boards, lowering the
+frequency to 100MHz made the eMMC much more stable, so let's lower the
+frequency to 100MHz.
 
-WARNING: unmet direct dependencies detected for HAVE_ARCH_BITREVERSE
-  Depends on [n]: BITREVERSE [=n]
-  Selected by [y]:
-  - ARM [=y] && (CPU_32v7M [=n] || CPU_32v7 [=y]) && !CPU_32v6 [=n]
+It might be possible to run at 150MHz as on RK3399 Gru boards but only
+100MHz was extensively tested.
 
-This is because ARM selects HAVE_ARCH_BITREVERSE
-without selecting BITREVERSE, despite
-HAVE_ARCH_BITREVERSE depending on BITREVERSE.
-
-This unmet dependency bug was found by Kismet,
-a static analysis tool for Kconfig. Please advise if this
-is not the appropriate solution.
-
-Signed-off-by: Julian Braha <julianbraha@gmail.com>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Cc: Quentin Schulz <foss+kernel@0leil.net>
+Signed-off-by: Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Link: https://lore.kernel.org/r/20220119134948.1444965-1-quentin.schulz@theobroma-systems.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/lib/Kconfig b/lib/Kconfig
-index 260a80e313b9..600759707ffe 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -16,7 +16,6 @@ config BITREVERSE
- config HAVE_ARCH_BITREVERSE
- 	bool
- 	default n
--	depends on BITREVERSE
- 	help
- 	  This option enables the use of hardware bit-reversal instructions on
- 	  architectures which support such operations.
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+index 0d5679380b2a..70fe6013d17c 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi
+@@ -484,6 +484,12 @@
+ };
+ 
+ &sdhci {
++	/*
++	 * Signal integrity isn't great at 200MHz but 100MHz has proven stable
++	 * enough.
++	 */
++	max-frequency = <100000000>;
++
+ 	bus-width = <8>;
+ 	mmc-hs400-1_8v;
+ 	mmc-hs400-enhanced-strobe;
 -- 
 2.34.1
 

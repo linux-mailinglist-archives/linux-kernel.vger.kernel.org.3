@@ -2,82 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C4F4E263A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0769D4E263B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347293AbiCUMU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
+        id S1347295AbiCUMWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241875AbiCUMU0 (ORCPT
+        with ESMTP id S1347027AbiCUMWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:20:26 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983BD24BED
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:19:00 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id r2so16439535iod.9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:19:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gviUCZoqMlwAzPxDTeni3/iP7iEP9Odnzm6mNqYWrWE=;
-        b=sUINLx6thHdc+ZK8Os4juDGY3FX9AeO5hZVu/WjHFREy1p3ODH3sudnKqkHlbnB7l6
-         UO2IiYkkoyKWuTT31JjYaPqvJtA144jGu4cDav2Q+wXfQbPYU5Gx+6uyB6BAR4etAR3Z
-         3zG4DBXNSYV1rQBfDL3UrV+GYPjDf4tMlpGovjwSESOqxy5/CtlgY3GhqUpp/OpaIg5f
-         rv8uY1at77CC7Mag+vZdnHCVQInAkvwytCiv3igX9p4CK2RSSxss1KzYdOS1OnEiRFPR
-         wKqHrqwG9IyZNdLT3X/G0XosymFnKXHWY5p//o+JKPIEGPp8RDmLA4K+fkldDp6S9jpZ
-         RpQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gviUCZoqMlwAzPxDTeni3/iP7iEP9Odnzm6mNqYWrWE=;
-        b=0zQcLcGEa7qLPWpPrgR6PMLoKT7SMO8SH1o7y4GQb92wxIs6bHmKrdW/K5QGb4vNuB
-         GuhiwuSb98dNMhUNMnKd4LULKQGNyocQmjfsmk83JxsctfddVUq5LrJWxktZt4UWohZ8
-         XAkkmYQgfCmorc60CE9V8Xk+iM/u6Yz7ME596UhNH3quZLpqq2MqTDsuSusu6iwhEYGx
-         Uk+kn9ZrjlAPI/CB3WGQrzv/xAfvK8W4IMC0fEq68RZTKBNjHFt43CsCOCkPACSmbexE
-         ArqWrfug5Vw004bvrOqIVvID/qwnWcw9RiDT/Wesh+G6zmWAXHRPI0WWdegBr0eS+M1D
-         jkog==
-X-Gm-Message-State: AOAM530t5/t9hFELWNvuesJdpbl5xdxuJ/1vVjd1OR4ckh9HulLeoXoh
-        QIaDCX5G/LbvKqyB8iKo2ZxeCFhfNn8ykQ==
-X-Google-Smtp-Source: ABdhPJwnU6BWz11dWizI7zp4dHVLETJ6TbQyIBffJyHl3m3j17tE7tcHexwcX2y3NMCekWPKLLRtlQ==
-X-Received: by 2002:a05:6638:1455:b0:319:e467:656b with SMTP id l21-20020a056638145500b00319e467656bmr10518195jad.111.1647865139942;
-        Mon, 21 Mar 2022 05:18:59 -0700 (PDT)
-Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id w8-20020a056e0213e800b002c8279fb9dfsm1847793ilj.57.2022.03.21.05.18.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 05:18:59 -0700 (PDT)
-Message-ID: <312061ed-61d6-4e2f-a180-8e8c85573e31@linaro.org>
-Date:   Mon, 21 Mar 2022 07:18:57 -0500
+        Mon, 21 Mar 2022 08:22:44 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17CBE165A9B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:21:05 -0700 (PDT)
+X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
+        R,40,3)
+Received: from 172.27.96.203
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(7815:0:AUTH_RELAY)
+        (envelope-from <xt.hu@cqplus1.com>); Mon, 21 Mar 2022 20:19:46 +0800 (CST)
+Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
+ CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Mon, 21 Mar 2022 20:20:15 +0800
+Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
+ ([::1]) with mapi id 15.01.2375.018; Mon, 21 Mar 2022 20:20:15 +0800
+From:   =?utf-8?B?eHQuaHVb6IOh5YWI6Z+sXQ==?= <xt.hu@cqplus1.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>,
+        Rob Herring <robh@kernel.org>
+Subject: RE: [PATCH v7 1/2] dt-bindings: watchdog: Add watchdog yaml file for
+ Sunplus SP7021
+Thread-Topic: [PATCH v7 1/2] dt-bindings: watchdog: Add watchdog yaml file for
+ Sunplus SP7021
+Thread-Index: AQHYL5/Q1yVPqanKh0adMWWXRxc4MazJQxOAgACSokA=
+Date:   Mon, 21 Mar 2022 12:20:14 +0000
+Message-ID: <d752e8ad9d634332954bee930d4050eb@cqplus1.com>
+References: <20220304081209.672-1-xt.hu@cqplus1.com>
+ <20220304081209.672-2-xt.hu@cqplus1.com>
+ <20220321111005.w27blherwnon6kwk@krzk-bin>
+In-Reply-To: <20220321111005.w27blherwnon6kwk@krzk-bin>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.28.110.16]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [greybus-dev] Re: [PATCH] staging: greybus: codecs: fix type
- confusion with dedicated list iterator variable
-Content-Language: en-US
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Mike Rapport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-References: <20220319202058.2518847-1-jakobkoschel@gmail.com>
- <20220321084844.GG3293@kadam>
- <23587784-B0EB-4FDD-B5BC-DC1B16404DA7@gmail.com>
- <20220321092132.GI3293@kadam>
- <56102C8D-DBFF-43A5-9641-04577F01AB6D@gmail.com>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <56102C8D-DBFF-43A5-9641-04577F01AB6D@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,71 +66,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/22 4:27 AM, Jakob Koschel wrote:
-> 
-
-I just released some messages that were marked as spam.  So
-this looks to me like it's already been seen on the list.
-I'm not sure why this happens but if it seems like deja vu,
-you're not imagining things.  Please know that this could
-happen from time to time, but I'll see if I can find out
-how to avoid it.
-
-					-Alex
-
->> On 21. Mar 2022, at 10:21, Dan Carpenter <dan.carpenter@oracle.com> wrote:
->>
->> On Mon, Mar 21, 2022 at 10:06:13AM +0100, Jakob Koschel wrote:
->>>
->>>> On 21. Mar 2022, at 09:48, Dan Carpenter <dan.carpenter@oracle.com> wrote:
->>>>
->>>> The subject says that it fixes a bug but it does not.
->>>
->>> Thank you for your review!
->>>
->>> I don't agree that this doesn't fix a bug:
->>>
->>>> +		}
->>>> 	}
->>>> 	if (!data) {
->>>> -		dev_err(dai->dev, "%s:%s DATA connection missing\n",
->>>> -			dai->name, module->name);
->>>
->>> Using 'module' when data == NULL is *guaranteed* to be a type confused
->>> bogus pointer. It fundamentally can never be correct.
->>
->> Ah.  I did not read all the way to the end of the patch.
->>
->> The bugfix needs to be sent as it's own patch.  Just the one liner.  It
->> needs a fixes tag as well.
->>
->> [PATCH] staging: greybus: fix Oops in error message
->>
->> The "module" pointer is invalid here.  It's the list iterator and we
->> exited the loop without finding a valid entry.
->>
->> Fixes: 6dd67645f22c ("greybus: audio: Use single codec driver registration")
->> Signed-off-by: You
->>
->> 	if (!data) {
->> -		dev_err(dai->dev, "%s:%s DATA connection missing\n",
->> -			dai->name, module->name);
->> +		dev_err(dai->dev, "%s DATA connection missing\n",
->> +			dai->name);
->> 		mutex_unlock(&codec->lock);
->>
->> We're happy to apply the other stuff as well, but we don't mix cleanups
->> and bug fixes like that.
-> 
-> ok great, I'll separate and resubmit both. Thanks!
-> 
->>
->> regards,
->> dan carpenter
-> 
-> 	Jakob
-> 
-> _______________________________________________
-> greybus-dev mailing list -- greybus-dev@lists.linaro.org
-> To unsubscribe send an email to greybus-dev-leave@lists.linaro.org
-
+RGVhciBLcnp5c3p0b2YNCglUaGFua3MgZm9yIHlvdXIgcmV2aWV3Lg0KDQo+IC0tLS0tT3JpZ2lu
+YWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEtyenlzenRvZiBLb3psb3dza2kgW21haWx0bzprcnpr
+QGtlcm5lbC5vcmddDQo+IFNlbnQ6IE1vbmRheSwgTWFyY2ggMjEsIDIwMjIgNzoxMCBQTQ0KPiBU
+bzogeHQuaHVb6IOh5YWI6Z+sXSA8eHQuaHVAY3FwbHVzMS5jb20+DQo+IENjOiB3aW1AbGludXgt
+d2F0Y2hkb2cub3JnOyBwLnphYmVsQHBlbmd1dHJvbml4LmRlOyBsaW51eC1rZXJuZWxAdmdlci5r
+ZXJuZWwub3JnOw0KPiBsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4QHJvZWNr
+LXVzLm5ldDsgcm9iaCtkdEBrZXJuZWwub3JnOyBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsN
+Cj4gV2VsbHMgTHUg5ZGC6Iqz6aiwIDx3ZWxscy5sdUBzdW5wbHVzLmNvbT47IHFpbmppYW5b6KaD
+5YGlXSA8cWluamlhbkBjcXBsdXMxLmNvbT47IFJvYiBIZXJyaW5nDQo+IDxyb2JoQGtlcm5lbC5v
+cmc+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjcgMS8yXSBkdC1iaW5kaW5nczogd2F0Y2hkb2c6
+IEFkZCB3YXRjaGRvZyB5YW1sIGZpbGUgZm9yIFN1bnBsdXMgU1A3MDIxDQo+IA0KPiBPbiBGcmks
+IE1hciAwNCwgMjAyMiBhdCAwNDoxMjowOFBNICswODAwLCBYaWFudGFvIEh1IHdyb3RlOg0KPiA+
+IFRoaXMgYWRkcyB0aGUgZG9jdW1lbnRhdGlvbiBmb3IgdGhlIGRldmljZXRyZWUgYmluZGluZ3Mg
+b2YgdGhlIFN1bnBsdXMNCj4gPiBTUDcwMjEgd2F0Y2hkb2cgZHJpdmVyLCBmb3VuZCBmcm9tIFNQ
+NzAyMSBTb0NzIGFuZCBuZXdlci4NCj4gPg0KPiA+IFJldmlld2VkLWJ5OiBSb2IgSGVycmluZyA8
+cm9iaEBrZXJuZWwub3JnPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFhpYW50YW8gSHUgPHh0Lmh1QGNx
+cGx1czEuY29tPg0KPiA+IC0tLQ0KPiA+ICAuLi4vYmluZGluZ3Mvd2F0Y2hkb2cvc3VucGx1cyxz
+cDcwMjEtd2R0LnlhbWwgfCA0NyArKysrKysrKysrKysrKysrKysrDQo+ID4gIE1BSU5UQUlORVJT
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA2ICsrKw0KPiA+ICAyIGZpbGVz
+IGNoYW5nZWQsIDUzIGluc2VydGlvbnMoKykNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3Vt
+ZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy93YXRjaGRvZy9zdW5wbHVzLHNwNzAyMS13ZHQu
+eWFtbA0KPiANCj4gUGxlYXNlIHVzZSBzY3JpcHRzL2dldF9tYWludGFpbmVyLnBsIG9uIHJlY2Vu
+dCBrZXJuZWwgKG5ld2VzdCBtYWlubGluZSBvcg0KPiByZWNlbnQgbGludXgtbmV4dCkgdG8gZ2V0
+IHRoZSBsaXN0IG9mIHBlb3BsZSB0byBDQy4NCj4gDQoNCkkgd2lsbCBkbyBpdCBpbiB0aGUgbmV4
+dCBwYXRjaC4NCg0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
+ZS9iaW5kaW5ncy93YXRjaGRvZy9zdW5wbHVzLHNwNzAyMS13ZHQueWFtbA0KPiBiL0RvY3VtZW50
+YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy93YXRjaGRvZy9zdW5wbHVzLHNwNzAyMS13ZHQueWFt
+bA0KPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAwMDAwLi45YTliZmUx
+NTANCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
+L2JpbmRpbmdzL3dhdGNoZG9nL3N1bnBsdXMsc3A3MDIxLXdkdC55YW1sDQo+ID4gQEAgLTAsMCAr
+MSw0NyBAQA0KPiA+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMC1vbmx5IE9S
+IEJTRC0yLUNsYXVzZSkNCj4gPiArIyBDb3B5cmlnaHQgKEMpIFN1bnBsdXMgQ28uLCBMdGQuIDIw
+MjENCj4gPiArJVlBTUwgMS4yDQo+ID4gKy0tLQ0KPiA+ICskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVl
+Lm9yZy9zY2hlbWFzL3dhdGNoZG9nL3N1bnBsdXMsc3A3MDIxLXdkdC55YW1sIw0KPiA+ICskc2No
+ZW1hOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFtbCMNCj4gPiAr
+DQo+ID4gK3RpdGxlOiBTdW5wbHVzIFNvQ3MgV2F0Y2hkb2cgRGV2aWNlIFRyZWUgQmluZGluZ3MN
+Cj4gDQo+IHMvRGV2aWNlIFRyZWUgQmluZGluZ3MvLw0KPiANCg0KSSB3aWxsIGRyb3AgdGhlIHN0
+cmluZyAiRGV2aWNlIFRyZWUgQmluZGluZ3MiLg0KDQo+ID4gKw0KPiA+ICttYWludGFpbmVyczoN
+Cj4gPiArICAtIFhpYW5UYW8gSHUgPHh0Lmh1QGNxcGx1czEuY29tPg0KPiA+ICsNCj4gPiArYWxs
+T2Y6DQo+ID4gKyAgLSAkcmVmOiB3YXRjaGRvZy55YW1sIw0KPiA+ICsNCj4gPiArcHJvcGVydGll
+czoNCj4gPiArICBjb21wYXRpYmxlOg0KPiA+ICsgICAgY29uc3Q6IHN1bnBsdXMsc3A3MDIxLXdk
+dA0KPiA+ICsNCj4gPiArICByZWc6DQo+ID4gKyAgICBpdGVtczoNCj4gPiArICAgICAgLSBkZXNj
+cmlwdGlvbjogd2F0Y2hkb2cgcmVnaXN0ZXJzIHJlZ2lvbnMNCj4gPiArICAgICAgLSBkZXNjcmlw
+dGlvbjogbWlzY2VsbGFuZW91cyBjb250cm9sIHJlZ2lzdGVycyByZWdpb25zDQo+ID4gKw0KPiA+
+ICsgIGNsb2NrczoNCj4gPiArICAgIG1heEl0ZW1zOiAxDQo+ID4gKw0KPiA+ICsgIHJlc2V0czoN
+Cj4gPiArICAgIG1heEl0ZW1zOiAxDQo+ID4gKw0KPiA+ICtyZXF1aXJlZDoNCj4gPiArICAtIGNv
+bXBhdGlibGUNCj4gPiArICAtIHJlZw0KPiA+ICsgIC0gY2xvY2tzDQo+ID4gKyAgLSByZXNldHMN
+Cj4gPiArDQo+ID4gK2FkZGl0aW9uYWxQcm9wZXJ0aWVzOiBmYWxzZQ0KPiA+ICsNCj4gPiArZXhh
+bXBsZXM6DQo+ID4gKyAgLSB8DQo+ID4gKyAgICB3YXRjaGRvZzogd2F0Y2hkb2dAOWMwMDA2MzAg
+ew0KPiA+ICsgICAgICAgIGNvbXBhdGlibGUgPSAic3VucGx1cyxzcDcwMjEtd2R0IjsNCj4gPiAr
+ICAgICAgICByZWcgPSA8MHg5YzAwMDYzMCAweDA4PiwgPDB4OUMwMDAyNzQgMHgwND47DQo+IA0K
+PiBsb3dlcmNhc2UgaGV4IChTZWNvbmQgcmVnKQ0KPiANCg0KSSBqdXN0IHJlYWxpemVkIHRoZSBk
+cml2ZXIgZG9uJ3QgdXNlIHNlY29uZCByZWcgYW55bW9yZS4gSSB3aWxsIGRyb3AgaXQgYW5kIA0K
+bW9kaWZ5IHRoZSBkZXNjcmlwdGlvbiBvZiByZWcuDQoNCj4gQ2FuIGJlIGZpeGVkIHdoaWxlIGFw
+cGx5aW5nLCBzbyBpbiBzdWNoIGNhc2U6DQo+IFJldmlld2VkLWJ5OiBLcnp5c3p0b2YgS296bG93
+c2tpIDxrcnprQGtlcm5lbC5vcmc+DQo+IA0KDQpJIGdvdCBpdC4NCg0KQmVzdCByZWdhcmRzLA0K
+WGlhbi10YW8NCj4gQmVzdCByZWdhcmRzLA0KPiBLcnp5c3p0b2YNCg==

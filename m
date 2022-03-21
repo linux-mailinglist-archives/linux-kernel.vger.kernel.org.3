@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BF44E319F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 21:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFFC4E31A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 21:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353237AbiCUUVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 16:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
+        id S1353254AbiCUUVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 16:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348511AbiCUUVI (ORCPT
+        with ESMTP id S1352774AbiCUUVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 16:21:08 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4BF5046B;
-        Mon, 21 Mar 2022 13:19:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1647893982; x=1679429982;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KM4cbUqc61kjh6/ZMy8nXkMNNieQHx9QuZwQJwmTVhE=;
-  b=ySN46ef+ehCp0hJSYonP5r98U5J1BANxhxcPrgCcQMz6euifMvY7XAjA
-   UXFLlVbsyM1c6mcn4Bj0ejkOIbLcCHFIboFtUaoY9xSpzP6nelv+8qzb5
-   xc0Ay1jQFR0Ei+WwUiq7r4HjtKAYuCmNmBSD2YmTIer4FxETHR+uLmT5+
-   DJMMcw6DdFEHw6ji0eqK/jS4ZgM4yivos8sDCvIF+MwAvUNIeZFTdShA+
-   oF7kO8niFRwFk3Kz1g/6+8XVmFsGiDbwTRhgPRG6HVwj8kL16d5m8JT74
-   L1ScExQpXjuTjIsADJVsacw4Irmq3NAM7syeT6N4wuJ5/RbwpgNOlAfGs
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,199,1643698800"; 
-   d="scan'208";a="152737726"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Mar 2022 13:19:41 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 21 Mar 2022 13:19:40 -0700
-Received: from CHE-LT-I21427LX.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 21 Mar 2022 13:19:31 -0700
-Message-ID: <b7d6a721c1a5dd7de39483a9f70c40912bb5265b.camel@microchip.com>
-Subject: Re: [PATCH v9 net-next 03/11] dt-bindings: net: dsa: dt bindings
- for microchip lan937x
-From:   Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     <netdev@vger.kernel.org>, <olteanv@gmail.com>,
-        <robh+dt@kernel.org>, <UNGLinuxDriver@microchip.com>,
-        <woojung.huh@microchip.com>, <hkallweit1@gmail.com>,
-        <linux@armlinux.org.uk>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Date:   Tue, 22 Mar 2022 01:49:29 +0530
-In-Reply-To: <YjZ6GIrGCMzBaftB@lunn.ch>
-References: <20220318085540.281721-1-prasanna.vengateshan@microchip.com>
-         <20220318085540.281721-4-prasanna.vengateshan@microchip.com>
-         <YjZ6GIrGCMzBaftB@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0-1 
+        Mon, 21 Mar 2022 16:21:38 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC185A090;
+        Mon, 21 Mar 2022 13:20:12 -0700 (PDT)
+Received: from [192.168.192.153] (unknown [50.126.114.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 9DC7C3F675;
+        Mon, 21 Mar 2022 20:20:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647894009;
+        bh=uamzDTJ4eJ/ciPYegLGLh1LwOQ1s4XFLg66bcANk+sw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=PhIGq27tIR6YGTpy+wnDQh8CRjPzA5RjWXdayxXMhy9VMK/vpwY2lrozuck/Q0BGn
+         2yNfzkrnwblJGs4nRobrc6x/F1mcqSShK2KsSINwDHalwonqRl1KBYfR/79XCmtIUZ
+         9TaqHNCZy9x0rba3HHAdQtIv/xnIs3/jmTaTaePPl3/8fhxYte7Of7yWFujkaPGFSY
+         owDvM8DqO9XrRHYH7zI+Ji44jGokH9O8pFnPIsw+8Vb4WkzEhyCapetCAnoJlRKANZ
+         kPdxmH8wylIKPTu0S2a5dPc6fNFg+xVQjcL9f9ipykTZbnSca5Tbm3u2UHPnUKJoXy
+         SK0i5xVgkTLog==
+Message-ID: <a6ce3c77-bb90-f074-e3a5-eb16c7b6ea8b@canonical.com>
+Date:   Mon, 21 Mar 2022 13:20:07 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH -next] apparmor: Fix some kernel-doc comments
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     jmorris@namei.org, serge@hallyn.com, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20220317010330.82929-1-yang.lee@linux.alibaba.com>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20220317010330.82929-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-03-20 at 01:49 +0100, Andrew Lunn wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the
-> content is safe
+On 3/16/22 18:03, Yang Li wrote:
+> Remove some warnings found by running scripts/kernel-doc,
+> which is caused by using 'make W=1'.
 > 
-> > +examples:
+> security/apparmor/domain.c:137: warning: Function parameter or member
+> 'state' not described in 'label_compound_match'
+> security/apparmor/domain.c:137: warning: Excess function parameter
+> 'start' description in 'label_compound_match'
+> security/apparmor/domain.c:1294: warning: Excess function parameter
+> 'onexec' description in 'aa_change_profile'
 > 
-> > +          port@6 {
-> > +            reg = <6>;
-> > +            label = "lan5";
-> > +            phy-mode = "internal";
-> > +            phy-handle = <&t1phy4>;
-> > +          };
-> > +          port@7 {
-> > +            reg = <7>;
-> > +            label = "lan3";
-> > +            phy-mode = "internal";
-> > +            phy-handle = <&t1phy5>;
-> > +          };
-> > +        };
-> > +
-> > +        mdio {
-> 
-> ..
-> 
-> > +          t1phy4: ethernet-phy@6{
-> > +            reg = <0x6>;
-> > +          };
-> > +          t1phy5: ethernet-phy@7{
-> > +            reg = <0x7>;
-> > +          };
-> 
-> I know it is only an example, but the numbering is a little odd here.
-> 
-> Port 6, which is named lan5 using t1phy4 at address 6?
-> 
-> I would be more likely to use t1phy6 instead of t1phy4. And t1phy7
-> instead of t1phy5.
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
+Acked-by: John Johansen <john.johansen@canonical.com>
+
+I have pulled this into my tree
+
+
+> ---
+>  security/apparmor/domain.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
->         Andrew
-
-Sure, will change it in the next rev as above, Labels are just named to
-understand front panel naming.
-
-Prasanna V
+> diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
+> index a29e69d2c300..d71023f5c9c4 100644
+> --- a/security/apparmor/domain.c
+> +++ b/security/apparmor/domain.c
+> @@ -119,7 +119,7 @@ static inline unsigned int match_component(struct aa_profile *profile,
+>   * @profile: profile to find perms for
+>   * @label: label to check access permissions for
+>   * @stack: whether this is a stacking request
+> - * @start: state to start match in
+> + * @state: state to start match in
+>   * @subns: whether to do permission checks on components in a subns
+>   * @request: permissions to request
+>   * @perms: perms struct to set
+> @@ -1279,7 +1279,6 @@ static int change_profile_perms_wrapper(const char *op, const char *name,
+>  /**
+>   * aa_change_profile - perform a one-way profile transition
+>   * @fqname: name of profile may include namespace (NOT NULL)
+> - * @onexec: whether this transition is to take place immediately or at exec
+>   * @flags: flags affecting change behavior
+>   *
+>   * Change to new profile @name.  Unlike with hats, there is no way
 

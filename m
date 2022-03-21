@@ -2,59 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3574E3249
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 22:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4034E324C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 22:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiCUVW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 17:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53502 "EHLO
+        id S230367AbiCUVWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 17:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiCUVWZ (ORCPT
+        with ESMTP id S229550AbiCUVWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Mar 2022 17:22:25 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A26E2B4A49
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 14:20:17 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A6AFC2C00BE;
-        Mon, 21 Mar 2022 21:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1647897615;
-        bh=qdVK/9bT48x/jOX0/GBrjiXcVufotfBylhHUtNPUL7E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PVf5Jhp7gQTXhHu611bV2MIgjGMvufK9deuwp4zAEBgauXdFuA5xSlV8hm7IKX13r
-         gPiH8kF65BZXsJQdLKD41fxR4FpgLlUtGXkG/kyY9VAvba2uSvmpHG2Y9g8TUggis8
-         wOMI+x3F/AL8fMv0RLcmPb0XFi75ILnUlOam2xOfQoAXNwhOp2wjnW5YiChHWzD1Fu
-         OVWa51uCMmG3ArtpT91pMfRmgMhS6O8d01XXkPvyXQWY3p7YW3XerdFzDVtIyctwiw
-         sQF+tiWO71cR77HfecPfh6hHC1l+pFkyPXhmZYyeyNIOtAp8bDoqiT1M5ytQx7GjSk
-         RTFUbtdxWHvAg==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6238ec0f0000>; Tue, 22 Mar 2022 10:20:15 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 7941213EE36;
-        Tue, 22 Mar 2022 10:20:15 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id ADB172A2679; Tue, 22 Mar 2022 10:20:10 +1300 (NZDT)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, robh+dt@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH] arm64: dts: marvell: Update sdhci node names to match schema
-Date:   Tue, 22 Mar 2022 10:20:07 +1300
-Message-Id: <20220321212007.2961581-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.35.1
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BAA1AAFCC;
+        Mon, 21 Mar 2022 14:20:18 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso592115pjb.0;
+        Mon, 21 Mar 2022 14:20:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=mUKC2d+rgbadrMqKVzRP63ji1CbU8Dtk3LjZqErXfOE=;
+        b=M1cz0oNp0VZNd+EWrU5eo3Q9CNpBY6GlvjuOPjo7UNwwLLiok+jLmS1d/4hoTj9MHm
+         ql25H9sfRQ0n6q2e7wgqPMNlcr8T4Ra3okSeFY8ezPCqAcLO+9sSkslmQDRDAggYzRhj
+         gdsu45gccbRrFNc6/4mGVBGNKlWK0vdVbANxZpbEqQKfSAtkmB9cKHQpuMJQ4uERAWs/
+         sH480/8jecHqQX5ikXdo+NC/BEQ4z1k3OrFpTLCXMMaDyc1V59TnkXgHfJ9eELnUmxUn
+         7PQ73ETbMrhi0IM9DiyeDi8UdpRwEYehpaywLb6kFSWGLqWk3YW2+LWpS3zP+bc+93yL
+         eFeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mUKC2d+rgbadrMqKVzRP63ji1CbU8Dtk3LjZqErXfOE=;
+        b=2NNpSFN54I3nJnzmaPWgzFLiFM68e+nvwcGeGl0TWc4YeP1nn6OHmLXDGh+A+AMDvA
+         TyiN0BEWVUQpPHeo1QLAnro7o+97X6sUFUEdbduPV1ZC+bnnSc3MkSnDX9BqpKBkSgk+
+         bUCmC01MkhhxDZrLMbz4apaCVP/7xrx/aQzyFb/mwiuS2JzW5FUELchfGLV7yaH1jxVw
+         OJGXv0D1Ng1IxsIgM40GArbAfX+pzLIEeyPmN2l19p5mrtbrNXq81l7eAz9PtZUOWTOc
+         OC08o7rkCsdZ915S1Fdo+g4Jm7/Y1jFZtN9BvWms9Q8OnVVYi4gVZaxlkZ7812q9PWy5
+         eqfA==
+X-Gm-Message-State: AOAM5305Ej4WVyBsB/FRau3uxemW/+X4OgQubHvZuSMy1uGvXoSsIZ/W
+        AeD+u7H8GxIIjJWTHKbNj+ovomAQww8PvxoB
+X-Google-Smtp-Source: ABdhPJzT7QSBE6LBEo1dSHapxVA/gwhWkgapC+sufWqb95WRdgxHj6lqgoAB825AlBFUQ7PBiGViig==
+X-Received: by 2002:a17:902:d48a:b0:154:7a1b:5f2b with SMTP id c10-20020a170902d48a00b001547a1b5f2bmr2327169plg.52.1647897617648;
+        Mon, 21 Mar 2022 14:20:17 -0700 (PDT)
+Received: from jagath-PC ([115.99.184.169])
+        by smtp.gmail.com with ESMTPSA id m11-20020a056a00080b00b004f791d0115esm22307990pfk.171.2022.03.21.14.20.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 21 Mar 2022 14:20:17 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 02:50:13 +0530
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Dan Robertson <dan@dlrobertson.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/5] iio: accel: bma400: conversion to device-managed
+ function
+Message-ID: <20220321212012.GB10058@jagath-PC>
+References: <20220319181023.8090-1-jagathjog1996@gmail.com>
+ <20220319181023.8090-2-jagathjog1996@gmail.com>
+ <CAHp75Vem7DS1oXRt=d78pKe4WEWVOJ7uR8p9r33H5Ws9Rz4Qmg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=Cfh2G4jl c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=o8Y5sQTvuykA:10 a=AgHtZ1O-xYyxAwoHFCcA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vem7DS1oXRt=d78pKe4WEWVOJ7uR8p9r33H5Ws9Rz4Qmg@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,72 +76,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the node names of the sdhci@ interfaces to be mmc@ to match the
-node name enforced by the mmc-controller.yaml schema.
+Hello Andy,
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
-
-Notes:
-    This was spun off from converting the dt-binding to JSON schema but I
-    think this change can stand on it's own.
-
- arch/arm64/boot/dts/marvell/armada-37xx.dtsi  | 4 ++--
- arch/arm64/boot/dts/marvell/armada-ap80x.dtsi | 2 +-
- arch/arm64/boot/dts/marvell/armada-cp11x.dtsi | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/bo=
-ot/dts/marvell/armada-37xx.dtsi
-index 673f4906eef9..9d9415da8c88 100644
---- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-@@ -434,7 +434,7 @@ rwtm: mailbox@b0000 {
- 				#mbox-cells =3D <1>;
- 			};
-=20
--			sdhci1: sdhci@d0000 {
-+			sdhci1: mmc@d0000 {
- 				compatible =3D "marvell,armada-3700-sdhci",
- 					     "marvell,sdhci-xenon";
- 				reg =3D <0xd0000 0x300>,
-@@ -445,7 +445,7 @@ sdhci1: sdhci@d0000 {
- 				status =3D "disabled";
- 			};
-=20
--			sdhci0: sdhci@d8000 {
-+			sdhci0: mmc@d8000 {
- 				compatible =3D "marvell,armada-3700-sdhci",
- 					     "marvell,sdhci-xenon";
- 				reg =3D <0xd8000 0x300>,
-diff --git a/arch/arm64/boot/dts/marvell/armada-ap80x.dtsi b/arch/arm64/b=
-oot/dts/marvell/armada-ap80x.dtsi
-index 6614472100c2..a06a0a889c43 100644
---- a/arch/arm64/boot/dts/marvell/armada-ap80x.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-ap80x.dtsi
-@@ -250,7 +250,7 @@ watchdog: watchdog@610000 {
- 				interrupts =3D <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
- 			};
-=20
--			ap_sdhci0: sdhci@6e0000 {
-+			ap_sdhci0: mmc@6e0000 {
- 				compatible =3D "marvell,armada-ap806-sdhci";
- 				reg =3D <0x6e0000 0x300>;
- 				interrupts =3D <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi b/arch/arm64/b=
-oot/dts/marvell/armada-cp11x.dtsi
-index 3bd2182817fb..d6c0990a267d 100644
---- a/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi
-@@ -493,7 +493,7 @@ CP11X_LABEL(trng): trng@760000 {
- 			status =3D "okay";
- 		};
-=20
--		CP11X_LABEL(sdhci0): sdhci@780000 {
-+		CP11X_LABEL(sdhci0): mmc@780000 {
- 			compatible =3D "marvell,armada-cp110-sdhci";
- 			reg =3D <0x780000 0x300>;
- 			interrupts =3D <27 IRQ_TYPE_LEVEL_HIGH>;
---=20
-2.35.1
-
+On Mon, Mar 21, 2022 at 10:30:26AM +0200, Andy Shevchenko wrote:
+> On Sat, Mar 19, 2022 at 8:10 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
+> >
+> > This is a conversion to device-managed by using devm_iio_device_register
+> > inside probe function, now disabling the regulator and putting bma400 to
+> > power down via a devm_add_action_or_reset() hook.
+> >
+> > The dev_set_drvdata() call, bma400_remove() function and hooks in the I2C
+> > and SPI driver struct is removed as devm_iio_device_register function is
+> > used to automatically unregister on driver detach.
+> 
+> ...
+> 
+> > +static void bma400_disable(void *data_ptr)
+> > +{
+> > +       struct bma400_data *data = data_ptr;
+> > +       int ret;
+> 
+> > +       ret = bma400_set_power_mode(data, POWER_MODE_SLEEP);
+> > +       if (ret)
+> > +               dev_warn(data->dev, "Failed to put device into sleep mode (%pe)\n",
+> > +                        ERR_PTR(ret));
+> 
+> By what reason did you remove mutex around this call?
+> 
+> > +       regulator_bulk_disable(ARRAY_SIZE(data->regulators), data->regulators);
+> > +}
+Sorry my mistake, I missed this.
+I will include the mutex calls in next patch version.
+> 
+> 
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko

@@ -2,118 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923FE4E23A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD084E23B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346048AbiCUJyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
+        id S1346060AbiCUJ5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346045AbiCUJyf (ORCPT
+        with ESMTP id S244469AbiCUJ52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:54:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751961C931;
-        Mon, 21 Mar 2022 02:53:08 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 09:53:05 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647856387;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I5ozfk75sTR+lMOAYEyFLx5lbU0fNr2ZE4gFceh64Co=;
-        b=ctaenzuH7fTIpG6QmI4cp0SHkslskx9enL/xxcxde2QIF3yIL7bnF3JoRGyJ5NVBQAZhb8
-        ZWYMBfi0ipJ2eFB19vqkSCcdD1iQ5krXPmtPbuwV6+ycgP3Lvtw3xXc1d+Cqc+ftnfs6iK
-        K9YZAXBBzivCKv8muOhLZNkwOh8w3R5ijTipHCxmoOMj0R/4AgS9zZiTFczkVhndTt63+X
-        fmdG3LrrP9o5G0yvCb30G85AKsqMGf+hecDWMNuIOe1awCp9m/ca/nxHC/5LCFa8jngoWe
-        mHOtZQ8sXewfos1FWvFm7tJ9FXz+GyKTycBFEbRDd7q3HR8/xWafONc1d2JmHg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647856387;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I5ozfk75sTR+lMOAYEyFLx5lbU0fNr2ZE4gFceh64Co=;
-        b=Ih/i9+Vct/yxefi88d4Jbwf7P6iuGsrLAhnV40Tx84tRvz43KEmsCfM1AQOGq48p0A2Ceb
-        /PYGasA+uM48zKDA==
-From:   "tip-bot2 for Nathan Chancellor" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/Kconfig: Only enable CONFIG_CC_HAS_IBT for clang
- >= 14.0.0
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220318230747.3900772-2-nathan@kernel.org>
-References: <20220318230747.3900772-2-nathan@kernel.org>
-MIME-Version: 1.0
-Message-ID: <164785638590.389.2607767326848409657.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+        Mon, 21 Mar 2022 05:57:28 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149F413701E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:56:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SBA2ORrEyzPoGdq2/9C2pmhDRXq390j5e6id4QAAxGaGJ7Tp0qeZ5NmWzo0p8kXtEUCRLDtPrHiPr8889/0T9mTz1ZEq2lDeKGfoN+lCVtDWq0vhBQOad4v5FGLyIYOkp8RC4DeyU9Aro5aB7gApKqD/JaeFvdbeLCQRoeUlWlfrrdKQibQPHv+MFblVVjh03ndaaw2amG93TFEcBFqy/oSiBCbefHJSt7DqXT/IaO8IGdjnHhpMpzH1hylBn91ZtPvcnZJwN0uejKbrnCa83YyRRyOE5x5V3TZFFta8h/o3Mir8iGSlefpnZ3DOgG5a4KE6+VyjlctKhO/2LJ3/Aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VyrjzS5Qq8YpZW1dmmnB9FGrKZvz8YrZIMekwDAV8eU=;
+ b=V5Nv/NagR9QDHRCZG5kGHY1myILdJehXNlPlZWsnWymmcLHDkgNlTtCw+BzSRh7P/1ObXgJKvEZm1FWPS3g9At67kB5Aa5fHZ6KuKzoDgH2r+0oQBg46zhnTQQWOOsUSG7OIIeyEhtFQV4qJDHMXWJuNbWmCBR1VZfxnF19Kj3z7E+5lS5uM2EK+2L1ONo/ZuJwwZxf4P/BZJpCHSrUlgfc+XhcbOILlYE2Uzf7wYp9osR/OZvGd9KAz1xM9xzOyoydEvIsxPZb+ynCmPiutJa48GoQoJrcqmq8W4e4RBeiuzIj+9kDsPRNBg0AphrfeqjmZPJdlEO7EEPK2V+SyrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VyrjzS5Qq8YpZW1dmmnB9FGrKZvz8YrZIMekwDAV8eU=;
+ b=kzHcctCNK09T5KcWudwcaHPHvUAdDkxYtMY044O0LD2grpP3HyBWW+WuvPkbywgfJS3oAk63bAN37JS/Gs5oOaIDEaWZkVZBnD1hV2TQpbRu+3MoSkTnvrwRmpS8JrGZPY5ePBzFBS2I43Z1dySt8forpG0EuVqanlgdCs/sWJ4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by MWHPR12MB1502.namprd12.prod.outlook.com (2603:10b6:301:10::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Mon, 21 Mar
+ 2022 09:56:00 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::404f:1fc8:9f4c:f185%6]) with mapi id 15.20.5081.023; Mon, 21 Mar 2022
+ 09:56:00 +0000
+Message-ID: <cea6758b-6e7c-46d2-7d44-4372742ed449@amd.com>
+Date:   Mon, 21 Mar 2022 10:55:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ttm: remove check of list iterator against head outside
+ the loop
+Content-Language: en-US
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>, ray.huang@amd.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220319073143.30184-1-xiam0nd.tong@gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220319073143.30184-1-xiam0nd.tong@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: AS9PR06CA0333.eurprd06.prod.outlook.com
+ (2603:10a6:20b:466::12) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 25e3207a-49cf-4373-8377-08da0b210077
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1502:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1502D1768C8F476E6DEA106883169@MWHPR12MB1502.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YljoIsDStjQubsSTUf/J9lwbPlQRQVeGfsW8uCzI6bh9U+XLkNmBKbZPWZthF4XnWKoocEXYaDc5VuW5DWibTew1Uy26C+MntFor6km9pxWn1mNuGW8eKiFRr5Y6BO0nlXwfbUUvT5LmwkS+1b6YvDVwwZrovfwMhmpJnYjK42LBOc5PzJkY+0Uc7C4SpyASxVdS/ttANRXxRz4/0g9/zcpvLcbSW6WdvzI4uwQlhFkZxNVOY9OWX8gsXvcHiRVyeCy82I1Nyt7VyjcIDRFuGBRIH7Rbsna+MS5/6GL+YRidFNANole6uy/NloqFdnGjF2chlfl/1SdluoiMP9HCc+S2qghdpjSutblWBrwaNHnnejnRvpGWoPSlct636oaKi741O8FfHSGkI7Gk3t7/8xcIXUEukQTHjvFs5OrYEnCFn3dd5iEUrBJozlbG9j3zUB8BVLR+B4ibROhvS4hdqdjUDAyuPsi/uxgPs6oJHt5975u8hKe+gccrH3KtfBPqgRMpqy7FMAmqJq+1JqWR8zY8Pd/5S6W3eoZ/Z7bp2vz76WZkuFlK6bI5CzfKSn4hb+dxadnZjz5wxDENHUmPHg9ac9tnXKzdZ8vQp5Ley8ESbP6xyg2ajWJBlAdER3Md4RwGaxpTh6u1B6aXvFny2K80jAikCHWaHG8blwZRy4Hqb6OyS7wlInVzDzm8irsplxGRWHz257WWe1yr+mmpens+XP12pLYreqvfOmz9i7HxHdFaeMS53CE2pxhil+5e8W0fHLsIfHtFzllOrU73EyYyaNqPePKb1Cdr2rLR9wIl/FyDZp7lWTpfJIMrLoz5VN0PaP1jCag8Ha2VKO/5yw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(36756003)(66476007)(31686004)(66556008)(4326008)(2906002)(83380400001)(8936002)(66946007)(6506007)(8676002)(38100700002)(2616005)(6666004)(508600001)(86362001)(6486002)(966005)(316002)(31696002)(5660300002)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cGd0WG1vTlZ5MkZVQ0cvZFFYYVFYMWdEZHk4cXBERlFKUm90U1UyWkZheXhO?=
+ =?utf-8?B?cWN0YVR6TjhJOUtkZVVLRWVEaGJPRVFBZE9Od1U0N1ZHbUw3anNacjR3bS8y?=
+ =?utf-8?B?WllTS1RBVFNEUkUyLzA2QVRtOG5rS2JDdkg3bVIrZjRGNWwvYjRVWTJ5dzBW?=
+ =?utf-8?B?TnNreEw3T0NjREhCcWo2NkptU1QyQXdtVEtOQ1JURjNJdVF5Q1RpMW9sWUV5?=
+ =?utf-8?B?MTZ2Z3ZHZUx2WExmck9XNnBlK0VWZFJIZTBpTDV6OGVzN2NtSGgrOU94eHZK?=
+ =?utf-8?B?UFEwc2g3c3FVUVU0eEZROW5vbHJrL29GYnRYYmZ0b2RNVSsvOWlaMmduVUJZ?=
+ =?utf-8?B?QWVCM0Fpb1R6Lzc1NTUyY3JhMlBMeHdQR3lPREVacWFHRFF0NUo0alRaZXQx?=
+ =?utf-8?B?TmdmNWIyWEE0Y1JpT3c3d0ZHL3ZoYnJKVEphbC9mbmU5TGdJWVV3VEVLSnlI?=
+ =?utf-8?B?TlV1QlRHOGh1SFpYdGVKOTNMTU5JRTR0QnRTSWoyeDliSWs3eFR6cjZKUzJu?=
+ =?utf-8?B?emdFOTNtbmtsbSsrdUluOWFndkdldFZ4bVZnYTdRUnYwc0FLdU93ZVdTSmtK?=
+ =?utf-8?B?dFYrN1JCNVlOQnQwQnplOFQxb3lvUHduSEFJVWxUOGdGRWpGY0xEempxTHFE?=
+ =?utf-8?B?U1dRaDk1ZktmektmbjZRQlFhM1dQeXJSbGhCSHJXbXZkTkdTVVZZYUZ5NldT?=
+ =?utf-8?B?ekRQWnQvVVlHODRwdzY1NlE1YlZ5Mlc4VzBjMmZCd2czS2VRWmw0MSt6R3pO?=
+ =?utf-8?B?aWhuMzQ1bzZyNVlRaUtaU0kvMG90VlBhOVJLUVl3Q0JVU2s0UWh3M1JBOWJK?=
+ =?utf-8?B?TTc5M2xzSHcrQ2crWlVTVjhkOVJyd0R1RE9OMU9jZWhBRzVxSFBEemxIZTJU?=
+ =?utf-8?B?ZEljMmVpNVc2blJjR2RndEZ2T1hQelhRNjVrZDJCTjE4dVYySXRvcmM0MUN4?=
+ =?utf-8?B?ZFY0aGJuTlAyb0JpMFdiZGw1MXhxM25WdnhKQmMxTlZ2cjlDby85UmxhMkdj?=
+ =?utf-8?B?YTd6Yy9LTTcyU2dwSHFOUU5BNmkwdWFsQW1FS0ZXMHFkTFdBaEJ2S0ZCOTBh?=
+ =?utf-8?B?YldEbE5IRnF6ZWt5WThnTXFnbzFlMzRzd2VoQWhYNnlZVFRKV1AzS3ZhdExL?=
+ =?utf-8?B?eUpVTjJGUkF5SUZDV2hkSmtXa0lKRW9iQkI2UXRKUDdiYXRwQWcydytZckR4?=
+ =?utf-8?B?V0JqWXVoMjJnMGt1T1RKdFRma1lMWCtYbFNkblhlVDZ6dk42Wmt3bHdra0ph?=
+ =?utf-8?B?Tjk4VmIwS1dBNlhKNGR0R1E3WTR6N3Y2NXNidXFqY2trUmRqb3k4TGJpMmtN?=
+ =?utf-8?B?Ty9CeExwVXIyZTBmbnNjd1dsYlFhclYvRDZFTDFtREVTOUVtTXpLVjZOYjQw?=
+ =?utf-8?B?OFNaenNXeEZ1TjVDYlVFZ0pnZ2dBN2U4clR3M0lVcU5yeGYxOHRtV0VOZ2l0?=
+ =?utf-8?B?ZVB4MXJQL0tWbVNLMTcrTytsOVNicUxSSHpaRi9Mc1J6SkNWV3pCR3NHMkRj?=
+ =?utf-8?B?SXljR1BnUitMdHpJSGpyM3JGdExMcnIxS1dPVHZOaHZyT0ZOOE1HcUppOVh6?=
+ =?utf-8?B?SzZnalhKMTNvNTZhUTNpSDRtN1FPMEJ5ZW1jTXV0ZFVwMVNMMVd2bWFRamY3?=
+ =?utf-8?B?aWkvdG9kWjVXYWJFWjg4WUZ1SldHN29ScWYvcUF3bXlnL1F4aVZneHIwaUg2?=
+ =?utf-8?B?a1NGdjROMnBBRWh4N2xiTkpRQ2VoTWZvMWt3SG9VSW42dUd4NjN3d1ZQU3VI?=
+ =?utf-8?B?dDdHcVJlS2t0UW9wQzI1RXdQWXlKb29sYVd4WWhuMkNWbUh6aFVqMmNta2hH?=
+ =?utf-8?B?SEJ0REpIa2FTdG1WWDd6QTRGMkx0OXRMOXd3a0ZYOXlSYUZRSmg0WjArRjhm?=
+ =?utf-8?B?SFRwQklscUQvYktpSmMrYVZhNmFOWVova2dwTGJYR1hjbmpGeEtnNDBSSDFX?=
+ =?utf-8?B?ZksvYzdXbVNuRWpHNDg2NUpheFZ5cjRFanRzOGQzZmx2Zld5NGhvbVNKQUhS?=
+ =?utf-8?B?OXQ1S1JxR2V2Wm40SHJZMFhXNHVxSVN5VTNHVzFYSTE0NUtvd1h6Q2JCcHkx?=
+ =?utf-8?Q?wcZ4R/?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25e3207a-49cf-4373-8377-08da0b210077
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 09:55:59.7880
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1dR9VPnxqK7yg9gyCnF4By6gyetlqoA3s84LS91XYhToUWSoH1JV1P3Lm8oXMbMV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1502
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/core branch of tip:
+Am 19.03.22 um 08:31 schrieb Xiaomeng Tong:
+> When list_for_each_entry() completes the iteration over the whole list
+> without breaking the loop, the iterator value will be a bogus pointer
+> computed based on the head element.
+>
+> While it is safe to use the pointer to determine if it was computed
+> based on the head element with &pos->member == head, using the iterator
+> variable after the loop should be avoided.
+>
+> In preparation to limiting the scope of a list iterator to the list
+> traversal loop, use a dedicated pointer to point to the found element [1].
+>
+> Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
 
-Commit-ID:     71a7580b17e9510e5f74c0687567f9d8b5d48f5d
-Gitweb:        https://git.kernel.org/tip/71a7580b17e9510e5f74c0687567f9d8b5d48f5d
-Author:        Nathan Chancellor <nathan@kernel.org>
-AuthorDate:    Fri, 18 Mar 2022 16:07:46 -07:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Sat, 19 Mar 2022 00:47:12 +01:00
+Well exactly that's why I'm pushing back to those changes.
 
-x86/Kconfig: Only enable CONFIG_CC_HAS_IBT for clang >= 14.0.0
+We have tons of cases like this and I certainly won't accept patches to 
+make the code more complex than necessary. Especially not adding extra 
+local variables.
 
-Commit 156ff4a544ae ("x86/ibt: Base IBT bits") added a check for a crash
-with 'clang -fcf-protection=branch -mfentry -pg', which intended to
-exclude Clang versions older than 14.0.0 from selecting
-CONFIG_X86_KERNEL_IBT.
+Regards,
+Christian.
 
-clang-11 does not have the issue that the check is testing for, so
-CONFIG_X86_KERNEL_IBT is selectable. Unfortunately, there is a different
-crash in clang-11 that was fixed in clang-12. To make matters worse,
-that crash does not appear to be entirely deterministic, as the same
-input to the compiler will sometimes crash and other times not, which
-makes dynamically checking for the crash like the '-pg' one unreliable.
+>
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> ---
+>   drivers/gpu/drm/ttm/ttm_bo.c | 20 ++++++++++----------
+>   1 file changed, 10 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+> index db3dc7ef5382..413b5bbf2414 100644
+> --- a/drivers/gpu/drm/ttm/ttm_bo.c
+> +++ b/drivers/gpu/drm/ttm/ttm_bo.c
+> @@ -673,36 +673,36 @@ int ttm_mem_evict_first(struct ttm_device *bdev,
+>   			struct ww_acquire_ctx *ticket)
+>   {
+>   	struct ttm_buffer_object *bo = NULL, *busy_bo = NULL;
+> +	struct ttm_buffer_object *iter;
+>   	bool locked = false;
+>   	unsigned i;
+>   	int ret;
+>   
+>   	spin_lock(&bdev->lru_lock);
+>   	for (i = 0; i < TTM_MAX_BO_PRIORITY; ++i) {
+> -		list_for_each_entry(bo, &man->lru[i], lru) {
+> +		list_for_each_entry(iter, &man->lru[i], lru) {
+>   			bool busy;
+>   
+> -			if (!ttm_bo_evict_swapout_allowable(bo, ctx, place,
+> +			if (!ttm_bo_evict_swapout_allowable(iter, ctx, place,
+>   							    &locked, &busy)) {
+>   				if (busy && !busy_bo && ticket !=
+> -				    dma_resv_locking_ctx(bo->base.resv))
+> -					busy_bo = bo;
+> +				    dma_resv_locking_ctx(iter->base.resv))
+> +					busy_bo = iter;
+>   				continue;
+>   			}
+>   
+> -			if (!ttm_bo_get_unless_zero(bo)) {
+> +			if (!ttm_bo_get_unless_zero(iter)) {
+>   				if (locked)
+> -					dma_resv_unlock(bo->base.resv);
+> +					dma_resv_unlock(iter->base.resv);
+>   				continue;
+>   			}
+> +
+> +			bo = iter;
+>   			break;
+>   		}
+>   
+> -		/* If the inner loop terminated early, we have our candidate */
+> -		if (&bo->lru != &man->lru[i])
+> +		if (bo)
+>   			break;
+> -
+> -		bo = NULL;
+>   	}
+>   
+>   	if (!bo) {
 
-To make everything work properly for all common versions of clang, use a
-hard version check of 14.0.0, as that will be the first release upstream
-that has both bugs properly fixed.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220318230747.3900772-2-nathan@kernel.org
----
- arch/x86/Kconfig | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 0f0672d..921e4eb 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1865,9 +1865,10 @@ config CC_HAS_IBT
- 	# GCC >= 9 and binutils >= 2.29
- 	# Retpoline check to work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93654
- 	# Clang/LLVM >= 14
--	# fentry check to work around https://reviews.llvm.org/D111108
-+	# https://github.com/llvm/llvm-project/commit/e0b89df2e0f0130881bf6c39bf31d7f6aac00e0f
-+	# https://github.com/llvm/llvm-project/commit/dfcf69770bc522b9e411c66454934a37c1f35332
- 	def_bool ((CC_IS_GCC && $(cc-option, -fcf-protection=branch -mindirect-branch-register)) || \
--		  (CC_IS_CLANG && $(success,echo "void a(void) {}" | $(CC) -Werror $(CLANG_FLAGS) -fcf-protection=branch -mfentry -pg -x c - -c -o /dev/null))) && \
-+		  (CC_IS_CLANG && CLANG_VERSION >= 140000)) && \
- 		  $(as-instr,endbr64)
- 
- config X86_KERNEL_IBT

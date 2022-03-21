@@ -2,117 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAD94E27E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D49204E27E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348012AbiCUNm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S1348020AbiCUNmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347988AbiCUNmY (ORCPT
+        with ESMTP id S1348004AbiCUNm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:42:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE98C7306A;
+        Mon, 21 Mar 2022 09:42:27 -0400
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A10A74630;
+        Mon, 21 Mar 2022 06:41:02 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id q8so9386164wrc.0;
+        Mon, 21 Mar 2022 06:41:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9vMt+hX5zS+6WtuXH1LjsjcqPrroHsDgeG/H9EBbOj0=;
+        b=VW/c6Hh40d3QPB+ixM5WfemxoZK7q1oyz2WLdIy/3LCR88cFmN+9WFjgtEk5OH9A6b
+         H7IQGh2LFBYdzlC0qP5MDg/0fJqEeX3RK3ap3jZB8sorcHXUeSpe0Qtp4iGgoVm+bB3Z
+         CgPzFb2vQQq4W3sZCgmddgGNgQZosVtQss2uzQCvvIpo+FOH+UcMlXDxi6a3TJQkjzob
+         EAlYsBJFzOnOsV4aBg0tUHLLRCOPa9JnBFzJIqFmCx3NDnLJP3nwRFr49GMR2MADHFfG
+         g40bs0Nfb+SugonRR3aDOi4B19wlSWKQPJt3ylHDpw+Rlmu1BVMqL/a58AtRrY3k/CYE
+         QdpA==
+X-Gm-Message-State: AOAM532w5As2mIq2fFvKMt3AcfBU48/crtnEfV1UB+dGir8WsNRmZcDy
+        kwdIkfnNAmAC45SQDy+sXlM=
+X-Google-Smtp-Source: ABdhPJxTBRXSwZa5Hgbdytx3UhsHjpCQShJv0x20dGfBhjxWjqfKvLc85bU5Nw7kbDtVsAU0SKnPPw==
+X-Received: by 2002:a5d:52ca:0:b0:203:db2f:2a47 with SMTP id r10-20020a5d52ca000000b00203db2f2a47mr18658989wrv.580.1647870060324;
+        Mon, 21 Mar 2022 06:41:00 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id n23-20020a05600c3b9700b0038b7c4c0803sm17157114wms.30.2022.03.21.06.40.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Mon, 21 Mar 2022 06:40:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F01CC61240;
-        Mon, 21 Mar 2022 13:40:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CEDDC340E8;
-        Mon, 21 Mar 2022 13:40:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647870058;
-        bh=Tta+gf+lXM/5A76YW4BpjuBuyFt4HrFGmdEfOCer/ZI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oTFgDUVOAkqeq+MZLODh7VZJB6faVsBs7zC2CzrHiKJ+WjDoJFDMW61NSu0Rhkp03
-         2tekrg1np6R9SuP0hq3wRC5EXjau3a+F/M+G7i40UFXYsh2LeYHxTM4dKfL8rk/3JF
-         fy/42Pxzd6M8Fo3Uk4J4h43mmiha4oBOmERpJTJBq5/pyctMVQTV7DvXbpiRy8XfRe
-         AAdAPFJbrJwjQLFXI/Jw5znjsKapqEyu9oGndZGVfsYF5J4M/YERv1jz5A0Tc6nVlW
-         0M/8WC+A7Doz8qHUvbgvPnq1QKbAl1u95ZTjSgFqwx7M+jkig624WjIsoR4Ri/p0I0
-         k5tP5hbvSH4Vg==
-Received: by pali.im (Postfix)
-        id 2BE61A5B; Mon, 21 Mar 2022 14:40:55 +0100 (CET)
-Date:   Mon, 21 Mar 2022 14:40:55 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, marek.behun@nic.cz
-Subject: Re: [PATCH 1/2] arm64: dts: uDPU: update partition table
-Message-ID: <20220321134055.o3uz5al5np7fj273@pali>
-References: <20220321121728.414839-1-robert.marko@sartura.hr>
+Message-ID: <221c38f0-4eb2-18d4-ef18-ec35437d1163@kernel.org>
+Date:   Mon, 21 Mar 2022 14:40:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321121728.414839-1-robert.marko@sartura.hr>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/6] scsi: ufs: dt-bindings: Add SM6350 compatible
+ string
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220321133318.99406-1-luca.weiss@fairphone.com>
+ <20220321133318.99406-2-luca.weiss@fairphone.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220321133318.99406-2-luca.weiss@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 21 March 2022 13:17:27 Robert Marko wrote:
-> Partition currently called "uboot" does not only contain U-boot, but
-> rather it contains TF-A, U-boot and U-boot environment.
+On 21/03/2022 14:33, Luca Weiss wrote:
+> Document the compatible for the UFS found on SM6350.
 > 
-> So, to avoid accidentally deleting the U-boot environment which is
-> located at 0x180000 split the partition.
-> 
-> "uboot" is not the correct name as you can't boot these boards with U-boot
-> only, TF-A must be present as well, so rename the "uboot" partition to
-> "firmware".
-> 
-> While we are here, describe the NOR node as "spi-flash@0" instead of
-> "m25p80@0" which is the old SPI-NOR driver name.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 > ---
->  arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-
-FYI, U-Boot now contains copy of kernel's A3720 DTS files, so you should
-send same patch also to U-Boot project.
-
-> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-> index 95d46e8d081c..ac64949bb53e 100644
-> --- a/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-> +++ b/arch/arm64/boot/dts/marvell/armada-3720-uDPU.dts
-> @@ -99,7 +99,7 @@ &spi0 {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&spi_quad_pins>;
->  
-> -	m25p80@0 {
-> +	spi-flash@0 {
->  		compatible = "jedec,spi-nor";
->  		reg = <0>;
->  		spi-max-frequency = <54000000>;
-> @@ -108,10 +108,15 @@ partitions {
->  			compatible = "fixed-partitions";
->  			#address-cells = <1>;
->  			#size-cells = <1>;
-> -			/* only bootloader is located on the SPI */
-> +
->  			partition@0 {
-> -				label = "uboot";
-> -				reg = <0 0x400000>;
-> +				label = "firmware";
-> +				reg = <0x0 0x180000>;
-> +			};
-> +
-> +			partition@180000 {
-> +				label = "u-boot-env";
-> +				reg = <0x180000 0x10000>;
->  			};
->  		};
->  	};
-> -- 
-> 2.35.1
+> Changes in v2:
+> - add second hunk for clock validation
 > 
+>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+
+
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+
+Best regards,
+Krzysztof

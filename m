@@ -2,144 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73EB4E2B05
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA4E4E2B0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349485AbiCUOlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S244595AbiCUOn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349457AbiCUOlW (ORCPT
+        with ESMTP id S1349692AbiCUOnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:41:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE65F1890CD;
-        Mon, 21 Mar 2022 07:39:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3759660C73;
-        Mon, 21 Mar 2022 14:39:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D4EC340E8;
-        Mon, 21 Mar 2022 14:39:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647873595;
-        bh=DvATwoHTxnArnbHtADD5Mg71Fi3pHjfQ9J9ORoxi+UI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NYmgDU7FL+wbRjIgi+f4VRnRmFWuAVTkl7g3kOamPyLk64U7Ax14VO3SKbCcdbC0W
-         Bu9cW7deMtVw3T9rWU9seP7toK06zScpQrc2iTe/0KTcA24G/CBgcGsaI2DXLcBtSS
-         ofo0rT/LwpSJdn0mJVwpa2dzNYgcP03+DZc32HeKsxMcy4TvJk7IWLgPLjvLaDUWBQ
-         bAUN+fbbDqXv/lYRyuXk/5NpPINOtFu8yiE1SLqeC5w3HqTeDdltRxgES82G62Oo0R
-         qpOpLHCTH3K/Egvs2irmRYrKOdTEosWJmRJXwzhj0xH6E7NYv0RvaKXlvX642pbZ0x
-         jNQ9DhNE8HAsQ==
-Date:   Mon, 21 Mar 2022 14:39:44 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v1 4/7] arm64/pgtable: support
- __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-Message-ID: <20220321143944.GD11145@willie-the-truck>
-References: <20220315141837.137118-1-david@redhat.com>
- <20220315141837.137118-5-david@redhat.com>
- <YjIr9f9qaz4xITVd@arm.com>
- <20220321143802.GC11145@willie-the-truck>
+        Mon, 21 Mar 2022 10:43:17 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60D118B7B9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:41:51 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 25so20132256ljv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:41:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=75Gwq4uHWEN6DEz0j9a7FSUGeVHdNTQqq72dygCbFyU=;
+        b=Ifna/CHrQAnT5/LK1JI6Od2Y8qAp5JdHTZcb3L0bAL46Po6MAUaw/J4QGSXVe9707j
+         u0uFsPlTz9sIRnWTYp7DNDUP21oh0G4LcxsNoGKVZHFddg6ODUHI6m1w2niZBfPhvSZI
+         OQUOtNu54JuwLFTixxAq+TNT0AUNt68NWqmhxp/mVw+mLczveaAoXZV11lojcttCPnmG
+         RstKBoKuDN/AVRRRcZr8WZ/V8CbOmjesp4D/OdrPD1vvXe9wWPdaE80nTe8CJ4HWZUbR
+         Piboqu2cqzJUSiO/iconevRs9Ky6bTDkgk3oewG3BvY8fdgHdqkHXHO6iti1V49K9qJy
+         M+GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=75Gwq4uHWEN6DEz0j9a7FSUGeVHdNTQqq72dygCbFyU=;
+        b=15IEn0k0tPoHnfkukMguFDhn1cES4PspcDJolTazzfYkkfAFp1ZLzjqpTv/7hgtehJ
+         2zmRGWf6ulgQ4Syh/R6XpiVGqeqWCHvz/fvnUANbYgOKZTl34JZxbUf+iQ+QmyplyS5G
+         5/rQtk0gCAoB2jc+S53m78dVqDRS6gZl7oFS6gKzlM28YMbA5c4XB+rewwkPPRZsbu07
+         Hkp1SZQBI1XOegQtHIY9g+RdlmqbomXWiDMg063NQD68IJyW/gKvcqWRp8tzjyczMBH9
+         Ma/keM7lW6lwtj4trNuH7FGU2rMj7eNtUxTAJf9KYdARDjoALe0KlM97AlceO8zLoiUO
+         cCPg==
+X-Gm-Message-State: AOAM531Wb1/wGfonbSZ5R7QK4Z6pA/ZMi+YxxudbMi8ZSRsyk7hFjHm7
+        Otm7/9SiQ4722X2y/fT2ixdceTkP4aA7FiUeGv8xbWcoBiRgXQ==
+X-Google-Smtp-Source: ABdhPJxFqljoMBBwSBqHrF2ieRsY0JDuV+pkq1EcUn8iOy26rx7V0hLtdFw2WLdtJJj7VMSxabUROv3JxtP2Jage4Rc=
+X-Received: by 2002:a2e:3607:0:b0:249:87a5:af18 with SMTP id
+ d7-20020a2e3607000000b0024987a5af18mr2707697lja.93.1647873709522; Mon, 21 Mar
+ 2022 07:41:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321143802.GC11145@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <000000000000778f1005dab1558e@google.com>
+In-Reply-To: <000000000000778f1005dab1558e@google.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Mon, 21 Mar 2022 15:41:13 +0100
+Message-ID: <CAG48ez2AAk6JpZAA6GPVgvCmKimXHJXO906e=r=WGU06k=HB3A@mail.gmail.com>
+Subject: Re: [syzbot] possible deadlock in pipe_write
+To:     syzbot <syzbot+011e4ea1da6692cf881c@syzkaller.appspotmail.com>,
+        David Howells <dhowells@redhat.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 02:38:02PM +0000, Will Deacon wrote:
-> On Wed, Mar 16, 2022 at 06:27:01PM +0000, Catalin Marinas wrote:
-> > On Tue, Mar 15, 2022 at 03:18:34PM +0100, David Hildenbrand wrote:
-> > > diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
-> > > index b1e1b74d993c..62e0ebeed720 100644
-> > > --- a/arch/arm64/include/asm/pgtable-prot.h
-> > > +++ b/arch/arm64/include/asm/pgtable-prot.h
-> > > @@ -14,6 +14,7 @@
-> > >   * Software defined PTE bits definition.
-> > >   */
-> > >  #define PTE_WRITE		(PTE_DBM)		 /* same as DBM (51) */
-> > > +#define PTE_SWP_EXCLUSIVE	(_AT(pteval_t, 1) << 2)	 /* only for swp ptes */
-> > 
-> > I think we can use bit 1 here.
-> > 
-> > > @@ -909,12 +925,13 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
-> > >  /*
-> > >   * Encode and decode a swap entry:
-> > >   *	bits 0-1:	present (must be zero)
-> > > - *	bits 2-7:	swap type
-> > > + *	bits 2:		remember PG_anon_exclusive
-> > > + *	bits 3-7:	swap type
-> > >   *	bits 8-57:	swap offset
-> > >   *	bit  58:	PTE_PROT_NONE (must be zero)
-> > 
-> > I don't remember exactly why we reserved bits 0 and 1 when, from the
-> > hardware perspective, it's sufficient for bit 0 to be 0 and the whole
-> > pte becomes invalid. We use bit 1 as the 'table' bit (when 0 at pmd
-> > level, it's a huge page) but we shouldn't check for this on a swap
-> > entry.
-> 
-> I'm a little worried that when we're dealing with huge mappings at the
-> PMD level we might lose the ability to distinguish them from a pte-level
-> mapping with this new flag set if we use bit 1. A similar issue to this
-> was fixed a long time ago by 59911ca4325d ("ARM64: mm: Move PTE_PROT_NONE
-> bit") when we used to use bit 1 for PTE_PROT_NONE.
-> 
-> Is something like:
-> 
-> 	pmd_to_swp_entry(swp_entry_to_pmd(pmd));
-> 
-> supposed to preserve the original pmd? I'm not sure that's guaranteed
-> after this change if bit 1 can be cleared in the process -- we could end
-> up with a pte, which the hardware would interpret as a table entry and
-> end up with really bad things happening.
+This also looks like a watch_queue bug.
 
-(I got this back to front: having the bit set rather than cleared would
-be an issue, but the overall point remains).
+On Mon, Mar 21, 2022 at 3:34 AM syzbot
+<syzbot+011e4ea1da6692cf881c@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    56e337f2cf13 Revert "gpio: Revert regression in sysfs-gpio..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13f00f7e700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=d35f9bc6884af6c9
+> dashboard link: https://syzkaller.appspot.com/bug?extid=011e4ea1da6692cf881c
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133235c5700000
 
-Will
+The syz reproducer is:
+
+#{"threaded":true,"procs":1,"slowdown":1,"sandbox":"","close_fds":false}
+pipe(&(0x7f0000000240)={<r0=>0xffffffffffffffff, <r1=>0xffffffffffffffff})
+pipe2(&(0x7f00000001c0)={0xffffffffffffffff, <r2=>0xffffffffffffffff}, 0x80)
+splice(r0, 0x0, r2, 0x0, 0x1ff, 0x0)
+vmsplice(r1, &(0x7f00000006c0)=[{&(0x7f0000000080)="b5", 0x1}], 0x1, 0x0)
+
+That 0x80 is O_NOTIFICATION_PIPE (==O_EXCL).
+
+It looks like the bug is that when you try to splice between a normal
+pipe and a notification pipe, get_pipe_info(..., true) fails, so
+splice() falls back to treating the notification pipe like a normal
+pipe - so we end up in iter_file_splice_write(), which first locks the
+input pipe, then calls vfs_iter_write(), which locks the output pipe.
+
+I think this probably (?) can't actually lead to deadlocks, since
+you'd need another way to nest locking a normal pipe into locking a
+watch_queue pipe, but the lockdep annotations don't make that clear.
+
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1248ca89700000
+>
+> Bisection is inconclusive: the issue happens on the oldest tested release.
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12f235c5700000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=11f235c5700000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16f235c5700000
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+011e4ea1da6692cf881c@syzkaller.appspotmail.com
+>
+> ============================================
+> WARNING: possible recursive locking detected
+> 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0 Not tainted
+> --------------------------------------------
+> syz-executor190/3593 is trying to acquire lock:
+> ffff888078020868 (&pipe->mutex/1){+.+.}-{3:3}, at: __pipe_lock fs/pipe.c:103 [inline]
+> ffff888078020868 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_write+0x132/0x1c00 fs/pipe.c:431
+>
+> but task is already holding lock:
+> ffff888078020468 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_lock_nested fs/pipe.c:82 [inline]
+> ffff888078020468 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_lock fs/pipe.c:90 [inline]
+> ffff888078020468 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_wait_readable+0x39b/0x420 fs/pipe.c:1049
+>
+> other info that might help us debug this:
+>  Possible unsafe locking scenario:
+>
+>        CPU0
+>        ----
+>   lock(&pipe->mutex/1);
+>   lock(&pipe->mutex/1);
+>
+>  *** DEADLOCK ***
+>
+>  May be due to missing lock nesting notation
+>
+> 1 lock held by syz-executor190/3593:
+>  #0: ffff888078020468 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_lock_nested fs/pipe.c:82 [inline]
+>  #0: ffff888078020468 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_lock fs/pipe.c:90 [inline]
+>  #0: ffff888078020468 (&pipe->mutex/1){+.+.}-{3:3}, at: pipe_wait_readable+0x39b/0x420 fs/pipe.c:1049
+>
+> stack backtrace:
+> CPU: 1 PID: 3593 Comm: syz-executor190 Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_deadlock_bug kernel/locking/lockdep.c:2956 [inline]
+>  check_deadlock kernel/locking/lockdep.c:2999 [inline]
+>  validate_chain kernel/locking/lockdep.c:3788 [inline]
+>  __lock_acquire.cold+0x213/0x3a9 kernel/locking/lockdep.c:5027
+>  lock_acquire kernel/locking/lockdep.c:5639 [inline]
+>  lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
+>  __mutex_lock_common kernel/locking/mutex.c:600 [inline]
+>  __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
+>  __pipe_lock fs/pipe.c:103 [inline]
+>  pipe_write+0x132/0x1c00 fs/pipe.c:431
+>  call_write_iter include/linux/fs.h:2074 [inline]
+>  do_iter_readv_writev+0x47a/0x750 fs/read_write.c:725
+>  do_iter_write+0x188/0x710 fs/read_write.c:851
+>  vfs_iter_write+0x70/0xa0 fs/read_write.c:892
+>  iter_file_splice_write+0x723/0xc70 fs/splice.c:689
+>  do_splice_from fs/splice.c:767 [inline]
+>  do_splice+0xb7e/0x1960 fs/splice.c:1079
+>  __do_splice+0x134/0x250 fs/splice.c:1144
+>  __do_sys_splice fs/splice.c:1350 [inline]
+>  __se_sys_splice fs/splice.c:1332 [inline]
+>  __x64_sys_splice+0x198/0x250 fs/splice.c:1332
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7fb9ac14bca9
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007fb9ac0fe308 EFLAGS: 00000246 ORIG_RAX: 0000000000000113
+> RAX: fffffff
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
+>

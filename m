@@ -2,98 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FD94E345F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1814E3465
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232727AbiCUXaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
+        id S232528AbiCUXbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbiCUXaA (ORCPT
+        with ESMTP id S232802AbiCUXay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:30:00 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693DE54F92;
-        Mon, 21 Mar 2022 16:28:33 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id d76so2071056pga.8;
-        Mon, 21 Mar 2022 16:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=kcgU7Ygr4hDo5WFjwKdbti0JsL3etMpL87nJF1yX9Fk=;
-        b=jBWzIVQbYv/gZClrGlj1CqaZZmtHw9V3gcUREV8rmsIuZvamHvkhVgte4mFL5Uh+NN
-         99+3BXh+vtv5+2aPMao2Xn3+TxahjdK8iYMcSJos98P64RUBL/Naay3Rku9vL1URj0Pu
-         LyVQnhOf7+/3PKSk7h2oPYTLpxCtZfO3yqXkDOvlufh9+7ZwdxEaY/xEyCdjgWJfZVK3
-         rXaQt62DvY+SgMG/Vvv70oIOSTr9e/efLfw8lwq0ePKdTdAWTixieEM6b2yiwKLygEal
-         jW71bozhUmWa1s8mCOyQ/EO8ZVCA//D9V7ODMTkfKlfJFjiWEL5Rp2D5bFirp68e6qPo
-         rQQw==
+        Mon, 21 Mar 2022 19:30:54 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EFF103BA8;
+        Mon, 21 Mar 2022 16:29:24 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id s207so17878710oie.11;
+        Mon, 21 Mar 2022 16:29:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=kcgU7Ygr4hDo5WFjwKdbti0JsL3etMpL87nJF1yX9Fk=;
-        b=hx/g8itipTyXSE7lGAFuTdSZ7cEtYv182z9KqJfJ8IdjCfGFW4runx693WjlcXRY6f
-         7maaOfOOZvih4qmSvi45lwkd9C2yJv+DSvxTfn/d8HU8TxcEfty9jWkSnvufDjoXX8FO
-         ntymY0xKShWatcedFmSz14Wof3Hhg8snFW4vgJfTK0nHt/qfWppRb8xwnCHsrKxyC/z2
-         PzxnDGR9uLfKbBvIMe5a1/T9qowWxXZtIkeescDZpKpCFhz6+GGWDupAiIzLXbCI7dBF
-         FcEBTvrB3BhdfclX4b0Em1Z7gBZBtqcrbOWMjZXhVz0E8F9ZKYdSiSQ/g9mHRAcxcwGH
-         N7nQ==
-X-Gm-Message-State: AOAM530vKpaclwaqE7/7PT+V7Sz1eIm1ljNqlP9nrG2X2f7ZDtzpKCYS
-        awHxahrY9SubpwuYHUlwabzy1kUuHuPWa/1TkzWnNQ==
-X-Google-Smtp-Source: ABdhPJwGIMcmoy8YE6aqOrBHI2doApncoaTodpkHbT6rbeciJiDrZVLFnoKTczgXd5Z8wUFvEGWYwg==
-X-Received: by 2002:a65:6d8f:0:b0:380:8b0c:a5b0 with SMTP id bc15-20020a656d8f000000b003808b0ca5b0mr20249219pgb.558.1647905312403;
-        Mon, 21 Mar 2022 16:28:32 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [71.19.144.195])
-        by smtp.gmail.com with ESMTPSA id c4-20020a056a00248400b004faad8c81bcsm3094531pfv.127.2022.03.21.16.28.27
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1eYyatCQZd3YZhjNaHOmfvqTN+inYRTrGVc7sx+pnE0=;
+        b=vx9rowa71MxgcnZ81TJjYpYDWCUUzsLwdqVKMb0f7+rF92by4+WaxUO+cGH9aviKqG
+         8oNwtvre9PU6sxg6XOnG1sAi8qT2qzsHl6M+EwVnChTDlzigInAncwOSH/iFsg2QQCc3
+         RunTUnQbI+eZCXH7Jli0AvYIICYn2QXH+OuILwogC7EHcqiwKRegvvdecTvvUrCCyhOF
+         rYKyKuPJw0Mtpq1sr1mFkFOio+l4EmTZfQWOE+LiXduFaxGwdHo+4T6SH4RC8l+DRKW1
+         7Z1I4iwA0/mRscIsgARmYM6HCZLIWFbY9zbw1VUXLpGpdHPs4mUBF1cGn6S96NkXuSaf
+         EpwQ==
+X-Gm-Message-State: AOAM531AzWKbWZZ/l1i8jqjczaAs2C0wOGR6f47fD44d67zs+1hKdmYK
+        A4n4YjiokL/yKcAXvYiK4A==
+X-Google-Smtp-Source: ABdhPJyL1wG4H9T4Ik1hQtcDoVEUgVmKOxTNyJ47cLWpAoUJUz0YuC27Z4XHCxLH9HKrwTpQSKukJQ==
+X-Received: by 2002:aca:59d5:0:b0:2ef:2125:ec15 with SMTP id n204-20020aca59d5000000b002ef2125ec15mr841064oib.4.1647905364052;
+        Mon, 21 Mar 2022 16:29:24 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 4-20020a056870004400b000dabe0c435bsm6809638oaz.7.2022.03.21.16.29.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 16:28:31 -0700 (PDT)
-Message-ID: <62390a1f.1c69fb81.9e54b.855a@mx.google.com>
-Date:   Mon, 21 Mar 2022 16:28:31 -0700 (PDT)
-X-Google-Original-Date: Mon, 21 Mar 2022 23:28:25 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
-Subject: RE: [PATCH 5.16 00/37] 5.16.17-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 16:29:23 -0700 (PDT)
+Received: (nullmailer pid 744835 invoked by uid 1000);
+        Mon, 21 Mar 2022 23:29:21 -0000
+Date:   Mon, 21 Mar 2022 18:29:21 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Axe Yang <axe.yang@mediatek.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        angelogioacchino.delregno@collabora.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v8 1/3] dt-bindings: mmc: mtk-sd: extend interrupts and
+ pinctrls properties
+Message-ID: <YjkKURNzg8JPbXcg@robh.at.kernel.org>
+References: <20220321115133.32121-1-axe.yang@mediatek.com>
+ <20220321115133.32121-2-axe.yang@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321115133.32121-2-axe.yang@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 14:52:42 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.16.17 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Mar 21, 2022 at 07:51:32PM +0800, Axe Yang wrote:
+> Extend interrupts and pinctrls for SDIO wakeup interrupt feature.
+> This feature allow SDIO devices alarm asynchronous interrupt to host
+> even when host stop providing clock to SDIO card. An extra wakeup
+> interrupt and pinctrl states for SDIO DAT1 pin state switching are
+> required in this scenario.
 > 
-> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+> ---
+>  .../devicetree/bindings/mmc/mtk-sd.yaml       | 23 ++++++++++++++++++-
+>  1 file changed, 22 insertions(+), 1 deletion(-)
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.17-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> index 297ada03e3de..f57774535a1d 100644
+> --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> @@ -69,12 +69,23 @@ properties:
+>        - const: ahb_cg
+>  
+>    interrupts:
+> -    maxItems: 1
+> +    description:
+> +      Should at least contain MSDC GIC interrupt. To support SDIO in-band wakeup, an extended
+> +      interrupt is required and be configured as wakeup source irq.
+> +    minItems: 1
+> +    maxItems: 2
+>  
+>    pinctrl-names:
+> +    description:
+> +      Should at least contain default and state_uhs. To support SDIO in-band wakeup, dat1 pin
+> +      will be switched between GPIO mode and SDIO DAT1 mode, state_eint and state_dat1 are
+> +      mandatory in this scenarios.
+> +    minItems: 2
+>      items:
+>        - const: default
+>        - const: state_uhs
+> +      - const: state_eint
+> +      - const: state_dat1
+>  
+>    pinctrl-0:
+>      description:
+> @@ -86,6 +97,16 @@ properties:
+>        should contain uhs mode pin ctrl.
+>      maxItems: 1
+>  
+> +  pinctrl-2:
+> +    description:
+> +      should switch dat1 pin to GPIO mode.
+> +    maxItems: 1
+> +
+> +  pinctrl-3:
+> +    description:
+> +      should switch SDIO dat1 pin from GPIO mode back to SDIO mode.
 
-5.16.17-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+How is this different than pinctrl-0?
 
+> +    maxItems: 1
+> +
+>    assigned-clocks:
+>      description:
+>        PLL of the source clock.
+> -- 
+> 2.25.1
+> 
+> 

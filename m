@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9914E28A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C12E4E285A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348453AbiCUN5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
+        id S1348285AbiCUN4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348332AbiCUN4c (ORCPT
+        with ESMTP id S1348320AbiCUNz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:56:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB90316F06E;
-        Mon, 21 Mar 2022 06:54:58 -0700 (PDT)
+        Mon, 21 Mar 2022 09:55:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76665F8E;
+        Mon, 21 Mar 2022 06:54:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28B00B81644;
-        Mon, 21 Mar 2022 13:54:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B6A4C340E8;
-        Mon, 21 Mar 2022 13:54:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A635B816C8;
+        Mon, 21 Mar 2022 13:54:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC7DC340E8;
+        Mon, 21 Mar 2022 13:53:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647870895;
-        bh=wRlbELFcSaNKD9S2F10d7gbg4M2/MDxgsTY8gQvkjOM=;
+        s=korg; t=1647870840;
+        bh=QCLclt6Podyl2puOmDCwjqlOCtweKVJusbddgI3eqP4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JwoUBJZBlQL4uf5Zk5YJ+Dos/CzvSGY9UGnoICiS0X4u1xs4UCBVY/XJZj+z1qrCz
-         BfAL9ZBICIKcfKWLQd4gYLpIPkZQKX0OBQ5bbKCt7555wWQ+E1OS8wMjLXT+8Jve29
-         jJYxkJ/Qu2wtN+4Xg5LrwdLxy9aX4V1ko/Ltxosg=
+        b=2eKWnxcU89B1q21FI2jPdLSOTQg4P1dsqK5L7TCn0miT7n86FUxSWy6bwua5INuWC
+         VGkZvZ2I6ZG3/ynMsxbYU4vfAbFT9+DIaus3KTvzdoi4jxxapYIuiH3RpS9vaAP0pn
+         QgVxYPTKM87UaKUeko3Y+BzwzsvfZB0gr0qr5PkE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kai Lueke <kailueke@linux.microsoft.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Subject: [PATCH 4.19 01/57] Revert "xfrm: state and policy should fail if XFRMA_IF_ID 0"
-Date:   Mon, 21 Mar 2022 14:51:42 +0100
-Message-Id: <20220321133222.028331018@linuxfoundation.org>
+        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 12/22] sfc: extend the locking on mcdi->seqno
+Date:   Mon, 21 Mar 2022 14:51:43 +0100
+Message-Id: <20220321133217.970199472@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133221.984120927@linuxfoundation.org>
-References: <20220321133221.984120927@linuxfoundation.org>
+In-Reply-To: <20220321133217.602054917@linuxfoundation.org>
+References: <20220321133217.602054917@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,69 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kai Lueke <kailueke@linux.microsoft.com>
+From: Niels Dossche <dossche.niels@gmail.com>
 
-commit a3d9001b4e287fc043e5539d03d71a32ab114bcb upstream.
+[ Upstream commit f1fb205efb0ccca55626fd4ef38570dd16b44719 ]
 
-This reverts commit 68ac0f3810e76a853b5f7b90601a05c3048b8b54 because ID
-0 was meant to be used for configuring the policy/state without
-matching for a specific interface (e.g., Cilium is affected, see
-https://github.com/cilium/cilium/pull/18789 and
-https://github.com/cilium/cilium/pull/19019).
+seqno could be read as a stale value outside of the lock. The lock is
+already acquired to protect the modification of seqno against a possible
+race condition. Place the reading of this value also inside this locking
+to protect it against a possible race condition.
 
-Signed-off-by: Kai Lueke <kailueke@linux.microsoft.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xfrm/xfrm_user.c |   21 +++------------------
- 1 file changed, 3 insertions(+), 18 deletions(-)
+ drivers/net/ethernet/sfc/mcdi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/xfrm/xfrm_user.c
-+++ b/net/xfrm/xfrm_user.c
-@@ -620,13 +620,8 @@ static struct xfrm_state *xfrm_state_con
+diff --git a/drivers/net/ethernet/sfc/mcdi.c b/drivers/net/ethernet/sfc/mcdi.c
+index 3df872f56289..040b52affe19 100644
+--- a/drivers/net/ethernet/sfc/mcdi.c
++++ b/drivers/net/ethernet/sfc/mcdi.c
+@@ -167,9 +167,9 @@ static void efx_mcdi_send_request(struct efx_nic *efx, unsigned cmd,
+ 	/* Serialise with efx_mcdi_ev_cpl() and efx_mcdi_ev_death() */
+ 	spin_lock_bh(&mcdi->iface_lock);
+ 	++mcdi->seqno;
++	seqno = mcdi->seqno & SEQ_MASK;
+ 	spin_unlock_bh(&mcdi->iface_lock);
  
- 	xfrm_smark_init(attrs, &x->props.smark);
- 
--	if (attrs[XFRMA_IF_ID]) {
-+	if (attrs[XFRMA_IF_ID])
- 		x->if_id = nla_get_u32(attrs[XFRMA_IF_ID]);
--		if (!x->if_id) {
--			err = -EINVAL;
--			goto error;
--		}
--	}
- 
- 	err = __xfrm_init_state(x, false, attrs[XFRMA_OFFLOAD_DEV]);
- 	if (err)
-@@ -1332,13 +1327,8 @@ static int xfrm_alloc_userspi(struct sk_
- 
- 	mark = xfrm_mark_get(attrs, &m);
- 
--	if (attrs[XFRMA_IF_ID]) {
-+	if (attrs[XFRMA_IF_ID])
- 		if_id = nla_get_u32(attrs[XFRMA_IF_ID]);
--		if (!if_id) {
--			err = -EINVAL;
--			goto out_noput;
--		}
--	}
- 
- 	if (p->info.seq) {
- 		x = xfrm_find_acq_byseq(net, mark, p->info.seq);
-@@ -1640,13 +1630,8 @@ static struct xfrm_policy *xfrm_policy_c
- 
- 	xfrm_mark_get(attrs, &xp->mark);
- 
--	if (attrs[XFRMA_IF_ID]) {
-+	if (attrs[XFRMA_IF_ID])
- 		xp->if_id = nla_get_u32(attrs[XFRMA_IF_ID]);
--		if (!xp->if_id) {
--			err = -EINVAL;
--			goto error;
--		}
--	}
- 
- 	return xp;
-  error:
+-	seqno = mcdi->seqno & SEQ_MASK;
+ 	xflags = 0;
+ 	if (mcdi->mode == MCDI_MODE_EVENTS)
+ 		xflags |= MCDI_HEADER_XFLAGS_EVREQ;
+-- 
+2.34.1
+
 
 

@@ -2,159 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC654E26F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:54:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB5E4E26FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347613AbiCUMz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53532 "EHLO
+        id S1347628AbiCUM5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343693AbiCUMz4 (ORCPT
+        with ESMTP id S238985AbiCUM5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:55:56 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2068.outbound.protection.outlook.com [40.107.102.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7704CD70;
-        Mon, 21 Mar 2022 05:54:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FNXYUsYxwcdJozVJsrL6jvcTLliWmrmdGxdD2blW/juhp/qcNQdj88oOaNv4y7wQba0G61v32ruOwpn86LgJy26LQEOXo/x45B+tQJ/kPTpxxGLPu7NeBeHedgWn9tNkvZQAXbNkx5zqWVBWQ3272PtTBZtSLSWfl9Okxnpg2CTnzuwLuqmhGVoqQjoGNfzkg83+HuEzXEdPMFFCtLEXJbznaYVyWorNRCZodSqujh561Pr9tzKfJFDdYx2jNGx/1/jKt5v+lBz0KU/Wgcc9F2tsFOl374KylhvGJ6OJknWFhFSN6hhoOU2PrL0Ca52/JUdhc3TvECtAhXq0MalJhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=27tk8hMv5OqgP3OjLFaMwdoT1Msw3jdS+gyMcAYdVX0=;
- b=BPwCqdZ9T48A44RCDhlRL51RTTPaKFWwbNbIMWBYAzsXNEojRQJsT6pAnjAoOKwLs7pr+nufO60wAWed+MEEG5ngJdaRvcsav1uMMRfTutiBrPAcOYKvSGZwCiDF/szIFsODTAd/Fk0Ni5WTkvjAIn/u8LejE2QX4TPo6Ud30LApibRVrvKXW2DSFLb8ewIa+NyE8y4wQ1n5raActMYWjnH31tCYv0DxSUAyyHGQwxPSZa11iR19sTP3Lyl4N5e7iE/hjepEGdhSvDvjE4clXFALpfJeMX4Fm6h05wpN59KNMtK3BCPoAKK41dlQYb7zRg1mamZ/6bQYXpzXowPxLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=27tk8hMv5OqgP3OjLFaMwdoT1Msw3jdS+gyMcAYdVX0=;
- b=WeZoOKk08S8rlzmZuf5JPBCKKcNTvxYxs6duYaOzqxVUcaUI2neabX2Z6fsBLTmyGRCCaRIl3pCX0ZwJr9QrUiPD2hkY9hVgCNLlxPZE4J4qNsyOmgggi/hlegQi1Yay66wyccJugv3iesyy46cHFdMoQnLPw70LtjOFgGY4pu45hjQxKRuPLPiqZiERx+bwkp7F4CiRw5sTCA26kHOxEo0ERwx9/58dimqD6+zMuTETCR2qAes7SvJi0AZAHOEhXebfRJAo0ZKs60RlCcnfOwFaZSFEwiwUzhSPtwmjTU9COoZ8qHuKhZYjy9cK+C3qC5gtbA4j+TDsCsixAnxKEQ==
-Received: from BN8PR03CA0032.namprd03.prod.outlook.com (2603:10b6:408:94::45)
- by DM4PR12MB5723.namprd12.prod.outlook.com (2603:10b6:8:5e::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5081.14; Mon, 21 Mar 2022 12:54:30 +0000
-Received: from BN8NAM11FT006.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:94:cafe::c9) by BN8PR03CA0032.outlook.office365.com
- (2603:10b6:408:94::45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.22 via Frontend
- Transport; Mon, 21 Mar 2022 12:54:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- BN8NAM11FT006.mail.protection.outlook.com (10.13.177.21) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5081.14 via Frontend Transport; Mon, 21 Mar 2022 12:54:29 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Mon, 21 Mar
- 2022 12:54:29 +0000
-Received: from [10.41.21.79] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 21 Mar
- 2022 05:54:24 -0700
-Message-ID: <748d87c6-3f91-8bc0-ce8f-0a64278b4122@nvidia.com>
-Date:   Mon, 21 Mar 2022 18:24:21 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [Patch v1 2/3] arm64: tegra: add node for tegra234 cpufreq
-Content-Language: en-US
-To:     Jon Hunter <jonathanh@nvidia.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>, <treding@nvidia.com>,
-        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>, <bbasu@nvidia.com>,
-        "Sumit Gupta" <sumitg@nvidia.com>
-References: <20220316135831.900-1-sumitg@nvidia.com>
- <20220316135831.900-3-sumitg@nvidia.com>
- <30bb04fe-4fed-04bc-6f99-158ac09d6bb8@nvidia.com>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <30bb04fe-4fed-04bc-6f99-158ac09d6bb8@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f89de91c-dfed-4c40-ae72-08da0b39f03c
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5723:EE_
-X-Microsoft-Antispam-PRVS: <DM4PR12MB5723BDAAD9C1A792143D7D90B9169@DM4PR12MB5723.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: raBEaZ2XTXtKTp1rZG3Gpfb0KRAbyEsYKHQcoLPbgzC6ROaOKHLebEZ7nbUMisIV5HdT3zgE7TtWEg+SISBuImTDOVUJoJu/5iYTaBKgFjPOluMind9FoUB5XWpwk8s6x+/oq3D1zjnXMOy7uJ5VwZ2quKKJqGF8uPHr4Fp8cI7WmF0NOEbOAdS26WQfffPOwyIYPTZ40qJbGcqrF93znwRYNYCjviN3AMK2Y8Q6psfQqxeVwWcq8xr9jNoHm0v17XHbNYGyOfOn3iP5CAdZ99HXbGJfVh2AUYiM9fr00TxdjVdfkB89IxhVdmCEomt9fKfhwTxISyzA+jjRB0YyiiaPVAv07ouLq7/Kb2sgAZDTS43E2cmlKnIXiawiZ0/wAIvu/r0uUxCW4FHyBxnABkrIeMZkifh1o+zpPGL0mCjnWtn5hT9ght5c6smRbMaQ2kvyHEP53Shij6/Ujg1CIgCtJGwCkupU95K3Lgw0Es7plxQsLx3E/nhOulF/Px6EDp2A+v5h5SNZQxZ5WkdBm8pWNmEUFK2FZ/VW+Q/xkqg0qOQ7q3WFQW/+lGADbeHsPYowQtYXizQ65bQeKVR2LghwvYeToKtsvWoIYi6XtMvwLBy4u++GAoP5+qRHT+tMa+SiUKzlA+y2iZICVtHIiDCCBbasmZ5aJaHGC6zocAlMiBq4E1QI7GRgwCu+Ky5Fa408c9avPeKG8RDcb4sHSXODismC3mY8s57MhFHzHEv/LjBiivkG7+EBchb8kuYiZLTv0vwNRrMlVcCrCCw+Yqq9Fk+xiIFxlkF+E0/+8ZTSakvff4LuwZ03pu56rAOAbPuaAPeSTLPsoZVaLU5GeA==
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(47076005)(6666004)(316002)(16576012)(36860700001)(36756003)(426003)(4326008)(83380400001)(336012)(86362001)(70206006)(70586007)(8676002)(186003)(16526019)(26005)(2616005)(82310400004)(31696002)(107886003)(2906002)(356005)(921005)(81166007)(966005)(40460700003)(31686004)(508600001)(54906003)(110136005)(8936002)(5660300002)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 12:54:29.6177
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f89de91c-dfed-4c40-ae72-08da0b39f03c
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT006.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5723
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 21 Mar 2022 08:57:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74112DE91E;
+        Mon, 21 Mar 2022 05:55:36 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22LA8rcA012413;
+        Mon, 21 Mar 2022 12:55:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=i9FSWZOUmFDSxdmussmd7Hti/4DTWyRGI8gRhtar5Ew=;
+ b=kDoBA7EYk1fT6q522pXIa1XuVDrkzEeOcoVsclxiufUoL8ng+xgafz/CCHFQsfmefeA4
+ ZVWyJXkkdeqKY8cE2uV7ekLpvUwuuEl/RPtMaY2F/JZ2HtEoU2rWNGw40SEh44ZIckzW
+ JmffHgymVyqTGqKwVy0TnDx7Z+cdKLi2CXOmH+Lp7euCJcyft/ipbyJpF+vmUMRAhjo1
+ UnabVHVDGLOFS7zwLO8vZKOU4EjqhDAC9BN/esoJljrNywx8LDOqzHAHN0VKZlwVV065
+ iAH9toln55mmK1SmBrPCOLASZI8LSixhWhAU6h7xS3nYx0ixjhOXyA8n13KF5zw4gILf MQ== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3exmaq7b5p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Mar 2022 12:55:34 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22LCnfUv019916;
+        Mon, 21 Mar 2022 12:55:31 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3ew6ehuddv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Mar 2022 12:55:31 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22LCtTYR52756888
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Mar 2022 12:55:29 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 766D742042;
+        Mon, 21 Mar 2022 12:55:29 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6CD644203F;
+        Mon, 21 Mar 2022 12:55:28 +0000 (GMT)
+Received: from sig-9-65-76-147.ibm.com (unknown [9.65.76.147])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 21 Mar 2022 12:55:28 +0000 (GMT)
+Message-ID: <493d1cd4393530276182a92a95d21367f03d4eaf.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 5/5] fsverity: update the documentation
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 21 Mar 2022 08:55:27 -0400
+In-Reply-To: <e4af1e00-8eaa-259b-ad81-ec86682ea4af@linux.ibm.com>
+References: <20220318182151.100847-1-zohar@linux.ibm.com>
+         <20220318182151.100847-6-zohar@linux.ibm.com>
+         <e4af1e00-8eaa-259b-ad81-ec86682ea4af@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Qm84yJr_eTY1ieE7oyOw5SJOCbwVPXIJ
+X-Proofpoint-GUID: Qm84yJr_eTY1ieE7oyOw5SJOCbwVPXIJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-21_05,2022-03-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ spamscore=0 priorityscore=1501 impostorscore=0 adultscore=0 clxscore=1015
+ mlxlogscore=999 lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2203210081
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2022-03-18 at 16:55 -0400, Stefan Berger wrote:
+> 
+> On 3/18/22 14:21, Mimi Zohar wrote:
+> > Update the fsverity documentation related to IMA signature support.
+> > 
+> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> > ---
+> >   Documentation/filesystems/fsverity.rst | 22 +++++++++++++---------
+> >   1 file changed, 13 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/Documentation/filesystems/fsverity.rst b/Documentation/filesystems/fsverity.rst
+> > index 1d831e3cbcb3..28a47488848e 100644
+> > --- a/Documentation/filesystems/fsverity.rst
+> > +++ b/Documentation/filesystems/fsverity.rst
+> > @@ -74,8 +74,12 @@ authenticating the files is up to userspace.  However, to meet some
+> >   users' needs, fs-verity optionally supports a simple signature
+> >   verification mechanism where users can configure the kernel to require
+> >   that all fs-verity files be signed by a key loaded into a keyring; see
+> > -`Built-in signature verification`_.  Support for fs-verity file hashes
+> > -in IMA (Integrity Measurement Architecture) policies is also planned.
+> > +`Built-in signature verification`_.
+> > +
+> > +IMA supports including fs-verity file digests and signatures in the
+> > +IMA (Integrity Measurement Architecture) measurement list and
+> 
+> The Integrity Measurement Architecture (IMA) supports including ...
+> 
+> > +verifying fs-verity based file signatures stored as security.ima
+> > +xattrs, based on policy.
+> >   
+> >   User API
+> >   ========
+> > @@ -653,13 +657,13 @@ weren't already directly answered in other parts of this document.
+> >       hashed and what to do with those hashes, such as log them,
+> >       authenticate them, or add them to a measurement list.
+> >   
+> > -    IMA is planned to support the fs-verity hashing mechanism as an
+> > -    alternative to doing full file hashes, for people who want the
+> > -    performance and security benefits of the Merkle tree based hash.
+> > -    But it doesn't make sense to force all uses of fs-verity to be
+> > -    through IMA.  As a standalone filesystem feature, fs-verity
+> > -    already meets many users' needs, and it's testable like other
+> > -    filesystem features e.g. with xfstests.
+> > +    IMA supports the fs-verity hashing mechanism as an alternative
+> > +    to doing full file hashes, for people who want the performance
+> 
+> IMA supports the fs-verity hashing mechanism as an alternative to full 
+> file hashes for those who want the performance and security benefits ...
+> 
+> > +    and security benefits of the Merkle tree based hash.  But it
+> > +    doesn't make sense to force all uses of fs-verity to be through
+> 
+> However, it doesn't make sense ...
+> 
+> > +    IMA.  As a standalone filesystem feature, fs-verity already meets
+> > +    many users' needs, and it's testable like other filesystem
+> > +    features e.g. with xfstests.
+> 
+> Fs-verity already meets many user' needs even as a standalone filesystem 
+> feature and it is testable like other ...
+> 
+> >   
+> >   :Q: Isn't fs-verity useless because the attacker can just modify the
+> >       hashes in the Merkle tree, which is stored on-disk?
+
+Thanks, Stefan, for the suggestions.  I tried to minimize the changes
+as much as possible.  Based on another thread, the documentation should
+be updated, but I'm not going to be presumptuous and make those
+changes.  Eric, should I drop this patch and let you update the fs-
+verity documentation as you want?
+
+-- 
+thanks,
+
+Mimi
 
 
->> Adding cclpex node to represent Tegra234 cpufreq.
->> Tegra234 uses some of the CRAB (Control Register Access Bus)
->> registers for cpu frequency requests. These registers are
->> memory mapped to CCPLEX_MMCRAB_ARM region. In this node, mapping
->> the range of MMCRAB registers required only for cpu frequency info.
->>
->> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
->> ---
->>   arch/arm64/boot/dts/nvidia/tegra234.dtsi | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi 
->> b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
->> index aaace605bdaa..610207f3f967 100644
->> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
->> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
->> @@ -1258,6 +1258,13 @@
->>           };
->>       };
->> +    ccplex@e000000 {
->> +        compatible = "nvidia,tegra234-ccplex-cluster";
->> +        reg = <0x0 0x0e000000 0x0 0x5ffff>;
->> +        nvidia,bpmp = <&bpmp>;
->> +        status = "okay";
->> +    };
->> +
->>       sram@40000000 {
->>           compatible = "nvidia,tegra234-sysram", "mmio-sram";
->>           reg = <0x0 0x40000000 0x0 0x80000>;
-> 
-> 
-> We need to add this compatible string to a DT binding doc somewhere.
-It seems the binding doc was previously posted in [1] for T186 SoC.
-Same will be applicable for T234 SoC also. Only compatible string need 
-to be added.
-Should I sent a separate patch after converting it to yaml format and 
-add compatible string (or) send as part of v2.
-
-[1] https://lkml.org/lkml/2017/4/3/324
-
-> 
-> Cheers
-> Jon
-> 

@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9054E2ECD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353B74E2EC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351640AbiCURIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
+        id S1351627AbiCURIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349584AbiCURIt (ORCPT
+        with ESMTP id S1351621AbiCURIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:08:49 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29ABAF1F1;
-        Mon, 21 Mar 2022 10:07:23 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a8so31169621ejc.8;
-        Mon, 21 Mar 2022 10:07:23 -0700 (PDT)
+        Mon, 21 Mar 2022 13:08:18 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C9418B7AD
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:06:50 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id q194so12135097qke.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:06:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nNbNlGuXV6X4fWF2qLDMdJsQMzIxqfeeRH+sUuCiCXQ=;
-        b=db9Mw7BqATvzLY1U2pGCP7VeG2dUUK3OxrlF/KdZGWer11Uc7abtZMQ2dHoWY0qtEV
-         BENMVa4hEQxaHRJYvYuhFrogLje5nOt7i1KZhMRbW7HIIuJHIb2YqCT6uGtTWd7qDq9d
-         NhymuRw43M7tzX4C39venxpI3bHQEkM9nKhYKYRzBBsDXYVOTPXQmcUTXG6HHzHwz0ku
-         MH80Pk/ulwEpF7kCClk/Iqkji3iRjNV0Ld3jfuGtM1uIWuu5vKtxsv0V3704ujRD74ru
-         SAypy3Ae861RvOsQn/QEjkOxaF7q9HcXx0juWk0M33LJMpap7VyxBn1C4oKmBmnQekuS
-         444Q==
+         :cc;
+        bh=9Q7EZsk0NyGGjg2uLdF540zMF+2EuqJBclIgzPSF1C8=;
+        b=h+DdS2/7NcIaA6sZS7bItMmuB2gTstd0sI/Iwa+tijJggrdVUaibWtw5g9uSIiS2b3
+         L4uURJPhCqfvV5DNUiR9s/D8EgCwV+jSTxnK5PNCouIdVNfrDNUr7eKy9QVixdjsdfHd
+         Ikw/WudvjovYLoNoBc7K65r58Coaji5pw3JyNCNPPI9uxfgwI93YgyT/NTanlX96UQ2b
+         WHe9XpmvCzd2dJoQEUTWvkkfiyT547v49eA59/CT0Y2BuTjWlm3XuMS5f59/2jM49K5g
+         diwU3u7sAoLgvU+DWkj8d7JQbyEBqYJDHRJn3oRRyRhst9IC12OzHZhlMciqwmn3j+YR
+         2hXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nNbNlGuXV6X4fWF2qLDMdJsQMzIxqfeeRH+sUuCiCXQ=;
-        b=cMlIgll78cQB8MGQ4Yz6uAAXYVC2dWxd2dteEFQGA2SYv7Bns6j5wyAW8FAtlaXeMq
-         LmCK6aJarxbbdozCxta4mwOi0RAa4gMIJvFNvxFsUL/UjrpCaRJ0o/BTczJI9NqeDW3J
-         DF/YjcoXDYuomAPbDtRx+tWAIdwBdcfOCiM0ygdZ8FV50a6D98Pae9NDpo25tz2J3ikz
-         uey13EjGpNgzBpq7B1RDd3MP6fkRu5YlsBBGkzxaKJELrm3abeY9lN3ngeAJf/MghYo6
-         JAA1E0Zi9ZtI5TcNbDnlSF8PCzyZjnA99fp4OQJNPL6MU+Jc6LdOaoQOVN5mFbJtsS6r
-         RWrg==
-X-Gm-Message-State: AOAM530eTwVeNytBXGzQXk2Myuovz7iEZnOJuA+Ph2LCVmuib76IRk2b
-        lmwnG8iNARQN/mzwdkkgNMj1g4h9jQIkyum/F3Q=
-X-Google-Smtp-Source: ABdhPJz3+5NZZMx6LfOczVDWh8iPK8wiFLRlrTjLaXEGAzbTMpJ0HoYaMDtbC7h4sMTpGeMQo3gxiUfgSLQ9LdtTCqk=
-X-Received: by 2002:a17:907:7289:b0:6df:9746:e7c4 with SMTP id
- dt9-20020a170907728900b006df9746e7c4mr20246985ejc.497.1647882442198; Mon, 21
- Mar 2022 10:07:22 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=9Q7EZsk0NyGGjg2uLdF540zMF+2EuqJBclIgzPSF1C8=;
+        b=61RWDD0Q/3i9fzbK2eETbvkqhmWvd4nAt+YlbtTu2i4yx6OA3MKE6Jimbr1EJ54E2s
+         gTEYWiYxxA0IYH9NycDeK2AFUhn8snnCoQdpvRg7S7LIlbuwllOFN9fMQeAvbqihZzr9
+         XP5rfM4rwNa9v6de4sTR47NLVOH7/qJMe5OeSnqK8CDZb7D4qMydqmKBIchua3dW/SjW
+         DfNK41svYye74Hj40wVrjSrZK3nesRA2k/bv/ULWJOqx0IVASOXsBusluetr1x2JwzE6
+         p3i+tb/FtwK1mk0F91WhR3CgNN/MyLroxENUGbBd8HNnB8llDNUCqxihwhLM/h3+gdqs
+         1HBQ==
+X-Gm-Message-State: AOAM530jtwvZFyjMnBcAsuYvPETcofcKc9Es2nR3jAppwpAcOG/XkM9x
+        dyFKNHQm7dH3Vg3aWizAg7beasoF64IDhE60zTX20g==
+X-Google-Smtp-Source: ABdhPJxfIEtzC31bQBsGSWiCw75gZY0zguDBuHbBV5ngG04N1tb0Sk7JP/pOuiBR5tUm41ZdJNfnHSWte0B7Lodye3c=
+X-Received: by 2002:a05:620a:166b:b0:67b:1333:4df1 with SMTP id
+ d11-20020a05620a166b00b0067b13334df1mr13097350qko.423.1647882408736; Mon, 21
+ Mar 2022 10:06:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220321042142.69239-1-frank@zago.net> <20220321042142.69239-3-frank@zago.net>
-In-Reply-To: <20220321042142.69239-3-frank@zago.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 21 Mar 2022 19:06:10 +0200
-Message-ID: <CAHp75VdfEheEPWBDb+3FUwmwGx_4NR8o+SMwTwjgPr7oGGM5-A@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] gpio: ch341: add MFD cell driver for the CH341
-To:     frank zago <frank@zago.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220319001635.4097742-1-khazhy@google.com> <ea2afc67b92f33dbf406c3ebf49a0da9c6ec1e5b.camel@hammerspace.com>
+ <CAOQ4uxgTJdcO-xZbtTSUkjD2g0vSHr=PLFc6-T6RgO0u5DS=0g@mail.gmail.com>
+In-Reply-To: <CAOQ4uxgTJdcO-xZbtTSUkjD2g0vSHr=PLFc6-T6RgO0u5DS=0g@mail.gmail.com>
+From:   Khazhy Kumykov <khazhy@google.com>
+Date:   Mon, 21 Mar 2022 10:06:37 -0700
+Message-ID: <CACGdZY+wHLFXt5i22Y+j3QFddTJiUXy9WfbLDB=CjrvTsTK9ug@mail.gmail.com>
+Subject: Re: [PATCH RFC] nfsd: avoid recursive locking through fsnotify
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Trond Myklebust <trondmy@hammerspace.com>, Jan Kara <jack@suse.cz>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000a4c07805dabd85e1"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,329 +74,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 4:13 PM frank zago <frank@zago.net> wrote:
+--000000000000a4c07805dabd85e1
+Content-Type: text/plain; charset="UTF-8"
+
+On Sat, Mar 19, 2022 at 2:36 AM Amir Goldstein <amir73il@gmail.com> wrote:
 >
-> The GPIO interface offers 16 GPIOs. 6 are read/write, and 10 are
-> read-only.
-
-We use terminology of output-only and input-only. Is it what you are
-telling us? If it's something else, you have to elaborate much better
-on what's going on with these GPIO lines.
-
-...
-
-> +config GPIO_CH341
-> +       tristate "CH341 USB adapter in GPIO/I2C/SPI mode"
-
-How is this driver related to either SPI or I=C2=B2C modes?
-
-> +       depends on MFD_CH341
-
-Can't be compile tested?
-
-> +       help
-> +         If you say yes to this option, GPIO support will be included fo=
-r the
-> +         WCH CH341, a USB to I2C/SPI/GPIO interface.
-> +
-> +         This driver can also be built as a module.  If so, the module
-> +         will be called gpio-ch341.
-
-...
-
-> +/* Notes.
-
-Keep the proper (not network) style for multi-line comments.
-
-
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/gpio.h>
-
-> +#include <linux/mfd/ch341.h>
-
-If I got your intention with groups of headers, I would see rather
-
-...ordered headers...
-blank line
-#include <linux/gpio.h>
-
-But more importantly that gpio.h is the wrong header and must be
-replaced with the appropriate one from the include/gpio/ folder.
-
-Also you have missed headers, like types.h.
-
-...
-
-> +#define CH341_PARA_CMD_STS          0xA0  /* Get pins status */
-> +#define CH341_CMD_UIO_STREAM        0xAB  /* UIO stream command */
-> +
-> +#define CH341_CMD_UIO_STM_OUT       0x80  /* UIO interface OUT command (=
-D0~D5) */
-> +#define CH341_CMD_UIO_STM_DIR       0x40  /* UIO interface DIR command (=
-D0~D5) */
-> +#define CH341_CMD_UIO_STM_END       0x20  /* UIO interface END command *=
-/
-
-What does UIO mean here? If it is Userspace I/O in terms of Linux
-kernel, it's no-go we want this. Otherwise needs to be explained
-somewhere.
-
-...
-
-> +struct ch341_gpio {
-> +       struct gpio_chip gpio;
-> +       struct mutex gpio_lock;
-> +       u16 gpio_dir;           /* 1 bit per pin, 0=3DIN, 1=3DOUT. */
-> +       u16 gpio_last_read;     /* last GPIO values read */
-> +       u16 gpio_last_written;  /* last GPIO values written */
-> +       u8 gpio_buf[SEG_SIZE];
-> +
-> +       struct {
-> +               char name[32];
-> +               bool enabled;
-> +               struct irq_chip irq;
-> +               int num;
-> +               struct urb *urb;
-> +               struct usb_anchor urb_out;
-> +               u8 buf[CH341_USB_MAX_INTR_SIZE];
-> +       } gpio_irq;
-
-We have a specific GPIO IRQ chip structure, what is the purpose of
-semi-duplication of it?
-
-> +
-> +       struct ch341_device *ch341;
-> +};
-
-...
-
-> +static void ch341_gpio_dbg_show(struct seq_file *s, struct gpio_chip *ch=
-ip)
-> +{
-> +       struct ch341_gpio *dev =3D gpiochip_get_data(chip);
-> +
-> +       seq_printf(s, "pin config  : %04x  (0=3DIN, 1=3DOUT)\n", dev->gpi=
-o_dir);
-> +       seq_printf(s, "last read   : %04x\n", dev->gpio_last_read);
-> +       seq_printf(s, "last written: %04x\n", dev->gpio_last_written);
-
-Multi-line debug output is quite non-standard among GPIO drivers.
-
-> +}
-
-> +{
-> +       struct ch341_device *ch341 =3D dev->ch341;
-> +       int actual;
-> +       int rc;
-> +
-> +       mutex_lock(&ch341->usb_lock);
-> +
-> +       rc =3D usb_bulk_msg(ch341->usb_dev,
-> +                         usb_sndbulkpipe(ch341->usb_dev, ch341->ep_out),
-> +                         dev->gpio_buf, out_len,
-> +                         &actual, DEFAULT_TIMEOUT);
-
-> +       if (rc < 0)
-> +               goto done;
-> +
-> +       if (in_len =3D=3D 0) {
-> +               rc =3D actual;
-> +               goto done;
-> +       }
-
-You may do it better. See below.
-
-> +       rc =3D usb_bulk_msg(ch341->usb_dev,
-> +                         usb_rcvbulkpipe(ch341->usb_dev, ch341->ep_in),
-> +                         dev->gpio_buf, SEG_SIZE, &actual, DEFAULT_TIMEO=
-UT);
-> +
-> +       if (rc =3D=3D 0)
-> +               rc =3D actual;
-
-> +done:
-
-out_unlock: sounds better.
-
-> +       mutex_unlock(&ch341->usb_lock);
-
-> +       return rc;
-
-if (rc < 0)
-  return rc;
-
-return actual;
-
-> +}
-
-...
-
-> +       int result;
-
-rc / result / etc... Please, become consistent in naming the return
-code variable.
-
-...
-
-> +       if (result =3D=3D 6)
-> +               dev->gpio_last_read =3D le16_to_cpu(*(__le16 *)dev->gpio_=
-buf);
-
-So, it means you have the wrong type of gpio_but. Also you missed the
-pointer versions of leXX_to_cpu() helpers.
-
-...
-
-> +       return (result !=3D 6) ? result : 0;
-
-Besides redundant parentheses, this can be optimized. I will leave it
-for your homework (the hint is given at the top part of the review).
-
-...
-
-> +       return (dev->gpio_last_read & BIT(offset)) ? 1 : 0;
-
-!! can be used. But it's up to you and maintainers, the compiler will
-do its job anyway.
-
-...
-
-> +       dev->gpio_last_written &=3D ~*mask;
-> +       dev->gpio_last_written |=3D (*bits & *mask);
-
-Can be done in one line as it's a well established pattern in Linux
-kernel for drivers.
-
-...
-
-> +       return (dev->gpio_dir & BIT(offset)) ? 0 : 1;
-
-! will do the job.
-
-...
-
-> +       if (!(pin_can_output & mask))
-> +               return -EINVAL;
-
-I don't remember if we have a valid mask for this case.
-
-...
-
-> +       if (!urb->status) {
-
-Will be much better to simply do:
-
-if (urb_status) {
- ...
- return;
-}
-
-> +       } else {
-> +               usb_unanchor_urb(dev->gpio_irq.urb);
-> +       }
-
-...
-
-> +       if (data->irq !=3D dev->gpio_irq.num || type !=3D IRQ_TYPE_EDGE_R=
-ISING)
-> +               return -EINVAL;
-
-Usually we lock the handler type here while in ->probe() we assign a
-bad handler by default in order to filter out spurious interrupts.
-
-...
-
-> +       dev->gpio_irq.enabled =3D true;
-
-What is the purpose of this flag? Note there is a patch to add a
-specific flag to the descriptor to do exactly this.
-
-...
-
-> +/* Convert the GPIO index to the IRQ number */
-> +static int ch341_gpio_to_irq(struct gpio_chip *chip, unsigned int offset=
-)
-> +{
-> +       struct ch341_gpio *dev =3D gpiochip_get_data(chip);
-> +
-> +       if (offset !=3D CH341_GPIO_INT_LINE)
-> +               return -ENXIO;
-> +
-> +       return dev->gpio_irq.num;
-
-In the new code we will have the special field that limits the GPIO
-IRQ lines (can be different to the ngpio).
-
-> +}
-
-...
-
-> +       snprintf(dev->gpio_irq.name, sizeof(dev->gpio_irq.name),
-> +                "ch341-%s-gpio", dev_name(&ch341->usb_dev->dev));
-
-> +       dev->gpio_irq.name[sizeof(dev->gpio_irq.name) - 1] =3D 0;
-
-This is redundant. Have you read the manual page on snprintf()?
-
-...
-
-> +       rc =3D devm_irq_alloc_desc(&pdev->dev, 0);
-> +       if (rc < 0) {
-
-> +               dev_err(&pdev->dev, "Cannot allocate an IRQ desc");
-> +               return rc;
-
-return dev_err_probe();
-
-> +       }
-> +
-> +       dev->gpio_irq.num =3D rc;
-> +       dev->gpio_irq.enabled =3D false;
-> +
-> +       irq_set_chip_data(dev->gpio_irq.num, dev);
-> +       irq_set_chip_and_handler(dev->gpio_irq.num, &dev->gpio_irq.irq,
-> +                                handle_simple_irq);
-
-Oh l=C3=A0 l=C3=A0. Can you use the latest and greatest approach of
-instantiating the GPIO IRQ chip?
-
-...
-
-> +               dev_err(&pdev->dev, "Cannot allocate the int URB");
-> +               return -ENOMEM;
-
-return dev_err_probe();
-
-...
-
-> +       rc =3D gpiochip_add_data(gpio, dev);
-
-Why not devm?
-
-> +       if (rc) {
-> +               dev_err(&pdev->dev, "Could not add GPIO\n");
-> +               goto release_urb;
-
-return dev_err_probe();
-
-> +       }
-
-...
-
-> +static struct platform_driver ch341_gpio_driver =3D {
-> +       .driver.name    =3D "ch341-gpio",
-> +       .probe          =3D ch341_gpio_probe,
-> +       .remove         =3D ch341_gpio_remove,
-> +};
-> +
-
-Redundant blank line.
-
-> +module_platform_driver(ch341_gpio_driver);
-
---=20
-With Best Regards,
-Andy Shevchenko
+> On Sat, Mar 19, 2022 at 9:02 AM Trond Myklebust <trondmy@hammerspace.com> wrote:
+> >
+> > On Fri, 2022-03-18 at 17:16 -0700, Khazhismel Kumykov wrote:
+> > > fsnotify_add_inode_mark may allocate with GFP_KERNEL, which may
+> > > result
+> > > in recursing back into nfsd, resulting in deadlock. See below stack.
+> > >
+> > > nfsd            D    0 1591536      2 0x80004080
+> > > Call Trace:
+> > >  __schedule+0x497/0x630
+> > >  schedule+0x67/0x90
+> > >  schedule_preempt_disabled+0xe/0x10
+> > >  __mutex_lock+0x347/0x4b0
+> > >  fsnotify_destroy_mark+0x22/0xa0
+> > >  nfsd_file_free+0x79/0xd0 [nfsd]
+> > >  nfsd_file_put_noref+0x7c/0x90 [nfsd]
+> > >  nfsd_file_lru_dispose+0x6d/0xa0 [nfsd]
+> > >  nfsd_file_lru_scan+0x57/0x80 [nfsd]
+> > >  do_shrink_slab+0x1f2/0x330
+> > >  shrink_slab+0x244/0x2f0
+> > >  shrink_node+0xd7/0x490
+> > >  do_try_to_free_pages+0x12f/0x3b0
+> > >  try_to_free_pages+0x43f/0x540
+> > >  __alloc_pages_slowpath+0x6ab/0x11c0
+> > >  __alloc_pages_nodemask+0x274/0x2c0
+> > >  alloc_slab_page+0x32/0x2e0
+> > >  new_slab+0xa6/0x8b0
+> > >  ___slab_alloc+0x34b/0x520
+> > >  kmem_cache_alloc+0x1c4/0x250
+> > >  fsnotify_add_mark_locked+0x18d/0x4c0
+> > >  fsnotify_add_mark+0x48/0x70
+> > >  nfsd_file_acquire+0x570/0x6f0 [nfsd]
+> > >  nfsd_read+0xa7/0x1c0 [nfsd]
+> > >  nfsd3_proc_read+0xc1/0x110 [nfsd]
+> > >  nfsd_dispatch+0xf7/0x240 [nfsd]
+> > >  svc_process_common+0x2f4/0x610 [sunrpc]
+> > >  svc_process+0xf9/0x110 [sunrpc]
+> > >  nfsd+0x10e/0x180 [nfsd]
+> > >  kthread+0x130/0x140
+> > >  ret_from_fork+0x35/0x40
+> > >
+> > > Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
+> > > ---
+> > >  fs/nfsd/filecache.c | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > >
+> > > Marking this RFC since I haven't actually had a chance to test this,
+> > > we
+> > > we're seeing this deadlock for some customers.
+> > >
+> > > diff --git a/fs/nfsd/filecache.c b/fs/nfsd/filecache.c
+> > > index fdf89fcf1a0c..a14760f9b486 100644
+> > > --- a/fs/nfsd/filecache.c
+> > > +++ b/fs/nfsd/filecache.c
+> > > @@ -121,6 +121,7 @@ nfsd_file_mark_find_or_create(struct nfsd_file
+> > > *nf)
+> > >         struct fsnotify_mark    *mark;
+> > >         struct nfsd_file_mark   *nfm = NULL, *new;
+> > >         struct inode *inode = nf->nf_inode;
+> > > +       unsigned int pflags;
+> > >
+> > >         do {
+> > >                 mutex_lock(&nfsd_file_fsnotify_group->mark_mutex);
+> > > @@ -149,7 +150,10 @@ nfsd_file_mark_find_or_create(struct nfsd_file
+> > > *nf)
+> > >                 new->nfm_mark.mask = FS_ATTRIB|FS_DELETE_SELF;
+> > >                 refcount_set(&new->nfm_ref, 1);
+> > >
+> > > +               /* fsnotify allocates, avoid recursion back into nfsd
+> > > */
+> > > +               pflags = memalloc_nofs_save();
+> > >                 err = fsnotify_add_inode_mark(&new->nfm_mark, inode,
+> > > 0);
+> > > +               memalloc_nofs_restore(pflags);
+> > >
+> > >                 /*
+> > >                  * If the add was successful, then return the object.
+> >
+> > Isn't that stack trace showing a slab direct reclaim, and not a
+> > filesystem writeback situation?
+> >
+> > Does memalloc_nofs_save()/restore() really fix this problem? It seems
+> > to me that it cannot, particularly since knfsd is not a filesystem, and
+> > so does not ever handle writeback of dirty pages.
+> >
+>
+> Maybe NOFS throttles direct reclaims to the point that the problem is
+> harder to hit?
+
+(I think I simply got confused - I don't see reason that NOFS would
+help with direct reclaim, though it does look like the gfp flags are
+passed via a shrink_control struct so one *could* react to them in the
+shrinker - again not an area i'm super familiar with)
+
+>
+> This report came in at good timing for me.
+>
+> It demonstrates an issue I did not predict for "volatile"' fanotify marks [1].
+> As far as I can tell, nfsd filecache is currently the only fsnotify backend that
+> frees fsnotify marks in memory shrinker. "volatile" fanotify marks would also
+> be evictable in that way, so they would expose fanotify to this deadlock.
+>
+> For the short term, maybe nfsd filecache can avoid the problem by checking
+> mutex_is_locked(&nfsd_file_fsnotify_group->mark_mutex) and abort the
+> shrinker. I wonder if there is a place for a helper mutex_is_locked_by_me()?
+
+fwiw, it does look like ~5.5 nfsd did stop freeing fanotify marks
+during reclaim, in the commit "nfsd: Containerise filecache
+laundrette" (I had sent an earlier email about this, not sure where
+that's getting caught up, but I do see it on lore...)
+
+
+>
+> Jan,
+>
+> A relatively simple fix would be to allocate fsnotify_mark_connector in
+> fsnotify_add_mark() and free it, if a connector already exists for the object.
+> I don't think there is a good reason to optimize away this allocation
+> for the case of a non-first group to set a mark on an object?
+>
+> Thanks,
+> Amir.
+>
+>
+>
+> [1] https://lore.kernel.org/linux-fsdevel/20220307155741.1352405-1-amir73il@gmail.com/
+
+--000000000000a4c07805dabd85e1
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPmwYJKoZIhvcNAQcCoIIPjDCCD4gCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz1MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+h3dPtFviTyG11HYwTAYDVR0gBEUwQzBBBgkrBgEEAaAyASgwNDAyBggrBgEFBQcCARYmaHR0cHM6
+Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/BAIwADCBmgYIKwYBBQUH
+AQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2NhL2dzYXRs
+YXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29t
+L2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgwFoAUfMwKaNei6x4schvR
+zV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEBAE0ANr7NUOqEcZce4KYP
+SjzlrshSC8sgJ8dKDDbe35PL86vDuMIrytVjiV10p/YUofun9GeHBY6r5kTyh4be5FgftiiNtWzn
+U1W5cxLYMT1hKYxXxnM2sWMQGFl4TkxxbRoVZa3ou/NxFdAZeiQSwGnzk5oIDTBZQc8q3wMa1svm
+A5Rd4MVaIUt+hyk6seAldN6k4/O34O1l2V6D+/BwagyzLWvOeMEM9hClVF+F6a20yy4dcDsprFZZ
+Sk9JzUy9F6FM7L1wT2ndjTNDja4Y2tixf31KuisZLGKmDZsW/fXF1GgWDaM0DbYJwtE3kHylWnMk
+CN4PfYgIa15C5A9lXhExggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
+YWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIzIFNNSU1FIENBIDIwMjAC
+EAFEftjde/YEIFcjUXqhcBUwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILJDQRfl
+nWE4ibkfLLaobYYE11pMahEOtkni96yvUG5jMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
+KoZIhvcNAQkFMQ8XDTIyMDMyMTE3MDY0OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
+CwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZI
+hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBSZUpkVRqZ9ITkRc7aXg9ajMHQ
+jF3zkENPHHDFuLh9SGmTEW5B5TxqRWpypMUqASOXD1KUXD5Ut8dbvZaIyb3txY66szKXTK8pzUX9
+0amuXvjBdu+HIJTTCACE8Ylo6Whm++80vrcszgugin0yorYmwZ7NdrCiLTlc4ivG6Zb9svB6ltzu
+t3FEhw3w1XUDDBBHYYUBQvyVtM1RVR94olaLFdOkmtwfoPNqRXYE0107PDNi8+WNuU8zMyBzgSsi
+idaiIFMkL6AWROO+P/zg6L/IcGt7atGIkB1uRcs+Uvfg89TWDUjpw49PIjISdldUa9HmdkiNozlE
+dbPdY7yoaQ6J
+--000000000000a4c07805dabd85e1--

@@ -2,77 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AA04E2F3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 389C64E2F40
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349926AbiCURmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
+        id S1345896AbiCURmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345896AbiCURmE (ORCPT
+        with ESMTP id S1345607AbiCURml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:42:04 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2453650E3C;
-        Mon, 21 Mar 2022 10:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647884439; x=1679420439;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=88Sb97FF2mT4zGdmyNozW0OvxQ2rZhAh4hxyWWz9lcw=;
-  b=UbcRsaKCfmnWZLyXe+LInQR4Ke16PNJwtMR8+aZHIvZWeg5TY0Vuw28T
-   T3t55acTLIgX4+1HTbEWfAtNiIHa+SsEZJh4HKkWIXgk+92gC8pSop/07
-   SxMkiUfFDiV7eD8CgiP6XwDkA4vy5iSMbqlk16R509GMIy6Pt9PuLj2kO
-   HEw0YkwCgC98yajv9p+aguhfYYI6r9EXnknGFYWIHijnql8a9LQyWPLAA
-   VCrhw1g6QT/kf4dDj8YXtm8kNr/pBeIsi3zqmPJ4jayx2gVSh0fP56Qe6
-   ICREUSYOAUCvW+BKEFXF1O2z3/tY/YyfwMZUfeMNuHiIJDQo3DZyrwCpG
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="344041806"
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="344041806"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 10:40:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="582943620"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
-  by orsmga001.jf.intel.com with ESMTP; 21 Mar 2022 10:40:34 -0700
-Message-ID: <ff7ac17b-06ba-cf56-dca2-94c4ccca5df8@intel.com>
-Date:   Mon, 21 Mar 2022 19:40:33 +0200
+        Mon, 21 Mar 2022 13:42:41 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3540B51595
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:41:15 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id q5so20872309ljb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:41:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uvDP/aC4k2MIgLQCzM4tXzCki/AhzE/DRELx6D6TcvQ=;
+        b=LCiQ2cBeGHtozeXWAJvmRWwSIzciVtKWGB8pQ78lb5TjP5X+NgKn+rLgOWRq24XaeK
+         DTNFFZpR+k3YjUjF9zPc65gJ3uf7BKFTAvH3NVZHBFjJ/VZk6a5ivjm3Mfxpao9gvvcw
+         4DT7pcwi+m7tjMt7OpjXBs9QtMSlGHIt+rwu4eTg93rv27aDIE07WU9KWBeCCMGcImBn
+         YlWs4EQHe9A9pkK7DbJ8VXa1sOwxHS27xRoLlWWuLfv4cPPk6TsH3V3lPgA+b0THxn65
+         k8aitxmEIG3KeprGwDXtbPyaZnh4Gluqo+Ubvbu5MXkex5SDhMZbrVOhE/yqj099Leyr
+         qzJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uvDP/aC4k2MIgLQCzM4tXzCki/AhzE/DRELx6D6TcvQ=;
+        b=Vo0MYfguMLFGIPzCYmBQC0BopqF/IUoabajhHWKw/ABpgU084lJjhMtjU2c1ysm0xx
+         sMsTY1wCc8RamzO+RlvXLzknC22PzitfXBbzMfwGu16eFxvIvKnJW8RBdIDPqB+r25N7
+         sgKZ06TeH2YyWWRkteho55uf+C4rGUfU77v57EWEte/i2rRuSVNj5QLrfXlAJtbqmpkx
+         RCgeaib5aURmRNeWdGdWDAytF0r3qrM8DazCEMyjRgu/6sanBzlf1iauWuXm5T4pTgZT
+         utyHdp27hhBs5cFIgHtju9JVR/4FvEAmGQiky/wLHWNMPMJC+s9AQImH40eMiGkmdncB
+         kgFA==
+X-Gm-Message-State: AOAM532JV/Ueb/76PCsz6duMi83FENxqQ9Mn2bF/1T3Vhc82yW6xiYB0
+        RrSqiF5JtcXslm9tkOvoUXEj49T1AvqbWIJL5v1Pt5irZYBB5s02
+X-Google-Smtp-Source: ABdhPJzbEpirlUxNiDc0Pp6FcUiq9WvkQhNk8nak3G1dOD4WBSldy75o+lwnjBnpM+YiU6CE7/fcbaaUZBHsyMqJarc=
+X-Received: by 2002:a2e:a0c9:0:b0:249:171b:1b06 with SMTP id
+ f9-20020a2ea0c9000000b00249171b1b06mr16403679ljm.420.1647884472740; Mon, 21
+ Mar 2022 10:41:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
-Content-Language: en-US
-To:     "Steinar H. Gunderson" <sesse@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <YjBnet2813sEGjZY@google.com>
- <c50bb87d-9fee-c4f9-a350-8729e503e43a@intel.com>
- <YjDUO6bbyfGw/u0C@google.com>
- <52903e58-e74c-5ea0-36b4-277ea3610af4@intel.com>
- <YjGdoGy4Z2UUG9S9@google.com>
- <ef780335-7dc6-3a23-54a8-b6fc9c8a2ed3@intel.com>
- <YjHfGrZovk3N/H0f@google.com>
- <371faf0d-f794-4a2e-0a1c-9d454d7c8b12@intel.com>
- <YjhUjotmo+kYvoNP@google.com>
- <ffa56520-09b5-9c5d-7733-6767d2f8e350@intel.com>
- <YjiuoEUL6jH32cBi@google.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <YjiuoEUL6jH32cBi@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <202203211432.Fx74gYS9-lkp@intel.com>
+In-Reply-To: <202203211432.Fx74gYS9-lkp@intel.com>
+From:   Joanne Koong <joannelkoong@gmail.com>
+Date:   Mon, 21 Mar 2022 10:41:01 -0700
+Message-ID: <CAJnrk1bqXmtSjvevnuBBqYWsZeQsMPYJhZRCXVrQnwqowBZ00Q@mail.gmail.com>
+Subject: Re: [ammarfaizi2-block:bpf/bpf-next/master 244/254]
+ kernel/bpf/verifier.c:13499:47: sparse: sparse: cast from restricted gfp_t
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org,
+        "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,19 +68,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2022 18:58, Steinar H. Gunderson wrote:
-> On Mon, Mar 21, 2022 at 03:09:08PM +0200, Adrian Hunter wrote:
->> Yes, it can cross calls and returns.  'returns' due to "Return Compression"
->> which can be switched off at record time with config term noretcomp, but
->> that may cause more overflows / trace data loss.
->>
->> To get accurate times for a single function there is Intel PT
->> address filtering.
->>
->> Otherwise LBRs can have cycle times.
-> 
-> Many interesting points, I'll be sure to look into them.
-> 
-> Meanwhile, should I send a new patch with your latest changes?
+On Sun, Mar 20, 2022 at 11:58 PM kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   https://github.com/ammarfaizi2/linux-block bpf/bpf-next/master
+> head:   7ada3787e91c89b0aa7abf47682e8e587b855c13
+> commit: b00fa38a9c1cba044a32a601b49a55a18ed719d1 [244/254] bpf: Enable non-atomic allocations in local storage
+> config: csky-randconfig-s032-20220320 (https://download.01.org/0day-ci/archive/20220321/202203211432.Fx74gYS9-lkp@intel.com/config)
+> compiler: csky-linux-gcc (GCC) 11.2.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # apt-get install sparse
+>         # sparse version: v0.6.4-dirty
+>         # https://github.com/ammarfaizi2/linux-block/commit/b00fa38a9c1cba044a32a601b49a55a18ed719d1
+>         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+>         git fetch --no-tags ammarfaizi2-block bpf/bpf-next/master
+>         git checkout b00fa38a9c1cba044a32a601b49a55a18ed719d1
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky SHELL=/bin/bash kernel/bpf/
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+>
+> sparse warnings: (new ones prefixed by >>)
+> >> kernel/bpf/verifier.c:13499:47: sparse: sparse: cast from restricted gfp_t
+>    kernel/bpf/verifier.c:13501:47: sparse: sparse: cast from restricted gfp_t
+>    kernel/bpf/verifier.c:13746:38: sparse: sparse: subtraction of functions? Share your drugs
+>    kernel/bpf/verifier.c: note: in included file (through include/linux/uaccess.h, include/linux/sched/task.h, include/linux/sched/signal.h, ...):
+>    arch/csky/include/asm/uaccess.h:121:17: sparse: sparse: cast removes address space '__user' of expression
+>    arch/csky/include/asm/uaccess.h:121:17: sparse: sparse: asm output is not an lvalue
+>    arch/csky/include/asm/uaccess.h:121:17: sparse: sparse: cast removes address space '__user' of expression
+>    arch/csky/include/asm/uaccess.h:121:17: sparse: sparse: generating address of non-lvalue (11)
+>    kernel/bpf/verifier.c: note: in included file (through include/linux/bpf.h, include/linux/bpf-cgroup.h):
+>    include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
+>    include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
+>    include/linux/bpfptr.h:63:40: sparse: sparse: cast to non-scalar
+>    include/linux/bpfptr.h:63:40: sparse: sparse: cast from non-scalar
+>    include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
+>    include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
+>    include/linux/bpfptr.h:63:40: sparse: sparse: cast to non-scalar
+>    include/linux/bpfptr.h:63:40: sparse: sparse: cast from non-scalar
+>    include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
+>    include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
+>    include/linux/bpfptr.h:63:40: sparse: sparse: cast to non-scalar
+>    include/linux/bpfptr.h:63:40: sparse: sparse: cast from non-scalar
+>    include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
+>    include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
+>    include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
+>    include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
+>
+> vim +13499 kernel/bpf/verifier.c
+>
+>  13236
+[...]
+>  13485                          new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+>  13486                          if (!new_prog)
+>  13487                                  return -ENOMEM;
+>  13488
+>  13489                          delta    += cnt - 1;
+>  13490                          env->prog = prog = new_prog;
+>  13491                          insn      = new_prog->insnsi + i + delta;
+>  13492                          goto patch_call_imm;
+>  13493                  }
+>  13494
+>  13495                  if (insn->imm == BPF_FUNC_task_storage_get ||
+>  13496                      insn->imm == BPF_FUNC_sk_storage_get ||
+>  13497                      insn->imm == BPF_FUNC_inode_storage_get) {
+>  13498                          if (env->prog->aux->sleepable)
+>  13499                                  insn_buf[0] = BPF_MOV64_IMM(BPF_REG_5, (__s32)GFP_KERNEL);
+>  13500                          else
+>  13501                                  insn_buf[0] = BPF_MOV64_IMM(BPF_REG_5, (__s32)GFP_ATOMIC);
 
-Yes please.
+Sorry for causing this, I will submit a fix.
+
+>  13502                          insn_buf[1] = *insn;
+>  13503                          cnt = 2;
+>  13504
+>  13505                          new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+>  13506                          if (!new_prog)
+>  13507                                  return -ENOMEM;
+>  13508
+[...]
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp

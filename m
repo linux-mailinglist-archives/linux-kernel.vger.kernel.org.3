@@ -2,108 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862124E1FB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 05:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BA64E1FB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 06:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344374AbiCUFBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 01:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
+        id S242489AbiCUFD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 01:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243479AbiCUFBI (ORCPT
+        with ESMTP id S229982AbiCUFDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 01:01:08 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B161F1EAC9;
-        Sun, 20 Mar 2022 21:59:43 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id s72so6805417pgc.5;
-        Sun, 20 Mar 2022 21:59:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JIgHZDed9PIspLBbM5lPWdLUcFy0yV12Bw9ldjirghI=;
-        b=ji8GCtCBicLxy3lk2fMdGpM+NyvXyi4eLh/3+FzN8mdLRW2+K/83g4Y3gX39C54ePX
-         +P/jtU3rF3bq5XvEIWexsKogdpasdCaVqhuBU/Pgoc19lOE8cnJOPnGtwoEhGP81ez7X
-         EdUgK8Bc5onPybzgllcMqxTn5LQ6lEnCx2B3A5IYby0/GUmbPHr8teE/xyUdm/4wZpiI
-         b1owOSGQGUL7tA6SEpo7298XXFWvIdJshlPdqgjW/+aFY15rU391AH+Z/tYqWbysVPqc
-         ntLoeoxNH0cnZ64iTbOVwpwixTe49CBHOSKsV3x1V+EuIc5VT+0pI8d67hmZP4Z95cvc
-         kiWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JIgHZDed9PIspLBbM5lPWdLUcFy0yV12Bw9ldjirghI=;
-        b=AekMtwb9qSkqGaB7H4hF/F9vMDu3gzdmSOjZ13AdoUT5FHii39SWfyBQFWI8hh8E0b
-         abym9G4DdIagf7QeEU/9J8uBhRxBXO1IpKKYaXd0TJsPt58Oy0MBa2EfADv3l3b9CGjD
-         utKaXgeFFr9FjeI8lj78BkNbY6EXSxzScJuPKK115ZWMUl45c9KK4tzEi2Pzr4dJ1trd
-         TN2IEmVf9AA7rHMmqoUkh/nA0qHXtnVWze/DzpqcdQRkBozkCCHdSaGiEkXXtv1U1ukQ
-         z6NfVIpgLpyjjWpydfiN36DHpXsfQDQHeuUdToXEe9eolb7Qz76p1NBBb3RsJ3g2WwJ4
-         b0KQ==
-X-Gm-Message-State: AOAM530w/47ByvEHrDZUwC6ahlPvarz2hE0oGlZzDe1sUw/iXopxFig5
-        HCpGt5sJdUb/WhOIfM6/lI+25HK2A+M=
-X-Google-Smtp-Source: ABdhPJw4qzO2fT/83eP9ukobw6P+/9PRsTwsNIyPlsfXAEYKwQOnOWENU9OVZAfuZL3HpOeET2Glgw==
-X-Received: by 2002:a63:6942:0:b0:380:153e:63f9 with SMTP id e63-20020a636942000000b00380153e63f9mr17076839pgc.212.1647838782477;
-        Sun, 20 Mar 2022 21:59:42 -0700 (PDT)
-Received: from fedora-qemu.flets-east.jp (p912131-ipoe.ipoe.ocn.ne.jp. [153.243.13.130])
-        by smtp.gmail.com with ESMTPSA id x23-20020a63fe57000000b0036490068f12sm12868770pgj.90.2022.03.20.21.59.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 21:59:41 -0700 (PDT)
-From:   Akihiko Odaki <akihiko.odaki@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-efi@vger.kernel.org, x86@kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>
-Subject: [PATCH] x86/efi: Remove references of EFI earlyprintk from documentation
-Date:   Mon, 21 Mar 2022 13:58:53 +0900
-Message-Id: <20220321045853.3324-1-akihiko.odaki@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 21 Mar 2022 01:03:53 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B2C72E3D;
+        Sun, 20 Mar 2022 22:02:26 -0700 (PDT)
+Message-ID: <f359be78-c95d-555a-67ec-f665f90e93b8@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1647838943; h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=65X9ZuCif/yAbUFkhfhi8Kr+zxZCktpmfhwmQ+y1gUw=;
+        b=bsDbxoZcT1G+NYhwDmURnP4w7GvRTVL3Dk6vESLSMgSELRVUutbpyooaiCdEy/wGDevTAl
+        64LAffoT12FbYOPPB3Csp1T0jA0+uXlu9c0JnPtuNkpFEtQ0vsmx3sZ4GwtzZo9ga2kYru
+        +TMVSjBDRZT+l0uwrVBUKQl/kQUnBU8=
+Date:   Mon, 21 Mar 2022 08:02:22 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Vasily Averin <vasily.averin@linux.dev>
+Subject: [PATCH v2] memcg: enable accounting for nft objects
+To:     Florian Westphal <fw@strlen.de>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        kernel@openvz.org
+References: <20220228122429.GC26547@breakpoint.cc>
+Reply-To: vasily.averin@linux.dev
+Content-Language: en-US
+In-Reply-To: <20220228122429.GC26547@breakpoint.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-x86 EFI earlyprink was removed with commit 69c1f396f25b ("efi/x86:
-Convert x86 EFI earlyprintk into generic earlycon implementation").
+nftables replaces iptables, but it lacks memcg accounting.
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+This patch account most of the memory allocation associated with nft
+and should protect the host from misusing nft inside a memcg restricted
+container.
+
+Signed-off-by: Vasily Averin <vvs@openvz.org>
 ---
- Documentation/admin-guide/kernel-parameters.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+  net/netfilter/core.c          |  2 +-
+  net/netfilter/nf_tables_api.c | 44 +++++++++++++++++------------------
+  2 files changed, 23 insertions(+), 23 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index f5a27f067db9..fb39337f4123 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1252,7 +1252,7 @@
- 			Append ",keep" to not disable it when the real console
- 			takes over.
- 
--			Only one of vga, efi, serial, or usb debug port can
-+			Only one of vga, serial, or usb debug port can
- 			be used at a time.
- 
- 			Currently only ttyS0 and ttyS1 may be specified by
-@@ -1267,7 +1267,7 @@
- 			Interaction with the standard serial driver is not
- 			very good.
- 
--			The VGA and EFI output is eventually overwritten by
-+			The VGA output is eventually overwritten by
- 			the real console.
- 
- 			The xen option can only be used in Xen domains.
+diff --git a/net/netfilter/core.c b/net/netfilter/core.c
+index 8a77a3fd69bc..77ae3e8d344c 100644
+--- a/net/netfilter/core.c
++++ b/net/netfilter/core.c
+@@ -58,7 +58,7 @@ static struct nf_hook_entries *allocate_hook_entries_size(u16 num)
+  	if (num == 0)
+  		return NULL;
+  
+-	e = kvzalloc(alloc, GFP_KERNEL);
++	e = kvzalloc(alloc, GFP_KERNEL_ACCOUNT);
+  	if (e)
+  		e->num_hook_entries = num;
+  	return e;
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index d71a33ae39b3..04be94236a34 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -1113,16 +1113,16 @@ static int nf_tables_newtable(struct sk_buff *skb, const struct nfnl_info *info,
+  	}
+  
+  	err = -ENOMEM;
+-	table = kzalloc(sizeof(*table), GFP_KERNEL);
++	table = kzalloc(sizeof(*table), GFP_KERNEL_ACCOUNT);
+  	if (table == NULL)
+  		goto err_kzalloc;
+  
+-	table->name = nla_strdup(attr, GFP_KERNEL);
++	table->name = nla_strdup(attr, GFP_KERNEL_ACCOUNT);
+  	if (table->name == NULL)
+  		goto err_strdup;
+  
+  	if (nla[NFTA_TABLE_USERDATA]) {
+-		table->udata = nla_memdup(nla[NFTA_TABLE_USERDATA], GFP_KERNEL);
++		table->udata = nla_memdup(nla[NFTA_TABLE_USERDATA], GFP_KERNEL_ACCOUNT);
+  		if (table->udata == NULL)
+  			goto err_table_udata;
+  
+@@ -1803,7 +1803,7 @@ static struct nft_hook *nft_netdev_hook_alloc(struct net *net,
+  	struct nft_hook *hook;
+  	int err;
+  
+-	hook = kmalloc(sizeof(struct nft_hook), GFP_KERNEL);
++	hook = kmalloc(sizeof(struct nft_hook), GFP_KERNEL_ACCOUNT);
+  	if (!hook) {
+  		err = -ENOMEM;
+  		goto err_hook_alloc;
+@@ -2026,7 +2026,7 @@ static struct nft_rule_blob *nf_tables_chain_alloc_rules(unsigned int size)
+  	if (size > INT_MAX)
+  		return NULL;
+  
+-	blob = kvmalloc(size, GFP_KERNEL);
++	blob = kvmalloc(size, GFP_KERNEL_ACCOUNT);
+  	if (!blob)
+  		return NULL;
+  
+@@ -2126,7 +2126,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
+  		if (err < 0)
+  			return err;
+  
+-		basechain = kzalloc(sizeof(*basechain), GFP_KERNEL);
++		basechain = kzalloc(sizeof(*basechain), GFP_KERNEL_ACCOUNT);
+  		if (basechain == NULL) {
+  			nft_chain_release_hook(&hook);
+  			return -ENOMEM;
+@@ -2156,7 +2156,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
+  		if (flags & NFT_CHAIN_HW_OFFLOAD)
+  			return -EOPNOTSUPP;
+  
+-		chain = kzalloc(sizeof(*chain), GFP_KERNEL);
++		chain = kzalloc(sizeof(*chain), GFP_KERNEL_ACCOUNT);
+  		if (chain == NULL)
+  			return -ENOMEM;
+  
+@@ -2169,7 +2169,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
+  	chain->table = table;
+  
+  	if (nla[NFTA_CHAIN_NAME]) {
+-		chain->name = nla_strdup(nla[NFTA_CHAIN_NAME], GFP_KERNEL);
++		chain->name = nla_strdup(nla[NFTA_CHAIN_NAME], GFP_KERNEL_ACCOUNT);
+  	} else {
+  		if (!(flags & NFT_CHAIN_BINDING)) {
+  			err = -EINVAL;
+@@ -2177,7 +2177,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
+  		}
+  
+  		snprintf(name, sizeof(name), "__chain%llu", ++chain_id);
+-		chain->name = kstrdup(name, GFP_KERNEL);
++		chain->name = kstrdup(name, GFP_KERNEL_ACCOUNT);
+  	}
+  
+  	if (!chain->name) {
+@@ -2186,7 +2186,7 @@ static int nf_tables_addchain(struct nft_ctx *ctx, u8 family, u8 genmask,
+  	}
+  
+  	if (nla[NFTA_CHAIN_USERDATA]) {
+-		chain->udata = nla_memdup(nla[NFTA_CHAIN_USERDATA], GFP_KERNEL);
++		chain->udata = nla_memdup(nla[NFTA_CHAIN_USERDATA], GFP_KERNEL_ACCOUNT);
+  		if (chain->udata == NULL) {
+  			err = -ENOMEM;
+  			goto err_destroy_chain;
+@@ -2349,7 +2349,7 @@ static int nf_tables_updchain(struct nft_ctx *ctx, u8 genmask, u8 policy,
+  		char *name;
+  
+  		err = -ENOMEM;
+-		name = nla_strdup(nla[NFTA_CHAIN_NAME], GFP_KERNEL);
++		name = nla_strdup(nla[NFTA_CHAIN_NAME], GFP_KERNEL_ACCOUNT);
+  		if (!name)
+  			goto err;
+  
+@@ -2797,7 +2797,7 @@ static struct nft_expr *nft_expr_init(const struct nft_ctx *ctx,
+  		goto err1;
+  
+  	err = -ENOMEM;
+-	expr = kzalloc(expr_info.ops->size, GFP_KERNEL);
++	expr = kzalloc(expr_info.ops->size, GFP_KERNEL_ACCOUNT);
+  	if (expr == NULL)
+  		goto err2;
+  
+@@ -3405,7 +3405,7 @@ static int nf_tables_newrule(struct sk_buff *skb, const struct nfnl_info *info,
+  	}
+  
+  	err = -ENOMEM;
+-	rule = kzalloc(sizeof(*rule) + size + usize, GFP_KERNEL);
++	rule = kzalloc(sizeof(*rule) + size + usize, GFP_KERNEL_ACCOUNT);
+  	if (rule == NULL)
+  		goto err_release_expr;
+  
+@@ -3818,7 +3818,7 @@ static int nf_tables_set_alloc_name(struct nft_ctx *ctx, struct nft_set *set,
+  		free_page((unsigned long)inuse);
+  	}
+  
+-	set->name = kasprintf(GFP_KERNEL, name, min + n);
++	set->name = kasprintf(GFP_KERNEL_ACCOUNT, name, min + n);
+  	if (!set->name)
+  		return -ENOMEM;
+  
+@@ -4382,11 +4382,11 @@ static int nf_tables_newset(struct sk_buff *skb, const struct nfnl_info *info,
+  	alloc_size = sizeof(*set) + size + udlen;
+  	if (alloc_size < size || alloc_size > INT_MAX)
+  		return -ENOMEM;
+-	set = kvzalloc(alloc_size, GFP_KERNEL);
++	set = kvzalloc(alloc_size, GFP_KERNEL_ACCOUNT);
+  	if (!set)
+  		return -ENOMEM;
+  
+-	name = nla_strdup(nla[NFTA_SET_NAME], GFP_KERNEL);
++	name = nla_strdup(nla[NFTA_SET_NAME], GFP_KERNEL_ACCOUNT);
+  	if (!name) {
+  		err = -ENOMEM;
+  		goto err_set_name;
+@@ -5921,7 +5921,7 @@ static int nft_add_set_elem(struct nft_ctx *ctx, struct nft_set *set,
+  	err = -ENOMEM;
+  	elem.priv = nft_set_elem_init(set, &tmpl, elem.key.val.data,
+  				      elem.key_end.val.data, elem.data.val.data,
+-				      timeout, expiration, GFP_KERNEL);
++				      timeout, expiration, GFP_KERNEL_ACCOUNT);
+  	if (elem.priv == NULL)
+  		goto err_parse_data;
+  
+@@ -6165,7 +6165,7 @@ static int nft_del_setelem(struct nft_ctx *ctx, struct nft_set *set,
+  	err = -ENOMEM;
+  	elem.priv = nft_set_elem_init(set, &tmpl, elem.key.val.data,
+  				      elem.key_end.val.data, NULL, 0, 0,
+-				      GFP_KERNEL);
++				      GFP_KERNEL_ACCOUNT);
+  	if (elem.priv == NULL)
+  		goto fail_elem;
+  
+@@ -6477,7 +6477,7 @@ static struct nft_object *nft_obj_init(const struct nft_ctx *ctx,
+  	}
+  
+  	err = -ENOMEM;
+-	obj = kzalloc(sizeof(*obj) + ops->size, GFP_KERNEL);
++	obj = kzalloc(sizeof(*obj) + ops->size, GFP_KERNEL_ACCOUNT);
+  	if (!obj)
+  		goto err2;
+  
+@@ -6643,7 +6643,7 @@ static int nf_tables_newobj(struct sk_buff *skb, const struct nfnl_info *info,
+  	obj->key.table = table;
+  	obj->handle = nf_tables_alloc_handle(table);
+  
+-	obj->key.name = nla_strdup(nla[NFTA_OBJ_NAME], GFP_KERNEL);
++	obj->key.name = nla_strdup(nla[NFTA_OBJ_NAME], GFP_KERNEL_ACCOUNT);
+  	if (!obj->key.name) {
+  		err = -ENOMEM;
+  		goto err_strdup;
+@@ -7404,7 +7404,7 @@ static int nf_tables_newflowtable(struct sk_buff *skb,
+  
+  	nft_ctx_init(&ctx, net, skb, info->nlh, family, table, NULL, nla);
+  
+-	flowtable = kzalloc(sizeof(*flowtable), GFP_KERNEL);
++	flowtable = kzalloc(sizeof(*flowtable), GFP_KERNEL_ACCOUNT);
+  	if (!flowtable)
+  		return -ENOMEM;
+  
+@@ -7412,7 +7412,7 @@ static int nf_tables_newflowtable(struct sk_buff *skb,
+  	flowtable->handle = nf_tables_alloc_handle(table);
+  	INIT_LIST_HEAD(&flowtable->hook_list);
+  
+-	flowtable->name = nla_strdup(nla[NFTA_FLOWTABLE_NAME], GFP_KERNEL);
++	flowtable->name = nla_strdup(nla[NFTA_FLOWTABLE_NAME], GFP_KERNEL_ACCOUNT);
+  	if (!flowtable->name) {
+  		err = -ENOMEM;
+  		goto err1;
 -- 
-2.35.1
+2.25.1
 

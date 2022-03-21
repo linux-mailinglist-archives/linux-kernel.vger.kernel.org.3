@@ -2,117 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039FF4E202E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 06:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB18E4E2037
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 06:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344424AbiCUFkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 01:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
+        id S1344436AbiCUFqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 01:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237634AbiCUFkA (ORCPT
+        with ESMTP id S237634AbiCUFqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 01:40:00 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9712611D;
-        Sun, 20 Mar 2022 22:38:36 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id kl29so4469257qvb.2;
-        Sun, 20 Mar 2022 22:38:36 -0700 (PDT)
+        Mon, 21 Mar 2022 01:46:42 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412EB3467E;
+        Sun, 20 Mar 2022 22:45:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ElyZxBSGFcV7GRF7AHMLc39rdz6a/cByjmTIAqRWb9w=;
-        b=hv5W1ECgcQ1dF9rhFkQb3PFBtyZOm+aZunZsyGWsV1eI1ISLonvLLPwTEqML/HcCVR
-         my7bUb4IYJ1L293x2TbNTKlK17U+1Lx1ae8prjFGj96SBMssSdQUH6nP1/JeIRaeJgJD
-         1a/5UfuS2ToHVrIdQLpqcuN9efN3Pc57nmSqqO44EEL+sNrUcmsgZpmuvRxQCgsaD7M/
-         xykBJF8Y1oA9UQGdbxaBDo+LOUUHL0Cs7rw5fFLlsXy7eblS5gcOmScQoqzBYSoIQwxs
-         FNGSuBaP1hVb+rehn0dlJMRR0H5gqlY+PwGmE3Va1bQSs52oAhcx+8G/TdEuxkh/Agg5
-         h8Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ElyZxBSGFcV7GRF7AHMLc39rdz6a/cByjmTIAqRWb9w=;
-        b=4bWtsUuhvg8TLAZBUtmtYgJfEfgDymTb12yMU2gBl6uVeKC+/bNez0GNFjSNYxoX2I
-         1RmrlLUfayTCo9WsJXRDnCjAQllbt2D932bBV7fX6r5bF1Ylg9UGk2RzxcUj9HbMN1kZ
-         aTM8YCD5nyufMoP9B6MlhE3r9W0hHWFUFw3T5Rf89hHwZ/oz8O7RXOkiMNp+oR6aBIoF
-         h1h61Gb3tCcCz0JYk+nJ49VMhKt9/B0xCVVca2H/45ViSFLnIsosVr+RMkVCeObvehPP
-         eiY+NOp9c8PEfXVjA+8ihVeegDO/naVE+YhD6yjQ/ycyU+7mt2mawEW/EuhwDwzcphWZ
-         tZ6Q==
-X-Gm-Message-State: AOAM532eO+VQSdOIzKQowZTiyE+HmTF1Rg2h7IodKlqerE1nuZPUSbAB
-        rTB+5sIi94Be2HH3J5gr5Fw=
-X-Google-Smtp-Source: ABdhPJyIqxkdkSIUu18d2F0nVvEAN+k6swQvjRrfh9TbYnj1z2/8wI06xHn1i82zJlN6yn1SbKsiiQ==
-X-Received: by 2002:a05:6214:2487:b0:441:1c21:2693 with SMTP id gi7-20020a056214248700b004411c212693mr3736618qvb.17.1647841115223;
-        Sun, 20 Mar 2022 22:38:35 -0700 (PDT)
-Received: from localhost (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with UTF8SMTPSA id l7-20020a37f507000000b0047b528ef416sm7263142qkk.93.2022.03.20.22.38.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Mar 2022 22:38:35 -0700 (PDT)
-From:   Schspa Shi <schspa@gmail.com>
-To:     pmladek@suse.com, sergey.senozhatsky@gmail.com,
-        rostedt@goodmis.org, john.ogness@linutronix.de
-Cc:     linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bigeasy@linutronix.de, tglx@linutronix.de, schspa@gmail.com
-Subject: [PATCH 5.10-rt] printk: fix suppressed message print when reboot/panic
-Date:   Mon, 21 Mar 2022 13:38:16 +0800
-Message-Id: <20220321053815.71316-1-schspa@gmail.com>
-X-Mailer: git-send-email 2.29.0
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647841518; x=1679377518;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5jpBW6uLsQb0YnPNbiHNaZP2OmTuH9tT+u8HihjWK8Y=;
+  b=jobQ4oOHQ30u19jP0tFiCUv8wdZK55VOlsq0JKs+Mn2ia9mjB08tHETt
+   BMeQUw15WlM34FtGuV6Acgx4mz4Gyo+R/dOxv8uGBfxVvTKo2w8mE5m+k
+   vLTSGijA24dVRC29fcqudFiu+Vvny0jxI7hgvlFY36+4Hx7jfFgyVC3xd
+   c=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Mar 2022 22:45:17 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 22:45:16 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 20 Mar 2022 22:45:16 -0700
+Received: from [10.216.35.92] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 20 Mar
+ 2022 22:45:13 -0700
+Message-ID: <c808dc08-09c8-bb08-6656-18dd649af036@quicinc.com>
+Date:   Mon, 21 Mar 2022 11:14:56 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1 2/4] arm64: dts: qcom: sc7280: Add 'piglin' to the
+ crd-r3 compatible strings
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Stephen Boyd <swboyd@chromium.org>, <devicetree@vger.kernel.org>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220316172814.v1.1.I2deda8f2cd6adfbb525a97d8fee008a8477b7b0e@changeid>
+ <20220316172814.v1.2.Ib0fbb7e5218201c81a2d064ff13c9bc1b0863212@changeid>
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <20220316172814.v1.2.Ib0fbb7e5218201c81a2d064ff13c9bc1b0863212@changeid>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update printk_seq for suppressed message.
 
-Affects 5.9-rt and 5.10-rt
+On 3/17/2022 5:58 AM, Matthias Kaehlcke wrote:
+> With newer bootloader versions the crd-r3 (aka CRD 1.0 and 2.0) is
+> identified as a 'piglin' board (like the IDP2 board), instead of 'hoglin'
+> Add the compatible strings 'google,piglin-rev{3,4}'. The hoglin entries
+> are kept to make sure the board keeps booting with older bootloader
+> versions.
 
-When message is suppressed, printk_seq should be updated, otherwise
-this message will be printed when reboot. This problem was introduced
-in commit 3edc0c85d154 ("printk: Rebase on top of new ring buffer").
+The older bootloaders really look for the google,hoglin-rev3/google,hoglin-rev4
+compatibles or just google,hoglin? If its just google,hoglin, won;t it pick the
+crd-rev5+ dtb now?
 
-Signed-off-by: Schspa Shi <schspa@gmail.com>
----
- kernel/printk/printk.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 0c56873396a9..f68c4ba7eb4d 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2826,8 +2826,17 @@ static int printk_kthread_func(void *data)
- 		if (!(con->flags & CON_ENABLED))
- 			continue;
- 
--		if (suppress_message_printing(r.info->level))
-+		printk_seq = atomic64_read(&con->printk_seq);
-+
-+		if (suppress_message_printing(r.info->level)) {
-+			/*
-+			 * Skip record we have buffered and already printed
-+			 * directly to the console when we received it, and
-+			 * record that has level above the console loglevel.
-+			 */
-+			atomic64_cmpxchg_relaxed(&con->printk_seq, printk_seq, seq);
- 			continue;
-+		}
- 
- 		if (con->flags & CON_EXTENDED) {
- 			len = info_print_ext_header(ext_text,
-@@ -2843,7 +2852,6 @@ static int printk_kthread_func(void *data)
- 				printk_time);
- 		}
- 
--		printk_seq = atomic64_read(&con->printk_seq);
- 
- 		console_lock();
- 		console_may_schedule = 0;
--- 
-2.29.0
-
+> 
+> The compatible string 'google,piglin' (without revision information) is
+> still used by the IDP2 board, which is not expected to evolve further.
+> 
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+> 
+>   arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+> index 7a028b9248c3..344338ad8a01 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
+> @@ -12,7 +12,10 @@
+>   
+>   / {
+>   	model = "Qualcomm Technologies, Inc. sc7280 CRD platform (rev3 - 4)";
+> -	compatible = "qcom,sc7280-crd", "google,hoglin-rev3", "google,hoglin-rev4", "qcom,sc7280";
+> +	compatible = "qcom,sc7280-crd",
+> +		     "google,hoglin-rev3", "google,hoglin-rev4",
+> +		     "google,piglin-rev3", "google,piglin-rev4",
+> +		     "qcom,sc7280";
+>   
+>   	aliases {
+>   		serial0 = &uart5;

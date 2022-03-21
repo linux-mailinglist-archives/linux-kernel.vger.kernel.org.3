@@ -2,102 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CF64E331D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5424E3363
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiCUWwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 18:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
+        id S230291AbiCUWvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 18:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiCUWvr (ORCPT
+        with ESMTP id S230183AbiCUWuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:51:47 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D760A92303
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:31:22 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id r22so21805295ljd.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:31:22 -0700 (PDT)
+        Mon, 21 Mar 2022 18:50:50 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D4B38F732;
+        Mon, 21 Mar 2022 15:30:39 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-de48295467so209439fac.2;
+        Mon, 21 Mar 2022 15:30:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=A3Kz4KZvaRiOgJe1t3ngqZtIUVbdUovCXw60tFV+lMU=;
-        b=LX5a+s2Ci3x6sDDdQDgxWrS4aTCQiHwx3XKUMhGYaygGZTc6FFrXYHHycZQIJN+jFB
-         IYOJWfv2K60k29Sq3Qf0fSPO+HdT6Gca0EZAjBxhcSkLjXIRfz4GXlJv+3VUJJ3iNE/9
-         lHUTmSazMXruZaWs5xiYHIBaMuVmSMK8ojDeUS/B/cNW9MP2HS3fjSdqzVsKg+EFp1hv
-         UxLExZEyMDV2We/71tmX9ADtvK0gBhJjDnlzOG9YLtdd0FOQju0TZc4XZxAWiX840UUm
-         k+Y5XhScZWo/BY45nhf4rzGR9LQA4Hp5E4q0eLneDrFkC0v9XfLWSbv75cv8Mmyr7Q4G
-         yX2A==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=fd0ioVJnCUxmBqE5v/1CktP1XfO1ct0lyiZbE7j35V8=;
+        b=JPbAJMKIYbgC77xWESrjn/RacBD6J3iRT8AHohuSQ5gNjCihvenph23+NrpNOEwu23
+         fPCOh4WFVaCtXprRY1+RoyESnxJHObyb3e7zwlzQlYoUxWD8FHJi6I8iZ2o/tt8seIDU
+         4nIQwRqYQtohiDBBUOWlgDQWgjE4V4hJEdtowkSEVAdKm95uEwcq0N5uN1xcj6py3ZPz
+         BLhvCVi/hfkUOm5lwjHvODcUlvous1XOim6kczc+LPjHJO7V0AKP5N1a6xbKQyd2csvb
+         48cV81fo25s6sCrryb8VX35V8a9ku+yauFAL9EFR7buUWgj7OdF+/03okeAHnJCCM5C2
+         Nxbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=A3Kz4KZvaRiOgJe1t3ngqZtIUVbdUovCXw60tFV+lMU=;
-        b=RPTpOmtjSzptYeeimJa2pSJzXqBdBkOrsnl3q0r9ubdgg+ZwH77Y+NGCCCmgFf4eUE
-         ECyEF5akftGXiMd8ZDG6X3g2AqXhqm0k3mLLDGEMzulwlnYEQ4twW9C+koiWEcr0uyYw
-         2BFQBCD0sOHaQHc33IeqOE8cDCHO48fGBdBvq6IQ4S1vMteeUPCicjd2pPvLT2OW9gRU
-         86nl/a2RNRM8aaZQA5+ifrida9bLE00K2lmt5gVKCE/T534LqL1G5ynK4EjpgYqJ4hln
-         B2Dfav6/nkitkT5cLdre6FR8NAJs3BaxZPbIB2JCiPnzoC0HKViDRpEXvbLoeLOWk8o0
-         VwBg==
-X-Gm-Message-State: AOAM5302DaeIVxtNrnJrJy3Z5YZKdlGjfBDERo2a+c7IBvRr2OkxaSzW
-        LJA3R6aOuCiTuBjgz4rG+LaFcxGdK+vY/blSR/5ZQ5cQFAyZ
-X-Google-Smtp-Source: ABdhPJz3965Uy4d5QHoOKDMXyHIaR5GqBM6BApFEjEp9cDL7gyzHFIaTOQTamwyHJi5TOyg0hs97x6yCL9tuI57kw0M=
-X-Received: by 2002:a05:6402:35c5:b0:419:2c72:66c3 with SMTP id
- z5-20020a05640235c500b004192c7266c3mr10970074edc.343.1647901279404; Mon, 21
- Mar 2022 15:21:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=fd0ioVJnCUxmBqE5v/1CktP1XfO1ct0lyiZbE7j35V8=;
+        b=ALmCKxooUO1TR3I8C6PU53UPFOFOJLhl6GDA9bIZ4AZFJEQyKhQjDHY8PlaLwYlojG
+         Um0hm6453mxYP6TvXd2AGkzSIC1GDgihI6P3ZJx1K1HNO65IgwZ/C+3QqGiiAH0jcHjv
+         3Tk2eonbWn+zXcfOslZAo8Ga6DBAa+VVpGAbtoljCV4XpGgFU5sBIbm1+HqEBzpQMLnM
+         sMyG0RzHBbl/dmUYQvomQTMsXyjlkKQdxnObsd5rpjEbhkVBp8KImK3UAEJZz8Dd9gNQ
+         dK/sC8KnH6fVWiAREcY+VxV58/MCK5a3fd4xv3S+ceplyy6/ZIgFRVi0SdjPWmQqXZEN
+         xVWg==
+X-Gm-Message-State: AOAM533c2VgKHBXdGqVdEPkDhHn1V1xKilU7NkgP9stlNVMjZUlN3dnw
+        x8NVQTgIHFT5uqpBt8wW3g0TM7I4Nwyr5dG4
+X-Google-Smtp-Source: ABdhPJx9PqwCNkYnhrgCr9dl47xOE1L03ITPFHLHegqf7Cg046EHXDpNqRAOoGssllJToGvQO1sgow==
+X-Received: by 2002:a17:90a:5ae2:b0:1c6:7168:1164 with SMTP id n89-20020a17090a5ae200b001c671681164mr1354065pji.119.1647901282882;
+        Mon, 21 Mar 2022 15:21:22 -0700 (PDT)
+Received: from jagath-PC ([115.99.184.169])
+        by smtp.gmail.com with ESMTPSA id u22-20020a056a00125600b004fa3aec7f89sm16017098pfi.75.2022.03.21.15.21.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 21 Mar 2022 15:21:22 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 03:51:18 +0530
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Dan Robertson <dan@dlrobertson.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 3/5] iio: accel: bma400: Add triggered buffer support
+Message-ID: <20220321222117.GD10058@jagath-PC>
+References: <20220319181023.8090-1-jagathjog1996@gmail.com>
+ <20220319181023.8090-4-jagathjog1996@gmail.com>
+ <CAHp75VdB5q+Y2R46OO-kCKCkPY58YzyLNjN3PjJiQhTOgV4n2w@mail.gmail.com>
 MIME-Version: 1.0
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 21 Mar 2022 18:21:08 -0400
-Message-ID: <CAHC9VhTdj=86GwGpv5bgwVrQp0v1o-a=YKKDw-vC_Er8uKBizA@mail.gmail.com>
-Subject: [GIT PULL] Audit patches for v5.18
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-audit@redhat.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdB5q+Y2R46OO-kCKCkPY58YzyLNjN3PjJiQhTOgV4n2w@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Hello Andy,
 
-Just one audit patch queued for v5.18:
+On Mon, Mar 21, 2022 at 10:39:22AM +0200, Andy Shevchenko wrote:
+> On Sat, Mar 19, 2022 at 8:10 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
+> >
+> > Added trigger buffer support to read continuous acceleration
+> > data from device with data ready interrupt which is mapped
+> > to INT1 pin.
+> 
+> ...
+> 
+> >  #include <linux/mutex.h>
+> >  #include <linux/regmap.h>
+> >  #include <linux/regulator/consumer.h>
+> > +#include <linux/bits.h>
+> > +#include <linux/bitfield.h>
+> 
+> It would be nice to keep the above in order.
+> 
+> > +#include <linux/iio/buffer.h>
+> > +#include <linux/iio/trigger.h>
+> > +#include <linux/iio/triggered_buffer.h>
+> > +#include <linux/iio/trigger_consumer.h>
+> 
+> These ones, possibly including iio headers from the above piece, are
+> good to be grouped together here with a blank line in between the
+> above part and iio/*.
+> 
+> ...
+> 
+> > +static const unsigned long bma400_avail_scan_masks[] = {
+> > +       GENMASK(3, 0),
+> 
+> > +       0,
+> 
+> No need to have a comma in terminator entry.
+> 
+> > +};
+> 
+> ...
+> 
+> > +       ret = regmap_bulk_read(data->regmap, BMA400_X_AXIS_LSB_REG,
+> > +                              &data->buffer.buff, 3 * sizeof(__be16));
+> 
+> sizeof(buff)
+> 
+> ...
+> 
+> > +out:
 
-- Change the AUDIT_TIME_* record generation so that they are generated
-at syscall exit time and subject to all of the normal syscall exit
-filtering.  This should help reduce noise and ensure those records
-which are most relevant to the admin's audit configuration are
-recorded in the audit log.
+Just to skip the below "if()" if error occurs in previous regmap read,
+I used this label.
+       if (status & BMA400_INT_DRDY_MSK)
+             iio_trigger_poll_chained(data->trig);
 
-Please merge,
--Paul
+I will remove the label in next patch
+> 
+> A useless label. Moreover this raises a question: why is it okay to
+> always mark IRQ as handled?
+> 
+> > +       return IRQ_HANDLED;
 
---
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+Since I was not using top-half of the interrupt so I marked IRQ as handled
+even for error case in the handler.
 
- Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+> 
+> ...
+> 
+> > +                       dev_err(dev, "iio trigger register failed\n");
+> > +                       return ret;
+> 
+> return dev_err_probe();
+> 
+> ...
+> 
+> > +                       dev_err(dev, "request irq %d failed\n", irq);
+> > +                       return ret;
+> 
+> Ditto.
+> 
+> ...
+> 
+> > +               dev_err(dev, "iio triggered buffer setup failed\n");
+> > +               return ret;
+> 
+> Ditto.
 
-are available in the Git repository at:
-
- https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
-   tags/audit-pr-20220321
-
-for you to fetch changes up to 272ceeaea355214b301530e262a0df8600bfca95:
-
- audit: log AUDIT_TIME_* records only from rules
-   (2022-02-22 13:51:40 -0500)
-
-----------------------------------------------------------------
-audit/stable-5.18 PR 20220321
-
-----------------------------------------------------------------
-Richard Guy Briggs (1):
-     audit: log AUDIT_TIME_* records only from rules
-
-kernel/audit.h   |  4 +++
-kernel/auditsc.c | 87 +++++++++++++++++++++++++++++++++++++++-----------
-2 files changed, 71 insertions(+), 20 deletions(-)
-
--- 
-paul-moore.com
+I will change this in the next patch version.
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko

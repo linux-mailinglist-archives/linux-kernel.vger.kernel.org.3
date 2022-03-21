@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491974E29E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3894C4E2A0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351757AbiCUOLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
+        id S1350927AbiCUOK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348565AbiCUOCj (ORCPT
+        with ESMTP id S1349257AbiCUODe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:02:39 -0400
+        Mon, 21 Mar 2022 10:03:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F5CA27D3;
-        Mon, 21 Mar 2022 06:59:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393FE17A5B6;
+        Mon, 21 Mar 2022 07:00:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B386B61325;
-        Mon, 21 Mar 2022 13:59:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9938C340ED;
-        Mon, 21 Mar 2022 13:59:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A3C1611D5;
+        Mon, 21 Mar 2022 14:00:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C0CDC340E8;
+        Mon, 21 Mar 2022 14:00:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871168;
-        bh=WbAXIMIpSRb7OSyInJWIlEk1e63sTaThqozBnDrl2dY=;
+        s=korg; t=1647871242;
+        bh=id3rTSXc9qVDduvaUhiySlvx9cuHzqqhqRBvxy7JmoY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u02wL1SW39FzXRYbI6Wr4VNYBTOOjMJFXrUt23gT3ZDI3RVepUxUI0zW1Vxq2u+Lm
-         u9fiQmv0GVCry/THldhali7hCktgIj+LbIgy1fxP66cCfjMSu2/Wdy8BQCGxo61Zv4
-         nr47/p4qZH5xVxu65ls4I8Ud48tMpB8Qezomftx0=
+        b=bv7hxqn35PbnkQN2lO+LK0oi1LwYwznxTJQ8Zlewd5TwzxQExyL1Gh5KKC1jHNw8w
+         qE7tezwuFssrrzUJPzs/IrMNmqMI6PV8fDMCr0j/tTY8sQnr6RyqxrWSoWND6M6Wqt
+         jqSDuId+JcbRA1/8zZlKGuQ+nHoVZ/yyWnG+ZAPo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, valis <sec@valis.email>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: [PATCH 5.10 29/30] esp: Fix possible buffer overflow in ESP transformation
-Date:   Mon, 21 Mar 2022 14:52:59 +0100
-Message-Id: <20220321133220.490047170@linuxfoundation.org>
+        stable@vger.kernel.org, Ivan Vecera <ivecera@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 24/32] iavf: Fix hang during reboot/shutdown
+Date:   Mon, 21 Mar 2022 14:53:00 +0100
+Message-Id: <20220321133221.262713778@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
-References: <20220321133219.643490199@linuxfoundation.org>
+In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
+References: <20220321133220.559554263@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,95 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steffen Klassert <steffen.klassert@secunet.com>
+From: Ivan Vecera <ivecera@redhat.com>
 
-commit ebe48d368e97d007bfeb76fcb065d6cfc4c96645 upstream.
+[ Upstream commit b04683ff8f0823b869c219c78ba0d974bddea0b5 ]
 
-The maximum message size that can be send is bigger than
-the  maximum site that skb_page_frag_refill can allocate.
-So it is possible to write beyond the allocated buffer.
+Recent commit 974578017fc1 ("iavf: Add waiting so the port is
+initialized in remove") adds a wait-loop at the beginning of
+iavf_remove() to ensure that port initialization is finished
+prior unregistering net device. This causes a regression
+in reboot/shutdown scenario because in this case callback
+iavf_shutdown() is called and this callback detaches the device,
+makes it down if it is running and sets its state to __IAVF_REMOVE.
+Later shutdown callback of associated PF driver (e.g. ice_shutdown)
+is called. That callback calls among other things sriov_disable()
+that calls indirectly iavf_remove() (see stack trace below).
+As the adapter state is already __IAVF_REMOVE then the mentioned
+loop is end-less and shutdown process hangs.
 
-Fix this by doing a fallback to COW in that case.
+The patch fixes this by checking adapter's state at the beginning
+of iavf_remove() and skips the rest of the function if the adapter
+is already in remove state (shutdown is in progress).
 
-v2:
+Reproducer:
+1. Create VF on PF driven by ice or i40e driver
+2. Ensure that the VF is bound to iavf driver
+3. Reboot
 
-Avoid get get_order() costs as suggested by Linus Torvalds.
+[52625.981294] sysrq: SysRq : Show Blocked State
+[52625.988377] task:reboot          state:D stack:    0 pid:17359 ppid:     1 f2
+[52625.996732] Call Trace:
+[52625.999187]  __schedule+0x2d1/0x830
+[52626.007400]  schedule+0x35/0xa0
+[52626.010545]  schedule_hrtimeout_range_clock+0x83/0x100
+[52626.020046]  usleep_range+0x5b/0x80
+[52626.023540]  iavf_remove+0x63/0x5b0 [iavf]
+[52626.027645]  pci_device_remove+0x3b/0xc0
+[52626.031572]  device_release_driver_internal+0x103/0x1f0
+[52626.036805]  pci_stop_bus_device+0x72/0xa0
+[52626.040904]  pci_stop_and_remove_bus_device+0xe/0x20
+[52626.045870]  pci_iov_remove_virtfn+0xba/0x120
+[52626.050232]  sriov_disable+0x2f/0xe0
+[52626.053813]  ice_free_vfs+0x7c/0x340 [ice]
+[52626.057946]  ice_remove+0x220/0x240 [ice]
+[52626.061967]  ice_shutdown+0x16/0x50 [ice]
+[52626.065987]  pci_device_shutdown+0x34/0x60
+[52626.070086]  device_shutdown+0x165/0x1c5
+[52626.074011]  kernel_restart+0xe/0x30
+[52626.077593]  __do_sys_reboot+0x1d2/0x210
+[52626.093815]  do_syscall_64+0x5b/0x1a0
+[52626.097483]  entry_SYSCALL_64_after_hwframe+0x65/0xca
 
-Fixes: cac2661c53f3 ("esp4: Avoid skb_cow_data whenever possible")
-Fixes: 03e2a30f6a27 ("esp6: Avoid skb_cow_data whenever possible")
-Reported-by: valis <sec@valis.email>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 974578017fc1 ("iavf: Add waiting so the port is initialized in remove")
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+Link: https://lore.kernel.org/r/20220317104524.2802848-1-ivecera@redhat.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/esp.h  |    2 ++
- include/net/sock.h |    1 +
- net/ipv4/esp4.c    |    5 +++++
- net/ipv6/esp6.c    |    5 +++++
- 4 files changed, 13 insertions(+)
+ drivers/net/ethernet/intel/iavf/iavf_main.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/include/net/esp.h
-+++ b/include/net/esp.h
-@@ -4,6 +4,8 @@
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
+index 7fca9dd8dcf6..ca74824d40b8 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -4025,6 +4025,13 @@ static void iavf_remove(struct pci_dev *pdev)
+ 	struct iavf_hw *hw = &adapter->hw;
+ 	int err;
  
- #include <linux/skbuff.h>
- 
-+#define ESP_SKB_FRAG_MAXSIZE (PAGE_SIZE << SKB_FRAG_PAGE_ORDER)
++	/* When reboot/shutdown is in progress no need to do anything
++	 * as the adapter is already REMOVE state that was set during
++	 * iavf_shutdown() callback.
++	 */
++	if (adapter->state == __IAVF_REMOVE)
++		return;
 +
- struct ip_esp_hdr;
- 
- static inline struct ip_esp_hdr *ip_esp_hdr(const struct sk_buff *skb)
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -2670,6 +2670,7 @@ extern int sysctl_optmem_max;
- extern __u32 sysctl_wmem_default;
- extern __u32 sysctl_rmem_default;
- 
-+#define SKB_FRAG_PAGE_ORDER	get_order(32768)
- DECLARE_STATIC_KEY_FALSE(net_high_order_alloc_disable_key);
- 
- static inline int sk_get_wmem0(const struct sock *sk, const struct proto *proto)
---- a/net/ipv4/esp4.c
-+++ b/net/ipv4/esp4.c
-@@ -448,6 +448,7 @@ int esp_output_head(struct xfrm_state *x
- 	struct page *page;
- 	struct sk_buff *trailer;
- 	int tailen = esp->tailen;
-+	unsigned int allocsz;
- 
- 	/* this is non-NULL only with TCP/UDP Encapsulation */
- 	if (x->encap) {
-@@ -457,6 +458,10 @@ int esp_output_head(struct xfrm_state *x
- 			return err;
- 	}
- 
-+	allocsz = ALIGN(skb->data_len + tailen, L1_CACHE_BYTES);
-+	if (allocsz > ESP_SKB_FRAG_MAXSIZE)
-+		goto cow;
-+
- 	if (!skb_cloned(skb)) {
- 		if (tailen <= skb_tailroom(skb)) {
- 			nfrags = 1;
---- a/net/ipv6/esp6.c
-+++ b/net/ipv6/esp6.c
-@@ -483,6 +483,7 @@ int esp6_output_head(struct xfrm_state *
- 	struct page *page;
- 	struct sk_buff *trailer;
- 	int tailen = esp->tailen;
-+	unsigned int allocsz;
- 
- 	if (x->encap) {
- 		int err = esp6_output_encap(x, skb, esp);
-@@ -491,6 +492,10 @@ int esp6_output_head(struct xfrm_state *
- 			return err;
- 	}
- 
-+	allocsz = ALIGN(skb->data_len + tailen, L1_CACHE_BYTES);
-+	if (allocsz > ESP_SKB_FRAG_MAXSIZE)
-+		goto cow;
-+
- 	if (!skb_cloned(skb)) {
- 		if (tailen <= skb_tailroom(skb)) {
- 			nfrags = 1;
+ 	set_bit(__IAVF_IN_REMOVE_TASK, &adapter->crit_section);
+ 	/* Wait until port initialization is complete.
+ 	 * There are flows where register/unregister netdev may race.
+-- 
+2.34.1
+
 
 

@@ -2,594 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD73E4E204D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 06:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D94694E2057
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 06:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344509AbiCUFzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 01:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
+        id S1344557AbiCUF47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 01:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344450AbiCUFzW (ORCPT
+        with ESMTP id S1344525AbiCUF4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 01:55:22 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A694F470;
-        Sun, 20 Mar 2022 22:53:55 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22KMvCXr009189;
-        Sun, 20 Mar 2022 22:53:45 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=4YPWAswcVAf236VF6nT/95B3FFUNy0VJDJjc4p7nO9A=;
- b=XAlsbH1FC9suiVA8mqFF3SnJIO27qhSIluRw59KKjCs2BvTu+5aKZKqU31m5sJSUvX/1
- Od5oGHd2UFs9XlFkKb5T0XGayzbDvK/AW4XJC/9c2EiIhxFFQMorNmgB8miJAuvcoy1K
- gav4d08iV+ATCCxI93HoVrwFxLCVk4RCcT0GtTGlu7yixVk6UCR9IhRgP9jgA5XNz2iC
- s5eVH1gf2u/9QCVWshwfF+y7c+fJwK6zD2kUG3lP8EQRweOlzbF5WE4rh1//z8m9d8f1
- +3JTukxaYJ7dAnUpOVNRRCeMXeCHtMks5CD0ztq9SYOxyueDVhd4yoiMmcZnhyKszjS7 aA== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3ewchnp527-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Sun, 20 Mar 2022 22:53:44 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sun, 20 Mar
- 2022 22:53:42 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Sun, 20 Mar 2022 22:53:42 -0700
-Received: from sburla-PowerEdge-T630.caveonetworks.com (unknown [10.106.27.217])
-        by maili.marvell.com (Postfix) with ESMTP id 65FB03F7061;
-        Sun, 20 Mar 2022 22:53:42 -0700 (PDT)
-From:   Veerasenareddy Burru <vburru@marvell.com>
-To:     <vburru@marvell.com>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <corbet@lwn.net>, <netdev@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Abhijit Ayarekar <aayarekar@marvell.com>,
-        Satananda Burla <sburla@marvell.com>
-Subject: [net-next PATCH v4 7/7] octeon_ep: add ethtool support for Octeon PCI Endpoint NIC
-Date:   Sun, 20 Mar 2022 22:53:37 -0700
-Message-ID: <20220321055337.4488-8-vburru@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220321055337.4488-1-vburru@marvell.com>
-References: <20220321055337.4488-1-vburru@marvell.com>
+        Mon, 21 Mar 2022 01:56:46 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AF250040
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 22:54:21 -0700 (PDT)
+X-UUID: 8bf06df480d84b9b9160ebc5db8d4e2c-20220321
+X-UUID: 8bf06df480d84b9b9160ebc5db8d4e2c-20220321
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 970566358; Mon, 21 Mar 2022 13:54:13 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 21 Mar 2022 13:54:12 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 21 Mar
+ 2022 13:54:11 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 21 Mar 2022 13:54:11 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <chunkuang.hu@kernel.org>
+CC:     <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <matthias.bgg@gmail.com>, <jason-jh.lin@mediatek.com>,
+        <yongqiang.niu@mediatek.com>, <nancy.lin@mediatek.com>,
+        <hsinyi@google.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH V1] drm/mediatek: Fix issue of vblank callback data is NULL
+Date:   Mon, 21 Mar 2022 13:53:45 +0800
+Message-ID: <20220321055345.10195-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: 1tdoHo9JTtJXJulhin-GV7FcgUXleeE0
-X-Proofpoint-ORIG-GUID: 1tdoHo9JTtJXJulhin-GV7FcgUXleeE0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-21_02,2022-03-15_01,2022-02-23_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the following ethtool commands:
+We encountered a kernel panic issue that callback data will be NULL when
+it's using in ovl irq handler. There is a timing issue between
+mtk_disp_ovl_irq_handler() and mtk_ovl_disable_vblank().
 
-ethtool -i|--driver devname
-ethtool devname
-ethtool -s devname [speed N] [autoneg on|off] [advertise N]
-ethtool -S|--statistics devname
+To resolve this issue, we use the flow to register/unregister vblank cb:
+- Register callback function and callback data when crtc creates.
+- Unregister callback function and callback data when crtc destroies.
 
-Signed-off-by: Veerasenareddy Burru <vburru@marvell.com>
-Signed-off-by: Abhijit Ayarekar <aayarekar@marvell.com>
-Signed-off-by: Satananda Burla <sburla@marvell.com>
+With this solution, we can assure callback data will not be NULL when
+vblank is disable.
+
+Fixes: 9b0704988b15 ("drm/mediatek: Register vblank callback function")
+Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Reviewed-by: jason-jh.lin <jason-jh.lin@mediatek.com>
 ---
-V3 -> V4:
-  - fix build errors observed with "make W=1 C=1", that were missed
-    to fix in v3 patchset.
-  - declare the variables used with-in the file as static.
+ drivers/gpu/drm/mediatek/mtk_disp_drv.h     | 16 +++++++-----
+ drivers/gpu/drm/mediatek/mtk_disp_ovl.c     | 22 ++++++++++++----
+ drivers/gpu/drm/mediatek/mtk_disp_rdma.c    | 20 +++++++++-----
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c     | 14 +++++++++-
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |  4 +++
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h | 29 ++++++++++++++++-----
+ 6 files changed, 80 insertions(+), 25 deletions(-)
 
-V2 -> V3: no change.
-
-V1 -> V2:
-  - Fix build errors observed with clang and "make W=1 C=1".
-  - Address review comments:
-      - removed setting version string in get_drvinfo.
-      - defined helper macro for common code to set supported and
-        advertised modes in get_link_ksettings.
-
- .../net/ethernet/marvell/octeon_ep/Makefile   |   2 +-
- .../marvell/octeon_ep/octep_ethtool.c         | 463 ++++++++++++++++++
- .../ethernet/marvell/octeon_ep/octep_main.c   |   1 +
- 3 files changed, 465 insertions(+), 1 deletion(-)
- create mode 100644 drivers/net/ethernet/marvell/octeon_ep/octep_ethtool.c
-
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/Makefile b/drivers/net/ethernet/marvell/octeon_ep/Makefile
-index 6e2db8e80b4a..2026c8118158 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/Makefile
-+++ b/drivers/net/ethernet/marvell/octeon_ep/Makefile
-@@ -6,4 +6,4 @@
- obj-$(CONFIG_OCTEON_EP) += octeon_ep.o
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+index 86c3068894b1..974462831133 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
++++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+@@ -76,9 +76,11 @@ void mtk_ovl_layer_off(struct device *dev, unsigned int idx,
+ void mtk_ovl_start(struct device *dev);
+ void mtk_ovl_stop(struct device *dev);
+ unsigned int mtk_ovl_supported_rotations(struct device *dev);
+-void mtk_ovl_enable_vblank(struct device *dev,
+-			   void (*vblank_cb)(void *),
+-			   void *vblank_cb_data);
++void mtk_ovl_register_vblank_cb(struct device *dev,
++				void (*vblank_cb)(void *),
++				void *vblank_cb_data);
++void mtk_ovl_unregister_vblank_cb(struct device *dev);
++void mtk_ovl_enable_vblank(struct device *dev);
+ void mtk_ovl_disable_vblank(struct device *dev);
  
- octeon_ep-y := octep_main.o octep_cn9k_pf.o octep_tx.o octep_rx.o \
--	       octep_ctrl_mbox.o octep_ctrl_net.o
-+	       octep_ethtool.o octep_ctrl_mbox.o octep_ctrl_net.o
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_ethtool.c b/drivers/net/ethernet/marvell/octeon_ep/octep_ethtool.c
-new file mode 100644
-index 000000000000..87ef129b269a
---- /dev/null
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_ethtool.c
-@@ -0,0 +1,463 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Marvell Octeon EP (EndPoint) Ethernet Driver
-+ *
-+ * Copyright (C) 2020 Marvell.
-+ *
-+ */
-+
-+#include <linux/pci.h>
-+#include <linux/netdevice.h>
-+#include <linux/ethtool.h>
-+
-+#include "octep_config.h"
-+#include "octep_main.h"
-+#include "octep_ctrl_net.h"
-+
-+static const char octep_gstrings_global_stats[][ETH_GSTRING_LEN] = {
-+	"rx_packets",
-+	"tx_packets",
-+	"rx_bytes",
-+	"tx_bytes",
-+	"rx_alloc_errors",
-+	"tx_busy_errors",
-+	"rx_dropped",
-+	"tx_dropped",
-+	"tx_hw_pkts",
-+	"tx_hw_octs",
-+	"tx_hw_bcast",
-+	"tx_hw_mcast",
-+	"tx_hw_underflow",
-+	"tx_hw_control",
-+	"tx_less_than_64",
-+	"tx_equal_64",
-+	"tx_equal_65_to_127",
-+	"tx_equal_128_to_255",
-+	"tx_equal_256_to_511",
-+	"tx_equal_512_to_1023",
-+	"tx_equal_1024_to_1518",
-+	"tx_greater_than_1518",
-+	"rx_hw_pkts",
-+	"rx_hw_bytes",
-+	"rx_hw_bcast",
-+	"rx_hw_mcast",
-+	"rx_pause_pkts",
-+	"rx_pause_bytes",
-+	"rx_dropped_pkts_fifo_full",
-+	"rx_dropped_bytes_fifo_full",
-+	"rx_err_pkts",
-+};
-+
-+#define OCTEP_GLOBAL_STATS_CNT (sizeof(octep_gstrings_global_stats) / ETH_GSTRING_LEN)
-+
-+static const char octep_gstrings_tx_q_stats[][ETH_GSTRING_LEN] = {
-+	"tx_packets_posted[Q-%u]",
-+	"tx_packets_completed[Q-%u]",
-+	"tx_bytes[Q-%u]",
-+	"tx_busy[Q-%u]",
-+};
-+
-+#define OCTEP_TX_Q_STATS_CNT (sizeof(octep_gstrings_tx_q_stats) / ETH_GSTRING_LEN)
-+
-+static const char octep_gstrings_rx_q_stats[][ETH_GSTRING_LEN] = {
-+	"rx_packets[Q-%u]",
-+	"rx_bytes[Q-%u]",
-+	"rx_alloc_errors[Q-%u]",
-+};
-+
-+#define OCTEP_RX_Q_STATS_CNT (sizeof(octep_gstrings_rx_q_stats) / ETH_GSTRING_LEN)
-+
-+static void octep_get_drvinfo(struct net_device *netdev,
-+			      struct ethtool_drvinfo *info)
-+{
-+	struct octep_device *oct = netdev_priv(netdev);
-+
-+	strscpy(info->driver, OCTEP_DRV_NAME, sizeof(info->driver));
-+	strscpy(info->bus_info, pci_name(oct->pdev), sizeof(info->bus_info));
-+}
-+
-+static void octep_get_strings(struct net_device *netdev,
-+			      u32 stringset, u8 *data)
-+{
-+	struct octep_device *oct = netdev_priv(netdev);
-+	u16 num_queues = CFG_GET_PORTS_ACTIVE_IO_RINGS(oct->conf);
-+	char *strings = (char *)data;
-+	int i, j;
-+
-+	switch (stringset) {
-+	case ETH_SS_STATS:
-+		for (i = 0; i < OCTEP_GLOBAL_STATS_CNT; i++) {
-+			snprintf(strings, ETH_GSTRING_LEN,
-+				 octep_gstrings_global_stats[i]);
-+			strings += ETH_GSTRING_LEN;
-+		}
-+
-+		for (i = 0; i < num_queues; i++) {
-+			for (j = 0; j < OCTEP_TX_Q_STATS_CNT; j++) {
-+				snprintf(strings, ETH_GSTRING_LEN,
-+					 octep_gstrings_tx_q_stats[j], i);
-+				strings += ETH_GSTRING_LEN;
-+			}
-+		}
-+
-+		for (i = 0; i < num_queues; i++) {
-+			for (j = 0; j < OCTEP_RX_Q_STATS_CNT; j++) {
-+				snprintf(strings, ETH_GSTRING_LEN,
-+					 octep_gstrings_rx_q_stats[j], i);
-+				strings += ETH_GSTRING_LEN;
-+			}
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static int octep_get_sset_count(struct net_device *netdev, int sset)
-+{
-+	struct octep_device *oct = netdev_priv(netdev);
-+	u16 num_queues = CFG_GET_PORTS_ACTIVE_IO_RINGS(oct->conf);
-+
-+	switch (sset) {
-+	case ETH_SS_STATS:
-+		return OCTEP_GLOBAL_STATS_CNT + (num_queues *
-+		       (OCTEP_TX_Q_STATS_CNT + OCTEP_RX_Q_STATS_CNT));
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static void
-+octep_get_ethtool_stats(struct net_device *netdev,
-+			struct ethtool_stats *stats, u64 *data)
-+{
-+	struct octep_device *oct = netdev_priv(netdev);
-+	struct octep_iface_tx_stats *iface_tx_stats;
-+	struct octep_iface_rx_stats *iface_rx_stats;
-+	u64 rx_packets, rx_bytes;
-+	u64 tx_packets, tx_bytes;
-+	u64 rx_alloc_errors, tx_busy_errors;
-+	int q, i;
-+
-+	rx_packets = 0;
-+	rx_bytes = 0;
-+	tx_packets = 0;
-+	tx_bytes = 0;
-+	rx_alloc_errors = 0;
-+	tx_busy_errors = 0;
-+	tx_packets = 0;
-+	tx_bytes = 0;
-+	rx_packets = 0;
-+	rx_bytes = 0;
-+
-+	octep_get_if_stats(oct);
-+	iface_tx_stats = &oct->iface_tx_stats;
-+	iface_rx_stats = &oct->iface_rx_stats;
-+
-+	for (q = 0; q < oct->num_oqs; q++) {
-+		struct octep_iq *iq = oct->iq[q];
-+		struct octep_oq *oq = oct->oq[q];
-+
-+		tx_packets += iq->stats.instr_completed;
-+		tx_bytes += iq->stats.bytes_sent;
-+		tx_busy_errors += iq->stats.tx_busy;
-+
-+		rx_packets += oq->stats.packets;
-+		rx_bytes += oq->stats.bytes;
-+		rx_alloc_errors += oq->stats.alloc_failures;
-+	}
-+	i = 0;
-+	data[i++] = rx_packets;
-+	data[i++] = tx_packets;
-+	data[i++] = rx_bytes;
-+	data[i++] = tx_bytes;
-+	data[i++] = rx_alloc_errors;
-+	data[i++] = tx_busy_errors;
-+	data[i++] = iface_rx_stats->dropped_pkts_fifo_full +
-+		    iface_rx_stats->err_pkts;
-+	data[i++] = iface_tx_stats->xscol +
-+		    iface_tx_stats->xsdef;
-+	data[i++] = iface_tx_stats->pkts;
-+	data[i++] = iface_tx_stats->octs;
-+	data[i++] = iface_tx_stats->bcst;
-+	data[i++] = iface_tx_stats->mcst;
-+	data[i++] = iface_tx_stats->undflw;
-+	data[i++] = iface_tx_stats->ctl;
-+	data[i++] = iface_tx_stats->hist_lt64;
-+	data[i++] = iface_tx_stats->hist_eq64;
-+	data[i++] = iface_tx_stats->hist_65to127;
-+	data[i++] = iface_tx_stats->hist_128to255;
-+	data[i++] = iface_tx_stats->hist_256to511;
-+	data[i++] = iface_tx_stats->hist_512to1023;
-+	data[i++] = iface_tx_stats->hist_1024to1518;
-+	data[i++] = iface_tx_stats->hist_gt1518;
-+	data[i++] = iface_rx_stats->pkts;
-+	data[i++] = iface_rx_stats->octets;
-+	data[i++] = iface_rx_stats->mcast_pkts;
-+	data[i++] = iface_rx_stats->bcast_pkts;
-+	data[i++] = iface_rx_stats->pause_pkts;
-+	data[i++] = iface_rx_stats->pause_octets;
-+	data[i++] = iface_rx_stats->dropped_pkts_fifo_full;
-+	data[i++] = iface_rx_stats->dropped_octets_fifo_full;
-+	data[i++] = iface_rx_stats->err_pkts;
-+
-+	/* Per Tx Queue stats */
-+	for (q = 0; q < oct->num_iqs; q++) {
-+		struct octep_iq *iq = oct->iq[q];
-+
-+		data[i++] = iq->stats.instr_posted;
-+		data[i++] = iq->stats.instr_completed;
-+		data[i++] = iq->stats.bytes_sent;
-+		data[i++] = iq->stats.tx_busy;
-+	}
-+
-+	/* Per Rx Queue stats */
-+	for (q = 0; q < oct->num_oqs; q++) {
-+		struct octep_oq *oq = oct->oq[q];
-+
-+		data[i++] = oq->stats.packets;
-+		data[i++] = oq->stats.bytes;
-+		data[i++] = oq->stats.alloc_failures;
-+	}
-+}
-+
-+#define OCTEP_SET_ETHTOOL_LINK_MODES_BITMAP(octep_speeds, ksettings, name) \
-+{ \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_10GBASE_T)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 10000baseT_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_10GBASE_R)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 10000baseR_FEC); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_10GBASE_CR)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 10000baseCR_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_10GBASE_KR)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 10000baseKR_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_10GBASE_LR)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 10000baseLR_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_10GBASE_SR)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 10000baseSR_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_25GBASE_CR)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 25000baseCR_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_25GBASE_KR)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 25000baseKR_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_25GBASE_SR)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 25000baseSR_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_40GBASE_CR4)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 40000baseCR4_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_40GBASE_KR4)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 40000baseKR4_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_40GBASE_LR4)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 40000baseLR4_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_40GBASE_SR4)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 40000baseSR4_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_50GBASE_CR2)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 50000baseCR2_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_50GBASE_KR2)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 50000baseKR2_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_50GBASE_SR2)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 50000baseSR2_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_50GBASE_CR)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 50000baseCR_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_50GBASE_KR)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 50000baseKR_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_50GBASE_LR)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 50000baseLR_ER_FR_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_50GBASE_SR)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 50000baseSR_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_100GBASE_CR4)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 100000baseCR4_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_100GBASE_KR4)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 100000baseKR4_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_100GBASE_LR4)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 100000baseLR4_ER4_Full); \
-+	if ((octep_speeds) & BIT(OCTEP_LINK_MODE_100GBASE_SR4)) \
-+		ethtool_link_ksettings_add_link_mode(ksettings, name, 100000baseSR4_Full); \
-+}
-+
-+static int octep_get_link_ksettings(struct net_device *netdev,
-+				    struct ethtool_link_ksettings *cmd)
-+{
-+	struct octep_device *oct = netdev_priv(netdev);
-+	struct octep_iface_link_info *link_info;
-+	u32 advertised_modes, supported_modes;
-+
-+	ethtool_link_ksettings_zero_link_mode(cmd, supported);
-+	ethtool_link_ksettings_zero_link_mode(cmd, advertising);
-+
-+	octep_get_link_info(oct);
-+
-+	advertised_modes = oct->link_info.advertised_modes;
-+	supported_modes = oct->link_info.supported_modes;
-+	link_info = &oct->link_info;
-+
-+	OCTEP_SET_ETHTOOL_LINK_MODES_BITMAP(supported_modes, cmd, supported);
-+	OCTEP_SET_ETHTOOL_LINK_MODES_BITMAP(advertised_modes, cmd, advertising);
-+
-+	if (link_info->autoneg) {
-+		if (link_info->autoneg & OCTEP_LINK_MODE_AUTONEG_SUPPORTED)
-+			ethtool_link_ksettings_add_link_mode(cmd, supported, Autoneg);
-+		if (link_info->autoneg & OCTEP_LINK_MODE_AUTONEG_ADVERTISED) {
-+			ethtool_link_ksettings_add_link_mode(cmd, advertising, Autoneg);
-+			cmd->base.autoneg = AUTONEG_ENABLE;
-+		} else {
-+			cmd->base.autoneg = AUTONEG_DISABLE;
-+		}
-+	} else {
-+		cmd->base.autoneg = AUTONEG_DISABLE;
-+	}
-+
-+	if (link_info->pause) {
-+		if (link_info->pause & OCTEP_LINK_MODE_PAUSE_SUPPORTED)
-+			ethtool_link_ksettings_add_link_mode(cmd, supported, Pause);
-+		if (link_info->pause & OCTEP_LINK_MODE_PAUSE_ADVERTISED)
-+			ethtool_link_ksettings_add_link_mode(cmd, advertising, Pause);
-+	}
-+
-+	cmd->base.port = PORT_FIBRE;
-+	ethtool_link_ksettings_add_link_mode(cmd, supported, FIBRE);
-+	ethtool_link_ksettings_add_link_mode(cmd, advertising, FIBRE);
-+
-+	if (netif_carrier_ok(netdev)) {
-+		cmd->base.speed = link_info->speed;
-+		cmd->base.duplex = DUPLEX_FULL;
-+	} else {
-+		cmd->base.speed = SPEED_UNKNOWN;
-+		cmd->base.duplex = DUPLEX_UNKNOWN;
-+	}
-+	return 0;
-+}
-+
-+static int octep_set_link_ksettings(struct net_device *netdev,
-+				    const struct ethtool_link_ksettings *cmd)
-+{
-+	struct octep_device *oct = netdev_priv(netdev);
-+	struct octep_iface_link_info link_info_new;
-+	struct octep_iface_link_info *link_info;
-+	u64 advertised = 0;
-+	u8 autoneg = 0;
-+	int err;
-+
-+	link_info = &oct->link_info;
-+	memcpy(&link_info_new, link_info, sizeof(struct octep_iface_link_info));
-+
-+	/* Only Full duplex is supported;
-+	 * Assume full duplex when duplex is unknown.
-+	 */
-+	if (cmd->base.duplex != DUPLEX_FULL &&
-+	    cmd->base.duplex != DUPLEX_UNKNOWN)
-+		return -EOPNOTSUPP;
-+
-+	if (cmd->base.autoneg == AUTONEG_ENABLE) {
-+		if (!(link_info->autoneg & OCTEP_LINK_MODE_AUTONEG_SUPPORTED))
-+			return -EOPNOTSUPP;
-+		autoneg = 1;
-+	}
-+
-+	if (!bitmap_subset(cmd->link_modes.advertising,
-+			   cmd->link_modes.supported,
-+			   __ETHTOOL_LINK_MODE_MASK_NBITS))
-+		return -EINVAL;
-+
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  10000baseT_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_10GBASE_T);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  10000baseR_FEC))
-+		advertised |= BIT(OCTEP_LINK_MODE_10GBASE_R);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  10000baseCR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_10GBASE_CR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  10000baseKR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_10GBASE_KR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  10000baseLR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_10GBASE_LR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  10000baseSR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_10GBASE_SR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  25000baseCR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_25GBASE_CR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  25000baseKR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_25GBASE_KR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  25000baseSR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_25GBASE_SR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  40000baseCR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_40GBASE_CR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  40000baseKR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_40GBASE_KR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  40000baseLR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_40GBASE_LR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  40000baseSR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_40GBASE_SR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseCR2_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_CR2);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseKR2_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_KR2);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseSR2_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_SR2);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseCR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_CR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseKR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_KR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseLR_ER_FR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_LR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseSR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_SR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  100000baseCR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_100GBASE_CR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  100000baseKR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_100GBASE_KR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  100000baseLR4_ER4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_100GBASE_LR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  100000baseSR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_100GBASE_SR4);
-+
-+	if (advertised == link_info->advertised_modes &&
-+	    cmd->base.speed == link_info->speed &&
-+	    cmd->base.autoneg == link_info->autoneg)
-+		return 0;
-+
-+	link_info_new.advertised_modes = advertised;
-+	link_info_new.speed = cmd->base.speed;
-+	link_info_new.autoneg = autoneg;
-+
-+	err = octep_set_link_info(oct, &link_info_new);
-+	if (err)
-+		return err;
-+
-+	memcpy(link_info, &link_info_new, sizeof(struct octep_iface_link_info));
-+	return 0;
-+}
-+
-+static const struct ethtool_ops octep_ethtool_ops = {
-+	.get_drvinfo = octep_get_drvinfo,
-+	.get_link = ethtool_op_get_link,
-+	.get_strings = octep_get_strings,
-+	.get_sset_count = octep_get_sset_count,
-+	.get_ethtool_stats = octep_get_ethtool_stats,
-+	.get_link_ksettings = octep_get_link_ksettings,
-+	.set_link_ksettings = octep_set_link_ksettings,
-+};
-+
-+void octep_set_ethtool_ops(struct net_device *netdev)
-+{
-+	netdev->ethtool_ops = &octep_ethtool_ops;
-+}
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-index 1c9c00cc4641..31435c41e3f0 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-@@ -1059,6 +1059,7 @@ static int octep_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	INIT_WORK(&octep_dev->ctrl_mbox_task, octep_ctrl_mbox_task);
+ void mtk_rdma_bypass_shadow(struct device *dev);
+@@ -93,9 +95,11 @@ void mtk_rdma_layer_config(struct device *dev, unsigned int idx,
+ 			   struct cmdq_pkt *cmdq_pkt);
+ void mtk_rdma_start(struct device *dev);
+ void mtk_rdma_stop(struct device *dev);
+-void mtk_rdma_enable_vblank(struct device *dev,
+-			    void (*vblank_cb)(void *),
+-			    void *vblank_cb_data);
++void mtk_rdma_register_vblank_cb(struct device *dev,
++				 void (*vblank_cb)(void *),
++				 void *vblank_cb_data);
++void mtk_rdma_unregister_vblank_cb(struct device *dev);
++void mtk_rdma_enable_vblank(struct device *dev);
+ void mtk_rdma_disable_vblank(struct device *dev);
  
- 	netdev->netdev_ops = &octep_netdev_ops;
-+	octep_set_ethtool_ops(netdev);
- 	netif_carrier_off(netdev);
+ #endif
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+index 2146299e5f52..1fa1bbac9f9c 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl.c
+@@ -96,14 +96,28 @@ static irqreturn_t mtk_disp_ovl_irq_handler(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
  
- 	netdev->hw_features = NETIF_F_SG;
+-void mtk_ovl_enable_vblank(struct device *dev,
+-			   void (*vblank_cb)(void *),
+-			   void *vblank_cb_data)
++void mtk_ovl_register_vblank_cb(struct device *dev,
++				void (*vblank_cb)(void *),
++				void *vblank_cb_data)
+ {
+ 	struct mtk_disp_ovl *ovl = dev_get_drvdata(dev);
+ 
+ 	ovl->vblank_cb = vblank_cb;
+ 	ovl->vblank_cb_data = vblank_cb_data;
++}
++
++void mtk_ovl_unregister_vblank_cb(struct device *dev)
++{
++	struct mtk_disp_ovl *ovl = dev_get_drvdata(dev);
++
++	ovl->vblank_cb = NULL;
++	ovl->vblank_cb_data = NULL;
++}
++
++void mtk_ovl_enable_vblank(struct device *dev)
++{
++	struct mtk_disp_ovl *ovl = dev_get_drvdata(dev);
++
+ 	writel(0x0, ovl->regs + DISP_REG_OVL_INTSTA);
+ 	writel_relaxed(OVL_FME_CPL_INT, ovl->regs + DISP_REG_OVL_INTEN);
+ }
+@@ -112,8 +126,6 @@ void mtk_ovl_disable_vblank(struct device *dev)
+ {
+ 	struct mtk_disp_ovl *ovl = dev_get_drvdata(dev);
+ 
+-	ovl->vblank_cb = NULL;
+-	ovl->vblank_cb_data = NULL;
+ 	writel_relaxed(0x0, ovl->regs + DISP_REG_OVL_INTEN);
+ }
+ 
+diff --git a/drivers/gpu/drm/mediatek/mtk_disp_rdma.c b/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
+index d41a3970b944..943780fc7bf6 100644
+--- a/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
++++ b/drivers/gpu/drm/mediatek/mtk_disp_rdma.c
+@@ -94,24 +94,32 @@ static void rdma_update_bits(struct device *dev, unsigned int reg,
+ 	writel(tmp, rdma->regs + reg);
+ }
+ 
+-void mtk_rdma_enable_vblank(struct device *dev,
+-			    void (*vblank_cb)(void *),
+-			    void *vblank_cb_data)
++void mtk_rdma_register_vblank_cb(struct device *dev,
++				 void (*vblank_cb)(void *),
++				 void *vblank_cb_data)
+ {
+ 	struct mtk_disp_rdma *rdma = dev_get_drvdata(dev);
+ 
+ 	rdma->vblank_cb = vblank_cb;
+ 	rdma->vblank_cb_data = vblank_cb_data;
+-	rdma_update_bits(dev, DISP_REG_RDMA_INT_ENABLE, RDMA_FRAME_END_INT,
+-			 RDMA_FRAME_END_INT);
+ }
+ 
+-void mtk_rdma_disable_vblank(struct device *dev)
++void mtk_rdma_unregister_vblank_cb(struct device *dev)
+ {
+ 	struct mtk_disp_rdma *rdma = dev_get_drvdata(dev);
+ 
+ 	rdma->vblank_cb = NULL;
+ 	rdma->vblank_cb_data = NULL;
++}
++
++void mtk_rdma_enable_vblank(struct device *dev)
++{
++	rdma_update_bits(dev, DISP_REG_RDMA_INT_ENABLE, RDMA_FRAME_END_INT,
++			 RDMA_FRAME_END_INT);
++}
++
++void mtk_rdma_disable_vblank(struct device *dev)
++{
+ 	rdma_update_bits(dev, DISP_REG_RDMA_INT_ENABLE, RDMA_FRAME_END_INT, 0);
+ }
+ 
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+index d661edf7e0fe..e42a9bfa0ecb 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+@@ -152,6 +152,7 @@ static void mtk_drm_cmdq_pkt_destroy(struct cmdq_pkt *pkt)
+ static void mtk_drm_crtc_destroy(struct drm_crtc *crtc)
+ {
+ 	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
++	int i;
+ 
+ 	mtk_mutex_put(mtk_crtc->mutex);
+ #if IS_REACHABLE(CONFIG_MTK_CMDQ)
+@@ -162,6 +163,14 @@ static void mtk_drm_crtc_destroy(struct drm_crtc *crtc)
+ 		mtk_crtc->cmdq_client.chan = NULL;
+ 	}
+ #endif
++
++	for (i = 0; i < mtk_crtc->ddp_comp_nr; i++) {
++		struct mtk_ddp_comp *comp;
++
++		comp = mtk_crtc->ddp_comp[i];
++		mtk_ddp_comp_unregister_vblank_cb(comp);
++	}
++
+ 	drm_crtc_cleanup(crtc);
+ }
+ 
+@@ -616,7 +625,7 @@ static int mtk_drm_crtc_enable_vblank(struct drm_crtc *crtc)
+ 	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
+ 	struct mtk_ddp_comp *comp = mtk_crtc->ddp_comp[0];
+ 
+-	mtk_ddp_comp_enable_vblank(comp, mtk_crtc_ddp_irq, &mtk_crtc->base);
++	mtk_ddp_comp_enable_vblank(comp);
+ 
+ 	return 0;
+ }
+@@ -916,6 +925,9 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
+ 			if (comp->funcs->ctm_set)
+ 				has_ctm = true;
+ 		}
++
++		mtk_ddp_comp_register_vblank_cb(comp, mtk_crtc_ddp_irq,
++						&mtk_crtc->base);
+ 	}
+ 
+ 	for (i = 0; i < mtk_crtc->ddp_comp_nr; i++)
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+index b4b682bc1991..028cf76b9531 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+@@ -297,6 +297,8 @@ static const struct mtk_ddp_comp_funcs ddp_ovl = {
+ 	.config = mtk_ovl_config,
+ 	.start = mtk_ovl_start,
+ 	.stop = mtk_ovl_stop,
++	.register_vblank_cb = mtk_ovl_register_vblank_cb,
++	.unregister_vblank_cb = mtk_ovl_unregister_vblank_cb,
+ 	.enable_vblank = mtk_ovl_enable_vblank,
+ 	.disable_vblank = mtk_ovl_disable_vblank,
+ 	.supported_rotations = mtk_ovl_supported_rotations,
+@@ -321,6 +323,8 @@ static const struct mtk_ddp_comp_funcs ddp_rdma = {
+ 	.config = mtk_rdma_config,
+ 	.start = mtk_rdma_start,
+ 	.stop = mtk_rdma_stop,
++	.register_vblank_cb = mtk_rdma_register_vblank_cb,
++	.unregister_vblank_cb = mtk_rdma_unregister_vblank_cb,
+ 	.enable_vblank = mtk_rdma_enable_vblank,
+ 	.disable_vblank = mtk_rdma_disable_vblank,
+ 	.layer_nr = mtk_rdma_layer_nr,
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+index 4c6a98662305..b83f24cb045f 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
++++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+@@ -48,9 +48,11 @@ struct mtk_ddp_comp_funcs {
+ 		       unsigned int bpc, struct cmdq_pkt *cmdq_pkt);
+ 	void (*start)(struct device *dev);
+ 	void (*stop)(struct device *dev);
+-	void (*enable_vblank)(struct device *dev,
+-			      void (*vblank_cb)(void *),
+-			      void *vblank_cb_data);
++	void (*register_vblank_cb)(struct device *dev,
++				   void (*vblank_cb)(void *),
++				   void *vblank_cb_data);
++	void (*unregister_vblank_cb)(struct device *dev);
++	void (*enable_vblank)(struct device *dev);
+ 	void (*disable_vblank)(struct device *dev);
+ 	unsigned int (*supported_rotations)(struct device *dev);
+ 	unsigned int (*layer_nr)(struct device *dev);
+@@ -111,12 +113,25 @@ static inline void mtk_ddp_comp_stop(struct mtk_ddp_comp *comp)
+ 		comp->funcs->stop(comp->dev);
+ }
+ 
+-static inline void mtk_ddp_comp_enable_vblank(struct mtk_ddp_comp *comp,
+-					      void (*vblank_cb)(void *),
+-					      void *vblank_cb_data)
++static inline void mtk_ddp_comp_register_vblank_cb(struct mtk_ddp_comp *comp,
++						   void (*vblank_cb)(void *),
++						   void *vblank_cb_data)
++{
++	if (comp->funcs && comp->funcs->register_vblank_cb)
++		comp->funcs->register_vblank_cb(comp->dev, vblank_cb,
++						vblank_cb_data);
++}
++
++static inline void mtk_ddp_comp_unregister_vblank_cb(struct mtk_ddp_comp *comp)
++{
++	if (comp->funcs && comp->funcs->unregister_vblank_cb)
++		comp->funcs->unregister_vblank_cb(comp->dev);
++}
++
++static inline void mtk_ddp_comp_enable_vblank(struct mtk_ddp_comp *comp)
+ {
+ 	if (comp->funcs && comp->funcs->enable_vblank)
+-		comp->funcs->enable_vblank(comp->dev, vblank_cb, vblank_cb_data);
++		comp->funcs->enable_vblank(comp->dev);
+ }
+ 
+ static inline void mtk_ddp_comp_disable_vblank(struct mtk_ddp_comp *comp)
 -- 
-2.17.1
+2.18.0
 

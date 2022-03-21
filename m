@@ -2,317 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36EA4E233C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B704E234A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345851AbiCUJXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
+        id S1345881AbiCUJ1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345834AbiCUJXa (ORCPT
+        with ESMTP id S1345867AbiCUJ1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:23:30 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7FD143442
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:22:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647854525; x=1679390525;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=NSz37lo5jIFrpR9cvSDf+RjBw9qiPB5q2YAIoatLyl4=;
-  b=ITw+1AJ+1mRii8PiQIbfjoGp29IMjTu49RhjfSkkVxdu8l0j8rSSwO3K
-   kMqb713PalYRHDPj7UYZWqSl/hOMRAFBGqE1geQqhO2NLGouboMg504mZ
-   Ii+v04TnWiljtVnJTYMAR1km/A76rVifzwF+Ky61ey25OnsSPn5rvdL3L
-   D2+ilCNxKIbTdg7ATfopfe+0YAqo2FWZwcuB8QHlFCJiAkI0KLBtWvQ8E
-   0HziaJbkKNsw74IESTYdMerOcBCTl7DSIdF25knhTdqdQZIpYWZmFJVsm
-   HrgXzAMyJCF5aSit1DCnT2p7QpiE+LH+0Pl/KiiCRxWP81xHPOU0pchG5
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="318217263"
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="318217263"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 02:22:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="784936168"
-Received: from pglc00034.png.intel.com ([10.221.207.54])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Mar 2022 02:22:01 -0700
-From:   kah.jing.lee@intel.com
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, radu.bacrau@intel.com,
-        tien.sung.ang@intel.com, Kah Jing Lee <kah.jing.lee@intel.com>
-Subject: [PATCH] firmware: stratix10-rsu: extend RSU driver to get DCMF status
-Date:   Mon, 21 Mar 2022 17:21:58 +0800
-Message-Id: <20220321092158.16456-1-kah.jing.lee@intel.com>
-X-Mailer: git-send-email 2.26.2
+        Mon, 21 Mar 2022 05:27:01 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3E96516A
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:25:36 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220321092533epoutp018e260b4a308c41b46df529a4daffc03c~eWyY-Ay151955619556epoutp01l
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:25:33 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220321092533epoutp018e260b4a308c41b46df529a4daffc03c~eWyY-Ay151955619556epoutp01l
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1647854733;
+        bh=e8bwc2Ysxw5MN4eM2XYne32AAf/UZRzAOxexveGEtGU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Pj6eeYL0D6KJSeslOYVfaNSLBcUcl9f/IdEkahTLt39NAknYRq1+0/zi0UOLgKbaS
+         BGhKMWftuLdWuz0WyFuqyWTu/as+q7syh+QWxpvBMr5pKq28iZGn/nx9lEWaa6HPTB
+         FcgrV4C4j+BEZGS3Qr9E4HSu/rOwiLg+n1lHz3Kk=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220321092532epcas2p10d70a6372d69a95910bfbccdb09004c1~eWyYcnmY00811308113epcas2p1f;
+        Mon, 21 Mar 2022 09:25:32 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.89]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4KMTk31l5fz4x9Pv; Mon, 21 Mar
+        2022 09:25:31 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        CE.62.25540.88448326; Mon, 21 Mar 2022 18:25:28 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220321092527epcas2p4d7935b4535902c27b412325ebd0f15f4~eWyTnZCk81323613236epcas2p4l;
+        Mon, 21 Mar 2022 09:25:27 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220321092527epsmtrp2e87ba18f1e93c2e9a8fd2290161d14ce~eWyTmcP4K1566415664epsmtrp2C;
+        Mon, 21 Mar 2022 09:25:27 +0000 (GMT)
+X-AuditID: b6c32a47-81bff700000063c4-8c-62384488471d
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        19.D3.29871.78448326; Mon, 21 Mar 2022 18:25:27 +0900 (KST)
+Received: from ubuntu (unknown [12.36.155.120]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220321092527epsmtip2c105407545e6069710ade2a503c4f4db~eWyTeEG6c3183331833epsmtip20;
+        Mon, 21 Mar 2022 09:25:27 +0000 (GMT)
+Date:   Mon, 21 Mar 2022 18:24:09 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
+Subject: Re: [PATCH v3 0/4] support USB offload feature
+Message-ID: <20220321092409.GA62265@ubuntu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YjhB7+AaEXvuUmdi@kroah.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIJsWRmVeSWpSXmKPExsWy7bCmmW6Hi0WSwe8pXBZPjixit2hevJ7N
+        4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtZq5Vtui6e4PRgdPjcl8vk8eCTaUei/e8ZPLY
+        P3cNu0ffllWMHp83yQWwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXm
+        ptoqufgE6Lpl5gDdpKRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMC/QK07MLS7N
+        S9fLSy2xMjQwMDIFKkzIzmjc9IS5YL9Axd/ra9kaGJfxdjFyckgImEjsPj2JuYuRi0NIYAej
+        xI/FK9kgnE+MEqf6HkI53xgl5i+7zwzTcuF1JwuILSSwl1GiY6EzhP2EUWLDwnAQm0VAVeLG
+        7auMIDabgJbEvR8nwHpFBIwl+s/OYgcZyiywgUnixJ3nYAlhAXOJ2VP62EFsXgFtiY4DJ5gg
+        bEGJkzOfgC3jFNCUmPLxJlA9B4eogIrEq4P1EPdM5JA4vU8QwnaRmLv6FNSdwhKvjm9hh7Cl
+        JD6/28sGYRdL7PrUygRyg4RAA6NE44MTUA3GErOetTOCzGcWyJTY9qQCxJQQUJY4cgvsAmYB
+        PomOw3/ZIcK8Eh1tQhCNyhLTL09ghbAlJQ6+Pgc10ENiWvN8dnjgrm48wjKBUX4WksdmISyb
+        BbZBR2LB7k9sEGFpieX/OCBMTYn1u/QXMLKuYhRLLSjOTU8tNiowhsd0cn7uJkZwWtVy38E4
+        4+0HvUOMTByMhxglOJiVRHgXfzBPEuJNSaysSi3Kjy8qzUktPsRoCoylicxSosn5wMSeVxJv
+        aGJpYGJmZmhuZGpgriTO65WyIVFIID2xJDU7NbUgtQimj4mDU6qBySBa/Wqh2edCS6f3Gf9m
+        l9ckluS8PJxiLmzNY2ow+WJE7bmUQ9MvL/TP7VxymVeK4345y6UyjeqEEsO7K5PC47e5Kwq6
+        qjTOXvh8/a+aVVts218f5XI+turVjvZonpK+NUIRJuHZ1b6hfGqzOvTv+5eebWPlF1bP5fQM
+        vP1k19Vgy+WHkmPrn764vnpDpMLae8LfA56lN270eFezbpdSvgavTvcfX+/XdT1yOmLXHN7M
+        MH24QjG4MPf1PvEvjeyzZjzJmeCq/Dc3VPbbWm1VjpmnDY8oCTYffDn1YffRbU9etSRfXvq1
+        /9BTUctXL2fd8TpYonnnZLDGQwm/2d6pN6bc1a1fLr9WO1TulNFzJZbijERDLeai4kQAWVo5
+        qjQEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrFLMWRmVeSWpSXmKPExsWy7bCSvG67i0WSweHdGhZPjixit2hevJ7N
+        4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtZq5Vtui6e4PRgdPjcl8vk8eCTaUei/e8ZPLY
+        P3cNu0ffllWMHp83yQWwRXHZpKTmZJalFunbJXBl7N0/hb3gD2/FzAPKDYx/uLoYOTkkBEwk
+        LrzuZOli5OIQEtjNKPGhrZ8RIiEpsXTuDXYIW1jifssRVoiiR4wSvzp3M4EkWARUJW7cvgrW
+        wCagJXHvxwlmEFtEwFii/+wsdpAGZoFNTBKzf68FSwgLmEvMntIHNpVXQFui48AJJoipOxgl
+        Pi/rYYJICEqcnPmEBcRmBpp6499LoDgHkC0tsfwfB0iYU0BTYsrHm8wgYVEBFYlXB+snMArO
+        QtI8C0nzLITmBYzMqxglUwuKc9Nziw0LDPNSy/WKE3OLS/PS9ZLzczcxgqNDS3MH4/ZVH/QO
+        MTJxMB5ilOBgVhLhXfzBPEmINyWxsiq1KD++qDQntfgQozQHi5I474Wuk/FCAumJJanZqakF
+        qUUwWSYOTqkGpsD/Jgu3TvPetX9hOC+3qu353r+7101miMp6dWQvq/TBH52XJEO9+K6sLjs2
+        51TLE/GnB4p8NyRw3PWZu9tR5FTPyaUN1+++mR+Q8anZNrl1hb6LU2vLX7W2e2tueVgu7Fli
+        G1auODVf+demZpmqB1ne95XLmS8diJe+86SD1b1hafzhy4HNMrtccvJ7uqetfpPk9klpwZW3
+        vbMMD035f7K74Ii7xO4jee+91q3e42+aF7LZ4ETjYoaNDy4Ky8ww+XE68XHK2ZbfjBOmqBlM
+        mtwuMu3tw4dbTn8/7Ke3Po6L+bn9wbxv115eMT11ReS2g+c639y9R+u9F8838fqfueeJ8ult
+        vWcv3lcQ+nLk3CRFJZbijERDLeai4kQARwF99/0CAAA=
+X-CMS-MailID: 20220321092527epcas2p4d7935b4535902c27b412325ebd0f15f4
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----mwmExhcEqaTMgLyfw452.zc-R1ZLcLBBgXcQdqrDAhnQ.X2v=_22567d_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c
+References: <CGME20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c@epcas2p1.samsung.com>
+        <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
+        <YjhB7+AaEXvuUmdi@kroah.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kah Jing Lee <kah.jing.lee@intel.com>
+------mwmExhcEqaTMgLyfw452.zc-R1ZLcLBBgXcQdqrDAhnQ.X2v=_22567d_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-Extend RSU driver to get DCMF status.
+On Mon, Mar 21, 2022 at 10:14:23AM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Mar 21, 2022 at 05:59:50PM +0900, Daehwan Jung wrote:
+> > This patchset is for USB offload feature, which makes Co-processor to use
+> > some memories of xhci. Especially it's useful for USB Audio scenario.
+> > Audio stream would get shortcut because Co-processor directly write/read
+> > data in xhci memories. It could get speed-up using faster memory like SRAM.
+> > That's why this gives vendors flexibilty of memory management.
+> > Several pathches have been merged in AOSP kernel(android12-5.10) and I put
+> > together and split into 3 patches. Plus let me add user(xhci-exynos)
+> > module to see how user could use it.
+> > 
+> > To sum up, it's for providing xhci memories to Co-Processor.
+> > It would cover DCBAA, Device Context, Transfer Ring, Event Ring, ERST.
+> > It needs xhci hooks and to export some xhci symbols.
+> > 
+> > Changes in v2 :
+> > - Fix commit message by adding Signed-off-by in each patch.
+> > - Fix conflict on latest.
+> > 
+> > Changes in v3 :
+> > - Remove export symbols and xhci hooks which xhci-exynos don't need.
+> > - Modify commit message to clarify why it needs to export symbols.
+> > - Check compiling of xhci-exynos.
+> 
+> As I asked for in the previous submission, you MUST have a user for
+> these hooks, otherwise we can not accept them (nor would you WANT us to
+> accept them).  Please fix that up and add them to the next submission as
+> we can not do anything with this one.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-The status of each DCMF is reported. The currently used DCMF is used as
-reference, while the other three are compared against it to determine if
-they are corrupted.
+Hi greg,
 
-DCMF = Decision Configuration Management Firmware.
-RSU = Remote System Update
+I've submitted the user(xhci-exynos) together on the last patch of the patchset.
+You can see xhci-exynos uses these hooks and symbols.
 
-Signed-off-by: Radu Bacrau <radu.bacrau@intel.com>
-Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
----
- drivers/firmware/stratix10-rsu.c | 131 +++++++++++++++++++++++++++++--
- 1 file changed, 125 insertions(+), 6 deletions(-)
+[PATCH v3 4/4] usb: host: add xhci-exynos driver
 
-diff --git a/drivers/firmware/stratix10-rsu.c b/drivers/firmware/stratix10-rsu.c
-index 9378075d04e9..856bc03ca07c 100644
---- a/drivers/firmware/stratix10-rsu.c
-+++ b/drivers/firmware/stratix10-rsu.c
-@@ -24,12 +24,16 @@
- #define RSU_DCMF1_MASK			GENMASK_ULL(63, 32)
- #define RSU_DCMF2_MASK			GENMASK_ULL(31, 0)
- #define RSU_DCMF3_MASK			GENMASK_ULL(63, 32)
-+#define RSU_DCMF0_STATUS_MASK		GENMASK_ULL(15, 0)
-+#define RSU_DCMF1_STATUS_MASK		GENMASK_ULL(31, 16)
-+#define RSU_DCMF2_STATUS_MASK		GENMASK_ULL(47, 32)
-+#define RSU_DCMF3_STATUS_MASK		GENMASK_ULL(63, 48)
- 
- #define RSU_TIMEOUT	(msecs_to_jiffies(SVC_RSU_REQUEST_TIMEOUT_MS))
- 
- #define INVALID_RETRY_COUNTER		0xFF
- #define INVALID_DCMF_VERSION		0xFF
--
-+#define INVALID_DCMF_STATUS		0xFFFFFFFF
- 
- typedef void (*rsu_callback)(struct stratix10_svc_client *client,
- 			     struct stratix10_svc_cb_data *data);
-@@ -49,6 +53,10 @@ typedef void (*rsu_callback)(struct stratix10_svc_client *client,
-  * @dcmf_version.dcmf1: Quartus dcmf1 version
-  * @dcmf_version.dcmf2: Quartus dcmf2 version
-  * @dcmf_version.dcmf3: Quartus dcmf3 version
-+ * @dcmf_status.dcmf0: dcmf0 status
-+ * @dcmf_status.dcmf1: dcmf1 status
-+ * @dcmf_status.dcmf2: dcmf2 status
-+ * @dcmf_status.dcmf3: dcmf3 status
-  * @retry_counter: the current image's retry counter
-  * @max_retry: the preset max retry value
-  */
-@@ -73,6 +81,13 @@ struct stratix10_rsu_priv {
- 		unsigned int dcmf3;
- 	} dcmf_version;
- 
-+	struct {
-+		unsigned int dcmf0;
-+		unsigned int dcmf1;
-+		unsigned int dcmf2;
-+		unsigned int dcmf3;
-+	} dcmf_status;
-+
- 	unsigned int retry_counter;
- 	unsigned int max_retry;
- };
-@@ -129,7 +144,7 @@ static void rsu_command_callback(struct stratix10_svc_client *client,
- 	struct stratix10_rsu_priv *priv = client->priv;
- 
- 	if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
--		dev_warn(client->dev, "FW doesn't support notify\n");
-+		dev_warn(client->dev, "Secure FW doesn't support notify\n");
- 	else if (data->status == BIT(SVC_STATUS_ERROR))
- 		dev_err(client->dev, "Failure, returned status is %lu\n",
- 			BIT(data->status));
-@@ -139,7 +154,7 @@ static void rsu_command_callback(struct stratix10_svc_client *client,
- 
- /**
-  * rsu_retry_callback() - Callback from Intel service layer for getting
-- * the current image's retry counter from the firmware
-+ * the current image's retry counter from firmware
-  * @client: pointer to client
-  * @data: pointer to callback data structure
-  *
-@@ -156,7 +171,7 @@ static void rsu_retry_callback(struct stratix10_svc_client *client,
- 	if (data->status == BIT(SVC_STATUS_OK))
- 		priv->retry_counter = *counter;
- 	else if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
--		dev_warn(client->dev, "FW doesn't support retry\n");
-+		dev_warn(client->dev, "Secure FW doesn't support retry\n");
- 	else
- 		dev_err(client->dev, "Failed to get retry counter %lu\n",
- 			BIT(data->status));
-@@ -181,7 +196,7 @@ static void rsu_max_retry_callback(struct stratix10_svc_client *client,
- 	if (data->status == BIT(SVC_STATUS_OK))
- 		priv->max_retry = *max_retry;
- 	else if (data->status == BIT(SVC_STATUS_NO_SUPPORT))
--		dev_warn(client->dev, "FW doesn't support max retry\n");
-+		dev_warn(client->dev, "Secure FW doesn't support max retry\n");
- 	else
- 		dev_err(client->dev, "Failed to get max retry %lu\n",
- 			BIT(data->status));
-@@ -215,6 +230,35 @@ static void rsu_dcmf_version_callback(struct stratix10_svc_client *client,
- 	complete(&priv->completion);
- }
- 
-+/**
-+ * rsu_dcmf_status_callback() - Callback from Intel service layer for getting
-+ * the DCMF status
-+ * @client: pointer to client
-+ * @data: pointer to callback data structure
-+ *
-+ * Callback from Intel service layer for DCMF status
-+ */
-+static void rsu_dcmf_status_callback(struct stratix10_svc_client *client,
-+				     struct stratix10_svc_cb_data *data)
-+{
-+	struct stratix10_rsu_priv *priv = client->priv;
-+	unsigned long long *value = (unsigned long long *)data->kaddr1;
-+
-+	if (data->status == BIT(SVC_STATUS_OK)) {
-+		priv->dcmf_status.dcmf0 = FIELD_GET(RSU_DCMF0_STATUS_MASK,
-+						    *value);
-+		priv->dcmf_status.dcmf1 = FIELD_GET(RSU_DCMF1_STATUS_MASK,
-+						    *value);
-+		priv->dcmf_status.dcmf2 = FIELD_GET(RSU_DCMF2_STATUS_MASK,
-+						    *value);
-+		priv->dcmf_status.dcmf3 = FIELD_GET(RSU_DCMF3_STATUS_MASK,
-+						    *value);
-+	} else
-+		dev_err(client->dev, "failed to get DCMF status\n");
-+
-+	complete(&priv->completion);
-+}
-+
- /**
-  * rsu_send_msg() - send a message to Intel service layer
-  * @priv: pointer to rsu private data
-@@ -361,7 +405,8 @@ static ssize_t max_retry_show(struct device *dev,
- 	if (!priv)
- 		return -ENODEV;
- 
--	return sprintf(buf, "0x%08x\n", priv->max_retry);
-+	return scnprintf(buf, sizeof(priv->max_retry),
-+			 "0x%08x\n", priv->max_retry);
- }
- 
- static ssize_t dcmf0_show(struct device *dev,
-@@ -408,6 +453,61 @@ static ssize_t dcmf3_show(struct device *dev,
- 	return sprintf(buf, "0x%08x\n", priv->dcmf_version.dcmf3);
- }
- 
-+static ssize_t dcmf0_status_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->dcmf_status.dcmf0 == INVALID_DCMF_STATUS)
-+		return -EIO;
-+
-+	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf0);
-+}
-+
-+static ssize_t dcmf1_status_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->dcmf_status.dcmf1 == INVALID_DCMF_STATUS)
-+		return -EIO;
-+
-+	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf1);
-+}
-+
-+static ssize_t dcmf2_status_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->dcmf_status.dcmf2 == INVALID_DCMF_STATUS)
-+		return -EIO;
-+
-+	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf2);
-+}
-+
-+static ssize_t dcmf3_status_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	struct stratix10_rsu_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!priv)
-+		return -ENODEV;
-+
-+	if (priv->dcmf_status.dcmf3 == INVALID_DCMF_STATUS)
-+		return -EIO;
-+
-+	return sprintf(buf, "0x%08x\n", priv->dcmf_status.dcmf3);
-+}
- static ssize_t reboot_image_store(struct device *dev,
- 				  struct device_attribute *attr,
- 				  const char *buf, size_t count)
-@@ -484,6 +584,10 @@ static DEVICE_ATTR_RO(dcmf0);
- static DEVICE_ATTR_RO(dcmf1);
- static DEVICE_ATTR_RO(dcmf2);
- static DEVICE_ATTR_RO(dcmf3);
-+static DEVICE_ATTR_RO(dcmf0_status);
-+static DEVICE_ATTR_RO(dcmf1_status);
-+static DEVICE_ATTR_RO(dcmf2_status);
-+static DEVICE_ATTR_RO(dcmf3_status);
- static DEVICE_ATTR_WO(reboot_image);
- static DEVICE_ATTR_WO(notify);
- 
-@@ -500,6 +604,10 @@ static struct attribute *rsu_attrs[] = {
- 	&dev_attr_dcmf1.attr,
- 	&dev_attr_dcmf2.attr,
- 	&dev_attr_dcmf3.attr,
-+	&dev_attr_dcmf0_status.attr,
-+	&dev_attr_dcmf1_status.attr,
-+	&dev_attr_dcmf2_status.attr,
-+	&dev_attr_dcmf3_status.attr,
- 	&dev_attr_reboot_image.attr,
- 	&dev_attr_notify.attr,
- 	NULL
-@@ -532,6 +640,10 @@ static int stratix10_rsu_probe(struct platform_device *pdev)
- 	priv->dcmf_version.dcmf2 = INVALID_DCMF_VERSION;
- 	priv->dcmf_version.dcmf3 = INVALID_DCMF_VERSION;
- 	priv->max_retry = INVALID_RETRY_COUNTER;
-+	priv->dcmf_status.dcmf0 = INVALID_DCMF_STATUS;
-+	priv->dcmf_status.dcmf1 = INVALID_DCMF_STATUS;
-+	priv->dcmf_status.dcmf2 = INVALID_DCMF_STATUS;
-+	priv->dcmf_status.dcmf3 = INVALID_DCMF_STATUS;
- 
- 	mutex_init(&priv->lock);
- 	priv->chan = stratix10_svc_request_channel_byname(&priv->client,
-@@ -561,6 +673,13 @@ static int stratix10_rsu_probe(struct platform_device *pdev)
- 		stratix10_svc_free_channel(priv->chan);
- 	}
- 
-+	ret = rsu_send_msg(priv, COMMAND_RSU_DCMF_STATUS,
-+			   0, rsu_dcmf_status_callback);
-+	if (ret) {
-+		dev_err(dev, "Error, getting DCMF status %i\n", ret);
-+		stratix10_svc_free_channel(priv->chan);
-+	}
-+
- 	ret = rsu_send_msg(priv, COMMAND_RSU_RETRY, 0, rsu_retry_callback);
- 	if (ret) {
- 		dev_err(dev, "Error, getting RSU retry %i\n", ret);
--- 
-2.26.2
+Best Regards,
+Jung Daehwan
 
+------mwmExhcEqaTMgLyfw452.zc-R1ZLcLBBgXcQdqrDAhnQ.X2v=_22567d_
+Content-Type: text/plain; charset="utf-8"
+
+
+------mwmExhcEqaTMgLyfw452.zc-R1ZLcLBBgXcQdqrDAhnQ.X2v=_22567d_--

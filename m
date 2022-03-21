@@ -2,51 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9D94E29EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0485C4E2988
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:04:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351496AbiCUOLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S243872AbiCUOFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349094AbiCUODT (ORCPT
+        with ESMTP id S1349155AbiCUN71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:03:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2ED1777DC;
-        Mon, 21 Mar 2022 07:00:19 -0700 (PDT)
+        Mon, 21 Mar 2022 09:59:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5657672;
+        Mon, 21 Mar 2022 06:58:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A1BDB816DD;
-        Mon, 21 Mar 2022 14:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78B0DC340E8;
-        Mon, 21 Mar 2022 14:00:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1C796125C;
+        Mon, 21 Mar 2022 13:58:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD750C340E8;
+        Mon, 21 Mar 2022 13:57:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871218;
-        bh=qOVgskf1QpCv/42Fu5pcrFzI5eB1xoZRISZBvhB1r0k=;
+        s=korg; t=1647871080;
+        bh=tj33CDVipt3Hwcf7gdEjoaIZbWPVmkUS+u0jcdrdLGM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lL/HOvJmgkN0KBrJF+Xjzn1W2GXLgScgn6vM3KsRM65vVtL1gY7kF1ZF1ZjT9Wv3+
-         lMLZplBJ0P47GYLXrxgKLxqw1XIYFhRo4anT2deoNvykuf3zP0h2mxo/PVYnkVoH7C
-         X2d2gioXNh/0AGWQ2pIqR+gJm5gqA6yaUcnZEe2U=
+        b=Xl21rsFR58KjffptMJonZ8hBxrgiTe52k9YSX3KUaluXabObpICw+Yj3bFnekoKLr
+         Gfc6KAJl5cGM/2RWjK+jlM3KBZaU7nBZGoLB3RzjyaQFYmM2o5zOGrU2g2xi+K1HrI
+         xX6mc0NXcdZSksKjQ84kafKgf3gX9Aw9iPZP97/0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 16/32] drm/panel: simple: Fix Innolux G070Y2-L01 BPP settings
+        stable@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        Jiri Olsa <jolsa@kernel.org>, Kajol Jain <kjain@linux.ibm.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.4 16/17] perf symbols: Fix symbol size calculation condition
 Date:   Mon, 21 Mar 2022 14:52:52 +0100
-Message-Id: <20220321133221.033520901@linuxfoundation.org>
+Message-Id: <20220321133217.625197205@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
-References: <20220321133220.559554263@linuxfoundation.org>
+In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
+References: <20220321133217.148831184@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,49 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+From: Michael Petlan <mpetlan@redhat.com>
 
-[ Upstream commit fc1b6ef7bfb3d1d4df868b1c3e0480cacda6cd81 ]
+commit 3cf6a32f3f2a45944dd5be5c6ac4deb46bcd3bee upstream.
 
-The Innolux G070Y2-L01 supports two modes of operation:
-1) FRC=Low/NC ... MEDIA_BUS_FMT_RGB666_1X7X3_SPWG ... BPP=6
-2) FRC=High ..... MEDIA_BUS_FMT_RGB888_1X7X4_SPWG ... BPP=8
+Before this patch, the symbol end address fixup to be called, needed two
+conditions being met:
 
-Currently the panel description mixes both, BPP from 1) and bus
-format from 2), which triggers a warning at panel-simple.c:615.
+  if (prev->end == prev->start && prev->end != curr->start)
 
-Pick the later, set bpp=8, fix the warning.
+Where
+  "prev->end == prev->start" means that prev is zero-long
+                             (and thus needs a fixup)
+and
+  "prev->end != curr->start" means that fixup hasn't been applied yet
 
-Fixes: a5d2ade627dca ("drm/panel: simple: Add support for Innolux G070Y2-L01")
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Christoph Fritz <chf.fritz@googlemail.com>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: Maxime Ripard <maxime@cerno.tech>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220220040718.532866-1-marex@denx.de
-Signed-off-by: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+However, this logic is incorrect in the following situation:
+
+*curr  = {rb_node = {__rb_parent_color = 278218928,
+  rb_right = 0x0, rb_left = 0x0},
+  start = 0xc000000000062354,
+  end = 0xc000000000062354, namelen = 40, type = 2 '\002',
+  binding = 0 '\000', idle = 0 '\000', ignore = 0 '\000',
+  inlined = 0 '\000', arch_sym = 0 '\000', annotate2 = false,
+  name = 0x1159739e "kprobe_optinsn_page\t[__builtin__kprobes]"}
+
+*prev = {rb_node = {__rb_parent_color = 278219041,
+  rb_right = 0x109548b0, rb_left = 0x109547c0},
+  start = 0xc000000000062354,
+  end = 0xc000000000062354, namelen = 12, type = 2 '\002',
+  binding = 1 '\001', idle = 0 '\000', ignore = 0 '\000',
+  inlined = 0 '\000', arch_sym = 0 '\000', annotate2 = false,
+  name = 0x1095486e "optinsn_slot"}
+
+In this case, prev->start == prev->end == curr->start == curr->end,
+thus the condition above thinks that "we need a fixup due to zero
+length of prev symbol, but it has been probably done, since the
+prev->end == curr->start", which is wrong.
+
+After the patch, the execution path proceeds to arch__symbols__fixup_end
+function which fixes up the size of prev symbol by adding page_size to
+its end offset.
+
+Fixes: 3b01a413c196c910 ("perf symbols: Improve kallsyms symbol end addr calculation")
+Signed-off-by: Michael Petlan <mpetlan@redhat.com>
+Cc: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Kajol Jain <kjain@linux.ibm.com>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+Link: http://lore.kernel.org/lkml/20220317135536.805-1-mpetlan@redhat.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/panel/panel-simple.c | 2 +-
+ tools/perf/util/symbol.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index b7b654f2dfd9..f9242c19b458 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -2510,7 +2510,7 @@ static const struct display_timing innolux_g070y2_l01_timing = {
- static const struct panel_desc innolux_g070y2_l01 = {
- 	.timings = &innolux_g070y2_l01_timing,
- 	.num_timings = 1,
--	.bpc = 6,
-+	.bpc = 8,
- 	.size = {
- 		.width = 152,
- 		.height = 91,
--- 
-2.34.1
-
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -231,7 +231,7 @@ void symbols__fixup_end(struct rb_root_c
+ 		prev = curr;
+ 		curr = rb_entry(nd, struct symbol, rb_node);
+ 
+-		if (prev->end == prev->start && prev->end != curr->start)
++		if (prev->end == prev->start || prev->end != curr->start)
+ 			arch__symbols__fixup_end(prev, curr);
+ 	}
+ 
 
 

@@ -2,81 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DF04E235A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1454E235B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345905AbiCUJcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
+        id S1345907AbiCUJdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238396AbiCUJcW (ORCPT
+        with ESMTP id S238396AbiCUJdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:32:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8050554B7;
-        Mon, 21 Mar 2022 02:30:57 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647855056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/jbJ+hlrmhBqwAxQYwBxLE0FutwoN2QmvQOGRzH0pko=;
-        b=IADmSlZ6RCvbQq0Vnz5tUBbtX9STyzztEG5j7/VUQJUMjtbuXTp5qsIn7k3F8bVky6iCyi
-        77P+ex1h+Fa3dkpXn8YmON2VAYMbdrLUbelKySpjdbFid5QING2fE11Fo/5qf34TT8gbgr
-        ASV1H34T0gBBUuzO5MLrGEf6RXW9MvjWzmidHRSnAU9QJbk3+ZwxU2UvQfkw0mexV4V5hr
-        ctQaCi63OHYvjhkRQxsnmNjn6pTpRjnWsLcMkPRBUepKKZoNi5Tq6UCU3Bz5akttG5QJjA
-        vB+D8TX7PwvvgrvKCtJOtqEcTG3hBjWcVYxFlo0y2vRV9a9n2vSzMIpDIWZ6cA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647855056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/jbJ+hlrmhBqwAxQYwBxLE0FutwoN2QmvQOGRzH0pko=;
-        b=40Pn5fOwZzkrht8DcMsuGmZay1AWQZCxZkrofxArFbCux0MHYc4swe6xRjNeppdTg5Pz6b
-        EpvNCmRsjz/LhVBA==
-To:     Schspa Shi <schspa@gmail.com>, pmladek@suse.com,
-        sergey.senozhatsky@gmail.com, rostedt@goodmis.org
-Cc:     linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bigeasy@linutronix.de, tglx@linutronix.de, schspa@gmail.com
-Subject: Re: [PATCH 5.10-rt] printk: fix suppressed message print when
- reboot/panic
-In-Reply-To: <20220321053815.71316-1-schspa@gmail.com>
-References: <20220321053815.71316-1-schspa@gmail.com>
-Date:   Mon, 21 Mar 2022 10:36:55 +0106
-Message-ID: <87a6dj3b5c.fsf@jogness.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 05:33:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EABB554BF
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:31:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C57F861248
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:31:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D6BFC340E8;
+        Mon, 21 Mar 2022 09:31:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647855102;
+        bh=sBjg7qgQ6pczYWMz8UKw42GOeHOpY7uX94N0BI51gHo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ByIZ6N/6MPrert/CyCQRL27uNf95TpwDv9nIprg1u89aImqqlPlEt2ipFfwdHHaDq
+         4K3J4fLYrhvyV30eMOgXJToobLd7achbkdrSb99OnyfgXfpX18hlkwfEGlHljnp4vT
+         CIPAfJCW2Dg3nHT0Jrlv3EeF9oyM+nvAe68zRPfssyQDLHoR50wmgtX5ccPn1cs0mQ
+         xKDOdIkTjVdg5+adYg+if+OHMQr55Th8oqx/sFKhK5fFmaE9OPWnVomyYrQ2vPhHQs
+         BixMU9U4LywmecDE6yPP/DezVP5zGo2dlJ+4QwsccsU2W5q4HSmyEgprUt11yPixAY
+         06PKRMxXMXgkg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nWEO3-00FuQu-RN; Mon, 21 Mar 2022 09:31:39 +0000
+Date:   Mon, 21 Mar 2022 09:31:39 +0000
+Message-ID: <87k0cny7lw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andre Przywara <andre.przywara@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH 2/3] irqchip/gic-v3: Detect LPI invalidation MMIO registers
+In-Reply-To: <YjNxW5iFIYFApshg@lpieralisi>
+References: <20220315165034.794482-1-maz@kernel.org>
+        <20220315165034.794482-3-maz@kernel.org>
+        <YjNxW5iFIYFApshg@lpieralisi>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lorenzo.pieralisi@arm.com, linux-kernel@vger.kernel.org, andre.przywara@arm.com, tglx@linutronix.de, eric.auger@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-21, Schspa Shi <schspa@gmail.com> wrote:
-> Update printk_seq for suppressed message.
->
-> Affects 5.9-rt and 5.10-rt
->
-> When message is suppressed, printk_seq should be updated, otherwise
-> this message will be printed when reboot. This problem was introduced
-> in commit 3edc0c85d154 ("printk: Rebase on top of new ring buffer").
->
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
+On Thu, 17 Mar 2022 17:35:23 +0000,
+Lorenzo Pieralisi <lorenzo.pieralisi@arm.com> wrote:
+> 
+> On Tue, Mar 15, 2022 at 04:50:33PM +0000, Marc Zyngier wrote:
+> > Since GICv4.1, an implementation can offer the same MMIO-based
+> > implementation as DirectLPI, only with an ITS. Given that this
+> > can be hugely beneficial for workloads that are very LPI masking
+> > heavy (although these workloads are admitedly a bit odd).
+> > 
+> > Interestingly, this is independent of RVPEI, which only *implies*
+> > the functionnality.
+> > 
+> > So let's detect whether the implementation has GICR_CTLR.IR set,
+> > and propagate this as DirectLPI to the ITS driver.
+> > 
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > ---
+> >  drivers/irqchip/irq-gic-v3.c       | 15 +++++++++++----
+> >  include/linux/irqchip/arm-gic-v3.h |  2 ++
+> >  2 files changed, 13 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> > index 736163d36b13..363bfe172033 100644
+> > --- a/drivers/irqchip/irq-gic-v3.c
+> > +++ b/drivers/irqchip/irq-gic-v3.c
+> > @@ -918,7 +918,11 @@ static int gic_populate_rdist(void)
+> >  static int __gic_update_rdist_properties(struct redist_region *region,
+> >  					 void __iomem *ptr)
+> >  {
+> > -	u64 typer = gic_read_typer(ptr + GICR_TYPER);
+> > +	u64 typer;
+> > +	u32 ctlr;
+> > +
+> > +	typer = gic_read_typer(ptr + GICR_TYPER);
+> > +	ctlr = readl_relaxed(ptr + GICR_CTLR);
+> >  
+> >  	/* Boot-time cleanip */
+> >  	if ((typer & GICR_TYPER_VLPIS) && (typer & GICR_TYPER_RVPEID)) {
+> > @@ -941,6 +945,7 @@ static int __gic_update_rdist_properties(struct redist_region *region,
+> >  	/* RVPEID implies some form of DirectLPI, no matter what the doc says... :-/ */
+> >  	gic_data.rdists.has_rvpeid &= !!(typer & GICR_TYPER_RVPEID);
+> >  	gic_data.rdists.has_direct_lpi &= (!!(typer & GICR_TYPER_DirectLPIS) |
+> > +					   !!(ctlr & GICR_CTLR_IR) |
+> >  					   gic_data.rdists.has_rvpeid);
+> >  	gic_data.rdists.has_vpend_valid_dirty &= !!(typer & GICR_TYPER_DIRTY);
+> >  
+> > @@ -962,7 +967,11 @@ static void gic_update_rdist_properties(void)
+> >  	gic_iterate_rdists(__gic_update_rdist_properties);
+> >  	if (WARN_ON(gic_data.ppi_nr == UINT_MAX))
+> >  		gic_data.ppi_nr = 0;
+> > -	pr_info("%d PPIs implemented\n", gic_data.ppi_nr);
+> > +	pr_info("GICv3 features: %d PPIs, %s%s\n",
+> > +		gic_data.ppi_nr,
+> > +		gic_data.has_rss ? "RSS " : "",
+> > +		gic_data.rdists.has_direct_lpi ? "DirectLPI " : "");
+> 
+> I understand GICR_CTLR.IR detection (which is v4.1 feature) - I don't
 
-Reviewed-by: John Ogness <john.ogness@linutronix.de>
+No, it is *also* a GICv3 feature. RVPEI implies IR, but IR is a
+feature on its own (see my reply to Andre on the same subject).
+Nothing restrict IR to a GICv4.1+ implementation, and KVM is about to
+expose these registers to the GICv*3* guest.
 
-Nice catch. Thanks.
+> get why in this patch we are adding a GICv3 DirectLPI info dump (hunk
+> above), it is probably nitpicking but the hunk above does not seem to
+> belong in this patch - it is a separate print info refactoring or I am
+> reading it wrongly.
 
-5.15-rt also has this issue, although the fix is slightly different. For
-5.15-rt, writing to con->printk_seq (via latched_seq_write()) requires
-the console locked. Would you like to post a patch for 5.15-rt as well,
-or would you like me to do it?
+It is indeed just refactoring the kernel messages so that we can see
+that we enable DirectLPI for GICv3 as well. I honestly don't think
+this deserves a separate patch.
 
-5.16 and beyond does not have this issue.
+Thanks,
 
-John Ogness
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,169 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999D14E2725
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF904E272A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347531AbiCUNEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
+        id S1347691AbiCUNFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234229AbiCUNE2 (ORCPT
+        with ESMTP id S1347679AbiCUNFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:04:28 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4088B139
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:03:01 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id q5so3435752plg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:03:01 -0700 (PDT)
+        Mon, 21 Mar 2022 09:05:19 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE6811164
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:03:53 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id q14so6424543ljc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:03:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r0+Od+n3mnWlR1TFnZchNIM/GdPKAtnY5SiiOvRmnTM=;
-        b=TCPJaBfk/04kAILw2uiGrNaftNH9rQ97oP9XPr+Tw3Np45GpB54yTeD1xVrqeZacs3
-         jiy3+GouTv3s3In9ka4KOR2pRXI17ndtyPqDGgIZ9zP+D5AMGAA2NPqGkFvQhIvE5rOK
-         NaGaHytUZ3RDlJuD14pxML2uO+2+zW5WLB0dkuGIfGTY3GIOOXq/ey4AsQ5JPbm1UG7M
-         J3s8GsvanGd943MBqM5TQZQaJtD9uoV1PaacM6A3eoIC0h0Mc5MERcvdqqcWg/HS6FdC
-         aec1GaumZX7AdaaJSV+oUn3zHAwgV4bgOWrDRjVdoU+nr9ZgA2twTijxwBqYPEGGi97q
-         KUJg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dlA9o1B3cAEKjsPw4UZfHpkn62rMesKmX8Xaat/DqJw=;
+        b=Yy4T/tBKzEJawIoH/P6xKcBUGGvKwFoIf6ZiFasZ5D9A16By9VHgjnm3o9auvohKUk
+         /VtHnY03OpgbU5544PsSaz/ola+itereRmWey7wpbprlgY6J9EAzUWPJHv4XklJWCpAp
+         SugwrKfynpSNdCYYp9eGHG+/S6vlIdLt6usjmn+yMpI0mPoH+0NW3Yn3QHJMZNbxJaXP
+         UC7XrLraWSyb+imdjRGQxrgQVr/AZZbx9bvIJsSAQYG92yL4Us4T+NeLykj3S2UBCHU2
+         nKgjaupGEoQno4eLufw5TPUyGGlBf456KI4eLRMXuNZsmGz60aPNbxhcKyQLbzbyDSqp
+         74lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r0+Od+n3mnWlR1TFnZchNIM/GdPKAtnY5SiiOvRmnTM=;
-        b=dxRuchjHwa5grK9L6Tfp3Ve9vBTUNAKBGVehanRYmzPYAsecswZgxwfqs1PCkMAzg1
-         n2AVeeVQ9TP6uqTmO5F3H1nFMHmPdF6XUuZpJVw863ZBTuqyLN2VD+NpKVRk80MhM/QS
-         X3lDwCBmNrSlJmA+KFk+imwXYba8CxXRPL8llVW7k19heMRp3MGXL6FvEFYjo/izUfg1
-         BUPl7ekqBB+IhTvUPb418ATb0EzC3kwA3p58tPe7vFEdpsSy0KQuV26D9y6U/D4NaT1r
-         ltcUXodj2/MQE19S4an4I1azdVHcDI+rqWdRWcwsjO7wZaMzJ1TVfus1jJooKt7e8L4T
-         w/MA==
-X-Gm-Message-State: AOAM530Rm7eS4Ns8NQyMhbtc2RgDd3x3ERIeIsB6tFv4mhzdXiKQVxPp
-        s854qJHL3QQK/od4iHVkMOnAzDkqNko7M1F7eg==
-X-Google-Smtp-Source: ABdhPJzLokYAQATmpIhBzFgbYbD9l6L/7rTAW/yvbzvu2aqQnL7tbRXM0shHvgx/qEZKeovVUqevpxUyFPhc0O9ZglU=
-X-Received: by 2002:a17:90b:1803:b0:1c7:24c4:ab52 with SMTP id
- lw3-20020a17090b180300b001c724c4ab52mr3894290pjb.240.1647867780606; Mon, 21
- Mar 2022 06:03:00 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dlA9o1B3cAEKjsPw4UZfHpkn62rMesKmX8Xaat/DqJw=;
+        b=NT3koh3nCTFPbGQhTnXOMZrPEaKvzgp5dlpuxZrncHMBc2xLd5pm1NPXeqm/Ryhd0s
+         51QrSin/AtQ2mwCXRbW4k/wv+8Bu4+Ao5aQ/RYyfqpv4+mMBdzYZfEEkYCjqY2fLaY0F
+         fkcdHEyk9RTJTmd7zZbQTRGL0aflcflMvDZUigBuhMMdWyq0xWk4gGOWfZCaV6HhnxXF
+         WowtqUvjDnmzMoJs+tI6Eo2tNmZZSJKG7Qh6YSN0xl3AgzfHQ/OQRV3ACgNxdjJZWmuH
+         iY2zMFPkKIvKjg/26c8wonjlo688SlHgpNa8jXorx7fEw6aP9mE4/RHwbkD6MKsiLN4y
+         rqLA==
+X-Gm-Message-State: AOAM5305/hwbPMRsc+hbYm5XtemvprM/TZLf56wbj4wIPGEs6NutexOQ
+        Ezg8lc/j7CVdtjqf5ph9/3jWADL6qE0kUQ==
+X-Google-Smtp-Source: ABdhPJzY0lTYbzt1vECx3UTcOkmwVlgwRYGbNbIzMSstLyr5PDsnRHnLyqrlMT5D4xqdN56p9c1FMg==
+X-Received: by 2002:a2e:9692:0:b0:247:e508:714e with SMTP id q18-20020a2e9692000000b00247e508714emr15546606lji.375.1647867831205;
+        Mon, 21 Mar 2022 06:03:51 -0700 (PDT)
+Received: from jade.urgonet (h-79-136-84-253.A175.priv.bahnhof.se. [79.136.84.253])
+        by smtp.gmail.com with ESMTPSA id t27-20020a2e8e7b000000b00247f32b572asm2067738ljk.19.2022.03.21.06.03.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 06:03:50 -0700 (PDT)
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>
+Subject: [PATCH v2 0/4]  OP-TEE RPC argument cache
+Date:   Mon, 21 Mar 2022 14:03:37 +0100
+Message-Id: <20220321130341.935535-1-jens.wiklander@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <1646983382-30036-1-git-send-email-zheyuma97@gmail.com> <YjMSMIrbsVZjEw8W@phenom.ffwll.local>
-In-Reply-To: <YjMSMIrbsVZjEw8W@phenom.ffwll.local>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Mon, 21 Mar 2022 21:02:47 +0800
-Message-ID: <CAMhUBjkohp=-4YZ7x6Yyf4tQr_2zCoR+RVmEZPGLoXTEhNoPFA@mail.gmail.com>
-Subject: Re: [PATCH] drm: drm_bufs: Error out if 'dev->agp' is a null pointer
-To:     Zheyu Ma <zheyuma97@gmail.com>, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, airlied@linux.ie,
-        dri-devel@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 6:49 PM Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Fri, Mar 11, 2022 at 07:23:02AM +0000, Zheyu Ma wrote:
-> > The user program can control the 'drm_buf_desc::flags' via ioctl system
-> > call and enter the function drm_legacy_addbufs_agp(). If the driver
-> > doesn't initialize the agp resources, the driver will cause a null
-> > pointer dereference.
-> >
-> > The following log reveals it:
-> >     general protection fault, probably for non-canonical address
-> >     0xdffffc000000000f: 0000 [#1] PREEMPT SMP KASAN PTI
-> >     KASAN: null-ptr-deref in range [0x0000000000000078-0x000000000000007f]
-> >     Call Trace:
-> >      <TASK>
-> >      drm_ioctl_kernel+0x342/0x450 drivers/gpu/drm/drm_ioctl.c:785
-> >      drm_ioctl+0x592/0x940 drivers/gpu/drm/drm_ioctl.c:885
-> >      vfs_ioctl fs/ioctl.c:51 [inline]
-> >      __do_sys_ioctl fs/ioctl.c:874 [inline]
-> >      __se_sys_ioctl+0xaa/0xf0 fs/ioctl.c:860
-> >      do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >      do_syscall_64+0x43/0x90 arch/x86/entry/common.c:80
-> >      entry_SYSCALL_64_after_hwframe+0x44/0xae
-> >
-> > Fix this bug by adding a check.
-> >
-> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
->
-> You can only hit this if you enabled a DRIVER_LEGACY drm driver, which
-> opens you up to tons of other CVEs and issues. What's your .config?
+Hi all,
 
-Yes, I enable the DRM_LEGACY option in the config.
-I think you mean this is not a normal configuration file? Do you have
-a recommended configuration option for when I want to test the GPU
-driver?
+This patchset optimizes handling of the argument struct passed to
+call_with_arg when doing a yielding call to OP-TEE.
 
-Actually, I use the following configs related to GPU:
+Prior to this was this struct allocated before the yielding call and
+then freed after it had returned. In case many calls are made in succession
+this results in quite a bit of unnecessary allocte/free and possibly also
+switching back and forth to secure work in order to register if needed.
 
-CONFIG_AGP=y
-CONFIG_AGP_AMD64=y
-CONFIG_AGP_INTEL=y
-CONFIG_AGP_SIS=y
-CONFIG_AGP_VIA=y
-CONFIG_INTEL_GTT=y
-CONFIG_VGA_ARB=y
-CONFIG_VGA_ARB_MAX_GPUS=16
-CONFIG_DRM=y
-CONFIG_DRM_MIPI_DSI=y
-CONFIG_DRM_KMS_HELPER=y
-CONFIG_DRM_DEBUG_MODESET_LOCK=y
-CONFIG_DRM_FBDEV_EMULATION=y
-CONFIG_DRM_FBDEV_OVERALLOC=100
-CONFIG_DRM_TTM=y
-CONFIG_DRM_VRAM_HELPER=y
-CONFIG_DRM_TTM_HELPER=y
-CONFIG_DRM_GEM_SHMEM_HELPER=y
-CONFIG_DRM_SCHED=y
-CONFIG_DRM_RADEON=y
-CONFIG_DRM_AMDGPU=y
-CONFIG_DRM_AMD_DC=y
-CONFIG_DRM_AMD_DC_DCN=y
-CONFIG_DRM_I915=y
-CONFIG_DRM_I915_FORCE_PROBE=""
-CONFIG_DRM_I915_CAPTURE_ERROR=y
-CONFIG_DRM_I915_COMPRESS_ERROR=y
-CONFIG_DRM_I915_USERPTR=y
-CONFIG_DRM_I915_REQUEST_TIMEOUT=20000
-CONFIG_DRM_I915_FENCE_TIMEOUT=10000
-CONFIG_DRM_I915_USERFAULT_AUTOSUSPEND=250
-CONFIG_DRM_I915_HEARTBEAT_INTERVAL=2500
-CONFIG_DRM_I915_PREEMPT_TIMEOUT=640
-CONFIG_DRM_I915_MAX_REQUEST_BUSYWAIT=8000
-CONFIG_DRM_I915_STOP_TIMEOUT=100
-CONFIG_DRM_I915_TIMESLICE_DURATION=1
-CONFIG_DRM_VMWGFX=y
-CONFIG_DRM_GMA500=y
-CONFIG_DRM_UDL=y
-CONFIG_DRM_AST=y
-CONFIG_DRM_MGAG200=y
-CONFIG_DRM_QXL=y
-CONFIG_DRM_VIRTIO_GPU=y
-CONFIG_DRM_PANEL=y
-CONFIG_DRM_BRIDGE=y
-CONFIG_DRM_PANEL_BRIDGE=y
-CONFIG_DRM_BOCHS=y
-CONFIG_DRM_CIRRUS_QEMU=y
-CONFIG_DRM_GM12U320=y
-CONFIG_DRM_VBOXVIDEO=y
-CONFIG_DRM_GUD=y
-CONFIG_DRM_HYPERV=y
-CONFIG_DRM_LEGACY=y
-CONFIG_DRM_TDFX=y
-CONFIG_DRM_R128=y
-CONFIG_DRM_MGA=y
-CONFIG_DRM_SIS=y
-CONFIG_DRM_VIA=y
-CONFIG_DRM_SAVAGE=y
-CONFIG_DRM_PANEL_ORIENTATION_QUIRKS=y
+Another optimization handles the way the argument struct needed to do RPC
+is passed. Please see the patch "optee: add OPTEE_SMC_CALL_WITH_RPC_ARG and
+OPTEE_SMC_CALL_WITH_REGD_ARG" for details.
+
+This patchset is based the next branch [1] in my kernel to avoid conflict
+with other recent patches.
 
 Thanks,
-Zheyu Ma
+Jens
+
+[1] https://git.linaro.org/people/jens.wiklander/linux-tee.git/log/?h=next
+
+v1->v2:
+* Split out a separate commit "optee: rename rpc_arg_count to
+  rpc_param_count"
+* Check optee->rpc_param_count before calling optee_disable_shm_cache().
+* Mention OPTEE_SMC_CALL_WITH_REGD_ARG in commit message.
+
+
+Jens Wiklander (4):
+  optee: rename rpc_arg_count to rpc_param_count
+  optee: add OPTEE_SMC_CALL_WITH_RPC_ARG and
+    OPTEE_SMC_CALL_WITH_REGD_ARG
+  optee: add FF-A capability OPTEE_FFA_SEC_CAP_ARG_OFFSET
+  optee: cache argument shared memory structs
+
+ drivers/tee/optee/call.c          | 238 ++++++++++++++++++++++++------
+ drivers/tee/optee/core.c          |   1 +
+ drivers/tee/optee/ffa_abi.c       |  36 +++--
+ drivers/tee/optee/optee_ffa.h     |  12 +-
+ drivers/tee/optee/optee_private.h |  31 +++-
+ drivers/tee/optee/optee_smc.h     |  47 +++++-
+ drivers/tee/optee/smc_abi.c       | 162 +++++++++++++++-----
+ 7 files changed, 427 insertions(+), 100 deletions(-)
+
+-- 
+2.31.1
+

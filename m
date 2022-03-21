@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629304E330E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C764E3303
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiCUWtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 18:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S229981AbiCUWtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 18:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiCUWt0 (ORCPT
+        with ESMTP id S229688AbiCUWt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:49:26 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819C656203
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:44:12 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id t12-20020a17090a448c00b001b9cbac9c43so266884pjg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:44:12 -0700 (PDT)
+        Mon, 21 Mar 2022 18:49:29 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F283DDCE2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:44:15 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id oo16-20020a17090b1c9000b001c6d21e8c04so338150pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:44:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=N/VqAqp6gLrZv99t4Njzo2cELtOAzHXSK8UPoavhuKQ=;
-        b=mcmZRlLuczmyzx0s2+txXbdamltCrph70eCBEhtFHOvXlDp5ARTOrdpARtK5XjDuq/
-         /QSyThdWNlgl09K6ie4aoRZsa9DnMIO4AUf1aB5quXDa++jLJLuDaq0r6RLOITOehL2G
-         UxAyo1V2O2hF8uzY1cZAenEmg1GuRJK5040lKh/i24X9VFRn9j0DAufUUwfQcBbFP3la
-         Z88KuHe2CPCmRF18dpZ3xHoVXM91Iibz0NcgSyPUGj9P6QvDko1CuxZd6bGhECq/uC4r
-         8il+WcQub0GJ8/Sk8ATiI8TzN3XzIzg2blaYqcoRuenSpyio1nFgqwl+rbBRpHoV5kfc
-         eeNw==
+        bh=ry/V9YKDNiv2vz1hDLgo+eFR8ahO5mH8znmtscP7EmE=;
+        b=WwG2u7IpZgea5H5GWN2LQKdFaBLk/jfiid/ciXEV7lby07wuiAKU6CWpErdYgWG7sP
+         Lq9m3DglPE2OgHasPd0SOuZRh6xLkbOVphpN8n7QhTel+9/yHIWA/OF/h3k0RTWKvtK5
+         LCmwhOoEcyWdhm7pIsyZNK1zFE48KkJ3cQ3iGs1kxoPhqrSltqaFF3ndiHec8jrw9rL7
+         QQ3VC+90lgaePJAYPmsOQHCoNnvx0bWeXFxGMDPONKufR5xvjS0AicLVUpPTXzcPGCDP
+         J6fb+pbaKjzLeRtijlSnOhYcKKAp7eIKHWTxaf3ubt3Fw73UqC1kOHgS3I+xHF1oxRPC
+         BkFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=N/VqAqp6gLrZv99t4Njzo2cELtOAzHXSK8UPoavhuKQ=;
-        b=4IBQAqGjlDmTcdoNBaYUI5xSUVXUXkWGNKd1WXT7Dd3CWY58NAKJ2at0cMRUCpc8mS
-         QtWPn6SUnaBu5lrIcguEqcZ0vRhPh88rUgqn6U5+tKndJEp9Md/xd3HR4MUpDu12h31d
-         e1b0503gxNVBmMuucAjuxXqqFRAoy3a2GN/IuA76j7EiF+cmzcBpgdrj71OChVLBgnYk
-         cMY3w2HJPTAmQzn/PjgLrFnW7SDJlcpOusIk7MESMUMU4+Mb/jZL13gxIy5iFMBdTrES
-         PfKnktMIEQTSLm6YlbJlFRfvQCmCh/zKDcLRlFl+v4bY/DOER7dP4/v7eMPr4Xlmipfn
-         3yGw==
-X-Gm-Message-State: AOAM531ofLDuBlyWCoKY9S3H23XvJE3TnsJREYNIiE6yGuZp+5p6SVbX
-        X4cBaaB7ka0sK2OQCVQ0CYhD+EfjiOpGXswBQ8YbWpW7S/s1EICxxiVtBjmTe4XyhmdLVbpHi/S
-        KUBH+WfIDtLuEAReYp/WkIEhSGR6fZfC0w8VQ76R/JS+wgX/07BoANyFf+yO0P5g8uGb9IeWq
-X-Google-Smtp-Source: ABdhPJxVGCsN92veaK7XgFpIeG5LFpswGfzkkUAPxNMiuzTEbr6kXLk7fUqQnVex+6LVlldWiThRI3baU2Ir
+        bh=ry/V9YKDNiv2vz1hDLgo+eFR8ahO5mH8znmtscP7EmE=;
+        b=wJo++jfKQeu6B4olnBQgY92V0iyo31gc/IaEQnqBQNXsjWQlOiGeiZ0w7aSDjvj08W
+         lItjP5RY6J2TY+c0gCW4kIt7dXZ6Pzy3xwoyTfUKFUKYptVs5GnVMVNycu7BfGikIOSc
+         pw6u0WrdZ0nwYKyZ9TljfbGnPOG474vA3WL+KaokQS8D3HwODchzq94+wbF40N697X6H
+         O2BT6xoPWnBNlLEZEMoQ0MbPO9y1YpRfpQXnE0cY4gc9VWq4omQY9R2mpKbnkts9UuOP
+         RZN/BS+RimN09x+flI8ZDgogLZx7ZKfg+3y4lnQLBFkjONCp1gPHiiDAKYsX68n62JkV
+         T1HQ==
+X-Gm-Message-State: AOAM530OLTOhufvj7ZJ3ZaFyvrfT7A/Aifo2AAU4CTuj8RS0OxkQj5j3
+        Qsj+2zAxcj7E7Ymyv5OqOcuLCyTm5U6dyjjxe5/h7tlzoGlNkMeOeOfYIjpKY9aIDp4B1vAHvga
+        TxpxWp4IV2iZxoq7wQF5oXfTNX8A/TkjmPx9ZYldOb9cicUJo9dKY/Cw6vcPKUX6NznaYr3i4
+X-Google-Smtp-Source: ABdhPJzvtJaDirlNw2N/gfEsXwwJ07X/ORBgROWSzoIs87S3gs5eF48UAvimJequA6LLUN827xFgWpELHZ2N
 X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:b76a:f152:cb5e:5cd2])
  (user=bgardon job=sendgmr) by 2002:a17:902:6b89:b0:154:623c:9517 with SMTP id
- p9-20020a1709026b8900b00154623c9517mr5803697plk.45.1647902651774; Mon, 21 Mar
- 2022 15:44:11 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 15:43:53 -0700
+ p9-20020a1709026b8900b00154623c9517mr5803835plk.45.1647902654448; Mon, 21 Mar
+ 2022 15:44:14 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 15:43:54 -0700
 In-Reply-To: <20220321224358.1305530-1-bgardon@google.com>
-Message-Id: <20220321224358.1305530-5-bgardon@google.com>
+Message-Id: <20220321224358.1305530-6-bgardon@google.com>
 Mime-Version: 1.0
 References: <20220321224358.1305530-1-bgardon@google.com>
 X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH v2 4/9] KVM: x86/mmu: Replace vcpu argument with kvm pointer
- in make_spte
+Subject: [PATCH v2 5/9] KVM: x86/mmu: Factor out the meat of reset_tdp_shadow_zero_bits_mask
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -76,74 +75,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No that nothing in make_spte actually needs the vCPU argument, just
-pass in a pointer to the struct kvm. This allows the function to be used
-in situations where there is no relevant struct vcpu.
+Factor out the implementation of reset_tdp_shadow_zero_bits_mask to a
+helper function which does not require a vCPU pointer. The only element
+of the struct kvm_mmu context used by the function is the shadow root
+level, so pass that in too instead of the mmu context.
 
 No functional change intended.
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- arch/x86/kvm/mmu/spte.c | 9 ++++-----
- arch/x86/kvm/mmu/spte.h | 2 +-
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-index ef2d85577abb..45e9c0c3932e 100644
---- a/arch/x86/kvm/mmu/spte.c
-+++ b/arch/x86/kvm/mmu/spte.c
-@@ -90,7 +90,7 @@ static bool kvm_is_mmio_pfn(kvm_pfn_t pfn)
- 				     E820_TYPE_RAM);
- }
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 3b8da8b0745e..6f98111f8f8b 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -4487,16 +4487,14 @@ static inline bool boot_cpu_is_amd(void)
+  * possible, however, kvm currently does not do execution-protection.
+  */
+ static void
+-reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
++build_tdp_shadow_zero_bits_mask(struct rsvd_bits_validate *shadow_zero_check,
++				int shadow_root_level)
+ {
+-	struct rsvd_bits_validate *shadow_zero_check;
+ 	int i;
  
--bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-+bool __make_spte(struct kvm *kvm, struct kvm_mmu_page *sp,
- 		 const struct kvm_memory_slot *slot, unsigned int pte_access,
- 		 gfn_t gfn, kvm_pfn_t pfn, u64 old_spte, bool prefetch,
- 		 bool can_unsync, bool host_writable, u64 mt_mask,
-@@ -161,7 +161,7 @@ bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
- 		 * e.g. it's write-tracked (upper-level SPs) or has one or more
- 		 * shadow pages and unsync'ing pages is not allowed.
- 		 */
--		if (mmu_try_to_unsync_pages(vcpu->kvm, slot, gfn, can_unsync, prefetch)) {
-+		if (mmu_try_to_unsync_pages(kvm, slot, gfn, can_unsync, prefetch)) {
- 			pgprintk("%s: found shadow page for %llx, marking ro\n",
- 				 __func__, gfn);
- 			wrprot = true;
-@@ -184,7 +184,7 @@ bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
- 	if ((spte & PT_WRITABLE_MASK) && kvm_slot_dirty_track_enabled(slot)) {
- 		/* Enforced by kvm_mmu_hugepage_adjust. */
- 		WARN_ON(level > PG_LEVEL_4K);
--		mark_page_dirty_in_slot(vcpu->kvm, slot, gfn);
-+		mark_page_dirty_in_slot(kvm, slot, gfn);
- 	}
- 
- 	*new_spte = spte;
-@@ -202,10 +202,9 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
- 	struct rsvd_bits_validate *shadow_zero_check =
- 			&vcpu->arch.mmu->shadow_zero_check;
- 
--	return __make_spte(vcpu, sp, slot, pte_access, gfn, pfn, old_spte,
-+	return __make_spte(vcpu->kvm, sp, slot, pte_access, gfn, pfn, old_spte,
- 			   prefetch, can_unsync, host_writable, mt_mask,
- 			   shadow_zero_check, new_spte);
+-	shadow_zero_check = &context->shadow_zero_check;
 -
+ 	if (boot_cpu_is_amd())
+ 		__reset_rsvds_bits_mask(shadow_zero_check, reserved_hpa_bits(),
+-					context->shadow_root_level, false,
++					shadow_root_level, false,
+ 					boot_cpu_has(X86_FEATURE_GBPAGES),
+ 					false, true);
+ 	else
+@@ -4507,12 +4505,19 @@ reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
+ 	if (!shadow_me_mask)
+ 		return;
+ 
+-	for (i = context->shadow_root_level; --i >= 0;) {
++	for (i = shadow_root_level; --i >= 0;) {
+ 		shadow_zero_check->rsvd_bits_mask[0][i] &= ~shadow_me_mask;
+ 		shadow_zero_check->rsvd_bits_mask[1][i] &= ~shadow_me_mask;
+ 	}
  }
  
- static u64 make_spte_executable(u64 spte)
-diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-index e8a051188eb6..cee02fe63429 100644
---- a/arch/x86/kvm/mmu/spte.h
-+++ b/arch/x86/kvm/mmu/spte.h
-@@ -410,7 +410,7 @@ static inline u64 get_mmio_spte_generation(u64 spte)
- 	return gen;
- }
- 
--bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-+bool __make_spte(struct kvm *kvm, struct kvm_mmu_page *sp,
- 		 const struct kvm_memory_slot *slot, unsigned int pte_access,
- 		 gfn_t gfn, kvm_pfn_t pfn, u64 old_spte, bool prefetch,
- 		 bool can_unsync, bool host_writable, u64 mt_mask,
++static void
++reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
++{
++	build_tdp_shadow_zero_bits_mask(&context->shadow_zero_check,
++					context->shadow_root_level);
++}
++
+ /*
+  * as the comments in reset_shadow_zero_bits_mask() except it
+  * is the shadow page table for intel nested guest.
 -- 
 2.35.1.894.gb6a874cedc-goog
 

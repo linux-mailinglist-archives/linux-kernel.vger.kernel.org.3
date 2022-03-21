@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFB24E2E6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F214E2E6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351356AbiCUQqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 12:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S1351365AbiCUQqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 12:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344532AbiCUQqc (ORCPT
+        with ESMTP id S1344532AbiCUQqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:46:32 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502762DD48;
-        Mon, 21 Mar 2022 09:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oJ9Qvw5oXwS4GQGsOIZPh2cYX0tdWh2rdUhpNrMbGAI=; b=Wf13uQGgu5LlB1T0RiH5DnWLtr
-        Es3xkJsC7yQJbgDsza/QL5Lidt9VGfx0J8ACxJ1VQiWhhpRwilKwds11y6jEB6U8c8AJUVCHm+3cB
-        RSzbwfRbMNUVoOGLdXlu77Z96ra2u5NK9fxNI10e2UfLiHjW3aF5A2ojzoS7gSw5MdRBLLpKr8L3t
-        pfL7a/eU9x/hGgyTO/a5XYFdgMhWWLbU7sGC9vgve4jzwDwEp9BgI2ZTvrzrv+pkn+/gNWiTUvutd
-        FJ73bBCEEu5QX84N/91xSXagoa3qHjwgoqFey6RoIHd3Dpldx0f5KezJZcdtXkIou5upGV6wrHbuh
-        7XZX56JQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWL9B-00AkyC-M3; Mon, 21 Mar 2022 16:44:45 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1815930020B;
-        Mon, 21 Mar 2022 17:44:45 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F34242DB88BF5; Mon, 21 Mar 2022 17:44:44 +0100 (CET)
-Date:   Mon, 21 Mar 2022 17:44:44 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <YjirfOJ2HQAnTrU4@hirez.programming.kicks-ass.net>
-References: <20220321140327.777f9554@canb.auug.org.au>
- <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
- <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
- <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
- <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net>
- <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
- <YjidpOZZJkF6aBTG@hirez.programming.kicks-ass.net>
- <CAHk-=wigO=68WA8aMZnH9o8qRUJQbNJPERosvW82YuScrUTo7Q@mail.gmail.com>
+        Mon, 21 Mar 2022 12:46:53 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBA43914C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:45:27 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id mm17-20020a17090b359100b001c6da62a559so5118085pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AicliVQo9oPBK8n7poeLN51566am0Rt/VUvE8XrowPQ=;
+        b=ZTiDb1aQ0Y7pdZtN6OoKWYvjwdAZqk/SO3bPioXF0K5AbLBvmws1X34rzqX80ZQIRw
+         80bRadDMgRvlW8wQVA3cYBaJsameVfGTQ0veT1zsj7ylD4Y2c45f2VEqxWjaM/gmsbj9
+         k1eRfDYXYsGK93GqgZiY9Q9LywnK+OzvnPQ9I5yS9+Y8Ipr2aMSF+mgsWMajY0I9DYll
+         8OSaT/ML4OFsqOTghSpjGbfymkHK4wgVM7vMVXxhDcDIEJKg14UeluSfz1LouMScnQa1
+         6Yqeb+e3qHRJTDqOM8Su5779tYTxX36JUx9XnMr4IVMF9C/uLwRO8+rne8XlHANsW1Sp
+         0IFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=AicliVQo9oPBK8n7poeLN51566am0Rt/VUvE8XrowPQ=;
+        b=Ikinxr0oK45WL7t5vJNpG5wZzltWS9IvX05EpLHSrPu96cxIsfSu++3Vus7zmrpbvi
+         EA4Q+ccIrfmNrFpSX9cYpWvMvpIVmUtx7ReP924R4NlsND9hRh5XnyH3FJV47ULZrDO9
+         1CFcG+nVKuv85YWbjyq16uJnR0id7+qPBwxCyn4ZpxC+lVrUWLRmbOC24BPOvdX6ZEdQ
+         4DzAkA5vOZLgQhMl+j3LCi0VXNfIo82KWpq1oK+0QjR00OaCiL77+SQ979sFNRw/z+YC
+         CDf9dApTM08Chs2v/7vGlW3POpSbQEiDS6RU1SDHXAe3PpLSvCJZfQQlTA2u03vfY68c
+         joSg==
+X-Gm-Message-State: AOAM531Wd/aPifA24zui+HMexzpp3aBd5PQ3qtuBihsuu39PCwzcOVE6
+        cKYgjEsLw873KDXcs5v4RoW1cddGPl7EGw==
+X-Google-Smtp-Source: ABdhPJyHS1zM0QTpvbnngDrXsPaSf+9njyggsayW5v60DPCfyvZ73SqetYY/v51IhrBqSso7skltnA==
+X-Received: by 2002:a17:902:e742:b0:154:3e6a:21c0 with SMTP id p2-20020a170902e74200b001543e6a21c0mr10091153plf.117.1647881126281;
+        Mon, 21 Mar 2022 09:45:26 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id x2-20020a63aa42000000b0038265eb2495sm5477022pgo.88.2022.03.21.09.45.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 09:45:25 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 21 Mar 2022 06:45:23 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: An announcement for kernel-global workqueue users.
+Message-ID: <Yjirozrn/iRHhN63@slm.duckdns.org>
+References: <49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wigO=68WA8aMZnH9o8qRUJQbNJPERosvW82YuScrUTo7Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,36 +72,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 09:37:35AM -0700, Linus Torvalds wrote:
-> On Mon, Mar 21, 2022 at 8:46 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > This landing in -next only today (after having been committed last
-> > friday night) is another clue it should probably go next round.
-> 
-> I went and looked at lore to get the context that I didn't get in this
-> email that I was added to the participants for.
-> 
-> I didn't find the context there either.
-> 
-> Sure, I found the thread, but the whole "that x86 patch" that you
-> refer to was never actually specified even in the full thread as far
-> as I can tell. I see that there is an arm64 equivalent too of what you
-> are complaining about, and I have no idea about that one either..
-> 
-> Mind actually giving the full details so that we don't have to go
-> re-do the work you already did?
-> 
-> Because right now I know something is wrong, I know the warnings, but
-> I don't actually have any handle on the actual patches to look out
-> for.
-> 
-> It's presumably not in any of the pull requests I already have
-> pending, but it would be nice if I saw some details of _what_ you are
-> complaining about, and not just the complaint itself ;)
+Hello, Tetsuo.
 
-Duh, right. It's this series:
+On Mon, Mar 21, 2022 at 10:24:23AM +0900, Tetsuo Handa wrote:
+> Hello.
+> 
+> The Linux kernel provides kernel-global WQs (namely, system_wq, system_highpri_wq,
+> system_long_wq, system_unbound_wq, system_freezable_wq, system_power_efficient_wq
+> and system_freezable_power_efficient_wq). But since attempt to flush kernel-global
+> WQs has possibility of deadlock, Tejun Heo thinks that we should stop calling
+> flush_scheduled_work() and flush_workqueue(system_*). Such callers as of Linux 5.17
+> are listed below.
 
-  https://lore.kernel.org/bpf/164757541675.26179.17727138330733641017.git-patchwork-notify@kernel.org/
+Hey, so, I'm not too sure this approach would work. Someone would have to do
+most of the legwork and ping the respective maintainers with proposed
+patches explaining what's happening why and how the proposed patches are
+safe.
 
-That went into bpf-next last Friday. I just checked but haven't found a
-pull for it yet.
+> I tried to send a patch that emits a warning when flushing kernel-global WQs is attempted
+> ( https://lkml.kernel.org/r/2efd5461-fccd-f1d9-7138-0a6767cbf5fe@I-love.SAKURA.ne.jp ).
+> But Linus does not want such patch
+> ( https://lkml.kernel.org/r/CAHk-=whWreGjEQ6yasspzBrNnS7EQiL+SknToWt=SzUh4XomyQ@mail.gmail.com ).
+
+You can *float* these warning patches in -next to help with conversion if
+necessary but you really have to convert most of the obvious existing users
+beforehand.
+
+> Step 2: Create a WQ for your module from __init function. The same flags
+>         used by corresponding kernel-global WQ can be used when creating
+>         the WQ for your module.
+> 
+>     my_wq = alloc_workqueue("my_wq_name", 0, 0);
+
+And, the first preference would be converting to use flush_work() unless
+defining a separate flush domain to flush multiple work items is absolutely
+necessary.
+
+Thanks.
+
+-- 
+tejun

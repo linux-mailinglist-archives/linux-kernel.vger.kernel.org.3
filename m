@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F054E223B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1664E2240
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345273AbiCUIdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 04:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S1345291AbiCUIez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 04:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345282AbiCUIdL (ORCPT
+        with ESMTP id S243898AbiCUIev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 04:33:11 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7085E158;
-        Mon, 21 Mar 2022 01:31:46 -0700 (PDT)
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MBDzc-1nMpmp02H8-00CgfB; Mon, 21 Mar 2022 09:31:45 +0100
-Received: by mail-wr1-f53.google.com with SMTP id r13so4543509wrr.9;
-        Mon, 21 Mar 2022 01:31:44 -0700 (PDT)
-X-Gm-Message-State: AOAM533d2oLOP4ggDTp+ZT1ZGVxKmCEtVetk0b2ewAAwmUOlC3CHiroN
-        IQPY+nqrOUDKPzhEzYmEwtvJQ05Y/hu1NeP91s4=
-X-Google-Smtp-Source: ABdhPJwNXiwsoigTvelrjNs5EbXksDtDKvgY9x9aJt86WRD44JHHj4qZkGEwvdPjubVD7qa0SC7fOGzOnaEQv83dZHU=
-X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
- e15-20020a5d6d0f000000b0020391571c48mr17100710wrq.192.1647851504650; Mon, 21
- Mar 2022 01:31:44 -0700 (PDT)
+        Mon, 21 Mar 2022 04:34:51 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE52019C3D;
+        Mon, 21 Mar 2022 01:33:26 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id h196so11111689qke.12;
+        Mon, 21 Mar 2022 01:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lgbn95GaqkaWrHL6lRh7q4XgqWtuDli+cU2zPOFKkFA=;
+        b=mHtUj+RrDRqWSpPHCVZONVGDK9NAKmdn+SAbQqbfdIdge9jNVa8UeQOFOZo/oJhkzt
+         fG2fFt3THlSS/xWroxDQURGWy7uOpdsQW/q0RI48TPjMIUb6dr/z8/74ApHC9CGH1lWy
+         vzK9GBP8kFBqxq+3FrGrsGu+uadB5+U8XO+N2sgn/jtiEPm0wL9OQ4A/kDVFuL6bUVtg
+         7bTJyvfkwErsoQnq9ndq9wjzUCBjKtP/hKVQzFxBmkeLQbX18JU+EWzM4uMISeeuPqpY
+         Jm1IAdPqeRlA2WcQHpWEJMgAK8ubT3UIRF83/qG6PtBriOWr+PMtWNBRTey0Akdf8N/Q
+         gyLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lgbn95GaqkaWrHL6lRh7q4XgqWtuDli+cU2zPOFKkFA=;
+        b=5ribDpbBK8yBbE9BMl+HRE2G/UHLveFT+9lrfPRGw/Cgpyk8qnyuFkApLEif064WG9
+         6OGWK9B8plozIXiu3b2tmY2rHh2mSZbMO1aGM/zQhSnPEP4kONZo/8qcnytSZdUFdpp3
+         EpDQW2jf6v3YiIo13WWpbTdceI7XqYUDe4hQBuDegxDxs1rv4pethUryObjE/ta0nrpx
+         p/BeYmJ6gCqJlCptHJTfF+jyzpzlwT1ia3aPhkBAN01e5sBK5EwI74ZiCyQkkQiV+DSB
+         DDy8yiplEmI3bnxs64VY1oeHMys6UpDhBzL/5nlCvfw1+c1UnvrT4BAav/twes8E8ojK
+         +qxA==
+X-Gm-Message-State: AOAM531G7DKWjsC2T8nBV4Y2GJmMdBb/QvCTaNnHWi5+SxNSAC6sUu+9
+        75DMDexzahvITIno7+Sl8GGg0oMecDc=
+X-Google-Smtp-Source: ABdhPJw+GWk50gV9/1wgOLhU3z6N7p7AIvpMX3uvTLLQPU0opKrzG2JSX3NF5WhObtLrF+72/ZwfIg==
+X-Received: by 2002:a37:65d3:0:b0:67e:9cbf:b1ec with SMTP id z202-20020a3765d3000000b0067e9cbfb1ecmr2132269qkb.138.1647851605607;
+        Mon, 21 Mar 2022 01:33:25 -0700 (PDT)
+Received: from vps.qemfd.net (vps.qemfd.net. [173.230.130.29])
+        by smtp.gmail.com with ESMTPSA id g21-20020ac85815000000b002e06e2623a7sm11397415qtg.0.2022.03.21.01.33.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 01:33:25 -0700 (PDT)
+Received: from schwarzgerat.orthanc (schwarzgerat.danknet [192.168.128.2])
+        by vps.qemfd.net (Postfix) with ESMTP id 97B012B6E2;
+        Mon, 21 Mar 2022 04:33:24 -0400 (EDT)
+Received: by schwarzgerat.orthanc (Postfix, from userid 1000)
+        id 80F45600415; Mon, 21 Mar 2022 04:33:24 -0400 (EDT)
+Date:   Mon, 21 Mar 2022 04:33:24 -0400
+From:   nick black <dankamongmen@gmail.com>
+To:     "G. Branden Robinson" <g.branden.robinson@gmail.com>
+Cc:     linux-man@vger.kernel.org,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [patch] console_codes.4: ffix
+Message-ID: <Yjg4VHMhrabggl88@schwarzgerat.orthanc>
+References: <YeEc2pYvKEckcAmv@schwarzgerat.orthanc>
+ <CAN4uE+p-uKzHNYry2YhCMfEFBQ2jUqpDAGx=+eha01w-L4fAjg@mail.gmail.com>
+ <20220320160217.gws42lklp6ishzub@localhost.localdomain>
 MIME-Version: 1.0
-References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143130.1026432-1-chenhuacai@loongson.cn> <20220319143130.1026432-5-chenhuacai@loongson.cn>
-In-Reply-To: <20220319143130.1026432-5-chenhuacai@loongson.cn>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 21 Mar 2022 09:31:28 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3ycOKLvKunyatRETN0n3=D+=Y-EZF3aYH95G5WF8M7bg@mail.gmail.com>
-Message-ID: <CAK8P3a3ycOKLvKunyatRETN0n3=D+=Y-EZF3aYH95G5WF8M7bg@mail.gmail.com>
-Subject: Re: [PATCH V8 05/22] LoongArch: Add build infrastructure
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ZdHIvV1BtcEI1gX4wU//OX4oJC5NRpmkhfoVFsJOH5Jr1ZJObZw
- ln06/5/rgAjITdJsqK9oZvqddKD+Xw/zMXTQi4oV9lBtV/AZDXmP3sRC/dfvIhVHspMa8BM
- FhUoVeM1yGjwLQhS+le6bwcSGMomY6orS6SwX5QxEjARERUqxisGEnNMowa65ew/ZIZyFED
- rmXyuJB85Ed495+hSf6FQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LJxcEdo9OWc=:/wHgL8BynPJugPKJ9vsSVM
- wYYis3Vtzu9ccMa8CcyupqLNlNG6HtpunpgmyxeVDQtA/AwVCZop58PIQB2r09DnOl0TwxxKo
- t6XrBUWvHMHqd8FbMQ+xyC6Rf7DCnysl42+C1Awkv1nLNWzbn28Gl+sMDsLWzpxS++OoBCZmM
- dMfwr74msMQjS6aoRgVrsRiyWXp19ibT7rbbLq+NpQjJXPE/x5+Msao6azt+3V3igZ2AbSmiY
- EwINTKJyi6odpsYaf7QPI5qxdnm3SB53VsoX+3XNPTUKcFXOS/ossaIBt1F5B/hGt3TpVz12B
- RMDAjgTvZGyTprv37+29HpNZ+IHDY8T75zDmpoKVgk/Lq0ulf+lt6cSNAW5ylkOexnyv2/h5I
- Ml+BnkZQyFF9kZwkuCuXXajOBdQChVmSrjeO6t4xqTnQUWUXEnOn7T1mOXWZisReND+UXt6V7
- M5EW2xEqiIonmX20HYa4T8jsv6Yf0Dqj4oRjQv0AvIuINJU+yD1MOIZBpNOkWq7b8CGAx2Yoz
- coPdy2nCuwT9wJ9G5wOd/PPL3DYOI4md8rIFANFsNwzJW9aMPCZiyabsBH7+dve9UEo7l74O/
- TjcTO7qjoFCWDzR0oikvO/D2Xt5yN9KUwwOpjvkcoNsAEkRNs/NMp07fHen/vwIn3XOzx1N/0
- Wb7Shy83krg45G4A2vJNQxt61O1IcD7wDO+XT9t5F+YkwuI0YAsvybyv9LgxOmHSRbu9z0QkY
- SFsLoq+HxAkStuBNYz3r0NRtKhH0n/WmoYXFiuK+cy4i8x22sTztU8pA0IjCzrXJPeZ/tWSkj
- BmfGblBsFlOWl/ROksCJF/A+3O98gq9h5Z5QwFcccJTM+tE2e8=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+z8w45qClGzS9KLx"
+Content-Disposition: inline
+In-Reply-To: <20220320160217.gws42lklp6ishzub@localhost.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,15 +80,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 3:31 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> This patch adds Kbuild, Makefile, Kconfig and link script for LoongArch
-> build infrastructure.
 
-Looks good, but I spotted one detail:
+--+z8w45qClGzS9KLx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +       select HAVE_FUTEX_CMPXCHG if FUTEX
+G. Branden Robinson left as an exercise for the reader:
+> I have some suggestions for further improvement, but please don't gate
+> the patch application on these.
 
-HAVE_FUTEX_CMPXCHG no longer exists, everyone supports it now,
-so you should drop this line as well.
+always good to hear from you, GBR. i replied to alejandro's
+request with the original, not wanting to mess with (and then
+test) groff right at the moment, but i've saved your
+animadversions. i've got a patch outstanding for the linux
+console right now, and once it lands, i'll need come back and
+modify this page again (indeed, that's why i was looking at it
+in the first place). i'll effect your suggestions then, thanks!
 
-       ARnd
+--=20
+nick black -=3D- https://www.nick-black.com
+to make an apple pie from scratch,
+you need first invent a universe.
+
+--+z8w45qClGzS9KLx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEmi//dHmU4oe+xCLxX0NADCHL+swFAmI4OFQACgkQX0NADCHL
++szYCg//Xj9aJBwd6LjC2AWfEgrdq8ZuZWR84HuO57e2ZCO9UH9QGY3fETq6eCWk
+/xtrPvwjHK/NDa9LO4b1vyyGhovg9rjwNsYS/ct2jfJICDk7FKrOUk5Z9kJVWRXB
+/YQprfF4G7qd3IR0qszxviVv5V4wI3TzUhiQwR6IEmOeF9N+phXCc7EZqQigWoas
+cq2pkMSqXWgqC/tr+K8FAv75E09955Ghpo5olqDWSRsS8wyVeDmSkw3kXORZO8ZQ
+9JFGfIZFTsVUsWMpi9EGiGNbPSbprG+rN5eODDkorB2LPTOHhhVIB6QcHo1s/bsP
+A8hhR0SvmyTFV2uTNEFqm+WiuWd9n3nbAdW7QPLW+0encYqzioo1wQNzGEaIUZiJ
+gXw2NBrXCEoMaeIYqqa59A9X/7ia+nzd1K8NywroHUzhftzV4IFio7gQTGtyTwCm
+w8NUmBQuJDZrrelE8nL9iiSb4e+rYRj89gQRx2WkKbSqIaQ1Tfdz2AtxJsSHFx6N
+zQYzw8r7YDOBsEk53dO8LbCwj6ICjvgvG+LbyQFWD/eH8YeVSiAPa2Dd2XkSzsGk
+SERjmUeIXLO+uiUiqw7GagNze3q0nzICsZNAcmMWKLysuflXnsCQEvYxLuKVuZ7l
+qMVJGKTN9APyWDJV3WDMP/6VD5LajvwiyOTBG57C3bfVrjd5awo=
+=9Cjm
+-----END PGP SIGNATURE-----
+
+--+z8w45qClGzS9KLx--

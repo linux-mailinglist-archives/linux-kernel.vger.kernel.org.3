@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B8D4E2A7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9D94E29EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349586AbiCUOSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
+        id S1351496AbiCUOLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349616AbiCUOId (ORCPT
+        with ESMTP id S1349094AbiCUODT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:08:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0CC1E3E4;
-        Mon, 21 Mar 2022 07:03:07 -0700 (PDT)
+        Mon, 21 Mar 2022 10:03:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2ED1777DC;
+        Mon, 21 Mar 2022 07:00:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F2C4611D5;
-        Mon, 21 Mar 2022 14:03:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC9EC340E8;
-        Mon, 21 Mar 2022 14:03:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A1BDB816DD;
+        Mon, 21 Mar 2022 14:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78B0DC340E8;
+        Mon, 21 Mar 2022 14:00:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871380;
-        bh=dja4BpNU5v3FWoo+Pg9KabpZUGDnbBswDF7NRHePqXI=;
+        s=korg; t=1647871218;
+        bh=qOVgskf1QpCv/42Fu5pcrFzI5eB1xoZRISZBvhB1r0k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jptkxEW4h0u2TKhrm4DSpFa7ruXX+dWtfG8XxBQs6NGhhE3qGJ/EpSj/Y5PWW3e+w
-         Cr4qExu4w0oJ/pnAKh17yjBr+h9qfbPSfZuQBWj6HRRzLyZAjxaeYNrLmzQ44lRgOn
-         vlcOI0aEzGqAtibDbqCKSsnDk6zJpkI7wLOtG6SA=
+        b=lL/HOvJmgkN0KBrJF+Xjzn1W2GXLgScgn6vM3KsRM65vVtL1gY7kF1ZF1ZjT9Wv3+
+         lMLZplBJ0P47GYLXrxgKLxqw1XIYFhRo4anT2deoNvykuf3zP0h2mxo/PVYnkVoH7C
+         X2d2gioXNh/0AGWQ2pIqR+gJm5gqA6yaUcnZEe2U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kurt Cancemi <kurt@x64architecture.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 10/37] net: phy: marvell: Fix invalid comparison in the resume and suspend functions
+Subject: [PATCH 5.15 16/32] drm/panel: simple: Fix Innolux G070Y2-L01 BPP settings
 Date:   Mon, 21 Mar 2022 14:52:52 +0100
-Message-Id: <20220321133221.593414150@linuxfoundation.org>
+Message-Id: <20220321133221.033520901@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
-References: <20220321133221.290173884@linuxfoundation.org>
+In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
+References: <20220321133220.559554263@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kurt Cancemi <kurt@x64architecture.com>
+From: Marek Vasut <marex@denx.de>
 
-[ Upstream commit 837d9e49402eaf030db55a49f96fc51d73b4b441 ]
+[ Upstream commit fc1b6ef7bfb3d1d4df868b1c3e0480cacda6cd81 ]
 
-This bug resulted in only the current mode being resumed and suspended when
-the PHY supported both fiber and copper modes and when the PHY only supported
-copper mode the fiber mode would incorrectly be attempted to be resumed and
-suspended.
+The Innolux G070Y2-L01 supports two modes of operation:
+1) FRC=Low/NC ... MEDIA_BUS_FMT_RGB666_1X7X3_SPWG ... BPP=6
+2) FRC=High ..... MEDIA_BUS_FMT_RGB888_1X7X4_SPWG ... BPP=8
 
-Fixes: 3758be3dc162 ("Marvell phy: add functions to suspend and resume both interfaces: fiber and copper links.")
-Signed-off-by: Kurt Cancemi <kurt@x64architecture.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220312201512.326047-1-kurt@x64architecture.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Currently the panel description mixes both, BPP from 1) and bus
+format from 2), which triggers a warning at panel-simple.c:615.
+
+Pick the later, set bpp=8, fix the warning.
+
+Fixes: a5d2ade627dca ("drm/panel: simple: Add support for Innolux G070Y2-L01")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Christoph Fritz <chf.fritz@googlemail.com>
+Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc: Maxime Ripard <maxime@cerno.tech>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220220040718.532866-1-marex@denx.de
+Signed-off-by: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/marvell.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/panel/panel-simple.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
-index cfda625dbea5..4d726ee03ce2 100644
---- a/drivers/net/phy/marvell.c
-+++ b/drivers/net/phy/marvell.c
-@@ -1693,8 +1693,8 @@ static int marvell_suspend(struct phy_device *phydev)
- 	int err;
- 
- 	/* Suspend the fiber mode first */
--	if (!linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
--			       phydev->supported)) {
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
-+			      phydev->supported)) {
- 		err = marvell_set_page(phydev, MII_MARVELL_FIBER_PAGE);
- 		if (err < 0)
- 			goto error;
-@@ -1728,8 +1728,8 @@ static int marvell_resume(struct phy_device *phydev)
- 	int err;
- 
- 	/* Resume the fiber mode first */
--	if (!linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
--			       phydev->supported)) {
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
-+			      phydev->supported)) {
- 		err = marvell_set_page(phydev, MII_MARVELL_FIBER_PAGE);
- 		if (err < 0)
- 			goto error;
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index b7b654f2dfd9..f9242c19b458 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -2510,7 +2510,7 @@ static const struct display_timing innolux_g070y2_l01_timing = {
+ static const struct panel_desc innolux_g070y2_l01 = {
+ 	.timings = &innolux_g070y2_l01_timing,
+ 	.num_timings = 1,
+-	.bpc = 6,
++	.bpc = 8,
+ 	.size = {
+ 		.width = 152,
+ 		.height = 91,
 -- 
 2.34.1
 

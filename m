@@ -2,117 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2639F4E2F3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AA04E2F3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349857AbiCURlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
+        id S1349926AbiCURmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349974AbiCURlh (ORCPT
+        with ESMTP id S1345896AbiCURmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:41:37 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B02868FAE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:40:11 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id b67so12222404qkc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6W2sIVaPd1wN+ZQSZ4o9j1nJ91W2fIHQV8YHK4mslGI=;
-        b=othMTu8DE+iag13P8/3A86+7Cc/DHfdnjpWo/byQ5ZUfFCsKml6d/b3+j7enHM3E4T
-         p+KQDmhtptyFrPuooWSYmYPJhZWIkHdGt+4vDWYH8iYYuao36WWrhVCMkScMLZUcTZup
-         pbxMXwiUoDBFmduoGs8/S8k0tsoBfeYNIRC0GZYKyyNpLf6jW7ygE9Q4oqBC51xdfcFk
-         7ttNl5wra931kZmVavvxQVP/9NCHWg77ijwCiHKLw+zmH2XDabD4PX37zubDr18d1FXu
-         LkskplWtgjBIz3OnXb1aT9cH4qssg21daGzI4dNto8OQ0PN0SvwCPVBwRyAb6Xlo3qN2
-         FbyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6W2sIVaPd1wN+ZQSZ4o9j1nJ91W2fIHQV8YHK4mslGI=;
-        b=ATcfVIhg/3rGCy4HxTgErcjux/o86E6dz15Q9qV6ZdQ+6jaeLlrEpj4dzc+k9KR2bf
-         k1cx9Ef1PTQZaTD5DllZfWeXCLJfwWm4sz9JRNjqhQJRoxKa415YJLbbqy+99sJ7WpQk
-         KuOOL4mWIePJe5M5jAstYM9lL8BHquFjUVkFfLQeGNJs2c72sllcYSvgddIWPKeX++Hh
-         ahd3+NGiFy4Eh2WLfDEM8upyZBSC5pgKQ2Fk2s4Z+HbUHf7Sd2ERQ8xa8qZZAsnVJhx/
-         2AZpbK/MyarJyzaBPq7xxRWTp/UIwsGWm34LPFIUsYMwlZ9NSPpjDVs6aMBU2ei2swzE
-         Cvgg==
-X-Gm-Message-State: AOAM533A9VD5rEdhXTQIj3w0nIe7BQQ2mVESqFMmXybwvHf6HxdocMvE
-        CiRwOrQlYsarKFh31mVol9Pufh+4Ec/dIYv4vWeglA==
-X-Google-Smtp-Source: ABdhPJzAfOtHcF9CqanODzAbHAfQeaYZMAZcZ9hv0xTWt4ZcE9sSN4BkC8am1z8h+EdgxGiCPhpJswcEmaek2cu2UjE=
-X-Received: by 2002:a05:620a:2453:b0:67d:9539:495c with SMTP id
- h19-20020a05620a245300b0067d9539495cmr13674139qkn.30.1647884410564; Mon, 21
- Mar 2022 10:40:10 -0700 (PDT)
+        Mon, 21 Mar 2022 13:42:04 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2453650E3C;
+        Mon, 21 Mar 2022 10:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647884439; x=1679420439;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=88Sb97FF2mT4zGdmyNozW0OvxQ2rZhAh4hxyWWz9lcw=;
+  b=UbcRsaKCfmnWZLyXe+LInQR4Ke16PNJwtMR8+aZHIvZWeg5TY0Vuw28T
+   T3t55acTLIgX4+1HTbEWfAtNiIHa+SsEZJh4HKkWIXgk+92gC8pSop/07
+   SxMkiUfFDiV7eD8CgiP6XwDkA4vy5iSMbqlk16R509GMIy6Pt9PuLj2kO
+   HEw0YkwCgC98yajv9p+aguhfYYI6r9EXnknGFYWIHijnql8a9LQyWPLAA
+   VCrhw1g6QT/kf4dDj8YXtm8kNr/pBeIsi3zqmPJ4jayx2gVSh0fP56Qe6
+   ICREUSYOAUCvW+BKEFXF1O2z3/tY/YyfwMZUfeMNuHiIJDQo3DZyrwCpG
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="344041806"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="344041806"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 10:40:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="582943620"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
+  by orsmga001.jf.intel.com with ESMTP; 21 Mar 2022 10:40:34 -0700
+Message-ID: <ff7ac17b-06ba-cf56-dca2-94c4ccca5df8@intel.com>
+Date:   Mon, 21 Mar 2022 19:40:33 +0200
 MIME-Version: 1.0
-References: <1647269217-14064-1-git-send-email-quic_vpolimer@quicinc.com>
- <1647269217-14064-2-git-send-email-quic_vpolimer@quicinc.com>
- <CAE-0n51vfoOK_6B0yAvws32MtLQ1SvBPoQPHBFE14TLzZFUZaw@mail.gmail.com> <BN0PR02MB8173BBD2C02F5DFBEBE94E40E4169@BN0PR02MB8173.namprd02.prod.outlook.com>
-In-Reply-To: <BN0PR02MB8173BBD2C02F5DFBEBE94E40E4169@BN0PR02MB8173.namprd02.prod.outlook.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 21 Mar 2022 20:39:59 +0300
-Message-ID: <CAA8EJpribc722wN2jR5sQEkX6FiaE_SdBk8B5HPamCXZWhEd7A@mail.gmail.com>
-Subject: Re: [PATCH v6 1/5] drm/msm/disp/dpu1: set mdp clk to the maximum
- frequency in opp table during probe
-To:     Vinod Polimera <vpolimer@qti.qualcomm.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        quic_vpolimer <quic_vpolimer@quicinc.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "dianders@chromium.org" <dianders@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
+Content-Language: en-US
+To:     "Steinar H. Gunderson" <sesse@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <YjBnet2813sEGjZY@google.com>
+ <c50bb87d-9fee-c4f9-a350-8729e503e43a@intel.com>
+ <YjDUO6bbyfGw/u0C@google.com>
+ <52903e58-e74c-5ea0-36b4-277ea3610af4@intel.com>
+ <YjGdoGy4Z2UUG9S9@google.com>
+ <ef780335-7dc6-3a23-54a8-b6fc9c8a2ed3@intel.com>
+ <YjHfGrZovk3N/H0f@google.com>
+ <371faf0d-f794-4a2e-0a1c-9d454d7c8b12@intel.com>
+ <YjhUjotmo+kYvoNP@google.com>
+ <ffa56520-09b5-9c5d-7733-6767d2f8e350@intel.com>
+ <YjiuoEUL6jH32cBi@google.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <YjiuoEUL6jH32cBi@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 at 19:21, Vinod Polimera <vpolimer@qti.qualcomm.com> wrote:
->
->
->
-> > -----Original Message-----
-> > From: Stephen Boyd <swboyd@chromium.org>
-> > Sent: Friday, March 18, 2022 2:41 AM
-> > To: quic_vpolimer <quic_vpolimer@quicinc.com>;
-> > devicetree@vger.kernel.org; dri-devel@lists.freedesktop.org;
-> > freedreno@lists.freedesktop.org; linux-arm-msm@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org; robdclark@gmail.com;
-> > dmitry.baryshkov@linaro.org; dianders@chromium.org; quic_kalyant
-> > <quic_kalyant@quicinc.com>
-> > Subject: Re: [PATCH v6 1/5] drm/msm/disp/dpu1: set mdp clk to the
-> > maximum frequency in opp table during probe
-> >
-> > WARNING: This email originated from outside of Qualcomm. Please be wary
-> > of any links or attachments, and do not enable macros.
-> >
-> > Quoting Vinod Polimera (2022-03-14 07:46:53)
-> > > use max clock during probe/bind sequence from the opp table.
-> > > The clock will be scaled down when framework sends an update.
-> >
-> > Capitalize 'use'.
-> >
-> > Why is it important to use max frequency during probe/bind? Does not
-> > setting the clk rate during probe mean that we'll never use the max
-> > rate? Does it speed things up during probe?
->
-> We need to vote mdp clock during probe/bind so that rails are not set at undetermined state as pointed out by Dmitry.
-> Since we dont know what will be the rate set in boot loader, it would be ideal to vote at max frequency.
-> There could be a firmware display programmed in bootloader and we want to transition it to kernel without underflowing.
+On 21/03/2022 18:58, Steinar H. Gunderson wrote:
+> On Mon, Mar 21, 2022 at 03:09:08PM +0200, Adrian Hunter wrote:
+>> Yes, it can cross calls and returns.  'returns' due to "Return Compression"
+>> which can be switched off at record time with config term noretcomp, but
+>> that may cause more overflows / trace data loss.
+>>
+>> To get accurate times for a single function there is Intel PT
+>> address filtering.
+>>
+>> Otherwise LBRs can have cycle times.
+> 
+> Many interesting points, I'll be sure to look into them.
+> 
+> Meanwhile, should I send a new patch with your latest changes?
 
-This should be expressed in the commit message.
-
-
--- 
-With best wishes
-Dmitry
+Yes please.

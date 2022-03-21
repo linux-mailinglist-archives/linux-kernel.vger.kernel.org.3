@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6236E4E2238
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F054E223B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345270AbiCUIdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 04:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S1345273AbiCUIdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 04:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240827AbiCUIdC (ORCPT
+        with ESMTP id S1345282AbiCUIdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 04:33:02 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557545D1AA;
-        Mon, 21 Mar 2022 01:31:38 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id k10so3164650edj.2;
-        Mon, 21 Mar 2022 01:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ptBJ8d2HXhA8CdAaHQDtBS8m0+CIB+DKz+bbzuAsNIE=;
-        b=YJNrChZUz2zpNGb6N7/5G9E77OX8wf8fkLLmgy4NWBBcO6XnmZ+VC1b3vI6IQ5t5EZ
-         eIx2XtXCvqOGkg/eUU0Wi3lSh8005CWSO3WyB+BOK6HMK5JZK0opXM8dGx0XRGn94IAn
-         kq2N9RJY/r9yUwuWmgo1HKY86cjlKzUPHGFqi3sGvY382L2yjwoG2I54Tmr1SV3YsKUx
-         lGAr2xUcjuIldU1AHyvpNpdBVbiFvaQG7cOsg1nUo+dfkL1biCmK8dWVhV2qonk8o7Jm
-         fbqt8c+nBhZB0mFFU+NPWvrG8w4iSj1cfOKjgkIrqurRURIf1JdbeYkgHz3RfJecj0WI
-         /EzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ptBJ8d2HXhA8CdAaHQDtBS8m0+CIB+DKz+bbzuAsNIE=;
-        b=lNkBnobpdA6U9STi81ieD1FzATz1HTDLirYtlFiGOEqc+YmKpFbLS07POl2pqkruNi
-         yNcqaMK80VKoWdQg1jVZkKvE1ERwZTW4Vls1SL86JplPzGYJ9t+WdfDshVgAzXe7pDDD
-         FvY/mWP6TSkm3do3TeR7XUuv5JJFLkdkLGs0rOTpQgrq6ceLQ8D4SHkUU+p/ui/iaB5h
-         7MpXq+F1mzESmM9ZplCKRdBL7y3/QAMwUe+OYqfsdkWHfKDj9Rzb3OcQKyarjij74SRf
-         7e2bkxtyAtbR+J1xsFH/hwZeSrFVOGIY/oivbv4uyThqvKBHbaURAyNcj1PXXtFTgLlr
-         t6nQ==
-X-Gm-Message-State: AOAM532+1JUpDo0mJ15n3yQAkRYWqTNM2IATbjeRDQv+yb3QGwSO1ASp
-        4YKkpFN83q4eAhBC+hPUrgJJifk+GnPylt+rQ54=
-X-Google-Smtp-Source: ABdhPJwkZ7E9x3mlklbSGKy4s+bDAybw0OsCV2Xr/ugF7ASrrAvp+IRjqNV5CIpms5KY8brZDRTh2ZtOwhxEDpx2dRY=
-X-Received: by 2002:aa7:dc4e:0:b0:419:407b:6bff with SMTP id
- g14-20020aa7dc4e000000b00419407b6bffmr3380196edu.158.1647851496821; Mon, 21
- Mar 2022 01:31:36 -0700 (PDT)
+        Mon, 21 Mar 2022 04:33:11 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7085E158;
+        Mon, 21 Mar 2022 01:31:46 -0700 (PDT)
+Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MBDzc-1nMpmp02H8-00CgfB; Mon, 21 Mar 2022 09:31:45 +0100
+Received: by mail-wr1-f53.google.com with SMTP id r13so4543509wrr.9;
+        Mon, 21 Mar 2022 01:31:44 -0700 (PDT)
+X-Gm-Message-State: AOAM533d2oLOP4ggDTp+ZT1ZGVxKmCEtVetk0b2ewAAwmUOlC3CHiroN
+        IQPY+nqrOUDKPzhEzYmEwtvJQ05Y/hu1NeP91s4=
+X-Google-Smtp-Source: ABdhPJwNXiwsoigTvelrjNs5EbXksDtDKvgY9x9aJt86WRD44JHHj4qZkGEwvdPjubVD7qa0SC7fOGzOnaEQv83dZHU=
+X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
+ e15-20020a5d6d0f000000b0020391571c48mr17100710wrq.192.1647851504650; Mon, 21
+ Mar 2022 01:31:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220319181023.8090-1-jagathjog1996@gmail.com> <20220319181023.8090-2-jagathjog1996@gmail.com>
-In-Reply-To: <20220319181023.8090-2-jagathjog1996@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 21 Mar 2022 10:30:26 +0200
-Message-ID: <CAHp75Vem7DS1oXRt=d78pKe4WEWVOJ7uR8p9r33H5Ws9Rz4Qmg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/5] iio: accel: bma400: conversion to device-managed function
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     Dan Robertson <dan@dlrobertson.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
+ <20220319143130.1026432-1-chenhuacai@loongson.cn> <20220319143130.1026432-5-chenhuacai@loongson.cn>
+In-Reply-To: <20220319143130.1026432-5-chenhuacai@loongson.cn>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 21 Mar 2022 09:31:28 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3ycOKLvKunyatRETN0n3=D+=Y-EZF3aYH95G5WF8M7bg@mail.gmail.com>
+Message-ID: <CAK8P3a3ycOKLvKunyatRETN0n3=D+=Y-EZF3aYH95G5WF8M7bg@mail.gmail.com>
+Subject: Re: [PATCH V8 05/22] LoongArch: Add build infrastructure
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Provags-ID: V03:K1:ZdHIvV1BtcEI1gX4wU//OX4oJC5NRpmkhfoVFsJOH5Jr1ZJObZw
+ ln06/5/rgAjITdJsqK9oZvqddKD+Xw/zMXTQi4oV9lBtV/AZDXmP3sRC/dfvIhVHspMa8BM
+ FhUoVeM1yGjwLQhS+le6bwcSGMomY6orS6SwX5QxEjARERUqxisGEnNMowa65ew/ZIZyFED
+ rmXyuJB85Ed495+hSf6FQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LJxcEdo9OWc=:/wHgL8BynPJugPKJ9vsSVM
+ wYYis3Vtzu9ccMa8CcyupqLNlNG6HtpunpgmyxeVDQtA/AwVCZop58PIQB2r09DnOl0TwxxKo
+ t6XrBUWvHMHqd8FbMQ+xyC6Rf7DCnysl42+C1Awkv1nLNWzbn28Gl+sMDsLWzpxS++OoBCZmM
+ dMfwr74msMQjS6aoRgVrsRiyWXp19ibT7rbbLq+NpQjJXPE/x5+Msao6azt+3V3igZ2AbSmiY
+ EwINTKJyi6odpsYaf7QPI5qxdnm3SB53VsoX+3XNPTUKcFXOS/ossaIBt1F5B/hGt3TpVz12B
+ RMDAjgTvZGyTprv37+29HpNZ+IHDY8T75zDmpoKVgk/Lq0ulf+lt6cSNAW5ylkOexnyv2/h5I
+ Ml+BnkZQyFF9kZwkuCuXXajOBdQChVmSrjeO6t4xqTnQUWUXEnOn7T1mOXWZisReND+UXt6V7
+ M5EW2xEqiIonmX20HYa4T8jsv6Yf0Dqj4oRjQv0AvIuINJU+yD1MOIZBpNOkWq7b8CGAx2Yoz
+ coPdy2nCuwT9wJ9G5wOd/PPL3DYOI4md8rIFANFsNwzJW9aMPCZiyabsBH7+dve9UEo7l74O/
+ TjcTO7qjoFCWDzR0oikvO/D2Xt5yN9KUwwOpjvkcoNsAEkRNs/NMp07fHen/vwIn3XOzx1N/0
+ Wb7Shy83krg45G4A2vJNQxt61O1IcD7wDO+XT9t5F+YkwuI0YAsvybyv9LgxOmHSRbu9z0QkY
+ SFsLoq+HxAkStuBNYz3r0NRtKhH0n/WmoYXFiuK+cy4i8x22sTztU8pA0IjCzrXJPeZ/tWSkj
+ BmfGblBsFlOWl/ROksCJF/A+3O98gq9h5Z5QwFcccJTM+tE2e8=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,35 +78,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 8:10 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
->
-> This is a conversion to device-managed by using devm_iio_device_register
-> inside probe function, now disabling the regulator and putting bma400 to
-> power down via a devm_add_action_or_reset() hook.
->
-> The dev_set_drvdata() call, bma400_remove() function and hooks in the I2C
-> and SPI driver struct is removed as devm_iio_device_register function is
-> used to automatically unregister on driver detach.
+On Sat, Mar 19, 2022 at 3:31 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> This patch adds Kbuild, Makefile, Kconfig and link script for LoongArch
+> build infrastructure.
 
-...
+Looks good, but I spotted one detail:
 
-> +static void bma400_disable(void *data_ptr)
-> +{
-> +       struct bma400_data *data = data_ptr;
-> +       int ret;
+> +       select HAVE_FUTEX_CMPXCHG if FUTEX
 
-> +       ret = bma400_set_power_mode(data, POWER_MODE_SLEEP);
-> +       if (ret)
-> +               dev_warn(data->dev, "Failed to put device into sleep mode (%pe)\n",
-> +                        ERR_PTR(ret));
+HAVE_FUTEX_CMPXCHG no longer exists, everyone supports it now,
+so you should drop this line as well.
 
-By what reason did you remove mutex around this call?
-
-> +       regulator_bulk_disable(ARRAY_SIZE(data->regulators), data->regulators);
-> +}
-
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+       ARnd

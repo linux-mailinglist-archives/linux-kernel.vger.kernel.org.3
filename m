@@ -2,119 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4D14E2D79
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFA04E2D87
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345854AbiCUQLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 12:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        id S1350884AbiCUQOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 12:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350866AbiCUQLG (ORCPT
+        with ESMTP id S1348341AbiCUQN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:11:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1165D2899A
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:09:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647878954;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sfGTEmUWEu/FuJm8rv4KxXhPR+l0i9Uc8G4IxOhNPME=;
-        b=X2fStYiGZGu28IzGz94/X4Qix5z/Hr13kjipABSXwtnFEVPKtoB3jGKKQOEvvv7EUMobrc
-        CAKxHClMNNbRxvOb6qvEgQIXUDwbnmNOnpiRhzPWC8bbpRr5GzxnEtDNJQwKuicIey3F1e
-        JEYO2hCnaXljuwhs2HJxk+XCrcv+W5E=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-272-fM6NJd5AOni4YYdRJe2zXw-1; Mon, 21 Mar 2022 12:09:12 -0400
-X-MC-Unique: fM6NJd5AOni4YYdRJe2zXw-1
-Received: by mail-wr1-f71.google.com with SMTP id 71-20020adf82cd000000b00203dc43d216so3238209wrc.22
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:09:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=sfGTEmUWEu/FuJm8rv4KxXhPR+l0i9Uc8G4IxOhNPME=;
-        b=GdQVtHevxamBoqL5ngCx3IqxdMJUuaskFViDa8FrtRAuC49mvjkHCGDsHQD75gdjIq
-         LXUKwjakPGNYW5addWILUSN6x3iKdjkLvvI6NOHovpk11olSGQfQpqNziUnWZZzgG5Rb
-         l0m9u6+Sxw4cR/86xS4ii1gW9877W93n42oxrEf2P0wgItNFQ8DW1wL/5jTw7cvPhMQM
-         HypMrsgxMfPm7guZ4FOLhGJWfaJjW6LklEjWnOKNk/vFybWCafIyr4cW9+kR9fIxWkOv
-         iZfrnz3DH7csq2HVIjRY3AavV5wM3nwzluX+ZWtA6lqIuwEX2PMhlB/LzTGsTCnujBrm
-         15fg==
-X-Gm-Message-State: AOAM532FrCll+kW2uairDKYvLLo1+b+2TV9lMOC56mmn5N1//ml/zf0w
-        eWLUhHmHSPqxqdvrv9ueY9IxBIaKhJncUDsnKZLb+UEEZlleODRVPyOkHwK7iXNMEOh2lcnuHXo
-        TbnjzLM6TQKAqO6degrDZrsit
-X-Received: by 2002:adf:a4ce:0:b0:203:fce0:755e with SMTP id h14-20020adfa4ce000000b00203fce0755emr11044489wrb.510.1647878951694;
-        Mon, 21 Mar 2022 09:09:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxP8tnNpWfcqHVPmFM+7jTdPf3u8hsTPKsNtKPW9hZQPytRSq0aasePBoKmg+nUJ/TirjdyGQ==
-X-Received: by 2002:adf:a4ce:0:b0:203:fce0:755e with SMTP id h14-20020adfa4ce000000b00203fce0755emr11044467wrb.510.1647878951397;
-        Mon, 21 Mar 2022 09:09:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:4900:849b:f76e:5e1f:ff95? (p200300cbc7044900849bf76e5e1fff95.dip0.t-ipconnect.de. [2003:cb:c704:4900:849b:f76e:5e1f:ff95])
-        by smtp.gmail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm14376699wmh.31.2022.03.21.09.09.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 09:09:10 -0700 (PDT)
-Message-ID: <51635f15-0f43-0f9d-e66f-9cd651431f81@redhat.com>
-Date:   Mon, 21 Mar 2022 17:09:09 +0100
+        Mon, 21 Mar 2022 12:13:58 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5512D2E08B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:12:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=jAxbIQUDN4uvFhBZPHKWfmWfwUw
+        ggpRe45TqNvbcPEQ=; b=rIQpjLbMem3sQnGRGTvmlIobA+wYxnhNxICC8qdVl48
+        1OgABgj/rtr73schbXCTGOSo7EzgqeNXw9YWwCGis6evu2yEPK4rh+DTwl+hYsaI
+        l0/y9Hd6He7sgAWYw4II7oPByOCwLqEOoG9Dgw7tG7EZy8lkm2+yY6K13NO48n80
+        =
+Received: (qmail 957618 invoked from network); 21 Mar 2022 17:12:27 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Mar 2022 17:12:27 +0100
+X-UD-Smtp-Session: l3s3148p1@v0I7w7zaFtkgAwDPXxCoAIeNYiWy88zT
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [RFC PATCH 00/15] treewide: rename fsleep
+Date:   Mon, 21 Mar 2022 17:12:08 +0100
+Message-Id: <20220321161223.2837-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH V5 1/2] selftests: vm: bring common functions to a new
- file
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kernel@collabora.com, krisman@collabora.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-References: <20220317103323.94799-1-usama.anjum@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220317103323.94799-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> diff --git a/tools/testing/selftests/vm/vm_util.h b/tools/testing/selftests/vm/vm_util.h
-> new file mode 100644
-> index 0000000000000..e9f5a0f2be196
-> --- /dev/null
-> +++ b/tools/testing/selftests/vm/vm_util.h
-> @@ -0,0 +1,10 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <stdint.h>
-> +#include <fcntl.h>
-> +#include "../kselftest.h"
+Hi,
 
-Are that latter two really required in this header? IMHO they should be
-moved to the respective files that need them.
+I recently stumbled over the relatively new function fsleep(). While I
+think it is usful, I also think the name is too short to be
+self-explanatory. This is why I suggest a rename before it gets even
+wider use in the kernel, see patch 1.  As you can see from the
+statistics below, the churn is still in the acceptable range IMO.
 
-If you return "bool" below, you might want to include <stdbool.h> here
-as well.
+The name 'usleep_autoyield' is the best I could come up with, but if you
+can think of something better I am all ears. This is why the series is
+still RFC and not sent to subsystem mailing lists. The base is v5.17-rc8
+but my plan is to resend it after 5.18-rc1 with all new fsleep-users
+fixed as well. And remove the fallback late in the 5.18 cycle. If we can
+agree on something that is.
 
-> +
-> +uint64_t pagemap_get_entry(int fd, char *start);
-> +bool pagemap_is_softdirty(int fd, char *start);
-> +void clear_softdirty(void);
-> +uint64_t read_pmd_pagesize(void);
-> +uint64_t check_huge(void *addr);
+buildbot is happy with the changes. A branch can be found here:
 
-Apart from that, LGTM.
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/usleep_autoyield
+
+Please let me know what you think!
+
+All the best,
+
+   Wolfram
+
+
+Wolfram Sang (15):
+  delay: rename fsleep to usleep_autoyield
+  base: regmap: use new name 'usleep_autoyield' instead of 'fsleep'
+  bus: mhi: core: use new name 'usleep_autoyield' instead of 'fsleep'
+  iio: adc: use new name 'usleep_autoyield' instead of 'fsleep'
+  memory: tegra: use new name 'usleep_autoyield' instead of 'fsleep'
+  mfd: use new name 'usleep_autoyield' instead of 'fsleep'
+  mux: use new name 'usleep_autoyield' instead of 'fsleep'
+  net: ethernet: realtek: use new name 'usleep_autoyield' instead of
+    'fsleep'
+  net: mdio: use new name 'usleep_autoyield' instead of 'fsleep'
+  net: phy: use new name 'usleep_autoyield' instead of 'fsleep'
+  net: wireless: realtek: rtw88: use new name 'usleep_autoyield' instead
+    of 'fsleep'
+  net: wireless: realtek: rtw89: use new name 'usleep_autoyield' instead
+    of 'fsleep'
+  thermal: tegra: use new name 'usleep_autoyield' instead of 'fsleep'
+  usb: chipidea: use new name 'usleep_autoyield' instead of 'fsleep'
+  delay: remove the fallback for fsleep
+
+ Documentation/timers/timers-howto.rst             | 2 +-
+ drivers/base/regmap/regmap.c                      | 4 ++--
+ drivers/bus/mhi/core/main.c                       | 2 +-
+ drivers/iio/adc/ti-tsc2046.c                      | 2 +-
+ drivers/memory/tegra/tegra20.c                    | 2 +-
+ drivers/mfd/acer-ec-a500.c                        | 2 +-
+ drivers/mux/core.c                                | 2 +-
+ drivers/net/ethernet/realtek/r8169_main.c         | 8 ++++----
+ drivers/net/mdio/mdio-ipq4019.c                   | 2 +-
+ drivers/net/phy/broadcom.c                        | 2 +-
+ drivers/net/phy/mdio_bus.c                        | 4 ++--
+ drivers/net/phy/mdio_device.c                     | 2 +-
+ drivers/net/wireless/realtek/rtw88/rtw8822c.c     | 8 ++++----
+ drivers/net/wireless/realtek/rtw89/fw.c           | 2 +-
+ drivers/net/wireless/realtek/rtw89/mac.c          | 6 +++---
+ drivers/net/wireless/realtek/rtw89/pci.c          | 2 +-
+ drivers/net/wireless/realtek/rtw89/rtw8852a.c     | 4 ++--
+ drivers/net/wireless/realtek/rtw89/rtw8852a_rfk.c | 8 ++++----
+ drivers/thermal/tegra/tegra30-tsensor.c           | 2 +-
+ drivers/usb/chipidea/ci_hdrc_tegra.c              | 6 +++---
+ include/linux/delay.h                             | 2 +-
+ 21 files changed, 37 insertions(+), 37 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.34.1
 

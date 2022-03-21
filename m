@@ -2,157 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D95D4E2BA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:16:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3886C4E2BD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349897AbiCUPST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S1349993AbiCUPTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349890AbiCUPSQ (ORCPT
+        with ESMTP id S1349933AbiCUPTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:18:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07F0110EC5A
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:16:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647875809;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nX4QZCO/oNI/owmGNcTSGcMnEF5mlfrSVaizLBz7uJ0=;
-        b=buoEHscV8d93rWe5zHzGJmIyTgBhH+xN63JqSUIhUnCGV7/AYpMQbcUKYrgYmiKa1bjnlb
-        m4x7O615a7tjxhtxFSODOISeTvo/Ue192l503kI4evEeiekCP4wLPVJUJSQucWue0r8v6R
-        PT7YuzQCWhyHoeIwRUmRLG95uLT7pfo=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-32-J4n9EuznNs-N3PQXTFnW8g-1; Mon, 21 Mar 2022 11:16:46 -0400
-X-MC-Unique: J4n9EuznNs-N3PQXTFnW8g-1
-Received: by mail-wr1-f69.google.com with SMTP id 71-20020adf82cd000000b00203dc43d216so3191693wrc.22
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:16:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=nX4QZCO/oNI/owmGNcTSGcMnEF5mlfrSVaizLBz7uJ0=;
-        b=GcSjvf3FxYGpRXMqJGVu4+1K4h2uAhsjLCZTTHg1o7ECkHqXBsUcbqQbtFtlY7hUeN
-         KbUQcUxjnx3NlZopO2HT9Ot5pjUWJGHCslCvtfHokzHE1Y7w7qPw/lHVQzEoLNnApodc
-         M0jX7Kc2oaig74RLNnYYMIyYs4hC85wMXXgOaxvi2tt7UkkiqI+h0SN8FIXDXi/hnmjQ
-         t7RxgKJs5GyW/Tl/c44tgV8YJqBBsm3G5PCyhO/W2X32goGNcp/wVoJpJ85HqYukTdbM
-         YmpIVVHIcJY+c7d/40G0A0f+Ut1GB7fKPeWuyiR3cih3X1g4bVts+h7A9Xy8MzHySKL/
-         OMTQ==
-X-Gm-Message-State: AOAM530N/JKlwcxw8706ckE8bmtnVGpqbfl8BkLUN5MRvGnmodA1rjy4
-        Ow90zOZuvcLPNtkJVMXLTrz+Q4KAfQiUQPrU9If6SBs3ClquDelJSq7BoVKNZSvQwNi9xRLdGUx
-        QssYk619urAjZp3IMdCkYpc9k
-X-Received: by 2002:a5d:5690:0:b0:203:f727:362 with SMTP id f16-20020a5d5690000000b00203f7270362mr13336324wrv.717.1647875805651;
-        Mon, 21 Mar 2022 08:16:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxzTIc10MZuTh5WcD+YFZa7hXvGCjsQ2g+VK/yHzoP82TjLC4Ii/L09EZIrxSnI/6aUkzWG0g==
-X-Received: by 2002:a5d:5690:0:b0:203:f727:362 with SMTP id f16-20020a5d5690000000b00203f7270362mr13336299wrv.717.1647875805316;
-        Mon, 21 Mar 2022 08:16:45 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:4900:849b:f76e:5e1f:ff95? (p200300cbc7044900849bf76e5e1fff95.dip0.t-ipconnect.de. [2003:cb:c704:4900:849b:f76e:5e1f:ff95])
-        by smtp.gmail.com with ESMTPSA id i5-20020adfaac5000000b00203fd04bf86sm7526495wrc.66.2022.03.21.08.16.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 08:16:44 -0700 (PDT)
-Message-ID: <9ae0a8e4-41b7-04f4-4435-17cbba9850fb@redhat.com>
-Date:   Mon, 21 Mar 2022 16:16:44 +0100
+        Mon, 21 Mar 2022 11:19:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2C411174C;
+        Mon, 21 Mar 2022 08:17:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7AB2B8175E;
+        Mon, 21 Mar 2022 15:17:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8CB8C340F4;
+        Mon, 21 Mar 2022 15:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647875867;
+        bh=9+FB8FqiPz2INA3LHeEMbXtjaqxdTmkp1xc/rbUvb8g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iY2kM+kk/k9XRIJpOweLDdoV0Qbbb9Le27cicZiqsTWHGuaubJxgJKDF3p7i1Lepy
+         FYDMrEVtCCOqmoUNxkbqmfdx5AiTxkKnBIkQk6jzKZs9e9c60k0BWEr+nsvrJHumw3
+         SxACHAsrR+7s8jr6tN77OthE9W4ckwlNz898NvR0mYagooAamWfywmFEZMetc7qdD2
+         dyjCNBNWdbMZxup0DHanVr8Zw/Mhb+fo52hkPUfVWdHUTUDF7OUxwJcZCwFHSzAqfB
+         ssLoyytLEYPe+jy6osPEQVJl6nezkF8xixnZaUIbnwR7xPDdIxNHWawg4zNJnGq2Fs
+         vNSK5qRXUR2SA==
+Received: by mail-ed1-f42.google.com with SMTP id b24so18220954edu.10;
+        Mon, 21 Mar 2022 08:17:47 -0700 (PDT)
+X-Gm-Message-State: AOAM530whwR1lYN3L7Ddk6yN4+veqJmt4fcslavZRsLEU6AB8XjqYxrw
+        MsuGad9tbPxR2w6ok5zNYX7SfSOLRxYKGtscLA==
+X-Google-Smtp-Source: ABdhPJzVOekr/XRMAYz6o3vgNpt77YLnLfN20A1NcI85VtDGlaILC4gRTvIJUrbrtw7CiwFutMg/Nb4GAJ585vY9D/0=
+X-Received: by 2002:a05:6402:1d51:b0:418:bd81:78b3 with SMTP id
+ dz17-20020a0564021d5100b00418bd8178b3mr22893313edb.46.1647875865787; Mon, 21
+ Mar 2022 08:17:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [GIT PULL] Folio patches for 5.18 (MM part)
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Hugh Dickins <hughd@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        William Kucharski <william.kucharski@oracle.com>
-References: <Yjh+EuacJURShtJI@casper.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Yjh+EuacJURShtJI@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220321104843.949645-1-maz@kernel.org>
+In-Reply-To: <20220321104843.949645-1-maz@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 21 Mar 2022 10:17:34 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJacC6GbNebTfYyUEScROCFN4+Fg2v1_iYFfqAvW4E9Vw@mail.gmail.com>
+Message-ID: <CAL_JsqJacC6GbNebTfYyUEScROCFN4+Fg2v1_iYFfqAvW4E9Vw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] PCI: xgene: Restore working PCIe functionnality
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        Toan Le <toan@os.amperecomputing.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
+        dann frazier <dann.frazier@canonical.com>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.03.22 14:30, Matthew Wilcox wrote:
-> Hi Linus,
-> 
-> This is the first of two folio-related pull requests for this merge
-> window.  This is the MM side of things and we had some unfortunate
-> complex merge conflicts to resolve.  I decided to redo my changes on
-> top of Hugh's and Christoph's patches, so I'm the one sending the
-> pull request.
-> 
-> The following changes since commit f71077a4d84bbe8c7b91b7db7c4ef815755ac5e3:
-> 
->   Merge tag 'mmc-v5.17-rc1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc (2022-02-16 12:09:22 -0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.infradead.org/users/willy/pagecache.git tags/folio-5.18
-> 
-> for you to fetch changes up to 5063f22c914e3e5f2239cf91f4986042dc705bde:
-> 
->   mm/damon: minor cleanup for damon_pa_young (2022-03-16 10:09:50 -0400)
-> 
-> ----------------------------------------------------------------
-> Folio changes for 5.18
-> 
-> Several of us had overlapping, conflicting changes to the MM this
-> round, and I volunteered to send the pull request.
-> 
->  - Hugh rewrote how munlock works to massively reduce the contention
->    on i_mmap_rwsem:
->    https://lore.kernel.org/linux-mm/8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com/
->  - Christoph sorted out the page refcount mess for ZONE_DEVICE pages:
->    https://lore.kernel.org/linux-mm/20220210072828.2930359-1-hch@lst.de/
->  - I converted GUP to use folios and make pincount available for order-1
->    pages.
->  - I converted a few more truncation functions to use folios
->  - I converted page_vma_mapped_walk to use PFNs instead of pages
->  - I converted rmap_walk to use folios
->  - I converted most of shrink_page_list() to use a folio
->  - I added support for creating large folios in readahead
-> 
-> ----------------------------------------------------------------
-> Alex Sierra (10):
->       mm: add zone device coherent type memory support
->       mm: add device coherent vma selection for memory migration
->       mm/gup: fail get_user_pages for LONGTERM dev coherent type
->       drm/amdkfd: add SPM support for SVM
->       drm/amdkfd: coherent type as sys mem on migration to ram
->       lib: test_hmm add ioctl to get zone device type
->       lib: test_hmm add module param for zone device type
->       lib: add support for device coherent type in test_hmm
->       tools: update hmm-test to support device coherent type
->       tools: update test_hmm script to support SP config
-> 
-> Alistair Popple (2):
->       mm: remove the vma check in migrate_vma_setup()
->       mm/gup: migrate device coherent pages when pinning instead of failing
+On Mon, Mar 21, 2022 at 5:49 AM Marc Zyngier <maz@kernel.org> wrote:
+>
+> Since 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup") was
+> merged in the 5.5 time frame, PCIe on the venerable XGene platform has
+> been unusable: 6dce5aa59e0b broke both XGene-1 (Mustang and m400) and
+> XGene-2 (Merlin), while the addition of c7a75d07827a ("PCI: xgene: Fix
+> IB window setup") fixed XGene-2, but left the rest of the zoo
+> unusable.
+>
+> It is understood that this systems come with "creative" DTs that don't
+> match the expectations of modern kernels. However, there is little to
+> be gained by forcing these changes on users -- the firmware is not
+> upgradable, and the current owner of the IP will deny that these
+> machines have ever existed.
 
-... I thought DEVICE_COHERENT is still under development?
+The gain for fixing this properly is not having drivers do their own
+dma-ranges parsing. We've seen what happens when drivers do their own
+parsing of standard properties (e.g. interrupt-map). Currently, we
+don't have any drivers doing their own parsing:
 
+$ git grep of_pci_dma_range_parser_init
+drivers/of/address.c:int of_pci_dma_range_parser_init(struct
+of_pci_range_parser *parser,
+drivers/of/address.c:EXPORT_SYMBOL_GPL(of_pci_dma_range_parser_init);
+drivers/of/address.c:#define of_dma_range_parser_init
+of_pci_dma_range_parser_init
+drivers/of/unittest.c:  if (of_pci_dma_range_parser_init(&parser, np)) {
+drivers/pci/of.c:       err = of_pci_dma_range_parser_init(&parser, dev_node);
+include/linux/of_address.h:extern int
+of_pci_dma_range_parser_init(struct of_pci_range_parser *parser,
+include/linux/of_address.h:static inline int
+of_pci_dma_range_parser_init(struct of_pci_range_parser *parser,
 
--- 
-Thanks,
+And we can probably further refactor this to be private to drivers/pci/of.c.
 
-David / dhildenb
+For XGene-2 the issue is simply that the driver depends on the order
+of dma-ranges entries.
 
+For XGene-1, I'd still like to understand what the issue is. Reverting
+the first fix and fixing 'dma-ranges' should have fixed it. I need a
+dump of how the IB registers are initialized in both cases. I'm not
+saying changing 'dma-ranges' in the firmware is going to be required
+here. There's a couple of other ways we could fix that without a
+firmware change, but first I need to understand why it broke.
+
+Rob
+
+P.S. We're carrying ACPI and DT support for these platforms. It seems
+the few users are using DT, so can we drop the ACPI support? Or do I
+need to break it first and wait a year? ;)

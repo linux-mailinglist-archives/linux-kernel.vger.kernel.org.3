@@ -2,117 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E5F4E2C38
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:27:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E114E2C3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350213AbiCUP3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
+        id S1350233AbiCUP3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350179AbiCUP3N (ORCPT
+        with ESMTP id S1350211AbiCUP3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:29:13 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0AA1637E2;
-        Mon, 21 Mar 2022 08:27:47 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id qa43so30481281ejc.12;
-        Mon, 21 Mar 2022 08:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aLOeU6WpgD0PL1DxU3mLFrPMooW422SjAuE/Y9O4C7Y=;
-        b=kHXuDFc3XLD+ccOUFGUYgxoeu0hLCe4kZBdPoE0BWxAATHREykdDgjFpilpwCOAUkS
-         ze9vvTQXAdNq3RJ8bm0cXmkJcq1OXVmNZd2WyhDrK0IFWBR5194jpKmTypzD/kbTcUGP
-         ZaNFD78HnBxuKPisa0mSpoBW0LsYkj5pYjBpVyQ20V1RqfbPQ1YEFtKTtC2CLGmCxM+F
-         dfofV4s/Qy6osIaonjxpGdAioukKOPWQVy/V/dvvQC0JlKnT9B1e2OD0dWZVGJmAD80N
-         cxab8tu7290NcX4UNNOpSLHaShg5zh6dYpWBoiFqSC6z2HFi0dMfDiIhksucRZ3GvRGi
-         Q1LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aLOeU6WpgD0PL1DxU3mLFrPMooW422SjAuE/Y9O4C7Y=;
-        b=gYHkFeav+w9blvQTzhPvNmQnuBWM05Ozwcez/2ERMEDjWQ77enRycVfAQmATGfHyE6
-         GU2ZCo6ztW8H8Op35luysbwe0W4mGzs+EbOpyaBBNuriDINQ/bf2BB1Zcx3YE0dZCxiU
-         smgVlTcw3Gr1y8aNMs8/sf92el+hu8IUXSciJQCtB7g8LRJwfV7cR7a2cNDMIY/56Sih
-         YKaXIVqfrsWCeLhm8cHhtVR3xJhKvgy58faKCRutnoccdREtrZf5d3tkeAVEQNp0GIK4
-         q4n90VDZre9cWRKNJaNxJFfX/JQcvV5IcRMNaK9T8i6+WNWKiJwfrDqTrhXhYkaTxeIy
-         lb8Q==
-X-Gm-Message-State: AOAM5306XD0JF8tJoOKtghrIRn9hrHXllbayAm3EIAVED27Anyr2gM37
-        tiXdJ+g61Hxq3iza1ZhPsptWNfluP58=
-X-Google-Smtp-Source: ABdhPJzwjTTAAiPPtKV5sp+yKADmJUcTpiZo6kWCim0vVzTeuErWFOlPSuEpSMcwzYBh9o7GV0cK/Q==
-X-Received: by 2002:a17:907:c16:b0:6da:7d72:1357 with SMTP id ga22-20020a1709070c1600b006da7d721357mr21680979ejc.251.1647876465189;
-        Mon, 21 Mar 2022 08:27:45 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id y15-20020a170906518f00b006df87a2bb16sm6334445ejk.89.2022.03.21.08.27.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 08:27:44 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <f8500809-610e-ce44-9906-785b7ddc0911@redhat.com>
-Date:   Mon, 21 Mar 2022 16:27:43 +0100
+        Mon, 21 Mar 2022 11:29:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA10FDEE7;
+        Mon, 21 Mar 2022 08:28:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5659961047;
+        Mon, 21 Mar 2022 15:28:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3725BC340E8;
+        Mon, 21 Mar 2022 15:28:07 +0000 (UTC)
+Date:   Mon, 21 Mar 2022 11:28:05 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        mhiramat@kernel.org, ast@kernel.org, hjl.tools@gmail.com,
+        rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <20220321112805.1393f9b9@gandalf.local.home>
+In-Reply-To: <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+References: <20220321140327.777f9554@canb.auug.org.au>
+        <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+        <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
-Content-Language: en-US
-To:     Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Joerg Roedel <jroedel@suse.de>, Marc Orr <marcorr@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org
-References: <20220321150214.1895231-1-pgonda@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220321150214.1895231-1-pgonda@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/22 16:02, Peter Gonda wrote:
-> SEV-ES guests can request termination using the GHCB's MSR protocol. See
-> AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
-> guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
-> return code from KVM_RUN. By adding a KVM_EXIT_SHUTDOWN_ENTRY to kvm_run
-> struct the userspace VMM can clearly see the guest has requested a SEV-ES
-> termination including the termination reason code set and reason code.
+On Mon, 21 Mar 2022 14:04:05 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
+
+> Ahh, something tracing. I'll go do some patches on top of it.
 > 
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> Cc: Brijesh Singh <brijesh.singh@amd.com>
-> Cc: Joerg Roedel <jroedel@suse.de>
-> Cc: Marc Orr <marcorr@google.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: kvm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+> Also, folks, I'm thinking we should start to move to __fexit__, if CET
+> SHSTK ever wants to come to kernel land return trampolines will
+> insta-stop working.
+> 
+> Hjl, do you think we could get -mfexit to go along with -mfentry ?
 
-Looks good, but it has to also add a capability.
+If we do every add a -mfexit, we will need to add a __ftail__ call.
+Because, the current function exit tracing works for functions, even with
+tail calls.
 
-> +		/* KVM_EXIT_SHUTDOWN_ENTRY */
 
-Just KVM_EXIT_SHUTDOWN.
+int funcA () {
+	[..]
+	return funcB();
+}
 
-Paolo
+Can turn into:
 
-> +		struct {
-> +			__u64 reason;
-> +			__u32 ndata;
-> +			__u64 data[16];
-> +		} shutdown;
->   		/* KVM_EXIT_FAIL_ENTRY */
->   		struct {
->   			__u64 hardware_entry_failure_reason;
+	[..]
+	pop all stack from funcA
+	load reg params to funcB
+	jmp funcB
 
+Then when funcB does does it's
+
+	[..]
+	ret
+
+It will pop the call site of funcA (not the call site of funcB) and return
+to wherever called funcA with the proper return values.
+
+This currently works with function graph and kretprobe tracing because of
+the shadow stack. Let's say we traced both funcA and funcB
+
+funcA:
+	call __fentry__
+
+			Replace caller address with graph_trampoline and
+			store the return caller into the shadow stack.
+
+	[..]
+	jmp funcB
+
+funcB:
+	call __fentry__
+
+			Replace caller address with graph_trampoline and
+			store the return caller (which is the
+			graph_trampoline that was switched earlier) in the
+			shadow stack.
+
+	[..]
+	ret
+
+			Returns to the graph_trampoline and we trace the
+			return of funcB. Then we pop off the shadow stack
+			and jump to that. But the shadow stack had a call
+			to the graph_trampoline, which gets called again.
+
+			Returns to the graph_trampoline and we trace the
+			return of funcA. Then we pop off the shadow stack
+			and jump to that, which is the original caller to
+			funcA.
+
+That is, the current algorithm traces the end of both funcA and funcB
+without issue, because of how the shadow stack works.
+
+Now if we add a __fexit__, we will need a way to tell the tracers how to
+record this scenario. That is why I'm thinking of a jmp to __ftail__.
+
+Perhaps something like:
+
+funcA:
+	call __fentry__
+	[..]
+	push address of funcB
+	jmp __ftail__
+	jmp funcB
+
+Where, __ftail__ would do at the end:
+
+	ret
+
+To jump to funcB and we skip the jmp to funcB anyway.
+
+And to "nop" it out, we would have to convert it to.
+
+funcA:
+	call __fentry__
+	[..]
+	jmp 1
+	jmp __ftail__
+1:	jmp funcB
+
+
+This is one way I can think of if we include a __fexit__. But to maintain
+backward compatibility to function graph tracing (which is a requirement),
+we need to be able to handle such cases.
+
+Perhaps this is a good topic to bring up at Plumbers? :-)
+
+Do I need to submit a tracing MC, or can we have this conversation at a
+compiler / toolchain MC?
+
+-- Steve

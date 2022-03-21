@@ -2,61 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF9D4E2550
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F7F4E2553
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:38:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346798AbiCULib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 07:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
+        id S1346803AbiCULjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 07:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234145AbiCULi3 (ORCPT
+        with ESMTP id S237622AbiCULjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 07:38:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7FCB2478;
-        Mon, 21 Mar 2022 04:37:05 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C861B210E5;
-        Mon, 21 Mar 2022 11:37:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1647862623; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KDGMrlzc2IyJ05FC1gHd44GrnU2ZGku3O8AZy40JkyE=;
-        b=H0V82i6wAIZ+dV1TGX6rkOt0i+JZxP2NhIl8BGZlIHfCZBC47/fb0x0lm920dUHMQ3LhQM
-        kclWINppQoGGQMsbCwUckGNoqKNOtqkt9YGTqSkA8b/EjLsc7if7RUuuNapE4i5G+5KbZf
-        9hZirLu5k4cZ4suKotajjzMHuHWfG9E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1647862623;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KDGMrlzc2IyJ05FC1gHd44GrnU2ZGku3O8AZy40JkyE=;
-        b=5R4iUw7QGDmKkFlpew9Yh0yezyWc2pTlMfv7eQkuoqxa11f3Lz9odt4kfrvVSnglCPFoX2
-        HvbMsO30QzTPlpCA==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B4710A3B83;
-        Mon, 21 Mar 2022 11:37:03 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 51AC4A0610; Mon, 21 Mar 2022 12:37:03 +0100 (CET)
-Date:   Mon, 21 Mar 2022 12:37:03 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, lczerner@redhat.com
-Subject: Re: [PATCH -next] ext4: Fix symlink file size not match to file
- content
-Message-ID: <20220321113703.cibgeac5ipslg3df@quack3.lan>
-References: <20220321113408.4112428-1-yebin10@huawei.com>
+        Mon, 21 Mar 2022 07:39:52 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDA83E0F9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:38:27 -0700 (PDT)
+Received: from [192.168.12.80] (unknown [182.2.38.58])
+        by gnuweeb.org (Postfix) with ESMTPSA id 9F95D7E2DA;
+        Mon, 21 Mar 2022 11:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1647862706;
+        bh=sGCCsF1nBmMsD5TBZTyQUXibY7ZkHQnUkBbAPcG5uE0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ym5Ey51x4Qv5YDlnzEF9C4q8NT3VVA/FLm8bAzUY64Oxb1uIjBS5xjXWl+5x4FTEe
+         6bA+8t7YiM+lBdumsVe4koo6BpegaEd6JaTyyCK4yOgrP/yeeHouslhKdEr8F4impT
+         Ne7DaGmidZvldeXwUvQEqwIhn3r3iwTcJHkRNNI3gtH3KIKT63nPtRda6sESlRIQcw
+         qD0yTUeRHJQvG9XyViZf7ge/xEhRvA8nJZwa/9idnGzj3PRghCPmCK0KiT3y9uGi7R
+         4k7J3c2G/UuG+zcDqCkzMvzrhiXDuDN+57ZaBG0v81rUJk6lDKDUgrLsves2Wxry3Z
+         ARKj7Vfu6U1Xg==
+Message-ID: <9e69af8e-74c1-f35b-98dd-e2a77153ea09@gnuweeb.org>
+Date:   Mon, 21 Mar 2022 18:38:18 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321113408.4112428-1-yebin10@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH v1 2/6] tools/nolibc: Make the entry point not weak
+ for clang
+Content-Language: en-US
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Nugraha <richiisei@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        llvm@lists.linux.dev
+References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
+ <20220320093750.159991-3-ammarfaizi2@gnuweeb.org>
+ <20220320191619.GA27312@1wt.eu>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20220320191619.GA27312@1wt.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,59 +60,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 21-03-22 19:34:08, Ye Bin wrote:
-> We got issue as follows:
-> [home]# fsck.ext4  -fn  ram0yb
-> e2fsck 1.45.6 (20-Mar-2020)
-> Pass 1: Checking inodes, blocks, and sizes
-> Pass 2: Checking directory structure
-> Symlink /p3/d14/d1a/l3d (inode #3494) is invalid.
-> Clear? no
-> Entry 'l3d' in /p3/d14/d1a (3383) has an incorrect filetype (was 7, should be 0).
-> Fix? no
+On 3/21/22 2:16 AM, Willy Tarreau wrote:
+> Hi Ammar,
 > 
-> As symlink file size not match to file content. If symlink data block
-> writback failed, will call ext4_finish_bio to end io. In this path don't
-> mark buffer error. When umount do checkpoint can't detect buffer error,
-> then will cleanup jounral. Actually, correct data maybe in journal area.
-> To solve this issue, mark buffer error when detect bio error in
-> ext4_finish_bio.
-
-Thanks for the patch! Let me rephrase the text a bit:
-
-As the symlink file size does not match the file content. If the writeback
-of the symlink data block failed, ext4_finish_bio() handles the end of IO.
-However this function fails to mark the buffer with BH_write_io_error and
-so when unmount does journal checkpoint it cannot detect the writeback
-error and will cleanup the journal. Thus we've lost the correct data in the
-journal area. To solve this issue, mark the buffer as BH_write_io_error in
-ext4_finish_bio().
-
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> ---
->  fs/ext4/page-io.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> I've had a look at this one.
 > 
-> diff --git a/fs/ext4/page-io.c b/fs/ext4/page-io.c
-> index 495ce59fb4ad..14695e2b5042 100644
-> --- a/fs/ext4/page-io.c
-> +++ b/fs/ext4/page-io.c
-> @@ -134,8 +134,10 @@ static void ext4_finish_bio(struct bio *bio)
->  				continue;
->  			}
->  			clear_buffer_async_write(bh);
-> -			if (bio->bi_status)
-> +			if (bio->bi_status) {
-> +				set_buffer_write_io_error(bh);
+> On Sun, Mar 20, 2022 at 04:37:46PM +0700, Ammar Faizi wrote:
+>> Budilig with clang yields the following error:
+>    ^^^^^^^
+> BTW please fix the typo in the final commit message.
+> 
+>> @@ -183,7 +183,9 @@ struct sys_stat_struct {
+>>   
+>>   /* startup code */
+>>   asm(".section .text\n"
+>> +#if !defined(__clang__)
+>>       ".weak _start\n"
+>> +#endif
+>>       ".global _start\n"
+>>       "_start:\n"
+> 
+> So it seems that I was wrong and that .weak is an alternate for .global
+> and not a complement. As such, instead of adding all these #if, please
+> simply remove all .global.
 
-Why don't you use mark_buffer_write_io_error()? It will also update other IO
-error counters properly so that e.g. fsync(2) or sync_filesystem() can properly
-report IO error etc. Granted we'll abort the journal in response to
-checkpointing error so the failure will be hard to miss anyway but still
-:).
-
-								Honza
+Will fix this in the next version.
 
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Ammar Faizi

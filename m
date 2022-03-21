@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE8C4E2496
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6A24E24A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346422AbiCUKsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 06:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S1346497AbiCUKu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 06:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235884AbiCUKsM (ORCPT
+        with ESMTP id S1346469AbiCUKup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 06:48:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C08A37BD0;
-        Mon, 21 Mar 2022 03:46:47 -0700 (PDT)
+        Mon, 21 Mar 2022 06:50:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2997A23BD7;
+        Mon, 21 Mar 2022 03:49:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2087F6136D;
-        Mon, 21 Mar 2022 10:46:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6890FC340E8;
-        Mon, 21 Mar 2022 10:46:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 736D7B81202;
+        Mon, 21 Mar 2022 10:49:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DB5C340E8;
+        Mon, 21 Mar 2022 10:49:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647859606;
-        bh=Vs+nyNU9WPQ7f8z0iHRRvmd6m3Jk9pFLsFcqph9kasw=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=Xji8JWciE6aQU4muZlCqsXcPBYs396Lv+H94GDwIbQ9/JgGfmEcT1Ru8w9v5r3eK1
-         GejAAaXmPvVz+VQVXhdS6xmTFx4MqNh6bhzPlM6ngzQ6UrZC/AT5a+Sgwf3Dt42MgK
-         9Nm8UCn8nUNLdjCRnDZit52AZUUXmW2HbN2QhCUZsr154vfgYEfk3JSnUz0z5hgk7/
-         /RY0KbZco0vn+vhyix376c0Be74gjmbtQyseHFK1mzMk8h0mURjACj891Abpv3dMUz
-         07Lz+HataH0ZP7cYJ3UC2A1/EauM/ty+h1ywrK+3fmHHHJYvSMrKzEGFh1Jt1qLa5y
-         Y9xm6hR1q4teg==
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1647859757;
+        bh=huUpho3oZIwwEpj2ZIcjMR8j8ncYN4uWkyHSQ8QxcSg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RlpZskjfYCQaHWnm3drieTw6GwGmKilaNAWb6JJpHjiRftl/luhKimA3ugS8iUjys
+         9PcvMy7xLWmhAhsI0FxaRZzgJt5Kd/w/PJuIyy+vlLi01PnhLQBwL5Em809Zy0+E5j
+         daOnB02G1bC3mFPOQezcP6gNNLJLyrGBnXM+XN8ZjVV9ZG3xDyB/XZodYBFudRTsjH
+         Xv4H/Z7C2yUGatVUPvVX8MGezPMc5YUpkNcTRMtGrt8+ymHY4VNd6NBTXbJVI+tDKM
+         KHZVeOBiKA700Zyt7Fe4ZBZyVh7bLhlpsXPHXKudFcva4ThrczkYX2OwOE9BwYkfwf
+         O5Z28nXSLtoCA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nWFb8-00FvJp-On; Mon, 21 Mar 2022 10:49:15 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pci@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>,
+        Toan Le <toan@os.amperecomputing.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
+        dann frazier <dann.frazier@canonical.com>,
+        kernel-team@android.com
+Subject: [PATCH v2 0/2] PCI: xgene: Restore working PCIe functionnality
+Date:   Mon, 21 Mar 2022 10:48:41 +0000
+Message-Id: <20220321104843.949645-1-maz@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v6 2/2] ath10k: Trigger sta disconnect on hardware restart
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220315082944.12406-3-youghand@codeaurora.org>
-References: <20220315082944.12406-3-youghand@codeaurora.org>
-To:     Youghandhar Chintala <youghand@codeaurora.org>
-Cc:     ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pillair@codeaurora.org,
-        dianders@chromium.org, kuabhs@chromium.org,
-        briannorris@chromium.org, mpubbise@codeaurora.org,
-        Youghandhar Chintala <youghand@codeaurora.org>
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164785960237.19083.15185904446289698730.kvalo@kernel.org>
-Date:   Mon, 21 Mar 2022 10:46:44 +0000 (UTC)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, robh@kernel.org, toan@os.amperecomputing.com, lorenzo.pieralisi@arm.com, kw@linux.com, bhelgaas@google.com, stgraber@ubuntu.com, dann.frazier@canonical.com, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,39 +69,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Youghandhar Chintala <youghand@codeaurora.org> wrote:
+Since 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup") was
+merged in the 5.5 time frame, PCIe on the venerable XGene platform has
+been unusable: 6dce5aa59e0b broke both XGene-1 (Mustang and m400) and
+XGene-2 (Merlin), while the addition of c7a75d07827a ("PCI: xgene: Fix
+IB window setup") fixed XGene-2, but left the rest of the zoo
+unusable.
 
-> Currently after the hardware restart triggered from the driver,
-> the station interface connection remains intact, since a disconnect
-> trigger is not sent to userspace. This can lead to a problem in
-> targets where the wifi mac sequence is added by the firmware.
-> 
-> After the target restart, its wifi mac sequence number gets
-> reset to zero. Hence AP to which our device is connected will receive
-> frames with a  wifi mac sequence number jump to the past, thereby
-> resulting in the AP dropping all these frames, until the frame
-> arrives with a wifi mac sequence number which AP was expecting.
-> 
-> To avoid such frame drops, its better to trigger a station disconnect
-> upon target hardware restart which can be done with API
-> ieee80211_reconfig_disconnect exposed to mac80211.
-> 
-> The other targets are not affected by this change, since the hardware
-> params flag is not set.
-> 
-> Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.1-01040-QCAHLSWMTPLZ-1
-> Tested-on: QCA6174 hw3.2 PCI WLAN.RM.4.4.1-00110-QCARMSWP-1
-> Tested-on: QCA6174 hw3.2 SDIO WLAN.RMH.4.4.1-00048
-> 
-> Signed-off-by: Youghandhar Chintala <youghand@codeaurora.org>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+It is understood that this systems come with "creative" DTs that don't
+match the expectations of modern kernels. However, there is little to
+be gained by forcing these changes on users -- the firmware is not
+upgradable, and the current owner of the IP will deny that these
+machines have ever existed.
 
-Patch applied to ath-next branch of ath.git, thanks.
+Given that, revert both changes and let people enjoy their XGene boxes
+once again.
 
-2c3fc50591ff ath10k: Trigger sta disconnect on hardware restart
+* From v1 [1]:
+  - Also revert c7a75d07827a ("PCI: xgene: Fix IB window setup")
+
+[1] https://lore.kernel.org/r/20220314144429.1947610-1-maz@kernel.org
+
+Marc Zyngier (2):
+  PCI: xgene: Revert "PCI: xgene: Use inbound resources for setup"
+  PCI: xgene: Revert "PCI: xgene: Fix IB window setup"
+
+ drivers/pci/controller/pci-xgene.c | 35 ++++++++++++++++++++----------
+ 1 file changed, 23 insertions(+), 12 deletions(-)
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220315082944.12406-3-youghand@codeaurora.org/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.34.1
 

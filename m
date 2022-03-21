@@ -2,153 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C526A4E2612
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1304E2613
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347041AbiCUMHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
+        id S1347178AbiCUMJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236862AbiCUMHe (ORCPT
+        with ESMTP id S237391AbiCUMJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:07:34 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4933F71A3B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:06:08 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d19so15217833pfv.7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:06:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mQVeuWDN9J1yJyMFSCKrDaWCEtSDGr5BIpmWKndqjqU=;
-        b=il07ih78+2jqROVK64V1q8dH8fuvuEUVpuFFYuoV9+FUaWECoUWPLX1EGjh2oTzcAA
-         6Nc5ZhfANhok56d6bAs5Q3AvdhsQm5kKSNFlrVXf/M3Vl/CfUUeKpLo1YS917+HwP3Gt
-         /VUOYUIlfE68hEnUoNmKmbzLUIIFQ7qwhDb8wj3UGZEVm7re7NSt6rEgMxm8FKX6Wnf+
-         F1BmE/uiSfXCGOU0p0Q9mxEiy1RNvYw6cfHG3GBWsvNJzc4eWC/PsRrsCmF9jL4FfXA5
-         OyhxkvWKwF0S6qH3JYiM0jl00ipXcNTD0u/C4IMIjo9tqcu3I/MgCb/k5iRgn2S7o/dO
-         rlXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mQVeuWDN9J1yJyMFSCKrDaWCEtSDGr5BIpmWKndqjqU=;
-        b=vXpbjHrD4vKghRwF57orIHQ1EBFDZuv2z7vv/kEfEZLYBKjvcUF2Im4h8aMS37PU5J
-         H1o2xM9Ad/dTU0dkyJWSXlUBUUAjc6jTw6Lup/kNa9Ge+szY9Kb4KnBOXd6Vf7uaCw72
-         vnfF06I5JLT+AjImybLA5mD4UWrmXbILNQVkgCuHQvtxRxtZq9fxs8RWksOxBJvOZOHR
-         xNworgIdJJhnqFHrgLfrQPRZxOfSktXpgwwODk2RHo7IfMVoVb4xmC5g5HW8jpP3HSaK
-         0JlZBIFrgLtmwYO+JIwll6RB81ZCfZwGXAZpul2soq1NCBO2ws9mZhiv1Sv5m0+zcWR+
-         Udrg==
-X-Gm-Message-State: AOAM530GYBzn6Mdb6XcYZII8NGoMqq0okefyqjYM0GXgLhiG/nXpJB0b
-        EaCQFfKgUPtHAP1o0yG3LyzYDHt7VtBH3Q==
-X-Google-Smtp-Source: ABdhPJzTSnRZI8bxbc9u4mpE7+yAwc8MQ3ONG2T9QvJu6PpnBge+u3kcv+5gCP4PLj9EL9IMgX0ugg==
-X-Received: by 2002:a63:9d48:0:b0:378:c359:fcbf with SMTP id i69-20020a639d48000000b00378c359fcbfmr17593387pgd.371.1647864367768;
-        Mon, 21 Mar 2022 05:06:07 -0700 (PDT)
-Received: from [192.168.225.67] ([157.49.192.24])
-        by smtp.gmail.com with ESMTPSA id kb10-20020a17090ae7ca00b001bfad03c750sm21996931pjb.26.2022.03.21.05.06.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 05:06:07 -0700 (PDT)
-Message-ID: <6f088754-49e7-143b-7735-d94b0199ee33@gmail.com>
-Date:   Mon, 21 Mar 2022 17:36:01 +0530
+        Mon, 21 Mar 2022 08:09:38 -0400
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B4E14003
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:08:12 -0700 (PDT)
+Received: from [127.0.0.1] (unknown [90.59.133.218])
+        (Authenticated sender: eric.valette@free.fr)
+        by smtp3-g21.free.fr (Postfix) with ESMTPSA id 589AF13F8A7;
+        Mon, 21 Mar 2022 13:07:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+        s=smtp-20201208; t=1647864490;
+        bh=xXEkKhP21j6z3maIS8t4Sjhtp6NJrateRL7U0XZ9/V8=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=Xaw0Xqk+UU939Tv2bOs7/Hca8R7E5RZtlT3zPkxnGDBqBN4y8m6IMwQ8c8kWSaEPX
+         DqwgRGIIDvwYsN8XxC3tlong7FPxyVk9x/j16ADm4Jf3MccTgFFCVRlrckl5yiUiod
+         7c0EpRy+4wR8jFsMKFbVFgzlcD9HDATJjlaI8qd4sapoyXC21kWC+VY19n61+p9WBq
+         +34ld9Wtw7uuE84DIZoSAaNa7yBUQFPT37j3b0KaZ1kprb59Y3FLEC5S/WE49Z16Dx
+         EUwR9W/d2v3oSGdbIVc+SYxwHFryUm0ZQZQnIXYgyQZq0/8ke+t6ZWU8DKcHCZm4aB
+         EvLEZ2cdHsDWg==
+Date:   Mon, 21 Mar 2022 12:07:51 +0000 (UTC)
+From:   =?UTF-8?Q?=C3=89ric_Valette?= <eric.valette@free.fr>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Salvatore Bonaccorso <carnil@debian.org>,
+        Dominique Dumont <dod@debian.org>,
+        Sasha Levin <sashal@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        1005005@bugs.debian.org, Evan Quan <evan.quan@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexdeucher@gmail.com>
+Message-ID: <ba7faa48-68a5-41f9-9192-f843e17c5a07@free.fr>
+In-Reply-To: <61c2b2ce-d749-3723-ad27-f40e1c49d967@leemhuis.info>
+References: <Ygf7KuWyc0d4HIFu@eldamar.lan> <CADnq5_MfR99OhjumQESCO7Oq+JVOHOVgyVQHX4FpGFDnPu6CyQ@mail.gmail.com> <5164225.DI6hChFYCN@ylum> <c62d4ba9-2214-ca7d-ee78-ee19a9bf51e6@free.fr> <CADnq5_MWqz7-XhOS4zfuzi3=_nKa72iYaO0BcKNcVDwEvZ+YHw@mail.gmail.com> <61c2b2ce-d749-3723-ad27-f40e1c49d967@leemhuis.info>
+Subject: Re: Regression from 3c196f056666 ("drm/amdgpu: always reset the
+ asic in suspend (v2)") on suspend?
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH v2] staging: rtl8712: Fix CamelCase warnings
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220318101440.13887-1-skumark1902@gmail.com>
- <YjRswrHu0JUm9331@kroah.com>
-From:   Sathish Kumar <skumark1902@gmail.com>
-In-Reply-To: <YjRswrHu0JUm9331@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Correlation-ID: <ba7faa48-68a5-41f9-9192-f843e17c5a07@free.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/03/22 4:58 pm, Greg KH wrote:
+My problem has never been fixed. The proposed patch has been applied to 5.1=
+5. I do not remerber which version 28 maybe.
 
-> On Fri, Mar 18, 2022 at 03:44:40PM +0530, Sathish Kumar wrote:
->> This patch fixes the checkpatch.pl warnings like:
->> CHECK: Avoid CamelCase: <blnEnableRxFF0Filter>
->> +   u8 blnEnableRxFF0Filter;
->>
->> Signed-off-by: Sathish Kumar <skumark1902@gmail.com>
->> ---
->> Changes in v2:
->>      - Remove the "bln" prefix
->> ---
->>   drivers/staging/rtl8712/drv_types.h   | 2 +-
->>   drivers/staging/rtl8712/rtl871x_cmd.c | 2 +-
->>   drivers/staging/rtl8712/xmit_linux.c  | 4 ++--
->>   3 files changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/staging/rtl8712/drv_types.h b/drivers/staging/rtl8712/drv_types.h
->> index a44d04effc8b..4de3aad08242 100644
->> --- a/drivers/staging/rtl8712/drv_types.h
->> +++ b/drivers/staging/rtl8712/drv_types.h
->> @@ -157,7 +157,7 @@ struct _adapter {
->>   	struct iw_statistics iwstats;
->>   	int pid; /*process id from UI*/
->>   	struct work_struct wk_filter_rx_ff0;
->> -	u8 blnEnableRxFF0Filter;
->> +	u8 enable_rx_ff0_filter;
-> Shouldn't this be a boolean?
-Yes. It should be boolean(dealing only with either 0 or 1). Will fix this.
->
->>   	spinlock_t lock_rx_ff0_filter;
->>   	const struct firmware *fw;
->>   	struct usb_interface *pusb_intf;
->> diff --git a/drivers/staging/rtl8712/rtl871x_cmd.c b/drivers/staging/rtl8712/rtl871x_cmd.c
->> index acda930722b2..69d3c55ee9e5 100644
->> --- a/drivers/staging/rtl8712/rtl871x_cmd.c
->> +++ b/drivers/staging/rtl8712/rtl871x_cmd.c
->> @@ -202,7 +202,7 @@ u8 r8712_sitesurvey_cmd(struct _adapter *padapter,
->>   	mod_timer(&pmlmepriv->scan_to_timer,
->>   		  jiffies + msecs_to_jiffies(SCANNING_TIMEOUT));
->>   	padapter->ledpriv.LedControlHandler(padapter, LED_CTL_SITE_SURVEY);
->> -	padapter->blnEnableRxFF0Filter = 0;
->> +	padapter->enable_rx_ff0_filter = 0;
->>   	return _SUCCESS;
->>   }
->>   
->> diff --git a/drivers/staging/rtl8712/xmit_linux.c b/drivers/staging/rtl8712/xmit_linux.c
->> index 90d34cf9d2ff..d58ae5b387d4 100644
->> --- a/drivers/staging/rtl8712/xmit_linux.c
->> +++ b/drivers/staging/rtl8712/xmit_linux.c
->> @@ -102,11 +102,11 @@ void r8712_SetFilter(struct work_struct *work)
->>   	r8712_write8(adapter, 0x117, newvalue);
->>   
->>   	spin_lock_irqsave(&adapter->lock_rx_ff0_filter, irqL);
->> -	adapter->blnEnableRxFF0Filter = 1;
->> +	adapter->enable_rx_ff0_filter = 1;
->>   	spin_unlock_irqrestore(&adapter->lock_rx_ff0_filter, irqL);
->>   	do {
->>   		msleep(100);
->> -	} while (adapter->blnEnableRxFF0Filter == 1);
->> +	} while (adapter->enable_rx_ff0_filter == 1);
-> Ah, that's funny.  It's amazing it works at all and that the compiler
-> doesn't optimize this away.  This isn't a good pattern to use in kernel
-Do you mean "do { msleep(); } while()" here?
-> code.  I know it's not caused by your change here, but perhaps you might
-> want to fix this up to work properly?
->
-> thanks,
->
-> greg k-h
+I still have =C3=A0 RIP in pm_suspend. Did not test the Last two 15 version=
+s.
 
-Sure. Will fix this up to work properly.
+I can leave with 5.10 est using own compiled kernels.
 
-Thanks,
+Thanks for asking.
 
-Sathish
+21 mars 2022 09:58:01 Thorsten Leemhuis <regressions@leemhuis.info>:
 
+> Hi, this is your Linux kernel regression tracker. Top-posting for once,
+> to make this easily accessible to everyone.
+>=20
+> Dominique/Salvatore/Eric, what's the status of this regression?
+> According to the debian bug tracker the problem is solved with 5.16 and
+> 5.17, but was 5.15 ever fixed?
+>=20
+> Ciao, Thorsten
+>=20
+> On 21.02.22 15:16, Alex Deucher wrote:
+>> On Mon, Feb 21, 2022 at 3:29 AM Eric Valette <eric.valette@free.fr> wrot=
+e:
+>>>=20
+>>> On 20/02/2022 16:48, Dominique Dumont wrote:
+>>>> On Monday, 14 February 2022 22:52:27 CET Alex Deucher wrote:
+>>>>> Does the system actually suspend?
+>>>>=20
+>>>> Not really. The screens looks like it's going to suspend, but it does =
+come
+>>>> back after 10s or so. The light mounted in the middle of the power but=
+ton does
+>>>> not switch off.
+>>>=20
+>>>=20
+>>> As I have a very similar problem and also commented on the original
+>>> debian bug report
+>>> (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D1005005), I will a=
+dd
+>>> some information here on another amd only laptop (renoir AMD Ryzen 7
+>>> 4800H with Radeon Graphics + Radeon RX 5500/5500M / Pro 5500M).
+>>>=20
+>>> For me the suspend works once, but after the first resume (I do know
+>>> know if it is in the suspend path or the resume path I see a RIP in the
+>>> dmesg (see aditional info in debian bug))=C2=A0 and later suspend do no=
+t
+>>> work: It only go to the kde login screen.
+>>>=20
+>>> I was unable due to network connectivity to do a full bisect but tested
+>>> with the patch I had on my laptop:
+>>>=20
+>>> 5.10.101 works, 5.10 from debian works
+>>> 5.11 works
+>>> 5.12 works
+>>> 5.13 suspend works but when resuming the PC is dead I have to reboot
+>>> 5.14 seems to work but looking at dmesg it is full of RIP messages at
+>>> various places.
+>>> 5.15.24 is a described 5.15 from debian is behaving identically
+>>> 5.16 from debian is behaving identically.
+>>>=20
+>>>>> Is this system S0i3 or regular S3?
+>>>=20
+>>> For me it is real S3.
+>>>=20
+>>> The proposed patch is intended for INTEl + intel gpu + amdgpu but I hav=
+e
+>>> dual amd GPU.
+>>=20
+>> It doesn't really matter what the platform is, it could still
+>> potentially help on your system, it depends on the bios implementation
+>> for your platform and how it handles suspend. You can try the patch,
+>> but I don't think you are hitting the same issue.=C2=A0 I bisect would b=
+e
+>> helpful in your case.
+>>=20
+>> Alex

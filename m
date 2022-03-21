@@ -2,150 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD944E2B6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EABF4E2B6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349767AbiCUPDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
+        id S1349774AbiCUPE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234542AbiCUPDn (ORCPT
+        with ESMTP id S1346270AbiCUPE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:03:43 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1281517EB
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:02:17 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id u67-20020a627946000000b004fa6338bd77so6638071pfc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:02:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=7qxY5R4b4k3tZIlP/A/FDGNN142+VI1rVlCy2DOCwi0=;
-        b=nC46NUSEFVQbOeDk6LfOyhS40oaJ2zPSxyh0pGmiY9ES2hb+V/UH15eh6ZaYsitZd3
-         a4Cj1IZDWfD0Tn+NEfBoMz8Z/Ji1Uz/kkj5U3a4XCZGxYPreJLOAz1qz6+ifam2Thay3
-         DLvopEw1LTvoFncjzixRSB45p+8BCSc60lEP6wdL+hHgyw7uH/0gToixw9cvzxYrdT1g
-         B/5QVa31BXXKsH43r3Cug2AGvZtRdIOESnSF6nYridvRB8A2/5IxgDlQg+/nN9iN1O56
-         ptQJE8EwFMLAi0oX0FqY/bf1/NrR98yHRqDM1EaWASTLAbc+e3eG+9wIL8nYTk0fcO0q
-         XCPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=7qxY5R4b4k3tZIlP/A/FDGNN142+VI1rVlCy2DOCwi0=;
-        b=YybeN2ovCZ+1Nt1r3zih2OsCLsgzUyWGT3T4UhTK7wk2BNMp1MJzDXv3damPVw6/Al
-         yBvzds6GOQa4SdsurcBDGNUDjdd02AyQjkY/zoMb3RFo8YOXBai0HIVfAweT558eK1f7
-         vqaaFtKwCyyzAve9Td1AORBPEqCPtlNiJePolK+MNEZU+iy4N2hl2274GHl9/g9XzRlg
-         txAsjE0sit23ZMwl3tHK4SxHLVsIRSkhMKuK8PZUU8Gu25r9ux2e9glFFZvHNx4yUM0a
-         oy6QjzaL6TVVPXGrHD6MkwCdIqKd+rEvTz/gMIRQxbUwpsMWfe0vlS84+pqpeQrkWe05
-         TJhg==
-X-Gm-Message-State: AOAM533NzCIyD6vh/i4kIgMW5ImHoVcDUbK0eVTINJgUajHbt+++pl/1
-        57a/3rAZXhm4lUF2IBS77vFXBGwtZoQ=
-X-Google-Smtp-Source: ABdhPJw5HrqT+acz2IEXJQLkk1uQOBVBLwD5RCVwc17uWxphkqjuN7JbiWkcphBM/5381aZBpBbMk/wALfY=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:dc6f:6bfe:c575:7dd])
- (user=pgonda job=sendgmr) by 2002:a17:903:2285:b0:154:c94:c5b7 with SMTP id
- b5-20020a170903228500b001540c94c5b7mr13543882plh.64.1647874937331; Mon, 21
- Mar 2022 08:02:17 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 08:02:14 -0700
-Message-Id: <20220321150214.1895231-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH] Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>, Borislav Petkov <bp@alien8.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Joerg Roedel <jroedel@suse.de>, Marc Orr <marcorr@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 11:04:26 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCE163AE;
+        Mon, 21 Mar 2022 08:02:58 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4CCEE210E7;
+        Mon, 21 Mar 2022 15:02:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1647874977; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OkgYg9DsjYEvDqx12odqmwwGLMGZxuZ1Rg8inY0wdNY=;
+        b=EwdDAPf2rxnWpgRabYg6f9trBDXYGpHOBzPOIJnFPy6wfUY+KOeFRMUMTwUUo3whDNYSoz
+        Zjow8ecoGAXjZTKP18FatBKJ7LATJ1TAU8kyoRtitEI2K557dqYIxTmEy4yNTdSTLI9Hv5
+        sIeMUwrkazwmnJQ8m8wO8QT8CjYFGPU=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 5D02FA3B93;
+        Mon, 21 Mar 2022 15:02:56 +0000 (UTC)
+Date:   Mon, 21 Mar 2022 16:02:55 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, surenb@google.com,
+        vbabka@suse.cz, rientjes@google.com, sfr@canb.auug.org.au,
+        edgararriaga@google.com, nadav.amit@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, "# 5 . 10+" <stable@vger.kernel.org>
+Subject: Re: [PATCH V2,2/2] mm: madvise: skip unmapped vma holes passed to
+ process_madvise
+Message-ID: <YjiTn+7vw2rXA6K/@dhcp22.suse.cz>
+References: <cover.1647008754.git.quic_charante@quicinc.com>
+ <4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com>
+ <YjEaFBWterxc3Nzf@google.com>
+ <20220315164807.7a9cf1694ee2db8709a8597c@linux-foundation.org>
+ <YjFAzuLKWw5eadtf@google.com>
+ <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SEV-ES guests can request termination using the GHCB's MSR protocol. See
-AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
-guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
-return code from KVM_RUN. By adding a KVM_EXIT_SHUTDOWN_ENTRY to kvm_run
-struct the userspace VMM can clearly see the guest has requested a SEV-ES
-termination including the termination reason code set and reason code.
+On Wed 16-03-22 19:49:38, Charan Teja Kalla wrote:
+[...]
+> It can return EINTR when:
+> -------------------------
+> 1) PTRACE_MODE_READ is being checked in mm_access() where it is waiting
+> on task->signal->exec_update_lock. EINTR returned from here guarantees
+> that process_madvise() didn't event start processing.
+> https://elixir.bootlin.com/linux/v5.16.14/source/mm/madvise.c#L1264 -->
+> https://elixir.bootlin.com/linux/v5.16.14/source/kernel/fork.c#L1318
+> 
+> 2) The process_madvise() started processing VMA's but the required
+> behavior on a VMA needs mmap_write_lock_killable(), from where EINTR is
+> returned.
 
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Brijesh Singh <brijesh.singh@amd.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Marc Orr <marcorr@google.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Please note this will happen if the task has been killed. The return
+value doesn't really matter because the process won't run in userspace.
 
----
+> The current behaviours supported by process_madvise(),
+> MADV_COLD, PAGEOUT, WILLNEED, just need read lock here.
+> https://elixir.bootlin.com/linux/v5.16.14/source/mm/madvise.c#L1164
+>  **Thus I think no way for EINTR can be returned by process_madvise() in
+> the middle of processing.** . No?
 
-Tested by making an SEV-ES guest call sev_es_terminate() with hardcoded
-reason code set and reason code and then observing the codes from the
-userspace VMM in the kvm_run.shutdown.data fields.
+Maybe not with the current implementation but I can easily imagine that
+there is a requirement to break out early when there is a signal pending
+(e.g. to support terminating madvise on a large memory rage). You would
+get EINTR then somehow need to communicate that to the userspace.
 
----
- arch/x86/kvm/svm/sev.c   |  9 +++++++--
- include/uapi/linux/kvm.h | 12 ++++++++++++
- 2 files changed, 19 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 75fa6dd268f0..5f9d37dd3f6f 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -2735,8 +2735,13 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
- 		pr_info("SEV-ES guest requested termination: %#llx:%#llx\n",
- 			reason_set, reason_code);
- 
--		ret = -EINVAL;
--		break;
-+		vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
-+		vcpu->run->shutdown.reason = KVM_SHUTDOWN_SEV_TERM;
-+		vcpu->run->shutdown.ndata = 2;
-+		vcpu->run->shutdown.data[0] = reason_set;
-+		vcpu->run->shutdown.data[1] = reason_code;
-+
-+		return 0;
- 	}
- 	default:
- 		/* Error, keep GHCB MSR value as-is */
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 8616af85dc5d..12138b8f290c 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -271,6 +271,12 @@ struct kvm_xen_exit {
- #define KVM_EXIT_XEN              34
- #define KVM_EXIT_RISCV_SBI        35
- 
-+/* For KVM_EXIT_SHUTDOWN */
-+/* Standard VM shutdown request. No additional metadata provided. */
-+#define KVM_SHUTDOWN_REQ	0
-+/* SEV-ES termination request */
-+#define KVM_SHUTDOWN_SEV_TERM	1
-+
- /* For KVM_EXIT_INTERNAL_ERROR */
- /* Emulate instruction failed. */
- #define KVM_INTERNAL_ERROR_EMULATION	1
-@@ -311,6 +317,12 @@ struct kvm_run {
- 		struct {
- 			__u64 hardware_exit_reason;
- 		} hw;
-+		/* KVM_EXIT_SHUTDOWN_ENTRY */
-+		struct {
-+			__u64 reason;
-+			__u32 ndata;
-+			__u64 data[16];
-+		} shutdown;
- 		/* KVM_EXIT_FAIL_ENTRY */
- 		struct {
- 			__u64 hardware_entry_failure_reason;
 -- 
-2.35.1.894.gb6a874cedc-goog
-
+Michal Hocko
+SUSE Labs

@@ -2,126 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBE54E231C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1B24E231E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345768AbiCUJQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S1345781AbiCUJSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236571AbiCUJQj (ORCPT
+        with ESMTP id S1345809AbiCUJSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:16:39 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A360F33EA1;
-        Mon, 21 Mar 2022 02:15:14 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id a11so7484251qtb.12;
-        Mon, 21 Mar 2022 02:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=UDlYPAQBAOlLXBbFBOerVAwIN2CtIDqxO6mOQnxtBt8=;
-        b=W8Byhw7YaHbu5C9YCddrrjz9P8+J4EhFPoPEWcsXXW1b7sOaCfegJrcK6DZhkDyc9b
-         oLOXTXJK4Zwtr09FZhmSM8CvJC5UsvlUnD4+gFWtW5P3H/4mED8PfbagF4rpjrP4sscJ
-         TkFrT6KdhDKZbE5V3ifobaWetZJN+m9cbwz+7y8nvt6J7CEzH9FqnT5xZZRw0lDnwOkB
-         ElqLVe8UQ7xPH3U4QDaagnvdD4rWNWZ8KjVFyqt30SqRzPlCSvdmE6QBH0NV97FP4+sX
-         lTYsw79fgdj/V5IaeeTP1GQLrCOaMuxsmm2VHRFR1+Ebk39iDKdaOMkS7tBnujXM5+9+
-         TmMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=UDlYPAQBAOlLXBbFBOerVAwIN2CtIDqxO6mOQnxtBt8=;
-        b=MOmIY+3//3H6DrWMaMtUOTLfxRscQYZsVmU2C7wJvEfmDhNK/6A/cxjA0W7Eg1BI2Q
-         A0s1f9Ombd8dPnE9g3ldSv6zqwv0dP9vaLMIAO4V/Sfw316gE+tA9GfopL0ksmoqv8V9
-         xvQ2ZD2lmlKUchfGpXqZrA8xWYxQOGospJ0KQ0bi7JfX8SabZNHPQZ9bg+jx0Id5XK1U
-         7W/cOB4U6mQ6bIehiwL6HMWo9flj6nOeL8k5rTFss1EBiIg8HeqrFD+3O3TVkL5sG2Uv
-         RDu6ZChHaQr3lxxmbYW24gtlAqci1jXWkN/eva5wVXZNA3bubAADAA8Q0Qf8SIqw7+4L
-         oxog==
-X-Gm-Message-State: AOAM5315wCDWa7felJqPDRlF9O7zPxxCDBybiyl6SF7Hr3RX00yJUK5V
-        KbsI/cH/1a+qEhM4xn9ik1vHXtdmri7xt4G5BligHGM6tuc=
-X-Google-Smtp-Source: ABdhPJx6afM3anilCbMCFrKf4jg+CYfcVO0zYYZm56r5PmbeJlvV/EOJLyPGEyQCfRZG2xHq9Ghe76SJ3VlQC5uOtsY=
-X-Received: by 2002:a05:622a:143:b0:2e0:b7c8:3057 with SMTP id
- v3-20020a05622a014300b002e0b7c83057mr15557151qtw.179.1647854113688; Mon, 21
- Mar 2022 02:15:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAPmgiUJVaACDyWkEhpC5Tfk233t-Tw6_f-Y99KLUDqv6dEq0tw@mail.gmail.com>
- <YjMFTSKZp9eX/c4k@localhost.localdomain> <CAPmgiUJsd-gdq=JG1rF8BHfpADeS45rcVWwnC2qKE=7W1EryiQ@mail.gmail.com>
- <YjdVHgildbWO7diJ@localhost.localdomain>
-In-Reply-To: <YjdVHgildbWO7diJ@localhost.localdomain>
-From:   hui li <juanfengpy@gmail.com>
-Date:   Mon, 21 Mar 2022 17:15:02 +0800
-Message-ID: <CAPmgiUK90T212icXkSJ2vSiCjXbUqO-fptNLL7NF6SMDAyTtRg@mail.gmail.com>
-Subject: Re: [PATCH] proc: fix dentry/inode overinstantiating under /proc/${pid}/net
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 05:18:03 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C130333EA1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:16:38 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 324DA5C00A2;
+        Mon, 21 Mar 2022 05:16:38 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 21 Mar 2022 05:16:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:date:date:from:from:in-reply-to
+        :message-id:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=gNzyaw
+        ml6Mx9maRou91ByTbvGdGsig6mwf7OInhrdyE=; b=irk/5onzONs1uDbRQ3SRU3
+        unK4ocRvauOhTLinCpwrPn13YJe1nn6XpKfTDLD0b2vikofHoqLJNdfQGqj7XmS3
+        jFJulhTTYi65OJWGxd3mRrBNpjIc3h1wHPNnvjDzfEbR5NRE8cJDVOMJLDRwE0FF
+        IcPRZexWjkEEMQpxQeZBipCFpiiHOwpRU+ISKtjok6fEZpkd+aoUw8SMYSvwykiV
+        KfSluup1dbZzpoDIsrgkk+6EZtf7WnGAyMEt6O/nSDqQ0XzKHQktiMC6MwQMr2H2
+        UhckZlHBwee8wVzdaLbV9zQdiL8HDWkcBDqhpvLjbVKMDdZwZaDseohPUr5ETnKA
+        ==
+X-ME-Sender: <xms:dkI4YmmXyFgxWPP0DWilFaotzABjbQ-e3slgKe9TdZozepgd25e5Ow>
+    <xme:dkI4Yt3pMvCVmNxQnlKF-KL0fAIKB7bKV8DcBNg71lGLIvwnHgzQ1kdwKYMOqF_gC
+    rEJh8qrcPqgw-3kLnY>
+X-ME-Received: <xmr:dkI4Ykp55jg7rY41fNPV-b__JSKUSNxmmFCaXLjmpw_MiIiqQp6WrMVce-9j4hzsflz1cGk9ISOOEz7I5QysZbUcoTpSZIQyLL0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegfedgtddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepvffkhffuffestddtredttddttdenucfhrhhomhephfhinhhnucfvhhgrihhn
+    uceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvghrnh
+    eptdelteekleekkedvueejheekgfdvtdehhefhteeitefhteefgefhudehveevleelnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfhhthhgrih
+    hnsehlihhnuhigqdhmieekkhdrohhrgh
+X-ME-Proxy: <xmx:dkI4YqmMNYxMOwfPGaL3I8QN3BnV7z-cmPoGJ4mWWkXLM-QgBK88EQ>
+    <xmx:dkI4Yk1-PEVzSVymIoWR45MQssvDlSRfm1rfpHdnVpne6ZIYLGHwwA>
+    <xmx:dkI4YhuRHYpiS4muO7tgcv45KirbQ-lWx9NIyOHy9kju6uwrMNsUHQ>
+    <xmx:dkI4YiAoKlCbzT8lbWvb290h-TAw_5GhRLQC7jjYIYB7-9VbABpTpA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Mar 2022 05:16:36 -0400 (EDT)
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     "Randy Dunlap" <rdunlap@infradead.org>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Message-Id: <bb3b2229213f5feaff12e731b7537d03705e15d5.1647854173.git.fthain@linux-m68k.org>
+From:   Finn Thain <fthain@linux-m68k.org>
+Subject: [PATCH] Subject: [PATCH] macintosh/via-pmu: Avoid compiler warnings
+ when CONFIG_PROC_FS is disabled
+Date:   Mon, 21 Mar 2022 20:16:13 +1100
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-proc_misc_dentry_ops is a general ops for dentry under /proc, except
-for "/proc/${pid}/net"=EF=BC=8Cother dentries may also use there own ops to=
-o,
-so I think change proc_misc_d_delete may be better?
-see patch under: https://lkml.org/lkml/2022/3/17/319
+drivers/macintosh/via-pmu.c:897:12: warning: 'pmu_battery_proc_show' defined but not used [-Wunused-function]
+ static int pmu_battery_proc_show(struct seq_file *m, void *v)
+            ^~~~~~~~~~~~~~~~~~~~~
+drivers/macintosh/via-pmu.c:871:12: warning: 'pmu_irqstats_proc_show' defined but not used [-Wunused-function]
+ static int pmu_irqstats_proc_show(struct seq_file *m, void *v)
+            ^~~~~~~~~~~~~~~~~~~~~~
+drivers/macintosh/via-pmu.c:860:12: warning: 'pmu_info_proc_show' defined but not used [-Wunused-function]
+ static int pmu_info_proc_show(struct seq_file *m, void *v)
+            ^~~~~~~~~~~~~~~~~~
 
-Alexey Dobriyan <adobriyan@gmail.com> =E4=BA=8E2022=E5=B9=B43=E6=9C=8821=E6=
-=97=A5=E5=91=A8=E4=B8=80 00:24=E5=86=99=E9=81=93=EF=BC=9A
->
-> When a process exits, /proc/${pid}, and /proc/${pid}/net dentries are flu=
-shed.
-> However some leaf dentries like /proc/${pid}/net/arp_cache aren't.
-> That's because respective PDEs have proc_misc_d_revalidate() hook which
-> returns 1 and leaves dentries/inodes in the LRU.
->
-> Force revalidation/lookup on everything under /proc/${pid}/net by inherit=
-ing
-> proc_net_dentry_ops.
->
-> Fixes: c6c75deda813 ("proc: fix lookup in /proc/net subdirectories after =
-setns(2)")
-> Reported-by: hui li <juanfengpy@gmail.com>
-> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
-> ---
->
->  fs/proc/generic.c  |    4 ++++
->  fs/proc/proc_net.c |    3 +++
->  2 files changed, 7 insertions(+)
->
-> --- a/fs/proc/generic.c
-> +++ b/fs/proc/generic.c
-> @@ -448,6 +448,10 @@ static struct proc_dir_entry *__proc_create(struct p=
-roc_dir_entry **parent,
->         proc_set_user(ent, (*parent)->uid, (*parent)->gid);
->
->         ent->proc_dops =3D &proc_misc_dentry_ops;
-> +       /* Revalidate everything under /proc/${pid}/net */
-> +       if ((*parent)->proc_dops =3D=3D &proc_net_dentry_ops) {
-> +               pde_force_lookup(ent);
-> +       }
->
->  out:
->         return ent;
-> --- a/fs/proc/proc_net.c
-> +++ b/fs/proc/proc_net.c
-> @@ -376,6 +376,9 @@ static __net_init int proc_net_ns_init(struct net *ne=
-t)
->
->         proc_set_user(netd, uid, gid);
->
-> +       /* Seed dentry revalidation for /proc/${pid}/net */
-> +       pde_force_lookup(netd);
-> +
->         err =3D -EEXIST;
->         net_statd =3D proc_net_mkdir(net, "stat", netd);
->         if (!net_statd)
+Rearrange some code and add some #ifdefs to avoid unused code warnings
+when CONFIG_PROC_FS is disabled.
+
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+---
+ drivers/macintosh/via-pmu.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/macintosh/via-pmu.c b/drivers/macintosh/via-pmu.c
+index 2109129ea1bb..495fd35b11de 100644
+--- a/drivers/macintosh/via-pmu.c
++++ b/drivers/macintosh/via-pmu.c
+@@ -204,9 +204,11 @@ static int init_pmu(void);
+ static void pmu_start(void);
+ static irqreturn_t via_pmu_interrupt(int irq, void *arg);
+ static irqreturn_t gpio1_interrupt(int irq, void *arg);
++#ifdef CONFIG_PROC_FS
+ static int pmu_info_proc_show(struct seq_file *m, void *v);
+ static int pmu_irqstats_proc_show(struct seq_file *m, void *v);
+ static int pmu_battery_proc_show(struct seq_file *m, void *v);
++#endif
+ static void pmu_pass_intr(unsigned char *data, int len);
+ static const struct proc_ops pmu_options_proc_ops;
+ 
+@@ -857,6 +859,7 @@ query_battery_state(void)
+ 			2, PMU_SMART_BATTERY_STATE, pmu_cur_battery+1);
+ }
+ 
++#ifdef CONFIG_PROC_FS
+ static int pmu_info_proc_show(struct seq_file *m, void *v)
+ {
+ 	seq_printf(m, "PMU driver version     : %d\n", PMU_DRIVER_VERSION);
+@@ -977,6 +980,7 @@ static const struct proc_ops pmu_options_proc_ops = {
+ 	.proc_release	= single_release,
+ 	.proc_write	= pmu_options_proc_write,
+ };
++#endif
+ 
+ #ifdef CONFIG_ADB
+ /* Send an ADB command */
+-- 
+2.32.0
+

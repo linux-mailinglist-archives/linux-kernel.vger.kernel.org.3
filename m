@@ -2,74 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 411454E2E73
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9484E2E7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351406AbiCUQsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 12:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
+        id S1349940AbiCUQuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 12:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbiCUQsX (ORCPT
+        with ESMTP id S233401AbiCUQuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:48:23 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766EC16D8CD
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:46:57 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso10866050pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:46:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=V6tc3pkqZNZyKCTRozXMk87YSKEnJRwRCHnnvTYojQM=;
-        b=qJLjA563ml8lhITs2zgrhf5rlbXm0bI3sjBmmEadv2kyKIgzHrhs52TsG5Q3CkEwAH
-         yTbNE15rSUDyrpvTckkpN+wNAaeg2IxzpA9xLL50n93Qos3qRBJzXwLMRcTwYE3jIH0h
-         MP9D3xDb63d9F2gY48267Ltq9pjZwOwY215R0Ca9vRgi4rYwHO8nkt0m7kVXrLshZ6oJ
-         /MPPRk3tZQWqeUakFIbju39P0m9vw5VDuK0OpIs7w1oOjpQ5yz/+Bh0tQ8bp7j+xGTFN
-         SMBHmqL8kQfy0ojMUPijx5S1RPlfFD8NQ2WOXuWy9Hsk+rIxfPAn1DwHqBdF20hVNhtg
-         5fkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=V6tc3pkqZNZyKCTRozXMk87YSKEnJRwRCHnnvTYojQM=;
-        b=CXxPd5evIXgVkFZWbMbMXLrj2oQV7pAl1zACWR/3qS5xEtzQkI5mThgkYLcK8ta6cn
-         6FdcsSFN625I3qfpDJ/dt2GAJN5sXNhnS7uhjvhrHLDYcU6Duvz6MUlwwxtjn9g75As8
-         YSb1R7NonB5aWBB4Jy9wfKH4RJn7M31B0H85YEijUH3ySlgA7blWF9qVlkhYCnSLtKtZ
-         gr3RaVkD5KqFLs4ZMHsG6+vD/HXyHnVIhm/Km8X8rInRfvhW9uW6gF9g7N5yT0BYBfV2
-         qlznnrFbk6pwBTVc51N/1frMOZB+F1pilXOmhGDOuWISpM5En36cA6KtiKaiZeDx8hzC
-         M1eA==
-X-Gm-Message-State: AOAM532uSMfqG4zCg6kKXcbjmub75Qb4ZwMNLsuOR4AmKafK+WasPX/k
-        6m5X1m48U+R1EadvmecX1F8=
-X-Google-Smtp-Source: ABdhPJw1lU/HcU+i9TJEwn7QFHAfdz7Eg7o6ONFT68y6ASLupQld+f3Hq1/sh7yxe/ZQwDtEszM2KQ==
-X-Received: by 2002:a17:902:e5d1:b0:154:3319:19c7 with SMTP id u17-20020a170902e5d100b00154331919c7mr11436438plf.34.1647881216780;
-        Mon, 21 Mar 2022 09:46:56 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id 68-20020a621647000000b004fa763ef1easm11159917pfw.125.2022.03.21.09.46.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 09:46:55 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 21 Mar 2022 06:46:53 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Imran Khan <imran.f.khan@oracle.com>, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v7 7/8] kernfs: Replace per-fs rwsem with hashed
- rwsems.
-Message-ID: <Yjir/d5S3J1PTiux@slm.duckdns.org>
-References: <20220317072612.163143-1-imran.f.khan@oracle.com>
- <20220317072612.163143-8-imran.f.khan@oracle.com>
- <YjPNOQJf/Wxa4YeV@zeniv-ca.linux.org.uk>
- <536f2392-45d2-2f43-5e9d-01ef50e33126@oracle.com>
- <YjgpaeFfFandY999@zeniv-ca.linux.org.uk>
+        Mon, 21 Mar 2022 12:50:44 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126433F8B8;
+        Mon, 21 Mar 2022 09:49:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ih87pxrMStIDzG7/g9OQRTfoGLyCU+nQ0PiHF7wFn0A=; b=HJ/hN+5QK8oYBuY1Z9W28lDnKg
+        olkRPbqOfh2FJ8j+4p6hcV1SosrRTM05tsif0RFsSb5NSBG1uP+58Bi9MxWkLagezuuICP7iHoVjP
+        NCj0siBk9j5UjNlPv/sjxPJPP/o+oUJy60xbw0SLkOkd2p6M8vNsa1Q5p+vmFbTEz4lW1dvH8IL/Q
+        mGMcCRXOv6d5+9ZnwVEFn4OVF78XnsNG8bK2QsnoEdWU5hVuRlkaJvW3UHuPHGxR5peoh1ZkJ/xiG
+        6lYyUg+wceOawcNe7/baY7n7dpT5fiC3dM9nygDasdXYZmk4o/bpHTOvTB9oGhPjDCGZ453G2GgaP
+        x/7qmKqQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWLDD-003BEn-Bs; Mon, 21 Mar 2022 16:48:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CF2FA30031D;
+        Mon, 21 Mar 2022 17:48:54 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B00B22DB9484B; Mon, 21 Mar 2022 17:48:54 +0100 (CET)
+Date:   Mon, 21 Mar 2022 17:48:54 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        mhiramat@kernel.org, rostedt@goodmis.org, ast@kernel.org,
+        hjl.tools@gmail.com, rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <YjisdqdofbDIYj2U@hirez.programming.kicks-ass.net>
+References: <20220321140327.777f9554@canb.auug.org.au>
+ <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+ <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YjgpaeFfFandY999@zeniv-ca.linux.org.uk>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,17 +67,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 07:29:45AM +0000, Al Viro wrote:
-...
-> stabilizing the tree topology.  Turn it into rwlock if you wish,
-> with that thing being a reader and existing users - writers.
-> And don't bother with further scaling, until and unless you see a real
-> contention on it.
+On Mon, Mar 21, 2022 at 02:04:05PM +0100, Peter Zijlstra wrote:
+> On Mon, Mar 21, 2022 at 01:55:49PM +0100, Peter Zijlstra wrote:
+> > On Mon, Mar 21, 2022 at 02:03:27PM +1100, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > After merging the tip tree, today's linux-next build (x864 allmodconfig)
+> > > produced these new warnings:
+> > > 
+> > > vmlinux.o: warning: objtool: arch_rethook_prepare()+0x55: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > vmlinux.o: warning: objtool: arch_rethook_trampoline_callback()+0x3e: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > vmlinux.o: warning: objtool: unwind_next_frame()+0x93e: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > vmlinux.o: warning: objtool: unwind_next_frame()+0x5f2: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > vmlinux.o: warning: objtool: unwind_next_frame()+0x4a7: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x81: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x90: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x8c: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x9b: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > 
+> > Hurmph, lemme go figure out where that code comes from, I've not seen
+> > those.
+> 
+> Ahh, something tracing. I'll go do some patches on top of it.
 
-Given how rare these renames are, in the (unlikely) case the rename rwsem
-becomes a problem, we should probably just switch it to a percpu_rwsem.
+The below gets rid of the objtool warnings.
 
-Thanks.
+But I still think it's fairly terrible to get a (flawed) carbon copy of
+the kretprobe code. Also, I think both should fix regs->ss.
 
--- 
-tejun
+---
+diff --git a/arch/x86/kernel/rethook.c b/arch/x86/kernel/rethook.c
+index f0f2f0608282..227a1890a984 100644
+--- a/arch/x86/kernel/rethook.c
++++ b/arch/x86/kernel/rethook.c
+@@ -20,6 +20,7 @@ asm(
+ 	".type arch_rethook_trampoline, @function\n"
+ 	"arch_rethook_trampoline:\n"
+ #ifdef CONFIG_X86_64
++	ANNOTATE_NOENDBR
+ 	/* Push a fake return address to tell the unwinder it's a kretprobe. */
+ 	"	pushq $arch_rethook_trampoline\n"
+ 	UNWIND_HINT_FUNC
+@@ -48,7 +49,7 @@ asm(
+ 	"	addl $4, %esp\n"
+ 	"	popfl\n"
+ #endif
+-	"	ret\n"
++	ASM_RET
+ 	".size arch_rethook_trampoline, .-arch_rethook_trampoline\n"
+ );
+ NOKPROBE_SYMBOL(arch_rethook_trampoline);

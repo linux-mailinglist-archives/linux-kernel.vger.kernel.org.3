@@ -2,169 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005154E2197
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 08:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C934E219F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 08:56:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345045AbiCUHyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 03:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
+        id S1345065AbiCUH6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 03:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236143AbiCUHyt (ORCPT
+        with ESMTP id S1345091AbiCUH6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 03:54:49 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE4E7140B0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 00:53:21 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 22L7r8hC005539;
-        Mon, 21 Mar 2022 08:53:08 +0100
-Date:   Mon, 21 Mar 2022 08:53:08 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Nugraha <richiisei@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: Re: [RFC PATCH v1 6/6] tools/include/string: Implement `strdup()`
- and `strndup()`
-Message-ID: <20220321075308.GD29580@1wt.eu>
-References: <20220320093750.159991-1-ammarfaizi2@gnuweeb.org>
- <20220320093750.159991-7-ammarfaizi2@gnuweeb.org>
+        Mon, 21 Mar 2022 03:58:09 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120072.outbound.protection.outlook.com [40.107.12.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1695B1AAB
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 00:56:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NK6/BKbtG1bXulIsbhT8ZTYBStY5CqzuKc/DH9yKyk1jooW4fNRwB4Xpx2f2sHv533Uwe1A35VLsHVIRFHfo3Wl7Z2CrqgKfofkRLPJlArr2dZ/Eh8x0N0GA5txUqTvnovxKVIrR/hbxQjsn0qd4oKqJWxFxFhBFohMRiX4J+arBLF2dC1aAxOePQ2VwWWznP20GisH4AozUeScGLjpQ9barLnTA2kKflSaQ6FSFj5/DlTYbDvCrfVr9uRpY3nntSG4PFNJf6aDR8VvHgPPPD01xVdiP5WhiA3r6lEyu6OJCfB/jfUU00gSu2pHWW1WCdjmVRZOTn200qvnilCMt7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3YBBhUybv1MhMc6B/pHiHpEOpNszQ9ARuBjBbzMuNZU=;
+ b=j3J2HpCulW0av7UOLZYINhOj9Ec+YP0giGgvtWUZ0N8DsfMBZvGhLqg0YOcm/Jn7qOIk8rn8zsYBImhqJU1ZGBFH1gmRgg3ICM4MxlT+Ku7kylyhrM04RcEhK5HJT7FZY+Cft3uYIgsuNP7ZIBR6PEuQp+aL89g7s5Wr9dXNJznlVCil0zyCktXdWCWNEcex3OSMNeRU6jKB//x1FC0zo6mrScLMJf6bhwMWpWzMS1r4B0i8IXgdCW3NB3MgimeDmfqb7qSEba53tchyDIzanCDtnPCbGHOuQ5ok75CMpozRyFmYXOlqarJkPK1cDiO4w7/PtAZcykvO8z4R59nYOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB1876.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:2::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Mon, 21 Mar
+ 2022 07:56:41 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::cd2f:d05d:9aa3:400d%6]) with mapi id 15.20.5081.022; Mon, 21 Mar 2022
+ 07:56:41 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+CC:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
+Thread-Topic: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
+Thread-Index: AQHYOsOkMhd+XrYXYE6fzWpV8XELvKzFK0EAgAP1goCAAFwcgA==
+Date:   Mon, 21 Mar 2022 07:56:41 +0000
+Message-ID: <a688b641-a8ef-8e6b-4f94-da5edd1c6943@csgroup.eu>
+References: <20220318105140.43914-1-sv@linux.ibm.com>
+ <20220318105140.43914-4-sv@linux.ibm.com>
+ <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
+ <33447256-81d1-8844-d82f-e8ac94f65fbe@csgroup.eu>
+ <87pmmgghvu.fsf@mpe.ellerman.id.au>
+In-Reply-To: <87pmmgghvu.fsf@mpe.ellerman.id.au>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f1477918-b7fc-4f18-7a4b-08da0b105629
+x-ms-traffictypediagnostic: MR1P264MB1876:EE_
+x-microsoft-antispam-prvs: <MR1P264MB187685D37B303C8D977F062CED169@MR1P264MB1876.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: EfCPbLtEZ5g+92NDBsjEcLF2llJ1hNjLTZRPm2AeTj7jpi6ZZieTMsYhwpFMQyczZiWIr526c2kbH5Qk/O/mRVUXhFAxv9P4/jvbA/827elj8jJE/WVuRLUuq5Rba4OtnOKPzVdFD7qqrHvL0x6UGeYYabsfIgBzhjwF87kQrPwJgmfTfV9V3yhmoQMwspvg8PoES0qjW3w3lLSIBbJEG0OLruN5+euNlRlxq+6yqjQImxfS20GpT12wEnFNEwNZM2ZqEHAkEO4Z32ZO5TyThjTBkqvjMj7MGaZvCPQiSEUwSG/wqolYaQDIbU6pLwNDbmPLU+Und6AnvXgaLSNJxCs9ocvO4jlWE6724paVtRdYD4S2Jy5HaYjT4fEbwpkd4nRtet8qvkgTxLnpneqaNqG2fBgo+i7oQjsPir6E/zESnTYADlDhb0pe0/09qexP/2ynZMca80Ua9DNCIdc3eLFCYl/WUl4HyPrASDt5F7Q+F/1AcNImhGZ1DaOclQwZ0jwVA/8ON6v2p3HmLYvFJBxcU93lzaewxdclKxLRsgjcwgaV3VTOceXNoeN2ZN5+V5aWrfkJmr2jfxpjCcJRqEvobkD0nvA+sOFWXUuOUQ90rkRIbCDsdB11Ku2wY4WvjzXBBVz+sc7Wir1jbGyBudifGbOBdJeUUZ9dGKfv8K29kjXTLp5U0p8ss1fK8BVGhGUK7nQ0qXGspRn1QmT9ZS2UJ3eU4gHYHWJl/pkEztEWfmXAYTT2aE8UqSaOYsXnTFYPvCV/sW6vyH+MvZEqPmMgxRAO/YlGgrZKgyH8kF9RgD16HSxkBW5uHbTZT50FN1EYbRHNrX+G5vkgIrNBF6RSfizzXi4G+Vti8I5MergMPkeRMG/FOdA2nd/0logaRXf5JSARnGE4f11MqgbhNw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(110136005)(54906003)(2906002)(6506007)(6512007)(71200400001)(36756003)(31686004)(508600001)(6486002)(966005)(66446008)(186003)(26005)(4744005)(4326008)(76116006)(66556008)(66476007)(64756008)(38070700005)(66946007)(2616005)(8676002)(38100700002)(91956017)(5660300002)(31696002)(86362001)(44832011)(83380400001)(8936002)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MjJoVWxoQjJKZlFadmVhenJraVB2cERJRW9nbjI4RlhHVkhVcE1hMGpPajBy?=
+ =?utf-8?B?TlZGWkxpdWRQWUVudDE2Y1R5aHZkUVNmY1JFWi9pWjl2QVBGc0RCd1VQdFE2?=
+ =?utf-8?B?enhJblRKTDRSLy9DaHBXakJvT0VSNkJ0cXduWEJlQTlwVERGSUw4blZSZmhK?=
+ =?utf-8?B?dE5KMSs4SXRnWW03dlFzTVpRaVd3UmZibmI5b1lCM3grK1ljd3g0V201WDNp?=
+ =?utf-8?B?T1YvTDZsZThIbXhKZkdaUW9EK0R0T3d1ZzRVTUkwc1hRR2F6SFA3dmdTY3Ir?=
+ =?utf-8?B?NWk4NnVIejdwOVVrczNteDhtWnorZHJ4WDBtU0FNZTZTcUREcmpaU0RDVHRR?=
+ =?utf-8?B?N1Q3Uy9OZlVzai96ekFvMWV3aXEvbnZzcGltdWNmcmoxby9zd00vbFNocDNY?=
+ =?utf-8?B?L1pPaDZNVlRDS1RTV1lHOXBBVkFmamVCcVlCbTdTTS9SN2hhTGVNakJESUtt?=
+ =?utf-8?B?QXgzaTBrWm9CVU5MQnVpeWV2VEM4eCt6RVl6QmRLL2poeUVWWXBmRGFxUFRj?=
+ =?utf-8?B?R01uc24yNlFiRXhVbFN6SHNaN3lXd2Q4VXBXK2EwT25rcURTbGcwcG8zVHN0?=
+ =?utf-8?B?N1FNL1JxOStqSk13QklveElQTzQzUHN3bG9lN2dsWDZpWlBPNm1acXZrTVNB?=
+ =?utf-8?B?eTFjUGxwZ0Zxc1hybVhNU2VlVlBoNEt1Umo4OU5iUjZhempjR3pJRnJhUDBX?=
+ =?utf-8?B?RmRIcGg2UUpZZm9lNG9wQjlhMHF2d1RQMXlCNWUxbGREei93eWZzNTEvUkg4?=
+ =?utf-8?B?ZElEY2MvMWF4OWhDZzN1b3BtcG1kT1NxSVB5cUF5Q1JFODdsVmoxN0NNaGx5?=
+ =?utf-8?B?UEw3eFZZdnNxdnFrQzNzM0JtRWZoV2NQUW9YeGlEN3pGd3owQzRHWG1zNzlN?=
+ =?utf-8?B?SzFvY1V6aURKYldFTlFYejM3RDl3OFZLUU9Bc290d3piVHl0UXV6a0ZDK3RN?=
+ =?utf-8?B?TUhTc21pdk9OR09rZUVxMVV5SFBEeWNkTDRuY0RYYW5JTjkzeG93cDArV0Uv?=
+ =?utf-8?B?Wmx0MzVGVytiQlEveUdUdnF0RVAzMXhPUFNxWjE5UHI5UDJZdHdabHhEY0dx?=
+ =?utf-8?B?djhIcHdTVCt6REllZGRseXhYcW9ndU1JR3hPaThyUnlxWkZ2SlU1N2JiUTdk?=
+ =?utf-8?B?MEJCdmlvTG1YeXMvSmxUSnoybDNaQXI3SEQ1ZG5SeFdhMlBHWEVOTy9OTmp3?=
+ =?utf-8?B?ZzZHRVkwcEh6WW9ESjUzTVBmUUxsTHQ2d2NJNnptTU5teER0b00ySjd4ZzRy?=
+ =?utf-8?B?K2lJT2Frb0xPR3orcnBFbDI1c3FCN2JoV0QzaWV2YXRKd0hDb3A3a1RNRG9z?=
+ =?utf-8?B?eW5jK2w2ZjNTSjF1QXY2Tmx0TlZoa1dVbzkyQjIwb0M4NFZ5TlFGTjJUT2xR?=
+ =?utf-8?B?dldnN0FpbGU3OTBVT0o2dU9kMG5XazlRb1Y5MVNDRkJrYXgxNW5LbWJnc1Vv?=
+ =?utf-8?B?U2lOcGs3MFdoU3lZV3o0WHNVMm9QcHM1cUN3WjNGNWVoNUZURXAvTWhYRkFm?=
+ =?utf-8?B?eXhtR2NYUi9tL0JWQ2QrMkMwdmQzcHdoQ3lwQjYwaXJnRUVuKzEwSm1hWExV?=
+ =?utf-8?B?VEpPOE1vR2lvTDM0eFNJYTdmYVV3bzhKellNRFM2cGhNdU5mWlorZUI2QlRs?=
+ =?utf-8?B?c21iTWltVWQ1V1pDWXFOeHRZSitTdE5jUHRLajArdWNRaERyYTE4Zmt0S1hr?=
+ =?utf-8?B?akxPMCtseExTZHJIRXdkNTFIVjRTVStaUTZTTHBMQ0tZZmtzeklVMkV2NC9S?=
+ =?utf-8?B?TzFHeU1ndi9kem5rWDdiWno5eEZ6TERWaXBxcnJyOStNM3BaamcvUG5yT3Br?=
+ =?utf-8?B?L0ZnOFFkMTRhVndKdTMwTi9PYVRRQjd0UStaSUZ5VzZ6d1NNVk9QZS9rYnpl?=
+ =?utf-8?B?VmZ5K2FpbnB4QXBod3I1WlhGZ0d2S2FVTlVvOVQ5NFkwWXZ5dGhxMTdFUEU2?=
+ =?utf-8?B?ek52MEUxMDh0cGZST05zNjdGWEwvKzhKbEtwK1pvYUw5bjR3czUyMVBWSnhx?=
+ =?utf-8?Q?gWOrI+JXsPwhLj1eDp9veZ83z3A50Q=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4FAEB5C697D2494FA8D98F98BF587DE2@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220320093750.159991-7-ammarfaizi2@gnuweeb.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1477918-b7fc-4f18-7a4b-08da0b105629
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2022 07:56:41.8662
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GsHztAHIzbGDsSGGHR0Hx6Ftuo8qwCwm9FDr5eSbG61p4EMSbTZXw0jMU9IIuAUGycXnJ44y+eKDYmvMQGJXuCr3NDkpA6w1T1Tk53NwJQk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB1876
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ammar,
-
-On Sun, Mar 20, 2022 at 04:37:50PM +0700, Ammar Faizi wrote:
-> Add strdup and strndup support. These functions are only available on
-> architectures that have my_syscall6() macro from nolibc.
-> 
-> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> ---
->  tools/include/nolibc/string.h | 68 +++++++++++++++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
-> 
-> diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
-> index 4554b6fcb400..413c65f7c853 100644
-> --- a/tools/include/nolibc/string.h
-> +++ b/tools/include/nolibc/string.h
-> @@ -9,6 +9,10 @@
->  
->  #include "std.h"
->  
-> +static void free(void *ptr);
-> +static void *malloc(size_t len);
-> +static void *realloc(void *old_ptr, size_t new_size);
-
-Better include the required h files here.
-
->  /*
->   * As much as possible, please keep functions alphabetically sorted.
->   */
-> @@ -127,6 +131,70 @@ size_t nolibc_strlen(const char *str)
->  		nolibc_strlen((str));           \
->  })
->  
-> +static __attribute__((unused))
-> +char *strdup(const char *str)
-> +{
-> +	size_t allocated = 2048;
-> +	size_t i;
-> +	char *ret;
-> +	char *tmp;
-> +
-> +	ret = malloc(allocated);
-> +	if (__builtin_expect(!ret, 0))
-> +		return NULL;
-> +
-> +	i = 0;
-> +	for (;;) {
-> +		char c = *str;
-> +		if (!c)
-> +			break;
-> +
-> +		if (i == allocated) {
-> +			allocated += 2048;
-> +			tmp = realloc(ret, allocated);
-> +			if (__builtin_expect(!tmp, 0)) {
-> +				free(ret);
-> +				return NULL;
-> +			}
-> +			ret = tmp;
-> +		}
-> +
-> +		ret[i++] = c;
-> +		str++;
-> +	}
-> +
-> +	ret[i] = '\0';
-> +	return ret;
-> +}
-
-This version is suboptimal in terms of code size, CPU usage and memory
-usage. And it even seems it contains a buffer overflow: if the string
-is exactly a multiple of 2048, it seems to me that you'll write the
-trailing zero past the end. Please instead use the more intuitive form
-below (not tested but you get the idea):
-
-	size_t len = strlen(str);
-	char *ret = malloc(len + 1);
-	if (ret)
-		memcpy(ret, str, len);
-	return ret;
-
-> +static __attribute__((unused))
-> +char *strndup(const char *str, size_t maxlen)
-> +{
-> +	size_t i;
-> +	char *ret;
-> +
-> +	ret = malloc(maxlen + 1);
-> +	if (__builtin_expect(!ret, 0))
-> +		return NULL;
-> +
-> +	i = 0;
-> +	for (;;) {
-> +		char c = *str;
-> +		if (!c)
-> +			break;
-> +
-> +		if (i == maxlen)
-> +			break;
-> +
-> +		ret[i++] = c;
-> +		str++;
-> +	}
-> +
-> +	ret[i] = '\0';
-> +	return ret;
-> +}
-
-Here it can cost quite a lot for large values of maxlen. Please just use
-a variant of the proposal above like this one:
-
-	size_t len;
-	char *ret;
-
-	len = strlen(str);
-	if (len > maxlen)
-		len = maxlen;
-	ret = malloc(len + 1);
-	if (ret)
-		memcpy(ret, str, len);
-	return ret;
-
-Thanks,
-Willy
+DQoNCkxlIDIxLzAzLzIwMjIgw6AgMDM6MjcsIE1pY2hhZWwgRWxsZXJtYW4gYSDDqWNyaXTCoDoN
+Cj4gQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1PiB3cml0ZXM6
+DQo+PiBMZSAxOC8wMy8yMDIyIMOgIDEzOjI2LCBQZXRlciBaaWpsc3RyYSBhIMOpY3JpdMKgOg0K
+Pj4+IE9uIEZyaSwgTWFyIDE4LCAyMDIyIGF0IDA0OjIxOjQwUE0gKzA1MzAsIFNhdGh2aWthIFZh
+c2lyZWRkeSB3cm90ZToNCj4+Pj4gVGhpcyBwYXRjaCBhZGRzIHBvd2VycGMgc3BlY2lmaWMgZnVu
+Y3Rpb25zIHJlcXVpcmVkIGZvcg0KPj4+PiAnb2JqdG9vbCBtY291bnQnIHRvIHdvcmssIGFuZCBl
+bmFibGVzIG1jb3VudCBmb3IgcHBjLg0KPj4+DQo+Pj4gSSB3b3VsZCBsb3ZlIHRvIHNlZSBtb3Jl
+IG9ianRvb2wgZW5hYmxlbWVudCBmb3IgUG93ZXIgOi0pDQo+Pg0KPj4gSSBoYXZlIG5vdCByZWNl
+aXZlZCB0aGlzIHNlcmllcyBhbmQgSSBjYW4ndCBzZWUgaXQgb24gcG93ZXJwYyBwYXRjaHdvcmsN
+Cj4+IGVpdGhlciAoaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2xpbnV4cHBj
+LWRldi9saXN0LykNCj4+DQo+PiBEaWQgeW91IHNlbmQgaXQgdG8gbGludXhwcGMtZGV2IGxpc3Qg
+PyBJZiBub3QgY2FuIHlvdSByZXNlbmQgaXQgdGhlcmUgPw0KPiANCj4gSXQgaXMgdGhlcmUsIG1p
+Z2h0IGhhdmUgYmVlbiBkZWxheWVkPw0KPiANCj4gaHR0cDovL3BhdGNod29yay5vemxhYnMub3Jn
+L3Byb2plY3QvbGludXhwcGMtZGV2L2xpc3QvP3Nlcmllcz0yOTExMjkNCj4gDQo+IFRoZXJlIGFy
+ZSBzb21lIENJIGZhaWx1cmVzLg0KPiANCg0KT24gUFBDMzIgSSBnZXQgOg0KDQpbICAgIDAuMDAw
+MDAwXSBmdHJhY2U6IE5vIGZ1bmN0aW9ucyB0byBiZSB0cmFjZWQ/DQoNCldpdGhvdXQgdGhpcyBz
+ZXJpZXMgSSBnZXQ6DQoNClsgICAgMC4wMDAwMDBdIGZ0cmFjZTogYWxsb2NhdGluZyAyMjUwOCBl
+bnRyaWVzIGluIDE3IHBhZ2VzDQpbICAgIDAuMDAwMDAwXSBmdHJhY2U6IGFsbG9jYXRlZCAxNyBw
+YWdlcyB3aXRoIDIgZ3JvdXBzDQoNCg0KQ2hyaXN0b3BoZQ==

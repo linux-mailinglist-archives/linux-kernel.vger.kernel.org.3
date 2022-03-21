@@ -2,151 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C934E219F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 08:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE27E4E21A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345065AbiCUH6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 03:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
+        id S1345073AbiCUIBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 04:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345091AbiCUH6J (ORCPT
+        with ESMTP id S244075AbiCUIBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 03:58:09 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120072.outbound.protection.outlook.com [40.107.12.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1695B1AAB
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 00:56:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NK6/BKbtG1bXulIsbhT8ZTYBStY5CqzuKc/DH9yKyk1jooW4fNRwB4Xpx2f2sHv533Uwe1A35VLsHVIRFHfo3Wl7Z2CrqgKfofkRLPJlArr2dZ/Eh8x0N0GA5txUqTvnovxKVIrR/hbxQjsn0qd4oKqJWxFxFhBFohMRiX4J+arBLF2dC1aAxOePQ2VwWWznP20GisH4AozUeScGLjpQ9barLnTA2kKflSaQ6FSFj5/DlTYbDvCrfVr9uRpY3nntSG4PFNJf6aDR8VvHgPPPD01xVdiP5WhiA3r6lEyu6OJCfB/jfUU00gSu2pHWW1WCdjmVRZOTn200qvnilCMt7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3YBBhUybv1MhMc6B/pHiHpEOpNszQ9ARuBjBbzMuNZU=;
- b=j3J2HpCulW0av7UOLZYINhOj9Ec+YP0giGgvtWUZ0N8DsfMBZvGhLqg0YOcm/Jn7qOIk8rn8zsYBImhqJU1ZGBFH1gmRgg3ICM4MxlT+Ku7kylyhrM04RcEhK5HJT7FZY+Cft3uYIgsuNP7ZIBR6PEuQp+aL89g7s5Wr9dXNJznlVCil0zyCktXdWCWNEcex3OSMNeRU6jKB//x1FC0zo6mrScLMJf6bhwMWpWzMS1r4B0i8IXgdCW3NB3MgimeDmfqb7qSEba53tchyDIzanCDtnPCbGHOuQ5ok75CMpozRyFmYXOlqarJkPK1cDiO4w7/PtAZcykvO8z4R59nYOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB1876.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:2::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Mon, 21 Mar
- 2022 07:56:41 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::cd2f:d05d:9aa3:400d%6]) with mapi id 15.20.5081.022; Mon, 21 Mar 2022
- 07:56:41 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-CC:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
-Thread-Topic: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
-Thread-Index: AQHYOsOkMhd+XrYXYE6fzWpV8XELvKzFK0EAgAP1goCAAFwcgA==
-Date:   Mon, 21 Mar 2022 07:56:41 +0000
-Message-ID: <a688b641-a8ef-8e6b-4f94-da5edd1c6943@csgroup.eu>
-References: <20220318105140.43914-1-sv@linux.ibm.com>
- <20220318105140.43914-4-sv@linux.ibm.com>
- <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
- <33447256-81d1-8844-d82f-e8ac94f65fbe@csgroup.eu>
- <87pmmgghvu.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87pmmgghvu.fsf@mpe.ellerman.id.au>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f1477918-b7fc-4f18-7a4b-08da0b105629
-x-ms-traffictypediagnostic: MR1P264MB1876:EE_
-x-microsoft-antispam-prvs: <MR1P264MB187685D37B303C8D977F062CED169@MR1P264MB1876.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EfCPbLtEZ5g+92NDBsjEcLF2llJ1hNjLTZRPm2AeTj7jpi6ZZieTMsYhwpFMQyczZiWIr526c2kbH5Qk/O/mRVUXhFAxv9P4/jvbA/827elj8jJE/WVuRLUuq5Rba4OtnOKPzVdFD7qqrHvL0x6UGeYYabsfIgBzhjwF87kQrPwJgmfTfV9V3yhmoQMwspvg8PoES0qjW3w3lLSIBbJEG0OLruN5+euNlRlxq+6yqjQImxfS20GpT12wEnFNEwNZM2ZqEHAkEO4Z32ZO5TyThjTBkqvjMj7MGaZvCPQiSEUwSG/wqolYaQDIbU6pLwNDbmPLU+Und6AnvXgaLSNJxCs9ocvO4jlWE6724paVtRdYD4S2Jy5HaYjT4fEbwpkd4nRtet8qvkgTxLnpneqaNqG2fBgo+i7oQjsPir6E/zESnTYADlDhb0pe0/09qexP/2ynZMca80Ua9DNCIdc3eLFCYl/WUl4HyPrASDt5F7Q+F/1AcNImhGZ1DaOclQwZ0jwVA/8ON6v2p3HmLYvFJBxcU93lzaewxdclKxLRsgjcwgaV3VTOceXNoeN2ZN5+V5aWrfkJmr2jfxpjCcJRqEvobkD0nvA+sOFWXUuOUQ90rkRIbCDsdB11Ku2wY4WvjzXBBVz+sc7Wir1jbGyBudifGbOBdJeUUZ9dGKfv8K29kjXTLp5U0p8ss1fK8BVGhGUK7nQ0qXGspRn1QmT9ZS2UJ3eU4gHYHWJl/pkEztEWfmXAYTT2aE8UqSaOYsXnTFYPvCV/sW6vyH+MvZEqPmMgxRAO/YlGgrZKgyH8kF9RgD16HSxkBW5uHbTZT50FN1EYbRHNrX+G5vkgIrNBF6RSfizzXi4G+Vti8I5MergMPkeRMG/FOdA2nd/0logaRXf5JSARnGE4f11MqgbhNw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(110136005)(54906003)(2906002)(6506007)(6512007)(71200400001)(36756003)(31686004)(508600001)(6486002)(966005)(66446008)(186003)(26005)(4744005)(4326008)(76116006)(66556008)(66476007)(64756008)(38070700005)(66946007)(2616005)(8676002)(38100700002)(91956017)(5660300002)(31696002)(86362001)(44832011)(83380400001)(8936002)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MjJoVWxoQjJKZlFadmVhenJraVB2cERJRW9nbjI4RlhHVkhVcE1hMGpPajBy?=
- =?utf-8?B?TlZGWkxpdWRQWUVudDE2Y1R5aHZkUVNmY1JFWi9pWjl2QVBGc0RCd1VQdFE2?=
- =?utf-8?B?enhJblRKTDRSLy9DaHBXakJvT0VSNkJ0cXduWEJlQTlwVERGSUw4blZSZmhK?=
- =?utf-8?B?dE5KMSs4SXRnWW03dlFzTVpRaVd3UmZibmI5b1lCM3grK1ljd3g0V201WDNp?=
- =?utf-8?B?T1YvTDZsZThIbXhKZkdaUW9EK0R0T3d1ZzRVTUkwc1hRR2F6SFA3dmdTY3Ir?=
- =?utf-8?B?NWk4NnVIejdwOVVrczNteDhtWnorZHJ4WDBtU0FNZTZTcUREcmpaU0RDVHRR?=
- =?utf-8?B?N1Q3Uy9OZlVzai96ekFvMWV3aXEvbnZzcGltdWNmcmoxby9zd00vbFNocDNY?=
- =?utf-8?B?L1pPaDZNVlRDS1RTV1lHOXBBVkFmamVCcVlCbTdTTS9SN2hhTGVNakJESUtt?=
- =?utf-8?B?QXgzaTBrWm9CVU5MQnVpeWV2VEM4eCt6RVl6QmRLL2poeUVWWXBmRGFxUFRj?=
- =?utf-8?B?R01uc24yNlFiRXhVbFN6SHNaN3lXd2Q4VXBXK2EwT25rcURTbGcwcG8zVHN0?=
- =?utf-8?B?N1FNL1JxOStqSk13QklveElQTzQzUHN3bG9lN2dsWDZpWlBPNm1acXZrTVNB?=
- =?utf-8?B?eTFjUGxwZ0Zxc1hybVhNU2VlVlBoNEt1Umo4OU5iUjZhempjR3pJRnJhUDBX?=
- =?utf-8?B?RmRIcGg2UUpZZm9lNG9wQjlhMHF2d1RQMXlCNWUxbGREei93eWZzNTEvUkg4?=
- =?utf-8?B?ZElEY2MvMWF4OWhDZzN1b3BtcG1kT1NxSVB5cUF5Q1JFODdsVmoxN0NNaGx5?=
- =?utf-8?B?UEw3eFZZdnNxdnFrQzNzM0JtRWZoV2NQUW9YeGlEN3pGd3owQzRHWG1zNzlN?=
- =?utf-8?B?SzFvY1V6aURKYldFTlFYejM3RDl3OFZLUU9Bc290d3piVHl0UXV6a0ZDK3RN?=
- =?utf-8?B?TUhTc21pdk9OR09rZUVxMVV5SFBEeWNkTDRuY0RYYW5JTjkzeG93cDArV0Uv?=
- =?utf-8?B?Wmx0MzVGVytiQlEveUdUdnF0RVAzMXhPUFNxWjE5UHI5UDJZdHdabHhEY0dx?=
- =?utf-8?B?djhIcHdTVCt6REllZGRseXhYcW9ndU1JR3hPaThyUnlxWkZ2SlU1N2JiUTdk?=
- =?utf-8?B?MEJCdmlvTG1YeXMvSmxUSnoybDNaQXI3SEQ1ZG5SeFdhMlBHWEVOTy9OTmp3?=
- =?utf-8?B?ZzZHRVkwcEh6WW9ESjUzTVBmUUxsTHQ2d2NJNnptTU5teER0b00ySjd4ZzRy?=
- =?utf-8?B?K2lJT2Frb0xPR3orcnBFbDI1c3FCN2JoV0QzaWV2YXRKd0hDb3A3a1RNRG9z?=
- =?utf-8?B?eW5jK2w2ZjNTSjF1QXY2Tmx0TlZoa1dVbzkyQjIwb0M4NFZ5TlFGTjJUT2xR?=
- =?utf-8?B?dldnN0FpbGU3OTBVT0o2dU9kMG5XazlRb1Y5MVNDRkJrYXgxNW5LbWJnc1Vv?=
- =?utf-8?B?U2lOcGs3MFdoU3lZV3o0WHNVMm9QcHM1cUN3WjNGNWVoNUZURXAvTWhYRkFm?=
- =?utf-8?B?eXhtR2NYUi9tL0JWQ2QrMkMwdmQzcHdoQ3lwQjYwaXJnRUVuKzEwSm1hWExV?=
- =?utf-8?B?VEpPOE1vR2lvTDM0eFNJYTdmYVV3bzhKellNRFM2cGhNdU5mWlorZUI2QlRs?=
- =?utf-8?B?c21iTWltVWQ1V1pDWXFOeHRZSitTdE5jUHRLajArdWNRaERyYTE4Zmt0S1hr?=
- =?utf-8?B?akxPMCtseExTZHJIRXdkNTFIVjRTVStaUTZTTHBMQ0tZZmtzeklVMkV2NC9S?=
- =?utf-8?B?TzFHeU1ndi9kem5rWDdiWno5eEZ6TERWaXBxcnJyOStNM3BaamcvUG5yT3Br?=
- =?utf-8?B?L0ZnOFFkMTRhVndKdTMwTi9PYVRRQjd0UStaSUZ5VzZ6d1NNVk9QZS9rYnpl?=
- =?utf-8?B?VmZ5K2FpbnB4QXBod3I1WlhGZ0d2S2FVTlVvOVQ5NFkwWXZ5dGhxMTdFUEU2?=
- =?utf-8?B?ek52MEUxMDh0cGZST05zNjdGWEwvKzhKbEtwK1pvYUw5bjR3czUyMVBWSnhx?=
- =?utf-8?Q?gWOrI+JXsPwhLj1eDp9veZ83z3A50Q=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4FAEB5C697D2494FA8D98F98BF587DE2@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 21 Mar 2022 04:01:39 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8806B2E0AC
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 01:00:13 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220321080010euoutp027f043458f11543ecbf415d916654b392~eVn12l3UE0236602366euoutp02V
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:00:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220321080010euoutp027f043458f11543ecbf415d916654b392~eVn12l3UE0236602366euoutp02V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1647849610;
+        bh=wmpt2tjWG+U0wt9U6Ul9ObyovGJ8vBWAjVswsiVCeBc=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=efQmIbfdWJL0EowGw5N+D5JNsqDW1fw2GzKgul9D49h5gbWhhNAaWNXapiVoBtvNz
+         lzmdShOwd5sWwyC14R4IL9SagLve+/Td/64pR/gTcEVH/he1mRi3W/hRWqv913i6Cz
+         YtEllkqkg3ZL/So6ADWPLrRfg/2nmwcfV/6JMpe4=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220321080010eucas1p14d0cfaae9c8abec761fa359e8111d21b~eVn1eOsKc0890108901eucas1p1s;
+        Mon, 21 Mar 2022 08:00:10 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 4A.30.09887.A8038326; Mon, 21
+        Mar 2022 08:00:10 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220321080009eucas1p2efb4872d4b1b9a37025dc6b1a5cc5bff~eVn1DF7r13081430814eucas1p2U;
+        Mon, 21 Mar 2022 08:00:09 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220321080009eusmtrp13058155feb11d77c87f76b0b9db2a677~eVn1CO5FF0361803618eusmtrp1H;
+        Mon, 21 Mar 2022 08:00:09 +0000 (GMT)
+X-AuditID: cbfec7f4-471ff7000000269f-5f-6238308a0727
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 96.1E.09404.98038326; Mon, 21
+        Mar 2022 08:00:09 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220321080008eusmtip22587c7213aa29fe82cdc14e175514f10~eVn0ZgonH2745827458eusmtip2K;
+        Mon, 21 Mar 2022 08:00:08 +0000 (GMT)
+Message-ID: <e8b58fc4-fdc2-7fca-f8f5-c45f0891b53b@samsung.com>
+Date:   Mon, 21 Mar 2022 09:00:08 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1477918-b7fc-4f18-7a4b-08da0b105629
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2022 07:56:41.8662
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GsHztAHIzbGDsSGGHR0Hx6Ftuo8qwCwm9FDr5eSbG61p4EMSbTZXw0jMU9IIuAUGycXnJ44y+eKDYmvMQGJXuCr3NDkpA6w1T1Tk53NwJQk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB1876
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH v2 3/4] clocksource/drivers/exynos_mct: Support
+ local-timer-index property
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        kernel <kernel@axis.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <69be9f88-b69b-c149-4387-c5002219bf0a@canonical.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDKsWRmVeSWpSXmKPExsWy7djPc7pdBhZJBu3TWSwezNvGZjHvs6zF
+        /CPnWC0+tahabHz7g8li0+NrrBaXd81hs5hxfh+TReveI+wWmzdNZbY4v83fgdvj+roAj1kN
+        vWwem1Z1snncubaHzePduXPsHpuX1Hv0bVnF6PF5k1wARxSXTUpqTmZZapG+XQJXxv9zixkL
+        3itVTP+6lbmBcblMFyMnh4SAicS2dceZuhi5OIQEVjBKTFo8kwXC+cIo0fjvAhNIlZDAZ0aJ
+        Q7sdYTpudD5hhyhazijxd28TVPtHRonWQ89ZQKp4BewkFnZvB+tmEVCVaFjwiREiLihxcuYT
+        sBpRgSSJ1dtXs4HYwgIJEtO3HmEGsZkFxCVuPZkP1isikC/RNvMmO0S8gUXi1yIzEJtNwFCi
+        620XWC+ngKPE0nUrGCFq5CW2v53DDHKQhEA3p8T0x8fYIc52kXh8ay4jhC0s8er4Fqi4jMTp
+        yT0sEA3NjBIPz61lh3B6GCUuN82A6rCWuHPuF9A6DqAVmhLrd+lDhB0lZrWeZwQJSwjwSdx4
+        KwhxBJ/EpG3TmSHCvBIdbUIQ1WoSs46vg1t78MIl5gmMSrOQgmUWkvdnIXlnFsLeBYwsqxjF
+        U0uLc9NTi43yUsv1ihNzi0vz0vWS83M3MQIT2Ol/x7/sYFz+6qPeIUYmDsZDjBIczEoivIs/
+        mCcJ8aYkVlalFuXHF5XmpBYfYpTmYFES503O3JAoJJCeWJKanZpakFoEk2Xi4JRqYPLwdJiu
+        ODOeb5uCmGh/3Pv3OfqTXs25w250Z4+Yx/bDSpacE78l3V746cCjN3PuSwu/+XRiy5nQlF2x
+        bTcSZyztDlb+62Qd8sJ2zT2jOR+6c3edWpYdsFvGW8vNI+TWbD2e6yciv5x0ET+76uI0L8mD
+        E65dapx+wXm9o6dY+7fLF7bylsnnRHyfJbtENoN7/w/lZR9YIj68/f2oIdqjozqWv7m2U57/
+        wL0ZISfvP56x3p/zoHHStVlla3W8M2tX7LOr/RUkFR8smbbL7P3GCc1xb/m314Zwrmp/myCS
+        FOQt/2HT9svRJ+duaGKOEN/+e8L6KYalVc6b3hqmyiRunbMt5mSaA8PcLdv2ui67GfpGiaU4
+        I9FQi7moOBEA1Mqv088DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAIsWRmVeSWpSXmKPExsVy+t/xe7qdBhZJBptXKlg8mLeNzWLeZ1mL
+        +UfOsVp8alG12Pj2B5PFpsfXWC0u75rDZjHj/D4mi9a9R9gtNm+aymxxfpu/A7fH9XUBHrMa
+        etk8Nq3qZPO4c20Pm8e7c+fYPTYvqffo27KK0ePzJrkAjig9m6L80pJUhYz84hJbpWhDCyM9
+        Q0sLPSMTSz1DY/NYKyNTJX07m5TUnMyy1CJ9uwS9jP/nFjMWvFeqmP51K3MD43KZLkZODgkB
+        E4kbnU/Yuxi5OIQEljJK3Lm4jxEiISNxcloDK4QtLPHnWhcbRNF7Rok3a2ezgSR4BewkFnZv
+        ZwKxWQRUJRoWfGKEiAtKnJz5hAXEFhVIkrjU1Q4WFxZIkJi+9QgziM0sIC5x68l8sF4RgXyJ
+        szPawK5gFmhhkVh4sJ0FYttDJolzO1rZQarYBAwlut52gW3mFHCUWLpuBSPEJDOJrq1dULa8
+        xPa3c5gnMArNQnLILCQLZyFpmYWkZQEjyypGkdTS4tz03GIjveLE3OLSvHS95PzcTYzAqN12
+        7OeWHYwrX33UO8TIxMF4iFGCg1lJhHfxB/MkId6UxMqq1KL8+KLSnNTiQ4ymwNCYyCwlmpwP
+        TBt5JfGGZgamhiZmlgamlmbGSuK8ngUdiUIC6YklqdmpqQWpRTB9TBycUg1MOwU33apLXqO6
+        2zA8f3mifUfd1K0nnwpVXNl8a+Oyjepph1MKvET+/PW6fXK/bHxw1tRseZ0vih3Gh7UCf2VM
+        mJgzf0aPjenlJT9Nb0ecMgvb0mQz97BMgcKtRMf57Ea+HGFuvpl17/kaGn6u3ShjELt1sfU0
+        e7951+TvzbIs/O1/3UTKR6/u4jR/28lpl3ZMO1XmLn1ihdDd3sOFJRa15cUTWdec2Xy5/sv9
+        NxYLPxQrPXCe8LX256pnPX2cxc9efbMPa3PbeqlPt7wnSEmDvSv4W5mW4sS+i8EKi357LTNI
+        ldFYpfut3zLePcc3+mhbdrDqf2V2fwmrl19+Ttp2yU5Q8RvP833v73vt7LJVYinOSDTUYi4q
+        TgQAyZtf42MDAAA=
+X-CMS-MailID: 20220321080009eucas1p2efb4872d4b1b9a37025dc6b1a5cc5bff
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220311125154eucas1p180cf38fcfe33e52757c2442bbd9c2ab3
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220311125154eucas1p180cf38fcfe33e52757c2442bbd9c2ab3
+References: <20220308142410.3193729-1-vincent.whitchurch@axis.com>
+        <20220308142410.3193729-4-vincent.whitchurch@axis.com>
+        <226dcb1b-d141-f0d3-68c4-11d2466ca571@canonical.com>
+        <20220311113543.GA17877@axis.com>
+        <CGME20220311125154eucas1p180cf38fcfe33e52757c2442bbd9c2ab3@eucas1p1.samsung.com>
+        <69be9f88-b69b-c149-4387-c5002219bf0a@canonical.com>
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDIxLzAzLzIwMjIgw6AgMDM6MjcsIE1pY2hhZWwgRWxsZXJtYW4gYSDDqWNyaXTCoDoN
-Cj4gQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1PiB3cml0ZXM6
-DQo+PiBMZSAxOC8wMy8yMDIyIMOgIDEzOjI2LCBQZXRlciBaaWpsc3RyYSBhIMOpY3JpdMKgOg0K
-Pj4+IE9uIEZyaSwgTWFyIDE4LCAyMDIyIGF0IDA0OjIxOjQwUE0gKzA1MzAsIFNhdGh2aWthIFZh
-c2lyZWRkeSB3cm90ZToNCj4+Pj4gVGhpcyBwYXRjaCBhZGRzIHBvd2VycGMgc3BlY2lmaWMgZnVu
-Y3Rpb25zIHJlcXVpcmVkIGZvcg0KPj4+PiAnb2JqdG9vbCBtY291bnQnIHRvIHdvcmssIGFuZCBl
-bmFibGVzIG1jb3VudCBmb3IgcHBjLg0KPj4+DQo+Pj4gSSB3b3VsZCBsb3ZlIHRvIHNlZSBtb3Jl
-IG9ianRvb2wgZW5hYmxlbWVudCBmb3IgUG93ZXIgOi0pDQo+Pg0KPj4gSSBoYXZlIG5vdCByZWNl
-aXZlZCB0aGlzIHNlcmllcyBhbmQgSSBjYW4ndCBzZWUgaXQgb24gcG93ZXJwYyBwYXRjaHdvcmsN
-Cj4+IGVpdGhlciAoaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2xpbnV4cHBj
-LWRldi9saXN0LykNCj4+DQo+PiBEaWQgeW91IHNlbmQgaXQgdG8gbGludXhwcGMtZGV2IGxpc3Qg
-PyBJZiBub3QgY2FuIHlvdSByZXNlbmQgaXQgdGhlcmUgPw0KPiANCj4gSXQgaXMgdGhlcmUsIG1p
-Z2h0IGhhdmUgYmVlbiBkZWxheWVkPw0KPiANCj4gaHR0cDovL3BhdGNod29yay5vemxhYnMub3Jn
-L3Byb2plY3QvbGludXhwcGMtZGV2L2xpc3QvP3Nlcmllcz0yOTExMjkNCj4gDQo+IFRoZXJlIGFy
-ZSBzb21lIENJIGZhaWx1cmVzLg0KPiANCg0KT24gUFBDMzIgSSBnZXQgOg0KDQpbICAgIDAuMDAw
-MDAwXSBmdHJhY2U6IE5vIGZ1bmN0aW9ucyB0byBiZSB0cmFjZWQ/DQoNCldpdGhvdXQgdGhpcyBz
-ZXJpZXMgSSBnZXQ6DQoNClsgICAgMC4wMDAwMDBdIGZ0cmFjZTogYWxsb2NhdGluZyAyMjUwOCBl
-bnRyaWVzIGluIDE3IHBhZ2VzDQpbICAgIDAuMDAwMDAwXSBmdHJhY2U6IGFsbG9jYXRlZCAxNyBw
-YWdlcyB3aXRoIDIgZ3JvdXBzDQoNCg0KQ2hyaXN0b3BoZQ==
+Hi Krzysztof,
+
+On 11.03.2022 13:51, Krzysztof Kozlowski wrote:
+> On 11/03/2022 12:35, Vincent Whitchurch wrote:
+>> On Tue, Mar 08, 2022 at 03:57:55PM +0100, Krzysztof Kozlowski wrote:
+>>> On 08/03/2022 15:24, Vincent Whitchurch wrote:
+>>>> diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
+>>>> index f29c812b70c9..5f8b516614eb 100644
+>>>> --- a/drivers/clocksource/exynos_mct.c
+>>>> +++ b/drivers/clocksource/exynos_mct.c
+>>>> @@ -33,7 +33,7 @@
+>>>>   #define EXYNOS4_MCT_G_INT_ENB		EXYNOS4_MCTREG(0x248)
+>>>>   #define EXYNOS4_MCT_G_WSTAT		EXYNOS4_MCTREG(0x24C)
+>>>>   #define _EXYNOS4_MCT_L_BASE		EXYNOS4_MCTREG(0x300)
+>>>> -#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * x))
+>>>> +#define EXYNOS4_MCT_L_BASE(x)		(_EXYNOS4_MCT_L_BASE + (0x100 * (x)))
+>>>>   #define EXYNOS4_MCT_L_MASK		(0xffffff00)
+>>>>   
+>>>>   #define MCT_L_TCNTB_OFFSET		(0x00)
+>>>> @@ -75,6 +75,7 @@ enum {
+>>>>   static void __iomem *reg_base;
+>>>>   static unsigned long clk_rate;
+>>>>   static unsigned int mct_int_type;
+>>>> +static unsigned int mct_local_idx;
+>>> No more static variables. This was wrong design, happens, but let's not
+>>> grow the list.
+>>>
+>>> I propose to conditionally (depending on property samsung,frc-shared)
+>>> assign .resume callback to NULL or exynos4_frc_resume. The init can
+>>> receive an argument whether to call frc_start().
+>> Could we just add the skip-write-register-if-already-started change in
+>> exynos4_mct_frc_start() uncondtionally?  Perhaps it could be in a
+>> separate patch too?  I was probably being over-cautious when I did it
+>> conditionally on mct_local_idx.  Doing it uncondtionally would make it
+>> easier to remove the global variable.
+>>
+>> On my system the FRC is actually started long before Linux, and I assume
+>> it's similar on other chips.
+> +Cc Marek,
+>
+> Maybe we could skip it, I don't know. It could be enabled by early boot
+> code or by trusted firmware. This would require more testing, on few
+> different platforms.
+>
+> On my Exynos5422 HC1 board the MCT is not running upon boot. The
+> EXYNOS4_MCT_G_TCON starts with a reset value (0x0).
+>
+>>>>   static int mct_irqs[MCT_NR_IRQS];
+>>>>   
+>>>>   struct mct_clock_event_device {
+>>>> @@ -157,6 +158,17 @@ static void exynos4_mct_frc_start(void)
+>>>>   	u32 reg;
+>>>>   
+>>>>   	reg = readl_relaxed(reg_base + EXYNOS4_MCT_G_TCON);
+>>>> +
+>>>> +	/*
+>>>> +	 * If the FRC is already running, we don't need to start it again.  We
+>>>> +	 * could probably just do this on all systems, but, to avoid any risk
+>>>> +	 * for regressions, we only do it on systems where it's absolutely
+>>>> +	 * necessary (i.e., on systems where writes to the global registers
+>>>> +	 * need to be avoided).
+>>>> +	 */
+>>>> +	if (mct_local_idx && (reg & MCT_G_TCON_START))
+>>> This contradicts your intentions in commit #2 msg, where you described
+>>> that A53 will be started first.
+>> Yes, you're right.  The case of the FRC not being running when the A5
+>> starts up is only ever hit in our simulation environment where we are
+>> able to start Linux on the A5 directly, without having to go via the
+>> A53.
+>>
+>>> 1. If A53 is always started first, is it possible to be here from A5?
+>>> 2. If above is possible, how do you handle locking? For example:
+>>> a. A53 started with some delay, entered exynos4_mct_frc_start() pass
+>>> this check;
+>>> b. A5 gets to exynos4_mct_frc_start(), check is still false, so A5
+>>> enables the FRC,
+>>> c. A53 also enables the FRC.
+>> The A5 is normally started from Linux on the A53 (using the remoteproc
+>> framework).  This is long after exynos4_mct_frc_start() has been called
+>> on the A53.
+> If it is 100% like this, let's make it explicit - if it is A53 (lack of
+> dedicated property), let's start it. If it A5 (property present), skip it.
+>
+> Let's wait for Marek thoughts, he was digging the MCT a lot.
+
+
+Right, I've played a bit with MCT on some older Exynos SoCs (ARM 32bit 
+based and even Exynos5433) and it looked that none of it enabled MCT FRC 
+timer in their proprietary firmware. I've even proposed a patch for this 
+once ([1]), but such approach has been rejected. I think that calling 
+exynos4_mct_frc_start() unconditionally won't hurt.
+
+[1] https://lore.kernel.org/all/20181018095708.1527-5-m.szyprowski@samsung.com/
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+

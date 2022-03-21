@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687E04E30F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2D84E30F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352838AbiCUTxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 15:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
+        id S1352847AbiCUTxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 15:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242322AbiCUTxk (ORCPT
+        with ESMTP id S1352842AbiCUTxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 15:53:40 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB118123BE1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:52:14 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id z8so30016237ybh.7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:52:14 -0700 (PDT)
+        Mon, 21 Mar 2022 15:53:50 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9B016F061
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:52:22 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id ay7so17387268oib.8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:52:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QvfezOET3lCC5FO8wlzK/F9Hv0UPPErwC2g10ZZeTqg=;
-        b=C7S75GM1c5KW3lmmgzpDvrVssfE1dxTGXZBTTaMMZEKb9T3UyRNgsTrnLpBLMrPzTP
-         wTKO7A5vgCE8bgVQjtDPqW7z6vOIks4vSfc09J5dt9QDf2ijfvCvcQFcNtzt7nJvkyCV
-         DEpcHgshkGccdULN9rKKb2+m40Zyj/jUu57RmGpHLG0ZUGw1M1882QqrrdeQI9NXLJPX
-         sst/FAwXi49iC0E7Sg8Lk4oYVRWEGI2Zd6ClTTvHpLkfDKrdNELF6TX+hrwoYkPRpdvv
-         h0lW1rrRqHCMHlXBGeYV+kVoR4G7f+zEgoCHCRtbEaqJ2uV4vBC0ogdsIlvQ2jDBrqbc
-         j51w==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=ok3RVltL8xCbLsqr5CfkTVPVWz4EKRmC9g7u5BKP3cI=;
+        b=OYavUS59dk26LyBiY+BKFcEy8oe1jkfCsSArFJSB7rd8OZWWrOT0siAlHH/9NgcdBw
+         wOmfgRGJWgh+cgDTD5QHC1UDlyIWoU/O3mkHW0oYxQJlNqvFQxPcdnqzJLf9QhrGLA1A
+         EhbzmrkEX5Ns2SmbMFkLDkCKxWvYIfvEV9RrI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QvfezOET3lCC5FO8wlzK/F9Hv0UPPErwC2g10ZZeTqg=;
-        b=TvbSIRhFmt+xEqXgFRdybMrZSi62Bs1mudPGaEfWOWEYS0LfIiDdEtwWoHagLm8zyB
-         rcThFJfDcpaVOst8c1lZ4Dnm8Gym3jPfNB8JqO5npGyywMqKyri7xR9CUhSTLqmt0qVN
-         NbeT6EId0+n5KUxgB2DrVPhUOxMUq2zs32U14bpGGHuCzMo6kFMBbub7UyoAPl6Ia40d
-         Rgqiwfp1vIul7rLGx4M0lvutqI8oBAuqVt+tBg6s+mf0bryGfWte1r2ZG69868KciBeA
-         XSDuB+Pu8rQQrW2NtQNTQCjSgdBIAc1uC6SOnmNvMq6CpL0buNsYPLJZdxyRbJZD3s7C
-         BLhw==
-X-Gm-Message-State: AOAM533AyfLQ2lQsOcakQ11RcmSyhnAucpmYjbRlaWdZTA6imK55Q8fc
-        4gffw3BiIrKaZ3qU3qZ4G1EyAk+s12FucuvlW8nE+g==
-X-Google-Smtp-Source: ABdhPJxLg2RsCkPd5Fc/l+US1HyLmn9WT4iHloqABdNUZIkhfgg+UffDulpLI3GEMfIDZm+sbazSOFms1Cpw7blOHWY=
-X-Received: by 2002:a25:928e:0:b0:633:f370:d9ff with SMTP id
- y14-20020a25928e000000b00633f370d9ffmr8028608ybl.338.1647892334113; Mon, 21
- Mar 2022 12:52:14 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=ok3RVltL8xCbLsqr5CfkTVPVWz4EKRmC9g7u5BKP3cI=;
+        b=qTG2QaOkO/lq92mPlO0iqoCgk9mOD/Ej3j4YA6U6svLy3nqpOzfqdHrHO19lyg3a+S
+         qzhOVwyG3/4l2uYjzxKYH7f160c/IG/5X6I6ayWdrditTqNjj0QNZoGHX6Ro2TD2bBuW
+         IVNI89cV52b8RsVGVhVdKagtIaZzcA55u7Sfsu4Nmc+tgps83BUQKZPL1ElHwfbR+BBv
+         2ta58IPYaANkJMKCbrxuFkY8S6D/P2MdEd5zJU/ta/4CHqxd0kJPL2tTLcR/Ykd8z907
+         pLpl3iwihaMB5JX2zMGVmaVtB/kwNEF3lnHPVm3/sO8k+9VBg+lmln5pWngGJOKWNZpE
+         TXJA==
+X-Gm-Message-State: AOAM532ww/8QfxQ8mV+Az/EySkspUlKhhmgC+mfCSYzj2T4Uu7WdR+fl
+        8SN8BnPYdCka6quDL/RyIIda+80bOI8gtH2wxinJbQ==
+X-Google-Smtp-Source: ABdhPJw/w3E47RE2s1O6mJ0xGYZGoSVgYc7BhnMuoFT0ytHU1sjUK0Ss3SAsOoPu7b3lNEtFDeCqCZfCoVVY74aLXVY=
+X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
+ n62-20020acabd41000000b002ecff42814fmr399339oif.63.1647892341694; Mon, 21 Mar
+ 2022 12:52:21 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 21 Mar 2022 20:52:21 +0100
 MIME-Version: 1.0
-References: <20220321133221.290173884@linuxfoundation.org>
-In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
-From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
-Date:   Mon, 21 Mar 2022 15:51:38 -0400
-Message-ID: <CAG=yYw=eJAnZCM1RgKb_oh1cW75AKyV6zR_vn7oMib6oLrXKzQ@mail.gmail.com>
-Subject: Re: [PATCH 5.16 00/37] 5.16.17-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        torvalds@linux-foundation.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+In-Reply-To: <1647865696-19192-3-git-send-email-quic_srivasam@quicinc.com>
+References: <1647865696-19192-1-git-send-email-quic_srivasam@quicinc.com> <1647865696-19192-3-git-send-email-quic_srivasam@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 21 Mar 2022 20:52:21 +0100
+Message-ID: <CAE-0n51iMpwMXayMEbPrqO2b=wX-Lz8DYiZMNnzRNGY1BNSKYg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] arm64: dts: qcom: sc7280: Add lpass cpu node
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        judyhsiao@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        rohitkr@codeaurora.org, srinivas.kandagatla@linaro.org
+Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:14 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Quoting Srinivasa Rao Mandadapu (2022-03-21 05:28:15)
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 499299a..e6ec334 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -19,6 +19,7 @@
+>  #include <dt-bindings/reset/qcom,sdm845-aoss.h>
+>  #include <dt-bindings/reset/qcom,sdm845-pdc.h>
+>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> +#include <dt-bindings/sound/qcom,lpass.h>
+>  #include <dt-bindings/thermal/thermal.h>
 >
-> This is the start of the stable review cycle for the 5.16.17 release.
-> There are 37 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+>  / {
+> @@ -1980,6 +1981,68 @@
+>                         #clock-cells = <1>;
+>                 };
 >
-> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.17-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-hello,
+> +               lpass_cpu: audio-subsystem@3260000 {
 
-Compiled and booted 5.16.17-rc1+ on...
-Processor Information
-    Socket Designation: FM2
-    Type: Central Processor
-    Family: A-Series
-    Manufacturer: AuthenticAMD
-    ID: 31 0F 61 00 FF FB 8B 17
-    Signature: Family 21, Model 19, Stepping 1
-
-output of "dmesg -l warn"
-
----------------------<output>--------------------------
-$dmesg -l warn
-[    0.007168] ACPI BIOS Warning (bug): Optional FADT field
-Pm2ControlBlock has valid Length but zero Address:
-0x0000000000000000/0x1 (20210930/tbfadt-615)
-[    7.663451] amdgpu: CRAT table not found
-[   49.488716] kauditd_printk_skb: 11 callbacks suppressed
-$
-
----------------------<output>--------------------------
-
-
-Tested-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
-
--- 
-software engineer
-rajagiri school of engineering and technology
+The unit address should match the first reg address. This should be
+3987000. By the way, 'subsystem' looks redundant. Maybe just
+'audio@3987000' or 'subsystem@3987000'?

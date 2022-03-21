@@ -2,104 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42BB4E2707
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 289364E2708
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347631AbiCUM53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
+        id S1347640AbiCUM5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347625AbiCUM51 (ORCPT
+        with ESMTP id S1347637AbiCUM5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:57:27 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4812BEDF3A;
-        Mon, 21 Mar 2022 05:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=YFlhHXWTNkKh8CB15QpQ7sYR5pmzwsAj6etOr2SZi1A=; b=JlvVlVELnIp48NMJI+ARrQuFjv
-        Zi1AvQ4ZxQxzjdm7/LVcyoxoYY+I0Vtf1W/ysTpTfqiKLHoOeL72srIfSZkrIyc2in+1oP5ati8sY
-        2hGzP3UMMn5ewty3VJB65a0R0jXJYD0rhTBAXl352vEUMVVQFWARKl7/LJUkKQix21vtHY6ao0m0X
-        2y4ykvY7mUZetTCaQzNcv199ONxsl3v8Wh1xH3s/JncQRsjN707up3lbJO+k/aZ9lr74FH2KVsxxD
-        TLNsmTYU+BX+s1Kc3sZ+B+jjDyyfWV6YZ/fClDC4w2fxvOQPOhb8d8jCNN00xmyfzjHMClPg0MeDb
-        +MRqQATQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWHZd-00AZWq-VL; Mon, 21 Mar 2022 12:55:50 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7116E3001CD;
-        Mon, 21 Mar 2022 13:55:49 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 30D192025BC86; Mon, 21 Mar 2022 13:55:49 +0100 (CET)
-Date:   Mon, 21 Mar 2022 13:55:49 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
-References: <20220321140327.777f9554@canb.auug.org.au>
+        Mon, 21 Mar 2022 08:57:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56FDF3F9B;
+        Mon, 21 Mar 2022 05:56:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 443C46116D;
+        Mon, 21 Mar 2022 12:56:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8857DC340E8;
+        Mon, 21 Mar 2022 12:56:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647867367;
+        bh=UVhMNYZt0v0YxEbud2ZYFEHu/6nOoe53r2esS6kiD0c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hqbc7UBUyBD77c/D5TtQyEQy4GGpnKP5jWUzGKYAYN6gsntYzczG867BTxgnNKk8Y
+         ZOqbfqTsZ2Q9W4+1fVCZPeMp/GgbJ4YhERECrS9rGOVk5HW94B2voaOczK3CWExzxq
+         o+/h+VPbI4VfnlcTZteOIGj4Y+Oijtv5us9olN3inJGQl8vErA20Z+nVXEaDZ0PhJa
+         YxZF0JhwX4Xwvp7wv3qgEItIptTfBg+MFfMcHyDVXhdPoyBuwnrliYgy0pNgw1E8xj
+         19mltPvrk826KtvdbnG2k6/IcHrp2MBzkDsNJxv8+ed1imw7/2MzohnOZhyPM9cq7t
+         wspzZkYvxYhTw==
+Received: by pali.im (Postfix)
+        id 85FF5A5B; Mon, 21 Mar 2022 13:56:04 +0100 (CET)
+Date:   Mon, 21 Mar 2022 13:56:04 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Robert Marko <robert.marko@sartura.hr>,
+        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
+        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marek.behun@nic.cz
+Subject: Re: [PATCH 1/2] arm64: dts: uDPU: update partition table
+Message-ID: <20220321125604.gjqxxv7jxlons4b4@pali>
+References: <20220321121728.414839-1-robert.marko@sartura.hr>
+ <Yjhyg5cNe5KZ6SOp@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220321140327.777f9554@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yjhyg5cNe5KZ6SOp@lunn.ch>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 02:03:27PM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the tip tree, today's linux-next build (x864 allmodconfig)
-> produced these new warnings:
->=20
-> vmlinux.o: warning: objtool: arch_rethook_prepare()+0x55: relocation to !=
-ENDBR: arch_rethook_trampoline+0x0
-> vmlinux.o: warning: objtool: arch_rethook_trampoline_callback()+0x3e: rel=
-ocation to !ENDBR: arch_rethook_trampoline+0x0
-> vmlinux.o: warning: objtool: unwind_next_frame()+0x93e: relocation to !EN=
-DBR: arch_rethook_trampoline+0x0
-> vmlinux.o: warning: objtool: unwind_next_frame()+0x5f2: relocation to !EN=
-DBR: arch_rethook_trampoline+0x0
-> vmlinux.o: warning: objtool: unwind_next_frame()+0x4a7: relocation to !EN=
-DBR: arch_rethook_trampoline+0x0
-> vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x81: relocation t=
-o !ENDBR: arch_rethook_trampoline+0x0
-> vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x90: relocation t=
-o !ENDBR: arch_rethook_trampoline+0x0
-> vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x8c: relocatio=
-n to !ENDBR: arch_rethook_trampoline+0x0
-> vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x9b: relocatio=
-n to !ENDBR: arch_rethook_trampoline+0x0
+On Monday 21 March 2022 13:41:39 Andrew Lunn wrote:
+> On Mon, Mar 21, 2022 at 01:17:27PM +0100, Robert Marko wrote:
+> > Partition currently called "uboot" does not only contain U-boot, but
+> > rather it contains TF-A, U-boot and U-boot environment.
+> > 
+> > So, to avoid accidentally deleting the U-boot environment which is
+> > located at 0x180000 split the partition.
+> > 
+> > "uboot" is not the correct name as you can't boot these boards with U-boot
+> > only, TF-A must be present as well, so rename the "uboot" partition to
+> > "firmware".
+> 
+> Are there any ABI issues here? If these names are being used
+> somewhere, you are potentially breaking the boot. At minimum, i would
+> like to see something in the commit message which indicates you have
+> considered this and why you don't expect it to be a problem.
 
-Hurmph, lemme go figure out where that code comes from, I've not seen
-those.
+Hello! Similar change/fix was done also for Turris Mox DTS file:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a9d9bfcadfb43b856dbcf9419de75f7420d5a225
 
-> [ Note I was already getting these:
-> arch/x86/crypto/chacha-x86_64.o: warning: objtool: chacha_2block_xor_avx5=
-12vl() falls through to next function chacha_8block_xor_avx512vl()
-> arch/x86/crypto/chacha-x86_64.o: warning: objtool: chacha_4block_xor_avx5=
-12vl() falls through to next function chacha_8block_xor_avx512vl()
-> arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx(=
-) falls through to next function poly1305_blocks_x86_64()
-> arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_emit_avx() =
-falls through to next function poly1305_emit_x86_64()
-> arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx2=
-() falls through to next function poly1305_blocks_x86_64()
+Difference between uDPU and Mox is that uDPU has concatenated
+CM3 firmware (called secure firmware) and A53 firmware (TF-A + u-boot)
+into one binary, Mox has these two parts separated. So uDPU partition
+should be called just firmware.
 
-Yes, those are somewhere on the todo list, lemme bump them.
+Same partition name "firmware" is used also on another A3720 device
+Espressobin. But here partition names are filled/injected into DTB at
+runtime by bootloader.
+
+So I think this change for uDPU looks reasonable. Partition name
+"u-boot" is used for flashing u-boot binary and renaming it could really
+fix automated scripts to stop flashing into SPI NOR something which
+makes device unbootable.

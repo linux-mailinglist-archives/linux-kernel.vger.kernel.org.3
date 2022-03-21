@@ -2,141 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B43F4E5A47
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 21:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 688954E5A8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Mar 2022 22:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240826AbiCWVAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Mar 2022 17:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42976 "EHLO
+        id S1344872AbiCWVTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Mar 2022 17:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238959AbiCWVA3 (ORCPT
+        with ESMTP id S1344864AbiCWVTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Mar 2022 17:00:29 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F9551580
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 13:58:59 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id y3-20020a056830070300b005cd9c4d03feso1942173ots.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Mar 2022 13:58:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PDtBM5hqbvt4+JqyFSZXBMrTnrXWPNoWcMzp99D0f7E=;
-        b=chKJefI0XjtrFUxYi0ulFeOo3TsayjUm6ihkCAycSOVj3vIU/VPkc1NANoW4c/ceq9
-         L2t8lhWDI4J3znBEsh+8Qc7QTKFC0dzQZRk/3zNXshdmVP2tRb+jPmUXZssuaUOtSfoK
-         x8p9qn0Gm4zxRU8vfbNXMLOQMRsmQnW3Lro7UMlwj+KXEBp+rpSnY1M+w6Occr7GDxNT
-         ZDbxkD/wSR1exsMEPJfvpnxpg2xeHrsY8u1HuELGor4ysauNpyo8xPsb3ZaQIHvuUn9g
-         6pArBDYAA9PDBjKqmG+RCxxQX3Jd9IE0Cogh+6RDsnZV+oNU1vJoNiTpXs27VFkzrrRo
-         3j4A==
-X-Gm-Message-State: AOAM533IBa7pGqQlk/W8Lv8QdRbEL9ekDFb1e/39iDg5Htu3Gn37rpgR
-        Rv0vIlRXk/kwI8O4LUr99Q==
-X-Google-Smtp-Source: ABdhPJzYzYyUCn05VBIHs6elEIxo+MAFz8ymy/NOBTak3xXBZk/S2Y+QrbXRNfyWP2g9YCNWV6rmTg==
-X-Received: by 2002:a05:6830:138d:b0:5b2:4b0a:a4fa with SMTP id d13-20020a056830138d00b005b24b0aa4famr840268otq.380.1648069138311;
-        Wed, 23 Mar 2022 13:58:58 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o185-20020acabec2000000b002ecf1218c53sm437366oif.15.2022.03.23.13.58.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 13:58:57 -0700 (PDT)
-Received: (nullmailer pid 441174 invoked by uid 1000);
-        Wed, 23 Mar 2022 20:58:56 -0000
-Date:   Wed, 23 Mar 2022 15:58:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     James Morse <james.morse@arm.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        Jamie Iles <jamie@nuviainc.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        lcherian@marvell.com, bobo.shaobowang@huawei.com,
-        tan.shaopeng@fujitsu.com
-Subject: Re: [PATCH v3 16/21] x86/resctrl: Pass the required parameters into
- resctrl_arch_rmid_read()
-Message-ID: <YjuKEB9RbDa/68ll@robh.at.kernel.org>
-References: <20220217182110.7176-1-james.morse@arm.com>
- <20220217182110.7176-17-james.morse@arm.com>
+        Wed, 23 Mar 2022 17:19:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC3385644;
+        Wed, 23 Mar 2022 14:17:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EFA6616E0;
+        Wed, 23 Mar 2022 21:17:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9643FC340EE;
+        Wed, 23 Mar 2022 21:17:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648070269;
+        bh=IFzak4etS5b+TZUCLXmkFg0fNbP7CdQrVm5pDLCsKkc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=q+qrQoYwYyK3fIL7uHv5AHHKNdnjT4xIQQst4KM9/AbQXVOUpJXH+gyqhfVk1BUCt
+         4pIDybJYO2LN3HCC86JgXhblINWXYfmOJva1zMcZHh19Sf4CtFJRbq7n29gW0pYfwZ
+         pRscui9wVBZmH3nMu39X9Z3qxjiYrbH65IeGsdVQ7tChj5RszFzbqCaWi8B+oidcng
+         bjOj3iDRkZDQZq3IvodyZ/hVOSZb5fpkPmJImmn+ao0N5DvwHbFpmtjRdBAqYxH9uC
+         mTB65w/fxZi9mlvYO955du+T4TwPlwSJWpspFpIk7GoFc9TEbziBFzqnpi0gwqgjPi
+         fwGg0rIEYL80Q==
+Received: by earth.universe (Postfix, from userid 1000)
+        id 19D353C0CBC; Mon, 21 Mar 2022 19:03:24 +0100 (CET)
+Date:   Mon, 21 Mar 2022 19:03:24 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply changes for 5.18
+Message-ID: <20220321180324.aruy3fhiopzjkr32@earth.universe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="arho6uem3puskgsi"
 Content-Disposition: inline
-In-Reply-To: <20220217182110.7176-17-james.morse@arm.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 06:21:05PM +0000, James Morse wrote:
-> resctrl_arch_rmid_read() is intended as the function that an
-> architecture agnostic resctrl filesystem driver can use to
-> read a value in bytes from a hardware register. Currently the function
-> returns the MBM values in chunks directly from hardware.
-> 
-> To convert this to bytes, some correction and overflow calculations
-> are needed. These depend on the resource and domain structures.
-> Overflow detection requires the old chunks value. None of this
-> is available to resctrl_arch_rmid_read(). MPAM requires the
-> resource and domain structures to find the MMIO device that holds
-> the registers.
-> 
-> Pass the resource and domain to resctrl_arch_rmid_read(). This make
 
-s/make/makes/
+--arho6uem3puskgsi
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> rmid_dirty() too big, instead merge it with its only caller, the name is
-> kept as a local variable.
+Hi Linus,
 
-... big. Instead, merge it with its only caller, and the name...
+This time two merge conflicts have been reported for my tree:
 
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> ---
-> Changes since v2:
->  * Typos.
->  * Kerneldoc fixes.
-> 
-> This is all a little noisy for __mon_event_count(), as the switch
-> statement work is now before the resctrl_arch_rmid_read() call.
-> ---
->  arch/x86/kernel/cpu/resctrl/monitor.c | 31 +++++++++++++++------------
->  include/linux/resctrl.h               | 16 +++++++++++++-
->  2 files changed, 32 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-> index b6ad290fda8d..277c22f8c976 100644
-> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
-> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-> @@ -167,10 +167,14 @@ void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d,
->  		memset(am, 0, sizeof(*am));
->  }
->  
-> -int resctrl_arch_rmid_read(u32 rmid, enum resctrl_event_id eventid, u64 *val)
-> +int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
-> +			   u32 rmid, enum resctrl_event_id eventid, u64 *val)
->  {
->  	u64 msr_val;
->  
-> +	if (!cpumask_test_cpu(smp_processor_id(), &d->cpu_mask))
+1. conflict between driver-core and power-supply. Solution is
+to ignore the change from Greg as the modified code has been
+deleted in my tree.
 
-We already tested this and disabled preemption. (At least from some 
-caller AFAICT from this patch.) I'd assume we'd want the fs code to 
-handle preemption disable and checking cpumask. In any case, it should 
-be clear what guarantees resctrl_arch_rmid_read() has.
+2. conflict between extcon and power-supply. That one should
+also be obvious. The patch from extcon does and the patch in
+my tree change different lines, but within the diff scope.
 
-> @@ -278,7 +281,7 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
->  	cpu = get_cpu();
->  	list_for_each_entry(d, &r->domains, list) {
->  		if (cpumask_test_cpu(cpu, &d->cpu_mask)) {
-> -			err = resctrl_arch_rmid_read(entry->rmid,
-> +			err = resctrl_arch_rmid_read(r, d, entry->rmid,
->  						     QOS_L3_OCCUP_EVENT_ID,
->  						     &val);
->  			if (err || val <= resctrl_cqm_threshold)
+Otherwise things are business as usual, so please pull :)
+
+Thanks,
+
+-- Sebastian
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-su=
+pply.git tags/for-v5.18
+
+for you to fetch changes up to c22fca40522e2be8af168f3087d87d85e404ea72:
+
+  power: ab8500_chargalg: Use CLOCK_MONOTONIC (2022-03-14 17:24:52 +0100)
+
+----------------------------------------------------------------
+power supply and reset changes for the v5.18 series
+
+power-supply core:
+ - Introduce "Bypass" charging type used by USB PPS standard
+ - Refactor power_supply_set_input_current_limit_from_supplier()
+ - Add fwnode support to power_supply_get_battery_info()
+
+Drivers:
+ - ab8500: continue migrating towards using standard core APIs
+ - axp288 fuel-gauge: refactor driver to be fully resource managed
+ - battery-samsung-sdi: new in-kernel provider for (constant) Samsung batte=
+ry info
+ - bq24190: disable boost regulator on shutdown
+ - bq24190: add support for battery-info on ACPI based systems
+ - bq25890: prepare driver for usage on ACPI based systems
+ - bq25890: add boost regulator support
+ - cpcap-battery: add NVMEM based battery detection support
+ - injoinic ip5xxx: new driver for power bank IC
+ - upi ug3105: new battery driver
+ - misc. small improvements and fixes
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      power: supply: core: Use device_property_string_array_count()
+
+Carl Philipp Klemm (1):
+      power: supply: cpcap-battery: Add battery type auto detection for map=
+phone devices
+
+Changcheng Deng (1):
+      power: supply: ab8500: Remove unneeded variable
+
+Christophe JAILLET (6):
+      power: supply: core: Simplify hwmon memory allocation
+      power: supply: max17042_battery: Use devm_work_autocancel()
+      power: supply: sbs-charger: Don't cancel work that is not initialized
+      power: supply: da9150-fg: Use devm_delayed_work_autocancel()
+      power: supply: max14656: Use devm_work_autocancel()
+      power: supply: max8997_charger: Use devm_work_autocancel()
+
+Colin Ian King (2):
+      power: supply: axp288_fuel_gauge: Fix spelling mistake "resisitor" ->=
+ "resistor"
+      power: supply: ab8500: fix a handful of spelling mistakes
+
+Daisuke Nojiri (1):
+      power: supply: PCHG: Use MKBP for device event handling
+
+Evgeny Boger (1):
+      power: supply: axp20x_battery: properly report current when dischargi=
+ng
+
+Gustavo A. R. Silva (1):
+      power: supply: cros_usbpd: Use struct_size() helper in kzalloc()
+
+Hans de Goede (37):
+      power: supply: axp288_fuel_gauge: Add dev helper var to probe()
+      power: supply: axp288_fuel_gauge: Add axp288_fuel_gauge_read_initial_=
+regs()
+      power: supply: axp288_fuel_gauge: Use devm_add_action_or_reset() for =
+iio chan release
+      power: supply: axp288_fuel_gauge: Use devm_power_supply_register()
+      power: supply: axp288_fuel_gauge: Refactor IRQ initialization
+      power: supply: axp288_fuel_gauge: Take lock before updating the valid=
+ flag
+      power: supply: axp288_fuel_gauge: Add a no_current_sense_res module_p=
+aram
+      power: supply: core: Refactor power_supply_set_input_current_limit_fr=
+om_supplier()
+      power: supply: bq25890: Add a bq25890_rw_init_data() helper
+      power: supply: bq25890: Add support to skip reset at probe() / remove=
+()
+      power: supply: bq25890: Add support to read back the settings from th=
+e chip
+      power: supply: bq25890: Enable charging on boards where we skip reset
+      power: supply: bq25890: Drop dev->platform_data =3D=3D NULL check
+      power: supply: bq25890: Add bq25890_set_otg_cfg() helper
+      power: supply: bq25890: Add support for registering the Vbus boost co=
+nverter as a regulator
+      power: supply: bq25890: On the bq25892 set the IINLIM based on extern=
+al charger detection
+      power: supply: bq25890: Use the devm_regmap_field_bulk_alloc() helper
+      mfd: intel_soc_pmic_chtwc: Add cht_wc_model data to struct intel_soc_=
+pmic
+      i2c: cht-wc: Make charger i2c-client instantiation board/device-model=
+ specific
+      extcon: intel-cht-wc: Use new cht_wc_model intel_soc_pmic field
+      extcon: intel-cht-wc: Support devs with Micro-B / USB-2 only Type-C c=
+onnectors
+      extcon: intel-cht-wc: Refactor cht_wc_extcon_get_charger()
+      extcon: intel-cht-wc: Add support for registering a power_supply clas=
+s-device
+      extcon: intel-cht-wc: Report RID_A for ACA adapters
+      power: supply: core: Use fwnode_property_*() in power_supply_get_batt=
+ery_info()
+      power: supply: core: Add support for generic fwnodes to power_supply_=
+get_battery_info()
+      power: supply: bq24190_charger: Turn off 5V boost regulator on shutdo=
+wn
+      power: supply: bq24190_charger: Always call power_supply_get_battery_=
+info()
+      power: supply: bq24190_charger: Store ichg-max and vreg-max in bq2419=
+0_dev_info
+      power: supply: bq24190_charger: Program charger with fwnode supplied =
+ccc_ireg and cvc_vreg
+      power: supply: bq24190_charger: Disallow ccc_ireg and cvc_vreg to be =
+higher then the fwnode values
+      power: supply: ug3105_battery: Add driver for uPI uG3105 battery moni=
+tor
+      power: supply: axp288-charger: Set Vhold to 4.4V
+      power: supply: axp288_charger: Use acpi_quirk_skip_acpi_ac_and_batter=
+y()
+      power: supply: axp288_fuel_gauge: Use acpi_quirk_skip_acpi_ac_and_bat=
+tery()
+      power: supply: bq24190_charger: Fix bq24190_vbus_is_enabled() wrong f=
+alse return
+      power: supply: bq24190_charger: Delay applying charge_type changes wh=
+en OTG 5V Vbus boost is on
+
+Hong Peng (1):
+      power: supply: ab8500_charger: Fix spelling typo
+
+Jiasheng Jiang (2):
+      power: supply: wm8350-power: Handle error for wm8350_register_irq
+      power: supply: wm8350-power: Add missing free in free_charger_irq
+
+Linus Walleij (20):
+      power: supply: ab8500: Drop BATCTRL thermal mode
+      power: supply: ab8500: Swap max and overvoltage
+      power: supply: ab8500: Integrate thermal zone
+      power: supply: ab8500_fg: Break loop for measurement
+      power: supply: ab8500_fg: Break out load compensated voltage
+      power: supply: ab8500_fg: Safeguard compensated voltage
+      power: supply: ab8500_fg: Drop useless parameter
+      power: supply: ab8500_chargalg: Drop charging step
+      power: supply: ab8500_chargalg: Drop enable/disable sysfs
+      power: supply: ab8500_charger: Restrict ADC retrieveal
+      power: supply: ab8500_charger: Fix VBAT interval check
+      power: supply: ab8500: Standardize maintenance charging
+      power: supply: ab8500: Standardize alert mode charging
+      power: supply: ab8500: Standardize BTI resistance
+      power: supply: Support VBAT-to-Ri lookup tables
+      power: supply: ab8500_fg: Use VBAT-to-Ri if possible
+      power: supply: Static data for Samsung batteries
+      dt-bindings: power: supply: ab8500_fg: Add line impedance
+      power: supply: ab8500_fg: Account for line impedance
+      power: ab8500_chargalg: Use CLOCK_MONOTONIC
+
+Mark Brown (1):
+      power: supply: Use an rbtree rather than flat register cache
+
+Miaoqian Lin (2):
+      power: reset: gemini-poweroff: Fix IRQ check in gemini_poweroff_probe
+      power: supply: ab8500: Fix memory leak in ab8500_fg_sysfs_init
+
+Micha=C5=82 Miros=C5=82aw (2):
+      power: supply: ltc2941: simplify Qlsb calculation
+      power: supply: ltc2941: clean up error messages
+
+Ricardo Rivera-Matos (3):
+      power: supply: Introduces bypass charging property
+      power: supply: bq25980: Implements POWER_SUPPLY_CHARGE_TYPE_BYPASS
+      ABI: testing: sysfs-class-power: Adds "Long Life" entry
+
+Samuel Holland (3):
+      dt-bindings: vendor-prefixes: Add Injoinic
+      dt-bindings: trivial-devices: Add Injoinic power bank ICs
+      power: supply: Add a driver for Injoinic power bank ICs
+
+Sebastian Reichel (1):
+      Merge tag 'psy-extcon-i2c-mfd-for-v5.18-signed' into psy-next
+
+Sergey Shtylyov (1):
+      power: supply: mp2629_charger: use platform_get_irq()
+
+Souptick Joarder (HPE) (1):
+      power: supply: ab8500: Remove unused variable
+
+Uwe Kleine-K=C3=B6nig (1):
+      power: supply: rt9455: Don't pass an error code in remove callback
+
+Yang Li (1):
+      power: supply: da9150-fg: Remove unnecessary print function dev_err()
+
+Yauhen Kharuzhy (3):
+      power: supply: bq25890: Rename IILIM field to IINLIM
+      power: supply: bq25890: Reduce reported CONSTANT_CHARGE_CURRENT_MAX f=
+or low temperatures
+      power: supply: bq25890: Support higher charging voltages through Pump=
+ Express+ protocol
+
+Yihao Han (2):
+      power: supply: axp20x_ac_power: fix platform_get_irq.cocci warning
+      power: supply: axp20x_usb_power: fix platform_get_irq.cocci warnings
+
+ Documentation/ABI/testing/sysfs-class-power        |   8 +-
+ .../power/supply/stericsson,ab8500-fg.yaml         |   5 +
+ .../devicetree/bindings/trivial-devices.yaml       |   8 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ MAINTAINERS                                        |   5 +
+ drivers/extcon/Kconfig                             |   2 +
+ drivers/extcon/extcon-intel-cht-wc.c               | 240 +++++-
+ drivers/i2c/busses/i2c-cht-wc.c                    | 120 ++-
+ drivers/mfd/intel_soc_pmic_chtwc.c                 |  40 +
+ drivers/power/reset/gemini-poweroff.c              |   4 +-
+ drivers/power/supply/Kconfig                       |  35 +-
+ drivers/power/supply/Makefile                      |   3 +
+ drivers/power/supply/ab8500-bm.h                   |  79 --
+ drivers/power/supply/ab8500_bmdata.c               |  86 +-
+ drivers/power/supply/ab8500_btemp.c                | 342 +-------
+ drivers/power/supply/ab8500_chargalg.c             | 418 ++--------
+ drivers/power/supply/ab8500_charger.c              |  47 +-
+ drivers/power/supply/ab8500_fg.c                   | 145 ++--
+ drivers/power/supply/axp20x_ac_power.c             |   6 +-
+ drivers/power/supply/axp20x_battery.c              |  13 +-
+ drivers/power/supply/axp20x_usb_power.c            |   6 +-
+ drivers/power/supply/axp288_charger.c              |  21 +-
+ drivers/power/supply/axp288_fuel_gauge.c           | 273 +++---
+ drivers/power/supply/bq24190_charger.c             | 158 +++-
+ drivers/power/supply/bq25890_charger.c             | 396 +++++++--
+ drivers/power/supply/bq25980_charger.c             |   2 +-
+ drivers/power/supply/cpcap-battery.c               | 118 ++-
+ drivers/power/supply/cros_peripheral_charger.c     |  37 +-
+ drivers/power/supply/cros_usbpd-charger.c          |   2 +-
+ drivers/power/supply/da9150-fg.c                   |  35 +-
+ drivers/power/supply/ip5xxx_power.c                | 638 ++++++++++++++
+ drivers/power/supply/ltc2941-battery-gauge.c       |  61 +-
+ drivers/power/supply/max14656_charger_detector.c   |  15 +-
+ drivers/power/supply/max17042_battery.c            |  12 +-
+ drivers/power/supply/max8997_charger.c             |  12 +-
+ drivers/power/supply/mp2629_charger.c              |   6 +-
+ drivers/power/supply/power_supply_core.c           | 294 +++++--
+ drivers/power/supply/power_supply_hwmon.c          |  15 +-
+ drivers/power/supply/power_supply_sysfs.c          |   1 +
+ drivers/power/supply/rt9455_charger.c              |   2 +-
+ drivers/power/supply/samsung-sdi-battery.c         | 918 +++++++++++++++++=
+++++
+ drivers/power/supply/samsung-sdi-battery.h         |  13 +
+ drivers/power/supply/sbs-charger.c                 |  18 +-
+ drivers/power/supply/smb347-charger.c              |   3 +-
+ drivers/power/supply/ug3105_battery.c              | 486 +++++++++++
+ drivers/power/supply/wm8350_power.c                |  97 ++-
+ include/linux/mfd/intel_soc_pmic.h                 |   8 +
+ include/linux/platform_data/cros_ec_commands.h     |  64 ++
+ include/linux/power/bq25890_charger.h              |  15 +
+ include/linux/power_supply.h                       | 213 ++++-
+ 50 files changed, 4118 insertions(+), 1429 deletions(-)
+ create mode 100644 drivers/power/supply/ip5xxx_power.c
+ create mode 100644 drivers/power/supply/samsung-sdi-battery.c
+ create mode 100644 drivers/power/supply/samsung-sdi-battery.h
+ create mode 100644 drivers/power/supply/ug3105_battery.c
+ create mode 100644 include/linux/power/bq25890_charger.h
+
+--arho6uem3puskgsi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmI4vegACgkQ2O7X88g7
++przmhAApksmbtMLb002Leqyu9msKgUYoTbQtHacaTNUE5bhck5TZmSYRsRXiZ1A
+L+4Gb6ggO3tknN5SP8UyRKyBf0pH9hdEOWIVUmAFhPXQLOT4/IlS0tiNpOYkonmK
+zvASN6+tWKIrVVfothsziENezoF2p942NyF5VZ8VbymUdRFUuMxuGSvB1sBCNbbJ
++84aLekX7lln2Jx0y/8b79Qj8TxaaUAG9uVkTGQhEtWLWKgeFNEhmzT4+0+T6wN8
+QyMwKQzBZpRzLcmeIovzDG3DvReLZ5pZiBLWOLz1GpaSs31gJvQ7RKxaccbQLLbw
+3eygefZgvons7XP+BVa2zc/OSBhk9z7j1NrAf4xNgj72tUK86vXTpDMmhfCdXgWY
+uikjWrFcm7Hx0IJMc8okmF7IBxfiJPxD/er3WlHVwUYnnuQsRxcErUwfznnKXIcl
+spiErpTAP6p9WtYqrR/FF28fpQ4EZPI9y6ek8WOjSn58Luul+JwZDbet9WZ8sxeJ
++BdRs9n75EOpvsrXtSzDlyxoF0loj490EaxyEr5dpicil2vrLZ4LgewPr0hV3Eok
+X2SMsPXqiItJfG5IiF8qNs9p/7VISOVlnBZuVFc4iq7X7c0SIn3AnvSmMvGSwyAD
++G10um/NZAICPDrSI3+1+zZYKwOMQqbyNJrfJ99ZRo7bkpWLjUk=
+=fq9Y
+-----END PGP SIGNATURE-----
+
+--arho6uem3puskgsi--

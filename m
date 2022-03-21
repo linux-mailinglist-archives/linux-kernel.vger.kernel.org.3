@@ -2,196 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108F44E23F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 750F24E23FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346195AbiCUKIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 06:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
+        id S1346201AbiCUKJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 06:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233065AbiCUKIU (ORCPT
+        with ESMTP id S1346062AbiCUKJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 06:08:20 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Mar 2022 03:06:53 PDT
-Received: from esa6.hc3370-68.iphmx.com (esa6.hc3370-68.iphmx.com [216.71.155.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3715641D;
-        Mon, 21 Mar 2022 03:06:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1647857213;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=lIYdkrDN+PoNgoEibvd3dukVof0EVRd2O3ljM3bCXp4=;
-  b=e0sOlllqTtuHd7mcZGZ+Fd7KRtY1lYqzpHEz9/A+kieojyi8FHBfBQR7
-   QyXuAkhcZLNFueD+ziNZHpWvIJuZg2Lz6N5JCfvSeyF+bKtImynJ2aJVX
-   RjaIyVuvacP1AZabDQ0bLh49b2LrgMARsz9hclIg2dmNtDtgF8II3vQas
-   w=;
-Authentication-Results: esa6.hc3370-68.iphmx.com; dkim=pass (signature verified) header.i=@citrix.onmicrosoft.com
-X-SBRS: 5.1
-X-MesageID: 66664893
-X-Ironport-Server: esa6.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.156.83
-X-Policy: $RELAYED
-IronPort-Data: A9a23:PaecO62bypCOpHoB6/bD5URxkn2cJEfYwER7XKvMYLTBsI5bpzwHn
- 2QXXWmDaPbZazb2Ktt/boi39EwF6JbWytNiHlNspC1hF35El5HIVI+TRqvS04J+DSFhoGZPt
- Zh2hgzodZhsJpPkjk7xdOCn9xGQ7InQLlbGILes1htZGEk1EE/NtTo5w7Rj2tUy2IDga++wk
- YiaT/P3aQfNNwFcagr424rbwP+4lK2v0N+wlgVWicFj5DcypVFMZH4sDfjZw0/DaptVBoaHq
- 9Prl9lVyI97EyAFUbtJmp6jGqEDryW70QKm0hK6UID66vROS7BbPg/W+5PwZG8O4whlkeydx
- /1rjLOeb1gTNZfH2/4SDgBeOTggPINJreqvzXiX6aR/zmXDenrohf5vEFs3LcsT/eMf7WNmr
- KJCbmpXN1ba2rzwkOnTpupE36zPKOHxO4wSoDd4xCzxBvc6W5HTBa7N4Le02R9u2J4QQaaPP
- KL1bxIoKzT5TkNjO2sFK5J9raSYmn/OMBRh/Qf9Sa0fvDGIkV0ZPKLWGMHOZtWASMFRn0CZj
- mHL5WL0BlcdLtP34TiK6HW3ncfUgDj2HokVEdWQ8v9snU3WxWEJDhASfUW0rOP/iUOkXd9bb
- UsO9UIGpLg480GDTdTnWRC85nKH1jYYWtxNA6gw7AaGyYLK7AuDQGsJVDhMbJohrsBebTAt0
- FCNnpX7BTVpv5WSU3uW8rrSpjS3UQAfKnUDfmkDVhcf5Mf4o5AbiQjGRdJuVqWyi7XdCTz2h
- jyHsiU6r7ESltIQkbW2+0jdhDChrYSPSRQ6jjg7RUr8sFk/PtT8IdX1tx6Ltp6sMbp1UHGnh
- VcqvZek59oFTouCyTWLavxTHZ+msqPt3CLnvXZjGJwo9jKI8nGlfJxN7DwWGHqFIvroaheyP
- haN5Fo5CIt7eSLzMPQpO97Z59ECl/CIKDjzahzDgjOiiLBVfRTPwixhbFX4M4vFwBl1yvFX1
- Xt2nK+R4Zcm5UZPkWHeqwQ1i+ZDKsUCKYT7H8yT8vhf+eDCDEN5sJ9cWLd0Usg37bmfvCLe+
- MtFOs2Bxn13CbOiPXmOqddKfQlRfBDX4KwaTOQNK4a+zvdOQjl9W5c9P5t/E2Cao0ilvriRp
- SzsMqOp4FH+mWfGOW23hoNLM9vSsWJEhStjZ0QEZA/ws1B6ONrHxPpPJvMfIOh8nMQ+nKEcc
- hXwU5jZahi5Ym+coGp1gFiUhNEKSSlHcirVZnv7OmdjJ8A8L+ELk/e9FjbSGOA1JnPfneM1o
- qG61xOdRpwGRg94C93RZu7pxFS01UXxUsorBSMk/vE7lJ3QzbVX
-IronPort-HdrOrdr: A9a23:UnSFcqtqOFEbpnnvje9oHsOV7skCkoMji2hC6mlwRA09TyXGra
- 6TdaUguiMc1gx8ZJhBo7C90KnpewK7yXdQ2/htAV7EZnibhILIFvAZ0WKG+Vzd8kLFh4tgPM
- tbAsxD4ZjLfCdHZKXBkXmF+rQbsaG6GcmT7I+0pRodLnAJV0gj1XYDNu/yKDwGeOAsP+tBKH
- Pz3Lshm9L2Ek5nEPhTS0N1FNTrlpnurtbLcBQGDxko5E2nii6p0qfzF1y90g0FWz1C7L8++S
- yd+jaJq5mLgrWe8FvxxmXT55NZlJ/IzcZCPtWFjowwJi/3ggilSYx9U/mpvSwzosuo9FE2+e
- O86SsIDoBW0Tf8b2u1qRzi103J1ysv0WbrzRuijX7qsaXCNUQHIvsEobgcXgrS6kImst05+r
- lMxXilu51eCg6FtDjh5vDTPisa2HackD4Hq6o+nnZfWYwRZPt6tooE5n5YF58GAWbT9J0nKu
- 9zF8vRjcwmPm9yV0qp/lWH/ebcHUjaRny9Mwo/U42uonRrdUlCvgolLJd1pAZEyHo/I6M0kN
- gsfJ4Y0I2mdfVmH56VNN1xMvdfNVa9NC4kEFjiaGgPR5t3c04klfbMkcEIDaeRCds18Kc=
-X-IronPort-AV: E=Sophos;i="5.90,198,1643691600"; 
-   d="scan'208";a="66664893"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V95fT5xbOcX055NK9aVsuACjKcwU1ykfnsJfgtzWz1xh36vRkmD9MMN9Di8imvhwTUSz66/KlrA+7w10COwzLy/WSZyD1H7KkeM7CnMVD1e/KyGfkOsVqSxOvBjzONAuyBqOGs7jMtGCdFIoLenRHyBBdbNv5CCt1suai5w4QH5TPx+PYkQkEockCTgTchPwQh97sKzsSenIVjAZO6PbSWWOJ+41h13C3evJUtdspHQznTGRONapbhh6nybkMW6U5Gw/yVurbY2L8CAcciMxXdVS6Nxog7wCnLZ7Uhxr9sJ+s6RI8PQS+RpUya974iKCplufFpp2UuZDfIa6T9K+Hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z1dHHPlb1CLo6A4GiwERElpYODVOZKRQMD0jDBxG774=;
- b=Sz2/YOvdM/op/KpVTr4IAbA1ukEkd3dGm4PGWYSwt6IHXflDnG+vZDC0MhlVE7ev64ibBms1HJBHmyG43Srjv9zGRNUWPfFR9a9DUnZM06nKUh6SVvHepXLvjfswFOmK+7I3fmD6fKCDN2ISOPCd+WwhYAQj4wF+tfjduRVfTEhn60UN/WwlWBJe0dNUvH9Y+V6CvbklyRhkE1HataOWPmmrZviRvyDnbF504rzvjazt7cQzeFA6jhnpfH0Ry/5ritH/6OC/Ucxygv5hmekPa1zjcEWKwqR9Ofl0rPK5+pHghZwVBy+NP5KjiALPAiUNgs5/LuHXINyJyeq4rjdarw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z1dHHPlb1CLo6A4GiwERElpYODVOZKRQMD0jDBxG774=;
- b=sWxgzsGQ0FQaC+xYF5bisDf0GgrA5jvI4c3v+UBt2iYhqw/jM+IhX1cuLu79ZW/5tM5hs5pMUl9ySMmFPWvhO2+xFOgpAcng1yuQLTc7op2rfVVG866Ver9JHTqzgg6LuHM2i5PuDc1baf64VFH67yvWxP0CK29+RV+6nBlaPAg=
-Date:   Mon, 21 Mar 2022 11:05:22 +0100
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     Dongli Zhang <dongli.zhang@oracle.com>
-CC:     <linux-block@vger.kernel.org>, <xen-devel@lists.xenproject.org>,
-        <boris.ostrovsky@oracle.com>, <jgross@suse.com>,
-        <sstabellini@kernel.org>, <axboe@kernel.dk>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] xen/blkfront: fix comment for need_copy
-Message-ID: <YjhN4neEJMs04JEN@Air-de-Roger>
-References: <20220317220930.5698-1-dongli.zhang@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220317220930.5698-1-dongli.zhang@oracle.com>
-X-ClientProxiedBy: LO2P265CA0324.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:a4::24) To DS7PR03MB5608.namprd03.prod.outlook.com
- (2603:10b6:5:2c9::18)
+        Mon, 21 Mar 2022 06:09:29 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C84B1AC
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 03:07:58 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220321100753epoutp0438af69dfc52ad2d9767d093417f2f882~eXXWNhYsr2125721257epoutp04k
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:07:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220321100753epoutp0438af69dfc52ad2d9767d093417f2f882~eXXWNhYsr2125721257epoutp04k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1647857273;
+        bh=EQdv+mLi3PBgdEQfFCjcX0fY2+npbW6yoMgn2DjAL9k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Oft5IBRS3mpC+nmQjZuENkatsRpKxJC1kOxCOzvVVM+pxdDfZlBE7iSR8dCIYAUgZ
+         2K452T3tap9teFNjO2HUpqqwlHF0uh3yOZxDpRd7EixTXY+peKNV2BI33XwMl0Ws5u
+         duViIIEQNBYdvmJzAXfRUAAFzdkgchzohNaRRDHk=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220321100752epcas2p23f34c46f801d7789f6e53469ddf52446~eXXVuiWns1541815418epcas2p2X;
+        Mon, 21 Mar 2022 10:07:52 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.88]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4KMVfr4mnPz4x9Q5; Mon, 21 Mar
+        2022 10:07:48 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        87.39.10444.37E48326; Mon, 21 Mar 2022 19:07:48 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220321100747epcas2p4594e7196634a28bed2539390263aeb60~eXXRCevy30425604256epcas2p4O;
+        Mon, 21 Mar 2022 10:07:47 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220321100747epsmtrp1c3bdb3b6d86780694746f124fe836428~eXXRBdg7H0163701637epsmtrp1k;
+        Mon, 21 Mar 2022 10:07:47 +0000 (GMT)
+X-AuditID: b6c32a45-513ff700000228cc-d4-62384e739007
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        27.91.03370.37E48326; Mon, 21 Mar 2022 19:07:47 +0900 (KST)
+Received: from ubuntu (unknown [12.36.155.120]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220321100747epsmtip1e3253fe7e565ec9f5b3698f3269d8136~eXXQ3xrFp0882408824epsmtip1M;
+        Mon, 21 Mar 2022 10:07:47 +0000 (GMT)
+Date:   Mon, 21 Mar 2022 19:06:31 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
+Subject: Re: [PATCH v3 0/4] support USB offload feature
+Message-ID: <20220321100631.GB62265@ubuntu>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4f66fc39-fdb0-4bf7-b9fa-08da0b225289
-X-MS-TrafficTypeDiagnostic: DM5PR03MB3273:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR03MB327327426804C03549FF25F28F169@DM5PR03MB3273.namprd03.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nfmjY73vSKkW4a4P5htNVjFhAnilfxLCQk9t6qaNlEF5Ny/yznyOUyMagbh0I40kAB8V9kPYCAmzec1r8Hq2+rAXp94fK1DP2Vml/agYBLMraDRUJ6RhgTulWBJsV9iLZziuRsaudZzTkA7Wxk6qsijjKrrkpYGClEVwIJ5EzxAdtDqIVtWS0R0X4lYqnBUBdenT68g/+F7KDkuJy6UPpU5lgYqtYLJxN8FX8LyFEcjRW1Lddax3ugXXVeSjTYgHephGId1IojQP6YFOJqcymJiWyiSodoSqiMOKynrKbqH4F2qlGtDiBsnKQyIZZFnSFH8HuB1AdWBNT3zTZe6EHnEbb8aD+QaRyTZHQ3A/2BB4aFezytoHeU2ZfGYToJov4x2u9fED7RYz76bCCyySWOoyn82Lyu1EvFGextq0nP1Ix5A3+SL/jsZY8CpGrY/gnFHareGgLqKKP4hDjzHGJA1muoMwr2d9H2PxNdi1YObCtAnR1k2RK0p8Jsuj0WB3/xLdA/rAjhBjUUjSiwYnMTwC7Cd1ZK1mxgo0enSlsl2WOt7cY2zMT4Lv9EqIgIHWk8oVaa/x/fCzh++7/qoJyNjppBcvuOgfMto4FRctSpkVoIZR3j+CoZXJMsuNGsx2qe8tvXOk6bAw/IjBVgT+4w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR03MB5608.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(85182001)(6506007)(8936002)(6512007)(9686003)(5660300002)(86362001)(33716001)(6666004)(83380400001)(4326008)(6486002)(26005)(186003)(66556008)(66946007)(38100700002)(82960400001)(316002)(66476007)(8676002)(6916009)(508600001)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MDZ2ek1PMDZ4NlpkVE8wYjZwNkljTGpVK1Zkb0VRLzk5VkZ6Nmc2d2FhWTdt?=
- =?utf-8?B?a3FYZkl1d0pUUlVwQ1l5SjJPS25ISHZUOWQ2L3l3d2NGZXJzUzQvYUs0SWR0?=
- =?utf-8?B?Z3B2NTZZOWgwOURTZEQ1TmpzamFsTnU1Z3hnSkFYTFJhOW1jNk9aVzl2d3Rk?=
- =?utf-8?B?VXpRWXpHSXcyZkJLNzhKaUlyNVFhRjV5bEJGRTExSkhTdWxoMTgrK2E4N3pX?=
- =?utf-8?B?ZDkwdlpDQ1paT2tyZnlKNVJEa2ZpdlBDcUx6TjhRWFpxTFdzMGZBZWxoNkhp?=
- =?utf-8?B?dEpmN0pvaEpvZHFZRHBKbDlhRVdCSUxSeC9JZ2U1UzhWTGFGZXY2dnJ2dU1j?=
- =?utf-8?B?MUNJM2RYRCszTnBiOG5JWWtJRnlxaE1pd0w0bXFXUEZZM282Q2hqdXhzcFhz?=
- =?utf-8?B?dlBpaWVBRkpCSkE5aHU2R1g3MTRXWGZnUTIyajJ4U1VqZTlReXFUVGFHWEtj?=
- =?utf-8?B?WTR2ZVJsWlB4QksvMnBocWgvV0RvNnduWnIvb0g0enRTOERxcWdKVTJNT2dR?=
- =?utf-8?B?OFJES3p5dStxUmtTUGpRTHdPOUVJTUM4RHlLbzlPRUZFT09FUjEzVWJMeThz?=
- =?utf-8?B?akJqYXcxcS8rYkRaNjJya0Z3MHZUcWt2ekxkK0U1VUZSNmM1amlnTmNmU1VM?=
- =?utf-8?B?TEZiNnFUd01TeEtzVWhZa3B2UU4rTm1qR1F6Vm5JNHZYSzJ3Mjg0Z1pZNjhZ?=
- =?utf-8?B?ejRwVXdMRWhYWnpxdDNYVFYxWGNBSHdSTERMMHVSQlBoSnVuNHRvRi8rSnU4?=
- =?utf-8?B?QzNMejB4U1hmaml6VlZKU3lHbWJ6bGhsc0pUaE1Lcmp6RS80aFZRZEE5SEpQ?=
- =?utf-8?B?dVcxN2NrQkhLcTYxYm8zRnVLeFNLc0tDVHdvZzdOMTlOYnRXTkxFbjJiUDA3?=
- =?utf-8?B?NkZxaTZpTjJqdjNUVys4VnBqaEFBTVlHUEVzMXZuQjFBc3dNSjVxSmdBYmRZ?=
- =?utf-8?B?S1VnWE5GZWw2ZVN3ZzRoSFNiMmJFc0gwekorRXpoRnZWOTRFYlVYbXQ3SEla?=
- =?utf-8?B?bUFqWUprZnUxL0ExbWgyWCtSd1JRQVlTZGN1UlZtRnBndEZBVTI1dlVYTWx2?=
- =?utf-8?B?ay9SckNuYmlCVkZ2RWNZMUlMK09GZUIvYk9lRHE1MFZwK3pHNXFGcHVaa3pK?=
- =?utf-8?B?WUhnRXlTSzllVTBrUitmdktwaXlJaUFPcFpuanBaUHRlcC9Wei96dklyTFpE?=
- =?utf-8?B?eWNDQ0VWbXY3ZFRZQTJ0QUJFdEFTTTA2RnFFMzFNWjhwU2hCWTIzcHUwU0gw?=
- =?utf-8?B?aHJZbHFOUW5HZDhJd0NTQmJDUmF4MERWWldvKzErZEdhWTJCYURWQmpEanM4?=
- =?utf-8?B?ZkE1YXN3aytVOVl1bnhJVTJDNWwwck11U09NYXYvOG51TWxEKzd2UWVhNkFY?=
- =?utf-8?B?UjJrZkl0eVlWcWtQWlhEZmdLM0w3OHRnTXNKUWF3UnpOa2ZmaURsMnJOa0xH?=
- =?utf-8?B?OUtZRllVNFNveHdKNERKQm5maDJveVV3enBXVDROVXBISVpDbmRDRWZ1ZXFq?=
- =?utf-8?B?N1ZhbDhlMFhZZ1VWK21aMTlQc2lXYWJ4Z2llcGh1TWxvSEVzMGtWdmdmck9n?=
- =?utf-8?B?VUFoVTFXaG4wK3NoZ1RhYzA1SUl4bUl5V1A5bmxjeEgraGpYSUZyZUp5NGtW?=
- =?utf-8?B?YmZVZEdFOVVLRUxKclZsZDUrRHM0eTJyOGdSZmZVMFB5bmU3QnRiOXJHN1Aw?=
- =?utf-8?B?Rk5iNXlGNTBPZXZZTkQ2OW5kdjc1MUdvVnVZb05yTTEvcko5NCt0aDVvTHQ4?=
- =?utf-8?B?Q0hOYnJpNVR2bkhtWUszWXRGc2VTVm4yZWNxUnB3d3lHR3VMbkZDUHJLYk83?=
- =?utf-8?B?QjF4eXhhVkkrTnlLamp4dFdUZVVUeFd0N1RwM0hSYUY0OU5PU2ZJOFhoYkVm?=
- =?utf-8?B?MSs4bUtsNVYrSUYwZ1dwemExVHpVVmNaSElqZEZKTjNzRDBscXBiblJGRFBE?=
- =?utf-8?B?K0FrUERiSmdRbWJGRVZGV2VrazcwaW4zYTlISUZZV1hCYkxrYlFubjRRMnJq?=
- =?utf-8?B?WFJ5TXlkUDNnPT0=?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f66fc39-fdb0-4bf7-b9fa-08da0b225289
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR03MB5608.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 10:05:27.0100
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Dhx0RguqCNTaN3hF1ayFqj6zgLMhF8E1bcVS9eDZU4mV1M2QFK8jPFpF27DL7fQQfOhk1VluclUqUmiNcfe0Ug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR03MB3273
-X-OriginatorOrg: citrix.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YjhGKVKuPsKG80wZ@kroah.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKJsWRmVeSWpSXmKPExsWy7bCmhW6Jn0WSwft/zBZPjixit2hevJ7N
+        4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtZq5Vtui6e4PRgdPjcl8vk8eCTaUei/e8ZPLY
+        P3cNu0ffllWMHp83yQWwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXm
+        ptoqufgE6Lpl5gDdpKRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMC/QK07MLS7N
+        S9fLSy2xMjQwMDIFKkzIzlgw7zJLwS+Jijdz+lgbGHcJdzFyckgImEgse3iXtYuRi0NIYAej
+        xItJ29kgnE+MEmdvbWWEcD4zSjxd9pARpmXTikUsEIldjBJND3awgCSEBJ4wSnzZVwliswio
+        SnxpAhnFycEmoCVx78cJZhBbRMBYov/sLHaQZmaBDUwSJ+48B0sIC5hLzJ7Sxw5i8wpoS0x7
+        spkZwhaUODnzCdgCTgFNie2XzwEN5eAQFVCReHWwHmSOhMBEDokFD+6xQlznInH6/z9mCFtY
+        4tXxLewQtpTEy/42KLtYYtenViaI5gZGicYHJ6AajCVmPWsHe5NZIFNi4vRWFpBlEgLKEkdu
+        sUCE+SQ6Dv9lhwjzSnS0CUF0KktMvzwB6gRJiYOvz0FN9JCY1jyfHRJY3xklui6eYpvAKD8L
+        yWuzkGyDsHUkFuz+xDYLaAWzgLTE8n8cEKamxPpd+gsYWVcxiqUWFOempxYbFRjCYzs5P3cT
+        Izi9arnuYJz89oPeIUYmDsZDjBIczEoivIs/mCcJ8aYkVlalFuXHF5XmpBYfYjQFRtREZinR
+        5Hxggs8riTc0sTQwMTMzNDcyNTBXEuf1StmQKCSQnliSmp2aWpBaBNPHxMEp1cAUrri4ZuLh
+        L/sYixecjFnTPTm7t15oT8GErQuuTti9SGxNaq1hU5IZzzI7hZBJmZoGEcoZr0yuzt0gL3lp
+        efRp9c6SP32S078/XRlSJ936gyd14Z00rmImTotF0Tnq21fNXLbw1t9c6cAHnK6VLh29OhGF
+        S7ose9Pn7dF8q//2qeDkoszX6s7PNZjSJ3ZEedY9sJq1dv7/vhMxRtt3rnpzyjAwv37p77/6
+        nr8mdr1qZw7uz5G06yxQ1TlzolhffeXKoLXmwpKdl6vvs/8LcTkaWcDqsUvRXSs1eaqHctXv
+        qRKTxASzq/zuXrZb+7Kp5Y/vwiV3us2tN98+vOjGtglzTENDpb/5vcqxOZnrwKXEUpyRaKjF
+        XFScCAD1Q4vjOAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNLMWRmVeSWpSXmKPExsWy7bCSnG6xn0WSwa7ZchZPjixit2hevJ7N
+        4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtZq5Vtui6e4PRgdPjcl8vk8eCTaUei/e8ZPLY
+        P3cNu0ffllWMHp83yQWwRXHZpKTmZJalFunbJXBl3Nr2jL1gu1jF58Un2RsYJwh2MXJySAiY
+        SGxasYili5GLQ0hgB6PEhZcH2CESkhJL596AsoUl7rccYYUoesQosff3V7AEi4CqxJem7Wwg
+        NpuAlsS9HyeYQWwRAWOJ/rOz2EEamAU2MUnM/r0WLCEsYC4xe0ofWDOvgLbEtCebmSGm/mSU
+        mHLtLBtEQlDi5MwnLCA2M9DUG/9eMnUxcgDZ0hLL/3GAhDkFNCW2Xz7HBhIWFVCReHWwfgKj
+        4CwkzbOQNM9CaF7AyLyKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93EyM4PrS0djDuWfVB
+        7xAjEwfjIUYJDmYlEd7FH8yThHhTEiurUovy44tKc1KLDzFKc7AoifNe6DoZLySQnliSmp2a
+        WpBaBJNl4uCUamCSdDDdZSKwrq3xiMye555HUv5LnhBvanrxwiLQRVbwrO33tbLLZr3K2aC6
+        SUQsc5dlbV6i1lLzM8JHFDTUt3tNy9/eVMOcztctdtnFc1MIF1t/mv2CRWX31eYW99911zmd
+        fLjwzYQmQ573U6IOc51SOJvG3apwVTM+nqssc+ZWM6bLp/tm2x8/b9Vr2eHiECa9116UXXre
+        oez0Z27vOYQO2c327txm+eSsx+nWCO9LmyK2xDz+8NL4ku2DE7IOK1cve/djvblM22qxwz+k
+        5j8zXB3+ae7Pc8uTcuzuP7266+PR1Fv/f8z9ePfUxuRWPt63ehY/yvcc6k74nvfC6WRe9s3W
+        pc8awhZP+1cixHRQiaU4I9FQi7moOBEAdwxuyP4CAAA=
+X-CMS-MailID: 20220321100747epcas2p4594e7196634a28bed2539390263aeb60
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----2fH_v7u-qooQo7zMtxxTw1wUndVpTJhY--Wv6pszNQmaZVXq=_225eb3_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c
+References: <CGME20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c@epcas2p1.samsung.com>
+        <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
+        <YjhB7+AaEXvuUmdi@kroah.com> <20220321092409.GA62265@ubuntu>
+        <YjhGKVKuPsKG80wZ@kroah.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 03:09:30PM -0700, Dongli Zhang wrote:
-> The 'need_copy' is set when rq_data_dir(req) returns WRITE, in order to
-> copy the written data to persistent page.
+------2fH_v7u-qooQo7zMtxxTw1wUndVpTJhY--Wv6pszNQmaZVXq=_225eb3_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+
+On Mon, Mar 21, 2022 at 10:32:25AM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Mar 21, 2022 at 06:24:09PM +0900, Jung Daehwan wrote:
+> > On Mon, Mar 21, 2022 at 10:14:23AM +0100, Greg Kroah-Hartman wrote:
+> > > On Mon, Mar 21, 2022 at 05:59:50PM +0900, Daehwan Jung wrote:
+> > > > This patchset is for USB offload feature, which makes Co-processor to use
+> > > > some memories of xhci. Especially it's useful for USB Audio scenario.
+> > > > Audio stream would get shortcut because Co-processor directly write/read
+> > > > data in xhci memories. It could get speed-up using faster memory like SRAM.
+> > > > That's why this gives vendors flexibilty of memory management.
+> > > > Several pathches have been merged in AOSP kernel(android12-5.10) and I put
+> > > > together and split into 3 patches. Plus let me add user(xhci-exynos)
+> > > > module to see how user could use it.
+> > > > 
+> > > > To sum up, it's for providing xhci memories to Co-Processor.
+> > > > It would cover DCBAA, Device Context, Transfer Ring, Event Ring, ERST.
+> > > > It needs xhci hooks and to export some xhci symbols.
+> > > > 
+> > > > Changes in v2 :
+> > > > - Fix commit message by adding Signed-off-by in each patch.
+> > > > - Fix conflict on latest.
+> > > > 
+> > > > Changes in v3 :
+> > > > - Remove export symbols and xhci hooks which xhci-exynos don't need.
+> > > > - Modify commit message to clarify why it needs to export symbols.
+> > > > - Check compiling of xhci-exynos.
+> > > 
+> > > As I asked for in the previous submission, you MUST have a user for
+> > > these hooks, otherwise we can not accept them (nor would you WANT us to
+> > > accept them).  Please fix that up and add them to the next submission as
+> > > we can not do anything with this one.
+> > > 
+> > > thanks,
+> > > 
+> > > greg k-h
+> > > 
+> > 
+> > Hi greg,
+> > 
+> > I've submitted the user(xhci-exynos) together on the last patch of the patchset.
+> > You can see xhci-exynos uses these hooks and symbols.
+> > 
+> > [PATCH v3 4/4] usb: host: add xhci-exynos driver
 > 
-> ".need_copy = rq_data_dir(req) && info->feature_persistent,"
+> Then this is not "offload" hooks at all.  They are merely "support
+> another xhci platform driver, right?
 
-I would also add:
+Yes, right.
 
-Fixes: c004a6fe0c40 ('block/xen-blkfront: Make it running on 64KB page granularity')
-
-> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
-
-Acked-by: Roger Pau Monné <roger.pau@citrix.com>
-
-Albeit I have one nit since you are already changing the line.
-
-> ---
->  drivers/block/xen-blkfront.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
-> index 03b5fb341e58..dbc32d0a4b1a 100644
-> --- a/drivers/block/xen-blkfront.c
-> +++ b/drivers/block/xen-blkfront.c
-> @@ -576,7 +576,7 @@ struct setup_rw_req {
->  	struct blkif_request *ring_req;
->  	grant_ref_t gref_head;
->  	unsigned int id;
-> -	/* Only used when persistent grant is used and it's a read request */
-> +	/* Only used when persistent grant is used and it's a write request */
+> I see a lot of exports and function hooks added, are they _ALL_ used by
+> the xhci driver?  If so, please reword this series as it is not very
+> obvious at all what you are doing.
 
-While there you might want to adjust the comment to:
+Yes, they are all used by the xhci driver. Is it OK for me to use "xhci-exynos"
+instead of "USB offload" on series like below?
 
-"... persistent grants are used ..."
+[v3, 0/4] add xhci-exynos driver
 
-Thanks, Roger.
+This patchset is for support xhci-exynos driver....
+....
+
+  usb: host: export symbols for xhci-exynos to use xhci hooks
+  usb: host: add xhci hooks for xhci-exynos
+  usb: host: add some to xhci overrides for xhci-exynos
+  usb: host: add xhci-exynos driver
+
+Best Regards,
+Jung Daehwan
+
+> 
+> thanks,
+> 
+> greg k-h
+> 
+
+------2fH_v7u-qooQo7zMtxxTw1wUndVpTJhY--Wv6pszNQmaZVXq=_225eb3_
+Content-Type: text/plain; charset="utf-8"
+
+
+------2fH_v7u-qooQo7zMtxxTw1wUndVpTJhY--Wv6pszNQmaZVXq=_225eb3_--

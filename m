@@ -2,129 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E908F4E1F13
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C85B4E1F16
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344210AbiCUChJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 22:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
+        id S1344216AbiCUCk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 22:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238487AbiCUChH (ORCPT
+        with ESMTP id S240839AbiCUCk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 22:37:07 -0400
-Received: from mg.sunplus.com (unknown [113.196.136.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAB6A4C7A6;
-        Sun, 20 Mar 2022 19:35:40 -0700 (PDT)
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.202
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(10880:0:AUTH_RELAY)
-        (envelope-from <tony.huang@sunplus.com>); Mon, 21 Mar 2022 10:35:52 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Mon, 21 Mar 2022 10:35:46 +0800
-Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
- sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Mon, 21 Mar 2022 10:35:46 +0800
-From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Tony Huang <tonyhuang.sunplus@gmail.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "lhjeff911@gmail.com" <lhjeff911@gmail.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
-CC:     =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: RE: [PATCH v4 1/2] dt-binding: mmc: Add mmc yaml file for Sunplus
- SP7021
-Thread-Topic: [PATCH v4 1/2] dt-binding: mmc: Add mmc yaml file for Sunplus
- SP7021
-Thread-Index: AQHYOzO5KyAdMjgPQEaJFU8W2wW2NazHonKAgAF9QKA=
-Date:   Mon, 21 Mar 2022 02:35:46 +0000
-Message-ID: <cab5bdafed86451a99cd59da3b1c5a38@sphcmbx02.sunplus.com.tw>
-References: <cover.1647652688.git.tonyhuang.sunplus@gmail.com>
- <27dba330ec0c1cd7edbcec53083f78169713a42e.1647652688.git.tonyhuang.sunplus@gmail.com>
- <c78aa9fa-8001-2c48-7a25-1f44f9952c9b@kernel.org>
-In-Reply-To: <c78aa9fa-8001-2c48-7a25-1f44f9952c9b@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.54]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sun, 20 Mar 2022 22:40:26 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15C017AA3
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:39:01 -0700 (PDT)
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 277983F200
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:38:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647830334;
+        bh=iHeI4Li4UlP93b9NJtNDxcZHhK1vAIlk+zBGGpgqVZ0=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=t1xI6W8KL5Vxfi9VtzTcRJg0Ufi2yzqervORRIqYwXypA5HBp05IjNvYinf4d+du7
+         VmrGkOTd5MYMtqITAdx5u6vrUFm1A6fuii63oJ/J9uiuZKnYMqvPm4J7J+fMVvbfm5
+         TwIBceku8rCded4V+o3hfOVFMd0LTFXJCc+ZN0CC7XJ4uHTuZH+oRtDK8fe+U9mmQz
+         4LoGyZsvLTJfTvXLlZ1fwAcu2+yc22rqC6JvTHYSEUgpdzofdqa5fItUEVkrMmp76B
+         8L2a7uT3uhlubpoklhd7FWOd6hO3eXIPYP8DfTAgSlLQUKqsIpY/Kcfb5LotflWGwk
+         AG5/epvYiscjA==
+Received: by mail-oi1-f198.google.com with SMTP id s6-20020acaa906000000b002ef2bd1c699so4461402oie.2
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:38:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iHeI4Li4UlP93b9NJtNDxcZHhK1vAIlk+zBGGpgqVZ0=;
+        b=xwkzapPcsd/K0h+kV6FjOC6p7Okx6MALT8pSqiSdEA07J7S/Yakp83UBj4eU5zZg/I
+         4MJBa3sQMYJMMDwz1FFRzswvf4d4gN5SoMpMEKcLEIhbGHIEuAEmIAz6hmeOnbD5HM7O
+         1HcMvYhfjEMRQcRY+7ZHn9YxQy0MIUF0rxK4o6AfvxaB43QtEf3lMVilt3IVhjqfDTno
+         Kpq/XuWLRjANrrgHrqfP+XfWXi494bJ2d9a6L9TlHqA+zfW7qLSY2mPsR9UcJz4P5J4O
+         gBjYm+qZ2YNejjlWOisZLIXneV/R3hzgMDBXEMlCvYEcRIxW2jShZmk4WplMoGqoSSG1
+         ypGg==
+X-Gm-Message-State: AOAM530tgFvBGuX03s3iz31NzQe2sg9sTGMTvHYk1tBlW4z/jzPBtEH3
+        GZWmW84gAjPLJ2/IxgTJj5V49OO3kx7N0CyXLfF3i1OUkoSdMCQjFxsLsMj0TY6NUWk5OjxbX6t
+        bMUaqLH6KKhZuW2aDW9IYyPybqOVLRT0uklgmk2uYR8N5tTdKx0G7iAKeYw==
+X-Received: by 2002:a05:6808:1a97:b0:2ec:a246:ad01 with SMTP id bm23-20020a0568081a9700b002eca246ad01mr12887370oib.54.1647830330727;
+        Sun, 20 Mar 2022 19:38:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyjDOKXSViaQfhEChkSFuWe9zr8ywxKQSBCSo0Be72wPBCEEfWDVVovfp/J+gN4VMKEQCAGYLCs/0mFC/qTjVg=
+X-Received: by 2002:a05:6808:1a97:b0:2ec:a246:ad01 with SMTP id
+ bm23-20020a0568081a9700b002eca246ad01mr12887355oib.54.1647830330410; Sun, 20
+ Mar 2022 19:38:50 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220127025418.1989642-1-kai.heng.feng@canonical.com> <427f19c6-32f0-684e-5fdd-2e5ed192b71d@linux.intel.com>
+In-Reply-To: <427f19c6-32f0-684e-5fdd-2e5ed192b71d@linux.intel.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 21 Mar 2022 10:38:39 +0800
+Message-ID: <CAAd53p6ZrFNhtKk=9wz8SF68jBuNajKgOzZFgHgKgd57Zp3pHg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] PCI/AER: Disable AER service when link is in L2/L3
+ ready, L2 and L3 state
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
+        koba.ko@canonical.com, Russell Currey <ruscur@russell.cc>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Lalithambika Krishnakumar <lalithambika.krishnakumar@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>, linuxppc-dev@lists.ozlabs.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBLcnp5c3p0b2Y6DQoNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
-ZGluZ3MvbW1jL3N1bnBsdXMsbW1jLnlhbWwNCj4gPiBAQCAtMCwwICsxLDc5IEBADQo+ID4gKyMg
-U1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9ubHkgT1IgQlNELTItQ2xhdXNlKSAj
-IENvcHlyaWdodA0KPiA+ICsoQykgU3VucGx1cyBMdGQuIENvLiAyMDIxICVZQU1MIDEuMg0KPiA+
-ICstLS0NCj4gPiArJGlkOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9tbWMvc3VucGx1
-cyxtbWMueWFtbCMNCj4gPiArJHNjaGVtYTogaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2No
-ZW1hcy9jb3JlLnlhbWwjDQo+ID4gKw0KPiA+ICt0aXRsZTogc3VucGx1cyBNTUMgY29udHJvbGxl
-cg0KPiANCj4gcy9zdW5wbHVzL1N1bnBsdXMvDQo+IA0KDQpCZWxvdyBpcyBteSBtb2RpZmljYXRp
-b246DQp0aXRsZTogU3VucGx1cyBNTUMgQ29udHJvbGxlcg0KDQo+ID4gKw0KPiA+ICthbGxPZjoN
-Cj4gPiArICAtICRyZWY6ICJtbWMtY29udHJvbGxlci55YW1sIg0KPiANCj4gYWxsT2YgYmVsb3cg
-bWFpbnRhaW5lcnMsDQo+IA0KDQpJIHdpbGwgbW9kaWZ5IGl0Lg0KDQo+ID4gKw0KPiA+ICttYWlu
-dGFpbmVyczoNCj4gPiArICAtIFRvbnkgSHVhbmcgPHRvbnlodWFuZy5zdW5wbHVzQGdtYWlsLmNv
-bT4NCj4gPiArICAtIExpLWhhbyBLdW8gPGxoamVmZjkxMUBnbWFpbC5jb20+DQo+ID4gKw0KPiA+
-ICtwcm9wZXJ0aWVzOg0KPiA+ICsgIGNvbXBhdGlibGU6DQo+ID4gKyAgICBlbnVtOg0KPiA+ICsg
-ICAgICAtIHN1bnBsdXMsbW1jLXYxDQo+ID4gKyAgICAgIC0gc3VucGx1cyxtbWMtdjINCj4gDQo+
-IEhvdyBkaWQgdGhpcyBoYXBwZW4/IFZlcnNpb25zIG9mIGJsb2NrcyBhcmUgdXN1YWxseSBkaXNj
-b3VyYWdlZCwgdW5sZXNzIHlvdQ0KPiBoYXZlIGNsZWFyIHNwZWNpZmljYXRpb24sLiBUaGUgcHJl
-dmlvdXMgZGlzY3Vzc2lvbiBkaWQgbm90IGVuZCB3aXRoICJhZGQgdjEgYW5kDQo+IHYyIi4NCj4g
-DQo+IERvIHlvdSBoYXZlIGNsZWFyIGRvY3VtZW50YXRpb24vc3BlY2lmaWNhdGlvbiBvZiB0aGVz
-ZSBibG9ja3M/IElmIG5vLCBwbGVhc2UNCj4gdXNlIFNvQyBjb21wYXRpYmxlcy4NCj4gDQoNCnYx
-OiBzdXBwb3J0IFNESU8gMi4wCQkJCQkJCQ0KdjI6IHN1cHBvcnQgZU1NQyA0LjQxCQkJCQkJCQ0K
-VGhlIHJlZ2lzdGVyIGJhc2UgYWRkcmVzcyBhbmQgb2Zmc2V0IGFkZHJlc3Mgb2YgZW1tYyBhbmQg
-c2QgY2FyZCBhcmUgZGlmZmVyZW50LgkJCQkJCQkNCmVNTUMgYW5kIHNkY2FyZCBhcmUgaW5kaXZp
-ZHVhbCBoYXJkd2FyZSBzZXR0aW5ncwkJCQkJCQkNCldlIG5lZWQgdmVyc2lvbiB0byBkaXN0aW5n
-dWlzaCBkaWZmZXJlbnQgc3BlZWRzCQkJCQkJCQ0KDQo+ID4gKw0KPiA+ICsgIHJlZzoNCj4gPiAr
-ICAgIG1heEl0ZW1zOiAxDQo+ID4gKw0KPiA+ICsgIGludGVycnVwdHM6DQo+ID4gKyAgICBtYXhJ
-dGVtczogMQ0KPiA+ICsNCj4gPiArICBjbG9ja3M6DQo+ID4gKyAgICBtaW5JdGVtczogMQ0KPiAN
-Cj4gbWF4SXRlbXMNCj4gDQoNCkkgd2lsbCBtb2RpZnkgaXQuDQoNCj4gPiArDQo+ID4gKyAgcmVz
-ZXRzOg0KPiA+ICsgICAgbWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgbWF4LWZyZXF1ZW5jeTog
-dHJ1ZQ0KPiA+ICsNCj4gPiArcmVxdWlyZWQ6DQo+ID4gKyAgLSBjb21wYXRpYmxlDQo+ID4gKyAg
-LSByZWcNCj4gPiArICAtIGludGVycnVwdHMNCj4gPiArICAtIGNsb2Nrcw0KPiA+ICsgIC0gcmVz
-ZXRzDQo+ID4gKw0KPiA+ICt1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZhbHNlDQo+ID4gKw0KPiA+
-ICtleGFtcGxlczoNCj4gPiArICAtIHwNCj4gPiArICAgICNpbmNsdWRlIDxkdC1iaW5kaW5ncy9p
-bnRlcnJ1cHQtY29udHJvbGxlci9pcnEuaD4NCj4gPiArICAgICNpbmNsdWRlIDxkdC1iaW5kaW5n
-cy9pbnRlcnJ1cHQtY29udHJvbGxlci9hcm0tZ2ljLmg+DQo+ID4gKyAgICBtbWMwOiBtbWNAOWMw
-MDNiMDAgew0KPiA+ICsgICAgICAgIGNvbXBhdGlibGUgPSAic3VucGx1cyxtbWMtdjIiOw0KPiA+
-ICsgICAgICAgIHJlZyA9IDwweDljMDAzYjAwIDB4MTgwPjsNCj4gPiArICAgICAgICBpbnRlcnJ1
-cHRzID0gPDIwIElSUV9UWVBFX0xFVkVMX0hJR0g+Ow0KPiA+ICsgICAgICAgIGNsb2NrcyA9IDwm
-Y2xrYyAweDRlPjsNCj4gPiArICAgICAgICByZXNldHMgPSA8JnJzdGMgMHgzZT47DQo+ID4gKyAg
-ICAgICAgYnVzLXdpZHRoID0gPDg+Ow0KPiA+ICsgICAgICAgIG1heC1mcmVxdWVuY3kgPSA8NTIw
-MDAwMDA+Ow0KPiA+ICsgICAgICAgIG5vbi1yZW1vdmFibGU7DQo+ID4gKyAgICAgICAgZGlzYWJs
-ZS13cDsNCj4gPiArICAgICAgICBjYXAtbW1jLWhpZ2hzcGVlZDsNCj4gPiArICAgICAgICBtbWMt
-ZGRyLTNfM3Y7DQo+ID4gKyAgICAgICAgbm8tc2RpbzsNCj4gPiArICAgICAgICBuby1zZDsNCj4g
-PiArICAgIH07DQo+ID4gKw0KPiA+ICsgICAgbW1jMTogbW1jQDljMDAzZTgwIHsNCj4gPiArICAg
-ICAgIGNvbXBhdGlibGUgPSAic3VucGx1cyxtbWMtdjEiOw0KPiA+ICsgICAgICAgcmVnID0gPDB4
-OWMwMDNlODAgMHgyODA+Ow0KPiA+ICsgICAgICAgaW50ZXJydXB0cyA9IDwyMSBJUlFfVFlQRV9M
-RVZFTF9ISUdIPjsNCj4gPiArICAgICAgIGNsb2NrcyA9IDwmY2xrYyAweDRmPjsNCj4gPiArICAg
-ICAgIHJlc2V0cyA9IDwmcnN0YyAweDNmPjsNCj4gPiArICAgICAgIHBpbmN0cmwtbmFtZXMgPSAi
-ZGVmYXVsdCI7DQo+ID4gKyAgICAgICBwaW5jdHJsLTAgPSA8Jm1tYzFfbXV4ICZtbWMxX211eF9j
-ZD47DQo+ID4gKyAgICAgICBtYXgtZnJlcXVlbmN5ID0gPDUyMDAwMDAwPjsNCj4gPiArICAgICAg
-IGRpc2FibGUtd3A7DQo+ID4gKyAgICAgICBjYXAtc2QtaGlnaHNwZWVkOw0KPiA+ICsgICAgICAg
-bm8tc2RpbzsNCj4gPiArICAgICAgIG5vLW1tYzsNCj4gPiArICAgIH07DQo+ID4gZGlmZiAtLWdp
-dCBhL01BSU5UQUlORVJTIGIvTUFJTlRBSU5FUlMgaW5kZXggZmIxOGNlNy4uMmQ5MTQzMSAxMDA2
-NDQNCj4gPiAtLS0gYS9NQUlOVEFJTkVSUw0KPiA+ICsrKyBiL01BSU5UQUlORVJTDQo+ID4gQEAg
-LTE4MjQyLDYgKzE4MjQyLDEyIEBAIEw6CW5ldGRldkB2Z2VyLmtlcm5lbC5vcmcNCj4gPiAgUzoJ
-TWFpbnRhaW5lZA0KPiA+ICBGOglkcml2ZXJzL25ldC9ldGhlcm5ldC9kbGluay9zdW5kYW5jZS5j
-DQo+ID4NCj4gPiArU1VOUExVUyBNTUMgRFJJVkVSDQo+ID4gK006CVRvbnkgSHVhbmcgPHRvbnlo
-dWFuZy5zdW5wbHVzQGdtYWlsLmNvbT4NCj4gPiArTTogTGktaGFvIEt1byA8bGhqZWZmOTExQGdt
-YWlsLmNvbT4NCj4gDQo+IFdyb25nIGluZGVudGF0aW9uLg0KDQpJIHdpbGwgbW9kaWZ5IGl0Lg0K
-DQo+IA0KPiA+ICtTOglNYWludGFpbmVkDQo+ID4gK0Y6CURvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy9tbWMvc3VucGx1LG1tYy55YW1sDQo+IA0KPiBXcm9uZyBmaWxlIG5hbWUuDQo+
-IA0KDQpJIHdpbGwgbW9kaWZ5IGl0Lg0KDQo=
+On Sun, Mar 20, 2022 at 4:38 AM Sathyanarayanan Kuppuswamy
+<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+>
+>
+>
+> On 1/26/22 6:54 PM, Kai-Heng Feng wrote:
+> > Commit 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in
+> > hint") enables ACS, and some platforms lose its NVMe after resume from
+>
+> Why enabling ACS makes platform lose NVMe? Can you add more details
+> about the problem?
+
+I don't have a hardware analyzer, so the only detail I can provide is
+the symptom.
+I believe the affected system was sent Intel, and there wasn't any
+feedback since then.
+
+>
+> > S3:
+> > [   50.947816] pcieport 0000:00:1b.0: DPC: containment event, status:0x1f01 source:0x0000
+> > [   50.947817] pcieport 0000:00:1b.0: DPC: unmasked uncorrectable error detected
+> > [   50.947829] pcieport 0000:00:1b.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Receiver ID)
+> > [   50.947830] pcieport 0000:00:1b.0:   device [8086:06ac] error status/mask=00200000/00010000
+> > [   50.947831] pcieport 0000:00:1b.0:    [21] ACSViol                (First)
+> > [   50.947841] pcieport 0000:00:1b.0: AER: broadcast error_detected message
+> > [   50.947843] nvme nvme0: frozen state error detected, reset controller
+> >
+> > It happens right after ACS gets enabled during resume.
+> >
+> > There's another case, when Thunderbolt reaches D3cold:
+> > [   30.100211] pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
+> > [   30.100251] pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> > [   30.100256] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
+> > [   30.100262] pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
+> > [   30.100267] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
+> > [   30.100372] thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
+>
+> no callback message means one or more devices in the given port does not
+> support error handler. How is this related to ACS?
+
+This case is about D3cold, not related to ACS.
+And no error_detected is just part of the message. The whole AER
+message is more important.
+
+Kai-Heng
+
+>
+> > [   30.100401] xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
+> > [   30.100427] pcieport 0000:00:1d.0: AER: device recovery failed
+> >
+> > So disable AER service to avoid the noises from turning power rails
+> > on/off when the device is in low power states (D3hot and D3cold), as
+> > PCIe spec "5.2 Link State Power Management" states that TLP and DLLP
+> > transmission is disabled for a Link in L2/L3 Ready (D3hot), L2 (D3cold
+> > with aux power) and L3 (D3cold).
+> >
+> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=209149
+> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215453
+> > Fixes: 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in hint")
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> > v2:
+> >   - Wording change.
+> >
+> >   drivers/pci/pcie/aer.c | 31 +++++++++++++++++++++++++------
+> >   1 file changed, 25 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> > index 9fa1f97e5b270..e4e9d4a3098d7 100644
+> > --- a/drivers/pci/pcie/aer.c
+> > +++ b/drivers/pci/pcie/aer.c
+> > @@ -1367,6 +1367,22 @@ static int aer_probe(struct pcie_device *dev)
+> >       return 0;
+> >   }
+> >
+> > +static int aer_suspend(struct pcie_device *dev)
+> > +{
+> > +     struct aer_rpc *rpc = get_service_data(dev);
+> > +
+> > +     aer_disable_rootport(rpc);
+> > +     return 0;
+> > +}
+> > +
+> > +static int aer_resume(struct pcie_device *dev)
+> > +{
+> > +     struct aer_rpc *rpc = get_service_data(dev);
+> > +
+> > +     aer_enable_rootport(rpc);
+> > +     return 0;
+> > +}
+> > +
+> >   /**
+> >    * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
+> >    * @dev: pointer to Root Port, RCEC, or RCiEP
+> > @@ -1433,12 +1449,15 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
+> >   }
+> >
+> >   static struct pcie_port_service_driver aerdriver = {
+> > -     .name           = "aer",
+> > -     .port_type      = PCIE_ANY_PORT,
+> > -     .service        = PCIE_PORT_SERVICE_AER,
+> > -
+> > -     .probe          = aer_probe,
+> > -     .remove         = aer_remove,
+> > +     .name                   = "aer",
+> > +     .port_type              = PCIE_ANY_PORT,
+> > +     .service                = PCIE_PORT_SERVICE_AER,
+> > +     .probe                  = aer_probe,
+> > +     .suspend                = aer_suspend,
+> > +     .resume                 = aer_resume,
+> > +     .runtime_suspend        = aer_suspend,
+> > +     .runtime_resume         = aer_resume,
+> > +     .remove                 = aer_remove,
+> >   };
+> >
+> >   /**
+>
+> --
+> Sathyanarayanan Kuppuswamy
+> Linux Kernel Developer

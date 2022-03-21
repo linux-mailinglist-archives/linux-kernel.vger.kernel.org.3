@@ -2,100 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164C04E351D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F1F4E3518
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbiCUX71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
+        id S233657AbiCUX6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbiCUX7W (ORCPT
+        with ESMTP id S233593AbiCUX5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:59:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7338628D295;
-        Mon, 21 Mar 2022 16:56:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD7B0B81ACE;
-        Mon, 21 Mar 2022 23:53:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B99CC340E8;
-        Mon, 21 Mar 2022 23:53:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647906838;
-        bh=cj/bg1sLNNaJqVbORGbd8V+TtcWsAd5DpPi34vxVBaI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jG6Iugnvq9+d6FpMQh4OXsHDYag7OBVdmKGbPXMugx1nLVkFXiyjGHP4SzRll0IzV
-         WZEf51AichSBMW4+Gdh9AvgLqBUX5O61NRj0ceCc8GRODHAx7Z2JTKCIt4zzNoW+Z6
-         GxpRtL2Ay9j3e1spyAd5WEHRi/b1d4+JCWba3RfAK7kICHe6dpDnt1K5hno/9cklzi
-         +nXWKcR5tToM7qwPcll7bLb2rs8LQfB/qLI1eEppJGbz4l2SUSN+RBXgKB6NBILqef
-         /Gypl4G3TQk+syuMICPME9IbehTQ5ZZjO4pagqsRxoV+eadF95vyuRMfOsC32ngFw1
-         yroKlFAIAqzvQ==
-Date:   Tue, 22 Mar 2022 01:53:09 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        David Howells <dhowells@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v1 1/1] certs: Explain the rational to call panic()
-Message-ID: <YjkP5d6e6SU8BPtO@iki.fi>
-References: <20220321174548.510516-1-mic@digikod.net>
- <20220321174548.510516-2-mic@digikod.net>
- <CAHC9VhR+Ss5VAUHLutTvyS8g+agZy7d0YGcu_9dV1LBx_8ifNQ@mail.gmail.com>
+        Mon, 21 Mar 2022 19:57:52 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07A1284E79
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:55:02 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id j15so18893360eje.9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:55:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qiaO27WzdyEkhPCgtVcKJYNpZr9WKp2+zwnsf/1VvSc=;
+        b=Ri8yuR7/Vfc3fPL9gQLx7nlC2w5WarFCPritcrnsHpSsxuLwI5G3Voo8JeXcgyszLb
+         +2uoYc1aMEeZckMfuvJ2tS1RQ4sV4x2bEw3/t6bZI8mymUrBIyCvE8fdVOZNpVekttmd
+         gL3/aF9rUmS8p0UDTQfskhyx+I2egHowIc+sQ/N03tFWDWkkas9yz9J6z6/pRbfJotOJ
+         Hya7yMo0Sw59opqFkSYTZhc7F9NiPgJ8uwx1p8C0nJ00wLf8jKvLHqjCFphRAZgfpYi+
+         VVSQCs5iHmIrTMa+g/VlfDJHcUV27McnejGmfZoaaKiH2IvdAJP5kg+Lda21FYCK3UME
+         MrGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qiaO27WzdyEkhPCgtVcKJYNpZr9WKp2+zwnsf/1VvSc=;
+        b=MILDXu1sR+DCW6Y7+dUyx/9El5gdp684njVqA1y+TyZaxnxwBDUlwjlDpOrh2GZUoF
+         vhTeF9XnhOzMK913TSodhnhMAeskoacCCCH0Axm+Vz7pwR9017eBKIIpUkyjCboL6B6a
+         NlWAeuZLJERpiW+ingLTt6RW4MUpMwZTe833KJsR+swoe5YWYIkw5ZO9x/lllClHQezi
+         nlFkn4OY8JjG32zAy05G+wbTHB+z94XWAptv+MwMcRnv+SO60Z1MMBnrsg1WJ2q5JuE5
+         dB7Ot0ye4djWX8hiykYBaix7WIbD+MJMr2NI1mUfJWFrlakCGVWwvy4H3hk4MuzPNwmp
+         7JDw==
+X-Gm-Message-State: AOAM531vIaAP/06E7krYQIAfOGn1UMFQxMS51DCxr9PMKF7cjxoNw4dO
+        Q0g6czUe+maKgGS0iuI10GU3I3FCMzma3NrLqAerdA==
+X-Google-Smtp-Source: ABdhPJwljarBa64DW7LUA/1wDxvFxLHgPtNYizJ4BJSCb3j/73bGTaegZtVwv4hXKy5Ey64Opp4zZ4UPfFj0Fl96E/A=
+X-Received: by 2002:a17:907:3eaa:b0:6df:b058:96a with SMTP id
+ hs42-20020a1709073eaa00b006dfb058096amr18101556ejc.368.1647906877844; Mon, 21
+ Mar 2022 16:54:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhR+Ss5VAUHLutTvyS8g+agZy7d0YGcu_9dV1LBx_8ifNQ@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220309165222.2843651-1-tjmercier@google.com>
+ <20220309165222.2843651-6-tjmercier@google.com> <20220321174530.GB9640@blackbody.suse.cz>
+In-Reply-To: <20220321174530.GB9640@blackbody.suse.cz>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Mon, 21 Mar 2022 16:54:26 -0700
+Message-ID: <CABdmKX3+mTjxWzgrv44SKWT7mdGnQKMrv6c26d=iWdNPG7f1VQ@mail.gmail.com>
+Subject: Re: [RFC v3 5/8] dmabuf: Add gpu cgroup charge transfer function
+To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 02:23:54PM -0400, Paul Moore wrote:
-> On Mon, Mar 21, 2022 at 1:45 PM Mickaël Salaün <mic@digikod.net> wrote:
-> >
-> > From: Mickaël Salaün <mic@linux.microsoft.com>
-> >
-> > The blacklist_init() function calls panic() for memory allocation
-> > errors.  This change documents the reason why we don't return -ENODEV.
-> >
-> > Suggested-by: Paul Moore <paul@paul-moore.com> [1]
-> > Requested-by: Jarkko Sakkinen <jarkko@kernel.org> [1]
-> > Link: https://lore.kernel.org/r/YjeW2r6Wv55Du0bJ@iki.fi [1]
-> > Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-> > Link: https://lore.kernel.org/r/20220321174548.510516-2-mic@digikod.net
-> > ---
-> >  certs/blacklist.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> 
-> I would suggest changing the second sentence as shown below, but
-> otherwise it looks good to me.
-> 
-> Reviewed-by: Paul Moore <paul@paul-moore.com>
+On Mon, Mar 21, 2022 at 10:45 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrot=
+e:
+>
+> Hello.
+>
+> On Wed, Mar 09, 2022 at 04:52:15PM +0000, "T.J. Mercier" <tjmercier@googl=
+e.com> wrote:
+> > +int dma_buf_charge_transfer(struct dma_buf *dmabuf, struct gpucg *gpuc=
+g)
+> > +{
+> > +#ifdef CONFIG_CGROUP_GPU
+> > +     struct gpucg *current_gpucg;
+> > +     int ret =3D 0;
+> > +
+> > +     /*
+> > +      * Verify that the cgroup of the process requesting the transfer =
+is the
+> > +      * same as the one the buffer is currently charged to.
+> > +      */
+> > +     current_gpucg =3D gpucg_get(current);
+> > +     mutex_lock(&dmabuf->lock);
+> > +     if (current_gpucg !=3D dmabuf->gpucg) {
+> > +             ret =3D -EPERM;
+> > +             goto err;
+> > +     }
+>
+> Add a shortcut for gpucg =3D=3D current_gpucg?
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Good idea, thank you!
 
-Mickaël, I think since your patch set was not huge in the first place, I'm
-considering making it part of rc2 pull request while I normally try to
-avoid any features after rc1. It's anyway throughly tested, and generally
-has been around for a *long time*. I've even tested it myself a few times.
+>
+> > +
+> > +     ret =3D gpucg_try_charge(gpucg, dmabuf->gpucg_dev, dmabuf->size);
+> > +     if (ret)
+> > +             goto err;
+> > +
+> > +     dmabuf->gpucg =3D gpucg;
+> > +
+> > +     /* uncharge the buffer from the cgroup it's currently charged to.=
+ */
+> > +     gpucg_uncharge(current_gpucg, dmabuf->gpucg_dev, dmabuf->size);
+>
+> I think gpucg_* API would need to cater for such transfers too since
+> possibly transitional breach of a limit during the transfer may
+> unnecessarily fail the operation.
 
-Just trying to be responsible as a maintainer and if something does not
-feel right, I don't  try to pretend that "I get it", if you know what 
-I mean. This fully clarifies "not getting it" part :-)
+Since the charge is duplicated in two cgroups for a short period
+before it is uncharged from the source cgroup I guess the situation
+you're thinking about is a global (or common ancestor) limit? I can
+see how that would be a problem for transfers done this way and an
+alternative would be to swap the order of the charge operations: first
+uncharge, then try_charge. To be certain the uncharge is reversible if
+the try_charge fails, I think I'd need either a mutex used at all
+gpucg_*charge call sites or access to the gpucg_mutex, which implies
+adding transfer support to gpu.c as part of the gpucg_* API itself and
+calling it here. Am I following correctly here?
+
+This series doesn't actually add limit support just accounting, but
+I'd like to get it right here.
+
+>
+> My 0.02=E2=82=AC,
+> Michal
 
 Thanks!
-
-BR, Jarkko

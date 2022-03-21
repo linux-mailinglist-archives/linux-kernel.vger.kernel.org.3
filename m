@@ -2,118 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17CE4E1F3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 04:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC0E4E1F3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 04:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344280AbiCUDE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 23:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
+        id S1344287AbiCUDFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 23:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236347AbiCUDE5 (ORCPT
+        with ESMTP id S236347AbiCUDFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 23:04:57 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C8753B66;
-        Sun, 20 Mar 2022 20:03:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KMKFD037hz4xXV;
-        Mon, 21 Mar 2022 14:03:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647831808;
-        bh=br0z9NnXGCy1ONvQ0NncqSLcsoe37vqwTOZ0/CseSWY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aPEBavwX5zap3rg8cwb5bH4sOruoMRdfuHZ9XYnZLJSJzbMUgGg+oj5JqmQhOHT9M
-         sSUkNXTt6ycWH2RfwxQjpOjpoBPGgJIoN2qF7vOhK0KZiH+1OpGBu1JJeCpIndgxUD
-         RR0d38kZco82NFQGMp/R7QJdXMEPFLR7J2jbDiz9ksam9QYH4TOYr4SUF2V4d0HOeG
-         ZFPUYck/2UW2F6CKUcB2ZfKSEWRMqNajM/psPxZia5hzV8+EoyPy0cUM5Y1YwE8mD6
-         ++CKfgfDSKUwGGWqIaPFXQ1J/09jLH1RRL2aYWmaOIiagQWgi8Z93OTa6osVhMVzm3
-         uuq8vDL8VObIQ==
-Date:   Mon, 21 Mar 2022 14:03:27 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the tip tree
-Message-ID: <20220321140327.777f9554@canb.auug.org.au>
+        Sun, 20 Mar 2022 23:05:43 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D188BE11
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 20:04:18 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 21 Mar
+ 2022 11:04:17 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Mon, 21 Mar
+ 2022 11:04:15 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+        <jirislaby@kernel.org>, <dsterba@suse.com>, <elder@linaro.org>,
+        <jcmvbkbc@gmail.com>
+CC:     <johan@kernel.org>, <linux-kernel@vger.kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>
+Subject: [PATCH] try: synclink_cs: Use bitwise instead of arithmetic operator for flags
+Date:   Mon, 21 Mar 2022 11:04:12 +0800
+Message-ID: <1647831852-28973-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cppcYrp6myv2JRW1dwxasD2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/cppcYrp6myv2JRW1dwxasD2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+This silences the following coccinelle warning:
+drivers/s390/char/tape_34xx.c:360:38-39: WARNING: sum of probable bitmasks, consider |
 
-Hi all,
+we will try to make code cleaner
 
-After merging the tip tree, today's linux-next build (x864 allmodconfig)
-produced these new warnings:
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ drivers/char/pcmcia/synclink_cs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-vmlinux.o: warning: objtool: arch_rethook_prepare()+0x55: relocation to !EN=
-DBR: arch_rethook_trampoline+0x0
-vmlinux.o: warning: objtool: arch_rethook_trampoline_callback()+0x3e: reloc=
-ation to !ENDBR: arch_rethook_trampoline+0x0
-vmlinux.o: warning: objtool: unwind_next_frame()+0x93e: relocation to !ENDB=
-R: arch_rethook_trampoline+0x0
-vmlinux.o: warning: objtool: unwind_next_frame()+0x5f2: relocation to !ENDB=
-R: arch_rethook_trampoline+0x0
-vmlinux.o: warning: objtool: unwind_next_frame()+0x4a7: relocation to !ENDB=
-R: arch_rethook_trampoline+0x0
-vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x81: relocation to =
-!ENDBR: arch_rethook_trampoline+0x0
-vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x90: relocation to =
-!ENDBR: arch_rethook_trampoline+0x0
-vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x8c: relocation =
-to !ENDBR: arch_rethook_trampoline+0x0
-vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x9b: relocation =
-to !ENDBR: arch_rethook_trampoline+0x0
+diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+index 78baba5..e6f2186 100644
+--- a/drivers/char/pcmcia/synclink_cs.c
++++ b/drivers/char/pcmcia/synclink_cs.c
+@@ -922,7 +922,7 @@ static void rx_ready_async(MGSLPC_INFO *info, int tcd)
+ 		// BIT7:parity error
+ 		// BIT6:framing error
+ 
+-		if (status & (BIT7 + BIT6)) {
++		if (status & (BIT7 | BIT6)) {
+ 			if (status & BIT7)
+ 				icount->parity++;
+ 			else
+-- 
+2.7.4
 
-[ Note I was already getting these:
-arch/x86/crypto/chacha-x86_64.o: warning: objtool: chacha_2block_xor_avx512=
-vl() falls through to next function chacha_8block_xor_avx512vl()
-arch/x86/crypto/chacha-x86_64.o: warning: objtool: chacha_4block_xor_avx512=
-vl() falls through to next function chacha_8block_xor_avx512vl()
-arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx() =
-falls through to next function poly1305_blocks_x86_64()
-arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_emit_avx() fa=
-lls through to next function poly1305_emit_x86_64()
-arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx2()=
- falls through to next function poly1305_blocks_x86_64()
-]
-
-I have no idea what has caused this ...
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/cppcYrp6myv2JRW1dwxasD2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI36v8ACgkQAVBC80lX
-0GwhPQf+LHeHHDKPYEGcEn1NY2XYBWdREedwXgRyvX5AGsSIbK7QJc53oA3fR92M
-muMOJtHZG6KqkIsbb/gJkFlwNSv5+IO/DInCcf3K8+Il76o5x9fLaC+YidpMnnFr
-+JJDrl3ZeylYMk2sqT2or9rPfoTnKcB7/83pcjpjVlUosnliDBPmZV5Jp8k11I92
-BvG1CmUyGcKFHHhTqgpXlYBLgt/xKPToaQ/Jo4LAraLXpIwPeFR9eAFFKamFM17z
-d6YgcfBKFrUWKBY/gM8oq5XikPlTsgrVlDdjfR7XxPJ7gjE4CP3vi/S4lsSfCtrR
-GP0OGbAOEM+gOXNrEXJ+8CTPQxU0Ww==
-=HvKn
------END PGP SIGNATURE-----
-
---Sig_/cppcYrp6myv2JRW1dwxasD2--

@@ -2,117 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586774E278D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F804E27A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347872AbiCUNfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
+        id S1347932AbiCUNgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236687AbiCUNez (ORCPT
+        with ESMTP id S1345886AbiCUNgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:34:55 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2051.outbound.protection.outlook.com [40.107.20.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9607F33E88;
-        Mon, 21 Mar 2022 06:33:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mh69Df6ZLE1rBjPoxFK5kh2suLVUUfIFoeXmnHr48/53o6IXT46KojPZb7KSQGV4SNOZyeyCXce8KgX9gnHyAOk+KU90kUrAa3rRYJSrf7OgV9UJwvX03oUYSlOu3g9dwvwJA+iYldvYzNOWLzRbkS5VdF9p6E9PE3MK73SdhxpjOUcLmKsums8gk5zsSZIyV+oJPqrREDays2clbxwQX8633H5Juxtj1imoE6at0oIArlmiiWjy+qwrH2eM3ujO3z15SaWF4QPMW58iAl/Snt90plPG8iLRlH53Us6/PDKVZM7Q2OWR+twmDioVOIqVGAo1aCVqsEcednpw2zmlNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R+pUVmUnDBFDrdPfiXX7u2v/2nQJhINr6rhBDssIs8w=;
- b=NetjdjDcBQZZPIsCS2Ec4fT2laSmyQibSis+vMH5ie8L/lqrYhAkquOLFIOoAAsrCnFVJMleZWMllSVi2sPGJca0EkQTlZnIPtdaLLC6LA6axmJCerEmA4u8t1VoTKVL5Lp94ZijeBvAto9OHuD++V1O2NMeTNEzp9vkFPywFHLegLOfs5l+H/QkRuTuBTT8Cs5xOeFLjIPQrVxaxsP4vZXi70k2iJUyme2cesvI+Oh+YGrmSENvjhgwtXuVb0vKtAKdofe3qFwgOtFxPaDH4+rOEtMYDdQgPraQ1b+nPnbHD6bzerLCr/ICNqXbmgl0Q//0Sd+3WhICRMkenly6dg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R+pUVmUnDBFDrdPfiXX7u2v/2nQJhINr6rhBDssIs8w=;
- b=cAob8GLUR2Ej+ekrxPwoQ18XXpDEHsjEv3/Ed6D9PlRFsvSzGEFGNtOqf/x87bF/NuTlXWDBlhUwn7zMKXH9tMISjaeyoTd3E1/kzeDA1kscfH5e4Hfzsphw9EMkjJ0U1fQjRNW1byyTJdVw5o+CtELKUYXxzYwGikgKb+02zK0=
-Received: from AM9PR04MB8274.eurprd04.prod.outlook.com (2603:10a6:20b:3e8::23)
- by AM0PR04MB5284.eurprd04.prod.outlook.com (2603:10a6:208:cb::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.22; Mon, 21 Mar
- 2022 13:33:24 +0000
-Received: from AM9PR04MB8274.eurprd04.prod.outlook.com
- ([fe80::c121:7f8f:a903:ae7f]) by AM9PR04MB8274.eurprd04.prod.outlook.com
- ([fe80::c121:7f8f:a903:ae7f%5]) with mapi id 15.20.5081.022; Mon, 21 Mar 2022
- 13:33:24 +0000
-From:   Shenwei Wang <shenwei.wang@nxp.com>
-To:     Sherry Sun <sherry.sun@nxp.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        Vabhav Sharma <vabhav.sharma@nxp.com>
-CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH] tty: serial: fsl_lpuart: fix potential bug when using
- both of_alias_get_id and ida_simple_get
-Thread-Topic: [PATCH] tty: serial: fsl_lpuart: fix potential bug when using
- both of_alias_get_id and ida_simple_get
-Thread-Index: AQHYPRZLkioNdXEb806mHueeH0kdlqzJ1Y2Q
-Date:   Mon, 21 Mar 2022 13:33:24 +0000
-Message-ID: <AM9PR04MB8274AA137A140A4B4DFD0EE889169@AM9PR04MB8274.eurprd04.prod.outlook.com>
-References: <20220321112211.8895-1-sherry.sun@nxp.com>
-In-Reply-To: <20220321112211.8895-1-sherry.sun@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 223cb923-9428-4335-8643-08da0b3f5fae
-x-ms-traffictypediagnostic: AM0PR04MB5284:EE_
-x-microsoft-antispam-prvs: <AM0PR04MB52847F8978174796D8CABC9689169@AM0PR04MB5284.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tQocNzTuqJhqnc3o0b4+Odpx8m/6EttDR9r3oNO7i9/eotRfng6ca4AqXHYMu9bthP8UcJcMbxMcuAbqTHaZXRR3gp1sNr9nHeXr1yyVrvOaZdBpGbHOK6EgMbaToYl4RsB2zU0s+DB6kY6KCO9TrtLWOFgQCHlKcFN1kLdPumjc4fFvSAgrweMWqBgL1kXzGFwrrDGx85/ANRSyNZ19H7Q/KRuEOZEj6at1IQggfJ3FkqnwCCSNaV3nj9kyhyguGETNIFM2wMjAKKhKuVADMsf1tBzMUDqbBOOXqcaa8AV0aqjfdHSU0tQOvdm8CO05n9uROzO5o3rBHIlEhrYFeXGAWxtVjSG1USkkkhIbbtOk/GZAUW3gMMcB4b2Ork8rP9W3VY1Ynz5LxEtYt4BNZgDmyLGc14q4EmerqSIpHahajOgkOenMf5mNT42KucJUuIYNFz5ZUBW8xaoPU11HkFgTRfqmc4y5HXY1K9NU9j//RpetSQSoZzVtKXvwDtdpyk56hpJS2GJF3SprtplbgzfOeUVyn4Cagpm7gXlYx+zHxvhoR8hhR7vGUJgyWO+1x9vFjiwAGkA7D022vuYFu06pg6ivpqEAiRzMq8nbiFwP/SO0YS32OTv9LxEUHq4ZHbJ+SPQzoqOdksIrbEeHxsuoJRQJTa8FMBmvrcxV8pV6It2OWDw8cqBSwqZWCEeYWJs9m1emw/sn8kJizTyVJQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8274.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(26005)(66476007)(52536014)(8936002)(316002)(33656002)(38100700002)(44832011)(66446008)(6636002)(64756008)(8676002)(4326008)(66946007)(76116006)(5660300002)(54906003)(55016003)(66556008)(110136005)(2906002)(9686003)(38070700005)(55236004)(71200400001)(86362001)(53546011)(508600001)(122000001)(83380400001)(6506007)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?HR0u1emeasx2+UUoSd27TN8bv+sYKWF+qhTVmNYh9BvVo5TWGWcfCQqneufF?=
- =?us-ascii?Q?d8pZv/K8wOf75ve7QMdfzs73iPDVfuiXznzJe6M1kIk1aTAwAYkAGe5NOW6V?=
- =?us-ascii?Q?f5SJYzFE2z6lBnR/CN9qSgrcSOXioq95bkcy0Vn2oIObmeGZoI4aS7g8lbyU?=
- =?us-ascii?Q?YxKPVcwti+wOIpj47QDK4DvYnQm0hTxsbKgKj/9sLxn47+2fokObR4wvTUvV?=
- =?us-ascii?Q?dJDey+y7kN3BvmHWiuZmsgmeG8oE+b+4H/Sn5G5DaZqQkTEUy3dKO5Cet4BU?=
- =?us-ascii?Q?dlR7mBdroinpeGk2g5kwEq5Da++Iif1Kpu+pzwylD0NxxI1HSoHCbSd2AnPL?=
- =?us-ascii?Q?4RwOOQgjqrX0sVeGLYqxWK9ueWVPW9jHb8llpVz1eCYUhsd+gCf/ZuQnrJsj?=
- =?us-ascii?Q?xZu0VYK2M1TKaZwGL5yqUnsW9ZLy2S1mZbxTOjIZYGaJrIrB+apphDbGyK6B?=
- =?us-ascii?Q?6M45VlbhSk+ZTuN8hAhhYJ1t8Zz/1QnkmN2SZL1ZF8G2NbhgO+drgg6CCAzi?=
- =?us-ascii?Q?w3RCMpCUxydOzy3HYxIv4RpmpgDLUHSIQeTZBQdO/iB2dx8f1kb69thGjdcu?=
- =?us-ascii?Q?cQDFRKXuOVWMbo/ApNH+OHqWp1jXOcxrF6qkc9jC3uVb+INBqR8sgFHZlsKp?=
- =?us-ascii?Q?i+D68Rr50RgmzDAYfNtqwyfVVmL0ubUIdzn7ZPTgwADEkzG3p29ZyOwFee1v?=
- =?us-ascii?Q?ZYPLs7HlYcmb2oDlIDxDRtyqoZIKmZ/OIciaQi+o+cQmpX3yrd+WnmZPj/AW?=
- =?us-ascii?Q?IYk4khlwEdccMhR4+s2oxmKJAGrcp2kamycEHf4x8p6I3nY/2PQUPA16DwtH?=
- =?us-ascii?Q?WQoRyT2v3FZMveRqEzBDhfNxGhQ6Rcn0Z/nyEwD2lMBLwFveRKpyPgtOSnhJ?=
- =?us-ascii?Q?q2iCFSimqQIR+Kho9Eb+dsggDyeVRqcfet3Isq7jn5Vuy7hGfspSi24gXiAK?=
- =?us-ascii?Q?/Siavu2IlZgDup4cIq1+KhBuEGfJMDQYtbqC00m7CFCGGNUf8sCQsv0lIWDx?=
- =?us-ascii?Q?3Qsgoz1xVpcGzJUGU2NGRW2mwvBh3HiTv4O7e8iVOsvqKmet2B2Hnz5bvxft?=
- =?us-ascii?Q?SnZGgJHwLsF2qUjCToupnFKf6TkVajgDgDZZhuTH49+x5kbp0sh0Ec5TZjs9?=
- =?us-ascii?Q?fxXM2QCLS0cSp3b3ywfxEdXkAhY0EQhG0ktGjp7bbU8wTr2WXIlHaq9dmHU9?=
- =?us-ascii?Q?Gg1/Gd/1MNk1anp2jHY3Sy5dGMCFvdF5EtD9ePoDVLJMpFcDK48lwkJL6Ufm?=
- =?us-ascii?Q?w75HikP7rt4lGol+lLaSwSHuSadV5+ItWGlxGg3njuc3g6raIN8IwsfGJWm0?=
- =?us-ascii?Q?sMLWhsFb7RycqQ5rIM/oicMtI2oNqRpicHY5kIXX6t7AvMpLHtMiU19Nuv7q?=
- =?us-ascii?Q?7cRrg2awiPGcbHpBef98JHDWx7x8AiTYiN9u5iSSZdHF9pF0ET6UJ4Br4qK7?=
- =?us-ascii?Q?TRIVKyj2KVm7TZay2S92FkBtSMTUb3xv?=
-Content-Type: text/plain; charset="us-ascii"
+        Mon, 21 Mar 2022 09:36:14 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C12D4131E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:34:38 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a8so29868170ejc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:34:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=N8/CwtqN9kge4KyfLwif97kBN6bn65zBDJpOs3ol2XY=;
+        b=N+pLfUCjyXYZ1IVBqh+pWSg52dJdjSZVdhekNwZCcOUqAU9NgtFBf5EXl0SZkvbqdb
+         FlUfjIh9wfHQdouQEI2M6H7k5E/WNm1LYU9W1vv9rd3W92qZ5tamiKEIeu/HllwodkU2
+         Hrtv5t6626Yp8Yr+xLGvJzDRhhXQuOeWENK0/sFpvPstCFF1uyeAnu6aVTq1KGNOpuhE
+         Hhx9DfoQcqfC5z/IGDVXBuVQ5dYb+l+Ht28GfAd0uNdjGvX40Fy+Eg8lTENCjBexUBUu
+         Xt2+6Bt+pSH7bc1titJe+IQRT9UAdCVNfEeKCSdnRj8XfH0QLgxcRniUBr14HMWCH5ez
+         cU4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=N8/CwtqN9kge4KyfLwif97kBN6bn65zBDJpOs3ol2XY=;
+        b=UhRhZH3a6jmO4XJ0jQ/W5h7g0kS7HpGWRbrOvv04/dpZ9OBlOLJCXxOU65hj/3+Ccf
+         KHiUbRz8pP3b+A/O+aDacH7U3+67t+4ksH6ncmEU3kVmLxMYNeKvKmmaBY0LPPHarSHz
+         GvBxdbgvRXGxCOEyDt8tOrFY03t6t9dOkM0Qg/si/lPKpU5bjdwsZtAcG8468QShdEKV
+         KQYSBm5t2xp/bZ6LY8l1dwrhu5YLyFiGzCD/nZxIGCoK9ZPGOTHZVVeko7wwpNeBnNXF
+         +QA1hXIYJ2JEXxcK2lUE5015LQYn3RwnKdAFn1cxNMhg98e4Q4HosAWpSIpZiLtWgbyu
+         pwTQ==
+X-Gm-Message-State: AOAM533cstOdU1RbjLRKeU93BDeeQfUqVbV8tmW+ZQ43NjnDNm1uldTE
+        7588LKDfCdh82icr7fTDiiM=
+X-Google-Smtp-Source: ABdhPJxBH3xRePg3GN07CJFaSCHvo39gfLOYF2D01sOHTyhiAtmC+JM5coj4Vv88HOlhAoHDarpNdA==
+X-Received: by 2002:a17:907:9623:b0:6de:c0fb:8acc with SMTP id gb35-20020a170907962300b006dec0fb8accmr20266161ejc.380.1647869676508;
+        Mon, 21 Mar 2022 06:34:36 -0700 (PDT)
+Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.gmail.com with ESMTPSA id g13-20020a1709065d0d00b006df7dfa2a51sm6776497ejt.132.2022.03.21.06.34.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 21 Mar 2022 06:34:35 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH] ocfs2: fix check if list iterator did find an element
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <abcbf5d2-c348-7dc0-cfd3-9bcc6431bc64@linux.alibaba.com>
+Date:   Mon, 21 Mar 2022 14:34:34 +0100
+Cc:     Mark Fasheh <mark@fasheh.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ocfs2-devel@oss.oracle.com, Joel Becker <jlbec@evilplan.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        Dan Carpenter <dan.carpenter@oracle.com>
 Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8274.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 223cb923-9428-4335-8643-08da0b3f5fae
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2022 13:33:24.1527
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YZyLlBUiNsP8eoQLryQQR/OhUAs2nkGm77pkOkAEiBm+xzH+IdqK95HIRgSVVBE9Rh2SqnBISB3FaNdJvD7EUQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5284
+Message-Id: <A7AA04AA-6B4C-4211-99A6-0D3C04ED7B26@gmail.com>
+References: <20220319203106.2541700-1-jakobkoschel@gmail.com>
+ <abcbf5d2-c348-7dc0-cfd3-9bcc6431bc64@linux.alibaba.com>
+To:     Joseph Qi <joseph.qi@linux.alibaba.com>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -121,136 +84,104 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+> On 21. Mar 2022, at 02:50, Joseph Qi <joseph.qi@linux.alibaba.com> =
+wrote:
+>=20
+>=20
+>=20
+> On 3/20/22 4:31 AM, Jakob Koschel wrote:
+>> Instead of setting 'res' to NULL, it should only be set if
+>> the suitable element was found.
+>>=20
+>> In the original code 'res' would have been set to an incorrect =
+pointer
+>> if the list is empty.
+>>=20
+> The logic before iteration can make sure track_list won't be empty.
+> Please refer the discussion via:
+> =
+https://lore.kernel.org/ocfs2-devel/bd0ec87e-b490-83dc-2363-5e5342c59fa4@l=
+inux.alibaba.com/T/#m96d4397930201d83d68677c33a9721ae8dbd8f15
 
-> -----Original Message-----
-> From: Sherry Sun <sherry.sun@nxp.com>
-> Sent: Monday, March 21, 2022 6:22 AM
-> To: gregkh@linuxfoundation.org; jirislaby@kernel.org; Vabhav Sharma
-> <vabhav.sharma@nxp.com>
-> Cc: linux-serial@vger.kernel.org; linux-kernel@vger.kernel.org; dl-linux-=
-imx
-> <linux-imx@nxp.com>
-> Subject: [PATCH] tty: serial: fsl_lpuart: fix potential bug when using bo=
-th
-> of_alias_get_id and ida_simple_get
->=20
-> Now fsl_lpuart driver use both of_alias_get_id() and ida_simple_get() in =
-.probe(),
-> which has the potential bug. For example, when remove the
-> lpuart7 alias in dts, of_alias_get_id() will return error, then call
-> ida_simple_get() to allocate the id 0 for lpuart7, this may confilct with=
- the
-> lpuart4 which has alias 0.
+ah yes, I just read up on the discussion there, sorry for having =
+duplicated it
+here.
 
-The behavior of ida_simple_get() is to allocate an unused alias number. Do =
-you see any conflict when you test?
+Was any conclusion reached there which fixes can/should be merged?
 
-Regards,
-Shenwei
+This code obviously can always be safe if the list cannot be empty.
+That's also not necessarily the reason I'm fixing this. The reason is =
+that
+we want to get rid of any use of the list iterator variable after the =
+loop
+('res' in this case). This will allow moving the list iterator variable
+into the scope of the list iterator macro to forbid any invalid use of =
+it
+at compile time. Like this you don't have to rely on assumptions that =
+are
+hard to validate (e.g. that a certain list is never empty).
+
+The patch here is the minimal change to simply do that but looking at
+Dan Carpenter patch there might be more things in this code that can
+be simplified.
+
+[CC'd Dan Carpenter]
+
+See [1] for changes that have already been merged:
+
+[1] =
+https://lore.kernel.org/linux-kernel/20220308171818.384491-3-jakobkoschel@=
+gmail.com/
 
 >=20
->     aliases {
-> 	...
->         serial0 =3D &lpuart4;
->         serial1 =3D &lpuart5;
->         serial2 =3D &lpuart6;
->         serial3 =3D &lpuart7;
->     }
+> Thanks,
+> Joseph
 >=20
-> So remove the ida_simple_get() in .probe(), return an error directly when=
- calling
-> of_alias_get_id() fails, which is consistent with other uart drivers beha=
-vior.
->=20
-> Fixes: 3bc3206e1c0f ("serial: fsl_lpuart: Remove the alias node dependenc=
-e")
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> ---
->  drivers/tty/serial/fsl_lpuart.c | 24 ++++--------------------
->  1 file changed, 4 insertions(+), 20 deletions(-)
->=20
-> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpu=
-art.c index
-> 452a015825ba..40465d23d7ad 100644
-> --- a/drivers/tty/serial/fsl_lpuart.c
-> +++ b/drivers/tty/serial/fsl_lpuart.c
-> @@ -239,8 +239,6 @@
->  /* IMX lpuart has four extra unused regs located at the beginning */
->  #define IMX_REG_OFF	0x10
->=20
-> -static DEFINE_IDA(fsl_lpuart_ida);
-> -
->  enum lpuart_type {
->  	VF610_LPUART,
->  	LS1021A_LPUART,
-> @@ -276,7 +274,6 @@ struct lpuart_port {
->  	int			rx_dma_rng_buf_len;
->  	unsigned int		dma_tx_nents;
->  	wait_queue_head_t	dma_wait;
-> -	bool			id_allocated;
->  };
->=20
->  struct lpuart_soc_data {
-> @@ -2716,23 +2713,18 @@ static int lpuart_probe(struct platform_device
-> *pdev)
->=20
->  	ret =3D of_alias_get_id(np, "serial");
->  	if (ret < 0) {
-> -		ret =3D ida_simple_get(&fsl_lpuart_ida, 0, UART_NR,
-> GFP_KERNEL);
-> -		if (ret < 0) {
-> -			dev_err(&pdev->dev, "port line is full, add device
-> failed\n");
-> -			return ret;
-> -		}
-> -		sport->id_allocated =3D true;
-> +		dev_err(&pdev->dev, "failed to get alias id, errno %d\n", ret);
-> +		return ret;
->  	}
->  	if (ret >=3D ARRAY_SIZE(lpuart_ports)) {
->  		dev_err(&pdev->dev, "serial%d out of range\n", ret);
-> -		ret =3D -EINVAL;
-> -		goto failed_out_of_range;
-> +		return -EINVAL;
->  	}
->  	sport->port.line =3D ret;
->=20
->  	ret =3D lpuart_enable_clks(sport);
->  	if (ret)
-> -		goto failed_clock_enable;
-> +		return ret;
->  	sport->port.uartclk =3D lpuart_get_baud_clk_rate(sport);
->=20
->  	lpuart_ports[sport->port.line] =3D sport; @@ -2781,10 +2773,6 @@ static
-> int lpuart_probe(struct platform_device *pdev)
->  failed_attach_port:
->  failed_irq_request:
->  	lpuart_disable_clks(sport);
-> -failed_clock_enable:
-> -failed_out_of_range:
-> -	if (sport->id_allocated)
-> -		ida_simple_remove(&fsl_lpuart_ida, sport->port.line);
->  	return ret;
->  }
->=20
-> @@ -2794,9 +2782,6 @@ static int lpuart_remove(struct platform_device
-> *pdev)
->=20
->  	uart_remove_one_port(&lpuart_reg, &sport->port);
->=20
-> -	if (sport->id_allocated)
-> -		ida_simple_remove(&fsl_lpuart_ida, sport->port.line);
-> -
->  	lpuart_disable_clks(sport);
->=20
->  	if (sport->dma_tx_chan)
-> @@ -2926,7 +2911,6 @@ static int __init lpuart_serial_init(void)
->=20
->  static void __exit lpuart_serial_exit(void)  {
-> -	ida_destroy(&fsl_lpuart_ida);
->  	platform_driver_unregister(&lpuart_driver);
->  	uart_unregister_driver(&lpuart_reg);
->  }
-> --
-> 2.17.1
+>> In preparation to limit the scope of the list iterator to the list
+>> traversal loop, use a dedicated pointer pointing to the found element =
+[1].
+>>=20
+>> Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
+>> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+>> ---
+>> fs/ocfs2/dlm/dlmdebug.c | 12 ++++++------
+>> 1 file changed, 6 insertions(+), 6 deletions(-)
+>>=20
+>> diff --git a/fs/ocfs2/dlm/dlmdebug.c b/fs/ocfs2/dlm/dlmdebug.c
+>> index d442cf5dda8a..be5e9ed7da8d 100644
+>> --- a/fs/ocfs2/dlm/dlmdebug.c
+>> +++ b/fs/ocfs2/dlm/dlmdebug.c
+>> @@ -541,7 +541,7 @@ static void *lockres_seq_start(struct seq_file =
+*m, loff_t *pos)
+>> 	struct debug_lockres *dl =3D m->private;
+>> 	struct dlm_ctxt *dlm =3D dl->dl_ctxt;
+>> 	struct dlm_lock_resource *oldres =3D dl->dl_res;
+>> -	struct dlm_lock_resource *res =3D NULL;
+>> +	struct dlm_lock_resource *res =3D NULL, *iter;
+>> 	struct list_head *track_list;
+>>=20
+>> 	spin_lock(&dlm->track_lock);
+>> @@ -556,11 +556,11 @@ static void *lockres_seq_start(struct seq_file =
+*m, loff_t *pos)
+>> 		}
+>> 	}
+>>=20
+>> -	list_for_each_entry(res, track_list, tracking) {
+>> -		if (&res->tracking =3D=3D &dlm->tracking_list)
+>> -			res =3D NULL;
+>> -		else
+>> -			dlm_lockres_get(res);
+>> +	list_for_each_entry(iter, track_list, tracking) {
+>> +		if (&iter->tracking !=3D &dlm->tracking_list) {
+>> +			dlm_lockres_get(iter);
+>> +			res =3D iter;
+>> +		}
+>> 		break;
+>> 	}
+>> 	spin_unlock(&dlm->track_lock);
+>>=20
+>> base-commit: 34e047aa16c0123bbae8e2f6df33e5ecc1f56601
+>> --
+>> 2.25.1
 
+	Jakob=

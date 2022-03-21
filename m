@@ -2,94 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D874E3044
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3964E3046
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352327AbiCUSzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 14:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
+        id S1352342AbiCUSzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 14:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239977AbiCUSy7 (ORCPT
+        with ESMTP id S1352332AbiCUSzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 14:54:59 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E401E3CF;
-        Mon, 21 Mar 2022 11:53:32 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id w127so17187695oig.10;
-        Mon, 21 Mar 2022 11:53:32 -0700 (PDT)
+        Mon, 21 Mar 2022 14:55:13 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CA03134E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:53:47 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id e4so14164848oif.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=QsItZtJmJ2CFB/IluEilX1aCyTGMoKcJJhXW/pui3cs=;
+        b=CngDF1MVwEO3lmynF+1vbj0LbrsGQqTNxN+rlV6L4NBGpLQ0vRuKc5YZg8LXrGcxqV
+         yD/qt87ex9YLdjI9rKoby0Fu0l8DXeAv++yvThjoZFlBme/BEicPYWhiq/067rmeWqgy
+         039yEalaOMYt+Jf+Xh+rO956Iaraqw8MfDV/4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a7Xyf2QArSyizp0F9X7a7N1r4113OGPHtnk41fQc9lc=;
-        b=aV2yM1r0WWvSwXYRBg7uM6+gGIxDQVX11JTcT1uxi9UfjB48Z7GE83boFwsXca1wk8
-         rQJVucvUgZP9gEQo7lSBwkD93xrceFN4lLasU0bY8mn6A3sCiwnXUva8lrhiEeJQnQqj
-         FMV5qxI7t0rwcmInMvFcavIz2+NjXy05f2fXp7pxI/DmxB/0edXZDgIpFYXEI5hqNcqG
-         eB8LEtS9SbEiaLOHGEkr7wTgf8yre6luXN3TGKOHHWgBHZrBhWBdSppPvPvegu1dBOCs
-         zlDrx450R7YehlhFGlJqfcU8PfxCnjOy0PH4MEkipfS0q3HdCh2URu5JO3j1KKg/imKi
-         V0Ew==
-X-Gm-Message-State: AOAM531JQuLjXDk3QH9enP9s1KMfX3DI1g4NM1GhGJCbqBKLTzk4cAkL
-        toWoYWhGK2Y0lKaGfjO13A==
-X-Google-Smtp-Source: ABdhPJym1cVJ6hIiuqEDxMhZRQrspeqqkZR5PA/kFVaC8hdwQ5SdvwfkufWH3kcX6wu+LcnGMs9IxQ==
-X-Received: by 2002:a05:6808:f88:b0:2da:850d:18f0 with SMTP id o8-20020a0568080f8800b002da850d18f0mr270615oiw.19.1647888810502;
-        Mon, 21 Mar 2022 11:53:30 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e8-20020a9d63c8000000b005b235a56831sm7783461otl.49.2022.03.21.11.53.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 11:53:29 -0700 (PDT)
-Received: (nullmailer pid 359469 invoked by uid 1000);
-        Mon, 21 Mar 2022 18:53:27 -0000
-Date:   Mon, 21 Mar 2022 13:53:27 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Michael Walle <michael@walle.cc>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        Daniel Palmer <daniel@thingy.jp>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        Bert Vermeulen <bert@biot.com>,
-        John Crispin <john@phrozen.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Suman Anna <s-anna@ti.com>, Lokesh Vutla <lokeshvutla@ti.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, openbmc@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-oxnas@groups.io
-Subject: Re: [PATCH 00/18] dt-bindings: irqchip: include generic schema
-Message-ID: <YjjJpxLWJ/YOe0OX@robh.at.kernel.org>
-References: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=QsItZtJmJ2CFB/IluEilX1aCyTGMoKcJJhXW/pui3cs=;
+        b=KjCoQnssMRf2jQ53AxU6Q5Xm0dHnG6MKHUT0+s5KHu9D1pbrJpMtQ8Jkvio5BfR16s
+         mpzTG5RR14TBE3uyDPXCjhzOy27T7+wt2yGOkA+3DKdvF9BMLTYWGK8gXDoaH3XXMcYX
+         se425giS9cWQCkruk4AvInx1Uy7Za5+/A/NOE6DjipKtHcImznhUqS4u+sgsnd/jbdCX
+         rfh05xsyqwJuYLAVaiHUVizzHWYCyEuTrlxwGVRSqTomQEZMZoG45zd6MoC9VVY2vFMP
+         Y2RC/IBbsyX/ZSoFaV9GTKV3LprSlLhc0n1Qr2kB6jdMvZNXhwsBogsgGTxY5k7Rx+EV
+         tyFQ==
+X-Gm-Message-State: AOAM53222OnPm45WyOe/x8OXm4fCiopdXaPWSkQ0UToIkyCKGU7ncJO+
+        UAhjpTa2j/H54EJpFUYLuoS0annE/KLmpB0nhECOyA==
+X-Google-Smtp-Source: ABdhPJwYzDcCTvKabFEJ1mwqClZzWrwQNz6j/RVLn4zSvahDVJN8VgpKIjzun9aJwk6RJ6HJuCpLNF0PrBMN9YDNHPo=
+X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
+ n62-20020acabd41000000b002ecff42814fmr281721oif.63.1647888826407; Mon, 21 Mar
+ 2022 11:53:46 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 21 Mar 2022 19:53:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220317115542.450032-1-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <CAD=FV=WNqCdPpKdV4gHL4Y9aDpwGW+OE3AcxKrx-OXNfQSLFBQ@mail.gmail.com>
+References: <20220317010640.2498502-1-swboyd@chromium.org> <20220317010640.2498502-3-swboyd@chromium.org>
+ <CAD=FV=WNqCdPpKdV4gHL4Y9aDpwGW+OE3AcxKrx-OXNfQSLFBQ@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 21 Mar 2022 19:53:45 +0100
+Message-ID: <CAE-0n53UbZq4MqrzNLEpmJO4j1S+d-LNPqpSwu5VM0873NSyGA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: Fully describe fingerprint node on Herobrine
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,48 +71,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 12:55:24PM +0100, Krzysztof Kozlowski wrote:
+Quoting Doug Anderson (2022-03-18 13:55:56)
 > Hi,
-> 
-> The DTS patches can be picked up independently.
-> 
-> Best regards,
-> Krzysztof
-> 
-> Krzysztof Kozlowski (18):
->   ARM: dts: nspire: use lower case hex addresses in node unit addresses
->   ARM: dts: ox820: align interrupt controller node name with dtschema
->   ARM: dts: socfpga: align interrupt controller node name with dtschema
->   dt-bindings: irqchip: actions,owl-sirq: include generic schema
->   dt-bindings: irqchip: fsl: include generic schema
->   dt-bindings: irqchip: ingenic: include generic schema
->   dt-bindings: irqchip: intel,ixp4xx: include generic schema
->   dt-bindings: irqchip: kontron,sl28cpld: include generic schema
->   dt-bindings: irqchip: loongson: include generic schema
->   dt-bindings: irqchip: microchip,eic: include generic schema
->   dt-bindings: irqchip: mrvl,intc: include generic schema
->   dt-bindings: irqchip: mstar,mst-intc: include generic schema
->   dt-bindings: irqchip: mti,gic: include generic schema
->   dt-bindings: irqchip: nuvoton,wpcm450-aic: include generic schema
->   dt-bindings: irqchip: realtek,rtl-intc: include generic schema
->   dt-bindings: irqchip: renesas: include generic schema
->   dt-bindings: irqchip: sifive: include generic schema
->   dt-bindings: irqchip: ti: include generic schema
+>
+> On Wed, Mar 16, 2022 at 6:06 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > Update the fingerprint node on Herobrine to match the fingerprint DT
+> > binding. This will allow us to drive the reset and boot gpios from the
+> > driver when it is re-attached after flashing. We'll also be able to boot
+> > the fingerprint processor if the BIOS isn't doing it for us.
+> >
+> > Cc: Douglas Anderson <dianders@chromium.org>
+> > Cc: Matthias Kaehlcke <mka@chromium.org>
+> > Cc: Alexandru M Stan <amstan@chromium.org>
+> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> > ---
+> >
+> > Depends on https://lore.kernel.org/r/20220317005814.2496302-1-swboyd@chromium.org
+> >
+> >  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> > index 984a7faf0888..282dda78ba3f 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+> > @@ -396,13 +396,16 @@ ap_spi_fp: &spi9 {
+> >         cs-gpios = <&tlmm 39 GPIO_ACTIVE_LOW>;
+> >
+> >         cros_ec_fp: ec@0 {
+> > -               compatible = "google,cros-ec-spi";
+> > +               compatible = "google,cros-ec-fp";
+> >                 reg = <0>;
+> >                 interrupt-parent = <&tlmm>;
+> >                 interrupts = <61 IRQ_TYPE_LEVEL_LOW>;
+> >                 pinctrl-names = "default";
+> >                 pinctrl-0 = <&fp_to_ap_irq_l>, <&fp_rst_l>, <&fpmcu_boot0>;
+> > +               boot0-gpios = <&tlmm 68 GPIO_ACTIVE_HIGH>;
+> > +               reset-gpios = <&tlmm 78 GPIO_ACTIVE_LOW>;
+> >                 spi-max-frequency = <3000000>;
+> > +               vdd-supply = <&pp3300_fp_mcu>;
+>
+> IMO we shouldn't specify vdd-supply here when it's a bogus regulator
+> (doesn't actually control the relevant GPIO). Having device trees like
+> this will make it hard to transition to the kernel controlling this
+> GPIO in the future because the cros-ec-fp driver won't know whether
+> it's controlling the GPIO or not. So my vote would be either:
+>
+> 1. Go whole hog and have the kernel in charge of the regulator,
+> exposing regulator control to the userspace updater through some sort
+> of GPIO
+>
+> - or -
+>
+> 2. Make the "vdd-supply" optional and don't specify it until we're
+> ready to go whole hog.
 
-I'm somewhat on the fence about these. Originally only devices with a 
-bus or child nodes included a common schema. For 'simple' providers 
-with mainly a '#<provider>-cells' property, we had to set the 
-constraints on the number of cells anyways, so referencing another 
-schema doesn't save anything. It is nice to declare the 'class' of the 
-device though.
+It isn't an optional supply because the device always has this voltage
+pin connected to power it. I think we decided in the driver side patches
+that this isn't an issue because the driver will ignore the regulator
+for now. Eventually it will take control and firmware flashing will be
+done differently. If you don't agree please let me know.
 
-It makes the schema be applied twice (if the node name matches). That's 
-not all bad because it finds cases of wrong node name. However, 
-sometimes we have devices which are multiple providers and can't set the 
-node name. So those can't reference interrupt-controller.yaml.
+>
+> Also note: looking back at the note about the fingerprint regulator,
+> there's something I wonder if we tried. Did we try to have the
+> userspace "updater" try unbinding the fingerprint regulator so it
+> could get control of the GPIO? Then the regulator could normally have
+> control of it but if userspace wanted control it would unbind the
+> regulator driver.
+>
 
-It also means that 'interrupt-map' for example is now valid. That could 
-be fixed by splitting 'interrupt-map' related properties to its own 
-schema. 
-
-Rob
+Nope we didn't try that. I find it pretty disappointing that userspace
+needs to control the regulator at all though. We should work towards
+moving the control into the kernel for all these gpios and regulators so
+that userspace simply flashes the firmware in a platform agnostic way.

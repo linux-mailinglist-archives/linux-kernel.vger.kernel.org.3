@@ -2,47 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5F14E2C13
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 255614E2C18
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350066AbiCUPYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
+        id S1350063AbiCUPZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350341AbiCUPXq (ORCPT
+        with ESMTP id S1350076AbiCUPY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:23:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054A9E8864;
-        Mon, 21 Mar 2022 08:22:21 -0700 (PDT)
+        Mon, 21 Mar 2022 11:24:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D2B25E9C;
+        Mon, 21 Mar 2022 08:23:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9683161013;
-        Mon, 21 Mar 2022 15:22:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25B33C340E8;
-        Mon, 21 Mar 2022 15:22:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AAB1B817C2;
+        Mon, 21 Mar 2022 15:23:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2884C340E8;
+        Mon, 21 Mar 2022 15:23:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647876140;
-        bh=BmDckR9oVCj0Dpd4A7Tl1cnWlUNuPswQxFdMCV/VB28=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MVQLwBvoPv739CozYeYWtmsjiElxLsHftJW0CyEqAFU8TDqKf/lZ0pr44OTuhBXku
-         UasA+zKlU4VFI+8EB34OUZkR+m9XuD6v7IWgcQX8LSDtmUvGEVp+Vz85Nz9lezM4Lq
-         NlKnH5UQdxesNjrkU5yhmAmVgJvQaH3DaEpk9B7muO6TMB+XtFgh9ddla872vCJvCD
-         0evxGiuwkFwFvrrgrfL6Y9uYYgH+EAZDFQehNLqbgycTaVYBJFuT8JGM83Bs6JRUXD
-         ENQ+rCL/vZvU/b32WEZ9nbsqbyNxywLB1VIUqaQh8iYa1ziKAHNnjn7S3ALVjeb4D1
-         c6WqHvhOWMPRQ==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        stable@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
-Subject: [PATCH] f2fs: fix to do sanity check on .cp_pack_total_block_count
-Date:   Mon, 21 Mar 2022 23:22:11 +0800
-Message-Id: <20220321152211.5656-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        s=k20201202; t=1647876211;
+        bh=4ZpyIyXYDcZ36RfZOIv4oxh4lJ+vIIHH8n+8gbprSCg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FLUh+ySfIHCMJccWzOujn77JxsZSejOrwn2p+855hwyPXkF77aZrr9VGfNd3TNBae
+         Jv/ZNWbw9RsZ+dfUJ84+PcHkfujZL0NeibCYTsty4A6WSXYyMYGmUmcj2w2lcgxd4P
+         cf8c1Gms39QL09R0tr7PAs6V8cKQg33YUUbBvLVsjcnKMHMgi57S0ZTfSyDw1nfGl/
+         HoyUkLDdnEeKZ8mYgoL+WPh+F2bKLY/gcv6y9AFrzpORCRUSuBTM7+tSlEiZbuUDU6
+         80L7Ocezq1BqkwgAuVGW8CVX5utlXtGw9ev6MzSOKgVw2psVepJdNKjc6a5a4AXINL
+         /VeaMprAovbNg==
+Date:   Mon, 21 Mar 2022 23:23:26 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     broonie@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linmq006@gmail.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-mediatek@lists.infradead.org, trevor.wu@mediatek.com,
+        matthias.bgg@gmail.com, aaronyu@google.com,
+        linux-arm-kernel@lists.infradead.org,
+        angelogioacchino.delregno@collabora.com
+Subject: Re: [v5 3/4] ASoC: mediatek: mt8192: refactor for I2S8/I2S9 DAI
+ links of headset
+Message-ID: <YjiYbqtrxlgrUplq@google.com>
+References: <20220319114111.11496-1-jiaxin.yu@mediatek.com>
+ <20220319114111.11496-4-jiaxin.yu@mediatek.com>
+ <Yjf4KjXpVJaNnvb8@google.com>
+ <17e6e8895ebc1113911481c7e097b394005db123.camel@mediatek.com>
+ <YjhDqKhtYastPhf0@google.com>
+ <f9cd3c31cc41f0f3c72930664445646d8175c760.camel@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f9cd3c31cc41f0f3c72930664445646d8175c760.camel@mediatek.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,73 +66,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As bughunter reported in bugzilla:
+On Mon, Mar 21, 2022 at 10:38:48PM +0800, Jiaxin Yu wrote:
+> On Mon, 2022-03-21 at 17:21 +0800, Tzung-Bi Shih wrote:
+> > On Mon, Mar 21, 2022 at 05:14:08PM +0800, Jiaxin Yu wrote:
+> > > On Mon, 2022-03-21 at 11:59 +0800, Tzung-Bi Shih wrote:
+> > > > On Sat, Mar 19, 2022 at 07:41:10PM +0800, Jiaxin Yu wrote:
+> > > > > @@ -1145,6 +1140,13 @@ static int
+> > > > > mt8192_mt6359_dev_probe(struct
+> > > > > platform_device *pdev)
+> > > > >  		goto err_speaker_codec;
+> > > > >  	}
+> > > > >  
+> > > > > +	headset_codec = of_get_child_by_name(pdev->dev.of_node,
+> > > > > "mediatek,headset-codec");
+> > > > > +	if (!headset_codec) {
+> > > > > +		ret = -EINVAL;
+> > > > > +		dev_err_probe(&pdev->dev, ret, "Property
+> > > > > 'headset_codec' missing or invalid\n");
+> > > > > +		goto err_headset_codec;
+> > > > > +	}
+> > > > 
+> > > > (to be neat) Does it have any reason to prevent from using
+> > > > of_parse_phandle()
+> > > > but of_get_child_by_name()?
+> > > 
+> > > "mediatek,headset-codec" is a child node of pdev->dev.of_node, so I
+> > > use
+> > > of_get_child_by_name() to get and   pass it to
+> > > snd_soc_of_get_dai_link_codecs().
+> > 
+> > "mediatek,platform" and "mediatek,hdmi-codec" are also children of
+> > pdev->dev.of_node.  I guess my question is: why doesn't it also use
+> > of_parse_phandle() for "mediatek,headset-codec"?  Did I
+> > misunderstand?
+> 
+> The following is from bindings, "mediatek,speaker-codec" and
+> "mediatek,headset-codec" are sub nodes of sound but "mediatek,platform"
+> and "mediatek,hdmi-codec" are the name of properties. So we can't get
+> the sub node pointer through of_parse_phandle().
+> 
+>       sound: mt8192-sound {
+>           compatible = "mediatek,mt8192_mt6359_rt1015_rt5682";
+>           mediatek,platform = <&afe>;
+>           mediatek,hdmi-codec = <&anx_bridge_dp>;
+>           pinctrl-names = "aud_clk_mosi_off",
+>                           "aud_clk_mosi_on";
+>           pinctrl-0 = <&aud_clk_mosi_off>;
+>           pinctrl-1 = <&aud_clk_mosi_on>;
+>  
+>           mediatek,headset-codec {
+>               sound-dai = <&rt5682>;
+>           };
+>  
+>           mediatek,speaker-codec {
+>               sound-dai = <&rt1015_l>,
+>                           <&rt1015_r>;
+>           };
+>       };
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215709
-
-f2fs may hang when mounting a fuzzed image, the dmesg shows as below:
-
-__filemap_get_folio+0x3a9/0x590
-pagecache_get_page+0x18/0x60
-__get_meta_page+0x95/0x460 [f2fs]
-get_checkpoint_version+0x2a/0x1e0 [f2fs]
-validate_checkpoint+0x8e/0x2a0 [f2fs]
-f2fs_get_valid_checkpoint+0xd0/0x620 [f2fs]
-f2fs_fill_super+0xc01/0x1d40 [f2fs]
-mount_bdev+0x18a/0x1c0
-f2fs_mount+0x15/0x20 [f2fs]
-legacy_get_tree+0x28/0x50
-vfs_get_tree+0x27/0xc0
-path_mount+0x480/0xaa0
-do_mount+0x7c/0xa0
-__x64_sys_mount+0x8b/0xe0
-do_syscall_64+0x38/0xc0
-entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The root cause is cp_pack_total_block_count field in checkpoint was fuzzed
-to one, as calcuated, two cp pack block locates in the same block address,
-so then read latter cp pack block, it will block on the page lock due to
-the lock has already held when reading previous cp pack block, fix it by
-adding sanity check for cp_pack_total_block_count.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
----
- fs/f2fs/checkpoint.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index 871eee35a32f..aba1b8a1ce66 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -875,6 +875,7 @@ static struct page *validate_checkpoint(struct f2fs_sb_info *sbi,
- 	struct page *cp_page_1 = NULL, *cp_page_2 = NULL;
- 	struct f2fs_checkpoint *cp_block = NULL;
- 	unsigned long long cur_version = 0, pre_version = 0;
-+	unsigned int cp_blocks;
- 	int err;
- 
- 	err = get_checkpoint_version(sbi, cp_addr, &cp_block,
-@@ -882,15 +883,16 @@ static struct page *validate_checkpoint(struct f2fs_sb_info *sbi,
- 	if (err)
- 		return NULL;
- 
--	if (le32_to_cpu(cp_block->cp_pack_total_block_count) >
--					sbi->blocks_per_seg) {
-+	cp_blocks = le32_to_cpu(cp_block->cp_pack_total_block_count);
-+
-+	if (cp_blocks > sbi->blocks_per_seg || cp_blocks <= F2FS_CP_PACKS) {
- 		f2fs_warn(sbi, "invalid cp_pack_total_block_count:%u",
- 			  le32_to_cpu(cp_block->cp_pack_total_block_count));
- 		goto invalid_cp;
- 	}
- 	pre_version = *version;
- 
--	cp_addr += le32_to_cpu(cp_block->cp_pack_total_block_count) - 1;
-+	cp_addr += cp_blocks - 1;
- 	err = get_checkpoint_version(sbi, cp_addr, &cp_block,
- 					&cp_page_2, version);
- 	if (err)
--- 
-2.25.1
-
+Got it, thanks for the explanation.  Will provide my R-b tag in another
+thread.

@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987784E2AF3
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBA64E2AF2
 	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349429AbiCUOfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
+        id S1349443AbiCUOe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349794AbiCUOdH (ORCPT
+        with ESMTP id S1349846AbiCUOdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:33:07 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8BE5E77F
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:30:06 -0700 (PDT)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nWJ2p-00029J-Ve; Mon, 21 Mar 2022 15:30:04 +0100
-Message-ID: <41eaaf17-1456-5971-e7d9-e5ccc65bcf01@leemhuis.info>
-Date:   Mon, 21 Mar 2022 15:30:02 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: Regression from 3c196f056666 ("drm/amdgpu: always reset the asic
- in suspend (v2)") on suspend?
-Content-Language: en-US
-To:     =?UTF-8?Q?=c3=89ric_Valette?= <eric.valette@free.fr>
-Cc:     Salvatore Bonaccorso <carnil@debian.org>,
-        Dominique Dumont <dod@debian.org>,
-        Sasha Levin <sashal@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Mon, 21 Mar 2022 10:33:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DCDA1AF;
+        Mon, 21 Mar 2022 07:30:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 019D0B8170B;
+        Mon, 21 Mar 2022 14:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22526C340EE;
+        Mon, 21 Mar 2022 14:30:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647873028;
+        bh=BJoJxM62oVu3PvwNK+c15fauttUCWAVfzzp/YPFUujo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qMJEj8Zo3BFaBw5Q+l5pug8Oa22PK9dZbWcMe5AZda5rqrEYZ9Q0GqaeZYcv6+vY0
+         hWLJ/CgZbWa1zThm38J7rqx0Qn2DSBAUKLS1squ35QlSdse+oWuIHOXT/LF4V1JzAx
+         /3J374DD0Ze1ReNwYDnSDVRhfdgPSt4acP5ab1efSe4YY8SZrusWmMX+eqlIXHw2qn
+         QwAqDNyi5hKLk3Em2C761jdzMrwE1znLJU7qDV6YR1/HxqATZ4pBrW1RB9FpqAlyRz
+         g7v6Jfh4CdtdXjXA5SOZBZ7BLx9odpD2PRdGtyTmkiu9ntV+iCKPvSz/mCPx7xozeS
+         X+Qam1RbisLAQ==
+Date:   Mon, 21 Mar 2022 14:30:22 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Darren Hart <darren@os.amperecomputing.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        1005005@bugs.debian.org, Evan Quan <evan.quan@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Alex Deucher <alexdeucher@gmail.com>
-References: <Ygf7KuWyc0d4HIFu@eldamar.lan>
- <CADnq5_MfR99OhjumQESCO7Oq+JVOHOVgyVQHX4FpGFDnPu6CyQ@mail.gmail.com>
- <5164225.DI6hChFYCN@ylum> <c62d4ba9-2214-ca7d-ee78-ee19a9bf51e6@free.fr>
- <CADnq5_MWqz7-XhOS4zfuzi3=_nKa72iYaO0BcKNcVDwEvZ+YHw@mail.gmail.com>
- <61c2b2ce-d749-3723-ad27-f40e1c49d967@leemhuis.info>
- <ba7faa48-68a5-41f9-9192-f843e17c5a07@free.fr>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <ba7faa48-68a5-41f9-9192-f843e17c5a07@free.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1647873006;988f5919;
-X-HE-SMSGID: 1nWJ2p-00029J-Ve
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        Linux Arm <linux-arm-kernel@lists.infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Catalin Marinas <Catalin.Marinas@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Valentin Schneider <Valentin.Schneider@arm.com>,
+        "D . Scott Phillips" <scott@os.amperecomputing.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        stable@vger.kernel.org, Barry Song <21cnbao@gmail.com>
+Subject: Re: [PATCH v3] topology: make core_mask include at least
+ cluster_siblings
+Message-ID: <20220321143021.GB11145@willie-the-truck>
+References: <CAKfTPtDe+i0fwV10m2sX2xkJGBrO8B+RQogDDij8ioJAT5+wAw@mail.gmail.com>
+ <e91bcc83-37c8-dcca-e088-8b3fcd737b2c@arm.com>
+ <YieXQD7uG0+R5QBq@fedora>
+ <7ac47c67-0b5e-5caa-20bb-a0100a0cb78f@arm.com>
+ <YijxUAuufpBKLtwy@fedora>
+ <9398d7ad-30e7-890a-3e18-c3011c383585@arm.com>
+ <Yi9zUuroS1vHWexY@fedora>
+ <eb33745a-9d63-89b1-1245-9d1e0e04a169@arm.com>
+ <YjIAQKwfa3/vr/kU@fedora>
+ <YjIIfS6HkvlrdAHS@bogus>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjIIfS6HkvlrdAHS@bogus>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,35 +76,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.03.22 13:07, Éric Valette wrote:
-> My problem has never been fixed.
->
-> The proposed patch has been applied to 5.15. I do not remerber which version 28 maybe.
+On Wed, Mar 16, 2022 at 03:55:41PM +0000, Sudeep Holla wrote:
+> On Wed, Mar 16, 2022 at 08:20:32AM -0700, Darren Hart wrote:
+> > On Wed, Mar 16, 2022 at 03:48:50PM +0100, Dietmar Eggemann wrote:
 > 
-> I still have à RIP in pm_suspend. Did not test the Last two 15 versions.
+> [...]
 > 
-> I can leave with 5.10 est using own compiled kernels.
+> > >
+> > > Yeah, I can see your point. It's the smaller hack. My solution just
+> > > prevents us to manipulate the coregroup mask only to get the MC layer
+> > > degenerated by the core topology code. But people might say that's a
+> > > clever thing to do here. So I'm fine with your original solution as well.
+> > >
+> > > [...]
+> >
+> > Thanks Dietmar,
+> >
+> > Sudeep, do we have sufficient consensus to pull in this patch?
 > 
-> Thanks for asking.
+> Indeed. I have already Acked, and sure after all these discussions we have
+> concluded that this is the best we can do though not matches everyone's taste.
+> 
+> Greg or Will(not sure why he had asked since v3 doesn't touch arm64),
+> Can one of you pick this patch ?
 
-This thread/the debian bug report
-(https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1005005 ) is getting
-long which makes things hard to grasp. But to me it looks a lot like the
-problem you are facing is different from the problem that others ran
-into and bisected -- but I might be totally wrong there. Have you ever
-tried reverting 3c196f056666 to seem if it helps (sorry if that's
-mentioned in the bug report somewhere, as I said, it became long)? I
-guess a bisection from your side really would help a lot; but before you
-go down that route you might want to give 5.17 and the latest 5.15.y
-kernel a try.
+Right, this doesn't touch arm64 any more so I don't think I'm the right
+person to queue it.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
-
+Will

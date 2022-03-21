@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1B84E2F99
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5FB4E2F94
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:04:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351969AbiCUSGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 14:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
+        id S1351967AbiCUSGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 14:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241367AbiCUSG3 (ORCPT
+        with ESMTP id S1349445AbiCUSGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 14:06:29 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FDE5DE4C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+zScwtX/0ywSew6B96Ie7Los4HXBqMBl4omHP7aKR20=; b=Yxg3Sck22bJIBXWdYeu1MSghNA
-        eu5QpotV/MH5f/7hKrBXUJpIGTxiLClWOW9VbqKPXP2L9QcGgdHCiF6KX3Q9Ltl/IlLBix6kVj2Do
-        ddaveWLy3aBJpacLKlA7vRbjH8rt2YsMNO0bpSwmiRHhJeIz/T3BcR5887S324WZ5E7Hzg1ASiSFc
-        3w3yhIBZ1bSMWlxCWeLrlFPU88AUSlPeu0NS9SWuQtZhcO4OvHffO/KMkRCPSvTZ59lZ5OVe1wnWv
-        QjYBCKikz8IffhdI0vnPzYD7R2rkcwDpVPTLQ8cUS+O2pfKQ/82Y9A1GbP21FRDC/B+C2bI6m6Qlp
-        kFJyhmBw==;
-Received: from [187.39.124.208] (helo=[192.168.0.110])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nWMOn-0008Ht-Mr; Mon, 21 Mar 2022 19:04:58 +0100
-Message-ID: <307799df-fddd-6c46-7dd5-323ea5628892@igalia.com>
-Date:   Mon, 21 Mar 2022 15:04:34 -0300
+        Mon, 21 Mar 2022 14:06:04 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB9C4CD61;
+        Mon, 21 Mar 2022 11:04:38 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id n15so13457993plh.2;
+        Mon, 21 Mar 2022 11:04:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=aLAMIQ8Z/Brx4GgfsQ0HcQtispmXwswle1+zYBDv2JM=;
+        b=lrfYWw0h7r5509pqhsgV/reZahtlNdofwS6QxNFbJe7SH/kkWK7a2pHOo/Lz4b4O2d
+         HMIiLyOd69phUkQqMsxWcYPCTJ0Wfx3ZqX4uqgBZA2p3Z4hrZFxbYBHmYtqCCTk3HMQ2
+         I5FbxpfLD7057G+ykHNj97m+/ID6/qLZN5eRnAUSZ1bD+pFuAgrHygt25SJzaylaJcZH
+         t4jMKKg9YJGeqRM3hz6ddmWK7o+n+IllcKX5S71zvYwk4SU2aSaQHcUcWTbxDPF9F6y5
+         eXKhWIC8NNMCS6SxzMl7zeZLbemifs0ZBLxg3Ww3p+Dzzy8OJh93w3PtDTD83FMutxg9
+         TVvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=aLAMIQ8Z/Brx4GgfsQ0HcQtispmXwswle1+zYBDv2JM=;
+        b=CAc3RouA/VdjDDO3BMapZIIWJn56RkYIU34Xz3LwzaL+DrhyZF8eZcnhBRJQqloYYt
+         RfawTwHWrFyvRd/Zj3VKfmRLogYQanGBVTeba93AKBW5jyRmXhyTFFaliBddy9v67uCt
+         BtOHkiq9lWo03D5E7Hx7VsZzjO61d5eC8I2V3sfctb6MHWO/A/a98a0jlweBmtA+ei9S
+         HnXiyaWkp7D12X6HoAo72qzh+8SdArR9ePFoMXsBExdOwo5LyclwBDolvEt25Z+ZsuLF
+         pc61TmpmZKXOZ00MvxEOo3aAh592GgdT+ehRkttXXXGnSe5HkrIOwLL0hHOH0/eRbeFX
+         UEYg==
+X-Gm-Message-State: AOAM533mF9SXCiYX5pEe6C/bVJf2tPCVDnCUgNb1B5XfByuYBwVvmfUa
+        DqXL2DEW1m0Pu1xgnd6I1TE=
+X-Google-Smtp-Source: ABdhPJzxVKNEzDd2T+O/tM3Jwt/u+g4+SzF/YQt8YFs6HGgO4SYfo1bT7GLj6MME54cabODbsD1T2g==
+X-Received: by 2002:a17:90b:1d02:b0:1c7:1802:c00e with SMTP id on2-20020a17090b1d0200b001c71802c00emr331358pjb.99.1647885878110;
+        Mon, 21 Mar 2022 11:04:38 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id h2-20020a056a00218200b004f66d50f054sm19871038pfi.158.2022.03.21.11.04.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 11:04:37 -0700 (PDT)
+Message-ID: <a88a3172-aca8-adb5-c9a3-e4d32a416190@gmail.com>
+Date:   Mon, 21 Mar 2022 11:04:35 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Question about the Broadcom Always On register panic handling
+ Thunderbird/91.5.0
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 5.10 00/30] 5.10.108-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220321133219.643490199@linuxfoundation.org>
 Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        computersforpeace@gmail.com
-Cc:     "Guilherme G. Piccoli" <kernel@gpiccoli.net>, opendmb@gmail.com,
-        justinpopo6@gmail.com, mmayer@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, kexec@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <6dac422b-d509-b863-0b31-98a07808ac0d@igalia.com>
- <781cafb0-8d06-8b56-907a-5175c2da196a@gmail.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <781cafb0-8d06-8b56-907a-5175c2da196a@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2022 13:32, Florian Fainelli wrote:
-> [...]
-> The AON (standing for always-on) is a small domain in the SoC that can 
-> retain its state across various system wide sleep states and specific 
-> reset conditions. The AON DATA RAM is a small ram of a few words (< 1KB) 
-> which can store persistent information across such events.
+On 3/21/22 06:52, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.108 release.
+> There are 30 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> The purpose of this write was initially to help with indicating to the 
-> boot loader that a panic occurred and so that it should try its best to 
-> preserve the DRAM contents holding that buffer for recovery by the Linux 
-> kernel as opposed to wiping out DRAM clean again. I cannot go into the 
-> mechanics of what happens publicly unfortunately.
+> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
+> Anything received after that time might be too late.
 > 
-
-Thanks a lot Florian! This is very good information, it's enough for me
-- I'd like to be sure it's not rebooting the board or something
-"extreme" like that, so in the end...it's kinda the opposite, it's
-preserving the DRAM.
-
-
->>
->> Any information that helps me to document such panic event is very
->> welcome, and in case you have AON documentation, it'd be also pretty great!
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.108-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
 > 
-> Why are you asking specifically about this if I may ask? If you are a 
-> legitimate Broadcom STB customer you can reach out to our support and I 
-> am sure the question will come back for me to answer.
-
-Oh I'm not a Broadcom STB customer, I'm just working in the panic
-notifiers and was curious about this one. When I submit my series (soon)
-it's likely that there  will be a small refactor of this notifier plus a
-comment, with your great explanation.
-
-Regarding the full AON documentation, I just asked in case it's public
-and I couldn't find - it's unfortunate that a lot of code in the kernel
-is based on closed specifications, but I understand we can't do much
-about that. Your response was very useful, and enough for my work =)
-
-Cheers,
+> thanks,
+> 
+> greg k-h
 
 
-Guilherme
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

@@ -2,199 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD444E3453
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833E84E3463
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbiCUXbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
+        id S232903AbiCUXbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbiCUXbl (ORCPT
+        with ESMTP id S232724AbiCUXbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:31:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7D1A3719F5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:30:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647905411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=DfILl+Y8WthQ4B0V8ke3TBGeiTs8pGVHFP+6t+6MG3w=;
-        b=AKYk+EqlTDU4YfLJCXvFR/3lJ8ERHILe+kRDw3TJSar+eXrmUFacRCjG73neiCPt2cEbGZ
-        uv0bEICaezRaq70gPEUQV9ZIfWs5m3+Ow2zSeeDgOVuZvXS7yjkhtGXQs/RYWhNMHNXokc
-        9gR3q2KCrYwuk9zoGEdavmXOvTFvtZE=
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
- [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-244-ZplUdLXjM8SBt_-PR8cEuw-1; Mon, 21 Mar 2022 19:30:10 -0400
-X-MC-Unique: ZplUdLXjM8SBt_-PR8cEuw-1
-Received: by mail-yb1-f199.google.com with SMTP id e8-20020a259248000000b0063391b39d14so12157208ybo.10
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:30:10 -0700 (PDT)
+        Mon, 21 Mar 2022 19:31:38 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15721355B91;
+        Mon, 21 Mar 2022 16:30:09 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-d39f741ba0so317229fac.13;
+        Mon, 21 Mar 2022 16:30:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=DfILl+Y8WthQ4B0V8ke3TBGeiTs8pGVHFP+6t+6MG3w=;
-        b=uapomI2aUUzFutMI8dtvchRuJVeI6XuFj8oCVDtPy+HS90Zj7IMhD4H/5bwtOaF05P
-         1ph6FdOmqqHc8eX7Q9pI4f2aulc0Cu+j0mDi75OjtkbWdze5puGg+gn2J2dRnciKKfAN
-         t1T3T/0C6LWnnkzTj3bzHC6HTPXw+GUL9IgP1U4cauVcKYHswkoXsdUdIeKxvxGr+6KA
-         pWv9cV3B92C4Z3E62osAFydchNcY0UfthRRqVhsZ3/+ontXNzPC7ZxZ4RsTirB5DAKgF
-         ZzID/xVFCRXeKmxmVAs1gZyV4wmToS6gZBy4OKCX4OCjajPwTGiOz6FKdl9D4ld+bO+K
-         ynPQ==
-X-Gm-Message-State: AOAM530sePJbkUqDwHptWxaL/IqT2XC1LuTW6+cwlIseOv4vjCPq3wuy
-        Gbo4d9mwCRBdUDg8dXWBUsUdwpGohxG/k/A2nEvQpfZcv1E3bHRHFldbJE/oH/ZXjSmIgJJ8cuk
-        xpP9yh55VNPOk3CUqoFu/u5+wiKvimCbW98wRt5zK
-X-Received: by 2002:a25:8887:0:b0:622:77:ecad with SMTP id d7-20020a258887000000b006220077ecadmr23795247ybl.30.1647905409284;
-        Mon, 21 Mar 2022 16:30:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz6rVyuuCs62E6c2yFBGeQoXVgSKVrjqIvHTsjKHy/QzxFE79oDVXdTkIP8OWbJ00Go6LxGI05FVkEYDAia6/o=
-X-Received: by 2002:a25:8887:0:b0:622:77:ecad with SMTP id d7-20020a258887000000b006220077ecadmr23795222ybl.30.1647905408937;
- Mon, 21 Mar 2022 16:30:08 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jcbOalPGoZlPVOYBNp+MHPtkQGuUqsNk0ulK/GNGgc8=;
+        b=lq72NR4GPvdOAcKPyE3cVfmm49pHbwlMcgxdq333WHG0g3o0tTtRX+a7Zl+iew19pb
+         aA1w5aploCGvDrBv/+PpaxrpehiJHwPB2k5iXfaNQ1GjUzxc1zuKF/0RTi7jcJxXz6xK
+         kOLJu+teT6K80A92EuK/thFy/RQfeKA5NyGDyHufQmWW1PcPymvAKd6fJi3UjGCHMgGQ
+         XTjtOnkThV9iD/1XO2teXnzLnmjRTjIadaV8Rc1cQVA22871SXnqpGQbA5FxnshrtlHR
+         MCmFfNACaX8LT4L4HJRXCQawf6v8OhJMFcX5b2DoAKT0ppWxatJktku0x3NqllriHn26
+         lw7g==
+X-Gm-Message-State: AOAM533tcIWUrj2BngHwZbSSEDpydWIjxyGTd1aOh52bL/nBJ7PcHbFJ
+        Sm4eE9CoBq8B2P1GFIInvw==
+X-Google-Smtp-Source: ABdhPJwus8FT5y2o3/MJA9opEbTL/aWgDuKhBeOv7vLJJLqBbRBk4A9XVfafmZwyivYO4tXGW68qrQ==
+X-Received: by 2002:a05:6870:5687:b0:dd:d21b:4e54 with SMTP id p7-20020a056870568700b000ddd21b4e54mr604717oao.184.1647905407981;
+        Mon, 21 Mar 2022 16:30:07 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x25-20020a056830409900b005af164235b4sm7795352ott.2.2022.03.21.16.30.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 16:30:07 -0700 (PDT)
+Received: (nullmailer pid 746077 invoked by uid 1000);
+        Mon, 21 Mar 2022 23:30:06 -0000
+Date:   Mon, 21 Mar 2022 18:30:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Leilk Liu <leilk.liu@mediatek.com>
+Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Subject: Re: [PATCH V6 2/3] dt-bindings: spi: support hclk
+Message-ID: <YjkKfjeJ5cuSyE3d@robh.at.kernel.org>
+References: <20220321013922.24067-1-leilk.liu@mediatek.com>
+ <20220321013922.24067-3-leilk.liu@mediatek.com>
 MIME-Version: 1.0
-From:   Jirka Hladky <jhladky@redhat.com>
-Date:   Tue, 22 Mar 2022 00:29:58 +0100
-Message-ID: <CAE4VaGDZr_4wzRn2___eDYRtmdPaGGJdzu_LCSkJYuY9BEO3cw@mail.gmail.com>
-Subject: PANIC: "Oops: 0000 [#1] PREEMPT SMP PTI" starting from 5.17 on dual
- socket Intel Xeon Gold servers
-To:     linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Philip Auld <pauld@redhat.com>, Donald Zickus <dzickus@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321013922.24067-3-leilk.liu@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Starting from kernel 5.17 (tested with rc2, rc4, rc7, rc8) we
-experience kernel oops on Intel Xeon Gold dual-socket servers (2x Xeon
-Gold 6126 CPU)
+On Mon, 21 Mar 2022 09:39:21 +0800, Leilk Liu wrote:
+> this patch support hclk for AHB bus.
+> 
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../devicetree/bindings/spi/mediatek,spi-mt65xx.yaml          | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
-Bellow is a backtrace and the dmesg log.
-
-I have trouble creating a simple reproducer - it happens at random
-places when preparing the NAS benchmark to be run. The script creates
-a bunch of directories, compiles the benchmark a start trial runs.
-
-Could you please help to narrow down the problem?
-
-Reports bellow were created with kernel 5.17 rc8 and with
-echo 1 > /proc/sys/kernel/panic_on_oops
-setting.
-
-crash> sys
-      KERNEL: /usr/lib/debug/lib/modules/5.17.0-0.rc8.123.fc37.x86_64/vmlinux
-    DUMPFILE: vmcore  [PARTIAL DUMP]
-        CPUS: 48
-        DATE: Thu Mar 17 02:49:40 CET 2022
-      UPTIME: 00:02:50
-LOAD AVERAGE: 0.32, 0.10, 0.03
-       TASKS: 608
-    NODENAME: gold-2s-c
-     RELEASE: 5.17.0-0.rc8.123.fc37.x86_64
-     VERSION: #1 SMP PREEMPT Mon Mar 14 18:11:49 UTC 2022
-     MACHINE: x86_64  (2600 Mhz)
-      MEMORY: 94.7 GB
-       PANIC: "Oops: 0000 [#1] PREEMPT SMP PTI" (check log for details)
-
-
-crash> bt
-PID: 2480   TASK: ffff9e8f76cb8000  CPU: 26  COMMAND: "umount"
-#0 [ffffae00cacbfbb8] machine_kexec at ffffffffbb068980
-#1 [ffffae00cacbfc08] __crash_kexec at ffffffffbb1a300a
-#2 [ffffae00cacbfcc8] crash_kexec at ffffffffbb1a4045
-#3 [ffffae00cacbfcd0] oops_end at ffffffffbb02c410
-#4 [ffffae00cacbfcf0] page_fault_oops at ffffffffbb076a38
-#5 [ffffae00cacbfd68] exc_page_fault at ffffffffbbd0b7c1
-#6 [ffffae00cacbfd90] asm_exc_page_fault at ffffffffbbe00ace
-   [exception RIP: kernfs_remove+7]
-   RIP: ffffffffbb421f67  RSP: ffffae00cacbfe48  RFLAGS: 00010246
-   RAX: 0000000000000001  RBX: ffffffffbce31e58  RCX: 0000000080200018
-   RDX: 0000000080200019  RSI: ffffdfbd44161640  RDI: 0000000000000000
-   RBP: ffffffffbce31e58   R8: 0000000000000000   R9: 0000000080200018
-   R10: ffff9e8f05859e80  R11: ffff9e9443b1bd98  R12: ffff9ea057f1d000
-   R13: ffffffffbce31e60  R14: dead000000000122  R15: dead000000000100
-   ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
-#7 [ffffae00cacbfe58] rdt_kill_sb at ffffffffbb05074b
-#8 [ffffae00cacbfea8] deactivate_locked_super at ffffffffbb36ce1f
-#9 [ffffae00cacbfec0] cleanup_mnt at ffffffffbb39176e
-#10 [ffffae00cacbfee8] task_work_run at ffffffffbb10703c
-#11 [ffffae00cacbff08] exit_to_user_mode_prepare at ffffffffbb17a399
-#12 [ffffae00cacbff28] syscall_exit_to_user_mode at ffffffffbbd0bde8
-#13 [ffffae00cacbff38] do_syscall_64 at ffffffffbbd071a6
-#14 [ffffae00cacbff50] entry_SYSCALL_64_after_hwframe at ffffffffbbe0007c
-   RIP: 00007f442c75126b  RSP: 00007ffc82d66fe8  RFLAGS: 00000202
-   RAX: 0000000000000000  RBX: 000055bd4cc37090  RCX: 00007f442c75126b
-   RDX: 0000000000000001  RSI: 0000000000000001  RDI: 000055bd4cc3b950
-   RBP: 000055bd4cc371a8   R8: 0000000000000000   R9: 0000000000000073
-   R10: 0000000000000000  R11: 0000000000000202  R12: 0000000000000001
-   R13: 000055bd4cc3b950  R14: 000055bd4cc372c0  R15: 000055bd4cc37090
-   ORIG_RAX: 00000000000000a6  CS: 0033  SS: 002b
-
-[2] dmesg
-[  172.776553] BUG: kernel NULL pointer dereference, address: 0000000000000008
-[  172.783513] #PF: supervisor read access in kernel mode
-[  172.788652] #PF: error_code(0x0000) - not-present page
-[  172.793793] PGD 0 P4D 0
-[  172.796330] Oops: 0000 [#1] PREEMPT SMP PTI
-[  172.800519] CPU: 26 PID: 2480 Comm: umount Kdump: loaded Not
-tainted 5.17.0-0.rc8.123.fc37.x86_64 #1
-[  172.809645] Hardware name: Supermicro Super Server/X11DDW-L, BIOS
-2.0b 03/07/2018
-[  172.817123] RIP: 0010:kernfs_remove+0x7/0x50
-[  172.821397] Code: e8 be e7 2c 00 48 89 df e8 b6 8c f0 ff 48 c7 c3
-f4 ff ff ff 48 89 d8 5b 5d 41 5c 41 5d 41 5e c3 cc 66 90 0f 1f 44 00
-00 55 53 <48> 8b 47 08 48 89 fb 48 85 c0 48 0f 44 c7 48 8b 68 50 48 83
-c5 60
-[  172.840141] RSP: 0018:ffffae00cacbfe48 EFLAGS: 00010246
-[  172.845367] RAX: 0000000000000001 RBX: ffffffffbce31e58 RCX: 0000000080200018
-[  172.852501] RDX: 0000000080200019 RSI: ffffdfbd44161640 RDI: 0000000000000000
-[  172.859632] RBP: ffffffffbce31e58 R08: 0000000000000000 R09: 0000000080200018
-[  172.866764] R10: ffff9e8f05859e80 R11: ffff9e9443b1bd98 R12: ffff9ea057f1d000
-[  172.873899] R13: ffffffffbce31e60 R14: dead000000000122 R15: dead000000000100
-[  172.881033] FS:  00007f442c53c800(0000) GS:ffff9e9429000000(0000)
-knlGS:0000000000000000
-[  172.889117] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  172.894861] CR2: 0000000000000008 CR3: 000000010ba96006 CR4: 00000000007706e0
-[  172.901997] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  172.909127] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  172.916261] PKRU: 55555554
-[  172.918974] Call Trace:
-[  172.921427]  <TASK>
-[  172.923533]  rdt_kill_sb+0x29b/0x350
-[  172.927112]  deactivate_locked_super+0x2f/0xa0
-[  172.931559]  cleanup_mnt+0xee/0x180
-[  172.935051]  task_work_run+0x5c/0x90
-[  172.938629]  exit_to_user_mode_prepare+0x229/0x230
-[  172.943424]  syscall_exit_to_user_mode+0x18/0x40
-[  172.948043]  do_syscall_64+0x46/0x80
-[  172.951623]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  172.956675] RIP: 0033:0x7f442c75126b
-[  172.960271] Code: cb 1b 0e 00 f7 d8 64 89 01 48 83 c8 ff c3 90 f3
-0f 1e fa 31 f6 e9 05 00 00 00 0f 1f 44 00 00 f3 0f 1e fa b8 a6 00 00
-00 0f 05 <48> 3d 00 f0 ff ff 77 05 c3 0f 1f 40 00 48 8b 15 91 1b 0e 00
-f7 d8
-[  172.979017] RSP: 002b:00007ffc82d66fe8 EFLAGS: 00000202 ORIG_RAX:
-00000000000000a6
-[  172.986584] RAX: 0000000000000000 RBX: 000055bd4cc37090 RCX: 00007f442c75126b
-[  172.993715] RDX: 0000000000000001 RSI: 0000000000000001 RDI: 000055bd4cc3b950
-[  173.000849] RBP: 000055bd4cc371a8 R08: 0000000000000000 R09: 0000000000000073
-[  173.007980] R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000001
-[  173.015115] R13: 000055bd4cc3b950 R14: 000055bd4cc372c0 R15: 000055bd4cc37090
-[  173.022249]  </TASK>
-[  173.024440] Modules linked in: rfkill intel_rapl_msr
-intel_rapl_common isst_if_common irdma skx_edac nfit libnvdimm ice
-x86_pkg_temp_thermal intel_powerclamp coretemp ib_uverbs iTCO_wdt
-intel_pmc_bxt ib_core iTCO_vendor_support kvm_
-intel ipmi_ssif kvm irqbypass rapl acpi_ipmi intel_cstate i40e joydev
-mei_me ioatdma i2c_i801 intel_uncore lpc_ich i2c_smbus mei
-intel_pch_thermal dca ipmi_si ipmi_devintf ipmi_msghandler acpi_pad
-acpi_power_meter fuse zram xfs crct10d
-if_pclmul ast crc32_pclmul crc32c_intel drm_vram_helper drm_ttm_helper
-ttm wmi ghash_clmulni_intel
-[  173.073900] CR2: 0000000000000008
-
--- 
--Jirka
-
+Reviewed-by: Rob Herring <robh@kernel.org>

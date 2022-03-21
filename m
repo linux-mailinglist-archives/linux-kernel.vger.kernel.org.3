@@ -2,175 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFEF4E3342
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3614E3340
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:56:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiCUWx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 18:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
+        id S230230AbiCUWxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 18:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiCUWxh (ORCPT
+        with ESMTP id S230393AbiCUWxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:53:37 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F1A3CD8C5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:32:48 -0700 (PDT)
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        Mon, 21 Mar 2022 18:53:34 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A693CD8C4;
+        Mon, 21 Mar 2022 15:32:47 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9085B3F1FC
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 22:32:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647901965;
-        bh=XDxK5C2+TSZ+aKZ0Wy4YRhUpCIrlRUVGIVSk2+SABTU=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=tqIgojDWSHJyPdZcyqFpL6o7ZVnZAmuDGRyK9juvO1iBokpBxtaeo4HpmAUj+S/Q6
-         JHodkUAHBUxfvJ+Uopa70FxlpAMbPNC9VvbI1Ef63Dh7TNY34kBKHCt3iXArIBlRyf
-         XG8MxI9bLmlN7dWkm481SoG0CKw54lCQ+QL9AppckOkEIIKpckEVV2uWpU9G5cGWr8
-         +w57c+e4jyPMiJ1Ex3ra7e3bxZAqfVOVsLZ/AxslvWGmrvEHBQfx7v8BNoaQ+f2/R2
-         JYW7VTlO+x9H31t9J5KYXSJp6sTvquLnyzqDxlc39wlkt1gmjzv+e4SXYy27n2NLkw
-         om9AH1zRK7k0w==
-Received: by mail-il1-f198.google.com with SMTP id y7-20020a92d207000000b002c7f55e413bso5044647ily.5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:32:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XDxK5C2+TSZ+aKZ0Wy4YRhUpCIrlRUVGIVSk2+SABTU=;
-        b=cBMJoAxmETxdXUhNfiGNoRytgdz6OhwJOd+dngn0axbMWut5riilfsz2cTgiimfr/5
-         1AszKKg8d5xEu2dKHaQE8TZ4SviZycYJNOu71aQz8g7N5Kh5b3Z+rRnzWyyjtjwN6gGw
-         JsnN2iYM+s0tNAoxT+B5eB/ZafopluEfbbnA7pAVhPPS9g0nGzelQkARnSJG4CkRRK1r
-         CdT0BuxnQuz7NruskgQPtVWWAEnO7ZER40mKYJb9VEE7pihrtQn8KRhNiQeNdfpak0Di
-         SmW3sVFN/RF8RjXLiKy5XgFKpBXcoUcsZSbYvc3pUbOWNCLELFUtX6dxHBWZbgKvYJYf
-         6rzQ==
-X-Gm-Message-State: AOAM533uDwHre8cCcNZUbIU8EFn9FpLpZX7bLomQe4JnJXwidPK++t1t
-        2q5qHM8HwcxM0LWGFZDGN+e9MIHYOBMvYoI8cTV+4WQ7u8Yh/DCmBoSdu6pGPJLJj0Ae0qKqxay
-        QL0Du3UMB7RL6iNAuAbccgOj5LLf15VK/BwF1FDziQw==
-X-Received: by 2002:a05:6e02:5b1:b0:2c6:218d:fb38 with SMTP id k17-20020a056e0205b100b002c6218dfb38mr10945926ils.266.1647901963708;
-        Mon, 21 Mar 2022 15:32:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwAFr4gjq1K+/JSkE+Bmnd8mMisGuPUNiCR0CRuDg5LKHtX6MOLU2pb1SX/F9E9Vlp34LLMoQ==
-X-Received: by 2002:a05:6e02:5b1:b0:2c6:218d:fb38 with SMTP id k17-20020a056e0205b100b002c6218dfb38mr10945920ils.266.1647901963429;
-        Mon, 21 Mar 2022 15:32:43 -0700 (PDT)
-Received: from xps13.dannf (c-73-14-97-161.hsd1.co.comcast.net. [73.14.97.161])
-        by smtp.gmail.com with ESMTPSA id s10-20020a6b740a000000b006413d13477dsm9219017iog.33.2022.03.21.15.32.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 15:32:42 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 16:32:40 -0600
-From:   dann frazier <dann.frazier@canonical.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        Toan Le <toan@os.amperecomputing.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
-        Android Kernel Team <kernel-team@android.com>
-Subject: Re: [PATCH v2 0/2] PCI: xgene: Restore working PCIe functionnality
-Message-ID: <Yjj9CLyRdFVWxin0@xps13.dannf>
-References: <20220321104843.949645-1-maz@kernel.org>
- <CAL_JsqJacC6GbNebTfYyUEScROCFN4+Fg2v1_iYFfqAvW4E9Vw@mail.gmail.com>
- <YjiewB5Nz5CyFuI0@xps13.dannf>
- <Yjii9LUC+u/gmijj@robh.at.kernel.org>
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 757FB113;
+        Mon, 21 Mar 2022 15:32:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1647901967;
+        bh=r4WfNG3naLSNSTH3OBiFqFDpGWTK1IXv86OvRgH10fE=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=JZaLni9ntUONhphJ4aBgcdP+8Gzhh9K7hIuy/QQZiKY+0zXguJRz0ccqKZJyWqi7d
+         /Z/OkLBd+MGcXdNPbW+A2F+P8TcfWnZDoXpdyOgBs9RDlu/koEDbcFhniCLTY6Qgcb
+         sDXjCDg4XQAKNvV+xGrU7sUjElNDkaxX4fJE23CQ=
+Date:   Mon, 21 Mar 2022 15:32:43 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        linux-i2c@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] ic2: mux: pca9541: add delayed-release support
+Message-ID: <Yjj9C5PgBfgmXyp7@hatter.bewilderbeest.net>
+References: <20220201001810.19516-1-zev@bewilderbeest.net>
+ <ae14fd3c-2f50-b982-c61c-9db3bb28c809@axentia.se>
+ <Yh1O6w56zsNtNRbb@hatter.bewilderbeest.net>
+ <f3c56f5a-6a6b-039c-9fdf-a994d054645d@axentia.se>
+ <YiAPKGSDJrO+MxLR@hatter.bewilderbeest.net>
+ <YjRmUokDFPezGI5B@shikoro>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <Yjii9LUC+u/gmijj@robh.at.kernel.org>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YjRmUokDFPezGI5B@shikoro>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 11:08:20AM -0500, Rob Herring wrote:
-> On Mon, Mar 21, 2022 at 09:50:24AM -0600, dann frazier wrote:
-> > On Mon, Mar 21, 2022 at 10:17:34AM -0500, Rob Herring wrote:
-> > > On Mon, Mar 21, 2022 at 5:49 AM Marc Zyngier <maz@kernel.org> wrote:
-> > > >
-> > > > Since 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup") was
-> > > > merged in the 5.5 time frame, PCIe on the venerable XGene platform has
-> > > > been unusable: 6dce5aa59e0b broke both XGene-1 (Mustang and m400) and
-> > > > XGene-2 (Merlin), while the addition of c7a75d07827a ("PCI: xgene: Fix
-> > > > IB window setup") fixed XGene-2, but left the rest of the zoo
-> > > > unusable.
-> > > >
-> > > > It is understood that this systems come with "creative" DTs that don't
-> > > > match the expectations of modern kernels. However, there is little to
-> > > > be gained by forcing these changes on users -- the firmware is not
-> > > > upgradable, and the current owner of the IP will deny that these
-> > > > machines have ever existed.
-> > > 
-> > > The gain for fixing this properly is not having drivers do their own
-> > > dma-ranges parsing. We've seen what happens when drivers do their own
-> > > parsing of standard properties (e.g. interrupt-map). Currently, we
-> > > don't have any drivers doing their own parsing:
-> > > 
-> > > $ git grep of_pci_dma_range_parser_init
-> > > drivers/of/address.c:int of_pci_dma_range_parser_init(struct
-> > > of_pci_range_parser *parser,
-> > > drivers/of/address.c:EXPORT_SYMBOL_GPL(of_pci_dma_range_parser_init);
-> > > drivers/of/address.c:#define of_dma_range_parser_init
-> > > of_pci_dma_range_parser_init
-> > > drivers/of/unittest.c:  if (of_pci_dma_range_parser_init(&parser, np)) {
-> > > drivers/pci/of.c:       err = of_pci_dma_range_parser_init(&parser, dev_node);
-> > > include/linux/of_address.h:extern int
-> > > of_pci_dma_range_parser_init(struct of_pci_range_parser *parser,
-> > > include/linux/of_address.h:static inline int
-> > > of_pci_dma_range_parser_init(struct of_pci_range_parser *parser,
-> > > 
-> > > And we can probably further refactor this to be private to drivers/pci/of.c.
-> > > 
-> > > For XGene-2 the issue is simply that the driver depends on the order
-> > > of dma-ranges entries.
-> > > 
-> > > For XGene-1, I'd still like to understand what the issue is. Reverting
-> > > the first fix and fixing 'dma-ranges' should have fixed it. I need a
-> > > dump of how the IB registers are initialized in both cases.
-> > 
-> > Happy to provide that for the m400 if told how :)
-> 
-> Something like the below patch. This should be with the 'dma-ranges' 
-> DT change and only c7a75d07827a reverted.
+On Fri, Mar 18, 2022 at 04:00:34AM PDT, Wolfram Sang wrote:
+>
+>Can someone give me a summary What is the status of this series?
+>
 
-https://paste.ubuntu.com/p/RHzBd5jT6v/
-
-Note that networking does come up with this setup. That surprised me
-because I thought I'd tested this combo before, but apparently what
-I'd tested before was 6dce5aa59e0b reverted + the dtb change:
-  https://lore.kernel.org/linux-pci/YgXG838iMrS1l8SC@xps13.dannf/
-
-  -dann
+I had been hoping Peter might offer any further thoughts on my last 
+email regarding the feasibility/proper approach for implementing some 
+sort of automated avoidance of the problem scenario he pointed out -- or 
+alternately, if we think a written warning in the bindings is 
+sufficient, I can send a v3 with that incorporated.
 
 
-> 8<-------------------------------------------------------------------
-> diff --git a/drivers/pci/controller/pci-xgene.c b/drivers/pci/controller/pci-xgene.c
-> index 0d5acbfc7143..6a435c31f45e 100644
-> --- a/drivers/pci/controller/pci-xgene.c
-> +++ b/drivers/pci/controller/pci-xgene.c
-> @@ -78,6 +78,7 @@ static u32 xgene_pcie_readl(struct xgene_pcie *port, u32 reg)
->  
->  static void xgene_pcie_writel(struct xgene_pcie *port, u32 reg, u32 val)
->  {
-> +	dev_info(port->dev, "0x%04x <- 0x%08x\n", reg, val);
->  	writel(val, port->csr_base + reg);
->  }
->  
-> @@ -508,7 +509,9 @@ static void xgene_pcie_setup_ib_reg(struct xgene_pcie *port,
->  	case 0:
->  		xgene_pcie_set_ib_mask(port, BRIDGE_CFG_4, flags, size);
->  		bar_addr = cfg_base + PCI_BASE_ADDRESS_0;
-> +		dev_info(port->dev, "BAR0L <- 0x%08x\n", bar_low);
->  		writel(bar_low, bar_addr);
-> +		dev_info(port->dev, "BAR0H <- 0x%08x\n", upper_32_bits(cpu_addr));
->  		writel(upper_32_bits(cpu_addr), bar_addr + 0x4);
->  		pim_reg = PIM1_1L;
->  		break;
+Thanks,
+Zev
 

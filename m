@@ -2,119 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B704E234A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40AC84E2342
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345881AbiCUJ1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
+        id S1345845AbiCUJ01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345867AbiCUJ1B (ORCPT
+        with ESMTP id S1345781AbiCUJ0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:27:01 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3E96516A
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:25:36 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220321092533epoutp018e260b4a308c41b46df529a4daffc03c~eWyY-Ay151955619556epoutp01l
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:25:33 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220321092533epoutp018e260b4a308c41b46df529a4daffc03c~eWyY-Ay151955619556epoutp01l
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1647854733;
-        bh=e8bwc2Ysxw5MN4eM2XYne32AAf/UZRzAOxexveGEtGU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Pj6eeYL0D6KJSeslOYVfaNSLBcUcl9f/IdEkahTLt39NAknYRq1+0/zi0UOLgKbaS
-         BGhKMWftuLdWuz0WyFuqyWTu/as+q7syh+QWxpvBMr5pKq28iZGn/nx9lEWaa6HPTB
-         FcgrV4C4j+BEZGS3Qr9E4HSu/rOwiLg+n1lHz3Kk=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20220321092532epcas2p10d70a6372d69a95910bfbccdb09004c1~eWyYcnmY00811308113epcas2p1f;
-        Mon, 21 Mar 2022 09:25:32 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.89]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4KMTk31l5fz4x9Pv; Mon, 21 Mar
-        2022 09:25:31 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CE.62.25540.88448326; Mon, 21 Mar 2022 18:25:28 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220321092527epcas2p4d7935b4535902c27b412325ebd0f15f4~eWyTnZCk81323613236epcas2p4l;
-        Mon, 21 Mar 2022 09:25:27 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220321092527epsmtrp2e87ba18f1e93c2e9a8fd2290161d14ce~eWyTmcP4K1566415664epsmtrp2C;
-        Mon, 21 Mar 2022 09:25:27 +0000 (GMT)
-X-AuditID: b6c32a47-81bff700000063c4-8c-62384488471d
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        19.D3.29871.78448326; Mon, 21 Mar 2022 18:25:27 +0900 (KST)
-Received: from ubuntu (unknown [12.36.155.120]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220321092527epsmtip2c105407545e6069710ade2a503c4f4db~eWyTeEG6c3183331833epsmtip20;
-        Mon, 21 Mar 2022 09:25:27 +0000 (GMT)
-Date:   Mon, 21 Mar 2022 18:24:09 +0900
-From:   Jung Daehwan <dh10.jung@samsung.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
-Subject: Re: [PATCH v3 0/4] support USB offload feature
-Message-ID: <20220321092409.GA62265@ubuntu>
+        Mon, 21 Mar 2022 05:26:22 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B044DF70
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647854697; x=1679390697;
+  h=message-id:date:subject:references:to:cc:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=1ZNZ/wAx6hIbsFWX4YpOQjODzHTXpRqdfrhqT8cuRs4=;
+  b=GCs/08+pjlNjbSbRHI11ok4v4D4SkCYlqLXT2GOPRvJ3qG+PPX3f9BYF
+   SHMt4pR4L0nV3bYOweeWV3Er5exCGfysXie3dR/cHvwkQmE8xZ1fzuv3D
+   5ovg2UIP2ot0oAxeJbp19K+CaEbcfWqvCpCFkLofNkLP81v7PBLXad2jP
+   NLbu63ZlDnRw8tiAoImzMFpDfqRLVI8GQ0OIXqMqyai4Ya+bqWUf8A1qM
+   nUtR5EgZ4Otnqo+zjgG1+DLcpcmFOlVWbqLpwI8f7/U228BMLLQJgkejC
+   JvrN+pnXWaMTC96bnjwQgsLc4yUtu+aWb4thV7J8POvWZnhCW6vFvC9yv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="282333640"
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="282333640"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 02:24:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="824304486"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Mar 2022 02:24:57 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 21 Mar 2022 02:24:56 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Mon, 21 Mar 2022 02:24:56 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.173)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.21; Mon, 21 Mar 2022 02:24:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fDr2EU7whfybJtZYif36rR4aQekw/2+ZSRRQP6f7LASMuyXjwxUyG1+s0LdnmpsHpitun5FSO6/aUZO1suaxUjO4rVk07kzL4KaffvQllQ70qRI/jxcILLzkPyGc6/WVkD5ibw6RKLA7B6ALs7ruMyvJ709/Z0NCLOmoT/MvavG3xN+NdwZEQ9l6KNpnvavKRzwRqOrKAMlbCJTQmlMdY0yymcBogirSYKd24KEZjvadwwURa2HB9kcrcoAtcpKxjJrEnA/tvDdv1vNkon/mRzSS91ZA5sj9dBTaaW1zT9CEhVui9z69O9pACjrdU5ITaNFRakxuDZRI9u+G6YEylg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CbBx/yHXw3q3CQw1vsDlQ7Pz6WrJI22PYduFdKNWmIw=;
+ b=D8aDYIGLoB5I2pXovDBPPhzEtZ2BK+eczPAcJhc4qDEttRl7TKw+3fLref0vIisa+Pn9DF78id38c02wq1bzqOBJB7cy8d0UpCqi2dP6l4jTzDmjZZcc+b2dXe9J5LwuPBkzEhnS1dc6ntXEUt7Tc7pDla2SfRSNGOXsIUuOvf+yhaNpQ0dGqpExHLjrGEy0JhUplh6UXlQBkWnqJ41IAgE7kSkgtvI+nQPjrwbME2Duj85xuatDTdP/uabdFsvhtU9jBy/Ho9CL9mLJuray2XSwtxYPgixaCeJViIu/zaLoGlElaKhTD+TZr+E4KXUhQCWfsFDlYCrehlqWxTypug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ0PR11MB5598.namprd11.prod.outlook.com (2603:10b6:a03:304::12)
+ by MN2PR11MB4464.namprd11.prod.outlook.com (2603:10b6:208:188::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Mon, 21 Mar
+ 2022 09:24:53 +0000
+Received: from SJ0PR11MB5598.namprd11.prod.outlook.com
+ ([fe80::90bc:9408:541e:5b94]) by SJ0PR11MB5598.namprd11.prod.outlook.com
+ ([fe80::90bc:9408:541e:5b94%8]) with mapi id 15.20.5081.022; Mon, 21 Mar 2022
+ 09:24:53 +0000
+Message-ID: <af19bca5-7ae6-afb7-6f2e-57c67fb6d9b4@intel.com>
+Date:   Mon, 21 Mar 2022 17:24:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: [amir73il:fsnotify-volatile 8/9]
+ fs/notify/fanotify/fanotify_user.c:1202:2: warning: Value stored to 'ret' is
+ never read [clang-analyzer-deadcode.DeadStores]
+References: <202203211233.Vk5Tdqt8-lkp@intel.com>
+Content-Language: en-US
+To:     Amir Goldstein <amir73il@gmail.com>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>
+From:   kernel test robot <yujie.liu@intel.com>
+In-Reply-To: <202203211233.Vk5Tdqt8-lkp@intel.com>
+X-Forwarded-Message-Id: <202203211233.Vk5Tdqt8-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: HK2PR0401CA0017.apcprd04.prod.outlook.com
+ (2603:1096:202:2::27) To SJ0PR11MB5598.namprd11.prod.outlook.com
+ (2603:10b6:a03:304::12)
 MIME-Version: 1.0
-In-Reply-To: <YjhB7+AaEXvuUmdi@kroah.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIJsWRmVeSWpSXmKPExsWy7bCmmW6Hi0WSwe8pXBZPjixit2hevJ7N
-        4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtZq5Vtui6e4PRgdPjcl8vk8eCTaUei/e8ZPLY
-        P3cNu0ffllWMHp83yQWwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXm
-        ptoqufgE6Lpl5gDdpKRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMC/QK07MLS7N
-        S9fLSy2xMjQwMDIFKkzIzmjc9IS5YL9Axd/ra9kaGJfxdjFyckgImEjsPj2JuYuRi0NIYAej
-        xI/FK9kgnE+MEqf6HkI53xgl5i+7zwzTcuF1JwuILSSwl1GiY6EzhP2EUWLDwnAQm0VAVeLG
-        7auMIDabgJbEvR8nwHpFBIwl+s/OYgcZyiywgUnixJ3nYAlhAXOJ2VP62EFsXgFtiY4DJ5gg
-        bEGJkzOfgC3jFNCUmPLxJlA9B4eogIrEq4P1EPdM5JA4vU8QwnaRmLv6FNSdwhKvjm9hh7Cl
-        JD6/28sGYRdL7PrUygRyg4RAA6NE44MTUA3GErOetTOCzGcWyJTY9qQCxJQQUJY4cgvsAmYB
-        PomOw3/ZIcK8Eh1tQhCNyhLTL09ghbAlJQ6+Pgc10ENiWvN8dnjgrm48wjKBUX4WksdmISyb
-        BbZBR2LB7k9sEGFpieX/OCBMTYn1u/QXMLKuYhRLLSjOTU8tNiowhsd0cn7uJkZwWtVy38E4
-        4+0HvUOMTByMhxglOJiVRHgXfzBPEuJNSaysSi3Kjy8qzUktPsRoCoylicxSosn5wMSeVxJv
-        aGJpYGJmZmhuZGpgriTO65WyIVFIID2xJDU7NbUgtQimj4mDU6qBySBa/Wqh2edCS6f3Gf9m
-        l9ckluS8PJxiLmzNY2ow+WJE7bmUQ9MvL/TP7VxymVeK4345y6UyjeqEEsO7K5PC47e5Kwq6
-        qjTOXvh8/a+aVVts218f5XI+turVjvZonpK+NUIRJuHZ1b6hfGqzOvTv+5eebWPlF1bP5fQM
-        vP1k19Vgy+WHkmPrn764vnpDpMLae8LfA56lN270eFezbpdSvgavTvcfX+/XdT1yOmLXHN7M
-        MH24QjG4MPf1PvEvjeyzZjzJmeCq/Dc3VPbbWm1VjpmnDY8oCTYffDn1YffRbU9etSRfXvq1
-        /9BTUctXL2fd8TpYonnnZLDGQwm/2d6pN6bc1a1fLr9WO1TulNFzJZbijERDLeai4kQAWVo5
-        qjQEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrFLMWRmVeSWpSXmKPExsWy7bCSvG67i0WSweHdGhZPjixit2hevJ7N
-        4vqf94wW7c8vsFlc3jWHzWLRslZmi+ZNU1gtZq5Vtui6e4PRgdPjcl8vk8eCTaUei/e8ZPLY
-        P3cNu0ffllWMHp83yQWwRXHZpKTmZJalFunbJXBl7N0/hb3gD2/FzAPKDYx/uLoYOTkkBEwk
-        LrzuZOli5OIQEtjNKPGhrZ8RIiEpsXTuDXYIW1jifssRVoiiR4wSvzp3M4EkWARUJW7cvgrW
-        wCagJXHvxwlmEFtEwFii/+wsdpAGZoFNTBKzf68FSwgLmEvMntIHNpVXQFui48AJJoipOxgl
-        Pi/rYYJICEqcnPmEBcRmBpp6499LoDgHkC0tsfwfB0iYU0BTYsrHm8wgYVEBFYlXB+snMArO
-        QtI8C0nzLITmBYzMqxglUwuKc9Nziw0LDPNSy/WKE3OLS/PS9ZLzczcxgqNDS3MH4/ZVH/QO
-        MTJxMB5ilOBgVhLhXfzBPEmINyWxsiq1KD++qDQntfgQozQHi5I474Wuk/FCAumJJanZqakF
-        qUUwWSYOTqkGpsD/Jgu3TvPetX9hOC+3qu353r+7101miMp6dWQvq/TBH52XJEO9+K6sLjs2
-        51TLE/GnB4p8NyRw3PWZu9tR5FTPyaUN1+++mR+Q8anZNrl1hb6LU2vLX7W2e2tueVgu7Fli
-        G1auODVf+demZpmqB1ne95XLmS8diJe+86SD1b1hafzhy4HNMrtccvJ7uqetfpPk9klpwZW3
-        vbMMD035f7K74Ii7xO4jee+91q3e42+aF7LZ4ETjYoaNDy4Ky8ww+XE68XHK2ZbfjBOmqBlM
-        mtwuMu3tw4dbTn8/7Ke3Po6L+bn9wbxv115eMT11ReS2g+c639y9R+u9F8838fqfueeJ8ult
-        vWcv3lcQ+nLk3CRFJZbijERDLeai4kQARwF99/0CAAA=
-X-CMS-MailID: 20220321092527epcas2p4d7935b4535902c27b412325ebd0f15f4
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----mwmExhcEqaTMgLyfw452.zc-R1ZLcLBBgXcQdqrDAhnQ.X2v=_22567d_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c
-References: <CGME20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c@epcas2p1.samsung.com>
-        <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
-        <YjhB7+AaEXvuUmdi@kroah.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8ecaa3c6-c740-459d-486d-08da0b1ca829
+X-MS-TrafficTypeDiagnostic: MN2PR11MB4464:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <MN2PR11MB4464BBB38405950CE2E86A0EFB169@MN2PR11MB4464.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aV+VKV9SlMZ+XgOcW8gAoTn3jnw5hMBoCYHmUh7X6rc6tt//RMQ3OowMvTembXVX4yWWU01Eu76bdjqtCkjZng/baiNiAecfc3bl5gHTU/VilvpjO5JaRVizQk80eBE+82tyVUme85UPaz2vzafyDSAF/9xGCGYSei+bv4GRjZukIvSY+SmX4hA3HJQ4TtszoO1h9VCZkZ5uLC974KSAcXhRyyMPxc9ahHUkr6O3zMyq2HKpOQ5NMLQhjE9rDJ5BjGd0rDNw2ctPzvyksozxC+7YN6MR4PUieki3qVfvnT0NGiuGGD7OwEedHUXqKyFWoMEELqVM129HXWTwOkRLDi7wrUi2mAzwl8WA483FByHV9kJNh1Af+ch/x7picHvlV8pAKibAD7dnWl52sqLMU6vSL0K6AApL0sXc6Dqj7xyvfU332cHG4EdpeFcSq4tXsMlSBDN7oZsTpYY+KrMjG678Y5M6mc1Zf6RBDC376mNXHbATIlyVrs9B57P2PouhXvUUE6MfTwrVTpGRuz7h54qc1ytKfcDGFCsoSYQFm9cFao/KgoKyvr+pijqwQ4Vipg0LlIg0S0AG33TOHy9PoCNCR4WrLB/48dLlW5r2EMOxOgt8tCg2fcnlyjV/gVDTMceyz9tAg8ZQMtAhDKj+DVsm3X8rqd0TnHd/GV5PGwpx97D0TEVi30s4BAZxzbZJWu09H0tgJKSrV4x65tWSMzT/fA6qRGPhvPQbwcAG17yghCkKCH6aelsxfyeoxZx9rBfkg0OJMS0sHpwmUICVjBFXGm7wEWiO+GRtA7e3Gx571Wgq2FM3GKOVRibUTcbk9uQXdbEmSEUH3LiAgRWGjJCt+nAlL+e7mpu/sSJy6Wo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5598.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(66556008)(66946007)(2906002)(8676002)(4326008)(82960400001)(4001150100001)(38100700002)(36756003)(83380400001)(31686004)(6666004)(6512007)(508600001)(6506007)(6486002)(966005)(186003)(26005)(6916009)(5660300002)(316002)(86362001)(31696002)(2616005)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q0RBK3R5di9tL3lYM0YveEQrVzJZWmY5RDVxUk9xdVhLNnlNUEpVSWZKUTVk?=
+ =?utf-8?B?eGFENXMvdHpJdmFLL28wV3dlemRCN09qNHZsVFMvejdKVVdPZER5U2trMVlS?=
+ =?utf-8?B?bDdqdXp5cFA5d3JGZVlwTVF4SnFXcGN4MkhYSlgwM1hCOVNMOWxUK2ZUOUVz?=
+ =?utf-8?B?M0taZk1TNTdiWnhyRjNXYW8vdE5Od25Qc1g1b3J6bUVMMFhQVlBrdllnanh0?=
+ =?utf-8?B?TWFXb3JJUkJ0RlhJOWw0QVBJWU92bXV5eW1jYmFHMzI5YUNkTmFkY3RTNy9m?=
+ =?utf-8?B?aXR3QXdWU3VFUURCczlvSGFNSlR0TSt4eHI2VG5ycDI4Y3JncThEaXBVZUZ4?=
+ =?utf-8?B?SnFLclQ4VTU5bnhRaGZsN1NudXRkL3JZVWc0cmozMVpZZ1pCZzZYWi9pMkNO?=
+ =?utf-8?B?VHo5WDRTbVFiRlRQa2ExYnBISCtvY0MrMXAzZVNWRExiWThveDFOV3VmMWZN?=
+ =?utf-8?B?akd6ekJ6Y2RFZ2huS1dteU1hdDdid2hqamZUdDJxNmdVdnIzZDNRbzd6bW1O?=
+ =?utf-8?B?WXNkb2ZCSWF5b0lxV2JzaXpscHdoSmtkMkJLd3NBNTVHVmlDTEpLV1p5ODYr?=
+ =?utf-8?B?V3FvZ05iVExROFhodFZBeGpUNEdnRW1lclFLeS96NHE1d3VYay9JbUxLTEtJ?=
+ =?utf-8?B?NUhLWGYvb1Zya0h4MEpJTjV5Nzl2eFJ0VFRYSmlUN25ORSsxNjdZOC9KL2FX?=
+ =?utf-8?B?dTZpVnllVGd6NGtxclJPSldmQWVzZkN3TlJ6RitPL2hzZXdTRUVGWHRUaXJj?=
+ =?utf-8?B?Y3ZMU1d6WXhnOUpGVExsWVZOTGpHbXRscG0yWWtmcmVtZ3htUjVadzZqSDBN?=
+ =?utf-8?B?L3h5SGRGcVAwR05MY0ZzMTd2azlyVE9PbzJSeUJLbVpWTDM5dzRQbFJRZUx3?=
+ =?utf-8?B?VFJsUDBqM2oyM0tweDFLQ3krTkZoWE9NVStSbGFRSHpvWXF6eGlFTmlYR3BG?=
+ =?utf-8?B?TkZoZUZuTHlST1paaEFsOG1sdjdCbnNqZGJJVnV6eUFDQU9ETkpqOThhVW4z?=
+ =?utf-8?B?Q3AyU21jSzMzYnNCYzVUUlZKU01qc2tROXNrUHF6UTRJMlpxWTcxSGp2TWE3?=
+ =?utf-8?B?bmdkY1B5Yzc2V2J3STlwTWg0cXcvUFE4QWloempPSWgxN3FhdGNBSkxwc0xR?=
+ =?utf-8?B?NDBrelhTWUlocWRNanNWT2pHeHRiQjhISEFYTVN1Y1B0MDJMdkZCWXZZakdW?=
+ =?utf-8?B?cWVLOTd6WXdiWWVZMVB1N0Y5b3ZvWWJFamQ3NG9FaVZrMm81ODQrUkh1ei9Z?=
+ =?utf-8?B?WEZkRytJaHRjelByWWdPa0o4UEh5STZKNUJpVzhTUHAyaWZIMUFCMmRqRGJv?=
+ =?utf-8?B?RmdDa3l4blVJOUFrNXd5Wm8ydmNVcFJ0SFhvWUhKQzgrTUZmaWpzMytXbVRh?=
+ =?utf-8?B?Vjljc2t5MGRXNytDQk0vR1VIWXVLVDNqdnlNUmQ2U1F4ZDg4QTlRQitiZkx2?=
+ =?utf-8?B?ZTVzU3k5TE1uV2dHbU9aUEhBQ0h6K2QvUXJEODgwYjBJalN4UHEzVzY5WTNh?=
+ =?utf-8?B?TXBXdXkrRmVJMGlQVS9IRVB3ejNERitreTI3WjF1OGNYU3Q5QjFTVjZEOURJ?=
+ =?utf-8?B?YXBnWmN3STMrbFJQbXp4bVIrNUxKYTRubjhyNVZjTGh1OTBFSWRJRGhNbHpj?=
+ =?utf-8?B?ZDdKZTdFS0FHOHo0RFBqZzMrQTRDbmdQUll2cHo0b0VTU0NaaTJPZVVvckYz?=
+ =?utf-8?B?UnI5UkU4L2MrVVowMHM2cnhOV25sUkNRWFZBaGtuNmVKeHRYeEQwdU55c2J6?=
+ =?utf-8?B?bEVZTGp0UlA0b1JxMmdUeWFJY3Fyam05cCtNZHVSdmE0bjZIWXE1c0ljQjNV?=
+ =?utf-8?B?d3FSNVlHVEJvWHJ1REtiKzlVanJJNW1SVHRhNUQ5Mk90QitqbXg3UU9VN0xr?=
+ =?utf-8?B?WXpGUk16cnFleUFYeVVORUVZVVlESWQ0UXF1RlBhQ2MrTFJaclVFajAzbDFO?=
+ =?utf-8?Q?kHhDcmazNprSyXdVLrU/ay36wXfPbnLN?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ecaa3c6-c740-459d-486d-08da0b1ca829
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5598.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 09:24:53.7648
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GGoF+vhpP3etArhK06O9PQbYwUlmiVhua5qPB06jOFX0ILU3ENCNvH9oJNtuFgA7hIIgYmvfyrW9g5V4duA6xQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4464
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,56 +157,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------mwmExhcEqaTMgLyfw452.zc-R1ZLcLBBgXcQdqrDAhnQ.X2v=_22567d_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+tree:   https://github.com/amir73il/linux fsnotify-volatile
+head:   20c431f640f13d125fa3d80fde9ae4a28892a029
+commit: 068909e55d92d27d6c7e5688b4689235707613ba [8/9] fanotify: factor out helper fanotify_mark_update_flags()
+config: x86_64-randconfig-c007 (https://download.01.org/0day-ci/archive/20220321/202203211233.Vk5Tdqt8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+         chmod +x ~/bin/make.cross
+         # https://github.com/amir73il/linux/commit/068909e55d92d27d6c7e5688b4689235707613ba
+         git remote add amir73il https://github.com/amir73il/linux
+         git fetch --no-tags amir73il fsnotify-volatile
+         git checkout 068909e55d92d27d6c7e5688b4689235707613ba
+         # save the config file to linux build tree
+         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64 clang-analyzer
 
-On Mon, Mar 21, 2022 at 10:14:23AM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Mar 21, 2022 at 05:59:50PM +0900, Daehwan Jung wrote:
-> > This patchset is for USB offload feature, which makes Co-processor to use
-> > some memories of xhci. Especially it's useful for USB Audio scenario.
-> > Audio stream would get shortcut because Co-processor directly write/read
-> > data in xhci memories. It could get speed-up using faster memory like SRAM.
-> > That's why this gives vendors flexibilty of memory management.
-> > Several pathches have been merged in AOSP kernel(android12-5.10) and I put
-> > together and split into 3 patches. Plus let me add user(xhci-exynos)
-> > module to see how user could use it.
-> > 
-> > To sum up, it's for providing xhci memories to Co-Processor.
-> > It would cover DCBAA, Device Context, Transfer Ring, Event Ring, ERST.
-> > It needs xhci hooks and to export some xhci symbols.
-> > 
-> > Changes in v2 :
-> > - Fix commit message by adding Signed-off-by in each patch.
-> > - Fix conflict on latest.
-> > 
-> > Changes in v3 :
-> > - Remove export symbols and xhci hooks which xhci-exynos don't need.
-> > - Modify commit message to clarify why it needs to export symbols.
-> > - Check compiling of xhci-exynos.
-> 
-> As I asked for in the previous submission, you MUST have a user for
-> these hooks, otherwise we can not accept them (nor would you WANT us to
-> accept them).  Please fix that up and add them to the next submission as
-> we can not do anything with this one.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
-Hi greg,
-
-I've submitted the user(xhci-exynos) together on the last patch of the patchset.
-You can see xhci-exynos uses these hooks and symbols.
-
-[PATCH v3 4/4] usb: host: add xhci-exynos driver
-
-Best Regards,
-Jung Daehwan
-
-------mwmExhcEqaTMgLyfw452.zc-R1ZLcLBBgXcQdqrDAhnQ.X2v=_22567d_
-Content-Type: text/plain; charset="utf-8"
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <yujie.liu@intel.com>
 
 
-------mwmExhcEqaTMgLyfw452.zc-R1ZLcLBBgXcQdqrDAhnQ.X2v=_22567d_--
+clang-analyzer warnings: (new ones prefixed by >>)
+
+ >> fs/notify/fanotify/fanotify_user.c:1202:2: warning: Value stored to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
+            ret = 0;
+            ^     ~
+
+vim +/ret +1202 fs/notify/fanotify/fanotify_user.c
+
+5e9c070ca08543 Lino Sanfilippo         2013-07-08  1178
+eaa2c6b0c9181c Amir Goldstein          2018-06-23  1179  static int fanotify_add_mark(struct fsnotify_group *group,
+ad69cd9972e79a Amir Goldstein          2021-11-29  1180  			     fsnotify_connp_t *connp, unsigned int obj_type,
+77115225acc67d Amir Goldstein          2019-01-10  1181  			     __u32 mask, unsigned int flags,
+77115225acc67d Amir Goldstein          2019-01-10  1182  			     __kernel_fsid_t *fsid)
+2a3edf86040a7e Eric Paris              2009-12-17  1183  {
+40822e8f3f162d Amir Goldstein          2022-03-20  1184  	struct fsnotify_mark *fsn_mark = NULL;
+40822e8f3f162d Amir Goldstein          2022-03-20  1185  	void *prealloc_conn = NULL, *prealloc_mark = NULL;
+40822e8f3f162d Amir Goldstein          2022-03-20  1186  	int ret = -ENOMEM;
+40822e8f3f162d Amir Goldstein          2022-03-20  1187
+40822e8f3f162d Amir Goldstein          2022-03-20  1188  	fsn_mark = fsnotify_find_mark(connp, group);
+40822e8f3f162d Amir Goldstein          2022-03-20  1189  	/* Preallocate new mark and connector outside of group lock */
+40822e8f3f162d Amir Goldstein          2022-03-20  1190  	if (!fsn_mark) {
+40822e8f3f162d Amir Goldstein          2022-03-20  1191  		prealloc_conn = fsnotify_conn_alloc(GFP_KERNEL);
+40822e8f3f162d Amir Goldstein          2022-03-20  1192  		if (!prealloc_conn)
+40822e8f3f162d Amir Goldstein          2022-03-20  1193  			goto out;
+40822e8f3f162d Amir Goldstein          2022-03-20  1194
+40822e8f3f162d Amir Goldstein          2022-03-20  1195  		prealloc_mark = kmem_cache_alloc(fanotify_mark_cache,
+40822e8f3f162d Amir Goldstein          2022-03-20  1196  						 GFP_KERNEL);
+40822e8f3f162d Amir Goldstein          2022-03-20  1197  		if (!prealloc_mark)
+40822e8f3f162d Amir Goldstein          2022-03-20  1198  			goto out;
+40822e8f3f162d Amir Goldstein          2022-03-20  1199  	}
+88826276dcaf4c Eric Paris              2009-12-17  1200
+7b18527c4a9539 Lino Sanfilippo         2013-07-08  1201  	mutex_lock(&group->mark_mutex);
+40822e8f3f162d Amir Goldstein          2022-03-20 @1202  	ret = 0;
+40822e8f3f162d Amir Goldstein          2022-03-20  1203  	/* Check again under lock - if found will not use preallocated mark */
+40822e8f3f162d Amir Goldstein          2022-03-20  1204  	if (!fsn_mark)
+b812a9f5896379 Amir Goldstein          2018-06-23  1205  		fsn_mark = fsnotify_find_mark(connp, group);
+88826276dcaf4c Eric Paris              2009-12-17  1206  	if (!fsn_mark) {
+40822e8f3f162d Amir Goldstein          2022-03-20  1207  		fsn_mark = fanotify_add_new_mark(group, connp, obj_type, fsid,
+40822e8f3f162d Amir Goldstein          2022-03-20  1208  						 &prealloc_mark,
+40822e8f3f162d Amir Goldstein          2022-03-20  1209  						 &prealloc_conn);
+5e9c070ca08543 Lino Sanfilippo         2013-07-08  1210  		if (IS_ERR(fsn_mark)) {
+40822e8f3f162d Amir Goldstein          2022-03-20  1211  			ret = PTR_ERR(fsn_mark);
+40822e8f3f162d Amir Goldstein          2022-03-20  1212  			fsn_mark = NULL;
+40822e8f3f162d Amir Goldstein          2022-03-20  1213  			goto out_unlock;
+88826276dcaf4c Eric Paris              2009-12-17  1214  		}
+7b18527c4a9539 Lino Sanfilippo         2013-07-08  1215  	}
+734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1216
+734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1217  	/*
+734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1218  	 * Error events are pre-allocated per group, only if strictly
+734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1219  	 * needed (i.e. FAN_FS_ERROR was requested).
+734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1220  	 */
+734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1221  	if (!(flags & FAN_MARK_IGNORED_MASK) && (mask & FAN_FS_ERROR)) {
+734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1222  		ret = fanotify_group_init_error_pool(group);
+734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1223  		if (ret)
+40822e8f3f162d Amir Goldstein          2022-03-20  1224  			goto out_unlock;
+734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1225  	}
+734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1226
+068909e55d92d2 Amir Goldstein          2022-03-20  1227  	ret = fanotify_mark_add_to_mask(fsn_mark, mask, flags);
+734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1228
+40822e8f3f162d Amir Goldstein          2022-03-20  1229  out_unlock:
+c97476400d3b73 Jan Kara                2016-12-14  1230  	mutex_unlock(&group->mark_mutex);
+5e9c070ca08543 Lino Sanfilippo         2013-07-08  1231
+40822e8f3f162d Amir Goldstein          2022-03-20  1232  out:
+40822e8f3f162d Amir Goldstein          2022-03-20  1233  	if (fsn_mark)
+fa218ab98c31ee Lino Sanfilippo         2010-11-09  1234  		fsnotify_put_mark(fsn_mark);
+40822e8f3f162d Amir Goldstein          2022-03-20  1235  	if (prealloc_mark)
+40822e8f3f162d Amir Goldstein          2022-03-20  1236  		kmem_cache_free(fanotify_mark_cache, prealloc_mark);
+40822e8f3f162d Amir Goldstein          2022-03-20  1237  	if (prealloc_conn)
+40822e8f3f162d Amir Goldstein          2022-03-20  1238  		fsnotify_conn_free(prealloc_conn);
+40822e8f3f162d Amir Goldstein          2022-03-20  1239
+734a1a5eccc5f7 Gabriel Krisman Bertazi 2021-10-25  1240  	return ret;
+88826276dcaf4c Eric Paris              2009-12-17  1241  }
+88826276dcaf4c Eric Paris              2009-12-17  1242
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

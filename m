@@ -2,108 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397194E328F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C544E339F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbiCUWHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 18:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        id S231839AbiCUW5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 18:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiCUWHW (ORCPT
+        with ESMTP id S231410AbiCUW5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:07:22 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6E53F9D68
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 14:58:29 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id t2so16614255pfj.10
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 14:58:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tirotech-co-nz.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=qgGWcNzqf70V0zDA4Yv68hUMtmMVuVXrVYT6D0ldnSA=;
-        b=NqQMU+RlRXEyvXplZj/GcJHynyho2mNoYHvXPnMq5jPk+by0W9euAldjHQVyZpeOxR
-         8OuwENpf1xs5DP9cRhz2QKcl5TmsbW0oHOxfKZNtr2LBI79sCYwq8Q8RbXhucxhUEzBh
-         XHZQPekoPQ1JcsZXwiUxWg3yjdmfz58Rt6VoWPlDMlRL8Asia7nQ8Gn7p0e/pF4nD0PR
-         e6W/BR+vtNeKG9CXEai7G5HnxaJ5uFlPncO7lkxg15oIYFJ2OR/AbXkL73RFOF0Nllzh
-         meFXWN4o6gH+CdjR6qirvzzo8W6aylJcQcalbbCup4XclXbK1QnxknAhV3q4qWzbB1Lc
-         KGnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=qgGWcNzqf70V0zDA4Yv68hUMtmMVuVXrVYT6D0ldnSA=;
-        b=27vt6Gv7K1Mdgygk1CDkAJdooJJqKrwt2ai/7NqBYwQJ4rkqHysdUdbojoqDESq6f6
-         4Kys0JeWyPSM8XS1wfkrlx0/hEsqxBTioPGc2NeeCQrqPeexkTV2ITrdjp9LT2hn3eCL
-         6lzw0rnPHa3lRmtJTxMnPe/Q1XynGcR/ACy8r8kO4XUB9Twr/PFB09fYm8DT3jI5aq33
-         5yQ1d9XvKEhjX5XSxbBHU+ph0Lva5MOuRNt1oDCl34j8KugA96EWN6rOBnWvSiiiApHL
-         ilalwu0RITIeOGygpddqyatPcCmrKZxS4Wnd45yK+vBYOrnxfOI82+mtwnTxJxCbNeMu
-         ZT5w==
-X-Gm-Message-State: AOAM530+Nt+hvMlYBvnjYvfy4EnvP/pdlHZX9VAm+JfSvLNV8f5hBO8Y
-        uRuQ/eNiyH1iNA8SiS5xnlnNfw==
-X-Google-Smtp-Source: ABdhPJx2x+qXILIuvhr2vGrCamrFMyqXjFh4dqr8xaKUcPYjivCIvhoyXz3FtzK6/pd07AQHZeSj/Q==
-X-Received: by 2002:a05:6a00:2402:b0:4e1:3df2:5373 with SMTP id z2-20020a056a00240200b004e13df25373mr26150714pfh.40.1647899620364;
-        Mon, 21 Mar 2022 14:53:40 -0700 (PDT)
-Received: from localhost ([121.99.145.49])
-        by smtp.gmail.com with ESMTPSA id i9-20020a17090a2a0900b001c6e540fb6asm380469pjd.13.2022.03.21.14.53.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 14:53:39 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 10:53:36 +1300
-From:   Daniel Beer <daniel.beer@tirotech.co.nz>
-To:     =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] winmate-fm07-keys: Winmate FM07/FM07P buttons
-Message-ID: <20220321215336.GA1005@nyquist.nev>
-References: <6237f057.1c69fb81.1689.fec7@mx.google.com>
- <XgTKv1bHGoFONS2zlwhJAM-CvIm8ZgwA0Nf2UTl0_P38ubTg9hPzJOEP14Kddal_Lxk91kvQuHhi4P0gOAht_c_P847QCqMPeN81xv6mEhY=@protonmail.com>
+        Mon, 21 Mar 2022 18:57:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29443B6DAD;
+        Mon, 21 Mar 2022 15:37:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98C7261556;
+        Mon, 21 Mar 2022 21:53:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B177C340E8;
+        Mon, 21 Mar 2022 21:53:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647899623;
+        bh=V71uAhPOIm1dgSRYeDXlMVloISpJ0FIXrczDGgzcvWI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eXVgpOjSdk81uyB2wY0Jx5kJfYa4sJtEqXDQnsnYKgm3xG9nU6qwqM0YzKTfGyyoP
+         /7mOMJkbAog0IdnHsPVSQPaIbNbEzqYa1irjJBXDCVUl6wR7itdc6eoW9iEIJsHatW
+         YArUOdK+hlZtAkOkod71qt7wwY1zXbDKqhSYVfOGvGIyufG+m3tk98/0VwjrT70wnX
+         y9c6pGpBmNmRG1CmGQs3hda92floqB51AzWUakLxjp4wlVhcLYNNFLb3wbu61cMqVf
+         Q+ZP4CAYW6VWou8bAO7EOfxpEVOM7tldjGzLXcIZouTG6wxZ3mmDZDjOD4yG+sW5+D
+         PAkDTnHq1r1tA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com,
+        Willem de Bruijn <willemb@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 2/2] net: ipv6: fix skb_over_panic in __ip6_append_data
+Date:   Mon, 21 Mar 2022 17:53:38 -0400
+Message-Id: <20220321215338.490562-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220321215338.490562-1-sashal@kernel.org>
+References: <20220321215338.490562-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <XgTKv1bHGoFONS2zlwhJAM-CvIm8ZgwA0Nf2UTl0_P38ubTg9hPzJOEP14Kddal_Lxk91kvQuHhi4P0gOAht_c_P847QCqMPeN81xv6mEhY=@protonmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 08:13:15PM +0000, Barnabás Pőcze wrote:
-> > +#define PORT_CMD	0x6c
-> > +#define PORT_DATA	0x68
-> > +
-> > +#define EC_ADDR_KEYS	0x3b
-> > +#define EC_CMD_READ	0x80
-> 
-> It seems you are reading from the embedded controller, have you checked if the
-> ACPI EC driver works? Then you could probably just use the `ec_{read,write}()` functions.
+From: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-Hi Barnabás,
+[ Upstream commit 5e34af4142ffe68f01c8a9acae83300f8911e20c ]
 
-There is already an ACPI EC driver working on this system, but it's
-using ports 0x66 and 0x62. I guess this one is something unrelated,
-although it does appear to use the same protocol.
+Syzbot found a kernel bug in the ipv6 stack:
+LINK: https://syzkaller.appspot.com/bug?id=205d6f11d72329ab8d62a610c44c5e7e25415580
+The reproducer triggers it by sending a crafted message via sendmmsg()
+call, which triggers skb_over_panic, and crashes the kernel:
 
-I might be missing something, but it doesn't look like I can use the ec_
-functions in this case as they will direct everything towards the EC at
-0x66/0x62. Is there anything else you'd suggest?
+skbuff: skb_over_panic: text:ffffffff84647fb4 len:65575 put:65575
+head:ffff888109ff0000 data:ffff888109ff0088 tail:0x100af end:0xfec0
+dev:<NULL>
 
-If it helps to know, the hardware vendor shipped an Ubuntu distribution
-with a kernel module that just exposed the ability to read/write ports
-0x6c/0x68 via chardev ioctls, and then a proprietary userspace program
-polled for button states.
+Update the check that prevents an invalid packet with MTU equal
+to the fregment header size to eat up all the space for payload.
 
-I'll address your other comments in v2.
+The reproducer can be found here:
+LINK: https://syzkaller.appspot.com/text?tag=ReproC&x=1648c83fb00000
 
-Cheers,
-Daniel
+Reported-by: syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Acked-by: Willem de Bruijn <willemb@google.com>
+Link: https://lore.kernel.org/r/20220310232538.1044947-1-tadeusz.struk@linaro.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/ipv6/ip6_output.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+index c474e4b4c4bb..fbad7828568f 100644
+--- a/net/ipv6/ip6_output.c
++++ b/net/ipv6/ip6_output.c
+@@ -1321,8 +1321,8 @@ static int __ip6_append_data(struct sock *sk,
+ 		      sizeof(struct frag_hdr) : 0) +
+ 		     rt->rt6i_nfheader_len;
+ 
+-	if (mtu < fragheaderlen ||
+-	    ((mtu - fragheaderlen) & ~7) + fragheaderlen < sizeof(struct frag_hdr))
++	if (mtu <= fragheaderlen ||
++	    ((mtu - fragheaderlen) & ~7) + fragheaderlen <= sizeof(struct frag_hdr))
+ 		goto emsgsize;
+ 
+ 	maxfraglen = ((mtu - fragheaderlen) & ~7) + fragheaderlen -
 -- 
-Daniel Beer
-Software Development Manager
-Tirotech Ltd
+2.34.1
+

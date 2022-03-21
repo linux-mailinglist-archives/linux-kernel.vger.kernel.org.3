@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF0B4E2A08
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6732D4E29EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351801AbiCUOLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
+        id S1344684AbiCUOH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348893AbiCUOEG (ORCPT
+        with ESMTP id S1348435AbiCUOAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:04:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955EE33378;
-        Mon, 21 Mar 2022 07:01:17 -0700 (PDT)
+        Mon, 21 Mar 2022 10:00:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427E2369DC;
+        Mon, 21 Mar 2022 06:58:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEF3B6129A;
-        Mon, 21 Mar 2022 14:01:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A33D2C340E8;
-        Mon, 21 Mar 2022 14:01:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A67FD612ED;
+        Mon, 21 Mar 2022 13:58:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7968FC340ED;
+        Mon, 21 Mar 2022 13:58:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871276;
-        bh=+5XscdXFlROL7LE0XhkkVwHD8z4u39zM1wNi9pM8m7k=;
+        s=korg; t=1647871120;
+        bh=g/Blq5cKIEPWCWplMLMYhEi+1mqL6HFNaZtEtsVL4Gg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kn9rVg5lE159ethtuUykJ2miKMCzR67Cv971xUnvF7R4yr58o8ASHNYT7cM2MF6XR
-         iWVNNSTy9FssvwaIfzkNrM3/kSvyxh4AUVbr3c0HJrM6hitefPhLXNSSJ+rP5kC6Gn
-         Ym61tZ2+fOGhCaO/ZgIeU2uxeIxN6I+6uhQOaZEM=
+        b=w8rLHOwUfVjLYVBaK3OgozF2w7OKT+ffmiU5tpAC14/PAFrwWPJBUoX9Qx1CruZL4
+         5h3F5/2J2vVGTodosnPJB9D5Gqc1bLg9p27m4yob06XeRQL1bT665cBmqPaYOV3X/y
+         kop8AXnU4uo8pshuSKTT4UIDd0J5WDfMYPLN/1+Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        Octavian Purdila <octavian.purdila@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
+        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Christoph Fritz <chf.fritz@googlemail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 06/32] efi: fix return value of __setup handlers
+Subject: [PATCH 5.10 12/30] drm/panel: simple: Fix Innolux G070Y2-L01 BPP settings
 Date:   Mon, 21 Mar 2022 14:52:42 +0100
-Message-Id: <20220321133220.747644115@linuxfoundation.org>
+Message-Id: <20220321133220.002301624@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
-References: <20220321133220.559554263@linuxfoundation.org>
+In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
+References: <20220321133219.643490199@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,80 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Marek Vasut <marex@denx.de>
 
-[ Upstream commit 9feaf8b387ee0ece9c1d7add308776b502a35d0c ]
+[ Upstream commit fc1b6ef7bfb3d1d4df868b1c3e0480cacda6cd81 ]
 
-When "dump_apple_properties" is used on the kernel boot command line,
-it causes an Unknown parameter message and the string is added to init's
-argument strings:
+The Innolux G070Y2-L01 supports two modes of operation:
+1) FRC=Low/NC ... MEDIA_BUS_FMT_RGB666_1X7X3_SPWG ... BPP=6
+2) FRC=High ..... MEDIA_BUS_FMT_RGB888_1X7X4_SPWG ... BPP=8
 
-  Unknown kernel command line parameters "dump_apple_properties
-    BOOT_IMAGE=/boot/bzImage-517rc6 efivar_ssdt=newcpu_ssdt", will be
-    passed to user space.
+Currently the panel description mixes both, BPP from 1) and bus
+format from 2), which triggers a warning at panel-simple.c:615.
 
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-     dump_apple_properties
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc6
-     efivar_ssdt=newcpu_ssdt
+Pick the later, set bpp=8, fix the warning.
 
-Similarly when "efivar_ssdt=somestring" is used, it is added to the
-Unknown parameter message and to init's environment strings, polluting
-them (see examples above).
-
-Change the return value of the __setup functions to 1 to indicate
-that the __setup options have been handled.
-
-Fixes: 58c5475aba67 ("x86/efi: Retrieve and assign Apple device properties")
-Fixes: 475fb4e8b2f4 ("efi / ACPI: load SSTDs from EFI variables")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-efi@vger.kernel.org
-Cc: Lukas Wunner <lukas@wunner.de>
-Cc: Octavian Purdila <octavian.purdila@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Matt Fleming <matt@codeblueprint.co.uk>
-Link: https://lore.kernel.org/r/20220301041851.12459-1-rdunlap@infradead.org
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Fixes: a5d2ade627dca ("drm/panel: simple: Add support for Innolux G070Y2-L01")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Christoph Fritz <chf.fritz@googlemail.com>
+Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc: Maxime Ripard <maxime@cerno.tech>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220220040718.532866-1-marex@denx.de
+Signed-off-by: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/efi/apple-properties.c | 2 +-
- drivers/firmware/efi/efi.c              | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/panel/panel-simple.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/efi/apple-properties.c b/drivers/firmware/efi/apple-properties.c
-index 4c3201e290e2..ea84108035eb 100644
---- a/drivers/firmware/efi/apple-properties.c
-+++ b/drivers/firmware/efi/apple-properties.c
-@@ -24,7 +24,7 @@ static bool dump_properties __initdata;
- static int __init dump_properties_enable(char *arg)
- {
- 	dump_properties = true;
--	return 0;
-+	return 1;
- }
- 
- __setup("dump_apple_properties", dump_properties_enable);
-diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-index 9fa86288b78a..e3df82d5d37a 100644
---- a/drivers/firmware/efi/efi.c
-+++ b/drivers/firmware/efi/efi.c
-@@ -209,7 +209,7 @@ static int __init efivar_ssdt_setup(char *str)
- 		memcpy(efivar_ssdt, str, strlen(str));
- 	else
- 		pr_warn("efivar_ssdt: name too long: %s\n", str);
--	return 0;
-+	return 1;
- }
- __setup("efivar_ssdt=", efivar_ssdt_setup);
- 
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index 7ffd2a04ab23..959dcbd8a29c 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -2132,7 +2132,7 @@ static const struct display_timing innolux_g070y2_l01_timing = {
+ static const struct panel_desc innolux_g070y2_l01 = {
+ 	.timings = &innolux_g070y2_l01_timing,
+ 	.num_timings = 1,
+-	.bpc = 6,
++	.bpc = 8,
+ 	.size = {
+ 		.width = 152,
+ 		.height = 91,
 -- 
 2.34.1
 

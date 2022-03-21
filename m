@@ -2,75 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2D54E30E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148CB4E30E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352801AbiCUTqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 15:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
+        id S1352821AbiCUTqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 15:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344392AbiCUTqg (ORCPT
+        with ESMTP id S1352806AbiCUTqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 15:46:36 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6D672E12;
-        Mon, 21 Mar 2022 12:45:10 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id j83so17378174oih.6;
-        Mon, 21 Mar 2022 12:45:10 -0700 (PDT)
+        Mon, 21 Mar 2022 15:46:51 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA727462E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:45:24 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id k10so5838533oia.0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:45:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c6hvIp8pXUul8MkAQabiAJVZoLIOX+w0hp2vYhnD0VY=;
+        b=Bi05ptWWCkEbMqWa/GgMTXmQ0l8nUFiBK+PQAd2R3cK5s0ZoFzi4Zplo6KR1OEEn1l
+         UgHmzcQx2Kl2uXlsbwjHYyIhClBptTsSJ+kbaoWcnB2cj4MOCHWkkDOz3KVpik7LQM5E
+         D7XKw9DMh8n3pbzR1HWCj0FdsRb8egX7GPlrZyITn3EuOMc340R29fNl+oFYSe75DQEB
+         MbcvbKBZ7i/lVUg8ckWvGbp8ypRCqFA41KqPzO8YwTnAypN8IN+tZVUxJLLLGDpGwdSb
+         F6VOeS+QyhDGjW2CKTjkJQXih4PJGzVx7+FheHc5V42MfwM4AuxAGHj+VZWkn7o/IU8U
+         XuHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TAjWLBWhBHjCUb+VIfbAKdSt9gXhVpt6cPap/7gcaLE=;
-        b=T9tNkPvgm4n/7jmhqarxKsZTSVfFizrNTitTd3JY0n4rzKiuzL4sDiYEGjQyrKAtir
-         bN718MtP/4ZnRJgVh9mBzGM38Y89GnOyMF9t17WGN5mceXF5pVZ+a2V/29JYPC8iUVJd
-         r7Z2kO0GXo2BfKHKU+/YwmyjFVrb6F6xoqhOk5PtpGqSyIJ8kiGLOi3T4dbmDSdbIxt1
-         QEbj6sc8WgBwisDaR8izPFnVWeheKNdMhBCV2RoSyn7IELxnfn+sAZqAdt8xJzXKpuIr
-         oIm9XMMoeoc8qSnylFOdvXd9bRM/xXe83PmeYIRN5QcZqwxqT7R+UNGhYoHxw4aqsKXL
-         +Htw==
-X-Gm-Message-State: AOAM5319k/0ak7XmwheOvT1JHRsWPMujj6I9HEYblmt5RYprnMo/sv47
-        09BmMlb8gQ9RGadagiYASQ==
-X-Google-Smtp-Source: ABdhPJyBgzvN0GnnOtwLOq9oZTWqIpLkZn6zH522PjA2WIR9UZy8zCfvhj25OCnlkKnX0nFyxzagkg==
-X-Received: by 2002:a05:6808:912:b0:2ec:cf83:6137 with SMTP id w18-20020a056808091200b002eccf836137mr384391oih.227.1647891909394;
-        Mon, 21 Mar 2022 12:45:09 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o2-20020a05687072c200b000d9ae3e1fabsm6526127oak.12.2022.03.21.12.45.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 12:45:08 -0700 (PDT)
-Received: (nullmailer pid 431535 invoked by uid 1000);
-        Mon, 21 Mar 2022 19:45:06 -0000
-Date:   Mon, 21 Mar 2022 14:45:06 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH] dt-bindings: mfd: syscon: add
- microchip,lan966x-cpu-syscon compatible
-Message-ID: <YjjVwhFCYRX3Alhy@robh.at.kernel.org>
-References: <20220313003122.19155-1-michael@walle.cc>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c6hvIp8pXUul8MkAQabiAJVZoLIOX+w0hp2vYhnD0VY=;
+        b=AKNB/upzqC4tfI/fo7SwD5lo8pJsH3T3bGc3QvYoIR7xTo2fDEMXU6tSYSaK0rbPTd
+         UorL3LwEOYoTGjHDUEWDdC9lmN/fM1iA+E0Sr+htoySVLc+38/yGTWJbQuQ+ohC8VW90
+         GbVc7HPoB1BFstqmuHA1Hu65OMnM6pPV7CB0YZUiwaPVB0Eu5a1phmqDsyQ+x21vq8mv
+         He1Cerd398aGO53kW07IA+FS7o/SGq2BD3xfS9mQbOtCevcC0RwwNvGnZY3mCiU+kAzE
+         FeYQgKbRh5iEbp++5ov9kDFrnPpnNLt+oQ6jj65kA7ZxkC/ay5yRFDkhjvq6gv6kpdLA
+         anvA==
+X-Gm-Message-State: AOAM532omKdeSN8sPr4EBKi9+h3cREsglfkvpYHxBtqEFee5GqOmSyuw
+        yhABQiXNES/sVBNH69upGSv6wdEgnDC3nfUBt2duwg==
+X-Google-Smtp-Source: ABdhPJxCnw6snm/lyG9Cg9XjtSD7+KuAcQaSBkeGoIOCxcBUkRCVrdPKiHTftbvO+UZOYtWavYKgw/2Lx4GI6pnWVRE=
+X-Received: by 2002:a05:6808:1592:b0:2d9:fd1a:1a69 with SMTP id
+ t18-20020a056808159200b002d9fd1a1a69mr409841oiw.110.1647891923912; Mon, 21
+ Mar 2022 12:45:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220313003122.19155-1-michael@walle.cc>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220321150214.1895231-1-pgonda@google.com> <CAA03e5HEKPxfGZ57r=intg_ogTp_JPAio36QJXqviMZM_KmvEg@mail.gmail.com>
+ <CAMkAt6qbauEn1jGUYLQc6QURhCHLu7eDmzJhfHZZXN9FGbQOMA@mail.gmail.com>
+In-Reply-To: <CAMkAt6qbauEn1jGUYLQc6QURhCHLu7eDmzJhfHZZXN9FGbQOMA@mail.gmail.com>
+From:   Marc Orr <marcorr@google.com>
+Date:   Mon, 21 Mar 2022 12:45:13 -0700
+Message-ID: <CAA03e5GDyM1O6aEYcpUnTY4JLBvOqQugWzpXefD9YGEkSuALVA@mail.gmail.com>
+Subject: Re: [PATCH] Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm list <kvm@vger.kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Sean Christopherson <seanjc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Mar 2022 01:31:22 +0100, Michael Walle wrote:
-> Add the Microchip LAN966x CPU system registers compatible.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Mon, Mar 21, 2022 at 11:08 AM Peter Gonda <pgonda@google.com> wrote:
+>
+> > > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> > > index 75fa6dd268f0..5f9d37dd3f6f 100644
+> > > --- a/arch/x86/kvm/svm/sev.c
+> > > +++ b/arch/x86/kvm/svm/sev.c
+> > > @@ -2735,8 +2735,13 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
+> > >                 pr_info("SEV-ES guest requested termination: %#llx:%#llx\n",
+> > >                         reason_set, reason_code);
+> > >
+> > > -               ret = -EINVAL;
+> > > -               break;
+> > > +               vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
+> > > +               vcpu->run->shutdown.reason = KVM_SHUTDOWN_SEV_TERM;
+> > > +               vcpu->run->shutdown.ndata = 2;
+> > > +               vcpu->run->shutdown.data[0] = reason_set;
+> > > +               vcpu->run->shutdown.data[1] = reason_code;
+> > > +
+> > > +               return 0;
+> >
+> > Maybe I'm missing something, but don't we want to keep returning an error?
+> >
+> > rationale: Current behavior: return -EINVAL to userpsace, but
+> > userpsace cannot infer where the -EINVAL came from. After this patch:
+> > We should still return -EINVAL to userspace, but now userspace can
+> > parse this new info in the KVM run struct to properly terminate.
+> >
+>
+> I removed the error return code here since an SEV guest may request a
+> termination due to no fault of the host at all. This is now inline
+> with any other shutdown requested by the guest. I don't have a strong
+> preference here but EINVAL doesn't seem correct in all cases, do
+> others have any thoughts on this?
 
-Applied, thanks!
+Makes sense. Yeah, let's see if others have an opinion. Otherwise, I'm
+fine either way. Now that you mention it, returning an error to
+userspace when the guest triggered the self-termination, and could've
+done so for reasons outside the host's control, is a little odd. But
+at the same time, it's just as likely that the guest is
+self-terminating due to a host-side error. So I guess it's not clear
+whether returning an error here is "right" or "wrong".

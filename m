@@ -2,244 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4454E2E38
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA2C4E2E40
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351308AbiCUQlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 12:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36960 "EHLO
+        id S1351338AbiCUQmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 12:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243578AbiCUQlV (ORCPT
+        with ESMTP id S1346336AbiCUQmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:41:21 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA3D17E18;
-        Mon, 21 Mar 2022 09:39:55 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2e5757b57caso162188437b3.4;
-        Mon, 21 Mar 2022 09:39:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=q2bbu0FlI0bjoAu2DyU2tLEct1K2WT3Nwkj0AnRIr48=;
-        b=GUhwGqwI7E1/9Coni0FmKD7WWeVcXGHm4+T2KqIv/qs9ODbfHmh7iWTv6pID7znr3e
-         hs7lINy2y5G+78pNeEKmnNbKC2juML9SruScmyqZu90PdLJWF7Bzl3IfoBR4S4a29rha
-         YcLPEMOPQuJ2UU4PkVo1v6SSJNuYPYFxSd+1Xob6rNLpGm5iO1K9pOf/D4z3yL59jbom
-         QsvGTZPI7b2UY1hhM69kofdU9NLv+cuV7FIVi1bjbQIYve7zhgxVVWfaeCdiza6TGf/6
-         CDlGIivgaGQFGxgLoBXs9Va1Z6ojZeml0KyYQqhqPJR/IrqaTtAS/3A8W9awDmgtUGbs
-         X59w==
-X-Gm-Message-State: AOAM5300YjMv85Jsmd8CjRerHEe1JrQB2uIvljAmhTSZTrJdZO5jAlbI
-        fsauNgktTHaLny1ni04GmQQrn1WHDNa2MSZ0V5k=
-X-Google-Smtp-Source: ABdhPJz2BdoNoNPYGxapeQ55Ogncfc3A7a6RAv/xKxM8OfgNimI4flRGmVJ1RWxaw2GT5+2UHqr6A+gf/94/yzomQS0=
-X-Received: by 2002:a81:5cf:0:b0:2e5:7477:168e with SMTP id
- 198-20020a8105cf000000b002e57477168emr24630650ywf.149.1647880794783; Mon, 21
- Mar 2022 09:39:54 -0700 (PDT)
-MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 21 Mar 2022 17:39:44 +0100
-Message-ID: <CAJZ5v0gzkr8k3u6ZdKnsAOgk569Gf-HF5u2AShXdznEE4+UYGw@mail.gmail.com>
-Subject: [GIT PULL] Thermal control updates for v5.18-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Mon, 21 Mar 2022 12:42:35 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D306C904;
+        Mon, 21 Mar 2022 09:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1alXXCG8SsafVFyYpDrzAC/fb1eFuk40wMrMnE1w1g4=; b=da6+RkwQDrJD49bGvpI587bS/z
+        Ix8hy/7rZ9D03IZro7vw6f12P+9tYcDPF3OkgoLPCreLurjZjL6J8lDnP3+7p8hO7U7b/U5JboxjB
+        +Wjw9lIOqeBFA6GZKvcSmIsZkkb+89edMIXGK8hvaEMS7fqaoqekUq7IXlAh+DShYIsZUIpy9KrD9
+        zNwKqsae/S7qS9U0ga9Bz6qU3GYGfsJcFQ8UCx8qOlaUy4E93qM+ba8cPOafHvpA3Wkr9yc9VtwYI
+        6UQ6SQuk0K5w0l7mtZK6iXNcpBlwFEvnJaYufmc9ne2i4+I1uOj+C5TxISnIJs3M1npeLovQk/Ksd
+        NHA54u+w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWL59-00Akib-U9; Mon, 21 Mar 2022 16:40:36 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D75443001CD;
+        Mon, 21 Mar 2022 17:40:32 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id ACD622DB8D795; Mon, 21 Mar 2022 17:40:32 +0100 (CET)
+Date:   Mon, 21 Mar 2022 17:40:32 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        mhiramat@kernel.org, ast@kernel.org, hjl.tools@gmail.com,
+        rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <YjiqgPL+pPGkOgCv@hirez.programming.kicks-ass.net>
+References: <20220321140327.777f9554@canb.auug.org.au>
+ <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+ <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+ <20220321112805.1393f9b9@gandalf.local.home>
+ <YjiiDFHIQg78QwSb@hirez.programming.kicks-ass.net>
+ <20220321121209.3b95e406@gandalf.local.home>
+ <20220321121549.1c8588c5@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321121549.1c8588c5@gandalf.local.home>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Mar 21, 2022 at 12:15:49PM -0400, Steven Rostedt wrote:
+> On Mon, 21 Mar 2022 12:12:09 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > > > funcB:
+> > > > 	call __fentry__    
+> > > 			push funcB on trace-stack  
+> > > > 
+> > > > 	[..]    
+> > > 	call __fexit__
+> > > 			pop trace-stack until empty
+> > > 			  'exit funcB'
+> > > 			  'exit funcA'  
+> > 
+> > And what happens if funcC called funcA and it too was on the stack. We pop
+> > that too? But it's not done yet, because calling of funcA was not a tail
+> > call.
 
-Please pull from the tag
+Hmm, yeah, how about we have __ftail__ mark the left function.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-5.18-rc1
+func_B()
+{
+	...
+}
 
-with top-most commit 31035f3e20af4ede5f1c8162068327ea0b35a96e
+func_A()
+{
+	...
+	return func_B();
+}
 
- Merge branch 'thermal-hfi'
+func_C()
+{
+	func_A();
+	...
+	return;
+}
 
-on top of commit 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3
+func_B:
+	call __fentry__	/* push func_B */
+	...
+	call __fexit__	/* pop 1 + tails */
+	ret
 
- Linux 5.17-rc6
+func_A:
+	call __fentry__ /* push func_A */
+	...
+	call __ftail__  /* mark func_A tail */
+	jmp func_B
 
-to receive thermal control updates for 5.18-rc1.
-
-As far as new functionality is concerned, there is a new thermal
-driver for the Intel Hardware Feedback Interface (HFI) along with
-some intel-speed-select utility changes to support it.  There are
-also new DT compatible strings for a couple of platforms and
-thermal zones on some platforms will be registered as HWmon
-sensors now.
-
-Apart from the above, some drivers are updated (fixes mostly) and
-there is a new piece of documentation for the Intel DPTF (Dynamic
-Power and Thermal Framework) sysfs interface.
-
-Specifics:
-
- - Add a new thermal driver for the Intel Hardware Feedback Interface
-   (HFI) including the HFI initialization, HFI notification interrupt
-   handling and sending CPU capabilities change messages to user
-   space via the thermal netlink interface (Ricardo Neri, Srinivas
-   Pandruvada, Nathan Chancellor, Randy Dunlap).
-
- - Extend the intel-speed-select utility to handle out-of-band CPU
-   configuration changes and add support for the CPU capabilities
-   change messages sent over the thermal netlink interface by the new
-   HFI thermal driver to it (Srinivas Pandruvada).
-
- - Convert the DT bindings to yaml format for the Exynos platform
-   and fix and update the MAINTAINERS file for this driver (Krzysztof
-   Kozlowski).
-
- - Register the thermal zones as HWmon sensors for the QCom's
-   Tsens driver and TI thermal platforms (Dmitry Baryshkov, Romain
-   Naour).
-
- - Add the msm8953 compatible documentation in the bindings (Luca
-   Weiss).
-
- - Add the sm8150 platform support to the QCom LMh driver's DT
-   binding (Thara Gopinath).
-
- - Check the command result from the IPC command to the BPMP in the
-   Tegra driver (Mikko Perttunen).
-
- - Silence the error for normal configuration where the interrupt
-   is optional in the Broadcom thermal driver (Florian Fainelli).
-
- - Remove remaining dead code from the TI thermal driver (Yue
-   Haibing).
-
- - Don't use bitmap_weight() in end_power_clamp() in the powerclamp
-   driver (Yury Norov).
-
- - Update the OS policy capabilities handshake in the int340x thermal
-   driver (Srinivas Pandruvada).
-
- - Increase the policies bitmap size in int340x (Srinivas Pandruvada).
-
- - Replace acpi_bus_get_device() with acpi_fetch_acpi_dev() in the
-   int340x thermal driver (Rafael Wysocki).
-
- - Check for NULL after calling kmemdup() in int340x (Jiasheng Jiang).
-
- - Add Intel Dynamic Power and Thermal Framework (DPTF) kernel interface
-   documentation (Srinivas Pandruvada).
-
- - Fix bullet list warning in the thermal documentation (Randy Dunlap).
-
-Thanks!
+func_C:
+	call __fentry__ /* push func_C */
+	call func_A;
+	...
+	call __fexit__  /* pop 1 + tails */
+	ret;
 
 
----------------
+Then the stack at the end of func_B looks something like:
 
-Dmitry Baryshkov (1):
-      thermal/drivers/tsens: register thermal zones as hwmon sensors
+	func_C
+	func_A (tail)
+	func_B
 
-Florian Fainelli (1):
-      thermal/drivers/brcmstb_thermal: Interrupt is optional
+And it will pop func_B plus all tails (func_A).
 
-Jiasheng Jiang (1):
-      thermal: int340x: Check for NULL after calling kmemdup()
+> And I just thought of another issue, where even my solution wont fix it.
+> What happens if we trace funcA but not funcB? How do we get to trace the
+> end of funcA?
 
-Krzysztof Kozlowski (3):
-      dt-bindings: thermal: samsung: Convert to dtschema
-      MAINTAINERS: thermal: samsung: Drop obsolete properties
-      MAINTAINERS: thermal: samsung: update Krzysztof Kozlowski's email
-
-Luca Weiss (1):
-      dt-bindings: thermal: tsens: Add msm8953 compatible
-
-Mikko Perttunen (1):
-      thermal: tegra-bpmp: Handle errors in BPMP response
-
-Nathan Chancellor (1):
-      thermal: netlink: Fix parameter type of
-thermal_genl_cpu_capability_event() stub
-
-Nicolas Cavallari (1):
-      thermal: core: Fix TZ_GET_TRIP NULL pointer dereference
-
-Rafael J. Wysocki (1):
-      thermal: Replace acpi_bus_get_device()
-
-Randy Dunlap (2):
-      thermal: fix Documentation bullet list warning
-      thermal: intel: hfi: INTEL_HFI_THERMAL depends on NET
-
-Ricardo Neri (5):
-      x86/Documentation: Describe the Intel Hardware Feedback Interface
-      x86/cpu: Add definitions for the Intel Hardware Feedback Interface
-      thermal: intel: hfi: Minimally initialize the Hardware Feedback Interface
-      thermal: intel: hfi: Handle CPU hotplug events
-      thermal: intel: hfi: Enable notification interrupt
-
-Romain Naour (1):
-      drivers/thermal/ti-soc-thermal: Add hwmon support
-
-Srinivas Pandruvada (8):
-      thermal: netlink: Add a new event to notify CPU capabilities change
-      thermal: intel: hfi: Notify user space for HFI events
-      tools/power/x86/intel-speed-select: OOB daemon mode
-      tools/power/x86/intel-speed-select: HFI support
-      tools/power/x86/intel-speed-select: v1.12 release
-      Documentation: thermal: DPTF Documentation
-      thermal: int340x: Increase bitmap size
-      thermal: int340x: Update OS policy capability handshake
-
-Thara Gopinath (2):
-      thermal/drivers/qcom/lmh: Add support for sm8150
-      dt-bindings: thermal: Add sm8150 compatible string for LMh
-
-YueHaibing (1):
-      thermal/drivers/ti-soc-thermal: Remove unused function
-ti_thermal_get_temp()
-
-Yury Norov (1):
-      thermal: intel_powerclamp: don't use bitmap_weight() in end_power_clamp()
-
----------------
-
- Documentation/ABI/testing/sysfs-class-thermal      |   2 +-
- .../devicetree/bindings/thermal/exynos-thermal.txt | 106 ----
- .../devicetree/bindings/thermal/qcom-lmh.yaml      |   1 +
- .../devicetree/bindings/thermal/qcom-tsens.yaml    |   1 +
- .../bindings/thermal/samsung,exynos-thermal.yaml   | 184 +++++++
- Documentation/driver-api/thermal/index.rst         |   1 +
- Documentation/driver-api/thermal/intel_dptf.rst    | 272 ++++++++++
- Documentation/x86/index.rst                        |   1 +
- Documentation/x86/intel-hfi.rst                    |  72 +++
- MAINTAINERS                                        |   7 +-
- arch/x86/include/asm/cpufeatures.h                 |   1 +
- arch/x86/include/asm/msr-index.h                   |   6 +
- drivers/thermal/broadcom/brcmstb_thermal.c         |   2 +-
- drivers/thermal/intel/Kconfig                      |  14 +
- drivers/thermal/intel/Makefile                     |   1 +
- .../intel/int340x_thermal/acpi_thermal_rel.c       |  23 +-
- .../intel/int340x_thermal/int3400_thermal.c        | 153 ++++--
- drivers/thermal/intel/intel_hfi.c                  | 569 +++++++++++++++++++++
- drivers/thermal/intel/intel_hfi.h                  |  17 +
- drivers/thermal/intel/intel_powerclamp.c           |   9 +-
- drivers/thermal/intel/therm_throt.c                |  22 +
- drivers/thermal/qcom/lmh.c                         |  62 ++-
- drivers/thermal/qcom/tsens.c                       |   5 +
- drivers/thermal/tegra/tegra-bpmp-thermal.c         |  13 +-
- drivers/thermal/thermal_netlink.c                  |  58 ++-
- drivers/thermal/thermal_netlink.h                  |  14 +
- drivers/thermal/ti-soc-thermal/ti-thermal-common.c |  12 +-
- include/uapi/linux/thermal.h                       |   6 +-
- tools/power/x86/intel-speed-select/Build           |   2 +-
- tools/power/x86/intel-speed-select/Makefile        |  10 +-
- tools/power/x86/intel-speed-select/hfi-events.c    | 309 +++++++++++
- tools/power/x86/intel-speed-select/isst-config.c   |  54 +-
- tools/power/x86/intel-speed-select/isst-daemon.c   | 244 +++++++++
- tools/power/x86/intel-speed-select/isst.h          |  13 +
- 34 files changed, 2029 insertions(+), 237 deletions(-)
+Disallow tail calls to notrace?

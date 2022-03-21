@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159C44E27A4
+	by mail.lfdr.de (Postfix) with ESMTP id F26CC4E27A6
 	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347952AbiCUNfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S1347926AbiCUNfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347890AbiCUNfZ (ORCPT
+        with ESMTP id S1347929AbiCUNf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:35:25 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1B33C4BE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:33:54 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id qa43so29763876ejc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:33:54 -0700 (PDT)
+        Mon, 21 Mar 2022 09:35:26 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F1B3CA49
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:33:55 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id u26so2279311eda.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:33:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fairphone.com; s=fair;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PkYVYmY9Le2aSokUPH4KG71aD16wj93RAHpPc0N5vfM=;
-        b=Hxc7aeJlYgvRRhGcrYyv1X44Sch6Tk7LZAeJVbWn9NZbCzimeNoWoV+WpFf8YK2q7G
-         RuDIIPFD6orLxH1VxiCcJ8zP2BZd+4Ajkvps9HDF7bGg6uQrbi2LgB05HSTQw5kEcKhF
-         MCbztYIHYG0Eh8hmo49sTgleoFm0kukmtXaLNgbS9u//wUtRHJDYo7oOtuevFf2maLLp
-         f0PVk/gZ4oofN0O9AXcvnNtLDfr1OsnDWld5zUOFx4SHR1trOXKNjj5JIfOj57VSfIJV
-         0oRW+YK9nVqwzDSjbjrA8i0pqwndiMp809JB7mSNCG80o1X5jdHbws+wKUMFKNksyYWL
-         buGA==
+        bh=aM6GQeVZtCegHilLMs+aD7A4drFAdvrQdeDC75uWokk=;
+        b=0ZmJa6mEHVzoEvukgeG4nEGyuYrvNOV6BVoc0wD/1/Ux1o12tc/3YNQvOS4/iqjC4m
+         GIFrwlLgMqP2tMUXoOlcRU60T1e5cQM/56JodEjpAdsgh7bI95LBnCAuale6tVLavsQQ
+         H6YxEyLf3ZAz1jRLELbLsh6snRv0r/osgE3nNZ8lsw6tg3ZsgJikmuz1LcEhSMhovPia
+         IYRTtLWa0Vok4cjLZvKEIggAjxNmyYiJ+fgWM0hAlxwHGyRahM/6oWSx144DCShIsw7h
+         6HJWMJYp5CjDOrg4DrwtBlmFHafmu96DRTE0/3fCg1hJonH20hIDw+EpDetqIlCRvC6C
+         z8DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PkYVYmY9Le2aSokUPH4KG71aD16wj93RAHpPc0N5vfM=;
-        b=o01/5S6I+BmGbzLjZR3VpZnMgAWcq1wRCBcHHbRmwVfJNoPWtXXj86/cnIJF/ZrCB+
-         3rQBBmmlpEoh8XxZ7xvfvpIjur6AziutJq8X5Kc/aevtWF59wzzySDXwhPt05C1EM8Ps
-         qj/oFtcme/FiN8OZXNj0IWkGMMwur4ODoDzn5rgSlWxahOZzf/A0d1JHi6rkHgtEyBfr
-         rJ+KhLbmS6nZN/D1SOR9TuZFrEXOf5A8w8z94OXZ6g3H8KGCKpKsyWD4fjJ9r/yBGFIQ
-         XO1lLkcvgWr+aHClLDYa+CPYFBMyFgS3SKwP6eKBntSGvlgIP6dhSov47rFna8BgX2/H
-         s0pw==
-X-Gm-Message-State: AOAM531jK683pWtW8QwM1wjQP3j9Gycgc+eakU+OFU4Z3Kwkuaz/IZE2
-        NOPMxLZnfUP4NpDeX1JF8ZWHeTFNM6D5sQ==
-X-Google-Smtp-Source: ABdhPJyU3Coc4BvT2jI/q5GOqjcvZ07JMnbuOupESfqHWOrMFlZEqYtJ3ruZc8obgb6AZb6Hy452rw==
-X-Received: by 2002:a17:907:96a1:b0:6df:c9e3:25e2 with SMTP id hd33-20020a17090796a100b006dfc9e325e2mr12664451ejc.138.1647869633415;
-        Mon, 21 Mar 2022 06:33:53 -0700 (PDT)
+        bh=aM6GQeVZtCegHilLMs+aD7A4drFAdvrQdeDC75uWokk=;
+        b=SuEtgJtEiBNFV74v0DLZyGET1/+mqMhSDsgwxSOghzqWvQ9K1PuStXfZE1gDRgac86
+         oJKFgqD90BRSr3ZR9km+R4sAOVrtGgKN1BACzyYe3dXnC+EfgT5eiEy8LuyRSZb/2Jsg
+         4SZC5cOKDMdw2xADnUKijhan0XWAYoAfU2UYYhF1tAkC/+jG9b9WGSNnbFgq6M065HIv
+         o4FZYkG8Bz9I9zSQoqq69IpoYA6fXVVA0iMDI5AIoDSj0NwIT+2MRBJM6C8gcKzvjVwH
+         SXZZ+fydakq1DxKqzFnUZlcW1lw2JZFylRGQQEx2VtqTN6CCCZNiMfBj+l3hlnfBsTRv
+         /43g==
+X-Gm-Message-State: AOAM5337Xjmc3ZSI5as8b7Siz5Tqi9ce9qRghKtcuWptaSR+er68/LO0
+        BvVlFB3fHP0O91H79arjLWvM1A==
+X-Google-Smtp-Source: ABdhPJwK5bxupTxJOcHJW/CL8XeUHz5cLnTleQNzf5yTSvwqrflM4qAG71Qe/NROSCms+FRKCcnQlw==
+X-Received: by 2002:a05:6402:3591:b0:419:26ea:1e22 with SMTP id y17-20020a056402359100b0041926ea1e22mr10468061edc.27.1647869634278;
+        Mon, 21 Mar 2022 06:33:54 -0700 (PDT)
 Received: from otso.arnhem.chello.nl (a246182.upc-a.chello.nl. [62.163.246.182])
-        by smtp.gmail.com with ESMTPSA id r22-20020a17090638d600b006d584aaa9c9sm6862154ejd.133.2022.03.21.06.33.52
+        by smtp.gmail.com with ESMTPSA id r22-20020a17090638d600b006d584aaa9c9sm6862154ejd.133.2022.03.21.06.33.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 21 Mar 2022 06:33:53 -0700 (PDT)
 From:   Luca Weiss <luca.weiss@fairphone.com>
@@ -54,14 +54,12 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Luca Weiss <luca.weiss@fairphone.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/6] pinctrl: qcom: sm6350: fix order of UFS & SDC pins
-Date:   Mon, 21 Mar 2022 14:33:16 +0100
-Message-Id: <20220321133318.99406-5-luca.weiss@fairphone.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 5/6] arm64: dts: qcom: sm6350: Add UFS nodes
+Date:   Mon, 21 Mar 2022 14:33:17 +0100
+Message-Id: <20220321133318.99406-6-luca.weiss@fairphone.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220321133318.99406-1-luca.weiss@fairphone.com>
 References: <20220321133318.99406-1-luca.weiss@fairphone.com>
@@ -77,45 +75,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In other places the SDC and UFS pins have been swapped but this was
-missed in the PINCTRL_PIN definitions. Fix that.
+Add the necessary nodes for UFS and its PHY.
 
-Fixes: 7d74b55afd27 ("pinctrl: qcom: Add SM6350 pinctrl driver")
 Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
 Changes in v2:
-- nothing
+- rename node to ufs@ -> this makes this patch now (soft-)depend on
+  https://lore.kernel.org/linux-arm-msm/20220320110616.18355-1-krzk@kernel.org/
 
- drivers/pinctrl/qcom/pinctrl-sm6350.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ arch/arm64/boot/dts/qcom/sm6350.dtsi | 77 ++++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-sm6350.c b/drivers/pinctrl/qcom/pinctrl-sm6350.c
-index 4d37b817b232..a91a86628f2f 100644
---- a/drivers/pinctrl/qcom/pinctrl-sm6350.c
-+++ b/drivers/pinctrl/qcom/pinctrl-sm6350.c
-@@ -264,14 +264,14 @@ static const struct pinctrl_pin_desc sm6350_pins[] = {
- 	PINCTRL_PIN(153, "GPIO_153"),
- 	PINCTRL_PIN(154, "GPIO_154"),
- 	PINCTRL_PIN(155, "GPIO_155"),
--	PINCTRL_PIN(156, "SDC1_RCLK"),
--	PINCTRL_PIN(157, "SDC1_CLK"),
--	PINCTRL_PIN(158, "SDC1_CMD"),
--	PINCTRL_PIN(159, "SDC1_DATA"),
--	PINCTRL_PIN(160, "SDC2_CLK"),
--	PINCTRL_PIN(161, "SDC2_CMD"),
--	PINCTRL_PIN(162, "SDC2_DATA"),
--	PINCTRL_PIN(163, "UFS_RESET"),
-+	PINCTRL_PIN(156, "UFS_RESET"),
-+	PINCTRL_PIN(157, "SDC1_RCLK"),
-+	PINCTRL_PIN(158, "SDC1_CLK"),
-+	PINCTRL_PIN(159, "SDC1_CMD"),
-+	PINCTRL_PIN(160, "SDC1_DATA"),
-+	PINCTRL_PIN(161, "SDC2_CLK"),
-+	PINCTRL_PIN(162, "SDC2_CMD"),
-+	PINCTRL_PIN(163, "SDC2_DATA"),
- };
+diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+index d7c9edff19f7..75e4b2b4d3af 100644
+--- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+@@ -541,6 +541,83 @@ uart2: serial@98c000 {
+ 			};
+ 		};
  
- #define DECLARE_MSM_GPIO_PINS(pin) \
++		ufs_mem_hc: ufs@1d84000 {
++			compatible = "qcom,sm6350-ufshc", "qcom,ufshc",
++				     "jedec,ufs-2.0";
++			reg = <0 0x01d84000 0 0x3000>,
++			      <0 0x01d90000 0 0x8000>;
++			reg-names = "std", "ice";
++			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
++			phys = <&ufs_mem_phy_lanes>;
++			phy-names = "ufsphy";
++			lanes-per-direction = <2>;
++			#reset-cells = <1>;
++			resets = <&gcc GCC_UFS_PHY_BCR>;
++			reset-names = "rst";
++
++			power-domains = <&gcc UFS_PHY_GDSC>;
++
++			iommus = <&apps_smmu 0x80 0x0>;
++
++			clock-names = "core_clk",
++				      "bus_aggr_clk",
++				      "iface_clk",
++				      "core_clk_unipro",
++				      "ref_clk",
++				      "tx_lane0_sync_clk",
++				      "rx_lane0_sync_clk",
++				      "rx_lane1_sync_clk",
++				      "ice_core_clk";
++			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
++				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
++				 <&gcc GCC_UFS_PHY_AHB_CLK>,
++				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
++				 <&rpmhcc RPMH_QLINK_CLK>,
++				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
++				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
++				 <&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>,
++				 <&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
++			freq-table-hz =
++				<50000000 200000000>,
++				<0 0>,
++				<0 0>,
++				<37500000 150000000>,
++				<75000000 300000000>,
++				<0 0>,
++				<0 0>,
++				<0 0>,
++				<0 0>;
++
++			status = "disabled";
++		};
++
++		ufs_mem_phy: phy@1d87000 {
++			compatible = "qcom,sm6350-qmp-ufs-phy";
++			reg = <0 0x01d87000 0 0x18c>;
++			#address-cells = <2>;
++			#size-cells = <2>;
++			ranges;
++
++			clock-names = "ref",
++				      "ref_aux";
++			clocks = <&gcc GCC_UFS_MEM_CLKREF_CLK>,
++				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
++
++			resets = <&ufs_mem_hc 0>;
++			reset-names = "ufsphy";
++
++			status = "disabled";
++
++			ufs_mem_phy_lanes: phy@1d87400 {
++				reg = <0 0x01d87400 0 0x128>,
++				      <0 0x01d87600 0 0x1fc>,
++				      <0 0x01d87c00 0 0x1dc>,
++				      <0 0x01d87800 0 0x128>,
++				      <0 0x01d87a00 0 0x1fc>;
++				#phy-cells = <0>;
++			};
++		};
++
+ 		tcsr_mutex: hwlock@1f40000 {
+ 			compatible = "qcom,tcsr-mutex";
+ 			reg = <0x0 0x01f40000 0x0 0x40000>;
 -- 
 2.35.1
 

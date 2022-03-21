@@ -2,198 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641D44E35D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 146934E35E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 02:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234522AbiCVBBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 21:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
+        id S234573AbiCVBPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 21:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234503AbiCVBBn (ORCPT
+        with ESMTP id S234503AbiCVBO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 21:01:43 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5AB335503
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 18:00:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647910815; x=1679446815;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=EZ2uxHqqkYEhVDUtUYaPwBKICbKEcQj4D6xOz3xFAz0=;
-  b=EzztOsOcEVICIPqD6Gq0lwqrbsHktf48sM9HQM01QUtK25cxpBQFSw79
-   bh9CsA6a+DnBjr+0kA92S3RzhQIhn+08n8nAqov4K8/XCkdjIf0sGv8wl
-   mK1r6mDLtCmiIn1jdv66Qw7Sx5iD2uMse+Ps5P/bAmjOtN5V3Z+aALCTX
-   i0TQBaaVc/KLVZL64MDmBG26MfU+WbhIHd5NAHpNx4KjH3+bfZV/9GO5X
-   7g6WIOhf1nPHYYHxYzyKW4xde/BrNTEWm77YSSTVInTMpSRntUNs5pEZd
-   20++wvaJJ7hxwvxxq7mX1pHUXp87RTv37xYeTxeqhRmv/kdmvfZvC4CIh
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="239846163"
-X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
-   d="scan'208";a="239846163"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 18:00:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,200,1643702400"; 
-   d="scan'208";a="636847939"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Mar 2022 18:00:14 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 21 Mar 2022 18:00:14 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21 via Frontend Transport; Mon, 21 Mar 2022 18:00:14 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.170)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.21; Mon, 21 Mar 2022 18:00:13 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nQxNTdAxeoJoeKt2Oh98IcsSzkGrGPYG8I6+weCNazgbMsz4Q/9oc9pqFd2i3Gz3Ad06Ch69jdkuG+Oe+2POER0ePzr/J5a/Ye+eEd2iNAeuK9DzbSXepgPAhurxPfKwSm4w7nVqIjYPgvr6qUYRPDLX2luqemHF1giNWiDUYzHZ19hT0Cg3PaMeTd/x6S8LGwJHVrHEGsP+HI5BHbDDMVlmBJ2xjnfFW1r31nvUhzMxsntgaH4nf/Gx5E8CrWcc+0LuhNP7eSDtO4dwIvbKtDRD5auVHFEoI5jOkPFD+6cH96SlERPFRcXVNcuyMvcfmhkiRkqmed5f+4UjZyw8Sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EZ2uxHqqkYEhVDUtUYaPwBKICbKEcQj4D6xOz3xFAz0=;
- b=hsLqctSnmLDW0wn9Q0to+jGNb0hGDb0b7eVP4gm2Ly5IaoKT6sWoEeitn4xUA8SgXVpRxHNkVgX/YN9Q9ZUfLHnZ36TtelUz4ipmbHp6dD1p5/X8uTLWfy5KKxPBZXepVqkd5iVTmhd1QFXkTugx2tnk6UPc7T0Oa+lrXQbOZ4xCx8HwrDu1DDIdb4fhGGF5GTTPlUtseEMOXHWFnmX/aumcDC1Yf/s4hr10UFSppX3oe8R2QmgWJ5ZAh19XGoqaf0lj5MBLTGgxYcVa5ylXWFRL1bNpLYK67ci3RPPUC5kD4GAc5hbqt+VXpfzU0EZHC8ouNEYX9BPmCuPIco0gKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by CH2PR11MB4296.namprd11.prod.outlook.com (2603:10b6:610:3c::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Tue, 22 Mar
- 2022 01:00:08 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4df7:2fc6:c7cf:ffa0]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4df7:2fc6:c7cf:ffa0%4]) with mapi id 15.20.5081.023; Tue, 22 Mar 2022
- 01:00:08 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-CC:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH RFC 10/11] iommu: Make IOPF handling framework generic
-Thread-Topic: [PATCH RFC 10/11] iommu: Make IOPF handling framework generic
-Thread-Index: AQHYPCXJ2tlsQR7+N0uG4LpIf9YVg6zJfVAQgAA70QCAAN2a8A==
-Date:   Tue, 22 Mar 2022 01:00:08 +0000
-Message-ID: <BN9PR11MB52769EBCAE7E3EBB6D6AF1328C179@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
- <20220320064030.2936936-11-baolu.lu@linux.intel.com>
- <BL1PR11MB5271DE11A868204D2E0D5B548C169@BL1PR11MB5271.namprd11.prod.outlook.com>
- <YjhkmDEGwF4EcM8R@myrica>
-In-Reply-To: <YjhkmDEGwF4EcM8R@myrica>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fdeef294-f9e0-49d5-9c2b-08da0b9f4f4f
-x-ms-traffictypediagnostic: CH2PR11MB4296:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <CH2PR11MB4296BCC17C3E7CD6E519DB888C179@CH2PR11MB4296.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OuL4wwNrwt9pt8Sge6c/n3tMczeIL5DjKN1tx1UXr93lOIr68Gf69R7MWPVC/uxmet97ZmSCYtH4zge4NthvutEr6VjcUt5vN+wnkPpv/rEoHY2sh9OHMAB+Y8YouwS1Ng/renfYoDQ9bIO7iVM8Pc4q/wJlUdDf87ug96AsrCVbDnsXECBYl7vcuft/cWT1CAPgQgkVELBZTEwBmHCJODA95A/MTq0oC8Awq6mBYsaMCgS6Ce7X9ei7Iv8QpQH6Bibn39GcDnuHLG+VUVQYRKOjhWg5Y/hqfLnqb1LA5TQ3DzXjMtzFfO4l+tTJzXbAOlMgzomMA9UzrvcJ3/hcBG3AbtHws0JdMU1DQQ/1ZZqiESQri0MLgmRZtinwk6BQxW1cvXv1h2KPnpi5WmaiHTGcP/Rd19tmZXtvdpvutupMDTQeLrtrdIrjbe/0l7liY1DaIf2Ig5/BR7bpn1fVg2Br+W9z9h33+V2chZvV20BWp5zffhgB1jSyacuPmc6+f/hKfg7XHoYTgoSVjWR35jtsxdW3q6OLXZNFWKDmwJpINAr45Iilbd923mA7XrNiFaELxYM4Kk0LDETIiir2KdWzQoP8oAsRMo3DzhEIAqgVjD/DGFuTgCCxqPwbwvol7vVotPCWAidC3Jvkb10E8zCFbSkO0JrVFKb9kJ4hGfhVuNs4l0lJeamc/r/smJo18e5rU33qHhlFeTyWM2C9RRpl4of2OeGbsYq1n0zBI2I=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8676002)(33656002)(7416002)(52536014)(71200400001)(5660300002)(86362001)(8936002)(508600001)(64756008)(4326008)(76116006)(66946007)(66556008)(66476007)(66446008)(55016003)(83380400001)(186003)(26005)(38100700002)(2906002)(9686003)(122000001)(82960400001)(6506007)(316002)(7696005)(38070700005)(6916009)(54906003)(41533002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OTIxMndMU2VPRjV5LzlaT0ExQWV6VjlzZHNBcGtWOWhsNUhTNUpienZLMDlY?=
- =?utf-8?B?UjlqSmFJVE9XaWNGck51cnRaUXhCRmZqZUpsS1FxVmxaRFVBa1NSSkRscGhR?=
- =?utf-8?B?aUdtZklyWWRNN1pWK3dUNmFNS1hFRWMreWtKVGVWVm9yM3d0ZE5oUFhoZnZy?=
- =?utf-8?B?SFJkRnI1SDZOaHBjMGRhS3B1TGh3SnJhaldGeVRoQUt0WmRsUFMxVXhWeEJU?=
- =?utf-8?B?Y3g4dHF1OHhMSlNJZVVRRnFWTWJYcTVYdEcyaGF2Q25uNS9uN2pETG5od2l6?=
- =?utf-8?B?c1dTRWU2bHpydWVpbkFaUVlEUkNLMWdrRzh3TVllaENuV2puN09HU3JmTkNQ?=
- =?utf-8?B?M1l5NCtMcjhLSDRHMjErUDJPYnMxUEJoREg5UTdaOGdtZmlvekNQQ3pvUFNq?=
- =?utf-8?B?TWJnK0FVU0RlKy9zU0I3QXJrb2IxWkQzZVRESXVGSXBGcGh3S3VUT3VVNWhS?=
- =?utf-8?B?NmxtNHdNVFl1SDhhWm5OcWc3OUVyNXhEWWFzM0VQY2VJZmVNYlVpZWEwamow?=
- =?utf-8?B?ejVPODdpT1ZnZm8wZ3VPblFBUkZFeTU0NlcySUp0RHp2YUxzUVN6c1h4MFpO?=
- =?utf-8?B?SVczMkV2Tm8wLzJQYUg2WmZqNFBIalFZOW1nazFkZ1U3ZGNHcnJLUU1vekFt?=
- =?utf-8?B?dGJyaEhmdFBEcGJUbHp6TktVYjVHd1lDeUtpREhMVVlqZ3JITm9CNUlNN2Vt?=
- =?utf-8?B?dHZhTUo3a1dKMUFFUGVGRU43emw4NFM3bjh4MlZUSldBTkpacXNsaWFvL043?=
- =?utf-8?B?YVVHeGRsSEo2NjdYTlZYOGlkeWRRTStZb2liZmVhY2lkQVVpNzlLUktBZG4w?=
- =?utf-8?B?WnFZZ0dYQjNiclRBcm9KU2pBV2hCUXJVNmV5Z3JIQlVnalVGMjgyQk52SGJn?=
- =?utf-8?B?VHdKUHFRWHdMTEVXTXp1Y25FRi9mMWpJdFpwdlNsKzlpSVR6blo3dFFUcnJo?=
- =?utf-8?B?NTNtdFpwWDczNmJrdFVLMm83bTUyQmtFblI1TXFtQzkwOUlUK2JBcTVWaE9R?=
- =?utf-8?B?SHJZYkpsR3A4aERpK251engrS0NpYmU3Slk3ZVplMEpzNUVCSjRydHpWRHRD?=
- =?utf-8?B?aklzdjRZczRYc3ppNTZWT0Z2WDlycEgwd3FnbHNWZU5IOGhnQ3I4THFTUFNt?=
- =?utf-8?B?SkYyUndleWpGaE55S0lSUDEvV01ONjNnS21tZUJidGg1MnNUTUdIMGY2TEEv?=
- =?utf-8?B?NHIvVFl2bW9aU3IrZ1NOUVZ2SkNKdGZwNERhcmVGYlRDZTlQc1h1RGdmRCtK?=
- =?utf-8?B?clFzb1ZCYXRRUmxzbkNlVVY4NmFYZXA2MWlEc3B1ZENQUzVjM3pVelh6cDhZ?=
- =?utf-8?B?TEg2U05VUDROWDJnRThIOHIwNWZ4YlpMYVNFWjJ3YnhCd3BSUm1sUElOWmF6?=
- =?utf-8?B?TVpUR2lsT1BJR2I2OEt2SnpzVzFqY0cwWUpReXhnNEt4emc2UHdwNVd1b0Zz?=
- =?utf-8?B?eWZZcVNMd0tvN3NxRHFSMFM3bm9wODRaS2IvNDgwSEpHQnVac2NYSGVBUVk0?=
- =?utf-8?B?a1VCbCtxVmpZbzlBVm0rNk11eFd2YkxobWFPaG53WWJjd2lvaHZwWE5EdnNK?=
- =?utf-8?B?ZVVhWThud3FwQURyOU0va2Fob3B2V3MvYlM2eCtVVEw2ditYZUhRRXdaaWpn?=
- =?utf-8?B?TTY5bGFMRnBOV3QrL2o1QU9Gck16WWJZTXl4OHo1VE8rWUFDSlNIS2k3cUVi?=
- =?utf-8?B?S215Tkk1M2NneUc4a21EbFM5dG5zMHFwUjA5QUFHNFExcmUyTlZJWEFzbXNJ?=
- =?utf-8?B?NVZIMFNLNG16TStjMHlvSDdLQytXWXVUWkhxdklsbU02UHA2dTJGZUZLa2xi?=
- =?utf-8?B?OU5sWVVoaVFnTmtHVTFwamVZRmZ1dTFQNTR2OS8yVC80OXlJUnlJQW8zK0pi?=
- =?utf-8?B?MHRJYm1HVjU0UkM4RlVodk5KNjg3eDZmZVRtNnk0c0N1aHhrVFpZVFpkanZB?=
- =?utf-8?Q?oHaKtJm7m6elkgQCvSEpN/I9iIiO4pl0?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 21 Mar 2022 21:14:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B4313CC4;
+        Mon, 21 Mar 2022 18:13:31 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 7A874210F0;
+        Mon, 21 Mar 2022 21:37:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1647898630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JKHx/9SwDe6T3GQCr95qMN28gaKErxUDbVaf8UGzMsw=;
+        b=BW0E9LCuwRXo4Ds1QoIFeRmhaMdmZJUs/LcGm12IBqAKuSdS+OpjxwZuuMR2OfkwZ1/278
+        nk5VW4qrG5d3OV7doEr3nB76QF+PEoAcX54cDSHux2+5tGrmdKattYdQcc2eDW6N8oBIlS
+        i+nyAabqTCU9amREdOjVdz8HwvLXWnE=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 6EF26A3B81;
+        Mon, 21 Mar 2022 21:37:10 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 508D9DA818; Mon, 21 Mar 2022 22:33:08 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs updates for 5.18
+Date:   Mon, 21 Mar 2022 22:33:04 +0100
+Message-Id: <cover.1647894991.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fdeef294-f9e0-49d5-9c2b-08da0b9f4f4f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Mar 2022 01:00:08.3576
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: h+Fp3GAJXTautmZlgXBRVD7sqp2jIwGqDQxyJGe9dMOD9ZsDR56iApk3jYTiDFkVaKZToRs3FvR57r2/Db3eig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR11MB4296
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBKZWFuLVBoaWxpcHBlIEJydWNrZXIgPGplYW4tcGhpbGlwcGVAbGluYXJvLm9yZz4N
-Cj4gU2VudDogTW9uZGF5LCBNYXJjaCAyMSwgMjAyMiA3OjQyIFBNDQo+IA0KPiBIaSBLZXZpbiwN
-Cj4gDQo+IE9uIE1vbiwgTWFyIDIxLCAyMDIyIGF0IDA4OjA5OjM2QU0gKzAwMDAsIFRpYW4sIEtl
-dmluIHdyb3RlOg0KPiA+ID4gRnJvbTogTHUgQmFvbHUgPGJhb2x1Lmx1QGxpbnV4LmludGVsLmNv
-bT4NCj4gPiA+IFNlbnQ6IFN1bmRheSwgTWFyY2ggMjAsIDIwMjIgMjo0MCBQTQ0KPiA+ID4NCj4g
-PiA+IFRoZSBleGlzdGluZyBJT1BGIGhhbmRsaW5nIGZyYW1ld29yayBvbmx5IGhhbmRsZXMgdGhl
-IEkvTyBwYWdlIGZhdWx0cyBmb3INCj4gPiA+IFNWQS4gR2ludmVuIHRoYXQgd2UgYXJlIGFibGUg
-dG8gbGluayBpb21tdSBkb21haW4gd2l0aCBlYWNoIEkvTyBwYWdlDQo+IGZhdWx0LA0KPiA+ID4g
-d2UgY2FuIG5vdyBtYWtlIHRoZSBJL08gcGFnZSBmYXVsdCBoYW5kbGluZyBmcmFtZXdvcmsgbW9y
-ZSBnZW5lcmFsDQo+IGZvcg0KPiA+ID4gbW9yZSB0eXBlcyBvZiBwYWdlIGZhdWx0cy4NCj4gPg0K
-PiA+ICJtYWtlIC4uLiBnZW5lcmljIiBpbiBzdWJqZWN0IGxpbmUgaXMga2luZCBvZiBjb25mdXNp
-bmcuIFJlYWRpbmcgdGhpcyBwYXRjaCBJDQo+ID4gdGhpbmsgeW91IHJlYWxseSBtZWFudCBjaGFu
-Z2luZyBmcm9tIHBlci1kZXZpY2UgZmF1bHQgaGFuZGxpbmcgdG8gcGVyLQ0KPiBkb21haW4NCj4g
-PiBmYXVsdCBoYW5kbGluZy4gVGhpcyBpcyBtb3JlIGFjY3VyYXRlIGluIGNvbmNlcHQgc2luY2Ug
-dGhlIGZhdWx0IGlzIGNhdXNlZCBieQ0KPiA+IHRoZSBkb21haW4gcGFnZSB0YWJsZS4g8J+Yig0K
-PiANCj4gSSB0ZW5kIHRvIGRpc2FncmVlIHdpdGggdGhhdCBsYXN0IHBhcnQuIFRoZSBmYXVsdCBp
-cyBjYXVzZWQgYnkgYSBzcGVjaWZpYw0KPiBkZXZpY2UgYWNjZXNzaW5nIHNoYXJlZCBwYWdlIHRh
-Ymxlcy4gV2Ugc2hvdWxkIGtlZXAgdGhhdCBkZXZpY2UNCj4gaW5mb3JtYXRpb24gdGhyb3VnaG91
-dCB0aGUgZmF1bHQgaGFuZGxpbmcsIHNvIHRoYXQgd2UgY2FuIHJlcG9ydCBpdCB0byB0aGUNCj4g
-ZHJpdmVyIHdoZW4gdGhpbmdzIGdvIHdyb25nLiBBIHByb2Nlc3MgY2FuIGhhdmUgbXVsdGlwbGUg
-dGhyZWFkcyBib3VuZCB0bw0KPiBkaWZmZXJlbnQgZGV2aWNlcywgdGhleSBzaGFyZSB0aGUgc2Ft
-ZSBtbSBzbyBpZiB0aGUgZHJpdmVyIHdhbnRlZCB0bw0KPiBzaWduYWwgYSBtaXNiZWhhdmluZyB0
-aHJlYWQsIHNpbWlsYXJseSB0byBhIFNFR1Ygb24gdGhlIENQVSBzaWRlLCBpdCB3b3VsZA0KPiBu
-ZWVkIHRoZSBkZXZpY2UgaW5mb3JtYXRpb24gdG8gcHJlY2lzZWx5IHJlcG9ydCBpdCB0byB1c2Vy
-c3BhY2UuDQo+IA0KDQppb21tdSBkcml2ZXIgY2FuIGluY2x1ZGUgdGhlIGRldmljZSBpbmZvcm1h
-dGlvbiBpbiB0aGUgZmF1bHQgZGF0YS4gQnV0DQppbiBjb25jZXB0IHRoZSBJT1BGIHNob3VsZCBi
-ZSByZXBvcnRlZCBwZXIgZG9tYWluLg0KDQphbmQgSSBhZ3JlZSB3aXRoIEphc29uIHRoYXQgYXQg
-bW9zdCB3ZSBjYW4gc2VuZCBTRUdWIHRvIHRoZSBlbnRpcmUgdGhyZWFkDQpncm91cCBzaW5jZSB0
-aGVyZSBpcyBubyB3YXkgdG8gYXNzb2NpYXRlIGEgRE1BIGJhY2sgdG8gYSB0aHJlYWQgd2hpY2gg
-DQppbml0aWF0ZXMgdGhlIERNQS4NCg0KVGhhbmtzDQpLZXZpbg0KDQoNCg==
+Hi,
+
+this update contains feature updates, performance improvements,
+preparatory and core work and some related VFS updates.  Please pull,
+thanks.
+
+Features:
+
+- encoded read/write ioctls, allows user space to read or write raw data
+  directly to extents (now compressed, encrypted in the future), will be
+  used by send/receive v2 where it saves processing time
+
+- zoned mode now works with metadata DUP (the mkfs.btrfs default)
+
+- error message header updates:
+  - print error state: transaction abort, other error, log tree errors
+  - print transient filesystem state: remount, device replace, ignored
+    checksum verifications
+
+- tree-checker: verify the transaction id of the to-be-written dirty
+  extent buffer
+
+Performance improvements:
+
+- fsync speedups
+  - directory logging speedups (up to -90% run time)
+  - avoid logging all directory changes during renames (up to -60% run
+    time)
+  - avoid inode logging during rename and link when possible (up to -60%
+    run time)
+  - prepare extents to be logged before locking a log tree path
+    (throughput +7%)
+  - stop copying old file extents when doing a full fsync ()
+  - improved logging of old extents after truncate
+
+Core, fixes:
+
+- improved stale device identification by dev_t and not just path (for
+  devices that are behind other layers like device mapper)
+
+- continued extent tree v2 preparatory work
+  - disable features that won't work yet
+  - add wrappers and abstractions for new tree roots
+
+- improved error handling
+
+- add super block write annotations around background block group
+  reclaim
+
+- fix device scanning messages potentially accessing stale pointer
+
+- cleanups and refactoring
+
+VFS:
+
+- allow reflinks/deduplication from two different mounts of the same
+  filesystem
+
+- export and add helpers for read/write range verification, for the
+  encoded ioctls
+
+----------------------------------------------------------------
+The following changes since commit 09688c0166e76ce2fb85e86b9d99be8b0084cdf9:
+
+  Linux 5.17-rc8 (2022-03-13 13:23:37 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.18-tag
+
+for you to fetch changes up to d3e29967079c522ce1c5cab0e9fab2c280b977eb:
+
+  btrfs: zoned: put block group after final usage (2022-03-14 13:13:54 +0100)
+
+----------------------------------------------------------------
+Anand Jain (6):
+      btrfs: simplify fs_devices member access in btrfs_init_dev_replace_tgtdev
+      btrfs: harden identification of a stale device
+      btrfs: match stale devices by dev_t
+      btrfs: add device major-minor info in the struct btrfs_device
+      btrfs: use dev_t to match device in device_matched
+      btrfs: cleanup temporary variables when finding rotational device status
+
+David Sterba (1):
+      btrfs: replace BUILD_BUG_ON by static_assert
+
+Dongliang Mu (1):
+      btrfs: don't access possibly stale fs_info data in device_list_add
+
+Dāvis Mosāns (1):
+      btrfs: add lzo workspace buffer length constants
+
+Filipe Manana (28):
+      btrfs: remove write and wait of struct walk_control
+      btrfs: don't log unnecessary boundary keys when logging directory
+      btrfs: put initial index value of a directory in a constant
+      btrfs: stop copying old dir items when logging a directory
+      btrfs: stop trying to log subdirectories created in past transactions
+      btrfs: add helper to delete a dir entry from a log tree
+      btrfs: pass the dentry to btrfs_log_new_name() instead of the inode
+      btrfs: avoid logging all directory changes during renames
+      btrfs: stop doing unnecessary log updates during a rename
+      btrfs: avoid inode logging during rename and link when possible
+      btrfs: use single variable to track return value at btrfs_log_inode()
+      btrfs: remove unnecessary leaf free space checks when pushing items
+      btrfs: avoid unnecessary COW of leaves when deleting items from a leaf
+      btrfs: avoid unnecessary computation when deleting items from a leaf
+      btrfs: remove constraint on number of visited leaves when replacing extents
+      btrfs: remove useless path release in the fast fsync path
+      btrfs: prepare extents to be logged before locking a log tree path
+      btrfs: stop checking for NULL return from btrfs_get_extent()
+      btrfs: fix lost error return value when reading a data page
+      btrfs: remove no longer used counter when reading data page
+      btrfs: assert we have a write lock when removing and replacing extent maps
+      btrfs: stop copying old file extents when doing a full fsync
+      btrfs: hold on to less memory when logging checksums during full fsync
+      btrfs: voluntarily relinquish cpu when doing a full fsync
+      btrfs: reset last_reflink_trans after fsyncing inode
+      btrfs: fix unexpected error path when reflinking an inline extent
+      btrfs: deal with unexpected extent type during reflinking
+      btrfs: add and use helper for unlinking inode during log replay
+
+Jiapeng Chong (2):
+      btrfs: zoned: remove redundant initialization of to_add
+      btrfs: scrub: remove redundant initialization of increment
+
+Johannes Thumshirn (5):
+      btrfs: zoned: make zone activation multi stripe capable
+      btrfs: zoned: make zone finishing multi stripe capable
+      btrfs: zoned: prepare for allowing DUP on zoned
+      btrfs: zoned: allow DUP on meta-data block groups
+      btrfs: stop checking for NULL return from btrfs_get_extent_fiemap()
+
+Josef Bacik (27):
+      btrfs: add definition for EXTENT_TREE_V2
+      btrfs: disable balance for extent tree v2 for now
+      btrfs: disable device manipulation ioctl's EXTENT_TREE_V2
+      btrfs: disable qgroups in extent tree v2
+      btrfs: disable scrub for extent-tree-v2
+      btrfs: disable snapshot creation/deletion for extent tree v2
+      btrfs: disable space cache related mount options for extent tree v2
+      btrfs: tree-checker: don't fail on empty extent roots for extent tree v2
+      btrfs: abstract out loading the tree root
+      btrfs: add code to support the block group root
+      btrfs: add support for multiple global roots
+      btrfs: make search_csum_tree return 0 if we get -EFBIG
+      btrfs: handle csum lookup errors properly on reads
+      btrfs: check correct bio in finish_compressed_bio_read
+      btrfs: remove the bio argument from finish_compressed_bio_read
+      btrfs: track compressed bio errors as blk_status_t
+      btrfs: do not double complete bio on errors during compressed reads
+      btrfs: do not try to repair bio that has no mirror set
+      btrfs: do not clean up repair bio if submit fails
+      btrfs: pass btrfs_fs_info for deleting snapshots and cleaner
+      btrfs: pass btrfs_fs_info to btrfs_recover_relocation
+      btrfs: remove the cross file system checks from remap
+      fs: allow cross-vfsmount reflink/dedupe
+      btrfs: remove BUG_ON(ret) in alloc_reserved_tree_block
+      btrfs: add a alloc_reserved_extent helper
+      btrfs: remove last_ref from the extent freeing code
+      btrfs: factor out do_free_extent_accounting helper
+
+Minghao Chi (1):
+      btrfs: send: remove redundant ret variable in fs_path_copy
+
+Naohiro Aota (1):
+      btrfs: zoned: mark relocation as writing
+
+Niels Dossche (2):
+      btrfs: extend locking to all space_info members accesses
+      btrfs: add lockdep_assert_held to need_preemptive_reclaim
+
+Nikolay Borisov (3):
+      btrfs: move missing device handling in a dedicate function
+      btrfs: move QUOTA_ENABLED check to rescan_should_stop from btrfs_qgroup_rescan_worker
+      btrfs: zoned: put block group after final usage
+
+Omar Sandoval (10):
+      fs: export rw_verify_area()
+      fs: export variant of generic_write_checks without iov_iter
+      btrfs: don't advance offset for compressed bios in btrfs_csum_one_bio()
+      btrfs: add ram_bytes and offset to btrfs_ordered_extent
+      btrfs: support different disk extent size for delalloc
+      btrfs: clean up cow_file_range_inline()
+      btrfs: optionally extend i_size in cow_file_range_inline()
+      btrfs: add definitions and documentation for encoded I/O ioctls
+      btrfs: add BTRFS_IOC_ENCODED_READ ioctl
+      btrfs: add BTRFS_IOC_ENCODED_WRITE
+
+Pankaj Raghav (1):
+      btrfs: zoned: remove redundant assignment in btrfs_check_zoned_mode
+
+Qu Wenruo (4):
+      btrfs: populate extent_map::generation when reading from disk
+      btrfs: unify the error handling pattern for read_tree_block()
+      btrfs: unify the error handling of btrfs_read_buffer()
+      btrfs: verify the tranisd of the to-be-written dirty extent buffer
+
+Sahil Kang (2):
+      btrfs: reuse existing pointers from btrfs_ioctl
+      btrfs: reuse existing inode from btrfs_ioctl
+
+Sidong Yang (2):
+      btrfs: qgroup: remove duplicated check in adding qgroup relations
+      btrfs: qgroup: remove outdated TODO comments
+
+Sweet Tea Dorminy (1):
+      btrfs: add filesystems state details to error messages
+
+ fs/btrfs/backref.c                |    7 +-
+ fs/btrfs/block-group.c            |   36 +-
+ fs/btrfs/block-group.h            |    1 +
+ fs/btrfs/btrfs_inode.h            |   42 +-
+ fs/btrfs/compression.c            |   63 +-
+ fs/btrfs/compression.h            |   10 +-
+ fs/btrfs/ctree.c                  |  108 ++--
+ fs/btrfs/ctree.h                  |   83 ++-
+ fs/btrfs/delalloc-space.c         |   18 +-
+ fs/btrfs/dev-replace.c            |   18 +-
+ fs/btrfs/disk-io.c                |  219 +++++--
+ fs/btrfs/disk-io.h                |    2 +
+ fs/btrfs/extent-tree.c            |  148 +++--
+ fs/btrfs/extent_io.c              |   45 +-
+ fs/btrfs/extent_map.c             |    4 +
+ fs/btrfs/file-item.c              |   76 +--
+ fs/btrfs/file.c                   |   79 ++-
+ fs/btrfs/free-space-tree.c        |    2 +
+ fs/btrfs/inode.c                  | 1183 +++++++++++++++++++++++++++++--------
+ fs/btrfs/ioctl.c                  |  309 ++++++++--
+ fs/btrfs/lzo.c                    |   11 +-
+ fs/btrfs/ordered-data.c           |  132 ++---
+ fs/btrfs/ordered-data.h           |   25 +-
+ fs/btrfs/print-tree.c             |    5 +-
+ fs/btrfs/qgroup.c                 |   72 ++-
+ fs/btrfs/reflink.c                |   43 +-
+ fs/btrfs/relocation.c             |   11 +-
+ fs/btrfs/scrub.c                  |    2 +-
+ fs/btrfs/send.c                   |   11 +-
+ fs/btrfs/send.h                   |    2 +-
+ fs/btrfs/space-info.c             |    5 +-
+ fs/btrfs/super.c                  |   96 ++-
+ fs/btrfs/sysfs.c                  |   15 +-
+ fs/btrfs/tests/extent-map-tests.c |    2 +
+ fs/btrfs/transaction.c            |   19 +-
+ fs/btrfs/transaction.h            |    2 +-
+ fs/btrfs/tree-checker.c           |   35 +-
+ fs/btrfs/tree-log.c               |  982 ++++++++++++++++++------------
+ fs/btrfs/tree-log.h               |    7 +-
+ fs/btrfs/volumes.c                |  147 ++---
+ fs/btrfs/volumes.h                |    7 +-
+ fs/btrfs/zoned.c                  |  167 ++++--
+ fs/internal.h                     |    5 -
+ fs/ioctl.c                        |    4 -
+ fs/read_write.c                   |   34 +-
+ fs/remap_range.c                  |    7 +-
+ include/linux/fs.h                |    2 +
+ include/trace/events/btrfs.h      |    1 +
+ include/uapi/linux/btrfs.h        |  133 +++++
+ include/uapi/linux/btrfs_tree.h   |    3 +
+ 50 files changed, 3109 insertions(+), 1331 deletions(-)

@@ -2,256 +2,400 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384234E2773
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF41A4E2787
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243683AbiCUN0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
+        id S1347860AbiCUNdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347814AbiCUN0s (ORCPT
+        with ESMTP id S242964AbiCUNds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:26:48 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3320488B8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:25:22 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id s4-20020a92c5c4000000b002c7884b8608so7368857ilt.21
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:25:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=QMr3nEyvbG3K5J289IqeMGPpB3eaTvGJdsuLO/upv7E=;
-        b=6PBvWBrNOpeOXTgxnRH2/7vhmIiHSem+lZ9jvGliMrO/CQkmwD4+zXZFOb3PyowYue
-         Djqz6kBEekBgF6HDIiBsp7pPF6bUIWc967260g2CPHnJPbO8ROpFUqlqVYl3M14TvDbB
-         VvRXsDGnFRNTwnHhj9Shg0hNVvLKA68qiy0YQ1BVnO/0204ID0Q0QhBC7WGt+kLKDcgb
-         FdhTPfrO2xXjJxLqHEfx4iwh2tiFCjUQmrE5R7MicjGUhHtWHHxfhvw3id8L2M/xgJzQ
-         YhLnlmXOH1AgFL+URSU0vMQQ1ungepb7DU3ZrZ9Pi+j995ZWS8rZIK5Y/gpQZ6yBTZ9A
-         ubng==
-X-Gm-Message-State: AOAM530LxB81jICj53qtSXNdp0tPmnliNGpz+1NbWIDNXo4s9sEKofKY
-        GTuIKUbq4NeQ26wtA6MZBsfnlVc18XgGzm4O23iP1CHDfuyz
-X-Google-Smtp-Source: ABdhPJwT7sKbosWnL88cfyX+/GHlWucYKFPOLWzpqvPsOGNtUoa6CaDxnwEGJvo8uoXPg+xgZwqdCYqvUGXqIo/Z3Bo15FB88zB+
+        Mon, 21 Mar 2022 09:33:48 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8755A15878F;
+        Mon, 21 Mar 2022 06:32:22 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22LCw8RN010792;
+        Mon, 21 Mar 2022 13:31:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=RBK2h0/2HD6m/12NwHJyuiG07uwo69AAZRwvpxS5F3s=;
+ b=GamJ7DmPZXC9eRsDIL6/QScKKWhfBmKJORZ/jfkVYgMmGNCadNsjn5obO7CfAtjw9gmS
+ /DxCBEYZHmjJ6X9DqObaFT9AjshstsV15ezPTn5Ix+SUMsIQev52SJZY0uThb44L259b
+ OvQUaFtCW9hvINweMxagEQcri33cnSPB9VMVnTvCmLs8cAAGNN7pVeLP0fhS6omkx8pV
+ 78XyqGPJCro6HBOJlguO+Jw0H3aNpQze/PwR8nlqzdH60CGeCsSNlDx5XdMPTC4VbptY
+ OjdqYE41vQECcEK32KmEKHTTQq8Fzn2osADNlhMTX2OOD735Vy6VFI1SRYMqiHpvJ1ez Vw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ew5y1uad9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Mar 2022 13:31:30 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22LDFmCu137865;
+        Mon, 21 Mar 2022 13:31:29 GMT
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2174.outbound.protection.outlook.com [104.47.73.174])
+        by userp3020.oracle.com with ESMTP id 3exawgrr6q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Mar 2022 13:31:28 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cMoMfnh7sj5XoipS7HsBSmphx0Lf6XyvIDiRctLfb0RJTyBi6KILpX36JZgadHdZZ6O3O0GV/hQ76eP7X3hVIct4NgjAz8qe2OhCQw6CJsJLG/wCHv0cKY88BPIwPbLlvlnNXJ55SvlgHGLKHVkkoXNKG119NJqPFre3r6Yj/gNSAz1whI2Xg162rkSARgKLe2cnjlK1331ViVJ15fQ1SQtD2Umsnhe3ENKaba9XoVVk3+tIWmI+UGf0qvNeshM+N4Zwrs0ABxLOorWu8dS2+Qbe9/02L/sNVcsaN5M+8i5wahsJCEVoAUpRvWKDotsu5EeeXo4BBaCcWWhXsTdRpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RBK2h0/2HD6m/12NwHJyuiG07uwo69AAZRwvpxS5F3s=;
+ b=hrgZhhg0LOUyuX59r8APQxVoZzMbac11ohwSKe4tIlra10vejcTy19TAmsySnh/xpt8CNj7BuzNNDy7QdcjiUebiIRjB/qWxa4Rwzdeq1claox/UTUpGFpe7jYFnZY95TnRcox0aUOHVUlU4Kk4h2MT6gOFc5nia6oSNXyBI+D0zHtnpoGuE9c0iVJzZoU9/yZ6Ic/42HvRz3+OE3f5PFwIA1VPYGjalP4SY2YYdoJlV9PtHXkcNMMtLCm+2iZsTGEDf+ZZn2VsVdfcsPLOahgSY24IWqXO2xoH8TaThB0RfHLLa7D0Ts94J0/EtqA6mB5b88TrS2228T1rCBNlLCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RBK2h0/2HD6m/12NwHJyuiG07uwo69AAZRwvpxS5F3s=;
+ b=yVWukN3UaG9UIaSrdpjumnSR8ZgGx4t7xBVBlZ1XiALk8XF9Z/HBTfeN5GdGG8UOW9/4ULIdlw52fXhV1+m3IVzQc3s9zD2argA8XVKv3N5KElziALgHmYGiqUGTwY8OExALdpvgSfAV48sYDDPTIAEPEs3BEDIW7KXOryD8EtI=
+Received: from CO1PR10MB4722.namprd10.prod.outlook.com (2603:10b6:303:9e::12)
+ by DM6PR10MB2825.namprd10.prod.outlook.com (2603:10b6:5:63::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Mon, 21 Mar
+ 2022 13:31:25 +0000
+Received: from CO1PR10MB4722.namprd10.prod.outlook.com
+ ([fe80::4851:6096:3259:2f9a]) by CO1PR10MB4722.namprd10.prod.outlook.com
+ ([fe80::4851:6096:3259:2f9a%7]) with mapi id 15.20.5081.023; Mon, 21 Mar 2022
+ 13:31:25 +0000
+Message-ID: <cc0186d9-29a3-8eff-e38a-95fd4dd9c46f@oracle.com>
+Date:   Mon, 21 Mar 2022 08:29:19 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v21 3/5] arm64: kdump: reimplement crashkernel=X
+Content-Language: en-US
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org,
+        John Donnelly <john.p.donnelly@oracle.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+References: <20220227030717.1464-1-thunder.leizhen@huawei.com>
+ <20220227030717.1464-4-thunder.leizhen@huawei.com>
+From:   John Donnelly <John.p.donnelly@oracle.com>
+In-Reply-To: <20220227030717.1464-4-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT3PR01CA0041.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:82::21) To CO1PR10MB4722.namprd10.prod.outlook.com
+ (2603:10b6:303:9e::12)
 MIME-Version: 1.0
-X-Received: by 2002:a02:c053:0:b0:321:422d:af71 with SMTP id
- u19-20020a02c053000000b00321422daf71mr2165176jam.238.1647869122183; Mon, 21
- Mar 2022 06:25:22 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 06:25:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000aa07b205daba6d49@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in post_one_notification
-From:   syzbot <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>
-To:     christophe.jaillet@wanadoo.fr, dhowells@redhat.com,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c93303f3-6a90-478f-cad5-08da0b3f18b5
+X-MS-TrafficTypeDiagnostic: DM6PR10MB2825:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB282571EEE016A01AEF3620C8C7169@DM6PR10MB2825.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JSPZV8Fpx/EIm2DWuz0voO6/a9RUi6wxCwvM63jzd73SgjLLyHm4WmC/g9C/2bEyv3AaLFH+nYx942vIvEJn5mFn1sH2DXp6/b+UsM+1kXz2UfpxAnv9S0SA8JifOiCipDV8hpSwVIEf8sZ6HpR7/OuyDqlipcxBeRUDf+QgiQH0dIrSaxCuhd7Whf1ov0PFveQh/41yEx3k9IMusxIYzaInWOGDTiigJOOa2N/QjH9qG/QyF6aWJguhxUZi+oQOhxatTC1ZpxuOLAUCwQnklDUmwekjLugX5N1bQylcL0h+YFt43Dm0FQ6/WFxsu+c3HuuAl53fQxXvE0uqf1369Lf7bpsLK+KP1l125tjf3uqodTOe8NKs2UZ49FU/WZHzxh9bh/9OjtmfuY8pzynGafOX1avhIGfmSSxyOkupNA0Ag3nx4kMuSnVEE8Tditw9o5rJAdokOKBQK0ou4SYgSN5hlaz0DtbK1xHFg9d4ewdGzppL9XU/685lmNjaM1HN94fin/c2FtNg+3mkqUmyZWFszUgL2seMhaO9fD4cwLanzXeCRSbm4cey2D6xvqP2iifPVAJw4ZH/J9jGofIZGSDVvC/jm4DpIH5uCTR37KJeMIUXJr6dq5C/7wHX5+ktEFwFLKP7MPYPpPEIDS6GGfs5bGVwID8/YaC3wmiOSVWzZN+7IOq6liiyCYqDtVr1W1vkKMBx6OYszhKFrhgid9VyCtjafwv0onco26V/kTXC8ZAVCMfHBwRa8jiUWDV092RnGFRUIee05xmACd52HEAgyMn4/2FPe6ir954+5kU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4722.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(6512007)(31696002)(86362001)(7416002)(5660300002)(53546011)(6506007)(2906002)(921005)(31686004)(66556008)(186003)(36756003)(316002)(8676002)(6666004)(2616005)(8936002)(66946007)(26005)(4326008)(54906003)(38100700002)(508600001)(110136005)(6486002)(107886003)(66476007)(43740500002)(45980500001)(309714004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V1lmZW9QbmxhY2JHbUNzdHhwbkpRTklLNFdWRjV0K094emFkYzBQMnZHd1dp?=
+ =?utf-8?B?QWRnN3Jkb1RCVGF4dFl3N3BMbVpuUW1kemRUTnUvalpscis2Sm5RVDNXTzg4?=
+ =?utf-8?B?R3MydzJoM29KTHo0THNuc05VWFFmY3JuaEw3Wk9pNGFKLy9lUEM5dG1NVUdu?=
+ =?utf-8?B?cUxHbXBDdFI2MWdaRkJ0eDRuVWlTUHVXNTVSbEU0MW5YMENRQ3poYisyd1hB?=
+ =?utf-8?B?REZJZFF1enYvcmR6c05SYlFpaEd6T0h0VWRwN0ZVUjd4ZWY0U3pqOUVDL2ZB?=
+ =?utf-8?B?RlNPMjk0a1hNRDBnQ1YrSVV2d1BpaHpHY2FCTnZWaXZXVWNpZFpESTNrZGp2?=
+ =?utf-8?B?QWYrbkhPSG9GVnZUdGwxMExEaC9ZblVhK1cyeE1xNTBoVXZyejlLMlUvV3c3?=
+ =?utf-8?B?eFdSZjY0WGFhVXdnZm1OU2UxQWdZbTZVRkxLSjJXMXA5d2dYQWRuZE5pMy9X?=
+ =?utf-8?B?eDhqajUxL1hzKzNWY2xpUjY4M0o3SDdaZEMvVitzdFZ2UFF0RWZrRGk4bmZs?=
+ =?utf-8?B?R1o5cTczQzVNQzQ3ak5pUDZDWXhxNmw5RVFXU1NkTnBhWW5IZXhhamNiRUNB?=
+ =?utf-8?B?MXJibzZlOExlM0oxYXRkby9DUExMSlJQU1FNdGdLY0gyTEdCVnlsY0oycko4?=
+ =?utf-8?B?QjNDSkE3Rm85MFRLT1dZQjF4RnpvMFdheXpWZDlTRTRsQjRia0xqUUJlOXEx?=
+ =?utf-8?B?OEg2aE5YSjZJTS9nWUdmNlVtTnRZZGcyZyt6Qyt2MXZJRjFBRWV6S05OdEFl?=
+ =?utf-8?B?eEJiZjJtQ240ZDJqeW9OQ0RhMnBhNHdUN3FJYjdZQ1VlZDE5SjNVREVud0lj?=
+ =?utf-8?B?QWkyTzkzbUtTWkdhUUd5RnRCNldSNFNmQWQyNnRpeTBEcENwUm9lRDA5UnpW?=
+ =?utf-8?B?cXZKQzhrTXRYMDlzaktWdi8wTW5BTkd6OUNPaXdqV0dkRER3bDIyZSs4c3cr?=
+ =?utf-8?B?SkdtZmgrUytROFZJL3ZvdjRjcXVMWFhpRnFGb3drMXJhRXFIakVMcU8ydHpV?=
+ =?utf-8?B?dkdVd1UzczZ5bHVKVnBxZVo4WmJzZmZ0bGtyZ21sd1VHK3hDaFJqcXpjVmRM?=
+ =?utf-8?B?cUgzMVhLZ0g4U290VENvaTNnYjcrcGI3NFhkdXNKT3Y5ek5NWVF0ZllsRDZs?=
+ =?utf-8?B?d1JvVnRXOU9lYWorRWk1WXVxaFYwZk1tZ2NlMW5ad2pmeFUrTHBNK21sdUtU?=
+ =?utf-8?B?eUpaNVJ5bHh4ajhWZ3R1L2xYZ0lQWkRxbDYzaE5IOGhrbklPUWI1TkNvbXI2?=
+ =?utf-8?B?UTZyMEswNFNiT2xydlp3VXlVQXNUN3JjZzFiOVpVNml5aXZkT056UDcrU2Jo?=
+ =?utf-8?B?bjBxYzUweHdLTDlHR05lQmZlYXFsaXA0QXljT3lGOUJGVGJiWm5CVlliYzYv?=
+ =?utf-8?B?cWQ1MHhveWdKbWpGUFd2MHQ0VDUyS2FFaGRaQ0hmR2pVYXkvdDNYWmNtQzdO?=
+ =?utf-8?B?N09PTEx1N3o1MTJQYUllTFlGbWc3NjBpVUFUWmhRSE0rZk1JbFhqcUxmd2Vr?=
+ =?utf-8?B?SzNQNFdlbHJDczlBckVLMTExTU55OWpqU2ozZmh0ZmxHL2o4YzJTbEw0S2Vk?=
+ =?utf-8?B?bmRvU1VuOXlKYXptQlN1SkJ3ajZGaTRiTTRBVjhCRTFjaW04YzEzWGV2S3cz?=
+ =?utf-8?B?VEtYRnZmSFlqYWNBTmhxbkVuNnMrK29nKzUxc1Q1N1BFckJyejEzenJXZGR5?=
+ =?utf-8?B?Q3RVbzN0RXA3elB6emhKazA1eGNkYkF2a2IzYnE4ZXdmakVyeEl0TFZLQU5K?=
+ =?utf-8?B?cEcrc0dCZkpGTTF2MVNvVWFaM0lMMzE1UmtEQkd5RWQrZHJSekxPRU1hc2lP?=
+ =?utf-8?B?dnFkN0Z2Ukt1ZWQxcm52OEhlMnFLWVpxazFYNE9CbzhhWGdBMm8rbzN0MlFK?=
+ =?utf-8?B?bExxa3JWYjBpWXdyYnpVbTJHZEdYdFNYT3NxSlNJbENVMm9OUkZvVWp1cFpP?=
+ =?utf-8?B?VDVPbFg1TXdFT2VZYnR2bXB2eEFMa3RKeDdsbkJtUVordi9MdmtEUElMdjlq?=
+ =?utf-8?B?MkY0c0I3RWRRPT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c93303f3-6a90-478f-cad5-08da0b3f18b5
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4722.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 13:31:25.3633
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 39trBCSxAH0DnpNuSqO47abbEiFYcX5a05kHiP1lXrz66VcGK1Et8yfbGY1oqf5XZ/UzhZFrBU3KcqJ0Xed3MH3ezNDB/1fDWVy/3xiYYnI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB2825
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10292 signatures=694221
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 malwarescore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203210086
+X-Proofpoint-GUID: nj20mAKan2Xqz3PCvj3kklqNpCPyd3qo
+X-Proofpoint-ORIG-GUID: nj20mAKan2Xqz3PCvj3kklqNpCPyd3qo
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2/26/22 9:07 PM, Zhen Lei wrote:
+> From: Chen Zhou <chenzhou10@huawei.com>
+> 
+> There are following issues in arm64 kdump:
+> 1. We use crashkernel=X to reserve crashkernel below 4G, which
+> will fail when there is no enough low memory.
 
-syzbot found the following issue on:
+                         " Not enough "
+> 2. If reserving crashkernel above 4G, in this case, crash dump
+> kernel will boot failure because there is no low memory available
+> for allocation.
 
-HEAD commit:    551acdc3c3d2 Merge tag 'net-5.17-final' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=131b279d700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d35f9bc6884af6c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=c70d87ac1d001f29a058
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11dbf961700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17f5b119700000
+  We can't have a "boot failure". If the requested reservation
+  can not be met,  the kdump  configuration is not setup.
+> 
+> To solve these issues, change the behavior of crashkernel=X and
+> introduce crashkernel=X,[high,low]. crashkernel=X tries low allocation
+> in DMA zone, and fall back to high allocation if it fails.
+> We can also use "crashkernel=X,high" to select a region above DMA zone,
+> which also tries to allocate at least 256M in DMA zone automatically.
+> "crashkernel=Y,low" can be used to allocate specified size low memory.
 
-Bisection is inconclusive: the issue happens on the oldest tested release.
+Is there going to be documentation on what values certain Arm platforms 
+are going to use this on ?
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1163699d700000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1363699d700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1563699d700000
+> 
+> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
+> Co-developed-by: Zhen Lei <thunder.leizhen@huawei.com>
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>   arch/arm64/kernel/machine_kexec.c      |   9 ++-
+>   arch/arm64/kernel/machine_kexec_file.c |  12 ++-
+>   arch/arm64/mm/init.c                   | 106 +++++++++++++++++++++++--
+>   3 files changed, 115 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/machine_kexec.c b/arch/arm64/kernel/machine_kexec.c
+> index e16b248699d5c3c..19c2d487cb08feb 100644
+> --- a/arch/arm64/kernel/machine_kexec.c
+> +++ b/arch/arm64/kernel/machine_kexec.c
+> @@ -329,8 +329,13 @@ bool crash_is_nosave(unsigned long pfn)
+>   
+>   	/* in reserved memory? */
+>   	addr = __pfn_to_phys(pfn);
+> -	if ((addr < crashk_res.start) || (crashk_res.end < addr))
+> -		return false;
+> +	if ((addr < crashk_res.start) || (crashk_res.end < addr)) {
+> +		if (!crashk_low_res.end)
+> +			return false;
+> +
+> +		if ((addr < crashk_low_res.start) || (crashk_low_res.end < addr))
+> +			return false;
+> +	}
+>   
+>   	if (!kexec_crash_image)
+>   		return true;
+> diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+> index 59c648d51848886..889951291cc0f9c 100644
+> --- a/arch/arm64/kernel/machine_kexec_file.c
+> +++ b/arch/arm64/kernel/machine_kexec_file.c
+> @@ -65,10 +65,18 @@ static int prepare_elf_headers(void **addr, unsigned long *sz)
+>   
+>   	/* Exclude crashkernel region */
+>   	ret = crash_exclude_mem_range(cmem, crashk_res.start, crashk_res.end);
+> +	if (ret)
+> +		goto out;
+> +
+> +	if (crashk_low_res.end) {
+> +		ret = crash_exclude_mem_range(cmem, crashk_low_res.start, crashk_low_res.end);
+> +		if (ret)
+> +			goto out;
+> +	}
+>   
+> -	if (!ret)
+> -		ret =  crash_prepare_elf64_headers(cmem, true, addr, sz);
+> +	ret = crash_prepare_elf64_headers(cmem, true, addr, sz);
+>   
+> +out:
+>   	kfree(cmem);
+>   	return ret;
+>   }
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index 90f276d46b93bc6..30ae6638ff54c47 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -65,6 +65,44 @@ EXPORT_SYMBOL(memstart_addr);
+>   phys_addr_t arm64_dma_phys_limit __ro_after_init;
+>   
+>   #ifdef CONFIG_KEXEC_CORE
+> +/* Current arm64 boot protocol requires 2MB alignment */
+> +#define CRASH_ALIGN			SZ_2M
+> +
+> +#define CRASH_ADDR_LOW_MAX		arm64_dma_phys_limit
+> +#define CRASH_ADDR_HIGH_MAX		memblock.current_limit
+> +
+> +/*
+> + * This is an empirical value in x86_64 and taken here directly. Please
+> + * refer to the code comment in reserve_crashkernel_low() of x86_64 for more
+> + * details.
+> + */
+> +#define DEFAULT_CRASH_KERNEL_LOW_SIZE	\
+> +	max(swiotlb_size_or_default() + (8UL << 20), 256UL << 20)
+> +
+> +static int __init reserve_crashkernel_low(unsigned long long low_size)
+> +{
+> +	unsigned long long low_base;
+> +
+> +	/* passed with crashkernel=0,low ? */
+> +	if (!low_size)
+> +		return 0;
+> +
+> +	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
+> +	if (!low_base) {
+> +		pr_err("cannot allocate crashkernel low memory (size:0x%llx).\n", low_size);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	pr_info("crashkernel low memory reserved: 0x%08llx - 0x%08llx (%lld MB)\n",
+> +		low_base, low_base + low_size, low_size >> 20);
+> +
+> +	crashk_low_res.start = low_base;
+> +	crashk_low_res.end   = low_base + low_size - 1;
+> +	insert_resource(&iomem_resource, &crashk_low_res);
+> +
+> +	return 0;
+> +}
+> +
+>   /*
+>    * reserve_crashkernel() - reserves memory for crash kernel
+>    *
+> @@ -75,30 +113,79 @@ phys_addr_t arm64_dma_phys_limit __ro_after_init;
+>   static void __init reserve_crashkernel(void)
+>   {
+>   	unsigned long long crash_base, crash_size;
+> -	unsigned long long crash_max = arm64_dma_phys_limit;
+> +	unsigned long long crash_low_size;
+> +	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+>   	int ret;
+> +	bool fixed_base, high = false;
+> +	char *cmdline = boot_command_line;
+>   
+> -	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
+> +	/* crashkernel=X[@offset] */
+> +	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
+>   				&crash_size, &crash_base);
+> -	/* no crashkernel= or invalid value specified */
+> -	if (ret || !crash_size)
+> -		return;
+> +	if (ret || !crash_size) {
+> +		/* crashkernel=X,high */
+> +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
+> +		if (ret || !crash_size)
+> +			return;
+> +
+> +		/* crashkernel=Y,low */
+> +		ret = parse_crashkernel_low(cmdline, 0, &crash_low_size, &crash_base);
+> +		if (ret == -ENOENT)
+> +			/*
+> +			 * crashkernel=Y,low is not specified explicitly, use
+> +			 * default size automatically.
+> +			 */
+> +			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
+> +		else if (ret)
+> +			/* crashkernel=Y,low is specified but Y is invalid */
+> +			return;
+> +
+> +		/* Mark crashkernel=X,high is specified */
+> +		high = true;
+> +		crash_max = CRASH_ADDR_HIGH_MAX;
+> +	}
+>   
+> +	fixed_base = !!crash_base;
+>   	crash_size = PAGE_ALIGN(crash_size);
+>   
+>   	/* User specifies base address explicitly. */
+> -	if (crash_base)
+> +	if (fixed_base)
+>   		crash_max = crash_base + crash_size;
+>   
+> -	/* Current arm64 boot protocol requires 2MB alignment */
+> -	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
+> +retry:
+> +	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>   					       crash_base, crash_max);
+>   	if (!crash_base) {
+> +		/*
+> +		 * Attempt to fully allocate low memory failed, fall back
+> +		 * to high memory, the minimum required low memory will be
+> +		 * reserved later.
+> +		 */
+> +		if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
+> +			crash_max = CRASH_ADDR_HIGH_MAX;
+> +			goto retry;
+> +		}
+> +
+>   		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
+>   			crash_size);
+>   		return;
+>   	}
+>   
+> +	if (crash_base >= SZ_4G) {
+> +		/*
+> +		 * For case crashkernel=X, low memory is not enough and fall
+> +		 * back to reserve specified size of memory above 4G, try to
+> +		 * allocate minimum required memory below 4G again.
+> +		 */
+> +		if (!high)
+> +			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
+> +
+> +		if (reserve_crashkernel_low(crash_low_size)) {
+> +			memblock_phys_free(crash_base, crash_size);
+> +			return;
+> +		}
+> +	}
+> +
+>   	pr_info("crashkernel reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
+>   		crash_base, crash_base + crash_size, crash_size >> 20);
+>   
+> @@ -107,6 +194,9 @@ static void __init reserve_crashkernel(void)
+>   	 * map. Inform kmemleak so that it won't try to access it.
+>   	 */
+>   	kmemleak_ignore_phys(crash_base);
+> +	if (crashk_low_res.end)
+> +		kmemleak_ignore_phys(crashk_low_res.start);
+> +
+>   	crashk_res.start = crash_base;
+>   	crashk_res.end = crash_base + crash_size - 1;
+>   	insert_resource(&iomem_resource, &crashk_res);
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in __lock_acquire+0x3f2f/0x56c0 kernel/locking/lockdep.c:4897
-Read of size 8 at addr ffff88807bc048a8 by task syz-executor399/3618
-
-CPU: 1 PID: 3618 Comm: syz-executor399 Not tainted 5.17.0-rc8-syzkaller-00045-g551acdc3c3d2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.c:255
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- __lock_acquire+0x3f2f/0x56c0 kernel/locking/lockdep.c:4897
- lock_acquire kernel/locking/lockdep.c:5639 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
- __raw_spin_lock_irq include/linux/spinlock_api_smp.h:119 [inline]
- _raw_spin_lock_irq+0x32/0x50 kernel/locking/spinlock.c:170
- spin_lock_irq include/linux/spinlock.h:374 [inline]
- post_one_notification.isra.0+0x59/0x830 kernel/watch_queue.c:86
- __post_watch_notification kernel/watch_queue.c:206 [inline]
- __post_watch_notification+0x561/0x840 kernel/watch_queue.c:176
- post_watch_notification include/linux/watch_queue.h:109 [inline]
- notify_key security/keys/internal.h:199 [inline]
- __key_update security/keys/key.c:775 [inline]
- key_create_or_update+0xdbf/0xde0 security/keys/key.c:979
- __do_sys_add_key+0x215/0x430 security/keys/keyctl.c:134
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f53132c8a89
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f531327a2f8 EFLAGS: 00000246 ORIG_RAX: 00000000000000f8
-RAX: ffffffffffffffda RBX: 00007f5313350428 RCX: 00007f53132c8a89
-RDX: 00000000200000c0 RSI: 0000000020000080 RDI: 0000000020000040
-RBP: 0000000000000000 R08: 00000000fffffffc R09: 0000000000000000
-R10: 0000000000000048 R11: 0000000000000246 R12: 00007f5313350420
-R13: 00007f531335042c R14: 00007f531331e074 R15: 3a74707972637366
- </TASK>
-
-Allocated by task 3615:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- ____kasan_kmalloc mm/kasan/common.c:474 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
- kmalloc include/linux/slab.h:581 [inline]
- kzalloc include/linux/slab.h:714 [inline]
- alloc_pipe_info+0x105/0x590 fs/pipe.c:790
- get_pipe_inode fs/pipe.c:881 [inline]
- create_pipe_files+0x8d/0x880 fs/pipe.c:913
- __do_pipe_flags fs/pipe.c:962 [inline]
- do_pipe2+0x96/0x1b0 fs/pipe.c:1010
- __do_sys_pipe2 fs/pipe.c:1028 [inline]
- __se_sys_pipe2 fs/pipe.c:1026 [inline]
- __x64_sys_pipe2+0x50/0x70 fs/pipe.c:1026
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Freed by task 3616:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x126/0x160 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:236 [inline]
- slab_free_hook mm/slub.c:1728 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1754
- slab_free mm/slub.c:3509 [inline]
- kfree+0xd0/0x390 mm/slub.c:4562
- put_pipe_info fs/pipe.c:711 [inline]
- pipe_release+0x2bf/0x320 fs/pipe.c:734
- __fput+0x286/0x9f0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- tracehook_notify_resume include/linux/tracehook.h:188 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
- exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The buggy address belongs to the object at ffff88807bc04800
- which belongs to the cache kmalloc-cg-512 of size 512
-The buggy address is located 168 bytes inside of
- 512-byte region [ffff88807bc04800, ffff88807bc04a00)
-The buggy address belongs to the page:
-page:ffffea0001ef0100 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7bc04
-head:ffffea0001ef0100 order:2 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 0000000000000000 dead000000000122 ffff888010c42dc0
-raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 2, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3609, ts 50514720858, free_ts 25116018184
- prep_new_page mm/page_alloc.c:2434 [inline]
- get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab+0x27f/0x3c0 mm/slub.c:1944
- new_slab mm/slub.c:2004 [inline]
- ___slab_alloc+0xbe1/0x12b0 mm/slub.c:3018
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3105
- slab_alloc_node mm/slub.c:3196 [inline]
- slab_alloc mm/slub.c:3238 [inline]
- kmem_cache_alloc_trace+0x2f8/0x3d0 mm/slub.c:3255
- kmalloc include/linux/slab.h:581 [inline]
- kzalloc include/linux/slab.h:714 [inline]
- alloc_pipe_info+0x105/0x590 fs/pipe.c:790
- get_pipe_inode fs/pipe.c:881 [inline]
- create_pipe_files+0x8d/0x880 fs/pipe.c:913
- __do_pipe_flags fs/pipe.c:962 [inline]
- do_pipe2+0x96/0x1b0 fs/pipe.c:1010
- __do_sys_pipe2 fs/pipe.c:1028 [inline]
- __se_sys_pipe2 fs/pipe.c:1026 [inline]
- __x64_sys_pipe2+0x50/0x70 fs/pipe.c:1026
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1352 [inline]
- free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
- free_unref_page_prepare mm/page_alloc.c:3325 [inline]
- free_unref_page+0x19/0x690 mm/page_alloc.c:3404
- __unfreeze_partials+0x320/0x340 mm/slub.c:2536
- qlink_free mm/kasan/quarantine.c:157 [inline]
- qlist_free_all+0x6d/0x160 mm/kasan/quarantine.c:176
- kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:283
- __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:446
- kasan_slab_alloc include/linux/kasan.h:260 [inline]
- slab_post_alloc_hook mm/slab.h:732 [inline]
- slab_alloc_node mm/slub.c:3230 [inline]
- slab_alloc mm/slub.c:3238 [inline]
- kmem_cache_alloc_trace+0x258/0x3d0 mm/slub.c:3255
- kmalloc include/linux/slab.h:581 [inline]
- kzalloc include/linux/slab.h:714 [inline]
- tomoyo_print_bprm security/tomoyo/audit.c:26 [inline]
- tomoyo_init_log+0xc6a/0x1ee0 security/tomoyo/audit.c:264
- tomoyo_supervisor+0x34d/0xf00 security/tomoyo/common.c:2097
- tomoyo_audit_env_log security/tomoyo/environ.c:36 [inline]
- tomoyo_env_perm+0x17f/0x1f0 security/tomoyo/environ.c:63
- tomoyo_environ security/tomoyo/domain.c:672 [inline]
- tomoyo_find_next_domain+0x13ce/0x1f80 security/tomoyo/domain.c:879
- tomoyo_bprm_check_security security/tomoyo/tomoyo.c:101 [inline]
- tomoyo_bprm_check_security+0x121/0x1a0 security/tomoyo/tomoyo.c:91
- security_bprm_check+0x45/0xa0 security/security.c:866
- search_binary_handler fs/exec.c:1715 [inline]
- exec_binprm fs/exec.c:1768 [inline]
- bprm_execve fs/exec.c:1837 [inline]
- bprm_execve+0x732/0x19b0 fs/exec.c:1799
- do_execveat_common+0x5e3/0x780 fs/exec.c:1926
- do_execve fs/exec.c:1994 [inline]
- __do_sys_execve fs/exec.c:2070 [inline]
- __se_sys_execve fs/exec.c:2065 [inline]
- __x64_sys_execve+0x8f/0xc0 fs/exec.c:2065
-
-Memory state around the buggy address:
- ffff88807bc04780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88807bc04800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88807bc04880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                  ^
- ffff88807bc04900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807bc04980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches

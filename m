@@ -2,120 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE444E3381
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A814E3316
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiCUWuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 18:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
+        id S230058AbiCUWuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 18:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiCUWuQ (ORCPT
+        with ESMTP id S229797AbiCUWtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:50:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB454370C90
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647901809;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=EAE8HCtpjM+jUc1ApTBvyoxBSZREVuBpm/2ip+JPuvw=;
-        b=g3xaE9ts4I5zA/pQyhDUnSj3damHaMO3Yj9chLDNMvrH0e4NOKUF3iUbtuNf6CqkKXgZtK
-        j8zBKaRtV6GeN1vxq6huZ+ZdiS5vq2kVllc363sMkny7Kd5myoo45YoycskZUUshOq7F6G
-        DZwpPHvPWgQKAGFpdrSVai7A8CLpndg=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-410-KyK5Dv_UMbOhSg7CnAfObA-1; Mon, 21 Mar 2022 18:04:24 -0400
-X-MC-Unique: KyK5Dv_UMbOhSg7CnAfObA-1
-Received: by mail-qv1-f71.google.com with SMTP id x6-20020ad44626000000b0044119c7bf4aso4243963qvv.12
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:04:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EAE8HCtpjM+jUc1ApTBvyoxBSZREVuBpm/2ip+JPuvw=;
-        b=UrNQ9wtDjgcsvF0Bd3StqUflFoSky4JGwTfmCiAU5PI/d/Q5jR87AvtHZbJTzW+Wwu
-         //EtIdX3/oJvf95eOkiT8HH4nkrACeAL8f8X5CUgrFooFXSjbcJ7IpDRxJPcLNobuOCL
-         Y68zfPozxUibzjixm5aR0hyTQyFdjNj2O3PqDD/G7o75jvNEXZN6wPQ6Pj82tAbMqEGI
-         pZAPe6s6kBA8M8jpAOmQR+JgLxPQtA8LgevJy5jtGkT43ytbW7NjW38JAgDY+edymJbX
-         fFLcJhlKEVA/zWI9YzAZD1Ezoul95akXo7Q0ZZ43A8YV0619RN0Xusc65ugWN/39p3Nk
-         4Hhg==
-X-Gm-Message-State: AOAM531O+jMNIe7wS1qXy6AbSQ++03Tuvm4N42qtg7N1BrO5nbnW4ccQ
-        l8pTAKWaNH0sLuZBWfPNfptUqs9HHN4mzpJooGISUc/E3ZZvNGBqLifJZ+4L8GDuVkS98M+C6Ry
-        XGbF+BphuaT27guLN6iItJntN
-X-Received: by 2002:a05:622a:13d2:b0:2e1:eedb:c81a with SMTP id p18-20020a05622a13d200b002e1eedbc81amr17047682qtk.437.1647900263482;
-        Mon, 21 Mar 2022 15:04:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy1U5Tj/wJe6NsZNnB2FgrrKyvSVD8FAkqs6udLgi3vy3yBsH2/Xd1pfjMZojGr6sjDBC2Sug==
-X-Received: by 2002:a05:622a:13d2:b0:2e1:eedb:c81a with SMTP id p18-20020a05622a13d200b002e1eedbc81amr17047671qtk.437.1647900263231;
-        Mon, 21 Mar 2022 15:04:23 -0700 (PDT)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id de26-20020a05620a371a00b0067dc7923b14sm8218854qkb.132.2022.03.21.15.04.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 15:04:22 -0700 (PDT)
-From:   trix@redhat.com
-To:     corbet@lwn.net, dan.j.williams@intel.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] nvdimm/blk: Fix title level
-Date:   Mon, 21 Mar 2022 15:04:08 -0700
-Message-Id: <20220321220408.2381974-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Mon, 21 Mar 2022 18:49:20 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6453A7207;
+        Mon, 21 Mar 2022 15:29:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KMpbB31LYz4xc3;
+        Tue, 22 Mar 2022 09:05:42 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647900345;
+        bh=gmYh7GMo3XiS2P6h/BZ+GHGO/dGum+YMp62zDLTtDtU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UNqQg1QalL1tX0zvuuptb7aZrlkz+7F2pEf4x51k9xBVs6OisaV3HoMoEXhz3Uzat
+         SVYSuK/xfxB8/08mO32OjWTJDoo8kc2lxGDQiAsYJrTCiGz8xsWIbtU7UkXySpiFVA
+         OwfM8bsABe6ymCTzslPuakDymH+eMJ/DPiyb7ZuxOOt665cUSUlYJp1bAySmznO2qQ
+         nKMdbMg4TCcnCDrMiorgFElL1Ffp2cpPTqSimXHza8kI4Wa6QAlu1H4dX5h5EULdiV
+         rLfuC+q2ZNMFIh8DxxfeaNtQ3BIWWQyyl44hSghG57u1sos0jyP8nHSov+psZMcIeY
+         rjvJQPocLwGPg==
+Date:   Tue, 22 Mar 2022 09:05:41 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <20220322090541.7d06c8cb@canb.auug.org.au>
+In-Reply-To: <CAHk-=wguO61ACXPSz=hmCxNTzqE=mNr_bWLv6GH5jCVZLBL=qw@mail.gmail.com>
+References: <20220321140327.777f9554@canb.auug.org.au>
+        <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+        <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+        <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
+        <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net>
+        <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
+        <YjidpOZZJkF6aBTG@hirez.programming.kicks-ass.net>
+        <CAHk-=wigO=68WA8aMZnH9o8qRUJQbNJPERosvW82YuScrUTo7Q@mail.gmail.com>
+        <YjirfOJ2HQAnTrU4@hirez.programming.kicks-ass.net>
+        <CAHk-=wguO61ACXPSz=hmCxNTzqE=mNr_bWLv6GH5jCVZLBL=qw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/NW1DkACVm_Mf38+_y.WTVWm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+--Sig_/NW1DkACVm_Mf38+_y.WTVWm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-make htmldocs fails with
-Sphinx parallel build error:
-docutils.utils.SystemMessage: ...nvdimm.rst:146:
-  (SEVERE/4) Title level inconsistent:
+Hi all,
 
-PMEM-REGIONs, Atomic Sectors, and DAX
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+On Mon, 21 Mar 2022 09:52:58 -0700 Linus Torvalds <torvalds@linux-foundatio=
+n.org> wrote:
+>
+> On Mon, Mar 21, 2022 at 9:45 AM Peter Zijlstra <peterz@infradead.org> wro=
+te:
+> > >
+> > > It's presumably not in any of the pull requests I already have
+> > > pending, but it would be nice if I saw some details of _what_ you are
+> > > complaining about, and not just the complaint itself ;) =20
+> >
+> > Duh, right. It's this series:
+> >
+> >   https://lore.kernel.org/bpf/164757541675.26179.17727138330733641017.g=
+it-patchwork-notify@kernel.org/
+> >
+> > That went into bpf-next last Friday. I just checked but haven't found a
+> > pull for it yet. =20
+>=20
+> Thanks. I can confirm it's not in any of the pull requests I have
+> pending, so I'll just start doing my normal work and try to remember
+> to look out for this issue later.
 
-The PMEM vs BLK section was removed without changing
-the PMEM-REGIONS... title line.  Replace '^' with '_'.
+The normal path for bpf-next code is via the net-next tree.  But the
+above series has not yet been merged into the net-next tree so is only
+in the bpf-next tree.
 
-Fixes: f8669f1d6a86 ("nvdimm/blk: Delete the block-aperture window driver")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- Documentation/driver-api/nvdimm/nvdimm.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+So, what am I to do?  Drop the bpf-next tree from linux-next until this
+is resolved?  Some input from the BPF people would be useful.
 
-diff --git a/Documentation/driver-api/nvdimm/nvdimm.rst b/Documentation/driver-api/nvdimm/nvdimm.rst
-index 7917f64710920..be8587a558e1e 100644
---- a/Documentation/driver-api/nvdimm/nvdimm.rst
-+++ b/Documentation/driver-api/nvdimm/nvdimm.rst
-@@ -15,7 +15,7 @@ Version 13
- 	    Supporting Documents
- 	    Git Trees
- 	LIBNVDIMM PMEM
--	        PMEM-REGIONs, Atomic Sectors, and DAX
-+	    PMEM-REGIONs, Atomic Sectors, and DAX
- 	Example NVDIMM Platform
- 	LIBNVDIMM Kernel Device Model and LIBNDCTL Userspace API
- 	    LIBNDCTL: Context
-@@ -144,7 +144,7 @@ can be immediately attached to nd_pmem. This latter mode is called
- label-less or "legacy".
- 
- PMEM-REGIONs, Atomic Sectors, and DAX
--^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+-------------------------------------
- 
- For the cases where an application or filesystem still needs atomic sector
- update guarantees it can register a BTT on a PMEM device or partition.  See
--- 
-2.26.3
+Dave, Jakub, please do not merge the bpf-bext tree into the net-next
+tree for now.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/NW1DkACVm_Mf38+_y.WTVWm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI49rUACgkQAVBC80lX
+0GyZSwf/YAF9koEMRaqDbLHeyzvHSVVuqJ5aiqYdatLo85YQJEjezT2PWUv4WlVH
+iRC7bB9X+nzuwy+y9K2Cp0oC8a5XN/StPltylx+n6hCX/RLzJmiuLBzHu0RS8F9u
+kZ/YQap95KE2cc92SR/UMoGzngXmCjBvem/S7CJw4VZaHlSQStjR/LcwKhKHi/gq
+9S8zQhT5el5feN5dnJesUFLpiUqkhKP64L2pwmrMS0zG7ZksObEqEweal70AC0gV
+vVk3yygoku4YYCQMVHSVDUSLt5esDWotFzWrmFI9//P7ot29u68i8C7MFxgUumcW
+P3TwfTIEItlxQ46dt5Ip2Ob4HhFNWA==
+=O/2P
+-----END PGP SIGNATURE-----
+
+--Sig_/NW1DkACVm_Mf38+_y.WTVWm--

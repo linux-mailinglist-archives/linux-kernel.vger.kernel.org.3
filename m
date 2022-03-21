@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9499A4E265E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:29:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593D64E2659
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347357AbiCUMah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
+        id S1347347AbiCUMaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347335AbiCUMa3 (ORCPT
+        with ESMTP id S1347329AbiCUMaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:30:29 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41003DF87
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:29:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Jr1ZLs7cdsoRFBEY22djs5MKyrd9wQirB+eEW4f9e3M=; b=f6DA+B/dmje1YHC2W6jYmrhSLo
-        kRDhdOtxpd2i8lgI6LjLrQWZDYVQnFowXWehLmiQ53gqYL4wUzmNoBDc/Ltfd2F6makpCxQyhRMo4
-        ARwdK81e9WXygF8hUpGFZMi9vamvCwfCavbB+yLsjHDQRCHMYy3rtz6j8mSH7zXj/SKqvc0BYOA6f
-        hXQ8UGAHlPl+20y1EyZTqhbJecgCn1hgxBtDUOUz37rGhdGl4Xbnd92RlCB/1YBNfk6PArvki1GCm
-        gdt/RLEwP0E/NzlBAgK9PAue6EvxHOttjTUkfdBOavhEqbzJEL6XoJBJZ+TLJ3teWGMzTTspdzki3
-        cPSy5Uyw==;
-Received: from [187.39.124.208] (helo=[192.168.0.110])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nWH9I-000BLL-CG; Mon, 21 Mar 2022 13:28:36 +0100
-Message-ID: <1ccc06f4-3fff-8a6e-2a66-3f117ca6f282@igalia.com>
-Date:   Mon, 21 Mar 2022 09:28:15 -0300
+        Mon, 21 Mar 2022 08:30:18 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F6ADEDA;
+        Mon, 21 Mar 2022 05:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647865733; x=1679401733;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=NgPy/OX0CSDl7BUYWnpSjxCfYLb3tdk9bTYgnvhfbP8=;
+  b=agqkCPbOnsZCQhPMLj2+32adhhZmjTuYDfoI+urZae4lHRHZ9TzUQDpE
+   CQVOWnZ6gU9V68da7POmKqaV5UUaw5CaAZn5fPBJeUWKE6Iyh9mCDiC47
+   hHvYdkpli5cnx6ADvXgbQZ6xGqbT9VmQxt/3b6hu5tko4N3NHHYcjmJ6Y
+   w=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 21 Mar 2022 05:28:53 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 05:28:53 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 21 Mar 2022 05:28:52 -0700
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 21 Mar 2022 05:28:48 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <rohitkr@codeaurora.org>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
+Subject: [PATCH v5 2/3] arm64: dts: qcom: sc7280: Add lpass cpu node
+Date:   Mon, 21 Mar 2022 17:58:15 +0530
+Message-ID: <1647865696-19192-3-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1647865696-19192-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1647865696-19192-1-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC 0/4] Support kdump with LUKS encryption by reusing LUKS
- master key
-Content-Language: en-US
-To:     Coiby Xu <coxu@redhat.com>
-Cc:     kexec@lists.infradead.org, Milan Broz <gmazyland@gmail.com>,
-        Thomas Staudt <tstaudt@de.ibm.com>,
-        Kairui Song <ryncsn@gmail.com>, dm-devel@redhat.com,
-        Mike Snitzer <snitzer@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Dave Young <dyoung@redhat.com>, linux-kernel@vger.kernel.org
-References: <20220318103423.286410-1-coxu@redhat.com>
- <c06a21cc-e1c1-e627-f908-ebc2a041e29a@igalia.com>
- <20220321014150.w6wux5azabweu7dr@Rk>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220321014150.w6wux5azabweu7dr@Rk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,21 +68,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/03/2022 22:41, Coiby Xu wrote:
-> [...]
-> 
-> I believe some users have security concern for where to save vmcore.
-> This use case exactly fits your description and your proposed solution
-> shall be good for this type of users. But I think many more users may
-> just choose to encrypt the hard drive when installing the system and
-> they would naturally expect kdump to work for the case of full disk
-> encryption. So your proposed solution may not address the latter case 
-> where there is a much large user base.
-> 
+Add lpass cpu node for audio on sc7280 based platforms.
 
-Thanks Coiby, makes sense, your idea is more generic and seems to
-address all the use cases!
-Cheers,
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 28 ++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi     | 63 ++++++++++++++++++++++++++++++++
+ 2 files changed, 91 insertions(+)
 
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index 5f75c9a..ca799c2 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -273,6 +273,34 @@
+ 	modem-init;
+ };
+ 
++&lpass_cpu {
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&sec_mi2s_data0>, <&sec_mi2s_sclk>, <&sec_mi2s_ws>;
++
++	mi2s-secondary@1 {
++		reg = <MI2S_SECONDARY>;
++		qcom,playback-sd-lines = <0>;
++	};
++
++	hdmi-primary@5 {
++		reg = <LPASS_DP_RX>;
++	};
++
++	wcd-rx@6 {
++		reg = <LPASS_CDC_DMA_RX0>;
++	};
++
++	wcd-tx@19 {
++		reg = <LPASS_CDC_DMA_TX3>;
++	};
++
++	va-tx@25 {
++		reg = <LPASS_CDC_DMA_VA_TX0>;
++	};
++};
++
+ &pcie1 {
+ 	status = "okay";
+ 	perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 499299a..e6ec334 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -19,6 +19,7 @@
+ #include <dt-bindings/reset/qcom,sdm845-aoss.h>
+ #include <dt-bindings/reset/qcom,sdm845-pdc.h>
+ #include <dt-bindings/soc/qcom,rpmh-rsc.h>
++#include <dt-bindings/sound/qcom,lpass.h>
+ #include <dt-bindings/thermal/thermal.h>
+ 
+ / {
+@@ -1980,6 +1981,68 @@
+ 			#clock-cells = <1>;
+ 		};
+ 
++		lpass_cpu: audio-subsystem@3260000 {
++			compatible = "qcom,sc7280-lpass-cpu";
++
++			reg = <0 0x03987000 0 0x68000>,
++			      <0 0x03b00000 0 0x29000>,
++			      <0 0x03260000 0 0xc000>,
++			      <0 0x03280000 0 0x29000>,
++			      <0 0x03340000 0 0x29000>,
++			      <0 0x0336c000 0 0x3000>;
++
++			reg-names = "lpass-hdmiif",
++				    "lpass-lpaif",
++				    "lpass-rxtx-cdc-dma-lpm",
++				    "lpass-rxtx-lpaif",
++				    "lpass-va-lpaif",
++				    "lpass-va-cdc-dma-lpm";
++
++			iommus = <&apps_smmu 0x1820 0>,
++				 <&apps_smmu 0x1821 0>,
++				 <&apps_smmu 0x1832 0>;
++			status = "disabled";
++
++			power-domains =	<&rpmhpd SC7280_LCX>;
++			power-domain-names = "lcx";
++			required-opps = <&rpmhpd_opp_nom>;
++
++			clocks = <&lpass_aon LPASS_AON_CC_AUDIO_HM_H_CLK>,
++				 <&lpass_audiocc LPASS_AUDIO_CC_EXT_MCLK0_CLK>,
++				 <&lpasscore LPASS_CORE_CC_SYSNOC_MPORT_CORE_CLK>,
++				 <&lpasscore LPASS_CORE_CC_EXT_IF0_IBIT_CLK>,
++				 <&lpasscore LPASS_CORE_CC_EXT_IF1_IBIT_CLK>,
++				 <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM_CLK>,
++				 <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM0_CLK>,
++				 <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM1_CLK>,
++				 <&lpass_audiocc LPASS_AUDIO_CC_CODEC_MEM2_CLK>,
++				 <&lpass_aon LPASS_AON_CC_VA_MEM0_CLK>;
++			clock-names = "aon_cc_audio_hm_h",
++				      "audio_cc_ext_mclk0",
++				      "core_cc_sysnoc_mport_core",
++				      "core_cc_ext_if0_ibit",
++				      "core_cc_ext_if1_ibit",
++				      "audio_cc_codec_mem",
++				      "audio_cc_codec_mem0",
++				      "audio_cc_codec_mem1",
++				      "audio_cc_codec_mem2",
++				      "aon_cc_va_mem0";
++
++			#sound-dai-cells = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 268 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>;
++
++			interrupt-names = "lpass-irq-lpaif",
++					  "lpass-irq-hdmi",
++					  "lpass-irq-vaif",
++					  "lpass-irq-rxtxif";
++		};
++
+ 		lpass_ag_noc: interconnect@3c40000 {
+ 			reg = <0 0x03c40000 0 0xf080>;
+ 			compatible = "qcom,sc7280-lpass-ag-noc";
+-- 
+2.7.4
 
-Guilherme

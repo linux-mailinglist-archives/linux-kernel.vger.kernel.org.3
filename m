@@ -2,124 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A4E4E2370
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EF04E2372
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345945AbiCUJiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S1345082AbiCUJjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345957AbiCUJiF (ORCPT
+        with ESMTP id S233668AbiCUJjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:38:05 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72C963BED
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:36:38 -0700 (PDT)
-X-UUID: ef0d69968e6348248e783b0787ce3457-20220321
-X-UUID: ef0d69968e6348248e783b0787ce3457-20220321
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 625806720; Mon, 21 Mar 2022 17:36:33 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 21 Mar 2022 17:36:32 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 21 Mar 2022 17:36:32 +0800
-Message-ID: <0e4344e084e3306cd265580883c0093c7cb40d45.camel@mediatek.com>
-Subject: Re: [PATCH v3, 1/4] drm/mediatek: Adjust the timing of mipi signal
- from LP00 to LP11
-From:   CK Hu <ck.hu@mediatek.com>
-To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <matthias.bgg@gmail.com>
-CC:     <jitao.shi@mediatek.com>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>, <rex-bc.chen@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Mon, 21 Mar 2022 17:36:32 +0800
-In-Reply-To: <1647503611-13144-2-git-send-email-xinlei.lee@mediatek.com>
-References: <1647503611-13144-1-git-send-email-xinlei.lee@mediatek.com>
-         <1647503611-13144-2-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 21 Mar 2022 05:39:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BDA4DF4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647855482;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CKsx9lB6p9WZgwNtKRiFWqPlet0kE4LtzkeugjgOYxw=;
+        b=g8tFGSwsSAAPj0jchcr5axtMYkZYVoXwoFu2llviMMuKHEFp0jlnL6DOt/ViPYOn/ZmprV
+        bk6/K04/6y4c2a5K8LP7T8ADhwAaRFfUmAC4BHBFiKE9CVEvb//Wgfme7rwICBqdDJlGR8
+        /lzAjCtDb2DDGMvNT0VXBYLA2ygnrTc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-322-jCMNr4XVNeSNL75jysd6Mg-1; Mon, 21 Mar 2022 05:37:58 -0400
+X-MC-Unique: jCMNr4XVNeSNL75jysd6Mg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D0411044562;
+        Mon, 21 Mar 2022 09:37:58 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AFA01400E11D;
+        Mon, 21 Mar 2022 09:37:57 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <1745593.TLkxdtWsSY@leap>
+References: <1745593.TLkxdtWsSY@leap> <1821968.CQOukoFCf9@leap> <000000000000b1807c05daad8f98@google.com> <977073.1647852411@warthog.procyon.org.uk>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     dhowells@redhat.com, christophe.jaillet@wanadoo.fr,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: null-ptr-deref Read in __free_pages
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <985900.1647855477.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 21 Mar 2022 09:37:57 +0000
+Message-ID: <985901.1647855477@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xinlei:
+Fabio M. De Francesco <fmdefrancesco@gmail.com> wrote:
 
-On Thu, 2022-03-17 at 15:53 +0800, xinlei.lee@mediatek.com wrote:
-> From: Jitao Shi <jitao.shi@mediatek.com>
-> 
-> Old sequence:
-> 1. Pull the MIPI signal high
-> 2. Delay & Dsi_reset
-> 3. Set the dsi timing register
-> 4. dsi clk & lanes leave ulp mode and enter hs mode
-> 
-> New sequence:
-> 1. Set the dsi timing register
-> 2. Pull the MIPI signal high
-> 3. Delay & Dsi_reset
-> 4. dsi clk & lanes leave ulp mode and enter hs mode
-> 
-> In the new sequence 2 & 3 & 4 will be moved to dsi_enbale in later
-> patch.
+> I cannot have any objection, it's up to you to decide :)
 
-I think there would be one patch in 5.9 make the wrong sequence, so add
-'Fixes' tag to indicate which patch make the wrong sequence. Use the
-term correct/wrong instead old/new sequence.
+Of course you can object.  That's kind of the point of a review;-)
 
-I still do not understand what is the sequence after apply this patch?
+How about the attached instead, then?
 
-Does the sequence is this after apply this patch?
-1. Set the dsi timing register
-2. Pull the MIPI signal high
-3. Delay & Dsi_reset
-4. dsi clk & lanes leave ulp mode and enter hs mode
+David
+---
+--- a/kernel/watch_queue.c
++++ b/kernel/watch_queue.c
+@@ -271,9 +271,8 @@ long watch_queue_set_size(struct pipe_inode_info *pipe=
+, unsigned int nr_notes)
+ 	return 0;
+ =
 
-Regards,
-CK
-
-> 
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dsi.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> index ccb0511b9cd5..262c027d8c2f 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -649,14 +649,14 @@ static int mtk_dsi_poweron(struct mtk_dsi *dsi)
->  	mtk_dsi_reset_engine(dsi);
->  	mtk_dsi_phy_timconfig(dsi);
->  
-> -	mtk_dsi_rxtx_control(dsi);
-> -	usleep_range(30, 100);
-> -	mtk_dsi_reset_dphy(dsi);
->  	mtk_dsi_ps_control_vact(dsi);
->  	mtk_dsi_set_vm_cmd(dsi);
->  	mtk_dsi_config_vdo_timing(dsi);
->  	mtk_dsi_set_interrupt_enable(dsi);
->  
-> +	mtk_dsi_rxtx_control(dsi);
-> +	usleep_range(30, 100);
-> +	mtk_dsi_reset_dphy(dsi);
->  	mtk_dsi_clk_ulp_mode_leave(dsi);
->  	mtk_dsi_lane0_ulp_mode_leave(dsi);
->  	mtk_dsi_clk_hs_mode(dsi, 0);
+ error_p:
+-	for (i =3D 0; i < nr_pages; i++)
+-		if (pages[i])
+-			__free_page(pages[i]);
++	while (--i >=3D 0)
++		__free_page(pages[i]);
+ 	kfree(pages);
+ error:
+ 	(void) account_pipe_buffers(pipe->user, nr_pages, pipe->nr_accounted);
 

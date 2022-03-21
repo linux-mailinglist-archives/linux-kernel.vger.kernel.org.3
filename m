@@ -2,258 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5B64E2CF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B18954E2CF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243411AbiCUP4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
+        id S1349240AbiCUPz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349010AbiCUPzy (ORCPT
+        with ESMTP id S1348811AbiCUPzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:55:54 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5BE181160;
-        Mon, 21 Mar 2022 08:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1647878068; x=1679414068;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YK/s9M5dM9W+oVehrs/ALR9xtLEfVnh8YMQ1VH2XiPU=;
-  b=VY6DBu0RMLvNuqKRq2RZfQEDdtsnK4ULKnVSbvQt/FVN7AkmX182GhHS
-   M9ZE4+VFyUMYqVec6Yc6PiPvFO3iPsgUq6RtyT1jA6Fha+MAzoSo2fF4S
-   Ra7uNms+fno3JZQX/CJ/0H/Uo/JNN+lw1RBMhR1GjWGr0WfQcXJd6QTVS
-   uCRHubIfuYUTGTd/J4gvjL5ZejtYANUXGj5RSpzfNox3k3Bl9hglgw1ON
-   Jlngsv1y0KfbVqYHWaEIv/UAVxZR9Qrs+KwuES2JP7kaydVa/IFi5eoHJ
-   Jdjq3U80xrA/frbPv9UB5trsMALlYJ8o3IQwdZsxI8PuwlYC2ohuSgtGe
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,199,1643698800"; 
-   d="scan'208";a="152707589"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Mar 2022 08:54:27 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+        Mon, 21 Mar 2022 11:55:49 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5C1B0A42;
+        Mon, 21 Mar 2022 08:54:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647878064; x=1679414064;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=yzFpC7VxjWrIafcSj+avkexiroeO263rG7Ei9+ahZKI=;
+  b=QWIHcaiAYakiQ+jQDmckC/zn/bjGBiSyiz3viRDYfstwZeaQvvM5nPpx
+   joaSbV0Ugz1+/xGt7fGs61c/KyA7odcCBp9iROXidTky+W37ScXOkvOGf
+   6ZneXVP0dqurV76xYqDcjNLtyqueoCSR7g53NSEg4/Zg+LzM3KLRb2zJw
+   kXBXHTMTeoHHhOILC5BrSx3sZNA+Dxo6ZGst3Q8OR+vP8f2Lgnu6H0uLJ
+   m49pV30gndSQeYsOCL8nF6V6+uQnjeOFLuFme8WNj1wETgwlODnQuakCY
+   POU1lktwctMs4nwfzo/hcTiCEWb2UhcARaa2MGb17xYSJ1fuGO7lkiuzn
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="256404011"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="256404011"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 08:54:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="692216313"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Mar 2022 08:54:23 -0700
+Received: from shsmsx606.ccr.corp.intel.com (10.109.6.216) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 21 Mar 2022 08:54:27 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 21 Mar 2022 08:54:22 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, <UNGLinuxDriver@microchip.com>
-Subject: [RFC Patch net-next 3/3] net: phy: lan87xx: added ethtool SQI support
-Date:   Mon, 21 Mar 2022 21:23:37 +0530
-Message-ID: <20220321155337.16260-4-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220321155337.16260-1-arun.ramadoss@microchip.com>
-References: <20220321155337.16260-1-arun.ramadoss@microchip.com>
+ 15.1.2308.21; Mon, 21 Mar 2022 08:54:22 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ SHSMSX606.ccr.corp.intel.com (10.109.6.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 21 Mar 2022 23:54:19 +0800
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.021;
+ Mon, 21 Mar 2022 08:54:17 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+CC:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "graeme.gregory@linaro.org" <graeme.gregory@linaro.org>,
+        "will.deacon@arm.com" <will.deacon@arm.com>,
+        "myron.stowe@redhat.com" <myron.stowe@redhat.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>
+Subject: RE: [BUG] kernel side can NOT trigger memory error with einj
+Thread-Topic: [BUG] kernel side can NOT trigger memory error with einj
+Thread-Index: AQHYMqwUN/kZY3Cbfk+jlxJiPgOL36zCUXmAgAETuICAAHR30IAE7oAAgAFGNfA=
+Date:   Mon, 21 Mar 2022 15:54:17 +0000
+Message-ID: <16c12d3d310f414ba43219cdf4b31539@intel.com>
+References: <8c40a492-9461-2b43-6ec9-06bfc7a0e77f@linux.alibaba.com>
+ <YjIeff7ESJB/amYA@agluck-desk3.sc.intel.com>
+ <f93a5532-3e07-edf4-38ca-142a0f1d78d7@linux.alibaba.com>
+ <1421c3ac3d3c4438a6ff18f193f8a41c@intel.com>
+ <78cefd4c-f735-2ec4-0c09-35c8191280c5@linux.alibaba.com>
+In-Reply-To: <78cefd4c-f735-2ec4-0c09-35c8191280c5@linux.alibaba.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch add the support for measuring Signal Quality Index for
-LAN87xx and LAN937x T1 Phy. To get better accuracy of the SQI,
-readings are measured and its average is calculated. If the link is
-down, then routine return immediately.
-
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
----
- drivers/net/phy/microchip_t1.c | 132 +++++++++++++++++++++++++++++++++
- 1 file changed, 132 insertions(+)
-
-diff --git a/drivers/net/phy/microchip_t1.c b/drivers/net/phy/microchip_t1.c
-index 2742d71a469f..ebbf1e8067f6 100644
---- a/drivers/net/phy/microchip_t1.c
-+++ b/drivers/net/phy/microchip_t1.c
-@@ -9,6 +9,7 @@
- #include <linux/ethtool.h>
- #include <linux/ethtool_netlink.h>
- #include <linux/bitfield.h>
-+#include <linux/sort.h>
- 
- #define PHY_ID_LAN87XX				0x0007c150
- #define PHY_ID_LAN937X				0x0007c180
-@@ -68,7 +69,14 @@
- #define T1_POST_LCK_MUFACT_CFG_REG	0x1C
- #define T1_TX_RX_FIFO_CFG_REG		0x02
- #define T1_TX_LPF_FIR_CFG_REG		0x55
-+#define T1_COEF_CLK_PWR_DN_CFG		0x04
-+#define T1_COEF_RW_CTL_CFG		0x0D
- #define T1_SQI_CONFIG_REG		0x2E
-+#define T1_SQI_CONFIG2_REG		0x4A
-+#define T1_DCQ_MSE_REG			0xC1
-+#define T1_MSE_VLD_MSK			BIT(9)
-+#define T1_DCQ_SQI_REG			0xC3
-+#define T1_DCQ_SQI_MSK			GENMASK(3, 1)
- #define T1_MDIO_CONTROL2_REG		0x10
- #define T1_INTERRUPT_SOURCE_REG		0x18
- #define T1_INTERRUPT2_SOURCE_REG	0x08
-@@ -82,6 +90,12 @@
- #define T1_MODE_STAT_REG		0x11
- #define T1_LINK_UP_MSK			BIT(0)
- 
-+/* SQI defines */
-+#define LAN87XX_MAX_SQI			0x07
-+#define LAN87XX_SQI_ENTRY		200
-+#define SQI_AVG_MIN			40
-+#define SQI_AVG_MAX			160
-+
- #define DRIVER_AUTHOR	"Nisar Sayed <nisar.sayed@microchip.com>"
- #define DRIVER_DESC	"Microchip LAN87XX/LAN937x T1 PHY driver"
- 
-@@ -740,6 +754,120 @@ static int lan87xx_config_aneg(struct phy_device *phydev)
- 	return rc;
- }
- 
-+static int lan87xx_sqi_cmp(const void *a, const void *b)
-+{
-+	return *(u16 *)a - *(u16 *)b;
-+}
-+
-+static int lan87xx_get_sqi(struct phy_device *phydev)
-+{
-+	u16 sqi_value[LAN87XX_SQI_ENTRY];
-+	u32 sqi_avg = 0;
-+	int rc;
-+	u8 i;
-+
-+	rc = lan87xx_update_link(phydev);
-+	if (rc < 0)
-+		return rc;
-+
-+	if (phydev->link == 0)
-+		return sqi_avg;
-+
-+	rc = access_ereg(phydev, PHYACC_ATTR_MODE_WRITE,
-+			 PHYACC_ATTR_BANK_DSP, T1_COEF_CLK_PWR_DN_CFG, 0x16d6);
-+	if (rc < 0)
-+		return rc;
-+
-+	/* Enable SQI measurement */
-+	rc = access_ereg(phydev, PHYACC_ATTR_MODE_WRITE,
-+			 PHYACC_ATTR_BANK_DSP, T1_SQI_CONFIG_REG, 0x9572);
-+	if (rc < 0)
-+		return rc;
-+
-+	/* Enable SQI Method 5 */
-+	rc = access_ereg(phydev, PHYACC_ATTR_MODE_WRITE,
-+			 PHYACC_ATTR_BANK_DSP, T1_SQI_CONFIG2_REG, 0x0001);
-+	if (rc < 0)
-+		return rc;
-+
-+	/* Below effectively throws away first reading
-+	 * required delay before reading DSP.
-+	 */
-+	rc = access_ereg(phydev, PHYACC_ATTR_MODE_WRITE,
-+			 PHYACC_ATTR_BANK_DSP, T1_COEF_RW_CTL_CFG, 0x0301);
-+	if (rc < 0)
-+		return rc;
-+
-+	usleep_range(40, 50);
-+
-+	for (i = 0; i < LAN87XX_SQI_ENTRY; i++) {
-+		rc = lan87xx_update_link(phydev);
-+		if (rc < 0)
-+			return rc;
-+
-+		if (phydev->link == 0)
-+			return sqi_avg;
-+
-+		rc = access_ereg(phydev, PHYACC_ATTR_MODE_WRITE,
-+				 PHYACC_ATTR_BANK_DSP,
-+				 T1_COEF_RW_CTL_CFG, 0x0301);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = access_ereg(phydev, PHYACC_ATTR_MODE_READ,
-+				 PHYACC_ATTR_BANK_DSP, T1_DCQ_SQI_REG, 0x0);
-+		if (rc < 0)
-+			return rc;
-+
-+		sqi_value[i] = FIELD_GET(T1_DCQ_SQI_MSK, rc);
-+
-+		rc = access_ereg(phydev, PHYACC_ATTR_MODE_READ,
-+				 PHYACC_ATTR_BANK_DSP, T1_DCQ_MSE_REG, 0x0);
-+		if (rc < 0)
-+			return rc;
-+
-+		/* Check valid value. 0 - valid, 1 - Invalid
-+		 * if invalid, re-read the value after 250ms
-+		 */
-+		if (FIELD_GET(T1_MSE_VLD_MSK, rc) == 1) {
-+			rc = access_ereg(phydev, PHYACC_ATTR_MODE_WRITE,
-+					 PHYACC_ATTR_BANK_DSP,
-+					 T1_COEF_RW_CTL_CFG, 0x0301);
-+			if (rc < 0)
-+				return rc;
-+
-+			msleep(250);
-+
-+			rc = access_ereg(phydev, PHYACC_ATTR_MODE_READ,
-+					 PHYACC_ATTR_BANK_DSP,
-+					 T1_DCQ_SQI_REG, 0x0);
-+			if (rc < 0)
-+				return rc;
-+
-+			sqi_value[i] = FIELD_GET(T1_DCQ_SQI_MSK, rc);
-+		}
-+	}
-+
-+	/* Sorting SQI values */
-+	sort(sqi_value, LAN87XX_SQI_ENTRY, sizeof(u16), lan87xx_sqi_cmp, NULL);
-+
-+	/* Discarding outliers */
-+	for (i = 0; i < LAN87XX_SQI_ENTRY; i++) {
-+		if (i >= SQI_AVG_MIN && i <= SQI_AVG_MAX)
-+			sqi_avg += sqi_value[i];
-+	}
-+
-+	/* Calculating SQI number */
-+	sqi_avg = DIV_ROUND_UP(sqi_avg, (SQI_AVG_MAX - SQI_AVG_MIN + 1));
-+
-+	return sqi_avg;
-+}
-+
-+static int lan87xx_get_sqi_max(struct phy_device *phydev)
-+{
-+	return LAN87XX_MAX_SQI;
-+}
-+
- static struct phy_driver microchip_t1_phy_driver[] = {
- 	{
- 		PHY_ID_MATCH_MODEL(PHY_ID_LAN87XX),
-@@ -753,6 +881,8 @@ static struct phy_driver microchip_t1_phy_driver[] = {
- 		.resume         = genphy_resume,
- 		.config_aneg    = lan87xx_config_aneg,
- 		.read_status	= lan87xx_read_status,
-+		.get_sqi	= lan87xx_get_sqi,
-+		.get_sqi_max	= lan87xx_get_sqi_max,
- 		.cable_test_start = lan87xx_cable_test_start,
- 		.cable_test_get_status = lan87xx_cable_test_get_status,
- 	},
-@@ -766,6 +896,8 @@ static struct phy_driver microchip_t1_phy_driver[] = {
- 		.resume		= genphy_resume,
- 		.config_aneg    = lan87xx_config_aneg,
- 		.read_status	= lan87xx_read_status,
-+		.get_sqi	= lan87xx_get_sqi,
-+		.get_sqi_max	= lan87xx_get_sqi_max,
- 		.cable_test_start = lan87xx_cable_test_start,
- 		.cable_test_get_status = lan87xx_cable_test_get_status,
- 	}
--- 
-2.33.0
-
+PiBBcyBmYXIgYXMgSSBrbm93LCBBUEVJIG9ubHkgZGVmaW5lcyBmaXZlIGluamVjdGlvbiBpbnN0
+cnVjdGlvbnMsIEFDUElfRUlOSl9SRUFEX1JFR0lTVEVSLA0KPiBBQ1BJX0VJTkpfUkVBRF9SRUdJ
+U1RFUl9WQUxVRSwgQUNQSV9FSU5KX1dSSVRFX1JFR0lTVEVSLCBBQ1BJX0VJTkpfV1JJVEVfUkVH
+SVNURVJfVkFMVUUgYW5kDQo+IEFDUElfRUlOSl9OT09QLiBBQ1BJX0VJTkpfVFJJR0dFUl9FUlJP
+UiBhY3Rpb24gc2hvdWxkIHJ1biBvbmUgb2YgdGhlbSwgSSBkb24ndCBzZWUNCj4gYW55IG9mIHRo
+ZW0gd2lsbCBraWNrIHRoZSBwYXRyb2wgc2NydWJiZXIuIEZvciBleGFtcGxlLCB0cmlnZ2VyIHdp
+dGggQUNQSV9FSU5KX1JFQURfUkVHSVNURVI6DQoNCktpY2tpbmcgdGhlIHBhdHJvbCBzY3J1YmJl
+ciBpcyBkb25lIHdpdGggYSB0cmlnZ2VyIGFjdGlvbiB0aGF0IHdyaXRlcw0KdG8gbWVtb3J5IGNv
+bnRyb2xsZXIgcmVnaXN0ZXJzIHVzaW5nIEFDUElfRUlOSl9XUklURV9SRUdJU1RFUl9WQUxVRS4N
+Cg0KLVRvbnkNCg==

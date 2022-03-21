@@ -2,200 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5056D4E2CFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FF54E2CC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349367AbiCUP6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
+        id S1350549AbiCUPrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236298AbiCUP6F (ORCPT
+        with ESMTP id S1350517AbiCUPra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:58:05 -0400
-X-Greylist: delayed 672 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Mar 2022 08:56:39 PDT
-Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3D75D1B6;
-        Mon, 21 Mar 2022 08:56:39 -0700 (PDT)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9f:8600:0:0:0:1])
-        (authenticated bits=0)
-        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 22LFj3Jb506661
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Mon, 21 Mar 2022 15:45:05 GMT
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8602:8cd5:a7b0:d07:d516])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 22LFj2lX1245399
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Mon, 21 Mar 2022 16:45:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1647877503; bh=eQHJWF+2Qkckbxc6boV6Ua513xsiPv7/H/5mXqIvaF8=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=CEHzqXz9IPk4GobVdbrQC0kKK23X+r4qs3QFYPDpbUhNNP45Zvb4YzY03Ox6D5jSz
-         PE+j54KI4Z2+vNUt8cOHFFuILpB+ApDllVRHBBfLUBYVwxpFj1dnwKSrMMr7d45MEE
-         gZ6/3Ws75fxF+YPCKskNO6fFk1g2iBnP/l40Cj04=
-Received: (nullmailer pid 902608 invoked by uid 1000);
-        Mon, 21 Mar 2022 15:45:01 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Howard Yen <howardyen@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Puma Hsu <pumahsu@google.com>,
-        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
-Subject: Re: [PATCH v3 4/4] usb: host: add xhci-exynos driver
-In-Reply-To: <1647853194-62147-5-git-send-email-dh10.jung@samsung.com>
-        (Daehwan Jung's message of "Mon, 21 Mar 2022 17:59:54 +0900")
-Organization: m
-References: <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
-        <CGME20220321090205epcas2p15ac16f281554b663062e0e31666defab@epcas2p1.samsung.com>
-        <1647853194-62147-5-git-send-email-dh10.jung@samsung.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Mon, 21 Mar 2022 16:45:01 +0100
-Message-ID: <87r16v9uo2.fsf@miraculix.mork.no>
+        Mon, 21 Mar 2022 11:47:30 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B665370A;
+        Mon, 21 Mar 2022 08:46:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AEeSeutZfJtu2nIPuVFGjj2ShykAWgOjHpmhtGwOQnc=; b=ban8yFbw+5HuTNu6qlubpGMcDs
+        3OBD6aMZ4bm1OggDFeh+2L2p0OzCRcUhhCeLzlYZnag6JQPpRlOdT7BIpikJipkVZzysYMNz747Pj
+        YnGn5XuPWflO5LbmIM1PgDmdAUAZNEs1trbWwUp1pkgbQLfoPM382N+Uh5ToNU8h+pIKYRpUho8in
+        JY236BxNqB2GSG3MUC2T/60BtDgxDgerC+ngYlr4Mj5oaQiCLY3thXipHQRD415FIKAo1G48Y6ebv
+        lJQk5ooR1YXLwZ+qrO4kaLz2dRUzLXKQZpyKyCgOSpwZPo3HdlyPLzkxdfKuv0KXASDrXMBwdhVVo
+        CUxgeiMQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWKE1-00AiA1-OO; Mon, 21 Mar 2022 15:45:41 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 936783001CD;
+        Mon, 21 Mar 2022 16:45:40 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 31210203A7684; Mon, 21 Mar 2022 16:45:40 +0100 (CET)
+Date:   Mon, 21 Mar 2022 16:45:40 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        mhiramat@kernel.org, rostedt@goodmis.org, ast@kernel.org,
+        hjl.tools@gmail.com, rick.p.edgecombe@intel.com, rppt@kernel.org,
+        linux-toolchains@vger.kernel.org, Andrew.Cooper3@citrix.com,
+        ndesaulniers@google.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <YjidpOZZJkF6aBTG@hirez.programming.kicks-ass.net>
+References: <20220321140327.777f9554@canb.auug.org.au>
+ <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+ <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+ <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
+ <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net>
+ <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.3 at canardo
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daehwan Jung <dh10.jung@samsung.com> writes:
+On Mon, Mar 21, 2022 at 04:28:06PM +0100, Peter Zijlstra wrote:
+> On Mon, Mar 21, 2022 at 02:45:16PM +0100, Peter Zijlstra wrote:
+> > On Mon, Mar 21, 2022 at 02:08:23PM +0100, Peter Zijlstra wrote:
+> > > On Mon, Mar 21, 2022 at 02:04:05PM +0100, Peter Zijlstra wrote:
+> > > > On Mon, Mar 21, 2022 at 01:55:49PM +0100, Peter Zijlstra wrote:
+> > > > > On Mon, Mar 21, 2022 at 02:03:27PM +1100, Stephen Rothwell wrote:
+> > > > > > Hi all,
+> > > > > > 
+> > > > > > After merging the tip tree, today's linux-next build (x864 allmodconfig)
+> > > > > > produced these new warnings:
+> > > > > > 
+> > > > > > vmlinux.o: warning: objtool: arch_rethook_prepare()+0x55: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: arch_rethook_trampoline_callback()+0x3e: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x93e: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x5f2: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: unwind_next_frame()+0x4a7: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x81: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x90: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x8c: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > > vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x9b: relocation to !ENDBR: arch_rethook_trampoline+0x0
+> > > > > 
+> > > > > Hurmph, lemme go figure out where that code comes from, I've not seen
+> > > > > those.
+> > > > 
+> > > > Ahh, something tracing. I'll go do some patches on top of it.
+> > > 
+> > > Also, that x86 patch has never his x86@kernel.org and doesn't have an
+> > > ACK from any x86 person :-(((
+> > 
+> > Worse, it adds a 3rd return trampoline without replacing any of the
+> > existing two :-(
+> > 
+> > Why was this merged?
+> 
+> It additionally gets ret wrong:
+> 
+>   vmlinux.o: warning: objtool: arch_rethook_trampoline()+0x4a: missing int3 after ret
+> 
+> and afaict regs->ss is garbage (much like kretprobes it appears).
+> 
+> Can we please unmerge this stuff and try again later?
 
-> +++ b/drivers/usb/host/xhci-exynos.c
-> @@ -0,0 +1,982 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * xhci-exynos.c - xHCI host controller driver platform Bus Glue for Exy=
-nos.
-> + *
-> + * Copyright (C) 2022 Samsung Electronics Incorporated - http://www.sams=
-ung.com
-> + * Author: Daehwan Jung <dh10.jung@samsung.com>
-> + *
-> + * A lot of code borrowed from the Linux xHCI driver.
-> + */
-> +#include <linux/clk.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/module.h>
-> +#include <linux/pci.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/usb/phy.h>
-> +#include <linux/slab.h>
-> +#include <linux/acpi.h>
-> +#include <linux/usb/of.h>
-> +
-> +#include "xhci.h"
-> +#include "xhci-plat.h"
-> +#include "xhci-mvebu.h"
-> +#include "xhci-rcar.h"
-
-The xhci-plat.c file is Copyright (C) 2012 Texas Instruments Incorporated
-You can't just steal it.
-
-Besides, even if you could, this isn't about copying as much code as
-posible from A to B.  The point is to add as *little* code as possible
-to support your hardware.
-
-> +static int xhci_exynos_vendor_init(struct xhci_hcd *xhci)
-> +{
-> +	/* TODO */
-> +	return 0;
-> +}
-
-And you didn't even add that?
-
-> +static int xhci_exynos_wake_lock(struct xhci_hcd_exynos *xhci_exynos,
-> +				   int is_main_hcd, int is_lock)
-> +{
-> +	struct usb_hcd	*hcd =3D xhci_exynos->hcd;
-> +	struct xhci_hcd *xhci =3D hcd_to_xhci(hcd);
-> +	struct wakeup_source *main_wakelock, *shared_wakelock;
-> +
-> +	main_wakelock =3D xhci_exynos->main_wakelock;
-> +	shared_wakelock =3D xhci_exynos->shared_wakelock;
-
-Are these fields initialized anywhere?
-
-
-> +
-> +	if (xhci->xhc_state & XHCI_STATE_REMOVING)
-> +		return -ESHUTDOWN;
-> +
-> +	if (is_lock) {
-
-bool?
-
-> +		if (is_main_hcd)
-
-another bool?
-
-> +			__pm_stay_awake(main_wakelock);
-> +		else
-> +			__pm_stay_awake(shared_wakelock);
-> +	} else {
-> +		if (is_main_hcd)
-> +			__pm_relax(main_wakelock);
-> +		else
-> +			__pm_relax(shared_wakelock);
-> +	}
-
-Looks interesting.   Are you signalling relax/wakeups events to the PM
-core on device suspend/resume?  Why?
-
-> +static int xhci_exynos_address_device(struct usb_hcd *hcd, struct usb_de=
-vice *udev)
-> +{
-> +	struct xhci_hcd *xhci;
-> +	int ret;
-> +
-> +	ret =3D xhci_address_device(hcd, udev);
-> +	xhci =3D hcd_to_xhci(hcd);
-> +
-> +	return ret;
-> +}
-
-What's left here if we drop the unused parts?
-
-> +#ifdef CONFIG_OF
-> +static const struct xhci_plat_priv xhci_plat_marvell_armada =3D {
-> +	.init_quirk =3D xhci_mvebu_mbus_init_quirk,
-> +};
-> +
-> +static const struct xhci_plat_priv xhci_plat_marvell_armada3700 =3D {
-> +	.plat_setup =3D xhci_mvebu_a3700_plat_setup,
-> +	.init_quirk =3D xhci_mvebu_a3700_init_quirk,
-> +};
-
-
-Right...
-
-> +#ifdef CONFIG_ACPI
-> +static const struct acpi_device_id usb_xhci_acpi_match[] =3D {
-> +	/* XHCI-compliant USB Controller */
-> +	{ "PNP0D10", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(acpi, usb_xhci_acpi_match);
-> +#endif
-
-Nice one
-
-There's no need to copy me if you plan to resend any of this.  I'm just
-a drive-by reader here anyway, and I've seen enough.
-
-Good luck!
-
-
-
-
-Bj=C3=B8rn
+This landing in -next only today (after having been committed last
+friday night) is another clue it should probably go next round.

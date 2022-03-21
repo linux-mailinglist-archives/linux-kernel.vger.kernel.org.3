@@ -2,133 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154044E2300
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C84CB4E2307
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345696AbiCUJNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        id S1345713AbiCUJOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235501AbiCUJNF (ORCPT
+        with ESMTP id S1345704AbiCUJOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:13:05 -0400
+        Mon, 21 Mar 2022 05:14:06 -0400
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F809C559C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:11:40 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id B54EA5C0102;
-        Mon, 21 Mar 2022 05:11:39 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB45DB4BE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:12:41 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id D37CF5C0127;
+        Mon, 21 Mar 2022 05:12:40 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 21 Mar 2022 05:11:39 -0400
+  by compute3.internal (MEProxy); Mon, 21 Mar 2022 05:12:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=yk+nKpl1q7kSZQ0Ga4s6cX3UW3mqfycxEk/hbr
+        UrqjA=; b=tmBZLNYeUIr+1OS4X+l580Np02SDwdmZAkLq7BaZTqKx4CYSflht2Y
+        2vY9O0hLhund1WtFWicyL9AlUouCJpEzF0our6MgPUHGfbEfzN8Sw+Jvp4Llqv8J
+        hrLdnY/Zl3qsZ9ZNJpeDhXPjGHuZ5kN8xYrR669a8Qz6taSdx2LpNlCqpLP5h+h1
+        3FXEb4nVL/KkNXO+0F2X5aA1OEsyTTOetLs9M5NGmB+crUMZVUljwzp1u+bd5Un4
+        QSsTmthEOedQU0IuVjeX7u9IB198nUeLnjJ+c3CUKeyWl6i6di9voSRZ4QlNe95n
+        /FgUwVZhj1sPg+zL81esajn3L4mxD/jg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=EaBaoXYAR6b4616S4
-        HVTs+O1Fjylx01QZh1cTzPU21s=; b=jbpPCrVncbBcY4X+FwPZg82jyiQkUUmmf
-        1WzAI21dnNO6ghSDonK7FYMnahrJ+UiY01HHnoF1QiRq8D5lC5N02m2M5rIyf/Ay
-        Kb36Oo618zk7x5ZGXbMYbNTyOB0O6tUpPu94lU/4kXMftRaBUe1gD8764Jgz59IG
-        i1O/v1rpQYHj9g294BKOAL6gJSN/qu+Y/i8dq2568X5WqxpM85/i66xp5Fm55WC2
-        iRW4qhMQ73WsSqY+HJlYHa2SQ6nA4tVwH8kCxcMBGoK7lWylsAGH/AoLPSA6oFzf
-        3RV9df8ZN+N8+hnZgcb1l9ItpLDAIjNjxCRYJkQRSqO9OsOHU8pVA==
-X-ME-Sender: <xms:S0E4YuUc06YA_sE-ekyolfXUyDsCW0Mpo-74-ZHXuEKsE-OPBTFHnA>
-    <xme:S0E4Yqkn6zSeMr0qeGAoolvWxe-ghz57YvbmLteVjh9aegH5Pmx162AnnL4zTdf8m
-    _xUtT97qkaXxYeDEy8>
-X-ME-Received: <xmr:S0E4YiYR7uL2CLnV2t4TL9EADRQv11LPuEjs8DWZfPJf4QHTmgEBqNiczum4B6wVypoRxcWe2ZesR6seY3NKFlMsCYeUQpM3FIg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegfedgtdduucetufdoteggodetrfdotf
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=yk+nKpl1q7kSZQ0Ga
+        4s6cX3UW3mqfycxEk/hbrUrqjA=; b=OHwE84h3b8iy5JgHvWJCL+WbZIVXUDo5p
+        Anl4bP0H2v0DZFIRFCb4UjK8LI9OoMRaYsfiFQGIgi/nUk7QRP5jf5CCjLtzVZJ8
+        9W3cKb85OuGyinPF1py1So0c+m3yK14VEj0JcrS8/jUA6RpQ6PjgBctGBQkbQ7Nv
+        fwIUmtkeGeFIDrAIg7dp348ARfpzBOAAuSDcSsgC8yQIJifBj7Qw22kitxMikyb4
+        K1k1For9j++/mX/3J218iyzqsKEstfRQAR4DCQ7rp4cP0BOzR77wo9E5bEEamJtE
+        qc6G1Hf0pwfBrd4j6BZ2kShe857mjWNAfcPzI3kG36+iy1kMejl/g==
+X-ME-Sender: <xms:iEE4YmDBLTBHDUhclVJviokp7ntaV0DOqxWy1XZxFH0Rk5fiQ2IWhQ>
+    <xme:iEE4YgiyrWuDdnbZkrx4_38UQyXf5v9zatDbEEWfeLK3GoDYfz-GkAYnbnG8JDeVD
+    sN0C4CSx_z8EdxhPjU>
+X-ME-Received: <xmr:iEE4YplVqO1OJDLaRbBXMOMbcPYeBlg35gGv5cDDwx9eky3BgQbDhpDpfAr5YyvYdHXVjiDYakIeCs8lBB2Ma7ijKafuNHzwHzJChPQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegfedgtddvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffujgfkfhggtgesmhdtreertddtjeenucfhrhhomhephfhinhhnucfv
-    hhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrth
-    htvghrnhepfeffjeeigfehveehfeevhfetgefgieejieeviefhffffudfgfeekleffhffg
-    hedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfh
-    hthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
-X-ME-Proxy: <xmx:S0E4YlXdsIqRWw6y11QDsxECnFnCnsysxwZ9OsQ1t5Znfgq6PXM8Aw>
-    <xmx:S0E4YolfyPDTrTwsQQpqDOJDCSVtq3GgIUBs-9u6NGjNh7Zbqh2hWw>
-    <xmx:S0E4YqdfWOxnfVYEFb64rfxNimM9thv5i-lmGrlFE_jgmHhZLQRyDQ>
-    <xmx:S0E4Ytx0wh9jx2g3BESC2GZBoyiF5NFxEjK3tcx-6wa5dsfRvDn4xw>
+    uceurghilhhouhhtmecufedttdenucdnkfhovfculdeitddmnecujfgurhepfffhvffukf
+    hfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhmvgcutfhiphgrrhguuceo
+    mhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrthhtvghrnhepleekgeehhf
+    dutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieehgedunecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnh
+    hordhtvggthh
+X-ME-Proxy: <xmx:iEE4YkxUg0lVNp7aLgkfPhqEG4DM1O0K6MYNOZ1Y87HkY_pbsV7DvQ>
+    <xmx:iEE4YrTw-iSqQW1t4_VCiw-S6o6zmagB9aRq2XLBrk8bP4aoEIOeMA>
+    <xmx:iEE4YvbQ8LHvZk0KpIhyuMOQJSwZBHlvUrwWWEE1_h4mAMw4mwnShDJuog>
+    <xmx:iEE4YmHWawlOkLPlgyb0B27BR7bjfVAZG4U_L4151FITfp1BOIbbqg>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 21 Mar 2022 05:11:37 -0400 (EDT)
-Date:   Mon, 21 Mar 2022 20:11:47 +1100 (AEDT)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] macintosh/via-pmu: Fix compiler warnings when CONFIG_PROC_FS
- is disabled
-In-Reply-To: <073c34e0-a016-cf70-1deb-be286da94bde@csgroup.eu>
-Message-ID: <b6d69a6-9e17-d370-a1cd-8f51204ea5d@linux-m68k.org>
-References: <650f5577599a701fdd632cdd469a9cea9788cdf3.1647674431.git.fthain@linux-m68k.org> <bb6d3131-3c46-654f-d2a0-6d57bb8cbfbf@csgroup.eu> <39f63c1b-5a1b-8c8e-5991-813d3d3c2576@linux-m68k.org> <7b16264-dfef-414-8195-87c14a89fb40@linux-m68k.org>
- <073c34e0-a016-cf70-1deb-be286da94bde@csgroup.eu>
+ 21 Mar 2022 05:12:39 -0400 (EDT)
+Date:   Mon, 21 Mar 2022 10:12:36 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2] drm: of: Properly try all possible cases for
+ bridge/panel detection
+Message-ID: <20220321091236.5rcottkhtztvijpl@houat>
+References: <20220318160249.126431-1-paul.kocialkowski@bootlin.com>
+ <20220318161847.ezi6yat4on7rvfdf@houat>
+ <YjSx1rNLTh/L3MQQ@aptenodytes>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-1463811774-918512666-1647853907=:7891"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5mrpx3bhcyhfcg74"
+Content-Disposition: inline
+In-Reply-To: <YjSx1rNLTh/L3MQQ@aptenodytes>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
----1463811774-918512666-1647853907=:7891
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+--5mrpx3bhcyhfcg74
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 21 Mar 2022, Christophe Leroy wrote:
-
-> Le 21/03/2022 =C3=A0 09:50, Finn Thain a =C3=A9crit=C2=A0:
-> > Hi Christophe,
+On Fri, Mar 18, 2022 at 05:22:46PM +0100, Paul Kocialkowski wrote:
+> On Fri 18 Mar 22, 17:18, Maxime Ripard wrote:
+> > On Fri, Mar 18, 2022 at 05:02:49PM +0100, Paul Kocialkowski wrote:
+> > > While bridge/panel detection was initially relying on the usual
+> > > port/ports-based of graph detection, it was recently changed to
+> > > perform the lookup on any child node that is not port/ports
+> > > instead when such a node is available, with no fallback on the
+> > > usual way.
+> > >=20
+> > > This results in breaking detection when a child node is present
+> > > but does not contain any panel or bridge node, even when the
+> > > usual port/ports-based of graph is there.
+> > >=20
+> > > In order to support both situations properly, this commit reworks
+> > > the logic to try both options and not just one of the two: it will
+> > > only return -EPROBE_DEFER when both have failed.
+> > >=20
+> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > Fixes: 80253168dbfd ("drm: of: Lookup if child node has panel or brid=
+ge")
+> > > ---
+> > >=20
+> > > Changes since v1:
+> > > - Renamed remote to node;
+> > > - Renamed helper to find_panel_or_bridge;
+> > > - Cleared bridge pointer early;
+> > > - Returned early to make the code more concise;
+> > >=20
+> > > ---
+> > >  drivers/gpu/drm/drm_of.c | 98 ++++++++++++++++++++------------------=
+--
+> > >  1 file changed, 49 insertions(+), 49 deletions(-)
+> > >=20
+> > > diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
+> > > index 9d90cd75c457..63137c833b7a 100644
+> > > --- a/drivers/gpu/drm/drm_of.c
+> > > +++ b/drivers/gpu/drm/drm_of.c
+> > > @@ -219,6 +219,28 @@ int drm_of_encoder_active_endpoint(struct device=
+_node *node,
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(drm_of_encoder_active_endpoint);
+> > > =20
+> > > +static int find_panel_or_bridge(struct device_node *node,
+> > > +				struct drm_panel **panel,
+> > > +				struct drm_bridge **bridge)
+> > > +{
+> > > +	if (panel) {
+> > > +		*panel =3D of_drm_find_panel(node);
+> > > +		if (!IS_ERR(*panel))
+> > > +			return 0;
+> > > +		else
+> > > +			*panel =3D NULL;
 > >=20
-> > On Mon, 21 Mar 2022, Finn Thain wrote:
-> >=20
-> >> On Mon, 21 Mar 2022, Christophe Leroy wrote:
-> >>
-> >>> Le 19/03/2022 =C3=A0 08:20, Finn Thain a =C3=A9crit=C2=A0:
-> >>>> drivers/macintosh/via-pmu.c:897:12: warning: 'pmu_battery_proc_show'=
- defined but not used [-Wunused-function]
-> >>>>    static int pmu_battery_proc_show(struct seq_file *m, void *v)
-> >>>>               ^~~~~~~~~~~~~~~~~~~~~
-> >>>> drivers/macintosh/via-pmu.c:871:12: warning: 'pmu_irqstats_proc_show=
-' defined but not used [-Wunused-function]
-> >>>>    static int pmu_irqstats_proc_show(struct seq_file *m, void *v)
-> >>>>               ^~~~~~~~~~~~~~~~~~~~~~
-> >>>> drivers/macintosh/via-pmu.c:860:12: warning: 'pmu_info_proc_show' de=
-fined but not used [-Wunused-function]
-> >>>>    static int pmu_info_proc_show(struct seq_file *m, void *v)
-> >>>>               ^~~~~~~~~~~~~~~~~~
-> >>>>
-> >>>> Rearrange some code and add some #ifdefs to avoid unused code warnin=
-gs
-> >>>> when CONFIG_PROC_FS is disabled.
-> >>>
-> >>> Why not just put those three functions inside an #ifdef CONFIG_PROC_F=
-S ?
-> >>>
-> >>
-> >> You'd get a warning about the prototypes ("declared static but never
-> >> defined"). Rather than add an ifdef around the prototypes as well, I
-> >> just reordered things a little.
-> >=20
-> > Oops, I was forgetting that I also added an ifdef around the new
-> > prototype.
-> >=20
-> > The simplest solution is probably the patch below, as it better exploit=
-s
-> > the stubbed-out proc_* API in include/linux/proc_fs.h.
-> >=20
-> > Was this what you had in mind?
+> > You don't need the else branch here, we already cleared panel in
+> > drm_of_find_panel_or_bridge
 >=20
-> Yes that's exactly what I had in mind.
->=20
+> I think we do, because of_drm_find_panel doesn't return NULL when an error
+> happens but PTR_ERR(), so we need to clear it to keep up with previous
+> expectations.
 
-OK, I'll submit it formally.
+Ah, right. We should remove the else then, checkpatch complains about it.
 
-Thanks for your review.
----1463811774-918512666-1647853907=:7891--
+Maxime
+
+--5mrpx3bhcyhfcg74
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYjhBhAAKCRDj7w1vZxhR
+xY30AP48CB5lqRqbdnOS6zvsuJf8aSBYpBIhroE2fAQCOUmvtwD+LPaP2ISCRzgk
+ZZKzRmLYAorwUG84gEHQLYeajML57AI=
+=J2Z3
+-----END PGP SIGNATURE-----
+
+--5mrpx3bhcyhfcg74--

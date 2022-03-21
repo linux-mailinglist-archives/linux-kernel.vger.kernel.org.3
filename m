@@ -2,281 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9634E22E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 945EA4E22EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345664AbiCUJHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
+        id S1345672AbiCUJHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235161AbiCUJG7 (ORCPT
+        with ESMTP id S235161AbiCUJHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:06:59 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EBF32995;
-        Mon, 21 Mar 2022 02:05:34 -0700 (PDT)
+        Mon, 21 Mar 2022 05:07:40 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED619D06B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:06:15 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id qx21so28357233ejb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:06:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1647853534; x=1679389534;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=SWm2rZMQQWr7/N6IuT3e00JWHrd5mZhind7/8gMs0ck=;
-  b=goBg0urROb8Rxiw+X17RhYoC/q+3EUAXVz+FAd1EoKwBGmgQN80fv0zU
-   T45kE9BOwuiWXxjXh2IrCoJqyzIrITb9KxB0sZsVfUeyiev7E1O3e03g5
-   rXPtxNW/9RZlZsf+FjdbPIfSr9eXRmUE32G4pgJvQ+UjlOTzGqAkJV+Xj
-   A=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 21 Mar 2022 02:05:34 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 02:05:33 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 21 Mar 2022 02:05:33 -0700
-Received: from jianbinz-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 21 Mar 2022 02:05:30 -0700
-From:   jianbinz <quic_jianbinz@quicinc.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
-CC:     jianbinz <quic_jianbinz@quicinc.com>, <quic_subbaram@quicinc.com>,
-        <quic_collinsd@quicinc.com>, <linux-rtc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_fenglinw@quicinc.com>
-Subject: [PATCH] rtc: rtc-pm8xxx: Retrigger RTC alarm if it's fired before the driver probed
-Date:   Mon, 21 Mar 2022 17:05:14 +0800
-Message-ID: <20220321090514.4523-1-quic_jianbinz@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=mt0VFhB/cCuPyGbbmavpLIyzsTNFvG4Vc/AfIj3zApY=;
+        b=NmF37/lEaxfT5M2TGcYPyQIp9c0iopepl58SqhUvDu9K7LZLiOuaayFWTWseflPfsO
+         JX7NDUoyGbjVXeIm3W8JbWd/4HDJ8tOLTCB63wZ6L8Nr+YUduPkGHzFfI1fiF9zqkT9m
+         P3rPfvEoF5AmJnQtZWRXc2xgKq/pnaQmrewjS56TwrIr6tEJ8DZOTM538mc24TKZFmpE
+         0k0bakJcvUSgedXhBQKYIyTpeKrtPfTstKfB/JNDF1h6SXHVu7s4trOgUoYY3YcQYqFy
+         j1pSJ3xQF9LTlKY2oepQQ13IkmDkqnu7zYHM2IePJXV/q2+LOk8mgyLw0uqwztmMFagu
+         QkuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=mt0VFhB/cCuPyGbbmavpLIyzsTNFvG4Vc/AfIj3zApY=;
+        b=6NOgRUjse8gyDgOKpKjhQUORAzjMgMiGQRanjPlF3tpRcursAorNlW2JIZdiU2tk9n
+         tBezzYRmrAgze6DXM7mME6LyqiEc5FyFwUNANWn9JJCVDSLt70OIe8xinY6El32Xv8+g
+         jxNyXvz6D4pUGlGagtCibqtgTpezUE34EjjBnvmmSJCO7mXHuMkF5VVTpYlqO0k14X2W
+         ofT2eFzsSK+FTwvsfqCSi3kgLdzA/U2PK+jLfZUkkOSjcPDFN1aa/zAaShoDmxISHX4k
+         KUfZSvRO946Ba4n2EUxD/DdxCtE8sXQURuOLhLG+ljn0toQsSWnSB/8rmHYqFf91gjiY
+         UTqA==
+X-Gm-Message-State: AOAM531AbdLIDtM0YyLSDJESgusoUapiR9coa7cK7wcAmcNyRo2sQIpa
+        Zn5JNgTfqCwsWgh9m2hZJLY=
+X-Google-Smtp-Source: ABdhPJwVFF2qOVXbaAyFvG0JRg6aagD1KaDmyF5Ceu3CSRh8UkE/rrnLpGcJIX3kct91TcwxEhpPtw==
+X-Received: by 2002:a17:907:7e97:b0:6db:c1ef:6a68 with SMTP id qb23-20020a1709077e9700b006dbc1ef6a68mr18932062ejc.475.1647853574492;
+        Mon, 21 Mar 2022 02:06:14 -0700 (PDT)
+Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.gmail.com with ESMTPSA id w19-20020a05640234d300b00416baf4cdcasm7771528edc.48.2022.03.21.02.06.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 21 Mar 2022 02:06:14 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
+Subject: Re: [PATCH] staging: greybus: codecs: fix type confusion with
+ dedicated list iterator variable
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <20220321084844.GG3293@kadam>
+Date:   Mon, 21 Mar 2022 10:06:13 +0100
+Cc:     Vaibhav Agarwal <vaibhav.sr@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        Mark Greer <mgreer@animalcreek.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mike Rapport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Transfer-Encoding: 7bit
+Message-Id: <23587784-B0EB-4FDD-B5BC-DC1B16404DA7@gmail.com>
+References: <20220319202058.2518847-1-jakobkoschel@gmail.com>
+ <20220321084844.GG3293@kadam>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+X-Mailer: Apple Mail (2.3693.60.0.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the alarm is triggered before the driver gets probed, the alarm
-interrupt will be missed and it won't be detected, and the stale
-alarm settings will be still retained because of not being cleared.
-Check this condition during driver probe, retrigger the alarm and
-clear the settings manually if it's such case.
 
-Signed-off-by: jianbinz <quic_jianbinz@quicinc.com>
----
- drivers/rtc/rtc-pm8xxx.c | 148 ++++++++++++++++++++++++++++++---------
- 1 file changed, 113 insertions(+), 35 deletions(-)
- mode change 100644 => 100755 drivers/rtc/rtc-pm8xxx.c
+> On 21. Mar 2022, at 09:48, Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> 
+> The subject says that it fixes a bug but it does not.
 
-diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-old mode 100644
-new mode 100755
-index 29a1c65661e9..f213702a513c
---- a/drivers/rtc/rtc-pm8xxx.c
-+++ b/drivers/rtc/rtc-pm8xxx.c
-@@ -64,6 +64,62 @@ struct pm8xxx_rtc {
- 	spinlock_t ctrl_reg_lock;
- };
- 
-+static int pm8xxx_rtc_read_rtc_data(struct pm8xxx_rtc *rtc_dd, unsigned long *rtc_data)
-+{
-+	int rc;
-+	u8 value[NUM_8_BIT_RTC_REGS];
-+	unsigned int reg;
-+	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-+
-+	rc = regmap_bulk_read(rtc_dd->regmap, regs->read, value, sizeof(value));
-+	if (rc) {
-+		dev_err(rtc_dd->rtc_dev, "RTC read rtc data register failed\n");
-+		return rc;
-+	}
-+
-+	/*
-+	 * Read the LSB again and check if there has been a carry over.
-+	 * If there is, redo the read operation.
-+	 */
-+	rc = regmap_read(rtc_dd->regmap, regs->read, &reg);
-+	if (rc < 0) {
-+		dev_err(rtc_dd->rtc_dev, "RTC read rtc data register failed\n");
-+		return rc;
-+	}
-+
-+	if (unlikely(reg < value[0])) {
-+		rc = regmap_bulk_read(rtc_dd->regmap, regs->read,
-+				      value, sizeof(value));
-+		if (rc) {
-+			dev_err(rtc_dd->rtc_dev, "RTC read rtc data register failed\n");
-+			return rc;
-+		}
-+	}
-+
-+	*rtc_data = value[0] | (value[1] << 8) | (value[2] << 16) |
-+			((unsigned long)value[3] << 24);
-+
-+	return 0;
-+}
-+
-+static int pm8xxx_rtc_read_alarm_data(struct pm8xxx_rtc *rtc_dd, unsigned long *alarm_data)
-+{
-+	int rc;
-+	u8 value[NUM_8_BIT_RTC_REGS];
-+
-+	rc = regmap_bulk_read(rtc_dd->regmap, rtc_dd->regs->alarm_rw, value,
-+			      sizeof(value));
-+	if (rc) {
-+		dev_err(rtc_dd->rtc_dev, "RTC read alarm data failed\n");
-+		return rc;
-+	}
-+
-+	*alarm_data = value[0] | (value[1] << 8) | (value[2] << 16) |
-+			((unsigned long)value[3] << 24);
-+
-+	return 0;
-+}
-+
- /*
-  * Steps to write the RTC registers.
-  * 1. Disable alarm if enabled.
-@@ -175,40 +231,15 @@ static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
- static int pm8xxx_rtc_read_time(struct device *dev, struct rtc_time *tm)
- {
- 	int rc;
--	u8 value[NUM_8_BIT_RTC_REGS];
- 	unsigned long secs;
--	unsigned int reg;
- 	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
--	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
- 
--	rc = regmap_bulk_read(rtc_dd->regmap, regs->read, value, sizeof(value));
-+	rc = pm8xxx_rtc_read_rtc_data(rtc_dd, &secs);
- 	if (rc) {
--		dev_err(dev, "RTC read data register failed\n");
--		return rc;
--	}
--
--	/*
--	 * Read the LSB again and check if there has been a carry over.
--	 * If there is, redo the read operation.
--	 */
--	rc = regmap_read(rtc_dd->regmap, regs->read, &reg);
--	if (rc < 0) {
--		dev_err(dev, "RTC read data register failed\n");
-+		dev_err(dev, "RTC read time failed\n");
- 		return rc;
- 	}
- 
--	if (unlikely(reg < value[0])) {
--		rc = regmap_bulk_read(rtc_dd->regmap, regs->read,
--				      value, sizeof(value));
--		if (rc) {
--			dev_err(dev, "RTC read data register failed\n");
--			return rc;
--		}
--	}
--
--	secs = value[0] | (value[1] << 8) | (value[2] << 16) |
--	       ((unsigned long)value[3] << 24);
--
- 	rtc_time64_to_tm(secs, tm);
- 
- 	dev_dbg(dev, "secs = %lu, h:m:s == %ptRt, y-m-d = %ptRdr\n", secs, tm, tm);
-@@ -267,21 +298,16 @@ static int pm8xxx_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
- {
- 	int rc;
- 	unsigned int ctrl_reg;
--	u8 value[NUM_8_BIT_RTC_REGS];
- 	unsigned long secs;
- 	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
- 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
- 
--	rc = regmap_bulk_read(rtc_dd->regmap, regs->alarm_rw, value,
--			      sizeof(value));
-+	rc = pm8xxx_rtc_read_alarm_data(rtc_dd, &secs);
- 	if (rc) {
--		dev_err(dev, "RTC alarm time read failed\n");
-+		dev_err(dev, "RTC alarm data read failed\n");
- 		return rc;
- 	}
- 
--	secs = value[0] | (value[1] << 8) | (value[2] << 16) |
--	       ((unsigned long)value[3] << 24);
--
- 	rtc_time64_to_tm(secs, &alarm->time);
- 
- 	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
-@@ -394,6 +420,52 @@ static irqreturn_t pm8xxx_alarm_trigger(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+/*
-+ * Trigger the alarm event and clear the alarm settings
-+ * if the alarm data has been behind the RTC data which
-+ * means the alarm has been triggered before the driver
-+ * is probed.
-+ */
-+static int pm8xxx_rtc_init_alarm(struct pm8xxx_rtc *rtc_dd)
-+{
-+	int rc;
-+	unsigned long rtc_data, alarm_data, irq_flags;
-+	unsigned int ctrl_reg, alarm_en;
-+	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-+
-+	spin_lock_irqsave(&rtc_dd->ctrl_reg_lock, irq_flags);
-+
-+	rc = pm8xxx_rtc_read_rtc_data(rtc_dd, &rtc_data);
-+	if (rc) {
-+		spin_unlock_irqrestore(&rtc_dd->ctrl_reg_lock, irq_flags);
-+		dev_err(rtc_dd->rtc_dev, "rtc read rtc data failed\n");
-+		return rc;
-+	}
-+
-+	rc = pm8xxx_rtc_read_alarm_data(rtc_dd, &alarm_data);
-+	if (rc) {
-+		spin_unlock_irqrestore(&rtc_dd->ctrl_reg_lock, irq_flags);
-+		dev_err(rtc_dd->rtc_dev, "rtc read alarm data failed\n");
-+		return rc;
-+	}
-+
-+	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
-+	if (rc) {
-+		spin_unlock_irqrestore(&rtc_dd->ctrl_reg_lock, irq_flags);
-+		dev_err(rtc_dd->rtc_dev, "Read from RTC alarm control register failed\n");
-+		return rc;
-+	}
-+
-+	spin_unlock_irqrestore(&rtc_dd->ctrl_reg_lock, irq_flags);
-+
-+	alarm_en = !!(ctrl_reg & PM8xxx_RTC_ALARM_ENABLE);
-+
-+	if (alarm_en && rtc_data >= alarm_data)
-+		pm8xxx_alarm_trigger(0, rtc_dd);
-+
-+	return 0;
-+}
-+
- static int pm8xxx_rtc_enable(struct pm8xxx_rtc *rtc_dd)
- {
- 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-@@ -527,7 +599,13 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
- 		return rc;
- 	}
- 
--	return devm_rtc_register_device(rtc_dd->rtc);
-+	rc =  devm_rtc_register_device(rtc_dd->rtc);
-+	if (rc < 0) {
-+		dev_err(&pdev->dev, "Register RTC device failed\n");
-+		return rc;
-+	}
-+
-+	return pm8xxx_rtc_init_alarm(rtc_dd);
- }
- 
- #ifdef CONFIG_PM_SLEEP
--- 
-2.17.1
+Thank you for your review!
+
+I don't agree that this doesn't fix a bug:
+
+> +		}
+> 	}
+> 	if (!data) {
+> -		dev_err(dai->dev, "%s:%s DATA connection missing\n",
+> -			dai->name, module->name);
+
+Using 'module' when data == NULL is *guaranteed* to be a type confused
+bogus pointer. It fundamentally can never be correct.
+
+If I should still change the wording please let me know.
+
+> +		dev_err(dai->dev, "%s DATA connection missing\n",
+> +			dai->name);
+> 		mutex_unlock(&codec->lock);
+> 		return -ENODEV;
+> 	}
+
+
+> 
+> On Sat, Mar 19, 2022 at 09:20:58PM +0100, Jakob Koschel wrote:
+>> If the list does not exit early then data == NULL and 'module' does not
+>> point to a valid list element.
+>> Using 'module' in such a case is not valid and was therefore removed.
+> 
+> This paragraph is confusing jumble words.  Just say: "This code is fine".
+> 
+>> 
+>> In preparation to limit the scope of the list iterator to the list
+>> traversal loop, use a dedicated pointer pointing to the found element [1].
+> 
+> This paragraph is the information we need.  Just add something like
+> "This patch has no effect on runtime".
+
+As mentioned above, this code effects runtime (in one out of the two cases).
+
+> 
+> regards,
+> dan carpenter
+
+Thanks,
+Jakob
 

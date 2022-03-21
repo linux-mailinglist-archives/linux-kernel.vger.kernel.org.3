@@ -2,664 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6BB4E236E
+	by mail.lfdr.de (Postfix) with ESMTP id DC50B4E236F
 	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:36:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345888AbiCUJiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
+        id S1345938AbiCUJiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345901AbiCUJhz (ORCPT
+        with ESMTP id S1345933AbiCUJh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:37:55 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCFD5FF29;
-        Mon, 21 Mar 2022 02:36:28 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so10099687pjm.0;
-        Mon, 21 Mar 2022 02:36:28 -0700 (PDT)
+        Mon, 21 Mar 2022 05:37:58 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791E85FF29
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:36:33 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id j15so14505597eje.9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:36:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=szeredi.hu; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=s2P5Lw/DsAKf7yY0qEaJNmwr7N89ocRPuK2j4JhWlrc=;
-        b=KT7QeMz1NqB+HMsVwUXmk861vvvxxOdOWCEd5bpQVVmeoxmTa0JpALgY2aUl7ImAeB
-         7ndwN1oj3D8d7FXI8cSgzNYUvcTwCEcsmO+ORo0r4G/CGjTVZQatY8cJWfVAjK8OzuCn
-         eSo3yGGRc0yOJns4AGBSXjfzRSH4x7fDQQiohtfcuUY8upJsOyDkuGsj5+OEwu4QiNga
-         odEgAA7VRXahtIngThDgle3xywRchZRiETzMWQ7SZS84NF+8XSsl32FoXKUvfvbAcKZh
-         pOCSWPaF83NWdUHLg6H9azV8S/QQ4mxBIoaxwHrG2z7/eGFEfc00zdTh2A5fkcgg0WpM
-         VQUw==
+        bh=ogrhRXR+AVdt3mfgPz8CUVBxI7B5+eAIXFaggH9T3eY=;
+        b=JTdeK1AYQxPLk0QC4MPXc65N/+9KLmUz6bikgdSXHUYI1p9r2xyaAC87MAdfYFwnjX
+         SBcIYVRVP+XrwcjVGS++LI/xdkXEGR/RfOz7lYc9NYGt5ThG2cWE7ZZrlTctS0fsSm4n
+         iHHZnYjhB4CoSF55F68VVh93gpvkr+4GcL2jw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=s2P5Lw/DsAKf7yY0qEaJNmwr7N89ocRPuK2j4JhWlrc=;
-        b=MZXnFlZnsyYF91mfBgOUYKpAbECgDUDZB+JPQHuaolYzW9ZgU+pq3UGCeRlOdTbc2L
-         6ANVR+wGXB3vbhMyrG2XFsW8N2TlhMsXsarqkr/4iqPj3Hznrz5j6+tFhcC0j7w71VJG
-         iQzSkTdHiBXIox3BvntukLEmVWu/cYCFPIN04FsBhyU5/M1Xk+jBj+DTgnkSW3V//Rpr
-         K1Zx5fgk/m7pW9qkLBkAk8YCC1dLtSfb1s32y0ydZ8zRmldFxSxht09Z3AMeJJJZjsvR
-         bp/dCsRF6CIGq4iT8R93xESlRCz8bYY0zLrAGkJO+MzLleckN94jVzn9TTY1L9kX00MA
-         dvLA==
-X-Gm-Message-State: AOAM531kdVlbyybrcutq/j7lTvacAJtoKKihOsLFe4ov6BqqWtCb6RYK
-        +OyG2esksujkixNI9JHGEVNTc7YR9Ai9Uhmad4Y=
-X-Google-Smtp-Source: ABdhPJwhclQAU0bcNNzQNAYvSMp3963FNp9lNNfK8TA41DuF3UR2CMJUXgoMgYeHVkDUp2IwX/SlZ1844df4xvsbhyA=
-X-Received: by 2002:a17:902:c412:b0:154:4012:4beb with SMTP id
- k18-20020a170902c41200b0015440124bebmr8002715plk.107.1647855388012; Mon, 21
- Mar 2022 02:36:28 -0700 (PDT)
+        bh=ogrhRXR+AVdt3mfgPz8CUVBxI7B5+eAIXFaggH9T3eY=;
+        b=Wilq5LbVJcbD5Lulct5agYnDWWY86GED/pGHCTwCpttgyAk8kVQp/lVZ0WCKjG88MC
+         1dHz+mvCB62+aFXArVgcSgszd3eogTollFqsKJl4nSQOOO2NLKavPwFs3llQeOydBjip
+         VmkMJTWqzix7AV700rRDLQJsO7KphzrP7LGx4wPjh+asjntBeoWmoHVoVlb8oU4evqmh
+         60bloYAOEBNK815XmjE+79SZyeNb3rzXmgesA5i0NGTgEsh/sVOExBQCeBulNGEYf9Rp
+         NG0fLJnCZ60UrCvuwQCOsYSYa6YAkeDOKcsmyN4okBLlO9ZsvmDUgvfET3swCekxHAXV
+         +p5w==
+X-Gm-Message-State: AOAM531ONKAptr+W7rF0C5jmasYp4fMGki2utsta7Q4bmUCYCyLnrHIb
+        8SsxPKNKBgI9ZH8rBbVObz3OD4Cf6IFTwlnTzSagqw==
+X-Google-Smtp-Source: ABdhPJw/xfXVim0fva3bC9a3lXSZs/6Jqd/qOjzzPhc6BW9eY8sIeleI+X0vFnNDwscOC3H/fugKA3B7QsQkWDW0q+M=
+X-Received: by 2002:a17:906:c259:b0:6ce:a165:cd0d with SMTP id
+ bl25-20020a170906c25900b006cea165cd0dmr19443119ejb.270.1647855392023; Mon, 21
+ Mar 2022 02:36:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220311170240.173846-1-cbranchereau@gmail.com>
- <20220311170240.173846-3-cbranchereau@gmail.com> <YjD1rl7jSxLvJhfL@ravnborg.org>
-In-Reply-To: <YjD1rl7jSxLvJhfL@ravnborg.org>
-From:   Christophe Branchereau <cbranchereau@gmail.com>
-Date:   Mon, 21 Mar 2022 10:36:16 +0100
-Message-ID: <CAFsFa87NBB8VFFHJKjyPi+A255i9dyE-xxTggz3kLcEXmSWJXg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] drm/panel: Add panel driver for NewVision NV3052C
- based LCDs
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
+References: <20220318171405.2728855-1-cmllamas@google.com> <CAJfpegsT6BO5P122wrKbni3qFkyHuq_0Qq4ibr05_SOa7gfvcw@mail.gmail.com>
+ <Yjfd1+k83U+meSbi@google.com> <CAJfpeguoFHgG9Jm3hVqWnta3DB6toPRp_vD3EK74y90Aj3w+8Q@mail.gmail.com>
+ <Yjg8TVQZ6TeTSQxj@kroah.com>
+In-Reply-To: <Yjg8TVQZ6TeTSQxj@kroah.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Mon, 21 Mar 2022 10:36:20 +0100
+Message-ID: <CAJfpegsj94__xdBe8aH+VFdY5fJg515vG0XY-Qu0RXwEAUhM3A@mail.gmail.com>
+Subject: Re: [PATCH] fuse: fix integer type usage in uapi header
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Carlos Llamas <cmllamas@google.com>,
+        Alessio Balsini <balsini@android.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel-team <kernel-team@android.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sam
-
-On Tue, Mar 15, 2022 at 9:23 PM Sam Ravnborg <sam@ravnborg.org> wrote:
+On Mon, 21 Mar 2022 at 09:50, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Hi Christophe,
-> On Fri, Mar 11, 2022 at 06:02:38PM +0100, Christophe Branchereau wrote:
-> > This driver supports the NewVision NV3052C based LCDs. Right now, it
-> > only supports the LeadTek LTK035C5444T 2.4" 640x480 TFT LCD panel, which
-> > can be found in the Anbernic RG-350M handheld console.
->
-> I had to get away from my day-time job and you were the lucky winner.
-> A couple of comments in the following that you can address now or later.
->
+> On Mon, Mar 21, 2022 at 09:40:56AM +0100, Miklos Szeredi wrote:
+> > On Mon, 21 Mar 2022 at 03:07, Carlos Llamas <cmllamas@google.com> wrote:
+> > >
+> > > On Fri, Mar 18, 2022 at 08:24:55PM +0100, Miklos Szeredi wrote:
+> > > > On Fri, 18 Mar 2022 at 18:14, Carlos Llamas <cmllamas@google.com> wrote:
+> > > > >
+> > > > > Kernel uapi headers are supposed to use __[us]{8,16,32,64} defined by
+> > > > > <linux/types.h> instead of 'uint32_t' and similar. This patch changes
+> > > > > all the definitions in this header to use the correct type. Previous
+> > > > > discussion of this topic can be found here:
+> > > > >
+> > > > >   https://lkml.org/lkml/2019/6/5/18
+> > > >
+> > > > This is effectively a revert of these two commits:
+> > > >
+> > > > 4c82456eeb4d ("fuse: fix type definitions in uapi header")
+> > > > 7e98d53086d1 ("Synchronize fuse header with one used in library")
+> > > >
+> > > > And so we've gone full circle and back to having to modify the header
+> > > > to be usable in the cross platform library...
+> > > >
+> > > > And also made lots of churn for what reason exactly?
+> > >
+> > > There are currently only two uapi headers making use of C99 types and
+> > > one is <linux/fuse.h>. This approach results in different typedefs being
+> > > selected when compiling for userspace vs the kernel.
 > >
-> > Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
-> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-> > ---
-> >  drivers/gpu/drm/panel/Kconfig                 |   9 +
-> >  drivers/gpu/drm/panel/Makefile                |   1 +
-> >  .../gpu/drm/panel/panel-newvision-nv3052c.c   | 497 ++++++++++++++++++
-> >  3 files changed, 507 insertions(+)
-> >  create mode 100644 drivers/gpu/drm/panel/panel-newvision-nv3052c.c
-> >
-> > diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-> > index bb2e47229c68..40084f709789 100644
-> > --- a/drivers/gpu/drm/panel/Kconfig
-> > +++ b/drivers/gpu/drm/panel/Kconfig
-> > @@ -283,6 +283,15 @@ config DRM_PANEL_NEC_NL8048HL11
-> >         panel (found on the Zoom2/3/3630 SDP boards). To compile this driver
-> >         as a module, choose M here.
-> >
-> > +config DRM_PANEL_NEWVISION_NV3052C
-> > +     tristate "NewVision NV3052C RGB/SPI panel"
-> > +     depends on OF && SPI
-> > +     depends on BACKLIGHT_CLASS_DEVICE
-> > +     select DRM_MIPI_DBI
-> > +     help
-> > +       Say Y here if you want to enable support for the panels built
-> > +       around the NewVision NV3052C display controller.
-> > +
-> >  config DRM_PANEL_NOVATEK_NT35510
-> >       tristate "Novatek NT35510 RGB panel driver"
-> >       depends on OF
-> > diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-> > index 5740911f637c..42a7ab54234b 100644
-> > --- a/drivers/gpu/drm/panel/Makefile
-> > +++ b/drivers/gpu/drm/panel/Makefile
-> > @@ -26,6 +26,7 @@ obj-$(CONFIG_DRM_PANEL_LEADTEK_LTK500HD1829) += panel-leadtek-ltk500hd1829.o
-> >  obj-$(CONFIG_DRM_PANEL_LG_LB035Q02) += panel-lg-lb035q02.o
-> >  obj-$(CONFIG_DRM_PANEL_LG_LG4573) += panel-lg-lg4573.o
-> >  obj-$(CONFIG_DRM_PANEL_NEC_NL8048HL11) += panel-nec-nl8048hl11.o
-> > +obj-$(CONFIG_DRM_PANEL_NEWVISION_NV3052C) += panel-newvision-nv3052c.o
-> >  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35510) += panel-novatek-nt35510.o
-> >  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35560) += panel-novatek-nt35560.o
-> >  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35950) += panel-novatek-nt35950.o
-> > diff --git a/drivers/gpu/drm/panel/panel-newvision-nv3052c.c b/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
-> > new file mode 100644
-> > index 000000000000..fc31df0dee12
-> > --- /dev/null
-> > +++ b/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
-> > @@ -0,0 +1,497 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * NevVision NV3052C IPS LCD panel driver
-> > + *
-> > + * Copyright (C) 2020, Paul Cercueil <paul@crapouillou.net>
-> > + * Copyright (C) 2022, Christophe Branchereau <cbranchereau@gmail.com>
-> > + */
-> > +
-> > +#include <linux/delay.h>
-> > +#include <linux/device.h>
-> > +#include <linux/gpio/consumer.h>
-> > +#include <linux/media-bus-format.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/regulator/consumer.h>
-> > +#include <linux/spi/spi.h>
-> > +
-> > +#include <video/mipi_display.h>
-> > +
-> > +#include <drm/drm_mipi_dbi.h>
-> > +#include <drm/drm_modes.h>
-> > +#include <drm/drm_panel.h>
-> > +
-> > +struct nv3052c_panel_info {
-> > +     const struct drm_display_mode *display_modes;
-> > +     unsigned int num_modes;
-> > +     u16 width_mm, height_mm;
-> > +     u32 bus_format, bus_flags;
-> > +};
-> > +
-> > +struct nv3052c {
-> > +     struct device *dev;
-> > +     struct drm_panel panel;
-> > +     struct mipi_dbi dbi;
-> > +
-> > +     const struct nv3052c_panel_info *panel_info;
-> > +
-> > +     struct regulator *supply;
-> > +     struct gpio_desc *reset_gpio;
-> > +};
-> > +
-> > +struct nv3052c_reg {
-> > +     u8 cmd;
-> > +     u8 val;
-> > +};
-> > +
-> > +static const struct nv3052c_reg nv3052c_panel_regs[] = {
-> > +     { 0xff, 0x30 },
-> > +     { 0xff, 0x52 },
-> > +     { 0xff, 0x01 },
-> > +     { 0xe3, 0x00 },
-> > +     { 0x40, 0x00 },
-> > +     { 0x03, 0x40 },
-> > +     { 0x04, 0x00 },
-> > +     { 0x05, 0x03 },
-> > +     { 0x08, 0x00 },
-> > +     { 0x09, 0x07 },
-> > +     { 0x0a, 0x01 },
-> > +     { 0x0b, 0x32 },
-> > +     { 0x0c, 0x32 },
-> > +     { 0x0d, 0x0b },
-> > +     { 0x0e, 0x00 },
-> > +     { 0x23, 0xa0 },
-> > +
-> > +     { 0x24, 0x0c },
-> > +     { 0x25, 0x06 },
-> > +     { 0x26, 0x14 },
-> > +     { 0x27, 0x14 },
-> > +
-> > +     { 0x38, 0xcc },
-> > +     { 0x39, 0xd7 },
-> > +     { 0x3a, 0x4a },
-> > +
-> > +     { 0x28, 0x40 },
-> > +     { 0x29, 0x01 },
-> > +     { 0x2a, 0xdf },
-> > +     { 0x49, 0x3c },
-> > +     { 0x91, 0x77 },
-> > +     { 0x92, 0x77 },
-> > +     { 0xa0, 0x55 },
-> > +     { 0xa1, 0x50 },
-> > +     { 0xa4, 0x9c },
-> > +     { 0xa7, 0x02 },
-> > +     { 0xa8, 0x01 },
-> > +     { 0xa9, 0x01 },
-> > +     { 0xaa, 0xfc },
-> > +     { 0xab, 0x28 },
-> > +     { 0xac, 0x06 },
-> > +     { 0xad, 0x06 },
-> > +     { 0xae, 0x06 },
-> > +     { 0xaf, 0x03 },
-> > +     { 0xb0, 0x08 },
-> > +     { 0xb1, 0x26 },
-> > +     { 0xb2, 0x28 },
-> > +     { 0xb3, 0x28 },
-> > +     { 0xb4, 0x33 },
-> > +     { 0xb5, 0x08 },
-> > +     { 0xb6, 0x26 },
-> > +     { 0xb7, 0x08 },
-> > +     { 0xb8, 0x26 },
-> > +     { 0xf0, 0x00 },
-> > +     { 0xf6, 0xc0 },
-> > +
-> > +     { 0xff, 0x30 },
-> > +     { 0xff, 0x52 },
-> > +     { 0xff, 0x02 },
-> > +     { 0xb0, 0x0b },
-> > +     { 0xb1, 0x16 },
-> > +     { 0xb2, 0x17 },
-> > +     { 0xb3, 0x2c },
-> > +     { 0xb4, 0x32 },
-> > +     { 0xb5, 0x3b },
-> > +     { 0xb6, 0x29 },
-> > +     { 0xb7, 0x40 },
-> > +     { 0xb8, 0x0d },
-> > +     { 0xb9, 0x05 },
-> > +     { 0xba, 0x12 },
-> > +     { 0xbb, 0x10 },
-> > +     { 0xbc, 0x12 },
-> > +     { 0xbd, 0x15 },
-> > +     { 0xbe, 0x19 },
-> > +     { 0xbf, 0x0e },
-> > +     { 0xc0, 0x16 },
-> > +     { 0xc1, 0x0a },
-> > +     { 0xd0, 0x0c },
-> > +     { 0xd1, 0x17 },
-> > +     { 0xd2, 0x14 },
-> > +     { 0xd3, 0x2e },
-> > +     { 0xd4, 0x32 },
-> > +     { 0xd5, 0x3c },
-> > +     { 0xd6, 0x22 },
-> > +     { 0xd7, 0x3d },
-> > +     { 0xd8, 0x0d },
-> > +     { 0xd9, 0x07 },
-> > +     { 0xda, 0x13 },
-> > +     { 0xdb, 0x13 },
-> > +     { 0xdc, 0x11 },
-> > +     { 0xdd, 0x15 },
-> > +     { 0xde, 0x19 },
-> > +     { 0xdf, 0x10 },
-> > +     { 0xe0, 0x17 },
-> > +     { 0xe1, 0x0a },
-> > +
-> > +     { 0xff, 0x30 },
-> > +     { 0xff, 0x52 },
-> > +     { 0xff, 0x03 },
-> > +     { 0x00, 0x2a },
-> > +     { 0x01, 0x2a },
-> > +     { 0x02, 0x2a },
-> > +     { 0x03, 0x2a },
-> > +     { 0x04, 0x61 },
-> > +     { 0x05, 0x80 },
-> > +     { 0x06, 0xc7 },
-> > +     { 0x07, 0x01 },
-> > +     { 0x08, 0x03 },
-> > +     { 0x09, 0x04 },
-> > +     { 0x70, 0x22 },
-> > +     { 0x71, 0x80 },
-> > +     { 0x30, 0x2a },
-> > +     { 0x31, 0x2a },
-> > +     { 0x32, 0x2a },
-> > +     { 0x33, 0x2a },
-> > +     { 0x34, 0x61 },
-> > +     { 0x35, 0xc5 },
-> > +     { 0x36, 0x80 },
-> > +     { 0x37, 0x23 },
-> > +     { 0x40, 0x03 },
-> > +     { 0x41, 0x04 },
-> > +     { 0x42, 0x05 },
-> > +     { 0x43, 0x06 },
-> > +     { 0x44, 0x11 },
-> > +     { 0x45, 0xe8 },
-> > +     { 0x46, 0xe9 },
-> > +     { 0x47, 0x11 },
-> > +     { 0x48, 0xea },
-> > +     { 0x49, 0xeb },
-> > +     { 0x50, 0x07 },
-> > +     { 0x51, 0x08 },
-> > +     { 0x52, 0x09 },
-> > +     { 0x53, 0x0a },
-> > +     { 0x54, 0x11 },
-> > +     { 0x55, 0xec },
-> > +     { 0x56, 0xed },
-> > +     { 0x57, 0x11 },
-> > +     { 0x58, 0xef },
-> > +     { 0x59, 0xf0 },
-> > +     { 0xb1, 0x01 },
-> > +     { 0xb4, 0x15 },
-> > +     { 0xb5, 0x16 },
-> > +     { 0xb6, 0x09 },
-> > +     { 0xb7, 0x0f },
-> > +     { 0xb8, 0x0d },
-> > +     { 0xb9, 0x0b },
-> > +     { 0xba, 0x00 },
-> > +     { 0xc7, 0x02 },
-> > +     { 0xca, 0x17 },
-> > +     { 0xcb, 0x18 },
-> > +     { 0xcc, 0x0a },
-> > +     { 0xcd, 0x10 },
-> > +     { 0xce, 0x0e },
-> > +     { 0xcf, 0x0c },
-> > +     { 0xd0, 0x00 },
-> > +     { 0x81, 0x00 },
-> > +     { 0x84, 0x15 },
-> > +     { 0x85, 0x16 },
-> > +     { 0x86, 0x10 },
-> > +     { 0x87, 0x0a },
-> > +     { 0x88, 0x0c },
-> > +     { 0x89, 0x0e },
-> > +     { 0x8a, 0x02 },
-> > +     { 0x97, 0x00 },
-> > +     { 0x9a, 0x17 },
-> > +     { 0x9b, 0x18 },
-> > +     { 0x9c, 0x0f },
-> > +     { 0x9d, 0x09 },
-> > +     { 0x9e, 0x0b },
-> > +     { 0x9f, 0x0d },
-> > +     { 0xa0, 0x01 },
-> > +
-> > +     { 0xff, 0x30 },
-> > +     { 0xff, 0x52 },
-> > +     { 0xff, 0x02 },
-> > +     { 0x01, 0x01 },
-> > +     { 0x02, 0xda },
-> > +     { 0x03, 0xba },
-> > +     { 0x04, 0xa8 },
-> > +     { 0x05, 0x9a },
-> > +     { 0x06, 0x70 },
-> > +     { 0x07, 0xff },
-> > +     { 0x08, 0x91 },
-> > +     { 0x09, 0x90 },
-> > +     { 0x0a, 0xff },
-> > +     { 0x0b, 0x8f },
-> > +     { 0x0c, 0x60 },
-> > +     { 0x0d, 0x58 },
-> > +     { 0x0e, 0x48 },
-> > +     { 0x0f, 0x38 },
-> > +     { 0x10, 0x2b },
-> > +
-> > +     { 0xff, 0x30 },
-> > +     { 0xff, 0x52 },
-> > +     { 0xff, 0x00 },
-> > +     { 0x36, 0x0a },
-> > +};
-> There are some random (?) empty lines.
-> If they have any significance then a short comment would be nice.
-> If not, then drop the empty lines.
+> > Why is this a problem if the size of the resulting types is the same?
 >
+> uint* are not "valid" variable types to cross the user/kernel boundary.
+> They are part of the userspace variable type namespace, not the kernel
+> variable type namespace.  Linus wrong a long post about this somewhere
+> in the past, I'm sure someone can dig it up...
 
-The empty lines are not random no, to access a different page in the
-init, one must write i.e.   { 0xff, 0x30 }, { 0xff, 0x52 }, { 0xff,
-0x02 }, to access page 2, so they add a little bit of readability.
+Looking forward to the details.  I cannot imagine why this would matter...
 
-But I can drop them indeed. as well as for the includes and struct on
-top, to make it more compact.
-
-> > +
-> > +static inline struct nv3052c *to_nv3052c(struct drm_panel *panel)
-> > +{
-> > +     return container_of(panel, struct nv3052c, panel);
-> > +}
-> > +
-> > +static int nv3052c_prepare(struct drm_panel *panel)
-> > +{
-> > +     struct nv3052c *priv = to_nv3052c(panel);
-> > +     struct mipi_dbi *dbi = &priv->dbi;
-> > +     unsigned int i;
-> > +     int err;
-> > +
-> > +     err = regulator_enable(priv->supply);
-> > +     if (err) {
-> > +             dev_err(priv->dev, "Failed to enable power supply: %d\n", err);
-> > +             return err;
-> > +     }
-> > +
-> > +     /* Reset the chip */
-> > +     gpiod_set_value_cansleep(priv->reset_gpio, 1);
-> > +     usleep_range(10, 1000);
-> > +     gpiod_set_value_cansleep(priv->reset_gpio, 0);
-> > +     msleep(5);
-> > +
-> > +     for (i = 0; i < ARRAY_SIZE(nv3052c_panel_regs); i++) {
-> > +             err = mipi_dbi_command(dbi, nv3052c_panel_regs[i].cmd,
-> > +                                    nv3052c_panel_regs[i].val);
-> > +
-> > +             if (err) {
-> > +                     dev_err(priv->dev, "Unable to set register: %d\n", err);
-> > +                     goto err_disable_regulator;
-> > +             }
-> > +     }
-> > +
-> > +     err = mipi_dbi_command(dbi, MIPI_DCS_EXIT_SLEEP_MODE);
-> > +     if (err) {
-> > +             dev_err(priv->dev, "Unable to exit sleep mode: %d\n", err);
-> > +             goto err_disable_regulator;
-> > +     }
-> > +
-> > +     return 0;
-> > +
-> > +err_disable_regulator:
-> > +     regulator_disable(priv->supply);
-> > +     return err;
-> > +}
-> > +
-> > +static int nv3052c_unprepare(struct drm_panel *panel)
-> > +{
-> > +     struct nv3052c *priv = to_nv3052c(panel);
-> > +     struct mipi_dbi *dbi = &priv->dbi;
-> > +     int err;
-> > +
-> > +     err = mipi_dbi_command(dbi, MIPI_DCS_ENTER_SLEEP_MODE);
-> > +     if (err) {
-> > +             dev_err(priv->dev, "Unable to enter sleep mode: %d\n", err);
-> > +             return err;
-> Consider to just continue here. In case we fail to enter sleep mode we
-> will anyway reset the panel and disable the supply voltage.
-> So things will likely work anyway and we avoid a display with power
-> where it was supposed to be disabled.
-> I bet many panels uses the same pattern as this driver, but I think that
-> continue is the right thing to do here.
->
-Yes, you're right.
-
->
-> > +     }
-> > +
-> > +     gpiod_set_value_cansleep(priv->reset_gpio, 1);
-> > +     regulator_disable(priv->supply);
-> > +
-> > +     return 0;
-> > +}
->
-> Everything else looked good - nicely written driver.
->
->         Sam
-
-Thank you
-
->
-> > +
-> > +static int nv3052c_enable(struct drm_panel *panel)
-> > +{
-> > +     struct nv3052c *priv = to_nv3052c(panel);
-> > +     struct mipi_dbi *dbi = &priv->dbi;
-> > +     int err;
-> > +
-> > +     err = mipi_dbi_command(dbi, MIPI_DCS_SET_DISPLAY_ON);
-> > +     if (err) {
-> > +             dev_err(priv->dev, "Unable to enable display: %d\n", err);
-> > +             return err;
-> > +     }
-> > +
-> > +     if (panel->backlight) {
-> > +             /* Wait for the picture to be ready before enabling backlight */
-> > +             msleep(120);
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int nv3052c_disable(struct drm_panel *panel)
-> > +{
-> > +     struct nv3052c *priv = to_nv3052c(panel);
-> > +     struct mipi_dbi *dbi = &priv->dbi;
-> > +     int err;
-> > +
-> > +     err = mipi_dbi_command(dbi, MIPI_DCS_SET_DISPLAY_OFF);
-> > +     if (err) {
-> > +             dev_err(priv->dev, "Unable to disable display: %d\n", err);
-> > +             return err;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int nv3052c_get_modes(struct drm_panel *panel,
-> > +                          struct drm_connector *connector)
-> > +{
-> > +     struct nv3052c *priv = to_nv3052c(panel);
-> > +     const struct nv3052c_panel_info *panel_info = priv->panel_info;
-> > +     struct drm_display_mode *mode;
-> > +     unsigned int i;
-> > +
-> > +     for (i = 0; i < panel_info->num_modes; i++) {
-> > +             mode = drm_mode_duplicate(connector->dev,
-> > +                                       &panel_info->display_modes[i]);
-> > +             if (!mode)
-> > +                     return -ENOMEM;
-> > +
-> > +             drm_mode_set_name(mode);
-> > +
-> > +             mode->type = DRM_MODE_TYPE_DRIVER;
-> > +             if (panel_info->num_modes == 1)
-> > +                     mode->type |= DRM_MODE_TYPE_PREFERRED;
-> > +
-> > +             drm_mode_probed_add(connector, mode);
-> > +     }
-> > +
-> > +     connector->display_info.bpc = 8;
-> > +     connector->display_info.width_mm = panel_info->width_mm;
-> > +     connector->display_info.height_mm = panel_info->height_mm;
-> > +
-> > +     drm_display_info_set_bus_formats(&connector->display_info,
-> > +                                      &panel_info->bus_format, 1);
-> > +     connector->display_info.bus_flags = panel_info->bus_flags;
-> > +
-> > +     return panel_info->num_modes;
-> > +}
-> > +
-> > +static const struct drm_panel_funcs nv3052c_funcs = {
-> > +     .prepare        = nv3052c_prepare,
-> > +     .unprepare      = nv3052c_unprepare,
-> > +     .enable         = nv3052c_enable,
-> > +     .disable        = nv3052c_disable,
-> > +     .get_modes      = nv3052c_get_modes,
-> > +};
-> > +
-> > +static int nv3052c_probe(struct spi_device *spi)
-> > +{
-> > +     struct device *dev = &spi->dev;
-> > +     struct nv3052c *priv;
-> > +     int err;
-> > +
-> > +     priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> > +     if (!priv)
-> > +             return -ENOMEM;
-> > +
-> > +     priv->dev = dev;
-> > +
-> > +     priv->panel_info = of_device_get_match_data(dev);
-> > +     if (!priv->panel_info)
-> > +             return -EINVAL;
-> > +
-> > +     priv->supply = devm_regulator_get(dev, "power");
-> > +     if (IS_ERR(priv->supply))
-> > +             return dev_err_probe(dev, PTR_ERR(priv->supply), "Failed to get power supply\n");
-> > +
-> > +     priv->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
-> > +     if (IS_ERR(priv->reset_gpio))
-> > +             return dev_err_probe(dev, PTR_ERR(priv->reset_gpio), "Failed to get reset GPIO\n");
-> > +
-> > +     err = mipi_dbi_spi_init(spi, &priv->dbi, NULL);
-> > +     if (err)
-> > +             return dev_err_probe(dev, err, "MIPI DBI init failed\n");
-> > +
-> > +     priv->dbi.read_commands = NULL;
-> > +
-> > +     spi_set_drvdata(spi, priv);
-> > +
-> > +     drm_panel_init(&priv->panel, dev, &nv3052c_funcs,
-> > +                    DRM_MODE_CONNECTOR_DPI);
-> > +
-> > +     err = drm_panel_of_backlight(&priv->panel);
-> > +     if (err)
-> > +             return dev_err_probe(dev, err, "Failed to attach backlight\n");
-> > +
-> > +     drm_panel_add(&priv->panel);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int nv3052c_remove(struct spi_device *spi)
-> > +{
-> > +     struct nv3052c *priv = spi_get_drvdata(spi);
-> > +
-> > +     drm_panel_remove(&priv->panel);
-> > +     drm_panel_disable(&priv->panel);
-> > +     drm_panel_unprepare(&priv->panel);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct drm_display_mode ltk035c5444t_modes[] = {
-> > +     { /* 60 Hz */
-> > +             .clock = 24000,
-> > +             .hdisplay = 640,
-> > +             .hsync_start = 640 + 96,
-> > +             .hsync_end = 640 + 96 + 16,
-> > +             .htotal = 640 + 96 + 16 + 48,
-> > +             .vdisplay = 480,
-> > +             .vsync_start = 480 + 5,
-> > +             .vsync_end = 480 + 5 + 2,
-> > +             .vtotal = 480 + 5 + 2 + 13,
-> > +             .flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
-> > +     },
-> > +     { /* 50 Hz */
-> > +             .clock = 18000,
-> > +             .hdisplay = 640,
-> > +             .hsync_start = 640 + 39,
-> > +             .hsync_end = 640 + 39 + 2,
-> > +             .htotal = 640 + 39 + 2 + 39,
-> > +             .vdisplay = 480,
-> > +             .vsync_start = 480 + 5,
-> > +             .vsync_end = 480 + 5 + 2,
-> > +             .vtotal = 480 + 5 + 2 + 13,
-> > +             .flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
-> > +     },
-> > +};
-> > +
-> > +static const struct nv3052c_panel_info ltk035c5444t_panel_info = {
-> > +     .display_modes = ltk035c5444t_modes,
-> > +     .num_modes = ARRAY_SIZE(ltk035c5444t_modes),
-> > +     .width_mm = 77,
-> > +     .height_mm = 64,
-> > +     .bus_format = MEDIA_BUS_FMT_RGB888_1X24,
-> > +     .bus_flags = DRM_BUS_FLAG_DE_HIGH | DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE,
-> > +};
-> > +
-> > +static const struct of_device_id nv3052c_of_match[] = {
-> > +     { .compatible = "leadtek,ltk035c5444t", .data = &ltk035c5444t_panel_info },
-> > +     { /* sentinel */ }
-> > +};
-> > +MODULE_DEVICE_TABLE(of, nv3052c_of_match);
-> > +
-> > +static struct spi_driver nv3052c_driver = {
-> > +     .driver = {
-> > +             .name = "nv3052c",
-> > +             .of_match_table = nv3052c_of_match,
-> > +     },
-> > +     .probe = nv3052c_probe,
-> > +     .remove = nv3052c_remove,
-> > +};
-> > +module_spi_driver(nv3052c_driver);
-> > +
-> > +MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
-> > +MODULE_AUTHOR("Christophe Branchereau <cbranchereau@gmail.com>");
-> > +MODULE_LICENSE("GPL v2");
-> > --
-> > 2.35.1
+Thanks,
+Miklos

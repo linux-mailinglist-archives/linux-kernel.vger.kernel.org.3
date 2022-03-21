@@ -2,140 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BC84E2F71
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716404E2F75
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351902AbiCUR5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
+        id S1351896AbiCUR63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351888AbiCUR5m (ORCPT
+        with ESMTP id S1349925AbiCUR6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:57:42 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6053F66FA6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:56:14 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id m67so29502018ybm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:56:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kfv/9FSlbLzfGxHvKEV7DROpdlh0zhjyUxjgEm+XMUs=;
-        b=Enp0aTiRztyLlENDKrOUZbpSrFZjJVqkANRGVkYcu7I6u7d4eQombCyjgdN5NKqFOL
-         EsNSmqRoz9w4bFl4IW5D9ePCXA2C+H+Lhn6vESBb3aWarmDWoYUse/zJbSeBQ39Y0ped
-         0jK4vEugdoWU+lAmEfb8NaboeiQ9coemxDEKa2WbtYFtV8Q71TXRx7StVbPdbV611qAv
-         9XGwHE7y63aP8DmEaYs4mJUQltL/JXMXml44K+thSrIiCeqeY8M9WtewOvgJ+5sEtTSH
-         bTLWTowp/fGI9Nv9sIb8pI+1086k7hD+efOGQ82JcXG2NlIYofYja4PJ/JxNcMS0hBEj
-         bqmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kfv/9FSlbLzfGxHvKEV7DROpdlh0zhjyUxjgEm+XMUs=;
-        b=UStQ5BKzjVsRoTSYa8vSq0RNX9x3DNYBPUKhJ1ZW+Vg0KZOEjjutQ11q2Q2VvsC8L+
-         JsKvNroqS4mH3bd5NWSi5HmLpbquYy9ss7n2TMIp2uV7JFqE2qDd9AJPyI9l5CE+tBL5
-         6FtgTEfWYiu0nX290NHzhIVtAocxfowsejPvqLha1aSzXz25/8w2b7nvi2e8t82y40EK
-         Otz09LAXvqurnp++p8jshYkkEFohnf1EKGogrJ244QrR5Gys6WZSIrVrblwrjq7Wengl
-         mAJO64+uIPnlYwvHktgCkjy1ypP/wl3J9uoBfpjDM/DSNxcc2KExWdPE3VAJqFI9StR3
-         uzGQ==
-X-Gm-Message-State: AOAM532uJ7R8sIW8IdU+4Y+QjyWWieP2APMubZo/Qjy/1iCCGa3BpXjs
-        ItQFpA0E1Tv8a9gyUrdyh6NYJQYtrfUQc+sbjK61DA==
-X-Google-Smtp-Source: ABdhPJy0PvjjI0rN49+9uygFrL+LdtdHi1DdOpbJJHdVvpT3nHHciEV6eiCz5S8ECH+mlI8qe4tK3hpKQ04e7trKGG8=
-X-Received: by 2002:a25:94a:0:b0:615:7cf4:e2cd with SMTP id
- u10-20020a25094a000000b006157cf4e2cdmr24169543ybm.227.1647885373431; Mon, 21
- Mar 2022 10:56:13 -0700 (PDT)
+        Mon, 21 Mar 2022 13:58:22 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D99B14CD32
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:56:56 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id AA8425C020D;
+        Mon, 21 Mar 2022 13:56:55 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 21 Mar 2022 13:56:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=animalcreek.com;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; bh=xR2HymObUcHW2Ru/WNztu5+8qpLOJK
+        0OIKxqaZHFhPE=; b=D/75QaV9d16KtYAFSmM89OelNNcnvivOmvJkcA0LaTGlFO
+        zGPpIfH6qRwdn9+DDsgl6mrBA3wDrXUST68EfcqQOCBCvUWCSQdj9KmH5m+NDIwx
+        OgoKWoGnr1xiLlp4lCtQojdVPcTW/qoy8edYGPnLcu57KQPOIGlSh+UFYXeLsGIp
+        vg8cOVMWfWemxWavDcUf9dN0oRfyQn8BTdvs1k9ATWxf1Obd2rItPcDN5FYRjrbE
+        EJB7BJtDvojhSLALDFhx4P9XK+LXeRqUlko5ARGTlwFirBlastiFVPwddVLs+I2f
+        hLPLiGIJ7/1s2ylnb6ersKSfKgxED037uKDWZadw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=xR2HymObUcHW2Ru/W
+        Nztu5+8qpLOJK0OIKxqaZHFhPE=; b=bB6oMib+z5i4JY5nLvEuQoJILWqyGdON9
+        a2kkKpHrm/KHubawEmUu7Qz7zOtheVGeaNLC+GEP8Jn9x2kxPHMR640sPndtHR1W
+        334h86tHNXDrKMO8P11+iMjm/XPsz7N2DUtZYvzm0fY2VqQupls0giVqOmCik8q8
+        R3B9uKgOKTvf+gwbS+FDbJttH/e3/QSGoVmniYbdzZeF3KD92RaItvvIvRe34xpq
+        b00aF3r3+cx6jOFFYkpQqqgntWlhOPqnY5P19cRFpNF/DjLDI0FIrzHxhhcm10rj
+        TrItycGG6k0CzUGdUYOOauk+e6TGJbeUIsq9gmcoAo1iWVPDdTDuw==
+X-ME-Sender: <xms:Z7w4YkKRMRdJN7Bl_Es1hyZFmR17GDLLpsDEzVh4cJgjpXrvbv1Lvg>
+    <xme:Z7w4YkJBatUBN2ePYgHu5qm8kxo-dv8XHYLiSw-slSwkCp3RRcj4f01Nv_7NkTI8f
+    oQfY1QcQrHbkhoedA>
+X-ME-Received: <xmr:Z7w4YkttF7Hk0ivRieFIXb1uBqtkhu3bDl1cqDfUz0UVlA2MNzRN16nYO3RxBDvGy59bpNT9JWgSNUUEutqA8MMrAb2HOcEUwk_gG2s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegfedguddtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujghosehttdertddttddvnecuhfhrohhmpeforghr
+    khcuifhrvggvrhcuoehmghhrvggvrhesrghnihhmrghltghrvggvkhdrtghomheqnecugg
+    ftrfgrthhtvghrnhepieeugfdutdefiedtvdfftedufedvjeehgfevveefudfgjeffgeei
+    teetjedufffhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepmhhgrhgvvghrsegrnhhimhgrlhgtrhgvvghkrdgtohhm
+X-ME-Proxy: <xmx:Z7w4YhZXMoPjvKN7Q-hPKRi54NBuv_DJh8FhHNC_oSevXzcKeSaGOA>
+    <xmx:Z7w4YracOK-PUOyLON2PgC7TSyu_vFGP-5M6Tphvlpb9nn62fvdFig>
+    <xmx:Z7w4YtDZlERtbfssYwDLI46kgQ7f4qmhTyCYZ9yij7nekP05DvD7Kg>
+    <xmx:Z7w4YpAAVYS7Hv9WS0HfUlpsbbvJQHP0jDCBNMs5polh_w0Ot_rdTg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Mar 2022 13:56:55 -0400 (EDT)
+Received: by blue.animalcreek.com (Postfix, from userid 1000)
+        id 1F3AF136015B; Mon, 21 Mar 2022 10:56:54 -0700 (MST)
+Date:   Mon, 21 Mar 2022 10:56:54 -0700
+From:   Mark Greer <mgreer@animalcreek.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Vaibhav Agarwal <vaibhav.sr@gmail.com>,
+        linux-kernel@vger.kernel.org, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev, Mark Greer <mgreer@animalcreek.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [PATCH] staging: greybus: codecs: fix type confusion of list
+ iterator variable
+Message-ID: <20220321175654.GA647493@animalcreek.com>
+References: <20220321123626.3068639-1-jakobkoschel@gmail.com>
 MIME-Version: 1.0
-References: <20220321002638.379672-1-mizhang@google.com> <20220321002638.379672-4-mizhang@google.com>
-In-Reply-To: <20220321002638.379672-4-mizhang@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Mon, 21 Mar 2022 10:56:02 -0700
-Message-ID: <CANgfPd_CexHH-QDs899RdEpAO=xGnSfdf80FZzOsum5oYEPCMw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] KVM: x86/mmu: explicitly check nx_hugepage in disallowed_hugepage_adjust()
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Peter Xu <peterx@redhat.com>, Ben Gardon <bgorden@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321123626.3068639-1-jakobkoschel@gmail.com>
+Organization: Animal Creek Technologies, Inc.
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 5:26 PM Mingwei Zhang <mizhang@google.com> wrote:
->
-> Add extra check to specify the case of nx hugepage and allow KVM to
-> reconstruct large mapping after dirty logging is disabled. Existing code
-> works only for nx hugepage but the condition is too general in that does
-> not consider other usage case (such as dirty logging). Moreover, existing
-> code assumes that a present PMD or PUD indicates that there exist 'smaller
-> SPTEs' under the paging structure. This assumption may no be true if
-> consider the zapping leafs only behavior in MMU.
->
-> Missing the check causes KVM incorrectly regards the faulting page as a NX
-> huge page and refuse to map it at desired level. And this leads to back
-> performance in shadow mmu and potentiall TDP mmu.
->
-> Fixes: b8e8c8303ff2 ("kvm: mmu: ITLB_MULTIHIT mitigation")
-> Cc: stable@vger.kernel.org
->
-> Reviewed-by: Ben Gardon <bgardon@google.com>
-> Signed-off-by: Mingwei Zhang <mizhang@google.com>
+On Mon, Mar 21, 2022 at 01:36:26PM +0100, Jakob Koschel wrote:
+> If the list does not exit early then data == NULL and 'module' does not
+> point to a valid list element.
+> Using 'module' in such a case is not valid and was therefore removed.
+> 
+> Fixes: 6dd67645f22c ("greybus: audio: Use single codec driver registration")
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 > ---
->  arch/x86/kvm/mmu/mmu.c | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 5628d0ba637e..4d358c273f6c 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -2919,6 +2919,16 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
->             cur_level == fault->goal_level &&
->             is_shadow_present_pte(spte) &&
->             !is_large_pte(spte)) {
-> +               struct kvm_mmu_page *sp;
-> +               u64 page_mask;
-> +               /*
-> +                * When nx hugepage flag is not set, there is no reason to
-> +                * go down to another level. This helps demand paging to
-> +                * generate large mappings.
-> +                */
+>  drivers/staging/greybus/audio_codec.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/greybus/audio_codec.c b/drivers/staging/greybus/audio_codec.c
+> index b589cf6b1d03..e19b91e7a72e 100644
+> --- a/drivers/staging/greybus/audio_codec.c
+> +++ b/drivers/staging/greybus/audio_codec.c
+> @@ -599,8 +599,8 @@ static int gbcodec_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
+>  			break;
+>  	}
+>  	if (!data) {
+> -		dev_err(dai->dev, "%s:%s DATA connection missing\n",
+> -			dai->name, module->name);
+> +		dev_err(dai->dev, "%s DATA connection missing\n",
+> +			dai->name);
+>  		mutex_unlock(&codec->lock);
+>  		return -ENODEV;
+>  	}
+> 
+> base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 
-This comment is relevant to Google's internal demand paging scheme,
-but isn't really relevant to UFFD demand paging.
-Still, as demonstrated by the next commit, this is important for dirty
-loggin, so I'd suggest updating this comment to refer to that instead.
-
-
-> +               sp = to_shadow_page(spte & PT64_BASE_ADDR_MASK);
-> +               if (!sp->lpage_disallowed)
-> +                       return;
->                 /*
->                  * A small SPTE exists for this pfn, but FNAME(fetch)
->                  * and __direct_map would like to create a large PTE
-> @@ -2926,8 +2936,8 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
->                  * patching back for them into pfn the next 9 bits of
->                  * the address.
->                  */
-> -               u64 page_mask = KVM_PAGES_PER_HPAGE(cur_level) -
-> -                               KVM_PAGES_PER_HPAGE(cur_level - 1);
-> +               page_mask = KVM_PAGES_PER_HPAGE(cur_level) -
-> +                       KVM_PAGES_PER_HPAGE(cur_level - 1);
->                 fault->pfn |= fault->gfn & page_mask;
->                 fault->goal_level--;
->         }
-> --
-> 2.35.1.894.gb6a874cedc-goog
->
+Reviewed-by: Mark Greer <mgreer@animalcreek.com>

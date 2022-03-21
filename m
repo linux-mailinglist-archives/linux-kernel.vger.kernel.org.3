@@ -2,76 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909C74E2AC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC434E2AA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349030AbiCUOam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
+        id S1349182AbiCUO3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349293AbiCUO1y (ORCPT
+        with ESMTP id S1349090AbiCUO3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:27:54 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5733EFD2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:21:59 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id g20so18035483edw.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
-         :from:to:references:in-reply-to;
-        bh=wqQ731hjmzYwePMzj+DNt4zNoUy/RV/H/tR/xZClBEc=;
-        b=a7Rj6AcABHT78i9TWBgkQWPokagDU0jBGQ8LsSbBRRv/OI/4rMl/1lju5JlyvS+tKB
-         IuOqDYxcyotfBCrs3bvIdzLsazH1bv1ZEmVlUQGa01tFitcvq362wqqPjcwvMHU7Adyr
-         LKkIWbPU5R+35AO/6VOvWccjhxctlXSXVTUvF9VuG2KG6LZQSYI9F5O6OHG7RmNdiQsC
-         bUXm1f5BMaOcPQIoXlbmwPYJhJEIUd8GGJfSKJ0o7MumrzXVWEi6/qIwGoJ7Pq6eiTMO
-         Eppsl4kulnTjm3XxgvwUK4oVT+R3wYUCPwo0/7uQkZWeF7evkxcElK0yCJUwT40bNalq
-         gn9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:cc:subject:from:to:references:in-reply-to;
-        bh=wqQ731hjmzYwePMzj+DNt4zNoUy/RV/H/tR/xZClBEc=;
-        b=qbQF+Gq4xKKc/ZHxJlE4aP6RX6Tub+acy0OXZODrJIPicTh3+V3N42f+Q56lWroGIK
-         uChjBDy9qvoVN5DBP+RfGWnTzUbasgAH0Bx+R3+oDwfyscyKViGeKnArIy8Bpv+C8SSN
-         p8rEhFpk48YL55YWqcI4B/0GxXjMZ9ilJsZXl2F7ZwzOe1yAtKPNYlPUpZSprclckf7H
-         hkqG5BglKXRnNyKHL8BcudfJksYSkKCGOtql2+AzK66YLLQwT3S5ASRc9Td1ITxgqA12
-         HKnTej6dP1pQb3AN+bUGuTMIXOcEMZ6Wi1l3BN6oDWBgNQLOaHqBVb5ADeuKTEEoRifi
-         3bYQ==
-X-Gm-Message-State: AOAM5317tXkaVEnCy9nXZwlERJAzcLM1BoY6nSQnTqIihy40aJRkLN1j
-        gAXlZHAQijarRhDZkt/5WuJR4Q==
-X-Google-Smtp-Source: ABdhPJyJQVu0Cr0w5giMNOtom9UMGLM/PCPym5H/QrHqy+QJ5fE7S8CUPrlQk3ekr9KXq9nUVZImUA==
-X-Received: by 2002:a05:6402:d2:b0:413:2e50:d6fd with SMTP id i18-20020a05640200d200b004132e50d6fdmr23158510edu.171.1647872517856;
-        Mon, 21 Mar 2022 07:21:57 -0700 (PDT)
-Received: from localhost (a246182.upc-a.chello.nl. [62.163.246.182])
-        by smtp.gmail.com with ESMTPSA id bn14-20020a170906c0ce00b006c5ef0494besm6945946ejb.86.2022.03.21.07.21.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 07:21:57 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 21 Mar 2022 15:21:56 +0100
-Message-Id: <CIPM1ZGMNRPK.36O4MO2RGWRV8@otso>
-Cc:     <linux-arm-msm@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, "Andy Gross" <agross@kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@somainline.org>,
-        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/6] pinctrl: qcom: sm6350: fix order of UFS & SDC
- pins
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Bjorn Andersson" <bjorn.andersson@linaro.org>
-References: <20220321133318.99406-1-luca.weiss@fairphone.com>
- <20220321133318.99406-5-luca.weiss@fairphone.com>
- <YjiIZBbPN7pAUl1q@builder.lan>
-In-Reply-To: <YjiIZBbPN7pAUl1q@builder.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Mon, 21 Mar 2022 10:29:19 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3BD5675B;
+        Mon, 21 Mar 2022 07:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647872706; x=1679408706;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZRgMOrMKRu4QklsqExf2gmjTp684KRU6lmpsY+ibWYM=;
+  b=i0/4zLYkwiJ8NvI69RnJ/Eg2uKUZ27hDn5B90vRAAJHIxqUp4nVJhvQD
+   FLIRifQoWSx0uXI2FB7o6FtMes/po82QJpzo7cpJ6v44BKXs1kst0XfY1
+   hGLRusJWVnJ/nqttbjkMSE4UvI5qvTLvyf4e8VxeJlbR4uMSjuXgbWRVl
+   4AMHvZxbdT4RalOsU2cWM3E8lGltXZvTeIZZxqIJB0Zo+nAzTdHH4SYrC
+   ZlaqkVfJ0HDD3Lsn2JXRrzivQzGv9i5uPjYLZqLl3146OqLCE3e01wcsb
+   DDOyFv//8Tf7cXvMEWPidEuI98Is629XEwcHHv6GCez0ySqyNPSUn6fC+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="237506512"
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="237506512"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 07:25:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="824465825"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Mar 2022 07:25:01 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWIxu-000HtG-Qp; Mon, 21 Mar 2022 14:24:58 +0000
+Date:   Mon, 21 Mar 2022 22:24:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Quan Nguyen <quan@os.amperecomputing.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu Nguyen <thu@os.amperecomputing.com>,
+        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v7 3/9] misc: smpro-errmon: Add Ampere's SMpro error
+ monitor driver
+Message-ID: <202203212244.dJ8wLdCt-lkp@intel.com>
+References: <20220321081355.6802-4-quan@os.amperecomputing.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321081355.6802-4-quan@os.amperecomputing.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,79 +85,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+Hi Quan,
 
-On Mon Mar 21, 2022 at 3:15 PM CET, Bjorn Andersson wrote:
-> On Mon 21 Mar 08:33 CDT 2022, Luca Weiss wrote:
->
-> > In other places the SDC and UFS pins have been swapped but this was
-> > missed in the PINCTRL_PIN definitions. Fix that.
-> >=20
-> > Fixes: 7d74b55afd27 ("pinctrl: qcom: Add SM6350 pinctrl driver")
-> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->
-> Your proposed change looks good, but when I look at 7d74b55afd27 it
-> already has these entries in the correct order.
->
-> Can you please confirm that this is still applicable. Or help me see
-> what I am missing.
+I love your patch! Perhaps something to improve:
 
-There are 3 times where number and description should match.
-For this UFS pin on sm6350 only 2/3 match.
-2x the number is 156, 1x it's 163
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on groeck-staging/hwmon-next lee-mfd/for-mfd-next v5.17 next-20220318]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-$ grep -i ufs_reset drivers/pinctrl/qcom/pinctrl-sm6350.c
-        PINCTRL_PIN(163, "UFS_RESET"),
-static const unsigned int ufs_reset_pins[] =3D { 156 };
-        [156] =3D UFS_RESET(ufs_reset, 0xae000),
+url:    https://github.com/0day-ci/linux/commits/Quan-Nguyen/Add-Ampere-s-Altra-SMPro-MFD-and-its-child-drivers/20220321-161811
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 37fd83916da2e4cae03d350015c82a67b1b334c4
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220321/202203212244.dJ8wLdCt-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/3e85c45303bab9bd02a4761bc7e182fb001ac625
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Quan-Nguyen/Add-Ampere-s-Altra-SMPro-MFD-and-its-child-drivers/20220321-161811
+        git checkout 3e85c45303bab9bd02a4761bc7e182fb001ac625
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hwmon/ drivers/misc/
 
-Does that help?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Regards
-Luca
+All warnings (new ones prefixed by >>):
+
+>> drivers/misc/smpro-errmon.c:276:6: warning: variable 'data_hi' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (addr2 != 0xff) {
+               ^~~~~~~~~~~~~
+   drivers/misc/smpro-errmon.c:303:28: note: uninitialized use occurs here
+                            ret_hi & 0xff, ret_lo, data_hi, data_lo);
+                                                   ^~~~~~~
+   drivers/misc/smpro-errmon.c:276:2: note: remove the 'if' if its condition is always true
+           if (addr2 != 0xff) {
+           ^~~~~~~~~~~~~~~~~~~
+   drivers/misc/smpro-errmon.c:265:47: note: initialize the variable 'data_hi' to silence this warning
+           unsigned int ret_hi, ret_lo, data_lo, data_hi;
+                                                        ^
+                                                         = 0
+>> drivers/misc/smpro-errmon.c:276:6: warning: variable 'data_lo' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (addr2 != 0xff) {
+               ^~~~~~~~~~~~~
+   drivers/misc/smpro-errmon.c:303:37: note: uninitialized use occurs here
+                            ret_hi & 0xff, ret_lo, data_hi, data_lo);
+                                                            ^~~~~~~
+   drivers/misc/smpro-errmon.c:276:2: note: remove the 'if' if its condition is always true
+           if (addr2 != 0xff) {
+           ^~~~~~~~~~~~~~~~~~~
+   drivers/misc/smpro-errmon.c:265:38: note: initialize the variable 'data_lo' to silence this warning
+           unsigned int ret_hi, ret_lo, data_lo, data_hi;
+                                               ^
+                                                = 0
+   2 warnings generated.
 
 
->
-> Regards,
-> Bjorn
->
-> > ---
-> > Changes in v2:
-> > - nothing
-> >=20
-> >  drivers/pinctrl/qcom/pinctrl-sm6350.c | 16 ++++++++--------
-> >  1 file changed, 8 insertions(+), 8 deletions(-)
-> >=20
-> > diff --git a/drivers/pinctrl/qcom/pinctrl-sm6350.c b/drivers/pinctrl/qc=
-om/pinctrl-sm6350.c
-> > index 4d37b817b232..a91a86628f2f 100644
-> > --- a/drivers/pinctrl/qcom/pinctrl-sm6350.c
-> > +++ b/drivers/pinctrl/qcom/pinctrl-sm6350.c
-> > @@ -264,14 +264,14 @@ static const struct pinctrl_pin_desc sm6350_pins[=
-] =3D {
-> >  	PINCTRL_PIN(153, "GPIO_153"),
-> >  	PINCTRL_PIN(154, "GPIO_154"),
-> >  	PINCTRL_PIN(155, "GPIO_155"),
-> > -	PINCTRL_PIN(156, "SDC1_RCLK"),
-> > -	PINCTRL_PIN(157, "SDC1_CLK"),
-> > -	PINCTRL_PIN(158, "SDC1_CMD"),
-> > -	PINCTRL_PIN(159, "SDC1_DATA"),
-> > -	PINCTRL_PIN(160, "SDC2_CLK"),
-> > -	PINCTRL_PIN(161, "SDC2_CMD"),
-> > -	PINCTRL_PIN(162, "SDC2_DATA"),
-> > -	PINCTRL_PIN(163, "UFS_RESET"),
-> > +	PINCTRL_PIN(156, "UFS_RESET"),
-> > +	PINCTRL_PIN(157, "SDC1_RCLK"),
-> > +	PINCTRL_PIN(158, "SDC1_CLK"),
-> > +	PINCTRL_PIN(159, "SDC1_CMD"),
-> > +	PINCTRL_PIN(160, "SDC1_DATA"),
-> > +	PINCTRL_PIN(161, "SDC2_CLK"),
-> > +	PINCTRL_PIN(162, "SDC2_CMD"),
-> > +	PINCTRL_PIN(163, "SDC2_DATA"),
-> >  };
-> > =20
-> >  #define DECLARE_MSM_GPIO_PINS(pin) \
-> > --=20
-> > 2.35.1
-> >=20
+vim +276 drivers/misc/smpro-errmon.c
 
+   261	
+   262	static s32 smpro_internal_err_get_info(struct regmap *regmap, u8 addr, u8 addr1,
+   263					       u8 addr2, u8 addr3, u8 subtype, char *buf)
+   264	{
+   265		unsigned int ret_hi, ret_lo, data_lo, data_hi;
+   266		int ret;
+   267	
+   268		ret = regmap_read(regmap, addr, &ret_lo);
+   269		if (ret)
+   270			return ret;
+   271	
+   272		ret = regmap_read(regmap, addr1, &ret_hi);
+   273		if (ret)
+   274			return ret;
+   275	
+ > 276		if (addr2 != 0xff) {
+   277			ret = regmap_read(regmap, addr2, &data_lo);
+   278			if (ret)
+   279				return ret;
+   280			ret = regmap_read(regmap, addr3, &data_hi);
+   281			if (ret)
+   282				return ret;
+   283		}
+   284		/*
+   285		 * Output format:
+   286		 * <errType> <image> <dir> <Location> <errorCode> <data>
+   287		 * Where:
+   288		 *   + errType: SCP Error Type (3 bits)
+   289		 *      1: Warning
+   290		 *      2: Error
+   291		 *      4: Error with data
+   292		 *   + image: SCP Image Code (8 bits)
+   293		 *   + dir: Direction (1 bit)
+   294		 *      0: Enter
+   295		 *      1: Exit
+   296		 *   + location: SCP Module Location Code (8 bits)
+   297		 *   + errorCode: SCP Error Code (16 bits)
+   298		 *   + data : Extensive data (32 bits)
+   299		 *      All bits are 0 when errType is warning or error.
+   300		 */
+   301		return scnprintf(buf, MAX_MSG_LEN, "%01x %02x %01x %02x %04x %04x%04x\n",
+   302				 subtype, (ret_hi & 0xf000) >> 12, (ret_hi & 0x0800) >> 11,
+   303				 ret_hi & 0xff, ret_lo, data_hi, data_lo);
+   304	}
+   305	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

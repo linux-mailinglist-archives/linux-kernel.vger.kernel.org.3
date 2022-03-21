@@ -2,111 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D354E261A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 152A64E2628
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347202AbiCUMNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
+        id S1347237AbiCUMPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347204AbiCUMN2 (ORCPT
+        with ESMTP id S240603AbiCUMPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:13:28 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1CD1637DC
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:12:03 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E5C121F37C;
-        Mon, 21 Mar 2022 12:12:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1647864721; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HXN2HJbm0BalOg6bKSVLRWcC3/+l/IIQZD7njTj+fkY=;
-        b=Gp5wTZrlgDRMAvh0Z5GT/FdxVrOxd2/PEdp/s8VyoCs1Tf/frU9tKWVlD3b1Oj2K52kHGK
-        Rn642mUFD/XZfjiChzHFzCQx/bFl7iKxanOCrwvKum5LAhQcETFpFH2JejFnsJko0vqj1v
-        nkk2dvYKroeeiJLyuHJaIXDHNPTzhHM=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A6407A3B81;
-        Mon, 21 Mar 2022 12:12:00 +0000 (UTC)
-Date:   Mon, 21 Mar 2022 13:12:00 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, kosaki.motohiro@jp.fujitsu.com,
-        mgorman@suse.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm/mempolicy: fix mpol_new leak in
- shared_policy_replace
-Message-ID: <YjhrkDlvOnmqIP6n@dhcp22.suse.cz>
-References: <20220322083456.16563-1-linmiaohe@huawei.com>
+        Mon, 21 Mar 2022 08:15:49 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B61A6E25
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:14:23 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id bn33so19532263ljb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LdqYxoutc6DsO1XYUa/CbHh15uqU3qu1/fReXRM+8bM=;
+        b=Bws30VSjpwUf8+/rHfoUjxJuuojumekDO6vnEVaGexwkugcY6BvWDP7xIVX3t3M+Ua
+         kOcQIlMpv9HA9gZmy92w31MiElYYs7t/LiQMv2X97gRIJv9BcL3bHPSmQHI6lmw9Bhi9
+         WH4bzkHI1dyYlkdn5S8BBxNdPYKJlOFK0PyJY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LdqYxoutc6DsO1XYUa/CbHh15uqU3qu1/fReXRM+8bM=;
+        b=jeytlb7bAD3inXdM4qOkgdQt85ni4O7keb2wUJ6NTlnEDG6jwDN/z1UJML40gQxBM+
+         cu43twbjWJmyz0nY3DndBLhmGOE7b+hp7llcS1ux/K6JmYnl3bpzuZfz4oAlFs69AoZW
+         JCOYeShe3VEqBO05FAGuTVnXx8mXeLnluvb42Gnv8/OxyOHibV5ycU2mj8i0L7Bu2RrB
+         erqI68aNYMKA92J/cbxCXzPGKTcW4JHuOJOvsvrCfOBraHePGevqpqNfeZz0Ox8OyZfV
+         ZB9XNxtYIX63RDIU+AfRUuUVWAgGh2xSoB3fG83rh+ueHP/0JyDCYQneKcTS51LmRXlz
+         xppA==
+X-Gm-Message-State: AOAM530wmyj9A/FfstRxOkELamMAsTsyDsOSoGdOWj+s+g/N5qead+IA
+        zhCHGKc8TRs0gpsxZWeNYorbBw==
+X-Google-Smtp-Source: ABdhPJxSECgSKE+FFm1j6vX16456ZsPRFygIBmhFFVdLV7Gnjqy4ySnLbRGANhmCzgDKIB0xQcbwFQ==
+X-Received: by 2002:a05:651c:a05:b0:249:8586:3f42 with SMTP id k5-20020a05651c0a0500b0024985863f42mr3275360ljq.349.1647864862098;
+        Mon, 21 Mar 2022 05:14:22 -0700 (PDT)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id h16-20020ac25d70000000b00445c231e814sm1796747lft.144.2022.03.21.05.14.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 05:14:21 -0700 (PDT)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] lib/Kconfig.debug: remove more CONFIG_..._VALUE indirections
+Date:   Mon, 21 Mar 2022 13:13:00 +0100
+Message-Id: <20220321121301.1389693-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220322083456.16563-1-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 22-03-22 16:34:56, Miaohe Lin wrote:
-> If mpol_new is allocated but not used in restart loop, mpol_new will be
-> freed via mpol_put before returning to the caller.  But refcnt is not
-> initialized yet, so mpol_put could not do the right things and might leak
-> the unused mpol_new.
+As in "kernel/panic.c: remove CONFIG_PANIC_ON_OOPS_VALUE indirection",
+use the IS_ENABLED() helper rather than having a hidden config option.
 
-I would just add:
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ kernel/hung_task.c |  2 +-
+ kernel/watchdog.c  |  4 ++--
+ lib/Kconfig.debug  | 21 ---------------------
+ 3 files changed, 3 insertions(+), 24 deletions(-)
 
-This would happen if mempolicy was updated on the shared shmem file
-while the sp->lock has been dropped during the memory allocation.
-
-> This issue could be triggered easily with the below
-> code snippet if there're many processes doing the below work at the same
-> time:
-> 
->   shmid = shmget((key_t)5566, 1024 * PAGE_SIZE, 0666|IPC_CREAT);
->   shm = shmat(shmid, 0, 0);
->   loop many times {
->     mbind(shm, 1024 * PAGE_SIZE, MPOL_LOCAL, mask, maxnode, 0);
->     mbind(shm + 128 * PAGE_SIZE, 128 * PAGE_SIZE, MPOL_DEFAULT, mask,
->           maxnode, 0);
->   }
-> 
-> Fixes: 42288fe366c4 ("mm: mempolicy: Convert shared_policy mutex to spinlock")
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> Cc: <stable@vger.kernel.org> # 3.8
-
-Acked-by: Michal Hocko <mhocko@suse.com>
-
-Thanks a lot!
-> ---
-> v1->v2:
->   Add reproducer snippet and Cc stable.
->   Thanks Michal Hocko for review and comment!
-> ---
->  mm/mempolicy.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> index a2516d31db6c..4cdd425b2752 100644
-> --- a/mm/mempolicy.c
-> +++ b/mm/mempolicy.c
-> @@ -2733,6 +2733,7 @@ static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
->  	mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
->  	if (!mpol_new)
->  		goto err_out;
-> +	refcount_set(&mpol_new->refcnt, 1);
->  	goto restart;
->  }
->  
-> -- 
-> 2.23.0
-
+diff --git a/kernel/hung_task.c b/kernel/hung_task.c
+index 52501e5f7655..cff3ae8c818f 100644
+--- a/kernel/hung_task.c
++++ b/kernel/hung_task.c
+@@ -73,7 +73,7 @@ static unsigned int __read_mostly sysctl_hung_task_all_cpu_backtrace;
+  * hung task is detected:
+  */
+ unsigned int __read_mostly sysctl_hung_task_panic =
+-				CONFIG_BOOTPARAM_HUNG_TASK_PANIC_VALUE;
++				IS_ENABLED(CONFIG_BOOTPARAM_HUNG_TASK_PANIC);
+ 
+ static int
+ hung_task_panic(struct notifier_block *this, unsigned long event, void *ptr)
+diff --git a/kernel/watchdog.c b/kernel/watchdog.c
+index 99afb88d2e85..50a1b8a95127 100644
+--- a/kernel/watchdog.c
++++ b/kernel/watchdog.c
+@@ -57,7 +57,7 @@ int __read_mostly sysctl_hardlockup_all_cpu_backtrace;
+  * Should we panic when a soft-lockup or hard-lockup occurs:
+  */
+ unsigned int __read_mostly hardlockup_panic =
+-			CONFIG_BOOTPARAM_HARDLOCKUP_PANIC_VALUE;
++			IS_ENABLED(CONFIG_BOOTPARAM_HARDLOCKUP_PANIC);
+ /*
+  * We may not want to enable hard lockup detection by default in all cases,
+  * for example when running the kernel as a guest on a hypervisor. In these
+@@ -168,7 +168,7 @@ static struct cpumask watchdog_allowed_mask __read_mostly;
+ 
+ /* Global variables, exported for sysctl */
+ unsigned int __read_mostly softlockup_panic =
+-			CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC_VALUE;
++			IS_ENABLED(CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC);
+ 
+ static bool softlockup_initialized __read_mostly;
+ static u64 __read_mostly sample_period;
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 14b89aa37c5c..522231f4a501 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1043,13 +1043,6 @@ config BOOTPARAM_SOFTLOCKUP_PANIC
+ 
+ 	  Say N if unsure.
+ 
+-config BOOTPARAM_SOFTLOCKUP_PANIC_VALUE
+-	int
+-	depends on SOFTLOCKUP_DETECTOR
+-	range 0 1
+-	default 0 if !BOOTPARAM_SOFTLOCKUP_PANIC
+-	default 1 if BOOTPARAM_SOFTLOCKUP_PANIC
+-
+ config HARDLOCKUP_DETECTOR_PERF
+ 	bool
+ 	select SOFTLOCKUP_DETECTOR
+@@ -1091,13 +1084,6 @@ config BOOTPARAM_HARDLOCKUP_PANIC
+ 
+ 	  Say N if unsure.
+ 
+-config BOOTPARAM_HARDLOCKUP_PANIC_VALUE
+-	int
+-	depends on HARDLOCKUP_DETECTOR
+-	range 0 1
+-	default 0 if !BOOTPARAM_HARDLOCKUP_PANIC
+-	default 1 if BOOTPARAM_HARDLOCKUP_PANIC
+-
+ config DETECT_HUNG_TASK
+ 	bool "Detect Hung Tasks"
+ 	depends on DEBUG_KERNEL
+@@ -1145,13 +1131,6 @@ config BOOTPARAM_HUNG_TASK_PANIC
+ 
+ 	  Say N if unsure.
+ 
+-config BOOTPARAM_HUNG_TASK_PANIC_VALUE
+-	int
+-	depends on DETECT_HUNG_TASK
+-	range 0 1
+-	default 0 if !BOOTPARAM_HUNG_TASK_PANIC
+-	default 1 if BOOTPARAM_HUNG_TASK_PANIC
+-
+ config WQ_WATCHDOG
+ 	bool "Detect Workqueue Stalls"
+ 	depends on DEBUG_KERNEL
 -- 
-Michal Hocko
-SUSE Labs
+2.31.1
+

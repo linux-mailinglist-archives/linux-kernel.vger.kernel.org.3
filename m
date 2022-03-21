@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FDC4E2312
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 459A74E2315
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343644AbiCUJPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
+        id S1345732AbiCUJP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235509AbiCUJPn (ORCPT
+        with ESMTP id S1345750AbiCUJPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:15:43 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC1531DFD;
-        Mon, 21 Mar 2022 02:14:13 -0700 (PDT)
-X-UUID: e030b7e5dcad4d9286f6479676f04775-20220321
-X-UUID: e030b7e5dcad4d9286f6479676f04775-20220321
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 524223218; Mon, 21 Mar 2022 17:14:10 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 21 Mar 2022 17:14:09 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 21 Mar 2022 17:14:08 +0800
-Message-ID: <17e6e8895ebc1113911481c7e097b394005db123.camel@mediatek.com>
-Subject: Re: [v5 3/4] ASoC: mediatek: mt8192: refactor for I2S8/I2S9 DAI
- links of headset
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-CC:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linmq006@gmail.com>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>, <trevor.wu@mediatek.com>,
-        <matthias.bgg@gmail.com>, <aaronyu@google.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <angelogioacchino.delregno@collabora.com>
-Date:   Mon, 21 Mar 2022 17:14:08 +0800
-In-Reply-To: <Yjf4KjXpVJaNnvb8@google.com>
-References: <20220319114111.11496-1-jiaxin.yu@mediatek.com>
-         <20220319114111.11496-4-jiaxin.yu@mediatek.com>
-         <Yjf4KjXpVJaNnvb8@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 21 Mar 2022 05:15:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B4033E8C;
+        Mon, 21 Mar 2022 02:14:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 214BC611FA;
+        Mon, 21 Mar 2022 09:14:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E28BDC340E8;
+        Mon, 21 Mar 2022 09:14:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647854067;
+        bh=QR1O5XKlJpJuPjR5SVi4jtYcguILB+hAXNad3vIFDNw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I6UwOlDq+7pdOBZyFL7gFWPy22etBVprVoqB3Ikka5a6K7b4E4teeWa2X+iRTWJ1z
+         Daw54agLSZjz9NWrsFy72fr7gCImpGEXcvGCOmZYSGkkVCS2DuB25hzGsuUKUw18w5
+         Gyo7ypU/wIwnxd3gKmBS56iRRcf3T5hYc4vau+us=
+Date:   Mon, 21 Mar 2022 10:14:23 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Daehwan Jung <dh10.jung@samsung.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
+Subject: Re: [PATCH v3 0/4] support USB offload feature
+Message-ID: <YjhB7+AaEXvuUmdi@kroah.com>
+References: <CGME20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c@epcas2p1.samsung.com>
+ <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,32 +57,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-03-21 at 11:59 +0800, Tzung-Bi Shih wrote:
-> On Sat, Mar 19, 2022 at 07:41:10PM +0800, Jiaxin Yu wrote:
-> > @@ -1145,6 +1140,13 @@ static int mt8192_mt6359_dev_probe(struct
-> > platform_device *pdev)
-> >  		goto err_speaker_codec;
-> >  	}
-> >  
-> > +	headset_codec = of_get_child_by_name(pdev->dev.of_node,
-> > "mediatek,headset-codec");
-> > +	if (!headset_codec) {
-> > +		ret = -EINVAL;
-> > +		dev_err_probe(&pdev->dev, ret, "Property
-> > 'headset_codec' missing or invalid\n");
-> > +		goto err_headset_codec;
-> > +	}
+On Mon, Mar 21, 2022 at 05:59:50PM +0900, Daehwan Jung wrote:
+> This patchset is for USB offload feature, which makes Co-processor to use
+> some memories of xhci. Especially it's useful for USB Audio scenario.
+> Audio stream would get shortcut because Co-processor directly write/read
+> data in xhci memories. It could get speed-up using faster memory like SRAM.
+> That's why this gives vendors flexibilty of memory management.
+> Several pathches have been merged in AOSP kernel(android12-5.10) and I put
+> together and split into 3 patches. Plus let me add user(xhci-exynos)
+> module to see how user could use it.
 > 
-> (to be neat) Does it have any reason to prevent from using
-> of_parse_phandle()
-> but of_get_child_by_name()?
+> To sum up, it's for providing xhci memories to Co-Processor.
+> It would cover DCBAA, Device Context, Transfer Ring, Event Ring, ERST.
+> It needs xhci hooks and to export some xhci symbols.
+> 
+> Changes in v2 :
+> - Fix commit message by adding Signed-off-by in each patch.
+> - Fix conflict on latest.
+> 
+> Changes in v3 :
+> - Remove export symbols and xhci hooks which xhci-exynos don't need.
+> - Modify commit message to clarify why it needs to export symbols.
+> - Check compiling of xhci-exynos.
 
-Hi Tzung-Bi,
+As I asked for in the previous submission, you MUST have a user for
+these hooks, otherwise we can not accept them (nor would you WANT us to
+accept them).  Please fix that up and add them to the next submission as
+we can not do anything with this one.
 
-"mediatek,headset-codec" is a child node of pdev->dev.of_node, so I use
-of_get_child_by_name() to get and   pass it to
-snd_soc_of_get_dai_link_codecs().
+thanks,
 
-Jiaxin.Yu
-Thanks
-
+greg k-h

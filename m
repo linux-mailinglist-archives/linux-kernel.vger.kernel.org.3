@@ -2,133 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A344E25D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF684E25DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346180AbiCUL77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 07:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
+        id S1347050AbiCUMAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345937AbiCUL7u (ORCPT
+        with ESMTP id S1347038AbiCUMAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 07:59:50 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0C71D0EB
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:58:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k+xqZjtUD2Hkayh3vuAwynzn/bViPYzk88c3n9K6LFPAP+GpGXe6mE0PkRlpXBRlpt7KzGbWfidoi0aGdZDqulIrckvt87c7+4jukGT3jfi60Kj0z34KJFuA2QIy1CkYebF0Gbpj6Tawbh/XxOumaDQodGiuj4bZ4gb4Y38ouQZI9mYCInpuup3vldc7GmPOedXTtmSO2uPhacIcN12tBAua0GFpzR1hMuEEsBQIewTRVBWF3YtCxRaONG0oro7AGrShLf/zbU3ERXVhrSgJ/u0Nqmi277pJi+Ghsohsbxi9pTTJWnVgnlOKWMiVPC7t65rj1kux5Di9Bhjvt6z4Nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W8T7dQq3Ggb4C9I7wBC6scbBeEdjKR1CveuNsmXlcyM=;
- b=jN/2CWDFtAi6+0OdZ1eyaaZJHBhJtOWHHoBnH+va37yNBPLlcfcojcyfa3f6WSFKp6LTfRQP9EB2XNncGgl0d1RXOZbFEEGzvok1v2sDRegB2GvK7R06uI6RtuRSGRo+yWLqfb0hy60hgQh0DArii77wi0dSiaLtRrAlBWcQTGrNJr5pP/bS4FxiSOLR+AZDtNJOY9Uyjuh+Y1iuxKbkjqJc4aB8q9SGkLkfvC2CWyN4cX1M63Yo4MHz8tAIi0/eRL96gCznltakPhz1Vyl9pknIPQllcNcr4Qad9eLyuJ9O0CNy+kgG1E3gE2A3eAfCewpGuPPs2DYsVXM/vWda7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W8T7dQq3Ggb4C9I7wBC6scbBeEdjKR1CveuNsmXlcyM=;
- b=cB6ez0dFdnK61Xx7gCHYEdKd2iHN9rkMKq9Fpo7GU+x+WHHz/TYKGI5HBKXobjPzKv5sfFjc70wY6+HWs5TMrLONALV1r8tkfP9uWbqOJbhr3TtK+0H/oYwNFdorv+46yBpNd9g83X2XCd+ip1kG8NsbctYBpRKjhc5kssogG/sNn8OE1TU9E/JXf9t1E4+KT9xmmkhP2f2OHDrQ6LbpzCWs2t9DNvdeU2BRMbeQd2wZ+YRuoQGRgbsU+fhMiOHL1yYwIf1qAMqvZO3TqU9Rd0dnwrTDvREt6uU6NK14GpHIt0TPc5Zvc+zjXoJO0tomKdH1QGs4GNWbo2k2DLN6rw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BYAPR12MB2933.namprd12.prod.outlook.com (2603:10b6:a03:138::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Mon, 21 Mar
- 2022 11:58:22 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::11a0:970a:4c24:c70c]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::11a0:970a:4c24:c70c%5]) with mapi id 15.20.5081.023; Mon, 21 Mar 2022
- 11:58:22 +0000
-Date:   Mon, 21 Mar 2022 08:58:21 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 05/11] arm-smmu-v3/sva: Add SVA domain support
-Message-ID: <20220321115821.GL11336@nvidia.com>
-References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
- <20220320064030.2936936-6-baolu.lu@linux.intel.com>
- <YjhiByacn+WACHCU@myrica>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjhiByacn+WACHCU@myrica>
-X-ClientProxiedBy: MN2PR03CA0005.namprd03.prod.outlook.com
- (2603:10b6:208:23a::10) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 91430131-0432-493f-510c-08da0b321912
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2933:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB293335F0812C4C4664D3DEBDC2169@BYAPR12MB2933.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2geR5muLbI8KjltTDpoPA5ao21ek2p34Zay9Y5gROeRcpJJoK2ieX3fOV3Ry3HrcFGTs0bdss8suLmB3cDQOhJt6qPcyrd04UZi33N9ikFWFJ6ypDm7FhwHgkSkCjJKg5oN1bstU20Tsvc7RHyNwjZ4SHJzdcxXaZWrxtAcQxTado1AiV+cGwlmc5daMd0EVl49GTA3u6LeJRgrPHHE30757pfcfdiCLN8hnfROhmmTqDsZYCNPr1qMPUiWQ34+e1+o0gJJxjIVIi5fMY2+u4AaegqIFyImN4VauQDkkycolYA5cIJk1pr5LW9TWr5yZa8Fq6m1STy1o/f+n9rJNlSH0dK4oszm/Lbsg/8+mCxAzeGNkCBKJTdM8OiGL7fJ8jqiqEa1DAJNtSgCMH4tkY8HjEMD7hIFMHvLwzVBTEKGpSg3epqHcgKIcGcOsyJsq4fghYsGGN7PLmsw31jXYHDzAKTAkJiBy/IccdJRivxNY8b2x3J6u9TCrkxYLL7Zwv7rORBgGBFHqHAe2vMNUk3WeeQ0K6au1qF8NaoJwIyO2nW6lhIKOk+iBpi+TRvnwOzNkWEYBenySiWUVCxWSaGslWhozEot400FHjoI+3hbsb678HfaqomYIif4NNs9Zuhv6N9bOEkJriQ172qJbPA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(6512007)(1076003)(2616005)(26005)(6486002)(36756003)(2906002)(33656002)(4744005)(86362001)(4326008)(316002)(38100700002)(8676002)(66556008)(66946007)(66476007)(8936002)(7416002)(5660300002)(6916009)(54906003)(6506007)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FzV/sFE8tvnGnp+c4IGYkgyWEtiSg2A4FwkqODN9zTbtvuJdnKiAigKGx2k8?=
- =?us-ascii?Q?DP7P/qTqrcIzWZrc9pgg8OB8PTY5oSAxzLv468UGsBV9leDdhZMxbwmWEVYP?=
- =?us-ascii?Q?3gYyQEi4A1EupLWITE3NcepJQsLj1t43gSmP22r/1qaHpqPx0mlDzN69TIRC?=
- =?us-ascii?Q?JEumT8IXTUcM6Mp4DvNvwIL3SUBihfLlY8FYk4VjgiwIqcvpT0bcFMLZPxWY?=
- =?us-ascii?Q?zzQn9A8jBMjUBYxvWPU4J99Tymr4+32HwqQNRKFI6f3REXAo+76NGhr0/+dZ?=
- =?us-ascii?Q?ZDXS4rEmvvOZY7T58PSNHJSiJiL8dJnq4YfQK53uvbhVfBXIsU5sZYLdoys+?=
- =?us-ascii?Q?j/u/SnxL7oXRD6JPxoRLxK8VtbXl3Vy7fmc/GYwg6KF48wlZpBlLIScmPRW9?=
- =?us-ascii?Q?qwqfUM4zkDi0R8JemLUbpy+OnMJZmjeMlrSlPAUxlfp9ivEqkpdcKLK8VKbj?=
- =?us-ascii?Q?vo4r7NsmbZJcOudKz80g6W/zX0YwbfNlYeLrLoyImqIR+1MmTH3XQI8ZBx2X?=
- =?us-ascii?Q?CH+EKHoxIhvdh+PPYOh1LPINJmhnZcjeDSMONS5SYk0A+gh8KpPKx0Dy2mHT?=
- =?us-ascii?Q?HYwmohY0Idfwph5USG5ZY3S5Vp3D49flHPUlnz24S3YLpfG33eVNIwpFMOKV?=
- =?us-ascii?Q?CJ88Nld+APWzmcMUG0X2NRgh2vDFEIXSoscoYy2DKRKY0r7wOJzkdCmaz+qZ?=
- =?us-ascii?Q?l9Bkpj9N4S39hvYitWhDH6acAdv5RNuyOBi1mgH0WqYsSS7ULERjHo/+9hrP?=
- =?us-ascii?Q?6MeV2+kRBvUKG335NY2XCA7AO1S1plc06cAeJwoE5Gt89TWXAh4akpVFVOVO?=
- =?us-ascii?Q?+MiOoh92TgDmeocX6V2lnhO0ZVWQ7f+Fj2RHCOvOeQFShweomvSS0qDFMI87?=
- =?us-ascii?Q?DAHFv59bS3uDX4Se0GNPQfF34V7eJIqw6qHfw5UfYnV2XJIWMC7TwzEUYj0J?=
- =?us-ascii?Q?UbXrcqsZltmYBQvHUZrLQbwoBja8/vnl9s3f63OTm2k0bx1y2wdK3617nOH5?=
- =?us-ascii?Q?02zemlXwJodmpHmL8YwzhSRghwV3OchMACvWR3+wzcKeiizUc0ZHwC7tn+dy?=
- =?us-ascii?Q?4wCYUZEM9/vvuMDfjrhTcoMGr617BdjFPKBE1+ETTGONZxYJyeSttATLtAdt?=
- =?us-ascii?Q?iOJpF83QlR+WowMIushg1u4+F1YtOFWgqj0Djkr4S7J17gZUwnBaj/f4JYX4?=
- =?us-ascii?Q?sv1RijeUVNUrcwNMv8IgyO+rOgxgLmBGXgLscb5F5OxLGr/+r7ks0mSloSs/?=
- =?us-ascii?Q?SVRALXLNL2yA9jccpePTJRbgb/qX0nm+eBGSzqvtcgUqTFw6IAcLLfVFjXCJ?=
- =?us-ascii?Q?oYjlE5UmJtIgbtdMQy807MA+X2iutVYjEai48/KvleFH9WNoN58vqColFfoV?=
- =?us-ascii?Q?N8sYQ8fe1rCXbsHuIrCelonUaQopCoJoCsiJjND2y5vxYhDI9Wi1Agn+1X0W?=
- =?us-ascii?Q?UqpWwVTnuNUyJhiXseTWbjgBSxxmZ6nc?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91430131-0432-493f-510c-08da0b321912
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 11:58:22.4184
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GwYqXY3IctYLUt0RpxRXq2XxzpkzEVwMm18VlZPSvi0rHV6jbAAikdY1nDZqQIm+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2933
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 08:00:14 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA5C20F7D
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:58:48 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id d10so29269237eje.10
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=mime-version:content-transfer-encoding:date:message-id:from:to:cc
+         :subject:references:in-reply-to;
+        bh=tqqiIpLTBH/4MyJcSp/sFT/gB1/sD2BSsd40ElAdaOw=;
+        b=lCexYss4DcuUyoUIGwJK9ubCG7XUQSW7mnQK4tyWtHN0zgmfOIwHHBOAyu6GXnT4dx
+         Ch9zQSD2cvTXneK5P6N+q65MYGjTPnlBbzHiZdt0WjWqPRlBkB0qh81eVxt0C/ybk8Sb
+         C7t9R9fFPxOBCPTDgwIjOmGAXcnPbp8FTrurJdFxsGe+OIW2K5w2KvONB7vsxURqg9C5
+         btRNP9ijiltOUXGyl7/yxeEd8uMBY+n/zphbsvxlklfySHhHjFS/ZQoRFydm/kBT7egZ
+         ds7T0n8J87RIjhQ3xVyoXUf2xAFJQj+DsToIUGWj2JhTVBAsmBDN02RSMv7XpIBEV0y/
+         Su6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:from:to:cc:subject:references:in-reply-to;
+        bh=tqqiIpLTBH/4MyJcSp/sFT/gB1/sD2BSsd40ElAdaOw=;
+        b=cD/R9rU9WHeQyNM+C3WGh7EBSg89N902gG9URL6ZSgukYV8fUiFS3UidmZxs2QKoJH
+         V+eJSH4S8gHFsmzOcEU+6L2XutgkH/yGjHq5AuRqreAc2m0UWXIUe/rgcKN9hq3vxKmY
+         fHo65WFaxdnERFVMah+Qjyg8ebZgOvj7wmixkiGAkl0s9XIZ3kKHMIyBtndZM1Clb+aY
+         xteBGYmwjsKcp7PDR+els5oEkC2SaIdFIanfmqgtmwimLykH4YXdmgEGlSV7I8s2gKC6
+         yQTrtMup7+cdBa98t86K1/zVMZqH6CAJZs+PQJBPfGxBOluMwLpe3Trn1wKlXGPI1rOi
+         yJJw==
+X-Gm-Message-State: AOAM531JAoppUx52VGUxFJBC8aHdCwINhNaQ7QrgEfvF7EgFK5MgE6yB
+        hao0bhDcrUbfdiexIii5DNOlxA==
+X-Google-Smtp-Source: ABdhPJzcOcz4bZpddTr6Wy4fSAUvv8yj7fkX0ktNMmkeQt+2Gw+AwGUfUjOj6KPuA6oy3uxrFzu6JQ==
+X-Received: by 2002:a17:907:8687:b0:6da:824e:c8b8 with SMTP id qa7-20020a170907868700b006da824ec8b8mr20927854ejc.428.1647863926737;
+        Mon, 21 Mar 2022 04:58:46 -0700 (PDT)
+Received: from localhost (a246182.upc-a.chello.nl. [62.163.246.182])
+        by smtp.gmail.com with ESMTPSA id l2-20020aa7cac2000000b003f9b3ac68d6sm7793092edt.15.2022.03.21.04.58.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 04:58:46 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 21 Mar 2022 12:58:45 +0100
+Message-Id: <CIPJ0CT6EQI9.2C0T9KAHDODH2@otso>
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Krzysztof Kozlowski" <krzk@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        "Avri Altman" <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [RFT] ufs: qcom: drop custom Android boot parameters
+References: <20220320110616.18355-1-krzk@kernel.org>
+In-Reply-To: <20220320110616.18355-1-krzk@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 11:31:19AM +0000, Jean-Philippe Brucker wrote:
-> For now we could just return a naked struct iommu_domain. Sanity checks in
-> arm_smmu_attach_dev() would be good too, a SVA domain can't be attached as
-> a parent domain.
+Hi Krzysztof,
 
-Now that we have per-domain ops the 'standard' arm_smmu_attach_dev()
-cannot be called on a SVA iommu_domain already.
+On Sun Mar 20, 2022 at 12:06 PM CET, Krzysztof Kozlowski wrote:
+> The QCOM UFS driver requires an androidboot.bootdevice command line
+> argument matching the UFS device name.  If the name is different, it
+> refuses to probe.  Thise androidboot.bootdevice is provided by
+> stock/vendor (from an Android-based device) bootloader.
+>
+> This does not make sense from Linux point of view.  Driver should be
+> able to boot regardless of bootloader.  Driver should not depend on some
+> Android custom environment data.
+>
+> Cc: Luca Weiss <luca.weiss@fairphone.com>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Jason
+As expected this makes UFS probe even if the node is named ufs@1d84000
+on my device.
+
+While I don't know why the code existed in the first place, it was added
+back in 2015 with the introduction of the driver, so probably it's just
+some remains from downstream that weren't cleaned up back then.
+
+With this commit also 6b9afd8f96c6 ("arm64: dts: qcom: sm8250: change
+ufs node name to ufshc") could be reverted (but it would probably make
+more sense to rename all ufshc@ to ufs@ in a new commit).
+
+Tested-by: Luca Weiss <luca.weiss@fairphone.com>
+
+Regards
+Luca
+
+>
+> ---
+>
+> Not tested, please kindly provide tests.
+>
+> See also:
+> https://lore.kernel.org/linux-devicetree/f61abc2b-3ce8-7b1f-3d28-8a4a03ec=
+58eb@kernel.org/T/#u
+> ---
+>  drivers/scsi/ufs/ufs-qcom.c | 15 ---------------
+>  1 file changed, 15 deletions(-)
+>
+> diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+> index 0d2e950d0865..586c0e567ff9 100644
+> --- a/drivers/scsi/ufs/ufs-qcom.c
+> +++ b/drivers/scsi/ufs/ufs-qcom.c
+> @@ -957,18 +957,6 @@ static const struct reset_control_ops ufs_qcom_reset=
+_ops =3D {
+>  	.deassert =3D ufs_qcom_reset_deassert,
+>  };
+> =20
+> -#define	ANDROID_BOOT_DEV_MAX	30
+> -static char android_boot_dev[ANDROID_BOOT_DEV_MAX];
+> -
+> -#ifndef MODULE
+> -static int __init get_android_boot_dev(char *str)
+> -{
+> -	strlcpy(android_boot_dev, str, ANDROID_BOOT_DEV_MAX);
+> -	return 1;
+> -}
+> -__setup("androidboot.bootdevice=3D", get_android_boot_dev);
+> -#endif
+> -
+>  /**
+>   * ufs_qcom_init - bind phy with controller
+>   * @hba: host controller instance
+> @@ -988,9 +976,6 @@ static int ufs_qcom_init(struct ufs_hba *hba)
+>  	struct resource *res;
+>  	struct ufs_clk_info *clki;
+> =20
+> -	if (strlen(android_boot_dev) && strcmp(android_boot_dev, dev_name(dev))=
+)
+> -		return -ENODEV;
+> -
+>  	host =3D devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
+>  	if (!host) {
+>  		err =3D -ENOMEM;
+> --=20
+> 2.32.0
+

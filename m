@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5E44E2521
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A234E2524
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346720AbiCULVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 07:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
+        id S1346727AbiCULXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 07:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbiCULVb (ORCPT
+        with ESMTP id S244245AbiCULXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 07:21:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98D3E80232
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647861605;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TXuXLqm5FHH4sp7xPxKCkqjBCYke9wOJKWY6Gs+qP90=;
-        b=Yg+wKwcAniMQ2Wfk/rK7If/KwswNdVsYaISt0Jn8UiibZ4d0p1VhUt5g/gyaSB9eiarKr9
-        o2Kt9foRwIe/zmIJpgW7DcHDJSx9L2kHTDqrsAEoC1+2aT82OCX4Y3l19D8jCjaFg58O7s
-        FS49dnrT6MMM+GecZHCo8xAdId2SBgQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-608-Czle0zbOMN6q2ddu47c9vQ-1; Mon, 21 Mar 2022 07:20:00 -0400
-X-MC-Unique: Czle0zbOMN6q2ddu47c9vQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F087D2A59559;
-        Mon, 21 Mar 2022 11:19:59 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C73FE1410F35;
-        Mon, 21 Mar 2022 11:19:58 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <000000000000b1807c05daad8f98@google.com>
-References: <000000000000b1807c05daad8f98@google.com>
-To:     syzbot <syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        christophe.jaillet@wanadoo.fr, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: null-ptr-deref Read in __free_pages
+        Mon, 21 Mar 2022 07:23:10 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECAA89080
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:21:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647861705; x=1679397705;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FO6c/Tj1y4b2o7cgkDZa8XOg8XTGeIMhXAyB4E4sNO8=;
+  b=BtkO4ZKI6tYB0yp2JZakUh30GBTe4s1XvKf3JYCNPtHPWPCdjcgYGm98
+   hvomQRez/Xwh0ygGtf/jTmPdSBNslxkhc0MkBy+yRghgAX5oe3k5xR9UC
+   PTy2agI1W2Ho3OH366eIT3jOZmRDjnhxY8IOAlmmnyVYU5JApgqCA+Aey
+   Juedl0Us1HeJ4Hp1Unn4RbCEuqu29W13FO8kasY3TL0WPUx0txqNJNEQi
+   rQFva8sJ1/ZF9GAIrAaJQ62jAdnc3yKQLCAY7iw60MbX3XkdYF4BCU0R9
+   YYIyTPxVg7seTjRz7Pu0Tvnz2Fg9pI1WgzksGMQhwTTHpeo/MAMs/BaHw
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="239684544"
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="239684544"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 04:21:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="518393688"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 21 Mar 2022 04:21:42 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWG6X-000Hmi-7U; Mon, 21 Mar 2022 11:21:41 +0000
+Date:   Mon, 21 Mar 2022 19:20:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arvind Sankar <nivedita@alum.mit.edu>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [linux-stable-rc:queue/5.4 2475/9999]
+ drivers/crypto/inside-secure/safexcel_cipher.c:303:12: warning: stack frame
+ size (1032) exceeds limit (1024) in 'safexcel_aead_setkey'
+Message-ID: <202203211901.Rjocgciw-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1003459.1647861598.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 21 Mar 2022 11:19:58 +0000
-Message-ID: <1003460.1647861598@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SCC_BODY_URI_ONLY,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,6 +69,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs=
-.git 	733021c6d8607c5c5ab08bbe9b400d0da609185f
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.4
+head:   56d48cd38defb6b9eb374d9b0ca438325067ffad
+commit: c2c5dc84ac51da90cadcb12554c69bdd5ac7aeeb [2475/9999] compiler.h: fix barrier_data() on clang
+config: mips-randconfig-r036-20220320 (https://download.01.org/0day-ci/archive/20220321/202203211901.Rjocgciw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=c2c5dc84ac51da90cadcb12554c69bdd5ac7aeeb
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.4
+        git checkout c2c5dc84ac51da90cadcb12554c69bdd5ac7aeeb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/crypto/inside-secure/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/crypto/inside-secure/safexcel_cipher.c:303:12: warning: stack frame size (1032) exceeds limit (1024) in 'safexcel_aead_setkey' [-Wframe-larger-than]
+   static int safexcel_aead_setkey(struct crypto_aead *ctfm, const u8 *key,
+              ^
+   1 warning generated.
+
+
+vim +/safexcel_aead_setkey +303 drivers/crypto/inside-secure/safexcel_cipher.c
+
+1b44c5a60c137e Antoine Tenart     2017-05-24  302  
+77cdd4efe57134 Pascal van Leeuwen 2019-07-05 @303  static int safexcel_aead_setkey(struct crypto_aead *ctfm, const u8 *key,
+f6beaea304872b Antoine Tenart     2018-05-14  304  				unsigned int len)
+f6beaea304872b Antoine Tenart     2018-05-14  305  {
+f6beaea304872b Antoine Tenart     2018-05-14  306  	struct crypto_tfm *tfm = crypto_aead_tfm(ctfm);
+f6beaea304872b Antoine Tenart     2018-05-14  307  	struct safexcel_cipher_ctx *ctx = crypto_tfm_ctx(tfm);
+f6beaea304872b Antoine Tenart     2018-05-14  308  	struct safexcel_ahash_export_state istate, ostate;
+f6beaea304872b Antoine Tenart     2018-05-14  309  	struct safexcel_crypto_priv *priv = ctx->priv;
+f6beaea304872b Antoine Tenart     2018-05-14  310  	struct crypto_authenc_keys keys;
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  311  	struct crypto_aes_ctx aes;
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  312  	int err = -EINVAL;
+f6beaea304872b Antoine Tenart     2018-05-14  313  
+f6beaea304872b Antoine Tenart     2018-05-14  314  	if (crypto_authenc_extractkeys(&keys, key, len) != 0)
+f6beaea304872b Antoine Tenart     2018-05-14  315  		goto badkey;
+f6beaea304872b Antoine Tenart     2018-05-14  316  
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  317  	if (ctx->mode == CONTEXT_CONTROL_CRYPTO_MODE_CTR_LOAD) {
+f26882a3475eb7 Pascal van Leeuwen 2019-07-30  318  		/* Minimum keysize is minimum AES key size + nonce size */
+f26882a3475eb7 Pascal van Leeuwen 2019-07-30  319  		if (keys.enckeylen < (AES_MIN_KEY_SIZE +
+f26882a3475eb7 Pascal van Leeuwen 2019-07-30  320  				      CTR_RFC3686_NONCE_SIZE))
+f6beaea304872b Antoine Tenart     2018-05-14  321  			goto badkey;
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  322  		/* last 4 bytes of key are the nonce! */
+f26882a3475eb7 Pascal van Leeuwen 2019-07-30  323  		ctx->nonce = *(u32 *)(keys.enckey + keys.enckeylen -
+f26882a3475eb7 Pascal van Leeuwen 2019-07-30  324  				      CTR_RFC3686_NONCE_SIZE);
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  325  		/* exclude the nonce here */
+f26882a3475eb7 Pascal van Leeuwen 2019-07-30  326  		keys.enckeylen -= CONTEXT_CONTROL_CRYPTO_MODE_CTR_LOAD;
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  327  	}
+f6beaea304872b Antoine Tenart     2018-05-14  328  
+f6beaea304872b Antoine Tenart     2018-05-14  329  	/* Encryption key */
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  330  	switch (ctx->alg) {
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  331  	case SAFEXCEL_3DES:
+21f5a15e0f26c7 Ard Biesheuvel     2019-08-15  332  		err = verify_aead_des3_key(ctfm, keys.enckey, keys.enckeylen);
+77cdd4efe57134 Pascal van Leeuwen 2019-07-05  333  		if (unlikely(err))
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  334  			goto badkey_expflags;
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  335  		break;
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  336  	case SAFEXCEL_AES:
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  337  		err = aes_expandkey(&aes, keys.enckey, keys.enckeylen);
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  338  		if (unlikely(err))
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  339  			goto badkey;
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  340  		break;
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  341  	default:
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  342  		dev_err(priv->dev, "aead: unsupported cipher algorithm\n");
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  343  		goto badkey;
+77cdd4efe57134 Pascal van Leeuwen 2019-07-05  344  	}
+77cdd4efe57134 Pascal van Leeuwen 2019-07-05  345  
+53c83e915ce8b2 Antoine Tenart     2018-06-28  346  	if (priv->flags & EIP197_TRC_CACHE && ctx->base.ctxr_dma &&
+f6beaea304872b Antoine Tenart     2018-05-14  347  	    memcmp(ctx->key, keys.enckey, keys.enckeylen))
+f6beaea304872b Antoine Tenart     2018-05-14  348  		ctx->base.needs_inv = true;
+f6beaea304872b Antoine Tenart     2018-05-14  349  
+f6beaea304872b Antoine Tenart     2018-05-14  350  	/* Auth key */
+a7dea8c0ff9f25 Ofer Heifetz       2018-06-28  351  	switch (ctx->hash_alg) {
+01ba061d0fd769 Antoine Tenart     2018-05-14  352  	case CONTEXT_CONTROL_CRYPTO_ALG_SHA1:
+01ba061d0fd769 Antoine Tenart     2018-05-14  353  		if (safexcel_hmac_setkey("safexcel-sha1", keys.authkey,
+01ba061d0fd769 Antoine Tenart     2018-05-14  354  					 keys.authkeylen, &istate, &ostate))
+01ba061d0fd769 Antoine Tenart     2018-05-14  355  			goto badkey;
+01ba061d0fd769 Antoine Tenart     2018-05-14  356  		break;
+678b2878ac396f Antoine Tenart     2018-05-14  357  	case CONTEXT_CONTROL_CRYPTO_ALG_SHA224:
+678b2878ac396f Antoine Tenart     2018-05-14  358  		if (safexcel_hmac_setkey("safexcel-sha224", keys.authkey,
+678b2878ac396f Antoine Tenart     2018-05-14  359  					 keys.authkeylen, &istate, &ostate))
+678b2878ac396f Antoine Tenart     2018-05-14  360  			goto badkey;
+678b2878ac396f Antoine Tenart     2018-05-14  361  		break;
+678b2878ac396f Antoine Tenart     2018-05-14  362  	case CONTEXT_CONTROL_CRYPTO_ALG_SHA256:
+f6beaea304872b Antoine Tenart     2018-05-14  363  		if (safexcel_hmac_setkey("safexcel-sha256", keys.authkey,
+f6beaea304872b Antoine Tenart     2018-05-14  364  					 keys.authkeylen, &istate, &ostate))
+f6beaea304872b Antoine Tenart     2018-05-14  365  			goto badkey;
+678b2878ac396f Antoine Tenart     2018-05-14  366  		break;
+ea23cb533ce419 Antoine Tenart     2018-05-29  367  	case CONTEXT_CONTROL_CRYPTO_ALG_SHA384:
+ea23cb533ce419 Antoine Tenart     2018-05-29  368  		if (safexcel_hmac_setkey("safexcel-sha384", keys.authkey,
+ea23cb533ce419 Antoine Tenart     2018-05-29  369  					 keys.authkeylen, &istate, &ostate))
+ea23cb533ce419 Antoine Tenart     2018-05-29  370  			goto badkey;
+ea23cb533ce419 Antoine Tenart     2018-05-29  371  		break;
+87eee125e7490c Antoine Tenart     2018-05-29  372  	case CONTEXT_CONTROL_CRYPTO_ALG_SHA512:
+87eee125e7490c Antoine Tenart     2018-05-29  373  		if (safexcel_hmac_setkey("safexcel-sha512", keys.authkey,
+87eee125e7490c Antoine Tenart     2018-05-29  374  					 keys.authkeylen, &istate, &ostate))
+87eee125e7490c Antoine Tenart     2018-05-29  375  			goto badkey;
+87eee125e7490c Antoine Tenart     2018-05-29  376  		break;
+678b2878ac396f Antoine Tenart     2018-05-14  377  	default:
+678b2878ac396f Antoine Tenart     2018-05-14  378  		dev_err(priv->dev, "aead: unsupported hash algorithm\n");
+678b2878ac396f Antoine Tenart     2018-05-14  379  		goto badkey;
+678b2878ac396f Antoine Tenart     2018-05-14  380  	}
+f6beaea304872b Antoine Tenart     2018-05-14  381  
+f6beaea304872b Antoine Tenart     2018-05-14  382  	crypto_aead_set_flags(ctfm, crypto_aead_get_flags(ctfm) &
+f6beaea304872b Antoine Tenart     2018-05-14  383  				    CRYPTO_TFM_RES_MASK);
+f6beaea304872b Antoine Tenart     2018-05-14  384  
+53c83e915ce8b2 Antoine Tenart     2018-06-28  385  	if (priv->flags & EIP197_TRC_CACHE && ctx->base.ctxr_dma &&
+f6beaea304872b Antoine Tenart     2018-05-14  386  	    (memcmp(ctx->ipad, istate.state, ctx->state_sz) ||
+f6beaea304872b Antoine Tenart     2018-05-14  387  	     memcmp(ctx->opad, ostate.state, ctx->state_sz)))
+f6beaea304872b Antoine Tenart     2018-05-14  388  		ctx->base.needs_inv = true;
+f6beaea304872b Antoine Tenart     2018-05-14  389  
+f6beaea304872b Antoine Tenart     2018-05-14  390  	/* Now copy the keys into the context */
+f6beaea304872b Antoine Tenart     2018-05-14  391  	memcpy(ctx->key, keys.enckey, keys.enckeylen);
+f6beaea304872b Antoine Tenart     2018-05-14  392  	ctx->key_len = keys.enckeylen;
+f6beaea304872b Antoine Tenart     2018-05-14  393  
+f6beaea304872b Antoine Tenart     2018-05-14  394  	memcpy(ctx->ipad, &istate.state, ctx->state_sz);
+f6beaea304872b Antoine Tenart     2018-05-14  395  	memcpy(ctx->opad, &ostate.state, ctx->state_sz);
+f6beaea304872b Antoine Tenart     2018-05-14  396  
+f6beaea304872b Antoine Tenart     2018-05-14  397  	memzero_explicit(&keys, sizeof(keys));
+f6beaea304872b Antoine Tenart     2018-05-14  398  	return 0;
+f6beaea304872b Antoine Tenart     2018-05-14  399  
+f6beaea304872b Antoine Tenart     2018-05-14  400  badkey:
+f6beaea304872b Antoine Tenart     2018-05-14  401  	crypto_aead_set_flags(ctfm, CRYPTO_TFM_RES_BAD_KEY_LEN);
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  402  badkey_expflags:
+f6beaea304872b Antoine Tenart     2018-05-14  403  	memzero_explicit(&keys, sizeof(keys));
+0e17e3621a28a6 Pascal van Leeuwen 2019-07-05  404  	return err;
+f6beaea304872b Antoine Tenart     2018-05-14  405  }
+f6beaea304872b Antoine Tenart     2018-05-14  406  
+
+:::::: The code at line 303 was first introduced by commit
+:::::: 77cdd4efe571345e9c116e65f64a616969e0bc35 crypto: inside-secure - add support for authenc(hmac(sha1),cbc(des3_ede))
+
+:::::: TO: Pascal van Leeuwen <pascalvanl@gmail.com>
+:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

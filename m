@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AA24E2A09
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10884E29DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348398AbiCUOND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S1349080AbiCUOHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348776AbiCUOFd (ORCPT
+        with ESMTP id S1348513AbiCUOAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:05:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D563B289;
-        Mon, 21 Mar 2022 07:01:38 -0700 (PDT)
+        Mon, 21 Mar 2022 10:00:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C9B396A6;
+        Mon, 21 Mar 2022 06:58:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B421B816DA;
-        Mon, 21 Mar 2022 14:01:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DEB5C340E8;
-        Mon, 21 Mar 2022 14:01:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 925596125C;
+        Mon, 21 Mar 2022 13:58:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8084C340F2;
+        Mon, 21 Mar 2022 13:58:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871292;
-        bh=1NvZWoJdlvPUkVw4Aq0oXH5wnc5kbY4fIKkcrvdEqtM=;
+        s=korg; t=1647871126;
+        bh=lhp5KPgkqNQMD0iMwsTPMTbGR16W4F3pRMK30uJXhLY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R24G6Ig89TIkG55sGS3O9D6n/oJvFJWX0y5WLU3XvnouiSrbRF0L3OJNIx5a+kFcn
-         CaeFZ8MSXwTdxgrWBNF1H5AanzXJ3f0EuvZzZsPU1pC+rb3zvJEEtgD/Cn3Qv9q2B4
-         HwOheZS+0tFpARvYXHCivK9rmI6ZHQ7dlyzYniTw=
+        b=VXFT1sHfWHi3FSTV8U3w7z9tYRqc37t9twwL1fL24uuplD2WkBjKMzdGBaw1dJQ1g
+         eg9gc6lcZYflBfLlUHmnbsa3vEPbcy6AHhIS9pD1IYzAlxcNg648UxH1EqYvfeRiTt
+         9uwZ7uuudEV8pug3R6dTzs05BWRJYa/eaWgquaZE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Junxiao Bi <junxiao.bi@oracle.com>,
-        Changwei Ge <gechangwei@live.cn>, Gang He <ghe@suse.com>,
-        Jun Piao <piaojun@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.16 02/37] ocfs2: fix crash when initialize filecheck kobj fails
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 14/30] net: dsa: Add missing of_node_put() in dsa_port_parse_of
 Date:   Mon, 21 Mar 2022 14:52:44 +0100
-Message-Id: <20220321133221.363764517@linuxfoundation.org>
+Message-Id: <20220321133220.058790653@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
-References: <20220321133221.290173884@linuxfoundation.org>
+In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
+References: <20220321133219.643490199@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,70 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joseph Qi <joseph.qi@linux.alibaba.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 7b0b1332cfdb94489836b67d088a779699f8e47e upstream.
+[ Upstream commit cb0b430b4e3acc88c85e0ad2e25f2a25a5765262 ]
 
-Once s_root is set, genric_shutdown_super() will be called if
-fill_super() fails.  That means, we will call ocfs2_dismount_volume()
-twice in such case, which can lead to kernel crash.
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-Fix this issue by initializing filecheck kobj before setting s_root.
-
-Link: https://lkml.kernel.org/r/20220310081930.86305-1-joseph.qi@linux.alibaba.com
-Fixes: 5f483c4abb50 ("ocfs2: add kobject for online file check")
-Signed-off-by: Joseph Qi <joseph.qi@linux.alibaba.com>
-Cc: Mark Fasheh <mark@fasheh.com>
-Cc: Joel Becker <jlbec@evilplan.org>
-Cc: Junxiao Bi <junxiao.bi@oracle.com>
-Cc: Changwei Ge <gechangwei@live.cn>
-Cc: Gang He <ghe@suse.com>
-Cc: Jun Piao <piaojun@huawei.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 6d4e5c570c2d ("net: dsa: get port type at parse time")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220316082602.10785-1-linmq006@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ocfs2/super.c |   22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ net/dsa/dsa2.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/ocfs2/super.c
-+++ b/fs/ocfs2/super.c
-@@ -1106,17 +1106,6 @@ static int ocfs2_fill_super(struct super
- 		goto read_super_error;
- 	}
+diff --git a/net/dsa/dsa2.c b/net/dsa/dsa2.c
+index 71c8ef7d4087..f543fca6dfcb 100644
+--- a/net/dsa/dsa2.c
++++ b/net/dsa/dsa2.c
+@@ -766,6 +766,7 @@ static int dsa_port_parse_of(struct dsa_port *dp, struct device_node *dn)
+ 		struct net_device *master;
  
--	root = d_make_root(inode);
--	if (!root) {
--		status = -ENOMEM;
--		mlog_errno(status);
--		goto read_super_error;
--	}
--
--	sb->s_root = root;
--
--	ocfs2_complete_mount_recovery(osb);
--
- 	osb->osb_dev_kset = kset_create_and_add(sb->s_id, NULL,
- 						&ocfs2_kset->kobj);
- 	if (!osb->osb_dev_kset) {
-@@ -1134,6 +1123,17 @@ static int ocfs2_fill_super(struct super
- 		goto read_super_error;
- 	}
+ 		master = of_find_net_device_by_node(ethernet);
++		of_node_put(ethernet);
+ 		if (!master)
+ 			return -EPROBE_DEFER;
  
-+	root = d_make_root(inode);
-+	if (!root) {
-+		status = -ENOMEM;
-+		mlog_errno(status);
-+		goto read_super_error;
-+	}
-+
-+	sb->s_root = root;
-+
-+	ocfs2_complete_mount_recovery(osb);
-+
- 	if (ocfs2_mount_local(osb))
- 		snprintf(nodestr, sizeof(nodestr), "local");
- 	else
+-- 
+2.34.1
+
 
 

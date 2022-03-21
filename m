@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5364E3000
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9254E2FFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352165AbiCUSay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 14:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S1352138AbiCUSan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 14:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352175AbiCUSav (ORCPT
+        with ESMTP id S1352165AbiCUSah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 14:30:51 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABB02CE1B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647887365; x=1679423365;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rONq22mMYd2BOfwVn3Vvkvv6jVlRMLok2GoRj1UqipM=;
-  b=FPs5gV/9CPhAhCroXh0JbsqYkYGmswSbj1jP04iOW+duexDyg151zekN
-   9IH8Lk4Kpu8YRvRmDxE7CywXeGKcP7mKeDqCf1d4J0lEe8AIR8ruhhgtf
-   PjXFAD8oG7Gx7GesKv1CjOlFyValwsOl+W4qGkIkW8pHXPULzf812JHDd
-   /JkUpnAe0p98e1l/mJCZycuVwSzcLSMzdnU3gc3PinHRVJEfGZGtURDLJ
-   xp9TrnSnts+NNv+FC2DbRWPG1PKsEFUP26xR3/Ji1W6YVYvsY1xaAQp62
-   wnkhmo94xYZdIGbOzvA4HAkyvqFJWMkLuNsVikqurV+V6pSn/WQzIcu9A
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="255185776"
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="255185776"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 11:29:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="648665264"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 21 Mar 2022 11:29:22 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nWMmQ-000I4F-6N; Mon, 21 Mar 2022 18:29:22 +0000
-Date:   Tue, 22 Mar 2022 02:29:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
-        mhocko@suse.com
-Cc:     kbuild-all@lists.01.org, kosaki.motohiro@jp.fujitsu.com,
-        mgorman@suse.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linmiaohe@huawei.com
-Subject: Re: [PATCH v2] mm/mempolicy: fix mpol_new leak in
- shared_policy_replace
-Message-ID: <202203220201.toJrpBkF-lkp@intel.com>
-References: <20220322083456.16563-1-linmiaohe@huawei.com>
+        Mon, 21 Mar 2022 14:30:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B9E2B1A9;
+        Mon, 21 Mar 2022 11:29:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0969B61507;
+        Mon, 21 Mar 2022 18:29:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42A83C340F3;
+        Mon, 21 Mar 2022 18:29:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647887351;
+        bh=EHIoXmYCuzDlVCK0jURCIo59lgDODdUVpaJaU5SSLpg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qeL4wsD1g++Dcko05MgG1VrqlOEY/wR4/46wp1OsXiJ04a/Nqn0yRIkr8QfmxOOw3
+         0X/+BZjvQAhfw48Rqj4qi4etTu5qO4nhwHf+720KAC8veUmFgrM91J2t+1a64BZsQO
+         QdTzEzsP6lp/UkKWvdMpAwyvluEkeiLg0bzjvUggNZ1qa6uQHcr1zGBkrwLtTvGzAS
+         UOskj0J/graWCS9Q3E0mSCcPnIWt5/bhT/wqlIPgNoCpseMCrKoTsDIQzA9z1jyvlz
+         94xoCBxXPZKCs00ill82TBAkNGZW1t/t7rWb6qWdtyfK2YvImCAY8CbqUvcS5p5ros
+         zLe4oGstqSyiQ==
+Received: by pali.im (Postfix)
+        id 35DCAA5B; Mon, 21 Mar 2022 19:29:08 +0100 (CET)
+Date:   Mon, 21 Mar 2022 19:29:08 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] PCI: mvebu: Slot support
+Message-ID: <20220321182908.3q4s2ramvhfdpgab@pali>
+References: <20220302145733.12606-1-pali@kernel.org>
+ <20220308113831.pmq4apsxjwzfbesk@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220322083456.16563-1-linmiaohe@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220308113831.pmq4apsxjwzfbesk@pali>
+User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,124 +65,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaohe,
+PING?
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linux/master]
-[also build test ERROR on linus/master v5.17]
-[cannot apply to hnaz-mm/master next-20220321]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Miaohe-Lin/mm-mempolicy-fix-mpol_new-leak-in-shared_policy_replace/20220321-200100
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-config: ia64-defconfig (https://download.01.org/0day-ci/archive/20220322/202203220201.toJrpBkF-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/9a91a8a7964a3af0b60f08dc38b7815e5118206a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Miaohe-Lin/mm-mempolicy-fix-mpol_new-leak-in-shared_policy_replace/20220321-200100
-        git checkout 9a91a8a7964a3af0b60f08dc38b7815e5118206a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   mm/mempolicy.c: In function 'shared_policy_replace':
->> mm/mempolicy.c:2745:22: error: passing argument 1 of 'refcount_set' from incompatible pointer type [-Werror=incompatible-pointer-types]
-    2745 |         refcount_set(&mpol_new->refcnt, 1);
-         |                      ^~~~~~~~~~~~~~~~~
-         |                      |
-         |                      atomic_t *
-   In file included from include/linux/pid.h:7,
-                    from include/linux/sched.h:14,
-                    from include/linux/mempolicy.h:9,
-                    from mm/mempolicy.c:73:
-   include/linux/refcount.h:134:45: note: expected 'refcount_t *' {aka 'struct refcount_struct *'} but argument is of type 'atomic_t *'
-     134 | static inline void refcount_set(refcount_t *r, int n)
-         |                                 ~~~~~~~~~~~~^
-   cc1: some warnings being treated as errors
-
-
-vim +/refcount_set +2745 mm/mempolicy.c
-
-  2681	
-  2682	/* Replace a policy range. */
-  2683	static int shared_policy_replace(struct shared_policy *sp, unsigned long start,
-  2684					 unsigned long end, struct sp_node *new)
-  2685	{
-  2686		struct sp_node *n;
-  2687		struct sp_node *n_new = NULL;
-  2688		struct mempolicy *mpol_new = NULL;
-  2689		int ret = 0;
-  2690	
-  2691	restart:
-  2692		write_lock(&sp->lock);
-  2693		n = sp_lookup(sp, start, end);
-  2694		/* Take care of old policies in the same range. */
-  2695		while (n && n->start < end) {
-  2696			struct rb_node *next = rb_next(&n->nd);
-  2697			if (n->start >= start) {
-  2698				if (n->end <= end)
-  2699					sp_delete(sp, n);
-  2700				else
-  2701					n->start = end;
-  2702			} else {
-  2703				/* Old policy spanning whole new range. */
-  2704				if (n->end > end) {
-  2705					if (!n_new)
-  2706						goto alloc_new;
-  2707	
-  2708					*mpol_new = *n->policy;
-  2709					atomic_set(&mpol_new->refcnt, 1);
-  2710					sp_node_init(n_new, end, n->end, mpol_new);
-  2711					n->end = start;
-  2712					sp_insert(sp, n_new);
-  2713					n_new = NULL;
-  2714					mpol_new = NULL;
-  2715					break;
-  2716				} else
-  2717					n->end = start;
-  2718			}
-  2719			if (!next)
-  2720				break;
-  2721			n = rb_entry(next, struct sp_node, nd);
-  2722		}
-  2723		if (new)
-  2724			sp_insert(sp, new);
-  2725		write_unlock(&sp->lock);
-  2726		ret = 0;
-  2727	
-  2728	err_out:
-  2729		if (mpol_new)
-  2730			mpol_put(mpol_new);
-  2731		if (n_new)
-  2732			kmem_cache_free(sn_cache, n_new);
-  2733	
-  2734		return ret;
-  2735	
-  2736	alloc_new:
-  2737		write_unlock(&sp->lock);
-  2738		ret = -ENOMEM;
-  2739		n_new = kmem_cache_alloc(sn_cache, GFP_KERNEL);
-  2740		if (!n_new)
-  2741			goto err_out;
-  2742		mpol_new = kmem_cache_alloc(policy_cache, GFP_KERNEL);
-  2743		if (!mpol_new)
-  2744			goto err_out;
-> 2745		refcount_set(&mpol_new->refcnt, 1);
-  2746		goto restart;
-  2747	}
-  2748	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On Tuesday 08 March 2022 12:38:31 Pali Rohár wrote:
+> Hello Bjorn! Could you look if v2 changes are now fine?
+> 
+> On Wednesday 02 March 2022 15:57:29 Pali Rohár wrote:
+> > This patch series add slot support to pci-mvebu.c driver.
+> > 
+> > It is based on branch pci/mvebu of git repository:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git
+> > 
+> > Changes in v2:
+> > * Dropped patch with PCI_EXP_SLTCAP_*_SHIFT macros as it is not needed anymore
+> > * Dropped patch "ARM: dts: turris-omnia: Set PCIe slot-power-limit-milliwatt properties" which was applied
+> > * Added support for PCIe 6.0 slot power limit encodings
+> > * Round down slot power limit value
+> > * Fix handling of slot power limit with scale x1.0 (0x00 value)
+> > * Use FIELD_PREP instead of _SHIFT macros
+> > * Changed commit message to Bjorn's suggestion
+> > * Changed comments in the code to match PCIe spec
+> > * Preserve user settings of PCI_EXP_SLTCTL_ASPL_DISABLE bit
+> > 
+> > Pali Rohár (4):
+> >   PCI: Add PCI_EXP_SLTCTL_ASPL_DISABLE macro
+> >   dt-bindings: Add 'slot-power-limit-milliwatt' PCIe port property
+> >   PCI: Add function for parsing 'slot-power-limit-milliwatt' DT property
+> >   PCI: mvebu: Add support for sending Set_Slot_Power_Limit message
+> > 
+> >  Documentation/devicetree/bindings/pci/pci.txt |  6 ++
+> >  drivers/pci/controller/pci-mvebu.c            | 96 ++++++++++++++++++-
+> >  drivers/pci/of.c                              | 64 +++++++++++++
+> >  drivers/pci/pci.h                             | 15 +++
+> >  include/uapi/linux/pci_regs.h                 |  1 +
+> >  5 files changed, 177 insertions(+), 5 deletions(-)
+> > 
+> > -- 
+> > 2.20.1
+> > 

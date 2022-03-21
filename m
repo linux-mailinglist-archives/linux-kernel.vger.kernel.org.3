@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649654E2F1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0D44E2F1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349485AbiCURfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        id S1349589AbiCURfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348720AbiCURe6 (ORCPT
+        with ESMTP id S1348746AbiCURe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Mar 2022 13:34:58 -0400
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D7C36A072
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D5CD69CF3
         for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:33:31 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 22LHXNUw007573;
-        Mon, 21 Mar 2022 18:33:23 +0100
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 22LHXOaH007574;
+        Mon, 21 Mar 2022 18:33:24 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [PATCH 4/8] tools/nolibc/string: add strcmp() and strncmp()
-Date:   Mon, 21 Mar 2022 18:33:10 +0100
-Message-Id: <20220321173314.7519-5-w@1wt.eu>
+Subject: [PATCH 5/8] tools/nolibc/sys: add syscall definition for getppid()
+Date:   Mon, 21 Mar 2022 18:33:11 +0100
+Message-Id: <20220321173314.7519-6-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220321173314.7519-1-w@1wt.eu>
 References: <20220321173314.7519-1-w@1wt.eu>
@@ -36,57 +36,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need these functions all the time, including when checking environment
-variables and parsing command-line arguments. These implementations were
-optimized to show optimal code size on a wide range of compilers (22 bytes
-return included for strcmp(), 33 for strncmp()).
+This is essentially for completeness as it's not the most often used
+in regtests.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/string.h | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ tools/include/nolibc/sys.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
-index 4554b6fcb400..0d5e870c7c0b 100644
---- a/tools/include/nolibc/string.h
-+++ b/tools/include/nolibc/string.h
-@@ -102,6 +102,17 @@ char *strchr(const char *s, int c)
- 	return NULL;
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 28437863c63f..4d4308d5d111 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -464,6 +464,23 @@ pid_t getpid(void)
  }
  
-+static __attribute__((unused))
-+int strcmp(const char *a, const char *b)
-+{
-+	unsigned int c;
-+	int diff;
+ 
++/*
++ * pid_t getppid(void);
++ */
 +
-+	while (!(diff = (unsigned char)*a++ - (c = (unsigned char)*b++)) && c)
-+		;
-+	return diff;
++static __attribute__((unused))
++pid_t sys_getppid(void)
++{
++	return my_syscall0(__NR_getppid);
 +}
 +
- static __attribute__((unused))
- char *strcpy(char *dst, const char *src)
- {
-@@ -184,6 +195,18 @@ char *strncat(char *dst, const char *src, size_t size)
- 	return orig;
- }
- 
 +static __attribute__((unused))
-+int strncmp(const char *a, const char *b, size_t size)
++pid_t getppid(void)
 +{
-+	unsigned int c;
-+	int diff = 0;
-+
-+	while (size-- &&
-+	       !(diff = (unsigned char)*a++ - (c = (unsigned char)*b++)) && c)
-+		;
-+
-+	return diff;
++	return sys_getppid();
 +}
- 
- static __attribute__((unused))
- char *strncpy(char *dst, const char *src, size_t size)
++
++
+ /*
+  * pid_t gettid(void);
+  */
 -- 
 2.35.1
 

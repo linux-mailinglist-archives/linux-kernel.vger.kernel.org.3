@@ -2,52 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C084E3067
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EDF4E3068
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:03:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352395AbiCUTET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 15:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S1352402AbiCUTEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 15:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346596AbiCUTES (ORCPT
+        with ESMTP id S1352398AbiCUTE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 15:04:18 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501B36BDC6;
-        Mon, 21 Mar 2022 12:02:52 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 12:02:38 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1647889365;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HecCqCfvIXy+CaH5mhi+OWHYhER0SlCGtdaZnxXs1SA=;
-        b=nWgFSKfQJh8DZT2IfGheY+NaAAu143FVLKzNVNnB22JK/XrLw8mUVyUGIlfkbrtapR0PRU
-        GqZdYPBekJz6XfxE4emm1VhGrpHvq2PQ2AVpNXBqjTHmD8N90tdroqNDx6W1+ZV8HM7Ode
-        C2Mf3p7NoI+C9MMsbntY0JYik5B+NUQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        Shuah Khan <shuah@kernel.org>, Yang Shi <shy828301@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Hugh Dickins <hughd@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 2/5] mm: page_owner: add support for splitting to any
- order in split page_owner.
-Message-ID: <YjjLzvT2if2JDbGE@carbon.dhcp.thefacebook.com>
-References: <20220321142128.2471199-1-zi.yan@sent.com>
- <20220321142128.2471199-3-zi.yan@sent.com>
+        Mon, 21 Mar 2022 15:04:27 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8495B842
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:03:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7721F210E5;
+        Mon, 21 Mar 2022 19:02:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1647889379; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0lPY7URDPMq8rYBVp0M/NOfMrQTutTr1yrMsLeMpnNY=;
+        b=LBOFPdEmGXgywh7acCGg0RyFzCbh1fOXlP8H1MYq1W2Wk8A497m1v2R9U44NPOhWLDAviy
+        8dKxCN45Ste5saMajog0Y+qkTDWqbbszDfHHXY33W2a6tFE1DZnwhzXIYnjP8RwEyJP7zR
+        9bWSnqphBeXcGQmA+9p1BVk1HbbCXUY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1647889379;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0lPY7URDPMq8rYBVp0M/NOfMrQTutTr1yrMsLeMpnNY=;
+        b=xJWAyr76OIAuzvi4/zYDNPZb7bQ8ogpWhEQVUtuck4Xywrre5po5ncRulk2AVAqvZ3I6VW
+        mgfTNSLoDC0lR2Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 44FE4139F9;
+        Mon, 21 Mar 2022 19:02:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CE4lEOPLOGI1bQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 21 Mar 2022 19:02:59 +0000
+Message-ID: <ee1fe9ee-c560-9f7c-c8d1-bd48c608ba90@suse.cz>
+Date:   Mon, 21 Mar 2022 20:02:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321142128.2471199-3-zi.yan@sent.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Content-Language: en-US
+Subject: [GIT PULL] slab for 5.18
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,120 +76,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:21:25AM -0400, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> It adds a new_order parameter to set new page order in page owner and
-> uses old_order instead of nr to make the parameters look consistent.
-> It prepares for upcoming changes to support split huge page to any
-> lower order.
-> 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> ---
->  include/linux/page_owner.h | 12 +++++++-----
->  mm/huge_memory.c           |  3 ++-
->  mm/page_alloc.c            |  2 +-
->  mm/page_owner.c            | 13 +++++++------
->  4 files changed, 17 insertions(+), 13 deletions(-)
-> 
-> diff --git a/include/linux/page_owner.h b/include/linux/page_owner.h
-> index 119a0c9d2a8b..16050cc89274 100644
-> --- a/include/linux/page_owner.h
-> +++ b/include/linux/page_owner.h
-> @@ -11,7 +11,8 @@ extern struct page_ext_operations page_owner_ops;
->  extern void __reset_page_owner(struct page *page, unsigned short order);
->  extern void __set_page_owner(struct page *page,
->  			unsigned short order, gfp_t gfp_mask);
-> -extern void __split_page_owner(struct page *page, unsigned int nr);
-> +extern void __split_page_owner(struct page *page, unsigned short old_order,
-> +			unsigned short new_order);
+Linus,
 
-Unsigned short here,
+please pull the latest slab changes from
 
->  extern void __folio_copy_owner(struct folio *newfolio, struct folio *old);
->  extern void __set_page_owner_migrate_reason(struct page *page, int reason);
->  extern void __dump_page_owner(const struct page *page);
-> @@ -31,10 +32,11 @@ static inline void set_page_owner(struct page *page,
->  		__set_page_owner(page, order, gfp_mask);
->  }
->  
-> -static inline void split_page_owner(struct page *page, unsigned int nr)
-> +static inline void split_page_owner(struct page *page, unsigned int old_order,
-> +			unsigned int new_order)
+  git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-5.18
 
-but unsigned int here.
+======================================
 
->  {
->  	if (static_branch_unlikely(&page_owner_inited))
-> -		__split_page_owner(page, nr);
-> +		__split_page_owner(page, old_order, new_order);
->  }
->  static inline void folio_copy_owner(struct folio *newfolio, struct folio *old)
->  {
-> @@ -56,11 +58,11 @@ static inline void reset_page_owner(struct page *page, unsigned short order)
->  {
->  }
->  static inline void set_page_owner(struct page *page,
-> -			unsigned int order, gfp_t gfp_mask)
-> +			unsigned short order, gfp_t gfp_mask)
->  {
->  }
->  static inline void split_page_owner(struct page *page,
-> -			unsigned short order)
-> +			unsigned short old_order, unsigned short new_order)
->  {
->  }
->  static inline void folio_copy_owner(struct folio *newfolio, struct folio *folio)
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 640040c386f0..fcfa46af6c4c 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -2367,6 +2367,7 @@ static void __split_huge_page(struct page *page, struct list_head *list,
->  	struct lruvec *lruvec;
->  	struct address_space *swap_cache = NULL;
->  	unsigned long offset = 0;
-> +	unsigned int order = thp_order(head);
->  	unsigned int nr = thp_nr_pages(head);
->  	int i;
->  
-> @@ -2408,7 +2409,7 @@ static void __split_huge_page(struct page *page, struct list_head *list,
->  	unlock_page_lruvec(lruvec);
->  	/* Caller disabled irqs, so they are still disabled here */
->  
-> -	split_page_owner(head, nr);
-> +	split_page_owner(head, order, 0);
->  
->  	/* See comment in __split_huge_page_tail() */
->  	if (PageAnon(head)) {
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index d982919b9e51..9cac40c26c58 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -3514,7 +3514,7 @@ void split_page(struct page *page, unsigned int order)
->  
->  	for (i = 1; i < (1 << order); i++)
->  		set_page_refcounted(page + i);
-> -	split_page_owner(page, 1 << order);
-> +	split_page_owner(page, order, 0);
->  	split_page_memcg(page, 1 << order, 0);
->  }
->  EXPORT_SYMBOL_GPL(split_page);
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index 0a9588506571..52013c846d19 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
-> @@ -202,19 +202,20 @@ void __set_page_owner_migrate_reason(struct page *page, int reason)
->  	page_owner->last_migrate_reason = reason;
->  }
->  
-> -void __split_page_owner(struct page *page, unsigned int nr)
-> +void __split_page_owner(struct page *page, unsigned short old_order,
-> +			unsigned short new_order)
+- A few non-trivial SLUB code cleanups, most notably a
+  refactoring of deactivate_slab().
 
-And short again here. Please, make it consistent.
+- Bunch of trivial changes, such as removal of unused parameters,
+  making stuff static, employing helpers.
 
-Other than that, looks good to me. Please, feel free to add
-Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
-after fixing the type inconsistency.
+Thanks,
+Vlastimil
 
-Thank you!
+----------------------------------------------------------------
+Hyeonggon Yoo (2):
+      mm/slub: limit number of node partial slabs only in cache creation
+      mm/slub: refactor deactivate_slab()
+
+Lianjie Zhang (1):
+      mm/slub: use helper macro __ATTR_XX_MODE for SLAB_ATTR(_RO)
+
+Miaohe Lin (3):
+      mm/slob: make kmem_cache_boot static
+      mm/slab_common: use helper function is_power_of_2()
+      mm/slub: remove forced_order parameter in calculate_sizes
+
+Vlastimil Babka (2):
+      Merge branch 'slab/for-5.18/trivial' into slab/for-linus
+      Merge branch 'slab/for-5.18/cleanups' into slab/for-linus
+
+Xiongwei Song (2):
+      mm: slab: Delete unused SLAB_DEACTIVATED flag
+      mm: slub: Delete useless parameter of alloc_slab_page()
+
+ include/linux/slab.h |   3 --
+ mm/slab_common.c     |   2 +-
+ mm/slob.c            |   2 +-
+ mm/slub.c            | 130 +++++++++++++++++++++------------------------------
+ 4 files changed, 54 insertions(+), 83 deletions(-)

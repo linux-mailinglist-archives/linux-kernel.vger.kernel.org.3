@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97AD84E2C53
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1234E2C5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350302AbiCUPdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S1350305AbiCUPei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350303AbiCUPc4 (ORCPT
+        with ESMTP id S1344805AbiCUPed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:32:56 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CE4169B26
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:31:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=J/lTHS/ESbpMkBjmmSGXD7aVVwe5+onP+1fVkUHYzpg=; b=BJxaqjqFxD68gr8Nr8dZC2BPcv
-        ml9J29lnqxjIbPfwfWRMOPk0udm15BAHWVEXcETCJJUV0tk8LiR8hXW/uoRe9stOY1rBsStGrIEd0
-        hDFuPQ2Oi7HlauLma/UeXSPtJ/aWOxrcMJg1QsfMMz/ETHcv3JkqZM4fMcAnFhpgnF9eNTywfiqmU
-        ZiVLQP2CEYYbKjdcp/6PoL5Uvo1Q95TDgWT5jfvghUv0xDJzpDEjmYS32TBDebhK6QzL+R6Hvk5U4
-        t5AxJz4e/B8FIpuguY/SQ2LJlc2YP+fx06t9K2/mnv7x8I7on9J8oF2QKr730K3riQUbs8o2tkrwr
-        BpdgAA5Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWK09-00AhYf-5j; Mon, 21 Mar 2022 15:31:21 +0000
-Date:   Mon, 21 Mar 2022 15:31:21 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Hugh Dickins <hughd@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        William Kucharski <william.kucharski@oracle.com>
-Subject: Re: [GIT PULL] Folio patches for 5.18 (MM part)
-Message-ID: <YjiaSbUBLJP+9Jtt@casper.infradead.org>
-References: <Yjh+EuacJURShtJI@casper.infradead.org>
- <9ae0a8e4-41b7-04f4-4435-17cbba9850fb@redhat.com>
- <d5676cf0-30f9-8497-95a8-332767dede46@redhat.com>
+        Mon, 21 Mar 2022 11:34:33 -0400
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB31634E;
+        Mon, 21 Mar 2022 08:33:05 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id h23so20609133wrb.8;
+        Mon, 21 Mar 2022 08:33:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3LRliTmfLlH3oKVFP57IUFaZfYEaxuZudtlO6I7qIIs=;
+        b=tSshbf46XCiFT/cS9MYxBW/VSFzYcnshB9vln1gUGNJfBlshI4ppzJn8Xvz8HbeMwt
+         V+qpZkDApL9k0rkF5tcXVOmBwU5y1Ks5pFbJn8do2OcvRfKW1mQDlI+lt7YdiHR3y5VJ
+         i8M8n1LW2xZ2J2tnilFWudYUd+x3mm81k4B46uUQdXypOo51XWT6SoJHrukUdwRLKWBi
+         mSfapkagaeuSBT2Cut134wju1SwaPS5gi74Xjw+RtNh4CZf++nakTINu5Y8UvburOELu
+         Ufu+YnectCsuMgeqJBj99UcwWL/GxckTk78WSe55Jgqh5FD1eQa5LvBZkbEy83p5vfJE
+         KJ1g==
+X-Gm-Message-State: AOAM531P9rt5TLOMMpNC/VMjrrfRjMxvaIlO370DGk4rHCidN3JidjE3
+        kkx8Lg0hW5FgA6mkUmnsgNA=
+X-Google-Smtp-Source: ABdhPJyoMJgUZCvV0Y0flDAyJ4coI02yk9wt3cl8Asvux4XUXpEuGTL0bFFEZcGPxGZh3Sj1ux4c7g==
+X-Received: by 2002:adf:e18d:0:b0:204:981:9f73 with SMTP id az13-20020adfe18d000000b0020409819f73mr6510342wrb.99.1647876783791;
+        Mon, 21 Mar 2022 08:33:03 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id d14-20020a056000186e00b0020405198faasm6736607wri.52.2022.03.21.08.33.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 08:33:03 -0700 (PDT)
+Message-ID: <3ee94d1d-4e16-a744-c217-c4bc69ad96b4@kernel.org>
+Date:   Mon, 21 Mar 2022 16:33:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d5676cf0-30f9-8497-95a8-332767dede46@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 15/18] dt-bindings: clock: Add L2 clocks to
+ qcom,krait-cc Documentation
+Content-Language: en-US
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20220321144825.11736-1-ansuelsmth@gmail.com>
+ <20220321144825.11736-16-ansuelsmth@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220321144825.11736-16-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,81 +71,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 04:24:08PM +0100, David Hildenbrand wrote:
-> On 21.03.22 16:16, David Hildenbrand wrote:
-> > On 21.03.22 14:30, Matthew Wilcox wrote:
-> >> Hi Linus,
-> >>
-> >> This is the first of two folio-related pull requests for this merge
-> >> window.  This is the MM side of things and we had some unfortunate
-> >> complex merge conflicts to resolve.  I decided to redo my changes on
-> >> top of Hugh's and Christoph's patches, so I'm the one sending the
-> >> pull request.
-> >>
-> >> The following changes since commit f71077a4d84bbe8c7b91b7db7c4ef815755ac5e3:
-> >>
-> >>   Merge tag 'mmc-v5.17-rc1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc (2022-02-16 12:09:22 -0800)
-> >>
-> >> are available in the Git repository at:
-> >>
-> >>   git://git.infradead.org/users/willy/pagecache.git tags/folio-5.18
-> >>
-> >> for you to fetch changes up to 5063f22c914e3e5f2239cf91f4986042dc705bde:
-> >>
-> >>   mm/damon: minor cleanup for damon_pa_young (2022-03-16 10:09:50 -0400)
-> >>
-> >> ----------------------------------------------------------------
-> >> Folio changes for 5.18
-> >>
-> >> Several of us had overlapping, conflicting changes to the MM this
-> >> round, and I volunteered to send the pull request.
-> >>
-> >>  - Hugh rewrote how munlock works to massively reduce the contention
-> >>    on i_mmap_rwsem:
-> >>    https://lore.kernel.org/linux-mm/8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com/
-> >>  - Christoph sorted out the page refcount mess for ZONE_DEVICE pages:
-> >>    https://lore.kernel.org/linux-mm/20220210072828.2930359-1-hch@lst.de/
-> >>  - I converted GUP to use folios and make pincount available for order-1
-> >>    pages.
-> >>  - I converted a few more truncation functions to use folios
-> >>  - I converted page_vma_mapped_walk to use PFNs instead of pages
-> >>  - I converted rmap_walk to use folios
-> >>  - I converted most of shrink_page_list() to use a folio
-> >>  - I added support for creating large folios in readahead
-> >>
-> >> ----------------------------------------------------------------
-> >> Alex Sierra (10):
-> >>       mm: add zone device coherent type memory support
-> >>       mm: add device coherent vma selection for memory migration
-> >>       mm/gup: fail get_user_pages for LONGTERM dev coherent type
-> >>       drm/amdkfd: add SPM support for SVM
-> >>       drm/amdkfd: coherent type as sys mem on migration to ram
-> >>       lib: test_hmm add ioctl to get zone device type
-> >>       lib: test_hmm add module param for zone device type
-> >>       lib: add support for device coherent type in test_hmm
-> >>       tools: update hmm-test to support device coherent type
-> >>       tools: update test_hmm script to support SP config
-> >>
-> >> Alistair Popple (2):
-> >>       mm: remove the vma check in migrate_vma_setup()
-> >>       mm/gup: migrate device coherent pages when pinning instead of failing
-> > 
-> > ... I thought DEVICE_COHERENT is still under development?
-> > 
+On 21/03/2022 15:48, Ansuel Smith wrote:
+> Krait-cc qcom driver provide also L2 clocks and require the acpu_l2_aux
+> and the hfpll_l2 clock to be provided. Add these missing clocks to the
+> Documentation.
 > 
-> After verifying that I'm not daydreaming [1] (and realizing that I had
-> review comments to some of these patches that have not been resolved
-> yet) and also not spotting these change in your changelog above, I
-> assume this stuff was included by mistake. NACK to merging
-> DEVICE_COHERENT at this point.
-> 
-> [1] https://lkml.kernel.org/r/20220310172633.9151-1-alex.sierra@amd.com
 
-That patch ("split vm_normal_pages for LRU and non-LRU handling") isn't
-included in this pull request.  The patches I have were those sent by
-Christoph here:
+Thanks. It would be also nice to see here short sentence about expected
+impact, e.g. there are no in-tree DTSes which would be affected, no out
+of tree known users etc.
 
-https://lore.kernel.org/linux-mm/20220210072828.2930359-1-hch@lst.de/
+Because basically with this requirement you change the ABI, so you might
+break some users.
 
-I can drop any patches that you have objections to, but I don't see
-any objections from you to any patches in that list.
+I will leave it to platform maintainers to decide whether it is accepted
+or not.
+
+
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+
+Best regards,
+Krzysztof

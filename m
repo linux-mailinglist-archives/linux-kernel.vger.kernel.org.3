@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A485D4E2BF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 023084E2BFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236775AbiCUPUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S1350190AbiCUPUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350003AbiCUPTf (ORCPT
+        with ESMTP id S1350018AbiCUPTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:19:35 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB972DD9;
-        Mon, 21 Mar 2022 08:17:57 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id j18so11531503wrd.6;
-        Mon, 21 Mar 2022 08:17:57 -0700 (PDT)
+        Mon, 21 Mar 2022 11:19:37 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC41A65EF;
+        Mon, 21 Mar 2022 08:17:58 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id p9so21127318wra.12;
+        Mon, 21 Mar 2022 08:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=HxwJ/rmGXQIKgHQmjTVr7v/2TGpe+xuVVbkVjt0eYLU=;
-        b=elB8X7nDW+MCLKa9DYw38ucoZJeNYT/mBKbWmpO7aQGPhKN6IifyAQ+EjgVjj44Wn9
-         8AiGW8J6SxU25VXd4ErZ2CwwLHZhoaE2ejNPN3PFKp1cOetjW/cExoMcTtcT2hZF68r+
-         3bxosGU5JKSAOj4HwzQOCbemoydE9YEvJC2VZTVrDCuFkDysQ+tvc3u4djzoqWj25IeE
-         xqPntVruHnfVx+GoRlTMV+2g7dwYLryncUe3P/+ganMhjEp4Y4shNHx8rdPZGXh6qfDc
-         mTUYmxKh/ry2vECAac8JgzVZwoTQQ/tiHeoQxb7dGYCkNeXGYJQD0jpXyztfu+cteEck
-         PH5Q==
+        bh=qACBw0o2MS9FzPU5J+S+Zvtw1uM7Qy8GLYaDlXl8cVc=;
+        b=l3rOu6WWsA0qZpmJxKYIc7YEUR3VoiXN8AwMT1egJmMyaPNWQxr42JHqsTCueFvAa+
+         lzOt2ilyf2ZZIt22Bg+k7/Ddn8qLOs6Ay+iqecTm5+rCaSPnyEWIkUwukH0EA/xYjF/S
+         257RoapSM7Wh24PWsNsTwLQ7Ka2sc4I2eqDZILYSWtYlc17UW6sBd1NTZvUNONOdvOu0
+         KvFu4SlxtSuOJVgIpTQW/UEOzHGGflo+cYi1URXMco8S3ISWQE80ndo1xvHJlqAgjjZW
+         TBHU9y+T6HGT+tmdWa15GiGvucy6OvYyhllMZQn02JLJJjkv4vknYD+RFfyK5hC93Q/X
+         PQcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HxwJ/rmGXQIKgHQmjTVr7v/2TGpe+xuVVbkVjt0eYLU=;
-        b=ka2Fa6tAGNTqPnCcOZrnIhd0oc7gma90VVSp/r/gHdjkJqvT6BGnYBr8Adq7ci5oms
-         fD1kJIi/42ikZ5bkdCh1d33xRVgwxjFVd0lCX4vITl3o+VHFKttuv4tq4J8gU+i5ZaXx
-         XX9SbvtVhTLSffo+gy9dGUoMNQnQePq+0Jc0xXHpZUD2PtIAHqiWEwFpEgBoAE8lLWZF
-         +i6sss+3XNOZYSAbC+PnlhOL1SCv0kxhwlv1E+xVrdJkWozXNO5q1RjoDEb7yWeJd6MS
-         mmEqbVMALUTAonwjgArG6q9DbGNEAPWqbUdyNtwgNBv9fq6xxHuuw0yOYb99IbB8W95S
-         9ygw==
-X-Gm-Message-State: AOAM532zrp4yxdDtQc4v+WnOeUZ6JDR6xTjlEDL//JK1N/zP5Kk3RNeT
-        6lrsLgqoCzVXcVaC67ryhU0=
-X-Google-Smtp-Source: ABdhPJzZEeP7++6AWrLhVXszsuuwVS5RmvIXm9G7Lu9YwPqV/jWYRJ1F6Q68zgbw4McJrq157/6UDA==
-X-Received: by 2002:a5d:6da8:0:b0:1f1:fa31:e7f7 with SMTP id u8-20020a5d6da8000000b001f1fa31e7f7mr18991643wrs.389.1647875876226;
-        Mon, 21 Mar 2022 08:17:56 -0700 (PDT)
+        bh=qACBw0o2MS9FzPU5J+S+Zvtw1uM7Qy8GLYaDlXl8cVc=;
+        b=NldYJAyZBSvQyj8ectItsQznD1zQ5lauOOXVAIeoQRVytzG1pbeTVNNbbRKOjeXHq6
+         KjBYInQQNqTvtcc+ph4mkV4TkE7xhpqR7nS65EYLNiloodKkL9ZaArWlU65q67dEGGGX
+         AJVWxUt4Hnt29O4sV03XOhZsWEIhYg1njOBbhZGyX7V8HVbUoo9b6qKJpAkqipnUYLWC
+         YWjTwgn02TEj/flLUGKzKwtHcYeBEfxjdL/ogWcty/pThpYvTGt/b9Prt3eAe37envgb
+         04ksmWhJruo6luFJwkCchNf+/3cCtJxxpbUHKicJgr+PrwF2v3DyoTm84/Gn3EmlL1tM
+         WKBw==
+X-Gm-Message-State: AOAM533UPrkREh3slzQfIvAF92HYWfehQ177MNV95ezC+VM//R4QOgX3
+        UaOEQJ6bawxyapFXfpKd+7Q=
+X-Google-Smtp-Source: ABdhPJxeblGqbtY8WuW3yAgphhyve7Pldlq32T6D1NQbPPj/F0d3v2RRSfYsYxOxiKZrClHHCxyGHg==
+X-Received: by 2002:adf:e102:0:b0:203:f5b7:bc97 with SMTP id t2-20020adfe102000000b00203f5b7bc97mr13613810wrz.310.1647875877244;
+        Mon, 21 Mar 2022 08:17:57 -0700 (PDT)
 Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
-        by smtp.googlemail.com with ESMTPSA id 10-20020a5d47aa000000b00204012e4373sm7239729wrb.101.2022.03.21.08.17.55
+        by smtp.googlemail.com with ESMTPSA id 10-20020a5d47aa000000b00204012e4373sm7239729wrb.101.2022.03.21.08.17.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 08:17:55 -0700 (PDT)
+        Mon, 21 Mar 2022 08:17:56 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -57,9 +57,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Ansuel Smith <ansuelsmth@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v4 10/18] clk: qcom: krait-cc: drop hardcoded safe_sel
-Date:   Mon, 21 Mar 2022 15:48:17 +0100
-Message-Id: <20220321144825.11736-11-ansuelsmth@gmail.com>
+Subject: [PATCH v4 11/18] clk: qcom: krait-cc: force sec_mux to QSB
+Date:   Mon, 21 Mar 2022 15:48:18 +0100
+Message-Id: <20220321144825.11736-12-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220321144825.11736-1-ansuelsmth@gmail.com>
 References: <20220321144825.11736-1-ansuelsmth@gmail.com>
@@ -75,142 +75,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop hardcoded safe_sel definition and use helper to correctly calculate
-it. We assume qsb clk is always present as it should be declared in DTS
-per Documentation and in the absence of that, it's declared as a fixed
-clk.
+Now that we have converted every driver to parent_data, it was
+notice that the bootloader can't really leave the system in a
+strange state where l2 or the cpu0/1 can be sourced in a number of ways
+for example cpu1 sourcing out of qsb, l2 sourcing out of pxo.
+To correctly reset the mux and the HFPLL force the sec_mux to QSB.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/clk/qcom/krait-cc.c | 40 +++++++++++++++++++++++++------------
- 1 file changed, 27 insertions(+), 13 deletions(-)
+ drivers/clk/qcom/krait-cc.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/clk/qcom/krait-cc.c b/drivers/clk/qcom/krait-cc.c
-index e9508e3104ea..5f98ee1c3681 100644
+index 5f98ee1c3681..299eb4c81d96 100644
 --- a/drivers/clk/qcom/krait-cc.c
 +++ b/drivers/clk/qcom/krait-cc.c
-@@ -26,6 +26,17 @@ static unsigned int pri_mux_map[] = {
+@@ -15,6 +15,8 @@
+ 
+ #include "clk-krait.h"
+ 
++#define QSB_RATE	1
++
+ static unsigned int sec_mux_map[] = {
+ 	2,
  	0,
- };
+@@ -181,6 +183,13 @@ krait_add_sec_mux(struct device *dev, struct clk *qsb, int id,
+ 	if (ret)
+ 		clk = ERR_PTR(ret);
  
-+static u8 krait_get_mux_sel(struct krait_mux_clk *mux, struct clk *safe_clk)
-+{
-+	struct clk_hw *safe_hw = __clk_get_hw(safe_clk);
-+
 +	/*
-+	 * We can ignore errors from clk_hw_get_index_of_parent()
-+	 * as we create these parents in this driver.
++	 * Force the sec_mux to be set to QSB rate.
++	 * This is needed to correctly set the parents and
++	 * to later reset mux and HFPLL to a known freq.
 +	 */
-+	return clk_hw_get_index_of_parent(&mux->hw, safe_hw);
-+}
++	clk_set_rate(clk, QSB_RATE);
 +
- /*
-  * Notifier function for switching the muxes to safe parent
-  * while the hfpll is getting reprogrammed.
-@@ -116,8 +127,8 @@ krait_add_div(struct device *dev, int id, const char *s, unsigned int offset)
- }
- 
- static struct clk *
--krait_add_sec_mux(struct device *dev, int id, const char *s,
--		  unsigned int offset, bool unique_aux)
-+krait_add_sec_mux(struct device *dev, struct clk *qsb, int id,
-+		  const char *s, unsigned int offset, bool unique_aux)
- {
- 	int ret;
- 	struct krait_mux_clk *mux;
-@@ -144,7 +155,6 @@ krait_add_sec_mux(struct device *dev, int id, const char *s,
- 	mux->shift = 2;
- 	mux->parent_map = sec_mux_map;
- 	mux->hw.init = &init;
--	mux->safe_sel = 0;
- 
- 	init.name = kasprintf(GFP_KERNEL, "krait%s_sec_mux", s);
- 	if (!init.name)
-@@ -166,6 +176,7 @@ krait_add_sec_mux(struct device *dev, int id, const char *s,
- 	if (IS_ERR(clk))
- 		goto err_clk;
- 
-+	mux->safe_sel = krait_get_mux_sel(mux, qsb);
- 	ret = krait_notifier_register(dev, clk, mux);
- 	if (ret)
- 		clk = ERR_PTR(ret);
-@@ -204,7 +215,6 @@ krait_add_pri_mux(struct device *dev, struct clk *hfpll_div, struct clk *sec_mux
- 	mux->lpl = id >= 0;
- 	mux->parent_map = pri_mux_map;
- 	mux->hw.init = &init;
--	mux->safe_sel = 2;
- 
- 	init.name = kasprintf(GFP_KERNEL, "krait%s_pri_mux", s);
- 	if (!init.name)
-@@ -226,6 +236,7 @@ krait_add_pri_mux(struct device *dev, struct clk *hfpll_div, struct clk *sec_mux
- 	if (IS_ERR(clk))
- 		goto err_clk;
- 
-+	mux->safe_sel = krait_get_mux_sel(mux, sec_mux);
- 	ret = krait_notifier_register(dev, clk, mux);
- 	if (ret)
- 		clk = ERR_PTR(ret);
-@@ -238,7 +249,9 @@ krait_add_pri_mux(struct device *dev, struct clk *hfpll_div, struct clk *sec_mux
- }
- 
- /* id < 0 for L2, otherwise id == physical CPU number */
--static struct clk *krait_add_clks(struct device *dev, int id, bool unique_aux)
-+static struct clk *
-+krait_add_clks(struct device *dev, struct clk *qsb, int id,
-+	       bool unique_aux)
- {
- 	unsigned int offset;
- 	void *p = NULL;
-@@ -261,7 +274,7 @@ static struct clk *krait_add_clks(struct device *dev, int id, bool unique_aux)
- 		goto err;
+ err_clk:
+ 	if (unique_aux)
+ 		kfree(parent_name);
+@@ -378,7 +387,7 @@ static int krait_cc_probe(struct platform_device *pdev)
+ 	 */
+ 	cur_rate = clk_get_rate(l2_pri_mux_clk);
+ 	aux_rate = 384000000;
+-	if (cur_rate == 1) {
++	if (cur_rate == QSB_RATE) {
+ 		dev_info(dev, "L2 @ QSB rate. Forcing new rate.\n");
+ 		cur_rate = aux_rate;
  	}
- 
--	sec_mux = krait_add_sec_mux(dev, id, s, offset, unique_aux);
-+	sec_mux = krait_add_sec_mux(dev, qsb, id, s, offset, unique_aux);
- 	if (IS_ERR(sec_mux)) {
- 		clk = sec_mux;
- 		goto err;
-@@ -301,18 +314,19 @@ static int krait_cc_probe(struct platform_device *pdev)
- 	int cpu;
- 	struct clk *clk;
- 	struct clk **clks;
--	struct clk *l2_pri_mux_clk;
-+	struct clk *l2_pri_mux_clk, *qsb;
- 
- 	id = of_match_device(krait_cc_match_table, dev);
- 	if (!id)
- 		return -ENODEV;
- 
- 	/* Rate is 1 because 0 causes problems for __clk_mux_determine_rate */
--	if (IS_ERR(clk_get(dev, "qsb")))
--		clk = clk_register_fixed_rate(dev, "qsb", NULL, 0, 1);
-+	qsb = clk_get(dev, "qsb");
-+	if (IS_ERR(qsb))
-+		qsb = clk_register_fixed_rate(dev, "qsb", NULL, 0, 1);
- 
--	if (IS_ERR(clk))
--		return PTR_ERR(clk);
-+	if (IS_ERR(qsb))
-+		return PTR_ERR(qsb);
- 
- 	if (!id->data) {
- 		clk = clk_register_fixed_factor(dev, "acpu_aux",
-@@ -327,13 +341,13 @@ static int krait_cc_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
+@@ -389,7 +398,7 @@ static int krait_cc_probe(struct platform_device *pdev)
  	for_each_possible_cpu(cpu) {
--		clk = krait_add_clks(dev, cpu, id->data);
-+		clk = krait_add_clks(dev, qsb, cpu, id->data);
- 		if (IS_ERR(clk))
- 			return PTR_ERR(clk);
- 		clks[cpu] = clk;
- 	}
- 
--	l2_pri_mux_clk = krait_add_clks(dev, -1, id->data);
-+	l2_pri_mux_clk = krait_add_clks(dev, qsb, -1, id->data);
- 	if (IS_ERR(l2_pri_mux_clk))
- 		return PTR_ERR(l2_pri_mux_clk);
- 	clks[4] = l2_pri_mux_clk;
+ 		clk = clks[cpu];
+ 		cur_rate = clk_get_rate(clk);
+-		if (cur_rate == 1) {
++		if (cur_rate == QSB_RATE) {
+ 			dev_info(dev, "CPU%d @ QSB rate. Forcing new rate.\n", cpu);
+ 			cur_rate = aux_rate;
+ 		}
 -- 
 2.34.1
 

@@ -2,159 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8A74E2A6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D844E2A81
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349202AbiCUOQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
+        id S1349271AbiCUOQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351521AbiCUOLH (ORCPT
+        with ESMTP id S1351573AbiCUOLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:11:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E180201BB
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:07:29 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 14:07:26 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647871648;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l6yc/vA9uu+Mbg963qnjC5ATlEBMQUpuZ5tmykv0Ezc=;
-        b=gLmIrEwl0xiSHN1s1Tz4dWgQ7PSiRKoL460wq2IOsxWLM9Q4Zxw/sQ5sSQjULlTibOejYP
-        bUBwlEKkTcBFCYrW1HkEIIFNW5uHT/D1cWH2Vy07yQbzzBJUSGDkybo0OK6PJUN3VBBiKy
-        9Sx0M8ZSc35SYPgta9Ilfdlu8+/O/xDEhmh6S/zM6nVp3QJ32fqwoaGQO1WvfDbfgAg/fS
-        p2xUr/y/eDB20NXVFRaNxd+DA94qWF6Wsxj1mtrLQQDG9yxhZvXphEMERLONlC2xVR71yz
-        LpHiY47iaxWUwfOgPvPYYwLpKmifT4DB0Y+58I7KGDrgs+3kGXCSwm6ukfML4A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647871648;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l6yc/vA9uu+Mbg963qnjC5ATlEBMQUpuZ5tmykv0Ezc=;
-        b=mvi85GYiWcsg0zhDNaj1HxLau1NtWDHdZHt+8SctVA2Jmr0q7kaztvHmWc2PojAxvWQZ+g
-        FVmzD93QbJdyexDA==
-From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/gic-v4: Wait for
- GICR_VPENDBASER.Dirty to clear before descheduling
-Cc:     Jingyi Wang <wangjingyi11@huawei.com>,
-        Nianyao Tang <tangnianyao@huawei.com>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <4aae10ba-b39a-5f84-754b-69c2eb0a2c03@huawei.com>
-References: <4aae10ba-b39a-5f84-754b-69c2eb0a2c03@huawei.com>
+        Mon, 21 Mar 2022 10:11:09 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1068749F27;
+        Mon, 21 Mar 2022 07:08:52 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R321e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0V7qO7VJ_1647871727;
+Received: from 192.168.31.65(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V7qO7VJ_1647871727)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 21 Mar 2022 22:08:49 +0800
+Message-ID: <6bc551d2-15fc-5d17-c99b-8db588c6b671@linux.alibaba.com>
+Date:   Mon, 21 Mar 2022 22:08:47 +0800
 MIME-Version: 1.0
-Message-ID: <164787164696.389.6013852304037958343.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH v5 03/22] cachefiles: introduce on-demand read mode
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com
+References: <20220316131723.111553-1-jefflexu@linux.alibaba.com>
+ <20220316131723.111553-4-jefflexu@linux.alibaba.com>
+ <YjiAVezd5B9auhcP@casper.infradead.org>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <YjiAVezd5B9auhcP@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     e307414a346d99ead7b1e962daee331e71467d18
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/e307414a346d99ead7b1e962daee331e71467d18
-Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Thu, 17 Mar 2022 09:49:02 
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Mon, 21 Mar 2022 14:02:32 
 
-irqchip/gic-v4: Wait for GICR_VPENDBASER.Dirty to clear before descheduling
+On 3/21/22 9:40 PM, Matthew Wilcox wrote:
+> On Wed, Mar 16, 2022 at 09:17:04PM +0800, Jeffle Xu wrote:
+>> +#ifdef CONFIG_CACHEFILES_ONDEMAND
+>> +	struct xarray			reqs;		/* xarray of pending on-demand requests */
+>> +	rwlock_t			reqs_lock;	/* Lock for reqs xarray */
+> 
+> Why do you have a separate rwlock when the xarray already has its own
+> spinlock?  This is usually a really bad idea.
 
-The way KVM drives GICv4.{0,1} is as follows:
-- vcpu_load() makes the VPE resident, instructing the RD to start
-  scanning for interrupts
-- just before entering the guest, we check that the RD has finished
-  scanning and that we can start running the vcpu
-- on preemption, we deschedule the VPE by making it invalid on
-  the RD
+Hi,
 
-However, we are preemptible between the first two steps. If it so
-happens *and* that the RD was still scanning, we nonetheless write
-to the GICR_VPENDBASER register while Dirty is set, and bad things
-happen (we're in UNPRED land).
+Thanks for reviewing.
 
-This affects both the 4.0 and 4.1 implementations.
+reqs_lock is also used to protect the check of cache->flags. Please
+refer to patch 4 [1] of this patchset.
 
-Make sure Dirty is cleared before performing the deschedule,
-meaning that its_clear_vpend_valid() becomes a sort of full VPE
-residency barrier.
-
-Reported-by: Jingyi Wang <wangjingyi11@huawei.com>
-Tested-by: Nianyao Tang <tangnianyao@huawei.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Fixes: 57e3cebd022f ("KVM: arm64: Delay the polling of the GICR_VPENDBASER.Dirty bit")
-Link: https://lore.kernel.org/r/4aae10ba-b39a-5f84-754b-69c2eb0a2c03@huawei.com
----
- drivers/irqchip/irq-gic-v3-its.c | 28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index 9e93ff2..c9b1df9 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -3011,18 +3011,12 @@ static int __init allocate_lpi_tables(void)
- 	return 0;
- }
- 
--static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
-+static u64 read_vpend_dirty_clear(void __iomem *vlpi_base)
- {
- 	u32 count = 1000000;	/* 1s! */
- 	bool clean;
- 	u64 val;
- 
--	val = gicr_read_vpendbaser(vlpi_base + GICR_VPENDBASER);
--	val &= ~GICR_VPENDBASER_Valid;
--	val &= ~clr;
--	val |= set;
--	gicr_write_vpendbaser(val, vlpi_base + GICR_VPENDBASER);
--
- 	do {
- 		val = gicr_read_vpendbaser(vlpi_base + GICR_VPENDBASER);
- 		clean = !(val & GICR_VPENDBASER_Dirty);
-@@ -3033,10 +3027,26 @@ static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
- 		}
- 	} while (!clean && count);
- 
--	if (unlikely(val & GICR_VPENDBASER_Dirty)) {
-+	if (unlikely(!clean))
- 		pr_err_ratelimited("ITS virtual pending table not cleaning\n");
+```
++	/*
++	 * Enqueue the pending request.
++	 *
++	 * Stop enqueuing the request when daemon is dying. So we need to
++	 * 1) check cache state, and 2) enqueue request if cache is alive.
++	 *
++	 * The above two ops need to be atomic as a whole. @reqs_lock is used
++	 * here to ensure that. Otherwise, request may be enqueued after xarray
++	 * has been flushed, in which case the orphan request will never be
++	 * completed and thus netfs will hang there forever.
++	 */
++	read_lock(&cache->reqs_lock);
 +
-+	return val;
-+}
++	/* recheck dead state under lock */
++	if (test_bit(CACHEFILES_DEAD, &cache->flags)) {
++		read_unlock(&cache->reqs_lock);
++		ret = -EIO;
++		goto out;
++	}
 +
-+static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
-+{
-+	u64 val;
++	xa_lock(xa);
++	ret = __xa_alloc(xa, &id, req, xa_limit_32b, GFP_KERNEL);
++	if (!ret)
++		__xa_set_mark(xa, id, CACHEFILES_REQ_NEW);
++	xa_unlock(xa);
 +
-+	/* Make sure we wait until the RD is done with the initial scan */
-+	val = read_vpend_dirty_clear(vlpi_base);
-+	val &= ~GICR_VPENDBASER_Valid;
-+	val &= ~clr;
-+	val |= set;
-+	gicr_write_vpendbaser(val, vlpi_base + GICR_VPENDBASER);
-+
-+	val = read_vpend_dirty_clear(vlpi_base);
-+	if (unlikely(val & GICR_VPENDBASER_Dirty))
- 		val |= GICR_VPENDBASER_PendingLast;
--	}
- 
- 	return val;
- }
++	read_unlock(&cache->reqs_lock);
+```
+
+It's mainly used to protect against the xarray flush.
+
+Besides, IMHO read-write lock shall be more performance friendly, since
+most cases are the read side.
+
+
+[1] https://lkml.org/lkml/2022/3/16/351
+
+-- 
+Thanks,
+Jeffle

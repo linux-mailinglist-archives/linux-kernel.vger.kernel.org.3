@@ -2,125 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1B24E231E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2654E4E2320
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345781AbiCUJSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
+        id S1345789AbiCUJSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345809AbiCUJSD (ORCPT
+        with ESMTP id S1345787AbiCUJSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:18:03 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C130333EA1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:16:38 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 324DA5C00A2;
-        Mon, 21 Mar 2022 05:16:38 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 21 Mar 2022 05:16:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:date:date:from:from:in-reply-to
-        :message-id:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=gNzyaw
-        ml6Mx9maRou91ByTbvGdGsig6mwf7OInhrdyE=; b=irk/5onzONs1uDbRQ3SRU3
-        unK4ocRvauOhTLinCpwrPn13YJe1nn6XpKfTDLD0b2vikofHoqLJNdfQGqj7XmS3
-        jFJulhTTYi65OJWGxd3mRrBNpjIc3h1wHPNnvjDzfEbR5NRE8cJDVOMJLDRwE0FF
-        IcPRZexWjkEEMQpxQeZBipCFpiiHOwpRU+ISKtjok6fEZpkd+aoUw8SMYSvwykiV
-        KfSluup1dbZzpoDIsrgkk+6EZtf7WnGAyMEt6O/nSDqQ0XzKHQktiMC6MwQMr2H2
-        UhckZlHBwee8wVzdaLbV9zQdiL8HDWkcBDqhpvLjbVKMDdZwZaDseohPUr5ETnKA
-        ==
-X-ME-Sender: <xms:dkI4YmmXyFgxWPP0DWilFaotzABjbQ-e3slgKe9TdZozepgd25e5Ow>
-    <xme:dkI4Yt3pMvCVmNxQnlKF-KL0fAIKB7bKV8DcBNg71lGLIvwnHgzQ1kdwKYMOqF_gC
-    rEJh8qrcPqgw-3kLnY>
-X-ME-Received: <xmr:dkI4Ykp55jg7rY41fNPV-b__JSKUSNxmmFCaXLjmpw_MiIiqQp6WrMVce-9j4hzsflz1cGk9ISOOEz7I5QysZbUcoTpSZIQyLL0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegfedgtddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepvffkhffuffestddtredttddttdenucfhrhhomhephfhinhhnucfvhhgrihhn
-    uceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvghrnh
-    eptdelteekleekkedvueejheekgfdvtdehhefhteeitefhteefgefhudehveevleelnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfhhthhgrih
-    hnsehlihhnuhigqdhmieekkhdrohhrgh
-X-ME-Proxy: <xmx:dkI4YqmMNYxMOwfPGaL3I8QN3BnV7z-cmPoGJ4mWWkXLM-QgBK88EQ>
-    <xmx:dkI4Yk1-PEVzSVymIoWR45MQssvDlSRfm1rfpHdnVpne6ZIYLGHwwA>
-    <xmx:dkI4YhuRHYpiS4muO7tgcv45KirbQ-lWx9NIyOHy9kju6uwrMNsUHQ>
-    <xmx:dkI4YiAoKlCbzT8lbWvb290h-TAw_5GhRLQC7jjYIYB7-9VbABpTpA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 21 Mar 2022 05:16:36 -0400 (EDT)
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     "Randy Dunlap" <rdunlap@infradead.org>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Message-Id: <bb3b2229213f5feaff12e731b7537d03705e15d5.1647854173.git.fthain@linux-m68k.org>
-From:   Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH] Subject: [PATCH] macintosh/via-pmu: Avoid compiler warnings
- when CONFIG_PROC_FS is disabled
-Date:   Mon, 21 Mar 2022 20:16:13 +1100
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 05:18:30 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359C13525E;
+        Mon, 21 Mar 2022 02:16:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647854221; x=1679390221;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=Z6FoBmMzUj/h6G67RT14tpXv61lHjD9Rx9GsVyx6fFU=;
+  b=KrXmMZFvL6sejkhTqdg33Kp52/tGYhvTipetixX1CyZVDdvdlkZS8MMy
+   I4wJ3lER/r6D3dqNCskW3OTyqrxA7ymFGLLTQF7qik97/M/oN62YHMbHb
+   9eh6b9ZxpCZo5CxjCz2vA6s3NwDNdnsjKOqQffC7XHWWDQSLG5fxwxYUt
+   E84Z9XhRpNIQd4Icu7G61Xs71p5fQFBsIbEj4m5fje6ENSxXm1nSs2zX1
+   3lJRSKef1yrkhIGGYB2dTX1UFp67ajBGe5dZLE1egY20QYEfIWlwOsiCB
+   OxGLW8yPU+NVdpIT7+H0bGwAXReDaWgGyphfFT8a/iEIQ9FZqc+nStM+K
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="257226115"
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="257226115"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 02:16:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="582800731"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
+  by orsmga001.jf.intel.com with ESMTP; 21 Mar 2022 02:16:57 -0700
+Message-ID: <371faf0d-f794-4a2e-0a1c-9d454d7c8b12@intel.com>
+Date:   Mon, 21 Mar 2022 11:16:56 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
+To:     "Steinar H. Gunderson" <sesse@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220310093844.982656-1-sesse@google.com>
+ <586de5fc-858b-2693-1986-5c77e8c0e3d0@intel.com>
+ <YiuKAk7SaXP7B7Ee@google.com>
+ <ba2c49da-22c5-06ea-e953-82211b953ca8@intel.com>
+ <YjBnet2813sEGjZY@google.com>
+ <c50bb87d-9fee-c4f9-a350-8729e503e43a@intel.com>
+ <YjDUO6bbyfGw/u0C@google.com>
+ <52903e58-e74c-5ea0-36b4-277ea3610af4@intel.com>
+ <YjGdoGy4Z2UUG9S9@google.com>
+ <ef780335-7dc6-3a23-54a8-b6fc9c8a2ed3@intel.com>
+ <YjHfGrZovk3N/H0f@google.com>
+Content-Language: en-US
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <YjHfGrZovk3N/H0f@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/macintosh/via-pmu.c:897:12: warning: 'pmu_battery_proc_show' defined but not used [-Wunused-function]
- static int pmu_battery_proc_show(struct seq_file *m, void *v)
-            ^~~~~~~~~~~~~~~~~~~~~
-drivers/macintosh/via-pmu.c:871:12: warning: 'pmu_irqstats_proc_show' defined but not used [-Wunused-function]
- static int pmu_irqstats_proc_show(struct seq_file *m, void *v)
-            ^~~~~~~~~~~~~~~~~~~~~~
-drivers/macintosh/via-pmu.c:860:12: warning: 'pmu_info_proc_show' defined but not used [-Wunused-function]
- static int pmu_info_proc_show(struct seq_file *m, void *v)
-            ^~~~~~~~~~~~~~~~~~
+On 16.3.2022 14.59, Steinar H. Gunderson wrote:
+> On Wed, Mar 16, 2022 at 01:19:46PM +0200, Adrian Hunter wrote:
+>>> I guess the good news is that the perf report coming out of your version
+>>> looks more likely to me; I have some functions that are around 1% that
+>>> shouldn't intuitively be that much (and, if I write some Perl to sum up
+>>> the cycles from the IPC lines in perf script, are more around 0.1%).
+>>> So perhaps we should stop chasing the difference? I don't know.
+>> That doesn't sound right.  I will look at it more closely in the next few days.
+> 
+> If you need, I can supply the perf.data and binaries, but we're talking
+> a couple of gigabytes of data (and I don't know immediately if there's
+> an easy way I can package up everything perf.data references) :-)
+> 
+> /* Steinar */
 
-Rearrange some code and add some #ifdefs to avoid unused code warnings
-when CONFIG_PROC_FS is disabled.
+I had another look at this and it seemed *mostly* OK for me.  One change
+I would make is to subject the cycle period to the logic of the 'A' option
+(approximate IPC).
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Finn Thain <fthain@linux-m68k.org>
----
- drivers/macintosh/via-pmu.c | 4 ++++
- 1 file changed, 4 insertions(+)
+So what does the 'A' option do.
 
-diff --git a/drivers/macintosh/via-pmu.c b/drivers/macintosh/via-pmu.c
-index 2109129ea1bb..495fd35b11de 100644
---- a/drivers/macintosh/via-pmu.c
-+++ b/drivers/macintosh/via-pmu.c
-@@ -204,9 +204,11 @@ static int init_pmu(void);
- static void pmu_start(void);
- static irqreturn_t via_pmu_interrupt(int irq, void *arg);
- static irqreturn_t gpio1_interrupt(int irq, void *arg);
-+#ifdef CONFIG_PROC_FS
- static int pmu_info_proc_show(struct seq_file *m, void *v);
- static int pmu_irqstats_proc_show(struct seq_file *m, void *v);
- static int pmu_battery_proc_show(struct seq_file *m, void *v);
-+#endif
- static void pmu_pass_intr(unsigned char *data, int len);
- static const struct proc_ops pmu_options_proc_ops;
- 
-@@ -857,6 +859,7 @@ query_battery_state(void)
- 			2, PMU_SMART_BATTERY_STATE, pmu_cur_battery+1);
- }
- 
-+#ifdef CONFIG_PROC_FS
- static int pmu_info_proc_show(struct seq_file *m, void *v)
- {
- 	seq_printf(m, "PMU driver version     : %d\n", PMU_DRIVER_VERSION);
-@@ -977,6 +980,7 @@ static const struct proc_ops pmu_options_proc_ops = {
- 	.proc_release	= single_release,
- 	.proc_write	= pmu_options_proc_write,
- };
-+#endif
- 
- #ifdef CONFIG_ADB
- /* Send an ADB command */
--- 
-2.32.0
+By default, IPC is output only when the exact number of cycles and
+instructions is known for the sample.  Decoding walks instructions
+to reconstruct the control flow, so the exact number of instructions
+is known, but the cycle count (CYC packet) is only produced with
+another packet, so only indirect/async branches or the first
+conditional branch of a TNT packet.
 
+Reporting exact IPC makes sense when sampling every branch or
+instruction, but makes less sense when sampling less often.
+
+For example with:
+
+$ perf record -e intel_pt/cyc/u uname
+Linux
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.218 MB perf.data ]
+
+Sampling every 50us, exact IPC is reported only twice:
+
+$ perf script --itrace=i50us -F+ipc
+           uname 2007962 [005] 2426597.185314:      91866 instructions:uH:      7f3feb913deb _dl_relocate_object+0x40b (/usr/lib/x86_64-linux-gnu/ld-2.31.so)
+           uname 2007962 [005] 2426597.185353:      21959 instructions:uH:      7f3feb91158f do_lookup_x+0xcf (/usr/lib/x86_64-linux-gnu/ld-2.31.so)
+           uname 2007962 [005] 2426597.185670:     129834 instructions:uH:      7f3feb72e05a read_alias_file+0x23a (/usr/lib/x86_64-linux-gnu/libc-2.31.so)
+           uname 2007962 [005] 2426597.185709:      39373 instructions:uH:      7f3feb72ed52 _nl_explode_name+0x52 (/usr/lib/x86_64-linux-gnu/libc-2.31.so)
+           uname 2007962 [005] 2426597.185947:     137486 instructions:uH:      7f3feb87e5f3 __strlen_avx2+0x13 (/usr/lib/x86_64-linux-gnu/libc-2.31.so)         IPC: 0.88 (420518/472789) 
+           uname 2007962 [005] 2426597.186026:      79196 instructions:uH:      7f3feb87e5f3 __strlen_avx2+0x13 (/usr/lib/x86_64-linux-gnu/libc-2.31.so)         IPC: 1.34 (79196/59092) 
+           uname 2007962 [005] 2426597.186066:      29855 instructions:uH:      7f3feb78dee6 _int_malloc+0x446 (/usr/lib/x86_64-linux-gnu/libc-2.31.so)
+
+But if we relax the requirement and just use the number of cycles
+counted so far, whether it is exactly correct or not, we can get
+approx IPC for every sample:
+
+$ perf script --itrace=i50usA -F+ipc
+           uname 2007962 [005] 2426597.185314:      91866 instructions:uH:      7f3feb913deb _dl_relocate_object+0x40b (/usr/lib/x86_64-linux-gnu/ld-2.31.so)    IPC: 0.74 (91866/122744) 
+           uname 2007962 [005] 2426597.185353:      21959 instructions:uH:      7f3feb91158f do_lookup_x+0xcf (/usr/lib/x86_64-linux-gnu/ld-2.31.so)     IPC: 0.92 (21959/23822) 
+           uname 2007962 [005] 2426597.185670:     129834 instructions:uH:      7f3feb72e05a read_alias_file+0x23a (/usr/lib/x86_64-linux-gnu/libc-2.31.so)      IPC: 0.77 (129834/167753) 
+           uname 2007962 [005] 2426597.185709:      39373 instructions:uH:      7f3feb72ed52 _nl_explode_name+0x52 (/usr/lib/x86_64-linux-gnu/libc-2.31.so)      IPC: 1.01 (39373/38881) 
+           uname 2007962 [005] 2426597.185947:     137486 instructions:uH:      7f3feb87e5f3 __strlen_avx2+0x13 (/usr/lib/x86_64-linux-gnu/libc-2.31.so)         IPC: 1.14 (137486/119589) 
+           uname 2007962 [005] 2426597.186026:      79196 instructions:uH:      7f3feb87e5f3 __strlen_avx2+0x13 (/usr/lib/x86_64-linux-gnu/libc-2.31.so)         IPC: 1.34 (79196/59092) 
+           uname 2007962 [005] 2426597.186066:      29855 instructions:uH:      7f3feb78dee6 _int_malloc+0x446 (/usr/lib/x86_64-linux-gnu/libc-2.31.so)          IPC: 1.33 (29855/22282) 
+
+
+So the cycle sample function looks like this:
+
+static int intel_pt_synth_cycle_sample(struct intel_pt_queue *ptq)
+{
+	struct intel_pt *pt = ptq->pt;
+	union perf_event *event = ptq->event_buf;
+	struct perf_sample sample = { .ip = 0, };
+	u64 period = 0;
+
+	if (ptq->sample_ipc)
+		period = ptq->ipc_cyc_cnt - ptq->last_cy_cyc_cnt;
+
+	if (!period || intel_pt_skip_event(pt))
+		return 0;
+
+	intel_pt_prep_sample(pt, ptq, event, &sample);
+
+	sample.id = ptq->pt->cycles_id;
+	sample.stream_id = ptq->pt->cycles_id;
+	sample.period = period;
+
+	sample.cyc_cnt = period;
+	sample.insn_cnt = ptq->ipc_insn_cnt - ptq->last_cy_insn_cnt;
+	ptq->last_cy_insn_cnt = ptq->ipc_insn_cnt;
+	ptq->last_cy_cyc_cnt = ptq->ipc_cyc_cnt;
+
+	return intel_pt_deliver_synth_event(pt, event, &sample, pt->cycles_sample_type);
+}
+
+
+With regard to the results you got with perf report, please try:
+
+	perf report --itrace=y0nse --show-total-period --stdio
+
+and see if the percentages and cycle counts for rarely executed
+functions make more sense.

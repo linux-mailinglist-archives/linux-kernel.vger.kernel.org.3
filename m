@@ -2,93 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9724E209A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 07:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C3D4E209E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 07:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344565AbiCUG2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 02:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
+        id S1344594AbiCUGau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 02:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241560AbiCUG14 (ORCPT
+        with ESMTP id S232580AbiCUGao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 02:27:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41A11A3B4
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 23:26:22 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22L3fxNH023145;
-        Mon, 21 Mar 2022 06:25:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=lHG4gvtN3vri3JiV8+qPPfosk4XAtywS64mVIaCnmMY=;
- b=UOQbH1VpWX1N8QbQOv+0VNjLHS6kuCTAFZGet/lOfrk2VdNT1akzGCow3WVs5FUPbO0W
- 1yVcqtjZ+ptmNir6feRp+E+zWQqGvmx5zOYhls/w0Iksi1oo5HvH1jd9o2plv9t8KA8A
- kl085J14hcVT3loPN4EeSTGzF/bRqqZNnvV3MhRChmanzjhKaaD4Ek3Vwl5Hiqk652R/
- EkCUCizEgUkOjyc78pW61I9qQyIXtZijQXQRTGetewsoluczAzdDmfyl5ASMLSRRMM/+
- HTBrZbOO402RcioyZUlepXgrOpZwyrtRuFibZYytLolZJadlljqLu7ebY9dQIUVduAng JA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3exhpcj729-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 06:25:48 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 22L6Mi3n010483;
-        Mon, 21 Mar 2022 06:25:47 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3exhpcj71v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 06:25:47 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22L6C8ZI013865;
-        Mon, 21 Mar 2022 06:25:45 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ew6t8u4a6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 06:25:45 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22L6E5dq49021422
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Mar 2022 06:14:05 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 91132AE051;
-        Mon, 21 Mar 2022 06:25:43 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 26681AE045;
-        Mon, 21 Mar 2022 06:25:43 +0000 (GMT)
-Received: from localhost (unknown [9.43.115.88])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 21 Mar 2022 06:25:43 +0000 (GMT)
-Date:   Mon, 21 Mar 2022 11:55:41 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     aik@ozlabs.ru, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
-        rostedt@goodmis.org
-References: <20220318105140.43914-1-sv@linux.ibm.com>
-        <20220318105140.43914-4-sv@linux.ibm.com>
-        <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
-In-Reply-To: <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
+        Mon, 21 Mar 2022 02:30:44 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313DA35847;
+        Sun, 20 Mar 2022 23:29:20 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nWBXX-0004rC-64; Mon, 21 Mar 2022 07:29:15 +0100
+Message-ID: <818a4927-b204-3eab-da9f-466841ec9a16@leemhuis.info>
+Date:   Mon, 21 Mar 2022 07:29:08 +0100
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1647843607.5vkv4b5tvk.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 34J3O1aoWHDG4aGJm3jALdU7jgra_4ws
-X-Proofpoint-GUID: WJzRE_49EOLLkYwlkToirVo4TrnOPTKg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-21_02,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 suspectscore=0
- spamscore=0 impostorscore=0 phishscore=0 adultscore=0 mlxscore=0
- mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2203210039
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] HID: multitouch: fix Dell Precision 7550 and 7750 button
+ type
+Content-Language: en-US
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        jkosina@suse.cz
+Cc:     tiwai@suse.de, benjamin.tissoires@redhat.com,
+        peter.hutterer@who-t.net, linux-input@vger.kernel.org,
+        stable@vger.kernel.org, regressions@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220320190602.7484-1-jose.exposito89@gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20220320190602.7484-1-jose.exposito89@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1647844160;011dcebc;
+X-HE-SMSGID: 1nWBXX-0004rC-64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,95 +48,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra wrote:
-> On Fri, Mar 18, 2022 at 04:21:40PM +0530, Sathvika Vasireddy wrote:
->> This patch adds powerpc specific functions required for
->> 'objtool mcount' to work, and enables mcount for ppc.
->=20
-> I would love to see more objtool enablement for Power :-)
->=20
->=20
->> diff --git a/tools/objtool/arch/powerpc/include/arch/elf.h b/tools/objto=
-ol/arch/powerpc/include/arch/elf.h
->> new file mode 100644
->> index 000000000000..3c8ebb7d2a6b
->> --- /dev/null
->> +++ b/tools/objtool/arch/powerpc/include/arch/elf.h
->> @@ -0,0 +1,8 @@
->> +/* SPDX-License-Identifier: GPL-2.0-or-later */
->> +
->> +#ifndef _OBJTOOL_ARCH_ELF
->> +#define _OBJTOOL_ARCH_ELF
->> +
->> +#define R_NONE R_PPC_NONE
->> +
->> +#endif /* _OBJTOOL_ARCH_ELF */
->> diff --git a/tools/objtool/utils.c b/tools/objtool/utils.c
->> index d1fc6a123a6e..c9c14fa0dfd7 100644
->> --- a/tools/objtool/utils.c
->> +++ b/tools/objtool/utils.c
->> @@ -179,11 +179,29 @@ int create_mcount_loc_sections(struct objtool_file=
- *file)
->>  		loc =3D (unsigned long *)sec->data->d_buf + idx;
->>  		memset(loc, 0, sizeof(unsigned long));
->> =20
->> -		if (elf_add_reloc_to_insn(file->elf, sec,
->> -					  idx * sizeof(unsigned long),
->> -					  R_X86_64_64,
->> -					  insn->sec, insn->offset))
->> -			return -1;
->> +		if (file->elf->ehdr.e_machine =3D=3D EM_X86_64) {
->> +			if (elf_add_reloc_to_insn(file->elf, sec,
->> +						  idx * sizeof(unsigned long),
->> +						  R_X86_64_64,
->> +						  insn->sec, insn->offset))
->> +				return -1;
->> +		}
->> +
->> +		if (file->elf->ehdr.e_machine =3D=3D EM_PPC64) {
->> +			if (elf_add_reloc_to_insn(file->elf, sec,
->> +						  idx * sizeof(unsigned long),
->> +						  R_PPC64_ADDR64,
->> +						  insn->sec, insn->offset))
->> +				return -1;
->> +		}
->> +
->> +		if (file->elf->ehdr.e_machine =3D=3D EM_PPC) {
->> +			if (elf_add_reloc_to_insn(file->elf, sec,
->> +						  idx * sizeof(unsigned long),
->> +						  R_PPC_ADDR32,
->> +						  insn->sec, insn->offset))
->> +				return -1;
->> +		}
->=20
-> It appears to me that repeating this code 3 times doesn't really scale
-> well, how about we introduce a helper like:
->=20
->=20
-> int elf_reloc_type_long(struct elf *elf)
-> {
-> 	switch (elf->ehdr.e_machine) {
-> 	case EM_X86_64:
-> 		return R_X86_64_64;
-> 	case EM_PPC64:
-> 		return R_PPC64_ADDR64;
-> 	case EM_PPC:
-> 		return R_PPC_ADDR32;
-> 	default:
-> 		WARN("unknown machine...")
-> 		exit(-1);
-> 	}
-> }
->=20
-> 		if (elf_add_reloc_to_insn(file->elf, sec,
-> 					  idx * sizeof(unsigned long),
-> 					  elf_reloc_type_long(file->elf),
-> 					  insn->sec, insn->offset))
-> 			return -1;
+thx for working on this
 
-Good point. I suppose we'll need a similar helper, say,=20
-elf_reloc_type_none(), to replace R_NONE usage if we want to have=20
-objtool work for cross-arch builds.
+On 20.03.22 20:06, José Expósito wrote:
+> The touchpad present in the Dell Precision 7550 and 7750 laptops
+> reports a HID_DG_BUTTONTYPE of type MT_BUTTONTYPE_CLICKPAD. However,
+> the device is not a clickpad, it is a touchpad with physical buttons.
+> 
+> In order to fix this issue, a quirk for the device was introduced in
+> libinput [1] [2] to disable the INPUT_PROP_BUTTONPAD property:
+> 
+> 	[Precision 7x50 Touchpad]
+> 	MatchBus=i2c
+> 	MatchUdevType=touchpad
+> 	MatchDMIModalias=dmi:*svnDellInc.:pnPrecision7?50*
+> 	AttrInputPropDisable=INPUT_PROP_BUTTONPAD
+> 
+> However, because of the change introduced in 37ef4c19b4 ("Input: clear
+> BTN_RIGHT/MIDDLE on buttonpads") the BTN_RIGHT key bit is not mapped
+> anymore breaking the device right click button.
+> 
+> In order to fix the issue, create a quirk for the device forcing its
+> button type to touchpad regardless of the value reported by the
+> firmware.
+> 
+> [1] https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/481
+> [2] https://bugzilla.redhat.com/show_bug.cgi?id=1868789
+
+Nitpicking: those should be "Link" tags, as explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'? Never tried, but if you want to
+make them footnote-style this should work according to the docs:
+
+Link:
+https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/481  [1]
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=1868789  [2]
+
+In anyone wonders why I care: there are internal and publicly used tools
+and scripts out there that reply on proper "Link" tags. I don't known
+how many, but there is at least one public tool I'm running that cares:
+regzbot, my regression tracking bot, which I use to track Linux kernel
+regressions and generate the regression reports sent to Linus. Proper
+"Link:" tags allow the bot to automatically connect regression reports
+with fixes being posted or applied to resolve the particular regression
+-- which makes regression tracking a whole lot easier and feasible for
+the Linux kernel. That's why it's a great help for me if people set
+proper "Link" tags.
+
+While at it, let me tell regzbot about this thread:
+#regzbot ^backmonitor:
+https://linux-regtracking.leemhuis.info/regzbot/regression/s5htubv32s8.wl-tiwai@suse.de/
 
 
-- Naveen
+> Fixes: 37ef4c19b4 ("Input: clear BTN_RIGHT/MIDDLE on buttonpads")
+> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> [...]
+
+Ciao, Thorsten

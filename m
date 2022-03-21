@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5FB4E2F94
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF144E2F9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351967AbiCUSGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 14:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
+        id S1351986AbiCUSGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 14:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349445AbiCUSGE (ORCPT
+        with ESMTP id S1351980AbiCUSGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 14:06:04 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB9C4CD61;
-        Mon, 21 Mar 2022 11:04:38 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id n15so13457993plh.2;
-        Mon, 21 Mar 2022 11:04:38 -0700 (PDT)
+        Mon, 21 Mar 2022 14:06:33 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4C015CB6D
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:05:07 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id z16so16185128pfh.3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:05:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=aLAMIQ8Z/Brx4GgfsQ0HcQtispmXwswle1+zYBDv2JM=;
-        b=lrfYWw0h7r5509pqhsgV/reZahtlNdofwS6QxNFbJe7SH/kkWK7a2pHOo/Lz4b4O2d
-         HMIiLyOd69phUkQqMsxWcYPCTJ0Wfx3ZqX4uqgBZA2p3Z4hrZFxbYBHmYtqCCTk3HMQ2
-         I5FbxpfLD7057G+ykHNj97m+/ID6/qLZN5eRnAUSZ1bD+pFuAgrHygt25SJzaylaJcZH
-         t4jMKKg9YJGeqRM3hz6ddmWK7o+n+IllcKX5S71zvYwk4SU2aSaQHcUcWTbxDPF9F6y5
-         eXKhWIC8NNMCS6SxzMl7zeZLbemifs0ZBLxg3Ww3p+Dzzy8OJh93w3PtDTD83FMutxg9
-         TVvQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VSE/zjzMF4GUAODi9hUWbSKALcdRpi7FbYvoQ5n/zHE=;
+        b=fcyAfSP5auLlxa8uxnRYod/EMf7JE1qAALckx8tRF9JKQppHhU9QysjLogLKyxYU6a
+         2R0dvGNpSM3MjBR8fOWEDbotvhLJ42Pxjh1OR471p6ss5wu8DTreSiar/deSJfqS5Bz0
+         ZJrDvhsTfX+rv0DePsGh8eO9zBQS5Q1E1B9m1Dl2X5V7XOPM9zbO8xspgoNJrJraHldJ
+         0/lC1CNncq0xlOpMy1ldeuil3tJ8rYv0pzU/bwMTuDCOBr8j27BAiw2yTlVByaNLzcAH
+         MBY/ZTGVla0e3oHRwwiI3404xKCORRZ7UC0HAgiiacCLYjqVGDFCnIPNgeysH1TGdgfN
+         R6lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=aLAMIQ8Z/Brx4GgfsQ0HcQtispmXwswle1+zYBDv2JM=;
-        b=CAc3RouA/VdjDDO3BMapZIIWJn56RkYIU34Xz3LwzaL+DrhyZF8eZcnhBRJQqloYYt
-         RfawTwHWrFyvRd/Zj3VKfmRLogYQanGBVTeba93AKBW5jyRmXhyTFFaliBddy9v67uCt
-         BtOHkiq9lWo03D5E7Hx7VsZzjO61d5eC8I2V3sfctb6MHWO/A/a98a0jlweBmtA+ei9S
-         HnXiyaWkp7D12X6HoAo72qzh+8SdArR9ePFoMXsBExdOwo5LyclwBDolvEt25Z+ZsuLF
-         pc61TmpmZKXOZ00MvxEOo3aAh592GgdT+ehRkttXXXGnSe5HkrIOwLL0hHOH0/eRbeFX
-         UEYg==
-X-Gm-Message-State: AOAM533mF9SXCiYX5pEe6C/bVJf2tPCVDnCUgNb1B5XfByuYBwVvmfUa
-        DqXL2DEW1m0Pu1xgnd6I1TE=
-X-Google-Smtp-Source: ABdhPJzxVKNEzDd2T+O/tM3Jwt/u+g4+SzF/YQt8YFs6HGgO4SYfo1bT7GLj6MME54cabODbsD1T2g==
-X-Received: by 2002:a17:90b:1d02:b0:1c7:1802:c00e with SMTP id on2-20020a17090b1d0200b001c71802c00emr331358pjb.99.1647885878110;
-        Mon, 21 Mar 2022 11:04:38 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id h2-20020a056a00218200b004f66d50f054sm19871038pfi.158.2022.03.21.11.04.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 11:04:37 -0700 (PDT)
-Message-ID: <a88a3172-aca8-adb5-c9a3-e4d32a416190@gmail.com>
-Date:   Mon, 21 Mar 2022 11:04:35 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VSE/zjzMF4GUAODi9hUWbSKALcdRpi7FbYvoQ5n/zHE=;
+        b=ZpfmML6g/mh2DhCejk0y/rEVZFcJMwCWNLht8b3cgNXQ2kS4nWNfxl047rhDhWVCoF
+         Z1Z69U2qoqoV5tL7l5ZnmngySCLjEfJ9CRzBoxtH1dB8CBR+JxMqixNF2luS82a1Ad/W
+         oTdKDQQNooZcJLoMYGPU45oBkvTA6rBYQnSpudzLNOSq2AVcbRolLAzPL2rnASzpKbHd
+         Vgejidnw+lgKQaknbJ75GpNOnRe+MkPaRjac1ddvssxh7+o8jYtV5PKFB3UtaLHxOvFy
+         fcBUOrSoCdRbvyQEvd4V7XaauoalCcLWvBVYuEBJPMPnkARngxnCuLh7UHjJ8Zey/uO4
+         dRgA==
+X-Gm-Message-State: AOAM531c58B38ZlBLZtKcSi4H3kikQNTRuPWMnFOLSrqwfQ1O9Oz2oT7
+        ACGe9RgBrM/jMP5bLZyCn5d89Fu1p47A/HRk+/pf
+X-Google-Smtp-Source: ABdhPJxhYv/ZbgyMx8y9NX4YnmX8FOmzPsTIfGrBazZdrmJADnDkiyJf7MEXQnfVPRrCwcTuhFqiH2ta2wyZE1ZbcL4=
+X-Received: by 2002:a63:1613:0:b0:382:2a7f:5ca1 with SMTP id
+ w19-20020a631613000000b003822a7f5ca1mr13980696pgl.151.1647885906868; Mon, 21
+ Mar 2022 11:05:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 5.10 00/30] 5.10.108-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220321133219.643490199@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220316213055.2351342-1-morbo@google.com> <20220319222228.4160598-1-morbo@google.com>
+ <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
+In-Reply-To: <CAHk-=wh4B42bYZmGoY8=UsqHDuq_th2KN7TmXuTnhwyYWzQ5pg@mail.gmail.com>
+From:   Bill Wendling <morbo@google.com>
+Date:   Mon, 21 Mar 2022 11:04:55 -0700
+Message-ID: <CAGG=3QWPAF4wtb93LJiv5Hz1pM+dvwM1+NNG8cr7813k-gpUTA@mail.gmail.com>
+Subject: Re: [PATCH v2] gpiolib: acpi: use correct format characters
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,28 +76,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/21/22 06:52, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.108 release.
-> There are 30 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.108-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Sat, Mar 19, 2022 at 3:55 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> So I think that clang warning is only annoying, not helpful, but:
+>
+> On Sat, Mar 19, 2022 at 3:22 PM Bill Wendling <morbo@google.com> wrote:
+> >
+> > diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+> > index a5495ad31c9c..92dd9b8784f2 100644
+> > --- a/drivers/gpio/gpiolib-acpi.c
+> > +++ b/drivers/gpio/gpiolib-acpi.c
+> > @@ -388,9 +388,9 @@ static acpi_status acpi_gpiochip_alloc_event(struct acpi_resource *ares,
+> >
+> >         if (pin <= 255) {
+> >                 char ev_name[5];
+> > -               sprintf(ev_name, "_%c%02hhX",
+> > +               sprintf(ev_name, "_%c%02X",
+>
+> This part I approve of.
+>
+> >                         agpio->triggering == ACPI_EDGE_SENSITIVE ? 'E' : 'L',
+> > -                       pin);
+> > +                       (unsigned char)pin);
+>
+> But this cast seems pointless and wrong.
+>
+You're right. I was trying to ensure that the patch didn't change
+behavior. But the cast achieves nothing. Thanks!
 
+-bw
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> Casts in general are bad, and should be avoided unless there's a real
+> reason for them. And that reason doesn't seem to exist. We don't
+> actually want to truncate the value of 'pin', and just a few lines
+> earlier actually checked that it is in range.
+>
+> And if 'pin' can't be negative - it comes from a 'u16' table
+> dereference - but even if it could have been that would have been a
+> different bug here anyway (and should have been fixed by tightening
+> the check).
+>
+> So the cast doesn't add anything - not for humans, and not for a
+> compiler that could just optimize it away because it saw the range
+> check.
+>
+> End result: just fix the pointless 'hh' in the print specifier. It
+> doesn't add anything, and only causes problems. Anybody who uses '%02X
+> to print a byte should only use it for byte values - and the code
+> already does.
+>
+> Of course, the _reason_ for this all was a warning that was pointless
+> to begin with, and should never have existed. Clang was not smart
+> enough to take the range knowledge that it _could_ have taken into
+> account, and instead wrote out a completely bogus warning.
+>
+> It's completely bogus not just because clang didn't do a sufficiently
+> good job of range analysis - it's completely bogus because a 'varargs'
+> function DOES NOT TAKE arguments of type 'char'.
+>
+> So the *only* reason to use '%hhX' in the first place is that you
+> *want* the sprintf() to actually limit the value to a byte for you
+> (possibly because you have a signed char, know it will sign-extend to
+> 'int', and want to limit it back to 8 bits).
+>
+> If you *actually* had a 'unsigned char' to begin with, you'd be
+> completely insane to use %hhX. It's just pointless.
+>
+> So warning that '%hhX' is paired with an 'int' is all just completely
+> mindless and wrong.
+>
+>               Linus

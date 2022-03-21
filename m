@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9114E297E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9B84E29C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348864AbiCUOFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S1351786AbiCUOLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349126AbiCUN7S (ORCPT
+        with ESMTP id S243034AbiCUOCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:59:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67D710CC;
-        Mon, 21 Mar 2022 06:57:52 -0700 (PDT)
+        Mon, 21 Mar 2022 10:02:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271A63A722;
+        Mon, 21 Mar 2022 06:59:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63D586125C;
-        Mon, 21 Mar 2022 13:57:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 767D3C340E8;
-        Mon, 21 Mar 2022 13:57:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6AC461291;
+        Mon, 21 Mar 2022 13:59:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB1D0C340E8;
+        Mon, 21 Mar 2022 13:59:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871071;
-        bh=iTxtJC1l3ApI+080GeDg+/sXNoxalLmyjWgvZ1KIW7g=;
+        s=korg; t=1647871165;
+        bh=JBwT2FpWuW+DXrzrhNxMCQ2pX1GZUCBphhPILV5OTbU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L77uKD0/nJGMbQS0WMfu5y5ecBJlUs4VJxmVLoEfvFZCA+NrO2MCFIA36uvTRzvuu
-         W59N5LIS+A1NAVbkdxU8nlYxtHn/jqVcpv/4ieLDCHNxtXthdN2C615twfjI7G9gbN
-         BqhJEce6ywawTPE6VyKJ/D6b4aQsjoSIyHaTmTsE=
+        b=DSJuKUbHUs1qyDDOQpg35MJstcdazu3gKDoFiyEzLTXmoR43arbjb7/DbOKg35o0u
+         8nRwVxcOFV7B/IqgaUJ7DUG0R/pVtwMTdmQAZjkf/UUpNjmfNwIN1op0Gr7+AKplG1
+         12NvIuMJJvDaiAaBRlPNZybnXbE5InFfesb+U68I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com
-Subject: [PATCH 5.4 13/17] usb: gadget: Fix use-after-free bug by not setting udc->dev.driver
-Date:   Mon, 21 Mar 2022 14:52:49 +0100
-Message-Id: <20220321133217.540026477@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH 5.10 20/30] usb: gadget: rndis: prevent integer overflow in rndis_set_response()
+Date:   Mon, 21 Mar 2022 14:52:50 +0100
+Message-Id: <20220321133220.230272220@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
-References: <20220321133217.148831184@linuxfoundation.org>
+In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
+References: <20220321133219.643490199@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,86 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 16b1941eac2bd499f065a6739a40ce0011a3d740 upstream.
+commit 65f3324f4b6fed78b8761c3b74615ecf0ffa81fa upstream.
 
-The syzbot fuzzer found a use-after-free bug:
+If "BufOffset" is very large the "BufOffset + 8" operation can have an
+integer overflow.
 
-BUG: KASAN: use-after-free in dev_uevent+0x712/0x780 drivers/base/core.c:2320
-Read of size 8 at addr ffff88802b934098 by task udevd/3689
-
-CPU: 2 PID: 3689 Comm: udevd Not tainted 5.17.0-rc4-syzkaller-00229-g4f12b742eb2b #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- dev_uevent+0x712/0x780 drivers/base/core.c:2320
- uevent_show+0x1b8/0x380 drivers/base/core.c:2391
- dev_attr_show+0x4b/0x90 drivers/base/core.c:2094
-
-Although the bug manifested in the driver core, the real cause was a
-race with the gadget core.  dev_uevent() does:
-
-	if (dev->driver)
-		add_uevent_var(env, "DRIVER=%s", dev->driver->name);
-
-and between the test and the dereference of dev->driver, the gadget
-core sets dev->driver to NULL.
-
-The race wouldn't occur if the gadget core registered its devices on
-a real bus, using the standard synchronization techniques of the
-driver core.  However, it's not necessary to make such a large change
-in order to fix this bug; all we need to do is make sure that
-udc->dev.driver is always NULL.
-
-In fact, there is no reason for udc->dev.driver ever to be set to
-anything, let alone to the value it currently gets: the address of the
-gadget's driver.  After all, a gadget driver only knows how to manage
-a gadget, not how to manage a UDC.
-
-This patch simply removes the statements in the gadget core that touch
-udc->dev.driver.
-
-Fixes: 2ccea03a8f7e ("usb: gadget: introduce UDC Class")
-CC: <stable@vger.kernel.org>
-Reported-and-tested-by: syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/YiQgukfFFbBnwJ/9@rowland.harvard.edu
+Cc: stable@kernel.org
+Fixes: 38ea1eac7d88 ("usb: gadget: rndis: check size of RNDIS_MSG_SET command")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220301080424.GA17208@kili
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/udc/core.c |    3 ---
- 1 file changed, 3 deletions(-)
+ drivers/usb/gadget/function/rndis.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1303,7 +1303,6 @@ static void usb_gadget_remove_driver(str
- 	usb_gadget_udc_stop(udc);
+--- a/drivers/usb/gadget/function/rndis.c
++++ b/drivers/usb/gadget/function/rndis.c
+@@ -640,6 +640,7 @@ static int rndis_set_response(struct rnd
+ 	BufLength = le32_to_cpu(buf->InformationBufferLength);
+ 	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
+ 	if ((BufLength > RNDIS_MAX_TOTAL_SIZE) ||
++	    (BufOffset > RNDIS_MAX_TOTAL_SIZE) ||
+ 	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE))
+ 		    return -EINVAL;
  
- 	udc->driver = NULL;
--	udc->dev.driver = NULL;
- 	udc->gadget->dev.driver = NULL;
- }
- 
-@@ -1352,7 +1351,6 @@ static int udc_bind_to_driver(struct usb
- 			driver->function);
- 
- 	udc->driver = driver;
--	udc->dev.driver = &driver->driver;
- 	udc->gadget->dev.driver = &driver->driver;
- 
- 	usb_gadget_udc_set_speed(udc, driver->max_speed);
-@@ -1374,7 +1372,6 @@ err1:
- 		dev_err(&udc->dev, "failed to start %s: %d\n",
- 			udc->driver->function, ret);
- 	udc->driver = NULL;
--	udc->dev.driver = NULL;
- 	udc->gadget->dev.driver = NULL;
- 	return ret;
- }
 
 

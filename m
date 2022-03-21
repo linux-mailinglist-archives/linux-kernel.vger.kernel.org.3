@@ -2,113 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CD54E1F60
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 04:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B76B64E1F65
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 04:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240964AbiCUD41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 23:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
+        id S229982AbiCUEAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 00:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiCUD4Z (ORCPT
+        with ESMTP id S229553AbiCUEAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 23:56:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F21FE13EB6
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 20:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647834899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MEC5W64mg/dChPmSON3+rx/2O3+zfOyzeqWukrfjHaE=;
-        b=UhK0TEdFoY19+49qHdVGXN0WVXurJPqOOIWy6eahW6Qq4zVZNQr0NcrF7L66/sr+Kxq5Np
-        Kbl5jj1fF4r07XCuuLVb5N4f3OWWlD7HL9XedAWYF05gP0EVIdQ2OIpsZoBo/ohlwsJAkO
-        heUwlfBvHdh6sxDxbS3MjZ6nWOVSzQs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-d0wMJBzJPc23XLU06H5n6Q-1; Sun, 20 Mar 2022 23:54:55 -0400
-X-MC-Unique: d0wMJBzJPc23XLU06H5n6Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 21 Mar 2022 00:00:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C61AE5E;
+        Sun, 20 Mar 2022 20:59:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50332802C16;
-        Mon, 21 Mar 2022 03:54:55 +0000 (UTC)
-Received: from localhost (ovpn-12-54.pek2.redhat.com [10.72.12.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1B9E02166B2D;
-        Mon, 21 Mar 2022 03:54:53 +0000 (UTC)
-Date:   Mon, 21 Mar 2022 11:54:50 +0800
-From:   'Baoquan He' <bhe@redhat.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "yangtiezhu@loongson.cn" <yangtiezhu@loongson.cn>,
-        "amit.kachhap@arm.com" <amit.kachhap@arm.com>,
-        "hch@lst.de" <hch@lst.de>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v4 4/4] fs/proc/vmcore: Use iov_iter_count()
-Message-ID: <Yjf3CivCFMNE/Hbs@MiWiFi-R3L-srv>
-References: <20220318093706.161534-1-bhe@redhat.com>
- <20220318093706.161534-5-bhe@redhat.com>
- <1592a861bd9e46e5adf1431ad6bbd25c@AcuMS.aculab.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9C5860C6E;
+        Mon, 21 Mar 2022 03:59:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0256C340EE;
+        Mon, 21 Mar 2022 03:59:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647835162;
+        bh=Y4RPiSr+4ZFbLITcBxYisXPJwqdGgqpzoccbeNlhlz8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hbwrRg3dYYgVo5Vm2TvAvXfrFT8frw0Wgc6mDOmq/9KM9ZfGyxLu1VI5czKGhU6JO
+         2+Y2MGwgodRQ30iyM+I4c+s/g5MnUGA6MHN8PLuL6q3voUYcZ8o6UIkSglFBBn1Tnh
+         faphTUcxF9tZ3m2pXj3IIFyt81s07xTtLwQgUGuMpaHDvdUmvvS8OmXes7vyaV/if6
+         fK4noFy9Xqf7p/3jA5XXnP4c02IcfYODnzIHDP6V/G6qwxRKp1QUlFPrcby8NuTUXW
+         Z5GTM+y05VGUrlxfNDooAnuf1v3Ui7TuoUszGLiIU298vFP69UBE/H5jSW+BoIbW1N
+         6xM9z2M47Z8CQ==
+Date:   Mon, 21 Mar 2022 11:59:17 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     broonie@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linmq006@gmail.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-mediatek@lists.infradead.org, trevor.wu@mediatek.com,
+        matthias.bgg@gmail.com, aaronyu@google.com,
+        linux-arm-kernel@lists.infradead.org,
+        angelogioacchino.delregno@collabora.com
+Subject: Re: [v5 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
+ speaker
+Message-ID: <Yjf4FXEirDkxPUd1@google.com>
+References: <20220319114111.11496-1-jiaxin.yu@mediatek.com>
+ <20220319114111.11496-3-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1592a861bd9e46e5adf1431ad6bbd25c@AcuMS.aculab.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220319114111.11496-3-jiaxin.yu@mediatek.com>
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On Sat, Mar 19, 2022 at 07:41:09PM +0800, Jiaxin Yu wrote:
+>  static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
+[...]
+> +	hdmi_codec = of_parse_phandle(pdev->dev.of_node, "mediatek,hdmi-codec", 0);
+> +	if (!hdmi_codec) {
+>  		ret = -EINVAL;
+> -		goto put_platform_node;
+> +		dev_err_probe(&pdev->dev, ret, "Property 'hdmi-codec' missing or invalid\n");
+> +		goto err_hdmi_codec;
+>  	}
+> -	card->dev = &pdev->dev;
+>  
+> -	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
+> -				      "mediatek,hdmi-codec", 0);
+> +	speaker_codec = of_get_child_by_name(pdev->dev.of_node, "mediatek,speaker-codec");
+> +	if (!speaker_codec) {
+> +		ret = -EINVAL;
+> +		dev_err_probe(&pdev->dev, ret, "Property 'speaker_codec' missing or invalid\n");
+> +		goto err_speaker_codec;
+> +	}
 
-On 03/18/22 at 01:48pm, David Laight wrote:
-> From: Baoquan He
-> > Sent: 18 March 2022 09:37
-> > 
-> > To replace open coded iter->count. This makes code cleaner.
-> ...
-> > diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
-> > index 4cbb8db7c507..ed58a7edc821 100644
-> > --- a/fs/proc/vmcore.c
-> > +++ b/fs/proc/vmcore.c
-> > @@ -319,21 +319,21 @@ static ssize_t __read_vmcore(struct iov_iter *iter, loff_t *fpos)
-> >  	u64 start;
-> >  	struct vmcore *m = NULL;
-> > 
-> > -	if (iter->count == 0 || *fpos >= vmcore_size)
-> > +	if (!iov_iter_count(iter) || *fpos >= vmcore_size)
-> 
-> For some definition of 'cleaner' :-)
-> 
-> iter->count is clearly a simple, cheap structure member lookup.
-> OTOH iov_iter_count(iter) might be an expensive traversal of
-> the vector (or worse).
-> 
-> So a quick read of the code by someone who isn't an expert
-> in the iov functions leaves them wondering what is going on
-> or having to spend time locating the definition ...
-
-Thanks for reviewing and looking into this.
-
-People may have the same feeling as you when looking at codes at the
-first glance. While usually we all use editor to explore codes, so.
-
-Basically, I noticed putting open code into wrapper is a tendency, see a
-lot of patches to clean up open code in sub component. About the extra
-cost of wrapper, I believe it does have. It should be one of reasons
-in some places open code is necessary. However, in fs/proc/vmcore, I
-don't have the worry since it's very tiny and can be ignorable.
-
-Thanks
-Baoquan
-
+(to be neat) Does it have any reason to prevent from using of_parse_phandle()
+but of_get_child_by_name()?

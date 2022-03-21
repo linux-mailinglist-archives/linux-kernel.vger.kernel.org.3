@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C174E32F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE7D4E32E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:48:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiCUWtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 18:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52462 "EHLO
+        id S229760AbiCUWtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 18:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiCUWsv (ORCPT
+        with ESMTP id S229853AbiCUWtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:48:51 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806653DE8C8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:44:22 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id oj16-20020a17090b4d9000b001c7552b7546so330260pjb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:44:22 -0700 (PDT)
+        Mon, 21 Mar 2022 18:49:03 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FF9181B1D
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:44:25 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id x29-20020aa7941d000000b004fa7e7f232fso4714724pfo.7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:44:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=ZLPE95jpMe8lV+T0TCTfToINWj+s4+K7bgD6GOm8guA=;
-        b=CajaE6dlLX8Yr8WIk2KWXbrjn53KC91j1SdU00qweOisaskCK3aHgMjE1CRdyXzLHZ
-         C5fKlRw9g7ow1hrQ3B4/846IJpwUt4SSvFLkn+TgoJ+23GpNU3R09NAccrh38bLASLTs
-         3V/Hgcx9TMY4ZuMziFaD1v5ypRe4VVHA/yy+7aBDikhuEKgExP6hMjh2Ja7ua/TmVe4q
-         f19e/dhTvg9tc52yHUU20EsiLLmcSRgflIDx9skeIvJzqRydezTEy6qRBWrA8hdPjXey
-         Swr4Hc6pa0cHv9jXCLFWH6ffZaEIDHDGXPjLtLFofGzs05REbJTpHmLqPDrWZeJfrsNB
-         Wpgw==
+        bh=uCzuyzAeivg9rQW1tF47OPLIGzwSsZl5WKJom2K5UFo=;
+        b=FUDtiOGTljaKLXmMd+WjpcA4qQiPozroTXy+12tMQNQeBynzAQlWEhBHea7Z6YUYfy
+         F6eoo8Wzhk4F4yw6xXKagVR79ivkLNhDaiLZnHQWF9iPRGa9diKwHaC5r+1EhDOuMZNo
+         RRgL5eMAaL+ppbPzfxwlRn/mxprXf4AQzvdEWN9a8jCSO/WjVhzouewDi3fjh0sWsaO3
+         eGVdUvyYiwMeHANsAT1Od8JsF5htVoijWzAVuj8jyzvihrQ4B6TOEaszsYSxWMDnpcNS
+         IJCkwTNkwjA5RV0fEKq9rSwQgYZ/U2GKk0XSm5eCcXmsroJKk8hhhO+XonzxBtVS9kIh
+         Wlvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=ZLPE95jpMe8lV+T0TCTfToINWj+s4+K7bgD6GOm8guA=;
-        b=6LGMg4m4Z8Hxt9bqePAfEKtNFXGPj/2SmxeDeOizr1D7U54zZlFDny2wgJ9314wDir
-         4x8YPGTGho4dwh4apJe4s4wzOc72oPUpi3IhnL8s8Ydy3q+FwT3n+zNoJPkhyE0SBYxR
-         RUgOhXb2rQl2CQcPpqVSAwkVt/iJu82m+b3rWQHk7qZQ1sIH2Y5V3NdjdOnZCPwcJsc3
-         0YtJyRbSCmg1PQOMGD1OlIUsxAywbRB9JwrvPkcfuu+qWcQweiD+Rrt5G67ji1zo3Y5Z
-         b0u+QSMn+PM0rMDAdHok0Q2CMFVxq476Ij0ApfSmoBOXwcYG1d0iT7il2YkXGL5UxjN4
-         I8GQ==
-X-Gm-Message-State: AOAM530Q2zyJhPDvyH/ld6rKaICwVCWBy9vBZSFW75t6rNCqX7JCYnH9
-        7dtVo+wkInj5VHxRcutCOGVHCgdRgR8/UPTKWZYWUDlkETsmlJmv/0LF+8YTwZzXdrkc3gB4okC
-        eARQgjIIjR+xZYB7IVYW1PsGl1vewjuz8d/vca1MC0nU/rzEKXfOPtaNGypl7RnlIqMUAPzOQ
-X-Google-Smtp-Source: ABdhPJx1NaHm335/J0Bcq4TpBTZou5NEHOeWgQqSdDOymCWGceNCKVwWAFHgIFAtBMbqfmtWLOi/tH5lmHwn
+        bh=uCzuyzAeivg9rQW1tF47OPLIGzwSsZl5WKJom2K5UFo=;
+        b=yTmSbRPv13pxUG4LCfX1tV+lqMMAH1PuSWhgEkvF+t/H++qDyq1ogAufH3OsE9hYV8
+         Ej3punguEbOiQCB0UZRUBlhJgT/GdDKJMxA4MYYL8/x7KPSbvrE4cL7B4JCQpFkYowh1
+         8BcjlZuPvF7puYDKeWOFZhnCf+dqwAE6pA8nk8ikqVvngN6DcLwzOaFmvzZRPF//RoOf
+         k8qNHWxlFEw5ugNLi2dnuN6TyTkG21Lg4U1IE//d/T3AEcUaWm6KAxwvgTHrMi2KHXkM
+         pUzeh0YO/ITRSvL2stUXM7VNx5GsIbk4G5KfGtE3ZezBgtEnTcmUg73IZ+MgQx0RgiJu
+         jo1g==
+X-Gm-Message-State: AOAM533hRP1ikg/Re+Vcw+uEDZjpQGTiLaXgiBdrNwPHkMFTB2bHEL7T
+        0cHRBCjWgfkP4zJcYZrnbgMYVnGdPD3qbrSiAl7Vzla4HWya6bsYFKw1SBgS8uMRo7K6lbQ4N/w
+        ZdMrHQ2tEIO1CO70j+nFDoNVd9gDG3hI2QMPvbjreo5IIupke/53Ih8ovFLDcZlZwcAHn6Vti
+X-Google-Smtp-Source: ABdhPJzuK9aAeqw10fWLswjFrzy+1wQuny8/nM8UoMiivEPlbzYZ/OsJI1KZlbWt71dulve1DsCnOzXFmJ/A
 X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:b76a:f152:cb5e:5cd2])
- (user=bgardon job=sendgmr) by 2002:a17:90b:4f92:b0:1bf:25e2:f6af with SMTP id
- qe18-20020a17090b4f9200b001bf25e2f6afmr1480613pjb.98.1647902661983; Mon, 21
- Mar 2022 15:44:21 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 15:43:57 -0700
+ (user=bgardon job=sendgmr) by 2002:a17:90b:e81:b0:1c6:5a9c:5afa with SMTP id
+ fv1-20020a17090b0e8100b001c65a9c5afamr188347pjb.1.1647902664757; Mon, 21 Mar
+ 2022 15:44:24 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 15:43:58 -0700
 In-Reply-To: <20220321224358.1305530-1-bgardon@google.com>
-Message-Id: <20220321224358.1305530-9-bgardon@google.com>
+Message-Id: <20220321224358.1305530-10-bgardon@google.com>
 Mime-Version: 1.0
 References: <20220321224358.1305530-1-bgardon@google.com>
 X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH v2 8/9] KVM: x86/mmu: Make kvm_is_mmio_pfn usable outside of spte.c
+Subject: [PATCH v2 9/9] KVM: x86/mmu: Promote pages in-place when disabling
+ dirty logging
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -68,46 +69,165 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Export kvm_is_mmio_pfn from spte.c. It will be used in a subsequent
-commit for in-place lpage promotion when disabling dirty logging.
+When disabling dirty logging, the TDP MMU currently zaps each leaf entry
+mapping memory in the relevant memslot. This is very slow. Doing the zaps
+under the mmu read lock requires a TLB flush for every zap and the
+zapping causes a storm of ETP/NPT violations.
 
+Instead of zapping, replace the split large pages with large page
+mappings directly. While this sort of operation has historically only
+been done in the vCPU page fault handler context, refactorings earlier
+in this series and the relative simplicity of the TDP MMU make it
+possible here as well.
+
+Running the dirty_log_perf_test on an Intel Skylake with 96 vCPUs and 1G
+of memory per vCPU, this reduces the time required to disable dirty
+logging from over 45 seconds to just over 1 second. It also avoids
+provoking page faults, improving vCPU performance while disabling
+dirty logging.
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- arch/x86/kvm/mmu/spte.c | 2 +-
- arch/x86/kvm/mmu/spte.h | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/kvm/mmu/mmu.c          |  4 +-
+ arch/x86/kvm/mmu/mmu_internal.h |  6 +++
+ arch/x86/kvm/mmu/tdp_mmu.c      | 73 ++++++++++++++++++++++++++++++++-
+ 3 files changed, 79 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-index 45e9c0c3932e..8e9b827c4ed5 100644
---- a/arch/x86/kvm/mmu/spte.c
-+++ b/arch/x86/kvm/mmu/spte.c
-@@ -69,7 +69,7 @@ u64 make_mmio_spte(struct kvm_vcpu *vcpu, u64 gfn, unsigned int access)
- 	return spte;
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 6f98111f8f8b..a99c23ef90b6 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -100,7 +100,7 @@ module_param_named(flush_on_reuse, force_flush_and_sync_on_reuse, bool, 0644);
+  */
+ bool tdp_enabled = false;
+ 
+-static int max_huge_page_level __read_mostly;
++int max_huge_page_level;
+ static int tdp_root_level __read_mostly;
+ static int max_tdp_level __read_mostly;
+ 
+@@ -4486,7 +4486,7 @@ static inline bool boot_cpu_is_amd(void)
+  * the direct page table on host, use as much mmu features as
+  * possible, however, kvm currently does not do execution-protection.
+  */
+-static void
++void
+ build_tdp_shadow_zero_bits_mask(struct rsvd_bits_validate *shadow_zero_check,
+ 				int shadow_root_level)
+ {
+diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+index 1bff453f7cbe..6c08a5731fcb 100644
+--- a/arch/x86/kvm/mmu/mmu_internal.h
++++ b/arch/x86/kvm/mmu/mmu_internal.h
+@@ -171,4 +171,10 @@ void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
+ void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
+ void unaccount_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
+ 
++void
++build_tdp_shadow_zero_bits_mask(struct rsvd_bits_validate *shadow_zero_check,
++				int shadow_root_level);
++
++extern int max_huge_page_level __read_mostly;
++
+ #endif /* __KVM_X86_MMU_INTERNAL_H */
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index af60922906ef..eb8929e394ec 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1709,6 +1709,66 @@ void kvm_tdp_mmu_clear_dirty_pt_masked(struct kvm *kvm,
+ 		clear_dirty_pt_masked(kvm, root, gfn, mask, wrprot);
  }
  
--static bool kvm_is_mmio_pfn(kvm_pfn_t pfn)
-+bool kvm_is_mmio_pfn(kvm_pfn_t pfn)
- {
- 	if (pfn_valid(pfn))
- 		return !is_zero_pfn(pfn) && PageReserved(pfn_to_page(pfn)) &&
-diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-index cee02fe63429..e058a85e6c66 100644
---- a/arch/x86/kvm/mmu/spte.h
-+++ b/arch/x86/kvm/mmu/spte.h
-@@ -443,4 +443,5 @@ u64 kvm_mmu_changed_pte_notifier_make_spte(u64 old_spte, kvm_pfn_t new_pfn);
++static bool try_promote_lpage(struct kvm *kvm,
++			      const struct kvm_memory_slot *slot,
++			      struct tdp_iter *iter)
++{
++	struct kvm_mmu_page *sp = sptep_to_sp(iter->sptep);
++	struct rsvd_bits_validate shadow_zero_check;
++	bool map_writable;
++	kvm_pfn_t pfn;
++	u64 new_spte;
++	u64 mt_mask;
++
++	/*
++	 * If addresses are being invalidated, don't do in-place promotion to
++	 * avoid accidentally mapping an invalidated address.
++	 */
++	if (unlikely(kvm->mmu_notifier_count))
++		return false;
++
++	if (iter->level > max_huge_page_level || iter->gfn < slot->base_gfn ||
++	    iter->gfn >= slot->base_gfn + slot->npages)
++		return false;
++
++	pfn = __gfn_to_pfn_memslot(slot, iter->gfn, true, NULL, true,
++				   &map_writable, NULL);
++	if (is_error_noslot_pfn(pfn))
++		return false;
++
++	/*
++	 * Can't reconstitute an lpage if the consituent pages can't be
++	 * mapped higher.
++	 */
++	if (iter->level > kvm_mmu_max_mapping_level(kvm, slot, iter->gfn,
++						    pfn, PG_LEVEL_NUM))
++		return false;
++
++	build_tdp_shadow_zero_bits_mask(&shadow_zero_check, iter->root_level);
++
++	/*
++	 * In some cases, a vCPU pointer is required to get the MT mask,
++	 * however in most cases it can be generated without one. If a
++	 * vCPU pointer is needed kvm_x86_try_get_mt_mask will fail.
++	 * In that case, bail on in-place promotion.
++	 */
++	if (unlikely(!static_call(kvm_x86_try_get_mt_mask)(kvm, iter->gfn,
++							   kvm_is_mmio_pfn(pfn),
++							   &mt_mask)))
++		return false;
++
++	__make_spte(kvm, sp, slot, ACC_ALL, iter->gfn, pfn, 0, false, true,
++		  map_writable, mt_mask, &shadow_zero_check, &new_spte);
++
++	if (tdp_mmu_set_spte_atomic(kvm, iter, new_spte))
++		return true;
++
++	/* Re-read the SPTE as it must have been changed by another thread. */
++	iter->old_spte = READ_ONCE(*rcu_dereference(iter->sptep));
++
++	return false;
++}
++
+ /*
+  * Clear leaf entries which could be replaced by large mappings, for
+  * GFNs within the slot.
+@@ -1729,8 +1789,17 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
+ 		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
+ 			continue;
  
- void kvm_mmu_reset_all_pte_masks(void);
+-		if (!is_shadow_present_pte(iter.old_spte) ||
+-		    !is_last_spte(iter.old_spte, iter.level))
++		if (iter.level > max_huge_page_level ||
++		    iter.gfn < slot->base_gfn ||
++		    iter.gfn >= slot->base_gfn + slot->npages)
++			continue;
++
++		if (!is_shadow_present_pte(iter.old_spte))
++			continue;
++
++		/* Try to promote the constitutent pages to an lpage. */
++		if (!is_last_spte(iter.old_spte, iter.level) &&
++		    try_promote_lpage(kvm, slot, &iter))
+ 			continue;
  
-+bool kvm_is_mmio_pfn(kvm_pfn_t pfn);
- #endif
+ 		pfn = spte_to_pfn(iter.old_spte);
 -- 
 2.35.1.894.gb6a874cedc-goog
 

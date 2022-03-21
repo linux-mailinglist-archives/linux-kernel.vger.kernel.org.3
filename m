@@ -2,45 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3F84E2821
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7367C4E2826
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348116AbiCUNxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
+        id S1348122AbiCUNxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348103AbiCUNxZ (ORCPT
+        with ESMTP id S1348115AbiCUNx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:53:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959D7145986;
-        Mon, 21 Mar 2022 06:51:59 -0700 (PDT)
+        Mon, 21 Mar 2022 09:53:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D687615DA91;
+        Mon, 21 Mar 2022 06:52:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B8A9B81675;
-        Mon, 21 Mar 2022 13:51:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E9C2C340E8;
-        Mon, 21 Mar 2022 13:51:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E19C6125C;
+        Mon, 21 Mar 2022 13:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E83DC340E8;
+        Mon, 21 Mar 2022 13:51:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647870716;
-        bh=lFLXRhW34vfFCOIYngRiWETJjhBV4ONwtADOaPDllds=;
+        s=korg; t=1647870719;
+        bh=SBnrSzmZi9VtvJcA7vI5yIsQi0dybMaBTBAxM9wYWXQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ryoHmOEjFdeR5SOppw0ky5WGTFGVrtJCy73eGbRe0LaZRmMLqiI04eP/5W9W+B4tN
-         Jvo7fSv3SCGFE8bc3HBdrl8AY4cTWyffVG8ZF90G5Q2vUsHt1zc4N9IukQ/o/ity6q
-         KgBNYcNZ7Lk0H8Zsiaq+GqGG1eVUBbnxBGoxbnWM=
+        b=BpI4dT1u21se8D7n5e/AFzH8YF2rdiHqn/IbaGNK2dVqpixq3EqPFfM0ttaJ1HxL5
+         9ANkZ2IVkK/H/MhaENyWE6j9r/q6THz7WBe8bCecNu+dlLa0QfMUKDVUqVpqoFJGAO
+         Bxu3091X1oEf3aDQ1Txi5xZAYn3brT+Cgrg2zUzU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 10/16] kselftest/vm: fix tests build with old libc
-Date:   Mon, 21 Mar 2022 14:51:40 +0100
-Message-Id: <20220321133216.955615999@linuxfoundation.org>
+        stable@vger.kernel.org, Lucas Wei <lucaswei@google.com>
+Subject: [PATCH 4.9 11/16] fs: sysfs_emit: Remove PAGE_SIZE alignment check
+Date:   Mon, 21 Mar 2022 14:51:41 +0100
+Message-Id: <20220321133216.984022688@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220321133216.648316863@linuxfoundation.org>
 References: <20220321133216.648316863@linuxfoundation.org>
@@ -58,47 +53,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengming Zhou <zhouchengming@bytedance.com>
+From: Lucas Wei <lucaswei@google.com>
 
-[ Upstream commit b773827e361952b3f53ac6fa4c4e39ccd632102e ]
+For kernel releases older than 4.20, using the SLUB alloctor will cause
+this alignment check to fail as that allocator did NOT align kmalloc
+allocations on a PAGE_SIZE boundry.
 
-The error message when I build vm tests on debian10 (GLIBC 2.28):
+Remove the check for these older kernels as it is a false-positive and
+causes problems on many devices.
 
-    userfaultfd.c: In function `userfaultfd_pagemap_test':
-    userfaultfd.c:1393:37: error: `MADV_PAGEOUT' undeclared (first use
-    in this function); did you mean `MADV_RANDOM'?
-      if (madvise(area_dst, test_pgsize, MADV_PAGEOUT))
-                                         ^~~~~~~~~~~~
-                                         MADV_RANDOM
-
-This patch includes these newer definitions from UAPI linux/mman.h, is
-useful to fix tests build on systems without these definitions in glibc
-sys/mman.h.
-
-Link: https://lkml.kernel.org/r/20220227055330.43087-2-zhouchengming@bytedance.com
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Lucas Wei <lucaswei@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/vm/userfaultfd.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/sysfs/file.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index d77ed41b2094..1f89d3dd8295 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -60,6 +60,7 @@
- #include <signal.h>
- #include <poll.h>
- #include <string.h>
-+#include <linux/mman.h>
- #include <sys/mman.h>
- #include <sys/syscall.h>
- #include <sys/ioctl.h>
--- 
-2.34.1
-
+--- a/fs/sysfs/file.c
++++ b/fs/sysfs/file.c
+@@ -565,8 +565,7 @@ int sysfs_emit(char *buf, const char *fm
+ 	va_list args;
+ 	int len;
+ 
+-	if (WARN(!buf || offset_in_page(buf),
+-		 "invalid sysfs_emit: buf:%p\n", buf))
++	if (WARN(!buf, "invalid sysfs_emit: buf:%p\n", buf))
+ 		return 0;
+ 
+ 	va_start(args, fmt);
 
 

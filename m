@@ -2,126 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F674E2CB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:46:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 120CC4E2CBE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350519AbiCUPr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        id S234421AbiCUPrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350501AbiCUPrT (ORCPT
+        with ESMTP id S1350522AbiCUPrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:47:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B7857B1A
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:45:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADE936117E
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:45:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A52DC340F0;
-        Mon, 21 Mar 2022 15:44:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647877500;
-        bh=OJ5Meuvox4FnTDLO6bRR0IED9v6M1ZLzd8Rikjv7omY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qPcxCNb7cnBsk+7BbUEUVtPjwQhwneJumn1Zkf28vpgTxb3mb3N9qc7z1We+Ir+ql
-         Zg+l+83LPQeumX2ritqk8kLjJrkm+pRGNPbHyTsGGontGfbvfLyqa7f5WJrql6yXp+
-         h7SDCmZA37zCwNpYCKpVUM72TI6V/1ePgSG4iYsu4+ZKsyzsSTnRhaNXsY6XQLnCsO
-         qqKwNl0JA7WNAd6+WsfmloKFOPIepMYRtz8ojom6qQcVXfNUhP+8AVUzx3Q8vNp75t
-         d/mWzy+oI0Q8gtOuAtqBRIMSDYvIeBXCQQOZRkJ54iklW8nH8sQzLoGqQkjEgSnAAK
-         uMAJilTkDd1dw==
-Date:   Mon, 21 Mar 2022 08:44:52 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [GIT PULL] scheduler updates for v5.18
-Message-ID: <YjiddAnoCCz7Tbt3@dev-arch.thelio-3990X>
-References: <YjhZUezhnamHAl0H@gmail.com>
+        Mon, 21 Mar 2022 11:47:31 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F52357B1A;
+        Mon, 21 Mar 2022 08:46:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647877566; x=1679413566;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pu7vZcm3vds3YMiUNrGH7dI0e1cLyRyYAZeDHVPZQ6Q=;
+  b=OwwM4e0zBZMujiHvgXO59HILe3VFiiULSooFeeVYYblWArgMOcNYXkoK
+   dQgvLawtRUmEB/cOhM1wkNYWNMK4Eey/WUX7nhQ0LwMw/GENJarNvZxwD
+   A7gtB2BXFRiR1gGNRfpt7W6tpiV88gewn5VMNkPPfubyasZBHbSPRF0NP
+   QFUWTgmf11FqCenETH7Uy3j6c9/bVID3L+jfxsz6fDO4gg+SsExCTISc1
+   A7YkVaQpoFIaMjXQ0jM0ORHSbtSzCC0zF7NdZ7eAfZr1s4zdrxR06Ao+r
+   8nVNlXaYUNhb6OoiH3fAiHT/qiTvRkltt/45DvqLXwky1sXamXl7z7l26
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="282409575"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="282409575"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 08:46:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="582906172"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 21 Mar 2022 08:46:03 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWKEM-000Hww-O1; Mon, 21 Mar 2022 15:46:02 +0000
+Date:   Mon, 21 Mar 2022 23:44:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Roopa Prabhu <roopa@nvidia.com>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] vxlan: fix returnvar.cocci warnings
+Message-ID: <20220321154456.GA30106@e0e7ddfdfbf7>
+References: <202203212331.4ZEJaAXK-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YjhZUezhnamHAl0H@gmail.com>
+In-Reply-To: <202203212331.4ZEJaAXK-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ingo,
+From: kernel test robot <lkp@intel.com>
 
-On Mon, Mar 21, 2022 at 11:54:09AM +0100, Ingo Molnar wrote:
-> Ingo Molnar (17):
->       sched/headers: Fix header to build standalone: <linux/sched_clock.h>
->       sched/headers: Add header guard to kernel/sched/sched.h
->       sched/headers: Add header guard to kernel/sched/stats.h and kernel/sched/autogroup.h
->       sched/headers: sched/clock: Mark all functions 'notrace', remove CC_FLAGS_FTRACE build asymmetry
->       sched/headers: Add initial new headers as identity mappings
->       sched/headers: Fix comment typo in kernel/sched/cpudeadline.c
->       sched/headers: Make the <linux/sched/deadline.h> header build standalone
->       sched/headers: Introduce kernel/sched/build_utility.c and build multiple .c files there
->       sched/headers: Introduce kernel/sched/build_policy.c and build multiple .c files there
->       sched/headers: Standardize kernel/sched/sched.h header dependencies
->       sched/headers: Reorganize, clean up and optimize kernel/sched/core.c dependencies
->       sched/headers: Reorganize, clean up and optimize kernel/sched/fair.c dependencies
->       sched/headers: Reorganize, clean up and optimize kernel/sched/build_policy.c dependencies
->       sched/headers: Reorganize, clean up and optimize kernel/sched/build_utility.c dependencies
->       sched/headers: Reorganize, clean up and optimize kernel/sched/sched.h dependencies
->       sched/headers: Only include <linux/entry-common.h> when CONFIG_GENERIC_ENTRY=y
->       headers/prep: Fix header to build standalone: <linux/psi.h>
+drivers/net/vxlan/vxlan_core.c:2962:5-8: Unneeded variable: "ret". Return "0" on line 2971
 
-This series regresses ARCH=arm allmodconfig:
 
-$ make -skj"$(nproc)" ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- mrproper allmodconfig kernel/sched/
-In file included from kernel/sched/fair.c:52:
-kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
-   87 | # include <asm/paravirt_api_clock.h>
-      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[3]: *** [scripts/Makefile.build:288: kernel/sched/fair.o] Error 1
-In file included from kernel/sched/core.c:81:
-kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
-   87 | # include <asm/paravirt_api_clock.h>
-      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[3]: *** [scripts/Makefile.build:288: kernel/sched/core.o] Error 1
-In file included from kernel/sched/build_policy.c:33:
-kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
-   87 | # include <asm/paravirt_api_clock.h>
-      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[3]: *** [scripts/Makefile.build:288: kernel/sched/build_policy.o] Error 1
-In file included from kernel/sched/build_utility.c:52:
-kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
-   87 | # include <asm/paravirt_api_clock.h>
-      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[3]: *** [scripts/Makefile.build:288: kernel/sched/build_utility.o] Error 1
-make[3]: Target '__build' not remade because of errors.
-make[2]: *** [scripts/Makefile.build:550: kernel/sched] Error 2
+ Remove unneeded variable used to store return value.
 
-Randy Dunlap has sent a patch that fixes it, which I just reviewed:
+Generated by: scripts/coccinelle/misc/returnvar.cocci
 
-https://lore.kernel.org/r/20220316204146.14000-1-rdunlap@infradead.org/
+Fixes: f9c4bb0b245c ("vxlan: vni filtering support on collect metadata device")
+CC: Roopa Prabhu <roopa@nvidia.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
 
-It would be nice if this could be taken with the pull (or submitted with
-the pull in a v2 as I see Qian's comment) to avoid regressing the build.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6d72dda014a4753974eb08950089ddf71fec4f60
+commit: f9c4bb0b245cee35ef66f75bf409c9573d934cf9 [8808/13988] vxlan: vni filtering support on collect metadata device
+:::::: branch date: 3 days ago
+:::::: commit date: 3 weeks ago
 
-Cheers,
-Nathan
+ drivers/net/vxlan/vxlan_core.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+--- a/drivers/net/vxlan/vxlan_core.c
++++ b/drivers/net/vxlan/vxlan_core.c
+@@ -2959,7 +2959,6 @@ static void vxlan_flush(struct vxlan_dev
+ static int vxlan_stop(struct net_device *dev)
+ {
+ 	struct vxlan_dev *vxlan = netdev_priv(dev);
+-	int ret = 0;
+ 
+ 	vxlan_multicast_leave(vxlan);
+ 
+@@ -2968,7 +2967,7 @@ static int vxlan_stop(struct net_device
+ 	vxlan_flush(vxlan, false);
+ 	vxlan_sock_release(vxlan);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ /* Stub, nothing needs to be done. */

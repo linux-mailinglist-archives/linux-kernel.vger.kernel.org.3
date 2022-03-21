@@ -2,132 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7BB4E23F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E8A4E23DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346176AbiCUKG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 06:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S245584AbiCUKBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 06:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239190AbiCUKGW (ORCPT
+        with ESMTP id S232096AbiCUKBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 06:06:22 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAED50442;
-        Mon, 21 Mar 2022 03:04:55 -0700 (PDT)
-Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M7s1M-1nSPQK0PmE-0050Iu; Mon, 21 Mar 2022 11:04:54 +0100
-Received: by mail-wm1-f49.google.com with SMTP id j13-20020a05600c1c0d00b0038c8f94aac2so3793118wms.3;
-        Mon, 21 Mar 2022 03:04:53 -0700 (PDT)
-X-Gm-Message-State: AOAM532x53b4mI0pNF8Qfs3glIUYpZjGPMil69+jK+hRMkCEHhC9Ui54
-        FGuwoGmQOzwiZ/LDOIDxy+bswmMl9c5/4tpALOs=
-X-Google-Smtp-Source: ABdhPJxjEc9bzYesuwCKdzUo5YCU+Maot3VI/4zz2PDoJ/C9nonejO7aSCHEJYC3ozg6TMkFNtWWtvUlXTjVI63bZYY=
-X-Received: by 2002:a05:600c:4b83:b0:38c:49b5:5bfc with SMTP id
- e3-20020a05600c4b8300b0038c49b55bfcmr24295350wmp.33.1647856738182; Mon, 21
- Mar 2022 02:58:58 -0700 (PDT)
+        Mon, 21 Mar 2022 06:01:51 -0400
+Received: from esa3.hc3370-68.iphmx.com (esa3.hc3370-68.iphmx.com [216.71.145.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EA660F9;
+        Mon, 21 Mar 2022 03:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1647856824;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=4RckOyHuQ5kYI0KTpTlxEdTuSeWl8kDZa4B0qCmjOyw=;
+  b=Lo1gg80pLusbju6jdA6LvDPahNROEAnJcgd/PyVdDOySTWhAZ0rS7DgV
+   PwmDXbQM2dkPT4Hi+wnXaQnYg+CezyTq+CSXQNaZhX2V8OphRkhlKAn/K
+   rZVek8F7K2Pwv9TKPud7sSWZwBUzK5DTH1ho8ZwgT7Gf/q1VGUAP9Wm/9
+   I=;
+Authentication-Results: esa3.hc3370-68.iphmx.com; dkim=pass (signature verified) header.i=@citrix.onmicrosoft.com
+X-SBRS: 5.1
+X-MesageID: 66745199
+X-Ironport-Server: esa3.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.156.83
+X-Policy: $RELAYED
+IronPort-Data: A9a23:A0pLa6nPgzHnKsQaygorzzro5gwGJkRdPkR7XQ2eYbSJt1+Wr1Gzt
+ xIaD2nSbv7YN2T8f9snOY2/9EwCvcPRnIBrSFBo/npnRCMWpZLJC+rCIxarNUt+DCFioGGLT
+ Sk6QoOdRCzhZiaE/n9BCpC48T8kk/vgqoPUUIYoAAgoLeNfYHpn2EoLd9IR2NYy24DiWVrV4
+ LsenuWEULOb828sWo4rw/rrRCNH5JwebxtB4zTSzdgS1LPvvyF94KA3fMldHFOhKmVgJcaoR
+ v6r8V2M1jixEyHBqD+Suu2TnkUiGtY+NOUV45Zcc/DKbhNq/kTe3kunXRa1hIg+ZzihxrhMJ
+ NtxWZOYGRclNJHtksshTzpTTCdAOLJcpIDKCC3q2SCT5xWun3rExvxvCAc9PJEC+/YxCmZLn
+ RAaAGlTNFbZ3bvwme/lDLk37iggBJCD0Ic3oHZvwCufFf87aZvCX7/L9ZlT2zJYasVmQ6iBO
+ 5dAOGsHgBLoXS8VFFkFCosHjMjzuWTdSC1qolDFqv9ii4TU5FMoi+W8WDbPQfSJSN9Tk0Ldp
+ GvA/nj+GAoyKtOS03yG/2iqi+uJmjn0MKoWFbul5rtpjUeVy2g7FhIbTx24rOO/h0r4XMhQQ
+ 2QQ/jQrhawz71CwCN38WQCo5nKJoHY0X9tWDv1/4gWKwan8/QmUHC4HQyRHZdhgs9U5LRQh0
+ VuImZXoQz9utrK9RneU97PSpjS3UQAcPWUFaAcHQBED7t2lrIJbpgLCSJNvHbC4ivXxGCrs2
+ HaaoS4mnbIRgMUXkaKh8jj6bymE/8aTCFRvv0OOAzzjvlgRiJOZi5KAuUjX58phJqmlUnqK4
+ 346nteEsN8DJMTY/MCSe9klELas7veDFTTTh19zApUsnwiQF26fkZN4u28nehowWioQUXqwO
+ RKI51sNjHNGFCHyBZKbdb5dHCjDIULIMd3+Hs7ZYdNVCnSaXF/WpXo+DaJ8Mo2EraTNrU3dE
+ crAGSpPJSxDYUiC8NZRb71BuYLHPghkmQvuqWnTlnxLK4a2an+PUqsiO1CTdO0/567siFyLr
+ 4kPbpPTkkUGC7yWjszrHWk7dw1iEJTGLcqu95w/mhCrfGKK513N+9eOmOh8KuSJboxel/vS/
+ 2HVZ6Or4AGXuJEzEi3TMioLQOq2Bf5X9CtnVQRxbQfA8yVyOu6HsfZAH6bbiJF6rYSPO9YvF
+ KJbEyhBa9wSIgn6F8M1NsCs8tY9KEz12Wpj/UONOVACQnKpfCSQkvfMdQrz7igeSC2xsMo1u
+ bq70Q3HB5EEQmxf4Az+MppDE3vZUaAhpd9P
+IronPort-HdrOrdr: A9a23:vQWcVaPv/ZwJfcBcTyP155DYdb4zR+YMi2TDiHofdfUFSKClfp
+ 6V8cjztSWUtN4QMEtQ/uxoHJPwO080kqQFnLX5XI3SJzUO3VHHEGgM1/qB/9SNIVyaygcZ79
+ YdT0EcMqyAMbEZt7eC3ODQKb9Jq7PmgcOVbKXlvg9QpGlRGt9dBmxCe2Cm+yNNNW177c1TLu
+ vi2iMLnUvpRV0nKuCAQlUVVenKoNPG0LrgfB49HhYirC2Dlymh5rLWGwWRmk52aUIE/Z4StU
+ z+1yDp7KSqtP+2jjfaym/o9pxT3P/s0MFKCsCggtUcbh/slgGrToJ8XKDqhkF/nMifrHIR1P
+ XcqRYpOMp+r1vXY2GOuBPonzLt1T4/gkWSvmOwsD/Gm4jUVTg6A81OicZyaR3C8Xctu9l6ze
+ Ziw3+Zn4A/N2KOoA3No/zzEz16nEu9pnQv1cQJiWZEbIcYYLhN6aQC4UJuFosaFi6S0vFqLA
+ BXNrCc2B9qSyLbU5iA1VMfg+BEH05DUytue3Jy9PB8iFNt7TJEJ0hx/r1qop5PzuN5d3B+3Z
+ W2Dk1ZrsA/ciYoV9MOOA4ge7rANoWfe2OEDIqtSW6XYZ3vfUi976LK3A==
+X-IronPort-AV: E=Sophos;i="5.90,198,1643691600"; 
+   d="scan'208";a="66745199"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FH0GUeUe9+XOTHqYtAraBj4C2XnrHeoM96AcgSsK6b1nc7vdtInAi9j/B3XqkqFITd1+oXJFfAlPpWPTEqNAh+06GcJo5wEQB6KCxdAcoCtzcahmTM7lByxJwjcqOmG74ANE9rFI70JW84OZ+Ypp9bVuiBM/oZarVsu1VP1uacPKPEztsFwuEattbPIjEKVdJPgY+XNmBlUwo7ebtKvbOwfzWU1LypnvxDWTT0KUWoY6uu7z5NOY5dX/rd5QBgQBYDJXoOJ2pAmFyP2A7EZHGxpBnRd4L+9I+cvnrcvYzjCvyzOSVJ+CrYCZ1JxoThKBcQJsP9ZOVDaJIHT0u552Bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LJxLXOd/g+NcgzFBMKk/6O/8OuPEssPXeeYfnKDPtG0=;
+ b=A50FAf01qR7bF9Glx54iJv603uLfyzarwcGG7uNUmVlxIhelTJUzuRsK51wYIH8ZOWuV/CTKH5V4t8Jc/YHEozMFC7D31/2vt2eK7HZxYss+ha4HrIPhibc59Om8xtVhte8bLo8wDptFDzYXrMFjN6vOWbpXU/3R+FvH22TDA61EREtUaat0ZFW87QARNaHHrAyJTN5G8MWyoCeMLczVWEK6b9KQlIyFpdJFwHyoYfgxp4ARUmtV4yZDFZ03UfBgJSTphWCYb5yn1pIeI6gJrqWe1mzitKFfNFQ7aRk+HsTplId7ww+KD+3bql750poKtKHLkY13rgrA2uElElFQmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
+ dkim=pass header.d=citrix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LJxLXOd/g+NcgzFBMKk/6O/8OuPEssPXeeYfnKDPtG0=;
+ b=hRlQ2QNydZbs7MZMO1KvtkrBRuRkLZwBUG42Ek518GlXXVSXk9JCG38xpjCQ7vE6jramEwoBU8J3HQusSfaqVqER5N8dAFW1eWsVrb2GU9mMpRDLlENrDtGn2a19wC6NTe2unGeWHN4T1WhIk1rA6k12Qe9IewvCcUyZp3upkl8=
+Date:   Mon, 21 Mar 2022 11:00:13 +0100
+From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+CC:     Jens Axboe <axboe@kernel.dk>, <xen-devel@lists.xenproject.org>,
+        <linux-block@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: Re: [PATCH] xen-blkback: remove redundant assignment to variable i
+Message-ID: <YjhMre8vckI1HbSS@Air-de-Roger>
+References: <20220317234646.78158-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220317234646.78158-1-colin.i.king@gmail.com>
+X-ClientProxiedBy: LO2P265CA0241.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:8a::13) To DS7PR03MB5608.namprd03.prod.outlook.com
+ (2603:10b6:5:2c9::18)
 MIME-Version: 1.0
-References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-2-chenhuacai@loongson.cn>
-In-Reply-To: <20220319143817.1026708-2-chenhuacai@loongson.cn>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 21 Mar 2022 10:58:42 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a11-cRsFDYv-NzqWtWV3h8=xYoHGf_V33BhSRDBFPDXpA@mail.gmail.com>
-Message-ID: <CAK8P3a11-cRsFDYv-NzqWtWV3h8=xYoHGf_V33BhSRDBFPDXpA@mail.gmail.com>
-Subject: Re: [PATCH V8 09/22] LoongArch: Add boot and setup routines
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:NTZYbBHtfGesGoqv+h7F2I5E/pFV1xoBScyg3KX17CM+0GiB9R0
- fZXoaQoX5QibEzLioznve/rxBrR/zHG1e4OTpJEgvt/63BfTGS4vkEEyRaBHT8MIa8ILEij
- j7/SOVTids1h5/FgAhguIUaBIN/KtG84ykr7I3rL8j4uFd+1OGY0e/jwRzFg+qjyKrCKTEi
- 2ejdlGw/Ax+vRwSm9I1pA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JrHK0eP7o/4=:20upI0sMznrxFIV7b3yANu
- JQvBFIHYf7ZWuF+7hAlefT5+2tFwg7JGcr+LFbOMYo93JXWbLRcWMOLRVhk+pHpLrvS1ODRDt
- nJ1NstTILaIcoREdX3hmipqOnUrDStl+Uo+xZiD61pM8IxIllpx1Ci2RosfRMfX2ViFFM2vRQ
- x7lvhekZM5g2NXuvjVC+eXs0fryJ9Kn/GkJbWktK5j4hzfHEVXh+neZnu3pHoFsvzeRbpNmjG
- DTSt1GnN9/NditrckcudH9yaZUdrsgssbV77eRTjtJEWEBYMgBNkHIa7q3dsZG9VqUGvigSwF
- MezR9Nctp1INtHR2INWhuo/3+wog16EtuK7pWjXaq4PMSFlxPQX2N/73P18PIy09QPAVPlLvr
- 8+N5XtCE0WcBiKt9y5QmejRGZborz/l+UqYdT6tTfE34fW5rgDKeQfogAGxOoRvMtvjjzHHKl
- uc4I9P3BI7T9aY2uKO1noVWhgAvZ55Izszs8s2cfYJf9QKUbXcWuCWTXlV1cQSxCvvOTC8Jop
- lhBulB0+SGtpFSnxDigkAAzI7mCZNiZ3+G9OW3JWK0+fpc1HTcD2qhhwqoE1Z0o0kFE95QSAX
- Yzk41pY4Vqbr74PWLTvgtc24Mz4VmVjJ1cfzth9xZKJ5V60Nd6p/4GaalhXowne9Gx3gCURAJ
- VeNgNr4o/vPaOtXBn2iTvQm852SxMz+UTVdqV0HyjLUxrz/i2DCQ0VBvv//UXGwNWlwQMmLWD
- rtIYZkGC0l5p2EdEHCd9CL/TdQOd8ySJ9qoD2XqF/Go4df1T7g2Y1EA7A6wrKvgqx7phkNGJw
- eqLR0xPYvqYEVtpyMMYX/D155tBgT2ezcEhhzsDnTN67c/jEac=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 889f5f94-f5a8-48a9-f05d-08da0b219ab6
+X-MS-TrafficTypeDiagnostic: PH7PR03MB6944:EE_
+X-Microsoft-Antispam-PRVS: <PH7PR03MB6944166296D4E2C6802A04878F169@PH7PR03MB6944.namprd03.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 50Mk5dI1AbaE+zveTAmqMcD0J+N9zbjq1kfTbL/bTjpVrYDLFXnAPg19bmMHVyDxes7bnAyfoBKE3YmMO2tFNznIPE0JfPa643m1fxYaVwq2xgD4WfhEL4Lg0L2j9NZL3EfkbKJ01KLdKWcPqtjYxmip5RRFku1HilWblK14SIImo9Cu9sYUPJHLTHc6ay62iEiAxcibnIhBL9ly9BDYgPdJFAFeMxALad0rq7i6LxKnlgBl7QPP+U+XhflYwNn3vFHUGz5qkwto3qHQrg0hupd/wfZyufmcZAoMkWbTJaaLTf+NxMXzpHSZKhG8yMAEG6fdqqqrbT9zHWFsvH9abyHuoHB8JIwOtIxDJ6fAMgHQWzBWoAu5c6SB1jWq5haYcsh0cmfNKN61TNhdOI8Vlz+wYGy6fZlM05SnT6lUZ/5GEbEnf8EFe6ZHvW+rSgtdw50z8j1+BOQojAMWIwYpFcfaV6r5C8QgpJfRMuYy+qyS0g8iy6Spy9qSQZ/38Ap2h4RSofGXLzc/bkC/rW14baDdAXCe9gPOohCZzkcski2/9zSvziJsvAXqg0WFOA8byPpm02Xoh/9qiU9kML9aBSXyrBKtDAm1JkYVL41NJ0odaiFzRhoII1Iw7rKCip1gQ7BENc/4HhRoSXqxsGmBpV0BqkaAqS21m3ZOX7ErtO1OVgERI8VSJBJnmPSoQ5QUS4JizGNYQmu7u1faxEKJNg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR03MB5608.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(2906002)(9686003)(6512007)(6666004)(33716001)(86362001)(83380400001)(66946007)(66556008)(8936002)(66476007)(85182001)(4326008)(508600001)(8676002)(6506007)(26005)(82960400001)(186003)(6916009)(4744005)(5660300002)(316002)(6486002)(38100700002)(129723003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OGMvakdRM2dwR1ZGQUk0SVIwclhVdFpwaTRVQ0lhWUMxbDFabEYxOHcxa0tI?=
+ =?utf-8?B?OTg4SEpwOC9meDNPcHVFYWVyVFEyZ0Q4eXFSSk9MZnVYMzNNOTRIeWtVMEpF?=
+ =?utf-8?B?UERrWnAyZkYyVnRCRWVsMzF6bG9YU0NhdzR4Q3RvSXpDa21LcDZLTzRQVTRC?=
+ =?utf-8?B?cFF2cCtqMDlLSXVoR2pDSUErVGo2aDdZRlJyNlhBM1BRS3FoWUlnR1lJMGpG?=
+ =?utf-8?B?YjZidFRSV1BlN1pkVitkVldrUGhDaEplMkdHem9Cbk5ZSk41WjNCOXN3MCti?=
+ =?utf-8?B?UEF1MDhRK1hBdkJnRWlTdy94ZVZZWjZrMUZkTElyd1QvR085aFhZVFdkdlpL?=
+ =?utf-8?B?NFJFdnA3NE5Gazk4M253Sldrb0JlTXBQYTNHd1hRVndlUEF5bllNMmtLZllQ?=
+ =?utf-8?B?U1o1YjFLUHNCNEdsQ1BNS2UzRlIwZTBYN3prNGZoM2xmU202d1NhUUxQby8w?=
+ =?utf-8?B?ZG1BMVRqK1hlTDVRTjZQSzF1UzI5RGFjWXdFQWJadC9UYzBEalJpdjFGYUNZ?=
+ =?utf-8?B?bWVEQ0N1bGxzNloxMVNIbmdCdmp4NmUyUDhQMVlYOFNBUmxkT1hPRjdPcGxk?=
+ =?utf-8?B?d3VlY2ppS01GT2RkMEVQYWpTQnZETTRKMmtYemNwMWx3dVpaQXozcHg4aWdO?=
+ =?utf-8?B?ekRxTkQxblUzT2kwMG9KbnhNK2h2TXFGWmNLN2Z4NlJDcDhhTVlkbTVGaDU3?=
+ =?utf-8?B?UEwvaHlFTEp3d2tHR1hIZklEeTdlUDNIbHVET3gwRXp0YzZxNXNiM0FmL3Rt?=
+ =?utf-8?B?VElIMlF3dGw3ZjM4Rzg1K0JsbU4vUzhMWTA3T0RSR25HYzNtYld3YWVYU2gz?=
+ =?utf-8?B?QnBNdlo3Nk52RzBNQW10L0ltY3dJL0h2NUR1UTdkT0pUKy9WN1V1SGh3eGlJ?=
+ =?utf-8?B?TVorT2o4eDZkdFJ2MGNSS0czVlBZek5sRFVTOEVJUDZVUWY5M0JLam5PSTB6?=
+ =?utf-8?B?ZWI5N25IRzBndE5rY2ZJK2pQbm5YWVJTU1Y4S240N0hKanc5RWV0YlJZc296?=
+ =?utf-8?B?cGpNcWxyNXJNRTQvSktudlRlVzl0ZlozaE83ZDB1ZlNhZ3dUQXJzamo2UDYz?=
+ =?utf-8?B?VHUyY1BIbnQwMzYvbnZpb0FqLzl2UFZaQ0tkN1dQWVFDeXRLcXAzM3NleCt1?=
+ =?utf-8?B?aGpXcDZrWG1UUy9WSGNLVUZZNmpsZVFkdUFNU2tGV2s0MUlyY050bThCNVJY?=
+ =?utf-8?B?S1lQVC9wcllJdDVKSStKMHZwWWQzaWVNbS84MmRkelFSUEtCdmZrUm1kU2F5?=
+ =?utf-8?B?N1FQMHJMQWhRcWV2RThGYXVRRWRpeFdMZXVYNW40bVpOalVTODRmRjBNYU02?=
+ =?utf-8?B?am85SGY2ZUFCQU93MkZOZ213NVNBWS93ckpOL2xIUkpOSzdGSTlYVFd3OFI3?=
+ =?utf-8?B?cEZVNUlwbVhnRmw1QzI5VGRkbXAwVE1iSjlLVVREOE5EbHJ6cHBkcVhjcEVZ?=
+ =?utf-8?B?T1NjbTdKK0JMaGZnOWdkUjRjSDRJQW16MGg0cTNiN2I2RVVkdHZFQ3NqV1RV?=
+ =?utf-8?B?QXQ2dGp0WlJWSmZiaFREMFNRWWRFdE8vYll3MUx1NHg1OEZjUm5mZ3lEZFlt?=
+ =?utf-8?B?c0FCdE9Yb3NYOFhqR251VXovOFpoeDM2S0ZTTUFjVVFlaHNMU0JVay9LSE8z?=
+ =?utf-8?B?d2FJTThtYVM0YlUxVnV4SENZbmk3UWt1YnZGUXpOdzkyWnEyMGZoQ210bmY5?=
+ =?utf-8?B?cDQ5Z3JrMmRrOHNObVBUc0hKcVpwdlBrc0JKeUZiVjJ5MXVDaHFRd0dncmtw?=
+ =?utf-8?B?ZStJZGFBQURXcHNFZHQyaEhnbTF6WUY0MHdLRnlCYWcyblJXT1lUc1oybW1j?=
+ =?utf-8?B?T1VmcXpvTjNRUXV4ajFZTW9PU3ZaOHVHVWhtS1RJallTcFhSelo1aklsVUNO?=
+ =?utf-8?B?QmxPOFJWY0xDcnNFNFpITURTamJLbUZvTE5ZTE5wMW43TDE5TXdaMFBQWTla?=
+ =?utf-8?B?OVFuRzJQOHBUNVlLSTRVNFJIcGxycXZPK21VOURUTUVNeW9UdnpBMDJra0Nk?=
+ =?utf-8?B?aGdHalI4dXdRPT0=?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 889f5f94-f5a8-48a9-f05d-08da0b219ab6
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR03MB5608.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 10:00:18.4946
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CSxd25QMo8d1nkDYATJGnZ8HAwfUk1uR9jct47LiURPY7APTQhZEWmnH0+gTsdkiPbgzEUQb9E+hBeBygge2Cg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR03MB6944
+X-OriginatorOrg: citrix.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> This patch adds basic boot, setup and reset routines for LoongArch.
-> LoongArch uses UEFI-based firmware. The firmware uses ACPI and DMI/
-> SMBIOS to pass configuration information to the Linux kernel.
->
-> Now the boot information passed to kernel is like this:
-> 1, kernel get 3 register values (a0, a1 and a2) from bootloader.
-> 2, a0 is "argc", a1 is "argv", so "kernel cmdline" comes from a0/a1.
-> 3, a2 is "environ", which is a pointer to the "struct boot_params".
-> 4, "struct boot_params" include a "systemtable" pointer, whose type is
->    "efi_system_table_t". Most configuration information, include ACPI
->    tables and SMBIOS tables, come from here.
->
-> The above interface is an internal interface between bootloader (grub,
-> efistub, etc.) and the raw kernel. You can use this method to boot the
-> Linux kernel in raw elf format, but it is recommend to use the standard
-> UEFI boot protocol when efistub is added later.
->
-> ECR for adding LoongArch support in ACPI:
-> https://mantis.uefi.org/mantis/view.php?id=2203
->
-> ECR for adding LoongArch support in ACPI (version update):
-> https://mantis.uefi.org/mantis/view.php?id=2268
->
-> ECR for adding LoongArch support in UEFI:
-> https://mantis.uefi.org/mantis/view.php?id=2313
->
-> ACPI changes of LoongArch have been approved in the last year, but the
-> new version of ACPI SPEC hasn't been made public yet. And UEFI changes
-> of LoongArch are under review now.
->
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: linux-efi@vger.kernel.org
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+On Thu, Mar 17, 2022 at 11:46:46PM +0000, Colin Ian King wrote:
+> Variable i is being assigned a value that is never read, it is being
+> re-assigned later in a for-loop. The assignment is redundant and can
+> be removed.
+> 
+> Cleans up clang scan build warning:
+> drivers/block/xen-blkback/blkback.c:934:14: warning: Although the value
+> stored to 'i' is used in the enclosing expression, the value is never
+> actually read from 'i' [deadcode.DeadStores]
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-I think this is still the most controversial bit of the series, and my
-feeling is that it would be better to have the UEFI stub bits in place
-first, so the custom entry point can be avoided completely.
+Acked-by: Roger Pau Monné <roger.pau@citrix.com>
 
-Unfortunately I don't have access to mantis.uefi.org, can you
-explain what the current status is? Are there still ABI relevant
-decisions that need to be made about the UEFI entry point?
-
-If the timing works out, the best approach may be to instead send
-a draft version of the UEFI wrapper based boot implementation
-for review now, so it can be merged once the standard has found
-consensus. Having the code openly accessible should also help
-with speed up the review.
-
-         Arnd
+Thanks, Roger.

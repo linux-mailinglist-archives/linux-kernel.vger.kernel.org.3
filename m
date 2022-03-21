@@ -2,103 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731CC4E2F00
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:24:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 638F44E2F03
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351821AbiCURZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
+        id S1351830AbiCUR1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345862AbiCURZh (ORCPT
+        with ESMTP id S1345862AbiCUR1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:25:37 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95962183805
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:24:11 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id mr5-20020a17090b238500b001c67366ae93so12424723pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:24:11 -0700 (PDT)
+        Mon, 21 Mar 2022 13:27:00 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4CB183805
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:25:35 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id q1-20020a4a7d41000000b003211b63eb7bso19961333ooe.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:25:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JfYPzIW2uZzSE1OyzcQN2ZgSvbN8ua2owpED41aqf8k=;
-        b=cP0Vw/KU+TayukEqk47ZzWLTyhs9Sb6Nnk/xv2Zusp8ePPannwFsRf9qWpavIy/vUH
-         Mthdsilm9/Z2GQOgg2rTFIOzE4gxIiPZDI9q5H0Pq6p7LqWHqxuVfbwYUQoBIhv8Ykdh
-         5WLOVxxiHFQrby2H+xNZot7gpXtkaxWzJMEJsl8BlBQ+Qm0Ixfwn5vIaQGSRVJDo80sE
-         8+2hEYP/f54KuFdlkzTHxh23nVk2qMy+K8PSfoloz5wfQ1cS9ZGOKp6afCoVdDeB9rg8
-         Hz0dVPJunBc92nnCR48bm7Vr+buIVzXEA7aq9fl8K5f+p/nLJmSgLsrDJYOlP6E1tf1F
-         KxAQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fmeIv2QDOzsS4zlc06LTh9pZ1GK8X0LxwrhNTBduaNE=;
+        b=Ht6jx+xVr1kX1fn3bCqDejvCU3VXDWeBe8bNQskALug//Ri2sX9OThqeOZIA30pMVa
+         aJWNsC0OZmC9yRDNN9uKgC/a5oWM3IMclnjP0GuPTSMg++dHdHHU1j1CN1FePWCbYgUI
+         MpmFWOhO7XnThgsWfZyL5P++U+HBzMPzydUUaDOaSHOKv7hR76MByO0SNZTdT5XhNhXm
+         +ypkONCBmSfYr3KSp/sVSGn59d/jcxg8j4DyVqjR89jMD80tNAX+EHyhxQnqttf84JOc
+         MFRfcy19RtYm5Y/1sy2ScULSoYwMlIiov+Oya1AMJZEVFcDPvtLfOawzZ5CpZyMqCroG
+         7RJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=JfYPzIW2uZzSE1OyzcQN2ZgSvbN8ua2owpED41aqf8k=;
-        b=QnHAptyifEkf8R29jQ4hzbVGrBGYmvuh+XCd+39YG3xVQgRDX8oe8OHXn/i6qmzUVF
-         46mqPab+cV5NkRfssbhhyVS+VlIpo8Th8shi9SAt6tKEzL5ofO3bSJPU1kE6r2av/W2E
-         FC3t4AlTjwCXRf9webGZJ88jNQ/8YfsZ6gncgVcgVMcOSuLhh2Zsvv22rKh/kL8W6hWy
-         6XJMwPbPK0hRD/0NNFo7hS5iWKAQHJBkgGgjhdiAels4pAHqLz2XSQh1Ppqg0SOIMEE3
-         qHOMkPV0H35HMBNFG1/Sf22CzxSWkFAPGyANE8VF+bsiU3KiWEW97kj3EXHgK2qXh3az
-         NidA==
-X-Gm-Message-State: AOAM532VrZ/iWyNj8TI0j8H1kTLm50PAByuLyRCCkSfHgWV90lWM2wHT
-        9DbFbFu2zaWm/4N6/mtZAkQ=
-X-Google-Smtp-Source: ABdhPJxktdHHIsTKejTvZ1f+liEbHlXdjGAcmQRLIAdUUovCXnZu4jp649ZCQ4dW1JCBky15mgB7fg==
-X-Received: by 2002:a17:903:246:b0:153:857c:a1f6 with SMTP id j6-20020a170903024600b00153857ca1f6mr13788157plh.153.1647883450916;
-        Mon, 21 Mar 2022 10:24:10 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id y14-20020a62f24e000000b004f7d604f5ddsm19745878pfl.181.2022.03.21.10.24.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 10:24:09 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 21 Mar 2022 07:24:07 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com,
-        pkondeti@codeaurora.org, valentin.schneider@arm.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, dhaval.giani@oracle.com,
-        qperret@google.com, tim.c.chen@linux.intel.com
-Subject: Re: [RFC 6/6] sched/fair: Add sched group latency support
-Message-ID: <Yji0twS4N+0b/Rs9@slm.duckdns.org>
-References: <20220311161406.23497-1-vincent.guittot@linaro.org>
- <20220311161406.23497-7-vincent.guittot@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fmeIv2QDOzsS4zlc06LTh9pZ1GK8X0LxwrhNTBduaNE=;
+        b=CzlQsQ7fCkUqBiuEoNlfOGuL/dkLzZ8ZPZRdQJO3Cod3OpNlQRA4JWO9zfFxI2+iiD
+         eZQjXPOFkU+fbzBbpxKqAGtHPIhz/oLk4ewSpS2D9G0G/6TquSC6nqylP3eUk/Ga6+Bz
+         bTdblO6cBu4dZB7EEseCLuCFJhQFqAfcafHAY9sqbFzbO4/3Pc8YVxOKfAZXguTxFaxf
+         BSbFUIFXCCFNN8pD/YRu53FR1hROB0AXEgQ30v5rSpq7g9XuU93yqMACQfQt21Qo963E
+         bDJp4+70HIwsig17eXSFsq334pXDSLBdz6RBLDog/XnrJBmN5LhixS10TC/65F5EbkD9
+         dXCA==
+X-Gm-Message-State: AOAM530o+oTLKH0icjFwehrTxhCjXQtGg1vW4TICxPd5WmaXFUJxxIaO
+        GZh7VYZr8A6geNqQtJY67rP2UCkhuH3yehwbtlkFeQ==
+X-Google-Smtp-Source: ABdhPJx916mIocw0CSs5GhHKZIpvBgvBumuH1FgDOkSt/vPvxDiJB7JuxJkaHYMjljkWKaFwGwNr2/5kLY5pgucKJyw=
+X-Received: by 2002:a05:6870:40cc:b0:de:15e7:4df0 with SMTP id
+ l12-20020a05687040cc00b000de15e74df0mr89545oal.110.1647883534190; Mon, 21 Mar
+ 2022 10:25:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311161406.23497-7-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220321150214.1895231-1-pgonda@google.com>
+In-Reply-To: <20220321150214.1895231-1-pgonda@google.com>
+From:   Marc Orr <marcorr@google.com>
+Date:   Mon, 21 Mar 2022 10:25:22 -0700
+Message-ID: <CAA03e5HEKPxfGZ57r=intg_ogTp_JPAio36QJXqviMZM_KmvEg@mail.gmail.com>
+Subject: Re: [PATCH] Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm list <kvm@vger.kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Sean Christopherson <seanjc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Mar 21, 2022 at 8:02 AM Peter Gonda <pgonda@google.com> wrote:
+>
+> SEV-ES guests can request termination using the GHCB's MSR protocol. See
+> AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
+> guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
+> return code from KVM_RUN. By adding a KVM_EXIT_SHUTDOWN_ENTRY to kvm_run
+> struct the userspace VMM can clearly see the guest has requested a SEV-ES
+> termination including the termination reason code set and reason code.
+>
+> Signed-off-by: Peter Gonda <pgonda@google.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Tom Lendacky <thomas.lendacky@amd.com>
+> Cc: Brijesh Singh <brijesh.singh@amd.com>
+> Cc: Joerg Roedel <jroedel@suse.de>
+> Cc: Marc Orr <marcorr@google.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: kvm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+>
+> ---
+>
+> Tested by making an SEV-ES guest call sev_es_terminate() with hardcoded
+> reason code set and reason code and then observing the codes from the
+> userspace VMM in the kvm_run.shutdown.data fields.
+>
+> ---
+>  arch/x86/kvm/svm/sev.c   |  9 +++++++--
+>  include/uapi/linux/kvm.h | 12 ++++++++++++
+>  2 files changed, 19 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 75fa6dd268f0..5f9d37dd3f6f 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2735,8 +2735,13 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
+>                 pr_info("SEV-ES guest requested termination: %#llx:%#llx\n",
+>                         reason_set, reason_code);
+>
+> -               ret = -EINVAL;
+> -               break;
+> +               vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
+> +               vcpu->run->shutdown.reason = KVM_SHUTDOWN_SEV_TERM;
+> +               vcpu->run->shutdown.ndata = 2;
+> +               vcpu->run->shutdown.data[0] = reason_set;
+> +               vcpu->run->shutdown.data[1] = reason_code;
+> +
+> +               return 0;
 
-On Fri, Mar 11, 2022 at 05:14:06PM +0100, Vincent Guittot wrote:
-> Tasks can set its latency priority which is then used to decide to preempt
-> the current running entity of the cfs but sched group entities still have
-> the default latency priority.
-> 
-> Add a latency field in task group to set the latency priority of the group
-> which will be used against other entity in the parent cfs.
+Maybe I'm missing something, but don't we want to keep returning an error?
 
-One thing that bothers me about this interface is that the configuration
-values aren't well defined. We have the same problems with the nice levels
-but at least have them map to well defined weight values, which likely won't
-change in any foreseeable future. The fact that we have the
-not-too-well-defined nice levels as an interface shouldn't be a reason we
-add another one. Provided that this is something scheduler folks want, it'd
-be really great if the interface can be better thought through. What are the
-numbers actually encoding?
+rationale: Current behavior: return -EINVAL to userpsace, but
+userpsace cannot infer where the -EINVAL came from. After this patch:
+We should still return -EINVAL to userspace, but now userspace can
+parse this new info in the KVM run struct to properly terminate.
 
-Thanks.
-
--- 
-tejun
+>         }
+>         default:
+>                 /* Error, keep GHCB MSR value as-is */
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 8616af85dc5d..12138b8f290c 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -271,6 +271,12 @@ struct kvm_xen_exit {
+>  #define KVM_EXIT_XEN              34
+>  #define KVM_EXIT_RISCV_SBI        35
+>
+> +/* For KVM_EXIT_SHUTDOWN */
+> +/* Standard VM shutdown request. No additional metadata provided. */
+> +#define KVM_SHUTDOWN_REQ       0
+> +/* SEV-ES termination request */
+> +#define KVM_SHUTDOWN_SEV_TERM  1
+> +
+>  /* For KVM_EXIT_INTERNAL_ERROR */
+>  /* Emulate instruction failed. */
+>  #define KVM_INTERNAL_ERROR_EMULATION   1
+> @@ -311,6 +317,12 @@ struct kvm_run {
+>                 struct {
+>                         __u64 hardware_exit_reason;
+>                 } hw;
+> +               /* KVM_EXIT_SHUTDOWN_ENTRY */
+> +               struct {
+> +                       __u64 reason;
+> +                       __u32 ndata;
+> +                       __u64 data[16];
+> +               } shutdown;
+>                 /* KVM_EXIT_FAIL_ENTRY */
+>                 struct {
+>                         __u64 hardware_entry_failure_reason;
+> --
+> 2.35.1.894.gb6a874cedc-goog
+>

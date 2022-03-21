@@ -2,152 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807774E2B3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF074E2B43
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349625AbiCUOwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
+        id S1349664AbiCUOwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241954AbiCUOwH (ORCPT
+        with ESMTP id S1345489AbiCUOwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:52:07 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3A663C8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:50:41 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d726bd83a2so126315167b3.20
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:50:41 -0700 (PDT)
+        Mon, 21 Mar 2022 10:52:36 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D5C12AD7;
+        Mon, 21 Mar 2022 07:51:09 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id p15so14267531lfk.8;
+        Mon, 21 Mar 2022 07:51:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=j/FXTEmOSxH0gjgjdSzeFMh8shZcXNYs1S5aZMLLEM4=;
-        b=SBrVSoKXdDsuaByiB5bpEuvHlzX6PEE7ScTFdcnyvBB3LM8FjBIxb4HE452P7nW/1P
-         x8Uhx569twf4z5ULHgqQdUEGzVl4SU+QwvbLAIFQyuTyB21bcIOsfkT6/PBkBr+1n4Y9
-         hsFezBjQyP+3jHyQKzGIyLT/UH4/gWuwY3xOeR6unA65Om/6xbAmfUO+De3vhuy15UEC
-         zrrJLt9FdxLdYyM926/tTlpnRZTG53MfuP8rZklNPPTyNZfK1RA5vggICA2wqeExGlfZ
-         AfbURLvOReHTpT55NHCBSLztJoEA6UoKzhUD4WkTaY5lbkIRXroMJHZHY4psJj9DqtPU
-         W+LA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=V9QJhItuGj131X5U24BIjE6xMJa7ckWXlhf3pX2Qb7w=;
+        b=hVNxEkMPFhWNhQ6oKe5bcnNri0UMhznsBewxDmrB8a18rPDQXU3w3+ibFl3giYgcO7
+         3LN7H+LGrRc8+f9qHNriFO15Z1jKztavMZK70q4eTDKCHkuQR88FoUssKCzIGjwdOSxe
+         qZQNNLp0xRmS6obHoFrpMzCT/FYV73BTqJY31XKRw/zPyPF46kovinfnipbgxvR9QuDc
+         pCCb4FMiYS40owPPP25hJu0RaJq/CIQ/NEaJUnQ8HV0t3Gdljf2j0pYGjvYfr9ShOHnL
+         wlnXEPW8WEFbrLzBP3BqMFI2Pi0JtDjaVvcDx0NVEP6+oQB2HcrzMxIoxsLTWr+2qdeR
+         U5Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=j/FXTEmOSxH0gjgjdSzeFMh8shZcXNYs1S5aZMLLEM4=;
-        b=hJivBxIMEtlIJFiJXcUiJMP1j2VLJGHweBSImK713u5aeKyNWGINVGwHNR08IC4JPT
-         4V0Nuf29PB47qrHwvOw0vQcsOmYBYmGIdLD8e1VYSmJ+jZKJf9/cVfGxtoqxzYFSIdKA
-         BA6nv63EOP9ApWMuG6cB/7W4Do67GMGY/26zhORr3p6aQv5SSikF0u1xHCNfIK2Rtd0R
-         vF8o1UR/dqF8SZkWMptbAg1xG1N+by7mtjQfpfkmdbSvMon9piho1AnSR1rZcq9IignX
-         XM502roZLd3hbOotToFZq7orvqBlHBSjJYFQ91y/gX9PTDLN1zk6eXJG8QBXrDamVdiL
-         Tyjg==
-X-Gm-Message-State: AOAM532xd+PXuchm/w6uC/Tf7LXW0TgP+9+gFBzhu4m8CeDHWheIc6zE
-        bPsNgo/KneeL2IPyNXVqkE45dOgegA0K
-X-Google-Smtp-Source: ABdhPJxLCtNARAk+EJOSYZ01zh/M9UDj+P8uAmI3Yand6sFtWYVr5ajlQJ7KLCg0hyNWZ/skpNcv8bBOhH9u
-X-Received: from bg.sfo.corp.google.com ([2620:15c:11a:202:3257:ddd6:5193:4ceb])
- (user=bgeffon job=sendgmr) by 2002:a25:7686:0:b0:633:bdb7:1e75 with SMTP id
- r128-20020a257686000000b00633bdb71e75mr14061753ybc.634.1647874240929; Mon, 21
- Mar 2022 07:50:40 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 07:50:37 -0700
-In-Reply-To: <20220315172221.9522-1-bgeffon@google.com>
-Message-Id: <20220321145037.1024083-1-bgeffon@google.com>
-Mime-Version: 1.0
-References: <20220315172221.9522-1-bgeffon@google.com>
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH] zram: Add a huge_idle writeback mode
-From:   Brian Geffon <bgeffon@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Minchan Kim <minchan@kernel.org>, Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, Brian Geffon <bgeffon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=V9QJhItuGj131X5U24BIjE6xMJa7ckWXlhf3pX2Qb7w=;
+        b=O2ejeiXANLA0uIv9NVON1IqjAv11xLOjfuU6qgEBxL6BDuYYaRcYNs0ZsC4urA8axo
+         CAIMjtadbAfIMWMO6az6mQC3z5x+xsTXSBxabSaZkFgVA1Ebn0PEvh8aRxb39x/0oUO9
+         VzvcF1HeQ5cfsOSSFt4y0GNDrCumu6ffXk8Yr4UcEfGqHeNRyUMVH9s+w5PXNd/iMq6g
+         92PYGGbAjvUGspcaQ6LZF9VnT/OFjPG6ZWjMGK3mdUB0Yvrd8VZDKoNXwA4RTKZ5cgnv
+         boVSLosuPpWtK//5DiSA5exGSMwuJKxiC8wp5MtkP4Mzx0lnhqxBo55SWD8naWCG0f+Q
+         vlqw==
+X-Gm-Message-State: AOAM532CNZ672kG46dbTsoKULSUBUXxiVCC7EuNggPYyMC5uzVj/H+7k
+        OXoESFLHURjhQNavgkC+UZpKiVodmq8=
+X-Google-Smtp-Source: ABdhPJy/zkuOFRI5NSGnx6DSDrPaX00+ZIvAAggAOHT0Nhrt9aFLL0ndDJXWs/3Gt43hJTyUnWwrbQ==
+X-Received: by 2002:ac2:4ed4:0:b0:44a:212e:fa1a with SMTP id p20-20020ac24ed4000000b0044a212efa1amr7065503lfr.372.1647874265558;
+        Mon, 21 Mar 2022 07:51:05 -0700 (PDT)
+Received: from wse-c0127 ([208.127.141.29])
+        by smtp.gmail.com with ESMTPSA id bu1-20020a056512168100b004437db5e773sm1829487lfb.94.2022.03.21.07.51.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 07:51:05 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>, Hans Schultz <schultz.hans@gmail.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <YjNDgnrYaYfviNTi@lunn.ch>
+References: <20220310142320.611738-1-schultz.hans+netdev@gmail.com>
+ <20220310142320.611738-4-schultz.hans+netdev@gmail.com>
+ <20220310142836.m5onuelv4jej5gvs@skbuf> <86r17495gk.fsf@gmail.com>
+ <20220316233447.kwyirxckgancdqmh@skbuf> <86lex9hsg0.fsf@gmail.com>
+ <YjNDgnrYaYfviNTi@lunn.ch>
+Date:   Mon, 21 Mar 2022 15:51:02 +0100
+Message-ID: <86czifxstl.fsf@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Today it's only possible to write back as a page, idle, or huge.
-A user might want to writeback pages which are huge and idle first
-as these idle pages do not require decompression and make a good
-first pass for writeback.
+On tor, mar 17, 2022 at 15:19, Andrew Lunn <andrew@lunn.ch> wrote:
+> On Thu, Mar 17, 2022 at 09:52:15AM +0100, Hans Schultz wrote:
+>> On tor, mar 17, 2022 at 01:34, Vladimir Oltean <olteanv@gmail.com> wrote:
+>> > On Mon, Mar 14, 2022 at 11:46:51AM +0100, Hans Schultz wrote:
+>> >> >> @@ -396,6 +414,13 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+>> >> >>  				    "ATU miss violation for %pM portvec %x spid %d\n",
+>> >> >>  				    entry.mac, entry.portvec, spid);
+>> >> >>  		chip->ports[spid].atu_miss_violation++;
+>> >> >> +		if (mv88e6xxx_port_is_locked(chip, chip->ports[spid].port))
+>> >> >> +			err = mv88e6xxx_switchdev_handle_atu_miss_violation(chip,
+>> >> >> +									    chip->ports[spid].port,
+>> >> >> +									    &entry,
+>> >> >> +									    fid);
+>> >> >
+>> >> > Do we want to suppress the ATU miss violation warnings if we're going to
+>> >> > notify the bridge, or is it better to keep them for some reason?
+>> >> > My logic is that they're part of normal operation, so suppressing makes
+>> >> > sense.
+>> >> >
+>> >> 
+>> >> I have been seeing many ATU member violations after the miss violation is
+>> >> handled (using ping), and I think it could be considered to suppress the ATU member
+>> >> violations interrupts by setting the IgnoreWrongData bit for the
+>> >> port (sect 4.4.7). This would be something to do whenever a port is set in locked mode?
+>> >
+>> > So the first packet with a given MAC SA triggers an ATU miss violation
+>> > interrupt.
+>> >
+>> > You program that MAC SA into the ATU with a destination port mask of all
+>> > zeroes. This suppresses further ATU miss interrupts for this MAC SA, but
+>> > now generates ATU member violations, because the MAC SA _is_ present in
+>> > the ATU, but not towards the expected port (in fact, towards _no_ port).
+>> >
+>> > Especially if user space decides it doesn't want to authorize this MAC
+>> > SA, it really becomes a problem because this is now a vector for denial
+>> > of service, with every packet triggering an ATU member violation
+>> > interrupt.
+>> >
+>> > So your suggestion is to set the IgnoreWrongData bit on locked ports,
+>> > and this will suppress the actual member violation interrupts for
+>> > traffic coming from these ports.
+>> >
+>> > So if the user decides to unplug a previously authorized printer from
+>> > switch port 1 and move it to port 2, how is this handled? If there isn't
+>> > a mechanism in place to delete the locked FDB entry when the printer
+>> > goes away, then by setting IgnoreWrongData you're effectively also
+>> > suppressing migration notifications.
+>> 
+>> I don't think such a scenario is so realistic, as changing port is not
+>> just something done casually, besides port 2 then must also be a locked
+>> port to have the same policy.
+>
+> I think it is very realistic. It is also something which does not work
+> is going to cause a lot of confusion. People will blame the printer,
+> when in fact they should be blaming the switch. They will be rebooting
+> the printer, when in fact, they need to reboot the switch etc.
+>
+> I expect there is a way to cleanly support this, you just need to
+> figure it out.
+>
+>> The other aspect is that the user space daemon that authorizes catches
+>> the fdb add entry events and checks if it is a locked entry. So it will
+>> be up to said daemon to decide the policy, like remove the fdb entry
+>> after a timeout.
+>> 
+>> >
+>> > Oh, btw, my question was: could you consider suppressing the _prints_ on
+>> > an ATU miss violation on a locked port?
+>> 
+>> As there will only be such on the first packet, I think it should be
+>> logged and those prints serve that purpose, so I think it is best to
+>> keep the print.
+>> If in the future some tests or other can argue for suppressing the
+>> prints, it is an easy thing to do.
+>
+> Please use a traffic generator and try to DOS one of your own
+> switches. Can you?
+>
+> 	  Andrew
 
-Idle writeback specifically has the advantage that a refault is
-unlikely given that the page has been swapped for some amount of
-time without being refaulted.
+Here is a trafgen report, where I sent packets to a locked port with random SAs:
 
-Huge writeback has the advantage that you're guaranteed to get
-the maximum benefit from a single page writeback, that is, you're
-reclaiming one full page of memory. Pages which are compressed in
-zram being written back result in some benefit which is always
-less than a page size because of the fact that it was compressed.
+    42527020 packets outgoing
+  3104472460 bytes outgoing
+         329 sec, 989345 usec on CPU0 (5835746 packets)
+         329 sec, 985243 usec on CPU1 (2119061 packets)
+         329 sec, 997323 usec on CPU2 (5656546 packets)
+         329 sec, 989475 usec on CPU3 (5617322 packets)
+         330 sec, 5228 usec on CPU4 (6034671 packets)
+         330 sec, 1603 usec on CPU5 (5833505 packets)
+         329 sec, 989319 usec on CPU6 (5709841 packets)
+         329 sec, 989294 usec on CPU7 (5720328 packets)
 
-This change allows for users to write back huge pages which are
-also idle.
+I could do 'bridge fdb show' after stopping the traffic, printing out a
+very long list (minutes to print). The ATU was normal, so there is an
+issue of the soft FDB locked entries not ageing out.
 
-Signed-off-by: Brian Geffon <bgeffon@google.com>
----
- Documentation/admin-guide/blockdev/zram.rst |  6 ++++++
- drivers/block/zram/zram_drv.c               | 10 ++++++----
- 2 files changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
-index 3e11926a4df9..af1123bfaf92 100644
---- a/Documentation/admin-guide/blockdev/zram.rst
-+++ b/Documentation/admin-guide/blockdev/zram.rst
-@@ -343,6 +343,12 @@ Admin can request writeback of those idle pages at right timing via::
- 
- With the command, zram writeback idle pages from memory to the storage.
- 
-+Additionally, if a user choose to writeback only huge and idle pages
-+this can be accomplished with::
-+
-+        echo huge_idle > /sys/block/zramX/writeback
-+
-+
- If admin want to write a specific page in zram device to backing device,
- they could write a page index into the interface.
- 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index cb253d80d72b..f196902ae554 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -643,8 +643,8 @@ static int read_from_bdev_async(struct zram *zram, struct bio_vec *bvec,
- #define PAGE_WB_SIG "page_index="
- 
- #define PAGE_WRITEBACK 0
--#define HUGE_WRITEBACK 1
--#define IDLE_WRITEBACK 2
-+#define HUGE_WRITEBACK (1<<0)
-+#define IDLE_WRITEBACK (1<<1)
- 
- 
- static ssize_t writeback_store(struct device *dev,
-@@ -664,6 +664,8 @@ static ssize_t writeback_store(struct device *dev,
- 		mode = IDLE_WRITEBACK;
- 	else if (sysfs_streq(buf, "huge"))
- 		mode = HUGE_WRITEBACK;
-+	else if (sysfs_streq(buf, "huge_idle"))
-+		mode = IDLE_WRITEBACK | HUGE_WRITEBACK;
- 	else {
- 		if (strncmp(buf, PAGE_WB_SIG, sizeof(PAGE_WB_SIG) - 1))
- 			return -EINVAL;
-@@ -725,10 +727,10 @@ static ssize_t writeback_store(struct device *dev,
- 				zram_test_flag(zram, index, ZRAM_UNDER_WB))
- 			goto next;
- 
--		if (mode == IDLE_WRITEBACK &&
-+		if (mode & IDLE_WRITEBACK &&
- 			  !zram_test_flag(zram, index, ZRAM_IDLE))
- 			goto next;
--		if (mode == HUGE_WRITEBACK &&
-+		if (mode & HUGE_WRITEBACK &&
- 			  !zram_test_flag(zram, index, ZRAM_HUGE))
- 			goto next;
- 		/*
--- 
-2.35.1.894.gb6a874cedc-goog
-
+I saw many reports of suppressed IRQs in the kernel log.

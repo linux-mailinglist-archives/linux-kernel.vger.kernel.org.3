@@ -2,88 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0EF4E21C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D3E4E223D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 09:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345113AbiCUIM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 04:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        id S1345303AbiCUIdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 04:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234851AbiCUIMT (ORCPT
+        with ESMTP id S1345286AbiCUIda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 04:12:19 -0400
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2D4473A2;
-        Mon, 21 Mar 2022 01:10:54 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id g20so16847293edw.6;
-        Mon, 21 Mar 2022 01:10:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VR9e0iZWt0FeO56LbwGYfT7tfmrE93+bIcYs8f42zMU=;
-        b=mF943hlck2JLyQClEYB3q58HKQ0Mqwi0hM3lS9sUwpT4kKOz9LGXZA2JrFdyeXsh8L
-         wjJ48UcS+cAHiu9E5Xyiee7mRniALo5ug4cTW/R62wHNcH9iY57Fd1yGpnuEAt5rERTI
-         zRq3LtQO/DnEJ+EhATLXbUFkxta4unfQtLETtI8Yp1Ov7o45zP5S2zRdrcZVK+2pRaDV
-         csrhKh0FMQqyEdKnezxRDCizOjcbHzjrpjYRgc9n0YFkpEcS0B63jeUpmqNpw4t+fUJ/
-         NEpmxgfqjzYvEazI5eUUAy2NnM1FfFy+oyr4PDBtWs/rjA2792O/VtiQ32D9tFSbsjW9
-         9U5A==
-X-Gm-Message-State: AOAM530SSnDLojMO/2lDf8qVzstGYhiH4xNcoEWiCeYEMttGbDovXpuI
-        bdna/R9AcLInRotfq7LAKXQ=
-X-Google-Smtp-Source: ABdhPJwHgX6IH7vB0Gk5yvtqOiL8MQs5vJyBbAFANw6q6SoJGAjf1/czso+3H830kxaAO5wpyYl1SQ==
-X-Received: by 2002:a05:6402:1d4f:b0:416:6450:e1b4 with SMTP id dz15-20020a0564021d4f00b004166450e1b4mr21510894edb.79.1647850252705;
-        Mon, 21 Mar 2022 01:10:52 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id og49-20020a1709071df100b006db0dcf673esm6688688ejc.27.2022.03.21.01.10.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 01:10:52 -0700 (PDT)
-Message-ID: <3f9605e5-16e4-e982-73d6-ab116155d2d7@kernel.org>
-Date:   Mon, 21 Mar 2022 09:10:49 +0100
+        Mon, 21 Mar 2022 04:33:30 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E995D1AA;
+        Mon, 21 Mar 2022 01:32:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=XMXNSMJsHoBcTaN7FyF3mPMBw90PZZ++kgwHn83Gnm0=;
+        b=e1ailRQkQmG95cN3IilLUATQppKcrC2KcRViJ75hIujDdjV7sAlKaVftRWQ+XNlquCjRQa05N7cPX
+         4Ft9e6TaxWfSZBemw2kYVhrwv4DCGEKgKe8yhZtBRXrYr/oGFqXExe2QR1uab3toW90LXPfvktIYfC
+         ToeMFuFxGZokY07OnP9LnB48CwG0z0MAizWLiJ5LTA5Hd170HnF6cAO088sNOtqm/uTezj6zRzOYPW
+         kBsKtJj0alNJMR+JVobx2FPauxPpHYAE0rsAfqxfQPqjqxcWvlUAkJvPXGuHJOyThGrjRNvQ1t3fa5
+         5Soy3fFgt9qydwbCgYKdZVljSV+gbrQ==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1410, Stamp: 3], Multi: [Enabled, t: (0.000008,0.007038)], BW: [Enabled, t: (0.000018,0.000001)], RTDA: [Enabled, t: (0.063542), Hit: No, Details: v2.28.0; Id: 15.52kce0.1fulpl0km.306h; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Mon, 21 Mar 2022 11:31:43 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, mdf@kernel.org,
+        hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+        conor.dooley@microchip.com, robh+dt@kernel.org, system@metrotek.ru,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v5 0/2] Microchip Polarfire FPGA manager
+Date:   Mon, 21 Mar 2022 11:11:58 +0300
+Message-Id: <20220321081200.6912-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V2 1/2] dt-bindings: memory: snps,ddrc-3.80a compatible
- also need interrupts
-Content-Language: en-US
-To:     Sherry Sun <sherry.sun@nxp.com>, robh+dt@kernel.org,
-        krzk+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        manish.narani@xilinx.com, michal.simek@xilinx.com,
-        dinguyen@kernel.org, bp@suse.de
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com
-References: <20220321075131.17811-1-sherry.sun@nxp.com>
- <20220321075131.17811-2-sherry.sun@nxp.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220321075131.17811-2-sherry.sun@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2022 08:51, Sherry Sun wrote:
-> For the snps,ddrc-3.80a compatible, the interrupts property is also
-> required, also order the compatibles by name (s goes before x).
-> 
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> ---
->  .../bindings/memory-controllers/synopsys,ddrc-ecc.yaml      | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
+Add support to the FPGA manager for programming Microchip Polarfire
+FPGAs over slave SPI interface with .dat formatted bitsream image.
 
-Fixes: a9e6b3819b36 ("dt-bindings: memory: Add entry for version 3.80a")
+Changelog:
+  v1 -> v2: fix printk formating
+  v2 -> v3:
+   * replace "microsemi" with "microchip"
+   * replace prefix "microsemi_fpga_" with "mpf_"
+   * more sensible .compatible and .name strings
+   * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
+  v3 -> v4: fix unused variable warning
+    Put 'mpf_of_ids' definition under conditional compilation, so it
+    would not hang unused if CONFIG_OF is not enabled.
+  v4 -> v5:
+   * prefix defines with MPF_
+   * mdelay() -> usleep_range()
+   * formatting fixes
+   * add DT bindings doc
+   * rework fpga_manager_ops.write() to fpga_manager_ops.write_sg()
+     We can't parse image header in write_init() because image header
+     size is not known beforehand. Thus parsing need to be done in
+     fpga_manager_ops.write() callback, but fpga_manager_ops.write()
+     also need to be reenterable. On the other hand,
+     fpga_manager_ops.write_sg() is called once. Thus, rework usage of
+     write() callback to write_sg().
+
+Ivan Bornyakov (2):
+  fpga: microchip-spi: add Microchip MPF FPGA manager
+  dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
+
+ .../fpga/microchip,mpf-spi-fpga-mgr.yaml      |  32 ++
+ drivers/fpga/Kconfig                          |  10 +
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/microchip-spi.c                  | 448 ++++++++++++++++++
+ 4 files changed, 491 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+ create mode 100644 drivers/fpga/microchip-spi.c
+
+-- 
+2.34.1
 
 
-Looks good, I will take it after merge window. Somehow I was not cc-ed
-on previous memory controllers patch. :(
-
-Best regards,
-Krzysztof

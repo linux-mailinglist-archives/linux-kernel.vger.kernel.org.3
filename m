@@ -2,155 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2944E2F49
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB6C4E2F57
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350134AbiCURps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S1350327AbiCURrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238056AbiCURpr (ORCPT
+        with ESMTP id S238056AbiCURrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:45:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012493AA5B;
-        Mon, 21 Mar 2022 10:44:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 21 Mar 2022 13:47:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448CE3B039;
+        Mon, 21 Mar 2022 10:45:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 142D4B818D2;
-        Mon, 21 Mar 2022 17:44:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48FE8C340E8;
-        Mon, 21 Mar 2022 17:44:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647884656;
-        bh=Cc93Sj0aRgEOWTPpRj8NNqcOtJCr+4R/IS5e+PnVDpI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U3fE9mvncxRxT9MkMJyY0wRxVjZfmImW2AWeVMS26K1N5AtfUrZ1VUSp/QbiO/uIR
-         BFbccvvfaSmWp/4TrOWv/MhNpySrnD3IQq3wzid7KyDktnTbLdSYaFOJLcRZtN4o7N
-         aDSP6nZ92OrCdbiQk8QH4DJ9LgjlQ5L1sJF3iyIWFCD3ZQtx29z+angBTrsQGIj6Kn
-         DdRfhByEDboFK2Cl786MKfWBivB0FL5zKRy23ALcA8DH4ljl0HYRhoHyjFQ4aXHahG
-         qSstj/taGkUf/aMOjalkyn48fWLmLB6kIOwvf2k/g0exuPW+jZpFfMOn1uJibIorNR
-         UkF9q9okXpjRg==
-Date:   Mon, 21 Mar 2022 17:44:05 +0000
-From:   Will Deacon <will@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v1 4/7] arm64/pgtable: support
- __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-Message-ID: <20220321174404.GA11389@willie-the-truck>
-References: <20220315141837.137118-1-david@redhat.com>
- <20220315141837.137118-5-david@redhat.com>
- <YjIr9f9qaz4xITVd@arm.com>
- <20220321143802.GC11145@willie-the-truck>
- <ea570f92-f896-7f9b-91c4-ad0a025bb340@redhat.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B8B6C1F381;
+        Mon, 21 Mar 2022 17:45:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1647884732; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=peglqrh0TeDc2F8OaZcmUkLDagjJhol7WzzofXyyxO4=;
+        b=PnmDb1Bn2lmsEUIPSG3oXSY46IqI6iAnrhkUOd3imYGHhzUBGrywA4Q9uGXh7c/svUPKw5
+        ngHuZu78cVggAJKMr47ybLtd326kLSE1NoNSHr9Gfg480gkY2G8m9HV1lQGRPPiKOrSgdz
+        U10jIZn2E3ClJ36uP4+4GnMAPYs5WBQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AB410139DB;
+        Mon, 21 Mar 2022 17:45:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uViIKLu5OGIeUQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 21 Mar 2022 17:45:31 +0000
+Date:   Mon, 21 Mar 2022 18:45:30 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     "T.J. Mercier" <tjmercier@google.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, kaleshsingh@google.com,
+        Kenny.Ho@amd.com, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC v3 5/8] dmabuf: Add gpu cgroup charge transfer function
+Message-ID: <20220321174530.GB9640@blackbody.suse.cz>
+References: <20220309165222.2843651-1-tjmercier@google.com>
+ <20220309165222.2843651-6-tjmercier@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ea570f92-f896-7f9b-91c4-ad0a025bb340@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220309165222.2843651-6-tjmercier@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 04:07:48PM +0100, David Hildenbrand wrote:
-> On 21.03.22 15:38, Will Deacon wrote:
-> > On Wed, Mar 16, 2022 at 06:27:01PM +0000, Catalin Marinas wrote:
-> >> On Tue, Mar 15, 2022 at 03:18:34PM +0100, David Hildenbrand wrote:
-> >>> diff --git a/arch/arm64/include/asm/pgtable-prot.h b/arch/arm64/include/asm/pgtable-prot.h
-> >>> index b1e1b74d993c..62e0ebeed720 100644
-> >>> --- a/arch/arm64/include/asm/pgtable-prot.h
-> >>> +++ b/arch/arm64/include/asm/pgtable-prot.h
-> >>> @@ -14,6 +14,7 @@
-> >>>   * Software defined PTE bits definition.
-> >>>   */
-> >>>  #define PTE_WRITE		(PTE_DBM)		 /* same as DBM (51) */
-> >>> +#define PTE_SWP_EXCLUSIVE	(_AT(pteval_t, 1) << 2)	 /* only for swp ptes */
-> >>
-> >> I think we can use bit 1 here.
-> >>
-> >>> @@ -909,12 +925,13 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
-> >>>  /*
-> >>>   * Encode and decode a swap entry:
-> >>>   *	bits 0-1:	present (must be zero)
-> >>> - *	bits 2-7:	swap type
-> >>> + *	bits 2:		remember PG_anon_exclusive
-> >>> + *	bits 3-7:	swap type
-> >>>   *	bits 8-57:	swap offset
-> >>>   *	bit  58:	PTE_PROT_NONE (must be zero)
-> >>
-> >> I don't remember exactly why we reserved bits 0 and 1 when, from the
-> >> hardware perspective, it's sufficient for bit 0 to be 0 and the whole
-> >> pte becomes invalid. We use bit 1 as the 'table' bit (when 0 at pmd
-> >> level, it's a huge page) but we shouldn't check for this on a swap
-> >> entry.
-> > 
-> > I'm a little worried that when we're dealing with huge mappings at the
-> > PMD level we might lose the ability to distinguish them from a pte-level
-> > mapping with this new flag set if we use bit 1. A similar issue to this
-> > was fixed a long time ago by 59911ca4325d ("ARM64: mm: Move PTE_PROT_NONE
-> > bit") when we used to use bit 1 for PTE_PROT_NONE.
-> > 
-> > Is something like:
-> > 
-> > 	pmd_to_swp_entry(swp_entry_to_pmd(pmd));
-> 
-> Note that __HAVE_ARCH_PTE_SWP_EXCLUSIVE currently only applies to actual
-> swap entries, not non-swap entries (migration, hwpoison, ...). So it
-> really only applies to PTEs -- PMDs are not applicable.
+Hello.
 
-Right, thanks for the clarification.
+On Wed, Mar 09, 2022 at 04:52:15PM +0000, "T.J. Mercier" <tjmercier@google.com> wrote:
+> +int dma_buf_charge_transfer(struct dma_buf *dmabuf, struct gpucg *gpucg)
+> +{
+> +#ifdef CONFIG_CGROUP_GPU
+> +	struct gpucg *current_gpucg;
+> +	int ret = 0;
+> +
+> +	/*
+> +	 * Verify that the cgroup of the process requesting the transfer is the
+> +	 * same as the one the buffer is currently charged to.
+> +	 */
+> +	current_gpucg = gpucg_get(current);
+> +	mutex_lock(&dmabuf->lock);
+> +	if (current_gpucg != dmabuf->gpucg) {
+> +		ret = -EPERM;
+> +		goto err;
+> +	}
 
-> So the example you gave cannot possibly have that bit set. From what I
-> understand, it should be fine. But I have no real preference: I can also
-> just stick to the original patch, whatever you prefer.
+Add a shortcut for gpucg == current_gpucg?
 
-I think I'd prefer to stay on the safe side and stick with bit 2 as you
-originally proposed. If we need to support crazy numbers of swapfiles
-in future then we can revisit the idea of allocating bit 1.
+> +
+> +	ret = gpucg_try_charge(gpucg, dmabuf->gpucg_dev, dmabuf->size);
+> +	if (ret)
+> +		goto err;
+> +
+> +	dmabuf->gpucg = gpucg;
+> +
+> +	/* uncharge the buffer from the cgroup it's currently charged to. */
+> +	gpucg_uncharge(current_gpucg, dmabuf->gpucg_dev, dmabuf->size);
 
-Thanks, and sorry for the trouble.
+I think gpucg_* API would need to cater for such transfers too since
+possibly transitional breach of a limit during the transfer may
+unnecessarily fail the operation.
 
-Will
+My 0.02€,
+Michal

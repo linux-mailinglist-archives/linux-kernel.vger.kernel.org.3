@@ -2,91 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6154E24AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354914E24A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346496AbiCUKvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 06:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
+        id S1346461AbiCUKui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 06:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346489AbiCUKvb (ORCPT
+        with ESMTP id S240532AbiCUKug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 06:51:31 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20A33CA7F;
-        Mon, 21 Mar 2022 03:50:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647859806; x=1679395806;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fliE/T1LCX93MwQ1Bnv434Gg30/vCZwgY+6LB+3NqUM=;
-  b=TsGu0BRYZeiyiB8/6sY5MZXTLJ6ymjmqsG4vb53QTU+89QzWSAF6axs5
-   64Z20+sFkAFPmbx5PxzUk2AX4dVjjOF5G/YWFFOeCzSfnCO0MjIXMD/X0
-   hZSRhzBKbTOG2kfJ56+CU9NKpT9ZnVljX+LrZz8WYPh9txyURypo3VgXU
-   fcyX/qwgaSymw5VC6n2cLz+zkwXhBkTopI1qSi9JdmMQLmX2/Ig6TFCJn
-   M1WRvR9Q12BJWzcpY+NXwtJS21yldmweA/3pKzuX7wj9ZhJXLjcyk1YQO
-   VwZRzc2cW+5EUnmKYspXm2O39RNJAg1L8JnPkKvT2WXu0I1xXb3UPaEJ2
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="257240841"
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="257240841"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 03:50:06 -0700
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="500128970"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 03:50:00 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 21 Mar 2022 12:48:48 +0200
-Date:   Mon, 21 Mar 2022 12:48:48 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Rajat Jain <rajatja@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Pavel Machek <pavel@denx.de>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        iommu@lists.linux-foundation.org
-Subject: Re: [PATCH v4 2/2] PCI: ACPI: Support Microsoft's "DmaProperty"
-Message-ID: <YjhYEN/ajM71wMn0@lahna>
-References: <20220320062907.3272903-1-rajatja@google.com>
- <20220320062907.3272903-2-rajatja@google.com>
+        Mon, 21 Mar 2022 06:50:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D779F1C920;
+        Mon, 21 Mar 2022 03:49:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C74AB811BE;
+        Mon, 21 Mar 2022 10:49:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A74AC340E8;
+        Mon, 21 Mar 2022 10:49:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647859748;
+        bh=1XzuE1mkXqD0j+4Q6vb5nPgTLU+T40IwB7OS0cmE41E=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=jxohsmgScROjOx85jDEqGMztdXQq8/DLeu3aFQfwptRnRgeFtQH1YWGM3yTWDBx9K
+         zMxGlD0vYnAyF4Vwg3lTgTSwpTh1Kyd2BG6VgxwU0Pvbhfg9XYfVziESgLMPHb9mOn
+         cxzq7eKGhdzz1qZr7xs349r+WX4BMRtSSmI5VT793T+bNZ7zyuFSv4NZ4wkUyoVM+T
+         22bawrFISzckuS7OBrH8H/5Th0ss1sgNh63kfwyKVetlOfZ5C+jHtShIkkI6Vpv0L2
+         pCzpbzOWumN5Ed37EtWk9U5S+ZEj7lKQ+hOCcjdWQvKU80W06aUjKYc1zQTVrwYtOl
+         w86Nlt22iHEpg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220320062907.3272903-2-rajatja@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] net: wireless: ath10k: Use of_device_get_match_data()
+ helper
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220318025331.23030-1-tangmeng@uniontech.com>
+References: <20220318025331.23030-1-tangmeng@uniontech.com>
+To:     Meng Tang <tangmeng@uniontech.com>
+Cc:     davem@davemloft.net, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <164785974519.19083.15212520438409516614.kvalo@kernel.org>
+Date:   Mon, 21 Mar 2022 10:49:07 +0000 (UTC)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 11:29:06PM -0700, Rajat Jain wrote:
-> The "DmaProperty" is supported and documented by Microsoft here:
-> https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports
-> They use this property for DMA protection:
-> https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
-> 
-> Support the "DmaProperty" with the same semantics. This is useful for
-> internal PCI devices that do not hang off a PCIe rootport, but offer
-> an attack surface for DMA attacks (e.g. internal network devices).
-> 
-> Signed-off-by: Rajat Jain <rajatja@google.com>
+Meng Tang <tangmeng@uniontech.com> wrote:
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Only the device data is needed, not the entire struct of_device_id.
+> Use of_device_get_match_data() instead of of_match_device().
+> 
+> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+
+Patch applied to ath-next branch of ath.git, thanks.
+
+c4e9705c5012 ath10k: Use of_device_get_match_data() helper
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20220318025331.23030-1-tangmeng@uniontech.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

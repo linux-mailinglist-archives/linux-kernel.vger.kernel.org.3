@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA984E1E7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 01:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C764E1E7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 01:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343921AbiCUA21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 20:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
+        id S1343945AbiCUA22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 20:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343901AbiCUA2J (ORCPT
+        with ESMTP id S1343912AbiCUA2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 20:28:09 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BCCDE924
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 17:26:45 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id x18-20020a170902ea9200b00153e0dbca9bso3395054plb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 17:26:45 -0700 (PDT)
+        Sun, 20 Mar 2022 20:28:11 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B7DDE915
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 17:26:47 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id mm2-20020a17090b358200b001bf529127dfso8195674pjb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 17:26:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=w72ktL2NVaulWnSOLwhUAw/SEUZ2qLk7Ydqg7suvoo4=;
-        b=fx1XCeSYsDcHoKzCEPO5QZTH/7lJHeMLn4C/eT3bSq9992/wm8zBqAZSk2S8ps8OVp
-         YVMnCJq6mRf809eIU4L/Cez2s4PciznmUAWKOwgFPAp82mqDTNJnQY4VLW7Odu7kWy5I
-         K5X/MNocMz7n6KTZPyq7pkGdo5582uc8RzaV4LVqKe5OYI/C7nLQovCZYIQKKlT0jqGu
-         H28bbR4alZOzfpAwlcHASL/0YDA46pxKWiSHQUpbGUQkE5ccSQDXy7tm3II7/dBe9UeA
-         BXovdb4Gr/rmvzC405fiMovRJthVWFMRzeRyKDahyKfYQeVZ60hGjjcMbkUQ3fO7ZSE6
-         DpTA==
+        bh=Fmv+HMc2DFxNt8CxUdSLz9dfbbTJJCLxSOxGsXm4RyU=;
+        b=p6WWOu56th14hFbz/vDJsj1YNlhWpB7KWlRQjlG5lF4dyCxZxdkzJkQU/tJPoez92d
+         maakq/dfxmhfKGNOZYWMgEKpDoKtFAgijvHMmtYdKhUALE5ymi1R5lTAcHpGpyth9NMf
+         zLrmS3vhHPaaPsoQVmefiC/MjXoB0+gEZmiY0coOY2wrbWU/wCxd4F5t1N8bnMiJd+ab
+         nhjgojLKs3DtNzC0Bm6ejviuERcb3oxb7/dkWQtPSyV0kSSm2ArXx1WZTCNoLXs8rwBY
+         ecDJ78LUFg6Exe7b5GrWHuRX2wfCdtxK8sQe0zG5z1W/0Afu2KR9/lsuAYZrKEoSzkgu
+         7KrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=w72ktL2NVaulWnSOLwhUAw/SEUZ2qLk7Ydqg7suvoo4=;
-        b=NqKQS4xpRohqLAhKwx+g8cHt1i6D1WmLD1HeXBC1RtfdNqxkR8DQ7R2oNdROg4uRqC
-         NdD2TbOJBmwmgiiCzWbOxaMtwf57CJKAt7r7rL/vkBIDHpaxo/wIyNo1+JQib3CQnKuX
-         GxPgVllexKY9pCT4bVXMYFufItmDar+9WsGFfIxkmOtDE51sVMX+nM4xsqQA8c81FCXm
-         wNveMRnaDk47lNKP1oNc6jIIxc3MLkbJPUk9f3yQtGvFpbIsRLDyYK7ITU8SI2J9s9Xu
-         2ho5382kgHSndtZRQy7a7L1ui/zDGaFuFP9igQTe1Trpaxx+0NPhgm5Og/nQKMgqeVTH
-         KN+A==
-X-Gm-Message-State: AOAM533vy0Xf4uLgQWo5PO6jNXv6b6bbybHYS7534zgluOIY6EQXbWya
-        QUNbWcvynjKl+ME/EWLihFyiPG6ug7Sw
-X-Google-Smtp-Source: ABdhPJxbX88VuJKl737VvBq/vCrgo6XQMNEN18CqZbwf3ZJmJ6wNbhkzBo6bEjn+oSxahPeVrtMULAZs1R6L
+        bh=Fmv+HMc2DFxNt8CxUdSLz9dfbbTJJCLxSOxGsXm4RyU=;
+        b=YEdiCDyHe/KwXyMeJqGpM737PXoGemSD7uFoGUuEYusJC+v5Wxo9aOm7TTiogL003B
+         8OYGd6IW7h9xgrf2INI0cpt6KlAXPKMdV5UcxGrA5Pi6c2tpwKTYx2BWaB61WMBcv2QR
+         MokIGBp9EGdOSOlw4AHeZT5FBD0dWyqp/6mSC1oOd583LWxkCFJY4sCkWrKds0q5rAGE
+         z5lTDa7kQJoyrPM+XFMsUI8hH6RMv57bZmXkFso3BWvGiRbK68NQpS14GqZY92Jc7Or3
+         agmBEqbL2F3tTslJV97cgHc4FXYUV9sj0v5QbL+yImzVYk+j0nLiqvM04PikUGLCWyOU
+         I8EA==
+X-Gm-Message-State: AOAM530E/ksQTx9hjgRjIpqju44hdVLOJuoMSa5Jk4MKGcrVsUih0Jxk
+        AJl7+rXY4Y8nB1qaXtwD795RKDJBM541
+X-Google-Smtp-Source: ABdhPJyKZwK8L7OgfM5eCJrVgG7L/KDRJs9ML8qnRmGqUKzDjY6RiXCxrTBNf2fA8anI5bY3FN33eH2UxTo1
 X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:aa7:8432:0:b0:4f6:6dcd:4f19 with SMTP id
- q18-20020aa78432000000b004f66dcd4f19mr21345407pfn.53.1647822405012; Sun, 20
- Mar 2022 17:26:45 -0700 (PDT)
+ (user=mizhang job=sendgmr) by 2002:a17:902:b941:b0:14d:af72:3f23 with SMTP id
+ h1-20020a170902b94100b0014daf723f23mr10621824pls.6.1647822406401; Sun, 20 Mar
+ 2022 17:26:46 -0700 (PDT)
 Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Mon, 21 Mar 2022 00:26:37 +0000
+Date:   Mon, 21 Mar 2022 00:26:38 +0000
 In-Reply-To: <20220321002638.379672-1-mizhang@google.com>
-Message-Id: <20220321002638.379672-4-mizhang@google.com>
+Message-Id: <20220321002638.379672-5-mizhang@google.com>
 Mime-Version: 1.0
 References: <20220321002638.379672-1-mizhang@google.com>
 X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH 3/4] KVM: x86/mmu: explicitly check nx_hugepage in disallowed_hugepage_adjust()
+Subject: [PATCH 4/4] selftests: KVM: use dirty logging to check if page stats
+ work correctly
 From:   Mingwei Zhang <mizhang@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -77,59 +78,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add extra check to specify the case of nx hugepage and allow KVM to
-reconstruct large mapping after dirty logging is disabled. Existing code
-works only for nx hugepage but the condition is too general in that does
-not consider other usage case (such as dirty logging). Moreover, existing
-code assumes that a present PMD or PUD indicates that there exist 'smaller
-SPTEs' under the paging structure. This assumption may no be true if
-consider the zapping leafs only behavior in MMU.
+When dirty logging is enabled, KVM splits the all hugepage mapping in
+NPT/EPT into the smallest 4K size. This property could be used to check if
+the page stats metrics work properly in KVM mmu. At the same time, this
+logic might be used the other way around: using page stats to verify if
+dirty logging really splits all huge pages. Moreover, when dirty logging is
+disabled, KVM zaps corresponding SPTEs and we could check whether the large
+pages come back when guest touches the pages again.
 
-Missing the check causes KVM incorrectly regards the faulting page as a NX
-huge page and refuse to map it at desired level. And this leads to back
-performance in shadow mmu and potentiall TDP mmu.
+So add page stats checking in dirty logging performance selftest. In
+particular, add checks in three locations:
+ - just after vm is created;
+ - after populating memory into vm but before enabling dirty logging;
+ - just after turning on dirty logging.
+ - after one final iteration after turning off dirty logging.
 
-Fixes: b8e8c8303ff2 ("kvm: mmu: ITLB_MULTIHIT mitigation")
-Cc: stable@vger.kernel.org
+Tested using commands:
+ - ./dirty_log_perf_test -s anonymous_hugetlb_1gb
+ - ./dirty_log_perf_test -s anonymous_thp
 
-Reviewed-by: Ben Gardon <bgardon@google.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: David Matlack <dmatlack@google.com>
+Cc: Jing Zhang <jingzhangos@google.com>
+Cc: Peter Xu <peterx@redhat.com>
+
+Suggested-by: Ben Gardon <bgorden@google.com>
 Signed-off-by: Mingwei Zhang <mizhang@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ .../selftests/kvm/dirty_log_perf_test.c       | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 5628d0ba637e..4d358c273f6c 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -2919,6 +2919,16 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
- 	    cur_level == fault->goal_level &&
- 	    is_shadow_present_pte(spte) &&
- 	    !is_large_pte(spte)) {
-+		struct kvm_mmu_page *sp;
-+		u64 page_mask;
-+		/*
-+		 * When nx hugepage flag is not set, there is no reason to
-+		 * go down to another level. This helps demand paging to
-+		 * generate large mappings.
-+		 */
-+		sp = to_shadow_page(spte & PT64_BASE_ADDR_MASK);
-+		if (!sp->lpage_disallowed)
-+			return;
- 		/*
- 		 * A small SPTE exists for this pfn, but FNAME(fetch)
- 		 * and __direct_map would like to create a large PTE
-@@ -2926,8 +2936,8 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
- 		 * patching back for them into pfn the next 9 bits of
- 		 * the address.
- 		 */
--		u64 page_mask = KVM_PAGES_PER_HPAGE(cur_level) -
--				KVM_PAGES_PER_HPAGE(cur_level - 1);
-+		page_mask = KVM_PAGES_PER_HPAGE(cur_level) -
-+			KVM_PAGES_PER_HPAGE(cur_level - 1);
- 		fault->pfn |= fault->gfn & page_mask;
- 		fault->goal_level--;
+diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+index 1954b964d1cf..ab0457d91658 100644
+--- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+@@ -19,6 +19,10 @@
+ #include "perf_test_util.h"
+ #include "guest_modes.h"
+ 
++#ifdef __x86_64__
++#include "processor.h"
++#endif
++
+ /* How many host loops to run by default (one KVM_GET_DIRTY_LOG for each loop)*/
+ #define TEST_HOST_LOOP_N		2UL
+ 
+@@ -185,6 +189,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 				 p->slots, p->backing_src,
+ 				 p->partition_vcpu_memory_access);
+ 
++#ifdef __x86_64__
++	TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") == 0,
++		    "4K page is non zero");
++	TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
++		    "2M page is non zero");
++	TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
++		    "1G page is non zero");
++#endif
+ 	perf_test_set_wr_fract(vm, p->wr_fract);
+ 
+ 	guest_num_pages = (nr_vcpus * guest_percpu_mem_size) >> vm_get_page_shift(vm);
+@@ -222,6 +234,16 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	pr_info("Populate memory time: %ld.%.9lds\n",
+ 		ts_diff.tv_sec, ts_diff.tv_nsec);
+ 
++#ifdef __x86_64__
++	TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
++		    "4K page is zero");
++	if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP)
++		TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
++			    "2M page is zero");
++	if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
++		TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
++			    "1G page is zero");
++#endif
+ 	/* Enable dirty logging */
+ 	clock_gettime(CLOCK_MONOTONIC, &start);
+ 	enable_dirty_logging(vm, p->slots);
+@@ -267,6 +289,14 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 				iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
+ 		}
  	}
++#ifdef __x86_64__
++	TEST_ASSERT(vm_get_single_stat(vm, "pages_4k") != 0,
++		    "4K page is zero after dirty logging");
++	TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") == 0,
++		    "2M page is non-zero after dirty logging");
++	TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") == 0,
++		    "1G page is non-zero after dirty logging");
++#endif
+ 
+ 	/* Disable dirty logging */
+ 	clock_gettime(CLOCK_MONOTONIC, &start);
+@@ -275,6 +305,28 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	pr_info("Disabling dirty logging time: %ld.%.9lds\n",
+ 		ts_diff.tv_sec, ts_diff.tv_nsec);
+ 
++#ifdef __x86_64__
++	/*
++	 * Increment iteration to run the vcpus again to verify if huge pages
++	 * come back.
++	 */
++	iteration++;
++	pr_info("Starting the final iteration to verify page stats\n");
++
++	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
++		while (READ_ONCE(vcpu_last_completed_iteration[vcpu_id])
++		       != iteration)
++			;
++	}
++
++	if (p->backing_src == VM_MEM_SRC_ANONYMOUS_THP)
++		TEST_ASSERT(vm_get_single_stat(vm, "pages_2m") != 0,
++			    "2M page is zero");
++	if (p->backing_src == VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB)
++		TEST_ASSERT(vm_get_single_stat(vm, "pages_1g") != 0,
++			    "1G page is zero");
++#endif
++
+ 	/* Tell the vcpu thread to quit */
+ 	host_quit = true;
+ 	perf_test_join_vcpu_threads(nr_vcpus);
 -- 
 2.35.1.894.gb6a874cedc-goog
 

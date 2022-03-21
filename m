@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70A54E29CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 178BA4E2971
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349674AbiCUOIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
+        id S1348965AbiCUOEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348578AbiCUOBg (ORCPT
+        with ESMTP id S1349104AbiCUN7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:01:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A9C44745;
-        Mon, 21 Mar 2022 06:59:25 -0700 (PDT)
+        Mon, 21 Mar 2022 09:59:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866CE10CC;
+        Mon, 21 Mar 2022 06:57:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECEF7611D5;
-        Mon, 21 Mar 2022 13:59:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F32C8C340E8;
-        Mon, 21 Mar 2022 13:59:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E597B81598;
+        Mon, 21 Mar 2022 13:57:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D7B6C340E8;
+        Mon, 21 Mar 2022 13:57:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871154;
-        bh=7xh3drwf+VYtvLvhQqinf+lnwZkr3z7FFQHSQFrnSaQ=;
+        s=korg; t=1647871060;
+        bh=5yEzG5mCcTVSwH9OiUgBrwqHfwd0OfKOqGsA5QmuISQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LXDcQyzZ7g1v1I70wFfq+Em3p14DQN3qHfZdfvOpvgtb0p2Fvjn6XPNO+c7lwkPq2
-         rMhL0DSR/bDFUjgXol8SI5LJ7LaoGX74g6WZMFhI80kr+LD+5cR0A57vDtkx3wM1G7
-         drulmfnOf41dLh6KP30fa3GSQX3+NAjDP+lc8geA=
+        b=Dk3DP0+Mlg5VFzLTfCZJEEue4hu9BijiY9d4ES2ZKJxJA4mAXfAp4Q+x4kXP2knUa
+         61zMGUWY6Z3S/2PPUeQPEO4ZBiWbpw3WPpq1392wzrJhrW4nToWz1ySdxRY0aaAACN
+         TaTPe3Ddsi2MSF++1pMDH/1rW80xJXhES/R6WFFA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kurt Cancemi <kurt@x64architecture.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 07/30] net: phy: marvell: Fix invalid comparison in the resume and suspend functions
+        stable@vger.kernel.org, Brian Masney <bmasney@redhat.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: [PATCH 5.4 01/17] crypto: qcom-rng - ensure buffer for generate is completely filled
 Date:   Mon, 21 Mar 2022 14:52:37 +0100
-Message-Id: <20220321133219.861122873@linuxfoundation.org>
+Message-Id: <20220321133217.193115204@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
-References: <20220321133219.643490199@linuxfoundation.org>
+In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
+References: <20220321133217.148831184@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,53 +58,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kurt Cancemi <kurt@x64architecture.com>
+From: Brian Masney <bmasney@redhat.com>
 
-[ Upstream commit 837d9e49402eaf030db55a49f96fc51d73b4b441 ]
+commit a680b1832ced3b5fa7c93484248fd221ea0d614b upstream.
 
-This bug resulted in only the current mode being resumed and suspended when
-the PHY supported both fiber and copper modes and when the PHY only supported
-copper mode the fiber mode would incorrectly be attempted to be resumed and
-suspended.
+The generate function in struct rng_alg expects that the destination
+buffer is completely filled if the function returns 0. qcom_rng_read()
+can run into a situation where the buffer is partially filled with
+randomness and the remaining part of the buffer is zeroed since
+qcom_rng_generate() doesn't check the return value. This issue can
+be reproduced by running the following from libkcapi:
 
-Fixes: 3758be3dc162 ("Marvell phy: add functions to suspend and resume both interfaces: fiber and copper links.")
-Signed-off-by: Kurt Cancemi <kurt@x64architecture.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220312201512.326047-1-kurt@x64architecture.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+    kcapi-rng -b 9000000 > OUTFILE
+
+The generated OUTFILE will have three huge sections that contain all
+zeros, and this is caused by the code where the test
+'val & PRNG_STATUS_DATA_AVAIL' fails.
+
+Let's fix this issue by ensuring that qcom_rng_read() always returns
+with a full buffer if the function returns success. Let's also have
+qcom_rng_generate() return the correct value.
+
+Here's some statistics from the ent project
+(https://www.fourmilab.ch/random/) that shows information about the
+quality of the generated numbers:
+
+    $ ent -c qcom-random-before
+    Value Char Occurrences Fraction
+      0           606748   0.067416
+      1            33104   0.003678
+      2            33001   0.003667
+    ...
+    253   �        32883   0.003654
+    254   �        33035   0.003671
+    255   �        33239   0.003693
+
+    Total:       9000000   1.000000
+
+    Entropy = 7.811590 bits per byte.
+
+    Optimum compression would reduce the size
+    of this 9000000 byte file by 2 percent.
+
+    Chi square distribution for 9000000 samples is 9329962.81, and
+    randomly would exceed this value less than 0.01 percent of the
+    times.
+
+    Arithmetic mean value of data bytes is 119.3731 (127.5 = random).
+    Monte Carlo value for Pi is 3.197293333 (error 1.77 percent).
+    Serial correlation coefficient is 0.159130 (totally uncorrelated =
+    0.0).
+
+Without this patch, the results of the chi-square test is 0.01%, and
+the numbers are certainly not random according to ent's project page.
+The results improve with this patch:
+
+    $ ent -c qcom-random-after
+    Value Char Occurrences Fraction
+      0            35432   0.003937
+      1            35127   0.003903
+      2            35424   0.003936
+    ...
+    253   �        35201   0.003911
+    254   �        34835   0.003871
+    255   �        35368   0.003930
+
+    Total:       9000000   1.000000
+
+    Entropy = 7.999979 bits per byte.
+
+    Optimum compression would reduce the size
+    of this 9000000 byte file by 0 percent.
+
+    Chi square distribution for 9000000 samples is 258.77, and randomly
+    would exceed this value 42.24 percent of the times.
+
+    Arithmetic mean value of data bytes is 127.5006 (127.5 = random).
+    Monte Carlo value for Pi is 3.141277333 (error 0.01 percent).
+    Serial correlation coefficient is 0.000468 (totally uncorrelated =
+    0.0).
+
+This change was tested on a Nexus 5 phone (msm8974 SoC).
+
+Signed-off-by: Brian Masney <bmasney@redhat.com>
+Fixes: ceec5f5b5988 ("crypto: qcom-rng - Add Qcom prng driver")
+Cc: stable@vger.kernel.org # 4.19+
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/marvell.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/crypto/qcom-rng.c |   17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
-index cb9d1852a75c..54786712a991 100644
---- a/drivers/net/phy/marvell.c
-+++ b/drivers/net/phy/marvell.c
-@@ -1536,8 +1536,8 @@ static int marvell_suspend(struct phy_device *phydev)
- 	int err;
+--- a/drivers/crypto/qcom-rng.c
++++ b/drivers/crypto/qcom-rng.c
+@@ -7,6 +7,7 @@
+ #include <linux/acpi.h>
+ #include <linux/clk.h>
+ #include <linux/crypto.h>
++#include <linux/iopoll.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+@@ -42,16 +43,19 @@ static int qcom_rng_read(struct qcom_rng
+ {
+ 	unsigned int currsize = 0;
+ 	u32 val;
++	int ret;
  
- 	/* Suspend the fiber mode first */
--	if (!linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
--			       phydev->supported)) {
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
-+			      phydev->supported)) {
- 		err = marvell_set_page(phydev, MII_MARVELL_FIBER_PAGE);
- 		if (err < 0)
- 			goto error;
-@@ -1571,8 +1571,8 @@ static int marvell_resume(struct phy_device *phydev)
- 	int err;
+ 	/* read random data from hardware */
+ 	do {
+-		val = readl_relaxed(rng->base + PRNG_STATUS);
+-		if (!(val & PRNG_STATUS_DATA_AVAIL))
+-			break;
++		ret = readl_poll_timeout(rng->base + PRNG_STATUS, val,
++					 val & PRNG_STATUS_DATA_AVAIL,
++					 200, 10000);
++		if (ret)
++			return ret;
  
- 	/* Resume the fiber mode first */
--	if (!linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
--			       phydev->supported)) {
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
-+			      phydev->supported)) {
- 		err = marvell_set_page(phydev, MII_MARVELL_FIBER_PAGE);
- 		if (err < 0)
- 			goto error;
--- 
-2.34.1
-
+ 		val = readl_relaxed(rng->base + PRNG_DATA_OUT);
+ 		if (!val)
+-			break;
++			return -EINVAL;
+ 
+ 		if ((max - currsize) >= WORD_SZ) {
+ 			memcpy(data, &val, WORD_SZ);
+@@ -60,11 +64,10 @@ static int qcom_rng_read(struct qcom_rng
+ 		} else {
+ 			/* copy only remaining bytes */
+ 			memcpy(data, &val, max - currsize);
+-			break;
+ 		}
+ 	} while (currsize < max);
+ 
+-	return currsize;
++	return 0;
+ }
+ 
+ static int qcom_rng_generate(struct crypto_rng *tfm,
+@@ -86,7 +89,7 @@ static int qcom_rng_generate(struct cryp
+ 	mutex_unlock(&rng->lock);
+ 	clk_disable_unprepare(rng->clk);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int qcom_rng_seed(struct crypto_rng *tfm, const u8 *seed,
 
 

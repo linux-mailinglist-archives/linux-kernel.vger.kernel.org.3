@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2F44E2D0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A444E2D0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349601AbiCUQBn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 21 Mar 2022 12:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
+        id S1350603AbiCUQDt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 21 Mar 2022 12:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241372AbiCUQBl (ORCPT
+        with ESMTP id S1348726AbiCUQDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:01:41 -0400
+        Mon, 21 Mar 2022 12:03:48 -0400
 Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28AFD496BD
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:00:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CACD53A70
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:02:23 -0700 (PDT)
 Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-239-DZcqY6ZCNM-Zxa3ztE6Iiw-1; Mon, 21 Mar 2022 16:00:10 +0000
-X-MC-Unique: DZcqY6ZCNM-Zxa3ztE6Iiw-1
+ uk-mta-31-F6hM2S3-NnqEGYc8T09CnQ-1; Mon, 21 Mar 2022 16:02:20 +0000
+X-MC-Unique: F6hM2S3-NnqEGYc8T09CnQ-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Mon, 21 Mar 2022 16:00:11 +0000
+ Server (TLS) id 15.0.1497.32; Mon, 21 Mar 2022 16:02:20 +0000
 Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
  AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Mon, 21 Mar 2022 16:00:10 +0000
+ 15.00.1497.033; Mon, 21 Mar 2022 16:02:20 +0000
 From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dan Carpenter' <dan.carpenter@oracle.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>
-CC:     Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Mark Fasheh <mark@fasheh.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "ocfs2-devel@oss.oracle.com" <ocfs2-devel@oss.oracle.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: RE: [PATCH] ocfs2: fix check if list iterator did find an element
-Thread-Topic: [PATCH] ocfs2: fix check if list iterator did find an element
-Thread-Index: AQHYPSvRVnhy0IZf6EGgy069JPLEqKzJ/HWg
-Date:   Mon, 21 Mar 2022 16:00:10 +0000
-Message-ID: <75180dd18a3f460891cd93f7fcb3aa1c@AcuMS.aculab.com>
-References: <20220319203106.2541700-1-jakobkoschel@gmail.com>
- <abcbf5d2-c348-7dc0-cfd3-9bcc6431bc64@linux.alibaba.com>
- <A7AA04AA-6B4C-4211-99A6-0D3C04ED7B26@gmail.com> <20220321135435.GL336@kadam>
-In-Reply-To: <20220321135435.GL336@kadam>
+To:     'Wan Jiabing' <wanjiabing@vivo.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "alexandr.lobakin@intel.com" <alexandr.lobakin@intel.com>
+Subject: RE: [PATCH v2] ice: use min_t() to make code cleaner in ice_gnss
+Thread-Topic: [PATCH v2] ice: use min_t() to make code cleaner in ice_gnss
+Thread-Index: AQHYPSxszwX/VYzTWUmJ1ZXJKTtOx6zJ/3tw
+Date:   Mon, 21 Mar 2022 16:02:20 +0000
+Message-ID: <f888e3cf09944f9aa63532c9f59e69fb@AcuMS.aculab.com>
+References: <20220321135947.378250-1-wanjiabing@vivo.com>
+In-Reply-To: <20220321135947.378250-1-wanjiabing@vivo.com>
 Accept-Language: en-GB, en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
@@ -73,64 +66,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter
-> Sent: 21 March 2022 13:55
-> On Mon, Mar 21, 2022 at 02:34:34PM +0100, Jakob Koschel wrote:
-> > >> @@ -556,11 +556,11 @@ static void *lockres_seq_start(struct seq_file *m, loff_t *pos)
-> > >> 		}
-> > >> 	}
-> > >>
-> > >> -	list_for_each_entry(res, track_list, tracking) {
-> > >> -		if (&res->tracking == &dlm->tracking_list)
-> > >> -			res = NULL;
-> > >> -		else
-> > >> -			dlm_lockres_get(res);
-> > >> +	list_for_each_entry(iter, track_list, tracking) {
-> > >> +		if (&iter->tracking != &dlm->tracking_list) {
+From: Wan Jiabing
+> Sent: 21 March 2022 14:00
 > 
-> This is an open coded version of:
+> Fix the following coccicheck warning:
+> ./drivers/net/ethernet/intel/ice/ice_gnss.c:79:26-27: WARNING opportunity for min()
 > 
-> 	if (!list_entry_is_head(iter, &dlm->tracking_list, tracking)) {
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+> Changelog:
+> v2:
+> - Use typeof(bytes_left) instead of u8.
+> ---
+>  drivers/net/ethernet/intel/ice/ice_gnss.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/ice/ice_gnss.c b/drivers/net/ethernet/intel/ice/ice_gnss.c
+> index 35579cf4283f..57586a2e6dec 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_gnss.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_gnss.c
+> @@ -76,8 +76,7 @@ static void ice_gnss_read(struct kthread_work *work)
+>  	for (i = 0; i < data_len; i += bytes_read) {
+>  		u16 bytes_left = data_len - i;
 
-Doesn't list_for_each_entry() terminate before that happens?
-So this code is probably still horribly broken.
-
-My worry about bugs with these lists isn't really the code
-that uses list_for_each_entry() - they are fairly easy to
-locate, read and fix.
-The problem is all the other code that is scanning these
-list in other more obscure ways.
-
-It really isn't a list structure that is easy to use at all.
-It's only slight advantage is that you can unlink an item
-without knowing the list head.
-(Which can stop buggy code generating cross-linked lists.)
-
-Unless you actually need to traverse backwards the 'back
-pointer points to forwards pointer' list is much better.
-Even if you have to maintain a 'pointer to last' to get
-FIFO operation.
-
-The other option is to double-link the items into a loop and
-have a 'head' that points to the first item.
-
-Both these loops have 'pointer to items' to don't need
-container_of() and get better type checking from the compiler.
+Oh FFS why is that u16?
+Don't do arithmetic on anything smaller than 'int'
 
 	David
 
 > 
-> Ideally someone would come through with enough confidence to just delete
-> it but the second best option is to just make it readable...
+> -		bytes_read = bytes_left < ICE_MAX_I2C_DATA_SIZE ? bytes_left :
+> -					  ICE_MAX_I2C_DATA_SIZE;
+> +		bytes_read = min_t(typeof(bytes_left), bytes_left, ICE_MAX_I2C_DATA_SIZE);
 > 
-> regards,
-> dan carpenter
-> 
-> > >> +			dlm_lockres_get(iter);
-> > >> +			res = iter;
-> > >> +		}
-> > >> 		break;
-> > >> 	}
+>  		err = ice_aq_read_i2c(hw, link_topo, ICE_GNSS_UBX_I2C_BUS_ADDR,
+>  				      cpu_to_le16(ICE_GNSS_UBX_EMPTY_DATA),
+> --
+> 2.35.1
 
 -
 Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK

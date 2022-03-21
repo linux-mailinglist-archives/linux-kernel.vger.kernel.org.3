@@ -2,141 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9EE4E2CD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F794E2CDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346428AbiCUPwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        id S1347991AbiCUPwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238686AbiCUPv4 (ORCPT
+        with ESMTP id S238686AbiCUPwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:51:56 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FC89F386
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:50:30 -0700 (PDT)
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 747413F329
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:50:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647877829;
-        bh=amAeexB40qeQuUsgEFDBLhcLC0MO2/MpF5kxBkxTRmI=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=XFCpwt7tCAZlBPG+AZ0usNVyFZJujaZlgsN7eV/aNU8ZUxl7LZ1WkxywUhhI57HQ8
-         TiJEqyDUcWs6elIvE4kOGILr+cUQWbnsac7l25h68IFqmrsoLhVZ2mzddidZDPY4TB
-         K3L0s3ecxyqwNRyndX3nLYmcwnd/dWesFJu04wwpkcB44lX7ktW5oJPi0J67OZqY3O
-         S3bgM1n66VRoRMxZR5EyvHb3WSD9fEgk0xiVFb50rfoZiH828qnHUZ5pf81jVb2obk
-         gs7oMkbiqv/xscO1paYA2lM2ZVUklBgUbPLkFyn5HkeIX9PPA8QnDEgzYV0V/eqP1R
-         FrOdrlXXj6OEg==
-Received: by mail-io1-f69.google.com with SMTP id i19-20020a5d9353000000b006495ab76af6so7777368ioo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:50:29 -0700 (PDT)
+        Mon, 21 Mar 2022 11:52:36 -0400
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621D01557FF;
+        Mon, 21 Mar 2022 08:51:11 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id r10so21329536wrp.3;
+        Mon, 21 Mar 2022 08:51:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=amAeexB40qeQuUsgEFDBLhcLC0MO2/MpF5kxBkxTRmI=;
-        b=P3sXItGmXDwAiplo8/NdykiRPDnQwYUHHmoVb7r7X5jr+QE66UKU3lkLj6Syhctuk5
-         4pkbgTVqt/3B92tojm1Oazgbib41YSvPVapxqnYhOxZx7jfJiDv6TIPrYLVHci/930hN
-         TR3clZmsohWHT6v4qxQngBKbKKSn2LLqCBcE7NKziAhmpI9p0xfJNE5Bm/nAOR4mtgxd
-         6AFx3oXt6gkSyKj2IC5UvRxWTiNXyetHLDKCrYiQdYZewDJSd5v5RsaFSPi4W1cvAYaU
-         071To4eV7iCh1lT4t2L06RlUg+oBjHZqN8sGwIshWV4S2r5LNVI8ebmuD03xJ7u6ab/S
-         zldw==
-X-Gm-Message-State: AOAM5324LVcc+PHC8CfSizYrVPah6/69l3eH1yJDz1ErS+kL+U240GBG
-        zH2OshlJT4/g51+ywrYipKKfd7l9kW6HLbeA+EgCYq4mQS8Tnb1Hpr950FSQ8FAOEMvIUQ48XdZ
-        xqWRcdcRismTc+bqbFGG/G9OxJJi8OloyGLd62U08cQ==
-X-Received: by 2002:a92:ca4a:0:b0:2c8:301e:3624 with SMTP id q10-20020a92ca4a000000b002c8301e3624mr1747923ilo.301.1647877828243;
-        Mon, 21 Mar 2022 08:50:28 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz5zI7dbe8PgtCdpDk52EDFpaKY1vg7MjzSrWomIEbD/IHHzCyZhQG2tfBo94Rl9x/jY457wA==
-X-Received: by 2002:a92:ca4a:0:b0:2c8:301e:3624 with SMTP id q10-20020a92ca4a000000b002c8301e3624mr1747912ilo.301.1647877828016;
-        Mon, 21 Mar 2022 08:50:28 -0700 (PDT)
-Received: from xps13.dannf (c-73-14-97-161.hsd1.co.comcast.net. [73.14.97.161])
-        by smtp.gmail.com with ESMTPSA id q197-20020a6b8ece000000b00648d615e80csm8501663iod.41.2022.03.21.08.50.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 08:50:27 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 09:50:24 -0600
-From:   dann frazier <dann.frazier@canonical.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        Toan Le <toan@os.amperecomputing.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
-        Android Kernel Team <kernel-team@android.com>
-Subject: Re: [PATCH v2 0/2] PCI: xgene: Restore working PCIe functionnality
-Message-ID: <YjiewB5Nz5CyFuI0@xps13.dannf>
-References: <20220321104843.949645-1-maz@kernel.org>
- <CAL_JsqJacC6GbNebTfYyUEScROCFN4+Fg2v1_iYFfqAvW4E9Vw@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hefucE+Jiu9ept//sebHy0SZe1pf91jzk4A2hhyEoXU=;
+        b=j5xnLu4HfbvAZePTS+Q8j2bHhaftEKa8xdA01aScy2pzazE+gAPbz6pO0JtVC5Zq1e
+         N4Hs5AMCIGYtqhsYv265rz8TBpwSwGIZO5MbPglxS2WeF3YEf0AnF1pCuxJS/u+ZqEHR
+         gdCUPnJ0eh9RCPPfTmo8E4TytT6+2PEzWmsFJdeW0SP50r3z0UasQi3T67cQMp74rRVG
+         x2K96uw9LKOXXaGz6IV6UkYvLjh2TVIHUP5+FqlHocQ8HpLclT0d2xsEGpqcCadpkMkY
+         0Foy0FbPKnc8T/xmVr+BVtg35FHtJIbqhcEVhK0LwGu9vaIwD27HsQSlCZvHuGdG71b2
+         RCHw==
+X-Gm-Message-State: AOAM533PXJwUG47JMtrettbyIIlzp6DGwHWUjLDGqw1nqy5VsYPWvom4
+        h7ajqYl5MegyVFIq4c+cuD4=
+X-Google-Smtp-Source: ABdhPJwvW8A/Q2Qjh46eoL/oVh5ZiV0UasSIAFG93IFQXPqcKZSoCt5kt1x/8yu76BU3wmUskwpDfw==
+X-Received: by 2002:a5d:6acd:0:b0:1ef:78e9:193a with SMTP id u13-20020a5d6acd000000b001ef78e9193amr18601351wrw.281.1647877869926;
+        Mon, 21 Mar 2022 08:51:09 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id u7-20020a5d6da7000000b00203d9d1875bsm15376362wrs.73.2022.03.21.08.51.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 08:51:09 -0700 (PDT)
+Message-ID: <3aae94bd-d39d-ddfc-2b06-356173f6b1f8@kernel.org>
+Date:   Mon, 21 Mar 2022 16:51:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqJacC6GbNebTfYyUEScROCFN4+Fg2v1_iYFfqAvW4E9Vw@mail.gmail.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: net: add reset property for aspeed,
+ ast2600-mdio binding
+Content-Language: en-US
+To:     Dylan Hung <dylan_hung@aspeedtech.com>, robh+dt@kernel.org,
+        joel@jms.id.au, andrew@aj.id.au, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     BMC-SW@aspeedtech.com, stable@vger.kernel.org
+References: <20220321095648.4760-1-dylan_hung@aspeedtech.com>
+ <20220321095648.4760-2-dylan_hung@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220321095648.4760-2-dylan_hung@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:17:34AM -0500, Rob Herring wrote:
-> On Mon, Mar 21, 2022 at 5:49 AM Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > Since 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup") was
-> > merged in the 5.5 time frame, PCIe on the venerable XGene platform has
-> > been unusable: 6dce5aa59e0b broke both XGene-1 (Mustang and m400) and
-> > XGene-2 (Merlin), while the addition of c7a75d07827a ("PCI: xgene: Fix
-> > IB window setup") fixed XGene-2, but left the rest of the zoo
-> > unusable.
-> >
-> > It is understood that this systems come with "creative" DTs that don't
-> > match the expectations of modern kernels. However, there is little to
-> > be gained by forcing these changes on users -- the firmware is not
-> > upgradable, and the current owner of the IP will deny that these
-> > machines have ever existed.
+On 21/03/2022 10:56, Dylan Hung wrote:
+> The AST2600 MDIO bus controller has a reset control bit and must be
+> deasserted before the manipulating the MDIO controller.
 > 
-> The gain for fixing this properly is not having drivers do their own
-> dma-ranges parsing. We've seen what happens when drivers do their own
-> parsing of standard properties (e.g. interrupt-map). Currently, we
-> don't have any drivers doing their own parsing:
-> 
-> $ git grep of_pci_dma_range_parser_init
-> drivers/of/address.c:int of_pci_dma_range_parser_init(struct
-> of_pci_range_parser *parser,
-> drivers/of/address.c:EXPORT_SYMBOL_GPL(of_pci_dma_range_parser_init);
-> drivers/of/address.c:#define of_dma_range_parser_init
-> of_pci_dma_range_parser_init
-> drivers/of/unittest.c:  if (of_pci_dma_range_parser_init(&parser, np)) {
-> drivers/pci/of.c:       err = of_pci_dma_range_parser_init(&parser, dev_node);
-> include/linux/of_address.h:extern int
-> of_pci_dma_range_parser_init(struct of_pci_range_parser *parser,
-> include/linux/of_address.h:static inline int
-> of_pci_dma_range_parser_init(struct of_pci_range_parser *parser,
-> 
-> And we can probably further refactor this to be private to drivers/pci/of.c.
-> 
-> For XGene-2 the issue is simply that the driver depends on the order
-> of dma-ranges entries.
-> 
-> For XGene-1, I'd still like to understand what the issue is. Reverting
-> the first fix and fixing 'dma-ranges' should have fixed it. I need a
-> dump of how the IB registers are initialized in both cases.
+> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
+> Cc: stable@vger.kernel.org
 
-Happy to provide that for the m400 if told how :)
+No bugs fixes, no cc-stable. Especially that you break existing devices...
 
-  -dann
+> ---
+>  .../devicetree/bindings/net/aspeed,ast2600-mdio.yaml          | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml b/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
+> index 1c88820cbcdf..8ba108e25d94 100644
+> --- a/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
+> +++ b/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
+> @@ -23,12 +23,15 @@ properties:
+>    reg:
+>      maxItems: 1
+>      description: The register range of the MDIO controller instance
 
-> I'm not
-> saying changing 'dma-ranges' in the firmware is going to be required
-> here. There's a couple of other ways we could fix that without a
-> firmware change, but first I need to understand why it broke.
+Missing empty line.
 
+> +  resets:
+> +    maxItems: 1
+>  
+>  required:
+>    - compatible
+>    - reg
+>    - "#address-cells"
+>    - "#size-cells"
+> +  - resets
+
+You break the ABI. This isusually not accepted in a regular kernel and
+even totally not accepted accepted for stable kernel.
+
+>  
+>  unevaluatedProperties: false
+>  
+> @@ -39,6 +42,7 @@ examples:
+>              reg = <0x1e650000 0x8>;
+>              #address-cells = <1>;
+>              #size-cells = <0>;
+> +            resets = <&syscon 35>;
+>  
+>              ethphy0: ethernet-phy@0 {
+>                      compatible = "ethernet-phy-ieee802.3-c22";
+
+
+Best regards,
+Krzysztof

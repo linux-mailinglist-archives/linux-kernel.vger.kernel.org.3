@@ -2,50 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3424E298E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA654E29F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348927AbiCUOFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60362 "EHLO
+        id S1351168AbiCUOKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349173AbiCUN7e (ORCPT
+        with ESMTP id S1349403AbiCUODm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:59:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C438255B0;
-        Mon, 21 Mar 2022 06:58:09 -0700 (PDT)
+        Mon, 21 Mar 2022 10:03:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7A518005A;
+        Mon, 21 Mar 2022 07:01:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2778E6126A;
-        Mon, 21 Mar 2022 13:58:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBA33C340E8;
-        Mon, 21 Mar 2022 13:58:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E84FBB816D7;
+        Mon, 21 Mar 2022 14:01:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2179CC340E8;
+        Mon, 21 Mar 2022 14:00:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871088;
-        bh=hg12RVOcVeX/qVd5Vr1cnlSIyR3Is5JuwGoCxLJRNE8=;
+        s=korg; t=1647871259;
+        bh=u3F5wmbk+6PkM8pt2vrxqech9PMOYixTjf4rRI8WWcM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BIDLf2+evEhqzuOEWkDvjKHlZHS3qhZ4ohu3hjLxARW6tuM8pR2UJoVFGwWIhdpTy
-         aRZItNnGDh9YfSc2QpeU6Z9cx8nC+32tXPRv/vr/9w0rInAIKVLXBpng4vM6yemkPj
-         wcD0fQSNltxFAaESI2nb8gAdndzSGUV7GO0mKllU=
+        b=Ro0/ORY1qmo1P4eGyCR1bGBlU2Jm1h7meFiaGb3eFnOkb2bI97KgbbV+9O0nDk/cw
+         S1P2wujTNhgDBKCW5GLA4OxRhKCZLA+Zk1NzETY+DTsJVwxigFrf/5C/Od07hZoE2T
+         UfyxOFWhF2rPmtCOcjvF2M99NsoM9jPeR2Klhdq8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        Octavian Purdila <octavian.purdila@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 03/17] efi: fix return value of __setup handlers
+        stable@vger.kernel.org, Guo Ziliang <guo.ziliang@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Hugh Dickins <hughd@google.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 03/32] mm: swap: get rid of livelock in swapin readahead
 Date:   Mon, 21 Mar 2022 14:52:39 +0100
-Message-Id: <20220321133217.252494434@linuxfoundation.org>
+Message-Id: <20220321133220.662265760@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
-References: <20220321133217.148831184@linuxfoundation.org>
+In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
+References: <20220321133220.559554263@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,82 +65,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Guo Ziliang <guo.ziliang@zte.com.cn>
 
-[ Upstream commit 9feaf8b387ee0ece9c1d7add308776b502a35d0c ]
+commit 029c4628b2eb2ca969e9bf979b05dc18d8d5575e upstream.
 
-When "dump_apple_properties" is used on the kernel boot command line,
-it causes an Unknown parameter message and the string is added to init's
-argument strings:
+In our testing, a livelock task was found.  Through sysrq printing, same
+stack was found every time, as follows:
 
-  Unknown kernel command line parameters "dump_apple_properties
-    BOOT_IMAGE=/boot/bzImage-517rc6 efivar_ssdt=newcpu_ssdt", will be
-    passed to user space.
+  __swap_duplicate+0x58/0x1a0
+  swapcache_prepare+0x24/0x30
+  __read_swap_cache_async+0xac/0x220
+  read_swap_cache_async+0x58/0xa0
+  swapin_readahead+0x24c/0x628
+  do_swap_page+0x374/0x8a0
+  __handle_mm_fault+0x598/0xd60
+  handle_mm_fault+0x114/0x200
+  do_page_fault+0x148/0x4d0
+  do_translation_fault+0xb0/0xd4
+  do_mem_abort+0x50/0xb0
 
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-     dump_apple_properties
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc6
-     efivar_ssdt=newcpu_ssdt
+The reason for the livelock is that swapcache_prepare() always returns
+EEXIST, indicating that SWAP_HAS_CACHE has not been cleared, so that it
+cannot jump out of the loop.  We suspect that the task that clears the
+SWAP_HAS_CACHE flag never gets a chance to run.  We try to lower the
+priority of the task stuck in a livelock so that the task that clears
+the SWAP_HAS_CACHE flag will run.  The results show that the system
+returns to normal after the priority is lowered.
 
-Similarly when "efivar_ssdt=somestring" is used, it is added to the
-Unknown parameter message and to init's environment strings, polluting
-them (see examples above).
+In our testing, multiple real-time tasks are bound to the same core, and
+the task in the livelock is the highest priority task of the core, so
+the livelocked task cannot be preempted.
 
-Change the return value of the __setup functions to 1 to indicate
-that the __setup options have been handled.
+Although cond_resched() is used by __read_swap_cache_async, it is an
+empty function in the preemptive system and cannot achieve the purpose
+of releasing the CPU.  A high-priority task cannot release the CPU
+unless preempted by a higher-priority task.  But when this task is
+already the highest priority task on this core, other tasks will not be
+able to be scheduled.  So we think we should replace cond_resched() with
+schedule_timeout_uninterruptible(1), schedule_timeout_interruptible will
+call set_current_state first to set the task state, so the task will be
+removed from the running queue, so as to achieve the purpose of giving
+up the CPU and prevent it from running in kernel mode for too long.
 
-Fixes: 58c5475aba67 ("x86/efi: Retrieve and assign Apple device properties")
-Fixes: 475fb4e8b2f4 ("efi / ACPI: load SSTDs from EFI variables")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-efi@vger.kernel.org
-Cc: Lukas Wunner <lukas@wunner.de>
-Cc: Octavian Purdila <octavian.purdila@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Matt Fleming <matt@codeblueprint.co.uk>
-Link: https://lore.kernel.org/r/20220301041851.12459-1-rdunlap@infradead.org
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+(akpm: ugly hack becomes uglier.  But it fixes the issue in a
+backportable-to-stable fashion while we hopefully work on something
+better)
+
+Link: https://lkml.kernel.org/r/20220221111749.1928222-1-cgel.zte@gmail.com
+Signed-off-by: Guo Ziliang <guo.ziliang@zte.com.cn>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Reviewed-by: Jiang Xuexin <jiang.xuexin@zte.com.cn>
+Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+Acked-by: Hugh Dickins <hughd@google.com>
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Roger Quadros <rogerq@kernel.org>
+Cc: Ziliang Guo <guo.ziliang@zte.com.cn>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/efi/apple-properties.c | 2 +-
- drivers/firmware/efi/efi.c              | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ mm/swap_state.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/efi/apple-properties.c b/drivers/firmware/efi/apple-properties.c
-index 0e206c9e0d7a..7ad2d85d7270 100644
---- a/drivers/firmware/efi/apple-properties.c
-+++ b/drivers/firmware/efi/apple-properties.c
-@@ -23,7 +23,7 @@ static bool dump_properties __initdata;
- static int __init dump_properties_enable(char *arg)
- {
- 	dump_properties = true;
--	return 0;
-+	return 1;
- }
+--- a/mm/swap_state.c
++++ b/mm/swap_state.c
+@@ -478,7 +478,7 @@ struct page *__read_swap_cache_async(swp
+ 		 * __read_swap_cache_async(), which has set SWAP_HAS_CACHE
+ 		 * in swap_map, but not yet added its page to swap cache.
+ 		 */
+-		cond_resched();
++		schedule_timeout_uninterruptible(1);
+ 	}
  
- __setup("dump_apple_properties", dump_properties_enable);
-diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-index 415d7b3a59f8..8fd74a7501d4 100644
---- a/drivers/firmware/efi/efi.c
-+++ b/drivers/firmware/efi/efi.c
-@@ -231,7 +231,7 @@ static int __init efivar_ssdt_setup(char *str)
- 		memcpy(efivar_ssdt, str, strlen(str));
- 	else
- 		pr_warn("efivar_ssdt: name too long: %s\n", str);
--	return 0;
-+	return 1;
- }
- __setup("efivar_ssdt=", efivar_ssdt_setup);
- 
--- 
-2.34.1
-
+ 	/*
 
 

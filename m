@@ -2,162 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F1F4E3518
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A4D4E3530
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbiCUX6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
+        id S233766AbiCUX7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233593AbiCUX5w (ORCPT
+        with ESMTP id S233617AbiCUX7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:57:52 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07A1284E79
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:55:02 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id j15so18893360eje.9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:55:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qiaO27WzdyEkhPCgtVcKJYNpZr9WKp2+zwnsf/1VvSc=;
-        b=Ri8yuR7/Vfc3fPL9gQLx7nlC2w5WarFCPritcrnsHpSsxuLwI5G3Voo8JeXcgyszLb
-         +2uoYc1aMEeZckMfuvJ2tS1RQ4sV4x2bEw3/t6bZI8mymUrBIyCvE8fdVOZNpVekttmd
-         gL3/aF9rUmS8p0UDTQfskhyx+I2egHowIc+sQ/N03tFWDWkkas9yz9J6z6/pRbfJotOJ
-         Hya7yMo0Sw59opqFkSYTZhc7F9NiPgJ8uwx1p8C0nJ00wLf8jKvLHqjCFphRAZgfpYi+
-         VVSQCs5iHmIrTMa+g/VlfDJHcUV27McnejGmfZoaaKiH2IvdAJP5kg+Lda21FYCK3UME
-         MrGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qiaO27WzdyEkhPCgtVcKJYNpZr9WKp2+zwnsf/1VvSc=;
-        b=MILDXu1sR+DCW6Y7+dUyx/9El5gdp684njVqA1y+TyZaxnxwBDUlwjlDpOrh2GZUoF
-         vhTeF9XnhOzMK913TSodhnhMAeskoacCCCH0Axm+Vz7pwR9017eBKIIpUkyjCboL6B6a
-         NlWAeuZLJERpiW+ingLTt6RW4MUpMwZTe833KJsR+swoe5YWYIkw5ZO9x/lllClHQezi
-         nlFkn4OY8JjG32zAy05G+wbTHB+z94XWAptv+MwMcRnv+SO60Z1MMBnrsg1WJ2q5JuE5
-         dB7Ot0ye4djWX8hiykYBaix7WIbD+MJMr2NI1mUfJWFrlakCGVWwvy4H3hk4MuzPNwmp
-         7JDw==
-X-Gm-Message-State: AOAM531vIaAP/06E7krYQIAfOGn1UMFQxMS51DCxr9PMKF7cjxoNw4dO
-        Q0g6czUe+maKgGS0iuI10GU3I3FCMzma3NrLqAerdA==
-X-Google-Smtp-Source: ABdhPJwljarBa64DW7LUA/1wDxvFxLHgPtNYizJ4BJSCb3j/73bGTaegZtVwv4hXKy5Ey64Opp4zZ4UPfFj0Fl96E/A=
-X-Received: by 2002:a17:907:3eaa:b0:6df:b058:96a with SMTP id
- hs42-20020a1709073eaa00b006dfb058096amr18101556ejc.368.1647906877844; Mon, 21
- Mar 2022 16:54:37 -0700 (PDT)
+        Mon, 21 Mar 2022 19:59:39 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCEF6C92C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647907018; x=1679443018;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rJEfyOReNJQTGn+tVBm2YXQgWt5h+CMA1eKwF0napew=;
+  b=bSee/7ha5ZYcYl4ckq5lEqtEiK552jndf1pxRAGeGDKHBhPl5JunJ8pV
+   Yc8E0piQFkkL+o8osk2WBop6shLwDDbwOAJyWP4laC8R+J2StFUgVrhyG
+   YSkZHBV5kirJKcpuOwvMi/hhsjHKeGgLyYM31ivl8rKbenoPkhnYmkZGX
+   GMVZeG73KMpUzz8ry6mJyoUorIIUcf5TOxPiGMjeMGDyKcu6q+UK8d+eR
+   A16l9t8yE9BPoIpGRb1U/Oq1L+uF4Y2o3xmTMB0u3ECvhY8SYi9CM8XKf
+   hWdyHwvwtkQ9+kVU0GQsQlp49XxWYbWdM6eEF2DlvlEXslgLXXV8NZHyo
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="344106687"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="344106687"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 16:55:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="515120209"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 21 Mar 2022 16:55:13 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWRrk-000IIN-Sg; Mon, 21 Mar 2022 23:55:12 +0000
+Date:   Tue, 22 Mar 2022 07:54:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: kernel/time/hrtimer.c:650:19: warning: unused function
+ 'hrtimer_hres_active'
+Message-ID: <202203220741.Ez9nK7eG-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220309165222.2843651-1-tjmercier@google.com>
- <20220309165222.2843651-6-tjmercier@google.com> <20220321174530.GB9640@blackbody.suse.cz>
-In-Reply-To: <20220321174530.GB9640@blackbody.suse.cz>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Mon, 21 Mar 2022 16:54:26 -0700
-Message-ID: <CABdmKX3+mTjxWzgrv44SKWT7mdGnQKMrv6c26d=iWdNPG7f1VQ@mail.gmail.com>
-Subject: Re: [RFC v3 5/8] dmabuf: Add gpu cgroup charge transfer function
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:45 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrot=
-e:
->
-> Hello.
->
-> On Wed, Mar 09, 2022 at 04:52:15PM +0000, "T.J. Mercier" <tjmercier@googl=
-e.com> wrote:
-> > +int dma_buf_charge_transfer(struct dma_buf *dmabuf, struct gpucg *gpuc=
-g)
-> > +{
-> > +#ifdef CONFIG_CGROUP_GPU
-> > +     struct gpucg *current_gpucg;
-> > +     int ret =3D 0;
-> > +
-> > +     /*
-> > +      * Verify that the cgroup of the process requesting the transfer =
-is the
-> > +      * same as the one the buffer is currently charged to.
-> > +      */
-> > +     current_gpucg =3D gpucg_get(current);
-> > +     mutex_lock(&dmabuf->lock);
-> > +     if (current_gpucg !=3D dmabuf->gpucg) {
-> > +             ret =3D -EPERM;
-> > +             goto err;
-> > +     }
->
-> Add a shortcut for gpucg =3D=3D current_gpucg?
+Hi Thomas,
 
-Good idea, thank you!
+FYI, the error/warning still remains.
 
->
-> > +
-> > +     ret =3D gpucg_try_charge(gpucg, dmabuf->gpucg_dev, dmabuf->size);
-> > +     if (ret)
-> > +             goto err;
-> > +
-> > +     dmabuf->gpucg =3D gpucg;
-> > +
-> > +     /* uncharge the buffer from the cgroup it's currently charged to.=
- */
-> > +     gpucg_uncharge(current_gpucg, dmabuf->gpucg_dev, dmabuf->size);
->
-> I think gpucg_* API would need to cater for such transfers too since
-> possibly transitional breach of a limit during the transfer may
-> unnecessarily fail the operation.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f443e374ae131c168a065ea1748feac6b2e76613
+commit: 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429 hrtimer: Use raw_cpu_ptr() in clock_was_set()
+date:   7 months ago
+config: mips-randconfig-r022-20220319 (https://download.01.org/0day-ci/archive/20220322/202203220741.Ez9nK7eG-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 217f267efe3082438e698e2f08566b9df8c530fa)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9482fd71dbb8f0d1a61821a83e467dc0a9d7b429
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/iommu/ fs/ kernel/time/
 
-Since the charge is duplicated in two cgroups for a short period
-before it is uncharged from the source cgroup I guess the situation
-you're thinking about is a global (or common ancestor) limit? I can
-see how that would be a problem for transfers done this way and an
-alternative would be to swap the order of the charge operations: first
-uncharge, then try_charge. To be certain the uncharge is reversible if
-the try_charge fails, I think I'd need either a mutex used at all
-gpucg_*charge call sites or access to the gpucg_mutex, which implies
-adding transfer support to gpu.c as part of the gpucg_* API itself and
-calling it here. Am I following correctly here?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This series doesn't actually add limit support just accounting, but
-I'd like to get it right here.
+All warnings (new ones prefixed by >>):
 
->
-> My 0.02=E2=82=AC,
-> Michal
+   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_REALTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_MONOTONIC,
+   ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_BOOTTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_TAI,
+   ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
+   static inline bool is_migration_base(struct hrtimer_clock_base
+   ^
+>> kernel/time/hrtimer.c:650:19: warning: unused function 'hrtimer_hres_active'
+   static inline int hrtimer_hres_active(void)
+   ^
+   kernel/time/hrtimer.c:1887:20: warning: unused function '__hrtimer_peek_ahead_timers'
+   static inline void __hrtimer_peek_ahead_timers(void) { }
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+   Target: mipsel-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-85e9b2687a/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch block certs crypto drivers fs include init ipc kernel lib mm scripts security sound source usr virt
 
-Thanks!
+
+vim +/hrtimer_hres_active +650 kernel/time/hrtimer.c
+
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  649  
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21 @650  static inline int hrtimer_hres_active(void)
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  651  {
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  652  	return __hrtimer_hres_active(this_cpu_ptr(&hrtimer_bases));
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  653  }
+28bfd18bf3daa5 Anna-Maria Gleixner 2017-12-21  654  
+
+:::::: The code at line 650 was first introduced by commit
+:::::: 28bfd18bf3daa5db8bb3422ea7138c8b7d2444ac hrtimer: Make the hrtimer_cpu_base::hres_active field unconditional, to simplify the code
+
+:::::: TO: Anna-Maria Gleixner <anna-maria@linutronix.de>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

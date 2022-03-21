@@ -2,182 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B044E2C86
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E574E2C87
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350428AbiCUPnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S1350433AbiCUPn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350507AbiCUPnK (ORCPT
+        with ESMTP id S1350496AbiCUPnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:43:10 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227A4177094
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:41:43 -0700 (PDT)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220321154141epoutp01a2f1ba9607fde7f6594792afca74ff03~eb6zJgcvo1140711407epoutp01p
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:41:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220321154141epoutp01a2f1ba9607fde7f6594792afca74ff03~eb6zJgcvo1140711407epoutp01p
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1647877301;
-        bh=O1HQT/885gkVXT9rzN+2h0d6pOqAcBP4cDszVi8TFxQ=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=lGrhB2K91eQLqlZS1TIUu29spH3q1kroHpBasOlD4OPra/EX8Ty2cbUjyB1R2Ue8F
-         CiNwv70sZF8Fb8x7STwdzmkeRuqr5JVHWUru8o4gbakX5YURl8wMc+owxy1MHpvJPU
-         /x65c963baM/MvoacplxKvPpFY47mM29cqDsiF2s=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220321154140epcas5p3dbfc222f169b1b101042b407ee25f8f3~eb6x2TEbA1960819608epcas5p3Y;
-        Mon, 21 Mar 2022 15:41:40 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4KMf3z4D9Fz4x9Pr; Mon, 21 Mar
-        2022 15:41:35 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BE.DA.12523.FAC98326; Tue, 22 Mar 2022 00:41:35 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220321154135epcas5p233cbad96d408145559a48ca0f5c9b0c8~eb6tKk6ge2171521715epcas5p2a;
-        Mon, 21 Mar 2022 15:41:35 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220321154135epsmtrp1f6b47c8ad891baebce0b344d6f205e31~eb6tJo0PT1508015080epsmtrp1l;
-        Mon, 21 Mar 2022 15:41:35 +0000 (GMT)
-X-AuditID: b6c32a4a-5a1ff700000030eb-45-62389caf62ba
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        67.E0.03370.EAC98326; Tue, 22 Mar 2022 00:41:34 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220321154133epsmtip218668a6deeef3b4f4288c87e1d36c8fe~eb6rdOCBc3051430514epsmtip2W;
-        Mon, 21 Mar 2022 15:41:33 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Luca Weiss'" <luca.weiss@fairphone.com>,
-        <linux-arm-msm@vger.kernel.org>
-Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, "'Andy Gross'" <agross@kernel.org>,
-        "'Bjorn Andersson'" <bjorn.andersson@linaro.org>,
-        "'Avri Altman'" <avri.altman@wdc.com>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Krzysztof Kozlowski'" <krzk+dt@kernel.org>,
-        <linux-scsi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-In-Reply-To: <20220321133318.99406-2-luca.weiss@fairphone.com>
-Subject: RE: [PATCH v2 1/6] scsi: ufs: dt-bindings: Add SM6350 compatible
- string
-Date:   Mon, 21 Mar 2022 21:11:32 +0530
-Message-ID: <004e01d83d3a$25313910$6f93ab30$@samsung.com>
+        Mon, 21 Mar 2022 11:43:06 -0400
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4BC174BA9;
+        Mon, 21 Mar 2022 08:41:40 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id u16so20256885wru.4;
+        Mon, 21 Mar 2022 08:41:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WML5+iO99XG8Cnb/y7ZTclpuOwKzuJZAVQdLXyKLfiY=;
+        b=2uOKEVaozGuCB/X3I7v+OUGNpMd6JQPmfKvnxTlIcAaFEczHc6hn3FqEDVScye1N6q
+         88cRBu5wJ3nZjuI/ouHqlITQK0+G227Hr+i1/1GN2aqstVXWFGty/kwvJIn7ijuncZrS
+         qS9xP4YYhK+Ov4jZbtXwH6f+YI5dhrtyra/d77GDZ5sMg2MkNAMVZjMNMfOyo7g/oqrH
+         k2zZguKt0vTVHdQn8pUrMVWSZPXwqq+6rslcaKR3j//79CcSNtU6Psd3Gfvc+FNUH5SM
+         oqFf+CGnnrRvJYLU27qFd3xV62eoLmE9AuX+QrLrQtCEiEbOAmgjEPVBe3lnbHi8wD6W
+         gRkA==
+X-Gm-Message-State: AOAM533QLjyeD6sM105oytLbK/541p3LoTqSKYPwBYEnJFXNmgy8u1tj
+        qSz1dTAhu4F+Ofqlza3d1/zKAvockco=
+X-Google-Smtp-Source: ABdhPJwswOpeYAUSbv2gZd+sF9HdVox9ltx0wl2XRAWQjiodyAcp5T05tpxfrZ5d6BEO3ueGw112Sw==
+X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id k10-20020a5d66ca000000b00203fb72a223mr11487484wrw.12.1647877298918;
+        Mon, 21 Mar 2022 08:41:38 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id z18-20020adfec92000000b00203f04ed4a8sm10085010wrn.13.2022.03.21.08.41.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 08:41:38 -0700 (PDT)
+Message-ID: <a7837388-e36f-9e55-4107-9f7f85571f3b@kernel.org>
+Date:   Mon, 21 Mar 2022 16:41:37 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 18/18] dt-bindings: arm: msm: Convert kpss-gcc driver
+ Documentation to yaml
+Content-Language: en-US
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20220321144825.11736-1-ansuelsmth@gmail.com>
+ <20220321144825.11736-19-ansuelsmth@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220321144825.11736-19-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQDQr1gGFOqfu4YzJCL3IxFGIQ6RUQJHsVu4AXhMAmeuuxV/cA==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCJsWRmVeSWpSXmKPExsWy7bCmuu76ORZJBk2LFCzOPf7NYvHy51U2
-        i9P737FYzD9yjtXi5ax7bBYT959lt7i8aw6bRff1HWwWD1cYWSz4Y2fRuvcIu8Xm738ZHXg8
-        2ppesnpsWtXJ5nHn2h42j/931rJ7fN4k59F+oJspgC0q2yYjNTEltUghNS85PyUzL91WyTs4
-        3jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6EQlhbLEnFKgUEBicbGSvp1NUX5pSapCRn5x
-        ia1SakFKToFJgV5xYm5xaV66Xl5qiZWhgYGRKVBhQnZG18szrAWdfBV7Dr1nb2Bcyt3FyMkh
-        IWAise/QbNYuRi4OIYHdjBKrmtcxQzifGCVmTj4E5XxmlJg36Q8TTMvF+d+hWnYxSuw5spUF
-        wnnJKPHszFSwKjYBXYkdi9vYQGwRgQCJU9uOgBUxCzQyS2x7f4MFJMEpYCdx4ukTIJuDQ1gg
-        SOLyHjYQk0VAVaJ7QiJIBa+ApcT2GW/ZIWxBiZMzn4B1MgvIS2x/O4cZ4iAFiZ9Pl7FCrHKS
-        uHztEjNEjbjEy6NH2CFqjnBInHouCWG7SEyfMBeqV1ji1fEtUDVSEi/729hBTpAQyJbo2WUM
-        Ea6RWDrvGAuEbS9x4MocsIOZBTQl1u/Sh9jEJ9H7+wkTRCevREebEES1qkTzu6tQndISE7u7
-        WSFsD4m3hyawTGBUnIXkr1lI/pqF5P5ZCMsWMLKsYpRMLSjOTU8tNi0wyksth8d2cn7uJkZw
-        8tXy2sH48MEHvUOMTByMhxglOJiVRHgXfzBPEuJNSaysSi3Kjy8qzUktPsRoCgzricxSosn5
-        wPSfVxJvaGJpYGJmZmZiaWxmqCTOezp9Q6KQQHpiSWp2ampBahFMHxMHp1QD07pX668z7+ZX
-        ShEP/+k7IVu4edv1d6Y32KcZ54luUj0qsM/wTmj6bsmZO3LimSfzH9q9cmvGS7Hnn76ypPaI
-        h6+5zbiZN4szR0lrj83MhHuinRusljhNTRG1M8xdGDH1Ko+R7VQ3jl+/jm1kyA/cESj8YGUY
-        z5sHJfXJlpnPNjg9zb6+/cehBTJ6c06nFsz5tbg+Kfr+ayF2g2vR1cuv5q4M3fX7yesq5eTQ
-        6XIKvf4xv54wrBEM/e+1dXIR2/0F+6692vIi6qdA1Dl+vv+hL+ct7rfnYvVQ9j8qs2/Z68c3
-        e11CVjeHXfZ5V/7s8s+DoXdWFugxvF9uc2fbP5NdBo80nh0TDzq42qahYrbuvQwlluKMREMt
-        5qLiRAAnHvS6RwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLIsWRmVeSWpSXmKPExsWy7bCSvO76ORZJBv80LM49/s1i8fLnVTaL
-        0/vfsVjMP3KO1eLlrHtsFhP3n2W3uLxrDptF9/UdbBYPVxhZLPhjZ9G69wi7xebvfxkdeDza
-        ml6yemxa1cnmcefaHjaP/3fWsnt83iTn0X6gmymALYrLJiU1J7MstUjfLoEro+vlGdaCTr6K
-        PYfeszcwLuXuYuTkkBAwkbg4/ztrFyMXh5DADkaJw20HGCES0hLXN05gh7CFJVb+e84OUfSc
-        UaLnyTtWkASbgK7EjsVtbCC2iECAxKltR1hAipgFOpklpm1cDzX2IKPEhw8nwUZxCthJnHj6
-        hAXEFgbqmPV7F3MXIwcHi4CqRPeERJAwr4ClxPYZb9khbEGJkzNByjmAhupJtG0EO45ZQF5i
-        +9s5zBDHKUj8fLqMFeIGJ4nL1y4xQ9SIS7w8eoR9AqPwLCSTZiFMmoVk0iwkHQsYWVYxSqYW
-        FOem5xYbFhjlpZbrFSfmFpfmpesl5+duYgTHoJbWDsY9qz7oHWJk4mA8xCjBwawkwrv4g3mS
-        EG9KYmVValF+fFFpTmrxIUZpDhYlcd4LXSfjhQTSE0tSs1NTC1KLYLJMHJxSDUzRP7KfvN3e
-        KWhkFJs6r+ju1eoEq6lnnr66X/+xJ4D736yG9wxL69z7q/QXZPOnL7kXKpx75YCj5erZjMvj
-        Vuimces0nJ7E53h5i02VFU9Tpe9R8WTREzq/d2/SEXjwRXfn2YAQ0ciKF1PL6vuEngeIPDBu
-        2PykRSk2ffGtjbsL3i/0KnB9K+T478//P6dncu1/XcqoXnjdy/T39XXLZi3MlxHY/799XUCb
-        fsFrz/3nA67mL9NMt3mXUZRZvfxUxNPJT0VleF4fvPE6JUNi4mqLzX4qnremHZf7cN0jQpbp
-        3S2ZCbeFiv6IT8l+uvnrM504h5n+V3uOHAuuEJ+deVz83Bm+IOPFGc6/j62p4UpWYinOSDTU
-        Yi4qTgQA8Za9QjADAAA=
-X-CMS-MailID: 20220321154135epcas5p233cbad96d408145559a48ca0f5c9b0c8
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220321133352epcas5p493c209ac3f6edbb820cbaba1b4265525
-References: <20220321133318.99406-1-luca.weiss@fairphone.com>
-        <CGME20220321133352epcas5p493c209ac3f6edbb820cbaba1b4265525@epcas5p4.samsung.com>
-        <20220321133318.99406-2-luca.weiss@fairphone.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21/03/2022 15:48, Ansuel Smith wrote:
+> Convert kpss-gcc driver Documentation to yaml.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ------------
+>  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 68 +++++++++++++++++++
+>  2 files changed, 68 insertions(+), 44 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+>  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+> deleted file mode 100644
+> index e628758950e1..000000000000
+> --- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+> +++ /dev/null
+> @@ -1,44 +0,0 @@
+> -Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
+> -
+> -PROPERTIES
+> -
+> -- compatible:
+> -	Usage: required
+> -	Value type: <string>
+> -	Definition: should be one of the following. The generic compatible
+> -			"qcom,kpss-gcc" should also be included.
+> -			"qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc"
+> -			"qcom,kpss-gcc-apq8064", "qcom,kpss-gcc"
+> -			"qcom,kpss-gcc-msm8974", "qcom,kpss-gcc"
+> -			"qcom,kpss-gcc-msm8960", "qcom,kpss-gcc"
+> -
+> -- reg:
+> -	Usage: required
+> -	Value type: <prop-encoded-array>
+> -	Definition: base address and size of the register region
+> -
+> -- clocks:
+> -	Usage: required
+> -	Value type: <prop-encoded-array>
+> -	Definition: reference to the pll parents.
+> -
+> -- clock-names:
+> -	Usage: required
+> -	Value type: <stringlist>
+> -	Definition: must be "pll8_vote", "pxo".
+> -
+> -- clock-output-names:
+> -	Usage: required
+> -	Value type: <string>
+> -	Definition: Name of the output clock. Typically acpu_l2_aux indicating
+> -		    an L2 cache auxiliary clock.
+> -
+> -Example:
+> -
+> -	l2cc: clock-controller@2011000 {
+> -		compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
+> -		reg = <0x2011000 0x1000>;
+> -		clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
+> -		clock-names = "pll8_vote", "pxo";
+> -		clock-output-names = "acpu_l2_aux";
+> -	};
+> diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> new file mode 100644
+> index 000000000000..20ee182eb16f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/msm/qcom,kpss-gcc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
+> +
+> +maintainers:
+> +  - Ansuel Smith <ansuelsmth@gmail.com>
+> +
+> +description: |
+> +  Krait Processor Sub-system (KPSS) Global Clock Controller (GCC). Used
+> +  to control L2 mux (in the current implementation).
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - qcom,kpss-gcc-ipq8064
+> +          - qcom,kpss-gcc-apq8064
+> +          - qcom,kpss-gcc-msm8974
+> +          - qcom,kpss-gcc-msm8960
+> +      - const: qcom,kpss-gcc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: phandle to pll8_vote
+> +      - description: phandle to pxo_board
+> +
+> +  clock-names:
+> +    items:
+> +      - const: pll8_vote
+> +      - const: pxo
+> +
+> +  clock-output-names:
+> +    const: acpu_l2_aux
+> +
+> +  '#clock-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - clock-output-names
+> +  - '#clock-cells'
 
+You add here a new required property, so this is not a pure conversion.
+Please explain in the commit msg why are you doing this. I asked about
+this in your previous patchset.
 
->-----Original Message-----
->From: Luca Weiss [mailto:luca.weiss@fairphone.com]
->Sent: Monday, March 21, 2022 7:03 PM
->To: linux-arm-msm@vger.kernel.org
->Cc: ~postmarketos/upstreaming@lists.sr.ht; phone-devel@vger.kernel.org;
->Luca Weiss <luca.weiss@fairphone.com>; Andy Gross <agross@kernel.org>;
->Bjorn Andersson <bjorn.andersson@linaro.org>; Alim Akhtar
-><alim.akhtar@samsung.com>; Avri Altman <avri.altman@wdc.com>; Rob
->Herring <robh+dt@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>;
->linux-scsi@vger.kernel.org; devicetree@vger.kernel.org; linux-
->kernel@vger.kernel.org
->Subject: [PATCH v2 1/6] scsi: ufs: dt-bindings: Add SM6350 compatible
-string
->
->Document the compatible for the UFS found on SM6350.
->
->Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->---
-
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-
->Changes in v2:
->- add second hunk for clock validation
->
-> Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
-> 1 file changed, 2 insertions(+)
->
->diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
->b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
->index 5b3a2157f7e5..dcd32c10205a 100644
->--- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
->+++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
->@@ -27,6 +27,7 @@ properties:
->           - qcom,msm8996-ufshc
->           - qcom,msm8998-ufshc
->           - qcom,sdm845-ufshc
->+          - qcom,sm6350-ufshc
->           - qcom,sm8150-ufshc
->           - qcom,sm8250-ufshc
->           - qcom,sm8350-ufshc
->@@ -125,6 +126,7 @@ allOf:
->           contains:
->             enum:
->               - qcom,sdm845-ufshc
->+              - qcom,sm6350-ufshc
->               - qcom,sm8150-ufshc
->     then:
->       properties:
->--
->2.35.1
-
-
+Best regards,
+Krzysztof

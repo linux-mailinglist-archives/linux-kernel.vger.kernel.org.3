@@ -2,76 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CC44E274E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 545FB4E2742
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:10:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347788AbiCUNQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S1347762AbiCUNL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347691AbiCUNQI (ORCPT
+        with ESMTP id S232345AbiCUNLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:16:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66335286CC;
-        Mon, 21 Mar 2022 06:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647868483; x=1679404483;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=sjb101FGT2qlwEkPfKE4XTwqZyBSG+Zqst7PnnvuPPg=;
-  b=TuZ6waQ2LlzSSDpH5/mq5+2n8mSu3poTTEcCzOHOY/yjoBHEXUnLrc5s
-   Iqzu/k0MYbg6keZWp/iIymwwBcUEkhFZHFGd6kmJdE7+ya8Fz5AfW++wh
-   6H0rjHisRHZl/JxthjZrhgKgKyJIVXZ+h92TUF7Av0xA8z14K8SyImuqz
-   Bsumnj4jPQP04YQtFW/sdK4QeepXQZtpU1TIquxqYOhV9Rcxmnz80xEYo
-   j/qY8y2Hsw30OvfOQUAr3//VyGqoCtLViwJkfvz6WiFsGX21zGwehNoly
-   GVsjpilZpG47nzANlVGiNnFCX+8LPFduF+V99+BMfn6gR9p215XkCk8ey
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="238151931"
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="238151931"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 06:09:18 -0700
-X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
-   d="scan'208";a="559862757"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.56.148])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 06:09:14 -0700
-Message-ID: <ffa56520-09b5-9c5d-7733-6767d2f8e350@intel.com>
-Date:   Mon, 21 Mar 2022 15:09:08 +0200
+        Mon, 21 Mar 2022 09:11:54 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8BC1D0EF;
+        Mon, 21 Mar 2022 06:10:29 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22LAj81a024285;
+        Mon, 21 Mar 2022 13:10:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=dSRhfx3VoPovZmn5BHzSX5JfMdqftW5QA/0PFRNnjIU=;
+ b=N4qjJhSIO1OgRK8iEblIGGnpKt31Mh9fCuLWWBphMuypKwzquZAaAjJMz/u1hntvOXi5
+ kAQl/EmifPR5lmUXYT+edCKN6sFX2J1yqs3RyvO9b7RAeM5rlzG71E1N8jDWZOOTX2/M
+ LQBQKmD+fbQbDcN7xqd8xKc+MNBIQ1xdAq3iwUS97mmXd/5YP/F8SS8dM3QrF5uuuju5
+ rj0KgbDSftWHmCT4XORpXkwdk2i3g64l7m591Zdu87/5shmrWwzfvBfbFZe9zYaZ20eo
+ mkbGHxvPCli03/SPyy92gOiTt1/ROLrqutlLcTCuUcNHZ8p4KC+M2fsoO2D7CyGT6bLf Rw== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3exmwkexqs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Mar 2022 13:10:26 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22LCvTUF020282;
+        Mon, 21 Mar 2022 13:10:25 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma04wdc.us.ibm.com with ESMTP id 3exd3j3tsr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Mar 2022 13:10:25 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22LDAOAF29098254
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Mar 2022 13:10:24 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 173C46A04D;
+        Mon, 21 Mar 2022 13:10:24 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F2EA76A04F;
+        Mon, 21 Mar 2022 13:10:22 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 21 Mar 2022 13:10:22 +0000 (GMT)
+Message-ID: <d79baf40-6bb7-d4f4-666d-91e1ad20be74@linux.ibm.com>
+Date:   Mon, 21 Mar 2022 09:10:22 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH] perf intel-pt: Synthesize cycle events
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v6 4/5] ima: support fs-verity file digest based version 3
+ signatures
 Content-Language: en-US
-To:     "Steinar H. Gunderson" <sesse@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <YiuKAk7SaXP7B7Ee@google.com>
- <ba2c49da-22c5-06ea-e953-82211b953ca8@intel.com>
- <YjBnet2813sEGjZY@google.com>
- <c50bb87d-9fee-c4f9-a350-8729e503e43a@intel.com>
- <YjDUO6bbyfGw/u0C@google.com>
- <52903e58-e74c-5ea0-36b4-277ea3610af4@intel.com>
- <YjGdoGy4Z2UUG9S9@google.com>
- <ef780335-7dc6-3a23-54a8-b6fc9c8a2ed3@intel.com>
- <YjHfGrZovk3N/H0f@google.com>
- <371faf0d-f794-4a2e-0a1c-9d454d7c8b12@intel.com>
- <YjhUjotmo+kYvoNP@google.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <YjhUjotmo+kYvoNP@google.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220318182151.100847-1-zohar@linux.ibm.com>
+ <20220318182151.100847-5-zohar@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220318182151.100847-5-zohar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hSEeA2y0OdL23AynEl1JBxWYH7heLFX8
+X-Proofpoint-GUID: hSEeA2y0OdL23AynEl1JBxWYH7heLFX8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-21_05,2022-03-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 adultscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
+ mlxscore=0 clxscore=1015 bulkscore=0 priorityscore=1501 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203210085
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,60 +89,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.3.2022 12.33, Steinar H. Gunderson wrote:
-> On Mon, Mar 21, 2022 at 11:16:56AM +0200, Adrian Hunter wrote:
->> I had another look at this and it seemed *mostly* OK for me.  One change
->> I would make is to subject the cycle period to the logic of the 'A' option
->> (approximate IPC).
->>
->> So what does the 'A' option do.
->>
->> By default, IPC is output only when the exact number of cycles and
->> instructions is known for the sample.  Decoding walks instructions
->> to reconstruct the control flow, so the exact number of instructions
->> is known, but the cycle count (CYC packet) is only produced with
->> another packet, so only indirect/async branches or the first
->> conditional branch of a TNT packet.
+
+
+On 3/18/22 14:21, Mimi Zohar wrote:
+> IMA may verify a file's integrity against a "good" value stored in the
+> 'security.ima' xattr or as an appended signature, based on policy.  When
+> the "good value" is stored in the xattr, the xattr may contain a file
+> hash or signature.  In either case, the "good" value is preceded by a
+> header.  The first byte of the xattr header indicates the type of data
+> - hash, signature - stored in the xattr.  To support storing fs-verity
+> signatures in the 'security.ima' xattr requires further differentiating
+> the fs-verity signature from the existing IMA signature.
 > 
-> Ah, I hadn't thought of the fact that you only get the first branch per
-> packet. It's a bit unfortunate for (exact) cycle counts, since I guess
-> TNT packets can also easily cross functions?
+> In addition the signatures stored in 'security.ima' xattr, need to be
+> disambiguated.  Instead of directly signing the fs-verity digest, a new
+> signature version 3 is defined as the hash of the ima_file_id structure,
+> which identifies the type of signature and the digest.
 
-Yes, it can cross calls and returns.  'returns' due to "Return Compression"
-which can be switched off at record time with config term noretcomp, but
-that may cause more overflows / trace data loss.
-
-To get accurate times for a single function there is Intel PT
-address filtering.
-
-Otherwise LBRs can have cycle times.
-
-> 
->> So the cycle sample function looks like this:
->>
->> static int intel_pt_synth_cycle_sample(struct intel_pt_queue *ptq)
->>
->> [...]
->>
->> With regard to the results you got with perf report, please try:
->>
->> 	perf report --itrace=y0nse --show-total-period --stdio
->>
->> and see if the percentages and cycle counts for rarely executed
->> functions make more sense.
-> 
-> I already run mostly with 0ns period, so I don't think that's it.
-> I tried your new version, and it's very similar to your previous one;
-> there are some small changes (largest is that one function goes from
-> 2.5% to 2.2% or so), but the general gist of it is the same.
-> I am increasingly leaning towards that my original version is wrong
-> somehow, though.
-> 
-> By the way, I noticed that synthesized call stacks do not respect
-> --inline; is that on purpose? The patch seems simple enough (just
-> a call to add_inlines), although it exposes extreme slowness in libbfd
-> when run over large binaries, which I'll have to look into.
-> (10+ ms for each address-to-symbol lookup is rather expensive when you
-> have 4M samples to churn through!)
-
-No, not on purpose.
+Would it not be enough to just differentiat by the type of signature 
+rather than also bumping the version? It's still signature_v2_hdr but a 
+new type IMA_VERITY_DIGSIG is introduced there that shoud be sufficient 
+to indicate that a different method for calculating the hash is to be 
+used than for anything that existed before? sigv3 would then become the 
+more obvious veriftysig... ?

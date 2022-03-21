@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904DC4E281E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A23454E28A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348101AbiCUNxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
+        id S1348651AbiCUN6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232974AbiCUNxU (ORCPT
+        with ESMTP id S1348225AbiCUN4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:53:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD27813CED6;
-        Mon, 21 Mar 2022 06:51:54 -0700 (PDT)
+        Mon, 21 Mar 2022 09:56:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363A93632B;
+        Mon, 21 Mar 2022 06:54:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C1A6B81676;
-        Mon, 21 Mar 2022 13:51:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0F66C340E8;
-        Mon, 21 Mar 2022 13:51:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A39CB611F4;
+        Mon, 21 Mar 2022 13:54:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80B93C340E8;
+        Mon, 21 Mar 2022 13:54:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647870712;
-        bh=pPgQaOZzDcuntvZ1Zvvum1sIs0kBLStpXYMjOtcnB/U=;
+        s=korg; t=1647870893;
+        bh=dS+Typ0E4lZzZ4E0xNMx2367Dr9VVbSspbe8d/9USKw=;
         h=From:To:Cc:Subject:Date:From;
-        b=aGXlZztHKdUBvPJ8JZXZz/MkmqDaMDLzD5t0EL/pZl2YQJDLT35z9Uyqn3+3iwhrI
-         tbhmI5wCbDBRF8ipJUsE8ux9hsZTfFD/mAkm+f6C7ptUbigXw4j3QpMeKdb1NExUBC
-         EqOIV/JUPWUs6IKxXekACDzC4OndVejdcyW/rUAY=
+        b=ulDrOzZHr1oaopaX3GZkBG2GZ5zhLmTyboP8CQ8/DpBPbz7oLRevAeYm5DyBWVi1e
+         qi+YTGWpOppWmA3VTi599q6aHlKUZXC2fewBSQEZSX+W9afTyLJjOzLXiVBCER9b6E
+         BPnx2WVSQVQh/bzz9S7gb/uWQKaPNQd+xTFKRoCs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,19 +37,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
         jonathanh@nvidia.com, f.fainelli@gmail.com,
         sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.9 00/16] 4.9.308-rc1 review
-Date:   Mon, 21 Mar 2022 14:51:30 +0100
-Message-Id: <20220321133216.648316863@linuxfoundation.org>
+Subject: [PATCH 4.14 00/22] 4.14.273-rc1 review
+Date:   Mon, 21 Mar 2022 14:51:31 +0100
+Message-Id: <20220321133217.602054917@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 User-Agent: quilt/0.66
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.308-rc1.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.273-rc1.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.9.y
+X-KernelTest-Branch: linux-4.14.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.9.308-rc1
+X-KernelTest-Version: 4.14.273-rc1
 X-KernelTest-Deadline: 2022-03-23T13:32+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -62,8 +62,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.9.308 release.
-There are 16 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 4.14.273 release.
+There are 22 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
@@ -71,9 +71,9 @@ Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.308-rc1.gz
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.273-rc1.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
 and the diffstat can be found below.
 
 thanks,
@@ -84,7 +84,10 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.9.308-rc1
+    Linux 4.14.273-rc1
+
+Michael Petlan <mpetlan@redhat.com>
+    perf symbols: Fix symbol size calculation condition
 
 Pavel Skripkin <paskripkin@gmail.com>
     Input: aiptek - properly check endpoint type
@@ -95,11 +98,17 @@ Alan Stern <stern@rowland.harvard.edu>
 Dan Carpenter <dan.carpenter@oracle.com>
     usb: gadget: rndis: prevent integer overflow in rndis_set_response()
 
+Nicolas Dichtel <nicolas.dichtel@6wind.com>
+    net: handle ARPHRD_PIMREG in dev_is_mac_header_xmit()
+
 Jiasheng Jiang <jiasheng@iscas.ac.cn>
     atm: eni: Add check for dma_map_single
 
 Eric Dumazet <edumazet@google.com>
     net/packet: fix slab-out-of-bounds access in packet_recvmsg()
+
+Randy Dunlap <rdunlap@infradead.org>
+    efi: fix return value of __setup handlers
 
 Lucas Wei <lucaswei@google.com>
     fs: sysfs_emit: Remove PAGE_SIZE alignment check
@@ -131,31 +140,46 @@ Alexander Lobakin <alobakin@pm.me>
 Corentin Labbe <clabbe@baylibre.com>
     ARM: dts: rockchip: fix a typo on rk3288 crypto-controller
 
+Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
+    arm64: dts: rockchip: fix rk3399-puma eMMC HS400 signal integrity
+
 Yan Yan <evitayan@google.com>
     xfrm: Fix xfrm migrate issues when address family changes
+
+Xin Long <lucien.xin@gmail.com>
+    sctp: fix the processing for INIT_ACK chunk
+
+Xin Long <lucien.xin@gmail.com>
+    sctp: fix the processing for INIT chunk
 
 
 -------------
 
 Diffstat:
 
- Makefile                                 |  4 ++--
- arch/arm/boot/dts/rk3288.dtsi            |  2 +-
- arch/mips/kernel/smp.c                   |  6 +++---
- drivers/atm/eni.c                        |  2 ++
- drivers/atm/firestream.c                 |  2 ++
- drivers/input/tablet/aiptek.c            | 10 ++++------
- drivers/net/can/rcar/rcar_canfd.c        |  6 +++---
- drivers/net/ethernet/sfc/mcdi.c          |  2 +-
- drivers/usb/gadget/function/rndis.c      |  1 +
- drivers/usb/gadget/udc/core.c            |  3 ---
- fs/sysfs/file.c                          |  3 +--
- lib/Kconfig                              |  1 -
- net/ipv4/tcp.c                           | 10 ++++++----
- net/packet/af_packet.c                   | 11 ++++++++++-
- net/wireless/nl80211.c                   |  3 ++-
- net/xfrm/xfrm_state.c                    |  8 +++++---
- tools/testing/selftests/vm/userfaultfd.c |  1 +
- 17 files changed, 44 insertions(+), 31 deletions(-)
+ Makefile                                      |   4 +-
+ arch/arm/boot/dts/rk3288.dtsi                 |   2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-puma.dtsi |   6 ++
+ arch/mips/kernel/smp.c                        |   6 +-
+ drivers/atm/eni.c                             |   2 +
+ drivers/atm/firestream.c                      |   2 +
+ drivers/firmware/efi/apple-properties.c       |   2 +-
+ drivers/firmware/efi/efi.c                    |   2 +-
+ drivers/input/tablet/aiptek.c                 |  10 +--
+ drivers/net/can/rcar/rcar_canfd.c             |   6 +-
+ drivers/net/ethernet/sfc/mcdi.c               |   2 +-
+ drivers/usb/gadget/function/rndis.c           |   1 +
+ drivers/usb/gadget/udc/core.c                 |   3 -
+ fs/sysfs/file.c                               |   3 +-
+ include/linux/if_arp.h                        |   1 +
+ lib/Kconfig                                   |   1 -
+ net/ipv4/tcp.c                                |  10 ++-
+ net/packet/af_packet.c                        |  11 ++-
+ net/sctp/sm_statefuns.c                       | 108 ++++++++++++++++----------
+ net/wireless/nl80211.c                        |   3 +-
+ net/xfrm/xfrm_state.c                         |   8 +-
+ tools/perf/util/symbol.c                      |   2 +-
+ tools/testing/selftests/vm/userfaultfd.c      |   1 +
+ 23 files changed, 119 insertions(+), 77 deletions(-)
 
 

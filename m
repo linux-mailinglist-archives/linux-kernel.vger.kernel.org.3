@@ -2,350 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A704E1EE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 02:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D1F4E1EEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 02:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344104AbiCUB5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 21:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
+        id S1344110AbiCUB6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 21:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242733AbiCUB5n (ORCPT
+        with ESMTP id S238328AbiCUB6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 21:57:43 -0400
-Received: from tmailer.gwdg.de (tmailer.gwdg.de [134.76.10.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFC815B072;
-        Sun, 20 Mar 2022 18:56:17 -0700 (PDT)
-Received: from excmbx-17.um.gwdg.de ([134.76.9.228] helo=email.gwdg.de)
-        by mailer.gwdg.de with esmtp (GWDG Mailer)
-        (envelope-from <alexander.vorwerk@stud.uni-goettingen.de>)
-        id 1nW7HH-0006vC-Lh; Mon, 21 Mar 2022 02:56:11 +0100
-Received: from notebook.fritz.box (10.250.9.199) by excmbx-17.um.gwdg.de
- (134.76.9.228) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521) id 15.1.2375.24; Mon, 21
- Mar 2022 02:56:10 +0100
-From:   Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de>
-To:     <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
-        <dsahern@kernel.org>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de>
-Subject: [PATCH] net: ipv4: update route.c to match coding-style guidelines
-Date:   Mon, 21 Mar 2022 02:55:50 +0100
-Message-ID: <20220321015550.11255-1-alexander.vorwerk@stud.uni-goettingen.de>
-X-Mailer: git-send-email 2.17.1
+        Sun, 20 Mar 2022 21:58:49 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A1617F3DA
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 18:57:24 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22KKxfWL031084;
+        Mon, 21 Mar 2022 01:57:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=jjPvhcWItxpRLOkngkwj0ymPdc7pOhPTEbKNEQXHo6w=;
+ b=PMbhPg9aVrlJ4vjnDqFYHxyDUl0NrHekcqKJrlgXqo4D3ECvM66PpL/krgqP35lXefFA
+ i+liThu49jHreiEiqn0h37fGMllXIXRaR55+hHhFNP4r8QQI47+7J8a5GBChJSeGrdJq
+ hu1Nm0MynX6SJ/j7ydnKivi9MEQ7xeVsru1sIQKi7oXoHBRRMQn++FOdgKwAfPsWGtzL
+ tuMDp1q0b8mTCRsTBilUwsXjaIrlFyyu0iCQHNwjng62BOxcMEsPiKKbfrOEgqnnZ/QV
+ 31VN1l2j0I3Z882k5C065OdJfcqOcpOW49a5eDUZbvwdttbhg8nE89ptyBfW6BKdt4hj hg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ew5kchwyb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Mar 2022 01:57:18 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22L1thLk171383;
+        Mon, 21 Mar 2022 01:57:17 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
+        by userp3020.oracle.com with ESMTP id 3exawgb9pu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Mar 2022 01:57:17 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TBQzrnYvtgPiTplJiTt2xwhBbRBhAzBeW77SK8lGuBAKaXuNAm46Zo9UqU0GmRNC5b9T3gyg7N22YaM81uP2awydZl5IQySgTHxgijeOiXtSu03zHFB+5iCDX/+5oZ+2TL0/Hym1vmBHhOZw7v3wYTtkfAOic8+bEwAI1vdMstjaLI8fCPSYU/z0sMXmH/HxZjPPx5M5EjRMkx9zCu1BRt8jzC0JOlrvJwmTO+iIcCZqjYOWRBaiieOY94ldjVAfl0m22sE8wuReg3qBL/NsKFwtIkzhGSRbPlud/CBtNgqZNwKKCSaaTEcn6pBUiAw82Eshx6qWhQdyd80u9f4vxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jjPvhcWItxpRLOkngkwj0ymPdc7pOhPTEbKNEQXHo6w=;
+ b=AaDodyOK9xcfwpRN2wlNiD5cRnIIxQNqNrcekfYjxBJF0/DN8hxfijQBSba9zR8v0NaRbU6hSNvbYu8G95Ppq6JGi4KPM2ydmYUt7QT/oETVIyBdyePcSE9Io3WhSZgfIVIEu9WZ1LJ7dgevvzu2JYwo5VcsOlwtVfRzD5f7lcEH2yfgqdYHZEK7E5qzK5TrHCoz+Qfsibg9D312EBuY81D4bbKjy50/6SyZgOrDFicDu4kVV+Yhzt11+8rb1wcU0/0eu2+VMLIzDdYsCPgrTUL65e2mgvOJH6HmMCRKsnaeoPmpcfs3gmICEdZZ/AIOEEyqXogNRZnhqzgHBtCrTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jjPvhcWItxpRLOkngkwj0ymPdc7pOhPTEbKNEQXHo6w=;
+ b=OAyaZr8gGbg7Om5w5RT6lnIQ1dYUCyA2TpSfxEc43tdxcwpbiG0aIL8ppjc6/63osvyg9vvgB3xouE7dsBJfTREq1+zAHFoix1tvsh5RUQAXAWlkZjGpr90+HIsvROu+JsxddGDwNYM/I6GsOvf/IEAhn7Jqc5IOIXNcEdL+ds8=
+Received: from CO1PR10MB4468.namprd10.prod.outlook.com (2603:10b6:303:6c::24)
+ by MWHPR10MB1598.namprd10.prod.outlook.com (2603:10b6:300:2a::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Mon, 21 Mar
+ 2022 01:57:15 +0000
+Received: from CO1PR10MB4468.namprd10.prod.outlook.com
+ ([fe80::b5ab:1c3e:6540:d2fa]) by CO1PR10MB4468.namprd10.prod.outlook.com
+ ([fe80::b5ab:1c3e:6540:d2fa%9]) with mapi id 15.20.5081.022; Mon, 21 Mar 2022
+ 01:57:15 +0000
+Message-ID: <536f2392-45d2-2f43-5e9d-01ef50e33126@oracle.com>
+Date:   Mon, 21 Mar 2022 12:57:07 +1100
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [RESEND PATCH v7 7/8] kernfs: Replace per-fs rwsem with hashed
+ rwsems.
+Content-Language: en-US
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20220317072612.163143-1-imran.f.khan@oracle.com>
+ <20220317072612.163143-8-imran.f.khan@oracle.com>
+ <YjPNOQJf/Wxa4YeV@zeniv-ca.linux.org.uk>
+From:   Imran Khan <imran.f.khan@oracle.com>
+In-Reply-To: <YjPNOQJf/Wxa4YeV@zeniv-ca.linux.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR05CA0082.namprd05.prod.outlook.com
+ (2603:10b6:a03:332::27) To CO1PR10MB4468.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::24)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.250.9.199]
-X-ClientProxiedBy: excmbx-14.um.gwdg.de (134.76.9.225) To excmbx-17.um.gwdg.de
- (134.76.9.228)
-X-Virus-Scanned: (clean) by clamav
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c78ace83-4f9c-4e1d-4de1-08da0ade1f8c
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1598:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1598696786664CFD064822C2B0169@MWHPR10MB1598.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9cIWCofxMlfm4UJI5Q5NqqhP/3tK/jTfWlNjOkwbrQVhqj4uTvFctNV6XfBo0LTLm36NVnhclpA/w77c8Tmayvv3cejx8YDqkZqopzX8vfc0E9l1ZYIJmuoeNZxd6CYY29UL1Zae0pAHcTnkQqcJWsF3ZWNyQpY0qdn754YOFOThhp30IOklBsvURQue09r8OCFLmiKFWulc3nJehY9DiZjw+BCZzqKix0Ifx09/RdGuCSabjTLl9wLK2fBr25F+GChAuve49mB2utdmFsvcm5T40mbRvzOtUxOkA2RPsj5DCJoFMPbTe0nHCVJeg6/2EwPzZL/pBDkF8MFAwcRT1Iyz42+GCxRta/nmZNq5MD4DYGwfL/RXtTT9Z4zRF+PLD4nMApAOfWfV98d/i/1V6sYZq4W1JB3m3GPAXugop7Pmf6z+tIP6w/3BqPqhc4C2I00GdgNTgrnJ/ylu4HSH6tbesXoufJNJA49udKGSHos9F1+PJfbUN5vBZVzfHTbSYaM2R0B+XYI9+jDiQcFwGHENEjhHOn5W5HIWttIG3JVxxSk8oKfcF/N9pVXx4xfL1mKVmHJEPDxdzs3+g5Pqef7uEI/iOwPEn0tpcLQInwJtU1MoKQt2lLDRta8v/SJT6Ja9RotXl3XiRRYqu3rHh1YijvE+9WK7SbZOSrEyFx1xUKO8+XfsUeaTywKLkwZSNxqgPrVtdM/vwwBIxxj+hIaYIVQpxJPfqcdwXMI8MGc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4468.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(36756003)(31686004)(86362001)(6486002)(83380400001)(31696002)(38100700002)(6916009)(316002)(508600001)(186003)(26005)(66946007)(66476007)(66556008)(4326008)(8676002)(5660300002)(6666004)(53546011)(2616005)(6506007)(6512007)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?enJiZkIrVkpYaTV3cGs2eWZLWGxqRFhOOWpVSzdrRTJWazl3RUtxeWx6RERi?=
+ =?utf-8?B?UlQxTmlFSG0xcmJDT1A2VlBuSmxkbnNFbFRFbzY5NEg5c1JUNUZwVVVoY290?=
+ =?utf-8?B?R3diWXVmNXJMOEdMcEZ4Wko5N1lsVkdNS25qOVJjVmU4UFNyMk1PRkYvR3NS?=
+ =?utf-8?B?WTYrTzdLclFtVkZNRDEzbUd5cG0xYkFVUVc1OWFyc2NVY0hUcEhZck4wc2JN?=
+ =?utf-8?B?RUlMRkN0Z1ppWmFoQitKd1FaZDFUUW4wNmtLZ045TnIxaCtXNmJJdHdTeHlS?=
+ =?utf-8?B?a0dDWlNPNEdYeG5hTXM4d2Z2Vm1UcGRpS1kxSWhlVW12K2kxejZWL1BrTy9C?=
+ =?utf-8?B?Z1YrZW00dVpUb2RmREhUNm05eDlkdFVVWlFQOGR1ZVoyMG44THZwaHd4eFI4?=
+ =?utf-8?B?akxpU1cvbytTVlJWRlVTS0N5bjdUbFQrSmdzQno1OVFNalRSUEdvL3BJZ3Jq?=
+ =?utf-8?B?akdJUkczZ21Vd1VNcHYwT0d0SjdYYzlFUEtZMHpYSm9qc3EzUVV3TEd3SlU5?=
+ =?utf-8?B?a3hZbWNMQTF4dzdFMS9iUEN1RndtSUY4dTFyNDZjSFFLcFhoTW40TGVVKzlX?=
+ =?utf-8?B?YXZCY0JVRExOb2Vwa2lISm51TW9pYVlON2RpRjlTYm1kaHkxc1MzREo4LzRz?=
+ =?utf-8?B?UDBSV3ZIMUJ5VkhuWi9uNU43UTJyajBQa2lpN1JaZWpDYndYRkdzOXFXT0ZR?=
+ =?utf-8?B?T2Y0Z1VtcUdid2NYTjZKOU0xZkhtaDlKSGJBUVE4NHc5bXVCZjhpbFFsWWp1?=
+ =?utf-8?B?eGFqTjhSejd0bHphZktVNWRsM2RIQnlkTjRmWG16MGtwWkluM2pXYis0WERZ?=
+ =?utf-8?B?aUJMQldtVE40OThiMERQNTcrSllidThUL0x1ZVlMYXRXQkxFeEJaT1FPb3NU?=
+ =?utf-8?B?dGE5YUtPWkdrVitKWVNLd3QwdE5rakpPN0ZoL3phb21RdDlwQk94YzJYcTJw?=
+ =?utf-8?B?OEFZdDhQcTFJMDBUaUMwTmtaY01Ic3FCN1ZHbzUzN1liMnlaaFhOQlFBNFNi?=
+ =?utf-8?B?NHdmbm5DT25IMStGUXpJUXFKQzJqcEZxTldjZHlDb3djQXFiRi9DMzhVd2Ex?=
+ =?utf-8?B?aGdoeUdvTDdxVGZpcWQxRGx5RjhDT3JCS2tjZDAyWFc2Q1E5aDY0V1Qyb0VU?=
+ =?utf-8?B?NUtaNWlUTFdZRHRKZS8wNzhJRkxvQ3grQ2dzNjBhdCtITFM5V3ZlWVVCa3lo?=
+ =?utf-8?B?SW95WGVCczRmQURndGV0d2c5SEo3NlFzazZuWCs5SWRGeTNEcVVaNFFnb1cz?=
+ =?utf-8?B?UHN2OFpsTFJ5cWZqM3k4THJVVkVIT0FsNE0zcGs4Y2JYZjlCdnBiTEV4WnF4?=
+ =?utf-8?B?RjdrUDFYbXBzWHJHclVRTWdmZE4yemh5TG9BNGJQL2dma0hxSVdkblZ4Y0di?=
+ =?utf-8?B?S1VqMWZmcnF1TlJtUGJaMSs3a3NYbVJyQ3V3V0dKQ28rYXQ2bnhZQU1CbzAr?=
+ =?utf-8?B?M3JNd1RDSWpsMHVtU2ZKZy9OMEJrUkt4bFVDdGNvNWZ0QjJqK2JtWWJsQ1NS?=
+ =?utf-8?B?djlxNytJbjlTMk1iUGFGWnpGNEo5d2c3NitDVVJBR29za3lGU2FHZFdZekxh?=
+ =?utf-8?B?VTZ2Q3JGL2VNc242ajJNTTdMazNLZHhDdWdPdHA2anpVWm52dTlZcTlNQ2sz?=
+ =?utf-8?B?UFY0T240S012Tko3bVFVNWszTFlyVmdNOHBWbzc3UXBFUUFLUStoWHdidG92?=
+ =?utf-8?B?QWhtYlIrU0loMTFIS0FVUUxrVVpwZmoxYnNiZzQrYkVFZ3BsL2duRDQ3VmEy?=
+ =?utf-8?B?d3Nnak9BNDh5Z1JteUwzeWs2NVo0K3EyN1BUS2VsRUhZOVNGc3ZON0pxVVlh?=
+ =?utf-8?B?UXFDaVU4M3Y0WkR4d0dhRzJaTTBNVUVVak9CWTFZRTVta2dPZHoyZFBBVmpq?=
+ =?utf-8?B?ZzZwZlJkU1ZUS01pVmRhL1pKOFpielJhZXZ4QW5CZXVMQ1VhVW9DRDhLbExu?=
+ =?utf-8?B?UXlzWFNOWmJQVG0rNFU1cFR6ZTBIRXhsWkZVVG5jMHNIdXBjNU9FTFVmbll0?=
+ =?utf-8?B?eUp4c2c5OTV3PT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c78ace83-4f9c-4e1d-4de1-08da0ade1f8c
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4468.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 01:57:15.5589
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AFLk4Dx3S6R2GlZYNF0NHulFjjUhrcGIlaONaqThj2xHDBuxyHugh/8d35Di+rc04cnLNAUj8PerAh4u6nlwmw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1598
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10292 signatures=694221
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 malwarescore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203210009
+X-Proofpoint-GUID: oImxH-JB4dUockDjBveyYLnj3Lin4G-7
+X-Proofpoint-ORIG-GUID: oImxH-JB4dUockDjBveyYLnj3Lin4G-7
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel has some code coding-stlye guidelines defined at
-Documentation/process/coding-style.rst
+Hello Al,
+Thanks again for reviewing this.
 
-This patch fixes most of the code-style issues in route.c
+On 18/3/22 11:07 am, Al Viro wrote:
+> On Thu, Mar 17, 2022 at 06:26:11PM +1100, Imran Khan wrote:
+> 
+>> diff --git a/fs/kernfs/symlink.c b/fs/kernfs/symlink.c
+>> index 9d4103602554..cbdd1be5f0a8 100644
+>> --- a/fs/kernfs/symlink.c
+>> +++ b/fs/kernfs/symlink.c
+>> @@ -113,12 +113,19 @@ static int kernfs_getlink(struct inode *inode, char *path)
+>>  	struct kernfs_node *kn = inode->i_private;
+>>  	struct kernfs_node *parent = kn->parent;
+>>  	struct kernfs_node *target = kn->symlink.target_kn;
+>> -	struct rw_semaphore *rwsem;
+>> +	struct kernfs_rwsem_token token;
+>>  	int error;
+>>  
+>> -	rwsem = kernfs_down_read(parent);
+>> +	/**
+>> +	 * Lock both parent and target, to avoid their movement
+>> +	 * or removal in the middle of path construction.
+>> +	 * If a competing remove or rename for parent or target
+>> +	 * wins, it will be reflected in result returned from
+>> +	 * kernfs_get_target_path.
+>> +	 */
+>> +	kernfs_down_read_double_nodes(target, parent, &token);
+>>  	error = kernfs_get_target_path(parent, target, path);
+>> -	kernfs_up_read(rwsem);
+>> +	kernfs_up_read_double_nodes(target, parent, &token);
+>>  
+>>  	return error;
+>>  }
+> 
+> No.  Read through the kernfs_get_target_path().  Why would locking these
+> two specific nodes be sufficient for anything useful?  That code relies
+> upon ->parent of *many* nodes being stable.  Which is not going to be
+> guaranteed by anything of that sort.
+> 
+> And it's not just "we might get garbage if we race" - it's "we might
+> walk into kfree'd object and proceed to walk the pointer chain".
+> 
+> Or have this loop
+> 	kn = target;
+> 	while (kn->parent && kn != base) {
+> 		len += strlen(kn->name) + 1;
+> 		kn = kn->parent;
+> 	}
+> see the names that are not identical to what we see in
+> 	kn = target;
+> 	while (kn->parent && kn != base) {
+> 		int slen = strlen(kn->name);
+> 
+> 		len -= slen;
+> 		memcpy(s + len, kn->name, slen);
+> 		if (len)
+> 			s[--len] = '/';
+> 
+> 		kn = kn->parent;
+> 	}
+> done later in the same function.  With obvious unpleasant effects.
+> Or a different set of nodes, for that matter.
+> 
+> This code really depends upon the tree being stable.  No renames of
+> any sort allowed during that thing.
 
-Signed-off-by: Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de>
----
- net/ipv4/route.c | 75 ++++++++++++++++++++++--------------------------
- 1 file changed, 35 insertions(+), 40 deletions(-)
+Yes. My earlier approach is wrong.
 
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 63f3256a407d..7daf63f2f1dd 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -109,7 +109,7 @@
- #define RT_FL_TOS(oldflp4) \
- 	((oldflp4)->flowi4_tos & (IPTOS_RT_MASK | RTO_ONLINK))
- 
--#define RT_GC_TIMEOUT (300*HZ)
-+#define RT_GC_TIMEOUT (300 * HZ)
- 
- #define DEFAULT_MIN_PMTU (512 + 20 + 20)
- #define DEFAULT_MTU_EXPIRES (10 * 60 * HZ)
-@@ -235,10 +235,10 @@ static void *rt_cpu_seq_start(struct seq_file *seq, loff_t *pos)
- 	if (*pos == 0)
- 		return SEQ_START_TOKEN;
- 
--	for (cpu = *pos-1; cpu < nr_cpu_ids; ++cpu) {
-+	for (cpu = *pos - 1; cpu < nr_cpu_ids; ++cpu) {
- 		if (!cpu_possible(cpu))
- 			continue;
--		*pos = cpu+1;
-+		*pos = cpu + 1;
- 		return &per_cpu(rt_cache_stat, cpu);
- 	}
- 	return NULL;
-@@ -251,12 +251,11 @@ static void *rt_cpu_seq_next(struct seq_file *seq, void *v, loff_t *pos)
- 	for (cpu = *pos; cpu < nr_cpu_ids; ++cpu) {
- 		if (!cpu_possible(cpu))
- 			continue;
--		*pos = cpu+1;
-+		*pos = cpu + 1;
- 		return &per_cpu(rt_cache_stat, cpu);
- 	}
- 	(*pos)++;
- 	return NULL;
--
+This patch set has also introduced a per-fs mutex (kernfs_rm_mutex)
+which should fix the problem of inconsistent tree view as far as
+kernfs_get_path is concerned.
+Acquiring kernfs_rm_mutex before invoking kernfs_get_path in
+kernfs_getlink will ensure that kernfs_get_path will get a consistent
+view of ->parent of nodes from root to target. This is because acquiring
+kernfs_rm_mutex will ensure that __kernfs_remove does not remove any
+kernfs_node(or parent of kernfs_node). Further it ensures that
+kernfs_rename_ns does not move any kernfs_node. So far I have not used
+per-fs mutex in kernfs_rename_ns but I can make this change in next
+version. So following change on top of current patch set should fix
+this issue of ->parent change in the middle of kernfs_get_path.
+
+
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index 1b28d99ff1c3..8095dcdd437c 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -1672,11 +1672,13 @@ int kernfs_rename_ns(struct kernfs_node *kn,
+struct kernfs_node *new_parent,
+        const char *old_name = NULL;
+        struct kernfs_rwsem_token token;
+        int error;
++       struct kernfs_root *root = kernfs_root(kn);
+
+        /* can't move or rename root */
+        if (!kn->parent)
+                return -EINVAL;
+
++       mutex_lock(&root->kernfs_rm_mutex);
+        old_parent = kn->parent;
+        kernfs_get(old_parent);
+        kernfs_down_write_triple_nodes(kn, old_parent, new_parent, &token);
+@@ -1741,6 +1743,7 @@ int kernfs_rename_ns(struct kernfs_node *kn,
+struct kernfs_node *new_parent,
+        error = 0;
+  out:
+        kernfs_up_write_triple_nodes(kn, new_parent, old_parent, &token);
++       mutex_unlock(&root->kernfs_rm_mutex);
+        return error;
  }
- 
- static void rt_cpu_seq_stop(struct seq_file *seq, void *v)
-@@ -348,7 +347,7 @@ static int __net_init ip_rt_do_proc_init(struct net *net)
- 
- #ifdef CONFIG_IP_ROUTE_CLASSID
- 	pde = proc_create_single("rt_acct", 0, net->proc_net,
--			rt_acct_proc_show);
-+				 rt_acct_proc_show);
- 	if (!pde)
- 		goto err3;
- #endif
-@@ -414,7 +413,7 @@ static struct neighbour *ipv4_neigh_lookup(const struct dst_entry *dst,
- 		n = ip_neigh_gw4(dev, rt->rt_gw4);
- 	} else if (rt->rt_gw_family == AF_INET6) {
- 		n = ip_neigh_gw6(dev, &rt->rt_gw6);
--        } else {
-+	} else {
- 		__be32 pkey;
- 
- 		pkey = skb ? ip_hdr(skb)->daddr : *((__be32 *) daddr);
-@@ -782,8 +781,8 @@ static void __ip_do_redirect(struct rtable *rt, struct sk_buff *skb, struct flow
- 				fib_select_path(net, &res, fl4, skb);
- 				nhc = FIB_RES_NHC(res);
- 				update_or_create_fnhe(nhc, fl4->daddr, new_gw,
--						0, false,
--						jiffies + ip_rt_gc_timeout);
-+						      0, false,
-+						      jiffies + ip_rt_gc_timeout);
- 			}
- 			if (kill_route)
- 				rt->dst.obsolete = DST_OBSOLETE_KILL;
-@@ -796,7 +795,7 @@ static void __ip_do_redirect(struct rtable *rt, struct sk_buff *skb, struct flow
- reject_redirect:
- #ifdef CONFIG_IP_ROUTE_VERBOSE
- 	if (IN_DEV_LOG_MARTIANS(in_dev)) {
--		const struct iphdr *iph = (const struct iphdr *) skb->data;
-+		const struct iphdr *iph = (const struct iphdr *)skb->data;
- 		__be32 daddr = iph->daddr;
- 		__be32 saddr = iph->saddr;
- 
-@@ -813,14 +812,14 @@ static void ip_do_redirect(struct dst_entry *dst, struct sock *sk, struct sk_buf
- {
- 	struct rtable *rt;
- 	struct flowi4 fl4;
--	const struct iphdr *iph = (const struct iphdr *) skb->data;
-+	const struct iphdr *iph = (const struct iphdr *)skb->data;
- 	struct net *net = dev_net(skb->dev);
- 	int oif = skb->dev->ifindex;
- 	u8 tos = RT_TOS(iph->tos);
- 	u8 prot = iph->protocol;
- 	u32 mark = skb->mark;
- 
--	rt = (struct rtable *) dst;
-+	rt = (struct rtable *)dst;
- 
- 	__build_flow_key(net, &fl4, sk, iph, oif, tos, prot, mark, 0);
- 	__ip_do_redirect(rt, skb, &fl4, true);
-@@ -844,8 +843,7 @@ static struct dst_entry *ipv4_negative_advice(struct dst_entry *dst)
- 	return ret;
+
+diff --git a/fs/kernfs/symlink.c b/fs/kernfs/symlink.c
+index cbdd1be5f0a8..805543d7a1f2 100644
+--- a/fs/kernfs/symlink.c
++++ b/fs/kernfs/symlink.c
+@@ -113,19 +113,22 @@ static int kernfs_getlink(struct inode *inode,
+char *path)
+        struct kernfs_node *kn = inode->i_private;
+        struct kernfs_node *parent = kn->parent;
+        struct kernfs_node *target = kn->symlink.target_kn;
+-       struct kernfs_rwsem_token token;
++       struct kernfs_root *root;
+        int error;
+
++       root = kernfs_root(kn);
++
+        /**
+-        * Lock both parent and target, to avoid their movement
+-        * or removal in the middle of path construction.
+-        * If a competing remove or rename for parent or target
+-        * wins, it will be reflected in result returned from
+-        * kernfs_get_target_path.
++        * Acquire kernfs_rm_mutex to ensure that kernfs_get_path
++        * sees correct ->parent for all nodes.
++        * We need to make sure that during kernfs_get_path parent
++        * of any node from target to root does not change. Acquiring
++        * kernfs_rm_mutex ensure that there are no concurrent remove
++        * or rename operations.
+         */
+-       kernfs_down_read_double_nodes(target, parent, &token);
++       mutex_lock(&root->kernfs_rm_mutex);
+        error = kernfs_get_target_path(parent, target, path);
+-       kernfs_up_read_double_nodes(target, parent, &token);
++       mutex_unlock(&root->kernfs_rm_mutex);
+
+        return error;
  }
- 
--/*
-- * Algorithm:
-+/* Algorithm:
-  *	1. The first ip_rt_redirect_number redirects are sent
-  *	   with exponential backoff, then we stop sending them at all,
-  *	   assuming that the host ignores our redirects.
-@@ -1043,7 +1041,7 @@ static void ip_rt_update_pmtu(struct dst_entry *dst, struct sock *sk,
- 			      struct sk_buff *skb, u32 mtu,
- 			      bool confirm_neigh)
- {
--	struct rtable *rt = (struct rtable *) dst;
-+	struct rtable *rt = (struct rtable *)dst;
- 	struct flowi4 fl4;
- 
- 	ip_rt_build_flow_key(&fl4, sk, skb);
-@@ -1181,7 +1179,7 @@ EXPORT_SYMBOL_GPL(ipv4_sk_redirect);
- INDIRECT_CALLABLE_SCOPE struct dst_entry *ipv4_dst_check(struct dst_entry *dst,
- 							 u32 cookie)
- {
--	struct rtable *rt = (struct rtable *) dst;
-+	struct rtable *rt = (struct rtable *)dst;
- 
- 	/* All IPV4 dsts are created with ->obsolete set to the value
- 	 * DST_OBSOLETE_FORCE_CHK which forces validation calls down
-@@ -1246,8 +1244,7 @@ static int ip_rt_bug(struct net *net, struct sock *sk, struct sk_buff *skb)
- 	return 0;
- }
- 
--/*
-- * We do not cache source address of outgoing interface,
-+/* We do not cache source address of outgoing interface,
-  * because it is used only by IP RR, TS and SRR options,
-  * so that it out of fast path.
-  *
-@@ -1259,9 +1256,9 @@ void ip_rt_get_source(u8 *addr, struct sk_buff *skb, struct rtable *rt)
- {
- 	__be32 src;
- 
--	if (rt_is_output_route(rt))
-+	if (rt_is_output_route(rt)) {
- 		src = ip_hdr(skb)->saddr;
--	else {
-+	} else {
- 		struct fib_result res;
- 		struct iphdr *iph = ip_hdr(skb);
- 		struct flowi4 fl4 = {
-@@ -1600,8 +1597,9 @@ static void rt_set_nexthop(struct rtable *rt, __be32 daddr,
- 			}
- 			rt_add_uncached_list(rt);
- 		}
--	} else
-+	} else {
- 		rt_add_uncached_list(rt);
-+	}
- 
- #ifdef CONFIG_IP_ROUTE_CLASSID
- #ifdef CONFIG_IP_MULTIPLE_TABLES
-@@ -1732,7 +1730,7 @@ static int ip_route_input_mc(struct sk_buff *skb, __be32 daddr, __be32 saddr,
- 	rth->dst.tclassid = itag;
- #endif
- 	rth->dst.output = ip_rt_bug;
--	rth->rt_is_input= 1;
-+	rth->rt_is_input = 1;
- 
- #ifdef CONFIG_IP_MROUTE
- 	if (!ipv4_is_local_multicast(daddr) && IN_DEV_MFORWARD(in_dev))
-@@ -1744,7 +1742,6 @@ static int ip_route_input_mc(struct sk_buff *skb, __be32 daddr, __be32 saddr,
- 	return 0;
- }
- 
--
- static void ip_handle_martian_source(struct net_device *dev,
- 				     struct in_device *in_dev,
- 				     struct sk_buff *skb,
-@@ -1754,8 +1751,7 @@ static void ip_handle_martian_source(struct net_device *dev,
- 	RT_CACHE_STAT_INC(in_martian_src);
- #ifdef CONFIG_IP_ROUTE_VERBOSE
- 	if (IN_DEV_LOG_MARTIANS(in_dev) && net_ratelimit()) {
--		/*
--		 *	RFC1812 recommendation, if source is martian,
-+		/*	RFC1812 recommendation, if source is martian,
- 		 *	the only hint is MAC header.
- 		 */
- 		pr_warn("martian source %pI4 from %pI4, on dev %s\n",
-@@ -2188,8 +2184,7 @@ static struct net_device *ip_rt_get_dev(struct net *net,
- 	return dev ? : net->loopback_dev;
- }
- 
--/*
-- *	NOTE. We drop all the packets that has local source
-+/*	NOTE. We drop all the packets that has local source
-  *	addresses, because every properly looped back packet
-  *	must have correct destination already attached by output routine.
-  *	Changes in the enforced policies must be applied also to
-@@ -2351,7 +2346,7 @@ out:	return err;
- 	if (!rth)
- 		goto e_nobufs;
- 
--	rth->dst.output= ip_rt_bug;
-+	rth->dst.output = ip_rt_bug;
- #ifdef CONFIG_IP_ROUTE_CLASSID
- 	rth->dst.tclassid = itag;
- #endif
-@@ -2359,8 +2354,8 @@ out:	return err;
- 
- 	RT_CACHE_STAT_INC(in_slow_tot);
- 	if (res->type == RTN_UNREACHABLE) {
--		rth->dst.input= ip_error;
--		rth->dst.error= -err;
-+		rth->dst.input = ip_error;
-+		rth->dst.error = -err;
- 		rth->rt_flags	&= ~RTCF_LOCAL;
- 	}
- 
-@@ -2693,7 +2688,6 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
- 		}
- 	}
- 
--
- 	if (fl4->flowi4_oif) {
- 		dev_out = dev_get_by_index_rcu(net, fl4->flowi4_oif);
- 		rth = ERR_PTR(-ENODEV);
-@@ -2725,8 +2719,10 @@ struct rtable *ip_route_output_key_hash_rcu(struct net *net, struct flowi4 *fl4,
- 
- 	if (!fl4->daddr) {
- 		fl4->daddr = fl4->saddr;
--		if (!fl4->daddr)
--			fl4->daddr = fl4->saddr = htonl(INADDR_LOOPBACK);
-+		if (!fl4->daddr) {
-+			fl4->daddr = htonl(INADDR_LOOPBACK);
-+			fl4->saddr = htonl(INADDR_LOOPBACK);
-+		}
- 		dev_out = net->loopback_dev;
- 		fl4->flowi4_oif = LOOPBACK_IFINDEX;
- 		res->type = RTN_LOCAL;
-@@ -2814,7 +2810,7 @@ static struct dst_ops ipv4_dst_blackhole_ops = {
- 
- struct dst_entry *ipv4_blackhole_route(struct net *net, struct dst_entry *dst_orig)
- {
--	struct rtable *ort = (struct rtable *) dst_orig;
-+	struct rtable *ort = (struct rtable *)dst_orig;
- 	struct rtable *rt;
- 
- 	rt = dst_alloc(&ipv4_dst_blackhole_ops, NULL, 1, DST_OBSOLETE_DEAD, 0);
-@@ -3265,7 +3261,7 @@ static int inet_rtm_getroute(struct sk_buff *in_skb, struct nlmsghdr *nlh,
- 			     struct netlink_ext_ack *extack)
- {
- 	struct net *net = sock_net(in_skb->sk);
--	struct nlattr *tb[RTA_MAX+1];
-+	struct nlattr *tb[RTA_MAX + 1];
- 	u32 table_id = RT_TABLE_MAIN;
- 	__be16 sport = 0, dport = 0;
- 	struct fib_result res = {};
-@@ -3440,7 +3436,7 @@ static int ip_rt_gc_elasticity __read_mostly	= 8;
- static int ip_min_valid_pmtu __read_mostly	= IPV4_MIN_MTU;
- 
- static int ipv4_sysctl_rtcache_flush(struct ctl_table *__ctl, int write,
--		void *buffer, size_t *lenp, loff_t *ppos)
-+				     void *buffer, size_t *lenp, loff_t *ppos)
- {
- 	struct net *net = (struct net *)__ctl->extra1;
- 
-@@ -3699,7 +3695,7 @@ int __init ip_rt_init(void)
- 					      NULL,
- 					      &ip_idents_mask,
- 					      2048,
--					      256*1024);
-+					      256 * 1024);
- 
- 	ip_idents = idents_hash;
- 
-@@ -3722,7 +3718,7 @@ int __init ip_rt_init(void)
- 
- 	ipv4_dst_ops.kmem_cachep =
- 		kmem_cache_create("ip_dst_cache", sizeof(struct rtable), 0,
--				  SLAB_HWCACHE_ALIGN|SLAB_PANIC, NULL);
-+				  SLAB_HWCACHE_ALIGN | SLAB_PANIC, NULL);
- 
- 	ipv4_dst_blackhole_ops.kmem_cachep = ipv4_dst_ops.kmem_cachep;
- 
-@@ -3757,8 +3753,7 @@ int __init ip_rt_init(void)
- }
- 
- #ifdef CONFIG_SYSCTL
--/*
-- * We really need to sanitize the damn ipv4 init order, then all
-+/* We really need to sanitize the damn ipv4 init order, then all
-  * this nonsense will go away.
-  */
- void __init ip_static_sysctl_init(void)
--- 
-2.17.1
+
+Could you please let me know if you see some issues with this approach ?
+
+Thanks
+-- Imran
+
 

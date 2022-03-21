@@ -2,99 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C88E4E27BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D59484E27C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348043AbiCUNhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S1347970AbiCUNhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347978AbiCUNgm (ORCPT
+        with ESMTP id S1347967AbiCUNgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:36:42 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF1B45525;
-        Mon, 21 Mar 2022 06:35:16 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id o20-20020a9d7194000000b005cb20cf4f1bso10504213otj.7;
-        Mon, 21 Mar 2022 06:35:16 -0700 (PDT)
+        Mon, 21 Mar 2022 09:36:40 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC4045079;
+        Mon, 21 Mar 2022 06:35:14 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id k10so4670874oia.0;
+        Mon, 21 Mar 2022 06:35:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=NU1pLk5IqSWcyWusRAP1p7PrXvtwzl9hkbWcVT80EPU=;
-        b=GJPuiVkwP0BfPjMy+MitMyl+/ZsheE84vn1vVH9p04AUjo4R4HgHi26dQ9H3IupkqM
-         O49VsMADvDDohab0OYA0+IT4K8EZrk0euVDCk/Hi8tg10H5k/iBn9CvLr9uQLFYmPGdm
-         A8rEuf04mZ5nWGj+y782rFNz+AxyYF4XMkL3UMz2JT+I8ABwSnd23rLaiEKdrkbwSWAX
-         GQPcWETbsLCTpulVsi53pvxbNGCfNSi46b9gaRxSbSHSJulq5Ub+nDlnG9NNND8Fba8L
-         s+krInbA6ZzmChrJUCKzQKQ3eYDsFdWoW3dq774oP4PX8QQ+UyhX5Qf9dQxVKJWkbStJ
-         HgBQ==
-X-Gm-Message-State: AOAM533hjdTBVTqeGZWR5dDCDGqTrdWfaGYS5+yfL0RBBkMblaFgmR2Y
-        PYhwWziUo0yff/xvgdjsN0fFExwwvA==
-X-Google-Smtp-Source: ABdhPJxXvj7+Au/0bjcORzoGJez8P+Nc7Rh9Cw/fVD8qcE/yQPAqJPfplnxo6L4ijO8qvhE/tW7lUQ==
-X-Received: by 2002:a05:6830:3113:b0:5c9:416c:83c0 with SMTP id b19-20020a056830311300b005c9416c83c0mr8072791ots.239.1647869715649;
-        Mon, 21 Mar 2022 06:35:15 -0700 (PDT)
+        bh=9yHBFvAmotgj/IqBA0AuyCu3wDLvOQFxKhwN+eCLBMw=;
+        b=VYHizoU0TNVl0J36Szh7Rzmxfm2HXTbTvOqc/5FvWf1/P++WUam1MbJLFUf5GYcABb
+         vJysgxU7EPpox/lJvT7zLSTuAadhGfkk+BvCFO5BtylziSeZE/S/m9fCdGAMelPjkDPr
+         0tKE9hjMO3kqP9a4rj6ukfL6utqYeRk+9FTywPy7HJXn/Tu7DoFiasOf0Q/TEgLTsbIN
+         qGAuX2A2GYbB5jKIScVf6u+nnw+yY7eOaMTqILTBQn2jK8zfG5AR6A1dGykUocwNo7rS
+         8H3oKvZq1i52EQ6vRuJlGwxtfhKhGfj0R80t5mg4ZKWxMOLVsw5fNU7ExUKRKR0GmN8o
+         um1g==
+X-Gm-Message-State: AOAM531ZYTAK/RJhLo6OrMlLlHTrJYkSdDH+E8sFLJm4dnQflzGGOzxr
+        vhfSusZNwBaGnhfgMz67nQ==
+X-Google-Smtp-Source: ABdhPJw70yBMj/HnL99fXmgwqAbCYFqxmA+8bkEnDSsHVCZzESWK309igckM3Lgg4pHysUWDvWDa1Q==
+X-Received: by 2002:a05:6808:28b:b0:2ee:36b8:8619 with SMTP id z11-20020a056808028b00b002ee36b88619mr13273266oic.275.1647869713552;
+        Mon, 21 Mar 2022 06:35:13 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b15-20020a05687061cf00b000d17a5f0ee6sm6241462oah.11.2022.03.21.06.35.14
+        by smtp.gmail.com with ESMTPSA id w22-20020acaad16000000b002d9c98e551bsm7255683oie.36.2022.03.21.06.35.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 06:35:14 -0700 (PDT)
-Received: (nullmailer pid 4125324 invoked by uid 1000);
+        Mon, 21 Mar 2022 06:35:12 -0700 (PDT)
+Received: (nullmailer pid 4125319 invoked by uid 1000);
         Mon, 21 Mar 2022 13:35:11 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     robh+dt@kernel.org, mdf@kernel.org, linux-fpga@vger.kernel.org,
-        hao.wu@intel.com, linux-kernel@vger.kernel.org,
-        conor.dooley@microchip.com, devicetree@vger.kernel.org,
-        system@metrotek.ru, yilun.xu@intel.com, trix@redhat.com
-In-Reply-To: <20220321090020.22530-3-i.bornyakov@metrotek.ru>
-References: <20220321090020.22530-1-i.bornyakov@metrotek.ru> <20220321090020.22530-3-i.bornyakov@metrotek.ru>
-Subject: Re: [PATCH v6 2/2] dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>
+In-Reply-To: <20220320113430.26076-15-ansuelsmth@gmail.com>
+References: <20220320113430.26076-1-ansuelsmth@gmail.com> <20220320113430.26076-15-ansuelsmth@gmail.com>
+Subject: Re: [PATCH v3 14/18] dt-bindings: clock: Convert qcom,krait-cc to yaml
 Date:   Mon, 21 Mar 2022 08:35:11 -0500
-Message-Id: <1647869711.882038.4125323.nullmailer@robh.at.kernel.org>
+Message-Id: <1647869711.854036.4125318.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 12:00:20 +0300, Ivan Bornyakov wrote:
-> Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
-> slave SPI to load .dat formatted bitstream image.
+On Sun, 20 Mar 2022 12:34:26 +0100, Ansuel Smith wrote:
+> Convert qcom,krait-cc to yaml Documentation.
 > 
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 > ---
->  .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+>  .../bindings/clock/qcom,krait-cc.txt          | 34 -----------
+>  .../bindings/clock/qcom,krait-cc.yaml         | 59 +++++++++++++++++++
+>  2 files changed, 59 insertions(+), 34 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.txt
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml:17:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml: 'maintainers' is a required property
-	hint: Metaschema for devicetree binding documentation
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml: 'additionalProperties' is a required property
-	hint: A schema without a "$ref" to another schema must define all properties and use "additionalProperties"
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml: ignoring, error in schema: 
-Error: Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.example.dts:22.17-26 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1398: dt_binding_check] Error 2
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,krait-cc.example.dt.yaml: clock-controller: clocks: [[4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295], [4294967295]] is too long
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1607659
+See https://patchwork.ozlabs.org/patch/1607456
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

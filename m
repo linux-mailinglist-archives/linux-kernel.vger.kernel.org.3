@@ -2,111 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9424E20C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 07:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEADC4E20C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 07:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344650AbiCUG4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 02:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
+        id S1344657AbiCUG5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 02:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344643AbiCUG4r (ORCPT
+        with ESMTP id S1344643AbiCUG5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 02:56:47 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0244B36168
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 23:55:23 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id s14-20020a0566022bce00b00645e9bc9773so9949659iov.20
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 23:55:22 -0700 (PDT)
+        Mon, 21 Mar 2022 02:57:06 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B43713667B
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 23:55:42 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id z9-20020a05683020c900b005b22bf41872so9903653otq.13
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 23:55:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Wc7ThkaLJZR7210QtzX2oyJpNFvUx6zmHKI3fEwxV1k=;
+        b=BvK9/xmg5mbwHV3uJTwp/m5Pz7h2c5hZQRgcSnDc6oglsPU9d/pd5sOMuJ939yX3Vh
+         dZjJpDpxQHJuqZ+n0Sf+BtFPF+jMgtABw4DK/ziRf5dlaU5XLX7dMxMlNy/w9X30aN/h
+         2jvbH32dNQ9vhadpL4YRGibyngHgH2U/jghKCwhWnGMYOZU2rx4sQuiLEnLFbtDPyUFv
+         U2K+z8UCLc3cHxqucIIQQX6F0LRnNhZHvXvzv7xfMrk/lHW/u41duh/tcD9KoRZXx6Ib
+         ERgXw5uZUzXBiu5wGPi5W0HG+q4qlt/QXquzGHa0ctILkRSzs5EcYk3aHtpk5E8TChtt
+         tO6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=daSupJTaLEMjCQlcgBlg0/J8zG8qmmsadR+tY63b3gs=;
-        b=ZzsGq+wAqbgo0GGoQgaSGKj0UrhYnEHhzJKnTrQrevbTWFAayDQ+GC76UFxhP9JSJw
-         3qQQuYVsWXSIuZPccnB1vVDzuL8yc9s8mxN/lZOAZW64aJZ9PpHHBNB7tOvJ5V/1H7c0
-         xa1TFEuMQVTvYmzwK+wWdnfQKWjUIpQ9C981WCXLWB9NsIlzcnCK2ZnXmcfnyoythli+
-         v3hHW7gkrRVfLsHmbhYoFFvb4tYvMl7cNik64soTnUCNs/oaxnHhEJP7F3qEthWoB6r4
-         DRdXAjEpCdx0MBRcfIswqwok9kWzBMlQwx4RTgXQ5cIysPKoviF1dOcaLYIK7YuEyKHg
-         Selw==
-X-Gm-Message-State: AOAM531Lj9j5Z19EBYuHbOqaazzi+TGRPsVaIo04s0uzwRD1T5pazooy
-        LeSrSbkzae+Q+0LsBIiCxXJrfuJ+eUDngqXiczXPp9vmGQyo
-X-Google-Smtp-Source: ABdhPJyaYb68cejI/NR0p5vkFV1JTMagoK9de7VunW25JL+u2gSHf2xZ1AF9cWOrhDNbTSrjR7+4DCvM8TADQF5NhhPKg9edY2Nj
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Wc7ThkaLJZR7210QtzX2oyJpNFvUx6zmHKI3fEwxV1k=;
+        b=vKvNjXC1y0evTs7BDU3xBEZsbQod3fJUh9EgbC+QZelB77d29SgWYzmm05LfydDsuA
+         NR7n4mzaOLDPRWHRA5flsVp25Aj3eX8jI4dyoBuzLnQ8m2vhrJtl8H93ZCXLQtH9S7cU
+         jKi4n8YqBp/TSCiyApHjyh170G/wOHsWJW7vdTjpGaYMSc+bsC1hrksBRZc6XpmZaEqf
+         SteXpuztZjfqDU+403FOamP7qGbafxuyp4lS3g/wU6Mm63WmkSC26+RaxpHGuXBAXDu6
+         9NkqY0BF2zVU0BkUMLfiwdIHjqOI+iTGEeJmNUVrqRHliVEbAMls22znhr1ok1tdIzuH
+         XzZw==
+X-Gm-Message-State: AOAM5328QB/1AGaCpamRcQ1vT7LDs+oHfIRyQoEzRPJdksuFihU5/SrH
+        ROejqzyusgOq3R2F4m5fUg4IdOBrKd8CThkmcl1UhQ==
+X-Google-Smtp-Source: ABdhPJxs66SQ7AlLchmppjScFi0PWxUVPW97mA7V9Pe6BdZ1UrrvgXFOuKMfA3wO/VHOJxyOXq7T8GsAw6vHTAzTKbQ=
+X-Received: by 2002:a05:6830:23b6:b0:5b2:4ac0:9130 with SMTP id
+ m22-20020a05683023b600b005b24ac09130mr7439221ots.196.1647845741145; Sun, 20
+ Mar 2022 23:55:41 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:bb01:0:b0:31a:a11:1c39 with SMTP id
- y1-20020a02bb01000000b0031a0a111c39mr10494944jan.233.1647845722331; Sun, 20
- Mar 2022 23:55:22 -0700 (PDT)
-Date:   Sun, 20 Mar 2022 23:55:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ec9cf305dab4faae@google.com>
-Subject: [syzbot] bpf-next boot error: WARNING in bpf_prog_pack_free
-From:   syzbot <syzbot+c946805b5ce6ab87df0b@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
+References: <000000000000dda2f905da80c934@google.com> <00000000000009cf1e05da85bb31@google.com>
+ <CAMZfGtWL-2+en7=FKBoPUwq1FMGYYqZCvB1jmJ7fhiQc1XX4oQ@mail.gmail.com> <CAD-N9QU1CDatEhzBzFL_GMB5qcCJgZ+wfmK8ND_=7ki9pKJ-Cw@mail.gmail.com>
+In-Reply-To: <CAD-N9QU1CDatEhzBzFL_GMB5qcCJgZ+wfmK8ND_=7ki9pKJ-Cw@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 21 Mar 2022 07:55:29 +0100
+Message-ID: <CACT4Y+Yh7t=wBftzCA9zxtVFKFiYFurBOq-5GFe1Le3W5ujOPw@mail.gmail.com>
+Subject: Re: [syzbot] WARNING: kobject bug in erofs_unregister_sysfs
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        syzbot <syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chao Yu <chao@kernel.org>, linux-erofs@lists.ozlabs.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Gao Xiang <xiang@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, 20 Mar 2022 at 05:19, Dongliang Mu <mudongliangabcd@gmail.com> wrote:
+>
+> On Sat, Mar 19, 2022 at 10:21 AM Muchun Song <songmuchun@bytedance.com> wrote:
+> >
+> > On Sat, Mar 19, 2022 at 6:33 AM syzbot
+> > <syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com> wrote:
+> > >
+> > > syzbot has bisected this issue to:
+> > >
+> > > commit 2768c206f2c3e95c0e5cf2e7f846103fda7cd429
+> > > Author: Muchun Song <songmuchun@bytedance.com>
+> > > Date:   Thu Mar 3 01:15:36 2022 +0000
+> > >
+> > >     mm: list_lru: allocate list_lru_one only when needed
+> > >
+> > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1495694d700000
+> > > start commit:   91265a6da44d Add linux-next specific files for 20220303
+> > > git tree:       linux-next
+> > > final oops:     https://syzkaller.appspot.com/x/report.txt?x=1695694d700000
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=1295694d700000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=617f79440a35673a
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=f05ba4652c0471416eaf
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=137f17d9700000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=114ebabd700000
+> > >
+> > > Reported-by: syzbot+f05ba4652c0471416eaf@syzkaller.appspotmail.com
+> > > Fixes: 2768c206f2c3 ("mm: list_lru: allocate list_lru_one only when needed")
+> >
+> > Does this patch [1] fix the issue? If yes, I am confused why the Fixes tag
+> > should be the commit 2768c206f2c3?  What am I missing here?
+>
+> Sometimes syzkaller bisection may make mistakes. Please ignore it.
+>
+> >
+> > [1] https://lore.kernel.org/r/20220315132814.12332-1-dzm91@hust.edu.cn
+>
 
-syzbot found the following issue on:
+Let's tell syzbot so that it reports new bugs in future:
 
-HEAD commit:    7ada3787e91c bpf: Check for NULL return from bpf_get_btf_v..
-git tree:       bpf-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=14079871700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=820db791969fe863
-dashboard link: https://syzkaller.appspot.com/bug?extid=c946805b5ce6ab87df0b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c946805b5ce6ab87df0b@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-bpf_prog_pack bug
-WARNING: CPU: 0 PID: 8 at kernel/bpf/core.c:947 bpf_prog_pack_free+0x2fc/0x3a0 kernel/bpf/core.c:947
-Modules linked in:
-CPU: 0 PID: 8 Comm: kworker/0:1 Not tainted 5.17.0-rc6-syzkaller-02056-g7ada3787e91c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events bpf_prog_free_deferred
-RIP: 0010:bpf_prog_pack_free+0x2fc/0x3a0 kernel/bpf/core.c:947
-Code: 0b 31 ff 89 de e8 64 44 f3 ff 84 db 0f 85 82 fe ff ff e8 d7 41 f3 ff 48 c7 c7 60 df b2 89 c6 05 e2 99 fa 0b 01 e8 6b 10 87 07 <0f> 0b e9 63 fe ff ff e8 b8 41 f3 ff 0f 0b 0f 0b 41 be ff ff ff ff
-RSP: 0000:ffffc900000d7c60 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888010e65700 RSI: ffffffff815fe3a8 RDI: fffff5200001af7e
-RBP: ffffffff8bc177e0 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff815f8a3e R11: 0000000000000000 R12: ffff8881449f4010
-R13: ffffffffa0400000 R14: ffffffffa0600640 R15: 0000000000000540
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000b88e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- bpf_jit_binary_pack_free kernel/bpf/core.c:1151 [inline]
- bpf_jit_free+0x11d/0x2b0 kernel/bpf/core.c:1180
- bpf_prog_free_deferred+0x5c1/0x790 kernel/bpf/core.c:2553
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+#syz fix: fs: erofs: add sanity check for kobject in erofs_unregister_sysfs

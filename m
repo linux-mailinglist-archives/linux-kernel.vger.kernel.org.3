@@ -2,75 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF944E2FDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:23:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1F74E2FE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346531AbiCUSY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 14:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        id S1352097AbiCUSYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 14:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352085AbiCUSYZ (ORCPT
+        with ESMTP id S1352106AbiCUSYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 14:24:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B4D15F78
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:22:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647886978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FfY8Crr6Tj01OHCDabQLLo1k6K5pz09f+j9vIenvmF0=;
-        b=TNvnXmyGUDPk5PrfVPT0cUE9JXJ9aUFSyzNDCLgwBwpLXHqkMVyK90+RuI135bunWPLj4e
-        DefRLbgYPMK1R9GrKrAoAfpL8ttTl31znq+QP8M2368gZaD0k+FjE+Teq3QvZyPOeo8Ymd
-        U6KRpeF7dwTsK47ftd1HuOxAUMNmTVs=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-6oxNs6e1ObKoPj4a73TmOA-1; Mon, 21 Mar 2022 14:22:57 -0400
-X-MC-Unique: 6oxNs6e1ObKoPj4a73TmOA-1
-Received: by mail-pf1-f200.google.com with SMTP id i2-20020a056a00224200b004fa60c248a1so6991220pfu.13
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:22:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=FfY8Crr6Tj01OHCDabQLLo1k6K5pz09f+j9vIenvmF0=;
-        b=leI3pzRTbXp8Dn7RCRQ97KyPe3DGbwtfnotG+Rq6c59NvwiLT4TB00dVreNUXTDpE3
-         KxjrByXu8VfZwSwNl2XW29AkmbCHZtxBiw8qpsqCXDOy0SpDkdkSSU3E8STYtIU3DX1b
-         2m66Pbf5+UFM8ltm4xn77c0tTL4+R6T65WfyVBad842/l4ysLHrMeOSsy9RvHqb8igO3
-         yf9vtAz6DkBm1dPmfahUOXJNbe0uukXvd9teKBaIK5WcDXH5t89In+5Bn/BpxbQDXtxS
-         OfkldQUSrRkv3dahHu2SuJ2pWGyhb8bHGlJcbwEJkVJgVy8fsiMgfeC93H/uj8Bbeg4n
-         RQqg==
-X-Gm-Message-State: AOAM532Bjm4lO3jSTDvxeT84cBJX2MKh8++DIZ4pWp3/IvqRMJdLYlWL
-        SU/ET3USIJBT6nlRun6mdE5tSd/DXqAKfSXfGnk1dhaDxp8AfUAkgO/Xt4D3nj5HnB542juIIzl
-        WEiAiqCOHcJ9zOb9NluAkgSYd8JTnroibLnMBxAGh
-X-Received: by 2002:a17:902:9308:b0:14e:def5:e6b5 with SMTP id bc8-20020a170902930800b0014edef5e6b5mr14049243plb.73.1647886976218;
-        Mon, 21 Mar 2022 11:22:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx9aMQx7N8NzYKX/luZYTlxOSYv+dJ1fzKnlT1BrjqExeEXa8Ysv2lVcuOFuxnRhYWNJpFSmIX5GsyMlUX8Mt8=
-X-Received: by 2002:a17:902:9308:b0:14e:def5:e6b5 with SMTP id
- bc8-20020a170902930800b0014edef5e6b5mr14049231plb.73.1647886975908; Mon, 21
- Mar 2022 11:22:55 -0700 (PDT)
+        Mon, 21 Mar 2022 14:24:37 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5361D339
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:23:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ANKJabyS3ewlHuOoZj+mrW/QWsQsSm860pb8IWAGMoIGj42xjuScm8MARHfoz2Ny/kcISObYkJDXkyYBhu6Jm7plP291aiMmI6q5SWLQmusdAcWA9bQN8/NoRfebAOmNRqTRVX7nPriqc0AP0zpeujvYUK+n0PjvZFAIenAMeTgJP+kfYSWKkNp5HUHTu5Vskyt8QPhqGIIEAAk9pFH8JQ96MvdwOphMtXGY27M+shOLglY0pj4TIWg6q0r3WX9/758CXZ3kr+jY/hRw+dxvqjiI6S1h76jQ9XFb9efLqwDCzAog0RXsZzuSxb/fDM53XDikbMAQsCwirWS5otOIoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fQwDxK/gdIHqbqOeEp/IQxRlNZ4A2bHTRBpng4gQ7m8=;
+ b=H3svOxFgmy1we5y9MX/AST84BUJ60SsCXVqDLKWSVb4F7Z3RxiFV0cYon10CQsBV+gI1duA5MOgI9HgZaAa8SiQqCyu9ZS6W9efNk/dipYfQ5leHWNwAVA5nuJL2exqo4fV8T2qOKJPc/bCK6tjpElxG9Yi483gDlb4aatN9KB63q4ksh7xObwnvPUJW2s3HzyaozP3JU8AE8B1wk6Sgrh0QLIze27WDQZqQrqdNjGTw0ll4TuNJViwJo1u3Ba4Ettu4nUXguYroW3eNFsWYMWW1pUf+gpM+1KDAED59BGwABQUdVCzp9H/lQ7ZIVYw+1AQPqFo+rKSzeBkGLXk5lA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fQwDxK/gdIHqbqOeEp/IQxRlNZ4A2bHTRBpng4gQ7m8=;
+ b=P0cImXvud7d2jluMyngiDjKZatqO4LB4aLdwjWrd0Okp+pTkd0NV+cVobEIs1mS67ZWWHHRpkoGL/l8irrziXM3yjZQiOuHfOyqwv61mBvA76Cfonmr+FCFr6SekQNlxkNsGeTNzodN5H1F0Qzb7qQPRBAzA2MQamS69cRBCk/yJLF0XcgEIyQ/N65OCkF4yPtlld8lUz9dGmmqwm9JphxNIMGXy1KkcJvUJMcGhsP+8aQmLq41hv//XlVlY9UrXHwq9Siq0Ap7pjSJjgBITKvO+saVgEv0X+dxM4kKlvSy48gH/NEHQnTrSIfKgL+t3FwZg4e1yx7q2YXvmcDJkFg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
+ by BY5PR12MB4212.namprd12.prod.outlook.com (2603:10b6:a03:202::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Mon, 21 Mar
+ 2022 18:23:09 +0000
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::40a6:6e1d:b057:a036]) by MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::40a6:6e1d:b057:a036%6]) with mapi id 15.20.5081.023; Mon, 21 Mar 2022
+ 18:23:09 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v8 2/5] mm: page_isolation: check specified range for unmovable pages
+Date:   Mon, 21 Mar 2022 14:23:07 -0400
+X-Mailer: MailMate (1.14r5870)
+Message-ID: <3379379B-489B-460F-8B01-9A1D584A5036@nvidia.com>
+In-Reply-To: <44a512ba-1707-d9c7-7df3-b81af9b5f0fb@redhat.com>
+References: <20220317153733.2171277-1-zi.yan@sent.com>
+ <20220317153733.2171277-3-zi.yan@sent.com>
+ <44a512ba-1707-d9c7-7df3-b81af9b5f0fb@redhat.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_605DE710-A1C7-453D-9556-8FFF53B4648D_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: MN2PR20CA0060.namprd20.prod.outlook.com
+ (2603:10b6:208:235::29) To MN2PR12MB3823.namprd12.prod.outlook.com
+ (2603:10b6:208:168::26)
 MIME-Version: 1.0
-References: <20220320190602.7484-1-jose.exposito89@gmail.com> <CAO-hwJKZUSTaWUpE_vsvAs-MNoZ8UJLgxiCyQ6OzwHYFZszf2w@mail.gmail.com>
-In-Reply-To: <CAO-hwJKZUSTaWUpE_vsvAs-MNoZ8UJLgxiCyQ6OzwHYFZszf2w@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Mon, 21 Mar 2022 19:22:45 +0100
-Message-ID: <CAO-hwJL4=OGv34mXq3de4QEKW15tT4gZDOBxhkuXVh5AeSafeQ@mail.gmail.com>
-Subject: Re: [PATCH] HID: multitouch: fix Dell Precision 7550 and 7750 button type
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     Jiri Kosina <jkosina@suse.cz>, Takashi Iwai <tiwai@suse.de>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        "3.8+" <stable@vger.kernel.org>, regressions@lists.linux.dev,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 12600e52-92ef-43ad-cb86-08da0b67d9f9
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4212:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB4212465F352A01AED49B25BAC2169@BY5PR12MB4212.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aTxrWCN0uPm6KVPI34AST8oyg8UwgpEFilHglwNyGfJxaOkIdZKJycgRXgdQR2VZ4ful5a955GAGuUyai1+fLKcGTFEzp+KoK12RKFXW3a8NfEbE59wUegLHUtXQHxXZaAXZQjDtrnclr/uXmv7c3V8hceM53leTh6HVPmu3oyhgEOYGNPg0Gwq9+pBrcztKAqUIqsFqyeJ3A/cbGc1EHonFwJW7WYXXGQ/LM1foR1ilcP6kqkhHT6lwNlGdwiT2RyghAkI3qkkCOTWI1VgIayS6iJlCanZvd1QBUybmRdfWe11EL33TCmXVxPzqI0DE0Z6h55rCgJch/ZqdORoqN72GKeFzmlUvVKBoPnj6E+x4Fj4FnlwthVriEi0WlckQyNUbU/HES+N8HouZDBbvWgFik3l1gbRFKev6w6gGAz4p6s9VJPxe29ca5UJ8tp11jZYdCtwtQM8z+7tgb/R7Nlk8Z5YZXYAAdGUuA0o9oyyR6kq9KB8wz7fGNDORi1/p8J7QwtADrZLsKUD3cV3g4NJNtJOs6nESmZ+a+M0yVzY7p3yvnR7W1ROG7+v2m3JQ2+EngHBaHk+borIhXmlOS4Yj1KHLSGFu+g4i1TD88LS9ZIXvZvFckD0X5pd5WxGvmkI+K+cVaOOKWjCkgrF/tuwqEJ+15QzFvndNAIlDvVHwq93ibXady8OBlS7t/QDiXsVRuiEJkRwK04JPEnfzIq2EhnwRJyVyIFxf8xcoIv8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(33656002)(86362001)(2906002)(508600001)(8936002)(8676002)(66476007)(66556008)(66946007)(4326008)(6916009)(316002)(54906003)(6486002)(6506007)(53546011)(6512007)(38100700002)(26005)(2616005)(186003)(83380400001)(235185007)(7416002)(5660300002)(36756003)(21480400003)(45980500001)(72826004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VP0C+hs07kBx5LX2SrxNBEQAcDIs1PBWr7gmNwVmvGuEwHBgh/XIVWl+E/Iy?=
+ =?us-ascii?Q?hcl2JQuzOP3NlIdxHDuAbw8hKN2frmL/ryEAdn1mCnBUHlfgVXWAde+EE0Ak?=
+ =?us-ascii?Q?bpw1CRSZqrtzNtcPis1qj029XbsCjwNRwl1T/W+48Mub3oWAH7O+96HkPzWf?=
+ =?us-ascii?Q?TKuvlrh4rVeQVDipdKjA//ftFLlphxEdyXGQ9eliz1KlMRx0Ugd/PRejTL+y?=
+ =?us-ascii?Q?jzgN23RhViGNzMnTU38ugxRBXUKhmV+oisXOYhq/1dRDTCDgz+X1lR5XSLQ9?=
+ =?us-ascii?Q?DDGqHMKMtxnWI90CG+DZdT0twFAsV5yr6SSI6CBu0mwgyGWbPOa6+j7UOUws?=
+ =?us-ascii?Q?b7NsgcU9MfWV6VjF9uaV7vMA9rIrpv8LOy1qajoKlq1354vPijLdD/NSZUpV?=
+ =?us-ascii?Q?WqpsWpPMu1IPfNUkSVn2IAPMfbi84i3aJ+FAKvoPpetxhaQ90yUUQNo67UVw?=
+ =?us-ascii?Q?hXncykHi53LHCl6JJQ4tq2+l/tm7MPsCiptZ6RC1VR3SxftJW/bkxlRbwbJp?=
+ =?us-ascii?Q?wOxNZDN820xG3a9vv7LX+23UALGYAhGGnSxX7KI3QeVamjbyruTWgAW80YV+?=
+ =?us-ascii?Q?kyvkPMDkw91mLVwqQYGLk8XefpaTjYt98LDFHMDjvtF83q4rBOUAUsv0s6lu?=
+ =?us-ascii?Q?IWik4uMLcqWry22KRKwWwHOCP9DEc4DvZKoRyNK4AXoNpvMQ4K1fJjq9SB8I?=
+ =?us-ascii?Q?wV3Oe5Oun9IG5TSyBZNUAGQnSPT30xIhR/MNXeXkdDIpdGxcp+mwEghSmzZZ?=
+ =?us-ascii?Q?IyJvlri2iaIOFbnR00b1r9Da7GgnlBIP9DjF/rKiz1UsGXkKxJnZrMcQQa2B?=
+ =?us-ascii?Q?RV52HpNUEidkYUzYV8qq9yBh3/nTTjnd0yAenIrea12Q1p9x2MATUvWpsG7L?=
+ =?us-ascii?Q?dnuYjynRGLraiGOsFc3ZD/HJNqFcE6dAldmSd4xAEwgX6EzZ9+wBMyo3u45Z?=
+ =?us-ascii?Q?eIiSch0NsRRLEzTRTCDj5S7pAF5h4qAe6kx1yZU++YgoH2GjHVbSFrENGbW+?=
+ =?us-ascii?Q?aJVQz+SzpM3NgWsIMIsT8jWot2X9HSkGql7OJ8/YkNRnRRDSD6EHVZ5T/qmX?=
+ =?us-ascii?Q?hZ5Ff8+0tJbqxs354iktRE3SEdXb210qnjEkTRZJ+IplmLWNcqPAEboyX/zp?=
+ =?us-ascii?Q?jMi+o6NtSkbVOBp0QTO/Gl/IBiTf4VI5z8GOy+pxy0cJ+seBwUGCmGIUG65u?=
+ =?us-ascii?Q?7b9yhj5/vP8qQmeJk0R56icKTwSyRqzQztaE9EpPFOy7KktHwIjEyZAGhdqp?=
+ =?us-ascii?Q?2D8ADyGTZydxWDrgTSjAV9n10QGaCuD67JkwN9gt4NkyA8/cmoNuwSTqn6Xu?=
+ =?us-ascii?Q?zftzA7vrid4KkNYcdORP1NQcW8YnADgF75eHObj6Ru+OYc5wwiSmCElvVGkH?=
+ =?us-ascii?Q?3JKcIT6cWplvgnvuarAlBjzFcaQNPCRRTR0+1qs8Ljejl317uYAJ9Qrsqwaw?=
+ =?us-ascii?Q?Lgwbuw1bxagg/EyWAY/D86rNjahKeSpH?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12600e52-92ef-43ad-cb86-08da0b67d9f9
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 18:23:09.5566
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dtZtp5S7INtMx5hohsKvQ2UgxMf2HgXi1o4AZid/XC4SLoohyMrjoqDmBLGlSEIS
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4212
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,171 +122,339 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 10:25 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
+--=_MailMate_605DE710-A1C7-453D-9556-8FFF53B4648D_=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+On 21 Mar 2022, at 13:30, David Hildenbrand wrote:
+
+> On 17.03.22 16:37, Zi Yan wrote:
+>> From: Zi Yan <ziy@nvidia.com>
+>>
+>> Enable set_migratetype_isolate() to check specified sub-range for
+>> unmovable pages during isolation. Page isolation is done
+>> at max(MAX_ORDER_NR_PAEGS, pageblock_nr_pages) granularity, but not al=
+l
+>> pages within that granularity are intended to be isolated. For example=
+,
+>> alloc_contig_range(), which uses page isolation, allows ranges without=
+
+>> alignment. This commit makes unmovable page check only look for
+>> interesting pages, so that page isolation can succeed for any
+>> non-overlapping ranges.
+>>
+>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>> ---
+>>  include/linux/page-isolation.h | 10 +++++
+>>  mm/page_alloc.c                | 13 +------
+>>  mm/page_isolation.c            | 69 ++++++++++++++++++++-------------=
+-
+>>  3 files changed, 51 insertions(+), 41 deletions(-)
+>>
+>> diff --git a/include/linux/page-isolation.h b/include/linux/page-isola=
+tion.h
+>> index e14eddf6741a..eb4a208fe907 100644
+>> --- a/include/linux/page-isolation.h
+>> +++ b/include/linux/page-isolation.h
+>> @@ -15,6 +15,16 @@ static inline bool is_migrate_isolate(int migratety=
+pe)
+>>  {
+>>  	return migratetype =3D=3D MIGRATE_ISOLATE;
+>>  }
+>> +static inline unsigned long pfn_max_align_down(unsigned long pfn)
+>> +{
+>> +	return ALIGN_DOWN(pfn, MAX_ORDER_NR_PAGES);
+>> +}
+>> +
+>> +static inline unsigned long pfn_max_align_up(unsigned long pfn)
+>> +{
+>> +	return ALIGN(pfn, MAX_ORDER_NR_PAGES);
+>> +}
+>> +
+>>  #else
+>>  static inline bool has_isolate_pageblock(struct zone *zone)
+>>  {
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index 6de57d058d3d..680580a40a35 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -8937,16 +8937,6 @@ void *__init alloc_large_system_hash(const char=
+ *tablename,
+>>  }
+>>
+>>  #ifdef CONFIG_CONTIG_ALLOC
+>> -static unsigned long pfn_max_align_down(unsigned long pfn)
+>> -{
+>> -	return ALIGN_DOWN(pfn, MAX_ORDER_NR_PAGES);
+>> -}
+>> -
+>> -static unsigned long pfn_max_align_up(unsigned long pfn)
+>> -{
+>> -	return ALIGN(pfn, MAX_ORDER_NR_PAGES);
+>> -}
+>> -
+>>  #if defined(CONFIG_DYNAMIC_DEBUG) || \
+>>  	(defined(CONFIG_DYNAMIC_DEBUG_CORE) && defined(DYNAMIC_DEBUG_MODULE)=
+)
+>>  /* Usage: See admin-guide/dynamic-debug-howto.rst */
+>> @@ -9091,8 +9081,7 @@ int alloc_contig_range(unsigned long start, unsi=
+gned long end,
+>>  	 * put back to page allocator so that buddy can use them.
+>>  	 */
+>>
+>> -	ret =3D start_isolate_page_range(pfn_max_align_down(start),
+>> -				       pfn_max_align_up(end), migratetype, 0);
+>> +	ret =3D start_isolate_page_range(start, end, migratetype, 0);
+>>  	if (ret)
+>>  		return ret;
 >
-> Hi Jos=C3=A9,
->
-> On Sun, Mar 20, 2022 at 8:06 PM Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@=
-gmail.com> wrote:
-> >
-> > The touchpad present in the Dell Precision 7550 and 7750 laptops
-> > reports a HID_DG_BUTTONTYPE of type MT_BUTTONTYPE_CLICKPAD. However,
-> > the device is not a clickpad, it is a touchpad with physical buttons.
-> >
-> > In order to fix this issue, a quirk for the device was introduced in
-> > libinput [1] [2] to disable the INPUT_PROP_BUTTONPAD property:
-> >
-> >         [Precision 7x50 Touchpad]
-> >         MatchBus=3Di2c
-> >         MatchUdevType=3Dtouchpad
-> >         MatchDMIModalias=3Ddmi:*svnDellInc.:pnPrecision7?50*
-> >         AttrInputPropDisable=3DINPUT_PROP_BUTTONPAD
-> >
-> > However, because of the change introduced in 37ef4c19b4 ("Input: clear
-> > BTN_RIGHT/MIDDLE on buttonpads") the BTN_RIGHT key bit is not mapped
-> > anymore breaking the device right click button.
-> >
-> > In order to fix the issue, create a quirk for the device forcing its
-> > button type to touchpad regardless of the value reported by the
-> > firmware.
-> >
-> > [1] https://gitlab.freedesktop.org/libinput/libinput/-/merge_requests/4=
-81
-> > [2] https://bugzilla.redhat.com/show_bug.cgi?id=3D1868789
-> >
-> > Fixes: 37ef4c19b4 ("Input: clear BTN_RIGHT/MIDDLE on buttonpads")
-> > Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
-> > ---
->
-> Thanks for the patch.
-> However, I'd like to put this one on hold for a bit. I am discussing
-> it right now with Peter and we are trying to see what are the possible
-> implications of starting to fix those in the kernel one by one.
->
-> So Jiri, please hold on before applying this one.
+> Shouldn't we similarly adjust undo_isolate_page_range()? IOW, all users=
 
-Giving a little bit more context here (and quoting Peter).
+> of pfn_max_align_down()/pfn_max_align_up(). would be gone from that fil=
+e
+> and you can move these defines into mm/page_isolation.c instead of
+> include/linux/page-isolation.h?
 
-"""
-The problem with [37ef4c19b4] is that it removes functionality -
-before a clickpad was falsely advertised but the button worked, now in
-the affected devices it simply no longer works because the button code
-gets filtered. And user-space can't work around this.
-...
-So the main question remains: why are we doing this?
-
-And the answer here is: because libinput can't handle clickpads with
-right buttons. But that's not really true either, libinput just
-doesn't want to, and for no other reason than that it's easier to
-handle it this way.
-"""
-
-So basically, we tried to fix a choice on libinput assuming that all
-devices are perfect, for the only sake of making it easy for libinput.
-But the solution prevents further tweaks, and we then need to manually
-quirk devices in the kernel which involves a slightly heavier
-difficulty for end users than just dropping a config file or changing
-a setting in their UI.
-
-With that said, this patch is:
-Nacked-by: me
-
-Jos=C3=A9, could you send a revert of 37ef4c19b4, and add "Cc:
-stable@vger.kernel.org" and all the other tags for the regression
-tracker bot?
-
-Thanks in advance.
-
-Cheers,
-Benjamin
+undo_isolate_page_range() faces much simpler situation, just needing
+to unset migratetype. We can just pass pageblock_nr_pages aligned range
+to it. For start_isolate_page_range(), start and end are also used for
+has_unmovable_pages() for precise unmovable page identification, so
+they cannot be pageblock_nr_pages aligned. But for readability and symmet=
+ry,
+yes, I can change undo_isolate_page_range() too.
 
 >
-> Cheers,
-> Benjamin
->
-> >  drivers/hid/hid-ids.h        |  3 +++
-> >  drivers/hid/hid-multitouch.c | 20 ++++++++++++++++++++
-> >  2 files changed, 23 insertions(+)
-> >
-> > diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-> > index 78bd3ddda442..6cf7a5b6835b 100644
-> > --- a/drivers/hid/hid-ids.h
-> > +++ b/drivers/hid/hid-ids.h
-> > @@ -287,6 +287,9 @@
-> >
-> >  #define USB_VENDOR_ID_CIDC             0x1677
-> >
-> > +#define USB_VENDOR_ID_CIRQUE_CORP              0x0488
-> > +#define USB_DEVICE_ID_DELL_PRECISION_7X50      0x120A
-> > +
-> >  #define USB_VENDOR_ID_CJTOUCH          0x24b8
-> >  #define USB_DEVICE_ID_CJTOUCH_MULTI_TOUCH_0020 0x0020
-> >  #define USB_DEVICE_ID_CJTOUCH_MULTI_TOUCH_0040 0x0040
-> > diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.=
-c
-> > index 99eabfb4145b..f012cf8e0b8c 100644
-> > --- a/drivers/hid/hid-multitouch.c
-> > +++ b/drivers/hid/hid-multitouch.c
-> > @@ -71,6 +71,7 @@ MODULE_LICENSE("GPL");
-> >  #define MT_QUIRK_SEPARATE_APP_REPORT   BIT(19)
-> >  #define MT_QUIRK_FORCE_MULTI_INPUT     BIT(20)
-> >  #define MT_QUIRK_DISABLE_WAKEUP                BIT(21)
-> > +#define MT_QUIRK_BUTTONTYPE_TOUCHPAD   BIT(22)
-> >
-> >  #define MT_INPUTMODE_TOUCHSCREEN       0x02
-> >  #define MT_INPUTMODE_TOUCHPAD          0x03
-> > @@ -194,6 +195,7 @@ static void mt_post_parse(struct mt_device *td, str=
-uct mt_application *app);
-> >  #define MT_CLS_WIN_8_FORCE_MULTI_INPUT         0x0015
-> >  #define MT_CLS_WIN_8_DISABLE_WAKEUP            0x0016
-> >  #define MT_CLS_WIN_8_NO_STICKY_FINGERS         0x0017
-> > +#define MT_CLS_BUTTONTYPE_TOUCHPAD             0x0018
-> >
-> >  /* vendor specific classes */
-> >  #define MT_CLS_3M                              0x0101
-> > @@ -302,6 +304,15 @@ static const struct mt_class mt_classes[] =3D {
-> >                         MT_QUIRK_CONTACT_CNT_ACCURATE |
-> >                         MT_QUIRK_WIN8_PTP_BUTTONS,
-> >                 .export_all_inputs =3D true },
-> > +       { .name =3D MT_CLS_BUTTONTYPE_TOUCHPAD,
-> > +               .quirks =3D MT_QUIRK_ALWAYS_VALID |
-> > +                       MT_QUIRK_IGNORE_DUPLICATES |
-> > +                       MT_QUIRK_HOVERING |
-> > +                       MT_QUIRK_CONTACT_CNT_ACCURATE |
-> > +                       MT_QUIRK_STICKY_FINGERS |
-> > +                       MT_QUIRK_WIN8_PTP_BUTTONS |
-> > +                       MT_QUIRK_BUTTONTYPE_TOUCHPAD,
-> > +               .export_all_inputs =3D true },
-> >
-> >         /*
-> >          * vendor specific classes
-> > @@ -1286,6 +1297,9 @@ static int mt_touch_input_configured(struct hid_d=
-evice *hdev,
-> >             (app->buttons_count =3D=3D 1))
-> >                 td->is_buttonpad =3D true;
-> >
-> > +       if (app->quirks & MT_QUIRK_BUTTONTYPE_TOUCHPAD)
-> > +               td->is_buttonpad =3D false;
-> > +
-> >         if (td->is_buttonpad)
-> >                 __set_bit(INPUT_PROP_BUTTONPAD, input->propbit);
-> >
-> > @@ -1872,6 +1886,12 @@ static const struct hid_device_id mt_devices[] =
-=3D {
-> >                 MT_USB_DEVICE(USB_VENDOR_ID_CHUNGHWAT,
-> >                         USB_DEVICE_ID_CHUNGHWAT_MULTITOUCH) },
-> >
-> > +       /* Cirque Corp (Dell Precision 7550 and 7750 touchpad) */
-> > +       { .driver_data =3D MT_CLS_BUTTONTYPE_TOUCHPAD,
-> > +               HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
-> > +                       USB_VENDOR_ID_CIRQUE_CORP,
-> > +                       USB_DEVICE_ID_DELL_PRECISION_7X50) },
-> > +
-> >         /* CJTouch panels */
-> >         { .driver_data =3D MT_CLS_NSMU,
-> >                 MT_USB_DEVICE(USB_VENDOR_ID_CJTOUCH,
-> > --
-> > 2.25.1
-> >
+> Maybe perform this change in a separate patch for
+> start_isolate_page_range() and undo_isolate_page_range() ?
 
+The change is trivial enough to be folded into this one.
+
+>
+>>
+>> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
+>> index b34f1310aeaa..419c805dbdcd 100644
+>> --- a/mm/page_isolation.c
+>> +++ b/mm/page_isolation.c
+>> @@ -16,7 +16,8 @@
+>>  #include <trace/events/page_isolation.h>
+>>
+>>  /*
+>> - * This function checks whether pageblock includes unmovable pages or=
+ not.
+>> + * This function checks whether pageblock within [start_pfn, end_pfn)=
+ includes
+>> + * unmovable pages or not.
+>
+> I think we still want to limit that to a single pageblock (see below),
+> as we're going to isolate individual pageblocks. Then an updated
+> description could be:
+>
+> "This function checks whether the range [start_pfn, end_pfn) includes
+> unmovable pages or not. The range must fall into a single pageblock and=
+
+> consequently belong to a single zone."
+>
+
+Sure.
+
+>>   *
+>>   * PageLRU check without isolation or lru_lock could race so that
+>>   * MIGRATE_MOVABLE block might include unmovable pages. And __PageMov=
+able
+>> @@ -28,27 +29,26 @@
+>>   * cannot get removed (e.g., via memory unplug) concurrently.
+>>   *
+>>   */
+>> -static struct page *has_unmovable_pages(struct zone *zone, struct pag=
+e *page,
+>> -				 int migratetype, int flags)
+>> +static struct page *has_unmovable_pages(unsigned long start_pfn, unsi=
+gned long end_pfn,
+>> +				int migratetype, int flags)
+>>  {
+>> -	unsigned long iter =3D 0;
+>> -	unsigned long pfn =3D page_to_pfn(page);
+>> -	unsigned long offset =3D pfn % pageblock_nr_pages;
+>> +	unsigned long pfn =3D start_pfn;
+>>
+>> -	if (is_migrate_cma_page(page)) {
+>> -		/*
+>> -		 * CMA allocations (alloc_contig_range) really need to mark
+>> -		 * isolate CMA pageblocks even when they are not movable in fact
+>> -		 * so consider them movable here.
+>> -		 */
+>> -		if (is_migrate_cma(migratetype))
+>> -			return NULL;
+>
+> If we're really dealing with a range that falls into a single pageblock=
+,
+> then you can leave the is_migrate_cma_page() in place and also lookup
+> the zone only once. That should speed up things and minimize the
+> required changes.
+>
+> You can then further add VM_BUG_ON()s that make sure that start_pfn and=
+
+> end_pfn-1 belong to a single pageblock.
+
+Sure.
+
+>
+>> +	for (pfn =3D start_pfn; pfn < end_pfn; pfn++) {
+>> +		struct page *page =3D pfn_to_page(pfn);
+>> +		struct zone *zone =3D page_zone(page);
+>>
+>> -		return page;
+>> -	}
+>> +		if (is_migrate_cma_page(page)) {
+>> +			/*
+>> +			 * CMA allocations (alloc_contig_range) really need to mark
+>> +			 * isolate CMA pageblocks even when they are not movable in fact
+>> +			 * so consider them movable here.
+>> +			 */
+>> +			if (is_migrate_cma(migratetype))
+>> +				return NULL;
+>>
+>> -	for (; iter < pageblock_nr_pages - offset; iter++) {
+>> -		page =3D pfn_to_page(pfn + iter);
+>> +			return page;
+>> +		}
+>>
+>>  		/*
+>>  		 * Both, bootmem allocations and memory holes are marked
+>> @@ -85,7 +85,7 @@ static struct page *has_unmovable_pages(struct zone =
+*zone, struct page *page,
+>>  			}
+>>
+>>  			skip_pages =3D compound_nr(head) - (page - head);
+>> -			iter +=3D skip_pages - 1;
+>> +			pfn +=3D skip_pages - 1;
+>>  			continue;
+>>  		}
+>>
+>> @@ -97,7 +97,7 @@ static struct page *has_unmovable_pages(struct zone =
+*zone, struct page *page,
+>>  		 */
+>>  		if (!page_ref_count(page)) {
+>>  			if (PageBuddy(page))
+>> -				iter +=3D (1 << buddy_order(page)) - 1;
+>> +				pfn +=3D (1 << buddy_order(page)) - 1;
+>>  			continue;
+>>  		}
+>>
+>> @@ -134,7 +134,13 @@ static struct page *has_unmovable_pages(struct zo=
+ne *zone, struct page *page,
+>>  	return NULL;
+>>  }
+>>
+>> -static int set_migratetype_isolate(struct page *page, int migratetype=
+, int isol_flags)
+>> +/*
+>> + * This function set pageblock migratetype to isolate if no unmovable=
+ page is
+>> + * present in [start_pfn, end_pfn). The pageblock must intersect with=
+
+>> + * [start_pfn, end_pfn).
+>> + */
+>> +static int set_migratetype_isolate(struct page *page, int migratetype=
+, int isol_flags,
+>> +			unsigned long start_pfn, unsigned long end_pfn)
+>>  {
+>>  	struct zone *zone =3D page_zone(page);
+>>  	struct page *unmovable;
+>> @@ -155,8 +161,13 @@ static int set_migratetype_isolate(struct page *p=
+age, int migratetype, int isol_
+>>  	/*
+>>  	 * FIXME: Now, memory hotplug doesn't call shrink_slab() by itself.
+>>  	 * We just check MOVABLE pages.
+>> +	 *
+>> +	 * Pass the intersection of [start_pfn, end_pfn) and the page's page=
+block
+>> +	 * to avoid redundant checks.
+>>  	 */
+>
+> I think I'd prefer some helper variables for readability.
+
+Will do.
+
+>
+>> -	unmovable =3D has_unmovable_pages(zone, page, migratetype, isol_flag=
+s);
+>> +	unmovable =3D has_unmovable_pages(max(page_to_pfn(page), start_pfn),=
+
+>> +			min(ALIGN(page_to_pfn(page) + 1, pageblock_nr_pages), end_pfn),
+>> +			migratetype, isol_flags);
+>>  	if (!unmovable) {
+>>  		unsigned long nr_pages;
+>>  		int mt =3D get_pageblock_migratetype(page);
+>> @@ -267,7 +278,6 @@ __first_valid_page(unsigned long pfn, unsigned lon=
+g nr_pages)
+>>   * be MIGRATE_ISOLATE.
+>>   * @start_pfn:		The lower PFN of the range to be isolated.
+>>   * @end_pfn:		The upper PFN of the range to be isolated.
+>> - *			start_pfn/end_pfn must be aligned to pageblock_order.
+>>   * @migratetype:	Migrate type to set in error recovery.
+>>   * @flags:		The following flags are allowed (they can be combined in
+>>   *			a bit mask)
+>> @@ -309,15 +319,16 @@ int start_isolate_page_range(unsigned long start=
+_pfn, unsigned long end_pfn,
+>>  	unsigned long pfn;
+>>  	struct page *page;
+>>
+>> -	BUG_ON(!IS_ALIGNED(start_pfn, pageblock_nr_pages));
+>> -	BUG_ON(!IS_ALIGNED(end_pfn, pageblock_nr_pages));
+>> +	unsigned long isolate_start =3D pfn_max_align_down(start_pfn);
+>> +	unsigned long isolate_end =3D pfn_max_align_up(end_pfn);
+>>
+>> -	for (pfn =3D start_pfn;
+>> -	     pfn < end_pfn;
+>> +	for (pfn =3D isolate_start;
+>> +	     pfn < isolate_end;
+>>  	     pfn +=3D pageblock_nr_pages) {
+>>  		page =3D __first_valid_page(pfn, pageblock_nr_pages);
+>> -		if (page && set_migratetype_isolate(page, migratetype, flags)) {
+>> -			undo_isolate_page_range(start_pfn, pfn, migratetype);
+>> +		if (page && set_migratetype_isolate(page, migratetype, flags,
+>> +					start_pfn, end_pfn)) {
+>> +			undo_isolate_page_range(isolate_start, pfn, migratetype);
+>>  			return -EBUSY;
+>>  		}
+>>  	}
+>
+>
+> -- =
+
+> Thanks,
+>
+> David / dhildenb
+
+Thanks for your review.
+
+
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_605DE710-A1C7-453D-9556-8FFF53B4648D_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmI4wowPHHppeUBudmlk
+aWEuY29tAAoJEOJ/noEUByhUs1EP/RRBRjXVcCmRswBgj6F68TLqEX/1tScdYVuP
+OCH3+MD4120X0MNfajVSd6Uajh9N0Ng1zPyO2lqnFIVzoVbuMViSMQQ2HpFinalF
+gBjGg00IJYC7sy7dO5als7JtlXSTus+K8FF7kdBhxIbQwfVpAqBpH81FVrjwyvog
+Dw47W1pVfrtIA4i1lPlbjxlT7vuf3cdzrIMlyhsSsc2J7bGYlT4xoJDTpuXhJn1h
+vAEpymCxwJqajkgEIe7gEm4i/z24UMS2RHjtveX7VIul7aPQeVUNuRcFAs4vqrxV
+sVRHmVa0m+T7rcMK91N1MZV59PZmfcRI05/sR+NqsO/lTKcRvzQ/qfjkWUSepQLs
+PXIQhR2X9G3cbYrrxlfnYeQSbx7papJxtSHPhTJHt+qe8f/LVnwDj4S5h/t44fYN
+KspVH36ZK5PrL0yguVfMnt/p4+lA0Y9SYuAZ0jdczEt4XVw1XtMq3uCTsbs+7urh
+5ETHo4YFAELhkSw+O1ULtc68V93qeZlCN5uxhECtVc5DlKuXL3pkLr+u1hKNOlsH
+PD2518FVOonxMv9PWS3672brRjpYqobGQiOM4LQFEn0B1nsPYdFEuf36GJF9Ya00
+09uNfzOOKztyLUGtnvXgM8F76S/3XyBsM6wGX9q1gWn9ByrPMtIGNs3iZUDUTsWF
+6XjXaTsp
+=czjX
+-----END PGP SIGNATURE-----
+
+--=_MailMate_605DE710-A1C7-453D-9556-8FFF53B4648D_=--

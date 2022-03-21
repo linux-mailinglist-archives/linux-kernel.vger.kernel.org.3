@@ -2,212 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49FF4E1F1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D636D4E1F25
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344120AbiCUCqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 22:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
+        id S1344225AbiCUCzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 22:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242162AbiCUCqa (ORCPT
+        with ESMTP id S1344196AbiCUCzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 22:46:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 982A711A3E
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:45:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647830703;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6ubxP4hFPwWxxv0omchK9xVZybEAI/r5w17ak6c2HDo=;
-        b=IDBxeE78TmUg1H13VXaJa3Q2XtvLh4lLUKDeTbHj6FjrPg5PsQocez743r8VnjKu1Pc0dm
-        F0G9xw5muaNcy9wyVAvsm/vy/d+Cnh+7vpKndfiT50PpDV1VlYR/KoEE8jLjgnwlZhaHhp
-        GJwbHxpDEg+G4lIYgxcGcgILjioJALk=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-575-WmRqz3okM1asimgO9_G1LQ-1; Sun, 20 Mar 2022 22:45:02 -0400
-X-MC-Unique: WmRqz3okM1asimgO9_G1LQ-1
-Received: by mail-lf1-f70.google.com with SMTP id i17-20020a056512007100b0044879482376so3375419lfo.20
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:45:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6ubxP4hFPwWxxv0omchK9xVZybEAI/r5w17ak6c2HDo=;
-        b=rie6ea16HJo2a6a4Fm2YtzLpDrrUuZspIrchm39AGPUv2E5OjqANXZ4ulsO3zVFKJM
-         N7UfXGj0pXMfE/AnDeFQp2DrgJDoJL+eQZqNfYKTN1Ur2IARYS0sDg60uILjWDsX+UYO
-         4Y37nL5lE/GIXfut65lsCl1yNMwDItf5c0HQBmMqHB4vyNQ1TmqG/PJTGrqNtMfvXJFs
-         6XKWLe36ZLT1JlS6qOtJ+o9WJ1uqyrPo4kTkP1SZdS104WsrR7WtujW7MdAb0hmwztsg
-         nECe+a453OQ2nnK6C9/mYbgVfwwIZ7GWpB9tEZOOgePjizRryfTbbAv0sItR/S1rQ4f4
-         z4KQ==
-X-Gm-Message-State: AOAM532TqNh/fsDDQfL8FjiA1XtrY4LXCKBqb4i4/c9in0725T1I2usB
-        0Hn/vMUrskncoTl60BbjYP8V+x6pcgFynFosmo8N8olTSxN3zDT7Bkk6cBDimMlprX9zNhTFqLD
-        sBMbZtQ4r1HN1gGrXxIJp0iRInom9em4AzyCTd2knphLCgvWPmCTVfgOzRRmhS1MifyAR1zs27I
-        4=
-X-Received: by 2002:a05:6512:220c:b0:44a:2e21:e35c with SMTP id h12-20020a056512220c00b0044a2e21e35cmr1450073lfu.107.1647830701135;
-        Sun, 20 Mar 2022 19:45:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyFXUogRW93Ntm/8FmIFnPfkQTaFd15JoOAVpUH6T8ISpe1VzIYS3//Es/xS4cbZxgGHbVESw==
-X-Received: by 2002:a05:6512:220c:b0:44a:2e21:e35c with SMTP id h12-20020a056512220c00b0044a2e21e35cmr1450053lfu.107.1647830700856;
-        Sun, 20 Mar 2022 19:45:00 -0700 (PDT)
-Received: from localhost.localdomain (91-145-109-188.bb.dnainternet.fi. [91.145.109.188])
-        by smtp.gmail.com with ESMTPSA id m8-20020a05651202e800b0044a2d45534fsm161250lfq.103.2022.03.20.19.45.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Mar 2022 19:45:00 -0700 (PDT)
-From:   mpenttil@redhat.com
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     apopple@nvidia.com, jhubbard@nvidia.com, rcampbell@nvidia.com,
-        jgg@ziepe.ca, vbabka@suse.cz,
-        =?UTF-8?q?Mika=20Penttil=C3=A4?= <mpenttil@redhat.com>
-Subject: [PATCH v3] mm/hmm/test: use char dev with struct device to get device node
-Date:   Mon, 21 Mar 2022 04:44:00 +0200
-Message-Id: <20220321024400.20956-1-mpenttil@redhat.com>
-X-Mailer: git-send-email 2.17.1
+        Sun, 20 Mar 2022 22:55:21 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEB858E64;
+        Sun, 20 Mar 2022 19:53:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647831237; x=1679367237;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=d7KQds5beDpM3p/NihgSSHXqAj0QSPvdkhy43Lf5WgE=;
+  b=iHGQ6iHcK3UJrw+Dwh63qkjDNWkB3gz3zQNwTq+e09QavipjBPtb5ZHg
+   uK20fKcpyKG0y/M1tl5RC/8VjnSdI+sJmSp8u9dzr1Xr/z8mtOVAGVODz
+   3NJW/RG5XD10pW6pW/kGi5vQvAtF6C+dEuIc1haamubi62sxG0HZ+w4nq
+   W4rhB3Jj6RkueOBHKlvXHxZEEPI4ct6I5O1lp1nXcMZDMhYqfUjR46z4D
+   G4gfzKnoIf4IT5nFq14T3W5IbbbKx1hsm2o4E8z4lzNvK3Bm4RCKsyktr
+   TqYEYYyUHNzIi5ZbMElQf3qk71pdFE/Sb+fSbRGTixqqZGY7FVD3wPu06
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="255020822"
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="255020822"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 19:53:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="784852173"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Mar 2022 19:53:54 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nW8B7-000HOp-TC; Mon, 21 Mar 2022 02:53:53 +0000
+Date:   Mon, 21 Mar 2022 10:52:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, Will Deacon <will@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "open list:AMD IOMMU (AMD-VI)" <iommu@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v2] iommu/amd: Add support to indicate whether DMA remap
+ support is enabled
+Message-ID: <202203211032.FSaAOkQt-lkp@intel.com>
+References: <20220318223104.7049-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318223104.7049-1-mario.limonciello@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mika Penttilä <mpenttil@redhat.com>
+Hi Mario,
 
-HMM selftests use an in-kernel pseudo device to emulate device private
-memory. The pseudo device registers a major device range for two pseudo
-device instances. User space has a script that reads /proc/devices in
-order to find the assigned major number, and sends that to mknod(1),
-once for each node.
+Thank you for the patch! Yet something to improve:
 
-This duplicates a fair amount of boilerplate that misc device can do
-instead.
+[auto build test ERROR on joro-iommu/next]
+[also build test ERROR on v5.17 next-20220318]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Change this to use misc device, which makes the device node names appear
-for us. This also enables udev-like processing if desired.
+url:    https://github.com/0day-ci/linux/commits/Mario-Limonciello/iommu-amd-Add-support-to-indicate-whether-DMA-remap-support-is-enabled/20220319-063131
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git next
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220321/202203211032.FSaAOkQt-lkp@intel.com/config)
+compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/105690537e561d997e376617aa6a7d6d7b74a6a6
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Mario-Limonciello/iommu-amd-Add-support-to-indicate-whether-DMA-remap-support-is-enabled/20220319-063131
+        git checkout 105690537e561d997e376617aa6a7d6d7b74a6a6
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Delete the /proc/devices parsing from the user-space test script, now
-that it is unnecessary.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Mika Penttilä <mpenttil@redhat.com>
-Cc: Alistair Popple <apopple@nvidia.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Ralph Campbell <rcampbell@nvidia.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Vlastimil Babka <vbabka@suse.cz>
----
-v3:
-        - use cdev_device_add() instead of miscdevice
-v2:
-        - Cleanups per review comments from John Hubbard
-        - Added Tested-by and Ccs
+All errors (new ones prefixed by >>):
 
- lib/test_hmm.c                         | 25 ++++++++++++++++++-------
- tools/testing/selftests/vm/test_hmm.sh |  6 ------
- 2 files changed, 18 insertions(+), 13 deletions(-)
+   drivers/iommu/amd/iommu.c: In function 'amd_iommu_capable':
+>> drivers/iommu/amd/iommu.c:2165:7: error: 'IOMMU_CAP_PRE_BOOT_PROTECTION' undeclared (first use in this function)
+    2165 |  case IOMMU_CAP_PRE_BOOT_PROTECTION:
+         |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/amd/iommu.c:2165:7: note: each undeclared identifier is reported only once for each function it appears in
 
-diff --git a/lib/test_hmm.c b/lib/test_hmm.c
-index 767538089a62..d247e9c0fe94 100644
---- a/lib/test_hmm.c
-+++ b/lib/test_hmm.c
-@@ -29,11 +29,17 @@
- 
- #include "test_hmm_uapi.h"
- 
--#define DMIRROR_NDEVICES		2
- #define DMIRROR_RANGE_FAULT_TIMEOUT	1000
- #define DEVMEM_CHUNK_SIZE		(256 * 1024 * 1024U)
- #define DEVMEM_CHUNKS_RESERVE		16
- 
-+static const char *dmirror_device_names[] = {
-+	"hmm_dmirror0",
-+	"hmm_dmirror1"
-+};
-+
-+#define DMIRROR_NDEVICES ARRAY_SIZE(dmirror_device_names)
-+
- static const struct dev_pagemap_ops dmirror_devmem_ops;
- static const struct mmu_interval_notifier_ops dmirror_min_ops;
- static dev_t dmirror_dev;
-@@ -74,7 +80,7 @@ struct dmirror {
-  * ZONE_DEVICE pages for migration and simulating device memory.
-  */
- struct dmirror_chunk {
--	struct dev_pagemap	pagemap;
-+	struct dev_pagemap      pagemap;
- 	struct dmirror_device	*mdevice;
- };
- 
-@@ -82,8 +88,9 @@ struct dmirror_chunk {
-  * Per device data.
-  */
- struct dmirror_device {
--	struct cdev		cdevice;
--	struct hmm_devmem	*devmem;
-+	struct cdev             cdevice;
-+	struct device           device;
-+	struct hmm_devmem       *devmem;
- 
- 	unsigned int		devmem_capacity;
- 	unsigned int		devmem_count;
-@@ -132,7 +139,7 @@ static int dmirror_fops_open(struct inode *inode, struct file *filp)
- 	xa_init(&dmirror->pt);
- 
- 	ret = mmu_interval_notifier_insert(&dmirror->notifier, current->mm,
--				0, ULONG_MAX & PAGE_MASK, &dmirror_min_ops);
-+					0, ULONG_MAX & PAGE_MASK, &dmirror_min_ops);
- 	if (ret) {
- 		kfree(dmirror);
- 		return ret;
-@@ -1225,7 +1232,11 @@ static int dmirror_device_init(struct dmirror_device *mdevice, int id)
- 
- 	cdev_init(&mdevice->cdevice, &dmirror_fops);
- 	mdevice->cdevice.owner = THIS_MODULE;
--	ret = cdev_add(&mdevice->cdevice, dev, 1);
-+	device_initialize(&mdevice->device);
-+	dev_set_name(&mdevice->device, "%s", dmirror_device_names[id]);
-+	mdevice->device.devt = dev;
-+
-+	ret = cdev_device_add(&mdevice->cdevice, &mdevice->device);
- 	if (ret)
- 		return ret;
- 
-@@ -1252,7 +1263,7 @@ static void dmirror_device_remove(struct dmirror_device *mdevice)
- 		kfree(mdevice->devmem_chunks);
- 	}
- 
--	cdev_del(&mdevice->cdevice);
-+	cdev_device_del(&mdevice->cdevice, &mdevice->device);
- }
- 
- static int __init hmm_dmirror_init(void)
-diff --git a/tools/testing/selftests/vm/test_hmm.sh b/tools/testing/selftests/vm/test_hmm.sh
-index 0647b525a625..69f5889f8575 100755
---- a/tools/testing/selftests/vm/test_hmm.sh
-+++ b/tools/testing/selftests/vm/test_hmm.sh
-@@ -41,17 +41,11 @@ check_test_requirements()
- load_driver()
- {
- 	modprobe $DRIVER > /dev/null 2>&1
--	if [ $? == 0 ]; then
--		major=$(awk "\$2==\"HMM_DMIRROR\" {print \$1}" /proc/devices)
--		mknod /dev/hmm_dmirror0 c $major 0
--		mknod /dev/hmm_dmirror1 c $major 1
--	fi
- }
- 
- unload_driver()
- {
- 	modprobe -r $DRIVER > /dev/null 2>&1
--	rm -f /dev/hmm_dmirror?
- }
- 
- run_smoke()
+
+vim +/IOMMU_CAP_PRE_BOOT_PROTECTION +2165 drivers/iommu/amd/iommu.c
+
+  2155	
+  2156	static bool amd_iommu_capable(enum iommu_cap cap)
+  2157	{
+  2158		switch (cap) {
+  2159		case IOMMU_CAP_CACHE_COHERENCY:
+  2160			return true;
+  2161		case IOMMU_CAP_INTR_REMAP:
+  2162			return (irq_remapping_enabled == 1);
+  2163		case IOMMU_CAP_NOEXEC:
+  2164			return false;
+> 2165		case IOMMU_CAP_PRE_BOOT_PROTECTION:
+  2166			return amdr_ivrs_remap_support;
+  2167		default:
+  2168			break;
+  2169		}
+  2170	
+  2171		return false;
+  2172	}
+  2173	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

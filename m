@@ -2,79 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C85B4E1F16
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F75A4E1F1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344216AbiCUCk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 22:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
+        id S1344030AbiCUCox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 22:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240839AbiCUCk0 (ORCPT
+        with ESMTP id S242162AbiCUCor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 22:40:26 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15C017AA3
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:39:01 -0700 (PDT)
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 277983F200
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:38:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647830334;
-        bh=iHeI4Li4UlP93b9NJtNDxcZHhK1vAIlk+zBGGpgqVZ0=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=t1xI6W8KL5Vxfi9VtzTcRJg0Ufi2yzqervORRIqYwXypA5HBp05IjNvYinf4d+du7
-         VmrGkOTd5MYMtqITAdx5u6vrUFm1A6fuii63oJ/J9uiuZKnYMqvPm4J7J+fMVvbfm5
-         TwIBceku8rCded4V+o3hfOVFMd0LTFXJCc+ZN0CC7XJ4uHTuZH+oRtDK8fe+U9mmQz
-         4LoGyZsvLTJfTvXLlZ1fwAcu2+yc22rqC6JvTHYSEUgpdzofdqa5fItUEVkrMmp76B
-         8L2a7uT3uhlubpoklhd7FWOd6hO3eXIPYP8DfTAgSlLQUKqsIpY/Kcfb5LotflWGwk
-         AG5/epvYiscjA==
-Received: by mail-oi1-f198.google.com with SMTP id s6-20020acaa906000000b002ef2bd1c699so4461402oie.2
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:38:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iHeI4Li4UlP93b9NJtNDxcZHhK1vAIlk+zBGGpgqVZ0=;
-        b=xwkzapPcsd/K0h+kV6FjOC6p7Okx6MALT8pSqiSdEA07J7S/Yakp83UBj4eU5zZg/I
-         4MJBa3sQMYJMMDwz1FFRzswvf4d4gN5SoMpMEKcLEIhbGHIEuAEmIAz6hmeOnbD5HM7O
-         1HcMvYhfjEMRQcRY+7ZHn9YxQy0MIUF0rxK4o6AfvxaB43QtEf3lMVilt3IVhjqfDTno
-         Kpq/XuWLRjANrrgHrqfP+XfWXi494bJ2d9a6L9TlHqA+zfW7qLSY2mPsR9UcJz4P5J4O
-         gBjYm+qZ2YNejjlWOisZLIXneV/R3hzgMDBXEMlCvYEcRIxW2jShZmk4WplMoGqoSSG1
-         ypGg==
-X-Gm-Message-State: AOAM530tgFvBGuX03s3iz31NzQe2sg9sTGMTvHYk1tBlW4z/jzPBtEH3
-        GZWmW84gAjPLJ2/IxgTJj5V49OO3kx7N0CyXLfF3i1OUkoSdMCQjFxsLsMj0TY6NUWk5OjxbX6t
-        bMUaqLH6KKhZuW2aDW9IYyPybqOVLRT0uklgmk2uYR8N5tTdKx0G7iAKeYw==
-X-Received: by 2002:a05:6808:1a97:b0:2ec:a246:ad01 with SMTP id bm23-20020a0568081a9700b002eca246ad01mr12887370oib.54.1647830330727;
-        Sun, 20 Mar 2022 19:38:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyjDOKXSViaQfhEChkSFuWe9zr8ywxKQSBCSo0Be72wPBCEEfWDVVovfp/J+gN4VMKEQCAGYLCs/0mFC/qTjVg=
-X-Received: by 2002:a05:6808:1a97:b0:2ec:a246:ad01 with SMTP id
- bm23-20020a0568081a9700b002eca246ad01mr12887355oib.54.1647830330410; Sun, 20
- Mar 2022 19:38:50 -0700 (PDT)
+        Sun, 20 Mar 2022 22:44:47 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AB520B;
+        Sun, 20 Mar 2022 19:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647830603; x=1679366603;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=I+HE8aeKfC1xV+LiM5SCNvJ9J2P8mDQI8RqPWqB1Ajg=;
+  b=f/0VZVmUGN8sNofhWobe+POK2Wv1VrZZKLpwW110ZCSPwNF5eiV3wF0o
+   Eog5OLj0V09BzwXJX+l9gFth2KcW9eIpHYQShp/QevRuIJ7zPl0zFnef0
+   MQjOWDD/XXzP73/zQmFmkKHdLuOrZD0AmgNYm6SMxiraZRMM4wTWXgps8
+   1tzUm2tGJeQADr9WQqN9Q+FyBb66nWYF3BvB052wMIE6IW9zHme2QK0pd
+   AoJpgpz7qmC23HJIdlLVLiv9qNU1msvhRsX7yKgFx5cpy9IPC47ksASY2
+   M9uSNiTTD0vuR1UpKkthDfqyBCd3xnStjepItyU7wR9/IMGcQE98Z/2F7
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="320659506"
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="320659506"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 19:43:21 -0700
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="500010768"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 19:43:18 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "graeme.gregory@linaro.org" <graeme.gregory@linaro.org>,
+        "will.deacon@arm.com" <will.deacon@arm.com>,
+        "myron.stowe@redhat.com" <myron.stowe@redhat.com>,
+        "Brown, Len" <len.brown@intel.com>
+Subject: Re: [BUG] kernel side can NOT trigger memory error with einj
+References: <8c40a492-9461-2b43-6ec9-06bfc7a0e77f@linux.alibaba.com>
+        <YjIeff7ESJB/amYA@agluck-desk3.sc.intel.com>
+        <f93a5532-3e07-edf4-38ca-142a0f1d78d7@linux.alibaba.com>
+        <1421c3ac3d3c4438a6ff18f193f8a41c@intel.com>
+        <78cefd4c-f735-2ec4-0c09-35c8191280c5@linux.alibaba.com>
+Date:   Mon, 21 Mar 2022 10:43:16 +0800
+In-Reply-To: <78cefd4c-f735-2ec4-0c09-35c8191280c5@linux.alibaba.com> (Shuai
+        Xue's message of "Sun, 20 Mar 2022 21:11:58 +0800")
+Message-ID: <87wngoc9ff.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220127025418.1989642-1-kai.heng.feng@canonical.com> <427f19c6-32f0-684e-5fdd-2e5ed192b71d@linux.intel.com>
-In-Reply-To: <427f19c6-32f0-684e-5fdd-2e5ed192b71d@linux.intel.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Mon, 21 Mar 2022 10:38:39 +0800
-Message-ID: <CAAd53p6ZrFNhtKk=9wz8SF68jBuNajKgOzZFgHgKgd57Zp3pHg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] PCI/AER: Disable AER service when link is in L2/L3
- ready, L2 and L3 state
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
-        koba.ko@canonical.com, Russell Currey <ruscur@russell.cc>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Lalithambika Krishnakumar <lalithambika.krishnakumar@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>, linuxppc-dev@lists.ozlabs.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,123 +74,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 4:38 AM Sathyanarayanan Kuppuswamy
-<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->
->
->
-> On 1/26/22 6:54 PM, Kai-Heng Feng wrote:
-> > Commit 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in
-> > hint") enables ACS, and some platforms lose its NVMe after resume from
->
-> Why enabling ACS makes platform lose NVMe? Can you add more details
-> about the problem?
+Shuai Xue <xueshuai@linux.alibaba.com> writes:
 
-I don't have a hardware analyzer, so the only detail I can provide is
-the symptom.
-I believe the affected system was sent Intel, and there wasn't any
-feedback since then.
-
+> =E5=9C=A8 2022/3/18 AM12:57, Luck, Tony =E5=86=99=E9=81=93:
+>>> -       rc =3D apei_exec_run(&trigger_ctx, ACPI_EINJ_TRIGGER_ERROR);
+>>> +       ptr =3D kmap(pfn_to_page(pfn));
+>>> +       tmp =3D *(ptr + (param1 & ~ PAGE_MASK));
+>>=20
+>> That hack works when the trigger action is just trying to access the inj=
+ected
+>> location. But on Intel platforms the trigger "kicks" the patrol scrubber=
+ in the
+>> memory controller to access the address. So the error is triggered not by
+>> an access from the core, but by internal memory controller access.
+>>=20
+>> This results in a different error signature (for an uncorrected error in=
+jection
+>> it will be a UCNA or SRAO in Intel acronym-speak).
 >
-> > S3:
-> > [   50.947816] pcieport 0000:00:1b.0: DPC: containment event, status:0x1f01 source:0x0000
-> > [   50.947817] pcieport 0000:00:1b.0: DPC: unmasked uncorrectable error detected
-> > [   50.947829] pcieport 0000:00:1b.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Receiver ID)
-> > [   50.947830] pcieport 0000:00:1b.0:   device [8086:06ac] error status/mask=00200000/00010000
-> > [   50.947831] pcieport 0000:00:1b.0:    [21] ACSViol                (First)
-> > [   50.947841] pcieport 0000:00:1b.0: AER: broadcast error_detected message
-> > [   50.947843] nvme nvme0: frozen state error detected, reset controller
-> >
-> > It happens right after ACS gets enabled during resume.
-> >
-> > There's another case, when Thunderbolt reaches D3cold:
-> > [   30.100211] pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
-> > [   30.100251] pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> > [   30.100256] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
-> > [   30.100262] pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
-> > [   30.100267] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
-> > [   30.100372] thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
+> As far as I know, APEI only defines five injection instructions, ACPI_EIN=
+J_READ_REGISTER,
+> ACPI_EINJ_READ_REGISTER_VALUE, ACPI_EINJ_WRITE_REGISTER, ACPI_EINJ_WRITE_=
+REGISTER_VALUE and
+> ACPI_EINJ_NOOP. ACPI_EINJ_TRIGGER_ERROR action should run one of them, I =
+don't see
+> any of them will kick the patrol scrubber. For example, trigger with ACPI=
+_EINJ_READ_REGISTER:
 >
-> no callback message means one or more devices in the given port does not
-> support error handler. How is this related to ACS?
-
-This case is about D3cold, not related to ACS.
-And no error_detected is just part of the message. The whole AER
-message is more important.
-
-Kai-Heng
-
+> apei_exec_run(&trigger_ctx, ACPI_EINJ_TRIGGER_ERROR)
+>     __apei_exec_run	// ins=3D0
+>         =3D> apei_exec_read_register
+>             =3D> apei_read
+>                 =3D> acpi_os_read_memory
+>                     =3D> acpi_map_vaddr_lookup    /* lookup VA of PA from=
+ acpi_ioremap */
+>                     =3D> acpi_os_ioremap
+> 		    =3D> acpi_os_read_iomem
+> 			=3D> *(u32 *) value =3D readl(virt_addr);
 >
-> > [   30.100401] xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
-> > [   30.100427] pcieport 0000:00:1d.0: AER: device recovery failed
-> >
-> > So disable AER service to avoid the noises from turning power rails
-> > on/off when the device is in low power states (D3hot and D3cold), as
-> > PCIe spec "5.2 Link State Power Management" states that TLP and DLLP
-> > transmission is disabled for a Link in L2/L3 Ready (D3hot), L2 (D3cold
-> > with aux power) and L3 (D3cold).
-> >
-> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=209149
-> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215453
-> > Fixes: 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in hint")
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
-> > v2:
-> >   - Wording change.
-> >
-> >   drivers/pci/pcie/aer.c | 31 +++++++++++++++++++++++++------
-> >   1 file changed, 25 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> > index 9fa1f97e5b270..e4e9d4a3098d7 100644
-> > --- a/drivers/pci/pcie/aer.c
-> > +++ b/drivers/pci/pcie/aer.c
-> > @@ -1367,6 +1367,22 @@ static int aer_probe(struct pcie_device *dev)
-> >       return 0;
-> >   }
-> >
-> > +static int aer_suspend(struct pcie_device *dev)
-> > +{
-> > +     struct aer_rpc *rpc = get_service_data(dev);
-> > +
-> > +     aer_disable_rootport(rpc);
-> > +     return 0;
-> > +}
-> > +
-> > +static int aer_resume(struct pcie_device *dev)
-> > +{
-> > +     struct aer_rpc *rpc = get_service_data(dev);
-> > +
-> > +     aer_enable_rootport(rpc);
-> > +     return 0;
-> > +}
-> > +
-> >   /**
-> >    * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
-> >    * @dev: pointer to Root Port, RCEC, or RCiEP
-> > @@ -1433,12 +1449,15 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
-> >   }
-> >
-> >   static struct pcie_port_service_driver aerdriver = {
-> > -     .name           = "aer",
-> > -     .port_type      = PCIE_ANY_PORT,
-> > -     .service        = PCIE_PORT_SERVICE_AER,
-> > -
-> > -     .probe          = aer_probe,
-> > -     .remove         = aer_remove,
-> > +     .name                   = "aer",
-> > +     .port_type              = PCIE_ANY_PORT,
-> > +     .service                = PCIE_PORT_SERVICE_AER,
-> > +     .probe                  = aer_probe,
-> > +     .suspend                = aer_suspend,
-> > +     .resume                 = aer_resume,
-> > +     .runtime_suspend        = aer_suspend,
-> > +     .runtime_resume         = aer_resume,
-> > +     .remove                 = aer_remove,
-> >   };
-> >
-> >   /**
+> As we can see, the error is triggered by access from the core. However, t=
+he physical
+> address can NOT be mapped by acpi_os_ioremap.
 >
-> --
-> Sathyanarayanan Kuppuswamy
-> Linux Kernel Developer
+> If I missed anything, please let me know. Thank you very much.
+
+As the name suggested, ACPI_EINJ_READ/WRITE_REGISTER are used to
+read/write device registers via iomem.  They aren't used to read/write
+normal physical memory.  If that's needed, you can try some other method
+I guess.
+
+If you write a device register, the device can kick the patrol scrubber
+for you.  This device behavior needs not to be defined in APEI spec.
+
+Best Regards,
+Huang, Ying
+
+> Best Regards,
+> Shuai

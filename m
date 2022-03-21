@@ -2,82 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845DB4E3329
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFEF4E3342
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbiCUWuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 18:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
+        id S230266AbiCUWx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 18:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiCUWua (ORCPT
+        with ESMTP id S229948AbiCUWxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:50:30 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D641A443A51;
-        Mon, 21 Mar 2022 15:30:23 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id s207so17759361oie.11;
-        Mon, 21 Mar 2022 15:30:23 -0700 (PDT)
+        Mon, 21 Mar 2022 18:53:37 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F1A3CD8C5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:32:48 -0700 (PDT)
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9085B3F1FC
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 22:32:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647901965;
+        bh=XDxK5C2+TSZ+aKZ0Wy4YRhUpCIrlRUVGIVSk2+SABTU=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=tqIgojDWSHJyPdZcyqFpL6o7ZVnZAmuDGRyK9juvO1iBokpBxtaeo4HpmAUj+S/Q6
+         JHodkUAHBUxfvJ+Uopa70FxlpAMbPNC9VvbI1Ef63Dh7TNY34kBKHCt3iXArIBlRyf
+         XG8MxI9bLmlN7dWkm481SoG0CKw54lCQ+QL9AppckOkEIIKpckEVV2uWpU9G5cGWr8
+         +w57c+e4jyPMiJ1Ex3ra7e3bxZAqfVOVsLZ/AxslvWGmrvEHBQfx7v8BNoaQ+f2/R2
+         JYW7VTlO+x9H31t9J5KYXSJp6sTvquLnyzqDxlc39wlkt1gmjzv+e4SXYy27n2NLkw
+         om9AH1zRK7k0w==
+Received: by mail-il1-f198.google.com with SMTP id y7-20020a92d207000000b002c7f55e413bso5044647ily.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:32:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=zbp0hIb8uBy2/xVSmAWjwvVhJzm0B0givR3TBIiOw0Q=;
-        b=ECFyqAj1G+nUD67jd/CbWlSsNLp/9ZW/WNWfNTJ9WDvCiWgXbZk5Gah/DCrx3NW2N/
-         8SL6t8WK9dM+uLeiUx1bbaSba4Y/w7oO64JDhWwgz0ZOi4HARfurGomyotF+tCKLQS6p
-         81e9YrplS6nU1dgzN76mt5SXgSHy52UDGIcpE7Ir/eZWITUY+Le9oAj9sksemJV2HXAc
-         0XRDnSgoAfbGBtnAqvCn9ze3B5q662bUCMxS2y25TPgL+P+kvrlahEyOVext+Ho7aERm
-         e4yO9z6gBk5096BlSRCTGDrgn8OWMgFE451/ykcEqgX17imcolypywUqCOZ6cuK2dNRN
-         mXHw==
-X-Gm-Message-State: AOAM532Yt2BJuCtQWjTtF4/Fx3fozl/Com++mFAufxFDXnLGkCZhAGzR
-        WpXjVN4DSLQ5FDrtTMiFzg==
-X-Google-Smtp-Source: ABdhPJwt1zw6TNwDij87xVlDMEQVe7cTjU5dSscPmUpAKgOWzXQ8WYcqWpTBlrQ/KYGd/g16yMgQ4Q==
-X-Received: by 2002:a05:6808:30a2:b0:2da:3ab6:2c83 with SMTP id bl34-20020a05680830a200b002da3ab62c83mr675374oib.206.1647901823127;
-        Mon, 21 Mar 2022 15:30:23 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p18-20020a056830131200b005ccf8ac6207sm2491234otq.80.2022.03.21.15.30.19
+        bh=XDxK5C2+TSZ+aKZ0Wy4YRhUpCIrlRUVGIVSk2+SABTU=;
+        b=cBMJoAxmETxdXUhNfiGNoRytgdz6OhwJOd+dngn0axbMWut5riilfsz2cTgiimfr/5
+         1AszKKg8d5xEu2dKHaQE8TZ4SviZycYJNOu71aQz8g7N5Kh5b3Z+rRnzWyyjtjwN6gGw
+         JsnN2iYM+s0tNAoxT+B5eB/ZafopluEfbbnA7pAVhPPS9g0nGzelQkARnSJG4CkRRK1r
+         CdT0BuxnQuz7NruskgQPtVWWAEnO7ZER40mKYJb9VEE7pihrtQn8KRhNiQeNdfpak0Di
+         SmW3sVFN/RF8RjXLiKy5XgFKpBXcoUcsZSbYvc3pUbOWNCLELFUtX6dxHBWZbgKvYJYf
+         6rzQ==
+X-Gm-Message-State: AOAM533uDwHre8cCcNZUbIU8EFn9FpLpZX7bLomQe4JnJXwidPK++t1t
+        2q5qHM8HwcxM0LWGFZDGN+e9MIHYOBMvYoI8cTV+4WQ7u8Yh/DCmBoSdu6pGPJLJj0Ae0qKqxay
+        QL0Du3UMB7RL6iNAuAbccgOj5LLf15VK/BwF1FDziQw==
+X-Received: by 2002:a05:6e02:5b1:b0:2c6:218d:fb38 with SMTP id k17-20020a056e0205b100b002c6218dfb38mr10945926ils.266.1647901963708;
+        Mon, 21 Mar 2022 15:32:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwAFr4gjq1K+/JSkE+Bmnd8mMisGuPUNiCR0CRuDg5LKHtX6MOLU2pb1SX/F9E9Vlp34LLMoQ==
+X-Received: by 2002:a05:6e02:5b1:b0:2c6:218d:fb38 with SMTP id k17-20020a056e0205b100b002c6218dfb38mr10945920ils.266.1647901963429;
+        Mon, 21 Mar 2022 15:32:43 -0700 (PDT)
+Received: from xps13.dannf (c-73-14-97-161.hsd1.co.comcast.net. [73.14.97.161])
+        by smtp.gmail.com with ESMTPSA id s10-20020a6b740a000000b006413d13477dsm9219017iog.33.2022.03.21.15.32.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 15:30:22 -0700 (PDT)
-Received: (nullmailer pid 656090 invoked by uid 1000);
-        Mon, 21 Mar 2022 22:30:18 -0000
-Date:   Mon, 21 Mar 2022 17:30:18 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Moudy Ho <moudy.ho@mediatek.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
-        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        menghui.lin@mediatek.com, sj.huang@mediatek.com,
-        allen-kh.cheng@mediatek.com, randy.wu@mediatek.com,
-        jason-jh.lin@mediatek.com, roy-cw.yeh@mediatek.com,
-        river.cheng@mediatek.com, srv_heupstream@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v14 4/6] dt-bindings: soc: mediatek: add gce-client-reg
- for MUTEX
-Message-ID: <Yjj8eoXmsYRRvb1I@robh.at.kernel.org>
-References: <20220317143926.15835-1-moudy.ho@mediatek.com>
- <20220317143926.15835-5-moudy.ho@mediatek.com>
+        Mon, 21 Mar 2022 15:32:42 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 16:32:40 -0600
+From:   dann frazier <dann.frazier@canonical.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        Toan Le <toan@os.amperecomputing.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
+        Android Kernel Team <kernel-team@android.com>
+Subject: Re: [PATCH v2 0/2] PCI: xgene: Restore working PCIe functionnality
+Message-ID: <Yjj9CLyRdFVWxin0@xps13.dannf>
+References: <20220321104843.949645-1-maz@kernel.org>
+ <CAL_JsqJacC6GbNebTfYyUEScROCFN4+Fg2v1_iYFfqAvW4E9Vw@mail.gmail.com>
+ <YjiewB5Nz5CyFuI0@xps13.dannf>
+ <Yjii9LUC+u/gmijj@robh.at.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220317143926.15835-5-moudy.ho@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <Yjii9LUC+u/gmijj@robh.at.kernel.org>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,45 +90,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 10:39:24PM +0800, Moudy Ho wrote:
-> In order to allow modules with latency requirements such as MDP3
-> to set registers through CMDQ, add the relevant GCE property.
+On Mon, Mar 21, 2022 at 11:08:20AM -0500, Rob Herring wrote:
+> On Mon, Mar 21, 2022 at 09:50:24AM -0600, dann frazier wrote:
+> > On Mon, Mar 21, 2022 at 10:17:34AM -0500, Rob Herring wrote:
+> > > On Mon, Mar 21, 2022 at 5:49 AM Marc Zyngier <maz@kernel.org> wrote:
+> > > >
+> > > > Since 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup") was
+> > > > merged in the 5.5 time frame, PCIe on the venerable XGene platform has
+> > > > been unusable: 6dce5aa59e0b broke both XGene-1 (Mustang and m400) and
+> > > > XGene-2 (Merlin), while the addition of c7a75d07827a ("PCI: xgene: Fix
+> > > > IB window setup") fixed XGene-2, but left the rest of the zoo
+> > > > unusable.
+> > > >
+> > > > It is understood that this systems come with "creative" DTs that don't
+> > > > match the expectations of modern kernels. However, there is little to
+> > > > be gained by forcing these changes on users -- the firmware is not
+> > > > upgradable, and the current owner of the IP will deny that these
+> > > > machines have ever existed.
+> > > 
+> > > The gain for fixing this properly is not having drivers do their own
+> > > dma-ranges parsing. We've seen what happens when drivers do their own
+> > > parsing of standard properties (e.g. interrupt-map). Currently, we
+> > > don't have any drivers doing their own parsing:
+> > > 
+> > > $ git grep of_pci_dma_range_parser_init
+> > > drivers/of/address.c:int of_pci_dma_range_parser_init(struct
+> > > of_pci_range_parser *parser,
+> > > drivers/of/address.c:EXPORT_SYMBOL_GPL(of_pci_dma_range_parser_init);
+> > > drivers/of/address.c:#define of_dma_range_parser_init
+> > > of_pci_dma_range_parser_init
+> > > drivers/of/unittest.c:  if (of_pci_dma_range_parser_init(&parser, np)) {
+> > > drivers/pci/of.c:       err = of_pci_dma_range_parser_init(&parser, dev_node);
+> > > include/linux/of_address.h:extern int
+> > > of_pci_dma_range_parser_init(struct of_pci_range_parser *parser,
+> > > include/linux/of_address.h:static inline int
+> > > of_pci_dma_range_parser_init(struct of_pci_range_parser *parser,
+> > > 
+> > > And we can probably further refactor this to be private to drivers/pci/of.c.
+> > > 
+> > > For XGene-2 the issue is simply that the driver depends on the order
+> > > of dma-ranges entries.
+> > > 
+> > > For XGene-1, I'd still like to understand what the issue is. Reverting
+> > > the first fix and fixing 'dma-ranges' should have fixed it. I need a
+> > > dump of how the IB registers are initialized in both cases.
+> > 
+> > Happy to provide that for the m400 if told how :)
 > 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: CK Hu <ck.hu@mediatek.com>
-> ---
->  .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml  | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
-> index f825af49f820..a4892979480c 100644
-> --- a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
-> +++ b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
-> @@ -60,6 +60,14 @@ properties:
->        include/dt-bindings/gce/<chip>-gce.h of each chips.
->      $ref: /schemas/types.yaml#/definitions/phandle-array
+> Something like the below patch. This should be with the 'dma-ranges' 
+> DT change and only c7a75d07827a reverted.
+
+https://paste.ubuntu.com/p/RHzBd5jT6v/
+
+Note that networking does come up with this setup. That surprised me
+because I thought I'd tested this combo before, but apparently what
+I'd tested before was 6dce5aa59e0b reverted + the dtb change:
+  https://lore.kernel.org/linux-pci/YgXG838iMrS1l8SC@xps13.dannf/
+
+  -dann
+
+
+> 8<-------------------------------------------------------------------
+> diff --git a/drivers/pci/controller/pci-xgene.c b/drivers/pci/controller/pci-xgene.c
+> index 0d5acbfc7143..6a435c31f45e 100644
+> --- a/drivers/pci/controller/pci-xgene.c
+> +++ b/drivers/pci/controller/pci-xgene.c
+> @@ -78,6 +78,7 @@ static u32 xgene_pcie_readl(struct xgene_pcie *port, u32 reg)
 >  
-> +  mediatek,gce-client-reg:
-> +    description: The register of client driver can be configured by gce with
-> +      4 arguments defined in this property, such as phandle of gce, subsys id,
-> +      register offset and size. Each GCE subsys id is mapping to a client
-> +      defined in the header include/dt-bindings/gce/<chip>-gce.h.
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    maxItems: 1
+>  static void xgene_pcie_writel(struct xgene_pcie *port, u32 reg, u32 val)
+>  {
+> +	dev_info(port->dev, "0x%04x <- 0x%08x\n", reg, val);
+>  	writel(val, port->csr_base + reg);
+>  }
+>  
+> @@ -508,7 +509,9 @@ static void xgene_pcie_setup_ib_reg(struct xgene_pcie *port,
+>  	case 0:
+>  		xgene_pcie_set_ib_mask(port, BRIDGE_CFG_4, flags, size);
+>  		bar_addr = cfg_base + PCI_BASE_ADDRESS_0;
+> +		dev_info(port->dev, "BAR0L <- 0x%08x\n", bar_low);
+>  		writel(bar_low, bar_addr);
+> +		dev_info(port->dev, "BAR0H <- 0x%08x\n", upper_32_bits(cpu_addr));
+>  		writel(upper_32_bits(cpu_addr), bar_addr + 0x4);
+>  		pim_reg = PIM1_1L;
+>  		break;
 
-items:
-  items:
-    - description: phandle of GCE
-    - description: GCE subsys id
-    - description: register offset
-    - description: register size
-
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.18.0
-> 
-> 

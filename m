@@ -2,157 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CDE4E3511
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 164C04E351D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 01:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233572AbiCUXxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
+        id S233721AbiCUX71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234044AbiCUXx3 (ORCPT
+        with ESMTP id S233617AbiCUX7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:53:29 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6987B288AA1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:51:53 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id i5so1140688uab.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=UTkGkxH5z61CFvvV+2N0qMPgD0+CXKYTvEk2R706LAM=;
-        b=LmC5XeHMDSyMfs8sqcXs4MtdfXUq+ej1d0yqeFGBoARUAOlwT6Oo6hiE8GJLAyipV7
-         6Ys+1yodh0I0YOEIlJio68bp2A6satdIrW9COEKhv6wvoP88UuxUhOhDwCAezrDuQDDI
-         gJkCci+X+SERoIspL0e1CK1WwYxrGhhIA7Vi270rwI8K/6w00v/xEw9n/puGwnlQ2+Nx
-         P6RIdkbmFMhV++N6pfqesnBvJHLkTZw5Wmgh2Cu2oZiKjAdBgtSd6+dgSnBhyLDADBHq
-         rbKMhEKI3pdjITumRYZ5K9ZeL1SiavuOytAg4+BsM/JrK7qfhzCpXZAg7b7ec0EWFjKa
-         GP0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=UTkGkxH5z61CFvvV+2N0qMPgD0+CXKYTvEk2R706LAM=;
-        b=2QhfrH9YcojXWfmHMh5prfH6x9nCuz5T+RiAQ4NSzKjWHbjHCYcfHNrgm9l7E1TSDB
-         nR9LmdLr5Ieu6TLf4lZI8JD3swtQGh94XPewSkUzCs+IOIBYsQUp0Tl78uGalfpd0GUm
-         Qa0Sk1AIJ61xNw2gOPlaRIvyx4RqX3NMNZc3Du8uBwUT4ohRq6VKKrQPHDpZ4lw2JY0Q
-         t1pdNQxq8R0GU91LfpdTltG8emaK0WWEil2rK5NUUeHTY2BSjA5BdXVVWMs3NRMg0o9r
-         uUpsszYYYodLsFz7i2MqXenHr4vWiQQKaXIwY7W2H5laGDPqHqINJhZel7sO6oH9p0jZ
-         rSvw==
-X-Gm-Message-State: AOAM532Ii00MmRTYT9eGgmBp+DacT8UXb741+quh9TUEU+SvS20YGG5O
-        8Bvqlr88/R3d+zLQMTTga7rxE5DJeQwv6BvGlFat7g==
-X-Google-Smtp-Source: ABdhPJxbhMJeBQEf3j1JZxDTy/ndgvixACjKlQy40+dklccM507ablsvs0srEgLOR5fHAAQwED3gOjGvVZyRkFztdhI=
-X-Received: by 2002:ab0:6499:0:b0:351:b9b5:9715 with SMTP id
- p25-20020ab06499000000b00351b9b59715mr6585658uam.17.1647906710154; Mon, 21
- Mar 2022 16:51:50 -0700 (PDT)
+        Mon, 21 Mar 2022 19:59:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7338628D295;
+        Mon, 21 Mar 2022 16:56:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD7B0B81ACE;
+        Mon, 21 Mar 2022 23:53:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B99CC340E8;
+        Mon, 21 Mar 2022 23:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647906838;
+        bh=cj/bg1sLNNaJqVbORGbd8V+TtcWsAd5DpPi34vxVBaI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jG6Iugnvq9+d6FpMQh4OXsHDYag7OBVdmKGbPXMugx1nLVkFXiyjGHP4SzRll0IzV
+         WZEf51AichSBMW4+Gdh9AvgLqBUX5O61NRj0ceCc8GRODHAx7Z2JTKCIt4zzNoW+Z6
+         GxpRtL2Ay9j3e1spyAd5WEHRi/b1d4+JCWba3RfAK7kICHe6dpDnt1K5hno/9cklzi
+         +nXWKcR5tToM7qwPcll7bLb2rs8LQfB/qLI1eEppJGbz4l2SUSN+RBXgKB6NBILqef
+         /Gypl4G3TQk+syuMICPME9IbehTQ5ZZjO4pagqsRxoV+eadF95vyuRMfOsC32ngFw1
+         yroKlFAIAqzvQ==
+Date:   Tue, 22 Mar 2022 01:53:09 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        David Howells <dhowells@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v1 1/1] certs: Explain the rational to call panic()
+Message-ID: <YjkP5d6e6SU8BPtO@iki.fi>
+References: <20220321174548.510516-1-mic@digikod.net>
+ <20220321174548.510516-2-mic@digikod.net>
+ <CAHC9VhR+Ss5VAUHLutTvyS8g+agZy7d0YGcu_9dV1LBx_8ifNQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220309021230.721028-1-yuzhao@google.com> <20220309021230.721028-7-yuzhao@google.com>
- <CAGsJ_4wW-SUPZ+soz5L+TROcmWtiYoABMcYzNyw4p=f2ro9vLQ@mail.gmail.com>
-In-Reply-To: <CAGsJ_4wW-SUPZ+soz5L+TROcmWtiYoABMcYzNyw4p=f2ro9vLQ@mail.gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 21 Mar 2022 17:51:39 -0600
-Message-ID: <CAOUHufa50Mj6wusKvFX2cCAk58oTwCLDC8im+_B6OS_dP6=TJQ@mail.gmail.com>
-Subject: Re: [PATCH v9 06/14] mm: multi-gen LRU: minimal implementation
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        x86 <x86@kernel.org>, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhR+Ss5VAUHLutTvyS8g+agZy7d0YGcu_9dV1LBx_8ifNQ@mail.gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 4:14 AM Barry Song <21cnbao@gmail.com> wrote:
->
-> > +static void inc_max_seq(struct lruvec *lruvec, unsigned long max_seq)
-> > +{
-> > +       int prev, next;
-> > +       int type, zone;
-> > +       struct lru_gen_struct *lrugen =3D &lruvec->lrugen;
-> > +
-> > +       spin_lock_irq(&lruvec->lru_lock);
-> > +
-> > +       VM_BUG_ON(!seq_is_valid(lruvec));
-> > +
-> > +       if (max_seq !=3D lrugen->max_seq)
-> > +               goto unlock;
-> > +
-> > +       inc_min_seq(lruvec);
-> > +
-> > +       /* update the active/inactive LRU sizes for compatibility */
-> > +       prev =3D lru_gen_from_seq(lrugen->max_seq - 1);
-> > +       next =3D lru_gen_from_seq(lrugen->max_seq + 1);
-> > +
-> > +       for (type =3D 0; type < ANON_AND_FILE; type++) {
-> > +               for (zone =3D 0; zone < MAX_NR_ZONES; zone++) {
-> > +                       enum lru_list lru =3D type * LRU_INACTIVE_FILE;
-> > +                       long delta =3D lrugen->nr_pages[prev][type][zon=
-e] -
-> > +                                    lrugen->nr_pages[next][type][zone]=
-;
->
-> this is confusing to me. does lrugen->nr_pages[next][type][zone] have a
-> chance to be none-zero even before max_seq is increased? some pages
-> can be in the next generation before the generation is born?
+On Mon, Mar 21, 2022 at 02:23:54PM -0400, Paul Moore wrote:
+> On Mon, Mar 21, 2022 at 1:45 PM Mickaël Salaün <mic@digikod.net> wrote:
+> >
+> > From: Mickaël Salaün <mic@linux.microsoft.com>
+> >
+> > The blacklist_init() function calls panic() for memory allocation
+> > errors.  This change documents the reason why we don't return -ENODEV.
+> >
+> > Suggested-by: Paul Moore <paul@paul-moore.com> [1]
+> > Requested-by: Jarkko Sakkinen <jarkko@kernel.org> [1]
+> > Link: https://lore.kernel.org/r/YjeW2r6Wv55Du0bJ@iki.fi [1]
+> > Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> > Link: https://lore.kernel.org/r/20220321174548.510516-2-mic@digikod.net
+> > ---
+> >  certs/blacklist.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> 
+> I would suggest changing the second sentence as shown below, but
+> otherwise it looks good to me.
+> 
+> Reviewed-by: Paul Moore <paul@paul-moore.com>
 
-Yes.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-> isn't it a bug if(lrugen->nr_pages[next][type][zone] > 0)? shouldn't it b=
-e=EF=BC=9F
->
-> delta =3D lrugen->nr_pages[prev][type][zone]=EF=BC=9B
+Mickaël, I think since your patch set was not huge in the first place, I'm
+considering making it part of rc2 pull request while I normally try to
+avoid any features after rc1. It's anyway throughly tested, and generally
+has been around for a *long time*. I've even tested it myself a few times.
 
-No. The gen counter in page flags can be updated locklessly
-(lru_lock). Later a batched update of nr_pages[] will account for the
-change made. If the gen counter is updated to a stale max_seq, and
-this stale max_seq is less than min_seq, then this page will be in a
-generation yet to be born. Extremely unlikely, but still possible.
+Just trying to be responsible as a maintainer and if something does not
+feel right, I don't  try to pretend that "I get it", if you know what 
+I mean. This fully clarifies "not getting it" part :-)
 
-This is not a bug because pages might be misplaced but they won't be
-lost. IOW, nr_pages[] is always balanced across all *possible*
-generations. For the same reason, reset_batch_size() and
-drain_evictable() use for_each_gen_type_zone() to go through all
-possible generations rather than only those between[max_seq, min_seq].
+Thanks!
 
-I'll add a comment here. Sounds good?
+BR, Jarkko

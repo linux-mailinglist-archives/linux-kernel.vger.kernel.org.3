@@ -2,131 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6725E4E27B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:35:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C88E4E27BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347962AbiCUNgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
+        id S1348043AbiCUNhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbiCUNgb (ORCPT
+        with ESMTP id S1347978AbiCUNgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:36:31 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2294474B;
-        Mon, 21 Mar 2022 06:35:05 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KMbDB4F2FzfZMc;
-        Mon, 21 Mar 2022 21:33:30 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 21 Mar 2022 21:35:02 +0800
-Subject: Re: [PATCH -next] ext4: Fix symlink file size not match to file
- content
-To:     Jan Kara <jack@suse.cz>
-References: <20220321113408.4112428-1-yebin10@huawei.com>
- <20220321113703.cibgeac5ipslg3df@quack3.lan>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lczerner@redhat.com>
-From:   yebin <yebin10@huawei.com>
-Message-ID: <62387F05.2090408@huawei.com>
-Date:   Mon, 21 Mar 2022 21:35:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
-MIME-Version: 1.0
-In-Reply-To: <20220321113703.cibgeac5ipslg3df@quack3.lan>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 21 Mar 2022 09:36:42 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF1B45525;
+        Mon, 21 Mar 2022 06:35:16 -0700 (PDT)
+Received: by mail-ot1-f47.google.com with SMTP id o20-20020a9d7194000000b005cb20cf4f1bso10504213otj.7;
+        Mon, 21 Mar 2022 06:35:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=NU1pLk5IqSWcyWusRAP1p7PrXvtwzl9hkbWcVT80EPU=;
+        b=GJPuiVkwP0BfPjMy+MitMyl+/ZsheE84vn1vVH9p04AUjo4R4HgHi26dQ9H3IupkqM
+         O49VsMADvDDohab0OYA0+IT4K8EZrk0euVDCk/Hi8tg10H5k/iBn9CvLr9uQLFYmPGdm
+         A8rEuf04mZ5nWGj+y782rFNz+AxyYF4XMkL3UMz2JT+I8ABwSnd23rLaiEKdrkbwSWAX
+         GQPcWETbsLCTpulVsi53pvxbNGCfNSi46b9gaRxSbSHSJulq5Ub+nDlnG9NNND8Fba8L
+         s+krInbA6ZzmChrJUCKzQKQ3eYDsFdWoW3dq774oP4PX8QQ+UyhX5Qf9dQxVKJWkbStJ
+         HgBQ==
+X-Gm-Message-State: AOAM533hjdTBVTqeGZWR5dDCDGqTrdWfaGYS5+yfL0RBBkMblaFgmR2Y
+        PYhwWziUo0yff/xvgdjsN0fFExwwvA==
+X-Google-Smtp-Source: ABdhPJxXvj7+Au/0bjcORzoGJez8P+Nc7Rh9Cw/fVD8qcE/yQPAqJPfplnxo6L4ijO8qvhE/tW7lUQ==
+X-Received: by 2002:a05:6830:3113:b0:5c9:416c:83c0 with SMTP id b19-20020a056830311300b005c9416c83c0mr8072791ots.239.1647869715649;
+        Mon, 21 Mar 2022 06:35:15 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b15-20020a05687061cf00b000d17a5f0ee6sm6241462oah.11.2022.03.21.06.35.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Mar 2022 06:35:14 -0700 (PDT)
+Received: (nullmailer pid 4125324 invoked by uid 1000);
+        Mon, 21 Mar 2022 13:35:11 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     robh+dt@kernel.org, mdf@kernel.org, linux-fpga@vger.kernel.org,
+        hao.wu@intel.com, linux-kernel@vger.kernel.org,
+        conor.dooley@microchip.com, devicetree@vger.kernel.org,
+        system@metrotek.ru, yilun.xu@intel.com, trix@redhat.com
+In-Reply-To: <20220321090020.22530-3-i.bornyakov@metrotek.ru>
+References: <20220321090020.22530-1-i.bornyakov@metrotek.ru> <20220321090020.22530-3-i.bornyakov@metrotek.ru>
+Subject: Re: [PATCH v6 2/2] dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
+Date:   Mon, 21 Mar 2022 08:35:11 -0500
+Message-Id: <1647869711.882038.4125323.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 21 Mar 2022 12:00:20 +0300, Ivan Bornyakov wrote:
+> Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
+> slave SPI to load .dat formatted bitstream image.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> ---
+>  .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> 
 
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-On 2022/3/21 19:37, Jan Kara wrote:
-> On Mon 21-03-22 19:34:08, Ye Bin wrote:
->> We got issue as follows:
->> [home]# fsck.ext4  -fn  ram0yb
->> e2fsck 1.45.6 (20-Mar-2020)
->> Pass 1: Checking inodes, blocks, and sizes
->> Pass 2: Checking directory structure
->> Symlink /p3/d14/d1a/l3d (inode #3494) is invalid.
->> Clear? no
->> Entry 'l3d' in /p3/d14/d1a (3383) has an incorrect filetype (was 7, should be 0).
->> Fix? no
->>
->> As symlink file size not match to file content. If symlink data block
->> writback failed, will call ext4_finish_bio to end io. In this path don't
->> mark buffer error. When umount do checkpoint can't detect buffer error,
->> then will cleanup jounral. Actually, correct data maybe in journal area.
->> To solve this issue, mark buffer error when detect bio error in
->> ext4_finish_bio.
-> Thanks for the patch! Let me rephrase the text a bit:
->
-> As the symlink file size does not match the file content. If the writeback
-> of the symlink data block failed, ext4_finish_bio() handles the end of IO.
-> However this function fails to mark the buffer with BH_write_io_error and
-> so when unmount does journal checkpoint it cannot detect the writeback
-> error and will cleanup the journal. Thus we've lost the correct data in the
-> journal area. To solve this issue, mark the buffer as BH_write_io_error in
-> ext4_finish_bio().
->
->> Signed-off-by: Ye Bin <yebin10@huawei.com>
->> ---
->>   fs/ext4/page-io.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/fs/ext4/page-io.c b/fs/ext4/page-io.c
->> index 495ce59fb4ad..14695e2b5042 100644
->> --- a/fs/ext4/page-io.c
->> +++ b/fs/ext4/page-io.c
->> @@ -134,8 +134,10 @@ static void ext4_finish_bio(struct bio *bio)
->>   				continue;
->>   			}
->>   			clear_buffer_async_write(bh);
->> -			if (bio->bi_status)
->> +			if (bio->bi_status) {
->> +				set_buffer_write_io_error(bh);
-> Why don't you use mark_buffer_write_io_error()? It will also update other IO
-> error counters properly so that e.g. fsync(2) or sync_filesystem() can properly
-> report IO error etc. Granted we'll abort the journal in response to
-> checkpointing error so the failure will be hard to miss anyway but still
-> :).
->
-> 								Honza
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml:17:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
 
-'ext4_finish_bio' already call 'mapping_set_error' set mapping error , I think fsync
-and sync_filesystem can report IO error.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml: 'maintainers' is a required property
+	hint: Metaschema for devicetree binding documentation
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml: 'additionalProperties' is a required property
+	hint: A schema without a "$ref" to another schema must define all properties and use "additionalProperties"
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml: ignoring, error in schema: 
+Error: Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.example.dts:22.17-26 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1398: dt_binding_check] Error 2
 
-static inline void mapping_set_error(struct address_space *mapping, int error)
-{
-         if (likely(!error))
-                 return;
+doc reference errors (make refcheckdocs):
 
-         /* Record in wb_err for checkers using errseq_t based tracking */
-         __filemap_set_wb_err(mapping, error);
+See https://patchwork.ozlabs.org/patch/1607659
 
-         /* Record it in superblock */
-         if (mapping->host)
-                 errseq_set(&mapping->host->i_sb->s_wb_err, error);
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-         /* Record it in flags for now, for legacy callers */
-         if (error == -ENOSPC)
-                 set_bit(AS_ENOSPC, &mapping->flags);
-         else
-                 set_bit(AS_EIO, &mapping->flags);
-}
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

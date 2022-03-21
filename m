@@ -2,119 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477C04E2607
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C526A4E2612
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347180AbiCUMGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
+        id S1347041AbiCUMHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347215AbiCUMGe (ORCPT
+        with ESMTP id S236862AbiCUMHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:06:34 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3326E5D5DE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:05:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RnOPKpgHZ4iCaalrC5g4dw1X4dGOOf+jYMQF2+RobUfOVAVncRQpFq87w92iPP3L8NJQbjtFGq2+2DETrh2OHR5a/5APPtOqRfUmiRcs2gURNPKgeb2Tcj4fHuKfFrLio7unDYdcZVsB0Mv7NsHVpI7B1FXaWBClBRsBjY1Ac/cE9iGl+/U+NO5zbCuZAZb99VR8CAP0cRVWXHeEHRfCuJBWQ0soaiE6InTKKQDtIDLoBh8apjDLmCHLM5GBX7BgUmezAyA7MHMUdZHSiOgFXEzOVfSsSyEfyOUXVsU5KX7sDfCDQW61+yMuwINtmGAQeo/Jl7mcoWY6WT8CK+1S/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A48WT1vVx0f3vAgwXWr6Ncr+Ch9VF4nT6NdTTVMti2U=;
- b=V8opLu4dn/+ufXTqeEF31xh8bkvbiqWZkfzzmRnqer/rrfWeYlCMwFEGpKGzW/eTrBIdFxMZ0GiNRgfTpGji+g2nBtx7i1p9b2P7jlX/iORwDYtQr8lwcVuOPtWTYuYYlnW1tAYNyemwcb1PJ6/YlALXChuD/sJG/KYD0fBqawQezczLzHwWKm4vS/Slny79CtGGbQqjS8p6gvLh4YJ+vpRarmg9PeL+syZ04CpZeKozpgrF7yqmVOCbW1pBrkIRFBd7v7CpHcKhvnkZxUHh2adAkQBOYYgsQMjmYM9oBSTdlVdh3IutIRg5D3msMYdySLPkZYvzZjuOK6QAhdizOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A48WT1vVx0f3vAgwXWr6Ncr+Ch9VF4nT6NdTTVMti2U=;
- b=ffEvquUP28aNk5e+i7hG0uBNyazKsifoP029CGVc86BPxIP2Dj01vg5p+OnChBD0zltm0JFd2vlJ3K/YAMglptmTPjd5z+Z9S+wi5222KUnDDNVgAT0m9hrPiL/Y6trudowGpMtL0eoJN2Zozu5QSzO7ugwu7xh/VsjtGRIRUfVZYA8oUPnPOTJGLvQoeXZF0tFp1cjoJ+BV24HyAJCHqZBvEGUvHF/ltdh7s1BA1V6fRRZS8XWHQhoaImFh94VOTl1evx22ZvkVrlMqwjqogbpRMPyRMN9whSf5xtbLQ2iDVLw+uXsd+6V6v7FXdfCfPOuVWuDyDVlFIrWT8NgTrw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM5PR12MB2503.namprd12.prod.outlook.com (2603:10b6:4:b2::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Mon, 21 Mar
- 2022 12:05:04 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::11a0:970a:4c24:c70c]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::11a0:970a:4c24:c70c%5]) with mapi id 15.20.5081.023; Mon, 21 Mar 2022
- 12:05:04 +0000
-Date:   Mon, 21 Mar 2022 09:05:03 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 06/11] iommu/sva: Use attach/detach_pasid_dev in SVA
- interfaces
-Message-ID: <20220321120503.GN11336@nvidia.com>
-References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
- <20220320064030.2936936-7-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220320064030.2936936-7-baolu.lu@linux.intel.com>
-X-ClientProxiedBy: MN2PR20CA0064.namprd20.prod.outlook.com
- (2603:10b6:208:235::33) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 21 Mar 2022 08:07:34 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4933F71A3B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:06:08 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d19so15217833pfv.7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 05:06:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mQVeuWDN9J1yJyMFSCKrDaWCEtSDGr5BIpmWKndqjqU=;
+        b=il07ih78+2jqROVK64V1q8dH8fuvuEUVpuFFYuoV9+FUaWECoUWPLX1EGjh2oTzcAA
+         6Nc5ZhfANhok56d6bAs5Q3AvdhsQm5kKSNFlrVXf/M3Vl/CfUUeKpLo1YS917+HwP3Gt
+         /VUOYUIlfE68hEnUoNmKmbzLUIIFQ7qwhDb8wj3UGZEVm7re7NSt6rEgMxm8FKX6Wnf+
+         F1BmE/uiSfXCGOU0p0Q9mxEiy1RNvYw6cfHG3GBWsvNJzc4eWC/PsRrsCmF9jL4FfXA5
+         OyhxkvWKwF0S6qH3JYiM0jl00ipXcNTD0u/C4IMIjo9tqcu3I/MgCb/k5iRgn2S7o/dO
+         rlXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mQVeuWDN9J1yJyMFSCKrDaWCEtSDGr5BIpmWKndqjqU=;
+        b=vXpbjHrD4vKghRwF57orIHQ1EBFDZuv2z7vv/kEfEZLYBKjvcUF2Im4h8aMS37PU5J
+         H1o2xM9Ad/dTU0dkyJWSXlUBUUAjc6jTw6Lup/kNa9Ge+szY9Kb4KnBOXd6Vf7uaCw72
+         vnfF06I5JLT+AjImybLA5mD4UWrmXbILNQVkgCuHQvtxRxtZq9fxs8RWksOxBJvOZOHR
+         xNworgIdJJhnqFHrgLfrQPRZxOfSktXpgwwODk2RHo7IfMVoVb4xmC5g5HW8jpP3HSaK
+         0JlZBIFrgLtmwYO+JIwll6RB81ZCfZwGXAZpul2soq1NCBO2ws9mZhiv1Sv5m0+zcWR+
+         Udrg==
+X-Gm-Message-State: AOAM530GYBzn6Mdb6XcYZII8NGoMqq0okefyqjYM0GXgLhiG/nXpJB0b
+        EaCQFfKgUPtHAP1o0yG3LyzYDHt7VtBH3Q==
+X-Google-Smtp-Source: ABdhPJzTSnRZI8bxbc9u4mpE7+yAwc8MQ3ONG2T9QvJu6PpnBge+u3kcv+5gCP4PLj9EL9IMgX0ugg==
+X-Received: by 2002:a63:9d48:0:b0:378:c359:fcbf with SMTP id i69-20020a639d48000000b00378c359fcbfmr17593387pgd.371.1647864367768;
+        Mon, 21 Mar 2022 05:06:07 -0700 (PDT)
+Received: from [192.168.225.67] ([157.49.192.24])
+        by smtp.gmail.com with ESMTPSA id kb10-20020a17090ae7ca00b001bfad03c750sm21996931pjb.26.2022.03.21.05.06.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 05:06:07 -0700 (PDT)
+Message-ID: <6f088754-49e7-143b-7735-d94b0199ee33@gmail.com>
+Date:   Mon, 21 Mar 2022 17:36:01 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7f4c5ed2-9696-4c51-e81b-08da0b3308b0
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2503:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB2503755E0E119F466A54626BC2169@DM5PR12MB2503.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +n6OqvqEi3VOS/9SIgVcS9ef+qDNpjwnzKlR2wXNMQd1OIZ4Tg8LSIO+1/UNrKUUh6gMs1tMGeAMh44vLgerj/ks9cYPXqHk+1E6YxFikXdmGEopr8PqNhT4y98M8EU/y2ClPYObj2QLJImo5NBLdQBLpFLa4khV7wrPyq+PuT1qAVewo3IESYKzH1DooJB3IzZJ1R3rdmtCfq6YKd7tvLN3nBSWun7pZkiSLswFPW5gvlfuWA+2eJ17LA8ltidyTMaHZ6+jzN9tMOJPUeGi7L2yO6wuM7ieasL+d7aXlxG/CHjoR+Oy18nN7kkIiDsMHU8Cf1Aqr4tjB0tFgqFFIwD0uDUe2LuWDCw7mu23+ftgOBhkmfTaGiyLrRSW/W4gDS9oofQEZ9VDdV/U1SsRstqLz9nyafUGNuV13tjle9jBciOG1Nd/qA1tzXKcp2IA+MGlO9fWdF1BO8kay359z6mgFzfQmNGDYH0WeGs2pdDKLaTH2gmscKxw5KH3LazSHijklHD8KVZhwjEkllQbOHMZAhnCB5MX78mNkP4QL+0cXwC24hl7MCvuB7fAWO0zQVeqi0f+5oS3yCDAx9bpYoIJJ72vQgkxMCbG0Nwz9Yqzxpw8z6bP41WN+5nQj5sPT4rwZ867e7oakSw8Nxwo+g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(6916009)(6506007)(508600001)(6512007)(26005)(316002)(186003)(2616005)(36756003)(83380400001)(33656002)(8936002)(1076003)(6486002)(54906003)(4744005)(38100700002)(8676002)(4326008)(5660300002)(7416002)(66476007)(66556008)(66946007)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yVM3Hc31J9Pd/UgYLAb11lT33haYGDPGjLWKyX5+rUZI6eCu41fY6WTpsxs/?=
- =?us-ascii?Q?oDEeD4eFxhQzOsqhge3WmFXImNar1aneQ6cvBLRMhncq/Tb4v7Z6b/NLihEV?=
- =?us-ascii?Q?c+CCFJJsh2LPqBSDK01DdzavMAfCtXgpFJmD0+sMrk5VEcwIHDjfM0yihxuV?=
- =?us-ascii?Q?/6T4iTl+KdoHEm+y420hxHsfYCxNfJpkanF2+0S8rq7auHfFtr10GcLFCmYj?=
- =?us-ascii?Q?ZmPcchezVuZrXLESkUXMTDssjSokQhihd3TlsFwIudH5Y1uYojsksSc7GBLu?=
- =?us-ascii?Q?WNkqVtJ/dl5xgzNdMebxsLZc3o3wdC8fUjUqJLuGsWo5QUHsaDgSSQ0awibH?=
- =?us-ascii?Q?soS07ZX+3U7BxW97RT4EicZMdeYLUumE6PQFyP3Tk8cZc3OOU3WzLzcjs74+?=
- =?us-ascii?Q?tP2lHvhnHKU8mqi9qqsxpTZMixAcZ0C36IF6t0wdkGfbZXuFPF/GsX7vowwE?=
- =?us-ascii?Q?XkdaCL45fPEGlSlt7wBza52Dr0iD+LPWw16T4bHFCSbb8QHKabdM4dsSeYSQ?=
- =?us-ascii?Q?uvuGGLUNMwaUTEl85FbfmDsI1PI0D4C47JseLO1iTvER40A0Z9zN5sGGGVRO?=
- =?us-ascii?Q?rxgzkv5zFYJy7c7Zd+LLCBi3j/6QsEStV2NBqLgQVfBji25Ir1LU2p2P6sJs?=
- =?us-ascii?Q?dnrXLZ1KT1v30YmPCYhci6BTB5e8hNgX7ewMtUghgco3JRO0f8/WPTGpIDhZ?=
- =?us-ascii?Q?9SBzBM6TOldNlRcPuVtLLIOl2g3soMXjG90ofyA88Mwh4f/jmFAQCWVAWOyO?=
- =?us-ascii?Q?ryiJ4tcRNrPMC+wKURS5hZSb/tLsazKQzOyi7Pg8A/xxxz/O2g4NS5RB3Q/c?=
- =?us-ascii?Q?pV3fq9aApI8lu+Pxjsqu6B0hhxFfq00q0NJR4uFaTbvfQ8tK1Nygs1hwhfJi?=
- =?us-ascii?Q?z0Xkiz8gUuiVdt0rUeFfBQ+4dlpoyG8ywjRfSosww2jTn46GsFzkMQxy4P/i?=
- =?us-ascii?Q?88Uo1reXerFhhrSz4xReIF3zE7wPylLwR9Kifi8cMtMBhnVAFWS9RaMhXmC/?=
- =?us-ascii?Q?Ov2JQD0cSMjU05PAnWnT6WDN836/1zNv4paUfm8+fZkN2f3WzkS5QApwD8ep?=
- =?us-ascii?Q?NtOd4W0lbSw3hF3EnqjvQ0o04Riyle5AIE0Ma0ORWrcMtT29mXPPy1sj9pJY?=
- =?us-ascii?Q?5u8lbO/vapgRfgYwZfYI06Iqr5yLI9j95dhoidUrzwM30Tx4TknlKnwXclmB?=
- =?us-ascii?Q?JwrH4iXisyLOUhKCaRdyxYYqe9bJEASVGFcclImXOBfNd65K4au/yA4hZeJC?=
- =?us-ascii?Q?+lA0EAeHkn7piMzOG+7R7RBKFuWg8p6/4Pha8+RjPDS/a45rnQ1Fbl7GEOY9?=
- =?us-ascii?Q?A95Z1nDG6nF3XV3t9ITslXibOtaRrVPf0VjKZGSwecSiM/OHaIxXwKFaf34F?=
- =?us-ascii?Q?bNUjphBmAIykd0IHtLmiQH3n4eNoHOu/BOQKvhshqtopiM1LhxJVa4tqxA+i?=
- =?us-ascii?Q?WordvjmN4hTt3c6YUlleE2YvWRUpLZe9?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f4c5ed2-9696-4c51-e81b-08da0b3308b0
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 12:05:04.4332
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: slnMeyFAcbzrHk/U/VOPLuTGXy+Rcuv0qqTeqW5Sq1LiW+oJn3JuLHoVUQyOdZt4
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2503
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH v2] staging: rtl8712: Fix CamelCase warnings
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220318101440.13887-1-skumark1902@gmail.com>
+ <YjRswrHu0JUm9331@kroah.com>
+From:   Sathish Kumar <skumark1902@gmail.com>
+In-Reply-To: <YjRswrHu0JUm9331@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,27 +75,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 02:40:25PM +0800, Lu Baolu wrote:
+On 18/03/22 4:58 pm, Greg KH wrote:
 
-> +/**
-> + * iommu_sva_bind_device() - Bind a process address space to a device
-> + * @dev: the device
-> + * @mm: the mm to bind, caller must hold a reference to it
-> + * @drvdata: opaque data pointer to pass to bind callback
-> + *
-> + * Create a bond between device and address space, allowing the device to access
-> + * the mm using the returned PASID. If a bond already exists between @device and
-> + * @mm, it is returned and an additional reference is taken. Caller must call
-> + * iommu_sva_unbind_device() to release each reference.
-> + *
-> + * iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) must be called first, to
-> + * initialize the required SVA features.
-> + *
-> + * On error, returns an ERR_PTR value.
-> + */
-> +struct iommu_sva *
-> +iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
+> On Fri, Mar 18, 2022 at 03:44:40PM +0530, Sathish Kumar wrote:
+>> This patch fixes the checkpatch.pl warnings like:
+>> CHECK: Avoid CamelCase: <blnEnableRxFF0Filter>
+>> +   u8 blnEnableRxFF0Filter;
+>>
+>> Signed-off-by: Sathish Kumar <skumark1902@gmail.com>
+>> ---
+>> Changes in v2:
+>>      - Remove the "bln" prefix
+>> ---
+>>   drivers/staging/rtl8712/drv_types.h   | 2 +-
+>>   drivers/staging/rtl8712/rtl871x_cmd.c | 2 +-
+>>   drivers/staging/rtl8712/xmit_linux.c  | 4 ++--
+>>   3 files changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/staging/rtl8712/drv_types.h b/drivers/staging/rtl8712/drv_types.h
+>> index a44d04effc8b..4de3aad08242 100644
+>> --- a/drivers/staging/rtl8712/drv_types.h
+>> +++ b/drivers/staging/rtl8712/drv_types.h
+>> @@ -157,7 +157,7 @@ struct _adapter {
+>>   	struct iw_statistics iwstats;
+>>   	int pid; /*process id from UI*/
+>>   	struct work_struct wk_filter_rx_ff0;
+>> -	u8 blnEnableRxFF0Filter;
+>> +	u8 enable_rx_ff0_filter;
+> Shouldn't this be a boolean?
+Yes. It should be boolean(dealing only with either 0 or 1). Will fix this.
+>
+>>   	spinlock_t lock_rx_ff0_filter;
+>>   	const struct firmware *fw;
+>>   	struct usb_interface *pusb_intf;
+>> diff --git a/drivers/staging/rtl8712/rtl871x_cmd.c b/drivers/staging/rtl8712/rtl871x_cmd.c
+>> index acda930722b2..69d3c55ee9e5 100644
+>> --- a/drivers/staging/rtl8712/rtl871x_cmd.c
+>> +++ b/drivers/staging/rtl8712/rtl871x_cmd.c
+>> @@ -202,7 +202,7 @@ u8 r8712_sitesurvey_cmd(struct _adapter *padapter,
+>>   	mod_timer(&pmlmepriv->scan_to_timer,
+>>   		  jiffies + msecs_to_jiffies(SCANNING_TIMEOUT));
+>>   	padapter->ledpriv.LedControlHandler(padapter, LED_CTL_SITE_SURVEY);
+>> -	padapter->blnEnableRxFF0Filter = 0;
+>> +	padapter->enable_rx_ff0_filter = 0;
+>>   	return _SUCCESS;
+>>   }
+>>   
+>> diff --git a/drivers/staging/rtl8712/xmit_linux.c b/drivers/staging/rtl8712/xmit_linux.c
+>> index 90d34cf9d2ff..d58ae5b387d4 100644
+>> --- a/drivers/staging/rtl8712/xmit_linux.c
+>> +++ b/drivers/staging/rtl8712/xmit_linux.c
+>> @@ -102,11 +102,11 @@ void r8712_SetFilter(struct work_struct *work)
+>>   	r8712_write8(adapter, 0x117, newvalue);
+>>   
+>>   	spin_lock_irqsave(&adapter->lock_rx_ff0_filter, irqL);
+>> -	adapter->blnEnableRxFF0Filter = 1;
+>> +	adapter->enable_rx_ff0_filter = 1;
+>>   	spin_unlock_irqrestore(&adapter->lock_rx_ff0_filter, irqL);
+>>   	do {
+>>   		msleep(100);
+>> -	} while (adapter->blnEnableRxFF0Filter == 1);
+>> +	} while (adapter->enable_rx_ff0_filter == 1);
+> Ah, that's funny.  It's amazing it works at all and that the compiler
+> doesn't optimize this away.  This isn't a good pattern to use in kernel
+Do you mean "do { msleep(); } while()" here?
+> code.  I know it's not caused by your change here, but perhaps you might
+> want to fix this up to work properly?
+>
+> thanks,
+>
+> greg k-h
 
-The drvdata is never used
+Sure. Will fix this up to work properly.
 
-Jason
+Thanks,
+
+Sathish
+

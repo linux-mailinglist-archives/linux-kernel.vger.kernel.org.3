@@ -2,235 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC124E1EF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03564E1EF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 03:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344136AbiCUCHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 22:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
+        id S1344145AbiCUCIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 22:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238328AbiCUCHe (ORCPT
+        with ESMTP id S1344137AbiCUCIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 22:07:34 -0400
-Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E9A627CF9;
-        Sun, 20 Mar 2022 19:06:07 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id D8ADBFF93C;
-        Mon, 21 Mar 2022 02:06:05 +0000 (UTC)
-Date:   Mon, 21 Mar 2022 03:06:03 +0100
-From:   Max Staudt <max@enpas.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
-Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <20220321030603.2feac810.max@enpas.org>
-In-Reply-To: <20220317205542.2re5x73gqys5fl2n@pengutronix.de>
-References: <20220307214303.1822590-1-max@enpas.org>
-        <20220314215843.xxf6rdxxfwb255s4@pengutronix.de>
-        <20220317211822.7d74b49c.max@enpas.org>
-        <20220317205542.2re5x73gqys5fl2n@pengutronix.de>
+        Sun, 20 Mar 2022 22:08:49 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96475BD08
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:07:24 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id c11so9301391pgu.11
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 19:07:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2dJnNJv7tm7UdVVNql3/erHAUxpmpE++s8tQq8p65Yc=;
+        b=mu/10eV1z+dHYGAsdcf9q8Aabh+EEP6gv8Zlf8rKwMJHk9e89FS7GS5uLHgRyQrQW4
+         Ct/aNefRA3L4NHnVFXVksmW8dLFKvbTMZSYFPPDYxCwUmCcBUy8FQqXo4jU9aW4O5LNL
+         G28HpkWyi5RSqomgMMNT5F65J/9pb9x4mvI9Wvk56nFgf0OvB1Xmou9y4oC1KoySzTmP
+         o1EFEcERaW48bE/dogVZvCPvtDIYtQlGmwXIvgcBrAcCa2S4WwnGd2ktgy+Dxb2oLNsb
+         uRmu8RLWe9yXUp7yoSeuMNWDpyCHoI1pgWpwFayu8/g4yEia74hMkvsOmUIm05MsRg2z
+         B6vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2dJnNJv7tm7UdVVNql3/erHAUxpmpE++s8tQq8p65Yc=;
+        b=tYhe2olHzFu0WqApB10VwO6luzX7m5d/CsEjAqtQMFkWVBU2Qd/VEKUXkJagFP4fVl
+         StpZP95r7Je98DZjzHEfF8smFHEO/X2LHDhZxddD5SMQdPMUx49siYMsIzBiVRUmk/CP
+         UImJ8IP7mnOnH4wqw37GcclAll4PK05O/+HI6mkdxMvpBzmVXj45poUPKoORhdwzJ/Vz
+         /cwdyAnkbAn1p7FAf41n0zM8zjHxKK5ymYXQWwHXj6WPobxyfDXsUsQSAj2eBALrml8z
+         RksLfkmWkJR/Y3yWfGSecsbhcD83jwTKhhlhdfWwwiS6XY8aeiX5P4fIU+GLnzAJzgBb
+         Kvuw==
+X-Gm-Message-State: AOAM530ppTR6xqmQg99RbP28iQaLyajxGHy4fAc3eF2LamCO4cowoDB9
+        lVrrf2XEYMAa3Nx7Hks7Hz16HA==
+X-Google-Smtp-Source: ABdhPJzq6K073T30dDUYD8wJP7MMTAw+cUTD/IS/UWpKHIhyrTvuoP/jdZkYeB94PcZPbbr/gShQEg==
+X-Received: by 2002:a65:6202:0:b0:382:1fbd:5bb3 with SMTP id d2-20020a656202000000b003821fbd5bb3mr13319263pgv.194.1647828443928;
+        Sun, 20 Mar 2022 19:07:23 -0700 (PDT)
+Received: from google.com (201.59.83.34.bc.googleusercontent.com. [34.83.59.201])
+        by smtp.gmail.com with ESMTPSA id b9-20020a056a000cc900b004f7a986fc78sm17867328pfv.11.2022.03.20.19.07.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Mar 2022 19:07:23 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 02:07:19 +0000
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alessio Balsini <balsini@android.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel-team <kernel-team@android.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fuse: fix integer type usage in uapi header
+Message-ID: <Yjfd1+k83U+meSbi@google.com>
+References: <20220318171405.2728855-1-cmllamas@google.com>
+ <CAJfpegsT6BO5P122wrKbni3qFkyHuq_0Qq4ibr05_SOa7gfvcw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfpegsT6BO5P122wrKbni3qFkyHuq_0Qq4ibr05_SOa7gfvcw@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022 21:55:42 +0100
-Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-
-> On 17.03.2022 21:18:22, Max Staudt wrote:
-> > > > +/* Bits in elm->cmds_todo */
-> > > > +enum ELM_TODO {    
-> > >         ^^^^^^^^
-> > > small caps please, and Vincent alreadt commented on the name.  
-> > 
-> > Small caps? Sorry, that's not possible in plain ASCII.
-> > You probably mean something else, but I'm not sure what?  
-> 
-> I meant to say lowercase, sorry for the confusion.
-
-Ah, thanks for the clarification!
-
-
-> > > > +	/* Regular parsing */
-> > > > +	switch (elm->state) {
-> > > > +	case ELM_RECEIVING:
-> > > > +		if (elm327_parse_frame(elm, len)) {
-> > > > +			/* Parse an error line. */
-> > > > +			elm327_parse_error(elm, len);
-> > > > +
-> > > > +			/* Start afresh. */
-> > > > +			elm327_kick_into_cmd_mode(elm);
-> > > > +		}
-> > > > +		break;
-> > > > +	default:
-> > > > +		break;
-> > > > +	}
-> > > > +}
-> > > > +
-> > > > +/* Assumes elm->lock taken. */
-> > > > +static void elm327_handle_prompt(struct elmcan *elm)
-> > > > +{
-> > > > +	struct can_frame *frame = &elm->can_frame;
-> > > > +	char local_txbuf[20];    
-> > > 
-> > > How can you be sure, that the local_txbuf is large enough?  
-> > 
-> > It's filled in this very same function, with sprintf() or a strcpy()
-> > from one of the short strings in elm327_init_script (see next quote
-> > below). I've calculated the maximum length that can occur out of all
-> > these possibilities in the current code, and set that as the length
-> > of local_txbuf.  
-> 
-> You can use something like "local_txbuf[sizeof("ATZ;ATDT0815;ATH")]"
-> with the longest ATZ command you can produce here.
-
-That's a great idea, thanks!
-
-
-> > > > +	/* Reconfigure ELM327 step by step as indicated by
-> > > > elm->cmds_todo */
-> > > > +	if (test_bit(TODO_INIT, &elm->cmds_todo)) {
-> > > > +		strcpy(local_txbuf, *elm->next_init_cmd);    
-> > > 
-> > > strncpy()  
-> > 
-> > For this, there would have to be an entry in elm327_init_script
-> > that is longer than sizeof(local_txbuf) - 1. I highly doubt there
-> > ever will be, and even if someone does come up with one (maybe a
-> > huge new command in a future ELM327 revision), then strncpy would
-> > silently cut off the end and induce unexpected failure. Most
-> > importantly, this failure would be silent - the driver doesn't
-> > check the ELM's responses by design!
-> > 
-> > I suggest an assert here. How about something like this?
-> > 
-> > 	if (strlen(*elm->next_init_cmd) < sizeof(local_txbuf))
-> > 		strcpy(local_txbuf, *elm->next_init_cmd);
-> > 	else
-> > 		WARN_ONCE(...)
+On Fri, Mar 18, 2022 at 08:24:55PM +0100, Miklos Szeredi wrote:
+> On Fri, 18 Mar 2022 at 18:14, Carlos Llamas <cmllamas@google.com> wrote:
 > >
-> > If elm327_init_script contains an item longer than this buffer, then
-> > the buffer size needs to be increased. Simple programming error
-> > IMHO. I'd also add a comment to state this, next to
-> > elm327_init_script.
-> > 
-> > What do you think?  
+> > Kernel uapi headers are supposed to use __[us]{8,16,32,64} defined by
+> > <linux/types.h> instead of 'uint32_t' and similar. This patch changes
+> > all the definitions in this header to use the correct type. Previous
+> > discussion of this topic can be found here:
+> >
+> >   https://lkml.org/lkml/2019/6/5/18
 > 
-> You can use BUILD_BUG_ON() (see linux/build_bug.h) inside your C
-> function to make a compile time check, or static_assert() outside of C
-> functions.
-
-Thanks! But... what would be the expression being checked? The desire
-is to compare the size of local_txbuf against the size of each member
-of elm327_init_script - it seems counterintuitive to me to loop over
-them all and have a BUILD_BUG_ON() as the loop body. Does the compiler
-optimise that away?
-
-
-> > > > +	} else if (test_and_clear_bit(TODO_SILENT_MONITOR,
-> > > > &elm->cmds_todo)) {
-> > > > +		sprintf(local_txbuf, "ATCSM%i\r",
-> > > > +			!(!(elm->can.ctrlmode &
-> > > > CAN_CTRLMODE_LISTENONLY)));    
-> > > 
-> > > snprintf()  
-> > 
-> > See above. This size is predictable, and used to size local_txbuf.
-> > 
-> > Thinking about it, since this size is easily predictable, the
-> > compiler could also do it, and that would turn snprintf() into a
-> > compile time check.
-> > 
-> > Unfortunately I couldn't make GCC shout at me for giving snprintf()
-> > too small a buffer to fit all possible expansions of this format
-> > string. Is this even possible?  
+> This is effectively a revert of these two commits:
 > 
-> In user space, I've seen warnings like that, not sure about the
-> kernel.
-
-Ditto.
-
-Okay, then I can plop in snprintf() anyway, and maybe the compiler will
-start shouting a few years down the road when this kind of warning is
-enabled in kernel builds. Unless you no longer see the need :)
-
-
-> > > > +static int elmcan_netdev_open(struct net_device *dev)
-> > > > +{
-> > > > +	struct elmcan *elm = netdev_priv(dev);
-> > > > +	int err;
-> > > > +
-> > > > +	spin_lock_bh(&elm->lock);
-> > > > +	if (elm->hw_failure) {
-> > > > +		netdev_err(elm->dev, "Refusing to open
-> > > > interface after a hardware fault has been detected.\n");
-> > > > +		spin_unlock_bh(&elm->lock);
-> > > > +		return -EIO;
-> > > > +	}    
-> > > 
-> > > How to recover from this error?  
-> > 
-> > The user can detach and reattach the ldisc as often as desired.
-> > 
-> > There is currently no intention to recover automatically. Once
-> > elm->hw_failure is set, something really weird must have happened
-> > such as unexpected characters on the UART. Since these devices are
-> > usually a PIC right next to a UART-USB bridge chip, which is why I
-> > deem this indicative of hardware too faulty to be trusted in any
-> > way.
-> > 
-> > Regular "expected" errors are parsed and dealt with by sending error
-> > frames in elm327_parse_error(). These do not trigger hw_failure.  
+> 4c82456eeb4d ("fuse: fix type definitions in uapi header")
+> 7e98d53086d1 ("Synchronize fuse header with one used in library")
 > 
-> Ok, in other drivers I usually do a full reset during an ifdown/ifup
-> cycle....at least for non hot plug-able devices.
-
-Yeah, this one is hotpluggable by definition, and I'm not sure that
-resuming communications is a good idea once a UART sanity test in the
-driver has failed. In case the UART is unreliable, trying to reset the
-interface may do more harm than good.
-
-And if anyone builds this interface internally into their product,
-non-hotpluggable and with this driver, then may mercy be upon them.
-This driver really isn't meant for them. All ELM327 devices I've ever
-seen are a UART via RS232, USB, BT, or TCP, and hot-pluggable by the
-user.
-
-I have thought about a reset as a thing to maybe implement later down
-the road, but so far when I tried to implement more lenient error
-handling, I got a bad feeling about it.
-
-Fun fact: elm327_hw_failure() used to be called elm327_panic() in early
-versions of the driver, because I just give up on UART errors :)
-
-
-> > > > +	elm->txbuf = kmalloc(ELM327_SIZE_TXBUF, GFP_KERNEL);
-> > > >  
-> > > 
-> > > Why do you allocate an extra buffer?  
-> > 
-> > If I remember correctly, I was told that this is preferred because
-> > drivers can DMA out of the aligned buffer. I didn't question that. I
-> > can simply allocate a buffer as part of struct elmcan if you
-> > prefer.  
+> And so we've gone full circle and back to having to modify the header
+> to be usable in the cross platform library...
 > 
-> You can force proper alignment with marking the memory as
-> ____cacheline_aligned. Extra bonus for checking (and optimizing)
-> structure packing with the "pahole" tool.
+> And also made lots of churn for what reason exactly?
 
-Thanks! Will do then, this simplifies things.
+There are currently only two uapi headers making use of C99 types and
+one is <linux/fuse.h>. This approach results in different typedefs being
+selected when compiling for userspace vs the kernel. Plus only __u32 and
+similar types align with the coding style as described in 5(e).
 
+Yet, there is still the cross platform concern you mention. I think the
+best way to accommodate this while still conforming with the __u32 types
+is to follow something similar to 1a95916f5465 ("drm: Add compatibility
+#ifdefs for *BSD"). Basically doing this:
 
+  #if defined(__KERNEL__) || defined(__linux__)
+  #include <linux/types.h>
+  #else
+  #include <stdint.h>
+  typedef uint16_t __u16;
+  typedef int32_t  __s32;
+  typedef uint32_t __u32;
+  typedef int64_t  __s64;
+  typedef uint64_t __u64;
+  #endif
 
-Max
+This alternative selects the correct uapi types for both __KERNEL__ and
+__linux__ cases which is the main goal of this patch and it's just minor
+fixes from 7e98d53086d1 ("Synchronize header with one used in library").
+
+I see there where previous attempts to address similar changes here:
+  https://lkml.org/lkml/2013/3/11/620
+  https://lkml.org/lkml/2013/4/15/487
+
+So, if you agree with the approach above I'd be happy to send a separate
+patch on top to address the *BSD compatibility.
+
+Thanks,
+Carlos Llamas

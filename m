@@ -2,111 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3542B4E31AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 21:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 966544E31B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 21:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353296AbiCUUYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 16:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        id S1353304AbiCUU2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 16:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353114AbiCUUYk (ORCPT
+        with ESMTP id S1353305AbiCUU1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 16:24:40 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4558C2A736;
-        Mon, 21 Mar 2022 13:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1647894194; x=1679430194;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2XKSa393AJ/u/J5kUeoinz3LLqVWqafJGXbziCYPgUk=;
-  b=BBKYcwjsETXEsv0qSZWDe6YRk8wFOU9P1kxq5IRDug/vPew8MaDyERcq
-   B+eTUO8zat1m/QPsvxLF87J5hjb41VBxrEtvVwuqtq5yU7nyOjULnZLEs
-   Wbh0A7YCVAcC0TBNAUHAGyHn6N86VnD3uTgfCkQq18wQv/YvThZRiXevH
-   2rUT7r+fpzZe/M9vGNDv627Jku9fO3Dz9jIOayXM7nM4U5tjUSjBcJaEt
-   KkzaaPthFRWKyENDevzC7Bs6QKrj4Y4B2MMZpSjsdM07A3Uj21ZIPCO2V
-   gEWklXpsqR1aAeTD6tydFG/wvLCwfbRu2woTFVRpF6Dt8byHaizsWCz4p
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,199,1643698800"; 
-   d="scan'208";a="152737954"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Mar 2022 13:23:13 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 21 Mar 2022 13:23:13 -0700
-Received: from CHE-LT-I21427LX.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 21 Mar 2022 13:23:02 -0700
-Message-ID: <661489ea4ba5646d695d55242808f1fb4ae35cfb.camel@microchip.com>
-Subject: Re: [PATCH v9 net-next 09/11] net: dsa: microchip: add support for
- port mirror operations
-From:   Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-CC:     <andrew@lunn.ch>, <netdev@vger.kernel.org>, <robh+dt@kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <woojung.huh@microchip.com>,
-        <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <devicetree@vger.kernel.org>
-Date:   Tue, 22 Mar 2022 01:52:59 +0530
-In-Reply-To: <20220318110033.nuwvrok6ywsagxwf@skbuf>
-References: <20220318085540.281721-1-prasanna.vengateshan@microchip.com>
-         <20220318085540.281721-10-prasanna.vengateshan@microchip.com>
-         <20220318110033.nuwvrok6ywsagxwf@skbuf>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0-1 
+        Mon, 21 Mar 2022 16:27:55 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B27165B8F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 13:26:29 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-dda559a410so65110fac.3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 13:26:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=taGGw6FofrDBtg863EraXXBX2AFEQktzuZisXMbt1m4=;
+        b=Sjv8nPGkQ9wOO76X9eqZVeXYPv5fgfvaAsJeozgl/xckR0NlSAO3HO9Zys0XN/ZgSr
+         wnfaXZnZuDDk8C2PQJxSqeSIPvOflZMi4+pPTT586WrfBLEYLZs0eFOabMkPejm/tMVp
+         yBzclX9et8LnF3XdHOKqh/wM9gxa5OlZi7f+E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=taGGw6FofrDBtg863EraXXBX2AFEQktzuZisXMbt1m4=;
+        b=BgjHWHy/Fc4oJPs+Vj7F7ijNBcMYKUeTUo+KrbcZjsnndb4s1QTD8bVq7DfjA36n3j
+         wB6KdEpT6mi3h6sfGIJZHVAFKqdTTErCGyUQtfByKmPccYZ4qS2Qb6tQOu4sImldRffo
+         ZIwDBdYNutvIuuTfTBdE1Gqe01x76x8rvYZhMNw6Oa0aSlcnvg4T4YCFHkHUI3P7mOfO
+         RTkSMwEZP/97lmGHMCgT++hJ0fK1J9e6cqL605lBx/HLqnigV9GLaadjjuPZ4UGkdc8m
+         rA76xVi/lQYZs7tCk+ERza/POwdFlqYcGM/AW9chcWUPv1g0UjIxJo29Ew5mcNIfIDCH
+         7TjA==
+X-Gm-Message-State: AOAM5335F5vvhvwObHd2AukpnhLr4U0+V3v9mc3KgfsLPXb6tEU7gyoG
+        DvFZxHxBLHb4ypCy2HwnwR+hy3dhvGbAaL8XKqG5+Q==
+X-Google-Smtp-Source: ABdhPJz8HOZEVrIhWX7eSAQXVQnCmvsiRO0z81j0NHxZfPtMNjOYbIOcA/jpMSwp4ajyvemLspWs71EsYbEprbwEuuI=
+X-Received: by 2002:a05:6870:b69c:b0:dd:b74b:4099 with SMTP id
+ cy28-20020a056870b69c00b000ddb74b4099mr326223oab.193.1647894389066; Mon, 21
+ Mar 2022 13:26:29 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 21 Mar 2022 21:26:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1647863959-3289-4-git-send-email-quic_srivasam@quicinc.com>
+References: <1647863959-3289-1-git-send-email-quic_srivasam@quicinc.com> <1647863959-3289-4-git-send-email-quic_srivasam@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 21 Mar 2022 21:26:28 +0100
+Message-ID: <CAE-0n50xoWpd8S82W=xjbKBjqD-bgyMM8b539PV83=fHBQC7yw@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] arm64: dts: qcom: sc7280: add lpass lpi pin
+ controller node
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        judyhsiao@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        rohitkr@codeaurora.org, srinivas.kandagatla@linaro.org
+Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-18 at 13:00 +0200, Vladimir Oltean wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the
-> content is safe
-> 
-> On Fri, Mar 18, 2022 at 02:25:38PM +0530, Prasanna Vengateshan wrote:
-> > Added support for port_mirror_add() and port_mirror_del operations
-> > 
-> > Sniffing is limited to one port & alert the user if any new
-> > sniffing port is selected
-> > 
-> > Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-> > Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-> > Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> > ---
-> >  drivers/net/dsa/microchip/lan937x_main.c | 84 ++++++++++++++++++++++++
-> >  1 file changed, 84 insertions(+)
-> > 
-> > diff --git a/drivers/net/dsa/microchip/lan937x_main.c
-> > b/drivers/net/dsa/microchip/lan937x_main.c
-> > index c54aba6a05b5..5a57a2ce8992 100644
-> > --- a/drivers/net/dsa/microchip/lan937x_main.c
-> > +++ b/drivers/net/dsa/microchip/lan937x_main.c
-> > @@ -98,6 +98,88 @@ static void lan937x_port_stp_state_set(struct dsa_switch
-> > *ds, int port,
-> >       ksz_update_port_member(dev, port);
-> >  }
-> > 
-> > +static int lan937x_port_mirror_add(struct dsa_switch *ds, int port,
-> > +                                struct dsa_mall_mirror_tc_entry *mirror,
-> > +                                bool ingress)
-> 
-> This function gained a new extack argument yesterday => your patch
-> doesn't compile. Maybe you could even use the extack to propagate the
-> "existing sniffer port" error.
-> 
-> 
+Quoting Srinivasa Rao Mandadapu (2022-03-21 04:59:19)
+> Add LPASS LPI pinctrl node required for Audio functionality on sc7280
+> based platforms.
+>
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 147 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 147 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 8d8cec5..499299a 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -1987,6 +1987,153 @@
+>                         qcom,bcm-voters = <&apps_bcm_voter>;
+>                 };
+>
+> +               lpass_tlmm: pinctrl@33c0000 {
+> +                       compatible = "qcom,sc7280-lpass-lpi-pinctrl";
+> +                       reg = <0 0x33c0000 0x0 0x20000>,
+> +                               <0 0x3550000 0x0 0x10000>;
+> +                       gpio-controller;
+> +                       #gpio-cells = <2>;
+> +                       gpio-ranges = <&lpass_tlmm 0 0 15>;
+> +
+> +                       #clock-cells = <1>;
+> +
+> +                       dmic01_active: dmic01-active {
+> +                               clk {
+> +                                       pins = "gpio6";
+> +                                       function = "dmic1_clk";
+> +                                       drive-strength = <8>;
+> +                                       output-high;
 
-Sure, will use the extack for existing errors.
+The rule of thumb is that drive strength, output/input, and bias
+properties should be in the board file, because the board layout decides
+the drive strength, the output level could be inverted on the board, and
+the biasing could be done externally (or not) via pullup/pulldowns on
+the net. The gpio driver should be able to make pins into inputs
+automatically when the gpio is requested and used so having input or
+output is typically wrong and should be handled by the consumer driver.
 
-Prasanna V
+> +                               };
+> +
+> +                               data {
+> +                                       pins = "gpio7";
+> +                                       function = "dmic1_data";
 
+So in the end I'd expect to only see pins and function properties in the
+SoC dtsi file.
+
+> +                                       drive-strength = <8>;
+> +                               };
+> +                       };
+> +
+> +                       dmic01_sleep: dmic01-sleep {
+> +                               clk {
+> +                                       pins = "gpio6";
+> +                                       function = "dmic1_clk";

@@ -2,147 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 615A34E2FCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483374E300A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352052AbiCUSUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 14:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49290 "EHLO
+        id S1352145AbiCUSfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 14:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbiCUSUu (ORCPT
+        with ESMTP id S238953AbiCUSfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 14:20:50 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234A01EAD6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:19:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647886764; x=1679422764;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RpxhtOeQxZ8yIXkXuKKL4DSSYVP8/RZrN59np0aIsu4=;
-  b=TRWCxI7AMJPFxIehd13GS+IY0cxejktCMtGFQC69gRQLKxsktWSvIOg7
-   wm5m2e/Q1VU0OlaP49j3J/oLmQxJEZBwX7e14RtBuevoJk1kexq/0GAMd
-   tMrsdwC34+8w33Yc/MKkBnJLUVyeGsKm5qf8SkdK39uLDv4Upi093Yws4
-   nmJL4L5CXX55eoMzcxiy4tpCXQIeP/Yp2wGRJnwtDkp4qz3/pzgkvMVtn
-   BcqBlRRSJ2NBSI16+q1/pMoZ6VSapOgZkps1cmDnOhxATpEY2AKfuTiPX
-   MvcgSJD1xEoo4dWGuQWE6Q0l/LIW/oZOk263hGPw0G9Y/6kc7LuEhCnbt
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="320823041"
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="320823041"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 11:19:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="518541486"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 21 Mar 2022 11:19:22 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nWMcj-000I3m-MN; Mon, 21 Mar 2022 18:19:21 +0000
-Date:   Tue, 22 Mar 2022 02:18:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [amir73il:fsnotify-volatile 3/10]
- fs/notify/fanotify/fanotify_user.c:1147:8: error: too few arguments to
- function 'fsnotify_add_mark_locked'
-Message-ID: <202203220253.CbyFvh3n-lkp@intel.com>
+        Mon, 21 Mar 2022 14:35:05 -0400
+X-Greylist: delayed 762 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Mar 2022 11:33:38 PDT
+Received: from mail.cybernetics.com (mail.cybernetics.com [173.71.130.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C76762A7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:33:38 -0700 (PDT)
+X-ASG-Debug-ID: 1647886851-0fb3b00bc488b5a0001-xx1T2L
+Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id bFwvDITkKmngQ9Uc; Mon, 21 Mar 2022 14:20:51 -0400 (EDT)
+X-Barracuda-Envelope-From: tonyb@cybernetics.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.10.4.126
+X-ASG-Whitelist: Client
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
+        bh=TnLfS5YUHN3LTRVR51dnyNj9HyvjTtJA6eggQNFB3nQ=;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:To:
+        Content-Language:Subject:MIME-Version:Date:Message-ID; b=JFvmKUVf2mQnkugOBlUD
+        38WEillNpSOKksCRNZuuVfeQbk2AZRu6/Yveg6JA/b9OlGloywCkCwceTrv4HYtB9mG/jwf5/UpHO
+        tFYwSlYG5Ciog0+6e/ePvrDRs4+Eo+S3WriOZYsMMwjWP1sRHisACqT4grWAJk3a2hmdEUAHwc=
+Received: from [10.157.2.224] (HELO [192.168.200.1])
+  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
+  with ESMTPS id 11624553; Mon, 21 Mar 2022 14:20:51 -0400
+Message-ID: <6d8b3c24-12d1-043f-aec8-cfdc5b2e2786@cybernetics.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.157.2.224
+Date:   Mon, 21 Mar 2022 14:20:50 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] kernel: make TIF_NOTIFY_SIGNAL and core dumps co-exist
+Content-Language: en-US
+X-ASG-Orig-Subj: Re: [PATCH] kernel: make TIF_NOTIFY_SIGNAL and core dumps co-exist
+To:     Jens Axboe <axboe@kernel.dk>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Olivier Langlois <olivier@trillion01.com>
+References: <76d3418c-e9ba-4392-858a-5da8028e3526@kernel.dk>
+ <CAHk-=wgBMNC1ePTgqM6f0iBH94KE5_oHQYD2sqCbjev0KaZ6Kw@mail.gmail.com>
+ <7fb2d8a6-951c-092c-ccaa-15522ae2ed01@kernel.dk>
+From:   Tony Battersby <tonyb@cybernetics.com>
+In-Reply-To: <7fb2d8a6-951c-092c-ccaa-15522ae2ed01@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Barracuda-Connect: UNKNOWN[10.10.4.126]
+X-Barracuda-Start-Time: 1647886851
+X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
+X-Barracuda-BRTS-Status: 1
+X-Virus-Scanned: by bsmtpd at cybernetics.com
+X-Barracuda-Scan-Msg-Size: 2936
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/amir73il/linux fsnotify-volatile
-head:   46cbd4482bb2350a2d667d18272e2f0172c1633b
-commit: 66f27fc99e46b12f1078e8e2915793040ce50ee7 [3/10] fsnotify: preallocate connector outside of group lock
-config: x86_64-rhel-8.3-func (https://download.01.org/0day-ci/archive/20220322/202203220253.CbyFvh3n-lkp@intel.com/config)
-compiler: gcc-9 (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-reproduce (this is a W=1 build):
-        # https://github.com/amir73il/linux/commit/66f27fc99e46b12f1078e8e2915793040ce50ee7
-        git remote add amir73il https://github.com/amir73il/linux
-        git fetch --no-tags amir73il fsnotify-volatile
-        git checkout 66f27fc99e46b12f1078e8e2915793040ce50ee7
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On 8/19/21 10:59, Jens Axboe wrote:
+> On 8/18/21 8:57 PM, Linus Torvalds wrote:
+>> On Tue, Aug 17, 2021 at 8:06 PM Jens Axboe <axboe@kernel.dk> wrote:
+>>> task_work being added with notify == TWA_SIGNAL will utilize
+>>> TIF_NOTIFY_SIGNAL for signaling the targeted task that work is available.
+>>> If this happens while a task is going through a core dump, it'll
+>>> potentially disturb and truncate the dump as a signal interruption.
+>> This patch seems (a) buggy and (b) hacky.
+>>
+>>> --- a/kernel/task_work.c
+>>> +++ b/kernel/task_work.c
+>>> @@ -41,6 +41,12 @@ int task_work_add(struct task_struct *task, struct callback_head *work,
+>>>                 head = READ_ONCE(task->task_works);
+>>>                 if (unlikely(head == &work_exited))
+>>>                         return -ESRCH;
+>>> +               /*
+>>> +                * TIF_NOTIFY_SIGNAL notifications will interfere with
+>>> +                * a core dump in progress, reject them.
+>>> +                */
+>>> +               if (notify == TWA_SIGNAL && (task->flags & PF_SIGNALED))
+>>> +                       return -ESRCH;
+>> This basically seems to check task->flags with no serialization.
+>>
+>> I'm sure it works 99.9% of the time in practice, since you'd be really
+>> unlucky to hit any races, but I really don't see what the
+>> serialization logic is.
+>>
+>> Also, the main user that actually triggered the problem already has
+>>
+>>         if (unlikely(tsk->flags & PF_EXITING))
+>>                 goto fail;
+>>
+>> just above the call to task_work_add(), so this all seems very hacky indeed.
+>>
+>> Of course, I don't see what the serialization for _that_ one is either.
+>>
+>> Pls explain. You can't just randomly add tests for random flags that
+>> get modified by other random code.
+> You're absolutely right. On the io_uring side, in the current tree,
+> there's only one check where current != task being checked - and that's
+> in the poll rewait arming. That one should likely just go away. It may
+> be fine as it is, as it just pertains to ring exit cancelations. We want
+> to ensure that we don't rearm poll requests if the process is canceling
+> and going away. I'll take a closer look at that one.
+>
+> For this particular patch, I agree it's racy. I'll see if I can come up
+> with something better...
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Continuing this thread from August 2021:
 
-Note: the amir73il/fsnotify-volatile HEAD 46cbd4482bb2350a2d667d18272e2f0172c1633b builds fine.
-      It only hurts bisectability.
+I previously tested a version of Jens' patch backported to 5.10 and it
+fixed my problem.  Now I am trying to upgrade kernels, and 5.17 still
+has the same problem - coredumps from an io_uring program to a pipe are
+truncated.  Jens' patch applied to 5.17 again fixes the problem.  Has
+there been any progress with fixing the problem upstream?
 
-All errors (new ones prefixed by >>):
+Reference:
 
-   fs/notify/fanotify/fanotify_user.c: In function 'fanotify_add_new_mark':
->> fs/notify/fanotify/fanotify_user.c:1147:8: error: too few arguments to function 'fsnotify_add_mark_locked'
-    1147 |  ret = fsnotify_add_mark_locked(mark, connp, obj_type, 0, fsid);
-         |        ^~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from fs/notify/fanotify/fanotify_user.c:8:
-   include/linux/fsnotify_backend.h:642:12: note: declared here
-     642 | extern int fsnotify_add_mark_locked(struct fsnotify_mark *mark,
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~
+https://lore.kernel.org/all/8af373ec-9609-35a4-f185-f9bdc63d39b7@cybernetics.com/
+https://lore.kernel.org/all/76d3418c-e9ba-4392-858a-5da8028e3526@kernel.dk/
 
+Tony Battersby
+Cybernetics
 
-vim +/fsnotify_add_mark_locked +1147 fs/notify/fanotify/fanotify_user.c
-
-912ee3946c5e57 Andreas Gruenbacher 2009-12-17  1121  
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1122  static struct fsnotify_mark *fanotify_add_new_mark(struct fsnotify_group *group,
-b812a9f5896379 Amir Goldstein      2018-06-23  1123  						   fsnotify_connp_t *connp,
-ad69cd9972e79a Amir Goldstein      2021-11-29  1124  						   unsigned int obj_type,
-77115225acc67d Amir Goldstein      2019-01-10  1125  						   __kernel_fsid_t *fsid)
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1126  {
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1127  	struct ucounts *ucounts = group->fanotify_data.ucounts;
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1128  	struct fsnotify_mark *mark;
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1129  	int ret;
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1130  
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1131  	/*
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1132  	 * Enforce per user marks limits per user in all containing user ns.
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1133  	 * A group with FAN_UNLIMITED_MARKS does not contribute to mark count
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1134  	 * in the limited groups account.
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1135  	 */
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1136  	if (!FAN_GROUP_FLAG(group, FAN_UNLIMITED_MARKS) &&
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1137  	    !inc_ucount(ucounts->ns, ucounts->uid, UCOUNT_FANOTIFY_MARKS))
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1138  		return ERR_PTR(-ENOSPC);
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1139  
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1140  	mark = kmem_cache_alloc(fanotify_mark_cache, GFP_KERNEL);
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1141  	if (!mark) {
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1142  		ret = -ENOMEM;
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1143  		goto out_dec_ucounts;
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1144  	}
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1145  
-054c636e5c8054 Jan Kara            2016-12-21  1146  	fsnotify_init_mark(mark, group);
-ad69cd9972e79a Amir Goldstein      2021-11-29 @1147  	ret = fsnotify_add_mark_locked(mark, connp, obj_type, 0, fsid);
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1148  	if (ret) {
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1149  		fsnotify_put_mark(mark);
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1150  		goto out_dec_ucounts;
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1151  	}
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1152  
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1153  	return mark;
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1154  
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1155  out_dec_ucounts:
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1156  	if (!FAN_GROUP_FLAG(group, FAN_UNLIMITED_MARKS))
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1157  		dec_ucount(ucounts, UCOUNT_FANOTIFY_MARKS);
-5b8fea65d197f4 Amir Goldstein      2021-03-04  1158  	return ERR_PTR(ret);
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1159  }
-5e9c070ca08543 Lino Sanfilippo     2013-07-08  1160  
-
-:::::: The code at line 1147 was first introduced by commit
-:::::: ad69cd9972e79aba103ba5365de0acd35770c265 fsnotify: clarify object type argument
-
-:::::: TO: Amir Goldstein <amir73il@gmail.com>
-:::::: CC: Jan Kara <jack@suse.cz>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

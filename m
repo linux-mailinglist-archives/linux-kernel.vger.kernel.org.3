@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9584D4E2545
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44DFB4E2548
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346173AbiCULdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 07:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
+        id S1346779AbiCULfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 07:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235038AbiCULdL (ORCPT
+        with ESMTP id S235038AbiCULfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 07:33:11 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184BE8EB78
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:31:46 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id dr20so28827402ejc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:31:45 -0700 (PDT)
+        Mon, 21 Mar 2022 07:35:46 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C8693980
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:34:20 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id d7so20249088wrb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 04:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=PQzatZvQ0rnATnfydXXlZrcHERA9v9fqeol3oNRKe0s=;
-        b=o6jTaq+guIeRJ1bVk1VLAfnnqbZ52yA+6P9AnEGOtOEqKkkiqb/sch6b14kyOhlCF9
-         9CCR1EeOrSziOpa4PX8fDCbsloh+uaPQ2wfOmIfP59VnqWPaM7O8MfZDIhXN8IOn07c9
-         8/bwgRBom5WtQhd/qXWBBdib7N0qe7VW9Qb68Xd0Fev9UxWOu7CmqU9f5vbcePQjKOCD
-         nRkCw0AWy2n7DDLgMwgv/kSA6Yf97rrtN7oScgWQhCOSVZ8DFJ+k2AxSj57osJk04nu1
-         d+uKFhRjycjKHvOKgIVkC/dMpWFvQVHeqyyzBsuySWhPvil1dVzcd8+VY8NS+vrRAw+e
-         l9Zw==
+        bh=42+pcjD9nmVdVhSwWnyaINhA05iNt1mKva6XHXFOVbY=;
+        b=qe6EWJsblOtDgZAnHq0dmr30IAgU307PubyeD6gbwstJOL3yIQu6FogrFJDQqe9hGV
+         2Ejc4ONV49X+482LdIv2jYbrWTlz6Uc95WfrOilsre4k7aww01MdknuM8ucxDYcHv0i9
+         hovvGmfg4pFSKEZfaBV6QXVpn4IYiRSAkNWqA3i8vXA7BnLpioauvjt3piMFCRSn+IE/
+         E5nbRG33eDa7NzjGHWLSfEAdTBacGamOTUCB1rZazwpxav1qSoMKtdKpHfrZCekcILkX
+         Zs2oPwhvHr31cE5k5lwFGavUzdqSwtJAkKi7yds+IgmaUXb6UE7U3mcgCE/qFzhOTxoj
+         QULQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=PQzatZvQ0rnATnfydXXlZrcHERA9v9fqeol3oNRKe0s=;
-        b=ruWqM7qROpvoTTWaLAx0V3C8RO/n663Dn49eshmkhd5T39Xh15WAy3EjNaNsHzeOHr
-         TfzGtlQDC7N/gES122IwNzTzm6lRBGZLgORk98C+IHYC3J4ADSu4miLbPyGr7zdAUddl
-         8FPNRURBFbEjqnRH40QJSG6sBNHE6IDYnAYfIT+3aeLMKO6J2oABlCOSqwOjtgcn2rn7
-         dCAhKfYNLKppjvkIlB72GH+wBFPS9YZVYtrWaO2OObC3w9IdSbKTiRaJvuxQKCNnjUK3
-         CO2XwkZ/UHep6qjlZY4AHFykyZy7fGSYtsPsFEUrtyS2lYeey33aDvj2Ay0Pckh+r1ez
-         gK9w==
-X-Gm-Message-State: AOAM530gLylcSFahHBOz5s33InJNrCx+7js7dTvT+9N2ATrBV6tZbvlE
-        rwGUooIpbrq1yg8ANqhCjMGdyg==
-X-Google-Smtp-Source: ABdhPJyL9LR1se3eQeUHysrOzRuRAJK4jfY+6A8O1BnJb+gkVSsQ0NGrsR6W/95ufMiuyrJxX0jmKw==
-X-Received: by 2002:a17:907:b590:b0:6c1:c061:d945 with SMTP id qx16-20020a170907b59000b006c1c061d945mr20083570ejc.768.1647862304429;
-        Mon, 21 Mar 2022 04:31:44 -0700 (PDT)
+        bh=42+pcjD9nmVdVhSwWnyaINhA05iNt1mKva6XHXFOVbY=;
+        b=TXbqnt9L16oAbISF1vS6AfO2BG1GYydoH7LlHBRLqR2GWrYJBisrCplKd1f7gxalfZ
+         1sGt0U2H3VkheBUWsLMdW3f+iHM1/eOm3Ga9h+L9t1nnpPcs2Hy276goDZHfcBrxKfAw
+         KZtHzSJry2tlkR6y8nF6/10xGrbLF6jr/WJETdLei26TtAoSN/picsjS5DXJC09HU2oY
+         C0GUxfSIt++lqGQg/Wxzdl4NkwTMfo7gElKwCXQ6XHUDT12k44fX/MyXWVDP2pQ9UTzZ
+         4c2mJTZLc9VXcMcevv1iD+7f5hgok5B0hd3kEebzTpRm7pcMQ5HIOWC19iQxoB4ZL4Tz
+         uRpw==
+X-Gm-Message-State: AOAM532PxxrIRzD2MHRECEh0Xi3C6dSoqi2sAduW90Spew0QS99v64OW
+        R+qv3HzoV8rXKN+wXIDjO4TFvA==
+X-Google-Smtp-Source: ABdhPJy1/Z5mdy2AbOVHN0m4FGyURD/Rk49c17OO5Dn464AdAgBr8yGbYlfNUZ8vkzX5261k0FlnrA==
+X-Received: by 2002:a5d:6707:0:b0:203:e60e:49fa with SMTP id o7-20020a5d6707000000b00203e60e49famr18260078wru.603.1647862459370;
+        Mon, 21 Mar 2022 04:34:19 -0700 (PDT)
 Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id z6-20020a056402274600b004194fc1b7casm101822edd.48.2022.03.21.04.31.43
+        by smtp.gmail.com with ESMTPSA id i11-20020a05600c354b00b00389f440512esm18318765wmq.32.2022.03.21.04.34.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 04:31:44 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 11:31:19 +0000
+        Mon, 21 Mar 2022 04:34:19 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 11:33:54 +0000
 From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
 To:     Lu Baolu <baolu.lu@linux.intel.com>
 Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
@@ -61,14 +61,15 @@ Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Liu Yi L <yi.l.liu@intel.com>,
         Jacob jun Pan <jacob.jun.pan@intel.com>,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 05/11] arm-smmu-v3/sva: Add SVA domain support
-Message-ID: <YjhiByacn+WACHCU@myrica>
+Subject: Re: [PATCH RFC 06/11] iommu/sva: Use attach/detach_pasid_dev in SVA
+ interfaces
+Message-ID: <YjhiohZAbN1ornmB@myrica>
 References: <20220320064030.2936936-1-baolu.lu@linux.intel.com>
- <20220320064030.2936936-6-baolu.lu@linux.intel.com>
+ <20220320064030.2936936-7-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220320064030.2936936-6-baolu.lu@linux.intel.com>
+In-Reply-To: <20220320064030.2936936-7-baolu.lu@linux.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -79,167 +80,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 02:40:24PM +0800, Lu Baolu wrote:
-> Add support for SVA domain allocation and provide an SVA-specific
-> iommu_domain_ops.
-> 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   | 14 ++++++
->  .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   | 45 +++++++++++++++++++
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   | 13 +++++-
->  3 files changed, 71 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-> index cd48590ada30..7631c00fdcbd 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-> @@ -759,6 +759,10 @@ struct iommu_sva *arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm,
->  void arm_smmu_sva_unbind(struct iommu_sva *handle);
->  u32 arm_smmu_sva_get_pasid(struct iommu_sva *handle);
->  void arm_smmu_sva_notifier_synchronize(void);
-> +int arm_smmu_sva_attach_dev_pasid(struct iommu_domain *domain,
-> +				  struct device *dev, ioasid_t id);
-> +void arm_smmu_sva_detach_dev_pasid(struct iommu_domain *domain,
-> +				   struct device *dev, ioasid_t id);
->  #else /* CONFIG_ARM_SMMU_V3_SVA */
->  static inline bool arm_smmu_sva_supported(struct arm_smmu_device *smmu)
->  {
-> @@ -804,5 +808,15 @@ static inline u32 arm_smmu_sva_get_pasid(struct iommu_sva *handle)
->  }
+On Sun, Mar 20, 2022 at 02:40:25PM +0800, Lu Baolu wrote:
+> diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
+> index 106506143896..47cf98e661ff 100644
+> --- a/drivers/iommu/iommu-sva-lib.c
+> +++ b/drivers/iommu/iommu-sva-lib.c
+> @@ -3,6 +3,8 @@
+>   * Helpers for IOMMU drivers implementing SVA
+>   */
+>  #include <linux/mutex.h>
+> +#include <linux/iommu.h>
+> +#include <linux/slab.h>
+>  #include <linux/sched/mm.h>
 >  
->  static inline void arm_smmu_sva_notifier_synchronize(void) {}
+>  #include "iommu-sva-lib.h"
+> @@ -69,3 +71,101 @@ struct mm_struct *iommu_sva_find(ioasid_t pasid)
+>  	return ioasid_find(&iommu_sva_pasid, pasid, __mmget_not_zero);
+>  }
+>  EXPORT_SYMBOL_GPL(iommu_sva_find);
 > +
-> +static inline int arm_smmu_sva_attach_dev_pasid(struct iommu_domain *domain,
-> +						struct device *dev, ioasid_t id)
+> +static struct iommu_domain *iommu_sva_domain_alloc(struct device *dev)
 > +{
-> +	return -ENODEV;
+> +	struct bus_type *bus = dev->bus;
+> +	struct iommu_domain *domain;
+> +
+> +	if (!bus || !bus->iommu_ops)
+> +		return NULL;
+> +
+> +	domain = bus->iommu_ops->domain_alloc(IOMMU_DOMAIN_SVA);
+> +	if (domain)
+> +		domain->type = IOMMU_DOMAIN_SVA;
+> +
+> +	return domain;
 > +}
 > +
-> +static inline void arm_smmu_sva_detach_dev_pasid(struct iommu_domain *domain,
-> +						 struct device *dev,
-> +						 ioasid_t id) {}
->  #endif /* CONFIG_ARM_SMMU_V3_SVA */
->  #endif /* _ARM_SMMU_V3_H */
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> index 22ddd05bbdcd..1e114b9dc17f 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> @@ -534,3 +534,48 @@ void arm_smmu_sva_notifier_synchronize(void)
->  	 */
->  	mmu_notifier_synchronize();
->  }
-> +
-> +int arm_smmu_sva_attach_dev_pasid(struct iommu_domain *domain,
-> +				  struct device *dev, ioasid_t id)
+> +/**
+> + * iommu_sva_bind_device() - Bind a process address space to a device
+> + * @dev: the device
+> + * @mm: the mm to bind, caller must hold a reference to it
+> + * @drvdata: opaque data pointer to pass to bind callback
+> + *
+> + * Create a bond between device and address space, allowing the device to access
+> + * the mm using the returned PASID. If a bond already exists between @device and
+> + * @mm, it is returned and an additional reference is taken.
+
+This is not true anymore, we return a different structure for each call.
+
+> Caller must call
+> + * iommu_sva_unbind_device() to release each reference.
+> + *
+> + * iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) must be called first, to
+> + * initialize the required SVA features.
+> + *
+> + * On error, returns an ERR_PTR value.
+> + */
+> +struct iommu_sva *
+> +iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
 > +{
-> +	int ret = 0;
+> +	int ret = -EINVAL;
 > +	struct iommu_sva *handle;
-> +	struct mm_struct *mm = domain->sva_cookie;
-> +	struct arm_smmu_domain *smmu_domain = to_smmu_domain(domain);
+> +	struct iommu_domain *domain;
 > +
-> +	if (smmu_domain->stage != ARM_SMMU_DOMAIN_S1 ||
-
-This check is for the parent domain, iommu_get_domain_for_dev(dev)
-
-> +	    domain->type != IOMMU_DOMAIN_SVA || !mm)
-> +		return -EINVAL;
+> +	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
+> +	if (!handle)
+> +		return ERR_PTR(-ENOMEM);
 > +
-> +	mutex_lock(&sva_lock);
-> +	handle = __arm_smmu_sva_bind(dev, mm);
-> +	if (IS_ERR_OR_NULL(handle))
-> +		ret = PTR_ERR(handle);
-> +	mutex_unlock(&sva_lock);
+> +	ret = iommu_sva_alloc_pasid(mm, 1, (1U << dev->iommu->pasid_bits) - 1);
+> +	if (ret)
+> +		goto out;
 > +
-> +	return ret;
-> +}
-> +
-> +void arm_smmu_sva_detach_dev_pasid(struct iommu_domain *domain,
-> +				   struct device *dev, ioasid_t id)
-> +{
-> +	struct arm_smmu_bond *bond = NULL, *t;
-> +	struct mm_struct *mm = domain->sva_cookie;
-> +	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
-> +
-> +	mutex_lock(&sva_lock);
-> +	list_for_each_entry(t, &master->bonds, list) {
-> +		if (t->mm == mm) {
-> +			bond = t;
-> +			break;
-> +		}
+> +	domain = iommu_sva_domain_alloc(dev);
+> +	if (!domain) {
+> +		ret = -ENOMEM;
+> +		goto out;
 > +	}
+> +	domain->sva_cookie = mm;
 > +
-> +	if (!WARN_ON(!bond) && refcount_dec_and_test(&bond->refs)) {
-> +		list_del(&bond->list);
-> +		arm_smmu_mmu_notifier_put(bond->smmu_mn);
-> +		iommu_sva_free_pasid(bond->mm);
-
-Can be dropped since iommu.c does PASID allocation (also the one in
-__arm_smmu_sva_bind() as a cleanup patch)
-
-> +		kfree(bond);
-> +	}
-> +	mutex_unlock(&sva_lock);
+> +	ret = iommu_attach_device_pasid(domain, dev, mm->pasid);
+> +	if (ret)
+> +		goto out_free_domain;
+> +
+> +	handle->dev = dev;
+> +	handle->domain = domain;
+> +	handle->pasid = mm->pasid;
+> +
+> +	return handle;
+> +
+> +out_free_domain:
+> +	iommu_domain_free(domain);
+> +out:
+> +	kfree(handle);
+> +
+> +	return ERR_PTR(ret);
 > +}
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> index 8e262210b5ad..2e9d3cd30510 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> @@ -88,6 +88,8 @@ static struct arm_smmu_option_prop arm_smmu_options[] = {
->  	{ 0, NULL},
->  };
->  
-> +static void arm_smmu_domain_free(struct iommu_domain *domain);
+> +EXPORT_SYMBOL_GPL(iommu_sva_bind_device);
 > +
->  static void parse_driver_options(struct arm_smmu_device *smmu)
->  {
->  	int i = 0;
-> @@ -1995,6 +1997,12 @@ static bool arm_smmu_capable(enum iommu_cap cap)
->  	}
->  }
->  
-> +static const struct iommu_domain_ops arm_smmu_sva_domain_ops = {
-> +	.attach_dev_pasid	= arm_smmu_sva_attach_dev_pasid,
-> +	.detach_dev_pasid	= arm_smmu_sva_detach_dev_pasid,
-> +	.free			= arm_smmu_domain_free,
-> +};
-> +
->  static struct iommu_domain *arm_smmu_domain_alloc(unsigned type)
->  {
->  	struct arm_smmu_domain *smmu_domain;
-> @@ -2002,7 +2010,8 @@ static struct iommu_domain *arm_smmu_domain_alloc(unsigned type)
->  	if (type != IOMMU_DOMAIN_UNMANAGED &&
->  	    type != IOMMU_DOMAIN_DMA &&
->  	    type != IOMMU_DOMAIN_DMA_FQ &&
-> -	    type != IOMMU_DOMAIN_IDENTITY)
-> +	    type != IOMMU_DOMAIN_IDENTITY &&
-> +	    type != IOMMU_DOMAIN_SVA)
->  		return NULL;
+> +/**
+> + * iommu_sva_unbind_device() - Remove a bond created with iommu_sva_bind_device
+> + * @handle: the handle returned by iommu_sva_bind_device()
+> + *
+> + * Put reference to a bond between device and address space.
 
-We don't need to allocate an arm_smmu_domain, it likely won't have
-anything in common with the SVA domain and it would be much clearer within
-the SMMU driver if we use different structs for parent and child domains.
-For now we could just return a naked struct iommu_domain. Sanity checks in
-arm_smmu_attach_dev() would be good too, a SVA domain can't be attached as
-a parent domain.
-
-I this this works otherwise, but will need to test the series to see what
-more is needed, when I find some time.
+Same here. But I'd prefer keeping the old behavior so device drivers don't
+have to keep track of {dev, mm} pairs themselves.
 
 Thanks,
 Jean
 
->  
->  	/*
-> @@ -2018,6 +2027,8 @@ static struct iommu_domain *arm_smmu_domain_alloc(unsigned type)
->  	INIT_LIST_HEAD(&smmu_domain->devices);
->  	spin_lock_init(&smmu_domain->devices_lock);
->  	INIT_LIST_HEAD(&smmu_domain->mmu_notifiers);
-> +	if (type == IOMMU_DOMAIN_SVA)
-> +		smmu_domain->domain.ops = &arm_smmu_sva_domain_ops;
->  
->  	return &smmu_domain->domain;
->  }
-> -- 
-> 2.25.1
-> 
+> The device should
+> + * not be issuing any more transaction for this PASID. All outstanding page
+> + * requests for this PASID must have been flushed to the IOMMU.
+> + */
+> +void iommu_sva_unbind_device(struct iommu_sva *handle)
+> +{
+> +	struct device *dev = handle->dev;
+> +	struct iommu_domain *domain = handle->domain;
+> +	struct mm_struct *mm = domain->sva_cookie;
+> +
+> +	iommu_detach_device_pasid(domain, dev, mm->pasid);
+> +	iommu_domain_free(domain);
+> +	kfree(handle);
+> +}
+> +EXPORT_SYMBOL_GPL(iommu_sva_unbind_device);
+> +
+> +u32 iommu_sva_get_pasid(struct iommu_sva *handle)
+> +{
+> +	return handle->pasid;
+> +}
+> +EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);

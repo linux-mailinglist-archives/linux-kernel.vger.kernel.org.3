@@ -2,75 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8FC4E2398
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30FD4E22DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346016AbiCUJsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S1345634AbiCUJDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346025AbiCUJsl (ORCPT
+        with ESMTP id S1345528AbiCUJDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:48:41 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168AD1350A4;
-        Mon, 21 Mar 2022 02:47:14 -0700 (PDT)
-Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MOzjW-1niHLI2G8y-00PQYd; Mon, 21 Mar 2022 10:47:12 +0100
-Received: by mail-wr1-f48.google.com with SMTP id h4so1886414wrc.13;
-        Mon, 21 Mar 2022 02:47:12 -0700 (PDT)
-X-Gm-Message-State: AOAM532fABBkxkanJAfZPCNauoHejVllUnZlaKMU87qgQmjA3xaeECVh
-        PqqRJBS6PxAlByq8h+x1icqAue1KP/fwoNz2JZc=
-X-Google-Smtp-Source: ABdhPJyOugVZs0WuLZGA5S5fvh4E/SZOrX2XaObUjw113bg3VATG3qE5f/uf70NlJtAeFLbVSJkTwKN5RI+nUV2zcU0=
-X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
- e15-20020a5d6d0f000000b0020391571c48mr17167113wrq.192.1647852867006; Mon, 21
- Mar 2022 01:54:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-6-chenhuacai@loongson.cn>
-In-Reply-To: <20220319143817.1026708-6-chenhuacai@loongson.cn>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 21 Mar 2022 09:54:11 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2kroHVN3fTabuFVMz08SXytz-SC8X11BxxszsUCksJ4g@mail.gmail.com>
-Message-ID: <CAK8P3a2kroHVN3fTabuFVMz08SXytz-SC8X11BxxszsUCksJ4g@mail.gmail.com>
-Subject: Re: [PATCH V8 13/22] LoongArch: Add system call support
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:rCdFpqmPfHoRNRNaxUfc7r0fQcv9wGvASDzi0v1Tk9Btj28/S55
- G4RecOA35Q8EeyTP6FMkSBtB3yoxWpgQ4SyAzfpm9nOCoBWBdgYWYEy0+31VkMMx61HN1s/
- yYP+Mqrvd/SiAz4zPg5weyXLGuLlyxT4vjPQ0mvvi+b0z3DPKtYtgCj2xj68uvVVhztSW4x
- FCNi15ETYUXu6smuqmf8g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Sxg/epg92uQ=:ue5eF+gDBmWW08+qFfFcXf
- h83T+kssmzjynZ90jvgxYSD0o7DLi8Z2MXjo7fWY1RocC1iefr29urjy0iZAGIcqlez2win+0
- jgSswiKGZPDWEexrAlLxrrtpHb7Je4UOvs8VkqflJB7OT32gtPby6b+UxVFkJByH/xxk+Em1H
- IXoLzJurcMvjOIU6QREsMwJy0yIBSObf6GfK/vBNsvi+I4MQNlCZYK1DOvDO61XlzWGD6BgjY
- I4/KcjFGTqlNphgQ4ZFUEPNJZzTtS+CHJ0slSx5xZxn3nX1feVXNz3zDWRZO4q+NvHpoE5qKM
- PLC6sGYt+egiQ+vU5OXUCgWD6I8aRUmVlpwDHMtJ7HzwoxhhERdwwmUYCoS8U0xUvrC/vXPj+
- nnzayW9BEqsuItYZNp38NqLSMJIeAnQSdi0x7doN0/nH0ZsPzomUwL9fFw/khXCcp/GSkCq9+
- 65XURyCCN+1ZtEsA/6Mh5yPZCnZMY/OeuPWBqUhaNrETThdBBM/bJvMxA8+snJXq54LhOve0b
- rRsLZc2BOt9fb8+3RcFqfWtI9q1VUHUz4dnFC4Zxj0p18yV3AHgdHtocoJndSdvjNu3a4ulz1
- AlelrsUTFDTgVlPdlDO4Q1yXeKkNeIyUP/X33z4X8JmJfm9IAiTC6BUXsKEGm/yUgbJaowyFF
- MF6r+gvDxeSfg5OpiPQ9a88OGEh6FDUNPmh1/162ceKoaO8qAQgSU6GelmLD8n7CwHo/8LlDJ
- QlhXlwf1hkhlEcEIv+6JESi/YMRiGl6eZDFhRXhduGxJ8cImQGibR/BvVMHupUbf6nDqmzulx
- EHvViHDD/BI1PA9ymfsczDFwPaz89pkDxU+YRYHJox8FWlTeXk=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        Mon, 21 Mar 2022 05:03:40 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3598FE7B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 02:02:11 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220321090206epoutp01a1df40e2aabb95e769f5a3f128f43c7f~eWd6wP33i2991429914epoutp01_
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:02:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220321090206epoutp01a1df40e2aabb95e769f5a3f128f43c7f~eWd6wP33i2991429914epoutp01_
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1647853326;
+        bh=obaOjAdryqP2qc69EQLjpYCegESyjAgiVw6k4cPxyZo=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=TklZW5x4B/BgVjI9IX3bpjOYVb9QD8su0GiUUGXeRCycEHeT7U/lQw/eO48zEycSb
+         PS6+js5QEx3HWUTruuyjIptelRFqVxkTvneSSnr/C2DQp58HCmcqeHM9iv2ipWcb9J
+         CVBt5EK6YrjJK4ovhbwYLE/DfzfNjLMCzIL0glE8=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220321090206epcas2p31eaf3d1b8e8c000912fd07a0ab4b9796~eWd6VOA1R3112631126epcas2p3R;
+        Mon, 21 Mar 2022 09:02:06 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KMTC00ssCz4x9QC; Mon, 21 Mar
+        2022 09:02:04 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F2.81.16040.A0F38326; Mon, 21 Mar 2022 18:02:02 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c~eWd2xhO1m0731007310epcas2p1J;
+        Mon, 21 Mar 2022 09:02:02 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220321090202epsmtrp1b814ddbe0867f61120e1f78fe0ded0d7~eWd2wwwzq2591125911epsmtrp1W;
+        Mon, 21 Mar 2022 09:02:02 +0000 (GMT)
+X-AuditID: b6c32a46-bffff70000023ea8-66-62383f0a0288
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FF.E7.03370.A0F38326; Mon, 21 Mar 2022 18:02:02 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220321090202epsmtip2e1e01a66a4ff88e0e31169705049d6c7~eWd2n55oj1773717737epsmtip2B;
+        Mon, 21 Mar 2022 09:02:02 +0000 (GMT)
+From:   Daehwan Jung <dh10.jung@samsung.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
+        linux-kernel@vger.kernel.org (open list),
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>,
+        Daehwan Jung <dh10.jung@samsung.com>, sc.suh@samsung.com
+Subject: [PATCH v3 0/4] support USB offload feature
+Date:   Mon, 21 Mar 2022 17:59:50 +0900
+Message-Id: <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPKsWRmVeSWpSXmKPExsWy7bCmuS6XvUWSwbV16hZ3FkxjsnhyZBG7
+        RfPi9WwW1/+8Z7Rof36BzeLyrjlsFouWtTJbNG+awmoxc62yRdfdG4wOXB6X+3qZPBZsKvVY
+        vOclk8f+uWvYPfq2rGL0+LxJLoAtKtsmIzUxJbVIITUvOT8lMy/dVsk7ON453tTMwFDX0NLC
+        XEkhLzE31VbJxSdA1y0zB+gwJYWyxJxSoFBAYnGxkr6dTVF+aUmqQkZ+cYmtUmpBSk6BeYFe
+        cWJucWleul5eaomVoYGBkSlQYUJ2xrvX11kL/vBVPDgh0sD4g7uLkZNDQsBEovn0M8YuRi4O
+        IYEdjBKHbvxgg3A+MUpsmdTFDOF8ZpSYfLwbyOEAa7mymAsivotR4vXVmewgo4QEfjBKNC0x
+        BqlhE9CS+L6QESQsIhAnsbTzEhNIPbPAaiaJ9x8vsoEkhAWMJU7d+w/WyyKgKjFlxjqwOK+A
+        q8T7k1uYIM6Tk7h5rhPsCAmBc+wSzV8nMkIkXCTubr7JDGELS7w6voUdwpaSeNnfBmUXS+z6
+        1MoE0dzAKNH44ARUg7HErGftjCCXMgtoSqzfpQ/xmLLEkVssIBXMAnwSHYf/skOEeSU62oQg
+        GpUlpl+ewAphS0ocfH0OaqCHxLTm+dBgiJXYs6STbQKj7CyE+QsYGVcxiqUWFOempxYbFRjB
+        oyg5P3cTIzilabntYJzy9oPeIUYmDsZDjBIczEoivIs/mCcJ8aYkVlalFuXHF5XmpBYfYjQF
+        htdEZinR5HxgUs0riTc0sTQwMTMzNDcyNTBXEuf1StmQKCSQnliSmp2aWpBaBNPHxMEp1cCk
+        ek9ep/vN5e6nx8unz3uWwlY6TaUl4HLz338fz3K/Fmx1uP9G0EY5MuF7bSEHfyYbv3HVyXXH
+        /ldeebFku2Tc3L95kz7oqh71Nlu6Xu4qe5/POi/G5Rsf7X3383T/CdPe/68tfgvnNKje7PV6
+        8MdM0XJ60ZInygL6zPv+nJg3q9b4rgozC6O64VLOS3mbHx1gZO9ZK/TIK9JHKtlQ/s2twD3v
+        Dv6Z9elg1+u0a2arbJ6WxsgZNDHsjdVJkb1s/oBJzSgpnl9z412xPJ4+IxPX3bb31+5W4pD6
+        0brWPk+1ZkqHmfFWk4eSBu/bM5fIGfxJvDdpicoWdZ29zloiu9633knP0vvm6e3hffBOBJcS
+        S3FGoqEWc1FxIgCol9Za8gMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnluLIzCtJLcpLzFFi42LZdlhJXpfL3iLJYO97IYs7C6YxWTw5sojd
+        onnxejaL63/eM1q0P7/AZnF51xw2i0XLWpktmjdNYbWYuVbZouvuDUYHLo/Lfb1MHgs2lXos
+        3vOSyWP/3DXsHn1bVjF6fN4kF8AWxWWTkpqTWZZapG+XwJXx7vV11oI/fBUPTog0MP7g7mLk
+        4JAQMJG4spiri5GLQ0hgB6PE3V+rmLsYOYHikhJL595gh7CFJe63HGGFKPrGKHFi8yMmkGY2
+        AS2J7wsZQWpEBOIkVlzewwJSwyywkUli0oNLLCAJYQFjiVP3/oMNYhFQlZgyYx0biM0r4Crx
+        /uQWJogFchI3z3UyT2DkWcDIsIpRMrWgODc9t9iwwCgvtVyvODG3uDQvXS85P3cTIzjMtLR2
+        MO5Z9UHvECMTB+MhRgkOZiUR3sUfzJOEeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkvJJCe
+        WJKanZpakFoEk2Xi4JRqYBJ6KChzrzG3tkVc87buA4/iXNMLqtfVldtyzF7nPqlbcVup5Dn/
+        dfkHqsx52twRpY8MTE62+x45Ybpo9ZUK3r2h0RNWm4pPmPfjSbKly9QW/8n/ZwYvYYu/P1u7
+        JaN57vUd+ms/xseu9MibPSv3h7bAWY7dk7mLN4gc+iT1Ie+gcP1pB2lv96DDaa2G65a8+Dvn
+        ef/OHwscDi4OOxnR+X9j1Dz/H5dC21feuWwRt99M6nKchb0Xc/XBqICwvZuex09nXX9FSlGi
+        /l5f9K6350ovpXM7n5Wb+D7M5bH09fYNqbbnP2U8X7Wyb19hMeuTI10eyybJLdg34WrCJMvY
+        bbvmRhx9cTDVIXLz919ZizOUWIozEg21mIuKEwG+n9RaogIAAA==
+X-CMS-MailID: 20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c
+References: <CGME20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c@epcas2p1.samsung.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,73 +116,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> This patch adds system call support and related uaccess.h for LoongArch.
->
-> Q: Why keep __ARCH_WANT_NEW_STAT definition while there is statx:
-> A: Until the latest glibc release (2.34), statx is only used for 32-bit
->    platforms, or 64-bit platforms with 32-bit timestamp. I.e., Most 64-
->    bit platforms still use newstat now.
->
-> Q: Why keep _ARCH_WANT_SYS_CLONE definition while there is clone3:
-> A: The latest glibc release (2.34) has some basic support for clone3 but
->    it isn't complete. E.g., pthread_create() and spawni() have converted
->    to use clone3 but fork() will still use clone. Moreover, some seccomp
->    related applications can still not work perfectly with clone3.
+This patchset is for USB offload feature, which makes Co-processor to use
+some memories of xhci. Especially it's useful for USB Audio scenario.
+Audio stream would get shortcut because Co-processor directly write/read
+data in xhci memories. It could get speed-up using faster memory like SRAM.
+That's why this gives vendors flexibilty of memory management.
+Several pathches have been merged in AOSP kernel(android12-5.10) and I put
+together and split into 3 patches. Plus let me add user(xhci-exynos)
+module to see how user could use it.
 
-Please leave those out of the mainline kernel support though: Any users
-of existing glibc binaries can keep using patched kernels for the moment,
-and then later drop those pages when the proper glibc support gets
-merged.
+To sum up, it's for providing xhci memories to Co-Processor.
+It would cover DCBAA, Device Context, Transfer Ring, Event Ring, ERST.
+It needs xhci hooks and to export some xhci symbols.
 
-> +#define __ua_size(size)                                                        \
-> +       ((__builtin_constant_p(size) && (signed long) (size) > 0) ? 0 : (size))
-> +
-> +/*
-> + * access_ok: - Checks if a user space pointer is valid
-> + * @addr: User space pointer to start of block to check
-> + * @size: Size of block to check
-> + *
-> + * Context: User context only. This function may sleep if pagefaults are
-> + *          enabled.
-> + *
-> + * Checks if a pointer to a block of memory in user space is valid.
-> + *
-> + * Returns true (nonzero) if the memory block may be valid, false (zero)
-> + * if it is definitely invalid.
-> + *
-> + * Note that, depending on architecture, this function probably just
-> + * checks that the pointer is in the user space range - after calling
-> + * this function, memory access functions may still return -EFAULT.
-> + */
-> +static inline int __access_ok(const void __user *p, unsigned long size)
-> +{
-> +       unsigned long addr = (unsigned long)p;
-> +       unsigned long end = addr + size - !!size;
-> +
-> +       return (__UA_LIMIT & (addr | end | __ua_size(size))) == 0;
-> +}
-> +
-> +#define access_ok(addr, size)                                  \
-> +       likely(__access_ok((addr), (size)))
+Changes in v2 :
+- Fix commit message by adding Signed-off-by in each patch.
+- Fix conflict on latest.
 
-I rewrote this bit a series that is currently queued for 5.18, so you
-will have to adapt it to the new version, by just removing your
-custom definitions.
+Changes in v3 :
+- Remove export symbols and xhci hooks which xhci-exynos don't need.
+- Modify commit message to clarify why it needs to export symbols.
+- Check compiling of xhci-exynos.
 
-> +#define __get_user(x, ptr) \
-> +({                                                                     \
-> +       int __gu_err = 0;                                               \
-> +                                                                       \
-> +       __chk_user_ptr(ptr);                                            \
-> +       __get_user_common((x), sizeof(*(ptr)), ptr);                    \
-> +       __gu_err;                                                       \
-> +})
+Daehwan Jung (4):
+  usb: host: export symbols for xhci hooks usage
+  usb: host: add xhci hooks for USB offload
+  usb: host: add some to xhci overrides for USB offload
+  usb: host: add xhci-exynos driver
 
-It would be good to also provide a
-__kernel_kernel_nofault()/__put_kernel_nofault()
-implementation, as the default based on __get_user()/__put_user is not
-ideal.
+ drivers/usb/host/Kconfig       |   9 +
+ drivers/usb/host/Makefile      |   1 +
+ drivers/usb/host/xhci-exynos.c | 982 +++++++++++++++++++++++++++++++++
+ drivers/usb/host/xhci-exynos.h |  63 +++
+ drivers/usb/host/xhci-hub.c    |   7 +
+ drivers/usb/host/xhci-mem.c    | 150 ++++-
+ drivers/usb/host/xhci-plat.c   |  43 +-
+ drivers/usb/host/xhci-plat.h   |   7 +
+ drivers/usb/host/xhci-ring.c   |   1 +
+ drivers/usb/host/xhci.c        |  90 ++-
+ drivers/usb/host/xhci.h        |  50 ++
+ 11 files changed, 1379 insertions(+), 24 deletions(-)
+ create mode 100644 drivers/usb/host/xhci-exynos.c
+ create mode 100644 drivers/usb/host/xhci-exynos.h
 
-        Arnd
+-- 
+2.31.1
+

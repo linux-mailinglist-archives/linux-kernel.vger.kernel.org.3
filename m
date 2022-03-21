@@ -2,65 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798A34E340E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3544E3433
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbiCUXXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
+        id S231753AbiCUXYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232972AbiCUXXL (ORCPT
+        with ESMTP id S232554AbiCUXYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:23:11 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A05F352E2F
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:16:15 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d18so14015282plr.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:16:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jprZ5dlZvfVcHO5mE9ZsoLRmOINsWsg3Aq0+MlbJMbQ=;
-        b=m3w0Z62CifEheFBP2aKif3vYzDSKk5kP4WmMFHWxicEhav1Zh1vUUcSqxMBflIqAWh
-         13aAwdlYmvIgg9CRJATzDQJ+W51aQ+jfkK32jf7LTv6OZPp6Qs2ftu9cAAlYBepUB5Zf
-         z37VcVrlpoe+qPR8Pbnx11ENZuL1iSdgBJQk4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jprZ5dlZvfVcHO5mE9ZsoLRmOINsWsg3Aq0+MlbJMbQ=;
-        b=QbS5fkFlJtkI+hoNQRSwhGioxImArL+Pa53BIdWLg1kYqXpdC7Z4wrBlI1nct+qiX4
-         +EiysGKDG7mcKp8jpGqZcMzGjJ96400llpQnP1gVZ+owzzFg1gR0pJFRqnPsZhanj7cz
-         K0HSe1FNP90EvgYecv2tz2JdRf3aH8UjPGDR5vprJxNK++452MO6GG7pOjUc4/AlKp/d
-         i5NoSo4H/OswILbXRZxwiWZNr+VPLl7GFFcRu0fQ8FjMDsbpJ9hDS1TYOuVEASrt7gvm
-         wTGmTt5UrM/a6Li++Qu3juQT63vtsdsj1NQldHql0qrQAdxutt8C9G/xWdlF57qQhU+m
-         /kuQ==
-X-Gm-Message-State: AOAM530kLsDj5303qkV6kERZz7T8BN6kup78SAJ4KNCW/JN2raDUWeYw
-        LlZOrNedW/Oa5pZemk9TjqG9zA==
-X-Google-Smtp-Source: ABdhPJy4o7zoUol63NLz6MOIzB5l3YwODgUiOck2+yxumSjiJkNDqtAnqeZi3MluXTRKMbqZP7s30w==
-X-Received: by 2002:a17:902:ef46:b0:153:81f7:7fc2 with SMTP id e6-20020a170902ef4600b0015381f77fc2mr15499305plx.26.1647904574600;
-        Mon, 21 Mar 2022 16:16:14 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:69b1:6a1d:ea0e:4fc9])
-        by smtp.gmail.com with ESMTPSA id oo17-20020a17090b1c9100b001bf0ccc59c2sm481412pjb.16.2022.03.21.16.16.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 16:16:14 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] soc: qcom: socinfo: add SC7280 entry to soc_id array
-Date:   Mon, 21 Mar 2022 16:15:55 -0700
-Message-Id: <20220321161546.1.Ifc4270fbe9bad536f08a47696e00cca5a0714abd@changeid>
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+        Mon, 21 Mar 2022 19:24:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925A0278555
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 16:17:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23837B81A21
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 23:17:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86C47C340E8;
+        Mon, 21 Mar 2022 23:17:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647904664;
+        bh=y9xXWMwyEANoM6aeY6koZNPCFGb3yUKNDQjuQUtX7JY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rSY9bXGW0N5W+d2AHsxfL96+yWeLwzTaINMtf3MV3QrW+jcJumSbKNClS66ynent3
+         418H0sJ4vy+66ecCKoIusShJ60tw0TeDvizUA9FKtOjcbPA+BwR4PduTg3epP7u33k
+         CK8gR8E7K/94OKJs9clkdaDMUjUWVolmAGJcHvP6Hd+gnPFmnWHEJGyfA/zk0krHmn
+         QdfIyvybn/y95cB50mZGLdkyFXD8RKAggjwIfKDlGKBHM77dsQWaNi9h0ksyrTgdV8
+         xkM5efXRgSetllQDIbWMk5tg9/3Pl4LCmuXbWGBO+w5upjztBcKh3LUY6s8/buQpoy
+         FWSx8gZxemBeQ==
+Date:   Mon, 21 Mar 2022 16:17:37 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     x86-ml <x86@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [tip:sched/core] BUILD SUCCESS
+ 3387ce4d8a5f2956fab827edf499fe6780e83faa
+Message-ID: <YjkHkb7joeu5GCto@dev-arch.thelio-3990X>
+References: <6238fde0.Qe5umewxqwiDe2GE%lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6238fde0.Qe5umewxqwiDe2GE%lkp@intel.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,26 +54,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an entry for SC7280 SoC.
+Hello,
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+On Tue, Mar 22, 2022 at 06:36:16AM +0800, kernel test robot wrote:
+> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
+> branch HEAD: 3387ce4d8a5f2956fab827edf499fe6780e83faa  headers/prep: Fix header to build standalone: <linux/psi.h>
+> 
+> elapsed time: 730m
+> 
+> configs tested: 114
+> configs skipped: 3
+> 
+> The following configs have been built successfully.
+> More configs may be tested in the coming days.
+> 
+> gcc tested configs:
+...
+> arm                              allyesconfig
+> arm                              allmodconfig
 
- drivers/soc/qcom/socinfo.c | 1 +
- 1 file changed, 1 insertion(+)
+This caught my eye due to my earlier report:
 
-diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-index 8b38d134720a..dbdbad5db3e5 100644
---- a/drivers/soc/qcom/socinfo.c
-+++ b/drivers/soc/qcom/socinfo.c
-@@ -330,6 +330,7 @@ static const struct soc_id soc_id[] = {
- 	{ 459, "SM7225" },
- 	{ 460, "SA8540P" },
- 	{ 480, "SM8450" },
-+	{ 487, "SC7280" },
- };
- 
- static const char *socinfo_machine(struct device *dev, unsigned int id)
--- 
-2.35.1.894.gb6a874cedc-goog
+https://lore.kernel.org/r/YjiddAnoCCz7Tbt3@dev-arch.thelio-3990X/
 
+Are you sure these configurations built sucessfully?
+
+
+$ git show -s
+commit 3387ce4d8a5f2956fab827edf499fe6780e83faa
+Author: Ingo Molnar <mingo@kernel.org>
+Date:   Mon Mar 21 11:05:50 2022 +0100
+
+    headers/prep: Fix header to build standalone: <linux/psi.h>
+    
+    Add the <linux/cgroup-defs.h> dependency to <linux/psi.h>, because
+    cgroup_move_task() will dereference 'struct css_set'.
+    
+    ( Only older toolchains are affected, due to variations in
+      the implementation of rcu_assign_pointer() et al. )
+    
+    Cc: Peter Zijlstra <peterz@infradead.org>
+    Cc: Linus Torvalds <torvalds@linux-foundation.org>
+    Reported-by: Sachin Sant <sachinp@linux.ibm.com>
+    Reported-by: Andrew Morton <akpm@linux-foundation.org>
+    Reported-by: Borislav Petkov <bp@alien8.de>
+    Signed-off-by: Ingo Molnar <mingo@kernel.org>
+
+$ make -skj"$(nproc)" ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- allmodconfig kernel/sched/
+In file included from kernel/sched/fair.c:52:
+kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
+   87 | # include <asm/paravirt_api_clock.h>
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[3]: *** [scripts/Makefile.build:288: kernel/sched/fair.o] Error 1
+In file included from kernel/sched/build_utility.c:52:
+kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
+   87 | # include <asm/paravirt_api_clock.h>
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[3]: *** [scripts/Makefile.build:288: kernel/sched/build_utility.o] Error 1
+In file included from kernel/sched/build_policy.c:33:
+kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
+   87 | # include <asm/paravirt_api_clock.h>
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[3]: *** [scripts/Makefile.build:288: kernel/sched/build_policy.o] Error 1
+In file included from kernel/sched/core.c:81:
+kernel/sched/sched.h:87:11: fatal error: asm/paravirt_api_clock.h: No such file or directory
+   87 | # include <asm/paravirt_api_clock.h>
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+...
+
+I am curious to know how this error was not caught by these builds?
+Perhaps an old .config from a previous allmodconfig is being reused,
+rather than just running "make allmodconfig"? If that is the case, it
+seems like that methodology will miss out on new configuration options
+over time.
+
+Cheers,
+Nathan

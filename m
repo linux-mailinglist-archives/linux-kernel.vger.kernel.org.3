@@ -2,147 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35394E24CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 11:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFB64E24D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346542AbiCULAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 07:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
+        id S1346571AbiCULCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 07:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbiCULAv (ORCPT
+        with ESMTP id S1346552AbiCULCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 07:00:51 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6151E3CC
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 03:59:25 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id dr20so28660152ejc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 03:59:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=Zzl3GYl80w+S9mI5wpD2NO28H32GyZAzJz9ChCnYhhk=;
-        b=BOeG2vnZA3JGkd2zKOK8WvSEdIkop3CBOdorIGHuagbywfrRREEbfwjaL+moII1QoU
-         kwxemH01uBlp6L5MKQCLgCYTU6Q4kNRQRSNmeY8yyNH3+Sfj+lh8IrDd/gpnbD3bt/x5
-         i7ZJVSxZHhJKvjuJSgq203uPnnCZX5jF2tFdrJ8FwEF3jB74skE/RyC8IOMLBGNtjLVs
-         YvBxyBgjs9y5yz5jg+5HPK4P5Ds17OXKP6+wfYE2xltgGNu1eJUZ6DOiCqvr6vbQ0K7T
-         Jv/GDBWoqlfF15yb70RHK20dHIRwWaLKxwIW/w18aiA5aLd9u7m0QFHgZkw0pkAiidv4
-         Eq3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=Zzl3GYl80w+S9mI5wpD2NO28H32GyZAzJz9ChCnYhhk=;
-        b=hkRr9Z7hTlFBBXzESSrfscZ6KoR6RjB09yuO1qzw7laKXd/IFAqBkiGp2Pf+H2cKX8
-         qsqiUk62Z1NEVivvaFZATpywQmCkm6A3rZqUmxwArEuoFzADolF/8yxTNYMU9GdvOhwY
-         76k8V7KdTMKZ5E3nQUUTzX+cyLfZjC0E3uGEaW8YkppAOCLXs/pg+cwqZm8cOVAf43TQ
-         U1uHOtfSvNvlmHvrj950c7RjJoB22Tiq8UXlwq6txDkSpLaUKDAqgcuzLlSVFdQK6Ny0
-         j+fRHvsnWG/BQeTKGsVpvrwkGAO9RLASZNIu5ZjRDaklMfO/G++tiU2KCRAuB6l63p4W
-         s72w==
-X-Gm-Message-State: AOAM532KD8tmpmaJALNSEEZMtNWAAllimvd+9eFa5WGBLRrJpviUz/l1
-        ah4es7UjAzE2OIBsoAX7dbU=
-X-Google-Smtp-Source: ABdhPJzFQJFSyfa9BJo3F9NHYbj9M7wkim3YSPp0uiJrjdxczNULqZJmdMtcLCF2Dpvd/9uOZJM60A==
-X-Received: by 2002:a17:906:bb01:b0:6a7:df9:d67c with SMTP id jz1-20020a170906bb0100b006a70df9d67cmr19812804ejb.733.1647860364059;
-        Mon, 21 Mar 2022 03:59:24 -0700 (PDT)
-Received: from gmail.com (0526ECD0.dsl.pool.telekom.hu. [5.38.236.208])
-        by smtp.gmail.com with ESMTPSA id fx3-20020a170906b74300b006daecedee44sm6744062ejb.220.2022.03.21.03.59.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 03:59:23 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 21 Mar 2022 11:59:21 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Subject: [GIT PULL] perf events changes for v5.18
-Message-ID: <YjhaieorORDCnPvh@gmail.com>
+        Mon, 21 Mar 2022 07:02:48 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4D512B77F;
+        Mon, 21 Mar 2022 04:01:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647860482; x=1679396482;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HZ/6PoiG7H+z+0tPIdkEquUj6/sBoIg3k6UoDOJklXk=;
+  b=EZCzPtGQUxWWzYWRMfulyjWqGHB2Sp9ZDVzE+nX8D0/FrRQFYo1ZqK2F
+   hK7s+Z88JS9td0ylf4hdy2u5/31Larme+nf2uh8xOvDJXEfNOuT0mMX0L
+   LTY1oIItZznT39gCOkUpZNzgAJ4LZI+ofGJETUCW4TUaRbANqSpLxOUC5
+   5d4UMjsynPYTqIrnx7qoU+ObM6mXavwpFYCEgaYwEhkNvLq8xOb3uN4DP
+   awD4vR0jgvJ4eUI5MCHTqcXbRKlWMm/hH12hH+fcYg5RSS1qpB91gXHzf
+   wK1snQlEAhztXem20zZ6X9VhIhXBQUmjLUWtklJJ2DYuRKxATFYWsOe8g
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="343952358"
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="343952358"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 04:01:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,198,1643702400"; 
+   d="scan'208";a="784957665"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Mar 2022 04:01:19 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 22LB1HaC031880;
+        Mon, 21 Mar 2022 11:01:18 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Wojciech Drewek <wojciech.drewek@intel.com>,
+        Marcin Szycik <marcin.szycik@linux.intel.com>,
+        Martyna Szapar-Mudlaw <martyna.szapar-mudlaw@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 net-next 1/5] ice: switch: add and use u16[] aliases to ice_adv_lkup_elem::{h,m}_u
+Date:   Mon, 21 Mar 2022 11:59:50 +0100
+Message-Id: <20220321105954.843154-2-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220321105954.843154-1-alexandr.lobakin@intel.com>
+References: <20220321105954.843154-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+ice_adv_lkup_elem fields h_u and m_u are being accessed as raw u16
+arrays in several places.
+To reduce cast and braces burden, add permanent array-of-u16 aliases
+with the same size as the `union ice_prot_hdr` itself via anonymous
+unions to the actual struct declaration, and just access them
+directly.
 
-Please pull the latest perf/core git tree from:
+This:
+ - removes the need to cast the union to u16[] and then dereference
+   it each time -> reduces the horizon for potential bugs;
+ - improves -Warray-bounds coverage -- the array size is now known
+   at compilation time;
+ - addresses cppcheck complaints.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf-core-2022-03-21
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+Tested-by: Marcin Szycik <marcin.szycik@linux.intel.com>
+---
+ drivers/net/ethernet/intel/ice/ice_switch.c | 15 +++++++--------
+ drivers/net/ethernet/intel/ice/ice_switch.h | 12 ++++++++++--
+ 2 files changed, 17 insertions(+), 10 deletions(-)
 
-   # HEAD: 02a08d78f5c429c7dc8e5b9417b4efb518b3d041 perf/x86/intel/uncore: Fix the build on !CONFIG_PHYS_ADDR_T_64BIT
+diff --git a/drivers/net/ethernet/intel/ice/ice_switch.c b/drivers/net/ethernet/intel/ice/ice_switch.c
+index 25b8f6f726eb..075df2474688 100644
+--- a/drivers/net/ethernet/intel/ice/ice_switch.c
++++ b/drivers/net/ethernet/intel/ice/ice_switch.c
+@@ -5811,12 +5811,12 @@ ice_fill_adv_dummy_packet(struct ice_adv_lkup_elem *lkups, u16 lkups_cnt,
+ 		 * over any significant packet data.
+ 		 */
+ 		for (j = 0; j < len / sizeof(u16); j++)
+-			if (((u16 *)&lkups[i].m_u)[j])
++			if (lkups[i].m_raw[j])
+ 				((u16 *)(pkt + offset))[j] =
+ 					(((u16 *)(pkt + offset))[j] &
+-					 ~((u16 *)&lkups[i].m_u)[j]) |
+-					(((u16 *)&lkups[i].h_u)[j] &
+-					 ((u16 *)&lkups[i].m_u)[j]);
++					 ~lkups[i].m_raw[j]) |
++					(lkups[i].h_raw[j] &
++					 lkups[i].m_raw[j]);
+ 	}
+ 
+ 	s_rule->pdata.lkup_tx_rx.hdr_len = cpu_to_le16(pkt_len);
+@@ -6065,11 +6065,10 @@ ice_add_adv_rule(struct ice_hw *hw, struct ice_adv_lkup_elem *lkups,
+ 	/* get # of words we need to match */
+ 	word_cnt = 0;
+ 	for (i = 0; i < lkups_cnt; i++) {
+-		u16 j, *ptr;
++		u16 j;
+ 
+-		ptr = (u16 *)&lkups[i].m_u;
+-		for (j = 0; j < sizeof(lkups->m_u) / sizeof(u16); j++)
+-			if (ptr[j] != 0)
++		for (j = 0; j < ARRAY_SIZE(lkups->m_raw); j++)
++			if (lkups[i].m_raw[j])
+ 				word_cnt++;
+ 	}
+ 
+diff --git a/drivers/net/ethernet/intel/ice/ice_switch.h b/drivers/net/ethernet/intel/ice/ice_switch.h
+index ed3d1d03befa..ecac75e71395 100644
+--- a/drivers/net/ethernet/intel/ice/ice_switch.h
++++ b/drivers/net/ethernet/intel/ice/ice_switch.h
+@@ -138,8 +138,16 @@ struct ice_update_recipe_lkup_idx_params {
+ 
+ struct ice_adv_lkup_elem {
+ 	enum ice_protocol_type type;
+-	union ice_prot_hdr h_u;	/* Header values */
+-	union ice_prot_hdr m_u;	/* Mask of header values to match */
++	union {
++		union ice_prot_hdr h_u;	/* Header values */
++		/* Used to iterate over the headers */
++		u16 h_raw[sizeof(union ice_prot_hdr) / sizeof(u16)];
++	};
++	union {
++		union ice_prot_hdr m_u;	/* Mask of header values to match */
++		/* Used to iterate over header mask */
++		u16 m_raw[sizeof(union ice_prot_hdr) / sizeof(u16)];
++	};
+ };
+ 
+ struct ice_sw_act_ctrl {
+-- 
+2.35.1
 
-Changes for this cycle were:
-
- - Fix address filtering for Intel/PT,ARM/CoreSight
- - Enable Intel/PEBS format 5
- - Allow more fixed-function counters for x86
- - Intel/PT: Enable not recording Taken-Not-Taken packets
- - Add a few branch-types
-
- Thanks,
-
-	Ingo
-
------------------->
-Adrian Hunter (5):
-      perf/x86/intel/pt: Relax address filter validation
-      x86: Share definition of __is_canonical_address()
-      perf/core: Fix address filter parser for multiple filters
-      perf/x86/intel/pt: Fix address filter config for 32-bit kernel
-      perf/core: Allow kernel address filter when not filtering the kernel
-
-Alexander Shishkin (2):
-      perf/x86/intel/pt: Add a capability and config bit for event tracing
-      perf/x86/intel/pt: Add a capability and config bit for disabling TNTs
-
-Anshuman Khandual (1):
-      perf: Add irq and exception return branch types
-
-Ingo Molnar (1):
-      perf/x86/intel/uncore: Fix the build on !CONFIG_PHYS_ADDR_T_64BIT
-
-Kan Liang (2):
-      perf/x86/intel: Enable PEBS format 5
-      perf/x86/intel: Increase max number of the fixed counters
-
-Steve Wahl (1):
-      perf/x86/intel/uncore: Make uncore_discovery clean for 64 bit addresses
-
-Wei Wang (1):
-      KVM: x86: use the KVM side max supported fixed counter
-
-
- arch/x86/events/intel/core.c             | 40 +++++++++++++++++-
- arch/x86/events/intel/ds.c               | 14 +++++--
- arch/x86/events/intel/lbr.c              |  4 +-
- arch/x86/events/intel/pt.c               | 71 +++++++++++++++++++++++++-------
- arch/x86/events/intel/uncore_discovery.c | 16 +++++--
- arch/x86/events/intel/uncore_discovery.h |  2 -
- arch/x86/include/asm/intel_ds.h          |  5 ++-
- arch/x86/include/asm/intel_pt.h          |  2 +
- arch/x86/include/asm/kvm_host.h          |  3 +-
- arch/x86/include/asm/msr-index.h         |  2 +
- arch/x86/include/asm/page.h              | 10 +++++
- arch/x86/include/asm/perf_event.h        |  2 +-
- arch/x86/kvm/cpuid.c                     |  3 +-
- arch/x86/kvm/emulate.c                   |  4 +-
- arch/x86/kvm/pmu.h                       |  2 -
- arch/x86/kvm/vmx/pmu_intel.c             |  4 +-
- arch/x86/kvm/x86.c                       |  4 +-
- arch/x86/kvm/x86.h                       |  7 +---
- arch/x86/mm/maccess.c                    |  7 +---
- include/uapi/linux/perf_event.h          |  2 +
- kernel/events/core.c                     |  5 ++-
- tools/include/uapi/linux/perf_event.h    |  2 +
- tools/perf/util/branch.c                 |  4 +-
- 23 files changed, 161 insertions(+), 54 deletions(-)

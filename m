@@ -2,48 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08AA4E2093
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 07:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4101C4E2096
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 07:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344579AbiCUGVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 02:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
+        id S1344583AbiCUGXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 02:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245278AbiCUGVo (ORCPT
+        with ESMTP id S238029AbiCUGXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 02:21:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA061B1A91
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 23:20:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 887E6B8110D
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 06:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEA6EC340E8;
-        Mon, 21 Mar 2022 06:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647843617;
-        bh=y2t+aPgtRfPaRo5y42R2mcdKf/j7bJjGo0jm0Tj0SLk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IX6IcjQzXXTm4U9PFUX85UvTKb1C+x4RMf2q5crSj/tHQzy8my8y0LOnSXC/r4fjq
-         mjmUi6Ax4hvZH84LdiWwiDukNCuq7D1BKSsIzTOK1qs1S1cv+PYclx9/UriWsJByvx
-         9jiUrztVu4CE7VBJEh/2ChpoG3yKD/IdYTAoktYg=
-Date:   Mon, 21 Mar 2022 07:20:14 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     arnd@arndb.de, jirislaby@kernel.org, dsterba@suse.com,
-        elder@linaro.org, jcmvbkbc@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] tty: synclink_cs: Use bitwise instead of arithmetic
- operator for flags
-Message-ID: <YjgZHkYlICLQi47t@kroah.com>
-References: <1647843227-32098-1-git-send-email-baihaowen@meizu.com>
+        Mon, 21 Mar 2022 02:23:21 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3397B6E5F;
+        Sun, 20 Mar 2022 23:21:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647843716; x=1679379716;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=+rkB4KEmfi5Lh7xQbC1EST+XQiej4N3zvxLPT5tm5cQ=;
+  b=w+TogDmd2V/9F3+onYGuyyHd7lSbbv+r5rTnsWX6RtbNRrws1A0e0uKo
+   MQM4uHV6X+13wmrQ5jTUdIQzaZIra6tdXEaCw1xA1kqFp1riMIcfzH0EL
+   ijOLJgEFKgOPSv3TKUdm1r5xQoTVEWY/nq1kquLBRHCrJXEvdEsuNK7pP
+   M=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Mar 2022 23:21:56 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 23:21:55 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 20 Mar 2022 23:21:55 -0700
+Received: from [10.216.8.69] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 20 Mar
+ 2022 23:21:50 -0700
+Subject: Re: [PATCH v2 0/3] Refactor xhci quirks and plat private data
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Doug Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>
+References: <1646130507-26796-1-git-send-email-quic_c_sanm@quicinc.com>
+ <ddc86a4f-8d1c-c02c-5600-4fa851568557@quicinc.com>
+ <YjR0Ne3BDxxMfrxt@kroah.com>
+From:   "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>
+Message-ID: <b38ddfcc-68c3-d99f-816b-8b9f788aa88a@quicinc.com>
+Date:   Mon, 21 Mar 2022 11:51:41 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1647843227-32098-1-git-send-email-baihaowen@meizu.com>
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <YjR0Ne3BDxxMfrxt@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,58 +79,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 02:13:47PM +0800, Haowen Bai wrote:
-> This silences the following coccinelle warning:
-> drivers/s390/char/tape_34xx.c:360:38-39: WARNING: sum of probable bitmasks, consider |
-> 
-> we will try to make code cleaner
-> 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->  drivers/char/pcmcia/synclink_cs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
-> index 78baba5..e6f2186 100644
-> --- a/drivers/char/pcmcia/synclink_cs.c
-> +++ b/drivers/char/pcmcia/synclink_cs.c
-> @@ -922,7 +922,7 @@ static void rx_ready_async(MGSLPC_INFO *info, int tcd)
->  		// BIT7:parity error
->  		// BIT6:framing error
->  
-> -		if (status & (BIT7 + BIT6)) {
-> +		if (status & (BIT7 | BIT6)) {
->  			if (status & BIT7)
->  				icount->parity++;
->  			else
-> -- 
-> 2.7.4
-> 
+Hi Mathias,
 
-Hi,
+On 3/18/2022 5:29 PM, Greg Kroah-Hartman wrote:
+> On Thu, Mar 17, 2022 at 11:17:17AM +0530, Sandeep Maheswaram (Temp) wrote:
+>> Hi Greg,
+>>
+>> On 3/1/2022 3:58 PM, Sandeep Maheswaram wrote:
+>>> changes in v2:
+>>> Added a PATCH 2/3 to remove unwanted header inclusion.
+>>> Fixed minor nitpicks in PATCH 3/3.
+>>>
+>>> Pavankumar Kondeti (1):
+>>>     usb: xhci: refactor quirks and plat private data
+>>>
+>>> Sandeep Maheswaram (2):
+>>>     usb: xhci: Remove unwanted header inclusion
+>>>     usb: dwc: host: add xhci_plat_priv quirk XHCI_SKIP_PHY_INIT
+>>>
+>>>    drivers/usb/cdns3/host.c        |  2 +-
+>>>    drivers/usb/dwc3/host.c         | 13 ++++++++
+>>>    drivers/usb/host/xhci-plat.c    |  3 +-
+>>>    drivers/usb/host/xhci-plat.h    | 24 ---------------
+>>>    drivers/usb/host/xhci-rcar.c    |  3 +-
+>>>    drivers/usb/host/xhci.h         | 60 ++++--------------------------------
+>>>    include/linux/usb/xhci-plat.h   | 24 +++++++++++++++
+>>>    include/linux/usb/xhci-quirks.h | 67 +++++++++++++++++++++++++++++++++++++++++
+>>>    8 files changed, 115 insertions(+), 81 deletions(-)
+>>>    delete mode 100644 drivers/usb/host/xhci-plat.h
+>>>    create mode 100644 include/linux/usb/xhci-plat.h
+>>>    create mode 100644 include/linux/usb/xhci-quirks.h
+>> Please let me know your opinion about this patch series.
+> I need the xhci maintainer to review it...
+>
+> thanks,
+>
+> greg k-h
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Can you please review this patch series.
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
+Regards
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Sandeep
 
-thanks,
-
-greg k-h's patch email bot

@@ -2,113 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234464E3218
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 21:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2572D4E321C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 21:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235953AbiCUU71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 16:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
+        id S231150AbiCUVAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 17:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235159AbiCUU7Z (ORCPT
+        with ESMTP id S230090AbiCUVAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 16:59:25 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40E73BF;
-        Mon, 21 Mar 2022 13:57:58 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id g24so20340284lja.7;
-        Mon, 21 Mar 2022 13:57:58 -0700 (PDT)
+        Mon, 21 Mar 2022 17:00:42 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B57C403D7;
+        Mon, 21 Mar 2022 13:59:16 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id bx5so14025422pjb.3;
+        Mon, 21 Mar 2022 13:59:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=59Gat+qN8WYpOTE7jvqTIV+CFqNDHfOUiPDOr7kqbpI=;
-        b=qRlll4fPK7PvNN9xxSThqBTIVaDT1lTOnflWhLswPW4fzuPFbpLkQMitkW1FSXhFn9
-         ouKvR49cXE4PbLn10tQw73qAUN72rM/3ewqdetuZASVRnLPjiXnxaqOsqmg+HlbEI7m8
-         EH6JLA3w3QvN/uG6OdkvCiEWvoW8twdD9WWVTJgW9zd07ZO5NuTaRnMVbMQnH79d+Y+R
-         17qkBclkjQ1nhDzRHAllOe7Z3Dwb3JROFgRRwPQkv9Q7coVpnjDxNJR3piO+2cAkYDPE
-         y/EIYIVMRO2XfuX/5BTaHPMBfp+HdRDbn3OimzueAUne39YK03EKKPD3/yf9K8QYSfkm
-         RgGA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IIUq70JYO9LLmND1+BslUpEoL6qaTZK16a7hVYB0QVM=;
+        b=GndI/VxWim9/UZXk2q5afrDqn2qyfiunzh3+1Wi9X8fNS1w85Tf4ChDSAH8lNu5uUL
+         oWYqa/jbEnaFBK81JDNc81tks7HXnDtf3AndRcwvNV9bSWWPsC4XzNwmnBsOEdkY0L1X
+         BSUG7RROwOeVpU/tFDseuWll/YOx3hbAqIOScG1ZrCafa0FxC4cOZFUyKofji/UXVGZE
+         FdsJxWWGaHKc+ZeWwRHhBQEb4MxhvniyoNYzNkXb1HCmR+ZLFFOcLbXYmMAGkuuYqiiQ
+         4v3yAupeTJUIl3lUpmw43KqO20tcx9Zmm/IP2nvuGgT+hjVlPo1QRaBdT0e2fmiBIXjV
+         tF+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=59Gat+qN8WYpOTE7jvqTIV+CFqNDHfOUiPDOr7kqbpI=;
-        b=mJPmo1uyECTV7lwksk70WJRWr/jCyBwku8n81CtqckSL3STgj1GD7HLymhj52pM+XA
-         xrZ+JU+SuB6DlDu7v/EoOhnvzNVNROr/8TCTU7HYm6J8evYJBQKORueRo6d9htKbsBAW
-         /dKLZw1bmJMoiYHX6DWAh6LrT9UxfLgGq/NcBElk+wFeOKxxjpLdP9Nzx+VTevMMj3tK
-         p2UtqemHjS6jiKsPAnvvJQ93ndKEpKGxFlBvrb2Nbxkx2Eb7bluGDAZLvAxhBGI6WcZS
-         mcAqXyIUcgZjuwPgPprS0O/X/AhpcVsE4ocA84CT6r1hAZeFmPYYwz0/5VMkivukqA6n
-         sR+A==
-X-Gm-Message-State: AOAM53352zb5HTC4QIhOrDA+FLxW082igRCN03YjksTvITmLaLrua5Bu
-        CpP1Jd7VSvlbPJ0a1LoMpGH7OinmLCdx4IkoXDW+h0R4VKo=
-X-Google-Smtp-Source: ABdhPJwvMRtGusSZ+hNspFYr/Dii0ZVYYUEk7bK9rqI2rA1ikb6lsCypXRqVfnRcaAO2ylQsZHJCoH2cy1r7A2jNnq0=
-X-Received: by 2002:a2e:9dcf:0:b0:247:f8eb:90d5 with SMTP id
- x15-20020a2e9dcf000000b00247f8eb90d5mr16503519ljj.23.1647896276871; Mon, 21
- Mar 2022 13:57:56 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IIUq70JYO9LLmND1+BslUpEoL6qaTZK16a7hVYB0QVM=;
+        b=RBUXKlp5L2IowEYcQGNXmnZvQ4rtDLYcdKICVOmMEuLMxmO+vpnbeT9jJ33fV7ugsr
+         TFKrdi/mgw6pJtbD9zEc4OI4sHUZeC0+kpLufsNFlg7mkAt9av+Jo14soNzjzvbRjp8M
+         ngQi42rRIiaf98qO8s+wtMtscoA8xNbwz10u+qBcNikp0EnYEZpBNycjJgHiakkEkKwL
+         a84lOulBs03J+RCQP4aYk9SDCZHWNU+JZ1zz82M33jZ5tRmZ1RtDPj8izdxSSe3wzOH5
+         bXXFMi+d3x5xhd6VPr8IH+wlxgZBY68jd2u9oz4XJWGZBTzRYS2ROGaBfs+/05RzIOSW
+         6vBA==
+X-Gm-Message-State: AOAM530Qj70tzzhYA2leYaomF8fNceqVBGRLqckaqg2/d1zhWUvw1VSz
+        u+7UhbiFQHfwEilv7RrVzPFDtA2ifr4Bh8OOGec8MgM3
+X-Google-Smtp-Source: ABdhPJyBLvSja91CZSb9b1UipjcC7dfke8iT6LTMlxKJcStOuDIKqmTw96VUrfGKcbTdWt/JgXkudAetfH8E4lRL998=
+X-Received: by 2002:a17:903:124a:b0:151:99fe:1a10 with SMTP id
+ u10-20020a170903124a00b0015199fe1a10mr14532689plh.87.1647896356123; Mon, 21
+ Mar 2022 13:59:16 -0700 (PDT)
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 21 Mar 2022 15:57:45 -0500
-Message-ID: <CAH2r5mt+Zkrv8A2cw=xSXp=J=sebtF0qxRdP-+WWZqo9USXRsg@mail.gmail.com>
-Subject: [GIT PULL] cifs/smb3 fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
+References: <20220317234827.447799-1-shy828301@gmail.com> <20220317234827.447799-4-shy828301@gmail.com>
+ <YjhpxDKJFtztdTCb@ip-172-31-19-208.ap-northeast-1.compute.internal>
+In-Reply-To: <YjhpxDKJFtztdTCb@ip-172-31-19-208.ap-northeast-1.compute.internal>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 21 Mar 2022 13:59:04 -0700
+Message-ID: <CAHbLzkpZVJ0L1rVQdZEeLq6s9H9DSPQVKdHz626uHk2z0Mw7uw@mail.gmail.com>
+Subject: Re: [v2 PATCH 3/8] mm: khugepaged: skip DAX vma
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Song Liu <songliubraving@fb.com>,
+        Rik van Riel <riel@surriel.com>,
+        Matthew Wilcox <willy@infradead.org>, Zi Yan <ziy@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        darrick.wong@oracle.com, Linux MM <linux-mm@kvack.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-6e4069881a7f9dceb6dfb97e436d55e3c7f43e81:
+On Mon, Mar 21, 2022 at 5:04 AM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+>
+> On Thu, Mar 17, 2022 at 04:48:22PM -0700, Yang Shi wrote:
+> > The DAX vma may be seen by khugepaged when the mm has other khugepaged
+> > suitable vmas.  So khugepaged may try to collapse THP for DAX vma, but
+> > it will fail due to page sanity check, for example, page is not
+> > on LRU.
+> >
+> > So it is not harmful, but it is definitely pointless to run khugepaged
+> > against DAX vma, so skip it in early check.
+>
+> in fs/xfs/xfs_file.c:
+> 1391 STATIC int
+> 1392 xfs_file_mmap(
+> 1393         struct file             *file,
+> 1394         struct vm_area_struct   *vma)
+> 1395 {
+> 1396         struct inode            *inode = file_inode(file);
+> 1397         struct xfs_buftarg      *target = xfs_inode_buftarg(XFS_I(inode));
+> 1398
+> 1399         /*
+> 1400          * We don't support synchronous mappings for non-DAX files and
+> 1401          * for DAX files if underneath dax_device is not synchronous.
+> 1402          */
+> 1403         if (!daxdev_mapping_supported(vma, target->bt_daxdev))
+> 1404                 return -EOPNOTSUPP;
+> 1405
+> 1406         file_accessed(file);
+> 1407         vma->vm_ops = &xfs_file_vm_ops;
+> 1408         if (IS_DAX(inode))
+> 1409                 vma->vm_flags |= VM_HUGEPAGE;
+>
+> Are xfs and other filesystems setting VM_HUGEPAGE flag even if it can
+> never be collapsed?
 
-  Merge tag '5.17-rc8-smb3-fix' of
-git://git.samba.org/sfrench/cifs-2.6 (2022-03-18 12:22:15 -0700)
+DAX is available or intended to use on some special devices, for
+example, persistent memory. Collapsing huge pages on such devices is
+not the intended usecase of khugepaged.
 
-are available in the Git repository at:
-
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.18-smb3-fixes-part1
-
-for you to fetch changes up to dca65818c80cf06e0f08ba2cf94060a5236e73c2:
-
-  cifs: use a different reconnect helper for non-cifsd threads
-(2022-03-18 23:12:03 -0500)
-
-----------------------------------------------------------------
-5 cifs/smb3 fixes, 3 for stable
-
-handlecache,  unmount, fiemap and two reconnect fixes
-
-Am working on (testing, reviewing) a larger set of fixes for
-later in the merge window, but these are good to get in
-early.
-----------------------------------------------------------------
-Rohith Surabattula (1):
-      Adjust cifssb maximum read size
-
-Ronnie Sahlberg (3):
-      cifs: fix handlecache and multiuser
-      cifs: truncate the inode and mapping when we simulate fcollapse
-      cifs: we do not need a spinlock around the tree access during umount
-
-Shyam Prasad N (1):
-      cifs: use a different reconnect helper for non-cifsd threads
-
- fs/cifs/cifs_swn.c  |  6 +++---
- fs/cifs/cifsfs.c    | 14 +++++++++++---
- fs/cifs/cifsproto.h |  3 +++
- fs/cifs/connect.c   | 42 +++++++++++++++++++++++++++++++++++++++++-
- fs/cifs/dfs_cache.c |  2 +-
- fs/cifs/file.c      | 10 ++++++++++
- fs/cifs/smb1ops.c   |  2 +-
- fs/cifs/smb2ops.c   | 18 ++++++++++++++----
- fs/cifs/transport.c |  2 +-
- 9 files changed, 85 insertions(+), 14 deletions(-)
-
--- 
-Thanks,
-
-Steve
+>
+> 1410         return 0;
+> 1411 }
+>
+>
+> > Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+> > Signed-off-by: Yang Shi <shy828301@gmail.com>
+> > ---
+> >  mm/khugepaged.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index 82c71c6da9ce..a0e4fa33660e 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -448,6 +448,10 @@ static bool hugepage_vma_check(struct vm_area_struct *vma,
+> >       if (vm_flags & VM_NO_KHUGEPAGED)
+> >               return false;
+> >
+> > +     /* Don't run khugepaged against DAX vma */
+> > +     if (vma_is_dax(vma))
+> > +             return false;
+> > +
+> >       if (vma->vm_file && !IS_ALIGNED((vma->vm_start >> PAGE_SHIFT) -
+> >                               vma->vm_pgoff, HPAGE_PMD_NR))
+> >               return false;
+> > --
+> > 2.26.3
+> >
+> >
+>
+> --
+> Thank you, You are awesome!
+> Hyeonggon :-)

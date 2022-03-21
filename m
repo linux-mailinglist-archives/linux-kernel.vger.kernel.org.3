@@ -2,54 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF154E29CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B9A4E2A5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351416AbiCUOLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
+        id S1349607AbiCUOSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349129AbiCUODV (ORCPT
+        with ESMTP id S1349611AbiCUOId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:03:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E0041320;
-        Mon, 21 Mar 2022 07:00:25 -0700 (PDT)
+        Mon, 21 Mar 2022 10:08:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE411E3D5;
+        Mon, 21 Mar 2022 07:03:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC836B816DA;
-        Mon, 21 Mar 2022 14:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF5F9C340F2;
-        Mon, 21 Mar 2022 14:00:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B09ED6132C;
+        Mon, 21 Mar 2022 14:03:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0FB3C340E8;
+        Mon, 21 Mar 2022 14:03:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871223;
-        bh=l/4aaPMy5P3KEVoiyumRgPHI+RSe1kw9SKejYd4DT4E=;
+        s=korg; t=1647871386;
+        bh=0uBFwo4dObKSt47frABjkpdhEbOqAtuJ8KAHkE6jSiU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nMqWhC+RzVVyr5AFfcq9GQlpRpmN2Q10jRoxiP6ihfv7KJ6Q6kT0NpGi1u3fBBGNJ
-         fTb0IAk7TMxRuF9v5OI2LvIQZ/6AiDF6KEcCPOVggjiVCRu3avJh+ytSva/smU3TV9
-         z1ly1ovtY/h1S0D/H7DMKtlK0OAmfVPWwQUjbhX0=
+        b=J1iP2CjETf7WNqkuc+dPiwt56VxJT0LQLk04SRmMFo856iceBongTS9NQWxDHEKFM
+         JfVbFRwZ3CkoFyIVZsMTIhLjfyz3kwy+3sPVr01sv06hNzdqVcBXWbv9DV3JEyyA/D
+         Bs2rFX9LkRYV0LfWv+dJCZJSnIAYm+IWrxgAleC8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Brian Masney <bmasney@redhat.com>,
-        kernel test robot <lkp@intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Lyude Paul <lyude@redhat.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org, Dave Airlie <airlied@redhat.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 18/32] drm: Dont make DRM_PANEL_BRIDGE dependent on DRM_KMS_HELPERS
+        stable@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 12/37] nvmet: revert "nvmet: make discovery NQN configurable"
 Date:   Mon, 21 Mar 2022 14:52:54 +0100
-Message-Id: <20220321133221.091073183@linuxfoundation.org>
+Message-Id: <20220321133221.650869844@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133220.559554263@linuxfoundation.org>
-References: <20220321133220.559554263@linuxfoundation.org>
+In-Reply-To: <20220321133221.290173884@linuxfoundation.org>
+References: <20220321133221.290173884@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,92 +54,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Zimmermann <tzimmermann@suse.de>
+From: Hannes Reinecke <hare@suse.de>
 
-[ Upstream commit 3c3384050d68570f9de0fec9e58824decfefba7a ]
+[ Upstream commit 0c48645a7f3988a624767d025fa3275ae24b6ca1 ]
 
-Fix a number of undefined references to drm_kms_helper.ko in
-drm_dp_helper.ko:
+Revert commit 626851e9225d ("nvmet: make discovery NQN configurable");
+the interface was deemed incorrect and will be replaced with a different
+one.
 
-  arm-suse-linux-gnueabi-ld: drivers/gpu/drm/dp/drm_dp_mst_topology.o: in function `drm_dp_mst_duplicate_state':
-  drm_dp_mst_topology.c:(.text+0x2df0): undefined reference to `__drm_atomic_helper_private_obj_duplicate_state'
-  arm-suse-linux-gnueabi-ld: drivers/gpu/drm/dp/drm_dp_mst_topology.o: in function `drm_dp_delayed_destroy_work':
-  drm_dp_mst_topology.c:(.text+0x370c): undefined reference to `drm_kms_helper_hotplug_event'
-  arm-suse-linux-gnueabi-ld: drivers/gpu/drm/dp/drm_dp_mst_topology.o: in function `drm_dp_mst_up_req_work':
-  drm_dp_mst_topology.c:(.text+0x7938): undefined reference to `drm_kms_helper_hotplug_event'
-  arm-suse-linux-gnueabi-ld: drivers/gpu/drm/dp/drm_dp_mst_topology.o: in function `drm_dp_mst_link_probe_work':
-  drm_dp_mst_topology.c:(.text+0x82e0): undefined reference to `drm_kms_helper_hotplug_event'
-
-This happens if panel-edp.ko has been configured with
-
-  DRM_PANEL_EDP=y
-  DRM_DP_HELPER=y
-  DRM_KMS_HELPER=m
-
-which builds DP helpers into the kernel and KMS helpers sa a module.
-Making DRM_PANEL_EDP select DRM_KMS_HELPER resolves this problem.
-
-To avoid a resulting cyclic dependency with DRM_PANEL_BRIDGE, don't
-make the latter depend on DRM_KMS_HELPER and fix the one DRM bridge
-drivers that doesn't already select DRM_KMS_HELPER. As KMS helpers
-cannot be selected directly by the user, config symbols should avoid
-depending on it anyway.
-
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Fixes: 3755d35ee1d2 ("drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP")
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-Tested-by: Brian Masney <bmasney@redhat.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Linux Kernel Functional Testing <lkft@linaro.org>
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: dri-devel@lists.freedesktop.org
-Cc: Dave Airlie <airlied@redhat.com>
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Link: https://patchwork.freedesktop.org/patch/478296/
+Fixes: 626851e9225d ("nvmet: make discovery NQN configurable")
+Signed-off-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/Kconfig | 2 +-
- drivers/gpu/drm/panel/Kconfig  | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/nvme/target/configfs.c | 39 ----------------------------------
+ drivers/nvme/target/core.c     |  3 +--
+ 2 files changed, 1 insertion(+), 41 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kconfig
-index 431b6e12a81f..68ec45abc1fb 100644
---- a/drivers/gpu/drm/bridge/Kconfig
-+++ b/drivers/gpu/drm/bridge/Kconfig
-@@ -8,7 +8,6 @@ config DRM_BRIDGE
- config DRM_PANEL_BRIDGE
- 	def_bool y
- 	depends on DRM_BRIDGE
--	depends on DRM_KMS_HELPER
- 	select DRM_PANEL
- 	help
- 	  DRM bridge wrapper of DRM panels
-@@ -30,6 +29,7 @@ config DRM_CDNS_DSI
- config DRM_CHIPONE_ICN6211
- 	tristate "Chipone ICN6211 MIPI-DSI/RGB Converter bridge"
- 	depends on OF
-+	select DRM_KMS_HELPER
- 	select DRM_MIPI_DSI
- 	select DRM_PANEL_BRIDGE
- 	help
-diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index f63fd0f90360..af1402d83d51 100644
---- a/drivers/gpu/drm/panel/Kconfig
-+++ b/drivers/gpu/drm/panel/Kconfig
-@@ -84,6 +84,7 @@ config DRM_PANEL_SIMPLE
- 	select VIDEOMODE_HELPERS
- 	select DRM_DP_AUX_BUS
- 	select DRM_DP_HELPER
-+	select DRM_KMS_HELPER
- 	help
- 	  DRM panel driver for dumb panels that need at most a regulator and
- 	  a GPIO to be powered up. Optionally a backlight can be attached so
+diff --git a/drivers/nvme/target/configfs.c b/drivers/nvme/target/configfs.c
+index 091a0ca16361..496d775c6770 100644
+--- a/drivers/nvme/target/configfs.c
++++ b/drivers/nvme/target/configfs.c
+@@ -1233,44 +1233,6 @@ static ssize_t nvmet_subsys_attr_model_store(struct config_item *item,
+ }
+ CONFIGFS_ATTR(nvmet_subsys_, attr_model);
+ 
+-static ssize_t nvmet_subsys_attr_discovery_nqn_show(struct config_item *item,
+-			char *page)
+-{
+-	return snprintf(page, PAGE_SIZE, "%s\n",
+-			nvmet_disc_subsys->subsysnqn);
+-}
+-
+-static ssize_t nvmet_subsys_attr_discovery_nqn_store(struct config_item *item,
+-			const char *page, size_t count)
+-{
+-	struct nvmet_subsys *subsys = to_subsys(item);
+-	char *subsysnqn;
+-	int len;
+-
+-	len = strcspn(page, "\n");
+-	if (!len)
+-		return -EINVAL;
+-
+-	subsysnqn = kmemdup_nul(page, len, GFP_KERNEL);
+-	if (!subsysnqn)
+-		return -ENOMEM;
+-
+-	/*
+-	 * The discovery NQN must be different from subsystem NQN.
+-	 */
+-	if (!strcmp(subsysnqn, subsys->subsysnqn)) {
+-		kfree(subsysnqn);
+-		return -EBUSY;
+-	}
+-	down_write(&nvmet_config_sem);
+-	kfree(nvmet_disc_subsys->subsysnqn);
+-	nvmet_disc_subsys->subsysnqn = subsysnqn;
+-	up_write(&nvmet_config_sem);
+-
+-	return count;
+-}
+-CONFIGFS_ATTR(nvmet_subsys_, attr_discovery_nqn);
+-
+ #ifdef CONFIG_BLK_DEV_INTEGRITY
+ static ssize_t nvmet_subsys_attr_pi_enable_show(struct config_item *item,
+ 						char *page)
+@@ -1300,7 +1262,6 @@ static struct configfs_attribute *nvmet_subsys_attrs[] = {
+ 	&nvmet_subsys_attr_attr_cntlid_min,
+ 	&nvmet_subsys_attr_attr_cntlid_max,
+ 	&nvmet_subsys_attr_attr_model,
+-	&nvmet_subsys_attr_attr_discovery_nqn,
+ #ifdef CONFIG_BLK_DEV_INTEGRITY
+ 	&nvmet_subsys_attr_attr_pi_enable,
+ #endif
+diff --git a/drivers/nvme/target/core.c b/drivers/nvme/target/core.c
+index 5119c687de68..626caf6f1e4b 100644
+--- a/drivers/nvme/target/core.c
++++ b/drivers/nvme/target/core.c
+@@ -1493,8 +1493,7 @@ static struct nvmet_subsys *nvmet_find_get_subsys(struct nvmet_port *port,
+ 	if (!port)
+ 		return NULL;
+ 
+-	if (!strcmp(NVME_DISC_SUBSYS_NAME, subsysnqn) ||
+-	    !strcmp(nvmet_disc_subsys->subsysnqn, subsysnqn)) {
++	if (!strcmp(NVME_DISC_SUBSYS_NAME, subsysnqn)) {
+ 		if (!kref_get_unless_zero(&nvmet_disc_subsys->ref))
+ 			return NULL;
+ 		return nvmet_disc_subsys;
 -- 
 2.34.1
 

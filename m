@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289364E2708
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 257844E270D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347640AbiCUM5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
+        id S1347650AbiCUM6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347637AbiCUM5d (ORCPT
+        with ESMTP id S1346113AbiCUM6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:57:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56FDF3F9B;
-        Mon, 21 Mar 2022 05:56:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 443C46116D;
-        Mon, 21 Mar 2022 12:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8857DC340E8;
-        Mon, 21 Mar 2022 12:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647867367;
-        bh=UVhMNYZt0v0YxEbud2ZYFEHu/6nOoe53r2esS6kiD0c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hqbc7UBUyBD77c/D5TtQyEQy4GGpnKP5jWUzGKYAYN6gsntYzczG867BTxgnNKk8Y
-         ZOqbfqTsZ2Q9W4+1fVCZPeMp/GgbJ4YhERECrS9rGOVk5HW94B2voaOczK3CWExzxq
-         o+/h+VPbI4VfnlcTZteOIGj4Y+Oijtv5us9olN3inJGQl8vErA20Z+nVXEaDZ0PhJa
-         YxZF0JhwX4Xwvp7wv3qgEItIptTfBg+MFfMcHyDVXhdPoyBuwnrliYgy0pNgw1E8xj
-         19mltPvrk826KtvdbnG2k6/IcHrp2MBzkDsNJxv8+ed1imw7/2MzohnOZhyPM9cq7t
-         wspzZkYvxYhTw==
-Received: by pali.im (Postfix)
-        id 85FF5A5B; Mon, 21 Mar 2022 13:56:04 +0100 (CET)
-Date:   Mon, 21 Mar 2022 13:56:04 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Robert Marko <robert.marko@sartura.hr>,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marek.behun@nic.cz
-Subject: Re: [PATCH 1/2] arm64: dts: uDPU: update partition table
-Message-ID: <20220321125604.gjqxxv7jxlons4b4@pali>
-References: <20220321121728.414839-1-robert.marko@sartura.hr>
- <Yjhyg5cNe5KZ6SOp@lunn.ch>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yjhyg5cNe5KZ6SOp@lunn.ch>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 08:58:37 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE02B1697A0;
+        Mon, 21 Mar 2022 05:57:12 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n15so12665750plh.2;
+        Mon, 21 Mar 2022 05:57:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=sCS6c171oyN7Cq0gnRAYsCzijiKw228qCeDaGu15gbQ=;
+        b=kxKHOOABq7S1CRI0KHi/xF4YyJwZK6cmyIAmwClbqrsolrkKTytDk72Ruj1zQ60y+T
+         Nu8rNFZiEQIf1Y85wSPGdZnAGOotwnU4irRb20LPXBjW3zPkW8vg5i7swBTxNpr5kQV5
+         sofHwBwkj7lvrMa17ETqe0YBxjeqA2mGuyt2bAsCMEQGh2iqppvq9gr7hhy/Z4Y5izRf
+         rSgUKLtRTkM46bqRfxVYyCt8xaSxRcm1WaUgyKJhgfdBCvkpzqhdkyi37ugmo5MLzrRR
+         ckgR32huHN2VCsgpYMOPznMSjSo8U9JjG7G4k1pIN+nkF3U4MQfqcWKBXVWc9l70Fmf1
+         MQpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=sCS6c171oyN7Cq0gnRAYsCzijiKw228qCeDaGu15gbQ=;
+        b=fxUgVtueFeYReARGnKkqyGXWUPxCE7uiIV54glaNhGxMc+PILYPShTc8K8FTg5YLbi
+         BeWFXHGxyzXUV77ayhw4OjwuYhoSFUs2W9S9RnAvmWNnecOQLSz81g3X7olN1XUVPlIl
+         TgKrbr+pWdfEfpUSicdDDYlCtUgbmD/gppOG3o2CpJ2kQTPiCH/jiSH9bLuA2htjXrFj
+         lVQKeKw2cifIOTLsY1v9Ega0e2wZCSVwn3EO0s8oVx8FPEszgLhiizpsoJr3n1+Vktx9
+         GgMqso4fSq7MASGdXd3dl6uOIL2WZk9PE4DA3dop34E4LTSi3YKzvHh9TI+nMb3LoxkV
+         klCA==
+X-Gm-Message-State: AOAM531ybaHvcuIZjSaSayG6A+Pn9deUDQI35OSSrhjnNPmMfExRrOJi
+        op5oItUmtNWzfE992+zrqZw7RhAFDs4=
+X-Google-Smtp-Source: ABdhPJza+rnxixluZ0BEyTT7Cn7E8pppNLNxJ1YwY3wqwVIRgg/wezDWXN7ZSR4DmrPnM8fJJVdOPQ==
+X-Received: by 2002:a17:903:24f:b0:153:32c0:7d6f with SMTP id j15-20020a170903024f00b0015332c07d6fmr12467134plh.36.1647867432121;
+        Mon, 21 Mar 2022 05:57:12 -0700 (PDT)
+Received: from carrot.localdomain (i114-180-38-233.s42.a014.ap.plala.or.jp. [114.180.38.233])
+        by smtp.gmail.com with ESMTPSA id gb5-20020a17090b060500b001c6d46f7e75sm8009046pjb.30.2022.03.21.05.57.09
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 21 Mar 2022 05:57:11 -0700 (PDT)
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-nilfs <linux-nilfs@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: [PATCH 0/3] nilfs2 lockdep warning fixes
+Date:   Mon, 21 Mar 2022 21:57:04 +0900
+Message-Id: <1647867427-30498-1-git-send-email-konishi.ryusuke@gmail.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 21 March 2022 13:41:39 Andrew Lunn wrote:
-> On Mon, Mar 21, 2022 at 01:17:27PM +0100, Robert Marko wrote:
-> > Partition currently called "uboot" does not only contain U-boot, but
-> > rather it contains TF-A, U-boot and U-boot environment.
-> > 
-> > So, to avoid accidentally deleting the U-boot environment which is
-> > located at 0x180000 split the partition.
-> > 
-> > "uboot" is not the correct name as you can't boot these boards with U-boot
-> > only, TF-A must be present as well, so rename the "uboot" partition to
-> > "firmware".
-> 
-> Are there any ABI issues here? If these names are being used
-> somewhere, you are potentially breaking the boot. At minimum, i would
-> like to see something in the commit message which indicates you have
-> considered this and why you don't expect it to be a problem.
+Hi Andrew,
 
-Hello! Similar change/fix was done also for Turris Mox DTS file:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a9d9bfcadfb43b856dbcf9419de75f7420d5a225
+please consider applying the following changes to -mm tree.
 
-Difference between uDPU and Mox is that uDPU has concatenated
-CM3 firmware (called secure firmware) and A53 firmware (TF-A + u-boot)
-into one binary, Mox has these two parts separated. So uDPU partition
-should be called just firmware.
+Ryusuke Konishi (3):
+  nilfs2: fix lockdep warnings in page operations for btree nodes
+  nilfs2: fix lockdep warnings during disk space reclamation
+  nilfs2: get rid of nilfs_mapping_init()
 
-Same partition name "firmware" is used also on another A3720 device
-Espressobin. But here partition names are filled/injected into DTB at
-runtime by bootloader.
+The first two are to resolve the lockdep warning issue, and the last
+one is the accompanying cleanup and low priority.
 
-So I think this change for uDPU looks reasonable. Partition name
-"u-boot" is used for flashing u-boot binary and renaming it could really
-fix automated scripts to stop flashing into SPI NOR something which
-makes device unbootable.
+The merge window is already open, but this is for the reported issues,
+so I'll send it without waiting at this point when tests have passed.
+
+Based on your comment, this series solves the issue by separating
+inode object as needed.  Since I was worried about the impact of the
+object composition changes, I tested the series carefully not to cause
+regressions especially for delicate functions such like disk space
+reclamation and snapshots.
+
+
+Thanks,
+Ryusuke Konishi
+--
+ fs/nilfs2/btnode.c  |  23 +++++++-
+ fs/nilfs2/btnode.h  |   1 +
+ fs/nilfs2/btree.c   |  27 ++++++---
+ fs/nilfs2/dat.c     |   4 +-
+ fs/nilfs2/gcinode.c |   7 ++-
+ fs/nilfs2/inode.c   | 159 +++++++++++++++++++++++++++++++++++++++++++++++-----
+ fs/nilfs2/mdt.c     |  43 +++++++++-----
+ fs/nilfs2/mdt.h     |   6 +-
+ fs/nilfs2/nilfs.h   |  16 +++---
+ fs/nilfs2/page.c    |  16 +-----
+ fs/nilfs2/page.h    |   1 -
+ fs/nilfs2/segment.c |   9 ++-
+ fs/nilfs2/super.c   |   5 +-
+ 13 files changed, 241 insertions(+), 76 deletions(-)
+
+-- 
+1.8.3.1
+

@@ -2,87 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F574E26F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC654E26F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347604AbiCUMzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        id S1347613AbiCUMz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343693AbiCUMzK (ORCPT
+        with ESMTP id S1343693AbiCUMz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:55:10 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0197349F0E;
-        Mon, 21 Mar 2022 05:53:44 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22LCbtYV020632;
-        Mon, 21 Mar 2022 12:53:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=YdFgqeukeLoGFVaICxahPmVUOqgutiRUWpi8e1v11VA=;
- b=LTs6csA0mg+QnOkRHqyrw/vozmfj5WnQb3Ume2Jamh/9C0SaGVX8XyGmG6aarrzkPEiD
- ck1QO05SdpuCp2UPY0l0k0xrEf0CQa85HDT16HBaz7QI+YQ4UoPVNlGYgAro5nE4JrsI
- aXvQd8hSUqf4eFLbCpGynLE4BDEGdNQ5u6Xveiku+YtAkyLH1lJTldPiduG/CsFqWguJ
- e9Ma9Nieh8q7MQc4hI/jN7gPE8heAWCm0PQKCRe35BtCpLLH9VAe73VbgPtcjgjtfZWS
- TdlG1p/nepN9J12N5GEiDAeHC9oDXjAFOU7PP/rj4yNh2WT7tIJrJ3M4dHHibD6Lyho+ ZA== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3exf1uuspn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 12:53:39 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22LCr7p9005803;
-        Mon, 21 Mar 2022 12:53:38 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma04dal.us.ibm.com with ESMTP id 3ew6t9gm9n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 12:53:38 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22LCrbTd32637328
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Mar 2022 12:53:37 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 323DD7805F;
-        Mon, 21 Mar 2022 12:53:37 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F301B78060;
-        Mon, 21 Mar 2022 12:53:35 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 21 Mar 2022 12:53:35 +0000 (GMT)
-Message-ID: <b19eca12-3ae1-a8a5-fcfd-a22b5ee9319c@linux.ibm.com>
-Date:   Mon, 21 Mar 2022 08:53:35 -0400
+        Mon, 21 Mar 2022 08:55:56 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2068.outbound.protection.outlook.com [40.107.102.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7704CD70;
+        Mon, 21 Mar 2022 05:54:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FNXYUsYxwcdJozVJsrL6jvcTLliWmrmdGxdD2blW/juhp/qcNQdj88oOaNv4y7wQba0G61v32ruOwpn86LgJy26LQEOXo/x45B+tQJ/kPTpxxGLPu7NeBeHedgWn9tNkvZQAXbNkx5zqWVBWQ3272PtTBZtSLSWfl9Okxnpg2CTnzuwLuqmhGVoqQjoGNfzkg83+HuEzXEdPMFFCtLEXJbznaYVyWorNRCZodSqujh561Pr9tzKfJFDdYx2jNGx/1/jKt5v+lBz0KU/Wgcc9F2tsFOl374KylhvGJ6OJknWFhFSN6hhoOU2PrL0Ca52/JUdhc3TvECtAhXq0MalJhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=27tk8hMv5OqgP3OjLFaMwdoT1Msw3jdS+gyMcAYdVX0=;
+ b=BPwCqdZ9T48A44RCDhlRL51RTTPaKFWwbNbIMWBYAzsXNEojRQJsT6pAnjAoOKwLs7pr+nufO60wAWed+MEEG5ngJdaRvcsav1uMMRfTutiBrPAcOYKvSGZwCiDF/szIFsODTAd/Fk0Ni5WTkvjAIn/u8LejE2QX4TPo6Ud30LApibRVrvKXW2DSFLb8ewIa+NyE8y4wQ1n5raActMYWjnH31tCYv0DxSUAyyHGQwxPSZa11iR19sTP3Lyl4N5e7iE/hjepEGdhSvDvjE4clXFALpfJeMX4Fm6h05wpN59KNMtK3BCPoAKK41dlQYb7zRg1mamZ/6bQYXpzXowPxLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=27tk8hMv5OqgP3OjLFaMwdoT1Msw3jdS+gyMcAYdVX0=;
+ b=WeZoOKk08S8rlzmZuf5JPBCKKcNTvxYxs6duYaOzqxVUcaUI2neabX2Z6fsBLTmyGRCCaRIl3pCX0ZwJr9QrUiPD2hkY9hVgCNLlxPZE4J4qNsyOmgggi/hlegQi1Yay66wyccJugv3iesyy46cHFdMoQnLPw70LtjOFgGY4pu45hjQxKRuPLPiqZiERx+bwkp7F4CiRw5sTCA26kHOxEo0ERwx9/58dimqD6+zMuTETCR2qAes7SvJi0AZAHOEhXebfRJAo0ZKs60RlCcnfOwFaZSFEwiwUzhSPtwmjTU9COoZ8qHuKhZYjy9cK+C3qC5gtbA4j+TDsCsixAnxKEQ==
+Received: from BN8PR03CA0032.namprd03.prod.outlook.com (2603:10b6:408:94::45)
+ by DM4PR12MB5723.namprd12.prod.outlook.com (2603:10b6:8:5e::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5081.14; Mon, 21 Mar 2022 12:54:30 +0000
+Received: from BN8NAM11FT006.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:94:cafe::c9) by BN8PR03CA0032.outlook.office365.com
+ (2603:10b6:408:94::45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.22 via Frontend
+ Transport; Mon, 21 Mar 2022 12:54:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ BN8NAM11FT006.mail.protection.outlook.com (10.13.177.21) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5081.14 via Frontend Transport; Mon, 21 Mar 2022 12:54:29 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Mon, 21 Mar
+ 2022 12:54:29 +0000
+Received: from [10.41.21.79] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 21 Mar
+ 2022 05:54:24 -0700
+Message-ID: <748d87c6-3f91-8bc0-ce8f-0a64278b4122@nvidia.com>
+Date:   Mon, 21 Mar 2022 18:24:21 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v6 2/5] ima: define a new template field named 'd-ngv2'
- and templates
+ Thunderbird/91.5.0
+Subject: Re: [Patch v1 2/3] arm64: tegra: add node for tegra234 cpufreq
 Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220318182151.100847-1-zohar@linux.ibm.com>
- <20220318182151.100847-3-zohar@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220318182151.100847-3-zohar@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kTZHQ2FTVcLb4JqdPtlerAA2SRFtCU89
-X-Proofpoint-GUID: kTZHQ2FTVcLb4JqdPtlerAA2SRFtCU89
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-21_05,2022-03-21_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 suspectscore=0 adultscore=0 bulkscore=0
- lowpriorityscore=0 spamscore=0 mlxscore=0 malwarescore=0 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203210081
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Jon Hunter <jonathanh@nvidia.com>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>, <treding@nvidia.com>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>, <bbasu@nvidia.com>,
+        "Sumit Gupta" <sumitg@nvidia.com>
+References: <20220316135831.900-1-sumitg@nvidia.com>
+ <20220316135831.900-3-sumitg@nvidia.com>
+ <30bb04fe-4fed-04bc-6f99-158ac09d6bb8@nvidia.com>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <30bb04fe-4fed-04bc-6f99-158ac09d6bb8@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f89de91c-dfed-4c40-ae72-08da0b39f03c
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5723:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB5723BDAAD9C1A792143D7D90B9169@DM4PR12MB5723.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: raBEaZ2XTXtKTp1rZG3Gpfb0KRAbyEsYKHQcoLPbgzC6ROaOKHLebEZ7nbUMisIV5HdT3zgE7TtWEg+SISBuImTDOVUJoJu/5iYTaBKgFjPOluMind9FoUB5XWpwk8s6x+/oq3D1zjnXMOy7uJ5VwZ2quKKJqGF8uPHr4Fp8cI7WmF0NOEbOAdS26WQfffPOwyIYPTZ40qJbGcqrF93znwRYNYCjviN3AMK2Y8Q6psfQqxeVwWcq8xr9jNoHm0v17XHbNYGyOfOn3iP5CAdZ99HXbGJfVh2AUYiM9fr00TxdjVdfkB89IxhVdmCEomt9fKfhwTxISyzA+jjRB0YyiiaPVAv07ouLq7/Kb2sgAZDTS43E2cmlKnIXiawiZ0/wAIvu/r0uUxCW4FHyBxnABkrIeMZkifh1o+zpPGL0mCjnWtn5hT9ght5c6smRbMaQ2kvyHEP53Shij6/Ujg1CIgCtJGwCkupU95K3Lgw0Es7plxQsLx3E/nhOulF/Px6EDp2A+v5h5SNZQxZ5WkdBm8pWNmEUFK2FZ/VW+Q/xkqg0qOQ7q3WFQW/+lGADbeHsPYowQtYXizQ65bQeKVR2LghwvYeToKtsvWoIYi6XtMvwLBy4u++GAoP5+qRHT+tMa+SiUKzlA+y2iZICVtHIiDCCBbasmZ5aJaHGC6zocAlMiBq4E1QI7GRgwCu+Ky5Fa408c9avPeKG8RDcb4sHSXODismC3mY8s57MhFHzHEv/LjBiivkG7+EBchb8kuYiZLTv0vwNRrMlVcCrCCw+Yqq9Fk+xiIFxlkF+E0/+8ZTSakvff4LuwZ03pu56rAOAbPuaAPeSTLPsoZVaLU5GeA==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(47076005)(6666004)(316002)(16576012)(36860700001)(36756003)(426003)(4326008)(83380400001)(336012)(86362001)(70206006)(70586007)(8676002)(186003)(16526019)(26005)(2616005)(82310400004)(31696002)(107886003)(2906002)(356005)(921005)(81166007)(966005)(40460700003)(31686004)(508600001)(54906003)(110136005)(8936002)(5660300002)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 12:54:29.6177
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f89de91c-dfed-4c40-ae72-08da0b39f03c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT006.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5723
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,236 +114,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 3/18/22 14:21, Mimi Zohar wrote:
-> In preparation to differentiate between unsigned regular IMA file
-> hashes and fs-verity's file digests in the IMA measurement list,
-> define a new template field named 'd-ngv2'.
+>> Adding cclpex node to represent Tegra234 cpufreq.
+>> Tegra234 uses some of the CRAB (Control Register Access Bus)
+>> registers for cpu frequency requests. These registers are
+>> memory mapped to CCPLEX_MMCRAB_ARM region. In this node, mapping
+>> the range of MMCRAB registers required only for cpu frequency info.
+>>
+>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>> ---
+>>   arch/arm64/boot/dts/nvidia/tegra234.dtsi | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi 
+>> b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+>> index aaace605bdaa..610207f3f967 100644
+>> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+>> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+>> @@ -1258,6 +1258,13 @@
+>>           };
+>>       };
+>> +    ccplex@e000000 {
+>> +        compatible = "nvidia,tegra234-ccplex-cluster";
+>> +        reg = <0x0 0x0e000000 0x0 0x5ffff>;
+>> +        nvidia,bpmp = <&bpmp>;
+>> +        status = "okay";
+>> +    };
+>> +
+>>       sram@40000000 {
+>>           compatible = "nvidia,tegra234-sysram", "mmio-sram";
+>>           reg = <0x0 0x40000000 0x0 0x80000>;
 > 
-> Also define two new templates named 'ima-ngv2' and 'ima-sigv2', which
-> include the new 'd-ngv2' field.
 > 
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->   .../admin-guide/kernel-parameters.txt         |  3 +-
->   security/integrity/ima/ima_template.c         |  4 ++
->   security/integrity/ima/ima_template_lib.c     | 71 ++++++++++++++++---
->   security/integrity/ima/ima_template_lib.h     |  4 ++
->   4 files changed, 72 insertions(+), 10 deletions(-)
+> We need to add this compatible string to a DT binding doc somewhere.
+It seems the binding doc was previously posted in [1] for T186 SoC.
+Same will be applicable for T234 SoC also. Only compatible string need 
+to be added.
+Should I sent a separate patch after converting it to yaml format and 
+add compatible string (or) send as part of v2.
+
+[1] https://lkml.org/lkml/2017/4/3/324
+
 > 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index f5a27f067db9..47386ac10471 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1876,7 +1876,8 @@
->   
->   	ima_template=	[IMA]
->   			Select one of defined IMA measurements template formats.
-> -			Formats: { "ima" | "ima-ng" | "ima-sig" }
-> +			Formats: { "ima" | "ima-ng" | "ima-ngv2" | "ima-sig" |
-> +				   "ima-sigv2" }
->   			Default: "ima-ng"
->   
->   	ima_template_fmt=
-> diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-> index db1ad6d7a57f..c25079faa208 100644
-> --- a/security/integrity/ima/ima_template.c
-> +++ b/security/integrity/ima/ima_template.c
-> @@ -20,6 +20,8 @@ static struct ima_template_desc builtin_templates[] = {
->   	{.name = IMA_TEMPLATE_IMA_NAME, .fmt = IMA_TEMPLATE_IMA_FMT},
->   	{.name = "ima-ng", .fmt = "d-ng|n-ng"},
->   	{.name = "ima-sig", .fmt = "d-ng|n-ng|sig"},
-> +	{.name = "ima-ngv2", .fmt = "d-ngv2|n-ng"},
-> +	{.name = "ima-sigv2", .fmt = "d-ngv2|n-ng|sig"},
->   	{.name = "ima-buf", .fmt = "d-ng|n-ng|buf"},
->   	{.name = "ima-modsig", .fmt = "d-ng|n-ng|sig|d-modsig|modsig"},
->   	{.name = "evm-sig",
-> @@ -38,6 +40,8 @@ static const struct ima_template_field supported_fields[] = {
->   	 .field_show = ima_show_template_string},
->   	{.field_id = "d-ng", .field_init = ima_eventdigest_ng_init,
->   	 .field_show = ima_show_template_digest_ng},
-> +	{.field_id = "d-ngv2", .field_init = ima_eventdigest_ngv2_init,
-> +	 .field_show = ima_show_template_digest_ngv2},
->   	{.field_id = "n-ng", .field_init = ima_eventname_ng_init,
->   	 .field_show = ima_show_template_string},
->   	{.field_id = "sig", .field_init = ima_eventsig_init,
-> diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-> index 7155d17a3b75..bd95864a5f6f 100644
-> --- a/security/integrity/ima/ima_template_lib.c
-> +++ b/security/integrity/ima/ima_template_lib.c
-> @@ -24,11 +24,16 @@ static bool ima_template_hash_algo_allowed(u8 algo)
->   enum data_formats {
->   	DATA_FMT_DIGEST = 0,
->   	DATA_FMT_DIGEST_WITH_ALGO,
-> +	DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO,
->   	DATA_FMT_STRING,
->   	DATA_FMT_HEX,
->   	DATA_FMT_UINT
->   };
->   
-> +#define DIGEST_TYPE_MAXLEN 16	/* including NULL */
-> +static const char * const digest_type_name[] = {"ima"};
-> +static int digest_type_size = ARRAY_SIZE(digest_type_name);
-> +
->   static int ima_write_template_field_data(const void *data, const u32 datalen,
->   					 enum data_formats datafmt,
->   					 struct ima_field_data *field_data)
-> @@ -72,8 +77,9 @@ static void ima_show_template_data_ascii(struct seq_file *m,
->   	u32 buflen = field_data->len;
->   
->   	switch (datafmt) {
-> +	case DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO:
->   	case DATA_FMT_DIGEST_WITH_ALGO:
-> -		buf_ptr = strnchr(field_data->data, buflen, ':');
-> +		buf_ptr = strrchr(field_data->data, ':');
->   		if (buf_ptr != field_data->data)
->   			seq_printf(m, "%s", field_data->data);
->   
-> @@ -178,6 +184,14 @@ void ima_show_template_digest_ng(struct seq_file *m, enum ima_show_type show,
->   				     field_data);
->   }
->   
-> +void ima_show_template_digest_ngv2(struct seq_file *m, enum ima_show_type show,
-> +				   struct ima_field_data *field_data)
-> +{
-> +	ima_show_template_field_data(m, show,
-> +				     DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO,
-> +				     field_data);
-> +}
-> +
->   void ima_show_template_string(struct seq_file *m, enum ima_show_type show,
->   			      struct ima_field_data *field_data)
->   {
-> @@ -265,26 +279,39 @@ int ima_parse_buf(void *bufstartp, void *bufendp, void **bufcurp,
->   }
->   
->   static int ima_eventdigest_init_common(const u8 *digest, u32 digestsize,
-> -				       u8 hash_algo,
-> +				       u8 digest_type, u8 hash_algo,
->   				       struct ima_field_data *field_data)
->   {
->   	/*
->   	 * digest formats:
->   	 *  - DATA_FMT_DIGEST: digest
->   	 *  - DATA_FMT_DIGEST_WITH_ALGO: [<hash algo>] + ':' + '\0' + digest,
-> +	 *  - DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO:
-> +	 *	[<digest type> + ':' + <hash algo>] + ':' + '\0' + digest,
-> +	 *    where <hash type> is either "ima" or "verity",
->   	 *    where <hash algo> is provided if the hash algorithm is not
->   	 *    SHA1 or MD5
->   	 */
-> -	u8 buffer[CRYPTO_MAX_ALG_NAME + 2 + IMA_MAX_DIGEST_SIZE] = { 0 };
-> +	u8 buffer[DIGEST_TYPE_MAXLEN + CRYPTO_MAX_ALG_NAME + 2 +
-> +		IMA_MAX_DIGEST_SIZE] = { 0 };
-
-Should it not be DIGEST_TYPE_MAXLEN + 1 /* for ':' */ + 
-CRYPTO_MAX_ALG_NAME + ....
-
->   	enum data_formats fmt = DATA_FMT_DIGEST;
->   	u32 offset = 0;
->   
-> -	if (hash_algo < HASH_ALGO__LAST) {
-> -		fmt = DATA_FMT_DIGEST_WITH_ALGO;
-> -		offset += snprintf(buffer, CRYPTO_MAX_ALG_NAME + 1, "%s",
-> +	if (digest_type < digest_type_size && hash_algo < HASH_ALGO__LAST) {
-
-It's a bit difficult to see what the digest_type has to do with size...
-Maybe digest_type should be a enum and the comparison here should be 
-digest_type != DIGEST_TYPE_NONE or something like it..
-
-
-> +		fmt = DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO;
-> +		offset += snprintf(buffer, DIGEST_TYPE_MAXLEN +
-> +				   CRYPTO_MAX_ALG_NAME + 1, "%*s:%s",
-> +				   (int)strlen(digest_type_name[digest_type]),
-> +				   digest_type_name[digest_type],
->   				   hash_algo_name[hash_algo]);
->   		buffer[offset] = ':';
->   		offset += 2;
-> +	} else if (hash_algo < HASH_ALGO__LAST) {
-> +		fmt = DATA_FMT_DIGEST_WITH_ALGO;
-> +		offset += snprintf(buffer, CRYPTO_MAX_ALG_NAME + 1,
-> +				   "%s", hash_algo_name[hash_algo]);
-> +		buffer[offset] = ':';
-> +		offset += 2;
->   	}
->   
->   	if (digest)
-> @@ -359,7 +386,8 @@ int ima_eventdigest_init(struct ima_event_data *event_data,
->   	cur_digestsize = hash.hdr.length;
->   out:
->   	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
-> -					   HASH_ALGO__LAST, field_data);
-> +					   digest_type_size, HASH_ALGO__LAST,
-> +					   field_data);
->   }
->   
->   /*
-> @@ -380,7 +408,31 @@ int ima_eventdigest_ng_init(struct ima_event_data *event_data,
->   	hash_algo = event_data->iint->ima_hash->algo;
->   out:
->   	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
-> -					   hash_algo, field_data);
-> +					   digest_type_size, hash_algo,
-> +					   field_data);
-> +}
-> +
-> +/*
-> + * This function writes the digest of an event (without size limit),
-> + * prefixed with both the hash type and algorithm.
-> + */
-> +int ima_eventdigest_ngv2_init(struct ima_event_data *event_data,
-> +			      struct ima_field_data *field_data)
-> +{
-> +	u8 *cur_digest = NULL, hash_algo = HASH_ALGO_SHA1;
-> +	u32 cur_digestsize = 0;
-> +	u8 digest_type = 0;
-
-What does '0' mean? I think this should definitely be an enum or at 
-least #define.
-
-> +
-> +	if (event_data->violation)	/* recording a violation. */
-> +		goto out;
-> +
-> +	cur_digest = event_data->iint->ima_hash->digest;
-> +	cur_digestsize = event_data->iint->ima_hash->length;
-> +
-> +	hash_algo = event_data->iint->ima_hash->algo;
-> +out:
-> +	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
-> +					   digest_type, hash_algo, field_data);
->   }
->   
->   /*
-> @@ -415,7 +467,8 @@ int ima_eventdigest_modsig_init(struct ima_event_data *event_data,
->   	}
->   
->   	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
-> -					   hash_algo, field_data);
-> +					   digest_type_size, hash_algo,
-> +					   field_data);
->   }
->   
->   static int ima_eventname_init_common(struct ima_event_data *event_data,
-> diff --git a/security/integrity/ima/ima_template_lib.h b/security/integrity/ima/ima_template_lib.h
-> index c71f1de95753..9f7c335f304f 100644
-> --- a/security/integrity/ima/ima_template_lib.h
-> +++ b/security/integrity/ima/ima_template_lib.h
-> @@ -21,6 +21,8 @@ void ima_show_template_digest(struct seq_file *m, enum ima_show_type show,
->   			      struct ima_field_data *field_data);
->   void ima_show_template_digest_ng(struct seq_file *m, enum ima_show_type show,
->   				 struct ima_field_data *field_data);
-> +void ima_show_template_digest_ngv2(struct seq_file *m, enum ima_show_type show,
-> +				   struct ima_field_data *field_data);
->   void ima_show_template_string(struct seq_file *m, enum ima_show_type show,
->   			      struct ima_field_data *field_data);
->   void ima_show_template_sig(struct seq_file *m, enum ima_show_type show,
-> @@ -38,6 +40,8 @@ int ima_eventname_init(struct ima_event_data *event_data,
->   		       struct ima_field_data *field_data);
->   int ima_eventdigest_ng_init(struct ima_event_data *event_data,
->   			    struct ima_field_data *field_data);
-> +int ima_eventdigest_ngv2_init(struct ima_event_data *event_data,
-> +			      struct ima_field_data *field_data);
->   int ima_eventdigest_modsig_init(struct ima_event_data *event_data,
->   				struct ima_field_data *field_data);
->   int ima_eventname_ng_init(struct ima_event_data *event_data,
+> Cheers
+> Jon
+> 

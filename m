@@ -2,107 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AC04E30E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 321414E30EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 20:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352824AbiCUTsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 15:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S1352832AbiCUTu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 15:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239684AbiCUTsv (ORCPT
+        with ESMTP id S239684AbiCUTu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 15:48:51 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918B776297
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:47:21 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id c15so21323854ljr.9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:47:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lCiODI9PI/EEfC6nyI3suBU5YNtGDoGGxuNDXJnVdTA=;
-        b=ezmZUQJ4kvMrHLo4x5F8XsnqcRGxtWgktJJ1WwpOwWXNKYLVOUbTbyhLyRBpe5o8Dt
-         +g8PqbcgmlNrTRHqBe78ScSgYJYGnvcSIKiLY8zwdhx//bndxVsMOhUQyeXm2OUHo2AA
-         zezBo+N6+i7TZSdnwddAT0+JYMamd1jr42bIE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lCiODI9PI/EEfC6nyI3suBU5YNtGDoGGxuNDXJnVdTA=;
-        b=6ui9jIkNPq693m439szm2kXfNsYo3nSO+KYq4Q9L1mw69PHygeT9s30L7IIaPkUeiA
-         oPKMp4WCrq5OwY7jSfRKCamZ2mhXxWhoMCBWC/gBacl+83KYQ5wuuRRp0CeMA6VWK5IM
-         L5JdcsrIRtXk4Me1TsfL3FXp8ltC8NmrouKo2jvab8l4F47icgpJI07NbPiUjaRUqh36
-         wvmntImhbI79hLF8iUF2yjk5VmSDJ1kY700g+bU7yKRrDmge/ACNxZRcN+0cLLpajVZP
-         H47kmibu7LeF/0LEs150HKIqiE0bXa9tajKnrSZTf49yh81nDaOYTR+iSMIiI9ZTwLjm
-         GNww==
-X-Gm-Message-State: AOAM533SpTM2H1WN1r2DxDevlDUNjxV+L3WPje3f43+XGWJIVlpeZ15D
-        Zjim7qeEziDpdLROBm09oNIXzfKdYMyxYVxNhhQ=
-X-Google-Smtp-Source: ABdhPJy95Ya2NviqIo9Bu3A+aYbg8txXV0UgttM7+noppa16CWI7gwYnqlki6lulBu/BfOewVsGJag==
-X-Received: by 2002:a05:651c:3cc:b0:249:800d:58ea with SMTP id f12-20020a05651c03cc00b00249800d58eamr6855403ljp.41.1647892039380;
-        Mon, 21 Mar 2022 12:47:19 -0700 (PDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id r25-20020ac25a59000000b00445b78bb876sm1893923lfn.295.2022.03.21.12.47.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 12:47:18 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id a26so8337493lfg.10
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 12:47:17 -0700 (PDT)
-X-Received: by 2002:a05:6512:2294:b0:448:6c86:3c78 with SMTP id
- f20-20020a056512229400b004486c863c78mr15188243lfu.531.1647892037101; Mon, 21
- Mar 2022 12:47:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <164786042536.122591.4459156564791679956.tglx@xen13>
-In-Reply-To: <164786042536.122591.4459156564791679956.tglx@xen13>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 21 Mar 2022 12:47:01 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgfSKuzHggdngkXxSDvRp3FOMwbbvPJqag99NiRekbJfg@mail.gmail.com>
-Message-ID: <CAHk-=wgfSKuzHggdngkXxSDvRp3FOMwbbvPJqag99NiRekbJfg@mail.gmail.com>
-Subject: Re: [GIT pull] core/core for v5.18-rc1
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Oleg Nesterov <oleg@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 15:50:26 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D676E7CB35;
+        Mon, 21 Mar 2022 12:49:00 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22LHqPGS002594;
+        Mon, 21 Mar 2022 19:48:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=/32NuSvKToMX7b4xGjzfLvjI0xh2tfWsRPAXABKe04o=;
+ b=Fu7SOryqbjHwCUsyVrP0hTkdR49q2LOZK9M0gZmcJGae+fExYOgbkAIGJMzc4/6Kyo9d
+ kLao/FRpzeQceyBcaWzuLK+0KPhZ26VNyyVPyR4dL9/N0nG/XJn/Cl1gc/MBeiVQXQCF
+ 18wJ8Pn6PGVI3gnykf6WSRtQcRm7B8no+O0fXSEztxC03n15Fb/ar4vWZ4uIb1n6zCuf
+ EnAMs8rCcXdNzLX5vP99PgKhJlrRkX9O6h7eTBQMsWUT4F8PXuUim/e/HfTKqKtkcyge
+ b0Pa1S99y6QiIceZVOgU4D1xfhgMLpU8J2V0k6zCKHC3AVivXDMA0RcqzW1tEZ5iLZwO kQ== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3expy0mm72-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Mar 2022 19:48:57 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22LJmt4J017728;
+        Mon, 21 Mar 2022 19:48:55 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma01fra.de.ibm.com with ESMTP id 3ew6t8m0b3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Mar 2022 19:48:55 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22LJmrsQ26608020
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Mar 2022 19:48:53 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0356B42042;
+        Mon, 21 Mar 2022 19:48:53 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3DA8442041;
+        Mon, 21 Mar 2022 19:48:52 +0000 (GMT)
+Received: from sig-9-65-71-84.ibm.com (unknown [9.65.71.84])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 21 Mar 2022 19:48:52 +0000 (GMT)
+Message-ID: <31254e743b73a43f6f27679678318d0d8744a355.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 2/5] ima: define a new template field named 'd-ngv2'
+ and templates
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 21 Mar 2022 15:48:51 -0400
+In-Reply-To: <b19eca12-3ae1-a8a5-fcfd-a22b5ee9319c@linux.ibm.com>
+References: <20220318182151.100847-1-zohar@linux.ibm.com>
+         <20220318182151.100847-3-zohar@linux.ibm.com>
+         <b19eca12-3ae1-a8a5-fcfd-a22b5ee9319c@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hnFN2G3Havcxswh36i790sxpy2UPdC9m
+X-Proofpoint-GUID: hnFN2G3Havcxswh36i790sxpy2UPdC9m
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-21_08,2022-03-21_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 impostorscore=0
+ malwarescore=0 clxscore=1015 priorityscore=1501 suspectscore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203210124
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 4:02 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->
->   - Provide a mechanism to delay raising signals from atomic context on
->     PREEMPT_RT enabled kernels as sighand::lock cannot be acquired.  Store
->     the information in the task struct and raise it in the exit path.
+On Mon, 2022-03-21 at 08:53 -0400, Stefan Berger wrote:
+> >   	/*
+> >   	 * digest formats:
+> >   	 *  - DATA_FMT_DIGEST: digest
+> >   	 *  - DATA_FMT_DIGEST_WITH_ALGO: [<hash algo>] + ':' + '\0' + digest,
+> > +	 *  - DATA_FMT_DIGEST_WITH_TYPE_AND_ALGO:
+> > +	 *	[<digest type> + ':' + <hash algo>] + ':' + '\0' + digest,
+> > +	 *    where <hash type> is either "ima" or "verity",
+> >   	 *    where <hash algo> is provided if the hash algorithm is not
+> >   	 *    SHA1 or MD5
+> >   	 */
+> > -	u8 buffer[CRYPTO_MAX_ALG_NAME + 2 + IMA_MAX_DIGEST_SIZE] = { 0 };
+> > +	u8 buffer[DIGEST_TYPE_MAXLEN + CRYPTO_MAX_ALG_NAME + 2 +
+> > +		IMA_MAX_DIGEST_SIZE] = { 0 };
+> 
+> Should it not be DIGEST_TYPE_MAXLEN + 1 /* for ':' */ + 
+> CRYPTO_MAX_ALG_NAME + ....
 
-This isn't super-pretty, but doing it conditionally makes it even uglier.
+DIGEST_TYPE_MAXLEN is hard coded as 16.
 
-I've pulled this, but my reaction to it all is
-"force_sig_info_to_task() isn't that critical, and
-CONFIG_RT_DELAYED_SIGNALS might as well have been unconditional".
+> 
+> >   	enum data_formats fmt = DATA_FMT_DIGEST;
+> >   	u32 offset = 0;
+> >   
+> > -	if (hash_algo < HASH_ALGO__LAST) {
+> > -		fmt = DATA_FMT_DIGEST_WITH_ALGO;
+> > -		offset += snprintf(buffer, CRYPTO_MAX_ALG_NAME + 1, "%s",
+> > +	if (digest_type < digest_type_size && hash_algo < HASH_ALGO__LAST) {
+> 
+> It's a bit difficult to see what the digest_type has to do with size...
+> Maybe digest_type should be a enum and the comparison here should be 
+> digest_type != DIGEST_TYPE_NONE or something like it..
 
-In fact, is there any reason to make it conditional even at run-time, ie this:
+digest_type_size is the size of the array.  It's defined as "static int
+digest_type_size = ARRAY_SIZE(digest_type_name);", with the first
+element as "ima".
 
-> +       if (!in_atomic())
-> +               return false;
+> > +
+> > +/*
+> > + * This function writes the digest of an event (without size limit),
+> > + * prefixed with both the hash type and algorithm.
+> > + */
+> > +int ima_eventdigest_ngv2_init(struct ima_event_data *event_data,
+> > +			      struct ima_field_data *field_data)
+> > +{
+> > +	u8 *cur_digest = NULL, hash_algo = HASH_ALGO_SHA1;
+> > +	u32 cur_digestsize = 0;
+> > +	u8 digest_type = 0;
+> 
+> What does '0' mean? I think this should definitely be an enum or at 
+> least #define.
 
-looks a bit unnecessary too. Why not just always do that thing and
-avoid having two code-paths?
+The first element of the array is "ima".  Should I define two macros
+similar to kernel_read_file_id and kernel_read_file_str for just two
+strings?
 
-I really think we don't want more complexity in this unusual "force
-signal on exception" case, and TIF_NOTIFY_RESUME doesn't seem like
-it's the wrong place to do it.
+thanks,
 
-Hmm?
+Mimi
 
-Anyway, I've pulled it in this form, I just don't like the special
-cases that seem a bit pointless. They not only make the code bigger
-and more complex, they actively mean that test coverage is much worse
-too.
-
-             Linus

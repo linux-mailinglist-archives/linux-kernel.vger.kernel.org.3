@@ -2,235 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EE24E25AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF994E25AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 12:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347080AbiCULyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 07:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S1346976AbiCULyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 07:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347067AbiCULyV (ORCPT
+        with ESMTP id S1347040AbiCULyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 07:54:21 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2138.outbound.protection.outlook.com [40.107.100.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B09B15AAF3;
-        Mon, 21 Mar 2022 04:52:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SLH3q9jPd6Lf0d1bYmF9AcgzzU1rawR5kU0B3fGWUiBgigpeoTFo2h44clJBg3ZBhCoZujIXunLly5Au8ui0Oxj5430zyTenOmhEmYTEUUtI+iXJaVseNQmS1dvangDV2z+0Y8WRBfsO+72j5Tn7gzgbnjweLurUe206n36pgKHV8Drb35SD9DlYU5e0UUxHBuSxuSGBXqWuDoIdAqjY1lxaT3OULgrG1HEhnmFMJAoq9b7muQXKHXnl/0w9Fw2hR8u+QLct76SyKkEb0/e70G385DXVx6ytb5UJsl48EuxN+EXF+/bFrkV7UGpsbl9oJ1HazKRDgAeUZq6LlokjJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YMRdPAHbmpQvKsY1OGijUl/wbrOuubHm3Cg7Sm0Y7uU=;
- b=kJB61WfBc0TI8XgP9fU9pm0mKFSGqp6UxKxqGiyAk7UOON5cgE/fc5aj2IO/NBLL/mnRcCCximlwL9jq03Pb21/JvE5p8ryv32jmUtLUcQ7jmJvHTFKWPZdPT2GKoyUihdD5Rq7XWl94EvSRaWXfeYqhAaK2cnWAqGczGFPvX2fSHDvQ5NgGMZQNakRN0AibECKo3j8Z/9a/6LjI6i/eknLCXGvQ7oV/5vL7FNcpc40AmREv9cSIAdvHgAKUXZ/tYTpc6RCllVFkDA6fmcm4y/cG8hxAKfgeVlADG0SEDgRcyUX+H3yT4ORcoS27SgwZLTVltAVvLCOdgt6oUunH/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YMRdPAHbmpQvKsY1OGijUl/wbrOuubHm3Cg7Sm0Y7uU=;
- b=tK6SnZzP/3VG/4gmLCoALjT5wpfmpXTXHjrC+j5Qljlo4CWJsrlA3mXBuEplaDsb3Jw+R98G+mHIjMGUKkeGYTX8N7948ID9ftSIjBtSUP3FMax0E9oDl4WXVGYAs56738+44mYNmw4Xi+K0F0Zc654v823pou+vY/iKcMnJ1xc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by BYAPR04MB4888.namprd04.prod.outlook.com (2603:10b6:a03:4f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18; Mon, 21 Mar
- 2022 11:52:34 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::a865:6d10:c4a9:1142]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::a865:6d10:c4a9:1142%9]) with mapi id 15.20.5081.023; Mon, 21 Mar 2022
- 11:52:34 +0000
-Date:   Mon, 21 Mar 2022 19:52:26 +0800
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>, Xin Ji <xji@analogixsemi.com>,
-        a.hajda@samsung.com, narmstrong@baylibre.com,
-        dan.carpenter@oracle.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        sam@ravnborg.org, pihsun@chromium.org, tzungbi@google.com,
-        maxime@cerno.tech, drinkcat@google.com, hsinyi@chromium.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        bliang@analogixsemi.com, qwen@analogixsemi.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
-Subject: Re: [PATCH v12 3/4] drm/bridge: anx7625: add MIPI DPI input feature
-Message-ID: <20220321115226.GA1484106@anxtwsw-Precision-3640-Tower>
-References: <20211105031904.2641088-1-xji@analogixsemi.com>
- <20211105031904.2641088-3-xji@analogixsemi.com>
- <YiTruiCIkyxs3jTC@pendragon.ideasonboard.com>
- <YiWiYpEfTOOqgyAN@google.com>
- <CAG3jFys-BYsBp07AAFQ2O_TFsXOwhcVDnsOh8WVNNSag3HZw+Q@mail.gmail.com>
- <CAG3jFyu47cv8oSecONM95KVoP=NOvgwafAp4TQ33CZ0Y4zWmnQ@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG3jFyu47cv8oSecONM95KVoP=NOvgwafAp4TQ33CZ0Y4zWmnQ@mail.gmail.com>
-X-ClientProxiedBy: HKAPR04CA0009.apcprd04.prod.outlook.com
- (2603:1096:203:d0::19) To BY5PR04MB6739.namprd04.prod.outlook.com
- (2603:10b6:a03:229::8)
+        Mon, 21 Mar 2022 07:54:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC24F165BB1;
+        Mon, 21 Mar 2022 04:52:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8915F1042;
+        Mon, 21 Mar 2022 04:52:33 -0700 (PDT)
+Received: from [10.57.43.230] (unknown [10.57.43.230])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DDD73F66F;
+        Mon, 21 Mar 2022 04:52:31 -0700 (PDT)
+Message-ID: <44f3abe1-09a2-657f-7637-afa34781709b@arm.com>
+Date:   Mon, 21 Mar 2022 11:52:27 +0000
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1fd5ba9c-1af6-4616-45e6-08da0b314930
-X-MS-TrafficTypeDiagnostic: BYAPR04MB4888:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR04MB48885EE0993DBAC49D9D6369C7169@BYAPR04MB4888.namprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3hYaZNBkDls4kwO2uqlSjySuaefLkM9M+77aGSZAxifpukNUkDEPppHy/2z8IeOzlxZ+0jZugHGTKtAkHimoP2CjobknbrWsVro6vjtCOwGQhJiMVOH7tMSAWdO7NJmMJZn8gKZzl4zKjXIQl46c9041/DpBviDhW09HX0NMlGcQgw9uw4yHP0IVxarkZyCbn7eerg15AGF9fKDbAqi8VcoIDpj4JjPJ9MNHodgLtR3dSN5zE9SL5KPOce/Wbie5qBOaxeoSy96kOaZYe3aJjw8aJhGGeDv5g381sCcAlcu306N4qhDk4KKQjBM0flzJv5O6gCcxY5jWpL0PFJA1N8iqAnOBiEdF0c/iZYY+VgyTlFUxXC5iGddF/K1XvKNFAAWNEvk9VcdTWs8FQiRwOMIwkZKwfRvTRWh0dmtNSAog2jUHv5DygeeVDvqtT3L5ryPaIFh8ydTjCyXfAEV75MhWcPfh1yppvMmZv8O5j7UwDlkxEvWW1qJKc39jPmXpt/Ln/8/L6v32nOuruX3K5apF92rHUAUQjWFNaz0t7SJ4lufgszaI8pj26PS0wNlF0FtJx8T8Z993zxlcPvbaFoZSCgJip4O7q0rw+GKrSw4tSKWszqnQ3uFC+op00ZEIenwQ/YuAFSGk0JBO4JoiUjp/1Ut9oyvpNseGrGQXjpMfVrU71fHwdruh2ndyaHKogs7svhUJvkAd772uXfc/F5g2niKzGa3I+KrrrJk7OcArvaspowEEdGB3ImbZ7zfp9IuJbJPpsCfOQQZstjPgGWKWInH4feINb/2Z4m+7ZvY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(83380400001)(45080400002)(4326008)(66556008)(66946007)(8676002)(6666004)(508600001)(66476007)(966005)(6486002)(38350700002)(8936002)(38100700002)(9686003)(33716001)(2906002)(55236004)(316002)(33656002)(26005)(186003)(52116002)(5660300002)(6506007)(6916009)(54906003)(86362001)(7416002)(1076003)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SLDqSfar7K0YBk6LWDM1ZXV3MpWy+IPIp/uhQmjiYrFibm8oIYetsalu1naV?=
- =?us-ascii?Q?Bw7crVgSjbTgTaptOzQR4qVZlxgG3KkqA6haXJdpKUMjljBZLaZF4IqXJBM1?=
- =?us-ascii?Q?/vz9U4D6HTT5RBlfo5Vw0Oev/PT3yC4onVyZi8WjrXa3a51qG/EB4LRI53nQ?=
- =?us-ascii?Q?C6+L4x+HVbGb6Y+7TM73lkvr8FBU+14w2UwE3KwYQ7h32pcoDi2iLO3f/a+C?=
- =?us-ascii?Q?8thoOFc/Al4L+F/fIwCJ7Q9/6TyplkHR54FbueYQmHYzb3l8S3F2ijyGB3/E?=
- =?us-ascii?Q?AIhIXQwo6+siAwJj6XmtGbQdHIQtocuUgAnNpQIX7W2T50OfyBuhUmKIgr13?=
- =?us-ascii?Q?LPmdW5P3ughCjTv+90W63jhz5R/50TsWHphN8qRaVuUREnTB9w7c3qSPHIap?=
- =?us-ascii?Q?Q+XihJuaRCB35f3nZO+S+70FIuwXpo6mD7siYXBk1H8uIf3Cx9zsvZd3rwHm?=
- =?us-ascii?Q?gguCTvTyuXH/ZyzNVeKUoSQ51u97U1SxYGiph1qXjPoomZehaspGuHvYp/2l?=
- =?us-ascii?Q?Mbnq2DfdfDCuUCSsK3U0SKjyVG/yvbAke++wcARcFm88WBt7FmP7LIHBsgPk?=
- =?us-ascii?Q?AL9wdqXuXnHDO9mCIvaJ8F6Cru4CwabCFOKxwZnef6/Zgzr9D5TueMFUtrIX?=
- =?us-ascii?Q?CqloalWgM6AuBEijrUhnUeWE2rUERkSVJd2OzEF3xrefukzCu6sktHX+eOIy?=
- =?us-ascii?Q?LZkKZ1MSfTvrjZTAkjN+Ajkprg9f2zyv/80gwRlbF7jy2dSU2Jdx6X/rKaqG?=
- =?us-ascii?Q?v3yqn0NnXgHrW/Cuzv/ciuRJoVcvgxP+M4DUykp+6FXUoqMOmrS8FCQ+xMgx?=
- =?us-ascii?Q?/93oz56gDoLNYObewwQ5MrkCehPwYwmbPpr3WmvppwuSD4x8gvXPZ7NLBjhM?=
- =?us-ascii?Q?/N/DEwn7WbDmpwWQijHbyBPFcnJo3ma7IH2ewSD2V6pNTwr/AhwZUgzaYscX?=
- =?us-ascii?Q?zczQGDJlJ4nOEz6H4CdvqWBD8kMzub4NXn3uz5MVChsClqOwlFc/X0bP6rl9?=
- =?us-ascii?Q?F10CKErLrQf5gHjAkXBTYqawzV/yAw36ywLOWJdZLEor4L1hUwERH39qzOn3?=
- =?us-ascii?Q?IEN98RICGsEbOxu2ju+mMiNirkZUm4rIyDq0hmjm++F2BsGHSGR0GFq1l3cG?=
- =?us-ascii?Q?fZ/e5hP/Hq3MQ7Txh3Q2ZvkrmK0fV84yvYs65S3syZV+8IAGfaab9y2jY0in?=
- =?us-ascii?Q?YaQ7dpZu/lB92aSX9M9t7Ax62RE4B9NT1whNfppWal57fXNWupJiwLXLyELG?=
- =?us-ascii?Q?kXmuvL+T6uIH//V/GbDkNT4k7fAU4+MZNmyp0rCae0dMi+HkMgr2R/ual5Mh?=
- =?us-ascii?Q?7b5elEf1pxk3SmhqgeSpcYpheYGAwY5hTlm3D0gwMJwdGrBppLJVPipY9SSS?=
- =?us-ascii?Q?Yco3YZdPUqWtM7GCG9HX2LGSw6YojjxiPFk2Did5kUZBj7uA2uTd7Cpcizd+?=
- =?us-ascii?Q?sH6gjErfRqVhkIxZtpCtaLFSiNFxHxuT?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1fd5ba9c-1af6-4616-45e6-08da0b314930
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 11:52:33.9924
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CvLLG4Z+CsuS/pFpqFXPA144aOfwA50wDc/zc0eH1+9UocNJIwFLvOpA7k/n6SWOnmydrHB9FcNeWZwMKI6jlg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4888
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 2/3] dt-bindings: timer: Document arm, cortex-a7-timer
+ in arch timer
+Content-Language: en-GB
+To:     Rob Herring <robh@kernel.org>,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220317191527.96237-1-singh.kuldeep87k@gmail.com>
+ <20220317191527.96237-3-singh.kuldeep87k@gmail.com>
+ <558f0c92-c499-daca-e1ad-2b16137f8c06@arm.com>
+ <20220317212508.GB99538@9a2d8922b8f1> <Yjd23Gro6B6zWCrO@robh.at.kernel.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <Yjd23Gro6B6zWCrO@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 11:00:20AM +0100, Robert Foss wrote:
-> On Mon, 7 Mar 2022 at 16:49, Robert Foss <robert.foss@linaro.org> wrote:
-> >
-> > On Mon, 7 Mar 2022 at 07:12, Chen-Yu Tsai <wenst@chromium.org> wrote:
-> > >
-> > > On Sun, Mar 06, 2022 at 07:13:30PM +0200, Laurent Pinchart wrote:
-> > > > Hello Xin,
-> > > >
-> > > > (Question for Rob below, and I'm afraid this is urgent as we need to
-> > > > merge a fix in v5.17).
-> > > >
-> > > > On Fri, Nov 05, 2021 at 11:19:03AM +0800, Xin Ji wrote:
-> > > > > The basic anx7625 driver only support MIPI DSI rx signal input.
-> > > > > This patch add MIPI DPI rx input configuration support, after apply
-> > > > > this patch, the driver can support DSI rx or DPI rx by adding
-> > > > > 'bus-type' in DT.
-> > > > >
-> > > > > Reviewed-by: Robert Foss <robert.foss@linaro.org>
-> > > > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> > > > > ---
-> > > > >  drivers/gpu/drm/bridge/analogix/anx7625.c | 247 ++++++++++++++++------
-> > > > >  drivers/gpu/drm/bridge/analogix/anx7625.h |  18 +-
-> > > > >  2 files changed, 205 insertions(+), 60 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > > > index f48e91134c20..f7c3386c8929 100644
-> > > > > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > > > > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > >
-> > > [...]
-> > >
-> > > > >  static int anx7625_parse_dt(struct device *dev,
-> > > > >                         struct anx7625_platform_data *pdata)
-> > > > >  {
-> > > > > -   struct device_node *np = dev->of_node;
-> > > > > +   struct device_node *np = dev->of_node, *ep0;
-> > > > >     struct drm_panel *panel;
-> > > > >     int ret;
-> > > > > +   int bus_type, mipi_lanes;
-> > > > > +
-> > > > > +   anx7625_get_swing_setting(dev, pdata);
-> > > > >
-> > > > > +   pdata->is_dpi = 1; /* default dpi mode */
-> > > > >     pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
-> > > > >     if (!pdata->mipi_host_node) {
-> > > > >             DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
-> > > > >             return -ENODEV;
-> > > > >     }
-> > > > >
-> > > > > -   DRM_DEV_DEBUG_DRIVER(dev, "found dsi host node.\n");
-> > > > > +   bus_type = V4L2_FWNODE_BUS_TYPE_PARALLEL;
-> > > > > +   mipi_lanes = MAX_LANES_SUPPORT;
-> > > > > +   ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
-> > > > > +   if (ep0) {
-> > > > > +           if (of_property_read_u32(ep0, "bus-type", &bus_type))
-> > > > > +                   bus_type = 0;
-> > > > > +
-> > > > > +           mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
-> > > > > +   }
-> > > > > +
-> > > > > +   if (bus_type == V4L2_FWNODE_BUS_TYPE_PARALLEL) /* bus type is Parallel(DSI) */
-> > > >
-> > > > This is not correct *at all*. V4L2_FWNODE_BUS_TYPE_PARALLEL has nothing
-> > > > to do with DSI. DSI stands for Digital *Serial* Interface. If anything,
-> > > > the V4L2_FWNODE_BUS_TYPE_PARALLEL type would map better to DPI, even if
-> > > > it's not an exact match.
-> > > >
-> > > > This patch has landed in v5.17-rc1, along with the corresponding
-> > > > bindings. As DT bindings are an ABI, we should really fix this before
-> > > > v5.17 is released. There is no DSI bus types defined in DT, and adding
-> > > > one as a fix so late in the v5.17-rc cycle seems a bit of a stretch to
-> > > > me (unless Rob disagrees).
-> > > >
-> > > > It would seem best to revert this series and the corresponding bindings,
-> > > > and retry in v5.18.
-> > >
-> > > There is a DT patch using this property that is already queued up for 5.17
-> > > in the soc tree:
-> > >
-> > > https://nam10.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20220214200507.2500693-1-nfraprado%40collabora.com%2F&amp;data=04%7C01%7Cxji%40analogixsemi.com%7C69542695a9cd42cff5a508da00ea7baa%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637823304343387964%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=KbitBhnvGWfpHu6PNLUmrgdqcoZbXaA3hGwq9iAjQfI%3D&amp;reserved=0
-> > >
-> > > merged here:
-> > >
-> > > https://nam10.safelinks.protection.outlook.com/?url=http%3A%2F%2Fgit.kernel.org%2Fsoc%2Fsoc%2Fc%2F32568ae37596b529628ac09b875f4874e614f63f&amp;data=04%7C01%7Cxji%40analogixsemi.com%7C69542695a9cd42cff5a508da00ea7baa%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637823304343387964%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=YJAs0IPxR0hrHpGR7K00itcTIF9cnz4L4ta%2B9ACQdSk%3D&amp;reserved=0
-> > >
-> > > We will need to revert that one as well.
-> >
-> > I just submitted a series reverting the dt-binding change + the
-> > related commit to "mt8183: jacuzzi".
-> > Can I get a quick r-b/a-b in order to get this into v5.17.
-> >
-> > https://nam10.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20220307154558.2505734-3-robert.foss%40linaro.org%2F&amp;data=04%7C01%7Cxji%40analogixsemi.com%7C69542695a9cd42cff5a508da00ea7baa%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637823304343387964%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=S5ScH2jid3ZRobvO%2Fl2nVgdOvFHNj1nWafTQYG3L9d0%3D&amp;reserved=0
-> >
+On 2022-03-20 18:47, Rob Herring wrote:
+> On Fri, Mar 18, 2022 at 02:55:08AM +0530, Kuldeep Singh wrote:
+>> On Thu, Mar 17, 2022 at 08:25:12PM +0000, Robin Murphy wrote:
+>>> On 2022-03-17 19:15, Kuldeep Singh wrote:
+>>>> Renesas RZ/N1D platform uses compatible "arm,cortex-a7-timer" in
+>>>> conjugation with "arm,armv7-timer". Since, initial entry is not
+>>>> documented, it start raising dtbs_check warnings.
+>>>>
+>>>> ['arm,cortex-a7-timer', 'arm,armv7-timer'] is too long
+>>>> 'arm,cortex-a7-timer' is not one of ['arm,armv7-timer', 'arm,armv8-timer']
+>>>> 'arm,cortex-a7-timer' is not one of ['arm,cortex-a15-timer']
+>>>>
+>>>> Document this compatible to address it. The motivation to add this
+>>>> change is taken from an already existing entry "arm,cortex-a15-timer".
+>>>> Please note, this will not hurt any arch timer users.
+>>>
+>>> Eh, if it's never been documented or supported, I say just get rid of it.
+>>> The arch timer interface is by definition part of a CPU, and we can tell
+>>> what the CPU is by reading its ID registers. Indeed that's how the driver
+>>> handles the non-zero number of CPU-specific errata that already exist - we
+>>> don't need compatibles for that.
+>>>
+>>> In some ways it might have been nice to have *SoC-specific* compatibles
+>>> given the difficulty some integrators seem to have had in wiring up a stable
+>>> count *to* the interface, but it's not like they could be magically added to
+>>> already-deployed DTs after a bug is discovered, and nor could we have
+>>> mandated them from day 1 just in case and subsequently maintained a binding
+>>> that is just an ever-growing list of every SoC. Oh well.
+>>
+>> Robin, A similar discussion was already done on v1 thread. Please see
+>> below for details:
+>> https://lore.kernel.org/linux-devicetree/20220317065925.GA9158@9a2d8922b8f1/
+>> https://lore.kernel.org/linux-devicetree/726bde76-d792-febf-d364-6eedeb748c3b@canonical.com/
+>>
+>> And final outcome of discussion turns out to add this compatible string.
 > 
-> v2 of revert submitted.
-> 
-> https://nam10.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20220308094911.2680291-1-robert.foss%40linaro.org%2F&amp;data=04%7C01%7Cxji%40analogixsemi.com%7C69542695a9cd42cff5a508da00ea7baa%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637823304343387964%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=D6ulS16g4v4x0u23OtYRrSeitTqllWwDzPiT%2BxMcQQg%3D&amp;reserved=0
-> 
-> Xin: Will you spin a series that adds DPI support and re-enables DPI
-> for anx7625? Additionally, "mt8183: jacuzzi" will have to have DPI
-> re-enabled.
-Hi Robert Foss, I'm little confused, do I need resend this serial or
-send a patch based on currently define(V4L2_FWNODE_BUS_TYPE_PARALLEL)?
+> I agree with Robin on dropping. More specific here is not useful. If
+> we're going to add some cores, then we should add every core
+> implementation.
 
-And use V4L2_FWNODE_BUS_TYPE_PARALLEL for DPI, other value for DSI
-setup?
+Yeah, what I was trying to convey is that a compatible like 
+"arm,cortex-a76-timer" has the problem of being both too specific *and* 
+not specific enough to be genuinely useful *for the particular case of 
+the arch timer*. It's an architectural interface, where the actual 
+functional features are described through the interface itself, so the 
+purpose of the DT entry is really just to indicate that the standard 
+interface is present and describe how its externally-routed interrupts 
+are wired up.
 
-Thanks,
-Xin
+However, it's also true that implementations of standard functionality 
+sometimes have bugs that software needs to know about, but in order for 
+specific DT compatibles to be useful in that respect they really need to 
+identify the *exact* implementation, e.g. to know that 
+"arm,cortex-a76-r0p0-timer" has a bug which needs working around, but 
+"arm,cortex-a76-r4p0-timer" does not. There might be cases where every 
+known version of a CPU is equally affected (e.g. Cortex-A73), but it 
+doesn't hold as a general assumption. Furthermore as mentioned, the 
+other class of bugs which affect this interface are not in the CPU's 
+implementation of the interface at all, but in the external SoC logic 
+that provides the counter value, and therefore it can be identification 
+of the overall SoC that matters regardless of which CPU IP(s) may be 
+present.
+
+If we'd had the benefit of 10 years worth of hindsight 10 years ago, we 
+probably wouldn't have defined "arm,cortex-a15-timer" either. However 
+the fact that we can't erase the legacy of that decision doesn't make an 
+argument for repeating it now.
+
+> If one has a big.LITTLE system with A15/A7 what would be the right
+> compatible value?
+> 
+>>
+>> I see people with different set of perspective in regard to whether keep
+>> compatible string or not. We should have some sort of evidences to
+>> support claims so that next time when similar situation arises, we'll be
+>> aware beforehand how to proceed.
+> 
+> Every situation tends to be different.
+
+Indeed, I certainly don't have a personal perspective of "delete all the 
+bindings!" in general - only when they're truly redundant (functionally, 
+any driver that can touch the arch timer registers can also read the CPU 
+ID registers, but even in the DT there should already be compatibles for 
+the CPUs themselves).
+
+Robin.

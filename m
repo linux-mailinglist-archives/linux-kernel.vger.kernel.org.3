@@ -2,158 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E804E2158
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 08:25:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EA74E2162
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 08:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344883AbiCUH00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 03:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
+        id S1344896AbiCUH2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 03:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244518AbiCUH0Y (ORCPT
+        with ESMTP id S244518AbiCUH2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 03:26:24 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BE258806;
-        Mon, 21 Mar 2022 00:24:59 -0700 (PDT)
-X-UUID: bf319316ec4c4ac78d0bf8b63b671b06-20220321
-X-UUID: bf319316ec4c4ac78d0bf8b63b671b06-20220321
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1336590698; Mon, 21 Mar 2022 15:24:54 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 21 Mar 2022 15:24:52 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 21 Mar
- 2022 15:24:52 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 21 Mar 2022 15:24:52 +0800
-Message-ID: <dae3ccb3e2f658418d6b1c061181a0b9291c108f.camel@mediatek.com>
-Subject: Re: [PATCH v8 17/19] drm/mediatek: add hpd debounce
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>,
-        <chunfeng.yun@mediatek.com>, <kishon@ti.com>, <vkoul@kernel.org>,
-        <deller@gmx.de>, <ck.hu@mediatek.com>, <jitao.shi@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
-Date:   Mon, 21 Mar 2022 15:24:52 +0800
-In-Reply-To: <20220218145437.18563-18-granquet@baylibre.com>
-References: <20220218145437.18563-1-granquet@baylibre.com>
-         <20220218145437.18563-18-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 21 Mar 2022 03:28:14 -0400
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96DC2BD3;
+        Mon, 21 Mar 2022 00:26:49 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id d7so19384385wrb.7;
+        Mon, 21 Mar 2022 00:26:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=ENOqnP/WW6UM3qaFy0lGbYegzr0M5eqkdbS/cdjw0fo=;
+        b=vIKwUXnWGf6j81kTfjIAWfNyPzwUSBKqoZMSpGmRsRYdnTMKpBqGA25yErtYCzTfha
+         n0jbV/8a7CuzKc/jJaBBP23IZNYs/hboqdUzEOYmnqcgQ4rFkTZK7EvUHMlaSKAEvR01
+         /OJfA36mOH/iWUHXMRWM8TadK3zK+J4TXmpohU3saAPSeTLoIkRHaUO7V0v8Xrrg0OL5
+         mv+7Vra2cPrV2jrGikXIVUTGAdGuLIkggB/hMJXb0/e+wvPMpHTFXRXMZ1+sUXE9Axz1
+         9leBaW0DhnUpnBsWNqDubt5zAicRr6O/KX74JUOCpYYwS938tYmsojzQqNnvHYxhiJBR
+         WusQ==
+X-Gm-Message-State: AOAM532SVgRaO3ffjjs/IrDvZGjewu4aVUbbyTp10UJDoBkFacOxH/VM
+        risHUnQF+oxsoFi84+Uq9v5fgQQLt3E=
+X-Google-Smtp-Source: ABdhPJzUvmAWRgR7q1ci7OIP+LVdN/znbcBcE8pa47RQfSIyM0lvTooRFU1rnpzwDTGkVK9wZXpO9w==
+X-Received: by 2002:a5d:6c69:0:b0:203:78af:48b2 with SMTP id r9-20020a5d6c69000000b0020378af48b2mr16800440wrz.123.1647847608398;
+        Mon, 21 Mar 2022 00:26:48 -0700 (PDT)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id j16-20020a05600c191000b0038ca3500494sm5330249wmq.27.2022.03.21.00.26.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 00:26:47 -0700 (PDT)
+Message-ID: <dd4e55aa-0b3e-6e18-7ec2-3bec02cafde0@kernel.org>
+Date:   Mon, 21 Mar 2022 08:26:47 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: hppa vDSO and compiler (non-)support
+Content-Language: en-US
+From:   Jiri Slaby <jirislaby@kernel.org>
+To:     Helge Deller <deller@gmx.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-parisc@vger.kernel.org,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
+        Andreas Schwab <schwab@linux-m68k.org>
+References: <d2713ae1-0ca5-9e5a-b7d2-b7d0f1f5614a@kernel.org>
+ <2e1f3e41-7097-e68d-d312-9319ad62565c@gmx.de>
+ <d2a09bf3-9bd3-588a-99a1-598281d08678@kernel.org>
+In-Reply-To: <d2a09bf3-9bd3-588a-99a1-598281d08678@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-02-18 at 15:54 +0100, Guillaume Ranquet wrote:
-> From: Jitao Shi <jitao.shi@mediatek.com>
+On 09. 03. 22, 6:48, Jiri Slaby wrote:
+> Hi,
 > 
-> Implement the DP HDP debounce described in DP 1.4a 3.3.
+> On 08. 03. 22, 15:51, Helge Deller wrote:
+>> Hi Jiri,
+>>
+>> Thanks for testing on parisc!
+>>
+>> On 3/8/22 12:06, Jiri Slaby wrote:
+>>> since the "parisc: Add vDSO support" commit, I can no longer 
+>>> cross-build a hppa kernel. I see two issues:
+>>>
+>>> 1) CROSS32_COMPILE detection doesn't work here, as openSUSE provides 
+>>> hppa-suse-linux-* binaries. It's easy to overcome by 
+>>> "CROSS32_COMPILE=hppa-suse-linux-"
+>>
+>> How is it handled for other platforms like s390x?
 > 
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-
-> ---
->  drivers/gpu/drm/mediatek/mtk_dp.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
+> s390 simply uses CC for vdso32:
+> cmd_vdso32cc = $(CC) $(c_flags) -c -o $@ $<
 > 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c
-> b/drivers/gpu/drm/mediatek/mtk_dp.c
-> index 2a3d5f15b651b..fe91ab8b2fd89 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-> @@ -178,6 +178,8 @@ struct mtk_dp {
->  	struct device *codec_dev;
->  	u8 connector_eld[MAX_ELD_BYTES];
->  	struct drm_connector *conn;
-> +	bool need_debounce;
-> +	struct timer_list debounce_timer;
->  };
->  
->  static struct regmap_config mtk_dp_regmap_config = {
-> @@ -1698,6 +1700,9 @@ static irqreturn_t mtk_dp_hpd_event_thread(int
-> hpd, void *dev)
->  	if (event < 0)
->  		return IRQ_HANDLED;
->  
-> +	if (mtk_dp->need_debounce && mtk_dp-
-> >train_info.cable_plugged_in)
-> +		msleep(100);
-> +
->  	if (mtk_dp->drm_dev) {
->  		dev_info(mtk_dp->dev, "drm_helper_hpd_irq_event\n");
->  		drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
-> @@ -1776,6 +1781,13 @@ static irqreturn_t
-> mtk_dp_hpd_isr_handler(struct mtk_dp *mtk_dp)
->  	}
->  	train_info->cable_state_change = true;
->  
-> +	if (train_info->cable_state_change) {
-> +		if (!train_info->cable_plugged_in) {
-> +			mod_timer(&mtk_dp->debounce_timer, jiffies +
-> msecs_to_jiffies(100) - 1);
-> +			mtk_dp->need_debounce = false;
-> +		}
-> +	}
-> +
->  	return IRQ_WAKE_THREAD;
->  }
->  
-> @@ -2239,6 +2251,13 @@ static const struct drm_bridge_funcs
-> mtk_dp_bridge_funcs = {
->  	.detect = mtk_dp_bdg_detect,
->  };
->  
-> +static void mtk_dp_debounce_timer(struct timer_list *t)
-> +{
-> +	struct mtk_dp *mtk_dp = from_timer(mtk_dp, t, debounce_timer);
-> +
-> +	mtk_dp->need_debounce = true;
-> +}
-> +
->  static int mtk_dp_probe(struct platform_device *pdev)
->  {
->  	struct mtk_dp *mtk_dp;
-> @@ -2319,6 +2338,9 @@ static int mtk_dp_probe(struct platform_device
-> *pdev)
->  	else
->  		mtk_dp->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
->  
-> +	mtk_dp->need_debounce = true;
-> +	timer_setup(&mtk_dp->debounce_timer, mtk_dp_debounce_timer, 0);
-> +
->  	pm_runtime_enable(dev);
->  	pm_runtime_get_sync(dev);
->  
-> @@ -2332,6 +2354,7 @@ static int mtk_dp_remove(struct platform_device
-> *pdev)
->  	platform_device_unregister(mtk_dp->phy_dev);
->  
->  	mtk_dp_video_mute(mtk_dp, true);
-> +	del_timer_sync(&mtk_dp->debounce_timer);
->  
->  	pm_runtime_disable(&pdev->dev);
->  
+>> Would it make sense to add the detection for SUSE too?
+> 
+> Maybe.
 
+So, could 1) be fixed on the Kconfig side? Or should I (people running 
+SUSE) use "CROSS32_COMPILE=hppa-suse-linux-"?
+
+>>> 2) openSUSE doesn't provide any libc for hppa. So gcc doesn't provide 
+>>> libgcc.a and the build of vDSO fails.
+>>
+>> libgcc.a comes with the compiler, I don't think you need libc for that.
+> 
+> I was told glibc is needed to build libgcc.a.
+
+2) was fixed on the compiler (SUSE) side. cross-hppa-gcc12-bootstrap was 
+introduced -- note it's known to be a misnomer -- it should have been 
+like s/-bootstrap/-baremetal/.
+
+thanks,
+-- 
+js
+suse labs

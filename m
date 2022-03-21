@@ -2,58 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE644E29DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A794E2993
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349069AbiCUOHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S1348813AbiCUOFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348403AbiCUOAF (ORCPT
+        with ESMTP id S1349192AbiCUN7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:00:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B1F35DD8;
-        Mon, 21 Mar 2022 06:58:38 -0700 (PDT)
+        Mon, 21 Mar 2022 09:59:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89502529B;
+        Mon, 21 Mar 2022 06:58:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E2D36125C;
-        Mon, 21 Mar 2022 13:58:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ED5DC340E8;
-        Mon, 21 Mar 2022 13:58:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5502FB816D9;
+        Mon, 21 Mar 2022 13:58:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A40BBC340E8;
+        Mon, 21 Mar 2022 13:58:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871117;
-        bh=wCtlhzyVh7eEx2vCINhC9Y7uEvjVr+GVgYMntv5pJWI=;
+        s=korg; t=1647871094;
+        bh=yPZRnszcRnTlK724j8QKykCYhFFiHM1RE3ZWDxWCnu8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s7RYhEMU13gqWKYuL1r7Fv5wocoxzOW1jthULM6ac8iUJQLxaqer5bc7TyUUmqjk4
-         zmtYsP5FdlEc/FQKspf3YlOzyV4TExU12rJc9x5DEbyA+6yvIyw//ec733V3DfKXwN
-         QvTWrWL/HEOnX6JRxLoBb7UNjjKucVKSbpQui5yI=
+        b=MEGYNFHxj3UZI0MXD2Tb12S3919sWlpyCrBgRRCLQ4Ncm/L6FpukfDIcbVmFcaUVZ
+         AioOJXyGvCeYHrKc9rO87fejzLT+P5O8T6Mv0IZxeiHQ8PHeX2PvkEVFwCkMNM8gTE
+         EadWLSKvt7EqYHH4pmAibacj1HVl9C/wQo/OEocA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Marek Vasut <marex@denx.de>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 11/30] drm/imx: parallel-display: Remove bus flags check in imx_pd_bridge_atomic_check()
+Subject: [PATCH 5.4 05/17] net/packet: fix slab-out-of-bounds access in packet_recvmsg()
 Date:   Mon, 21 Mar 2022 14:52:41 +0100
-Message-Id: <20220321133219.974486080@linuxfoundation.org>
+Message-Id: <20220321133217.310908340@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
-References: <20220321133219.643490199@linuxfoundation.org>
+In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
+References: <20220321133217.148831184@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -68,66 +56,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 6061806a863e8b65b109eb06a280041cc7525442 ]
+[ Upstream commit c700525fcc06b05adfea78039de02628af79e07a ]
 
-If display timings were read from the devicetree using
-of_get_display_timing() and pixelclk-active is defined
-there, the flag DISPLAY_FLAGS_SYNC_POSEDGE/NEGEDGE is
-automatically generated. Through the function
-drm_bus_flags_from_videomode() e.g. called in the
-panel-simple driver this flag got into the bus flags,
-but then in imx_pd_bridge_atomic_check() the bus flag
-check failed and will not initialize the display. The
-original commit fe141cedc433 does not explain why this
-check was introduced. So remove the bus flags check,
-because it stops the initialization of the display with
-valid bus flags.
+syzbot found that when an AF_PACKET socket is using PACKET_COPY_THRESH
+and mmap operations, tpacket_rcv() is queueing skbs with
+garbage in skb->cb[], triggering a too big copy [1]
 
-Fixes: fe141cedc433 ("drm/imx: pd: Use bus format/flags provided by the bridge when available")
-Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc: Marek Vasut <marex@denx.de>
-Cc: Boris Brezillon <boris.brezillon@collabora.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-arm-kernel@lists.infradead.org
-To: dri-devel@lists.freedesktop.org
-Tested-by: Max Krummenacher <max.krummenacher@toradex.com>
-Acked-by: Boris Brezillon <boris.brezillon@collabora.com>
-Signed-off-by: Marek Vasut <marex@denx.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220201113643.4638-1-cniedermaier@dh-electronics.com
-Signed-off-by: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Presumably, users of af_packet using mmap() already gets correct
+metadata from the mapped buffer, we can simply make sure
+to clear 12 bytes that might be copied to user space later.
+
+BUG: KASAN: stack-out-of-bounds in memcpy include/linux/fortify-string.h:225 [inline]
+BUG: KASAN: stack-out-of-bounds in packet_recvmsg+0x56c/0x1150 net/packet/af_packet.c:3489
+Write of size 165 at addr ffffc9000385fb78 by task syz-executor233/3631
+
+CPU: 0 PID: 3631 Comm: syz-executor233 Not tainted 5.17.0-rc7-syzkaller-02396-g0b3660695e80 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x336 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ memcpy+0x39/0x60 mm/kasan/shadow.c:66
+ memcpy include/linux/fortify-string.h:225 [inline]
+ packet_recvmsg+0x56c/0x1150 net/packet/af_packet.c:3489
+ sock_recvmsg_nosec net/socket.c:948 [inline]
+ sock_recvmsg net/socket.c:966 [inline]
+ sock_recvmsg net/socket.c:962 [inline]
+ ____sys_recvmsg+0x2c4/0x600 net/socket.c:2632
+ ___sys_recvmsg+0x127/0x200 net/socket.c:2674
+ __sys_recvmsg+0xe2/0x1a0 net/socket.c:2704
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fdfd5954c29
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffcf8e71e48 EFLAGS: 00000246 ORIG_RAX: 000000000000002f
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fdfd5954c29
+RDX: 0000000000000000 RSI: 0000000020000500 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 000000000000000d R09: 000000000000000d
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffcf8e71e60
+R13: 00000000000f4240 R14: 000000000000c1ff R15: 00007ffcf8e71e54
+ </TASK>
+
+addr ffffc9000385fb78 is located in stack of task syz-executor233/3631 at offset 32 in frame:
+ ____sys_recvmsg+0x0/0x600 include/linux/uio.h:246
+
+this frame has 1 object:
+ [32, 160) 'addr'
+
+Memory state around the buggy address:
+ ffffc9000385fa80: 00 04 f3 f3 f3 f3 f3 00 00 00 00 00 00 00 00 00
+ ffffc9000385fb00: 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00
+>ffffc9000385fb80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 f3
+                                                                ^
+ ffffc9000385fc00: f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00 f1
+ ffffc9000385fc80: f1 f1 f1 00 f2 f2 f2 00 f2 f2 f2 00 00 00 00 00
+==================================================================
+
+Fixes: 0fb375fb9b93 ("[AF_PACKET]: Allow for > 8 byte hardware addresses.")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Link: https://lore.kernel.org/r/20220312232958.3535620-1-eric.dumazet@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/imx/parallel-display.c | 8 --------
- 1 file changed, 8 deletions(-)
+ net/packet/af_packet.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/imx/parallel-display.c b/drivers/gpu/drm/imx/parallel-display.c
-index 2eb8df4697df..605ac8825a59 100644
---- a/drivers/gpu/drm/imx/parallel-display.c
-+++ b/drivers/gpu/drm/imx/parallel-display.c
-@@ -212,14 +212,6 @@ static int imx_pd_bridge_atomic_check(struct drm_bridge *bridge,
- 	if (!imx_pd_format_supported(bus_fmt))
- 		return -EINVAL;
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index ed11013d4b95..70c102359bfe 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -2257,8 +2257,11 @@ static int tpacket_rcv(struct sk_buff *skb, struct net_device *dev,
+ 					copy_skb = skb_get(skb);
+ 					skb_head = skb->data;
+ 				}
+-				if (copy_skb)
++				if (copy_skb) {
++					memset(&PACKET_SKB_CB(copy_skb)->sa.ll, 0,
++					       sizeof(PACKET_SKB_CB(copy_skb)->sa.ll));
+ 					skb_set_owner_r(copy_skb, sk);
++				}
+ 			}
+ 			snaplen = po->rx_ring.frame_size - macoff;
+ 			if ((int)snaplen < 0) {
+@@ -3405,6 +3408,8 @@ static int packet_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+ 	sock_recv_ts_and_drops(msg, sk, skb);
  
--	if (bus_flags &
--	    ~(DRM_BUS_FLAG_DE_LOW | DRM_BUS_FLAG_DE_HIGH |
--	      DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE |
--	      DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE)) {
--		dev_warn(imxpd->dev, "invalid bus_flags (%x)\n", bus_flags);
--		return -EINVAL;
--	}
--
- 	bridge_state->output_bus_cfg.flags = bus_flags;
- 	bridge_state->input_bus_cfg.flags = bus_flags;
- 	imx_crtc_state->bus_flags = bus_flags;
+ 	if (msg->msg_name) {
++		const size_t max_len = min(sizeof(skb->cb),
++					   sizeof(struct sockaddr_storage));
+ 		int copy_len;
+ 
+ 		/* If the address length field is there to be filled
+@@ -3427,6 +3432,10 @@ static int packet_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+ 				msg->msg_namelen = sizeof(struct sockaddr_ll);
+ 			}
+ 		}
++		if (WARN_ON_ONCE(copy_len > max_len)) {
++			copy_len = max_len;
++			msg->msg_namelen = copy_len;
++		}
+ 		memcpy(msg->msg_name, &PACKET_SKB_CB(skb)->sa, copy_len);
+ 	}
+ 
 -- 
 2.34.1
 

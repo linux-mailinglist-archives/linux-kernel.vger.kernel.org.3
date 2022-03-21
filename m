@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21954E33B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80D94E33CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Mar 2022 00:11:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbiCUXB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 19:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
+        id S231954AbiCUXCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 19:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233265AbiCUW7A (ORCPT
+        with ESMTP id S232615AbiCUW6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:59:00 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFDB65158
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:46:21 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id pv16so32840297ejb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:46:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=9C6i1V5W4MCeD/1gLMcJ+GxUdwOY2A6vsDcUchCpRHU=;
-        b=h21Ke7djN8csNxDP0N2xUzZGpjd3brsfArHEu7cU+flfuHfn3v0Qyr+wOLxIHDFCH6
-         AKO2Nkn2l++CSvp7bh98y0Ew0PaOUHaaN5+JBd8Mzrt+OtVqUz3Joomtfskoj7Z2WCz5
-         TblZNEJThXjP3MnSTLuZ6knslhebdT0Ex1hEjlt5CJD/ickAO0dJxanf///Nv9q/hapJ
-         BjBOIHWNXDn7OYSUsCggoG/uy9Yoyj0t1EleEP+48trZdChMtuA7CYKld/xSsKnB4bo0
-         GH1CCYnG52Smn9ykPcCZFiplkUvwDPciyMQ5HZ1noQmiqo93cNtUqf+6dlijUv1KpJN4
-         78Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=9C6i1V5W4MCeD/1gLMcJ+GxUdwOY2A6vsDcUchCpRHU=;
-        b=OgLgdfBMtSlb3M5bnYlGVkmrUIZ2YNkSya6DixpO/HF2sYCmX7aJZg53rZplHXzOg5
-         ydzNx7MVMorRBU6NU1C58AdZkEJLxt8cFP4AwlAKIyQ16lwqdGfnQVQ/832oESe17xcc
-         gxy282uSF+FXU2q4rXiQs+AZSzj7DPSl1elUcaca02ZyfobktejPjJ+hvNIAaguiM+ZP
-         1WTE+1R+OrbqClKytNgyIlXLAx2JwyB7LJ+6ja6suDxdJmUYolIB9S+O6c5mn8A8iOZ1
-         NvVsloEw84rlvgKq8XE64b/6ZfJQ2ZzJ3qQqc6NhKvqbnlBdrOWPjbf19O6JLA1Vj/rg
-         PdJg==
-X-Gm-Message-State: AOAM531QqNKvzaX2C7J5ko8m6IOz7zRoi0U1g40HM5ej1pKW082ax0Fa
-        Cao+YCIxLd513RwWNjrd8ksGzM5aQumlXcnzaTir6rb/7W75
-X-Google-Smtp-Source: ABdhPJyiMez9ZfWnO8QSTwIMXiv9ZaXQhOY7r3oIbxQAI+nwTkPaLLqfCwO6rIX4TQN62sPtD15z8P7mdGRwCRoEAig=
-X-Received: by 2002:a17:907:1b09:b0:6d8:faa8:4a06 with SMTP id
- mp9-20020a1709071b0900b006d8faa84a06mr22563111ejc.701.1647900842214; Mon, 21
- Mar 2022 15:14:02 -0700 (PDT)
+        Mon, 21 Mar 2022 18:58:31 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E563B5021
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647902157; x=1679438157;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RzCf4SJ+k3d46/cwkuqnvoxXNs2VObQiS28QfmiPf+g=;
+  b=harJLerrGVxdUI4c9SbWmf8qUE7tfihmWYNkQS+keegFezRU5czyPdaz
+   T/nmBH+ral3pX/+Eqw4QQOBNeOaU89x2zON7YQM1ESmZTm5ggZiZiG9i0
+   5bCpE1bJIjeGJEY3mNQSRZVuMY8ebd7WBbaC44/f+9asBDThJaLfYXr4Z
+   ysTBpgRJkbKE2Q67XpdcGdSrePoVHt8XSl7i4tmlnBxCk/518isWer7sG
+   eqWdJ+Hc9X+Y9GVjURab1SyKM+UG1ni11sA6tD9mLGvNDGA5kfmPfk8M+
+   dkQyiUOaVDSf8CtLHTFUaxuEA0H6L7opCi5PLIMAgcfWIiTugA22nwgKN
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="239821766"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="239821766"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 15:35:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="500330533"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 21 Mar 2022 15:35:55 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWQd0-000ID2-6N; Mon, 21 Mar 2022 22:35:54 +0000
+Date:   Tue, 22 Mar 2022 06:35:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/core] BUILD SUCCESS
+ 44aba1d9e26641728f33f5834f436dd9ef486b96
+Message-ID: <6238fda8.Ui3gXvQw+3Cnm2QF%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 21 Mar 2022 18:13:51 -0400
-Message-ID: <CAHC9VhTA1O4J_dS9T_U-Vrmi-7JeHTM6fEOfS8JJBfvoNgDrfg@mail.gmail.com>
-Subject: [GIT PULL] SELinux patches for v5.18
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,128 +62,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
+branch HEAD: 44aba1d9e26641728f33f5834f436dd9ef486b96  kvm/emulate: Fix SETcc emulation for ENDBR
 
-We've got a number of SELinux patches queued up for v5.18, the
-highlights are below:
+elapsed time: 728m
 
-- Fixup the security_fs_context_parse_param() LSM hook so it executes
-all of the LSM hook implementations unless a serious error occurs.  We
-also correct the SELinux hook implementation so that it returns zero
-on success.
+configs tested: 126
+configs skipped: 3
 
-- In addition to a few SELinux mount option parsing fixes, we
-simplified the parsing by moving it earlier in the process.  The logic
-was that it was unlikely an admin/user would use the new mount API and
-not have the policy loaded before passing the SELinux options.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-- Properly fixed the LSM/SELinux/SCTP hooks with the addition of the
-security_sctp_assoc_established() hook.  This work was done in
-conjunction with the netdev folks and should complete the move of the
-SCTP labeling from the endpoints to the associations.
+gcc tested configs:
+arm                                 defconfig
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                              allyesconfig
+i386                 randconfig-c001-20220321
+powerpc                mpc7448_hpc2_defconfig
+arc                         haps_hs_defconfig
+sh                            migor_defconfig
+m68k                             alldefconfig
+arc                        vdk_hs38_defconfig
+m68k                         apollo_defconfig
+m68k                       m5475evb_defconfig
+arm                             pxa_defconfig
+powerpc                      pcm030_defconfig
+powerpc                    sam440ep_defconfig
+nios2                         10m50_defconfig
+sh                          rsk7269_defconfig
+mips                        bcm47xx_defconfig
+sh                          landisk_defconfig
+mips                      fuloong2e_defconfig
+sh                   secureedge5410_defconfig
+powerpc                 mpc834x_itx_defconfig
+sh                             sh03_defconfig
+sh                        edosk7705_defconfig
+arm                         vf610m4_defconfig
+powerpc                     rainier_defconfig
+m68k                        mvme147_defconfig
+arm                            hisi_defconfig
+arm                  randconfig-c002-20220320
+arm                  randconfig-c002-20220321
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+alpha                               defconfig
+nds32                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                                defconfig
+parisc64                            defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                   debian-10.3-kselftests
+i386                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64               randconfig-a013-20220321
+x86_64               randconfig-a012-20220321
+x86_64               randconfig-a014-20220321
+x86_64               randconfig-a011-20220321
+x86_64               randconfig-a016-20220321
+x86_64               randconfig-a015-20220321
+i386                 randconfig-a013-20220321
+i386                 randconfig-a016-20220321
+i386                 randconfig-a015-20220321
+i386                 randconfig-a011-20220321
+i386                 randconfig-a012-20220321
+i386                 randconfig-a014-20220321
+arc                  randconfig-r043-20220320
+riscv                randconfig-r042-20220321
+s390                 randconfig-r044-20220321
+arc                  randconfig-r043-20220321
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                            allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
 
-- Fixed a variety of sparse warnings caused by changes in the "__rcu"
-markings of some core kernel structures.
+clang tested configs:
+arm                          ixp4xx_defconfig
+arm                     am200epdkit_defconfig
+arm                        spear3xx_defconfig
+powerpc                     tqm8540_defconfig
+arm                  colibri_pxa270_defconfig
+powerpc               mpc834x_itxgp_defconfig
+riscv                             allnoconfig
+powerpc                     pseries_defconfig
+mips                     cu1830-neo_defconfig
+mips                       lemote2f_defconfig
+mips                        omega2p_defconfig
+x86_64               randconfig-a003-20220321
+x86_64               randconfig-a004-20220321
+x86_64               randconfig-a001-20220321
+x86_64               randconfig-a002-20220321
+x86_64               randconfig-a005-20220321
+x86_64               randconfig-a006-20220321
+i386                 randconfig-a003-20220321
+i386                 randconfig-a001-20220321
+i386                 randconfig-a006-20220321
+i386                 randconfig-a002-20220321
+i386                 randconfig-a004-20220321
+i386                 randconfig-a005-20220321
+hexagon              randconfig-r041-20220321
+hexagon              randconfig-r045-20220321
+hexagon              randconfig-r045-20220320
+hexagon              randconfig-r041-20220320
+s390                 randconfig-r044-20220320
+riscv                randconfig-r042-20220320
 
-- Ensure we access the superblock's LSM security blob using the
-stacking-safe accessors.
-
-- Added the ability for the kernel to always allow FIOCLEX and
-FIONCLEX if the "ioctl_skip_cloexec" policy capability is specified.
-
-- Various constifications improvements, type casting improvements,
-additional return value checks, and dead code/parameter removal.
-
-- Documentation fixes.
-
-Please merge.
--Paul
-
---
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07=
-:
-
- Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
- https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
-   tags/selinux-pr-20220321
-
-for you to fetch changes up to cdbec3ede0b8cb318c36f5cc945b9360329cbd25:
-
- selinux: shorten the policy capability enum names
-   (2022-03-02 11:37:03 -0500)
-
-----------------------------------------------------------------
-selinux/stable-5.18 PR 20220321
-
-----------------------------------------------------------------
-Casey Schaufler (1):
-     LSM: general protection fault in legacy_parse_param
-
-Christian G=C3=B6ttsche (11):
-     selinux: check return value of sel_make_avc_files
-     selinux: declare path parameters of _genfs_sid const
-     selinux: declare name parameter of hash_eval const
-     selinux: enclose macro arguments in parenthesis
-     selinux: drop cast to same type
-     selinux: drop unused parameter of avtab_insert_node
-     selinux: do not discard const qualifier in cast
-     selinux: simplify cred_init_security
-     selinux: drop unused macro
-     selinux: drop return statement at end of void functions
-     selinux: use correct type for context length
-
-GONG, Ruiqi (1):
-     selinux: access superblock_security_struct in LSM blob way
-
-Ondrej Mosnacek (3):
-     selinux: parse contexts for mount options early
-     security: add sctp_assoc_established hook
-     security: implement sctp_assoc_established hook in selinux
-
-Paul Moore (3):
-     selinux: fix a type cast problem in cred_init_security()
-     selinux: various sparse fixes
-     selinux: shorten the policy capability enum names
-
-Richard Haines (1):
-     selinux: allow FIOCLEX and FIONCLEX with policy capability
-
-Scott Mayhew (2):
-     selinux: Fix selinux_sb_mnt_opts_compat()
-     selinux: try to use preparsed sid before calling parse_sid()
-
-Wan Jiabing (1):
-     docs: fix 'make htmldocs' warning in SCTP.rst
-
-Documentation/security/SCTP.rst            |  26 ++-
-include/linux/lsm_hook_defs.h              |   2 +
-include/linux/lsm_hooks.h                  |   5 +
-include/linux/security.h                   |   8 +
-net/sctp/sm_statefuns.c                    |   8 +-
-security/security.c                        |  24 ++-
-security/selinux/hooks.c                   | 299 ++++++++++++++------------=
----
-security/selinux/ibpkey.c                  |   2 +-
-security/selinux/ima.c                     |   4 +-
-security/selinux/include/policycap.h       |  21 +-
-security/selinux/include/policycap_names.h |   5 +-
-security/selinux/include/security.h        |  31 +--
-security/selinux/netnode.c                 |   9 +-
-security/selinux/netport.c                 |   2 +-
-security/selinux/selinuxfs.c               |   4 +-
-security/selinux/ss/avtab.c                |   6 +-
-security/selinux/ss/conditional.c          |   2 -
-security/selinux/ss/ebitmap.c              |   1 -
-security/selinux/ss/ebitmap.h              |   6 +-
-security/selinux/ss/mls.c                  |   1 -
-security/selinux/ss/policydb.c             |   4 +-
-security/selinux/ss/services.c             |  10 +-
-security/selinux/ss/sidtab.c               |   4 +-
-security/selinux/xfrm.c                    |   2 +-
-24 files changed, 255 insertions(+), 231 deletions(-)
-
---=20
-paul-moore.com
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

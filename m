@@ -2,134 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394874E2C00
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5754E2C02
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350188AbiCUPVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
+        id S1350197AbiCUPVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350024AbiCUPUJ (ORCPT
+        with ESMTP id S1350164AbiCUPUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:20:09 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD4226C6;
-        Mon, 21 Mar 2022 08:18:09 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0V7rdzHQ_1647875885;
-Received: from 192.168.31.65(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V7rdzHQ_1647875885)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 21 Mar 2022 23:18:06 +0800
-Message-ID: <adb957da-8909-06d8-1b2c-b8a293b37930@linux.alibaba.com>
-Date:   Mon, 21 Mar 2022 23:18:05 +0800
+        Mon, 21 Mar 2022 11:20:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6AC2E9D8;
+        Mon, 21 Mar 2022 08:18:21 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 24EDD1F385;
+        Mon, 21 Mar 2022 15:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1647875900; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xFpX1rFA2m/zDU4C8dgv2bCPZ2EIaAccPKrj70k0GOM=;
+        b=b74XJAqnFxOPGE0Q6Z+YPvZrhh4KRmkGHVja+nAhwlpSDjdL5ZDKd1A91IjFmLjnRM94bn
+        WYmPxDb52SuemoDZSuo/NGnwSXp6nHD2VcHe+juNbS9pMeymWpn/SCV1hXrOwpdMi0y9Dr
+        vHBSPfpW3LCO4ihfE6DDmdaCvZ/V3jk=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 71D61A3BA0;
+        Mon, 21 Mar 2022 15:18:19 +0000 (UTC)
+Date:   Mon, 21 Mar 2022 16:18:18 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+Cc:     akpm@linux-foundation.org, surenb@google.com, vbabka@suse.cz,
+        rientjes@google.com, sfr@canb.auug.org.au, edgararriaga@google.com,
+        minchan@kernel.org, nadav.amit@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, "# 5 . 10+" <stable@vger.kernel.org>
+Subject: Re: [PATCH V2,1/2] mm: madvise: return correct bytes advised with
+ process_madvise
+Message-ID: <YjiXOmbO9bn1r/wC@dhcp22.suse.cz>
+References: <cover.1647008754.git.quic_charante@quicinc.com>
+ <125b61a0edcee5c2db8658aed9d06a43a19ccafc.1647008754.git.quic_charante@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH v5 03/22] cachefiles: introduce on-demand read mode
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com
-References: <20220316131723.111553-1-jefflexu@linux.alibaba.com>
- <20220316131723.111553-4-jefflexu@linux.alibaba.com>
- <YjiAVezd5B9auhcP@casper.infradead.org>
- <6bc551d2-15fc-5d17-c99b-8db588c6b671@linux.alibaba.com>
- <YjiLACenpRV4XTcs@casper.infradead.org>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <YjiLACenpRV4XTcs@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <125b61a0edcee5c2db8658aed9d06a43a19ccafc.1647008754.git.quic_charante@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/21/22 10:26 PM, Matthew Wilcox wrote:
-> On Mon, Mar 21, 2022 at 10:08:47PM +0800, JeffleXu wrote:
->> reqs_lock is also used to protect the check of cache->flags. Please
->> refer to patch 4 [1] of this patchset.
+On Fri 11-03-22 20:59:05, Charan Teja Kalla wrote:
+> The process_madvise() system call returns error even after processing
+> some VMA's passed in the 'struct iovec' vector list which leaves the
+> user confused to know where to restart the advise next. It is also
+> against this syscall man page[1] documentation where it mentions that
+> "return value may be less than the total number of requested bytes, if
+> an error occurred after some iovec elements were already processed.".
 > 
-> Yes, that's exactly what I meant by "bad idea".
+> Consider a user passed 10 VMA's in the 'struct iovec' vector list of
+> which 9 are processed but one. Then it just returns the error caused on
+> that failed VMA despite the first 9 VMA's processed, leaving the user
+> confused about on which VMA it is failed. Returning the number of bytes
+> processed here can help the user to know which VMA it is failed on and
+> thus can retry/skip the advise on that VMA.
 > 
->> ```
->> +	/*
->> +	 * Enqueue the pending request.
->> +	 *
->> +	 * Stop enqueuing the request when daemon is dying. So we need to
->> +	 * 1) check cache state, and 2) enqueue request if cache is alive.
->> +	 *
->> +	 * The above two ops need to be atomic as a whole. @reqs_lock is used
->> +	 * here to ensure that. Otherwise, request may be enqueued after xarray
->> +	 * has been flushed, in which case the orphan request will never be
->> +	 * completed and thus netfs will hang there forever.
->> +	 */
->> +	read_lock(&cache->reqs_lock);
->> +
->> +	/* recheck dead state under lock */
->> +	if (test_bit(CACHEFILES_DEAD, &cache->flags)) {
->> +		read_unlock(&cache->reqs_lock);
->> +		ret = -EIO;
->> +		goto out;
->> +	}
+> [1]https://man7.org/linux/man-pages/man2/process_madvise.2.html.
 > 
-> So this is an error path.  We're almost always going to take the xa_lock
-> immediately after taking the read_lock.  In other words, you've done two
-> atomic operations instead of one.
+> Fixes: ecb8ac8b1f14("mm/madvise: introduce process_madvise() syscall: an external memory hinting API")
+> Cc: <stable@vger.kernel.org> # 5.10+
+> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
 
-Right.
+Acked-by: Michal Hocko <mhocko@suse.com>
 
+> ---
+> Changes in V2:
+>  -- Separated the ENOMEM handling and return bytes processed, as per Minchan comments.
+>  -- This contains correcting return bytes processed with process_madvise().
 > 
->> +	xa_lock(xa);
->> +	ret = __xa_alloc(xa, &id, req, xa_limit_32b, GFP_KERNEL);
->> +	if (!ret)
->> +		__xa_set_mark(xa, id, CACHEFILES_REQ_NEW);
->> +	xa_unlock(xa);
->> +
->> +	read_unlock(&cache->reqs_lock);
->> ```
->>
->> It's mainly used to protect against the xarray flush.
->>
->> Besides, IMHO read-write lock shall be more performance friendly, since
->> most cases are the read side.
+> Changes in V1:
+>  -- Fixed the ENOMEM handling and return bytes processed by process_madvise.
+>  -- https://patchwork.kernel.org/project/linux-mm/patch/1646803679-11433-1-git-send-email-quic_charante@quicinc.com/
 > 
-> That's almost never true.  rwlocks are usually a bad idea because you
-> still have to bounce the cacheline, so you replace lock contention
-> (which you can see) with cacheline contention (which is harder to
-> measure).  And then you have questions about reader/writer fairness
-> (should new readers queue behind a writer if there's one waiting, or
-> should a steady stream of readers be able to hold a writer off
-> indefinitely?)
-
-Interesting, I didn't notice it before. Thanks for explaining it.
-
-
-BTW what I want is just
-
-```
-PROCESS 1		PROCESS 2
-=========		=========
-#lock			#lock
-set DEAD state		if (not DEAD)
-flush xarray		   enqueue into xarray
-#unlock			#unlock
-```
-
-I think it is a generic paradigm. So it seems that the spinlock inside
-xarray is already adequate for this job?
+>  mm/madvise.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 38d0f51..e97e6a9 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -1433,8 +1433,7 @@ SYSCALL_DEFINE5(process_madvise, int, pidfd, const struct iovec __user *, vec,
+>  		iov_iter_advance(&iter, iovec.iov_len);
+>  	}
+>  
+> -	if (ret == 0)
+> -		ret = total_len - iov_iter_count(&iter);
+> +	ret = (total_len - iov_iter_count(&iter)) ? : ret;
+>  
+>  release_mm:
+>  	mmput(mm);
+> -- 
+> 2.7.4
 
 -- 
-Thanks,
-Jeffle
+Michal Hocko
+SUSE Labs

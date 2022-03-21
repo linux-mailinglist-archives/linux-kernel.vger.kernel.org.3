@@ -2,166 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB5E4E26FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D42BB4E2707
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 13:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347628AbiCUM5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 08:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
+        id S1347631AbiCUM53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 08:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238985AbiCUM5B (ORCPT
+        with ESMTP id S1347625AbiCUM51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 08:57:01 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74112DE91E;
-        Mon, 21 Mar 2022 05:55:36 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22LA8rcA012413;
-        Mon, 21 Mar 2022 12:55:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=i9FSWZOUmFDSxdmussmd7Hti/4DTWyRGI8gRhtar5Ew=;
- b=kDoBA7EYk1fT6q522pXIa1XuVDrkzEeOcoVsclxiufUoL8ng+xgafz/CCHFQsfmefeA4
- ZVWyJXkkdeqKY8cE2uV7ekLpvUwuuEl/RPtMaY2F/JZ2HtEoU2rWNGw40SEh44ZIckzW
- JmffHgymVyqTGqKwVy0TnDx7Z+cdKLi2CXOmH+Lp7euCJcyft/ipbyJpF+vmUMRAhjo1
- UnabVHVDGLOFS7zwLO8vZKOU4EjqhDAC9BN/esoJljrNywx8LDOqzHAHN0VKZlwVV065
- iAH9toln55mmK1SmBrPCOLASZI8LSixhWhAU6h7xS3nYx0ixjhOXyA8n13KF5zw4gILf MQ== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3exmaq7b5p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 12:55:34 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22LCnfUv019916;
-        Mon, 21 Mar 2022 12:55:31 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 3ew6ehuddv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Mar 2022 12:55:31 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22LCtTYR52756888
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Mar 2022 12:55:29 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 766D742042;
-        Mon, 21 Mar 2022 12:55:29 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6CD644203F;
-        Mon, 21 Mar 2022 12:55:28 +0000 (GMT)
-Received: from sig-9-65-76-147.ibm.com (unknown [9.65.76.147])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 21 Mar 2022 12:55:28 +0000 (GMT)
-Message-ID: <493d1cd4393530276182a92a95d21367f03d4eaf.camel@linux.ibm.com>
-Subject: Re: [PATCH v6 5/5] fsverity: update the documentation
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 21 Mar 2022 08:55:27 -0400
-In-Reply-To: <e4af1e00-8eaa-259b-ad81-ec86682ea4af@linux.ibm.com>
-References: <20220318182151.100847-1-zohar@linux.ibm.com>
-         <20220318182151.100847-6-zohar@linux.ibm.com>
-         <e4af1e00-8eaa-259b-ad81-ec86682ea4af@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Qm84yJr_eTY1ieE7oyOw5SJOCbwVPXIJ
-X-Proofpoint-GUID: Qm84yJr_eTY1ieE7oyOw5SJOCbwVPXIJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-21_05,2022-03-21_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
- spamscore=0 priorityscore=1501 impostorscore=0 adultscore=0 clxscore=1015
- mlxlogscore=999 lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2203210081
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 08:57:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4812BEDF3A;
+        Mon, 21 Mar 2022 05:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=YFlhHXWTNkKh8CB15QpQ7sYR5pmzwsAj6etOr2SZi1A=; b=JlvVlVELnIp48NMJI+ARrQuFjv
+        Zi1AvQ4ZxQxzjdm7/LVcyoxoYY+I0Vtf1W/ysTpTfqiKLHoOeL72srIfSZkrIyc2in+1oP5ati8sY
+        2hGzP3UMMn5ewty3VJB65a0R0jXJYD0rhTBAXl352vEUMVVQFWARKl7/LJUkKQix21vtHY6ao0m0X
+        2y4ykvY7mUZetTCaQzNcv199ONxsl3v8Wh1xH3s/JncQRsjN707up3lbJO+k/aZ9lr74FH2KVsxxD
+        TLNsmTYU+BX+s1Kc3sZ+B+jjDyyfWV6YZ/fClDC4w2fxvOQPOhb8d8jCNN00xmyfzjHMClPg0MeDb
+        +MRqQATQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWHZd-00AZWq-VL; Mon, 21 Mar 2022 12:55:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7116E3001CD;
+        Mon, 21 Mar 2022 13:55:49 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 30D192025BC86; Mon, 21 Mar 2022 13:55:49 +0100 (CET)
+Date:   Mon, 21 Mar 2022 13:55:49 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+References: <20220321140327.777f9554@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220321140327.777f9554@canb.auug.org.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-03-18 at 16:55 -0400, Stefan Berger wrote:
-> 
-> On 3/18/22 14:21, Mimi Zohar wrote:
-> > Update the fsverity documentation related to IMA signature support.
-> > 
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > ---
-> >   Documentation/filesystems/fsverity.rst | 22 +++++++++++++---------
-> >   1 file changed, 13 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/Documentation/filesystems/fsverity.rst b/Documentation/filesystems/fsverity.rst
-> > index 1d831e3cbcb3..28a47488848e 100644
-> > --- a/Documentation/filesystems/fsverity.rst
-> > +++ b/Documentation/filesystems/fsverity.rst
-> > @@ -74,8 +74,12 @@ authenticating the files is up to userspace.  However, to meet some
-> >   users' needs, fs-verity optionally supports a simple signature
-> >   verification mechanism where users can configure the kernel to require
-> >   that all fs-verity files be signed by a key loaded into a keyring; see
-> > -`Built-in signature verification`_.  Support for fs-verity file hashes
-> > -in IMA (Integrity Measurement Architecture) policies is also planned.
-> > +`Built-in signature verification`_.
-> > +
-> > +IMA supports including fs-verity file digests and signatures in the
-> > +IMA (Integrity Measurement Architecture) measurement list and
-> 
-> The Integrity Measurement Architecture (IMA) supports including ...
-> 
-> > +verifying fs-verity based file signatures stored as security.ima
-> > +xattrs, based on policy.
-> >   
-> >   User API
-> >   ========
-> > @@ -653,13 +657,13 @@ weren't already directly answered in other parts of this document.
-> >       hashed and what to do with those hashes, such as log them,
-> >       authenticate them, or add them to a measurement list.
-> >   
-> > -    IMA is planned to support the fs-verity hashing mechanism as an
-> > -    alternative to doing full file hashes, for people who want the
-> > -    performance and security benefits of the Merkle tree based hash.
-> > -    But it doesn't make sense to force all uses of fs-verity to be
-> > -    through IMA.  As a standalone filesystem feature, fs-verity
-> > -    already meets many users' needs, and it's testable like other
-> > -    filesystem features e.g. with xfstests.
-> > +    IMA supports the fs-verity hashing mechanism as an alternative
-> > +    to doing full file hashes, for people who want the performance
-> 
-> IMA supports the fs-verity hashing mechanism as an alternative to full 
-> file hashes for those who want the performance and security benefits ...
-> 
-> > +    and security benefits of the Merkle tree based hash.  But it
-> > +    doesn't make sense to force all uses of fs-verity to be through
-> 
-> However, it doesn't make sense ...
-> 
-> > +    IMA.  As a standalone filesystem feature, fs-verity already meets
-> > +    many users' needs, and it's testable like other filesystem
-> > +    features e.g. with xfstests.
-> 
-> Fs-verity already meets many user' needs even as a standalone filesystem 
-> feature and it is testable like other ...
-> 
-> >   
-> >   :Q: Isn't fs-verity useless because the attacker can just modify the
-> >       hashes in the Merkle tree, which is stored on-disk?
+On Mon, Mar 21, 2022 at 02:03:27PM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> After merging the tip tree, today's linux-next build (x864 allmodconfig)
+> produced these new warnings:
+>=20
+> vmlinux.o: warning: objtool: arch_rethook_prepare()+0x55: relocation to !=
+ENDBR: arch_rethook_trampoline+0x0
+> vmlinux.o: warning: objtool: arch_rethook_trampoline_callback()+0x3e: rel=
+ocation to !ENDBR: arch_rethook_trampoline+0x0
+> vmlinux.o: warning: objtool: unwind_next_frame()+0x93e: relocation to !EN=
+DBR: arch_rethook_trampoline+0x0
+> vmlinux.o: warning: objtool: unwind_next_frame()+0x5f2: relocation to !EN=
+DBR: arch_rethook_trampoline+0x0
+> vmlinux.o: warning: objtool: unwind_next_frame()+0x4a7: relocation to !EN=
+DBR: arch_rethook_trampoline+0x0
+> vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x81: relocation t=
+o !ENDBR: arch_rethook_trampoline+0x0
+> vmlinux.o: warning: objtool: __rethook_find_ret_addr()+0x90: relocation t=
+o !ENDBR: arch_rethook_trampoline+0x0
+> vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x8c: relocatio=
+n to !ENDBR: arch_rethook_trampoline+0x0
+> vmlinux.o: warning: objtool: rethook_trampoline_handler()+0x9b: relocatio=
+n to !ENDBR: arch_rethook_trampoline+0x0
 
-Thanks, Stefan, for the suggestions.  I tried to minimize the changes
-as much as possible.  Based on another thread, the documentation should
-be updated, but I'm not going to be presumptuous and make those
-changes.  Eric, should I drop this patch and let you update the fs-
-verity documentation as you want?
+Hurmph, lemme go figure out where that code comes from, I've not seen
+those.
 
--- 
-thanks,
+> [ Note I was already getting these:
+> arch/x86/crypto/chacha-x86_64.o: warning: objtool: chacha_2block_xor_avx5=
+12vl() falls through to next function chacha_8block_xor_avx512vl()
+> arch/x86/crypto/chacha-x86_64.o: warning: objtool: chacha_4block_xor_avx5=
+12vl() falls through to next function chacha_8block_xor_avx512vl()
+> arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx(=
+) falls through to next function poly1305_blocks_x86_64()
+> arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_emit_avx() =
+falls through to next function poly1305_emit_x86_64()
+> arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx2=
+() falls through to next function poly1305_blocks_x86_64()
 
-Mimi
-
-
+Yes, those are somewhere on the todo list, lemme bump them.

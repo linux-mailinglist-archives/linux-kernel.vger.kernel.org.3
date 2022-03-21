@@ -2,53 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C014E1E82
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 01:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F044E1E93
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 02:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343934AbiCUAij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 20:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        id S1343951AbiCUBLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 21:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232714AbiCUAih (ORCPT
+        with ESMTP id S232714AbiCUBLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 20:38:37 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AB011DD31
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 17:37:13 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id s14-20020a0566022bce00b00645e9bc9773so9564251iov.20
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 17:37:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=zgQUKqyjG4aGGBf8aCK0jtXa3zTm/bs6XHOzG16Y64g=;
-        b=hJYuLJgpUT21SF0DeLEmlOh+CAqSUym+leeo96pjLcJEVKy/jNVp/8Md+AogDsdJfM
-         wq9lYY8pe+WKdE5dLi+6XFbkeYE8QN7S2dwrWoAZ/ZZR63rHCXZJ7Z2IF11CxK5MBBiU
-         KK9OMQcLvOg+YK0mBRPoryQyMVnoDAlQBkNFzfPwWEYCcIH+DdyBJuCKEYkqxiQMJgNM
-         c+6EJmRidefh8AsjdCchk82iSgphPy/LhIP+VxrX2vlOokQ+l9rXu1uoSph27oNa83ai
-         y+XWK6twUL16fGfb/wA34QoMqJy4Mz9y44o4YosZ+Hnn73i/u6imUfuSPIWI3SlYSpyo
-         p9oQ==
-X-Gm-Message-State: AOAM530/ADkkSJy5ItpjURxq+bvJQO2RAdnva0KVeaeRwbVHZkB+HRKy
-        9WZweNr5CkCFSBcfSDyaCQLaXWYCqcRFkV54nNHDpaExu6WW
-X-Google-Smtp-Source: ABdhPJxkPgs0tx4NlXWqryXWzrsSRNeM6gWcKie3TCOArNOa+x8br18/TslqhGJfC+5n4nMaQDV/e/qutgSevhp+scAl6t8Zy7Wh
+        Sun, 20 Mar 2022 21:11:48 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E1217A2E8
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 18:10:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647825024; x=1679361024;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fsjJq34rAU+mDpeCy34fQFnLsRo2UrwFwjjI8k4EnZk=;
+  b=cov5TauZqURc2HWKRmaLTApZgDgvNKn9P2hl35bNUmXZQtvWitDlmWUJ
+   jvKFyf2Xk2PHkDpKnk/UJDo0WbytxBVqWNDthfp6mAckbgHXpOQ8O51QK
+   1SeyAVtwWAQjKEmY2lYqVxd4u+bp5lhS9zDexwBJ4xUUdGu5ycgVdQGTO
+   J8nXkBQU/ef8jVQWPEgVWr80PoHfXJROI2QGS2bAuPbBtANi30xsUn11r
+   /XAIOUrAP6I/W4BySbwahScQs82yWmpFEVEnHzbOXlkCjPK7cMCsy/TsI
+   hX2WwzSkHR1tFFG0h+RYWXhdSwJnC/YLAFfSLBtSzlsmKBYfDhSEgXEYX
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="237387886"
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="237387886"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 18:10:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="543010454"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 20 Mar 2022 18:10:22 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nW6Yv-000HLJ-E6; Mon, 21 Mar 2022 01:10:21 +0000
+Date:   Mon, 21 Mar 2022 09:10:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:nvme-rfc 4/10] drivers/soc/apple/sart.c:175:14: warning:
+ format specifies type 'unsigned long long' but the argument has type
+ 'phys_addr_t' (aka 'unsigned int')
+Message-ID: <202203210914.Sqyrtli2-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:85e2:0:b0:317:2edb:46cb with SMTP id
- d89-20020a0285e2000000b003172edb46cbmr8963902jai.118.1647823032735; Sun, 20
- Mar 2022 17:37:12 -0700 (PDT)
-Date:   Sun, 20 Mar 2022 17:37:12 -0700
-In-Reply-To: <1821968.CQOukoFCf9@leap>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000084e0cf05daafb25f@google.com>
-Subject: Re: [syzbot] KASAN: null-ptr-deref Read in __free_pages
-From:   syzbot <syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com>
-To:     christophe.jaillet@wanadoo.fr, dhowells@redhat.com,
-        fmdefrancesco@gmail.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,19 +63,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://github.com/AsahiLinux/linux nvme-rfc
+head:   822f7747e396aa35f280972b5f018c19b8dbc11c
+commit: ca0f2729fc45ec18e49de08ffcadbb22f3ecc028 [4/10] soc: apple: Add SART driver
+config: hexagon-buildonly-randconfig-r004-20220320 (https://download.01.org/0day-ci/archive/20220321/202203210914.Sqyrtli2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/ca0f2729fc45ec18e49de08ffcadbb22f3ecc028
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux nvme-rfc
+        git checkout ca0f2729fc45ec18e49de08ffcadbb22f3ecc028
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/apple/
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reported-and-tested-by: syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com
+All warnings (new ones prefixed by >>):
 
-Tested on:
+>> drivers/soc/apple/sart.c:175:14: warning: format specifies type 'unsigned long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
+                           i, flags, paddr, size);
+                                     ^~~~~
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+                                           ~~~    ^~~~~~~~~~~
+   drivers/soc/apple/sart.c:226:8: warning: format specifies type 'unsigned long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
+                                   i, paddr, size);
+                                      ^~~~~
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+                                           ~~~    ^~~~~~~~~~~
+   drivers/soc/apple/sart.c:231:55: warning: format specifies type 'unsigned long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
+                   dev_dbg(sart->dev, "wrote [0x%llx, 0x%zx] to %d\n", paddr, size,
+                                                ~~~~                   ^~~~~
+                                                %x
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+                                           ~~~    ^~~~~~~~~~~
+   drivers/soc/apple/sart.c:238:4: warning: format specifies type 'unsigned long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
+                    paddr, size);
+                    ^~~~~
+   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   drivers/soc/apple/sart.c:251:3: warning: format specifies type 'unsigned long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
+                   paddr, size);
+                   ^~~~~
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+                                           ~~~    ^~~~~~~~~~~
+   drivers/soc/apple/sart.c:274:4: warning: format specifies type 'unsigned long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
+                    paddr, size);
+                    ^~~~~
+   include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   6 warnings generated.
 
-commit:         f443e374 Linux 5.17
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=19ca6f72fd444749
-dashboard link: https://syzkaller.appspot.com/bug?extid=d55757faa9b80590767b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15ec554d700000
 
-Note: testing is done by a robot and is best-effort only.
+vim +175 drivers/soc/apple/sart.c
+
+   145	
+   146	static int apple_sart_probe(struct platform_device *pdev)
+   147	{
+   148		int i;
+   149		struct apple_sart *sart;
+   150		struct device *dev = &pdev->dev;
+   151	
+   152		sart = devm_kzalloc(dev, sizeof(*sart), GFP_KERNEL);
+   153		if (!sart)
+   154			return -ENOMEM;
+   155	
+   156		sart->dev = dev;
+   157		sart->ops = of_device_get_match_data(dev);
+   158	
+   159		sart->regs = devm_platform_ioremap_resource(pdev, 0);
+   160		if (IS_ERR(sart->regs))
+   161			return PTR_ERR(sart->regs);
+   162	
+   163		for (i = 0; i < APPLE_SART_MAX_ENTRIES; ++i) {
+   164			u8 flags;
+   165			size_t size;
+   166			phys_addr_t paddr;
+   167	
+   168			sart->ops->get_entry(sart, i, &flags, &paddr, &size);
+   169	
+   170			if (!flags)
+   171				continue;
+   172	
+   173			dev_dbg(sart->dev,
+   174				"SART bootloader entry: index %02d; flags: 0x%02x; paddr: 0x%llx; size: 0x%zx\n",
+ > 175				i, flags, paddr, size);
+   176			set_bit(i, &sart->protected_entries);
+   177		}
+   178	
+   179		platform_set_drvdata(pdev, sart);
+   180		return 0;
+   181	}
+   182	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

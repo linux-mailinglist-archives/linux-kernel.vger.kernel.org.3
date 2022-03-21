@@ -2,149 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B57E4E218A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 08:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F614E218B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 08:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345017AbiCUHrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 03:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
+        id S1345022AbiCUHsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 03:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245168AbiCUHrd (ORCPT
+        with ESMTP id S1344050AbiCUHsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 03:47:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264D3580C9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 00:46:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1756B8110D
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 07:46:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EED36C340EE;
-        Mon, 21 Mar 2022 07:45:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647848762;
-        bh=QldX2CgA/jrZgyN9GjhxNhil+DepyQR7nCll9agSBts=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ck3ZkIUBA/csRuIiZRzDFv38GO5nDKZGp0SGz/GCchIIjtdylPAk/J2XzfDMA6mhh
-         o2/cWWKkBHWwkDoCkBvnj0NyG31Td0W2ZPRFkuTpjmrzJnhkAlLM9MXbcNWzTuhwUe
-         IuO9n29T9FTriCzPD5OgNzceksvOsGW16SSEVXXGIQBXeue8E7ycmQ7hfvqAhIr/Al
-         rzMyTTyXyJe0dOEwz9cmJZ0I0Cf+rZ0nFfm+pfQPOgVzsP2JUP01SpDg0KDRurD4o8
-         sj2PYRKf8AHmR0vbvSDwW10cHL3Li54zG3/XighK5Sf96QUiUZMmweMUi9uddHCCHn
-         F24SDRw0PF6Uw==
-Date:   Mon, 21 Mar 2022 15:45:38 +0800
-From:   Gao Xiang <xiang@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Chao Yu <chao@kernel.org>,
-        linux-erofs@lists.ozlabs.org,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        lihongnan <hongnan.lhn@alibaba-inc.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        David Anderson <dvander@google.com>
-Subject: [GIT PULL] erofs updates for 5.18-rc1
-Message-ID: <YjgtIqJK0Io+zYeI@debian>
-Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, Chao Yu <chao@kernel.org>,
-        linux-erofs@lists.ozlabs.org,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        lihongnan <hongnan.lhn@alibaba-inc.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        David Anderson <dvander@google.com>
+        Mon, 21 Mar 2022 03:48:03 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90084.outbound.protection.outlook.com [40.107.9.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31AA580C9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 00:46:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l4vOulhbV0A7LxljBKhklYAiuMxr5G40pkDpm41NCKbsdk5BqUF1LtwIszIdRoyfPKsLWwVr9CsH3oX2MSU1V3YjUgZHYDp9OMweEHgU996wy8B+qjwbIbsJWS7SBgMssN5of2Rytke7tzaoJ5+4TsX1V3ja/oLX6+E5iR62LmIIo/vMq01x7PRtzbzvCgQUaOQ2vslc7aH7Hl3WSr9dawstjRBBR8RcusDkGsmRENkBDISFJaueaJD5Ub+9sf753FvcuAnOyLXg+fxhp98pcbA02djDEpEU/D1WFtbK8QNlel9KgjdEmHv9Oxxv5GNJgmsqWKP701or0TNSKRiabg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZiP4xsujlsUHEAERyx6b3KjtCP+cYAsx8p9kiKoPHqs=;
+ b=MbXWNNGuUT9N9jPWA+rGgxdxYp7YnsswaObpIhO2Db5XWZ0y/Qqbg+8VQiIB8Kq/6+AzNjFbcydHecagQVBmS/h5JrWteVf3i1h+cjIfPpOqotEb6GLwH+giZffMHHpzpYabp0lKuN7nExor6YXTGM2zQ3lpeOoiJBRuujEeng6rOVlEOskYdbbUKYYhZ5a3srnZVRkzFUqAPxCeS+mDSbo8t7Bn8q9wiCJj5ZlMVkufcyxpyiAYq3qb1Ejtumox44yUAXQ7gSc5Y3wq0CuCBHC3mB47L3tH5HwtdZpzVO4K6PKSK7/tzJIVMtf2CG3pmY2eJN8+1Aqy+0mS51+O0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR2P264MB0212.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.19; Mon, 21 Mar
+ 2022 07:46:34 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::cd2f:d05d:9aa3:400d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::cd2f:d05d:9aa3:400d%6]) with mapi id 15.20.5081.022; Mon, 21 Mar 2022
+ 07:46:33 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+CC:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
+Thread-Topic: [RFC PATCH 3/3] objtool/mcount: Add powerpc specific functions
+Thread-Index: AQHYOsOkMhd+XrYXYE6fzWpV8XELvKzFK0EAgAP1goCAAFlHgA==
+Date:   Mon, 21 Mar 2022 07:46:33 +0000
+Message-ID: <acde6260-59b1-c579-99e7-ad59fbd4c563@csgroup.eu>
+References: <20220318105140.43914-1-sv@linux.ibm.com>
+ <20220318105140.43914-4-sv@linux.ibm.com>
+ <YjR6kHq4c/rjCTpr@hirez.programming.kicks-ass.net>
+ <33447256-81d1-8844-d82f-e8ac94f65fbe@csgroup.eu>
+ <87pmmgghvu.fsf@mpe.ellerman.id.au>
+In-Reply-To: <87pmmgghvu.fsf@mpe.ellerman.id.au>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c5850a61-eef6-4846-3c70-08da0b0eebc2
+x-ms-traffictypediagnostic: MR2P264MB0212:EE_
+x-microsoft-antispam-prvs: <MR2P264MB0212358DE6C5D4880D917F33ED169@MR2P264MB0212.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2aRruN/uJbRa+VO79uWqhUXqA8qsswiJ3Bg6NjyJosGC5bxswXXfYpv64oZwf9FBAYy/PzN2ANfv2b4CvG6yKAIcF28nCfNTexH5fZq73mctpmtNcQ0KV5isf3DR/L+BiKvgJ1J5oKOFiUC17Gjh4Q+HMVIw43Jzz3rRT1gWXCz2WmziB7QKaDKcWa5Mr90S6BvYOopDLvZMqThgyyB5anaBQrrJ8OSZWBqZWx05zPyC9QKYS011sgTX8AA+x8LKefEpCc6Qatt22XJcSagiaHQwlKBomKmKgF9MHFZKQLJ9MLGJHcPGN0gAmJ662Pzt5rygza+AyG1o4SZqkaEM4HXOmMjJSE6P3thiUBtDMKsOzVBO3YG2bXo1izMCH3kU/nKBlosRkEQ/fB0toI6yjE83Q3SOskN1MdSmw7Usce/taVQD9Lulepz8fUgJEX7aoJjGbdh8+ywRn7Jv5Hpkw/PNmiqBnUeLF+P5bh6TxWGnjflzRE9TbdDhT9IAqjKa/hJbi4QtgAeeXWs/Hyjo4OCNqYOeMVAE+C3HkCZ/+UPxkHdfjpKZL6Gzscpmpd9Xo5O/Nf/rDwuq5A11rUGrp8RB+ftY5UEw/YD2qFar99TRBtGX2rrS77xAFohkvt0nRcV7JDO1XU5HjCU3AlvPFOJeYtTr9WEDzSE3HWjX/QexUH1hTFmS9Hk0oD0PhsgBGlS/zIQdVWIYs0C8HUVuy9AD642nR+g39Oo9guQyecb2JlU8XYVDpnN2JZjXlrvObxPChihPwmgTQLlH9nSvLmtMtfawtbUXgZstXUveGg4/w2x5nTzk0EA/nBjrWgwWDkHtQYGV5fFYIBdMwnhBXFomQ5THfpiVevy0hmuwxcsAfCo2CLig+lrxA0QQjqeJ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(44832011)(8936002)(2906002)(5660300002)(122000001)(4326008)(91956017)(66476007)(66556008)(76116006)(66946007)(64756008)(86362001)(8676002)(66446008)(38100700002)(38070700005)(31696002)(66574015)(508600001)(36756003)(186003)(26005)(71200400001)(966005)(6486002)(110136005)(6506007)(83380400001)(31686004)(2616005)(6512007)(54906003)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M1h2RmdYRGhibmJ5dFcrTGxSSkpSRTd3cWI5OEUrNC94VUZkWk4vajdTNVdS?=
+ =?utf-8?B?aVc2RE9OQWhmd0VseEZuV1YrRUR1NkNZWGViY0xlUkZaVlNEcXExNll5T0Nh?=
+ =?utf-8?B?TzVnOFgzWGtxdzQ2SGNrS1pxS01KMUN3OVVIRGtTUkYrZEt1OFFNcGVyVm9y?=
+ =?utf-8?B?UEJmemluaWoxT3V2aFh1eFMwRUlIOER2akowcUdPVEVCR1pMQVROV0NjWHpF?=
+ =?utf-8?B?T3BZeFl4WTdWY1IyU25VZ2tJMFczM2R3RnhPZC90V1N3Zit0RnZ2aDdNMWR4?=
+ =?utf-8?B?bXY4Z3AxRmovUlhQUiswUitGSmdVQ0pheUVxc3lDM0w3KzBTOHJHK1ZWNXh1?=
+ =?utf-8?B?ZHp5S2JTVXRPWk9VSW1RQzQ5YWhhZUllTUNrNjU2Wnpoci9DTGZPN004bUVp?=
+ =?utf-8?B?OTNVUlVoZ2tzb1AySUxldEpVVytUZG5PbUJoOElTYUVIUWdTZ3M2M3pFNWs2?=
+ =?utf-8?B?a1JUSVZEZjRkeEJyMytMbmVOL0lPVk9hYS9PSGMvdTBYQzlFU1l4UkdBUGE3?=
+ =?utf-8?B?ZmNMejcxK2p4VGluRllaUFFYN0hIajBoMHRTV1NOam45TWxmeVk1c2tVRHNV?=
+ =?utf-8?B?TUJKNGZqamdyM3IzZWNjeWFZcnA0cnVlMjZlampWWHpUZFZnMUNrSXpmWW54?=
+ =?utf-8?B?ZmJFVnM4Sk55bU1Ga2tMaTNmUnJ1L3RCcmJlL3laVnhPNjlUTXFKM3hiQStP?=
+ =?utf-8?B?OFZNRUZiSWFmUXNVMUZjRmhVdC92andyOC9kOUdRck5tY0x4M21Vc0VhWC9a?=
+ =?utf-8?B?K290bEFrQXZyNHMwN2VqTURud1VyM1VUcWpUNFlhNVA2OUpqMU5WdUg3QURl?=
+ =?utf-8?B?Nko0NHBlbUJvcE1zbzdXcVBPcFkyVnVaRnZEdmJUNmEyMHpyY1dkRnYxVGJN?=
+ =?utf-8?B?Y1FVbjFDQVM1dTY5NTFhbnkwOVVWS3prTEVadExVZGlObXRsYTVVaERJeGdG?=
+ =?utf-8?B?RjZLc0l4eUVZcXV2bkEvTDFBRFZ2dm55WmxxaWZQaGNCdHBVNWZneUl3cGZs?=
+ =?utf-8?B?S00wQ09Eb0ExQ1NrcjFocEFVV1JrU29LSjJNQ2VyTEQ5UGN6VmE3RWVSQ1lk?=
+ =?utf-8?B?TTZXU3M1alozVWljR29wWjNyend2cUZZQ2RSWHdFYVdYb2JRU2N2QlplZXYv?=
+ =?utf-8?B?TSsxRGRsM1JqMkVpaFFEMTBGZ2EyUVdIMUxQWlpQQmpEc1pBQmNJbzNxVlkz?=
+ =?utf-8?B?RStPWnYraDV0WStWNmdwODBYQ0txYk93RFhQeWUzc2ppNmp6KzlzR1VEc0dp?=
+ =?utf-8?B?Zk1ueXBjRVRXL3FqVWhpNlhsWlRWMEFHTnN1bkV0NmpvVG5GSFdhQUJ1ejlH?=
+ =?utf-8?B?WVhQY1ljZ2JuVklXWno0Zm9BZVQ1UHZKbGhJblRhQmUvcFFVM2pMWnRlZ2ZF?=
+ =?utf-8?B?bTl3NG93SklxNFhtZjcydVFDNmpuNGVXZ1hibXZDdXo1VUpJc1BIMDZXc1dn?=
+ =?utf-8?B?U1Fud1Z2blZib3VJVGxBVHE0Y1JzUzZoblRPUkpldXNWcVdFaFgxVTV3b3J1?=
+ =?utf-8?B?cStHbTdpVmgzcnZSYllvdGpzQTBjV04xNjJTWUNOc2dpbkhvaDRpSVIwNlRx?=
+ =?utf-8?B?ajJzUHUvc1JwbkdnbElxcWpmcTJ2cm81S1NoYXpmUTc3MVZ1eG95U0YzMXZs?=
+ =?utf-8?B?S0JYbUhXcnpXL1RvdG5mMFB6UHdHS0tMcGQxK1Q1KytXS2tBUkFyeThlaG1K?=
+ =?utf-8?B?NkV5ayt2MDdRUWw2SHM3cHNldmdtYzBzNmRWcTdnU0tkcFpQWGJlTHJOWU96?=
+ =?utf-8?B?WHJOL2tFaHNtVG5ZaWltVVpoODNyUkdOcmRVNVFXdDRvUE81L3VKWDlqY0ZE?=
+ =?utf-8?B?dDJ0OTlucmVRWURGVjBiT1JwRFdLTnNKSmpXREw2M1FTcm02TktIeHdKUVRO?=
+ =?utf-8?B?UFBpdFZBU2drLytWSE1USHg2TXNtWlp4M01FeENwbEI2ZWNacjgwOEJ1TEVD?=
+ =?utf-8?B?eUhXQXo1akYrN3lCVTJIa2NOSkJGTU1kVjFCc2NpcEo1eGRTMVhuRkZ5S1hT?=
+ =?utf-8?Q?DBJX/odPsGVIu8lBZKHK+6V09DvzS8=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <99C6F5A548B0434CAA3077EC6907D8E8@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5850a61-eef6-4846-3c70-08da0b0eebc2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2022 07:46:33.8232
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9mDYVcjwj3RKHiFza8CRXhLXitVRvbGZiRXGSfhRxHsl2qQT9gdyVlssYCRyBj8vXlqgHWbMnMsp9IDJ4O0rq3CcAQBjBOy8Ijft37pOz+M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR2P264MB0212
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-Could you consider this pull request for 5.18-rc1?
-
-In this cycle, we continue converting to use meta buffers for all
-remaining uncompressed paths to prepare for the upcoming subpage,
-folio and fscache features.
-
-We also fixed a double-free issue when sysfs initialization fails,
-which was reported by syzbot.
-
-Besides, in order for the userspace to control per-file timestamp
-easier, we now switch to record mtime instead of ctime with a
-compatible feature marked. And there are also some code cleanups
-and documentation update as usual.
-
-All commits have been in -next for a while and there is a minor
-trivial merge conflict with folio -next tree [1].
-
-Thanks,
-Gao Xiang
-
-[1] https://lore.kernel.org/r/20220315203112.03f6120c@canb.auug.org.au
-
-The following changes since commit ffb217a13a2eaf6d5bd974fc83036a53ca69f1e2:
-
-  Linux 5.17-rc7 (2022-03-06 14:28:31 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.18-rc1
-
-for you to fetch changes up to a1108dcd9373a98f7018aa4310076260b8ecfc0b:
-
-  erofs: rename ctime to mtime (2022-03-17 23:41:14 +0800)
-
-----------------------------------------------------------------
-Changes since last update:
-
- - Avoid using page structure directly for all uncompressed paths;
-
- - Fix a double-free issue when sysfs initialization fails;
-
- - Complete DAX description for erofs;
-
- - Use mtime instead since there's no (easy) way for users to control
-   ctime;
-
- - Several code cleanups.
-
-----------------------------------------------------------------
-David Anderson (1):
-      erofs: rename ctime to mtime
-
-Dongliang Mu (1):
-      fs: erofs: add sanity check for kobject in erofs_unregister_sysfs
-
-Gao Xiang (7):
-      erofs: get rid of `struct z_erofs_collector'
-      erofs: clean up preload_compressed_pages()
-      erofs: silence warnings related to impossible m_plen
-      erofs: clean up z_erofs_extent_lookback
-      erofs: refine managed inode stuffs
-      erofs: use meta buffers for reading directories
-      erofs: use meta buffers for inode lookup
-
-Jeffle Xu (1):
-      erofs: use meta buffers for erofs_read_superblock()
-
-lihongnan (1):
-      Documentation/filesystem/dax: update DAX description on erofs
-
- Documentation/filesystems/dax.rst   |   6 +-
- Documentation/filesystems/erofs.rst |   2 +-
- fs/erofs/data.c                     |  12 ++-
- fs/erofs/dir.c                      |  21 ++--
- fs/erofs/erofs_fs.h                 |   5 +-
- fs/erofs/inode.c                    |   4 +-
- fs/erofs/internal.h                 |   2 +
- fs/erofs/namei.c                    |  54 +++++------
- fs/erofs/super.c                    |  21 ++--
- fs/erofs/sysfs.c                    |   8 +-
- fs/erofs/zdata.c                    | 184 +++++++++++++++++-------------------
- fs/erofs/zmap.c                     |  71 +++++++-------
- 12 files changed, 189 insertions(+), 201 deletions(-)
+DQoNCkxlIDIxLzAzLzIwMjIgw6AgMDM6MjcsIE1pY2hhZWwgRWxsZXJtYW4gYSDDqWNyaXTCoDoN
+Cj4gQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1PiB3cml0ZXM6
+DQo+PiBMZSAxOC8wMy8yMDIyIMOgIDEzOjI2LCBQZXRlciBaaWpsc3RyYSBhIMOpY3JpdMKgOg0K
+Pj4+IE9uIEZyaSwgTWFyIDE4LCAyMDIyIGF0IDA0OjIxOjQwUE0gKzA1MzAsIFNhdGh2aWthIFZh
+c2lyZWRkeSB3cm90ZToNCj4+Pj4gVGhpcyBwYXRjaCBhZGRzIHBvd2VycGMgc3BlY2lmaWMgZnVu
+Y3Rpb25zIHJlcXVpcmVkIGZvcg0KPj4+PiAnb2JqdG9vbCBtY291bnQnIHRvIHdvcmssIGFuZCBl
+bmFibGVzIG1jb3VudCBmb3IgcHBjLg0KPj4+DQo+Pj4gSSB3b3VsZCBsb3ZlIHRvIHNlZSBtb3Jl
+IG9ianRvb2wgZW5hYmxlbWVudCBmb3IgUG93ZXIgOi0pDQo+Pg0KPj4gSSBoYXZlIG5vdCByZWNl
+aXZlZCB0aGlzIHNlcmllcyBhbmQgSSBjYW4ndCBzZWUgaXQgb24gcG93ZXJwYyBwYXRjaHdvcmsN
+Cj4+IGVpdGhlciAoaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2xpbnV4cHBj
+LWRldi9saXN0LykNCj4+DQo+PiBEaWQgeW91IHNlbmQgaXQgdG8gbGludXhwcGMtZGV2IGxpc3Qg
+PyBJZiBub3QgY2FuIHlvdSByZXNlbmQgaXQgdGhlcmUgPw0KPiANCj4gSXQgaXMgdGhlcmUsIG1p
+Z2h0IGhhdmUgYmVlbiBkZWxheWVkPw0KPiANCj4gaHR0cDovL3BhdGNod29yay5vemxhYnMub3Jn
+L3Byb2plY3QvbGludXhwcGMtZGV2L2xpc3QvP3Nlcmllcz0yOTExMjkNCj4gDQo+IFRoZXJlIGFy
+ZSBzb21lIENJIGZhaWx1cmVzLg0KPiANCg0KT24gUFBDNjQgd2UgcmFuZG9tbHkgZ2V0Og0KDQov
+YmluL3NoOiAxOiAuL3Rvb2xzL29ianRvb2wvb2JqdG9vbDogbm90IGZvdW5kDQptYWtlWzJdOiAq
+KiogW2FyY2gvcG93ZXJwYy9rZXJuZWwvdmRzby92Z2V0dGltZW9mZGF5LTY0Lm9dIEVycm9yIDEy
+Nw0KL2xpbnV4L2FyY2gvcG93ZXJwYy9rZXJuZWwvdmRzby9NYWtlZmlsZTo3NzogcmVjaXBlIGZv
+ciB0YXJnZXQgDQonYXJjaC9wb3dlcnBjL2tlcm5lbC92ZHNvL3ZnZXR0aW1lb2ZkYXktNjQubycg
+ZmFpbGVkDQptYWtlWzJdOiAqKiogRGVsZXRpbmcgZmlsZSAnYXJjaC9wb3dlcnBjL2tlcm5lbC92
+ZHNvL3ZnZXR0aW1lb2ZkYXktNjQubycNCm1ha2VbMV06ICoqKiBbdmRzb19wcmVwYXJlXSBFcnJv
+ciAyDQptYWtlWzFdOiAqKiogV2FpdGluZyBmb3IgdW5maW5pc2hlZCBqb2JzLi4uLg0KL2xpbnV4
+L2FyY2gvcG93ZXJwYy9NYWtlZmlsZTo0MjM6IHJlY2lwZSBmb3IgdGFyZ2V0ICd2ZHNvX3ByZXBh
+cmUnIGZhaWxlZA0KbWFrZTogKioqIFtfX3N1Yi1tYWtlXSBFcnJvciAyDQpNYWtlZmlsZToyMTk6
+IHJlY2lwZSBmb3IgdGFyZ2V0ICdfX3N1Yi1tYWtlJyBmYWlsZWQNCg0KVGhpcyBpcyBsaW5rZWx5
+IGJlY2F1c2UgcHJlcGFyZTogdGFyZ2V0IGRlcGVuZHMgb24gdmRzb19wcmVwYXJlIGFuZCANCnBy
+ZXBhcmU6IHRhcmdldCBkZXBlbmRzIG9uIG9ianRvb2wsIGJ1dCB2ZHNvX3ByZXBhcmU6IGRvZXNu
+J3QgZGVwZW5kIG9uIA0Kb2JqdG9vbC4NCg0KSSdtIG5vdCBzdXJlIGl0IGlzIGNvcnJlY3QgdG8g
+cnVuIG9ianRvb2wgbWNvdW50IG9uIFZEU08gYXMgaXQgaXMga2luZCANCm9mIHVzZWxlc3MuIE9u
+bHkgVkRTTzY0IHNlZW1zIHRvIGNhbGwgb2JqdG9vbCwgbm90IFZEU08zMi4NCg0KQ2hyaXN0b3Bo
+ZQ==

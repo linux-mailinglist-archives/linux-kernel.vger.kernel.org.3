@@ -2,68 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E574E2C87
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 408214E2C90
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350433AbiCUPn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
+        id S1350476AbiCUPog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350496AbiCUPnG (ORCPT
+        with ESMTP id S1350445AbiCUPoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:43:06 -0400
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4BC174BA9;
-        Mon, 21 Mar 2022 08:41:40 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id u16so20256885wru.4;
-        Mon, 21 Mar 2022 08:41:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WML5+iO99XG8Cnb/y7ZTclpuOwKzuJZAVQdLXyKLfiY=;
-        b=2uOKEVaozGuCB/X3I7v+OUGNpMd6JQPmfKvnxTlIcAaFEczHc6hn3FqEDVScye1N6q
-         88cRBu5wJ3nZjuI/ouHqlITQK0+G227Hr+i1/1GN2aqstVXWFGty/kwvJIn7ijuncZrS
-         qS9xP4YYhK+Ov4jZbtXwH6f+YI5dhrtyra/d77GDZ5sMg2MkNAMVZjMNMfOyo7g/oqrH
-         k2zZguKt0vTVHdQn8pUrMVWSZPXwqq+6rslcaKR3j//79CcSNtU6Psd3Gfvc+FNUH5SM
-         oqFf+CGnnrRvJYLU27qFd3xV62eoLmE9AuX+QrLrQtCEiEbOAmgjEPVBe3lnbHi8wD6W
-         gRkA==
-X-Gm-Message-State: AOAM533QLjyeD6sM105oytLbK/541p3LoTqSKYPwBYEnJFXNmgy8u1tj
-        qSz1dTAhu4F+Ofqlza3d1/zKAvockco=
-X-Google-Smtp-Source: ABdhPJwswOpeYAUSbv2gZd+sF9HdVox9ltx0wl2XRAWQjiodyAcp5T05tpxfrZ5d6BEO3ueGw112Sw==
-X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id k10-20020a5d66ca000000b00203fb72a223mr11487484wrw.12.1647877298918;
-        Mon, 21 Mar 2022 08:41:38 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id z18-20020adfec92000000b00203f04ed4a8sm10085010wrn.13.2022.03.21.08.41.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 08:41:38 -0700 (PDT)
-Message-ID: <a7837388-e36f-9e55-4107-9f7f85571f3b@kernel.org>
-Date:   Mon, 21 Mar 2022 16:41:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 18/18] dt-bindings: arm: msm: Convert kpss-gcc driver
- Documentation to yaml
-Content-Language: en-US
-To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Mon, 21 Mar 2022 11:44:24 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E70F05EBC6;
+        Mon, 21 Mar 2022 08:42:56 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.90,198,1643641200"; 
+   d="scan'208";a="114269400"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 22 Mar 2022 00:42:56 +0900
+Received: from vb.home (unknown [10.226.92.216])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id A5E004007539;
+        Tue, 22 Mar 2022 00:42:52 +0900 (JST)
+From:   Phil Edworthy <phil.edworthy@renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20220321144825.11736-1-ansuelsmth@gmail.com>
- <20220321144825.11736-19-ansuelsmth@gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220321144825.11736-19-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 00/14] Add new Renesas RZ/V2M SoC and Renesas RZ/V2M EVK support
+Date:   Mon, 21 Mar 2022 15:42:18 +0000
+Message-Id: <20220321154232.56315-1-phil.edworthy@renesas.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,128 +52,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2022 15:48, Ansuel Smith wrote:
-> Convert kpss-gcc driver Documentation to yaml.
-> 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ------------
->  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 68 +++++++++++++++++++
->  2 files changed, 68 insertions(+), 44 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
->  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-> deleted file mode 100644
-> index e628758950e1..000000000000
-> --- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-> +++ /dev/null
-> @@ -1,44 +0,0 @@
-> -Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
-> -
-> -PROPERTIES
-> -
-> -- compatible:
-> -	Usage: required
-> -	Value type: <string>
-> -	Definition: should be one of the following. The generic compatible
-> -			"qcom,kpss-gcc" should also be included.
-> -			"qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc"
-> -			"qcom,kpss-gcc-apq8064", "qcom,kpss-gcc"
-> -			"qcom,kpss-gcc-msm8974", "qcom,kpss-gcc"
-> -			"qcom,kpss-gcc-msm8960", "qcom,kpss-gcc"
-> -
-> -- reg:
-> -	Usage: required
-> -	Value type: <prop-encoded-array>
-> -	Definition: base address and size of the register region
-> -
-> -- clocks:
-> -	Usage: required
-> -	Value type: <prop-encoded-array>
-> -	Definition: reference to the pll parents.
-> -
-> -- clock-names:
-> -	Usage: required
-> -	Value type: <stringlist>
-> -	Definition: must be "pll8_vote", "pxo".
-> -
-> -- clock-output-names:
-> -	Usage: required
-> -	Value type: <string>
-> -	Definition: Name of the output clock. Typically acpu_l2_aux indicating
-> -		    an L2 cache auxiliary clock.
-> -
-> -Example:
-> -
-> -	l2cc: clock-controller@2011000 {
-> -		compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
-> -		reg = <0x2011000 0x1000>;
-> -		clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
-> -		clock-names = "pll8_vote", "pxo";
-> -		clock-output-names = "acpu_l2_aux";
-> -	};
-> diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> new file mode 100644
-> index 000000000000..20ee182eb16f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/msm/qcom,kpss-gcc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
-> +
-> +maintainers:
-> +  - Ansuel Smith <ansuelsmth@gmail.com>
-> +
-> +description: |
-> +  Krait Processor Sub-system (KPSS) Global Clock Controller (GCC). Used
-> +  to control L2 mux (in the current implementation).
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - qcom,kpss-gcc-ipq8064
-> +          - qcom,kpss-gcc-apq8064
-> +          - qcom,kpss-gcc-msm8974
-> +          - qcom,kpss-gcc-msm8960
-> +      - const: qcom,kpss-gcc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: phandle to pll8_vote
-> +      - description: phandle to pxo_board
-> +
-> +  clock-names:
-> +    items:
-> +      - const: pll8_vote
-> +      - const: pxo
-> +
-> +  clock-output-names:
-> +    const: acpu_l2_aux
-> +
-> +  '#clock-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - clock-output-names
-> +  - '#clock-cells'
+Hello,
 
-You add here a new required property, so this is not a pure conversion.
-Please explain in the commit msg why are you doing this. I asked about
-this in your previous patchset.
+RZ/V2M has a dual-core Cortex-A53 (1.0 GHz) CPU and built-in AI
+accelerator "DRP-AI" for vision, which is Renesas' original technology.
+It also has a 32-bit LPDDR4 interface and video codec (H.264).
 
-Best regards,
-Krzysztof
+The RZ/V2M is used with ISP firmware that runs on one of the Cortex-A53
+cores. The firmware is an integral part of the SoC such that the HW
+User's Manual documents which of the peripheral modules are used by the
+firmware.
+
+Initial patches enables minimal peripherals on Renesas RZ/V2M EVK board
+and booted via nfs. Ethernet is broadly compatible with the
+etheravb-rcar-gen3 driver, but interrupts need some work so it's not
+been included in this patch set.
+
+Below blocks are enabled on Renesas RZ/V2M EVK board:
+- memory
+- External input clock
+- CPG
+- UART
+
+Links for SoC and EVK:
+[*] https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-cortex-a-mpus/rzv2m-dual-cortex-a53-lpddr4x32bit-ai-accelerator-isp-4k-video-codec-4k-camera-input-fhd-display-output
+
+
+Sorry for cross posting the patches to multiple subsystems, as these are
+just the dt-binding patches included as part of initial bringup patches.
+
+Test logs on Renesas RZ/V2M EVK:
+
+/ # cat /proc/cpuinfo
+processor       : 0
+BogoMIPS        : 48.00
+Features        : fp asimd evtstrm crc32 cpuid
+CPU implementer : 0x41
+CPU architecture: 8
+CPU variant     : 0x0
+CPU part        : 0xd03
+CPU revision    : 4
+
+/ # cat /proc/meminfo
+MemTotal:        2617088 kB
+MemFree:         2560788 kB
+MemAvailable:    2495544 kB
+Buffers:               0 kB
+Cached:            24840 kB
+SwapCached:            0 kB
+Active:             7988 kB
+Inactive:          23420 kB
+Active(anon):        244 kB
+Inactive(anon):    14816 kB
+Active(file):       7744 kB
+Inactive(file):     8604 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+Dirty:                 0 kB
+Writeback:             0 kB
+AnonPages:          6568 kB
+Mapped:             9924 kB
+Shmem:              8492 kB
+KReclaimable:       4244 kB
+Slab:              11768 kB
+SReclaimable:       4244 kB
+SUnreclaim:         7524 kB
+KernelStack:         908 kB
+PageTables:          620 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:     1308544 kB
+Committed_AS:      24500 kB
+VmallocTotal:   133143592960 kB
+VmallocUsed:        1208 kB
+VmallocChunk:          0 kB
+Percpu:              124 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+CmaTotal:          32768 kB
+CmaFree:           31208 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+/ #
+/ # cat /proc/interrupts
+           CPU0
+ 11:       3394     GICv2  30 Level     arch_timer
+ 14:       4644     GICv2 283 Level     eth0:ch0:rx_be
+ 15:          0     GICv2 284 Level     eth0:ch1:rx_nc
+ 32:       6706     GICv2 301 Level     eth0:ch18:tx_be
+ 33:          0     GICv2 302 Level     eth0:ch19:tx_nc
+ 36:          0     GICv2 305 Level     eth0:ch22:multi
+ 38:          0     GICv2 309 Level     eth0:ch24:emac
+ 43:        402     GICv2 272 Level     ttyS0
+IPI0:         0       Rescheduling interrupts
+IPI1:         0       Function call interrupts
+IPI2:         0       CPU stop interrupts
+IPI3:         0       CPU stop (for crash dump) interrupts
+IPI4:         0       Timer broadcast interrupts
+IPI5:         0       IRQ work interrupts
+IPI6:         0       CPU wake-up interrupts
+Err:          0
+/ #
+/ # for i in machine family soc_id revision; do echo -n "$i: ";cat /sys/devices/soc0/$i; done
+machine: RZ/V2M Evaluation Kit 2.0
+family: RZ/V2M
+soc_id: r9a09g011
+revision: 1.0
+
+Thanks
+Phil

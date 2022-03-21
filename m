@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2A04E235C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2EB4E235E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 10:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345913AbiCUJdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 05:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
+        id S1345926AbiCUJd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 05:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238396AbiCUJdK (ORCPT
+        with ESMTP id S238396AbiCUJd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 05:33:10 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD39F554BF;
-        Mon, 21 Mar 2022 02:31:44 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 10:31:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1647855103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YfZJhnFFE47+r6x4/y12Et9mQlf31S6cyLCttG7V3Hg=;
-        b=slMFIokGRhs/PDaoq0WKr5va3xvP6cZXpwJGhaXFVAtqnCSE7/sPBtEl5AEn9eio/5pSTp
-        xomX0cA5lo0vZWThBX8Ej30PWPZCwUFFwjfzjo47ccJma3D0t274QAaZqJMfcgMt3oyeGo
-        BohAEcFhk4iJcFeWnb6DvDv+NJQ0Edm73IaqyeVpJ2tmA0nZmq3zPBSYnx37cNQLpfziA0
-        eb47m29ERJdVDQJ496ODexHpaIcS4aYOJbxcHBsmzWXAvLdEAPA+Kione/z0MxIteC0HZa
-        WsUj8q5PuMsSWSaQ7MjeUHNpb8etaBoa0kdbNfIX4xCLhPhrfV82Le+7UrV3sQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1647855103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YfZJhnFFE47+r6x4/y12Et9mQlf31S6cyLCttG7V3Hg=;
-        b=8BdkzvmmWaoe90eyw+hphvDhdeRamHpxmFFnEi/fEfgzeCnYzg3mpMZfgr/9VEwmV7nNfy
-        /WW9zUYJXae8xIAg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     pmladek@suse.com, sergey.senozhatsky@gmail.com,
-        rostedt@goodmis.org, john.ogness@linutronix.de,
-        linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de
-Subject: Re: [PATCH 5.10-rt] printk: fix suppressed message print when
- reboot/panic
-Message-ID: <YjhF/jWXY5L3I+DZ@linutronix.de>
-References: <20220321053815.71316-1-schspa@gmail.com>
+        Mon, 21 Mar 2022 05:33:56 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE0555755;
+        Mon, 21 Mar 2022 02:32:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1127BCE1281;
+        Mon, 21 Mar 2022 09:32:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03C76C340E8;
+        Mon, 21 Mar 2022 09:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1647855148;
+        bh=3TpisNXZrIjMUtHPVMXBUyOBKnyj9MiqrvAw+qDS5KA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ie2uN4/4NPOtK+25pNl+b5reXwnxOLMQSuhkhLzsLtRqA23qGEfMdX5TdK9jc9kW5
+         gXbuz9JAmKIY60YNvtahRZUDAZ5j3z0RR5R3Ooz4alOoCv6NTOdX6MCipBfkczw3YC
+         EjuvOiP0wUVTFav16fKZbjkoNW+EBBfNPJ5Wee1w=
+Date:   Mon, 21 Mar 2022 10:32:25 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jung Daehwan <dh10.jung@samsung.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com
+Subject: Re: [PATCH v3 0/4] support USB offload feature
+Message-ID: <YjhGKVKuPsKG80wZ@kroah.com>
+References: <CGME20220321090202epcas2p1bfa78db059c1f6f6acbbb015e4bf991c@epcas2p1.samsung.com>
+ <1647853194-62147-1-git-send-email-dh10.jung@samsung.com>
+ <YjhB7+AaEXvuUmdi@kroah.com>
+ <20220321092409.GA62265@ubuntu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220321053815.71316-1-schspa@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220321092409.GA62265@ubuntu>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-21 13:38:16 [+0800], Schspa Shi wrote:
-> Update printk_seq for suppressed message.
+On Mon, Mar 21, 2022 at 06:24:09PM +0900, Jung Daehwan wrote:
+> On Mon, Mar 21, 2022 at 10:14:23AM +0100, Greg Kroah-Hartman wrote:
+> > On Mon, Mar 21, 2022 at 05:59:50PM +0900, Daehwan Jung wrote:
+> > > This patchset is for USB offload feature, which makes Co-processor to use
+> > > some memories of xhci. Especially it's useful for USB Audio scenario.
+> > > Audio stream would get shortcut because Co-processor directly write/read
+> > > data in xhci memories. It could get speed-up using faster memory like SRAM.
+> > > That's why this gives vendors flexibilty of memory management.
+> > > Several pathches have been merged in AOSP kernel(android12-5.10) and I put
+> > > together and split into 3 patches. Plus let me add user(xhci-exynos)
+> > > module to see how user could use it.
+> > > 
+> > > To sum up, it's for providing xhci memories to Co-Processor.
+> > > It would cover DCBAA, Device Context, Transfer Ring, Event Ring, ERST.
+> > > It needs xhci hooks and to export some xhci symbols.
+> > > 
+> > > Changes in v2 :
+> > > - Fix commit message by adding Signed-off-by in each patch.
+> > > - Fix conflict on latest.
+> > > 
+> > > Changes in v3 :
+> > > - Remove export symbols and xhci hooks which xhci-exynos don't need.
+> > > - Modify commit message to clarify why it needs to export symbols.
+> > > - Check compiling of xhci-exynos.
+> > 
+> > As I asked for in the previous submission, you MUST have a user for
+> > these hooks, otherwise we can not accept them (nor would you WANT us to
+> > accept them).  Please fix that up and add them to the next submission as
+> > we can not do anything with this one.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
 > 
-> Affects 5.9-rt and 5.10-rt
+> Hi greg,
 > 
-> When message is suppressed, printk_seq should be updated, otherwise
-> this message will be printed when reboot. This problem was introduced
-> in commit 3edc0c85d154 ("printk: Rebase on top of new ring buffer").
+> I've submitted the user(xhci-exynos) together on the last patch of the patchset.
+> You can see xhci-exynos uses these hooks and symbols.
+> 
+> [PATCH v3 4/4] usb: host: add xhci-exynos driver
 
-So it is only 5.10 given that 5.9 is not maintained.
-That commits points to the printk update in v5.9.1-rt18.
-John?
+Then this is not "offload" hooks at all.  They are merely "support
+another xhci platform driver, right?
 
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
-> ---
->  kernel/printk/printk.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index 0c56873396a9..f68c4ba7eb4d 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2826,8 +2826,17 @@ static int printk_kthread_func(void *data)
->  		if (!(con->flags & CON_ENABLED))
->  			continue;
->  
-> -		if (suppress_message_printing(r.info->level))
-> +		printk_seq = atomic64_read(&con->printk_seq);
-> +
-> +		if (suppress_message_printing(r.info->level)) {
-> +			/*
-> +			 * Skip record we have buffered and already printed
-> +			 * directly to the console when we received it, and
-> +			 * record that has level above the console loglevel.
-> +			 */
-> +			atomic64_cmpxchg_relaxed(&con->printk_seq, printk_seq, seq);
->  			continue;
-> +		}
->  
->  		if (con->flags & CON_EXTENDED) {
->  			len = info_print_ext_header(ext_text,
-> @@ -2843,7 +2852,6 @@ static int printk_kthread_func(void *data)
->  				printk_time);
->  		}
->  
-> -		printk_seq = atomic64_read(&con->printk_seq);
->  
->  		console_lock();
->  		console_may_schedule = 0;
-> -- 
-> 2.29.0
-> 
+I see a lot of exports and function hooks added, are they _ALL_ used by
+the xhci driver?  If so, please reword this series as it is not very
+obvious at all what you are doing.
+
+thanks,
+
+greg k-h

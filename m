@@ -2,114 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C574B4E2E0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25EB94E2E1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351197AbiCUQcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 12:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
+        id S1351233AbiCUQdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 12:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351252AbiCUQby (ORCPT
+        with ESMTP id S1347933AbiCUQcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:31:54 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6B251590;
-        Mon, 21 Mar 2022 09:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=s3lcHJdrwD/PP8Ft4hyr0+q/Au2xCLskRoPRksjWMDg=; b=UwUD9IU51AOICt2I/+sVTjvxII
-        wZYBfeMssjoQe2T0qlG1+L0eYZ4LbVhcubFCRO/2OS6wOLtS9+XiopbD1EkH+toG9GKQoClCJUVBv
-        IXGJGpStTl5+srDQmYp1xbkjL/b8dXXVh3kbHOW/QgabccEOt3Q/SGd3CbmUdfTlPH7Cc9yKpvFJm
-        XnNtNmvFPHvcnaLjr27SJuHOEcXm/aLsMTjQzMLS13rRqckIbHhKxCJ9met+H609042RTJShHnwRq
-        WDfUEL7aLMgguvqD6o9STcOThPCqp5XPPdV+nNmO8bywSRkP+xXRIhBZG4mhAEBPQRE/5mi0B8P3A
-        jpCtmouQ==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1nWKvE-005YHB-DD; Mon, 21 Mar 2022 10:30:20 -0600
-Message-ID: <026bf48f-caf1-2d1e-b4de-553a6625a51b@deltatee.com>
-Date:   Mon, 21 Mar 2022 10:30:19 -0600
+        Mon, 21 Mar 2022 12:32:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D36AF7F53;
+        Mon, 21 Mar 2022 09:31:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB67861359;
+        Mon, 21 Mar 2022 16:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60F3C340E8;
+        Mon, 21 Mar 2022 16:31:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647880269;
+        bh=ctULTT0GSfG8hav4PRZOGF3yac+G3Xi+dkyRGpjQzpE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AQ9Fsw7AT7Geq902HBW7Lx9ReY1rCM/lHS5R/cMBrFv+KtQYiZc1X8DvWCqiqWZGg
+         8fIDGv9Xy/MFvTX+tsFqjKBWRSVYpd87gYyqPCJJJ+5M3vrJ8krd/tbsoFDjNvaAaK
+         oWH5ELXqmTb6bzYOrAGcG1MTXBQPLlx1WTijK7+WyCz+mV1KOWPV3MDlf0W6q+iKh9
+         wtX6PpeWyF9h/wGbYsKijnW//e81uqQ7KHd9mdeLYOfrLqpafOHRsXuBG8vU9PCsAH
+         8RJ/kmpQIP+e2xq6IKX/nt8v8+EkEo6SNuJkCNUVHqS5CPVdCR2GtKT5fVPEXj+nw/
+         BpednmGvePkpA==
+Received: by pali.im (Postfix)
+        id 062C0A5B; Mon, 21 Mar 2022 17:31:06 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] serial: Fix support for UPF_SPD_* flags
+Date:   Mon, 21 Mar 2022 17:30:52 +0100
+Message-Id: <20220321163055.4058-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-CA
-To:     Shlomo Pongratz <shlomopongratz@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew.maier@eideticom.com, bhelgaas@google.com,
-        Shlomo Pongratz <shlomop@pliops.com>
-References: <20220321143120.12191-1-shlomop@pliops.com>
- <981016a7-f994-f0dd-422e-66ac909371c7@deltatee.com>
- <302CF9D7-ACBD-49D6-AE56-4830B746CE1F@gmail.com>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <302CF9D7-ACBD-49D6-AE56-4830B746CE1F@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: shlomopongratz@gmail.com, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, andrew.maier@eideticom.com, bhelgaas@google.com, shlomop@pliops.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH v1] Intel Sky Lake-E host root ports check.
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Support for UPF_SPD_* flags is currently broken in more drivers for two
+reasons. First one is that uart_update_timeout() function does not
+calculate timeout for UPF_SPD_CUST flag correctly. Second reason is that
+userspace termios structre is modified by most drivers after each
+TIOCSSERIAL or TCSETS call to discard activation of UPF_SPD_* flags.
+
+Reproducer for these issues:
+
+  #include <termios.h>
+  #include <sys/ioctl.h>
+  #include <asm/ioctls.h>
+  #include <linux/serial.h>
+
+  static unsigned cdiv(unsigned a, unsigned b) {
+    if (!b) return b;
+    return (a + (b/2)) / b;
+  }
+
+  void set_active_spd_cust_baud(int fd, unsigned baudrate) {
+    struct serial_struct serial;
+    struct termios termios;
+    tcgetattr(fd, &termios);
+    ioctl(fd, TIOCGSERIAL, &serial);
+    serial.flags &= ~ASYNC_SPD_MASK;
+    serial.flags |= ASYNC_SPD_CUST;
+    serial.custom_divisor = cdiv(serial.baud_base, baudrate);
+    ioctl(fd, TIOCSSERIAL, &serial);
+    cfsetspeed(&termios, B38400);
+    tcsetattr(fd, TCSANOW, &termios);
+  }
+
+  int is_spd_cust_active(int fd) {
+    struct serial_struct serial;
+    struct termios termios;
+    tcgetattr(fd, &termios);
+    ioctl(fd, TIOCGSERIAL, &serial);
+    return
+      (serial.flags & ASYNC_SPD_MASK) == ASYNC_SPD_CUST &&
+      cfgetospeed(&termios) == B38400;
+  }
+
+(error handling was ommited for simplification)
+
+After calling set_active_spd_cust_baud() function SPD custom divisor
+should be active and therefore is_spd_cust_active() should return true.
+
+But it is not active (cfgetospeed does not return B38400) and this patch
+series should fix it. I have tested it with 8250 driver.
 
 
-On 2022-03-21 10:21, Shlomo Pongratz wrote:
-> See inline
-> 
-> Shlomo.
-> 
->> On 21 Mar 2022, at 17:46, Logan Gunthorpe <logang@deltatee.com
->> <mailto:logang@deltatee.com>> wrote:
->>
->>
->>
->> On 2022-03-21 08:31, Shlomo Pongratz wrote:
->>> On commit 7b94b53db34f ("PCI/P2PDMA: Add Intel Sky Lake-E Root Ports
->>> B, C, D to the whitelist")
->>> Andrew Maier added the Sky Lake-E additional devices
->>> 2031, 2032 and 2033 root ports to the already existing 2030 device.
->>> Note that the Intel devices 2030, 2031, 2032 and 2033 are ports A, B,
->>> C and D.
->>> Consider on a bus X only port C is connected downstream so in the PCI
->>> scan only
->>> device 8086:2032 on 0000:X:02.0 will be found as bridges that have no
->>> children are ignored.
->>> As a result the routine pci_host_bridge_dev will return NULL for
->>> devices under slot C.
->>> In the proposed patch port field is added to the whitelist which is 0
->>> for 2030, 1 for 2031,
->>> 2 for 2032 3 for 2033 and 0 for all other devices.
->>
->> The patch looks largely ok, but I'm not sure I follow this description.
->>
->> It sounds like in practice the host bridges B, C and D are not addressed
->> at function 0 as was assumed. But what does it mean that only C is
->> connected downstream? How can a bridge not be connected downstream?
->>
-> Maybe it is wrong usage of words.
-> I mean three are no devices behind port A and B, it is possible if there
-> if one has empty PCI slots.
-> I my case I had only on NVMe SSD connected to port C.
+Originally Johan Hovold reported that there may be issue with these
+ASYNC_SPD_FLAGS in email:
+https://lore.kernel.org/linux-serial/20211007133146.28949-1-johan@kernel.org/
 
-If a bridge has no devices behind it, it's not ever going to get into
-the p2pdma code; so I'm not sure how that's relevant. And just because
-one user doesn't have any device behind a bridge, doesn't mean that all
-users have no devices under that bridge.
 
-Sounds like the commit description and comments just neeed to change to
-note that the function of each of the bridge is not always zero, as
-originally assumed.
+Johan, Greg, could you please test these patches if there is not any
+regression?
 
-Logan
+
+Pali Rohár (3):
+  serial: core: Document why UPF_SPD_CUST is not handled in
+    uart_get_baud_rate()
+  serial: core: Fix function uart_update_timeout() to handle
+    UPF_SPD_CUST flag
+  serial: Fix support for UPF_SPD_* flags in serial drivers
+
+ drivers/tty/serial/21285.c          |  2 +-
+ drivers/tty/serial/8250/8250_mtk.c  |  2 +-
+ drivers/tty/serial/8250/8250_omap.c |  2 +-
+ drivers/tty/serial/8250/8250_port.c |  2 +-
+ drivers/tty/serial/altera_uart.c    |  2 +-
+ drivers/tty/serial/ar933x_uart.c    |  2 +-
+ drivers/tty/serial/arc_uart.c       |  2 +-
+ drivers/tty/serial/dz.c             |  2 +-
+ drivers/tty/serial/imx.c            |  3 +-
+ drivers/tty/serial/lantiq.c         |  2 +-
+ drivers/tty/serial/lpc32xx_hs.c     |  2 +-
+ drivers/tty/serial/men_z135_uart.c  |  2 +-
+ drivers/tty/serial/mps2-uart.c      |  2 +-
+ drivers/tty/serial/msm_serial.c     |  2 +-
+ drivers/tty/serial/mvebu-uart.c     |  2 +-
+ drivers/tty/serial/owl-uart.c       |  2 +-
+ drivers/tty/serial/pch_uart.c       |  2 +-
+ drivers/tty/serial/pic32_uart.c     |  2 +-
+ drivers/tty/serial/rda-uart.c       |  2 +-
+ drivers/tty/serial/rp2.c            |  2 +-
+ drivers/tty/serial/sccnxp.c         |  2 +-
+ drivers/tty/serial/serial-tegra.c   |  2 +-
+ drivers/tty/serial/serial_core.c    | 76 ++++++++++++++++++++++++++++-
+ drivers/tty/serial/sprd_serial.c    |  2 +-
+ drivers/tty/serial/timbuart.c       |  2 +-
+ drivers/tty/serial/vt8500_serial.c  |  2 +-
+ drivers/tty/serial/xilinx_uartps.c  |  2 +-
+ include/linux/serial_core.h         |  2 +
+ 28 files changed, 103 insertions(+), 28 deletions(-)
+
+-- 
+2.20.1
+

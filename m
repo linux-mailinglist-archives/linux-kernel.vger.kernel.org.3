@@ -2,296 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF62D4E2D13
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A294E2D19
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350612AbiCUQEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 12:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S1350623AbiCUQFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 12:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346093AbiCUQEX (ORCPT
+        with ESMTP id S1346093AbiCUQFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:04:23 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C132621
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:02:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647878577; x=1679414577;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=mXhSeWGUsiY3LNYSuyKnHfBrodQKAQwXYeDxsO7TL6I=;
-  b=Ny3h2XRFaJhrr1jLAoFwVImxhXadNiQ/bO1eNYQj+lL5Len9gU8LdXZC
-   z2bj4uAwtOr/xs1VdMc2u2CfhkJ1hu2J/NVbPrHuKvuF38P1kKwgHOGTn
-   WCVJSuiB3OEU8Cqtsip/FXnu3oJIPWPRLJGDWnWOcJ6nSxESwTBc8ASpO
-   bya6VA5THG6lD0i+Xgd1JuVohbiP4lvoG8euh0BoXhCrEsA+5uod0WHtc
-   HOc+sT+Y82FdpkBnqaJk7KNOezuxnjUEB0CqHWs3Quh4ih4ga99A7aPr3
-   MXRJKbZypNFcKpQpH0whUJpp4Vxxhv01YnO2BI9Mx7WDJHLxBx9KK6APk
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="255149581"
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="255149581"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 09:02:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="543276714"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 21 Mar 2022 09:02:49 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id AB94518E; Mon, 21 Mar 2022 18:03:09 +0200 (EET)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     bp@alien8.de
-Cc:     aarcange@redhat.com, ak@linux.intel.com, brijesh.singh@amd.com,
-        dan.j.williams@intel.com, dave.hansen@intel.com,
-        dave.hansen@linux.intel.com, david@redhat.com, hpa@zytor.com,
-        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
-        jpoimboe@redhat.com, kirill.shutemov@linux.intel.com,
-        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
-        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-Subject: [PATCHv7.1 02/30] x86/tdx: Provide common base for SEAMCALL and TDCALL C wrappers
-Date:   Mon, 21 Mar 2022 19:02:45 +0300
-Message-Id: <20220321160245.42886-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <YjXtK4awY6utz3wE@zn.tnic>
-References: <YjXtK4awY6utz3wE@zn.tnic>
+        Mon, 21 Mar 2022 12:05:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1314B1B7B6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647878632;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DJyMtVQ5+0AfNUolDd6Lt5IE2lynsgQekcoq9taq1eE=;
+        b=IOvk/7E/Q5EY/4Ty3aXlbsCfpdRBwSHglMVr7BngFFma4b0kkWfFgVd7uvcKrH7uB6ifYZ
+        VJpy5p5IdKXhLyw9oN3FcAHwwG7eq2VEhKeSKIHtlJfznjm/FNnHLRQld3DCmoigIhQyqF
+        E0cM42Zbtn83cR4Xa2nusKVCLiNxM1s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-279-tqlhcQEaOwuiuk4cCIL_Kg-1; Mon, 21 Mar 2022 12:03:51 -0400
+X-MC-Unique: tqlhcQEaOwuiuk4cCIL_Kg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6ABC8811E84;
+        Mon, 21 Mar 2022 16:03:50 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6BC0C2166B40;
+        Mon, 21 Mar 2022 16:03:49 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAG48ez2AAk6JpZAA6GPVgvCmKimXHJXO906e=r=WGU06k=HB3A@mail.gmail.com>
+References: <CAG48ez2AAk6JpZAA6GPVgvCmKimXHJXO906e=r=WGU06k=HB3A@mail.gmail.com> <000000000000778f1005dab1558e@google.com>
+To:     Jann Horn <jannh@google.com>
+Cc:     dhowells@redhat.com,
+        syzbot <syzbot+011e4ea1da6692cf881c@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] possible deadlock in pipe_write
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1037988.1647878628.1@warthog.procyon.org.uk>
+Date:   Mon, 21 Mar 2022 16:03:48 +0000
+Message-ID: <1037989.1647878628@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Secure Arbitration Mode (SEAM) is an extension of VMX architecture.  It
-defines a new VMX root operation (SEAM VMX root) and a new VMX non-root
-operation (SEAM VMX non-root) which are both isolated from the legacy
-VMX operation where the host kernel runs.
+Jann Horn <jannh@google.com> wrote:
 
-A CPU-attested software module (called 'TDX module') runs in SEAM VMX
-root to manage and protect VMs running in SEAM VMX non-root.  SEAM VMX
-root is also used to host another CPU-attested software module (called
-'P-SEAMLDR') to load and update the TDX module.
+> The syz reproducer is:
+> 
+> #{"threaded":true,"procs":1,"slowdown":1,"sandbox":"","close_fds":false}
+> pipe(&(0x7f0000000240)={<r0=>0xffffffffffffffff, <r1=>0xffffffffffffffff})
+> pipe2(&(0x7f00000001c0)={0xffffffffffffffff, <r2=>0xffffffffffffffff}, 0x80)
+> splice(r0, 0x0, r2, 0x0, 0x1ff, 0x0)
+> vmsplice(r1, &(0x7f00000006c0)=[{&(0x7f0000000080)="b5", 0x1}], 0x1, 0x0)
+> 
+> That 0x80 is O_NOTIFICATION_PIPE (==O_EXCL).
+> 
+> It looks like the bug is that when you try to splice between a normal
+> pipe and a notification pipe, get_pipe_info(..., true) fails, so
+> splice() falls back to treating the notification pipe like a normal
+> pipe - so we end up in iter_file_splice_write(), which first locks the
+> input pipe, then calls vfs_iter_write(), which locks the output pipe.
+> 
+> I think this probably (?) can't actually lead to deadlocks, since
+> you'd need another way to nest locking a normal pipe into locking a
+> watch_queue pipe, but the lockdep annotations don't make that clear.
 
-Host kernel transits to either P-SEAMLDR or TDX module via the new
-SEAMCALL instruction, which is essentially a VMExit from VMX root mode
-to SEAM VMX root mode.  SEAMCALLs are leaf functions defined by
-P-SEAMLDR and TDX module around the new SEAMCALL instruction.
+Is this then a bug/feature in iter_file_splice_write() rather than in the
+watch queue code, per se?
 
-A guest kernel can also communicate with TDX module via TDCALL
-instruction.
-
-TDCALLs and SEAMCALLs use an ABI different from the x86-64 system-v ABI.
-RAX is used to carry both the SEAMCALL leaf function number (input) and
-the completion status (output).  Additional GPRs (RCX, RDX, R8-R11) may
-be further used as both input and output operands in individual leaf.
-
-TDCALL and SEAMCALL share the same ABI and require the largely same
-code to pass down arguments and retrieve results.
-
-Define an assembly macro that can be used to implement C wrapper for
-both TDCALL and SEAMCALL.
-
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
----
-TDCALL wrapper will be implemented using the macro later in the series.
-SEAMCALL wrapper is out-of-scope for the series and will be implemented
-as part of TDX host enabling.
-
-v7.1:
- - Actually address Thomas' feedback;
-
----
- arch/x86/include/asm/tdx.h      | 28 ++++++++++
- arch/x86/kernel/asm-offsets.c   |  9 ++++
- arch/x86/virt/vmx/tdx/tdxcall.S | 96 +++++++++++++++++++++++++++++++++
- 3 files changed, 133 insertions(+)
- create mode 100644 arch/x86/virt/vmx/tdx/tdxcall.S
-
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index ba8042ce61c2..2ffefe22f10a 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -8,6 +8,33 @@
- #define TDX_CPUID_LEAF_ID	0x21
- #define TDX_IDENT		"IntelTDX    "
- 
-+/*
-+ * SW-defined error codes.
-+ *
-+ * Bits 47:40 == 0xFF indicate Reserved status code class that never used by
-+ * TDX module.
-+ */
-+#define TDX_ERROR			_BITUL(63)
-+#define TDX_SW_ERROR			(TDX_ERROR | GENMASK_ULL(40, 47))
-+#define TDX_SEAMCALL_VMFAILINVALID	(TDX_SW_ERROR | _UL(0xFFFF0000))
-+
-+#ifndef __ASSEMBLY__
-+
-+/*
-+ * Used to gather the output registers values of the TDCALL and SEAMCALL
-+ * instructions when requesting services from the TDX module.
-+ *
-+ * This is a software only structure and not part of the TDX module/VMM ABI.
-+ */
-+struct tdx_module_output {
-+	u64 rcx;
-+	u64 rdx;
-+	u64 r8;
-+	u64 r9;
-+	u64 r10;
-+	u64 r11;
-+};
-+
- #ifdef CONFIG_INTEL_TDX_GUEST
- 
- void __init tdx_early_init(void);
-@@ -18,4 +45,5 @@ static inline void tdx_early_init(void) { };
- 
- #endif /* CONFIG_INTEL_TDX_GUEST */
- 
-+#endif /* !__ASSEMBLY__ */
- #endif /* _ASM_X86_TDX_H */
-diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
-index 9fb0a2f8b62a..7dca52f5cfc6 100644
---- a/arch/x86/kernel/asm-offsets.c
-+++ b/arch/x86/kernel/asm-offsets.c
-@@ -18,6 +18,7 @@
- #include <asm/bootparam.h>
- #include <asm/suspend.h>
- #include <asm/tlbflush.h>
-+#include <asm/tdx.h>
- 
- #ifdef CONFIG_XEN
- #include <xen/interface/xen.h>
-@@ -65,6 +66,14 @@ static void __used common(void)
- 	OFFSET(XEN_vcpu_info_arch_cr2, vcpu_info, arch.cr2);
- #endif
- 
-+	BLANK();
-+	OFFSET(TDX_MODULE_rcx, tdx_module_output, rcx);
-+	OFFSET(TDX_MODULE_rdx, tdx_module_output, rdx);
-+	OFFSET(TDX_MODULE_r8,  tdx_module_output, r8);
-+	OFFSET(TDX_MODULE_r9,  tdx_module_output, r9);
-+	OFFSET(TDX_MODULE_r10, tdx_module_output, r10);
-+	OFFSET(TDX_MODULE_r11, tdx_module_output, r11);
-+
- 	BLANK();
- 	OFFSET(BP_scratch, boot_params, scratch);
- 	OFFSET(BP_secure_boot, boot_params, secure_boot);
-diff --git a/arch/x86/virt/vmx/tdx/tdxcall.S b/arch/x86/virt/vmx/tdx/tdxcall.S
-new file mode 100644
-index 000000000000..49a54356ae99
---- /dev/null
-+++ b/arch/x86/virt/vmx/tdx/tdxcall.S
-@@ -0,0 +1,96 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <asm/asm-offsets.h>
-+#include <asm/tdx.h>
-+
-+/*
-+ * TDCALL and SEAMCALL are supported in Binutils >= 2.36.
-+ */
-+#define tdcall		.byte 0x66,0x0f,0x01,0xcc
-+#define seamcall	.byte 0x66,0x0f,0x01,0xcf
-+
-+/*
-+ * TDX_MODULE_CALL - common helper macro for both
-+ *                 TDCALL and SEAMCALL instructions.
-+ *
-+ * TDCALL   - used by TDX guests to make requests to the
-+ *            TDX module and hypercalls to the VMM.
-+ * SEAMCALL - used by TDX hosts to make requests to the
-+ *            TDX module.
-+ */
-+.macro TDX_MODULE_CALL host:req
-+	/*
-+	 * R12 will be used as temporary storage for struct tdx_module_output
-+	 * pointer. Since R12-R15 registers are not used by TDCALL/SEAMCALL
-+	 * services supported by this function, it can be reused.
-+	 */
-+
-+	/* Callee saved, so preserve it */
-+	push %r12
-+
-+	/*
-+	 * Push output pointer to stack.
-+	 * After the operation, it will be fetched into R12 register.
-+	 */
-+	push %r9
-+
-+	/* Mangle function call ABI into TDCALL/SEAMCALL ABI: */
-+	/* Move Leaf ID to RAX */
-+	mov %rdi, %rax
-+	/* Move input 4 to R9 */
-+	mov %r8,  %r9
-+	/* Move input 3 to R8 */
-+	mov %rcx, %r8
-+	/* Move input 1 to RCX */
-+	mov %rsi, %rcx
-+	/* Leave input param 2 in RDX */
-+
-+	.if \host
-+	seamcall
-+	/*
-+	 * SEAMCALL instruction is essentially a VMExit from VMX root
-+	 * mode to SEAM VMX root mode.  VMfailInvalid (CF=1) indicates
-+	 * that the targeted SEAM firmware is not loaded or disabled,
-+	 * or P-SEAMLDR is busy with another SEAMCALL.  %rax is not
-+	 * changed in this case.
-+	 *
-+	 * Set %rax to TDX_SEAMCALL_VMFAILINVALID for VMfailInvalid.
-+	 * This value will never be used as actual SEAMCALL error code as
-+	 * it is from the Reserved status code class.
-+	 */
-+	jnc .Lno_vmfailinvalid
-+	mov $TDX_SEAMCALL_VMFAILINVALID, %rax
-+.Lno_vmfailinvalid:
-+
-+	.else
-+	tdcall
-+	.endif
-+
-+	/*
-+	 * Fetch output pointer from stack to R12 (It is used
-+	 * as temporary storage)
-+	 */
-+	pop %r12
-+
-+	/*
-+	 * Since this macro can be invoked with NULL as an output pointer,
-+	 * check if caller provided an output struct before storing output
-+	 * registers.
-+	 *
-+	 * Update output registers, even if the call failed (RAX != 0).
-+	 * Other registers may contain details of the failure.
-+	 */
-+	test %r12, %r12
-+	jz .Lno_output_struct
-+
-+	/* Copy result registers to output struct: */
-+	movq %rcx, TDX_MODULE_rcx(%r12)
-+	movq %rdx, TDX_MODULE_rdx(%r12)
-+	movq %r8,  TDX_MODULE_r8(%r12)
-+	movq %r9,  TDX_MODULE_r9(%r12)
-+	movq %r10, TDX_MODULE_r10(%r12)
-+	movq %r11, TDX_MODULE_r11(%r12)
-+
-+.Lno_output_struct:
-+	/* Restore the state of R12 register */
-+	pop %r12
-+.endm
--- 
-2.34.1
+David
 

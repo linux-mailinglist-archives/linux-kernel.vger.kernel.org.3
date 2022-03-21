@@ -2,124 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F794E2CDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 289D94E2CDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347991AbiCUPwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S1348056AbiCUPx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238686AbiCUPwg (ORCPT
+        with ESMTP id S1350712AbiCUPxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:52:36 -0400
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621D01557FF;
-        Mon, 21 Mar 2022 08:51:11 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id r10so21329536wrp.3;
-        Mon, 21 Mar 2022 08:51:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hefucE+Jiu9ept//sebHy0SZe1pf91jzk4A2hhyEoXU=;
-        b=j5xnLu4HfbvAZePTS+Q8j2bHhaftEKa8xdA01aScy2pzazE+gAPbz6pO0JtVC5Zq1e
-         N4Hs5AMCIGYtqhsYv265rz8TBpwSwGIZO5MbPglxS2WeF3YEf0AnF1pCuxJS/u+ZqEHR
-         gdCUPnJ0eh9RCPPfTmo8E4TytT6+2PEzWmsFJdeW0SP50r3z0UasQi3T67cQMp74rRVG
-         x2K96uw9LKOXXaGz6IV6UkYvLjh2TVIHUP5+FqlHocQ8HpLclT0d2xsEGpqcCadpkMkY
-         0Foy0FbPKnc8T/xmVr+BVtg35FHtJIbqhcEVhK0LwGu9vaIwD27HsQSlCZvHuGdG71b2
-         RCHw==
-X-Gm-Message-State: AOAM533PXJwUG47JMtrettbyIIlzp6DGwHWUjLDGqw1nqy5VsYPWvom4
-        h7ajqYl5MegyVFIq4c+cuD4=
-X-Google-Smtp-Source: ABdhPJwvW8A/Q2Qjh46eoL/oVh5ZiV0UasSIAFG93IFQXPqcKZSoCt5kt1x/8yu76BU3wmUskwpDfw==
-X-Received: by 2002:a5d:6acd:0:b0:1ef:78e9:193a with SMTP id u13-20020a5d6acd000000b001ef78e9193amr18601351wrw.281.1647877869926;
-        Mon, 21 Mar 2022 08:51:09 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id u7-20020a5d6da7000000b00203d9d1875bsm15376362wrs.73.2022.03.21.08.51.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 08:51:09 -0700 (PDT)
-Message-ID: <3aae94bd-d39d-ddfc-2b06-356173f6b1f8@kernel.org>
-Date:   Mon, 21 Mar 2022 16:51:07 +0100
+        Mon, 21 Mar 2022 11:53:44 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554151777F0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:52:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647877939; x=1679413939;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XCjwSZNXSIVogZF+tpJYJ0HEnNWCfLTJaR9dHUvTQmc=;
+  b=nu5IABiwJMa1rwi+AFuVR7HzjGxlOSkNvCWIjqthLLCd1pHpptCG40nt
+   M/Lc4zHRiQ24ZHT5NpIIjesDciXHgoUsuLqYWjiEIFlDhq2Ut10h1/c75
+   cqyfDfeKrNUXyMv/DjER1mHIVf81mJPFTrEZdAyjPvONOTeyHber6ePfs
+   HO6awCw2kCjNVBNC9P2QxAS81MV5Kel/M8R33cJV4QJ4b5w46IGNzCv4P
+   mmjGLHZnsLXS88bZgYHwYZYtjxMyPaDtxM1GXbb986YU5+uHRklVsuRrJ
+   wYa/VcfRa3GhnszoM8A5iT+s/OMDE7E2zZzXj42LEIXMt9h/I2/NK7uNR
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="239741208"
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="239741208"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 08:52:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
+   d="scan'208";a="514977890"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 21 Mar 2022 08:52:09 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 0D86418E; Mon, 21 Mar 2022 17:52:29 +0200 (EET)
+Date:   Mon, 21 Mar 2022 18:52:29 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCHv7 02/30] x86/tdx: Provide common base for SEAMCALL and
+ TDCALL C wrappers
+Message-ID: <20220321155229.jrjht4vnxgrh2wq5@black.fi.intel.com>
+References: <20220318153048.51177-1-kirill.shutemov@linux.intel.com>
+ <20220318153048.51177-3-kirill.shutemov@linux.intel.com>
+ <YjXtK4awY6utz3wE@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: net: add reset property for aspeed,
- ast2600-mdio binding
-Content-Language: en-US
-To:     Dylan Hung <dylan_hung@aspeedtech.com>, robh+dt@kernel.org,
-        joel@jms.id.au, andrew@aj.id.au, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     BMC-SW@aspeedtech.com, stable@vger.kernel.org
-References: <20220321095648.4760-1-dylan_hung@aspeedtech.com>
- <20220321095648.4760-2-dylan_hung@aspeedtech.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220321095648.4760-2-dylan_hung@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjXtK4awY6utz3wE@zn.tnic>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2022 10:56, Dylan Hung wrote:
-> The AST2600 MDIO bus controller has a reset control bit and must be
-> deasserted before the manipulating the MDIO controller.
+On Sat, Mar 19, 2022 at 03:48:11PM +0100, Borislav Petkov wrote:
+> On Fri, Mar 18, 2022 at 06:30:20PM +0300, Kirill A. Shutemov wrote:
+> > Secure Arbitration Mode (SEAM) is an extension of VMX architecture.  It
+> > defines a new VMX root operation (SEAM VMX root) and a new VMX non-root
+> > operation (SEAM VMX non-root) which are both isolated from the legacy
+> > VMX operation where the host kernel runs.
+> > 
+> > A CPU-attested software module (called 'TDX module') runs in SEAM VMX
+> > root to manage and protect VMs running in SEAM VMX non-root.  SEAM VMX
+> > root is also used to host another CPU-attested software module (called
+> > 'P-SEAMLDR') to load and update the TDX module.
+> > 
+> > Host kernel transits to either P-SEAMLDR or TDX module via the new
+> > SEAMCALL instruction, which is essentially a VMExit from VMX root mode
+> > to SEAM VMX root mode.  SEAMCALLs are leaf functions defined by
+> > P-SEAMLDR and TDX module around the new SEAMCALL instruction.
+> > 
+> > A guest kernel can also communicate with TDX module via TDCALL
+> > instruction.
+> > 
+> > TDCALLs and SEAMCALLs use an ABI different from the x86-64 system-v ABI.
+> > RAX is used to carry both the SEAMCALL leaf function number (input) and
+> > the completion status (output).  Additional GPRs (RCX, RDX, R8-R11) may
+> > be further used as both input and output operands in individual leaf.
+> > 
+> > TDCALL and SEAMCALL share the same ABI and require the largely same
+> > code to pass down arguments and retrieve results.
+> > 
+> > Define an assembly macro that can be used to implement C wrapper for
+> > both TDCALL and SEAMCALL.
+> > 
+> > Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
+> > Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> > ---
+> > TDCALL wrapper will be implemented using the macro later in the series.
+> > SEAMCALL wrapper is out-of-scope for the series and will be implemented
+> > as part of TDX host enabling.
+> > ---
+> >  arch/x86/include/asm/tdx.h      | 28 ++++++++++
+> >  arch/x86/kernel/asm-offsets.c   |  9 ++++
+> >  arch/x86/virt/vmx/tdx/tdxcall.S | 94 +++++++++++++++++++++++++++++++++
+> >  3 files changed, 131 insertions(+)
+> >  create mode 100644 arch/x86/virt/vmx/tdx/tdxcall.S
 > 
-> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
-> Cc: stable@vger.kernel.org
-
-No bugs fixes, no cc-stable. Especially that you break existing devices...
-
-> ---
->  .../devicetree/bindings/net/aspeed,ast2600-mdio.yaml          | 4 ++++
->  1 file changed, 4 insertions(+)
+> Instead of hurrying to send the set again two days after the v6 one -
 > 
-> diff --git a/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml b/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
-> index 1c88820cbcdf..8ba108e25d94 100644
-> --- a/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
-> +++ b/Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.yaml
-> @@ -23,12 +23,15 @@ properties:
->    reg:
->      maxItems: 1
->      description: The register range of the MDIO controller instance
+>   [ I frankly wonder why you're even in such a hurry - it seems people
+>     believe that hammering out the patches constantly would somehow get them
+>     upstreamed faster :-\ ]
+> 
+> - you should rather apply more diligence and take care of working in all
+> the comments from last review:
+> 
+> https://lore.kernel.org/r/87lex9321l.ffs@tglx
 
-Missing empty line.
+My bad.
 
-> +  resets:
-> +    maxItems: 1
->  
->  required:
->    - compatible
->    - reg
->    - "#address-cells"
->    - "#size-cells"
-> +  - resets
+I clearly remember addressing these. But I lost it somehow, I donno.
 
-You break the ABI. This isusually not accepted in a regular kernel and
-even totally not accepted accepted for stable kernel.
+Will send v7.1.
 
->  
->  unevaluatedProperties: false
->  
-> @@ -39,6 +42,7 @@ examples:
->              reg = <0x1e650000 0x8>;
->              #address-cells = <1>;
->              #size-cells = <0>;
-> +            resets = <&syscon 35>;
->  
->              ethphy0: ethernet-phy@0 {
->                      compatible = "ethernet-phy-ieee802.3-c22";
-
-
-Best regards,
-Krzysztof
+-- 
+ Kirill A. Shutemov

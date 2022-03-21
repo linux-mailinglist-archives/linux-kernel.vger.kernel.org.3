@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6624E2861
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6648B4E286B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348327AbiCUN4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
+        id S1348344AbiCUN4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348189AbiCUNzr (ORCPT
+        with ESMTP id S1345041AbiCUNzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:55:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC483BC28;
-        Mon, 21 Mar 2022 06:54:17 -0700 (PDT)
+        Mon, 21 Mar 2022 09:55:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C90764C;
+        Mon, 21 Mar 2022 06:54:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F26E612A5;
-        Mon, 21 Mar 2022 13:54:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41DD4C340E8;
-        Mon, 21 Mar 2022 13:54:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 238C1612A4;
+        Mon, 21 Mar 2022 13:54:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A721C340E8;
+        Mon, 21 Mar 2022 13:54:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647870856;
-        bh=hEddR5WDs0ROdOM2QtSZh8aTJbRN9Q96gt3rSu+JXPM=;
+        s=korg; t=1647870859;
+        bh=4l1eZtJRxcq+KHy0ubD44xMbgLdCnr8lSB3D266hihc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BcAFPM9GAt1Wp0Dh1t0DwcADlpgeJVIIckDJQE665sg3vXRo/8ErpG/MmgM4C1Mze
-         IvsozNLlDrPeKIGfs75QDZIKgjAwaSsti88APDMv7/WlMxF63B7iyXOoQbbuA6sl/x
-         IxmNbpZjQo7P4iavwEcJLuDzEJgmFIInnK7n1Y6c=
+        b=0WGqR417UBCcGcBd0jWd82zjmmOTAIXwLlZdCb3jIDxS1c1imT5L2w0ZdeXUQAQvN
+         8b5qHNAHjBlLtmGOgumcu+MwK2yK1MK53oDTvTECaGDbzrSbdGGrIRK8iGq8AKM7kh
+         wLo49u/tlN/2TEBP6Ix71Rcnb7Agn8Xvj8PC5vsE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 18/22] net: handle ARPHRD_PIMREG in dev_is_mac_header_xmit()
-Date:   Mon, 21 Mar 2022 14:51:49 +0100
-Message-Id: <20220321133218.143322755@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH 4.14 19/22] usb: gadget: rndis: prevent integer overflow in rndis_set_response()
+Date:   Mon, 21 Mar 2022 14:51:50 +0100
+Message-Id: <20220321133218.172738467@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220321133217.602054917@linuxfoundation.org>
 References: <20220321133217.602054917@linuxfoundation.org>
@@ -56,36 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 4ee06de7729d795773145692e246a06448b1eb7a ]
+commit 65f3324f4b6fed78b8761c3b74615ecf0ffa81fa upstream.
 
-This kind of interface doesn't have a mac header. This patch fixes
-bpf_redirect() to a PIM interface.
+If "BufOffset" is very large the "BufOffset + 8" operation can have an
+integer overflow.
 
-Fixes: 27b29f63058d ("bpf: add bpf_redirect() helper")
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Link: https://lore.kernel.org/r/20220315092008.31423-1-nicolas.dichtel@6wind.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@kernel.org
+Fixes: 38ea1eac7d88 ("usb: gadget: rndis: check size of RNDIS_MSG_SET command")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220301080424.GA17208@kili
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/if_arp.h | 1 +
+ drivers/usb/gadget/function/rndis.c |    1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/if_arp.h b/include/linux/if_arp.h
-index 4125f60ee53b..a9b09c7c2ce0 100644
---- a/include/linux/if_arp.h
-+++ b/include/linux/if_arp.h
-@@ -55,6 +55,7 @@ static inline bool dev_is_mac_header_xmit(const struct net_device *dev)
- 	case ARPHRD_VOID:
- 	case ARPHRD_NONE:
- 	case ARPHRD_RAWIP:
-+	case ARPHRD_PIMREG:
- 		return false;
- 	default:
- 		return true;
--- 
-2.34.1
-
+--- a/drivers/usb/gadget/function/rndis.c
++++ b/drivers/usb/gadget/function/rndis.c
+@@ -643,6 +643,7 @@ static int rndis_set_response(struct rnd
+ 	BufLength = le32_to_cpu(buf->InformationBufferLength);
+ 	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
+ 	if ((BufLength > RNDIS_MAX_TOTAL_SIZE) ||
++	    (BufOffset > RNDIS_MAX_TOTAL_SIZE) ||
+ 	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE))
+ 		    return -EINVAL;
+ 
 
 

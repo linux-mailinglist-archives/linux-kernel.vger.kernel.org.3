@@ -2,56 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EABF4E2B6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10084E2B6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349774AbiCUPE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        id S1349783AbiCUPEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346270AbiCUPE0 (ORCPT
+        with ESMTP id S1349779AbiCUPEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:04:26 -0400
+        Mon, 21 Mar 2022 11:04:39 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCE163AE;
-        Mon, 21 Mar 2022 08:02:58 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 4CCEE210E7;
-        Mon, 21 Mar 2022 15:02:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1647874977; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OkgYg9DsjYEvDqx12odqmwwGLMGZxuZ1Rg8inY0wdNY=;
-        b=EwdDAPf2rxnWpgRabYg6f9trBDXYGpHOBzPOIJnFPy6wfUY+KOeFRMUMTwUUo3whDNYSoz
-        Zjow8ecoGAXjZTKP18FatBKJ7LATJ1TAU8kyoRtitEI2K557dqYIxTmEy4yNTdSTLI9Hv5
-        sIeMUwrkazwmnJQ8m8wO8QT8CjYFGPU=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09696330
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 08:03:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5D02FA3B93;
-        Mon, 21 Mar 2022 15:02:56 +0000 (UTC)
-Date:   Mon, 21 Mar 2022 16:02:55 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, surenb@google.com,
-        vbabka@suse.cz, rientjes@google.com, sfr@canb.auug.org.au,
-        edgararriaga@google.com, nadav.amit@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, "# 5 . 10+" <stable@vger.kernel.org>
-Subject: Re: [PATCH V2,2/2] mm: madvise: skip unmapped vma holes passed to
- process_madvise
-Message-ID: <YjiTn+7vw2rXA6K/@dhcp22.suse.cz>
-References: <cover.1647008754.git.quic_charante@quicinc.com>
- <4f091776142f2ebf7b94018146de72318474e686.1647008754.git.quic_charante@quicinc.com>
- <YjEaFBWterxc3Nzf@google.com>
- <20220315164807.7a9cf1694ee2db8709a8597c@linux-foundation.org>
- <YjFAzuLKWw5eadtf@google.com>
- <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9D387210EE;
+        Mon, 21 Mar 2022 15:03:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647874992; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dZ3Vqe4rk9TNnaytN/665kqUhocAr1o5r4AjlzpBppY=;
+        b=jdxfHRCSjEchHb7zG9byaA6tCIbANIel3ZydXLtsmUOm+85tvkqOOYRa/P9v4oqq5631TZ
+        BdrjVMhIdrfmqN1UISOJN8A3uPFnW5B20KoPjdCe6kZtJ6HQ6K2kb6D6fWjziz0JoFq+WB
+        T1vlq5864BDPSq7GPMlLFb34Ee4Qt/w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647874992;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dZ3Vqe4rk9TNnaytN/665kqUhocAr1o5r4AjlzpBppY=;
+        b=ElMyMfMchloE1QH0HG0s83xQ6X6ATkz7LfOlmGRRApbEYpctomIvb+vI+LAa3DGz3qyY15
+        1Uk7Y7J0bDEmsfBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9052C13419;
+        Mon, 21 Mar 2022 15:03:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NeQxI7CTOGITCQAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 21 Mar 2022 15:03:12 +0000
+Date:   Mon, 21 Mar 2022 16:03:07 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?utf-8?B?SsO2cmcgUsO2ZGVs?= <jroedel@suse.de>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/cc for 5.18
+Message-ID: <YjiTq6esjAKwvvZt@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5428f192-1537-fa03-8e9c-4a8322772546@quicinc.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -62,34 +68,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 16-03-22 19:49:38, Charan Teja Kalla wrote:
-[...]
-> It can return EINTR when:
-> -------------------------
-> 1) PTRACE_MODE_READ is being checked in mm_access() where it is waiting
-> on task->signal->exec_update_lock. EINTR returned from here guarantees
-> that process_madvise() didn't event start processing.
-> https://elixir.bootlin.com/linux/v5.16.14/source/mm/madvise.c#L1264 -->
-> https://elixir.bootlin.com/linux/v5.16.14/source/kernel/fork.c#L1318
-> 
-> 2) The process_madvise() started processing VMA's but the required
-> behavior on a VMA needs mmap_write_lock_killable(), from where EINTR is
-> returned.
+Hi Linus,
 
-Please note this will happen if the task has been killed. The return
-value doesn't really matter because the process won't run in userspace.
+please pull some common confidential computing preparatory glue which
+will be shared by SEV/SNP and TDX in the future.
 
-> The current behaviours supported by process_madvise(),
-> MADV_COLD, PAGEOUT, WILLNEED, just need read lock here.
-> https://elixir.bootlin.com/linux/v5.16.14/source/mm/madvise.c#L1164
->  **Thus I think no way for EINTR can be returned by process_madvise() in
-> the middle of processing.** . No?
+Thx.
 
-Maybe not with the current implementation but I can easily imagine that
-there is a requirement to break out early when there is a signal pending
-(e.g. to support terminating madvise on a large memory rage). You would
-get EINTR then somehow need to communicate that to the userspace.
+---
+
+The following changes since commit cfb92440ee71adcc2105b0890bb01ac3cddb8507:
+
+  Linux 5.17-rc5 (2022-02-20 13:07:20 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cc_for_v5.18_rc1
+
+for you to fetch changes up to 1e8c5971c249893ac33ca983c32bafcf5d50c727:
+
+  x86/mm/cpa: Generalize __set_memory_enc_pgtable() (2022-02-23 19:14:29 +0100)
+
+----------------------------------------------------------------
+- Add shared confidential computing code which will be used by both
+vendors instead of proliferating home-grown solutions for technologies
+which are pretty similar
+
+----------------------------------------------------------------
+Brijesh Singh (1):
+      x86/mm/cpa: Generalize __set_memory_enc_pgtable()
+
+Kirill A. Shutemov (3):
+      x86/cc: Move arch/x86/{kernel/cc_platform.c => coco/core.c}
+      x86/coco: Explicitly declare type of confidential computing platform
+      x86/coco: Add API to handle encryption mask
+
+ arch/x86/Kbuild                                |  2 +
+ arch/x86/coco/Makefile                         |  6 +++
+ arch/x86/{kernel/cc_platform.c => coco/core.c} | 56 +++++++++++++++-----
+ arch/x86/include/asm/coco.h                    | 32 ++++++++++++
+ arch/x86/include/asm/pgtable.h                 | 13 ++---
+ arch/x86/include/asm/set_memory.h              |  1 -
+ arch/x86/include/asm/x86_init.h                | 16 ++++++
+ arch/x86/kernel/Makefile                       |  5 --
+ arch/x86/kernel/cpu/mshyperv.c                 |  6 +++
+ arch/x86/kernel/x86_init.c                     | 16 +++++-
+ arch/x86/mm/mem_encrypt_amd.c                  | 72 ++++++++++++++++++--------
+ arch/x86/mm/mem_encrypt_identity.c             | 12 +++--
+ arch/x86/mm/pat/set_memory.c                   | 25 +++++----
+ 13 files changed, 199 insertions(+), 63 deletions(-)
+ create mode 100644 arch/x86/coco/Makefile
+ rename arch/x86/{kernel/cc_platform.c => coco/core.c} (73%)
+ create mode 100644 arch/x86/include/asm/coco.h
+
 
 -- 
-Michal Hocko
-SUSE Labs
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

@@ -2,102 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E1F4E2CEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25E94E2CE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 16:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348408AbiCUPyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 11:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
+        id S1348285AbiCUPyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 11:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348370AbiCUPyq (ORCPT
+        with ESMTP id S1348079AbiCUPyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 11:54:46 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F8B3D1CC;
-        Mon, 21 Mar 2022 08:53:20 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id t33so21241472ybt.12;
-        Mon, 21 Mar 2022 08:53:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nTotdTusIeK32o/JzomDhnbhzpNSp4di8YaC3w/q0B8=;
-        b=J8hEpEQ0iO1EMe+hQsp/lSlwSPJPF9TEUePxBNLZ8YrYvF34xcl7jpvmYq0vgbxffa
-         6eeK2Hc+yXmCCG0CCc+AW03vhLmLfwjxI0Tpk05ANqUtkwgWDR5saRzxExTroweRDdLd
-         qAHdiOldrVZzi2PnzvWSZtIieR8Jc05tBaZMW9KNwtN4JMg+622Suj4Sskr0dAjcZcKd
-         enuucFhOkjOzZ6xcyMD0oXGTtp2J8u89zU2ypbAAm8oK+fsWd0OKxEspjPnjyWPNvXE/
-         vOIiZ7w7JWQCqWN7t0lntpxkPMJQq9ObKAlAssJybhreBLN45zZvmydMfJ31wpG0qqHL
-         6vmw==
+        Mon, 21 Mar 2022 11:54:39 -0400
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B293A1BB;
+        Mon, 21 Mar 2022 08:53:13 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id h23so20691484wrb.8;
+        Mon, 21 Mar 2022 08:53:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nTotdTusIeK32o/JzomDhnbhzpNSp4di8YaC3w/q0B8=;
-        b=wPhZFNCiVNVWWpnPFWMnHxoxWDmjkxzEw12MbplludyGuhaiLEaOoJSl4/Kl1KaZn5
-         HGRWvSW3Q63LY+sJHEYBb9EakdMLBg5D0I7vurl5NgNs+yvHmvxsHarKIsObVCuanBXe
-         j9OGN6UBn2NRtNbaJCgkdpzQTIQtsgswZ3A42sHp4qp2kjS75W63kZaBgDoGlkV/DFCB
-         2E1iYptTSIo1p5wZ9a7CYsfeNqI/e68jui3Wx/zeHD3ABGEhQf8Joj5eC0oJ7EnQnNp8
-         YN/x1JaHgNeJfd4AAmNGb91mSae9sRbyOTR7ItiiOhcg0xnWGLx5pGfHlJ7a84q3g2Q2
-         NRGw==
-X-Gm-Message-State: AOAM533imOpNk3ih3ywgD5YxPtSIuBt/3OndsodM7WFOb/hDeHnaqLNt
-        +9yBLCV5beIDxXV2m9UONFw+l4FWhJCQOpMy9A8=
-X-Google-Smtp-Source: ABdhPJx+Njv3z8UirguWrc2qa1JLVuf9bn3+0GyVzpaP/JwN9vI5ad2kyb1fbIR6I/iiO9AnFrthYoDCTlM/ZGe0+ks=
-X-Received: by 2002:a25:d2c1:0:b0:633:c33e:8df2 with SMTP id
- j184-20020a25d2c1000000b00633c33e8df2mr13826276ybg.597.1647877999660; Mon, 21
- Mar 2022 08:53:19 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=O83M9g7HZ0bl5yKyCrG5hB98wSTjsEoQqTkE9qL5pAE=;
+        b=8BgA6BjLtu+xaDQKDNK7nYnnJznHp+sr9IWRgNBESyRgA4Ct3xcuiw0wlJ9sPSSR7M
+         7I1xC3cNXNiRcJ54HCTwPe+HXgGUw8KWWRFcSY+gf7jIaN2DOC3eBbBRXwLUcNa9ooH8
+         tR4wnnkifU2jKxonQC0oFgCuFQmmz/aUO8SLCucRPgXjkTh0JzpkiYVGjJ7NFDqCvKB6
+         rHRh7/S6SVNuimAWKYIiEH6S+yS7mxtmhvdf0KtGkbS9vYD4LvgwWxs/hXIujbVpgpqk
+         ikEQ1UpSN2Igv+YKOMXNNWkTssFKjUERe3luOhnAqphsVWgfPB456jmMk/rUFAEMfRzm
+         DDyQ==
+X-Gm-Message-State: AOAM531kup/O/oje4VmeM121Z4/LANBYHg3DXAIbOs0h5oZAF71/G48Q
+        lD/fA0ydCFjmyCbLrICEtzk=
+X-Google-Smtp-Source: ABdhPJwMRG1dX+1zrHr+zFL5pS1NfgNXXqlzDQcAzX8jYM9eno1IAUX77WTCEo3QXtZLEbr9MvoIMg==
+X-Received: by 2002:a5d:584a:0:b0:203:97f6:5975 with SMTP id i10-20020a5d584a000000b0020397f65975mr18579197wrf.612.1647877992260;
+        Mon, 21 Mar 2022 08:53:12 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id o12-20020adfa10c000000b001efb97fae48sm14184830wro.80.2022.03.21.08.53.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 08:53:11 -0700 (PDT)
+Message-ID: <eefe6dd8-6542-a5c2-6bdf-2c3ffe06e06b@kernel.org>
+Date:   Mon, 21 Mar 2022 16:53:09 +0100
 MIME-Version: 1.0
-References: <20220319162006.13c60c1f@jic23-huawei> <20220319193459.2628876-1-ztong0001@gmail.com>
- <CAHp75Vfk+CQZoz+s5PuSTBb0Nb4KLB+yoNiTCJQ4NktxV1nycQ@mail.gmail.com>
-In-Reply-To: <CAHp75Vfk+CQZoz+s5PuSTBb0Nb4KLB+yoNiTCJQ4NktxV1nycQ@mail.gmail.com>
-From:   Tong Zhang <ztong0001@gmail.com>
-Date:   Mon, 21 Mar 2022 08:53:09 -0700
-Message-ID: <CAA5qM4DE7Qehn2G3bOJfJ7wNfOBA01tzAFOuGZa_O4=6Ocb61g@mail.gmail.com>
-Subject: Re: [PATCH v2] iio:imu:bmi160: disable regulator in error path
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Sean Nyekjaer <sean@geanix.com>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Albrieux <jonathan.albrieux@gmail.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/3] ARM: dts: aspeed: add reset properties into MDIO
+ nodes
+Content-Language: en-US
+To:     Dylan Hung <dylan_hung@aspeedtech.com>, robh+dt@kernel.org,
+        joel@jms.id.au, andrew@aj.id.au, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     BMC-SW@aspeedtech.com, stable@vger.kernel.org
+References: <20220321095648.4760-1-dylan_hung@aspeedtech.com>
+ <20220321095648.4760-4-dylan_hung@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220321095648.4760-4-dylan_hung@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 1:28 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Sun, Mar 20, 2022 at 8:44 AM Tong Zhang <ztong0001@gmail.com> wrote:
-> >
-> > Regulator should be disabled in error path as mentioned in _regulator_put().
-> > Also disable accel if gyro cannot be enabled.
-> >
-> > [   16.233604] WARNING: CPU: 0 PID: 2177 at drivers/regulator/core.c:2257 _regulator_put
-> > [   16.240453] Call Trace:
-> > [   16.240572]  <TASK>
-> > [   16.240676]  regulator_put+0x26/0x40
-> > [   16.240853]  regulator_bulk_free+0x26/0x50
-> > [   16.241050]  release_nodes+0x3f/0x70
-> > [   16.241225]  devres_release_group+0x147/0x1c0
-> > [   16.241441]  ? bmi160_core_probe+0x175/0x3a0 [bmi160_core]
->
-> Haven't I given you a tag?
->
-> --
-> With Best Regards,
-> Andy Shevchenko
-Hi Any, Thank you for reviewing the patch. I appreciate it.
-I thought I would need another tag since this patch is a v2.
-Sorry for this back and forth. Have a great one.
-Thanks,
-- Tong
+On 21/03/2022 10:56, Dylan Hung wrote:
+> Add reset control properties into MDIO nodes.  The 4 MDIO controllers in
+> AST2600 SOC share one reset control bit SCU50[3].
+> 
+> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
+> Cc: stable@vger.kernel.org
+
+Please describe the bug being fixed. See stable-kernel-rules.
+
+Best regards,
+Krzysztof

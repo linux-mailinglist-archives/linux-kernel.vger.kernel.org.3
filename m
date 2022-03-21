@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E052C4E32FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 562104E32DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbiCUWtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 18:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
+        id S229765AbiCUWtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 18:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiCUWtW (ORCPT
+        with ESMTP id S229978AbiCUWtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:49:22 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FEC3F88C0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:44:06 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id s68-20020a625e47000000b004fa6520b540so7067845pfb.17
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:44:06 -0700 (PDT)
+        Mon, 21 Mar 2022 18:49:24 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9507E54F89
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:44:09 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id w6-20020a170902d70600b001547597fccbso871612ply.15
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 15:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=u4JgM+75AZti27lWXqtslukLZQOfvOSzkXisiK6DciE=;
-        b=O3iLZaJFpBD2w8/KBPwwtdSPS3VW/mW+S1HIPBHLXcwgAJ4BjjapYoLUcZEAthI5CM
-         8pg6yLMvfbQfStqh4mPuZwedjV4YTYq5XoMkdOgLw3CW9MvcGCEK2TFcZT3csUGPf6GV
-         4Ffa1CQEmHjLFXFLB+W15T2iQBD9TnMIYYMGyQcAxVhffbp2lf9atPSu3uuUkW+HjxcU
-         U41z6fnybdcxtkbHs0+h3m28ei5FXR8FoVvb4T7lu/3rssBKeMct+czWbQK1qIW59mP3
-         n9RF3DR+RUFh4gAbrQXcMXDZBIZvnLvAfmk9RC/grvCY7vmD52esqOFUZo3eAP4m+omR
-         z0Ng==
+        bh=JAqLlS07OA/mtsxC0lr2Zf5cFpfFqBoRXPdNY1Wgz24=;
+        b=H0R79d5UcBxs6D8qTK2NTVn6tY35vwRgidZ9zKMSXB6AwWAv393rNwo+bk6Kobd6Z5
+         oRZV28Nt+t3/pMmVONdGgSbhQmFKF1O3YFr49wCsjKjt3jqNXClIKbn9rtYDAStiWYH6
+         en2bFzaGUklc2rPx+LnmFK/I+5qR7NPW22uRZsApafZ+drfZt9UVbr3bEMAMmoJ9QqCn
+         SZs6gzWXmc96NYNWk8Sv6UWauWLr2i3zc3RvA7a8yfzvlWypGS0q3PYA7Sbv+VlXeili
+         7btitqt8zcL1ZY35A8yPxwCp7++B/0K0l/LqF4PrZ4n2PiPCxyKXVW0fo8OkJefTS/zt
+         qPUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=u4JgM+75AZti27lWXqtslukLZQOfvOSzkXisiK6DciE=;
-        b=1m9byHzm2o7KN1kwoB53nxpIR+7554USb47NQe6sGazt+p5Qe4j2eVJjc9LtNehPPk
-         1wkGb/hs0/Yyr0CYzkiljEJiziZMwJOFtD7W3fNUCzN6cIMURyEqh8XsCWd+xpbRpGf0
-         BWJ6tL1KoCO+jm+k8YPXzGut/8YFhgMbPL5qSN6YrXrpfq5LiujpMvNBxZEgAikyFPnn
-         YWZAYOjWO+hZDLihw+I9vyEfIVAjE1sUsxtdlpqi85fTP1diItiNIjFO23jOnz/9rN7d
-         iB3GW27wfKD4IdewdXxKyMHYqibbTT38YoPVB6S/hwsQZPQvB3+M1nsGLOJZNKOk/Oax
-         kYEA==
-X-Gm-Message-State: AOAM532UsTIOVPQkqUmr9iuH64q90a2vNkMVIpRsxebE+2p2EuCN3lRE
-        kVA7CHssBtr6YPbTchiDG1G2G6Goq4HPnnOBEMR1j2BfV2u6oIUkOTGCZ4MO6jPTu3N+Wy9kWDK
-        2p91252l/wriU9jChYv+qLWOyAysqmu60w2+84E7QCQQC7693nJBBaAnQlJH6BQ1HhWqRflZZ
-X-Google-Smtp-Source: ABdhPJzjrjlRXuCSKs/r2vXduiSUY2+WMaIe9AiFUfDVX2HOaPToQVhD+JfsRG79K2Fz+le1NG7UYlGRPRjA
+        bh=JAqLlS07OA/mtsxC0lr2Zf5cFpfFqBoRXPdNY1Wgz24=;
+        b=H0BwnLthgEQtOLZtjCrZJnFAV9BNA9dGGKfB1h4u6C3naQ02cIdNhEV/LvnFvfB0/X
+         0IkfWCu3tYqXmIOGRympbQXucbM5xsJbIx4DaVdCmsr+aZ+qj6sPiBXp5m9+oVNK8QvL
+         nWjQOaWgS5h+I2B2UO9z6m+hCf/Dnr0IeJoArkg4rieJJdTaZCO1a6XVllWysAKe1mW8
+         uaN/wxabzmit767ozQQsdEehzitDwc3CfUK3U40wEPQQNENoaGkRn9VirIm4OgKtoleq
+         2bokGe6Ajn+ZFfQnjQMcQRJBmOQUISJ4Xr9f8NE2V9dRJzu3lDU3NcB5xWVOe4SBJW48
+         qROQ==
+X-Gm-Message-State: AOAM5302tYrSx5BPoFOHaJqso8WqzNjcFM6E62YXG7dGMDspEY8Xwgeu
+        dUPwTZMTZAugDQYakYbQ8Miqx4JLY9PnY6+ccTd5oSCih3wbnEOfBA6p6XJjSEsmcDsWCgs7bJb
+        GU9fJ95eIxOpsU+StCSBu8EwzW0Qp3vwA+wEvyUTVLGaX/gPX0XRnrYTriatRzkls+Y6/scVQ
+X-Google-Smtp-Source: ABdhPJxAtqyFX+JDYmmYwf3rvEhv5BiLfQfw2OU879/OP5hly2ytp4JfLR+hS/L7jvzneV2Wb/vLVdfuP+fm
 X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:b76a:f152:cb5e:5cd2])
- (user=bgardon job=sendgmr) by 2002:a05:6a00:1596:b0:4f9:f992:9f69 with SMTP
- id u22-20020a056a00159600b004f9f9929f69mr25497286pfk.7.1647902646189; Mon, 21
- Mar 2022 15:44:06 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 15:43:51 -0700
+ (user=bgardon job=sendgmr) by 2002:a17:903:2348:b0:154:dd0:aba8 with SMTP id
+ c8-20020a170903234800b001540dd0aba8mr15543475plh.51.1647902649014; Mon, 21
+ Mar 2022 15:44:09 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 15:43:52 -0700
 In-Reply-To: <20220321224358.1305530-1-bgardon@google.com>
-Message-Id: <20220321224358.1305530-3-bgardon@google.com>
+Message-Id: <20220321224358.1305530-4-bgardon@google.com>
 Mime-Version: 1.0
 References: <20220321224358.1305530-1-bgardon@google.com>
 X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-Subject: [PATCH v2 2/9] KVM: x86/mmu: Factor mt_mask out of __make_spte
+Subject: [PATCH v2 3/9] KVM: x86/mmu: Factor shadow_zero_check out of __make_spte
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -75,64 +75,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In service of removing the vCPU pointer from __make_spte, factor the memory
-type mask calculation out of __make_spte.
+In the interest of devloping a version of __make_spte that can function
+without a vCPU pointer, factor out the shadow_zero_mask to be an
+additional argument to the function.
+
+No functional change intended.
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- arch/x86/kvm/mmu/spte.c | 12 ++++++++----
- arch/x86/kvm/mmu/spte.h |  3 ++-
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ arch/x86/kvm/mmu/spte.c | 10 ++++++----
+ arch/x86/kvm/mmu/spte.h |  2 +-
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-index d3da0d3d41cb..931cf93c3b7e 100644
+index 931cf93c3b7e..ef2d85577abb 100644
 --- a/arch/x86/kvm/mmu/spte.c
 +++ b/arch/x86/kvm/mmu/spte.c
-@@ -93,7 +93,8 @@ static bool kvm_is_mmio_pfn(kvm_pfn_t pfn)
- bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+@@ -94,7 +94,7 @@ bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
  		 const struct kvm_memory_slot *slot, unsigned int pte_access,
  		 gfn_t gfn, kvm_pfn_t pfn, u64 old_spte, bool prefetch,
--		 bool can_unsync, bool host_writable, u64 *new_spte)
-+		 bool can_unsync, bool host_writable, u64 mt_mask,
-+		 u64 *new_spte)
+ 		 bool can_unsync, bool host_writable, u64 mt_mask,
+-		 u64 *new_spte)
++		 struct rsvd_bits_validate *shadow_zero_check, u64 *new_spte)
  {
  	int level = sp->role.level;
  	u64 spte = SPTE_MMU_PRESENT_MASK;
-@@ -130,8 +131,7 @@ bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
- 	if (level > PG_LEVEL_4K)
- 		spte |= PT_PAGE_SIZE_MASK;
- 	if (tdp_enabled)
--		spte |= static_call(kvm_x86_get_mt_mask)(vcpu, gfn,
--			kvm_is_mmio_pfn(pfn));
-+		spte |= mt_mask;
+@@ -177,9 +177,9 @@ bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+ 	if (prefetch)
+ 		spte = mark_spte_for_access_track(spte);
  
- 	if (host_writable)
- 		spte |= shadow_host_writable_mask;
-@@ -197,8 +197,12 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
- 	       u64 old_spte, bool prefetch, bool can_unsync,
- 	       bool host_writable, u64 *new_spte)
+-	WARN_ONCE(is_rsvd_spte(&vcpu->arch.mmu->shadow_zero_check, spte, level),
++	WARN_ONCE(is_rsvd_spte(shadow_zero_check, spte, level),
+ 		  "spte = 0x%llx, level = %d, rsvd bits = 0x%llx", spte, level,
+-		  get_rsvd_bits(&vcpu->arch.mmu->shadow_zero_check, spte, level));
++		  get_rsvd_bits(shadow_zero_check, spte, level));
+ 
+ 	if ((spte & PT_WRITABLE_MASK) && kvm_slot_dirty_track_enabled(slot)) {
+ 		/* Enforced by kvm_mmu_hugepage_adjust. */
+@@ -199,10 +199,12 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
  {
-+	u64 mt_mask = static_call(kvm_x86_get_mt_mask)(vcpu, gfn,
-+						       kvm_is_mmio_pfn(pfn));
-+
+ 	u64 mt_mask = static_call(kvm_x86_get_mt_mask)(vcpu, gfn,
+ 						       kvm_is_mmio_pfn(pfn));
++	struct rsvd_bits_validate *shadow_zero_check =
++			&vcpu->arch.mmu->shadow_zero_check;
+ 
  	return __make_spte(vcpu, sp, slot, pte_access, gfn, pfn, old_spte,
--			   prefetch, can_unsync, host_writable, new_spte);
-+			   prefetch, can_unsync, host_writable, mt_mask,
-+			   new_spte);
+ 			   prefetch, can_unsync, host_writable, mt_mask,
+-			   new_spte);
++			   shadow_zero_check, new_spte);
  
  }
  
 diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-index 3fae3c3124f7..d051f955699e 100644
+index d051f955699e..e8a051188eb6 100644
 --- a/arch/x86/kvm/mmu/spte.h
 +++ b/arch/x86/kvm/mmu/spte.h
-@@ -413,7 +413,8 @@ static inline u64 get_mmio_spte_generation(u64 spte)
- bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+@@ -414,7 +414,7 @@ bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
  		 const struct kvm_memory_slot *slot, unsigned int pte_access,
  		 gfn_t gfn, kvm_pfn_t pfn, u64 old_spte, bool prefetch,
--		 bool can_unsync, bool host_writable, u64 *new_spte);
-+		 bool can_unsync, bool host_writable, u64 mt_mask,
-+		 u64 *new_spte);
+ 		 bool can_unsync, bool host_writable, u64 mt_mask,
+-		 u64 *new_spte);
++		 struct rsvd_bits_validate *shadow_zero_check, u64 *new_spte);
  bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
  	       const struct kvm_memory_slot *slot,
  	       unsigned int pte_access, gfn_t gfn, kvm_pfn_t pfn,

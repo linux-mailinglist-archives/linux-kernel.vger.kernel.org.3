@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A3D4E27B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:35:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863D54E27C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347016AbiCUNhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S230253AbiCUNie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347984AbiCUNgp (ORCPT
+        with ESMTP id S235400AbiCUNic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:36:45 -0400
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF33457B1;
-        Mon, 21 Mar 2022 06:35:20 -0700 (PDT)
-Received: by mail-oo1-f48.google.com with SMTP id p10-20020a056820044a00b00320d7d4af22so19126499oou.4;
-        Mon, 21 Mar 2022 06:35:20 -0700 (PDT)
+        Mon, 21 Mar 2022 09:38:32 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D591BAC073;
+        Mon, 21 Mar 2022 06:37:05 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id l7-20020a05600c1d0700b0038c99618859so1295651wms.2;
+        Mon, 21 Mar 2022 06:37:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rmkzVJ7lPDe71qmJ25R6AMfvf9UDRM65tLBzs5QDkYM=;
+        b=iLBFeSWPiXwVdVcwIuy6GOVhOfiIEdNdnew2OVu/3VdMYmn8EQsGhB9nkOzeluNv/z
+         5/JDptmKB6dyn23iR67L1w/jLfL7LdKBVWAE9DCyutz/J+ZVCfUBC9o6/FmZrvpqaXql
+         kYosN3MKPCSp6LDw3idHShhSyfvHjg3Wd6AynVl9Hqs1jiuWRLZdQkNzD//C8RBbZjUY
+         araiUUqGsKqbmkZP2yvCTLdzeOg2aMmq2ZvIwy6vRzxhxkf0LKrsD5D8+U1N76py2um1
+         IM7LNnUbv2cTEuxsXoojjbM63dyDlpmu+nJZA+aV69samqFzU1Z21/O4b4OCp7naBn3H
+         JYAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=5UU4N1/jkwKIKHDgJE8Xaunth0Jq4iesYl4vSjdvP6Y=;
-        b=qK5Q3XxSupslhtSENzAM+l3k2Q+QECQFrcdN0K8V+GutjLodKMgqTSLCDjNH+H/lXM
-         quGzqqFM815yOTaGq6Va31/CvI4187G3ZcWZMLu4PKxbuHo1ut/QB66BwQHogJjHW8YT
-         eTLS4/ZY8Dot3kq+2M6CsbkPqjbyR3T7zcnx0/teuwZWVFPXNzUp0l1fIa/tw1zXhvx/
-         o4hJiO7gbFVHf9xOcryMa2WGFHn5g7eVOMc9+YifLDSMyfCnVCApH2iNJ3X/jxESmcI1
-         ocIl++leTqzC58O6tEEBFDazcPFxoBbGh8tolRrhXkbP/oUghP3bN+l1WqQt3mevVd46
-         YWng==
-X-Gm-Message-State: AOAM5322FDgSfm+6zNaKWh/yVrqx8byxlEeaWJ9l8vOpMVPCsPH733t4
-        xBfFwa5+9sM53y0Wh7aUzQ==
-X-Google-Smtp-Source: ABdhPJzfmSYuwsV67ZwxyLb5RUYtTVRmT0EHgTTZezQLdru8b+cuGc6RlbeGCMx5yctS3/FrA95Q3g==
-X-Received: by 2002:a05:6870:3112:b0:ce:c0c9:62b with SMTP id v18-20020a056870311200b000cec0c9062bmr11623640oaa.125.1647869719305;
-        Mon, 21 Mar 2022 06:35:19 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t15-20020a056808158f00b002e331356c87sm7572522oiw.39.2022.03.21.06.35.17
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rmkzVJ7lPDe71qmJ25R6AMfvf9UDRM65tLBzs5QDkYM=;
+        b=Aa4GLi6zxmOTrdZLAmpkkZh5lL6EH2srauo0OgCkRSZrzmZmky6ZhtrXbMDYy1mw24
+         lFggyOH7UEt/0yBVuLDwrtquVbk+XZFWLQT9Ik6O0+LPEoRM0AWmjF7Y8WuQKExee6Ks
+         LNktunS4xxhNjyOWs03PWsv9qIUvbLlCAUeKcA/AUF4kowsCx3aXR+r2N/1lqIcLjgQw
+         pS21aqzJLkNKg6VLK4c+pAWKGLbQVLFU6CUbbPnjj1XeAZdVDgc7TMBmeMpGlQRwBFpw
+         dtrHDeyu541bGWHP/E+wVaFtgC1Pn1cdSoOTDgODYyLg3BKjqCZR4syAksOAX7EgDoIu
+         OS1g==
+X-Gm-Message-State: AOAM532A8uEgH5tkm+Y922YUXSWPxBDaMpn1zLF3YfRdM2jGaM/g6vmo
+        71huYDZoILk19XP2j+T99yg=
+X-Google-Smtp-Source: ABdhPJyJztpZEF5HTmRWNv59asHTB2LyorTcORvSou9IrxfnYCvCgsEFrP4Vw4TR0ml++AXeJuR0PQ==
+X-Received: by 2002:a05:600c:a0a:b0:350:564b:d55e with SMTP id z10-20020a05600c0a0a00b00350564bd55emr19446726wmp.124.1647869824164;
+        Mon, 21 Mar 2022 06:37:04 -0700 (PDT)
+Received: from monk.home ([2a01:cb10:430:ec00:4737:d56e:186b:af1])
+        by smtp.gmail.com with ESMTPSA id w5-20020a5d5445000000b00203f8c96bcesm7969426wrv.49.2022.03.21.06.37.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 06:35:18 -0700 (PDT)
-Received: (nullmailer pid 4125326 invoked by uid 1000);
-        Mon, 21 Mar 2022 13:35:11 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Dylan Hung <dylan_hung@aspeedtech.com>
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, andrew@aj.id.au,
-        linux-arm-kernel@lists.infradead.org, andrew@lunn.ch,
-        davem@davemloft.net, linux-aspeed@lists.ozlabs.org,
-        BMC-SW@aspeedtech.com, kuba@kernel.org, p.zabel@pengutronix.de,
-        hkallweit1@gmail.com, joel@jms.id.au, pabeni@redhat.com,
-        linux@armlinux.org.uk
-In-Reply-To: <20220321095648.4760-2-dylan_hung@aspeedtech.com>
-References: <20220321095648.4760-1-dylan_hung@aspeedtech.com> <20220321095648.4760-2-dylan_hung@aspeedtech.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: net: add reset property for aspeed, ast2600-mdio binding
-Date:   Mon, 21 Mar 2022 08:35:11 -0500
-Message-Id: <1647869711.893197.4125325.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 21 Mar 2022 06:37:03 -0700 (PDT)
+From:   Christophe Branchereau <cbranchereau@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
+Subject: [PATCH v5 0/3] Ingenic DRM bridge_atomic_enable proposal
+Date:   Mon, 21 Mar 2022 14:36:48 +0100
+Message-Id: <20220321133651.291592-1-cbranchereau@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 17:56:46 +0800, Dylan Hung wrote:
-> The AST2600 MDIO bus controller has a reset control bit and must be
-> deasserted before the manipulating the MDIO controller.
-> 
-> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
-> Cc: stable@vger.kernel.org
-> ---
->  .../devicetree/bindings/net/aspeed,ast2600-mdio.yaml          | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+Hello,
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+v5 :
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+- this set doesn't include the nv3052c bindings doc anymore,
+  as it's already applied
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1607671
+- nv3052c panel driver : removed empty lines, proceed to turn it off
+  even is sleeping in fails instead of stopping there
 
+- abt panel : switched to REGCACHE_FLAT so we can disable sleep mode
+  in .enable with regmap_set_bits() instead of doing it at init time
 
-mdio@1e650000: 'resets' is a required property
-	arch/arm/boot/dts/aspeed-ast2600-evb-a1.dt.yaml
-	arch/arm/boot/dts/aspeed-ast2600-evb.dt.yaml
-	arch/arm/boot/dts/aspeed-bmc-inventec-transformers.dt.yaml
+- ingenic-drm-drv : added ingenic_drm_bridge_atomic_disable to balance
+  out ingenic_drm_bridge_atomic_enable
 
-mdio@1e650008: 'resets' is a required property
-	arch/arm/boot/dts/aspeed-ast2600-evb-a1.dt.yaml
-	arch/arm/boot/dts/aspeed-ast2600-evb.dt.yaml
-	arch/arm/boot/dts/aspeed-bmc-facebook-cloudripper.dt.yaml
-	arch/arm/boot/dts/aspeed-bmc-facebook-fuji.dt.yaml
+Tested working on the rg350m and rg280m
 
-mdio@1e650010: 'resets' is a required property
-	arch/arm/boot/dts/aspeed-ast2600-evb-a1.dt.yaml
-	arch/arm/boot/dts/aspeed-ast2600-evb.dt.yaml
+Christophe Branchereau (3):
+  drm/ingenic : add ingenic_drm_bridge_atomic_enable and disable
+  drm/panel: Add panel driver for NewVision NV3052C based LCDs
+  drm/panel : innolux-ej030na and abt-y030xx067a : add .enable and
+    .disable
 
-mdio@1e650018: 'resets' is a required property
-	arch/arm/boot/dts/aspeed-ast2600-evb-a1.dt.yaml
-	arch/arm/boot/dts/aspeed-ast2600-evb.dt.yaml
-	arch/arm/boot/dts/aspeed-bmc-facebook-cloudripper.dt.yaml
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  34 +-
+ drivers/gpu/drm/panel/Kconfig                 |   9 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-abt-y030xx067a.c  |  31 +-
+ drivers/gpu/drm/panel/panel-innolux-ej030na.c |  31 +-
+ .../gpu/drm/panel/panel-newvision-nv3052c.c   | 484 ++++++++++++++++++
+ 6 files changed, 572 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/gpu/drm/panel/panel-newvision-nv3052c.c
+
+-- 
+2.35.1
 

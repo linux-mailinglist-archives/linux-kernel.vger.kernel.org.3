@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1DB4E29CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7653C4E2990
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 15:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349059AbiCUOHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 10:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
+        id S1348791AbiCUOFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 10:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348384AbiCUOAC (ORCPT
+        with ESMTP id S1349185AbiCUN7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 10:00:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213F4326EF;
-        Mon, 21 Mar 2022 06:58:35 -0700 (PDT)
+        Mon, 21 Mar 2022 09:59:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE2C2529B;
+        Mon, 21 Mar 2022 06:58:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD14C6126E;
-        Mon, 21 Mar 2022 13:58:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B132DC340E8;
-        Mon, 21 Mar 2022 13:58:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EF79B816CE;
+        Mon, 21 Mar 2022 13:58:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8625C340E8;
+        Mon, 21 Mar 2022 13:58:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647871114;
-        bh=R3418Rrg5V8B1c05XGDtRWXcwFIPVmKBkAGQp1+t2as=;
+        s=korg; t=1647871091;
+        bh=cBni2buC7H1TRb79ApwE1RHigOmlD6zjLemNukfcyac=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R56KceI1PdSDLgVeto2O4yY/CcfK1443Pzv3lcdp5JUnwWEBlp0mUH8dIOtDgndhQ
-         P+AUpBPVgzagC4+WusY3YdnE2xfvZGs8IqZ5cVUy9mEgfYQneGntfDMieiqnk6ak8b
-         NzW42+zFr9Oys2oqh6ajkZlb1D2EGSu8MiAYh+W8=
+        b=DJeWaVRU1rqR4aqZ1kBiYY2a79Acz1mz/suNRFPK5N6FjxEFv0q9XoALWICvoDSR5
+         KKBlGQMFnQqA/vWjveU4r8+R16Fy6bWA00NzymGGEfdqLNfOfaEr+587geD+qsqAV2
+         TTWFms5+/gp5S8gecxsd13aYdsO1BCdzv7oj8cVg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Kurt Cancemi <kurt@x64architecture.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 10/30] hv_netvsc: Add check for kvmalloc_array
+Subject: [PATCH 5.4 04/17] net: phy: marvell: Fix invalid comparison in the resume and suspend functions
 Date:   Mon, 21 Mar 2022 14:52:40 +0100
-Message-Id: <20220321133219.946203430@linuxfoundation.org>
+Message-Id: <20220321133217.282060904@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220321133219.643490199@linuxfoundation.org>
-References: <20220321133219.643490199@linuxfoundation.org>
+In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
+References: <20220321133217.148831184@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Kurt Cancemi <kurt@x64architecture.com>
 
-[ Upstream commit 886e44c9298a6b428ae046e2fa092ca52e822e6a ]
+[ Upstream commit 837d9e49402eaf030db55a49f96fc51d73b4b441 ]
 
-As the potential failure of the kvmalloc_array(),
-it should be better to check and restore the 'data'
-if fails in order to avoid the dereference of the
-NULL pointer.
+This bug resulted in only the current mode being resumed and suspended when
+the PHY supported both fiber and copper modes and when the PHY only supported
+copper mode the fiber mode would incorrectly be attempted to be resumed and
+suspended.
 
-Fixes: 6ae746711263 ("hv_netvsc: Add per-cpu ethtool stats for netvsc")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220314020125.2365084-1-jiasheng@iscas.ac.cn
+Fixes: 3758be3dc162 ("Marvell phy: add functions to suspend and resume both interfaces: fiber and copper links.")
+Signed-off-by: Kurt Cancemi <kurt@x64architecture.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220312201512.326047-1-kurt@x64architecture.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/hyperv/netvsc_drv.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/phy/marvell.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
-index 261e6e55a907..e3676386d0ee 100644
---- a/drivers/net/hyperv/netvsc_drv.c
-+++ b/drivers/net/hyperv/netvsc_drv.c
-@@ -1562,6 +1562,9 @@ static void netvsc_get_ethtool_stats(struct net_device *dev,
- 	pcpu_sum = kvmalloc_array(num_possible_cpus(),
- 				  sizeof(struct netvsc_ethtool_pcpu_stats),
- 				  GFP_KERNEL);
-+	if (!pcpu_sum)
-+		return;
-+
- 	netvsc_get_pcpu_stats(dev, pcpu_sum);
- 	for_each_present_cpu(cpu) {
- 		struct netvsc_ethtool_pcpu_stats *this_sum = &pcpu_sum[cpu];
+diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+index 53420c531266..49801c2eb627 100644
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -1408,8 +1408,8 @@ static int marvell_suspend(struct phy_device *phydev)
+ 	int err;
+ 
+ 	/* Suspend the fiber mode first */
+-	if (!linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
+-			       phydev->supported)) {
++	if (linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
++			      phydev->supported)) {
+ 		err = marvell_set_page(phydev, MII_MARVELL_FIBER_PAGE);
+ 		if (err < 0)
+ 			goto error;
+@@ -1443,8 +1443,8 @@ static int marvell_resume(struct phy_device *phydev)
+ 	int err;
+ 
+ 	/* Resume the fiber mode first */
+-	if (!linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
+-			       phydev->supported)) {
++	if (linkmode_test_bit(ETHTOOL_LINK_MODE_FIBRE_BIT,
++			      phydev->supported)) {
+ 		err = marvell_set_page(phydev, MII_MARVELL_FIBER_PAGE);
+ 		if (err < 0)
+ 			goto error;
 -- 
 2.34.1
 

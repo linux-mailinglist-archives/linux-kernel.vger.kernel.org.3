@@ -2,334 +2,599 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F5F4E20CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 07:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C88C4E20CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 07:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344664AbiCUG5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 02:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        id S1344673AbiCUG7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 02:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344667AbiCUG5v (ORCPT
+        with ESMTP id S241003AbiCUG7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 02:57:51 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2076.outbound.protection.outlook.com [40.107.243.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FB810CF13
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 23:56:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ke8yiR/WjcfM66HEH7ebcnnntaWWET8zGsoD7mTrfGdNylPeT1N6vYbquL3uRRe/zTSmNTBGtoaNazJYsMplGmFG4/h6U2dmcyYtwbqwkaNMi6fZXe1OfHPpPZEyu+oICDPz+UvfaK6/5yCzDFWAPHjMZ6e7olSJIea35/3czhaFASvlhDIWZQkOBrMOiWbJdDP0rrdEBhUy30JqKNLuBg0Cq5KncfT+Ryy0IBIvJiSZ4Ztr768qHSx7kvyaz05mxtqXRKBB1BMXCL0wfOx6P924AymWOAdS92eFlUKrwZNs+x78KxMVbdFfaiKZzwXETL3Jynbfn8LsaTSb6Dm93w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MpRRNa4OU4t9hFJzEGGkGv2g7njz7cTr2A7hU+j7b8I=;
- b=KUXgPwlEM2Bp5Rmj3ja7qiBntv2i7cBEtOJSFkNst+YUIYoctt0ufhHCTYzsjiTLAr+k8MhNW9yaYiCIFL+q0HDmBzpIlmKcfr1HeYQBtJRl6XvND6fsmxFau7jngseyiZr+qgXv5yP5XWms1UB21UYLH+UTcHMgZgxfnDZq1BKlsBlvbSmlEKlNk7DBUe2/hYZYMFAg1pYUZrO5NuNpk1SBa+1XqCgnUoPjPA1g7UECkHz+X4/0Wafc+TOB6fzrwN4jjpfyxXlI1n/xIALXQVe04eIpD5eRiOeVZDv1YSAV+7qJv23OWb8BAsU+lO1OWkDiQyCcsO8Dw3MuEMqYJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MpRRNa4OU4t9hFJzEGGkGv2g7njz7cTr2A7hU+j7b8I=;
- b=G2MfpcN/37RJ+hUyHNG0gdz7ZUmKJ/eCMxrOj2Qz2wjZiBvrZ0XNJee6z+jjdDqopdKsuNSB8bX6nHfy8K8AgVnvIIPtAF4KStVAs3wyst3SSekeBCDFAoUYFwb08E9CHJrSgfRZ9UBsRVJdGk2pODFoRo3/YPUvMPyqRWCn3qabN1KDFln0eHk99JKdorlODX26zj5k+Kj6njs1QojVkOiFzH/P5FC3uhWm0z0rjBaGu/YPtxS71Rxk6t7hrQGTu9lO6idMa2Bgqi/BED/8dr2bGK/JlTIODGb5xiQJ3gtRD0xSkEWMqUdGUKBMuzM4szLlSrevh5SSPhu7QPMf/Q==
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
- DM5PR1201MB0123.namprd12.prod.outlook.com (2603:10b6:4:50::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5081.15; Mon, 21 Mar 2022 06:56:25 +0000
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::c53a:18b3:d87f:f627]) by DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::c53a:18b3:d87f:f627%5]) with mapi id 15.20.5081.022; Mon, 21 Mar 2022
- 06:56:24 +0000
-From:   Eli Cohen <elic@nvidia.com>
-To:     Jason Wang <jasowang@redhat.com>, "mst@redhat.com" <mst@redhat.com>
-CC:     "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/2] vdpa: mlx5: synchronize driver status with CVQ
-Thread-Topic: [PATCH 2/2] vdpa: mlx5: synchronize driver status with CVQ
-Thread-Index: AQHYPOmSgJrktw2RQ0+8QJjCeuRXoazJZ5DA
-Date:   Mon, 21 Mar 2022 06:56:24 +0000
-Message-ID: <DM8PR12MB5400B6489C7FEF8B950AF1C2AB169@DM8PR12MB5400.namprd12.prod.outlook.com>
-References: <20220321060429.10457-1-jasowang@redhat.com>
- <20220321060429.10457-2-jasowang@redhat.com>
-In-Reply-To: <20220321060429.10457-2-jasowang@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 96a5b456-0c34-42d2-fc38-08da0b07ea4b
-x-ms-traffictypediagnostic: DM5PR1201MB0123:EE_
-x-microsoft-antispam-prvs: <DM5PR1201MB01233695A5547F7AEA8FCAF5AB169@DM5PR1201MB0123.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bF/86LNxYZMhxTYypsAXAYrjibZ6s3hGSBWra2n+k+SS347tvUBWgqLV3qEXU/2kWdbPUSNSzsjaw4DFyHdmshLJQMbgfeV54EIq4IPxSph+Ltiw3JfIFgv8QrXbODFLBLEQ8cBtehmu5fG8OlYj66bPDtiDXJvH4zF1ICOT6kVGK6B3Rk/6kKOxiIxSr5ffAr7v7o2BDZW2RoRDQ0hU4wawO+pDE/3KoMCV3rRnr0COGVexv7Y6pEviQ5pQ/vZr0cHqtnqcEV2gzdCIq9tH2CODSypqDXZHARpf6itzSqsWwdHd0CcuTZPG+LEeQWAG6Emws3cYpNVU/fVXL9OMawEwRv0YWfbz0x8QRMkTMS4LW8RZI1ayiuwty7KHvgas8Qy/oSBL/E+Y1R5dbiRebEZZw/dF8NeFMgU0TrvslBNyrHagynPtQVNSrbEFy9RzvZRW/w4BQr+sOQ48yWFYE10MkrXsIxPtJDhkiBXumJLrxA3vNfLqAmpwoAmqmJsNaGlapyXTIRlCWWZinhz/UFOEJaLueN7hYf5zGj27wUhEtZRKrlHfXSjnVK/XcCficuEsTZ/sp7ntQ36a2nhWbbjs/fPxWLWsTF92E4Hjdr19rgBnOWYJ/4riVlt7Bc61FLCZPvWQNxVALzr4JHUyndqOh76ybcrWp3uUnzgLyc3hYD/x0OQ5WdXe8lpzf/RyInnkKCfrhALim0B90qjFkQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(55016003)(33656002)(26005)(186003)(83380400001)(2906002)(7696005)(6506007)(38100700002)(53546011)(38070700005)(8936002)(52536014)(5660300002)(76116006)(66946007)(122000001)(54906003)(316002)(9686003)(4326008)(508600001)(71200400001)(66556008)(86362001)(64756008)(66446008)(8676002)(66476007)(110136005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?92s59Vv6D43mDp74QHUEl+7+tsc0fr8ep+DkU6d3gMYUTtdLz81dUSy68a+v?=
- =?us-ascii?Q?lrpj/L1FC5hjrF8ldeTmhDMhKks5F50dnJQkBXmHcHBrl6t950z4LxBnjKoU?=
- =?us-ascii?Q?5RhR0znKykEbJbW/wIdmlkhFjVH+Jge5ee11C7AbWlPMnpiSlOx+cgjITGoL?=
- =?us-ascii?Q?EO01cEZd3xDw0W+R6z4C18eHHGHX2SAPLslBanYoLnMusQ9YZyTAdv1JIjFX?=
- =?us-ascii?Q?gp9hl/MP2miwICUTNnJhRLUGeW021QUBXypwr3wlFQ/4l1S9n4BzzSKdaRE6?=
- =?us-ascii?Q?R4+a7vs8f/wCHBkm806gkzKz6zLvxCU2Ga2/KFADZ6zriytFQQblEF0maK2l?=
- =?us-ascii?Q?eYR22BiBaCIg+44Xb9A6phQkr9vLDjRsBNx6DxzsQmcJRlGX5Xh4a0+v/F6f?=
- =?us-ascii?Q?Oe1FJE9g21RFDUzpZ26kQUIIVN/s1Eo7SN4aXFIjO75PGdBjW9jsWZmFTIIQ?=
- =?us-ascii?Q?uuHHvvWrFyYeuusx7eFCGJi44lVjpRb3BECf3NOQlPmRT60SRj7RxVYg9B5V?=
- =?us-ascii?Q?f9u4JV2G+rlv/ZKjhL12LmX6xwCUxepIdKAm4qJyAz1LevyoxVZhqQbhE9O0?=
- =?us-ascii?Q?92NRcZoqCLnXrwvMP5KqQy7JSRNscgkgoZFl3Gg0e0Vf6lrPD95hJ2QFYwUe?=
- =?us-ascii?Q?+8cmYFVtDHRbeClX8SRaFTyud4gCVE+fvBXnA2cEBQAuDNY9WyUhMlv7CGPC?=
- =?us-ascii?Q?CT/+Zs9S6cnReE7nULH8C5VaKJmPHCHL49i/EQ4DrJ0ajoUYA7llbcXBGHDu?=
- =?us-ascii?Q?ED+U+kmIna5JGF+4MFSE93h1Vxss/Hw2K5SdqoAECMmChpBd/6MU9TXHD9BR?=
- =?us-ascii?Q?5FU83wgrwdwis8UugS100oeTyNYpWjAuLM1UTP9hl88qmu6J5JLFwXhpXyFN?=
- =?us-ascii?Q?Mu5y3R9RLEq60B152g8UhkyRjSVmo5zoOue+1epLuTn4mVRYLjPINQRusYVo?=
- =?us-ascii?Q?gA+6KvEn0hzUJXgHn7ys7q76LZOP0fnm4iTQddVN3m81Egjd/tdDC5dO3Qvu?=
- =?us-ascii?Q?j7+LomufPtA7pb9awwfZ+7buj4mG79h0e9b6kRyzqtV9Zvt1i/bCGnTRbJzu?=
- =?us-ascii?Q?2SxgOHmZsuA5VtFSMvBQRwHeJ6xvmx/96qEvIgUL5BQHwcrtvt066LIG+Pph?=
- =?us-ascii?Q?dokJzf0bGfrrPDl7qEaYcpE50tr39zKs0a/0qT3THP0qm0Ydw1zr0Idtvd19?=
- =?us-ascii?Q?Vgj1Gwr507xcQzOWfuRLc9cixOFu9BKpHC+5kRAOQBB5f+Xp3U+jtmACM4ux?=
- =?us-ascii?Q?D6KEJBCboRDl8/QFeNp4xlKKaW+EoLV9x8gqXrUvcM+6PVwxMk8dmdCpvA+l?=
- =?us-ascii?Q?zF9gttKDM7OCINNd69Uqbbh1akRp941Hz71rlxBqaY81wV2yIIF/w4zLGoGy?=
- =?us-ascii?Q?imBNB+drgrfTifkvJmPQs14OHvRi8IGn4398agf3qnXxaEZZkMcwIESlP4gQ?=
- =?us-ascii?Q?VEVz0wvUn4U=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 21 Mar 2022 02:59:48 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299CF40929
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 23:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647845901; x=1679381901;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2xY7hFHnTphpI7bW00HMuxLdCo+tEd4p8L6fLJfPBE4=;
+  b=O833YmADrpuegWSoZPtUmupgkpRd+zoSTFZYrBaIVfuex2vP3KpIbbaI
+   HbERfDP/GQTKDoPGUtUz5eg79sLNyUwx9oHAhBgsexuAAvQvpgidJLEct
+   2UI1MkYXydbD7MABpzYrcUSS/ZE7AVc8d9J1UAdiQl2xt4zzhp06E5rqF
+   Ge2NGWNcw/ap3mOoO2uuRmMB79Xm2HM5/6CYQJVX0V2oOfLt7qXuhLvoz
+   Nr4XbPRPFmE6MqKyRDALCbOdG1/O4z9nU1qQu/CstOgGM4g0K5b1L2hjG
+   whzheEuiZ60Ojr6r4buycXj+JlBGh0yVz5MczIjC6Y3h9LIQJkU1nlM3q
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10292"; a="257430942"
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="257430942"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2022 23:58:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,197,1643702400"; 
+   d="scan'208";a="543096825"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 20 Mar 2022 23:58:18 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nWBze-000HZn-4s; Mon, 21 Mar 2022 06:58:18 +0000
+Date:   Mon, 21 Mar 2022 14:57:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Joanne Koong <joannelkoong@gmail.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
+Subject: [ammarfaizi2-block:bpf/bpf-next/master 244/254]
+ kernel/bpf/verifier.c:13499:47: sparse: sparse: cast from restricted gfp_t
+Message-ID: <202203211432.Fx74gYS9-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96a5b456-0c34-42d2-fc38-08da0b07ea4b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2022 06:56:24.8921
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BxvhwerbeN59e/VJgB/JrZ6UzwswpQtBTrHGQZflRfFu5do1GUGuGVxwdJxjcJQd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0123
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jason Wang <jasowang@redhat.com>
-> Sent: Monday, March 21, 2022 8:04 AM
-> To: mst@redhat.com; jasowang@redhat.com
-> Cc: Eli Cohen <elic@nvidia.com>; virtualization@lists.linux-foundation.or=
-g; linux-kernel@vger.kernel.org
-> Subject: [PATCH 2/2] vdpa: mlx5: synchronize driver status with CVQ
->=20
-> Currently, CVQ doesn't have any synchronization with the driver
-> status. Then CVQ emulation code run in the middle of:
->=20
-> 1) device reset
-> 2) device status changed
-> 3) map updating
->=20
-> The will lead several unexpected issue like trying to execute CVQ
-> command after the driver has been teared down.
->=20
-> Fixing this by using reslock to synchronize CVQ emulation code with
-> the driver status changing:
->=20
-> - protect the whole device reset, status changing and map updating
->   with reslock
-> - protect the CVQ handler with the reslock and check
->   VIRTIO_CONFIG_S_DRIVER_OK in the CVQ handler
->=20
-> This will guarantee that:
->=20
-> 1) CVQ handler won't work if VIRTIO_CONFIG_S_DRIVER_OK is not set
-> 2) CVQ handler will see a consistent state of the driver instead of
->    the partial one when it is running in the middle of the
->    teardown_driver() or setup_driver().
->=20
-> Cc: 5262912ef3cfc ("vdpa/mlx5: Add support for control VQ and MAC setting=
-")
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> ---
+tree:   https://github.com/ammarfaizi2/linux-block bpf/bpf-next/master
+head:   7ada3787e91c89b0aa7abf47682e8e587b855c13
+commit: b00fa38a9c1cba044a32a601b49a55a18ed719d1 [244/254] bpf: Enable non-atomic allocations in local storage
+config: csky-randconfig-s032-20220320 (https://download.01.org/0day-ci/archive/20220321/202203211432.Fx74gYS9-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/b00fa38a9c1cba044a32a601b49a55a18ed719d1
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block bpf/bpf-next/master
+        git checkout b00fa38a9c1cba044a32a601b49a55a18ed719d1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=csky SHELL=/bin/bash kernel/bpf/
 
-Reviewed-by: Eli Cohen <elic@nvidia.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->  drivers/vdpa/mlx5/net/mlx5_vnet.c | 42 +++++++++++++++++++++++--------
->  1 file changed, 31 insertions(+), 11 deletions(-)
->=20
-> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/ml=
-x5_vnet.c
-> index d5a6fb3f9c41..524240f55c1c 100644
-> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> @@ -1618,11 +1618,17 @@ static void mlx5_cvq_kick_handler(struct work_str=
-uct *work)
->  	mvdev =3D wqent->mvdev;
->  	ndev =3D to_mlx5_vdpa_ndev(mvdev);
->  	cvq =3D &mvdev->cvq;
-> +
-> +	mutex_lock(&ndev->reslock);
-> +
-> +	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
-> +		goto done;
-> +
->  	if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ)))
-> -		return;
-> +		goto done;
->=20
->  	if (!cvq->ready)
-> -		return;
-> +		goto done;
->=20
->  	while (true) {
->  		err =3D vringh_getdesc_iotlb(&cvq->vring, &cvq->riov, &cvq->wiov, &cvq=
-->head,
-> @@ -1663,6 +1669,9 @@ static void mlx5_cvq_kick_handler(struct work_struc=
-t *work)
->  			break;
->  		}
->  	}
-> +
-> +done:
-> +	mutex_unlock(&ndev->reslock);
->  }
->=20
->  static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
-> @@ -2125,6 +2134,8 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_de=
-v *mvdev, struct vhost_iotlb
->  	struct mlx5_vdpa_net *ndev =3D to_mlx5_vdpa_ndev(mvdev);
->  	int err;
->=20
-> +	mutex_lock(&ndev->reslock);
-> +
->  	suspend_vqs(ndev);
->  	err =3D save_channels_info(ndev);
->  	if (err)
-> @@ -2137,18 +2148,20 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_=
-dev *mvdev, struct vhost_iotlb
->  		goto err_mr;
->=20
->  	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
-> -		return 0;
-> +		goto err_mr;
->=20
->  	restore_channels_info(ndev);
->  	err =3D setup_driver(mvdev);
->  	if (err)
->  		goto err_setup;
->=20
-> +	mutex_unlock(&ndev->reslock);
->  	return 0;
->=20
->  err_setup:
->  	mlx5_vdpa_destroy_mr(mvdev);
->  err_mr:
-> +	mutex_unlock(&ndev->reslock);
->  	return err;
->  }
->=20
-> @@ -2157,7 +2170,8 @@ static int setup_driver(struct mlx5_vdpa_dev *mvdev=
-)
->  	struct mlx5_vdpa_net *ndev =3D to_mlx5_vdpa_ndev(mvdev);
->  	int err;
->=20
-> -	mutex_lock(&ndev->reslock);
-> +	WARN_ON(!mutex_is_locked(&ndev->reslock));
-> +
->  	if (ndev->setup) {
->  		mlx5_vdpa_warn(mvdev, "setup driver called for already setup driver\n"=
-);
->  		err =3D 0;
-> @@ -2187,7 +2201,6 @@ static int setup_driver(struct mlx5_vdpa_dev *mvdev=
-)
->  		goto err_fwd;
->  	}
->  	ndev->setup =3D true;
-> -	mutex_unlock(&ndev->reslock);
->=20
->  	return 0;
->=20
-> @@ -2198,23 +2211,22 @@ static int setup_driver(struct mlx5_vdpa_dev *mvd=
-ev)
->  err_rqt:
->  	teardown_virtqueues(ndev);
->  out:
-> -	mutex_unlock(&ndev->reslock);
->  	return err;
->  }
->=20
->  static void teardown_driver(struct mlx5_vdpa_net *ndev)
->  {
-> -	mutex_lock(&ndev->reslock);
-> +
-> +	WARN_ON(!mutex_is_locked(&ndev->reslock));
-> +
->  	if (!ndev->setup)
-> -		goto out;
-> +		return;
->=20
->  	remove_fwd_to_tir(ndev);
->  	destroy_tir(ndev);
->  	destroy_rqt(ndev);
->  	teardown_virtqueues(ndev);
->  	ndev->setup =3D false;
-> -out:
-> -	mutex_unlock(&ndev->reslock);
->  }
->=20
->  static void clear_vqs_ready(struct mlx5_vdpa_net *ndev)
-> @@ -2235,6 +2247,8 @@ static void mlx5_vdpa_set_status(struct vdpa_device=
- *vdev, u8 status)
->=20
->  	print_status(mvdev, status, true);
->=20
-> +	mutex_lock(&ndev->reslock);
-> +
->  	if ((status ^ ndev->mvdev.status) & VIRTIO_CONFIG_S_DRIVER_OK) {
->  		if (status & VIRTIO_CONFIG_S_DRIVER_OK) {
->  			err =3D setup_driver(mvdev);
-> @@ -2244,16 +2258,19 @@ static void mlx5_vdpa_set_status(struct vdpa_devi=
-ce *vdev, u8 status)
->  			}
->  		} else {
->  			mlx5_vdpa_warn(mvdev, "did not expect DRIVER_OK to be cleared\n");
-> -			return;
-> +			goto err_clear;
->  		}
->  	}
->=20
->  	ndev->mvdev.status =3D status;
-> +	mutex_unlock(&ndev->reslock);
->  	return;
->=20
->  err_setup:
->  	mlx5_vdpa_destroy_mr(&ndev->mvdev);
->  	ndev->mvdev.status |=3D VIRTIO_CONFIG_S_FAILED;
-> +err_clear:
-> +	mutex_unlock(&ndev->reslock);
->  }
->=20
->  static int mlx5_vdpa_reset(struct vdpa_device *vdev)
-> @@ -2263,6 +2280,8 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev=
-)
->=20
->  	print_status(mvdev, 0, true);
->  	mlx5_vdpa_info(mvdev, "performing device reset\n");
-> +
-> +	mutex_lock(&ndev->reslock);
->  	teardown_driver(ndev);
->  	clear_vqs_ready(ndev);
->  	mlx5_vdpa_destroy_mr(&ndev->mvdev);
-> @@ -2275,6 +2294,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev=
-)
->  		if (mlx5_vdpa_create_mr(mvdev, NULL))
->  			mlx5_vdpa_warn(mvdev, "create MR failed\n");
->  	}
-> +	mutex_unlock(&ndev->reslock);
->=20
->  	return 0;
->  }
-> --
-> 2.18.1
 
+sparse warnings: (new ones prefixed by >>)
+>> kernel/bpf/verifier.c:13499:47: sparse: sparse: cast from restricted gfp_t
+   kernel/bpf/verifier.c:13501:47: sparse: sparse: cast from restricted gfp_t
+   kernel/bpf/verifier.c:13746:38: sparse: sparse: subtraction of functions? Share your drugs
+   kernel/bpf/verifier.c: note: in included file (through include/linux/uaccess.h, include/linux/sched/task.h, include/linux/sched/signal.h, ...):
+   arch/csky/include/asm/uaccess.h:121:17: sparse: sparse: cast removes address space '__user' of expression
+   arch/csky/include/asm/uaccess.h:121:17: sparse: sparse: asm output is not an lvalue
+   arch/csky/include/asm/uaccess.h:121:17: sparse: sparse: cast removes address space '__user' of expression
+   arch/csky/include/asm/uaccess.h:121:17: sparse: sparse: generating address of non-lvalue (11)
+   kernel/bpf/verifier.c: note: in included file (through include/linux/bpf.h, include/linux/bpf-cgroup.h):
+   include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
+   include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
+   include/linux/bpfptr.h:63:40: sparse: sparse: cast to non-scalar
+   include/linux/bpfptr.h:63:40: sparse: sparse: cast from non-scalar
+   include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
+   include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
+   include/linux/bpfptr.h:63:40: sparse: sparse: cast to non-scalar
+   include/linux/bpfptr.h:63:40: sparse: sparse: cast from non-scalar
+   include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
+   include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
+   include/linux/bpfptr.h:63:40: sparse: sparse: cast to non-scalar
+   include/linux/bpfptr.h:63:40: sparse: sparse: cast from non-scalar
+   include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
+   include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
+   include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
+   include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
+
+vim +13499 kernel/bpf/verifier.c
+
+ 13236	
+ 13237	/* Do various post-verification rewrites in a single program pass.
+ 13238	 * These rewrites simplify JIT and interpreter implementations.
+ 13239	 */
+ 13240	static int do_misc_fixups(struct bpf_verifier_env *env)
+ 13241	{
+ 13242		struct bpf_prog *prog = env->prog;
+ 13243		enum bpf_attach_type eatype = prog->expected_attach_type;
+ 13244		enum bpf_prog_type prog_type = resolve_prog_type(prog);
+ 13245		struct bpf_insn *insn = prog->insnsi;
+ 13246		const struct bpf_func_proto *fn;
+ 13247		const int insn_cnt = prog->len;
+ 13248		const struct bpf_map_ops *ops;
+ 13249		struct bpf_insn_aux_data *aux;
+ 13250		struct bpf_insn insn_buf[16];
+ 13251		struct bpf_prog *new_prog;
+ 13252		struct bpf_map *map_ptr;
+ 13253		int i, ret, cnt, delta = 0;
+ 13254	
+ 13255		for (i = 0; i < insn_cnt; i++, insn++) {
+ 13256			/* Make divide-by-zero exceptions impossible. */
+ 13257			if (insn->code == (BPF_ALU64 | BPF_MOD | BPF_X) ||
+ 13258			    insn->code == (BPF_ALU64 | BPF_DIV | BPF_X) ||
+ 13259			    insn->code == (BPF_ALU | BPF_MOD | BPF_X) ||
+ 13260			    insn->code == (BPF_ALU | BPF_DIV | BPF_X)) {
+ 13261				bool is64 = BPF_CLASS(insn->code) == BPF_ALU64;
+ 13262				bool isdiv = BPF_OP(insn->code) == BPF_DIV;
+ 13263				struct bpf_insn *patchlet;
+ 13264				struct bpf_insn chk_and_div[] = {
+ 13265					/* [R,W]x div 0 -> 0 */
+ 13266					BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
+ 13267						     BPF_JNE | BPF_K, insn->src_reg,
+ 13268						     0, 2, 0),
+ 13269					BPF_ALU32_REG(BPF_XOR, insn->dst_reg, insn->dst_reg),
+ 13270					BPF_JMP_IMM(BPF_JA, 0, 0, 1),
+ 13271					*insn,
+ 13272				};
+ 13273				struct bpf_insn chk_and_mod[] = {
+ 13274					/* [R,W]x mod 0 -> [R,W]x */
+ 13275					BPF_RAW_INSN((is64 ? BPF_JMP : BPF_JMP32) |
+ 13276						     BPF_JEQ | BPF_K, insn->src_reg,
+ 13277						     0, 1 + (is64 ? 0 : 1), 0),
+ 13278					*insn,
+ 13279					BPF_JMP_IMM(BPF_JA, 0, 0, 1),
+ 13280					BPF_MOV32_REG(insn->dst_reg, insn->dst_reg),
+ 13281				};
+ 13282	
+ 13283				patchlet = isdiv ? chk_and_div : chk_and_mod;
+ 13284				cnt = isdiv ? ARRAY_SIZE(chk_and_div) :
+ 13285					      ARRAY_SIZE(chk_and_mod) - (is64 ? 2 : 0);
+ 13286	
+ 13287				new_prog = bpf_patch_insn_data(env, i + delta, patchlet, cnt);
+ 13288				if (!new_prog)
+ 13289					return -ENOMEM;
+ 13290	
+ 13291				delta    += cnt - 1;
+ 13292				env->prog = prog = new_prog;
+ 13293				insn      = new_prog->insnsi + i + delta;
+ 13294				continue;
+ 13295			}
+ 13296	
+ 13297			/* Implement LD_ABS and LD_IND with a rewrite, if supported by the program type. */
+ 13298			if (BPF_CLASS(insn->code) == BPF_LD &&
+ 13299			    (BPF_MODE(insn->code) == BPF_ABS ||
+ 13300			     BPF_MODE(insn->code) == BPF_IND)) {
+ 13301				cnt = env->ops->gen_ld_abs(insn, insn_buf);
+ 13302				if (cnt == 0 || cnt >= ARRAY_SIZE(insn_buf)) {
+ 13303					verbose(env, "bpf verifier is misconfigured\n");
+ 13304					return -EINVAL;
+ 13305				}
+ 13306	
+ 13307				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+ 13308				if (!new_prog)
+ 13309					return -ENOMEM;
+ 13310	
+ 13311				delta    += cnt - 1;
+ 13312				env->prog = prog = new_prog;
+ 13313				insn      = new_prog->insnsi + i + delta;
+ 13314				continue;
+ 13315			}
+ 13316	
+ 13317			/* Rewrite pointer arithmetic to mitigate speculation attacks. */
+ 13318			if (insn->code == (BPF_ALU64 | BPF_ADD | BPF_X) ||
+ 13319			    insn->code == (BPF_ALU64 | BPF_SUB | BPF_X)) {
+ 13320				const u8 code_add = BPF_ALU64 | BPF_ADD | BPF_X;
+ 13321				const u8 code_sub = BPF_ALU64 | BPF_SUB | BPF_X;
+ 13322				struct bpf_insn *patch = &insn_buf[0];
+ 13323				bool issrc, isneg, isimm;
+ 13324				u32 off_reg;
+ 13325	
+ 13326				aux = &env->insn_aux_data[i + delta];
+ 13327				if (!aux->alu_state ||
+ 13328				    aux->alu_state == BPF_ALU_NON_POINTER)
+ 13329					continue;
+ 13330	
+ 13331				isneg = aux->alu_state & BPF_ALU_NEG_VALUE;
+ 13332				issrc = (aux->alu_state & BPF_ALU_SANITIZE) ==
+ 13333					BPF_ALU_SANITIZE_SRC;
+ 13334				isimm = aux->alu_state & BPF_ALU_IMMEDIATE;
+ 13335	
+ 13336				off_reg = issrc ? insn->src_reg : insn->dst_reg;
+ 13337				if (isimm) {
+ 13338					*patch++ = BPF_MOV32_IMM(BPF_REG_AX, aux->alu_limit);
+ 13339				} else {
+ 13340					if (isneg)
+ 13341						*patch++ = BPF_ALU64_IMM(BPF_MUL, off_reg, -1);
+ 13342					*patch++ = BPF_MOV32_IMM(BPF_REG_AX, aux->alu_limit);
+ 13343					*patch++ = BPF_ALU64_REG(BPF_SUB, BPF_REG_AX, off_reg);
+ 13344					*patch++ = BPF_ALU64_REG(BPF_OR, BPF_REG_AX, off_reg);
+ 13345					*patch++ = BPF_ALU64_IMM(BPF_NEG, BPF_REG_AX, 0);
+ 13346					*patch++ = BPF_ALU64_IMM(BPF_ARSH, BPF_REG_AX, 63);
+ 13347					*patch++ = BPF_ALU64_REG(BPF_AND, BPF_REG_AX, off_reg);
+ 13348				}
+ 13349				if (!issrc)
+ 13350					*patch++ = BPF_MOV64_REG(insn->dst_reg, insn->src_reg);
+ 13351				insn->src_reg = BPF_REG_AX;
+ 13352				if (isneg)
+ 13353					insn->code = insn->code == code_add ?
+ 13354						     code_sub : code_add;
+ 13355				*patch++ = *insn;
+ 13356				if (issrc && isneg && !isimm)
+ 13357					*patch++ = BPF_ALU64_IMM(BPF_MUL, off_reg, -1);
+ 13358				cnt = patch - insn_buf;
+ 13359	
+ 13360				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+ 13361				if (!new_prog)
+ 13362					return -ENOMEM;
+ 13363	
+ 13364				delta    += cnt - 1;
+ 13365				env->prog = prog = new_prog;
+ 13366				insn      = new_prog->insnsi + i + delta;
+ 13367				continue;
+ 13368			}
+ 13369	
+ 13370			if (insn->code != (BPF_JMP | BPF_CALL))
+ 13371				continue;
+ 13372			if (insn->src_reg == BPF_PSEUDO_CALL)
+ 13373				continue;
+ 13374			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
+ 13375				ret = fixup_kfunc_call(env, insn);
+ 13376				if (ret)
+ 13377					return ret;
+ 13378				continue;
+ 13379			}
+ 13380	
+ 13381			if (insn->imm == BPF_FUNC_get_route_realm)
+ 13382				prog->dst_needed = 1;
+ 13383			if (insn->imm == BPF_FUNC_get_prandom_u32)
+ 13384				bpf_user_rnd_init_once();
+ 13385			if (insn->imm == BPF_FUNC_override_return)
+ 13386				prog->kprobe_override = 1;
+ 13387			if (insn->imm == BPF_FUNC_tail_call) {
+ 13388				/* If we tail call into other programs, we
+ 13389				 * cannot make any assumptions since they can
+ 13390				 * be replaced dynamically during runtime in
+ 13391				 * the program array.
+ 13392				 */
+ 13393				prog->cb_access = 1;
+ 13394				if (!allow_tail_call_in_subprogs(env))
+ 13395					prog->aux->stack_depth = MAX_BPF_STACK;
+ 13396				prog->aux->max_pkt_offset = MAX_PACKET_OFF;
+ 13397	
+ 13398				/* mark bpf_tail_call as different opcode to avoid
+ 13399				 * conditional branch in the interpreter for every normal
+ 13400				 * call and to prevent accidental JITing by JIT compiler
+ 13401				 * that doesn't support bpf_tail_call yet
+ 13402				 */
+ 13403				insn->imm = 0;
+ 13404				insn->code = BPF_JMP | BPF_TAIL_CALL;
+ 13405	
+ 13406				aux = &env->insn_aux_data[i + delta];
+ 13407				if (env->bpf_capable && !prog->blinding_requested &&
+ 13408				    prog->jit_requested &&
+ 13409				    !bpf_map_key_poisoned(aux) &&
+ 13410				    !bpf_map_ptr_poisoned(aux) &&
+ 13411				    !bpf_map_ptr_unpriv(aux)) {
+ 13412					struct bpf_jit_poke_descriptor desc = {
+ 13413						.reason = BPF_POKE_REASON_TAIL_CALL,
+ 13414						.tail_call.map = BPF_MAP_PTR(aux->map_ptr_state),
+ 13415						.tail_call.key = bpf_map_key_immediate(aux),
+ 13416						.insn_idx = i + delta,
+ 13417					};
+ 13418	
+ 13419					ret = bpf_jit_add_poke_descriptor(prog, &desc);
+ 13420					if (ret < 0) {
+ 13421						verbose(env, "adding tail call poke descriptor failed\n");
+ 13422						return ret;
+ 13423					}
+ 13424	
+ 13425					insn->imm = ret + 1;
+ 13426					continue;
+ 13427				}
+ 13428	
+ 13429				if (!bpf_map_ptr_unpriv(aux))
+ 13430					continue;
+ 13431	
+ 13432				/* instead of changing every JIT dealing with tail_call
+ 13433				 * emit two extra insns:
+ 13434				 * if (index >= max_entries) goto out;
+ 13435				 * index &= array->index_mask;
+ 13436				 * to avoid out-of-bounds cpu speculation
+ 13437				 */
+ 13438				if (bpf_map_ptr_poisoned(aux)) {
+ 13439					verbose(env, "tail_call abusing map_ptr\n");
+ 13440					return -EINVAL;
+ 13441				}
+ 13442	
+ 13443				map_ptr = BPF_MAP_PTR(aux->map_ptr_state);
+ 13444				insn_buf[0] = BPF_JMP_IMM(BPF_JGE, BPF_REG_3,
+ 13445							  map_ptr->max_entries, 2);
+ 13446				insn_buf[1] = BPF_ALU32_IMM(BPF_AND, BPF_REG_3,
+ 13447							    container_of(map_ptr,
+ 13448									 struct bpf_array,
+ 13449									 map)->index_mask);
+ 13450				insn_buf[2] = *insn;
+ 13451				cnt = 3;
+ 13452				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+ 13453				if (!new_prog)
+ 13454					return -ENOMEM;
+ 13455	
+ 13456				delta    += cnt - 1;
+ 13457				env->prog = prog = new_prog;
+ 13458				insn      = new_prog->insnsi + i + delta;
+ 13459				continue;
+ 13460			}
+ 13461	
+ 13462			if (insn->imm == BPF_FUNC_timer_set_callback) {
+ 13463				/* The verifier will process callback_fn as many times as necessary
+ 13464				 * with different maps and the register states prepared by
+ 13465				 * set_timer_callback_state will be accurate.
+ 13466				 *
+ 13467				 * The following use case is valid:
+ 13468				 *   map1 is shared by prog1, prog2, prog3.
+ 13469				 *   prog1 calls bpf_timer_init for some map1 elements
+ 13470				 *   prog2 calls bpf_timer_set_callback for some map1 elements.
+ 13471				 *     Those that were not bpf_timer_init-ed will return -EINVAL.
+ 13472				 *   prog3 calls bpf_timer_start for some map1 elements.
+ 13473				 *     Those that were not both bpf_timer_init-ed and
+ 13474				 *     bpf_timer_set_callback-ed will return -EINVAL.
+ 13475				 */
+ 13476				struct bpf_insn ld_addrs[2] = {
+ 13477					BPF_LD_IMM64(BPF_REG_3, (long)prog->aux),
+ 13478				};
+ 13479	
+ 13480				insn_buf[0] = ld_addrs[0];
+ 13481				insn_buf[1] = ld_addrs[1];
+ 13482				insn_buf[2] = *insn;
+ 13483				cnt = 3;
+ 13484	
+ 13485				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+ 13486				if (!new_prog)
+ 13487					return -ENOMEM;
+ 13488	
+ 13489				delta    += cnt - 1;
+ 13490				env->prog = prog = new_prog;
+ 13491				insn      = new_prog->insnsi + i + delta;
+ 13492				goto patch_call_imm;
+ 13493			}
+ 13494	
+ 13495			if (insn->imm == BPF_FUNC_task_storage_get ||
+ 13496			    insn->imm == BPF_FUNC_sk_storage_get ||
+ 13497			    insn->imm == BPF_FUNC_inode_storage_get) {
+ 13498				if (env->prog->aux->sleepable)
+ 13499					insn_buf[0] = BPF_MOV64_IMM(BPF_REG_5, (__s32)GFP_KERNEL);
+ 13500				else
+ 13501					insn_buf[0] = BPF_MOV64_IMM(BPF_REG_5, (__s32)GFP_ATOMIC);
+ 13502				insn_buf[1] = *insn;
+ 13503				cnt = 2;
+ 13504	
+ 13505				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+ 13506				if (!new_prog)
+ 13507					return -ENOMEM;
+ 13508	
+ 13509				delta += cnt - 1;
+ 13510				env->prog = prog = new_prog;
+ 13511				insn = new_prog->insnsi + i + delta;
+ 13512				goto patch_call_imm;
+ 13513			}
+ 13514	
+ 13515			/* BPF_EMIT_CALL() assumptions in some of the map_gen_lookup
+ 13516			 * and other inlining handlers are currently limited to 64 bit
+ 13517			 * only.
+ 13518			 */
+ 13519			if (prog->jit_requested && BITS_PER_LONG == 64 &&
+ 13520			    (insn->imm == BPF_FUNC_map_lookup_elem ||
+ 13521			     insn->imm == BPF_FUNC_map_update_elem ||
+ 13522			     insn->imm == BPF_FUNC_map_delete_elem ||
+ 13523			     insn->imm == BPF_FUNC_map_push_elem   ||
+ 13524			     insn->imm == BPF_FUNC_map_pop_elem    ||
+ 13525			     insn->imm == BPF_FUNC_map_peek_elem   ||
+ 13526			     insn->imm == BPF_FUNC_redirect_map    ||
+ 13527			     insn->imm == BPF_FUNC_for_each_map_elem)) {
+ 13528				aux = &env->insn_aux_data[i + delta];
+ 13529				if (bpf_map_ptr_poisoned(aux))
+ 13530					goto patch_call_imm;
+ 13531	
+ 13532				map_ptr = BPF_MAP_PTR(aux->map_ptr_state);
+ 13533				ops = map_ptr->ops;
+ 13534				if (insn->imm == BPF_FUNC_map_lookup_elem &&
+ 13535				    ops->map_gen_lookup) {
+ 13536					cnt = ops->map_gen_lookup(map_ptr, insn_buf);
+ 13537					if (cnt == -EOPNOTSUPP)
+ 13538						goto patch_map_ops_generic;
+ 13539					if (cnt <= 0 || cnt >= ARRAY_SIZE(insn_buf)) {
+ 13540						verbose(env, "bpf verifier is misconfigured\n");
+ 13541						return -EINVAL;
+ 13542					}
+ 13543	
+ 13544					new_prog = bpf_patch_insn_data(env, i + delta,
+ 13545								       insn_buf, cnt);
+ 13546					if (!new_prog)
+ 13547						return -ENOMEM;
+ 13548	
+ 13549					delta    += cnt - 1;
+ 13550					env->prog = prog = new_prog;
+ 13551					insn      = new_prog->insnsi + i + delta;
+ 13552					continue;
+ 13553				}
+ 13554	
+ 13555				BUILD_BUG_ON(!__same_type(ops->map_lookup_elem,
+ 13556					     (void *(*)(struct bpf_map *map, void *key))NULL));
+ 13557				BUILD_BUG_ON(!__same_type(ops->map_delete_elem,
+ 13558					     (int (*)(struct bpf_map *map, void *key))NULL));
+ 13559				BUILD_BUG_ON(!__same_type(ops->map_update_elem,
+ 13560					     (int (*)(struct bpf_map *map, void *key, void *value,
+ 13561						      u64 flags))NULL));
+ 13562				BUILD_BUG_ON(!__same_type(ops->map_push_elem,
+ 13563					     (int (*)(struct bpf_map *map, void *value,
+ 13564						      u64 flags))NULL));
+ 13565				BUILD_BUG_ON(!__same_type(ops->map_pop_elem,
+ 13566					     (int (*)(struct bpf_map *map, void *value))NULL));
+ 13567				BUILD_BUG_ON(!__same_type(ops->map_peek_elem,
+ 13568					     (int (*)(struct bpf_map *map, void *value))NULL));
+ 13569				BUILD_BUG_ON(!__same_type(ops->map_redirect,
+ 13570					     (int (*)(struct bpf_map *map, u32 ifindex, u64 flags))NULL));
+ 13571				BUILD_BUG_ON(!__same_type(ops->map_for_each_callback,
+ 13572					     (int (*)(struct bpf_map *map,
+ 13573						      bpf_callback_t callback_fn,
+ 13574						      void *callback_ctx,
+ 13575						      u64 flags))NULL));
+ 13576	
+ 13577	patch_map_ops_generic:
+ 13578				switch (insn->imm) {
+ 13579				case BPF_FUNC_map_lookup_elem:
+ 13580					insn->imm = BPF_CALL_IMM(ops->map_lookup_elem);
+ 13581					continue;
+ 13582				case BPF_FUNC_map_update_elem:
+ 13583					insn->imm = BPF_CALL_IMM(ops->map_update_elem);
+ 13584					continue;
+ 13585				case BPF_FUNC_map_delete_elem:
+ 13586					insn->imm = BPF_CALL_IMM(ops->map_delete_elem);
+ 13587					continue;
+ 13588				case BPF_FUNC_map_push_elem:
+ 13589					insn->imm = BPF_CALL_IMM(ops->map_push_elem);
+ 13590					continue;
+ 13591				case BPF_FUNC_map_pop_elem:
+ 13592					insn->imm = BPF_CALL_IMM(ops->map_pop_elem);
+ 13593					continue;
+ 13594				case BPF_FUNC_map_peek_elem:
+ 13595					insn->imm = BPF_CALL_IMM(ops->map_peek_elem);
+ 13596					continue;
+ 13597				case BPF_FUNC_redirect_map:
+ 13598					insn->imm = BPF_CALL_IMM(ops->map_redirect);
+ 13599					continue;
+ 13600				case BPF_FUNC_for_each_map_elem:
+ 13601					insn->imm = BPF_CALL_IMM(ops->map_for_each_callback);
+ 13602					continue;
+ 13603				}
+ 13604	
+ 13605				goto patch_call_imm;
+ 13606			}
+ 13607	
+ 13608			/* Implement bpf_jiffies64 inline. */
+ 13609			if (prog->jit_requested && BITS_PER_LONG == 64 &&
+ 13610			    insn->imm == BPF_FUNC_jiffies64) {
+ 13611				struct bpf_insn ld_jiffies_addr[2] = {
+ 13612					BPF_LD_IMM64(BPF_REG_0,
+ 13613						     (unsigned long)&jiffies),
+ 13614				};
+ 13615	
+ 13616				insn_buf[0] = ld_jiffies_addr[0];
+ 13617				insn_buf[1] = ld_jiffies_addr[1];
+ 13618				insn_buf[2] = BPF_LDX_MEM(BPF_DW, BPF_REG_0,
+ 13619							  BPF_REG_0, 0);
+ 13620				cnt = 3;
+ 13621	
+ 13622				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf,
+ 13623							       cnt);
+ 13624				if (!new_prog)
+ 13625					return -ENOMEM;
+ 13626	
+ 13627				delta    += cnt - 1;
+ 13628				env->prog = prog = new_prog;
+ 13629				insn      = new_prog->insnsi + i + delta;
+ 13630				continue;
+ 13631			}
+ 13632	
+ 13633			/* Implement bpf_get_func_arg inline. */
+ 13634			if (prog_type == BPF_PROG_TYPE_TRACING &&
+ 13635			    insn->imm == BPF_FUNC_get_func_arg) {
+ 13636				/* Load nr_args from ctx - 8 */
+ 13637				insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8);
+ 13638				insn_buf[1] = BPF_JMP32_REG(BPF_JGE, BPF_REG_2, BPF_REG_0, 6);
+ 13639				insn_buf[2] = BPF_ALU64_IMM(BPF_LSH, BPF_REG_2, 3);
+ 13640				insn_buf[3] = BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_1);
+ 13641				insn_buf[4] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, 0);
+ 13642				insn_buf[5] = BPF_STX_MEM(BPF_DW, BPF_REG_3, BPF_REG_0, 0);
+ 13643				insn_buf[6] = BPF_MOV64_IMM(BPF_REG_0, 0);
+ 13644				insn_buf[7] = BPF_JMP_A(1);
+ 13645				insn_buf[8] = BPF_MOV64_IMM(BPF_REG_0, -EINVAL);
+ 13646				cnt = 9;
+ 13647	
+ 13648				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+ 13649				if (!new_prog)
+ 13650					return -ENOMEM;
+ 13651	
+ 13652				delta    += cnt - 1;
+ 13653				env->prog = prog = new_prog;
+ 13654				insn      = new_prog->insnsi + i + delta;
+ 13655				continue;
+ 13656			}
+ 13657	
+ 13658			/* Implement bpf_get_func_ret inline. */
+ 13659			if (prog_type == BPF_PROG_TYPE_TRACING &&
+ 13660			    insn->imm == BPF_FUNC_get_func_ret) {
+ 13661				if (eatype == BPF_TRACE_FEXIT ||
+ 13662				    eatype == BPF_MODIFY_RETURN) {
+ 13663					/* Load nr_args from ctx - 8 */
+ 13664					insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8);
+ 13665					insn_buf[1] = BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 3);
+ 13666					insn_buf[2] = BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_1);
+ 13667					insn_buf[3] = BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_0, 0);
+ 13668					insn_buf[4] = BPF_STX_MEM(BPF_DW, BPF_REG_2, BPF_REG_3, 0);
+ 13669					insn_buf[5] = BPF_MOV64_IMM(BPF_REG_0, 0);
+ 13670					cnt = 6;
+ 13671				} else {
+ 13672					insn_buf[0] = BPF_MOV64_IMM(BPF_REG_0, -EOPNOTSUPP);
+ 13673					cnt = 1;
+ 13674				}
+ 13675	
+ 13676				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+ 13677				if (!new_prog)
+ 13678					return -ENOMEM;
+ 13679	
+ 13680				delta    += cnt - 1;
+ 13681				env->prog = prog = new_prog;
+ 13682				insn      = new_prog->insnsi + i + delta;
+ 13683				continue;
+ 13684			}
+ 13685	
+ 13686			/* Implement get_func_arg_cnt inline. */
+ 13687			if (prog_type == BPF_PROG_TYPE_TRACING &&
+ 13688			    insn->imm == BPF_FUNC_get_func_arg_cnt) {
+ 13689				/* Load nr_args from ctx - 8 */
+ 13690				insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8);
+ 13691	
+ 13692				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
+ 13693				if (!new_prog)
+ 13694					return -ENOMEM;
+ 13695	
+ 13696				env->prog = prog = new_prog;
+ 13697				insn      = new_prog->insnsi + i + delta;
+ 13698				continue;
+ 13699			}
+ 13700	
+ 13701			/* Implement tracing bpf_get_func_ip inline. */
+ 13702			if (prog_type == BPF_PROG_TYPE_TRACING &&
+ 13703			    insn->imm == BPF_FUNC_get_func_ip) {
+ 13704				/* Load IP address from ctx - 16 */
+ 13705				insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -16);
+ 13706	
+ 13707				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
+ 13708				if (!new_prog)
+ 13709					return -ENOMEM;
+ 13710	
+ 13711				env->prog = prog = new_prog;
+ 13712				insn      = new_prog->insnsi + i + delta;
+ 13713				continue;
+ 13714			}
+ 13715	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

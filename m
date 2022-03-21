@@ -2,145 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCDC4E3264
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 22:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 253A24E32E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 23:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbiCUVqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 17:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
+        id S229542AbiCUWr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 18:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiCUVqG (ORCPT
+        with ESMTP id S229835AbiCUWrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 17:46:06 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C59E264561
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 14:41:22 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id q11so13839639pln.11
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 14:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hzlxuoVcUtFNyYhd7IaP3vW/n/31iVrjVI0cYpxyVIg=;
-        b=AJJS8AlLvE3dh4Iw3f148oDobBs8GBjNK4HQR4fd1ld62s0aCs+22XINlkoJDU3AoS
-         8uOi8t84billfQr0/CqrEHKAzh01irX6vV3+g/0cziRJHBRIamVkeOpo/BnaIatO7PZV
-         Eh43oCbXlnRIdtB69OTh5c/BRYxUtttvmXan5DnrMyeb/hsvFapXSvlvx+JuWcvRFGHt
-         Ntke3y/TTx6l6EOaJqInsPSOd9mVsFU0WbP2/5lR+aO70ZuS7ys8aNRkV3i6D/Lf0evC
-         r6BJwCreN/NdOKs2SjJv0+1od6GQSOKpx1d5z0hh7EF2eui/EcuQxfMSPoOkBKCZ7FWC
-         /+Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hzlxuoVcUtFNyYhd7IaP3vW/n/31iVrjVI0cYpxyVIg=;
-        b=UbRXTHrsbs6r0S2xJn6wkWkjLM0sXBCuSClQGXF3b9YN1d7gUCaFKioapaKrzp61J/
-         E9n7l3nG4HC1IAZayHLTDvgXK+I9JlvEwUWUJ3kOFpzMcLyKFJ4XB6Nbd128LwbAnlmj
-         z7SHiKaXmgbbU2PnO3X7jNPgP0uaX6YpCN+2f8uSsUKXJlKgc8PYeACy5/qPq56NqJa8
-         DxXKjqomHcW+SJPzEfqZMeNA6YDlSRxsPgQQUGR/jdwYoEfNBX2eGURhDimjP6Z9uTog
-         OqWq0wUTvJgY33rOXnqzq/sSpEXUy/QqU6vyof2KMEgdyYr5rGmDSoe/zq67OmGly1i8
-         GyDA==
-X-Gm-Message-State: AOAM5331arWquAjePhmXc/F4LWOf3rOR4vRYwoiekQ99g7POnKsxphy9
-        cQ9VIolu8MYM979p/tlV0qxCTuXwPdI9sQebPhnRBg==
-X-Google-Smtp-Source: ABdhPJyzdofKTKHoiJ4iGCBbHSPi4Xc1wlwYjpgmL6SpWKAD7UioDwd+ubLQF8zj102JpbsH9iOBSWpSmWQXM5a6nHg=
-X-Received: by 2002:a17:903:32c7:b0:154:4156:f384 with SMTP id
- i7-20020a17090332c700b001544156f384mr10917932plr.34.1647898771195; Mon, 21
- Mar 2022 14:39:31 -0700 (PDT)
+        Mon, 21 Mar 2022 18:47:35 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67843A35D7;
+        Mon, 21 Mar 2022 15:27:35 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 81CD722175;
+        Mon, 21 Mar 2022 22:41:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1647898916;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H8b7+3L8jyoijK3U5LHdUPt3et03RXlG9z84o4vPklU=;
+        b=o/s/oQAP6fhf078SLdCjf35BeBa/MVgWK2EQ5ACRLZmmB8sjXAdT3mItde5d4yhj+YoGJW
+        3SLTBJsX0ffwSsf8G6o0IqCEkV2zYwBf0JTd4YWhUQpjzGtOJcFLRbz7kGeP13ltxceJGS
+        NnJZuKXpaSB3iQSAX/Coq1cQjYYnYPE=
 MIME-Version: 1.0
-References: <20220318114133.113627-1-kjain@linux.ibm.com> <20220318114133.113627-2-kjain@linux.ibm.com>
-In-Reply-To: <20220318114133.113627-2-kjain@linux.ibm.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 21 Mar 2022 14:39:23 -0700
-Message-ID: <CAPcyv4iqpTn89WLOW1XjFXGZEYG_MmPg+VQbcDJ9ygJ4Jaybtw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] powerpc/papr_scm: Fix build failure when
- CONFIG_PERF_EVENTS is not set
-To:     Kajol Jain <kjain@linux.ibm.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
-        rnsastry@linux.ibm.com,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 21 Mar 2022 22:41:56 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Clause 45 and Clause 22 PHYs on one MDIO bus
+In-Reply-To: <YjjhxbZgKHykJ+35@lunn.ch>
+References: <240354b0a54b37e8b5764773711b8aa3@walle.cc>
+ <cdb3d3f6ad35d4e26fd8abb23b2e96a3@walle.cc> <YjjhxbZgKHykJ+35@lunn.ch>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <4d728d267e45fe591c933c86cdfff333@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 4:42 AM Kajol Jain <kjain@linux.ibm.com> wrote:
->
-> The following build failure occures when CONFIG_PERF_EVENTS is not set
-> as generic pmu functions are not visible in that scenario.
->
-> arch/powerpc/platforms/pseries/papr_scm.c:372:35: error: =E2=80=98struct =
-perf_event=E2=80=99 has no member named =E2=80=98attr=E2=80=99
->          p->nvdimm_events_map[event->attr.config],
->                                    ^~
-> In file included from ./include/linux/list.h:5,
->                  from ./include/linux/kobject.h:19,
->                  from ./include/linux/of.h:17,
->                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
-> arch/powerpc/platforms/pseries/papr_scm.c: In function =E2=80=98papr_scm_=
-pmu_event_init=E2=80=99:
-> arch/powerpc/platforms/pseries/papr_scm.c:389:49: error: =E2=80=98struct =
-perf_event=E2=80=99 has no member named =E2=80=98pmu=E2=80=99
->   struct nvdimm_pmu *nd_pmu =3D to_nvdimm_pmu(event->pmu);
->                                                  ^~
-> ./include/linux/container_of.h:18:26: note: in definition of macro =E2=80=
-=98container_of=E2=80=99
->   void *__mptr =3D (void *)(ptr);     \
->                           ^~~
-> arch/powerpc/platforms/pseries/papr_scm.c:389:30: note: in expansion of m=
-acro =E2=80=98to_nvdimm_pmu=E2=80=99
->   struct nvdimm_pmu *nd_pmu =3D to_nvdimm_pmu(event->pmu);
->                               ^~~~~~~~~~~~~
-> In file included from ./include/linux/bits.h:22,
->                  from ./include/linux/bitops.h:6,
->                  from ./include/linux/of.h:15,
->                  from arch/powerpc/platforms/pseries/papr_scm.c:5:
->
-> Fix the build issue by adding check for CONFIG_PERF_EVENTS config option
-> and disabling the papr_scm perf interface support incase this config
-> is not set
->
-> Fixes: 4c08d4bbc089 ("powerpc/papr_scm: Add perf interface support") (Com=
-mit id
-> based on linux-next tree)
-> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
-> ---
->  arch/powerpc/platforms/pseries/papr_scm.c | 15 +++++++++++++++
+Am 2022-03-21 21:36, schrieb Andrew Lunn:
+>> Actually, it looks like mdiobus_c45_read() is really c45 only and only
+>> used for PHYs which just support c45 and not c45-over-c22 (?). I was
+>> mistaken by the heavy use of the function in phy_device.c. All the
+>> methods in phy-c45.c use phy_*_mmd() functions. Thus it might only be
+>> the mxl-gpy doing something fishy in its probe function.
+> 
+> Yes, there is something odd here. You should search back on the
+> mailing list.
+> 
+> If i remember correctly, it is something like it responds to both c22
+> and c45. If it is found via c22, phylib does not set phydev->is_c45,
+> and everything ends up going indirect. So the probe additionally tries
+> to find it via c45? Or something like that.
 
-This is a bit messier than I would have liked mainly because it dumps
-a bunch of ifdefery into a C file contrary to coding style, "Wherever
-possible, don't use preprocessor conditionals (#if, #ifdef) in .c
-files". I would expect this all to move to an organization like:
+Yeah, found it: https://lore.kernel.org/netdev/YLaG9cdn6ewdffjV@lunn.ch/
 
-arch/powerpc/platforms/pseries/papr_scm/main.c
-arch/powerpc/platforms/pseries/papr_scm/perf.c
+But that means that if the controller is not c45 capable, it will always
+fail to probe, no?
 
-...and a new config symbol like:
+I've added the "if (regnum & MII_ADDR_C45) return -EOPNOTSUPP" to the
+mdio driver and the gpy phy will then fail to probe - as expected.
 
-config PAPR_SCM_PERF
-       depends on PAPR_SCM && PERF_EVENTS
-       def_bool y
+Should it check for -EOPNOTSUPP and just ignore that error and continue
+probing? Or make it a no-op if probe_capabilities say it has no c45
+access so it would take advantage of a quirk flag (derived from dt)?
 
-...with wrappers in header files to make everything compile away
-without any need for main.c to carry an ifdef.
+>> Nevertheless, I'd still need the opt-out of any c45 access. Otherwise,
+>> if someone will ever implement c45 support for the mdio-mscc-mdio
+>> driver, I'll run in the erratic behavior.
+> 
+> Yah, i need to think about that. Are you purely in the DT world, or is
+> ACPI also an option?
 
-Can you turn a patch like that in the next couple days? Otherwise, I
-think if Linus saw me sending a late breaking compile fix that threw
-coding style out the window he'd have cause to just drop the pull
-request entirely.
+Just DT world.
+
+> Maybe extend of_mdiobus_register() to look for a DT property to limit
+> what values probe_capabilities can take?
+
+I'll have to give it a try. First I was thinking that we wouldn't need
+it because a broken PHY driver could just set a quirk 
+"broken_c45_access"
+or similar. But that would mean it has to be probed before any c45 PHY.
+Dunno if that will be true for the future. And it sounds rather fragile.
+So yes, a dt property might be a better option.
+
+-michael

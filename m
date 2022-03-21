@@ -2,59 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AE54E3102
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 21:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B465B4E3107
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 21:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352871AbiCUUDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 16:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
+        id S1352883AbiCUUGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 16:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236078AbiCUUDA (ORCPT
+        with ESMTP id S240609AbiCUUGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 16:03:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7485850B33
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 13:01:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647892894; x=1679428894;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cNo0jptrH7A1z6MbWEF0PmuWlYaPNWNxRipYv7rH21k=;
-  b=NG30+/1D0fnLGEm6NdRqfZ0dejJzhA8SpNm+a2XkIh5ClOuFzI1VJOWk
-   2XAOkai/cACVRWwlgadKDYt8sMkGSuppmSCo/Ak3bBMhiiA6VGsq3+IDZ
-   +aKqiAEZH9oI4VhTIQ6a3FT2T36IONGCdmFVjz9enhol+r9VqF5xdZKCw
-   KntjbWTurziaUVRufkMMq8ch9lmKhuF6jt57MWYUtwebVPSK1kpPE2fwR
-   tkXrefi1rdR8mr/yOOTx1XgE+lXxFdvwO8ikxoq2eOae59O8tyEasDB/j
-   LKmMYidtBvY96v7L+0ry14AYfnJpXN+SvhoVPXaE7yScET8lni8rImOS8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10293"; a="320840910"
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="320840910"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 13:01:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,199,1643702400"; 
-   d="scan'208";a="543363892"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 21 Mar 2022 13:01:32 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nWODb-000I6o-P4; Mon, 21 Mar 2022 20:01:31 +0000
-Date:   Tue, 22 Mar 2022 04:01:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Huang Pei <huangpei@loongson.cn>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: sound/pci/ca0106/ca0106.h:62:9: warning: 'PTR' macro redefined
-Message-ID: <202203220433.6STDC254-lkp@intel.com>
+        Mon, 21 Mar 2022 16:06:04 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2BB35DC0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 13:04:37 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id pv16so32185087ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 13:04:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EphSPWlAG/seg8/XxUJ+C6+QPSj46eTtMcd7G1mgPek=;
+        b=GJiGVlHHVxpjdeq+5wwQIz8f5/ZJWDeVpfFx00K5d5coCxSF4lf0U5NM44hce0/8dS
+         cDFuTSLXY1Tt08BWUK1bQeUbHtbjiOlkx/fMqd5T3EQHiTBKDRUWj5duxUWAnfoZwX6n
+         MJ+uELUJaR+tdQCDhu96nQH9BWXME35LCBwrg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EphSPWlAG/seg8/XxUJ+C6+QPSj46eTtMcd7G1mgPek=;
+        b=slrocj2x7I8ZBlzKcKlixcEiJ2IM8l8KXnJ06ZW+JWDS0IChPQ2fxxEk47EgKtIPoN
+         yZLIHZ138b2t0M4GTMqFmiLf0qV1eSu2zxkQ27uxvnSpwMDB0qwi6LDaYrvowxZkmHIR
+         Mv3cuWc/QnxvAl/s7i9dG5P+PoGqw1YXI6dd6w8iO5IR+0tOZoY6mxEHCVafCYAAUcKE
+         2Ack3erYF3Je3HAnq4PqarFZesO8dRk2VJKccmdtGfnO772kiWIibZbrS637w0AeuN8y
+         7UJq8INYeRFlvNyP6MokIgQt1dHMotio+swOmBhXsIkWoCNz+fcnZWTgLUuS51i554vR
+         tLOg==
+X-Gm-Message-State: AOAM531MRfY/erobjw/lr+KZtsWaS970ubJlP6FvJQAVcrd5WD1CZ97i
+        MPyv8LwbKAczl5juf+bCxefOBnFBkz6IQw==
+X-Google-Smtp-Source: ABdhPJzDeEtDozrCXdtZ1856Y1j+QHoE16KQNvgkH6LTmUGudVj4mz9M3gKo6ffp4E2kyhg0zyFInA==
+X-Received: by 2002:a17:907:3d89:b0:6df:802d:df43 with SMTP id he9-20020a1709073d8900b006df802ddf43mr22570543ejc.76.1647893075971;
+        Mon, 21 Mar 2022 13:04:35 -0700 (PDT)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
+        by smtp.gmail.com with ESMTPSA id dn4-20020a17090794c400b006dbec4f4acbsm7320759ejc.6.2022.03.21.13.04.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 13:04:35 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id p9so22174883wra.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 13:04:34 -0700 (PDT)
+X-Received: by 2002:a5d:5551:0:b0:203:f916:e319 with SMTP id
+ g17-20020a5d5551000000b00203f916e319mr13385092wrw.422.1647893074416; Mon, 21
+ Mar 2022 13:04:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220321191100.1993-1-swboyd@chromium.org> <20220321191100.1993-4-swboyd@chromium.org>
+In-Reply-To: <20220321191100.1993-4-swboyd@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 21 Mar 2022 13:04:20 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UXeJVVbJhdcoCc8iUESZ-Vz07iY-yt1OY3EM9m7T-axw@mail.gmail.com>
+Message-ID: <CAD=FV=UXeJVVbJhdcoCc8iUESZ-Vz07iY-yt1OY3EM9m7T-axw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] platform/chrome: cros_ec_spi: Boot fingerprint
+ processor during probe
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        chrome-platform@lists.linux.dev,
+        Guenter Roeck <groeck@chromium.org>,
+        Craig Hesling <hesling@chromium.org>,
+        Tom Hughes <tomhughes@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,59 +81,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Huang,
+Hi,
 
-FYI, the error/warning still remains.
+On Mon, Mar 21, 2022 at 12:11 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Add gpio control to this driver so that the fingerprint device can be
+> booted if the BIOS isn't doing it already. This eases bringup of new
+> hardware as we don't have to wait for the BIOS to be ready, supports
+> kexec where the GPIOs may not be configured by the previous boot stage,
+> and is all around good hygiene because we control GPIOs for this device
+> from the device driver.
+>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Craig Hesling <hesling@chromium.org>
+> Cc: Tom Hughes <tomhughes@chromium.org>
+> Cc: Alexandru M Stan <amstan@chromium.org>
+> Cc: Tzung-Bi Shih <tzungbi@kernel.org>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  drivers/platform/chrome/cros_ec_spi.c | 42 +++++++++++++++++++++++++--
+>  1 file changed, 39 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_spi.c b/drivers/platform/chrome/cros_ec_spi.c
+> index 51b64b392c51..92518f90f86e 100644
+> --- a/drivers/platform/chrome/cros_ec_spi.c
+> +++ b/drivers/platform/chrome/cros_ec_spi.c
+> @@ -4,6 +4,7 @@
+>  // Copyright (C) 2012 Google, Inc
+>
+>  #include <linux/delay.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> @@ -690,11 +691,13 @@ static int cros_ec_cmd_xfer_spi(struct cros_ec_device *ec_dev,
+>         return cros_ec_xfer_high_pri(ec_dev, ec_msg, do_cros_ec_cmd_xfer_spi);
+>  }
+>
+> -static void cros_ec_spi_dt_probe(struct cros_ec_spi *ec_spi, struct device *dev)
+> +static int cros_ec_spi_dt_probe(struct cros_ec_spi *ec_spi, struct device *dev)
+>  {
+>         struct device_node *np = dev->of_node;
+>         u32 val;
+>         int ret;
+> +       struct gpio_desc *boot0;
+> +       struct gpio_desc *reset;
+>
+>         ret = of_property_read_u32(np, "google,cros-ec-spi-pre-delay", &val);
+>         if (!ret)
+> @@ -703,6 +706,37 @@ static void cros_ec_spi_dt_probe(struct cros_ec_spi *ec_spi, struct device *dev)
+>         ret = of_property_read_u32(np, "google,cros-ec-spi-msg-delay", &val);
+>         if (!ret)
+>                 ec_spi->end_of_msg_delay = val;
+> +
+> +       if (!of_device_is_compatible(np, "google,cros-ec-fp"))
+> +               return 0;
+> +
+> +       boot0 = devm_gpiod_get(dev, "boot0", 0);
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f443e374ae131c168a065ea1748feac6b2e76613
-commit: f0b7ddbd794bdffade370f22bb7a774002208ef4 MIPS: retire "asm/llsc.h"
-date:   3 months ago
-config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20220322/202203220433.6STDC254-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 85e9b2687a13d1908aa86d1b89c5ce398a06cd39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f0b7ddbd794bdffade370f22bb7a774002208ef4
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f0b7ddbd794bdffade370f22bb7a774002208ef4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash sound/pci/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from sound/pci/ca0106/ca0106_main.c:156:
->> sound/pci/ca0106/ca0106.h:62:9: warning: 'PTR' macro redefined [-Wmacro-redefined]
-   #define PTR                     0x00            /* Indexed register set pointer register        */
-           ^
-   arch/mips/include/asm/asm.h:288:9: note: previous definition is here
-   #define PTR             .word
-           ^
-   1 warning generated.
+I think that the last parameter to devm_gpiod_get() is better
+described by "GPIOD_ASIS", right? Same for the other one below.
 
 
-vim +/PTR +62 sound/pci/ca0106/ca0106.h
+> +       if (IS_ERR(boot0))
+> +               return PTR_ERR(boot0);
+> +
+> +       reset = devm_gpiod_get(dev, "reset", 0);
+> +       if (IS_ERR(reset))
+> +               return PTR_ERR(reset);
+> +
+> +       /*
+> +        * Take the FPMCU out of reset and wait for it to boot if it's in
+> +        * bootloader mode or held in reset. This isn't the normal flow because
+> +        * typically the BIOS has already powered on the device to avoid the
+> +        * multi-second delay waiting for the FPMCU to boot and be responsive.
+> +        */
+> +       if (gpiod_get_value(boot0) || gpiod_get_value(reset)) {
 
-^1da177e4c3f41 Linus Torvalds 2005-04-16  61  
-^1da177e4c3f41 Linus Torvalds 2005-04-16 @62  #define PTR			0x00		/* Indexed register set pointer register	*/
-^1da177e4c3f41 Linus Torvalds 2005-04-16  63  						/* NOTE: The CHANNELNUM and ADDRESS words can	*/
-^1da177e4c3f41 Linus Torvalds 2005-04-16  64  						/* be modified independently of each other.	*/
-^1da177e4c3f41 Linus Torvalds 2005-04-16  65  						/* CNL[1:0], ADDR[27:16]                        */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  66  
+I believe that the above two calls are illegal as documented. The file
+`Documentation/driver-api/gpio/consumer.rst` says that if you use
+`GPIOD_ASIS` to get the GPIO that "The direction must be set later
+with one of the dedicated functions.". The "must" there is important.
 
-:::::: The code at line 62 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+Oh, and further down it appears to be even more explicit and says "Be
+aware that there is no default direction for GPIOs. Therefore, **using
+a GPIO without setting its direction first is illegal and will result
+in undefined behavior!**".
 
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+I assume that "get" counts as using?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I think this sorta gets into some of the limitations of the GPIO APIs
+in Linux that try to make sure that they work on a "lowest common
+denominator" GPIO controller. I don't think they promise that
+"get_value" while in output mode is legal across all GPIO controllers.
+
+Maybe a solution is to at least add a comment saying that the code
+will only work on GPIO controllers that will let you get the value
+back if it's an output?
+
+
+> +               /* Boot0 is sampled on reset deassertion */
+> +               gpiod_set_value(boot0, 0);
+> +               gpiod_set_value(reset, 1);
+
+Those two calls are almost certainly illegal / not guaranteed to work
+without setting a direction, at least in the general case. Luckily I
+think it's easy to just change both of them to
+"gpiod_direction_output", which takes a value.
+
+Actually, even on Qualcomm hardware I don't think those will work if
+the boot direction was input, will they? They'll set the value that
+_will_ be driven but won't cause it to actually be driven, right?
+
+
+-Doug

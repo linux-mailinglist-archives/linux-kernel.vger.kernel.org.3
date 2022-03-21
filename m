@@ -2,74 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20814E1EE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 02:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1924E1EE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 02:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344080AbiCUBtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Mar 2022 21:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S1344090AbiCUBvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Mar 2022 21:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344077AbiCUBtb (ORCPT
+        with ESMTP id S242733AbiCUBvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Mar 2022 21:49:31 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48C233E27;
-        Sun, 20 Mar 2022 18:48:05 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id o68-20020a17090a0a4a00b001c686a48263so6591659pjo.1;
-        Sun, 20 Mar 2022 18:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MXaHjSqW1X8Va2iXmuY0GdSIMSz0sws/QMoV4WVeEt8=;
-        b=bXw8LgDE+o11taz8NT95gJXNCd0JYnAVosKlZ3yFvjmLg4jhiTCWKd4sVOsYzNyMiI
-         E5W3oHErXcbJ1uLYklqrhWXpDnrKsGsJ86cZ/D9THR6l11pkUeHqWULGsoYipq1Q8Aug
-         YaO66Ox26YrcTvAk/VxszYXDHxdoENQC7D4s+y9H+//iYhOhv5rpdSDqyMCVbDtY1wgJ
-         y/tABDaGrswWJZ59x9Df5+1b9Nuo7Hr1Rqsr5/DZSvybQAgQldym+nQFev4VJbkISgGR
-         9cqyfmYHh0ogOifKOY2WbpNfXr3+Yw3uHpz5vLKtlYDaWnEjPJCSDccMHKKYjotvd8rj
-         pQug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MXaHjSqW1X8Va2iXmuY0GdSIMSz0sws/QMoV4WVeEt8=;
-        b=wY0n0t4a8WpdqKxtVyT4dsN7/3gPZ1EqnIDxZcIvCGRx4TbkdYKwbJ9OWYe5/kzf4l
-         bLNSiWwlYWg8mEB79HjyjDquBZ1avo7iVRB+z98PmUlK7iipKrSyG3pi6w4aY2suZlQn
-         AN0pa75yaxKjpELuMNoZpX+4oML/5wWJcDIxpISBojD9GKXSUME7x6dlMHb7UATIbjbu
-         thwIo8L39v9I3aXJ6muc26kxKYP0Wr5ybwj5PToeYnQl1qla3HM+ASVD0Q75sJZFBJ9+
-         4a9705sE+R/Sxe2Q0AIeIkhUUj3J56QSP1xvf/ByWsrdpwMPvbNFDr9zIwY99k65MhBc
-         Rd4w==
-X-Gm-Message-State: AOAM533e8VDSUNPOtTgP7gX1+DOoT43gh+EV4Uu+i1nHdaskcd7gOEcG
-        /XfX+wiMMVQmgUxTKMsNYdXcA+iZT+jXTw==
-X-Google-Smtp-Source: ABdhPJzwqjSayPfEdLMbnZ9hl+6ggCJT03NPCSGkybxAu1cj53SWeZ32/CQmZb6HD69avg0sPg8YnQ==
-X-Received: by 2002:a17:903:1205:b0:151:8ae9:93ea with SMTP id l5-20020a170903120500b001518ae993eamr10752168plh.37.1647827285428;
-        Sun, 20 Mar 2022 18:48:05 -0700 (PDT)
-Received: from [10.11.37.162] ([103.84.139.53])
-        by smtp.gmail.com with ESMTPSA id h2-20020a056a00218200b004f6519ce666sm17329005pfi.170.2022.03.20.18.48.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Mar 2022 18:48:05 -0700 (PDT)
-Message-ID: <de416319-c027-837d-4b8c-b8c3c37ed88e@gmail.com>
-Date:   Mon, 21 Mar 2022 09:47:58 +0800
+        Sun, 20 Mar 2022 21:51:39 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A7C10E042
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Mar 2022 18:50:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R231e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0V7h.VvQ_1647827408;
+Received: from 30.225.24.50(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0V7h.VvQ_1647827408)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 21 Mar 2022 09:50:10 +0800
+Message-ID: <abcbf5d2-c348-7dc0-cfd3-9bcc6431bc64@linux.alibaba.com>
+Date:   Mon, 21 Mar 2022 09:50:08 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] can: usb_8dev: fix possible double dev_kfree_skb in
- usb_8dev_start_xmit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH] ocfs2: fix check if list iterator did find an element
 Content-Language: en-US
-To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, stefan.maetje@esd.eu, mailhol.vincent@wanadoo.fr,
-        paskripkin@gmail.com, b.krumboeck@gmail.com
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220311080614.45229-1-hbh25y@gmail.com>
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <20220311080614.45229-1-hbh25y@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jakob Koschel <jakobkoschel@gmail.com>,
+        Mark Fasheh <mark@fasheh.com>
+Cc:     linux-kernel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        Joel Becker <jlbec@evilplan.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+References: <20220319203106.2541700-1-jakobkoschel@gmail.com>
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+In-Reply-To: <20220319203106.2541700-1-jakobkoschel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,64 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gentle ping.
 
-On 2022/3/11 16:06, Hangyu Hua wrote:
-> There is no need to call dev_kfree_skb when usb_submit_urb fails beacause
-> can_put_echo_skb deletes original skb and can_free_echo_skb deletes the cloned
-> skb.
+
+On 3/20/22 4:31 AM, Jakob Koschel wrote:
+> Instead of setting 'res' to NULL, it should only be set if
+> the suitable element was found.
 > 
-> Fixes: 0024d8ad1639 ("can: usb_8dev: Add support for USB2CAN interface from 8 devices")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> In the original code 'res' would have been set to an incorrect pointer
+> if the list is empty.
+> 
+The logic before iteration can make sure track_list won't be empty.
+Please refer the discussion via:
+https://lore.kernel.org/ocfs2-devel/bd0ec87e-b490-83dc-2363-5e5342c59fa4@linux.alibaba.com/T/#m96d4397930201d83d68677c33a9721ae8dbd8f15
+
+Thanks,
+Joseph
+
+> In preparation to limit the scope of the list iterator to the list
+> traversal loop, use a dedicated pointer pointing to the found element [1].
+> 
+> Link: https://lore.kernel.org/all/YhdfEIwI4EdtHdym@kroah.com/
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 > ---
->   drivers/net/can/usb/usb_8dev.c | 30 ++++++++++++++----------------
->   1 file changed, 14 insertions(+), 16 deletions(-)
+>  fs/ocfs2/dlm/dlmdebug.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/net/can/usb/usb_8dev.c b/drivers/net/can/usb/usb_8dev.c
-> index 431af1ec1e3c..b638604bf1ee 100644
-> --- a/drivers/net/can/usb/usb_8dev.c
-> +++ b/drivers/net/can/usb/usb_8dev.c
-> @@ -663,9 +663,20 @@ static netdev_tx_t usb_8dev_start_xmit(struct sk_buff *skb,
->   	atomic_inc(&priv->active_tx_urbs);
->   
->   	err = usb_submit_urb(urb, GFP_ATOMIC);
-> -	if (unlikely(err))
-> -		goto failed;
-> -	else if (atomic_read(&priv->active_tx_urbs) >= MAX_TX_URBS)
-> +	if (unlikely(err)) {
-> +		can_free_echo_skb(netdev, context->echo_index, NULL);
-> +
-> +		usb_unanchor_urb(urb);
-> +		usb_free_coherent(priv->udev, size, buf, urb->transfer_dma);
-> +
-> +		atomic_dec(&priv->active_tx_urbs);
-> +
-> +		if (err == -ENODEV)
-> +			netif_device_detach(netdev);
-> +		else
-> +			netdev_warn(netdev, "failed tx_urb %d\n", err);
-> +		stats->tx_dropped++;
-> +	} else if (atomic_read(&priv->active_tx_urbs) >= MAX_TX_URBS)
->   		/* Slow down tx path */
->   		netif_stop_queue(netdev);
->   
-> @@ -684,19 +695,6 @@ static netdev_tx_t usb_8dev_start_xmit(struct sk_buff *skb,
->   
->   	return NETDEV_TX_BUSY;
->   
-> -failed:
-> -	can_free_echo_skb(netdev, context->echo_index, NULL);
-> -
-> -	usb_unanchor_urb(urb);
-> -	usb_free_coherent(priv->udev, size, buf, urb->transfer_dma);
-> -
-> -	atomic_dec(&priv->active_tx_urbs);
-> -
-> -	if (err == -ENODEV)
-> -		netif_device_detach(netdev);
-> -	else
-> -		netdev_warn(netdev, "failed tx_urb %d\n", err);
-> -
->   nomembuf:
->   	usb_free_urb(urb);
->   
+> diff --git a/fs/ocfs2/dlm/dlmdebug.c b/fs/ocfs2/dlm/dlmdebug.c
+> index d442cf5dda8a..be5e9ed7da8d 100644
+> --- a/fs/ocfs2/dlm/dlmdebug.c
+> +++ b/fs/ocfs2/dlm/dlmdebug.c
+> @@ -541,7 +541,7 @@ static void *lockres_seq_start(struct seq_file *m, loff_t *pos)
+>  	struct debug_lockres *dl = m->private;
+>  	struct dlm_ctxt *dlm = dl->dl_ctxt;
+>  	struct dlm_lock_resource *oldres = dl->dl_res;
+> -	struct dlm_lock_resource *res = NULL;
+> +	struct dlm_lock_resource *res = NULL, *iter;
+>  	struct list_head *track_list;
+> 
+>  	spin_lock(&dlm->track_lock);
+> @@ -556,11 +556,11 @@ static void *lockres_seq_start(struct seq_file *m, loff_t *pos)
+>  		}
+>  	}
+> 
+> -	list_for_each_entry(res, track_list, tracking) {
+> -		if (&res->tracking == &dlm->tracking_list)
+> -			res = NULL;
+> -		else
+> -			dlm_lockres_get(res);
+> +	list_for_each_entry(iter, track_list, tracking) {
+> +		if (&iter->tracking != &dlm->tracking_list) {
+> +			dlm_lockres_get(iter);
+> +			res = iter;
+> +		}
+>  		break;
+>  	}
+>  	spin_unlock(&dlm->track_lock);
+> 
+> base-commit: 34e047aa16c0123bbae8e2f6df33e5ecc1f56601
+> --
+> 2.25.1

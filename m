@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F864E281B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1CF4E2830
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 14:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348092AbiCUNxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 09:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
+        id S1348154AbiCUNyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 09:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232974AbiCUNxR (ORCPT
+        with ESMTP id S1348179AbiCUNxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 09:53:17 -0400
+        Mon, 21 Mar 2022 09:53:51 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01ABC90CF6;
-        Mon, 21 Mar 2022 06:51:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C05A165A88;
+        Mon, 21 Mar 2022 06:52:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4EDEB81675;
-        Mon, 21 Mar 2022 13:51:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3FB8C340E8;
-        Mon, 21 Mar 2022 13:51:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6A82B81678;
+        Mon, 21 Mar 2022 13:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C592C340E8;
+        Mon, 21 Mar 2022 13:52:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647870709;
-        bh=vUJhJg6ldXz1gDP6tMqmE7OSEel0kuH3BqZO7brjH5I=;
+        s=korg; t=1647870737;
+        bh=StJD6HhQKaIGM1vNZ+XgYbCaVxO/g95cVkOWPhqPyWA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GqGTgLmgjtCe+eOBSBlmTzGE1qAtFx20ln8WyIyXF3p+ISXyRdpmGf8kiUCnzR0a8
-         2p7tGGnr7hzEPPU4dtTy+f6EflwOkgDZXWCTYeeoZURqZmqSuUl6OD9N2jW09x2g4o
-         6HR6ygGMp9THKA29/PpjXcJBjc+ZMXEEypcFF4aw=
+        b=Gqyqe4/O3+QKF25dv4jwfsIm0OcTv06opiXunw1Dfyk3xMlstYUuThbsqx45oLVum
+         YlNgD3Xyv9tJfEZPbl1z9pHUk/zhB5Q6HO3FuKKNnzKiRL17Jnv7qzpglUxGC4xl1B
+         PgRFRBedY6s8omai1g5184yYN4iUzJXCB+RihkOg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yan Yan <evitayan@google.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 01/16] xfrm: Fix xfrm migrate issues when address family changes
-Date:   Mon, 21 Mar 2022 14:51:31 +0100
-Message-Id: <20220321133216.693646575@linuxfoundation.org>
+Subject: [PATCH 4.9 02/16] ARM: dts: rockchip: fix a typo on rk3288 crypto-controller
+Date:   Mon, 21 Mar 2022 14:51:32 +0100
+Message-Id: <20220321133216.722084574@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220321133216.648316863@linuxfoundation.org>
 References: <20220321133216.648316863@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -57,56 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yan Yan <evitayan@google.com>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit e03c3bba351f99ad932e8f06baa9da1afc418e02 ]
+[ Upstream commit 3916c3619599a3970d3e6f98fb430b7c46266ada ]
 
-xfrm_migrate cannot handle address family change of an xfrm_state.
-The symptons are the xfrm_state will be migrated to a wrong address,
-and sending as well as receiving packets wil be broken.
+crypto-controller had a typo, fix it.
+In the same time, rename it to just crypto
 
-This commit fixes it by breaking the original xfrm_state_clone
-method into two steps so as to update the props.family before
-running xfrm_init_state. As the result, xfrm_state's inner mode,
-outer mode, type and IP header length in xfrm_state_migrate can
-be updated with the new address family.
-
-Tested with additions to Android's kernel unit test suite:
-https://android-review.googlesource.com/c/kernel/tests/+/1885354
-
-Signed-off-by: Yan Yan <evitayan@google.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Link: https://lore.kernel.org/r/20220209120355.1985707-1-clabbe@baylibre.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xfrm/xfrm_state.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/rk3288.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
-index 4d19f2ff6e05..73b4e7c0d336 100644
---- a/net/xfrm/xfrm_state.c
-+++ b/net/xfrm/xfrm_state.c
-@@ -1238,9 +1238,6 @@ static struct xfrm_state *xfrm_state_clone(struct xfrm_state *orig)
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 7b727d738b69..4702aa980ef8 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -918,7 +918,7 @@
+ 		status = "disabled";
+ 	};
  
- 	memcpy(&x->mark, &orig->mark, sizeof(x->mark));
- 
--	if (xfrm_init_state(x) < 0)
--		goto error;
--
- 	x->props.flags = orig->props.flags;
- 	x->props.extra_flags = orig->props.extra_flags;
- 
-@@ -1317,6 +1314,11 @@ struct xfrm_state *xfrm_state_migrate(struct xfrm_state *x,
- 	if (!xc)
- 		return NULL;
- 
-+	xc->props.family = m->new_family;
-+
-+	if (xfrm_init_state(xc) < 0)
-+		goto error;
-+
- 	memcpy(&xc->id.daddr, &m->new_daddr, sizeof(xc->id.daddr));
- 	memcpy(&xc->props.saddr, &m->new_saddr, sizeof(xc->props.saddr));
- 
+-	crypto: cypto-controller@ff8a0000 {
++	crypto: crypto@ff8a0000 {
+ 		compatible = "rockchip,rk3288-crypto";
+ 		reg = <0xff8a0000 0x4000>;
+ 		interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.34.1
 

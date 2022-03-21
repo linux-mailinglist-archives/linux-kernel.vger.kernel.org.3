@@ -2,293 +2,497 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5252E4E2D1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6508E4E2D20
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 17:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350633AbiCUQIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 12:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S240640AbiCUQJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 12:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349034AbiCUQHu (ORCPT
+        with ESMTP id S1350637AbiCUQJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 12:07:50 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C26565177
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:06:24 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id z15-20020a92d6cf000000b002c811796c23so2145907ilp.3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:06:24 -0700 (PDT)
+        Mon, 21 Mar 2022 12:09:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D71166FA4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:07:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647878856;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zpcoCC4yHq3ajeXZ8IqHbBVz9eP4OTlopTuEhplFUg4=;
+        b=YRRelgP1Bq7UKmw5Wh12l2+EU1/4pmrF7Zw1ltp6cnEJwmvjFTXG1P4DN5EXVzi/rkC+oe
+        WZB/a+RDxwG36n/L9FL6ow/Ee+4xCI1UOUlPZ4qsAg+dapr9qu5D1zqHf9UYrNVdW8s9JU
+        zYXJerjTgBZjNmPCXR2D9jewW+kBV8Y=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-591-zPQy_fWgNg6N1BHZqXGjaw-1; Mon, 21 Mar 2022 12:07:35 -0400
+X-MC-Unique: zPQy_fWgNg6N1BHZqXGjaw-1
+Received: by mail-pj1-f70.google.com with SMTP id x8-20020a17090a788800b001c662c78b4fso8237829pjk.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 09:07:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=fDjRP2JQcEzLDeioLLRFp9lQSMrewPMiB1BiU2Impu0=;
-        b=vDfH8y50GVpbPJRbdcSjrjvhrbUD9Xp5r9RpD+UudzIzGhRLPNNseIW++et85eGaKX
-         1e5tlpQU8DH9NPt3JZZDF3JV+Tenz6sH9YYULWEMv6iK3DDkq/ZCfV1hn8Qs0uzF4nyb
-         RqY3xIHpUJW80K/BeSk0VEPH5fUx5v/uehsPBNHRGNIYKV31Choy/9UKiMGSOnKLYgiz
-         WptAE6eckhDtfylgTq0rK2UJRn46eQl0N4sFf2pUnkVPo2cnQRtsRXqJxkjbzfD7Vst1
-         t4w2GITp3gISkR9FXS0qPbWRjy2drgl4ujqjINSsyD7XKFYYQ8eKhf+dtSuAZChZPPMS
-         kWIg==
-X-Gm-Message-State: AOAM532vt0ecpooS7ZSWB2XGDKicU2ztIohGNI3j67R7gTDirs40xII1
-        SupWZaO9iLKkn/ysZ7BjOnpPqAV12KM+h52W9UZucxN4UTrp
-X-Google-Smtp-Source: ABdhPJy/U9Q84+ldbJJAWRqTcdkejSYo9is9zrjm0+4QQd5ALc1reFuRQn8+8mEiuyQxVDG1bMIvg+sAV8RQpMW1MwKhOFbv2A9H
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zpcoCC4yHq3ajeXZ8IqHbBVz9eP4OTlopTuEhplFUg4=;
+        b=5p9pOyBMt4hZ8Q91fNom8mBjTrJkHeXmAyJEcPEDFgYj1qX55tlfrJO1+ImrvfGd1n
+         lJaqauE65hpgWGmlvRIrpUmLBnrcNQ7nUGKahbT6K6EDMDiSVjbUIVdqNVFgvI4x027f
+         +uAKI/q6/O+joLJ6CC2GOYdZrrL7Vz8ax4PW2nA0YeIlb7ysFltmzu8zzj08F/2QVjlc
+         htrTQJxWv4Re+IucZua3rKF4/ecvCU465j0o0Bp2h4h/sG3nfxTL6p9fkdYlSlqpoLk+
+         b17t+DeAgclgFtUnWTL6sSXFSWObXPT/iwMtLN6MGpboDIfFnYaewfK7eAVqciNqybNA
+         4QqQ==
+X-Gm-Message-State: AOAM5334cy5hbETJ4Zb6T2JzOhQKbz7glb87CluvT84LGKr/2gj7eM/R
+        B8uVEtVfuEW5OPnwylm2QJ44xuxm0B0w+lKcfxNpKKDJcm4wwuvTperBAiXvURQZqxbIfcXvqO2
+        xIVlybYSYAwneekGX/kxHdkCN3KQ+FsGnLZA+CGZh
+X-Received: by 2002:a17:902:c401:b0:154:1398:a16b with SMTP id k1-20020a170902c40100b001541398a16bmr13429804plk.67.1647878853100;
+        Mon, 21 Mar 2022 09:07:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwfR7xojQGSh+SlE52ZB3p3sYi5T6jUKMUP6HdTYmBdE+aOadzDpu21O7Hr0mDvNquBoaR05abTWhccSffR0dM=
+X-Received: by 2002:a17:902:c401:b0:154:1398:a16b with SMTP id
+ k1-20020a170902c40100b001541398a16bmr13429769plk.67.1647878852756; Mon, 21
+ Mar 2022 09:07:32 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a5e:c012:0:b0:649:ab74:a3c6 with SMTP id
- u18-20020a5ec012000000b00649ab74a3c6mr2345688iol.182.1647878783824; Mon, 21
- Mar 2022 09:06:23 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 09:06:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008af91005dabcad4f@google.com>
-Subject: [syzbot] INFO: task hung in nbd_add_socket (2)
-From:   syzbot <syzbot+cbb4b1ebc70d0c5a8c29@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
+ <20220318161528.1531164-3-benjamin.tissoires@redhat.com> <CAPhsuW5qseqVs4=hz3VvSJ2ObqB2kTbKXoaOCh=5vjoU_AXnKQ@mail.gmail.com>
+In-Reply-To: <CAPhsuW5qseqVs4=hz3VvSJ2ObqB2kTbKXoaOCh=5vjoU_AXnKQ@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 21 Mar 2022 17:07:21 +0100
+Message-ID: <CAO-hwJ+WSi645HhNV_BYACoJe2UTc4KZzqH0oHocfnBR8xUYEQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 02/17] bpf: introduce hid program type
+To:     Song Liu <song@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Song,
 
-syzbot found the following issue on:
+many thanks for the quick response.
 
-HEAD commit:    56e337f2cf13 Revert "gpio: Revert regression in sysfs-gpio..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14b09f89700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d35f9bc6884af6c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=cbb4b1ebc70d0c5a8c29
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b3f519700000
+On Fri, Mar 18, 2022 at 9:48 PM Song Liu <song@kernel.org> wrote:
+>
+> On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> [...]
+> >
+> > diff --git a/include/linux/bpf-hid.h b/include/linux/bpf-hid.h
+> > new file mode 100644
+> > index 000000000000..9c8dbd389995
+> > --- /dev/null
+> > +++ b/include/linux/bpf-hid.h
+> >
+> [...]
+> > +
+> > +struct hid_bpf_ctx_kern {
+> > +       enum hid_bpf_event type;        /* read-only */
+> > +       struct hid_device *hdev;        /* read-only */
+> > +
+> > +       u16 size;                       /* used size in data (RW) */
+> > +       u8 *data;                       /* data buffer (RW) */
+> > +       u32 allocated_size;             /* allocated size of data (RO) */
+>
+> Why u16 size vs. u32 allocated_size?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cbb4b1ebc70d0c5a8c29@syzkaller.appspotmail.com
+Probably an oversight because I wrote u32 in the public uapi. Will
+change this into u16 too.
 
-INFO: task syz-executor.3:3748 blocked for more than 143 seconds.
-      Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.3  state:D stack:28456 pid: 3748 ppid:  3641 flags:0x00000004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4995 [inline]
- __schedule+0xa94/0x4910 kernel/sched/core.c:6304
- schedule+0xd2/0x260 kernel/sched/core.c:6377
- blk_mq_freeze_queue_wait+0x112/0x160 block/blk-mq.c:178
- nbd_add_socket+0x166/0x810 drivers/block/nbd.c:1109
- __nbd_ioctl drivers/block/nbd.c:1454 [inline]
- nbd_ioctl+0x38c/0xb10 drivers/block/nbd.c:1511
- blkdev_ioctl+0x37a/0x800 block/ioctl.c:588
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f6ce3d6b049
-RSP: 002b:00007f6ce34e0168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f6ce3e7df60 RCX: 00007f6ce3d6b049
-RDX: 0000000000000004 RSI: 000000000000ab00 RDI: 0000000000000003
-RBP: 00007f6ce3dc508d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff39c20b5f R14: 00007f6ce34e0300 R15: 0000000000022000
- </TASK>
-INFO: task syz-executor.0:3762 blocked for more than 143 seconds.
-      Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.0  state:D stack:28456 pid: 3762 ppid:  3643 flags:0x00000004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4995 [inline]
- __schedule+0xa94/0x4910 kernel/sched/core.c:6304
- schedule+0xd2/0x260 kernel/sched/core.c:6377
- blk_mq_freeze_queue_wait+0x112/0x160 block/blk-mq.c:178
- nbd_add_socket+0x166/0x810 drivers/block/nbd.c:1109
- __nbd_ioctl drivers/block/nbd.c:1454 [inline]
- nbd_ioctl+0x38c/0xb10 drivers/block/nbd.c:1511
- blkdev_ioctl+0x37a/0x800 block/ioctl.c:588
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f76c6cb0049
-RSP: 002b:00007f76c6425168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f76c6dc2f60 RCX: 00007f76c6cb0049
-RDX: 0000000000000004 RSI: 000000000000ab00 RDI: 0000000000000003
-RBP: 00007f76c6d0a08d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc1647f5cf R14: 00007f76c6425300 R15: 0000000000022000
- </TASK>
-INFO: task syz-executor.1:3786 blocked for more than 143 seconds.
-      Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.1  state:D stack:28456 pid: 3786 ppid:  3644 flags:0x00000004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4995 [inline]
- __schedule+0xa94/0x4910 kernel/sched/core.c:6304
- schedule+0xd2/0x260 kernel/sched/core.c:6377
- blk_mq_freeze_queue_wait+0x112/0x160 block/blk-mq.c:178
- nbd_add_socket+0x166/0x810 drivers/block/nbd.c:1109
- __nbd_ioctl drivers/block/nbd.c:1454 [inline]
- nbd_ioctl+0x38c/0xb10 drivers/block/nbd.c:1511
- blkdev_ioctl+0x37a/0x800 block/ioctl.c:588
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f771e10a049
-RSP: 002b:00007f771d87f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f771e21cf60 RCX: 00007f771e10a049
-RDX: 0000000000000004 RSI: 000000000000ab00 RDI: 0000000000000003
-RBP: 00007f771e16408d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd29c3466f R14: 00007f771d87f300 R15: 0000000000022000
- </TASK>
-INFO: task syz-executor.2:3796 blocked for more than 144 seconds.
-      Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.2  state:D stack:28456 pid: 3796 ppid:  3646 flags:0x00000004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4995 [inline]
- __schedule+0xa94/0x4910 kernel/sched/core.c:6304
- schedule+0xd2/0x260 kernel/sched/core.c:6377
- blk_mq_freeze_queue_wait+0x112/0x160 block/blk-mq.c:178
- nbd_add_socket+0x166/0x810 drivers/block/nbd.c:1109
- __nbd_ioctl drivers/block/nbd.c:1454 [inline]
- nbd_ioctl+0x38c/0xb10 drivers/block/nbd.c:1511
- blkdev_ioctl+0x37a/0x800 block/ioctl.c:588
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f5cb8d4e049
-RSP: 002b:00007f5cb84c3168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f5cb8e60f60 RCX: 00007f5cb8d4e049
-RDX: 0000000000000004 RSI: 000000000000ab00 RDI: 0000000000000003
-RBP: 00007f5cb8da808d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc915ce70f R14: 00007f5cb84c3300 R15: 0000000000022000
- </TASK>
+> Also, maybe shuffle the members
+> to remove some holes?
 
-Showing all locks held in the system:
-1 lock held by khungtaskd/27:
- #0: ffffffff8bb84ca0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6460
-2 locks held by getty/3274:
- #0: ffff88814ac35098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:244
- #1: ffffc90002b632e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xcf0/0x1230 drivers/tty/n_tty.c:2075
-1 lock held by syz-executor.3/3748:
- #0: ffff88801ab4b198 (&nbd->config_lock){+.+.}-{3:3}, at: nbd_ioctl+0x151/0xb10 drivers/block/nbd.c:1504
-1 lock held by syz-executor.0/3762:
- #0: ffff88801aa43998 (&nbd->config_lock){+.+.}-{3:3}, at: nbd_ioctl+0x151/0xb10 drivers/block/nbd.c:1504
-1 lock held by syz-executor.1/3786:
- #0: ffff88801ab90198 (&nbd->config_lock){+.+.}-{3:3}, at: nbd_ioctl+0x151/0xb10 drivers/block/nbd.c:1504
-1 lock held by syz-executor.2/3796:
- #0: ffff88801ab97998 (&nbd->config_lock){+.+.}-{3:3}, at: nbd_ioctl+0x151/0xb10 drivers/block/nbd.c:1504
+Ack will do in the next version.
 
-=============================================
+>
+> > +
+> > +       s32 retval;                     /* in use when BPF_HID_ATTACH_USER_EVENT (RW) */
+> > +};
+> > +
+> [...]
+>
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>
+> We need to mirror these changes to tools/include/uapi/linux/bpf.h.
 
-NMI backtrace for cpu 0
-CPU: 0 PID: 27 Comm: khungtaskd Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x1e6/0x230 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:212 [inline]
- watchdog+0xc1d/0xf50 kernel/hung_task.c:369
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 3678 Comm: kworker/u4:2 Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: phy10 ieee80211_iface_work
-RIP: 0010:stackdepot_memcmp lib/stackdepot.c:217 [inline]
-RIP: 0010:find_stack lib/stackdepot.c:233 [inline]
-RIP: 0010:__stack_depot_save+0x145/0x500 lib/stackdepot.c:373
-Code: 29 48 85 ed 75 12 e9 92 00 00 00 48 8b 6d 00 48 85 ed 0f 84 85 00 00 00 39 5d 08 75 ee 44 3b 7d 0c 75 e8 31 c0 48 8b 74 c5 18 <49> 39 34 c6 75 db 48 83 c0 01 48 39 c2 75 ec 48 8b 7c 24 28 48 85
-RSP: 0018:ffffc90002adf418 EFLAGS: 00000202
-RAX: 0000000000000007 RBX: 00000000fcc93932 RCX: ffff88823b89c990
-RDX: 000000000000000b RSI: ffffffff814cca4c RDI: 00000000231130b5
-RBP: ffff88806d495930 R08: 00000000faa8e072 R09: 0000000000000001
-R10: fffff5200055be77 R11: 0000000000088078 R12: 0000000000000001
-R13: 0000000000000b20 R14: ffffc90002adf488 R15: 000000000000000b
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffd0058e108 CR3: 000000007f38a000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- kasan_save_stack+0x2e/0x40 mm/kasan/common.c:39
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- ____kasan_kmalloc mm/kasan/common.c:474 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
- kmalloc include/linux/slab.h:586 [inline]
- kzalloc include/linux/slab.h:714 [inline]
- cfg80211_inform_single_bss_frame_data+0x34b/0xf40 net/wireless/scan.c:2436
- cfg80211_inform_bss_frame_data+0xa7/0xb50 net/wireless/scan.c:2497
- ieee80211_bss_info_update+0x35b/0xb00 net/mac80211/scan.c:190
- ieee80211_rx_bss_info net/mac80211/ibss.c:1119 [inline]
- ieee80211_rx_mgmt_probe_beacon net/mac80211/ibss.c:1610 [inline]
- ieee80211_ibss_rx_queued_mgmt+0x19cf/0x3150 net/mac80211/ibss.c:1639
- ieee80211_iface_process_skb net/mac80211/iface.c:1527 [inline]
- ieee80211_iface_work+0xa69/0xd00 net/mac80211/iface.c:1581
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	29 48 85             	sub    %ecx,-0x7b(%rax)
-   3:	ed                   	in     (%dx),%eax
-   4:	75 12                	jne    0x18
-   6:	e9 92 00 00 00       	jmpq   0x9d
-   b:	48 8b 6d 00          	mov    0x0(%rbp),%rbp
-   f:	48 85 ed             	test   %rbp,%rbp
-  12:	0f 84 85 00 00 00    	je     0x9d
-  18:	39 5d 08             	cmp    %ebx,0x8(%rbp)
-  1b:	75 ee                	jne    0xb
-  1d:	44 3b 7d 0c          	cmp    0xc(%rbp),%r15d
-  21:	75 e8                	jne    0xb
-  23:	31 c0                	xor    %eax,%eax
-  25:	48 8b 74 c5 18       	mov    0x18(%rbp,%rax,8),%rsi
-* 2a:	49 39 34 c6          	cmp    %rsi,(%r14,%rax,8) <-- trapping instruction
-  2e:	75 db                	jne    0xb
-  30:	48 83 c0 01          	add    $0x1,%rax
-  34:	48 39 c2             	cmp    %rax,%rdx
-  37:	75 ec                	jne    0x25
-  39:	48 8b 7c 24 28       	mov    0x28(%rsp),%rdi
-  3e:	48                   	rex.W
-  3f:	85                   	.byte 0x85
+OK. I did that in patch 4/17 but I can bring in the changes there too.
 
+>
+> > index 99fab54ae9c0..0e8438e93768 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -952,6 +952,7 @@ enum bpf_prog_type {
+> >         BPF_PROG_TYPE_LSM,
+> >         BPF_PROG_TYPE_SK_LOOKUP,
+> >         BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
+> > +       BPF_PROG_TYPE_HID,
+> >  };
+> [...]
+> > +
+> >  /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+> >   * the following extensions:
+> >   *
+> > @@ -5129,6 +5145,16 @@ union bpf_attr {
+> >   *             The **hash_algo** is returned on success,
+> >   *             **-EOPNOTSUP** if the hash calculation failed or **-EINVAL** if
+> >   *             invalid arguments are passed.
+> > + *
+> > + * void *bpf_hid_get_data(void *ctx, u64 offset, u64 size)
+> > + *     Description
+> > + *             Returns a pointer to the data associated with context at the given
+> > + *             offset and size (in bytes).
+> > + *
+> > + *             Note: the returned pointer is refcounted and must be dereferenced
+> > + *             by a call to bpf_hid_discard;
+> > + *     Return
+> > + *             The pointer to the data. On error, a null value is returned.
+>
+> Please use annotations like *size*, **NULL**.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Ack
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+>
+> >   */
+> >  #define __BPF_FUNC_MAPPER(FN)          \
+> >         FN(unspec),                     \
+> > @@ -5325,6 +5351,7 @@ union bpf_attr {
+> >         FN(copy_from_user_task),        \
+> >         FN(skb_set_tstamp),             \
+> >         FN(ima_file_hash),              \
+> > +       FN(hid_get_data),               \
+> >         /* */
+> >
+> >  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> > @@ -5925,6 +5952,10 @@ struct bpf_link_info {
+> >                 struct {
+> >                         __u32 ifindex;
+> >                 } xdp;
+> > +               struct  {
+> > +                       __s32 hidraw_number;
+> > +                       __u32 attach_type;
+> > +               } hid;
+> >         };
+> >  } __attribute__((aligned(8)));
+> >
+> > diff --git a/include/uapi/linux/bpf_hid.h b/include/uapi/linux/bpf_hid.h
+> > new file mode 100644
+> > index 000000000000..64a8b9dd8809
+> > --- /dev/null
+> > +++ b/include/uapi/linux/bpf_hid.h
+> > @@ -0,0 +1,31 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
+> > +
+> > +/*
+> > + *  HID BPF public headers
+> > + *
+> > + *  Copyright (c) 2022 Benjamin Tissoires
+> > + */
+> > +
+> > +#ifndef _UAPI__LINUX_BPF_HID_H__
+> > +#define _UAPI__LINUX_BPF_HID_H__
+> > +
+> > +#include <linux/types.h>
+> > +
+> > +enum hid_bpf_event {
+> > +       HID_BPF_UNDEF = 0,
+> > +       HID_BPF_DEVICE_EVENT,           /* when attach type is BPF_HID_DEVICE_EVENT */
+> > +       HID_BPF_RDESC_FIXUP,            /* ................... BPF_HID_RDESC_FIXUP */
+> > +       HID_BPF_USER_EVENT,             /* ................... BPF_HID_USER_EVENT */
+>
+> Why don't we have a DRIVER_EVENT type here?
+
+For driver event, I want to have a little bit more of information
+which tells which event we have:
+- HID_BPF_DRIVER_PROBE
+- HID_BPF_DRIVER_SUSPEND
+- HID_BPF_DRIVER_RAW_REQUEST
+- HID_BPF_DRIVER_RAW_REQUEST_ANSWER
+- etc...
+
+However, I am not entirely sure on the implementation of all of those,
+so I left them aside for now.
+
+I'll work on that for v4.
+
+>
+> >
+> [...]
+> > +
+> > +BPF_CALL_3(bpf_hid_get_data, struct hid_bpf_ctx_kern*, ctx, u64, offset, u64, size)
+> > +{
+> > +       if (!size)
+> > +               return 0UL;
+> > +
+> > +       if (offset + size > ctx->allocated_size)
+> > +               return 0UL;
+> > +
+> > +       return (unsigned long)(ctx->data + offset);
+> > +}
+> > +
+> > +static const struct bpf_func_proto bpf_hid_get_data_proto = {
+> > +       .func      = bpf_hid_get_data,
+> > +       .gpl_only  = true,
+> > +       .ret_type  = RET_PTR_TO_ALLOC_MEM_OR_NULL,
+> > +       .arg1_type = ARG_PTR_TO_CTX,
+> > +       .arg2_type = ARG_ANYTHING,
+> > +       .arg3_type = ARG_CONST_ALLOC_SIZE_OR_ZERO,
+>
+> I think we should use ARG_CONST_SIZE or ARG_CONST_SIZE_OR_ZERO?
+
+I initially tried this with ARG_CONST_SIZE_OR_ZERO but it doesn't work
+for 2 reasons:
+- we need to pair the argument ARG_CONST_SIZE_* with a pointer to a
+memory just before, which doesn't really make sense here
+- ARG_CONST_SIZE_* isn't handled in the same way
+ARG_CONST_ALLOC_SIZE_OR_ZERO is. The latter tells the verifier that
+the given size is the available size of the returned
+PTR_TO_ALLOC_MEM_OR_NULL, which is exactly what we want.
+
+>
+> > +};
+> > +
+> > +static const struct bpf_func_proto *
+> > +hid_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> > +{
+> > +       switch (func_id) {
+> > +       case BPF_FUNC_hid_get_data:
+> > +               return &bpf_hid_get_data_proto;
+> > +       default:
+> > +               return bpf_base_func_proto(func_id);
+> > +       }
+> > +}
+> [...]
+> > +
+> > +static int hid_bpf_prog_test_run(struct bpf_prog *prog,
+> > +                                const union bpf_attr *attr,
+> > +                                union bpf_attr __user *uattr)
+> > +{
+> > +       struct hid_device *hdev = NULL;
+> > +       struct bpf_prog_array *progs;
+> > +       bool valid_prog = false;
+> > +       int i;
+> > +       int target_fd, ret;
+> > +       void __user *data_out = u64_to_user_ptr(attr->test.data_out);
+> > +       void __user *data_in = u64_to_user_ptr(attr->test.data_in);
+> > +       u32 user_size_in = attr->test.data_size_in;
+> > +       u32 user_size_out = attr->test.data_size_out;
+> > +       u32 allocated_size = max(user_size_in, user_size_out);
+> > +       struct hid_bpf_ctx_kern ctx = {
+> > +               .type = HID_BPF_USER_EVENT,
+> > +               .allocated_size = allocated_size,
+> > +       };
+> > +
+> > +       if (!hid_hooks.hdev_from_fd)
+> > +               return -EOPNOTSUPP;
+> > +
+> > +       if (attr->test.ctx_size_in != sizeof(int))
+> > +               return -EINVAL;
+>
+> ctx_size_in is always 4 bytes?
+
+Yes. Basically what I had in mind is that the "ctx" for
+user_prog_test_run is the file descriptor to the sysfs that represent
+the HID device.
+This seemed to me to be the easiest to handle for users.
+
+I'm open to suggestions though.
+
+>
+> > +
+> > +       if (allocated_size > HID_MAX_BUFFER_SIZE)
+> > +               return -E2BIG;
+> > +
+> > +       if (copy_from_user(&target_fd, (void *)attr->test.ctx_in, attr->test.ctx_size_in))
+> > +               return -EFAULT;
+> > +
+> > +       hdev = hid_hooks.hdev_from_fd(target_fd);
+> > +       if (IS_ERR(hdev))
+> > +               return PTR_ERR(hdev);
+> > +
+> > +       if (allocated_size) {
+> > +               ctx.data = kzalloc(allocated_size, GFP_KERNEL);
+> > +               if (!ctx.data)
+> > +                       return -ENOMEM;
+> > +
+> > +               ctx.allocated_size = allocated_size;
+> > +       }
+> > +       ctx.hdev = hdev;
+> > +
+> > +       ret = mutex_lock_interruptible(&bpf_hid_mutex);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       /* check if the given program is of correct type and registered */
+> > +       progs = rcu_dereference_protected(hdev->bpf.run_array[BPF_HID_ATTACH_USER_EVENT],
+> > +                                         lockdep_is_held(&bpf_hid_mutex));
+> > +       if (!progs) {
+> > +               ret = -EFAULT;
+> > +               goto unlock;
+> > +       }
+> > +
+> > +       for (i = 0; i < bpf_prog_array_length(progs); i++) {
+> > +               if (progs->items[i].prog == prog) {
+> > +                       valid_prog = true;
+> > +                       break;
+> > +               }
+> > +       }
+> > +
+> > +       if (!valid_prog) {
+> > +               ret = -EINVAL;
+> > +               goto unlock;
+> > +       }
+> > +
+> > +       /* copy data_in from userspace */
+> > +       if (user_size_in) {
+> > +               if (copy_from_user(ctx.data, data_in, user_size_in)) {
+> > +                       ret = -EFAULT;
+> > +                       goto unlock;
+> > +               }
+> > +
+> > +               ctx.size = user_size_in;
+> > +       }
+> > +
+> > +       migrate_disable();
+> > +
+> > +       ret = bpf_prog_run(prog, &ctx);
+> > +
+> > +       migrate_enable();
+> > +
+> > +       if (user_size_out && data_out) {
+> > +               user_size_out = min3(user_size_out, (u32)ctx.size, allocated_size);
+> > +
+> > +               if (copy_to_user(data_out, ctx.data, user_size_out)) {
+> > +                       ret = -EFAULT;
+> > +                       goto unlock;
+> > +               }
+> > +
+> > +               if (copy_to_user(&uattr->test.data_size_out,
+> > +                                &user_size_out,
+> > +                                sizeof(user_size_out))) {
+> > +                       ret = -EFAULT;
+> > +                       goto unlock;
+> > +               }
+> > +       }
+> > +
+> > +       if (copy_to_user(&uattr->test.retval, &ctx.retval, sizeof(ctx.retval)))
+> > +               ret = -EFAULT;
+> > +
+> > +unlock:
+> > +       kfree(ctx.data);
+> > +
+> > +       mutex_unlock(&bpf_hid_mutex);
+> > +       return ret;
+> > +}
+> > +
+> > +const struct bpf_prog_ops hid_prog_ops = {
+> > +       .test_run = hid_bpf_prog_test_run,
+> > +};
+> > +
+> > +int bpf_hid_init(struct hid_device *hdev)
+> > +{
+> > +       int type;
+> > +
+> > +       for (type = 0; type < MAX_BPF_HID_ATTACH_TYPE; type++)
+> > +               INIT_LIST_HEAD(&hdev->bpf.links[type]);
+> > +
+> > +       return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(bpf_hid_init);
+> > +
+> > +void bpf_hid_exit(struct hid_device *hdev)
+> > +{
+> > +       enum bpf_hid_attach_type type;
+> > +       struct bpf_hid_link *hid_link;
+> > +
+> > +       mutex_lock(&bpf_hid_mutex);
+> > +       for (type = 0; type < MAX_BPF_HID_ATTACH_TYPE; type++) {
+> > +               bpf_hid_run_array_detach(hdev, type);
+> > +               list_for_each_entry(hid_link, &hdev->bpf.links[type], node) {
+> > +                       hid_link->hdev = NULL; /* auto-detach link */
+> > +               }
+> > +       }
+> > +       mutex_unlock(&bpf_hid_mutex);
+> > +}
+> > +EXPORT_SYMBOL_GPL(bpf_hid_exit);
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index b88688264ad0..d1c05011e5ab 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -3,6 +3,7 @@
+> >   */
+> >  #include <linux/bpf.h>
+> >  #include <linux/bpf-cgroup.h>
+> > +#include <linux/bpf-hid.h>
+> >  #include <linux/bpf_trace.h>
+> >  #include <linux/bpf_lirc.h>
+> >  #include <linux/bpf_verifier.h>
+> > @@ -2205,6 +2206,7 @@ static bool is_sys_admin_prog_type(enum bpf_prog_type prog_type)
+> >  {
+> >         switch (prog_type) {
+> >         case BPF_PROG_TYPE_LIRC_MODE2:
+> > +       case BPF_PROG_TYPE_HID:
+> >                 return true;
+> >         default:
+> >                 return false;
+> > @@ -3199,6 +3201,11 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
+> >                 return BPF_PROG_TYPE_SK_LOOKUP;
+> >         case BPF_XDP:
+> >                 return BPF_PROG_TYPE_XDP;
+> > +       case BPF_HID_DEVICE_EVENT:
+> > +       case BPF_HID_RDESC_FIXUP:
+> > +       case BPF_HID_USER_EVENT:
+> > +       case BPF_HID_DRIVER_EVENT:
+> > +               return BPF_PROG_TYPE_HID;
+> >         default:
+> >                 return BPF_PROG_TYPE_UNSPEC;
+> >         }
+> > @@ -3342,6 +3349,11 @@ static int bpf_prog_query(const union bpf_attr *attr,
+> >         case BPF_SK_MSG_VERDICT:
+> >         case BPF_SK_SKB_VERDICT:
+> >                 return sock_map_bpf_prog_query(attr, uattr);
+> > +       case BPF_HID_DEVICE_EVENT:
+> > +       case BPF_HID_RDESC_FIXUP:
+> > +       case BPF_HID_USER_EVENT:
+> > +       case BPF_HID_DRIVER_EVENT:
+> > +               return bpf_hid_prog_query(attr, uattr);
+> >         default:
+> >                 return -EINVAL;
+> >         }
+> > @@ -4336,6 +4348,8 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+> >                 ret = bpf_perf_link_attach(attr, prog);
+> >                 break;
+> >  #endif
+> > +       case BPF_PROG_TYPE_HID:
+> > +               return bpf_hid_link_create(attr, prog);
+> >         default:
+> >                 ret = -EINVAL;
+> >         }
+> > --
+> > 2.35.1
+> >
+>
+
+Cheers,
+Benjamin
+

@@ -2,163 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638F44E2F03
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7C74E2F06
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 18:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351830AbiCUR1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 13:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
+        id S1351842AbiCUR11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 13:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345862AbiCUR1A (ORCPT
+        with ESMTP id S1351739AbiCUR1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 13:27:00 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4CB183805
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:25:35 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id q1-20020a4a7d41000000b003211b63eb7bso19961333ooe.6
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 10:25:35 -0700 (PDT)
+        Mon, 21 Mar 2022 13:27:25 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642E8183832;
+        Mon, 21 Mar 2022 10:26:00 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id n15so13369007plh.2;
+        Mon, 21 Mar 2022 10:26:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fmeIv2QDOzsS4zlc06LTh9pZ1GK8X0LxwrhNTBduaNE=;
-        b=Ht6jx+xVr1kX1fn3bCqDejvCU3VXDWeBe8bNQskALug//Ri2sX9OThqeOZIA30pMVa
-         aJWNsC0OZmC9yRDNN9uKgC/a5oWM3IMclnjP0GuPTSMg++dHdHHU1j1CN1FePWCbYgUI
-         MpmFWOhO7XnThgsWfZyL5P++U+HBzMPzydUUaDOaSHOKv7hR76MByO0SNZTdT5XhNhXm
-         +ypkONCBmSfYr3KSp/sVSGn59d/jcxg8j4DyVqjR89jMD80tNAX+EHyhxQnqttf84JOc
-         MFRfcy19RtYm5Y/1sy2ScULSoYwMlIiov+Oya1AMJZEVFcDPvtLfOawzZ5CpZyMqCroG
-         7RJw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lcBucpc3ZUGCjvl3pj650bWNhpmxqULXqAxJwZYyxwI=;
+        b=OaJnjzOrvKRUuxEsiML2uftTT4NiDdMzGPjL2qIJEg+p7JXn+u+lPkKkH14eCBPEiJ
+         lyrwoZVMsF3zjEqYgRBTj52aLmVTgkTYW7p2UKLSgBA8Zm4n7/xMmBa7omEz9ucrJxPs
+         dKGjagfJwBSiSaA1AApmWHfiKHx+W+IOqVZ7Mhs5boVdLHW9cC6ZVZOrGiD8wjHI4h/V
+         WinjVmLPEEsxbYLpbrjBlL7+QL3liT4J7LONGuft1WGm0xUVvNwt+cYMFlgvvcQVxjsZ
+         6TCvPHkjFE0XaI1MT2lXQju1GUB6aOgs2F3xm1EzYwnB9vxRrh1lu/SQN0KwmQLMoAH8
+         2uyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fmeIv2QDOzsS4zlc06LTh9pZ1GK8X0LxwrhNTBduaNE=;
-        b=CzlQsQ7fCkUqBiuEoNlfOGuL/dkLzZ8ZPZRdQJO3Cod3OpNlQRA4JWO9zfFxI2+iiD
-         eZQjXPOFkU+fbzBbpxKqAGtHPIhz/oLk4ewSpS2D9G0G/6TquSC6nqylP3eUk/Ga6+Bz
-         bTdblO6cBu4dZB7EEseCLuCFJhQFqAfcafHAY9sqbFzbO4/3Pc8YVxOKfAZXguTxFaxf
-         BSbFUIFXCCFNN8pD/YRu53FR1hROB0AXEgQ30v5rSpq7g9XuU93yqMACQfQt21Qo963E
-         bDJp4+70HIwsig17eXSFsq334pXDSLBdz6RBLDog/XnrJBmN5LhixS10TC/65F5EbkD9
-         dXCA==
-X-Gm-Message-State: AOAM530o+oTLKH0icjFwehrTxhCjXQtGg1vW4TICxPd5WmaXFUJxxIaO
-        GZh7VYZr8A6geNqQtJY67rP2UCkhuH3yehwbtlkFeQ==
-X-Google-Smtp-Source: ABdhPJx916mIocw0CSs5GhHKZIpvBgvBumuH1FgDOkSt/vPvxDiJB7JuxJkaHYMjljkWKaFwGwNr2/5kLY5pgucKJyw=
-X-Received: by 2002:a05:6870:40cc:b0:de:15e7:4df0 with SMTP id
- l12-20020a05687040cc00b000de15e74df0mr89545oal.110.1647883534190; Mon, 21 Mar
- 2022 10:25:34 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lcBucpc3ZUGCjvl3pj650bWNhpmxqULXqAxJwZYyxwI=;
+        b=xpXjDprVE+1bFlMeWCRZ9i0v1AN8V/Z/Sg83tgWfIXg+GUm4o+1t+kUfLGSUlm+iFf
+         Wk/9xf/0p9zqVstmHs7OU1yHB1ZYoi4Zq5mPEfIMVz5kCTbPD9WlpbhCJQFwgCapD1RU
+         aGmn9iXPqO7UkrouX8ufoQWJHf3q/Fdo7Q3PzTVixUoSIu7Kgr6BNTnFae0B7fi4n9Mx
+         r5N8B4fPm8RfnxtajY6C0EDCg2qnQ4rFJQj4A057DuN+GJupiFA/bTjfjFvbgdJ5GRtC
+         PqjiydtI1SLnlVz3W13VswSo2pNX24is0NiqjpY1aXP+YGB8lGYIDpKPdVS5BI1/QJOL
+         4+4A==
+X-Gm-Message-State: AOAM533gBTLK/ZoXjKO4sWiskQJgo1S29he6Fr/7fnt+ecWTbdcRmTY4
+        rVlEUibD2ExqXqXP/zqZ0vI=
+X-Google-Smtp-Source: ABdhPJxDQDem21pyBzTcZ0MmRX7MdRC6hkW3xkuui0BdaI+DOIJKAeaIn0oxCz/ykh8zAHnsWnwfrQ==
+X-Received: by 2002:a17:902:ab01:b0:153:2dec:6761 with SMTP id ik1-20020a170902ab0100b001532dec6761mr13985632plb.71.1647883559827;
+        Mon, 21 Mar 2022 10:25:59 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm5470775pfj.55.2022.03.21.10.25.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 10:25:59 -0700 (PDT)
+Message-ID: <b2223192-cd6f-a75a-5ba0-ee15f7bedf40@gmail.com>
+Date:   Mon, 21 Mar 2022 10:25:56 -0700
 MIME-Version: 1.0
-References: <20220321150214.1895231-1-pgonda@google.com>
-In-Reply-To: <20220321150214.1895231-1-pgonda@google.com>
-From:   Marc Orr <marcorr@google.com>
-Date:   Mon, 21 Mar 2022 10:25:22 -0700
-Message-ID: <CAA03e5HEKPxfGZ57r=intg_ogTp_JPAio36QJXqviMZM_KmvEg@mail.gmail.com>
-Subject: Re: [PATCH] Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm list <kvm@vger.kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.4 00/17] 5.4.187-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220321133217.148831184@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220321133217.148831184@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 8:02 AM Peter Gonda <pgonda@google.com> wrote:
->
-> SEV-ES guests can request termination using the GHCB's MSR protocol. See
-> AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
-> guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
-> return code from KVM_RUN. By adding a KVM_EXIT_SHUTDOWN_ENTRY to kvm_run
-> struct the userspace VMM can clearly see the guest has requested a SEV-ES
-> termination including the termination reason code set and reason code.
->
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> Cc: Brijesh Singh <brijesh.singh@amd.com>
-> Cc: Joerg Roedel <jroedel@suse.de>
-> Cc: Marc Orr <marcorr@google.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: kvm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
->
-> ---
->
-> Tested by making an SEV-ES guest call sev_es_terminate() with hardcoded
-> reason code set and reason code and then observing the codes from the
-> userspace VMM in the kvm_run.shutdown.data fields.
->
-> ---
->  arch/x86/kvm/svm/sev.c   |  9 +++++++--
->  include/uapi/linux/kvm.h | 12 ++++++++++++
->  2 files changed, 19 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 75fa6dd268f0..5f9d37dd3f6f 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -2735,8 +2735,13 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
->                 pr_info("SEV-ES guest requested termination: %#llx:%#llx\n",
->                         reason_set, reason_code);
->
-> -               ret = -EINVAL;
-> -               break;
-> +               vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
-> +               vcpu->run->shutdown.reason = KVM_SHUTDOWN_SEV_TERM;
-> +               vcpu->run->shutdown.ndata = 2;
-> +               vcpu->run->shutdown.data[0] = reason_set;
-> +               vcpu->run->shutdown.data[1] = reason_code;
-> +
-> +               return 0;
+On 3/21/22 06:52, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.187 release.
+> There are 17 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 23 Mar 2022 13:32:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.187-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Maybe I'm missing something, but don't we want to keep returning an error?
 
-rationale: Current behavior: return -EINVAL to userpsace, but
-userpsace cannot infer where the -EINVAL came from. After this patch:
-We should still return -EINVAL to userspace, but now userspace can
-parse this new info in the KVM run struct to properly terminate.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
->         }
->         default:
->                 /* Error, keep GHCB MSR value as-is */
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 8616af85dc5d..12138b8f290c 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -271,6 +271,12 @@ struct kvm_xen_exit {
->  #define KVM_EXIT_XEN              34
->  #define KVM_EXIT_RISCV_SBI        35
->
-> +/* For KVM_EXIT_SHUTDOWN */
-> +/* Standard VM shutdown request. No additional metadata provided. */
-> +#define KVM_SHUTDOWN_REQ       0
-> +/* SEV-ES termination request */
-> +#define KVM_SHUTDOWN_SEV_TERM  1
-> +
->  /* For KVM_EXIT_INTERNAL_ERROR */
->  /* Emulate instruction failed. */
->  #define KVM_INTERNAL_ERROR_EMULATION   1
-> @@ -311,6 +317,12 @@ struct kvm_run {
->                 struct {
->                         __u64 hardware_exit_reason;
->                 } hw;
-> +               /* KVM_EXIT_SHUTDOWN_ENTRY */
-> +               struct {
-> +                       __u64 reason;
-> +                       __u32 ndata;
-> +                       __u64 data[16];
-> +               } shutdown;
->                 /* KVM_EXIT_FAIL_ENTRY */
->                 struct {
->                         __u64 hardware_entry_failure_reason;
-> --
-> 2.35.1.894.gb6a874cedc-goog
->
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

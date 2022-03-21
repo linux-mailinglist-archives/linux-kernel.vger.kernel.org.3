@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E264E3018
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEB94E3017
 	for <lists+linux-kernel@lfdr.de>; Mon, 21 Mar 2022 19:36:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352229AbiCUSiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Mar 2022 14:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
+        id S1352251AbiCUSiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Mar 2022 14:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345165AbiCUSiA (ORCPT
+        with ESMTP id S1352240AbiCUSiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Mar 2022 14:38:00 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381117CDEE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:36:35 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so20163951oos.9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Mar 2022 11:36:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=yXYEBuW6VaDVgClKY3HKdDJSY8KyrlZEOVA56VtcWa4=;
-        b=AMClZKU3SKzDzuaJpTabi6xrGsDRYAM73Jppk48lHzd5Ma/lHr8lXJh6zbwtJujY1g
-         GEvaGdwRC5L+KCqVFgYYzHdGxuSuCTJs4B9LawELpTXpNAytnHhivXUlbApZ/KBvnmqP
-         eDlEeAC9gzGFA7ALWMLyd7iG/Fe+t/5EV/AeA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=yXYEBuW6VaDVgClKY3HKdDJSY8KyrlZEOVA56VtcWa4=;
-        b=4D7Vdy34c5pmeCrB4yCCRDncftC/aBIWfuVMPWuMLenG/ga9yZrrfK4P/HBRFmxxC1
-         T/Dz0RvZ+aCZmD0ZPiq7pT2pZnDb75DC/ApX/DwVUoePWKtm48xFHCrCvHtrmDWWlR+f
-         HdJOGl0k3CSAiFyx/F2sPkgG8bf/XDPdcNlwbIcLTdw8Ojha13MBYvfM8geIIC5JsWFn
-         bEe1bXNs/U+2KXF/zw1gufyfOn11cXSHIt21XBK+BGb62z3geGZ1eeX+QtdsJMnPXYW+
-         hCLoRcW998l6JKzGiHhM/dBFDOtKV5MgXNwW0P0z58PZwSbnMbbJGZBX/em5p6Amxbp0
-         C7nw==
-X-Gm-Message-State: AOAM533y0teMJrD5Hx6sBLZq/rQrXUkDJBGObyfz9hS/19WLGEqLgrUi
-        DIaVzC1NrCc3RY0uI9bvlS86j/NrpPQr5wr2vn1m1A==
-X-Google-Smtp-Source: ABdhPJzUFRaISHJP1MIIbyFz2LgziTazZlouqsO6VXm4BnAJFnDis079ZvsCevPAQzA5liEcTbirPV3VGTbE530ZTg8=
-X-Received: by 2002:a05:6870:c0cb:b0:da:2bcc:aa09 with SMTP id
- e11-20020a056870c0cb00b000da2bccaa09mr194320oad.63.1647887794519; Mon, 21 Mar
- 2022 11:36:34 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 21 Mar 2022 19:36:33 +0100
+        Mon, 21 Mar 2022 14:38:08 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28E181661;
+        Mon, 21 Mar 2022 11:36:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E21F8CE1AEB;
+        Mon, 21 Mar 2022 18:36:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F935C340F2;
+        Mon, 21 Mar 2022 18:36:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647887799;
+        bh=L4/pb0C+x3zLGknw3l+VTjgkqap8FhmEleEySHiDF8E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cdwwN42An54vRnJV3Zt6TSOetV1Xc7QPyxuYnzVQRstdts/+9tBw/vN/5o6vxRPvP
+         ijbMZhW+aAGq1xldOFxPyodaYfplB1eSxJ0CS2Mo7dz61U7nYflvTyt+G1aAqAZvEM
+         HRLwECd5PLAm43kKYR+/qnK3rdcNX5vEWy0iSaIRID8XnsVwtzM8oYo68gghHVyhzO
+         nlgYOJIChXUDInILMsW/DDnGxQLziSw91MgLfsBNiIPtE/GvOF/tMJE28f1YZpliUF
+         M06GU7erfFw8jNJaM8Yg6uOv+nYgQQ092LPWDaz6lqrXOl/EW6eGQ9ulqv6DyvBDw3
+         eEsqSN4fURNnQ==
+Date:   Mon, 21 Mar 2022 11:36:34 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "'Rafael J . Wysocki '" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 0/6] introduce fwnode in the I2C subsystem
+Message-ID: <20220321113634.56d6fe2b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220321115634.5f4b8bd4@fixe.home>
+References: <20220318160059.328208-1-clement.leger@bootlin.com>
+        <20220318100201.630c70bf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20220321115634.5f4b8bd4@fixe.home>
 MIME-Version: 1.0
-In-Reply-To: <20220319152641.49d8b3e1@jic23-huawei>
-References: <20220318204808.3404542-1-swboyd@chromium.org> <20220319152641.49d8b3e1@jic23-huawei>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 21 Mar 2022 19:36:33 +0100
-Message-ID: <CAE-0n52jDZz0qKhfg8OWVDmDg5+xXo-qSL3jNka82QHwA2-xsw@mail.gmail.com>
-Subject: Re: [PATCH] iio:proximity:sx9324: Fix hardware gain read/write
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, Gwendal Grignou <gwendal@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,59 +72,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Jonathan Cameron (2022-03-19 08:26:41)
-> On Fri, 18 Mar 2022 13:48:08 -0700
-> Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Hi Stephen,
->
->
-> > There are four possible gain values according to sx9324_gain_vals[]: 1,
-> > 2, 4, and 8. When writing and reading the register the values are off by
-> > one.
-> > The bits should be set according to this equation:
-> >
-> >       ilog2(<gain>) + 1
-> >
-> > so that a gain of 8 is 0x3 in the register field and a gain of 4 is 0x2
-> > in the register field, etc. Fix up the functions.
->
-> So is the 0 value reserved?  I can't find an sx9324 datasheet but he
-> 9320 is online and that seems to be the case there.  If so please state
-> that in this description as well.
+On Mon, 21 Mar 2022 11:56:34 +0100 Cl=C3=A9ment L=C3=A9ger wrote:
+> Le Fri, 18 Mar 2022 10:02:01 -0700,
+> Jakub Kicinski <kuba@kernel.org> a =C3=A9crit :
+>=20
+> > On Fri, 18 Mar 2022 17:00:46 +0100 Cl=C3=A9ment L=C3=A9ger wrote: =20
+> > > In order to allow the I2C subsystem to be usable with fwnode, add
+> > > some functions to retrieve an i2c_adapter from a fwnode and use
+> > > these functions in both i2c mux and sfp. ACPI and device-tree are
+> > > handled to allow these modifications to work with both descriptions.
+> > >=20
+> > > This series is a subset of the one that was first submitted as a larg=
+er
+> > > series to add swnode support [1]. In this one, it will be focused on
+> > > fwnode support only since it seems to have reach a consensus that
+> > > adding fwnode to subsystems makes sense.
+> > >=20
+> > > [1] https://lore.kernel.org/netdev/YhPSkz8+BIcdb72R@smile.fi.intel.co=
+m/T/   =20
+> >=20
+> > Sorry to jump ahead but would be great to split it up so that every
+> > subsystem could apply its patches without risking conflicts, once
+> > consensus has been reached. =20
+>=20
+> Hi Jakub,
+>=20
+> Ok, to be clear, you would like a series which contains all the
+> "base" fwnode functions that I'm going to add to be sent separately
+> right ? And then also split i2c/net stuff that was sent in this series ?
 
-Yes 0 is reserved. The top of this driver's C file has the datasheet
-link[1]
-
->
-> >
-> > Fixes: 4c18a890dff8 ("iio:proximity:sx9324: Add SX9324 support")
-> > Cc: Gwendal Grignou <gwendal@chromium.org>
-> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> > ---
-> >  drivers/iio/proximity/sx9324.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/iio/proximity/sx9324.c b/drivers/iio/proximity/sx9324.c
-> > index 0d9bbbb50cb4..a3c8e02f5a56 100644
-> > --- a/drivers/iio/proximity/sx9324.c
-> > +++ b/drivers/iio/proximity/sx9324.c
-> > @@ -379,7 +379,10 @@ static int sx9324_read_gain(struct sx_common_data *data,
-> >       if (ret)
-> >               return ret;
-> >
-> > -     *val = 1 << FIELD_GET(SX9324_REG_PROX_CTRL0_GAIN_MASK, regval);
-> > +     regval = FIELD_GET(SX9324_REG_PROX_CTRL0_GAIN_MASK, regval);
-> > +     if (regval)
->
-> If 0 is reserved then I'd return and error code here to indicate
-> we don't know what the gain is rather than carrying on regardless.
-> Or is this going to cause problems as it will be an ABI change (error
-> return possible when it wasn't really before)?
->
-
-That sounds OK to me. The driver is only being introduced now so we can
-still fix it to reject a gain of 0. Unless 0 should mean "off", i.e.
-hardware gain of 1?
-
-[1] https://edit.wpgdadawant.com/uploads/news_file/program/2019/30184/tech_files/program_30184_suggest_other_file.pdf
+I'm mostly concerned about conflicts, so if you can get the entire
+series into 5.18 before the merge window is over then consider it=20
+acked. If it doesn't make 5.18 looks like you'd need to send patches=20
+1 and 2 as a PR so that both the i2c and net trees can pull it.=20
+Once pulled send patch 6 out to net-next. Does that make sense?
